@@ -60,3 +60,15 @@ Dependency and resource inspection items expose posture and linked review state,
 ## Slice 4B Style Surface
 
 Slice 4B implements a production-facing local static surface at `../apps/web/static/operations-cockpit.html` from the owner-accepted static mockup and brand baseline. It preserves the same read-model/no-overclaim boundary and does not replace Product Design final visual acceptance.
+
+## Slice 5 Operating Loop Drill-Through
+
+Slice 5 extends the same read model with local conference and AI employee operating-loop drill-through. It does not introduce a new visual direction or final UX acceptance.
+
+New local contract fields:
+
+- work-index rows expose linked assignment, gate, conference, evidence, audit, allowed local actions, and blocked action reasons.
+- conference visibility exposes invite dispatch ids, participant positions, missing participant readbacks, minutes status, outcome class, and explicit `liveDispatchAuthorized=false` / `threadRegistryMutationAuthorized=false`.
+- the detail drawer exposes operating-loop summary, local actions, blocked actions, dry-run invite metadata, and conference loop state.
+
+The Slice 5 web surface remains functional-contract proof inside the accepted Slice 4B shell. It does not send live Codex dispatches, mutate the thread registry, execute copied helpers, deploy, publish, or claim final Product Design/browser/product acceptance.

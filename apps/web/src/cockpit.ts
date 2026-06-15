@@ -6,6 +6,7 @@ import type {
   EvidenceLink,
   GateWorkOrder,
   InitiativeRecord,
+  LocalOperatingLoopAction,
   ProjectRecord,
   ResourceRegistryRecord,
   StageMapItem,
@@ -49,8 +50,12 @@ export interface WorkstreamStoryRow {
   blocker?: string | undefined;
   nextOwnerRole: string;
   linkedGateIds: string[];
+  linkedConferenceIds: string[];
   linkedEvidenceIds: string[];
+  linkedAuditEventIds: string[];
   assignmentEmployeeIds: string[];
+  nextAllowedLocalActions: LocalOperatingLoopAction[];
+  blockedActions: Array<{ action: LocalOperatingLoopAction; reason: string; ownerRole: string }>;
   freshness: FreshnessState;
 }
 
@@ -87,13 +92,18 @@ export interface ConferenceVisibilityItem {
   title: string;
   initiatorEmployeeId: string;
   participantEmployeeIds: string[];
+  inviteDispatchIds: string[];
   missingParticipantEmployeeIds: string[];
+  participantPositionIds: string[];
   agenda: string[];
   linkedTicketIds: string[];
   linkedEvidenceIds: string[];
   desiredOutcome: string;
   status: ConferenceRequest["status"];
+  minutesStatus: "not_started" | "ready_for_draft" | "recorded" | "blocked";
   decisionClass: "discussion_only" | "recommendation" | "role_decision" | "blocked" | "owner_intent_required";
+  liveDispatchAuthorized: false;
+  threadRegistryMutationAuthorized: false;
   minutesSummary?: string | undefined;
 }
 
@@ -152,6 +162,9 @@ export interface CockpitDetailPanel {
   linkedConferenceIds: string[];
   linkedEvidenceIds: string[];
   auditEventIds: string[];
+  nextAllowedLocalActions: LocalOperatingLoopAction[];
+  blockedActions: Array<{ action: LocalOperatingLoopAction; reason: string; ownerRole: string }>;
+  operatingLoopSummary: string;
   noOverclaimSummary: string;
   rawSourceDisplayed: false;
   privateEvidenceDisplayed: false;
@@ -323,7 +336,7 @@ export function createOperationsCockpitReadModel(input: {
     riskWarnings: createRiskWarnings(gates, dependencies, resources, evidence),
     dependencyInspection: dependencies.map(toDependencyInspectionItem),
     resourceInspection: resources.map(toResourceInspectionItem),
-    detailPanel: input.selectedDetail ? createDetailPanel(input.selectedDetail, stories, gates, conferences, evidence, dependencies, resources, audit) : undefined,
+    detailPanel: input.selectedDetail ? createDetailPanel(input.selectedDetail, input.store, stories, gates, conferences, evidence, dependencies, resources, audit) : undefined,
     nonClaims: noOverclaimState,
     productDesignStatus: productDesignProofState
   };
@@ -337,6 +350,7 @@ function createWorkstreams(store: AosStore, initiative: InitiativeRecord, storie
       .filter((story) => story.epicId === epic.id)
       .map((story) => {
         const storyGates = gates.filter((gate) => story.gateIds.includes(gate.id));
+        const drillThrough = store.createWorkIndexDrillThrough(story.id);
         const blockedGate = storyGates.find((gate) => gate.status === "blocked");
         const storyAssignments = assignments.filter((assignment) => story.assignmentIds.includes(assignment.id));
         return {
@@ -345,9 +359,13 @@ function createWorkstreams(store: AosStore, initiative: InitiativeRecord, storie
           status: story.status,
           blocker: blockedGate?.blocker,
           nextOwnerRole: blockedGate?.ownerRole ?? storyAssignments[0]?.role ?? "implementation",
-          linkedGateIds: story.gateIds,
-          linkedEvidenceIds: story.evidenceIds,
+          linkedGateIds: drillThrough.linkedGateIds,
+          linkedConferenceIds: drillThrough.linkedConferenceIds,
+          linkedEvidenceIds: drillThrough.linkedEvidenceIds,
+          linkedAuditEventIds: drillThrough.linkedAuditEventIds,
           assignmentEmployeeIds: storyAssignments.map((assignment) => assignment.employeeId),
+          nextAllowedLocalActions: drillThrough.nextAllowedLocalActions,
+          blockedActions: drillThrough.blockedActions,
           freshness: story.evidenceIds.length > 0 ? "current" : "unknown"
         } satisfies WorkstreamStoryRow;
       });
@@ -454,6 +472,7 @@ function createRiskWarnings(
 
 function createDetailPanel(
   selected: { id: string; type: CockpitDetailPanel["selectedType"] },
+  store: AosStore,
   stories: StoryRecord[],
   gates: GateWorkOrder[],
   conferences: ConferenceRequest[],
@@ -463,8 +482,9 @@ function createDetailPanel(
   audit: AuditEvent[]
 ): CockpitDetailPanel {
   const linkedStoryIds = selected.type === "story" ? [selected.id] : [];
+  const drillThrough = selected.type === "story" ? store.createWorkIndexDrillThrough(selected.id) : undefined;
   const linkedGateIds = selected.type === "gate" ? [selected.id] : selected.type === "story"
-    ? gates.filter((gate) => gate.linkedTicketId === selected.id).map((gate) => gate.id)
+    ? drillThrough?.linkedGateIds ?? gates.filter((gate) => gate.linkedTicketId === selected.id).map((gate) => gate.id)
     : [];
   const linkedConferenceIds = selected.type === "conference" ? [selected.id] : conferences
     .filter((conference) => conference.linkedTicketIds.includes(selected.id))
@@ -481,9 +501,14 @@ function createDetailPanel(
     selectedType: selected.type,
     linkedStoryIds,
     linkedGateIds,
-    linkedConferenceIds,
-    linkedEvidenceIds: [...new Set(linkedEvidenceIds)],
-    auditEventIds: audit.filter((event) => event.targetId === selected.id || linkedGateIds.includes(event.targetId)).map((event) => event.id),
+    linkedConferenceIds: drillThrough?.linkedConferenceIds ?? linkedConferenceIds,
+    linkedEvidenceIds: drillThrough?.linkedEvidenceIds ?? [...new Set(linkedEvidenceIds)],
+    auditEventIds: drillThrough?.linkedAuditEventIds ?? audit.filter((event) => event.targetId === selected.id || linkedGateIds.includes(event.targetId)).map((event) => event.id),
+    nextAllowedLocalActions: drillThrough?.nextAllowedLocalActions ?? ["open_evidence_metadata"],
+    blockedActions: drillThrough?.blockedActions ?? [],
+    operatingLoopSummary: drillThrough
+      ? `${drillThrough.linkedConferenceIds.length} conference links, ${drillThrough.linkedGateIds.length} gate links, ${drillThrough.nextAllowedLocalActions.length} local actions`
+      : "Metadata-only drill-through; no operating-loop mutation.",
     noOverclaimSummary: "Functional contract readback only; no visual, release, product, dependency-clean, or live-dispatch acceptance.",
     rawSourceDisplayed: false,
     privateEvidenceDisplayed: false
@@ -506,18 +531,30 @@ function toGateQueueItem(gate: GateWorkOrder): GateQueueItem {
 
 function toConferenceVisibilityItem(conference: ConferenceRequest): ConferenceVisibilityItem {
   const respondingEmployeeIds = new Set(conference.positions.map((position) => position.actor.employeeId));
+  const minutesStatus = conference.status === "blocked"
+    ? "blocked"
+    : conference.minutes
+      ? "recorded"
+      : conference.positions.length > 0
+        ? "ready_for_draft"
+        : "not_started";
   return {
     id: conference.id,
     title: conference.title,
     initiatorEmployeeId: conference.initiator.employeeId,
     participantEmployeeIds: conference.participantEmployeeIds,
+    inviteDispatchIds: conference.inviteDispatchIds,
     missingParticipantEmployeeIds: conference.participantEmployeeIds.filter((id) => !respondingEmployeeIds.has(id)),
+    participantPositionIds: conference.positions.map((position) => position.id),
     agenda: conference.agenda,
     linkedTicketIds: conference.linkedTicketIds,
     linkedEvidenceIds: conference.positions.flatMap((position) => position.evidenceIds),
     desiredOutcome: conference.desiredOutcome,
     status: conference.status,
-    decisionClass: conference.minutes?.decisions[0]?.decisionClass ?? (conference.status === "blocked" ? "blocked" : "recommendation"),
+    minutesStatus,
+    decisionClass: conference.minutes?.outcomeClass ?? conference.minutes?.decisions[0]?.decisionClass ?? (conference.status === "blocked" ? "blocked" : "recommendation"),
+    liveDispatchAuthorized: false,
+    threadRegistryMutationAuthorized: false,
     minutesSummary: conference.minutes?.summary
   };
 }

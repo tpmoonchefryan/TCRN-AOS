@@ -7,6 +7,7 @@ import type {
   AgentRun,
   Assignment,
   AuditEvent,
+  ConferenceMinutes,
   ConferencePosition,
   ConferenceRequest,
   DependencyLifecycleRecord,
@@ -15,6 +16,7 @@ import type {
   GateWorkOrder,
   InitiativeRecord,
   KnowledgeEntry,
+  LocalConferenceOperatingLoop,
   OwnerIntent,
   ProjectId,
   ProjectRecord,
@@ -24,7 +26,8 @@ import type {
   StageMapItem,
   StoryRecord,
   StructuredComment,
-  SubTask
+  SubTask,
+  WorkIndexDrillThrough
 } from "./types.js";
 
 export interface AosSeed {
@@ -326,11 +329,12 @@ export class AosStore {
     return intent;
   }
 
-  createConference(input: Omit<ConferenceRequest, "id" | "status" | "positions">, actor: ActorIdentity): ConferenceRequest {
+  createConference(input: Omit<ConferenceRequest, "id" | "inviteDispatchIds" | "status" | "positions">, actor: ActorIdentity): ConferenceRequest {
     this.ensureSafe(input, "conference");
     const conference: ConferenceRequest = {
       ...input,
       id: createId("conference", input),
+      inviteDispatchIds: [],
       status: "requested",
       positions: []
     };
@@ -358,6 +362,132 @@ export class AosStore {
       positionId: position.id
     });
     return position;
+  }
+
+  recordConferenceMinutes(input: Omit<ConferenceMinutes, "id">, actor: ActorIdentity): ConferenceMinutes {
+    this.ensureSafe(input, "conferenceMinutes");
+    const conference = this.conferences.get(input.conferenceId);
+    if (!conference) {
+      throw new Error(`Unknown conference: ${input.conferenceId}`);
+    }
+    const minutes: ConferenceMinutes = {
+      ...input,
+      id: createId("conference_minutes", input)
+    };
+    conference.minutes = minutes;
+    conference.status = input.outcomeClass === "blocked" ? "blocked" : "closed";
+    this.appendAudit(actor, "conference.minutes.record", "conference", conference.id, input.outcomeClass === "blocked" ? "blocked" : "accepted", {
+      minutesId: minutes.id,
+      outcomeClass: minutes.outcomeClass,
+      actionItemAutomation: false
+    });
+    return minutes;
+  }
+
+  linkConferenceDispatch(conferenceId: string, dispatchId: string, actor: ActorIdentity): ConferenceRequest {
+    const conference = this.conferences.get(conferenceId);
+    if (!conference) {
+      throw new Error(`Unknown conference: ${conferenceId}`);
+    }
+    if (!conference.inviteDispatchIds.includes(dispatchId)) {
+      conference.inviteDispatchIds.push(dispatchId);
+      this.appendAudit(actor, "conference.dispatch.link", "conference", conference.id, "accepted", {
+        dispatchId,
+        liveDispatchAuthorized: false
+      });
+    }
+    return conference;
+  }
+
+  createWorkIndexDrillThrough(storyId: string): WorkIndexDrillThrough {
+    const story = this.requireStory(storyId);
+    const assignments = [...this.assignments.values()].filter((assignment) => story.assignmentIds.includes(assignment.id) || assignment.targetId === story.id);
+    const gates = [...this.gates.values()].filter((gate) => story.gateIds.includes(gate.id) || gate.linkedTicketId === story.id);
+    const conferences = [...this.conferences.values()].filter((conference) => conference.linkedTicketIds.includes(story.id));
+    const linkedEvidenceIds = new Set<string>([
+      ...story.evidenceIds,
+      ...gates.flatMap((gate) => gate.inputEvidenceIds),
+      ...conferences.flatMap((conference) => conference.positions.flatMap((position) => position.evidenceIds))
+    ]);
+    const targetIds = new Set<string>([
+      story.id,
+      ...assignments.map((assignment) => assignment.id),
+      ...gates.map((gate) => gate.id),
+      ...conferences.map((conference) => conference.id),
+      ...linkedEvidenceIds
+    ]);
+    const nextAllowedLocalActions = new Set<WorkIndexDrillThrough["nextAllowedLocalActions"][number]>(["open_evidence_metadata"]);
+    if (conferences.length === 0) {
+      nextAllowedLocalActions.add("request_conference");
+    }
+    if (conferences.some((conference) => this.deriveConferenceOperatingLoop(conference.id).missingParticipantEmployeeIds.length > 0)) {
+      nextAllowedLocalActions.add("record_participant_position");
+    }
+    if (conferences.some((conference) => this.deriveConferenceOperatingLoop(conference.id).minutesStatus === "ready_for_draft")) {
+      nextAllowedLocalActions.add("record_minutes");
+    }
+    if (gates.length === 0) {
+      nextAllowedLocalActions.add("request_gate");
+    }
+    if (assignments.some((assignment) => assignment.dueState === "timeout")) {
+      nextAllowedLocalActions.add("mark_route_stale");
+    }
+    const blockedActions: WorkIndexDrillThrough["blockedActions"] = [];
+    if (gates.some((gate) => gate.type === "owner_intent" || gate.status === "owner_intent_required")) {
+      blockedActions.push({
+        action: "submit_owner_intent",
+        reason: "Owner Intent remains a pending human gate and cannot be auto-executed by the local operating loop.",
+        ownerRole: "owner"
+      });
+    }
+    if (story.status === "blocked" || gates.some((gate) => gate.status === "blocked")) {
+      blockedActions.push({
+        action: "record_minutes",
+        reason: "Blocked work can keep metadata but cannot be advanced as accepted minutes without a role/owner disposition.",
+        ownerRole: "verification"
+      });
+    }
+    return {
+      selectedStoryId: story.id,
+      linkedAssignmentIds: assignments.map((assignment) => assignment.id),
+      linkedGateIds: gates.map((gate) => gate.id),
+      linkedConferenceIds: conferences.map((conference) => conference.id),
+      linkedEvidenceIds: [...linkedEvidenceIds],
+      linkedAuditEventIds: this.auditEvents.filter((event) => targetIds.has(event.targetId)).map((event) => event.id),
+      nextAllowedLocalActions: [...nextAllowedLocalActions],
+      blockedActions
+    };
+  }
+
+  deriveConferenceOperatingLoop(conferenceId: string): LocalConferenceOperatingLoop {
+    const conference = this.conferences.get(conferenceId);
+    if (!conference) {
+      throw new Error(`Unknown conference: ${conferenceId}`);
+    }
+    const respondingEmployeeIds = new Set(conference.positions.map((position) => position.actor.employeeId));
+    const missingParticipantEmployeeIds = conference.participantEmployeeIds.filter((id) => !respondingEmployeeIds.has(id));
+    const minutesStatus: LocalConferenceOperatingLoop["minutesStatus"] = conference.status === "blocked"
+      ? "blocked"
+      : conference.minutes
+        ? "recorded"
+        : conference.positions.length > 0
+          ? "ready_for_draft"
+          : "not_started";
+    const outcomeClass: LocalConferenceOperatingLoop["outcomeClass"] = conference.minutes?.outcomeClass
+      ?? (conference.status === "blocked" ? "blocked" : conference.positions.length > 0 ? "recommendation" : "discussion_only");
+    return {
+      conferenceId: conference.id,
+      linkedTicketIds: conference.linkedTicketIds,
+      initiatorEmployeeId: conference.initiator.employeeId,
+      participantEmployeeIds: conference.participantEmployeeIds,
+      inviteDispatchIds: conference.inviteDispatchIds,
+      missingParticipantEmployeeIds,
+      participantPositionIds: conference.positions.map((position) => position.id),
+      minutesStatus,
+      outcomeClass,
+      liveDispatchAuthorized: false,
+      threadRegistryMutationAuthorized: false
+    };
   }
 
   createDependencyRecord(input: Omit<DependencyLifecycleRecord, "id" | "linkedGateIds">, actor: ActorIdentity): DependencyLifecycleRecord {

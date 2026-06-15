@@ -103,6 +103,7 @@ test("Codex adapter dry-run outbox updates assignment, gate, and conference reco
   }, actor);
 
   assert.equal(adapter.listOutbox().length, 3);
+  assert.deepEqual(store.deriveConferenceOperatingLoop(conference.id).inviteDispatchIds, [conferenceDispatch.id]);
   assert.equal(adapter.readback(assignmentDispatch.id, actor).observedStatus, "queued");
 
   adapter.collectReturn(assignmentDispatch.id, "<status>success</status><summary>Implemented</summary>", actor);

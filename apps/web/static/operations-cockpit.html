@@ -117,6 +117,10 @@ dd { margin: 0; color: #162437; font-size: 12px; }
 .tag { background: #e5f8ee; color: #1d8d51; }
 .detail-drawer h2 { margin: 14px 0; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: #162437; font-size: 18px; line-height: 1.25; letter-spacing: 0; text-transform: none; }
 .detail-list { margin-bottom: 18px; }
+.loop-card { margin: 0 0 16px; border: 1px solid var(--line); border-radius: 5px; padding: 12px; background: var(--surface-weak); }
+.loop-card h3 { margin: 0 0 8px; font-size: 12px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+.loop-card p { margin: 0 0 8px; color: #17263a; font-size: 12px; }
+.loop-card ul { display: grid; gap: 5px; margin: 0; padding-left: 16px; color: #405065; font-size: 12px; }
 .risk-lane { padding-bottom: 4px; }
 @media (max-width: 1260px) {
   .aos-shell { grid-template-columns: 220px minmax(0, 1fr); }
@@ -255,10 +259,10 @@ dd { margin: 0; color: #162437; font-size: 12px; }
                 <div class="table-row table-head" role="row">
                   <span>ID</span><span>Title</span><span>State</span><span>Owner</span><span>Evidence</span><span>Gate</span>
                 </div>
-                <button class="table-row work-row active" data-work-row data-title="Render local-first cockpit style baseline" type="button" role="row"><span>story_daa1ed285030dd27</span><span>Render local-first cockpit style baseline</span><span>in_progress</span><span>implementation</span><span>metadata present</span><span>2 gate metadata</span></button>
+                <button class="table-row work-row active" data-work-row data-title="Render local-first cockpit style baseline" type="button" role="row"><span>story_daa1ed285030dd27</span><span>Render local-first cockpit style baseline</span><span>in_progress</span><span>implementation</span><span>1 conference link</span><span>3 local actions</span></button>
               </div>
             </section>
-            <aside class="detail-drawer" data-region="detail-drawer" aria-label="Selected item detail">
+            <aside class="detail-drawer" data-region="detail-drawer" data-slice5="work-index-drill-through" aria-label="Selected item detail">
               <div class="drawer-head">
                 <span class="tag">Story</span>
                 <button type="button" aria-label="Close detail">Close</button>
@@ -267,11 +271,24 @@ dd { margin: 0; color: #162437; font-size: 12px; }
               <dl class="detail-list">
                 <div><dt>Hierarchy</dt><dd>TCRN-AOS / init_e274579281bb3c2d</dd></div>
                 <div><dt>Gate flow</dt><dd>owner - owner_intent_required</dd></div>
-                <div><dt>Conference</dt><dd>collecting_positions</dd></div>
+                <div><dt>Conference</dt><dd>collecting_positions / ready_for_draft</dd></div>
+                <div><dt>Dry-run invite</dt><dd>0 outbox record metadata</dd></div>
+                <div><dt>Local actions</dt><dd>open_evidence_metadata, record_participant_position, record_minutes</dd></div>
+                <div><dt>Blocked actions</dt><dd>submit_owner_intent</dd></div>
                 <div><dt>Evidence</dt><dd>metadata_only</dd></div>
                 <div><dt>Dependency</dt><dd>reviewed for local checkpoint</dd></div>
                 <div><dt>Resource</dt><dd>reviewed for local checkpoint</dd></div>
               </dl>
+              <section class="loop-card" data-region="conference-operating-loop" aria-label="Conference operating loop">
+                <h3>Conference Loop</h3>
+                <p>Slice 4B style baseline review</p>
+                <ul>
+                  <li>1 positions recorded</li>
+                  <li>1 missing participant readbacks</li>
+                  <li>recommendation outcome metadata</li>
+                  <li>live dispatch false</li>
+                </ul>
+              </section>
               <button type="button" class="primary-action">Open gate work order</button>
               <button type="button" class="secondary-action">Request rework</button>
             </aside>

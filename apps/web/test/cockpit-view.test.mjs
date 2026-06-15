@@ -22,6 +22,12 @@ test("Slice 4B view model preserves accepted style baseline boundaries", () => {
   assert.equal(model.dependencyInspection[0].legalCompletionClaim, false);
   assert.equal(model.resourceInspection[0].scannerIngestionClaim, false);
   assert.equal(model.resourceInspection[0].materializationExecuted, false);
+  assert.equal(model.workstreams[0].rows[0].linkedConferenceIds.length, 1);
+  assert.ok(model.workstreams[0].rows[0].nextAllowedLocalActions.includes("record_participant_position"));
+  assert.equal(model.conferences[0].minutesStatus, "ready_for_draft");
+  assert.equal(model.conferences[0].liveDispatchAuthorized, false);
+  assert.equal(model.conferences[0].threadRegistryMutationAuthorized, false);
+  assert.equal(model.detailPanel?.rawSourceDisplayed, false);
 });
 
 test("Slice 4B production HTML exposes required cockpit regions", () => {
@@ -37,6 +43,9 @@ test("Slice 4B production HTML exposes required cockpit regions", () => {
   assert.match(html, /Local checkpoint observed/);
   assert.match(html, /local fixture readback current/);
   assert.match(html, /Open gate work order/);
+  assert.match(html, /data-slice5="work-index-drill-through"/);
+  assert.match(html, /data-region="conference-operating-loop"/);
+  assert.match(html, /live dispatch false/);
 });
 
 test("Slice 4B production HTML removes forbidden overclaim copy", () => {

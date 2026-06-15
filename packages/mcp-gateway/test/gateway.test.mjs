@@ -29,6 +29,7 @@ test("gateway exposes only the accepted Slice 1 MCP method families", () => {
   assert.deepEqual([...allowedMcpMethods].sort(), [
     "aos.audit.query",
     "aos.conference.position.record",
+    "aos.conference.minutes.record",
     "aos.conference.request",
     "aos.dependency.record.propose",
     "aos.evidence.link",
@@ -38,7 +39,8 @@ test("gateway exposes only the accepted Slice 1 MCP method families", () => {
     "aos.run.summary.create",
     "aos.stage_map.read",
     "aos.ticket.comment",
-    "aos.ticket.propose"
+    "aos.ticket.propose",
+    "aos.work_index.drill_through.read"
   ].sort());
 });
 

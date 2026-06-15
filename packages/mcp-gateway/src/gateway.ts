@@ -28,6 +28,8 @@ export const allowedMcpMethods = [
   "aos.policy.read",
   "aos.conference.request",
   "aos.conference.position.record",
+  "aos.conference.minutes.record",
+  "aos.work_index.drill_through.read",
   "aos.stage_map.read",
   "aos.dependency.record.propose",
   "aos.resource.record.propose",
@@ -78,7 +80,7 @@ export class McpGateway {
         throw new Error(`Role ${request.actor.role} cannot write through MCP`);
       }
       const result = this.dispatch(method, request.actor, request.params);
-      const audit = this.store.appendAudit(request.actor, `mcp.${method}`, "mcp_request", key, method === "aos.policy.read" || method === "aos.stage_map.read" || method === "aos.audit.query" ? "read" : "accepted", {
+      const audit = this.store.appendAudit(request.actor, `mcp.${method}`, "mcp_request", key, this.isReadMethod(method) ? "read" : "accepted", {
         method,
         resultType: resultType(result)
       });
@@ -165,6 +167,10 @@ export class McpGateway {
           recommendations: requireStringArray(params.recommendations, "recommendations"),
           evidenceIds: requireStringArray(params.evidenceIds, "evidenceIds")
         }, actor);
+      case "aos.conference.minutes.record":
+        return this.recordConferenceMinutes(actor, params);
+      case "aos.work_index.drill_through.read":
+        return this.store.createWorkIndexDrillThrough(requireString(params.storyId, "storyId"));
       case "aos.stage_map.read":
         return this.store.deriveStageMap(this.requireProjectScope(params.projectId), requireString(params.initiativeId, "initiativeId"));
       case "aos.dependency.record.propose":
@@ -248,6 +254,27 @@ export class McpGateway {
     return this.store.linkEvidence(evidence, actor);
   }
 
+  private recordConferenceMinutes(actor: ActorIdentity, params: Record<string, unknown>): unknown {
+    const conferenceId = requireString(params.conferenceId, "conferenceId");
+    const outcomeClass = requireString(params.outcomeClass, "outcomeClass") as never;
+    const evidenceIds = requireStringArray(params.evidenceIds, "evidenceIds");
+    return this.store.recordConferenceMinutes({
+      conferenceId,
+      summary: requireString(params.summary, "summary"),
+      outcomeClass,
+      decisions: [{
+        id: createId("decision", { conferenceId, outcomeClass, actor: actor.employeeId }),
+        decisionClass: outcomeClass,
+        actor,
+        summary: requireString(params.decisionSummary ?? params.summary, "decisionSummary"),
+        evidenceIds,
+        createdAt: new Date().toISOString()
+      }],
+      unresolvedIssues: requireStringArray(params.unresolvedIssues ?? [], "unresolvedIssues"),
+      actionItemIds: requireStringArray(params.actionItemIds ?? [], "actionItemIds")
+    }, actor);
+  }
+
   private authenticate(actor: ActorIdentity): void {
     const employee = this.store.getEmployee(actor.employeeId);
     if (!employee) {
@@ -276,7 +303,11 @@ export class McpGateway {
   }
 
   private isWriteMethod(method: AllowedMcpMethod): boolean {
-    return !["aos.policy.read", "aos.stage_map.read", "aos.audit.query"].includes(method);
+    return !this.isReadMethod(method);
+  }
+
+  private isReadMethod(method: AllowedMcpMethod): boolean {
+    return ["aos.policy.read", "aos.stage_map.read", "aos.work_index.drill_through.read", "aos.audit.query"].includes(method);
   }
 
   private requireProjectScope(value: unknown): string {

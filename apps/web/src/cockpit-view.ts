@@ -186,6 +186,7 @@ export function renderOperationsCockpitHtml(model: OperationsCockpitReadModel = 
   const blockingGate = model.ownerIntentQueue[0] ?? model.roleGateQueue[0];
   const dependency = model.dependencyInspection[0];
   const resource = model.resourceInspection[0];
+  const selectedConference = model.conferences[0];
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -311,7 +312,7 @@ export function renderOperationsCockpitHtml(model: OperationsCockpitReadModel = 
                 ${workRows.map((row, index) => workRow(row, index)).join("")}
               </div>
             </section>
-            <aside class="detail-drawer" data-region="detail-drawer" aria-label="Selected item detail">
+            <aside class="detail-drawer" data-region="detail-drawer" data-slice5="work-index-drill-through" aria-label="Selected item detail">
               <div class="drawer-head">
                 <span class="tag">Story</span>
                 <button type="button" aria-label="Close detail">Close</button>
@@ -320,11 +321,24 @@ export function renderOperationsCockpitHtml(model: OperationsCockpitReadModel = 
               <dl class="detail-list">
                 <div><dt>Hierarchy</dt><dd>${escapeHtml(model.contextHeader.selectedProjectId)} / ${escapeHtml(model.contextHeader.selectedInitiativeId)}</dd></div>
                 <div><dt>Gate flow</dt><dd>${blockingGate ? `${escapeHtml(blockingGate.ownerRole)} - ${escapeHtml(blockingGate.status)}` : "metadata present"}</dd></div>
-                <div><dt>Conference</dt><dd>${escapeHtml(model.conferences[0]?.status ?? "requested")}</dd></div>
+                <div><dt>Conference</dt><dd>${selectedConference ? `${escapeHtml(selectedConference.status)} / ${escapeHtml(selectedConference.minutesStatus)}` : "metadata present"}</dd></div>
+                <div><dt>Dry-run invite</dt><dd>${selectedConference ? `${selectedConference.inviteDispatchIds.length} outbox record metadata` : "metadata present"}</dd></div>
+                <div><dt>Local actions</dt><dd>${selectedRow ? selectedRow.nextAllowedLocalActions.map(escapeHtml).join(", ") : "open_evidence_metadata"}</dd></div>
+                <div><dt>Blocked actions</dt><dd>${selectedRow && selectedRow.blockedActions.length > 0 ? selectedRow.blockedActions.map((action) => escapeHtml(action.action)).join(", ") : "none for local readback"}</dd></div>
                 <div><dt>Evidence</dt><dd>${escapeHtml(model.evidenceReadbacks[0]?.redactionState ?? "metadata_only")}</dd></div>
                 <div><dt>Dependency</dt><dd>${dependency ? copyPosture(dependency.posture) : "metadata present"}</dd></div>
                 <div><dt>Resource</dt><dd>${resource ? copyPosture(resource.approvalState) : "metadata present"}</dd></div>
               </dl>
+              ${selectedConference ? `<section class="loop-card" data-region="conference-operating-loop" aria-label="Conference operating loop">
+                <h3>Conference Loop</h3>
+                <p>${escapeHtml(selectedConference.title)}</p>
+                <ul>
+                  <li>${selectedConference.participantPositionIds.length} positions recorded</li>
+                  <li>${selectedConference.missingParticipantEmployeeIds.length} missing participant readbacks</li>
+                  <li>${escapeHtml(selectedConference.decisionClass)} outcome metadata</li>
+                  <li>live dispatch false</li>
+                </ul>
+              </section>` : ""}
               <button type="button" class="primary-action">Open gate work order</button>
               <button type="button" class="secondary-action">Request rework</button>
             </aside>
@@ -452,6 +466,10 @@ dd { margin: 0; color: #162437; font-size: 12px; }
 .tag { background: #e5f8ee; color: #1d8d51; }
 .detail-drawer h2 { margin: 14px 0; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: #162437; font-size: 18px; line-height: 1.25; letter-spacing: 0; text-transform: none; }
 .detail-list { margin-bottom: 18px; }
+.loop-card { margin: 0 0 16px; border: 1px solid var(--line); border-radius: 5px; padding: 12px; background: var(--surface-weak); }
+.loop-card h3 { margin: 0 0 8px; font-size: 12px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+.loop-card p { margin: 0 0 8px; color: #17263a; font-size: 12px; }
+.loop-card ul { display: grid; gap: 5px; margin: 0; padding-left: 16px; color: #405065; font-size: 12px; }
 .risk-lane { padding-bottom: 4px; }
 @media (max-width: 1260px) {
   .aos-shell { grid-template-columns: 220px minmax(0, 1fr); }
@@ -515,7 +533,7 @@ function gateBlock(gate: GateQueueItem | undefined): string {
 }
 
 function workRow(row: WorkstreamStoryRow, index: number): string {
-  return `<button class="table-row work-row${index === 0 ? " active" : ""}" data-work-row data-title="${escapeHtml(row.title)}" type="button" role="row"><span>${escapeHtml(row.storyId)}</span><span>${escapeHtml(row.title)}</span><span>${escapeHtml(row.status)}</span><span>${escapeHtml(row.nextOwnerRole)}</span><span>${copyFreshness(row.freshness)}</span><span>${row.linkedGateIds.length} gate metadata</span></button>`;
+  return `<button class="table-row work-row${index === 0 ? " active" : ""}" data-work-row data-title="${escapeHtml(row.title)}" type="button" role="row"><span>${escapeHtml(row.storyId)}</span><span>${escapeHtml(row.title)}</span><span>${escapeHtml(row.status)}</span><span>${escapeHtml(row.nextOwnerRole)}</span><span>${row.linkedConferenceIds.length} conference link</span><span>${row.nextAllowedLocalActions.length} local actions</span></button>`;
 }
 
 function riskPill(warning: RiskWarningItem): string {

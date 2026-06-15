@@ -82,3 +82,18 @@ Slice 4B records the owner-accepted static Operations Cockpit style baseline and
 Slice 4B evidence receipt: `../evidence/slice-4b-frontend-style-baseline-proof.md`.
 
 Product Design status: brief and owner style baseline accepted for now. Product Design UX/layout/visual acceptance, browser acceptance, deployment, release readiness, product acceptance, and final MVP acceptance remain unclaimed.
+
+## Slice 5 Conference And AI Operating Loop Coverage
+
+Slice 5 adds local operating-loop drill-through on top of the accepted Slice 4B cockpit baseline:
+
+- `AOS-S038..AOS-S042`: conference request, typed/default conference behavior, dry-run invite outbox linkage, participant position collection, missing participant readback, and minutes/outcome metadata are covered by domain/gateway/adapter tests and `pnpm slice5:proof`.
+- `AOS-S014..AOS-S018`: AI employee identity, thread identity, assignment, run summary, and authority snapshots are used as operating-loop inputs and readbacks.
+- `AOS-S020..AOS-S024`: role-owned gate work orders, Owner Intent separation, ticket gate state, and stale-route follow-up remain explicit local records; high-risk owner actions do not auto-execute.
+- `AOS-S032..AOS-S036`: Codex Adapter dry-run dispatch/readback/return/retry contracts now link `conference_invite` outbox records back to conference operating-loop readbacks; live dispatch remains blocked.
+- `AOS-S049`, `AOS-S050`, `AOS-S052`, `AOS-S053`: work-index rows and the detail drawer expose story, assignment, gate, conference, evidence, audit, risk, owner-intent, and local action context.
+- Supporting `AOS-S029`, `AOS-S031`, `AOS-S045..AOS-S047`, `AOS-S060`, `AOS-S061`, `AOS-S064`, `AOS-S065`, and `AOS-S068`: evidence links, audit stream, source-truth metadata, stage-map readback, access/role binding, and seed/test posture remain local and inspectable.
+
+Still deferred: `AOS-S043` action-item automation, `AOS-S044` deep conference search, final visual/UX acceptance, browser acceptance closeout, deployment, live Codex dispatch, thread registry mutation, release readiness, product acceptance, and final MVP acceptance.
+
+Slice 5 evidence receipt: `../evidence/slice-5-conference-ai-operating-loop-proof.md`.

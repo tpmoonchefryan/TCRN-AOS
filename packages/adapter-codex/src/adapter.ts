@@ -97,17 +97,27 @@ export class CodexIntegrationAdapter {
       auditEventId: audit.id
     };
     this.outbox.set(record.id, record);
+    try {
+      if (payload.kind === "conference_invite" && payload.linkedConferenceId) {
+        this.store.linkConferenceDispatch(payload.linkedConferenceId, record.id, actor);
+      }
+    } catch (error) {
+      this.outbox.delete(record.id);
+      throw error;
+    }
     return record;
   }
 
   sendLive(): never {
-    throw new Error("Live Codex thread dispatch is not authorized in Slice 3");
+    throw new Error("Live Codex thread dispatch is not authorized in local AOS MVP slices");
   }
 
   readback(dispatchId: string, actor?: ActorIdentity): CodexReadback {
     const record = this.requireDispatch(dispatchId);
     const observedStatus = record.status === "failed" || record.status === "expired" || record.status === "blocked"
       ? "blocked"
+      : record.staleAt
+        ? "stale"
       : record.status === "collected"
         ? "completed"
         : record.status === "retrying"

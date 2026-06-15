@@ -270,6 +270,7 @@ export interface ConferenceRequest {
   title: string;
   initiator: ActorIdentity;
   participantEmployeeIds: AosId[];
+  inviteDispatchIds: AosId[];
   agenda: string[];
   linkedTicketIds: AosId[];
   desiredOutcome: string;
@@ -292,9 +293,50 @@ export interface ConferenceMinutes {
   id: AosId;
   conferenceId: AosId;
   summary: string;
+  outcomeClass: "discussion_only" | "recommendation" | "role_decision" | "blocked" | "owner_intent_required";
   decisions: DecisionHistoryEntry[];
   unresolvedIssues: string[];
   actionItemIds: AosId[];
+}
+
+export type LocalOperatingLoopAction =
+  | "request_conference"
+  | "record_participant_position"
+  | "record_minutes"
+  | "request_gate"
+  | "submit_owner_intent"
+  | "mark_route_stale"
+  | "open_evidence_metadata";
+
+export interface BlockedActionReason {
+  action: LocalOperatingLoopAction;
+  reason: string;
+  ownerRole: ActorRole;
+}
+
+export interface WorkIndexDrillThrough {
+  selectedStoryId: AosId;
+  linkedAssignmentIds: AosId[];
+  linkedGateIds: AosId[];
+  linkedConferenceIds: AosId[];
+  linkedEvidenceIds: AosId[];
+  linkedAuditEventIds: AosId[];
+  nextAllowedLocalActions: LocalOperatingLoopAction[];
+  blockedActions: BlockedActionReason[];
+}
+
+export interface LocalConferenceOperatingLoop {
+  conferenceId: AosId;
+  linkedTicketIds: AosId[];
+  initiatorEmployeeId: AosId;
+  participantEmployeeIds: AosId[];
+  inviteDispatchIds: AosId[];
+  missingParticipantEmployeeIds: AosId[];
+  participantPositionIds: AosId[];
+  minutesStatus: "not_started" | "ready_for_draft" | "recorded" | "blocked";
+  outcomeClass: "discussion_only" | "recommendation" | "role_decision" | "blocked" | "owner_intent_required";
+  liveDispatchAuthorized: false;
+  threadRegistryMutationAuthorized: false;
 }
 
 export interface StageDefinition {
