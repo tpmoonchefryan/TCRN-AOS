@@ -1,0 +1,20 @@
+{
+  "name": "tcrn-aos",
+  "version": "0.1.0-local",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "packageManager": "pnpm@11.3.0",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm build && node --test packages/domain/test/domain.test.mjs packages/mcp-gateway/test/gateway.test.mjs packages/adapter-codex/test/adapter.test.mjs packages/db/test/schema.test.mjs apps/api/test/api.test.mjs apps/web/test/cockpit.test.mjs",
+    "validate:migrations": "node scripts/validate-migrations.mjs",
+    "audit:licenses": "node scripts/audit-licenses.mjs",
+    "verify": "pnpm typecheck && pnpm validate:migrations && pnpm audit:licenses && pnpm test"
+  },
+  "devDependencies": {
+    "@types/node": "24.0.3",
+    "typescript": "5.8.3"
+  }
+}
