@@ -2,6 +2,8 @@
 
 Slice 2 adds a local-first runtime proof without deployment or persistent services.
 
+Observed proof receipt: `../evidence/slice-2-runtime-proof.md`.
+
 ## Commands
 
 ```sh
@@ -10,6 +12,8 @@ pnpm service:smoke
 ```
 
 `pnpm verify` includes both commands after typecheck, migration validation, license audit, and tests.
+
+The observed Slice 2 proof receipt for commit `e84410367267b47da0d2654e174a69578f91f6af` recorded `pnpm verify` passing with `16 pass / 0 fail`, runtime DB proof `ok=true`, and local service smoke proof `ok=true`.
 
 ## Runtime DB Fixture
 
@@ -22,3 +26,8 @@ The fixture covers Project, Initiative, Epic, Story, subtask, comment, evidence,
 The service proof starts a loopback-only HTTP server on an ephemeral port, reads `/health` and `/readback`, verifies DB connectivity and no-overclaim posture, then closes the server and resets its fixture storage.
 
 It does not start an external queue, use Redis, dispatch Codex live, execute copied helpers, mutate another product repo, deploy, or leave a retained service.
+
+## Traceability
+
+- `D-024`: runtime operational data remains local-first and ephemeral; Git records source, schema, fixture seed, tests, scripts, and evidence notes only.
+- `D-026`: Slice 2 runtime DB/local service proof is local-only and does not authorize deployment or acceptance claims.
