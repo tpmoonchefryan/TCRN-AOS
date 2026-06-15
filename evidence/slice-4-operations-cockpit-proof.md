@@ -4,9 +4,13 @@ Status: observed local functional-contract checkpoint receipt.
 
 Basis before implementation: `2debcd0e2c13bb8b98ea86a5502018a1a3902817` (`docs: repair AOS Slice 3 proof evidence`).
 
+Slice 4 checkpoint under review: `9c375193def6058146ff2ad661fb97b890ae8bc7` (`feat: add AOS Slice 4 cockpit contract`).
+
 Correct product repo: `<platform-root>/TCRN-AOS`.
 
 Wrong sibling quarantine: `<wrong-sibling-quarantine>` at commit `4d917fdb6fcbefe888054906b17b755690530112`; it remains quarantine/evidence only and is not accepted output.
+
+Evidence note: this receipt records observed proof for the Slice 4 checkpoint above. Later evidence-only repairs may add discoverability details, but they do not change the runtime/source checkpoint under review.
 
 ## Decision Traceability
 
@@ -27,6 +31,21 @@ product_design_status:
 ```
 
 ## Observed Command Receipt
+
+### `pnpm verify`
+
+Observed result: passed at checkpoint `9c375193def6058146ff2ad661fb97b890ae8bc7`.
+
+Component receipt:
+
+- `pnpm typecheck`: passed.
+- `pnpm validate:migrations`: passed with `ok=true`, `requiredTables=16`, `hasAppendOnlyTrigger=true`, and `runtimeDatabaseProof=static_schema_validation_only`.
+- `pnpm audit:licenses`: passed with `ok=true`, runtime dependencies `[]`, dev dependencies `@types/node` and `typescript`, package licenses `@types/node=MIT` and `typescript=Apache-2.0`, `queuePosture=no_external_queue_no_redis_runtime`, and blockers `[]`.
+- `pnpm test`: passed with `24 pass / 0 fail`.
+- `pnpm runtime:db:proof`: passed with `ok=true`, `storageMode=os_temp_ephemeral`, `runtimeDataCommitted=false`, representative counts including `stories=1`, `gates=2`, `knowledgeEntries=2`, `stageMapItems=4`, and `auditEvents=18`; audit proof blocked query-result mutation and rejected update/delete; redaction proof rejected and audited the synthetic local-path fixture; reset proof ended with `runtimeDataExistsAfterReset=false`.
+- `pnpm service:smoke`: passed with `ok=true`, loopback-only ephemeral service lifecycle, clean stop, `runtimeDatabase=local_fixture`, `runtimeDataCommitted=false`, `externalQueue=none`, `liveCodexDispatchAuthorized=false`, and `copiedHelperExecution=false`.
+- `pnpm slice3:proof`: passed with `ok=true`, `liveDispatchAuthorized=false`, `copiedHelperExecution=false`, `threadRegistryMutation=false`, and `restrictedPayloadBlocked=true`.
+- `pnpm slice4:proof`: passed with `ok=true`; details are recorded below.
 
 ### `pnpm slice4:proof`
 
@@ -58,6 +77,18 @@ No-overclaim booleans:
 - `runtimeDataCommittedToGit=false`.
 - `dependencyCleanClaim=false`.
 - `resourceMaterialization=false`.
+
+## Dependency, License, And Cleanliness Posture
+
+- Dependency graph change in Slice 4: none.
+- Runtime dependencies: `[]`.
+- Dev dependencies: `@types/node` under MIT and `typescript` under Apache-2.0.
+- License/dependency blockers: `[]`.
+- External queue posture: no external queue and no Redis-specific runtime.
+- Post-run AOS worktree/index state observed before this evidence-only repair: clean at checkpoint `9c375193def6058146ff2ad661fb97b890ae8bc7`.
+- Diff checks at checkpoint: `git diff --check` and staged diff check passed warning-zero before the Slice 4 commit.
+- Changed-surface scan at checkpoint: no real local absolute paths, token/private-key markers, raw scanner output, shell history, private-state leakage, raw source dumps, or route-local sensitive paths were found in changed Slice 4 surfaces.
+- Claim boundary: this is dependency/license and cleanliness posture evidence for the local Slice 4 checkpoint only; it is not dependency-clean, legal completion, public readiness, release readiness, product acceptance, or final MVP acceptance.
 
 ### `pnpm test`
 
