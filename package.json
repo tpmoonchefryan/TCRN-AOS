@@ -8,10 +8,12 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "pnpm build && node --test packages/domain/test/domain.test.mjs packages/mcp-gateway/test/gateway.test.mjs packages/adapter-codex/test/adapter.test.mjs packages/db/test/schema.test.mjs apps/api/test/api.test.mjs apps/web/test/cockpit.test.mjs",
+    "test": "pnpm build && node --test packages/domain/test/domain.test.mjs packages/mcp-gateway/test/gateway.test.mjs packages/adapter-codex/test/adapter.test.mjs packages/db/test/schema.test.mjs packages/db/test/runtime-fixture.test.mjs apps/api/test/api.test.mjs apps/api/test/service-smoke.test.mjs apps/web/test/cockpit.test.mjs",
     "validate:migrations": "node scripts/validate-migrations.mjs",
+    "runtime:db:proof": "pnpm build && node scripts/runtime-db-proof.mjs",
+    "service:smoke": "pnpm build && node scripts/service-smoke.mjs",
     "audit:licenses": "node scripts/audit-licenses.mjs",
-    "verify": "pnpm typecheck && pnpm validate:migrations && pnpm audit:licenses && pnpm test"
+    "verify": "pnpm typecheck && pnpm validate:migrations && pnpm audit:licenses && pnpm test && pnpm runtime:db:proof && pnpm service:smoke"
   },
   "devDependencies": {
     "@types/node": "24.0.3",

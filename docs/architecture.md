@@ -15,10 +15,10 @@ It does not replace:
 - `packages/domain`: operational models, policy predicates, redaction checks, idempotency keys, audit/event types, and an in-memory store for local proof.
 - `packages/mcp-gateway`: allowed MCP method contracts, authz, role/thread binding, idempotency, dedupe, Owner Intent Gate separation, and audit appenders.
 - `packages/adapter-codex`: Codex Integration Adapter contracts with dry-run dispatch/readback/return parsing only.
-- `packages/db`: PostgreSQL schema and seed data for static migration validation.
-- `apps/api`: API composition shell around the MCP Gateway.
+- `packages/db`: PostgreSQL schema, seed data, and an ephemeral local fixture runtime for apply/readback/reset proof.
+- `apps/api`: API composition shell around the MCP Gateway plus a short-lived local HTTP health/readback service for proof.
 - `apps/web`: cockpit read model shell for inspection.
 
 ## Deferred
 
-NestJS, Refine, Payload, PostgreSQL runtime service proof, deployment, live Codex sends, scanner ingestion, resource binary materialization, and GitHub remote publication require separate routes.
+NestJS, Refine, Payload, deployed PostgreSQL proof, deployment, live Codex sends, scanner ingestion, resource binary materialization, and GitHub remote publication require separate routes.
