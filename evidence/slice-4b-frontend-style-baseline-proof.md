@@ -54,6 +54,8 @@ It does not claim Product Design UX/layout/visual acceptance, browser acceptance
 
 Status: production-facing local static cockpit surface implemented from the owner-accepted style baseline.
 
+- Implementation checkpoint under review: `a39aa8843854638a51ef9a26b9df8568db90df19` (`feat: implement AOS Slice 4B cockpit style baseline`).
+- Pre-implementation basis: `e6e73ec6115092bf91eff86fb076d1fbc916e147` (`docs: record AOS Slice 4B style baseline`).
 - Render module: `apps/web/src/cockpit-view.ts`.
 - Static render: `apps/web/static/operations-cockpit.html`.
 - Proof script: `scripts/slice-4b-style-proof.mjs`.
@@ -95,3 +97,45 @@ Observed browser proof:
 - Temporary screenshots were captured for desktop and mobile proof, but screenshot file paths are not committed because they are machine-local artifacts.
 
 This browser/static proof remains a local implementation proof. It is not Product Design final visual acceptance, not deployment proof, not browser acceptance closeout, and not product acceptance.
+
+## Observed Command Receipt
+
+Status: observed local receipt for implementation checkpoint `a39aa8843854638a51ef9a26b9df8568db90df19`.
+
+The Slice 4B implementation proof recorded these observed command outcomes before the implementation checkpoint was committed:
+
+| Command or proof area | Observed result |
+| --- | --- |
+| `pnpm verify` | passed |
+| `pnpm test` | `27` pass / `0` fail |
+| `pnpm slice4:proof` | passed |
+| `pnpm slice4b:proof` | passed; baseline digest matched; required production selectors `10 / 10`; forbidden production-copy hits `0` |
+| Dependency/license posture | runtime dependencies `[]`; dev dependencies `@types/node` MIT and `typescript` Apache-2.0; blockers `[]`; dependency graph unchanged |
+| `git diff --check` | warning-zero |
+| staged diff check | warning-zero |
+| Changed-surface leakage scan | no secrets, private-key/token markers, raw secret scan output, shell history, browser/keychain/private-state markers, unmanaged private evidence, or raw source dumps |
+| Final AOS cleanliness | clean after implementation checkpoint commit |
+
+This evidence-only repair did not rerun build-producing proof commands or change runtime/source/browser payloads. It records the prior observed receipt and adds current boundary readbacks for discoverability.
+
+## Current Boundary Readbacks
+
+Status: Slice 4B package boundary readback for this evidence/discoverability repair.
+
+| Boundary | Current readback |
+| --- | --- |
+| Accepted AOS output repo | clean at `a39aa8843854638a51ef9a26b9df8568db90df19` on `main` |
+| TCRN-TMS product repo | `HEAD=origin/main=6356d3b6b730311fe09a0d3eb2f57a07b10bb3c5`; ahead/behind `0 0`; clean/synced; untouched |
+| Wrong-sibling quarantine | `<home>/Code/TCRN-AOS` remains at `4d917fdb6fcbefe888054906b17b755690530112` (`feat: implement AOS Slice 1 operational spine`); quarantine/evidence only; not accepted output, not rollback source, not publish target |
+| TCRN Workflow repo | unchanged at `02c33294db0839a38201821c112a4a6b27d8fc12`; clean with expected local ahead state from the workflow route |
+| Workflow local-track | `0` changes at readback |
+| Workflow runtime guard | `ok=true`; `changedCount=0`; `productRepoTouches=[]` |
+| Resource ledger | `publicationClean=true`; `open=[]`; owner-retained `res-mqb6852p-8mmtef` preserved/untouched |
+
+The wrong-sibling path is included only because Rowan's evidence repair requested a current quarantine readback. It is a route-bound local path classification, not an exportable product datum, credential, runtime authority, or accepted output path.
+
+## Slice 4B Claim Boundary
+
+Slice 4B remains a local static/frontend style-baseline checkpoint only.
+
+It does not claim Product Design final UX/layout/visual acceptance, selected visual target final acceptance, prototype/image-to-code acceptance, browser acceptance closeout, deployment, release readiness, product acceptance, final MVP acceptance, legal completion, dependency-clean public readiness, scanner ingestion, resource materialization, live Codex dispatch, remote publication, CI/dashboard closeout, or Selene closeout.
