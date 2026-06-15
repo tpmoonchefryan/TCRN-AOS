@@ -23,4 +23,5 @@ pnpm verify
 pnpm runtime:db:proof
 pnpm service:smoke
 pnpm slice3:proof
+pnpm slice4:proof
 ```

@@ -20,3 +20,5 @@ The Codex adapter is dry-run only. It records intended dispatch payloads and rea
 Slice 2 runtime proof uses ephemeral local fixture storage and a loopback-only short-lived service. The proof scripts do not retain runtime DB files, start external queues, execute copied helpers, or store local absolute path dumps in AOS records.
 
 Slice 3 gateway/adapter proof remains dry-run and local-only. Gateway writes require authenticated AI employee identity, active role/thread binding, project scope, write permission, idempotency, and payload safety before runtime storage. Codex Adapter outbox records are never delivered to live threads; readbacks and returns are fixture/local records only.
+
+Slice 4 operations cockpit proof is a non-visual read-model contract. It shows gate, conference, evidence, dependency, and resource posture metadata only; it does not import raw private evidence bodies, display raw source, execute live Codex dispatch, scan/materialize resources, commit runtime operational data, or claim Product Design visual acceptance.

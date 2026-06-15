@@ -66,6 +66,58 @@ export class AosStore {
     return [...this.projects.values()];
   }
 
+  listEmployees(): AIEmployee[] {
+    return [...this.employees.values()];
+  }
+
+  listInitiatives(): InitiativeRecord[] {
+    return [...this.initiatives.values()];
+  }
+
+  listEpics(): EpicRecord[] {
+    return [...this.epics.values()];
+  }
+
+  listStories(): StoryRecord[] {
+    return [...this.stories.values()];
+  }
+
+  listAssignments(): Assignment[] {
+    return [...this.assignments.values()];
+  }
+
+  listRuns(): AgentRun[] {
+    return [...this.runs.values()];
+  }
+
+  listGates(): GateWorkOrder[] {
+    return [...this.gates.values()];
+  }
+
+  listEvidence(): EvidenceLink[] {
+    return [...this.evidence.values()];
+  }
+
+  listConferences(): ConferenceRequest[] {
+    return [...this.conferences.values()];
+  }
+
+  listDependencies(): DependencyLifecycleRecord[] {
+    return [...this.dependencies.values()];
+  }
+
+  listResources(): ResourceRegistryRecord[] {
+    return [...this.resources.values()];
+  }
+
+  listKnowledge(): KnowledgeEntry[] {
+    return [...this.knowledge.values()];
+  }
+
+  listReleaseNotes(): ReleaseNoteRecord[] {
+    return [...this.releaseNotes.values()];
+  }
+
   getProject(projectId: ProjectId): ProjectRecord | undefined {
     return this.projects.get(projectId);
   }

@@ -50,3 +50,20 @@ Slice 3 adds runtime-backed MCP Gateway and Codex Adapter dry-run/outbox/readbac
 - `AOS-S064`, `AOS-S065`: access, role/thread binding, read/write split, restricted-content rejection, and append-only audit guardrails are tested.
 
 Slice 3 evidence receipt: `../evidence/slice-3-gateway-adapter-proof.md`.
+
+## Slice 4 Operations Cockpit Functional Contract Coverage
+
+Slice 4 adds non-visual Operations Cockpit read-model proof for owner observation and inspection surfaces:
+
+- `AOS-S045..AOS-S047`: stage-map readback is shaped with required state names, linked stories/gates/evidence, blockers, owner roles, and `manualReadinessOverrideAllowed=false`.
+- `AOS-S049`, `AOS-S050`, `AOS-S052`, `AOS-S053`: context header, workstream overview, gate queues, risk warnings, owner-intent separation, and no-overclaim states are exposed as functional contract data.
+- `AOS-S038..AOS-S042`: conference visibility exposes initiator, participants, missing responses, agenda, linked tickets/evidence, status, decision class, and minutes summary when present.
+- `AOS-S014..AOS-S018`, `AOS-S020..AOS-S024`: AI employee responsibility, role-owned gates, and Owner Intent gates remain separate; Owner Intent readbacks are not auto-executable.
+- `AOS-S029`, `AOS-S031`, `AOS-S054..AOS-S056`, `AOS-S060`, `AOS-S061`: evidence/readback freshness and source-truth links are metadata-only and do not copy raw private payloads.
+- `AOS-S064`, `AOS-S065`: access/audit guardrails remain readback-only in this slice.
+- `AOS-S069..AOS-S074`: dependency/license inspection shows posture, evidence status, SBOM/NOTICE obligation, and linked gates without dependency-clean or legal-completion claims.
+- `AOS-S075..AOS-S082`, `AOS-S084`: Resource Library inspection shows copyright, lifecycle, approval, manifest, and gate state without scanner ingestion or materialization execution.
+
+Slice 4 proof receipt: `../evidence/slice-4-operations-cockpit-proof.md`.
+
+Product Design status: brief accepted only. Visual ideation, prototype, browser visual acceptance, UX/layout/visual acceptance, Product Design acceptance, deployment, release readiness, product acceptance, and final MVP acceptance remain unclaimed.
