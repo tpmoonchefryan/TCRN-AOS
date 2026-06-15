@@ -4,13 +4,15 @@ Status: observed local implementation checkpoint receipt.
 
 Basis before implementation: `64c05607f7acdec1d13847e7125fc064a4f09b0d` (`docs: repair AOS Slice 4B proof evidence`).
 
-Slice 5 checkpoint under review: `4299d6c219f65faaec00c2272f4a37d0680af130` (`feat: add AOS Slice 5 operating loop`).
+Slice 5 implementation checkpoint under review: `4299d6c219f65faaec00c2272f4a37d0680af130` (`feat: add AOS Slice 5 operating loop`).
+
+Slice 5 evidence checkpoint under review: `90ebac4c2081633edd4f521802be43a11c393152` (`docs: record AOS Slice 5 proof evidence`).
 
 Correct product repo: `<platform-root>/TCRN-AOS`.
 
 Wrong sibling quarantine: `<wrong-sibling-quarantine>` at commit `4d917fdb6fcbefe888054906b17b755690530112`; it remains quarantine/evidence only and is not accepted output, rollback source, proof source, or publish target.
 
-Evidence note: this receipt records observed proof for the Slice 5 implementation checkpoint above. It does not change runtime/source behavior.
+Evidence note: this receipt records observed proof for the Slice 5 implementation checkpoint above and is itself finalized by the evidence checkpoint above. It does not change runtime/source behavior.
 
 ## Decision Traceability
 
