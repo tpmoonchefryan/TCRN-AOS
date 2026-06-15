@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { AosStore, createDefaultSeed } from "../../../dist/packages/domain/src/index.js";
+import { createAppliedRuntimeFixture } from "../../../dist/packages/db/src/index.js";
 import { McpGateway, allowedMcpMethods } from "../../../dist/packages/mcp-gateway/src/index.js";
 
 const actor = {
@@ -201,4 +202,103 @@ test("authz, role-thread binding, owner intent separation, and restricted payloa
   assert.equal(gate.ok, true);
   assert.equal(gate.result.type, "owner_intent");
   assert.equal(gate.result.status, "owner_intent_required");
+});
+
+test("runtime-backed gateway enforces project scope, read/write split, and records read audit", async () => {
+  const fixture = await createAppliedRuntimeFixture();
+  try {
+    const store = fixture.getStore();
+    const gateway = new McpGateway(store);
+    const policy = gateway.handle({ method: "aos.policy.read", actor, params: {} });
+    assert.equal(policy.ok, true);
+    assert.equal(policy.status, "read");
+    assert.equal(policy.result.actorAuthoritySnapshot.canWrite, true);
+    assert.equal(policy.result.liveDispatchAuthorized, false);
+
+    const unknownProject = gateway.handle({
+      method: "aos.ticket.propose",
+      actor,
+      params: {
+        ticketType: "initiative",
+        projectId: "UNKNOWN",
+        title: "Unknown project",
+        problem: "Project scope must exist.",
+        expectedOutcome: "Blocked."
+      }
+    });
+    assert.equal(unknownProject.ok, false);
+    assert.match(unknownProject.error, /Unknown project scope/);
+
+    const observerSeed = createDefaultSeed();
+    observerSeed.employees.push({
+      id: "employee-observer",
+      name: "Observer",
+      role: "owner_observer",
+      authoritySummary: "Read-only proof identity.",
+      contactWhen: "Observation only.",
+      lifecycle: "active",
+      threadIdentity: {
+        threadId: "observer-thread",
+        status: "active",
+        lifecycle: "ephemeral"
+      },
+      roleContractRefs: ["owner-observer"],
+      skillRefs: []
+    });
+    const observerGateway = new McpGateway(new AosStore(observerSeed));
+    const readOnlyActor = {
+      employeeId: "employee-observer",
+      role: "owner_observer",
+      threadId: "observer-thread",
+      sessionId: "gateway-test"
+    };
+    const readAllowed = observerGateway.handle({ method: "aos.policy.read", actor: readOnlyActor, params: {} });
+    const writeBlocked = observerGateway.handle({
+      method: "aos.ticket.propose",
+      actor: readOnlyActor,
+      params: {
+        ticketType: "initiative",
+        projectId: "TCRN-AOS",
+        title: "Blocked write",
+        problem: "Observers cannot write.",
+        expectedOutcome: "Blocked."
+      }
+    });
+    assert.equal(readAllowed.ok, true);
+    assert.equal(readAllowed.result.actorAuthoritySnapshot.canWrite, false);
+    assert.equal(writeBlocked.ok, false);
+    assert.match(writeBlocked.error, /cannot write/);
+    assert.ok(store.queryAudit({ action: "mcp.aos.policy.read" }).length >= 1);
+  } finally {
+    await fixture.reset();
+  }
+});
+
+test("gateway rejects restricted content classes before runtime storage", () => {
+  const { store, gateway } = gatewayFixture();
+  const unsafeBodies = [
+    ["raw_source", "diff --" + "git a/file b/file"],
+    ["secret", "AKIA" + "1234567890ABCDEF"],
+    ["private_key", "BEGIN " + "PRIVATE " + "KEY"],
+    ["shell_history", "export " + "API_SECRET=value"],
+    ["browser_or_keychain", "Key" + "chain"],
+    ["raw_secret_scan_output", "git" + "leaks " + "finding " + "secret detector"],
+    ["private_evidence_payload", "private " + "evidence payload"],
+    ["machine_local_absolute_path", "/" + "Users/example/private.txt"]
+  ];
+
+  for (const [kind, body] of unsafeBodies) {
+    const blocked = gateway.handle({
+      method: "aos.evidence.link",
+      actor,
+      params: {
+        type: "artifact_id",
+        target: body,
+        redactionState: "restricted"
+      }
+    });
+    assert.equal(blocked.ok, false, kind);
+    assert.match(blocked.error, new RegExp(kind), kind);
+  }
+  assert.equal(store.queryAudit({ action: "mcp.blocked" }).length, unsafeBodies.length);
 });

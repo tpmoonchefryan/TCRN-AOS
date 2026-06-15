@@ -96,6 +96,10 @@ export class AosRuntimeFixture {
 
   constructor(private readonly actor: ActorIdentity = runtimeActor) {}
 
+  getStore(): AosStore {
+    return this.store;
+  }
+
   async applySchemaAndSeed(): Promise<{ ok: true; schemaDigest: string; seedDigest: string; tableCount: number }> {
     this.runtimeDir = await mkdtemp(join(tmpdir(), "tcrn-aos-runtime-"));
     this.stateFile = join(this.runtimeDir, "aos-runtime-state.json");

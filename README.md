@@ -22,4 +22,5 @@ pnpm install
 pnpm verify
 pnpm runtime:db:proof
 pnpm service:smoke
+pnpm slice3:proof
 ```

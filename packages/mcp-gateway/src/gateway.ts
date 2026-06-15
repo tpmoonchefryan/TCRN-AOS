@@ -136,7 +136,15 @@ export class McpGateway {
         return {
           policyVersion: POLICY_VERSION,
           allowedMethods: allowedMcpMethods,
-          ownerIntentActionsRemainPending: true
+          ownerIntentActionsRemainPending: true,
+          actorAuthoritySnapshot: {
+            employeeId: actor.employeeId,
+            role: actor.role,
+            threadId: actor.threadId,
+            canWrite: canWrite(actor)
+          },
+          localOnly: true,
+          liveDispatchAuthorized: false
         };
       case "aos.conference.request":
         return this.store.createConference({
@@ -158,10 +166,12 @@ export class McpGateway {
           evidenceIds: requireStringArray(params.evidenceIds, "evidenceIds")
         }, actor);
       case "aos.stage_map.read":
-        return this.store.deriveStageMap(requireString(params.projectId, "projectId"), requireString(params.initiativeId, "initiativeId"));
+        return this.store.deriveStageMap(this.requireProjectScope(params.projectId), requireString(params.initiativeId, "initiativeId"));
       case "aos.dependency.record.propose":
+        this.requireProjectScope(params.projectId);
         return this.store.createDependencyRecord(params as unknown as Omit<DependencyLifecycleRecord, "id" | "linkedGateIds">, actor);
       case "aos.resource.record.propose":
+        this.requireProjectScope(params.projectId);
         return this.store.createResourceRecord(params as unknown as Omit<ResourceRegistryRecord, "id" | "linkedGateIds" | "projectManifestRefs">, actor);
       case "aos.audit.query":
         return this.store.queryAudit(compactFilter({
@@ -176,7 +186,7 @@ export class McpGateway {
     const ticketType = requireString(params.ticketType, "ticketType");
     if (ticketType === "initiative") {
       return this.store.createInitiative({
-        projectId: requireString(params.projectId, "projectId"),
+        projectId: this.requireProjectScope(params.projectId),
         title: requireString(params.title, "title"),
         status: "proposed",
         problem: requireString(params.problem, "problem"),
@@ -267,6 +277,14 @@ export class McpGateway {
 
   private isWriteMethod(method: AllowedMcpMethod): boolean {
     return !["aos.policy.read", "aos.stage_map.read", "aos.audit.query"].includes(method);
+  }
+
+  private requireProjectScope(value: unknown): string {
+    const projectId = requireString(value, "projectId");
+    if (!this.store.getProject(projectId)) {
+      throw new Error(`Unknown project scope: ${projectId}`);
+    }
+    return projectId;
   }
 }
 

@@ -37,3 +37,16 @@ Commit `e84410367267b47da0d2654e174a69578f91f6af` adds local runtime proof for t
 The checkpoint proves local TypeScript contracts, static PostgreSQL schema shape, local runtime fixture apply/readback/reset, loopback-only service health/readback, no runtime dependency graph, no Redis/external queue use, dry-run adapter behavior, redaction/restricted-payload rejection, audit append-only behavior, and no direct TCRN-TMS mutation.
 
 Slice 2 evidence receipt: `../evidence/slice-2-runtime-proof.md`.
+
+## Slice 3 Gateway And Adapter Proof Coverage
+
+Slice 3 adds runtime-backed MCP Gateway and Codex Adapter dry-run/outbox/readback proof for the existing operational-spine story groups:
+
+- `AOS-S020..AOS-S024`: Owner Intent and stale/blocked route state remain pending local records; high-risk actions do not execute.
+- `AOS-S025..AOS-S031`: MCP Gateway methods are runtime-backed for ticket proposal, comments, run summary, gate request, evidence link, policy read, conference request, conference position, stage-map read, and audit query.
+- `AOS-S032..AOS-S036`: Codex Adapter dry-run outbox creates assignment, gate request, and conference invitation payloads; return collection updates local assignment/gate/conference records without live dispatch.
+- `AOS-S038..AOS-S042`: conference invitation and return-loop proof remains local and dry-run only.
+- `AOS-S045..AOS-S047`, `AOS-S052..AOS-S056`, `AOS-S060..AOS-S061`: readback-only proof consumers are exercised where needed; no UX, publication, or product-source ingestion scope is promoted.
+- `AOS-S064`, `AOS-S065`: access, role/thread binding, read/write split, restricted-content rejection, and append-only audit guardrails are tested.
+
+Slice 3 evidence receipt: `../evidence/slice-3-gateway-adapter-proof.md`.

@@ -18,3 +18,5 @@ Owner-intent-required actions are modeled as pending gates. They are not execute
 The Codex adapter is dry-run only. It records intended dispatch payloads and readback models, but it does not send to live threads in this checkpoint.
 
 Slice 2 runtime proof uses ephemeral local fixture storage and a loopback-only short-lived service. The proof scripts do not retain runtime DB files, start external queues, execute copied helpers, or store local absolute path dumps in AOS records.
+
+Slice 3 gateway/adapter proof remains dry-run and local-only. Gateway writes require authenticated AI employee identity, active role/thread binding, project scope, write permission, idempotency, and payload safety before runtime storage. Codex Adapter outbox records are never delivered to live threads; readbacks and returns are fixture/local records only.

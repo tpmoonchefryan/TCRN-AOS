@@ -130,6 +130,78 @@ export class AosStore {
     return story;
   }
 
+  createAssignment(input: Omit<Assignment, "id" | "runIds">, actor: ActorIdentity): Assignment {
+    this.ensureSafe(input, "assignment");
+    if (!this.employees.has(input.employeeId)) {
+      throw new Error(`Unknown employee: ${input.employeeId}`);
+    }
+    if (input.targetType === "story") {
+      this.requireStory(input.targetId);
+    }
+    const assignment: Assignment = {
+      ...input,
+      id: createId("assignment", input),
+      runIds: []
+    };
+    this.assignments.set(assignment.id, assignment);
+    const story = input.targetType === "story" ? this.stories.get(input.targetId) : undefined;
+    story?.assignmentIds.push(assignment.id);
+    this.appendAudit(actor, "assignment.create", "assignment", assignment.id, "accepted", {
+      employeeId: assignment.employeeId,
+      targetType: assignment.targetType,
+      targetId: assignment.targetId
+    });
+    return assignment;
+  }
+
+  recordAgentRun(input: Omit<AgentRun, "id">, actor: ActorIdentity): AgentRun {
+    this.ensureSafe(input, "agentRun");
+    const assignment = this.assignments.get(input.assignmentId);
+    if (!assignment) {
+      throw new Error(`Unknown assignment: ${input.assignmentId}`);
+    }
+    const run: AgentRun = {
+      ...input,
+      id: createId("run", input)
+    };
+    this.runs.set(run.id, run);
+    assignment.runIds.push(run.id);
+    assignment.status = run.status === "success" ? "verified" : run.status === "blocked" ? "blocked" : "in_review";
+    this.appendAudit(actor, "agent_run.record", "run", run.id, "accepted", {
+      assignmentId: run.assignmentId,
+      status: run.status
+    });
+    return run;
+  }
+
+  updateGateStatus(gateId: string, status: GateWorkOrder["status"], actor: ActorIdentity, blocker?: string): GateWorkOrder {
+    const gate = this.gates.get(gateId);
+    if (!gate) {
+      throw new Error(`Unknown gate: ${gateId}`);
+    }
+    gate.status = status;
+    if (blocker) {
+      gate.blocker = blocker;
+    }
+    this.appendAudit(actor, "gate.status.update", "gate", gate.id, status === "blocked" ? "blocked" : "accepted", {
+      status,
+      blocker: blocker ?? null
+    });
+    return gate;
+  }
+
+  updateConferenceStatus(conferenceId: string, status: ConferenceRequest["status"], actor: ActorIdentity): ConferenceRequest {
+    const conference = this.conferences.get(conferenceId);
+    if (!conference) {
+      throw new Error(`Unknown conference: ${conferenceId}`);
+    }
+    conference.status = status;
+    this.appendAudit(actor, "conference.status.update", "conference", conference.id, status === "blocked" ? "blocked" : "accepted", {
+      status
+    });
+    return conference;
+  }
+
   addSubTask(storyId: string, subTask: SubTask, actor: ActorIdentity): SubTask {
     this.ensureSafe(subTask, "subTask");
     const story = this.requireStory(storyId);

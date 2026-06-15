@@ -7,13 +7,14 @@ import {
 import type { ActorIdentity, AIEmployee, AuditEvent } from "../../domain/src/index.js";
 
 export type DispatchKind = "assignment" | "gate_request" | "conference_invite";
-export type DispatchStatus = "pending" | "sent" | "failed" | "retrying" | "expired" | "dry_run";
+export type DispatchStatus = "pending" | "dry_run_ready" | "blocked" | "failed" | "retrying" | "expired" | "collected";
 export type ThreadReturnStatus = "success" | "partial" | "blocked" | "changes_requested";
 
 export interface CodexDispatchPayload {
   kind: DispatchKind;
   targetEmployeeId: string;
   linkedTicketIds: string[];
+  linkedAssignmentId?: string;
   linkedGateId?: string;
   linkedConferenceId?: string;
   subject: string;
@@ -32,6 +33,7 @@ export interface CodexDispatchRecord {
   idempotencyKey: string;
   createdAt: string;
   lastAttemptAt?: string;
+  staleAt?: string;
   result?: string;
   auditEventId: string;
 }
@@ -41,6 +43,9 @@ export interface CodexReadback {
   observedStatus: "queued" | "running" | "completed" | "stale" | "blocked";
   observedAt: string;
   acceptanceInferred: false;
+  targetThreadId: string;
+  targetEmployeeId: string;
+  retryable: boolean;
 }
 
 export interface ParsedThreadReturn {
@@ -64,8 +69,6 @@ export class CodexIntegrationAdapter {
   ) {}
 
   createDryRunDispatch(payload: CodexDispatchPayload, actor: ActorIdentity): CodexDispatchRecord {
-    this.assertSafePayload(payload);
-    const target = this.requireDispatchableEmployee(payload.targetEmployeeId);
     const key = idempotencyKey("codex.dispatch", actor.employeeId, payload);
     const existing = [...this.outbox.values()].find((record) => record.idempotencyKey === key);
     if (existing) {
@@ -74,17 +77,19 @@ export class CodexIntegrationAdapter {
       });
       return existing;
     }
+    const id = createId("dispatch", { payload, actor: actor.employeeId });
+    const target = this.validateDispatchRequest(payload, actor, id);
     const audit = this.store.appendAudit(actor, "codex.dispatch.dry_run", "dispatch", "pending", "accepted", {
       kind: payload.kind,
       targetEmployeeId: payload.targetEmployeeId,
       targetThreadId: target.threadIdentity.threadId
     });
     const record: CodexDispatchRecord = {
-      id: createId("dispatch", { payload, actor: actor.employeeId }),
+      id,
       targetThreadId: target.threadIdentity.threadId,
       targetEmployeeId: payload.targetEmployeeId,
       payload,
-      status: "dry_run",
+      status: "dry_run_ready",
       attempts: 0,
       maxAttempts: this.retryPolicy.maxAttempts,
       idempotencyKey: key,
@@ -96,18 +101,34 @@ export class CodexIntegrationAdapter {
   }
 
   sendLive(): never {
-    throw new Error("Live Codex thread dispatch is not authorized in Slice 1");
+    throw new Error("Live Codex thread dispatch is not authorized in Slice 3");
   }
 
-  readback(dispatchId: string): CodexReadback {
+  readback(dispatchId: string, actor?: ActorIdentity): CodexReadback {
     const record = this.requireDispatch(dispatchId);
-    const observedStatus = record.status === "failed" || record.status === "expired" ? "blocked" : "queued";
-    return {
+    const observedStatus = record.status === "failed" || record.status === "expired" || record.status === "blocked"
+      ? "blocked"
+      : record.status === "collected"
+        ? "completed"
+        : record.status === "retrying"
+          ? "running"
+          : "queued";
+    if (actor) {
+      this.store.appendAudit(actor, "codex.dispatch.readback", "dispatch", dispatchId, "read", {
+        observedStatus,
+        targetEmployeeId: record.targetEmployeeId
+      });
+    }
+    const readback: CodexReadback = {
       dispatchId,
       observedStatus,
       observedAt: now(),
-      acceptanceInferred: false
+      acceptanceInferred: false,
+      targetThreadId: record.targetThreadId,
+      targetEmployeeId: record.targetEmployeeId,
+      retryable: ["dry_run_ready", "retrying", "failed"].includes(record.status)
     };
+    return readback;
   }
 
   parseThreadReturn(text: string): ParsedThreadReturn {
@@ -132,7 +153,8 @@ export class CodexIntegrationAdapter {
     const record = this.requireDispatch(dispatchId);
     const parsed = this.parseThreadReturn(text);
     record.result = parsed.status;
-    record.status = parsed.status === "success" ? "sent" : "failed";
+    record.status = "collected";
+    this.applyReturnSideEffects(record, parsed, actor);
     this.store.appendAudit(actor, "codex.return.collect", "dispatch", dispatchId, "accepted", {
       status: parsed.status,
       blockerCount: parsed.blockers.length
@@ -159,6 +181,15 @@ export class CodexIntegrationAdapter {
     return record;
   }
 
+  markStale(dispatchId: string, actor: ActorIdentity): CodexDispatchRecord {
+    const record = this.requireDispatch(dispatchId);
+    record.staleAt = now();
+    this.store.appendAudit(actor, "codex.dispatch.stale", "dispatch", dispatchId, "blocked", {
+      targetEmployeeId: record.targetEmployeeId
+    });
+    return record;
+  }
+
   listOutbox(): CodexDispatchRecord[] {
     return [...this.outbox.values()].map((record) => ({ ...record, payload: { ...record.payload } }));
   }
@@ -169,6 +200,21 @@ export class CodexIntegrationAdapter {
       throw new Error(`Unknown dispatch: ${dispatchId}`);
     }
     return record;
+  }
+
+  private validateDispatchRequest(payload: CodexDispatchPayload, actor: ActorIdentity, dispatchId: string): AIEmployee {
+    try {
+      this.assertSafePayload(payload);
+      return this.requireDispatchableEmployee(payload.targetEmployeeId);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      this.store.appendAudit(actor, "codex.dispatch.blocked", "dispatch", dispatchId, "blocked", {
+        targetEmployeeId: payload.targetEmployeeId,
+        reason: message,
+        payload
+      });
+      throw error;
+    }
   }
 
   private requireDispatchableEmployee(employeeId: string): AIEmployee {
@@ -187,6 +233,28 @@ export class CodexIntegrationAdapter {
     if (findings.length > 0) {
       const first = findings[0]!;
       throw new Error(`Codex adapter rejected restricted ${first.kind} at ${first.path}`);
+    }
+  }
+
+  private applyReturnSideEffects(record: CodexDispatchRecord, parsed: ParsedThreadReturn, actor: ActorIdentity): void {
+    const summary = parsed.summary || parsed.status;
+    if (record.payload.linkedAssignmentId) {
+      this.store.recordAgentRun({
+        assignmentId: record.payload.linkedAssignmentId,
+        status: parsed.status === "changes_requested" ? "partial" : parsed.status,
+        startedAt: record.createdAt,
+        endedAt: now(),
+        readback: parsed.status,
+        outputSummary: summary
+      }, actor);
+    }
+    if (record.payload.linkedGateId) {
+      const gateStatus = parsed.status === "success" ? "accepted" : parsed.status === "partial" ? "pending_role" : "blocked";
+      this.store.updateGateStatus(record.payload.linkedGateId, gateStatus, actor, parsed.blockers[0]);
+    }
+    if (record.payload.linkedConferenceId) {
+      const conferenceStatus = parsed.status === "success" ? "closed" : parsed.status === "partial" ? "minutes_ready" : "blocked";
+      this.store.updateConferenceStatus(record.payload.linkedConferenceId, conferenceStatus, actor);
     }
   }
 }
