@@ -67,3 +67,18 @@ Slice 4 adds non-visual Operations Cockpit read-model proof for owner observatio
 Slice 4 proof receipt: `../evidence/slice-4-operations-cockpit-proof.md`.
 
 Product Design status: brief accepted only. Visual ideation, prototype, browser visual acceptance, UX/layout/visual acceptance, Product Design acceptance, deployment, release readiness, product acceptance, and final MVP acceptance remain unclaimed.
+
+## Slice 4B Frontend Style Baseline Coverage
+
+Slice 4B records the owner-accepted static Operations Cockpit style baseline and implements it as a production-facing local static web surface:
+
+- `AOS-S045..AOS-S047`: stage-map readback is visible in the local static cockpit with source-derived proof states.
+- `AOS-S049`, `AOS-S050`, `AOS-S052`, `AOS-S053`: cockpit shell, project selector, local checkpoint strip, work index, gate card, readback posture card, and detail drawer are represented as production-surface regions.
+- `AOS-S014..AOS-S018`, `AOS-S020..AOS-S024`: AI employee phase visibility and Owner Intent separation remain visible without automatic execution.
+- `AOS-S038..AOS-S042`: conference visibility remains part of the detail/readback model.
+- `AOS-S069..AOS-S074`: dependency/license inspection uses posture language only and does not claim dependency-clean or legal completion.
+- `AOS-S075..AOS-S082`, `AOS-S084`: Resource Library inspection remains metadata/posture only; scanner ingestion and materialization are not claimed.
+
+Slice 4B evidence receipt: `../evidence/slice-4b-frontend-style-baseline-proof.md`.
+
+Product Design status: brief and owner style baseline accepted for now. Product Design UX/layout/visual acceptance, browser acceptance, deployment, release readiness, product acceptance, and final MVP acceptance remain unclaimed.

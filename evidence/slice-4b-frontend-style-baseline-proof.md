@@ -6,11 +6,12 @@ Status: owner-accepted static style baseline recorded for product-local implemen
 
 - Route: TCRN-AOS Slice 4B Operations Cockpit frontend style baseline.
 - Baseline source head before this checkpoint: `3b7aa295411212ca7f5420f6c3cf63897bdc6755`.
+- Baseline checkpoint commit: `e6e73ec6115092bf91eff86fb076d1fbc916e147` (`docs: record AOS Slice 4B style baseline`).
 - Owner style baseline: accepted for now from the current static mockup.
 - Selected wordmark: `03 / Geometric Product`.
 - Aggregate manifest digest: `2bccfa9ab9ed95b785135965c4494f38258a27de3c6f4e9cc1fdad51ed75fb90`.
 - Manifest entries: 12 files.
-- Total bytes: 1708953.
+- Total bytes: 1723953.
 
 ## Product Design Status
 
@@ -48,3 +49,49 @@ product_design_status:
 This baseline receipt preserves the static mockup and brand direction as implementation input only.
 
 It does not claim Product Design UX/layout/visual acceptance, browser acceptance, deployment, release readiness, dependency-clean status, legal completion, public readiness, product acceptance, final MVP acceptance, scanner ingestion, resource materialization, live Codex dispatch, copied-helper execution, or remote publication.
+
+## Implementation Checkpoint Receipt
+
+Status: production-facing local static cockpit surface implemented from the owner-accepted style baseline.
+
+- Render module: `apps/web/src/cockpit-view.ts`.
+- Static render: `apps/web/static/operations-cockpit.html`.
+- Proof script: `scripts/slice-4b-style-proof.mjs`.
+- Package command: `pnpm slice4b:proof`.
+- Baseline digest readback: `2bccfa9ab9ed95b785135965c4494f38258a27de3c6f4e9cc1fdad51ed75fb90`.
+- Static render size observed by `pnpm slice4b:proof`: 20705 bytes.
+- Required selector count: 10 / 10 present.
+- Production copy scan: forbidden overclaim phrases `0`.
+
+The production surface keeps the mockup as a baseline/reference artifact and normalizes the active cockpit copy to local proof language:
+
+- `Local checkpoint observed`
+- `Local posture recorded`
+- `readback current`
+- `local fixture readback current`
+- `proof required`
+- `reviewed for local checkpoint`
+- `Open gate work order`
+
+The mockup reference may still contain historical draft copy. It is not the production surface, not browser acceptance, and not final Product Design acceptance.
+
+## Browser Static Proof Receipt
+
+Rendered target: `apps/web/static/operations-cockpit.html` through a temporary loopback static server.
+
+Observed browser proof:
+
+- Page title: `TCRN AOS Operations Cockpit`.
+- Meaningful DOM snapshot: yes, included `Operations Cockpit` and `Local checkpoint observed`.
+- Console warnings/errors: `0`.
+- Desktop viewport: default browser viewport, required regions present `10 / 10`.
+- Desktop major region overlap count: `0`.
+- Desktop production forbidden-copy hits: `0`.
+- Work-index interaction: search input count `1`; filtering to no-match hid all rows; filtering back to cockpit restored `1` row.
+- Mobile/narrow viewport: `390 x 844`.
+- Mobile required regions present: `10 / 10`.
+- Mobile zero-size regions: `0`.
+- Mobile horizontal overflow: `false`.
+- Temporary screenshots were captured for desktop and mobile proof, but screenshot file paths are not committed because they are machine-local artifacts.
+
+This browser/static proof remains a local implementation proof. It is not Product Design final visual acceptance, not deployment proof, not browser acceptance closeout, and not product acceptance.

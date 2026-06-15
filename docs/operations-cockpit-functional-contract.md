@@ -3,6 +3,7 @@
 Slice 4 adds a deterministic read-model contract for the AOS Operations Cockpit. It is not a Product Design visual target, browser visual acceptance artifact, prototype, deployment proof, or product acceptance claim.
 
 Observed proof receipt: `../evidence/slice-4-operations-cockpit-proof.md`.
+Slice 4B frontend style baseline receipt: `../evidence/slice-4b-frontend-style-baseline-proof.md`.
 
 ## Contract Surfaces
 
@@ -55,3 +56,7 @@ The read model fixes these non-claims:
 - `runtimeDataCommittedToGit=false`
 
 Dependency and resource inspection items expose posture and linked review state, but they keep `cleanClaim=false`, `legalCompletionClaim=false`, `scannerIngestionClaim=false`, and `materializationExecuted=false`.
+
+## Slice 4B Style Surface
+
+Slice 4B implements a production-facing local static surface at `../apps/web/static/operations-cockpit.html` from the owner-accepted static mockup and brand baseline. It preserves the same read-model/no-overclaim boundary and does not replace Product Design final visual acceptance.
