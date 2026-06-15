@@ -1,5 +1,7 @@
 # TCRN-AOS
 
+![TCRN-AOS product impression](docs/brand/tcrn-aos-impression.png)
+
 Local implementation checkpoint for the TCRN Agent Operations System MVP Operational Spine.
 
 This repository is a local product shell only. It does not publish, deploy, mutate other product repositories, execute copied helpers, or claim AOS product acceptance.
@@ -25,3 +27,16 @@ pnpm service:smoke
 pnpm slice3:proof
 pnpm slice4:proof
 ```
+
+## Brand Assets
+
+- Selected geometric wordmark: `docs/brand/tcrn-aos-wordmark-geometric-dark.png`
+- Selected geometric wordmark preview: `docs/brand/tcrn-aos-wordmark-geometric-dark-preview.png`
+- Selected geometric wordmark spec: `docs/brand/tcrn-aos-wordmark-geometric-spec.md`
+- Previous pure text wordmark: `docs/brand/tcrn-aos-wordmark.svg` and `docs/brand/tcrn-aos-wordmark.png`
+- Rounded-square favicon: `docs/brand/aos-favicon.png` and `docs/brand/favicon.ico`
+- README impression image: `docs/brand/tcrn-aos-impression.png`
+
+## Frontend Mockup
+
+- Static AOS core modules sample page: `apps/web/mockup/index.html`

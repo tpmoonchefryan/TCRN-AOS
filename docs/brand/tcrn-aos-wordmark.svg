@@ -1,0 +1,26 @@
+<svg width="940" height="220" viewBox="0 0 940 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">TCRN AOS wordmark</title>
+  <desc id="desc">Pure text TCRN AOS product wordmark with locked TCRN style and AI Operation System subtitle.</desc>
+  <defs>
+    <linearGradient id="aosGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#36DCCD"/>
+      <stop offset="58%" stop-color="#10B7A7"/>
+      <stop offset="100%" stop-color="#087B82"/>
+    </linearGradient>
+    <linearGradient id="edgeGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.44"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="aosShadow" x="-12%" y="-28%" width="124%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#064F57" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+  <g transform="translate(0 0)">
+    <text x="12" y="138" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="96" font-weight="300" letter-spacing="16.8" fill="#0D1A33">TCRN</text>
+    <g filter="url(#aosShadow)">
+      <text x="527" y="138" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="112" font-weight="800" letter-spacing="5.4" fill="url(#aosGrad)">AOS</text>
+      <rect x="539" y="52" width="237" height="11" rx="5.5" fill="url(#edgeGlow)" opacity="0.55"/>
+    </g>
+    <text x="545" y="186" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="17.4" font-weight="500" letter-spacing="3.48" fill="#196E74">AI Operation System</text>
+  </g>
+</svg>

@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TCRN AOS Mockup</title>
+    <link rel="icon" href="../../../docs/brand/aos-favicon.png" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell" data-active-view="Cockpit">
+      <aside class="sidebar" aria-label="AOS navigation">
+        <a class="brand-lockup" href="#" aria-label="TCRN AOS">
+          <span class="brand-tcrn">TCRN</span>
+          <span class="brand-aos">AOS</span>
+          <span class="collapse-mark">&laquo;</span>
+        </a>
+
+        <nav class="nav-stack" aria-label="Primary">
+          <section class="nav-section">
+            <h2>Project</h2>
+            <button class="nav-row active" type="button" data-view="Cockpit">
+              <span class="nav-glyph">⌂</span>
+              <span>Cockpit</span>
+            </button>
+            <button class="nav-row" type="button" data-view="Work Index">
+              <span class="nav-glyph">▤</span>
+              <span>Work Index</span>
+            </button>
+            <button class="nav-row" type="button" data-view="Stage Map">
+              <span class="nav-glyph">⌬</span>
+              <span>Stage Map</span>
+            </button>
+          </section>
+
+          <section class="nav-section">
+            <h2>AI Operations</h2>
+            <button class="nav-row" type="button" data-view="Employee List">
+              <span class="nav-glyph">◎</span>
+              <span>Employee List</span>
+            </button>
+            <button class="nav-row" type="button" data-view="Conference">
+              <span class="nav-glyph">◇</span>
+              <span>Conference</span>
+            </button>
+            <button class="nav-row" type="button" data-view="Approval Flows">
+              <span class="nav-glyph">□</span>
+              <span>Approval Flows</span>
+            </button>
+            <button class="nav-row" type="button" data-view="MCP Gateway">
+              <span class="nav-glyph">▣</span>
+              <span>MCP Gateway</span>
+            </button>
+          </section>
+
+          <section class="nav-section">
+            <h2>Knowledge</h2>
+            <button class="nav-row" type="button" data-view="Knowledge Base">
+              <span class="nav-glyph">▧</span>
+              <span>Knowledge Base</span>
+            </button>
+            <button class="nav-row" type="button" data-view="User Guide">
+              <span class="nav-glyph">▯</span>
+              <span>User Guide</span>
+            </button>
+            <button class="nav-row" type="button" data-view="Release Notes">
+              <span class="nav-glyph">▥</span>
+              <span>Release Notes</span>
+            </button>
+          </section>
+
+          <section class="nav-section">
+            <h2>Governance</h2>
+            <button class="nav-row" type="button" data-view="Resource Library">
+              <span class="nav-glyph">▱</span>
+              <span>Resource Library</span>
+            </button>
+            <button class="nav-row" type="button" data-view="Dependency & License">
+              <span class="nav-glyph">◈</span>
+              <span>Dependency &amp; License</span>
+            </button>
+            <button class="nav-row" type="button" data-view="Evidence Ledger">
+              <span class="nav-glyph">▦</span>
+              <span>Evidence Ledger</span>
+            </button>
+            <button class="nav-row" type="button" data-view="Audit Log">
+              <span class="nav-glyph">⌗</span>
+              <span>Audit Log</span>
+            </button>
+          </section>
+
+          <section class="nav-section">
+            <h2>System</h2>
+            <button class="nav-row" type="button" data-view="Local Storage">
+              <span class="nav-glyph">▰</span>
+              <span>Local Storage</span>
+            </button>
+            <button class="nav-row" type="button" data-view="Integrations">
+              <span class="nav-glyph">◎</span>
+              <span>Integrations</span>
+            </button>
+            <button class="nav-row" type="button" data-view="Settings">
+              <span class="nav-glyph">⚙</span>
+              <span>Settings</span>
+            </button>
+          </section>
+        </nav>
+
+        <footer class="sidebar-status">
+          <div><strong>AOS</strong><span>v0.0.1</span></div>
+          <p><span class="dot healthy"></span>All Systems Operational</p>
+        </footer>
+      </aside>
+
+      <section class="main-frame">
+        <header class="topbar">
+          <label class="project-select" for="projectSelect">
+            <span>Project:</span>
+            <select id="projectSelect">
+              <option>TCRN-AOS</option>
+              <option>TCRN-TMS</option>
+              <option>TCRN Workflow</option>
+            </select>
+          </label>
+          <div class="top-spacer"></div>
+          <div class="top-status"><span>Storage: Local-First</span><i class="dot healthy"></i><strong>Healthy</strong></div>
+          <div class="top-status"><span>Checkpoint:</span><strong>3b7aa295</strong><span>15m ago</span></div>
+          <div class="top-status"><span>Environment:</span><strong>Local Dev</strong></div>
+          <button class="bell" type="button" aria-label="Notifications" data-count="3"></button>
+          <button class="profile" type="button" aria-label="Profile">RL</button>
+        </header>
+
+        <div class="content-shell">
+          <section class="workspace">
+            <section class="project-head">
+              <div class="breadcrumb">
+                <strong>Project Cockpit</strong>
+                <span>/</span>
+                <strong id="projectName">TCRN-AOS</strong>
+                <em>On Track</em>
+              </div>
+              <div class="head-actions">
+                <span>Date: 2026-06-16</span>
+                <span>16:30</span>
+                <button type="button">Customize</button>
+              </div>
+            </section>
+
+            <section class="metric-grid" aria-label="Project cockpit summary">
+              <article class="summary-card stage-card">
+                <h3>Stage Map</h3>
+                <ol class="stage-line">
+                  <li class="done">
+                    <small>Foundation</small>
+                    <span>1</span>
+                  </li>
+                  <li class="done">
+                    <small>Gateway</small>
+                    <span>2</span>
+                  </li>
+                  <li class="current">
+                    <small>Ops Cockpit</small>
+                    <span>3</span>
+                  </li>
+                  <li>
+                    <small>AI Execution</small>
+                    <span>4</span>
+                  </li>
+                  <li>
+                    <small>Release</small>
+                    <span>5</span>
+                  </li>
+                </ol>
+                <div class="stage-footer">
+                  <span>Current: Slice 4 · Functional Contract</span>
+                  <button type="button">Checkpoint</button>
+                </div>
+              </article>
+
+              <article class="summary-card phase-card">
+                <h3>AI Employee by Phase</h3>
+                <div class="phase-row"><span>Foundation</span><b>Il</b><b>Ve</b><b>Sa</b><b>Ro</b><strong>4</strong></div>
+                <div class="phase-row"><span>Gateway</span><b>Il</b><b>Ve</b><b>Ro</b><strong>3</strong></div>
+                <div class="phase-row"><span>Ops Cockpit</span><b>Il</b><b>Ve</b><b>Ta</b><b>Ro</b><strong>4</strong></div>
+                <div class="phase-row muted"><span>AI Execution</span><em>--</em><strong>0</strong></div>
+                <div class="phase-row muted"><span>Release</span><em>--</em><strong>0</strong></div>
+              </article>
+
+              <article class="summary-card blocker-card">
+                <h3>Current Blockers <mark>2</mark></h3>
+                <button type="button" class="blocker-row" data-ticket-id="STORY-001234">
+                  <i class="risk high"></i>
+                  <span>PD-OPT-001</span>
+                  <strong>Product Design Visual Options</strong>
+                  <em>High</em>
+                </button>
+                <button type="button" class="blocker-row" data-ticket-id="EPIC-000589">
+                  <i class="risk medium"></i>
+                  <span>BUILD-012</span>
+                  <strong>Build Rerun Artifacts</strong>
+                  <em>Medium</em>
+                </button>
+                <button type="button" class="blocker-row" data-ticket-id="STORY-001237">
+                  <i class="risk low"></i>
+                  <span>CONF-067</span>
+                  <strong>Conference Minutes Pending</strong>
+                  <em>Low</em>
+                </button>
+                <a href="#">View all blockers</a>
+              </article>
+
+              <article class="summary-card health-card">
+                <h3>Service Health</h3>
+                <div><span>MCP Gateway</span><strong><i class="dot healthy"></i>Healthy</strong></div>
+                <div><span>Codex Adapter</span><strong><i class="dot healthy"></i>Healthy</strong></div>
+                <div><span>Local DB (SQLite)</span><strong><i class="dot healthy"></i>Healthy</strong></div>
+                <div><span>Outbox</span><strong><i class="dot healthy"></i>Healthy</strong></div>
+                <div><span>Readback</span><strong><i class="dot healthy"></i>Healthy</strong></div>
+                <a href="#">Open Health Monitor</a>
+              </article>
+            </section>
+
+            <section class="work-index">
+              <header class="index-header">
+                <h2>Work Index</h2>
+                <button type="button">Saved Views</button>
+                <label class="search-box" for="workSearch">
+                  <span>Search</span>
+                  <input id="workSearch" type="search" placeholder="Search initiatives, epics, stories, IDs..." />
+                  <kbd>⌘K</kbd>
+                </label>
+                <button type="button" id="filterButton">Filters <b>2</b></button>
+                <button type="button">Columns</button>
+              </header>
+
+              <div class="filter-row">
+                <button type="button">Type: All ×</button>
+                <button type="button">Status: All ×</button>
+                <button type="button">Stage: All ×</button>
+                <button type="button">AI Owner: All ×</button>
+                <button type="button">Priority: All ×</button>
+                <button type="button">Blocker: All ×</button>
+                <button type="button" class="clear">Clear All</button>
+              </div>
+
+              <div class="table-meta">
+                <span>1-25 of 412</span>
+                <div>
+                  <button type="button">&lsaquo;</button>
+                  <button type="button" class="page active">1</button>
+                  <button type="button" class="page">2</button>
+                  <button type="button" class="page">3</button>
+                  <span>...</span>
+                  <button type="button" class="page">17</button>
+                  <button type="button">&rsaquo;</button>
+                  <button type="button">25 / page</button>
+                </div>
+              </div>
+
+              <div class="work-table" role="table" aria-label="Work index">
+                <div class="table-row table-head" role="row">
+                  <span><input type="checkbox" aria-label="Select all" /></span>
+                  <span>ID</span>
+                  <span>Type</span>
+                  <span>Title</span>
+                  <span>Stage</span>
+                  <span>Status</span>
+                  <span>AI Owner</span>
+                  <span>Priority</span>
+                  <span>Blocker</span>
+                  <span>Evidence Freshness</span>
+                  <span>Last Activity</span>
+                  <span></span>
+                </div>
+              </div>
+
+              <div class="table-meta bottom">
+                <span>1-25 of 412</span>
+                <div>
+                  <button type="button">&lsaquo;</button>
+                  <button type="button" class="page active">1</button>
+                  <button type="button" class="page">2</button>
+                  <button type="button" class="page">3</button>
+                  <span>...</span>
+                  <button type="button" class="page">17</button>
+                  <button type="button">&rsaquo;</button>
+                  <button type="button">25 / page</button>
+                </div>
+              </div>
+            </section>
+          </section>
+
+          <aside class="detail-drawer" aria-label="Selected work item">
+            <header>
+              <h2 id="drawerId">STORY-001234</h2>
+              <button type="button" aria-label="Close detail">×</button>
+            </header>
+            <div class="tag-line">
+              <span class="tag story">Story</span>
+              <span class="tag review">Review</span>
+              <button type="button">☆</button>
+              <button type="button">⋮</button>
+            </div>
+            <h3 id="drawerTitle">Cockpit Layout Contract</h3>
+
+            <section class="drawer-section">
+              <h4>Hierarchy</h4>
+              <p class="path">TCRN-AOS <span>›</span> INIT-000123 <span>›</span> EPIC-000589</p>
+              <dl class="info-list">
+                <div><dt>Stage</dt><dd id="drawerStage">3. Ops Cockpit</dd></div>
+                <div><dt>AI Owner</dt><dd id="drawerOwner"><span class="tiny-avatar">Ta</span>Talia</dd></div>
+                <div><dt>Priority</dt><dd><span class="pill p0" id="drawerPriority">P0</span></dd></div>
+                <div><dt>Status</dt><dd><span class="pill review" id="drawerStatus">Review</span></dd></div>
+                <div><dt>Blocker</dt><dd><i class="risk high"></i><span id="drawerBlocker">PD-OPT-001</span><small>Product Design Visual Options</small></dd></div>
+              </dl>
+            </section>
+
+            <section class="drawer-section">
+              <h4>Approval Flow</h4>
+              <ol class="approval-flow">
+                <li class="done"><span>Il</span><strong>Ilya</strong></li>
+                <li class="done"><span>Ve</span><strong>Verity</strong></li>
+                <li class="done"><span>Sa</span><strong>Sable</strong></li>
+                <li class="done"><span>Ta</span><strong>Talia</strong></li>
+                <li class="done"><span>Ro</span><strong>Rowan</strong></li>
+                <li class="intent"><span>RL</span><strong>Owner Intent Gate</strong></li>
+              </ol>
+            </section>
+
+            <section class="drawer-section">
+              <h4>Conference</h4>
+              <a href="#">CONF-064&nbsp;&nbsp; Cockpit Functional Contract Review</a>
+              <p>2026-06-15&nbsp;&nbsp;14:22</p>
+            </section>
+
+            <section class="drawer-section">
+              <h4>Evidence / Readback</h4>
+              <dl class="compact-list">
+                <div><dt>Evidence Package</dt><dd><span class="pill fresh">Fresh</span><em>45m ago</em></dd></div>
+                <div><dt>Local Readback</dt><dd><span class="pill ok">OK</span><em>45m ago</em></dd></div>
+                <div><dt>Artifact Checksum</dt><dd>a1b2c3d4</dd></div>
+              </dl>
+              <a href="#">Open Evidence</a>
+            </section>
+
+            <section class="drawer-section">
+              <h4>Dependency / License / Resource</h4>
+              <dl class="compact-list">
+                <div><dt>Dependencies</dt><dd>3 <a href="#">View</a></dd></div>
+                <div><dt>License Check</dt><dd>MIT <span class="pill ok">OK</span></dd></div>
+                <div><dt>Resource Impact</dt><dd>Low <span class="pill ok">OK</span></dd></div>
+              </dl>
+              <a href="#">Open Details</a>
+            </section>
+
+            <section class="drawer-section action-panel">
+              <h4>Allowed Next Action</h4>
+              <button class="primary-route" type="button">Route to Next Approval</button>
+              <button class="secondary-route" type="button">Request Rework</button>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <script src="./mockup.js" type="module"></script>
+  </body>
+</html>
