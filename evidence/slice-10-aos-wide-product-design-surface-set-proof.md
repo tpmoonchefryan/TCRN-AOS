@@ -8,7 +8,7 @@ Status: implementation evidence ready for review.
 - Pre-implementation AOS basis: `06cded11e97be6d4a738a21ae942128d5b4688cd` (`docs: refresh Slice 9B mobile evidence`).
 - Local checkpoint name: `slice-10-aos-wide-product-design-surface-set`.
 - Implementation checkpoint: `13159319bc0e121509000088871240624a78aa29` (`feat: add AOS-wide product design surface set`).
-- Evidence checkpoint: route-carried until the local AOS evidence/docs commit is created.
+- Evidence checkpoint: route-carried by Rowan terminal return after the retained browser evidence refresh; this receipt intentionally does not self-reference its own future evidence-only commit hash.
 
 ## Implemented Static Target
 
@@ -42,6 +42,50 @@ No-server Chromium sanity check also passed using the static `file://` target, w
 - Mobile 390x844: body/document scroll width matched viewport width; 16 regions; 10 initial rows; blocked state filter returned 4 rows; `zzz-no-match` returned 0 rows with empty state visible; Resource Library detail selection worked; no page errors.
 
 The no-server Chromium pass is bounded implementation sanity. Rowan/Talia retained browser evidence can be recaptured in the routed review lane.
+
+## Retained Rowan Browser Evidence
+
+Rowan captured durable no-server browser evidence for Talia review without starting a dev server, static server, deployment server, remote host, persistent browser profile, or owner-retained resource.
+
+Retained evidence directory:
+
+- `evidence/slice-10-aos-wide-product-design-browser/13159319bc0e121509000088871240624a78aa29/`
+
+Retained artifacts:
+
+- `browser-evidence-summary.json` sha256 `f9b415d566094bcf3f25ab80f4c13ba33050e3bb870361e63ff278983f1a85fe` (carried in this receipt rather than embedded in the JSON to avoid recursive self-hash)
+- `desktop-1440x900-initial.png` sha256 `df694c7a31aaa69502c10feb64d50c208ea798e467b060426b50e80e9576fc65`
+- `desktop-1440x900-blocked-filter.png` sha256 `bb5ca841017c0c2e2b1cd5b17991b2d19b67c1b2370b08c609c459d1451a6277`
+- `desktop-1440x900-no-match.png` sha256 `e04dfd7eac7ab4901e440706e134afd4c752c043b1cfe6bb0207efde30112f85`
+- `desktop-1440x900-resource-detail.png` sha256 `7a87312f9c01d820573cfedc97d33b04aa94b523be5a44b0bdeeaa0f6907c1ed`
+- `mobile-390x844-initial.png` sha256 `89fcbfff7712853d051c4bd24550711603d0fd8e1a5db3dc425bf6667040c7cd`
+- `mobile-390x844-blocked-filter.png` sha256 `fb8155132d4eb0df7ef98585bd95b38ce4ca3e20c2134bfef8298542e7b6ac07`
+- `mobile-390x844-no-match.png` sha256 `fb54db37811e3ed8ef924fb057687544c8b1cb302d1db723287232803c6a21db`
+- `mobile-390x844-resource-detail.png` sha256 `a26c4168cacbbe218725efb91b779876fe5b46325c33d2d0a6aa95c80c266aa3`
+
+Retained browser summary:
+
+- Capture mode: `no_server_playwright_setContent_committed_static_html`.
+- Source head at capture: `3d066077e5dd04e2820bea001dec1bbe13263608`.
+- Implementation checkpoint under browser evidence: `13159319bc0e121509000088871240624a78aa29`.
+- Static target: `apps/web/static/aos-wide-product-design.html`.
+- Static target SHA-256: `09874a370b0fb4e9c82513e63b2a01e56d529a2891ec473aa12e991faf506e48`.
+- Browser engine: headless Chromium.
+- Desktop viewport: `1440x900`; mobile viewport: `390x844`.
+- Desktop initial: 10 visible rows, no body/page horizontal overflow, no wide regions.
+- Desktop blocked filter: 4 visible rows, no body/page horizontal overflow, no wide regions.
+- Desktop no-match filter: 0 visible rows, empty state visible.
+- Desktop Resource Library detail: detail selection readback title `Resource Library`, no body/page horizontal overflow.
+- Mobile initial: 10 visible rows, document/body scroll width matches 390px viewport, no wide regions.
+- Mobile blocked filter: 4 visible rows, document/body scroll width matches 390px viewport, no wide regions.
+- Mobile no-match filter: 0 visible rows, empty state visible, no body/page horizontal overflow.
+- Mobile Resource Library detail: detail selection readback title `Resource Library`, no body/page horizontal overflow, no wide regions.
+- Dense table overflow remains contained in `.surface-index`: mobile `surfaceIndex` width `366`, client width `364`, scroll width `1005`, `overflow-x=auto`.
+- Console/page errors: none.
+- Production positive forbidden-copy hits: `[]`.
+- Product Design status remains `target_set_implemented_pending_review`.
+- Product Design acceptance remains not claimed via required state `aosWideProductDesignAccepted=false`; the production surface does not use a separate `data-product-design-acceptance` attribute, which is not a blocker because the proof model and receipt carry the fixed false acceptance state.
+- Codex Security scan remains `not_run`; no scan completion is claimed.
 
 ## Required State Readback
 

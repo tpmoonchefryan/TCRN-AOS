@@ -1,0 +1,1749 @@
+{
+  "ok": true,
+  "capturedAt": "2026-06-16T16:03:04.888Z",
+  "captureMode": "no_server_playwright_setContent_committed_static_html",
+  "sourceHeadAtCapture": "3d066077e5dd04e2820bea001dec1bbe13263608",
+  "implementationCheckpoint": "13159319bc0e121509000088871240624a78aa29",
+  "staticTarget": "apps/web/static/aos-wide-product-design.html",
+  "staticTargetSha256": "09874a370b0fb4e9c82513e63b2a01e56d529a2891ec473aa12e991faf506e48",
+  "staticTargetBytes": 40492,
+  "browserEngine": "chromium",
+  "viewportEvidence": {
+    "desktop": {
+      "width": 1440,
+      "height": 900
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "requiredSurfaces": [
+    "project-hierarchy",
+    "ticket-drillthrough",
+    "ai-employee-profile",
+    "gates-owner-intent",
+    "conference-minutes",
+    "gateway-adapter",
+    "knowledge-release",
+    "dependency-license",
+    "resource-library",
+    "admin-access-audit"
+  ],
+  "requiredRegions": [
+    "aos-wide-shell",
+    "brand-lockup",
+    "global-nav",
+    "target-set-header",
+    "target-path-readback",
+    "surface-module-grid",
+    "project-dashboard-hierarchy",
+    "initiative-ticket-drillthrough",
+    "ai-employee-profile",
+    "gates-owner-intent",
+    "conference-minutes",
+    "gateway-adapter-health",
+    "knowledge-release-modules",
+    "dependency-license-console",
+    "resource-library-materialization",
+    "admin-access-audit-shell",
+    "surface-index",
+    "detail-panel",
+    "evidence-readiness-panel",
+    "required-state-readback"
+  ],
+  "states": {
+    "desktopInitial": {
+      "label": "desktop-initial",
+      "title": "TCRN AOS Product Design Surface Set",
+      "viewportWidth": 1440,
+      "documentScrollWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hasBodyHorizontalOverflow": false,
+      "maxScrollWidth": 1440,
+      "wideRegions": [],
+      "visibleRows": 10,
+      "bodyVisibleRowsData": "10",
+      "activeIds": [
+        "project-hierarchy",
+        "ticket-drillthrough",
+        "ai-employee-profile",
+        "gates-owner-intent",
+        "conference-minutes",
+        "gateway-adapter",
+        "knowledge-release",
+        "dependency-license",
+        "resource-library",
+        "admin-access-audit"
+      ],
+      "hiddenRows": [],
+      "emptyStateVisible": false,
+      "detailTitle": "Project Dashboard",
+      "detailState": "current",
+      "detailSurface": "Project dashboard and hierarchy",
+      "detailAction": "project switch is readback only",
+      "searchValue": "",
+      "focusableSearch": true,
+      "productDesignStatus": "target_set_implemented_pending_review",
+      "requiredSurfacePresence": {
+        "project-hierarchy": true,
+        "ticket-drillthrough": true,
+        "ai-employee-profile": true,
+        "gates-owner-intent": true,
+        "conference-minutes": true,
+        "gateway-adapter": true,
+        "knowledge-release": true,
+        "dependency-license": true,
+        "resource-library": true,
+        "admin-access-audit": true
+      },
+      "regionCount": 13,
+      "regions": {
+        "aos-wide-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 1440,
+          "height": 1798
+        },
+        "brand-lockup": {
+          "present": true,
+          "displayed": true,
+          "width": 224,
+          "height": 42
+        },
+        "global-nav": {
+          "present": false
+        },
+        "target-set-header": {
+          "present": false
+        },
+        "target-path-readback": {
+          "present": true,
+          "displayed": true,
+          "width": 1152,
+          "height": 87
+        },
+        "surface-module-grid": {
+          "present": false
+        },
+        "project-dashboard-hierarchy": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "initiative-ticket-drillthrough": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "ai-employee-profile": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "gates-owner-intent": {
+          "present": false
+        },
+        "conference-minutes": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "gateway-adapter-health": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 301
+        },
+        "knowledge-release-modules": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 301
+        },
+        "dependency-license-console": {
+          "present": false
+        },
+        "resource-library-materialization": {
+          "present": false
+        },
+        "admin-access-audit-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 301
+        },
+        "surface-index": {
+          "present": true,
+          "displayed": true,
+          "width": 816,
+          "height": 742
+        },
+        "detail-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 336,
+          "height": 742
+        },
+        "evidence-readiness-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 295,
+          "height": 222
+        },
+        "required-state-readback": {
+          "present": false
+        }
+      },
+      "disabledControls": [
+        "Close",
+        "Owner action locked",
+        "Live dispatch unavailable",
+        "External proof required"
+      ],
+      "focusVisibleCssPresent": true,
+      "surfaceIndex": {
+        "width": 816,
+        "clientWidth": 814,
+        "scrollWidth": 986,
+        "overflowX": "auto",
+        "rectRight": 1086
+      },
+      "surfaceTable": {
+        "width": 920,
+        "scrollWidth": 986,
+        "clientWidth": 920
+      },
+      "positiveForbiddenHits": []
+    },
+    "desktopBlocked": {
+      "label": "desktop-blocked-filter",
+      "title": "TCRN AOS Product Design Surface Set",
+      "viewportWidth": 1440,
+      "documentScrollWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hasBodyHorizontalOverflow": false,
+      "maxScrollWidth": 1440,
+      "wideRegions": [],
+      "visibleRows": 4,
+      "bodyVisibleRowsData": "4",
+      "activeIds": [
+        "gates-owner-intent",
+        "dependency-license",
+        "resource-library",
+        "admin-access-audit"
+      ],
+      "hiddenRows": [
+        {
+          "id": "project-hierarchy",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "ticket-drillthrough",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "ai-employee-profile",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "conference-minutes",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "gateway-adapter",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "knowledge-release",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        }
+      ],
+      "emptyStateVisible": false,
+      "detailTitle": "Gate Queue",
+      "detailState": "blocked",
+      "detailSurface": "Approvals, gates, and Owner Intent",
+      "detailAction": "true-owner action disabled",
+      "searchValue": "",
+      "focusableSearch": true,
+      "productDesignStatus": "target_set_implemented_pending_review",
+      "requiredSurfacePresence": {
+        "project-hierarchy": true,
+        "ticket-drillthrough": true,
+        "ai-employee-profile": true,
+        "gates-owner-intent": true,
+        "conference-minutes": true,
+        "gateway-adapter": true,
+        "knowledge-release": true,
+        "dependency-license": true,
+        "resource-library": true,
+        "admin-access-audit": true
+      },
+      "regionCount": 13,
+      "regions": {
+        "aos-wide-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 1440,
+          "height": 1798
+        },
+        "brand-lockup": {
+          "present": true,
+          "displayed": true,
+          "width": 224,
+          "height": 42
+        },
+        "global-nav": {
+          "present": false
+        },
+        "target-set-header": {
+          "present": false
+        },
+        "target-path-readback": {
+          "present": true,
+          "displayed": true,
+          "width": 1152,
+          "height": 87
+        },
+        "surface-module-grid": {
+          "present": false
+        },
+        "project-dashboard-hierarchy": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "initiative-ticket-drillthrough": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "ai-employee-profile": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "gates-owner-intent": {
+          "present": false
+        },
+        "conference-minutes": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "gateway-adapter-health": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 301
+        },
+        "knowledge-release-modules": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 301
+        },
+        "dependency-license-console": {
+          "present": false
+        },
+        "resource-library-materialization": {
+          "present": false
+        },
+        "admin-access-audit-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 301
+        },
+        "surface-index": {
+          "present": true,
+          "displayed": true,
+          "width": 816,
+          "height": 742
+        },
+        "detail-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 336,
+          "height": 742
+        },
+        "evidence-readiness-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 295,
+          "height": 222
+        },
+        "required-state-readback": {
+          "present": false
+        }
+      },
+      "disabledControls": [
+        "Close",
+        "Owner action locked",
+        "Live dispatch unavailable",
+        "External proof required"
+      ],
+      "focusVisibleCssPresent": true,
+      "surfaceIndex": {
+        "width": 816,
+        "clientWidth": 814,
+        "scrollWidth": 986,
+        "overflowX": "auto",
+        "rectRight": 1086
+      },
+      "surfaceTable": {
+        "width": 920,
+        "scrollWidth": 986,
+        "clientWidth": 920
+      },
+      "positiveForbiddenHits": []
+    },
+    "desktopNoMatch": {
+      "label": "desktop-no-match",
+      "title": "TCRN AOS Product Design Surface Set",
+      "viewportWidth": 1440,
+      "documentScrollWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hasBodyHorizontalOverflow": false,
+      "maxScrollWidth": 1440,
+      "wideRegions": [],
+      "visibleRows": 0,
+      "bodyVisibleRowsData": "0",
+      "activeIds": [],
+      "hiddenRows": [
+        {
+          "id": "project-hierarchy",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "ticket-drillthrough",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "ai-employee-profile",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "gates-owner-intent",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "conference-minutes",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "gateway-adapter",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "knowledge-release",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "dependency-license",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "resource-library",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "admin-access-audit",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        }
+      ],
+      "emptyStateVisible": true,
+      "detailTitle": "Project Dashboard",
+      "detailState": "current",
+      "detailSurface": "Project dashboard and hierarchy",
+      "detailAction": "project switch is readback only",
+      "searchValue": "zzz-no-match",
+      "focusableSearch": true,
+      "productDesignStatus": "target_set_implemented_pending_review",
+      "requiredSurfacePresence": {
+        "project-hierarchy": true,
+        "ticket-drillthrough": true,
+        "ai-employee-profile": true,
+        "gates-owner-intent": true,
+        "conference-minutes": true,
+        "gateway-adapter": true,
+        "knowledge-release": true,
+        "dependency-license": true,
+        "resource-library": true,
+        "admin-access-audit": true
+      },
+      "regionCount": 13,
+      "regions": {
+        "aos-wide-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 1440,
+          "height": 1798
+        },
+        "brand-lockup": {
+          "present": true,
+          "displayed": true,
+          "width": 224,
+          "height": 42
+        },
+        "global-nav": {
+          "present": false
+        },
+        "target-set-header": {
+          "present": false
+        },
+        "target-path-readback": {
+          "present": true,
+          "displayed": true,
+          "width": 1152,
+          "height": 87
+        },
+        "surface-module-grid": {
+          "present": false
+        },
+        "project-dashboard-hierarchy": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "initiative-ticket-drillthrough": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "ai-employee-profile": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "gates-owner-intent": {
+          "present": false
+        },
+        "conference-minutes": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "gateway-adapter-health": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 301
+        },
+        "knowledge-release-modules": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 301
+        },
+        "dependency-license-console": {
+          "present": false
+        },
+        "resource-library-materialization": {
+          "present": false
+        },
+        "admin-access-audit-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 301
+        },
+        "surface-index": {
+          "present": true,
+          "displayed": true,
+          "width": 816,
+          "height": 742
+        },
+        "detail-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 336,
+          "height": 742
+        },
+        "evidence-readiness-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 295,
+          "height": 222
+        },
+        "required-state-readback": {
+          "present": false
+        }
+      },
+      "disabledControls": [
+        "Close",
+        "Owner action locked",
+        "Live dispatch unavailable",
+        "External proof required"
+      ],
+      "focusVisibleCssPresent": true,
+      "surfaceIndex": {
+        "width": 816,
+        "clientWidth": 814,
+        "scrollWidth": 986,
+        "overflowX": "auto",
+        "rectRight": 1086
+      },
+      "surfaceTable": {
+        "width": 920,
+        "scrollWidth": 986,
+        "clientWidth": 920
+      },
+      "positiveForbiddenHits": []
+    },
+    "desktopResourceDetail": {
+      "label": "desktop-resource-detail",
+      "title": "TCRN AOS Product Design Surface Set",
+      "viewportWidth": 1440,
+      "documentScrollWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hasBodyHorizontalOverflow": false,
+      "maxScrollWidth": 1440,
+      "wideRegions": [],
+      "visibleRows": 10,
+      "bodyVisibleRowsData": "10",
+      "activeIds": [
+        "project-hierarchy",
+        "ticket-drillthrough",
+        "ai-employee-profile",
+        "gates-owner-intent",
+        "conference-minutes",
+        "gateway-adapter",
+        "knowledge-release",
+        "dependency-license",
+        "resource-library",
+        "admin-access-audit"
+      ],
+      "hiddenRows": [],
+      "emptyStateVisible": false,
+      "detailTitle": "Resource Library",
+      "detailState": "blocked",
+      "detailSurface": "Resource materialization and traceability",
+      "detailAction": "materialize action disabled",
+      "searchValue": "",
+      "focusableSearch": true,
+      "productDesignStatus": "target_set_implemented_pending_review",
+      "requiredSurfacePresence": {
+        "project-hierarchy": true,
+        "ticket-drillthrough": true,
+        "ai-employee-profile": true,
+        "gates-owner-intent": true,
+        "conference-minutes": true,
+        "gateway-adapter": true,
+        "knowledge-release": true,
+        "dependency-license": true,
+        "resource-library": true,
+        "admin-access-audit": true
+      },
+      "regionCount": 13,
+      "regions": {
+        "aos-wide-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 1440,
+          "height": 1814
+        },
+        "brand-lockup": {
+          "present": true,
+          "displayed": true,
+          "width": 224,
+          "height": 42
+        },
+        "global-nav": {
+          "present": false
+        },
+        "target-set-header": {
+          "present": false
+        },
+        "target-path-readback": {
+          "present": true,
+          "displayed": true,
+          "width": 1152,
+          "height": 87
+        },
+        "surface-module-grid": {
+          "present": false
+        },
+        "project-dashboard-hierarchy": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "initiative-ticket-drillthrough": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "ai-employee-profile": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "gates-owner-intent": {
+          "present": false
+        },
+        "conference-minutes": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 307
+        },
+        "gateway-adapter-health": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 301
+        },
+        "knowledge-release-modules": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 301
+        },
+        "dependency-license-console": {
+          "present": false
+        },
+        "resource-library-materialization": {
+          "present": false
+        },
+        "admin-access-audit-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 221,
+          "height": 301
+        },
+        "surface-index": {
+          "present": true,
+          "displayed": true,
+          "width": 816,
+          "height": 758
+        },
+        "detail-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 336,
+          "height": 758
+        },
+        "evidence-readiness-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 295,
+          "height": 222
+        },
+        "required-state-readback": {
+          "present": false
+        }
+      },
+      "disabledControls": [
+        "Close",
+        "Owner action locked",
+        "Live dispatch unavailable",
+        "External proof required"
+      ],
+      "focusVisibleCssPresent": true,
+      "surfaceIndex": {
+        "width": 816,
+        "clientWidth": 814,
+        "scrollWidth": 986,
+        "overflowX": "auto",
+        "rectRight": 1086
+      },
+      "surfaceTable": {
+        "width": 920,
+        "scrollWidth": 986,
+        "clientWidth": 920
+      },
+      "positiveForbiddenHits": []
+    },
+    "mobileInitial": {
+      "label": "mobile-initial",
+      "title": "TCRN AOS Product Design Surface Set",
+      "viewportWidth": 390,
+      "documentScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "hasBodyHorizontalOverflow": false,
+      "maxScrollWidth": 390,
+      "wideRegions": [],
+      "visibleRows": 10,
+      "bodyVisibleRowsData": "10",
+      "activeIds": [
+        "project-hierarchy",
+        "ticket-drillthrough",
+        "ai-employee-profile",
+        "gates-owner-intent",
+        "conference-minutes",
+        "gateway-adapter",
+        "knowledge-release",
+        "dependency-license",
+        "resource-library",
+        "admin-access-audit"
+      ],
+      "hiddenRows": [],
+      "emptyStateVisible": false,
+      "detailTitle": "Project Dashboard",
+      "detailState": "current",
+      "detailSurface": "Project dashboard and hierarchy",
+      "detailAction": "project switch is readback only",
+      "searchValue": "",
+      "focusableSearch": true,
+      "productDesignStatus": "target_set_implemented_pending_review",
+      "requiredSurfacePresence": {
+        "project-hierarchy": true,
+        "ticket-drillthrough": true,
+        "ai-employee-profile": true,
+        "gates-owner-intent": true,
+        "conference-minutes": true,
+        "gateway-adapter": true,
+        "knowledge-release": true,
+        "dependency-license": true,
+        "resource-library": true,
+        "admin-access-audit": true
+      },
+      "regionCount": 13,
+      "regions": {
+        "aos-wide-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 390,
+          "height": 5814
+        },
+        "brand-lockup": {
+          "present": true,
+          "displayed": true,
+          "width": 362,
+          "height": 42
+        },
+        "global-nav": {
+          "present": false
+        },
+        "target-set-header": {
+          "present": false
+        },
+        "target-path-readback": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 285
+        },
+        "surface-module-grid": {
+          "present": false
+        },
+        "project-dashboard-hierarchy": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "initiative-ticket-drillthrough": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "ai-employee-profile": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "gates-owner-intent": {
+          "present": false
+        },
+        "conference-minutes": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "gateway-adapter-health": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "knowledge-release-modules": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "dependency-license-console": {
+          "present": false
+        },
+        "resource-library-materialization": {
+          "present": false
+        },
+        "admin-access-audit-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "surface-index": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 840
+        },
+        "detail-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 678
+        },
+        "evidence-readiness-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 324,
+          "height": 190
+        },
+        "required-state-readback": {
+          "present": false
+        }
+      },
+      "disabledControls": [
+        "Close",
+        "Owner action locked",
+        "Live dispatch unavailable",
+        "External proof required"
+      ],
+      "focusVisibleCssPresent": true,
+      "surfaceIndex": {
+        "width": 366,
+        "clientWidth": 364,
+        "scrollWidth": 1005,
+        "overflowX": "auto",
+        "rectRight": 378
+      },
+      "surfaceTable": {
+        "width": 1005,
+        "scrollWidth": 1005,
+        "clientWidth": 1005
+      },
+      "positiveForbiddenHits": []
+    },
+    "mobileBlocked": {
+      "label": "mobile-blocked-filter",
+      "title": "TCRN AOS Product Design Surface Set",
+      "viewportWidth": 390,
+      "documentScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "hasBodyHorizontalOverflow": false,
+      "maxScrollWidth": 390,
+      "wideRegions": [],
+      "visibleRows": 4,
+      "bodyVisibleRowsData": "4",
+      "activeIds": [
+        "gates-owner-intent",
+        "dependency-license",
+        "resource-library",
+        "admin-access-audit"
+      ],
+      "hiddenRows": [
+        {
+          "id": "project-hierarchy",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "ticket-drillthrough",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "ai-employee-profile",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "conference-minutes",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "gateway-adapter",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "knowledge-release",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        }
+      ],
+      "emptyStateVisible": false,
+      "detailTitle": "Gate Queue",
+      "detailState": "blocked",
+      "detailSurface": "Approvals, gates, and Owner Intent",
+      "detailAction": "true-owner action disabled",
+      "searchValue": "",
+      "focusableSearch": true,
+      "productDesignStatus": "target_set_implemented_pending_review",
+      "requiredSurfacePresence": {
+        "project-hierarchy": true,
+        "ticket-drillthrough": true,
+        "ai-employee-profile": true,
+        "gates-owner-intent": true,
+        "conference-minutes": true,
+        "gateway-adapter": true,
+        "knowledge-release": true,
+        "dependency-license": true,
+        "resource-library": true,
+        "admin-access-audit": true
+      },
+      "regionCount": 13,
+      "regions": {
+        "aos-wide-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 390,
+          "height": 5514
+        },
+        "brand-lockup": {
+          "present": true,
+          "displayed": true,
+          "width": 362,
+          "height": 42
+        },
+        "global-nav": {
+          "present": false
+        },
+        "target-set-header": {
+          "present": false
+        },
+        "target-path-readback": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 285
+        },
+        "surface-module-grid": {
+          "present": false
+        },
+        "project-dashboard-hierarchy": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "initiative-ticket-drillthrough": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "ai-employee-profile": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "gates-owner-intent": {
+          "present": false
+        },
+        "conference-minutes": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "gateway-adapter-health": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "knowledge-release-modules": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "dependency-license-console": {
+          "present": false
+        },
+        "resource-library-materialization": {
+          "present": false
+        },
+        "admin-access-audit-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "surface-index": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 540
+        },
+        "detail-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 678
+        },
+        "evidence-readiness-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 324,
+          "height": 190
+        },
+        "required-state-readback": {
+          "present": false
+        }
+      },
+      "disabledControls": [
+        "Close",
+        "Owner action locked",
+        "Live dispatch unavailable",
+        "External proof required"
+      ],
+      "focusVisibleCssPresent": true,
+      "surfaceIndex": {
+        "width": 366,
+        "clientWidth": 364,
+        "scrollWidth": 1002,
+        "overflowX": "auto",
+        "rectRight": 378
+      },
+      "surfaceTable": {
+        "width": 1002,
+        "scrollWidth": 1002,
+        "clientWidth": 1002
+      },
+      "positiveForbiddenHits": []
+    },
+    "mobileNoMatch": {
+      "label": "mobile-no-match",
+      "title": "TCRN AOS Product Design Surface Set",
+      "viewportWidth": 390,
+      "documentScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "hasBodyHorizontalOverflow": false,
+      "maxScrollWidth": 390,
+      "wideRegions": [],
+      "visibleRows": 0,
+      "bodyVisibleRowsData": "0",
+      "activeIds": [],
+      "hiddenRows": [
+        {
+          "id": "project-hierarchy",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "ticket-drillthrough",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "ai-employee-profile",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "gates-owner-intent",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "conference-minutes",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "gateway-adapter",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "knowledge-release",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "dependency-license",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "resource-library",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        },
+        {
+          "id": "admin-access-audit",
+          "hidden": true,
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "offsetParentNull": true
+        }
+      ],
+      "emptyStateVisible": true,
+      "detailTitle": "Project Dashboard",
+      "detailState": "current",
+      "detailSurface": "Project dashboard and hierarchy",
+      "detailAction": "project switch is readback only",
+      "searchValue": "zzz-no-match",
+      "focusableSearch": true,
+      "productDesignStatus": "target_set_implemented_pending_review",
+      "requiredSurfacePresence": {
+        "project-hierarchy": true,
+        "ticket-drillthrough": true,
+        "ai-employee-profile": true,
+        "gates-owner-intent": true,
+        "conference-minutes": true,
+        "gateway-adapter": true,
+        "knowledge-release": true,
+        "dependency-license": true,
+        "resource-library": true,
+        "admin-access-audit": true
+      },
+      "regionCount": 13,
+      "regions": {
+        "aos-wide-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 390,
+          "height": 5387
+        },
+        "brand-lockup": {
+          "present": true,
+          "displayed": true,
+          "width": 362,
+          "height": 42
+        },
+        "global-nav": {
+          "present": false
+        },
+        "target-set-header": {
+          "present": false
+        },
+        "target-path-readback": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 285
+        },
+        "surface-module-grid": {
+          "present": false
+        },
+        "project-dashboard-hierarchy": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "initiative-ticket-drillthrough": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "ai-employee-profile": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "gates-owner-intent": {
+          "present": false
+        },
+        "conference-minutes": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "gateway-adapter-health": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "knowledge-release-modules": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "dependency-license-console": {
+          "present": false
+        },
+        "resource-library-materialization": {
+          "present": false
+        },
+        "admin-access-audit-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "surface-index": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 413
+        },
+        "detail-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 678
+        },
+        "evidence-readiness-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 324,
+          "height": 190
+        },
+        "required-state-readback": {
+          "present": false
+        }
+      },
+      "disabledControls": [
+        "Close",
+        "Owner action locked",
+        "Live dispatch unavailable",
+        "External proof required"
+      ],
+      "focusVisibleCssPresent": true,
+      "surfaceIndex": {
+        "width": 366,
+        "clientWidth": 364,
+        "scrollWidth": 1002,
+        "overflowX": "auto",
+        "rectRight": 378
+      },
+      "surfaceTable": {
+        "width": 1002,
+        "scrollWidth": 1002,
+        "clientWidth": 1002
+      },
+      "positiveForbiddenHits": []
+    },
+    "mobileResourceDetail": {
+      "label": "mobile-resource-detail",
+      "title": "TCRN AOS Product Design Surface Set",
+      "viewportWidth": 390,
+      "documentScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "hasBodyHorizontalOverflow": false,
+      "maxScrollWidth": 390,
+      "wideRegions": [],
+      "visibleRows": 10,
+      "bodyVisibleRowsData": "10",
+      "activeIds": [
+        "project-hierarchy",
+        "ticket-drillthrough",
+        "ai-employee-profile",
+        "gates-owner-intent",
+        "conference-minutes",
+        "gateway-adapter",
+        "knowledge-release",
+        "dependency-license",
+        "resource-library",
+        "admin-access-audit"
+      ],
+      "hiddenRows": [],
+      "emptyStateVisible": false,
+      "detailTitle": "Resource Library",
+      "detailState": "blocked",
+      "detailSurface": "Resource materialization and traceability",
+      "detailAction": "materialize action disabled",
+      "searchValue": "",
+      "focusableSearch": true,
+      "productDesignStatus": "target_set_implemented_pending_review",
+      "requiredSurfacePresence": {
+        "project-hierarchy": true,
+        "ticket-drillthrough": true,
+        "ai-employee-profile": true,
+        "gates-owner-intent": true,
+        "conference-minutes": true,
+        "gateway-adapter": true,
+        "knowledge-release": true,
+        "dependency-license": true,
+        "resource-library": true,
+        "admin-access-audit": true
+      },
+      "regionCount": 13,
+      "regions": {
+        "aos-wide-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 390,
+          "height": 5830
+        },
+        "brand-lockup": {
+          "present": true,
+          "displayed": true,
+          "width": 362,
+          "height": 42
+        },
+        "global-nav": {
+          "present": false
+        },
+        "target-set-header": {
+          "present": false
+        },
+        "target-path-readback": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 285
+        },
+        "surface-module-grid": {
+          "present": false
+        },
+        "project-dashboard-hierarchy": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "initiative-ticket-drillthrough": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "ai-employee-profile": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "gates-owner-intent": {
+          "present": false
+        },
+        "conference-minutes": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "gateway-adapter-health": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "knowledge-release-modules": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "dependency-license-console": {
+          "present": false
+        },
+        "resource-library-materialization": {
+          "present": false
+        },
+        "admin-access-audit-shell": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 240
+        },
+        "surface-index": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 840
+        },
+        "detail-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 366,
+          "height": 694
+        },
+        "evidence-readiness-panel": {
+          "present": true,
+          "displayed": true,
+          "width": 324,
+          "height": 190
+        },
+        "required-state-readback": {
+          "present": false
+        }
+      },
+      "disabledControls": [
+        "Close",
+        "Owner action locked",
+        "Live dispatch unavailable",
+        "External proof required"
+      ],
+      "focusVisibleCssPresent": true,
+      "surfaceIndex": {
+        "width": 366,
+        "clientWidth": 364,
+        "scrollWidth": 1005,
+        "overflowX": "auto",
+        "rectRight": 378
+      },
+      "surfaceTable": {
+        "width": 1005,
+        "scrollWidth": 1005,
+        "clientWidth": 1005
+      },
+      "positiveForbiddenHits": []
+    }
+  },
+  "focusReadbacks": {
+    "desktopFocus": {
+      "searchFocusable": true,
+      "rowFocusable": true,
+      "blockedFilterFocusable": true,
+      "disabledButtonLabels": [
+        "Close",
+        "Owner action locked",
+        "Live dispatch unavailable",
+        "External proof required"
+      ]
+    },
+    "mobileFocus": {
+      "searchFocusable": true,
+      "rowFocusable": true,
+      "blockedFilterFocusable": true,
+      "disabledButtonLabels": [
+        "Close",
+        "Owner action locked",
+        "Live dispatch unavailable",
+        "External proof required"
+      ]
+    }
+  },
+  "consoleMessages": [],
+  "pageErrors": [],
+  "noOverclaim": {
+    "productionPositiveForbiddenHits": {
+      "desktopInitial": [],
+      "desktopBlocked": [],
+      "desktopNoMatch": [],
+      "desktopResourceDetail": [],
+      "mobileInitial": [],
+      "mobileBlocked": [],
+      "mobileNoMatch": [],
+      "mobileResourceDetail": []
+    },
+    "productDesignAcceptance": "not_claimed_via_required_state_aosWideProductDesignAccepted_false",
+    "codexSecurityScan": "not_run_claimed_as_not_run_only",
+    "noDeploymentReleasePublicationAcceptanceClaimed": true,
+    "productDesignStatus": "target_set_implemented_pending_review",
+    "missingDataProductDesignAcceptanceAttribute": "not_blocking_required_state_records_false"
+  },
+  "artifactList": [
+    {
+      "file": "evidence/slice-10-aos-wide-product-design-browser/13159319bc0e121509000088871240624a78aa29/desktop-1440x900-initial.png",
+      "sha256": "df694c7a31aaa69502c10feb64d50c208ea798e467b060426b50e80e9576fc65",
+      "bytes": 243633,
+      "fullPage": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "evidence/slice-10-aos-wide-product-design-browser/13159319bc0e121509000088871240624a78aa29/desktop-1440x900-blocked-filter.png",
+      "sha256": "bb5ca841017c0c2e2b1cd5b17991b2d19b67c1b2370b08c609c459d1451a6277",
+      "bytes": 211973,
+      "fullPage": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "evidence/slice-10-aos-wide-product-design-browser/13159319bc0e121509000088871240624a78aa29/desktop-1440x900-no-match.png",
+      "sha256": "e04dfd7eac7ab4901e440706e134afd4c752c043b1cfe6bb0207efde30112f85",
+      "bytes": 193635,
+      "fullPage": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "evidence/slice-10-aos-wide-product-design-browser/13159319bc0e121509000088871240624a78aa29/desktop-1440x900-resource-detail.png",
+      "sha256": "7a87312f9c01d820573cfedc97d33b04aa94b523be5a44b0bdeeaa0f6907c1ed",
+      "bytes": 205458,
+      "fullPage": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "evidence/slice-10-aos-wide-product-design-browser/13159319bc0e121509000088871240624a78aa29/mobile-390x844-initial.png",
+      "sha256": "89fcbfff7712853d051c4bd24550711603d0fd8e1a5db3dc425bf6667040c7cd",
+      "bytes": 395376,
+      "fullPage": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "evidence/slice-10-aos-wide-product-design-browser/13159319bc0e121509000088871240624a78aa29/mobile-390x844-blocked-filter.png",
+      "sha256": "fb8155132d4eb0df7ef98585bd95b38ce4ca3e20c2134bfef8298542e7b6ac07",
+      "bytes": 376727,
+      "fullPage": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "evidence/slice-10-aos-wide-product-design-browser/13159319bc0e121509000088871240624a78aa29/mobile-390x844-no-match.png",
+      "sha256": "fb54db37811e3ed8ef924fb057687544c8b1cb302d1db723287232803c6a21db",
+      "bytes": 368550,
+      "fullPage": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "file": "evidence/slice-10-aos-wide-product-design-browser/13159319bc0e121509000088871240624a78aa29/mobile-390x844-resource-detail.png",
+      "sha256": "a26c4168cacbbe218725efb91b779876fe5b46325c33d2d0a6aa95c80c266aa3",
+      "bytes": 396532,
+      "fullPage": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    }
+  ],
+  "validationFailures": [],
+  "notes": [
+    "The production surface does not use data-product-design-acceptance; non-acceptance is carried by productDesignStatus=target_set_implemented_pending_review and required state aosWideProductDesignAccepted=false in the receipt/proof model."
+  ],
+  "summaryFileHashDisposition": "hash_carried_in_markdown_receipt_not_embedded_to_avoid_recursive_self_hash"
+}
