@@ -34,6 +34,17 @@ export type ThreadManagementPrimitive =
   | "successor_registration";
 export type HandoffReturnState = "return_sent" | "partial_return_sent" | "blocked_return_sent" | "return_blocked";
 export type TerminalReturnValidationDisposition = "consumable" | "duplicate" | "conflicting" | "non_consumable" | "blocked";
+export type LiveDispatchTargetReadbackState =
+  | NoSendTargetThreadState
+  | "replacement_named"
+  | "successor_unresolved"
+  | "commentary_only"
+  | "malformed_target_state";
+export type LiveDispatchMode = "blocked_without_owner_intent" | "implementation_readiness" | "live_send";
+export type LiveDispatchSourceRecordClass = "work_item" | "gate" | "conference" | "dispatch_request" | "evidence_request";
+export type LiveDispatchPayloadClass = "assignment" | "gate_request" | "conference_invite" | "terminal_return_request";
+export type LiveDispatchRedactionProfile = "count_only_route_metadata" | "redacted_payload_metadata";
+export type LiveDispatchSendEligibilityState = "blocked_owner_intent_required" | "blocked_duplicate_prevented" | "blocked_target_readback" | "blocked_restricted_payload";
 
 export interface CodexDispatchPayload {
   kind: DispatchKind;
@@ -88,6 +99,9 @@ export interface RetryPolicy {
 export interface NoSendPrimitiveProbe {
   recordSendPrimitiveCall(): void;
   recordThreadManagementPrimitiveCall(action: ThreadManagementPrimitive): void;
+  recordTerminalReturnIngestionExecution(): void;
+  recordRegistryMutation(): void;
+  recordGeneratedBridgeMutation(): void;
   snapshot(): NoSendPrimitiveSnapshot;
 }
 
@@ -95,6 +109,9 @@ export interface NoSendPrimitiveSnapshot {
   sendPrimitiveCallCount: number;
   threadManagementPrimitiveCallCount: number;
   threadManagementActions: ThreadManagementPrimitive[];
+  terminalReturnIngestionExecutionCount: number;
+  registryMutationCount: number;
+  generatedBridgeMutationCount: number;
 }
 
 export interface NoSendDispatchInput {
@@ -171,6 +188,7 @@ export interface TerminalReturnObservation {
   sourceThreadId?: string;
   targetThreadId?: string;
   coordinatorThreadId?: string;
+  terminalTurnId?: string;
   parentRouteId?: string;
   dispatchId?: string;
   status?: ThreadReturnStatus;
@@ -180,6 +198,11 @@ export interface TerminalReturnObservation {
   handoffReturnState?: HandoffReturnState | "return_gap_recovered" | "return_gap_blocked";
   payloadKind: "assistant_terminal" | "commentary_only" | "systemError" | "no_assistant_payload" | "user_only";
   targetThreadState?: NoSendTargetThreadState;
+  originalTerminalPacketReference?: string;
+  originalTerminalPacketChecksum?: string;
+  coordinatorConsumedReceiptReference?: string;
+  coordinatorConsumedReceiptChecksum?: string;
+  terminalIngestionExecutionRequested?: boolean;
   claims?: Partial<Record<
     | "productAcceptance"
     | "finalMvpAcceptance"
@@ -212,9 +235,90 @@ export interface TerminalReturnValidation {
   restrictedFindingCount: number;
 }
 
+export interface LiveDispatchTargetReadback {
+  state: LiveDispatchTargetReadbackState;
+  readAt: string;
+  canonicalThreadName: string;
+  roleId: string;
+  threadId?: string;
+  successorConfirmed?: boolean;
+  temporaryLaneAuthorized?: boolean;
+}
+
+export interface LiveDispatchOwnerIntentRequirement {
+  required: true;
+  proofState: "not_granted" | "pending";
+}
+
+export interface LiveDispatchEnvelopeInput {
+  schemaVersion?: string;
+  parentRouteId: string;
+  sourceProjectId: "TCRN-AOS";
+  initiativeId: "tcrn-aos-product-foundation";
+  sourceAosRecordId: string;
+  sourceRecordClass: LiveDispatchSourceRecordClass;
+  sourceAosBasisSha: string;
+  workflowBasisSha: string;
+  workflowPacketPath: string;
+  targetRoleId: string;
+  targetReadback: LiveDispatchTargetReadback;
+  dispatchMode: LiveDispatchMode;
+  payloadClass: LiveDispatchPayloadClass;
+  payloadDigest: string;
+  redactionProfile: LiveDispatchRedactionProfile;
+  ownerIntent: LiveDispatchOwnerIntentRequirement;
+  retryLimit: number;
+  returnContractVersion?: string;
+  receiptReferenceExpectation: "required_before_ingestion";
+  requestedSend?: boolean;
+  requestedTerminalReturnIngestion?: boolean;
+  requestedRegistryMutation?: boolean;
+  requestedGeneratedBridgeMutation?: boolean;
+  requestedThreadManagementActions?: ThreadManagementPrimitive[];
+}
+
+export interface LiveDispatchEnvelope {
+  envelopeId: string;
+  schemaVersion: string;
+  parentRouteId: string;
+  sourceProjectId: "TCRN-AOS";
+  initiativeId: "tcrn-aos-product-foundation";
+  sourceAosRecordId: string;
+  sourceRecordClass: LiveDispatchSourceRecordClass;
+  basisSha: {
+    aos: string;
+    workflow: string;
+  };
+  workflowPacketPath: string;
+  targetRoleId: string;
+  targetThreadId?: string;
+  targetReadback: LiveDispatchTargetReadback;
+  dispatchMode: Exclude<LiveDispatchMode, "live_send">;
+  payloadClass: LiveDispatchPayloadClass;
+  payloadDigest: string;
+  redactionProfile: LiveDispatchRedactionProfile;
+  ownerIntent: LiveDispatchOwnerIntentRequirement;
+  idempotencyKey: string;
+  dedupeKey: string;
+  replayGroup: string;
+  retryLimit: number;
+  sendPrimitiveEligibilityState: LiveDispatchSendEligibilityState;
+  expectedTerminalStatuses: ThreadReturnStatus[];
+  expectedHandoffReturnStates: HandoffReturnState[];
+  receiptReferenceExpectation: "required_before_ingestion";
+  returnContractVersion: string;
+  sendPrimitiveCallCount: 0;
+  threadManagementPrimitiveCallCount: 0;
+  terminalReturnIngestionExecutionCount: 0;
+  registryMutationCount: 0;
+  generatedBridgeMutationCount: 0;
+  auditEventId: string;
+}
+
 export class CodexIntegrationAdapter {
   private readonly outbox = new Map<string, CodexDispatchRecord>();
   private readonly noSendEnvelopes = new Map<string, NoSendDispatchEnvelope>();
+  private readonly liveDispatchEnvelopes = new Map<string, LiveDispatchEnvelope>();
 
   constructor(
     private readonly store: AosStore,
@@ -342,6 +446,127 @@ export class CodexIntegrationAdapter {
 
   listNoSendEnvelopes(): NoSendDispatchEnvelope[] {
     return [...this.noSendEnvelopes.values()].map(cloneNoSendEnvelope);
+  }
+
+  createLiveDispatchReadinessEnvelope(input: LiveDispatchEnvelopeInput, actor: ActorIdentity, probe: NoSendPrimitiveProbe = createNoSendPrimitiveProbe()): LiveDispatchEnvelope {
+    const returnContractVersion = input.returnContractVersion ?? "thread-handoff-contract-v2";
+    const schemaVersion = input.schemaVersion ?? "aos-real-live-dispatch-stage-a-v1";
+    const identitySeed = liveDispatchIdentitySeed(input, returnContractVersion, schemaVersion);
+    const envelopeId = createId("live_dispatch", identitySeed);
+    this.assertLiveDispatchReadinessInput(input, actor, envelopeId);
+    const existing = this.liveDispatchEnvelopes.get(envelopeId);
+    if (existing) {
+      this.store.appendAudit(actor, "codex.live_dispatch.duplicate_prevented", "dispatch", envelopeId, "blocked", {
+        parentRouteId: input.parentRouteId,
+        targetRoleId: input.targetRoleId,
+        targetReadbackState: input.targetReadback.state,
+        sendPrimitiveCallCount: 0
+      });
+      return cloneLiveDispatchEnvelope(existing);
+    }
+    const probeSnapshot = probe.snapshot();
+    if (
+      probeSnapshot.sendPrimitiveCallCount !== 0
+      || probeSnapshot.threadManagementPrimitiveCallCount !== 0
+      || probeSnapshot.terminalReturnIngestionExecutionCount !== 0
+      || probeSnapshot.registryMutationCount !== 0
+      || probeSnapshot.generatedBridgeMutationCount !== 0
+    ) {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", {
+        reason: "probe_observed_external_execution",
+        sendPrimitiveCallCount: probeSnapshot.sendPrimitiveCallCount,
+        threadManagementPrimitiveCallCount: probeSnapshot.threadManagementPrimitiveCallCount,
+        terminalReturnIngestionExecutionCount: probeSnapshot.terminalReturnIngestionExecutionCount,
+        registryMutationCount: probeSnapshot.registryMutationCount,
+        generatedBridgeMutationCount: probeSnapshot.generatedBridgeMutationCount
+      });
+      throw new Error("Live dispatch readiness blocked because a primitive probe observed execution");
+    }
+    const audit = this.store.appendAudit(actor, "codex.live_dispatch.readiness", "dispatch", envelopeId, "blocked", {
+      parentRouteId: input.parentRouteId,
+      sourceAosRecordId: input.sourceAosRecordId,
+      sourceRecordClass: input.sourceRecordClass,
+      targetRoleId: input.targetRoleId,
+      targetReadbackState: input.targetReadback.state,
+      dispatchMode: input.dispatchMode,
+      ownerIntentRequired: input.ownerIntent.required,
+      ownerIntentProofState: input.ownerIntent.proofState,
+      sendPrimitiveEligibilityState: "blocked_owner_intent_required",
+      payloadDigestPresent: Boolean(input.payloadDigest),
+      redactionProfile: input.redactionProfile
+    });
+    const dispatchMode: Exclude<LiveDispatchMode, "live_send"> = input.dispatchMode === "live_send" ? "blocked_without_owner_intent" : input.dispatchMode;
+    const envelope: LiveDispatchEnvelope = {
+      envelopeId,
+      schemaVersion,
+      parentRouteId: input.parentRouteId,
+      sourceProjectId: input.sourceProjectId,
+      initiativeId: input.initiativeId,
+      sourceAosRecordId: input.sourceAosRecordId,
+      sourceRecordClass: input.sourceRecordClass,
+      basisSha: {
+        aos: input.sourceAosBasisSha,
+        workflow: input.workflowBasisSha
+      },
+      workflowPacketPath: input.workflowPacketPath,
+      targetRoleId: input.targetRoleId,
+      targetReadback: cloneTargetReadback(input.targetReadback),
+      dispatchMode,
+      payloadClass: input.payloadClass,
+      payloadDigest: input.payloadDigest,
+      redactionProfile: input.redactionProfile,
+      ownerIntent: { ...input.ownerIntent },
+      idempotencyKey: idempotencyKey("codex.live_dispatch.stage_a", actor.employeeId, identitySeed),
+      dedupeKey: idempotencyKey("codex.live_dispatch.stage_a.dedupe", actor.employeeId, { envelopeId, schemaVersion }),
+      replayGroup: idempotencyKey("codex.live_dispatch.stage_a.replay", input.sourceAosRecordId, {
+        parentRouteId: input.parentRouteId,
+        targetThreadId: input.targetReadback.threadId ?? input.targetRoleId,
+        payloadDigest: input.payloadDigest
+      }),
+      retryLimit: input.retryLimit,
+      sendPrimitiveEligibilityState: "blocked_owner_intent_required",
+      expectedTerminalStatuses: ["success", "partial", "blocked", "changes_requested"],
+      expectedHandoffReturnStates: ["return_sent", "partial_return_sent", "blocked_return_sent", "return_blocked"],
+      receiptReferenceExpectation: input.receiptReferenceExpectation,
+      returnContractVersion,
+      sendPrimitiveCallCount: 0,
+      threadManagementPrimitiveCallCount: 0,
+      terminalReturnIngestionExecutionCount: 0,
+      registryMutationCount: 0,
+      generatedBridgeMutationCount: 0,
+      auditEventId: audit.id,
+      ...(input.targetReadback.threadId ? { targetThreadId: input.targetReadback.threadId } : {})
+    };
+    this.liveDispatchEnvelopes.set(envelopeId, envelope);
+    return cloneLiveDispatchEnvelope(envelope);
+  }
+
+  listLiveDispatchReadinessEnvelopes(): LiveDispatchEnvelope[] {
+    return [...this.liveDispatchEnvelopes.values()].map(cloneLiveDispatchEnvelope);
+  }
+
+  validateLiveDispatchTerminalReturnReadiness(
+    expected: ExpectedTerminalReturnContext,
+    observation: TerminalReturnObservation,
+    history: ValidatedTerminalReturnReceipt[] = []
+  ): TerminalReturnValidation {
+    const validation = this.validateTerminalReturnObservation(expected, observation, history);
+    if (validation.disposition !== "consumable") {
+      return validation;
+    }
+    if (observation.terminalIngestionExecutionRequested === true) {
+      return { ...validation, disposition: "blocked", consumableCandidate: false, reason: "terminal_return_ingestion_execution_not_authorized" };
+    }
+    if (!observation.terminalTurnId) {
+      return { ...validation, disposition: "non_consumable", consumableCandidate: false, reason: "missing_terminal_turn_id" };
+    }
+    if (!observation.originalTerminalPacketReference || !observation.originalTerminalPacketChecksum) {
+      return { ...validation, disposition: "non_consumable", consumableCandidate: false, reason: "missing_original_terminal_packet_reference" };
+    }
+    if (!observation.coordinatorConsumedReceiptReference || !observation.coordinatorConsumedReceiptChecksum) {
+      return { ...validation, disposition: "non_consumable", consumableCandidate: false, reason: "missing_coordinator_consumed_receipt_reference" };
+    }
+    return { ...validation, reason: "contract_valid_terminal_return_with_append_only_receipts" };
   }
 
   validateTerminalReturnObservation(
@@ -561,6 +786,68 @@ export class CodexIntegrationAdapter {
     }
   }
 
+  private assertLiveDispatchReadinessInput(input: LiveDispatchEnvelopeInput, actor: ActorIdentity, envelopeId: string): void {
+    const restrictedFindings = scanNoSendRestrictedContent(input);
+    if (restrictedFindings.length > 0) {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", {
+        reason: "restricted_payload",
+        restrictedFindingCount: restrictedFindings.length,
+        restrictedFindingKinds: [...new Set(restrictedFindings.map((finding) => finding.kind))]
+      });
+      throw new Error(`Live dispatch readiness rejected restricted ${restrictedFindings[0]!.kind}`);
+    }
+    if (input.sourceProjectId !== "TCRN-AOS" || input.initiativeId !== "tcrn-aos-product-foundation") {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "source_or_initiative_mismatch" });
+      throw new Error("Live dispatch readiness requires TCRN-AOS and the AOS product foundation initiative");
+    }
+    if (!input.sourceAosRecordId || !input.payloadDigest || !input.workflowPacketPath) {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "missing_required_identity_material" });
+      throw new Error("Live dispatch readiness requires source record, payload digest, and Workflow packet path");
+    }
+    if (input.dispatchMode === "live_send" || input.requestedSend === true) {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "owner_intent_required_for_live_send" });
+      throw new Error("Live dispatch readiness blocks live send without Owner Intent execution authority");
+    }
+    if (input.requestedTerminalReturnIngestion === true) {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "terminal_return_ingestion_execution_not_authorized" });
+      throw new Error("Live dispatch readiness blocks terminal-return ingestion execution");
+    }
+    if (input.requestedRegistryMutation === true || input.requestedGeneratedBridgeMutation === true) {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "registry_or_generated_bridge_mutation_not_authorized" });
+      throw new Error("Live dispatch readiness blocks registry or generated bridge mutation");
+    }
+    if ((input.requestedThreadManagementActions?.length ?? 0) > 0) {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", {
+        reason: "thread_management_requested",
+        threadManagementActionCount: input.requestedThreadManagementActions?.length ?? 0
+      });
+      throw new Error("Live dispatch readiness blocks thread-management primitive requests");
+    }
+    if (input.ownerIntent.required !== true || input.ownerIntent.proofState !== "not_granted") {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "owner_intent_not_in_stage_a_posture" });
+      throw new Error("Live dispatch Stage A requires Owner Intent to remain not_granted");
+    }
+    if (input.retryLimit < 0 || input.retryLimit > 1) {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "retry_policy_could_duplicate_live_message" });
+      throw new Error("Live dispatch Stage A requires retry policy that cannot duplicate live messages");
+    }
+    if (!targetReadbackAllowedForLiveDispatch(input.targetReadback)) {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", {
+        reason: "target_readback_fail_closed",
+        targetReadbackState: input.targetReadback.state
+      });
+      throw new Error(`Live dispatch readiness blocked for ${input.targetReadback.state} target readback`);
+    }
+    if (!input.targetReadback.threadId) {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "target_thread_id_required" });
+      throw new Error("Live dispatch readiness requires a target thread id after fresh readback");
+    }
+    if (input.receiptReferenceExpectation !== "required_before_ingestion") {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "receipt_reference_expectation_required" });
+      throw new Error("Live dispatch readiness requires receipt references before ingestion");
+    }
+  }
+
   private validateDispatchRequest(payload: CodexDispatchPayload, actor: ActorIdentity, dispatchId: string): AIEmployee {
     try {
       this.assertSafePayload(payload);
@@ -637,6 +924,9 @@ export function createCodexAdapter(store: AosStore): CodexIntegrationAdapter {
 
 export function createNoSendPrimitiveProbe(): NoSendPrimitiveProbe {
   let sendPrimitiveCallCount = 0;
+  let terminalReturnIngestionExecutionCount = 0;
+  let registryMutationCount = 0;
+  let generatedBridgeMutationCount = 0;
   const threadManagementActions: ThreadManagementPrimitive[] = [];
   return {
     recordSendPrimitiveCall() {
@@ -645,11 +935,23 @@ export function createNoSendPrimitiveProbe(): NoSendPrimitiveProbe {
     recordThreadManagementPrimitiveCall(action: ThreadManagementPrimitive) {
       threadManagementActions.push(action);
     },
+    recordTerminalReturnIngestionExecution() {
+      terminalReturnIngestionExecutionCount += 1;
+    },
+    recordRegistryMutation() {
+      registryMutationCount += 1;
+    },
+    recordGeneratedBridgeMutation() {
+      generatedBridgeMutationCount += 1;
+    },
     snapshot() {
       return {
         sendPrimitiveCallCount,
         threadManagementPrimitiveCallCount: threadManagementActions.length,
-        threadManagementActions: [...threadManagementActions]
+        threadManagementActions: [...threadManagementActions],
+        terminalReturnIngestionExecutionCount,
+        registryMutationCount,
+        generatedBridgeMutationCount
       };
     }
   };
@@ -678,6 +980,13 @@ function targetStateAllowedForNoSend(state: NoSendTargetThreadState, successorCo
   if (state === "active") return true;
   if (state === "active_successor") return successorConfirmed;
   if (state === "temporary_lane") return temporaryLaneAuthorized;
+  return false;
+}
+
+function targetReadbackAllowedForLiveDispatch(readback: LiveDispatchTargetReadback): boolean {
+  if (readback.state === "active") return Boolean(readback.threadId);
+  if (readback.state === "active_successor") return Boolean(readback.threadId) && readback.successorConfirmed === true;
+  if (readback.state === "temporary_lane") return Boolean(readback.threadId) && readback.temporaryLaneAuthorized === true;
   return false;
 }
 
@@ -725,5 +1034,44 @@ function cloneNoSendEnvelope(envelope: NoSendDispatchEnvelope): NoSendDispatchEn
     nonAuthorizations: [...envelope.nonAuthorizations],
     requiredReturnFormat: [...envelope.requiredReturnFormat],
     ownerIntentFlags: [...envelope.ownerIntentFlags]
+  };
+}
+
+function liveDispatchIdentitySeed(input: LiveDispatchEnvelopeInput, returnContractVersion: string, schemaVersion: string): Record<string, unknown> {
+  return {
+    parentRouteId: input.parentRouteId,
+    initiativeId: input.initiativeId,
+    sourceAosRecordId: input.sourceAosRecordId,
+    sourceRecordClass: input.sourceRecordClass,
+    targetRoleId: input.targetRoleId,
+    targetThreadId: input.targetReadback.threadId ?? input.targetRoleId,
+    targetReadbackState: input.targetReadback.state,
+    payloadDigest: input.payloadDigest,
+    sourceAosBasisSha: input.sourceAosBasisSha,
+    workflowBasisSha: input.workflowBasisSha,
+    dispatchMode: input.dispatchMode,
+    returnContractVersion,
+    schemaVersion
+  };
+}
+
+function cloneTargetReadback(readback: LiveDispatchTargetReadback): LiveDispatchTargetReadback {
+  return {
+    ...readback,
+    ...(readback.threadId ? { threadId: readback.threadId } : {}),
+    ...(readback.successorConfirmed !== undefined ? { successorConfirmed: readback.successorConfirmed } : {}),
+    ...(readback.temporaryLaneAuthorized !== undefined ? { temporaryLaneAuthorized: readback.temporaryLaneAuthorized } : {})
+  };
+}
+
+function cloneLiveDispatchEnvelope(envelope: LiveDispatchEnvelope): LiveDispatchEnvelope {
+  return {
+    ...envelope,
+    basisSha: { ...envelope.basisSha },
+    targetReadback: cloneTargetReadback(envelope.targetReadback),
+    ownerIntent: { ...envelope.ownerIntent },
+    expectedTerminalStatuses: [...envelope.expectedTerminalStatuses],
+    expectedHandoffReturnStates: [...envelope.expectedHandoffReturnStates],
+    ...(envelope.targetThreadId ? { targetThreadId: envelope.targetThreadId } : {})
   };
 }
