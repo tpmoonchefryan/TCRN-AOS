@@ -6,7 +6,8 @@ Status: observed local proof receipt
 
 - Pre-implementation basis: `b1889aa12fd34ca6335256191e091c267464d033` (`fix: fail closed Slice 7 execution claim flags`)
 - Implementation checkpoint under review: `01ae61eae0c3224400baddbc6036e39ada818548` (`feat: add AOS Slice 8 materialization history controls`)
-- Evidence successor: route-carried in Ilya terminal return after this receipt commit; the receipt intentionally avoids self-referencing its own commit hash.
+- Final evidence/checkpoint under review: `16000be29f3cb35e3062398ecaf0f5257c42572b` (`docs: record AOS Slice 8 proof evidence`)
+- Evidence repair successor: route-carried in Ilya terminal return after this narrow lineage repair; this successor does not self-reference its own commit hash.
 - Workflow packet basis: `401a35235860d5f7020ef081b3d8b0d1c12e226d` (`docs: define AOS Slice 8 materialization history packet`)
 - Slice 7 lineage preserved: implementation `d20ee15b3a7db5dcf8718f76747fc3bccf7036bd`; initial evidence `33e657708495c1d4c7680a29c183923d081c00b0`; evidence discoverability successor `6a8dee3dfc869f2b5318b1a4a8f6bb1b87e32add`; fail-closed behavior successor `b1889aa12fd34ca6335256191e091c267464d033`.
 - Wrong-sibling quarantine: `<wrong-sibling-quarantine>` remains quarantine/evidence only at `4d917fdb6fcbefe888054906b17b755690530112`; it is not accepted output, proof source, rollback source, or publish target.
