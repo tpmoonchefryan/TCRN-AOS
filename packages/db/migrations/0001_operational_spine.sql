@@ -243,6 +243,122 @@ CREATE TABLE aos_resource_audit_findings (
   product_repo_mutation_executed BOOLEAN NOT NULL DEFAULT false
 );
 
+CREATE TABLE aos_resource_materialization_history_records (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  resource_id TEXT NOT NULL REFERENCES aos_resource_registry_records(id),
+  materialization_request_id TEXT NOT NULL REFERENCES aos_resource_materialization_requests(id),
+  manifest_id TEXT NOT NULL REFERENCES aos_project_resource_manifests(id),
+  target_project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  target_reference TEXT NOT NULL,
+  resource_digest TEXT NOT NULL,
+  actor JSONB NOT NULL,
+  recorded_at TIMESTAMPTZ NOT NULL,
+  evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  lifecycle_state TEXT NOT NULL,
+  materialization_executed BOOLEAN NOT NULL DEFAULT false,
+  resource_binary_transferred BOOLEAN NOT NULL DEFAULT false,
+  product_repo_write_executed BOOLEAN NOT NULL DEFAULT false
+);
+
+CREATE TABLE aos_resource_update_requests (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  resource_id TEXT NOT NULL REFERENCES aos_resource_registry_records(id),
+  manifest_id TEXT NOT NULL REFERENCES aos_project_resource_manifests(id),
+  current_resource_version TEXT NOT NULL,
+  current_resource_digest TEXT NOT NULL,
+  proposed_resource_version TEXT NOT NULL,
+  proposed_resource_digest TEXT NOT NULL,
+  status TEXT NOT NULL,
+  linked_gate_id TEXT,
+  evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  owner_intent_required BOOLEAN NOT NULL DEFAULT true,
+  update_executed BOOLEAN NOT NULL DEFAULT false,
+  resource_binary_transferred BOOLEAN NOT NULL DEFAULT false,
+  product_repo_write_executed BOOLEAN NOT NULL DEFAULT false
+);
+
+CREATE TABLE aos_resource_replacement_requests (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  old_resource_id TEXT NOT NULL REFERENCES aos_resource_registry_records(id),
+  replacement_resource_id TEXT NOT NULL REFERENCES aos_resource_registry_records(id),
+  reason TEXT NOT NULL,
+  copyright_status TEXT NOT NULL,
+  license_posture TEXT NOT NULL,
+  residual_risk TEXT NOT NULL,
+  status TEXT NOT NULL,
+  linked_gate_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  owner_intent_required BOOLEAN NOT NULL DEFAULT true,
+  replacement_executed BOOLEAN NOT NULL DEFAULT false,
+  resource_binary_transferred BOOLEAN NOT NULL DEFAULT false,
+  product_repo_write_executed BOOLEAN NOT NULL DEFAULT false
+);
+
+CREATE TABLE aos_resource_rollback_requests (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  resource_id TEXT NOT NULL REFERENCES aos_resource_registry_records(id),
+  manifest_id TEXT NOT NULL REFERENCES aos_project_resource_manifests(id),
+  intended_previous_manifest_id TEXT REFERENCES aos_project_resource_manifests(id),
+  intended_previous_digest TEXT NOT NULL,
+  intended_previous_reference TEXT NOT NULL,
+  reason TEXT NOT NULL,
+  status TEXT NOT NULL,
+  required_gate_id TEXT,
+  evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  owner_intent_required BOOLEAN NOT NULL DEFAULT true,
+  rollback_executed BOOLEAN NOT NULL DEFAULT false,
+  cleanup_executed BOOLEAN NOT NULL DEFAULT false,
+  product_repo_write_executed BOOLEAN NOT NULL DEFAULT false
+);
+
+CREATE TABLE aos_resource_rollback_plans (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  rollback_request_id TEXT NOT NULL REFERENCES aos_resource_rollback_requests(id),
+  fallback_path TEXT NOT NULL,
+  expected_no_execution_result TEXT NOT NULL,
+  readback_command TEXT NOT NULL,
+  evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  owner_intent_required BOOLEAN NOT NULL DEFAULT true,
+  rollback_executed BOOLEAN NOT NULL DEFAULT false,
+  cleanup_executed BOOLEAN NOT NULL DEFAULT false,
+  product_repo_write_executed BOOLEAN NOT NULL DEFAULT false
+);
+
+CREATE TABLE aos_resource_retirement_records (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  resource_id TEXT NOT NULL REFERENCES aos_resource_registry_records(id),
+  manifest_id TEXT REFERENCES aos_project_resource_manifests(id),
+  reason TEXT NOT NULL,
+  lifecycle_state TEXT NOT NULL,
+  status TEXT NOT NULL,
+  evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  cleanup_required BOOLEAN NOT NULL DEFAULT false,
+  owner_intent_required BOOLEAN NOT NULL DEFAULT true,
+  retirement_cleanup_executed BOOLEAN NOT NULL DEFAULT false,
+  product_repo_delete_executed BOOLEAN NOT NULL DEFAULT false
+);
+
+CREATE TABLE aos_resource_cleanup_readbacks (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  target_type TEXT NOT NULL,
+  target_id TEXT NOT NULL,
+  cleanup_needed BOOLEAN NOT NULL DEFAULT false,
+  cleanup_reason TEXT NOT NULL,
+  status TEXT NOT NULL,
+  evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  owner_intent_required BOOLEAN NOT NULL DEFAULT true,
+  cleanup_executed BOOLEAN NOT NULL DEFAULT false,
+  delete_executed BOOLEAN NOT NULL DEFAULT false,
+  product_repo_write_executed BOOLEAN NOT NULL DEFAULT false
+);
+
 CREATE TABLE aos_knowledge_entries (
   id TEXT PRIMARY KEY,
   project_id TEXT NOT NULL REFERENCES aos_projects(id),

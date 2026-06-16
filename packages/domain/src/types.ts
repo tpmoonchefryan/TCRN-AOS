@@ -495,6 +495,122 @@ export interface ResourceAuditFinding {
   productRepoMutationExecuted: false;
 }
 
+export interface ResourceMaterializationHistoryRecord {
+  id: AosId;
+  projectId: ProjectId;
+  resourceId: AosId;
+  materializationRequestId: AosId;
+  manifestId: AosId;
+  targetProjectId: ProjectId;
+  targetReference: string;
+  resourceDigest: string;
+  actor: ActorIdentity;
+  recordedAt: ISODateTime;
+  evidenceIds: AosId[];
+  lifecycleState: "planned" | "approved_metadata_only" | "stale" | "superseded" | "blocked" | "rolled_back_metadata_only";
+  materializationExecuted: false;
+  resourceBinaryTransferred: false;
+  productRepoWriteExecuted: false;
+}
+
+export interface ResourceUpdateRequest {
+  id: AosId;
+  projectId: ProjectId;
+  resourceId: AosId;
+  manifestId: AosId;
+  currentResourceVersion: string;
+  currentResourceDigest: string;
+  proposedResourceVersion: string;
+  proposedResourceDigest: string;
+  status: "requested" | "dry_run_only" | "owner_intent_required" | "blocked" | "superseded";
+  linkedGateId?: AosId;
+  evidenceIds: AosId[];
+  ownerIntentRequired: true;
+  updateExecuted: false;
+  resourceBinaryTransferred: false;
+  productRepoWriteExecuted: false;
+}
+
+export interface ResourceReplacementRequest {
+  id: AosId;
+  projectId: ProjectId;
+  oldResourceId: AosId;
+  replacementResourceId: AosId;
+  reason: string;
+  copyrightStatus: ResourceRiskState;
+  licensePosture: "review_required" | "accepted_with_residual_risk" | "blocked";
+  residualRisk: "low" | "medium" | "high" | "blocked";
+  status: "requested" | "owner_intent_required" | "blocked" | "superseded";
+  linkedGateIds: AosId[];
+  evidenceIds: AosId[];
+  ownerIntentRequired: true;
+  replacementExecuted: false;
+  resourceBinaryTransferred: false;
+  productRepoWriteExecuted: false;
+}
+
+export interface ResourceRollbackRequest {
+  id: AosId;
+  projectId: ProjectId;
+  resourceId: AosId;
+  manifestId: AosId;
+  intendedPreviousManifestId?: AosId;
+  intendedPreviousDigest: string;
+  intendedPreviousReference: string;
+  reason: string;
+  status: "requested" | "owner_intent_required" | "blocked" | "superseded";
+  requiredGateId?: AosId;
+  evidenceIds: AosId[];
+  ownerIntentRequired: true;
+  rollbackExecuted: false;
+  cleanupExecuted: false;
+  productRepoWriteExecuted: false;
+}
+
+export interface ResourceRollbackPlan {
+  id: AosId;
+  projectId: ProjectId;
+  rollbackRequestId: AosId;
+  fallbackPath: string;
+  expectedNoExecutionResult: string;
+  readbackCommand: string;
+  evidenceIds: AosId[];
+  ownerIntentRequired: true;
+  rollbackExecuted: false;
+  cleanupExecuted: false;
+  productRepoWriteExecuted: false;
+}
+
+export interface ResourceRetirementRecord {
+  id: AosId;
+  projectId: ProjectId;
+  resourceId: AosId;
+  manifestId?: AosId;
+  reason: string;
+  lifecycleState: "stale" | "revoked" | "superseded" | "blocked" | "retired_metadata_only";
+  status: "recorded" | "blocked" | "superseded";
+  evidenceIds: AosId[];
+  cleanupRequired: boolean;
+  ownerIntentRequired: true;
+  retirementCleanupExecuted: false;
+  productRepoDeleteExecuted: false;
+}
+
+export interface ResourceCleanupReadback {
+  id: AosId;
+  projectId: ProjectId;
+  targetType: "resource" | "manifest" | "materialized_copy" | "runtime_reference";
+  targetId: AosId;
+  cleanupNeeded: boolean;
+  cleanupReason: string;
+  status: "identified" | "blocked" | "deferred" | "not_required";
+  evidenceIds: AosId[];
+  ownerIntentRequired: true;
+  cleanupExecuted: false;
+  deleteExecuted: false;
+  productRepoWriteExecuted: false;
+}
+
 export interface ResourceTraceabilityRow {
   resourceId: AosId;
   linkedStoryIds: AosId[];
@@ -519,6 +635,35 @@ export interface ResourceGovernanceIndexReadback {
   localFirstStorage: true;
   scannerIngestionExecuted: false;
   materializationExecuted: false;
+  productRepoWriteExecuted: false;
+  legalCompletionClaimed: false;
+  publicReadinessClaimed: false;
+  releaseReadinessClaimed: false;
+}
+
+export interface ResourceMaterializationControlIndexReadback {
+  projectId: ProjectId;
+  historyRecordIds: AosId[];
+  updateRequestIds: AosId[];
+  replacementRequestIds: AosId[];
+  rollbackRequestIds: AosId[];
+  rollbackPlanIds: AosId[];
+  retirementRecordIds: AosId[];
+  cleanupReadbackIds: AosId[];
+  unresolvedUpdateIds: AosId[];
+  unresolvedReplacementIds: AosId[];
+  unresolvedRollbackIds: AosId[];
+  cleanupBlockerIds: AosId[];
+  linkedGateIds: AosId[];
+  linkedEvidenceIds: AosId[];
+  localFirstStorage: true;
+  materializationExecuted: false;
+  updateExecuted: false;
+  replacementExecuted: false;
+  rollbackExecuted: false;
+  cleanupExecuted: false;
+  deleteExecuted: false;
+  resourceBinaryTransferred: false;
   productRepoWriteExecuted: false;
   legalCompletionClaimed: false;
   publicReadinessClaimed: false;

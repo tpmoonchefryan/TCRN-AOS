@@ -28,8 +28,16 @@ import type {
   ReleaseNoteRecord,
   ResourceAuditFinding,
   ResourceGovernanceIndexReadback,
+  ResourceCleanupReadback,
+  ResourceMaterializationControlIndexReadback,
+  ResourceMaterializationHistoryRecord,
   ResourceMaterializationRequest,
+  ResourceReplacementRequest,
+  ResourceRetirementRecord,
+  ResourceRollbackPlan,
+  ResourceRollbackRequest,
   ResourceRegistryRecord,
+  ResourceUpdateRequest,
   StageDefinition,
   StageMapItem,
   StoryRecord,
@@ -62,6 +70,13 @@ export class AosStore {
   private materializationRequests = new Map<string, ResourceMaterializationRequest>();
   private resourceManifests = new Map<string, ProjectResourceManifestRecord>();
   private resourceFindings = new Map<string, ResourceAuditFinding>();
+  private resourceMaterializationHistory = new Map<string, ResourceMaterializationHistoryRecord>();
+  private resourceUpdateRequests = new Map<string, ResourceUpdateRequest>();
+  private resourceReplacementRequests = new Map<string, ResourceReplacementRequest>();
+  private resourceRollbackRequests = new Map<string, ResourceRollbackRequest>();
+  private resourceRollbackPlans = new Map<string, ResourceRollbackPlan>();
+  private resourceRetirements = new Map<string, ResourceRetirementRecord>();
+  private resourceCleanupReadbacks = new Map<string, ResourceCleanupReadback>();
   private knowledge = new Map<string, KnowledgeEntry>();
   private userGuideDrafts = new Map<string, UserGuidePageDraft>();
   private releaseNotes = new Map<string, ReleaseNoteRecord>();
@@ -141,6 +156,34 @@ export class AosStore {
 
   listResourceFindings(): ResourceAuditFinding[] {
     return [...this.resourceFindings.values()];
+  }
+
+  listResourceMaterializationHistory(): ResourceMaterializationHistoryRecord[] {
+    return [...this.resourceMaterializationHistory.values()];
+  }
+
+  listResourceUpdateRequests(): ResourceUpdateRequest[] {
+    return [...this.resourceUpdateRequests.values()];
+  }
+
+  listResourceReplacementRequests(): ResourceReplacementRequest[] {
+    return [...this.resourceReplacementRequests.values()];
+  }
+
+  listResourceRollbackRequests(): ResourceRollbackRequest[] {
+    return [...this.resourceRollbackRequests.values()];
+  }
+
+  listResourceRollbackPlans(): ResourceRollbackPlan[] {
+    return [...this.resourceRollbackPlans.values()];
+  }
+
+  listResourceRetirements(): ResourceRetirementRecord[] {
+    return [...this.resourceRetirements.values()];
+  }
+
+  listResourceCleanupReadbacks(): ResourceCleanupReadback[] {
+    return [...this.resourceCleanupReadbacks.values()];
   }
 
   listKnowledge(): KnowledgeEntry[] {
@@ -629,6 +672,7 @@ export class AosStore {
 
   createResourceMaterializationRequest(input: Omit<ResourceMaterializationRequest, "id" | "ownerIntentRequired" | "materializationExecuted" | "productRepoWriteExecuted">, actor: ActorIdentity): ResourceMaterializationRequest {
     this.ensureSafe(input, "resourceMaterializationRequest");
+    rejectExecutionClaims(input as Record<string, unknown>, ["materializationExecuted", "productRepoWriteExecuted"], "resource materialization request");
     this.requireProject(input.projectId);
     this.requireProject(input.targetProjectId);
     this.requireResource(input.resourceId);
@@ -652,6 +696,7 @@ export class AosStore {
 
   createProjectResourceManifest(input: Omit<ProjectResourceManifestRecord, "id" | "sourceTruth" | "liveCopyCreated" | "productRepoWriteExecuted">, actor: ActorIdentity): ProjectResourceManifestRecord {
     this.ensureSafe(input, "projectResourceManifest");
+    rejectExecutionClaims(input as Record<string, unknown>, ["liveCopyCreated", "productRepoWriteExecuted"], "project resource manifest");
     this.requireProject(input.projectId);
     this.requireResource(input.resourceId);
     const manifest: ProjectResourceManifestRecord = {
@@ -677,6 +722,7 @@ export class AosStore {
 
   createResourceAuditFinding(input: Omit<ResourceAuditFinding, "id" | "scannerIngestionExecuted" | "materializationExecuted" | "productRepoMutationExecuted">, actor: ActorIdentity): ResourceAuditFinding {
     this.ensureSafe(input, "resourceAuditFinding");
+    rejectExecutionClaims(input as Record<string, unknown>, ["scannerIngestionExecuted", "materializationExecuted", "productRepoMutationExecuted"], "resource audit finding");
     this.requireProject(input.projectId);
     if (input.resourceId) {
       this.requireResource(input.resourceId);
@@ -750,6 +796,256 @@ export class AosStore {
       localFirstStorage: true,
       scannerIngestionExecuted: false,
       materializationExecuted: false,
+      productRepoWriteExecuted: false,
+      legalCompletionClaimed: false,
+      publicReadinessClaimed: false,
+      releaseReadinessClaimed: false
+    };
+  }
+
+  createResourceMaterializationHistory(input: Omit<ResourceMaterializationHistoryRecord, "id" | "recordedAt" | "materializationExecuted" | "resourceBinaryTransferred" | "productRepoWriteExecuted">, actor: ActorIdentity): ResourceMaterializationHistoryRecord {
+    this.ensureSafe(input, "resourceMaterializationHistory");
+    rejectExecutionClaims(input as Record<string, unknown>, ["materializationExecuted", "resourceBinaryTransferred", "productRepoWriteExecuted"], "resource materialization history");
+    this.requireProject(input.projectId);
+    this.requireProject(input.targetProjectId);
+    this.requireResource(input.resourceId);
+    this.requireMaterializationRequest(input.materializationRequestId);
+    this.requireResourceManifest(input.manifestId);
+    const history: ResourceMaterializationHistoryRecord = {
+      ...input,
+      id: createId("resource_materialization_history", input),
+      recordedAt: now(),
+      materializationExecuted: false,
+      resourceBinaryTransferred: false,
+      productRepoWriteExecuted: false
+    };
+    this.resourceMaterializationHistory.set(history.id, history);
+    this.appendAudit(actor, "resource.materialization_history.record", "resource_materialization_history", history.id, history.lifecycleState === "blocked" ? "blocked" : "accepted", {
+      resourceId: history.resourceId,
+      manifestId: history.manifestId,
+      lifecycleState: history.lifecycleState,
+      materializationExecuted: history.materializationExecuted,
+      resourceBinaryTransferred: history.resourceBinaryTransferred,
+      productRepoWriteExecuted: history.productRepoWriteExecuted
+    });
+    return history;
+  }
+
+  createResourceUpdateRequest(input: Omit<ResourceUpdateRequest, "id" | "ownerIntentRequired" | "updateExecuted" | "resourceBinaryTransferred" | "productRepoWriteExecuted">, actor: ActorIdentity): ResourceUpdateRequest {
+    this.ensureSafe(input, "resourceUpdateRequest");
+    rejectExecutionClaims(input as Record<string, unknown>, ["updateExecuted", "resourceBinaryTransferred", "productRepoWriteExecuted"], "resource update request");
+    this.requireProject(input.projectId);
+    this.requireResource(input.resourceId);
+    this.requireResourceManifest(input.manifestId);
+    if (input.linkedGateId) {
+      this.requireGate(input.linkedGateId);
+    }
+    const request: ResourceUpdateRequest = {
+      ...input,
+      id: createId("resource_update_request", input),
+      ownerIntentRequired: true,
+      updateExecuted: false,
+      resourceBinaryTransferred: false,
+      productRepoWriteExecuted: false
+    };
+    this.resourceUpdateRequests.set(request.id, request);
+    this.appendAudit(actor, "resource.update.request", "resource_update_request", request.id, request.status === "blocked" ? "blocked" : "accepted", {
+      resourceId: request.resourceId,
+      manifestId: request.manifestId,
+      status: request.status,
+      ownerIntentRequired: request.ownerIntentRequired,
+      updateExecuted: request.updateExecuted,
+      resourceBinaryTransferred: request.resourceBinaryTransferred,
+      productRepoWriteExecuted: request.productRepoWriteExecuted
+    });
+    return request;
+  }
+
+  createResourceReplacementRequest(input: Omit<ResourceReplacementRequest, "id" | "ownerIntentRequired" | "replacementExecuted" | "resourceBinaryTransferred" | "productRepoWriteExecuted">, actor: ActorIdentity): ResourceReplacementRequest {
+    this.ensureSafe(input, "resourceReplacementRequest");
+    rejectExecutionClaims(input as Record<string, unknown>, ["replacementExecuted", "resourceBinaryTransferred", "productRepoWriteExecuted"], "resource replacement request");
+    this.requireProject(input.projectId);
+    this.requireResource(input.oldResourceId);
+    this.requireResource(input.replacementResourceId);
+    input.linkedGateIds.forEach((gateId) => this.requireGate(gateId));
+    const request: ResourceReplacementRequest = {
+      ...input,
+      id: createId("resource_replacement_request", input),
+      ownerIntentRequired: true,
+      replacementExecuted: false,
+      resourceBinaryTransferred: false,
+      productRepoWriteExecuted: false
+    };
+    this.resourceReplacementRequests.set(request.id, request);
+    this.appendAudit(actor, "resource.replacement.request", "resource_replacement_request", request.id, request.status === "blocked" ? "blocked" : "accepted", {
+      oldResourceId: request.oldResourceId,
+      replacementResourceId: request.replacementResourceId,
+      status: request.status,
+      ownerIntentRequired: request.ownerIntentRequired,
+      replacementExecuted: request.replacementExecuted,
+      resourceBinaryTransferred: request.resourceBinaryTransferred,
+      productRepoWriteExecuted: request.productRepoWriteExecuted
+    });
+    return request;
+  }
+
+  createResourceRollbackRequest(input: Omit<ResourceRollbackRequest, "id" | "ownerIntentRequired" | "rollbackExecuted" | "cleanupExecuted" | "productRepoWriteExecuted">, actor: ActorIdentity): ResourceRollbackRequest {
+    this.ensureSafe(input, "resourceRollbackRequest");
+    rejectExecutionClaims(input as Record<string, unknown>, ["rollbackExecuted", "cleanupExecuted", "productRepoWriteExecuted"], "resource rollback request");
+    this.requireProject(input.projectId);
+    this.requireResource(input.resourceId);
+    this.requireResourceManifest(input.manifestId);
+    if (input.intendedPreviousManifestId) {
+      this.requireResourceManifest(input.intendedPreviousManifestId);
+    }
+    if (input.requiredGateId) {
+      this.requireGate(input.requiredGateId);
+    }
+    const request: ResourceRollbackRequest = {
+      ...input,
+      id: createId("resource_rollback_request", input),
+      ownerIntentRequired: true,
+      rollbackExecuted: false,
+      cleanupExecuted: false,
+      productRepoWriteExecuted: false
+    };
+    this.resourceRollbackRequests.set(request.id, request);
+    this.appendAudit(actor, "resource.rollback.request", "resource_rollback_request", request.id, request.status === "blocked" ? "blocked" : "accepted", {
+      resourceId: request.resourceId,
+      manifestId: request.manifestId,
+      status: request.status,
+      ownerIntentRequired: request.ownerIntentRequired,
+      rollbackExecuted: request.rollbackExecuted,
+      cleanupExecuted: request.cleanupExecuted,
+      productRepoWriteExecuted: request.productRepoWriteExecuted
+    });
+    return request;
+  }
+
+  createResourceRollbackPlan(input: Omit<ResourceRollbackPlan, "id" | "ownerIntentRequired" | "rollbackExecuted" | "cleanupExecuted" | "productRepoWriteExecuted">, actor: ActorIdentity): ResourceRollbackPlan {
+    this.ensureSafe(input, "resourceRollbackPlan");
+    rejectExecutionClaims(input as Record<string, unknown>, ["rollbackExecuted", "cleanupExecuted", "productRepoWriteExecuted"], "resource rollback plan");
+    this.requireProject(input.projectId);
+    this.requireResourceRollbackRequest(input.rollbackRequestId);
+    const plan: ResourceRollbackPlan = {
+      ...input,
+      id: createId("resource_rollback_plan", input),
+      ownerIntentRequired: true,
+      rollbackExecuted: false,
+      cleanupExecuted: false,
+      productRepoWriteExecuted: false
+    };
+    this.resourceRollbackPlans.set(plan.id, plan);
+    this.appendAudit(actor, "resource.rollback_plan.record", "resource_rollback_plan", plan.id, "accepted", {
+      rollbackRequestId: plan.rollbackRequestId,
+      ownerIntentRequired: plan.ownerIntentRequired,
+      rollbackExecuted: plan.rollbackExecuted,
+      cleanupExecuted: plan.cleanupExecuted,
+      productRepoWriteExecuted: plan.productRepoWriteExecuted
+    });
+    return plan;
+  }
+
+  createResourceRetirementRecord(input: Omit<ResourceRetirementRecord, "id" | "ownerIntentRequired" | "retirementCleanupExecuted" | "productRepoDeleteExecuted">, actor: ActorIdentity): ResourceRetirementRecord {
+    this.ensureSafe(input, "resourceRetirementRecord");
+    rejectExecutionClaims(input as Record<string, unknown>, ["retirementCleanupExecuted", "productRepoDeleteExecuted"], "resource retirement record");
+    this.requireProject(input.projectId);
+    this.requireResource(input.resourceId);
+    if (input.manifestId) {
+      this.requireResourceManifest(input.manifestId);
+    }
+    const retirement: ResourceRetirementRecord = {
+      ...input,
+      id: createId("resource_retirement", input),
+      ownerIntentRequired: true,
+      retirementCleanupExecuted: false,
+      productRepoDeleteExecuted: false
+    };
+    this.resourceRetirements.set(retirement.id, retirement);
+    this.appendAudit(actor, "resource.retirement.record", "resource_retirement", retirement.id, retirement.status === "blocked" ? "blocked" : "accepted", {
+      resourceId: retirement.resourceId,
+      status: retirement.status,
+      cleanupRequired: retirement.cleanupRequired,
+      ownerIntentRequired: retirement.ownerIntentRequired,
+      retirementCleanupExecuted: retirement.retirementCleanupExecuted,
+      productRepoDeleteExecuted: retirement.productRepoDeleteExecuted
+    });
+    return retirement;
+  }
+
+  createResourceCleanupReadback(input: Omit<ResourceCleanupReadback, "id" | "ownerIntentRequired" | "cleanupExecuted" | "deleteExecuted" | "productRepoWriteExecuted">, actor: ActorIdentity): ResourceCleanupReadback {
+    this.ensureSafe(input, "resourceCleanupReadback");
+    rejectExecutionClaims(input as Record<string, unknown>, ["cleanupExecuted", "deleteExecuted", "productRepoWriteExecuted"], "resource cleanup readback");
+    this.requireProject(input.projectId);
+    const readback: ResourceCleanupReadback = {
+      ...input,
+      id: createId("resource_cleanup_readback", input),
+      ownerIntentRequired: true,
+      cleanupExecuted: false,
+      deleteExecuted: false,
+      productRepoWriteExecuted: false
+    };
+    this.resourceCleanupReadbacks.set(readback.id, readback);
+    this.appendAudit(actor, "resource.cleanup_readback.record", "resource_cleanup_readback", readback.id, readback.status === "blocked" ? "blocked" : "accepted", {
+      targetType: readback.targetType,
+      targetId: readback.targetId,
+      cleanupNeeded: readback.cleanupNeeded,
+      status: readback.status,
+      ownerIntentRequired: readback.ownerIntentRequired,
+      cleanupExecuted: readback.cleanupExecuted,
+      deleteExecuted: readback.deleteExecuted,
+      productRepoWriteExecuted: readback.productRepoWriteExecuted
+    });
+    return readback;
+  }
+
+  createResourceMaterializationControlIndex(projectId: ProjectId): ResourceMaterializationControlIndexReadback {
+    this.requireProject(projectId);
+    const histories = [...this.resourceMaterializationHistory.values()].filter((record) => record.projectId === projectId || record.targetProjectId === projectId);
+    const updates = [...this.resourceUpdateRequests.values()].filter((request) => request.projectId === projectId);
+    const replacements = [...this.resourceReplacementRequests.values()].filter((request) => request.projectId === projectId);
+    const rollbacks = [...this.resourceRollbackRequests.values()].filter((request) => request.projectId === projectId);
+    const plans = [...this.resourceRollbackPlans.values()].filter((plan) => plan.projectId === projectId);
+    const retirements = [...this.resourceRetirements.values()].filter((record) => record.projectId === projectId);
+    const cleanupReadbacks = [...this.resourceCleanupReadbacks.values()].filter((readback) => readback.projectId === projectId);
+    return {
+      projectId,
+      historyRecordIds: histories.map((record) => record.id),
+      updateRequestIds: updates.map((request) => request.id),
+      replacementRequestIds: replacements.map((request) => request.id),
+      rollbackRequestIds: rollbacks.map((request) => request.id),
+      rollbackPlanIds: plans.map((plan) => plan.id),
+      retirementRecordIds: retirements.map((record) => record.id),
+      cleanupReadbackIds: cleanupReadbacks.map((readback) => readback.id),
+      unresolvedUpdateIds: updates.filter((request) => request.status !== "superseded").map((request) => request.id),
+      unresolvedReplacementIds: replacements.filter((request) => request.status !== "superseded").map((request) => request.id),
+      unresolvedRollbackIds: rollbacks.filter((request) => request.status !== "superseded").map((request) => request.id),
+      cleanupBlockerIds: unique([
+        ...retirements.filter((record) => record.cleanupRequired || record.status === "blocked").map((record) => record.id),
+        ...cleanupReadbacks.filter((readback) => readback.cleanupNeeded || readback.status === "blocked").map((readback) => readback.id)
+      ]),
+      linkedGateIds: unique([
+        ...updates.flatMap((request) => request.linkedGateId ? [request.linkedGateId] : []),
+        ...replacements.flatMap((request) => request.linkedGateIds),
+        ...rollbacks.flatMap((request) => request.requiredGateId ? [request.requiredGateId] : [])
+      ]),
+      linkedEvidenceIds: unique([
+        ...histories.flatMap((record) => record.evidenceIds),
+        ...updates.flatMap((request) => request.evidenceIds),
+        ...replacements.flatMap((request) => request.evidenceIds),
+        ...rollbacks.flatMap((request) => request.evidenceIds),
+        ...plans.flatMap((plan) => plan.evidenceIds),
+        ...retirements.flatMap((record) => record.evidenceIds),
+        ...cleanupReadbacks.flatMap((readback) => readback.evidenceIds)
+      ]),
+      localFirstStorage: true,
+      materializationExecuted: false,
+      updateExecuted: false,
+      replacementExecuted: false,
+      rollbackExecuted: false,
+      cleanupExecuted: false,
+      deleteExecuted: false,
+      resourceBinaryTransferred: false,
       productRepoWriteExecuted: false,
       legalCompletionClaimed: false,
       publicReadinessClaimed: false,
@@ -953,6 +1249,30 @@ export class AosStore {
       throw new Error(`Unknown resource: ${resourceId}`);
     }
     return resource;
+  }
+
+  private requireMaterializationRequest(requestId: string): ResourceMaterializationRequest {
+    const request = this.materializationRequests.get(requestId);
+    if (!request) {
+      throw new Error(`Unknown materialization request: ${requestId}`);
+    }
+    return request;
+  }
+
+  private requireResourceManifest(manifestId: string): ProjectResourceManifestRecord {
+    const manifest = this.resourceManifests.get(manifestId);
+    if (!manifest) {
+      throw new Error(`Unknown resource manifest: ${manifestId}`);
+    }
+    return manifest;
+  }
+
+  private requireResourceRollbackRequest(requestId: string): ResourceRollbackRequest {
+    const request = this.resourceRollbackRequests.get(requestId);
+    if (!request) {
+      throw new Error(`Unknown rollback request: ${requestId}`);
+    }
+    return request;
   }
 
   private ensureSafe(value: unknown, context: string): void {

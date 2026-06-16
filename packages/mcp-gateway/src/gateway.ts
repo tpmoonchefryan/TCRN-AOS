@@ -17,8 +17,15 @@ import type {
   GateWorkOrder,
   ProjectResourceManifestRecord,
   ResourceAuditFinding,
+  ResourceCleanupReadback,
+  ResourceMaterializationHistoryRecord,
   ResourceMaterializationRequest,
+  ResourceReplacementRequest,
+  ResourceRetirementRecord,
+  ResourceRollbackPlan,
+  ResourceRollbackRequest,
   ResourceRegistryRecord,
+  ResourceUpdateRequest,
   StoryRecord,
   SubTask
 } from "../../domain/src/index.js";
@@ -47,6 +54,14 @@ export const allowedMcpMethods = [
   "aos.resource.manifest.record",
   "aos.resource.audit_finding.record",
   "aos.resource.governance.read",
+  "aos.resource.materialization_history.record",
+  "aos.resource.update.request",
+  "aos.resource.replacement.request",
+  "aos.resource.rollback.request",
+  "aos.resource.rollback_plan.record",
+  "aos.resource.retirement.record",
+  "aos.resource.cleanup_readback.record",
+  "aos.resource.materialization_control.read",
   "aos.audit.query"
 ] as const;
 
@@ -221,6 +236,33 @@ export class McpGateway {
         return this.store.createResourceAuditFinding(params as unknown as Omit<ResourceAuditFinding, "id" | "scannerIngestionExecuted" | "materializationExecuted" | "productRepoMutationExecuted">, actor);
       case "aos.resource.governance.read":
         return this.store.createResourceGovernanceIndex(this.requireProjectScope(params.projectId));
+      case "aos.resource.materialization_history.record":
+        this.requireProjectScope(params.projectId);
+        this.requireProjectScope(params.targetProjectId);
+        return this.store.createResourceMaterializationHistory({
+          ...params,
+          actor
+        } as unknown as Omit<ResourceMaterializationHistoryRecord, "id" | "recordedAt" | "materializationExecuted" | "resourceBinaryTransferred" | "productRepoWriteExecuted">, actor);
+      case "aos.resource.update.request":
+        this.requireProjectScope(params.projectId);
+        return this.store.createResourceUpdateRequest(params as unknown as Omit<ResourceUpdateRequest, "id" | "ownerIntentRequired" | "updateExecuted" | "resourceBinaryTransferred" | "productRepoWriteExecuted">, actor);
+      case "aos.resource.replacement.request":
+        this.requireProjectScope(params.projectId);
+        return this.store.createResourceReplacementRequest(params as unknown as Omit<ResourceReplacementRequest, "id" | "ownerIntentRequired" | "replacementExecuted" | "resourceBinaryTransferred" | "productRepoWriteExecuted">, actor);
+      case "aos.resource.rollback.request":
+        this.requireProjectScope(params.projectId);
+        return this.store.createResourceRollbackRequest(params as unknown as Omit<ResourceRollbackRequest, "id" | "ownerIntentRequired" | "rollbackExecuted" | "cleanupExecuted" | "productRepoWriteExecuted">, actor);
+      case "aos.resource.rollback_plan.record":
+        this.requireProjectScope(params.projectId);
+        return this.store.createResourceRollbackPlan(params as unknown as Omit<ResourceRollbackPlan, "id" | "ownerIntentRequired" | "rollbackExecuted" | "cleanupExecuted" | "productRepoWriteExecuted">, actor);
+      case "aos.resource.retirement.record":
+        this.requireProjectScope(params.projectId);
+        return this.store.createResourceRetirementRecord(params as unknown as Omit<ResourceRetirementRecord, "id" | "ownerIntentRequired" | "retirementCleanupExecuted" | "productRepoDeleteExecuted">, actor);
+      case "aos.resource.cleanup_readback.record":
+        this.requireProjectScope(params.projectId);
+        return this.store.createResourceCleanupReadback(params as unknown as Omit<ResourceCleanupReadback, "id" | "ownerIntentRequired" | "cleanupExecuted" | "deleteExecuted" | "productRepoWriteExecuted">, actor);
+      case "aos.resource.materialization_control.read":
+        return this.store.createResourceMaterializationControlIndex(this.requireProjectScope(params.projectId));
       case "aos.audit.query":
         return this.store.queryAudit(compactFilter({
           targetId: optionalString(params.targetId),
@@ -404,7 +446,7 @@ export class McpGateway {
   }
 
   private isReadMethod(method: AllowedMcpMethod): boolean {
-    return ["aos.policy.read", "aos.stage_map.read", "aos.work_index.drill_through.read", "aos.documentation.index.read", "aos.dependency.governance.read", "aos.resource.governance.read", "aos.audit.query"].includes(method);
+    return ["aos.policy.read", "aos.stage_map.read", "aos.work_index.drill_through.read", "aos.documentation.index.read", "aos.dependency.governance.read", "aos.resource.governance.read", "aos.resource.materialization_control.read", "aos.audit.query"].includes(method);
   }
 
   private requireProjectScope(value: unknown): string {
