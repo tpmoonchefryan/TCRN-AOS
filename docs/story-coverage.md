@@ -181,3 +181,22 @@ Supporting `AOS-S054..AOS-S056` and `AOS-S060..AOS-S061` remain local documentat
 Slice 9B evidence receipt: `../evidence/slice-9b-visible-readiness-inspection-proof.md`.
 
 Still unclaimed: docs publication/export, canonical knowledge promotion, live GitHub writes, GitHub release creation, CI mutation, deployment, live Codex dispatch, scanner ingestion, resource materialization, public/legal/dependency-clean readiness, Product Design final UX/layout/visual acceptance, browser acceptance closeout, product acceptance, and final MVP acceptance.
+
+## Slice 10 AOS-Wide Product Design Surface Set Coverage
+
+Slice 10 adds a local static AOS-wide Product Design target-set surface that composes the accepted Operations Cockpit and Docs/Search/Release readiness anchors without replacing either anchor or claiming broad acceptance:
+
+- Project dashboard/hierarchy coverage exposes the project header, initiative summary, Epic/Story hierarchy, stage ownership, blockers, and evidence freshness.
+- Initiative/ticket drill-through coverage exposes assignments, gates, evidence links, decisions, comments, subtasks, row/detail selection, state/owner filtering, and blocked action posture.
+- AI employee list/profile coverage exposes role identity, thread identity, lifecycle, assignment scope, authority posture, active/idle/blocked states, and last readback.
+- Approvals/gates and Owner Intent coverage keeps role-owned gate work orders, Owner Intent indicators, required evidence, residual blockers, disabled true-owner actions, and no-auto-approval posture visible.
+- Conference list/detail/minutes coverage exposes metadata, participants, positions, linked tickets/evidence, outcomes, minutes, residual actions, and dry-run/no-live-dispatch posture.
+- MCP Gateway and Codex Adapter coverage exposes local health/readback, dry-run outbox, idempotency/dedupe, role/thread binding, audit, and redaction posture.
+- Knowledge Base/User Guide/Release Notes coverage links local module indexes, proposal/readiness states, and blocked export/publish/canonical-promotion posture to the docs readiness anchor.
+- Dependency/license coverage exposes lifecycle, license evidence, SBOM/NOTICE obligations, review gates, and residual risk without legal-completion or dependency-clean claims.
+- Resource Library/materialization/audit/traceability coverage exposes resource records, requests/history, manifests, update/rollback posture, fail-closed no-execution flags, and traceability without materialization execution.
+- Minimal admin/access/audit coverage exposes read-only access posture, authz boundary, role permission summary, audit status, and blocked break-glass posture without mutable admin CRUD or mutable audit actions.
+
+Slice 10 evidence receipt: `../evidence/slice-10-aos-wide-product-design-surface-set-proof.md`.
+
+Still unclaimed: AOS-wide Product Design acceptance, Product Design final UX/layout/visual acceptance, product acceptance, final MVP acceptance, deployment, release readiness, publication, Selene closeout, push, docs publication/export, canonical knowledge promotion, live GitHub writes, live dispatch, scanner ingestion, resource materialization, product repo writes, public/legal/dependency-clean readiness, and Codex Security scan completion.
