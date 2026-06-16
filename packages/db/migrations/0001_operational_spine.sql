@@ -405,6 +405,110 @@ CREATE TABLE aos_release_notes (
   release_closeout_claimed BOOLEAN NOT NULL DEFAULT false
 );
 
+CREATE TABLE aos_docs_readiness_records (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  target_type TEXT NOT NULL,
+  target_id TEXT NOT NULL,
+  readiness_state TEXT NOT NULL,
+  freshness_state TEXT NOT NULL,
+  linked_story_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  linked_evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  linked_gate_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  stage_map_context JSONB NOT NULL,
+  blockers JSONB NOT NULL DEFAULT '[]'::jsonb,
+  docs_published BOOLEAN NOT NULL DEFAULT false,
+  git_export_executed BOOLEAN NOT NULL DEFAULT false,
+  canonical_knowledge_promoted BOOLEAN NOT NULL DEFAULT false,
+  public_readiness_claimed BOOLEAN NOT NULL DEFAULT false,
+  release_ready_claimed BOOLEAN NOT NULL DEFAULT false,
+  local_first_storage BOOLEAN NOT NULL DEFAULT true
+);
+
+CREATE TABLE aos_project_search_index_records (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  source_type TEXT NOT NULL,
+  source_id TEXT NOT NULL,
+  title TEXT NOT NULL,
+  summary TEXT NOT NULL,
+  sanitized_terms JSONB NOT NULL DEFAULT '[]'::jsonb,
+  linked_story_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  linked_evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  linked_gate_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  visibility TEXT NOT NULL DEFAULT 'metadata_only',
+  raw_private_payload_indexed BOOLEAN NOT NULL DEFAULT false,
+  raw_source_indexed BOOLEAN NOT NULL DEFAULT false,
+  raw_scanner_output_indexed BOOLEAN NOT NULL DEFAULT false,
+  local_absolute_path_indexed BOOLEAN NOT NULL DEFAULT false,
+  local_first_storage BOOLEAN NOT NULL DEFAULT true
+);
+
+CREATE TABLE aos_github_metadata_readbacks (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  repo_registry_id TEXT NOT NULL,
+  repository_name TEXT NOT NULL,
+  default_branch TEXT NOT NULL,
+  branch_name TEXT NOT NULL,
+  commit_sha TEXT NOT NULL,
+  pull_request_refs JSONB NOT NULL DEFAULT '[]'::jsonb,
+  ci_run_refs JSONB NOT NULL DEFAULT '[]'::jsonb,
+  release_reference_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  readback_state TEXT NOT NULL,
+  warnings JSONB NOT NULL DEFAULT '[]'::jsonb,
+  blockers JSONB NOT NULL DEFAULT '[]'::jsonb,
+  github_write_executed BOOLEAN NOT NULL DEFAULT false,
+  release_created BOOLEAN NOT NULL DEFAULT false,
+  ci_status_mutated BOOLEAN NOT NULL DEFAULT false,
+  release_ready_claimed BOOLEAN NOT NULL DEFAULT false,
+  local_first_storage BOOLEAN NOT NULL DEFAULT true
+);
+
+CREATE TABLE aos_pr_ci_story_readiness_records (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  story_id TEXT NOT NULL REFERENCES aos_stories(id),
+  github_metadata_id TEXT NOT NULL REFERENCES aos_github_metadata_readbacks(id),
+  pull_request_state TEXT NOT NULL,
+  ci_state TEXT NOT NULL,
+  readiness_state TEXT NOT NULL,
+  warnings JSONB NOT NULL DEFAULT '[]'::jsonb,
+  blockers JSONB NOT NULL DEFAULT '[]'::jsonb,
+  linked_evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  github_write_executed BOOLEAN NOT NULL DEFAULT false,
+  ci_status_mutated BOOLEAN NOT NULL DEFAULT false,
+  release_ready_claimed BOOLEAN NOT NULL DEFAULT false,
+  local_first_storage BOOLEAN NOT NULL DEFAULT true
+);
+
+CREATE TABLE aos_release_candidate_linkages (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  release_candidate_label TEXT NOT NULL,
+  status TEXT NOT NULL,
+  story_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  docs_readiness_record_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  release_note_item_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  dependency_blocker_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  resource_blocker_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  gate_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  github_metadata_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  pr_ci_readiness_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  residual_risks JSONB NOT NULL DEFAULT '[]'::jsonb,
+  release_created BOOLEAN NOT NULL DEFAULT false,
+  github_write_executed BOOLEAN NOT NULL DEFAULT false,
+  deployment_executed BOOLEAN NOT NULL DEFAULT false,
+  product_accepted BOOLEAN NOT NULL DEFAULT false,
+  final_mvp_accepted BOOLEAN NOT NULL DEFAULT false,
+  release_ready_claimed BOOLEAN NOT NULL DEFAULT false,
+  public_readiness_claimed BOOLEAN NOT NULL DEFAULT false,
+  legal_completion_claimed BOOLEAN NOT NULL DEFAULT false,
+  dependency_clean_claimed BOOLEAN NOT NULL DEFAULT false,
+  local_first_storage BOOLEAN NOT NULL DEFAULT true
+);
+
 CREATE TABLE aos_audit_events (
   id TEXT PRIMARY KEY,
   actor JSONB NOT NULL,

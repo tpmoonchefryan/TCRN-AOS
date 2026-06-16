@@ -30,6 +30,11 @@ const requiredTables = [
   "aos_knowledge_entries",
   "aos_user_guide_page_drafts",
   "aos_release_notes",
+  "aos_docs_readiness_records",
+  "aos_project_search_index_records",
+  "aos_github_metadata_readbacks",
+  "aos_pr_ci_story_readiness_records",
+  "aos_release_candidate_linkages",
   "aos_audit_events"
 ];
 

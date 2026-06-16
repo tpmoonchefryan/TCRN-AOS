@@ -14,18 +14,24 @@ import type {
   DependencyGovernanceIndexReadback,
   DependencyLifecycleRecord,
   DocumentationActionBlock,
+  DocsReadinessRecord,
+  DocsSearchReleaseLinkageIndexReadback,
   EpicRecord,
   EvidenceLink,
   GateWorkOrder,
+  GitHubMetadataReadback,
   InitiativeRecord,
   KnowledgeEntry,
   LocalConferenceOperatingLoop,
   OwnerIntent,
+  PrCiStoryReadinessLinkage,
   ProjectId,
   ProjectDocumentationIndexReadback,
+  ProjectSearchIndexRecord,
   ProjectRecord,
   ProjectResourceManifestRecord,
   ReleaseNoteRecord,
+  ReleaseCandidateLinkage,
   ResourceAuditFinding,
   ResourceGovernanceIndexReadback,
   ResourceCleanupReadback,
@@ -80,6 +86,11 @@ export class AosStore {
   private knowledge = new Map<string, KnowledgeEntry>();
   private userGuideDrafts = new Map<string, UserGuidePageDraft>();
   private releaseNotes = new Map<string, ReleaseNoteRecord>();
+  private docsReadiness = new Map<string, DocsReadinessRecord>();
+  private searchIndexRecords = new Map<string, ProjectSearchIndexRecord>();
+  private githubMetadata = new Map<string, GitHubMetadataReadback>();
+  private prCiReadiness = new Map<string, PrCiStoryReadinessLinkage>();
+  private releaseCandidates = new Map<string, ReleaseCandidateLinkage>();
   private ownerIntents = new Map<string, OwnerIntent>();
   private stageDefinitions = new Map<string, StageDefinition>();
   private auditEvents: AuditEvent[] = [];
@@ -196,6 +207,26 @@ export class AosStore {
 
   listReleaseNotes(): ReleaseNoteRecord[] {
     return [...this.releaseNotes.values()];
+  }
+
+  listDocsReadinessRecords(): DocsReadinessRecord[] {
+    return [...this.docsReadiness.values()];
+  }
+
+  listSearchIndexRecords(): ProjectSearchIndexRecord[] {
+    return [...this.searchIndexRecords.values()];
+  }
+
+  listGitHubMetadataReadbacks(): GitHubMetadataReadback[] {
+    return [...this.githubMetadata.values()];
+  }
+
+  listPrCiStoryReadiness(): PrCiStoryReadinessLinkage[] {
+    return [...this.prCiReadiness.values()];
+  }
+
+  listReleaseCandidateLinkages(): ReleaseCandidateLinkage[] {
+    return [...this.releaseCandidates.values()];
   }
 
   getProject(projectId: ProjectId): ProjectRecord | undefined {
@@ -1174,6 +1205,213 @@ export class AosStore {
     };
   }
 
+  createDocsReadinessRecord(input: Omit<DocsReadinessRecord, "id" | "docsPublished" | "gitExportExecuted" | "canonicalKnowledgePromoted" | "publicReadinessClaimed" | "releaseReadyClaimed" | "localFirstStorage">, actor: ActorIdentity): DocsReadinessRecord {
+    this.ensureSafe(input, "docsReadiness");
+    rejectExecutionClaims(input as Record<string, unknown>, ["docsPublished", "gitExportExecuted", "canonicalKnowledgePromoted", "publicReadinessClaimed", "releaseReadyClaimed"], "docs readiness record");
+    this.requireProject(input.projectId);
+    this.requireDocumentationTarget(input.targetType, input.targetId, input.projectId);
+    input.linkedStoryIds.forEach((storyId) => this.requireStory(storyId));
+    input.linkedGateIds.forEach((gateId) => this.requireGate(gateId));
+    input.linkedEvidenceIds.forEach((evidenceId) => this.requireEvidence(evidenceId));
+    if (!this.initiatives.has(input.stageMapContext.initiativeId)) {
+      throw new Error(`Unknown initiative: ${input.stageMapContext.initiativeId}`);
+    }
+    const record: DocsReadinessRecord = {
+      ...input,
+      id: createId("docs_readiness", input),
+      docsPublished: false,
+      gitExportExecuted: false,
+      canonicalKnowledgePromoted: false,
+      publicReadinessClaimed: false,
+      releaseReadyClaimed: false,
+      localFirstStorage: true
+    };
+    this.docsReadiness.set(record.id, record);
+    this.appendAudit(actor, "docs.readiness.record", "docs_readiness", record.id, record.readinessState === "blocked" ? "blocked" : "accepted", {
+      projectId: record.projectId,
+      targetType: record.targetType,
+      readinessState: record.readinessState,
+      blockerCount: record.blockers.length,
+      docsPublished: record.docsPublished,
+      releaseReadyClaimed: record.releaseReadyClaimed
+    });
+    return record;
+  }
+
+  createProjectSearchIndexRecord(input: Omit<ProjectSearchIndexRecord, "id" | "visibility" | "rawPrivatePayloadIndexed" | "rawSourceIndexed" | "rawScannerOutputIndexed" | "localAbsolutePathIndexed" | "localFirstStorage">, actor: ActorIdentity): ProjectSearchIndexRecord {
+    this.ensureSafe(input, "projectSearchIndex");
+    rejectExecutionClaims(input as Record<string, unknown>, ["rawPrivatePayloadIndexed", "rawSourceIndexed", "rawScannerOutputIndexed", "localAbsolutePathIndexed"], "project search index record");
+    this.requireProject(input.projectId);
+    this.requireSearchSource(input.sourceType, input.sourceId);
+    input.linkedStoryIds.forEach((storyId) => this.requireStory(storyId));
+    input.linkedGateIds.forEach((gateId) => this.requireGate(gateId));
+    input.linkedEvidenceIds.forEach((evidenceId) => this.requireEvidence(evidenceId));
+    const record: ProjectSearchIndexRecord = {
+      ...input,
+      id: createId("project_search_index", input),
+      visibility: "metadata_only",
+      rawPrivatePayloadIndexed: false,
+      rawSourceIndexed: false,
+      rawScannerOutputIndexed: false,
+      localAbsolutePathIndexed: false,
+      localFirstStorage: true
+    };
+    this.searchIndexRecords.set(record.id, record);
+    this.appendAudit(actor, "docs.search.index", "project_search_index", record.id, "accepted", {
+      projectId: record.projectId,
+      sourceType: record.sourceType,
+      termCount: record.sanitizedTerms.length,
+      visibility: record.visibility,
+      rawSourceIndexed: record.rawSourceIndexed
+    });
+    return record;
+  }
+
+  createGitHubMetadataReadback(input: Omit<GitHubMetadataReadback, "id" | "githubWriteExecuted" | "releaseCreated" | "ciStatusMutated" | "releaseReadyClaimed" | "localFirstStorage">, actor: ActorIdentity): GitHubMetadataReadback {
+    this.ensureSafe(input, "githubMetadataReadback");
+    rejectExecutionClaims(input as Record<string, unknown>, ["githubWriteExecuted", "releaseCreated", "ciStatusMutated", "releaseReadyClaimed"], "github metadata readback");
+    this.requireProject(input.projectId);
+    const readback: GitHubMetadataReadback = {
+      ...input,
+      id: createId("github_metadata", input),
+      githubWriteExecuted: false,
+      releaseCreated: false,
+      ciStatusMutated: false,
+      releaseReadyClaimed: false,
+      localFirstStorage: true
+    };
+    this.githubMetadata.set(readback.id, readback);
+    this.appendAudit(actor, "github.metadata.record", "github_metadata", readback.id, readback.readbackState === "blocked" ? "blocked" : "accepted", {
+      projectId: readback.projectId,
+      repositoryName: readback.repositoryName,
+      readbackState: readback.readbackState,
+      githubWriteExecuted: readback.githubWriteExecuted,
+      releaseCreated: readback.releaseCreated
+    });
+    return readback;
+  }
+
+  createPrCiStoryReadiness(input: Omit<PrCiStoryReadinessLinkage, "id" | "githubWriteExecuted" | "ciStatusMutated" | "releaseReadyClaimed" | "localFirstStorage">, actor: ActorIdentity): PrCiStoryReadinessLinkage {
+    this.ensureSafe(input, "prCiStoryReadiness");
+    rejectExecutionClaims(input as Record<string, unknown>, ["githubWriteExecuted", "ciStatusMutated", "releaseReadyClaimed"], "PR/CI story readiness linkage");
+    this.requireProject(input.projectId);
+    this.requireStory(input.storyId);
+    this.requireGitHubMetadata(input.githubMetadataId);
+    input.linkedEvidenceIds.forEach((evidenceId) => this.requireEvidence(evidenceId));
+    const linkage: PrCiStoryReadinessLinkage = {
+      ...input,
+      id: createId("pr_ci_story_readiness", input),
+      githubWriteExecuted: false,
+      ciStatusMutated: false,
+      releaseReadyClaimed: false,
+      localFirstStorage: true
+    };
+    this.prCiReadiness.set(linkage.id, linkage);
+    this.appendAudit(actor, "pr_ci.story_readiness.record", "pr_ci_story_readiness", linkage.id, linkage.readinessState === "blocked" ? "blocked" : "accepted", {
+      projectId: linkage.projectId,
+      storyId: linkage.storyId,
+      pullRequestState: linkage.pullRequestState,
+      ciState: linkage.ciState,
+      releaseReadyClaimed: linkage.releaseReadyClaimed
+    });
+    return linkage;
+  }
+
+  createReleaseCandidateLinkage(input: Omit<ReleaseCandidateLinkage, "id" | "releaseCreated" | "githubWriteExecuted" | "deploymentExecuted" | "productAccepted" | "finalMvpAccepted" | "releaseReadyClaimed" | "publicReadinessClaimed" | "legalCompletionClaimed" | "dependencyCleanClaimed" | "localFirstStorage">, actor: ActorIdentity): ReleaseCandidateLinkage {
+    this.ensureSafe(input, "releaseCandidateLinkage");
+    rejectExecutionClaims(input as Record<string, unknown>, ["releaseCreated", "githubWriteExecuted", "deploymentExecuted", "productAccepted", "finalMvpAccepted", "releaseReadyClaimed", "publicReadinessClaimed", "legalCompletionClaimed", "dependencyCleanClaimed"], "release candidate linkage");
+    this.requireProject(input.projectId);
+    input.storyIds.forEach((storyId) => this.requireStory(storyId));
+    input.docsReadinessRecordIds.forEach((readinessId) => this.requireDocsReadinessRecord(readinessId));
+    input.releaseNoteItemIds.forEach((releaseNoteId) => this.requireReleaseNote(releaseNoteId));
+    input.evidenceIds.forEach((evidenceId) => this.requireEvidence(evidenceId));
+    input.dependencyBlockerIds.forEach((dependencyId) => this.requireDependency(dependencyId));
+    input.resourceBlockerIds.forEach((resourceId) => this.requireResource(resourceId));
+    input.gateIds.forEach((gateId) => this.requireGate(gateId));
+    input.githubMetadataIds.forEach((metadataId) => this.requireGitHubMetadata(metadataId));
+    input.prCiReadinessIds.forEach((readinessId) => this.requirePrCiReadiness(readinessId));
+    const linkage: ReleaseCandidateLinkage = {
+      ...input,
+      id: createId("release_candidate_linkage", input),
+      releaseCreated: false,
+      githubWriteExecuted: false,
+      deploymentExecuted: false,
+      productAccepted: false,
+      finalMvpAccepted: false,
+      releaseReadyClaimed: false,
+      publicReadinessClaimed: false,
+      legalCompletionClaimed: false,
+      dependencyCleanClaimed: false,
+      localFirstStorage: true
+    };
+    this.releaseCandidates.set(linkage.id, linkage);
+    this.appendAudit(actor, "release_candidate.linkage.record", "release_candidate", linkage.id, linkage.status === "blocked" || linkage.status === "not_ready_for_release" ? "blocked" : "accepted", {
+      projectId: linkage.projectId,
+      releaseCandidateLabel: linkage.releaseCandidateLabel,
+      status: linkage.status,
+      releaseCreated: linkage.releaseCreated,
+      releaseReadyClaimed: linkage.releaseReadyClaimed,
+      blockerCount: linkage.dependencyBlockerIds.length + linkage.resourceBlockerIds.length
+    });
+    return linkage;
+  }
+
+  createDocsSearchReleaseLinkageIndex(projectId: ProjectId): DocsSearchReleaseLinkageIndexReadback {
+    this.requireProject(projectId);
+    const readiness = [...this.docsReadiness.values()].filter((record) => record.projectId === projectId);
+    const search = [...this.searchIndexRecords.values()].filter((record) => record.projectId === projectId);
+    const github = [...this.githubMetadata.values()].filter((record) => record.projectId === projectId);
+    const prci = [...this.prCiReadiness.values()].filter((record) => record.projectId === projectId);
+    const candidates = [...this.releaseCandidates.values()].filter((record) => record.projectId === projectId);
+    return {
+      projectId,
+      docsReadinessRecordIds: readiness.map((record) => record.id),
+      searchIndexRecordIds: search.map((record) => record.id),
+      githubMetadataIds: github.map((record) => record.id),
+      prCiReadinessIds: prci.map((record) => record.id),
+      releaseCandidateIds: candidates.map((record) => record.id),
+      blockedReadinessIds: readiness.filter((record) => record.readinessState === "blocked" || record.blockers.length > 0).map((record) => record.id),
+      blockedPrCiIds: prci.filter((record) => record.readinessState === "blocked" || record.blockers.length > 0 || record.pullRequestState === "blocked" || record.ciState === "blocked").map((record) => record.id),
+      blockedReleaseCandidateIds: candidates.filter((record) => record.status === "blocked" || record.status === "not_ready_for_release" || record.dependencyBlockerIds.length > 0 || record.resourceBlockerIds.length > 0 || record.residualRisks.length > 0).map((record) => record.id),
+      linkedStoryIds: unique([
+        ...readiness.flatMap((record) => record.linkedStoryIds),
+        ...search.flatMap((record) => record.linkedStoryIds),
+        ...prci.map((record) => record.storyId),
+        ...candidates.flatMap((record) => record.storyIds)
+      ]),
+      linkedEvidenceIds: unique([
+        ...readiness.flatMap((record) => record.linkedEvidenceIds),
+        ...search.flatMap((record) => record.linkedEvidenceIds),
+        ...prci.flatMap((record) => record.linkedEvidenceIds),
+        ...candidates.flatMap((record) => record.evidenceIds)
+      ]),
+      linkedGateIds: unique([
+        ...readiness.flatMap((record) => record.linkedGateIds),
+        ...search.flatMap((record) => record.linkedGateIds),
+        ...candidates.flatMap((record) => record.gateIds)
+      ]),
+      stateCounts: countBy([
+        ...readiness.map((record) => record.readinessState),
+        ...prci.map((record) => record.readinessState),
+        ...candidates.map((record) => record.status)
+      ]),
+      localFirstStorage: true,
+      docsPublished: false,
+      gitExportExecuted: false,
+      canonicalKnowledgePromoted: false,
+      githubWriteExecuted: false,
+      releaseCreated: false,
+      ciStatusMutated: false,
+      releaseReadyClaimed: false,
+      publicReadinessClaimed: false,
+      deploymentExecuted: false,
+      productAccepted: false,
+      finalMvpAccepted: false,
+      legalCompletionClaimed: false,
+      dependencyCleanClaimed: false
+    };
+  }
+
   deriveStageMap(projectId: ProjectId, initiativeId: string): StageMapItem[] {
     const initiative = this.initiatives.get(initiativeId);
     if (!initiative || initiative.projectId !== projectId) {
@@ -1273,6 +1511,119 @@ export class AosStore {
       throw new Error(`Unknown rollback request: ${requestId}`);
     }
     return request;
+  }
+
+  private requireEvidence(evidenceId: string): EvidenceLink {
+    const evidence = this.evidence.get(evidenceId);
+    if (!evidence) {
+      throw new Error(`Unknown evidence: ${evidenceId}`);
+    }
+    return evidence;
+  }
+
+  private requireKnowledgeEntry(entryId: string): KnowledgeEntry {
+    const entry = this.knowledge.get(entryId);
+    if (!entry) {
+      throw new Error(`Unknown knowledge entry: ${entryId}`);
+    }
+    return entry;
+  }
+
+  private requireUserGuideDraft(guideId: string): UserGuidePageDraft {
+    const guide = this.userGuideDrafts.get(guideId);
+    if (!guide) {
+      throw new Error(`Unknown guide draft: ${guideId}`);
+    }
+    return guide;
+  }
+
+  private requireReleaseNote(releaseNoteId: string): ReleaseNoteRecord {
+    const note = this.releaseNotes.get(releaseNoteId);
+    if (!note) {
+      throw new Error(`Unknown release note: ${releaseNoteId}`);
+    }
+    return note;
+  }
+
+  private requireDocsReadinessRecord(readinessId: string): DocsReadinessRecord {
+    const record = this.docsReadiness.get(readinessId);
+    if (!record) {
+      throw new Error(`Unknown docs readiness record: ${readinessId}`);
+    }
+    return record;
+  }
+
+  private requireGitHubMetadata(metadataId: string): GitHubMetadataReadback {
+    const metadata = this.githubMetadata.get(metadataId);
+    if (!metadata) {
+      throw new Error(`Unknown GitHub metadata readback: ${metadataId}`);
+    }
+    return metadata;
+  }
+
+  private requirePrCiReadiness(readinessId: string): PrCiStoryReadinessLinkage {
+    const record = this.prCiReadiness.get(readinessId);
+    if (!record) {
+      throw new Error(`Unknown PR/CI readiness record: ${readinessId}`);
+    }
+    return record;
+  }
+
+  private requireDocumentationTarget(targetType: DocsReadinessRecord["targetType"], targetId: string, projectId: ProjectId): void {
+    if (targetType === "knowledge") {
+      this.requireKnowledgeEntry(targetId);
+      return;
+    }
+    if (targetType === "guide") {
+      this.requireUserGuideDraft(targetId);
+      return;
+    }
+    if (targetType === "release_note") {
+      this.requireReleaseNote(targetId);
+      return;
+    }
+    if (targetType === "documentation_index" && targetId === projectId) {
+      return;
+    }
+    throw new Error(`Unknown documentation target: ${targetType}:${targetId}`);
+  }
+
+  private requireSearchSource(sourceType: ProjectSearchIndexRecord["sourceType"], sourceId: string): void {
+    if (sourceType === "knowledge") {
+      this.requireKnowledgeEntry(sourceId);
+      return;
+    }
+    if (sourceType === "guide") {
+      this.requireUserGuideDraft(sourceId);
+      return;
+    }
+    if (sourceType === "release_note") {
+      this.requireReleaseNote(sourceId);
+      return;
+    }
+    if (sourceType === "evidence") {
+      this.requireEvidence(sourceId);
+      return;
+    }
+    if (sourceType === "gate") {
+      this.requireGate(sourceId);
+      return;
+    }
+    if (sourceType === "story") {
+      this.requireStory(sourceId);
+      return;
+    }
+    if (sourceType === "github_metadata") {
+      this.requireGitHubMetadata(sourceId);
+      return;
+    }
+    if (sourceType === "release_candidate") {
+      const candidate = this.releaseCandidates.get(sourceId);
+      if (candidate) {
+        return;
+      }
+    }
+    throw new Error(`Unknown search source: ${sourceType}:${sourceId}`);
   }
 
   private ensureSafe(value: unknown, context: string): void {

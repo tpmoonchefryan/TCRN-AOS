@@ -764,6 +764,150 @@ export interface DocumentationActionBlock {
   auditEventId: AosId;
 }
 
+export type DocsReadinessState =
+  | "draft"
+  | "needs_review"
+  | "blocked"
+  | "local_readback_ready"
+  | "not_ready_for_release";
+
+export interface DocsReadinessRecord {
+  id: AosId;
+  projectId: ProjectId;
+  targetType: "knowledge" | "guide" | "release_note" | "documentation_index";
+  targetId: AosId;
+  readinessState: DocsReadinessState;
+  freshnessState: ProjectDocumentationFreshness;
+  linkedStoryIds: AosId[];
+  linkedEvidenceIds: AosId[];
+  linkedGateIds: AosId[];
+  stageMapContext: {
+    initiativeId: AosId;
+    stageIds: AosId[];
+  };
+  blockers: string[];
+  docsPublished: false;
+  gitExportExecuted: false;
+  canonicalKnowledgePromoted: false;
+  publicReadinessClaimed: false;
+  releaseReadyClaimed: false;
+  localFirstStorage: true;
+}
+
+export interface ProjectSearchIndexRecord {
+  id: AosId;
+  projectId: ProjectId;
+  sourceType: "knowledge" | "guide" | "release_note" | "evidence" | "gate" | "story" | "github_metadata" | "release_candidate";
+  sourceId: AosId;
+  title: string;
+  summary: string;
+  sanitizedTerms: string[];
+  linkedStoryIds: AosId[];
+  linkedEvidenceIds: AosId[];
+  linkedGateIds: AosId[];
+  visibility: "metadata_only";
+  rawPrivatePayloadIndexed: false;
+  rawSourceIndexed: false;
+  rawScannerOutputIndexed: false;
+  localAbsolutePathIndexed: false;
+  localFirstStorage: true;
+}
+
+export interface GitHubMetadataReadback {
+  id: AosId;
+  projectId: ProjectId;
+  repoRegistryId: string;
+  repositoryName: string;
+  defaultBranch: string;
+  branchName: string;
+  commitSha: string;
+  pullRequestRefs: string[];
+  ciRunRefs: string[];
+  releaseReferenceIds: string[];
+  readbackState: "fixture_readback" | "metadata_missing" | "blocked";
+  warnings: string[];
+  blockers: string[];
+  githubWriteExecuted: false;
+  releaseCreated: false;
+  ciStatusMutated: false;
+  releaseReadyClaimed: false;
+  localFirstStorage: true;
+}
+
+export interface PrCiStoryReadinessLinkage {
+  id: AosId;
+  projectId: ProjectId;
+  storyId: AosId;
+  githubMetadataId: AosId;
+  pullRequestState: "missing" | "blocked" | "warning" | "verified_local_metadata";
+  ciState: "missing" | "blocked" | "warning" | "verified_local_metadata";
+  readinessState: DocsReadinessState;
+  warnings: string[];
+  blockers: string[];
+  linkedEvidenceIds: AosId[];
+  githubWriteExecuted: false;
+  ciStatusMutated: false;
+  releaseReadyClaimed: false;
+  localFirstStorage: true;
+}
+
+export interface ReleaseCandidateLinkage {
+  id: AosId;
+  projectId: ProjectId;
+  releaseCandidateLabel: string;
+  status: DocsReadinessState;
+  storyIds: AosId[];
+  docsReadinessRecordIds: AosId[];
+  releaseNoteItemIds: AosId[];
+  evidenceIds: AosId[];
+  dependencyBlockerIds: AosId[];
+  resourceBlockerIds: AosId[];
+  gateIds: AosId[];
+  githubMetadataIds: AosId[];
+  prCiReadinessIds: AosId[];
+  residualRisks: string[];
+  releaseCreated: false;
+  githubWriteExecuted: false;
+  deploymentExecuted: false;
+  productAccepted: false;
+  finalMvpAccepted: false;
+  releaseReadyClaimed: false;
+  publicReadinessClaimed: false;
+  legalCompletionClaimed: false;
+  dependencyCleanClaimed: false;
+  localFirstStorage: true;
+}
+
+export interface DocsSearchReleaseLinkageIndexReadback {
+  projectId: ProjectId;
+  docsReadinessRecordIds: AosId[];
+  searchIndexRecordIds: AosId[];
+  githubMetadataIds: AosId[];
+  prCiReadinessIds: AosId[];
+  releaseCandidateIds: AosId[];
+  blockedReadinessIds: AosId[];
+  blockedPrCiIds: AosId[];
+  blockedReleaseCandidateIds: AosId[];
+  linkedStoryIds: AosId[];
+  linkedEvidenceIds: AosId[];
+  linkedGateIds: AosId[];
+  stateCounts: Record<string, number>;
+  localFirstStorage: true;
+  docsPublished: false;
+  gitExportExecuted: false;
+  canonicalKnowledgePromoted: false;
+  githubWriteExecuted: false;
+  releaseCreated: false;
+  ciStatusMutated: false;
+  releaseReadyClaimed: false;
+  publicReadinessClaimed: false;
+  deploymentExecuted: false;
+  productAccepted: false;
+  finalMvpAccepted: false;
+  legalCompletionClaimed: false;
+  dependencyCleanClaimed: false;
+}
+
 export interface AuditEvent {
   id: AosId;
   actor: ActorIdentity | { system: string };

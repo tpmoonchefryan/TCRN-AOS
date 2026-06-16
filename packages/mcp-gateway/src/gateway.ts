@@ -13,9 +13,14 @@ import type {
   AuditEvent,
   DependencyDetectionFinding,
   DependencyLifecycleRecord,
+  DocsReadinessRecord,
+  GitHubMetadataReadback,
   EvidenceLink,
   GateWorkOrder,
+  PrCiStoryReadinessLinkage,
+  ProjectSearchIndexRecord,
   ProjectResourceManifestRecord,
+  ReleaseCandidateLinkage,
   ResourceAuditFinding,
   ResourceCleanupReadback,
   ResourceMaterializationHistoryRecord,
@@ -45,6 +50,12 @@ export const allowedMcpMethods = [
   "aos.knowledge.entry.propose",
   "aos.guide.page.draft",
   "aos.release_note.item.draft",
+  "aos.docs.readiness.record",
+  "aos.docs.search.index",
+  "aos.github.metadata.record",
+  "aos.pr_ci.story_readiness.record",
+  "aos.release_candidate.linkage.record",
+  "aos.release_candidate.linkage.read",
   "aos.stage_map.read",
   "aos.dependency.record.propose",
   "aos.dependency.detection.record",
@@ -208,6 +219,23 @@ export class McpGateway {
         return this.draftGuidePage(actor, params);
       case "aos.release_note.item.draft":
         return this.draftReleaseNote(actor, params);
+      case "aos.docs.readiness.record":
+        this.requireProjectScope(params.projectId);
+        return this.store.createDocsReadinessRecord(params as unknown as Omit<DocsReadinessRecord, "id" | "docsPublished" | "gitExportExecuted" | "canonicalKnowledgePromoted" | "publicReadinessClaimed" | "releaseReadyClaimed" | "localFirstStorage">, actor);
+      case "aos.docs.search.index":
+        this.requireProjectScope(params.projectId);
+        return this.store.createProjectSearchIndexRecord(params as unknown as Omit<ProjectSearchIndexRecord, "id" | "visibility" | "rawPrivatePayloadIndexed" | "rawSourceIndexed" | "rawScannerOutputIndexed" | "localAbsolutePathIndexed" | "localFirstStorage">, actor);
+      case "aos.github.metadata.record":
+        this.requireProjectScope(params.projectId);
+        return this.store.createGitHubMetadataReadback(params as unknown as Omit<GitHubMetadataReadback, "id" | "githubWriteExecuted" | "releaseCreated" | "ciStatusMutated" | "releaseReadyClaimed" | "localFirstStorage">, actor);
+      case "aos.pr_ci.story_readiness.record":
+        this.requireProjectScope(params.projectId);
+        return this.store.createPrCiStoryReadiness(params as unknown as Omit<PrCiStoryReadinessLinkage, "id" | "githubWriteExecuted" | "ciStatusMutated" | "releaseReadyClaimed" | "localFirstStorage">, actor);
+      case "aos.release_candidate.linkage.record":
+        this.requireProjectScope(params.projectId);
+        return this.store.createReleaseCandidateLinkage(params as unknown as Omit<ReleaseCandidateLinkage, "id" | "releaseCreated" | "githubWriteExecuted" | "deploymentExecuted" | "productAccepted" | "finalMvpAccepted" | "releaseReadyClaimed" | "publicReadinessClaimed" | "legalCompletionClaimed" | "dependencyCleanClaimed" | "localFirstStorage">, actor);
+      case "aos.release_candidate.linkage.read":
+        return this.store.createDocsSearchReleaseLinkageIndex(this.requireProjectScope(params.projectId));
       case "aos.stage_map.read":
         return this.store.deriveStageMap(this.requireProjectScope(params.projectId), requireString(params.initiativeId, "initiativeId"));
       case "aos.dependency.record.propose":
@@ -446,7 +474,7 @@ export class McpGateway {
   }
 
   private isReadMethod(method: AllowedMcpMethod): boolean {
-    return ["aos.policy.read", "aos.stage_map.read", "aos.work_index.drill_through.read", "aos.documentation.index.read", "aos.dependency.governance.read", "aos.resource.governance.read", "aos.resource.materialization_control.read", "aos.audit.query"].includes(method);
+    return ["aos.policy.read", "aos.stage_map.read", "aos.work_index.drill_through.read", "aos.documentation.index.read", "aos.release_candidate.linkage.read", "aos.dependency.governance.read", "aos.resource.governance.read", "aos.resource.materialization_control.read", "aos.audit.query"].includes(method);
   }
 
   private requireProjectScope(value: unknown): string {
