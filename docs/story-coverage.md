@@ -129,6 +129,23 @@ Slice 7 adds local-first dependency/license governance and Resource Library gove
 
 Supporting local proof touches `AOS-S020..AOS-S024`, `AOS-S029`, `AOS-S031`, `AOS-S045..AOS-S047`, `AOS-S052`, `AOS-S053`, and `AOS-S064..AOS-S068` only as readback/linkage context.
 
-Still deferred: `AOS-S083` materialization history/update/rollback/replacement automation, package dependency remediation, scanner ingestion, resource binary transfer, product-repo resource writes, release readiness, product acceptance, and final MVP acceptance.
+Still deferred: package dependency remediation, scanner ingestion, resource binary transfer, product-repo resource writes, materialization/update/rollback/replacement/cleanup execution, release readiness, product acceptance, and final MVP acceptance.
 
 Slice 7 evidence receipt: `../evidence/slice-7-dependency-resource-governance-proof.md`.
+
+## Slice 8 Resource Materialization History And Rollback Coverage
+
+Slice 8 adds local-first no-execution control-record foundations for `AOS-S083`:
+
+- Materialization history records preserve resource, manifest, target project, linked gates/evidence, lifecycle state, residual risk, next action, and fixed false execution flags.
+- Update and replacement requests preserve requested lineage changes and Owner Intent requirements without binary transfer, product-repo writes, or replacement execution.
+- Rollback requests and rollback plans preserve intended previous-manifest/readback posture, cleanup blockers, required gates, and fixed false rollback/cleanup/product-write claims.
+- Retirement records and cleanup readbacks preserve blocked/approved local posture, delete blockers, residual risk, and fixed false cleanup/delete/product-repo-write claims.
+- Materialization-control index readbacks expose history, update, replacement, rollback, plan, retirement, cleanup, blocked, gate, evidence, and lifecycle counts for cockpit/API/gateway consumers.
+- MCP Gateway methods record and read these control records locally, with idempotency, role/project checks, restricted payload rejection, and fail-closed execution-claim booleans.
+
+Supporting local proof touches `AOS-S078..AOS-S082`, `AOS-S084`, `AOS-S020..AOS-S024`, `AOS-S029`, `AOS-S031`, `AOS-S052`, `AOS-S053`, and `AOS-S064..AOS-S068` only as linkage/readback context.
+
+Still deferred: actual resource materialization, resource binary transfer, update execution, replacement execution, rollback execution, cleanup/delete execution, scanner ingestion, product-repo resource writes, public/legal/release readiness, product acceptance, and final MVP acceptance.
+
+Slice 8 evidence receipt: `../evidence/slice-8-resource-materialization-history-rollback-proof.md`.

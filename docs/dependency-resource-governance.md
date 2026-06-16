@@ -67,6 +67,19 @@ The Resource Library governance index reports resource ids, materialization requ
 
 Slice 7 traceability is intentionally metadata-only. Rows can link resources to stories, gates, release-note records, evidence, and residual findings without copying binaries, scanning product repositories, storing raw source, or writing any product repo.
 
+## Materialization History And Rollback Controls
+
+Slice 8 extends the Resource Library governance surface with no-execution control records for materialization history, update requests, replacement requests, rollback requests, rollback plans, retirement records, cleanup readbacks, and a materialization-control index.
+
+These records preserve:
+
+- prior manifest/resource lineage, current manifest/resource lineage, target project, linked gates, linked evidence, lifecycle state, residual risk, and next action
+- update, replacement, rollback, retirement, and cleanup status with Owner Intent required before any high-risk action can proceed
+- cleanup blockers, delete blockers, stale-version posture, resource-owner review posture, and local audit/readback metadata
+- fixed false execution flags for binary transfer, materialization, update, replacement, rollback, cleanup, delete, and product-repo writes
+
+The Slice 8 materialization-control index is a readback surface. It reports history ids, update request ids, replacement request ids, rollback request ids, rollback plan ids, retirement ids, cleanup readback ids, blocked ids, linked gates, linked evidence, and lifecycle counts. It does not execute or authorize resource binary transfer, product-repo writes, rollback, cleanup, deletion, scanner ingestion, release readiness, public readiness, or legal completion.
+
 ## Boundaries
 
-Slice 7 does not authorize dependency install/remove/update, dependency remediation, generated PRs, scanner ingestion, raw scanner output ingestion, resource binary transfer, resource materialization execution, product-repo resource writes, deployment, live Codex dispatch, Product Design final acceptance, legal completion, dependency clean/public readiness, release readiness, product acceptance, final MVP acceptance, Selene closeout, or remote publication.
+Slice 7 and Slice 8 do not authorize dependency install/remove/update, dependency remediation, generated PRs, scanner ingestion, raw scanner output ingestion, resource binary transfer, resource materialization execution, update execution, replacement execution, rollback execution, cleanup/delete execution, product-repo resource writes, deployment, live Codex dispatch, Product Design final acceptance, legal completion, dependency clean/public readiness, release readiness, product acceptance, final MVP acceptance, Selene closeout, or remote publication.
