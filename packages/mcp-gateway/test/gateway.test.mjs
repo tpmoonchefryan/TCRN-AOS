@@ -25,12 +25,14 @@ function gatewayFixture() {
   return { store, gateway };
 }
 
-test("gateway exposes only the accepted Slice 1 MCP method families", () => {
+test("gateway exposes only the accepted local MCP method families", () => {
   assert.deepEqual([...allowedMcpMethods].sort(), [
     "aos.audit.query",
     "aos.conference.position.record",
     "aos.conference.minutes.record",
     "aos.conference.request",
+    "aos.dependency.detection.record",
+    "aos.dependency.governance.read",
     "aos.dependency.record.propose",
     "aos.documentation.index.read",
     "aos.evidence.link",
@@ -39,6 +41,10 @@ test("gateway exposes only the accepted Slice 1 MCP method families", () => {
     "aos.knowledge.entry.propose",
     "aos.policy.read",
     "aos.release_note.item.draft",
+    "aos.resource.audit_finding.record",
+    "aos.resource.governance.read",
+    "aos.resource.manifest.record",
+    "aos.resource.materialization.request",
     "aos.resource.record.propose",
     "aos.run.summary.create",
     "aos.stage_map.read",

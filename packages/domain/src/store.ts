@@ -10,6 +10,8 @@ import type {
   ConferenceMinutes,
   ConferencePosition,
   ConferenceRequest,
+  DependencyDetectionFinding,
+  DependencyGovernanceIndexReadback,
   DependencyLifecycleRecord,
   DocumentationActionBlock,
   EpicRecord,
@@ -22,7 +24,11 @@ import type {
   ProjectId,
   ProjectDocumentationIndexReadback,
   ProjectRecord,
+  ProjectResourceManifestRecord,
   ReleaseNoteRecord,
+  ResourceAuditFinding,
+  ResourceGovernanceIndexReadback,
+  ResourceMaterializationRequest,
   ResourceRegistryRecord,
   StageDefinition,
   StageMapItem,
@@ -51,7 +57,11 @@ export class AosStore {
   private evidence = new Map<string, EvidenceLink>();
   private conferences = new Map<string, ConferenceRequest>();
   private dependencies = new Map<string, DependencyLifecycleRecord>();
+  private dependencyFindings = new Map<string, DependencyDetectionFinding>();
   private resources = new Map<string, ResourceRegistryRecord>();
+  private materializationRequests = new Map<string, ResourceMaterializationRequest>();
+  private resourceManifests = new Map<string, ProjectResourceManifestRecord>();
+  private resourceFindings = new Map<string, ResourceAuditFinding>();
   private knowledge = new Map<string, KnowledgeEntry>();
   private userGuideDrafts = new Map<string, UserGuidePageDraft>();
   private releaseNotes = new Map<string, ReleaseNoteRecord>();
@@ -113,8 +123,24 @@ export class AosStore {
     return [...this.dependencies.values()];
   }
 
+  listDependencyFindings(): DependencyDetectionFinding[] {
+    return [...this.dependencyFindings.values()];
+  }
+
   listResources(): ResourceRegistryRecord[] {
     return [...this.resources.values()];
+  }
+
+  listMaterializationRequests(): ResourceMaterializationRequest[] {
+    return [...this.materializationRequests.values()];
+  }
+
+  listResourceManifests(): ProjectResourceManifestRecord[] {
+    return [...this.resourceManifests.values()];
+  }
+
+  listResourceFindings(): ResourceAuditFinding[] {
+    return [...this.resourceFindings.values()];
   }
 
   listKnowledge(): KnowledgeEntry[] {
@@ -500,6 +526,7 @@ export class AosStore {
 
   createDependencyRecord(input: Omit<DependencyLifecycleRecord, "id" | "linkedGateIds">, actor: ActorIdentity): DependencyLifecycleRecord {
     this.ensureSafe(input, "dependency");
+    this.requireProject(input.projectId);
     const dependency: DependencyLifecycleRecord = {
       ...input,
       id: createId("dependency", input),
@@ -508,13 +535,19 @@ export class AosStore {
     this.dependencies.set(dependency.id, dependency);
     this.appendAudit(actor, "dependency.record.propose", "dependency", dependency.id, "accepted", {
       posture: dependency.posture,
-      evidenceStatus: dependency.evidenceStatus
+      evidenceStatus: dependency.evidenceStatus,
+      lifecycleState: dependency.lifecycleState ?? "current",
+      policyClass: dependency.policyClass ?? "review_required",
+      packageMutationExecuted: dependency.packageMutationExecuted ?? false
     });
     return dependency;
   }
 
   createResourceRecord(input: Omit<ResourceRegistryRecord, "id" | "linkedGateIds" | "projectManifestRefs">, actor: ActorIdentity): ResourceRegistryRecord {
     this.ensureSafe(input, "resource");
+    if (input.projectId) {
+      this.requireProject(input.projectId);
+    }
     const resource: ResourceRegistryRecord = {
       ...input,
       id: createId("resource", input),
@@ -524,7 +557,221 @@ export class AosStore {
     this.resources.set(resource.id, resource);
     this.appendAudit(actor, "resource.record.propose", "resource", resource.id, "accepted", {
       copyrightStatus: resource.copyrightStatus,
-      approvalState: resource.approvalState
+      approvalState: resource.approvalState,
+      permissionState: resource.permissionState ?? "unknown",
+      materializationExecuted: resource.materializationExecuted ?? false,
+      productRepoWriteExecuted: resource.productRepoWriteExecuted ?? false
+    });
+    return resource;
+  }
+
+  createDependencyDetectionFinding(input: Omit<DependencyDetectionFinding, "id">, actor: ActorIdentity): DependencyDetectionFinding {
+    this.ensureSafe(input, "dependencyFinding");
+    this.requireProject(input.projectId);
+    this.requireDependency(input.dependencyId);
+    const finding: DependencyDetectionFinding = {
+      ...input,
+      id: createId("dependency_finding", input)
+    };
+    this.dependencyFindings.set(finding.id, finding);
+    this.appendAudit(actor, "dependency.detection.record", "dependency_finding", finding.id, finding.state === "denied" ? "blocked" : "accepted", {
+      dependencyId: finding.dependencyId,
+      state: finding.state,
+      remediationExecuted: finding.remediationExecuted,
+      packageMutationExecuted: finding.packageMutationExecuted
+    });
+    return finding;
+  }
+
+  createDependencyGovernanceIndex(projectId: ProjectId): DependencyGovernanceIndexReadback {
+    this.requireProject(projectId);
+    const dependencies = [...this.dependencies.values()].filter((dependency) => dependency.projectId === projectId);
+    const findings = [...this.dependencyFindings.values()].filter((finding) => finding.projectId === projectId);
+    const blockedDependencyIds = unique([
+      ...dependencies.filter((dependency) => dependency.posture === "blocked" || dependency.policyClass === "denied" || dependency.evidenceStatus === "conflict").map((dependency) => dependency.id),
+      ...findings.filter((finding) => ["denied", "expired", "unapproved"].includes(finding.state)).map((finding) => finding.dependencyId)
+    ]);
+    return {
+      projectId,
+      dependencyIds: dependencies.map((dependency) => dependency.id),
+      detectionFindingIds: findings.map((finding) => finding.id),
+      blockedDependencyIds,
+      releaseBlockerDependencyIds: dependencies.filter((dependency) => dependency.releaseBlocker || dependency.policyClass === "denied" || dependency.evidenceStatus === "evidence_missing" || ["blocked", "denied", "expired", "evidence_missing"].includes(dependency.posture)).map((dependency) => dependency.id),
+      sbomNoticeRequiredDependencyIds: dependencies.filter((dependency) => dependency.sbomNoticeObligation !== "none").map((dependency) => dependency.id),
+      linkedGateIds: unique([
+        ...dependencies.flatMap((dependency) => dependency.linkedGateIds),
+        ...findings.flatMap((finding) => finding.linkedGateIds)
+      ]),
+      linkedEvidenceIds: unique([
+        ...dependencies.flatMap((dependency) => dependency.linkedEvidenceIds ?? []),
+        ...findings.flatMap((finding) => finding.evidenceIds)
+      ]),
+      stateCounts: countBy([
+        ...dependencies.map((dependency) => dependency.lifecycleState ?? "current"),
+        ...findings.map((finding) => finding.state)
+      ]),
+      localFirstStorage: true,
+      packageMutationAuthorized: false,
+      remediationExecuted: false,
+      dependencyCleanClaimed: false,
+      legalCompletionClaimed: false,
+      releaseReadinessClaimed: false
+    };
+  }
+
+  createResourceMaterializationRequest(input: Omit<ResourceMaterializationRequest, "id" | "ownerIntentRequired" | "materializationExecuted" | "productRepoWriteExecuted">, actor: ActorIdentity): ResourceMaterializationRequest {
+    this.ensureSafe(input, "resourceMaterializationRequest");
+    this.requireProject(input.projectId);
+    this.requireProject(input.targetProjectId);
+    this.requireResource(input.resourceId);
+    const request: ResourceMaterializationRequest = {
+      ...input,
+      id: createId("resource_materialization_request", input),
+      ownerIntentRequired: true,
+      materializationExecuted: false,
+      productRepoWriteExecuted: false
+    };
+    this.materializationRequests.set(request.id, request);
+    this.appendAudit(actor, "resource.materialization.request", "resource_materialization_request", request.id, request.status === "blocked" ? "blocked" : "accepted", {
+      resourceId: request.resourceId,
+      targetProjectId: request.targetProjectId,
+      ownerIntentRequired: request.ownerIntentRequired,
+      materializationExecuted: request.materializationExecuted,
+      productRepoWriteExecuted: request.productRepoWriteExecuted
+    });
+    return request;
+  }
+
+  createProjectResourceManifest(input: Omit<ProjectResourceManifestRecord, "id" | "sourceTruth" | "liveCopyCreated" | "productRepoWriteExecuted">, actor: ActorIdentity): ProjectResourceManifestRecord {
+    this.ensureSafe(input, "projectResourceManifest");
+    this.requireProject(input.projectId);
+    this.requireResource(input.resourceId);
+    const manifest: ProjectResourceManifestRecord = {
+      ...input,
+      id: createId("resource_manifest", input),
+      sourceTruth: "resource_library",
+      liveCopyCreated: false,
+      productRepoWriteExecuted: false
+    };
+    this.resourceManifests.set(manifest.id, manifest);
+    const resource = this.resources.get(manifest.resourceId);
+    if (resource && !resource.projectManifestRefs.includes(manifest.id)) {
+      resource.projectManifestRefs.push(manifest.id);
+    }
+    this.appendAudit(actor, "resource.manifest.record", "resource_manifest", manifest.id, manifest.status === "blocked" ? "blocked" : "accepted", {
+      resourceId: manifest.resourceId,
+      status: manifest.status,
+      liveCopyCreated: manifest.liveCopyCreated,
+      productRepoWriteExecuted: manifest.productRepoWriteExecuted
+    });
+    return manifest;
+  }
+
+  createResourceAuditFinding(input: Omit<ResourceAuditFinding, "id" | "scannerIngestionExecuted" | "materializationExecuted" | "productRepoMutationExecuted">, actor: ActorIdentity): ResourceAuditFinding {
+    this.ensureSafe(input, "resourceAuditFinding");
+    this.requireProject(input.projectId);
+    if (input.resourceId) {
+      this.requireResource(input.resourceId);
+    }
+    const finding: ResourceAuditFinding = {
+      ...input,
+      id: createId("resource_finding", input),
+      scannerIngestionExecuted: false,
+      materializationExecuted: false,
+      productRepoMutationExecuted: false
+    };
+    this.resourceFindings.set(finding.id, finding);
+    this.appendAudit(actor, "resource.audit_finding.record", "resource_finding", finding.id, finding.severity === "blocked" ? "blocked" : "accepted", {
+      findingType: finding.findingType,
+      severity: finding.severity,
+      scannerIngestionExecuted: finding.scannerIngestionExecuted,
+      materializationExecuted: finding.materializationExecuted,
+      productRepoMutationExecuted: finding.productRepoMutationExecuted
+    });
+    return finding;
+  }
+
+  createResourceGovernanceIndex(projectId: ProjectId): ResourceGovernanceIndexReadback {
+    this.requireProject(projectId);
+    const resources = [...this.resources.values()].filter((resource) => !resource.projectId || resource.projectId === projectId);
+    const requests = [...this.materializationRequests.values()].filter((request) => request.projectId === projectId || request.targetProjectId === projectId);
+    const manifests = [...this.resourceManifests.values()].filter((manifest) => manifest.projectId === projectId);
+    const findings = [...this.resourceFindings.values()].filter((finding) => finding.projectId === projectId);
+    const blockedResourceIds = unique([
+      ...resources.filter((resource) => resource.approvalState === "blocked" || resource.copyrightStatus === "blocked" || resource.lifecycleState === "denied" || resource.lifecycleState === "revoked").map((resource) => resource.id),
+      ...findings.filter((finding) => finding.severity === "blocked").flatMap((finding) => finding.resourceId ? [finding.resourceId] : [])
+    ]);
+    return {
+      projectId,
+      resourceIds: resources.map((resource) => resource.id),
+      materializationRequestIds: requests.map((request) => request.id),
+      manifestRecordIds: manifests.map((manifest) => manifest.id),
+      auditFindingIds: findings.map((finding) => finding.id),
+      blockedResourceIds,
+      releaseBlockerResourceIds: resources.filter((resource) => resource.releaseBlocker || resource.approvalState === "blocked" || resource.copyrightStatus === "blocked" || resource.permissionState === "denied" || resource.permissionState === "expired").map((resource) => resource.id),
+      linkedGateIds: unique([
+        ...resources.flatMap((resource) => resource.linkedGateIds),
+        ...requests.flatMap((request) => request.linkedGateId ? [request.linkedGateId] : []),
+        ...findings.flatMap((finding) => finding.linkedGateIds)
+      ]),
+      linkedEvidenceIds: unique([
+        ...resources.flatMap((resource) => resource.linkedEvidenceIds ?? []),
+        ...requests.flatMap((request) => request.evidenceIds),
+        ...manifests.flatMap((manifest) => manifest.linkedEvidenceIds),
+        ...findings.flatMap((finding) => finding.evidenceIds)
+      ]),
+      traceabilityRows: resources.map((resource) => ({
+        resourceId: resource.id,
+        linkedStoryIds: unique([
+          ...(resource.linkedStoryIds ?? []),
+          ...manifests.filter((manifest) => manifest.resourceId === resource.id).flatMap((manifest) => manifest.linkedStoryIds)
+        ]),
+        linkedGateIds: resource.linkedGateIds,
+        linkedReleaseNoteIds: unique([
+          ...(resource.linkedReleaseNoteIds ?? []),
+          ...manifests.filter((manifest) => manifest.resourceId === resource.id).flatMap((manifest) => manifest.linkedReleaseNoteIds)
+        ]),
+        linkedEvidenceIds: unique([
+          ...(resource.linkedEvidenceIds ?? []),
+          ...manifests.filter((manifest) => manifest.resourceId === resource.id).flatMap((manifest) => manifest.linkedEvidenceIds),
+          ...findings.filter((finding) => finding.resourceId === resource.id).flatMap((finding) => finding.evidenceIds)
+        ]),
+        residualFindingIds: findings.filter((finding) => finding.resourceId === resource.id && finding.severity !== "info").map((finding) => finding.id)
+      })),
+      findingCounts: countBy(findings.map((finding) => finding.findingType)),
+      localFirstStorage: true,
+      scannerIngestionExecuted: false,
+      materializationExecuted: false,
+      productRepoWriteExecuted: false,
+      legalCompletionClaimed: false,
+      publicReadinessClaimed: false,
+      releaseReadinessClaimed: false
+    };
+  }
+
+  linkDependencyGate(dependencyId: string, gateId: string, actor: ActorIdentity): DependencyLifecycleRecord {
+    const dependency = this.requireDependency(dependencyId);
+    this.requireGate(gateId);
+    if (!dependency.linkedGateIds.includes(gateId)) {
+      dependency.linkedGateIds.push(gateId);
+    }
+    this.appendAudit(actor, "dependency.gate.link", "dependency", dependency.id, "accepted", {
+      gateId,
+      packageMutationExecuted: false
+    });
+    return dependency;
+  }
+
+  linkResourceGate(resourceId: string, gateId: string, actor: ActorIdentity): ResourceRegistryRecord {
+    const resource = this.requireResource(resourceId);
+    this.requireGate(gateId);
+    if (!resource.linkedGateIds.includes(gateId)) {
+      resource.linkedGateIds.push(gateId);
+    }
+    this.appendAudit(actor, "resource.gate.link", "resource", resource.id, "accepted", {
+      gateId,
+      materializationExecuted: false,
+      productRepoWriteExecuted: false
     });
     return resource;
   }
@@ -676,6 +923,30 @@ export class AosStore {
     return project;
   }
 
+  private requireGate(gateId: string): GateWorkOrder {
+    const gate = this.gates.get(gateId);
+    if (!gate) {
+      throw new Error(`Unknown gate: ${gateId}`);
+    }
+    return gate;
+  }
+
+  private requireDependency(dependencyId: string): DependencyLifecycleRecord {
+    const dependency = this.dependencies.get(dependencyId);
+    if (!dependency) {
+      throw new Error(`Unknown dependency: ${dependencyId}`);
+    }
+    return dependency;
+  }
+
+  private requireResource(resourceId: string): ResourceRegistryRecord {
+    const resource = this.resources.get(resourceId);
+    if (!resource) {
+      throw new Error(`Unknown resource: ${resourceId}`);
+    }
+    return resource;
+  }
+
   private ensureSafe(value: unknown, context: string): void {
     assertNoRestrictedContent(value, context);
   }
@@ -703,4 +974,11 @@ export function now(): string {
 
 function unique(values: string[]): string[] {
   return [...new Set(values)];
+}
+
+function countBy(values: string[]): Record<string, number> {
+  return values.reduce<Record<string, number>>((counts, value) => {
+    counts[value] = (counts[value] ?? 0) + 1;
+    return counts;
+  }, {});
 }

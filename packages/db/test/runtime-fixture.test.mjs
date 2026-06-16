@@ -10,6 +10,10 @@ test("runtime fixture applies, reads back representative records, proves safety,
   assert.equal(readback.runtimeDataCommitted, false);
   assert.equal(readback.operationalRecordCounts.stories, 1);
   assert.equal(readback.operationalRecordCounts.gates, 2);
+  assert.equal(readback.operationalRecordCounts.dependencyFindings, 1);
+  assert.equal(readback.operationalRecordCounts.materializationRequests, 1);
+  assert.equal(readback.operationalRecordCounts.resourceManifests, 1);
+  assert.equal(readback.operationalRecordCounts.resourceFindings, 1);
   assert.equal(readback.operationalRecordCounts.knowledgeEntries, 1);
   assert.equal(readback.operationalRecordCounts.userGuideDrafts, 1);
   assert.equal(readback.operationalRecordCounts.stageMapItems, 4);

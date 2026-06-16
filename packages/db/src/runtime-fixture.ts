@@ -31,7 +31,11 @@ export interface RuntimeFixtureReadback {
     conferences: number;
     conferencePositions: number;
     dependencies: number;
+    dependencyFindings: number;
     resources: number;
+    materializationRequests: number;
+    resourceManifests: number;
+    resourceFindings: number;
     knowledgeEntries: number;
     userGuideDrafts: number;
     releaseNotes: number;
@@ -80,7 +84,11 @@ export interface RepresentativeRecordIds {
   conferenceId: string;
   conferencePositionId: string;
   dependencyId: string;
+  dependencyFindingId: string;
   resourceId: string;
+  materializationRequestId: string;
+  resourceManifestId: string;
+  resourceFindingId: string;
   knowledgeEntryId: string;
   userGuideDraftId: string;
   releaseNoteId: string;
@@ -212,14 +220,41 @@ export class AosRuntimeFixture {
       versionRange: "5.8.3",
       sourceSystem: "package.json",
       projectUsage: "development",
+      ownerRole: "security",
+      lifecycleState: "current",
+      artifactRef: "package:typescript@5.8.3",
       licenseExpression: "Apache-2.0",
+      declaredLicenseEvidence: "package-json-dev-dependency",
+      discoveredLicenseEvidence: "node-module-package-json",
+      evidenceArtifactRef: evidence.id,
       evidenceStatus: "present",
+      confidence: "high",
+      policyClass: "review_required",
+      reviewerRole: "security",
+      residualRisk: "low",
+      nextAction: "request_review",
       sbomNoticeObligation: "none",
       posture: "review_required",
-      approvalOwnerRole: "security"
+      approvalOwnerRole: "security",
+      linkedStoryIds: [story.id],
+      linkedEvidenceIds: [evidence.id],
+      releaseBlocker: false,
+      packageMutationExecuted: false
+    }, this.actor);
+    const dependencyFinding = this.store.createDependencyDetectionFinding({
+      projectId: "TCRN-AOS",
+      dependencyId: dependency.id,
+      state: "current",
+      sourceSystem: "deterministic_fixture",
+      evidenceIds: [evidence.id],
+      linkedGateIds: [gate.id],
+      remediationExecuted: false,
+      packageMutationExecuted: false,
+      nextAction: "request_review"
     }, this.actor);
     const resource = this.store.createResourceRecord({
       type: "template",
+      projectId: "TCRN-AOS",
       title: "Runtime proof evidence template",
       owner: "TCRN",
       source: "product-local",
@@ -227,9 +262,38 @@ export class AosRuntimeFixture {
       digest: "sha256:resource-template",
       storageReference: "aos-runtime-proof-template",
       classification: ["proof", "template"],
+      permissionState: "permission_required",
+      attributionRequired: false,
+      derivativeAllowed: false,
+      reviewerRole: "security",
+      residualRisk: "low",
       copyrightStatus: "review_required",
       lifecycleState: "proposed",
-      approvalState: "review_required"
+      approvalState: "review_required",
+      linkedStoryIds: [story.id],
+      linkedEvidenceIds: [evidence.id],
+      materializationAllowed: false,
+      materializationExecuted: false,
+      productRepoWriteExecuted: false,
+      releaseBlocker: false
+    }, this.actor);
+    const materializationRequest = this.store.createResourceMaterializationRequest({
+      projectId: "TCRN-AOS",
+      resourceId: resource.id,
+      targetProjectId: "TCRN-AOS",
+      requestedBy: this.actor,
+      requestedPurpose: "Metadata-only runtime fixture proof; no binary copy.",
+      status: "gate_required",
+      linkedGateId: ownerIntentGate.id,
+      evidenceIds: [evidence.id]
+    }, this.actor);
+    const resourceFinding = this.store.createResourceAuditFinding({
+      projectId: "TCRN-AOS",
+      resourceId: resource.id,
+      findingType: "approved_use",
+      severity: "info",
+      evidenceIds: [evidence.id],
+      linkedGateIds: [gate.id]
     }, this.actor);
     const knowledgeEntry = this.store.createKnowledgeEntry({
       id: createId("knowledge", { storyId: story.id, category: "knowledge" }),
@@ -274,6 +338,16 @@ export class AosRuntimeFixture {
       gitExportAuthorized: false,
       releaseCloseoutClaimed: false
     }, this.actor);
+    const resourceManifest = this.store.createProjectResourceManifest({
+      projectId: "TCRN-AOS",
+      resourceId: resource.id,
+      resourceDigest: resource.digest,
+      materializedCopyReference: "manifest-only:aos-runtime-proof-template",
+      status: "approved_lineage_record",
+      linkedStoryIds: [story.id],
+      linkedReleaseNoteIds: [releaseNote.id],
+      linkedEvidenceIds: [evidence.id]
+    }, this.actor);
 
     this.stageMap = this.store.deriveStageMap("TCRN-AOS", initiative.id);
     this.records = {
@@ -289,7 +363,11 @@ export class AosRuntimeFixture {
       conferenceId: conference.id,
       conferencePositionId: conferencePosition.id,
       dependencyId: dependency.id,
+      dependencyFindingId: dependencyFinding.id,
       resourceId: resource.id,
+      materializationRequestId: materializationRequest.id,
+      resourceManifestId: resourceManifest.id,
+      resourceFindingId: resourceFinding.id,
       knowledgeEntryId: knowledgeEntry.id,
       userGuideDraftId: userGuideDraft.id,
       releaseNoteId: releaseNote.id
@@ -319,7 +397,11 @@ export class AosRuntimeFixture {
         conferences: this.records ? 1 : 0,
         conferencePositions: this.records ? 1 : 0,
         dependencies: this.records ? 1 : 0,
+        dependencyFindings: this.records ? 1 : 0,
         resources: this.records ? 1 : 0,
+        materializationRequests: this.records ? 1 : 0,
+        resourceManifests: this.records ? 1 : 0,
+        resourceFindings: this.records ? 1 : 0,
         knowledgeEntries: this.records ? 1 : 0,
         userGuideDrafts: this.records ? 1 : 0,
         releaseNotes: this.records ? 1 : 0,

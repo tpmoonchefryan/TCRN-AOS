@@ -11,9 +11,13 @@ import {
 import type {
   ActorIdentity,
   AuditEvent,
+  DependencyDetectionFinding,
   DependencyLifecycleRecord,
   EvidenceLink,
   GateWorkOrder,
+  ProjectResourceManifestRecord,
+  ResourceAuditFinding,
+  ResourceMaterializationRequest,
   ResourceRegistryRecord,
   StoryRecord,
   SubTask
@@ -36,7 +40,13 @@ export const allowedMcpMethods = [
   "aos.release_note.item.draft",
   "aos.stage_map.read",
   "aos.dependency.record.propose",
+  "aos.dependency.detection.record",
+  "aos.dependency.governance.read",
   "aos.resource.record.propose",
+  "aos.resource.materialization.request",
+  "aos.resource.manifest.record",
+  "aos.resource.audit_finding.record",
+  "aos.resource.governance.read",
   "aos.audit.query"
 ] as const;
 
@@ -188,9 +198,29 @@ export class McpGateway {
       case "aos.dependency.record.propose":
         this.requireProjectScope(params.projectId);
         return this.store.createDependencyRecord(params as unknown as Omit<DependencyLifecycleRecord, "id" | "linkedGateIds">, actor);
+      case "aos.dependency.detection.record":
+        this.requireProjectScope(params.projectId);
+        return this.store.createDependencyDetectionFinding(params as unknown as Omit<DependencyDetectionFinding, "id">, actor);
+      case "aos.dependency.governance.read":
+        return this.store.createDependencyGovernanceIndex(this.requireProjectScope(params.projectId));
       case "aos.resource.record.propose":
         this.requireProjectScope(params.projectId);
         return this.store.createResourceRecord(params as unknown as Omit<ResourceRegistryRecord, "id" | "linkedGateIds" | "projectManifestRefs">, actor);
+      case "aos.resource.materialization.request":
+        this.requireProjectScope(params.projectId);
+        this.requireProjectScope(params.targetProjectId);
+        return this.store.createResourceMaterializationRequest({
+          ...params,
+          requestedBy: actor
+        } as unknown as Omit<ResourceMaterializationRequest, "id" | "ownerIntentRequired" | "materializationExecuted" | "productRepoWriteExecuted">, actor);
+      case "aos.resource.manifest.record":
+        this.requireProjectScope(params.projectId);
+        return this.store.createProjectResourceManifest(params as unknown as Omit<ProjectResourceManifestRecord, "id" | "sourceTruth" | "liveCopyCreated" | "productRepoWriteExecuted">, actor);
+      case "aos.resource.audit_finding.record":
+        this.requireProjectScope(params.projectId);
+        return this.store.createResourceAuditFinding(params as unknown as Omit<ResourceAuditFinding, "id" | "scannerIngestionExecuted" | "materializationExecuted" | "productRepoMutationExecuted">, actor);
+      case "aos.resource.governance.read":
+        return this.store.createResourceGovernanceIndex(this.requireProjectScope(params.projectId));
       case "aos.audit.query":
         return this.store.queryAudit(compactFilter({
           targetId: optionalString(params.targetId),
@@ -374,7 +404,7 @@ export class McpGateway {
   }
 
   private isReadMethod(method: AllowedMcpMethod): boolean {
-    return ["aos.policy.read", "aos.stage_map.read", "aos.work_index.drill_through.read", "aos.documentation.index.read", "aos.audit.query"].includes(method);
+    return ["aos.policy.read", "aos.stage_map.read", "aos.work_index.drill_through.read", "aos.documentation.index.read", "aos.dependency.governance.read", "aos.resource.governance.read", "aos.audit.query"].includes(method);
   }
 
   private requireProjectScope(value: unknown): string {

@@ -367,17 +367,33 @@ export interface DependencyLifecycleRecord {
   resolvedArtifact?: string;
   sourceSystem: string;
   projectUsage: "runtime" | "development" | "tooling" | "historical";
+  ownerRole?: ActorRole;
+  lifecycleState?: "current" | "historical" | "deprecated" | "denied" | "expired" | "unapproved" | "removed" | "unused";
+  artifactRef?: string;
   licenseExpression: string;
+  declaredLicenseEvidence?: string;
+  discoveredLicenseEvidence?: string;
+  evidenceArtifactRef?: string;
   evidenceStatus: "present" | "evidence_missing" | "conflict" | "not_applicable";
+  confidence?: "low" | "medium" | "high";
+  policyClass?: "allowed" | "review_required" | "denied" | "unknown";
+  reviewerRole?: ActorRole;
+  residualRisk?: "none" | "low" | "medium" | "high" | "blocked";
+  nextAction?: "none" | "collect_evidence" | "request_review" | "replace_dependency" | "remove_dependency" | "owner_intent_required";
   sbomNoticeObligation: "none" | "review_required" | "required";
   posture: DependencyPosture;
   approvalOwnerRole: ActorRole;
   linkedGateIds: AosId[];
+  linkedStoryIds?: AosId[];
+  linkedEvidenceIds?: AosId[];
+  releaseBlocker?: boolean;
+  packageMutationExecuted?: false;
 }
 
 export interface ResourceRegistryRecord {
   id: AosId;
   type: "image" | "icon" | "logo" | "font" | "copy" | "prompt_material" | "document" | "template" | "generated_artifact" | "dataset" | "code_adjacent_scaffold" | "external_reference";
+  projectId?: ProjectId;
   title: string;
   owner: string;
   source: string;
@@ -385,11 +401,128 @@ export interface ResourceRegistryRecord {
   digest: string;
   storageReference: string;
   classification: string[];
+  permissionState?: "unknown" | "permitted" | "permission_required" | "denied" | "expired";
+  attributionRequired?: boolean;
+  derivativeAllowed?: boolean;
+  expiresAt?: ISODateTime;
+  reviewerRole?: ActorRole;
+  residualRisk?: "none" | "low" | "medium" | "high" | "blocked";
   copyrightStatus: ResourceRiskState;
   lifecycleState: "proposed" | "approved" | "materialized" | "deprecated" | "revoked" | "replaced" | "archived" | "denied";
   approvalState: "none" | "review_required" | "accepted" | "accepted_with_residual_risk" | "blocked";
   projectManifestRefs: string[];
   linkedGateIds: AosId[];
+  linkedStoryIds?: AosId[];
+  linkedReleaseNoteIds?: AosId[];
+  linkedEvidenceIds?: AosId[];
+  materializationAllowed?: boolean;
+  materializationExecuted?: false;
+  productRepoWriteExecuted?: false;
+  releaseBlocker?: boolean;
+}
+
+export interface DependencyDetectionFinding {
+  id: AosId;
+  projectId: ProjectId;
+  dependencyId: AosId;
+  state: "deprecated" | "denied" | "expired" | "unapproved" | "current" | "historical" | "removed" | "unused";
+  sourceSystem: "deterministic_fixture" | "manual_review" | "policy_readback";
+  evidenceIds: AosId[];
+  linkedGateIds: AosId[];
+  remediationExecuted: false;
+  packageMutationExecuted: false;
+  nextAction: "none" | "collect_evidence" | "request_review" | "replace_dependency" | "remove_dependency" | "owner_intent_required";
+}
+
+export interface DependencyGovernanceIndexReadback {
+  projectId: ProjectId;
+  dependencyIds: AosId[];
+  detectionFindingIds: AosId[];
+  blockedDependencyIds: AosId[];
+  releaseBlockerDependencyIds: AosId[];
+  sbomNoticeRequiredDependencyIds: AosId[];
+  linkedGateIds: AosId[];
+  linkedEvidenceIds: AosId[];
+  stateCounts: Record<string, number>;
+  localFirstStorage: true;
+  packageMutationAuthorized: false;
+  remediationExecuted: false;
+  dependencyCleanClaimed: false;
+  legalCompletionClaimed: false;
+  releaseReadinessClaimed: false;
+}
+
+export interface ResourceMaterializationRequest {
+  id: AosId;
+  projectId: ProjectId;
+  resourceId: AosId;
+  targetProjectId: ProjectId;
+  requestedBy: ActorIdentity;
+  requestedPurpose: string;
+  status: "requested" | "gate_required" | "approved_metadata_only" | "blocked" | "superseded";
+  linkedGateId?: AosId;
+  evidenceIds: AosId[];
+  ownerIntentRequired: true;
+  materializationExecuted: false;
+  productRepoWriteExecuted: false;
+}
+
+export interface ProjectResourceManifestRecord {
+  id: AosId;
+  projectId: ProjectId;
+  resourceId: AosId;
+  resourceDigest: string;
+  materializedCopyReference: string;
+  status: "approved_lineage_record" | "stale_version" | "revoked" | "blocked";
+  linkedStoryIds: AosId[];
+  linkedReleaseNoteIds: AosId[];
+  linkedEvidenceIds: AosId[];
+  sourceTruth: "resource_library";
+  liveCopyCreated: false;
+  productRepoWriteExecuted: false;
+}
+
+export interface ResourceAuditFinding {
+  id: AosId;
+  projectId: ProjectId;
+  resourceId?: AosId;
+  findingType: "approved_use" | "deprecated" | "revoked" | "stale_version" | "unused_materialized" | "unregistered_local_asset" | "blocked";
+  severity: "info" | "review_required" | "blocked";
+  evidenceIds: AosId[];
+  linkedGateIds: AosId[];
+  scannerIngestionExecuted: false;
+  materializationExecuted: false;
+  productRepoMutationExecuted: false;
+}
+
+export interface ResourceTraceabilityRow {
+  resourceId: AosId;
+  linkedStoryIds: AosId[];
+  linkedGateIds: AosId[];
+  linkedReleaseNoteIds: AosId[];
+  linkedEvidenceIds: AosId[];
+  residualFindingIds: AosId[];
+}
+
+export interface ResourceGovernanceIndexReadback {
+  projectId: ProjectId;
+  resourceIds: AosId[];
+  materializationRequestIds: AosId[];
+  manifestRecordIds: AosId[];
+  auditFindingIds: AosId[];
+  blockedResourceIds: AosId[];
+  releaseBlockerResourceIds: AosId[];
+  linkedGateIds: AosId[];
+  linkedEvidenceIds: AosId[];
+  traceabilityRows: ResourceTraceabilityRow[];
+  findingCounts: Record<string, number>;
+  localFirstStorage: true;
+  scannerIngestionExecuted: false;
+  materializationExecuted: false;
+  productRepoWriteExecuted: false;
+  legalCompletionClaimed: false;
+  publicReadinessClaimed: false;
+  releaseReadinessClaimed: false;
 }
 
 export type ProjectKnowledgeCategory =

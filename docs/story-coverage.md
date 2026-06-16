@@ -109,3 +109,26 @@ Slice 6 adds local-first documentation model/index foundations for AOS-E10:
 Supporting local readbacks connect these records to existing story, conference, evidence, audit, gateway, and work-index metadata without promoting deferred docs readiness/search, Git export, canonical knowledge promotion, user-guide publication, release-note publication, or release readiness.
 
 Slice 6 evidence receipt: `../evidence/slice-6-knowledge-guide-release-notes-proof.md`.
+
+## Slice 7 Dependency License And Resource Library Governance Coverage
+
+Slice 7 adds local-first dependency/license governance and Resource Library governance foundations:
+
+- `AOS-S069`: dependency lifecycle records preserve project, ecosystem, package, version/range, source system, usage, owner, lifecycle state, artifact reference, and audit posture.
+- `AOS-S070`: license evidence posture records declared/discovered evidence, confidence, policy class, reviewer, residual risk, and next action without legal-completion claims.
+- `AOS-S071`: dependency/license gate work orders and release-view blockers expose unresolved obligations without satisfying them automatically.
+- `AOS-S072`: dependency detection fixtures cover deprecated, denied, expired, unapproved, current, historical, removed, and unused states without mutating package files.
+- `AOS-S073` and `AOS-S074`: SBOM/NOTICE obligation and approval owner fields are visible in dependency governance index readbacks.
+- `AOS-S075`: Resource Library registry records preserve resource id, type, title, owner, source, version, digest, storage reference, classification, and approval posture.
+- `AOS-S076` and `AOS-S077`: copyright/license metadata, permission state, attribution, derivative posture, expiration, reviewer, residual risk, and next action remain local metadata.
+- `AOS-S078`: materialization requests are gate/Owner Intent records only; no binary copy or product repo write is executed.
+- `AOS-S079`: project resource manifests record approved lineage metadata without creating live materialized copies.
+- `AOS-S080` and `AOS-S081`: resource audit findings cover approved use, deprecated, revoked, stale version, unused materialized, unregistered local asset, and blocked states.
+- `AOS-S082`: resource/dependency traceability links stories, gates, release-note records, evidence, and residual findings.
+- `AOS-S084`: dependency/resource blockers can inform release-view metadata while release readiness, dependency clean posture, legal completion, and public readiness remain unclaimed.
+
+Supporting local proof touches `AOS-S020..AOS-S024`, `AOS-S029`, `AOS-S031`, `AOS-S045..AOS-S047`, `AOS-S052`, `AOS-S053`, and `AOS-S064..AOS-S068` only as readback/linkage context.
+
+Still deferred: `AOS-S083` materialization history/update/rollback/replacement automation, package dependency remediation, scanner ingestion, resource binary transfer, product-repo resource writes, release readiness, product acceptance, and final MVP acceptance.
+
+Slice 7 evidence receipt: `../evidence/slice-7-dependency-resource-governance-proof.md`.
