@@ -149,3 +149,19 @@ Supporting local proof touches `AOS-S078..AOS-S082`, `AOS-S084`, `AOS-S020..AOS-
 Still deferred: actual resource materialization, resource binary transfer, update execution, replacement execution, rollback execution, cleanup/delete execution, scanner ingestion, product-repo resource writes, public/legal/release readiness, product acceptance, and final MVP acceptance.
 
 Slice 8 evidence receipt: `../evidence/slice-8-resource-materialization-history-rollback-proof.md`.
+
+## Slice 9 Docs Search And Release-Candidate Linkage Coverage
+
+Slice 9 adds local-first docs/search readiness and release-candidate linkage foundations:
+
+- `AOS-S057`: docs readiness records link knowledge, guide, release-note, and documentation-index targets to stories, evidence, gates, freshness, stage-map context, blockers, and fixed false publication/export/promotion/readiness claims.
+- `AOS-S058`: project search index records store sanitized metadata terms and source links only; raw source, private payloads, raw scanner output, and machine-local absolute path payloads are rejected before storage.
+- `AOS-S059`: aggregate docs/search readbacks expose readiness ids, search ids, blocked ids, linked stories, linked evidence, linked gates, and state counts without public readiness or search-readiness overclaims.
+- `AOS-S062`: GitHub metadata and PR/CI story readiness records preserve local fixture/readback metadata for branch, commit, PR refs, CI refs, warnings, blockers, and story readiness without GitHub writes, CI mutation, or release creation.
+- `AOS-S063`: release-candidate linkage records connect stories, docs readiness, release-note items, evidence, dependency blockers, resource blockers, gates, GitHub metadata, PR/CI readiness, and residual risks without release creation, deployment, release readiness, product acceptance, or final MVP acceptance.
+
+Supporting local linkage touches `AOS-S054..AOS-S056`, `AOS-S060..AOS-S061`, `AOS-S020..AOS-S024`, `AOS-S029`, `AOS-S031`, `AOS-S045..AOS-S047`, `AOS-S052`, `AOS-S053`, `AOS-S064..AOS-S068`, and prior dependency/resource governance stories only as readback context.
+
+Still deferred: docs publication/export, canonical knowledge promotion, live GitHub writes, GitHub release creation, CI status mutation, deployment, live Codex dispatch, thread registry mutation, scanner ingestion, resource materialization, release readiness, product acceptance, and final MVP acceptance.
+
+Slice 9 evidence receipt: `../evidence/slice-9-docs-search-release-linkage-proof.md`.
