@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TCRN AOS Docs Readiness Inspection</title>
+    <link rel="icon" href="../../../docs/brand/aos-favicon.png" />
+    <style>
+:root {
+  color-scheme: light;
+  --navy-950: #061a2c;
+  --navy-900: #08243b;
+  --teal-500: #14b8ad;
+  --teal-600: #069c99;
+  --blue-500: #1b75d0;
+  --red-500: #df2b2b;
+  --amber-500: #f4a321;
+  --green-500: #18a865;
+  --surface: #ffffff;
+  --surface-weak: #f7f9fb;
+  --line: #dbe4ea;
+  --line-strong: #c9d5de;
+  --text: #0f1b2d;
+  --muted: #647282;
+  font-family: Inter, "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; background: #f4f7fa; color: var(--text); }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+strong, b { font-weight: 500; }
+.aos-shell { display: grid; grid-template-columns: 252px minmax(0, 1fr); min-height: 100vh; }
+.aos-sidebar { position: sticky; top: 0; align-self: start; display: grid; grid-template-rows: auto 1fr auto; gap: 22px; height: 100vh; padding: 24px 14px 20px; overflow: auto; background: linear-gradient(180deg, var(--navy-900), var(--navy-950)); color: #d9e8f0; }
+.brand-lockup { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; min-height: 42px; padding: 0 10px 8px; }
+.brand-tcrn { font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 29px; line-height: 1; font-weight: 500; letter-spacing: 0.17em; color: #f7fbff; }
+.brand-aos { display: inline-block; font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 32px; line-height: 1; font-weight: 800; letter-spacing: 0; color: #14b8ad; transform: skewX(-5deg); }
+.nav-stack { display: grid; align-content: start; gap: 6px; }
+.nav-row { display: grid; grid-template-columns: 8px 1fr; align-items: center; gap: 10px; width: 100%; min-height: 38px; border: 1px solid transparent; border-radius: 6px; padding: 0 10px; background: transparent; color: #e5eef3; text-align: left; font-size: 14px; font-weight: 400; }
+.nav-row::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: #7891a2; }
+.nav-row.active, .nav-row:hover { background: rgba(255, 255, 255, 0.12); }
+.nav-row.active { box-shadow: inset 4px 0 0 var(--teal-500); }
+.nav-row.active::before { background: var(--teal-500); }
+.sidebar-note { display: flex; align-items: center; gap: 8px; color: #deedf4; font-size: 12px; }
+.aos-main { min-width: 0; }
+.topbar { display: grid; grid-template-columns: 220px minmax(0, 1fr) max-content; align-items: center; gap: 14px; min-height: 64px; padding: 0 22px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.96); }
+.project-selector { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 8px; min-height: 38px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 5px; background: var(--surface); font-size: 14px; }
+.project-selector select { min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text); font-weight: 500; }
+.checkpoint-strip { display: flex; align-items: center; gap: 12px; min-width: 0; color: #26364a; font-size: 13px; }
+.checkpoint-strip strong, .checkpoint-strip em { white-space: nowrap; }
+.checkpoint-strip em { color: var(--teal-600); font-style: normal; }
+.top-action, .panel-head button, .filter-row button { min-height: 34px; border: 1px solid var(--line-strong); border-radius: 5px; background: #fff; color: var(--text); font-weight: 500; }
+.workspace { display: grid; gap: 18px; padding: 24px 18px 34px; }
+.hero-row { display: flex; align-items: end; justify-content: space-between; gap: 18px; }
+.eyebrow { margin: 0 0 4px; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+h1 { margin: 0; font-size: 24px; line-height: 1.15; font-weight: 500; letter-spacing: 0; }
+.claim-strip { display: flex; flex-wrap: wrap; gap: 8px; }
+.claim-strip span { border: 1px solid var(--line); border-radius: 5px; padding: 6px 9px; background: #fff; color: #516174; font-size: 12px; }
+.summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; }
+.panel, .work-index, .detail-drawer { border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+.panel { min-height: 184px; padding: 16px; }
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+h2 { margin: 0; font-size: 13px; font-weight: 500; letter-spacing: 0.055em; text-transform: uppercase; }
+.count { display: grid; place-items: center; min-width: 22px; height: 22px; border-radius: 999px; background: #fff1d6; color: #a66f0d; font-size: 12px; }
+.tag, .state-chip { width: max-content; border-radius: 4px; padding: 4px 7px; font-size: 11px; font-weight: 500; }
+.tag { background: #e5f8ee; color: #1d8d51; }
+.state-chip { background: #e8f2ff; color: #176ac2; }
+.state-chip.release_proof_required { background: #fff1d6; color: #a66f0d; }
+.posture-list, .detail-list { display: grid; gap: 10px; margin: 0; }
+.posture-list div, .detail-list div { display: grid; grid-template-columns: 118px 1fr; gap: 8px; }
+dt { color: #253449; font-size: 12px; font-weight: 500; }
+dd { margin: 0; color: #162437; font-size: 12px; }
+.compact-copy { margin: 0 0 12px; color: #36475b; font-size: 12px; line-height: 1.5; }
+.term-list { display: flex; flex-wrap: wrap; gap: 7px; }
+.term-list span { border: 1px solid var(--line); border-radius: 4px; padding: 4px 7px; color: #3c5065; font-size: 11px; }
+.state-dot { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 999px; }
+.state-current { background: var(--green-500); }
+.state-review { background: var(--amber-500); }
+.content-grid { display: grid; grid-template-columns: minmax(0, 1fr) 336px; gap: 0; }
+.work-index { border-radius: 6px 0 0 6px; overflow: auto; }
+.work-index-head { display: grid; grid-template-columns: auto minmax(220px, 1fr) 88px; align-items: center; gap: 14px; padding: 18px; border-bottom: 1px solid var(--line); }
+.search-box { display: grid; grid-template-columns: 1fr; min-height: 36px; }
+.search-box span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.search-box input { width: 100%; border: 1px solid var(--line-strong); border-radius: 5px; padding: 0 12px; color: var(--text); }
+.filter-row { display: flex; flex-wrap: wrap; gap: 10px; padding: 12px 18px; border-bottom: 1px solid var(--line); }
+.readiness-table { min-width: 860px; }
+.readiness-row { display: grid; grid-template-columns: 92px minmax(190px, 1fr) 132px 116px 178px 96px; align-items: center; min-height: 48px; padding: 0 16px; border-bottom: 1px solid var(--line); color: #29374a; font-size: 12px; }
+.readiness-row[hidden], .empty-state[hidden] { display: none !important; }
+.readiness-row > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.table-head { min-height: 42px; background: #fbfcfd; color: #384659; font-size: 11px; font-weight: 500; }
+.inspection-row { width: 100%; border-width: 0 0 1px; background: #fff; text-align: left; }
+.inspection-row:hover, .inspection-row.active { background: #effafe; }
+.inspection-row.active { box-shadow: inset 4px 0 0 var(--teal-600); }
+.empty-state { display: grid; gap: 4px; padding: 18px; border-top: 1px solid var(--line); color: #4b5d70; font-size: 12px; }
+.detail-drawer { border-radius: 0 6px 6px 0; border-left: 0; padding: 20px; }
+.drawer-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.drawer-head button { border: 0; background: transparent; color: #1a293d; }
+.detail-drawer h2 { margin: 14px 0; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: #162437; font-size: 18px; line-height: 1.25; letter-spacing: 0; text-transform: none; }
+.detail-list { margin-bottom: 18px; }
+.evidence-panel { border: 1px solid var(--line); border-radius: 5px; padding: 12px; background: var(--surface-weak); }
+.evidence-panel h3 { margin: 0 0 10px; font-size: 12px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+@media (max-width: 1260px) {
+  .aos-shell { grid-template-columns: 220px minmax(0, 1fr); }
+  .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .content-grid { grid-template-columns: 1fr; }
+  .detail-drawer { border-left: 1px solid var(--line); border-radius: 6px; }
+}
+@media (max-width: 760px) {
+  .aos-shell { grid-template-columns: 1fr; }
+  .aos-sidebar { position: static; height: auto; gap: 14px; padding: 18px 14px; }
+  .nav-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .topbar, .work-index-head, .summary-grid { grid-template-columns: 1fr; }
+  .topbar { padding: 14px; }
+  .hero-row { align-items: start; flex-direction: column; }
+  .workspace { padding: 16px 12px 28px; }
+  .readiness-table { min-width: 760px; }
+}
+</style>
+  </head>
+  <body>
+    <main class="aos-shell" data-region="docs-surface-shell" data-surface="docs-search-release-readiness" data-docs-search-release-surfaces-visible="true" data-product-design-acceptance="not_claimed">
+      <aside class="aos-sidebar" aria-label="AOS navigation">
+        <a class="brand-lockup" data-region="brand-lockup" href="#inspection" aria-label="TCRN AOS">
+          <span class="brand-tcrn">TCRN</span>
+          <span class="brand-aos">AOS</span>
+        </a>
+        <nav class="nav-stack" aria-label="Primary views">
+          <button class="nav-row" type="button">Dashboard</button>
+          <button class="nav-row" type="button">Cockpit</button>
+          <button class="nav-row active" type="button">Docs Readiness</button>
+          <button class="nav-row" type="button">Evidence</button>
+          <button class="nav-row" type="button">Release Linkage</button>
+        </nav>
+        <footer class="sidebar-note">
+          <span class="state-dot state-current"></span>
+          <span>Local checkpoint observed</span>
+        </footer>
+      </aside>
+      <section class="aos-main" id="inspection">
+        <header class="topbar">
+          <label class="project-selector" for="project-select">
+            <span>Project</span>
+            <select id="project-select" aria-label="Project selector">
+              <option>TCRN-AOS</option>
+            </select>
+          </label>
+          <div class="checkpoint-strip" aria-label="Local checkpoint">
+            <span>Visible inspection</span>
+            <strong>slice-9b-visible-readiness-inspection</strong>
+            <em>readback current</em>
+          </div>
+          <button type="button" class="top-action">Refresh readback</button>
+        </header>
+        <div class="workspace">
+          <section class="hero-row">
+            <div>
+              <p class="eyebrow">Docs / Search / Release-Candidate</p>
+              <h1>Visible Readiness Inspection</h1>
+            </div>
+            <div class="claim-strip" data-region="header-claim-strip" aria-label="Claim boundaries">
+              <span>publication not executed</span>
+              <span>release creation not executed</span>
+              <span>final visual review pending</span>
+            </div>
+          </section>
+          <section class="summary-grid">
+            <article class="panel" data-region="docs-readiness-board" aria-label="Docs readiness board">
+              <div class="panel-head">
+                <h2>Docs Readiness</h2>
+                <span class="count">1</span>
+              </div>
+              <dl class="posture-list">
+                <div><dt>State</dt><dd><span class="state-dot state-review"></span>needs review</dd></div>
+                <div><dt>Freshness</dt><dd>review due</dd></div>
+                <div><dt>Blocker</dt><dd>release proof required</dd></div>
+                <div><dt>Evidence</dt><dd>1 metadata link</dd></div>
+              </dl>
+            </article>
+            <article class="panel" data-region="search-inspection" aria-label="Search inspection">
+              <div class="panel-head">
+                <h2>Search Inspection</h2>
+                <span class="tag">metadata only</span>
+              </div>
+              <p class="compact-copy">Sanitized local release-note summary for inspection.</p>
+              <div class="term-list">
+                <span>slice-9b</span><span>docs</span><span>search</span><span>release-candidate</span><span>local-readback</span>
+              </div>
+            </article>
+            <article class="panel" data-region="github-prci-linkage" aria-label="GitHub metadata and PR CI linkage">
+              <div class="panel-head">
+                <h2>GitHub / PR CI</h2>
+                <span class="state-chip">fixture readback</span>
+              </div>
+              <dl class="posture-list">
+                <div><dt>Repo</dt><dd>TCRN-AOS-local</dd></div>
+                <div><dt>PR</dt><dd>fixture-pr-9b</dd></div>
+                <div><dt>CI</dt><dd>warning</dd></div>
+                <div><dt>Mutation</dt><dd>not executed</dd></div>
+              </dl>
+            </article>
+            <article class="panel" data-region="release-candidate-linkage" aria-label="Release-candidate linkage">
+              <div class="panel-head">
+                <h2>Release Candidate</h2>
+                <span class="state-chip release_proof_required">proof required</span>
+              </div>
+              <dl class="posture-list">
+                <div><dt>Label</dt><dd>slice-9b-local-candidate</dd></div>
+                <div><dt>Dependencies</dt><dd>1 blocker</dd></div>
+                <div><dt>Resources</dt><dd>1 blocker</dd></div>
+                <div><dt>Creation</dt><dd>not executed</dd></div>
+              </dl>
+            </article>
+          </section>
+          <section class="content-grid">
+            <section class="work-index" aria-label="Docs readiness work index">
+              <header class="work-index-head">
+                <h2>Inspection Rows</h2>
+                <label class="search-box" for="readiness-search">
+                  <span>Search inspection rows</span>
+                  <input id="readiness-search" type="search" placeholder="Filter docs, GitHub, candidate rows" />
+                </label>
+                <button type="button">Columns</button>
+              </header>
+              <div class="filter-row" aria-label="Local filters">
+                <button type="button">Project: TCRN-AOS</button>
+                <button type="button">Scope: Slice 9B</button>
+                <button type="button">Storage: local first</button>
+              </div>
+              <div class="readiness-table" role="table">
+                <div class="readiness-row table-head" role="row">
+                  <span>Story</span><span>Surface</span><span>State</span><span>Owner</span><span>Blocker</span><span>Evidence</span>
+                </div>
+                <button class="readiness-row inspection-row active" data-readiness-row data-search="aos-s057 docs readiness release note draft needs_review review release proof required readiness record links release-note draft, stage context, evidence, and gate metadata. docs readiness release-note" data-story="AOS-S057" data-kind="Docs readiness" data-title="Release note draft" data-status="needs review" data-blocker="release proof required" data-detail="Readiness record links release-note draft, stage context, evidence, and gate metadata." type="button" role="row"><span>AOS-S057</span><span>Docs readiness</span><span>needs review</span><span>review</span><span>release proof required</span><span>1 link</span></button><button class="readiness-row inspection-row" data-readiness-row data-search="aos-s058 search index slice 9b visible docs readiness metadata metadata_only review raw payload rejected sanitized local release-note summary for inspection. slice-9b docs search release-candidate local-readback" data-story="AOS-S058" data-kind="Search index" data-title="Slice 9B visible docs readiness metadata" data-status="metadata only" data-blocker="raw payload rejected" data-detail="Sanitized local release-note summary for inspection." type="button" role="row"><span>AOS-S058</span><span>Search index</span><span>metadata only</span><span>review</span><span>raw payload rejected</span><span>1 link</span></button><button class="readiness-row inspection-row" data-readiness-row data-search="aos-s062 github and pr/ci tcrn-aos-local warning verification external proof required repository, branch, pr, and ci references are local readback metadata only. github pr ci metadata" data-story="AOS-S062" data-kind="GitHub and PR/CI" data-title="TCRN-AOS-local" data-status="warning" data-blocker="external proof required" data-detail="Repository, branch, PR, and CI references are local readback metadata only." type="button" role="row"><span>AOS-S062</span><span>GitHub and PR/CI</span><span>warning</span><span>verification</span><span>external proof required</span><span>1 link</span></button><button class="readiness-row inspection-row" data-readiness-row data-search="aos-s063 release candidate linkage slice-9b-local-candidate proof_required release-review dependency and resource blockers candidate links docs readiness, evidence, dependency/resource blockers, gates, and pr/ci metadata without release creation. release-candidate blockers evidence" data-story="AOS-S063" data-kind="Release candidate linkage" data-title="slice-9b-local-candidate" data-status="proof required" data-blocker="dependency and resource blockers" data-detail="Candidate links docs readiness, evidence, dependency/resource blockers, gates, and PR/CI metadata without release creation." type="button" role="row"><span>AOS-S063</span><span>Release candidate linkage</span><span>proof required</span><span>release-review</span><span>dependency and resource blockers</span><span>1 link</span></button>
+              </div>
+              <div class="empty-state" data-empty-state hidden>
+                <strong>No local metadata rows match this filter.</strong>
+                <span>Adjust the local filter or open the evidence readback panel.</span>
+              </div>
+            </section>
+            <aside class="detail-drawer" data-region="detail-panel" aria-label="Selected readiness detail">
+              <div class="drawer-head">
+                <span class="tag" data-detail-kind>Docs readiness</span>
+                <button type="button" aria-label="Close detail">Close</button>
+              </div>
+              <h2 data-detail-title>Release note draft</h2>
+              <dl class="detail-list">
+                <div><dt>Story</dt><dd data-detail-story>AOS-S057</dd></div>
+                <div><dt>State</dt><dd data-detail-status>needs review</dd></div>
+                <div><dt>Blocker</dt><dd data-detail-blocker>release proof required</dd></div>
+                <div><dt>Detail</dt><dd data-detail-copy>Readiness record links release-note draft, stage context, evidence, and gate metadata.</dd></div>
+              </dl>
+              <section class="evidence-panel" data-region="evidence-readback-panel" aria-label="Evidence readback panel">
+                <h3>Evidence Readback</h3>
+                <dl class="detail-list">
+                  <div><dt>Command</dt><dd>pnpm slice9b:proof</dd></div>
+                  <div><dt>Target</dt><dd>evidence/slice-9b-visible-readiness-inspection-proof.md</dd></div>
+                  <div><dt>TCRN-TMS</dt><dd>6356d3b6b730311fe09a0d3eb2f57a07b10bb3c5</dd></div>
+                  <div><dt>Wrong sibling</dt><dd>absent acceptable</dd></div>
+                </dl>
+              </section>
+            </aside>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script>
+const rows = Array.from(document.querySelectorAll("[data-readiness-row]"));
+const emptyState = document.querySelector("[data-empty-state]");
+const search = document.querySelector("#readiness-search");
+const detailKind = document.querySelector("[data-detail-kind]");
+const detailTitle = document.querySelector("[data-detail-title]");
+const detailStory = document.querySelector("[data-detail-story]");
+const detailStatus = document.querySelector("[data-detail-status]");
+const detailBlocker = document.querySelector("[data-detail-blocker]");
+const detailCopy = document.querySelector("[data-detail-copy]");
+function visibleRows() {
+  return rows.filter((row) => !row.hidden).length;
+}
+function syncEmptyState() {
+  const count = visibleRows();
+  document.body.dataset.visibleRows = String(count);
+  if (emptyState) emptyState.hidden = count !== 0;
+}
+function activate(row) {
+  rows.forEach((candidate) => candidate.classList.toggle("active", candidate === row));
+  if (detailKind) detailKind.textContent = row.getAttribute("data-kind") || "";
+  if (detailTitle) detailTitle.textContent = row.getAttribute("data-title") || "";
+  if (detailStory) detailStory.textContent = row.getAttribute("data-story") || "";
+  if (detailStatus) detailStatus.textContent = row.getAttribute("data-status") || "";
+  if (detailBlocker) detailBlocker.textContent = row.getAttribute("data-blocker") || "";
+  if (detailCopy) detailCopy.textContent = row.getAttribute("data-detail") || "";
+}
+rows.forEach((row) => row.addEventListener("click", () => activate(row)));
+rows.forEach((row) => row.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    activate(row);
+  }
+}));
+search?.addEventListener("input", () => {
+  const query = search.value.toLowerCase();
+  rows.forEach((row) => {
+    const haystack = row.getAttribute("data-search") || row.textContent || "";
+    row.hidden = query.length > 0 && !haystack.toLowerCase().includes(query);
+  });
+  syncEmptyState();
+});
+syncEmptyState();
+</script>
+  </body>
+</html>

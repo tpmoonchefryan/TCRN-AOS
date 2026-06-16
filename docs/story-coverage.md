@@ -165,3 +165,19 @@ Supporting local linkage touches `AOS-S054..AOS-S056`, `AOS-S060..AOS-S061`, `AO
 Still deferred: docs publication/export, canonical knowledge promotion, live GitHub writes, GitHub release creation, CI status mutation, deployment, live Codex dispatch, thread registry mutation, scanner ingestion, resource materialization, release readiness, product acceptance, and final MVP acceptance.
 
 Slice 9 evidence receipt: `../evidence/slice-9-docs-search-release-linkage-proof.md`.
+
+## Slice 9B Docs/Search/Release Visible Inspection Coverage
+
+Slice 9B adds a local static/browser inspection surface for the Slice 9 docs/search and release-candidate linkage records:
+
+- `AOS-S057`: docs readiness state, freshness, blockers, stage context, and evidence links are visible in the docs readiness board.
+- `AOS-S058`: sanitized search terms and metadata-only summaries are visible in the search inspection region and filterable work-index rows.
+- `AOS-S059`: aggregate docs/search readback counts, blocked ids, linked stories, evidence, and gates are represented through the static read model and proof script.
+- `AOS-S062`: GitHub repository, branch, PR, and CI metadata remain local fixture/readback fields and are visible without GitHub writes or CI mutation.
+- `AOS-S063`: release-candidate linkage shows dependency/resource blockers, gate/evidence linkage, PR/CI metadata, and residual-risk posture without release creation or release-readiness claims.
+
+Supporting `AOS-S054..AOS-S056` and `AOS-S060..AOS-S061` remain local documentation/source-truth metadata. Dependency/resource blocker context from prior governance slices is shown as posture only.
+
+Slice 9B evidence receipt: `../evidence/slice-9b-visible-readiness-inspection-proof.md`.
+
+Still unclaimed: docs publication/export, canonical knowledge promotion, live GitHub writes, GitHub release creation, CI mutation, deployment, live Codex dispatch, scanner ingestion, resource materialization, public/legal/dependency-clean readiness, Product Design final UX/layout/visual acceptance, browser acceptance closeout, product acceptance, and final MVP acceptance.

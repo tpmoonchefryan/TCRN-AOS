@@ -55,3 +55,19 @@ Not stored in AOS records or prompts:
 This checkpoint does not claim docs publication, docs export, search/public readiness, GitHub mutation, release creation, deployment, release readiness, canonical knowledge promotion, dependency-clean posture, legal completion, product acceptance, final MVP acceptance, live Codex dispatch, Selene publication, Product Design final UX/layout/visual acceptance, scanner ingestion, or resource materialization.
 
 Related evidence receipt: `../evidence/slice-9-docs-search-release-linkage-proof.md`.
+
+## Slice 9B Visible Readiness Inspection
+
+Slice 9B adds a dedicated static inspection target at `../apps/web/static/docs-search-release-readiness.html`. It renders the already-proven Slice 9 local metadata as a visible review surface without changing source-truth ownership or executing any publication/release action.
+
+The surface exposes:
+
+- docs readiness state, freshness, blockers, and evidence links;
+- sanitized search/readback terms and metadata-only visibility;
+- GitHub repository, PR, and CI metadata readbacks as local fixture/readback state;
+- release-candidate linkage to docs readiness, evidence, dependency blockers, resource blockers, gates, and PR/CI metadata;
+- a retained evidence panel for the product-local proof command and boundary readbacks.
+
+The static target supports reviewer search/filter inspection, true empty-state behavior, and row-to-detail drill-through. It is a local Product Design/browser evidence target only; final UX/layout/visual acceptance and browser acceptance closeout remain review-lane decisions.
+
+Slice 9B does not claim docs publication, docs export, canonical knowledge promotion, GitHub mutation, release creation, CI mutation, deployment, release readiness, public readiness, dependency-clean posture, legal completion, product acceptance, final MVP acceptance, live Codex dispatch, scanner ingestion, or resource materialization.
