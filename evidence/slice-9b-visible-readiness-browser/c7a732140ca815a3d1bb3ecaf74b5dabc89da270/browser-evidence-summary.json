@@ -1,0 +1,1079 @@
+{
+  "ok": true,
+  "implementationCheckpoint": "c7a732140ca815a3d1bb3ecaf74b5dabc89da270",
+  "route": "slice-9b-mobile-reflow-repair",
+  "renderMode": "no_server_offline_file_url",
+  "staticTarget": "apps/web/static/docs-search-release-readiness.html",
+  "browserEngine": "chromium",
+  "docsSearchReleaseSurfacesVisible": true,
+  "baselineOverflowCited": {
+    "source": "Ilya pre-repair no-server reproduction plus Talia/Rowan retained evidence",
+    "viewportWidth": 390,
+    "documentScrollWidth": 481,
+    "bodyScrollWidth": 481,
+    "hasBodyHorizontalOverflow": true,
+    "wideRegionWidth": 469,
+    "blockingFinding": "shell, summary panels, claim strip, and detail panel exceeded 390px viewport before repair"
+  },
+  "screenshots": [
+    {
+      "file": "evidence/slice-9b-visible-readiness-browser/c7a732140ca815a3d1bb3ecaf74b5dabc89da270/desktop-1440x900-initial.png",
+      "sha256": "d613bb934e0f3c0191f280481b7678c9c4264dcb488f3b06b54049c8ab0696d9",
+      "bytes": 176816
+    },
+    {
+      "file": "evidence/slice-9b-visible-readiness-browser/c7a732140ca815a3d1bb3ecaf74b5dabc89da270/desktop-1440x900-search-github.png",
+      "sha256": "79ac3ace8e539a49dbdc70da0a5d086134486b9156e92f6f198ca78fe99a9215",
+      "bytes": 157709
+    },
+    {
+      "file": "evidence/slice-9b-visible-readiness-browser/c7a732140ca815a3d1bb3ecaf74b5dabc89da270/desktop-1440x900-search-empty.png",
+      "sha256": "52444b63d75ac0183940c9661917d7268cfff56ea81bcd97e2043037be4fa431",
+      "bytes": 159744
+    },
+    {
+      "file": "evidence/slice-9b-visible-readiness-browser/c7a732140ca815a3d1bb3ecaf74b5dabc89da270/mobile-390x844-initial.png",
+      "sha256": "e84ce27ffa18657ad9913c249d3a5766aa5ba342afa126ca2192c214fc20e96f",
+      "bytes": 154338
+    },
+    {
+      "file": "evidence/slice-9b-visible-readiness-browser/c7a732140ca815a3d1bb3ecaf74b5dabc89da270/mobile-390x844-search-candidate.png",
+      "sha256": "831d077d90b2c4a4e0d32303027f0fa7c755b22f07db45930399ed29d2c97caa",
+      "bytes": 148626
+    }
+  ],
+  "desktopInitial": {
+    "ok": true,
+    "docsSearchReleaseSurfacesVisible": true,
+    "visibleRows": 4,
+    "bodyVisibleRowsData": "4",
+    "emptyStateVisible": false,
+    "detailTitle": "Release note draft",
+    "detailKind": "Docs readiness",
+    "activeTitle": "Release note draft",
+    "regionProof": [
+      {
+        "region": "docs-surface-shell",
+        "present": true,
+        "display": "grid",
+        "rect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "scrollWidth": 1440,
+        "clientWidth": 1440
+      },
+      {
+        "region": "brand-lockup",
+        "present": true,
+        "display": "flex",
+        "rect": {
+          "left": 14,
+          "right": 238,
+          "top": 24,
+          "bottom": 66,
+          "width": 224,
+          "height": 42
+        },
+        "scrollWidth": 224,
+        "clientWidth": 224
+      },
+      {
+        "region": "header-claim-strip",
+        "present": true,
+        "display": "flex",
+        "rect": {
+          "left": 903.25,
+          "right": 1422,
+          "top": 105.59,
+          "bottom": 135.59,
+          "width": 518.75,
+          "height": 30
+        },
+        "scrollWidth": 519,
+        "clientWidth": 519
+      },
+      {
+        "region": "docs-readiness-board",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 270,
+          "right": 548.25,
+          "top": 153.59,
+          "bottom": 349.59,
+          "width": 278.25,
+          "height": 196
+        },
+        "scrollWidth": 276,
+        "clientWidth": 276
+      },
+      {
+        "region": "search-inspection",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 561.25,
+          "right": 839.5,
+          "top": 153.59,
+          "bottom": 349.59,
+          "width": 278.25,
+          "height": 196
+        },
+        "scrollWidth": 276,
+        "clientWidth": 276
+      },
+      {
+        "region": "github-prci-linkage",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 852.5,
+          "right": 1130.75,
+          "top": 153.59,
+          "bottom": 349.59,
+          "width": 278.25,
+          "height": 196
+        },
+        "scrollWidth": 276,
+        "clientWidth": 276
+      },
+      {
+        "region": "release-candidate-linkage",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 1143.75,
+          "right": 1422,
+          "top": 153.59,
+          "bottom": 349.59,
+          "width": 278.25,
+          "height": 196
+        },
+        "scrollWidth": 276,
+        "clientWidth": 276
+      },
+      {
+        "region": "evidence-readback-panel",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 1106,
+          "right": 1401,
+          "top": 622.09,
+          "bottom": 802.09,
+          "width": 295,
+          "height": 180
+        },
+        "scrollWidth": 413,
+        "clientWidth": 293
+      },
+      {
+        "region": "detail-panel",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 1086,
+          "right": 1422,
+          "top": 367.59,
+          "bottom": 823.09,
+          "width": 336,
+          "height": 455.5
+        },
+        "scrollWidth": 434,
+        "clientWidth": 335
+      }
+    ],
+    "wideRegions": [],
+    "hiddenRowProof": [],
+    "forbiddenHits": [],
+    "focusableSearch": true,
+    "horizontalScrollContainerPresent": true,
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "documentScrollWidth": 1440,
+    "bodyScrollWidth": 1440,
+    "maxScrollWidth": 1440,
+    "hasBodyHorizontalOverflow": false,
+    "workIndex": {
+      "rect": {
+        "left": 270,
+        "right": 1086,
+        "top": 367.59,
+        "bottom": 823.09,
+        "width": 816,
+        "height": 455.5
+      },
+      "scrollWidth": 860,
+      "clientWidth": 814,
+      "overflowX": "auto",
+      "hasInternalHorizontalOverflow": true
+    },
+    "readinessTable": {
+      "rect": {
+        "left": 271,
+        "right": 1131,
+        "top": 500.59,
+        "bottom": 734.59,
+        "width": 860,
+        "height": 234
+      },
+      "scrollWidth": 860,
+      "clientWidth": 860
+    }
+  },
+  "desktopSearchGithub": {
+    "ok": true,
+    "docsSearchReleaseSurfacesVisible": true,
+    "visibleRows": 1,
+    "bodyVisibleRowsData": "1",
+    "emptyStateVisible": false,
+    "detailTitle": "TCRN-AOS-local",
+    "detailKind": "GitHub and PR/CI",
+    "activeTitle": "TCRN-AOS-local",
+    "regionProof": [
+      {
+        "region": "docs-surface-shell",
+        "present": true,
+        "display": "grid",
+        "rect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "scrollWidth": 1440,
+        "clientWidth": 1440
+      },
+      {
+        "region": "brand-lockup",
+        "present": true,
+        "display": "flex",
+        "rect": {
+          "left": 14,
+          "right": 238,
+          "top": 24,
+          "bottom": 66,
+          "width": 224,
+          "height": 42
+        },
+        "scrollWidth": 224,
+        "clientWidth": 224
+      },
+      {
+        "region": "header-claim-strip",
+        "present": true,
+        "display": "flex",
+        "rect": {
+          "left": 903.25,
+          "right": 1422,
+          "top": 105.59,
+          "bottom": 135.59,
+          "width": 518.75,
+          "height": 30
+        },
+        "scrollWidth": 519,
+        "clientWidth": 519
+      },
+      {
+        "region": "docs-readiness-board",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 270,
+          "right": 548.25,
+          "top": 153.59,
+          "bottom": 349.59,
+          "width": 278.25,
+          "height": 196
+        },
+        "scrollWidth": 276,
+        "clientWidth": 276
+      },
+      {
+        "region": "search-inspection",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 561.25,
+          "right": 839.5,
+          "top": 153.59,
+          "bottom": 349.59,
+          "width": 278.25,
+          "height": 196
+        },
+        "scrollWidth": 276,
+        "clientWidth": 276
+      },
+      {
+        "region": "github-prci-linkage",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 852.5,
+          "right": 1130.75,
+          "top": 153.59,
+          "bottom": 349.59,
+          "width": 278.25,
+          "height": 196
+        },
+        "scrollWidth": 276,
+        "clientWidth": 276
+      },
+      {
+        "region": "release-candidate-linkage",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 1143.75,
+          "right": 1422,
+          "top": 153.59,
+          "bottom": 349.59,
+          "width": 278.25,
+          "height": 196
+        },
+        "scrollWidth": 276,
+        "clientWidth": 276
+      },
+      {
+        "region": "evidence-readback-panel",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 1106,
+          "right": 1401,
+          "top": 622.09,
+          "bottom": 802.09,
+          "width": 295,
+          "height": 180
+        },
+        "scrollWidth": 413,
+        "clientWidth": 293
+      },
+      {
+        "region": "detail-panel",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 1086,
+          "right": 1422,
+          "top": 367.59,
+          "bottom": 823.09,
+          "width": 336,
+          "height": 455.5
+        },
+        "scrollWidth": 434,
+        "clientWidth": 335
+      }
+    ],
+    "wideRegions": [],
+    "hiddenRowProof": [
+      {
+        "title": "Release note draft",
+        "hidden": true,
+        "hasHiddenAttribute": true,
+        "display": "none",
+        "offsetParentNull": true,
+        "width": 0,
+        "height": 0
+      },
+      {
+        "title": "Slice 9B visible docs readiness metadata",
+        "hidden": true,
+        "hasHiddenAttribute": true,
+        "display": "none",
+        "offsetParentNull": true,
+        "width": 0,
+        "height": 0
+      },
+      {
+        "title": "slice-9b-local-candidate",
+        "hidden": true,
+        "hasHiddenAttribute": true,
+        "display": "none",
+        "offsetParentNull": true,
+        "width": 0,
+        "height": 0
+      }
+    ],
+    "forbiddenHits": [],
+    "focusableSearch": true,
+    "horizontalScrollContainerPresent": true,
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "documentScrollWidth": 1440,
+    "bodyScrollWidth": 1440,
+    "maxScrollWidth": 1440,
+    "hasBodyHorizontalOverflow": false,
+    "workIndex": {
+      "rect": {
+        "left": 270,
+        "right": 1086,
+        "top": 367.59,
+        "bottom": 823.09,
+        "width": 816,
+        "height": 455.5
+      },
+      "scrollWidth": 860,
+      "clientWidth": 814,
+      "overflowX": "auto",
+      "hasInternalHorizontalOverflow": true
+    },
+    "readinessTable": {
+      "rect": {
+        "left": 271,
+        "right": 1131,
+        "top": 500.59,
+        "bottom": 590.59,
+        "width": 860,
+        "height": 90
+      },
+      "scrollWidth": 860,
+      "clientWidth": 860
+    }
+  },
+  "desktopSearchEmpty": {
+    "ok": true,
+    "docsSearchReleaseSurfacesVisible": true,
+    "visibleRows": 0,
+    "bodyVisibleRowsData": "0",
+    "emptyStateVisible": true,
+    "detailTitle": "Release note draft",
+    "detailKind": "Docs readiness",
+    "activeTitle": "Release note draft",
+    "regionProof": [
+      {
+        "region": "docs-surface-shell",
+        "present": true,
+        "display": "grid",
+        "rect": {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 900,
+          "width": 1440,
+          "height": 900
+        },
+        "scrollWidth": 1440,
+        "clientWidth": 1440
+      },
+      {
+        "region": "brand-lockup",
+        "present": true,
+        "display": "flex",
+        "rect": {
+          "left": 14,
+          "right": 238,
+          "top": 24,
+          "bottom": 66,
+          "width": 224,
+          "height": 42
+        },
+        "scrollWidth": 224,
+        "clientWidth": 224
+      },
+      {
+        "region": "header-claim-strip",
+        "present": true,
+        "display": "flex",
+        "rect": {
+          "left": 903.25,
+          "right": 1422,
+          "top": 105.59,
+          "bottom": 135.59,
+          "width": 518.75,
+          "height": 30
+        },
+        "scrollWidth": 519,
+        "clientWidth": 519
+      },
+      {
+        "region": "docs-readiness-board",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 270,
+          "right": 548.25,
+          "top": 153.59,
+          "bottom": 349.59,
+          "width": 278.25,
+          "height": 196
+        },
+        "scrollWidth": 276,
+        "clientWidth": 276
+      },
+      {
+        "region": "search-inspection",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 561.25,
+          "right": 839.5,
+          "top": 153.59,
+          "bottom": 349.59,
+          "width": 278.25,
+          "height": 196
+        },
+        "scrollWidth": 276,
+        "clientWidth": 276
+      },
+      {
+        "region": "github-prci-linkage",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 852.5,
+          "right": 1130.75,
+          "top": 153.59,
+          "bottom": 349.59,
+          "width": 278.25,
+          "height": 196
+        },
+        "scrollWidth": 276,
+        "clientWidth": 276
+      },
+      {
+        "region": "release-candidate-linkage",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 1143.75,
+          "right": 1422,
+          "top": 153.59,
+          "bottom": 349.59,
+          "width": 278.25,
+          "height": 196
+        },
+        "scrollWidth": 276,
+        "clientWidth": 276
+      },
+      {
+        "region": "evidence-readback-panel",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 1106,
+          "right": 1401,
+          "top": 622.09,
+          "bottom": 802.09,
+          "width": 295,
+          "height": 180
+        },
+        "scrollWidth": 413,
+        "clientWidth": 293
+      },
+      {
+        "region": "detail-panel",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 1086,
+          "right": 1422,
+          "top": 367.59,
+          "bottom": 823.09,
+          "width": 336,
+          "height": 455.5
+        },
+        "scrollWidth": 434,
+        "clientWidth": 335
+      }
+    ],
+    "wideRegions": [],
+    "hiddenRowProof": [
+      {
+        "title": "Release note draft",
+        "hidden": true,
+        "hasHiddenAttribute": true,
+        "display": "none",
+        "offsetParentNull": true,
+        "width": 0,
+        "height": 0
+      },
+      {
+        "title": "Slice 9B visible docs readiness metadata",
+        "hidden": true,
+        "hasHiddenAttribute": true,
+        "display": "none",
+        "offsetParentNull": true,
+        "width": 0,
+        "height": 0
+      },
+      {
+        "title": "TCRN-AOS-local",
+        "hidden": true,
+        "hasHiddenAttribute": true,
+        "display": "none",
+        "offsetParentNull": true,
+        "width": 0,
+        "height": 0
+      },
+      {
+        "title": "slice-9b-local-candidate",
+        "hidden": true,
+        "hasHiddenAttribute": true,
+        "display": "none",
+        "offsetParentNull": true,
+        "width": 0,
+        "height": 0
+      }
+    ],
+    "forbiddenHits": [],
+    "focusableSearch": true,
+    "horizontalScrollContainerPresent": true,
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "documentScrollWidth": 1440,
+    "bodyScrollWidth": 1440,
+    "maxScrollWidth": 1440,
+    "hasBodyHorizontalOverflow": false,
+    "workIndex": {
+      "rect": {
+        "left": 270,
+        "right": 1086,
+        "top": 367.59,
+        "bottom": 823.09,
+        "width": 816,
+        "height": 455.5
+      },
+      "scrollWidth": 860,
+      "clientWidth": 814,
+      "overflowX": "auto",
+      "hasInternalHorizontalOverflow": true
+    },
+    "readinessTable": {
+      "rect": {
+        "left": 271,
+        "right": 1131,
+        "top": 500.59,
+        "bottom": 542.59,
+        "width": 860,
+        "height": 42
+      },
+      "scrollWidth": 860,
+      "clientWidth": 860
+    }
+  },
+  "mobileInitial": {
+    "ok": true,
+    "docsSearchReleaseSurfacesVisible": true,
+    "visibleRows": 4,
+    "bodyVisibleRowsData": "4",
+    "emptyStateVisible": false,
+    "detailTitle": "Release note draft",
+    "detailKind": "Docs readiness",
+    "activeTitle": "Release note draft",
+    "regionProof": [
+      {
+        "region": "docs-surface-shell",
+        "present": true,
+        "display": "grid",
+        "rect": {
+          "left": 0,
+          "right": 390,
+          "top": 0,
+          "bottom": 2385.09,
+          "width": 390,
+          "height": 2385.09
+        },
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      {
+        "region": "brand-lockup",
+        "present": true,
+        "display": "flex",
+        "rect": {
+          "left": 14,
+          "right": 376,
+          "top": 18,
+          "bottom": 60,
+          "width": 362,
+          "height": 42
+        },
+        "scrollWidth": 362,
+        "clientWidth": 362
+      },
+      {
+        "region": "header-claim-strip",
+        "present": true,
+        "display": "flex",
+        "rect": {
+          "left": 12,
+          "right": 378,
+          "top": 520.59,
+          "bottom": 588.59,
+          "width": 366,
+          "height": 68
+        },
+        "scrollWidth": 366,
+        "clientWidth": 366
+      },
+      {
+        "region": "docs-readiness-board",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 12,
+          "right": 378,
+          "top": 606.59,
+          "bottom": 790.59,
+          "width": 366,
+          "height": 184
+        },
+        "scrollWidth": 364,
+        "clientWidth": 364
+      },
+      {
+        "region": "search-inspection",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 12,
+          "right": 378,
+          "top": 803.59,
+          "bottom": 987.59,
+          "width": 366,
+          "height": 184
+        },
+        "scrollWidth": 364,
+        "clientWidth": 364
+      },
+      {
+        "region": "github-prci-linkage",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 12,
+          "right": 378,
+          "top": 1000.59,
+          "bottom": 1184.59,
+          "width": 366,
+          "height": 184
+        },
+        "scrollWidth": 364,
+        "clientWidth": 364
+      },
+      {
+        "region": "release-candidate-linkage",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 12,
+          "right": 378,
+          "top": 1197.59,
+          "bottom": 1381.59,
+          "width": 366,
+          "height": 184
+        },
+        "scrollWidth": 364,
+        "clientWidth": 364
+      },
+      {
+        "region": "evidence-readback-panel",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 33,
+          "right": 357,
+          "top": 2140.09,
+          "bottom": 2336.09,
+          "width": 324,
+          "height": 196
+        },
+        "scrollWidth": 322,
+        "clientWidth": 322
+      },
+      {
+        "region": "detail-panel",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 12,
+          "right": 378,
+          "top": 1885.59,
+          "bottom": 2357.09,
+          "width": 366,
+          "height": 471.5
+        },
+        "scrollWidth": 364,
+        "clientWidth": 364
+      }
+    ],
+    "wideRegions": [],
+    "hiddenRowProof": [],
+    "forbiddenHits": [],
+    "focusableSearch": true,
+    "horizontalScrollContainerPresent": true,
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "documentScrollWidth": 390,
+    "bodyScrollWidth": 390,
+    "maxScrollWidth": 390,
+    "hasBodyHorizontalOverflow": false,
+    "workIndex": {
+      "rect": {
+        "left": 12,
+        "right": 378,
+        "top": 1399.59,
+        "bottom": 1885.59,
+        "width": 366,
+        "height": 486
+      },
+      "scrollWidth": 836,
+      "clientWidth": 364,
+      "overflowX": "auto",
+      "hasInternalHorizontalOverflow": true
+    },
+    "readinessTable": {
+      "rect": {
+        "left": 13,
+        "right": 849,
+        "top": 1650.59,
+        "bottom": 1884.59,
+        "width": 836,
+        "height": 234
+      },
+      "scrollWidth": 836,
+      "clientWidth": 836
+    }
+  },
+  "mobileSearchCandidate": {
+    "ok": true,
+    "docsSearchReleaseSurfacesVisible": true,
+    "visibleRows": 1,
+    "bodyVisibleRowsData": "1",
+    "emptyStateVisible": false,
+    "detailTitle": "slice-9b-local-candidate",
+    "detailKind": "Release candidate linkage",
+    "activeTitle": "slice-9b-local-candidate",
+    "regionProof": [
+      {
+        "region": "docs-surface-shell",
+        "present": true,
+        "display": "grid",
+        "rect": {
+          "left": 0,
+          "right": 390,
+          "top": -636,
+          "bottom": 1621.09,
+          "width": 390,
+          "height": 2257.09
+        },
+        "scrollWidth": 390,
+        "clientWidth": 390
+      },
+      {
+        "region": "brand-lockup",
+        "present": true,
+        "display": "flex",
+        "rect": {
+          "left": 14,
+          "right": 376,
+          "top": -618,
+          "bottom": -576,
+          "width": 362,
+          "height": 42
+        },
+        "scrollWidth": 362,
+        "clientWidth": 362
+      },
+      {
+        "region": "header-claim-strip",
+        "present": true,
+        "display": "flex",
+        "rect": {
+          "left": 12,
+          "right": 378,
+          "top": -115.41,
+          "bottom": -47.41,
+          "width": 366,
+          "height": 68
+        },
+        "scrollWidth": 366,
+        "clientWidth": 366
+      },
+      {
+        "region": "docs-readiness-board",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 12,
+          "right": 378,
+          "top": -29.41,
+          "bottom": 154.59,
+          "width": 366,
+          "height": 184
+        },
+        "scrollWidth": 364,
+        "clientWidth": 364
+      },
+      {
+        "region": "search-inspection",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 12,
+          "right": 378,
+          "top": 167.59,
+          "bottom": 351.59,
+          "width": 366,
+          "height": 184
+        },
+        "scrollWidth": 364,
+        "clientWidth": 364
+      },
+      {
+        "region": "github-prci-linkage",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 12,
+          "right": 378,
+          "top": 364.59,
+          "bottom": 548.59,
+          "width": 366,
+          "height": 184
+        },
+        "scrollWidth": 364,
+        "clientWidth": 364
+      },
+      {
+        "region": "release-candidate-linkage",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 12,
+          "right": 378,
+          "top": 561.59,
+          "bottom": 745.59,
+          "width": 366,
+          "height": 184
+        },
+        "scrollWidth": 364,
+        "clientWidth": 364
+      },
+      {
+        "region": "evidence-readback-panel",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 33,
+          "right": 357,
+          "top": 1376.09,
+          "bottom": 1572.09,
+          "width": 324,
+          "height": 196
+        },
+        "scrollWidth": 322,
+        "clientWidth": 322
+      },
+      {
+        "region": "detail-panel",
+        "present": true,
+        "display": "block",
+        "rect": {
+          "left": 12,
+          "right": 378,
+          "top": 1105.59,
+          "bottom": 1593.09,
+          "width": 366,
+          "height": 487.5
+        },
+        "scrollWidth": 364,
+        "clientWidth": 364
+      }
+    ],
+    "wideRegions": [],
+    "hiddenRowProof": [
+      {
+        "title": "Release note draft",
+        "hidden": true,
+        "hasHiddenAttribute": true,
+        "display": "none",
+        "offsetParentNull": true,
+        "width": 0,
+        "height": 0
+      },
+      {
+        "title": "Slice 9B visible docs readiness metadata",
+        "hidden": true,
+        "hasHiddenAttribute": true,
+        "display": "none",
+        "offsetParentNull": true,
+        "width": 0,
+        "height": 0
+      },
+      {
+        "title": "TCRN-AOS-local",
+        "hidden": true,
+        "hasHiddenAttribute": true,
+        "display": "none",
+        "offsetParentNull": true,
+        "width": 0,
+        "height": 0
+      }
+    ],
+    "forbiddenHits": [],
+    "focusableSearch": true,
+    "horizontalScrollContainerPresent": true,
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "documentScrollWidth": 390,
+    "bodyScrollWidth": 390,
+    "maxScrollWidth": 390,
+    "hasBodyHorizontalOverflow": false,
+    "workIndex": {
+      "rect": {
+        "left": 12,
+        "right": 378,
+        "top": 763.59,
+        "bottom": 1105.59,
+        "width": 366,
+        "height": 342
+      },
+      "scrollWidth": 836,
+      "clientWidth": 364,
+      "overflowX": "auto",
+      "hasInternalHorizontalOverflow": true
+    },
+    "readinessTable": {
+      "rect": {
+        "left": 13,
+        "right": 849,
+        "top": 1014.59,
+        "bottom": 1104.59,
+        "width": 836,
+        "height": 90
+      },
+      "scrollWidth": 836,
+      "clientWidth": 836
+    }
+  },
+  "expected": {
+    "desktopInitialRows": true,
+    "desktopGithubRows": true,
+    "desktopEmptyRows": true,
+    "mobileInitialNoBodyOverflow": true,
+    "mobileCandidateNoBodyOverflow": true,
+    "mobileCandidateRows": true,
+    "mobileTableContained": true,
+    "forbiddenCopyAbsent": true,
+    "requiredRegionsFitMobile": true
+  }
+}
