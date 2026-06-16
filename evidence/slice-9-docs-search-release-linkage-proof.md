@@ -6,7 +6,8 @@ Status: observed local proof receipt
 
 - Pre-implementation basis: `9530c3ad4c42eb838972139f04ff72e1c59383f6` (`docs: repair AOS Slice 8 proof evidence`)
 - Implementation checkpoint under review: `d854e3ec170df9a7c9c935f9dbced59a0f4684f3` (`feat: add AOS Slice 9 docs readiness linkage`)
-- Evidence receipt successor: route-carried in Ilya terminal return after this evidence commit; this successor does not self-reference its own commit hash.
+- Final evidence/checkpoint under review: `72df75023a6f0e9cd679bb6a41af365db1dd60fa` (`docs: record AOS Slice 9 proof evidence`)
+- Evidence repair successor: route-carried in Ilya terminal return after this narrow lineage repair; this successor does not self-reference its own commit hash.
 - Workflow packet/disposition basis: `a32bec8d9ce68e6ded7708a5d4f2ef355ffefc6d` (`docs: define AOS remaining MVP disposition`)
 - Slice 8 lineage preserved: implementation `01ae61eae0c3224400baddbc6036e39ada818548`; evidence `16000be29f3cb35e3062398ecaf0f5257c42572b`; evidence discoverability successor `9530c3ad4c42eb838972139f04ff72e1c59383f6`.
 - Wrong-sibling quarantine: absent acceptable. The historical wrong-sibling path is not recreated, not accepted output, not a proof source, not a rollback source, and not a publish target.
