@@ -526,11 +526,13 @@ export class AosStore {
 
   createDependencyRecord(input: Omit<DependencyLifecycleRecord, "id" | "linkedGateIds">, actor: ActorIdentity): DependencyLifecycleRecord {
     this.ensureSafe(input, "dependency");
+    rejectExecutionClaims(input as Record<string, unknown>, ["packageMutationExecuted"], "dependency record");
     this.requireProject(input.projectId);
     const dependency: DependencyLifecycleRecord = {
       ...input,
       id: createId("dependency", input),
-      linkedGateIds: []
+      linkedGateIds: [],
+      packageMutationExecuted: false
     };
     this.dependencies.set(dependency.id, dependency);
     this.appendAudit(actor, "dependency.record.propose", "dependency", dependency.id, "accepted", {
@@ -545,6 +547,7 @@ export class AosStore {
 
   createResourceRecord(input: Omit<ResourceRegistryRecord, "id" | "linkedGateIds" | "projectManifestRefs">, actor: ActorIdentity): ResourceRegistryRecord {
     this.ensureSafe(input, "resource");
+    rejectExecutionClaims(input as Record<string, unknown>, ["materializationExecuted", "productRepoWriteExecuted"], "resource record");
     if (input.projectId) {
       this.requireProject(input.projectId);
     }
@@ -552,7 +555,9 @@ export class AosStore {
       ...input,
       id: createId("resource", input),
       projectManifestRefs: [],
-      linkedGateIds: []
+      linkedGateIds: [],
+      materializationExecuted: false,
+      productRepoWriteExecuted: false
     };
     this.resources.set(resource.id, resource);
     this.appendAudit(actor, "resource.record.propose", "resource", resource.id, "accepted", {
@@ -567,11 +572,14 @@ export class AosStore {
 
   createDependencyDetectionFinding(input: Omit<DependencyDetectionFinding, "id">, actor: ActorIdentity): DependencyDetectionFinding {
     this.ensureSafe(input, "dependencyFinding");
+    rejectExecutionClaims(input as Record<string, unknown>, ["remediationExecuted", "packageMutationExecuted"], "dependency detection finding");
     this.requireProject(input.projectId);
     this.requireDependency(input.dependencyId);
     const finding: DependencyDetectionFinding = {
       ...input,
-      id: createId("dependency_finding", input)
+      id: createId("dependency_finding", input),
+      remediationExecuted: false,
+      packageMutationExecuted: false
     };
     this.dependencyFindings.set(finding.id, finding);
     this.appendAudit(actor, "dependency.detection.record", "dependency_finding", finding.id, finding.state === "denied" ? "blocked" : "accepted", {
@@ -981,4 +989,13 @@ function countBy(values: string[]): Record<string, number> {
     counts[value] = (counts[value] ?? 0) + 1;
     return counts;
   }, {});
+}
+
+function rejectExecutionClaims(value: Record<string, unknown>, fields: string[], context: string): void {
+  for (const field of fields) {
+    const claim = value[field];
+    if (claim !== undefined && claim !== false) {
+      throw new Error(`${context} rejected execution claim ${field}; value must be false or omitted`);
+    }
+  }
 }

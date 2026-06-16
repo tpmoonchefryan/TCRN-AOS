@@ -212,6 +212,114 @@ test("Slice 7 gateway rejects restricted governance payloads before storage", ()
   assert.match(rejected.error, /restricted machine_local_absolute_path/);
 });
 
+test("Slice 7 gateway blocks caller-supplied execution claim booleans", () => {
+  const { gateway, storyId, evidenceId, gateId } = gatewayFixture();
+  const dependencyParams = {
+    projectId: "TCRN-AOS",
+    ecosystem: "npm",
+    packageName: "fixture-execution-claim",
+    versionRange: "1.0.0",
+    sourceSystem: "deterministic_fixture",
+    projectUsage: "development",
+    ownerRole: "security",
+    lifecycleState: "unapproved",
+    artifactRef: "package:fixture-execution-claim@1.0.0",
+    licenseExpression: "MIT",
+    declaredLicenseEvidence: "declared-execution-claim",
+    discoveredLicenseEvidence: "discovered-execution-claim",
+    evidenceArtifactRef: evidenceId,
+    evidenceStatus: "evidence_missing",
+    confidence: "medium",
+    policyClass: "unknown",
+    reviewerRole: "security",
+    residualRisk: "medium",
+    nextAction: "request_review",
+    sbomNoticeObligation: "review_required",
+    posture: "review_required",
+    approvalOwnerRole: "security",
+    linkedStoryIds: [storyId],
+    linkedEvidenceIds: [evidenceId],
+    releaseBlocker: true,
+    packageMutationExecuted: false
+  };
+  const blockedDependency = gateway.handle({
+    method: "aos.dependency.record.propose",
+    actor,
+    params: {
+      ...dependencyParams,
+      packageMutationExecuted: true
+    }
+  });
+  assert.equal(blockedDependency.ok, false);
+  assert.match(blockedDependency.error, /dependency record rejected execution claim packageMutationExecuted/);
+
+  const dependency = gateway.handle({
+    method: "aos.dependency.record.propose",
+    actor,
+    params: dependencyParams
+  });
+  assert.equal(dependency.ok, true);
+  assert.equal(dependency.result.packageMutationExecuted, false);
+
+  const blockedRemediationFinding = gateway.handle({
+    method: "aos.dependency.detection.record",
+    actor,
+    params: {
+      projectId: "TCRN-AOS",
+      dependencyId: dependency.result.id,
+      state: "unapproved",
+      sourceSystem: "deterministic_fixture",
+      evidenceIds: [evidenceId],
+      linkedGateIds: [gateId],
+      remediationExecuted: true,
+      packageMutationExecuted: false,
+      nextAction: "request_review"
+    }
+  });
+  const blockedPackageFinding = gateway.handle({
+    method: "aos.dependency.detection.record",
+    actor,
+    params: {
+      projectId: "TCRN-AOS",
+      dependencyId: dependency.result.id,
+      state: "unapproved",
+      sourceSystem: "deterministic_fixture",
+      evidenceIds: [evidenceId],
+      linkedGateIds: [gateId],
+      remediationExecuted: false,
+      packageMutationExecuted: true,
+      nextAction: "request_review"
+    }
+  });
+  assert.equal(blockedRemediationFinding.ok, false);
+  assert.match(blockedRemediationFinding.error, /dependency detection finding rejected execution claim remediationExecuted/);
+  assert.equal(blockedPackageFinding.ok, false);
+  assert.match(blockedPackageFinding.error, /dependency detection finding rejected execution claim packageMutationExecuted/);
+
+  const blockedResource = gateway.handle({
+    method: "aos.resource.record.propose",
+    actor,
+    params: {
+      type: "image",
+      projectId: "TCRN-AOS",
+      title: "Blocked execution-claim resource",
+      owner: "TCRN",
+      source: "product-local",
+      version: "1.0.0",
+      digest: "sha256:slice7-blocked-resource",
+      storageReference: "resource-library/blocked-execution-claim-resource",
+      classification: ["resource-library"],
+      copyrightStatus: "review_required",
+      lifecycleState: "proposed",
+      approvalState: "review_required",
+      materializationExecuted: true,
+      productRepoWriteExecuted: true
+    }
+  });
+  assert.equal(blockedResource.ok, false);
+  assert.match(blockedResource.error, /resource record rejected execution claim materializationExecuted/);
+});
+
 function gatewayFixture() {
   const store = new AosStore(createDefaultSeed());
   const gateway = new McpGateway(store);

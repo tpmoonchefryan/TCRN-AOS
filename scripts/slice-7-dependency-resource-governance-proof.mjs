@@ -19,11 +19,13 @@ const dependencyProof = proveDependencyGovernanceMatrix();
 const resourceProof = proveResourceGovernanceMatrix();
 const gatewayProof = proveGatewayGovernanceMethods();
 const restrictedPayloadProof = proveRestrictedPayloadRejected();
+const executionClaimProof = proveExecutionClaimBooleansFailClosed();
 
 const ok = dependencyProof.ok
   && resourceProof.ok
   && gatewayProof.ok
-  && restrictedPayloadProof.ok;
+  && restrictedPayloadProof.ok
+  && executionClaimProof.ok;
 
 console.log(JSON.stringify({
   ok,
@@ -31,6 +33,7 @@ console.log(JSON.stringify({
   resourceProof,
   gatewayProof,
   restrictedPayloadProof,
+  executionClaimProof,
   d024Boundary: {
     localFirstStorage: true,
     runtimeOperationalDataCommittedToGit: false,
@@ -402,6 +405,169 @@ function proveRestrictedPayloadRejected() {
     rejected,
     reasonKind: /machine_local_absolute_path/.test(message) ? "machine_local_absolute_path" : "other"
   };
+}
+
+function proveExecutionClaimBooleansFailClosed() {
+  const { store, story, evidence, gate } = createScenario("execution_claim_fail_closed");
+  const dependencyInput = {
+    projectId: "TCRN-AOS",
+    ecosystem: "npm",
+    packageName: "slice7-execution-claim",
+    versionRange: "1.0.0",
+    sourceSystem: "deterministic_fixture",
+    projectUsage: "development",
+    ownerRole: "security",
+    lifecycleState: "unapproved",
+    artifactRef: "package:slice7-execution-claim@1.0.0",
+    licenseExpression: "MIT",
+    declaredLicenseEvidence: "declared-execution-claim",
+    discoveredLicenseEvidence: "discovered-execution-claim",
+    evidenceArtifactRef: evidence.id,
+    evidenceStatus: "evidence_missing",
+    confidence: "medium",
+    policyClass: "unknown",
+    reviewerRole: "security",
+    residualRisk: "medium",
+    nextAction: "request_review",
+    sbomNoticeObligation: "review_required",
+    posture: "review_required",
+    approvalOwnerRole: "security",
+    linkedStoryIds: [story.id],
+    linkedEvidenceIds: [evidence.id],
+    releaseBlocker: true,
+    packageMutationExecuted: false
+  };
+  const dependencyClaim = expectRejected(
+    () => store.createDependencyRecord({ ...dependencyInput, packageMutationExecuted: true }, actor),
+    /dependency record rejected execution claim packageMutationExecuted/
+  );
+  const dependency = store.createDependencyRecord(dependencyInput, actor);
+  const remediationClaim = expectRejected(
+    () => store.createDependencyDetectionFinding({
+      projectId: "TCRN-AOS",
+      dependencyId: dependency.id,
+      state: "unapproved",
+      sourceSystem: "deterministic_fixture",
+      evidenceIds: [evidence.id],
+      linkedGateIds: [gate.id],
+      remediationExecuted: true,
+      packageMutationExecuted: false,
+      nextAction: "request_review"
+    }, actor),
+    /dependency detection finding rejected execution claim remediationExecuted/
+  );
+  const findingPackageClaim = expectRejected(
+    () => store.createDependencyDetectionFinding({
+      projectId: "TCRN-AOS",
+      dependencyId: dependency.id,
+      state: "unapproved",
+      sourceSystem: "deterministic_fixture",
+      evidenceIds: [evidence.id],
+      linkedGateIds: [gate.id],
+      remediationExecuted: false,
+      packageMutationExecuted: true,
+      nextAction: "request_review"
+    }, actor),
+    /dependency detection finding rejected execution claim packageMutationExecuted/
+  );
+  const materializationClaim = expectRejected(
+    () => store.createResourceRecord(resourceInput({ materializationExecuted: true }), actor),
+    /resource record rejected execution claim materializationExecuted/
+  );
+  const productRepoClaim = expectRejected(
+    () => store.createResourceRecord(resourceInput({ productRepoWriteExecuted: true }), actor),
+    /resource record rejected execution claim productRepoWriteExecuted/
+  );
+
+  const gateway = new McpGateway(store);
+  const gatewayDependencyClaim = gateway.handle({
+    method: "aos.dependency.record.propose",
+    actor,
+    params: {
+      ...dependencyInput,
+      packageName: "slice7-gateway-execution-claim",
+      packageMutationExecuted: true
+    }
+  });
+  const gatewayResourceClaim = gateway.handle({
+    method: "aos.resource.record.propose",
+    actor,
+    params: resourceInput({
+      title: "Gateway execution claim resource",
+      materializationExecuted: true,
+      productRepoWriteExecuted: true
+    })
+  });
+
+  const safeFinding = store.createDependencyDetectionFinding({
+    projectId: "TCRN-AOS",
+    dependencyId: dependency.id,
+    state: "unapproved",
+    sourceSystem: "deterministic_fixture",
+    evidenceIds: [evidence.id],
+    linkedGateIds: [gate.id],
+    remediationExecuted: false,
+    packageMutationExecuted: false,
+    nextAction: "request_review"
+  }, actor);
+  const safeResource = store.createResourceRecord(resourceInput({
+    title: "Safe execution claim baseline"
+  }), actor);
+
+  return {
+    scenario: "execution_claim_booleans_fail_closed",
+    ok: dependencyClaim.ok
+      && remediationClaim.ok
+      && findingPackageClaim.ok
+      && materializationClaim.ok
+      && productRepoClaim.ok
+      && gatewayDependencyClaim.ok === false
+      && /packageMutationExecuted/.test(gatewayDependencyClaim.error ?? "")
+      && gatewayResourceClaim.ok === false
+      && /materializationExecuted/.test(gatewayResourceClaim.error ?? "")
+      && dependency.packageMutationExecuted === false
+      && safeFinding.remediationExecuted === false
+      && safeFinding.packageMutationExecuted === false
+      && safeResource.materializationExecuted === false
+      && safeResource.productRepoWriteExecuted === false,
+    rejectedClaimCount: [
+      dependencyClaim,
+      remediationClaim,
+      findingPackageClaim,
+      materializationClaim,
+      productRepoClaim,
+      { ok: gatewayDependencyClaim.ok === false },
+      { ok: gatewayResourceClaim.ok === false }
+    ].filter((result) => result.ok).length,
+    rejectedClaimFields: [
+      "packageMutationExecuted",
+      "remediationExecuted",
+      "packageMutationExecuted",
+      "materializationExecuted",
+      "productRepoWriteExecuted"
+    ],
+    gatewayStatuses: {
+      dependencyRecordWithExecutionClaim: gatewayDependencyClaim.status,
+      resourceRecordWithExecutionClaim: gatewayResourceClaim.status
+    },
+    normalizedSafeRecords: {
+      dependencyPackageMutationExecuted: dependency.packageMutationExecuted,
+      findingRemediationExecuted: safeFinding.remediationExecuted,
+      findingPackageMutationExecuted: safeFinding.packageMutationExecuted,
+      resourceMaterializationExecuted: safeResource.materializationExecuted,
+      resourceProductRepoWriteExecuted: safeResource.productRepoWriteExecuted
+    }
+  };
+}
+
+function expectRejected(action, pattern) {
+  try {
+    action();
+    return { ok: false, message: "" };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { ok: pattern.test(message), message };
+  }
 }
 
 function createScenario(label) {

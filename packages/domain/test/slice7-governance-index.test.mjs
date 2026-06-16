@@ -179,6 +179,55 @@ test("Slice 7 governance records reject restricted local path payloads before st
   })), /restricted machine_local_absolute_path/);
 });
 
+test("Slice 7 governance records fail closed on execution claim booleans", () => {
+  const { store, evidence, gate } = governanceFixture();
+  assert.throws(() => store.createDependencyRecord(dependencyInput({
+    packageMutationExecuted: true
+  }), actor), /dependency record rejected execution claim packageMutationExecuted/);
+  const dependency = store.createDependencyRecord(dependencyInput({
+    evidenceArtifactRef: evidence.id,
+    linkedEvidenceIds: [evidence.id],
+    packageMutationExecuted: undefined
+  }), actor);
+  assert.equal(dependency.packageMutationExecuted, false);
+
+  const findingInput = {
+    projectId: "TCRN-AOS",
+    dependencyId: dependency.id,
+    state: "unapproved",
+    sourceSystem: "deterministic_fixture",
+    evidenceIds: [evidence.id],
+    linkedGateIds: [gate.id],
+    remediationExecuted: false,
+    packageMutationExecuted: false,
+    nextAction: "request_review"
+  };
+  assert.throws(() => store.createDependencyDetectionFinding({
+    ...findingInput,
+    remediationExecuted: true
+  }, actor), /dependency detection finding rejected execution claim remediationExecuted/);
+  assert.throws(() => store.createDependencyDetectionFinding({
+    ...findingInput,
+    packageMutationExecuted: true
+  }, actor), /dependency detection finding rejected execution claim packageMutationExecuted/);
+  const finding = store.createDependencyDetectionFinding(findingInput, actor);
+  assert.equal(finding.remediationExecuted, false);
+  assert.equal(finding.packageMutationExecuted, false);
+
+  assert.throws(() => store.createResourceRecord(resourceInput({
+    materializationExecuted: true
+  }), actor), /resource record rejected execution claim materializationExecuted/);
+  assert.throws(() => store.createResourceRecord(resourceInput({
+    productRepoWriteExecuted: true
+  }), actor), /resource record rejected execution claim productRepoWriteExecuted/);
+  const resource = store.createResourceRecord(resourceInput({
+    materializationExecuted: undefined,
+    productRepoWriteExecuted: undefined
+  }), actor);
+  assert.equal(resource.materializationExecuted, false);
+  assert.equal(resource.productRepoWriteExecuted, false);
+});
+
 function governanceFixture() {
   const store = new AosStore(createDefaultSeed());
   const initiative = store.createInitiative({
@@ -265,6 +314,38 @@ function resourceInput(overrides = {}) {
     materializationExecuted: false,
     productRepoWriteExecuted: false,
     releaseBlocker: false,
+    ...overrides
+  };
+}
+
+function dependencyInput(overrides = {}) {
+  return {
+    projectId: "TCRN-AOS",
+    ecosystem: "npm",
+    packageName: "fixture-execution-claim",
+    versionRange: "1.0.0",
+    sourceSystem: "deterministic_fixture",
+    projectUsage: "development",
+    ownerRole: "security",
+    lifecycleState: "unapproved",
+    artifactRef: "package:fixture-execution-claim@1.0.0",
+    licenseExpression: "MIT",
+    declaredLicenseEvidence: "declared-execution-claim",
+    discoveredLicenseEvidence: "discovered-execution-claim",
+    evidenceArtifactRef: "evidence-execution-claim",
+    evidenceStatus: "evidence_missing",
+    confidence: "medium",
+    policyClass: "unknown",
+    reviewerRole: "security",
+    residualRisk: "medium",
+    nextAction: "request_review",
+    sbomNoticeObligation: "review_required",
+    posture: "review_required",
+    approvalOwnerRole: "security",
+    linkedStoryIds: [],
+    linkedEvidenceIds: [],
+    releaseBlocker: true,
+    packageMutationExecuted: false,
     ...overrides
   };
 }
