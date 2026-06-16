@@ -163,20 +163,45 @@ CREATE TABLE aos_knowledge_entries (
   project_id TEXT NOT NULL REFERENCES aos_projects(id),
   category TEXT NOT NULL,
   status TEXT NOT NULL,
-  source TEXT NOT NULL,
-  freshness TEXT NOT NULL,
-  linked_ticket_ids JSONB NOT NULL DEFAULT '[]'::jsonb
+  source_kind TEXT NOT NULL,
+  source_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  freshness_state TEXT NOT NULL,
+  linked_ticket_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  linked_conference_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  linked_evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  raw_private_payload_stored BOOLEAN NOT NULL DEFAULT false,
+  canonical_promotion_claimed BOOLEAN NOT NULL DEFAULT false,
+  local_first_storage BOOLEAN NOT NULL DEFAULT true,
+  default_git_storage BOOLEAN NOT NULL DEFAULT false,
+  explicit_export_required BOOLEAN NOT NULL DEFAULT true
+);
+
+CREATE TABLE aos_user_guide_page_drafts (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES aos_projects(id),
+  audience TEXT NOT NULL,
+  version_label TEXT NOT NULL,
+  status TEXT NOT NULL,
+  linked_story_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  linked_release_note_item_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  linked_evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  published_state_distinct_from_draft BOOLEAN NOT NULL DEFAULT true,
+  release_closeout_claimed BOOLEAN NOT NULL DEFAULT false,
+  default_git_storage BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE aos_release_notes (
   id TEXT PRIMARY KEY,
   project_id TEXT NOT NULL REFERENCES aos_projects(id),
-  release TEXT NOT NULL,
-  story_ids JSONB NOT NULL,
+  release_label TEXT NOT NULL,
+  linked_story_ids JSONB NOT NULL,
   user_facing_summary TEXT NOT NULL,
-  internal_notes TEXT NOT NULL,
-  risk_notes JSONB NOT NULL,
-  status TEXT NOT NULL
+  internal_notes_summary TEXT NOT NULL,
+  risk_notes_summary TEXT NOT NULL,
+  linked_evidence_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
+  review_state TEXT NOT NULL,
+  git_export_authorized BOOLEAN NOT NULL DEFAULT false,
+  release_closeout_claimed BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE aos_audit_events (

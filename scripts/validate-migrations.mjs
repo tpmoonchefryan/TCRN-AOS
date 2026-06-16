@@ -17,6 +17,7 @@ const requiredTables = [
   "aos_dependency_lifecycle_records",
   "aos_resource_registry_records",
   "aos_knowledge_entries",
+  "aos_user_guide_page_drafts",
   "aos_release_notes",
   "aos_audit_events"
 ];

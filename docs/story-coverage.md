@@ -97,3 +97,15 @@ Slice 5 adds local operating-loop drill-through on top of the accepted Slice 4B 
 Still deferred: `AOS-S043` action-item automation, `AOS-S044` deep conference search, final visual/UX acceptance, browser acceptance closeout, deployment, live Codex dispatch, thread registry mutation, release readiness, product acceptance, and final MVP acceptance.
 
 Slice 5 evidence receipt: `../evidence/slice-5-conference-ai-operating-loop-proof.md`.
+
+## Slice 6 Knowledge, Guide, And Release Notes Coverage
+
+Slice 6 adds local-first documentation model/index foundations for AOS-E10:
+
+- `AOS-S054`: project knowledge records now preserve category, source kind, source ids, linked tickets, linked conferences, linked evidence, freshness state, and explicit export/canonical-promotion blockers.
+- `AOS-S055`: user-guide page draft records now separate local draft metadata from future publication state and link guide drafts to stories, release-note items, and evidence.
+- `AOS-S056`: release-note draft item records now link stories and evidence while keeping Git export, release closeout, and publication unclaimed by default.
+
+Supporting local readbacks connect these records to existing story, conference, evidence, audit, gateway, and work-index metadata without promoting deferred docs readiness/search, Git export, canonical knowledge promotion, user-guide publication, release-note publication, or release readiness.
+
+Slice 6 evidence receipt: `../evidence/slice-6-knowledge-guide-release-notes-proof.md`.

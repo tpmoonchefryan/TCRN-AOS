@@ -30,6 +30,10 @@ export const allowedMcpMethods = [
   "aos.conference.position.record",
   "aos.conference.minutes.record",
   "aos.work_index.drill_through.read",
+  "aos.documentation.index.read",
+  "aos.knowledge.entry.propose",
+  "aos.guide.page.draft",
+  "aos.release_note.item.draft",
   "aos.stage_map.read",
   "aos.dependency.record.propose",
   "aos.resource.record.propose",
@@ -171,6 +175,14 @@ export class McpGateway {
         return this.recordConferenceMinutes(actor, params);
       case "aos.work_index.drill_through.read":
         return this.store.createWorkIndexDrillThrough(requireString(params.storyId, "storyId"));
+      case "aos.documentation.index.read":
+        return this.store.createDocumentationIndex(this.requireProjectScope(params.projectId));
+      case "aos.knowledge.entry.propose":
+        return this.proposeKnowledgeEntry(actor, params);
+      case "aos.guide.page.draft":
+        return this.draftGuidePage(actor, params);
+      case "aos.release_note.item.draft":
+        return this.draftReleaseNote(actor, params);
       case "aos.stage_map.read":
         return this.store.deriveStageMap(this.requireProjectScope(params.projectId), requireString(params.initiativeId, "initiativeId"));
       case "aos.dependency.record.propose":
@@ -254,6 +266,61 @@ export class McpGateway {
     return this.store.linkEvidence(evidence, actor);
   }
 
+  private proposeKnowledgeEntry(actor: ActorIdentity, params: Record<string, unknown>): unknown {
+    const projectId = this.requireProjectScope(params.projectId);
+    return this.store.createKnowledgeEntry({
+      id: createId("knowledge", { projectId, category: params.category, sourceIds: params.sourceIds }),
+      projectId,
+      category: requireString(params.category, "category") as never,
+      status: requireString(params.status ?? "proposed", "status") as never,
+      sourceKind: requireString(params.sourceKind, "sourceKind") as never,
+      sourceIds: requireStringArray(params.sourceIds, "sourceIds"),
+      linkedTicketIds: requireStringArray(params.linkedTicketIds, "linkedTicketIds"),
+      linkedConferenceIds: requireStringArray(params.linkedConferenceIds ?? [], "linkedConferenceIds"),
+      linkedEvidenceIds: requireStringArray(params.linkedEvidenceIds ?? [], "linkedEvidenceIds"),
+      freshnessState: requireString(params.freshnessState ?? "fresh", "freshnessState") as never,
+      rawPrivatePayloadStored: false,
+      canonicalPromotionClaimed: false,
+      localFirstStorage: true,
+      defaultGitStorage: false,
+      explicitExportRequired: true
+    }, actor);
+  }
+
+  private draftGuidePage(actor: ActorIdentity, params: Record<string, unknown>): unknown {
+    const projectId = this.requireProjectScope(params.projectId);
+    return this.store.createUserGuideDraft({
+      id: createId("guide", { projectId, audience: params.audience, versionLabel: params.versionLabel }),
+      projectId,
+      audience: requireString(params.audience, "audience") as never,
+      versionLabel: requireString(params.versionLabel, "versionLabel"),
+      status: requireString(params.status ?? "draft", "status") as never,
+      linkedStoryIds: requireStringArray(params.linkedStoryIds, "linkedStoryIds"),
+      linkedReleaseNoteItemIds: requireStringArray(params.linkedReleaseNoteItemIds ?? [], "linkedReleaseNoteItemIds"),
+      linkedEvidenceIds: requireStringArray(params.linkedEvidenceIds ?? [], "linkedEvidenceIds"),
+      publishedStateDistinctFromDraft: true,
+      releaseCloseoutClaimed: false,
+      defaultGitStorage: false
+    }, actor);
+  }
+
+  private draftReleaseNote(actor: ActorIdentity, params: Record<string, unknown>): unknown {
+    const projectId = this.requireProjectScope(params.projectId);
+    return this.store.createReleaseNote({
+      id: createId("release_note", { projectId, releaseLabel: params.releaseLabel, linkedStoryIds: params.linkedStoryIds }),
+      projectId,
+      releaseLabel: requireString(params.releaseLabel, "releaseLabel"),
+      linkedStoryIds: requireStringArray(params.linkedStoryIds, "linkedStoryIds"),
+      userFacingSummary: requireString(params.userFacingSummary, "userFacingSummary"),
+      internalNotesSummary: requireString(params.internalNotesSummary, "internalNotesSummary"),
+      riskNotesSummary: requireString(params.riskNotesSummary, "riskNotesSummary"),
+      linkedEvidenceIds: requireStringArray(params.linkedEvidenceIds ?? [], "linkedEvidenceIds"),
+      reviewState: requireString(params.reviewState ?? "draft", "reviewState") as never,
+      gitExportAuthorized: false,
+      releaseCloseoutClaimed: false
+    }, actor);
+  }
+
   private recordConferenceMinutes(actor: ActorIdentity, params: Record<string, unknown>): unknown {
     const conferenceId = requireString(params.conferenceId, "conferenceId");
     const outcomeClass = requireString(params.outcomeClass, "outcomeClass") as never;
@@ -307,7 +374,7 @@ export class McpGateway {
   }
 
   private isReadMethod(method: AllowedMcpMethod): boolean {
-    return ["aos.policy.read", "aos.stage_map.read", "aos.work_index.drill_through.read", "aos.audit.query"].includes(method);
+    return ["aos.policy.read", "aos.stage_map.read", "aos.work_index.drill_through.read", "aos.documentation.index.read", "aos.audit.query"].includes(method);
   }
 
   private requireProjectScope(value: unknown): string {

@@ -392,25 +392,98 @@ export interface ResourceRegistryRecord {
   linkedGateIds: AosId[];
 }
 
+export type ProjectKnowledgeCategory =
+  | "architecture"
+  | "operations"
+  | "workflow"
+  | "user_guide"
+  | "release"
+  | "risk"
+  | "decision";
+
+export type ProjectDocumentationStatus =
+  | "draft"
+  | "proposed"
+  | "review_required"
+  | "accepted_local"
+  | "superseded"
+  | "blocked";
+
+export type ProjectDocumentationFreshness =
+  | "fresh"
+  | "review_due"
+  | "stale"
+  | "blocked";
+
 export interface KnowledgeEntry {
   id: AosId;
   projectId: ProjectId;
-  category: "knowledge" | "user_guide" | "release_note";
-  status: "proposed" | "draft" | "review" | "published" | "archived";
-  source: "agent_proposed" | "workflow_indexed" | "github_linked";
-  freshness: "current" | "stale" | "unknown";
+  category: ProjectKnowledgeCategory;
+  status: ProjectDocumentationStatus;
+  sourceKind: "story" | "conference" | "decision" | "evidence_link" | "manual_seed";
+  sourceIds: AosId[];
   linkedTicketIds: AosId[];
+  linkedConferenceIds: AosId[];
+  linkedEvidenceIds: AosId[];
+  freshnessState: ProjectDocumentationFreshness;
+  rawPrivatePayloadStored: false;
+  canonicalPromotionClaimed: false;
+  localFirstStorage: true;
+  defaultGitStorage: false;
+  explicitExportRequired: true;
+}
+
+export interface UserGuidePageDraft {
+  id: AosId;
+  projectId: ProjectId;
+  audience: "owner" | "operator" | "ai_employee" | "developer" | "release_reviewer";
+  versionLabel: string;
+  status: "draft" | "proposed" | "review_required" | "accepted_local" | "published_external_blocked";
+  linkedStoryIds: AosId[];
+  linkedReleaseNoteItemIds: AosId[];
+  linkedEvidenceIds: AosId[];
+  publishedStateDistinctFromDraft: true;
+  releaseCloseoutClaimed: false;
+  defaultGitStorage: false;
 }
 
 export interface ReleaseNoteRecord {
   id: AosId;
   projectId: ProjectId;
-  release: string;
-  storyIds: AosId[];
+  releaseLabel: string;
+  linkedStoryIds: AosId[];
   userFacingSummary: string;
-  internalNotes: string;
-  riskNotes: string[];
-  status: "draft" | "review" | "published";
+  internalNotesSummary: string;
+  riskNotesSummary: string;
+  linkedEvidenceIds: AosId[];
+  reviewState: "draft" | "proposed" | "review_required" | "accepted_local" | "publish_blocked";
+  gitExportAuthorized: false;
+  releaseCloseoutClaimed: false;
+}
+
+export interface ProjectDocumentationIndexReadback {
+  projectId: ProjectId;
+  knowledgeEntryIds: AosId[];
+  guidePageIds: AosId[];
+  releaseNoteItemIds: AosId[];
+  staleItemIds: AosId[];
+  blockedPublishItemIds: AosId[];
+  linkedWorkItemIds: AosId[];
+  linkedConferenceIds: AosId[];
+  linkedEvidenceIds: AosId[];
+  localFirstStorage: true;
+  explicitExportRequired: true;
+}
+
+export interface DocumentationActionBlock {
+  projectId: ProjectId;
+  targetType: "knowledge" | "guide" | "release_note" | "documentation_index";
+  targetId: AosId;
+  action: "export" | "publish" | "canonical_promote" | "release_closeout";
+  status: "blocked";
+  reason: string;
+  ownerIntentRequired: true;
+  auditEventId: AosId;
 }
 
 export interface AuditEvent {

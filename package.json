@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "pnpm build && node --test packages/domain/test/domain.test.mjs packages/domain/test/slice5-operating-loop.test.mjs packages/mcp-gateway/test/gateway.test.mjs packages/mcp-gateway/test/slice5-gateway.test.mjs packages/adapter-codex/test/adapter.test.mjs packages/db/test/schema.test.mjs packages/db/test/runtime-fixture.test.mjs apps/api/test/api.test.mjs apps/api/test/service-smoke.test.mjs apps/web/test/cockpit.test.mjs apps/web/test/cockpit-view.test.mjs",
+    "test": "pnpm build && node --test packages/domain/test/domain.test.mjs packages/domain/test/slice5-operating-loop.test.mjs packages/domain/test/slice6-documentation-index.test.mjs packages/mcp-gateway/test/gateway.test.mjs packages/mcp-gateway/test/slice5-gateway.test.mjs packages/mcp-gateway/test/slice6-documentation-gateway.test.mjs packages/adapter-codex/test/adapter.test.mjs packages/db/test/schema.test.mjs packages/db/test/runtime-fixture.test.mjs apps/api/test/api.test.mjs apps/api/test/service-smoke.test.mjs apps/web/test/cockpit.test.mjs apps/web/test/cockpit-view.test.mjs",
     "validate:migrations": "node scripts/validate-migrations.mjs",
     "runtime:db:proof": "pnpm build && node scripts/runtime-db-proof.mjs",
     "service:smoke": "pnpm build && node scripts/service-smoke.mjs",
@@ -16,8 +16,9 @@
     "slice4:proof": "pnpm build && node scripts/slice-4-proof.mjs",
     "slice4b:proof": "pnpm build && node scripts/slice-4b-style-proof.mjs",
     "slice5:proof": "pnpm build && node scripts/slice-5-operating-loop-proof.mjs",
+    "slice6:proof": "pnpm build && node scripts/slice-6-knowledge-guide-release-notes-proof.mjs",
     "audit:licenses": "node scripts/audit-licenses.mjs",
-    "verify": "pnpm typecheck && pnpm validate:migrations && pnpm audit:licenses && pnpm test && pnpm runtime:db:proof && pnpm service:smoke && pnpm slice3:proof && pnpm slice4:proof && pnpm slice4b:proof && pnpm slice5:proof"
+    "verify": "pnpm typecheck && pnpm validate:migrations && pnpm audit:licenses && pnpm test && pnpm runtime:db:proof && pnpm service:smoke && pnpm slice3:proof && pnpm slice4:proof && pnpm slice4b:proof && pnpm slice5:proof && pnpm slice6:proof"
   },
   "devDependencies": {
     "@types/node": "24.0.3",

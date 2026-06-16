@@ -14,6 +14,9 @@ test("schema includes core operational tables and append-only audit trigger", ()
     "aos_conferences",
     "aos_dependency_lifecycle_records",
     "aos_resource_registry_records",
+    "aos_knowledge_entries",
+    "aos_user_guide_page_drafts",
+    "aos_release_notes",
     "aos_audit_events"
   ]) {
     assert.match(sql, new RegExp(`CREATE TABLE ${table}\\b`));

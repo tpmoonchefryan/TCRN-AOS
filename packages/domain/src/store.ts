@@ -11,6 +11,7 @@ import type {
   ConferencePosition,
   ConferenceRequest,
   DependencyLifecycleRecord,
+  DocumentationActionBlock,
   EpicRecord,
   EvidenceLink,
   GateWorkOrder,
@@ -19,6 +20,7 @@ import type {
   LocalConferenceOperatingLoop,
   OwnerIntent,
   ProjectId,
+  ProjectDocumentationIndexReadback,
   ProjectRecord,
   ReleaseNoteRecord,
   ResourceRegistryRecord,
@@ -27,6 +29,7 @@ import type {
   StoryRecord,
   StructuredComment,
   SubTask,
+  UserGuidePageDraft,
   WorkIndexDrillThrough
 } from "./types.js";
 
@@ -50,6 +53,7 @@ export class AosStore {
   private dependencies = new Map<string, DependencyLifecycleRecord>();
   private resources = new Map<string, ResourceRegistryRecord>();
   private knowledge = new Map<string, KnowledgeEntry>();
+  private userGuideDrafts = new Map<string, UserGuidePageDraft>();
   private releaseNotes = new Map<string, ReleaseNoteRecord>();
   private ownerIntents = new Map<string, OwnerIntent>();
   private stageDefinitions = new Map<string, StageDefinition>();
@@ -115,6 +119,10 @@ export class AosStore {
 
   listKnowledge(): KnowledgeEntry[] {
     return [...this.knowledge.values()];
+  }
+
+  listUserGuideDrafts(): UserGuidePageDraft[] {
+    return [...this.userGuideDrafts.values()];
   }
 
   listReleaseNotes(): ReleaseNoteRecord[] {
@@ -523,22 +531,96 @@ export class AosStore {
 
   createKnowledgeEntry(entry: KnowledgeEntry, actor: ActorIdentity): KnowledgeEntry {
     this.ensureSafe(entry, "knowledge");
+    this.requireProject(entry.projectId);
     this.knowledge.set(entry.id, entry);
     this.appendAudit(actor, "knowledge.propose", "knowledge", entry.id, "accepted", {
       category: entry.category,
-      freshness: entry.freshness
+      freshnessState: entry.freshnessState,
+      canonicalPromotionClaimed: entry.canonicalPromotionClaimed,
+      explicitExportRequired: entry.explicitExportRequired
     });
     return entry;
   }
 
+  createUserGuideDraft(guide: UserGuidePageDraft, actor: ActorIdentity): UserGuidePageDraft {
+    this.ensureSafe(guide, "userGuideDraft");
+    this.requireProject(guide.projectId);
+    this.userGuideDrafts.set(guide.id, guide);
+    this.appendAudit(actor, "guide.page.draft", "guide", guide.id, "accepted", {
+      audience: guide.audience,
+      versionLabel: guide.versionLabel,
+      publishedStateDistinctFromDraft: guide.publishedStateDistinctFromDraft,
+      defaultGitStorage: guide.defaultGitStorage
+    });
+    return guide;
+  }
+
   createReleaseNote(note: ReleaseNoteRecord, actor: ActorIdentity): ReleaseNoteRecord {
     this.ensureSafe(note, "releaseNote");
+    this.requireProject(note.projectId);
     this.releaseNotes.set(note.id, note);
     this.appendAudit(actor, "release_note.draft", "release_note", note.id, "accepted", {
-      release: note.release,
-      status: note.status
+      releaseLabel: note.releaseLabel,
+      reviewState: note.reviewState,
+      gitExportAuthorized: note.gitExportAuthorized,
+      releaseCloseoutClaimed: note.releaseCloseoutClaimed
     });
     return note;
+  }
+
+  createDocumentationIndex(projectId: ProjectId): ProjectDocumentationIndexReadback {
+    this.requireProject(projectId);
+    const knowledge = [...this.knowledge.values()].filter((entry) => entry.projectId === projectId);
+    const guides = [...this.userGuideDrafts.values()].filter((guide) => guide.projectId === projectId);
+    const releases = [...this.releaseNotes.values()].filter((note) => note.projectId === projectId);
+    const staleItemIds = new Set<string>([
+      ...knowledge.filter((entry) => ["review_due", "stale", "blocked"].includes(entry.freshnessState)).map((entry) => entry.id),
+      ...guides.filter((guide) => ["review_required", "published_external_blocked"].includes(guide.status)).map((guide) => guide.id),
+      ...releases.filter((note) => ["review_required", "publish_blocked"].includes(note.reviewState)).map((note) => note.id)
+    ]);
+    const blockedPublishItemIds = new Set<string>([
+      ...knowledge.filter((entry) => entry.status === "blocked" || entry.explicitExportRequired).map((entry) => entry.id),
+      ...guides.filter((guide) => guide.status === "published_external_blocked").map((guide) => guide.id),
+      ...releases.filter((note) => note.reviewState === "publish_blocked" || !note.gitExportAuthorized).map((note) => note.id)
+    ]);
+    return {
+      projectId,
+      knowledgeEntryIds: knowledge.map((entry) => entry.id),
+      guidePageIds: guides.map((guide) => guide.id),
+      releaseNoteItemIds: releases.map((note) => note.id),
+      staleItemIds: [...staleItemIds],
+      blockedPublishItemIds: [...blockedPublishItemIds],
+      linkedWorkItemIds: unique([
+        ...knowledge.flatMap((entry) => entry.linkedTicketIds),
+        ...guides.flatMap((guide) => guide.linkedStoryIds),
+        ...releases.flatMap((note) => note.linkedStoryIds)
+      ]),
+      linkedConferenceIds: unique(knowledge.flatMap((entry) => entry.linkedConferenceIds)),
+      linkedEvidenceIds: unique([
+        ...knowledge.flatMap((entry) => entry.linkedEvidenceIds),
+        ...guides.flatMap((guide) => guide.linkedEvidenceIds),
+        ...releases.flatMap((note) => note.linkedEvidenceIds)
+      ]),
+      localFirstStorage: true,
+      explicitExportRequired: true
+    };
+  }
+
+  blockDocumentationAction(input: Omit<DocumentationActionBlock, "status" | "reason" | "ownerIntentRequired" | "auditEventId">, actor: ActorIdentity): DocumentationActionBlock {
+    this.ensureSafe(input, "documentationActionBlock");
+    this.requireProject(input.projectId);
+    const audit = this.appendAudit(actor, `documentation.${input.action}.blocked`, input.targetType, input.targetId, "blocked", {
+      projectId: input.projectId,
+      ownerIntentRequired: true,
+      localFirstStorage: true
+    });
+    return {
+      ...input,
+      status: "blocked",
+      reason: "Documentation export, publication, canonical promotion, and release closeout require a separately routed Owner Intent/export packet.",
+      ownerIntentRequired: true,
+      auditEventId: audit.id
+    };
   }
 
   deriveStageMap(projectId: ProjectId, initiativeId: string): StageMapItem[] {
@@ -586,6 +668,14 @@ export class AosStore {
     return story;
   }
 
+  private requireProject(projectId: ProjectId): ProjectRecord {
+    const project = this.projects.get(projectId);
+    if (!project) {
+      throw new Error(`Unknown project: ${projectId}`);
+    }
+    return project;
+  }
+
   private ensureSafe(value: unknown, context: string): void {
     assertNoRestrictedContent(value, context);
   }
@@ -609,4 +699,8 @@ export class AosStore {
 
 export function now(): string {
   return new Date().toISOString();
+}
+
+function unique(values: string[]): string[] {
+  return [...new Set(values)];
 }

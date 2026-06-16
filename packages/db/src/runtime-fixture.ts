@@ -33,6 +33,7 @@ export interface RuntimeFixtureReadback {
     dependencies: number;
     resources: number;
     knowledgeEntries: number;
+    userGuideDrafts: number;
     releaseNotes: number;
     stageMapItems: number;
     auditEvents: number;
@@ -81,7 +82,7 @@ export interface RepresentativeRecordIds {
   dependencyId: string;
   resourceId: string;
   knowledgeEntryId: string;
-  userGuideEntryId: string;
+  userGuideDraftId: string;
   releaseNoteId: string;
 }
 
@@ -233,30 +234,45 @@ export class AosRuntimeFixture {
     const knowledgeEntry = this.store.createKnowledgeEntry({
       id: createId("knowledge", { storyId: story.id, category: "knowledge" }),
       projectId: "TCRN-AOS",
-      category: "knowledge",
+      category: "operations",
       status: "proposed",
-      source: "agent_proposed",
-      freshness: "current",
-      linkedTicketIds: [story.id]
+      sourceKind: "story",
+      sourceIds: [story.id],
+      linkedTicketIds: [story.id],
+      linkedConferenceIds: [conference.id],
+      linkedEvidenceIds: [evidence.id],
+      freshnessState: "fresh",
+      rawPrivatePayloadStored: false,
+      canonicalPromotionClaimed: false,
+      localFirstStorage: true,
+      defaultGitStorage: false,
+      explicitExportRequired: true
     }, this.actor);
-    const userGuideEntry = this.store.createKnowledgeEntry({
-      id: createId("knowledge", { storyId: story.id, category: "user_guide" }),
+    const userGuideDraft = this.store.createUserGuideDraft({
+      id: createId("guide", { storyId: story.id, audience: "operator" }),
       projectId: "TCRN-AOS",
-      category: "user_guide",
+      audience: "operator",
+      versionLabel: "slice-2-local",
       status: "draft",
-      source: "agent_proposed",
-      freshness: "current",
-      linkedTicketIds: [story.id]
+      linkedStoryIds: [story.id],
+      linkedReleaseNoteItemIds: [],
+      linkedEvidenceIds: [evidence.id],
+      publishedStateDistinctFromDraft: true,
+      releaseCloseoutClaimed: false,
+      defaultGitStorage: false
     }, this.actor);
     const releaseNote = this.store.createReleaseNote({
       id: createId("release_note", { storyId: story.id, release: "slice-2-local" }),
       projectId: "TCRN-AOS",
-      release: "slice-2-local",
-      storyIds: [story.id],
+      releaseLabel: "slice-2-local",
+      linkedStoryIds: [story.id],
       userFacingSummary: "Runtime proof remains local and not release-ready.",
-      internalNotes: "Evidence is product-local and does not claim deployment.",
-      riskNotes: ["No external service proof", "No Product Design acceptance"],
-      status: "draft"
+      internalNotesSummary: "Evidence is product-local and does not claim deployment.",
+      riskNotesSummary: "No external service proof; no Product Design acceptance.",
+      linkedEvidenceIds: [evidence.id],
+      reviewState: "draft",
+      gitExportAuthorized: false,
+      releaseCloseoutClaimed: false
     }, this.actor);
 
     this.stageMap = this.store.deriveStageMap("TCRN-AOS", initiative.id);
@@ -275,7 +291,7 @@ export class AosRuntimeFixture {
       dependencyId: dependency.id,
       resourceId: resource.id,
       knowledgeEntryId: knowledgeEntry.id,
-      userGuideEntryId: userGuideEntry.id,
+      userGuideDraftId: userGuideDraft.id,
       releaseNoteId: releaseNote.id
     };
     await this.persistState();
@@ -304,7 +320,8 @@ export class AosRuntimeFixture {
         conferencePositions: this.records ? 1 : 0,
         dependencies: this.records ? 1 : 0,
         resources: this.records ? 1 : 0,
-        knowledgeEntries: this.records ? 2 : 0,
+        knowledgeEntries: this.records ? 1 : 0,
+        userGuideDrafts: this.records ? 1 : 0,
         releaseNotes: this.records ? 1 : 0,
         stageMapItems: this.stageMap.length,
         auditEvents: auditEvents.length
