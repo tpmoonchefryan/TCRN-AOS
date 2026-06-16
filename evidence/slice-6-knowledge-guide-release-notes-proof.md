@@ -6,6 +6,8 @@ Status: observed local proof receipt
 
 - Pre-implementation basis: `f3b8755bfac0468cb10d5db99a72cdaf1be53799` (`docs: repair AOS Slice 5 proof evidence`)
 - Implementation checkpoint under review: `a19213aa7f4a7835358867c0d04e61e4e4487a2c` (`feat: add AOS Slice 6 documentation foundations`)
+- Initial Slice 6 evidence receipt lineage: `efee660a485f49f13fb783a662a79572edee03dc` (`docs: record AOS Slice 6 proof evidence`)
+- Final repaired Slice 6 evidence/checkpoint under review: `33136fa4a99f8ef3e1556d1d75104f331edb6232` (`docs: repair AOS Slice 6 proof evidence`)
 - Workflow packet basis: `04095617148befbcb01777ac0e476a5f5cc470c2` (`docs: define AOS Slice 6 knowledge packet`)
 - Wrong-sibling quarantine: `<wrong-sibling-quarantine>` remains quarantine/evidence only at `4d917fdb6fcbefe888054906b17b755690530112`; it is not accepted output, proof source, rollback source, or publish target.
 - TCRN-TMS boundary: product repository remains separately owned and untouched; expected clean/synced head is `6356d3b6b730311fe09a0d3eb2f57a07b10bb3c5`.
