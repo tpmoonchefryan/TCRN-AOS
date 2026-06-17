@@ -8,12 +8,15 @@ Status: implementation evidence ready for review.
 - Workflow packet basis: `e3a0c96ed322c7f9110f7494934c63fe0c85de4e` (`docs: define AOS 59k execution packet`).
 - Pre-implementation AOS basis: `e2e856ad6d57f06f4c8ff32dc33d83a92b5ca989` (`docs: record AOS no-send dispatch proof`).
 - Implementation checkpoint: `20ad014d44705d57b5ee45eaa282e5c8fbea6ae1` (`feat: add AOS live dispatch Stage A readiness`).
-- Evidence/docs checkpoint: route-carried by this evidence successor; this receipt intentionally does not self-reference a future hash.
+- Initial evidence/docs checkpoint: `6b840e0de053bd6f1019f7a4d800ded00bc17b51` (`docs: record AOS live dispatch Stage A proof`).
+- Post-review repair checkpoint: route-carried by this evidence successor; this receipt intentionally does not self-reference a future hash.
 
 ## Implemented Scope
 
 - Added Stage A real live-dispatch readiness envelope modeling.
 - Added target-readback fail-closed validation.
+- Added target-readback role match, canonical thread name, and fresh readback timestamp validation.
+- Added canonical `sha256:<64 hex>` validation for payload digest, original terminal packet checksum, and coordinator-consumed receipt checksum.
 - Added terminal-return readiness validation that requires append-only original terminal packet and coordinator-consumed receipt references.
 - Added idempotency/dedupe/replay identity coverage over route, source AOS record, target thread, payload digest, AOS/Workflow basis, schema version, and dispatch/return mode.
 - Added duplicate-send prevention before future send primitive eligibility checks.
@@ -31,7 +34,9 @@ Observed summary:
 - Focused Stage A tests: 4 pass / 0 fail.
 - Covered execution-readiness envelopes without send, ingestion, registry, or bridge execution.
 - Covered target readback and execution-request fail-closed paths.
+- Covered role mismatch, missing/blank readback timestamp, stale readback timestamp, missing/blank canonical thread name, and non-digest payload prose rejection.
 - Covered terminal-return append-only receipt-reference requirements.
+- Covered invalid terminal packet and coordinator receipt checksum rejection.
 - Covered duplicate-send prevention before future primitive eligibility checks.
 
 `pnpm live-dispatch:execution-readiness-proof` passed.
@@ -51,12 +56,13 @@ Observed summary:
 - Duplicate envelope id and replay-linked envelope id matched the first envelope id.
 - Changed route, target, payload, basis, and schema produced distinct envelope ids.
 - Accepted target readback states: `active`, `active_successor`, `temporary_lane`.
-- Blocked target readback states: 14.
-- Terminal-return classifications: `consumable=5`, `duplicate=1`, `conflicting=1`, `non_consumable=8`, `blocked=6`.
+- Blocked target readback states: 18, including role mismatch, missing readback timestamp, stale readback timestamp, and missing canonical thread name.
+- Terminal-return classifications: `consumable=5`, `duplicate=1`, `conflicting=1`, `non_consumable=8`, `blocked=8`.
 - Accepted handoff return states: `return_sent`, `partial_return_sent`, `blocked_return_sent`, `return_blocked`.
 - Coordinator recovery states consumable: `false`.
 - Receipt references required: `true`.
-- Audit counts: readiness `8`, duplicate-prevented `2`, blocked `23`.
+- Canonical checksum validation: payload digest canonical `true`, invalid terminal packet checksum blocked `true`, invalid coordinator receipt checksum blocked `true`.
+- Audit counts: readiness `8`, duplicate-prevented `2`, blocked `28`.
 - Audit posture: redacted/count-only, raw restricted payload stored `false`.
 
 ## Required Evidence Rows
@@ -68,6 +74,7 @@ Append-only evidence row classes now modeled in proof:
 - Terminal-return validation matrix.
 - Original terminal packet reference/checksum.
 - Coordinator-consumed receipt reference/checksum.
+- Canonical payload digest and checksum format validation.
 - Idempotency/dedupe/replay proof.
 - Send primitive call-count proof.
 - Thread-management primitive call-count proof.

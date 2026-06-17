@@ -12,6 +12,10 @@ const actor = {
   threadId: "019eb6d7-f130-70a0-8805-169cc337229b",
   sessionId: "aos-59k-stage-a-test"
 };
+const PAYLOAD_DIGEST = `sha256:${"a".repeat(64)}`;
+const CHANGED_PAYLOAD_DIGEST = `sha256:${"b".repeat(64)}`;
+const ORIGINAL_TERMINAL_PACKET_CHECKSUM = `sha256:${"c".repeat(64)}`;
+const COORDINATOR_RECEIPT_CHECKSUM = `sha256:${"d".repeat(64)}`;
 
 test("59k Stage A creates execution-readiness envelopes without send, ingestion, registry, or bridge execution", () => {
   const store = new AosStore(createDefaultSeed());
@@ -27,7 +31,7 @@ test("59k Stage A creates execution-readiness envelopes without send, ingestion,
   }, actor, probe);
   const changedPayload = adapter.createLiveDispatchReadinessEnvelope({
     ...input,
-    payloadDigest: "sha256:changed-payload"
+    payloadDigest: CHANGED_PAYLOAD_DIGEST
   }, actor, probe);
   const changedSchema = adapter.createLiveDispatchReadinessEnvelope({
     ...input,
@@ -122,6 +126,43 @@ test("59k Stage A target readback and execution requests fail closed", () => {
   }, actor, probe), /active_successor/);
   assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
     ...baseLiveDispatchInput(),
+    sourceAosRecordId: "dispatch-request-role-mismatch",
+    targetReadback: {
+      ...baseTargetReadback(),
+      roleId: "sable-security-reviewer"
+    }
+  }, actor, probe), /target_role_mismatch/);
+  assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
+    ...baseLiveDispatchInput(),
+    sourceAosRecordId: "dispatch-request-missing-read-at",
+    targetReadback: {
+      ...baseTargetReadback(),
+      readAt: " "
+    }
+  }, actor, probe), /missing_registry_readback_timestamp/);
+  assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
+    ...baseLiveDispatchInput(),
+    sourceAosRecordId: "dispatch-request-stale-read-at",
+    targetReadback: {
+      ...baseTargetReadback(),
+      readAt: "2026-01-01T00:00:00.000Z"
+    }
+  }, actor, probe), /stale_registry_readback/);
+  assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
+    ...baseLiveDispatchInput(),
+    sourceAosRecordId: "dispatch-request-missing-canonical-name",
+    targetReadback: {
+      ...baseTargetReadback(),
+      canonicalThreadName: ""
+    }
+  }, actor, probe), /missing_canonical_thread_name/);
+  assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
+    ...baseLiveDispatchInput(),
+    sourceAosRecordId: "dispatch-request-prose-digest",
+    payloadDigest: "redacted payload summary without digest syntax"
+  }, actor, probe), /payloadDigest/);
+  assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
+    ...baseLiveDispatchInput(),
     dispatchMode: "live_send",
     requestedSend: true
   }, actor, probe), /Owner Intent/);
@@ -212,8 +253,16 @@ test("59k Stage A terminal returns require append-only receipt references before
   }).reason, "missing_original_terminal_packet_reference");
   assert.equal(adapter.validateLiveDispatchTerminalReturnReadiness(expected, {
     ...validReturn(envelope),
+    originalTerminalPacketChecksum: "checksum prose"
+  }).reason, "invalid_original_terminal_packet_checksum");
+  assert.equal(adapter.validateLiveDispatchTerminalReturnReadiness(expected, {
+    ...validReturn(envelope),
     coordinatorConsumedReceiptReference: undefined
   }).reason, "missing_coordinator_consumed_receipt_reference");
+  assert.equal(adapter.validateLiveDispatchTerminalReturnReadiness(expected, {
+    ...validReturn(envelope),
+    coordinatorConsumedReceiptChecksum: "receipt checksum prose"
+  }).reason, "invalid_coordinator_consumed_receipt_checksum");
   assert.equal(adapter.validateLiveDispatchTerminalReturnReadiness(expected, {
     ...validReturn(envelope),
     terminalIngestionExecutionRequested: true
@@ -310,7 +359,7 @@ function baseLiveDispatchInput() {
     targetReadback: baseTargetReadback(),
     dispatchMode: "implementation_readiness",
     payloadClass: "terminal_return_request",
-    payloadDigest: "sha256:stage-a-redacted-payload",
+    payloadDigest: PAYLOAD_DIGEST,
     redactionProfile: "count_only_route_metadata",
     ownerIntent: {
       required: true,
@@ -324,7 +373,7 @@ function baseLiveDispatchInput() {
 function baseTargetReadback() {
   return {
     state: "active",
-    readAt: "2026-06-17T00:00:00.000Z",
+    readAt: new Date().toISOString(),
     canonicalThreadName: "Ilya, Full-Stack Implementer",
     roleId: "ilya-full-stack-implementer",
     threadId: "019eb6d7-f130-70a0-8805-169cc337229b"
@@ -358,9 +407,9 @@ function validReturn(envelope) {
     payloadKind: "assistant_terminal",
     targetThreadState: "active",
     originalTerminalPacketReference: "evidence/live-dispatch-stage-a/original-terminal-packet.redacted.json",
-    originalTerminalPacketChecksum: "sha256:original-terminal-packet",
+    originalTerminalPacketChecksum: ORIGINAL_TERMINAL_PACKET_CHECKSUM,
     coordinatorConsumedReceiptReference: "evidence/live-dispatch-stage-a/coordinator-consumed-receipt.redacted.json",
-    coordinatorConsumedReceiptChecksum: "sha256:coordinator-consumed-receipt",
+    coordinatorConsumedReceiptChecksum: COORDINATOR_RECEIPT_CHECKSUM,
     terminalIngestionExecutionRequested: false,
     claims: {
       productAcceptance: false,

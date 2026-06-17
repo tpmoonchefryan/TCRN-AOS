@@ -46,6 +46,10 @@ export type LiveDispatchPayloadClass = "assignment" | "gate_request" | "conferen
 export type LiveDispatchRedactionProfile = "count_only_route_metadata" | "redacted_payload_metadata";
 export type LiveDispatchSendEligibilityState = "blocked_owner_intent_required" | "blocked_duplicate_prevented" | "blocked_target_readback" | "blocked_restricted_payload";
 
+const LIVE_DISPATCH_READBACK_MAX_AGE_MS = 15 * 60 * 1000;
+const LIVE_DISPATCH_READBACK_FUTURE_SKEW_MS = 60 * 1000;
+const SHA256_DIGEST_PATTERN = /^sha256:[a-f0-9]{64}$/i;
+
 export interface CodexDispatchPayload {
   kind: DispatchKind;
   targetEmployeeId: string;
@@ -495,6 +499,7 @@ export class CodexIntegrationAdapter {
       payloadDigestPresent: Boolean(input.payloadDigest),
       redactionProfile: input.redactionProfile
     });
+    const payloadDigest = canonicalSha256Digest(input.payloadDigest);
     const dispatchMode: Exclude<LiveDispatchMode, "live_send"> = input.dispatchMode === "live_send" ? "blocked_without_owner_intent" : input.dispatchMode;
     const envelope: LiveDispatchEnvelope = {
       envelopeId,
@@ -513,7 +518,7 @@ export class CodexIntegrationAdapter {
       targetReadback: cloneTargetReadback(input.targetReadback),
       dispatchMode,
       payloadClass: input.payloadClass,
-      payloadDigest: input.payloadDigest,
+      payloadDigest,
       redactionProfile: input.redactionProfile,
       ownerIntent: { ...input.ownerIntent },
       idempotencyKey: idempotencyKey("codex.live_dispatch.stage_a", actor.employeeId, identitySeed),
@@ -521,7 +526,7 @@ export class CodexIntegrationAdapter {
       replayGroup: idempotencyKey("codex.live_dispatch.stage_a.replay", input.sourceAosRecordId, {
         parentRouteId: input.parentRouteId,
         targetThreadId: input.targetReadback.threadId ?? input.targetRoleId,
-        payloadDigest: input.payloadDigest
+        payloadDigest
       }),
       retryLimit: input.retryLimit,
       sendPrimitiveEligibilityState: "blocked_owner_intent_required",
@@ -563,8 +568,14 @@ export class CodexIntegrationAdapter {
     if (!observation.originalTerminalPacketReference || !observation.originalTerminalPacketChecksum) {
       return { ...validation, disposition: "non_consumable", consumableCandidate: false, reason: "missing_original_terminal_packet_reference" };
     }
+    if (!isCanonicalSha256Digest(observation.originalTerminalPacketChecksum)) {
+      return { ...validation, disposition: "blocked", consumableCandidate: false, reason: "invalid_original_terminal_packet_checksum" };
+    }
     if (!observation.coordinatorConsumedReceiptReference || !observation.coordinatorConsumedReceiptChecksum) {
       return { ...validation, disposition: "non_consumable", consumableCandidate: false, reason: "missing_coordinator_consumed_receipt_reference" };
+    }
+    if (!isCanonicalSha256Digest(observation.coordinatorConsumedReceiptChecksum)) {
+      return { ...validation, disposition: "blocked", consumableCandidate: false, reason: "invalid_coordinator_consumed_receipt_checksum" };
     }
     return { ...validation, reason: "contract_valid_terminal_return_with_append_only_receipts" };
   }
@@ -804,6 +815,10 @@ export class CodexIntegrationAdapter {
       this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "missing_required_identity_material" });
       throw new Error("Live dispatch readiness requires source record, payload digest, and Workflow packet path");
     }
+    if (!isCanonicalSha256Digest(input.payloadDigest)) {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "invalid_payload_digest" });
+      throw new Error("Live dispatch readiness requires payloadDigest in sha256:<64 hex> format");
+    }
     if (input.dispatchMode === "live_send" || input.requestedSend === true) {
       this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "owner_intent_required_for_live_send" });
       throw new Error("Live dispatch readiness blocks live send without Owner Intent execution authority");
@@ -837,6 +852,16 @@ export class CodexIntegrationAdapter {
         targetReadbackState: input.targetReadback.state
       });
       throw new Error(`Live dispatch readiness blocked for ${input.targetReadback.state} target readback`);
+    }
+    const targetReadbackReason = validateLiveDispatchTargetReadback(input.targetRoleId, input.targetReadback);
+    if (targetReadbackReason) {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", {
+        reason: targetReadbackReason,
+        targetRoleId: input.targetRoleId,
+        targetReadbackRoleId: input.targetReadback.roleId,
+        targetReadbackState: input.targetReadback.state
+      });
+      throw new Error(`Live dispatch readiness blocked by ${targetReadbackReason}`);
     }
     if (!input.targetReadback.threadId) {
       this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "target_thread_id_required" });
@@ -990,6 +1015,38 @@ function targetReadbackAllowedForLiveDispatch(readback: LiveDispatchTargetReadba
   return false;
 }
 
+function validateLiveDispatchTargetReadback(targetRoleId: string, readback: LiveDispatchTargetReadback): string | undefined {
+  if (readback.roleId !== targetRoleId) {
+    return "target_role_mismatch";
+  }
+  if (!readback.canonicalThreadName.trim()) {
+    return "missing_canonical_thread_name";
+  }
+  if (!readback.readAt.trim()) {
+    return "missing_registry_readback_timestamp";
+  }
+  const readAtMs = Date.parse(readback.readAt);
+  if (!Number.isFinite(readAtMs)) {
+    return "invalid_registry_readback_timestamp";
+  }
+  const ageMs = Date.now() - readAtMs;
+  if (ageMs > LIVE_DISPATCH_READBACK_MAX_AGE_MS) {
+    return "stale_registry_readback";
+  }
+  if (ageMs < -LIVE_DISPATCH_READBACK_FUTURE_SKEW_MS) {
+    return "future_registry_readback";
+  }
+  return undefined;
+}
+
+function isCanonicalSha256Digest(value: string | undefined): value is string {
+  return typeof value === "string" && SHA256_DIGEST_PATTERN.test(value);
+}
+
+function canonicalSha256Digest(value: string): string {
+  return value.toLowerCase();
+}
+
 function isTargetHandoffReturnState(value: TerminalReturnObservation["handoffReturnState"]): value is HandoffReturnState {
   return value === "return_sent" || value === "partial_return_sent" || value === "blocked_return_sent" || value === "return_blocked";
 }
@@ -1046,7 +1103,7 @@ function liveDispatchIdentitySeed(input: LiveDispatchEnvelopeInput, returnContra
     targetRoleId: input.targetRoleId,
     targetThreadId: input.targetReadback.threadId ?? input.targetRoleId,
     targetReadbackState: input.targetReadback.state,
-    payloadDigest: input.payloadDigest,
+    payloadDigest: isCanonicalSha256Digest(input.payloadDigest) ? canonicalSha256Digest(input.payloadDigest) : input.payloadDigest,
     sourceAosBasisSha: input.sourceAosBasisSha,
     workflowBasisSha: input.workflowBasisSha,
     dispatchMode: input.dispatchMode,

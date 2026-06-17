@@ -9,6 +9,10 @@ const parentRouteId = "AOS-59f-live-dispatch-dry-run-no-send-authority-packet";
 const aosBasisSha = "e2e856ad6d57f06f4c8ff32dc33d83a92b5ca989";
 const workflowBasisSha = "e3a0c96ed322c7f9110f7494934c63fe0c85de4e";
 const workflowPacketPath = "vault/initiatives/cross-project/active/tcrn-aos-product-foundation/59k-real-live-dispatch-terminal-return-implementation-execution-packet.md";
+const payloadDigest = `sha256:${"a".repeat(64)}`;
+const changedPayloadDigest = `sha256:${"b".repeat(64)}`;
+const originalTerminalPacketChecksum = `sha256:${"c".repeat(64)}`;
+const coordinatorReceiptChecksum = `sha256:${"d".repeat(64)}`;
 
 const actor = {
   employeeId: "employee-ilya",
@@ -43,7 +47,7 @@ const changedTarget = adapter.createLiveDispatchReadinessEnvelope({
 const changedPayload = adapter.createLiveDispatchReadinessEnvelope({
   ...input,
   sourceAosRecordId: "dispatch-request-changed-payload",
-  payloadDigest: "sha256:changed-payload"
+  payloadDigest: changedPayloadDigest
 }, actor, probe);
 const changedBasis = adapter.createLiveDispatchReadinessEnvelope({
   ...input,
@@ -98,6 +102,15 @@ const blockedTargetStates = [
     state
   }
 }));
+const blockedReadbackValidationCases = [
+  ["target_role_mismatch", { targetReadback: { ...targetReadback(), roleId: "sable-security-reviewer" } }],
+  ["missing_read_at", { targetReadback: { ...targetReadback(), readAt: "" } }],
+  ["stale_read_at", { targetReadback: { ...targetReadback(), readAt: "2026-01-01T00:00:00.000Z" } }],
+  ["missing_canonical_thread_name", { targetReadback: { ...targetReadback(), canonicalThreadName: " " } }]
+].map(([name, override]) => blockedCase(name, {
+  sourceAosRecordId: `dispatch-request-${name}`,
+  ...override
+}));
 
 const blockedExecutionCases = [
   ["live_send", { dispatchMode: "live_send", requestedSend: true }],
@@ -108,7 +121,8 @@ const blockedExecutionCases = [
   ["raw_source", { readScope: ["diff --git a/private b/private\n@@ -1 +1 @@\n-secret\n+redacted"] }],
   ["raw_scanner_output", { readScope: ["semgrep scanner raw output vulnerability finding"] }],
   ["raw_secret_scan_output", { readScope: ["raw secret scan output"] }],
-  ["private_evidence", { readScope: ["private evidence payload"] }]
+  ["private_evidence", { readScope: ["private evidence payload"] }],
+  ["prose_payload_digest", { payloadDigest: "redacted payload prose without canonical digest syntax" }]
 ].map(([name, override]) => blockedCase(name, override));
 
 const expected = expectedReturnContext(active);
@@ -160,7 +174,9 @@ const terminalCases = [
   ["missing_handoff", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), handoffReturnState: undefined })],
   ["missing_terminal_turn", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), terminalTurnId: undefined })],
   ["missing_original_packet", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), originalTerminalPacketReference: undefined })],
+  ["invalid_original_packet_checksum", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), originalTerminalPacketChecksum: "checksum prose" })],
   ["missing_coordinator_receipt", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), coordinatorConsumedReceiptReference: undefined })],
+  ["invalid_coordinator_receipt_checksum", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), coordinatorConsumedReceiptChecksum: "receipt checksum prose" })],
   ["stale_source", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), sourceThreadId: "stale-thread" })],
   ["stale_route", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), parentRouteId: "stale-route" })],
   ["archived_target", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), targetThreadState: "archived" })],
@@ -223,10 +239,10 @@ assert.equal(terminalSummary.consumable, 5);
 assert.equal(terminalSummary.duplicate, 1);
 assert.equal(terminalSummary.conflicting, 1);
 assert.equal(terminalSummary.non_consumable, 8);
-assert.equal(terminalSummary.blocked, 6);
+assert.equal(terminalSummary.blocked, 8);
 assert.equal(auditCounts.readiness, 8);
 assert.equal(auditCounts.duplicatePrevented, 2);
-assert.equal(auditCounts.blocked, blockedTargetStates.length + blockedExecutionCases.length);
+assert.equal(auditCounts.blocked, blockedTargetStates.length + blockedReadbackValidationCases.length + blockedExecutionCases.length);
 assert.deepEqual(Object.values(noClaims).filter((value) => value === true), []);
 
 console.log(JSON.stringify({
@@ -264,7 +280,8 @@ console.log(JSON.stringify({
   targetReadback: {
     acceptedStates: [active.targetReadback.state, successor.targetReadback.state, temporaryLane.targetReadback.state],
     blockedStates: blockedTargetStates.map(({ name }) => name.replace("target_", "")),
-    blockedCount: blockedTargetStates.length
+    readbackValidationBlocked: blockedReadbackValidationCases.map(({ name, reason }) => ({ name, reason })),
+    blockedCount: blockedTargetStates.length + blockedReadbackValidationCases.length
   },
   terminalReturns: {
     summary: terminalSummary,
@@ -293,7 +310,12 @@ console.log(JSON.stringify({
     originalTerminalPacketReference: terminalReturn(active).originalTerminalPacketReference,
     coordinatorConsumedReceiptReference: terminalReturn(active).coordinatorConsumedReceiptReference,
     rawRestrictedPayloadStored: false,
-    blockedExecutionCases: blockedExecutionCases.map(({ name, reason }) => ({ name, reason }))
+    blockedExecutionCases: blockedExecutionCases.map(({ name, reason }) => ({ name, reason })),
+    checksumValidation: {
+      payloadDigestCanonical: /^sha256:[a-f0-9]{64}$/.test(active.payloadDigest),
+      invalidTerminalPacketChecksumBlocked: terminalCases.some(([name, result]) => name === "invalid_original_packet_checksum" && result.reason === "invalid_original_terminal_packet_checksum"),
+      invalidCoordinatorReceiptChecksumBlocked: terminalCases.some(([name, result]) => name === "invalid_coordinator_receipt_checksum" && result.reason === "invalid_coordinator_consumed_receipt_checksum")
+    }
   },
   noClaims
 }, null, 2));
@@ -325,7 +347,7 @@ function baseInput() {
     targetReadback: targetReadback(),
     dispatchMode: "implementation_readiness",
     payloadClass: "terminal_return_request",
-    payloadDigest: "sha256:stage-a-redacted-payload",
+    payloadDigest,
     redactionProfile: "count_only_route_metadata",
     ownerIntent: {
       required: true,
@@ -339,7 +361,7 @@ function baseInput() {
 function targetReadback() {
   return {
     state: "active",
-    readAt: "2026-06-17T00:00:00.000Z",
+    readAt: new Date().toISOString(),
     canonicalThreadName: "Ilya, Full-Stack Implementer",
     roleId: "ilya-full-stack-implementer",
     threadId: "019eb6d7-f130-70a0-8805-169cc337229b"
@@ -373,9 +395,9 @@ function terminalReturn(envelope) {
     payloadKind: "assistant_terminal",
     targetThreadState: "active",
     originalTerminalPacketReference: "evidence/live-dispatch-stage-a/original-terminal-packet.redacted.json",
-    originalTerminalPacketChecksum: "sha256:original-terminal-packet",
+    originalTerminalPacketChecksum: originalTerminalPacketChecksum,
     coordinatorConsumedReceiptReference: "evidence/live-dispatch-stage-a/coordinator-consumed-receipt.redacted.json",
-    coordinatorConsumedReceiptChecksum: "sha256:coordinator-consumed-receipt",
+    coordinatorConsumedReceiptChecksum: coordinatorReceiptChecksum,
     terminalIngestionExecutionRequested: false,
     claims: {
       productAcceptance: false,
