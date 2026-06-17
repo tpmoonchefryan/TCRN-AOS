@@ -127,3 +127,51 @@ test("persistent runtime profile fails closed for unsafe roots and cleanup", asy
     await rm(dangerousMarkedRoot, { recursive: true, force: true });
   }
 });
+
+test("persistent runtime profile rejects case-insensitive source-tree aliases when supported", async (t) => {
+  const sourceAlias = await caseAliasForExistingPath(process.cwd());
+  if (!sourceAlias) {
+    t.skip("case-insensitive source-tree alias is not available on this filesystem");
+    return;
+  }
+
+  await assert.rejects(
+    () => prepareRuntimeRoot({ runtimeRoot: join(sourceAlias, ".runtime-proof"), repoRoot: process.cwd() }),
+    /runtime_root_inside_git_tree/
+  );
+});
+
+test("persistent runtime profile rejects case-insensitive wrong-sibling aliases when supported", async (t) => {
+  const codeRootAlias = await caseAliasForExistingPath(resolve(process.cwd(), "..", ".."));
+  if (!codeRootAlias) {
+    t.skip("case-insensitive parent alias is not available on this filesystem");
+    return;
+  }
+
+  await assert.rejects(
+    () => prepareRuntimeRoot({ runtimeRoot: join(codeRootAlias, "TCRN-AOS", "runtime-proof"), repoRoot: process.cwd() }),
+    /runtime_root_aliases_wrong_sibling/
+  );
+});
+
+async function caseAliasForExistingPath(path) {
+  const canonicalPath = await realpath(path);
+  const candidates = [];
+  if (canonicalPath.startsWith("/Users/")) {
+    candidates.push(canonicalPath.replace(/^\/Users\//, "/users/"));
+  }
+
+  for (const candidate of candidates) {
+    if (candidate === canonicalPath) {
+      continue;
+    }
+    try {
+      if (await realpath(candidate) === canonicalPath) {
+        return candidate;
+      }
+    } catch {
+      // Unsupported on this filesystem.
+    }
+  }
+  return null;
+}

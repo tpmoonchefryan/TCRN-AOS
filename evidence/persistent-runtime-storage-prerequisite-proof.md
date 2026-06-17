@@ -2,7 +2,7 @@
 
 Status: product-local 59Z persistent DB/storage prerequisite implementation ready for review.
 
-Post-review repair status: root guard repair applied for Sable `TCRN-AOS-59Z-001` and route-local DPC findings. Explicit runtime roots now fail closed unless absent/newly-created, empty, or already route-owned with the current profile/route/run identity and matching runtime-root digest.
+Post-review repair status: root guard repair applied for Sable `TCRN-AOS-59Z-001` and route-local DPC findings. Explicit runtime roots now fail closed unless absent/newly-created, empty, or already route-owned with the current profile/route/run identity and matching runtime-root digest. Follow-up alias canonicalization repair applies nearest-existing-ancestor realpath identity before source-tree/wrong-sibling containment, marker digest validation, mkdir/use, and reset.
 
 ## Lineage
 
@@ -24,8 +24,9 @@ Post-review repair status: root guard repair applied for Sable `TCRN-AOS-59Z-001
 `node --test packages/db/test/persistent-runtime-profile.test.mjs`
 
 - Passed.
-- Focused persistent runtime profile tests: `2 pass / 0 fail`.
+- Focused persistent runtime profile tests: `4 pass / 0 fail`.
 - Covered temp route-owned persistent write/readback/restart/backup/restore/reset, conflicting temp/explicit root rejection, missing root rejection, source-tree root rejection, explicit wrong-sibling rejection, symlink root rejection, symlink ancestor rejection, non-empty unowned root rejection, stale data ambiguity rejection, stale marker/root digest mismatch rejection, unowned cleanup rejection, and dangerous marked source-tree reset rejection.
+- Added alias rows for case-insensitive source-tree and wrong-sibling aliases; on this Mac both rows ran and failed closed with `runtime_root_inside_git_tree` and `runtime_root_aliases_wrong_sibling`.
 
 `pnpm runtime:persistent-proof`
 
@@ -40,13 +41,14 @@ Post-review repair status: root guard repair applied for Sable `TCRN-AOS-59Z-001
 - Ownership/permissions readback `ok=true`.
 - Reset proof `runtimeDataExistsAfterReset=false`.
 - Negative proof booleans all `true`: missing runtime root, conflicting temp/explicit runtime-root flags, source tree root, wrong sibling root, symlink root, symlink ancestor, non-empty unowned root, stale data ambiguity, stale marker/root mismatch, unowned cleanup, dangerous marked reset, and restricted payload.
+- Alias canonicalization proof: `caseInsensitiveAliasSupported=true`, `sourceTreeAliasRejected=true`, and `wrongSiblingAliasRejected=true`.
 - No-overclaim booleans remained false for target-host execution, source transfer, service start/stop, `/srv` write, runtime operational data committed to Git, raw private payload retention, product acceptance, and final MVP acceptance.
 
 `pnpm verify`
 
 - Passed.
 - Component sequence: typecheck, migration validation, license audit, tests, runtime DB proof, service smoke, Slice 3 proof, Slice 4 proof, Slice 4B proof, Slice 5 proof, Slice 6 proof, Slice 7 proof, Slice 8 proof, Slice 9 proof, Slice 9B proof, Slice 10 proof, live-dispatch dry-run proof, live-dispatch execution-readiness proof, and live-dispatch terminal-ingestion proof.
-- Tests: `73 pass / 0 fail`.
+- Tests: `75 pass / 0 fail`.
 - License posture unchanged: runtime dependencies `[]`; dev dependencies `@types/node` MIT and `typescript` Apache-2.0; blockers `[]`.
 - Existing runtime DB proof remained local ephemeral fixture proof; it was not relabeled as persistent readiness.
 

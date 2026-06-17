@@ -99,6 +99,11 @@ export interface PersistentRuntimeStorageProof {
     dangerousMarkedRootResetRejected: boolean;
     restrictedPayloadRejected: boolean;
   };
+  aliasCanonicalizationProof: {
+    caseInsensitiveAliasSupported: boolean;
+    sourceTreeAliasRejected: boolean | null;
+    wrongSiblingAliasRejected: boolean | null;
+  };
   noOverclaim: {
     targetHostExecution: false;
     sourceTransfer: false;
@@ -137,6 +142,12 @@ interface PersistentRuntimeState {
     sourceTransferAuthorized: false;
     rawPrivatePayloadRetained: false;
   };
+}
+
+interface CanonicalRuntimeRoot {
+  requestedRoot: string;
+  canonicalRoot: string;
+  runtimeRootDigest: string;
 }
 
 export function createPersistentRuntimeProfile(): PersistentRuntimeProfile {
@@ -202,7 +213,12 @@ export async function runPersistentRuntimeStorageProof(
   const restoreReadback = await readPersistentState(paths.stateFile);
   const ownership = await readOwnershipPermissions(resolvedRuntimeRoot);
   const negativeProofs = await proveNegativeCases(repoRoot);
+  const aliasCanonicalizationProof = await proveAliasCanonicalizationCases(repoRoot);
   const reset = await resetPersistentRuntimeRoot(resolvedRuntimeRoot);
+  const aliasCanonicalizationOk = aliasCanonicalizationProof.caseInsensitiveAliasSupported
+    ? aliasCanonicalizationProof.sourceTreeAliasRejected === true
+      && aliasCanonicalizationProof.wrongSiblingAliasRejected === true
+    : true;
 
   return {
     ok: writeReadback.stateDigest === stateDigest
@@ -210,7 +226,8 @@ export async function runPersistentRuntimeStorageProof(
       && restoreReadback.stateDigest === stateDigest
       && ownership.ok
       && reset.ok
-      && Object.values(negativeProofs).every(Boolean),
+      && Object.values(negativeProofs).every(Boolean)
+      && aliasCanonicalizationOk,
     profile: createPersistentRuntimeProfile(),
     validation,
     writeReadbackProof: {
@@ -238,6 +255,7 @@ export async function runPersistentRuntimeStorageProof(
     ownershipPermissionsReadback: ownership,
     resetProof: reset,
     negativeProofs,
+    aliasCanonicalizationProof,
     noOverclaim: {
       targetHostExecution: false,
       sourceTransfer: false,
@@ -260,38 +278,37 @@ export async function prepareRuntimeRoot(input: {
   if (!input.runtimeRoot || input.runtimeRoot.trim().length === 0) {
     throw new Error("runtime_root_missing");
   }
-  const runtimeRoot = resolve(input.runtimeRoot);
   if (!isAbsolute(input.runtimeRoot)) {
     throw new Error("runtime_root_must_be_absolute");
   }
-  await assertExistingPathHasNoSymlink(runtimeRoot);
-  if (isSameOrInside(runtimeRoot, repoRoot)) {
+  const runtimeRoot = await canonicalizeRuntimeRoot(input.runtimeRoot);
+  if (isSameOrInside(runtimeRoot.canonicalRoot, repoRoot)) {
     throw new Error("runtime_root_inside_git_tree");
   }
-  const wrongSibling = resolve(dirname(dirname(repoRoot)), "TCRN-AOS");
-  if (isSameOrInside(runtimeRoot, wrongSibling)) {
+  const wrongSibling = await canonicalizePathWithExistingAncestor(resolve(dirname(dirname(repoRoot)), "TCRN-AOS"));
+  if (isSameOrInside(runtimeRoot.canonicalRoot, wrongSibling)) {
     throw new Error("runtime_root_aliases_wrong_sibling");
   }
-  const runtimeRootExisted = await pathExists(runtimeRoot);
+  const runtimeRootExisted = await pathExists(runtimeRoot.requestedRoot);
   if (runtimeRootExisted) {
-    const rootStat = await lstat(runtimeRoot);
+    const rootStat = await lstat(runtimeRoot.requestedRoot);
     if (!rootStat.isDirectory()) {
       throw new Error("runtime_root_not_directory");
     }
   }
-  const runtimeRootDigest = digestRuntimeRoot(runtimeRoot);
-  const markerPath = join(runtimeRoot, OWNER_MARKER_FILE);
+  const runtimeRootDigest = runtimeRoot.runtimeRootDigest;
+  const markerPath = join(runtimeRoot.requestedRoot, OWNER_MARKER_FILE);
   const existingMarker = await readOwnerMarker(markerPath, runtimeRootDigest);
   if (!existingMarker && runtimeRootExisted) {
-    if (await pathExists(runtimePaths(runtimeRoot).stateFile)) {
+    if (await pathExists(runtimePaths(runtimeRoot.requestedRoot).stateFile)) {
       throw new Error("runtime_root_stale_data_ambiguous");
     }
-    if (!await directoryIsEmpty(runtimeRoot)) {
+    if (!await directoryIsEmpty(runtimeRoot.requestedRoot)) {
       throw new Error("runtime_root_unowned_non_empty");
     }
   }
-  await mkdir(runtimeRoot, { recursive: true });
-  await assertExistingPathHasNoSymlink(runtimeRoot);
+  await mkdir(runtimeRoot.requestedRoot, { recursive: true });
+  await assertExistingPathHasNoSymlink(runtimeRoot.requestedRoot);
   const ownerMarkerStatus = existingMarker ? "existing_route_owned" : "created";
   if (!existingMarker) {
     await writeFile(markerPath, JSON.stringify(ownerMarker(runtimeRootDigest), null, 2));
@@ -311,22 +328,21 @@ export async function resetPersistentRuntimeRoot(runtimeRoot: string): Promise<{
   routeOwnedRootRemoved: boolean;
   runtimeDataExistsAfterReset: false;
 }> {
-  const resolvedRoot = resolve(runtimeRoot);
   const repoRoot = await realpath(process.cwd());
-  await assertExistingPathHasNoSymlink(resolvedRoot);
-  if (isSameOrInside(resolvedRoot, repoRoot)) {
+  const resolvedRoot = await canonicalizeRuntimeRoot(runtimeRoot);
+  if (isSameOrInside(resolvedRoot.canonicalRoot, repoRoot)) {
     throw new Error("runtime_root_inside_git_tree");
   }
-  const wrongSibling = resolve(dirname(dirname(repoRoot)), "TCRN-AOS");
-  if (isSameOrInside(resolvedRoot, wrongSibling)) {
+  const wrongSibling = await canonicalizePathWithExistingAncestor(resolve(dirname(dirname(repoRoot)), "TCRN-AOS"));
+  if (isSameOrInside(resolvedRoot.canonicalRoot, wrongSibling)) {
     throw new Error("runtime_root_aliases_wrong_sibling");
   }
-  const marker = await readOwnerMarker(join(resolvedRoot, OWNER_MARKER_FILE), digestRuntimeRoot(resolvedRoot));
+  const marker = await readOwnerMarker(join(resolvedRoot.requestedRoot, OWNER_MARKER_FILE), resolvedRoot.runtimeRootDigest);
   if (!marker) {
     throw new Error("destructive_cleanup_requires_route_owner_marker");
   }
-  await rm(resolvedRoot, { recursive: true, force: true });
-  const existsAfterReset = await pathExists(resolvedRoot);
+  await rm(resolvedRoot.requestedRoot, { recursive: true, force: true });
+  const existsAfterReset = await pathExists(resolvedRoot.requestedRoot);
   return {
     ok: !existsAfterReset,
     routeOwnedRootRemoved: !existsAfterReset,
@@ -455,6 +471,29 @@ async function proveNegativeCases(repoRoot: string): Promise<PersistentRuntimeSt
   };
 }
 
+async function proveAliasCanonicalizationCases(repoRoot: string): Promise<PersistentRuntimeStorageProof["aliasCanonicalizationProof"]> {
+  const sourceAlias = await caseInsensitiveAliasForExistingPath(repoRoot);
+  const codeRootAlias = await caseInsensitiveAliasForExistingPath(resolve(repoRoot, "..", ".."));
+  const sourceTreeAliasRejected = sourceAlias
+    ? await expectRejects(
+      () => prepareRuntimeRoot({ runtimeRoot: join(sourceAlias, ".aos-runtime-proof-alias"), repoRoot }),
+      "runtime_root_inside_git_tree"
+    )
+    : null;
+  const wrongSiblingAliasRejected = codeRootAlias
+    ? await expectRejects(
+      () => prepareRuntimeRoot({ runtimeRoot: join(codeRootAlias, "TCRN-AOS", "runtime-proof-alias"), repoRoot }),
+      "runtime_root_aliases_wrong_sibling"
+    )
+    : null;
+
+  return {
+    caseInsensitiveAliasSupported: sourceAlias !== null && codeRootAlias !== null,
+    sourceTreeAliasRejected,
+    wrongSiblingAliasRejected
+  };
+}
+
 async function readOwnershipPermissions(runtimeRoot: string): Promise<PersistentRuntimeStorageProof["ownershipPermissionsReadback"]> {
   const rootStat = await stat(runtimeRoot);
   const readable = await canAccess(runtimeRoot, constants.R_OK);
@@ -545,16 +584,71 @@ async function assertExistingPathHasNoSymlink(targetPath: string): Promise<void>
   }
 }
 
+async function canonicalizeRuntimeRoot(runtimeRoot: string): Promise<CanonicalRuntimeRoot> {
+  const requestedRoot = resolve(runtimeRoot);
+  await assertExistingPathHasNoSymlink(requestedRoot);
+  const canonicalRoot = await canonicalizePathWithExistingAncestor(requestedRoot);
+  return {
+    requestedRoot,
+    canonicalRoot,
+    runtimeRootDigest: digestRuntimeRoot(canonicalRoot)
+  };
+}
+
+async function canonicalizePathWithExistingAncestor(path: string): Promise<string> {
+  const resolved = resolve(path);
+  const parsed = parse(resolved);
+  const parts = relative(parsed.root, resolved).split("/").filter(Boolean);
+  let current = parsed.root;
+  let nearestExisting = parsed.root;
+  let firstMissingIndex = parts.length;
+
+  for (let index = 0; index < parts.length; index += 1) {
+    current = join(current, parts[index]!);
+    if (!await pathExists(current)) {
+      firstMissingIndex = index;
+      break;
+    }
+    nearestExisting = current;
+  }
+
+  const canonicalExisting = await realpath(nearestExisting);
+  const remainder = parts.slice(firstMissingIndex);
+  return remainder.length > 0 ? join(canonicalExisting, ...remainder) : canonicalExisting;
+}
+
+async function caseInsensitiveAliasForExistingPath(path: string): Promise<string | null> {
+  const canonicalPath = await realpath(path);
+  const candidates: string[] = [];
+  if (canonicalPath.startsWith("/Users/")) {
+    candidates.push(canonicalPath.replace(/^\/Users\//, "/users/"));
+  }
+
+  for (const candidate of candidates) {
+    if (candidate === canonicalPath) {
+      continue;
+    }
+    try {
+      if (await realpath(candidate) === canonicalPath) {
+        return candidate;
+      }
+    } catch {
+      // Unsupported on this filesystem.
+    }
+  }
+  return null;
+}
+
 async function directoryIsEmpty(path: string): Promise<boolean> {
   return (await readdir(path)).length === 0;
 }
 
-function digestRuntimeRoot(runtimeRoot: string): string {
+function digestRuntimeRoot(canonicalRuntimeRoot: string): string {
   return digest({
     profileId: PERSISTENT_RUNTIME_PROFILE_ID,
     routeId: PERSISTENT_RUNTIME_ROUTE_ID,
     runContext: PERSISTENT_RUNTIME_RUN_CONTEXT,
-    runtimeRoot: resolve(runtimeRoot)
+    runtimeRoot: resolve(canonicalRuntimeRoot)
   });
 }
 
