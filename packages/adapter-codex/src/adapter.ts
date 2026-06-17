@@ -45,8 +45,8 @@ export type LiveDispatchSourceRecordClass = "work_item" | "gate" | "conference" 
 export type LiveDispatchPayloadClass = "assignment" | "gate_request" | "conference_invite" | "terminal_return_request";
 export type LiveDispatchRedactionProfile = "count_only_route_metadata" | "redacted_payload_metadata";
 export type LiveDispatchSendEligibilityState = "blocked_owner_intent_required" | "blocked_duplicate_prevented" | "blocked_target_readback" | "blocked_restricted_payload";
-export type StageBTerminalReturnIngestionDisposition = "fixture_mode_readback_recorded";
-export type StageBTerminalReturnReadbackStatus = "fixture_readback_current" | "duplicate_replay_returned";
+export type StageBTerminalReturnIngestionDisposition = "fixture_mode_readback_recorded" | "real_ingestion_executed";
+export type StageBTerminalReturnReadbackStatus = "fixture_readback_current" | "real_readback_current" | "duplicate_replay_returned";
 
 const LIVE_DISPATCH_READBACK_MAX_AGE_MS = 15 * 60 * 1000;
 const LIVE_DISPATCH_READBACK_FUTURE_SKEW_MS = 60 * 1000;
@@ -60,9 +60,12 @@ const STAGE_B_SOURCE_PACKET_SCHEMA = "aos.stage_b.terminal_handoff_return.v1";
 const STAGE_B_SOURCE_PAYLOAD_DIGEST = "sha256:2daadd66db0566b59671c9ac2d968ca3f190a208e03520921e10968c67df8280";
 const STAGE_B_WORKFLOW_BASIS_SHA = "3aea9d069bcdaedf2a22ea6fd85ff4777d75875c";
 const STAGE_B_AOS_BASIS_SHA = "1387e38dc229856df542b6370bfb89cf87a75237";
+const STAGE_B_REAL_EXECUTION_WORKFLOW_BASIS_SHA = "1cad69eba4837628ef3a9c0a5a064b222f5058ec";
+const STAGE_B_REAL_EXECUTION_AOS_BASIS_SHA = "f8b5cd07d6a1a83617ca6aaff433199340fc9c3d";
 const STAGE_B_STOP_GATE = "aos-stage-b-live-dispatch-stop-before-primitive-v1";
 const STAGE_B_ORIGINAL_DISPATCH_PACKET_REFERENCE = "59p-stage-b-value-freeze-owner-intent-pre-execution-packet.md";
 const STAGE_B_REPLAY_GROUP = "aos-stage-b-terminal-return-ingestion-59s";
+const STAGE_B_REAL_REPLAY_GROUP = "aos-stage-b-real-terminal-return-ingestion-59u";
 const STAGE_B_INGESTION_SCHEMA_VERSION = "aos.stage_b.terminal_return_ingestion_record.v1";
 const STAGE_B_ACTION_BOOLEAN_FIELDS = [
   "filesEdited",
@@ -378,7 +381,16 @@ export interface LiveDispatchEnvelope {
 
 export type StageBSourceActionBooleanField = typeof STAGE_B_ACTION_BOOLEAN_FIELDS[number];
 
-export interface StageBTerminalReturnIngestionInput {
+export interface StageBPreservedReferenceSet {
+  sourceTerminalReadbackReference: string;
+  originalDispatchPacketReference: string;
+  liveSendStatusEvidenceReference: string;
+  stageBAuthorityReference: string;
+  fixtureImplementationPacketReference: string;
+  fixtureModeSyncReference: string;
+}
+
+interface StageBTerminalReturnIngestionBaseInput {
   parentRouteId: string;
   workflowBasisSha: string;
   aosBasisSha: string;
@@ -397,8 +409,6 @@ export interface StageBTerminalReturnIngestionInput {
   terminalPacketChecksumOrImmutableReference: string;
   coordinatorConsumedReceiptReference: string;
   sourceActionBooleans: Record<StageBSourceActionBooleanField, boolean>;
-  fixtureMode: true;
-  realSourceIngestionExecuted: false;
   requestedSecondSend?: boolean;
   requestedRetry?: boolean;
   requestedLiveDispatch?: boolean;
@@ -411,6 +421,19 @@ export interface StageBTerminalReturnIngestionInput {
   requestedFinalMvpAcceptance?: boolean;
   terminalPacketBody?: string;
   coordinatorReceiptBody?: string;
+}
+
+export interface StageBTerminalReturnIngestionInput extends StageBTerminalReturnIngestionBaseInput {
+  fixtureMode: true;
+  realSourceIngestionExecuted: false;
+}
+
+export interface StageBRealTerminalReturnIngestionInput extends StageBTerminalReturnIngestionBaseInput {
+  fixtureMode: false;
+  realSourceIngestionExecuted: true;
+  executionWorkflowBasisSha: string;
+  executionAosBasisSha: string;
+  preservedReferences: StageBPreservedReferenceSet;
 }
 
 export interface StageBTerminalReturnIngestionRecord {
@@ -430,8 +453,11 @@ export interface StageBTerminalReturnIngestionRecord {
   originalDispatchPacketReference: string;
   terminalPacketChecksumOrImmutableReference: string;
   coordinatorConsumedReceiptReference: string;
+  preservedReferences?: StageBPreservedReferenceSet;
   workflowBasisSha: string;
   aosBasisSha: string;
+  executionWorkflowBasisSha?: string;
+  executionAosBasisSha?: string;
   ingestionDisposition: StageBTerminalReturnIngestionDisposition;
   idempotencyKey: string;
   dedupeKey: string;
@@ -440,6 +466,8 @@ export interface StageBTerminalReturnIngestionRecord {
   readbackStatus: StageBTerminalReturnReadbackStatus;
   auditEventId: string;
   redactionProfile: "count_only_terminal_return_metadata";
+  fixtureMode: boolean;
+  realSourceIngestionExecuted: boolean;
   nonClaims: typeof STAGE_B_NON_CLAIMS;
 }
 
@@ -448,6 +476,7 @@ export class CodexIntegrationAdapter {
   private readonly noSendEnvelopes = new Map<string, NoSendDispatchEnvelope>();
   private readonly liveDispatchEnvelopes = new Map<string, LiveDispatchEnvelope>();
   private readonly stageBTerminalIngestionRecords = new Map<string, StageBTerminalReturnIngestionRecord>();
+  private readonly stageBRealTerminalIngestionRecords = new Map<string, StageBTerminalReturnIngestionRecord>();
 
   constructor(
     private readonly store: AosStore,
@@ -773,9 +802,126 @@ export class CodexIntegrationAdapter {
       readbackStatus: "fixture_readback_current",
       auditEventId: audit.id,
       redactionProfile: "count_only_terminal_return_metadata",
+      fixtureMode: true,
+      realSourceIngestionExecuted: false,
       nonClaims: STAGE_B_NON_CLAIMS
     };
     this.stageBTerminalIngestionRecords.set(ingestionId, record);
+    return cloneStageBTerminalReturnIngestionRecord(record);
+  }
+
+  createStageBRealTerminalReturnIngestionRecord(
+    input: StageBRealTerminalReturnIngestionInput,
+    actor: ActorIdentity,
+    probe: NoSendPrimitiveProbe = createNoSendPrimitiveProbe()
+  ): StageBTerminalReturnIngestionRecord {
+    const ingestionId = stageBRealTerminalIngestionId(input);
+    this.assertStageBRealTerminalReturnIngestionInput(input, actor, ingestionId);
+    const probeSnapshot = probe.snapshot();
+    if (
+      probeSnapshot.sendPrimitiveCallCount !== 0
+      || probeSnapshot.threadManagementPrimitiveCallCount !== 0
+      || probeSnapshot.terminalReturnIngestionExecutionCount !== 0
+      || probeSnapshot.registryMutationCount !== 0
+      || probeSnapshot.generatedBridgeMutationCount !== 0
+    ) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+        reason: "probe_observed_external_execution",
+        sendPrimitiveCallCount: probeSnapshot.sendPrimitiveCallCount,
+        threadManagementPrimitiveCallCount: probeSnapshot.threadManagementPrimitiveCallCount,
+        terminalReturnIngestionExecutionCount: probeSnapshot.terminalReturnIngestionExecutionCount,
+        registryMutationCount: probeSnapshot.registryMutationCount,
+        generatedBridgeMutationCount: probeSnapshot.generatedBridgeMutationCount
+      });
+      throw new Error("Stage B real terminal-return ingestion blocked because a primitive probe observed execution");
+    }
+    const terminalReference = input.terminalPacketChecksumOrImmutableReference.trim();
+    const coordinatorReference = input.coordinatorConsumedReceiptReference.trim();
+    const preservedReferences = cloneStageBPreservedReferences(input.preservedReferences);
+    const existing = this.stageBRealTerminalIngestionRecords.get(ingestionId);
+    if (existing) {
+      if (
+        existing.terminalPacketChecksumOrImmutableReference !== terminalReference
+        || existing.coordinatorConsumedReceiptReference !== coordinatorReference
+        || JSON.stringify(existing.preservedReferences) !== JSON.stringify(preservedReferences)
+      ) {
+        this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+          reason: "conflicting_duplicate_real_terminal_return_ingestion",
+          sourceThreadId: input.sourceThreadId,
+          sourceTerminalTurnId: input.sourceTerminalTurnId,
+          sourcePayloadDigest: input.sourcePayloadDigest
+        });
+        throw new Error("Stage B real terminal-return ingestion blocked by conflicting duplicate");
+      }
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.real_dedupe", "terminal_return_ingestion", ingestionId, "deduped", {
+        sourceThreadId: input.sourceThreadId,
+        sourceTerminalTurnId: input.sourceTerminalTurnId,
+        sourcePayloadDigest: input.sourcePayloadDigest,
+        readbackStatus: "duplicate_replay_returned"
+      });
+      return {
+        ...cloneStageBTerminalReturnIngestionRecord(existing),
+        readbackStatus: "duplicate_replay_returned"
+      };
+    }
+    const payloadDigest = canonicalSha256Digest(input.sourcePayloadDigest);
+    const idempotencySeed = stageBTerminalIngestionIdentitySeed(input, payloadDigest);
+    const audit = this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.real_record", "terminal_return_ingestion", ingestionId, "accepted", {
+      sourceThreadId: input.sourceThreadId,
+      sourceTerminalTurnId: input.sourceTerminalTurnId,
+      sourcePayloadDigest: payloadDigest,
+      fixtureMode: false,
+      realSourceIngestionExecuted: true,
+      executionWorkflowBasisSha: input.executionWorkflowBasisSha,
+      executionAosBasisSha: input.executionAosBasisSha,
+      terminalPacketReferenceClass: referenceClass(terminalReference),
+      coordinatorReceiptReferenceClass: referenceClass(coordinatorReference),
+      preservedReferenceCount: Object.keys(preservedReferences).length,
+      redactionProfile: "count_only_terminal_return_metadata",
+      actionBooleanFalseCount: STAGE_B_ACTION_BOOLEAN_FIELDS.length,
+      sendCount: 1,
+      retryLimit: 0,
+      liveDispatchExecuted: false,
+      secondSendExecuted: false
+    });
+    const record: StageBTerminalReturnIngestionRecord = {
+      ingestionId,
+      ingestionSchemaVersion: STAGE_B_INGESTION_SCHEMA_VERSION,
+      sourceTerminalTurnId: input.sourceTerminalTurnId,
+      sourceThreadId: input.sourceThreadId,
+      sourceThreadName: input.sourceThreadName,
+      sourcePacketSchemaVersion: input.sourcePacketSchemaVersion,
+      sourceStatus: "success",
+      sourceHandoffReturnState: "return_sent",
+      sourceRequestDisposition: "complied_without_execution",
+      sourcePayloadDigest: payloadDigest,
+      sourceSendCount: 1,
+      sourceRetryLimit: 0,
+      sourceStopGate: input.sourceStopGate,
+      originalDispatchPacketReference: input.originalDispatchPacketReference,
+      terminalPacketChecksumOrImmutableReference: terminalReference,
+      coordinatorConsumedReceiptReference: coordinatorReference,
+      preservedReferences,
+      workflowBasisSha: input.workflowBasisSha,
+      aosBasisSha: input.aosBasisSha,
+      executionWorkflowBasisSha: input.executionWorkflowBasisSha,
+      executionAosBasisSha: input.executionAosBasisSha,
+      ingestionDisposition: "real_ingestion_executed",
+      idempotencyKey: idempotencyKey("codex.stage_b_real_terminal_ingestion", actor.employeeId, idempotencySeed),
+      dedupeKey: idempotencyKey("codex.stage_b_real_terminal_ingestion.dedupe", input.sourceThreadId, {
+        sourceTerminalTurnId: input.sourceTerminalTurnId,
+        sourcePayloadDigest: payloadDigest
+      }),
+      replayGroup: STAGE_B_REAL_REPLAY_GROUP,
+      ingestedAt: now(),
+      readbackStatus: "real_readback_current",
+      auditEventId: audit.id,
+      redactionProfile: "count_only_terminal_return_metadata",
+      fixtureMode: false,
+      realSourceIngestionExecuted: true,
+      nonClaims: STAGE_B_NON_CLAIMS
+    };
+    this.stageBRealTerminalIngestionRecords.set(ingestionId, record);
     return cloneStageBTerminalReturnIngestionRecord(record);
   }
 
@@ -790,6 +936,23 @@ export class CodexIntegrationAdapter {
     sourcePayloadDigest: string;
   }> = {}): StageBTerminalReturnIngestionRecord[] {
     return [...this.stageBTerminalIngestionRecords.values()]
+      .filter((record) => !filter.sourceThreadId || record.sourceThreadId === filter.sourceThreadId)
+      .filter((record) => !filter.sourceTerminalTurnId || record.sourceTerminalTurnId === filter.sourceTerminalTurnId)
+      .filter((record) => !filter.sourcePayloadDigest || record.sourcePayloadDigest === canonicalSha256Digest(filter.sourcePayloadDigest))
+      .map(cloneStageBTerminalReturnIngestionRecord);
+  }
+
+  getStageBRealTerminalReturnIngestionById(ingestionId: string): StageBTerminalReturnIngestionRecord | undefined {
+    const record = this.stageBRealTerminalIngestionRecords.get(ingestionId);
+    return record ? cloneStageBTerminalReturnIngestionRecord(record) : undefined;
+  }
+
+  listStageBRealTerminalReturnIngestions(filter: Partial<{
+    sourceThreadId: string;
+    sourceTerminalTurnId: string;
+    sourcePayloadDigest: string;
+  }> = {}): StageBTerminalReturnIngestionRecord[] {
+    return [...this.stageBRealTerminalIngestionRecords.values()]
       .filter((record) => !filter.sourceThreadId || record.sourceThreadId === filter.sourceThreadId)
       .filter((record) => !filter.sourceTerminalTurnId || record.sourceTerminalTurnId === filter.sourceTerminalTurnId)
       .filter((record) => !filter.sourcePayloadDigest || record.sourcePayloadDigest === canonicalSha256Digest(filter.sourcePayloadDigest))
@@ -1122,6 +1285,52 @@ export class CodexIntegrationAdapter {
   }
 
   private assertStageBTerminalReturnIngestionInput(input: StageBTerminalReturnIngestionInput, actor: ActorIdentity, ingestionId: string): void {
+    this.assertStageBTerminalReturnIngestionCommon(input, actor, ingestionId);
+    if (input.fixtureMode !== true || input.realSourceIngestionExecuted !== false) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+        reason: "fixture_mode_required",
+        sourceThreadId: input.sourceThreadId,
+        sourceTerminalTurnId: input.sourceTerminalTurnId
+      });
+      throw new Error("Stage B terminal-return ingestion blocked by fixture_mode_required");
+    }
+  }
+
+  private assertStageBRealTerminalReturnIngestionInput(input: StageBRealTerminalReturnIngestionInput, actor: ActorIdentity, ingestionId: string): void {
+    this.assertStageBTerminalReturnIngestionCommon(input, actor, ingestionId);
+    if (input.fixtureMode !== false || input.realSourceIngestionExecuted !== true) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+        reason: "real_ingestion_mode_required",
+        sourceThreadId: input.sourceThreadId,
+        sourceTerminalTurnId: input.sourceTerminalTurnId
+      });
+      throw new Error("Stage B real terminal-return ingestion blocked by real_ingestion_mode_required");
+    }
+    const executionBasisChecks: Array<[boolean, string]> = [
+      [input.executionWorkflowBasisSha === STAGE_B_REAL_EXECUTION_WORKFLOW_BASIS_SHA, "execution_workflow_basis_mismatch"],
+      [input.executionAosBasisSha === STAGE_B_REAL_EXECUTION_AOS_BASIS_SHA, "execution_aos_basis_mismatch"]
+    ];
+    const failedExecutionBasis = executionBasisChecks.find(([ok]) => !ok);
+    if (failedExecutionBasis) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+        reason: failedExecutionBasis[1],
+        sourceThreadId: input.sourceThreadId,
+        sourceTerminalTurnId: input.sourceTerminalTurnId
+      });
+      throw new Error(`Stage B real terminal-return ingestion blocked by ${failedExecutionBasis[1]}`);
+    }
+    const missingReference = Object.entries(input.preservedReferences)
+      .find(([, value]) => !isNonBlankString(value));
+    if (missingReference) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+        reason: "missing_preserved_reference",
+        referenceName: missingReference[0]
+      });
+      throw new Error(`Stage B real terminal-return ingestion requires preserved reference: ${missingReference[0]}`);
+    }
+  }
+
+  private assertStageBTerminalReturnIngestionCommon(input: StageBTerminalReturnIngestionBaseInput, actor: ActorIdentity, ingestionId: string): void {
     const restrictedFindings = scanNoSendRestrictedContent(input);
     if (restrictedFindings.length > 0) {
       this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
@@ -1146,8 +1355,7 @@ export class CodexIntegrationAdapter {
       [input.sourceSendCount === 1, "source_send_count_mismatch"],
       [input.sourceRetryLimit === 0, "source_retry_limit_mismatch"],
       [input.sourceStopGate === STAGE_B_STOP_GATE, "source_stop_gate_mismatch"],
-      [input.originalDispatchPacketReference === STAGE_B_ORIGINAL_DISPATCH_PACKET_REFERENCE, "original_dispatch_packet_reference_mismatch"],
-      [input.fixtureMode === true && input.realSourceIngestionExecuted === false, "fixture_mode_required"]
+      [input.originalDispatchPacketReference === STAGE_B_ORIGINAL_DISPATCH_PACKET_REFERENCE, "original_dispatch_packet_reference_mismatch"]
     ];
     const failed = exactChecks.find(([ok]) => !ok);
     if (failed) {
@@ -1489,7 +1697,7 @@ function cloneLiveDispatchEnvelope(envelope: LiveDispatchEnvelope): LiveDispatch
   };
 }
 
-function stageBTerminalIngestionId(input: Pick<StageBTerminalReturnIngestionInput, "sourceThreadId" | "sourceTerminalTurnId" | "sourcePayloadDigest">): string {
+function stageBTerminalIngestionId(input: Pick<StageBTerminalReturnIngestionBaseInput, "sourceThreadId" | "sourceTerminalTurnId" | "sourcePayloadDigest">): string {
   return createId("stage_b_terminal_ingestion", {
     sourceThreadId: input.sourceThreadId,
     sourceTerminalTurnId: input.sourceTerminalTurnId,
@@ -1497,7 +1705,15 @@ function stageBTerminalIngestionId(input: Pick<StageBTerminalReturnIngestionInpu
   });
 }
 
-function stageBTerminalIngestionIdentitySeed(input: StageBTerminalReturnIngestionInput, payloadDigest: string): Record<string, unknown> {
+function stageBRealTerminalIngestionId(input: Pick<StageBTerminalReturnIngestionBaseInput, "sourceThreadId" | "sourceTerminalTurnId" | "sourcePayloadDigest">): string {
+  return createId("stage_b_real_terminal_ingestion", {
+    sourceThreadId: input.sourceThreadId,
+    sourceTerminalTurnId: input.sourceTerminalTurnId,
+    sourcePayloadDigest: isCanonicalSha256Digest(input.sourcePayloadDigest) ? canonicalSha256Digest(input.sourcePayloadDigest) : input.sourcePayloadDigest
+  });
+}
+
+function stageBTerminalIngestionIdentitySeed(input: StageBTerminalReturnIngestionBaseInput, payloadDigest: string): Record<string, unknown> {
   return {
     parentRouteId: input.parentRouteId,
     workflowBasisSha: input.workflowBasisSha,
@@ -1522,6 +1738,18 @@ function referenceClass(value: string): "sha256_checksum" | "redacted_immutable_
 function cloneStageBTerminalReturnIngestionRecord(record: StageBTerminalReturnIngestionRecord): StageBTerminalReturnIngestionRecord {
   return {
     ...record,
+    ...(record.preservedReferences ? { preservedReferences: cloneStageBPreservedReferences(record.preservedReferences) } : {}),
     nonClaims: { ...record.nonClaims }
+  };
+}
+
+function cloneStageBPreservedReferences(references: StageBPreservedReferenceSet): StageBPreservedReferenceSet {
+  return {
+    sourceTerminalReadbackReference: references.sourceTerminalReadbackReference.trim(),
+    originalDispatchPacketReference: references.originalDispatchPacketReference.trim(),
+    liveSendStatusEvidenceReference: references.liveSendStatusEvidenceReference.trim(),
+    stageBAuthorityReference: references.stageBAuthorityReference.trim(),
+    fixtureImplementationPacketReference: references.fixtureImplementationPacketReference.trim(),
+    fixtureModeSyncReference: references.fixtureModeSyncReference.trim()
   };
 }

@@ -39,6 +39,8 @@ test("59S Stage B fixture records terminal-return ingestion readbacks without re
   assert.equal(record.workflowBasisSha, "3aea9d069bcdaedf2a22ea6fd85ff4777d75875c");
   assert.equal(record.aosBasisSha, "1387e38dc229856df542b6370bfb89cf87a75237");
   assert.equal(record.ingestionDisposition, "fixture_mode_readback_recorded");
+  assert.equal(record.fixtureMode, true);
+  assert.equal(record.realSourceIngestionExecuted, false);
   assert.equal(record.replayGroup, "aos-stage-b-terminal-return-ingestion-59s");
   assert.equal(record.readbackStatus, "fixture_readback_current");
   assert.equal(record.redactionProfile, "count_only_terminal_return_metadata");
@@ -58,6 +60,83 @@ test("59S Stage B fixture records terminal-return ingestion readbacks without re
   assert.equal(probe.snapshot().terminalReturnIngestionExecutionCount, 0);
   assert.equal(probe.snapshot().registryMutationCount, 0);
   assert.equal(probe.snapshot().generatedBridgeMutationCount, 0);
+});
+
+test("59U Stage B real ingestion records exactly one local product-side readback without live dispatch", () => {
+  const store = new AosStore(createDefaultSeed());
+  const adapter = new CodexIntegrationAdapter(store);
+  const probe = createNoSendPrimitiveProbe();
+  const input = realStageBInput();
+
+  const record = adapter.createStageBRealTerminalReturnIngestionRecord(input, actor, probe);
+  const duplicate = adapter.createStageBRealTerminalReturnIngestionRecord(input, actor, probe);
+  const byId = adapter.getStageBRealTerminalReturnIngestionById(record.ingestionId);
+  const byThread = adapter.listStageBRealTerminalReturnIngestions({ sourceThreadId: input.sourceThreadId });
+  const byTurn = adapter.listStageBRealTerminalReturnIngestions({ sourceTerminalTurnId: input.sourceTerminalTurnId });
+  const byDigest = adapter.listStageBRealTerminalReturnIngestions({ sourcePayloadDigest: input.sourcePayloadDigest.toUpperCase() });
+
+  assert.equal(record.ingestionDisposition, "real_ingestion_executed");
+  assert.equal(record.replayGroup, "aos-stage-b-real-terminal-return-ingestion-59u");
+  assert.equal(record.readbackStatus, "real_readback_current");
+  assert.equal(record.fixtureMode, false);
+  assert.equal(record.realSourceIngestionExecuted, true);
+  assert.equal(record.executionWorkflowBasisSha, "1cad69eba4837628ef3a9c0a5a064b222f5058ec");
+  assert.equal(record.executionAosBasisSha, "f8b5cd07d6a1a83617ca6aaff433199340fc9c3d");
+  assert.equal(record.sourceTerminalTurnId, "019ed469-4067-7090-821b-eb19465e9f2a");
+  assert.equal(record.sourceThreadId, "019eb6d7-f130-70a0-8805-169cc337229b");
+  assert.equal(record.sourcePayloadDigest, "sha256:2daadd66db0566b59671c9ac2d968ca3f190a208e03520921e10968c67df8280");
+  assert.equal(record.preservedReferences.sourceTerminalReadbackReference, "codex_app.read_thread:019ed469-4067-7090-821b-eb19465e9f2a");
+  assert.equal(record.nonClaims.liveDispatch, false);
+  assert.equal(record.nonClaims.secondSend, false);
+  assert.equal(record.nonClaims.retry, false);
+  assert.equal(record.nonClaims.productAcceptance, "not_claimed");
+  assert.equal(duplicate.ingestionId, record.ingestionId);
+  assert.equal(duplicate.readbackStatus, "duplicate_replay_returned");
+  assert.equal(byId?.ingestionId, record.ingestionId);
+  assert.equal(byThread.length, 1);
+  assert.equal(byTurn.length, 1);
+  assert.equal(byDigest.length, 1);
+  assert.equal(store.queryAudit({ action: "codex.stage_b_terminal_return_ingestion.real_record" }).length, 1);
+  assert.equal(store.queryAudit({ action: "codex.stage_b_terminal_return_ingestion.real_dedupe" }).length, 1);
+  assert.equal(probe.snapshot().sendPrimitiveCallCount, 0);
+  assert.equal(probe.snapshot().threadManagementPrimitiveCallCount, 0);
+  assert.equal(probe.snapshot().terminalReturnIngestionExecutionCount, 0);
+  assert.equal(probe.snapshot().registryMutationCount, 0);
+  assert.equal(probe.snapshot().generatedBridgeMutationCount, 0);
+});
+
+test("59U Stage B real ingestion fails closed on fixture replay, missing references, and conflicting duplicates", () => {
+  const store = new AosStore(createDefaultSeed());
+  const adapter = new CodexIntegrationAdapter(store);
+  const accepted = adapter.createStageBRealTerminalReturnIngestionRecord(realStageBInput(), actor, createNoSendPrimitiveProbe());
+
+  assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
+    ...realStageBInput(),
+    terminalPacketChecksumOrImmutableReference: `sha256:${"e".repeat(64)}`
+  }, actor), /conflicting duplicate/);
+  assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
+    ...realStageBInput(),
+    preservedReferences: {
+      ...preservedReferences(),
+      sourceTerminalReadbackReference: " "
+    }
+  }, actor), /preserved reference/);
+  assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
+    ...realStageBInput(),
+    executionWorkflowBasisSha: "3aea9d069bcdaedf2a22ea6fd85ff4777d75875c"
+  }, actor), /execution_workflow_basis_mismatch/);
+  assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
+    ...realStageBInput(),
+    fixtureMode: true,
+    realSourceIngestionExecuted: false
+  }, actor), /real_ingestion_mode_required/);
+  assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
+    ...realStageBInput(),
+    terminalPacketBody: "gitleaks finding secret should not enter audit"
+  }, actor), /restricted raw_secret_scan_output/);
+
+  assert.equal(adapter.listStageBRealTerminalReturnIngestions().length, 1);
+  assert.equal(adapter.getStageBRealTerminalReturnIngestionById(accepted.ingestionId)?.ingestionId, accepted.ingestionId);
 });
 
 test("59S Stage B fixture ingestion fails closed on substituted identity, overclaims, forbidden execution, and restricted payloads", () => {
@@ -145,6 +224,28 @@ function baseStageBInput() {
     sourceActionBooleans: allFalseActions(),
     fixtureMode: true,
     realSourceIngestionExecuted: false
+  };
+}
+
+function realStageBInput() {
+  return {
+    ...baseStageBInput(),
+    fixtureMode: false,
+    realSourceIngestionExecuted: true,
+    executionWorkflowBasisSha: "1cad69eba4837628ef3a9c0a5a064b222f5058ec",
+    executionAosBasisSha: "f8b5cd07d6a1a83617ca6aaff433199340fc9c3d",
+    preservedReferences: preservedReferences()
+  };
+}
+
+function preservedReferences() {
+  return {
+    sourceTerminalReadbackReference: "codex_app.read_thread:019ed469-4067-7090-821b-eb19465e9f2a",
+    originalDispatchPacketReference: "59p-stage-b-value-freeze-owner-intent-pre-execution-packet.md",
+    liveSendStatusEvidenceReference: "59q-stage-b-live-send-status-evidence-sync.md",
+    stageBAuthorityReference: "59u-real-terminal-return-ingestion-execution-authority-packet.md",
+    fixtureImplementationPacketReference: "59s-stage-b-terminal-return-ingestion-implementation-execution-packet.md",
+    fixtureModeSyncReference: "59t-stage-b-terminal-return-ingestion-status-evidence-sync.md"
   };
 }
 
