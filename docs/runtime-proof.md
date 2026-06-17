@@ -31,3 +31,9 @@ It does not start an external queue, use Redis, dispatch Codex live, execute cop
 
 - `D-024`: runtime operational data remains local-first and ephemeral; Git records source, schema, fixture seed, tests, scripts, and evidence notes only.
 - `D-026`: Slice 2 runtime DB/local service proof is local-only and does not authorize deployment or acceptance claims.
+
+## 59Z Persistent Storage Prerequisite
+
+`pnpm runtime:persistent-proof` is a separate product-local prerequisite command for future persistent runtime proof. It uses a safe temporary route-owned root locally, keeps `/srv/tcrn/runtime/TCRN-AOS` as future target-host profile metadata only, proves synthetic write/readback, simulated restart/readback, backup/restore, ownership/permissions readback, and reset, and rejects unsafe roots before storage.
+
+Observed receipt: `../evidence/persistent-runtime-storage-prerequisite-proof.md`.
