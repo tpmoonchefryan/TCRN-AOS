@@ -15,11 +15,14 @@ The future target-host runtime root is profile metadata only: `/srv/tcrn/runtime
 ## Fail-Closed Predicates
 
 - missing runtime root is rejected unless the command is explicitly running in safe temp-root proof mode;
+- conflicting explicit `--runtime-root` and `--use-temp-runtime-root` flags are rejected;
 - runtime roots inside the Git/source tree are rejected;
 - roots aliasing the wrong sibling are rejected;
-- symlinked existing roots are rejected;
+- symlinked roots and symlink ancestors are rejected before mkdir/use/reset;
+- non-empty unowned roots are rejected before marker creation;
 - stale runtime data without the route-owned marker is rejected;
-- reset refuses to delete any root without the route-owned marker;
+- stale markers with mismatched profile, route, run context, or runtime-root digest are rejected;
+- reset refuses to delete any root without the current route-owned marker and matching runtime-root digest;
 - backup/restore is implemented for the synthetic profile record, so unsupported backup/restore is not silently accepted.
 
 ## Boundaries

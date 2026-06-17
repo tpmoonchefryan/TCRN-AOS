@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, rm, symlink, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, realpath, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import {
   FUTURE_TARGET_RUNTIME_ROOT,
   prepareRuntimeRoot,
@@ -35,11 +35,26 @@ test("persistent runtime profile fails closed for unsafe roots and cleanup", asy
     /runtime_root_missing/
   );
   await assert.rejects(
+    () => runPersistentRuntimeStorageProof({
+      runtimeRoot: join(tmpdir(), "tcrn-aos-conflicting-root"),
+      useTempRuntimeRoot: true
+    }),
+    /runtime_root_conflicting_temp_and_explicit/
+  );
+  await assert.rejects(
     () => prepareRuntimeRoot({ runtimeRoot: join(process.cwd(), ".runtime-proof"), repoRoot: process.cwd() }),
     /runtime_root_inside_git_tree/
   );
+  await assert.rejects(
+    () => prepareRuntimeRoot({
+      runtimeRoot: resolve(process.cwd(), "..", "..", "TCRN-AOS", "runtime-proof"),
+      repoRoot: process.cwd()
+    }),
+    /runtime_root_aliases_wrong_sibling/
+  );
 
-  const parent = await mkdtemp(join(tmpdir(), "tcrn-aos-persistent-profile-test-"));
+  const parent = await mkdtemp(join(await realpath(tmpdir()), "tcrn-aos-persistent-profile-test-"));
+  const dangerousMarkedRoot = join(process.cwd(), ".aos-dangerous-reset-test");
   try {
     const realRoot = join(parent, "real-root");
     const linkedRoot = join(parent, "linked-root");
@@ -49,6 +64,22 @@ test("persistent runtime profile fails closed for unsafe roots and cleanup", asy
       () => prepareRuntimeRoot({ runtimeRoot: linkedRoot, repoRoot: process.cwd() }),
       /runtime_root_unsafe_symlink/
     );
+    const symlinkParentTarget = join(parent, "symlink-parent-target");
+    const symlinkParent = join(parent, "symlink-parent");
+    await mkdir(symlinkParentTarget, { recursive: true });
+    await symlink(symlinkParentTarget, symlinkParent);
+    await assert.rejects(
+      () => prepareRuntimeRoot({ runtimeRoot: join(symlinkParent, "runtime-root"), repoRoot: process.cwd() }),
+      /runtime_root_unsafe_symlink/
+    );
+
+    const nonEmptyRoot = join(parent, "non-empty-unowned-root");
+    await mkdir(nonEmptyRoot, { recursive: true });
+    await writeFile(join(nonEmptyRoot, "pre-existing-data.txt"), "not route owned");
+    await assert.rejects(
+      () => prepareRuntimeRoot({ runtimeRoot: nonEmptyRoot, repoRoot: process.cwd() }),
+      /runtime_root_unowned_non_empty/
+    );
 
     const staleRoot = join(parent, "stale-root");
     await mkdir(join(staleRoot, "db"), { recursive: true });
@@ -57,6 +88,20 @@ test("persistent runtime profile fails closed for unsafe roots and cleanup", asy
       () => prepareRuntimeRoot({ runtimeRoot: staleRoot, repoRoot: process.cwd() }),
       /runtime_root_stale_data_ambiguous/
     );
+    const staleMarkedRoot = join(parent, "stale-marked-root");
+    await mkdir(staleMarkedRoot, { recursive: true });
+    await writeFile(join(staleMarkedRoot, ".aos-persistent-runtime-owner.json"), JSON.stringify({
+      markerSchemaVersion: "aos.persistent_runtime_owner.v1",
+      profileId: "aos-59z-persistent-runtime-storage-profile-v1",
+      routeId: "route_59z_product_local_persistent_db_storage_prerequisite_implementation",
+      runContext: "aos-59z-product-local-persistent-runtime-proof-v1",
+      owner: "aos-product-local-proof",
+      runtimeRootDigest: "stale-root-digest"
+    }));
+    await assert.rejects(
+      () => prepareRuntimeRoot({ runtimeRoot: staleMarkedRoot, repoRoot: process.cwd() }),
+      /runtime_root_owner_marker_mismatch/
+    );
 
     const unownedRoot = join(parent, "unowned-root");
     await mkdir(unownedRoot, { recursive: true });
@@ -64,7 +109,21 @@ test("persistent runtime profile fails closed for unsafe roots and cleanup", asy
       () => resetPersistentRuntimeRoot(unownedRoot),
       /destructive_cleanup_requires_route_owner_marker/
     );
+    await mkdir(dangerousMarkedRoot, { recursive: true });
+    await writeFile(join(dangerousMarkedRoot, ".aos-persistent-runtime-owner.json"), JSON.stringify({
+      markerSchemaVersion: "aos.persistent_runtime_owner.v1",
+      profileId: "aos-59z-persistent-runtime-storage-profile-v1",
+      routeId: "route_59z_product_local_persistent_db_storage_prerequisite_implementation",
+      runContext: "aos-59z-product-local-persistent-runtime-proof-v1",
+      owner: "aos-product-local-proof",
+      runtimeRootDigest: "dangerous-root-digest"
+    }));
+    await assert.rejects(
+      () => resetPersistentRuntimeRoot(dangerousMarkedRoot),
+      /runtime_root_inside_git_tree/
+    );
   } finally {
     await rm(parent, { recursive: true, force: true });
+    await rm(dangerousMarkedRoot, { recursive: true, force: true });
   }
 });

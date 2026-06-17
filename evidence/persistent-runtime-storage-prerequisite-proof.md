@@ -2,6 +2,8 @@
 
 Status: product-local 59Z persistent DB/storage prerequisite implementation ready for review.
 
+Post-review repair status: root guard repair applied for Sable `TCRN-AOS-59Z-001` and route-local DPC findings. Explicit runtime roots now fail closed unless absent/newly-created, empty, or already route-owned with the current profile/route/run identity and matching runtime-root digest.
+
 ## Lineage
 
 - Parent route: `AOS-59f-live-dispatch-dry-run-no-send-authority-packet`
@@ -23,7 +25,7 @@ Status: product-local 59Z persistent DB/storage prerequisite implementation read
 
 - Passed.
 - Focused persistent runtime profile tests: `2 pass / 0 fail`.
-- Covered temp route-owned persistent write/readback/restart/backup/restore/reset, missing root rejection, source-tree root rejection, symlink root rejection, stale data ambiguity rejection, and unowned cleanup rejection.
+- Covered temp route-owned persistent write/readback/restart/backup/restore/reset, conflicting temp/explicit root rejection, missing root rejection, source-tree root rejection, explicit wrong-sibling rejection, symlink root rejection, symlink ancestor rejection, non-empty unowned root rejection, stale data ambiguity rejection, stale marker/root digest mismatch rejection, unowned cleanup rejection, and dangerous marked source-tree reset rejection.
 
 `pnpm runtime:persistent-proof`
 
@@ -37,7 +39,7 @@ Status: product-local 59Z persistent DB/storage prerequisite implementation read
 - Backup/restore proof `ok=true`, `deferralAccepted=false`.
 - Ownership/permissions readback `ok=true`.
 - Reset proof `runtimeDataExistsAfterReset=false`.
-- Negative proof booleans all `true`: missing runtime root, source tree root, symlink root, stale data ambiguity, unowned cleanup, unsupported backup/restore posture, and restricted payload.
+- Negative proof booleans all `true`: missing runtime root, conflicting temp/explicit runtime-root flags, source tree root, wrong sibling root, symlink root, symlink ancestor, non-empty unowned root, stale data ambiguity, stale marker/root mismatch, unowned cleanup, dangerous marked reset, and restricted payload.
 - No-overclaim booleans remained false for target-host execution, source transfer, service start/stop, `/srv` write, runtime operational data committed to Git, raw private payload retention, product acceptance, and final MVP acceptance.
 
 `pnpm verify`
