@@ -40,7 +40,7 @@ Status: local AOS product-side 59U ingestion/readback execution proof ready for 
 - Passed after this checkpoint.
 - Focused Stage B terminal-ingestion tests: `5 pass / 0 fail`.
 - Covered both 59S fixture mode and 59U real-ingestion mode.
-- Covered one real record, exact duplicate returning existing readback, conflicting duplicate blocking, missing preserved reference blocking, execution-basis mismatch blocking, fixture/real substitution blocking, restricted raw-payload fixture blocking, and no primitive counters incrementing.
+- Covered one real record, exact duplicate returning existing readback, conflicting duplicate blocking, missing/malformed/substituted preserved reference blocking, malformed source action booleans blocking, execution-basis mismatch blocking, fixture/real substitution blocking, restricted raw-payload fixture blocking, and no primitive counters incrementing.
 
 `pnpm live-dispatch:real-terminal-ingestion-proof`
 
@@ -53,10 +53,10 @@ Status: local AOS product-side 59U ingestion/readback execution proof ready for 
 - Replay group: `aos-stage-b-real-terminal-return-ingestion-59u`.
 - Readback counts by id/source thread/terminal turn/payload digest: `true` / `1` / `1` / `1`.
 - Duplicate readback status: `duplicate_replay_returned`.
-- Blocked case count: `27`.
+- Blocked case count: `34`.
 - Conflicting duplicate blocked: `true`.
 - Probe-observed execution blocked: `true`.
-- Audit counts: real record `1`, real dedupe `1`, blocked `29`.
+- Audit counts: real record `1`, real dedupe `1`, blocked `36`.
 - Send primitive call count: `0`.
 - Thread-management primitive call count: `0`.
 - Terminal-return ingestion primitive execution count: `0`.

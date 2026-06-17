@@ -64,6 +64,11 @@ const STAGE_B_REAL_EXECUTION_WORKFLOW_BASIS_SHA = "1cad69eba4837628ef3a9c0a5a064
 const STAGE_B_REAL_EXECUTION_AOS_BASIS_SHA = "f8b5cd07d6a1a83617ca6aaff433199340fc9c3d";
 const STAGE_B_STOP_GATE = "aos-stage-b-live-dispatch-stop-before-primitive-v1";
 const STAGE_B_ORIGINAL_DISPATCH_PACKET_REFERENCE = "59p-stage-b-value-freeze-owner-intent-pre-execution-packet.md";
+const STAGE_B_SOURCE_TERMINAL_READBACK_REFERENCE = "codex_app.read_thread:019ed469-4067-7090-821b-eb19465e9f2a";
+const STAGE_B_LIVE_SEND_STATUS_EVIDENCE_REFERENCE = "59q-stage-b-live-send-status-evidence-sync.md";
+const STAGE_B_AUTHORITY_REFERENCE = "59u-real-terminal-return-ingestion-execution-authority-packet.md";
+const STAGE_B_FIXTURE_IMPLEMENTATION_PACKET_REFERENCE = "59s-stage-b-terminal-return-ingestion-implementation-execution-packet.md";
+const STAGE_B_FIXTURE_MODE_SYNC_REFERENCE = "59t-stage-b-terminal-return-ingestion-status-evidence-sync.md";
 const STAGE_B_REPLAY_GROUP = "aos-stage-b-terminal-return-ingestion-59s";
 const STAGE_B_REAL_REPLAY_GROUP = "aos-stage-b-real-terminal-return-ingestion-59u";
 const STAGE_B_INGESTION_SCHEMA_VERSION = "aos.stage_b.terminal_return_ingestion_record.v1";
@@ -1319,14 +1324,39 @@ export class CodexIntegrationAdapter {
       });
       throw new Error(`Stage B real terminal-return ingestion blocked by ${failedExecutionBasis[1]}`);
     }
+    if (!isPlainRecord(input.preservedReferences)) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+        reason: "malformed_preserved_references",
+        sourceThreadId: input.sourceThreadId,
+        sourceTerminalTurnId: input.sourceTerminalTurnId
+      });
+      throw new Error("Stage B real terminal-return ingestion requires preservedReferences object");
+    }
     const missingReference = Object.entries(input.preservedReferences)
-      .find(([, value]) => !isNonBlankString(value));
+      .find(([, value]) => typeof value !== "string" || !isNonBlankString(value));
     if (missingReference) {
       this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
         reason: "missing_preserved_reference",
         referenceName: missingReference[0]
       });
       throw new Error(`Stage B real terminal-return ingestion requires preserved reference: ${missingReference[0]}`);
+    }
+    const referenceChecks: Array<[boolean, string]> = [
+      [input.preservedReferences.sourceTerminalReadbackReference === STAGE_B_SOURCE_TERMINAL_READBACK_REFERENCE, "source_terminal_readback_reference_mismatch"],
+      [input.preservedReferences.originalDispatchPacketReference === STAGE_B_ORIGINAL_DISPATCH_PACKET_REFERENCE, "preserved_original_dispatch_reference_mismatch"],
+      [input.preservedReferences.liveSendStatusEvidenceReference === STAGE_B_LIVE_SEND_STATUS_EVIDENCE_REFERENCE, "live_send_status_evidence_reference_mismatch"],
+      [input.preservedReferences.stageBAuthorityReference === STAGE_B_AUTHORITY_REFERENCE, "stage_b_authority_reference_mismatch"],
+      [input.preservedReferences.fixtureImplementationPacketReference === STAGE_B_FIXTURE_IMPLEMENTATION_PACKET_REFERENCE, "fixture_implementation_packet_reference_mismatch"],
+      [input.preservedReferences.fixtureModeSyncReference === STAGE_B_FIXTURE_MODE_SYNC_REFERENCE, "fixture_mode_sync_reference_mismatch"]
+    ];
+    const failedReference = referenceChecks.find(([ok]) => !ok);
+    if (failedReference) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+        reason: failedReference[1],
+        sourceThreadId: input.sourceThreadId,
+        sourceTerminalTurnId: input.sourceTerminalTurnId
+      });
+      throw new Error(`Stage B real terminal-return ingestion blocked by ${failedReference[1]}`);
     }
   }
 
@@ -1377,6 +1407,14 @@ export class CodexIntegrationAdapter {
     if (!isChecksumOrImmutableReference(input.coordinatorConsumedReceiptReference)) {
       this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", { reason: "invalid_coordinator_consumed_receipt_reference" });
       throw new Error("Stage B terminal-return ingestion requires canonical coordinator receipt checksum or immutable redacted reference");
+    }
+    if (!isPlainRecord(input.sourceActionBooleans)) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+        reason: "malformed_source_action_booleans",
+        sourceThreadId: input.sourceThreadId,
+        sourceTerminalTurnId: input.sourceTerminalTurnId
+      });
+      throw new Error("Stage B terminal-return ingestion requires sourceActionBooleans object");
     }
     const trueActionFlags = STAGE_B_ACTION_BOOLEAN_FIELDS.filter((field) => input.sourceActionBooleans[field] !== false);
     if (trueActionFlags.length > 0) {
@@ -1733,6 +1771,10 @@ function stageBTerminalIngestionIdentitySeed(input: StageBTerminalReturnIngestio
 
 function referenceClass(value: string): "sha256_checksum" | "redacted_immutable_reference" {
   return isCanonicalSha256Digest(value) ? "sha256_checksum" : "redacted_immutable_reference";
+}
+
+function isPlainRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
 function cloneStageBTerminalReturnIngestionRecord(record: StageBTerminalReturnIngestionRecord): StageBTerminalReturnIngestionRecord {

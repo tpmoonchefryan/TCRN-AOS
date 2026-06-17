@@ -123,8 +123,45 @@ test("59U Stage B real ingestion fails closed on fixture replay, missing referen
   }, actor), /preserved reference/);
   assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
     ...realStageBInput(),
+    preservedReferences: {
+      ...preservedReferences(),
+      sourceTerminalReadbackReference: "codex_app.read_thread:substituted-terminal"
+    }
+  }, actor), /source_terminal_readback_reference_mismatch/);
+  assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
+    ...realStageBInput(),
+    preservedReferences: {
+      ...preservedReferences(),
+      stageBAuthorityReference: "59x-wrong-authority-reference.md"
+    }
+  }, actor), /stage_b_authority_reference_mismatch/);
+  assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
+    ...realStageBInput(),
+    preservedReferences: {
+      ...preservedReferences(),
+      fixtureModeSyncReference: "59t-substituted-sync-reference.md"
+    }
+  }, actor), /fixture_mode_sync_reference_mismatch/);
+  assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
+    ...realStageBInput(),
+    preservedReferences: null
+  }, actor), /preservedReferences object/);
+  assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
+    ...realStageBInput(),
+    preservedReferences: "not-an-object"
+  }, actor), /preservedReferences object/);
+  assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
+    ...realStageBInput(),
     executionWorkflowBasisSha: "3aea9d069bcdaedf2a22ea6fd85ff4777d75875c"
   }, actor), /execution_workflow_basis_mismatch/);
+  assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
+    ...realStageBInput(),
+    sourceActionBooleans: null
+  }, actor), /sourceActionBooleans object/);
+  assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
+    ...realStageBInput(),
+    sourceActionBooleans: "not-an-object"
+  }, actor), /sourceActionBooleans object/);
   assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
     ...realStageBInput(),
     fixtureMode: true,

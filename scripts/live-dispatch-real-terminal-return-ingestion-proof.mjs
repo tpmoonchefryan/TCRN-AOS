@@ -50,7 +50,14 @@ const blockedCases = [
   ["final_acceptance_requested", { requestedFinalMvpAcceptance: true }],
   ["raw_terminal_packet_body", { terminalPacketBody: "gitleaks finding secret should not enter audit" }],
   ["missing_preserved_reference", { preservedReferences: { ...preservedReferences(), sourceTerminalReadbackReference: " " } }],
+  ["wrong_source_terminal_readback_reference", { preservedReferences: { ...preservedReferences(), sourceTerminalReadbackReference: "codex_app.read_thread:substituted-terminal" } }],
+  ["wrong_authority_reference", { preservedReferences: { ...preservedReferences(), stageBAuthorityReference: "59x-wrong-authority-reference.md" } }],
+  ["wrong_fixture_sync_reference", { preservedReferences: { ...preservedReferences(), fixtureModeSyncReference: "59t-substituted-sync-reference.md" } }],
+  ["null_preserved_references", { preservedReferences: null }],
+  ["malformed_preserved_references", { preservedReferences: "not-an-object" }],
   ["wrong_execution_workflow_basis", { executionWorkflowBasisSha: "3aea9d069bcdaedf2a22ea6fd85ff4777d75875c" }],
+  ["null_source_action_booleans", { sourceActionBooleans: null }],
+  ["malformed_source_action_booleans", { sourceActionBooleans: "not-an-object" }],
   ["fixture_mode_substitution", { fixtureMode: true, realSourceIngestionExecuted: false }]
 ].map(([name, override]) => blockedCase(name, override));
 
@@ -112,7 +119,7 @@ assert.equal(probeSnapshot.threadManagementPrimitiveCallCount, 0);
 assert.equal(probeSnapshot.terminalReturnIngestionExecutionCount, 0);
 assert.equal(probeSnapshot.registryMutationCount, 0);
 assert.equal(probeSnapshot.generatedBridgeMutationCount, 0);
-assert.equal(blockedCases.length, 27);
+assert.equal(blockedCases.length, 34);
 assert.equal(conflictingDuplicate.blocked, true);
 assert.equal(probeBlocked.blocked, true);
 assert.equal(auditCounts.realRecord, 1);
