@@ -12,6 +12,7 @@
     "validate:migrations": "node scripts/validate-migrations.mjs",
     "runtime:db:proof": "pnpm build && node scripts/runtime-db-proof.mjs",
     "runtime:persistent-proof": "pnpm build && node scripts/persistent-runtime-storage-proof.mjs --use-temp-runtime-root",
+    "source-export:proof": "node scripts/source-export-prerequisite-proof.mjs",
     "service:smoke": "pnpm build && node scripts/service-smoke.mjs",
     "slice3:proof": "pnpm build && node scripts/slice-3-proof.mjs",
     "slice4:proof": "pnpm build && node scripts/slice-4-proof.mjs",
