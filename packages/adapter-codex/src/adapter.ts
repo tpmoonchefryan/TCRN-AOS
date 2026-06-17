@@ -45,11 +45,67 @@ export type LiveDispatchSourceRecordClass = "work_item" | "gate" | "conference" 
 export type LiveDispatchPayloadClass = "assignment" | "gate_request" | "conference_invite" | "terminal_return_request";
 export type LiveDispatchRedactionProfile = "count_only_route_metadata" | "redacted_payload_metadata";
 export type LiveDispatchSendEligibilityState = "blocked_owner_intent_required" | "blocked_duplicate_prevented" | "blocked_target_readback" | "blocked_restricted_payload";
+export type StageBTerminalReturnIngestionDisposition = "fixture_mode_readback_recorded";
+export type StageBTerminalReturnReadbackStatus = "fixture_readback_current" | "duplicate_replay_returned";
 
 const LIVE_DISPATCH_READBACK_MAX_AGE_MS = 15 * 60 * 1000;
 const LIVE_DISPATCH_READBACK_FUTURE_SKEW_MS = 60 * 1000;
 const SHA256_DIGEST_PATTERN = /^sha256:[a-f0-9]{64}$/i;
 const REDACTED_RECEIPT_REFERENCE_PATTERN = /^evidence\/[A-Za-z0-9._/-]+\.redacted\.json$/;
+const STAGE_B_PARENT_ROUTE_ID = "AOS-59f-live-dispatch-dry-run-no-send-authority-packet";
+const STAGE_B_SOURCE_THREAD_ID = "019eb6d7-f130-70a0-8805-169cc337229b";
+const STAGE_B_SOURCE_THREAD_NAME = "Ilya, Full-Stack Implementer";
+const STAGE_B_SOURCE_TERMINAL_TURN_ID = "019ed469-4067-7090-821b-eb19465e9f2a";
+const STAGE_B_SOURCE_PACKET_SCHEMA = "aos.stage_b.terminal_handoff_return.v1";
+const STAGE_B_SOURCE_PAYLOAD_DIGEST = "sha256:2daadd66db0566b59671c9ac2d968ca3f190a208e03520921e10968c67df8280";
+const STAGE_B_WORKFLOW_BASIS_SHA = "3aea9d069bcdaedf2a22ea6fd85ff4777d75875c";
+const STAGE_B_AOS_BASIS_SHA = "1387e38dc229856df542b6370bfb89cf87a75237";
+const STAGE_B_STOP_GATE = "aos-stage-b-live-dispatch-stop-before-primitive-v1";
+const STAGE_B_ORIGINAL_DISPATCH_PACKET_REFERENCE = "59p-stage-b-value-freeze-owner-intent-pre-execution-packet.md";
+const STAGE_B_REPLAY_GROUP = "aos-stage-b-terminal-return-ingestion-59s";
+const STAGE_B_INGESTION_SCHEMA_VERSION = "aos.stage_b.terminal_return_ingestion_record.v1";
+const STAGE_B_ACTION_BOOLEAN_FIELDS = [
+  "filesEdited",
+  "commandsRun",
+  "threadCreated",
+  "threadArchived",
+  "threadRenamed",
+  "threadPinned",
+  "threadForked",
+  "registryMutation",
+  "generatedBridgeMutation",
+  "productRepoTouched",
+  "resourceStarted",
+  "resourceMutated",
+  "deploymentExecuted",
+  "published",
+  "productAcceptanceClaimed",
+  "finalMvpAcceptanceClaimed",
+  "codexSecurityCompletionClaimed",
+  "broadDpcCompletionClaimed",
+  "ownerIntentExecutionClaimed",
+  "liveDispatchExecuted",
+  "realThreadSendExecuted",
+  "terminalReturnIngestionExecuted"
+] as const;
+
+const STAGE_B_NON_CLAIMS = {
+  productAcceptance: "not_claimed",
+  finalMvpAcceptance: "not_claimed",
+  deploymentReadiness: "not_claimed",
+  releaseReadiness: "not_claimed",
+  liveDispatch: false,
+  realThreadSend: false,
+  terminalReturnIngestionExecutedAgainstLivePacket: false,
+  registryMutation: false,
+  generatedBridgeMutation: false,
+  threadManagement: false,
+  secondSend: false,
+  retry: false,
+  codexSecurityCompletion: "not_claimed",
+  broadDpcCompletion: "not_claimed",
+  ownerIntentExecution: false
+} as const;
 
 export interface CodexDispatchPayload {
   kind: DispatchKind;
@@ -320,10 +376,78 @@ export interface LiveDispatchEnvelope {
   auditEventId: string;
 }
 
+export type StageBSourceActionBooleanField = typeof STAGE_B_ACTION_BOOLEAN_FIELDS[number];
+
+export interface StageBTerminalReturnIngestionInput {
+  parentRouteId: string;
+  workflowBasisSha: string;
+  aosBasisSha: string;
+  sourceTerminalTurnId: string;
+  sourceThreadId: string;
+  sourceThreadName: string;
+  sourcePacketSchemaVersion: string;
+  sourceStatus: "success" | "partial" | "blocked" | "changes_requested";
+  sourceHandoffReturnState: HandoffReturnState | "partial_return_sent" | "blocked_return_sent" | "return_blocked";
+  sourceRequestDisposition: string;
+  sourcePayloadDigest: string;
+  sourceSendCount: number;
+  sourceRetryLimit: number;
+  sourceStopGate: string;
+  originalDispatchPacketReference: string;
+  terminalPacketChecksumOrImmutableReference: string;
+  coordinatorConsumedReceiptReference: string;
+  sourceActionBooleans: Record<StageBSourceActionBooleanField, boolean>;
+  fixtureMode: true;
+  realSourceIngestionExecuted: false;
+  requestedSecondSend?: boolean;
+  requestedRetry?: boolean;
+  requestedLiveDispatch?: boolean;
+  requestedRegistryMutation?: boolean;
+  requestedGeneratedBridgeMutation?: boolean;
+  requestedThreadManagementActions?: ThreadManagementPrimitive[];
+  requestedDeploymentOrRelease?: boolean;
+  requestedOwnerIntentExecution?: boolean;
+  requestedProductAcceptance?: boolean;
+  requestedFinalMvpAcceptance?: boolean;
+  terminalPacketBody?: string;
+  coordinatorReceiptBody?: string;
+}
+
+export interface StageBTerminalReturnIngestionRecord {
+  ingestionId: string;
+  ingestionSchemaVersion: string;
+  sourceTerminalTurnId: string;
+  sourceThreadId: string;
+  sourceThreadName: string;
+  sourcePacketSchemaVersion: string;
+  sourceStatus: "success";
+  sourceHandoffReturnState: "return_sent";
+  sourceRequestDisposition: "complied_without_execution";
+  sourcePayloadDigest: string;
+  sourceSendCount: 1;
+  sourceRetryLimit: 0;
+  sourceStopGate: string;
+  originalDispatchPacketReference: string;
+  terminalPacketChecksumOrImmutableReference: string;
+  coordinatorConsumedReceiptReference: string;
+  workflowBasisSha: string;
+  aosBasisSha: string;
+  ingestionDisposition: StageBTerminalReturnIngestionDisposition;
+  idempotencyKey: string;
+  dedupeKey: string;
+  replayGroup: string;
+  ingestedAt: string;
+  readbackStatus: StageBTerminalReturnReadbackStatus;
+  auditEventId: string;
+  redactionProfile: "count_only_terminal_return_metadata";
+  nonClaims: typeof STAGE_B_NON_CLAIMS;
+}
+
 export class CodexIntegrationAdapter {
   private readonly outbox = new Map<string, CodexDispatchRecord>();
   private readonly noSendEnvelopes = new Map<string, NoSendDispatchEnvelope>();
   private readonly liveDispatchEnvelopes = new Map<string, LiveDispatchEnvelope>();
+  private readonly stageBTerminalIngestionRecords = new Map<string, StageBTerminalReturnIngestionRecord>();
 
   constructor(
     private readonly store: AosStore,
@@ -550,6 +674,126 @@ export class CodexIntegrationAdapter {
 
   listLiveDispatchReadinessEnvelopes(): LiveDispatchEnvelope[] {
     return [...this.liveDispatchEnvelopes.values()].map(cloneLiveDispatchEnvelope);
+  }
+
+  createStageBTerminalReturnIngestionRecord(
+    input: StageBTerminalReturnIngestionInput,
+    actor: ActorIdentity,
+    probe: NoSendPrimitiveProbe = createNoSendPrimitiveProbe()
+  ): StageBTerminalReturnIngestionRecord {
+    const ingestionId = stageBTerminalIngestionId(input);
+    this.assertStageBTerminalReturnIngestionInput(input, actor, ingestionId);
+    const probeSnapshot = probe.snapshot();
+    if (
+      probeSnapshot.sendPrimitiveCallCount !== 0
+      || probeSnapshot.threadManagementPrimitiveCallCount !== 0
+      || probeSnapshot.terminalReturnIngestionExecutionCount !== 0
+      || probeSnapshot.registryMutationCount !== 0
+      || probeSnapshot.generatedBridgeMutationCount !== 0
+    ) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+        reason: "probe_observed_external_execution",
+        sendPrimitiveCallCount: probeSnapshot.sendPrimitiveCallCount,
+        threadManagementPrimitiveCallCount: probeSnapshot.threadManagementPrimitiveCallCount,
+        terminalReturnIngestionExecutionCount: probeSnapshot.terminalReturnIngestionExecutionCount,
+        registryMutationCount: probeSnapshot.registryMutationCount,
+        generatedBridgeMutationCount: probeSnapshot.generatedBridgeMutationCount
+      });
+      throw new Error("Stage B terminal-return ingestion fixture blocked because a primitive probe observed execution");
+    }
+    const existing = this.stageBTerminalIngestionRecords.get(ingestionId);
+    if (existing) {
+      if (
+        existing.terminalPacketChecksumOrImmutableReference !== input.terminalPacketChecksumOrImmutableReference.trim()
+        || existing.coordinatorConsumedReceiptReference !== input.coordinatorConsumedReceiptReference.trim()
+      ) {
+        this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+          reason: "conflicting_duplicate_terminal_return_ingestion",
+          sourceThreadId: input.sourceThreadId,
+          sourceTerminalTurnId: input.sourceTerminalTurnId,
+          sourcePayloadDigest: input.sourcePayloadDigest
+        });
+        throw new Error("Stage B terminal-return ingestion blocked by conflicting duplicate");
+      }
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.dedupe", "terminal_return_ingestion", ingestionId, "deduped", {
+        sourceThreadId: input.sourceThreadId,
+        sourceTerminalTurnId: input.sourceTerminalTurnId,
+        sourcePayloadDigest: input.sourcePayloadDigest,
+        readbackStatus: "duplicate_replay_returned"
+      });
+      return {
+        ...cloneStageBTerminalReturnIngestionRecord(existing),
+        readbackStatus: "duplicate_replay_returned"
+      };
+    }
+    const terminalReference = input.terminalPacketChecksumOrImmutableReference.trim();
+    const coordinatorReference = input.coordinatorConsumedReceiptReference.trim();
+    const payloadDigest = canonicalSha256Digest(input.sourcePayloadDigest);
+    const idempotencySeed = stageBTerminalIngestionIdentitySeed(input, payloadDigest);
+    const audit = this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.fixture_record", "terminal_return_ingestion", ingestionId, "accepted", {
+      sourceThreadId: input.sourceThreadId,
+      sourceTerminalTurnId: input.sourceTerminalTurnId,
+      sourcePayloadDigest: payloadDigest,
+      fixtureMode: true,
+      terminalPacketReferenceClass: referenceClass(terminalReference),
+      coordinatorReceiptReferenceClass: referenceClass(coordinatorReference),
+      redactionProfile: "count_only_terminal_return_metadata",
+      actionBooleanFalseCount: STAGE_B_ACTION_BOOLEAN_FIELDS.length,
+      sendCount: 1,
+      retryLimit: 0,
+      noRealIngestion: true
+    });
+    const record: StageBTerminalReturnIngestionRecord = {
+      ingestionId,
+      ingestionSchemaVersion: STAGE_B_INGESTION_SCHEMA_VERSION,
+      sourceTerminalTurnId: input.sourceTerminalTurnId,
+      sourceThreadId: input.sourceThreadId,
+      sourceThreadName: input.sourceThreadName,
+      sourcePacketSchemaVersion: input.sourcePacketSchemaVersion,
+      sourceStatus: "success",
+      sourceHandoffReturnState: "return_sent",
+      sourceRequestDisposition: "complied_without_execution",
+      sourcePayloadDigest: payloadDigest,
+      sourceSendCount: 1,
+      sourceRetryLimit: 0,
+      sourceStopGate: input.sourceStopGate,
+      originalDispatchPacketReference: input.originalDispatchPacketReference,
+      terminalPacketChecksumOrImmutableReference: terminalReference,
+      coordinatorConsumedReceiptReference: coordinatorReference,
+      workflowBasisSha: input.workflowBasisSha,
+      aosBasisSha: input.aosBasisSha,
+      ingestionDisposition: "fixture_mode_readback_recorded",
+      idempotencyKey: idempotencyKey("codex.stage_b_terminal_ingestion", actor.employeeId, idempotencySeed),
+      dedupeKey: idempotencyKey("codex.stage_b_terminal_ingestion.dedupe", input.sourceThreadId, {
+        sourceTerminalTurnId: input.sourceTerminalTurnId,
+        sourcePayloadDigest: payloadDigest
+      }),
+      replayGroup: STAGE_B_REPLAY_GROUP,
+      ingestedAt: now(),
+      readbackStatus: "fixture_readback_current",
+      auditEventId: audit.id,
+      redactionProfile: "count_only_terminal_return_metadata",
+      nonClaims: STAGE_B_NON_CLAIMS
+    };
+    this.stageBTerminalIngestionRecords.set(ingestionId, record);
+    return cloneStageBTerminalReturnIngestionRecord(record);
+  }
+
+  getStageBTerminalReturnIngestionById(ingestionId: string): StageBTerminalReturnIngestionRecord | undefined {
+    const record = this.stageBTerminalIngestionRecords.get(ingestionId);
+    return record ? cloneStageBTerminalReturnIngestionRecord(record) : undefined;
+  }
+
+  listStageBTerminalReturnIngestions(filter: Partial<{
+    sourceThreadId: string;
+    sourceTerminalTurnId: string;
+    sourcePayloadDigest: string;
+  }> = {}): StageBTerminalReturnIngestionRecord[] {
+    return [...this.stageBTerminalIngestionRecords.values()]
+      .filter((record) => !filter.sourceThreadId || record.sourceThreadId === filter.sourceThreadId)
+      .filter((record) => !filter.sourceTerminalTurnId || record.sourceTerminalTurnId === filter.sourceTerminalTurnId)
+      .filter((record) => !filter.sourcePayloadDigest || record.sourcePayloadDigest === canonicalSha256Digest(filter.sourcePayloadDigest))
+      .map(cloneStageBTerminalReturnIngestionRecord);
   }
 
   validateLiveDispatchTerminalReturnReadiness(
@@ -877,6 +1121,82 @@ export class CodexIntegrationAdapter {
     }
   }
 
+  private assertStageBTerminalReturnIngestionInput(input: StageBTerminalReturnIngestionInput, actor: ActorIdentity, ingestionId: string): void {
+    const restrictedFindings = scanNoSendRestrictedContent(input);
+    if (restrictedFindings.length > 0) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+        reason: "restricted_payload",
+        restrictedFindingCount: restrictedFindings.length,
+        restrictedFindingKinds: [...new Set(restrictedFindings.map((finding) => finding.kind))]
+      });
+      throw new Error(`Stage B terminal-return ingestion rejected restricted ${restrictedFindings[0]!.kind}`);
+    }
+    const exactChecks: Array<[boolean, string]> = [
+      [input.parentRouteId === STAGE_B_PARENT_ROUTE_ID, "parent_route_mismatch"],
+      [input.workflowBasisSha === STAGE_B_WORKFLOW_BASIS_SHA, "workflow_basis_mismatch"],
+      [input.aosBasisSha === STAGE_B_AOS_BASIS_SHA, "aos_basis_mismatch"],
+      [input.sourceTerminalTurnId === STAGE_B_SOURCE_TERMINAL_TURN_ID, "source_terminal_turn_mismatch"],
+      [input.sourceThreadId === STAGE_B_SOURCE_THREAD_ID, "source_thread_mismatch"],
+      [input.sourceThreadName === STAGE_B_SOURCE_THREAD_NAME, "source_thread_name_mismatch"],
+      [input.sourcePacketSchemaVersion === STAGE_B_SOURCE_PACKET_SCHEMA, "source_schema_mismatch"],
+      [input.sourceStatus === "success", "source_status_mismatch"],
+      [input.sourceHandoffReturnState === "return_sent", "source_handoff_return_state_mismatch"],
+      [input.sourceRequestDisposition === "complied_without_execution", "source_request_disposition_mismatch"],
+      [input.sourcePayloadDigest === STAGE_B_SOURCE_PAYLOAD_DIGEST, "source_payload_digest_mismatch"],
+      [input.sourceSendCount === 1, "source_send_count_mismatch"],
+      [input.sourceRetryLimit === 0, "source_retry_limit_mismatch"],
+      [input.sourceStopGate === STAGE_B_STOP_GATE, "source_stop_gate_mismatch"],
+      [input.originalDispatchPacketReference === STAGE_B_ORIGINAL_DISPATCH_PACKET_REFERENCE, "original_dispatch_packet_reference_mismatch"],
+      [input.fixtureMode === true && input.realSourceIngestionExecuted === false, "fixture_mode_required"]
+    ];
+    const failed = exactChecks.find(([ok]) => !ok);
+    if (failed) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+        reason: failed[1],
+        sourceThreadId: input.sourceThreadId,
+        sourceTerminalTurnId: input.sourceTerminalTurnId
+      });
+      throw new Error(`Stage B terminal-return ingestion blocked by ${failed[1]}`);
+    }
+    if (!isCanonicalSha256Digest(input.sourcePayloadDigest)) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", { reason: "invalid_source_payload_digest" });
+      throw new Error("Stage B terminal-return ingestion requires canonical source payload digest");
+    }
+    if (!isChecksumOrImmutableReference(input.terminalPacketChecksumOrImmutableReference)) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", { reason: "invalid_terminal_packet_checksum_or_reference" });
+      throw new Error("Stage B terminal-return ingestion requires canonical terminal packet checksum or immutable redacted reference");
+    }
+    if (!isChecksumOrImmutableReference(input.coordinatorConsumedReceiptReference)) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", { reason: "invalid_coordinator_consumed_receipt_reference" });
+      throw new Error("Stage B terminal-return ingestion requires canonical coordinator receipt checksum or immutable redacted reference");
+    }
+    const trueActionFlags = STAGE_B_ACTION_BOOLEAN_FIELDS.filter((field) => input.sourceActionBooleans[field] !== false);
+    if (trueActionFlags.length > 0) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+        reason: "source_action_boolean_not_false",
+        trueActionFlags
+      });
+      throw new Error(`Stage B terminal-return ingestion requires source action booleans false: ${trueActionFlags.join(",")}`);
+    }
+    const requestedBlockedAction = input.requestedSecondSend === true
+      || input.requestedRetry === true
+      || input.requestedLiveDispatch === true
+      || input.requestedRegistryMutation === true
+      || input.requestedGeneratedBridgeMutation === true
+      || (input.requestedThreadManagementActions?.length ?? 0) > 0
+      || input.requestedDeploymentOrRelease === true
+      || input.requestedOwnerIntentExecution === true
+      || input.requestedProductAcceptance === true
+      || input.requestedFinalMvpAcceptance === true;
+    if (requestedBlockedAction) {
+      this.store.appendAudit(actor, "codex.stage_b_terminal_return_ingestion.blocked", "terminal_return_ingestion", ingestionId, "blocked", {
+        reason: "forbidden_execution_or_overclaim_request",
+        requestedThreadManagementActionCount: input.requestedThreadManagementActions?.length ?? 0
+      });
+      throw new Error("Stage B terminal-return ingestion blocks execution, retry, thread-management, registry, deployment, Owner Intent, and acceptance requests");
+    }
+  }
+
   private validateDispatchRequest(payload: CodexDispatchPayload, actor: ActorIdentity, dispatchId: string): AIEmployee {
     try {
       this.assertSafePayload(payload);
@@ -1054,6 +1374,14 @@ function canonicalSha256Digest(value: string): string {
   return value.toLowerCase();
 }
 
+function isChecksumOrImmutableReference(value: string | undefined): value is string {
+  if (!isNonBlankString(value)) {
+    return false;
+  }
+  const trimmed = value.trim();
+  return trimmed === value && (isCanonicalSha256Digest(trimmed) || isRedactedReceiptReference(trimmed));
+}
+
 function isNonBlankString(value: string | undefined): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
@@ -1158,5 +1486,42 @@ function cloneLiveDispatchEnvelope(envelope: LiveDispatchEnvelope): LiveDispatch
     expectedTerminalStatuses: [...envelope.expectedTerminalStatuses],
     expectedHandoffReturnStates: [...envelope.expectedHandoffReturnStates],
     ...(envelope.targetThreadId ? { targetThreadId: envelope.targetThreadId } : {})
+  };
+}
+
+function stageBTerminalIngestionId(input: Pick<StageBTerminalReturnIngestionInput, "sourceThreadId" | "sourceTerminalTurnId" | "sourcePayloadDigest">): string {
+  return createId("stage_b_terminal_ingestion", {
+    sourceThreadId: input.sourceThreadId,
+    sourceTerminalTurnId: input.sourceTerminalTurnId,
+    sourcePayloadDigest: isCanonicalSha256Digest(input.sourcePayloadDigest) ? canonicalSha256Digest(input.sourcePayloadDigest) : input.sourcePayloadDigest
+  });
+}
+
+function stageBTerminalIngestionIdentitySeed(input: StageBTerminalReturnIngestionInput, payloadDigest: string): Record<string, unknown> {
+  return {
+    parentRouteId: input.parentRouteId,
+    workflowBasisSha: input.workflowBasisSha,
+    aosBasisSha: input.aosBasisSha,
+    sourceThreadId: input.sourceThreadId,
+    sourceTerminalTurnId: input.sourceTerminalTurnId,
+    sourcePacketSchemaVersion: input.sourcePacketSchemaVersion,
+    sourceStatus: input.sourceStatus,
+    sourceHandoffReturnState: input.sourceHandoffReturnState,
+    sourceRequestDisposition: input.sourceRequestDisposition,
+    sourcePayloadDigest: payloadDigest,
+    terminalPacketChecksumOrImmutableReference: input.terminalPacketChecksumOrImmutableReference.trim(),
+    coordinatorConsumedReceiptReference: input.coordinatorConsumedReceiptReference.trim(),
+    ingestionSchemaVersion: STAGE_B_INGESTION_SCHEMA_VERSION
+  };
+}
+
+function referenceClass(value: string): "sha256_checksum" | "redacted_immutable_reference" {
+  return isCanonicalSha256Digest(value) ? "sha256_checksum" : "redacted_immutable_reference";
+}
+
+function cloneStageBTerminalReturnIngestionRecord(record: StageBTerminalReturnIngestionRecord): StageBTerminalReturnIngestionRecord {
+  return {
+    ...record,
+    nonClaims: { ...record.nonClaims }
   };
 }
