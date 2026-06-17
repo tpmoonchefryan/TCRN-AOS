@@ -7,7 +7,7 @@ Post-review repair status: root guard repair applied for Sable `TCRN-AOS-59Z-001
 ## Lineage
 
 - Parent route: `AOS-59f-live-dispatch-dry-run-no-send-authority-packet`
-- 59Z Workflow packet basis: `cbb5f8d1f62ee8b724b568ef742b0694a0dbe0db` (`docs: define AOS runtime prerequisites`)
+- 59Z Workflow packet basis: `cbb5f8d9ab57ecf585ebd3ec9ca455b4cf4aefa8` (`docs: define AOS runtime prerequisites`)
 - AOS pre-implementation basis: `1d30a10b2b47bb00cdcfd6407a4183155504b4ed` (`fix: harden AOS Stage B ingestion references`)
 - Implementation checkpoint: route-carried by this successor; this receipt intentionally does not self-reference a future hash.
 
