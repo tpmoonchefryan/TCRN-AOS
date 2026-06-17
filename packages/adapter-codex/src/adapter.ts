@@ -49,6 +49,7 @@ export type LiveDispatchSendEligibilityState = "blocked_owner_intent_required" |
 const LIVE_DISPATCH_READBACK_MAX_AGE_MS = 15 * 60 * 1000;
 const LIVE_DISPATCH_READBACK_FUTURE_SKEW_MS = 60 * 1000;
 const SHA256_DIGEST_PATTERN = /^sha256:[a-f0-9]{64}$/i;
+const REDACTED_RECEIPT_REFERENCE_PATTERN = /^evidence\/[A-Za-z0-9._/-]+\.redacted\.json$/;
 
 export interface CodexDispatchPayload {
   kind: DispatchKind;
@@ -500,6 +501,7 @@ export class CodexIntegrationAdapter {
       redactionProfile: input.redactionProfile
     });
     const payloadDigest = canonicalSha256Digest(input.payloadDigest);
+    const targetThreadId = canonicalThreadId(input.targetReadback.threadId);
     const dispatchMode: Exclude<LiveDispatchMode, "live_send"> = input.dispatchMode === "live_send" ? "blocked_without_owner_intent" : input.dispatchMode;
     const envelope: LiveDispatchEnvelope = {
       envelopeId,
@@ -525,7 +527,7 @@ export class CodexIntegrationAdapter {
       dedupeKey: idempotencyKey("codex.live_dispatch.stage_a.dedupe", actor.employeeId, { envelopeId, schemaVersion }),
       replayGroup: idempotencyKey("codex.live_dispatch.stage_a.replay", input.sourceAosRecordId, {
         parentRouteId: input.parentRouteId,
-        targetThreadId: input.targetReadback.threadId ?? input.targetRoleId,
+        targetThreadId: targetThreadId ?? input.targetRoleId,
         payloadDigest
       }),
       retryLimit: input.retryLimit,
@@ -540,7 +542,7 @@ export class CodexIntegrationAdapter {
       registryMutationCount: 0,
       generatedBridgeMutationCount: 0,
       auditEventId: audit.id,
-      ...(input.targetReadback.threadId ? { targetThreadId: input.targetReadback.threadId } : {})
+      ...(targetThreadId ? { targetThreadId } : {})
     };
     this.liveDispatchEnvelopes.set(envelopeId, envelope);
     return cloneLiveDispatchEnvelope(envelope);
@@ -565,14 +567,20 @@ export class CodexIntegrationAdapter {
     if (!observation.terminalTurnId) {
       return { ...validation, disposition: "non_consumable", consumableCandidate: false, reason: "missing_terminal_turn_id" };
     }
-    if (!observation.originalTerminalPacketReference || !observation.originalTerminalPacketChecksum) {
+    if (!isNonBlankString(observation.originalTerminalPacketReference) || !isNonBlankString(observation.originalTerminalPacketChecksum)) {
       return { ...validation, disposition: "non_consumable", consumableCandidate: false, reason: "missing_original_terminal_packet_reference" };
+    }
+    if (!isRedactedReceiptReference(observation.originalTerminalPacketReference)) {
+      return { ...validation, disposition: "blocked", consumableCandidate: false, reason: "invalid_original_terminal_packet_reference" };
     }
     if (!isCanonicalSha256Digest(observation.originalTerminalPacketChecksum)) {
       return { ...validation, disposition: "blocked", consumableCandidate: false, reason: "invalid_original_terminal_packet_checksum" };
     }
-    if (!observation.coordinatorConsumedReceiptReference || !observation.coordinatorConsumedReceiptChecksum) {
+    if (!isNonBlankString(observation.coordinatorConsumedReceiptReference) || !isNonBlankString(observation.coordinatorConsumedReceiptChecksum)) {
       return { ...validation, disposition: "non_consumable", consumableCandidate: false, reason: "missing_coordinator_consumed_receipt_reference" };
+    }
+    if (!isRedactedReceiptReference(observation.coordinatorConsumedReceiptReference)) {
+      return { ...validation, disposition: "blocked", consumableCandidate: false, reason: "invalid_coordinator_consumed_receipt_reference" };
     }
     if (!isCanonicalSha256Digest(observation.coordinatorConsumedReceiptChecksum)) {
       return { ...validation, disposition: "blocked", consumableCandidate: false, reason: "invalid_coordinator_consumed_receipt_checksum" };
@@ -846,13 +854,6 @@ export class CodexIntegrationAdapter {
       this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "retry_policy_could_duplicate_live_message" });
       throw new Error("Live dispatch Stage A requires retry policy that cannot duplicate live messages");
     }
-    if (!targetReadbackAllowedForLiveDispatch(input.targetReadback)) {
-      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", {
-        reason: "target_readback_fail_closed",
-        targetReadbackState: input.targetReadback.state
-      });
-      throw new Error(`Live dispatch readiness blocked for ${input.targetReadback.state} target readback`);
-    }
     const targetReadbackReason = validateLiveDispatchTargetReadback(input.targetRoleId, input.targetReadback);
     if (targetReadbackReason) {
       this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", {
@@ -863,9 +864,12 @@ export class CodexIntegrationAdapter {
       });
       throw new Error(`Live dispatch readiness blocked by ${targetReadbackReason}`);
     }
-    if (!input.targetReadback.threadId) {
-      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "target_thread_id_required" });
-      throw new Error("Live dispatch readiness requires a target thread id after fresh readback");
+    if (!targetReadbackAllowedForLiveDispatch(input.targetReadback)) {
+      this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", {
+        reason: "target_readback_fail_closed",
+        targetReadbackState: input.targetReadback.state
+      });
+      throw new Error(`Live dispatch readiness blocked for ${input.targetReadback.state} target readback`);
     }
     if (input.receiptReferenceExpectation !== "required_before_ingestion") {
       this.store.appendAudit(actor, "codex.live_dispatch.blocked", "dispatch", envelopeId, "blocked", { reason: "receipt_reference_expectation_required" });
@@ -1009,13 +1013,16 @@ function targetStateAllowedForNoSend(state: NoSendTargetThreadState, successorCo
 }
 
 function targetReadbackAllowedForLiveDispatch(readback: LiveDispatchTargetReadback): boolean {
-  if (readback.state === "active") return Boolean(readback.threadId);
-  if (readback.state === "active_successor") return Boolean(readback.threadId) && readback.successorConfirmed === true;
-  if (readback.state === "temporary_lane") return Boolean(readback.threadId) && readback.temporaryLaneAuthorized === true;
+  if (readback.state === "active") return hasNonBlankThreadId(readback);
+  if (readback.state === "active_successor") return hasNonBlankThreadId(readback) && readback.successorConfirmed === true;
+  if (readback.state === "temporary_lane") return hasNonBlankThreadId(readback) && readback.temporaryLaneAuthorized === true;
   return false;
 }
 
 function validateLiveDispatchTargetReadback(targetRoleId: string, readback: LiveDispatchTargetReadback): string | undefined {
+  if (!hasNonBlankThreadId(readback)) {
+    return "missing_target_thread_id";
+  }
   if (readback.roleId !== targetRoleId) {
     return "target_role_mismatch";
   }
@@ -1045,6 +1052,26 @@ function isCanonicalSha256Digest(value: string | undefined): value is string {
 
 function canonicalSha256Digest(value: string): string {
   return value.toLowerCase();
+}
+
+function isNonBlankString(value: string | undefined): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function canonicalThreadId(value: string | undefined): string | undefined {
+  return isNonBlankString(value) ? value.trim() : undefined;
+}
+
+function hasNonBlankThreadId(readback: LiveDispatchTargetReadback): boolean {
+  return canonicalThreadId(readback.threadId) !== undefined;
+}
+
+function isRedactedReceiptReference(value: string): boolean {
+  const trimmed = value.trim();
+  return trimmed === value
+    && !trimmed.includes("..")
+    && !trimmed.includes("//")
+    && REDACTED_RECEIPT_REFERENCE_PATTERN.test(trimmed);
 }
 
 function isTargetHandoffReturnState(value: TerminalReturnObservation["handoffReturnState"]): value is HandoffReturnState {
@@ -1101,7 +1128,7 @@ function liveDispatchIdentitySeed(input: LiveDispatchEnvelopeInput, returnContra
     sourceAosRecordId: input.sourceAosRecordId,
     sourceRecordClass: input.sourceRecordClass,
     targetRoleId: input.targetRoleId,
-    targetThreadId: input.targetReadback.threadId ?? input.targetRoleId,
+    targetThreadId: canonicalThreadId(input.targetReadback.threadId) ?? input.targetRoleId,
     targetReadbackState: input.targetReadback.state,
     payloadDigest: isCanonicalSha256Digest(input.payloadDigest) ? canonicalSha256Digest(input.payloadDigest) : input.payloadDigest,
     sourceAosBasisSha: input.sourceAosBasisSha,
@@ -1113,9 +1140,10 @@ function liveDispatchIdentitySeed(input: LiveDispatchEnvelopeInput, returnContra
 }
 
 function cloneTargetReadback(readback: LiveDispatchTargetReadback): LiveDispatchTargetReadback {
+  const threadId = canonicalThreadId(readback.threadId);
   return {
     ...readback,
-    ...(readback.threadId ? { threadId: readback.threadId } : {}),
+    ...(threadId ? { threadId } : {}),
     ...(readback.successorConfirmed !== undefined ? { successorConfirmed: readback.successorConfirmed } : {}),
     ...(readback.temporaryLaneAuthorized !== undefined ? { temporaryLaneAuthorized: readback.temporaryLaneAuthorized } : {})
   };

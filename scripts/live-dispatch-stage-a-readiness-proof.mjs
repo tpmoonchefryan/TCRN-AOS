@@ -104,8 +104,13 @@ const blockedTargetStates = [
 }));
 const blockedReadbackValidationCases = [
   ["target_role_mismatch", { targetReadback: { ...targetReadback(), roleId: "sable-security-reviewer" } }],
+  ["blank_thread_id_active", { targetReadback: { ...targetReadback(), threadId: " " } }],
+  ["blank_thread_id_successor", { targetReadback: { ...targetReadback(), state: "active_successor", threadId: " ", successorConfirmed: true } }],
+  ["blank_thread_id_temporary_lane", { targetReadback: { ...targetReadback(), state: "temporary_lane", threadId: " ", temporaryLaneAuthorized: true } }],
   ["missing_read_at", { targetReadback: { ...targetReadback(), readAt: "" } }],
+  ["invalid_read_at", { targetReadback: { ...targetReadback(), readAt: "not-a-date" } }],
   ["stale_read_at", { targetReadback: { ...targetReadback(), readAt: "2026-01-01T00:00:00.000Z" } }],
+  ["future_read_at", { targetReadback: { ...targetReadback(), readAt: new Date(Date.now() + 120_000).toISOString() } }],
   ["missing_canonical_thread_name", { targetReadback: { ...targetReadback(), canonicalThreadName: " " } }]
 ].map(([name, override]) => blockedCase(name, {
   sourceAosRecordId: `dispatch-request-${name}`,
@@ -174,8 +179,12 @@ const terminalCases = [
   ["missing_handoff", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), handoffReturnState: undefined })],
   ["missing_terminal_turn", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), terminalTurnId: undefined })],
   ["missing_original_packet", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), originalTerminalPacketReference: undefined })],
+  ["blank_original_packet_reference", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), originalTerminalPacketReference: " " })],
+  ["malformed_original_packet_reference", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), originalTerminalPacketReference: "notes/original-terminal-packet.txt" })],
   ["invalid_original_packet_checksum", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), originalTerminalPacketChecksum: "checksum prose" })],
   ["missing_coordinator_receipt", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), coordinatorConsumedReceiptReference: undefined })],
+  ["blank_coordinator_receipt_reference", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), coordinatorConsumedReceiptReference: " " })],
+  ["malformed_coordinator_receipt_reference", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), coordinatorConsumedReceiptReference: "evidence/live-dispatch-stage-a/../receipt.redacted.json" })],
   ["invalid_coordinator_receipt_checksum", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), coordinatorConsumedReceiptChecksum: "receipt checksum prose" })],
   ["stale_source", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), sourceThreadId: "stale-thread" })],
   ["stale_route", adapter.validateLiveDispatchTerminalReturnReadiness(expected, { ...terminalReturn(active), parentRouteId: "stale-route" })],
@@ -238,8 +247,8 @@ assert.equal(probeSnapshot.generatedBridgeMutationCount, 0);
 assert.equal(terminalSummary.consumable, 5);
 assert.equal(terminalSummary.duplicate, 1);
 assert.equal(terminalSummary.conflicting, 1);
-assert.equal(terminalSummary.non_consumable, 8);
-assert.equal(terminalSummary.blocked, 8);
+assert.equal(terminalSummary.non_consumable, 10);
+assert.equal(terminalSummary.blocked, 10);
 assert.equal(auditCounts.readiness, 8);
 assert.equal(auditCounts.duplicatePrevented, 2);
 assert.equal(auditCounts.blocked, blockedTargetStates.length + blockedReadbackValidationCases.length + blockedExecutionCases.length);
@@ -315,6 +324,12 @@ console.log(JSON.stringify({
       payloadDigestCanonical: /^sha256:[a-f0-9]{64}$/.test(active.payloadDigest),
       invalidTerminalPacketChecksumBlocked: terminalCases.some(([name, result]) => name === "invalid_original_packet_checksum" && result.reason === "invalid_original_terminal_packet_checksum"),
       invalidCoordinatorReceiptChecksumBlocked: terminalCases.some(([name, result]) => name === "invalid_coordinator_receipt_checksum" && result.reason === "invalid_coordinator_consumed_receipt_checksum")
+    },
+    receiptReferenceValidation: {
+      blankOriginalReferenceBlocked: terminalCases.some(([name, result]) => name === "blank_original_packet_reference" && result.reason === "missing_original_terminal_packet_reference"),
+      malformedOriginalReferenceBlocked: terminalCases.some(([name, result]) => name === "malformed_original_packet_reference" && result.reason === "invalid_original_terminal_packet_reference"),
+      blankCoordinatorReferenceBlocked: terminalCases.some(([name, result]) => name === "blank_coordinator_receipt_reference" && result.reason === "missing_coordinator_consumed_receipt_reference"),
+      malformedCoordinatorReferenceBlocked: terminalCases.some(([name, result]) => name === "malformed_coordinator_receipt_reference" && result.reason === "invalid_coordinator_consumed_receipt_reference")
     }
   },
   noClaims

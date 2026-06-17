@@ -134,6 +134,34 @@ test("59k Stage A target readback and execution requests fail closed", () => {
   }, actor, probe), /target_role_mismatch/);
   assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
     ...baseLiveDispatchInput(),
+    sourceAosRecordId: "dispatch-request-blank-thread-id-active",
+    targetReadback: {
+      ...baseTargetReadback(),
+      threadId: " "
+    }
+  }, actor, probe), /missing_target_thread_id/);
+  assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
+    ...baseLiveDispatchInput(),
+    sourceAosRecordId: "dispatch-request-blank-thread-id-successor",
+    targetReadback: {
+      ...baseTargetReadback(),
+      state: "active_successor",
+      threadId: " ",
+      successorConfirmed: true
+    }
+  }, actor, probe), /missing_target_thread_id/);
+  assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
+    ...baseLiveDispatchInput(),
+    sourceAosRecordId: "dispatch-request-blank-thread-id-temporary",
+    targetReadback: {
+      ...baseTargetReadback(),
+      state: "temporary_lane",
+      threadId: " ",
+      temporaryLaneAuthorized: true
+    }
+  }, actor, probe), /missing_target_thread_id/);
+  assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
+    ...baseLiveDispatchInput(),
     sourceAosRecordId: "dispatch-request-missing-read-at",
     targetReadback: {
       ...baseTargetReadback(),
@@ -142,12 +170,28 @@ test("59k Stage A target readback and execution requests fail closed", () => {
   }, actor, probe), /missing_registry_readback_timestamp/);
   assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
     ...baseLiveDispatchInput(),
+    sourceAosRecordId: "dispatch-request-invalid-read-at",
+    targetReadback: {
+      ...baseTargetReadback(),
+      readAt: "not-a-date"
+    }
+  }, actor, probe), /invalid_registry_readback_timestamp/);
+  assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
+    ...baseLiveDispatchInput(),
     sourceAosRecordId: "dispatch-request-stale-read-at",
     targetReadback: {
       ...baseTargetReadback(),
       readAt: "2026-01-01T00:00:00.000Z"
     }
   }, actor, probe), /stale_registry_readback/);
+  assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
+    ...baseLiveDispatchInput(),
+    sourceAosRecordId: "dispatch-request-future-read-at",
+    targetReadback: {
+      ...baseTargetReadback(),
+      readAt: new Date(Date.now() + 120_000).toISOString()
+    }
+  }, actor, probe), /future_registry_readback/);
   assert.throws(() => adapter.createLiveDispatchReadinessEnvelope({
     ...baseLiveDispatchInput(),
     sourceAosRecordId: "dispatch-request-missing-canonical-name",
@@ -253,12 +297,28 @@ test("59k Stage A terminal returns require append-only receipt references before
   }).reason, "missing_original_terminal_packet_reference");
   assert.equal(adapter.validateLiveDispatchTerminalReturnReadiness(expected, {
     ...validReturn(envelope),
+    originalTerminalPacketReference: " "
+  }).reason, "missing_original_terminal_packet_reference");
+  assert.equal(adapter.validateLiveDispatchTerminalReturnReadiness(expected, {
+    ...validReturn(envelope),
+    originalTerminalPacketReference: "notes/original-terminal-packet.txt"
+  }).reason, "invalid_original_terminal_packet_reference");
+  assert.equal(adapter.validateLiveDispatchTerminalReturnReadiness(expected, {
+    ...validReturn(envelope),
     originalTerminalPacketChecksum: "checksum prose"
   }).reason, "invalid_original_terminal_packet_checksum");
   assert.equal(adapter.validateLiveDispatchTerminalReturnReadiness(expected, {
     ...validReturn(envelope),
     coordinatorConsumedReceiptReference: undefined
   }).reason, "missing_coordinator_consumed_receipt_reference");
+  assert.equal(adapter.validateLiveDispatchTerminalReturnReadiness(expected, {
+    ...validReturn(envelope),
+    coordinatorConsumedReceiptReference: " "
+  }).reason, "missing_coordinator_consumed_receipt_reference");
+  assert.equal(adapter.validateLiveDispatchTerminalReturnReadiness(expected, {
+    ...validReturn(envelope),
+    coordinatorConsumedReceiptReference: "evidence/live-dispatch-stage-a/../receipt.redacted.json"
+  }).reason, "invalid_coordinator_consumed_receipt_reference");
   assert.equal(adapter.validateLiveDispatchTerminalReturnReadiness(expected, {
     ...validReturn(envelope),
     coordinatorConsumedReceiptChecksum: "receipt checksum prose"
