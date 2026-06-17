@@ -8,7 +8,9 @@ This checkpoint adds a product-local source/export prerequisite proof for AOS 59
 pnpm source-export:proof
 ```
 
-The command proves the raw checkout remains blocked for direct archive/source transfer when ignored or nontracked forbidden candidates are present. It then creates a route-owned temporary export candidate from an explicit tracked-file allowlist and verifies that candidate before creating a local, non-retained archive digest.
+The command proves the raw checkout remains blocked for direct archive/source transfer when ignored or nontracked forbidden candidates are present. It then creates a route-owned temporary export candidate from an explicit tracked-file allowlist and verifies that candidate before creating a local, non-retained archive readback.
+
+Export content is materialized from the reported Git commit object, not copied from live working-tree files. If tracked files or the index are dirty, the proof reports that status, but candidate contents still come from the commit object named in the readback.
 
 ## Export Policy
 
@@ -26,10 +28,13 @@ The export candidate excludes `evidence/**` by default. Ignored and untracked fi
 
 - raw checkout direct archive is blocked while forbidden ignored/nontracked candidates remain;
 - `dist/**`, `node_modules/**`, `.git/**`, coverage/cache directories, `.env*`, `.npmrc`, logs, private key/cert-like files, and similar forbidden transfer classes are rejected;
+- representative sensitive path classes are rejected by negative proof rows: secret, credential, password, token, auth/session, cookie, keychain, shell history, raw scanner output, and raw secret-scan output;
 - tracked symlinks are rejected before staging;
 - relative path escapes are rejected before staging;
 - clean candidate readback must show zero forbidden candidates, zero evidence candidates, zero symlinks, and zero path escapes;
-- any local archive is created only from the verified clean candidate and is removed with the route-owned temporary root.
+- any local archive is created only from the verified clean candidate and is removed with the route-owned temporary root;
+- deterministic digest proof uses tracked path, mode, and Git blob object identity from the commit tree rather than platform-specific tar metadata;
+- cleanup readback treats only `ENOENT` as removed. Any other cleanup/readback error is ambiguous and fails closed.
 
 ## Boundaries
 
