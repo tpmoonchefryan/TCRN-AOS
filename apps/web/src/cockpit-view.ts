@@ -49,6 +49,11 @@ export const forbiddenProductionCopy = [
   "final MVP accepted"
 ] as const;
 
+export interface OperationsCockpitRenderOptions {
+  serviceBacked?: boolean;
+  cockpitApiPath?: string;
+}
+
 const actor: ActorIdentity = {
   employeeId: "employee-ilya",
   role: "implementation",
@@ -180,7 +185,12 @@ export function createSlice4bCockpitReadModel(): OperationsCockpitReadModel {
   });
 }
 
-export function renderOperationsCockpitHtml(model: OperationsCockpitReadModel = createSlice4bCockpitReadModel()): string {
+export function renderOperationsCockpitHtml(
+  model: OperationsCockpitReadModel = createSlice4bCockpitReadModel(),
+  options: OperationsCockpitRenderOptions = {}
+): string {
+  const serviceBacked = options.serviceBacked === true;
+  const cockpitApiPath = options.cockpitApiPath ?? "/api/cockpit";
   const workRows = model.workstreams.flatMap((group) => group.rows);
   const selectedRow = workRows[0];
   const blockingGate = model.ownerIntentQueue[0] ?? model.roleGateQueue[0];
@@ -193,11 +203,11 @@ export function renderOperationsCockpitHtml(model: OperationsCockpitReadModel = 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TCRN AOS Operations Cockpit</title>
-    <link rel="icon" href="../../../docs/brand/aos-favicon.png" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='6'%20fill='%2308243b'/%3E%3Ctext%20x='16'%20y='21'%20font-size='12'%20text-anchor='middle'%20fill='%2314b8ad'%20font-family='Arial'%3EA%3C/text%3E%3C/svg%3E" />
     <style>${operationsCockpitCss}</style>
   </head>
   <body>
-    <main class="aos-shell" data-surface="operations-cockpit" data-product-design-acceptance="${model.nonClaims.productDesignAcceptance}">
+    <main class="aos-shell" data-surface="operations-cockpit" data-service-backed="${serviceBacked ? "true" : "false"}" data-cockpit-api="${escapeHtml(cockpitApiPath)}" data-product-design-acceptance="${model.nonClaims.productDesignAcceptance}">
       <aside class="aos-sidebar" data-region="sidebar-nav" aria-label="AOS navigation">
         <a class="brand-lockup" data-region="brand-lockup" href="#cockpit" aria-label="TCRN AOS">
           <span class="brand-tcrn">TCRN</span>
@@ -232,10 +242,11 @@ export function renderOperationsCockpitHtml(model: OperationsCockpitReadModel = 
           </label>
           <div class="checkpoint-strip" data-region="checkpoint-strip" aria-label="Local checkpoint">
             <span>Local checkpoint observed</span>
-            <strong>${escapeHtml(model.contextHeader.localCheckpoint)}</strong>
-            <em>${copyFreshness(model.contextHeader.dataFreshness)}</em>
+            <strong data-local-checkpoint>${escapeHtml(model.contextHeader.localCheckpoint)}</strong>
+            <em data-readback-freshness>${copyFreshness(model.contextHeader.dataFreshness)}</em>
+            <span class="service-readback" data-service-status>${serviceBacked ? "service API pending" : "static fixture"}</span>
           </div>
-          <button type="button" class="top-action">Refresh readback</button>
+          <button type="button" class="top-action" data-refresh-readback>Refresh readback</button>
           <button type="button" class="profile" aria-label="Current operator">RL</button>
         </header>
         <div class="workspace">
@@ -254,7 +265,7 @@ export function renderOperationsCockpitHtml(model: OperationsCockpitReadModel = 
             <article class="panel stage-panel" data-region="stage-map" aria-label="Development stage map">
               <div class="panel-head">
                 <h2>Stage Map</h2>
-                <button type="button">Open stage detail</button>
+                <button type="button" disabled title="Stage detail route is held for the owner-trial implementation proof">Stage detail held</button>
               </div>
               <ol class="stage-line">
                 ${model.stageMap.map((stage, index) => stageStep(stage, index)).join("")}
@@ -263,7 +274,7 @@ export function renderOperationsCockpitHtml(model: OperationsCockpitReadModel = 
             <article class="panel" data-region="ai-employee-phase" aria-label="AI employee responsibility by phase">
               <div class="panel-head">
                 <h2>AI Employee Phase</h2>
-                <button type="button">Open role detail</button>
+                <button type="button" disabled title="Role detail route is held for a later owner-trial slice">Role detail held</button>
               </div>
               <div class="phase-list">
                 ${model.stageMap.map((stage) => phaseRow(stage)).join("")}
@@ -275,12 +286,12 @@ export function renderOperationsCockpitHtml(model: OperationsCockpitReadModel = 
                 <span class="count">${model.ownerIntentQueue.length + model.roleGateQueue.length}</span>
               </div>
               ${gateBlock(blockingGate)}
-              <button type="button" class="secondary-action">Prepare gate request</button>
+              <button type="button" class="secondary-action" disabled title="Gate request requires a routed owner-intent or role-gate path">Gate request held</button>
             </article>
             <article class="panel" data-region="readback-posture-card" aria-label="Readback posture">
               <div class="panel-head">
                 <h2>Readback Posture</h2>
-                <button type="button">Open evidence detail</button>
+                <button type="button" disabled title="Evidence detail route is held for a later owner-trial slice">Evidence detail held</button>
               </div>
               <dl class="posture-list">
                 <div><dt>Runtime fixture</dt><dd><span class="state-dot state-current"></span>local fixture readback current</dd></div>
@@ -296,29 +307,30 @@ export function renderOperationsCockpitHtml(model: OperationsCockpitReadModel = 
                 <h2>Work Index</h2>
                 <label class="search-box" for="work-search">
                   <span>Search</span>
-                  <input id="work-search" type="search" placeholder="Filter local fixture rows" />
+                  <input id="work-search" data-work-search type="search" placeholder="Filter service-backed rows" />
                 </label>
-                <button type="button">Columns</button>
+                <button type="button" disabled title="Column customization is not implemented in this owner-trial slice">Columns held</button>
               </header>
               <div class="filter-row" aria-label="Fixture filters">
                 <button type="button">Project: ${escapeHtml(model.contextHeader.selectedProjectId)}</button>
                 <button type="button">Freshness: ${copyFreshness(model.contextHeader.dataFreshness)}</button>
                 <button type="button">Risk: proof required</button>
               </div>
-              <div class="work-table" role="table">
+              <div class="work-table" role="table" data-work-table>
                 <div class="table-row table-head" role="row">
                   <span>ID</span><span>Title</span><span>State</span><span>Owner</span><span>Evidence</span><span>Gate</span>
                 </div>
                 ${workRows.map((row, index) => workRow(row, index)).join("")}
+                <div class="empty-state" data-empty-state hidden>No matching service rows.</div>
               </div>
             </section>
             <aside class="detail-drawer" data-region="detail-drawer" data-slice5="work-index-drill-through" aria-label="Selected item detail">
               <div class="drawer-head">
                 <span class="tag">Story</span>
-                <button type="button" aria-label="Close detail">Close</button>
+                <button type="button" aria-label="Close detail" data-close-detail>Close</button>
               </div>
-              <h2>${escapeHtml(selectedRow?.title ?? "Selected work item")}</h2>
-              <dl class="detail-list">
+              <h2 data-drawer-title>${escapeHtml(selectedRow?.title ?? "Selected work item")}</h2>
+              <dl class="detail-list" data-detail-list>
                 <div><dt>Hierarchy</dt><dd>${escapeHtml(model.contextHeader.selectedProjectId)} / ${escapeHtml(model.contextHeader.selectedInitiativeId)}</dd></div>
                 <div><dt>Gate flow</dt><dd>${blockingGate ? `${escapeHtml(blockingGate.ownerRole)} - ${escapeHtml(blockingGate.status)}` : "metadata present"}</dd></div>
                 <div><dt>Conference</dt><dd>${selectedConference ? `${escapeHtml(selectedConference.status)} / ${escapeHtml(selectedConference.minutesStatus)}` : "metadata present"}</dd></div>
@@ -339,8 +351,8 @@ export function renderOperationsCockpitHtml(model: OperationsCockpitReadModel = 
                   <li>live dispatch false</li>
                 </ul>
               </section>` : ""}
-              <button type="button" class="primary-action">Open gate work order</button>
-              <button type="button" class="secondary-action">Request rework</button>
+              <button type="button" class="primary-action" disabled title="Gate work order execution is held outside this UI slice">Gate work order held</button>
+              <button type="button" class="secondary-action" disabled title="Rework request execution requires a routed owner-trial action">Rework request held</button>
             </aside>
           </section>
           <section class="risk-lane" aria-label="Risk and warning lane">
@@ -380,6 +392,7 @@ const operationsCockpitCss = `
 body { margin: 0; min-width: 320px; background: #f4f7fa; color: var(--text); }
 button, input, select { font: inherit; }
 button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: 0.58; }
 strong, b { font-weight: 500; }
 .aos-shell { display: grid; grid-template-columns: 252px minmax(0, 1fr); min-height: 100vh; }
 .aos-sidebar { position: sticky; top: 0; align-self: start; display: grid; grid-template-rows: auto 1fr auto; gap: 22px; height: 100vh; padding: 24px 14px 20px; overflow: auto; background: linear-gradient(180deg, var(--navy-900), var(--navy-950)); color: #d9e8f0; }
@@ -401,6 +414,9 @@ strong, b { font-weight: 500; }
 .checkpoint-strip { display: flex; align-items: center; gap: 12px; min-width: 0; color: #26364a; font-size: 13px; }
 .checkpoint-strip strong, .checkpoint-strip em { white-space: nowrap; }
 .checkpoint-strip em { color: var(--teal-600); font-style: normal; }
+.service-readback { border: 1px solid #b8dde0; border-radius: 4px; padding: 4px 7px; color: #14646a; background: #f1fcfc; white-space: nowrap; }
+.service-readback.blocked { border-color: #f2c0bd; color: #b42318; background: #fff4f2; }
+.service-readback.loading { border-color: #bed4f7; color: #1f5fa7; background: #f3f8ff; }
 .top-action, .profile, .panel-head button, .work-index-head button, .filter-row button, .primary-action, .secondary-action { min-height: 34px; border-radius: 5px; font-weight: 500; }
 .top-action, .panel-head button, .work-index-head button, .filter-row button, .secondary-action { border: 1px solid var(--line-strong); background: #fff; color: var(--text); }
 .profile { border: 0; border-radius: 999px; background: #091833; color: #fff; }
@@ -454,6 +470,7 @@ dd { margin: 0; color: #162437; font-size: 12px; }
 .search-box input { width: 100%; border: 1px solid var(--line-strong); border-radius: 5px; padding: 0 12px; color: var(--text); }
 .filter-row { display: flex; flex-wrap: wrap; gap: 10px; padding: 12px 18px; border-bottom: 1px solid var(--line); }
 .work-table { min-width: 820px; }
+.empty-state { padding: 18px; border-bottom: 1px solid var(--line); color: #526174; font-size: 13px; }
 .table-row { display: grid; grid-template-columns: 98px minmax(220px, 1fr) 112px 108px 124px 132px; align-items: center; min-height: 48px; padding: 0 16px; border-bottom: 1px solid var(--line); color: #29374a; font-size: 12px; }
 .table-row[hidden] { display: none !important; }
 .table-row > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -462,6 +479,7 @@ dd { margin: 0; color: #162437; font-size: 12px; }
 .work-row:hover, .work-row.active { background: #effafe; }
 .work-row.active { box-shadow: inset 4px 0 0 var(--teal-600); }
 .detail-drawer { border-radius: 0 6px 6px 0; border-left: 0; padding: 20px; }
+.detail-drawer.closed { display: none; }
 .drawer-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .drawer-head button { border: 0; background: transparent; color: #1a293d; }
 .tag { background: #e5f8ee; color: #1d8d51; }
@@ -497,24 +515,168 @@ dd { margin: 0; color: #162437; font-size: 12px; }
 }`;
 
 const operationsCockpitClientScript = `
-const rows = Array.from(document.querySelectorAll("[data-work-row]"));
+const shell = document.querySelector("[data-surface='operations-cockpit']");
+const serviceBacked = shell?.getAttribute("data-service-backed") === "true";
+const cockpitApiPath = shell?.getAttribute("data-cockpit-api") || "/api/cockpit";
+const workTable = document.querySelector("[data-work-table]");
+const drawer = document.querySelector("[data-region='detail-drawer']");
 const drawerTitle = document.querySelector("[data-drawer-title]");
-const search = document.querySelector("#work-search");
-function activate(row) {
-  rows.forEach((candidate) => candidate.classList.toggle("active", candidate === row));
-  if (drawerTitle) drawerTitle.textContent = row.getAttribute("data-title") || drawerTitle.textContent;
+const detailList = document.querySelector("[data-detail-list]");
+const search = document.querySelector("[data-work-search]");
+const refreshButton = document.querySelector("[data-refresh-readback]");
+const freshness = document.querySelector("[data-readback-freshness]");
+const checkpoint = document.querySelector("[data-local-checkpoint]");
+const serviceStatus = document.querySelector("[data-service-status]");
+const emptyState = document.querySelector("[data-empty-state]");
+let currentRows = Array.from(document.querySelectorAll("[data-work-row]"));
+let activeStoryId = currentRows[0]?.getAttribute("data-row-id") || "";
+
+function setServiceStatus(text, state) {
+  if (!serviceStatus) return;
+  serviceStatus.textContent = text;
+  serviceStatus.classList.toggle("loading", state === "loading");
+  serviceStatus.classList.toggle("blocked", state === "blocked");
 }
-rows.forEach((row) => row.addEventListener("click", () => activate(row)));
-search?.addEventListener("input", () => {
-  const query = search.value.toLowerCase();
-  rows.forEach((row) => {
-    row.hidden = !(row.textContent || "").toLowerCase().includes(query);
+
+function cockpitUrl(selectedId) {
+  const url = new URL(cockpitApiPath, window.location.origin);
+  if (selectedId) {
+    url.searchParams.set("selectedType", "story");
+    url.searchParams.set("selectedId", selectedId);
+  }
+  return url;
+}
+
+async function loadCockpit(selectedId) {
+  if (!serviceBacked) return;
+  refreshButton?.setAttribute("disabled", "true");
+  setServiceStatus("reading service API", "loading");
+  try {
+    const response = await fetch(cockpitUrl(selectedId), { headers: { accept: "application/json" } });
+    if (!response.ok) throw new Error("cockpit_api_" + response.status);
+    const payload = await response.json();
+    if (!payload.ok || !payload.model) throw new Error("cockpit_payload_not_ok");
+    renderPayload(payload);
+    setServiceStatus("service API read " + new Date(payload.generatedAt).toLocaleTimeString(), "ok");
+  } catch (error) {
+    setServiceStatus("service API read failed", "blocked");
+    console.error("AOS cockpit service read failed", error);
+  } finally {
+    refreshButton?.removeAttribute("disabled");
+  }
+}
+
+function renderPayload(payload) {
+  const model = payload.model;
+  activeStoryId = model.detailPanel?.selectedId || activeStoryId;
+  if (checkpoint) checkpoint.textContent = model.contextHeader.localCheckpoint;
+  if (freshness) freshness.textContent = copyFreshness(model.contextHeader.dataFreshness);
+  renderRows(model.workstreams.flatMap((group) => group.rows));
+  renderDetail(model);
+  filterRows();
+}
+
+function renderRows(rows) {
+  if (!workTable) return;
+  workTable.querySelectorAll("[data-work-row]").forEach((row) => row.remove());
+  const anchor = emptyState;
+  rows.forEach((row, index) => {
+    const button = document.createElement("button");
+    button.className = "table-row work-row" + (row.storyId === activeStoryId || (!activeStoryId && index === 0) ? " active" : "");
+    button.type = "button";
+    button.setAttribute("role", "row");
+    button.setAttribute("data-work-row", "");
+    button.setAttribute("data-row-id", row.storyId);
+    button.setAttribute("data-title", row.title);
+    [
+      row.storyId,
+      row.title,
+      row.status,
+      row.nextOwnerRole,
+      row.linkedConferenceIds.length + " conference link",
+      row.nextAllowedLocalActions.length + " local actions"
+    ].forEach((value) => {
+      const cell = document.createElement("span");
+      cell.textContent = value;
+      button.append(cell);
+    });
+    button.addEventListener("click", () => {
+      activeStoryId = row.storyId;
+      drawer?.classList.remove("closed");
+      loadCockpit(row.storyId);
+    });
+    workTable.insertBefore(button, anchor);
   });
-});
+  currentRows = Array.from(document.querySelectorAll("[data-work-row]"));
+}
+
+function renderDetail(model) {
+  const detail = model.detailPanel;
+  const row = model.workstreams.flatMap((group) => group.rows).find((candidate) => candidate.storyId === detail?.selectedId)
+    || model.workstreams.flatMap((group) => group.rows)[0];
+  if (drawerTitle) drawerTitle.textContent = row?.title || detail?.selectedId || "Selected work item";
+  if (!detailList || !detail) return;
+  replaceDetailList([
+    ["Hierarchy", model.contextHeader.selectedProjectId + " / " + model.contextHeader.selectedInitiativeId],
+    ["Selected", detail.selectedType + " / " + detail.selectedId],
+    ["Gate links", String(detail.linkedGateIds.length)],
+    ["Conference links", String(detail.linkedConferenceIds.length)],
+    ["Evidence links", String(detail.linkedEvidenceIds.length)],
+    ["Local actions", detail.nextAllowedLocalActions.join(", ") || "open_evidence_metadata"],
+    ["Blocked actions", detail.blockedActions.map((item) => item.action).join(", ") || "none for local readback"],
+    ["Operating loop", detail.operatingLoopSummary],
+    ["No-overclaim", detail.noOverclaimSummary]
+  ]);
+}
+
+function replaceDetailList(rows) {
+  detailList.replaceChildren();
+  rows.forEach(([term, description]) => {
+    const wrapper = document.createElement("div");
+    const dt = document.createElement("dt");
+    const dd = document.createElement("dd");
+    dt.textContent = term;
+    dd.textContent = description;
+    wrapper.append(dt, dd);
+    detailList.append(wrapper);
+  });
+}
+
+function filterRows() {
+  const query = (search?.value || "").toLowerCase();
+  let visible = 0;
+  currentRows.forEach((row) => {
+    const match = (row.textContent || "").toLowerCase().includes(query);
+    row.hidden = !match;
+    if (match) visible += 1;
+  });
+  if (emptyState) emptyState.hidden = visible !== 0;
+}
+
+function copyFreshness(value) {
+  if (value === "current") return "readback current";
+  if (value === "blocked") return "proof blocked";
+  if (value === "stale") return "proof required";
+  return "metadata present";
+}
+
+currentRows.forEach((row) => row.addEventListener("click", () => {
+  activeStoryId = row.getAttribute("data-row-id") || activeStoryId;
+  drawer?.classList.remove("closed");
+  loadCockpit(activeStoryId);
+}));
+search?.addEventListener("input", filterRows);
+refreshButton?.addEventListener("click", () => loadCockpit(activeStoryId));
+document.querySelector("[data-close-detail]")?.addEventListener("click", () => drawer?.classList.add("closed"));
+if (serviceBacked) {
+  loadCockpit(activeStoryId);
+} else {
+  filterRows();
+}
 `;
 
 function navButton(label: string, active: boolean): string {
-  return `<button class="nav-row${active ? " active" : ""}" type="button">${escapeHtml(label)}</button>`;
+  return `<button class="nav-row${active ? " active" : ""}" type="button"${active ? "" : " disabled"}>${escapeHtml(label)}</button>`;
 }
 
 function stageStep(stage: StageMapReadModel, index: number): string {
@@ -534,7 +696,7 @@ function gateBlock(gate: GateQueueItem | undefined): string {
 }
 
 function workRow(row: WorkstreamStoryRow, index: number): string {
-  return `<button class="table-row work-row${index === 0 ? " active" : ""}" data-work-row data-title="${escapeHtml(row.title)}" type="button" role="row"><span>${escapeHtml(row.storyId)}</span><span>${escapeHtml(row.title)}</span><span>${escapeHtml(row.status)}</span><span>${escapeHtml(row.nextOwnerRole)}</span><span>${row.linkedConferenceIds.length} conference link</span><span>${row.nextAllowedLocalActions.length} local actions</span></button>`;
+  return `<button class="table-row work-row${index === 0 ? " active" : ""}" data-work-row data-row-id="${escapeHtml(row.storyId)}" data-title="${escapeHtml(row.title)}" type="button" role="row"><span>${escapeHtml(row.storyId)}</span><span>${escapeHtml(row.title)}</span><span>${escapeHtml(row.status)}</span><span>${escapeHtml(row.nextOwnerRole)}</span><span>${row.linkedConferenceIds.length} conference link</span><span>${row.nextAllowedLocalActions.length} local actions</span></button>`;
 }
 
 function riskPill(warning: RiskWarningItem): string {

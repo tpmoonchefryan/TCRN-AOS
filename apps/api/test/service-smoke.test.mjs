@@ -7,6 +7,10 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
   try {
     const cockpit = await fetch(`${service.url}/`).then((response) => response.text());
     assert.match(cockpit, /data-surface="operations-cockpit"/);
+    assert.match(cockpit, /data-service-backed="true"/);
+    assert.match(cockpit, /data-cockpit-api="\/api\/cockpit"/);
+    assert.match(cockpit, /data-refresh-readback/);
+    assert.match(cockpit, /data-work-table/);
     assert.match(cockpit, /TCRN/);
     assert.match(cockpit, /AOS/);
 
@@ -30,6 +34,21 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
     const readback = await fetch(`${service.url}/readback`).then((response) => response.json());
     assert.equal(readback.operationalRecordCounts.stories, 1);
     assert.equal(readback.operationalRecordCounts.auditEvents >= 1, true);
+
+    const cockpitModel = await fetch(`${service.url}/api/cockpit`).then((response) => response.json());
+    assert.equal(cockpitModel.ok, true);
+    assert.equal(cockpitModel.serviceBacked, true);
+    assert.equal(cockpitModel.runtimeDataCommitted, false);
+    assert.equal(cockpitModel.liveCodexDispatchAuthorized, false);
+    assert.equal(cockpitModel.boundaries.productAcceptance, false);
+    assert.equal(cockpitModel.boundaries.finalMvpAcceptance, false);
+    assert.equal(cockpitModel.model.contextHeader.localCheckpoint, "owner-trial-service-readback");
+    assert.equal(cockpitModel.model.workstreams[0].rows.length, 1);
+    assert.equal(cockpitModel.model.detailPanel.selectedType, "story");
+
+    const selectedStoryId = cockpitModel.model.workstreams[0].rows[0].storyId;
+    const selectedCockpitModel = await fetch(`${service.url}/api/cockpit?selectedType=story&selectedId=${selectedStoryId}`).then((response) => response.json());
+    assert.equal(selectedCockpitModel.model.detailPanel.selectedId, selectedStoryId);
   } finally {
     const stopped = await service.close();
     assert.equal(stopped.stopped, true);

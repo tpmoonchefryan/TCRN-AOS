@@ -53,7 +53,9 @@ const ok = aggregateDigest === slice4bBaselineDigest
   && forbiddenHits.length === 0
   && html.includes("Local checkpoint observed")
   && html.includes("local fixture readback current")
-  && html.includes("Open gate work order")
+  && html.includes('data-service-backed="false"')
+  && html.includes("Gate work order held")
+  && html.includes("data-refresh-readback")
   && mockupReferenceCopyBoundary;
 
 console.log(JSON.stringify({

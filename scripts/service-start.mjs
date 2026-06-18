@@ -15,7 +15,8 @@ console.log(JSON.stringify({
     productDesign: `${service.url}/aos-wide-product-design`,
     health: `${service.url}/health`,
     policy: `${service.url}/policy`,
-    readback: `${service.url}/readback`
+    readback: `${service.url}/readback`,
+    cockpitApi: `${service.url}/api/cockpit`
   },
   runtimeDataCommitted: false,
   externalQueue: "none",

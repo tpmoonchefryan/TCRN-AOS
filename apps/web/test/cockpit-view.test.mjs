@@ -42,10 +42,28 @@ test("Slice 4B production HTML exposes required cockpit regions", () => {
   assert.match(html, /class="brand-aos">AOS/);
   assert.match(html, /Local checkpoint observed/);
   assert.match(html, /local fixture readback current/);
-  assert.match(html, /Open gate work order/);
+  assert.match(html, /data-service-backed="false"/);
+  assert.match(html, /data-refresh-readback/);
+  assert.match(html, /data-work-table/);
+  assert.match(html, /data-row-id=/);
+  assert.match(html, /data-drawer-title/);
+  assert.match(html, /data-detail-list/);
+  assert.match(html, /Gate work order held/);
   assert.match(html, /data-slice5="work-index-drill-through"/);
   assert.match(html, /data-region="conference-operating-loop"/);
   assert.match(html, /live dispatch false/);
+});
+
+test("Slice 4B production HTML can be marked as service-backed for owner-trial service rendering", () => {
+  const html = renderOperationsCockpitHtml(createSlice4bCockpitReadModel(), {
+    serviceBacked: true,
+    cockpitApiPath: "/api/cockpit"
+  });
+
+  assert.match(html, /data-service-backed="true"/);
+  assert.match(html, /data-cockpit-api="\/api\/cockpit"/);
+  assert.match(html, /service API pending/);
+  assert.match(html, /Filter service-backed rows/);
 });
 
 test("Slice 4B production HTML removes forbidden overclaim copy", () => {
