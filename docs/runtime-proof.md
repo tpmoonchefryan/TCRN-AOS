@@ -8,6 +8,7 @@ Observed proof receipt: `../evidence/slice-2-runtime-proof.md`.
 
 ```sh
 pnpm runtime:db:proof
+pnpm service:start
 pnpm service:smoke
 ```
 
@@ -23,7 +24,9 @@ The fixture covers Project, Initiative, Epic, Story, subtask, comment, evidence,
 
 ## Local Service Proof
 
-The service proof starts a loopback-only HTTP server on an ephemeral port, reads `/health` and `/readback`, verifies DB connectivity and no-overclaim posture, then closes the server and resets its fixture storage.
+The service proof starts a loopback-only HTTP server on an ephemeral port, reads `/`, `/health`, `/readback`, and the secondary owner-trial surfaces, verifies DB connectivity and no-overclaim posture, then closes the server and resets its fixture storage.
+
+`pnpm service:start` is the retained owner-trial variant. It starts the same loopback-only AOS service on `AOS_PORT` or `4317` by default. The service root `/` serves the operations cockpit; `/docs-readiness` and `/aos-wide-product-design` serve the supporting product-readiness surfaces; `/health`, `/policy`, and `/readback` serve JSON readbacks from the local fixture runtime.
 
 It does not start an external queue, use Redis, dispatch Codex live, execute copied helpers, mutate another product repo, deploy, or leave a retained service.
 
