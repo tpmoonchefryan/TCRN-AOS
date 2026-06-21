@@ -7,6 +7,7 @@ import {
   renderCockpitRuntimeDetailDrawer,
   renderCockpitRuntimeGateReadbackCards,
   renderCockpitRuntimeNavItems,
+  renderCockpitRuntimeStagePhaseCards,
   renderCockpitRuntimeWorkIndexCluster
 } from "../dist/apps/web/src/cockpit-ui-react-runtime.js";
 import {
@@ -17,7 +18,7 @@ import {
 } from "../dist/apps/web/src/cockpit-view.js";
 
 const repoRoot = process.cwd();
-const route = "route_tcrn_aos_design_system_frontend_rebuild_59aq_gate_readback_cards_package_runtime_implementation";
+const route = "route_tcrn_aos_design_system_frontend_rebuild_59ar_stage_phase_package_runtime_implementation";
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const packageJson = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8"));
 const runtimeSourcePath = "apps/web/src/cockpit-ui-react-runtime.ts";
@@ -27,6 +28,7 @@ const navRuntimeReadback = inspectPackageRuntimeNavItems(cockpitHtml);
 const workIndexRuntimeReadback = inspectPackageRuntimeWorkIndexCluster(cockpitHtml);
 const detailDrawerRuntimeReadback = inspectPackageRuntimeDetailDrawer(cockpitHtml);
 const gateReadbackCardsRuntimeReadback = inspectPackageRuntimeGateReadbackCards(cockpitHtml);
+const stagePhaseRuntimeReadback = inspectPackageRuntimeStagePhaseCards(cockpitHtml);
 const fullDocumentAccessibilityReadback = inspectFullDocumentAccessibility(cockpitHtml);
 const visualStyleReadback = inspectAosRuntimeStyleContract(cockpitHtml);
 const importReadback = inspectImports();
@@ -47,6 +49,7 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && workIndexRuntimeReadback.ok
   && detailDrawerRuntimeReadback.ok
   && gateReadbackCardsRuntimeReadback.ok
+  && stagePhaseRuntimeReadback.ok
   && fullDocumentAccessibilityReadback.ok
   && visualStyleReadback.ok
   && storybookReferenceReadback.ok
@@ -58,9 +61,9 @@ const summary = {
   route,
   sourceHead,
   claimScope: {
-    implementationKind: "operations_cockpit_gate_readback_cards_package_runtime_expansion",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_and_gate_readback_cards",
-    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_and_gate_readback_component_reference_only",
+    implementationKind: "operations_cockpit_stage_phase_package_runtime_expansion",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_and_stage_phase",
+    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_and_stage_phase_component_reference_only",
     broadUiReactRuntimeMigration: false,
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -82,6 +85,7 @@ const summary = {
   workIndexRuntimeReadback,
   detailDrawerRuntimeReadback,
   gateReadbackCardsRuntimeReadback,
+  stagePhaseRuntimeReadback,
   fullDocumentAccessibilityReadback,
   visualStyleReadback,
   storybookReferenceReadback,
@@ -123,6 +127,10 @@ console.log(JSON.stringify({
   packageRuntimeDetailDrawerSelectedId: summary.detailDrawerRuntimeReadback.selectedDetailId,
   packageRuntimeGateReadbackCardComponentCount: summary.gateReadbackCardsRuntimeReadback.packageRuntimeComponents.length,
   packageRuntimeGateReadbackCardFailures: summary.gateReadbackCardsRuntimeReadback.failures.length,
+  packageRuntimeStagePhaseComponentCount: summary.stagePhaseRuntimeReadback.packageRuntimeComponents.length,
+  packageRuntimeStagePhaseStageCount: summary.stagePhaseRuntimeReadback.stageCount,
+  packageRuntimeStagePhaseRowCount: summary.stagePhaseRuntimeReadback.phaseRowCount,
+  packageRuntimeStagePhaseFailures: summary.stagePhaseRuntimeReadback.failures.length,
   duplicateDomIdCount: summary.fullDocumentAccessibilityReadback.duplicateIds.length,
   ariaReferenceFailureCount: summary.fullDocumentAccessibilityReadback.ariaReferenceFailures.length,
   disabledDescriptionMismatchCount: summary.fullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length,
@@ -564,6 +572,132 @@ function inspectPackageRuntimeGateReadbackCards(html) {
   };
 }
 
+function inspectPackageRuntimeStagePhaseCards(html) {
+  const stageHtml = extractRegionHtml(html, "stage-map");
+  const phaseHtml = extractRegionHtml(html, "ai-employee-phase");
+  const failures = [];
+
+  if (!stageHtml) failures.push("stage_map_card_missing");
+  if (!phaseHtml) failures.push("ai_employee_phase_card_missing");
+  const combinedHtml = `${stageHtml}\n${phaseHtml}`;
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(combinedHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "Badge",
+    "Button",
+    "Heading",
+    "StatusBadge",
+    "Surface",
+    "Text"
+  ];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  if (missingComponents.length > 0) failures.push("stage_phase_required_package_components_missing");
+
+  const stageAttributes = parseAttributes(stageHtml.match(/<(?:section|article)\b([^>]*)>/)?.[1] ?? "");
+  const phaseAttributes = parseAttributes(phaseHtml.match(/<(?:section|article)\b([^>]*)>/)?.[1] ?? "");
+  if (stageAttributes["data-package-runtime-component"] !== "Surface") failures.push("stage_map_missing_surface_runtime_marker");
+  if (phaseAttributes["data-package-runtime-component"] !== "Surface") failures.push("ai_employee_phase_missing_surface_runtime_marker");
+  for (const [label, attributes] of [["stage_map", stageAttributes], ["ai_employee_phase", phaseAttributes]]) {
+    if (attributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push(`${label}_missing_package_source`);
+    if (attributes["data-package-runtime-surface"] !== "operations-cockpit-stage-phase") failures.push(`${label}_missing_runtime_surface`);
+  }
+
+  const stageItems = Array.from(stageHtml.matchAll(/<li\b(?=[^>]*data-stage-id)([^>]*)>([\s\S]*?)<\/li>/g))
+    .map((match) => ({ attributes: match[1], body: match[2], parsed: parseAttributes(match[1]) }));
+  const phaseRows = Array.from(phaseHtml.matchAll(/<div\b(?=[^>]*class="[^"]*\bphase-row\b)(?=[^>]*data-phase-stage-id)([^>]*)>([\s\S]*?)<\/div>/g))
+    .map((match) => ({ attributes: match[1], body: match[2], parsed: parseAttributes(match[1]) }));
+  if (stageItems.length !== 4) failures.push("stage_map_stage_count_mismatch");
+  if (phaseRows.length !== 4) failures.push("ai_employee_phase_row_count_mismatch");
+  for (const item of stageItems) {
+    const itemFailures = [];
+    if (item.parsed["data-package-runtime-surface"] !== "operations-cockpit-stage-phase") itemFailures.push("stage_item_missing_runtime_surface");
+    if (!item.parsed["data-stage-state"]?.trim()) itemFailures.push("stage_item_missing_state");
+    if (!item.parsed["data-stage-owner-count"]?.trim()) itemFailures.push("stage_item_missing_owner_count");
+    if (!item.parsed["data-stage-gate-count"]?.trim()) itemFailures.push("stage_item_missing_gate_count");
+    if (!item.parsed["data-stage-evidence-count"]?.trim()) itemFailures.push("stage_item_missing_evidence_count");
+    if (!/data-package-runtime-component="Text"/.test(item.body)) itemFailures.push("stage_item_missing_text_runtime_marker");
+    if (!/class="[^"]*\bstage-number\b[^"]*"/.test(item.body)) itemFailures.push("stage_item_missing_number_badge");
+    if (!/data-package-runtime-component="StatusBadge"/.test(item.body)) itemFailures.push("stage_item_missing_status_badge_runtime_marker");
+    if (itemFailures.length > 0) {
+      failures.push({ stageId: item.parsed["data-stage-id"] ?? "unknown", failures: itemFailures });
+    }
+  }
+  for (const row of phaseRows) {
+    const rowFailures = [];
+    if (row.parsed["data-package-runtime-surface"] !== "operations-cockpit-stage-phase") rowFailures.push("phase_row_missing_runtime_surface");
+    if (!row.parsed["data-phase-state"]?.trim()) rowFailures.push("phase_row_missing_state");
+    if (!/data-package-runtime-component="Text"/.test(row.body)) rowFailures.push("phase_row_missing_text_runtime_marker");
+    if (!/data-package-runtime-component="Badge"/.test(row.body)) rowFailures.push("phase_row_missing_owner_badge_runtime_marker");
+    if (!/data-package-runtime-component="StatusBadge"/.test(row.body)) rowFailures.push("phase_row_missing_status_badge_runtime_marker");
+    if (rowFailures.length > 0) {
+      failures.push({ stageId: row.parsed["data-phase-stage-id"] ?? "unknown", failures: rowFailures });
+    }
+  }
+
+  const disabledButtons = Array.from(combinedHtml.matchAll(/<button\b(?=[^>]*data-package-runtime-component="Button")(?=[^>]*disabled)([^>]*)>([\s\S]*?)<\/button>/g))
+    .map((match) => ({ attributes: match[1], body: match[2], parsed: parseAttributes(match[1]) }));
+  if (disabledButtons.length !== 2) failures.push("stage_phase_disabled_button_count_mismatch");
+  for (const button of disabledButtons) {
+    const buttonFailures = [];
+    if (button.parsed["data-package-runtime-surface"] !== "operations-cockpit-stage-phase") buttonFailures.push("disabled_button_missing_stage_phase_surface");
+    if (!button.parsed.title?.trim()) buttonFailures.push("disabled_button_missing_title");
+    if (!button.parsed["data-disabled-reason"]?.trim()) buttonFailures.push("disabled_button_missing_data_disabled_reason");
+    if (!button.parsed["aria-describedby"]?.trim()) buttonFailures.push("disabled_button_missing_aria_describedby");
+    if (!/class="tcrn-sr-only"/.test(button.body)) buttonFailures.push("disabled_button_sr_only_reason_missing");
+    if (buttonFailures.length > 0) {
+      failures.push({ label: extractButtonLabel(button.body), failures: buttonFailures });
+    }
+  }
+
+  const markerOnlyComponents = Array.from(combinedHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)([^>]*)>/g))
+    .map((match) => ({ tag: match[1], component: match[2] }));
+  if (markerOnlyComponents.length > 0) failures.push("stage_phase_marker_only_runtime_claim_present");
+
+  const mobileReadability = {
+    stageLabelRulePresent: /\.stage-line \.stage-label\s*\{[^}]*white-space:\s*nowrap;/s.test(html),
+    stageNumberScopedRulePresent: /\.stage-line \.stage-number\s*\{[^}]*width:\s*30px;[^}]*height:\s*30px;/s.test(html),
+    phaseLabelRulePresent: /\.phase-label\s*\{[^}]*min-width:\s*0;[^}]*white-space:\s*nowrap;/s.test(html),
+    mobileStageWrapRulePresent: /@media \(max-width: (?:460|520)px\)\s*\{[\s\S]*?\.stage-line\s*\{[^}]*grid-template-columns:\s*1fr;/s.test(html)
+  };
+  if (!Object.values(mobileReadability).every(Boolean)) failures.push("stage_phase_mobile_readability_rule_missing");
+
+  const sampleRenderedHtmlSha256 = createHash("sha256").update(renderCockpitRuntimeStagePhaseCards({
+    roleDetailDisabledReason: "Sample role detail disabled reason.",
+    stageDetailDisabledReason: "Sample stage detail disabled reason.",
+    stages: [
+      {
+        evidenceCount: 2,
+        freshnessLabel: "Readback current",
+        index: 0,
+        label: "Sample stage",
+        ownerRoles: ["implementation", "review"],
+        releaseReadinessLabel: "Not claimed",
+        sourceGateCount: 1,
+        stageId: "sample-stage",
+        state: "active",
+        stateLabel: "Active locally"
+      }
+    ]
+  })).digest("hex");
+
+  return {
+    ok: failures.length === 0,
+    present: Boolean(stageHtml && phaseHtml),
+    surface: "operations-cockpit-stage-phase",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    stageCount: stageItems.length,
+    phaseRowCount: phaseRows.length,
+    disabledActionButtonCount: disabledButtons.length,
+    markerOnlyComponents,
+    mobileReadability,
+    sampleRenderedHtmlSha256,
+    failures
+  };
+}
+
 function inspectFullDocumentAccessibility(html) {
   const idEntries = collectRealIdEntries(html);
   const idCounts = new Map();
@@ -776,6 +910,20 @@ function extractRegionArticleHtml(html, region) {
   return html.slice(start, end + "</article>".length);
 }
 
+function extractRegionHtml(html, region) {
+  const marker = `data-region="${region}"`;
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const articleStart = html.lastIndexOf("<article", markerIndex);
+  const sectionStart = html.lastIndexOf("<section", markerIndex);
+  const start = Math.max(articleStart, sectionStart);
+  if (start === -1) return "";
+  const tag = start === articleStart ? "article" : "section";
+  const end = html.indexOf(`</${tag}>`, markerIndex);
+  if (end === -1) return "";
+  return html.slice(start, end + `</${tag}>`.length);
+}
+
 function inspectStorybookReference() {
   const summaryPath = join(repoRoot, "..", "TCRN-Design-System", "docs", "verification", "internal-alpha", "browser-proof-summary.json");
   if (!existsSync(summaryPath)) {
@@ -877,6 +1025,9 @@ function markdownReceipt(summary) {
   const gateReadbackRows = summary.gateReadbackCardsRuntimeReadback.failures.length === 0
     ? "- Gate Work Order / Readback Posture package-runtime failures: 0"
     : summary.gateReadbackCardsRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
+  const stagePhaseRows = summary.stagePhaseRuntimeReadback.failures.length === 0
+    ? "- Stage Map / AI Employee Phase package-runtime failures: 0"
+    : summary.stagePhaseRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.stageId ?? failure.label}: ${failure.failures.join(", ")}`).join("\n");
   const accessibilityRows = [
     `- Full-document duplicate real DOM ids: ${summary.fullDocumentAccessibilityReadback.duplicateIds.length}`,
     `- Full-document aria reference failures: ${summary.fullDocumentAccessibilityReadback.ariaReferenceFailures.length}`,
@@ -897,6 +1048,8 @@ function markdownReceipt(summary) {
     + `- Package runtime selected detail id/type: ${summary.detailDrawerRuntimeReadback.selectedDetailId} / ${summary.detailDrawerRuntimeReadback.selectedDetailType}\n`
     + `- Package runtime selected detail components: ${summary.detailDrawerRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Package runtime Gate/Readback card components: ${summary.gateReadbackCardsRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
+    + `- Package runtime Stage/Phase components: ${summary.stagePhaseRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
+    + `- Package runtime Stage/Phase counts: ${summary.stagePhaseRuntimeReadback.stageCount} stages / ${summary.stagePhaseRuntimeReadback.phaseRowCount} phase rows\n`
     + `- Marker-only NavItems in cockpit nav: ${summary.navRuntimeReadback.markerOnlyNavItemCount}\n`
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
@@ -905,7 +1058,8 @@ function markdownReceipt(summary) {
     + `${workIndexRows}\n`
     + `${detailDrawerRows}\n`
     + `${gateReadbackRows}\n`
+    + `${stagePhaseRows}\n`
     + `${accessibilityRows}\n\n`
     + `## Boundaries\n\n`
-    + `This is an Operations Cockpit NavItem, Work Index, selected detail drawer, Gate Work Order card, and Readback Posture card package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
+    + `This is an Operations Cockpit NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, and AI Employee Phase package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
 }

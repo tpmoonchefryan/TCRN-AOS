@@ -69,7 +69,7 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.equal(aosDesignSystemConsumerBridge.tokenPackage, "@tcrn/ui-tokens");
   assert.equal(aosDesignSystemConsumerBridge.copyStatePackage, "@tcrn/ui-copy-state");
   assert.equal(aosDesignSystemConsumerBridge.uiReactPackage, "@tcrn/ui-react");
-  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards");
+  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase");
   assert.equal(aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering, true);
   assert.equal(aosDesignSystemConsumerBridge.designSystemSourceHead, "b0c00828a813d3c62392eb6e53d7d6b85b6affeb");
   assert.equal(copyAosState("external_proof_required"), "External proof required");
@@ -87,12 +87,48 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.match(html, /data-package-runtime-component="TableShell"/);
   assert.match(html, /data-package-runtime-component="GateReadinessPanel"/);
   assert.match(html, /data-package-runtime-component="ReadbackPanel"/);
+  assert.match(html, /data-package-runtime-surface="operations-cockpit-stage-phase"/);
   assert.doesNotMatch(html, /data-package-runtime-component="Input"/);
   assert.match(html, /data-package-runtime-subcomponent="SearchInput\.control"/);
   assert.match(html, /data-package-runtime-surface="operations-cockpit-work-index"/);
   assert.match(html, /--tcrn-color-brand-primary/);
   assert.match(html, /\.tcrn-sr-only\s*\{[^}]*position: absolute;[^}]*width: 1px;[^}]*overflow: hidden;/);
   assert.match(html, /@media \(max-width: 520px\)[\s\S]*\.work-table \.tcrn-table-shell__cell::before\s*\{[^}]*content: attr\(data-label\)/);
+});
+
+test("Operations Cockpit Stage Map and AI Employee Phase render package-backed runtime controls", () => {
+  const html = renderOperationsCockpitHtml();
+  const stageStart = html.indexOf('data-region="stage-map"');
+  const stageEnd = html.indexOf("</section>", stageStart);
+  const stageHtml = html.slice(stageStart, stageEnd);
+  const phaseStart = html.indexOf('data-region="ai-employee-phase"');
+  const phaseEnd = html.indexOf("</section>", phaseStart);
+  const phaseHtml = html.slice(phaseStart, phaseEnd);
+
+  assert.ok(stageStart > 0, "stage map region is present");
+  assert.ok(phaseStart > 0, "AI Employee Phase region is present");
+  assert.match(stageHtml, /data-package-runtime-component="Surface"/);
+  assert.match(stageHtml, /data-package-runtime-surface="operations-cockpit-stage-phase"/);
+  assert.match(stageHtml, /data-package-runtime-component="Heading"/);
+  assert.match(stageHtml, /data-package-runtime-component="Button"/);
+  assert.match(stageHtml, /data-package-runtime-component="Text"/);
+  assert.match(stageHtml, /data-package-runtime-component="Badge"/);
+  assert.match(stageHtml, /data-package-runtime-component="StatusBadge"/);
+  assert.match(stageHtml, /Stage detail held/);
+  assert.match(stageHtml, /data-disabled-reason="Stage detail route is held for the owner-trial implementation proof"/);
+  assert.equal((stageHtml.match(/data-stage-id=/g) ?? []).length, 4);
+  assert.equal((stageHtml.match(/data-stage-state=/g) ?? []).length, 4);
+  assert.match(phaseHtml, /data-package-runtime-component="Surface"/);
+  assert.match(phaseHtml, /data-package-runtime-surface="operations-cockpit-stage-phase"/);
+  assert.match(phaseHtml, /data-package-runtime-component="Heading"/);
+  assert.match(phaseHtml, /data-package-runtime-component="Button"/);
+  assert.match(phaseHtml, /data-package-runtime-component="Text"/);
+  assert.match(phaseHtml, /data-package-runtime-component="Badge"/);
+  assert.match(phaseHtml, /data-package-runtime-component="StatusBadge"/);
+  assert.match(phaseHtml, /Role detail held/);
+  assert.match(phaseHtml, /data-disabled-reason="Role detail route is held for a later owner-trial slice"/);
+  assert.equal((phaseHtml.match(/data-phase-stage-id=/g) ?? []).length, 4);
+  assert.ok((phaseHtml.match(/data-owner-role=/g) ?? []).length >= 4);
 });
 
 test("Operations Cockpit summary Gate and Readback cards render package-backed runtime controls", () => {

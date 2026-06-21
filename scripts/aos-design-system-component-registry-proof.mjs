@@ -112,8 +112,8 @@ const summary = {
   registrySource: relative(repoRoot, designSystemRegistrySourcePath),
   designSystemBasis,
   claimScope: {
-    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_gate_readback_cards_package_runtime",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_and_gate_readback_cards",
+    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_stage_phase_package_runtime",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_and_stage_phase",
     storybookVisualStyleParity: "not_claimed_by_registered_component_proof",
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -404,6 +404,7 @@ function inspectPackageRuntimeReadback(surface) {
     || !row.parsed["data-row-id"]?.trim());
   const detailDrawer = inspectDetailDrawerRuntime(surface.html);
   const gateReadbackCards = inspectGateReadbackCardsRuntime(surface.html);
+  const stagePhase = inspectStagePhaseRuntime(surface.html);
   return {
     ok: packageRuntimeNavItems.length === 10
       && markerOnlyNavItems.length === 0
@@ -417,9 +418,10 @@ function inspectPackageRuntimeReadback(surface) {
       && workIndexRowFailures.length === 0
       && detailDrawer.ok
       && gateReadbackCards.ok
+      && stagePhase.ok
       && surface.html.includes('data-package-backed-react-runtime-rendering="true"'),
     surface: surface.id,
-    packageRuntimeComponent: "NavItem+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel",
+    packageRuntimeComponent: "NavItem+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel+StagePhase",
     packageRuntimeSource: "@tcrn/ui-react",
     packageRuntimeNavItemCount: packageRuntimeNavItems.length,
     markerOnlyNavItemCount: markerOnlyNavItems.length,
@@ -433,6 +435,7 @@ function inspectPackageRuntimeReadback(surface) {
     workIndexRowFailureCount: workIndexRowFailures.length,
     detailDrawerRuntimeReadback: detailDrawer,
     gateReadbackCardsRuntimeReadback: gateReadbackCards,
+    stagePhaseRuntimeReadback: stagePhase,
     packageBackedReactRuntimeShellMarkerPresent: surface.html.includes('data-package-backed-react-runtime-rendering="true"')
   };
 }
@@ -477,6 +480,51 @@ function inspectGateReadbackCardsRuntime(html) {
     requiredComponents,
     packageRuntimeComponents,
     missingComponents,
+    failures
+  };
+}
+
+function inspectStagePhaseRuntime(html) {
+  const stageHtml = extractRegionHtml(html, "stage-map");
+  const phaseHtml = extractRegionHtml(html, "ai-employee-phase");
+  const combinedHtml = `${stageHtml}\n${phaseHtml}`;
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(combinedHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "Badge",
+    "Button",
+    "Heading",
+    "StatusBadge",
+    "Surface",
+    "Text"
+  ];
+  const failures = [];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  const stageAttributes = parseAttributes(stageHtml.match(/<(?:section|article)\b([^>]*)>/)?.[1] ?? "");
+  const phaseAttributes = parseAttributes(phaseHtml.match(/<(?:section|article)\b([^>]*)>/)?.[1] ?? "");
+  const stageCount = Array.from(stageHtml.matchAll(/<li\b(?=[^>]*data-stage-id)([^>]*)>/g)).length;
+  const phaseRowCount = Array.from(phaseHtml.matchAll(/<div\b(?=[^>]*class="[^"]*\bphase-row\b)(?=[^>]*data-phase-stage-id)([^>]*)>/g)).length;
+  if (!stageHtml) failures.push("stage_map_card_missing");
+  if (!phaseHtml) failures.push("ai_employee_phase_card_missing");
+  if (missingComponents.length > 0) failures.push("stage_phase_required_package_components_missing");
+  if (stageAttributes["data-package-runtime-component"] !== "Surface") failures.push("stage_map_missing_runtime_marker");
+  if (phaseAttributes["data-package-runtime-component"] !== "Surface") failures.push("ai_employee_phase_missing_runtime_marker");
+  if (stageAttributes["data-package-runtime-surface"] !== "operations-cockpit-stage-phase") failures.push("stage_map_missing_runtime_surface");
+  if (phaseAttributes["data-package-runtime-surface"] !== "operations-cockpit-stage-phase") failures.push("ai_employee_phase_missing_runtime_surface");
+  if (stageCount !== 4) failures.push("stage_map_stage_count_mismatch");
+  if (phaseRowCount !== 4) failures.push("ai_employee_phase_row_count_mismatch");
+  if ((combinedHtml.match(/data-package-runtime-component="Button"/g) ?? []).length !== 2) failures.push("stage_phase_disabled_button_count_mismatch");
+  if (!/data-disabled-reason="Stage detail route is held/.test(combinedHtml)) failures.push("stage_detail_disabled_reason_missing");
+  if (!/data-disabled-reason="Role detail route is held/.test(combinedHtml)) failures.push("role_detail_disabled_reason_missing");
+  return {
+    ok: failures.length === 0,
+    surface: "operations-cockpit-stage-phase",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    stageCount,
+    phaseRowCount,
     failures
   };
 }
@@ -558,6 +606,20 @@ function extractRegionArticleHtml(html, region) {
   const end = html.indexOf("</article>", markerIndex);
   if (start === -1 || end === -1) return "";
   return html.slice(start, end + "</article>".length);
+}
+
+function extractRegionHtml(html, region) {
+  const marker = `data-region="${region}"`;
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const articleStart = html.lastIndexOf("<article", markerIndex);
+  const sectionStart = html.lastIndexOf("<section", markerIndex);
+  const start = Math.max(articleStart, sectionStart);
+  if (start === -1) return "";
+  const tag = start === articleStart ? "article" : "section";
+  const end = html.indexOf(`</${tag}>`, markerIndex);
+  if (end === -1) return "";
+  return html.slice(start, end + `</${tag}>`.length);
 }
 
 function escapeRegExp(value) {

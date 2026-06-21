@@ -20,7 +20,6 @@ import {
   type GateQueueItem,
   type OperationsCockpitReadModel,
   type RiskWarningItem,
-  type StageMapReadModel,
   type WorkstreamStoryRow
 } from "./cockpit.js";
 import {
@@ -28,11 +27,13 @@ import {
   renderCockpitRuntimeDetailDrawer,
   renderCockpitRuntimeGateReadbackCards,
   renderCockpitRuntimeNavItems,
+  renderCockpitRuntimeStagePhaseCards,
   renderCockpitRuntimeWorkIndexCluster,
   type CockpitRuntimeDetailDrawerOptions,
   type CockpitRuntimeGateReadbackCardsOptions,
-  type CockpitRuntimeWorkIndexRow,
-  type CockpitRuntimeNavItem
+  type CockpitRuntimeNavItem,
+  type CockpitRuntimeStagePhaseOptions,
+  type CockpitRuntimeWorkIndexRow
 } from "./cockpit-ui-react-runtime.js";
 import { tcrnComponentAttr } from "./static-component-registry.js";
 
@@ -294,24 +295,7 @@ export function renderOperationsCockpitHtml(
             </div>
           </section>
           <section class="summary-grid">
-            <article class="panel stage-panel tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="stage-map" aria-label="Development stage map">
-              <div class="panel-head">
-                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Stage Map</h2>
-                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button" disabled title="${escapeHtml(stageDetailDisabledReason)}" data-disabled-reason="${escapeHtml(stageDetailDisabledReason)}" aria-describedby="stage-detail-held-reason">Stage detail held<span id="stage-detail-held-reason" class="tcrn-sr-only">${escapeHtml(stageDetailDisabledReason)}</span></button>
-              </div>
-              <ol class="stage-line">
-                ${model.stageMap.map((stage, index) => stageStep(stage, index)).join("")}
-              </ol>
-            </article>
-            <article class="panel tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="ai-employee-phase" aria-label="AI employee responsibility by phase">
-              <div class="panel-head">
-                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>AI Employee Phase</h2>
-                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button" disabled title="${escapeHtml(roleDetailDisabledReason)}" data-disabled-reason="${escapeHtml(roleDetailDisabledReason)}" aria-describedby="role-detail-held-reason">Role detail held<span id="role-detail-held-reason" class="tcrn-sr-only">${escapeHtml(roleDetailDisabledReason)}</span></button>
-              </div>
-              <div class="phase-list">
-                ${model.stageMap.map((stage) => phaseRow(stage)).join("")}
-              </div>
-            </article>
+            ${renderCockpitRuntimeStagePhaseCards(createCockpitRuntimeStagePhaseOptions(model, stageDetailDisabledReason, roleDetailDisabledReason))}
             ${renderCockpitRuntimeGateReadbackCards(createCockpitRuntimeGateReadbackCardsOptions({
               blockingGate,
               dependency,
@@ -431,17 +415,17 @@ h2 { margin: 0; font-size: var(--type-ui); font-weight: 500; letter-spacing: 0.0
 .stage-line { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 8px; margin: 0; padding: 28px 0 0; list-style: none; }
 .stage-line::before { content: ""; position: absolute; left: 11%; right: 11%; top: 54px; height: 4px; background: linear-gradient(90deg, var(--teal-600) 0 72%, #c9d4dd 72% 100%); }
 .stage-line li { position: relative; z-index: 1; display: grid; justify-items: center; gap: 8px; text-align: center; }
-.stage-line small { width: 100%; min-height: 24px; padding: 0 2px; color: #113447; font-size: 10px; font-weight: 500; line-height: var(--line-compact); white-space: nowrap; }
-.stage-line span { display: grid; place-items: center; width: 30px; height: 30px; border: 3px solid #c9d4dd; border-radius: 999px; background: var(--surface); color: var(--soft); font-weight: 500; }
-.stage-line .complete span, .stage-line .active span { border-color: var(--teal-600); }
-.stage-line .complete span { background: var(--teal-600); color: #fff; }
-.stage-line .active span { background: #f4fffd; color: var(--teal-600); }
-.stage-line .release_proof_required span { border-color: var(--amber-500); color: #a86500; }
+.stage-line .stage-label { width: 100%; min-height: 24px; margin: 0; padding: 0 2px; color: #113447; font-size: 10px; font-weight: 500; line-height: var(--line-compact); white-space: nowrap; }
+.stage-line .stage-number { display: grid; place-items: center; width: 30px; height: 30px; border: 3px solid #c9d4dd; border-radius: 999px; background: var(--surface); color: var(--soft); font-weight: 500; }
+.stage-line .complete .stage-number, .stage-line .active .stage-number { border-color: var(--teal-600); }
+.stage-line .complete .stage-number { background: var(--teal-600); color: #fff; }
+.stage-line .active .stage-number { background: #f4fffd; color: var(--teal-600); }
+.stage-line .release_proof_required .stage-number { border-color: var(--amber-500); color: #a86500; }
 .stage-line .state-chip { width: 100%; max-width: 82px; min-width: 0; padding: 4px; text-align: center; white-space: normal; overflow-wrap: anywhere; }
 .phase-list, .posture-list, .detail-list { display: grid; gap: 10px; }
 .phase-row, .gate-block { display: grid; gap: 8px; }
 .phase-row { grid-template-columns: minmax(86px, 1fr) minmax(46px, auto) auto; align-items: center; font-size: var(--type-ui); }
-.phase-row > span:first-child { min-width: 0; font-size: 11px; white-space: nowrap; }
+.phase-label { min-width: 0; margin: 0; font-size: 11px; white-space: nowrap; }
 .phase-owners { display: flex; gap: 5px; }
 .avatar { display: grid; place-items: center; width: 22px; height: 22px; border: 1px solid #9edbd9; border-radius: 999px; background: #edfafa; color: #30636a; font-size: 10px; font-weight: 500; line-height: 1; }
 .state-chip, .tag { width: max-content; border-radius: 4px; padding: 4px 7px; font-size: var(--type-label); font-weight: 500; line-height: var(--line-compact); }
@@ -764,6 +748,29 @@ function createCockpitRuntimeWorkIndexRows(rows: WorkstreamStoryRow[]): CockpitR
   });
 }
 
+function createCockpitRuntimeStagePhaseOptions(
+  model: OperationsCockpitReadModel,
+  stageDetailDisabledReason: string,
+  roleDetailDisabledReason: string
+): CockpitRuntimeStagePhaseOptions {
+  return {
+    roleDetailDisabledReason,
+    stageDetailDisabledReason,
+    stages: model.stageMap.map((stage, index) => ({
+      evidenceCount: model.evidenceReadbacks.length,
+      freshnessLabel: copyFreshness(model.contextHeader.dataFreshness),
+      index,
+      label: stage.label,
+      ownerRoles: stage.ownerRoles,
+      releaseReadinessLabel: copyState(model.nonClaims.releaseReadinessClaim),
+      sourceGateCount: model.ownerIntentQueue.length + model.roleGateQueue.length,
+      stageId: stage.stageId,
+      state: stage.state,
+      stateLabel: copyState(stage.state)
+    }))
+  };
+}
+
 interface DetailDrawerOptionInput {
   blockingGate: GateQueueItem | undefined;
   dependency: OperationsCockpitReadModel["dependencyInspection"][number] | undefined;
@@ -893,15 +900,6 @@ function formatBlockedActions(actions: Array<{ action: string }>): string {
 function serviceReadModelSummary(readback: CockpitServiceReadModelReadback): string {
   const gateCount = readback.surfaces.gate.roleGateCount + readback.surfaces.gate.ownerIntentGateCount;
   return `${readback.surfaces.workIndex.rowCount} work / ${gateCount} gates / detail ${readback.surfaces.detail.selectedType}`;
-}
-
-function stageStep(stage: StageMapReadModel, index: number): string {
-  return `<li class="${escapeHtml(stage.state)}"><small>${escapeHtml(stage.label)}</small><span class="tcrn-badge" ${tcrnComponentAttr("Badge")}>${index + 1}</span><em class="state-chip tcrn-badge ${escapeHtml(stage.state)}" ${tcrnComponentAttr("StatusBadge")}>${copyState(stage.state)}</em></li>`;
-}
-
-function phaseRow(stage: StageMapReadModel): string {
-  const owners = stage.ownerRoles.map((role) => `<span class="avatar tcrn-badge" ${tcrnComponentAttr("Badge")}>${escapeHtml(role.slice(0, 2))}</span>`).join("");
-  return `<div class="phase-row"><span>${escapeHtml(stage.label)}</span><span class="phase-owners">${owners}</span><em class="state-chip tcrn-badge ${escapeHtml(stage.state)}" ${tcrnComponentAttr("StatusBadge")}>${copyState(stage.state)}</em></div>`;
 }
 
 function gateBlock(gate: GateQueueItem | undefined): string {

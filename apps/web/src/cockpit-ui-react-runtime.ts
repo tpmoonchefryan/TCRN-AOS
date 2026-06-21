@@ -1,4 +1,4 @@
-import { createElement, type ComponentProps } from "react";
+import { createElement, Fragment, type ComponentProps } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
   Badge,
@@ -26,7 +26,7 @@ export const aosCockpitUiReactRuntime = {
   packageName: "@tcrn/ui-react",
   packageSpecifier: aosDesignSystemConsumerBridge.uiReactPackageSpecifier,
   designSystemSourceHead: aosDesignSystemConsumerBridge.designSystemSourceHead,
-  implementationKind: "operations_cockpit_gate_readback_cards_package_runtime_expansion",
+  implementationKind: "operations_cockpit_stage_phase_gate_readback_cards_package_runtime_expansion",
   componentScope: [
     "NavItem",
     "WorkIndex",
@@ -125,6 +125,25 @@ export interface CockpitRuntimeReadbackPostureOptions {
 export interface CockpitRuntimeGateReadbackCardsOptions {
   gateWorkOrder: CockpitRuntimeGateWorkOrderOptions;
   readbackPosture: CockpitRuntimeReadbackPostureOptions;
+}
+
+export interface CockpitRuntimeStageMapItem {
+  evidenceCount: number;
+  freshnessLabel: string;
+  index: number;
+  label: string;
+  ownerRoles: readonly string[];
+  releaseReadinessLabel: string;
+  sourceGateCount: number;
+  stageId: string;
+  state: string;
+  stateLabel: string;
+}
+
+export interface CockpitRuntimeStagePhaseOptions {
+  roleDetailDisabledReason: string;
+  stageDetailDisabledReason: string;
+  stages: readonly CockpitRuntimeStageMapItem[];
 }
 
 type RuntimeNavItemProps = ComponentProps<typeof NavItem> & {
@@ -322,6 +341,140 @@ export function renderCockpitRuntimeGateReadbackCards(options: CockpitRuntimeGat
   ].join("\n            ");
 }
 
+export function renderCockpitRuntimeStagePhaseCards(options: CockpitRuntimeStagePhaseOptions): string {
+  const stageMapCard = createElement(Surface, {
+    "aria-label": "Development stage map",
+    className: "panel stage-panel",
+    "data-region": "stage-map",
+    "data-tcrn-component": "Surface",
+    "data-package-runtime-component": "Surface",
+    "data-package-runtime-source": "@tcrn/ui-react",
+    "data-package-runtime-surface": "operations-cockpit-stage-phase"
+  } as ComponentProps<typeof Surface> & RuntimeDataProps,
+    createElement("div", { className: "panel-head" },
+      createElement(Heading, {
+        className: "tcrn-heading",
+        "data-tcrn-component": "Heading",
+        "data-package-runtime-component": "Heading",
+        "data-package-runtime-source": "@tcrn/ui-react",
+        level: 2
+      } as ComponentProps<typeof Heading> & RuntimeDataProps, "Stage Map"),
+      createElement(Button, {
+        className: "nav-disabled",
+        disabled: true,
+        disabledReason: options.stageDetailDisabledReason,
+        "data-tcrn-component": "Button",
+        "data-package-runtime-component": "Button",
+        "data-package-runtime-source": "@tcrn/ui-react",
+        "data-package-runtime-surface": "operations-cockpit-stage-phase",
+        type: "button",
+        variant: "secondary"
+      } as ComponentProps<typeof Button> & RuntimeDataProps, "Stage detail held")
+    ),
+    createElement("ol", { className: "stage-line" },
+      options.stages.map((stage) => createElement("li", {
+        className: stage.state,
+        "data-package-runtime-surface": "operations-cockpit-stage-phase",
+        "data-stage-evidence-count": String(stage.evidenceCount),
+        "data-stage-freshness": stage.freshnessLabel,
+        "data-stage-gate-count": String(stage.sourceGateCount),
+        "data-stage-id": stage.stageId,
+        "data-stage-owner-count": String(stage.ownerRoles.length),
+        "data-stage-release-readiness": stage.releaseReadinessLabel,
+        "data-stage-state": stage.state,
+        key: stage.stageId
+      },
+        createElement(Text, {
+          className: "stage-label",
+          "data-tcrn-component": "Text",
+          "data-package-runtime-component": "Text",
+          "data-package-runtime-source": "@tcrn/ui-react"
+        } as ComponentProps<typeof Text> & RuntimeDataProps, stage.label),
+        createElement(Badge, {
+          className: "stage-number",
+          "data-tcrn-component": "Badge",
+          "data-package-runtime-component": "Badge",
+          "data-package-runtime-source": "@tcrn/ui-react"
+        } as ComponentProps<typeof Badge> & RuntimeDataProps, String(stage.index + 1)),
+        createElement(StatusBadge, {
+          className: `state-chip ${stage.state}`,
+          "data-tcrn-component": "StatusBadge",
+          "data-package-runtime-component": "StatusBadge",
+          "data-package-runtime-source": "@tcrn/ui-react",
+          state: cockpitStageStatusBadgeState(stage)
+        } as ComponentProps<typeof StatusBadge> & RuntimeDataProps)
+      ))
+    )
+  );
+
+  const phaseCard = createElement(Surface, {
+    "aria-label": "AI employee responsibility by phase",
+    className: "panel",
+    "data-region": "ai-employee-phase",
+    "data-tcrn-component": "Surface",
+    "data-package-runtime-component": "Surface",
+    "data-package-runtime-source": "@tcrn/ui-react",
+    "data-package-runtime-surface": "operations-cockpit-stage-phase"
+  } as ComponentProps<typeof Surface> & RuntimeDataProps,
+    createElement("div", { className: "panel-head" },
+      createElement(Heading, {
+        className: "tcrn-heading",
+        "data-tcrn-component": "Heading",
+        "data-package-runtime-component": "Heading",
+        "data-package-runtime-source": "@tcrn/ui-react",
+        level: 2
+      } as ComponentProps<typeof Heading> & RuntimeDataProps, "AI Employee Phase"),
+      createElement(Button, {
+        className: "nav-disabled",
+        disabled: true,
+        disabledReason: options.roleDetailDisabledReason,
+        "data-tcrn-component": "Button",
+        "data-package-runtime-component": "Button",
+        "data-package-runtime-source": "@tcrn/ui-react",
+        "data-package-runtime-surface": "operations-cockpit-stage-phase",
+        type: "button",
+        variant: "secondary"
+      } as ComponentProps<typeof Button> & RuntimeDataProps, "Role detail held")
+    ),
+    createElement("div", { className: "phase-list" },
+      options.stages.map((stage) => createElement("div", {
+        className: "phase-row",
+        "data-package-runtime-surface": "operations-cockpit-stage-phase",
+        "data-phase-stage-id": stage.stageId,
+        "data-phase-state": stage.state,
+        key: stage.stageId
+      },
+        createElement(Text, {
+          className: "phase-label",
+          "data-tcrn-component": "Text",
+          "data-package-runtime-component": "Text",
+          "data-package-runtime-source": "@tcrn/ui-react"
+        } as ComponentProps<typeof Text> & RuntimeDataProps, stage.label),
+        createElement("span", { className: "phase-owners" },
+          stage.ownerRoles.map((role) => createElement(Badge, {
+            className: "avatar",
+            "data-owner-role": role,
+            "data-tcrn-component": "Badge",
+            "data-package-runtime-component": "Badge",
+            "data-package-runtime-source": "@tcrn/ui-react",
+            key: `${stage.stageId}-${role}`,
+            title: role
+          } as ComponentProps<typeof Badge> & RuntimeDataProps, role.slice(0, 2)))
+        ),
+        createElement(StatusBadge, {
+          className: `state-chip ${stage.state}`,
+          "data-tcrn-component": "StatusBadge",
+          "data-package-runtime-component": "StatusBadge",
+          "data-package-runtime-source": "@tcrn/ui-react",
+          state: cockpitStageStatusBadgeState(stage)
+        } as ComponentProps<typeof StatusBadge> & RuntimeDataProps)
+      ))
+    )
+  );
+
+  return renderCockpitRuntimeMarkup(createElement(Fragment, null, stageMapCard, phaseCard), "aos-stage-phase-");
+}
+
 export function renderCockpitRuntimeGateWorkOrderCard(options: CockpitRuntimeGateWorkOrderOptions): string {
   const state = {
     state: "proof_required",
@@ -369,6 +522,22 @@ export function renderCockpitRuntimeReadbackPostureCard(options: CockpitRuntimeR
     ]
   } as ComponentProps<typeof ReadbackPanel>);
   return addAosReadbackPostureRuntimeAttributes(renderCockpitRuntimeMarkup(tree, "aos-readback-panel-"));
+}
+
+function cockpitStageStatusBadgeState(stage: CockpitRuntimeStageMapItem): ComponentProps<typeof StatusBadge>["state"] {
+  if (stage.state === "blocked") {
+    return { state: "blocked", label: stage.stateLabel } as ComponentProps<typeof StatusBadge>["state"];
+  }
+
+  if (stage.state === "release_proof_required") {
+    return { state: "external_proof_needed", label: stage.stateLabel } as ComponentProps<typeof StatusBadge>["state"];
+  }
+
+  if (stage.state === "not_started") {
+    return { state: "not_configured", label: stage.stateLabel } as ComponentProps<typeof StatusBadge>["state"];
+  }
+
+  return { state: "local_only", label: stage.stateLabel } as ComponentProps<typeof StatusBadge>["state"];
 }
 
 function renderCockpitRuntimeMarkup(node: ReturnType<typeof createElement>, identifierPrefix: string): string {

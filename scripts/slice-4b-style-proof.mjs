@@ -70,15 +70,18 @@ const designSystemBridgeOk = html.includes('data-design-system-consumer="tokens_
   && html.includes('data-package-runtime-surface="operations-cockpit-work-index"')
   && html.includes('data-package-runtime-surface="operations-cockpit-detail-drawer"')
   && html.includes('data-package-runtime-surface="operations-cockpit-gate-readback-cards"')
+  && html.includes('data-package-runtime-surface="operations-cockpit-stage-phase"')
   && html.includes('data-package-runtime-component="WorkIndex"')
   && html.includes('data-package-runtime-component="DetailDrawer"')
   && html.includes('data-package-runtime-component="GateReadinessPanel"')
   && html.includes('data-package-runtime-component="ReadbackPanel"')
+  && html.includes('data-region="stage-map"')
+  && html.includes('data-region="ai-employee-phase"')
   && html.includes('data-package-runtime-component="KeyValueList"')
   && html.includes("--tcrn-color-brand-primary")
   && aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering === true
-  && aosDesignSystemConsumerBridge.uiReactRuntimeSurface === "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards"
+  && aosDesignSystemConsumerBridge.uiReactRuntimeSurface === "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase"
   && Boolean(aosDesignSystemTokenReadback.brandPrimary);
 const ok = aggregateDigest === slice4bBaselineDigest
   && selectorProof.every((item) => item.present)

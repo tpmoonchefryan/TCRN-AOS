@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "route": "route_tcrn_aos_design_system_frontend_rebuild_59aq_gate_readback_cards_package_runtime_implementation",
-  "sourceHead": "4d4f0ebf77b024496f3b8821fc2cc063c4af322c",
+  "route": "route_tcrn_aos_design_system_frontend_rebuild_59ar_stage_phase_package_runtime_implementation",
+  "sourceHead": "90043f918f9c1b78f01f1013283f134d890c3958",
   "claimScope": {
-    "implementationKind": "operations_cockpit_gate_readback_cards_package_runtime_expansion",
-    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_selected_detail_drawer_and_gate_readback_cards",
-    "storybookVisualStyleParity": "navitem_disabled_reason_work_index_selected_detail_and_gate_readback_component_reference_only",
+    "implementationKind": "operations_cockpit_stage_phase_package_runtime_expansion",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_and_stage_phase",
+    "storybookVisualStyleParity": "navitem_disabled_reason_work_index_selected_detail_gate_readback_and_stage_phase_component_reference_only",
     "broadUiReactRuntimeMigration": false,
     "docsReadinessPackageRuntimeRendering": false,
     "aosWidePackageRuntimeRendering": false,
@@ -16,9 +16,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "4d4f0ebf77b024496f3b8821fc2cc063c4af322c",
+    "sourceHeadAtProofRun": "90043f918f9c1b78f01f1013283f134d890c3958",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "ba1c3828e64b3eadffc6acb72ba778a5b72aec98d876a82d0ca834551f6a01b8",
+    "sourceContentDigest": "1ae084452b5865ece1779cf535da537cdf7898927d960acd2ff8d1caa64ef3f8",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
@@ -35,7 +35,7 @@
     "sourceHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
     "uiReactPackage": "@tcrn/ui-react",
     "uiReactPackageSpecifier": "file:../TCRN-Design-System/packages/ui-react",
-    "runtimeSurface": "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards",
+    "runtimeSurface": "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase",
     "runtimeComponentScope": [
       "NavItem",
       "WorkIndex",
@@ -230,14 +230,48 @@
     "sampleRenderedHtmlSha256": "cf331ac79ff8df4421da2b5a315fcd2fa9a993f909b27c0d56b6844fdec51fdf",
     "failures": []
   },
+  "stagePhaseRuntimeReadback": {
+    "ok": true,
+    "present": true,
+    "surface": "operations-cockpit-stage-phase",
+    "requiredComponents": [
+      "Badge",
+      "Button",
+      "Heading",
+      "StatusBadge",
+      "Surface",
+      "Text"
+    ],
+    "packageRuntimeComponents": [
+      "Badge",
+      "Button",
+      "Heading",
+      "StatusBadge",
+      "Surface",
+      "Text"
+    ],
+    "missingComponents": [],
+    "stageCount": 4,
+    "phaseRowCount": 4,
+    "disabledActionButtonCount": 2,
+    "markerOnlyComponents": [],
+    "mobileReadability": {
+      "stageLabelRulePresent": true,
+      "stageNumberScopedRulePresent": true,
+      "phaseLabelRulePresent": true,
+      "mobileStageWrapRulePresent": true
+    },
+    "sampleRenderedHtmlSha256": "fae3a670508197aee4563676e99d57609d05f27360c97cc7328fdab95a004059",
+    "failures": []
+  },
   "fullDocumentAccessibilityReadback": {
     "ok": true,
     "idCount": 20,
     "duplicateIds": [],
     "ariaReferenceFailures": [],
     "disabledControlDescriptionFailures": [],
-    "disabledControlsCount": 11,
-    "disabledControlsWithReasonCount": 11
+    "disabledControlsCount": 9,
+    "disabledControlsWithReasonCount": 9
   },
   "visualStyleReadback": {
     "ok": true,

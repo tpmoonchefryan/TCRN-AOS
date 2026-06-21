@@ -15,8 +15,8 @@
     }
   },
   "claimScope": {
-    "implementationKind": "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_gate_readback_cards_package_runtime",
-    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_selected_detail_drawer_and_gate_readback_cards",
+    "implementationKind": "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_stage_phase_package_runtime",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_and_stage_phase",
     "storybookVisualStyleParity": "not_claimed_by_registered_component_proof",
     "docsReadinessPackageRuntimeRendering": false,
     "aosWidePackageRuntimeRendering": false,
@@ -28,7 +28,7 @@
     {
       "id": "operations-cockpit",
       "path": "apps/web/static/operations-cockpit.html",
-      "componentCount": 95,
+      "componentCount": 103,
       "registeredComponents": [
         "Badge",
         "Button",
@@ -190,7 +190,7 @@
   "packageRuntimeReadback": {
     "ok": true,
     "surface": "operations-cockpit",
-    "packageRuntimeComponent": "NavItem+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel",
+    "packageRuntimeComponent": "NavItem+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel+StagePhase",
     "packageRuntimeSource": "@tcrn/ui-react",
     "packageRuntimeNavItemCount": 10,
     "markerOnlyNavItemCount": 0,
@@ -266,6 +266,30 @@
         "Text"
       ],
       "missingComponents": [],
+      "failures": []
+    },
+    "stagePhaseRuntimeReadback": {
+      "ok": true,
+      "surface": "operations-cockpit-stage-phase",
+      "requiredComponents": [
+        "Badge",
+        "Button",
+        "Heading",
+        "StatusBadge",
+        "Surface",
+        "Text"
+      ],
+      "packageRuntimeComponents": [
+        "Badge",
+        "Button",
+        "Heading",
+        "StatusBadge",
+        "Surface",
+        "Text"
+      ],
+      "missingComponents": [],
+      "stageCount": 4,
+      "phaseRowCount": 4,
       "failures": []
     },
     "packageBackedReactRuntimeShellMarkerPresent": true
