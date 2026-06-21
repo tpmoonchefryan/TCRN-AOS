@@ -40,6 +40,8 @@ strong, b { font-weight: 500; }
 .nav-row.active, .nav-row:hover { background: rgba(255, 255, 255, 0.12); }
 .nav-row.active { box-shadow: inset 4px 0 0 var(--teal-500); }
 .nav-row.active::before { background: var(--teal-500); }
+.nav-label { min-width: 0; }
+.nav-unavailable-reason { display: block; margin-top: 2px; color: #b8cad5; font-size: 11px; font-weight: 400; line-height: 1.25; }
 .sidebar-note { display: flex; align-items: center; gap: 8px; color: #deedf4; font-size: 12px; }
 .aos-main { min-width: 0; }
 .aos-main, .workspace, .hero-row, .summary-grid, .content-grid, .panel, .work-index, .detail-drawer, .topbar { max-width: 100%; min-width: 0; }
@@ -132,11 +134,11 @@ dd { margin: 0; color: #162437; font-size: 12px; }
           <span class="brand-aos">AOS</span>
         </a>
         <nav class="nav-stack tcrn-nav-group" data-tcrn-component="NavGroup" aria-label="Primary views">
-          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" href="#docs-readiness" aria-disabled="true" title="Held for later route">Dashboard</a>
-          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" href="#docs-readiness" aria-disabled="true" title="Held for later route">Cockpit</a>
-          <a class="nav-row tcrn-nav-item active" data-tcrn-component="NavItem" href="#docs-readiness" aria-current="page">Docs Readiness</a>
-          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" href="#docs-readiness" aria-disabled="true" title="Held for later route">Evidence</a>
-          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" href="#docs-readiness" aria-disabled="true" title="Held for later route">Release Linkage</a>
+          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" data-navigation-primitive="nav-item" aria-disabled="true" tabindex="-1" aria-describedby="nav-reason-dashboard" title="Dashboard view is held for a later routed AOS slice; this docs readiness metadata checkpoint keeps Docs readiness available only." data-disabled-reason="Dashboard view is held for a later routed AOS slice; this docs readiness metadata checkpoint keeps Docs readiness available only."><span class="nav-label">Dashboard</span><span class="nav-unavailable-reason" id="nav-reason-dashboard">Held for later route</span></a>
+          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" data-navigation-primitive="nav-item" aria-disabled="true" tabindex="-1" aria-describedby="nav-reason-cockpit" title="Cockpit view is held for a later routed AOS slice; this docs readiness metadata checkpoint keeps Docs readiness available only." data-disabled-reason="Cockpit view is held for a later routed AOS slice; this docs readiness metadata checkpoint keeps Docs readiness available only."><span class="nav-label">Cockpit</span><span class="nav-unavailable-reason" id="nav-reason-cockpit">Held for later route</span></a>
+          <a class="nav-row tcrn-nav-item active" data-tcrn-component="NavItem" data-navigation-primitive="nav-item" href="#docs-readiness" aria-current="page" data-selected="true"><span class="nav-label">Docs Readiness</span></a>
+          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" data-navigation-primitive="nav-item" aria-disabled="true" tabindex="-1" aria-describedby="nav-reason-evidence" title="Evidence view is held for a later routed AOS slice; this docs readiness metadata checkpoint keeps Docs readiness available only." data-disabled-reason="Evidence view is held for a later routed AOS slice; this docs readiness metadata checkpoint keeps Docs readiness available only."><span class="nav-label">Evidence</span><span class="nav-unavailable-reason" id="nav-reason-evidence">Held for later route</span></a>
+          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" data-navigation-primitive="nav-item" aria-disabled="true" tabindex="-1" aria-describedby="nav-reason-release-linkage" title="Release Linkage view is held for a later routed AOS slice; this docs readiness metadata checkpoint keeps Docs readiness available only." data-disabled-reason="Release Linkage view is held for a later routed AOS slice; this docs readiness metadata checkpoint keeps Docs readiness available only."><span class="nav-label">Release Linkage</span><span class="nav-unavailable-reason" id="nav-reason-release-linkage">Held for later route</span></a>
         </nav>
         <footer class="sidebar-note">
           <span class="state-dot state-current"></span>

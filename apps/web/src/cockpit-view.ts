@@ -23,7 +23,7 @@ import {
   type StageMapReadModel,
   type WorkstreamStoryRow
 } from "./cockpit.js";
-import { tcrnComponentAttr } from "./static-component-registry.js";
+import { tcrnComponentAttr, tcrnStaticNavItem } from "./static-component-registry.js";
 
 export const slice4bBaselineDigest = "2bccfa9ab9ed95b785135965c4494f38258a27de3c6f4e9cc1fdad51ed75fb90";
 
@@ -742,12 +742,13 @@ if (serviceBacked) {
 `;
 
 function navButton(label: string, active: boolean): string {
-  if (active) {
-    return `<a class="nav-row tcrn-nav-item active" ${tcrnComponentAttr("NavItem")} href="#cockpit" aria-current="page" data-selected="true"><span class="nav-label">${escapeHtml(label)}</span></a>`;
-  }
   const reason = `${label} view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only.`;
-  const reasonId = `nav-reason-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
-  return `<a class="nav-row tcrn-nav-item" ${tcrnComponentAttr("NavItem")} aria-disabled="true" aria-describedby="${reasonId}" title="${escapeHtml(reason)}" data-disabled-reason="${escapeHtml(reason)}"><span class="nav-label">${escapeHtml(label)}</span><span class="nav-unavailable-reason" id="${reasonId}">Held for later route</span></a>`;
+  return tcrnStaticNavItem({
+    active,
+    activeHref: "#cockpit",
+    disabledReason: reason,
+    label
+  });
 }
 
 function serviceReadModelSummary(readback: CockpitServiceReadModelReadback): string {

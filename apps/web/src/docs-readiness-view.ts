@@ -11,7 +11,7 @@ import {
   type ProjectSearchIndexRecord,
   type ReleaseCandidateLinkage
 } from "../../../packages/domain/src/index.js";
-import { tcrnComponentAttr } from "./static-component-registry.js";
+import { tcrnComponentAttr, tcrnStaticNavItem } from "./static-component-registry.js";
 
 export const slice9bWorkflowPacketBasis = "624127182da417f65c790de155e3297e77828181";
 export const slice9bPreImplementationBasis = "9d7980f46245bb783b520c9f90945da8609c01ce";
@@ -538,8 +538,12 @@ function inspectionRowHtml(row: InspectionRow, index: number): string {
 }
 
 function navButton(label: string, active: boolean): string {
-  const attrs = active ? `href="#docs-readiness" aria-current="page"` : `href="#docs-readiness" aria-disabled="true" title="Held for later route"`;
-  return `<a class="nav-row tcrn-nav-item${active ? " active" : ""}" ${tcrnComponentAttr("NavItem")} ${attrs}>${escapeHtml(label)}</a>`;
+  return tcrnStaticNavItem({
+    active,
+    activeHref: "#docs-readiness",
+    disabledReason: `${label} view is held for a later routed AOS slice; this docs readiness metadata checkpoint keeps Docs readiness available only.`,
+    label
+  });
 }
 
 function copyPosture(value: string): string {
@@ -596,6 +600,8 @@ strong, b { font-weight: 500; }
 .nav-row.active, .nav-row:hover { background: rgba(255, 255, 255, 0.12); }
 .nav-row.active { box-shadow: inset 4px 0 0 var(--teal-500); }
 .nav-row.active::before { background: var(--teal-500); }
+.nav-label { min-width: 0; }
+.nav-unavailable-reason { display: block; margin-top: 2px; color: #b8cad5; font-size: 11px; font-weight: 400; line-height: 1.25; }
 .sidebar-note { display: flex; align-items: center; gap: 8px; color: #deedf4; font-size: 12px; }
 .aos-main { min-width: 0; }
 .aos-main, .workspace, .hero-row, .summary-grid, .content-grid, .panel, .work-index, .detail-drawer, .topbar { max-width: 100%; min-width: 0; }

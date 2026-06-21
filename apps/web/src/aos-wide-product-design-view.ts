@@ -5,7 +5,7 @@ import {
   type AOSWideProductDesignModel,
   type SurfaceRow
 } from "./aos-wide-product-design-data.js";
-import { tcrnComponentAttr } from "./static-component-registry.js";
+import { tcrnComponentAttr, tcrnStaticNavItem } from "./static-component-registry.js";
 
 export {
   createAOSWideProductDesignModel,
@@ -204,8 +204,13 @@ function surfaceRow(surface: SurfaceRow, index: number): string {
 }
 
 function navButton(label: string, id: string, active: boolean): string {
-  const attrs = active ? `href="#target-set" aria-current="page"` : `href="#target-set" aria-disabled="true" title="Held for later route"`;
-  return `<a class="nav-row tcrn-nav-item${active ? " active" : ""}" ${tcrnComponentAttr("NavItem")} ${attrs} data-nav-surface="${escapeHtml(id)}">${escapeHtml(label)}</a>`;
+  return tcrnStaticNavItem({
+    active,
+    activeHref: "#target-set",
+    disabledReason: `${label} view is held for a later routed AOS slice; this AOS-wide target-set checkpoint keeps the target set available only.`,
+    extraAttributes: `data-nav-surface="${escapeHtml(id)}"`,
+    label
+  });
 }
 
 function statePill(key: string, value: string): string {
@@ -264,6 +269,8 @@ strong, b { font-weight: 500; }
 .nav-row.active, .nav-row:hover { background: rgba(255, 255, 255, 0.12); }
 .nav-row.active { box-shadow: inset 4px 0 0 var(--teal-500); }
 .nav-row.active::before { background: var(--teal-500); }
+.nav-label { min-width: 0; }
+.nav-unavailable-reason { display: block; margin-top: 2px; color: #b8cad5; font-size: 11px; font-weight: 400; line-height: 1.25; }
 .sidebar-note { display: flex; align-items: center; gap: 8px; color: #deedf4; font-size: 12px; }
 .aos-main, .workspace, .title-row, .module-grid, .content-grid, .surface-index, .detail-drawer, .topbar, .path-grid { max-width: 100%; min-width: 0; }
 .topbar { display: grid; grid-template-columns: 220px minmax(0, 1fr) max-content max-content; align-items: center; gap: 14px; min-height: 64px; padding: 0 22px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.96); }

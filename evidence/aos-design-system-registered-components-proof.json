@@ -2,6 +2,13 @@
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_rebuild_registered_component_proof",
   "registrySource": "../TCRN-Design-System/packages/ui-react/src/index.tsx",
+  "claimScope": {
+    "implementationKind": "static_renderer_registered_component_metadata",
+    "packageBackedReactRuntimeRendering": false,
+    "storybookVisualStyleParity": false,
+    "productAcceptanceReady": false,
+    "finalMvpAcceptanceReady": false
+  },
   "localRegistryDiff": [],
   "surfaces": [
     {
@@ -36,7 +43,9 @@
         "WorkIndex"
       ],
       "unregistered": [],
-      "missingRequired": []
+      "missingRequired": [],
+      "disabledNavItemSemanticFailures": [],
+      "disabledNavItemCount": 9
     },
     {
       "id": "docs-search-release-readiness",
@@ -69,7 +78,9 @@
         "WorkIndex"
       ],
       "unregistered": [],
-      "missingRequired": []
+      "missingRequired": [],
+      "disabledNavItemSemanticFailures": [],
+      "disabledNavItemCount": 4
     },
     {
       "id": "aos-wide-product-design",
@@ -102,9 +113,16 @@
         "WorkIndex"
       ],
       "unregistered": [],
-      "missingRequired": []
+      "missingRequired": [],
+      "disabledNavItemSemanticFailures": [],
+      "disabledNavItemCount": 9
     }
   ],
+  "browserReadbackPathLeakage": {
+    "path": "evidence/aos-design-system-browser-readback/summary.json",
+    "present": true,
+    "absolutePathHits": []
+  },
   "noOverclaim": {
     "productAcceptanceReady": false,
     "finalMvpAcceptanceReady": false,

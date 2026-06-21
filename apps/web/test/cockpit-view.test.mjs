@@ -83,7 +83,8 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
 test("disabled cockpit navigation exposes held reasons visibly and accessibly", () => {
   const html = renderOperationsCockpitHtml();
   const heldControls = Array.from(html.matchAll(/<(?:button|a)\b([^>]*(?:\bdisabled\b|aria-disabled="true")[^>]*)>/g))
-    .map((match) => `${match[1]} ${match[2]}`);
+    .map((match) => match[1]);
+  const disabledNavItems = disabledNavItemReadbacks(html);
 
   assert.ok(heldControls.length > 0);
   for (const attributes of heldControls) {
@@ -97,6 +98,14 @@ test("disabled cockpit navigation exposes held reasons visibly and accessibly", 
   assert.doesNotMatch(html, /Slice 1 checkpoint/);
   assert.match(html, /aria-describedby="nav-reason-dashboard"/);
   assert.match(html, /Held for later route/);
+  assert.ok(disabledNavItems.length > 0);
+  for (const item of disabledNavItems) {
+    assert.doesNotMatch(item.attributes, /\bhref=/, `disabled NavItem must not be actionable: ${item.attributes}`);
+    assert.match(item.attributes, /\btabindex="-1"/, `disabled NavItem must be removed from tab order: ${item.attributes}`);
+    assert.match(item.attributes, /\bdata-disabled-reason="[^"]+"/, `disabled NavItem exposes DS reason metadata: ${item.attributes}`);
+    assert.match(item.attributes, /\btitle="[^"]+"/, `disabled NavItem exposes title reason: ${item.attributes}`);
+    assert.match(item.body, /\bnav-unavailable-reason\b/, "disabled NavItem has visible reason text");
+  }
 });
 
 test("AOS cockpit static renderer uses only registered Design System components", () => {
@@ -152,3 +161,9 @@ test("AOS visible cockpit copy does not leak raw workflow enum labels", () => {
   assert.doesNotMatch(visibleTextFragments, /\brecord_participant_position\b/);
   assert.doesNotMatch(visibleTextFragments, /\bopen_evidence_metadata\b/);
 });
+
+function disabledNavItemReadbacks(html) {
+  return Array.from(html.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g))
+    .filter((match) => /\baria-disabled="true"/.test(match[1]))
+    .map((match) => ({ attributes: match[1], body: match[2] }));
+}

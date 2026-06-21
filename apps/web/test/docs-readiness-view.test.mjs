@@ -63,3 +63,24 @@ test("Slice 9B static HTML removes forbidden overclaim copy", () => {
 
   assert.deepEqual(hits, []);
 });
+
+test("Slice 9B disabled Design System NavItems are non-actionable with reasons", () => {
+  const html = renderDocsSearchReleaseReadinessHtml();
+  const disabledNavItems = disabledNavItemReadbacks(html);
+
+  assert.ok(disabledNavItems.length > 0);
+  for (const item of disabledNavItems) {
+    assert.doesNotMatch(item.attributes, /\bhref=/, `disabled NavItem must not be actionable: ${item.attributes}`);
+    assert.match(item.attributes, /\btabindex="-1"/, `disabled NavItem must be removed from tab order: ${item.attributes}`);
+    assert.match(item.attributes, /\baria-describedby="[^"]+"/, `disabled NavItem has accessible reason linkage: ${item.attributes}`);
+    assert.match(item.attributes, /\bdata-disabled-reason="[^"]+"/, `disabled NavItem has reason metadata: ${item.attributes}`);
+    assert.match(item.attributes, /\btitle="[^"]+"/, `disabled NavItem has title reason: ${item.attributes}`);
+    assert.match(item.body, /\bnav-unavailable-reason\b/, "disabled NavItem has visible reason text");
+  }
+});
+
+function disabledNavItemReadbacks(html) {
+  return Array.from(html.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g))
+    .filter((match) => /\baria-disabled="true"/.test(match[1]))
+    .map((match) => ({ attributes: match[1], body: match[2] }));
+}
