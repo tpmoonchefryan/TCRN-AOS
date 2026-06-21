@@ -94,12 +94,14 @@ const surfaceReadbacks = surfaces.map((surface) => {
   };
 });
 const browserReadbackPathLeakage = inspectBrowserReadbackPathLeakage(browserSummaryPath);
+const packageRuntimeReadback = inspectPackageRuntimeReadback(surfaces.find((surface) => surface.id === "operations-cockpit"));
 const proofSelfChecks = runProofSelfChecks();
 
 const ok = localRegistryDiff.length === 0
   && surfaceReadbacks.every((readback) => readback.unregistered.length === 0)
   && surfaceReadbacks.every((readback) => readback.missingRequired.length === 0)
   && surfaceReadbacks.every((readback) => readback.disabledNavItemSemanticFailures.length === 0)
+  && packageRuntimeReadback.ok
   && browserReadbackPathLeakage.present === true
   && browserReadbackPathLeakage.absolutePathHits.length === 0
   && proofSelfChecks.every((check) => check.passed);
@@ -110,14 +112,17 @@ const summary = {
   registrySource: relative(repoRoot, designSystemRegistrySourcePath),
   designSystemBasis,
   claimScope: {
-    implementationKind: "static_renderer_registered_component_metadata",
-    packageBackedReactRuntimeRendering: false,
-    storybookVisualStyleParity: false,
+    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_navitem_package_runtime",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_only",
+    storybookVisualStyleParity: "not_claimed_by_registered_component_proof",
+    docsReadinessPackageRuntimeRendering: false,
+    aosWidePackageRuntimeRendering: false,
     productAcceptanceReady: false,
     finalMvpAcceptanceReady: false
   },
   localRegistryDiff,
   surfaces: surfaceReadbacks,
+  packageRuntimeReadback,
   browserReadbackPathLeakage,
   proofSelfChecks,
   noOverclaim: {
@@ -178,7 +183,7 @@ function inspectNavItemSemantics(surface) {
 
     disabledLabels.push(label);
     if (/\bhref=/.test(attributes)) failures.push("disabled_navitem_has_href");
-    if (!/\btabindex="-1"/.test(attributes)) failures.push("disabled_navitem_missing_tabindex_minus_1");
+    if (parsedAttributes.tabindex !== "-1") failures.push("disabled_navitem_missing_tabindex_minus_1");
     if (!parsedAttributes.title?.trim()) failures.push("disabled_navitem_missing_title_reason");
     if (!parsedAttributes["data-disabled-reason"]?.trim()) failures.push("disabled_navitem_missing_data_disabled_reason");
     if (!parsedAttributes["aria-describedby"]?.trim()) {
@@ -260,12 +265,12 @@ function inspectBrowserReadbackPathLeakage(summaryPath) {
 function runProofSelfChecks() {
   const operationsSurface = surfaces.find((surface) => surface.id === "operations-cockpit");
   const actionableRegressionHtml = operationsSurface.html
-    .replace('aria-disabled="true" tabindex="-1"', 'href="#dashboard"')
-    .replace(' data-disabled-reason="Dashboard view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."', "");
-  const unresolvedReasonHtml = operationsSurface.html.replace('aria-describedby="nav-reason-dashboard"', 'aria-describedby="missing-nav-reason-dashboard"');
+    .replace(/\saria-disabled="true"/, " href=\"#dashboard\"")
+    .replace(/\stabindex="-1"|\stabIndex="-1"/, "");
+  const unresolvedReasonHtml = operationsSurface.html.replace(/aria-describedby="([^"]+)"/, 'aria-describedby="missing-nav-reason-dashboard"');
   const emptyReasonHtml = operationsSurface.html.replace(
-    '<span class="nav-unavailable-reason" id="nav-reason-dashboard">Held for later route</span>',
-    '<span class="nav-unavailable-reason" id="nav-reason-dashboard"></span>'
+    /(<span\b(?=[^>]*class="[^"]*(?:nav-unavailable-reason|tcrn-nav-item__disabled-reason)[^"]*")[^>]*>)([\s\S]*?)(<\/span>)/,
+    "$1$3"
   );
   const pathLeakHits = findAbsoluteLocalPathHits(JSON.stringify({
     one: "/Users/example/private.png",
@@ -345,19 +350,19 @@ function gitOk(args, cwd) {
 
 function parseAttributes(attributes) {
   return Object.fromEntries(
-    Array.from(attributes.matchAll(/\s([^\s=]+)="([^"]*)"/g)).map((match) => [match[1], match[2]])
+    Array.from(attributes.matchAll(/\s([^\s=]+)="([^"]*)"/g)).map((match) => [match[1].toLowerCase(), match[2]])
   );
 }
 
 function extractNavItemLabel(body) {
-  const labelMatch = body.match(/<span\b(?=[^>]*class="[^"]*\bnav-label\b[^"]*")[^>]*>([\s\S]*?)<\/span>/);
+  const labelMatch = body.match(/<span\b(?=[^>]*class="[^"]*(?:\bnav-label\b|\btcrn-nav-item__label\b)[^"]*")[^>]*>([\s\S]*?)<\/span>/);
   const labelSource = labelMatch?.[1] ?? body;
   return labelSource.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 }
 
 function findVisibleReasonByDescribedby(body, describedby) {
   for (const id of describedby.split(/\s+/).filter(Boolean)) {
-    const elementMatch = body.match(new RegExp(`<span\\b(?=[^>]*\\bid="${escapeRegExp(id)}")(?=[^>]*class="[^"]*\\bnav-unavailable-reason\\b[^"]*")[^>]*>([\\s\\S]*?)<\\/span>`));
+    const elementMatch = body.match(new RegExp(`<span\\b(?=[^>]*\\bid="${escapeRegExp(id)}")(?=[^>]*class="[^"]*(?:\\bnav-unavailable-reason\\b|\\btcrn-nav-item__disabled-reason\\b)[^"]*")[^>]*>([\\s\\S]*?)<\\/span>`));
     if (elementMatch) {
       return {
         resolved: true,
@@ -367,6 +372,30 @@ function findVisibleReasonByDescribedby(body, describedby) {
   }
 
   return { resolved: false, text: "" };
+}
+
+function inspectPackageRuntimeReadback(surface) {
+  const navItems = Array.from(surface.html.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g))
+    .map((match) => ({ attributes: match[1], body: match[2], parsed: parseAttributes(match[1]) }));
+  const packageRuntimeNavItems = navItems.filter((item) => item.parsed["data-package-runtime-component"] === "NavItem");
+  const markerOnlyNavItems = navItems.filter((item) => item.parsed["data-package-runtime-component"] !== "NavItem");
+  const disabledPackageRuntimeNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-disabled"] === "true");
+  const activePackageRuntimeNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-current"] === "page");
+  return {
+    ok: packageRuntimeNavItems.length === 10
+      && markerOnlyNavItems.length === 0
+      && disabledPackageRuntimeNavItems.length === 9
+      && activePackageRuntimeNavItems.length === 1
+      && surface.html.includes('data-package-backed-react-runtime-rendering="true"'),
+    surface: surface.id,
+    packageRuntimeComponent: "NavItem",
+    packageRuntimeSource: "@tcrn/ui-react",
+    packageRuntimeNavItemCount: packageRuntimeNavItems.length,
+    markerOnlyNavItemCount: markerOnlyNavItems.length,
+    disabledPackageRuntimeNavItemCount: disabledPackageRuntimeNavItems.length,
+    activePackageRuntimeNavItemCount: activePackageRuntimeNavItems.length,
+    packageBackedReactRuntimeShellMarkerPresent: surface.html.includes('data-package-backed-react-runtime-rendering="true"')
+  };
 }
 
 function escapeRegExp(value) {

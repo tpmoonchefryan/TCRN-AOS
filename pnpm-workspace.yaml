@@ -1,3 +1,6 @@
 packages:
   - "apps/*"
   - "packages/*"
+overrides:
+  "@tcrn/ui-react>@tcrn/ui-copy-state": "file:../TCRN-Design-System/packages/ui-copy-state"
+  "@tcrn/ui-react>@tcrn/ui-tokens": "file:../TCRN-Design-System/packages/ui-tokens"

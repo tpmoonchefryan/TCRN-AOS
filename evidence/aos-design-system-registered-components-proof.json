@@ -3,7 +3,7 @@
   "route": "route_tcrn_aos_design_system_frontend_rebuild_registered_component_proof",
   "registrySource": "../TCRN-Design-System/packages/ui-react/src/index.tsx",
   "designSystemBasis": {
-    "trackedHead": "a74742a9cfaa03205d867f7e33dea92c1e8ac6ca",
+    "trackedHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
     "registrySourcePath": "../TCRN-Design-System/packages/ui-react/src/index.tsx",
     "registrySourceTracked": true,
     "unacceptedStylesheetDraft": {
@@ -15,9 +15,11 @@
     }
   },
   "claimScope": {
-    "implementationKind": "static_renderer_registered_component_metadata",
-    "packageBackedReactRuntimeRendering": false,
-    "storybookVisualStyleParity": false,
+    "implementationKind": "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_navitem_package_runtime",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_only",
+    "storybookVisualStyleParity": "not_claimed_by_registered_component_proof",
+    "docsReadinessPackageRuntimeRendering": false,
+    "aosWidePackageRuntimeRendering": false,
     "productAcceptanceReady": false,
     "finalMvpAcceptanceReady": false
   },
@@ -186,6 +188,17 @@
       ]
     }
   ],
+  "packageRuntimeReadback": {
+    "ok": true,
+    "surface": "operations-cockpit",
+    "packageRuntimeComponent": "NavItem",
+    "packageRuntimeSource": "@tcrn/ui-react",
+    "packageRuntimeNavItemCount": 10,
+    "markerOnlyNavItemCount": 0,
+    "disabledPackageRuntimeNavItemCount": 9,
+    "activePackageRuntimeNavItemCount": 1,
+    "packageBackedReactRuntimeShellMarkerPresent": true
+  },
   "browserReadbackPathLeakage": {
     "path": "evidence/aos-design-system-browser-readback/summary.json",
     "present": true,

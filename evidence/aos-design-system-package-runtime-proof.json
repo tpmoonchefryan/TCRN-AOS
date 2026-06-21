@@ -1,0 +1,100 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_design_system_frontend_rebuild_59an_operations_cockpit_package_runtime_implementation",
+  "sourceHead": "a43d1324cdb9b13ba3bc2b6c933444946f7b6f15",
+  "claimScope": {
+    "implementationKind": "operations_cockpit_navitem_package_runtime_pilot",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_only",
+    "storybookVisualStyleParity": "navitem_disabled_reason_storybook_reference_only",
+    "broadUiReactRuntimeMigration": false,
+    "docsReadinessPackageRuntimeRendering": false,
+    "aosWidePackageRuntimeRendering": false,
+    "productAcceptanceReady": false,
+    "finalMvpAcceptanceReady": false,
+    "releasePublicationReady": false
+  },
+  "designSystemReadback": {
+    "sourceHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
+    "uiReactPackage": "@tcrn/ui-react",
+    "uiReactPackageSpecifier": "file:../TCRN-Design-System/packages/ui-react",
+    "runtimeSurface": "operations_cockpit_navitem_sidebar",
+    "runtimeComponentScope": [
+      "NavItem"
+    ]
+  },
+  "dependencyReadback": {
+    "ok": true,
+    "expectedRuntime": {
+      "@tcrn/ui-copy-state": "file:../TCRN-Design-System/packages/ui-copy-state",
+      "@tcrn/ui-react": "file:../TCRN-Design-System/packages/ui-react",
+      "@tcrn/ui-tokens": "file:../TCRN-Design-System/packages/ui-tokens",
+      "react": "19.1.0",
+      "react-dom": "19.1.0"
+    },
+    "runtimeDependencies": {
+      "@tcrn/ui-copy-state": "file:../TCRN-Design-System/packages/ui-copy-state",
+      "@tcrn/ui-react": "file:../TCRN-Design-System/packages/ui-react",
+      "@tcrn/ui-tokens": "file:../TCRN-Design-System/packages/ui-tokens",
+      "react": "19.1.0",
+      "react-dom": "19.1.0"
+    },
+    "mismatches": []
+  },
+  "importReadback": {
+    "ok": true,
+    "runtimeSourcePath": "apps/web/src/cockpit-ui-react-runtime.ts",
+    "packageImportPresent": true,
+    "reactServerRenderingPresent": true,
+    "deepImportHits": [],
+    "copiedSourceHits": []
+  },
+  "navRuntimeReadback": {
+    "ok": true,
+    "packageRuntimeComponents": [
+      "NavItem"
+    ],
+    "navItemCount": 10,
+    "packageRuntimeNavItemCount": 10,
+    "markerOnlyNavItemCount": 0,
+    "disabledNavItemCount": 9,
+    "activeNavItemCount": 1,
+    "disabledNavItemFailures": [],
+    "packageRuntimeShellMarkerPresent": true,
+    "packageRuntimeScopeMarkerPresent": true,
+    "sampleRenderedHtmlSha256": "db0f4fcc98bbe755c49c29384ffdfc0068b968a56056d6b607fd1f910054fba5"
+  },
+  "storybookReferenceReadback": {
+    "ok": true,
+    "path": "../TCRN-Design-System/docs/verification/internal-alpha/browser-proof-summary.json",
+    "storybookOk": true,
+    "packageBackedDisabledNavItemReasonReadback": {
+      "disabledNavItemCount": 3,
+      "invalidDisabledNavItems": [],
+      "validDisabledNavItemLabels": [
+        {
+          "viewport": "desktop-1440x900",
+          "section": "Components",
+          "label": "Blocked actions",
+          "reason": "Proof route is not in this component page"
+        },
+        {
+          "viewport": "tablet-1024x768",
+          "section": "Components",
+          "label": "Blocked actions",
+          "reason": "Proof route is not in this component page"
+        },
+        {
+          "viewport": "mobile-390x844",
+          "section": "Components",
+          "label": "Blocked actions",
+          "reason": "Proof route is not in this component page"
+        }
+      ],
+      "ok": true
+    }
+  },
+  "noOverclaimReadback": {
+    "ok": true,
+    "forbiddenClaimHits": []
+  }
+}

@@ -83,25 +83,38 @@ try {
       const text = document.body.innerText;
       const lower = text.toLowerCase();
       const rootStyles = getComputedStyle(document.documentElement);
-      const disabledButtons = Array.from(document.querySelectorAll("button:disabled")).map((button) => {
-        const ariaDescription = (button.getAttribute("aria-describedby") ?? "")
+      const readDisabledReason = (element) => {
+        const ariaDescription = (element.getAttribute("aria-describedby") ?? "")
           .split(/\s+/)
           .map((id) => document.getElementById(id)?.textContent?.trim() ?? "")
           .filter(Boolean)
           .join(" ");
-        const title = button.getAttribute("title")?.trim() ?? "";
-        const dataDisabledReason = button.getAttribute("data-disabled-reason")?.trim() ?? "";
+        const title = element.getAttribute("title")?.trim() ?? "";
+        const dataDisabledReason = element.getAttribute("data-disabled-reason")?.trim() ?? "";
         const reason = [title, ariaDescription, dataDisabledReason].filter(Boolean).join(" | ");
+        return { ariaDescription, dataDisabledReason, reason, title };
+      };
+      const disabledButtons = Array.from(document.querySelectorAll("button:disabled")).map((button) => {
+        const disabledReason = readDisabledReason(button);
         return {
           text: button.textContent?.trim() ?? "",
           className: button.className,
-          title,
-          ariaDescription,
-          dataDisabledReason,
-          reason
+          ...disabledReason
+        };
+      });
+      const disabledNavItems = Array.from(document.querySelectorAll('[data-tcrn-component="NavItem"][aria-disabled="true"]')).map((item) => {
+        const disabledReason = readDisabledReason(item);
+        return {
+          text: item.textContent?.trim() ?? "",
+          className: item.className,
+          describedbyResolved: Boolean(disabledReason.ariaDescription),
+          href: item.getAttribute("href") ?? "",
+          tabIndex: item.getAttribute("tabindex") ?? "",
+          ...disabledReason
         };
       });
       const disabledButtonsMissingReason = disabledButtons.filter((button) => !button.reason);
+      const disabledNavItemsMissingReason = disabledNavItems.filter((item) => !item.reason || !item.describedbyResolved);
       const disabledNavButtons = disabledButtons.filter((button) => String(button.className).includes("nav-row"));
       return {
         title: document.title,
@@ -121,14 +134,18 @@ try {
         forbiddenPositiveClaimHits: forbiddenPositiveClaims.filter((phrase) => lower.includes(phrase)),
         disabledButtons,
         disabledButtonsMissingReason,
+        disabledNavItems,
+        disabledNavItemsMissingReason,
         disabledNavButtonCount: disabledNavButtons.length,
+        disabledNavItemCount: disabledNavItems.length,
         documentScrollWidth: document.documentElement.scrollWidth,
         bodyScrollWidth: document.body.scrollWidth,
         viewportWidth: window.innerWidth,
         bodyLevelHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth || document.body.scrollWidth > window.innerWidth,
         hasOwnerIntentReason: disabledButtons.some((button) => /owner-intent|owner intent/i.test(button.reason)),
-        hasSidebarUnavailableReasons: disabledNavButtons.length >= 9
-          && disabledNavButtons.every((button) => button.reason.includes("later routed AOS slice") && button.text.includes("Held for later route")),
+        hasSidebarUnavailableReasons: disabledNavItems.length >= 9
+          && disabledNavItemsMissingReason.length === 0
+          && disabledNavItems.every((item) => item.href === "" && item.tabIndex === "-1" && item.reason.includes("later routed AOS slice") && item.text.includes("package-runtime pilot keeps Cockpit available only")),
         hasUnavailableCopy: text.includes("Unavailable: live dispatch"),
         hasExternalProofCopy: text.includes("External proof required"),
         hasTokenCss: rootStyles.getPropertyValue("--tcrn-color-text-primary").trim().length > 0

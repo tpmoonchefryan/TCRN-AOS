@@ -23,7 +23,12 @@ import {
   type StageMapReadModel,
   type WorkstreamStoryRow
 } from "./cockpit.js";
-import { tcrnComponentAttr, tcrnStaticNavItem } from "./static-component-registry.js";
+import {
+  aosCockpitUiReactRuntime,
+  renderCockpitRuntimeNavItems,
+  type CockpitRuntimeNavItem
+} from "./cockpit-ui-react-runtime.js";
+import { tcrnComponentAttr } from "./static-component-registry.js";
 
 export const slice4bBaselineDigest = "2bccfa9ab9ed95b785135965c4494f38258a27de3c6f4e9cc1fdad51ed75fb90";
 
@@ -80,6 +85,19 @@ const estimate: Estimate = {
   verificationCost: "medium",
   confidence: "medium"
 };
+
+const cockpitNavLabels = [
+  "Dashboard",
+  "Cockpit",
+  "Work Index",
+  "Stage Map",
+  "Gate Queue",
+  "Conferences",
+  "Evidence",
+  "Dependency",
+  "Resources",
+  "Audit"
+] as const;
 
 export function createSlice4bCockpitReadModel(): OperationsCockpitReadModel {
   const store = new AosStore(createDefaultSeed());
@@ -220,23 +238,14 @@ export function renderOperationsCockpitHtml(
     <style>${operationsCockpitCss}</style>
   </head>
   <body>
-    <main class="aos-shell" ${tcrnComponentAttr("Surface")} data-surface="operations-cockpit" data-service-backed="${serviceBacked ? "true" : "false"}" data-cockpit-api="${escapeHtml(cockpitApiPath)}" data-product-design-acceptance="${model.nonClaims.productDesignAcceptance}" data-design-system-consumer="${aosDesignSystemConsumerBridge.adoptionPosture}" data-design-system-tokens="${aosDesignSystemConsumerBridge.tokenPackage}" data-design-system-copy-state="${aosDesignSystemConsumerBridge.copyStatePackage}" data-design-system-source-head="${aosDesignSystemConsumerBridge.designSystemSourceHead}" data-service-model-schema="${serviceReadback.schemaVersion}" data-service-read-model-source="${serviceReadback.source}" data-service-work-row-count="${serviceReadback.surfaces.workIndex.rowCount}" data-service-selected-story-id="${escapeHtml(serviceReadback.surfaces.workIndex.selectedStoryId)}" data-service-detail-id="${escapeHtml(serviceReadback.surfaces.detail.selectedId)}" data-service-detail-type="${serviceReadback.surfaces.detail.selectedType}" data-service-gate-count="${serviceReadback.surfaces.gate.roleGateCount + serviceReadback.surfaces.gate.ownerIntentGateCount}" data-service-evidence-readback-count="${serviceReadback.surfaces.readback.evidenceReadbackCount}" data-service-runtime-data-committed="${serviceReadback.surfaces.readback.runtimeDataCommittedToGit}">
+    <main class="aos-shell" ${tcrnComponentAttr("Surface")} data-surface="operations-cockpit" data-service-backed="${serviceBacked ? "true" : "false"}" data-cockpit-api="${escapeHtml(cockpitApiPath)}" data-product-design-acceptance="${model.nonClaims.productDesignAcceptance}" data-design-system-consumer="${aosDesignSystemConsumerBridge.adoptionPosture}" data-design-system-tokens="${aosDesignSystemConsumerBridge.tokenPackage}" data-design-system-copy-state="${aosDesignSystemConsumerBridge.copyStatePackage}" data-design-system-ui-react="${aosDesignSystemConsumerBridge.uiReactPackage}" data-design-system-source-head="${aosDesignSystemConsumerBridge.designSystemSourceHead}" data-package-backed-react-runtime-rendering="${aosCockpitUiReactRuntime.packageBackedReactRuntimeRendering}" data-package-runtime-surface="${aosCockpitUiReactRuntime.implementationKind}" data-package-runtime-component-scope="${aosCockpitUiReactRuntime.componentScope.join(",")}" data-service-model-schema="${serviceReadback.schemaVersion}" data-service-read-model-source="${serviceReadback.source}" data-service-work-row-count="${serviceReadback.surfaces.workIndex.rowCount}" data-service-selected-story-id="${escapeHtml(serviceReadback.surfaces.workIndex.selectedStoryId)}" data-service-detail-id="${escapeHtml(serviceReadback.surfaces.detail.selectedId)}" data-service-detail-type="${serviceReadback.surfaces.detail.selectedType}" data-service-gate-count="${serviceReadback.surfaces.gate.roleGateCount + serviceReadback.surfaces.gate.ownerIntentGateCount}" data-service-evidence-readback-count="${serviceReadback.surfaces.readback.evidenceReadbackCount}" data-service-runtime-data-committed="${serviceReadback.surfaces.readback.runtimeDataCommittedToGit}">
       <aside class="aos-sidebar tcrn-side-nav" ${tcrnComponentAttr("SideNav")} data-region="sidebar-nav" aria-label="AOS navigation">
         <a class="brand-lockup tcrn-link-button tcrn-link-button--quiet" ${tcrnComponentAttr("LinkButton")} data-region="brand-lockup" href="#cockpit" aria-label="TCRN AOS">
           <span class="brand-tcrn">TCRN</span>
           <span class="brand-aos">AOS</span>
         </a>
-        <nav class="nav-stack tcrn-nav-group" ${tcrnComponentAttr("NavGroup")} aria-label="Primary cockpit views">
-          ${navButton("Dashboard", false)}
-          ${navButton("Cockpit", true)}
-          ${navButton("Work Index", false)}
-          ${navButton("Stage Map", false)}
-          ${navButton("Gate Queue", false)}
-          ${navButton("Conferences", false)}
-          ${navButton("Evidence", false)}
-          ${navButton("Dependency", false)}
-          ${navButton("Resources", false)}
-          ${navButton("Audit", false)}
+        <nav class="nav-stack tcrn-nav-group" ${tcrnComponentAttr("NavGroup")} data-package-runtime-scope="operations-cockpit-navitem" aria-label="Primary cockpit views">
+          ${renderCockpitRuntimeNavItems(createCockpitRuntimeNavItems())}
         </nav>
         <footer class="sidebar-note">
           <span class="state-dot state-current"></span>
@@ -427,6 +436,9 @@ strong, b { font-weight: 500; }
 .nav-row.active, .nav-row:hover { background: rgba(255, 255, 255, 0.12); }
 .nav-row.active { box-shadow: inset 4px 0 0 var(--teal-500); }
 .nav-row.active::before { background: var(--teal-500); }
+.tcrn-nav-item__content { display: grid; min-width: 0; gap: 2px; }
+.tcrn-nav-item__label { min-width: 0; }
+.tcrn-nav-item__disabled-reason { color: #b8cad5; font-size: var(--type-micro); font-weight: 400; line-height: var(--line-compact); overflow-wrap: anywhere; }
 .nav-label { min-width: 0; }
 .nav-unavailable-reason { display: block; margin-top: 2px; color: #b8cad5; font-size: var(--type-micro); font-weight: 400; line-height: var(--line-compact); }
 .sidebar-note { display: flex; align-items: center; gap: 8px; color: #deedf4; font-size: var(--type-label); }
@@ -741,14 +753,13 @@ if (serviceBacked) {
 }
 `;
 
-function navButton(label: string, active: boolean): string {
-  const reason = `${label} view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only.`;
-  return tcrnStaticNavItem({
-    active,
-    activeHref: "#cockpit",
-    disabledReason: reason,
+function createCockpitRuntimeNavItems(): CockpitRuntimeNavItem[] {
+  return cockpitNavLabels.map((label) => ({
+    active: label === "Cockpit",
+    disabledReason: `${label} view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.`,
+    href: "#cockpit",
     label
-  });
+  }));
 }
 
 function serviceReadModelSummary(readback: CockpitServiceReadModelReadback): string {

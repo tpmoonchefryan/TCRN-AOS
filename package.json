@@ -20,6 +20,7 @@
     "slice4b:proof": "pnpm build && node scripts/slice-4b-style-proof.mjs",
     "aos:design-system-slice1-proof": "pnpm build && node scripts/aos-design-system-consumer-slice-1-proof.mjs",
     "aos:design-system-slice2-proof": "pnpm build && node scripts/aos-design-system-consumer-slice-2-proof.mjs",
+    "aos:design-system-package-runtime-proof": "pnpm build && node scripts/aos-design-system-package-runtime-proof.mjs",
     "aos:design-system-components-proof": "pnpm build && node scripts/aos-design-system-component-registry-proof.mjs",
     "slice5:proof": "pnpm build && node scripts/slice-5-operating-loop-proof.mjs",
     "slice6:proof": "pnpm build && node scripts/slice-6-knowledge-guide-release-notes-proof.mjs",
@@ -33,14 +34,19 @@
     "live-dispatch:terminal-ingestion-proof": "pnpm build && node scripts/live-dispatch-terminal-return-ingestion-proof.mjs",
     "live-dispatch:real-terminal-ingestion-proof": "pnpm build && node scripts/live-dispatch-real-terminal-return-ingestion-proof.mjs",
     "audit:licenses": "node scripts/audit-licenses.mjs",
-    "verify": "pnpm typecheck && pnpm validate:migrations && pnpm audit:licenses && pnpm test && pnpm runtime:db:proof && pnpm service:smoke && pnpm slice3:proof && pnpm slice4:proof && pnpm slice4b:proof && pnpm aos:design-system-components-proof && pnpm slice5:proof && pnpm slice6:proof && pnpm slice7:proof && pnpm slice8:proof && pnpm slice9:proof && pnpm slice9b:proof && pnpm slice10:proof && pnpm live-dispatch:dry-run-proof && pnpm live-dispatch:execution-readiness-proof && pnpm live-dispatch:terminal-ingestion-proof"
+    "verify": "pnpm typecheck && pnpm validate:migrations && pnpm audit:licenses && pnpm test && pnpm runtime:db:proof && pnpm service:smoke && pnpm slice3:proof && pnpm slice4:proof && pnpm slice4b:proof && pnpm aos:design-system-package-runtime-proof && pnpm aos:design-system-components-proof && pnpm slice5:proof && pnpm slice6:proof && pnpm slice7:proof && pnpm slice8:proof && pnpm slice9:proof && pnpm slice9b:proof && pnpm slice10:proof && pnpm live-dispatch:dry-run-proof && pnpm live-dispatch:execution-readiness-proof && pnpm live-dispatch:terminal-ingestion-proof"
   },
   "devDependencies": {
+    "@types/react": "19.1.8",
+    "@types/react-dom": "19.1.6",
     "@types/node": "24.0.3",
     "typescript": "5.8.3"
   },
   "dependencies": {
     "@tcrn/ui-copy-state": "file:../TCRN-Design-System/packages/ui-copy-state",
-    "@tcrn/ui-tokens": "file:../TCRN-Design-System/packages/ui-tokens"
+    "@tcrn/ui-react": "file:../TCRN-Design-System/packages/ui-react",
+    "@tcrn/ui-tokens": "file:../TCRN-Design-System/packages/ui-tokens",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   }
 }

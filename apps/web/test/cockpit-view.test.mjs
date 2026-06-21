@@ -68,15 +68,20 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
 
   assert.equal(aosDesignSystemConsumerBridge.tokenPackage, "@tcrn/ui-tokens");
   assert.equal(aosDesignSystemConsumerBridge.copyStatePackage, "@tcrn/ui-copy-state");
-  assert.equal(aosDesignSystemConsumerBridge.uiReactPackage, "not_adopted_in_slice_1");
-  assert.equal(aosDesignSystemConsumerBridge.designSystemSourceHead, "a74742a9cfaa03205d867f7e33dea92c1e8ac6ca");
+  assert.equal(aosDesignSystemConsumerBridge.uiReactPackage, "@tcrn/ui-react");
+  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_navitem_sidebar");
+  assert.equal(aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering, true);
+  assert.equal(aosDesignSystemConsumerBridge.designSystemSourceHead, "b0c00828a813d3c62392eb6e53d7d6b85b6affeb");
   assert.equal(copyAosState("external_proof_required"), "External proof required");
   assert.equal(copyAosState("not_claimed"), "Not claimed");
   assert.equal(copyAosState("record_participant_position"), "Record participant position");
   assert.ok(aosDesignSystemTokenReadback.brandPrimary);
-  assert.match(html, /data-design-system-consumer="tokens_copy_state_static_renderer_bridge"/);
+  assert.match(html, /data-design-system-consumer="tokens_copy_state_ui_react_operations_cockpit_runtime_pilot"/);
   assert.match(html, /data-design-system-tokens="@tcrn\/ui-tokens"/);
   assert.match(html, /data-design-system-copy-state="@tcrn\/ui-copy-state"/);
+  assert.match(html, /data-design-system-ui-react="@tcrn\/ui-react"/);
+  assert.match(html, /data-package-backed-react-runtime-rendering="true"/);
+  assert.match(html, /data-package-runtime-component-scope="NavItem"/);
   assert.match(html, /--tcrn-color-brand-primary/);
 });
 
@@ -94,17 +99,23 @@ test("disabled cockpit navigation exposes held reasons visibly and accessibly", 
     assert.ok(hasReason, `held control exposes a held reason: ${attributes}`);
   }
   assert.match(html, /Dashboard view is held for a later routed AOS slice/);
-  assert.match(html, /this service read-model checkpoint keeps Cockpit available only/);
+  assert.match(html, /this package-runtime pilot keeps Cockpit available only/);
   assert.doesNotMatch(html, /Slice 1 checkpoint/);
-  assert.match(html, /aria-describedby="nav-reason-dashboard"/);
-  assert.match(html, /Held for later route/);
+  assert.match(html, /data-package-runtime-component="NavItem"/);
+  assert.match(html, /data-package-runtime-source="@tcrn\/ui-react"/);
   assert.ok(disabledNavItems.length > 0);
   for (const item of disabledNavItems) {
     assert.doesNotMatch(item.attributes, /\bhref=/, `disabled NavItem must not be actionable: ${item.attributes}`);
     assert.match(item.attributes, /\btabindex="-1"/, `disabled NavItem must be removed from tab order: ${item.attributes}`);
     assert.match(item.attributes, /\bdata-disabled-reason="[^"]+"/, `disabled NavItem exposes DS reason metadata: ${item.attributes}`);
     assert.match(item.attributes, /\btitle="[^"]+"/, `disabled NavItem exposes title reason: ${item.attributes}`);
-    assert.match(item.body, /\bnav-unavailable-reason\b/, "disabled NavItem has visible reason text");
+    assert.match(item.attributes, /\bdata-package-runtime-component="NavItem"/, `disabled NavItem is package-runtime backed: ${item.attributes}`);
+    assert.match(item.attributes, /\bdata-package-runtime-source="@tcrn\/ui-react"/, `disabled NavItem records package source: ${item.attributes}`);
+    const describedby = item.attributes.match(/\baria-describedby="([^"]+)"/)?.[1];
+    assert.ok(describedby, `disabled NavItem exposes aria-describedby: ${item.attributes}`);
+    assert.match(item.body, new RegExp(`id="${escapeRegExp(describedby)}"`), "disabled NavItem describes visible reason by id");
+    assert.match(item.body, /\btcrn-nav-item__disabled-reason\b/, "disabled NavItem has visible package reason text");
+    assert.match(item.body, /package-runtime pilot keeps Cockpit available only/, "disabled NavItem visible reason is specific to 59AN runtime pilot");
   }
 });
 
@@ -166,4 +177,8 @@ function disabledNavItemReadbacks(html) {
   return Array.from(html.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g))
     .filter((match) => /\baria-disabled="true"/.test(match[1]))
     .map((match) => ({ attributes: match[1], body: match[2] }));
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

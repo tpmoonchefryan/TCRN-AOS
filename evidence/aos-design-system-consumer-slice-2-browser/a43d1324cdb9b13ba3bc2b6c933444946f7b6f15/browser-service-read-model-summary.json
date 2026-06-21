@@ -1,0 +1,133 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_design_system_frontend_rebuild_slice_2_service_read_model_stabilization_implementation",
+  "sourceHead": "a43d1324cdb9b13ba3bc2b6c933444946f7b6f15",
+  "designSystemSourceHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
+  "serviceLifecycle": {
+    "loopbackOnly": true,
+    "ephemeralPort": true,
+    "stopped": true
+  },
+  "apiContract": {
+    "ok": true,
+    "schemaVersion": "aos.cockpit.service_read_model.v1",
+    "expectedDom": {
+      "schemaVersion": "aos.cockpit.service_read_model.v1",
+      "workRowCount": 1,
+      "selectedStoryId": "story_6a8345aeed11e98d",
+      "detailId": "story_6a8345aeed11e98d",
+      "detailType": "story",
+      "gateCount": 2,
+      "evidenceReadbackCount": 1
+    },
+    "selectedDetailRoundTrip": true,
+    "productAcceptance": false,
+    "finalMvpAcceptance": false,
+    "broadUiReactMigration": false,
+    "runtimeDataCommittedToGit": false
+  },
+  "designSystemConsumption": {
+    "adoptionPosture": "tokens_copy_state_ui_react_operations_cockpit_runtime_pilot",
+    "tokenPackage": "@tcrn/ui-tokens",
+    "copyStatePackage": "@tcrn/ui-copy-state",
+    "uiReactPackage": "@tcrn/ui-react"
+  },
+  "viewportReadbacks": [
+    {
+      "label": "desktop-1440x900",
+      "width": 1440,
+      "height": 900,
+      "title": "TCRN AOS Operations Cockpit",
+      "serviceBacked": "true",
+      "designSystemConsumer": "tokens_copy_state_ui_react_operations_cockpit_runtime_pilot",
+      "tokenPackage": "@tcrn/ui-tokens",
+      "copyStatePackage": "@tcrn/ui-copy-state",
+      "serviceStatus": "service API read 10:12:47 PM",
+      "serviceModelBadge": "1 work / 2 gates / detail story",
+      "attrs": {
+        "schema": "aos.cockpit.service_read_model.v1",
+        "source": "service_api_read",
+        "workRowCount": 1,
+        "selectedStoryId": "story_6a8345aeed11e98d",
+        "detailId": "story_6a8345aeed11e98d",
+        "detailType": "story",
+        "gateCount": 2,
+        "evidenceReadbackCount": 1,
+        "runtimeDataCommitted": "false"
+      },
+      "renderedRowCount": 1,
+      "domMatchesApi": true,
+      "rawVisibleCopyHits": [],
+      "forbiddenPositiveClaimHits": [],
+      "disabledButtonsMissingReason": [],
+      "disabledButtonsWithStaleReason": [],
+      "bodyLevelHorizontalOverflow": false,
+      "viewportWidth": 1440,
+      "documentScrollWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hasUnavailableCopy": true,
+      "hasHeldRouteCopy": true,
+      "screenshot": {
+        "path": "evidence/aos-design-system-consumer-slice-2-browser/a43d1324cdb9b13ba3bc2b6c933444946f7b6f15/desktop-1440x900-service-read-model.png",
+        "sha256": "26241218f77c0d2b7bf1c3d38b05d5ba351168040d5ea40f15a42eab98c4fe1d",
+        "bytes": 285049
+      }
+    },
+    {
+      "label": "mobile-390x844",
+      "width": 390,
+      "height": 844,
+      "title": "TCRN AOS Operations Cockpit",
+      "serviceBacked": "true",
+      "designSystemConsumer": "tokens_copy_state_ui_react_operations_cockpit_runtime_pilot",
+      "tokenPackage": "@tcrn/ui-tokens",
+      "copyStatePackage": "@tcrn/ui-copy-state",
+      "serviceStatus": "service API read 10:12:47 PM",
+      "serviceModelBadge": "1 work / 2 gates / detail story",
+      "attrs": {
+        "schema": "aos.cockpit.service_read_model.v1",
+        "source": "service_api_read",
+        "workRowCount": 1,
+        "selectedStoryId": "story_6a8345aeed11e98d",
+        "detailId": "story_6a8345aeed11e98d",
+        "detailType": "story",
+        "gateCount": 2,
+        "evidenceReadbackCount": 1,
+        "runtimeDataCommitted": "false"
+      },
+      "renderedRowCount": 1,
+      "domMatchesApi": true,
+      "rawVisibleCopyHits": [],
+      "forbiddenPositiveClaimHits": [],
+      "disabledButtonsMissingReason": [],
+      "disabledButtonsWithStaleReason": [],
+      "bodyLevelHorizontalOverflow": false,
+      "viewportWidth": 390,
+      "documentScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "hasUnavailableCopy": true,
+      "hasHeldRouteCopy": true,
+      "screenshot": {
+        "path": "evidence/aos-design-system-consumer-slice-2-browser/a43d1324cdb9b13ba3bc2b6c933444946f7b6f15/mobile-390x844-service-read-model.png",
+        "sha256": "d58758ee16333e9e54084acb518be9b53b34fb1699ec605373ef2e17c8a70362",
+        "bytes": 268014
+      }
+    }
+  ],
+  "browserHealth": {
+    "pageErrors": [],
+    "consoleErrors": [],
+    "requestFailures": []
+  },
+  "noOverclaim": {
+    "productAcceptanceReady": false,
+    "finalMvpAcceptanceReady": false,
+    "releasePublicationReady": false,
+    "batchPushGate": false,
+    "packagePublication": false,
+    "designSystemMutation": false,
+    "broadUiReactMigration": false,
+    "liveDispatch": false,
+    "ownerIntentExecution": false
+  }
+}

@@ -166,6 +166,8 @@ try {
         bodyScrollWidth: document.body.scrollWidth,
         hasUnavailableCopy: text.includes("Unavailable: live dispatch"),
         hasHeldRouteCopy: text.includes("Held for later route")
+          || text.includes("package-runtime pilot keeps Cockpit available only")
+          || text.includes("held for a later routed AOS slice")
       };
     }, { rawVisibleForbidden, forbiddenPositiveClaims, staleDisabledReasonPatterns, expected: apiContract.expectedDom });
     viewportReadbacks.push({

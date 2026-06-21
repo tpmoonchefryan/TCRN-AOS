@@ -3,72 +3,140 @@ import { existsSync, readFileSync } from "node:fs";
 const rootPackage = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
 const runtimeDeps = Object.keys(rootPackage.dependencies ?? {});
 const devDeps = Object.keys(rootPackage.devDependencies ?? {});
-const expectedDevDeps = new Set(["typescript", "@types/node"]);
+const expectedDevDeps = new Map([
+  ["@types/node", { version: "24.0.3", license: "MIT" }],
+  ["@types/react", { version: "19.1.8", license: "MIT" }],
+  ["@types/react-dom", { version: "19.1.6", license: "MIT" }],
+  ["typescript", { version: "5.8.3", license: "Apache-2.0" }]
+]);
 const allowedRuntimeDeps = new Map([
-  ["@tcrn/ui-copy-state", "file:../TCRN-Design-System/packages/ui-copy-state"],
-  ["@tcrn/ui-tokens", "file:../TCRN-Design-System/packages/ui-tokens"]
+  ["@tcrn/ui-copy-state", {
+    specifier: "file:../TCRN-Design-System/packages/ui-copy-state",
+    version: "0.0.0-private",
+    license: "local_private_tcrn_design_system_package",
+    allowedDependencies: []
+  }],
+  ["@tcrn/ui-react", {
+    specifier: "file:../TCRN-Design-System/packages/ui-react",
+    version: "0.0.0-private",
+    license: "local_private_tcrn_design_system_package",
+    allowedDependencies: ["@tcrn/ui-copy-state", "@tcrn/ui-tokens", "lucide-react"]
+  }],
+  ["@tcrn/ui-tokens", {
+    specifier: "file:../TCRN-Design-System/packages/ui-tokens",
+    version: "0.0.0-private",
+    license: "local_private_tcrn_design_system_package",
+    allowedDependencies: []
+  }],
+  ["react", {
+    specifier: "19.1.0",
+    version: "19.1.0",
+    license: "MIT",
+    allowedDependencies: []
+  }],
+  ["react-dom", {
+    specifier: "19.1.0",
+    version: "19.1.0",
+    license: "MIT",
+    allowedDependencies: ["scheduler"]
+  }]
 ]);
 const unexpected = devDeps.filter((name) => !expectedDevDeps.has(name));
-const missingDev = [...expectedDevDeps].filter((name) => !devDeps.includes(name));
+const missingDev = [...expectedDevDeps.keys()].filter((name) => !devDeps.includes(name));
 const packageLicenses = [];
 const runtimePackageReadbacks = [];
 
 for (const name of runtimeDeps) {
-  const expectedSpecifier = allowedRuntimeDeps.get(name);
+  const expectation = allowedRuntimeDeps.get(name);
   const actualSpecifier = rootPackage.dependencies[name];
   const packageUrl = new URL(`../node_modules/${name}/package.json`, import.meta.url);
   if (existsSync(packageUrl)) {
     const packageJson = JSON.parse(readFileSync(packageUrl, "utf8"));
+    const license = packageJson.license ?? "local_private_tcrn_design_system_package";
+    const dependencies = Object.keys(packageJson.dependencies ?? {});
     runtimePackageReadbacks.push({
       name,
       version: packageJson.version,
       specifier: actualSpecifier,
-      expectedSpecifier: expectedSpecifier ?? "not_allowed",
-      localDesignSystemPackage: actualSpecifier === expectedSpecifier,
-      license: packageJson.license ?? "local_private_tcrn_design_system_package",
-      dependencies: Object.keys(packageJson.dependencies ?? {})
+      expectedSpecifier: expectation?.specifier ?? "not_allowed",
+      allowedSpecifier: actualSpecifier === expectation?.specifier,
+      expectedVersion: expectation?.version ?? "not_allowed",
+      allowedVersion: packageJson.version === expectation?.version,
+      license,
+      expectedLicense: expectation?.license ?? "not_allowed",
+      allowedLicense: license === expectation?.license,
+      dependencies,
+      allowedDependencies: expectation?.allowedDependencies ?? [],
+      unexpectedDependencies: dependencies.filter((dependency) => !(expectation?.allowedDependencies ?? []).includes(dependency))
     });
   } else {
     runtimePackageReadbacks.push({
       name,
       version: "not_installed",
       specifier: actualSpecifier,
-      expectedSpecifier: expectedSpecifier ?? "not_allowed",
-      localDesignSystemPackage: false,
+      expectedSpecifier: expectation?.specifier ?? "not_allowed",
+      allowedSpecifier: false,
+      expectedVersion: expectation?.version ?? "not_allowed",
+      allowedVersion: false,
       license: "evidence_missing",
+      expectedLicense: expectation?.license ?? "not_allowed",
+      allowedLicense: false,
       dependencies: []
     });
   }
 }
 
 for (const name of devDeps) {
+  const expectation = expectedDevDeps.get(name);
   const packageUrl = new URL(`../node_modules/${name}/package.json`, import.meta.url);
   if (existsSync(packageUrl)) {
     const packageJson = JSON.parse(readFileSync(packageUrl, "utf8"));
+    const license = packageJson.license ?? "evidence_missing";
     packageLicenses.push({
       name,
       version: packageJson.version,
-      license: packageJson.license ?? "evidence_missing"
+      expectedVersion: expectation?.version ?? "not_allowed",
+      allowedVersion: packageJson.version === expectation?.version,
+      license,
+      expectedLicense: expectation?.license ?? "not_allowed",
+      allowedLicense: license === expectation?.license
     });
   } else {
-    packageLicenses.push({ name, version: "not_installed", license: "evidence_missing" });
+    packageLicenses.push({
+      name,
+      version: "not_installed",
+      expectedVersion: expectation?.version ?? "not_allowed",
+      allowedVersion: false,
+      license: "evidence_missing",
+      expectedLicense: expectation?.license ?? "not_allowed",
+      allowedLicense: false
+    });
   }
 }
 
 const blockers = [
-  runtimePackageReadbacks.some((entry) => !entry.localDesignSystemPackage)
-    ? `unexpected runtime dependencies: ${runtimePackageReadbacks.filter((entry) => !entry.localDesignSystemPackage).map((entry) => entry.name).join(",")}`
+  runtimePackageReadbacks.some((entry) => !allowedRuntimeDeps.has(entry.name))
+    ? `unexpected runtime dependencies: ${runtimePackageReadbacks.filter((entry) => !allowedRuntimeDeps.has(entry.name)).map((entry) => entry.name).join(",")}`
     : "",
-  runtimePackageReadbacks.some((entry) => entry.version !== "0.0.0-private")
-    ? "local Design System runtime dependency version mismatch"
+  runtimePackageReadbacks.some((entry) => !entry.allowedSpecifier)
+    ? `runtime dependency specifier mismatch: ${runtimePackageReadbacks.filter((entry) => !entry.allowedSpecifier).map((entry) => entry.name).join(",")}`
     : "",
-  runtimePackageReadbacks.some((entry) => entry.dependencies.length > 0)
-    ? "local Design System runtime dependency has transitive runtime dependencies"
+  runtimePackageReadbacks.some((entry) => !entry.allowedVersion)
+    ? `runtime dependency version mismatch: ${runtimePackageReadbacks.filter((entry) => !entry.allowedVersion).map((entry) => entry.name).join(",")}`
+    : "",
+  runtimePackageReadbacks.some((entry) => !entry.allowedLicense)
+    ? `runtime dependency license mismatch: ${runtimePackageReadbacks.filter((entry) => !entry.allowedLicense).map((entry) => entry.name).join(",")}`
+    : "",
+  runtimePackageReadbacks.some((entry) => entry.unexpectedDependencies?.length > 0)
+    ? `unexpected transitive runtime dependencies: ${runtimePackageReadbacks.filter((entry) => entry.unexpectedDependencies?.length > 0).map((entry) => `${entry.name}:${entry.unexpectedDependencies.join("|")}`).join(",")}`
     : "",
   unexpected.length > 0 ? `unexpected dev dependencies: ${unexpected.join(",")}` : "",
   missingDev.length > 0 ? `missing dev dependencies: ${missingDev.join(",")}` : "",
-  packageLicenses.some((entry) => ["GPL", "AGPL", "evidence_missing"].some((blocked) => String(entry.license).includes(blocked)))
-    ? "blocked or missing license evidence in dev dependencies"
+  packageLicenses.some((entry) => !entry.allowedVersion)
+    ? `dev dependency version mismatch: ${packageLicenses.filter((entry) => !entry.allowedVersion).map((entry) => entry.name).join(",")}`
+    : "",
+  packageLicenses.some((entry) => !entry.allowedLicense || ["GPL", "AGPL", "evidence_missing"].some((blocked) => String(entry.license).includes(blocked)))
+    ? "blocked, unexpected, or missing license evidence in dev dependencies"
     : ""
 ].filter(Boolean);
 

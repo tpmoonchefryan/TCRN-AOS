@@ -61,11 +61,16 @@ const rawVisibleCopyHits = [
   "open_evidence_metadata"
 ].filter((phrase) => visibleTextFragments.includes(phrase));
 const mockupReferenceCopyBoundary = baselinePaths.some((path) => path.startsWith("apps/web/mockup/"));
-const designSystemBridgeOk = html.includes('data-design-system-consumer="tokens_copy_state_static_renderer_bridge"')
+const designSystemBridgeOk = html.includes('data-design-system-consumer="tokens_copy_state_ui_react_operations_cockpit_runtime_pilot"')
   && html.includes('data-design-system-tokens="@tcrn/ui-tokens"')
   && html.includes('data-design-system-copy-state="@tcrn/ui-copy-state"')
+  && html.includes('data-design-system-ui-react="@tcrn/ui-react"')
+  && html.includes('data-package-backed-react-runtime-rendering="true"')
+  && html.includes('data-package-runtime-scope="operations-cockpit-navitem"')
   && html.includes("--tcrn-color-brand-primary")
-  && aosDesignSystemConsumerBridge.uiReactPackage === "not_adopted_in_slice_1"
+  && aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
+  && aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering === true
+  && aosDesignSystemConsumerBridge.uiReactRuntimeSurface === "operations_cockpit_navitem_sidebar"
   && Boolean(aosDesignSystemTokenReadback.brandPrimary);
 const ok = aggregateDigest === slice4bBaselineDigest
   && selectorProof.every((item) => item.present)
