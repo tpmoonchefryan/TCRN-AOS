@@ -141,11 +141,13 @@ strong, b { font-weight: 500; }
 .brand-tcrn { font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 29px; line-height: 1; font-weight: 500; letter-spacing: 0.17em; color: #f7fbff; }
 .brand-aos { display: inline-block; font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 32px; line-height: 1; font-weight: 800; letter-spacing: 0; color: transparent; background: linear-gradient(135deg, #18d7c8 6%, #08a99d 56%, #15c4b5 100%); -webkit-background-clip: text; background-clip: text; transform: skewX(-5deg); }
 .nav-stack { display: grid; align-content: start; gap: 6px; }
-.nav-row { display: grid; grid-template-columns: 8px 1fr; align-items: center; gap: 10px; width: 100%; min-height: 38px; border: 1px solid transparent; border-radius: 6px; padding: 0 10px; background: transparent; color: #e5eef3; text-align: left; font-size: var(--type-ui); font-weight: 400; }
+.nav-row { display: grid; grid-template-columns: 8px 1fr; align-items: center; gap: 10px; width: 100%; min-height: 38px; border: 1px solid transparent; border-radius: 6px; padding: 7px 10px; background: transparent; color: #e5eef3; text-align: left; font-size: var(--type-ui); font-weight: 400; }
 .nav-row::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: #7891a2; }
 .nav-row.active, .nav-row:hover { background: rgba(255, 255, 255, 0.12); }
 .nav-row.active { box-shadow: inset 4px 0 0 var(--teal-500); }
 .nav-row.active::before { background: var(--teal-500); }
+.nav-label { min-width: 0; }
+.nav-unavailable-reason { display: block; margin-top: 2px; color: #b8cad5; font-size: var(--type-micro); font-weight: 400; line-height: var(--line-compact); }
 .sidebar-note { display: flex; align-items: center; gap: 8px; color: #deedf4; font-size: var(--type-label); }
 .aos-main { min-width: 0; }
 .topbar { display: grid; grid-template-columns: 220px minmax(0, 1fr) max-content 38px; align-items: center; gap: 14px; min-height: 64px; padding: 0 22px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.96); }
@@ -264,16 +266,16 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
           <span class="brand-aos">AOS</span>
         </a>
         <nav class="nav-stack" aria-label="Primary cockpit views">
-          <button class="nav-row" type="button" disabled>Dashboard</button>
-          <button class="nav-row active" type="button">Cockpit</button>
-          <button class="nav-row" type="button" disabled>Work Index</button>
-          <button class="nav-row" type="button" disabled>Stage Map</button>
-          <button class="nav-row" type="button" disabled>Gate Queue</button>
-          <button class="nav-row" type="button" disabled>Conferences</button>
-          <button class="nav-row" type="button" disabled>Evidence</button>
-          <button class="nav-row" type="button" disabled>Dependency</button>
-          <button class="nav-row" type="button" disabled>Resources</button>
-          <button class="nav-row" type="button" disabled>Audit</button>
+          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-dashboard" title="Dashboard view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only." data-disabled-reason="Dashboard view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only."><span class="nav-label">Dashboard</span><span class="nav-unavailable-reason" id="nav-reason-dashboard">Held for later route</span></button>
+          <button class="nav-row active" type="button"><span class="nav-label">Cockpit</span></button>
+          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-work-index" title="Work Index view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only." data-disabled-reason="Work Index view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only."><span class="nav-label">Work Index</span><span class="nav-unavailable-reason" id="nav-reason-work-index">Held for later route</span></button>
+          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-stage-map" title="Stage Map view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only." data-disabled-reason="Stage Map view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only."><span class="nav-label">Stage Map</span><span class="nav-unavailable-reason" id="nav-reason-stage-map">Held for later route</span></button>
+          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-gate-queue" title="Gate Queue view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only." data-disabled-reason="Gate Queue view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only."><span class="nav-label">Gate Queue</span><span class="nav-unavailable-reason" id="nav-reason-gate-queue">Held for later route</span></button>
+          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-conferences" title="Conferences view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only." data-disabled-reason="Conferences view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only."><span class="nav-label">Conferences</span><span class="nav-unavailable-reason" id="nav-reason-conferences">Held for later route</span></button>
+          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-evidence" title="Evidence view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only." data-disabled-reason="Evidence view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only."><span class="nav-label">Evidence</span><span class="nav-unavailable-reason" id="nav-reason-evidence">Held for later route</span></button>
+          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-dependency" title="Dependency view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only." data-disabled-reason="Dependency view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only."><span class="nav-label">Dependency</span><span class="nav-unavailable-reason" id="nav-reason-dependency">Held for later route</span></button>
+          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-resources" title="Resources view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only." data-disabled-reason="Resources view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only."><span class="nav-label">Resources</span><span class="nav-unavailable-reason" id="nav-reason-resources">Held for later route</span></button>
+          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-audit" title="Audit view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only." data-disabled-reason="Audit view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only."><span class="nav-label">Audit</span><span class="nav-unavailable-reason" id="nav-reason-audit">Held for later route</span></button>
         </nav>
         <footer class="sidebar-note">
           <span class="state-dot state-current"></span>

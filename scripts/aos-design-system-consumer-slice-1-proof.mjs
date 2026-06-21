@@ -83,10 +83,26 @@ try {
       const text = document.body.innerText;
       const lower = text.toLowerCase();
       const rootStyles = getComputedStyle(document.documentElement);
-      const disabledButtons = Array.from(document.querySelectorAll("button:disabled")).map((button) => ({
-        text: button.textContent?.trim() ?? "",
-        title: button.getAttribute("title") ?? ""
-      }));
+      const disabledButtons = Array.from(document.querySelectorAll("button:disabled")).map((button) => {
+        const ariaDescription = (button.getAttribute("aria-describedby") ?? "")
+          .split(/\s+/)
+          .map((id) => document.getElementById(id)?.textContent?.trim() ?? "")
+          .filter(Boolean)
+          .join(" ");
+        const title = button.getAttribute("title")?.trim() ?? "";
+        const dataDisabledReason = button.getAttribute("data-disabled-reason")?.trim() ?? "";
+        const reason = [title, ariaDescription, dataDisabledReason].filter(Boolean).join(" | ");
+        return {
+          text: button.textContent?.trim() ?? "",
+          className: button.className,
+          title,
+          ariaDescription,
+          dataDisabledReason,
+          reason
+        };
+      });
+      const disabledButtonsMissingReason = disabledButtons.filter((button) => !button.reason);
+      const disabledNavButtons = disabledButtons.filter((button) => String(button.className).includes("nav-row"));
       return {
         title: document.title,
         serviceBacked: shell?.getAttribute("data-service-backed"),
@@ -104,11 +120,15 @@ try {
         rawVisibleCopyHits: rawVisibleForbidden.filter((phrase) => text.includes(phrase)),
         forbiddenPositiveClaimHits: forbiddenPositiveClaims.filter((phrase) => lower.includes(phrase)),
         disabledButtons,
+        disabledButtonsMissingReason,
+        disabledNavButtonCount: disabledNavButtons.length,
         documentScrollWidth: document.documentElement.scrollWidth,
         bodyScrollWidth: document.body.scrollWidth,
         viewportWidth: window.innerWidth,
         bodyLevelHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth || document.body.scrollWidth > window.innerWidth,
-        hasOwnerIntentReason: disabledButtons.some((button) => /owner-intent|owner intent/i.test(button.title)),
+        hasOwnerIntentReason: disabledButtons.some((button) => /owner-intent|owner intent/i.test(button.reason)),
+        hasSidebarUnavailableReasons: disabledNavButtons.length >= 9
+          && disabledNavButtons.every((button) => button.reason.includes("later routed AOS slice") && button.text.includes("Held for later route")),
         hasUnavailableCopy: text.includes("Unavailable: live dispatch"),
         hasExternalProofCopy: text.includes("External proof required"),
         hasTokenCss: rootStyles.getPropertyValue("--tcrn-color-text-primary").trim().length > 0
@@ -137,6 +157,8 @@ try {
     && viewportReadbacks.every((readback) => readback.workRows > 0)
     && viewportReadbacks.every((readback) => readback.rawVisibleCopyHits.length === 0)
     && viewportReadbacks.every((readback) => readback.forbiddenPositiveClaimHits.length === 0)
+    && viewportReadbacks.every((readback) => readback.disabledButtonsMissingReason.length === 0)
+    && viewportReadbacks.every((readback) => readback.hasSidebarUnavailableReasons)
     && viewportReadbacks.every((readback) => readback.hasTokenCss)
     && viewportReadbacks.every((readback) => readback.hasUnavailableCopy)
     && viewportReadbacks.every((readback) => readback.hasExternalProofCopy)
@@ -188,6 +210,8 @@ try {
     screenshots: viewportReadbacks.map((readback) => readback.screenshot),
     rawVisibleCopyHits: viewportReadbacks.flatMap((readback) => readback.rawVisibleCopyHits),
     forbiddenPositiveClaimHits: viewportReadbacks.flatMap((readback) => readback.forbiddenPositiveClaimHits),
+    disabledButtonsMissingReason: viewportReadbacks.flatMap((readback) => readback.disabledButtonsMissingReason),
+    hasSidebarUnavailableReasons: viewportReadbacks.every((readback) => readback.hasSidebarUnavailableReasons),
     pageErrorCount: pageErrors.length,
     consoleErrorCount: consoleErrors.length,
     summaryPath: relative(repoRoot, summaryPath),
@@ -208,7 +232,7 @@ try {
 
 function markdownReceipt(summary) {
   const screenshotRows = summary.viewportReadbacks
-    .map((readback) => `| ${readback.label} | \`${readback.screenshot.path}\` | \`${readback.screenshot.sha256}\` | ${readback.rawVisibleCopyHits.length} | ${readback.forbiddenPositiveClaimHits.length} |`)
+    .map((readback) => `| ${readback.label} | \`${readback.screenshot.path}\` | \`${readback.screenshot.sha256}\` | ${readback.rawVisibleCopyHits.length} | ${readback.forbiddenPositiveClaimHits.length} | ${readback.disabledButtonsMissingReason.length} |`)
     .join("\n");
   return `# AOS Design System Consumer Slice 1 Proof
 
@@ -228,8 +252,8 @@ Design System source basis: \`${summary.designSystemSourceHead}\`
 
 ## Browser Evidence
 
-| Viewport | Screenshot | SHA-256 | Raw visible copy hits | Forbidden claim hits |
-| --- | --- | --- | ---: | ---: |
+| Viewport | Screenshot | SHA-256 | Raw visible copy hits | Forbidden claim hits | Disabled controls missing reason |
+| --- | --- | --- | ---: | ---: | ---: |
 ${screenshotRows}
 
 ## No-Overclaim Boundaries

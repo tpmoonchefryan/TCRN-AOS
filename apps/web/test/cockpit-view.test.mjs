@@ -76,6 +76,23 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.match(html, /--tcrn-color-brand-primary/);
 });
 
+test("disabled cockpit navigation exposes held reasons visibly and accessibly", () => {
+  const html = renderOperationsCockpitHtml();
+  const disabledButtons = Array.from(html.matchAll(/<button\b([^>]*)\bdisabled\b([^>]*)>/g))
+    .map((match) => `${match[1]} ${match[2]}`);
+
+  assert.ok(disabledButtons.length > 0);
+  for (const attributes of disabledButtons) {
+    const hasReason = /title="[^"]+"/.test(attributes)
+      || /aria-describedby="[^"]+"/.test(attributes)
+      || /data-disabled-reason="[^"]+"/.test(attributes);
+    assert.ok(hasReason, `disabled button exposes a held reason: ${attributes}`);
+  }
+  assert.match(html, /Dashboard view is held for a later routed AOS slice/);
+  assert.match(html, /aria-describedby="nav-reason-dashboard"/);
+  assert.match(html, /Held for later route/);
+});
+
 test("Slice 4B production HTML can be marked as service-backed for owner-trial service rendering", () => {
   const html = renderOperationsCockpitHtml(createSlice4bCockpitReadModel(), {
     serviceBacked: true,

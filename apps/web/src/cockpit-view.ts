@@ -415,11 +415,13 @@ strong, b { font-weight: 500; }
 .brand-tcrn { font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 29px; line-height: 1; font-weight: 500; letter-spacing: 0.17em; color: #f7fbff; }
 .brand-aos { display: inline-block; font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 32px; line-height: 1; font-weight: 800; letter-spacing: 0; color: transparent; background: linear-gradient(135deg, #18d7c8 6%, #08a99d 56%, #15c4b5 100%); -webkit-background-clip: text; background-clip: text; transform: skewX(-5deg); }
 .nav-stack { display: grid; align-content: start; gap: 6px; }
-.nav-row { display: grid; grid-template-columns: 8px 1fr; align-items: center; gap: 10px; width: 100%; min-height: 38px; border: 1px solid transparent; border-radius: 6px; padding: 0 10px; background: transparent; color: #e5eef3; text-align: left; font-size: var(--type-ui); font-weight: 400; }
+.nav-row { display: grid; grid-template-columns: 8px 1fr; align-items: center; gap: 10px; width: 100%; min-height: 38px; border: 1px solid transparent; border-radius: 6px; padding: 7px 10px; background: transparent; color: #e5eef3; text-align: left; font-size: var(--type-ui); font-weight: 400; }
 .nav-row::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: #7891a2; }
 .nav-row.active, .nav-row:hover { background: rgba(255, 255, 255, 0.12); }
 .nav-row.active { box-shadow: inset 4px 0 0 var(--teal-500); }
 .nav-row.active::before { background: var(--teal-500); }
+.nav-label { min-width: 0; }
+.nav-unavailable-reason { display: block; margin-top: 2px; color: #b8cad5; font-size: var(--type-micro); font-weight: 400; line-height: var(--line-compact); }
 .sidebar-note { display: flex; align-items: center; gap: 8px; color: #deedf4; font-size: var(--type-label); }
 .aos-main { min-width: 0; }
 .topbar { display: grid; grid-template-columns: 220px minmax(0, 1fr) max-content 38px; align-items: center; gap: 14px; min-height: 64px; padding: 0 22px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.96); }
@@ -699,7 +701,12 @@ if (serviceBacked) {
 `;
 
 function navButton(label: string, active: boolean): string {
-  return `<button class="nav-row${active ? " active" : ""}" type="button"${active ? "" : " disabled"}>${escapeHtml(label)}</button>`;
+  if (active) {
+    return `<button class="nav-row active" type="button"><span class="nav-label">${escapeHtml(label)}</span></button>`;
+  }
+  const reason = `${label} view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only.`;
+  const reasonId = `nav-reason-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+  return `<button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="${reasonId}" title="${escapeHtml(reason)}" data-disabled-reason="${escapeHtml(reason)}"><span class="nav-label">${escapeHtml(label)}</span><span class="nav-unavailable-reason" id="${reasonId}">Held for later route</span></button>`;
 }
 
 function stageStep(stage: StageMapReadModel, index: number): string {

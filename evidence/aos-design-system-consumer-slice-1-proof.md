@@ -3,7 +3,7 @@
 Status: passed.
 
 Route: `route_aos_design_system_consumer_scaffold_slice_1_implementation`
-AOS source head: `de8dd00f98d0d08bbb3b3cb1fedffcd2c1ff50ca`
+AOS source head: `abae14e7f9c9a70587ba2f3404a1735c1cb4c221`
 Design System source basis: `a74742a9cfaa03205d867f7e33dea92c1e8ac6ca`
 
 ## Consumption Readback
@@ -16,10 +16,10 @@ Design System source basis: `a74742a9cfaa03205d867f7e33dea92c1e8ac6ca`
 
 ## Browser Evidence
 
-| Viewport | Screenshot | SHA-256 | Raw visible copy hits | Forbidden claim hits |
-| --- | --- | --- | ---: | ---: |
-| desktop-1440x900 | `evidence/aos-design-system-consumer-slice-1-browser/de8dd00f98d0d08bbb3b3cb1fedffcd2c1ff50ca/desktop-1440x900-operations-cockpit.png` | `7388efd332477f2539e2a5fef4484955c2a36c270d30205f26c8689f9fd2447b` | 0 | 0 |
-| mobile-390x844 | `evidence/aos-design-system-consumer-slice-1-browser/de8dd00f98d0d08bbb3b3cb1fedffcd2c1ff50ca/mobile-390x844-operations-cockpit.png` | `ecfd25ee55e14b6ec759d85c6ec29108133d09534c9438f8171ad9f5dd3eeb8d` | 0 | 0 |
+| Viewport | Screenshot | SHA-256 | Raw visible copy hits | Forbidden claim hits | Disabled controls missing reason |
+| --- | --- | --- | ---: | ---: | ---: |
+| desktop-1440x900 | `evidence/aos-design-system-consumer-slice-1-browser/abae14e7f9c9a70587ba2f3404a1735c1cb4c221/desktop-1440x900-operations-cockpit.png` | `3fe2ee3645a8e796473fcf1c9bd9d919820eb91bd096ba51ee58ceb16ac6e532` | 0 | 0 | 0 |
+| mobile-390x844 | `evidence/aos-design-system-consumer-slice-1-browser/abae14e7f9c9a70587ba2f3404a1735c1cb4c221/mobile-390x844-operations-cockpit.png` | `675ed23e4ee238bb0a46c3aa26846e4b219e6bd793a1b36d352b12f79649a619` | 0 | 0 | 0 |
 
 ## No-Overclaim Boundaries
 
