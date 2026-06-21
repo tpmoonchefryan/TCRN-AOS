@@ -1,0 +1,230 @@
+{
+  "ok": true,
+  "route": "route_aos_design_system_consumer_scaffold_slice_1_implementation",
+  "sourceHead": "de8dd00f98d0d08bbb3b3cb1fedffcd2c1ff50ca",
+  "designSystemSourceHead": "a74742a9cfaa03205d867f7e33dea92c1e8ac6ca",
+  "serviceLifecycle": {
+    "loopbackOnly": true,
+    "ephemeralPort": true,
+    "stopped": true
+  },
+  "designSystemConsumption": {
+    "adoptionPosture": "tokens_copy_state_static_renderer_bridge",
+    "tokenPackage": "@tcrn/ui-tokens",
+    "copyStatePackage": "@tcrn/ui-copy-state",
+    "uiReactPackage": "not_adopted_in_slice_1"
+  },
+  "viewportReadbacks": [
+    {
+      "label": "desktop-1440x900",
+      "width": 1440,
+      "height": 900,
+      "title": "TCRN AOS Operations Cockpit",
+      "serviceBacked": "true",
+      "designSystemConsumer": "tokens_copy_state_static_renderer_bridge",
+      "tokenPackage": "@tcrn/ui-tokens",
+      "copyStatePackage": "@tcrn/ui-copy-state",
+      "designSystemSourceHead": "a74742a9cfaa03205d867f7e33dea92c1e8ac6ca",
+      "brandPrimaryToken": "#5865d8",
+      "stateWarningToken": "#7a4e00",
+      "serviceStatus": "service API read 10:41:57 AM",
+      "localCheckpoint": "owner-trial-service-readback",
+      "readbackFreshness": "Readback current",
+      "workRows": 1,
+      "detailTitle": "Prove local runtime persistence",
+      "rawVisibleCopyHits": [],
+      "forbiddenPositiveClaimHits": [],
+      "disabledButtons": [
+        {
+          "text": "Dashboard",
+          "title": ""
+        },
+        {
+          "text": "Work Index",
+          "title": ""
+        },
+        {
+          "text": "Stage Map",
+          "title": ""
+        },
+        {
+          "text": "Gate Queue",
+          "title": ""
+        },
+        {
+          "text": "Conferences",
+          "title": ""
+        },
+        {
+          "text": "Evidence",
+          "title": ""
+        },
+        {
+          "text": "Dependency",
+          "title": ""
+        },
+        {
+          "text": "Resources",
+          "title": ""
+        },
+        {
+          "text": "Audit",
+          "title": ""
+        },
+        {
+          "text": "Stage detail held",
+          "title": "Stage detail route is held for the owner-trial implementation proof"
+        },
+        {
+          "text": "Role detail held",
+          "title": "Role detail route is held for a later owner-trial slice"
+        },
+        {
+          "text": "Gate request held",
+          "title": "Gate request requires a routed owner-intent or role-gate path"
+        },
+        {
+          "text": "Evidence detail held",
+          "title": "Evidence detail route is held for a later owner-trial slice"
+        },
+        {
+          "text": "Columns held",
+          "title": "Column customization is not implemented in this owner-trial slice"
+        },
+        {
+          "text": "Gate work order held",
+          "title": "Gate work order execution is held outside this UI slice"
+        },
+        {
+          "text": "Rework request held",
+          "title": "Rework request execution requires a routed owner-trial action"
+        }
+      ],
+      "documentScrollWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "viewportWidth": 1440,
+      "bodyLevelHorizontalOverflow": false,
+      "hasOwnerIntentReason": true,
+      "hasUnavailableCopy": true,
+      "hasExternalProofCopy": true,
+      "hasTokenCss": true,
+      "screenshot": {
+        "path": "evidence/aos-design-system-consumer-slice-1-browser/de8dd00f98d0d08bbb3b3cb1fedffcd2c1ff50ca/desktop-1440x900-operations-cockpit.png",
+        "sha256": "7388efd332477f2539e2a5fef4484955c2a36c270d30205f26c8689f9fd2447b",
+        "bytes": 216831
+      }
+    },
+    {
+      "label": "mobile-390x844",
+      "width": 390,
+      "height": 844,
+      "title": "TCRN AOS Operations Cockpit",
+      "serviceBacked": "true",
+      "designSystemConsumer": "tokens_copy_state_static_renderer_bridge",
+      "tokenPackage": "@tcrn/ui-tokens",
+      "copyStatePackage": "@tcrn/ui-copy-state",
+      "designSystemSourceHead": "a74742a9cfaa03205d867f7e33dea92c1e8ac6ca",
+      "brandPrimaryToken": "#5865d8",
+      "stateWarningToken": "#7a4e00",
+      "serviceStatus": "service API read 10:41:57 AM",
+      "localCheckpoint": "owner-trial-service-readback",
+      "readbackFreshness": "Readback current",
+      "workRows": 1,
+      "detailTitle": "Prove local runtime persistence",
+      "rawVisibleCopyHits": [],
+      "forbiddenPositiveClaimHits": [],
+      "disabledButtons": [
+        {
+          "text": "Dashboard",
+          "title": ""
+        },
+        {
+          "text": "Work Index",
+          "title": ""
+        },
+        {
+          "text": "Stage Map",
+          "title": ""
+        },
+        {
+          "text": "Gate Queue",
+          "title": ""
+        },
+        {
+          "text": "Conferences",
+          "title": ""
+        },
+        {
+          "text": "Evidence",
+          "title": ""
+        },
+        {
+          "text": "Dependency",
+          "title": ""
+        },
+        {
+          "text": "Resources",
+          "title": ""
+        },
+        {
+          "text": "Audit",
+          "title": ""
+        },
+        {
+          "text": "Stage detail held",
+          "title": "Stage detail route is held for the owner-trial implementation proof"
+        },
+        {
+          "text": "Role detail held",
+          "title": "Role detail route is held for a later owner-trial slice"
+        },
+        {
+          "text": "Gate request held",
+          "title": "Gate request requires a routed owner-intent or role-gate path"
+        },
+        {
+          "text": "Evidence detail held",
+          "title": "Evidence detail route is held for a later owner-trial slice"
+        },
+        {
+          "text": "Columns held",
+          "title": "Column customization is not implemented in this owner-trial slice"
+        },
+        {
+          "text": "Gate work order held",
+          "title": "Gate work order execution is held outside this UI slice"
+        },
+        {
+          "text": "Rework request held",
+          "title": "Rework request execution requires a routed owner-trial action"
+        }
+      ],
+      "documentScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "viewportWidth": 390,
+      "bodyLevelHorizontalOverflow": false,
+      "hasOwnerIntentReason": true,
+      "hasUnavailableCopy": true,
+      "hasExternalProofCopy": true,
+      "hasTokenCss": true,
+      "screenshot": {
+        "path": "evidence/aos-design-system-consumer-slice-1-browser/de8dd00f98d0d08bbb3b3cb1fedffcd2c1ff50ca/mobile-390x844-operations-cockpit.png",
+        "sha256": "ecfd25ee55e14b6ec759d85c6ec29108133d09534c9438f8171ad9f5dd3eeb8d",
+        "bytes": 208017
+      }
+    }
+  ],
+  "browserHealth": {
+    "pageErrors": [],
+    "consoleErrors": []
+  },
+  "noOverclaim": {
+    "productAcceptanceReady": false,
+    "finalMvpAcceptanceReady": false,
+    "releasePublicationReady": false,
+    "packagePublication": false,
+    "designSystemMutation": false,
+    "liveDispatch": false,
+    "ownerIntentExecution": false
+  }
+}

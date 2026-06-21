@@ -7,6 +7,13 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@tcrn/ui-copy-state':
+        specifier: file:../TCRN-Design-System/packages/ui-copy-state
+        version: file:../TCRN-Design-System/packages/ui-copy-state
+      '@tcrn/ui-tokens':
+        specifier: file:../TCRN-Design-System/packages/ui-tokens
+        version: file:../TCRN-Design-System/packages/ui-tokens
     devDependencies:
       '@types/node':
         specifier: 24.0.3
@@ -16,6 +23,12 @@ importers:
         version: 5.8.3
 
 packages:
+
+  '@tcrn/ui-copy-state@file:../TCRN-Design-System/packages/ui-copy-state':
+    resolution: {directory: ../TCRN-Design-System/packages/ui-copy-state, type: directory}
+
+  '@tcrn/ui-tokens@file:../TCRN-Design-System/packages/ui-tokens':
+    resolution: {directory: ../TCRN-Design-System/packages/ui-tokens, type: directory}
 
   '@types/node@24.0.3':
     resolution: {integrity: sha512-R4I/kzCYAdRLzfiCabn9hxWfbuHS573x+r0dJMkkzThEa7pbrcDWK+9zu3e7aBOouf+rQAciqPFMnxwr0aWgKg==}
@@ -29,6 +42,10 @@ packages:
     resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
 snapshots:
+
+  '@tcrn/ui-copy-state@file:../TCRN-Design-System/packages/ui-copy-state': {}
+
+  '@tcrn/ui-tokens@file:../TCRN-Design-System/packages/ui-tokens': {}
 
   '@types/node@24.0.3':
     dependencies:

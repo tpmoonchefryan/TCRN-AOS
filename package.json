@@ -18,6 +18,7 @@
     "slice3:proof": "pnpm build && node scripts/slice-3-proof.mjs",
     "slice4:proof": "pnpm build && node scripts/slice-4-proof.mjs",
     "slice4b:proof": "pnpm build && node scripts/slice-4b-style-proof.mjs",
+    "aos:design-system-slice1-proof": "pnpm build && node scripts/aos-design-system-consumer-slice-1-proof.mjs",
     "slice5:proof": "pnpm build && node scripts/slice-5-operating-loop-proof.mjs",
     "slice6:proof": "pnpm build && node scripts/slice-6-knowledge-guide-release-notes-proof.mjs",
     "slice7:proof": "pnpm build && node scripts/slice-7-dependency-resource-governance-proof.mjs",
@@ -35,5 +36,9 @@
   "devDependencies": {
     "@types/node": "24.0.3",
     "typescript": "5.8.3"
+  },
+  "dependencies": {
+    "@tcrn/ui-copy-state": "file:../TCRN-Design-System/packages/ui-copy-state",
+    "@tcrn/ui-tokens": "file:../TCRN-Design-System/packages/ui-tokens"
   }
 }

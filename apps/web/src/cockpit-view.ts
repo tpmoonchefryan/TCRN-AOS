@@ -5,6 +5,15 @@ import {
   type Estimate
 } from "../../../packages/domain/src/index.js";
 import {
+  aosClientCopyStateLabels,
+  aosDesignSystemConsumerBridge,
+  aosDesignSystemTokenCss,
+  copyAosAction,
+  copyAosFreshness,
+  copyAosPosture,
+  copyAosState
+} from "./design-system-bridge.js";
+import {
   createOperationsCockpitReadModel,
   type GateQueueItem,
   type OperationsCockpitReadModel,
@@ -207,7 +216,7 @@ export function renderOperationsCockpitHtml(
     <style>${operationsCockpitCss}</style>
   </head>
   <body>
-    <main class="aos-shell" data-surface="operations-cockpit" data-service-backed="${serviceBacked ? "true" : "false"}" data-cockpit-api="${escapeHtml(cockpitApiPath)}" data-product-design-acceptance="${model.nonClaims.productDesignAcceptance}">
+    <main class="aos-shell" data-surface="operations-cockpit" data-service-backed="${serviceBacked ? "true" : "false"}" data-cockpit-api="${escapeHtml(cockpitApiPath)}" data-product-design-acceptance="${model.nonClaims.productDesignAcceptance}" data-design-system-consumer="${aosDesignSystemConsumerBridge.adoptionPosture}" data-design-system-tokens="${aosDesignSystemConsumerBridge.tokenPackage}" data-design-system-copy-state="${aosDesignSystemConsumerBridge.copyStatePackage}" data-design-system-source-head="${aosDesignSystemConsumerBridge.designSystemSourceHead}">
       <aside class="aos-sidebar" data-region="sidebar-nav" aria-label="AOS navigation">
         <a class="brand-lockup" data-region="brand-lockup" href="#cockpit" aria-label="TCRN AOS">
           <span class="brand-tcrn">TCRN</span>
@@ -256,9 +265,9 @@ export function renderOperationsCockpitHtml(
               <h1>${escapeHtml(model.contextHeader.selectedProjectId)}</h1>
             </div>
             <div class="claim-strip" aria-label="Claim boundaries">
-              <span>${escapeHtml(model.nonClaims.releaseReadinessClaim)}</span>
-              <span>${escapeHtml(model.productDesignStatus.browserVisualAcceptance)}</span>
-              <span>live dispatch false</span>
+            <span>${copyState(model.nonClaims.releaseReadinessClaim)}</span>
+            <span>${copyState(model.productDesignStatus.browserVisualAcceptance)}</span>
+            <span>${copyState("unavailable")}: live dispatch</span>
             </div>
           </section>
           <section class="summary-grid">
@@ -294,10 +303,10 @@ export function renderOperationsCockpitHtml(
                 <button type="button" disabled title="Evidence detail route is held for a later owner-trial slice">Evidence detail held</button>
               </div>
               <dl class="posture-list">
-                <div><dt>Runtime fixture</dt><dd><span class="state-dot state-current"></span>local fixture readback current</dd></div>
+                <div><dt>Runtime fixture</dt><dd><span class="state-dot state-current"></span>${copyState("static_fixture")}</dd></div>
                 <div><dt>Evidence</dt><dd>${copyFreshness(model.evidenceReadbacks[0]?.freshness ?? "unknown")}</dd></div>
-                <div><dt>Dependency</dt><dd>${dependency ? copyPosture(dependency.posture) : "metadata present"}</dd></div>
-                <div><dt>Resource</dt><dd>${resource ? copyPosture(resource.approvalState) : "metadata present"}</dd></div>
+                <div><dt>Dependency</dt><dd>${dependency ? copyPosture(dependency.posture) : copyState("none")}</dd></div>
+                <div><dt>Resource</dt><dd>${resource ? copyPosture(resource.approvalState) : copyState("none")}</dd></div>
               </dl>
             </article>
           </section>
@@ -314,7 +323,7 @@ export function renderOperationsCockpitHtml(
               <div class="filter-row" aria-label="Fixture filters">
                 <button type="button">Project: ${escapeHtml(model.contextHeader.selectedProjectId)}</button>
                 <button type="button">Freshness: ${copyFreshness(model.contextHeader.dataFreshness)}</button>
-                <button type="button">Risk: proof required</button>
+                <button type="button">Risk: ${copyState("proof_required")}</button>
               </div>
               <div class="work-table" role="table" data-work-table>
                 <div class="table-row table-head" role="row">
@@ -332,14 +341,14 @@ export function renderOperationsCockpitHtml(
               <h2 data-drawer-title>${escapeHtml(selectedRow?.title ?? "Selected work item")}</h2>
               <dl class="detail-list" data-detail-list>
                 <div><dt>Hierarchy</dt><dd>${escapeHtml(model.contextHeader.selectedProjectId)} / ${escapeHtml(model.contextHeader.selectedInitiativeId)}</dd></div>
-                <div><dt>Gate flow</dt><dd>${blockingGate ? `${escapeHtml(blockingGate.ownerRole)} - ${escapeHtml(blockingGate.status)}` : "metadata present"}</dd></div>
-                <div><dt>Conference</dt><dd>${selectedConference ? `${escapeHtml(selectedConference.status)} / ${escapeHtml(selectedConference.minutesStatus)}` : "metadata present"}</dd></div>
-                <div><dt>Dry-run invite</dt><dd>${selectedConference ? `${selectedConference.inviteDispatchIds.length} outbox record metadata` : "metadata present"}</dd></div>
-                <div><dt>Local actions</dt><dd>${selectedRow ? selectedRow.nextAllowedLocalActions.map(escapeHtml).join(", ") : "open_evidence_metadata"}</dd></div>
-                <div><dt>Blocked actions</dt><dd>${selectedRow && selectedRow.blockedActions.length > 0 ? selectedRow.blockedActions.map((action) => escapeHtml(action.action)).join(", ") : "none for local readback"}</dd></div>
-                <div><dt>Evidence</dt><dd>${escapeHtml(model.evidenceReadbacks[0]?.redactionState ?? "metadata_only")}</dd></div>
-                <div><dt>Dependency</dt><dd>${dependency ? copyPosture(dependency.posture) : "metadata present"}</dd></div>
-                <div><dt>Resource</dt><dd>${resource ? copyPosture(resource.approvalState) : "metadata present"}</dd></div>
+                <div><dt>Gate flow</dt><dd>${blockingGate ? `${escapeHtml(blockingGate.ownerRole)} - ${copyState(blockingGate.status)}` : copyState("none")}</dd></div>
+                <div><dt>Conference</dt><dd>${selectedConference ? `${copyState(selectedConference.status)} / ${copyState(selectedConference.minutesStatus)}` : copyState("none")}</dd></div>
+                <div><dt>Dry-run invite</dt><dd>${selectedConference ? `${selectedConference.inviteDispatchIds.length} outbox record metadata` : copyState("none")}</dd></div>
+                <div><dt>Local actions</dt><dd>${selectedRow ? selectedRow.nextAllowedLocalActions.map(copyAction).join(", ") : copyAction("open_evidence_metadata")}</dd></div>
+                <div><dt>Blocked actions</dt><dd>${selectedRow && selectedRow.blockedActions.length > 0 ? selectedRow.blockedActions.map((action) => copyAction(action.action)).join(", ") : "No local readback blockers"}</dd></div>
+                <div><dt>Evidence</dt><dd>${copyState(model.evidenceReadbacks[0]?.redactionState ?? "metadata_only")}</dd></div>
+                <div><dt>Dependency</dt><dd>${dependency ? copyPosture(dependency.posture) : copyState("none")}</dd></div>
+                <div><dt>Resource</dt><dd>${resource ? copyPosture(resource.approvalState) : copyState("none")}</dd></div>
               </dl>
               ${selectedConference ? `<section class="loop-card" data-region="conference-operating-loop" aria-label="Conference operating loop">
                 <h3>Conference Loop</h3>
@@ -347,8 +356,8 @@ export function renderOperationsCockpitHtml(
                 <ul>
                   <li>${selectedConference.participantPositionIds.length} positions recorded</li>
                   <li>${selectedConference.missingParticipantEmployeeIds.length} missing participant readbacks</li>
-                  <li>${escapeHtml(selectedConference.decisionClass)} outcome metadata</li>
-                  <li>live dispatch false</li>
+                  <li>${copyState(selectedConference.decisionClass)} outcome metadata</li>
+                  <li>${copyState("unavailable")}: live dispatch</li>
                 </ul>
               </section>` : ""}
               <button type="button" class="primary-action" disabled title="Gate work order execution is held outside this UI slice">Gate work order held</button>
@@ -367,25 +376,26 @@ export function renderOperationsCockpitHtml(
 }
 
 const operationsCockpitCss = `
+${aosDesignSystemTokenCss}
 :root {
   color-scheme: light;
   --navy-950: #061a2c;
   --navy-900: #08243b;
   --navy-800: #0d304b;
-  --teal-500: #14b8ad;
-  --teal-600: #069c99;
-  --blue-500: #1b75d0;
-  --red-500: #df2b2b;
-  --amber-500: #f4a321;
-  --green-500: #18a865;
-  --surface: #ffffff;
-  --surface-weak: #f7f9fb;
-  --surface-tint: #eef9fb;
-  --line: #dbe4ea;
-  --line-strong: #c9d5de;
-  --text: #0f1b2d;
-  --muted: #647282;
-  --soft: #8c99a6;
+  --teal-500: var(--tcrn-color-brand-secondary);
+  --teal-600: var(--tcrn-color-brand-secondary);
+  --blue-500: var(--tcrn-color-brand-primary);
+  --red-500: var(--tcrn-color-state-blocked);
+  --amber-500: var(--tcrn-color-state-warning);
+  --green-500: var(--tcrn-color-state-ready);
+  --surface: var(--tcrn-color-surface-panel);
+  --surface-weak: var(--tcrn-color-surface-muted);
+  --surface-tint: var(--tcrn-color-brand-secondary-bg);
+  --line: var(--tcrn-color-border-subtle);
+  --line-strong: var(--tcrn-color-border-strong);
+  --text: var(--tcrn-color-text-primary);
+  --muted: var(--tcrn-color-text-secondary);
+  --soft: var(--tcrn-color-text-muted);
   --type-ui: 13px;
   --type-label: 12px;
   --type-micro: 11px;
@@ -522,6 +532,7 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
 
 const operationsCockpitClientScript = `
 const shell = document.querySelector("[data-surface='operations-cockpit']");
+const aosCopyStateLabels = ${JSON.stringify(aosClientCopyStateLabels)};
 const serviceBacked = shell?.getAttribute("data-service-backed") === "true";
 const cockpitApiPath = shell?.getAttribute("data-cockpit-api") || "/api/cockpit";
 const workTable = document.querySelector("[data-work-table]");
@@ -597,7 +608,7 @@ function renderRows(rows) {
     [
       row.storyId,
       row.title,
-      row.status,
+      copyState(row.status),
       row.nextOwnerRole,
       row.linkedConferenceIds.length + " conference link",
       row.nextAllowedLocalActions.length + " local actions"
@@ -624,12 +635,12 @@ function renderDetail(model) {
   if (!detailList || !detail) return;
   replaceDetailList([
     ["Hierarchy", model.contextHeader.selectedProjectId + " / " + model.contextHeader.selectedInitiativeId],
-    ["Selected", detail.selectedType + " / " + detail.selectedId],
+    ["Selected", copyState(detail.selectedType) + " / " + detail.selectedId],
     ["Gate links", String(detail.linkedGateIds.length)],
     ["Conference links", String(detail.linkedConferenceIds.length)],
     ["Evidence links", String(detail.linkedEvidenceIds.length)],
-    ["Local actions", detail.nextAllowedLocalActions.join(", ") || "open_evidence_metadata"],
-    ["Blocked actions", detail.blockedActions.map((item) => item.action).join(", ") || "none for local readback"],
+    ["Local actions", detail.nextAllowedLocalActions.map(copyAction).join(", ") || copyAction("open_evidence_metadata")],
+    ["Blocked actions", detail.blockedActions.map((item) => copyAction(item.action)).join(", ") || "No local readback blockers"],
     ["Operating loop", detail.operatingLoopSummary],
     ["No-overclaim", detail.noOverclaimSummary]
   ]);
@@ -659,11 +670,17 @@ function filterRows() {
   if (emptyState) emptyState.hidden = visible !== 0;
 }
 
+function copyState(value) {
+  const key = String(value || "unknown").trim().toLowerCase();
+  return aosCopyStateLabels[key] || "Unknown";
+}
+
+function copyAction(value) {
+  return copyState(value);
+}
+
 function copyFreshness(value) {
-  if (value === "current") return "readback current";
-  if (value === "blocked") return "proof blocked";
-  if (value === "stale") return "proof required";
-  return "metadata present";
+  return copyState(value);
 }
 
 currentRows.forEach((row) => row.addEventListener("click", () => {
@@ -696,38 +713,33 @@ function phaseRow(stage: StageMapReadModel): string {
 
 function gateBlock(gate: GateQueueItem | undefined): string {
   if (!gate) {
-    return `<div class="gate-block"><strong>metadata present</strong><span>No local gate rows in fixture.</span></div>`;
+    return `<div class="gate-block"><strong>${copyState("none")}</strong><span>No local gate rows in fixture.</span></div>`;
   }
-  return `<div class="gate-block"><span>${escapeHtml(gate.type)}</span><strong>${escapeHtml(gate.ownerRole)}</strong><span>${escapeHtml(gate.status)}</span><span>${gate.ownerIntent ? "Owner Intent separated" : "Role gate pending"}</span></div>`;
+  return `<div class="gate-block"><span>${copyState(gate.type)}</span><strong>${escapeHtml(gate.ownerRole)}</strong><span>${copyState(gate.status)}</span><span>${gate.ownerIntent ? "Owner Intent separated" : "Role gate pending"}</span></div>`;
 }
 
 function workRow(row: WorkstreamStoryRow, index: number): string {
-  return `<button class="table-row work-row${index === 0 ? " active" : ""}" data-work-row data-row-id="${escapeHtml(row.storyId)}" data-title="${escapeHtml(row.title)}" type="button" role="row"><span>${escapeHtml(row.storyId)}</span><span>${escapeHtml(row.title)}</span><span>${escapeHtml(row.status)}</span><span>${escapeHtml(row.nextOwnerRole)}</span><span>${row.linkedConferenceIds.length} conference link</span><span>${row.nextAllowedLocalActions.length} local actions</span></button>`;
+  return `<button class="table-row work-row${index === 0 ? " active" : ""}" data-work-row data-row-id="${escapeHtml(row.storyId)}" data-title="${escapeHtml(row.title)}" type="button" role="row"><span>${escapeHtml(row.storyId)}</span><span>${escapeHtml(row.title)}</span><span>${copyState(row.status)}</span><span>${escapeHtml(row.nextOwnerRole)}</span><span>${row.linkedConferenceIds.length} conference link</span><span>${row.nextAllowedLocalActions.length} local actions</span></button>`;
 }
 
 function riskPill(warning: RiskWarningItem): string {
-  return `<span class="risk-pill">${escapeHtml(warning.type)}: ${copyPosture(warning.state)}</span>`;
+  return `<span class="risk-pill">${copyState(warning.type)}: ${copyPosture(warning.state)}</span>`;
 }
 
 function copyState(state: string): string {
-  return state === "release_proof_required" ? "proof required" : state.replaceAll("_", " ");
+  return copyAosState(state);
 }
 
 function copyFreshness(freshness: string): string {
-  if (freshness === "current") return "readback current";
-  if (freshness === "blocked") return "proof blocked";
-  if (freshness === "stale") return "proof required";
-  return "metadata present";
+  return copyAosFreshness(freshness);
 }
 
 function copyPosture(posture: string): string {
-  if (posture === "accepted_with_residual_risk") return "accepted with residual risk";
-  if (posture === "blocked") return "blocked";
-  if (posture === "evidence_missing") return "evidence missing";
-  if (posture === "review_required") return "reviewed for local checkpoint";
-  if (posture === "not_applicable") return "not applicable";
-  if (posture === "none") return "metadata present";
-  return posture.replaceAll("_", " ");
+  return copyAosPosture(posture);
+}
+
+function copyAction(action: string): string {
+  return copyAosAction(action);
 }
 
 function escapeHtml(value: string): string {

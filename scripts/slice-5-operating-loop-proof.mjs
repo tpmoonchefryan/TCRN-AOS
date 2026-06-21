@@ -45,7 +45,7 @@ const staticProof = {
   workIndexDrillThroughMarker: html.includes('data-slice5="work-index-drill-through"'),
   conferenceLoopRegion: html.includes('data-region="conference-operating-loop"'),
   forbiddenProductionCopyHits: forbiddenProductionCopy.filter((phrase) => html.toLowerCase().includes(phrase.toLowerCase())),
-  liveDispatchCopyPresent: html.includes("live dispatch false")
+  liveDispatchCopyPresent: html.includes("Unavailable: live dispatch")
 };
 
 const ok = scenarioProofs.every((scenario) => scenario.ok)

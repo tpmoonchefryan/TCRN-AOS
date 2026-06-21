@@ -2,6 +2,10 @@ import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import {
+  aosDesignSystemConsumerBridge,
+  aosDesignSystemTokenReadback
+} from "../dist/apps/web/src/design-system-bridge.js";
+import {
   forbiddenProductionCopy,
   renderOperationsCockpitHtml,
   requiredProductionSelectors,
@@ -47,16 +51,33 @@ const selectorProof = requiredProductionSelectors.map((selector) => {
   return { selector, present };
 });
 const forbiddenHits = forbiddenProductionCopy.filter((phrase) => html.toLowerCase().includes(phrase.toLowerCase()));
+const visibleTextFragments = Array.from(html.matchAll(/>([^<>]+)</g)).map((match) => match[1]).join(" ");
+const rawVisibleCopyHits = [
+  "external_proof_required",
+  "not_claimed",
+  "release_proof_required",
+  "owner_intent_required",
+  "record_participant_position",
+  "open_evidence_metadata"
+].filter((phrase) => visibleTextFragments.includes(phrase));
 const mockupReferenceCopyBoundary = baselinePaths.some((path) => path.startsWith("apps/web/mockup/"));
+const designSystemBridgeOk = html.includes('data-design-system-consumer="tokens_copy_state_static_renderer_bridge"')
+  && html.includes('data-design-system-tokens="@tcrn/ui-tokens"')
+  && html.includes('data-design-system-copy-state="@tcrn/ui-copy-state"')
+  && html.includes("--tcrn-color-brand-primary")
+  && aosDesignSystemConsumerBridge.uiReactPackage === "not_adopted_in_slice_1"
+  && Boolean(aosDesignSystemTokenReadback.brandPrimary);
 const ok = aggregateDigest === slice4bBaselineDigest
   && selectorProof.every((item) => item.present)
   && forbiddenHits.length === 0
+  && rawVisibleCopyHits.length === 0
   && html.includes("Local checkpoint observed")
-  && html.includes("local fixture readback current")
+  && html.includes("Static fixture readback")
   && html.includes('data-service-backed="false"')
   && html.includes("Gate work order held")
   && html.includes("data-refresh-readback")
-  && mockupReferenceCopyBoundary;
+  && mockupReferenceCopyBoundary
+  && designSystemBridgeOk;
 
 console.log(JSON.stringify({
   ok,
@@ -74,8 +95,19 @@ console.log(JSON.stringify({
   },
   copyScan: {
     forbiddenHits,
+    rawVisibleCopyHits,
     productionSurfaceOnly: true,
     mockupReferenceCopyBoundary
+  },
+  designSystemConsumption: {
+    ok: designSystemBridgeOk,
+    route: aosDesignSystemConsumerBridge.route,
+    adoptionPosture: aosDesignSystemConsumerBridge.adoptionPosture,
+    designSystemSourceHead: aosDesignSystemConsumerBridge.designSystemSourceHead,
+    tokenPackage: aosDesignSystemConsumerBridge.tokenPackage,
+    copyStatePackage: aosDesignSystemConsumerBridge.copyStatePackage,
+    uiReactPackage: aosDesignSystemConsumerBridge.uiReactPackage,
+    selectedTokenReadback: aosDesignSystemTokenReadback
   },
   productDesignStatus: {
     brief: "accepted",

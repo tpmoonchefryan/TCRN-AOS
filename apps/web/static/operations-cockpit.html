@@ -7,24 +7,121 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='6'%20fill='%2308243b'/%3E%3Ctext%20x='16'%20y='21'%20font-size='12'%20text-anchor='middle'%20fill='%2314b8ad'%20font-family='Arial'%3EA%3C/text%3E%3C/svg%3E" />
     <style>
 :root {
+  --tcrn-color-text-primary: #172033;
+  --tcrn-color-text-secondary: #536579;
+  --tcrn-color-text-muted: #7b8a9a;
+  --tcrn-color-surface-canvas: #f6f7fb;
+  --tcrn-color-surface-panel: #ffffff;
+  --tcrn-color-surface-muted: #edf4f7;
+  --tcrn-color-border-subtle: #d7e0e8;
+  --tcrn-color-border-strong: #b8c8d6;
+  --tcrn-color-brand-teal: #2f8fa3;
+  --tcrn-color-brand-primary: #5865d8;
+  --tcrn-color-brand-primary-bg: #eef0ff;
+  --tcrn-color-brand-secondary: #2f8fa3;
+  --tcrn-color-brand-secondary-bg: #e4f7f9;
+  --tcrn-color-brand-accent: #c96a7e;
+  --tcrn-color-brand-accent-bg: #fcebf0;
+  --tcrn-color-brand-neutral: #536579;
+  --tcrn-color-brand-neutral-bg: #edf4f7;
+  --tcrn-color-focus-ring: #5865d8;
+  --tcrn-color-state-ready: #147a46;
+  --tcrn-color-state-ready-bg: #dff7ea;
+  --tcrn-color-state-blocked: #ad211c;
+  --tcrn-color-state-blocked-bg: #ffe7e3;
+  --tcrn-color-state-warning: #7a4e00;
+  --tcrn-color-state-warning-bg: #fff1d6;
+  --tcrn-type-family-ui: Inter, Avenir Next, Helvetica Neue, Arial, sans-serif;
+  --tcrn-type-family-latin: Inter, Avenir Next, Helvetica Neue, Arial, sans-serif;
+  --tcrn-type-family-distributable-latin: Inter, sans-serif;
+  --tcrn-type-family-distributable-zh-cn: Noto Sans CJK SC, Source Han Sans SC, sans-serif;
+  --tcrn-type-family-distributable-ja: Noto Sans CJK JP, Source Han Sans JP, sans-serif;
+  --tcrn-type-family-distributable-ko: Noto Sans CJK KR, Source Han Sans KR, sans-serif;
+  --tcrn-type-family-distributable-mono: Liberation Mono, monospace;
+  --tcrn-type-family-zh-cn: PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, Heiti SC, sans-serif;
+  --tcrn-type-family-ja: Hiragino Sans, Yu Gothic, Noto Sans CJK JP, Source Han Sans JP, Meiryo, sans-serif;
+  --tcrn-type-family-ko: Apple SD Gothic Neo, Malgun Gothic, Noto Sans CJK KR, Source Han Sans KR, sans-serif;
+  --tcrn-type-family-mono: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  --tcrn-type-size-ui: 13px;
+  --tcrn-type-size-caption: 11px;
+  --tcrn-type-size-body: 13px;
+  --tcrn-type-size-control: 13px;
+  --tcrn-type-size-section: 18px;
+  --tcrn-type-size-page: 28px;
+  --tcrn-type-line-ui: 1.35;
+  --tcrn-type-line-caption: 1.35;
+  --tcrn-type-line-body: 1.45;
+  --tcrn-type-line-control: 1.2;
+  --tcrn-type-line-section: 1.25;
+  --tcrn-type-line-page: 1.3;
+  --tcrn-type-weight-regular: 400;
+  --tcrn-type-weight-medium: 600;
+  --tcrn-type-weight-strong: 700;
+  --tcrn-space-2: 8px;
+  --tcrn-density-compact-row-height: 36px;
+  --tcrn-space-4: 16px;
+  --tcrn-radius-control: 5px;
+  --tcrn-radius-surface: 8px;
+  --tcrn-elevation-focus: 0 0 0 3px rgba(88, 101, 216, 0.2);
+  --tcrn-motion-fast: 120ms ease;
+  --tcrn-motion-instant: 80ms ease-out;
+  --tcrn-motion-standard: 160ms ease;
+  --tcrn-motion-emphasis: 220ms cubic-bezier(0.2, 0, 0.2, 1);
+  --tcrn-motion-loading-loop: 900ms linear;
+  --tcrn-motion-skeleton-loop: 1400ms ease-in-out;
+  --tcrn-motion-progress-loop: 1200ms ease-in-out;
+  --tcrn-motion-reduced-duration: 0.01ms;
+  --tcrn-z-overlay: 30;
+  --tcrn-z-popover: 20;
+  --tcrn-container-readable: 1120px;
+}
+[data-tcrn-theme="dark"] {
+  --tcrn-color-text-primary: #f2f7ff;
+  --tcrn-color-text-secondary: #bdcae0;
+  --tcrn-color-text-muted: #8fa2ba;
+  --tcrn-color-surface-canvas: #121a2a;
+  --tcrn-color-surface-panel: #182437;
+  --tcrn-color-surface-muted: #223149;
+  --tcrn-color-border-subtle: #344963;
+  --tcrn-color-border-strong: #5f7894;
+  --tcrn-color-brand-teal: #79d1da;
+  --tcrn-color-brand-primary: #a7b0ff;
+  --tcrn-color-brand-primary-bg: #25345f;
+  --tcrn-color-brand-secondary: #79d1da;
+  --tcrn-color-brand-secondary-bg: #133946;
+  --tcrn-color-brand-accent: #f2a3b5;
+  --tcrn-color-brand-accent-bg: #44252f;
+  --tcrn-color-brand-neutral: #b7c3ce;
+  --tcrn-color-brand-neutral-bg: #223149;
+  --tcrn-color-focus-ring: #b5baff;
+  --tcrn-color-state-ready: #6dd69a;
+  --tcrn-color-state-ready-bg: #123a2a;
+  --tcrn-color-state-blocked: #ff8a7f;
+  --tcrn-color-state-blocked-bg: #4a1d1b;
+  --tcrn-color-state-warning: #ffd27a;
+  --tcrn-color-state-warning-bg: #3f2f12;
+  --tcrn-elevation-focus: 0 0 0 3px rgba(181, 186, 255, 0.24);
+}
+
+:root {
   color-scheme: light;
   --navy-950: #061a2c;
   --navy-900: #08243b;
   --navy-800: #0d304b;
-  --teal-500: #14b8ad;
-  --teal-600: #069c99;
-  --blue-500: #1b75d0;
-  --red-500: #df2b2b;
-  --amber-500: #f4a321;
-  --green-500: #18a865;
-  --surface: #ffffff;
-  --surface-weak: #f7f9fb;
-  --surface-tint: #eef9fb;
-  --line: #dbe4ea;
-  --line-strong: #c9d5de;
-  --text: #0f1b2d;
-  --muted: #647282;
-  --soft: #8c99a6;
+  --teal-500: var(--tcrn-color-brand-secondary);
+  --teal-600: var(--tcrn-color-brand-secondary);
+  --blue-500: var(--tcrn-color-brand-primary);
+  --red-500: var(--tcrn-color-state-blocked);
+  --amber-500: var(--tcrn-color-state-warning);
+  --green-500: var(--tcrn-color-state-ready);
+  --surface: var(--tcrn-color-surface-panel);
+  --surface-weak: var(--tcrn-color-surface-muted);
+  --surface-tint: var(--tcrn-color-brand-secondary-bg);
+  --line: var(--tcrn-color-border-subtle);
+  --line-strong: var(--tcrn-color-border-strong);
+  --text: var(--tcrn-color-text-primary);
+  --muted: var(--tcrn-color-text-secondary);
+  --soft: var(--tcrn-color-text-muted);
   --type-ui: 13px;
   --type-label: 12px;
   --type-micro: 11px;
@@ -160,7 +257,7 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
 }</style>
   </head>
   <body>
-    <main class="aos-shell" data-surface="operations-cockpit" data-service-backed="false" data-cockpit-api="/api/cockpit" data-product-design-acceptance="not_claimed">
+    <main class="aos-shell" data-surface="operations-cockpit" data-service-backed="false" data-cockpit-api="/api/cockpit" data-product-design-acceptance="not_claimed" data-design-system-consumer="tokens_copy_state_static_renderer_bridge" data-design-system-tokens="@tcrn/ui-tokens" data-design-system-copy-state="@tcrn/ui-copy-state" data-design-system-source-head="a74742a9cfaa03205d867f7e33dea92c1e8ac6ca">
       <aside class="aos-sidebar" data-region="sidebar-nav" aria-label="AOS navigation">
         <a class="brand-lockup" data-region="brand-lockup" href="#cockpit" aria-label="TCRN AOS">
           <span class="brand-tcrn">TCRN</span>
@@ -196,7 +293,7 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
           <div class="checkpoint-strip" data-region="checkpoint-strip" aria-label="Local checkpoint">
             <span>Local checkpoint observed</span>
             <strong data-local-checkpoint>slice-4b-style-baseline</strong>
-            <em data-readback-freshness>readback current</em>
+            <em data-readback-freshness>Readback current</em>
             <span class="service-readback" data-service-status>static fixture</span>
           </div>
           <button type="button" class="top-action" data-refresh-readback>Refresh readback</button>
@@ -209,9 +306,9 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
               <h1>TCRN-AOS</h1>
             </div>
             <div class="claim-strip" aria-label="Claim boundaries">
-              <span>external_proof_required</span>
-              <span>not_claimed</span>
-              <span>live dispatch false</span>
+            <span>External proof required</span>
+            <span>Not claimed</span>
+            <span>Unavailable: live dispatch</span>
             </div>
           </section>
           <section class="summary-grid">
@@ -221,7 +318,7 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
                 <button type="button" disabled title="Stage detail route is held for the owner-trial implementation proof">Stage detail held</button>
               </div>
               <ol class="stage-line">
-                <li class="active"><small>intake</small><span>1</span><em class="state-chip active">active</em></li><li class="active"><small>architecture</small><span>2</span><em class="state-chip active">active</em></li><li class="active"><small>implementation</small><span>3</span><em class="state-chip active">active</em></li><li class="release_proof_required"><small>release</small><span>4</span><em class="state-chip release_proof_required">proof required</em></li>
+                <li class="active"><small>intake</small><span>1</span><em class="state-chip active">Active locally</em></li><li class="active"><small>architecture</small><span>2</span><em class="state-chip active">Active locally</em></li><li class="active"><small>implementation</small><span>3</span><em class="state-chip active">Active locally</em></li><li class="release_proof_required"><small>release</small><span>4</span><em class="state-chip release_proof_required">Proof required</em></li>
               </ol>
             </article>
             <article class="panel" data-region="ai-employee-phase" aria-label="AI employee responsibility by phase">
@@ -230,7 +327,7 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
                 <button type="button" disabled title="Role detail route is held for a later owner-trial slice">Role detail held</button>
               </div>
               <div class="phase-list">
-                <div class="phase-row"><span>intake</span><span class="phase-owners"><span class="avatar">co</span><span class="avatar">pr</span></span><em class="state-chip active">active</em></div><div class="phase-row"><span>architecture</span><span class="phase-owners"><span class="avatar">ar</span><span class="avatar">se</span></span><em class="state-chip active">active</em></div><div class="phase-row"><span>implementation</span><span class="phase-owners"><span class="avatar">im</span></span><em class="state-chip active">active</em></div><div class="phase-row"><span>release</span><span class="phase-owners"><span class="avatar">re</span></span><em class="state-chip release_proof_required">proof required</em></div>
+                <div class="phase-row"><span>intake</span><span class="phase-owners"><span class="avatar">co</span><span class="avatar">pr</span></span><em class="state-chip active">Active locally</em></div><div class="phase-row"><span>architecture</span><span class="phase-owners"><span class="avatar">ar</span><span class="avatar">se</span></span><em class="state-chip active">Active locally</em></div><div class="phase-row"><span>implementation</span><span class="phase-owners"><span class="avatar">im</span></span><em class="state-chip active">Active locally</em></div><div class="phase-row"><span>release</span><span class="phase-owners"><span class="avatar">re</span></span><em class="state-chip release_proof_required">Proof required</em></div>
               </div>
             </article>
             <article class="panel" data-region="blocker-gate-card" aria-label="Blocker and gate posture">
@@ -238,7 +335,7 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
                 <h2>Gate Work Order</h2>
                 <span class="count">2</span>
               </div>
-              <div class="gate-block"><span>owner_intent</span><strong>owner</strong><span>owner_intent_required</span><span>Owner Intent separated</span></div>
+              <div class="gate-block"><span>Owner Intent gate</span><strong>owner</strong><span>Owner Intent required</span><span>Owner Intent separated</span></div>
               <button type="button" class="secondary-action" disabled title="Gate request requires a routed owner-intent or role-gate path">Gate request held</button>
             </article>
             <article class="panel" data-region="readback-posture-card" aria-label="Readback posture">
@@ -247,10 +344,10 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
                 <button type="button" disabled title="Evidence detail route is held for a later owner-trial slice">Evidence detail held</button>
               </div>
               <dl class="posture-list">
-                <div><dt>Runtime fixture</dt><dd><span class="state-dot state-current"></span>local fixture readback current</dd></div>
-                <div><dt>Evidence</dt><dd>readback current</dd></div>
-                <div><dt>Dependency</dt><dd>reviewed for local checkpoint</dd></div>
-                <div><dt>Resource</dt><dd>reviewed for local checkpoint</dd></div>
+                <div><dt>Runtime fixture</dt><dd><span class="state-dot state-current"></span>Static fixture readback</dd></div>
+                <div><dt>Evidence</dt><dd>Readback current</dd></div>
+                <div><dt>Dependency</dt><dd>Review required</dd></div>
+                <div><dt>Resource</dt><dd>Review required</dd></div>
               </dl>
             </article>
           </section>
@@ -266,14 +363,14 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
               </header>
               <div class="filter-row" aria-label="Fixture filters">
                 <button type="button">Project: TCRN-AOS</button>
-                <button type="button">Freshness: readback current</button>
-                <button type="button">Risk: proof required</button>
+                <button type="button">Freshness: Readback current</button>
+                <button type="button">Risk: Proof required</button>
               </div>
               <div class="work-table" role="table" data-work-table>
                 <div class="table-row table-head" role="row">
                   <span>ID</span><span>Title</span><span>State</span><span>Owner</span><span>Evidence</span><span>Gate</span>
                 </div>
-                <button class="table-row work-row active" data-work-row data-row-id="story_daa1ed285030dd27" data-title="Render local-first cockpit style baseline" type="button" role="row"><span>story_daa1ed285030dd27</span><span>Render local-first cockpit style baseline</span><span>in_progress</span><span>implementation</span><span>1 conference link</span><span>3 local actions</span></button>
+                <button class="table-row work-row active" data-work-row data-row-id="story_daa1ed285030dd27" data-title="Render local-first cockpit style baseline" type="button" role="row"><span>story_daa1ed285030dd27</span><span>Render local-first cockpit style baseline</span><span>In progress</span><span>implementation</span><span>1 conference link</span><span>3 local actions</span></button>
                 <div class="empty-state" data-empty-state hidden>No matching service rows.</div>
               </div>
             </section>
@@ -285,14 +382,14 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
               <h2 data-drawer-title>Render local-first cockpit style baseline</h2>
               <dl class="detail-list" data-detail-list>
                 <div><dt>Hierarchy</dt><dd>TCRN-AOS / init_e274579281bb3c2d</dd></div>
-                <div><dt>Gate flow</dt><dd>owner - owner_intent_required</dd></div>
-                <div><dt>Conference</dt><dd>collecting_positions / ready_for_draft</dd></div>
+                <div><dt>Gate flow</dt><dd>owner - Owner Intent required</dd></div>
+                <div><dt>Conference</dt><dd>Collecting positions / Ready for draft</dd></div>
                 <div><dt>Dry-run invite</dt><dd>0 outbox record metadata</dd></div>
-                <div><dt>Local actions</dt><dd>open_evidence_metadata, record_participant_position, record_minutes</dd></div>
-                <div><dt>Blocked actions</dt><dd>submit_owner_intent</dd></div>
-                <div><dt>Evidence</dt><dd>metadata_only</dd></div>
-                <div><dt>Dependency</dt><dd>reviewed for local checkpoint</dd></div>
-                <div><dt>Resource</dt><dd>reviewed for local checkpoint</dd></div>
+                <div><dt>Local actions</dt><dd>Open evidence metadata, Record participant position, Unknown</dd></div>
+                <div><dt>Blocked actions</dt><dd>Unknown</dd></div>
+                <div><dt>Evidence</dt><dd>Metadata only</dd></div>
+                <div><dt>Dependency</dt><dd>Review required</dd></div>
+                <div><dt>Resource</dt><dd>Review required</dd></div>
               </dl>
               <section class="loop-card" data-region="conference-operating-loop" aria-label="Conference operating loop">
                 <h3>Conference Loop</h3>
@@ -300,8 +397,8 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
                 <ul>
                   <li>1 positions recorded</li>
                   <li>1 missing participant readbacks</li>
-                  <li>recommendation outcome metadata</li>
-                  <li>live dispatch false</li>
+                  <li>Recommendation outcome metadata</li>
+                  <li>Unavailable: live dispatch</li>
                 </ul>
               </section>
               <button type="button" class="primary-action" disabled title="Gate work order execution is held outside this UI slice">Gate work order held</button>
@@ -309,13 +406,14 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
             </aside>
           </section>
           <section class="risk-lane" aria-label="Risk and warning lane">
-            <span class="risk-pill">route: reviewed for local checkpoint</span><span class="risk-pill">dependency: reviewed for local checkpoint</span><span class="risk-pill">resource: reviewed for local checkpoint</span><span class="risk-pill">product_design: reviewed for local checkpoint</span>
+            <span class="risk-pill">Route gate: Review required</span><span class="risk-pill">Dependency proof: Review required</span><span class="risk-pill">Resource proof: Review required</span><span class="risk-pill">Product Design review: Review required</span>
           </section>
         </div>
       </section>
     </main>
     <script>
 const shell = document.querySelector("[data-surface='operations-cockpit']");
+const aosCopyStateLabels = {"accepted":"Accepted for local readback","accepted_with_residual_risk":"Accepted with residual risk","active":"Active locally","blocked":"Blocked","closed":"Closed locally","collecting_positions":"Collecting positions","complete":"Complete in local readback","current":"Readback current","d024":"D-024 boundary","dependency":"Dependency proof","discussion_only":"Discussion only","evidence_missing":"Evidence missing","evidence":"Evidence proof","evidence_proof":"Evidence proof","external_proof_required":"External proof required","external_release_proof_required":"External release proof required","gate":"Gate proof","conference":"Conference proof","in_progress":"In progress","license":"License proof","local_functional_contract_only":"Local functional contract only","metadata_only":"Metadata only","minutes_ready":"Minutes ready","none":"Metadata present","not_applicable":"Not applicable","not_claimed":"Not claimed","not_started":"Not started","open_evidence_metadata":"Open evidence metadata","owner_intent":"Owner Intent gate","owner_intent_required":"Owner Intent required","pending_role":"Role review pending","product_design":"Product Design review","product_design_visual_target_pending":"Product Design visual target pending","proof":"Proof lane","proof_required":"Proof required","proposed":"Proposed","ready_for_draft":"Ready for draft","recommendation":"Recommendation","record_participant_position":"Record participant position","release_proof_required":"Proof required","release":"Release proof","review_required":"Review required","resource":"Resource proof","route":"Route gate","security_license":"Security/license gate","security":"Security proof","stale":"Proof required","stage":"Stage proof","story":"Story readback","static_fixture":"Static fixture readback","superseded":"Superseded","unavailable":"Unavailable","unknown":"Unknown","valid":"Valid local evidence","visual_target_required_before_acceptance":"Visual target required before acceptance"};
 const serviceBacked = shell?.getAttribute("data-service-backed") === "true";
 const cockpitApiPath = shell?.getAttribute("data-cockpit-api") || "/api/cockpit";
 const workTable = document.querySelector("[data-work-table]");
@@ -391,7 +489,7 @@ function renderRows(rows) {
     [
       row.storyId,
       row.title,
-      row.status,
+      copyState(row.status),
       row.nextOwnerRole,
       row.linkedConferenceIds.length + " conference link",
       row.nextAllowedLocalActions.length + " local actions"
@@ -418,12 +516,12 @@ function renderDetail(model) {
   if (!detailList || !detail) return;
   replaceDetailList([
     ["Hierarchy", model.contextHeader.selectedProjectId + " / " + model.contextHeader.selectedInitiativeId],
-    ["Selected", detail.selectedType + " / " + detail.selectedId],
+    ["Selected", copyState(detail.selectedType) + " / " + detail.selectedId],
     ["Gate links", String(detail.linkedGateIds.length)],
     ["Conference links", String(detail.linkedConferenceIds.length)],
     ["Evidence links", String(detail.linkedEvidenceIds.length)],
-    ["Local actions", detail.nextAllowedLocalActions.join(", ") || "open_evidence_metadata"],
-    ["Blocked actions", detail.blockedActions.map((item) => item.action).join(", ") || "none for local readback"],
+    ["Local actions", detail.nextAllowedLocalActions.map(copyAction).join(", ") || copyAction("open_evidence_metadata")],
+    ["Blocked actions", detail.blockedActions.map((item) => copyAction(item.action)).join(", ") || "No local readback blockers"],
     ["Operating loop", detail.operatingLoopSummary],
     ["No-overclaim", detail.noOverclaimSummary]
   ]);
@@ -453,11 +551,17 @@ function filterRows() {
   if (emptyState) emptyState.hidden = visible !== 0;
 }
 
+function copyState(value) {
+  const key = String(value || "unknown").trim().toLowerCase();
+  return aosCopyStateLabels[key] || "Unknown";
+}
+
+function copyAction(value) {
+  return copyState(value);
+}
+
 function copyFreshness(value) {
-  if (value === "current") return "readback current";
-  if (value === "blocked") return "proof blocked";
-  if (value === "stale") return "proof required";
-  return "metadata present";
+  return copyState(value);
 }
 
 currentRows.forEach((row) => row.addEventListener("click", () => {
