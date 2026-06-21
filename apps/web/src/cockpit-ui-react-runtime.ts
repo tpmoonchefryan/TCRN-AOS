@@ -137,10 +137,10 @@ type RuntimeNavItemProps = ComponentProps<typeof NavItem> & {
 type RuntimeDataProps = Record<`data-${string}`, string | boolean | undefined>;
 
 export function renderCockpitRuntimeNavItems(items: readonly CockpitRuntimeNavItem[]): string {
-  return items.map((item) => renderCockpitRuntimeNavItem(item)).join("\n          ");
+  return items.map((item, index) => renderCockpitRuntimeNavItem(item, `aos-nav-${index}-`)).join("\n          ");
 }
 
-export function renderCockpitRuntimeNavItem(item: CockpitRuntimeNavItem): string {
+export function renderCockpitRuntimeNavItem(item: CockpitRuntimeNavItem, identifierPrefix = "aos-nav-single-"): string {
   const props: RuntimeNavItemProps = {
     children: item.label,
     className: `nav-row${item.active ? " active" : ""}`,
@@ -157,7 +157,7 @@ export function renderCockpitRuntimeNavItem(item: CockpitRuntimeNavItem): string
     props.disabledReason = item.disabledReason;
   }
 
-  return renderToStaticMarkup(createElement(NavItem, props));
+  return renderCockpitRuntimeMarkup(createElement(NavItem, props), identifierPrefix);
 }
 
 export function renderCockpitRuntimeWorkIndexCluster(options: CockpitRuntimeWorkIndexOptions): string {
@@ -232,7 +232,7 @@ export function renderCockpitRuntimeWorkIndexCluster(options: CockpitRuntimeWork
       title: "No matching service rows"
     }))
   );
-  return addAosWorkIndexRuntimeAttributes(renderToStaticMarkup(tree), options.rows);
+  return addAosWorkIndexRuntimeAttributes(renderCockpitRuntimeMarkup(tree, "aos-work-index-"), options.rows);
 }
 
 export function renderCockpitRuntimeDetailDrawer(options: CockpitRuntimeDetailDrawerOptions): string {
@@ -312,7 +312,7 @@ export function renderCockpitRuntimeDetailDrawer(options: CockpitRuntimeDetailDr
     title: options.title,
     open: true
   } as ComponentProps<typeof DetailDrawer>);
-  return addAosDetailDrawerRuntimeAttributes(renderToStaticMarkup(tree), options);
+  return addAosDetailDrawerRuntimeAttributes(renderCockpitRuntimeMarkup(tree, "aos-detail-drawer-"), options);
 }
 
 export function renderCockpitRuntimeGateReadbackCards(options: CockpitRuntimeGateReadbackCardsOptions): string {
@@ -328,7 +328,7 @@ export function renderCockpitRuntimeGateWorkOrderCard(options: CockpitRuntimeGat
     label: "Gate Work Order",
     description: options.gateSummary
   } as ComponentProps<typeof GateReadinessPanel>["state"];
-  const heldButton = renderToStaticMarkup(createElement(Button, {
+  const heldButton = renderCockpitRuntimeMarkup(createElement(Button, {
     disabled: true,
     disabledReason: options.disabledReason,
     "data-tcrn-component": "Button",
@@ -336,11 +336,11 @@ export function renderCockpitRuntimeGateWorkOrderCard(options: CockpitRuntimeGat
     "data-package-runtime-source": "@tcrn/ui-react",
     type: "button",
     variant: "secondary"
-  } as ComponentProps<typeof Button> & RuntimeDataProps, "Gate request held"));
+  } as ComponentProps<typeof Button> & RuntimeDataProps, "Gate request held"), "aos-gate-held-button-");
   const gateBlock = `<div class="gate-block tcrn-state-view" data-tcrn-component="StateView" data-package-runtime-component="StateView" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-gate-readback-cards"><span>${escapeAttribute(options.gateTypeLabel)}</span><strong>${escapeAttribute(options.gateOwnerRole)}</strong><span>${escapeAttribute(options.gateStatusLabel)}</span><span>${escapeAttribute(options.gateModeLabel)}</span></div>`;
-  const card = renderToStaticMarkup(createElement(GateReadinessPanel, {
+  const card = renderCockpitRuntimeMarkup(createElement(GateReadinessPanel, {
     state
-  }));
+  }), "aos-gate-panel-");
   return addAosGateWorkOrderRuntimeAttributes(card, options, gateBlock, heldButton);
 }
 
@@ -368,7 +368,11 @@ export function renderCockpitRuntimeReadbackPostureCard(options: CockpitRuntimeR
       createElement(KeyValueList, { items: readbackItems, key: "readback-list" })
     ]
   } as ComponentProps<typeof ReadbackPanel>);
-  return addAosReadbackPostureRuntimeAttributes(renderToStaticMarkup(tree));
+  return addAosReadbackPostureRuntimeAttributes(renderCockpitRuntimeMarkup(tree, "aos-readback-panel-"));
+}
+
+function renderCockpitRuntimeMarkup(node: ReturnType<typeof createElement>, identifierPrefix: string): string {
+  return renderToStaticMarkup(node, { identifierPrefix });
 }
 
 function addAosWorkIndexRuntimeAttributes(html: string, rows: readonly CockpitRuntimeWorkIndexRow[]): string {

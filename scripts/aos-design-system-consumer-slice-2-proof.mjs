@@ -107,6 +107,68 @@ try {
       const shell = document.querySelector("[data-surface='operations-cockpit']");
       const text = document.body.innerText;
       const lower = text.toLowerCase();
+      const inspectFullDocumentAccessibility = () => {
+        const idElements = Array.from(document.querySelectorAll("[id]"));
+        const idCounts = new Map();
+        for (const element of idElements) {
+          idCounts.set(element.id, (idCounts.get(element.id) ?? 0) + 1);
+        }
+        const duplicateIds = Array.from(idCounts.entries())
+          .filter(([, count]) => count > 1)
+          .map(([id, count]) => ({ id, count }));
+        const ariaReferenceFailures = [];
+        for (const element of Array.from(document.querySelectorAll("[aria-describedby], [aria-labelledby]"))) {
+          for (const attribute of ["aria-describedby", "aria-labelledby"]) {
+            const ids = (element.getAttribute(attribute) ?? "").split(/\s+/).filter(Boolean);
+            for (const id of ids) {
+              const targetCount = idCounts.get(id) ?? 0;
+              if (targetCount !== 1) {
+                ariaReferenceFailures.push({ tag: element.tagName.toLowerCase(), attribute, id, targetCount });
+              }
+            }
+          }
+        }
+        const normalizeText = (value) => value.replace(/\s+/g, " ").trim();
+        const disabledControlDescriptionFailures = [];
+        const disabledControls = Array.from(document.querySelectorAll("button:disabled, [aria-disabled='true']"));
+        for (const element of disabledControls) {
+          const dataDisabledReason = element.getAttribute("data-disabled-reason")?.trim() ?? "";
+          if (!dataDisabledReason) continue;
+          const describedbyIds = (element.getAttribute("aria-describedby") ?? "").split(/\s+/).filter(Boolean);
+          const targetCounts = describedbyIds.map((id) => ({ id, targetCount: idCounts.get(id) ?? 0 }));
+          const resolvedText = normalizeText(describedbyIds
+            .map((id) => idElements.find((candidate) => candidate.id === id)?.textContent?.trim() ?? "")
+            .filter(Boolean)
+            .join(" "));
+          const failures = [];
+          if (describedbyIds.length === 0) failures.push("disabled_control_missing_aria_describedby");
+          if (targetCounts.some(({ targetCount }) => targetCount !== 1)) failures.push("disabled_control_aria_target_count_not_one");
+          if (!resolvedText) failures.push("disabled_control_description_unresolved");
+          if (resolvedText && normalizeText(resolvedText) !== normalizeText(dataDisabledReason)) failures.push("disabled_control_description_mismatch");
+          if (failures.length > 0) {
+            disabledControlDescriptionFailures.push({
+              tag: element.tagName.toLowerCase(),
+              label: normalizeText(element.textContent ?? ""),
+              dataDisabledReason,
+              ariaDescribedBy: describedbyIds,
+              targetCounts,
+              resolvedText,
+              failures
+            });
+          }
+        }
+        return {
+          ok: duplicateIds.length === 0
+            && ariaReferenceFailures.length === 0
+            && disabledControlDescriptionFailures.length === 0,
+          idCount: idElements.length,
+          duplicateIds,
+          ariaReferenceFailures,
+          disabledControlDescriptionFailures,
+          disabledControlsWithReasonCount: disabledControls.filter((element) => element.getAttribute("data-disabled-reason")?.trim()).length
+        };
+      };
+      const fullDocumentAccessibilityReadback = inspectFullDocumentAccessibility();
       const disabledButtons = Array.from(document.querySelectorAll("button:disabled")).map((button) => {
         const ariaDescription = (button.getAttribute("aria-describedby") ?? "")
           .split(/\s+/)
@@ -340,6 +402,7 @@ try {
         columnsHeldVisibleText,
         columnsHeldReasonVisibleLeak,
         workIndexMobileReadability,
+        fullDocumentAccessibilityReadback,
         detailDrawerRuntimeReadback,
         gateReadbackCardsRuntimeReadback,
         bodyLevelHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth || document.body.scrollWidth > window.innerWidth,
@@ -380,6 +443,7 @@ try {
     && viewportReadbacks.every((readback) => readback.disabledReasonSrOnlyLeakage.length === 0)
     && viewportReadbacks.every((readback) => readback.columnsHeldReasonVisibleLeak === false)
     && viewportReadbacks.every((readback) => !readback.workIndexMobileReadability.applies || readback.workIndexMobileReadability.ok)
+    && viewportReadbacks.every((readback) => readback.fullDocumentAccessibilityReadback.ok)
     && viewportReadbacks.every((readback) => readback.detailDrawerRuntimeReadback.ok)
     && viewportReadbacks.every((readback) => readback.gateReadbackCardsRuntimeReadback.ok)
     && viewportReadbacks.every((readback) => readback.bodyLevelHorizontalOverflow === false)
@@ -450,6 +514,11 @@ try {
     disabledButtonsMissingReason: viewportReadbacks.flatMap((readback) => readback.disabledButtonsMissingReason),
     disabledButtonsWithStaleReason: viewportReadbacks.flatMap((readback) => readback.disabledButtonsWithStaleReason),
     disabledReasonSrOnlyLeakage: viewportReadbacks.flatMap((readback) => readback.disabledReasonSrOnlyLeakage),
+    fullDocumentAccessibilityFailures: viewportReadbacks.flatMap((readback) => [
+      ...readback.fullDocumentAccessibilityReadback.duplicateIds,
+      ...readback.fullDocumentAccessibilityReadback.ariaReferenceFailures,
+      ...readback.fullDocumentAccessibilityReadback.disabledControlDescriptionFailures
+    ]),
     columnsHeldReasonVisibleLeakCount: viewportReadbacks.filter((readback) => readback.columnsHeldReasonVisibleLeak).length,
     mobileWorkIndexReadabilityFailures: viewportReadbacks.filter((readback) => readback.workIndexMobileReadability.applies && !readback.workIndexMobileReadability.ok).length,
     detailDrawerRuntimeFailures: viewportReadbacks.flatMap((readback) => readback.detailDrawerRuntimeReadback.failures),

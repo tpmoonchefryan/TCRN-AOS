@@ -128,6 +128,31 @@ test("Operations Cockpit summary Gate and Readback cards render package-backed r
   assert.match(readbackHtml, /data-disabled-reason="Evidence detail route is held for a later owner-trial slice"/);
 });
 
+test("Operations Cockpit composed package runtime markup has unique id and resolved aria references", () => {
+  const html = renderOperationsCockpitHtml();
+  const idCounts = collectRealIdCounts(html);
+  const duplicateIds = Array.from(idCounts.entries()).filter(([, count]) => count > 1);
+
+  assert.deepEqual(duplicateIds, []);
+  for (const reference of collectAriaReferences(html)) {
+    for (const id of reference.ids) {
+      assert.equal(idCounts.get(id), 1, `${reference.attribute} ${id} resolves exactly once`);
+    }
+  }
+  for (const control of disabledControlsWithReasons(html)) {
+    const describedby = control.parsed["aria-describedby"];
+    assert.ok(describedby, `disabled control has aria-describedby: ${control.attributes}`);
+    const resolvedText = describedby
+      .split(/\s+/)
+      .map((id) => textForRealId(html, id))
+      .filter(Boolean)
+      .join(" ")
+      .replace(/\s+/g, " ")
+      .trim();
+    assert.equal(resolvedText, control.parsed["data-disabled-reason"], `disabled reason resolves to own description for ${control.attributes}`);
+  }
+});
+
 test("Operations Cockpit Work Index renders package-backed runtime controls", () => {
   const html = renderOperationsCockpitHtml();
   const workIndexStart = html.indexOf('data-region="work-index"');
@@ -269,6 +294,51 @@ function disabledNavItemReadbacks(html) {
   return Array.from(html.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g))
     .filter((match) => /\baria-disabled="true"/.test(match[1]))
     .map((match) => ({ attributes: match[1], body: match[2] }));
+}
+
+function collectRealIdCounts(html) {
+  const counts = new Map();
+  for (const match of html.matchAll(/<([a-zA-Z][\w:-]*)\b([^>]*)>/g)) {
+    const id = parseAttributes(match[2]).id;
+    if (id) counts.set(id, (counts.get(id) ?? 0) + 1);
+  }
+  return counts;
+}
+
+function collectAriaReferences(html) {
+  const references = [];
+  for (const match of html.matchAll(/<([a-zA-Z][\w:-]*)\b([^>]*)>/g)) {
+    const parsed = parseAttributes(match[2]);
+    for (const attribute of ["aria-describedby", "aria-labelledby"]) {
+      const ids = (parsed[attribute] ?? "").split(/\s+/).filter(Boolean);
+      if (ids.length > 0) references.push({ attribute, ids });
+    }
+  }
+  return references;
+}
+
+function disabledControlsWithReasons(html) {
+  return Array.from(html.matchAll(/<(button|a)\b([^>]*)>([\s\S]*?)<\/\1>/g))
+    .map((match) => ({
+      attributes: match[2],
+      body: match[3],
+      parsed: parseAttributes(match[2])
+    }))
+    .filter((control) => (control.parsed.disabled === "true" || control.parsed["aria-disabled"] === "true")
+      && control.parsed["data-disabled-reason"]);
+}
+
+function textForRealId(html, id) {
+  const match = html.match(new RegExp(`<([a-zA-Z][\\w:-]*)\\b(?=[^>]*\\sid="${escapeRegExp(id)}")[^>]*>([\\s\\S]*?)<\\/\\1>`));
+  return match ? match[2].replace(/<[^>]+>/g, "").replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").trim() : "";
+}
+
+function parseAttributes(raw) {
+  const attributes = {};
+  for (const match of raw.matchAll(/\s([a-zA-Z0-9:-]+)(?:="([^"]*)")?/g)) {
+    attributes[match[1].toLowerCase()] = match[2] ?? "true";
+  }
+  return attributes;
 }
 
 function escapeRegExp(value) {

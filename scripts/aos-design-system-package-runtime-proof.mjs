@@ -27,6 +27,7 @@ const navRuntimeReadback = inspectPackageRuntimeNavItems(cockpitHtml);
 const workIndexRuntimeReadback = inspectPackageRuntimeWorkIndexCluster(cockpitHtml);
 const detailDrawerRuntimeReadback = inspectPackageRuntimeDetailDrawer(cockpitHtml);
 const gateReadbackCardsRuntimeReadback = inspectPackageRuntimeGateReadbackCards(cockpitHtml);
+const fullDocumentAccessibilityReadback = inspectFullDocumentAccessibility(cockpitHtml);
 const visualStyleReadback = inspectAosRuntimeStyleContract(cockpitHtml);
 const importReadback = inspectImports();
 const dependencyReadback = inspectDependencies();
@@ -46,6 +47,7 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && workIndexRuntimeReadback.ok
   && detailDrawerRuntimeReadback.ok
   && gateReadbackCardsRuntimeReadback.ok
+  && fullDocumentAccessibilityReadback.ok
   && visualStyleReadback.ok
   && storybookReferenceReadback.ok
   && noOverclaimReadback.ok
@@ -80,6 +82,7 @@ const summary = {
   workIndexRuntimeReadback,
   detailDrawerRuntimeReadback,
   gateReadbackCardsRuntimeReadback,
+  fullDocumentAccessibilityReadback,
   visualStyleReadback,
   storybookReferenceReadback,
   noOverclaimReadback
@@ -120,6 +123,9 @@ console.log(JSON.stringify({
   packageRuntimeDetailDrawerSelectedId: summary.detailDrawerRuntimeReadback.selectedDetailId,
   packageRuntimeGateReadbackCardComponentCount: summary.gateReadbackCardsRuntimeReadback.packageRuntimeComponents.length,
   packageRuntimeGateReadbackCardFailures: summary.gateReadbackCardsRuntimeReadback.failures.length,
+  duplicateDomIdCount: summary.fullDocumentAccessibilityReadback.duplicateIds.length,
+  ariaReferenceFailureCount: summary.fullDocumentAccessibilityReadback.ariaReferenceFailures.length,
+  disabledDescriptionMismatchCount: summary.fullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length,
   disabledNavItemFailureCount: summary.navRuntimeReadback.disabledNavItemFailures.length,
   workIndexFailureCount: summary.workIndexRuntimeReadback.failures.length,
   detailDrawerFailureCount: summary.detailDrawerRuntimeReadback.failures.length,
@@ -558,6 +564,75 @@ function inspectPackageRuntimeGateReadbackCards(html) {
   };
 }
 
+function inspectFullDocumentAccessibility(html) {
+  const idEntries = collectRealIdEntries(html);
+  const idCounts = new Map();
+  for (const entry of idEntries) {
+    idCounts.set(entry.id, (idCounts.get(entry.id) ?? 0) + 1);
+  }
+  const duplicateIds = Array.from(idCounts.entries())
+    .filter(([, count]) => count > 1)
+    .map(([id, count]) => ({ id, count }))
+    .sort((left, right) => right.count - left.count || left.id.localeCompare(right.id));
+  const idText = collectRealIdText(html);
+  const ariaReferenceFailures = [];
+  for (const reference of collectAriaReferences(html)) {
+    for (const id of reference.ids) {
+      const targetCount = idCounts.get(id) ?? 0;
+      if (targetCount !== 1) {
+        ariaReferenceFailures.push({
+          tag: reference.tag,
+          attribute: reference.attribute,
+          id,
+          targetCount
+        });
+      }
+    }
+  }
+  const disabledControlDescriptionFailures = [];
+  for (const control of collectDisabledControls(html)) {
+    const expectedReason = control.parsed["data-disabled-reason"]?.trim() ?? "";
+    if (!expectedReason) continue;
+    const describedbyIds = splitIdRefs(control.parsed["aria-describedby"]);
+    const targetCounts = describedbyIds.map((id) => ({ id, targetCount: idCounts.get(id) ?? 0 }));
+    const resolvedText = describedbyIds
+      .map((id) => idText.get(id) ?? "")
+      .filter(Boolean)
+      .join(" ")
+      .replace(/\s+/g, " ")
+      .trim();
+    const failures = [];
+    if (describedbyIds.length === 0) failures.push("disabled_control_missing_aria_describedby");
+    if (targetCounts.some(({ targetCount }) => targetCount !== 1)) failures.push("disabled_control_aria_target_count_not_one");
+    if (!resolvedText) failures.push("disabled_control_description_unresolved");
+    if (resolvedText && normalizeText(resolvedText) !== normalizeText(expectedReason)) {
+      failures.push("disabled_control_description_mismatch");
+    }
+    if (failures.length > 0) {
+      disabledControlDescriptionFailures.push({
+        tag: control.tag,
+        label: extractButtonLabel(control.body),
+        dataDisabledReason: expectedReason,
+        ariaDescribedBy: describedbyIds,
+        targetCounts,
+        resolvedText,
+        failures
+      });
+    }
+  }
+  return {
+    ok: duplicateIds.length === 0
+      && ariaReferenceFailures.length === 0
+      && disabledControlDescriptionFailures.length === 0,
+    idCount: idEntries.length,
+    duplicateIds,
+    ariaReferenceFailures,
+    disabledControlDescriptionFailures,
+    disabledControlsWithReasonCount: collectDisabledControls(html)
+      .filter((control) => control.parsed["data-disabled-reason"]?.trim()).length
+  };
+}
+
 function inspectAosRuntimeStyleContract(html) {
   const failures = [];
   const hasSrOnlyRule = /\.tcrn-sr-only\s*\{[^}]*position:\s*absolute;[^}]*width:\s*1px;[^}]*height:\s*1px;[^}]*overflow:\s*hidden;[^}]*white-space:\s*nowrap;[^}]*border:\s*0;/s.test(html);
@@ -605,6 +680,66 @@ function inspectSourceContentDigest() {
     sourceContentDigest: createHash("sha256").update(digestInput).digest("hex"),
     sourcePaths
   };
+}
+
+function collectRealIdEntries(html) {
+  return Array.from(html.matchAll(/<([a-zA-Z][\w:-]*)\b([^>]*)>/g))
+    .map((match) => {
+      const parsed = parseAttributes(match[2] ?? "");
+      return parsed.id ? { tag: match[1].toLowerCase(), id: parsed.id } : null;
+    })
+    .filter(Boolean);
+}
+
+function collectRealIdText(html) {
+  const textById = new Map();
+  for (const { id } of collectRealIdEntries(html)) {
+    const escapedId = escapeRegExp(id);
+    const match = html.match(new RegExp(`<([a-zA-Z][\\w:-]*)\\b(?=[^>]*\\sid="${escapedId}")[^>]*>([\\s\\S]*?)<\\/\\1>`));
+    if (match) {
+      textById.set(id, decodeHtml(stripTags(match[2]).trim()));
+    } else {
+      textById.set(id, "");
+    }
+  }
+  return textById;
+}
+
+function collectAriaReferences(html) {
+  const references = [];
+  for (const match of html.matchAll(/<([a-zA-Z][\w:-]*)\b([^>]*)>/g)) {
+    const parsed = parseAttributes(match[2] ?? "");
+    for (const attribute of ["aria-describedby", "aria-labelledby"]) {
+      const ids = splitIdRefs(parsed[attribute]);
+      if (ids.length > 0) {
+        references.push({
+          tag: match[1].toLowerCase(),
+          attribute,
+          ids
+        });
+      }
+    }
+  }
+  return references;
+}
+
+function collectDisabledControls(html) {
+  return Array.from(html.matchAll(/<(button|a)\b([^>]*)>([\s\S]*?)<\/\1>/g))
+    .map((match) => ({
+      tag: match[1].toLowerCase(),
+      attributes: match[2],
+      body: match[3],
+      parsed: parseAttributes(match[2] ?? "")
+    }))
+    .filter((control) => control.parsed.disabled === "true" || control.parsed["aria-disabled"] === "true");
+}
+
+function splitIdRefs(value) {
+  return (value ?? "").split(/\s+/).map((id) => id.trim()).filter(Boolean);
+}
+
+function normalizeText(value) {
+  return decodeHtml(stripTags(value)).replace(/\s+/g, " ").trim();
 }
 
 function extractWorkIndexClusterHtml(html) {
@@ -738,6 +873,11 @@ function markdownReceipt(summary) {
   const gateReadbackRows = summary.gateReadbackCardsRuntimeReadback.failures.length === 0
     ? "- Gate Work Order / Readback Posture package-runtime failures: 0"
     : summary.gateReadbackCardsRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
+  const accessibilityRows = [
+    `- Full-document duplicate real DOM ids: ${summary.fullDocumentAccessibilityReadback.duplicateIds.length}`,
+    `- Full-document aria reference failures: ${summary.fullDocumentAccessibilityReadback.ariaReferenceFailures.length}`,
+    `- Full-document disabled-description mismatches: ${summary.fullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length}`
+  ].join("\n");
   return `# AOS Design System Package Runtime Proof\n\n`
     + `- Route: ${summary.route}\n`
     + `- Source head at proof run: ${summary.sourceHead}\n`
@@ -760,7 +900,8 @@ function markdownReceipt(summary) {
     + `${rows}\n`
     + `${workIndexRows}\n`
     + `${detailDrawerRows}\n`
-    + `${gateReadbackRows}\n\n`
+    + `${gateReadbackRows}\n`
+    + `${accessibilityRows}\n\n`
     + `## Boundaries\n\n`
     + `This is an Operations Cockpit NavItem, Work Index, selected detail drawer, Gate Work Order card, and Readback Posture card package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
 }

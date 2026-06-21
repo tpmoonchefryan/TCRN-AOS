@@ -1,9 +1,9 @@
 # AOS Design System Package Runtime Proof
 
 - Route: route_tcrn_aos_design_system_frontend_rebuild_59aq_gate_readback_cards_package_runtime_implementation
-- Source head at proof run: 526bc894dbb43df7b5420f3f3a735388a3354c14
+- Source head at proof run: f88b3940b98d2b98872b7d2ce72a750409bfcb03
 - Source freshness strategy: source_content_digest_for_mutating_receipts
-- Source content digest: 992ded9af85e78148aea837f2b726b4a624d8137022564b1c74edaad4f116959
+- Source content digest: 24985abedf0c9d3a5f104b4d496b3057303c5890a090c9d4ec8249c37c90f758
 - Scope: operations_cockpit_gate_readback_cards_package_runtime_expansion
 - Runtime rendering claim: operations_cockpit_navitem_work_index_selected_detail_drawer_and_gate_readback_cards
 - Design System source head: b0c00828a813d3c62392eb6e53d7d6b85b6affeb
@@ -23,6 +23,9 @@
 - Work Index package-runtime failures: 0
 - Selected detail drawer package-runtime failures: 0
 - Gate Work Order / Readback Posture package-runtime failures: 0
+- Full-document duplicate real DOM ids: 0
+- Full-document aria reference failures: 0
+- Full-document disabled-description mismatches: 0
 
 ## Boundaries
 

@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_rebuild_59aq_gate_readback_cards_package_runtime_implementation",
-  "sourceHead": "526bc894dbb43df7b5420f3f3a735388a3354c14",
+  "sourceHead": "f88b3940b98d2b98872b7d2ce72a750409bfcb03",
   "claimScope": {
     "implementationKind": "operations_cockpit_gate_readback_cards_package_runtime_expansion",
     "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_selected_detail_drawer_and_gate_readback_cards",
@@ -16,9 +16,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "526bc894dbb43df7b5420f3f3a735388a3354c14",
+    "sourceHeadAtProofRun": "f88b3940b98d2b98872b7d2ce72a750409bfcb03",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "992ded9af85e78148aea837f2b726b4a624d8137022564b1c74edaad4f116959",
+    "sourceContentDigest": "24985abedf0c9d3a5f104b4d496b3057303c5890a090c9d4ec8249c37c90f758",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
@@ -129,7 +129,7 @@
     "disabledNavItemFailures": [],
     "packageRuntimeShellMarkerPresent": true,
     "packageRuntimeScopeMarkerPresent": true,
-    "sampleRenderedHtmlSha256": "db0f4fcc98bbe755c49c29384ffdfc0068b968a56056d6b607fd1f910054fba5"
+    "sampleRenderedHtmlSha256": "9f1384e4664bf3a6e5b55b9bd4c4ad3d965c5e0c97a264cd8700d7e1355439dc"
   },
   "workIndexRuntimeReadback": {
     "ok": true,
@@ -162,7 +162,7 @@
     "packageRuntimeFilterBarPresent": true,
     "packageRuntimeTableShellPresent": true,
     "packageRuntimeEmptyStatePresent": true,
-    "sampleRenderedHtmlSha256": "ed60319b8ab7ea1d461781b50693eeb7ea9a752e11815e67dcc9675bce96958a",
+    "sampleRenderedHtmlSha256": "8e873bd68d3cfbaa2b4e5e71b78f2d0d2639879fc2057047d2ce085adac692d9",
     "failures": []
   },
   "detailDrawerRuntimeReadback": {
@@ -193,7 +193,7 @@
     "selectedStoryId": "story_daa1ed285030dd27",
     "keyValueRowCount": 10,
     "disabledActionButtonCount": 2,
-    "sampleRenderedHtmlSha256": "b719576f793bbc05686282bc891aa6e9bcaa3728e003929cfb403d0e9a93b4ac",
+    "sampleRenderedHtmlSha256": "b27a16344d71d8b46c79184bdb1ceef5931d91131475ec974eee835a76aa82f0",
     "failures": []
   },
   "gateReadbackCardsRuntimeReadback": {
@@ -227,8 +227,16 @@
     "readbackPostureComponent": "ReadbackPanel",
     "disabledActionButtonCount": 2,
     "readbackKeyValueRowCount": 4,
-    "sampleRenderedHtmlSha256": "ea895369c3cfc233709cf9f2b00f4a625566487a1672b63d5b723ff076a47579",
+    "sampleRenderedHtmlSha256": "cf331ac79ff8df4421da2b5a315fcd2fa9a993f909b27c0d56b6844fdec51fdf",
     "failures": []
+  },
+  "fullDocumentAccessibilityReadback": {
+    "ok": true,
+    "idCount": 18,
+    "duplicateIds": [],
+    "ariaReferenceFailures": [],
+    "disabledControlDescriptionFailures": [],
+    "disabledControlsWithReasonCount": 9
   },
   "visualStyleReadback": {
     "ok": true,
