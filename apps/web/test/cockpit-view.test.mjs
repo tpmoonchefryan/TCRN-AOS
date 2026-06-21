@@ -101,6 +101,12 @@ test("Slice 4B production HTML can be marked as service-backed for owner-trial s
 
   assert.match(html, /data-service-backed="true"/);
   assert.match(html, /data-cockpit-api="\/api\/cockpit"/);
+  assert.match(html, /data-service-model-schema="aos\.cockpit\.service_read_model\.v1"/);
+  assert.match(html, /data-service-read-model-source="service_api_read"/);
+  assert.match(html, /data-service-work-row-count="1"/);
+  assert.match(html, /data-service-gate-count="2"/);
+  assert.match(html, /data-service-runtime-data-committed="false"/);
+  assert.match(html, /data-service-model-readback>1 work \/ 2 gates \/ detail story/);
   assert.match(html, /service API pending/);
   assert.match(html, /Filter service-backed rows/);
 });

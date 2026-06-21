@@ -18,6 +18,10 @@ try {
     && readback.operationalRecordCounts.stories === 1
     && cockpit.ok
     && cockpit.serviceBacked === true
+    && cockpit.serviceReadModel?.schemaVersion === "aos.cockpit.service_read_model.v1"
+    && cockpit.serviceReadModel?.source === "service_api_read"
+    && cockpit.serviceReadModel?.surfaces?.workIndex?.rowCount === cockpit.model.workstreams[0].rows.length
+    && cockpit.serviceReadModel?.surfaces?.gate?.autoExecutableCount === 0
     && cockpit.model.contextHeader.localCheckpoint === "owner-trial-service-readback"
     && cockpit.model.workstreams[0].rows.length === 1
     && cockpit.boundaries.productAcceptance === false
@@ -44,6 +48,11 @@ try {
       serviceBacked: cockpit.serviceBacked,
       localCheckpoint: cockpit.model.contextHeader.localCheckpoint,
       workRows: cockpit.model.workstreams[0].rows.length,
+      serviceReadModelSchema: cockpit.serviceReadModel?.schemaVersion,
+      serviceReadModelSource: cockpit.serviceReadModel?.source,
+      selectedStoryId: cockpit.serviceReadModel?.surfaces?.workIndex?.selectedStoryId,
+      gateCount: (cockpit.serviceReadModel?.surfaces?.gate?.roleGateCount ?? 0) + (cockpit.serviceReadModel?.surfaces?.gate?.ownerIntentGateCount ?? 0),
+      autoExecutableCount: cockpit.serviceReadModel?.surfaces?.gate?.autoExecutableCount,
       productAcceptance: cockpit.boundaries.productAcceptance,
       finalMvpAcceptance: cockpit.boundaries.finalMvpAcceptance
     },

@@ -259,7 +259,7 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
 }</style>
   </head>
   <body>
-    <main class="aos-shell" data-surface="operations-cockpit" data-service-backed="false" data-cockpit-api="/api/cockpit" data-product-design-acceptance="not_claimed" data-design-system-consumer="tokens_copy_state_static_renderer_bridge" data-design-system-tokens="@tcrn/ui-tokens" data-design-system-copy-state="@tcrn/ui-copy-state" data-design-system-source-head="a74742a9cfaa03205d867f7e33dea92c1e8ac6ca">
+    <main class="aos-shell" data-surface="operations-cockpit" data-service-backed="false" data-cockpit-api="/api/cockpit" data-product-design-acceptance="not_claimed" data-design-system-consumer="tokens_copy_state_static_renderer_bridge" data-design-system-tokens="@tcrn/ui-tokens" data-design-system-copy-state="@tcrn/ui-copy-state" data-design-system-source-head="a74742a9cfaa03205d867f7e33dea92c1e8ac6ca" data-service-model-schema="aos.cockpit.service_read_model.v1" data-service-read-model-source="static_fixture" data-service-work-row-count="1" data-service-selected-story-id="story_daa1ed285030dd27" data-service-detail-id="story_daa1ed285030dd27" data-service-detail-type="story" data-service-gate-count="2" data-service-evidence-readback-count="1" data-service-runtime-data-committed="false">
       <aside class="aos-sidebar" data-region="sidebar-nav" aria-label="AOS navigation">
         <a class="brand-lockup" data-region="brand-lockup" href="#cockpit" aria-label="TCRN AOS">
           <span class="brand-tcrn">TCRN</span>
@@ -297,6 +297,7 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
             <strong data-local-checkpoint>slice-4b-style-baseline</strong>
             <em data-readback-freshness>Readback current</em>
             <span class="service-readback" data-service-status>static fixture</span>
+            <span class="service-readback" data-service-model-readback>1 work / 2 gates / detail story</span>
           </div>
           <button type="button" class="top-action" data-refresh-readback>Refresh readback</button>
           <button type="button" class="profile" aria-label="Current operator">RL</button>
@@ -427,6 +428,7 @@ const refreshButton = document.querySelector("[data-refresh-readback]");
 const freshness = document.querySelector("[data-readback-freshness]");
 const checkpoint = document.querySelector("[data-local-checkpoint]");
 const serviceStatus = document.querySelector("[data-service-status]");
+const serviceModelReadback = document.querySelector("[data-service-model-readback]");
 const emptyState = document.querySelector("[data-empty-state]");
 let currentRows = Array.from(document.querySelectorAll("[data-work-row]"));
 let activeStoryId = currentRows[0]?.getAttribute("data-row-id") || "";
@@ -456,6 +458,7 @@ async function loadCockpit(selectedId) {
     if (!response.ok) throw new Error("cockpit_api_" + response.status);
     const payload = await response.json();
     if (!payload.ok || !payload.model) throw new Error("cockpit_payload_not_ok");
+    if (!payload.serviceReadModel) throw new Error("cockpit_service_read_model_missing");
     renderPayload(payload);
     setServiceStatus("service API read " + new Date(payload.generatedAt).toLocaleTimeString(), "ok");
   } catch (error) {
@@ -471,9 +474,38 @@ function renderPayload(payload) {
   activeStoryId = model.detailPanel?.selectedId || activeStoryId;
   if (checkpoint) checkpoint.textContent = model.contextHeader.localCheckpoint;
   if (freshness) freshness.textContent = copyFreshness(model.contextHeader.dataFreshness);
+  applyServiceReadModel(payload.serviceReadModel);
   renderRows(model.workstreams.flatMap((group) => group.rows));
   renderDetail(model);
   filterRows();
+}
+
+function applyServiceReadModel(readback) {
+  if (!shell || !readback?.surfaces) return;
+  const workIndex = readback.surfaces.workIndex || {};
+  const detail = readback.surfaces.detail || {};
+  const gate = readback.surfaces.gate || {};
+  const readbackSurface = readback.surfaces.readback || {};
+  shell.setAttribute("data-service-model-schema", readback.schemaVersion || "");
+  shell.setAttribute("data-service-read-model-source", readback.source || "");
+  shell.setAttribute("data-service-work-row-count", String(workIndex.rowCount ?? 0));
+  shell.setAttribute("data-service-selected-story-id", workIndex.selectedStoryId || "");
+  shell.setAttribute("data-service-detail-id", detail.selectedId || "");
+  shell.setAttribute("data-service-detail-type", detail.selectedType || "");
+  shell.setAttribute("data-service-gate-count", String((gate.roleGateCount ?? 0) + (gate.ownerIntentGateCount ?? 0)));
+  shell.setAttribute("data-service-evidence-readback-count", String(readbackSurface.evidenceReadbackCount ?? 0));
+  shell.setAttribute("data-service-runtime-data-committed", String(readbackSurface.runtimeDataCommittedToGit === true));
+  if (serviceModelReadback) {
+    serviceModelReadback.textContent = serviceReadModelSummary(readback);
+  }
+}
+
+function serviceReadModelSummary(readback) {
+  const workIndex = readback?.surfaces?.workIndex || {};
+  const detail = readback?.surfaces?.detail || {};
+  const gate = readback?.surfaces?.gate || {};
+  const gateCount = (gate.roleGateCount ?? 0) + (gate.ownerIntentGateCount ?? 0);
+  return String(workIndex.rowCount ?? 0) + " work / " + String(gateCount) + " gates / detail " + (detail.selectedType || "story");
 }
 
 function renderRows(rows) {

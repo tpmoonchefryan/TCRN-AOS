@@ -45,10 +45,19 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
     assert.equal(cockpitModel.model.contextHeader.localCheckpoint, "owner-trial-service-readback");
     assert.equal(cockpitModel.model.workstreams[0].rows.length, 1);
     assert.equal(cockpitModel.model.detailPanel.selectedType, "story");
+    assert.equal(cockpitModel.serviceReadModel.schemaVersion, "aos.cockpit.service_read_model.v1");
+    assert.equal(cockpitModel.serviceReadModel.source, "service_api_read");
+    assert.equal(cockpitModel.serviceReadModel.surfaces.cockpit.serviceBacked, true);
+    assert.equal(cockpitModel.serviceReadModel.surfaces.workIndex.rowCount, 1);
+    assert.equal(cockpitModel.serviceReadModel.surfaces.gate.autoExecutableCount, 0);
+    assert.equal(cockpitModel.serviceReadModel.surfaces.readback.productAcceptance, false);
+    assert.equal(cockpitModel.serviceReadModel.noClaims.broadUiReactMigration, false);
 
     const selectedStoryId = cockpitModel.model.workstreams[0].rows[0].storyId;
     const selectedCockpitModel = await fetch(`${service.url}/api/cockpit?selectedType=story&selectedId=${selectedStoryId}`).then((response) => response.json());
     assert.equal(selectedCockpitModel.model.detailPanel.selectedId, selectedStoryId);
+    assert.equal(selectedCockpitModel.serviceReadModel.surfaces.workIndex.selectedStoryId, selectedStoryId);
+    assert.equal(selectedCockpitModel.serviceReadModel.surfaces.detail.selectedId, selectedStoryId);
   } finally {
     const stopped = await service.close();
     assert.equal(stopped.stopped, true);

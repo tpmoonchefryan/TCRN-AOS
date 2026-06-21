@@ -206,6 +206,65 @@ export interface OperationsCockpitReadModel {
   productDesignStatus: ProductDesignProofState;
 }
 
+export interface CockpitServiceReadModelReadback {
+  schemaVersion: "aos.cockpit.service_read_model.v1";
+  slice: "slice_2_service_read_model_stabilization";
+  source: "service_api_read" | "static_fixture";
+  surfaces: {
+    cockpit: {
+      selectedProjectId: string;
+      selectedInitiativeId: string;
+      localCheckpoint: string;
+      dataFreshness: FreshnessState;
+      serviceBacked: boolean;
+    };
+    workIndex: {
+      rowCount: number;
+      firstStoryId: string;
+      selectedStoryId: string;
+      linkedGateCount: number;
+      linkedConferenceCount: number;
+      linkedEvidenceCount: number;
+      nextLocalActionCount: number;
+      blockedActionCount: number;
+    };
+    detail: {
+      selectedId: string;
+      selectedType: CockpitDetailPanel["selectedType"];
+      linkedGateCount: number;
+      linkedConferenceCount: number;
+      linkedEvidenceCount: number;
+      auditEventCount: number;
+      rawSourceDisplayed: false;
+      privateEvidenceDisplayed: false;
+    };
+    gate: {
+      roleGateCount: number;
+      ownerIntentGateCount: number;
+      autoExecutableCount: number;
+      unavailableReason: string;
+    };
+    readback: {
+      evidenceReadbackCount: number;
+      riskWarningCount: number;
+      dependencyCount: number;
+      resourceCount: number;
+      productAcceptance: false;
+      finalMvpAcceptance: false;
+      releaseReadinessClaim: "external_proof_required";
+      runtimeDataCommittedToGit: false;
+    };
+  };
+  noClaims: {
+    productAcceptance: false;
+    finalMvpAcceptance: false;
+    releasePublication: false;
+    ownerIntentExecution: false;
+    liveDispatch: false;
+    broadUiReactMigration: false;
+  };
+}
+
 export const requiredCockpitRegionIds: CockpitRegionId[] = [
   "context_header",
   "stage_map",
@@ -339,6 +398,74 @@ export function createOperationsCockpitReadModel(input: {
     detailPanel: input.selectedDetail ? createDetailPanel(input.selectedDetail, input.store, stories, gates, conferences, evidence, dependencies, resources, audit) : undefined,
     nonClaims: noOverclaimState,
     productDesignStatus: productDesignProofState
+  };
+}
+
+export function createCockpitServiceReadback(
+  model: OperationsCockpitReadModel,
+  options: { serviceBacked?: boolean } = {}
+): CockpitServiceReadModelReadback {
+  const workRows = model.workstreams.flatMap((group) => group.rows);
+  const firstRow = workRows[0];
+  const selectedRow = workRows.find((row) => row.storyId === model.detailPanel?.selectedId) ?? firstRow;
+  const detail = model.detailPanel;
+  return {
+    schemaVersion: "aos.cockpit.service_read_model.v1",
+    slice: "slice_2_service_read_model_stabilization",
+    source: options.serviceBacked === true ? "service_api_read" : "static_fixture",
+    surfaces: {
+      cockpit: {
+        selectedProjectId: model.contextHeader.selectedProjectId,
+        selectedInitiativeId: model.contextHeader.selectedInitiativeId,
+        localCheckpoint: model.contextHeader.localCheckpoint,
+        dataFreshness: model.contextHeader.dataFreshness,
+        serviceBacked: options.serviceBacked === true
+      },
+      workIndex: {
+        rowCount: workRows.length,
+        firstStoryId: firstRow?.storyId ?? "",
+        selectedStoryId: selectedRow?.storyId ?? detail?.selectedId ?? "",
+        linkedGateCount: selectedRow?.linkedGateIds.length ?? detail?.linkedGateIds.length ?? 0,
+        linkedConferenceCount: selectedRow?.linkedConferenceIds.length ?? detail?.linkedConferenceIds.length ?? 0,
+        linkedEvidenceCount: selectedRow?.linkedEvidenceIds.length ?? detail?.linkedEvidenceIds.length ?? 0,
+        nextLocalActionCount: selectedRow?.nextAllowedLocalActions.length ?? detail?.nextAllowedLocalActions.length ?? 0,
+        blockedActionCount: selectedRow?.blockedActions.length ?? detail?.blockedActions.length ?? 0
+      },
+      detail: {
+        selectedId: detail?.selectedId ?? selectedRow?.storyId ?? "",
+        selectedType: detail?.selectedType ?? "story",
+        linkedGateCount: detail?.linkedGateIds.length ?? selectedRow?.linkedGateIds.length ?? 0,
+        linkedConferenceCount: detail?.linkedConferenceIds.length ?? selectedRow?.linkedConferenceIds.length ?? 0,
+        linkedEvidenceCount: detail?.linkedEvidenceIds.length ?? selectedRow?.linkedEvidenceIds.length ?? 0,
+        auditEventCount: detail?.auditEventIds.length ?? selectedRow?.linkedAuditEventIds.length ?? 0,
+        rawSourceDisplayed: false,
+        privateEvidenceDisplayed: false
+      },
+      gate: {
+        roleGateCount: model.roleGateQueue.length,
+        ownerIntentGateCount: model.ownerIntentQueue.length,
+        autoExecutableCount: [...model.roleGateQueue, ...model.ownerIntentQueue].filter((gate) => gate.autoExecutable).length,
+        unavailableReason: "Gate and deferred route actions remain held; Slice 2 proves service read-model mapping only."
+      },
+      readback: {
+        evidenceReadbackCount: model.evidenceReadbacks.length,
+        riskWarningCount: model.riskWarnings.length,
+        dependencyCount: model.dependencyInspection.length,
+        resourceCount: model.resourceInspection.length,
+        productAcceptance: false,
+        finalMvpAcceptance: false,
+        releaseReadinessClaim: model.nonClaims.releaseReadinessClaim,
+        runtimeDataCommittedToGit: false
+      }
+    },
+    noClaims: {
+      productAcceptance: false,
+      finalMvpAcceptance: false,
+      releasePublication: false,
+      ownerIntentExecution: false,
+      liveDispatch: false,
+      broadUiReactMigration: false
+    }
   };
 }
 

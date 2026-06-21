@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { AosStore, createDefaultSeed } from "../../../dist/packages/domain/src/index.js";
 import {
   conferenceStates,
+  createCockpitServiceReadback,
   createCockpitSnapshot,
   createOperationsCockpitReadModel,
   freshnessStates,
@@ -95,6 +96,21 @@ test("operations cockpit read model exposes required regions, states, and Produc
   assert.equal(model.nonClaims.runtimeDataCommittedToGit, false);
   assert.equal(model.detailPanel?.rawSourceDisplayed, false);
   assert.equal(model.detailPanel?.privateEvidenceDisplayed, false);
+
+  const serviceReadback = createCockpitServiceReadback(model, { serviceBacked: true });
+  assert.equal(serviceReadback.schemaVersion, "aos.cockpit.service_read_model.v1");
+  assert.equal(serviceReadback.slice, "slice_2_service_read_model_stabilization");
+  assert.equal(serviceReadback.source, "service_api_read");
+  assert.equal(serviceReadback.surfaces.cockpit.localCheckpoint, "slice-4-local");
+  assert.equal(serviceReadback.surfaces.workIndex.rowCount, 1);
+  assert.equal(serviceReadback.surfaces.workIndex.selectedStoryId, story.id);
+  assert.equal(serviceReadback.surfaces.detail.selectedId, story.id);
+  assert.equal(serviceReadback.surfaces.detail.rawSourceDisplayed, false);
+  assert.equal(serviceReadback.surfaces.detail.privateEvidenceDisplayed, false);
+  assert.equal(serviceReadback.surfaces.gate.autoExecutableCount, 0);
+  assert.equal(serviceReadback.surfaces.readback.productAcceptance, false);
+  assert.equal(serviceReadback.surfaces.readback.finalMvpAcceptance, false);
+  assert.equal(serviceReadback.noClaims.broadUiReactMigration, false);
 });
 
 test("operations cockpit moving scenario shows workstream, gate, conference, evidence, dependency, and resource readbacks", () => {

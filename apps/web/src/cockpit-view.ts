@@ -14,7 +14,9 @@ import {
   copyAosState
 } from "./design-system-bridge.js";
 import {
+  createCockpitServiceReadback,
   createOperationsCockpitReadModel,
+  type CockpitServiceReadModelReadback,
   type GateQueueItem,
   type OperationsCockpitReadModel,
   type RiskWarningItem,
@@ -206,6 +208,7 @@ export function renderOperationsCockpitHtml(
   const dependency = model.dependencyInspection[0];
   const resource = model.resourceInspection[0];
   const selectedConference = model.conferences[0];
+  const serviceReadback = createCockpitServiceReadback(model, { serviceBacked });
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -216,7 +219,7 @@ export function renderOperationsCockpitHtml(
     <style>${operationsCockpitCss}</style>
   </head>
   <body>
-    <main class="aos-shell" data-surface="operations-cockpit" data-service-backed="${serviceBacked ? "true" : "false"}" data-cockpit-api="${escapeHtml(cockpitApiPath)}" data-product-design-acceptance="${model.nonClaims.productDesignAcceptance}" data-design-system-consumer="${aosDesignSystemConsumerBridge.adoptionPosture}" data-design-system-tokens="${aosDesignSystemConsumerBridge.tokenPackage}" data-design-system-copy-state="${aosDesignSystemConsumerBridge.copyStatePackage}" data-design-system-source-head="${aosDesignSystemConsumerBridge.designSystemSourceHead}">
+    <main class="aos-shell" data-surface="operations-cockpit" data-service-backed="${serviceBacked ? "true" : "false"}" data-cockpit-api="${escapeHtml(cockpitApiPath)}" data-product-design-acceptance="${model.nonClaims.productDesignAcceptance}" data-design-system-consumer="${aosDesignSystemConsumerBridge.adoptionPosture}" data-design-system-tokens="${aosDesignSystemConsumerBridge.tokenPackage}" data-design-system-copy-state="${aosDesignSystemConsumerBridge.copyStatePackage}" data-design-system-source-head="${aosDesignSystemConsumerBridge.designSystemSourceHead}" data-service-model-schema="${serviceReadback.schemaVersion}" data-service-read-model-source="${serviceReadback.source}" data-service-work-row-count="${serviceReadback.surfaces.workIndex.rowCount}" data-service-selected-story-id="${escapeHtml(serviceReadback.surfaces.workIndex.selectedStoryId)}" data-service-detail-id="${escapeHtml(serviceReadback.surfaces.detail.selectedId)}" data-service-detail-type="${serviceReadback.surfaces.detail.selectedType}" data-service-gate-count="${serviceReadback.surfaces.gate.roleGateCount + serviceReadback.surfaces.gate.ownerIntentGateCount}" data-service-evidence-readback-count="${serviceReadback.surfaces.readback.evidenceReadbackCount}" data-service-runtime-data-committed="${serviceReadback.surfaces.readback.runtimeDataCommittedToGit}">
       <aside class="aos-sidebar" data-region="sidebar-nav" aria-label="AOS navigation">
         <a class="brand-lockup" data-region="brand-lockup" href="#cockpit" aria-label="TCRN AOS">
           <span class="brand-tcrn">TCRN</span>
@@ -254,6 +257,7 @@ export function renderOperationsCockpitHtml(
             <strong data-local-checkpoint>${escapeHtml(model.contextHeader.localCheckpoint)}</strong>
             <em data-readback-freshness>${copyFreshness(model.contextHeader.dataFreshness)}</em>
             <span class="service-readback" data-service-status>${serviceBacked ? "service API pending" : "static fixture"}</span>
+            <span class="service-readback" data-service-model-readback>${escapeHtml(serviceReadModelSummary(serviceReadback))}</span>
           </div>
           <button type="button" class="top-action" data-refresh-readback>Refresh readback</button>
           <button type="button" class="profile" aria-label="Current operator">RL</button>
@@ -546,6 +550,7 @@ const refreshButton = document.querySelector("[data-refresh-readback]");
 const freshness = document.querySelector("[data-readback-freshness]");
 const checkpoint = document.querySelector("[data-local-checkpoint]");
 const serviceStatus = document.querySelector("[data-service-status]");
+const serviceModelReadback = document.querySelector("[data-service-model-readback]");
 const emptyState = document.querySelector("[data-empty-state]");
 let currentRows = Array.from(document.querySelectorAll("[data-work-row]"));
 let activeStoryId = currentRows[0]?.getAttribute("data-row-id") || "";
@@ -575,6 +580,7 @@ async function loadCockpit(selectedId) {
     if (!response.ok) throw new Error("cockpit_api_" + response.status);
     const payload = await response.json();
     if (!payload.ok || !payload.model) throw new Error("cockpit_payload_not_ok");
+    if (!payload.serviceReadModel) throw new Error("cockpit_service_read_model_missing");
     renderPayload(payload);
     setServiceStatus("service API read " + new Date(payload.generatedAt).toLocaleTimeString(), "ok");
   } catch (error) {
@@ -590,9 +596,38 @@ function renderPayload(payload) {
   activeStoryId = model.detailPanel?.selectedId || activeStoryId;
   if (checkpoint) checkpoint.textContent = model.contextHeader.localCheckpoint;
   if (freshness) freshness.textContent = copyFreshness(model.contextHeader.dataFreshness);
+  applyServiceReadModel(payload.serviceReadModel);
   renderRows(model.workstreams.flatMap((group) => group.rows));
   renderDetail(model);
   filterRows();
+}
+
+function applyServiceReadModel(readback) {
+  if (!shell || !readback?.surfaces) return;
+  const workIndex = readback.surfaces.workIndex || {};
+  const detail = readback.surfaces.detail || {};
+  const gate = readback.surfaces.gate || {};
+  const readbackSurface = readback.surfaces.readback || {};
+  shell.setAttribute("data-service-model-schema", readback.schemaVersion || "");
+  shell.setAttribute("data-service-read-model-source", readback.source || "");
+  shell.setAttribute("data-service-work-row-count", String(workIndex.rowCount ?? 0));
+  shell.setAttribute("data-service-selected-story-id", workIndex.selectedStoryId || "");
+  shell.setAttribute("data-service-detail-id", detail.selectedId || "");
+  shell.setAttribute("data-service-detail-type", detail.selectedType || "");
+  shell.setAttribute("data-service-gate-count", String((gate.roleGateCount ?? 0) + (gate.ownerIntentGateCount ?? 0)));
+  shell.setAttribute("data-service-evidence-readback-count", String(readbackSurface.evidenceReadbackCount ?? 0));
+  shell.setAttribute("data-service-runtime-data-committed", String(readbackSurface.runtimeDataCommittedToGit === true));
+  if (serviceModelReadback) {
+    serviceModelReadback.textContent = serviceReadModelSummary(readback);
+  }
+}
+
+function serviceReadModelSummary(readback) {
+  const workIndex = readback?.surfaces?.workIndex || {};
+  const detail = readback?.surfaces?.detail || {};
+  const gate = readback?.surfaces?.gate || {};
+  const gateCount = (gate.roleGateCount ?? 0) + (gate.ownerIntentGateCount ?? 0);
+  return String(workIndex.rowCount ?? 0) + " work / " + String(gateCount) + " gates / detail " + (detail.selectedType || "story");
 }
 
 function renderRows(rows) {
@@ -707,6 +742,11 @@ function navButton(label: string, active: boolean): string {
   const reason = `${label} view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only.`;
   const reasonId = `nav-reason-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
   return `<button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="${reasonId}" title="${escapeHtml(reason)}" data-disabled-reason="${escapeHtml(reason)}"><span class="nav-label">${escapeHtml(label)}</span><span class="nav-unavailable-reason" id="${reasonId}">Held for later route</span></button>`;
+}
+
+function serviceReadModelSummary(readback: CockpitServiceReadModelReadback): string {
+  const gateCount = readback.surfaces.gate.roleGateCount + readback.surfaces.gate.ownerIntentGateCount;
+  return `${readback.surfaces.workIndex.rowCount} work / ${gateCount} gates / detail ${readback.surfaces.detail.selectedType}`;
 }
 
 function stageStep(stage: StageMapReadModel, index: number): string {

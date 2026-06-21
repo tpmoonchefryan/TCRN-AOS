@@ -1,7 +1,11 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { once } from "node:events";
 import { createAppliedRuntimeFixture, type AosRuntimeFixture } from "../../../packages/db/src/index.js";
-import { createOperationsCockpitReadModel, type CockpitDetailPanel } from "../../web/src/cockpit.js";
+import {
+  createCockpitServiceReadback,
+  createOperationsCockpitReadModel,
+  type CockpitDetailPanel
+} from "../../web/src/cockpit.js";
 import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
 import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
@@ -102,6 +106,7 @@ function handleRequest(
 function createCockpitServicePayload(runtime: AosRuntimeFixture, url: URL) {
   const model = createServiceCockpitReadModel(runtime, url);
   const readback = runtime.readback();
+  const serviceReadModel = createCockpitServiceReadback(model, { serviceBacked: true });
   return {
     ok: readback.ok,
     serviceBacked: true,
@@ -111,6 +116,7 @@ function createCockpitServicePayload(runtime: AosRuntimeFixture, url: URL) {
     externalQueue: "none",
     liveCodexDispatchAuthorized: false,
     model,
+    serviceReadModel,
     readback,
     boundaries: {
       serviceProofOnly: true,
