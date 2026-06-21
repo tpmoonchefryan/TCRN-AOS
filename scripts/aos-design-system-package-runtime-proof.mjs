@@ -4,6 +4,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import {
   aosCockpitUiReactRuntime,
+  renderCockpitRuntimeDetailDrawer,
   renderCockpitRuntimeNavItems,
   renderCockpitRuntimeWorkIndexCluster
 } from "../dist/apps/web/src/cockpit-ui-react-runtime.js";
@@ -15,7 +16,7 @@ import {
 } from "../dist/apps/web/src/cockpit-view.js";
 
 const repoRoot = process.cwd();
-const route = "route_tcrn_aos_design_system_frontend_rebuild_59ao_operations_cockpit_work_index_package_runtime_implementation";
+const route = "route_tcrn_aos_design_system_frontend_rebuild_59ap_selected_detail_package_runtime_implementation";
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const packageJson = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8"));
 const runtimeSourcePath = "apps/web/src/cockpit-ui-react-runtime.ts";
@@ -23,6 +24,7 @@ const runtimeSource = readFileSync(join(repoRoot, runtimeSourcePath), "utf8");
 const cockpitHtml = renderOperationsCockpitHtml();
 const navRuntimeReadback = inspectPackageRuntimeNavItems(cockpitHtml);
 const workIndexRuntimeReadback = inspectPackageRuntimeWorkIndexCluster(cockpitHtml);
+const detailDrawerRuntimeReadback = inspectPackageRuntimeDetailDrawer(cockpitHtml);
 const visualStyleReadback = inspectAosRuntimeStyleContract(cockpitHtml);
 const importReadback = inspectImports();
 const dependencyReadback = inspectDependencies();
@@ -40,6 +42,7 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && importReadback.ok
   && navRuntimeReadback.ok
   && workIndexRuntimeReadback.ok
+  && detailDrawerRuntimeReadback.ok
   && visualStyleReadback.ok
   && storybookReferenceReadback.ok
   && noOverclaimReadback.ok
@@ -50,9 +53,9 @@ const summary = {
   route,
   sourceHead,
   claimScope: {
-    implementationKind: "operations_cockpit_work_index_package_runtime_expansion",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_and_work_index_cluster",
-    storybookVisualStyleParity: "navitem_disabled_reason_and_work_index_component_reference_only",
+    implementationKind: "operations_cockpit_selected_detail_package_runtime_expansion",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_and_selected_detail_drawer",
+    storybookVisualStyleParity: "navitem_disabled_reason_work_index_and_selected_detail_component_reference_only",
     broadUiReactRuntimeMigration: false,
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -72,6 +75,7 @@ const summary = {
   importReadback,
   navRuntimeReadback,
   workIndexRuntimeReadback,
+  detailDrawerRuntimeReadback,
   visualStyleReadback,
   storybookReferenceReadback,
   noOverclaimReadback
@@ -108,8 +112,11 @@ console.log(JSON.stringify({
   packageRuntimeNavItemCount: summary.navRuntimeReadback.packageRuntimeNavItemCount,
   packageRuntimeWorkIndexComponentCount: summary.workIndexRuntimeReadback.packageRuntimeComponents.length,
   packageRuntimeWorkRowCount: summary.workIndexRuntimeReadback.packageRuntimeWorkRowCount,
+  packageRuntimeDetailDrawerComponentCount: summary.detailDrawerRuntimeReadback.packageRuntimeComponents.length,
+  packageRuntimeDetailDrawerSelectedId: summary.detailDrawerRuntimeReadback.selectedDetailId,
   disabledNavItemFailureCount: summary.navRuntimeReadback.disabledNavItemFailures.length,
   workIndexFailureCount: summary.workIndexRuntimeReadback.failures.length,
+  detailDrawerFailureCount: summary.detailDrawerRuntimeReadback.failures.length,
   visualStyleFailureCount: summary.visualStyleReadback.failures.length,
   markerOnlyNavItemCount: summary.navRuntimeReadback.markerOnlyNavItemCount,
   deepImportHits: summary.importReadback.deepImportHits,
@@ -152,7 +159,13 @@ function inspectImports() {
     "FilterBar",
     "Button",
     "Badge",
-    "StateView"
+    "StateView",
+    "DetailDrawer",
+    "KeyValueList",
+    "Surface",
+    "Heading",
+    "Text",
+    "StatusBadge"
   ];
   const publicComponentImportPresence = Object.fromEntries(
     requiredPublicComponentImports.map((name) => [name, new RegExp(`\\b${name}\\b`).test(runtimeSource)])
@@ -168,7 +181,7 @@ function inspectImports() {
   ]);
   const copiedSourceHits = runRg([
     "-n",
-    "function\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView)|const\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView)|export\\s+function\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView)",
+    "function\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge)|const\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge)|export\\s+function\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge)",
     "apps/web/src",
     "apps/web/test",
     "scripts"
@@ -344,6 +357,103 @@ function inspectPackageRuntimeWorkIndexCluster(html) {
   };
 }
 
+function inspectPackageRuntimeDetailDrawer(html) {
+  const detailHtml = extractDetailDrawerHtml(html);
+  const failures = [];
+  if (!detailHtml) {
+    return {
+      ok: false,
+      present: false,
+      surface: "operations-cockpit-detail-drawer",
+      requiredComponents: [],
+      packageRuntimeComponents: [],
+      failures: ["detail_drawer_missing"]
+    };
+  }
+
+  const asideMatch = detailHtml.match(/<aside\b([^>]*)>/);
+  const asideAttributes = parseAttributes(asideMatch?.[1] ?? "");
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(detailHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "Button",
+    "DetailDrawer",
+    "Heading",
+    "KeyValueList",
+    "StatusBadge",
+    "Surface",
+    "Text"
+  ];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  if (missingComponents.length > 0) failures.push("detail_drawer_required_package_components_missing");
+  if (asideAttributes["data-package-runtime-component"] !== "DetailDrawer") failures.push("detail_drawer_missing_runtime_marker");
+  if (asideAttributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push("detail_drawer_missing_package_source");
+  if (asideAttributes["data-package-runtime-surface"] !== "operations-cockpit-detail-drawer") failures.push("detail_drawer_missing_runtime_surface");
+  if (!asideAttributes["data-service-detail-id"]?.trim()) failures.push("detail_drawer_missing_service_detail_id");
+  if (asideAttributes["data-service-detail-type"] !== "story") failures.push("detail_drawer_unexpected_service_detail_type");
+  if (asideAttributes["data-selected-story-id"] !== asideAttributes["data-service-detail-id"]) failures.push("detail_drawer_selected_story_mismatch");
+  if (!/data-drawer-title/.test(detailHtml)) failures.push("detail_drawer_title_missing");
+  if (!/data-detail-list/.test(detailHtml)) failures.push("detail_drawer_key_value_list_missing");
+  if ((detailHtml.match(/<dt>/g) ?? []).length < 8 || (detailHtml.match(/<dd>/g) ?? []).length < 8) {
+    failures.push("detail_drawer_key_value_rows_missing");
+  }
+  if (!/Selected Detail Readback/.test(detailHtml)) failures.push("detail_drawer_readback_surface_missing");
+  if (!/Functional contract readback only; no visual, release, product, dependency-clean, or live-dispatch acceptance/.test(detailHtml)) {
+    failures.push("detail_drawer_no_overclaim_copy_missing");
+  }
+
+  const disabledButtons = Array.from(detailHtml.matchAll(/<button\b(?=[^>]*data-package-runtime-component="Button")(?=[^>]*disabled)([^>]*)>([\s\S]*?)<\/button>/g))
+    .map((match) => ({ attributes: match[1], body: match[2], parsed: parseAttributes(match[1]) }));
+  if (disabledButtons.length < 2) failures.push("detail_drawer_disabled_actions_missing");
+  for (const button of disabledButtons) {
+    const buttonFailures = [];
+    if (!button.parsed.title?.trim()) buttonFailures.push("disabled_button_missing_title");
+    if (!button.parsed["data-disabled-reason"]?.trim()) buttonFailures.push("disabled_button_missing_data_disabled_reason");
+    if (!button.parsed["aria-describedby"]?.trim()) buttonFailures.push("disabled_button_missing_aria_describedby");
+    if (!/class="tcrn-sr-only"/.test(button.body)) buttonFailures.push("disabled_button_sr_only_reason_missing");
+    if (buttonFailures.length > 0) {
+      failures.push({ label: extractButtonLabel(button.body), failures: buttonFailures });
+    }
+  }
+
+  const sampleRenderedHtmlSha256 = createHash("sha256").update(renderCockpitRuntimeDetailDrawer({
+    blockedActionLabel: "No local readback blockers",
+    closeLabel: "Close detail",
+    detailRows: [
+      { key: "selected", label: "Selected", value: "Story readback / sample_story" },
+      { key: "evidence", label: "Evidence", value: "Metadata only" }
+    ],
+    noOverclaimSummary: "No product, final, release, live dispatch, or Owner Intent execution is claimed.",
+    operatingLoopSummary: "Selected detail uses service-backed local readback only.",
+    primaryActionDisabledReason: "Gate work order execution is held outside this UI slice",
+    primaryActionLabel: "Gate work order held",
+    secondaryActionDisabledReason: "Rework request execution requires a routed owner-trial action",
+    secondaryActionLabel: "Rework request held",
+    selectedId: "sample_story",
+    selectedType: "story",
+    selectedTypeLabel: "Story readback",
+    statusLabel: "In progress",
+    title: "Sample selected detail"
+  })).digest("hex");
+
+  return {
+    ok: failures.length === 0,
+    present: true,
+    surface: "operations-cockpit-detail-drawer",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    selectedDetailId: asideAttributes["data-service-detail-id"] ?? "",
+    selectedDetailType: asideAttributes["data-service-detail-type"] ?? "",
+    selectedStoryId: asideAttributes["data-selected-story-id"] ?? "",
+    keyValueRowCount: detailHtml.match(/<dt>/g)?.length ?? 0,
+    disabledActionButtonCount: disabledButtons.length,
+    sampleRenderedHtmlSha256,
+    failures
+  };
+}
+
 function inspectAosRuntimeStyleContract(html) {
   const failures = [];
   const hasSrOnlyRule = /\.tcrn-sr-only\s*\{[^}]*position:\s*absolute;[^}]*width:\s*1px;[^}]*height:\s*1px;[^}]*overflow:\s*hidden;[^}]*white-space:\s*nowrap;[^}]*border:\s*0;/s.test(html);
@@ -377,7 +487,8 @@ function inspectSourceContentDigest() {
     "scripts/aos-design-system-package-runtime-proof.mjs",
     "scripts/aos-design-system-component-registry-proof.mjs",
     "scripts/aos-design-system-consumer-slice-1-proof.mjs",
-    "scripts/aos-design-system-consumer-slice-2-proof.mjs"
+    "scripts/aos-design-system-consumer-slice-2-proof.mjs",
+    "scripts/slice-4b-style-proof.mjs"
   ];
   const digestInput = sourcePaths
     .map((sourcePath) => `${sourcePath}\0${readFileSync(join(repoRoot, sourcePath), "utf8")}`)
@@ -400,6 +511,16 @@ function extractWorkIndexClusterHtml(html) {
   const end = html.indexOf('<aside class="detail-drawer', markerIndex);
   if (start === -1 || end === -1) return "";
   return html.slice(start, end);
+}
+
+function extractDetailDrawerHtml(html) {
+  const marker = 'data-region="detail-drawer"';
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<aside", markerIndex);
+  const end = html.indexOf("</aside>", markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + "</aside>".length);
 }
 
 function inspectStorybookReference() {
@@ -470,6 +591,10 @@ function extractVisibleText(body, className) {
   return match ? decodeHtml(stripTags(match[1]).trim()) : "";
 }
 
+function extractButtonLabel(body) {
+  return decodeHtml(stripTags(body).trim()) || "unknown";
+}
+
 function stripTags(value) {
   return value.replace(/<[^>]+>/g, "");
 }
@@ -493,6 +618,9 @@ function markdownReceipt(summary) {
   const workIndexRows = summary.workIndexRuntimeReadback.failures.length === 0
     ? "- Work Index package-runtime failures: 0"
     : summary.workIndexRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.id}: ${failure.failures.join(", ")}`).join("\n");
+  const detailDrawerRows = summary.detailDrawerRuntimeReadback.failures.length === 0
+    ? "- Selected detail drawer package-runtime failures: 0"
+    : summary.detailDrawerRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
   return `# AOS Design System Package Runtime Proof\n\n`
     + `- Route: ${summary.route}\n`
     + `- Source head at proof run: ${summary.sourceHead}\n`
@@ -505,12 +633,15 @@ function markdownReceipt(summary) {
     + `- Package runtime NavItems: ${summary.navRuntimeReadback.packageRuntimeNavItemCount}\n`
     + `- Package runtime Work Index rows: ${summary.workIndexRuntimeReadback.packageRuntimeWorkRowCount}\n`
     + `- Package runtime Work Index components: ${summary.workIndexRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
+    + `- Package runtime selected detail id/type: ${summary.detailDrawerRuntimeReadback.selectedDetailId} / ${summary.detailDrawerRuntimeReadback.selectedDetailType}\n`
+    + `- Package runtime selected detail components: ${summary.detailDrawerRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Marker-only NavItems in cockpit nav: ${summary.navRuntimeReadback.markerOnlyNavItemCount}\n`
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
     + `- AOS runtime sr-only / mobile TableShell style proof ok: ${summary.visualStyleReadback.ok}\n`
     + `${rows}\n`
-    + `${workIndexRows}\n\n`
+    + `${workIndexRows}\n`
+    + `${detailDrawerRows}\n\n`
     + `## Boundaries\n\n`
-    + `This is an Operations Cockpit NavItem plus Work Index package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
+    + `This is an Operations Cockpit NavItem, Work Index, and selected detail drawer package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
 }

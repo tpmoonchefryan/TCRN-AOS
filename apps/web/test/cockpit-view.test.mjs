@@ -69,7 +69,7 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.equal(aosDesignSystemConsumerBridge.tokenPackage, "@tcrn/ui-tokens");
   assert.equal(aosDesignSystemConsumerBridge.copyStatePackage, "@tcrn/ui-copy-state");
   assert.equal(aosDesignSystemConsumerBridge.uiReactPackage, "@tcrn/ui-react");
-  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_navitem_sidebar_work_index_cluster");
+  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer");
   assert.equal(aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering, true);
   assert.equal(aosDesignSystemConsumerBridge.designSystemSourceHead, "b0c00828a813d3c62392eb6e53d7d6b85b6affeb");
   assert.equal(copyAosState("external_proof_required"), "External proof required");
@@ -81,7 +81,7 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.match(html, /data-design-system-copy-state="@tcrn\/ui-copy-state"/);
   assert.match(html, /data-design-system-ui-react="@tcrn\/ui-react"/);
   assert.match(html, /data-package-backed-react-runtime-rendering="true"/);
-  assert.match(html, /data-package-runtime-component-scope="NavItem,WorkIndex,TableShell,SearchInput,Field,FilterBar,Button,Badge,StateView"/);
+  assert.match(html, /data-package-runtime-component-scope="NavItem,WorkIndex,TableShell,SearchInput,Field,FilterBar,Button,Badge,StateView,DetailDrawer,KeyValueList,Surface,Heading,Text,StatusBadge"/);
   assert.match(html, /data-package-runtime-component="WorkIndex"/);
   assert.match(html, /data-package-runtime-component="SearchInput"/);
   assert.match(html, /data-package-runtime-component="TableShell"/);
@@ -114,6 +114,32 @@ test("Operations Cockpit Work Index renders package-backed runtime controls", ()
   assert.match(workIndexHtml, /data-work-row/);
   assert.match(workIndexHtml, /aria-label="Service-backed Work Index"/);
   assert.match(workIndexHtml, /Filter service-backed rows/);
+});
+
+test("Operations Cockpit selected detail drawer renders package-backed runtime controls", () => {
+  const html = renderOperationsCockpitHtml();
+  const detailStart = html.indexOf('<aside class="detail-drawer');
+  const detailEnd = html.indexOf("</aside>", detailStart);
+  const detailHtml = html.slice(detailStart, detailEnd);
+
+  assert.ok(detailStart > 0, "detail drawer region is present");
+  assert.match(detailHtml, /data-region="detail-drawer"/);
+  assert.match(detailHtml, /data-package-runtime-component="DetailDrawer"/);
+  assert.match(detailHtml, /data-package-runtime-surface="operations-cockpit-detail-drawer"/);
+  assert.match(detailHtml, /data-service-detail-id="story_[^"]+"/);
+  assert.match(detailHtml, /data-service-detail-type="story"/);
+  assert.match(detailHtml, /data-selected-story-id="story_[^"]+"/);
+  assert.match(detailHtml, /data-drawer-title/);
+  assert.match(detailHtml, /data-package-runtime-component="StatusBadge"/);
+  assert.match(detailHtml, /data-package-runtime-component="KeyValueList"/);
+  assert.match(detailHtml, /data-package-runtime-component="Surface"/);
+  assert.match(detailHtml, /data-package-runtime-component="Heading"/);
+  assert.match(detailHtml, /data-package-runtime-component="Text"/);
+  assert.match(detailHtml, /data-package-runtime-component="Button"/);
+  assert.match(detailHtml, /data-detail-list/);
+  assert.match(detailHtml, /Selected Detail Readback/);
+  assert.match(detailHtml, /Functional contract readback only; no visual, release, product, dependency-clean, or live-dispatch acceptance/);
+  assert.match(detailHtml, /Gate work order held/);
 });
 
 test("disabled cockpit navigation exposes held reasons visibly and accessibly", () => {

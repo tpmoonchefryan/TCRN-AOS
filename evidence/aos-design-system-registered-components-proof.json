@@ -15,8 +15,8 @@
     }
   },
   "claimScope": {
-    "implementationKind": "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_work_index_package_runtime",
-    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_and_work_index_cluster",
+    "implementationKind": "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_selected_detail_package_runtime",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_and_selected_detail_drawer",
     "storybookVisualStyleParity": "not_claimed_by_registered_component_proof",
     "docsReadinessPackageRuntimeRendering": false,
     "aosWidePackageRuntimeRendering": false,
@@ -28,7 +28,7 @@
     {
       "id": "operations-cockpit",
       "path": "apps/web/static/operations-cockpit.html",
-      "componentCount": 92,
+      "componentCount": 93,
       "registeredComponents": [
         "Badge",
         "Button",
@@ -190,7 +190,7 @@
   "packageRuntimeReadback": {
     "ok": true,
     "surface": "operations-cockpit",
-    "packageRuntimeComponent": "NavItem+WorkIndex",
+    "packageRuntimeComponent": "NavItem+WorkIndex+DetailDrawer",
     "packageRuntimeSource": "@tcrn/ui-react",
     "packageRuntimeNavItemCount": 10,
     "markerOnlyNavItemCount": 0,
@@ -211,6 +211,35 @@
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "packageRuntimeWorkRowCount": 1,
     "workIndexRowFailureCount": 0,
+    "detailDrawerRuntimeReadback": {
+      "ok": true,
+      "present": true,
+      "surface": "operations-cockpit-detail-drawer",
+      "packageRuntimeComponents": [
+        "Button",
+        "DetailDrawer",
+        "Heading",
+        "KeyValueList",
+        "StatusBadge",
+        "Surface",
+        "Text"
+      ],
+      "requiredComponents": [
+        "Button",
+        "DetailDrawer",
+        "Heading",
+        "KeyValueList",
+        "StatusBadge",
+        "Surface",
+        "Text"
+      ],
+      "missingComponents": [],
+      "selectedDetailId": "story_daa1ed285030dd27",
+      "selectedDetailType": "story",
+      "selectedStoryId": "story_daa1ed285030dd27",
+      "keyValueRowCount": 10,
+      "failures": []
+    },
     "packageBackedReactRuntimeShellMarkerPresent": true
   },
   "browserReadbackPathLeakage": {

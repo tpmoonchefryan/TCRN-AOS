@@ -112,8 +112,8 @@ const summary = {
   registrySource: relative(repoRoot, designSystemRegistrySourcePath),
   designSystemBasis,
   claimScope: {
-    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_work_index_package_runtime",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_and_work_index_cluster",
+    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_selected_detail_package_runtime",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_and_selected_detail_drawer",
     storybookVisualStyleParity: "not_claimed_by_registered_component_proof",
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -402,6 +402,7 @@ function inspectPackageRuntimeReadback(surface) {
     || row.parsed["data-package-runtime-source"] !== "@tcrn/ui-react"
     || row.parsed["data-package-runtime-surface"] !== "operations-cockpit-work-index"
     || !row.parsed["data-row-id"]?.trim());
+  const detailDrawer = inspectDetailDrawerRuntime(surface.html);
   return {
     ok: packageRuntimeNavItems.length === 10
       && markerOnlyNavItems.length === 0
@@ -413,9 +414,10 @@ function inspectPackageRuntimeReadback(surface) {
       && missingWorkIndexComponents.length === 0
       && workIndexRows.length > 0
       && workIndexRowFailures.length === 0
+      && detailDrawer.ok
       && surface.html.includes('data-package-backed-react-runtime-rendering="true"'),
     surface: surface.id,
-    packageRuntimeComponent: "NavItem+WorkIndex",
+    packageRuntimeComponent: "NavItem+WorkIndex+DetailDrawer",
     packageRuntimeSource: "@tcrn/ui-react",
     packageRuntimeNavItemCount: packageRuntimeNavItems.length,
     markerOnlyNavItemCount: markerOnlyNavItems.length,
@@ -427,7 +429,57 @@ function inspectPackageRuntimeReadback(surface) {
     searchInputControlDisposition: "internal_subcomponent_not_separate_package_runtime_scope",
     packageRuntimeWorkRowCount: workIndexRows.length,
     workIndexRowFailureCount: workIndexRowFailures.length,
+    detailDrawerRuntimeReadback: detailDrawer,
     packageBackedReactRuntimeShellMarkerPresent: surface.html.includes('data-package-backed-react-runtime-rendering="true"')
+  };
+}
+
+function inspectDetailDrawerRuntime(html) {
+  const detailHtml = extractDetailDrawerHtml(html);
+  if (!detailHtml) {
+    return {
+      ok: false,
+      present: false,
+      failures: ["detail_drawer_missing"]
+    };
+  }
+  const asideMatch = detailHtml.match(/<aside\b([^>]*)>/);
+  const asideAttributes = parseAttributes(asideMatch?.[1] ?? "");
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(detailHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "Button",
+    "DetailDrawer",
+    "Heading",
+    "KeyValueList",
+    "StatusBadge",
+    "Surface",
+    "Text"
+  ];
+  const failures = [];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  if (missingComponents.length > 0) failures.push("detail_drawer_required_package_components_missing");
+  if (asideAttributes["data-package-runtime-component"] !== "DetailDrawer") failures.push("detail_drawer_missing_runtime_marker");
+  if (asideAttributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push("detail_drawer_missing_package_source");
+  if (asideAttributes["data-package-runtime-surface"] !== "operations-cockpit-detail-drawer") failures.push("detail_drawer_missing_runtime_surface");
+  if (!asideAttributes["data-service-detail-id"]?.trim()) failures.push("detail_drawer_missing_service_detail_id");
+  if (asideAttributes["data-service-detail-type"] !== "story") failures.push("detail_drawer_unexpected_service_detail_type");
+  if (asideAttributes["data-selected-story-id"] !== asideAttributes["data-service-detail-id"]) failures.push("detail_drawer_selected_story_mismatch");
+  if (!/data-detail-list/.test(detailHtml)) failures.push("detail_drawer_key_value_list_missing");
+  if (!/data-drawer-title/.test(detailHtml)) failures.push("detail_drawer_title_missing");
+  return {
+    ok: failures.length === 0,
+    present: true,
+    surface: "operations-cockpit-detail-drawer",
+    packageRuntimeComponents,
+    requiredComponents,
+    missingComponents,
+    selectedDetailId: asideAttributes["data-service-detail-id"] ?? "",
+    selectedDetailType: asideAttributes["data-service-detail-type"] ?? "",
+    selectedStoryId: asideAttributes["data-selected-story-id"] ?? "",
+    keyValueRowCount: detailHtml.match(/<dt>/g)?.length ?? 0,
+    failures
   };
 }
 
@@ -439,6 +491,16 @@ function extractWorkIndexClusterHtml(html) {
   const end = html.indexOf('<aside class="detail-drawer', markerIndex);
   if (start === -1 || end === -1) return "";
   return html.slice(start, end);
+}
+
+function extractDetailDrawerHtml(html) {
+  const marker = 'data-region="detail-drawer"';
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<aside", markerIndex);
+  const end = html.indexOf("</aside>", markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + "</aside>".length);
 }
 
 function escapeRegExp(value) {

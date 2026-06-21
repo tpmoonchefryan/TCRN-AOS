@@ -25,8 +25,10 @@ import {
 } from "./cockpit.js";
 import {
   aosCockpitUiReactRuntime,
+  renderCockpitRuntimeDetailDrawer,
   renderCockpitRuntimeNavItems,
   renderCockpitRuntimeWorkIndexCluster,
+  type CockpitRuntimeDetailDrawerOptions,
   type CockpitRuntimeWorkIndexRow,
   type CockpitRuntimeNavItem
 } from "./cockpit-ui-react-runtime.js";
@@ -225,6 +227,7 @@ export function renderOperationsCockpitHtml(
   const cockpitApiPath = options.cockpitApiPath ?? "/api/cockpit";
   const workRows = model.workstreams.flatMap((group) => group.rows);
   const selectedRow = workRows[0];
+  const selectedDetail = model.detailPanel;
   const blockingGate = model.ownerIntentQueue[0] ?? model.roleGateQueue[0];
   const dependency = model.dependencyInspection[0];
   const resource = model.resourceInspection[0];
@@ -336,36 +339,15 @@ export function renderOperationsCockpitHtml(
               ],
               rows: createCockpitRuntimeWorkIndexRows(workRows)
             })}
-            <aside class="detail-drawer tcrn-detail-drawer" ${tcrnComponentAttr("DetailDrawer")} data-region="detail-drawer" data-slice5="work-index-drill-through" aria-label="Selected item detail">
-              <div class="drawer-head">
-                <span class="tag tcrn-badge tcrn-badge--positive" ${tcrnComponentAttr("Badge")}>Story</span>
-                <button class="tcrn-button tcrn-button--quiet" ${tcrnComponentAttr("Button")} type="button" aria-label="Close detail" data-close-detail>Close</button>
-              </div>
-              <h2 class="tcrn-heading tcrn-heading--3" ${tcrnComponentAttr("Heading")} data-drawer-title>${escapeHtml(selectedRow?.title ?? "Selected work item")}</h2>
-              <dl class="detail-list tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")} data-detail-list>
-                <div><dt>Hierarchy</dt><dd>${escapeHtml(model.contextHeader.selectedProjectId)} / ${escapeHtml(model.contextHeader.selectedInitiativeId)}</dd></div>
-                <div><dt>Gate flow</dt><dd>${blockingGate ? `${escapeHtml(blockingGate.ownerRole)} - ${copyState(blockingGate.status)}` : copyState("none")}</dd></div>
-                <div><dt>Conference</dt><dd>${selectedConference ? `${copyState(selectedConference.status)} / ${copyState(selectedConference.minutesStatus)}` : copyState("none")}</dd></div>
-                <div><dt>Dry-run invite</dt><dd>${selectedConference ? `${selectedConference.inviteDispatchIds.length} outbox record metadata` : copyState("none")}</dd></div>
-                <div><dt>Local actions</dt><dd>${selectedRow ? selectedRow.nextAllowedLocalActions.map(copyAction).join(", ") : copyAction("open_evidence_metadata")}</dd></div>
-                <div><dt>Blocked actions</dt><dd>${selectedRow && selectedRow.blockedActions.length > 0 ? selectedRow.blockedActions.map((action) => copyAction(action.action)).join(", ") : "No local readback blockers"}</dd></div>
-                <div><dt>Evidence</dt><dd>${copyState(model.evidenceReadbacks[0]?.redactionState ?? "metadata_only")}</dd></div>
-                <div><dt>Dependency</dt><dd>${dependency ? copyPosture(dependency.posture) : copyState("none")}</dd></div>
-                <div><dt>Resource</dt><dd>${resource ? copyPosture(resource.approvalState) : copyState("none")}</dd></div>
-              </dl>
-              ${selectedConference ? `<section class="loop-card tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="conference-operating-loop" aria-label="Conference operating loop">
-                <h3 class="tcrn-heading tcrn-heading--3" ${tcrnComponentAttr("Heading")}>Conference Loop</h3>
-                <p class="tcrn-text" ${tcrnComponentAttr("Text")}>${escapeHtml(selectedConference.title)}</p>
-                <ul>
-                  <li>${selectedConference.participantPositionIds.length} positions recorded</li>
-                  <li>${selectedConference.missingParticipantEmployeeIds.length} missing participant readbacks</li>
-                  <li>${copyState(selectedConference.decisionClass)} outcome metadata</li>
-                  <li>${copyState("unavailable")}: live dispatch</li>
-                </ul>
-              </section>` : ""}
-              <button type="button" class="primary-action tcrn-button tcrn-button--primary" ${tcrnComponentAttr("Button")} disabled title="Gate work order execution is held outside this UI slice">Gate work order held</button>
-              <button type="button" class="secondary-action tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} disabled title="Rework request execution requires a routed owner-trial action">Rework request held</button>
-            </aside>
+            ${renderCockpitRuntimeDetailDrawer(createCockpitRuntimeDetailDrawerOptions({
+              blockingGate,
+              dependency,
+              model,
+              resource,
+              selectedConference,
+              selectedDetail,
+              selectedRow
+            }))}
           </section>
           <section class="risk-lane tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")} aria-label="Risk and warning lane">
             ${model.riskWarnings.slice(0, 4).map((warning) => riskPill(warning)).join("")}
@@ -509,7 +491,7 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
 .drawer-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .drawer-head button { border: 0; background: transparent; color: #1a293d; }
 .tag { background: #e5f8ee; color: #1d8d51; }
-.detail-drawer h2 { margin: 14px 0; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: #162437; font-size: 16px; line-height: 1.28; letter-spacing: 0; text-transform: none; }
+.detail-drawer h2, .detail-drawer h3 { margin: 14px 0; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: #162437; font-size: 16px; line-height: 1.28; letter-spacing: 0; text-transform: none; }
 .detail-list { margin-bottom: 18px; }
 .loop-card { margin: 0 0 16px; border: 1px solid var(--line); border-radius: 5px; padding: 12px; background: var(--surface-weak); }
 .loop-card h3 { margin: 0 0 8px; font-size: var(--type-label); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
@@ -661,9 +643,10 @@ function renderRows(rows) {
       row.title,
       copyState(row.status),
       row.nextOwnerRole
-    ].forEach((value) => {
+    ].forEach((value, index) => {
       const cell = document.createElement("span");
       cell.className = "tcrn-table-shell__cell";
+      cell.setAttribute("data-label", ["Work item", "State", "Owner"][index] || "Value");
       cell.textContent = value;
       button.append(cell);
     });
@@ -685,6 +668,11 @@ function renderDetail(model) {
   const detail = model.detailPanel;
   const row = model.workstreams.flatMap((group) => group.rows).find((candidate) => candidate.storyId === detail?.selectedId)
     || model.workstreams.flatMap((group) => group.rows)[0];
+  if (drawer && detail) {
+    drawer.setAttribute("data-service-detail-id", detail.selectedId);
+    drawer.setAttribute("data-service-detail-type", detail.selectedType);
+    drawer.setAttribute("data-selected-story-id", detail.selectedId);
+  }
   if (drawerTitle) drawerTitle.textContent = row?.title || detail?.selectedId || "Selected work item";
   if (!detailList || !detail) return;
   replaceDetailList([
@@ -784,6 +772,99 @@ function createCockpitRuntimeWorkIndexRows(rows: WorkstreamStoryRow[]): CockpitR
       title: row.title
     };
   });
+}
+
+interface DetailDrawerOptionInput {
+  blockingGate: GateQueueItem | undefined;
+  dependency: OperationsCockpitReadModel["dependencyInspection"][number] | undefined;
+  model: OperationsCockpitReadModel;
+  resource: OperationsCockpitReadModel["resourceInspection"][number] | undefined;
+  selectedConference: OperationsCockpitReadModel["conferences"][number] | undefined;
+  selectedDetail: OperationsCockpitReadModel["detailPanel"];
+  selectedRow: WorkstreamStoryRow | undefined;
+}
+
+function createCockpitRuntimeDetailDrawerOptions(input: DetailDrawerOptionInput): CockpitRuntimeDetailDrawerOptions {
+  const detail = input.selectedDetail;
+  const selectedType = detail?.selectedType ?? "story";
+  const selectedId = detail?.selectedId ?? input.selectedRow?.storyId ?? "";
+  const detailRows = [
+    {
+      key: "hierarchy",
+      label: "Hierarchy",
+      value: `${input.model.contextHeader.selectedProjectId} / ${input.model.contextHeader.selectedInitiativeId}`
+    },
+    {
+      key: "selected",
+      label: "Selected",
+      value: `${copyState(selectedType)} / ${selectedId || "unavailable"}`
+    },
+    {
+      key: "gate-flow",
+      label: "Gate flow",
+      value: input.blockingGate ? `${input.blockingGate.ownerRole} - ${copyState(input.blockingGate.status)}` : copyState("none")
+    },
+    {
+      key: "conference",
+      label: "Conference",
+      value: input.selectedConference ? `${copyState(input.selectedConference.status)} / ${copyState(input.selectedConference.minutesStatus)}` : copyState("none")
+    },
+    {
+      key: "dry-run-invite",
+      label: "Dry-run invite",
+      value: input.selectedConference ? `${input.selectedConference.inviteDispatchIds.length} outbox record metadata` : copyState("none")
+    },
+    {
+      key: "local-actions",
+      label: "Local actions",
+      value: detail?.nextAllowedLocalActions.map(copyAction).join(", ")
+        || input.selectedRow?.nextAllowedLocalActions.map(copyAction).join(", ")
+        || copyAction("open_evidence_metadata")
+    },
+    {
+      key: "blocked-actions",
+      label: "Blocked actions",
+      value: formatBlockedActions(detail?.blockedActions ?? input.selectedRow?.blockedActions ?? [])
+    },
+    {
+      key: "evidence",
+      label: "Evidence",
+      value: copyState(input.model.evidenceReadbacks[0]?.redactionState ?? "metadata_only")
+    },
+    {
+      key: "dependency",
+      label: "Dependency",
+      value: input.dependency ? copyPosture(input.dependency.posture) : copyState("none")
+    },
+    {
+      key: "resource",
+      label: "Resource",
+      value: input.resource ? copyPosture(input.resource.approvalState) : copyState("none")
+    }
+  ];
+  return {
+    blockedActionLabel: formatBlockedActions(detail?.blockedActions ?? input.selectedRow?.blockedActions ?? []),
+    closeLabel: "Close detail",
+    detailRows,
+    noOverclaimSummary: detail?.noOverclaimSummary ?? "No product, final, release, live dispatch, or Owner Intent execution is claimed.",
+    operatingLoopSummary: detail?.operatingLoopSummary ?? input.selectedConference?.title ?? "Selected detail uses service-backed local readback only.",
+    primaryActionDisabledReason: "Gate work order execution is held outside this UI slice",
+    primaryActionLabel: "Gate work order held",
+    secondaryActionDisabledReason: "Rework request execution requires a routed owner-trial action",
+    secondaryActionLabel: "Rework request held",
+    selectedId,
+    selectedType,
+    selectedTypeLabel: copyState(selectedType),
+    statusLabel: input.selectedRow ? copyState(input.selectedRow.status) : copyState("local_only"),
+    title: (input.selectedRow?.title ?? selectedId) || "Selected work item"
+  };
+}
+
+function formatBlockedActions(actions: Array<{ action: string }>): string {
+  if (actions.length === 0) {
+    return "No local readback blockers";
+  }
+  return actions.map((action) => copyAction(action.action)).join(", ");
 }
 
 function serviceReadModelSummary(readback: CockpitServiceReadModelReadback): string {

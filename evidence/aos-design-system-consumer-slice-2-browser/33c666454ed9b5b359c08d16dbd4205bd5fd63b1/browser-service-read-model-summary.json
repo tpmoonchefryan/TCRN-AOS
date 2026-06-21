@@ -1,0 +1,235 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_design_system_frontend_rebuild_slice_2_service_read_model_stabilization_implementation",
+  "sourceHead": "33c666454ed9b5b359c08d16dbd4205bd5fd63b1",
+  "designSystemSourceHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
+  "serviceLifecycle": {
+    "loopbackOnly": true,
+    "ephemeralPort": true,
+    "stopped": true
+  },
+  "apiContract": {
+    "ok": true,
+    "schemaVersion": "aos.cockpit.service_read_model.v1",
+    "expectedDom": {
+      "schemaVersion": "aos.cockpit.service_read_model.v1",
+      "workRowCount": 1,
+      "selectedStoryId": "story_6a8345aeed11e98d",
+      "detailId": "story_6a8345aeed11e98d",
+      "detailType": "story",
+      "gateCount": 2,
+      "evidenceReadbackCount": 1
+    },
+    "selectedDetailRoundTrip": true,
+    "productAcceptance": false,
+    "finalMvpAcceptance": false,
+    "broadUiReactMigration": false,
+    "runtimeDataCommittedToGit": false
+  },
+  "designSystemConsumption": {
+    "adoptionPosture": "tokens_copy_state_ui_react_operations_cockpit_runtime_pilot",
+    "tokenPackage": "@tcrn/ui-tokens",
+    "copyStatePackage": "@tcrn/ui-copy-state",
+    "uiReactPackage": "@tcrn/ui-react"
+  },
+  "viewportReadbacks": [
+    {
+      "label": "desktop-1440x900",
+      "width": 1440,
+      "height": 900,
+      "title": "TCRN AOS Operations Cockpit",
+      "serviceBacked": "true",
+      "designSystemConsumer": "tokens_copy_state_ui_react_operations_cockpit_runtime_pilot",
+      "tokenPackage": "@tcrn/ui-tokens",
+      "copyStatePackage": "@tcrn/ui-copy-state",
+      "serviceStatus": "service API read 2:47:53 AM",
+      "serviceModelBadge": "1 work / 2 gates / detail story",
+      "attrs": {
+        "schema": "aos.cockpit.service_read_model.v1",
+        "source": "service_api_read",
+        "workRowCount": 1,
+        "selectedStoryId": "story_6a8345aeed11e98d",
+        "detailId": "story_6a8345aeed11e98d",
+        "detailType": "story",
+        "gateCount": 2,
+        "evidenceReadbackCount": 1,
+        "runtimeDataCommitted": "false"
+      },
+      "renderedRowCount": 1,
+      "domMatchesApi": true,
+      "rawVisibleCopyHits": [],
+      "forbiddenPositiveClaimHits": [],
+      "disabledButtonsMissingReason": [],
+      "disabledButtonsWithStaleReason": [],
+      "disabledReasonSrOnlyLeakage": [],
+      "columnsHeldVisibleText": "Columns held",
+      "columnsHeldReasonVisibleLeak": false,
+      "workIndexMobileReadability": {
+        "applies": false,
+        "ok": true,
+        "rowGridTemplateColumns": "260px 136px 132px",
+        "rowMinWidth": "0px",
+        "headDisplay": "grid",
+        "cellCount": 3,
+        "cellWhiteSpace": [
+          "nowrap",
+          "nowrap",
+          "nowrap"
+        ],
+        "cellBeforeContent": [
+          "none",
+          "none",
+          "none"
+        ]
+      },
+      "detailDrawerRuntimeReadback": {
+        "ok": true,
+        "packageRuntimeComponents": [
+          "Button",
+          "DetailDrawer",
+          "Heading",
+          "KeyValueList",
+          "StatusBadge",
+          "Surface",
+          "Text"
+        ],
+        "requiredComponents": [
+          "Button",
+          "DetailDrawer",
+          "Heading",
+          "KeyValueList",
+          "StatusBadge",
+          "Surface",
+          "Text"
+        ],
+        "missingComponents": [],
+        "selectedDetailId": "story_6a8345aeed11e98d",
+        "selectedDetailType": "story",
+        "selectedStoryId": "story_6a8345aeed11e98d",
+        "keyValueRowCount": 9,
+        "closeButtonPresent": true,
+        "closedBeforeClose": false,
+        "closedAfterClose": true,
+        "failures": []
+      },
+      "bodyLevelHorizontalOverflow": false,
+      "viewportWidth": 1440,
+      "documentScrollWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hasUnavailableCopy": true,
+      "hasHeldRouteCopy": true,
+      "screenshot": {
+        "path": "evidence/aos-design-system-consumer-slice-2-browser/33c666454ed9b5b359c08d16dbd4205bd5fd63b1/desktop-1440x900-service-read-model.png",
+        "sha256": "0068341730bee7939c9ae6e4af3de8b19e50bd6669b6a3f8c956313470348684",
+        "bytes": 277786
+      }
+    },
+    {
+      "label": "mobile-390x844",
+      "width": 390,
+      "height": 844,
+      "title": "TCRN AOS Operations Cockpit",
+      "serviceBacked": "true",
+      "designSystemConsumer": "tokens_copy_state_ui_react_operations_cockpit_runtime_pilot",
+      "tokenPackage": "@tcrn/ui-tokens",
+      "copyStatePackage": "@tcrn/ui-copy-state",
+      "serviceStatus": "service API read 2:47:53 AM",
+      "serviceModelBadge": "1 work / 2 gates / detail story",
+      "attrs": {
+        "schema": "aos.cockpit.service_read_model.v1",
+        "source": "service_api_read",
+        "workRowCount": 1,
+        "selectedStoryId": "story_6a8345aeed11e98d",
+        "detailId": "story_6a8345aeed11e98d",
+        "detailType": "story",
+        "gateCount": 2,
+        "evidenceReadbackCount": 1,
+        "runtimeDataCommitted": "false"
+      },
+      "renderedRowCount": 1,
+      "domMatchesApi": true,
+      "rawVisibleCopyHits": [],
+      "forbiddenPositiveClaimHits": [],
+      "disabledButtonsMissingReason": [],
+      "disabledButtonsWithStaleReason": [],
+      "disabledReasonSrOnlyLeakage": [],
+      "columnsHeldVisibleText": "Columns held",
+      "columnsHeldReasonVisibleLeak": false,
+      "workIndexMobileReadability": {
+        "applies": true,
+        "ok": true,
+        "rowGridTemplateColumns": "277.062px",
+        "rowMinWidth": "0px",
+        "headDisplay": "none",
+        "cellCount": 3,
+        "cellWhiteSpace": [
+          "normal",
+          "normal",
+          "normal"
+        ],
+        "cellBeforeContent": [
+          "\"Work item\"",
+          "\"State\"",
+          "\"Owner\""
+        ]
+      },
+      "detailDrawerRuntimeReadback": {
+        "ok": true,
+        "packageRuntimeComponents": [
+          "Button",
+          "DetailDrawer",
+          "Heading",
+          "KeyValueList",
+          "StatusBadge",
+          "Surface",
+          "Text"
+        ],
+        "requiredComponents": [
+          "Button",
+          "DetailDrawer",
+          "Heading",
+          "KeyValueList",
+          "StatusBadge",
+          "Surface",
+          "Text"
+        ],
+        "missingComponents": [],
+        "selectedDetailId": "story_6a8345aeed11e98d",
+        "selectedDetailType": "story",
+        "selectedStoryId": "story_6a8345aeed11e98d",
+        "keyValueRowCount": 9,
+        "closeButtonPresent": true,
+        "closedBeforeClose": false,
+        "closedAfterClose": true,
+        "failures": []
+      },
+      "bodyLevelHorizontalOverflow": false,
+      "viewportWidth": 390,
+      "documentScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "hasUnavailableCopy": true,
+      "hasHeldRouteCopy": true,
+      "screenshot": {
+        "path": "evidence/aos-design-system-consumer-slice-2-browser/33c666454ed9b5b359c08d16dbd4205bd5fd63b1/mobile-390x844-service-read-model.png",
+        "sha256": "49579a0f30b8a8b3200976b80b4f1aec210dc47350ee0d4d00470e4b6efc894a",
+        "bytes": 263263
+      }
+    }
+  ],
+  "browserHealth": {
+    "pageErrors": [],
+    "consoleErrors": [],
+    "requestFailures": []
+  },
+  "noOverclaim": {
+    "productAcceptanceReady": false,
+    "finalMvpAcceptanceReady": false,
+    "releasePublicationReady": false,
+    "batchPushGate": false,
+    "packagePublication": false,
+    "designSystemMutation": false,
+    "broadUiReactMigration": false,
+    "liveDispatch": false,
+    "ownerIntentExecution": false
+  }
+}

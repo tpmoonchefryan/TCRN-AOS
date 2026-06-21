@@ -3,12 +3,19 @@ import { renderToStaticMarkup } from "react-dom/server";
 import {
   Badge,
   Button,
+  DetailDrawer,
   Field,
   FilterBar,
+  Heading,
+  KeyValueList,
   NavItem,
   SearchInput,
+  StatusBadge,
+  Surface,
   StateView,
+  Text,
   WorkIndex,
+  type KeyValueItem,
   type WorkIndexRow
 } from "@tcrn/ui-react";
 import { aosDesignSystemConsumerBridge } from "./design-system-bridge.js";
@@ -17,7 +24,7 @@ export const aosCockpitUiReactRuntime = {
   packageName: "@tcrn/ui-react",
   packageSpecifier: aosDesignSystemConsumerBridge.uiReactPackageSpecifier,
   designSystemSourceHead: aosDesignSystemConsumerBridge.designSystemSourceHead,
-  implementationKind: "operations_cockpit_work_index_package_runtime_expansion",
+  implementationKind: "operations_cockpit_selected_detail_package_runtime_expansion",
   componentScope: [
     "NavItem",
     "WorkIndex",
@@ -27,7 +34,13 @@ export const aosCockpitUiReactRuntime = {
     "FilterBar",
     "Button",
     "Badge",
-    "StateView"
+    "StateView",
+    "DetailDrawer",
+    "KeyValueList",
+    "Surface",
+    "Heading",
+    "Text",
+    "StatusBadge"
   ],
   packageBackedReactRuntimeRendering: true,
   broadUiReactMigration: false,
@@ -62,6 +75,29 @@ export interface CockpitRuntimeWorkIndexOptions {
 export interface CockpitRuntimeWorkIndexFilter {
   label: string;
   tone?: ComponentProps<typeof Badge>["tone"];
+}
+
+export interface CockpitRuntimeDetailDrawerOptions {
+  blockedActionLabel: string;
+  closeLabel: string;
+  detailRows: readonly CockpitRuntimeDetailRow[];
+  noOverclaimSummary: string;
+  operatingLoopSummary: string;
+  primaryActionDisabledReason: string;
+  primaryActionLabel: string;
+  secondaryActionDisabledReason: string;
+  secondaryActionLabel: string;
+  selectedId: string;
+  selectedTypeLabel: string;
+  selectedType: string;
+  statusLabel: string;
+  title: string;
+}
+
+export interface CockpitRuntimeDetailRow {
+  key: string;
+  label: string;
+  value: string;
 }
 
 type RuntimeNavItemProps = ComponentProps<typeof NavItem> & {
@@ -172,6 +208,86 @@ export function renderCockpitRuntimeWorkIndexCluster(options: CockpitRuntimeWork
   return addAosWorkIndexRuntimeAttributes(renderToStaticMarkup(tree), options.rows);
 }
 
+export function renderCockpitRuntimeDetailDrawer(options: CockpitRuntimeDetailDrawerOptions): string {
+  const detailItems: KeyValueItem[] = options.detailRows.map((row) => ({
+    key: row.key,
+    label: row.label,
+    value: row.value
+  }));
+  const detailChildren = [
+    createElement("div", { className: "drawer-head", key: "drawer-head" },
+      createElement(StatusBadge, {
+        "data-tcrn-component": "StatusBadge",
+        "data-package-runtime-component": "StatusBadge",
+        "data-package-runtime-source": "@tcrn/ui-react",
+        state: { state: "local_only", label: options.selectedTypeLabel }
+      } as ComponentProps<typeof StatusBadge> & RuntimeDataProps),
+      createElement(Button, {
+        "aria-label": options.closeLabel,
+        "data-close-detail": true,
+        "data-tcrn-component": "Button",
+        "data-package-runtime-component": "Button",
+        "data-package-runtime-source": "@tcrn/ui-react",
+        type: "button",
+        variant: "quiet"
+      } as ComponentProps<typeof Button> & RuntimeDataProps, options.closeLabel)
+    ),
+    createElement(KeyValueList, { items: detailItems, key: "detail-list" }),
+    createElement(Surface, {
+      "aria-label": "Selected work readback",
+      className: "loop-card",
+      "data-region": "conference-operating-loop",
+      "data-tcrn-component": "Surface",
+      "data-package-runtime-component": "Surface",
+      "data-package-runtime-source": "@tcrn/ui-react",
+      key: "selected-readback"
+    } as ComponentProps<typeof Surface> & RuntimeDataProps & { key: string },
+      createElement(Heading, {
+        "data-tcrn-component": "Heading",
+        "data-package-runtime-component": "Heading",
+        "data-package-runtime-source": "@tcrn/ui-react",
+        level: 3
+      } as ComponentProps<typeof Heading> & RuntimeDataProps, "Selected Detail Readback"),
+      createElement(Text, {
+        "data-tcrn-component": "Text",
+        "data-package-runtime-component": "Text",
+        "data-package-runtime-source": "@tcrn/ui-react"
+      } as ComponentProps<typeof Text> & RuntimeDataProps, options.operatingLoopSummary),
+      createElement(Text, {
+        "data-tcrn-component": "Text",
+        "data-package-runtime-component": "Text",
+        "data-package-runtime-source": "@tcrn/ui-react"
+      } as ComponentProps<typeof Text> & RuntimeDataProps, options.noOverclaimSummary)
+    ),
+    createElement(Button, {
+      disabled: true,
+      disabledReason: options.primaryActionDisabledReason,
+      "data-tcrn-component": "Button",
+      "data-package-runtime-component": "Button",
+      "data-package-runtime-source": "@tcrn/ui-react",
+      type: "button",
+      variant: "primary",
+      key: "primary-action"
+    } as ComponentProps<typeof Button> & RuntimeDataProps & { key: string }, options.primaryActionLabel),
+    createElement(Button, {
+      disabled: true,
+      disabledReason: options.secondaryActionDisabledReason,
+      "data-tcrn-component": "Button",
+      "data-package-runtime-component": "Button",
+      "data-package-runtime-source": "@tcrn/ui-react",
+      type: "button",
+      variant: "secondary",
+      key: "secondary-action"
+    } as ComponentProps<typeof Button> & RuntimeDataProps & { key: string }, options.secondaryActionLabel)
+  ];
+  const tree = createElement(DetailDrawer, {
+    children: detailChildren,
+    title: options.title,
+    open: true
+  } as ComponentProps<typeof DetailDrawer>);
+  return addAosDetailDrawerRuntimeAttributes(renderToStaticMarkup(tree), options);
+}
+
 function addAosWorkIndexRuntimeAttributes(html: string, rows: readonly CockpitRuntimeWorkIndexRow[]): string {
   let rowIndex = 0;
   return html
@@ -205,6 +321,22 @@ function addAosWorkIndexRuntimeAttributes(html: string, rows: readonly CockpitRu
       if (!row) return _match;
       return `<button class="table-row work-row tcrn-table-shell__row${row.active ? " active" : ""}" data-tcrn-component="TableShell" data-package-runtime-component="TableShell" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-work-index" data-work-row data-row-id="${escapeAttribute(row.storyId)}" data-title="${escapeAttribute(row.title)}" data-search="${escapeAttribute(row.searchText)}" data-evidence="${escapeAttribute(row.evidenceLabel)}" data-gate="${escapeAttribute(row.gateLabel)}" type="button" role="row">${cells}</button>`;
     });
+}
+
+function addAosDetailDrawerRuntimeAttributes(html: string, options: CockpitRuntimeDetailDrawerOptions): string {
+  return html
+    .replace(
+      /<aside class="tcrn-detail-drawer"/,
+      `<aside class="detail-drawer tcrn-detail-drawer" data-region="detail-drawer" data-slice5="work-index-drill-through" data-tcrn-component="DetailDrawer" data-package-runtime-component="DetailDrawer" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-detail-drawer" data-service-detail-id="${escapeAttribute(options.selectedId)}" data-service-detail-type="${escapeAttribute(options.selectedType)}" data-selected-story-id="${escapeAttribute(options.selectedId)}"`
+    )
+    .replace(
+      /<h3 id="([^"]+)" class="tcrn-heading tcrn-heading--3">/,
+      '<h3 id="$1" class="tcrn-heading tcrn-heading--3" data-drawer-title data-tcrn-component="Heading" data-package-runtime-component="Heading" data-package-runtime-source="@tcrn/ui-react">'
+    )
+    .replace(
+      /<dl class="tcrn-key-value-list">/,
+      '<dl class="detail-list tcrn-key-value-list" data-detail-list data-tcrn-component="KeyValueList" data-package-runtime-component="KeyValueList" data-package-runtime-source="@tcrn/ui-react">'
+    );
 }
 
 function escapeAttribute(value: string): string {

@@ -93,6 +93,13 @@ try {
         && shell?.getAttribute("data-service-read-model-source") === "service_api_read"
         && status?.textContent?.includes("service API read");
     }, apiPayload.serviceReadModel.schemaVersion, { timeout: 5000 });
+    await page.click("[data-work-row]");
+    await page.waitForFunction((expectedDom) => {
+      const drawer = document.querySelector("[data-region='detail-drawer']");
+      return drawer?.getAttribute("data-service-detail-id") === expectedDom.selectedStoryId
+        && drawer?.getAttribute("data-service-detail-type") === expectedDom.detailType
+        && !drawer?.classList.contains("closed");
+    }, apiContract.expectedDom, { timeout: 5000 });
     const screenshotPath = join(evidenceDir, `${viewport.label}-service-read-model.png`);
     await page.screenshot({ path: screenshotPath, fullPage: true });
     const screenshotBody = await readFile(screenshotPath);
@@ -186,6 +193,62 @@ try {
         evidenceReadbackCount: Number(shell?.getAttribute("data-service-evidence-readback-count") ?? "0"),
         runtimeDataCommitted: shell?.getAttribute("data-service-runtime-data-committed") ?? ""
       };
+      const detailDrawer = document.querySelector("[data-region='detail-drawer']");
+      const detailDrawerHtml = detailDrawer?.outerHTML ?? "";
+      const detailPackageComponents = Array.from(new Set(
+        Array.from(detailDrawer?.querySelectorAll("[data-package-runtime-component]") ?? [])
+          .map((node) => node.getAttribute("data-package-runtime-component"))
+          .filter(Boolean)
+      )).sort();
+      const detailRequiredComponents = [
+        "Button",
+        "DetailDrawer",
+        "Heading",
+        "KeyValueList",
+        "StatusBadge",
+        "Surface",
+        "Text"
+      ];
+      if (detailDrawer?.getAttribute("data-package-runtime-component")) {
+        detailPackageComponents.push(detailDrawer.getAttribute("data-package-runtime-component"));
+      }
+      const normalizedDetailComponents = Array.from(new Set(detailPackageComponents)).sort();
+      const detailFailures = [];
+      const missingDetailComponents = detailRequiredComponents.filter((component) => !normalizedDetailComponents.includes(component));
+      if (!detailDrawer) detailFailures.push("detail_drawer_missing");
+      if (detailDrawer?.getAttribute("data-package-runtime-component") !== "DetailDrawer") detailFailures.push("detail_drawer_missing_runtime_marker");
+      if (detailDrawer?.getAttribute("data-package-runtime-source") !== "@tcrn/ui-react") detailFailures.push("detail_drawer_missing_package_source");
+      if (detailDrawer?.getAttribute("data-package-runtime-surface") !== "operations-cockpit-detail-drawer") detailFailures.push("detail_drawer_missing_runtime_surface");
+      if (detailDrawer?.getAttribute("data-service-detail-id") !== expected.selectedStoryId) detailFailures.push("detail_drawer_selected_story_mismatch");
+      if (detailDrawer?.getAttribute("data-service-detail-type") !== expected.detailType) detailFailures.push("detail_drawer_detail_type_mismatch");
+      if (missingDetailComponents.length > 0) detailFailures.push("detail_drawer_required_package_components_missing");
+      if (!detailDrawer?.querySelector("[data-detail-list]")) detailFailures.push("detail_drawer_key_value_list_missing");
+      if (!detailDrawer?.querySelector("[data-drawer-title]")) detailFailures.push("detail_drawer_title_missing");
+      if ((detailDrawer?.querySelectorAll("dt").length ?? 0) < 8) detailFailures.push("detail_drawer_key_value_rows_missing");
+      if (!detailDrawerHtml.includes("Functional contract readback only; no visual, release, product, dependency-clean, or live-dispatch acceptance.")) {
+        detailFailures.push("detail_drawer_no_overclaim_copy_missing");
+      }
+      const closeButton = detailDrawer?.querySelector("[data-close-detail]");
+      const detailClosedBeforeClose = detailDrawer?.classList.contains("closed") ?? true;
+      closeButton?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      const detailClosedAfterClose = detailDrawer?.classList.contains("closed") ?? false;
+      if (!closeButton) detailFailures.push("detail_drawer_close_button_missing");
+      if (detailClosedBeforeClose) detailFailures.push("detail_drawer_unexpectedly_closed_after_row_click");
+      if (!detailClosedAfterClose) detailFailures.push("detail_drawer_close_button_did_not_close");
+      const detailDrawerRuntimeReadback = {
+        ok: detailFailures.length === 0,
+        packageRuntimeComponents: normalizedDetailComponents,
+        requiredComponents: detailRequiredComponents,
+        missingComponents: missingDetailComponents,
+        selectedDetailId: detailDrawer?.getAttribute("data-service-detail-id") ?? "",
+        selectedDetailType: detailDrawer?.getAttribute("data-service-detail-type") ?? "",
+        selectedStoryId: detailDrawer?.getAttribute("data-selected-story-id") ?? "",
+        keyValueRowCount: detailDrawer?.querySelectorAll("dt").length ?? 0,
+        closeButtonPresent: closeButton !== null,
+        closedBeforeClose: detailClosedBeforeClose,
+        closedAfterClose: detailClosedAfterClose,
+        failures: detailFailures
+      };
       const renderedRowCount = document.querySelectorAll("[data-work-row]").length;
       const domMatchesApi = attrs.schema === expected.schemaVersion
         && attrs.source === "service_api_read"
@@ -216,6 +279,7 @@ try {
         columnsHeldVisibleText,
         columnsHeldReasonVisibleLeak,
         workIndexMobileReadability,
+        detailDrawerRuntimeReadback,
         bodyLevelHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth || document.body.scrollWidth > window.innerWidth,
         viewportWidth: window.innerWidth,
         documentScrollWidth: document.documentElement.scrollWidth,
@@ -254,6 +318,7 @@ try {
     && viewportReadbacks.every((readback) => readback.disabledReasonSrOnlyLeakage.length === 0)
     && viewportReadbacks.every((readback) => readback.columnsHeldReasonVisibleLeak === false)
     && viewportReadbacks.every((readback) => !readback.workIndexMobileReadability.applies || readback.workIndexMobileReadability.ok)
+    && viewportReadbacks.every((readback) => readback.detailDrawerRuntimeReadback.ok)
     && viewportReadbacks.every((readback) => readback.bodyLevelHorizontalOverflow === false)
     && viewportReadbacks.every((readback) => readback.hasUnavailableCopy)
     && viewportReadbacks.every((readback) => readback.hasHeldRouteCopy)
@@ -324,6 +389,7 @@ try {
     disabledReasonSrOnlyLeakage: viewportReadbacks.flatMap((readback) => readback.disabledReasonSrOnlyLeakage),
     columnsHeldReasonVisibleLeakCount: viewportReadbacks.filter((readback) => readback.columnsHeldReasonVisibleLeak).length,
     mobileWorkIndexReadabilityFailures: viewportReadbacks.filter((readback) => readback.workIndexMobileReadability.applies && !readback.workIndexMobileReadability.ok).length,
+    detailDrawerRuntimeFailures: viewportReadbacks.flatMap((readback) => readback.detailDrawerRuntimeReadback.failures),
     bodyLevelHorizontalOverflowCount: viewportReadbacks.filter((readback) => readback.bodyLevelHorizontalOverflow).length,
     pageErrorCount: pageErrors.length,
     consoleErrorCount: consoleErrors.length,
@@ -384,7 +450,7 @@ function summarizeApiContract(apiPayload, selectedPayload) {
 
 function markdownReceipt(summary) {
   const screenshotRows = summary.viewportReadbacks
-    .map((readback) => `| ${readback.label} | \`${readback.screenshot.path}\` | \`${readback.screenshot.sha256}\` | ${readback.domMatchesApi ? "yes" : "no"} | ${readback.rawVisibleCopyHits.length} | ${readback.forbiddenPositiveClaimHits.length} | ${readback.disabledButtonsMissingReason.length} | ${readback.disabledButtonsWithStaleReason.length} | ${readback.bodyLevelHorizontalOverflow ? "yes" : "no"} |`)
+    .map((readback) => `| ${readback.label} | \`${readback.screenshot.path}\` | \`${readback.screenshot.sha256}\` | ${readback.domMatchesApi ? "yes" : "no"} | ${readback.detailDrawerRuntimeReadback.ok ? "yes" : "no"} | ${readback.rawVisibleCopyHits.length} | ${readback.forbiddenPositiveClaimHits.length} | ${readback.disabledButtonsMissingReason.length} | ${readback.disabledButtonsWithStaleReason.length} | ${readback.bodyLevelHorizontalOverflow ? "yes" : "no"} |`)
     .join("\n");
   return `# AOS Design System Consumer Slice 2 Service Read-Model Proof
 
@@ -416,8 +482,8 @@ Design System source basis: \`${summary.designSystemSourceHead}\`
 
 ## Browser Evidence
 
-| Viewport | Screenshot | SHA-256 | DOM matches API | Raw visible copy hits | Forbidden claim hits | Disabled controls missing reason | Stale disabled reason hits | Body overflow |
-| --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
+| Viewport | Screenshot | SHA-256 | DOM matches API | Detail drawer runtime ok | Raw visible copy hits | Forbidden claim hits | Disabled controls missing reason | Stale disabled reason hits | Body overflow |
+| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
 ${screenshotRows}
 
 ## No-Overclaim Boundaries
