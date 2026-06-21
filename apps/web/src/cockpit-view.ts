@@ -739,7 +739,7 @@ function navButton(label: string, active: boolean): string {
   if (active) {
     return `<button class="nav-row active" type="button"><span class="nav-label">${escapeHtml(label)}</span></button>`;
   }
-  const reason = `${label} view is held for a later routed AOS slice; this Slice 1 checkpoint keeps Cockpit available only.`;
+  const reason = `${label} view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only.`;
   const reasonId = `nav-reason-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
   return `<button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="${reasonId}" title="${escapeHtml(reason)}" data-disabled-reason="${escapeHtml(reason)}"><span class="nav-label">${escapeHtml(label)}</span><span class="nav-unavailable-reason" id="${reasonId}">Held for later route</span></button>`;
 }

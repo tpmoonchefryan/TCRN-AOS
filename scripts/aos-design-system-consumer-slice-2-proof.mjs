@@ -36,6 +36,11 @@ const forbiddenPositiveClaims = [
   "live dispatch enabled",
   "resource materialized"
 ];
+const staleDisabledReasonPatterns = [
+  "slice 1 checkpoint",
+  "slice 1-only",
+  "slice one checkpoint"
+];
 
 await mkdir(evidenceDir, { recursive: true });
 
@@ -91,7 +96,7 @@ try {
     const screenshotPath = join(evidenceDir, `${viewport.label}-service-read-model.png`);
     await page.screenshot({ path: screenshotPath, fullPage: true });
     const screenshotBody = await readFile(screenshotPath);
-    const readback = await page.evaluate(({ rawVisibleForbidden, forbiddenPositiveClaims, expected }) => {
+    const readback = await page.evaluate(({ rawVisibleForbidden, forbiddenPositiveClaims, staleDisabledReasonPatterns, expected }) => {
       const shell = document.querySelector("[data-surface='operations-cockpit']");
       const text = document.body.innerText;
       const lower = text.toLowerCase();
@@ -114,6 +119,10 @@ try {
         };
       });
       const disabledButtonsMissingReason = disabledButtons.filter((button) => !button.reason);
+      const disabledButtonsWithStaleReason = disabledButtons.filter((button) => {
+        const reason = `${button.reason} ${button.text}`.toLowerCase();
+        return staleDisabledReasonPatterns.some((phrase) => reason.includes(phrase));
+      });
       const attrs = {
         schema: shell?.getAttribute("data-service-model-schema") ?? "",
         source: shell?.getAttribute("data-service-read-model-source") ?? "",
@@ -150,6 +159,7 @@ try {
         rawVisibleCopyHits: rawVisibleForbidden.filter((phrase) => text.includes(phrase)),
         forbiddenPositiveClaimHits: forbiddenPositiveClaims.filter((phrase) => lower.includes(phrase)),
         disabledButtonsMissingReason,
+        disabledButtonsWithStaleReason,
         bodyLevelHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth || document.body.scrollWidth > window.innerWidth,
         viewportWidth: window.innerWidth,
         documentScrollWidth: document.documentElement.scrollWidth,
@@ -157,7 +167,7 @@ try {
         hasUnavailableCopy: text.includes("Unavailable: live dispatch"),
         hasHeldRouteCopy: text.includes("Held for later route")
       };
-    }, { rawVisibleForbidden, forbiddenPositiveClaims, expected: apiContract.expectedDom });
+    }, { rawVisibleForbidden, forbiddenPositiveClaims, staleDisabledReasonPatterns, expected: apiContract.expectedDom });
     viewportReadbacks.push({
       ...viewport,
       ...readback,
@@ -182,6 +192,7 @@ try {
     && viewportReadbacks.every((readback) => readback.rawVisibleCopyHits.length === 0)
     && viewportReadbacks.every((readback) => readback.forbiddenPositiveClaimHits.length === 0)
     && viewportReadbacks.every((readback) => readback.disabledButtonsMissingReason.length === 0)
+    && viewportReadbacks.every((readback) => readback.disabledButtonsWithStaleReason.length === 0)
     && viewportReadbacks.every((readback) => readback.bodyLevelHorizontalOverflow === false)
     && viewportReadbacks.every((readback) => readback.hasUnavailableCopy)
     && viewportReadbacks.every((readback) => readback.hasHeldRouteCopy)
@@ -248,6 +259,7 @@ try {
     rawVisibleCopyHits: viewportReadbacks.flatMap((readback) => readback.rawVisibleCopyHits),
     forbiddenPositiveClaimHits: viewportReadbacks.flatMap((readback) => readback.forbiddenPositiveClaimHits),
     disabledButtonsMissingReason: viewportReadbacks.flatMap((readback) => readback.disabledButtonsMissingReason),
+    disabledButtonsWithStaleReason: viewportReadbacks.flatMap((readback) => readback.disabledButtonsWithStaleReason),
     bodyLevelHorizontalOverflowCount: viewportReadbacks.filter((readback) => readback.bodyLevelHorizontalOverflow).length,
     pageErrorCount: pageErrors.length,
     consoleErrorCount: consoleErrors.length,
@@ -308,7 +320,7 @@ function summarizeApiContract(apiPayload, selectedPayload) {
 
 function markdownReceipt(summary) {
   const screenshotRows = summary.viewportReadbacks
-    .map((readback) => `| ${readback.label} | \`${readback.screenshot.path}\` | \`${readback.screenshot.sha256}\` | ${readback.domMatchesApi ? "yes" : "no"} | ${readback.rawVisibleCopyHits.length} | ${readback.forbiddenPositiveClaimHits.length} | ${readback.disabledButtonsMissingReason.length} | ${readback.bodyLevelHorizontalOverflow ? "yes" : "no"} |`)
+    .map((readback) => `| ${readback.label} | \`${readback.screenshot.path}\` | \`${readback.screenshot.sha256}\` | ${readback.domMatchesApi ? "yes" : "no"} | ${readback.rawVisibleCopyHits.length} | ${readback.forbiddenPositiveClaimHits.length} | ${readback.disabledButtonsMissingReason.length} | ${readback.disabledButtonsWithStaleReason.length} | ${readback.bodyLevelHorizontalOverflow ? "yes" : "no"} |`)
     .join("\n");
   return `# AOS Design System Consumer Slice 2 Service Read-Model Proof
 
@@ -340,8 +352,8 @@ Design System source basis: \`${summary.designSystemSourceHead}\`
 
 ## Browser Evidence
 
-| Viewport | Screenshot | SHA-256 | DOM matches API | Raw visible copy hits | Forbidden claim hits | Disabled controls missing reason | Body overflow |
-| --- | --- | --- | --- | ---: | ---: | ---: | --- |
+| Viewport | Screenshot | SHA-256 | DOM matches API | Raw visible copy hits | Forbidden claim hits | Disabled controls missing reason | Stale disabled reason hits | Body overflow |
+| --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
 ${screenshotRows}
 
 ## No-Overclaim Boundaries

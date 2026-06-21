@@ -89,6 +89,8 @@ test("disabled cockpit navigation exposes held reasons visibly and accessibly", 
     assert.ok(hasReason, `disabled button exposes a held reason: ${attributes}`);
   }
   assert.match(html, /Dashboard view is held for a later routed AOS slice/);
+  assert.match(html, /this service read-model checkpoint keeps Cockpit available only/);
+  assert.doesNotMatch(html, /Slice 1 checkpoint/);
   assert.match(html, /aria-describedby="nav-reason-dashboard"/);
   assert.match(html, /Held for later route/);
 });
