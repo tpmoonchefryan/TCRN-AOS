@@ -67,10 +67,12 @@ const designSystemBridgeOk = html.includes('data-design-system-consumer="tokens_
   && html.includes('data-design-system-ui-react="@tcrn/ui-react"')
   && html.includes('data-package-backed-react-runtime-rendering="true"')
   && html.includes('data-package-runtime-scope="operations-cockpit-navitem"')
+  && html.includes('data-package-runtime-surface="operations-cockpit-work-index"')
+  && html.includes('data-package-runtime-component="WorkIndex"')
   && html.includes("--tcrn-color-brand-primary")
   && aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering === true
-  && aosDesignSystemConsumerBridge.uiReactRuntimeSurface === "operations_cockpit_navitem_sidebar"
+  && aosDesignSystemConsumerBridge.uiReactRuntimeSurface === "operations_cockpit_navitem_sidebar_work_index_cluster"
   && Boolean(aosDesignSystemTokenReadback.brandPrimary);
 const ok = aggregateDigest === slice4bBaselineDigest
   && selectorProof.every((item) => item.present)

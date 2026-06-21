@@ -112,8 +112,8 @@ const summary = {
   registrySource: relative(repoRoot, designSystemRegistrySourcePath),
   designSystemBasis,
   claimScope: {
-    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_navitem_package_runtime",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_only",
+    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_work_index_package_runtime",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_and_work_index_cluster",
     storybookVisualStyleParity: "not_claimed_by_registered_component_proof",
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -381,21 +381,62 @@ function inspectPackageRuntimeReadback(surface) {
   const markerOnlyNavItems = navItems.filter((item) => item.parsed["data-package-runtime-component"] !== "NavItem");
   const disabledPackageRuntimeNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-disabled"] === "true");
   const activePackageRuntimeNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-current"] === "page");
+  const workIndexCluster = extractWorkIndexClusterHtml(surface.html);
+  const workIndexPackageRuntimeComponents = Array.from(new Set(
+    Array.from(workIndexCluster.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredWorkIndexComponents = [
+    "Badge",
+    "Button",
+    "Field",
+    "FilterBar",
+    "Input",
+    "SearchInput",
+    "StateView",
+    "TableShell",
+    "WorkIndex"
+  ];
+  const missingWorkIndexComponents = requiredWorkIndexComponents.filter((component) => !workIndexPackageRuntimeComponents.includes(component));
+  const workIndexRows = Array.from(workIndexCluster.matchAll(/<button\b(?=[^>]*data-work-row)([^>]*)>/g))
+    .map((match) => ({ parsed: parseAttributes(match[1]) }));
+  const workIndexRowFailures = workIndexRows.filter((row) => row.parsed["data-package-runtime-component"] !== "TableShell"
+    || row.parsed["data-package-runtime-source"] !== "@tcrn/ui-react"
+    || row.parsed["data-package-runtime-surface"] !== "operations-cockpit-work-index"
+    || !row.parsed["data-row-id"]?.trim());
   return {
     ok: packageRuntimeNavItems.length === 10
       && markerOnlyNavItems.length === 0
       && disabledPackageRuntimeNavItems.length === 9
       && activePackageRuntimeNavItems.length === 1
+      && workIndexCluster.includes('data-package-runtime-component="WorkIndex"')
+      && missingWorkIndexComponents.length === 0
+      && workIndexRows.length > 0
+      && workIndexRowFailures.length === 0
       && surface.html.includes('data-package-backed-react-runtime-rendering="true"'),
     surface: surface.id,
-    packageRuntimeComponent: "NavItem",
+    packageRuntimeComponent: "NavItem+WorkIndex",
     packageRuntimeSource: "@tcrn/ui-react",
     packageRuntimeNavItemCount: packageRuntimeNavItems.length,
     markerOnlyNavItemCount: markerOnlyNavItems.length,
     disabledPackageRuntimeNavItemCount: disabledPackageRuntimeNavItems.length,
     activePackageRuntimeNavItemCount: activePackageRuntimeNavItems.length,
+    workIndexRuntimeSurface: "operations-cockpit-work-index",
+    workIndexPackageRuntimeComponents,
+    missingWorkIndexComponents,
+    packageRuntimeWorkRowCount: workIndexRows.length,
+    workIndexRowFailureCount: workIndexRowFailures.length,
     packageBackedReactRuntimeShellMarkerPresent: surface.html.includes('data-package-backed-react-runtime-rendering="true"')
   };
+}
+
+function extractWorkIndexClusterHtml(html) {
+  const marker = 'data-region="work-index"';
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<section", markerIndex);
+  const end = html.indexOf('<aside class="detail-drawer', markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end);
 }
 
 function escapeRegExp(value) {

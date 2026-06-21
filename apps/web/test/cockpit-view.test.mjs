@@ -69,7 +69,7 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.equal(aosDesignSystemConsumerBridge.tokenPackage, "@tcrn/ui-tokens");
   assert.equal(aosDesignSystemConsumerBridge.copyStatePackage, "@tcrn/ui-copy-state");
   assert.equal(aosDesignSystemConsumerBridge.uiReactPackage, "@tcrn/ui-react");
-  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_navitem_sidebar");
+  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_navitem_sidebar_work_index_cluster");
   assert.equal(aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering, true);
   assert.equal(aosDesignSystemConsumerBridge.designSystemSourceHead, "b0c00828a813d3c62392eb6e53d7d6b85b6affeb");
   assert.equal(copyAosState("external_proof_required"), "External proof required");
@@ -81,8 +81,34 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.match(html, /data-design-system-copy-state="@tcrn\/ui-copy-state"/);
   assert.match(html, /data-design-system-ui-react="@tcrn\/ui-react"/);
   assert.match(html, /data-package-backed-react-runtime-rendering="true"/);
-  assert.match(html, /data-package-runtime-component-scope="NavItem"/);
+  assert.match(html, /data-package-runtime-component-scope="NavItem,WorkIndex,TableShell,SearchInput,Field,FilterBar,Button,Badge,StateView"/);
+  assert.match(html, /data-package-runtime-component="WorkIndex"/);
+  assert.match(html, /data-package-runtime-component="SearchInput"/);
+  assert.match(html, /data-package-runtime-component="TableShell"/);
+  assert.match(html, /data-package-runtime-surface="operations-cockpit-work-index"/);
   assert.match(html, /--tcrn-color-brand-primary/);
+});
+
+test("Operations Cockpit Work Index renders package-backed runtime controls", () => {
+  const html = renderOperationsCockpitHtml();
+  const workIndexStart = html.indexOf('data-region="work-index"');
+  const workIndexEnd = html.indexOf('<aside class="detail-drawer', workIndexStart);
+  const workIndexHtml = html.slice(workIndexStart, workIndexEnd);
+
+  assert.ok(workIndexStart > 0, "work index region is present");
+  assert.match(workIndexHtml, /data-package-runtime-component="WorkIndex"/);
+  assert.match(workIndexHtml, /data-package-runtime-component="Field"/);
+  assert.match(workIndexHtml, /data-package-runtime-component="SearchInput"/);
+  assert.match(workIndexHtml, /data-package-runtime-component="Input"/);
+  assert.match(workIndexHtml, /data-package-runtime-component="FilterBar"/);
+  assert.match(workIndexHtml, /data-package-runtime-component="Button"/);
+  assert.match(workIndexHtml, /data-package-runtime-component="Badge"/);
+  assert.match(workIndexHtml, /data-package-runtime-component="TableShell"/);
+  assert.match(workIndexHtml, /data-package-runtime-component="StateView"/);
+  assert.match(workIndexHtml, /data-work-table/);
+  assert.match(workIndexHtml, /data-work-row/);
+  assert.match(workIndexHtml, /aria-label="Service-backed Work Index"/);
+  assert.match(workIndexHtml, /Filter service-backed rows/);
 });
 
 test("disabled cockpit navigation exposes held reasons visibly and accessibly", () => {

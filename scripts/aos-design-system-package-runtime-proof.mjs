@@ -4,7 +4,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import {
   aosCockpitUiReactRuntime,
-  renderCockpitRuntimeNavItems
+  renderCockpitRuntimeNavItems,
+  renderCockpitRuntimeWorkIndexCluster
 } from "../dist/apps/web/src/cockpit-ui-react-runtime.js";
 import {
   aosDesignSystemConsumerBridge
@@ -14,13 +15,14 @@ import {
 } from "../dist/apps/web/src/cockpit-view.js";
 
 const repoRoot = process.cwd();
-const route = "route_tcrn_aos_design_system_frontend_rebuild_59an_operations_cockpit_package_runtime_implementation";
+const route = "route_tcrn_aos_design_system_frontend_rebuild_59ao_operations_cockpit_work_index_package_runtime_implementation";
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const packageJson = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8"));
 const runtimeSourcePath = "apps/web/src/cockpit-ui-react-runtime.ts";
 const runtimeSource = readFileSync(join(repoRoot, runtimeSourcePath), "utf8");
 const cockpitHtml = renderOperationsCockpitHtml();
 const navRuntimeReadback = inspectPackageRuntimeNavItems(cockpitHtml);
+const workIndexRuntimeReadback = inspectPackageRuntimeWorkIndexCluster(cockpitHtml);
 const importReadback = inspectImports();
 const dependencyReadback = inspectDependencies();
 const storybookReferenceReadback = inspectStorybookReference();
@@ -34,6 +36,7 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && dependencyReadback.ok
   && importReadback.ok
   && navRuntimeReadback.ok
+  && workIndexRuntimeReadback.ok
   && storybookReferenceReadback.ok
   && noOverclaimReadback.ok;
 
@@ -42,9 +45,9 @@ const summary = {
   route,
   sourceHead,
   claimScope: {
-    implementationKind: "operations_cockpit_navitem_package_runtime_pilot",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_only",
-    storybookVisualStyleParity: "navitem_disabled_reason_storybook_reference_only",
+    implementationKind: "operations_cockpit_work_index_package_runtime_expansion",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_and_work_index_cluster",
+    storybookVisualStyleParity: "navitem_disabled_reason_and_work_index_component_reference_only",
     broadUiReactRuntimeMigration: false,
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -62,6 +65,7 @@ const summary = {
   dependencyReadback,
   importReadback,
   navRuntimeReadback,
+  workIndexRuntimeReadback,
   storybookReferenceReadback,
   noOverclaimReadback
 };
@@ -76,7 +80,10 @@ console.log(JSON.stringify({
   implementationKind: summary.claimScope.implementationKind,
   runtimeComponents: summary.navRuntimeReadback.packageRuntimeComponents,
   packageRuntimeNavItemCount: summary.navRuntimeReadback.packageRuntimeNavItemCount,
+  packageRuntimeWorkIndexComponentCount: summary.workIndexRuntimeReadback.packageRuntimeComponents.length,
+  packageRuntimeWorkRowCount: summary.workIndexRuntimeReadback.packageRuntimeWorkRowCount,
   disabledNavItemFailureCount: summary.navRuntimeReadback.disabledNavItemFailures.length,
+  workIndexFailureCount: summary.workIndexRuntimeReadback.failures.length,
   markerOnlyNavItemCount: summary.navRuntimeReadback.markerOnlyNavItemCount,
   deepImportHits: summary.importReadback.deepImportHits,
   storybookReferenceOk: summary.storybookReferenceReadback.ok,
@@ -110,6 +117,19 @@ function inspectDependencies() {
 function inspectImports() {
   const packageImportPresent = /from\s+["']@tcrn\/ui-react["']/.test(runtimeSource);
   const reactServerRenderingPresent = /from\s+["']react-dom\/server["']/.test(runtimeSource);
+  const requiredPublicComponentImports = [
+    "NavItem",
+    "WorkIndex",
+    "SearchInput",
+    "Field",
+    "FilterBar",
+    "Button",
+    "Badge",
+    "StateView"
+  ];
+  const publicComponentImportPresence = Object.fromEntries(
+    requiredPublicComponentImports.map((name) => [name, new RegExp(`\\b${name}\\b`).test(runtimeSource)])
+  );
   const deepImportHits = runRg([
     "-n",
     "from\\s+[\"']@tcrn/ui-react/|TCRN-Design-System/packages/ui-react/src|TCRN-Design-System/packages/ui-react/dist",
@@ -121,16 +141,21 @@ function inspectImports() {
   ]);
   const copiedSourceHits = runRg([
     "-n",
-    "function\\s+NavItem|const\\s+NavItem|export\\s+function\\s+NavItem",
+    "function\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView)|const\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView)|export\\s+function\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView)",
     "apps/web/src",
     "apps/web/test",
     "scripts"
   ]).filter((line) => !line.includes(runtimeSourcePath));
   return {
-    ok: packageImportPresent && reactServerRenderingPresent && deepImportHits.length === 0 && copiedSourceHits.length === 0,
+    ok: packageImportPresent
+      && reactServerRenderingPresent
+      && Object.values(publicComponentImportPresence).every(Boolean)
+      && deepImportHits.length === 0
+      && copiedSourceHits.length === 0,
     runtimeSourcePath,
     packageImportPresent,
     reactServerRenderingPresent,
+    publicComponentImportPresence,
     deepImportHits,
     copiedSourceHits
   };
@@ -192,6 +217,113 @@ function inspectPackageRuntimeNavItems(html) {
       }
     ])).digest("hex")
   };
+}
+
+function inspectPackageRuntimeWorkIndexCluster(html) {
+  const clusterHtml = extractWorkIndexClusterHtml(html);
+  const failures = [];
+  if (!clusterHtml) {
+    return {
+      ok: false,
+      present: false,
+      packageRuntimeComponents: [],
+      packageRuntimeWorkRowCount: 0,
+      failures: ["work_index_cluster_missing"]
+    };
+  }
+
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(clusterHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "Badge",
+    "Button",
+    "Field",
+    "FilterBar",
+    "Input",
+    "SearchInput",
+    "StateView",
+    "TableShell",
+    "WorkIndex"
+  ];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  if (missingComponents.length > 0) failures.push("work_index_required_package_components_missing");
+
+  const workRows = Array.from(clusterHtml.matchAll(/<button\b(?=[^>]*data-work-row)([^>]*)>([\s\S]*?)<\/button>/g))
+    .map((match) => ({ attributes: match[1], body: match[2], parsed: parseAttributes(match[1]) }));
+  if (workRows.length === 0) failures.push("package_runtime_work_rows_missing");
+  for (const row of workRows) {
+    const rowFailures = [];
+    if (row.parsed["data-package-runtime-component"] !== "TableShell") rowFailures.push("work_row_missing_table_shell_runtime_marker");
+    if (row.parsed["data-package-runtime-source"] !== "@tcrn/ui-react") rowFailures.push("work_row_missing_package_source");
+    if (row.parsed["data-package-runtime-surface"] !== "operations-cockpit-work-index") rowFailures.push("work_row_missing_runtime_surface");
+    if (!row.parsed["data-row-id"]?.trim()) rowFailures.push("work_row_missing_row_id");
+    if (!row.parsed["data-title"]?.trim()) rowFailures.push("work_row_missing_title");
+    if ((row.body.match(/role="cell"/g) ?? []).length !== 3) rowFailures.push("work_row_unexpected_cell_count");
+    if (rowFailures.length > 0) {
+      failures.push({ id: row.parsed["data-row-id"] ?? "unknown", failures: rowFailures });
+    }
+  }
+
+  const searchInputOk = /data-package-runtime-component="SearchInput"/.test(clusterHtml)
+    && /data-package-runtime-component="Input"/.test(clusterHtml)
+    && /data-work-search="true"/.test(clusterHtml);
+  if (!searchInputOk) failures.push("package_runtime_search_input_missing");
+  const filterBarOk = /data-package-runtime-component="FilterBar"/.test(clusterHtml)
+    && (clusterHtml.match(/data-package-runtime-component="Button"/g) ?? []).length >= 4
+    && (clusterHtml.match(/data-package-runtime-component="Badge"/g) ?? []).length >= 3;
+  if (!filterBarOk) failures.push("package_runtime_filter_bar_missing");
+  const tableShellOk = /data-package-runtime-component="TableShell"/.test(clusterHtml)
+    && /data-work-table/.test(clusterHtml)
+    && /aria-label="Service-backed Work Index"/.test(clusterHtml);
+  if (!tableShellOk) failures.push("package_runtime_table_shell_missing");
+  const emptyStateOk = /data-empty-state="true"/.test(clusterHtml)
+    && /data-package-runtime-component="StateView"/.test(clusterHtml)
+    && /hidden/.test(clusterHtml);
+  if (!emptyStateOk) failures.push("package_runtime_empty_state_missing");
+
+  const sampleRenderedHtmlSha256 = createHash("sha256").update(renderCockpitRuntimeWorkIndexCluster({
+    columnsDisabledReason: "Sample disabled reason for package runtime proof.",
+    filters: [{ label: "Project: TCRN-AOS" }, { label: "Freshness: Readback current" }],
+    rows: [
+      {
+        active: true,
+        evidenceLabel: "1 conference link",
+        gateLabel: "3 local actions",
+        owner: "implementation",
+        searchText: "sample work index row",
+        stateLabel: "In progress",
+        storyId: "sample_story",
+        title: "Sample work index row"
+      }
+    ]
+  })).digest("hex");
+
+  return {
+    ok: failures.length === 0,
+    present: true,
+    surface: "operations-cockpit-work-index",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    packageRuntimeWorkRowCount: workRows.length,
+    packageRuntimeSearchInputPresent: searchInputOk,
+    packageRuntimeFilterBarPresent: filterBarOk,
+    packageRuntimeTableShellPresent: tableShellOk,
+    packageRuntimeEmptyStatePresent: emptyStateOk,
+    sampleRenderedHtmlSha256,
+    failures
+  };
+}
+
+function extractWorkIndexClusterHtml(html) {
+  const marker = 'data-region="work-index"';
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<section", markerIndex);
+  const end = html.indexOf('<aside class="detail-drawer', markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end);
 }
 
 function inspectStorybookReference() {
@@ -282,6 +414,9 @@ function markdownReceipt(summary) {
   const rows = summary.navRuntimeReadback.disabledNavItemFailures.length === 0
     ? "- Disabled package-runtime NavItem semantic failures: 0"
     : summary.navRuntimeReadback.disabledNavItemFailures.map((failure) => `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
+  const workIndexRows = summary.workIndexRuntimeReadback.failures.length === 0
+    ? "- Work Index package-runtime failures: 0"
+    : summary.workIndexRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.id}: ${failure.failures.join(", ")}`).join("\n");
   return `# AOS Design System Package Runtime Proof\n\n`
     + `- Route: ${summary.route}\n`
     + `- Source head: ${summary.sourceHead}\n`
@@ -290,10 +425,13 @@ function markdownReceipt(summary) {
     + `- Design System source head: ${summary.designSystemReadback.sourceHead}\n`
     + `- UI React package: ${summary.designSystemReadback.uiReactPackage} (${summary.designSystemReadback.uiReactPackageSpecifier})\n`
     + `- Package runtime NavItems: ${summary.navRuntimeReadback.packageRuntimeNavItemCount}\n`
+    + `- Package runtime Work Index rows: ${summary.workIndexRuntimeReadback.packageRuntimeWorkRowCount}\n`
+    + `- Package runtime Work Index components: ${summary.workIndexRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Marker-only NavItems in cockpit nav: ${summary.navRuntimeReadback.markerOnlyNavItemCount}\n`
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
-    + `${rows}\n\n`
+    + `${rows}\n`
+    + `${workIndexRows}\n\n`
     + `## Boundaries\n\n`
-    + `This is an Operations Cockpit NavItem runtime pilot only. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
+    + `This is an Operations Cockpit NavItem plus Work Index package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
 }

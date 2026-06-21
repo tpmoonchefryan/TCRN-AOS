@@ -26,6 +26,8 @@ import {
 import {
   aosCockpitUiReactRuntime,
   renderCockpitRuntimeNavItems,
+  renderCockpitRuntimeWorkIndexCluster,
+  type CockpitRuntimeWorkIndexRow,
   type CockpitRuntimeNavItem
 } from "./cockpit-ui-react-runtime.js";
 import { tcrnComponentAttr } from "./static-component-registry.js";
@@ -325,30 +327,15 @@ export function renderOperationsCockpitHtml(
             </article>
           </section>
           <section class="content-grid">
-            <section class="work-index tcrn-surface" ${tcrnComponentAttr("WorkIndex")} data-region="work-index" aria-label="Work index">
-              <header class="work-index-head">
-                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Work Index</h2>
-                <label class="search-box tcrn-field" ${tcrnComponentAttr("Field")} for="work-search">
-                  <span class="tcrn-field__label">Search</span>
-                  <span class="tcrn-search-input" ${tcrnComponentAttr("SearchInput")} data-search-input="true">
-                    <input class="tcrn-input tcrn-search-input__control" ${tcrnComponentAttr("Input")} id="work-search" data-work-search type="search" placeholder="Filter service-backed rows" />
-                  </span>
-                </label>
-                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button" disabled title="Column customization is not implemented in this owner-trial slice">Columns held</button>
-              </header>
-              <div class="filter-row tcrn-filter-bar" ${tcrnComponentAttr("FilterBar")} aria-label="Fixture filters">
-                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button">Project: ${escapeHtml(model.contextHeader.selectedProjectId)}</button>
-                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button">Freshness: ${copyFreshness(model.contextHeader.dataFreshness)}</button>
-                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button">Risk: ${copyState("proof_required")}</button>
-              </div>
-              <div class="work-table tcrn-table-shell" ${tcrnComponentAttr("TableShell")} role="table" data-work-table style="--tcrn-table-column-count: 6;">
-                <div class="table-row table-head tcrn-table-shell__head" role="row">
-                  <span>ID</span><span>Title</span><span>State</span><span>Owner</span><span>Evidence</span><span>Gate</span>
-                </div>
-                ${workRows.map((row, index) => workRow(row, index)).join("")}
-                <div class="empty-state tcrn-state-view" ${tcrnComponentAttr("StateView")} data-empty-state hidden>No matching service rows.</div>
-              </div>
-            </section>
+            ${renderCockpitRuntimeWorkIndexCluster({
+              columnsDisabledReason: "Column customization is not implemented in this owner-trial slice",
+              filters: [
+                { label: `Project: ${model.contextHeader.selectedProjectId}`, tone: "neutral" },
+                { label: `Freshness: ${copyFreshness(model.contextHeader.dataFreshness)}`, tone: "positive" },
+                { label: `Risk: ${copyState("proof_required")}`, tone: "warning" }
+              ],
+              rows: createCockpitRuntimeWorkIndexRows(workRows)
+            })}
             <aside class="detail-drawer tcrn-detail-drawer" ${tcrnComponentAttr("DetailDrawer")} data-region="detail-drawer" data-slice5="work-index-drill-through" aria-label="Selected item detail">
               <div class="drawer-head">
                 <span class="tag tcrn-badge tcrn-badge--positive" ${tcrnComponentAttr("Badge")}>Story</span>
@@ -507,9 +494,9 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
 .search-box span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .search-box input { width: 100%; border: 1px solid var(--line-strong); border-radius: 5px; padding: 0 12px; color: var(--text); }
 .filter-row { display: flex; flex-wrap: wrap; gap: 10px; padding: 12px 18px; border-bottom: 1px solid var(--line); }
-.work-table { min-width: 820px; }
+.work-table { min-width: 620px; }
 .empty-state { padding: 18px; border-bottom: 1px solid var(--line); color: #526174; font-size: var(--type-ui); }
-.table-row { display: grid; grid-template-columns: 98px minmax(220px, 1fr) 112px 108px 124px 132px; align-items: center; min-height: 48px; padding: 0 16px; border-bottom: 1px solid var(--line); color: #29374a; font-size: var(--type-ui); }
+.table-row { display: grid; grid-template-columns: minmax(260px, 1fr) 136px 132px; align-items: center; min-height: 48px; padding: 0 16px; border-bottom: 1px solid var(--line); color: #29374a; font-size: var(--type-ui); }
 .table-row[hidden] { display: none !important; }
 .table-row > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .table-head { min-height: 42px; background: #fbfcfd; color: #384659; font-size: var(--type-label); font-weight: 500; }
@@ -549,7 +536,7 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
 @media (max-width: 460px) {
   .stage-line { grid-template-columns: 1fr; }
   .checkpoint-strip, .claim-strip { align-items: start; flex-direction: column; }
-  .table-row { grid-template-columns: 86px minmax(190px, 1fr) 104px 96px 118px 122px; }
+  .table-row { grid-template-columns: minmax(190px, 1fr) 104px 96px; }
 }`;
 
 const operationsCockpitClientScript = `
@@ -649,23 +636,23 @@ function serviceReadModelSummary(readback) {
 function renderRows(rows) {
   if (!workTable) return;
   workTable.querySelectorAll("[data-work-row]").forEach((row) => row.remove());
-  const anchor = emptyState;
+  const anchor = emptyState?.parentElement === workTable ? emptyState : null;
   rows.forEach((row, index) => {
     const button = document.createElement("button");
     button.className = "table-row work-row tcrn-table-shell__row" + (row.storyId === activeStoryId || (!activeStoryId && index === 0) ? " active" : "");
     button.type = "button";
     button.setAttribute("role", "row");
     button.setAttribute("data-tcrn-component", "TableShell");
+    button.setAttribute("data-package-runtime-component", "TableShell");
+    button.setAttribute("data-package-runtime-source", "@tcrn/ui-react");
+    button.setAttribute("data-package-runtime-surface", "operations-cockpit-work-index");
     button.setAttribute("data-work-row", "");
     button.setAttribute("data-row-id", row.storyId);
     button.setAttribute("data-title", row.title);
     [
-      row.storyId,
       row.title,
       copyState(row.status),
-      row.nextOwnerRole,
-      row.linkedConferenceIds.length + " conference link",
-      row.nextAllowedLocalActions.length + " local actions"
+      row.nextOwnerRole
     ].forEach((value) => {
       const cell = document.createElement("span");
       cell.className = "tcrn-table-shell__cell";
@@ -677,7 +664,11 @@ function renderRows(rows) {
       drawer?.classList.remove("closed");
       loadCockpit(row.storyId);
     });
-    workTable.insertBefore(button, anchor);
+    if (anchor) {
+      workTable.insertBefore(button, anchor);
+    } else {
+      workTable.append(button);
+    }
   });
   currentRows = Array.from(document.querySelectorAll("[data-work-row]"));
 }
@@ -760,6 +751,31 @@ function createCockpitRuntimeNavItems(): CockpitRuntimeNavItem[] {
     href: "#cockpit",
     label
   }));
+}
+
+function createCockpitRuntimeWorkIndexRows(rows: WorkstreamStoryRow[]): CockpitRuntimeWorkIndexRow[] {
+  return rows.map((row, index) => {
+    const evidenceLabel = `${row.linkedConferenceIds.length} conference link`;
+    const gateLabel = `${row.nextAllowedLocalActions.length} local actions`;
+    const stateLabel = copyState(row.status);
+    return {
+      active: index === 0,
+      evidenceLabel,
+      gateLabel,
+      owner: row.nextOwnerRole,
+      searchText: [
+        row.storyId,
+        row.title,
+        stateLabel,
+        row.nextOwnerRole,
+        evidenceLabel,
+        gateLabel
+      ].join(" ").toLowerCase(),
+      stateLabel,
+      storyId: row.storyId,
+      title: row.title
+    };
+  });
 }
 
 function serviceReadModelSummary(readback: CockpitServiceReadModelReadback): string {

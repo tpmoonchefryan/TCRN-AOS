@@ -15,8 +15,8 @@
     }
   },
   "claimScope": {
-    "implementationKind": "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_navitem_package_runtime",
-    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_only",
+    "implementationKind": "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_work_index_package_runtime",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_and_work_index_cluster",
     "storybookVisualStyleParity": "not_claimed_by_registered_component_proof",
     "docsReadinessPackageRuntimeRendering": false,
     "aosWidePackageRuntimeRendering": false,
@@ -28,7 +28,7 @@
     {
       "id": "operations-cockpit",
       "path": "apps/web/static/operations-cockpit.html",
-      "componentCount": 90,
+      "componentCount": 93,
       "registeredComponents": [
         "Badge",
         "Button",
@@ -191,12 +191,27 @@
   "packageRuntimeReadback": {
     "ok": true,
     "surface": "operations-cockpit",
-    "packageRuntimeComponent": "NavItem",
+    "packageRuntimeComponent": "NavItem+WorkIndex",
     "packageRuntimeSource": "@tcrn/ui-react",
     "packageRuntimeNavItemCount": 10,
     "markerOnlyNavItemCount": 0,
     "disabledPackageRuntimeNavItemCount": 9,
     "activePackageRuntimeNavItemCount": 1,
+    "workIndexRuntimeSurface": "operations-cockpit-work-index",
+    "workIndexPackageRuntimeComponents": [
+      "Badge",
+      "Button",
+      "Field",
+      "FilterBar",
+      "Input",
+      "SearchInput",
+      "StateView",
+      "TableShell",
+      "WorkIndex"
+    ],
+    "missingWorkIndexComponents": [],
+    "packageRuntimeWorkRowCount": 1,
+    "workIndexRowFailureCount": 0,
     "packageBackedReactRuntimeShellMarkerPresent": true
   },
   "browserReadbackPathLeakage": {

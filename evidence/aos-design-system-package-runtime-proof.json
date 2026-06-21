@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "route": "route_tcrn_aos_design_system_frontend_rebuild_59an_operations_cockpit_package_runtime_implementation",
-  "sourceHead": "a43d1324cdb9b13ba3bc2b6c933444946f7b6f15",
+  "route": "route_tcrn_aos_design_system_frontend_rebuild_59ao_operations_cockpit_work_index_package_runtime_implementation",
+  "sourceHead": "5e83d229a12337d54b22fb8fe106171a57843284",
   "claimScope": {
-    "implementationKind": "operations_cockpit_navitem_package_runtime_pilot",
-    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_only",
-    "storybookVisualStyleParity": "navitem_disabled_reason_storybook_reference_only",
+    "implementationKind": "operations_cockpit_work_index_package_runtime_expansion",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_and_work_index_cluster",
+    "storybookVisualStyleParity": "navitem_disabled_reason_and_work_index_component_reference_only",
     "broadUiReactRuntimeMigration": false,
     "docsReadinessPackageRuntimeRendering": false,
     "aosWidePackageRuntimeRendering": false,
@@ -17,9 +17,17 @@
     "sourceHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
     "uiReactPackage": "@tcrn/ui-react",
     "uiReactPackageSpecifier": "file:../TCRN-Design-System/packages/ui-react",
-    "runtimeSurface": "operations_cockpit_navitem_sidebar",
+    "runtimeSurface": "operations_cockpit_navitem_sidebar_work_index_cluster",
     "runtimeComponentScope": [
-      "NavItem"
+      "NavItem",
+      "WorkIndex",
+      "TableShell",
+      "SearchInput",
+      "Field",
+      "FilterBar",
+      "Button",
+      "Badge",
+      "StateView"
     ]
   },
   "dependencyReadback": {
@@ -45,13 +53,31 @@
     "runtimeSourcePath": "apps/web/src/cockpit-ui-react-runtime.ts",
     "packageImportPresent": true,
     "reactServerRenderingPresent": true,
+    "publicComponentImportPresence": {
+      "NavItem": true,
+      "WorkIndex": true,
+      "SearchInput": true,
+      "Field": true,
+      "FilterBar": true,
+      "Button": true,
+      "Badge": true,
+      "StateView": true
+    },
     "deepImportHits": [],
     "copiedSourceHits": []
   },
   "navRuntimeReadback": {
     "ok": true,
     "packageRuntimeComponents": [
-      "NavItem"
+      "NavItem",
+      "WorkIndex",
+      "TableShell",
+      "SearchInput",
+      "Field",
+      "FilterBar",
+      "Button",
+      "Badge",
+      "StateView"
     ],
     "navItemCount": 10,
     "packageRuntimeNavItemCount": 10,
@@ -62,6 +88,41 @@
     "packageRuntimeShellMarkerPresent": true,
     "packageRuntimeScopeMarkerPresent": true,
     "sampleRenderedHtmlSha256": "db0f4fcc98bbe755c49c29384ffdfc0068b968a56056d6b607fd1f910054fba5"
+  },
+  "workIndexRuntimeReadback": {
+    "ok": true,
+    "present": true,
+    "surface": "operations-cockpit-work-index",
+    "requiredComponents": [
+      "Badge",
+      "Button",
+      "Field",
+      "FilterBar",
+      "Input",
+      "SearchInput",
+      "StateView",
+      "TableShell",
+      "WorkIndex"
+    ],
+    "packageRuntimeComponents": [
+      "Badge",
+      "Button",
+      "Field",
+      "FilterBar",
+      "Input",
+      "SearchInput",
+      "StateView",
+      "TableShell",
+      "WorkIndex"
+    ],
+    "missingComponents": [],
+    "packageRuntimeWorkRowCount": 1,
+    "packageRuntimeSearchInputPresent": true,
+    "packageRuntimeFilterBarPresent": true,
+    "packageRuntimeTableShellPresent": true,
+    "packageRuntimeEmptyStatePresent": true,
+    "sampleRenderedHtmlSha256": "a65bf9f1302ec088d2f35956eaeb50ec2bf41c88055e03e1c2cc5bbd97aa8da0",
+    "failures": []
   },
   "storybookReferenceReadback": {
     "ok": true,
