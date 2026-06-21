@@ -2,6 +2,18 @@
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_rebuild_registered_component_proof",
   "registrySource": "../TCRN-Design-System/packages/ui-react/src/index.tsx",
+  "designSystemBasis": {
+    "trackedHead": "a74742a9cfaa03205d867f7e33dea92c1e8ac6ca",
+    "registrySourcePath": "../TCRN-Design-System/packages/ui-react/src/index.tsx",
+    "registrySourceTracked": true,
+    "unacceptedStylesheetDraft": {
+      "path": "../TCRN-Design-System/packages/ui-react/src/styles.css",
+      "present": true,
+      "tracked": false,
+      "gitStatus": "?? packages/ui-react/src/styles.css",
+      "disposition": "unaccepted_context_only_not_used_as_registry_truth"
+    }
+  },
   "claimScope": {
     "implementationKind": "static_renderer_registered_component_metadata",
     "packageBackedReactRuntimeRendering": false,
@@ -44,8 +56,30 @@
       ],
       "unregistered": [],
       "missingRequired": [],
+      "expectedDisabledNavItems": [
+        "Dashboard",
+        "Work Index",
+        "Stage Map",
+        "Gate Queue",
+        "Conferences",
+        "Evidence",
+        "Dependency",
+        "Resources",
+        "Audit"
+      ],
       "disabledNavItemSemanticFailures": [],
-      "disabledNavItemCount": 9
+      "disabledNavItemCount": 9,
+      "disabledNavItemLabels": [
+        "Dashboard",
+        "Work Index",
+        "Stage Map",
+        "Gate Queue",
+        "Conferences",
+        "Evidence",
+        "Dependency",
+        "Resources",
+        "Audit"
+      ]
     },
     {
       "id": "docs-search-release-readiness",
@@ -79,8 +113,20 @@
       ],
       "unregistered": [],
       "missingRequired": [],
+      "expectedDisabledNavItems": [
+        "Dashboard",
+        "Cockpit",
+        "Evidence",
+        "Release Linkage"
+      ],
       "disabledNavItemSemanticFailures": [],
-      "disabledNavItemCount": 4
+      "disabledNavItemCount": 4,
+      "disabledNavItemLabels": [
+        "Dashboard",
+        "Cockpit",
+        "Evidence",
+        "Release Linkage"
+      ]
     },
     {
       "id": "aos-wide-product-design",
@@ -114,15 +160,56 @@
       ],
       "unregistered": [],
       "missingRequired": [],
+      "expectedDisabledNavItems": [
+        "Initiative Detail",
+        "AI Employee",
+        "Gate Queue",
+        "Conference",
+        "Gateway / Adapter",
+        "Knowledge Modules",
+        "Dependency Console",
+        "Resource Library",
+        "Admin / Access"
+      ],
       "disabledNavItemSemanticFailures": [],
-      "disabledNavItemCount": 9
+      "disabledNavItemCount": 9,
+      "disabledNavItemLabels": [
+        "Initiative Detail",
+        "AI Employee",
+        "Gate Queue",
+        "Conference",
+        "Gateway / Adapter",
+        "Knowledge Modules",
+        "Dependency Console",
+        "Resource Library",
+        "Admin / Access"
+      ]
     }
   ],
   "browserReadbackPathLeakage": {
     "path": "evidence/aos-design-system-browser-readback/summary.json",
     "present": true,
+    "required": true,
     "absolutePathHits": []
   },
+  "proofSelfChecks": [
+    {
+      "id": "expected_disabled_navitem_becomes_actionable",
+      "passed": true
+    },
+    {
+      "id": "aria_describedby_must_resolve_visible_reason",
+      "passed": true
+    },
+    {
+      "id": "visible_disabled_reason_must_be_nonempty",
+      "passed": true
+    },
+    {
+      "id": "absolute_local_path_patterns_are_detected",
+      "passed": true
+    }
+  ],
   "noOverclaim": {
     "productAcceptanceReady": false,
     "finalMvpAcceptanceReady": false,
