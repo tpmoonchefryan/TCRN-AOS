@@ -85,8 +85,12 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.match(html, /data-package-runtime-component="WorkIndex"/);
   assert.match(html, /data-package-runtime-component="SearchInput"/);
   assert.match(html, /data-package-runtime-component="TableShell"/);
+  assert.doesNotMatch(html, /data-package-runtime-component="Input"/);
+  assert.match(html, /data-package-runtime-subcomponent="SearchInput\.control"/);
   assert.match(html, /data-package-runtime-surface="operations-cockpit-work-index"/);
   assert.match(html, /--tcrn-color-brand-primary/);
+  assert.match(html, /\.tcrn-sr-only\s*\{[^}]*position: absolute;[^}]*width: 1px;[^}]*overflow: hidden;/);
+  assert.match(html, /@media \(max-width: 520px\)[\s\S]*\.work-table \.tcrn-table-shell__cell::before\s*\{[^}]*content: attr\(data-label\)/);
 });
 
 test("Operations Cockpit Work Index renders package-backed runtime controls", () => {
@@ -99,7 +103,8 @@ test("Operations Cockpit Work Index renders package-backed runtime controls", ()
   assert.match(workIndexHtml, /data-package-runtime-component="WorkIndex"/);
   assert.match(workIndexHtml, /data-package-runtime-component="Field"/);
   assert.match(workIndexHtml, /data-package-runtime-component="SearchInput"/);
-  assert.match(workIndexHtml, /data-package-runtime-component="Input"/);
+  assert.doesNotMatch(workIndexHtml, /data-package-runtime-component="Input"/);
+  assert.match(workIndexHtml, /data-package-runtime-subcomponent="SearchInput\.control"/);
   assert.match(workIndexHtml, /data-package-runtime-component="FilterBar"/);
   assert.match(workIndexHtml, /data-package-runtime-component="Button"/);
   assert.match(workIndexHtml, /data-package-runtime-component="Badge"/);

@@ -1,0 +1,468 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_design_system_frontend_rebuild_59ao_operations_cockpit_work_index_package_runtime_implementation",
+  "sourceHead": "f1f2cb263c74c08a05b4d1262e2786cef30a6109",
+  "designSystemSourceHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
+  "serviceLifecycle": {
+    "loopbackOnly": true,
+    "ephemeralPort": true,
+    "stopped": true
+  },
+  "designSystemConsumption": {
+    "adoptionPosture": "tokens_copy_state_ui_react_operations_cockpit_runtime_pilot",
+    "tokenPackage": "@tcrn/ui-tokens",
+    "copyStatePackage": "@tcrn/ui-copy-state",
+    "uiReactPackage": "@tcrn/ui-react"
+  },
+  "viewportReadbacks": [
+    {
+      "label": "desktop-1440x900",
+      "width": 1440,
+      "height": 900,
+      "title": "TCRN AOS Operations Cockpit",
+      "serviceBacked": "true",
+      "designSystemConsumer": "tokens_copy_state_ui_react_operations_cockpit_runtime_pilot",
+      "tokenPackage": "@tcrn/ui-tokens",
+      "copyStatePackage": "@tcrn/ui-copy-state",
+      "designSystemSourceHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
+      "brandPrimaryToken": "#5865d8",
+      "stateWarningToken": "#7a4e00",
+      "serviceStatus": "service API read 1:13:03 AM",
+      "localCheckpoint": "owner-trial-service-readback",
+      "readbackFreshness": "Readback current",
+      "workRows": 1,
+      "detailTitle": "Prove local runtime persistence",
+      "rawVisibleCopyHits": [],
+      "forbiddenPositiveClaimHits": [],
+      "disabledButtons": [
+        {
+          "text": "Stage detail held",
+          "className": "tcrn-button tcrn-button--secondary",
+          "ariaDescription": "",
+          "dataDisabledReason": "",
+          "reason": "Stage detail route is held for the owner-trial implementation proof",
+          "title": "Stage detail route is held for the owner-trial implementation proof"
+        },
+        {
+          "text": "Role detail held",
+          "className": "tcrn-button tcrn-button--secondary",
+          "ariaDescription": "",
+          "dataDisabledReason": "",
+          "reason": "Role detail route is held for a later owner-trial slice",
+          "title": "Role detail route is held for a later owner-trial slice"
+        },
+        {
+          "text": "Gate request held",
+          "className": "secondary-action tcrn-button tcrn-button--secondary",
+          "ariaDescription": "",
+          "dataDisabledReason": "",
+          "reason": "Gate request requires a routed owner-intent or role-gate path",
+          "title": "Gate request requires a routed owner-intent or role-gate path"
+        },
+        {
+          "text": "Evidence detail held",
+          "className": "tcrn-button tcrn-button--secondary",
+          "ariaDescription": "",
+          "dataDisabledReason": "",
+          "reason": "Evidence detail route is held for a later owner-trial slice",
+          "title": "Evidence detail route is held for a later owner-trial slice"
+        },
+        {
+          "text": "Columns heldColumn customization is not implemented in this owner-trial slice",
+          "className": "tcrn-button tcrn-button--secondary tcrn-button--md",
+          "ariaDescription": "Column customization is not implemented in this owner-trial slice",
+          "dataDisabledReason": "Column customization is not implemented in this owner-trial slice",
+          "reason": "Column customization is not implemented in this owner-trial slice | Column customization is not implemented in this owner-trial slice | Column customization is not implemented in this owner-trial slice",
+          "title": "Column customization is not implemented in this owner-trial slice"
+        },
+        {
+          "text": "Gate work order held",
+          "className": "primary-action tcrn-button tcrn-button--primary",
+          "ariaDescription": "",
+          "dataDisabledReason": "",
+          "reason": "Gate work order execution is held outside this UI slice",
+          "title": "Gate work order execution is held outside this UI slice"
+        },
+        {
+          "text": "Rework request held",
+          "className": "secondary-action tcrn-button tcrn-button--secondary",
+          "ariaDescription": "",
+          "dataDisabledReason": "",
+          "reason": "Rework request execution requires a routed owner-trial action",
+          "title": "Rework request execution requires a routed owner-trial action"
+        }
+      ],
+      "disabledButtonsMissingReason": [],
+      "disabledReasonSrOnlyLeakage": [],
+      "columnsHeldVisibleText": "Columns held",
+      "columnsHeldReasonVisibleLeak": false,
+      "workIndexMobileReadability": {
+        "applies": false,
+        "ok": true,
+        "rowGridTemplateColumns": "260px 136px 132px",
+        "rowMinWidth": "0px",
+        "headDisplay": "grid",
+        "cellCount": 3,
+        "cellWhiteSpace": [
+          "nowrap",
+          "nowrap",
+          "nowrap"
+        ],
+        "cellBeforeContent": [
+          "none",
+          "none",
+          "none"
+        ]
+      },
+      "disabledNavItems": [
+        {
+          "text": "DashboardDashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "Work IndexWork Index view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Work Index view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Work Index view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Work Index view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Work Index view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "Stage MapStage Map view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Stage Map view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Stage Map view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Stage Map view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Stage Map view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "Gate QueueGate Queue view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Gate Queue view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Gate Queue view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Gate Queue view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Gate Queue view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "ConferencesConferences view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Conferences view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Conferences view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Conferences view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Conferences view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "EvidenceEvidence view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Evidence view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Evidence view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Evidence view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Evidence view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "DependencyDependency view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Dependency view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Dependency view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dependency view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Dependency view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "ResourcesResources view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Resources view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Resources view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Resources view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Resources view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "AuditAudit view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Audit view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Audit view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Audit view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Audit view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        }
+      ],
+      "disabledNavItemsMissingReason": [],
+      "disabledNavButtonCount": 0,
+      "disabledNavItemCount": 9,
+      "documentScrollWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "viewportWidth": 1440,
+      "bodyLevelHorizontalOverflow": false,
+      "hasOwnerIntentReason": true,
+      "hasSidebarUnavailableReasons": true,
+      "hasUnavailableCopy": true,
+      "hasExternalProofCopy": true,
+      "hasTokenCss": true,
+      "screenshot": {
+        "path": "evidence/aos-design-system-consumer-slice-1-browser/f1f2cb263c74c08a05b4d1262e2786cef30a6109/desktop-1440x900-operations-cockpit.png",
+        "sha256": "79e75ae2c22eb08508de8518f2f74680576d7f260f37e553a5ee0c528383b8a8",
+        "bytes": 281927
+      }
+    },
+    {
+      "label": "mobile-390x844",
+      "width": 390,
+      "height": 844,
+      "title": "TCRN AOS Operations Cockpit",
+      "serviceBacked": "true",
+      "designSystemConsumer": "tokens_copy_state_ui_react_operations_cockpit_runtime_pilot",
+      "tokenPackage": "@tcrn/ui-tokens",
+      "copyStatePackage": "@tcrn/ui-copy-state",
+      "designSystemSourceHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
+      "brandPrimaryToken": "#5865d8",
+      "stateWarningToken": "#7a4e00",
+      "serviceStatus": "service API read 1:13:03 AM",
+      "localCheckpoint": "owner-trial-service-readback",
+      "readbackFreshness": "Readback current",
+      "workRows": 1,
+      "detailTitle": "Prove local runtime persistence",
+      "rawVisibleCopyHits": [],
+      "forbiddenPositiveClaimHits": [],
+      "disabledButtons": [
+        {
+          "text": "Stage detail held",
+          "className": "tcrn-button tcrn-button--secondary",
+          "ariaDescription": "",
+          "dataDisabledReason": "",
+          "reason": "Stage detail route is held for the owner-trial implementation proof",
+          "title": "Stage detail route is held for the owner-trial implementation proof"
+        },
+        {
+          "text": "Role detail held",
+          "className": "tcrn-button tcrn-button--secondary",
+          "ariaDescription": "",
+          "dataDisabledReason": "",
+          "reason": "Role detail route is held for a later owner-trial slice",
+          "title": "Role detail route is held for a later owner-trial slice"
+        },
+        {
+          "text": "Gate request held",
+          "className": "secondary-action tcrn-button tcrn-button--secondary",
+          "ariaDescription": "",
+          "dataDisabledReason": "",
+          "reason": "Gate request requires a routed owner-intent or role-gate path",
+          "title": "Gate request requires a routed owner-intent or role-gate path"
+        },
+        {
+          "text": "Evidence detail held",
+          "className": "tcrn-button tcrn-button--secondary",
+          "ariaDescription": "",
+          "dataDisabledReason": "",
+          "reason": "Evidence detail route is held for a later owner-trial slice",
+          "title": "Evidence detail route is held for a later owner-trial slice"
+        },
+        {
+          "text": "Columns heldColumn customization is not implemented in this owner-trial slice",
+          "className": "tcrn-button tcrn-button--secondary tcrn-button--md",
+          "ariaDescription": "Column customization is not implemented in this owner-trial slice",
+          "dataDisabledReason": "Column customization is not implemented in this owner-trial slice",
+          "reason": "Column customization is not implemented in this owner-trial slice | Column customization is not implemented in this owner-trial slice | Column customization is not implemented in this owner-trial slice",
+          "title": "Column customization is not implemented in this owner-trial slice"
+        },
+        {
+          "text": "Gate work order held",
+          "className": "primary-action tcrn-button tcrn-button--primary",
+          "ariaDescription": "",
+          "dataDisabledReason": "",
+          "reason": "Gate work order execution is held outside this UI slice",
+          "title": "Gate work order execution is held outside this UI slice"
+        },
+        {
+          "text": "Rework request held",
+          "className": "secondary-action tcrn-button tcrn-button--secondary",
+          "ariaDescription": "",
+          "dataDisabledReason": "",
+          "reason": "Rework request execution requires a routed owner-trial action",
+          "title": "Rework request execution requires a routed owner-trial action"
+        }
+      ],
+      "disabledButtonsMissingReason": [],
+      "disabledReasonSrOnlyLeakage": [],
+      "columnsHeldVisibleText": "Columns held",
+      "columnsHeldReasonVisibleLeak": false,
+      "workIndexMobileReadability": {
+        "applies": true,
+        "ok": true,
+        "rowGridTemplateColumns": "277.062px",
+        "rowMinWidth": "0px",
+        "headDisplay": "none",
+        "cellCount": 3,
+        "cellWhiteSpace": [
+          "normal",
+          "normal",
+          "normal"
+        ],
+        "cellBeforeContent": [
+          "\"\"",
+          "\"\"",
+          "\"\""
+        ]
+      },
+      "disabledNavItems": [
+        {
+          "text": "DashboardDashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "Work IndexWork Index view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Work Index view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Work Index view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Work Index view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Work Index view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "Stage MapStage Map view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Stage Map view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Stage Map view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Stage Map view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Stage Map view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "Gate QueueGate Queue view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Gate Queue view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Gate Queue view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Gate Queue view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Gate Queue view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "ConferencesConferences view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Conferences view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Conferences view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Conferences view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Conferences view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "EvidenceEvidence view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Evidence view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Evidence view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Evidence view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Evidence view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "DependencyDependency view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Dependency view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Dependency view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dependency view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Dependency view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "ResourcesResources view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Resources view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Resources view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Resources view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Resources view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        },
+        {
+          "text": "AuditAudit view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "className": "tcrn-nav-item nav-row",
+          "describedbyResolved": true,
+          "href": "",
+          "tabIndex": "-1",
+          "ariaDescription": "Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "dataDisabledReason": "Audit view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "reason": "Audit view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Dashboard view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only. | Audit view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.",
+          "title": "Audit view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only."
+        }
+      ],
+      "disabledNavItemsMissingReason": [],
+      "disabledNavButtonCount": 0,
+      "disabledNavItemCount": 9,
+      "documentScrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "viewportWidth": 390,
+      "bodyLevelHorizontalOverflow": false,
+      "hasOwnerIntentReason": true,
+      "hasSidebarUnavailableReasons": true,
+      "hasUnavailableCopy": true,
+      "hasExternalProofCopy": true,
+      "hasTokenCss": true,
+      "screenshot": {
+        "path": "evidence/aos-design-system-consumer-slice-1-browser/f1f2cb263c74c08a05b4d1262e2786cef30a6109/mobile-390x844-operations-cockpit.png",
+        "sha256": "37d9563c87ce15e7d981e44b8136ab74f41cb528f84b0e56f664656e296d7d01",
+        "bytes": 266761
+      }
+    }
+  ],
+  "browserHealth": {
+    "pageErrors": [],
+    "consoleErrors": []
+  },
+  "noOverclaim": {
+    "productAcceptanceReady": false,
+    "finalMvpAcceptanceReady": false,
+    "releasePublicationReady": false,
+    "packagePublication": false,
+    "designSystemMutation": false,
+    "liveDispatch": false,
+    "ownerIntentExecution": false
+  }
+}

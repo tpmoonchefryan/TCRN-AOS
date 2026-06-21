@@ -412,6 +412,7 @@ button, input, select { font: inherit; line-height: var(--line-compact); }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: 0.58; }
 strong, b { font-weight: 500; }
+.tcrn-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .aos-shell { display: grid; grid-template-columns: 252px minmax(0, 1fr); min-height: 100vh; }
 .aos-sidebar { position: sticky; top: 0; align-self: start; display: grid; grid-template-rows: auto 1fr auto; gap: 22px; height: 100vh; padding: 24px 14px 20px; overflow: auto; background: linear-gradient(180deg, var(--navy-900), var(--navy-950)); color: #d9e8f0; }
 .brand-lockup { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; min-height: 42px; padding: 0 10px 8px; }
@@ -537,6 +538,13 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
   .stage-line { grid-template-columns: 1fr; }
   .checkpoint-strip, .claim-strip { align-items: start; flex-direction: column; }
   .table-row { grid-template-columns: minmax(190px, 1fr) 104px 96px; }
+}
+@media (max-width: 520px) {
+  .work-table.tcrn-table-shell { min-width: 0; overflow-x: visible; }
+  .work-table .tcrn-table-shell__head { display: none; }
+  .work-table .tcrn-table-shell__row { display: grid; grid-template-columns: 1fr; gap: 8px; min-width: 0; min-height: 0; padding: 12px; }
+  .work-table .tcrn-table-shell__cell { display: grid; grid-template-columns: minmax(84px, 0.4fr) minmax(0, 1fr); gap: 8px; min-width: 0; overflow: visible; text-overflow: clip; white-space: normal; }
+  .work-table .tcrn-table-shell__cell::before { content: attr(data-label); color: var(--muted); font-weight: 500; }
 }`;
 
 const operationsCockpitClientScript = `

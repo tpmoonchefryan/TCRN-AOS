@@ -23,12 +23,15 @@ const runtimeSource = readFileSync(join(repoRoot, runtimeSourcePath), "utf8");
 const cockpitHtml = renderOperationsCockpitHtml();
 const navRuntimeReadback = inspectPackageRuntimeNavItems(cockpitHtml);
 const workIndexRuntimeReadback = inspectPackageRuntimeWorkIndexCluster(cockpitHtml);
+const visualStyleReadback = inspectAosRuntimeStyleContract(cockpitHtml);
 const importReadback = inspectImports();
 const dependencyReadback = inspectDependencies();
 const storybookReferenceReadback = inspectStorybookReference();
 const noOverclaimReadback = inspectNoOverclaim(cockpitHtml);
+const sourceContentReadback = inspectSourceContentDigest();
 const summaryPath = join(repoRoot, "evidence", "aos-design-system-package-runtime-proof.json");
 const markdownPath = join(repoRoot, "evidence", "aos-design-system-package-runtime-proof.md");
+const checkCurrentSource = process.argv.includes("--check-current-source");
 
 const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && aosDesignSystemConsumerBridge.designSystemSourceHead === "b0c00828a813d3c62392eb6e53d7d6b85b6affeb"
@@ -37,8 +40,10 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && importReadback.ok
   && navRuntimeReadback.ok
   && workIndexRuntimeReadback.ok
+  && visualStyleReadback.ok
   && storybookReferenceReadback.ok
-  && noOverclaimReadback.ok;
+  && noOverclaimReadback.ok
+  && sourceContentReadback.ok;
 
 const summary = {
   ok,
@@ -55,6 +60,7 @@ const summary = {
     finalMvpAcceptanceReady: false,
     releasePublicationReady: false
   },
+  sourceFreshnessReadback: sourceContentReadback,
   designSystemReadback: {
     sourceHead: aosDesignSystemConsumerBridge.designSystemSourceHead,
     uiReactPackage: aosDesignSystemConsumerBridge.uiReactPackage,
@@ -66,17 +72,37 @@ const summary = {
   importReadback,
   navRuntimeReadback,
   workIndexRuntimeReadback,
+  visualStyleReadback,
   storybookReferenceReadback,
   noOverclaimReadback
 };
 
-mkdirSync(dirname(summaryPath), { recursive: true });
-writeFileSync(summaryPath, `${JSON.stringify(summary, null, 2)}\n`);
-writeFileSync(markdownPath, markdownReceipt(summary));
+if (checkCurrentSource) {
+  const retained = JSON.parse(readFileSync(summaryPath, "utf8"));
+  const retainedDigest = retained.sourceFreshnessReadback?.sourceContentDigest;
+  const retainedStrategy = retained.sourceFreshnessReadback?.strategy;
+  if (retainedDigest !== sourceContentReadback.sourceContentDigest || retainedStrategy !== sourceContentReadback.strategy) {
+    console.error(JSON.stringify({
+      ok: false,
+      route,
+      sourceHead,
+      sourceContentDigest: sourceContentReadback.sourceContentDigest,
+      retainedDigest,
+      failure: "retained_source_content_digest_mismatch"
+    }, null, 2));
+    process.exit(1);
+  }
+} else {
+  mkdirSync(dirname(summaryPath), { recursive: true });
+  writeFileSync(summaryPath, `${JSON.stringify(summary, null, 2)}\n`);
+  writeFileSync(markdownPath, markdownReceipt(summary));
+}
 console.log(JSON.stringify({
   ok,
   route,
   sourceHead,
+  sourceFreshnessStrategy: summary.sourceFreshnessReadback.strategy,
+  sourceContentDigest: summary.sourceFreshnessReadback.sourceContentDigest,
   implementationKind: summary.claimScope.implementationKind,
   runtimeComponents: summary.navRuntimeReadback.packageRuntimeComponents,
   packageRuntimeNavItemCount: summary.navRuntimeReadback.packageRuntimeNavItemCount,
@@ -84,6 +110,7 @@ console.log(JSON.stringify({
   packageRuntimeWorkRowCount: summary.workIndexRuntimeReadback.packageRuntimeWorkRowCount,
   disabledNavItemFailureCount: summary.navRuntimeReadback.disabledNavItemFailures.length,
   workIndexFailureCount: summary.workIndexRuntimeReadback.failures.length,
+  visualStyleFailureCount: summary.visualStyleReadback.failures.length,
   markerOnlyNavItemCount: summary.navRuntimeReadback.markerOnlyNavItemCount,
   deepImportHits: summary.importReadback.deepImportHits,
   storybookReferenceOk: summary.storybookReferenceReadback.ok,
@@ -240,7 +267,6 @@ function inspectPackageRuntimeWorkIndexCluster(html) {
     "Button",
     "Field",
     "FilterBar",
-    "Input",
     "SearchInput",
     "StateView",
     "TableShell",
@@ -266,7 +292,8 @@ function inspectPackageRuntimeWorkIndexCluster(html) {
   }
 
   const searchInputOk = /data-package-runtime-component="SearchInput"/.test(clusterHtml)
-    && /data-package-runtime-component="Input"/.test(clusterHtml)
+    && /data-package-runtime-subcomponent="SearchInput\.control"/.test(clusterHtml)
+    && !/data-package-runtime-component="Input"/.test(clusterHtml)
     && /data-work-search="true"/.test(clusterHtml);
   if (!searchInputOk) failures.push("package_runtime_search_input_missing");
   const filterBarOk = /data-package-runtime-component="FilterBar"/.test(clusterHtml)
@@ -308,11 +335,60 @@ function inspectPackageRuntimeWorkIndexCluster(html) {
     missingComponents,
     packageRuntimeWorkRowCount: workRows.length,
     packageRuntimeSearchInputPresent: searchInputOk,
+    searchInputControlDisposition: "internal_subcomponent_not_separate_package_runtime_scope",
     packageRuntimeFilterBarPresent: filterBarOk,
     packageRuntimeTableShellPresent: tableShellOk,
     packageRuntimeEmptyStatePresent: emptyStateOk,
     sampleRenderedHtmlSha256,
     failures
+  };
+}
+
+function inspectAosRuntimeStyleContract(html) {
+  const failures = [];
+  const hasSrOnlyRule = /\.tcrn-sr-only\s*\{[^}]*position:\s*absolute;[^}]*width:\s*1px;[^}]*height:\s*1px;[^}]*overflow:\s*hidden;[^}]*white-space:\s*nowrap;[^}]*border:\s*0;/s.test(html);
+  if (!hasSrOnlyRule) failures.push("aos_runtime_sr_only_rule_missing");
+  const disabledButtonHasSrOnlyReason = /<button\b(?=[^>]*data-package-runtime-component="Button")(?=[^>]*disabled)([\s\S]*?)<span\b(?=[^>]*class="tcrn-sr-only")[^>]*>Column customization is not implemented in this owner-trial slice<\/span><\/button>/.test(html);
+  if (!disabledButtonHasSrOnlyReason) failures.push("disabled_button_sr_only_reason_markup_missing");
+  const mobileRulePresent = /@media \(max-width: 520px\)\s*\{[\s\S]*?\.work-table\.tcrn-table-shell\s*\{[^}]*min-width:\s*0;[^}]*overflow-x:\s*visible;[^}]*\}[\s\S]*?\.work-table \.tcrn-table-shell__head\s*\{[^}]*display:\s*none;[^}]*\}[\s\S]*?\.work-table \.tcrn-table-shell__row\s*\{[^}]*grid-template-columns:\s*1fr;[^}]*min-width:\s*0;[^}]*\}[\s\S]*?\.work-table \.tcrn-table-shell__cell::before\s*\{[^}]*content:\s*attr\(data-label\);/s.test(html);
+  if (!mobileRulePresent) failures.push("aos_runtime_mobile_table_shell_stacking_rule_missing");
+  const tableDataLabelsPresent = (html.match(/class="tcrn-table-shell__cell"/g) ?? []).length >= 3
+    && /data-label="Work item"/.test(html)
+    && /data-label="State"/.test(html)
+    && /data-label="Owner"/.test(html);
+  if (!tableDataLabelsPresent) failures.push("work_index_mobile_data_labels_missing");
+  return {
+    ok: failures.length === 0,
+    source: "AOS Operations Cockpit stylesheet consumes accepted Storybook sr-only and TableShell stacked-row selectors without Design System mutation",
+    disabledButtonSrOnlyRulePresent: hasSrOnlyRule,
+    disabledButtonSrOnlyReasonMarkupPresent: disabledButtonHasSrOnlyReason,
+    mobileTableShellStackingRulePresent: mobileRulePresent,
+    tableDataLabelsPresent,
+    failures
+  };
+}
+
+function inspectSourceContentDigest() {
+  const sourcePaths = [
+    "apps/web/src/cockpit-ui-react-runtime.ts",
+    "apps/web/src/cockpit-view.ts",
+    "apps/web/src/design-system-bridge.ts",
+    "apps/web/test/cockpit-view.test.mjs",
+    "scripts/aos-design-system-package-runtime-proof.mjs",
+    "scripts/aos-design-system-component-registry-proof.mjs",
+    "scripts/aos-design-system-consumer-slice-1-proof.mjs",
+    "scripts/aos-design-system-consumer-slice-2-proof.mjs"
+  ];
+  const digestInput = sourcePaths
+    .map((sourcePath) => `${sourcePath}\0${readFileSync(join(repoRoot, sourcePath), "utf8")}`)
+    .join("\0");
+  return {
+    ok: true,
+    strategy: "source_content_digest_for_mutating_receipts",
+    sourceHeadAtProofRun: sourceHead,
+    exactFinalCommitHeadRequired: false,
+    sourceContentDigest: createHash("sha256").update(digestInput).digest("hex"),
+    sourcePaths
   };
 }
 
@@ -419,7 +495,9 @@ function markdownReceipt(summary) {
     : summary.workIndexRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.id}: ${failure.failures.join(", ")}`).join("\n");
   return `# AOS Design System Package Runtime Proof\n\n`
     + `- Route: ${summary.route}\n`
-    + `- Source head: ${summary.sourceHead}\n`
+    + `- Source head at proof run: ${summary.sourceHead}\n`
+    + `- Source freshness strategy: ${summary.sourceFreshnessReadback.strategy}\n`
+    + `- Source content digest: ${summary.sourceFreshnessReadback.sourceContentDigest}\n`
     + `- Scope: ${summary.claimScope.implementationKind}\n`
     + `- Runtime rendering claim: ${summary.claimScope.packageBackedReactRuntimeRendering}\n`
     + `- Design System source head: ${summary.designSystemReadback.sourceHead}\n`
@@ -430,6 +508,7 @@ function markdownReceipt(summary) {
     + `- Marker-only NavItems in cockpit nav: ${summary.navRuntimeReadback.markerOnlyNavItemCount}\n`
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
+    + `- AOS runtime sr-only / mobile TableShell style proof ok: ${summary.visualStyleReadback.ok}\n`
     + `${rows}\n`
     + `${workIndexRows}\n\n`
     + `## Boundaries\n\n`

@@ -28,6 +28,9 @@ export const aosDesignSystemConsumerBridge = {
     "Badge",
     "StateView"
   ],
+  uiReactRuntimeInternalSubcomponents: [
+    "SearchInput.control"
+  ],
   packageBackedReactRuntimeRendering: true,
   productAcceptanceReady: false,
   finalMvpAcceptanceReady: false,

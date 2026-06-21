@@ -123,6 +123,58 @@ try {
         const reason = `${button.reason} ${button.text}`.toLowerCase();
         return staleDisabledReasonPatterns.some((phrase) => reason.includes(phrase));
       });
+      const srOnlyHiddenReadbacks = Array.from(document.querySelectorAll("button:disabled .tcrn-sr-only")).map((element) => {
+        const style = getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        const hidden = style.position === "absolute"
+          && style.overflow === "hidden"
+          && rect.width <= 1
+          && rect.height <= 1
+          && style.whiteSpace === "nowrap";
+        return {
+          text: element.textContent?.trim() ?? "",
+          hidden,
+          position: style.position,
+          overflow: style.overflow,
+          width: rect.width,
+          height: rect.height,
+          whiteSpace: style.whiteSpace
+        };
+      });
+      const disabledReasonSrOnlyLeakage = srOnlyHiddenReadbacks.filter((readback) => !readback.hidden);
+      const columnsHeldButton = Array.from(document.querySelectorAll("button:disabled"))
+        .find((button) => button.textContent?.includes("Columns held"));
+      const columnsHeldVisibleText = columnsHeldButton
+        ? Array.from(columnsHeldButton.childNodes)
+          .filter((node) => node.nodeType === Node.TEXT_NODE)
+          .map((node) => node.textContent ?? "")
+          .join(" ")
+          .replace(/\s+/g, " ")
+          .trim()
+        : "";
+      const columnsHeldReasonVisibleLeak = /Column customization is not implemented/i.test(columnsHeldVisibleText);
+      const workIndexRow = document.querySelector("[data-work-row]");
+      const workIndexHead = document.querySelector("[data-work-table] .tcrn-table-shell__head");
+      const workIndexCells = Array.from(document.querySelectorAll("[data-work-row] .tcrn-table-shell__cell"));
+      const mobileApplies = window.innerWidth <= 520;
+      const workIndexMobileReadability = {
+        applies: mobileApplies,
+        ok: !mobileApplies || (
+          workIndexRow !== null
+          && getComputedStyle(workIndexRow).gridTemplateColumns.split(" ").length === 1
+          && getComputedStyle(workIndexRow).minWidth === "0px"
+          && (!workIndexHead || getComputedStyle(workIndexHead).display === "none")
+          && workIndexCells.length >= 3
+          && workIndexCells.every((cell) => getComputedStyle(cell).whiteSpace === "normal")
+          && workIndexCells.every((cell) => getComputedStyle(cell, "::before").content !== "none")
+        ),
+        rowGridTemplateColumns: workIndexRow ? getComputedStyle(workIndexRow).gridTemplateColumns : "",
+        rowMinWidth: workIndexRow ? getComputedStyle(workIndexRow).minWidth : "",
+        headDisplay: workIndexHead ? getComputedStyle(workIndexHead).display : "",
+        cellCount: workIndexCells.length,
+        cellWhiteSpace: workIndexCells.map((cell) => getComputedStyle(cell).whiteSpace),
+        cellBeforeContent: workIndexCells.map((cell) => getComputedStyle(cell, "::before").content)
+      };
       const attrs = {
         schema: shell?.getAttribute("data-service-model-schema") ?? "",
         source: shell?.getAttribute("data-service-read-model-source") ?? "",
@@ -160,6 +212,10 @@ try {
         forbiddenPositiveClaimHits: forbiddenPositiveClaims.filter((phrase) => lower.includes(phrase)),
         disabledButtonsMissingReason,
         disabledButtonsWithStaleReason,
+        disabledReasonSrOnlyLeakage,
+        columnsHeldVisibleText,
+        columnsHeldReasonVisibleLeak,
+        workIndexMobileReadability,
         bodyLevelHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth || document.body.scrollWidth > window.innerWidth,
         viewportWidth: window.innerWidth,
         documentScrollWidth: document.documentElement.scrollWidth,
@@ -195,6 +251,9 @@ try {
     && viewportReadbacks.every((readback) => readback.forbiddenPositiveClaimHits.length === 0)
     && viewportReadbacks.every((readback) => readback.disabledButtonsMissingReason.length === 0)
     && viewportReadbacks.every((readback) => readback.disabledButtonsWithStaleReason.length === 0)
+    && viewportReadbacks.every((readback) => readback.disabledReasonSrOnlyLeakage.length === 0)
+    && viewportReadbacks.every((readback) => readback.columnsHeldReasonVisibleLeak === false)
+    && viewportReadbacks.every((readback) => !readback.workIndexMobileReadability.applies || readback.workIndexMobileReadability.ok)
     && viewportReadbacks.every((readback) => readback.bodyLevelHorizontalOverflow === false)
     && viewportReadbacks.every((readback) => readback.hasUnavailableCopy)
     && viewportReadbacks.every((readback) => readback.hasHeldRouteCopy)
@@ -262,6 +321,9 @@ try {
     forbiddenPositiveClaimHits: viewportReadbacks.flatMap((readback) => readback.forbiddenPositiveClaimHits),
     disabledButtonsMissingReason: viewportReadbacks.flatMap((readback) => readback.disabledButtonsMissingReason),
     disabledButtonsWithStaleReason: viewportReadbacks.flatMap((readback) => readback.disabledButtonsWithStaleReason),
+    disabledReasonSrOnlyLeakage: viewportReadbacks.flatMap((readback) => readback.disabledReasonSrOnlyLeakage),
+    columnsHeldReasonVisibleLeakCount: viewportReadbacks.filter((readback) => readback.columnsHeldReasonVisibleLeak).length,
+    mobileWorkIndexReadabilityFailures: viewportReadbacks.filter((readback) => readback.workIndexMobileReadability.applies && !readback.workIndexMobileReadability.ok).length,
     bodyLevelHorizontalOverflowCount: viewportReadbacks.filter((readback) => readback.bodyLevelHorizontalOverflow).length,
     pageErrorCount: pageErrors.length,
     consoleErrorCount: consoleErrors.length,

@@ -28,7 +28,7 @@
     {
       "id": "operations-cockpit",
       "path": "apps/web/static/operations-cockpit.html",
-      "componentCount": 93,
+      "componentCount": 92,
       "registeredComponents": [
         "Badge",
         "Button",
@@ -39,7 +39,6 @@
         "GateReadinessPanel",
         "Heading",
         "IconButton",
-        "Input",
         "KeyValueList",
         "LinkButton",
         "NavGroup",
@@ -203,13 +202,13 @@
       "Button",
       "Field",
       "FilterBar",
-      "Input",
       "SearchInput",
       "StateView",
       "TableShell",
       "WorkIndex"
     ],
     "missingWorkIndexComponents": [],
+    "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "packageRuntimeWorkRowCount": 1,
     "workIndexRowFailureCount": 0,
     "packageBackedReactRuntimeShellMarkerPresent": true

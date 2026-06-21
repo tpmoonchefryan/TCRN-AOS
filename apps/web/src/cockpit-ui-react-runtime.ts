@@ -185,7 +185,7 @@ function addAosWorkIndexRuntimeAttributes(html: string, rows: readonly CockpitRu
     )
     .replace(
       /(<input\b(?=[^>]*id="work-search")(?=[^>]*class="[^"]*\btcrn-input\b)[^>]*?)(\s*\/?>)/,
-      (_match, inputStart: string, close: string) => `${inputStart} data-tcrn-component="Input" data-package-runtime-component="Input" data-package-runtime-source="@tcrn/ui-react"${close}`
+      (_match, inputStart: string, close: string) => `${inputStart} data-package-runtime-subcomponent="SearchInput.control" data-package-runtime-source="@tcrn/ui-react"${close}`
     )
     .replace(
       /<section class="tcrn-filter-bar" aria-label="Service read-model filters">/,

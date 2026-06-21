@@ -390,7 +390,6 @@ function inspectPackageRuntimeReadback(surface) {
     "Button",
     "Field",
     "FilterBar",
-    "Input",
     "SearchInput",
     "StateView",
     "TableShell",
@@ -409,6 +408,8 @@ function inspectPackageRuntimeReadback(surface) {
       && disabledPackageRuntimeNavItems.length === 9
       && activePackageRuntimeNavItems.length === 1
       && workIndexCluster.includes('data-package-runtime-component="WorkIndex"')
+      && workIndexCluster.includes('data-package-runtime-subcomponent="SearchInput.control"')
+      && !workIndexCluster.includes('data-package-runtime-component="Input"')
       && missingWorkIndexComponents.length === 0
       && workIndexRows.length > 0
       && workIndexRowFailures.length === 0
@@ -423,6 +424,7 @@ function inspectPackageRuntimeReadback(surface) {
     workIndexRuntimeSurface: "operations-cockpit-work-index",
     workIndexPackageRuntimeComponents,
     missingWorkIndexComponents,
+    searchInputControlDisposition: "internal_subcomponent_not_separate_package_runtime_scope",
     packageRuntimeWorkRowCount: workIndexRows.length,
     workIndexRowFailureCount: workIndexRowFailures.length,
     packageBackedReactRuntimeShellMarkerPresent: surface.html.includes('data-package-backed-react-runtime-rendering="true"')
