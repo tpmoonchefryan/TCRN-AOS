@@ -592,7 +592,7 @@ function inspectFullDocumentAccessibility(html) {
   const disabledControlDescriptionFailures = [];
   for (const control of collectDisabledControls(html)) {
     const expectedReason = control.parsed["data-disabled-reason"]?.trim() ?? "";
-    if (!expectedReason) continue;
+    const title = control.parsed.title?.trim() ?? "";
     const describedbyIds = splitIdRefs(control.parsed["aria-describedby"]);
     const targetCounts = describedbyIds.map((id) => ({ id, targetCount: idCounts.get(id) ?? 0 }));
     const resolvedText = describedbyIds
@@ -602,10 +602,12 @@ function inspectFullDocumentAccessibility(html) {
       .replace(/\s+/g, " ")
       .trim();
     const failures = [];
+    if (!expectedReason) failures.push("disabled_control_missing_data_disabled_reason");
+    if (!title) failures.push("disabled_control_missing_title_reason");
     if (describedbyIds.length === 0) failures.push("disabled_control_missing_aria_describedby");
     if (targetCounts.some(({ targetCount }) => targetCount !== 1)) failures.push("disabled_control_aria_target_count_not_one");
     if (!resolvedText) failures.push("disabled_control_description_unresolved");
-    if (resolvedText && normalizeText(resolvedText) !== normalizeText(expectedReason)) {
+    if (resolvedText && expectedReason && normalizeText(resolvedText) !== normalizeText(expectedReason)) {
       failures.push("disabled_control_description_mismatch");
     }
     if (failures.length > 0) {
@@ -613,6 +615,7 @@ function inspectFullDocumentAccessibility(html) {
         tag: control.tag,
         label: extractButtonLabel(control.body),
         dataDisabledReason: expectedReason,
+        titleReason: title,
         ariaDescribedBy: describedbyIds,
         targetCounts,
         resolvedText,
@@ -628,6 +631,7 @@ function inspectFullDocumentAccessibility(html) {
     duplicateIds,
     ariaReferenceFailures,
     disabledControlDescriptionFailures,
+    disabledControlsCount: collectDisabledControls(html).length,
     disabledControlsWithReasonCount: collectDisabledControls(html)
       .filter((control) => control.parsed["data-disabled-reason"]?.trim()).length
   };

@@ -120,7 +120,7 @@ try {
         const disabledControls = Array.from(document.querySelectorAll("button:disabled, [aria-disabled='true']"));
         for (const element of disabledControls) {
           const dataDisabledReason = element.getAttribute("data-disabled-reason")?.trim() ?? "";
-          if (!dataDisabledReason) continue;
+          const title = element.getAttribute("title")?.trim() ?? "";
           const describedbyIds = (element.getAttribute("aria-describedby") ?? "").split(/\s+/).filter(Boolean);
           const targetCounts = describedbyIds.map((id) => ({ id, targetCount: idCounts.get(id) ?? 0 }));
           const resolvedText = normalizeText(describedbyIds
@@ -128,15 +128,18 @@ try {
             .filter(Boolean)
             .join(" "));
           const failures = [];
+          if (!dataDisabledReason) failures.push("disabled_control_missing_data_disabled_reason");
+          if (!title) failures.push("disabled_control_missing_title_reason");
           if (describedbyIds.length === 0) failures.push("disabled_control_missing_aria_describedby");
           if (targetCounts.some(({ targetCount }) => targetCount !== 1)) failures.push("disabled_control_aria_target_count_not_one");
           if (!resolvedText) failures.push("disabled_control_description_unresolved");
-          if (resolvedText && normalizeText(resolvedText) !== normalizeText(dataDisabledReason)) failures.push("disabled_control_description_mismatch");
+          if (resolvedText && dataDisabledReason && normalizeText(resolvedText) !== normalizeText(dataDisabledReason)) failures.push("disabled_control_description_mismatch");
           if (failures.length > 0) {
             disabledControlDescriptionFailures.push({
               tag: element.tagName.toLowerCase(),
               label: normalizeText(element.textContent ?? ""),
               dataDisabledReason,
+              titleReason: title,
               ariaDescribedBy: describedbyIds,
               targetCounts,
               resolvedText,
@@ -152,6 +155,7 @@ try {
           duplicateIds,
           ariaReferenceFailures,
           disabledControlDescriptionFailures,
+          disabledControlsCount: disabledControls.length,
           disabledControlsWithReasonCount: disabledControls.filter((element) => element.getAttribute("data-disabled-reason")?.trim()).length
         };
       };
@@ -175,7 +179,7 @@ try {
           ...disabledReason
         };
       });
-      const disabledButtonsMissingReason = disabledButtons.filter((button) => !button.reason);
+      const disabledButtonsMissingReason = disabledButtons.filter((button) => !button.dataDisabledReason || !button.ariaDescription || !button.title);
       const disabledNavItemsMissingReason = disabledNavItems.filter((item) => !item.reason || !item.describedbyResolved);
       const disabledNavButtons = disabledButtons.filter((button) => String(button.className).includes("nav-row"));
       const srOnlyHiddenReadbacks = Array.from(document.querySelectorAll("button:disabled .tcrn-sr-only")).map((element) => {

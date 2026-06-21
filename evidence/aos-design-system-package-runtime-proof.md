@@ -1,9 +1,9 @@
 # AOS Design System Package Runtime Proof
 
 - Route: route_tcrn_aos_design_system_frontend_rebuild_59aq_gate_readback_cards_package_runtime_implementation
-- Source head at proof run: f88b3940b98d2b98872b7d2ce72a750409bfcb03
+- Source head at proof run: 4d4f0ebf77b024496f3b8821fc2cc063c4af322c
 - Source freshness strategy: source_content_digest_for_mutating_receipts
-- Source content digest: 24985abedf0c9d3a5f104b4d496b3057303c5890a090c9d4ec8249c37c90f758
+- Source content digest: ba1c3828e64b3eadffc6acb72ba778a5b72aec98d876a82d0ca834551f6a01b8
 - Scope: operations_cockpit_gate_readback_cards_package_runtime_expansion
 - Runtime rendering claim: operations_cockpit_navitem_work_index_selected_detail_drawer_and_gate_readback_cards
 - Design System source head: b0c00828a813d3c62392eb6e53d7d6b85b6affeb

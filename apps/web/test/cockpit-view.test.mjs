@@ -139,7 +139,9 @@ test("Operations Cockpit composed package runtime markup has unique id and resol
       assert.equal(idCounts.get(id), 1, `${reference.attribute} ${id} resolves exactly once`);
     }
   }
-  for (const control of disabledControlsWithReasons(html)) {
+  for (const control of disabledControls(html)) {
+    assert.ok(control.parsed["data-disabled-reason"]?.trim(), `disabled control has data-disabled-reason: ${control.attributes}`);
+    assert.ok(control.parsed.title?.trim(), `disabled control has title reason: ${control.attributes}`);
     const describedby = control.parsed["aria-describedby"];
     assert.ok(describedby, `disabled control has aria-describedby: ${control.attributes}`);
     const resolvedText = describedby
@@ -149,6 +151,7 @@ test("Operations Cockpit composed package runtime markup has unique id and resol
       .join(" ")
       .replace(/\s+/g, " ")
       .trim();
+    assert.ok(resolvedText, `disabled control aria-describedby resolves to text: ${control.attributes}`);
     assert.equal(resolvedText, control.parsed["data-disabled-reason"], `disabled reason resolves to own description for ${control.attributes}`);
   }
 });
@@ -317,15 +320,14 @@ function collectAriaReferences(html) {
   return references;
 }
 
-function disabledControlsWithReasons(html) {
+function disabledControls(html) {
   return Array.from(html.matchAll(/<(button|a)\b([^>]*)>([\s\S]*?)<\/\1>/g))
     .map((match) => ({
       attributes: match[2],
       body: match[3],
       parsed: parseAttributes(match[2])
     }))
-    .filter((control) => (control.parsed.disabled === "true" || control.parsed["aria-disabled"] === "true")
-      && control.parsed["data-disabled-reason"]);
+    .filter((control) => control.parsed.disabled === "true" || control.parsed["aria-disabled"] === "true");
 }
 
 function textForRealId(html, id) {

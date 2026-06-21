@@ -3,7 +3,7 @@
 Status: passed.
 
 Route: `route_tcrn_aos_design_system_frontend_rebuild_59aq_gate_readback_cards_package_runtime_implementation`
-AOS source head: `f88b3940b98d2b98872b7d2ce72a750409bfcb03`
+AOS source head: `4d4f0ebf77b024496f3b8821fc2cc063c4af322c`
 Design System source basis: `b0c00828a813d3c62392eb6e53d7d6b85b6affeb`
 
 ## Consumption Readback
@@ -18,8 +18,8 @@ Design System source basis: `b0c00828a813d3c62392eb6e53d7d6b85b6affeb`
 
 | Viewport | Screenshot | SHA-256 | Raw visible copy hits | Forbidden claim hits | Disabled controls missing reason |
 | --- | --- | --- | ---: | ---: | ---: |
-| desktop-1440x900 | `evidence/aos-design-system-consumer-slice-1-browser/f88b3940b98d2b98872b7d2ce72a750409bfcb03/desktop-1440x900-operations-cockpit.png` | `311319caca3b4dde5cd184191a93b848ee33a2f80415af9adb30ac21f784efa1` | 0 | 0 | 0 |
-| mobile-390x844 | `evidence/aos-design-system-consumer-slice-1-browser/f88b3940b98d2b98872b7d2ce72a750409bfcb03/mobile-390x844-operations-cockpit.png` | `19a72df6b3eeee21139979e67ad869d806de22df4363c669a14573cc206a3a93` | 0 | 0 | 0 |
+| desktop-1440x900 | `evidence/aos-design-system-consumer-slice-1-browser/4d4f0ebf77b024496f3b8821fc2cc063c4af322c/desktop-1440x900-operations-cockpit.png` | `7cba2d568f6c0d234069c5cc94f5f9b68f0d074ec57da75bd15658358c1e3c7e` | 0 | 0 | 0 |
+| mobile-390x844 | `evidence/aos-design-system-consumer-slice-1-browser/4d4f0ebf77b024496f3b8821fc2cc063c4af322c/mobile-390x844-operations-cockpit.png` | `63d720ee9890a3619a48576434f524f0c4c90cdebf73b9e7d9cdb9f438140753` | 0 | 0 | 0 |
 
 ## No-Overclaim Boundaries
 

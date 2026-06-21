@@ -235,6 +235,8 @@ export function renderOperationsCockpitHtml(
   const resource = model.resourceInspection[0];
   const selectedConference = model.conferences[0];
   const serviceReadback = createCockpitServiceReadback(model, { serviceBacked });
+  const stageDetailDisabledReason = "Stage detail route is held for the owner-trial implementation proof";
+  const roleDetailDisabledReason = "Role detail route is held for a later owner-trial slice";
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -295,7 +297,7 @@ export function renderOperationsCockpitHtml(
             <article class="panel stage-panel tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="stage-map" aria-label="Development stage map">
               <div class="panel-head">
                 <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Stage Map</h2>
-                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button" disabled title="Stage detail route is held for the owner-trial implementation proof">Stage detail held</button>
+                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button" disabled title="${escapeHtml(stageDetailDisabledReason)}" data-disabled-reason="${escapeHtml(stageDetailDisabledReason)}" aria-describedby="stage-detail-held-reason">Stage detail held<span id="stage-detail-held-reason" class="tcrn-sr-only">${escapeHtml(stageDetailDisabledReason)}</span></button>
               </div>
               <ol class="stage-line">
                 ${model.stageMap.map((stage, index) => stageStep(stage, index)).join("")}
@@ -304,7 +306,7 @@ export function renderOperationsCockpitHtml(
             <article class="panel tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="ai-employee-phase" aria-label="AI employee responsibility by phase">
               <div class="panel-head">
                 <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>AI Employee Phase</h2>
-                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button" disabled title="Role detail route is held for a later owner-trial slice">Role detail held</button>
+                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button" disabled title="${escapeHtml(roleDetailDisabledReason)}" data-disabled-reason="${escapeHtml(roleDetailDisabledReason)}" aria-describedby="role-detail-held-reason">Role detail held<span id="role-detail-held-reason" class="tcrn-sr-only">${escapeHtml(roleDetailDisabledReason)}</span></button>
               </div>
               <div class="phase-list">
                 ${model.stageMap.map((stage) => phaseRow(stage)).join("")}
