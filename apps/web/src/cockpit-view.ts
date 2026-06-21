@@ -26,9 +26,11 @@ import {
 import {
   aosCockpitUiReactRuntime,
   renderCockpitRuntimeDetailDrawer,
+  renderCockpitRuntimeGateReadbackCards,
   renderCockpitRuntimeNavItems,
   renderCockpitRuntimeWorkIndexCluster,
   type CockpitRuntimeDetailDrawerOptions,
+  type CockpitRuntimeGateReadbackCardsOptions,
   type CockpitRuntimeWorkIndexRow,
   type CockpitRuntimeNavItem
 } from "./cockpit-ui-react-runtime.js";
@@ -308,26 +310,12 @@ export function renderOperationsCockpitHtml(
                 ${model.stageMap.map((stage) => phaseRow(stage)).join("")}
               </div>
             </article>
-            <article class="panel tcrn-gate-readiness-panel" ${tcrnComponentAttr("GateReadinessPanel")} data-region="blocker-gate-card" aria-label="Blocker and gate posture">
-              <div class="panel-head">
-                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Gate Work Order</h2>
-                <span class="count tcrn-badge tcrn-badge--danger" ${tcrnComponentAttr("Badge")}>${model.ownerIntentQueue.length + model.roleGateQueue.length}</span>
-              </div>
-              ${gateBlock(blockingGate)}
-              <button type="button" class="secondary-action tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} disabled title="Gate request requires a routed owner-intent or role-gate path">Gate request held</button>
-            </article>
-            <article class="panel tcrn-readback-panel" ${tcrnComponentAttr("ReadbackPanel")} data-region="readback-posture-card" aria-label="Readback posture">
-              <div class="panel-head">
-                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Readback Posture</h2>
-                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button" disabled title="Evidence detail route is held for a later owner-trial slice">Evidence detail held</button>
-              </div>
-              <dl class="posture-list tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")}>
-                <div><dt>Runtime fixture</dt><dd><span class="state-dot state-current"></span>${copyState("static_fixture")}</dd></div>
-                <div><dt>Evidence</dt><dd>${copyFreshness(model.evidenceReadbacks[0]?.freshness ?? "unknown")}</dd></div>
-                <div><dt>Dependency</dt><dd>${dependency ? copyPosture(dependency.posture) : copyState("none")}</dd></div>
-                <div><dt>Resource</dt><dd>${resource ? copyPosture(resource.approvalState) : copyState("none")}</dd></div>
-              </dl>
-            </article>
+            ${renderCockpitRuntimeGateReadbackCards(createCockpitRuntimeGateReadbackCardsOptions({
+              blockingGate,
+              dependency,
+              model,
+              resource
+            }))}
           </section>
           <section class="content-grid">
             ${renderCockpitRuntimeWorkIndexCluster({
@@ -782,6 +770,39 @@ interface DetailDrawerOptionInput {
   selectedConference: OperationsCockpitReadModel["conferences"][number] | undefined;
   selectedDetail: OperationsCockpitReadModel["detailPanel"];
   selectedRow: WorkstreamStoryRow | undefined;
+}
+
+interface GateReadbackCardsOptionInput {
+  blockingGate: GateQueueItem | undefined;
+  dependency: OperationsCockpitReadModel["dependencyInspection"][number] | undefined;
+  model: OperationsCockpitReadModel;
+  resource: OperationsCockpitReadModel["resourceInspection"][number] | undefined;
+}
+
+function createCockpitRuntimeGateReadbackCardsOptions(input: GateReadbackCardsOptionInput): CockpitRuntimeGateReadbackCardsOptions {
+  const gate = input.blockingGate;
+  const gateTypeLabel = gate ? copyState(gate.type) : copyState("none");
+  const gateOwnerRole = gate?.ownerRole ?? "No local gate rows";
+  const gateStatusLabel = gate ? copyState(gate.status) : "No local gate rows in fixture";
+  const gateModeLabel = gate ? (gate.ownerIntent ? "Owner Intent separated" : "Role gate pending") : "No local gate rows in fixture";
+  return {
+    gateWorkOrder: {
+      count: input.model.ownerIntentQueue.length + input.model.roleGateQueue.length,
+      disabledReason: "Gate request requires a routed owner-intent or role-gate path",
+      gateModeLabel,
+      gateOwnerRole,
+      gateStatusLabel,
+      gateSummary: `${gateTypeLabel}: ${gateStatusLabel}; ${gateModeLabel}.`,
+      gateTypeLabel
+    },
+    readbackPosture: {
+      dependencyLabel: input.dependency ? copyPosture(input.dependency.posture) : copyState("none"),
+      disabledReason: "Evidence detail route is held for a later owner-trial slice",
+      evidenceLabel: copyFreshness(input.model.evidenceReadbacks[0]?.freshness ?? "unknown"),
+      resourceLabel: input.resource ? copyPosture(input.resource.approvalState) : copyState("none"),
+      runtimeFixtureLabel: copyState("static_fixture")
+    }
+  };
 }
 
 function createCockpitRuntimeDetailDrawerOptions(input: DetailDrawerOptionInput): CockpitRuntimeDetailDrawerOptions {

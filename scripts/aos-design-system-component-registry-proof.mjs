@@ -112,8 +112,8 @@ const summary = {
   registrySource: relative(repoRoot, designSystemRegistrySourcePath),
   designSystemBasis,
   claimScope: {
-    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_selected_detail_package_runtime",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_and_selected_detail_drawer",
+    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_gate_readback_cards_package_runtime",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_and_gate_readback_cards",
     storybookVisualStyleParity: "not_claimed_by_registered_component_proof",
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -403,6 +403,7 @@ function inspectPackageRuntimeReadback(surface) {
     || row.parsed["data-package-runtime-surface"] !== "operations-cockpit-work-index"
     || !row.parsed["data-row-id"]?.trim());
   const detailDrawer = inspectDetailDrawerRuntime(surface.html);
+  const gateReadbackCards = inspectGateReadbackCardsRuntime(surface.html);
   return {
     ok: packageRuntimeNavItems.length === 10
       && markerOnlyNavItems.length === 0
@@ -415,9 +416,10 @@ function inspectPackageRuntimeReadback(surface) {
       && workIndexRows.length > 0
       && workIndexRowFailures.length === 0
       && detailDrawer.ok
+      && gateReadbackCards.ok
       && surface.html.includes('data-package-backed-react-runtime-rendering="true"'),
     surface: surface.id,
-    packageRuntimeComponent: "NavItem+WorkIndex+DetailDrawer",
+    packageRuntimeComponent: "NavItem+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel",
     packageRuntimeSource: "@tcrn/ui-react",
     packageRuntimeNavItemCount: packageRuntimeNavItems.length,
     markerOnlyNavItemCount: markerOnlyNavItems.length,
@@ -430,7 +432,52 @@ function inspectPackageRuntimeReadback(surface) {
     packageRuntimeWorkRowCount: workIndexRows.length,
     workIndexRowFailureCount: workIndexRowFailures.length,
     detailDrawerRuntimeReadback: detailDrawer,
+    gateReadbackCardsRuntimeReadback: gateReadbackCards,
     packageBackedReactRuntimeShellMarkerPresent: surface.html.includes('data-package-backed-react-runtime-rendering="true"')
+  };
+}
+
+function inspectGateReadbackCardsRuntime(html) {
+  const gateHtml = extractRegionArticleHtml(html, "blocker-gate-card");
+  const readbackHtml = extractRegionArticleHtml(html, "readback-posture-card");
+  const combinedHtml = `${gateHtml}\n${readbackHtml}`;
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(combinedHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "Badge",
+    "Button",
+    "GateReadinessPanel",
+    "Heading",
+    "KeyValueList",
+    "ReadbackPanel",
+    "StateView",
+    "StatusBadge",
+    "Text"
+  ];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  const failures = [];
+  const gateAttributes = parseAttributes(gateHtml.match(/<article\b([^>]*)>/)?.[1] ?? "");
+  const readbackAttributes = parseAttributes(readbackHtml.match(/<article\b([^>]*)>/)?.[1] ?? "");
+  if (!gateHtml) failures.push("gate_work_order_card_missing");
+  if (!readbackHtml) failures.push("readback_posture_card_missing");
+  if (missingComponents.length > 0) failures.push("gate_readback_required_package_components_missing");
+  if (gateAttributes["data-package-runtime-component"] !== "GateReadinessPanel") failures.push("gate_card_missing_runtime_marker");
+  if (readbackAttributes["data-package-runtime-component"] !== "ReadbackPanel") failures.push("readback_card_missing_runtime_marker");
+  if (gateAttributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push("gate_card_missing_package_source");
+  if (readbackAttributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push("readback_card_missing_package_source");
+  if (gateAttributes["data-package-runtime-surface"] !== "operations-cockpit-gate-readback-cards") failures.push("gate_card_missing_runtime_surface");
+  if (readbackAttributes["data-package-runtime-surface"] !== "operations-cockpit-gate-readback-cards") failures.push("readback_card_missing_runtime_surface");
+  if (!/Gate request held/.test(gateHtml)) failures.push("gate_card_disabled_action_missing");
+  if (!/Evidence detail held/.test(readbackHtml)) failures.push("readback_card_disabled_action_missing");
+  if ((readbackHtml.match(/<dt>/g) ?? []).length !== 4) failures.push("readback_key_value_rows_missing");
+  return {
+    ok: failures.length === 0,
+    surface: "operations-cockpit-gate-readback-cards",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    failures
   };
 }
 
@@ -501,6 +548,16 @@ function extractDetailDrawerHtml(html) {
   const end = html.indexOf("</aside>", markerIndex);
   if (start === -1 || end === -1) return "";
   return html.slice(start, end + "</aside>".length);
+}
+
+function extractRegionArticleHtml(html, region) {
+  const marker = `data-region="${region}"`;
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<article", markerIndex);
+  const end = html.indexOf("</article>", markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + "</article>".length);
 }
 
 function escapeRegExp(value) {

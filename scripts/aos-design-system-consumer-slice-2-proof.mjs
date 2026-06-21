@@ -249,6 +249,67 @@ try {
         closedAfterClose: detailClosedAfterClose,
         failures: detailFailures
       };
+      const inspectRuntimeRegion = (region, expectedRootComponent, requiredComponents) => {
+        const node = document.querySelector(`[data-region='${region}']`);
+        const components = Array.from(new Set(
+          Array.from(node?.querySelectorAll("[data-package-runtime-component]") ?? [])
+            .map((componentNode) => componentNode.getAttribute("data-package-runtime-component"))
+            .filter(Boolean)
+        )).sort();
+        if (node?.getAttribute("data-package-runtime-component")) {
+          components.push(node.getAttribute("data-package-runtime-component"));
+        }
+        const normalizedComponents = Array.from(new Set(components)).sort();
+        const missingComponents = requiredComponents.filter((component) => !normalizedComponents.includes(component));
+        const failures = [];
+        if (!node) failures.push(`${region}_missing`);
+        if (node?.getAttribute("data-package-runtime-component") !== expectedRootComponent) failures.push(`${region}_missing_runtime_marker`);
+        if (node?.getAttribute("data-package-runtime-source") !== "@tcrn/ui-react") failures.push(`${region}_missing_package_source`);
+        if (node?.getAttribute("data-package-runtime-surface") !== "operations-cockpit-gate-readback-cards") failures.push(`${region}_missing_runtime_surface`);
+        if (missingComponents.length > 0) failures.push(`${region}_required_package_components_missing`);
+        const disabledButtons = Array.from(node?.querySelectorAll("button:disabled") ?? []);
+        if (disabledButtons.length === 0) failures.push(`${region}_disabled_action_missing`);
+        for (const button of disabledButtons) {
+          if (!button.getAttribute("title")?.trim()) failures.push(`${region}_disabled_button_missing_title`);
+          if (!button.getAttribute("data-disabled-reason")?.trim()) failures.push(`${region}_disabled_button_missing_data_disabled_reason`);
+          if (!button.getAttribute("aria-describedby")?.trim()) failures.push(`${region}_disabled_button_missing_aria_describedby`);
+        }
+        return {
+          ok: failures.length === 0,
+          present: node !== null,
+          rootComponent: node?.getAttribute("data-package-runtime-component") ?? "",
+          packageRuntimeComponents: normalizedComponents,
+          requiredComponents,
+          missingComponents,
+          disabledButtonCount: disabledButtons.length,
+          failures
+        };
+      };
+      const gateCardRuntimeReadback = inspectRuntimeRegion("blocker-gate-card", "GateReadinessPanel", [
+        "Badge",
+        "Button",
+        "GateReadinessPanel",
+        "Heading",
+        "StateView",
+        "StatusBadge",
+        "Text"
+      ]);
+      const readbackCardRuntimeReadback = inspectRuntimeRegion("readback-posture-card", "ReadbackPanel", [
+        "Button",
+        "Heading",
+        "KeyValueList",
+        "ReadbackPanel"
+      ]);
+      const gateReadbackCardsRuntimeReadback = {
+        ok: gateCardRuntimeReadback.ok && readbackCardRuntimeReadback.ok,
+        surface: "operations-cockpit-gate-readback-cards",
+        gateCardRuntimeReadback,
+        readbackCardRuntimeReadback,
+        failures: [
+          ...gateCardRuntimeReadback.failures,
+          ...readbackCardRuntimeReadback.failures
+        ]
+      };
       const renderedRowCount = document.querySelectorAll("[data-work-row]").length;
       const domMatchesApi = attrs.schema === expected.schemaVersion
         && attrs.source === "service_api_read"
@@ -280,6 +341,7 @@ try {
         columnsHeldReasonVisibleLeak,
         workIndexMobileReadability,
         detailDrawerRuntimeReadback,
+        gateReadbackCardsRuntimeReadback,
         bodyLevelHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth || document.body.scrollWidth > window.innerWidth,
         viewportWidth: window.innerWidth,
         documentScrollWidth: document.documentElement.scrollWidth,
@@ -319,6 +381,7 @@ try {
     && viewportReadbacks.every((readback) => readback.columnsHeldReasonVisibleLeak === false)
     && viewportReadbacks.every((readback) => !readback.workIndexMobileReadability.applies || readback.workIndexMobileReadability.ok)
     && viewportReadbacks.every((readback) => readback.detailDrawerRuntimeReadback.ok)
+    && viewportReadbacks.every((readback) => readback.gateReadbackCardsRuntimeReadback.ok)
     && viewportReadbacks.every((readback) => readback.bodyLevelHorizontalOverflow === false)
     && viewportReadbacks.every((readback) => readback.hasUnavailableCopy)
     && viewportReadbacks.every((readback) => readback.hasHeldRouteCopy)
@@ -390,6 +453,7 @@ try {
     columnsHeldReasonVisibleLeakCount: viewportReadbacks.filter((readback) => readback.columnsHeldReasonVisibleLeak).length,
     mobileWorkIndexReadabilityFailures: viewportReadbacks.filter((readback) => readback.workIndexMobileReadability.applies && !readback.workIndexMobileReadability.ok).length,
     detailDrawerRuntimeFailures: viewportReadbacks.flatMap((readback) => readback.detailDrawerRuntimeReadback.failures),
+    gateReadbackCardsRuntimeFailures: viewportReadbacks.flatMap((readback) => readback.gateReadbackCardsRuntimeReadback.failures),
     bodyLevelHorizontalOverflowCount: viewportReadbacks.filter((readback) => readback.bodyLevelHorizontalOverflow).length,
     pageErrorCount: pageErrors.length,
     consoleErrorCount: consoleErrors.length,
@@ -450,7 +514,7 @@ function summarizeApiContract(apiPayload, selectedPayload) {
 
 function markdownReceipt(summary) {
   const screenshotRows = summary.viewportReadbacks
-    .map((readback) => `| ${readback.label} | \`${readback.screenshot.path}\` | \`${readback.screenshot.sha256}\` | ${readback.domMatchesApi ? "yes" : "no"} | ${readback.detailDrawerRuntimeReadback.ok ? "yes" : "no"} | ${readback.rawVisibleCopyHits.length} | ${readback.forbiddenPositiveClaimHits.length} | ${readback.disabledButtonsMissingReason.length} | ${readback.disabledButtonsWithStaleReason.length} | ${readback.bodyLevelHorizontalOverflow ? "yes" : "no"} |`)
+    .map((readback) => `| ${readback.label} | \`${readback.screenshot.path}\` | \`${readback.screenshot.sha256}\` | ${readback.domMatchesApi ? "yes" : "no"} | ${readback.detailDrawerRuntimeReadback.ok ? "yes" : "no"} | ${readback.gateReadbackCardsRuntimeReadback.ok ? "yes" : "no"} | ${readback.rawVisibleCopyHits.length} | ${readback.forbiddenPositiveClaimHits.length} | ${readback.disabledButtonsMissingReason.length} | ${readback.disabledButtonsWithStaleReason.length} | ${readback.bodyLevelHorizontalOverflow ? "yes" : "no"} |`)
     .join("\n");
   return `# AOS Design System Consumer Slice 2 Service Read-Model Proof
 
@@ -482,8 +546,8 @@ Design System source basis: \`${summary.designSystemSourceHead}\`
 
 ## Browser Evidence
 
-| Viewport | Screenshot | SHA-256 | DOM matches API | Detail drawer runtime ok | Raw visible copy hits | Forbidden claim hits | Disabled controls missing reason | Stale disabled reason hits | Body overflow |
-| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
+| Viewport | Screenshot | SHA-256 | DOM matches API | Detail drawer runtime ok | Gate/readback card runtime ok | Raw visible copy hits | Forbidden claim hits | Disabled controls missing reason | Stale disabled reason hits | Body overflow |
+| --- | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
 ${screenshotRows}
 
 ## No-Overclaim Boundaries

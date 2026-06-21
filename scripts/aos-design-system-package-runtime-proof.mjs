@@ -5,6 +5,7 @@ import { dirname, join, relative } from "node:path";
 import {
   aosCockpitUiReactRuntime,
   renderCockpitRuntimeDetailDrawer,
+  renderCockpitRuntimeGateReadbackCards,
   renderCockpitRuntimeNavItems,
   renderCockpitRuntimeWorkIndexCluster
 } from "../dist/apps/web/src/cockpit-ui-react-runtime.js";
@@ -16,7 +17,7 @@ import {
 } from "../dist/apps/web/src/cockpit-view.js";
 
 const repoRoot = process.cwd();
-const route = "route_tcrn_aos_design_system_frontend_rebuild_59ap_selected_detail_package_runtime_implementation";
+const route = "route_tcrn_aos_design_system_frontend_rebuild_59aq_gate_readback_cards_package_runtime_implementation";
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const packageJson = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8"));
 const runtimeSourcePath = "apps/web/src/cockpit-ui-react-runtime.ts";
@@ -25,6 +26,7 @@ const cockpitHtml = renderOperationsCockpitHtml();
 const navRuntimeReadback = inspectPackageRuntimeNavItems(cockpitHtml);
 const workIndexRuntimeReadback = inspectPackageRuntimeWorkIndexCluster(cockpitHtml);
 const detailDrawerRuntimeReadback = inspectPackageRuntimeDetailDrawer(cockpitHtml);
+const gateReadbackCardsRuntimeReadback = inspectPackageRuntimeGateReadbackCards(cockpitHtml);
 const visualStyleReadback = inspectAosRuntimeStyleContract(cockpitHtml);
 const importReadback = inspectImports();
 const dependencyReadback = inspectDependencies();
@@ -43,6 +45,7 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && navRuntimeReadback.ok
   && workIndexRuntimeReadback.ok
   && detailDrawerRuntimeReadback.ok
+  && gateReadbackCardsRuntimeReadback.ok
   && visualStyleReadback.ok
   && storybookReferenceReadback.ok
   && noOverclaimReadback.ok
@@ -53,9 +56,9 @@ const summary = {
   route,
   sourceHead,
   claimScope: {
-    implementationKind: "operations_cockpit_selected_detail_package_runtime_expansion",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_and_selected_detail_drawer",
-    storybookVisualStyleParity: "navitem_disabled_reason_work_index_and_selected_detail_component_reference_only",
+    implementationKind: "operations_cockpit_gate_readback_cards_package_runtime_expansion",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_and_gate_readback_cards",
+    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_and_gate_readback_component_reference_only",
     broadUiReactRuntimeMigration: false,
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -76,6 +79,7 @@ const summary = {
   navRuntimeReadback,
   workIndexRuntimeReadback,
   detailDrawerRuntimeReadback,
+  gateReadbackCardsRuntimeReadback,
   visualStyleReadback,
   storybookReferenceReadback,
   noOverclaimReadback
@@ -114,6 +118,8 @@ console.log(JSON.stringify({
   packageRuntimeWorkRowCount: summary.workIndexRuntimeReadback.packageRuntimeWorkRowCount,
   packageRuntimeDetailDrawerComponentCount: summary.detailDrawerRuntimeReadback.packageRuntimeComponents.length,
   packageRuntimeDetailDrawerSelectedId: summary.detailDrawerRuntimeReadback.selectedDetailId,
+  packageRuntimeGateReadbackCardComponentCount: summary.gateReadbackCardsRuntimeReadback.packageRuntimeComponents.length,
+  packageRuntimeGateReadbackCardFailures: summary.gateReadbackCardsRuntimeReadback.failures.length,
   disabledNavItemFailureCount: summary.navRuntimeReadback.disabledNavItemFailures.length,
   workIndexFailureCount: summary.workIndexRuntimeReadback.failures.length,
   detailDrawerFailureCount: summary.detailDrawerRuntimeReadback.failures.length,
@@ -165,7 +171,9 @@ function inspectImports() {
     "Surface",
     "Heading",
     "Text",
-    "StatusBadge"
+    "StatusBadge",
+    "GateReadinessPanel",
+    "ReadbackPanel"
   ];
   const publicComponentImportPresence = Object.fromEntries(
     requiredPublicComponentImports.map((name) => [name, new RegExp(`\\b${name}\\b`).test(runtimeSource)])
@@ -181,7 +189,7 @@ function inspectImports() {
   ]);
   const copiedSourceHits = runRg([
     "-n",
-    "function\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge)|const\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge)|export\\s+function\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge)",
+    "function\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel)|const\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel)|export\\s+function\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel)",
     "apps/web/src",
     "apps/web/test",
     "scripts"
@@ -454,6 +462,102 @@ function inspectPackageRuntimeDetailDrawer(html) {
   };
 }
 
+function inspectPackageRuntimeGateReadbackCards(html) {
+  const gateHtml = extractRegionArticleHtml(html, "blocker-gate-card");
+  const readbackHtml = extractRegionArticleHtml(html, "readback-posture-card");
+  const failures = [];
+
+  if (!gateHtml) failures.push("gate_work_order_card_missing");
+  if (!readbackHtml) failures.push("readback_posture_card_missing");
+  const combinedHtml = `${gateHtml}\n${readbackHtml}`;
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(combinedHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "Badge",
+    "Button",
+    "GateReadinessPanel",
+    "Heading",
+    "KeyValueList",
+    "ReadbackPanel",
+    "StateView",
+    "StatusBadge",
+    "Text"
+  ];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  if (missingComponents.length > 0) failures.push("gate_readback_required_package_components_missing");
+
+  const gateAttributes = parseAttributes(gateHtml.match(/<article\b([^>]*)>/)?.[1] ?? "");
+  const readbackAttributes = parseAttributes(readbackHtml.match(/<article\b([^>]*)>/)?.[1] ?? "");
+  if (gateAttributes["data-package-runtime-component"] !== "GateReadinessPanel") failures.push("gate_card_missing_gate_readiness_panel_runtime_marker");
+  if (readbackAttributes["data-package-runtime-component"] !== "ReadbackPanel") failures.push("readback_card_missing_readback_panel_runtime_marker");
+  for (const [label, attributes] of [["gate", gateAttributes], ["readback", readbackAttributes]]) {
+    if (attributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push(`${label}_card_missing_package_source`);
+    if (attributes["data-package-runtime-surface"] !== "operations-cockpit-gate-readback-cards") failures.push(`${label}_card_missing_runtime_surface`);
+  }
+
+  if (!/Gate Work Order/.test(gateHtml)) failures.push("gate_card_title_missing");
+  if (!/Readback Posture/.test(readbackHtml)) failures.push("readback_card_title_missing");
+  if (!/class="count\b/.test(gateHtml)) failures.push("gate_card_count_badge_missing");
+  if (!/class="gate-block\b/.test(gateHtml)) failures.push("gate_card_gate_block_missing");
+  if (!/Gate request held/.test(gateHtml)) failures.push("gate_card_disabled_action_missing");
+  if (!/Evidence detail held/.test(readbackHtml)) failures.push("readback_card_disabled_action_missing");
+  if ((readbackHtml.match(/<dt>/g) ?? []).length !== 4) failures.push("readback_card_key_value_rows_missing");
+  for (const expectedLabel of ["Runtime fixture", "Evidence", "Dependency", "Resource"]) {
+    if (!readbackHtml.includes(`<dt>${expectedLabel}</dt>`)) {
+      failures.push(`readback_card_${expectedLabel.toLowerCase().replace(/\s+/g, "_")}_row_missing`);
+    }
+  }
+
+  const disabledButtons = Array.from(combinedHtml.matchAll(/<button\b(?=[^>]*data-package-runtime-component="Button")(?=[^>]*disabled)([^>]*)>([\s\S]*?)<\/button>/g))
+    .map((match) => ({ attributes: match[1], body: match[2], parsed: parseAttributes(match[1]) }));
+  if (disabledButtons.length !== 2) failures.push("gate_readback_disabled_button_count_mismatch");
+  for (const button of disabledButtons) {
+    const buttonFailures = [];
+    if (!button.parsed.title?.trim()) buttonFailures.push("disabled_button_missing_title");
+    if (!button.parsed["data-disabled-reason"]?.trim()) buttonFailures.push("disabled_button_missing_data_disabled_reason");
+    if (!button.parsed["aria-describedby"]?.trim()) buttonFailures.push("disabled_button_missing_aria_describedby");
+    if (!/class="tcrn-sr-only"/.test(button.body)) buttonFailures.push("disabled_button_sr_only_reason_missing");
+    if (buttonFailures.length > 0) {
+      failures.push({ label: extractButtonLabel(button.body), failures: buttonFailures });
+    }
+  }
+
+  const sampleRenderedHtmlSha256 = createHash("sha256").update(renderCockpitRuntimeGateReadbackCards({
+    gateWorkOrder: {
+      count: 2,
+      disabledReason: "Sample gate request disabled reason.",
+      gateModeLabel: "Owner Intent separated",
+      gateOwnerRole: "owner",
+      gateStatusLabel: "Proof required",
+      gateSummary: "Owner Intent gate: Proof required; Owner Intent separated.",
+      gateTypeLabel: "Owner Intent gate"
+    },
+    readbackPosture: {
+      dependencyLabel: "Review required",
+      disabledReason: "Sample evidence detail disabled reason.",
+      evidenceLabel: "Readback current",
+      resourceLabel: "Review required",
+      runtimeFixtureLabel: "Static fixture readback"
+    }
+  })).digest("hex");
+
+  return {
+    ok: failures.length === 0,
+    present: Boolean(gateHtml && readbackHtml),
+    surface: "operations-cockpit-gate-readback-cards",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    gateWorkOrderComponent: gateAttributes["data-package-runtime-component"] ?? "",
+    readbackPostureComponent: readbackAttributes["data-package-runtime-component"] ?? "",
+    disabledActionButtonCount: disabledButtons.length,
+    readbackKeyValueRowCount: readbackHtml.match(/<dt>/g)?.length ?? 0,
+    sampleRenderedHtmlSha256,
+    failures
+  };
+}
+
 function inspectAosRuntimeStyleContract(html) {
   const failures = [];
   const hasSrOnlyRule = /\.tcrn-sr-only\s*\{[^}]*position:\s*absolute;[^}]*width:\s*1px;[^}]*height:\s*1px;[^}]*overflow:\s*hidden;[^}]*white-space:\s*nowrap;[^}]*border:\s*0;/s.test(html);
@@ -521,6 +625,16 @@ function extractDetailDrawerHtml(html) {
   const end = html.indexOf("</aside>", markerIndex);
   if (start === -1 || end === -1) return "";
   return html.slice(start, end + "</aside>".length);
+}
+
+function extractRegionArticleHtml(html, region) {
+  const marker = `data-region="${region}"`;
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<article", markerIndex);
+  const end = html.indexOf("</article>", markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + "</article>".length);
 }
 
 function inspectStorybookReference() {
@@ -621,6 +735,9 @@ function markdownReceipt(summary) {
   const detailDrawerRows = summary.detailDrawerRuntimeReadback.failures.length === 0
     ? "- Selected detail drawer package-runtime failures: 0"
     : summary.detailDrawerRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
+  const gateReadbackRows = summary.gateReadbackCardsRuntimeReadback.failures.length === 0
+    ? "- Gate Work Order / Readback Posture package-runtime failures: 0"
+    : summary.gateReadbackCardsRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
   return `# AOS Design System Package Runtime Proof\n\n`
     + `- Route: ${summary.route}\n`
     + `- Source head at proof run: ${summary.sourceHead}\n`
@@ -635,13 +752,15 @@ function markdownReceipt(summary) {
     + `- Package runtime Work Index components: ${summary.workIndexRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Package runtime selected detail id/type: ${summary.detailDrawerRuntimeReadback.selectedDetailId} / ${summary.detailDrawerRuntimeReadback.selectedDetailType}\n`
     + `- Package runtime selected detail components: ${summary.detailDrawerRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
+    + `- Package runtime Gate/Readback card components: ${summary.gateReadbackCardsRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Marker-only NavItems in cockpit nav: ${summary.navRuntimeReadback.markerOnlyNavItemCount}\n`
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
     + `- AOS runtime sr-only / mobile TableShell style proof ok: ${summary.visualStyleReadback.ok}\n`
     + `${rows}\n`
     + `${workIndexRows}\n`
-    + `${detailDrawerRows}\n\n`
+    + `${detailDrawerRows}\n`
+    + `${gateReadbackRows}\n\n`
     + `## Boundaries\n\n`
-    + `This is an Operations Cockpit NavItem, Work Index, and selected detail drawer package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
+    + `This is an Operations Cockpit NavItem, Work Index, selected detail drawer, Gate Work Order card, and Readback Posture card package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
 }

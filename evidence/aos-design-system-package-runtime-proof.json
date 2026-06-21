@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "route": "route_tcrn_aos_design_system_frontend_rebuild_59ap_selected_detail_package_runtime_implementation",
-  "sourceHead": "33c666454ed9b5b359c08d16dbd4205bd5fd63b1",
+  "route": "route_tcrn_aos_design_system_frontend_rebuild_59aq_gate_readback_cards_package_runtime_implementation",
+  "sourceHead": "526bc894dbb43df7b5420f3f3a735388a3354c14",
   "claimScope": {
-    "implementationKind": "operations_cockpit_selected_detail_package_runtime_expansion",
-    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_and_selected_detail_drawer",
-    "storybookVisualStyleParity": "navitem_disabled_reason_work_index_and_selected_detail_component_reference_only",
+    "implementationKind": "operations_cockpit_gate_readback_cards_package_runtime_expansion",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_selected_detail_drawer_and_gate_readback_cards",
+    "storybookVisualStyleParity": "navitem_disabled_reason_work_index_selected_detail_and_gate_readback_component_reference_only",
     "broadUiReactRuntimeMigration": false,
     "docsReadinessPackageRuntimeRendering": false,
     "aosWidePackageRuntimeRendering": false,
@@ -16,9 +16,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "33c666454ed9b5b359c08d16dbd4205bd5fd63b1",
+    "sourceHeadAtProofRun": "526bc894dbb43df7b5420f3f3a735388a3354c14",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "6545e34df3d913c880fc626dc3bc7398007dad08931f47fe04f9bba6b6ed79d4",
+    "sourceContentDigest": "992ded9af85e78148aea837f2b726b4a624d8137022564b1c74edaad4f116959",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
@@ -35,7 +35,7 @@
     "sourceHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
     "uiReactPackage": "@tcrn/ui-react",
     "uiReactPackageSpecifier": "file:../TCRN-Design-System/packages/ui-react",
-    "runtimeSurface": "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer",
+    "runtimeSurface": "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards",
     "runtimeComponentScope": [
       "NavItem",
       "WorkIndex",
@@ -51,7 +51,9 @@
       "Surface",
       "Heading",
       "Text",
-      "StatusBadge"
+      "StatusBadge",
+      "GateReadinessPanel",
+      "ReadbackPanel"
     ]
   },
   "dependencyReadback": {
@@ -91,7 +93,9 @@
       "Surface": true,
       "Heading": true,
       "Text": true,
-      "StatusBadge": true
+      "StatusBadge": true,
+      "GateReadinessPanel": true,
+      "ReadbackPanel": true
     },
     "deepImportHits": [],
     "copiedSourceHits": []
@@ -113,7 +117,9 @@
       "Surface",
       "Heading",
       "Text",
-      "StatusBadge"
+      "StatusBadge",
+      "GateReadinessPanel",
+      "ReadbackPanel"
     ],
     "navItemCount": 10,
     "packageRuntimeNavItemCount": 10,
@@ -188,6 +194,40 @@
     "keyValueRowCount": 10,
     "disabledActionButtonCount": 2,
     "sampleRenderedHtmlSha256": "b719576f793bbc05686282bc891aa6e9bcaa3728e003929cfb403d0e9a93b4ac",
+    "failures": []
+  },
+  "gateReadbackCardsRuntimeReadback": {
+    "ok": true,
+    "present": true,
+    "surface": "operations-cockpit-gate-readback-cards",
+    "requiredComponents": [
+      "Badge",
+      "Button",
+      "GateReadinessPanel",
+      "Heading",
+      "KeyValueList",
+      "ReadbackPanel",
+      "StateView",
+      "StatusBadge",
+      "Text"
+    ],
+    "packageRuntimeComponents": [
+      "Badge",
+      "Button",
+      "GateReadinessPanel",
+      "Heading",
+      "KeyValueList",
+      "ReadbackPanel",
+      "StateView",
+      "StatusBadge",
+      "Text"
+    ],
+    "missingComponents": [],
+    "gateWorkOrderComponent": "GateReadinessPanel",
+    "readbackPostureComponent": "ReadbackPanel",
+    "disabledActionButtonCount": 2,
+    "readbackKeyValueRowCount": 4,
+    "sampleRenderedHtmlSha256": "ea895369c3cfc233709cf9f2b00f4a625566487a1672b63d5b723ff076a47579",
     "failures": []
   },
   "visualStyleReadback": {

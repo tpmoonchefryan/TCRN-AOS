@@ -6,9 +6,11 @@ import {
   DetailDrawer,
   Field,
   FilterBar,
+  GateReadinessPanel,
   Heading,
   KeyValueList,
   NavItem,
+  ReadbackPanel,
   SearchInput,
   StatusBadge,
   Surface,
@@ -24,7 +26,7 @@ export const aosCockpitUiReactRuntime = {
   packageName: "@tcrn/ui-react",
   packageSpecifier: aosDesignSystemConsumerBridge.uiReactPackageSpecifier,
   designSystemSourceHead: aosDesignSystemConsumerBridge.designSystemSourceHead,
-  implementationKind: "operations_cockpit_selected_detail_package_runtime_expansion",
+  implementationKind: "operations_cockpit_gate_readback_cards_package_runtime_expansion",
   componentScope: [
     "NavItem",
     "WorkIndex",
@@ -40,7 +42,9 @@ export const aosCockpitUiReactRuntime = {
     "Surface",
     "Heading",
     "Text",
-    "StatusBadge"
+    "StatusBadge",
+    "GateReadinessPanel",
+    "ReadbackPanel"
   ],
   packageBackedReactRuntimeRendering: true,
   broadUiReactMigration: false,
@@ -98,6 +102,29 @@ export interface CockpitRuntimeDetailRow {
   key: string;
   label: string;
   value: string;
+}
+
+export interface CockpitRuntimeGateWorkOrderOptions {
+  count: number;
+  disabledReason: string;
+  gateModeLabel: string;
+  gateOwnerRole: string;
+  gateStatusLabel: string;
+  gateSummary: string;
+  gateTypeLabel: string;
+}
+
+export interface CockpitRuntimeReadbackPostureOptions {
+  dependencyLabel: string;
+  disabledReason: string;
+  evidenceLabel: string;
+  resourceLabel: string;
+  runtimeFixtureLabel: string;
+}
+
+export interface CockpitRuntimeGateReadbackCardsOptions {
+  gateWorkOrder: CockpitRuntimeGateWorkOrderOptions;
+  readbackPosture: CockpitRuntimeReadbackPostureOptions;
 }
 
 type RuntimeNavItemProps = ComponentProps<typeof NavItem> & {
@@ -288,6 +315,62 @@ export function renderCockpitRuntimeDetailDrawer(options: CockpitRuntimeDetailDr
   return addAosDetailDrawerRuntimeAttributes(renderToStaticMarkup(tree), options);
 }
 
+export function renderCockpitRuntimeGateReadbackCards(options: CockpitRuntimeGateReadbackCardsOptions): string {
+  return [
+    renderCockpitRuntimeGateWorkOrderCard(options.gateWorkOrder),
+    renderCockpitRuntimeReadbackPostureCard(options.readbackPosture)
+  ].join("\n            ");
+}
+
+export function renderCockpitRuntimeGateWorkOrderCard(options: CockpitRuntimeGateWorkOrderOptions): string {
+  const state = {
+    state: "proof_required",
+    label: "Gate Work Order",
+    description: options.gateSummary
+  } as ComponentProps<typeof GateReadinessPanel>["state"];
+  const heldButton = renderToStaticMarkup(createElement(Button, {
+    disabled: true,
+    disabledReason: options.disabledReason,
+    "data-tcrn-component": "Button",
+    "data-package-runtime-component": "Button",
+    "data-package-runtime-source": "@tcrn/ui-react",
+    type: "button",
+    variant: "secondary"
+  } as ComponentProps<typeof Button> & RuntimeDataProps, "Gate request held"));
+  const gateBlock = `<div class="gate-block tcrn-state-view" data-tcrn-component="StateView" data-package-runtime-component="StateView" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-gate-readback-cards"><span>${escapeAttribute(options.gateTypeLabel)}</span><strong>${escapeAttribute(options.gateOwnerRole)}</strong><span>${escapeAttribute(options.gateStatusLabel)}</span><span>${escapeAttribute(options.gateModeLabel)}</span></div>`;
+  const card = renderToStaticMarkup(createElement(GateReadinessPanel, {
+    state
+  }));
+  return addAosGateWorkOrderRuntimeAttributes(card, options, gateBlock, heldButton);
+}
+
+export function renderCockpitRuntimeReadbackPostureCard(options: CockpitRuntimeReadbackPostureOptions): string {
+  const readbackItems: KeyValueItem[] = [
+    { key: "runtime-fixture", label: "Runtime fixture", value: options.runtimeFixtureLabel },
+    { key: "evidence", label: "Evidence", value: options.evidenceLabel },
+    { key: "dependency", label: "Dependency", value: options.dependencyLabel },
+    { key: "resource", label: "Resource", value: options.resourceLabel }
+  ];
+  const heldButton = createElement(Button, {
+    disabled: true,
+    disabledReason: options.disabledReason,
+    "data-tcrn-component": "Button",
+    "data-package-runtime-component": "Button",
+    "data-package-runtime-source": "@tcrn/ui-react",
+    key: "evidence-detail-held",
+    type: "button",
+    variant: "secondary"
+  } as ComponentProps<typeof Button> & RuntimeDataProps & { key: string }, "Evidence detail held");
+  const tree = createElement(ReadbackPanel, {
+    title: "Readback Posture",
+    children: [
+      heldButton,
+      createElement(KeyValueList, { items: readbackItems, key: "readback-list" })
+    ]
+  } as ComponentProps<typeof ReadbackPanel>);
+  return addAosReadbackPostureRuntimeAttributes(renderToStaticMarkup(tree));
+}
+
 function addAosWorkIndexRuntimeAttributes(html: string, rows: readonly CockpitRuntimeWorkIndexRow[]): string {
   let rowIndex = 0;
   return html
@@ -337,6 +420,49 @@ function addAosDetailDrawerRuntimeAttributes(html: string, options: CockpitRunti
       /<dl class="tcrn-key-value-list">/,
       '<dl class="detail-list tcrn-key-value-list" data-detail-list data-tcrn-component="KeyValueList" data-package-runtime-component="KeyValueList" data-package-runtime-source="@tcrn/ui-react">'
     );
+}
+
+function addAosGateWorkOrderRuntimeAttributes(
+  html: string,
+  options: CockpitRuntimeGateWorkOrderOptions,
+  gateBlock: string,
+  heldButton: string
+): string {
+  return html
+    .replace(
+      /<section data-state="([^"]+)" class="tcrn-surface tcrn-gate-readiness-panel">/,
+      '<article class="panel tcrn-surface tcrn-gate-readiness-panel" data-state="$1" data-region="blocker-gate-card" data-tcrn-component="GateReadinessPanel" data-package-runtime-component="GateReadinessPanel" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-gate-readback-cards" aria-label="Blocker and gate posture">'
+    )
+    .replace(
+      /<h3 class="tcrn-heading tcrn-heading--3">([\s\S]*?)<\/h3>/,
+      `<div class="panel-head"><h2 class="tcrn-heading tcrn-heading--2" data-tcrn-component="Heading" data-package-runtime-component="Heading" data-package-runtime-source="@tcrn/ui-react">$1</h2><span class="count tcrn-badge tcrn-badge--danger" data-tcrn-component="Badge" data-package-runtime-component="Badge" data-package-runtime-source="@tcrn/ui-react">${options.count}</span></div>`
+    )
+    .replace(
+      /<p class="tcrn-text">/,
+      '<p class="tcrn-text" data-tcrn-component="Text" data-package-runtime-component="Text" data-package-runtime-source="@tcrn/ui-react">'
+    )
+    .replace(
+      /<span data-state="([^"]+)" class="tcrn-badge/,
+      '<span data-state="$1" data-tcrn-component="StatusBadge" data-package-runtime-component="StatusBadge" data-package-runtime-source="@tcrn/ui-react" class="tcrn-badge'
+    )
+    .replace(/<\/section>$/, `${gateBlock}${heldButton}</article>`);
+}
+
+function addAosReadbackPostureRuntimeAttributes(html: string): string {
+  return html
+    .replace(
+      /<section class="tcrn-surface tcrn-readback-panel">/,
+      '<article class="panel tcrn-surface tcrn-readback-panel" data-region="readback-posture-card" data-tcrn-component="ReadbackPanel" data-package-runtime-component="ReadbackPanel" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-gate-readback-cards" aria-label="Readback posture">'
+    )
+    .replace(
+      /<h3 class="tcrn-heading tcrn-heading--3">Readback Posture<\/h3>(<button\b[\s\S]*?<\/button>)/,
+      '<div class="panel-head"><h2 class="tcrn-heading tcrn-heading--2" data-tcrn-component="Heading" data-package-runtime-component="Heading" data-package-runtime-source="@tcrn/ui-react">Readback Posture</h2>$1</div>'
+    )
+    .replace(
+      /<dl class="tcrn-key-value-list">/,
+      '<dl class="posture-list tcrn-key-value-list" data-tcrn-component="KeyValueList" data-package-runtime-component="KeyValueList" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-gate-readback-cards">'
+    )
+    .replace(/<\/section>$/, "</article>");
 }
 
 function escapeAttribute(value: string): string {

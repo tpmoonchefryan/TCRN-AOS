@@ -3,7 +3,7 @@
 Status: passed.
 
 Route: `route_tcrn_aos_design_system_frontend_rebuild_slice_2_service_read_model_stabilization_implementation`
-AOS source head: `33c666454ed9b5b359c08d16dbd4205bd5fd63b1`
+AOS source head: `526bc894dbb43df7b5420f3f3a735388a3354c14`
 Design System source basis: `b0c00828a813d3c62392eb6e53d7d6b85b6affeb`
 
 ## Service Contract Readback
@@ -28,10 +28,10 @@ Design System source basis: `b0c00828a813d3c62392eb6e53d7d6b85b6affeb`
 
 ## Browser Evidence
 
-| Viewport | Screenshot | SHA-256 | DOM matches API | Detail drawer runtime ok | Raw visible copy hits | Forbidden claim hits | Disabled controls missing reason | Stale disabled reason hits | Body overflow |
-| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
-| desktop-1440x900 | `evidence/aos-design-system-consumer-slice-2-browser/33c666454ed9b5b359c08d16dbd4205bd5fd63b1/desktop-1440x900-service-read-model.png` | `0068341730bee7939c9ae6e4af3de8b19e50bd6669b6a3f8c956313470348684` | yes | yes | 0 | 0 | 0 | 0 | no |
-| mobile-390x844 | `evidence/aos-design-system-consumer-slice-2-browser/33c666454ed9b5b359c08d16dbd4205bd5fd63b1/mobile-390x844-service-read-model.png` | `49579a0f30b8a8b3200976b80b4f1aec210dc47350ee0d4d00470e4b6efc894a` | yes | yes | 0 | 0 | 0 | 0 | no |
+| Viewport | Screenshot | SHA-256 | DOM matches API | Detail drawer runtime ok | Gate/readback card runtime ok | Raw visible copy hits | Forbidden claim hits | Disabled controls missing reason | Stale disabled reason hits | Body overflow |
+| --- | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
+| desktop-1440x900 | `evidence/aos-design-system-consumer-slice-2-browser/526bc894dbb43df7b5420f3f3a735388a3354c14/desktop-1440x900-service-read-model.png` | `7aae5aa5d639095c667ff228d9e9c8924adc016d0652744e5967a3002197633b` | yes | yes | yes | 0 | 0 | 0 | 0 | no |
+| mobile-390x844 | `evidence/aos-design-system-consumer-slice-2-browser/526bc894dbb43df7b5420f3f3a735388a3354c14/mobile-390x844-service-read-model.png` | `dcd079424f3e6c8b900f0aaffa1781d07596864b0a8d157bcfc02cd0aa4fa155` | yes | yes | yes | 0 | 0 | 0 | 0 | no |
 
 ## No-Overclaim Boundaries
 
