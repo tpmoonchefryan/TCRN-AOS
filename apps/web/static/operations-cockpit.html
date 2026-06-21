@@ -178,16 +178,17 @@ h2 { margin: 0; font-size: var(--type-ui); font-weight: 500; letter-spacing: 0.0
 .stage-line { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 8px; margin: 0; padding: 28px 0 0; list-style: none; }
 .stage-line::before { content: ""; position: absolute; left: 11%; right: 11%; top: 54px; height: 4px; background: linear-gradient(90deg, var(--teal-600) 0 72%, #c9d4dd 72% 100%); }
 .stage-line li { position: relative; z-index: 1; display: grid; justify-items: center; gap: 8px; text-align: center; }
-.stage-line small { width: 100%; min-height: 24px; padding: 0 2px; color: #113447; font-size: var(--type-micro); font-weight: 500; line-height: var(--line-compact); overflow-wrap: anywhere; }
+.stage-line small { width: 100%; min-height: 24px; padding: 0 2px; color: #113447; font-size: 10px; font-weight: 500; line-height: var(--line-compact); white-space: nowrap; }
 .stage-line span { display: grid; place-items: center; width: 30px; height: 30px; border: 3px solid #c9d4dd; border-radius: 999px; background: var(--surface); color: var(--soft); font-weight: 500; }
 .stage-line .complete span, .stage-line .active span { border-color: var(--teal-600); }
 .stage-line .complete span { background: var(--teal-600); color: #fff; }
 .stage-line .active span { background: #f4fffd; color: var(--teal-600); }
 .stage-line .release_proof_required span { border-color: var(--amber-500); color: #a86500; }
+.stage-line .state-chip { width: 100%; max-width: 82px; min-width: 0; padding: 4px; text-align: center; white-space: normal; overflow-wrap: anywhere; }
 .phase-list, .posture-list, .detail-list { display: grid; gap: 10px; }
 .phase-row, .gate-block { display: grid; gap: 8px; }
 .phase-row { grid-template-columns: minmax(86px, 1fr) minmax(46px, auto) auto; align-items: center; font-size: var(--type-ui); }
-.phase-row > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.phase-row > span:first-child { min-width: 0; font-size: 11px; white-space: nowrap; }
 .phase-owners { display: flex; gap: 5px; }
 .avatar { display: grid; place-items: center; width: 22px; height: 22px; border: 1px solid #9edbd9; border-radius: 999px; background: #edfafa; color: #30636a; font-size: 10px; font-weight: 500; line-height: 1; }
 .state-chip, .tag { width: max-content; border-radius: 4px; padding: 4px 7px; font-size: var(--type-label); font-weight: 500; line-height: var(--line-compact); }
@@ -259,23 +260,23 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
 }</style>
   </head>
   <body>
-    <main class="aos-shell" data-surface="operations-cockpit" data-service-backed="false" data-cockpit-api="/api/cockpit" data-product-design-acceptance="not_claimed" data-design-system-consumer="tokens_copy_state_static_renderer_bridge" data-design-system-tokens="@tcrn/ui-tokens" data-design-system-copy-state="@tcrn/ui-copy-state" data-design-system-source-head="a74742a9cfaa03205d867f7e33dea92c1e8ac6ca" data-service-model-schema="aos.cockpit.service_read_model.v1" data-service-read-model-source="static_fixture" data-service-work-row-count="1" data-service-selected-story-id="story_daa1ed285030dd27" data-service-detail-id="story_daa1ed285030dd27" data-service-detail-type="story" data-service-gate-count="2" data-service-evidence-readback-count="1" data-service-runtime-data-committed="false">
-      <aside class="aos-sidebar" data-region="sidebar-nav" aria-label="AOS navigation">
-        <a class="brand-lockup" data-region="brand-lockup" href="#cockpit" aria-label="TCRN AOS">
+    <main class="aos-shell" data-tcrn-component="Surface" data-surface="operations-cockpit" data-service-backed="false" data-cockpit-api="/api/cockpit" data-product-design-acceptance="not_claimed" data-design-system-consumer="tokens_copy_state_static_renderer_bridge" data-design-system-tokens="@tcrn/ui-tokens" data-design-system-copy-state="@tcrn/ui-copy-state" data-design-system-source-head="a74742a9cfaa03205d867f7e33dea92c1e8ac6ca" data-service-model-schema="aos.cockpit.service_read_model.v1" data-service-read-model-source="static_fixture" data-service-work-row-count="1" data-service-selected-story-id="story_daa1ed285030dd27" data-service-detail-id="story_daa1ed285030dd27" data-service-detail-type="story" data-service-gate-count="2" data-service-evidence-readback-count="1" data-service-runtime-data-committed="false">
+      <aside class="aos-sidebar tcrn-side-nav" data-tcrn-component="SideNav" data-region="sidebar-nav" aria-label="AOS navigation">
+        <a class="brand-lockup tcrn-link-button tcrn-link-button--quiet" data-tcrn-component="LinkButton" data-region="brand-lockup" href="#cockpit" aria-label="TCRN AOS">
           <span class="brand-tcrn">TCRN</span>
           <span class="brand-aos">AOS</span>
         </a>
-        <nav class="nav-stack" aria-label="Primary cockpit views">
-          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-dashboard" title="Dashboard view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Dashboard view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Dashboard</span><span class="nav-unavailable-reason" id="nav-reason-dashboard">Held for later route</span></button>
-          <button class="nav-row active" type="button"><span class="nav-label">Cockpit</span></button>
-          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-work-index" title="Work Index view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Work Index view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Work Index</span><span class="nav-unavailable-reason" id="nav-reason-work-index">Held for later route</span></button>
-          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-stage-map" title="Stage Map view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Stage Map view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Stage Map</span><span class="nav-unavailable-reason" id="nav-reason-stage-map">Held for later route</span></button>
-          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-gate-queue" title="Gate Queue view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Gate Queue view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Gate Queue</span><span class="nav-unavailable-reason" id="nav-reason-gate-queue">Held for later route</span></button>
-          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-conferences" title="Conferences view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Conferences view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Conferences</span><span class="nav-unavailable-reason" id="nav-reason-conferences">Held for later route</span></button>
-          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-evidence" title="Evidence view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Evidence view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Evidence</span><span class="nav-unavailable-reason" id="nav-reason-evidence">Held for later route</span></button>
-          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-dependency" title="Dependency view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Dependency view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Dependency</span><span class="nav-unavailable-reason" id="nav-reason-dependency">Held for later route</span></button>
-          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-resources" title="Resources view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Resources view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Resources</span><span class="nav-unavailable-reason" id="nav-reason-resources">Held for later route</span></button>
-          <button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="nav-reason-audit" title="Audit view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Audit view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Audit</span><span class="nav-unavailable-reason" id="nav-reason-audit">Held for later route</span></button>
+        <nav class="nav-stack tcrn-nav-group" data-tcrn-component="NavGroup" aria-label="Primary cockpit views">
+          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" aria-disabled="true" aria-describedby="nav-reason-dashboard" title="Dashboard view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Dashboard view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Dashboard</span><span class="nav-unavailable-reason" id="nav-reason-dashboard">Held for later route</span></a>
+          <a class="nav-row tcrn-nav-item active" data-tcrn-component="NavItem" href="#cockpit" aria-current="page" data-selected="true"><span class="nav-label">Cockpit</span></a>
+          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" aria-disabled="true" aria-describedby="nav-reason-work-index" title="Work Index view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Work Index view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Work Index</span><span class="nav-unavailable-reason" id="nav-reason-work-index">Held for later route</span></a>
+          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" aria-disabled="true" aria-describedby="nav-reason-stage-map" title="Stage Map view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Stage Map view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Stage Map</span><span class="nav-unavailable-reason" id="nav-reason-stage-map">Held for later route</span></a>
+          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" aria-disabled="true" aria-describedby="nav-reason-gate-queue" title="Gate Queue view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Gate Queue view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Gate Queue</span><span class="nav-unavailable-reason" id="nav-reason-gate-queue">Held for later route</span></a>
+          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" aria-disabled="true" aria-describedby="nav-reason-conferences" title="Conferences view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Conferences view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Conferences</span><span class="nav-unavailable-reason" id="nav-reason-conferences">Held for later route</span></a>
+          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" aria-disabled="true" aria-describedby="nav-reason-evidence" title="Evidence view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Evidence view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Evidence</span><span class="nav-unavailable-reason" id="nav-reason-evidence">Held for later route</span></a>
+          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" aria-disabled="true" aria-describedby="nav-reason-dependency" title="Dependency view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Dependency view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Dependency</span><span class="nav-unavailable-reason" id="nav-reason-dependency">Held for later route</span></a>
+          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" aria-disabled="true" aria-describedby="nav-reason-resources" title="Resources view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Resources view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Resources</span><span class="nav-unavailable-reason" id="nav-reason-resources">Held for later route</span></a>
+          <a class="nav-row tcrn-nav-item" data-tcrn-component="NavItem" aria-disabled="true" aria-describedby="nav-reason-audit" title="Audit view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only." data-disabled-reason="Audit view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only."><span class="nav-label">Audit</span><span class="nav-unavailable-reason" id="nav-reason-audit">Held for later route</span></a>
         </nav>
         <footer class="sidebar-note">
           <span class="state-dot state-current"></span>
@@ -283,70 +284,70 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
         </footer>
       </aside>
       <section class="aos-main" id="cockpit">
-        <header class="topbar">
-          <label class="project-selector" data-region="project-selector" for="project-select">
-            <span>Project</span>
-            <select id="project-select" aria-label="Project selector">
+        <header class="topbar tcrn-top-bar" data-tcrn-component="TopBar">
+          <label class="project-selector tcrn-field" data-tcrn-component="Field" data-region="project-selector" for="project-select">
+            <span class="tcrn-field__label">Project</span>
+            <select class="tcrn-select" data-tcrn-component="Select" id="project-select" aria-label="Project selector">
               <option>TCRN-AOS</option>
               <option>TCRN-TMS</option>
               <option>TCRN Workflow</option>
             </select>
           </label>
-          <div class="checkpoint-strip" data-region="checkpoint-strip" aria-label="Local checkpoint">
+          <div class="checkpoint-strip tcrn-readback-panel" data-tcrn-component="ReadbackPanel" data-region="checkpoint-strip" aria-label="Local checkpoint">
             <span>Local checkpoint observed</span>
             <strong data-local-checkpoint>slice-4b-style-baseline</strong>
-            <em data-readback-freshness>Readback current</em>
-            <span class="service-readback" data-service-status>static fixture</span>
-            <span class="service-readback" data-service-model-readback>1 work / 2 gates / detail story</span>
+            <em class="tcrn-badge tcrn-badge--positive" data-tcrn-component="StatusBadge" data-readback-freshness>Readback current</em>
+            <span class="service-readback tcrn-badge" data-tcrn-component="Badge" data-service-status>static fixture</span>
+            <span class="service-readback tcrn-badge" data-tcrn-component="Badge" data-service-model-readback>1 work / 2 gates / detail story</span>
           </div>
-          <button type="button" class="top-action" data-refresh-readback>Refresh readback</button>
-          <button type="button" class="profile" aria-label="Current operator">RL</button>
+          <button type="button" class="top-action tcrn-button tcrn-button--secondary" data-tcrn-component="Button" data-refresh-readback>Refresh readback</button>
+          <button type="button" class="profile tcrn-button tcrn-icon-button" data-tcrn-component="IconButton" aria-label="Current operator">RL</button>
         </header>
         <div class="workspace">
           <section class="hero-row">
             <div>
-              <p class="eyebrow">Operations Cockpit</p>
-              <h1>TCRN-AOS</h1>
+              <p class="eyebrow tcrn-text" data-tcrn-component="Text">Operations Cockpit</p>
+              <h1 class="tcrn-heading tcrn-heading--1" data-tcrn-component="Heading">TCRN-AOS</h1>
             </div>
-            <div class="claim-strip" aria-label="Claim boundaries">
-            <span>External proof required</span>
-            <span>Not claimed</span>
-            <span>Unavailable: live dispatch</span>
+            <div class="claim-strip tcrn-evidence-strip" data-tcrn-component="EvidenceStrip" aria-label="Claim boundaries">
+            <span class="tcrn-badge tcrn-badge--warning" data-tcrn-component="StatusBadge">External proof required</span>
+            <span class="tcrn-badge tcrn-badge--neutral" data-tcrn-component="StatusBadge">Not claimed</span>
+            <span class="tcrn-badge tcrn-badge--neutral" data-tcrn-component="StatusBadge">Unavailable: live dispatch</span>
             </div>
           </section>
           <section class="summary-grid">
-            <article class="panel stage-panel" data-region="stage-map" aria-label="Development stage map">
+            <article class="panel stage-panel tcrn-surface" data-tcrn-component="Surface" data-region="stage-map" aria-label="Development stage map">
               <div class="panel-head">
-                <h2>Stage Map</h2>
-                <button type="button" disabled title="Stage detail route is held for the owner-trial implementation proof">Stage detail held</button>
+                <h2 class="tcrn-heading tcrn-heading--2" data-tcrn-component="Heading">Stage Map</h2>
+                <button class="tcrn-button tcrn-button--secondary" data-tcrn-component="Button" type="button" disabled title="Stage detail route is held for the owner-trial implementation proof">Stage detail held</button>
               </div>
               <ol class="stage-line">
-                <li class="active"><small>intake</small><span>1</span><em class="state-chip active">Active locally</em></li><li class="active"><small>architecture</small><span>2</span><em class="state-chip active">Active locally</em></li><li class="active"><small>implementation</small><span>3</span><em class="state-chip active">Active locally</em></li><li class="release_proof_required"><small>release</small><span>4</span><em class="state-chip release_proof_required">Proof required</em></li>
+                <li class="active"><small>intake</small><span class="tcrn-badge" data-tcrn-component="Badge">1</span><em class="state-chip tcrn-badge active" data-tcrn-component="StatusBadge">Active locally</em></li><li class="active"><small>architecture</small><span class="tcrn-badge" data-tcrn-component="Badge">2</span><em class="state-chip tcrn-badge active" data-tcrn-component="StatusBadge">Active locally</em></li><li class="active"><small>implementation</small><span class="tcrn-badge" data-tcrn-component="Badge">3</span><em class="state-chip tcrn-badge active" data-tcrn-component="StatusBadge">Active locally</em></li><li class="release_proof_required"><small>release</small><span class="tcrn-badge" data-tcrn-component="Badge">4</span><em class="state-chip tcrn-badge release_proof_required" data-tcrn-component="StatusBadge">Proof required</em></li>
               </ol>
             </article>
-            <article class="panel" data-region="ai-employee-phase" aria-label="AI employee responsibility by phase">
+            <article class="panel tcrn-surface" data-tcrn-component="Surface" data-region="ai-employee-phase" aria-label="AI employee responsibility by phase">
               <div class="panel-head">
-                <h2>AI Employee Phase</h2>
-                <button type="button" disabled title="Role detail route is held for a later owner-trial slice">Role detail held</button>
+                <h2 class="tcrn-heading tcrn-heading--2" data-tcrn-component="Heading">AI Employee Phase</h2>
+                <button class="tcrn-button tcrn-button--secondary" data-tcrn-component="Button" type="button" disabled title="Role detail route is held for a later owner-trial slice">Role detail held</button>
               </div>
               <div class="phase-list">
-                <div class="phase-row"><span>intake</span><span class="phase-owners"><span class="avatar">co</span><span class="avatar">pr</span></span><em class="state-chip active">Active locally</em></div><div class="phase-row"><span>architecture</span><span class="phase-owners"><span class="avatar">ar</span><span class="avatar">se</span></span><em class="state-chip active">Active locally</em></div><div class="phase-row"><span>implementation</span><span class="phase-owners"><span class="avatar">im</span></span><em class="state-chip active">Active locally</em></div><div class="phase-row"><span>release</span><span class="phase-owners"><span class="avatar">re</span></span><em class="state-chip release_proof_required">Proof required</em></div>
+                <div class="phase-row"><span>intake</span><span class="phase-owners"><span class="avatar tcrn-badge" data-tcrn-component="Badge">co</span><span class="avatar tcrn-badge" data-tcrn-component="Badge">pr</span></span><em class="state-chip tcrn-badge active" data-tcrn-component="StatusBadge">Active locally</em></div><div class="phase-row"><span>architecture</span><span class="phase-owners"><span class="avatar tcrn-badge" data-tcrn-component="Badge">ar</span><span class="avatar tcrn-badge" data-tcrn-component="Badge">se</span></span><em class="state-chip tcrn-badge active" data-tcrn-component="StatusBadge">Active locally</em></div><div class="phase-row"><span>implementation</span><span class="phase-owners"><span class="avatar tcrn-badge" data-tcrn-component="Badge">im</span></span><em class="state-chip tcrn-badge active" data-tcrn-component="StatusBadge">Active locally</em></div><div class="phase-row"><span>release</span><span class="phase-owners"><span class="avatar tcrn-badge" data-tcrn-component="Badge">re</span></span><em class="state-chip tcrn-badge release_proof_required" data-tcrn-component="StatusBadge">Proof required</em></div>
               </div>
             </article>
-            <article class="panel" data-region="blocker-gate-card" aria-label="Blocker and gate posture">
+            <article class="panel tcrn-gate-readiness-panel" data-tcrn-component="GateReadinessPanel" data-region="blocker-gate-card" aria-label="Blocker and gate posture">
               <div class="panel-head">
-                <h2>Gate Work Order</h2>
-                <span class="count">2</span>
+                <h2 class="tcrn-heading tcrn-heading--2" data-tcrn-component="Heading">Gate Work Order</h2>
+                <span class="count tcrn-badge tcrn-badge--danger" data-tcrn-component="Badge">2</span>
               </div>
-              <div class="gate-block"><span>Owner Intent gate</span><strong>owner</strong><span>Owner Intent required</span><span>Owner Intent separated</span></div>
-              <button type="button" class="secondary-action" disabled title="Gate request requires a routed owner-intent or role-gate path">Gate request held</button>
+              <div class="gate-block tcrn-state-view" data-tcrn-component="StateView"><span>Owner Intent gate</span><strong>owner</strong><span>Owner Intent required</span><span>Owner Intent separated</span></div>
+              <button type="button" class="secondary-action tcrn-button tcrn-button--secondary" data-tcrn-component="Button" disabled title="Gate request requires a routed owner-intent or role-gate path">Gate request held</button>
             </article>
-            <article class="panel" data-region="readback-posture-card" aria-label="Readback posture">
+            <article class="panel tcrn-readback-panel" data-tcrn-component="ReadbackPanel" data-region="readback-posture-card" aria-label="Readback posture">
               <div class="panel-head">
-                <h2>Readback Posture</h2>
-                <button type="button" disabled title="Evidence detail route is held for a later owner-trial slice">Evidence detail held</button>
+                <h2 class="tcrn-heading tcrn-heading--2" data-tcrn-component="Heading">Readback Posture</h2>
+                <button class="tcrn-button tcrn-button--secondary" data-tcrn-component="Button" type="button" disabled title="Evidence detail route is held for a later owner-trial slice">Evidence detail held</button>
               </div>
-              <dl class="posture-list">
+              <dl class="posture-list tcrn-key-value-list" data-tcrn-component="KeyValueList">
                 <div><dt>Runtime fixture</dt><dd><span class="state-dot state-current"></span>Static fixture readback</dd></div>
                 <div><dt>Evidence</dt><dd>Readback current</dd></div>
                 <div><dt>Dependency</dt><dd>Review required</dd></div>
@@ -355,35 +356,37 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
             </article>
           </section>
           <section class="content-grid">
-            <section class="work-index" data-region="work-index" aria-label="Work index">
+            <section class="work-index tcrn-surface" data-tcrn-component="WorkIndex" data-region="work-index" aria-label="Work index">
               <header class="work-index-head">
-                <h2>Work Index</h2>
-                <label class="search-box" for="work-search">
-                  <span>Search</span>
-                  <input id="work-search" data-work-search type="search" placeholder="Filter service-backed rows" />
+                <h2 class="tcrn-heading tcrn-heading--2" data-tcrn-component="Heading">Work Index</h2>
+                <label class="search-box tcrn-field" data-tcrn-component="Field" for="work-search">
+                  <span class="tcrn-field__label">Search</span>
+                  <span class="tcrn-search-input" data-tcrn-component="SearchInput" data-search-input="true">
+                    <input class="tcrn-input tcrn-search-input__control" data-tcrn-component="Input" id="work-search" data-work-search type="search" placeholder="Filter service-backed rows" />
+                  </span>
                 </label>
-                <button type="button" disabled title="Column customization is not implemented in this owner-trial slice">Columns held</button>
+                <button class="tcrn-button tcrn-button--secondary" data-tcrn-component="Button" type="button" disabled title="Column customization is not implemented in this owner-trial slice">Columns held</button>
               </header>
-              <div class="filter-row" aria-label="Fixture filters">
-                <button type="button">Project: TCRN-AOS</button>
-                <button type="button">Freshness: Readback current</button>
-                <button type="button">Risk: Proof required</button>
+              <div class="filter-row tcrn-filter-bar" data-tcrn-component="FilterBar" aria-label="Fixture filters">
+                <button class="tcrn-button tcrn-button--secondary" data-tcrn-component="Button" type="button">Project: TCRN-AOS</button>
+                <button class="tcrn-button tcrn-button--secondary" data-tcrn-component="Button" type="button">Freshness: Readback current</button>
+                <button class="tcrn-button tcrn-button--secondary" data-tcrn-component="Button" type="button">Risk: Proof required</button>
               </div>
-              <div class="work-table" role="table" data-work-table>
-                <div class="table-row table-head" role="row">
+              <div class="work-table tcrn-table-shell" data-tcrn-component="TableShell" role="table" data-work-table style="--tcrn-table-column-count: 6;">
+                <div class="table-row table-head tcrn-table-shell__head" role="row">
                   <span>ID</span><span>Title</span><span>State</span><span>Owner</span><span>Evidence</span><span>Gate</span>
                 </div>
-                <button class="table-row work-row active" data-work-row data-row-id="story_daa1ed285030dd27" data-title="Render local-first cockpit style baseline" type="button" role="row"><span>story_daa1ed285030dd27</span><span>Render local-first cockpit style baseline</span><span>In progress</span><span>implementation</span><span>1 conference link</span><span>3 local actions</span></button>
-                <div class="empty-state" data-empty-state hidden>No matching service rows.</div>
+                <button class="table-row work-row tcrn-table-shell__row active" data-tcrn-component="TableShell" data-work-row data-row-id="story_daa1ed285030dd27" data-title="Render local-first cockpit style baseline" type="button" role="row"><span class="tcrn-table-shell__cell">story_daa1ed285030dd27</span><span class="tcrn-table-shell__cell">Render local-first cockpit style baseline</span><span class="tcrn-table-shell__cell">In progress</span><span class="tcrn-table-shell__cell">implementation</span><span class="tcrn-table-shell__cell">1 conference link</span><span class="tcrn-table-shell__cell">3 local actions</span></button>
+                <div class="empty-state tcrn-state-view" data-tcrn-component="StateView" data-empty-state hidden>No matching service rows.</div>
               </div>
             </section>
-            <aside class="detail-drawer" data-region="detail-drawer" data-slice5="work-index-drill-through" aria-label="Selected item detail">
+            <aside class="detail-drawer tcrn-detail-drawer" data-tcrn-component="DetailDrawer" data-region="detail-drawer" data-slice5="work-index-drill-through" aria-label="Selected item detail">
               <div class="drawer-head">
-                <span class="tag">Story</span>
-                <button type="button" aria-label="Close detail" data-close-detail>Close</button>
+                <span class="tag tcrn-badge tcrn-badge--positive" data-tcrn-component="Badge">Story</span>
+                <button class="tcrn-button tcrn-button--quiet" data-tcrn-component="Button" type="button" aria-label="Close detail" data-close-detail>Close</button>
               </div>
-              <h2 data-drawer-title>Render local-first cockpit style baseline</h2>
-              <dl class="detail-list" data-detail-list>
+              <h2 class="tcrn-heading tcrn-heading--3" data-tcrn-component="Heading" data-drawer-title>Render local-first cockpit style baseline</h2>
+              <dl class="detail-list tcrn-key-value-list" data-tcrn-component="KeyValueList" data-detail-list>
                 <div><dt>Hierarchy</dt><dd>TCRN-AOS / init_e274579281bb3c2d</dd></div>
                 <div><dt>Gate flow</dt><dd>owner - Owner Intent required</dd></div>
                 <div><dt>Conference</dt><dd>Collecting positions / Ready for draft</dd></div>
@@ -394,9 +397,9 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
                 <div><dt>Dependency</dt><dd>Review required</dd></div>
                 <div><dt>Resource</dt><dd>Review required</dd></div>
               </dl>
-              <section class="loop-card" data-region="conference-operating-loop" aria-label="Conference operating loop">
-                <h3>Conference Loop</h3>
-                <p>Slice 4B style baseline review</p>
+              <section class="loop-card tcrn-surface" data-tcrn-component="Surface" data-region="conference-operating-loop" aria-label="Conference operating loop">
+                <h3 class="tcrn-heading tcrn-heading--3" data-tcrn-component="Heading">Conference Loop</h3>
+                <p class="tcrn-text" data-tcrn-component="Text">Slice 4B style baseline review</p>
                 <ul>
                   <li>1 positions recorded</li>
                   <li>1 missing participant readbacks</li>
@@ -404,12 +407,12 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
                   <li>Unavailable: live dispatch</li>
                 </ul>
               </section>
-              <button type="button" class="primary-action" disabled title="Gate work order execution is held outside this UI slice">Gate work order held</button>
-              <button type="button" class="secondary-action" disabled title="Rework request execution requires a routed owner-trial action">Rework request held</button>
+              <button type="button" class="primary-action tcrn-button tcrn-button--primary" data-tcrn-component="Button" disabled title="Gate work order execution is held outside this UI slice">Gate work order held</button>
+              <button type="button" class="secondary-action tcrn-button tcrn-button--secondary" data-tcrn-component="Button" disabled title="Rework request execution requires a routed owner-trial action">Rework request held</button>
             </aside>
           </section>
-          <section class="risk-lane" aria-label="Risk and warning lane">
-            <span class="risk-pill">Route gate: Review required</span><span class="risk-pill">Dependency proof: Review required</span><span class="risk-pill">Resource proof: Review required</span><span class="risk-pill">Product Design review: Review required</span>
+          <section class="risk-lane tcrn-evidence-strip" data-tcrn-component="EvidenceStrip" aria-label="Risk and warning lane">
+            <span class="risk-pill tcrn-badge" data-tcrn-component="Badge">Route gate: Review required</span><span class="risk-pill tcrn-badge" data-tcrn-component="Badge">Dependency proof: Review required</span><span class="risk-pill tcrn-badge" data-tcrn-component="Badge">Resource proof: Review required</span><span class="risk-pill tcrn-badge" data-tcrn-component="Badge">Product Design review: Review required</span>
           </section>
         </div>
       </section>
@@ -514,9 +517,10 @@ function renderRows(rows) {
   const anchor = emptyState;
   rows.forEach((row, index) => {
     const button = document.createElement("button");
-    button.className = "table-row work-row" + (row.storyId === activeStoryId || (!activeStoryId && index === 0) ? " active" : "");
+    button.className = "table-row work-row tcrn-table-shell__row" + (row.storyId === activeStoryId || (!activeStoryId && index === 0) ? " active" : "");
     button.type = "button";
     button.setAttribute("role", "row");
+    button.setAttribute("data-tcrn-component", "TableShell");
     button.setAttribute("data-work-row", "");
     button.setAttribute("data-row-id", row.storyId);
     button.setAttribute("data-title", row.title);
@@ -529,6 +533,7 @@ function renderRows(rows) {
       row.nextAllowedLocalActions.length + " local actions"
     ].forEach((value) => {
       const cell = document.createElement("span");
+      cell.className = "tcrn-table-shell__cell";
       cell.textContent = value;
       button.append(cell);
     });

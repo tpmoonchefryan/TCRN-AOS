@@ -23,6 +23,7 @@ import {
   type StageMapReadModel,
   type WorkstreamStoryRow
 } from "./cockpit.js";
+import { tcrnComponentAttr } from "./static-component-registry.js";
 
 export const slice4bBaselineDigest = "2bccfa9ab9ed95b785135965c4494f38258a27de3c6f4e9cc1fdad51ed75fb90";
 
@@ -219,13 +220,13 @@ export function renderOperationsCockpitHtml(
     <style>${operationsCockpitCss}</style>
   </head>
   <body>
-    <main class="aos-shell" data-surface="operations-cockpit" data-service-backed="${serviceBacked ? "true" : "false"}" data-cockpit-api="${escapeHtml(cockpitApiPath)}" data-product-design-acceptance="${model.nonClaims.productDesignAcceptance}" data-design-system-consumer="${aosDesignSystemConsumerBridge.adoptionPosture}" data-design-system-tokens="${aosDesignSystemConsumerBridge.tokenPackage}" data-design-system-copy-state="${aosDesignSystemConsumerBridge.copyStatePackage}" data-design-system-source-head="${aosDesignSystemConsumerBridge.designSystemSourceHead}" data-service-model-schema="${serviceReadback.schemaVersion}" data-service-read-model-source="${serviceReadback.source}" data-service-work-row-count="${serviceReadback.surfaces.workIndex.rowCount}" data-service-selected-story-id="${escapeHtml(serviceReadback.surfaces.workIndex.selectedStoryId)}" data-service-detail-id="${escapeHtml(serviceReadback.surfaces.detail.selectedId)}" data-service-detail-type="${serviceReadback.surfaces.detail.selectedType}" data-service-gate-count="${serviceReadback.surfaces.gate.roleGateCount + serviceReadback.surfaces.gate.ownerIntentGateCount}" data-service-evidence-readback-count="${serviceReadback.surfaces.readback.evidenceReadbackCount}" data-service-runtime-data-committed="${serviceReadback.surfaces.readback.runtimeDataCommittedToGit}">
-      <aside class="aos-sidebar" data-region="sidebar-nav" aria-label="AOS navigation">
-        <a class="brand-lockup" data-region="brand-lockup" href="#cockpit" aria-label="TCRN AOS">
+    <main class="aos-shell" ${tcrnComponentAttr("Surface")} data-surface="operations-cockpit" data-service-backed="${serviceBacked ? "true" : "false"}" data-cockpit-api="${escapeHtml(cockpitApiPath)}" data-product-design-acceptance="${model.nonClaims.productDesignAcceptance}" data-design-system-consumer="${aosDesignSystemConsumerBridge.adoptionPosture}" data-design-system-tokens="${aosDesignSystemConsumerBridge.tokenPackage}" data-design-system-copy-state="${aosDesignSystemConsumerBridge.copyStatePackage}" data-design-system-source-head="${aosDesignSystemConsumerBridge.designSystemSourceHead}" data-service-model-schema="${serviceReadback.schemaVersion}" data-service-read-model-source="${serviceReadback.source}" data-service-work-row-count="${serviceReadback.surfaces.workIndex.rowCount}" data-service-selected-story-id="${escapeHtml(serviceReadback.surfaces.workIndex.selectedStoryId)}" data-service-detail-id="${escapeHtml(serviceReadback.surfaces.detail.selectedId)}" data-service-detail-type="${serviceReadback.surfaces.detail.selectedType}" data-service-gate-count="${serviceReadback.surfaces.gate.roleGateCount + serviceReadback.surfaces.gate.ownerIntentGateCount}" data-service-evidence-readback-count="${serviceReadback.surfaces.readback.evidenceReadbackCount}" data-service-runtime-data-committed="${serviceReadback.surfaces.readback.runtimeDataCommittedToGit}">
+      <aside class="aos-sidebar tcrn-side-nav" ${tcrnComponentAttr("SideNav")} data-region="sidebar-nav" aria-label="AOS navigation">
+        <a class="brand-lockup tcrn-link-button tcrn-link-button--quiet" ${tcrnComponentAttr("LinkButton")} data-region="brand-lockup" href="#cockpit" aria-label="TCRN AOS">
           <span class="brand-tcrn">TCRN</span>
           <span class="brand-aos">AOS</span>
         </a>
-        <nav class="nav-stack" aria-label="Primary cockpit views">
+        <nav class="nav-stack tcrn-nav-group" ${tcrnComponentAttr("NavGroup")} aria-label="Primary cockpit views">
           ${navButton("Dashboard", false)}
           ${navButton("Cockpit", true)}
           ${navButton("Work Index", false)}
@@ -243,70 +244,70 @@ export function renderOperationsCockpitHtml(
         </footer>
       </aside>
       <section class="aos-main" id="cockpit">
-        <header class="topbar">
-          <label class="project-selector" data-region="project-selector" for="project-select">
-            <span>Project</span>
-            <select id="project-select" aria-label="Project selector">
+        <header class="topbar tcrn-top-bar" ${tcrnComponentAttr("TopBar")}>
+          <label class="project-selector tcrn-field" ${tcrnComponentAttr("Field")} data-region="project-selector" for="project-select">
+            <span class="tcrn-field__label">Project</span>
+            <select class="tcrn-select" ${tcrnComponentAttr("Select")} id="project-select" aria-label="Project selector">
               <option>${escapeHtml(model.contextHeader.selectedProjectId)}</option>
               <option>TCRN-TMS</option>
               <option>TCRN Workflow</option>
             </select>
           </label>
-          <div class="checkpoint-strip" data-region="checkpoint-strip" aria-label="Local checkpoint">
+          <div class="checkpoint-strip tcrn-readback-panel" ${tcrnComponentAttr("ReadbackPanel")} data-region="checkpoint-strip" aria-label="Local checkpoint">
             <span>Local checkpoint observed</span>
             <strong data-local-checkpoint>${escapeHtml(model.contextHeader.localCheckpoint)}</strong>
-            <em data-readback-freshness>${copyFreshness(model.contextHeader.dataFreshness)}</em>
-            <span class="service-readback" data-service-status>${serviceBacked ? "service API pending" : "static fixture"}</span>
-            <span class="service-readback" data-service-model-readback>${escapeHtml(serviceReadModelSummary(serviceReadback))}</span>
+            <em class="tcrn-badge tcrn-badge--positive" ${tcrnComponentAttr("StatusBadge")} data-readback-freshness>${copyFreshness(model.contextHeader.dataFreshness)}</em>
+            <span class="service-readback tcrn-badge" ${tcrnComponentAttr("Badge")} data-service-status>${serviceBacked ? "service API pending" : "static fixture"}</span>
+            <span class="service-readback tcrn-badge" ${tcrnComponentAttr("Badge")} data-service-model-readback>${escapeHtml(serviceReadModelSummary(serviceReadback))}</span>
           </div>
-          <button type="button" class="top-action" data-refresh-readback>Refresh readback</button>
-          <button type="button" class="profile" aria-label="Current operator">RL</button>
+          <button type="button" class="top-action tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} data-refresh-readback>Refresh readback</button>
+          <button type="button" class="profile tcrn-button tcrn-icon-button" ${tcrnComponentAttr("IconButton")} aria-label="Current operator">RL</button>
         </header>
         <div class="workspace">
           <section class="hero-row">
             <div>
-              <p class="eyebrow">Operations Cockpit</p>
-              <h1>${escapeHtml(model.contextHeader.selectedProjectId)}</h1>
+              <p class="eyebrow tcrn-text" ${tcrnComponentAttr("Text")}>Operations Cockpit</p>
+              <h1 class="tcrn-heading tcrn-heading--1" ${tcrnComponentAttr("Heading")}>${escapeHtml(model.contextHeader.selectedProjectId)}</h1>
             </div>
-            <div class="claim-strip" aria-label="Claim boundaries">
-            <span>${copyState(model.nonClaims.releaseReadinessClaim)}</span>
-            <span>${copyState(model.productDesignStatus.browserVisualAcceptance)}</span>
-            <span>${copyState("unavailable")}: live dispatch</span>
+            <div class="claim-strip tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")} aria-label="Claim boundaries">
+            <span class="tcrn-badge tcrn-badge--warning" ${tcrnComponentAttr("StatusBadge")}>${copyState(model.nonClaims.releaseReadinessClaim)}</span>
+            <span class="tcrn-badge tcrn-badge--neutral" ${tcrnComponentAttr("StatusBadge")}>${copyState(model.productDesignStatus.browserVisualAcceptance)}</span>
+            <span class="tcrn-badge tcrn-badge--neutral" ${tcrnComponentAttr("StatusBadge")}>${copyState("unavailable")}: live dispatch</span>
             </div>
           </section>
           <section class="summary-grid">
-            <article class="panel stage-panel" data-region="stage-map" aria-label="Development stage map">
+            <article class="panel stage-panel tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="stage-map" aria-label="Development stage map">
               <div class="panel-head">
-                <h2>Stage Map</h2>
-                <button type="button" disabled title="Stage detail route is held for the owner-trial implementation proof">Stage detail held</button>
+                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Stage Map</h2>
+                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button" disabled title="Stage detail route is held for the owner-trial implementation proof">Stage detail held</button>
               </div>
               <ol class="stage-line">
                 ${model.stageMap.map((stage, index) => stageStep(stage, index)).join("")}
               </ol>
             </article>
-            <article class="panel" data-region="ai-employee-phase" aria-label="AI employee responsibility by phase">
+            <article class="panel tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="ai-employee-phase" aria-label="AI employee responsibility by phase">
               <div class="panel-head">
-                <h2>AI Employee Phase</h2>
-                <button type="button" disabled title="Role detail route is held for a later owner-trial slice">Role detail held</button>
+                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>AI Employee Phase</h2>
+                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button" disabled title="Role detail route is held for a later owner-trial slice">Role detail held</button>
               </div>
               <div class="phase-list">
                 ${model.stageMap.map((stage) => phaseRow(stage)).join("")}
               </div>
             </article>
-            <article class="panel" data-region="blocker-gate-card" aria-label="Blocker and gate posture">
+            <article class="panel tcrn-gate-readiness-panel" ${tcrnComponentAttr("GateReadinessPanel")} data-region="blocker-gate-card" aria-label="Blocker and gate posture">
               <div class="panel-head">
-                <h2>Gate Work Order</h2>
-                <span class="count">${model.ownerIntentQueue.length + model.roleGateQueue.length}</span>
+                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Gate Work Order</h2>
+                <span class="count tcrn-badge tcrn-badge--danger" ${tcrnComponentAttr("Badge")}>${model.ownerIntentQueue.length + model.roleGateQueue.length}</span>
               </div>
               ${gateBlock(blockingGate)}
-              <button type="button" class="secondary-action" disabled title="Gate request requires a routed owner-intent or role-gate path">Gate request held</button>
+              <button type="button" class="secondary-action tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} disabled title="Gate request requires a routed owner-intent or role-gate path">Gate request held</button>
             </article>
-            <article class="panel" data-region="readback-posture-card" aria-label="Readback posture">
+            <article class="panel tcrn-readback-panel" ${tcrnComponentAttr("ReadbackPanel")} data-region="readback-posture-card" aria-label="Readback posture">
               <div class="panel-head">
-                <h2>Readback Posture</h2>
-                <button type="button" disabled title="Evidence detail route is held for a later owner-trial slice">Evidence detail held</button>
+                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Readback Posture</h2>
+                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button" disabled title="Evidence detail route is held for a later owner-trial slice">Evidence detail held</button>
               </div>
-              <dl class="posture-list">
+              <dl class="posture-list tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")}>
                 <div><dt>Runtime fixture</dt><dd><span class="state-dot state-current"></span>${copyState("static_fixture")}</dd></div>
                 <div><dt>Evidence</dt><dd>${copyFreshness(model.evidenceReadbacks[0]?.freshness ?? "unknown")}</dd></div>
                 <div><dt>Dependency</dt><dd>${dependency ? copyPosture(dependency.posture) : copyState("none")}</dd></div>
@@ -315,35 +316,37 @@ export function renderOperationsCockpitHtml(
             </article>
           </section>
           <section class="content-grid">
-            <section class="work-index" data-region="work-index" aria-label="Work index">
+            <section class="work-index tcrn-surface" ${tcrnComponentAttr("WorkIndex")} data-region="work-index" aria-label="Work index">
               <header class="work-index-head">
-                <h2>Work Index</h2>
-                <label class="search-box" for="work-search">
-                  <span>Search</span>
-                  <input id="work-search" data-work-search type="search" placeholder="Filter service-backed rows" />
+                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Work Index</h2>
+                <label class="search-box tcrn-field" ${tcrnComponentAttr("Field")} for="work-search">
+                  <span class="tcrn-field__label">Search</span>
+                  <span class="tcrn-search-input" ${tcrnComponentAttr("SearchInput")} data-search-input="true">
+                    <input class="tcrn-input tcrn-search-input__control" ${tcrnComponentAttr("Input")} id="work-search" data-work-search type="search" placeholder="Filter service-backed rows" />
+                  </span>
                 </label>
-                <button type="button" disabled title="Column customization is not implemented in this owner-trial slice">Columns held</button>
+                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button" disabled title="Column customization is not implemented in this owner-trial slice">Columns held</button>
               </header>
-              <div class="filter-row" aria-label="Fixture filters">
-                <button type="button">Project: ${escapeHtml(model.contextHeader.selectedProjectId)}</button>
-                <button type="button">Freshness: ${copyFreshness(model.contextHeader.dataFreshness)}</button>
-                <button type="button">Risk: ${copyState("proof_required")}</button>
+              <div class="filter-row tcrn-filter-bar" ${tcrnComponentAttr("FilterBar")} aria-label="Fixture filters">
+                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button">Project: ${escapeHtml(model.contextHeader.selectedProjectId)}</button>
+                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button">Freshness: ${copyFreshness(model.contextHeader.dataFreshness)}</button>
+                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button">Risk: ${copyState("proof_required")}</button>
               </div>
-              <div class="work-table" role="table" data-work-table>
-                <div class="table-row table-head" role="row">
+              <div class="work-table tcrn-table-shell" ${tcrnComponentAttr("TableShell")} role="table" data-work-table style="--tcrn-table-column-count: 6;">
+                <div class="table-row table-head tcrn-table-shell__head" role="row">
                   <span>ID</span><span>Title</span><span>State</span><span>Owner</span><span>Evidence</span><span>Gate</span>
                 </div>
                 ${workRows.map((row, index) => workRow(row, index)).join("")}
-                <div class="empty-state" data-empty-state hidden>No matching service rows.</div>
+                <div class="empty-state tcrn-state-view" ${tcrnComponentAttr("StateView")} data-empty-state hidden>No matching service rows.</div>
               </div>
             </section>
-            <aside class="detail-drawer" data-region="detail-drawer" data-slice5="work-index-drill-through" aria-label="Selected item detail">
+            <aside class="detail-drawer tcrn-detail-drawer" ${tcrnComponentAttr("DetailDrawer")} data-region="detail-drawer" data-slice5="work-index-drill-through" aria-label="Selected item detail">
               <div class="drawer-head">
-                <span class="tag">Story</span>
-                <button type="button" aria-label="Close detail" data-close-detail>Close</button>
+                <span class="tag tcrn-badge tcrn-badge--positive" ${tcrnComponentAttr("Badge")}>Story</span>
+                <button class="tcrn-button tcrn-button--quiet" ${tcrnComponentAttr("Button")} type="button" aria-label="Close detail" data-close-detail>Close</button>
               </div>
-              <h2 data-drawer-title>${escapeHtml(selectedRow?.title ?? "Selected work item")}</h2>
-              <dl class="detail-list" data-detail-list>
+              <h2 class="tcrn-heading tcrn-heading--3" ${tcrnComponentAttr("Heading")} data-drawer-title>${escapeHtml(selectedRow?.title ?? "Selected work item")}</h2>
+              <dl class="detail-list tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")} data-detail-list>
                 <div><dt>Hierarchy</dt><dd>${escapeHtml(model.contextHeader.selectedProjectId)} / ${escapeHtml(model.contextHeader.selectedInitiativeId)}</dd></div>
                 <div><dt>Gate flow</dt><dd>${blockingGate ? `${escapeHtml(blockingGate.ownerRole)} - ${copyState(blockingGate.status)}` : copyState("none")}</dd></div>
                 <div><dt>Conference</dt><dd>${selectedConference ? `${copyState(selectedConference.status)} / ${copyState(selectedConference.minutesStatus)}` : copyState("none")}</dd></div>
@@ -354,9 +357,9 @@ export function renderOperationsCockpitHtml(
                 <div><dt>Dependency</dt><dd>${dependency ? copyPosture(dependency.posture) : copyState("none")}</dd></div>
                 <div><dt>Resource</dt><dd>${resource ? copyPosture(resource.approvalState) : copyState("none")}</dd></div>
               </dl>
-              ${selectedConference ? `<section class="loop-card" data-region="conference-operating-loop" aria-label="Conference operating loop">
-                <h3>Conference Loop</h3>
-                <p>${escapeHtml(selectedConference.title)}</p>
+              ${selectedConference ? `<section class="loop-card tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="conference-operating-loop" aria-label="Conference operating loop">
+                <h3 class="tcrn-heading tcrn-heading--3" ${tcrnComponentAttr("Heading")}>Conference Loop</h3>
+                <p class="tcrn-text" ${tcrnComponentAttr("Text")}>${escapeHtml(selectedConference.title)}</p>
                 <ul>
                   <li>${selectedConference.participantPositionIds.length} positions recorded</li>
                   <li>${selectedConference.missingParticipantEmployeeIds.length} missing participant readbacks</li>
@@ -364,11 +367,11 @@ export function renderOperationsCockpitHtml(
                   <li>${copyState("unavailable")}: live dispatch</li>
                 </ul>
               </section>` : ""}
-              <button type="button" class="primary-action" disabled title="Gate work order execution is held outside this UI slice">Gate work order held</button>
-              <button type="button" class="secondary-action" disabled title="Rework request execution requires a routed owner-trial action">Rework request held</button>
+              <button type="button" class="primary-action tcrn-button tcrn-button--primary" ${tcrnComponentAttr("Button")} disabled title="Gate work order execution is held outside this UI slice">Gate work order held</button>
+              <button type="button" class="secondary-action tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} disabled title="Rework request execution requires a routed owner-trial action">Rework request held</button>
             </aside>
           </section>
-          <section class="risk-lane" aria-label="Risk and warning lane">
+          <section class="risk-lane tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")} aria-label="Risk and warning lane">
             ${model.riskWarnings.slice(0, 4).map((warning) => riskPill(warning)).join("")}
           </section>
         </div>
@@ -456,16 +459,17 @@ h2 { margin: 0; font-size: var(--type-ui); font-weight: 500; letter-spacing: 0.0
 .stage-line { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 8px; margin: 0; padding: 28px 0 0; list-style: none; }
 .stage-line::before { content: ""; position: absolute; left: 11%; right: 11%; top: 54px; height: 4px; background: linear-gradient(90deg, var(--teal-600) 0 72%, #c9d4dd 72% 100%); }
 .stage-line li { position: relative; z-index: 1; display: grid; justify-items: center; gap: 8px; text-align: center; }
-.stage-line small { width: 100%; min-height: 24px; padding: 0 2px; color: #113447; font-size: var(--type-micro); font-weight: 500; line-height: var(--line-compact); overflow-wrap: anywhere; }
+.stage-line small { width: 100%; min-height: 24px; padding: 0 2px; color: #113447; font-size: 10px; font-weight: 500; line-height: var(--line-compact); white-space: nowrap; }
 .stage-line span { display: grid; place-items: center; width: 30px; height: 30px; border: 3px solid #c9d4dd; border-radius: 999px; background: var(--surface); color: var(--soft); font-weight: 500; }
 .stage-line .complete span, .stage-line .active span { border-color: var(--teal-600); }
 .stage-line .complete span { background: var(--teal-600); color: #fff; }
 .stage-line .active span { background: #f4fffd; color: var(--teal-600); }
 .stage-line .release_proof_required span { border-color: var(--amber-500); color: #a86500; }
+.stage-line .state-chip { width: 100%; max-width: 82px; min-width: 0; padding: 4px; text-align: center; white-space: normal; overflow-wrap: anywhere; }
 .phase-list, .posture-list, .detail-list { display: grid; gap: 10px; }
 .phase-row, .gate-block { display: grid; gap: 8px; }
 .phase-row { grid-template-columns: minmax(86px, 1fr) minmax(46px, auto) auto; align-items: center; font-size: var(--type-ui); }
-.phase-row > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.phase-row > span:first-child { min-width: 0; font-size: 11px; white-space: nowrap; }
 .phase-owners { display: flex; gap: 5px; }
 .avatar { display: grid; place-items: center; width: 22px; height: 22px; border: 1px solid #9edbd9; border-radius: 999px; background: #edfafa; color: #30636a; font-size: 10px; font-weight: 500; line-height: 1; }
 .state-chip, .tag { width: max-content; border-radius: 4px; padding: 4px 7px; font-size: var(--type-label); font-weight: 500; line-height: var(--line-compact); }
@@ -636,9 +640,10 @@ function renderRows(rows) {
   const anchor = emptyState;
   rows.forEach((row, index) => {
     const button = document.createElement("button");
-    button.className = "table-row work-row" + (row.storyId === activeStoryId || (!activeStoryId && index === 0) ? " active" : "");
+    button.className = "table-row work-row tcrn-table-shell__row" + (row.storyId === activeStoryId || (!activeStoryId && index === 0) ? " active" : "");
     button.type = "button";
     button.setAttribute("role", "row");
+    button.setAttribute("data-tcrn-component", "TableShell");
     button.setAttribute("data-work-row", "");
     button.setAttribute("data-row-id", row.storyId);
     button.setAttribute("data-title", row.title);
@@ -651,6 +656,7 @@ function renderRows(rows) {
       row.nextAllowedLocalActions.length + " local actions"
     ].forEach((value) => {
       const cell = document.createElement("span");
+      cell.className = "tcrn-table-shell__cell";
       cell.textContent = value;
       button.append(cell);
     });
@@ -737,11 +743,11 @@ if (serviceBacked) {
 
 function navButton(label: string, active: boolean): string {
   if (active) {
-    return `<button class="nav-row active" type="button"><span class="nav-label">${escapeHtml(label)}</span></button>`;
+    return `<a class="nav-row tcrn-nav-item active" ${tcrnComponentAttr("NavItem")} href="#cockpit" aria-current="page" data-selected="true"><span class="nav-label">${escapeHtml(label)}</span></a>`;
   }
   const reason = `${label} view is held for a later routed AOS slice; this service read-model checkpoint keeps Cockpit available only.`;
   const reasonId = `nav-reason-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
-  return `<button class="nav-row" type="button" disabled aria-disabled="true" aria-describedby="${reasonId}" title="${escapeHtml(reason)}" data-disabled-reason="${escapeHtml(reason)}"><span class="nav-label">${escapeHtml(label)}</span><span class="nav-unavailable-reason" id="${reasonId}">Held for later route</span></button>`;
+  return `<a class="nav-row tcrn-nav-item" ${tcrnComponentAttr("NavItem")} aria-disabled="true" aria-describedby="${reasonId}" title="${escapeHtml(reason)}" data-disabled-reason="${escapeHtml(reason)}"><span class="nav-label">${escapeHtml(label)}</span><span class="nav-unavailable-reason" id="${reasonId}">Held for later route</span></a>`;
 }
 
 function serviceReadModelSummary(readback: CockpitServiceReadModelReadback): string {
@@ -750,27 +756,27 @@ function serviceReadModelSummary(readback: CockpitServiceReadModelReadback): str
 }
 
 function stageStep(stage: StageMapReadModel, index: number): string {
-  return `<li class="${escapeHtml(stage.state)}"><small>${escapeHtml(stage.label)}</small><span>${index + 1}</span><em class="state-chip ${escapeHtml(stage.state)}">${copyState(stage.state)}</em></li>`;
+  return `<li class="${escapeHtml(stage.state)}"><small>${escapeHtml(stage.label)}</small><span class="tcrn-badge" ${tcrnComponentAttr("Badge")}>${index + 1}</span><em class="state-chip tcrn-badge ${escapeHtml(stage.state)}" ${tcrnComponentAttr("StatusBadge")}>${copyState(stage.state)}</em></li>`;
 }
 
 function phaseRow(stage: StageMapReadModel): string {
-  const owners = stage.ownerRoles.map((role) => `<span class="avatar">${escapeHtml(role.slice(0, 2))}</span>`).join("");
-  return `<div class="phase-row"><span>${escapeHtml(stage.label)}</span><span class="phase-owners">${owners}</span><em class="state-chip ${escapeHtml(stage.state)}">${copyState(stage.state)}</em></div>`;
+  const owners = stage.ownerRoles.map((role) => `<span class="avatar tcrn-badge" ${tcrnComponentAttr("Badge")}>${escapeHtml(role.slice(0, 2))}</span>`).join("");
+  return `<div class="phase-row"><span>${escapeHtml(stage.label)}</span><span class="phase-owners">${owners}</span><em class="state-chip tcrn-badge ${escapeHtml(stage.state)}" ${tcrnComponentAttr("StatusBadge")}>${copyState(stage.state)}</em></div>`;
 }
 
 function gateBlock(gate: GateQueueItem | undefined): string {
   if (!gate) {
-    return `<div class="gate-block"><strong>${copyState("none")}</strong><span>No local gate rows in fixture.</span></div>`;
+    return `<div class="gate-block tcrn-state-view" ${tcrnComponentAttr("StateView")}><strong>${copyState("none")}</strong><span>No local gate rows in fixture.</span></div>`;
   }
-  return `<div class="gate-block"><span>${copyState(gate.type)}</span><strong>${escapeHtml(gate.ownerRole)}</strong><span>${copyState(gate.status)}</span><span>${gate.ownerIntent ? "Owner Intent separated" : "Role gate pending"}</span></div>`;
+  return `<div class="gate-block tcrn-state-view" ${tcrnComponentAttr("StateView")}><span>${copyState(gate.type)}</span><strong>${escapeHtml(gate.ownerRole)}</strong><span>${copyState(gate.status)}</span><span>${gate.ownerIntent ? "Owner Intent separated" : "Role gate pending"}</span></div>`;
 }
 
 function workRow(row: WorkstreamStoryRow, index: number): string {
-  return `<button class="table-row work-row${index === 0 ? " active" : ""}" data-work-row data-row-id="${escapeHtml(row.storyId)}" data-title="${escapeHtml(row.title)}" type="button" role="row"><span>${escapeHtml(row.storyId)}</span><span>${escapeHtml(row.title)}</span><span>${copyState(row.status)}</span><span>${escapeHtml(row.nextOwnerRole)}</span><span>${row.linkedConferenceIds.length} conference link</span><span>${row.nextAllowedLocalActions.length} local actions</span></button>`;
+  return `<button class="table-row work-row tcrn-table-shell__row${index === 0 ? " active" : ""}" ${tcrnComponentAttr("TableShell")} data-work-row data-row-id="${escapeHtml(row.storyId)}" data-title="${escapeHtml(row.title)}" type="button" role="row"><span class="tcrn-table-shell__cell">${escapeHtml(row.storyId)}</span><span class="tcrn-table-shell__cell">${escapeHtml(row.title)}</span><span class="tcrn-table-shell__cell">${copyState(row.status)}</span><span class="tcrn-table-shell__cell">${escapeHtml(row.nextOwnerRole)}</span><span class="tcrn-table-shell__cell">${row.linkedConferenceIds.length} conference link</span><span class="tcrn-table-shell__cell">${row.nextAllowedLocalActions.length} local actions</span></button>`;
 }
 
 function riskPill(warning: RiskWarningItem): string {
-  return `<span class="risk-pill">${copyState(warning.type)}: ${copyPosture(warning.state)}</span>`;
+  return `<span class="risk-pill tcrn-badge" ${tcrnComponentAttr("Badge")}>${copyState(warning.type)}: ${copyPosture(warning.state)}</span>`;
 }
 
 function copyState(state: string): string {

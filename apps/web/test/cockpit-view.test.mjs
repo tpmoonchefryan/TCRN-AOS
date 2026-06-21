@@ -6,6 +6,10 @@ import {
   copyAosState
 } from "../../../dist/apps/web/src/design-system-bridge.js";
 import {
+  aosDesignSystemRegisteredComponentNames,
+  aosRequiredStaticSurfaceComponents
+} from "../../../dist/apps/web/src/static-component-registry.js";
+import {
   createSlice4bCockpitReadModel,
   forbiddenProductionCopy,
   renderOperationsCockpitHtml,
@@ -78,21 +82,38 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
 
 test("disabled cockpit navigation exposes held reasons visibly and accessibly", () => {
   const html = renderOperationsCockpitHtml();
-  const disabledButtons = Array.from(html.matchAll(/<button\b([^>]*)\bdisabled\b([^>]*)>/g))
+  const heldControls = Array.from(html.matchAll(/<(?:button|a)\b([^>]*(?:\bdisabled\b|aria-disabled="true")[^>]*)>/g))
     .map((match) => `${match[1]} ${match[2]}`);
 
-  assert.ok(disabledButtons.length > 0);
-  for (const attributes of disabledButtons) {
+  assert.ok(heldControls.length > 0);
+  for (const attributes of heldControls) {
     const hasReason = /title="[^"]+"/.test(attributes)
       || /aria-describedby="[^"]+"/.test(attributes)
       || /data-disabled-reason="[^"]+"/.test(attributes);
-    assert.ok(hasReason, `disabled button exposes a held reason: ${attributes}`);
+    assert.ok(hasReason, `held control exposes a held reason: ${attributes}`);
   }
   assert.match(html, /Dashboard view is held for a later routed AOS slice/);
   assert.match(html, /this service read-model checkpoint keeps Cockpit available only/);
   assert.doesNotMatch(html, /Slice 1 checkpoint/);
   assert.match(html, /aria-describedby="nav-reason-dashboard"/);
   assert.match(html, /Held for later route/);
+});
+
+test("AOS cockpit static renderer uses only registered Design System components", () => {
+  const html = renderOperationsCockpitHtml();
+  const registered = new Set(aosDesignSystemRegisteredComponentNames);
+  const componentNames = Array.from(html.matchAll(/data-tcrn-component="([^"]+)"/g)).map((match) => match[1]);
+  const unregistered = componentNames.filter((name) => !registered.has(name));
+  const missingRequired = aosRequiredStaticSurfaceComponents.filter((name) => !componentNames.includes(name));
+
+  assert.ok(componentNames.length > 0);
+  assert.deepEqual(unregistered, []);
+  assert.deepEqual(missingRequired, []);
+  assert.match(html, /data-tcrn-component="SideNav"/);
+  assert.match(html, /data-tcrn-component="TableShell"/);
+  assert.match(html, /data-tcrn-component="DetailDrawer"/);
+  assert.doesNotMatch(html, /data-tcrn-component="ProductLockup"/);
+  assert.doesNotMatch(html, /data-tcrn-component="TcrnBrandMark"/);
 });
 
 test("Slice 4B production HTML can be marked as service-backed for owner-trial service rendering", () => {

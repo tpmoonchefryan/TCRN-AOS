@@ -5,6 +5,7 @@ import {
   type AOSWideProductDesignModel,
   type SurfaceRow
 } from "./aos-wide-product-design-data.js";
+import { tcrnComponentAttr } from "./static-component-registry.js";
 
 export {
   createAOSWideProductDesignModel,
@@ -27,56 +28,56 @@ export function renderAOSWideProductDesignHtml(model: AOSWideProductDesignModel 
     <style>${aosWideProductDesignCss}</style>
   </head>
   <body data-visible-rows="${model.surfaces.length}">
-    <main class="aos-shell" data-region="aos-wide-shell" data-surface="aos-wide-product-design" data-product-design-status="${model.context.productDesignStatus}" data-aos-wide-product-design-accepted="${model.requiredState.aosWideProductDesignAccepted}">
-      <aside class="aos-sidebar" aria-label="AOS navigation">
-        <a class="brand-lockup" data-region="brand-lockup" href="#target-set" aria-label="TCRN AOS">
+    <main class="aos-shell tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="aos-wide-shell" data-surface="aos-wide-product-design" data-product-design-status="${model.context.productDesignStatus}" data-aos-wide-product-design-accepted="${model.requiredState.aosWideProductDesignAccepted}">
+      <aside class="aos-sidebar tcrn-side-nav" ${tcrnComponentAttr("SideNav")} aria-label="AOS navigation">
+        <a class="brand-lockup tcrn-link-button" ${tcrnComponentAttr("LinkButton")} data-region="brand-lockup" href="#target-set" aria-label="TCRN AOS">
           <span class="brand-tcrn">TCRN</span>
           <span class="brand-aos">AOS</span>
         </a>
-        <nav class="nav-stack" aria-label="AOS-wide modules">
+        <nav class="nav-stack tcrn-nav-group" ${tcrnComponentAttr("NavGroup")} aria-label="AOS-wide modules">
           ${model.surfaces.map((surface, index) => navButton(surface.title, surface.id, index === 0)).join("")}
         </nav>
-        <footer class="sidebar-note">
-          <span class="state-dot state-current"></span>
-          <span>Target set pending review</span>
+        <footer class="sidebar-note tcrn-status-badge" ${tcrnComponentAttr("StatusBadge")}>
+          <span class="state-dot state-current" aria-hidden="true"></span>
+          <span class="tcrn-text" ${tcrnComponentAttr("Text")}>Target set pending review</span>
         </footer>
       </aside>
       <section class="aos-main" id="target-set">
-        <header class="topbar">
-          <label class="project-selector" for="project-select">
-            <span>Project</span>
-            <select id="project-select" aria-label="Project selector">
+        <header class="topbar tcrn-top-bar" ${tcrnComponentAttr("TopBar")}>
+          <label class="project-selector tcrn-field" ${tcrnComponentAttr("Field")} for="project-select">
+            <span class="tcrn-text" ${tcrnComponentAttr("Text")}>Project</span>
+            <select class="tcrn-select" ${tcrnComponentAttr("Select")} id="project-select" aria-label="Project selector">
               <option>${escapeHtml(model.context.projectId)}</option>
             </select>
           </label>
-          <div class="checkpoint-strip" aria-label="Local checkpoint">
-            <span>Product design status</span>
+          <div class="checkpoint-strip tcrn-readback-panel" ${tcrnComponentAttr("ReadbackPanel")} aria-label="Local checkpoint">
+            <span class="tcrn-text" ${tcrnComponentAttr("Text")}>Product design status</span>
             <strong>${escapeHtml(model.context.productDesignStatus)}</strong>
-            <em>review pending</em>
+            <em class="tcrn-status-badge" ${tcrnComponentAttr("StatusBadge")}>review pending</em>
           </div>
-          <a class="top-action" href="operations-cockpit.html">Cockpit anchor</a>
-          <a class="top-action" href="docs-search-release-readiness.html">Docs anchor</a>
+          <a class="top-action tcrn-link-button" ${tcrnComponentAttr("LinkButton")} href="operations-cockpit.html">Cockpit anchor</a>
+          <a class="top-action tcrn-link-button" ${tcrnComponentAttr("LinkButton")} href="docs-search-release-readiness.html">Docs anchor</a>
         </header>
         <div class="workspace">
-          <section class="title-row">
+          <section class="title-row tcrn-surface" ${tcrnComponentAttr("Surface")}>
             <div>
-              <p class="eyebrow">AOS-Wide / Target Set</p>
-              <h1>AOS Product Design Surface Set</h1>
+              <p class="eyebrow tcrn-text" ${tcrnComponentAttr("Text")}>AOS-Wide / Target Set</p>
+              <h1 class="tcrn-heading tcrn-heading--1" ${tcrnComponentAttr("Heading")}>AOS Product Design Surface Set</h1>
             </div>
-            <div class="claim-strip" aria-label="Claim boundaries">
-              <span>target set implemented</span>
-              <span>review pending</span>
-              <span>external proof required</span>
+            <div class="claim-strip tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")} aria-label="Claim boundaries">
+              <span class="tcrn-status-badge" ${tcrnComponentAttr("StatusBadge")}>target set implemented</span>
+              <span class="tcrn-status-badge" ${tcrnComponentAttr("StatusBadge")}>review pending</span>
+              <span class="tcrn-status-badge" ${tcrnComponentAttr("StatusBadge")}>external proof required</span>
             </div>
           </section>
 
-          <section class="path-grid" data-region="target-path-readback" aria-label="Target path readback">
-            <a href="operations-cockpit.html"><span>Anchor</span><strong>Operations cockpit</strong><em>${escapeHtml(model.targetPathReadback.operationsCockpit)}</em></a>
-            <a href="docs-search-release-readiness.html"><span>Anchor</span><strong>Docs readiness</strong><em>${escapeHtml(model.targetPathReadback.docsSearchRelease)}</em></a>
-            <a href="aos-wide-product-design.html" aria-current="page"><span>Current</span><strong>AOS-wide target set</strong><em>${escapeHtml(model.targetPathReadback.aosWideTarget)}</em></a>
+          <section class="path-grid tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")} data-region="target-path-readback" aria-label="Target path readback">
+            <a class="tcrn-link-button" ${tcrnComponentAttr("LinkButton")} href="operations-cockpit.html"><span>Anchor</span><strong>Operations cockpit</strong><em>${escapeHtml(model.targetPathReadback.operationsCockpit)}</em></a>
+            <a class="tcrn-link-button" ${tcrnComponentAttr("LinkButton")} href="docs-search-release-readiness.html"><span>Anchor</span><strong>Docs readiness</strong><em>${escapeHtml(model.targetPathReadback.docsSearchRelease)}</em></a>
+            <a class="tcrn-link-button" ${tcrnComponentAttr("LinkButton")} href="aos-wide-product-design.html" aria-current="page"><span>Current</span><strong>AOS-wide target set</strong><em>${escapeHtml(model.targetPathReadback.aosWideTarget)}</em></a>
           </section>
 
-          <section class="module-grid" aria-label="Required product design modules">
+          <section class="module-grid tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")} aria-label="Required product design modules">
             ${moduleCard(requiredSurface(model, 0), "project-dashboard-hierarchy", "Initiative summary", ["Stage owner: Ilya", "Blockers surfaced", "Evidence freshness visible"])}
             ${moduleCard(requiredSurface(model, 1), "initiative-ticket-drillthrough", "Ticket detail", ["Gates linked", "Decision history present", "Comments and subtasks posture"])}
             ${moduleCard(requiredSurface(model, 2), "ai-employee-profile", "Role profile", ["Role/thread identity", "Assignment scope", "Authority posture"])}
@@ -89,40 +90,40 @@ export function renderAOSWideProductDesignHtml(model: AOSWideProductDesignModel 
             ${moduleCard(requiredSurface(model, 9), "admin-access-audit-shell", "Access and audit", ["Read-only access", "Authz summary", "Break-glass blocked"])}
           </section>
 
-          <section class="content-grid">
-            <section class="surface-index" data-region="surface-index" aria-label="AOS-wide surface index">
-              <header class="surface-index-head">
-                <h2>Surface Index</h2>
-                <label class="search-box" for="surface-search">
+          <section class="content-grid tcrn-surface" ${tcrnComponentAttr("Surface")}>
+            <section class="surface-index tcrn-work-index" ${tcrnComponentAttr("WorkIndex")} data-region="surface-index" aria-label="AOS-wide surface index">
+              <header class="surface-index-head tcrn-filter-bar" ${tcrnComponentAttr("FilterBar")}>
+                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Surface Index</h2>
+                <label class="search-box tcrn-search-input" ${tcrnComponentAttr("SearchInput")} for="surface-search">
                   <span>Search target surfaces</span>
-                  <input id="surface-search" type="search" placeholder="Filter module, owner, blocker, story posture" />
+                  <input class="tcrn-input" ${tcrnComponentAttr("Input")} id="surface-search" type="search" placeholder="Filter module, owner, blocker, story posture" />
                 </label>
-                <button type="button" data-filter-state="all">All</button>
+                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" data-filter-state="all">All</button>
               </header>
-              <div class="filter-row" aria-label="State filters">
-                <button type="button" data-filter-state="review_required">Review required</button>
-                <button type="button" data-filter-state="blocked">Blocked posture</button>
-                <button type="button" data-filter-state="current">Current local readback</button>
-                <button type="button" data-filter-state="pending_external_proof">External proof</button>
+              <div class="filter-row tcrn-filter-bar" ${tcrnComponentAttr("FilterBar")} aria-label="State filters">
+                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" data-filter-state="review_required">Review required</button>
+                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" data-filter-state="blocked">Blocked posture</button>
+                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" data-filter-state="current">Current local readback</button>
+                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" data-filter-state="pending_external_proof">External proof</button>
               </div>
-              <div class="surface-table" role="table" aria-label="AOS-wide target-set rows">
-                <div class="surface-row table-head" role="row">
-                  <span>Surface</span><span>Module</span><span>State</span><span>Owner</span><span>Blocker</span><span>Evidence</span>
+              <div class="surface-table tcrn-table-shell" ${tcrnComponentAttr("TableShell")} role="table" aria-label="AOS-wide target-set rows">
+                <div class="surface-row table-head tcrn-table-shell__row" role="row">
+                  <span class="tcrn-table-shell__cell">Surface</span><span class="tcrn-table-shell__cell">Module</span><span class="tcrn-table-shell__cell">State</span><span class="tcrn-table-shell__cell">Owner</span><span class="tcrn-table-shell__cell">Blocker</span><span class="tcrn-table-shell__cell">Evidence</span>
                 </div>
                 ${model.surfaces.map((surface, index) => surfaceRow(surface, index)).join("")}
               </div>
-              <div class="empty-state" data-empty-state hidden>
+              <div class="empty-state tcrn-state-view" ${tcrnComponentAttr("StateView")} data-empty-state hidden>
                 <strong>No target-set rows match this local filter.</strong>
                 <span>Open the evidence panel for proof readiness metadata.</span>
               </div>
             </section>
-            <aside class="detail-drawer" data-region="detail-panel" aria-label="Selected AOS-wide surface detail">
+            <aside class="detail-drawer tcrn-detail-drawer" ${tcrnComponentAttr("DetailDrawer")} data-region="detail-panel" aria-label="Selected AOS-wide surface detail">
               <div class="drawer-head">
-                <span class="tag" data-detail-state>${copyState(selected.state)}</span>
-                <button type="button" aria-label="Close detail" disabled>Close</button>
+                <span class="tag tcrn-badge" ${tcrnComponentAttr("Badge")} data-detail-state>${copyState(selected.state)}</span>
+                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" aria-label="Close detail" disabled>Close</button>
               </div>
-              <h2 data-detail-title>${escapeHtml(selected.title)}</h2>
-              <dl class="detail-list">
+              <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")} data-detail-title>${escapeHtml(selected.title)}</h2>
+              <dl class="detail-list tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")}>
                 <div><dt>Surface</dt><dd data-detail-surface>${escapeHtml(selected.surface)}</dd></div>
                 <div><dt>Owner</dt><dd data-detail-owner>${escapeHtml(selected.owner)}</dd></div>
                 <div><dt>Stage</dt><dd data-detail-stage>${escapeHtml(selected.stage)}</dd></div>
@@ -131,14 +132,14 @@ export function renderAOSWideProductDesignHtml(model: AOSWideProductDesignModel 
                 <div><dt>Action</dt><dd data-detail-action>${escapeHtml(selected.disabledAction)}</dd></div>
                 <div><dt>Detail</dt><dd data-detail-copy>${escapeHtml(selected.detail)}</dd></div>
               </dl>
-              <section class="disabled-action-panel" aria-label="Disabled action posture">
-                <button type="button" disabled>Owner action locked</button>
-                <button type="button" disabled>Live dispatch unavailable</button>
-                <button type="button" disabled>External proof required</button>
+              <section class="disabled-action-panel tcrn-gate-readiness-panel" ${tcrnComponentAttr("GateReadinessPanel")} aria-label="Disabled action posture">
+                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" disabled>Owner action locked</button>
+                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" disabled>Live dispatch unavailable</button>
+                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" disabled>External proof required</button>
               </section>
-              <section class="evidence-panel" data-region="evidence-readiness-panel" aria-label="Evidence readiness panel">
-                <h3>Evidence Readiness</h3>
-                <dl class="detail-list">
+              <section class="evidence-panel tcrn-readback-panel" ${tcrnComponentAttr("ReadbackPanel")} data-region="evidence-readiness-panel" aria-label="Evidence readiness panel">
+                <h3 class="tcrn-heading tcrn-heading--3" ${tcrnComponentAttr("Heading")}>Evidence Readiness</h3>
+                <dl class="detail-list tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")}>
                   <div><dt>Command</dt><dd>pnpm slice10:proof</dd></div>
                   <div><dt>Static targets</dt><dd>3 paths read back</dd></div>
                   <div><dt>Desktop</dt><dd>capture metadata prepared</dd></div>
@@ -185,29 +186,30 @@ function requiredSurface(model: AOSWideProductDesignModel, index: number): Surfa
 }
 
 function moduleCard(surface: SurfaceRow, region: string, label: string, items: string[]): string {
-  return `<article class="module-card" data-region="${escapeHtml(region)}" data-module-id="${escapeHtml(surface.id)}">
-    <div class="panel-head">
-      <h2>${escapeHtml(surface.title)}</h2>
-      <span class="state-chip ${escapeHtml(surface.state)}">${copyState(surface.state)}</span>
+  return `<article class="module-card tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="${escapeHtml(region)}" data-module-id="${escapeHtml(surface.id)}">
+    <div class="panel-head tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")}>
+      <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>${escapeHtml(surface.title)}</h2>
+      <span class="state-chip tcrn-status-badge ${escapeHtml(surface.state)}" ${tcrnComponentAttr("StatusBadge")}>${copyState(surface.state)}</span>
     </div>
-    <strong>${escapeHtml(label)}</strong>
-    <p>${escapeHtml(surface.detail)}</p>
-    <ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-    <button type="button" data-select-surface="${escapeHtml(surface.id)}">Inspect</button>
+    <strong class="tcrn-text" ${tcrnComponentAttr("Text")}>${escapeHtml(label)}</strong>
+    <p class="tcrn-text" ${tcrnComponentAttr("Text")}>${escapeHtml(surface.detail)}</p>
+    <ul class="tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")}>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+    <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" data-select-surface="${escapeHtml(surface.id)}">Inspect</button>
   </article>`;
 }
 
 function surfaceRow(surface: SurfaceRow, index: number): string {
   const terms = [surface.title, surface.surface, surface.owner, surface.state, surface.stage, surface.blocker, surface.detail, surface.disabledAction, ...surface.terms].join(" ").toLowerCase();
-  return `<button class="surface-row target-row${index === 0 ? " active" : ""}" data-surface-row data-state="${escapeHtml(surface.state)}" data-row-id="${escapeHtml(surface.id)}" data-title="${escapeHtml(surface.title)}" data-surface="${escapeHtml(surface.surface)}" data-owner="${escapeHtml(surface.owner)}" data-stage="${escapeHtml(surface.stage)}" data-blocker="${escapeHtml(surface.blocker)}" data-evidence="${escapeHtml(surface.evidence)}" data-action="${escapeHtml(surface.disabledAction)}" data-detail="${escapeHtml(surface.detail)}" data-search="${escapeHtml(terms)}" type="button" role="row"><span>${escapeHtml(surface.title)}</span><span>${escapeHtml(surface.surface)}</span><span>${copyState(surface.state)}</span><span>${escapeHtml(surface.owner)}</span><span>${escapeHtml(surface.blocker)}</span><span>${escapeHtml(surface.evidence)}</span></button>`;
+  return `<button class="surface-row target-row tcrn-table-shell__row${index === 0 ? " active" : ""}" ${tcrnComponentAttr("TableShell")} data-surface-row data-state="${escapeHtml(surface.state)}" data-row-id="${escapeHtml(surface.id)}" data-title="${escapeHtml(surface.title)}" data-surface="${escapeHtml(surface.surface)}" data-owner="${escapeHtml(surface.owner)}" data-stage="${escapeHtml(surface.stage)}" data-blocker="${escapeHtml(surface.blocker)}" data-evidence="${escapeHtml(surface.evidence)}" data-action="${escapeHtml(surface.disabledAction)}" data-detail="${escapeHtml(surface.detail)}" data-search="${escapeHtml(terms)}" type="button" role="row"><span class="tcrn-table-shell__cell">${escapeHtml(surface.title)}</span><span class="tcrn-table-shell__cell">${escapeHtml(surface.surface)}</span><span class="tcrn-table-shell__cell">${copyState(surface.state)}</span><span class="tcrn-table-shell__cell">${escapeHtml(surface.owner)}</span><span class="tcrn-table-shell__cell">${escapeHtml(surface.blocker)}</span><span class="tcrn-table-shell__cell">${escapeHtml(surface.evidence)}</span></button>`;
 }
 
 function navButton(label: string, id: string, active: boolean): string {
-  return `<button class="nav-row${active ? " active" : ""}" type="button" data-nav-surface="${escapeHtml(id)}">${escapeHtml(label)}</button>`;
+  const attrs = active ? `href="#target-set" aria-current="page"` : `href="#target-set" aria-disabled="true" title="Held for later route"`;
+  return `<a class="nav-row tcrn-nav-item${active ? " active" : ""}" ${tcrnComponentAttr("NavItem")} ${attrs} data-nav-surface="${escapeHtml(id)}">${escapeHtml(label)}</a>`;
 }
 
 function statePill(key: string, value: string): string {
-  return `<div class="state-pill"><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`;
+  return `<div class="state-pill tcrn-badge" ${tcrnComponentAttr("Badge")}><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`;
 }
 
 function copyState(state: string): string {
