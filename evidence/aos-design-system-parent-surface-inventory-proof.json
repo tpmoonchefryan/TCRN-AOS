@@ -1,0 +1,506 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_design_system_frontend_full_rebuild_parent_objective_remaining_surface_component_gap_audit_repair_implementation",
+  "sourceHead": "249a56ba2d488a3665c3e77fe7e3f009dfd100ef",
+  "canonicalParentObjective": {
+    "ownerDirective": "不再做任何迁移，移除AOS现有所有前端组件，按照Design System要求和组件重建UI",
+    "disposition": "parent_objective_remaining_surface_component_gap_audit"
+  },
+  "claimScope": {
+    "productFacingSurfaceInventory": true,
+    "productFacingSurfaceCount": 3,
+    "productUiAcceptanceReady": false,
+    "productDesignAcceptanceReady": false,
+    "productAcceptanceReady": false,
+    "finalMvpAcceptanceReady": false,
+    "releasePublicationReady": false,
+    "parentGoalCompletion": false
+  },
+  "serverRouteReadback": {
+    "ok": true,
+    "sourcePath": "apps/api/src/server.ts",
+    "htmlRoutes": [
+      {
+        "id": "operations-cockpit",
+        "renderer": "renderOperationsCockpitHtml",
+        "aliases": [
+          "/",
+          "/cockpit",
+          "/operations-cockpit",
+          "/operations-cockpit.html",
+          "/apps/web/static/operations-cockpit.html"
+        ],
+        "aliasesPresent": true,
+        "rendererPresent": true
+      },
+      {
+        "id": "docs-search-release-readiness",
+        "renderer": "renderDocsSearchReleaseReadinessHtml",
+        "aliases": [
+          "/docs-readiness",
+          "/docs-search-release-readiness",
+          "/docs-search-release-readiness.html",
+          "/apps/web/static/docs-search-release-readiness.html"
+        ],
+        "aliasesPresent": true,
+        "rendererPresent": true
+      },
+      {
+        "id": "aos-wide-product-design",
+        "renderer": "renderAOSWideProductDesignHtml",
+        "aliases": [
+          "/aos-wide-product-design",
+          "/aos-wide-product-design.html",
+          "/apps/web/static/aos-wide-product-design.html"
+        ],
+        "aliasesPresent": true,
+        "rendererPresent": true
+      }
+    ],
+    "apiJsonRoutes": [
+      "/health",
+      "/api/health",
+      "/api/cockpit",
+      "/readback",
+      "/api/readback",
+      "/policy",
+      "/api/policy"
+    ],
+    "mockupServed": false,
+    "unexpectedHtmlSenders": [],
+    "failures": []
+  },
+  "staticOutputReadback": {
+    "ok": true,
+    "directory": "apps/web/static",
+    "htmlFiles": [
+      "aos-wide-product-design.html",
+      "docs-search-release-readiness.html",
+      "operations-cockpit.html"
+    ],
+    "expectedHtmlFiles": [
+      "aos-wide-product-design.html",
+      "docs-search-release-readiness.html",
+      "operations-cockpit.html"
+    ],
+    "unexpectedHtmlFiles": [],
+    "missingHtmlFiles": []
+  },
+  "productSurfaceReadbacks": [
+    {
+      "ok": true,
+      "id": "operations-cockpit",
+      "path": "apps/web/static/operations-cockpit.html",
+      "renderer": "renderOperationsCockpitHtml",
+      "sourcePaths": [
+        "apps/web/src/cockpit-view.ts",
+        "apps/web/src/cockpit-ui-react-runtime.ts",
+        "apps/web/src/cockpit.ts"
+      ],
+      "staticSha256": "a93a7f7d74883d540799d83ec25b9d8906377185e7d8b8ffd1a15809b016306b",
+      "renderedSha256": "a93a7f7d74883d540799d83ec25b9d8906377185e7d8b8ffd1a15809b016306b",
+      "staticOutputCurrent": true,
+      "componentInstanceCount": 105,
+      "registeredComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Field",
+        "FilterBar",
+        "GateReadinessPanel",
+        "Heading",
+        "IconButton",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "SearchInput",
+        "Select",
+        "SideNav",
+        "StateView",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar",
+        "WorkIndex"
+      ],
+      "packageRuntimeComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Field",
+        "FilterBar",
+        "GateReadinessPanel",
+        "Heading",
+        "IconButton",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "SearchInput",
+        "Select",
+        "SideNav",
+        "StateView",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar",
+        "WorkIndex"
+      ],
+      "unregisteredComponents": [],
+      "markerOnlyComponents": [],
+      "productVisibleCopyReadback": {
+        "ok": true,
+        "bannedTerms": [
+          "readback",
+          "checkpoint",
+          "route",
+          "fixture",
+          "proof_required",
+          "external_proof_required",
+          "package_runtime_pilot",
+          "functional_contract_readback_only",
+          "held_for_later",
+          "unavailable_in_this_route",
+          "not_claimed",
+          "slice_language"
+        ],
+        "hits": [],
+        "scannedTextLength": 5464
+      },
+      "fullDocumentAccessibilityReadback": {
+        "ok": true,
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlCount": 16,
+        "disabledControlReasonFailures": []
+      },
+      "packageRuntimeSourceFailures": [],
+      "failures": []
+    },
+    {
+      "ok": true,
+      "id": "docs-search-release-readiness",
+      "path": "apps/web/static/docs-search-release-readiness.html",
+      "renderer": "renderDocsSearchReleaseReadinessHtml",
+      "sourcePaths": [
+        "apps/web/src/docs-readiness-view.ts",
+        "apps/web/src/docs-readiness-ui-react-runtime.ts"
+      ],
+      "staticSha256": "1de39e05d7a5d868e38cbc9664756b7b54154bdeab4fa221be5a74987881bf1d",
+      "renderedSha256": "1de39e05d7a5d868e38cbc9664756b7b54154bdeab4fa221be5a74987881bf1d",
+      "staticOutputCurrent": true,
+      "componentInstanceCount": 61,
+      "registeredComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Field",
+        "FilterBar",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "SearchInput",
+        "Select",
+        "SideNav",
+        "StateView",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar",
+        "WorkIndex"
+      ],
+      "packageRuntimeComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Field",
+        "FilterBar",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "SearchInput",
+        "Select",
+        "SideNav",
+        "StateView",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar",
+        "WorkIndex"
+      ],
+      "unregisteredComponents": [],
+      "markerOnlyComponents": [],
+      "productVisibleCopyReadback": {
+        "ok": true,
+        "bannedTerms": [
+          "readback",
+          "checkpoint",
+          "route",
+          "fixture",
+          "proof_required",
+          "external_proof_required",
+          "package_runtime_pilot",
+          "functional_contract_readback_only",
+          "held_for_later",
+          "unavailable_in_this_route",
+          "not_claimed",
+          "slice_language"
+        ],
+        "hits": [],
+        "scannedTextLength": 2709
+      },
+      "fullDocumentAccessibilityReadback": {
+        "ok": true,
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlCount": 4,
+        "disabledControlReasonFailures": []
+      },
+      "packageRuntimeSourceFailures": [],
+      "failures": []
+    },
+    {
+      "ok": true,
+      "id": "aos-wide-product-design",
+      "path": "apps/web/static/aos-wide-product-design.html",
+      "renderer": "renderAOSWideProductDesignHtml",
+      "sourcePaths": [
+        "apps/web/src/aos-wide-product-design-view.ts",
+        "apps/web/src/aos-wide-product-design-ui-react-runtime.ts",
+        "apps/web/src/aos-wide-product-design-data.ts"
+      ],
+      "staticSha256": "0cfd9343edaa0a49f022a4aae7a4293739f0227c344b6d6f4d3df2fedd7b35d8",
+      "renderedSha256": "0cfd9343edaa0a49f022a4aae7a4293739f0227c344b6d6f4d3df2fedd7b35d8",
+      "staticOutputCurrent": true,
+      "componentInstanceCount": 135,
+      "registeredComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Field",
+        "FilterBar",
+        "GateReadinessPanel",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "SearchInput",
+        "Select",
+        "SideNav",
+        "StateView",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar",
+        "WorkIndex"
+      ],
+      "packageRuntimeComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Field",
+        "FilterBar",
+        "GateReadinessPanel",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "SearchInput",
+        "Select",
+        "SideNav",
+        "StateView",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar",
+        "WorkIndex"
+      ],
+      "unregisteredComponents": [],
+      "markerOnlyComponents": [],
+      "productVisibleCopyReadback": {
+        "ok": true,
+        "bannedTerms": [
+          "readback",
+          "checkpoint",
+          "route",
+          "fixture",
+          "proof_required",
+          "external_proof_required",
+          "package_runtime_pilot",
+          "functional_contract_readback_only",
+          "held_for_later",
+          "unavailable_in_this_route",
+          "not_claimed",
+          "slice_language"
+        ],
+        "hits": [],
+        "scannedTextLength": 8227
+      },
+      "fullDocumentAccessibilityReadback": {
+        "ok": true,
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlCount": 14,
+        "disabledControlReasonFailures": []
+      },
+      "packageRuntimeSourceFailures": [],
+      "failures": []
+    }
+  ],
+  "excludedFrontendArtifacts": {
+    "ok": true,
+    "artifacts": [
+      {
+        "path": "apps/web/mockup/index.html",
+        "exists": true,
+        "servedByAosService": false,
+        "completionPathDisposition": "excluded_reference_only_historical_style_baseline_not_product_route",
+        "reason": "Not routed by apps/api/src/server.ts and not present under apps/web/static product outputs."
+      },
+      {
+        "path": "apps/web/mockup/mockup.js",
+        "exists": true,
+        "servedByAosService": false,
+        "completionPathDisposition": "excluded_reference_only_historical_style_baseline_not_product_route",
+        "reason": "Not routed by apps/api/src/server.ts and not present under apps/web/static product outputs."
+      },
+      {
+        "path": "apps/web/mockup/styles.css",
+        "exists": true,
+        "servedByAosService": false,
+        "completionPathDisposition": "excluded_reference_only_historical_style_baseline_not_product_route",
+        "reason": "Not routed by apps/api/src/server.ts and not present under apps/web/static product outputs."
+      }
+    ],
+    "referencedByDocsOrProof": [
+      "README.md",
+      "docs/frontend-style-baseline.md",
+      "scripts/slice-4b-style-proof.mjs"
+    ]
+  },
+  "sourceBoundaryReadback": {
+    "ok": true,
+    "scannedFiles": [
+      "apps/api/src/index.ts",
+      "apps/api/src/server.ts",
+      "apps/web/src/aos-wide-product-design-data.ts",
+      "apps/web/src/aos-wide-product-design-ui-react-runtime.ts",
+      "apps/web/src/aos-wide-product-design-view.ts",
+      "apps/web/src/cockpit-ui-react-runtime.ts",
+      "apps/web/src/cockpit-view.ts",
+      "apps/web/src/cockpit.ts",
+      "apps/web/src/design-system-bridge.ts",
+      "apps/web/src/docs-readiness-ui-react-runtime.ts",
+      "apps/web/src/docs-readiness-view.ts",
+      "apps/web/src/static-component-registry.ts",
+      "package.json"
+    ],
+    "publicImportHits": [
+      "apps/web/src/aos-wide-product-design-ui-react-runtime.ts",
+      "apps/web/src/cockpit-ui-react-runtime.ts",
+      "apps/web/src/cockpit-view.ts",
+      "apps/web/src/design-system-bridge.ts",
+      "apps/web/src/docs-readiness-ui-react-runtime.ts",
+      "package.json"
+    ],
+    "deepImportHits": [],
+    "copiedSourceHits": [],
+    "untrackedStylesheetUsageHits": [],
+    "dependencyReadback": {
+      "uiReact": "file:../TCRN-Design-System/packages/ui-react",
+      "uiTokens": "file:../TCRN-Design-System/packages/ui-tokens",
+      "uiCopyState": "file:../TCRN-Design-System/packages/ui-copy-state",
+      "react": "19.1.0",
+      "reactDom": "19.1.0"
+    }
+  },
+  "designSystemBoundaryReadback": {
+    "ok": true,
+    "trackedHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
+    "registrySourcePath": "../TCRN-Design-System/packages/ui-react/src/index.tsx",
+    "registrySourceReadable": true,
+    "unacceptedStylesheetDraft": {
+      "path": "../TCRN-Design-System/packages/ui-react/src/styles.css",
+      "present": true,
+      "tracked": false,
+      "gitStatus": "?? packages/ui-react/src/styles.css",
+      "disposition": "unaccepted_context_only_not_imported_copied_or_used_as_truth"
+    }
+  },
+  "browserReceiptReadback": {
+    "ok": true,
+    "receipts": [
+      {
+        "path": "evidence/aos-design-system-browser-readback/summary.json",
+        "exists": true
+      },
+      {
+        "path": "evidence/aos-design-system-consumer-slice-1-browser/e61c22d3b99f3a9e0d53f3572985dae0fded47f8/browser-evidence-summary.json",
+        "exists": true
+      },
+      {
+        "path": "evidence/slice-9b-visible-readiness-browser/e61c22d3b99f3a9e0d53f3572985dae0fded47f8/browser-evidence-summary.json",
+        "exists": true
+      },
+      {
+        "path": "evidence/slice-10-aos-wide-product-design-browser/e61c22d3b99f3a9e0d53f3572985dae0fded47f8/browser-evidence-summary.json",
+        "exists": true
+      }
+    ],
+    "disposition": "retained_browser_receipts_exist_for_current_product_source_basis; this proof performs exact_current_source_static_route_inventory"
+  },
+  "sourceFreshnessReadback": {
+    "ok": true,
+    "strategy": "source_content_digest_for_parent_surface_inventory",
+    "sourceHeadAtProofRun": "249a56ba2d488a3665c3e77fe7e3f009dfd100ef",
+    "exactFinalCommitHeadRequired": false,
+    "sourceContentDigest": "318c9f146f98ff68cb51a305de20f6eb573d96feab81850c3e1d15f33c18465d",
+    "sourcePaths": [
+      "apps/api/src/server.ts",
+      "apps/web/src/aos-wide-product-design-data.ts",
+      "apps/web/src/aos-wide-product-design-ui-react-runtime.ts",
+      "apps/web/src/aos-wide-product-design-view.ts",
+      "apps/web/src/cockpit-ui-react-runtime.ts",
+      "apps/web/src/cockpit-view.ts",
+      "apps/web/src/cockpit.ts",
+      "apps/web/src/design-system-bridge.ts",
+      "apps/web/src/docs-readiness-ui-react-runtime.ts",
+      "apps/web/src/docs-readiness-view.ts",
+      "apps/web/src/static-component-registry.ts",
+      "apps/web/test/aos-wide-product-design-view.test.mjs",
+      "apps/web/test/cockpit-view.test.mjs",
+      "apps/web/test/docs-readiness-view.test.mjs",
+      "scripts/aos-design-system-component-registry-proof.mjs",
+      "scripts/aos-design-system-package-runtime-proof.mjs",
+      "scripts/aos-design-system-parent-surface-inventory-proof.mjs",
+      "scripts/slice-9b-visible-readiness-proof.mjs",
+      "scripts/slice-10-aos-wide-product-design-proof.mjs",
+      "package.json"
+    ]
+  }
+}
