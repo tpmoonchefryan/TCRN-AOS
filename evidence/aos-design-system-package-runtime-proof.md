@@ -1,11 +1,11 @@
 # AOS Design System Package Runtime Proof
 
-- Route: route_tcrn_aos_design_system_frontend_rebuild_59aw_docs_readiness_package_runtime_adoption_implementation
-- Source head at proof run: 671da27fc7f74d6548e8756c00bc4f0064503576
+- Route: route_tcrn_aos_design_system_frontend_rebuild_59ax_aos_wide_product_design_target_set_package_runtime_adoption_implementation
+- Source head at proof run: a305237f7dea0366de3f7229bc98cc966fb9b67d
 - Source freshness strategy: source_content_digest_for_mutating_receipts
-- Source content digest: d2f58a79597bcc0b8894ec46f4cacbcaf2f522cf8f93f813fd10d671854a5f04
-- Scope: operations_cockpit_package_runtime_completion_plus_docs_readiness_package_runtime_adoption
-- Runtime rendering claim: operations_cockpit_completion_and_docs_readiness_search_release_runtime_adoption
+- Source content digest: ab75cf5f063d0a98d3d541d32c1c902892a9ca0447c8f7863a928c8294b9709e
+- Scope: operations_cockpit_package_runtime_completion_plus_docs_readiness_and_aos_wide_target_set_package_runtime_adoption
+- Runtime rendering claim: operations_cockpit_completion_docs_readiness_and_aos_wide_target_set_runtime_adoption
 - Design System source head: b0c00828a813d3c62392eb6e53d7d6b85b6affeb
 - UI React package: @tcrn/ui-react (file:../TCRN-Design-System/packages/ui-react)
 - Package runtime Shell/Sidebar components: LinkButton, NavGroup, NavItem, SideNav, Surface, Text
@@ -24,6 +24,10 @@
 - Docs Readiness package runtime components: Badge, Button, DetailDrawer, EvidenceStrip, Field, FilterBar, Heading, KeyValueList, LinkButton, NavGroup, NavItem, ReadbackPanel, SearchInput, Select, SideNav, StateView, StatusBadge, Surface, TableShell, Text, TopBar, WorkIndex
 - Docs Readiness marker-only package component claims: 0
 - Docs Readiness disabled package NavItems: 4
+- AOS-wide target-set package runtime components: Badge, Button, DetailDrawer, EvidenceStrip, Field, FilterBar, GateReadinessPanel, Heading, KeyValueList, LinkButton, NavGroup, NavItem, ReadbackPanel, SearchInput, Select, SideNav, StateView, StatusBadge, Surface, TableShell, Text, TopBar, WorkIndex
+- AOS-wide target-set marker-only package component claims: 0
+- AOS-wide target-set surface rows: 10
+- AOS-wide target-set disabled package NavItems: 9
 - Marker-only NavItems in cockpit nav: 0
 - Deep import hits: 0
 - Storybook NavItem disabled reason reference ok: true
@@ -39,6 +43,7 @@
 - Stage Map / AI Employee Phase package-runtime failures: 0
 - Operations Cockpit completion marker-only failures: 0
 - Docs Readiness package-runtime failures: 0
+- AOS-wide target-set package-runtime failures: 0
 - Full-document duplicate real DOM ids: 0
 - Full-document aria reference failures: 0
 - Full-document disabled-description mismatches: 0
@@ -47,6 +52,10 @@
 - Docs Readiness aria reference failures: 0
 - Docs Readiness disabled-description mismatches: 0
 
+- AOS-wide target-set duplicate real DOM ids: 0
+- AOS-wide target-set aria reference failures: 0
+- AOS-wide target-set disabled-description mismatches: 0
+
 ## Boundaries
 
-This is an Operations Cockpit package-runtime completion plus Docs Readiness package-runtime adoption checkpoint. AOS-wide Product Design remains marker/static-renderer only. It is not broad AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, docs publication, release, GitHub mutation, CI mutation, VM freshness, or Owner Intent execution.
+This is an Operations Cockpit package-runtime completion plus Docs Readiness and AOS-wide target-set package-runtime adoption checkpoint. It is not AOS-wide Product Design acceptance, product UI acceptance, product acceptance, final MVP acceptance, docs publication, release, GitHub mutation, CI mutation, VM freshness, or Owner Intent execution.

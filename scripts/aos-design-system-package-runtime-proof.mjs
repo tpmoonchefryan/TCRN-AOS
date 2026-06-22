@@ -22,6 +22,14 @@ import {
   renderDocsReadinessRuntimeSurface
 } from "../dist/apps/web/src/docs-readiness-ui-react-runtime.js";
 import {
+  aosWideProductDesignUiReactRuntime,
+  renderAOSWideProductDesignRuntimeSurface
+} from "../dist/apps/web/src/aos-wide-product-design-ui-react-runtime.js";
+import {
+  createAOSWideProductDesignModel,
+  renderAOSWideProductDesignHtml
+} from "../dist/apps/web/src/aos-wide-product-design-view.js";
+import {
   createSlice9bDocsSearchReleaseReadModel,
   renderDocsSearchReleaseReadinessHtml
 } from "../dist/apps/web/src/docs-readiness-view.js";
@@ -30,15 +38,18 @@ import {
 } from "../dist/apps/web/src/cockpit-view.js";
 
 const repoRoot = process.cwd();
-const route = "route_tcrn_aos_design_system_frontend_rebuild_59aw_docs_readiness_package_runtime_adoption_implementation";
+const route = "route_tcrn_aos_design_system_frontend_rebuild_59ax_aos_wide_product_design_target_set_package_runtime_adoption_implementation";
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const packageJson = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8"));
 const runtimeSourcePath = "apps/web/src/cockpit-ui-react-runtime.ts";
 const docsRuntimeSourcePath = "apps/web/src/docs-readiness-ui-react-runtime.ts";
+const aosWideRuntimeSourcePath = "apps/web/src/aos-wide-product-design-ui-react-runtime.ts";
 const runtimeSource = readFileSync(join(repoRoot, runtimeSourcePath), "utf8");
 const docsRuntimeSource = readFileSync(join(repoRoot, docsRuntimeSourcePath), "utf8");
+const aosWideRuntimeSource = readFileSync(join(repoRoot, aosWideRuntimeSourcePath), "utf8");
 const cockpitHtml = renderOperationsCockpitHtml();
 const docsReadinessHtml = renderDocsSearchReleaseReadinessHtml();
+const aosWideHtml = renderAOSWideProductDesignHtml();
 const shellSidebarRuntimeReadback = inspectPackageRuntimeShellSidebar(cockpitHtml);
 const claimRiskEvidenceStripRuntimeReadback = inspectPackageRuntimeClaimRiskStrips(cockpitHtml);
 const topbarCheckpointRuntimeReadback = inspectPackageRuntimeTopbarCheckpoint(cockpitHtml);
@@ -49,13 +60,15 @@ const gateReadbackCardsRuntimeReadback = inspectPackageRuntimeGateReadbackCards(
 const stagePhaseRuntimeReadback = inspectPackageRuntimeStagePhaseCards(cockpitHtml);
 const operationsCockpitCompletionRuntimeReadback = inspectOperationsCockpitCompletionRuntime(cockpitHtml);
 const docsReadinessRuntimeReadback = inspectDocsReadinessRuntime(docsReadinessHtml);
+const aosWideTargetSetRuntimeReadback = inspectAosWideTargetSetRuntime(aosWideHtml);
 const fullDocumentAccessibilityReadback = inspectFullDocumentAccessibility(cockpitHtml);
 const docsReadinessFullDocumentAccessibilityReadback = inspectFullDocumentAccessibility(docsReadinessHtml);
+const aosWideFullDocumentAccessibilityReadback = inspectFullDocumentAccessibility(aosWideHtml);
 const visualStyleReadback = inspectAosRuntimeStyleContract(cockpitHtml);
 const importReadback = inspectImports();
 const dependencyReadback = inspectDependencies();
 const storybookReferenceReadback = inspectStorybookReference();
-const noOverclaimReadback = inspectNoOverclaim(cockpitHtml);
+const noOverclaimReadback = inspectNoOverclaim(`${cockpitHtml}\n${docsReadinessHtml}\n${aosWideHtml}`);
 const sourceContentReadback = inspectSourceContentDigest();
 const summaryPath = join(repoRoot, "evidence", "aos-design-system-package-runtime-proof.json");
 const markdownPath = join(repoRoot, "evidence", "aos-design-system-package-runtime-proof.md");
@@ -76,8 +89,10 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && stagePhaseRuntimeReadback.ok
   && operationsCockpitCompletionRuntimeReadback.ok
   && docsReadinessRuntimeReadback.ok
+  && aosWideTargetSetRuntimeReadback.ok
   && fullDocumentAccessibilityReadback.ok
   && docsReadinessFullDocumentAccessibilityReadback.ok
+  && aosWideFullDocumentAccessibilityReadback.ok
   && visualStyleReadback.ok
   && storybookReferenceReadback.ok
   && noOverclaimReadback.ok
@@ -88,12 +103,12 @@ const summary = {
   route,
   sourceHead,
   claimScope: {
-    implementationKind: "operations_cockpit_package_runtime_completion_plus_docs_readiness_package_runtime_adoption",
-    packageBackedReactRuntimeRendering: "operations_cockpit_completion_and_docs_readiness_search_release_runtime_adoption",
-    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_claim_risk_shell_sidebar_typography_and_docs_readiness_component_reference_only",
+    implementationKind: "operations_cockpit_package_runtime_completion_plus_docs_readiness_and_aos_wide_target_set_package_runtime_adoption",
+    packageBackedReactRuntimeRendering: "operations_cockpit_completion_docs_readiness_and_aos_wide_target_set_runtime_adoption",
+    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_claim_risk_shell_sidebar_typography_docs_readiness_and_aos_wide_component_reference_only",
     broadUiReactRuntimeMigration: false,
     docsReadinessPackageRuntimeRendering: true,
-    aosWidePackageRuntimeRendering: false,
+    aosWidePackageRuntimeRendering: true,
     productAcceptanceReady: false,
     finalMvpAcceptanceReady: false,
     releasePublicationReady: false
@@ -118,8 +133,10 @@ const summary = {
   stagePhaseRuntimeReadback,
   operationsCockpitCompletionRuntimeReadback,
   docsReadinessRuntimeReadback,
+  aosWideTargetSetRuntimeReadback,
   fullDocumentAccessibilityReadback,
   docsReadinessFullDocumentAccessibilityReadback,
+  aosWideFullDocumentAccessibilityReadback,
   visualStyleReadback,
   storybookReferenceReadback,
   noOverclaimReadback
@@ -177,9 +194,15 @@ console.log(JSON.stringify({
   docsReadinessRuntimeComponentCount: summary.docsReadinessRuntimeReadback.packageRuntimeComponents.length,
   docsReadinessMarkerOnlyCount: summary.docsReadinessRuntimeReadback.markerOnlyComponents.length,
   docsReadinessRuntimeFailures: summary.docsReadinessRuntimeReadback.failures.length,
+  aosWideTargetSetRuntimeComponentCount: summary.aosWideTargetSetRuntimeReadback.packageRuntimeComponents.length,
+  aosWideTargetSetMarkerOnlyCount: summary.aosWideTargetSetRuntimeReadback.markerOnlyComponents.length,
+  aosWideTargetSetRuntimeFailures: summary.aosWideTargetSetRuntimeReadback.failures.length,
   docsReadinessDuplicateDomIdCount: summary.docsReadinessFullDocumentAccessibilityReadback.duplicateIds.length,
   docsReadinessAriaReferenceFailureCount: summary.docsReadinessFullDocumentAccessibilityReadback.ariaReferenceFailures.length,
   docsReadinessDisabledDescriptionMismatchCount: summary.docsReadinessFullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length,
+  aosWideDuplicateDomIdCount: summary.aosWideFullDocumentAccessibilityReadback.duplicateIds.length,
+  aosWideAriaReferenceFailureCount: summary.aosWideFullDocumentAccessibilityReadback.ariaReferenceFailures.length,
+  aosWideDisabledDescriptionMismatchCount: summary.aosWideFullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length,
   duplicateDomIdCount: summary.fullDocumentAccessibilityReadback.duplicateIds.length,
   ariaReferenceFailureCount: summary.fullDocumentAccessibilityReadback.ariaReferenceFailures.length,
   disabledDescriptionMismatchCount: summary.fullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length,
@@ -218,11 +241,13 @@ function inspectDependencies() {
 }
 
 function inspectImports() {
-  const combinedRuntimeSource = `${runtimeSource}\n${docsRuntimeSource}`;
+  const combinedRuntimeSource = `${runtimeSource}\n${docsRuntimeSource}\n${aosWideRuntimeSource}`;
   const packageImportPresent = /from\s+["']@tcrn\/ui-react["']/.test(runtimeSource);
   const docsPackageImportPresent = /from\s+["']@tcrn\/ui-react["']/.test(docsRuntimeSource);
+  const aosWidePackageImportPresent = /from\s+["']@tcrn\/ui-react["']/.test(aosWideRuntimeSource);
   const reactServerRenderingPresent = /from\s+["']react-dom\/server["']/.test(runtimeSource);
   const docsReactServerRenderingPresent = /from\s+["']react-dom\/server["']/.test(docsRuntimeSource);
+  const aosWideReactServerRenderingPresent = /from\s+["']react-dom\/server["']/.test(aosWideRuntimeSource);
   const requiredPublicComponentImports = [
     "NavItem",
     "SideNav",
@@ -269,21 +294,26 @@ function inspectImports() {
     "apps/web/src",
     "apps/web/test",
     "scripts"
-  ]).filter((line) => !line.includes(runtimeSourcePath) && !line.includes(docsRuntimeSourcePath));
+  ]).filter((line) => !line.includes(runtimeSourcePath) && !line.includes(docsRuntimeSourcePath) && !line.includes(aosWideRuntimeSourcePath));
   return {
     ok: packageImportPresent
       && docsPackageImportPresent
+      && aosWidePackageImportPresent
       && reactServerRenderingPresent
       && docsReactServerRenderingPresent
+      && aosWideReactServerRenderingPresent
       && Object.values(publicComponentImportPresence).every(Boolean)
       && deepImportHits.length === 0
       && copiedSourceHits.length === 0,
     runtimeSourcePath,
     docsRuntimeSourcePath,
+    aosWideRuntimeSourcePath,
     packageImportPresent,
     docsPackageImportPresent,
+    aosWidePackageImportPresent,
     reactServerRenderingPresent,
     docsReactServerRenderingPresent,
+    aosWideReactServerRenderingPresent,
     publicComponentImportPresence,
     deepImportHits,
     copiedSourceHits
@@ -1250,6 +1280,162 @@ function inspectDocsReadinessRuntime(html) {
   };
 }
 
+function inspectAosWideTargetSetRuntime(html) {
+  const mainHtml = html.match(/<main\b[\s\S]*<\/main>/)?.[0] ?? "";
+  const failures = [];
+  if (!mainHtml) {
+    return {
+      ok: false,
+      present: false,
+      surface: "aos-wide-target-set-package-runtime-adoption",
+      requiredComponents: [],
+      packageRuntimeComponents: [],
+      markerOnlyComponents: [],
+      missingComponents: [],
+      failures: ["aos_wide_main_missing"]
+    };
+  }
+
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(mainHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = Array.from(aosWideProductDesignUiReactRuntime.componentScope);
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  if (missingComponents.length > 0) failures.push("aos_wide_required_package_components_missing");
+
+  const markerOnlyComponents = Array.from(mainHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)(?![^>]*data-package-runtime-subcomponent=)([^>]*)>/g))
+    .map((match) => ({
+      tag: match[1],
+      component: match[2],
+      snippet: redactAttributeSnippet(match[0])
+    }));
+  if (markerOnlyComponents.length > 0) failures.push("aos_wide_marker_only_component_claim_present");
+
+  const mainAttributes = parseAttributes(mainHtml.match(/<main\b([^>]*)>/)?.[1] ?? "");
+  if (mainAttributes["data-package-runtime-surface"] !== aosWideProductDesignUiReactRuntime.implementationKind) {
+    failures.push("aos_wide_runtime_surface_mismatch");
+  }
+  if (mainAttributes["data-package-runtime-component-scope"] !== aosWideProductDesignUiReactRuntime.componentScope.join(",")) {
+    failures.push("aos_wide_component_scope_mismatch");
+  }
+  if (mainAttributes["data-surface"] !== "aos-wide-product-design") failures.push("aos_wide_surface_marker_missing");
+  if (mainAttributes["data-package-backed-react-runtime-rendering"] !== "true") failures.push("aos_wide_runtime_flag_missing");
+  if (mainAttributes["data-aos-wide-product-design-accepted"] !== "false") failures.push("aos_wide_acceptance_boundary_missing");
+
+  const requiredRegions = [
+    "aos-wide-shell",
+    "brand-lockup",
+    "target-path-readback",
+    "project-dashboard-hierarchy",
+    "initiative-ticket-drillthrough",
+    "ai-employee-profile",
+    "gate-owner-intent",
+    "conference-minutes",
+    "gateway-adapter-health",
+    "knowledge-release-modules",
+    "dependency-governance-console",
+    "resource-library-traceability",
+    "admin-access-audit-shell",
+    "surface-index",
+    "detail-panel",
+    "evidence-readiness-panel"
+  ];
+  const missingRegions = requiredRegions.filter((region) => !mainHtml.includes(`data-region="${region}"`));
+  if (missingRegions.length > 0) failures.push("aos_wide_required_regions_missing");
+
+  const navItems = Array.from(mainHtml.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g))
+    .map((match) => ({ attributes: match[1], body: match[2], parsed: parseAttributes(match[1]) }));
+  const packageRuntimeNavItems = navItems.filter((item) => item.parsed["data-package-runtime-component"] === "NavItem");
+  const disabledNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-disabled"] === "true");
+  const activeNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-current"] === "page");
+  if (navItems.length !== 10) failures.push("aos_wide_navitem_count_mismatch");
+  if (packageRuntimeNavItems.length !== 10) failures.push("aos_wide_navitem_runtime_count_mismatch");
+  if (disabledNavItems.length !== 9) failures.push("aos_wide_disabled_navitem_count_mismatch");
+  if (activeNavItems.length !== 1) failures.push("aos_wide_active_navitem_count_mismatch");
+  for (const item of disabledNavItems) {
+    const label = extractVisibleText(item.body, "tcrn-nav-item__label");
+    const visibleReason = findVisibleDisabledReason(item.body, item.parsed["aria-describedby"]);
+    const itemFailures = [];
+    if (item.parsed.href) itemFailures.push("disabled_navitem_has_href");
+    if (item.parsed.tabindex !== "-1") itemFailures.push("disabled_navitem_missing_tabindex_minus_1");
+    if (!item.parsed.title?.trim()) itemFailures.push("disabled_navitem_missing_title");
+    if (!item.parsed["data-disabled-reason"]?.trim()) itemFailures.push("disabled_navitem_missing_data_disabled_reason");
+    if (!item.parsed["aria-describedby"]?.trim()) itemFailures.push("disabled_navitem_missing_aria_describedby");
+    if (!visibleReason.resolved) itemFailures.push("disabled_navitem_aria_describedby_unresolved");
+    if (visibleReason.resolved && !visibleReason.text.trim()) itemFailures.push("disabled_navitem_visible_reason_empty");
+    if (visibleReason.text && item.parsed["data-disabled-reason"] && normalizeText(visibleReason.text) !== normalizeText(item.parsed["data-disabled-reason"])) {
+      itemFailures.push("disabled_navitem_visible_reason_mismatch");
+    }
+    if (itemFailures.length > 0) failures.push({ label, failures: itemFailures });
+  }
+
+  const surfaceRows = Array.from(mainHtml.matchAll(/<button\b(?=[^>]*data-surface-row)([^>]*)>/g))
+    .map((match) => ({ parsed: parseAttributes(match[1]) }));
+  if (surfaceRows.length !== 10) failures.push("aos_wide_surface_row_count_mismatch");
+  if (surfaceRows.some((row) => !row.parsed["data-row-id"]?.trim())) failures.push("aos_wide_surface_rows_missing_row_ids");
+
+  const disabledButtons = Array.from(mainHtml.matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/g))
+    .map((match) => ({ attributes: match[1], body: match[2], parsed: parseAttributes(match[1]) }))
+    .filter((button) => Object.hasOwn(button.parsed, "disabled"));
+  const disabledButtonFailures = disabledButtons
+    .filter((button) => !button.parsed["data-disabled-reason"]?.trim()
+      || !button.parsed.title?.trim()
+      || !button.parsed["aria-describedby"]?.trim())
+    .map((button) => ({ label: extractButtonLabel(button.body), attributes: redactAttributeSnippet(button.attributes) }));
+  if (disabledButtonFailures.length > 0) failures.push("aos_wide_disabled_button_reason_wiring_missing");
+
+  if (!mainHtml.includes('data-package-runtime-subcomponent="SearchInput.control"')) failures.push("aos_wide_search_input_control_missing");
+  if (mainHtml.includes('data-package-runtime-component="Input"')) failures.push("aos_wide_input_scope_overclaim_present");
+  if (!mainHtml.includes("data-detail-title")) failures.push("aos_wide_detail_title_hook_missing");
+  if (!mainHtml.includes("AOS-wide acceptance")) failures.push("aos_wide_evidence_readback_missing");
+  if (!mainHtml.includes("Target set package runtime")) failures.push("aos_wide_claim_strip_runtime_copy_missing");
+
+  const forbiddenClaimHits = [
+    "aos-wide product design accepted",
+    "product accepted",
+    "final mvp accepted",
+    "release ready",
+    "deployment ready",
+    "public ready",
+    "legal complete",
+    "dependency clean",
+    "docs published",
+    "docs exported",
+    "canonical knowledge promoted",
+    "github release created",
+    "live dispatch enabled",
+    "resource materialized",
+    "product repo written",
+    "codex security scan completed"
+  ].filter((phrase) => mainHtml.toLowerCase().includes(phrase));
+  if (forbiddenClaimHits.length > 0) failures.push("aos_wide_forbidden_overclaim_copy_present");
+
+  const sampleRenderedHtmlSha256 = createHash("sha256").update(
+    renderAOSWideProductDesignRuntimeSurface(createAOSWideProductDesignModel())
+  ).digest("hex");
+
+  return {
+    ok: failures.length === 0,
+    present: true,
+    surface: "aos-wide-target-set-package-runtime-adoption",
+    implementationKind: mainAttributes["data-package-runtime-surface"] ?? "",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    markerOnlyComponents,
+    missingRegions,
+    packageRuntimeNavItemCount: packageRuntimeNavItems.length,
+    disabledNavItemCount: disabledNavItems.length,
+    activeNavItemCount: activeNavItems.length,
+    surfaceRowCount: surfaceRows.length,
+    disabledButtonFailures,
+    searchInputControlDisposition: "internal_subcomponent_not_separate_package_runtime_scope",
+    forbiddenClaimHits,
+    sampleRenderedHtmlSha256,
+    failures
+  };
+}
+
 function inspectFullDocumentAccessibility(html) {
   const idEntries = collectRealIdEntries(html);
   const idCounts = new Map();
@@ -1673,6 +1859,9 @@ function markdownReceipt(summary) {
   const docsReadinessRows = summary.docsReadinessRuntimeReadback.failures.length === 0
     ? "- Docs Readiness package-runtime failures: 0"
     : summary.docsReadinessRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
+  const aosWideRows = summary.aosWideTargetSetRuntimeReadback.failures.length === 0
+    ? "- AOS-wide target-set package-runtime failures: 0"
+    : summary.aosWideTargetSetRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
   const accessibilityRows = [
     `- Full-document duplicate real DOM ids: ${summary.fullDocumentAccessibilityReadback.duplicateIds.length}`,
     `- Full-document aria reference failures: ${summary.fullDocumentAccessibilityReadback.ariaReferenceFailures.length}`,
@@ -1682,6 +1871,11 @@ function markdownReceipt(summary) {
     `- Docs Readiness duplicate real DOM ids: ${summary.docsReadinessFullDocumentAccessibilityReadback.duplicateIds.length}`,
     `- Docs Readiness aria reference failures: ${summary.docsReadinessFullDocumentAccessibilityReadback.ariaReferenceFailures.length}`,
     `- Docs Readiness disabled-description mismatches: ${summary.docsReadinessFullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length}`
+  ].join("\n");
+  const aosWideAccessibilityRows = [
+    `- AOS-wide target-set duplicate real DOM ids: ${summary.aosWideFullDocumentAccessibilityReadback.duplicateIds.length}`,
+    `- AOS-wide target-set aria reference failures: ${summary.aosWideFullDocumentAccessibilityReadback.ariaReferenceFailures.length}`,
+    `- AOS-wide target-set disabled-description mismatches: ${summary.aosWideFullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length}`
   ].join("\n");
   return `# AOS Design System Package Runtime Proof\n\n`
     + `- Route: ${summary.route}\n`
@@ -1708,6 +1902,10 @@ function markdownReceipt(summary) {
     + `- Docs Readiness package runtime components: ${summary.docsReadinessRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Docs Readiness marker-only package component claims: ${summary.docsReadinessRuntimeReadback.markerOnlyComponents.length}\n`
     + `- Docs Readiness disabled package NavItems: ${summary.docsReadinessRuntimeReadback.disabledNavItemCount}\n`
+    + `- AOS-wide target-set package runtime components: ${summary.aosWideTargetSetRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
+    + `- AOS-wide target-set marker-only package component claims: ${summary.aosWideTargetSetRuntimeReadback.markerOnlyComponents.length}\n`
+    + `- AOS-wide target-set surface rows: ${summary.aosWideTargetSetRuntimeReadback.surfaceRowCount}\n`
+    + `- AOS-wide target-set disabled package NavItems: ${summary.aosWideTargetSetRuntimeReadback.disabledNavItemCount}\n`
     + `- Marker-only NavItems in cockpit nav: ${summary.navRuntimeReadback.markerOnlyNavItemCount}\n`
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
@@ -1722,8 +1920,10 @@ function markdownReceipt(summary) {
     + `${stagePhaseRows}\n`
     + `${completionRows}\n`
     + `${docsReadinessRows}\n`
+    + `${aosWideRows}\n`
     + `${accessibilityRows}\n\n`
     + `${docsAccessibilityRows}\n\n`
+    + `${aosWideAccessibilityRows}\n\n`
     + `## Boundaries\n\n`
-    + `This is an Operations Cockpit package-runtime completion plus Docs Readiness package-runtime adoption checkpoint. AOS-wide Product Design remains marker/static-renderer only. It is not broad AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, docs publication, release, GitHub mutation, CI mutation, VM freshness, or Owner Intent execution.\n`;
+    + `This is an Operations Cockpit package-runtime completion plus Docs Readiness and AOS-wide target-set package-runtime adoption checkpoint. It is not AOS-wide Product Design acceptance, product UI acceptance, product acceptance, final MVP acceptance, docs publication, release, GitHub mutation, CI mutation, VM freshness, or Owner Intent execution.\n`;
 }

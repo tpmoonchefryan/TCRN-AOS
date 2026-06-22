@@ -5,6 +5,9 @@ import {
   aosDesignSystemRegisteredComponentNames,
   aosRequiredStaticSurfaceComponents
 } from "../dist/apps/web/src/static-component-registry.js";
+import {
+  aosWideProductDesignUiReactRuntime
+} from "../dist/apps/web/src/aos-wide-product-design-ui-react-runtime.js";
 import { renderAOSWideProductDesignHtml } from "../dist/apps/web/src/aos-wide-product-design-view.js";
 import { renderOperationsCockpitHtml } from "../dist/apps/web/src/cockpit-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../dist/apps/web/src/docs-readiness-view.js";
@@ -96,6 +99,7 @@ const surfaceReadbacks = surfaces.map((surface) => {
 const browserReadbackPathLeakage = inspectBrowserReadbackPathLeakage(browserSummaryPath);
 const packageRuntimeReadback = inspectPackageRuntimeReadback(surfaces.find((surface) => surface.id === "operations-cockpit"));
 const docsReadinessPackageRuntimeReadback = inspectDocsReadinessPackageRuntimeReadback(surfaces.find((surface) => surface.id === "docs-search-release-readiness"));
+const aosWidePackageRuntimeReadback = inspectAosWidePackageRuntimeReadback(surfaces.find((surface) => surface.id === "aos-wide-product-design"));
 const proofSelfChecks = runProofSelfChecks();
 
 const ok = localRegistryDiff.length === 0
@@ -104,6 +108,7 @@ const ok = localRegistryDiff.length === 0
   && surfaceReadbacks.every((readback) => readback.disabledNavItemSemanticFailures.length === 0)
   && packageRuntimeReadback.ok
   && docsReadinessPackageRuntimeReadback.ok
+  && aosWidePackageRuntimeReadback.ok
   && browserReadbackPathLeakage.present === true
   && browserReadbackPathLeakage.absolutePathHits.length === 0
   && proofSelfChecks.every((check) => check.passed);
@@ -114,11 +119,11 @@ const summary = {
   registrySource: relative(repoRoot, designSystemRegistrySourcePath),
   designSystemBasis,
   claimScope: {
-    implementationKind: "mixed_static_renderer_registered_component_metadata_with_operations_cockpit_completion_and_docs_readiness_package_runtime",
-    packageBackedReactRuntimeRendering: "operations_cockpit_completion_and_docs_readiness_search_release_runtime_adoption",
+    implementationKind: "mixed_static_renderer_registered_component_metadata_with_operations_cockpit_completion_docs_readiness_and_aos_wide_target_set_package_runtime",
+    packageBackedReactRuntimeRendering: "operations_cockpit_completion_docs_readiness_search_release_and_aos_wide_target_set_runtime_adoption",
     storybookVisualStyleParity: "not_claimed_by_registered_component_proof",
     docsReadinessPackageRuntimeRendering: true,
-    aosWidePackageRuntimeRendering: false,
+    aosWidePackageRuntimeRendering: true,
     productAcceptanceReady: false,
     finalMvpAcceptanceReady: false
   },
@@ -126,6 +131,7 @@ const summary = {
   surfaces: surfaceReadbacks,
   packageRuntimeReadback,
   docsReadinessPackageRuntimeReadback,
+  aosWidePackageRuntimeReadback,
   browserReadbackPathLeakage,
   proofSelfChecks,
   noOverclaim: {
@@ -519,6 +525,67 @@ function inspectDocsReadinessPackageRuntimeReadback(surface) {
     markerOnlyComponents,
     packageRuntimeNavItemCount: navItems.length,
     disabledPackageRuntimeNavItemCount: disabledNavItems.length,
+    searchInputControlDisposition: "internal_subcomponent_not_separate_package_runtime_scope",
+    packageBackedReactRuntimeShellMarkerPresent: html.includes('data-package-backed-react-runtime-rendering="true"'),
+    failures
+  };
+}
+
+function inspectAosWidePackageRuntimeReadback(surface) {
+  if (!surface) {
+    return {
+      ok: false,
+      surface: "aos-wide-product-design",
+      failures: ["aos_wide_surface_missing"]
+    };
+  }
+  const html = surface.html;
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(html.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = Array.from(aosWideProductDesignUiReactRuntime.componentScope).sort();
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  const markerOnlyComponents = Array.from(html.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)(?![^>]*data-package-runtime-subcomponent=)([^>]*)>/g))
+    .map((match) => ({ tag: match[1], component: match[2] }));
+  const mainAttributes = parseAttributes(html.match(/<main\b([^>]*)>/)?.[1] ?? "");
+  const navItems = Array.from(html.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g))
+    .map((match) => ({ attributes: match[1], body: match[2], parsed: parseAttributes(match[1]) }));
+  const disabledNavItems = navItems.filter((item) => item.parsed["aria-disabled"] === "true");
+  const surfaceRows = Array.from(html.matchAll(/<button\b(?=[^>]*data-surface-row)([^>]*)>/g))
+    .map((match) => ({ parsed: parseAttributes(match[1]) }));
+  const surfaceRowFailures = surfaceRows.filter((row) => row.parsed["data-package-runtime-component"] !== "TableShell"
+    || row.parsed["data-package-runtime-source"] !== "@tcrn/ui-react"
+    || !row.parsed["data-row-id"]?.trim());
+  const failures = [];
+
+  if (missingComponents.length > 0) failures.push("aos_wide_required_package_components_missing");
+  if (markerOnlyComponents.length > 0) failures.push("aos_wide_marker_only_component_claim_present");
+  if (mainAttributes["data-package-runtime-surface"] !== aosWideProductDesignUiReactRuntime.implementationKind) failures.push("aos_wide_runtime_surface_mismatch");
+  if (mainAttributes["data-package-backed-react-runtime-rendering"] !== "true") failures.push("aos_wide_runtime_flag_missing");
+  if (mainAttributes["data-aos-wide-product-design-accepted"] !== "false") failures.push("aos_wide_acceptance_boundary_missing");
+  if (navItems.length !== 10) failures.push("aos_wide_navitem_count_mismatch");
+  if (disabledNavItems.length !== 9) failures.push("aos_wide_disabled_navitem_count_mismatch");
+  if (surfaceRows.length !== 10) failures.push("aos_wide_surface_row_count_mismatch");
+  if (surfaceRowFailures.length > 0) failures.push("aos_wide_surface_row_runtime_metadata_missing");
+  if (!html.includes('data-package-runtime-subcomponent="SearchInput.control"')) failures.push("aos_wide_search_input_control_missing");
+  if (html.includes('data-package-runtime-component="Input"')) failures.push("aos_wide_input_scope_overclaim_present");
+  if (!html.includes("data-detail-title")) failures.push("aos_wide_detail_title_hook_missing");
+  if (!html.includes('data-region="disabled-action-gate"')) failures.push("aos_wide_disabled_action_gate_missing");
+  if (!html.includes('data-region="evidence-readiness-panel"')) failures.push("aos_wide_evidence_readiness_panel_missing");
+
+  return {
+    ok: failures.length === 0,
+    surface: surface.id,
+    packageRuntimeComponent: "AOS-wide target-set public @tcrn/ui-react runtime surface",
+    packageRuntimeSource: "@tcrn/ui-react",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    markerOnlyComponents,
+    packageRuntimeNavItemCount: navItems.length,
+    disabledPackageRuntimeNavItemCount: disabledNavItems.length,
+    surfaceRowCount: surfaceRows.length,
+    surfaceRowFailureCount: surfaceRowFailures.length,
     searchInputControlDisposition: "internal_subcomponent_not_separate_package_runtime_scope",
     packageBackedReactRuntimeShellMarkerPresent: html.includes('data-package-backed-react-runtime-rendering="true"'),
     failures

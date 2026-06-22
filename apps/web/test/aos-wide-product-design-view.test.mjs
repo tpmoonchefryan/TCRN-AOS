@@ -88,8 +88,53 @@ test("Slice 10 disabled Design System NavItems are non-actionable with reasons",
     assert.match(item.attributes, /\baria-describedby="[^"]+"/, `disabled NavItem has accessible reason linkage: ${item.attributes}`);
     assert.match(item.attributes, /\bdata-disabled-reason="[^"]+"/, `disabled NavItem has reason metadata: ${item.attributes}`);
     assert.match(item.attributes, /\btitle="[^"]+"/, `disabled NavItem has title reason: ${item.attributes}`);
-    assert.match(item.body, /\bnav-unavailable-reason\b/, "disabled NavItem has visible reason text");
+    assert.match(item.body, /\b(?:nav-unavailable-reason|tcrn-nav-item__disabled-reason)\b/, "disabled NavItem has visible reason text");
   }
+});
+
+test("AOS-wide Product Design target-set renders package-backed runtime components", () => {
+  const html = renderAOSWideProductDesignHtml();
+  const packageComponents = Array.from(new Set(
+    Array.from(html.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "Badge",
+    "Button",
+    "DetailDrawer",
+    "EvidenceStrip",
+    "Field",
+    "FilterBar",
+    "GateReadinessPanel",
+    "Heading",
+    "KeyValueList",
+    "LinkButton",
+    "NavGroup",
+    "NavItem",
+    "ReadbackPanel",
+    "SearchInput",
+    "Select",
+    "SideNav",
+    "StateView",
+    "StatusBadge",
+    "Surface",
+    "TableShell",
+    "Text",
+    "TopBar",
+    "WorkIndex"
+  ];
+  const markerOnlyComponents = Array.from(html.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)(?![^>]*data-package-runtime-subcomponent=)([^>]*)>/g))
+    .map((match) => ({ tag: match[1], component: match[2] }));
+
+  assert.match(html, /data-package-backed-react-runtime-rendering="true"/);
+  assert.match(html, /data-package-runtime-surface="aos_wide_product_design_target_set_package_runtime_adoption"/);
+  assert.match(html, /data-aos-wide-product-design-accepted="false"/);
+  assert.deepEqual(requiredComponents.filter((component) => !packageComponents.includes(component)), []);
+  assert.deepEqual(markerOnlyComponents, []);
+  assert.equal((html.match(/<button\b(?=[^>]*data-surface-row=)/g) ?? []).length, 10);
+  assert.match(html, /data-package-runtime-subcomponent="SearchInput\.control"/);
+  assert.doesNotMatch(html, /data-package-runtime-component="Input"/);
+  assert.match(html, /data-region="disabled-action-gate"/);
+  assert.match(html, /data-region="evidence-readiness-panel"/);
 });
 
 function disabledNavItemReadbacks(html) {

@@ -2,10 +2,9 @@ import {
   createAOSWideProductDesignModel,
   forbiddenAosWidePositiveCopy,
   requiredAosWideSelectors,
-  type AOSWideProductDesignModel,
-  type SurfaceRow
+  type AOSWideProductDesignModel
 } from "./aos-wide-product-design-data.js";
-import { tcrnComponentAttr, tcrnStaticNavItem } from "./static-component-registry.js";
+import { renderAOSWideProductDesignRuntimeSurface } from "./aos-wide-product-design-ui-react-runtime.js";
 
 export {
   createAOSWideProductDesignModel,
@@ -17,7 +16,6 @@ export {
 } from "./aos-wide-product-design-data.js";
 
 export function renderAOSWideProductDesignHtml(model: AOSWideProductDesignModel = createAOSWideProductDesignModel()): string {
-  const selected = requiredSurface(model, 0);
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -28,207 +26,10 @@ export function renderAOSWideProductDesignHtml(model: AOSWideProductDesignModel 
     <style>${aosWideProductDesignCss}</style>
   </head>
   <body data-visible-rows="${model.surfaces.length}">
-    <main class="aos-shell tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="aos-wide-shell" data-surface="aos-wide-product-design" data-product-design-status="${model.context.productDesignStatus}" data-aos-wide-product-design-accepted="${model.requiredState.aosWideProductDesignAccepted}">
-      <aside class="aos-sidebar tcrn-side-nav" ${tcrnComponentAttr("SideNav")} aria-label="AOS navigation">
-        <a class="brand-lockup tcrn-link-button" ${tcrnComponentAttr("LinkButton")} data-region="brand-lockup" href="#target-set" aria-label="TCRN AOS">
-          <span class="brand-tcrn">TCRN</span>
-          <span class="brand-aos">AOS</span>
-        </a>
-        <nav class="nav-stack tcrn-nav-group" ${tcrnComponentAttr("NavGroup")} aria-label="AOS-wide modules">
-          ${model.surfaces.map((surface, index) => navButton(surface.title, surface.id, index === 0)).join("")}
-        </nav>
-        <footer class="sidebar-note tcrn-status-badge" ${tcrnComponentAttr("StatusBadge")}>
-          <span class="state-dot state-current" aria-hidden="true"></span>
-          <span class="tcrn-text" ${tcrnComponentAttr("Text")}>Target set pending review</span>
-        </footer>
-      </aside>
-      <section class="aos-main" id="target-set">
-        <header class="topbar tcrn-top-bar" ${tcrnComponentAttr("TopBar")}>
-          <label class="project-selector tcrn-field" ${tcrnComponentAttr("Field")} for="project-select">
-            <span class="tcrn-text" ${tcrnComponentAttr("Text")}>Project</span>
-            <select class="tcrn-select" ${tcrnComponentAttr("Select")} id="project-select" aria-label="Project selector">
-              <option>${escapeHtml(model.context.projectId)}</option>
-            </select>
-          </label>
-          <div class="checkpoint-strip tcrn-readback-panel" ${tcrnComponentAttr("ReadbackPanel")} aria-label="Local checkpoint">
-            <span class="tcrn-text" ${tcrnComponentAttr("Text")}>Product design status</span>
-            <strong>${escapeHtml(model.context.productDesignStatus)}</strong>
-            <em class="tcrn-status-badge" ${tcrnComponentAttr("StatusBadge")}>review pending</em>
-          </div>
-          <a class="top-action tcrn-link-button" ${tcrnComponentAttr("LinkButton")} href="operations-cockpit.html">Cockpit anchor</a>
-          <a class="top-action tcrn-link-button" ${tcrnComponentAttr("LinkButton")} href="docs-search-release-readiness.html">Docs anchor</a>
-        </header>
-        <div class="workspace">
-          <section class="title-row tcrn-surface" ${tcrnComponentAttr("Surface")}>
-            <div>
-              <p class="eyebrow tcrn-text" ${tcrnComponentAttr("Text")}>AOS-Wide / Target Set</p>
-              <h1 class="tcrn-heading tcrn-heading--1" ${tcrnComponentAttr("Heading")}>AOS Product Design Surface Set</h1>
-            </div>
-            <div class="claim-strip tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")} aria-label="Claim boundaries">
-              <span class="tcrn-status-badge" ${tcrnComponentAttr("StatusBadge")}>target set implemented</span>
-              <span class="tcrn-status-badge" ${tcrnComponentAttr("StatusBadge")}>review pending</span>
-              <span class="tcrn-status-badge" ${tcrnComponentAttr("StatusBadge")}>external proof required</span>
-            </div>
-          </section>
-
-          <section class="path-grid tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")} data-region="target-path-readback" aria-label="Target path readback">
-            <a class="tcrn-link-button" ${tcrnComponentAttr("LinkButton")} href="operations-cockpit.html"><span>Anchor</span><strong>Operations cockpit</strong><em>${escapeHtml(model.targetPathReadback.operationsCockpit)}</em></a>
-            <a class="tcrn-link-button" ${tcrnComponentAttr("LinkButton")} href="docs-search-release-readiness.html"><span>Anchor</span><strong>Docs readiness</strong><em>${escapeHtml(model.targetPathReadback.docsSearchRelease)}</em></a>
-            <a class="tcrn-link-button" ${tcrnComponentAttr("LinkButton")} href="aos-wide-product-design.html" aria-current="page"><span>Current</span><strong>AOS-wide target set</strong><em>${escapeHtml(model.targetPathReadback.aosWideTarget)}</em></a>
-          </section>
-
-          <section class="module-grid tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")} aria-label="Required product design modules">
-            ${moduleCard(requiredSurface(model, 0), "project-dashboard-hierarchy", "Initiative summary", ["Stage owner: Ilya", "Blockers surfaced", "Evidence freshness visible"])}
-            ${moduleCard(requiredSurface(model, 1), "initiative-ticket-drillthrough", "Ticket detail", ["Gates linked", "Decision history present", "Comments and subtasks posture"])}
-            ${moduleCard(requiredSurface(model, 2), "ai-employee-profile", "Role profile", ["Role/thread identity", "Assignment scope", "Authority posture"])}
-            ${moduleCard(requiredSurface(model, 3), "gate-owner-intent", "Owner Intent separation", ["Role gates separate", "Required evidence", "True-owner action disabled"])}
-            ${moduleCard(requiredSurface(model, 4), "conference-minutes", "Conference readback", ["Participants", "Positions", "Minutes and outcome"])}
-            ${moduleCard(requiredSurface(model, 5), "gateway-adapter-health", "Gateway readback", ["Dry-run outbox", "Idempotency/dedupe", "Audit/redaction posture"])}
-            ${moduleCard(requiredSurface(model, 6), "knowledge-release-modules", "Docs modules", ["Knowledge index", "Guide draft", "Release note draft"])}
-            ${moduleCard(requiredSurface(model, 7), "dependency-governance-console", "Dependency console", ["License evidence", "SBOM/NOTICE", "Residual risk"])}
-            ${moduleCard(requiredSurface(model, 8), "resource-library-traceability", "Resource traceability", ["Materialization request", "History and rollback posture", "Manifest audit"])}
-            ${moduleCard(requiredSurface(model, 9), "admin-access-audit-shell", "Access and audit", ["Read-only access", "Authz summary", "Break-glass blocked"])}
-          </section>
-
-          <section class="content-grid tcrn-surface" ${tcrnComponentAttr("Surface")}>
-            <section class="surface-index tcrn-work-index" ${tcrnComponentAttr("WorkIndex")} data-region="surface-index" aria-label="AOS-wide surface index">
-              <header class="surface-index-head tcrn-filter-bar" ${tcrnComponentAttr("FilterBar")}>
-                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Surface Index</h2>
-                <label class="search-box tcrn-search-input" ${tcrnComponentAttr("SearchInput")} for="surface-search">
-                  <span>Search target surfaces</span>
-                  <input class="tcrn-input" ${tcrnComponentAttr("Input")} id="surface-search" type="search" placeholder="Filter module, owner, blocker, story posture" />
-                </label>
-                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" data-filter-state="all">All</button>
-              </header>
-              <div class="filter-row tcrn-filter-bar" ${tcrnComponentAttr("FilterBar")} aria-label="State filters">
-                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" data-filter-state="review_required">Review required</button>
-                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" data-filter-state="blocked">Blocked posture</button>
-                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" data-filter-state="current">Current local readback</button>
-                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" data-filter-state="pending_external_proof">External proof</button>
-              </div>
-              <div class="surface-table tcrn-table-shell" ${tcrnComponentAttr("TableShell")} role="table" aria-label="AOS-wide target-set rows">
-                <div class="surface-row table-head tcrn-table-shell__row" role="row">
-                  <span class="tcrn-table-shell__cell">Surface</span><span class="tcrn-table-shell__cell">Module</span><span class="tcrn-table-shell__cell">State</span><span class="tcrn-table-shell__cell">Owner</span><span class="tcrn-table-shell__cell">Blocker</span><span class="tcrn-table-shell__cell">Evidence</span>
-                </div>
-                ${model.surfaces.map((surface, index) => surfaceRow(surface, index)).join("")}
-              </div>
-              <div class="empty-state tcrn-state-view" ${tcrnComponentAttr("StateView")} data-empty-state hidden>
-                <strong>No target-set rows match this local filter.</strong>
-                <span>Open the evidence panel for proof readiness metadata.</span>
-              </div>
-            </section>
-            <aside class="detail-drawer tcrn-detail-drawer" ${tcrnComponentAttr("DetailDrawer")} data-region="detail-panel" aria-label="Selected AOS-wide surface detail">
-              <div class="drawer-head">
-                <span class="tag tcrn-badge" ${tcrnComponentAttr("Badge")} data-detail-state>${copyState(selected.state)}</span>
-                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" aria-label="Close detail" disabled>Close</button>
-              </div>
-              <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")} data-detail-title>${escapeHtml(selected.title)}</h2>
-              <dl class="detail-list tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")}>
-                <div><dt>Surface</dt><dd data-detail-surface>${escapeHtml(selected.surface)}</dd></div>
-                <div><dt>Owner</dt><dd data-detail-owner>${escapeHtml(selected.owner)}</dd></div>
-                <div><dt>Stage</dt><dd data-detail-stage>${escapeHtml(selected.stage)}</dd></div>
-                <div><dt>Blocker</dt><dd data-detail-blocker>${escapeHtml(selected.blocker)}</dd></div>
-                <div><dt>Evidence</dt><dd data-detail-evidence>${escapeHtml(selected.evidence)}</dd></div>
-                <div><dt>Action</dt><dd data-detail-action>${escapeHtml(selected.disabledAction)}</dd></div>
-                <div><dt>Detail</dt><dd data-detail-copy>${escapeHtml(selected.detail)}</dd></div>
-              </dl>
-              <section class="disabled-action-panel tcrn-gate-readiness-panel" ${tcrnComponentAttr("GateReadinessPanel")} aria-label="Disabled action posture">
-                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" disabled>Owner action locked</button>
-                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" disabled>Live dispatch unavailable</button>
-                <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" disabled>External proof required</button>
-              </section>
-              <section class="evidence-panel tcrn-readback-panel" ${tcrnComponentAttr("ReadbackPanel")} data-region="evidence-readiness-panel" aria-label="Evidence readiness panel">
-                <h3 class="tcrn-heading tcrn-heading--3" ${tcrnComponentAttr("Heading")}>Evidence Readiness</h3>
-                <dl class="detail-list tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")}>
-                  <div><dt>Command</dt><dd>pnpm slice10:proof</dd></div>
-                  <div><dt>Static targets</dt><dd>3 paths read back</dd></div>
-                  <div><dt>Desktop</dt><dd>capture metadata prepared</dd></div>
-                  <div><dt>Mobile</dt><dd>overflow expected false</dd></div>
-                  <div><dt>Console</dt><dd>page-error expectation none</dd></div>
-                </dl>
-              </section>
-            </aside>
-          </section>
-
-          <section class="state-grid" aria-label="Required state readback">
-            ${statePill("productDesignStatus", model.requiredState.productDesignStatus)}
-            ${statePill("aosWideProductDesignAccepted", String(model.requiredState.aosWideProductDesignAccepted))}
-            ${statePill("deploymentProof", model.requiredState.deploymentProof)}
-            ${statePill("liveDispatch", String(model.requiredState.liveDispatch))}
-            ${statePill("threadRegistryMutation", String(model.requiredState.threadRegistryMutation))}
-            ${statePill("releaseReadiness", model.requiredState.releaseReadiness)}
-            ${statePill("productAcceptance", model.requiredState.productAcceptance)}
-            ${statePill("finalMvpAcceptance", model.requiredState.finalMvpAcceptance)}
-            ${statePill("docsExport", model.requiredState.docsExport)}
-            ${statePill("docsPublication", model.requiredState.docsPublication)}
-            ${statePill("canonicalPromotion", model.requiredState.canonicalPromotion)}
-            ${statePill("githubMutation", String(model.requiredState.githubMutation))}
-            ${statePill("scannerIngestion", String(model.requiredState.scannerIngestion))}
-            ${statePill("materializationExecuted", String(model.requiredState.materializationExecuted))}
-            ${statePill("productRepoWrite", String(model.requiredState.productRepoWrite))}
-            ${statePill("codexSecurityScan", model.requiredState.codexSecurityScan)}
-            ${statePill("externalProofRequired", String(model.requiredState.externalProofRequired))}
-          </section>
-        </div>
-      </section>
-    </main>
+    ${renderAOSWideProductDesignRuntimeSurface(model)}
     <script>${aosWideClientScript}</script>
   </body>
 </html>`;
-}
-
-function requiredSurface(model: AOSWideProductDesignModel, index: number): SurfaceRow {
-  const surface = model.surfaces[index];
-  if (!surface) {
-    throw new Error(`missing required Slice 10 surface at index ${index}`);
-  }
-  return surface;
-}
-
-function moduleCard(surface: SurfaceRow, region: string, label: string, items: string[]): string {
-  return `<article class="module-card tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="${escapeHtml(region)}" data-module-id="${escapeHtml(surface.id)}">
-    <div class="panel-head tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")}>
-      <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>${escapeHtml(surface.title)}</h2>
-      <span class="state-chip tcrn-status-badge ${escapeHtml(surface.state)}" ${tcrnComponentAttr("StatusBadge")}>${copyState(surface.state)}</span>
-    </div>
-    <strong class="tcrn-text" ${tcrnComponentAttr("Text")}>${escapeHtml(label)}</strong>
-    <p class="tcrn-text" ${tcrnComponentAttr("Text")}>${escapeHtml(surface.detail)}</p>
-    <ul class="tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")}>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-    <button class="tcrn-button" ${tcrnComponentAttr("Button")} type="button" data-select-surface="${escapeHtml(surface.id)}">Inspect</button>
-  </article>`;
-}
-
-function surfaceRow(surface: SurfaceRow, index: number): string {
-  const terms = [surface.title, surface.surface, surface.owner, surface.state, surface.stage, surface.blocker, surface.detail, surface.disabledAction, ...surface.terms].join(" ").toLowerCase();
-  return `<button class="surface-row target-row tcrn-table-shell__row${index === 0 ? " active" : ""}" ${tcrnComponentAttr("TableShell")} data-surface-row data-state="${escapeHtml(surface.state)}" data-row-id="${escapeHtml(surface.id)}" data-title="${escapeHtml(surface.title)}" data-surface="${escapeHtml(surface.surface)}" data-owner="${escapeHtml(surface.owner)}" data-stage="${escapeHtml(surface.stage)}" data-blocker="${escapeHtml(surface.blocker)}" data-evidence="${escapeHtml(surface.evidence)}" data-action="${escapeHtml(surface.disabledAction)}" data-detail="${escapeHtml(surface.detail)}" data-search="${escapeHtml(terms)}" type="button" role="row"><span class="tcrn-table-shell__cell">${escapeHtml(surface.title)}</span><span class="tcrn-table-shell__cell">${escapeHtml(surface.surface)}</span><span class="tcrn-table-shell__cell">${copyState(surface.state)}</span><span class="tcrn-table-shell__cell">${escapeHtml(surface.owner)}</span><span class="tcrn-table-shell__cell">${escapeHtml(surface.blocker)}</span><span class="tcrn-table-shell__cell">${escapeHtml(surface.evidence)}</span></button>`;
-}
-
-function navButton(label: string, id: string, active: boolean): string {
-  return tcrnStaticNavItem({
-    active,
-    activeHref: "#target-set",
-    disabledReason: `${label} view is held for a later routed AOS slice; this AOS-wide target-set checkpoint keeps the target set available only.`,
-    extraAttributes: `data-nav-surface="${escapeHtml(id)}"`,
-    label
-  });
-}
-
-function statePill(key: string, value: string): string {
-  return `<div class="state-pill tcrn-badge" ${tcrnComponentAttr("Badge")}><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`;
-}
-
-function copyState(state: string): string {
-  if (state === "review_required") return "review required";
-  if (state === "pending_external_proof") return "external proof required";
-  return state.replaceAll("_", " ");
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
 }
 
 const aosWideProductDesignCss = `
@@ -258,12 +59,19 @@ button { cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: 0.72; }
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--teal-500); outline-offset: 2px; }
 strong, b { font-weight: 500; }
+.tcrn-sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap !important; border: 0 !important; }
 .aos-shell { display: grid; grid-template-columns: 252px minmax(0, 1fr); min-height: 100vh; max-width: 100%; overflow-x: clip; }
 .aos-sidebar { position: sticky; top: 0; align-self: start; display: grid; grid-template-rows: auto 1fr auto; gap: 22px; height: 100vh; padding: 24px 14px 20px; overflow: auto; background: linear-gradient(180deg, var(--navy-900), var(--navy-950)); color: #d9e8f0; }
 .brand-lockup { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; min-height: 42px; padding: 0 10px 8px; }
+.brand-mark { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 6px; background: rgba(20, 184, 173, 0.18); color: #f7fbff; font-weight: 700; }
+.brand-copy { display: grid; gap: 2px; }
+.brand-copy strong { color: #f7fbff; font-size: 14px; }
+.brand-copy small { color: #b8cad5; font-size: 11px; }
 .brand-tcrn { font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 29px; line-height: 1; font-weight: 500; letter-spacing: 0.17em; color: #f7fbff; }
 .brand-aos { display: inline-block; font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 32px; line-height: 1; font-weight: 800; letter-spacing: 0; color: transparent; background: linear-gradient(135deg, #18d7c8 6%, #08a99d 56%, #15c4b5 100%); -webkit-background-clip: text; background-clip: text; transform: skewX(-5deg); }
 .nav-stack { display: grid; align-content: start; gap: 6px; }
+.tcrn-nav-group__label { margin: 0 10px 6px; color: #b8cad5; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+.tcrn-nav-group__items { display: grid; align-content: start; gap: 6px; }
 .nav-row { display: grid; grid-template-columns: 8px 1fr; align-items: center; gap: 10px; width: 100%; min-height: 38px; border: 1px solid transparent; border-radius: 6px; padding: 0 10px; background: transparent; color: #e5eef3; text-align: left; font-size: 13px; font-weight: 400; }
 .nav-row::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: #7891a2; }
 .nav-row.active, .nav-row:hover { background: rgba(255, 255, 255, 0.12); }
@@ -274,6 +82,8 @@ strong, b { font-weight: 500; }
 .sidebar-note { display: flex; align-items: center; gap: 8px; color: #deedf4; font-size: 12px; }
 .aos-main, .workspace, .title-row, .module-grid, .content-grid, .surface-index, .detail-drawer, .topbar, .path-grid { max-width: 100%; min-width: 0; }
 .topbar { display: grid; grid-template-columns: 220px minmax(0, 1fr) max-content max-content; align-items: center; gap: 14px; min-height: 64px; padding: 0 22px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.96); }
+.tcrn-top-bar__brand, .tcrn-top-bar__module { min-width: 0; color: #25364a; font-size: 13px; font-weight: 500; }
+.tcrn-top-bar__actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; min-width: 0; }
 .project-selector { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 8px; min-height: 38px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 5px; background: var(--surface); font-size: 14px; }
 .project-selector span { color: #25364a; }
 .project-selector select { min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text); font-weight: 500; }
@@ -299,8 +109,10 @@ h2 { margin: 0; font-size: 13px; font-weight: 500; letter-spacing: 0.055em; text
 .module-card strong { color: #17263a; font-size: 13px; }
 .module-card p, .module-card li { margin: 0; color: #46576b; font-size: 12px; line-height: 1.45; }
 .module-card ul { display: grid; gap: 4px; margin: 0; padding-left: 16px; }
-.panel-head { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
-.panel-head h2 { min-width: 0; }
+.panel-head, .module-card-head { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+.panel-head h2, .module-card-head h2 { min-width: 0; }
+.module-card .tcrn-key-value-list { display: grid; gap: 5px; margin: 0; }
+.module-card .tcrn-key-value-list div { display: grid; gap: 1px; }
 .state-chip, .tag { display: inline-block; width: fit-content; max-width: 100%; border-radius: 4px; padding: 4px 7px; font-size: 11px; font-weight: 500; line-height: 1.2; }
 .state-chip.current, .tag.current { background: #e5f8ee; color: #1d8d51; }
 .state-chip.review_required, .tag.review_required { background: #fff1d6; color: #a66f0d; }
@@ -310,10 +122,12 @@ h2 { margin: 0; font-size: 13px; font-weight: 500; letter-spacing: 0.055em; text
 .surface-index { border-radius: 6px 0 0 6px; overflow-x: auto; }
 .surface-index-head { display: grid; grid-template-columns: auto minmax(220px, 1fr) 88px; align-items: center; gap: 14px; padding: 18px; border-bottom: 1px solid var(--line); }
 .search-box { display: grid; min-height: 36px; }
-.search-box span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.search-box > .tcrn-field__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .search-box input { width: 100%; border: 1px solid var(--line-strong); border-radius: 5px; padding: 0 12px; color: var(--text); }
 .filter-row { padding: 12px 18px; border-bottom: 1px solid var(--line); }
 .surface-table { min-width: 920px; }
+.tcrn-table-shell__head { display: grid; grid-template-columns: 148px minmax(240px, 1fr) 132px 150px 150px 150px; align-items: center; min-height: 42px; padding: 0 16px; border-bottom: 1px solid var(--line); background: #fbfcfd; color: #384659; font-size: 11px; font-weight: 500; }
+.tcrn-table-shell__head span { min-width: 0; }
 .surface-row { display: grid; grid-template-columns: 148px minmax(240px, 1fr) 132px 150px 150px 150px; align-items: center; width: 100%; min-height: 50px; padding: 0 16px; border: 0; border-bottom: 1px solid var(--line); background: #fff; color: #29374a; text-align: left; font-size: 12px; }
 .surface-row[hidden], .empty-state[hidden] { display: none !important; }
 .surface-row > span { min-width: 0; line-height: 1.35; overflow-wrap: anywhere; }
@@ -324,7 +138,7 @@ h2 { margin: 0; font-size: 13px; font-weight: 500; letter-spacing: 0.055em; text
 .detail-drawer { border-radius: 0 6px 6px 0; border-left: 0; padding: 20px; }
 .drawer-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .drawer-head button { border: 0; background: transparent; color: #1a293d; }
-.detail-drawer h2 { margin: 14px 0; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: #162437; font-size: 18px; line-height: 1.25; letter-spacing: 0; text-transform: none; }
+.detail-drawer h2, .detail-drawer [data-detail-title="true"] { margin: 14px 0; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: #162437; font-size: 18px; line-height: 1.25; letter-spacing: 0; text-transform: none; }
 .detail-list { display: grid; gap: 10px; margin: 0 0 18px; }
 .detail-list div { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 8px; }
 dt { color: #253449; font-size: 12px; font-weight: 500; }
