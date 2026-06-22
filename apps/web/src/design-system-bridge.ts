@@ -9,22 +9,25 @@ import {
 } from "@tcrn/ui-copy-state";
 
 export const aosDesignSystemConsumerBridge = {
-  route: "route_tcrn_aos_design_system_frontend_rebuild_59ar_stage_phase_package_runtime_implementation",
+  route: "route_tcrn_aos_design_system_frontend_rebuild_59as_topbar_checkpoint_service_status_package_runtime_implementation",
   adoptionPosture: "tokens_copy_state_ui_react_operations_cockpit_runtime_pilot",
   designSystemSourceHead: "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
   tokenPackage: "@tcrn/ui-tokens",
   copyStatePackage: "@tcrn/ui-copy-state",
   uiReactPackage: "@tcrn/ui-react",
   uiReactPackageSpecifier: "file:../TCRN-Design-System/packages/ui-react",
-  uiReactRuntimeSurface: "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase",
+  uiReactRuntimeSurface: "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint",
   uiReactRuntimeComponentScope: [
     "NavItem",
+    "TopBar",
     "WorkIndex",
     "TableShell",
     "SearchInput",
     "Field",
+    "Select",
     "FilterBar",
     "Button",
+    "IconButton",
     "Badge",
     "StateView",
     "DetailDrawer",

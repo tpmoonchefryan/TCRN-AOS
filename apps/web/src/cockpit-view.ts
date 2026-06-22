@@ -28,11 +28,13 @@ import {
   renderCockpitRuntimeGateReadbackCards,
   renderCockpitRuntimeNavItems,
   renderCockpitRuntimeStagePhaseCards,
+  renderCockpitRuntimeTopbarCheckpoint,
   renderCockpitRuntimeWorkIndexCluster,
   type CockpitRuntimeDetailDrawerOptions,
   type CockpitRuntimeGateReadbackCardsOptions,
   type CockpitRuntimeNavItem,
   type CockpitRuntimeStagePhaseOptions,
+  type CockpitRuntimeTopbarCheckpointOptions,
   type CockpitRuntimeWorkIndexRow
 } from "./cockpit-ui-react-runtime.js";
 import { tcrnComponentAttr } from "./static-component-registry.js";
@@ -263,25 +265,11 @@ export function renderOperationsCockpitHtml(
         </footer>
       </aside>
       <section class="aos-main" id="cockpit">
-        <header class="topbar tcrn-top-bar" ${tcrnComponentAttr("TopBar")}>
-          <label class="project-selector tcrn-field" ${tcrnComponentAttr("Field")} data-region="project-selector" for="project-select">
-            <span class="tcrn-field__label">Project</span>
-            <select class="tcrn-select" ${tcrnComponentAttr("Select")} id="project-select" aria-label="Project selector">
-              <option>${escapeHtml(model.contextHeader.selectedProjectId)}</option>
-              <option>TCRN-TMS</option>
-              <option>TCRN Workflow</option>
-            </select>
-          </label>
-          <div class="checkpoint-strip tcrn-readback-panel" ${tcrnComponentAttr("ReadbackPanel")} data-region="checkpoint-strip" aria-label="Local checkpoint">
-            <span>Local checkpoint observed</span>
-            <strong data-local-checkpoint>${escapeHtml(model.contextHeader.localCheckpoint)}</strong>
-            <em class="tcrn-badge tcrn-badge--positive" ${tcrnComponentAttr("StatusBadge")} data-readback-freshness>${copyFreshness(model.contextHeader.dataFreshness)}</em>
-            <span class="service-readback tcrn-badge" ${tcrnComponentAttr("Badge")} data-service-status>${serviceBacked ? "service API pending" : "static fixture"}</span>
-            <span class="service-readback tcrn-badge" ${tcrnComponentAttr("Badge")} data-service-model-readback>${escapeHtml(serviceReadModelSummary(serviceReadback))}</span>
-          </div>
-          <button type="button" class="top-action tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} data-refresh-readback>Refresh readback</button>
-          <button type="button" class="profile tcrn-button tcrn-icon-button" ${tcrnComponentAttr("IconButton")} aria-label="Current operator">RL</button>
-        </header>
+        ${renderCockpitRuntimeTopbarCheckpoint(createCockpitRuntimeTopbarCheckpointOptions({
+          model,
+          serviceBacked,
+          serviceReadback
+        }))}
         <div class="workspace">
           <section class="hero-row">
             <div>
@@ -387,14 +375,18 @@ strong, b { font-weight: 500; }
 .nav-unavailable-reason { display: block; margin-top: 2px; color: #b8cad5; font-size: var(--type-micro); font-weight: 400; line-height: var(--line-compact); }
 .sidebar-note { display: flex; align-items: center; gap: 8px; color: #deedf4; font-size: var(--type-label); }
 .aos-main { min-width: 0; }
-.topbar { display: grid; grid-template-columns: 220px minmax(0, 1fr) max-content 38px; align-items: center; gap: 14px; min-height: 64px; padding: 0 22px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.96); }
+.topbar { display: grid; grid-template-columns: max-content minmax(0, 1fr); grid-template-areas: "brand actions" "module actions"; align-items: center; column-gap: 14px; row-gap: 4px; min-height: 64px; min-width: 0; padding: 8px 22px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.96); }
+.tcrn-top-bar__brand { grid-area: brand; color: #0f2437; font-size: var(--type-label); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+.tcrn-top-bar__module { grid-area: module; color: var(--muted); font-size: var(--type-label); white-space: nowrap; }
+.tcrn-top-bar__actions { grid-area: actions; display: grid; grid-template-columns: minmax(170px, 220px) minmax(0, 1fr) max-content 38px; align-items: center; gap: 14px; min-width: 0; }
 .project-selector { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 8px; min-height: 38px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 5px; background: var(--surface); font-size: var(--type-ui); }
 .project-selector span { color: #25364a; }
 .project-selector select { min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text); font-weight: 500; }
-.checkpoint-strip { display: flex; align-items: center; gap: 12px; min-width: 0; color: #26364a; font-size: var(--type-ui); }
-.checkpoint-strip strong, .checkpoint-strip em { white-space: nowrap; }
+.checkpoint-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; min-width: 0; color: #26364a; font-size: var(--type-ui); }
+.checkpoint-strip .tcrn-heading { flex: 0 0 auto; margin: 0; color: var(--muted); font-size: var(--type-label); font-weight: 500; letter-spacing: 0; text-transform: none; }
+.checkpoint-strip strong, .checkpoint-strip em, .checkpoint-strip .tcrn-badge { white-space: nowrap; }
 .checkpoint-strip em { color: var(--teal-600); font-style: normal; }
-.service-readback { border: 1px solid #b8dde0; border-radius: 4px; padding: 4px 7px; color: #14646a; background: #f1fcfc; white-space: nowrap; font-size: var(--type-label); line-height: var(--line-compact); }
+.service-readback { border: 1px solid #b8dde0; border-radius: 4px; padding: 4px 7px; color: #14646a; background: #f1fcfc; white-space: normal; font-size: var(--type-label); line-height: var(--line-compact); }
 .service-readback.blocked { border-color: #f2c0bd; color: #b42318; background: #fff4f2; }
 .service-readback.loading { border-color: #bed4f7; color: #1f5fa7; background: #f3f8ff; }
 .top-action, .profile, .panel-head button, .work-index-head button, .filter-row button, .primary-action, .secondary-action { min-height: 34px; border-radius: 5px; font-size: var(--type-ui); font-weight: 500; }
@@ -483,8 +475,8 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
   .aos-sidebar { position: static; height: auto; gap: 14px; padding: 18px 14px; }
   .nav-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .nav-row { min-height: 34px; }
-  .topbar, .work-index-head, .summary-grid { grid-template-columns: 1fr; }
-  .topbar { padding: 14px; }
+  .topbar, .tcrn-top-bar__actions, .work-index-head, .summary-grid { grid-template-columns: 1fr; }
+  .topbar { grid-template-areas: "brand" "module" "actions"; padding: 14px; }
   .hero-row { align-items: start; flex-direction: column; }
   .workspace { padding: 16px 12px 28px; }
   .stage-line { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 18px; }
@@ -721,6 +713,28 @@ function createCockpitRuntimeNavItems(): CockpitRuntimeNavItem[] {
     href: "#cockpit",
     label
   }));
+}
+
+function createCockpitRuntimeTopbarCheckpointOptions(input: {
+  model: OperationsCockpitReadModel;
+  serviceBacked: boolean;
+  serviceReadback: CockpitServiceReadModelReadback;
+}): CockpitRuntimeTopbarCheckpointOptions {
+  return {
+    checkpointLabel: "Local checkpoint observed",
+    checkpointValue: input.model.contextHeader.localCheckpoint,
+    freshnessLabel: copyFreshness(input.model.contextHeader.dataFreshness),
+    operatorLabel: "RL",
+    projectId: input.model.contextHeader.selectedProjectId,
+    projectOptions: [
+      input.model.contextHeader.selectedProjectId,
+      "TCRN-TMS",
+      "TCRN Workflow"
+    ],
+    refreshLabel: "Refresh readback",
+    serviceReadbackLabel: serviceReadModelSummary(input.serviceReadback),
+    serviceStatusLabel: input.serviceBacked ? "service API pending" : "static fixture"
+  };
 }
 
 function createCockpitRuntimeWorkIndexRows(rows: WorkstreamStoryRow[]): CockpitRuntimeWorkIndexRow[] {

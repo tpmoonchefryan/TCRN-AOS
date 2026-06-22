@@ -8,14 +8,17 @@ import {
   FilterBar,
   GateReadinessPanel,
   Heading,
+  IconButton,
   KeyValueList,
   NavItem,
   ReadbackPanel,
   SearchInput,
+  Select,
   StatusBadge,
   Surface,
   StateView,
   Text,
+  TopBar,
   WorkIndex,
   type KeyValueItem,
   type WorkIndexRow
@@ -26,15 +29,18 @@ export const aosCockpitUiReactRuntime = {
   packageName: "@tcrn/ui-react",
   packageSpecifier: aosDesignSystemConsumerBridge.uiReactPackageSpecifier,
   designSystemSourceHead: aosDesignSystemConsumerBridge.designSystemSourceHead,
-  implementationKind: "operations_cockpit_stage_phase_gate_readback_cards_package_runtime_expansion",
+  implementationKind: "operations_cockpit_topbar_checkpoint_stage_phase_gate_readback_cards_package_runtime_expansion",
   componentScope: [
     "NavItem",
+    "TopBar",
     "WorkIndex",
     "TableShell",
     "SearchInput",
     "Field",
+    "Select",
     "FilterBar",
     "Button",
+    "IconButton",
     "Badge",
     "StateView",
     "DetailDrawer",
@@ -146,6 +152,18 @@ export interface CockpitRuntimeStagePhaseOptions {
   stages: readonly CockpitRuntimeStageMapItem[];
 }
 
+export interface CockpitRuntimeTopbarCheckpointOptions {
+  checkpointLabel: string;
+  checkpointValue: string;
+  freshnessLabel: string;
+  operatorLabel: string;
+  projectId: string;
+  projectOptions: readonly string[];
+  refreshLabel: string;
+  serviceReadbackLabel: string;
+  serviceStatusLabel: string;
+}
+
 type RuntimeNavItemProps = ComponentProps<typeof NavItem> & {
   "data-tcrn-component": "NavItem";
   "data-package-runtime-component": "NavItem";
@@ -154,6 +172,83 @@ type RuntimeNavItemProps = ComponentProps<typeof NavItem> & {
 };
 
 type RuntimeDataProps = Record<`data-${string}`, string | boolean | undefined>;
+
+export function renderCockpitRuntimeTopbarCheckpoint(options: CockpitRuntimeTopbarCheckpointOptions): string {
+  const projectOptions = options.projectOptions.map((project) => ({
+    label: project,
+    value: project
+  }));
+  const tree = createElement(TopBar, {
+    productName: "TCRN AOS",
+    moduleName: "Operations Cockpit",
+    actions: createElement(Fragment, null,
+      createElement(Field, {
+        label: "Project",
+        children: createElement(Select, {
+          "aria-label": "Project selector",
+          "data-tcrn-component": "Select",
+          "data-package-runtime-component": "Select",
+          "data-package-runtime-source": "@tcrn/ui-react",
+          defaultValue: options.projectId,
+          id: "project-select",
+          options: projectOptions
+        } as ComponentProps<typeof Select> & RuntimeDataProps)
+      }),
+      createElement(ReadbackPanel, {
+        title: options.checkpointLabel,
+        children: [
+          createElement("strong", {
+            "data-local-checkpoint": true,
+            key: "checkpoint-value"
+          }, options.checkpointValue),
+          createElement(StatusBadge, {
+            "data-readback-freshness": true,
+            "data-tcrn-component": "StatusBadge",
+            "data-package-runtime-component": "StatusBadge",
+            "data-package-runtime-source": "@tcrn/ui-react",
+            key: "freshness",
+            state: { state: "local_only", label: options.freshnessLabel }
+          } as ComponentProps<typeof StatusBadge> & RuntimeDataProps & { key: string }),
+          createElement(Badge, {
+            className: "service-readback",
+            "data-service-status": true,
+            "data-tcrn-component": "Badge",
+            "data-package-runtime-component": "Badge",
+            "data-package-runtime-source": "@tcrn/ui-react",
+            key: "service-status"
+          } as ComponentProps<typeof Badge> & RuntimeDataProps & { key: string }, options.serviceStatusLabel),
+          createElement(Badge, {
+            className: "service-readback",
+            "data-service-model-readback": true,
+            "data-tcrn-component": "Badge",
+            "data-package-runtime-component": "Badge",
+            "data-package-runtime-source": "@tcrn/ui-react",
+            key: "service-readback"
+          } as ComponentProps<typeof Badge> & RuntimeDataProps & { key: string }, options.serviceReadbackLabel)
+        ]
+      } as ComponentProps<typeof ReadbackPanel>),
+      createElement(Button, {
+        className: "top-action",
+        "data-refresh-readback": true,
+        "data-tcrn-component": "Button",
+        "data-package-runtime-component": "Button",
+        "data-package-runtime-source": "@tcrn/ui-react",
+        type: "button",
+        variant: "secondary"
+      } as ComponentProps<typeof Button> & RuntimeDataProps, options.refreshLabel),
+      createElement(IconButton, {
+        ariaLabel: "Current operator",
+        className: "profile",
+        "data-tcrn-component": "IconButton",
+        "data-package-runtime-component": "IconButton",
+        "data-package-runtime-source": "@tcrn/ui-react",
+        type: "button"
+      } as ComponentProps<typeof IconButton> & RuntimeDataProps, options.operatorLabel)
+    )
+  });
+
+  return addAosTopbarCheckpointRuntimeAttributes(renderCockpitRuntimeMarkup(tree, "aos-topbar-checkpoint-"));
+}
 
 export function renderCockpitRuntimeNavItems(items: readonly CockpitRuntimeNavItem[]): string {
   return items.map((item, index) => renderCockpitRuntimeNavItem(item, `aos-nav-${index}-`)).join("\n          ");
@@ -542,6 +637,38 @@ function cockpitStageStatusBadgeState(stage: CockpitRuntimeStageMapItem): Compon
 
 function renderCockpitRuntimeMarkup(node: ReturnType<typeof createElement>, identifierPrefix: string): string {
   return renderToStaticMarkup(node, { identifierPrefix });
+}
+
+function addAosTopbarCheckpointRuntimeAttributes(html: string): string {
+  return html
+    .replace(
+      /<header class="tcrn-top-bar">/,
+      '<header class="topbar tcrn-top-bar" data-region="topbar-checkpoint" data-tcrn-component="TopBar" data-package-runtime-component="TopBar" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-topbar-checkpoint">'
+    )
+    .replace(
+      /<div class="tcrn-top-bar__brand">/,
+      '<div class="tcrn-top-bar__brand" data-package-runtime-subcomponent="TopBar.brand">'
+    )
+    .replace(
+      /<div class="tcrn-top-bar__module">/,
+      '<div class="tcrn-top-bar__module" data-package-runtime-subcomponent="TopBar.module">'
+    )
+    .replace(
+      /<div class="tcrn-top-bar__actions">/,
+      '<div class="tcrn-top-bar__actions" data-topbar-actions="true">'
+    )
+    .replace(
+      /<label class="tcrn-field"/,
+      '<label class="project-selector tcrn-field" data-region="project-selector" data-tcrn-component="Field" data-package-runtime-component="Field" data-package-runtime-source="@tcrn/ui-react"'
+    )
+    .replace(
+      /<section class="tcrn-surface tcrn-readback-panel">/,
+      '<section class="checkpoint-strip tcrn-surface tcrn-readback-panel" data-region="checkpoint-strip" data-tcrn-component="ReadbackPanel" data-package-runtime-component="ReadbackPanel" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-topbar-checkpoint" aria-label="Local checkpoint">'
+    )
+    .replace(
+      /<h3 class="tcrn-heading tcrn-heading--3">/,
+      '<h3 class="tcrn-heading tcrn-heading--3" data-tcrn-component="Heading" data-package-runtime-component="Heading" data-package-runtime-source="@tcrn/ui-react">'
+    );
 }
 
 function addAosWorkIndexRuntimeAttributes(html: string, rows: readonly CockpitRuntimeWorkIndexRow[]): string {

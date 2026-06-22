@@ -69,7 +69,7 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.equal(aosDesignSystemConsumerBridge.tokenPackage, "@tcrn/ui-tokens");
   assert.equal(aosDesignSystemConsumerBridge.copyStatePackage, "@tcrn/ui-copy-state");
   assert.equal(aosDesignSystemConsumerBridge.uiReactPackage, "@tcrn/ui-react");
-  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase");
+  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint");
   assert.equal(aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering, true);
   assert.equal(aosDesignSystemConsumerBridge.designSystemSourceHead, "b0c00828a813d3c62392eb6e53d7d6b85b6affeb");
   assert.equal(copyAosState("external_proof_required"), "External proof required");
@@ -81,7 +81,11 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.match(html, /data-design-system-copy-state="@tcrn\/ui-copy-state"/);
   assert.match(html, /data-design-system-ui-react="@tcrn\/ui-react"/);
   assert.match(html, /data-package-backed-react-runtime-rendering="true"/);
-  assert.match(html, /data-package-runtime-component-scope="NavItem,WorkIndex,TableShell,SearchInput,Field,FilterBar,Button,Badge,StateView,DetailDrawer,KeyValueList,Surface,Heading,Text,StatusBadge,GateReadinessPanel,ReadbackPanel"/);
+  assert.match(html, /data-package-runtime-component-scope="NavItem,TopBar,WorkIndex,TableShell,SearchInput,Field,Select,FilterBar,Button,IconButton,Badge,StateView,DetailDrawer,KeyValueList,Surface,Heading,Text,StatusBadge,GateReadinessPanel,ReadbackPanel"/);
+  assert.match(html, /data-package-runtime-component="TopBar"/);
+  assert.match(html, /data-package-runtime-component="Select"/);
+  assert.match(html, /data-package-runtime-component="IconButton"/);
+  assert.match(html, /data-package-runtime-surface="operations-cockpit-topbar-checkpoint"/);
   assert.match(html, /data-package-runtime-component="WorkIndex"/);
   assert.match(html, /data-package-runtime-component="SearchInput"/);
   assert.match(html, /data-package-runtime-component="TableShell"/);
@@ -94,6 +98,34 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.match(html, /--tcrn-color-brand-primary/);
   assert.match(html, /\.tcrn-sr-only\s*\{[^}]*position: absolute;[^}]*width: 1px;[^}]*overflow: hidden;/);
   assert.match(html, /@media \(max-width: 520px\)[\s\S]*\.work-table \.tcrn-table-shell__cell::before\s*\{[^}]*content: attr\(data-label\)/);
+});
+
+test("Operations Cockpit topbar and checkpoint strip render package-backed runtime controls", () => {
+  const html = renderOperationsCockpitHtml();
+  const topbarStart = html.indexOf('data-region="topbar-checkpoint"');
+  const topbarEnd = html.indexOf("</header>", topbarStart);
+  const topbarHtml = html.slice(topbarStart, topbarEnd);
+
+  assert.ok(topbarStart > 0, "topbar checkpoint region is present");
+  assert.match(topbarHtml, /data-tcrn-component="TopBar"/);
+  assert.match(topbarHtml, /data-package-runtime-component="TopBar"/);
+  assert.match(topbarHtml, /data-package-runtime-surface="operations-cockpit-topbar-checkpoint"/);
+  assert.match(topbarHtml, /data-package-runtime-component="Field"/);
+  assert.match(topbarHtml, /data-region="project-selector"/);
+  assert.match(topbarHtml, /data-package-runtime-component="Select"/);
+  assert.match(topbarHtml, /id="project-select"/);
+  assert.match(topbarHtml, /data-region="checkpoint-strip"/);
+  assert.match(topbarHtml, /data-package-runtime-component="ReadbackPanel"/);
+  assert.match(topbarHtml, /Local checkpoint observed/);
+  assert.match(topbarHtml, /data-local-checkpoint/);
+  assert.match(topbarHtml, /data-package-runtime-component="StatusBadge"/);
+  assert.match(topbarHtml, /data-readback-freshness/);
+  assert.match(topbarHtml, /data-service-status/);
+  assert.match(topbarHtml, /data-service-model-readback/);
+  assert.match(topbarHtml, /data-package-runtime-component="Button"/);
+  assert.match(topbarHtml, /data-refresh-readback/);
+  assert.match(topbarHtml, /data-package-runtime-component="IconButton"/);
+  assert.match(topbarHtml, /aria-label="Current operator"/);
 });
 
 test("Operations Cockpit Stage Map and AI Employee Phase render package-backed runtime controls", () => {
@@ -305,7 +337,7 @@ test("Slice 4B production HTML can be marked as service-backed for owner-trial s
   assert.match(html, /data-service-work-row-count="1"/);
   assert.match(html, /data-service-gate-count="2"/);
   assert.match(html, /data-service-runtime-data-committed="false"/);
-  assert.match(html, /data-service-model-readback>1 work \/ 2 gates \/ detail story/);
+  assert.match(html, /data-service-model-readback[^>]*>1 work \/ 2 gates \/ detail story/);
   assert.match(html, /service API pending/);
   assert.match(html, /Filter service-backed rows/);
 });

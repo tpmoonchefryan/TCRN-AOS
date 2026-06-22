@@ -1,13 +1,14 @@
 # AOS Design System Package Runtime Proof
 
-- Route: route_tcrn_aos_design_system_frontend_rebuild_59ar_stage_phase_package_runtime_implementation
-- Source head at proof run: 90043f918f9c1b78f01f1013283f134d890c3958
+- Route: route_tcrn_aos_design_system_frontend_rebuild_59as_topbar_checkpoint_service_status_package_runtime_implementation
+- Source head at proof run: e6287d9d114eb88a905de907f55f1367a4454286
 - Source freshness strategy: source_content_digest_for_mutating_receipts
-- Source content digest: 1ae084452b5865ece1779cf535da537cdf7898927d960acd2ff8d1caa64ef3f8
-- Scope: operations_cockpit_stage_phase_package_runtime_expansion
-- Runtime rendering claim: operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_and_stage_phase
+- Source content digest: 5ca31df8bcf9471d34678ae597d194085296762338dc36130143db6091441aaf
+- Scope: operations_cockpit_topbar_checkpoint_package_runtime_expansion
+- Runtime rendering claim: operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_and_topbar_checkpoint
 - Design System source head: b0c00828a813d3c62392eb6e53d7d6b85b6affeb
 - UI React package: @tcrn/ui-react (file:../TCRN-Design-System/packages/ui-react)
+- Package runtime Topbar/Checkpoint components: Badge, Button, Field, Heading, IconButton, ReadbackPanel, Select, StatusBadge, TopBar
 - Package runtime NavItems: 10
 - Package runtime Work Index rows: 1
 - Package runtime Work Index components: Badge, Button, Field, FilterBar, SearchInput, StateView, TableShell, WorkIndex
@@ -21,6 +22,7 @@
 - Storybook NavItem disabled reason reference ok: true
 
 - AOS runtime sr-only / mobile TableShell style proof ok: true
+- Topbar / Checkpoint package-runtime failures: 0
 - Disabled package-runtime NavItem semantic failures: 0
 - Work Index package-runtime failures: 0
 - Selected detail drawer package-runtime failures: 0
@@ -32,4 +34,4 @@
 
 ## Boundaries
 
-This is an Operations Cockpit NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, and AI Employee Phase package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.
+This is an Operations Cockpit NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, AI Employee Phase, and Topbar / Checkpoint package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.

@@ -8,6 +8,7 @@ import {
   renderCockpitRuntimeGateReadbackCards,
   renderCockpitRuntimeNavItems,
   renderCockpitRuntimeStagePhaseCards,
+  renderCockpitRuntimeTopbarCheckpoint,
   renderCockpitRuntimeWorkIndexCluster
 } from "../dist/apps/web/src/cockpit-ui-react-runtime.js";
 import {
@@ -18,12 +19,13 @@ import {
 } from "../dist/apps/web/src/cockpit-view.js";
 
 const repoRoot = process.cwd();
-const route = "route_tcrn_aos_design_system_frontend_rebuild_59ar_stage_phase_package_runtime_implementation";
+const route = "route_tcrn_aos_design_system_frontend_rebuild_59as_topbar_checkpoint_service_status_package_runtime_implementation";
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const packageJson = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8"));
 const runtimeSourcePath = "apps/web/src/cockpit-ui-react-runtime.ts";
 const runtimeSource = readFileSync(join(repoRoot, runtimeSourcePath), "utf8");
 const cockpitHtml = renderOperationsCockpitHtml();
+const topbarCheckpointRuntimeReadback = inspectPackageRuntimeTopbarCheckpoint(cockpitHtml);
 const navRuntimeReadback = inspectPackageRuntimeNavItems(cockpitHtml);
 const workIndexRuntimeReadback = inspectPackageRuntimeWorkIndexCluster(cockpitHtml);
 const detailDrawerRuntimeReadback = inspectPackageRuntimeDetailDrawer(cockpitHtml);
@@ -45,6 +47,7 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && aosCockpitUiReactRuntime.packageBackedReactRuntimeRendering === true
   && dependencyReadback.ok
   && importReadback.ok
+  && topbarCheckpointRuntimeReadback.ok
   && navRuntimeReadback.ok
   && workIndexRuntimeReadback.ok
   && detailDrawerRuntimeReadback.ok
@@ -61,9 +64,9 @@ const summary = {
   route,
   sourceHead,
   claimScope: {
-    implementationKind: "operations_cockpit_stage_phase_package_runtime_expansion",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_and_stage_phase",
-    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_and_stage_phase_component_reference_only",
+    implementationKind: "operations_cockpit_topbar_checkpoint_package_runtime_expansion",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_and_topbar_checkpoint",
+    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_and_topbar_checkpoint_component_reference_only",
     broadUiReactRuntimeMigration: false,
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -81,6 +84,7 @@ const summary = {
   },
   dependencyReadback,
   importReadback,
+  topbarCheckpointRuntimeReadback,
   navRuntimeReadback,
   workIndexRuntimeReadback,
   detailDrawerRuntimeReadback,
@@ -119,6 +123,8 @@ console.log(JSON.stringify({
   sourceFreshnessStrategy: summary.sourceFreshnessReadback.strategy,
   sourceContentDigest: summary.sourceFreshnessReadback.sourceContentDigest,
   implementationKind: summary.claimScope.implementationKind,
+  packageRuntimeTopbarCheckpointComponentCount: summary.topbarCheckpointRuntimeReadback.packageRuntimeComponents.length,
+  packageRuntimeTopbarCheckpointFailures: summary.topbarCheckpointRuntimeReadback.failures.length,
   runtimeComponents: summary.navRuntimeReadback.packageRuntimeComponents,
   packageRuntimeNavItemCount: summary.navRuntimeReadback.packageRuntimeNavItemCount,
   packageRuntimeWorkIndexComponentCount: summary.workIndexRuntimeReadback.packageRuntimeComponents.length,
@@ -173,11 +179,14 @@ function inspectImports() {
   const reactServerRenderingPresent = /from\s+["']react-dom\/server["']/.test(runtimeSource);
   const requiredPublicComponentImports = [
     "NavItem",
+    "TopBar",
     "WorkIndex",
     "SearchInput",
     "Field",
+    "Select",
     "FilterBar",
     "Button",
+    "IconButton",
     "Badge",
     "StateView",
     "DetailDrawer",
@@ -203,7 +212,7 @@ function inspectImports() {
   ]);
   const copiedSourceHits = runRg([
     "-n",
-    "function\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel)|const\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel)|export\\s+function\\s+(NavItem|WorkIndex|TableShell|SearchInput|FilterBar|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel)",
+    "function\\s+(NavItem|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel)|const\\s+(NavItem|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel)|export\\s+function\\s+(NavItem|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel)",
     "apps/web/src",
     "apps/web/test",
     "scripts"
@@ -220,6 +229,104 @@ function inspectImports() {
     publicComponentImportPresence,
     deepImportHits,
     copiedSourceHits
+  };
+}
+
+function inspectPackageRuntimeTopbarCheckpoint(html) {
+  const topbarHtml = extractHeaderHtml(html, "topbar-checkpoint");
+  const failures = [];
+  if (!topbarHtml) {
+    return {
+      ok: false,
+      present: false,
+      surface: "operations-cockpit-topbar-checkpoint",
+      requiredComponents: [],
+      packageRuntimeComponents: [],
+      failures: ["topbar_checkpoint_missing"]
+    };
+  }
+
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(topbarHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "Badge",
+    "Button",
+    "Field",
+    "Heading",
+    "IconButton",
+    "ReadbackPanel",
+    "Select",
+    "StatusBadge",
+    "TopBar"
+  ];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  if (missingComponents.length > 0) failures.push("topbar_checkpoint_required_package_components_missing");
+
+  const topbarAttributes = parseAttributes(topbarHtml.match(/<header\b([^>]*)>/)?.[1] ?? "");
+  if (topbarAttributes["data-package-runtime-component"] !== "TopBar") failures.push("topbar_missing_topbar_runtime_marker");
+  if (topbarAttributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push("topbar_missing_package_source");
+  if (topbarAttributes["data-package-runtime-surface"] !== "operations-cockpit-topbar-checkpoint") failures.push("topbar_missing_runtime_surface");
+
+  const projectSelectorHtml = extractLabelHtml(topbarHtml, "project-selector");
+  if (!projectSelectorHtml) failures.push("project_selector_missing");
+  if (projectSelectorHtml && !/data-package-runtime-component="Field"/.test(projectSelectorHtml)) failures.push("project_selector_missing_field_runtime_marker");
+  if (projectSelectorHtml && !/data-package-runtime-component="Select"/.test(projectSelectorHtml)) failures.push("project_selector_missing_select_runtime_marker");
+  if (projectSelectorHtml && !/id="project-select"/.test(projectSelectorHtml)) failures.push("project_selector_missing_project_select_id");
+  if (projectSelectorHtml && !/Project/.test(projectSelectorHtml)) failures.push("project_selector_label_missing");
+
+  const checkpointHtml = extractSectionHtml(topbarHtml, "checkpoint-strip");
+  if (!checkpointHtml) failures.push("checkpoint_strip_missing");
+  if (checkpointHtml && !/data-package-runtime-component="ReadbackPanel"/.test(checkpointHtml)) failures.push("checkpoint_missing_readback_panel_runtime_marker");
+  if (checkpointHtml && !/Local checkpoint observed/.test(checkpointHtml)) failures.push("checkpoint_label_missing");
+  if (checkpointHtml && !/data-local-checkpoint/.test(checkpointHtml)) failures.push("checkpoint_value_missing");
+  if (checkpointHtml && !/data-package-runtime-component="StatusBadge"/.test(checkpointHtml)) failures.push("checkpoint_freshness_status_badge_missing");
+  if (checkpointHtml && !/data-readback-freshness/.test(checkpointHtml)) failures.push("checkpoint_freshness_readback_missing");
+  if (checkpointHtml && !/data-service-status/.test(checkpointHtml)) failures.push("checkpoint_service_status_missing");
+  if (checkpointHtml && !/data-service-model-readback/.test(checkpointHtml)) failures.push("checkpoint_service_model_readback_missing");
+
+  const refreshButton = topbarHtml.match(/<button\b(?=[^>]*data-refresh-readback)([^>]*)>([\s\S]*?)<\/button>/);
+  if (!refreshButton) failures.push("refresh_readback_button_missing");
+  const refreshAttrs = parseAttributes(refreshButton?.[1] ?? "");
+  if (refreshButton && refreshAttrs["data-package-runtime-component"] !== "Button") failures.push("refresh_readback_button_missing_runtime_marker");
+  if (refreshButton && !/Refresh readback/.test(refreshButton[2])) failures.push("refresh_readback_button_label_missing");
+
+  const profileButton = topbarHtml.match(/<button\b(?=[^>]*aria-label="Current operator")([^>]*)>([\s\S]*?)<\/button>/);
+  if (!profileButton) failures.push("profile_icon_button_missing");
+  const profileAttrs = parseAttributes(profileButton?.[1] ?? "");
+  if (profileButton && profileAttrs["data-package-runtime-component"] !== "IconButton") failures.push("profile_icon_button_missing_runtime_marker");
+  if (profileButton && !/RL/.test(profileButton[2])) failures.push("profile_operator_label_missing");
+
+  const markerOnlyComponents = Array.from(topbarHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)([^>]*)>/g))
+    .map((match) => ({ tag: match[1], component: match[2] }));
+  if (markerOnlyComponents.length > 0) failures.push("topbar_checkpoint_marker_only_runtime_claim_present");
+
+  const sampleRenderedHtmlSha256 = createHash("sha256").update(renderCockpitRuntimeTopbarCheckpoint({
+    checkpointLabel: "Local checkpoint observed",
+    checkpointValue: "sample-checkpoint",
+    freshnessLabel: "Readback current",
+    operatorLabel: "RL",
+    projectId: "TCRN-AOS",
+    projectOptions: ["TCRN-AOS", "TCRN-TMS"],
+    refreshLabel: "Refresh readback",
+    serviceReadbackLabel: "1 work / 2 gates / detail story",
+    serviceStatusLabel: "static fixture"
+  })).digest("hex");
+
+  return {
+    ok: failures.length === 0,
+    present: true,
+    surface: "operations-cockpit-topbar-checkpoint",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    projectSelectorPresent: Boolean(projectSelectorHtml),
+    checkpointStripPresent: Boolean(checkpointHtml),
+    refreshButtonPresent: Boolean(refreshButton),
+    profileIconButtonPresent: Boolean(profileButton),
+    markerOnlyComponents,
+    sampleRenderedHtmlSha256,
+    failures
   };
 }
 
@@ -880,6 +987,36 @@ function normalizeText(value) {
   return decodeHtml(stripTags(value)).replace(/\s+/g, " ").trim();
 }
 
+function extractHeaderHtml(html, region) {
+  const marker = `data-region="${region}"`;
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<header", markerIndex);
+  const end = html.indexOf("</header>", markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + "</header>".length);
+}
+
+function extractLabelHtml(html, region) {
+  const marker = `data-region="${region}"`;
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<label", markerIndex);
+  const end = html.indexOf("</label>", markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + "</label>".length);
+}
+
+function extractSectionHtml(html, region) {
+  const marker = `data-region="${region}"`;
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<section", markerIndex);
+  const end = html.indexOf("</section>", markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + "</section>".length);
+}
+
 function extractWorkIndexClusterHtml(html) {
   const marker = 'data-region="work-index"';
   const markerIndex = html.indexOf(marker);
@@ -1013,6 +1150,9 @@ function escapeRegExp(value) {
 }
 
 function markdownReceipt(summary) {
+  const topbarRows = summary.topbarCheckpointRuntimeReadback.failures.length === 0
+    ? "- Topbar / Checkpoint package-runtime failures: 0"
+    : summary.topbarCheckpointRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
   const rows = summary.navRuntimeReadback.disabledNavItemFailures.length === 0
     ? "- Disabled package-runtime NavItem semantic failures: 0"
     : summary.navRuntimeReadback.disabledNavItemFailures.map((failure) => `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
@@ -1042,6 +1182,7 @@ function markdownReceipt(summary) {
     + `- Runtime rendering claim: ${summary.claimScope.packageBackedReactRuntimeRendering}\n`
     + `- Design System source head: ${summary.designSystemReadback.sourceHead}\n`
     + `- UI React package: ${summary.designSystemReadback.uiReactPackage} (${summary.designSystemReadback.uiReactPackageSpecifier})\n`
+    + `- Package runtime Topbar/Checkpoint components: ${summary.topbarCheckpointRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Package runtime NavItems: ${summary.navRuntimeReadback.packageRuntimeNavItemCount}\n`
     + `- Package runtime Work Index rows: ${summary.workIndexRuntimeReadback.packageRuntimeWorkRowCount}\n`
     + `- Package runtime Work Index components: ${summary.workIndexRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
@@ -1054,6 +1195,7 @@ function markdownReceipt(summary) {
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
     + `- AOS runtime sr-only / mobile TableShell style proof ok: ${summary.visualStyleReadback.ok}\n`
+    + `${topbarRows}\n`
     + `${rows}\n`
     + `${workIndexRows}\n`
     + `${detailDrawerRows}\n`
@@ -1061,5 +1203,5 @@ function markdownReceipt(summary) {
     + `${stagePhaseRows}\n`
     + `${accessibilityRows}\n\n`
     + `## Boundaries\n\n`
-    + `This is an Operations Cockpit NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, and AI Employee Phase package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
+    + `This is an Operations Cockpit NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, AI Employee Phase, and Topbar / Checkpoint package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
 }
