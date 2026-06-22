@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_rebuild_59aw_docs_readiness_package_runtime_adoption_implementation",
-  "sourceHead": "544b1a4be965de7b973fa341024ccf043cb669f6",
+  "sourceHead": "e61c22d3b99f3a9e0d53f3572985dae0fded47f8",
   "checkpoint": {
     "workflowPacketBasis": "624127182da417f65c790de155e3297e77828181",
     "preImplementationBasis": "9d7980f46245bb783b520c9f90945da8609c01ce",
@@ -54,7 +54,7 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_docs_readiness_browser_receipts",
-    "sourceHeadAtProofRun": "544b1a4be965de7b973fa341024ccf043cb669f6",
+    "sourceHeadAtProofRun": "e61c22d3b99f3a9e0d53f3572985dae0fded47f8",
     "exactFinalCommitHeadRequired": false,
     "sourceContentDigest": "11c6d153ce8e2a7a0b5f9d016e07f50d1bdb4ae2ab56ef16e4ed311c336934ac",
     "sourcePaths": [
@@ -109,27 +109,27 @@
     "requestFailures": [],
     "screenshots": [
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/544b1a4be965de7b973fa341024ccf043cb669f6/desktop-1440x900-initial.png",
+        "file": "evidence/slice-9b-visible-readiness-browser/e61c22d3b99f3a9e0d53f3572985dae0fded47f8/desktop-1440x900-initial.png",
         "sha256": "0c5ab8d97b3b4500fa1ce0ac0d333ebeff146c38a5f55c360e6bd41c8a7e6b99",
         "bytes": 188019
       },
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/544b1a4be965de7b973fa341024ccf043cb669f6/desktop-1440x900-search-github.png",
+        "file": "evidence/slice-9b-visible-readiness-browser/e61c22d3b99f3a9e0d53f3572985dae0fded47f8/desktop-1440x900-search-github.png",
         "sha256": "02f58b3d1f80c5431424da7db134d91937651fc47b39fbb67f46b7185a24ccd1",
         "bytes": 167095
       },
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/544b1a4be965de7b973fa341024ccf043cb669f6/desktop-1440x900-search-empty.png",
+        "file": "evidence/slice-9b-visible-readiness-browser/e61c22d3b99f3a9e0d53f3572985dae0fded47f8/desktop-1440x900-search-empty.png",
         "sha256": "de7e6c498b5d6fc7c43206fa2cf30d3eb39a9a11cb7ce85fa89024e490e2a76f",
         "bytes": 171611
       },
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/544b1a4be965de7b973fa341024ccf043cb669f6/mobile-390x844-initial.png",
+        "file": "evidence/slice-9b-visible-readiness-browser/e61c22d3b99f3a9e0d53f3572985dae0fded47f8/mobile-390x844-initial.png",
         "sha256": "c8975f6dd8459e2675ceab82ff181314b9c107db4e0172003dda70abaaac18fb",
         "bytes": 167384
       },
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/544b1a4be965de7b973fa341024ccf043cb669f6/mobile-390x844-search-candidate.png",
+        "file": "evidence/slice-9b-visible-readiness-browser/e61c22d3b99f3a9e0d53f3572985dae0fded47f8/mobile-390x844-search-candidate.png",
         "sha256": "c83e6a4ab1070ae31cf13a5fa017a2419e919dc3c0b994ef79eb409c749893f9",
         "bytes": 160809
       }
