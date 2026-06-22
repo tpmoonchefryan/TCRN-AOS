@@ -198,7 +198,7 @@ function renderTopbar(model: DocsSearchReleaseInspectionModel): ReactNode {
       createElement(ReadbackPanel, {
         title: "Readiness status",
         children: [
-          createElement("strong", { "data-local-checkpoint": true, key: "checkpoint" }, model.context.localCheckpoint),
+          createElement("strong", { "data-local-status": true, key: "status" }, "Local docs workspace"),
           createElement(StatusBadge, {
             "data-tcrn-component": "StatusBadge",
             "data-package-runtime-component": "StatusBadge",
@@ -518,7 +518,7 @@ function docsNavItem(label: string, active: boolean): DocsRuntimeNavItem {
 function copyPosture(value: string): string {
   if (value === "needs_review") return "needs review";
   if (value === "review_due") return "review due";
-  if (value === "fixture_readback") return "fixture readback";
+  if (value === "fixture_readback") return "local evidence review";
   if (value === "metadata_only") return "metadata only";
   if (value === "not_ready_for_release") return "release review pending";
   if (value === "release_proof_required") return "review needed";
@@ -590,7 +590,7 @@ function addDocsReadinessRuntimeAttributes(html: string, model: DocsSearchReleas
     )
     .replace(
       /<section class="tcrn-surface tcrn-readback-panel">/,
-      '<section class="evidence-panel tcrn-surface tcrn-readback-panel" data-region="evidence-readback-panel" data-tcrn-component="ReadbackPanel" data-package-runtime-component="ReadbackPanel" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="docs-readiness-detail" aria-label="Evidence readback panel">'
+      '<section class="evidence-panel tcrn-surface tcrn-readback-panel" data-region="evidence-readback-panel" data-tcrn-component="ReadbackPanel" data-package-runtime-component="ReadbackPanel" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="docs-readiness-detail" aria-label="Evidence overview panel">'
     )
     .replace(/<dl class="tcrn-key-value-list">/g, () => {
       const className = keyValueListIndex < 3 ? "posture-list tcrn-key-value-list" : "detail-list tcrn-key-value-list";

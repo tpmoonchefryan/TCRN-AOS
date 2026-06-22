@@ -423,7 +423,7 @@ function renderModuleGrid(model: AOSWideProductDesignModel): ReactNode {
 function renderModuleCard(surface: SurfaceRow, index: number): ReactNode {
   const items: KeyValueItem[] = surface.terms.slice(0, 3).map((term, i) => ({
     key: `${surface.id}-${i + 1}`,
-    label: `Readback ${i + 1}`,
+    label: `Signal ${i + 1}`,
     value: term,
   }));
 
@@ -612,7 +612,7 @@ function renderDetailDrawer(model: AOSWideProductDesignModel): ReactNode {
     throw new Error("missing required AOS-wide target-set detail row");
   }
   const disabledReason =
-    "Product actions require approved workflow authority before they can run.";
+    "Product actions require approved workspace authority before they can run.";
   const detailItems: KeyValueItem[] = [
     { key: "target-id", label: "Target id", value: createElement("span", { "data-detail-id": true }, selected.id) },
     { key: "surface", label: "Surface", value: createElement("span", { "data-detail-surface": true }, selected.surface) },
@@ -674,7 +674,11 @@ function renderDetailDrawer(model: AOSWideProductDesignModel): ReactNode {
         { className: "detail-actions" },
         [
           createElement(GateReadinessPanel, {
-            state: presentAosCopyState("unavailable"),
+            state: {
+              ...presentAosCopyState("unavailable"),
+              label: "Unavailable",
+              description: "This action is disabled until the workspace is approved for execution.",
+            },
           }),
           createElement(
             Button,
@@ -791,7 +795,7 @@ function addAOSWideRuntimeAttributes(
   );
   output = output.replace(
     '<section class="tcrn-surface tcrn-readback-panel">',
-    '<section class="checkpoint-card tcrn-surface tcrn-readback-panel" data-region="checkpoint-readback" data-package-runtime-component="ReadbackPanel" data-package-runtime-source="@tcrn/ui-react" data-tcrn-component="ReadbackPanel">',
+    '<section class="checkpoint-card tcrn-surface tcrn-readback-panel" data-region="workspace-status" data-package-runtime-component="ReadbackPanel" data-package-runtime-source="@tcrn/ui-react" data-tcrn-component="ReadbackPanel">',
   );
   output = output.replace(
     '<div class="tcrn-evidence-strip">',

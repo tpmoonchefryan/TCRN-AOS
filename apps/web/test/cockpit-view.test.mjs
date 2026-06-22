@@ -246,7 +246,7 @@ test("Operations Cockpit summary Gate and Readback cards render package-backed r
   assert.match(readbackHtml, /data-package-runtime-component="ReadbackPanel"/);
   assert.match(readbackHtml, /data-package-runtime-surface="operations-cockpit-gate-readback-cards"/);
   assert.match(readbackHtml, /data-package-runtime-component="KeyValueList"/);
-  assert.match(readbackHtml, /Runtime fixture/);
+  assert.match(readbackHtml, /Local data mode/);
   assert.match(readbackHtml, /Evidence/);
   assert.match(readbackHtml, /Dependency/);
   assert.match(readbackHtml, /Resource/);
@@ -326,7 +326,7 @@ test("Operations Cockpit selected detail drawer renders package-backed runtime c
   assert.match(detailHtml, /data-package-runtime-component="Text"/);
   assert.match(detailHtml, /data-package-runtime-component="Button"/);
   assert.match(detailHtml, /data-detail-list/);
-  assert.match(detailHtml, /Selected Detail Readback/);
+  assert.match(detailHtml, /Selected Work Summary/);
   assert.match(detailHtml, /Release and live operations remain disabled in this workspace/);
   assert.match(detailHtml, /Gate work order/);
 });
@@ -417,7 +417,7 @@ test("AOS visible cockpit copy does not leak raw workflow enum labels", () => {
   assert.doesNotMatch(visibleTextFragments, /\bowner_intent_required\b/);
   assert.doesNotMatch(visibleTextFragments, /\brecord_participant_position\b/);
   assert.doesNotMatch(visibleTextFragments, /\bopen_evidence_metadata\b/);
-  assert.doesNotMatch(visibleText(html), /package-runtime pilot|owner-trial|proof required|external proof required|not claimed|functional contract readback only|held for later routed AOS slice/i);
+  assert.doesNotMatch(productVisibleAndA11yText(html), productVisibleInternalTermsPattern);
 });
 
 function disabledNavItemReadbacks(html) {
@@ -479,6 +479,22 @@ function visibleText(html) {
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+const productVisibleInternalTermsPattern =
+  /\breadback\b|\bcheckpoint\b|\broute\b|\bfixture\b|proof required|external proof required|package-runtime pilot|functional contract readback only|held for later|unavailable in this route|not claimed|not_claimed/i;
+
+function productVisibleAndA11yText(html) {
+  const attributeText = Array.from(html.matchAll(/\s(?:aria-label|title|data-disabled-reason|placeholder|alt)="([^"]*)"/g))
+    .map((match) => match[1])
+    .join(" ");
+  return `${visibleText(html)} ${attributeText}`
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
     .replace(/\s+/g, " ")
     .trim();
 }

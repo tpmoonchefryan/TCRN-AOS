@@ -69,6 +69,11 @@ const importReadback = inspectImports();
 const dependencyReadback = inspectDependencies();
 const storybookReferenceReadback = inspectStorybookReference();
 const noOverclaimReadback = inspectNoOverclaim(`${cockpitHtml}\n${docsReadinessHtml}\n${aosWideHtml}`);
+const productVisibleCopyReadback = inspectProductVisibleCopy({
+  operationsCockpit: cockpitHtml,
+  docsReadiness: docsReadinessHtml,
+  aosWideProductDesign: aosWideHtml
+});
 const sourceContentReadback = inspectSourceContentDigest();
 const summaryPath = join(repoRoot, "evidence", "aos-design-system-package-runtime-proof.json");
 const markdownPath = join(repoRoot, "evidence", "aos-design-system-package-runtime-proof.md");
@@ -96,6 +101,7 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && visualStyleReadback.ok
   && storybookReferenceReadback.ok
   && noOverclaimReadback.ok
+  && productVisibleCopyReadback.ok
   && sourceContentReadback.ok;
 
 const summary = {
@@ -139,7 +145,8 @@ const summary = {
   aosWideFullDocumentAccessibilityReadback,
   visualStyleReadback,
   storybookReferenceReadback,
-  noOverclaimReadback
+  noOverclaimReadback,
+  productVisibleCopyReadback
 };
 
 if (checkCurrentSource) {
@@ -799,7 +806,7 @@ function inspectPackageRuntimeDetailDrawer(html) {
   if ((detailHtml.match(/<dt>/g) ?? []).length < 8 || (detailHtml.match(/<dd>/g) ?? []).length < 8) {
     failures.push("detail_drawer_key_value_rows_missing");
   }
-  if (!/Selected Detail Readback/.test(detailHtml)) failures.push("detail_drawer_readback_surface_missing");
+  if (!/Selected Work Summary/.test(detailHtml)) failures.push("detail_drawer_summary_surface_missing");
   if (!/Release and live operations remain disabled in this workspace/.test(detailHtml)) {
     failures.push("detail_drawer_no_overclaim_copy_missing");
   }
@@ -819,10 +826,10 @@ function inspectPackageRuntimeDetailDrawer(html) {
   }
 
   const sampleRenderedHtmlSha256 = createHash("sha256").update(renderCockpitRuntimeDetailDrawer({
-    blockedActionLabel: "No local readback blockers",
+    blockedActionLabel: "No local blockers",
     closeLabel: "Close detail",
     detailRows: [
-      { key: "selected", label: "Selected", value: "Story readback / sample_story" },
+      { key: "selected", label: "Selected", value: "Selected work / sample_story" },
       { key: "evidence", label: "Evidence", value: "Metadata only" }
     ],
     noOverclaimSummary: "Release and live operations remain disabled in this workspace.",
@@ -833,7 +840,7 @@ function inspectPackageRuntimeDetailDrawer(html) {
     secondaryActionLabel: "Request rework",
     selectedId: "sample_story",
     selectedType: "story",
-    selectedTypeLabel: "Story readback",
+    selectedTypeLabel: "Selected work",
     statusLabel: "In progress",
     title: "Sample selected detail"
   })).digest("hex");
@@ -890,13 +897,13 @@ function inspectPackageRuntimeGateReadbackCards(html) {
   }
 
   if (!/Gate Work Order/.test(gateHtml)) failures.push("gate_card_title_missing");
-  if (!/Readback Posture/.test(readbackHtml)) failures.push("readback_card_title_missing");
+  if (!/Workspace Posture/.test(readbackHtml)) failures.push("readback_card_title_missing");
   if (!/class="count\b/.test(gateHtml)) failures.push("gate_card_count_badge_missing");
   if (!/class="gate-block\b/.test(gateHtml)) failures.push("gate_card_gate_block_missing");
   if (!/Gate request held/.test(gateHtml)) failures.push("gate_card_disabled_action_missing");
   if (!/Evidence detail held/.test(readbackHtml)) failures.push("readback_card_disabled_action_missing");
   if ((readbackHtml.match(/<dt>/g) ?? []).length !== 4) failures.push("readback_card_key_value_rows_missing");
-  for (const expectedLabel of ["Runtime fixture", "Evidence", "Dependency", "Resource"]) {
+  for (const expectedLabel of ["Local data mode", "Evidence", "Dependency", "Resource"]) {
     if (!readbackHtml.includes(`<dt>${expectedLabel}</dt>`)) {
       failures.push(`readback_card_${expectedLabel.toLowerCase().replace(/\s+/g, "_")}_row_missing`);
     }
@@ -1795,6 +1802,61 @@ function inspectNoOverclaim(html) {
   };
 }
 
+function inspectProductVisibleCopy(surfaces) {
+  const bannedTerms = [
+    { id: "readback", pattern: /\breadback\b/i },
+    { id: "checkpoint", pattern: /\bcheckpoint\b/i },
+    { id: "route", pattern: /\broute\b/i },
+    { id: "fixture", pattern: /\bfixture\b/i },
+    { id: "proof_required", pattern: /proof required/i },
+    { id: "external_proof_required", pattern: /external proof required/i },
+    { id: "package_runtime_pilot", pattern: /package-runtime pilot/i },
+    { id: "functional_contract_readback_only", pattern: /functional contract readback only/i },
+    { id: "held_for_later", pattern: /held for later/i },
+    { id: "unavailable_in_this_route", pattern: /unavailable in this route/i },
+    { id: "not_claimed", pattern: /not claimed|not_claimed/i }
+  ];
+  const surfaceReadbacks = Object.entries(surfaces).map(([surface, html]) => {
+    const text = productVisibleAndA11yText(html);
+    const hits = bannedTerms
+      .filter((term) => term.pattern.test(text))
+      .map((term) => term.id);
+    return {
+      surface,
+      ok: hits.length === 0,
+      hits,
+      scannedTextLength: text.length
+    };
+  });
+  return {
+    ok: surfaceReadbacks.every((readback) => readback.ok),
+    bannedTerms: bannedTerms.map((term) => term.id),
+    surfaceReadbacks
+  };
+}
+
+function productVisibleAndA11yText(html) {
+  const attributeText = Array.from(html.matchAll(/\s(?:aria-label|title|data-disabled-reason|placeholder|alt)="([^"]*)"/g))
+    .map((match) => match[1])
+    .join(" ");
+  return `${visibleText(html)} ${attributeText}`
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function visibleText(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function runRg(args) {
   try {
     const output = execFileSync("rg", args, { cwd: repoRoot, encoding: "utf8" }).trim();
@@ -1932,6 +1994,7 @@ function markdownReceipt(summary) {
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
     + `- AOS runtime sr-only / mobile TableShell style proof ok: ${summary.visualStyleReadback.ok}\n`
+    + `- Product-visible internal-copy hits: ${summary.productVisibleCopyReadback.surfaceReadbacks.reduce((count, readback) => count + readback.hits.length, 0)}\n`
     + `${shellSidebarRows}\n`
     + `${claimRiskRows}\n`
     + `${topbarRows}\n`

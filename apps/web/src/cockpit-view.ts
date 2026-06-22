@@ -888,8 +888,8 @@ function createCockpitRuntimeGateReadbackCardsOptions(input: GateReadbackCardsOp
   const gate = input.blockingGate;
   const gateTypeLabel = gate ? copyState(gate.type) : copyState("none");
   const gateOwnerRole = gate?.ownerRole ?? "No local gate rows";
-  const gateStatusLabel = gate ? copyState(gate.status) : "No local gate rows in fixture";
-  const gateModeLabel = gate ? (gate.ownerIntent ? "Owner Intent separated" : "Role gate pending") : "No local gate rows in fixture";
+  const gateStatusLabel = gate ? copyState(gate.status) : "No local gate rows";
+  const gateModeLabel = gate ? (gate.ownerIntent ? "Owner Intent separated" : "Role gate pending") : "No local gate rows";
   return {
     gateWorkOrder: {
       count: input.model.ownerIntentQueue.length + input.model.roleGateQueue.length,
@@ -988,7 +988,7 @@ function createCockpitRuntimeDetailDrawerOptions(input: DetailDrawerOptionInput)
 
 function formatBlockedActions(actions: Array<{ action: string }>): string {
   if (actions.length === 0) {
-    return "No local readback blockers";
+    return "No local blockers";
   }
   return actions.map((action) => copyAction(action.action)).join(", ");
 }
@@ -1000,7 +1000,7 @@ function serviceReadModelSummary(readback: CockpitServiceReadModelReadback): str
 
 function gateBlock(gate: GateQueueItem | undefined): string {
   if (!gate) {
-    return `<div class="gate-block tcrn-state-view" ${tcrnComponentAttr("StateView")}><strong>${copyState("none")}</strong><span>No local gate rows in fixture.</span></div>`;
+    return `<div class="gate-block tcrn-state-view" ${tcrnComponentAttr("StateView")}><strong>${copyState("none")}</strong><span>No local gate rows.</span></div>`;
   }
   return `<div class="gate-block tcrn-state-view" ${tcrnComponentAttr("StateView")}><span>${copyState(gate.type)}</span><strong>${escapeHtml(gate.ownerRole)}</strong><span>${copyState(gate.status)}</span><span>${gate.ownerIntent ? "Owner Intent separated" : "Role gate pending"}</span></div>`;
 }

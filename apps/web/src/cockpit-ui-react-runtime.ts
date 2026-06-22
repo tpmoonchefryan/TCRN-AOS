@@ -530,7 +530,7 @@ export function renderCockpitRuntimeWorkIndexCluster(options: CockpitRuntimeWork
       } as ComponentProps<typeof Button> & RuntimeDataProps, "Columns held")
     ),
     createElement(FilterBar, {
-      label: "Service read-model filters",
+      label: "Service filters",
       children: filterButtons
     }),
     createElement(WorkIndex, {
@@ -577,7 +577,7 @@ export function renderCockpitRuntimeDetailDrawer(options: CockpitRuntimeDetailDr
     ),
     createElement(KeyValueList, { items: detailItems, key: "detail-list" }),
     createElement(Surface, {
-      "aria-label": "Selected work readback",
+      "aria-label": "Selected work summary",
       className: "loop-card",
       "data-region": "conference-operating-loop",
       "data-tcrn-component": "Surface",
@@ -590,7 +590,7 @@ export function renderCockpitRuntimeDetailDrawer(options: CockpitRuntimeDetailDr
         "data-package-runtime-component": "Heading",
         "data-package-runtime-source": "@tcrn/ui-react",
         level: 3
-      } as ComponentProps<typeof Heading> & RuntimeDataProps, "Selected Detail Readback"),
+      } as ComponentProps<typeof Heading> & RuntimeDataProps, "Selected Work Summary"),
       createElement(Text, {
         "data-tcrn-component": "Text",
         "data-package-runtime-component": "Text",
@@ -796,7 +796,7 @@ export function renderCockpitRuntimeGateWorkOrderCard(options: CockpitRuntimeGat
 
 export function renderCockpitRuntimeReadbackPostureCard(options: CockpitRuntimeReadbackPostureOptions): string {
   const readbackItems: KeyValueItem[] = [
-    { key: "runtime-fixture", label: "Runtime fixture", value: options.runtimeFixtureLabel },
+    { key: "runtime-fixture", label: "Local data mode", value: options.runtimeFixtureLabel },
     { key: "evidence", label: "Evidence", value: options.evidenceLabel },
     { key: "dependency", label: "Dependency", value: options.dependencyLabel },
     { key: "resource", label: "Resource", value: options.resourceLabel }
@@ -812,7 +812,7 @@ export function renderCockpitRuntimeReadbackPostureCard(options: CockpitRuntimeR
     variant: "secondary"
   } as ComponentProps<typeof Button> & RuntimeDataProps & { key: string }, "Evidence detail held");
   const tree = createElement(ReadbackPanel, {
-    title: "Readback Posture",
+    title: "Workspace Posture",
     children: [
       heldButton,
       createElement(KeyValueList, { items: readbackItems, key: "readback-list" })
@@ -877,7 +877,7 @@ function addAosTopbarCheckpointRuntimeAttributes(html: string): string {
     )
     .replace(
       /<section class="tcrn-surface tcrn-readback-panel">/,
-      '<section class="checkpoint-strip tcrn-surface tcrn-readback-panel" data-region="checkpoint-strip" data-tcrn-component="ReadbackPanel" data-package-runtime-component="ReadbackPanel" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-topbar-checkpoint" aria-label="Local checkpoint">'
+      '<section class="checkpoint-strip tcrn-surface tcrn-readback-panel" data-region="checkpoint-strip" data-tcrn-component="ReadbackPanel" data-package-runtime-component="ReadbackPanel" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-topbar-checkpoint" aria-label="Workspace status">'
     )
     .replace(
       /<h3 class="tcrn-heading tcrn-heading--3">/,
@@ -917,8 +917,8 @@ function addAosWorkIndexRuntimeAttributes(html: string, rows: readonly CockpitRu
       (_match, inputStart: string, close: string) => `${inputStart} data-package-runtime-subcomponent="SearchInput.control" data-package-runtime-source="@tcrn/ui-react"${close}`
     )
     .replace(
-      /<section class="tcrn-filter-bar" aria-label="Service read-model filters">/,
-      '<section class="filter-row tcrn-filter-bar" data-tcrn-component="FilterBar" data-package-runtime-component="FilterBar" data-package-runtime-source="@tcrn/ui-react" aria-label="Service read-model filters">'
+      /<section class="tcrn-filter-bar" aria-label="Service filters">/,
+      '<section class="filter-row tcrn-filter-bar" data-tcrn-component="FilterBar" data-package-runtime-component="FilterBar" data-package-runtime-source="@tcrn/ui-react" aria-label="Service filters">'
     )
     .replace(
       /<div class="tcrn-table-shell" role="table"/,
@@ -982,11 +982,11 @@ function addAosReadbackPostureRuntimeAttributes(html: string): string {
   return html
     .replace(
       /<section class="tcrn-surface tcrn-readback-panel">/,
-      '<article class="panel tcrn-surface tcrn-readback-panel" data-region="readback-posture-card" data-tcrn-component="ReadbackPanel" data-package-runtime-component="ReadbackPanel" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-gate-readback-cards" aria-label="Readback posture">'
+      '<article class="panel tcrn-surface tcrn-readback-panel" data-region="readback-posture-card" data-tcrn-component="ReadbackPanel" data-package-runtime-component="ReadbackPanel" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-gate-readback-cards" aria-label="Workspace posture">'
     )
     .replace(
-      /<h3 class="tcrn-heading tcrn-heading--3">Readback Posture<\/h3>(<button\b[\s\S]*?<\/button>)/,
-      '<div class="panel-head"><h2 class="tcrn-heading tcrn-heading--2" data-tcrn-component="Heading" data-package-runtime-component="Heading" data-package-runtime-source="@tcrn/ui-react">Readback Posture</h2>$1</div>'
+      /<h3 class="tcrn-heading tcrn-heading--3">Workspace Posture<\/h3>(<button\b[\s\S]*?<\/button>)/,
+      '<div class="panel-head"><h2 class="tcrn-heading tcrn-heading--2" data-tcrn-component="Heading" data-package-runtime-component="Heading" data-package-runtime-source="@tcrn/ui-react">Workspace Posture</h2>$1</div>'
     )
     .replace(
       /<dl class="tcrn-key-value-list">/,

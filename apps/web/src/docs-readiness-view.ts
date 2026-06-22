@@ -274,11 +274,11 @@ export function createSlice9bDocsSearchReleaseReadModel(): DocsSearchReleaseInsp
     defaultBranch: "main",
     branchName: "main",
     commitSha: slice9bPreImplementationBasis,
-    pullRequestRefs: ["fixture-pr-9b"],
-    ciRunRefs: ["fixture-ci-9b"],
+    pullRequestRefs: ["local-pr-9b"],
+    ciRunRefs: ["local-ci-9b"],
     releaseReferenceIds: [],
     readbackState: "fixture_readback",
-    warnings: ["local fixture metadata only"],
+    warnings: ["local metadata only"],
     blockers: []
   }, actor);
   const prCiReadiness = store.createPrCiStoryReadiness({
@@ -288,7 +288,7 @@ export function createSlice9bDocsSearchReleaseReadModel(): DocsSearchReleaseInsp
     pullRequestState: "verified_local_metadata",
     ciState: "warning",
     readinessState: "not_ready_for_release",
-    warnings: ["CI metadata is fixture readback only"],
+    warnings: ["CI metadata is local review only"],
     blockers: [],
     linkedEvidenceIds: [evidence.id]
   }, actor);
@@ -388,7 +388,7 @@ function inspectionRow(storyId: string, kind: string, title: string, status: str
 function copyPosture(value: string): string {
   if (value === "needs_review") return "needs review";
   if (value === "review_due") return "review due";
-  if (value === "fixture_readback") return "fixture readback";
+  if (value === "fixture_readback") return "local evidence review";
   if (value === "metadata_only") return "metadata only";
   if (value === "not_ready_for_release") return "release review pending";
   if (value === "release_proof_required") return "review needed";

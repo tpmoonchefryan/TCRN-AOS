@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_full_rebuild_planning_and_implementation_packet",
-  "sourceHead": "b7ff63ae3e53294e3a2904afdb9c8c5be306bf11",
+  "sourceHead": "544b1a4be965de7b973fa341024ccf043cb669f6",
   "claimScope": {
     "implementationKind": "aos_product_frontend_rebuilt_registered_design_system_runtime",
     "packageBackedReactRuntimeRendering": "operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild",
@@ -16,9 +16,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "b7ff63ae3e53294e3a2904afdb9c8c5be306bf11",
+    "sourceHeadAtProofRun": "544b1a4be965de7b973fa341024ccf043cb669f6",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "ed6e2a9c33fc74ce1e805e1e8b1b5ea36ade9d66086074f3e0d07dfdb522be99",
+    "sourceContentDigest": "cd9a63b9fbb4318f4737f007c2e12d89c749079df8e625f45b4389c59f96cced",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
@@ -223,7 +223,7 @@
     "refreshButtonPresent": true,
     "profileIconButtonPresent": true,
     "markerOnlyComponents": [],
-    "sampleRenderedHtmlSha256": "e79b106933e86df3582403db9b151f22d93290f83be26b83141bfa729158456a",
+    "sampleRenderedHtmlSha256": "fbe6d19b7555e4aa2798ae9dc5ac5225b771990006affc5ec734ca530d019ae5",
     "failures": []
   },
   "navRuntimeReadback": {
@@ -296,7 +296,7 @@
     "packageRuntimeFilterBarPresent": true,
     "packageRuntimeTableShellPresent": true,
     "packageRuntimeEmptyStatePresent": true,
-    "sampleRenderedHtmlSha256": "1036766ea0523b65861c4eb477c95d0f5e269f684f18ec3626e68f589d6ec68d",
+    "sampleRenderedHtmlSha256": "41687011b6eef19fbcea30eb8fa0f38389722fd5027794bd7329a69d31cdf51d",
     "failures": []
   },
   "detailDrawerRuntimeReadback": {
@@ -327,7 +327,7 @@
     "selectedStoryId": "story_daa1ed285030dd27",
     "keyValueRowCount": 10,
     "disabledActionButtonCount": 2,
-    "sampleRenderedHtmlSha256": "c03534d14076688d3e4e28ef13670588dc3caa2172c99069fd7013bf0b219552",
+    "sampleRenderedHtmlSha256": "185809e44fa4aad49931902401cfa4f8f816c67353df6d2759972ce9c97ffea4",
     "failures": []
   },
   "gateReadbackCardsRuntimeReadback": {
@@ -361,7 +361,7 @@
     "readbackPostureComponent": "ReadbackPanel",
     "disabledActionButtonCount": 2,
     "readbackKeyValueRowCount": 4,
-    "sampleRenderedHtmlSha256": "1a611339cef924f51767e64dae072c1eb506830f41d92f36aecb488fa3c0a096",
+    "sampleRenderedHtmlSha256": "da9c8c31b318d1358976e7f099fa88a501c0229688b8d6de1db085391f18a68a",
     "failures": []
   },
   "stagePhaseRuntimeReadback": {
@@ -530,7 +530,7 @@
     "activeNavItemCount": 1,
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "e5507f4e6803bb57d2dc39f476a001e6d02d847090de6f5263c789a1b7f987fd",
+    "sampleRenderedHtmlSha256": "c9724fc7183ac5867b18f7d6df21b51d635e82fe646f86e164ab005829894ab4",
     "failures": []
   },
   "aosWideTargetSetRuntimeReadback": {
@@ -598,7 +598,7 @@
     "disabledButtonFailures": [],
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "ec04eb3cc8ee3b747f65aa0bf106b62ffc0664d4d93e56f7c6a303007a62f798",
+    "sampleRenderedHtmlSha256": "1b7589c44d0e4b93ad97dc1efc740dfeb2c8a044561580cccb67ff36ff46991a",
     "failures": []
   },
   "fullDocumentAccessibilityReadback": {
@@ -670,5 +670,41 @@
   "noOverclaimReadback": {
     "ok": true,
     "forbiddenClaimHits": []
+  },
+  "productVisibleCopyReadback": {
+    "ok": true,
+    "bannedTerms": [
+      "readback",
+      "checkpoint",
+      "route",
+      "fixture",
+      "proof_required",
+      "external_proof_required",
+      "package_runtime_pilot",
+      "functional_contract_readback_only",
+      "held_for_later",
+      "unavailable_in_this_route",
+      "not_claimed"
+    ],
+    "surfaceReadbacks": [
+      {
+        "surface": "operationsCockpit",
+        "ok": true,
+        "hits": [],
+        "scannedTextLength": 5449
+      },
+      {
+        "surface": "docsReadiness",
+        "ok": true,
+        "hits": [],
+        "scannedTextLength": 2663
+      },
+      {
+        "surface": "aosWideProductDesign",
+        "ok": true,
+        "hits": [],
+        "scannedTextLength": 8087
+      }
+    ]
   }
 }

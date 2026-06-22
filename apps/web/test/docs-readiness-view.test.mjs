@@ -57,7 +57,8 @@ test("Slice 9B static HTML exposes required visible inspection regions", () => {
   assert.match(html, /data-empty-state/);
   assert.match(html, /Drafts stay local/);
   assert.match(html, /Release actions disabled/);
-  assert.doesNotMatch(visibleText(html), /publication not executed|release creation not executed|proof required|Slice 9B|slice-9b/i);
+  assert.doesNotMatch(productVisibleAndA11yText(html), /publication not executed|release creation not executed|proof required|Slice 9B|slice-9b/i);
+  assert.doesNotMatch(productVisibleAndA11yText(html), productVisibleInternalTermsPattern);
 });
 
 test("Slice 9B Docs Readiness runtime uses package-backed components instead of marker-only claims", () => {
@@ -130,6 +131,22 @@ function visibleText(html) {
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+const productVisibleInternalTermsPattern =
+  /\breadback\b|\bcheckpoint\b|\broute\b|\bfixture\b|proof required|external proof required|package-runtime pilot|functional contract readback only|held for later|unavailable in this route|not claimed|not_claimed/i;
+
+function productVisibleAndA11yText(html) {
+  const attributeText = Array.from(html.matchAll(/\s(?:aria-label|title|data-disabled-reason|placeholder|alt)="([^"]*)"/g))
+    .map((match) => match[1])
+    .join(" ");
+  return `${visibleText(html)} ${attributeText}`
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
     .replace(/\s+/g, " ")
     .trim();
 }

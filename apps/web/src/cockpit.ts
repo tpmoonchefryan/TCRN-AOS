@@ -445,7 +445,7 @@ export function createCockpitServiceReadback(
         roleGateCount: model.roleGateQueue.length,
         ownerIntentGateCount: model.ownerIntentQueue.length,
         autoExecutableCount: [...model.roleGateQueue, ...model.ownerIntentQueue].filter((gate) => gate.autoExecutable).length,
-        unavailableReason: "Gate and deferred route actions remain held; Slice 2 proves service read-model mapping only."
+        unavailableReason: "Gate actions remain disabled until this workspace has approved action authority."
       },
       readback: {
         evidenceReadbackCount: model.evidenceReadbacks.length,

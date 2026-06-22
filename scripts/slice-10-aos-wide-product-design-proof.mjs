@@ -26,6 +26,20 @@ const browserSummaryPath = join(browserEvidenceDir, "browser-evidence-summary.js
 const stableBrowserSummaryPath = join(browserEvidenceRoot, "browser-evidence-summary.json");
 const markdownPath = join(repoRoot, "evidence", "slice-10-aos-wide-product-design-surface-set-proof.md");
 const sourceFreshnessReadback = inspectSourceContentDigest();
+const productVisibleInternalTerms = [
+  "readback",
+  "checkpoint",
+  "route",
+  "fixture",
+  "proof required",
+  "external proof required",
+  "package-runtime pilot",
+  "functional contract readback only",
+  "held for later",
+  "unavailable in this route",
+  "not claimed",
+  "not_claimed"
+];
 
 if (checkCurrentSource) {
   const retained = JSON.parse(readFileSync(stableBrowserSummaryPath, "utf8"));
@@ -69,6 +83,7 @@ const selectorProof = requiredAosWideSelectors.map((selector) => {
   return { selector, present };
 });
 const forbiddenHits = forbiddenAosWidePositiveCopy.filter((phrase) => html.toLowerCase().includes(phrase.toLowerCase()));
+const productVisibleCopyReadback = inspectProductVisibleCopy(html);
 const htmlDigest = createHash("sha256").update(html).digest("hex");
 const requiredState = model.requiredState;
 const requiredStateOk = requiredState.productDesignStatus === "target_set_implemented_pending_review"
@@ -131,6 +146,7 @@ const ok = slice10WorkflowPacketBasis === "bcff619a406f2028e6c70ea76a3ade1674e3c
   && selectorProof.every((item) => item.present)
   && Object.values(targetPathReadback).every((item) => item.exists)
   && forbiddenHits.length === 0
+  && productVisibleCopyReadback.ok
   && requiredStateOk
   && readinessRows.every((row) => row.desktopReadyForCapture && row.mobileReadyForCapture && row.bodyOverflowExpected === false)
   && Object.values(interactionReadiness).every(Boolean)
@@ -169,6 +185,7 @@ const summary = {
   overflowReadiness,
   copyScan: {
     forbiddenHits,
+    productVisibleInternalHits: productVisibleCopyReadback.hits,
     productionSurfaceOnly: true
   },
   requiredState,
@@ -329,7 +346,7 @@ async function collectPageReadback(page, label) {
     .map((selector) => selector.match(/data-region='([^']+)'/)?.[1])
     .filter(Boolean);
 
-  return page.evaluate(({ label, requiredRegions, requiredRuntimeComponents, forbiddenAosWidePositiveCopy }) => {
+  return page.evaluate(({ label, requiredRegions, requiredRuntimeComponents, forbiddenAosWidePositiveCopy, productVisibleInternalTerms }) => {
     const normalizeText = (value) => value.replace(/\s+/g, " ").trim();
     const surface = document.querySelector("[data-surface='aos-wide-product-design']");
     const lowerText = document.body.innerText.toLowerCase();
@@ -429,6 +446,17 @@ async function collectPageReadback(page, label) {
     const targetPathLinks = Array.from(document.querySelectorAll("[data-region='target-path-readback'] a"))
       .map((link) => link.getAttribute("href") ?? "");
     const forbiddenHits = forbiddenAosWidePositiveCopy.filter((phrase) => lowerText.includes(phrase.toLowerCase()));
+    const accessibilityText = Array.from(document.querySelectorAll("[aria-label], [title], [data-disabled-reason], [placeholder], [alt]"))
+      .map((element) => [
+        element.getAttribute("aria-label"),
+        element.getAttribute("title"),
+        element.getAttribute("data-disabled-reason"),
+        element.getAttribute("placeholder"),
+        element.getAttribute("alt")
+      ].filter(Boolean).join(" "))
+      .join(" ");
+    const productVisibleText = normalizeText(`${document.body.innerText} ${accessibilityText}`).toLowerCase();
+    const productVisibleInternalHits = productVisibleInternalTerms.filter((term) => productVisibleText.includes(term));
     const expectedVisibleRows = label.includes("blocked-filter") || label.includes("resource-detail")
       ? 4
       : label.includes("no-match")
@@ -463,7 +491,8 @@ async function collectPageReadback(page, label) {
       && visibleRows.length === expectedVisibleRows
       && selectedDetail === expectedSelectedDetail
       && (label.includes("no-match") ? emptyState && getComputedStyle(emptyState).display !== "none" : true)
-      && forbiddenHits.length === 0;
+      && forbiddenHits.length === 0
+      && productVisibleInternalHits.length === 0;
     return {
       ok,
       label,
@@ -491,9 +520,42 @@ async function collectPageReadback(page, label) {
       selectedDetail,
       expectedSelectedDetail,
       emptyStateVisible: emptyState ? getComputedStyle(emptyState).display !== "none" : false,
-      forbiddenHits
+      forbiddenHits,
+      productVisibleInternalHits
     };
-  }, { label, requiredRegions, requiredRuntimeComponents, forbiddenAosWidePositiveCopy });
+  }, { label, requiredRegions, requiredRuntimeComponents, forbiddenAosWidePositiveCopy, productVisibleInternalTerms });
+}
+
+function inspectProductVisibleCopy(html) {
+  const text = productVisibleAndA11yText(html).toLowerCase();
+  const hits = productVisibleInternalTerms.filter((term) => text.includes(term));
+  return {
+    ok: hits.length === 0,
+    hits,
+    scannedTextLength: text.length
+  };
+}
+
+function productVisibleAndA11yText(html) {
+  const attributeText = Array.from(html.matchAll(/\s(?:aria-label|title|data-disabled-reason|placeholder|alt)="([^"]*)"/g))
+    .map((match) => match[1])
+    .join(" ");
+  return `${visibleText(html)} ${attributeText}`
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function visibleText(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 async function captureScreenshot(page, fileName) {

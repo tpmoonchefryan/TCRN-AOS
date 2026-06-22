@@ -53,6 +53,20 @@ const requiredRuntimeComponents = [
   "TopBar",
   "WorkIndex"
 ];
+const productVisibleInternalTerms = [
+  "readback",
+  "checkpoint",
+  "route",
+  "fixture",
+  "proof required",
+  "external proof required",
+  "package-runtime pilot",
+  "functional contract readback only",
+  "held for later",
+  "unavailable in this route",
+  "not claimed",
+  "not_claimed"
+];
 
 const sourceFreshnessReadback = inspectSourceContentDigest();
 
@@ -90,6 +104,7 @@ const selectorProof = requiredDocsReadinessSelectors.map((selector) => {
   return { selector, present };
 });
 const forbiddenHits = forbiddenDocsReadinessCopy.filter((phrase) => html.toLowerCase().includes(phrase.toLowerCase()));
+const productVisibleCopyReadback = inspectProductVisibleCopy(html);
 const htmlDigest = createHash("sha256").update(html).digest("hex");
 const docsReadinessRuntimeReadback = inspectDocsReadinessRuntime(html);
 const noExecutionClaims = {
@@ -108,6 +123,7 @@ const ok = slice9bWorkflowPacketBasis === "624127182da417f65c790de155e3297e77828
   && model.context.docsSearchReleaseSurfacesVisible === true
   && selectorProof.every((item) => item.present)
   && forbiddenHits.length === 0
+  && productVisibleCopyReadback.ok
   && Object.values(noExecutionClaims).every((value) => value === false)
   && docsReadinessRuntimeReadback.ok
   && browserReadback.ok
@@ -149,6 +165,7 @@ const summary = {
   },
   copyScan: {
     forbiddenHits,
+    productVisibleInternalHits: productVisibleCopyReadback.hits,
     productionSurfaceOnly: true
   },
   noExecutionClaims,
@@ -268,7 +285,7 @@ async function clickFirstVisibleReadinessRow(page) {
 }
 
 async function collectPageReadback(page, label) {
-  return page.evaluate(({ label, requiredRuntimeComponents, forbiddenDocsReadinessCopy }) => {
+  return page.evaluate(({ label, requiredRuntimeComponents, forbiddenDocsReadinessCopy, productVisibleInternalTerms }) => {
     const normalizeText = (value) => value.replace(/\s+/g, " ").trim();
     const surface = document.querySelector("[data-surface='docs-search-release-readiness']");
     const text = document.body.innerText;
@@ -383,6 +400,17 @@ async function collectPageReadback(page, label) {
           : "";
     const emptyState = document.querySelector("[data-empty-state]");
     const forbiddenHits = forbiddenDocsReadinessCopy.filter((phrase) => lowerText.includes(phrase.toLowerCase()));
+    const accessibilityText = Array.from(document.querySelectorAll("[aria-label], [title], [data-disabled-reason], [placeholder], [alt]"))
+      .map((element) => [
+        element.getAttribute("aria-label"),
+        element.getAttribute("title"),
+        element.getAttribute("data-disabled-reason"),
+        element.getAttribute("placeholder"),
+        element.getAttribute("alt")
+      ].filter(Boolean).join(" "))
+      .join(" ");
+    const productVisibleText = normalizeText(`${text} ${accessibilityText}`).toLowerCase();
+    const productVisibleInternalHits = productVisibleInternalTerms.filter((term) => productVisibleText.includes(term));
     const bodyHorizontalOverflow = Math.ceil(document.body.scrollWidth) > window.innerWidth + 1
       || Math.ceil(document.documentElement.scrollWidth) > window.innerWidth + 1;
     const ok = Boolean(surface)
@@ -395,6 +423,7 @@ async function collectPageReadback(page, label) {
       && regionProof.every((region) => region.present)
       && wideRegions.length === 0
       && forbiddenHits.length === 0
+      && productVisibleInternalHits.length === 0
       && selectedDetail.length > 0
       && (!expectedSelectedDetail || selectedDetail === expectedSelectedDetail)
       && !bodyHorizontalOverflow;
@@ -420,9 +449,42 @@ async function collectPageReadback(page, label) {
       selectedDetail,
       expectedSelectedDetail,
       emptyStateVisible: emptyState ? getComputedStyle(emptyState).display !== "none" : false,
-      forbiddenHits
+      forbiddenHits,
+      productVisibleInternalHits
     };
-  }, { label, requiredRuntimeComponents, forbiddenDocsReadinessCopy });
+  }, { label, requiredRuntimeComponents, forbiddenDocsReadinessCopy, productVisibleInternalTerms });
+}
+
+function inspectProductVisibleCopy(html) {
+  const text = productVisibleAndA11yText(html).toLowerCase();
+  const hits = productVisibleInternalTerms.filter((term) => text.includes(term));
+  return {
+    ok: hits.length === 0,
+    hits,
+    scannedTextLength: text.length
+  };
+}
+
+function productVisibleAndA11yText(html) {
+  const attributeText = Array.from(html.matchAll(/\s(?:aria-label|title|data-disabled-reason|placeholder|alt)="([^"]*)"/g))
+    .map((match) => match[1])
+    .join(" ");
+  return `${visibleText(html)} ${attributeText}`
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function visibleText(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 async function captureScreenshot(page, fileName) {

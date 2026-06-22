@@ -1,9 +1,9 @@
 # AOS Design System Package Runtime Proof
 
 - Route: route_tcrn_aos_design_system_frontend_full_rebuild_planning_and_implementation_packet
-- Source head at proof run: b7ff63ae3e53294e3a2904afdb9c8c5be306bf11
+- Source head at proof run: 544b1a4be965de7b973fa341024ccf043cb669f6
 - Source freshness strategy: source_content_digest_for_mutating_receipts
-- Source content digest: ed6e2a9c33fc74ce1e805e1e8b1b5ea36ade9d66086074f3e0d07dfdb522be99
+- Source content digest: cd9a63b9fbb4318f4737f007c2e12d89c749079df8e625f45b4389c59f96cced
 - Scope: aos_product_frontend_rebuilt_registered_design_system_runtime
 - Runtime rendering claim: operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild
 - Design System source head: b0c00828a813d3c62392eb6e53d7d6b85b6affeb
@@ -33,6 +33,7 @@
 - Storybook NavItem disabled reason reference ok: true
 
 - AOS runtime sr-only / mobile TableShell style proof ok: true
+- Product-visible internal-copy hits: 0
 - Shell / Sidebar package-runtime failures: 0
 - Claim Strip / Risk Lane package-runtime failures: 0
 - Topbar / Checkpoint package-runtime failures: 0

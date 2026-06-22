@@ -68,7 +68,8 @@ test("Slice 10 static HTML exposes required modules, anchors, and interactions",
   assert.match(html, /Request approval/);
   assert.match(html, /Run live action/);
   assert.ok(html.includes("Admin / Access"));
-  assert.doesNotMatch(visibleText(html), /Target set only|target-set checkpoint|local target-set checkpoint|Acceptance not claimed|External proof required|not_claimed|apps\/web\/static/i);
+  assert.doesNotMatch(productVisibleAndA11yText(html), /Target set only|target-set checkpoint|local target-set checkpoint|Acceptance not claimed|External proof required|not_claimed|apps\/web\/static/i);
+  assert.doesNotMatch(productVisibleAndA11yText(html), productVisibleInternalTermsPattern);
 });
 
 test("Slice 10 production HTML removes forbidden positive overclaim copy", () => {
@@ -171,6 +172,22 @@ function visibleText(html) {
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+const productVisibleInternalTermsPattern =
+  /\breadback\b|\bcheckpoint\b|\broute\b|\bfixture\b|proof required|external proof required|package-runtime pilot|functional contract readback only|held for later|unavailable in this route|not claimed|not_claimed/i;
+
+function productVisibleAndA11yText(html) {
+  const attributeText = Array.from(html.matchAll(/\s(?:aria-label|title|data-disabled-reason|placeholder|alt)="([^"]*)"/g))
+    .map((match) => match[1])
+    .join(" ");
+  return `${visibleText(html)} ${attributeText}`
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
     .replace(/\s+/g, " ")
     .trim();
 }
