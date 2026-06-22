@@ -113,8 +113,9 @@ const ok = slice9bWorkflowPacketBasis === "624127182da417f65c790de155e3297e77828
   && browserReadback.ok
   && html.includes("id=\"readiness-search\"")
   && html.includes("data-empty-state")
-  && html.includes("publication not executed")
-  && html.includes("release creation not executed");
+  && html.includes("Drafts stay local")
+  && html.includes("Release actions disabled")
+  && html.includes("Review state visible");
 
 const summary = {
   ok,
@@ -376,7 +377,7 @@ async function collectPageReadback(page, label) {
     const expectedSelectedDetail = label.includes("search-github")
       ? "TCRN-AOS-local"
       : label.includes("search-candidate")
-        ? "slice-9b-local-candidate"
+        ? "local-release-candidate"
         : label.includes("initial")
           ? "Release note draft"
           : "";

@@ -158,7 +158,7 @@ function AOSWideProductDesignRuntimeSurface({
           renderModuleGrid(model),
           renderSurfaceIndex(model),
           renderDetailDrawer(model),
-          renderRequiredState(model),
+          renderOperationalPosture(),
         ],
       ),
     ],
@@ -167,7 +167,7 @@ function AOSWideProductDesignRuntimeSurface({
 
 function renderSidebar(model: AOSWideProductDesignModel): ReactNode {
   const disabledReason =
-    "AOS-wide module implementation remains held for routed product slices.";
+    "This workspace opens when the corresponding AOS module is available.";
 
   return createElement(
     SideNav,
@@ -195,7 +195,7 @@ function renderSidebar(model: AOSWideProductDesignModel): ReactNode {
           createElement("span", { className: "brand-mark", "aria-hidden": "true" }, "AOS"),
           createElement("span", { className: "brand-copy" }, [
             createElement("strong", {}, "AOS product design"),
-            createElement("small", {}, "Target set only"),
+            createElement("small", {}, "Product workspace"),
           ]),
         ],
       ),
@@ -238,7 +238,7 @@ function renderSidebar(model: AOSWideProductDesignModel): ReactNode {
             "data-package-runtime-source": packageRuntimeSource,
             "data-tcrn-component": "Text",
           },
-          "Local target-set posture recorded",
+          "Read-only product posture recorded",
         ),
       ),
     ],
@@ -246,11 +246,11 @@ function renderSidebar(model: AOSWideProductDesignModel): ReactNode {
 }
 
 function renderTopbar(model: AOSWideProductDesignModel): ReactNode {
-  const targetPathDisabledReason = "Target path selection is held for this local read-only checkpoint";
+  const targetPathDisabledReason = "Target path is managed from project setup.";
 
   return createElement(TopBar, {
     productName: "AOS Product Design",
-    moduleName: "Target-set checkpoint",
+    moduleName: "Product workspace",
     actions: [
       createElement(
         Field,
@@ -266,7 +266,7 @@ function renderTopbar(model: AOSWideProductDesignModel): ReactNode {
             options: [
               {
                 value: model.targetPathReadback.aosWideTarget,
-                label: model.targetPathReadback.aosWideTarget,
+                label: pathLabel(model.targetPathReadback.aosWideTarget),
               },
             ],
             "data-disabled-reason": targetPathDisabledReason,
@@ -277,17 +277,13 @@ function renderTopbar(model: AOSWideProductDesignModel): ReactNode {
         ),
       ),
       createElement(ReadbackPanel, {
-        key: "checkpoint",
-        title: "Checkpoint",
+        key: "workspace",
+        title: "Workspace",
         children: createElement(KeyValueList, {
           items: [
-            { key: "checkpoint", label: "Checkpoint", value: model.context.localCheckpoint },
-            { key: "basis", label: "Basis", value: model.context.preImplementationBasis.slice(0, 10) },
-            {
-              key: "accepted",
-              label: "Accepted",
-              value: String(model.requiredState.aosWideProductDesignAccepted),
-            },
+            { key: "surface", label: "Surface", value: "AOS product design" },
+            { key: "mode", label: "Mode", value: "Read only" },
+            { key: "status", label: "Status", value: "Design review active" },
           ],
         }),
       }),
@@ -332,7 +328,7 @@ function renderHero(model: AOSWideProductDesignModel): ReactNode {
           "data-package-runtime-source": packageRuntimeSource,
           "data-tcrn-component": "Text",
         },
-        "AOS-wide design target set",
+        "AOS product design",
       ),
       createElement(
         Heading,
@@ -343,7 +339,7 @@ function renderHero(model: AOSWideProductDesignModel): ReactNode {
           "data-package-runtime-source": packageRuntimeSource,
           "data-tcrn-component": "Heading",
         },
-        "Product design surface targets",
+        "Product workspace coverage",
       ),
       createElement(
         Text,
@@ -354,14 +350,14 @@ function renderHero(model: AOSWideProductDesignModel): ReactNode {
           "data-package-runtime-source": packageRuntimeSource,
           "data-tcrn-component": "Text",
         },
-        "This local checkpoint maps the AOS-wide target set without enabling product modules, release posture, Owner Intent, or live dispatch.",
+        "AOS-wide workspaces are organized for review with local data, disabled actions, and clear readiness state.",
       ),
     ]),
     createElement(EvidenceStrip, {
       items: [
-        "Target set package runtime",
-        "Acceptance not claimed",
-        "External actions held",
+        "Registered Design System UI",
+        "Actions remain disabled",
+        "Review state visible",
       ],
     }),
   ]);
@@ -408,7 +404,7 @@ function renderTargetPath(model: AOSWideProductDesignModel): ReactNode {
               "data-package-runtime-source": packageRuntimeSource,
               "data-tcrn-component": "LinkButton",
             },
-            item.path,
+            pathLabel(item.path),
           ),
         ],
       ),
@@ -497,7 +493,7 @@ function renderModuleCard(surface: SurfaceRow, index: number): ReactNode {
           "data-package-runtime-source": packageRuntimeSource,
           "data-tcrn-component": "Button",
         },
-        "Inspect target",
+        "Inspect workspace",
       ),
     ],
   );
@@ -549,7 +545,7 @@ function renderSurfaceIndex(model: AOSWideProductDesignModel): ReactNode {
           createElement(SearchInput, {
             id: "surface-search",
             name: "surface-search",
-            placeholder: "Search AOS-wide target set",
+            placeholder: "Search AOS-wide workspaces",
             "data-package-runtime-component": "SearchInput",
             "data-package-runtime-source": packageRuntimeSource,
             "data-tcrn-component": "SearchInput",
@@ -579,15 +575,15 @@ function renderSurfaceIndex(model: AOSWideProductDesignModel): ReactNode {
             "data-filter-state": "blocked",
           }, "Blocked"),
           createElement(Button, {
-            key: "external-proof",
+            key: "evidence-review",
             type: "button",
             "data-filter-state": "pending_external_proof",
-          }, "External proof"),
+          }, "Evidence review"),
         ],
       }),
       ]),
       createElement(TableShell, {
-        label: "AOS-wide target-set rows",
+        label: "AOS-wide workspace rows",
         columns,
         rows,
         mobileLayout: "stacked-cards",
@@ -603,7 +599,7 @@ function renderSurfaceIndex(model: AOSWideProductDesignModel): ReactNode {
             "data-package-runtime-source": packageRuntimeSource,
             "data-tcrn-component": "Text",
           },
-          "Clear the local filter to restore the target-set readback.",
+          "Clear the local filter to restore the workspace list.",
         ),
       }),
     ],
@@ -616,7 +612,7 @@ function renderDetailDrawer(model: AOSWideProductDesignModel): ReactNode {
     throw new Error("missing required AOS-wide target-set detail row");
   }
   const disabledReason =
-    "AOS-wide product actions remain held until product implementation and Owner Intent authority are routed.";
+    "Product actions require approved workflow authority before they can run.";
   const detailItems: KeyValueItem[] = [
     { key: "target-id", label: "Target id", value: createElement("span", { "data-detail-id": true }, selected.id) },
     { key: "surface", label: "Surface", value: createElement("span", { "data-detail-surface": true }, selected.surface) },
@@ -651,7 +647,7 @@ function renderDetailDrawer(model: AOSWideProductDesignModel): ReactNode {
           {
             type: "button",
             disabled: true,
-            disabledReason: "Drawer close is visual-only in this local target-set checkpoint.",
+            disabledReason: "Detail drawer close is disabled in this read-only product view.",
             "data-drawer-close": true,
             "data-package-runtime-component": "Button",
             "data-package-runtime-source": packageRuntimeSource,
@@ -691,7 +687,7 @@ function renderDetailDrawer(model: AOSWideProductDesignModel): ReactNode {
               "data-package-runtime-source": packageRuntimeSource,
               "data-tcrn-component": "Button",
             },
-            "Owner action locked",
+            "Request approval",
           ),
           createElement(
             Button,
@@ -704,7 +700,7 @@ function renderDetailDrawer(model: AOSWideProductDesignModel): ReactNode {
               "data-package-runtime-source": packageRuntimeSource,
               "data-tcrn-component": "Button",
             },
-            "Live dispatch unavailable",
+            "Run live action",
           ),
           createElement(
             Button,
@@ -717,22 +713,22 @@ function renderDetailDrawer(model: AOSWideProductDesignModel): ReactNode {
               "data-package-runtime-source": packageRuntimeSource,
               "data-tcrn-component": "Button",
             },
-            "External proof required",
+            "Open evidence review",
           ),
         ],
       ),
       createElement(ReadbackPanel, {
-        title: "Evidence readiness",
+        title: "Review posture",
         children: createElement(KeyValueList, {
           items: [
             {
-              key: "aos-wide-acceptance",
-              label: "AOS-wide acceptance",
-              value: String(model.requiredState.aosWideProductDesignAccepted),
+              key: "product-design",
+              label: "Product design",
+              value: "Review active",
             },
-            { key: "product-acceptance", label: "Product acceptance", value: model.requiredState.productAcceptance },
-            { key: "release", label: "Release", value: model.requiredState.releaseReadiness },
-            { key: "live-dispatch", label: "Live dispatch", value: String(model.requiredState.liveDispatch) },
+            { key: "mode", label: "Mode", value: "Read only" },
+            { key: "release", label: "Release", value: "Disabled" },
+            { key: "operations", label: "Live actions", value: "Disabled" },
           ],
         }),
       }),
@@ -740,23 +736,17 @@ function renderDetailDrawer(model: AOSWideProductDesignModel): ReactNode {
   );
 }
 
-function renderRequiredState(model: AOSWideProductDesignModel): ReactNode {
+function renderOperationalPosture(): ReactNode {
   const entries = [
-    ["AOS-wide accepted", model.requiredState.aosWideProductDesignAccepted],
-    ["Product design status", model.requiredState.productDesignStatus],
-    ["Deployment proof", model.requiredState.deploymentProof],
-    ["Product acceptance", model.requiredState.productAcceptance],
-    ["Final MVP", model.requiredState.finalMvpAcceptance],
-    ["Release", model.requiredState.releaseReadiness],
-    ["Live dispatch", model.requiredState.liveDispatch],
-    ["Owner Intent", false],
-    ["Docs export", model.requiredState.docsExport],
-    ["GitHub mutation", model.requiredState.githubMutation],
+    ["Workspace", "Read only"],
+    ["Release", "Disabled"],
+    ["Live actions", "Disabled"],
+    ["Approvals", "Required before execution"],
   ] as const;
 
   return createElement(
     "section",
-    { className: "state-grid", "aria-label": "No-overclaim state" },
+    { className: "state-grid", "aria-label": "Operational posture" },
     entries.map(([label, value]) =>
       createElement(
         Badge,
@@ -879,6 +869,13 @@ function escapeAttribute(value: string): string {
     .replace(/"/g, "&quot;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
+}
+
+function pathLabel(path: string): string {
+  if (path.includes("operations-cockpit")) return "Operations Cockpit";
+  if (path.includes("docs-search-release-readiness")) return "Docs Readiness";
+  if (path.includes("aos-wide-product-design")) return "Product Design";
+  return path;
 }
 
 function surfaceRegionId(surfaceId: string): string {

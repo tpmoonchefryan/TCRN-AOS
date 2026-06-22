@@ -243,8 +243,8 @@ export function renderOperationsCockpitHtml(
   const resource = model.resourceInspection[0];
   const selectedConference = model.conferences[0];
   const serviceReadback = createCockpitServiceReadback(model, { serviceBacked });
-  const stageDetailDisabledReason = "Stage detail route is held for the owner-trial implementation proof";
-  const roleDetailDisabledReason = "Role detail route is held for a later owner-trial slice";
+  const stageDetailDisabledReason = "Stage details open after the stage workspace is available.";
+  const roleDetailDisabledReason = "Role details open after the staffing workspace is available.";
   const claimRiskStripSeparator = "\n          ";
   const claimRiskStripsHtml = renderCockpitRuntimeClaimRiskStrips(createCockpitRuntimeClaimRiskStripsOptions(model));
   const claimRiskStripParts = claimRiskStripsHtml.split(claimRiskStripSeparator);
@@ -289,7 +289,7 @@ export function renderOperationsCockpitHtml(
           </section>
           <section class="content-grid">
             ${renderCockpitRuntimeWorkIndexCluster({
-              columnsDisabledReason: "Column customization is not implemented in this owner-trial slice",
+              columnsDisabledReason: "Column settings are not available in this workspace.",
               filters: [
                 { label: `Project: ${model.contextHeader.selectedProjectId}`, tone: "neutral" },
                 { label: `Freshness: ${copyFreshness(model.contextHeader.dataFreshness)}`, tone: "positive" },
@@ -550,7 +550,7 @@ async function loadCockpit(selectedId) {
 function renderPayload(payload) {
   const model = payload.model;
   activeStoryId = model.detailPanel?.selectedId || activeStoryId;
-  if (checkpoint) checkpoint.textContent = model.contextHeader.localCheckpoint;
+  if (checkpoint) checkpoint.textContent = "Operations cockpit ready";
   if (freshness) freshness.textContent = copyFreshness(model.contextHeader.dataFreshness);
   applyServiceReadModel(payload.serviceReadModel);
   renderRows(model.workstreams.flatMap((group) => group.rows));
@@ -647,7 +647,7 @@ function renderDetail(model) {
     ["Local actions", detail.nextAllowedLocalActions.map(copyAction).join(", ") || copyAction("open_evidence_metadata")],
     ["Blocked actions", detail.blockedActions.map((item) => copyAction(item.action)).join(", ") || "No local readback blockers"],
     ["Operating loop", detail.operatingLoopSummary],
-    ["No-overclaim", detail.noOverclaimSummary]
+    ["Action posture", detail.noOverclaimSummary]
   ]);
 }
 
@@ -706,7 +706,7 @@ if (serviceBacked) {
 function createCockpitRuntimeNavItems(): CockpitRuntimeNavItem[] {
   return cockpitNavLabels.map((label) => ({
     active: label === "Cockpit",
-    disabledReason: `${label} view is held for a later routed AOS slice; this package-runtime pilot keeps Cockpit available only.`,
+    disabledReason: `${label} opens when that AOS workspace is available.`,
     href: "#cockpit",
     label
   }));
@@ -748,7 +748,7 @@ function createCockpitRuntimeShellSidebarOptions(input: {
     brandHref: "#cockpit",
     brandPrimaryLabel: "TCRN",
     brandSecondaryLabel: "AOS",
-    footerLabel: "Local posture recorded",
+    footerLabel: "Local operations posture recorded",
     navItems: createCockpitRuntimeNavItems(),
     navLabel: "Primary cockpit views",
     shellAttributesHtml: shellAttributes
@@ -763,8 +763,8 @@ function createCockpitRuntimeTopbarCheckpointOptions(input: {
   serviceReadback: CockpitServiceReadModelReadback;
 }): CockpitRuntimeTopbarCheckpointOptions {
   return {
-    checkpointLabel: "Local checkpoint observed",
-    checkpointValue: input.model.contextHeader.localCheckpoint,
+    checkpointLabel: "Workspace status",
+    checkpointValue: "Operations cockpit ready",
     freshnessLabel: copyFreshness(input.model.contextHeader.dataFreshness),
     operatorLabel: "RL",
     projectId: input.model.contextHeader.selectedProjectId,
@@ -773,9 +773,9 @@ function createCockpitRuntimeTopbarCheckpointOptions(input: {
       "TCRN-TMS",
       "TCRN Workflow"
     ],
-    refreshLabel: "Refresh readback",
+    refreshLabel: "Refresh status",
     serviceReadbackLabel: serviceReadModelSummary(input.serviceReadback),
-    serviceStatusLabel: input.serviceBacked ? "service API pending" : "static fixture"
+    serviceStatusLabel: input.serviceBacked ? "service API pending" : "local service snapshot"
   };
 }
 
@@ -803,7 +803,7 @@ function createCockpitRuntimeClaimRiskStripsOptions(model: OperationsCockpitRead
       },
       {
         key: "live-dispatch",
-        label: `${copyState("unavailable")}: live dispatch`,
+        label: "Live operations disabled",
         state: "unavailable",
         variant: "badge"
       }
@@ -893,7 +893,7 @@ function createCockpitRuntimeGateReadbackCardsOptions(input: GateReadbackCardsOp
   return {
     gateWorkOrder: {
       count: input.model.ownerIntentQueue.length + input.model.roleGateQueue.length,
-      disabledReason: "Gate request requires a routed owner-intent or role-gate path",
+      disabledReason: "Gate requests require an approved action path.",
       gateModeLabel,
       gateOwnerRole,
       gateStatusLabel,
@@ -902,7 +902,7 @@ function createCockpitRuntimeGateReadbackCardsOptions(input: GateReadbackCardsOp
     },
     readbackPosture: {
       dependencyLabel: input.dependency ? copyPosture(input.dependency.posture) : copyState("none"),
-      disabledReason: "Evidence detail route is held for a later owner-trial slice",
+      disabledReason: "Evidence details open from the evidence workspace.",
       evidenceLabel: copyFreshness(input.model.evidenceReadbacks[0]?.freshness ?? "unknown"),
       resourceLabel: input.resource ? copyPosture(input.resource.approvalState) : copyState("none"),
       runtimeFixtureLabel: copyState("static_fixture")
@@ -972,12 +972,12 @@ function createCockpitRuntimeDetailDrawerOptions(input: DetailDrawerOptionInput)
     blockedActionLabel: formatBlockedActions(detail?.blockedActions ?? input.selectedRow?.blockedActions ?? []),
     closeLabel: "Close detail",
     detailRows,
-    noOverclaimSummary: detail?.noOverclaimSummary ?? "No product, final, release, live dispatch, or Owner Intent execution is claimed.",
-    operatingLoopSummary: detail?.operatingLoopSummary ?? input.selectedConference?.title ?? "Selected detail uses service-backed local readback only.",
-    primaryActionDisabledReason: "Gate work order execution is held outside this UI slice",
-    primaryActionLabel: "Gate work order held",
-    secondaryActionDisabledReason: "Rework request execution requires a routed owner-trial action",
-    secondaryActionLabel: "Rework request held",
+    noOverclaimSummary: detail?.noOverclaimSummary ?? "Release and live operations remain disabled in this workspace.",
+    operatingLoopSummary: detail?.operatingLoopSummary ?? input.selectedConference?.title ?? "Selected detail uses the service-backed work model.",
+    primaryActionDisabledReason: "Gate work order execution requires approved action authority.",
+    primaryActionLabel: "Gate work order",
+    secondaryActionDisabledReason: "Rework requests require approved action authority.",
+    secondaryActionLabel: "Request rework",
     selectedId,
     selectedType,
     selectedTypeLabel: copyState(selectedType),

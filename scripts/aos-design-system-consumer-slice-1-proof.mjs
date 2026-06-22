@@ -117,7 +117,7 @@ try {
         }
         const normalizeText = (value) => value.replace(/\s+/g, " ").trim();
         const disabledControlDescriptionFailures = [];
-        const disabledControls = Array.from(document.querySelectorAll("button:disabled, [aria-disabled='true']"));
+        const disabledControls = Array.from(document.querySelectorAll("button:disabled, select:disabled, input:disabled, textarea:disabled, [aria-disabled='true']"));
         for (const element of disabledControls) {
           const dataDisabledReason = element.getAttribute("data-disabled-reason")?.trim() ?? "";
           const title = element.getAttribute("title")?.trim() ?? "";
@@ -268,9 +268,11 @@ try {
         hasOwnerIntentReason: disabledButtons.some((button) => /owner-intent|owner intent/i.test(button.reason)),
         hasSidebarUnavailableReasons: disabledNavItems.length >= 9
           && disabledNavItemsMissingReason.length === 0
-          && disabledNavItems.every((item) => item.href === "" && item.tabIndex === "-1" && item.reason.includes("later routed AOS slice") && item.text.includes("package-runtime pilot keeps Cockpit available only")),
-        hasUnavailableCopy: text.includes("Unavailable: live dispatch"),
-        hasExternalProofCopy: text.includes("External proof required"),
+          && disabledNavItems.every((item) => item.href === "" && item.tabIndex === "-1" && item.reason.includes("opens when that AOS workspace is available") && item.text.includes("opens when that AOS workspace is available")),
+        hasProductDisabledCopy: text.includes("Live operations disabled")
+          && text.includes("Not enabled")
+          && text.includes("Evidence review pending"),
+        hasWorkspaceAvailabilityCopy: text.includes("opens when that AOS workspace is available"),
         hasTokenCss: rootStyles.getPropertyValue("--tcrn-color-text-primary").trim().length > 0
       };
     }, { rawVisibleForbidden, forbiddenPositiveClaims });
@@ -304,8 +306,8 @@ try {
     && viewportReadbacks.every((readback) => readback.fullDocumentAccessibilityReadback.ok)
     && viewportReadbacks.every((readback) => readback.hasSidebarUnavailableReasons)
     && viewportReadbacks.every((readback) => readback.hasTokenCss)
-    && viewportReadbacks.every((readback) => readback.hasUnavailableCopy)
-    && viewportReadbacks.every((readback) => readback.hasExternalProofCopy)
+    && viewportReadbacks.every((readback) => readback.hasProductDisabledCopy)
+    && viewportReadbacks.every((readback) => readback.hasWorkspaceAvailabilityCopy)
     && pageErrors.length === 0
     && consoleErrors.length === 0;
 

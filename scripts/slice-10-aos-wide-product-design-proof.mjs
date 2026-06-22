@@ -16,6 +16,7 @@ import {
 
 const repoRoot = process.cwd();
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
+const checkCurrentSource = process.argv.includes("--check-current-source");
 const model = createAOSWideProductDesignModel();
 const html = renderAOSWideProductDesignHtml(model);
 const staticPath = join(repoRoot, "apps/web/static/aos-wide-product-design.html");
@@ -24,6 +25,32 @@ const browserEvidenceDir = join(browserEvidenceRoot, sourceHead);
 const browserSummaryPath = join(browserEvidenceDir, "browser-evidence-summary.json");
 const stableBrowserSummaryPath = join(browserEvidenceRoot, "browser-evidence-summary.json");
 const markdownPath = join(repoRoot, "evidence", "slice-10-aos-wide-product-design-surface-set-proof.md");
+const sourceFreshnessReadback = inspectSourceContentDigest();
+
+if (checkCurrentSource) {
+  const retained = JSON.parse(readFileSync(stableBrowserSummaryPath, "utf8"));
+  const retainedDigest = retained.sourceFreshnessReadback?.sourceContentDigest;
+  const retainedStrategy = retained.sourceFreshnessReadback?.strategy;
+  const ok = retainedDigest === sourceFreshnessReadback.sourceContentDigest
+    && retainedStrategy === sourceFreshnessReadback.strategy
+    && retained.ok === true;
+  const result = {
+    ok,
+    command: "node scripts/slice-10-aos-wide-product-design-proof.mjs --check-current-source",
+    retainedSummaryPath: "evidence/slice-10-aos-wide-product-design-browser/browser-evidence-summary.json",
+    retainedSourceHeadAtProofRun: retained.sourceHead,
+    retainedStrategy,
+    currentStrategy: sourceFreshnessReadback.strategy,
+    retainedDigest,
+    currentDigest: sourceFreshnessReadback.sourceContentDigest
+  };
+  console.log(JSON.stringify(result, null, 2));
+  if (!ok) {
+    process.exit(1);
+  }
+  process.exit(0);
+}
+
 mkdirSync(dirname(staticPath), { recursive: true });
 mkdirSync(browserEvidenceDir, { recursive: true });
 writeFileSync(staticPath, html);
@@ -77,7 +104,7 @@ const interactionReadiness = {
   stateFilters: ["all", "review_required", "blocked", "current", "pending_external_proof"].every((state) => html.includes(`data-filter-state="${state}"`)),
   rowDetailSelection: html.includes("data-surface-row") && html.includes("data-detail-title"),
   emptyState: html.includes("data-empty-state"),
-  disabledGateControls: html.includes("Owner action locked") && html.includes("disabled"),
+  disabledGateControls: html.includes("Request approval") && html.includes("Run live action") && html.includes("Open evidence review") && html.includes("disabled"),
   focusStateCss: html.includes(":focus-visible")
 };
 const overflowReadiness = {
@@ -133,6 +160,7 @@ const summary = {
     selectorProof
   },
   targetPathReadback,
+  sourceFreshnessReadback,
   surfaceReadiness: {
     count: readinessRows.length,
     rows: readinessRows
@@ -479,6 +507,29 @@ async function captureScreenshot(page, fileName) {
   };
 }
 
+function inspectSourceContentDigest() {
+  const sourcePaths = [
+    "apps/web/src/aos-wide-product-design-data.ts",
+    "apps/web/src/aos-wide-product-design-ui-react-runtime.ts",
+    "apps/web/src/aos-wide-product-design-view.ts",
+    "apps/web/test/aos-wide-product-design-view.test.mjs",
+    "scripts/aos-design-system-package-runtime-proof.mjs",
+    "scripts/aos-design-system-component-registry-proof.mjs",
+    "scripts/slice-10-aos-wide-product-design-proof.mjs"
+  ];
+  const digestInput = sourcePaths
+    .map((sourcePath) => `${sourcePath}\0${readFileSync(join(repoRoot, sourcePath), "utf8")}`)
+    .join("\0");
+  return {
+    ok: true,
+    strategy: "source_content_digest_for_mutating_aos_wide_browser_receipts",
+    sourceHeadAtProofRun: sourceHead,
+    exactFinalCommitHeadRequired: false,
+    sourceContentDigest: createHash("sha256").update(digestInput).digest("hex"),
+    sourcePaths
+  };
+}
+
 function markdownReceipt(summary) {
   const artifacts = summary.browserReadback.screenshots
     .map((screenshot) => `- \`${screenshot.file}\` sha256 \`${screenshot.sha256}\``)
@@ -492,6 +543,8 @@ function markdownReceipt(summary) {
     + `- Pre-implementation basis: \`${summary.checkpoint.preImplementationBasis}\`\n`
     + `- Static target: \`${summary.staticRender.path}\`\n`
     + `- Static target SHA-256: \`${summary.staticRender.sha256}\`\n`
+    + `- Source freshness strategy: \`${summary.sourceFreshnessReadback.strategy}\`\n`
+    + `- Source content digest: \`${summary.sourceFreshnessReadback.sourceContentDigest}\`\n`
     + `- Product Design status field: \`${summary.staticRender.productDesignStatus}\`\n\n`
     + `## Package Runtime Readback\n\n`
     + `- AOS-wide package runtime: true\n`

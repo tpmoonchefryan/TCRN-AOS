@@ -45,7 +45,7 @@ const staticProof = {
   workIndexDrillThroughMarker: html.includes('data-slice5="work-index-drill-through"'),
   conferenceLoopRegion: html.includes('data-region="conference-operating-loop"'),
   forbiddenProductionCopyHits: forbiddenProductionCopy.filter((phrase) => html.toLowerCase().includes(phrase.toLowerCase())),
-  liveDispatchCopyPresent: html.includes("Unavailable: live dispatch")
+  actionPostureCopyPresent: html.includes("Release and live operations remain disabled in this workspace.")
 };
 
 const ok = scenarioProofs.every((scenario) => scenario.ok)
@@ -53,7 +53,7 @@ const ok = scenarioProofs.every((scenario) => scenario.ok)
   && staticProof.workIndexDrillThroughMarker
   && staticProof.conferenceLoopRegion
   && staticProof.forbiddenProductionCopyHits.length === 0
-  && staticProof.liveDispatchCopyPresent;
+  && staticProof.actionPostureCopyPresent;
 
 console.log(JSON.stringify({
   ok,

@@ -55,8 +55,9 @@ test("Slice 9B static HTML exposes required visible inspection regions", () => {
   assert.match(html, /data-package-runtime-surface="docs_readiness_search_release_package_runtime_adoption"/);
   assert.match(html, /id="readiness-search"/);
   assert.match(html, /data-empty-state/);
-  assert.match(html, /publication not executed/);
-  assert.match(html, /release creation not executed/);
+  assert.match(html, /Drafts stay local/);
+  assert.match(html, /Release actions disabled/);
+  assert.doesNotMatch(visibleText(html), /publication not executed|release creation not executed|proof required|Slice 9B|slice-9b/i);
 });
 
 test("Slice 9B Docs Readiness runtime uses package-backed components instead of marker-only claims", () => {
@@ -122,4 +123,13 @@ function disabledNavItemReadbacks(html) {
   return Array.from(html.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g))
     .filter((match) => /\baria-disabled="true"/.test(match[1]))
     .map((match) => ({ attributes: match[1], body: match[2] }));
+}
+
+function visibleText(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }

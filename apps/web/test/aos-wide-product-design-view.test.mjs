@@ -59,15 +59,16 @@ test("Slice 10 static HTML exposes required modules, anchors, and interactions",
   }
   assert.match(html, /data-surface="aos-wide-product-design"/);
   assert.match(html, /data-product-design-status="target_set_implemented_pending_review"/);
-  assert.ok(html.includes("apps/web/static/operations-cockpit.html"));
-  assert.ok(html.includes("apps/web/static/docs-search-release-readiness.html"));
-  assert.ok(html.includes("apps/web/static/aos-wide-product-design.html"));
+  assert.match(html, />Operations Cockpit</);
+  assert.match(html, />Docs Readiness</);
+  assert.match(html, />Product Design</);
   assert.match(html, /id="surface-search"/);
   assert.match(html, /data-filter-state="blocked"/);
   assert.match(html, /data-empty-state/);
-  assert.match(html, /Owner action locked/);
-  assert.match(html, /Live dispatch unavailable/);
+  assert.match(html, /Request approval/);
+  assert.match(html, /Run live action/);
   assert.ok(html.includes("Admin / Access"));
+  assert.doesNotMatch(visibleText(html), /Target set only|target-set checkpoint|local target-set checkpoint|Acceptance not claimed|External proof required|not_claimed|apps\/web\/static/i);
 });
 
 test("Slice 10 production HTML removes forbidden positive overclaim copy", () => {
@@ -163,4 +164,13 @@ function disabledNavItemReadbacks(html) {
   return Array.from(html.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g))
     .filter((match) => /\baria-disabled="true"/.test(match[1]))
     .map((match) => ({ attributes: match[1], body: match[2] }));
+}
+
+function visibleText(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }

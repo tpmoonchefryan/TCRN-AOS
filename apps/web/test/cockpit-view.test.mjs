@@ -49,18 +49,19 @@ test("Slice 4B production HTML exposes required cockpit regions", () => {
   }
   assert.match(html, /class="brand-tcrn">TCRN/);
   assert.match(html, /class="brand-aos">AOS/);
-  assert.match(html, /Local checkpoint observed/);
-  assert.match(html, /Static fixture readback/);
+  assert.match(html, /Workspace status/);
+  assert.match(html, /Operations cockpit ready/);
+  assert.match(html, /Local service snapshot/);
   assert.match(html, /data-service-backed="false"/);
   assert.match(html, /data-refresh-readback/);
   assert.match(html, /data-work-table/);
   assert.match(html, /data-row-id=/);
   assert.match(html, /data-drawer-title/);
   assert.match(html, /data-detail-list/);
-  assert.match(html, /Gate work order held/);
+  assert.match(html, /Gate work order/);
   assert.match(html, /data-slice5="work-index-drill-through"/);
   assert.match(html, /data-region="conference-operating-loop"/);
-  assert.match(html, /Unavailable: live dispatch/);
+  assert.match(html, /Live operations disabled/);
 });
 
 test("AOS Design System consumer bridge exposes token and copy-state contracts", () => {
@@ -69,14 +70,14 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.equal(aosDesignSystemConsumerBridge.tokenPackage, "@tcrn/ui-tokens");
   assert.equal(aosDesignSystemConsumerBridge.copyStatePackage, "@tcrn/ui-copy-state");
   assert.equal(aosDesignSystemConsumerBridge.uiReactPackage, "@tcrn/ui-react");
-  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_completion");
+  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "aos_product_frontend_rebuilt_registered_design_system_runtime");
   assert.equal(aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering, true);
   assert.equal(aosDesignSystemConsumerBridge.designSystemSourceHead, "b0c00828a813d3c62392eb6e53d7d6b85b6affeb");
-  assert.equal(copyAosState("external_proof_required"), "External proof required");
-  assert.equal(copyAosState("not_claimed"), "Not claimed");
+  assert.equal(copyAosState("external_proof_required"), "Evidence review pending");
+  assert.equal(copyAosState("not_claimed"), "Not enabled");
   assert.equal(copyAosState("record_participant_position"), "Record participant position");
   assert.ok(aosDesignSystemTokenReadback.brandPrimary);
-  assert.match(html, /data-design-system-consumer="tokens_copy_state_ui_react_operations_cockpit_runtime_pilot"/);
+  assert.match(html, /data-design-system-consumer="tokens_copy_state_ui_react_product_frontend_rebuild"/);
   assert.match(html, /data-design-system-tokens="@tcrn\/ui-tokens"/);
   assert.match(html, /data-design-system-copy-state="@tcrn\/ui-copy-state"/);
   assert.match(html, /data-design-system-ui-react="@tcrn\/ui-react"/);
@@ -137,9 +138,9 @@ test("Operations Cockpit claim strip and risk lane render package-backed Evidenc
   assert.match(claimHtml, /data-package-runtime-source="@tcrn\/ui-react"/);
   assert.match(claimHtml, /data-package-runtime-surface="operations-cockpit-claim-risk-strips"/);
   assert.match(claimHtml, /data-package-runtime-item-count="3"/);
-  assert.match(claimHtml, /External proof required/);
-  assert.match(claimHtml, /Not claimed/);
-  assert.match(claimHtml, /Unavailable: live dispatch/);
+  assert.match(claimHtml, /Evidence review pending/);
+  assert.match(claimHtml, /Not enabled/);
+  assert.match(claimHtml, /Live operations disabled/);
   assert.match(claimHtml, /data-package-runtime-component="StatusBadge"/);
   assert.match(claimHtml, /data-package-runtime-component="Badge"/);
   assert.doesNotMatch(claimHtml, /release ready|product accepted|final MVP accepted/i);
@@ -152,7 +153,7 @@ test("Operations Cockpit claim strip and risk lane render package-backed Evidenc
   assert.match(riskHtml, /data-risk-id=/);
   assert.match(riskHtml, /data-risk-owner-role=/);
   assert.match(riskHtml, /data-risk-summary=/);
-  assert.match(riskHtml, /Review required|Not applicable|Blocked|Accepted with residual risk/);
+  assert.match(riskHtml, /Review required|Not applicable|Blocked|Review complete with residual risk/);
   assert.doesNotMatch(riskHtml, /risk accepted|dependency clean|legal completion|release ready/i);
 });
 
@@ -172,7 +173,8 @@ test("Operations Cockpit topbar and checkpoint strip render package-backed runti
   assert.match(topbarHtml, /id="project-select"/);
   assert.match(topbarHtml, /data-region="checkpoint-strip"/);
   assert.match(topbarHtml, /data-package-runtime-component="ReadbackPanel"/);
-  assert.match(topbarHtml, /Local checkpoint observed/);
+  assert.match(topbarHtml, /Workspace status/);
+  assert.match(topbarHtml, /Operations cockpit ready/);
   assert.match(topbarHtml, /data-local-checkpoint/);
   assert.match(topbarHtml, /data-package-runtime-component="StatusBadge"/);
   assert.match(topbarHtml, /data-readback-freshness/);
@@ -203,7 +205,7 @@ test("Operations Cockpit Stage Map and AI Employee Phase render package-backed r
   assert.match(stageHtml, /data-package-runtime-component="Badge"/);
   assert.match(stageHtml, /data-package-runtime-component="StatusBadge"/);
   assert.match(stageHtml, /Stage detail held/);
-  assert.match(stageHtml, /data-disabled-reason="Stage detail route is held for the owner-trial implementation proof"/);
+  assert.match(stageHtml, /data-disabled-reason="Stage details open after the stage workspace is available\."/);
   assert.equal((stageHtml.match(/data-stage-id=/g) ?? []).length, 4);
   assert.equal((stageHtml.match(/data-stage-state=/g) ?? []).length, 4);
   assert.match(phaseHtml, /data-package-runtime-component="Surface"/);
@@ -214,7 +216,7 @@ test("Operations Cockpit Stage Map and AI Employee Phase render package-backed r
   assert.match(phaseHtml, /data-package-runtime-component="Badge"/);
   assert.match(phaseHtml, /data-package-runtime-component="StatusBadge"/);
   assert.match(phaseHtml, /Role detail held/);
-  assert.match(phaseHtml, /data-disabled-reason="Role detail route is held for a later owner-trial slice"/);
+  assert.match(phaseHtml, /data-disabled-reason="Role details open after the staffing workspace is available\."/);
   assert.equal((phaseHtml.match(/data-phase-stage-id=/g) ?? []).length, 4);
   assert.ok((phaseHtml.match(/data-owner-role=/g) ?? []).length >= 4);
 });
@@ -239,7 +241,7 @@ test("Operations Cockpit summary Gate and Readback cards render package-backed r
   assert.match(gateHtml, /data-package-runtime-component="StateView"/);
   assert.match(gateHtml, /data-package-runtime-component="Button"/);
   assert.match(gateHtml, /Gate request held/);
-  assert.match(gateHtml, /data-disabled-reason="Gate request requires a routed owner-intent or role-gate path"/);
+  assert.match(gateHtml, /data-disabled-reason="Gate requests require an approved action path\."/);
   assert.match(readbackHtml, /data-tcrn-component="ReadbackPanel"/);
   assert.match(readbackHtml, /data-package-runtime-component="ReadbackPanel"/);
   assert.match(readbackHtml, /data-package-runtime-surface="operations-cockpit-gate-readback-cards"/);
@@ -249,7 +251,7 @@ test("Operations Cockpit summary Gate and Readback cards render package-backed r
   assert.match(readbackHtml, /Dependency/);
   assert.match(readbackHtml, /Resource/);
   assert.match(readbackHtml, /Evidence detail held/);
-  assert.match(readbackHtml, /data-disabled-reason="Evidence detail route is held for a later owner-trial slice"/);
+  assert.match(readbackHtml, /data-disabled-reason="Evidence details open from the evidence workspace\."/);
 });
 
 test("Operations Cockpit composed package runtime markup has unique id and resolved aria references", () => {
@@ -325,8 +327,8 @@ test("Operations Cockpit selected detail drawer renders package-backed runtime c
   assert.match(detailHtml, /data-package-runtime-component="Button"/);
   assert.match(detailHtml, /data-detail-list/);
   assert.match(detailHtml, /Selected Detail Readback/);
-  assert.match(detailHtml, /Functional contract readback only; no visual, release, product, dependency-clean, or live-dispatch acceptance/);
-  assert.match(detailHtml, /Gate work order held/);
+  assert.match(detailHtml, /Release and live operations remain disabled in this workspace/);
+  assert.match(detailHtml, /Gate work order/);
 });
 
 test("disabled cockpit navigation exposes held reasons visibly and accessibly", () => {
@@ -342,8 +344,8 @@ test("disabled cockpit navigation exposes held reasons visibly and accessibly", 
       || /data-disabled-reason="[^"]+"/.test(attributes);
     assert.ok(hasReason, `held control exposes a held reason: ${attributes}`);
   }
-  assert.match(html, /Dashboard view is held for a later routed AOS slice/);
-  assert.match(html, /this package-runtime pilot keeps Cockpit available only/);
+  assert.match(html, /Dashboard opens when that AOS workspace is available/);
+  assert.doesNotMatch(html, /this package-runtime pilot keeps Cockpit available only/);
   assert.doesNotMatch(html, /Slice 1 checkpoint/);
   assert.match(html, /data-package-runtime-component="NavItem"/);
   assert.match(html, /data-package-runtime-source="@tcrn\/ui-react"/);
@@ -359,7 +361,7 @@ test("disabled cockpit navigation exposes held reasons visibly and accessibly", 
     assert.ok(describedby, `disabled NavItem exposes aria-describedby: ${item.attributes}`);
     assert.match(item.body, new RegExp(`id="${escapeRegExp(describedby)}"`), "disabled NavItem describes visible reason by id");
     assert.match(item.body, /\btcrn-nav-item__disabled-reason\b/, "disabled NavItem has visible package reason text");
-    assert.match(item.body, /package-runtime pilot keeps Cockpit available only/, "disabled NavItem visible reason is specific to 59AN runtime pilot");
+    assert.match(item.body, /opens when that AOS workspace is available/, "disabled NavItem visible reason is product-facing");
   }
 });
 
@@ -415,6 +417,7 @@ test("AOS visible cockpit copy does not leak raw workflow enum labels", () => {
   assert.doesNotMatch(visibleTextFragments, /\bowner_intent_required\b/);
   assert.doesNotMatch(visibleTextFragments, /\brecord_participant_position\b/);
   assert.doesNotMatch(visibleTextFragments, /\bopen_evidence_metadata\b/);
+  assert.doesNotMatch(visibleText(html), /package-runtime pilot|owner-trial|proof required|external proof required|not claimed|functional contract readback only|held for later routed AOS slice/i);
 });
 
 function disabledNavItemReadbacks(html) {
@@ -469,4 +472,13 @@ function parseAttributes(raw) {
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function visibleText(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }

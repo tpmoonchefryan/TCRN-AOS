@@ -61,7 +61,7 @@ const rawVisibleCopyHits = [
   "open_evidence_metadata"
 ].filter((phrase) => visibleTextFragments.includes(phrase));
 const mockupReferenceCopyBoundary = baselinePaths.some((path) => path.startsWith("apps/web/mockup/"));
-const designSystemBridgeOk = html.includes('data-design-system-consumer="tokens_copy_state_ui_react_operations_cockpit_runtime_pilot"')
+const designSystemBridgeOk = html.includes('data-design-system-consumer="tokens_copy_state_ui_react_product_frontend_rebuild"')
   && html.includes('data-design-system-tokens="@tcrn/ui-tokens"')
   && html.includes('data-design-system-copy-state="@tcrn/ui-copy-state"')
   && html.includes('data-design-system-ui-react="@tcrn/ui-react"')
@@ -92,16 +92,16 @@ const designSystemBridgeOk = html.includes('data-design-system-consumer="tokens_
   && html.includes("--tcrn-color-brand-primary")
   && aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering === true
-  && aosDesignSystemConsumerBridge.uiReactRuntimeSurface === "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_completion"
+  && aosDesignSystemConsumerBridge.uiReactRuntimeSurface === "aos_product_frontend_rebuilt_registered_design_system_runtime"
   && Boolean(aosDesignSystemTokenReadback.brandPrimary);
 const ok = aggregateDigest === slice4bBaselineDigest
   && selectorProof.every((item) => item.present)
   && forbiddenHits.length === 0
   && rawVisibleCopyHits.length === 0
-  && html.includes("Local checkpoint observed")
-  && html.includes("Static fixture readback")
+  && html.includes("Workspace status")
+  && html.includes("Local service snapshot")
   && html.includes('data-service-backed="false"')
-  && html.includes("Gate work order held")
+  && html.includes("Gate work order")
   && html.includes("data-refresh-readback")
   && mockupReferenceCopyBoundary
   && designSystemBridgeOk;

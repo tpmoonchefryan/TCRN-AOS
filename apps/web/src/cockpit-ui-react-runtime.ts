@@ -27,7 +27,10 @@ import {
   type KeyValueItem,
   type WorkIndexRow
 } from "@tcrn/ui-react";
-import { aosDesignSystemConsumerBridge } from "./design-system-bridge.js";
+import {
+  aosDesignSystemConsumerBridge,
+  presentAosCopyState
+} from "./design-system-bridge.js";
 
 export const aosCockpitUiReactRuntime = {
   packageName: "@tcrn/ui-react",
@@ -771,7 +774,7 @@ export function renderCockpitRuntimeStagePhaseCards(options: CockpitRuntimeStage
 
 export function renderCockpitRuntimeGateWorkOrderCard(options: CockpitRuntimeGateWorkOrderOptions): string {
   const state = {
-    state: "proof_required",
+    ...presentAosCopyState("unavailable"),
     label: "Gate Work Order",
     description: options.gateSummary
   } as ComponentProps<typeof GateReadinessPanel>["state"];

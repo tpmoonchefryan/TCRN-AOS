@@ -633,7 +633,7 @@ function inspectShellSidebarRuntime(html) {
   if (navGroupAttributes["data-package-runtime-component"] !== "NavGroup") failures.push("nav_group_missing_runtime_marker");
   if (navGroupAttributes["data-package-runtime-scope"] !== "operations-cockpit-navitem") failures.push("nav_group_scope_missing");
   if (!/Primary cockpit views/.test(sidebarHtml)) failures.push("nav_group_label_missing");
-  if (!/Local posture recorded/.test(sidebarHtml)) failures.push("sidebar_footer_copy_missing");
+  if (!/Local operations posture recorded/.test(sidebarHtml)) failures.push("sidebar_footer_copy_missing");
   if (!/data-package-runtime-component="Text"/.test(sidebarHtml)) failures.push("sidebar_footer_text_runtime_missing");
 
   const markerOnlyComponents = Array.from(sidebarHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)([^>]*)>/g))
@@ -682,8 +682,8 @@ function inspectClaimRiskEvidenceStripRuntime(html) {
   if ((claimHtml.match(/data-claim-key=/g) ?? []).length !== 3) failures.push("claim_strip_claim_keys_missing");
   if ((riskHtml.match(/data-risk-id=/g) ?? []).length !== 4) failures.push("risk_lane_risk_ids_missing");
   if ((riskHtml.match(/data-risk-summary=/g) ?? []).length !== 4) failures.push("risk_lane_summaries_missing");
-  if (!/External proof required/.test(claimHtml)) failures.push("claim_strip_release_boundary_missing");
-  if (!/Unavailable: live dispatch/.test(claimHtml)) failures.push("claim_strip_live_dispatch_boundary_missing");
+  if (!/Evidence review pending/.test(claimHtml)) failures.push("claim_strip_release_boundary_missing");
+  if (!/Live operations disabled/.test(claimHtml)) failures.push("claim_strip_live_dispatch_boundary_missing");
   if (!/Review required|Blocked|Not applicable|Accepted with residual risk/.test(riskHtml)) failures.push("risk_lane_state_copy_missing");
   const markerOnlyComponents = Array.from(combinedHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)([^>]*)>/g))
     .map((match) => ({ tag: match[1], component: match[2] }));
@@ -827,8 +827,8 @@ function inspectStagePhaseRuntime(html) {
   if (stageCount !== 4) failures.push("stage_map_stage_count_mismatch");
   if (phaseRowCount !== 4) failures.push("ai_employee_phase_row_count_mismatch");
   if ((combinedHtml.match(/data-package-runtime-component="Button"/g) ?? []).length !== 2) failures.push("stage_phase_disabled_button_count_mismatch");
-  if (!/data-disabled-reason="Stage detail route is held/.test(combinedHtml)) failures.push("stage_detail_disabled_reason_missing");
-  if (!/data-disabled-reason="Role detail route is held/.test(combinedHtml)) failures.push("role_detail_disabled_reason_missing");
+  if (!/data-disabled-reason="Stage details open after the stage workspace is available\./.test(combinedHtml)) failures.push("stage_detail_disabled_reason_missing");
+  if (!/data-disabled-reason="Role details open after the staffing workspace is available\./.test(combinedHtml)) failures.push("role_detail_disabled_reason_missing");
   return {
     ok: failures.length === 0,
     surface: "operations-cockpit-stage-phase",

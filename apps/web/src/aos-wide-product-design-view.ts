@@ -194,7 +194,7 @@ let activeFilter = "all";
 
 function copyState(value) {
   if (value === "review_required") return "review required";
-  if (value === "pending_external_proof") return "external proof required";
+  if (value === "pending_external_proof") return "evidence review pending";
   return value.replaceAll("_", " ");
 }
 

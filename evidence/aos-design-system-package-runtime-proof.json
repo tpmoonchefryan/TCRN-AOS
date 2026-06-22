@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "route": "route_tcrn_aos_design_system_frontend_rebuild_59ax_aos_wide_product_design_target_set_package_runtime_adoption_implementation",
-  "sourceHead": "59357a5cc7610f6f1d45aecf2deacd7ed4c96808",
+  "route": "route_tcrn_aos_design_system_frontend_full_rebuild_planning_and_implementation_packet",
+  "sourceHead": "b7ff63ae3e53294e3a2904afdb9c8c5be306bf11",
   "claimScope": {
-    "implementationKind": "operations_cockpit_package_runtime_completion_plus_docs_readiness_and_aos_wide_target_set_package_runtime_adoption",
-    "packageBackedReactRuntimeRendering": "operations_cockpit_completion_docs_readiness_and_aos_wide_target_set_runtime_adoption",
+    "implementationKind": "aos_product_frontend_rebuilt_registered_design_system_runtime",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild",
     "storybookVisualStyleParity": "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_claim_risk_shell_sidebar_typography_docs_readiness_and_aos_wide_component_reference_only",
     "broadUiReactRuntimeMigration": false,
     "docsReadinessPackageRuntimeRendering": true,
@@ -16,9 +16,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "59357a5cc7610f6f1d45aecf2deacd7ed4c96808",
+    "sourceHeadAtProofRun": "b7ff63ae3e53294e3a2904afdb9c8c5be306bf11",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "efb219a5073b2a19a412abd62430072efa87e62dc4569f0315d06dd53b03cbfc",
+    "sourceContentDigest": "ed6e2a9c33fc74ce1e805e1e8b1b5ea36ade9d66086074f3e0d07dfdb522be99",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
@@ -44,7 +44,7 @@
     "sourceHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
     "uiReactPackage": "@tcrn/ui-react",
     "uiReactPackageSpecifier": "file:../TCRN-Design-System/packages/ui-react",
-    "runtimeSurface": "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_completion",
+    "runtimeSurface": "aos_product_frontend_rebuilt_registered_design_system_runtime",
     "runtimeComponentScope": [
       "NavItem",
       "SideNav",
@@ -155,7 +155,7 @@
     "brandLockupRegionPresent": true,
     "sidebarRegionPresent": true,
     "footerReadback": true,
-    "sampleRenderedHtmlSha256": "5e0be6cea9527b2d7c94c07e83ae4796da9ea881672d0baaac05fb0a2c2058fb",
+    "sampleRenderedHtmlSha256": "cc7ef5c3421d1fe76bc7d331c8e5689fd571fb488e3f4dc39ce95c8357a2cbb7",
     "failures": []
   },
   "claimRiskEvidenceStripRuntimeReadback": {
@@ -188,7 +188,7 @@
     ],
     "markerOnlyComponents": [],
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "a7dabbdb721ecee72290f98e135227b15b3773ede97ff805515872d3353a3b4d",
+    "sampleRenderedHtmlSha256": "79c309f86321022b61196ee137bcfab6e5a73a0063f872173d0d0614937275aa",
     "failures": []
   },
   "topbarCheckpointRuntimeReadback": {
@@ -223,7 +223,7 @@
     "refreshButtonPresent": true,
     "profileIconButtonPresent": true,
     "markerOnlyComponents": [],
-    "sampleRenderedHtmlSha256": "5fc9f6c9a0bfdd0bc96d9392665e1c31a7aa37b3f7d17b20de5e156debb71d2d",
+    "sampleRenderedHtmlSha256": "e79b106933e86df3582403db9b151f22d93290f83be26b83141bfa729158456a",
     "failures": []
   },
   "navRuntimeReadback": {
@@ -327,7 +327,7 @@
     "selectedStoryId": "story_daa1ed285030dd27",
     "keyValueRowCount": 10,
     "disabledActionButtonCount": 2,
-    "sampleRenderedHtmlSha256": "b27a16344d71d8b46c79184bdb1ceef5931d91131475ec974eee835a76aa82f0",
+    "sampleRenderedHtmlSha256": "c03534d14076688d3e4e28ef13670588dc3caa2172c99069fd7013bf0b219552",
     "failures": []
   },
   "gateReadbackCardsRuntimeReadback": {
@@ -361,7 +361,7 @@
     "readbackPostureComponent": "ReadbackPanel",
     "disabledActionButtonCount": 2,
     "readbackKeyValueRowCount": 4,
-    "sampleRenderedHtmlSha256": "cf331ac79ff8df4421da2b5a315fcd2fa9a993f909b27c0d56b6844fdec51fdf",
+    "sampleRenderedHtmlSha256": "1a611339cef924f51767e64dae072c1eb506830f41d92f36aecb488fa3c0a096",
     "failures": []
   },
   "stagePhaseRuntimeReadback": {
@@ -530,7 +530,7 @@
     "activeNavItemCount": 1,
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "a70e493c9e2f4ef9adcadda733ff59db971cf9339907c5912cda9d458dd61074",
+    "sampleRenderedHtmlSha256": "e5507f4e6803bb57d2dc39f476a001e6d02d847090de6f5263c789a1b7f987fd",
     "failures": []
   },
   "aosWideTargetSetRuntimeReadback": {
@@ -598,7 +598,7 @@
     "disabledButtonFailures": [],
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "1ad1357aa293afd2da1468dcfacb63af882b1680cbee0b9e90184ee28351bc63",
+    "sampleRenderedHtmlSha256": "ec04eb3cc8ee3b747f65aa0bf106b62ffc0664d4d93e56f7c6a303007a62f798",
     "failures": []
   },
   "fullDocumentAccessibilityReadback": {

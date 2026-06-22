@@ -1,16 +1,16 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_rebuild_59aw_docs_readiness_package_runtime_adoption_implementation",
-  "sourceHead": "59357a5cc7610f6f1d45aecf2deacd7ed4c96808",
+  "sourceHead": "b7ff63ae3e53294e3a2904afdb9c8c5be306bf11",
   "checkpoint": {
     "workflowPacketBasis": "624127182da417f65c790de155e3297e77828181",
     "preImplementationBasis": "9d7980f46245bb783b520c9f90945da8609c01ce",
-    "localCheckpoint": "slice-9b-visible-readiness-inspection"
+    "localCheckpoint": "docs-readiness-local-inspection"
   },
   "staticRender": {
     "path": "apps/web/static/docs-search-release-readiness.html",
-    "bytes": 39088,
-    "sha256": "1fee55dd010455eae7c782c0e3e86b11e6a2a75fe2301d2169744e8b31283ee5",
+    "bytes": 37690,
+    "sha256": "13a40530ff5e8c60dbec9970a4dd12b5482468dce48909fc8030ee394233c4bf",
     "docsSearchReleaseSurfacesVisible": true,
     "selectorProof": [
       {
@@ -54,9 +54,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_docs_readiness_browser_receipts",
-    "sourceHeadAtProofRun": "59357a5cc7610f6f1d45aecf2deacd7ed4c96808",
+    "sourceHeadAtProofRun": "b7ff63ae3e53294e3a2904afdb9c8c5be306bf11",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "9bb5b9077b5973ee27eef2be7b823948e5fc98819b845a3f378e09909b9eef9f",
+    "sourceContentDigest": "476d45108429bbb6ca269570d9de4d461452ed52d66fe4bc97d3df282806d32a",
     "sourcePaths": [
       "apps/web/src/docs-readiness-ui-react-runtime.ts",
       "apps/web/src/docs-readiness-view.ts",
@@ -109,29 +109,29 @@
     "requestFailures": [],
     "screenshots": [
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/desktop-1440x900-initial.png",
-        "sha256": "26df71d6be1fb9f69fe52d640017721142c7c9e70a3be4425e14fda691c10f4a",
-        "bytes": 227102
+        "file": "evidence/slice-9b-visible-readiness-browser/b7ff63ae3e53294e3a2904afdb9c8c5be306bf11/desktop-1440x900-initial.png",
+        "sha256": "8880a1c25d8ce2b9020cd5e60c818d2ec35b088456f95b37af592f4b325024ee",
+        "bytes": 188851
       },
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/desktop-1440x900-search-github.png",
-        "sha256": "11662a8d664b8370ffe53be059bc4729fb7ca0042d85c12d9bf9ed18d2ab94fe",
-        "bytes": 207562
+        "file": "evidence/slice-9b-visible-readiness-browser/b7ff63ae3e53294e3a2904afdb9c8c5be306bf11/desktop-1440x900-search-github.png",
+        "sha256": "fed80d50862acd347c45c9ac933b758b13beed35b2e857a37cb08db5ce0a4ca4",
+        "bytes": 167869
       },
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/desktop-1440x900-search-empty.png",
-        "sha256": "3e779157e8c5cda4bd82832350ae98f986f5d53e382e5c86ef0b021fda71bbff",
-        "bytes": 212150
+        "file": "evidence/slice-9b-visible-readiness-browser/b7ff63ae3e53294e3a2904afdb9c8c5be306bf11/desktop-1440x900-search-empty.png",
+        "sha256": "af18127efb72b1720e7d285d9d75fb588dd01940d43328d58950c5c81f2128d2",
+        "bytes": 172420
       },
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/mobile-390x844-initial.png",
-        "sha256": "58bae22def0c41dfe20af4ef60187e82f780a36336bdaaf923c7e15282d5b14f",
-        "bytes": 205153
+        "file": "evidence/slice-9b-visible-readiness-browser/b7ff63ae3e53294e3a2904afdb9c8c5be306bf11/mobile-390x844-initial.png",
+        "sha256": "128ae8c2d72f882fe8ebabe3b1e08fb378ec4cac3a3e208933d1f5742e3fc5a2",
+        "bytes": 167788
       },
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/mobile-390x844-search-candidate.png",
-        "sha256": "b216f234a33da91f727f6e23c5fed0155f07e3c802950a77fa832c33c20973a2",
-        "bytes": 199545
+        "file": "evidence/slice-9b-visible-readiness-browser/b7ff63ae3e53294e3a2904afdb9c8c5be306bf11/mobile-390x844-search-candidate.png",
+        "sha256": "7355ff180dbcf9a212fdec518af48b786be5c92f222ab327df337d1e1feb12f1",
+        "bytes": 161221
       }
     ],
     "viewportReadbacks": [
@@ -211,15 +211,15 @@
             "present": true,
             "display": "flex",
             "rect": {
-              "left": 903.25,
+              "left": 1020.484375,
               "right": 1422,
               "top": 105.59375,
               "bottom": 135.59375,
-              "width": 518.75,
+              "width": 401.515625,
               "height": 30
             },
-            "scrollWidth": 519,
-            "clientWidth": 519
+            "scrollWidth": 402,
+            "clientWidth": 402
           },
           {
             "region": "docs-readiness-board",
@@ -293,7 +293,7 @@
               "width": 295,
               "height": 219.5
             },
-            "scrollWidth": 413,
+            "scrollWidth": 293,
             "clientWidth": 293
           },
           {
@@ -308,7 +308,7 @@
               "width": 336,
               "height": 495
             },
-            "scrollWidth": 434,
+            "scrollWidth": 335,
             "clientWidth": 335
           }
         ],
@@ -394,15 +394,15 @@
             "present": true,
             "display": "flex",
             "rect": {
-              "left": 903.25,
+              "left": 1020.484375,
               "right": 1422,
               "top": 105.59375,
               "bottom": 135.59375,
-              "width": 518.75,
+              "width": 401.515625,
               "height": 30
             },
-            "scrollWidth": 519,
-            "clientWidth": 519
+            "scrollWidth": 402,
+            "clientWidth": 402
           },
           {
             "region": "docs-readiness-board",
@@ -471,12 +471,12 @@
             "rect": {
               "left": 1106,
               "right": 1401,
-              "top": 622.09375,
-              "bottom": 841.59375,
+              "top": 606.09375,
+              "bottom": 825.59375,
               "width": 295,
               "height": 219.5
             },
-            "scrollWidth": 413,
+            "scrollWidth": 293,
             "clientWidth": 293
           },
           {
@@ -487,11 +487,11 @@
               "left": 1086,
               "right": 1422,
               "top": 367.59375,
-              "bottom": 862.59375,
+              "bottom": 846.59375,
               "width": 336,
-              "height": 495
+              "height": 479
             },
-            "scrollWidth": 434,
+            "scrollWidth": 335,
             "clientWidth": 335
           }
         ],
@@ -577,15 +577,15 @@
             "present": true,
             "display": "flex",
             "rect": {
-              "left": 903.25,
+              "left": 1020.484375,
               "right": 1422,
               "top": 105.59375,
               "bottom": 135.59375,
-              "width": 518.75,
+              "width": 401.515625,
               "height": 30
             },
-            "scrollWidth": 519,
-            "clientWidth": 519
+            "scrollWidth": 402,
+            "clientWidth": 402
           },
           {
             "region": "docs-readiness-board",
@@ -654,12 +654,12 @@
             "rect": {
               "left": 1106,
               "right": 1401,
-              "top": 622.09375,
-              "bottom": 841.59375,
+              "top": 606.09375,
+              "bottom": 825.59375,
               "width": 295,
               "height": 219.5
             },
-            "scrollWidth": 413,
+            "scrollWidth": 293,
             "clientWidth": 293
           },
           {
@@ -670,11 +670,11 @@
               "left": 1086,
               "right": 1422,
               "top": 367.59375,
-              "bottom": 862.59375,
+              "bottom": 846.59375,
               "width": 336,
-              "height": 495
+              "height": 479
             },
-            "scrollWidth": 434,
+            "scrollWidth": 335,
             "clientWidth": 335
           }
         ],
@@ -733,9 +733,9 @@
               "left": 0,
               "right": 390,
               "top": 0,
-              "bottom": 2914,
+              "bottom": 2761,
               "width": 390,
-              "height": 2914
+              "height": 2761
             },
             "scrollWidth": 390,
             "clientWidth": 390
@@ -762,8 +762,8 @@
             "rect": {
               "left": 12,
               "right": 378,
-              "top": 1000,
-              "bottom": 1068,
+              "top": 835,
+              "bottom": 903,
               "width": 366,
               "height": 68
             },
@@ -777,8 +777,8 @@
             "rect": {
               "left": 12,
               "right": 378,
-              "top": 1086,
-              "bottom": 1270,
+              "top": 921,
+              "bottom": 1105,
               "width": 366,
               "height": 184
             },
@@ -792,8 +792,8 @@
             "rect": {
               "left": 12,
               "right": 378,
-              "top": 1283,
-              "bottom": 1467,
+              "top": 1118,
+              "bottom": 1302,
               "width": 366,
               "height": 184
             },
@@ -807,8 +807,8 @@
             "rect": {
               "left": 12,
               "right": 378,
-              "top": 1480,
-              "bottom": 1664,
+              "top": 1315,
+              "bottom": 1499,
               "width": 366,
               "height": 184
             },
@@ -822,8 +822,8 @@
             "rect": {
               "left": 12,
               "right": 378,
-              "top": 1677,
-              "bottom": 1861,
+              "top": 1512,
+              "bottom": 1696,
               "width": 366,
               "height": 184
             },
@@ -837,10 +837,10 @@
             "rect": {
               "left": 33,
               "right": 357,
-              "top": 2629.5,
-              "bottom": 2865,
+              "top": 2508.5,
+              "bottom": 2712,
               "width": 324,
-              "height": 235.5
+              "height": 203.5
             },
             "scrollWidth": 322,
             "clientWidth": 322
@@ -852,10 +852,10 @@
             "rect": {
               "left": 12,
               "right": 378,
-              "top": 2375,
-              "bottom": 2886,
+              "top": 2254,
+              "bottom": 2733,
               "width": 366,
-              "height": 511
+              "height": 479
             },
             "scrollWidth": 364,
             "clientWidth": 364
@@ -915,10 +915,10 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -1784,
-              "bottom": 1002,
+              "top": -1663,
+              "bottom": 970,
               "width": 390,
-              "height": 2786
+              "height": 2633
             },
             "scrollWidth": 390,
             "clientWidth": 390
@@ -930,8 +930,8 @@
             "rect": {
               "left": 14,
               "right": 376,
-              "top": -1766,
-              "bottom": -1724,
+              "top": -1645,
+              "bottom": -1603,
               "width": 362,
               "height": 42
             },
@@ -945,8 +945,8 @@
             "rect": {
               "left": 12,
               "right": 378,
-              "top": -784,
-              "bottom": -716,
+              "top": -828,
+              "bottom": -760,
               "width": 366,
               "height": 68
             },
@@ -960,8 +960,8 @@
             "rect": {
               "left": 12,
               "right": 378,
-              "top": -698,
-              "bottom": -514,
+              "top": -742,
+              "bottom": -558,
               "width": 366,
               "height": 184
             },
@@ -975,8 +975,8 @@
             "rect": {
               "left": 12,
               "right": 378,
-              "top": -501,
-              "bottom": -317,
+              "top": -545,
+              "bottom": -361,
               "width": 366,
               "height": 184
             },
@@ -990,8 +990,8 @@
             "rect": {
               "left": 12,
               "right": 378,
-              "top": -304,
-              "bottom": -120,
+              "top": -348,
+              "bottom": -164,
               "width": 366,
               "height": 184
             },
@@ -1005,8 +1005,8 @@
             "rect": {
               "left": 12,
               "right": 378,
-              "top": -107,
-              "bottom": 77,
+              "top": -151,
+              "bottom": 33,
               "width": 366,
               "height": 184
             },
@@ -1021,9 +1021,9 @@
               "left": 33,
               "right": 357,
               "top": 717.5,
-              "bottom": 953,
+              "bottom": 921,
               "width": 324,
-              "height": 235.5
+              "height": 203.5
             },
             "scrollWidth": 322,
             "clientWidth": 322
@@ -1036,17 +1036,17 @@
               "left": 12,
               "right": 378,
               "top": 447,
-              "bottom": 974,
+              "bottom": 942,
               "width": 366,
-              "height": 527
+              "height": 495
             },
             "scrollWidth": 364,
             "clientWidth": 364
           }
         ],
         "visibleRows": 1,
-        "selectedDetail": "slice-9b-local-candidate",
-        "expectedSelectedDetail": "slice-9b-local-candidate",
+        "selectedDetail": "local-release-candidate",
+        "expectedSelectedDetail": "local-release-candidate",
         "emptyStateVisible": false,
         "forbiddenHits": []
       }

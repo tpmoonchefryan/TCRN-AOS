@@ -38,7 +38,7 @@ import {
 } from "../dist/apps/web/src/cockpit-view.js";
 
 const repoRoot = process.cwd();
-const route = "route_tcrn_aos_design_system_frontend_rebuild_59ax_aos_wide_product_design_target_set_package_runtime_adoption_implementation";
+const route = "route_tcrn_aos_design_system_frontend_full_rebuild_planning_and_implementation_packet";
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const packageJson = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8"));
 const runtimeSourcePath = "apps/web/src/cockpit-ui-react-runtime.ts";
@@ -103,8 +103,8 @@ const summary = {
   route,
   sourceHead,
   claimScope: {
-    implementationKind: "operations_cockpit_package_runtime_completion_plus_docs_readiness_and_aos_wide_target_set_package_runtime_adoption",
-    packageBackedReactRuntimeRendering: "operations_cockpit_completion_docs_readiness_and_aos_wide_target_set_runtime_adoption",
+    implementationKind: "aos_product_frontend_rebuilt_registered_design_system_runtime",
+    packageBackedReactRuntimeRendering: "operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild",
     storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_claim_risk_shell_sidebar_typography_docs_readiness_and_aos_wide_component_reference_only",
     broadUiReactRuntimeMigration: false,
     docsReadinessPackageRuntimeRendering: true,
@@ -370,7 +370,7 @@ function inspectPackageRuntimeShellSidebar(html) {
   if (navGroupAttributes["data-package-runtime-scope"] !== "operations-cockpit-navitem") failures.push("nav_group_scope_missing");
   if (navGroupAttributes["data-navigation-primitive"] !== "nav-group") failures.push("nav_group_primitive_missing");
   if (!/Primary cockpit views/.test(sidebarHtml)) failures.push("nav_group_label_missing");
-  if (!/Local posture recorded/.test(sidebarHtml)) failures.push("sidebar_footer_copy_missing");
+  if (!/Local operations posture recorded/.test(sidebarHtml)) failures.push("sidebar_footer_copy_missing");
   if (!/data-package-runtime-component="Text"/.test(sidebarHtml)) failures.push("sidebar_footer_text_runtime_missing");
 
   const navItems = Array.from(sidebarHtml.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g));
@@ -384,7 +384,7 @@ function inspectPackageRuntimeShellSidebar(html) {
     brandHref: "#cockpit",
     brandPrimaryLabel: "TCRN",
     brandSecondaryLabel: "AOS",
-    footerLabel: "Local posture recorded",
+    footerLabel: "Local operations posture recorded",
     navItems: [
       {
         active: false,
@@ -408,7 +408,7 @@ function inspectPackageRuntimeShellSidebar(html) {
     markerOnlyComponents,
     brandLockupRegionPresent: Boolean(brandAttributes["data-region"]),
     sidebarRegionPresent: Boolean(sidebarAttributes["data-region"]),
-    footerReadback: /Local posture recorded/.test(sidebarHtml),
+    footerReadback: /Local operations posture recorded/.test(sidebarHtml),
     sampleRenderedHtmlSha256,
     failures
   };
@@ -449,9 +449,9 @@ function inspectPackageRuntimeClaimRiskStrips(html) {
   if ((riskHtml.match(/data-risk-id=/g) ?? []).length !== 4) failures.push("risk_lane_risk_ids_missing");
   if ((riskHtml.match(/data-risk-owner-role=/g) ?? []).length !== 4) failures.push("risk_lane_owner_roles_missing");
   if ((riskHtml.match(/data-risk-summary=/g) ?? []).length !== 4) failures.push("risk_lane_summaries_missing");
-  if (!/External proof required/.test(claimHtml)) failures.push("claim_strip_release_boundary_missing");
-  if (!/Not claimed/.test(claimHtml)) failures.push("claim_strip_product_design_boundary_missing");
-  if (!/Unavailable: live dispatch/.test(claimHtml)) failures.push("claim_strip_live_dispatch_boundary_missing");
+  if (!/Evidence review pending/.test(claimHtml)) failures.push("claim_strip_release_boundary_missing");
+  if (!/Not enabled/.test(claimHtml)) failures.push("claim_strip_product_design_boundary_missing");
+  if (!/Live operations disabled/.test(claimHtml)) failures.push("claim_strip_live_dispatch_boundary_missing");
   if (!/Review required|Blocked|Not applicable|Accepted with residual risk/.test(riskHtml)) failures.push("risk_lane_warning_state_missing");
 
   const markerOnlyComponents = Array.from(combinedHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)([^>]*)>/g))
@@ -470,9 +470,9 @@ function inspectPackageRuntimeClaimRiskStrips(html) {
 
   const sampleRenderedHtmlSha256 = createHash("sha256").update(renderCockpitRuntimeClaimRiskStrips({
     claims: [
-      { key: "release-readiness", label: "External proof required", state: "external_proof_needed", variant: "status" },
-      { key: "product-design-visual", label: "Not claimed", state: "not_claimed", variant: "status" },
-      { key: "live-dispatch", label: "Unavailable: live dispatch", state: "unavailable", variant: "badge" }
+      { key: "release-readiness", label: "Evidence review pending", state: "external_proof_needed", variant: "status" },
+      { key: "product-design-visual", label: "Not enabled", state: "not_claimed", variant: "status" },
+      { key: "live-dispatch", label: "Live operations disabled", state: "unavailable", variant: "badge" }
     ],
     riskWarnings: [
       {
@@ -550,7 +550,7 @@ function inspectPackageRuntimeTopbarCheckpoint(html) {
   const checkpointHtml = extractSectionHtml(topbarHtml, "checkpoint-strip");
   if (!checkpointHtml) failures.push("checkpoint_strip_missing");
   if (checkpointHtml && !/data-package-runtime-component="ReadbackPanel"/.test(checkpointHtml)) failures.push("checkpoint_missing_readback_panel_runtime_marker");
-  if (checkpointHtml && !/Local checkpoint observed/.test(checkpointHtml)) failures.push("checkpoint_label_missing");
+  if (checkpointHtml && !/Workspace status/.test(checkpointHtml)) failures.push("checkpoint_label_missing");
   if (checkpointHtml && !/data-local-checkpoint/.test(checkpointHtml)) failures.push("checkpoint_value_missing");
   if (checkpointHtml && !/data-package-runtime-component="StatusBadge"/.test(checkpointHtml)) failures.push("checkpoint_freshness_status_badge_missing");
   if (checkpointHtml && !/data-readback-freshness/.test(checkpointHtml)) failures.push("checkpoint_freshness_readback_missing");
@@ -561,7 +561,7 @@ function inspectPackageRuntimeTopbarCheckpoint(html) {
   if (!refreshButton) failures.push("refresh_readback_button_missing");
   const refreshAttrs = parseAttributes(refreshButton?.[1] ?? "");
   if (refreshButton && refreshAttrs["data-package-runtime-component"] !== "Button") failures.push("refresh_readback_button_missing_runtime_marker");
-  if (refreshButton && !/Refresh readback/.test(refreshButton[2])) failures.push("refresh_readback_button_label_missing");
+  if (refreshButton && !/Refresh status/.test(refreshButton[2])) failures.push("refresh_readback_button_label_missing");
 
   const profileButton = topbarHtml.match(/<button\b(?=[^>]*aria-label="Current operator")([^>]*)>([\s\S]*?)<\/button>/);
   if (!profileButton) failures.push("profile_icon_button_missing");
@@ -574,13 +574,13 @@ function inspectPackageRuntimeTopbarCheckpoint(html) {
   if (markerOnlyComponents.length > 0) failures.push("topbar_checkpoint_marker_only_runtime_claim_present");
 
   const sampleRenderedHtmlSha256 = createHash("sha256").update(renderCockpitRuntimeTopbarCheckpoint({
-    checkpointLabel: "Local checkpoint observed",
-    checkpointValue: "sample-checkpoint",
+    checkpointLabel: "Workspace status",
+    checkpointValue: "Operations cockpit ready",
     freshnessLabel: "Readback current",
     operatorLabel: "RL",
     projectId: "TCRN-AOS",
     projectOptions: ["TCRN-AOS", "TCRN-TMS"],
-    refreshLabel: "Refresh readback",
+    refreshLabel: "Refresh status",
     serviceReadbackLabel: "1 work / 2 gates / detail story",
     serviceStatusLabel: "static fixture"
   })).digest("hex");
@@ -800,7 +800,7 @@ function inspectPackageRuntimeDetailDrawer(html) {
     failures.push("detail_drawer_key_value_rows_missing");
   }
   if (!/Selected Detail Readback/.test(detailHtml)) failures.push("detail_drawer_readback_surface_missing");
-  if (!/Functional contract readback only; no visual, release, product, dependency-clean, or live-dispatch acceptance/.test(detailHtml)) {
+  if (!/Release and live operations remain disabled in this workspace/.test(detailHtml)) {
     failures.push("detail_drawer_no_overclaim_copy_missing");
   }
 
@@ -825,12 +825,12 @@ function inspectPackageRuntimeDetailDrawer(html) {
       { key: "selected", label: "Selected", value: "Story readback / sample_story" },
       { key: "evidence", label: "Evidence", value: "Metadata only" }
     ],
-    noOverclaimSummary: "No product, final, release, live dispatch, or Owner Intent execution is claimed.",
-    operatingLoopSummary: "Selected detail uses service-backed local readback only.",
-    primaryActionDisabledReason: "Gate work order execution is held outside this UI slice",
-    primaryActionLabel: "Gate work order held",
-    secondaryActionDisabledReason: "Rework request execution requires a routed owner-trial action",
-    secondaryActionLabel: "Rework request held",
+    noOverclaimSummary: "Release and live operations remain disabled in this workspace.",
+    operatingLoopSummary: "Selected detail uses the service-backed work model.",
+    primaryActionDisabledReason: "Gate work order execution requires approved action authority.",
+    primaryActionLabel: "Gate work order",
+    secondaryActionDisabledReason: "Rework requests require approved action authority.",
+    secondaryActionLabel: "Request rework",
     selectedId: "sample_story",
     selectedType: "story",
     selectedTypeLabel: "Story readback",
@@ -922,8 +922,8 @@ function inspectPackageRuntimeGateReadbackCards(html) {
       disabledReason: "Sample gate request disabled reason.",
       gateModeLabel: "Owner Intent separated",
       gateOwnerRole: "owner",
-      gateStatusLabel: "Proof required",
-      gateSummary: "Owner Intent gate: Proof required; Owner Intent separated.",
+      gateStatusLabel: "Owner Intent required",
+      gateSummary: "Owner Intent gate: Owner Intent required; Owner Intent separated.",
       gateTypeLabel: "Owner Intent gate"
     },
     readbackPosture: {
@@ -931,7 +931,7 @@ function inspectPackageRuntimeGateReadbackCards(html) {
       disabledReason: "Sample evidence detail disabled reason.",
       evidenceLabel: "Readback current",
       resourceLabel: "Review required",
-      runtimeFixtureLabel: "Static fixture readback"
+      runtimeFixtureLabel: "Local service snapshot"
     }
   })).digest("hex");
 
@@ -1241,10 +1241,10 @@ function inspectDocsReadinessRuntime(html) {
   if (!mainHtml.includes('data-package-runtime-subcomponent="SearchInput.control"')) failures.push("docs_readiness_search_input_control_missing");
   if (mainHtml.includes('data-package-runtime-component="Input"')) failures.push("docs_readiness_input_scope_overclaim_present");
   if (!mainHtml.includes("data-detail-title")) failures.push("docs_readiness_detail_title_hook_missing");
-  if (!mainHtml.includes("publication not executed")) failures.push("docs_readiness_publication_boundary_copy_missing");
-  if (!mainHtml.includes("release creation not executed")) failures.push("docs_readiness_release_boundary_copy_missing");
+  if (!mainHtml.includes("Drafts stay local")) failures.push("docs_readiness_local_draft_copy_missing");
+  if (!mainHtml.includes("Release actions disabled")) failures.push("docs_readiness_release_action_copy_missing");
   if (!mainHtml.includes("GitHub / PR CI")) failures.push("docs_readiness_github_panel_missing");
-  if (!mainHtml.includes("release proof required")) failures.push("docs_readiness_release_proof_copy_missing");
+  if (!mainHtml.includes("release review pending") || !mainHtml.includes("review needed")) failures.push("docs_readiness_release_review_copy_missing");
 
   const forbiddenClaimHits = [
     "docs published",
@@ -1387,8 +1387,8 @@ function inspectAosWideTargetSetRuntime(html) {
   if (!mainHtml.includes('data-package-runtime-subcomponent="SearchInput.control"')) failures.push("aos_wide_search_input_control_missing");
   if (mainHtml.includes('data-package-runtime-component="Input"')) failures.push("aos_wide_input_scope_overclaim_present");
   if (!mainHtml.includes("data-detail-title")) failures.push("aos_wide_detail_title_hook_missing");
-  if (!mainHtml.includes("AOS-wide acceptance")) failures.push("aos_wide_evidence_readback_missing");
-  if (!mainHtml.includes("Target set package runtime")) failures.push("aos_wide_claim_strip_runtime_copy_missing");
+  if (!mainHtml.includes("Review posture")) failures.push("aos_wide_evidence_readback_missing");
+  if (!mainHtml.includes("Registered Design System UI")) failures.push("aos_wide_claim_strip_runtime_copy_missing");
 
   const forbiddenClaimHits = [
     "aos-wide product design accepted",
@@ -1513,7 +1513,7 @@ function inspectAosRuntimeStyleContract(html) {
   const failures = [];
   const hasSrOnlyRule = /\.tcrn-sr-only\s*\{[^}]*position:\s*absolute;[^}]*width:\s*1px;[^}]*height:\s*1px;[^}]*overflow:\s*hidden;[^}]*white-space:\s*nowrap;[^}]*border:\s*0;/s.test(html);
   if (!hasSrOnlyRule) failures.push("aos_runtime_sr_only_rule_missing");
-  const disabledButtonHasSrOnlyReason = /<button\b(?=[^>]*data-package-runtime-component="Button")(?=[^>]*disabled)([\s\S]*?)<span\b(?=[^>]*class="tcrn-sr-only")[^>]*>Column customization is not implemented in this owner-trial slice<\/span><\/button>/.test(html);
+  const disabledButtonHasSrOnlyReason = /<button\b(?=[^>]*data-package-runtime-component="Button")(?=[^>]*disabled)([\s\S]*?)<span\b(?=[^>]*class="tcrn-sr-only")[^>]*>Column settings are not available in this workspace\.<\/span><\/button>/.test(html);
   if (!disabledButtonHasSrOnlyReason) failures.push("disabled_button_sr_only_reason_markup_missing");
   const mobileRulePresent = /@media \(max-width: 520px\)\s*\{[\s\S]*?\.work-table\.tcrn-table-shell\s*\{[^}]*min-width:\s*0;[^}]*overflow-x:\s*visible;[^}]*\}[\s\S]*?\.work-table \.tcrn-table-shell__head\s*\{[^}]*display:\s*none;[^}]*\}[\s\S]*?\.work-table \.tcrn-table-shell__row\s*\{[^}]*grid-template-columns:\s*1fr;[^}]*min-width:\s*0;[^}]*\}[\s\S]*?\.work-table \.tcrn-table-shell__cell::before\s*\{[^}]*content:\s*attr\(data-label\);/s.test(html);
   if (!mobileRulePresent) failures.push("aos_runtime_mobile_table_shell_stacking_rule_missing");
@@ -1882,7 +1882,7 @@ function markdownReceipt(summary) {
     ? "- Docs Readiness package-runtime failures: 0"
     : summary.docsReadinessRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
   const aosWideRows = summary.aosWideTargetSetRuntimeReadback.failures.length === 0
-    ? "- AOS-wide target-set package-runtime failures: 0"
+    ? "- AOS-wide product design package-runtime failures: 0"
     : summary.aosWideTargetSetRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
   const accessibilityRows = [
     `- Full-document duplicate real DOM ids: ${summary.fullDocumentAccessibilityReadback.duplicateIds.length}`,
@@ -1895,9 +1895,9 @@ function markdownReceipt(summary) {
     `- Docs Readiness disabled-description mismatches: ${summary.docsReadinessFullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length}`
   ].join("\n");
   const aosWideAccessibilityRows = [
-    `- AOS-wide target-set duplicate real DOM ids: ${summary.aosWideFullDocumentAccessibilityReadback.duplicateIds.length}`,
-    `- AOS-wide target-set aria reference failures: ${summary.aosWideFullDocumentAccessibilityReadback.ariaReferenceFailures.length}`,
-    `- AOS-wide target-set disabled-description mismatches: ${summary.aosWideFullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length}`
+    `- AOS-wide product design duplicate real DOM ids: ${summary.aosWideFullDocumentAccessibilityReadback.duplicateIds.length}`,
+    `- AOS-wide product design aria reference failures: ${summary.aosWideFullDocumentAccessibilityReadback.ariaReferenceFailures.length}`,
+    `- AOS-wide product design disabled-description mismatches: ${summary.aosWideFullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length}`
   ].join("\n");
   return `# AOS Design System Package Runtime Proof\n\n`
     + `- Route: ${summary.route}\n`
@@ -1924,10 +1924,10 @@ function markdownReceipt(summary) {
     + `- Docs Readiness package runtime components: ${summary.docsReadinessRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Docs Readiness marker-only package component claims: ${summary.docsReadinessRuntimeReadback.markerOnlyComponents.length}\n`
     + `- Docs Readiness disabled package NavItems: ${summary.docsReadinessRuntimeReadback.disabledNavItemCount}\n`
-    + `- AOS-wide target-set package runtime components: ${summary.aosWideTargetSetRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
-    + `- AOS-wide target-set marker-only package component claims: ${summary.aosWideTargetSetRuntimeReadback.markerOnlyComponents.length}\n`
-    + `- AOS-wide target-set surface rows: ${summary.aosWideTargetSetRuntimeReadback.surfaceRowCount}\n`
-    + `- AOS-wide target-set disabled package NavItems: ${summary.aosWideTargetSetRuntimeReadback.disabledNavItemCount}\n`
+    + `- AOS-wide product design package runtime components: ${summary.aosWideTargetSetRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
+    + `- AOS-wide product design marker-only package component claims: ${summary.aosWideTargetSetRuntimeReadback.markerOnlyComponents.length}\n`
+    + `- AOS-wide product design surface rows: ${summary.aosWideTargetSetRuntimeReadback.surfaceRowCount}\n`
+    + `- AOS-wide product design disabled package NavItems: ${summary.aosWideTargetSetRuntimeReadback.disabledNavItemCount}\n`
     + `- Marker-only NavItems in cockpit nav: ${summary.navRuntimeReadback.markerOnlyNavItemCount}\n`
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
@@ -1947,5 +1947,5 @@ function markdownReceipt(summary) {
     + `${docsAccessibilityRows}\n\n`
     + `${aosWideAccessibilityRows}\n\n`
     + `## Boundaries\n\n`
-    + `This is an Operations Cockpit package-runtime completion plus Docs Readiness and AOS-wide target-set package-runtime adoption checkpoint. It is not AOS-wide Product Design acceptance, product UI acceptance, product acceptance, final MVP acceptance, docs publication, release, GitHub mutation, CI mutation, VM freshness, or Owner Intent execution.\n`;
+    + `This is a product-grade AOS frontend rebuild using registered TCRN Design System package runtime, tokens, and copy-state contracts. It is not product UI acceptance, product acceptance, final MVP acceptance, docs publication, release, GitHub mutation, CI mutation, VM freshness, or Owner Intent execution.\n`;
 }

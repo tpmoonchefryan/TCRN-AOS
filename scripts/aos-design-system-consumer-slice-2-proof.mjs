@@ -130,7 +130,7 @@ try {
         }
         const normalizeText = (value) => value.replace(/\s+/g, " ").trim();
         const disabledControlDescriptionFailures = [];
-        const disabledControls = Array.from(document.querySelectorAll("button:disabled, [aria-disabled='true']"));
+        const disabledControls = Array.from(document.querySelectorAll("button:disabled, select:disabled, input:disabled, textarea:disabled, [aria-disabled='true']"));
         for (const element of disabledControls) {
           const dataDisabledReason = element.getAttribute("data-disabled-reason")?.trim() ?? "";
           const title = element.getAttribute("title")?.trim() ?? "";
@@ -291,8 +291,8 @@ try {
       if (!detailDrawer?.querySelector("[data-detail-list]")) detailFailures.push("detail_drawer_key_value_list_missing");
       if (!detailDrawer?.querySelector("[data-drawer-title]")) detailFailures.push("detail_drawer_title_missing");
       if ((detailDrawer?.querySelectorAll("dt").length ?? 0) < 8) detailFailures.push("detail_drawer_key_value_rows_missing");
-      if (!detailDrawerHtml.includes("Functional contract readback only; no visual, release, product, dependency-clean, or live-dispatch acceptance.")) {
-        detailFailures.push("detail_drawer_no_overclaim_copy_missing");
+      if (!detailDrawerHtml.includes("Release and live operations remain disabled in this workspace.")) {
+        detailFailures.push("detail_drawer_action_posture_copy_missing");
       }
       const closeButton = detailDrawer?.querySelector("[data-close-detail]");
       const detailClosedBeforeClose = detailDrawer?.classList.contains("closed") ?? true;
@@ -413,8 +413,11 @@ try {
         viewportWidth: window.innerWidth,
         documentScrollWidth: document.documentElement.scrollWidth,
         bodyScrollWidth: document.body.scrollWidth,
-        hasUnavailableCopy: text.includes("Unavailable: live dispatch"),
-        hasHeldRouteCopy: text.includes("Held for later route")
+        hasProductDisabledCopy: text.includes("Live operations disabled")
+          && text.includes("Not enabled")
+          && text.includes("Evidence review pending"),
+        hasWorkspaceAvailabilityCopy: text.includes("opens when that AOS workspace is available"),
+        hasStaleRouteCopy: text.includes("Held for later route")
           || text.includes("package-runtime pilot keeps Cockpit available only")
           || text.includes("held for a later routed AOS slice")
       };
@@ -451,8 +454,9 @@ try {
     && viewportReadbacks.every((readback) => readback.detailDrawerRuntimeReadback.ok)
     && viewportReadbacks.every((readback) => readback.gateReadbackCardsRuntimeReadback.ok)
     && viewportReadbacks.every((readback) => readback.bodyLevelHorizontalOverflow === false)
-    && viewportReadbacks.every((readback) => readback.hasUnavailableCopy)
-    && viewportReadbacks.every((readback) => readback.hasHeldRouteCopy)
+    && viewportReadbacks.every((readback) => readback.hasProductDisabledCopy)
+    && viewportReadbacks.every((readback) => readback.hasWorkspaceAvailabilityCopy)
+    && viewportReadbacks.every((readback) => !readback.hasStaleRouteCopy)
     && pageErrors.length === 0
     && consoleErrors.length === 0
     && requestFailures.length === 0;

@@ -163,7 +163,7 @@ export function createSlice9bDocsSearchReleaseReadModel(): DocsSearchReleaseInsp
     linkedStoryIds: [story.id],
     userFacingSummary: "Local release-candidate linkage is visible for review.",
     internalNotesSummary: "No release creation or GitHub write is claimed.",
-    riskNotesSummary: "Release proof remains required until external closeout exists.",
+    riskNotesSummary: "Release review remains pending until closeout is complete.",
     linkedEvidenceIds: [evidence.id],
     reviewState: "review_required",
     gitExportAuthorized: false,
@@ -254,15 +254,15 @@ export function createSlice9bDocsSearchReleaseReadModel(): DocsSearchReleaseInsp
       initiativeId: initiative.id,
       stageIds: ["verification", "release"]
     },
-    blockers: ["release proof required"]
+    blockers: ["release review pending"]
   }, actor);
   const searchIndex = store.createProjectSearchIndexRecord({
     projectId: "TCRN-AOS",
     sourceType: "release_note",
     sourceId: releaseNote.id,
-    title: "Slice 9B visible docs readiness metadata",
+    title: "Docs readiness metadata",
     summary: "Sanitized local release-note summary for inspection.",
-    sanitizedTerms: ["slice-9b", "docs", "search", "release-candidate", "local-readback"],
+    sanitizedTerms: ["docs", "search", "release-candidate", "local-review"],
     linkedStoryIds: [story.id],
     linkedEvidenceIds: [evidence.id],
     linkedGateIds: [gate.id]
@@ -294,7 +294,7 @@ export function createSlice9bDocsSearchReleaseReadModel(): DocsSearchReleaseInsp
   }, actor);
   const releaseCandidate = store.createReleaseCandidateLinkage({
     projectId: "TCRN-AOS",
-    releaseCandidateLabel: "slice-9b-local-candidate",
+    releaseCandidateLabel: "local-release-candidate",
     status: "not_ready_for_release",
     storyIds: [story.id],
     docsReadinessRecordIds: [docsReadiness.id],
@@ -312,17 +312,17 @@ export function createSlice9bDocsSearchReleaseReadModel(): DocsSearchReleaseInsp
   return {
     context: {
       projectId: "TCRN-AOS",
-      localCheckpoint: "slice-9b-visible-readiness-inspection",
+      localCheckpoint: "docs-readiness-local-inspection",
       workflowPacketBasis: slice9bWorkflowPacketBasis,
       preImplementationBasis: slice9bPreImplementationBasis,
       docsSearchReleaseSurfacesVisible: true,
       productDesignStatus: "local_static_surface_only"
     },
     rows: [
-      inspectionRow("AOS-S057", "Docs readiness", "Release note draft", docsReadiness.readinessState, "review", docsReadiness.blockers[0] ?? "external proof required", docsReadiness.linkedEvidenceIds.length, "Readiness record links release-note draft, stage context, evidence, and gate metadata.", ["docs", "readiness", "release-note"]),
+      inspectionRow("AOS-S057", "Docs readiness", "Release note draft", docsReadiness.readinessState, "review", docsReadiness.blockers[0] ?? "release review pending", docsReadiness.linkedEvidenceIds.length, "Readiness record links release-note draft, stage context, evidence, and gate metadata.", ["docs", "readiness", "release-note"]),
       inspectionRow("AOS-S058", "Search index", searchIndex.title, "metadata_only", "review", "raw payload rejected", searchIndex.linkedEvidenceIds.length, searchIndex.summary, searchIndex.sanitizedTerms),
-      inspectionRow("AOS-S062", "GitHub and PR/CI", githubMetadata.repositoryName, prCiReadiness.ciState, "verification", "external proof required", prCiReadiness.linkedEvidenceIds.length, "Repository, branch, PR, and CI references are local readback metadata only.", ["github", "pr", "ci", "metadata"]),
-      inspectionRow("AOS-S063", "Release candidate linkage", releaseCandidate.releaseCandidateLabel, "proof_required", "release-review", "dependency and resource blockers", releaseCandidate.evidenceIds.length, "Candidate links docs readiness, evidence, dependency/resource blockers, gates, and PR/CI metadata without release creation.", ["release-candidate", "blockers", "evidence"])
+      inspectionRow("AOS-S062", "GitHub and PR/CI", githubMetadata.repositoryName, prCiReadiness.ciState, "verification", "external review pending", prCiReadiness.linkedEvidenceIds.length, "Repository, branch, PR, and CI references are local metadata.", ["github", "pr", "ci", "metadata"]),
+      inspectionRow("AOS-S063", "Release candidate linkage", releaseCandidate.releaseCandidateLabel, "release_proof_required", "release-review", "dependency and resource blockers", releaseCandidate.evidenceIds.length, "Candidate links docs readiness, evidence, dependency/resource blockers, gates, and PR/CI metadata without release creation.", ["release-candidate", "blockers", "evidence"])
     ],
     docsReadiness,
     searchIndex,
@@ -390,8 +390,8 @@ function copyPosture(value: string): string {
   if (value === "review_due") return "review due";
   if (value === "fixture_readback") return "fixture readback";
   if (value === "metadata_only") return "metadata only";
-  if (value === "not_ready_for_release") return "release proof required";
-  if (value === "release_proof_required") return "proof required";
+  if (value === "not_ready_for_release") return "release review pending";
+  if (value === "release_proof_required") return "review needed";
   if (value === "absent_acceptable") return "absent acceptable";
   return value.replaceAll("_", " ");
 }

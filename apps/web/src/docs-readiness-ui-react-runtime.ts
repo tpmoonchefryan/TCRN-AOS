@@ -173,7 +173,7 @@ function renderSidebar(): ReactNode {
         "data-package-runtime-component": "Text",
         "data-package-runtime-source": "@tcrn/ui-react",
         "data-package-runtime-surface": "docs-readiness-shell"
-      } as ComponentProps<typeof Text> & RuntimeDataProps, "Local checkpoint observed")
+      } as ComponentProps<typeof Text> & RuntimeDataProps, "Local readiness data")
     )
   );
 }
@@ -196,7 +196,7 @@ function renderTopbar(model: DocsSearchReleaseInspectionModel): ReactNode {
         } as ComponentProps<typeof Select> & RuntimeDataProps)
       }),
       createElement(ReadbackPanel, {
-        title: "Visible inspection",
+        title: "Readiness status",
         children: [
           createElement("strong", { "data-local-checkpoint": true, key: "checkpoint" }, model.context.localCheckpoint),
           createElement(StatusBadge, {
@@ -204,7 +204,7 @@ function renderTopbar(model: DocsSearchReleaseInspectionModel): ReactNode {
             "data-package-runtime-component": "StatusBadge",
             "data-package-runtime-source": "@tcrn/ui-react",
             key: "freshness",
-            state: { state: "local_only", label: "readback current" }
+            state: { state: "local_only", label: "Current" }
           } as ComponentProps<typeof StatusBadge> & RuntimeDataProps & { key: string })
         ]
       }),
@@ -215,7 +215,7 @@ function renderTopbar(model: DocsSearchReleaseInspectionModel): ReactNode {
         "data-package-runtime-source": "@tcrn/ui-react",
         type: "button",
         variant: "secondary"
-      } as ComponentProps<typeof Button> & RuntimeDataProps, "Refresh readback")
+      } as ComponentProps<typeof Button> & RuntimeDataProps, "Refresh")
     )
   });
 }
@@ -236,13 +236,13 @@ function renderHero(model: DocsSearchReleaseInspectionModel): ReactNode {
         "data-package-runtime-component": "Heading",
         "data-package-runtime-source": "@tcrn/ui-react",
         "data-package-runtime-surface": "docs-readiness-hero"
-      } as ComponentProps<typeof Heading> & RuntimeDataProps, "Visible Readiness Inspection")
+      } as ComponentProps<typeof Heading> & RuntimeDataProps, "Docs Readiness")
     ),
     createElement(EvidenceStrip, {
       items: [
-        "publication not executed",
-        "release creation not executed",
-        "final visual review pending"
+        "Drafts stay local",
+        "Release actions disabled",
+        "Review state visible"
       ]
     })
   );
@@ -258,7 +258,7 @@ function renderSummaryGrid(model: DocsSearchReleaseInspectionModel): ReactNode {
       rows: [
         { key: "state", label: "State", value: createElement(Fragment, null, createElement("span", { className: "state-dot state-review" }), copyPosture(model.docsReadiness.readinessState)) },
         { key: "freshness", label: "Freshness", value: copyPosture(model.docsReadiness.freshnessState) },
-        { key: "blocker", label: "Blocker", value: model.docsReadiness.blockers[0] ?? "external proof required" },
+        { key: "blocker", label: "Blocker", value: model.docsReadiness.blockers[0] ?? "release review pending" },
         { key: "evidence", label: "Evidence", value: `${model.docsReadiness.linkedEvidenceIds.length} metadata link` }
       ]
     }),
@@ -273,7 +273,7 @@ function renderSummaryGrid(model: DocsSearchReleaseInspectionModel): ReactNode {
     } as ComponentProps<typeof Surface> & RuntimeDataProps,
       createElement("div", { className: "panel-head" },
         runtimeHeading("Search Inspection", 2),
-        runtimeBadge("metadata only", "Badge", "tag")
+        runtimeBadge("Local index", "Badge", "tag")
       ),
       createElement(Text, {
         className: "compact-copy",
@@ -300,12 +300,12 @@ function renderSummaryGrid(model: DocsSearchReleaseInspectionModel): ReactNode {
         { key: "repo", label: "Repo", value: model.githubMetadata.repositoryName },
         { key: "pr", label: "PR", value: model.githubMetadata.pullRequestRefs[0] ?? "metadata missing" },
         { key: "ci", label: "CI", value: copyPosture(model.prCiReadiness.ciState) },
-        { key: "mutation", label: "Mutation", value: "not executed" }
+        { key: "actions", label: "Actions", value: "Read only" }
       ]
     }),
     renderSummaryPanel({
       ariaLabel: "Release-candidate linkage",
-      badgeLabel: "proof required",
+      badgeLabel: "review needed",
       badgeKind: "StatusBadge",
       badgeClassName: "state-chip release_proof_required",
       region: "release-candidate-linkage",
@@ -315,7 +315,7 @@ function renderSummaryGrid(model: DocsSearchReleaseInspectionModel): ReactNode {
         { key: "label", label: "Label", value: model.releaseCandidate.releaseCandidateLabel },
         { key: "dependencies", label: "Dependencies", value: `${model.releaseCandidate.dependencyBlockerIds.length} blocker` },
         { key: "resources", label: "Resources", value: `${model.releaseCandidate.resourceBlockerIds.length} blocker` },
-        { key: "creation", label: "Creation", value: "not executed" }
+        { key: "creation", label: "Creation", value: "Disabled" }
       ]
     })
   );
@@ -373,7 +373,7 @@ function renderWorkIndex(model: DocsSearchReleaseInspectionModel): ReactNode {
       label: "Local filters",
       children: [
         filterButton(`Project: ${model.context.projectId}`, "project"),
-        filterButton("Scope: Slice 9B", "scope"),
+        filterButton("Scope: Docs readiness", "scope"),
         filterButton("Storage: local first", "storage")
       ]
     }),
@@ -428,13 +428,13 @@ function renderDetailDrawer(model: DocsSearchReleaseInspectionModel, selectedRow
     ),
     createElement(KeyValueList, { items: detailItems }),
     createElement(ReadbackPanel, {
-      title: "Evidence Readback",
+      title: "Readiness details",
       children: createElement(KeyValueList, {
         items: [
-          { key: "command", label: "Command", value: model.evidencePanel.command },
-          { key: "target", label: "Target", value: model.evidencePanel.evidenceTarget },
-          { key: "tms", label: "TCRN-TMS", value: model.evidencePanel.tcrnTmsBoundary },
-          { key: "wrong-sibling", label: "Wrong sibling", value: copyPosture(model.evidencePanel.wrongSiblingQuarantine) }
+          { key: "scope", label: "Scope", value: "Docs and release readiness" },
+          { key: "source", label: "Source", value: "Local metadata" },
+          { key: "mode", label: "Mode", value: "Read only" },
+          { key: "status", label: "Status", value: "Review active" }
         ]
       })
     })
@@ -468,7 +468,7 @@ function renderSummaryPanel(options: {
           "data-tcrn-component": "StatusBadge",
           "data-package-runtime-component": "StatusBadge",
           "data-package-runtime-source": "@tcrn/ui-react",
-          state: { state: options.badgeLabel === "proof required" ? "external_proof_needed" : "local_only", label: options.badgeLabel }
+          state: { state: options.badgeLabel === "review needed" ? "external_proof_needed" : "local_only", label: options.badgeLabel }
         } as ComponentProps<typeof StatusBadge> & RuntimeDataProps)
         : runtimeBadge(options.badgeLabel, "Badge", "count")
     ),
@@ -509,7 +509,7 @@ function runtimeBadge(label: string, component: "Badge", className?: string): Re
 function docsNavItem(label: string, active: boolean): DocsRuntimeNavItem {
   return {
     active,
-    disabledReason: `${label} view is held for a later routed AOS slice; this docs readiness package-runtime checkpoint keeps Docs readiness available only.`,
+    disabledReason: `${label} opens when that AOS workspace is available.`,
     href: "#docs-readiness",
     label
   };
@@ -520,8 +520,8 @@ function copyPosture(value: string): string {
   if (value === "review_due") return "review due";
   if (value === "fixture_readback") return "fixture readback";
   if (value === "metadata_only") return "metadata only";
-  if (value === "not_ready_for_release") return "release proof required";
-  if (value === "release_proof_required") return "proof required";
+  if (value === "not_ready_for_release") return "release review pending";
+  if (value === "release_proof_required") return "review needed";
   if (value === "absent_acceptable") return "absent acceptable";
   if (value === "warning") return "warning";
   return value.replaceAll("_", " ");
@@ -547,7 +547,7 @@ function addDocsReadinessRuntimeAttributes(html: string, model: DocsSearchReleas
     )
     .replace(
       /<section class="tcrn-surface tcrn-readback-panel">/,
-      '<section class="checkpoint-strip tcrn-surface tcrn-readback-panel" data-region="checkpoint-strip" data-tcrn-component="ReadbackPanel" data-package-runtime-component="ReadbackPanel" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="docs-readiness-topbar" aria-label="Local checkpoint">'
+      '<section class="checkpoint-strip tcrn-surface tcrn-readback-panel" data-region="checkpoint-strip" data-tcrn-component="ReadbackPanel" data-package-runtime-component="ReadbackPanel" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="docs-readiness-topbar" aria-label="Readiness status">'
     )
     .replace(
       /<div class="tcrn-evidence-strip">/,

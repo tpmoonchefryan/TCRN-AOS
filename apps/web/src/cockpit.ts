@@ -636,7 +636,7 @@ function createDetailPanel(
     operatingLoopSummary: drillThrough
       ? `${drillThrough.linkedConferenceIds.length} conference links, ${drillThrough.linkedGateIds.length} gate links, ${drillThrough.nextAllowedLocalActions.length} local actions`
       : "Metadata-only drill-through; no operating-loop mutation.",
-    noOverclaimSummary: "Functional contract readback only; no visual, release, product, dependency-clean, or live-dispatch acceptance.",
+    noOverclaimSummary: "Release and live operations remain disabled in this workspace.",
     rawSourceDisplayed: false,
     privateEvidenceDisplayed: false
   };
