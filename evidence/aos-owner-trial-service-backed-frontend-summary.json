@@ -1,13 +1,13 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_59ah_owner_trial_service_backed_frontend_implementation_after_talia_story_breakdown",
-  "sourceHead": "0e10b2dd4d66ac7d9d54b87fdaee2beed9326304",
+  "sourceHead": "6202f5b530b16cbcb41c0e7546c7ed029de5f2f8",
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_owner_trial_service_browser_receipt",
-    "sourceHeadAtProofRun": "0e10b2dd4d66ac7d9d54b87fdaee2beed9326304",
+    "sourceHeadAtProofRun": "6202f5b530b16cbcb41c0e7546c7ed029de5f2f8",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "ee9629a8ba631f472a841b412ea109407348be7cb8103bc13cca2440beb338eb",
+    "sourceContentDigest": "c9246d14ac645d161c6c1fb91a3c5717d73b60d399bde48c8763370208e2543f",
     "sourcePaths": [
       "apps/api/src/server.ts",
       "apps/api/test/service-smoke.test.mjs",
@@ -71,6 +71,7 @@
     "serviceDrivenBootstrap": true,
     "refreshAndHealthReadback": true,
     "workIndexSearchFilterSelection": true,
+    "workIndexCellSemantics": true,
     "detailRoundTrip": true,
     "unavailableActionLane": true,
     "responsiveProductDesignCleanup": true,
@@ -91,7 +92,7 @@
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 1,
-        "lastReadAt": "2026-06-22T23:02:57.497Z",
+        "lastReadAt": "2026-06-22T23:19:28.250Z",
         "selectedStoryId": "story_6a8345aeed11e98d",
         "detailId": "story_6a8345aeed11e98d",
         "detailType": "story",
@@ -100,11 +101,23 @@
         "drawerDetailId": "story_6a8345aeed11e98d",
         "drawerClosed": false
       },
+      "initialWorkIndexState": {
+        "totalRowCount": 2,
+        "visibleRowCount": 2,
+        "visibleRowIds": [
+          "story_6a8345aeed11e98d",
+          "story_70ba04a9a97c3b47"
+        ],
+        "apiSourcedRowCount": 2,
+        "emptyStateVisible": false,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
+      },
       "afterRefreshState": {
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 2,
-        "lastReadAt": "2026-06-22T23:02:57.550Z",
+        "lastReadAt": "2026-06-22T23:19:28.335Z",
         "selectedStoryId": "story_6a8345aeed11e98d",
         "detailId": "story_6a8345aeed11e98d",
         "detailType": "story",
@@ -120,20 +133,36 @@
           "story_70ba04a9a97c3b47"
         ],
         "apiSourcedRowCount": 2,
-        "emptyStateVisible": false
+        "emptyStateVisible": false,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
       },
       "zeroMatchState": {
         "totalRowCount": 2,
         "visibleRowCount": 0,
         "visibleRowIds": [],
         "apiSourcedRowCount": 2,
-        "emptyStateVisible": true
+        "emptyStateVisible": true,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
+      },
+      "selectedWorkIndexState": {
+        "totalRowCount": 2,
+        "visibleRowCount": 2,
+        "visibleRowIds": [
+          "story_6a8345aeed11e98d",
+          "story_70ba04a9a97c3b47"
+        ],
+        "apiSourcedRowCount": 2,
+        "emptyStateVisible": false,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
       },
       "selectedDetailState": {
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 3,
-        "lastReadAt": "2026-06-22T23:02:57.630Z",
+        "lastReadAt": "2026-06-22T23:19:28.414Z",
         "selectedStoryId": "story_70ba04a9a97c3b47",
         "detailId": "story_70ba04a9a97c3b47",
         "detailType": "story",
@@ -146,7 +175,7 @@
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 3,
-        "lastReadAt": "2026-06-22T23:02:57.630Z",
+        "lastReadAt": "2026-06-22T23:19:28.414Z",
         "selectedStoryId": "story_70ba04a9a97c3b47",
         "detailId": "story_70ba04a9a97c3b47",
         "detailType": "story",
@@ -179,9 +208,9 @@
         "bodyScrollWidth": 1440
       },
       "screenshot": {
-        "path": "evidence/aos-owner-trial-service-backed-frontend/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/desktop-1440x900-owner-trial-service-backed.png",
-        "sha256": "3b4015cd209c75bfeeec8897823d4926041b791a20088f185bc88a533f0d2f3a",
-        "bytes": 199666
+        "path": "evidence/aos-owner-trial-service-backed-frontend/6202f5b530b16cbcb41c0e7546c7ed029de5f2f8/desktop-1440x900-owner-trial-service-backed.png",
+        "sha256": "ffa76244062dbbf5d844d2877efae3ca3331b0e8e518a3035cdb7a7e271641e4",
+        "bytes": 199747
       }
     },
     {
@@ -198,7 +227,7 @@
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 1,
-        "lastReadAt": "2026-06-22T23:02:57.794Z",
+        "lastReadAt": "2026-06-22T23:19:28.580Z",
         "selectedStoryId": "story_6a8345aeed11e98d",
         "detailId": "story_6a8345aeed11e98d",
         "detailType": "story",
@@ -207,11 +236,23 @@
         "drawerDetailId": "story_6a8345aeed11e98d",
         "drawerClosed": false
       },
+      "initialWorkIndexState": {
+        "totalRowCount": 2,
+        "visibleRowCount": 2,
+        "visibleRowIds": [
+          "story_6a8345aeed11e98d",
+          "story_70ba04a9a97c3b47"
+        ],
+        "apiSourcedRowCount": 2,
+        "emptyStateVisible": false,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
+      },
       "afterRefreshState": {
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 2,
-        "lastReadAt": "2026-06-22T23:02:57.848Z",
+        "lastReadAt": "2026-06-22T23:19:28.648Z",
         "selectedStoryId": "story_6a8345aeed11e98d",
         "detailId": "story_6a8345aeed11e98d",
         "detailType": "story",
@@ -227,20 +268,36 @@
           "story_70ba04a9a97c3b47"
         ],
         "apiSourcedRowCount": 2,
-        "emptyStateVisible": false
+        "emptyStateVisible": false,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
       },
       "zeroMatchState": {
         "totalRowCount": 2,
         "visibleRowCount": 0,
         "visibleRowIds": [],
         "apiSourcedRowCount": 2,
-        "emptyStateVisible": true
+        "emptyStateVisible": true,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
+      },
+      "selectedWorkIndexState": {
+        "totalRowCount": 2,
+        "visibleRowCount": 2,
+        "visibleRowIds": [
+          "story_6a8345aeed11e98d",
+          "story_70ba04a9a97c3b47"
+        ],
+        "apiSourcedRowCount": 2,
+        "emptyStateVisible": false,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
       },
       "selectedDetailState": {
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 3,
-        "lastReadAt": "2026-06-22T23:02:57.929Z",
+        "lastReadAt": "2026-06-22T23:19:28.731Z",
         "selectedStoryId": "story_70ba04a9a97c3b47",
         "detailId": "story_70ba04a9a97c3b47",
         "detailType": "story",
@@ -253,7 +310,7 @@
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 3,
-        "lastReadAt": "2026-06-22T23:02:57.929Z",
+        "lastReadAt": "2026-06-22T23:19:28.731Z",
         "selectedStoryId": "story_70ba04a9a97c3b47",
         "detailId": "story_70ba04a9a97c3b47",
         "detailType": "story",
@@ -286,9 +343,9 @@
         "bodyScrollWidth": 390
       },
       "screenshot": {
-        "path": "evidence/aos-owner-trial-service-backed-frontend/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/mobile-390x844-owner-trial-service-backed.png",
-        "sha256": "554d4fc8156cddf21e577cb453c96aed2d74ce4b1a8b0813e0e43aed5a6b31c5",
-        "bytes": 192969
+        "path": "evidence/aos-owner-trial-service-backed-frontend/6202f5b530b16cbcb41c0e7546c7ed029de5f2f8/mobile-390x844-owner-trial-service-backed.png",
+        "sha256": "c71b75dfc62e09446161298e015d54ad1b98ceb7109657dc7c4c55f3bd78ca58",
+        "bytes": 193072
       }
     }
   ],

@@ -96,6 +96,7 @@ try {
     await page.goto(`${service.url}/operations-cockpit.html`, { waitUntil: "domcontentloaded" });
     await waitForReady(page, apiPayload.serviceReadModel.schemaVersion, workRows.length);
     const initialState = await readServiceState(page);
+    const initialWorkIndexState = await readWorkIndexState(page);
 
     await page.click("[data-refresh-readback]");
     await page.waitForFunction((previousCount) => {
@@ -135,6 +136,7 @@ try {
         && !drawer?.classList.contains("closed");
     }, secondStoryId, { timeout: 5000 });
     const selectedDetailState = await readServiceState(page);
+    const selectedWorkIndexState = await readWorkIndexState(page);
 
     await page.click("[data-close-detail]");
     await page.waitForFunction(() => document.querySelector("[data-region='detail-drawer']")?.classList.contains("closed") === true, { timeout: 5000 });
@@ -243,9 +245,11 @@ try {
       apiCallCount: cockpitApiCalls.length,
       apiCalls: cockpitApiCalls.map((url) => url.replace(service.url, "")),
       initialState,
+      initialWorkIndexState,
       afterRefreshState,
       searchState,
       zeroMatchState,
+      selectedWorkIndexState,
       selectedDetailState,
       closedDetailState,
       documentReadback,
@@ -283,6 +287,10 @@ try {
     && viewportReadbacks.every((readback) => readback.documentReadback.bodyHorizontalOverflow === false)
     && viewportReadbacks.every((readback) => readback.documentReadback.bodyTextIncludesServiceStatus)
     && viewportReadbacks.every((readback) => readback.documentReadback.bodyTextIncludesUnavailableActions)
+    && viewportReadbacks.every((readback) => readback.initialWorkIndexState.rowCellSemanticFailures.length === 0)
+    && viewportReadbacks.every((readback) => readback.searchState.rowCellSemanticFailures.length === 0)
+    && viewportReadbacks.every((readback) => readback.zeroMatchState.rowCellSemanticFailures.length === 0)
+    && viewportReadbacks.every((readback) => readback.selectedWorkIndexState.rowCellSemanticFailures.length === 0)
     && pageErrors.length === 0
     && consoleErrors.length === 0
     && requestFailures.length === 0;
@@ -303,6 +311,10 @@ try {
       serviceDrivenBootstrap: viewportReadbacks.every((readback) => readback.initialState.bootstrapState === "ready"),
       refreshAndHealthReadback: viewportReadbacks.every((readback) => readback.afterRefreshState.refreshCount > readback.initialState.refreshCount),
       workIndexSearchFilterSelection: viewportReadbacks.every((readback) => readback.searchState.visibleRowCount === 1 && readback.zeroMatchState.emptyStateVisible),
+      workIndexCellSemantics: viewportReadbacks.every((readback) => readback.initialWorkIndexState.rowCellSemanticFailures.length === 0
+        && readback.searchState.rowCellSemanticFailures.length === 0
+        && readback.zeroMatchState.rowCellSemanticFailures.length === 0
+        && readback.selectedWorkIndexState.rowCellSemanticFailures.length === 0),
       detailRoundTrip: viewportReadbacks.every((readback) => readback.selectedDetailState.detailId === secondStoryId && readback.closedDetailState.drawerClosed),
       unavailableActionLane: viewportReadbacks.every((readback) => readback.documentReadback.disabledControlFailures.length === 0),
       responsiveProductDesignCleanup: viewportReadbacks.every((readback) => readback.documentReadback.bodyHorizontalOverflow === false),
@@ -364,6 +376,12 @@ try {
     internalCopyHits: viewportReadbacks.flatMap((readback) => readback.documentReadback.internalCopyHits),
     enumLeakHits: viewportReadbacks.flatMap((readback) => readback.documentReadback.enumLeakHits),
     noOverclaimHits: viewportReadbacks.flatMap((readback) => readback.documentReadback.noOverclaimHits),
+    workIndexCellSemanticFailures: viewportReadbacks.flatMap((readback) => [
+      ...readback.initialWorkIndexState.rowCellSemanticFailures.map((failure) => ({ ...failure, viewport: readback.label, state: "bootstrap" })),
+      ...readback.searchState.rowCellSemanticFailures.map((failure) => ({ ...failure, viewport: readback.label, state: "search" })),
+      ...readback.zeroMatchState.rowCellSemanticFailures.map((failure) => ({ ...failure, viewport: readback.label, state: "zero-match" })),
+      ...readback.selectedWorkIndexState.rowCellSemanticFailures.map((failure) => ({ ...failure, viewport: readback.label, state: "selection" }))
+    ]),
     bodyHorizontalOverflowCount: viewportReadbacks.filter((readback) => readback.documentReadback.bodyHorizontalOverflow).length,
     pageErrorCount: pageErrors.length,
     consoleErrorCount: consoleErrors.length,
@@ -427,7 +445,33 @@ async function readWorkIndexState(page) {
       visibleRowCount: visibleRows.length,
       visibleRowIds: visibleRows.map((row) => row.getAttribute("data-row-id") ?? ""),
       apiSourcedRowCount: rows.filter((row) => row.getAttribute("data-service-row-source") === "api").length,
-      emptyStateVisible: emptyState ? !emptyState.hidden : false
+      emptyStateVisible: emptyState ? !emptyState.hidden : false,
+      serviceRenderedRowCount: rows.filter((row) => row.getAttribute("data-service-row-source") === "api").length,
+      rowCellSemanticFailures: rows
+        .filter((row) => row.getAttribute("data-service-row-source") === "api")
+        .map((row) => {
+          const children = Array.from(row.children);
+          const roleCells = children.filter((child) => child.getAttribute("role") === "cell");
+          const missingDataLabelCount = roleCells.filter((cell) => !(cell.getAttribute("data-label") ?? "").trim()).length;
+          const emptyCellTextCount = roleCells.filter((cell) => !(cell.textContent ?? "").trim()).length;
+          const failures = [];
+          if (row.getAttribute("role") !== "row") failures.push("row_missing_role_row");
+          if (children.length === 0) failures.push("row_missing_children");
+          if (roleCells.length !== children.length) failures.push("row_children_missing_role_cell");
+          if (roleCells.length !== 3) failures.push("row_unexpected_role_cell_count");
+          if (missingDataLabelCount > 0) failures.push("cell_missing_data_label");
+          if (emptyCellTextCount > 0) failures.push("cell_missing_text");
+          return {
+            rowId: row.getAttribute("data-row-id") ?? "",
+            role: row.getAttribute("role") ?? "",
+            childCount: children.length,
+            roleCellCount: roleCells.length,
+            missingDataLabelCount,
+            emptyCellTextCount,
+            failures
+          };
+        })
+        .filter((readback) => readback.failures.length > 0)
     };
   });
 }
@@ -506,7 +550,13 @@ function inspectSourceContentDigest() {
 
 function markdownReceipt(summary) {
   const viewportRows = summary.viewportReadbacks
-    .map((readback) => `| ${readback.label} | ${readback.apiCallCount} | ${readback.afterRefreshState.refreshCount} | ${readback.searchState.visibleRowCount} | ${readback.zeroMatchState.emptyStateVisible ? "yes" : "no"} | \`${readback.selectedDetailState.detailId}\` | ${readback.closedDetailState.drawerClosed ? "yes" : "no"} | ${readback.documentReadback.bodyHorizontalOverflow ? "yes" : "no"} | \`${readback.screenshot.path}\` |`)
+    .map((readback) => {
+      const cellFailureCount = readback.initialWorkIndexState.rowCellSemanticFailures.length
+        + readback.searchState.rowCellSemanticFailures.length
+        + readback.zeroMatchState.rowCellSemanticFailures.length
+        + readback.selectedWorkIndexState.rowCellSemanticFailures.length;
+      return `| ${readback.label} | ${readback.apiCallCount} | ${readback.afterRefreshState.refreshCount} | ${readback.searchState.visibleRowCount} | ${readback.zeroMatchState.emptyStateVisible ? "yes" : "no"} | \`${readback.selectedDetailState.detailId}\` | ${readback.closedDetailState.drawerClosed ? "yes" : "no"} | ${cellFailureCount} | ${readback.documentReadback.bodyHorizontalOverflow ? "yes" : "no"} | \`${readback.screenshot.path}\` |`;
+    })
     .join("\n");
   return `# AOS Owner-Trial Service-Backed Frontend Proof
 
@@ -531,8 +581,8 @@ Source content digest: \`${summary.sourceFreshnessReadback.sourceContentDigest}\
 
 ## Browser Readback
 
-| Viewport | API calls | Refresh count | Search visible rows | Zero-match shown | Selected detail | Drawer closed | Body overflow | Screenshot |
-| --- | ---: | ---: | ---: | --- | --- | --- | --- | --- |
+| Viewport | API calls | Refresh count | Search visible rows | Zero-match shown | Selected detail | Drawer closed | Cell semantic failures | Body overflow | Screenshot |
+| --- | ---: | ---: | ---: | --- | --- | --- | ---: | --- | --- |
 ${viewportRows}
 
 ## Boundaries

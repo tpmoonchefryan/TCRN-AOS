@@ -3,8 +3,8 @@
 Status: passed.
 
 Route: `route_tcrn_aos_59ah_owner_trial_service_backed_frontend_implementation_after_talia_story_breakdown`
-AOS source head: `0e10b2dd4d66ac7d9d54b87fdaee2beed9326304`
-Source content digest: `ee9629a8ba631f472a841b412ea109407348be7cb8103bc13cca2440beb338eb`
+AOS source head: `6202f5b530b16cbcb41c0e7546c7ed029de5f2f8`
+Source content digest: `c9246d14ac645d161c6c1fb91a3c5717d73b60d399bde48c8763370208e2543f`
 
 ## Service API
 
@@ -21,10 +21,10 @@ Source content digest: `ee9629a8ba631f472a841b412ea109407348be7cb8103bc13cca2440
 
 ## Browser Readback
 
-| Viewport | API calls | Refresh count | Search visible rows | Zero-match shown | Selected detail | Drawer closed | Body overflow | Screenshot |
-| --- | ---: | ---: | ---: | --- | --- | --- | --- | --- |
-| desktop-1440x900 | 3 | 2 | 1 | yes | `story_70ba04a9a97c3b47` | yes | no | `evidence/aos-owner-trial-service-backed-frontend/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/desktop-1440x900-owner-trial-service-backed.png` |
-| mobile-390x844 | 3 | 2 | 1 | yes | `story_70ba04a9a97c3b47` | yes | no | `evidence/aos-owner-trial-service-backed-frontend/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/mobile-390x844-owner-trial-service-backed.png` |
+| Viewport | API calls | Refresh count | Search visible rows | Zero-match shown | Selected detail | Drawer closed | Cell semantic failures | Body overflow | Screenshot |
+| --- | ---: | ---: | ---: | --- | --- | --- | ---: | --- | --- |
+| desktop-1440x900 | 3 | 2 | 1 | yes | `story_70ba04a9a97c3b47` | yes | 0 | no | `evidence/aos-owner-trial-service-backed-frontend/6202f5b530b16cbcb41c0e7546c7ed029de5f2f8/desktop-1440x900-owner-trial-service-backed.png` |
+| mobile-390x844 | 3 | 2 | 1 | yes | `story_70ba04a9a97c3b47` | yes | 0 | no | `evidence/aos-owner-trial-service-backed-frontend/6202f5b530b16cbcb41c0e7546c7ed029de5f2f8/mobile-390x844-owner-trial-service-backed.png` |
 
 ## Boundaries
 

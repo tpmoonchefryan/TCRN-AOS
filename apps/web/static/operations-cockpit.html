@@ -431,6 +431,7 @@ function renderRows(rows) {
     ].forEach((value, index) => {
       const cell = document.createElement("span");
       cell.className = "tcrn-table-shell__cell";
+      cell.setAttribute("role", "cell");
       cell.setAttribute("data-label", ["Work item", "State", "Owner"][index] || "Value");
       cell.textContent = value;
       button.append(cell);
