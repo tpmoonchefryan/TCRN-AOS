@@ -4,6 +4,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import {
   aosCockpitUiReactRuntime,
+  renderCockpitRuntimeClaimRiskStrips,
   renderCockpitRuntimeDetailDrawer,
   renderCockpitRuntimeGateReadbackCards,
   renderCockpitRuntimeNavItems,
@@ -19,12 +20,13 @@ import {
 } from "../dist/apps/web/src/cockpit-view.js";
 
 const repoRoot = process.cwd();
-const route = "route_tcrn_aos_design_system_frontend_rebuild_59as_topbar_checkpoint_service_status_package_runtime_implementation";
+const route = "route_tcrn_aos_design_system_frontend_rebuild_59at_claim_risk_evidence_strip_package_runtime_implementation";
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const packageJson = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8"));
 const runtimeSourcePath = "apps/web/src/cockpit-ui-react-runtime.ts";
 const runtimeSource = readFileSync(join(repoRoot, runtimeSourcePath), "utf8");
 const cockpitHtml = renderOperationsCockpitHtml();
+const claimRiskEvidenceStripRuntimeReadback = inspectPackageRuntimeClaimRiskStrips(cockpitHtml);
 const topbarCheckpointRuntimeReadback = inspectPackageRuntimeTopbarCheckpoint(cockpitHtml);
 const navRuntimeReadback = inspectPackageRuntimeNavItems(cockpitHtml);
 const workIndexRuntimeReadback = inspectPackageRuntimeWorkIndexCluster(cockpitHtml);
@@ -47,6 +49,7 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && aosCockpitUiReactRuntime.packageBackedReactRuntimeRendering === true
   && dependencyReadback.ok
   && importReadback.ok
+  && claimRiskEvidenceStripRuntimeReadback.ok
   && topbarCheckpointRuntimeReadback.ok
   && navRuntimeReadback.ok
   && workIndexRuntimeReadback.ok
@@ -64,9 +67,9 @@ const summary = {
   route,
   sourceHead,
   claimScope: {
-    implementationKind: "operations_cockpit_topbar_checkpoint_package_runtime_expansion",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_and_topbar_checkpoint",
-    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_and_topbar_checkpoint_component_reference_only",
+    implementationKind: "operations_cockpit_claim_risk_evidence_strip_package_runtime_expansion",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
+    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_and_claim_risk_component_reference_only",
     broadUiReactRuntimeMigration: false,
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -84,6 +87,7 @@ const summary = {
   },
   dependencyReadback,
   importReadback,
+  claimRiskEvidenceStripRuntimeReadback,
   topbarCheckpointRuntimeReadback,
   navRuntimeReadback,
   workIndexRuntimeReadback,
@@ -123,6 +127,10 @@ console.log(JSON.stringify({
   sourceFreshnessStrategy: summary.sourceFreshnessReadback.strategy,
   sourceContentDigest: summary.sourceFreshnessReadback.sourceContentDigest,
   implementationKind: summary.claimScope.implementationKind,
+  packageRuntimeClaimRiskEvidenceStripComponentCount: summary.claimRiskEvidenceStripRuntimeReadback.packageRuntimeComponents.length,
+  packageRuntimeClaimRiskEvidenceStripFailures: summary.claimRiskEvidenceStripRuntimeReadback.failures.length,
+  packageRuntimeClaimCount: summary.claimRiskEvidenceStripRuntimeReadback.claimCount,
+  packageRuntimeRiskWarningCount: summary.claimRiskEvidenceStripRuntimeReadback.riskWarningCount,
   packageRuntimeTopbarCheckpointComponentCount: summary.topbarCheckpointRuntimeReadback.packageRuntimeComponents.length,
   packageRuntimeTopbarCheckpointFailures: summary.topbarCheckpointRuntimeReadback.failures.length,
   runtimeComponents: summary.navRuntimeReadback.packageRuntimeComponents,
@@ -196,7 +204,8 @@ function inspectImports() {
     "Text",
     "StatusBadge",
     "GateReadinessPanel",
-    "ReadbackPanel"
+    "ReadbackPanel",
+    "EvidenceStrip"
   ];
   const publicComponentImportPresence = Object.fromEntries(
     requiredPublicComponentImports.map((name) => [name, new RegExp(`\\b${name}\\b`).test(runtimeSource)])
@@ -212,7 +221,7 @@ function inspectImports() {
   ]);
   const copiedSourceHits = runRg([
     "-n",
-    "function\\s+(NavItem|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel)|const\\s+(NavItem|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel)|export\\s+function\\s+(NavItem|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel)",
+    "function\\s+(NavItem|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel|EvidenceStrip)|const\\s+(NavItem|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel|EvidenceStrip)|export\\s+function\\s+(NavItem|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel|EvidenceStrip)",
     "apps/web/src",
     "apps/web/test",
     "scripts"
@@ -229,6 +238,96 @@ function inspectImports() {
     publicComponentImportPresence,
     deepImportHits,
     copiedSourceHits
+  };
+}
+
+function inspectPackageRuntimeClaimRiskStrips(html) {
+  const claimHtml = extractRegionHtml(html, "claim-strip");
+  const riskHtml = extractRegionHtml(html, "risk-lane");
+  const failures = [];
+
+  if (!claimHtml) failures.push("claim_strip_missing");
+  if (!riskHtml) failures.push("risk_lane_missing");
+  const combinedHtml = `${claimHtml}\n${riskHtml}`;
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(combinedHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "Badge",
+    "EvidenceStrip",
+    "StatusBadge"
+  ];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  if (missingComponents.length > 0) failures.push("claim_risk_required_package_components_missing");
+
+  const claimAttributes = parseAttributes(claimHtml.match(/<section\b([^>]*)>/)?.[1] ?? "");
+  const riskAttributes = parseAttributes(riskHtml.match(/<section\b([^>]*)>/)?.[1] ?? "");
+  for (const [label, attributes] of [["claim_strip", claimAttributes], ["risk_lane", riskAttributes]]) {
+    if (attributes["data-package-runtime-component"] !== "EvidenceStrip") failures.push(`${label}_missing_evidence_strip_runtime_marker`);
+    if (attributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push(`${label}_missing_package_source`);
+    if (attributes["data-package-runtime-surface"] !== "operations-cockpit-claim-risk-strips") failures.push(`${label}_missing_runtime_surface`);
+  }
+
+  const claimCount = Number(claimAttributes["data-package-runtime-item-count"] ?? 0);
+  const riskWarningCount = Number(riskAttributes["data-package-runtime-item-count"] ?? 0);
+  if (claimCount !== 3) failures.push("claim_strip_item_count_mismatch");
+  if (riskWarningCount !== 4) failures.push("risk_lane_item_count_mismatch");
+  if ((claimHtml.match(/data-claim-key=/g) ?? []).length !== 3) failures.push("claim_strip_claim_keys_missing");
+  if ((riskHtml.match(/data-risk-id=/g) ?? []).length !== 4) failures.push("risk_lane_risk_ids_missing");
+  if ((riskHtml.match(/data-risk-owner-role=/g) ?? []).length !== 4) failures.push("risk_lane_owner_roles_missing");
+  if ((riskHtml.match(/data-risk-summary=/g) ?? []).length !== 4) failures.push("risk_lane_summaries_missing");
+  if (!/External proof required/.test(claimHtml)) failures.push("claim_strip_release_boundary_missing");
+  if (!/Not claimed/.test(claimHtml)) failures.push("claim_strip_product_design_boundary_missing");
+  if (!/Unavailable: live dispatch/.test(claimHtml)) failures.push("claim_strip_live_dispatch_boundary_missing");
+  if (!/Review required|Blocked|Not applicable|Accepted with residual risk/.test(riskHtml)) failures.push("risk_lane_warning_state_missing");
+
+  const markerOnlyComponents = Array.from(combinedHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)([^>]*)>/g))
+    .map((match) => ({ tag: match[1], component: match[2] }));
+  if (markerOnlyComponents.length > 0) failures.push("claim_risk_marker_only_runtime_claim_present");
+
+  const forbiddenClaimHits = [
+    "risk accepted",
+    "dependency clean",
+    "legal completion",
+    "release ready",
+    "product accepted",
+    "final mvp accepted"
+  ].filter((phrase) => combinedHtml.toLowerCase().includes(phrase));
+  if (forbiddenClaimHits.length > 0) failures.push("claim_risk_forbidden_overclaim_copy_present");
+
+  const sampleRenderedHtmlSha256 = createHash("sha256").update(renderCockpitRuntimeClaimRiskStrips({
+    claims: [
+      { key: "release-readiness", label: "External proof required", state: "external_proof_needed", variant: "status" },
+      { key: "product-design-visual", label: "Not claimed", state: "not_claimed", variant: "status" },
+      { key: "live-dispatch", label: "Unavailable: live dispatch", state: "unavailable", variant: "badge" }
+    ],
+    riskWarnings: [
+      {
+        id: "sample-risk",
+        ownerRole: "security",
+        state: "proof_required",
+        stateLabel: "Review required",
+        summary: "Sample risk warning remains a readback only.",
+        typeLabel: "Dependency proof"
+      }
+    ]
+  })).digest("hex");
+
+  return {
+    ok: failures.length === 0,
+    present: Boolean(claimHtml && riskHtml),
+    surface: "operations-cockpit-claim-risk-strips",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    claimCount,
+    riskWarningCount,
+    claimItems: Array.from(claimHtml.matchAll(/data-claim-key="([^"]+)"/g)).map((match) => match[1]),
+    riskItems: Array.from(riskHtml.matchAll(/data-risk-id="([^"]+)"/g)).map((match) => match[1]),
+    markerOnlyComponents,
+    forbiddenClaimHits,
+    sampleRenderedHtmlSha256,
+    failures
   };
 }
 
@@ -1150,6 +1249,9 @@ function escapeRegExp(value) {
 }
 
 function markdownReceipt(summary) {
+  const claimRiskRows = summary.claimRiskEvidenceStripRuntimeReadback.failures.length === 0
+    ? "- Claim Strip / Risk Lane package-runtime failures: 0"
+    : summary.claimRiskEvidenceStripRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
   const topbarRows = summary.topbarCheckpointRuntimeReadback.failures.length === 0
     ? "- Topbar / Checkpoint package-runtime failures: 0"
     : summary.topbarCheckpointRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
@@ -1182,6 +1284,8 @@ function markdownReceipt(summary) {
     + `- Runtime rendering claim: ${summary.claimScope.packageBackedReactRuntimeRendering}\n`
     + `- Design System source head: ${summary.designSystemReadback.sourceHead}\n`
     + `- UI React package: ${summary.designSystemReadback.uiReactPackage} (${summary.designSystemReadback.uiReactPackageSpecifier})\n`
+    + `- Package runtime Claim/Risk components: ${summary.claimRiskEvidenceStripRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
+    + `- Package runtime Claim/Risk counts: ${summary.claimRiskEvidenceStripRuntimeReadback.claimCount} claims / ${summary.claimRiskEvidenceStripRuntimeReadback.riskWarningCount} risk warnings\n`
     + `- Package runtime Topbar/Checkpoint components: ${summary.topbarCheckpointRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Package runtime NavItems: ${summary.navRuntimeReadback.packageRuntimeNavItemCount}\n`
     + `- Package runtime Work Index rows: ${summary.workIndexRuntimeReadback.packageRuntimeWorkRowCount}\n`
@@ -1195,6 +1299,7 @@ function markdownReceipt(summary) {
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
     + `- AOS runtime sr-only / mobile TableShell style proof ok: ${summary.visualStyleReadback.ok}\n`
+    + `${claimRiskRows}\n`
     + `${topbarRows}\n`
     + `${rows}\n`
     + `${workIndexRows}\n`
@@ -1203,5 +1308,5 @@ function markdownReceipt(summary) {
     + `${stagePhaseRows}\n`
     + `${accessibilityRows}\n\n`
     + `## Boundaries\n\n`
-    + `This is an Operations Cockpit NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, AI Employee Phase, and Topbar / Checkpoint package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
+    + `This is an Operations Cockpit NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, AI Employee Phase, Topbar / Checkpoint, and Claim Strip / Risk Lane package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
 }

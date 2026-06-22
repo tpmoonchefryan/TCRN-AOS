@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "route": "route_tcrn_aos_design_system_frontend_rebuild_59as_topbar_checkpoint_service_status_package_runtime_implementation",
-  "sourceHead": "e6287d9d114eb88a905de907f55f1367a4454286",
+  "route": "route_tcrn_aos_design_system_frontend_rebuild_59at_claim_risk_evidence_strip_package_runtime_implementation",
+  "sourceHead": "4e0963c57b0b79174a66b1f41c262b665a035b6e",
   "claimScope": {
-    "implementationKind": "operations_cockpit_topbar_checkpoint_package_runtime_expansion",
-    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_and_topbar_checkpoint",
-    "storybookVisualStyleParity": "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_and_topbar_checkpoint_component_reference_only",
+    "implementationKind": "operations_cockpit_claim_risk_evidence_strip_package_runtime_expansion",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
+    "storybookVisualStyleParity": "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_and_claim_risk_component_reference_only",
     "broadUiReactRuntimeMigration": false,
     "docsReadinessPackageRuntimeRendering": false,
     "aosWidePackageRuntimeRendering": false,
@@ -16,9 +16,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "e6287d9d114eb88a905de907f55f1367a4454286",
+    "sourceHeadAtProofRun": "4e0963c57b0b79174a66b1f41c262b665a035b6e",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "5ca31df8bcf9471d34678ae597d194085296762338dc36130143db6091441aaf",
+    "sourceContentDigest": "701311e08a5b4c06e84bc3da1f860e28d244b4865245efc792eb7a1e32c21f3c",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
@@ -35,7 +35,7 @@
     "sourceHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
     "uiReactPackage": "@tcrn/ui-react",
     "uiReactPackageSpecifier": "file:../TCRN-Design-System/packages/ui-react",
-    "runtimeSurface": "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint",
+    "runtimeSurface": "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_strips",
     "runtimeComponentScope": [
       "NavItem",
       "TopBar",
@@ -56,7 +56,8 @@
       "Text",
       "StatusBadge",
       "GateReadinessPanel",
-      "ReadbackPanel"
+      "ReadbackPanel",
+      "EvidenceStrip"
     ]
   },
   "dependencyReadback": {
@@ -101,10 +102,44 @@
       "Text": true,
       "StatusBadge": true,
       "GateReadinessPanel": true,
-      "ReadbackPanel": true
+      "ReadbackPanel": true,
+      "EvidenceStrip": true
     },
     "deepImportHits": [],
     "copiedSourceHits": []
+  },
+  "claimRiskEvidenceStripRuntimeReadback": {
+    "ok": true,
+    "present": true,
+    "surface": "operations-cockpit-claim-risk-strips",
+    "requiredComponents": [
+      "Badge",
+      "EvidenceStrip",
+      "StatusBadge"
+    ],
+    "packageRuntimeComponents": [
+      "Badge",
+      "EvidenceStrip",
+      "StatusBadge"
+    ],
+    "missingComponents": [],
+    "claimCount": 3,
+    "riskWarningCount": 4,
+    "claimItems": [
+      "release-readiness",
+      "product-design-visual",
+      "live-dispatch"
+    ],
+    "riskItems": [
+      "risk-gate_b51e635230125f15",
+      "risk-dependency_e0aa4649b59a9e57",
+      "risk-resource_3d7b80524e078941",
+      "risk-product-design-visual-target"
+    ],
+    "markerOnlyComponents": [],
+    "forbiddenClaimHits": [],
+    "sampleRenderedHtmlSha256": "a7dabbdb721ecee72290f98e135227b15b3773ede97ff805515872d3353a3b4d",
+    "failures": []
   },
   "topbarCheckpointRuntimeReadback": {
     "ok": true,
@@ -163,7 +198,8 @@
       "Text",
       "StatusBadge",
       "GateReadinessPanel",
-      "ReadbackPanel"
+      "ReadbackPanel",
+      "EvidenceStrip"
     ],
     "navItemCount": 10,
     "packageRuntimeNavItemCount": 10,

@@ -72,9 +72,11 @@ const designSystemBridgeOk = html.includes('data-design-system-consumer="tokens_
   && html.includes('data-package-runtime-surface="operations-cockpit-gate-readback-cards"')
   && html.includes('data-package-runtime-surface="operations-cockpit-stage-phase"')
   && html.includes('data-package-runtime-surface="operations-cockpit-topbar-checkpoint"')
+  && html.includes('data-package-runtime-surface="operations-cockpit-claim-risk-strips"')
   && html.includes('data-package-runtime-component="TopBar"')
   && html.includes('data-package-runtime-component="Select"')
   && html.includes('data-package-runtime-component="IconButton"')
+  && html.includes('data-package-runtime-component="EvidenceStrip"')
   && html.includes('data-package-runtime-component="WorkIndex"')
   && html.includes('data-package-runtime-component="DetailDrawer"')
   && html.includes('data-package-runtime-component="GateReadinessPanel"')
@@ -85,7 +87,7 @@ const designSystemBridgeOk = html.includes('data-design-system-consumer="tokens_
   && html.includes("--tcrn-color-brand-primary")
   && aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering === true
-  && aosDesignSystemConsumerBridge.uiReactRuntimeSurface === "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint"
+  && aosDesignSystemConsumerBridge.uiReactRuntimeSurface === "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_strips"
   && Boolean(aosDesignSystemTokenReadback.brandPrimary);
 const ok = aggregateDigest === slice4bBaselineDigest
   && selectorProof.every((item) => item.present)

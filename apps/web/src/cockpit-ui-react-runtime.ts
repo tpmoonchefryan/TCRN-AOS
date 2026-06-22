@@ -4,6 +4,7 @@ import {
   Badge,
   Button,
   DetailDrawer,
+  EvidenceStrip,
   Field,
   FilterBar,
   GateReadinessPanel,
@@ -29,7 +30,7 @@ export const aosCockpitUiReactRuntime = {
   packageName: "@tcrn/ui-react",
   packageSpecifier: aosDesignSystemConsumerBridge.uiReactPackageSpecifier,
   designSystemSourceHead: aosDesignSystemConsumerBridge.designSystemSourceHead,
-  implementationKind: "operations_cockpit_topbar_checkpoint_stage_phase_gate_readback_cards_package_runtime_expansion",
+  implementationKind: "operations_cockpit_claim_risk_topbar_checkpoint_stage_phase_gate_readback_cards_package_runtime_expansion",
   componentScope: [
     "NavItem",
     "TopBar",
@@ -50,7 +51,8 @@ export const aosCockpitUiReactRuntime = {
     "Text",
     "StatusBadge",
     "GateReadinessPanel",
-    "ReadbackPanel"
+    "ReadbackPanel",
+    "EvidenceStrip"
   ],
   packageBackedReactRuntimeRendering: true,
   broadUiReactMigration: false,
@@ -164,6 +166,27 @@ export interface CockpitRuntimeTopbarCheckpointOptions {
   serviceStatusLabel: string;
 }
 
+export interface CockpitRuntimeClaimItem {
+  key: string;
+  label: string;
+  state: ComponentProps<typeof StatusBadge>["state"]["state"];
+  variant: "status" | "badge";
+}
+
+export interface CockpitRuntimeRiskWarningItem {
+  id: string;
+  ownerRole: string;
+  state: ComponentProps<typeof StatusBadge>["state"]["state"];
+  stateLabel: string;
+  summary: string;
+  typeLabel: string;
+}
+
+export interface CockpitRuntimeClaimRiskStripsOptions {
+  claims: readonly CockpitRuntimeClaimItem[];
+  riskWarnings: readonly CockpitRuntimeRiskWarningItem[];
+}
+
 type RuntimeNavItemProps = ComponentProps<typeof NavItem> & {
   "data-tcrn-component": "NavItem";
   "data-package-runtime-component": "NavItem";
@@ -248,6 +271,66 @@ export function renderCockpitRuntimeTopbarCheckpoint(options: CockpitRuntimeTopb
   });
 
   return addAosTopbarCheckpointRuntimeAttributes(renderCockpitRuntimeMarkup(tree, "aos-topbar-checkpoint-"));
+}
+
+export function renderCockpitRuntimeClaimRiskStrips(options: CockpitRuntimeClaimRiskStripsOptions): string {
+  return [
+    renderCockpitRuntimeClaimStrip(options.claims),
+    renderCockpitRuntimeRiskLane(options.riskWarnings)
+  ].join("\n          ");
+}
+
+function renderCockpitRuntimeClaimStrip(claims: readonly CockpitRuntimeClaimItem[]): string {
+  const childrenHtml = renderCockpitRuntimeMarkup(createElement(Fragment, null,
+    claims.map((claim) => claim.variant === "status"
+      ? createElement(StatusBadge, {
+        "data-claim-key": claim.key,
+        "data-tcrn-component": "StatusBadge",
+        "data-package-runtime-component": "StatusBadge",
+        "data-package-runtime-source": "@tcrn/ui-react",
+        key: claim.key,
+        state: { state: claim.state, label: claim.label }
+      } as ComponentProps<typeof StatusBadge> & RuntimeDataProps & { key: string })
+      : createElement(Badge, {
+        "data-claim-key": claim.key,
+        "data-tcrn-component": "Badge",
+        "data-package-runtime-component": "Badge",
+        "data-package-runtime-source": "@tcrn/ui-react",
+        key: claim.key,
+        tone: "neutral"
+      } as ComponentProps<typeof Badge> & RuntimeDataProps & { key: string }, claim.label))
+  ), "aos-claim-strip-items-");
+  const shellHtml = renderCockpitRuntimeMarkup(createElement(EvidenceStrip, { items: [] }), "aos-claim-strip-");
+  return addAosEvidenceStripRuntimeAttributes(shellHtml, {
+    ariaLabel: "Claim boundaries",
+    className: "claim-strip tcrn-evidence-strip",
+    itemCount: claims.length,
+    region: "claim-strip"
+  }, childrenHtml);
+}
+
+function renderCockpitRuntimeRiskLane(riskWarnings: readonly CockpitRuntimeRiskWarningItem[]): string {
+  const childrenHtml = renderCockpitRuntimeMarkup(createElement(Fragment, null,
+    riskWarnings.map((warning) => createElement(StatusBadge, {
+      "data-risk-id": warning.id,
+      "data-risk-owner-role": warning.ownerRole,
+      "data-risk-summary": warning.summary,
+      "data-risk-type": warning.typeLabel,
+      "data-tcrn-component": "StatusBadge",
+      "data-package-runtime-component": "StatusBadge",
+      "data-package-runtime-source": "@tcrn/ui-react",
+      key: warning.id,
+      state: { state: warning.state, label: `${warning.typeLabel}: ${warning.stateLabel}` },
+      title: warning.summary
+    } as ComponentProps<typeof StatusBadge> & RuntimeDataProps & { key: string }))
+  ), "aos-risk-lane-items-");
+  const shellHtml = renderCockpitRuntimeMarkup(createElement(EvidenceStrip, { items: [] }), "aos-risk-lane-");
+  return addAosEvidenceStripRuntimeAttributes(shellHtml, {
+    ariaLabel: "Risk and warning lane",
+    className: "risk-lane tcrn-evidence-strip",
+    itemCount: riskWarnings.length,
+    region: "risk-lane"
+  }, childrenHtml);
 }
 
 export function renderCockpitRuntimeNavItems(items: readonly CockpitRuntimeNavItem[]): string {
@@ -669,6 +752,22 @@ function addAosTopbarCheckpointRuntimeAttributes(html: string): string {
       /<h3 class="tcrn-heading tcrn-heading--3">/,
       '<h3 class="tcrn-heading tcrn-heading--3" data-tcrn-component="Heading" data-package-runtime-component="Heading" data-package-runtime-source="@tcrn/ui-react">'
     );
+}
+
+function addAosEvidenceStripRuntimeAttributes(
+  html: string,
+  options: {
+    ariaLabel: string;
+    className: string;
+    itemCount: number;
+    region: "claim-strip" | "risk-lane";
+  },
+  childrenHtml: string
+): string {
+  return html.replace(
+    /<div class="tcrn-evidence-strip"><\/div>/,
+    `<section class="${options.className}" data-region="${options.region}" data-tcrn-component="EvidenceStrip" data-package-runtime-component="EvidenceStrip" data-package-runtime-source="@tcrn/ui-react" data-package-runtime-surface="operations-cockpit-claim-risk-strips" data-package-runtime-item-count="${options.itemCount}" aria-label="${options.ariaLabel}">${childrenHtml}</section>`
+  );
 }
 
 function addAosWorkIndexRuntimeAttributes(html: string, rows: readonly CockpitRuntimeWorkIndexRow[]): string {

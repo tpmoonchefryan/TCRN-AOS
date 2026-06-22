@@ -69,7 +69,7 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.equal(aosDesignSystemConsumerBridge.tokenPackage, "@tcrn/ui-tokens");
   assert.equal(aosDesignSystemConsumerBridge.copyStatePackage, "@tcrn/ui-copy-state");
   assert.equal(aosDesignSystemConsumerBridge.uiReactPackage, "@tcrn/ui-react");
-  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint");
+  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_strips");
   assert.equal(aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering, true);
   assert.equal(aosDesignSystemConsumerBridge.designSystemSourceHead, "b0c00828a813d3c62392eb6e53d7d6b85b6affeb");
   assert.equal(copyAosState("external_proof_required"), "External proof required");
@@ -81,11 +81,13 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.match(html, /data-design-system-copy-state="@tcrn\/ui-copy-state"/);
   assert.match(html, /data-design-system-ui-react="@tcrn\/ui-react"/);
   assert.match(html, /data-package-backed-react-runtime-rendering="true"/);
-  assert.match(html, /data-package-runtime-component-scope="NavItem,TopBar,WorkIndex,TableShell,SearchInput,Field,Select,FilterBar,Button,IconButton,Badge,StateView,DetailDrawer,KeyValueList,Surface,Heading,Text,StatusBadge,GateReadinessPanel,ReadbackPanel"/);
+  assert.match(html, /data-package-runtime-component-scope="NavItem,TopBar,WorkIndex,TableShell,SearchInput,Field,Select,FilterBar,Button,IconButton,Badge,StateView,DetailDrawer,KeyValueList,Surface,Heading,Text,StatusBadge,GateReadinessPanel,ReadbackPanel,EvidenceStrip"/);
   assert.match(html, /data-package-runtime-component="TopBar"/);
   assert.match(html, /data-package-runtime-component="Select"/);
   assert.match(html, /data-package-runtime-component="IconButton"/);
   assert.match(html, /data-package-runtime-surface="operations-cockpit-topbar-checkpoint"/);
+  assert.match(html, /data-package-runtime-component="EvidenceStrip"/);
+  assert.match(html, /data-package-runtime-surface="operations-cockpit-claim-risk-strips"/);
   assert.match(html, /data-package-runtime-component="WorkIndex"/);
   assert.match(html, /data-package-runtime-component="SearchInput"/);
   assert.match(html, /data-package-runtime-component="TableShell"/);
@@ -98,6 +100,41 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.match(html, /--tcrn-color-brand-primary/);
   assert.match(html, /\.tcrn-sr-only\s*\{[^}]*position: absolute;[^}]*width: 1px;[^}]*overflow: hidden;/);
   assert.match(html, /@media \(max-width: 520px\)[\s\S]*\.work-table \.tcrn-table-shell__cell::before\s*\{[^}]*content: attr\(data-label\)/);
+});
+
+test("Operations Cockpit claim strip and risk lane render package-backed EvidenceStrip runtime controls", () => {
+  const html = renderOperationsCockpitHtml();
+  const claimStart = html.indexOf('data-region="claim-strip"');
+  const claimEnd = html.indexOf("</section>", claimStart);
+  const claimHtml = html.slice(claimStart, claimEnd);
+  const riskStart = html.indexOf('data-region="risk-lane"');
+  const riskEnd = html.indexOf("</section>", riskStart);
+  const riskHtml = html.slice(riskStart, riskEnd);
+
+  assert.ok(claimStart > 0, "claim strip region is present");
+  assert.ok(riskStart > 0, "risk lane region is present");
+  assert.match(claimHtml, /data-tcrn-component="EvidenceStrip"/);
+  assert.match(claimHtml, /data-package-runtime-component="EvidenceStrip"/);
+  assert.match(claimHtml, /data-package-runtime-source="@tcrn\/ui-react"/);
+  assert.match(claimHtml, /data-package-runtime-surface="operations-cockpit-claim-risk-strips"/);
+  assert.match(claimHtml, /data-package-runtime-item-count="3"/);
+  assert.match(claimHtml, /External proof required/);
+  assert.match(claimHtml, /Not claimed/);
+  assert.match(claimHtml, /Unavailable: live dispatch/);
+  assert.match(claimHtml, /data-package-runtime-component="StatusBadge"/);
+  assert.match(claimHtml, /data-package-runtime-component="Badge"/);
+  assert.doesNotMatch(claimHtml, /release ready|product accepted|final MVP accepted/i);
+
+  assert.match(riskHtml, /data-tcrn-component="EvidenceStrip"/);
+  assert.match(riskHtml, /data-package-runtime-component="EvidenceStrip"/);
+  assert.match(riskHtml, /data-package-runtime-surface="operations-cockpit-claim-risk-strips"/);
+  assert.match(riskHtml, /data-package-runtime-item-count="4"/);
+  assert.match(riskHtml, /data-package-runtime-component="StatusBadge"/);
+  assert.match(riskHtml, /data-risk-id=/);
+  assert.match(riskHtml, /data-risk-owner-role=/);
+  assert.match(riskHtml, /data-risk-summary=/);
+  assert.match(riskHtml, /Review required|Not applicable|Blocked|Accepted with residual risk/);
+  assert.doesNotMatch(riskHtml, /risk accepted|dependency clean|legal completion|release ready/i);
 });
 
 test("Operations Cockpit topbar and checkpoint strip render package-backed runtime controls", () => {

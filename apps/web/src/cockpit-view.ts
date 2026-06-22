@@ -24,12 +24,14 @@ import {
 } from "./cockpit.js";
 import {
   aosCockpitUiReactRuntime,
+  renderCockpitRuntimeClaimRiskStrips,
   renderCockpitRuntimeDetailDrawer,
   renderCockpitRuntimeGateReadbackCards,
   renderCockpitRuntimeNavItems,
   renderCockpitRuntimeStagePhaseCards,
   renderCockpitRuntimeTopbarCheckpoint,
   renderCockpitRuntimeWorkIndexCluster,
+  type CockpitRuntimeClaimRiskStripsOptions,
   type CockpitRuntimeDetailDrawerOptions,
   type CockpitRuntimeGateReadbackCardsOptions,
   type CockpitRuntimeNavItem,
@@ -240,6 +242,11 @@ export function renderOperationsCockpitHtml(
   const serviceReadback = createCockpitServiceReadback(model, { serviceBacked });
   const stageDetailDisabledReason = "Stage detail route is held for the owner-trial implementation proof";
   const roleDetailDisabledReason = "Role detail route is held for a later owner-trial slice";
+  const claimRiskStripSeparator = "\n          ";
+  const claimRiskStripsHtml = renderCockpitRuntimeClaimRiskStrips(createCockpitRuntimeClaimRiskStripsOptions(model));
+  const claimRiskStripParts = claimRiskStripsHtml.split(claimRiskStripSeparator);
+  const claimStripHtml = claimRiskStripParts[0] ?? "";
+  const riskLaneHtml = claimRiskStripParts.slice(1).join(claimRiskStripSeparator);
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -276,11 +283,7 @@ export function renderOperationsCockpitHtml(
               <p class="eyebrow tcrn-text" ${tcrnComponentAttr("Text")}>Operations Cockpit</p>
               <h1 class="tcrn-heading tcrn-heading--1" ${tcrnComponentAttr("Heading")}>${escapeHtml(model.contextHeader.selectedProjectId)}</h1>
             </div>
-            <div class="claim-strip tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")} aria-label="Claim boundaries">
-            <span class="tcrn-badge tcrn-badge--warning" ${tcrnComponentAttr("StatusBadge")}>${copyState(model.nonClaims.releaseReadinessClaim)}</span>
-            <span class="tcrn-badge tcrn-badge--neutral" ${tcrnComponentAttr("StatusBadge")}>${copyState(model.productDesignStatus.browserVisualAcceptance)}</span>
-            <span class="tcrn-badge tcrn-badge--neutral" ${tcrnComponentAttr("StatusBadge")}>${copyState("unavailable")}: live dispatch</span>
-            </div>
+            ${claimStripHtml}
           </section>
           <section class="summary-grid">
             ${renderCockpitRuntimeStagePhaseCards(createCockpitRuntimeStagePhaseOptions(model, stageDetailDisabledReason, roleDetailDisabledReason))}
@@ -311,9 +314,7 @@ export function renderOperationsCockpitHtml(
               selectedRow
             }))}
           </section>
-          <section class="risk-lane tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")} aria-label="Risk and warning lane">
-            ${model.riskWarnings.slice(0, 4).map((warning) => riskPill(warning)).join("")}
-          </section>
+          ${riskLaneHtml}
         </div>
       </section>
     </main>
@@ -737,6 +738,39 @@ function createCockpitRuntimeTopbarCheckpointOptions(input: {
   };
 }
 
+function createCockpitRuntimeClaimRiskStripsOptions(model: OperationsCockpitReadModel): CockpitRuntimeClaimRiskStripsOptions {
+  return {
+    claims: [
+      {
+        key: "release-readiness",
+        label: copyState(model.nonClaims.releaseReadinessClaim),
+        state: "external_proof_needed",
+        variant: "status"
+      },
+      {
+        key: "product-design-visual",
+        label: copyState(model.productDesignStatus.browserVisualAcceptance),
+        state: "not_claimed",
+        variant: "status"
+      },
+      {
+        key: "live-dispatch",
+        label: `${copyState("unavailable")}: live dispatch`,
+        state: "unavailable",
+        variant: "badge"
+      }
+    ],
+    riskWarnings: model.riskWarnings.slice(0, 4).map((warning) => ({
+      id: warning.id,
+      ownerRole: warning.ownerRole,
+      state: riskWarningStatusState(warning),
+      stateLabel: copyPosture(warning.state),
+      summary: warning.summary,
+      typeLabel: copyState(warning.type)
+    }))
+  };
+}
+
 function createCockpitRuntimeWorkIndexRows(rows: WorkstreamStoryRow[]): CockpitRuntimeWorkIndexRow[] {
   return rows.map((row, index) => {
     const evidenceLabel = `${row.linkedConferenceIds.length} conference link`;
@@ -927,10 +961,6 @@ function workRow(row: WorkstreamStoryRow, index: number): string {
   return `<button class="table-row work-row tcrn-table-shell__row${index === 0 ? " active" : ""}" ${tcrnComponentAttr("TableShell")} data-work-row data-row-id="${escapeHtml(row.storyId)}" data-title="${escapeHtml(row.title)}" type="button" role="row"><span class="tcrn-table-shell__cell">${escapeHtml(row.storyId)}</span><span class="tcrn-table-shell__cell">${escapeHtml(row.title)}</span><span class="tcrn-table-shell__cell">${copyState(row.status)}</span><span class="tcrn-table-shell__cell">${escapeHtml(row.nextOwnerRole)}</span><span class="tcrn-table-shell__cell">${row.linkedConferenceIds.length} conference link</span><span class="tcrn-table-shell__cell">${row.nextAllowedLocalActions.length} local actions</span></button>`;
 }
 
-function riskPill(warning: RiskWarningItem): string {
-  return `<span class="risk-pill tcrn-badge" ${tcrnComponentAttr("Badge")}>${copyState(warning.type)}: ${copyPosture(warning.state)}</span>`;
-}
-
 function copyState(state: string): string {
   return copyAosState(state);
 }
@@ -945,6 +975,13 @@ function copyPosture(posture: string): string {
 
 function copyAction(action: string): string {
   return copyAosAction(action);
+}
+
+function riskWarningStatusState(warning: RiskWarningItem): "blocked" | "external_proof_needed" | "local_only" | "proof_required" {
+  if (warning.state === "blocked") return "blocked";
+  if (warning.type === "release") return "external_proof_needed";
+  if (warning.state === "not_applicable") return "local_only";
+  return "proof_required";
 }
 
 function escapeHtml(value: string): string {

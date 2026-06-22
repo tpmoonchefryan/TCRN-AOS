@@ -15,8 +15,8 @@
     }
   },
   "claimScope": {
-    "implementationKind": "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_topbar_checkpoint_package_runtime",
-    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_and_topbar_checkpoint",
+    "implementationKind": "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_claim_risk_package_runtime",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
     "storybookVisualStyleParity": "not_claimed_by_registered_component_proof",
     "docsReadinessPackageRuntimeRendering": false,
     "aosWidePackageRuntimeRendering": false,
@@ -190,8 +190,28 @@
   "packageRuntimeReadback": {
     "ok": true,
     "surface": "operations-cockpit",
-    "packageRuntimeComponent": "NavItem+TopBar+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel+StagePhase",
+    "packageRuntimeComponent": "NavItem+TopBar+EvidenceStrip+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel+StagePhase",
     "packageRuntimeSource": "@tcrn/ui-react",
+    "claimRiskEvidenceStripRuntimeReadback": {
+      "ok": true,
+      "surface": "operations-cockpit-claim-risk-strips",
+      "requiredComponents": [
+        "Badge",
+        "EvidenceStrip",
+        "StatusBadge"
+      ],
+      "packageRuntimeComponents": [
+        "Badge",
+        "EvidenceStrip",
+        "StatusBadge"
+      ],
+      "missingComponents": [],
+      "claimCount": 3,
+      "riskWarningCount": 4,
+      "markerOnlyComponents": [],
+      "forbiddenClaimHits": [],
+      "failures": []
+    },
     "topbarCheckpointRuntimeReadback": {
       "ok": true,
       "surface": "operations-cockpit-topbar-checkpoint",

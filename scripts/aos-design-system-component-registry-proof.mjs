@@ -112,8 +112,8 @@ const summary = {
   registrySource: relative(repoRoot, designSystemRegistrySourcePath),
   designSystemBasis,
   claimScope: {
-    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_topbar_checkpoint_package_runtime",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_and_topbar_checkpoint",
+    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_claim_risk_package_runtime",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
     storybookVisualStyleParity: "not_claimed_by_registered_component_proof",
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -381,6 +381,7 @@ function inspectPackageRuntimeReadback(surface) {
   const markerOnlyNavItems = navItems.filter((item) => item.parsed["data-package-runtime-component"] !== "NavItem");
   const disabledPackageRuntimeNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-disabled"] === "true");
   const activePackageRuntimeNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-current"] === "page");
+  const claimRisk = inspectClaimRiskEvidenceStripRuntime(surface.html);
   const topbarCheckpoint = inspectTopbarCheckpointRuntime(surface.html);
   const workIndexCluster = extractWorkIndexClusterHtml(surface.html);
   const workIndexPackageRuntimeComponents = Array.from(new Set(
@@ -411,6 +412,7 @@ function inspectPackageRuntimeReadback(surface) {
       && markerOnlyNavItems.length === 0
       && disabledPackageRuntimeNavItems.length === 9
       && activePackageRuntimeNavItems.length === 1
+      && claimRisk.ok
       && topbarCheckpoint.ok
       && workIndexCluster.includes('data-package-runtime-component="WorkIndex"')
       && workIndexCluster.includes('data-package-runtime-subcomponent="SearchInput.control"')
@@ -423,8 +425,9 @@ function inspectPackageRuntimeReadback(surface) {
       && stagePhase.ok
       && surface.html.includes('data-package-backed-react-runtime-rendering="true"'),
     surface: surface.id,
-    packageRuntimeComponent: "NavItem+TopBar+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel+StagePhase",
+    packageRuntimeComponent: "NavItem+TopBar+EvidenceStrip+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel+StagePhase",
     packageRuntimeSource: "@tcrn/ui-react",
+    claimRiskEvidenceStripRuntimeReadback: claimRisk,
     topbarCheckpointRuntimeReadback: topbarCheckpoint,
     packageRuntimeNavItemCount: packageRuntimeNavItems.length,
     markerOnlyNavItemCount: markerOnlyNavItems.length,
@@ -440,6 +443,65 @@ function inspectPackageRuntimeReadback(surface) {
     gateReadbackCardsRuntimeReadback: gateReadbackCards,
     stagePhaseRuntimeReadback: stagePhase,
     packageBackedReactRuntimeShellMarkerPresent: surface.html.includes('data-package-backed-react-runtime-rendering="true"')
+  };
+}
+
+function inspectClaimRiskEvidenceStripRuntime(html) {
+  const claimHtml = extractRegionHtml(html, "claim-strip");
+  const riskHtml = extractRegionHtml(html, "risk-lane");
+  const combinedHtml = `${claimHtml}\n${riskHtml}`;
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(combinedHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "Badge",
+    "EvidenceStrip",
+    "StatusBadge"
+  ];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  const failures = [];
+  const claimAttributes = parseAttributes(claimHtml.match(/<section\b([^>]*)>/)?.[1] ?? "");
+  const riskAttributes = parseAttributes(riskHtml.match(/<section\b([^>]*)>/)?.[1] ?? "");
+  if (!claimHtml) failures.push("claim_strip_missing");
+  if (!riskHtml) failures.push("risk_lane_missing");
+  if (missingComponents.length > 0) failures.push("claim_risk_required_package_components_missing");
+  if (claimAttributes["data-package-runtime-component"] !== "EvidenceStrip") failures.push("claim_strip_missing_evidence_strip_runtime_marker");
+  if (riskAttributes["data-package-runtime-component"] !== "EvidenceStrip") failures.push("risk_lane_missing_evidence_strip_runtime_marker");
+  if (claimAttributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push("claim_strip_missing_package_source");
+  if (riskAttributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push("risk_lane_missing_package_source");
+  if (claimAttributes["data-package-runtime-surface"] !== "operations-cockpit-claim-risk-strips") failures.push("claim_strip_missing_runtime_surface");
+  if (riskAttributes["data-package-runtime-surface"] !== "operations-cockpit-claim-risk-strips") failures.push("risk_lane_missing_runtime_surface");
+  if (Number(claimAttributes["data-package-runtime-item-count"] ?? 0) !== 3) failures.push("claim_strip_item_count_mismatch");
+  if (Number(riskAttributes["data-package-runtime-item-count"] ?? 0) !== 4) failures.push("risk_lane_item_count_mismatch");
+  if ((claimHtml.match(/data-claim-key=/g) ?? []).length !== 3) failures.push("claim_strip_claim_keys_missing");
+  if ((riskHtml.match(/data-risk-id=/g) ?? []).length !== 4) failures.push("risk_lane_risk_ids_missing");
+  if ((riskHtml.match(/data-risk-summary=/g) ?? []).length !== 4) failures.push("risk_lane_summaries_missing");
+  if (!/External proof required/.test(claimHtml)) failures.push("claim_strip_release_boundary_missing");
+  if (!/Unavailable: live dispatch/.test(claimHtml)) failures.push("claim_strip_live_dispatch_boundary_missing");
+  if (!/Review required|Blocked|Not applicable|Accepted with residual risk/.test(riskHtml)) failures.push("risk_lane_state_copy_missing");
+  const markerOnlyComponents = Array.from(combinedHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)([^>]*)>/g))
+    .map((match) => ({ tag: match[1], component: match[2] }));
+  if (markerOnlyComponents.length > 0) failures.push("claim_risk_marker_only_runtime_claim_present");
+  const forbiddenClaimHits = [
+    "risk accepted",
+    "dependency clean",
+    "legal completion",
+    "release ready",
+    "product accepted",
+    "final mvp accepted"
+  ].filter((phrase) => combinedHtml.toLowerCase().includes(phrase));
+  if (forbiddenClaimHits.length > 0) failures.push("claim_risk_forbidden_overclaim_copy_present");
+  return {
+    ok: failures.length === 0,
+    surface: "operations-cockpit-claim-risk-strips",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    claimCount: Number(claimAttributes["data-package-runtime-item-count"] ?? 0),
+    riskWarningCount: Number(riskAttributes["data-package-runtime-item-count"] ?? 0),
+    markerOnlyComponents,
+    forbiddenClaimHits,
+    failures
   };
 }
 
