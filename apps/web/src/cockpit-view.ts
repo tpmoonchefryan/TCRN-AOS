@@ -27,6 +27,7 @@ import {
   renderCockpitRuntimeClaimRiskStrips,
   renderCockpitRuntimeDetailDrawer,
   renderCockpitRuntimeGateReadbackCards,
+  renderCockpitRuntimeHeroTitle,
   renderCockpitRuntimeShellSidebar,
   renderCockpitRuntimeStagePhaseCards,
   renderCockpitRuntimeTopbarCheckpoint,
@@ -34,6 +35,7 @@ import {
   type CockpitRuntimeClaimRiskStripsOptions,
   type CockpitRuntimeDetailDrawerOptions,
   type CockpitRuntimeGateReadbackCardsOptions,
+  type CockpitRuntimeHeroTitleOptions,
   type CockpitRuntimeNavItem,
   type CockpitRuntimeShellSidebarOptions,
   type CockpitRuntimeStagePhaseOptions,
@@ -273,10 +275,7 @@ export function renderOperationsCockpitHtml(
         }))}
         <div class="workspace">
           <section class="hero-row">
-            <div>
-              <p class="eyebrow tcrn-text" ${tcrnComponentAttr("Text")}>Operations Cockpit</p>
-              <h1 class="tcrn-heading tcrn-heading--1" ${tcrnComponentAttr("Heading")}>${escapeHtml(model.contextHeader.selectedProjectId)}</h1>
-            </div>
+            ${renderCockpitRuntimeHeroTitle(createCockpitRuntimeHeroTitleOptions(model))}
             ${claimStripHtml}
           </section>
           <section class="summary-grid">
@@ -777,6 +776,13 @@ function createCockpitRuntimeTopbarCheckpointOptions(input: {
     refreshLabel: "Refresh readback",
     serviceReadbackLabel: serviceReadModelSummary(input.serviceReadback),
     serviceStatusLabel: input.serviceBacked ? "service API pending" : "static fixture"
+  };
+}
+
+function createCockpitRuntimeHeroTitleOptions(model: OperationsCockpitReadModel): CockpitRuntimeHeroTitleOptions {
+  return {
+    eyebrow: "Operations Cockpit",
+    title: model.contextHeader.selectedProjectId
   };
 }
 

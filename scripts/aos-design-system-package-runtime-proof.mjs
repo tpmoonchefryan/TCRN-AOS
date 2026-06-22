@@ -7,6 +7,7 @@ import {
   renderCockpitRuntimeClaimRiskStrips,
   renderCockpitRuntimeDetailDrawer,
   renderCockpitRuntimeGateReadbackCards,
+  renderCockpitRuntimeHeroTitle,
   renderCockpitRuntimeNavItems,
   renderCockpitRuntimeShellSidebar,
   renderCockpitRuntimeStagePhaseCards,
@@ -21,7 +22,7 @@ import {
 } from "../dist/apps/web/src/cockpit-view.js";
 
 const repoRoot = process.cwd();
-const route = "route_tcrn_aos_design_system_frontend_rebuild_59au_cockpit_shell_sidebar_package_runtime_implementation";
+const route = "route_tcrn_aos_design_system_frontend_rebuild_59av_operations_cockpit_package_runtime_completion_implementation";
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const packageJson = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8"));
 const runtimeSourcePath = "apps/web/src/cockpit-ui-react-runtime.ts";
@@ -35,6 +36,7 @@ const workIndexRuntimeReadback = inspectPackageRuntimeWorkIndexCluster(cockpitHt
 const detailDrawerRuntimeReadback = inspectPackageRuntimeDetailDrawer(cockpitHtml);
 const gateReadbackCardsRuntimeReadback = inspectPackageRuntimeGateReadbackCards(cockpitHtml);
 const stagePhaseRuntimeReadback = inspectPackageRuntimeStagePhaseCards(cockpitHtml);
+const operationsCockpitCompletionRuntimeReadback = inspectOperationsCockpitCompletionRuntime(cockpitHtml);
 const fullDocumentAccessibilityReadback = inspectFullDocumentAccessibility(cockpitHtml);
 const visualStyleReadback = inspectAosRuntimeStyleContract(cockpitHtml);
 const importReadback = inspectImports();
@@ -59,6 +61,7 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && detailDrawerRuntimeReadback.ok
   && gateReadbackCardsRuntimeReadback.ok
   && stagePhaseRuntimeReadback.ok
+  && operationsCockpitCompletionRuntimeReadback.ok
   && fullDocumentAccessibilityReadback.ok
   && visualStyleReadback.ok
   && storybookReferenceReadback.ok
@@ -70,9 +73,9 @@ const summary = {
   route,
   sourceHead,
   claimScope: {
-    implementationKind: "operations_cockpit_shell_sidebar_package_runtime_expansion",
-    packageBackedReactRuntimeRendering: "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
-    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_claim_risk_and_shell_sidebar_component_reference_only",
+    implementationKind: "operations_cockpit_package_runtime_completion",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_shell_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_and_typography_completion",
+    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_claim_risk_shell_sidebar_and_typography_component_reference_only",
     broadUiReactRuntimeMigration: false,
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -98,6 +101,7 @@ const summary = {
   detailDrawerRuntimeReadback,
   gateReadbackCardsRuntimeReadback,
   stagePhaseRuntimeReadback,
+  operationsCockpitCompletionRuntimeReadback,
   fullDocumentAccessibilityReadback,
   visualStyleReadback,
   storybookReferenceReadback,
@@ -151,6 +155,8 @@ console.log(JSON.stringify({
   packageRuntimeStagePhaseStageCount: summary.stagePhaseRuntimeReadback.stageCount,
   packageRuntimeStagePhaseRowCount: summary.stagePhaseRuntimeReadback.phaseRowCount,
   packageRuntimeStagePhaseFailures: summary.stagePhaseRuntimeReadback.failures.length,
+  operationsCockpitCompletionMarkerOnlyCount: summary.operationsCockpitCompletionRuntimeReadback.markerOnlyComponents.length,
+  operationsCockpitCompletionFailures: summary.operationsCockpitCompletionRuntimeReadback.failures.length,
   duplicateDomIdCount: summary.fullDocumentAccessibilityReadback.duplicateIds.length,
   ariaReferenceFailureCount: summary.fullDocumentAccessibilityReadback.ariaReferenceFailures.length,
   disabledDescriptionMismatchCount: summary.fullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length,
@@ -1007,6 +1013,85 @@ function inspectPackageRuntimeStagePhaseCards(html) {
   };
 }
 
+function inspectOperationsCockpitCompletionRuntime(html) {
+  const mainHtml = extractMainShellHtml(html);
+  const failures = [];
+  if (!mainHtml) {
+    return {
+      ok: false,
+      present: false,
+      surface: "operations-cockpit-package-runtime-completion",
+      requiredComponents: [],
+      packageRuntimeComponents: [],
+      markerOnlyComponents: [],
+      missingComponents: [],
+      failures: ["operations_cockpit_main_missing"]
+    };
+  }
+
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(mainHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = Array.from(aosCockpitUiReactRuntime.componentScope);
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  if (missingComponents.length > 0) failures.push("operations_cockpit_required_package_components_missing");
+
+  const markerOnlyComponents = Array.from(mainHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)([^>]*)>/g))
+    .map((match) => ({
+      tag: match[1],
+      component: match[2],
+      snippet: redactAttributeSnippet(match[0])
+    }));
+  if (markerOnlyComponents.length > 0) failures.push("operations_cockpit_marker_only_component_claim_present");
+
+  const mainAttributes = parseAttributes(mainHtml.match(/<main\b([^>]*)>/)?.[1] ?? "");
+  if (mainAttributes["data-package-runtime-surface"] !== aosCockpitUiReactRuntime.implementationKind) {
+    failures.push("operations_cockpit_runtime_surface_mismatch");
+  }
+  if (mainAttributes["data-package-runtime-component-scope"] !== aosCockpitUiReactRuntime.componentScope.join(",")) {
+    failures.push("operations_cockpit_component_scope_mismatch");
+  }
+
+  const heroTitleHtml = extractRegionElementHtml(mainHtml, "hero-title", "div");
+  const heroAttributes = parseAttributes(heroTitleHtml.match(/<div\b([^>]*)>/)?.[1] ?? "");
+  const heroTextRuntimePresent = /<p\b(?=[^>]*data-tcrn-component="Text")(?=[^>]*data-package-runtime-component="Text")(?=[^>]*data-package-runtime-surface="operations-cockpit-hero-title")[^>]*>Operations Cockpit<\/p>/.test(heroTitleHtml);
+  const heroHeadingRuntimePresent = /<h1\b(?=[^>]*data-tcrn-component="Heading")(?=[^>]*data-package-runtime-component="Heading")(?=[^>]*data-package-runtime-surface="operations-cockpit-hero-title")[^>]*>TCRN-AOS<\/h1>/.test(heroTitleHtml);
+  if (heroAttributes["data-region"] !== "hero-title") failures.push("hero_title_region_missing");
+  if (heroAttributes["data-package-runtime-surface"] !== "operations-cockpit-hero-title") failures.push("hero_title_surface_missing");
+  if (!heroTextRuntimePresent) failures.push("hero_title_text_runtime_missing");
+  if (!heroHeadingRuntimePresent) failures.push("hero_title_heading_runtime_missing");
+
+  const workIndexHeadingRuntimePresent = /<h2\b(?=[^>]*data-tcrn-component="Heading")(?=[^>]*data-package-runtime-component="Heading")(?=[^>]*data-package-runtime-surface="operations-cockpit-work-index")[^>]*>Work Index<\/h2>/.test(mainHtml);
+  if (!workIndexHeadingRuntimePresent) failures.push("work_index_heading_runtime_missing");
+
+  const sampleRenderedHtmlSha256 = createHash("sha256").update(renderCockpitRuntimeHeroTitle({
+    eyebrow: "Operations Cockpit",
+    title: "TCRN-AOS"
+  })).digest("hex");
+
+  return {
+    ok: failures.length === 0,
+    present: true,
+    surface: "operations-cockpit-package-runtime-completion",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    markerOnlyComponents,
+    runtimeSurface: mainAttributes["data-package-runtime-surface"] ?? "",
+    componentScope: mainAttributes["data-package-runtime-component-scope"] ?? "",
+    heroTitleReadback: {
+      present: Boolean(heroTitleHtml),
+      region: heroAttributes["data-region"] ?? "",
+      surface: heroAttributes["data-package-runtime-surface"] ?? "",
+      textRuntimePresent: heroTextRuntimePresent,
+      headingRuntimePresent: heroHeadingRuntimePresent
+    },
+    workIndexHeadingRuntimePresent,
+    sampleRenderedHtmlSha256,
+    failures
+  };
+}
+
 function inspectFullDocumentAccessibility(html) {
   const idEntries = collectRealIdEntries(html);
   const idCounts = new Map();
@@ -1348,6 +1433,10 @@ function parseAttributes(raw) {
   return attributes;
 }
 
+function redactAttributeSnippet(value) {
+  return value.replace(/\s+/g, " ").trim().slice(0, 240);
+}
+
 function findVisibleDisabledReason(body, describedby) {
   if (!describedby) return { resolved: false, text: "" };
   const id = escapeRegExp(describedby);
@@ -1406,6 +1495,9 @@ function markdownReceipt(summary) {
   const stagePhaseRows = summary.stagePhaseRuntimeReadback.failures.length === 0
     ? "- Stage Map / AI Employee Phase package-runtime failures: 0"
     : summary.stagePhaseRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.stageId ?? failure.label}: ${failure.failures.join(", ")}`).join("\n");
+  const completionRows = summary.operationsCockpitCompletionRuntimeReadback.failures.length === 0
+    ? "- Operations Cockpit completion marker-only failures: 0"
+    : summary.operationsCockpitCompletionRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
   const accessibilityRows = [
     `- Full-document duplicate real DOM ids: ${summary.fullDocumentAccessibilityReadback.duplicateIds.length}`,
     `- Full-document aria reference failures: ${summary.fullDocumentAccessibilityReadback.ariaReferenceFailures.length}`,
@@ -1432,6 +1524,7 @@ function markdownReceipt(summary) {
     + `- Package runtime Gate/Readback card components: ${summary.gateReadbackCardsRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Package runtime Stage/Phase components: ${summary.stagePhaseRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Package runtime Stage/Phase counts: ${summary.stagePhaseRuntimeReadback.stageCount} stages / ${summary.stagePhaseRuntimeReadback.phaseRowCount} phase rows\n`
+    + `- Operations Cockpit marker-only package component claims: ${summary.operationsCockpitCompletionRuntimeReadback.markerOnlyComponents.length}\n`
     + `- Marker-only NavItems in cockpit nav: ${summary.navRuntimeReadback.markerOnlyNavItemCount}\n`
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
@@ -1444,7 +1537,8 @@ function markdownReceipt(summary) {
     + `${detailDrawerRows}\n`
     + `${gateReadbackRows}\n`
     + `${stagePhaseRows}\n`
+    + `${completionRows}\n`
     + `${accessibilityRows}\n\n`
     + `## Boundaries\n\n`
-    + `This is an Operations Cockpit Shell / Sidebar, NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, AI Employee Phase, Topbar / Checkpoint, and Claim Strip / Risk Lane package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
+    + `This is an Operations Cockpit package-runtime completion checkpoint covering Shell / Sidebar, NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, AI Employee Phase, Topbar / Checkpoint, Claim Strip / Risk Lane, and cockpit typography residues only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
 }

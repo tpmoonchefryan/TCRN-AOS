@@ -112,8 +112,8 @@ const summary = {
   registrySource: relative(repoRoot, designSystemRegistrySourcePath),
   designSystemBasis,
   claimScope: {
-    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_shell_sidebar_package_runtime",
-    packageBackedReactRuntimeRendering: "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
+    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_package_runtime_completion",
+    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_shell_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_and_typography_completion",
     storybookVisualStyleParity: "not_claimed_by_registered_component_proof",
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -408,6 +408,7 @@ function inspectPackageRuntimeReadback(surface) {
   const detailDrawer = inspectDetailDrawerRuntime(surface.html);
   const gateReadbackCards = inspectGateReadbackCardsRuntime(surface.html);
   const stagePhase = inspectStagePhaseRuntime(surface.html);
+  const completion = inspectOperationsCockpitCompletionRuntime(surface.html);
   return {
     ok: packageRuntimeNavItems.length === 10
       && markerOnlyNavItems.length === 0
@@ -425,6 +426,7 @@ function inspectPackageRuntimeReadback(surface) {
       && detailDrawer.ok
       && gateReadbackCards.ok
       && stagePhase.ok
+      && completion.ok
       && surface.html.includes('data-package-backed-react-runtime-rendering="true"'),
     surface: surface.id,
     packageRuntimeComponent: "Surface+SideNav+NavGroup+LinkButton+NavItem+TopBar+EvidenceStrip+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel+StagePhase",
@@ -445,6 +447,7 @@ function inspectPackageRuntimeReadback(surface) {
     detailDrawerRuntimeReadback: detailDrawer,
     gateReadbackCardsRuntimeReadback: gateReadbackCards,
     stagePhaseRuntimeReadback: stagePhase,
+    operationsCockpitCompletionRuntimeReadback: completion,
     packageBackedReactRuntimeShellMarkerPresent: surface.html.includes('data-package-backed-react-runtime-rendering="true"')
   };
 }
@@ -743,6 +746,60 @@ function inspectDetailDrawerRuntime(html) {
     selectedDetailType: asideAttributes["data-service-detail-type"] ?? "",
     selectedStoryId: asideAttributes["data-selected-story-id"] ?? "",
     keyValueRowCount: detailHtml.match(/<dt>/g)?.length ?? 0,
+    failures
+  };
+}
+
+function inspectOperationsCockpitCompletionRuntime(html) {
+  const mainHtml = extractMainShellHtml(html);
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(mainHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "Badge",
+    "Button",
+    "DetailDrawer",
+    "EvidenceStrip",
+    "Field",
+    "FilterBar",
+    "GateReadinessPanel",
+    "Heading",
+    "IconButton",
+    "KeyValueList",
+    "LinkButton",
+    "NavGroup",
+    "NavItem",
+    "ReadbackPanel",
+    "SearchInput",
+    "Select",
+    "SideNav",
+    "StateView",
+    "StatusBadge",
+    "Surface",
+    "TableShell",
+    "Text",
+    "TopBar",
+    "WorkIndex"
+  ];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  const markerOnlyComponents = Array.from(mainHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)([^>]*)>/g))
+    .map((match) => ({ tag: match[1], component: match[2], snippet: redactAttributeSnippet(match[0]) }));
+  const failures = [];
+  if (!mainHtml) failures.push("operations_cockpit_main_missing");
+  if (missingComponents.length > 0) failures.push("operations_cockpit_required_package_components_missing");
+  if (markerOnlyComponents.length > 0) failures.push("operations_cockpit_marker_only_component_claim_present");
+  if (!/data-region="hero-title"/.test(mainHtml)) failures.push("hero_title_region_missing");
+  if (!/data-package-runtime-surface="operations-cockpit-hero-title"/.test(mainHtml)) failures.push("hero_title_runtime_surface_missing");
+  if (!/<h2\b(?=[^>]*data-package-runtime-component="Heading")(?=[^>]*data-package-runtime-surface="operations-cockpit-work-index")[^>]*>Work Index<\/h2>/.test(mainHtml)) {
+    failures.push("work_index_heading_runtime_missing");
+  }
+  return {
+    ok: failures.length === 0,
+    surface: "operations-cockpit-package-runtime-completion",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    markerOnlyComponents,
     failures
   };
 }

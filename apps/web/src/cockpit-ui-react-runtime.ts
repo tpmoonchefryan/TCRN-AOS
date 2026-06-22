@@ -33,7 +33,7 @@ export const aosCockpitUiReactRuntime = {
   packageName: "@tcrn/ui-react",
   packageSpecifier: aosDesignSystemConsumerBridge.uiReactPackageSpecifier,
   designSystemSourceHead: aosDesignSystemConsumerBridge.designSystemSourceHead,
-  implementationKind: "operations_cockpit_shell_sidebar_claim_risk_topbar_checkpoint_stage_phase_gate_readback_cards_package_runtime_expansion",
+  implementationKind: "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_completion",
   componentScope: [
     "NavItem",
     "SideNav",
@@ -82,6 +82,11 @@ export interface CockpitRuntimeShellSidebarOptions {
   navItems: readonly CockpitRuntimeNavItem[];
   navLabel: string;
   shellAttributesHtml: string;
+}
+
+export interface CockpitRuntimeHeroTitleOptions {
+  eyebrow: string;
+  title: string;
 }
 
 export interface CockpitRuntimeWorkIndexRow {
@@ -212,6 +217,28 @@ type RuntimeNavItemProps = ComponentProps<typeof NavItem> & {
 };
 
 type RuntimeDataProps = Record<`data-${string}`, string | boolean | undefined>;
+
+export function renderCockpitRuntimeHeroTitle(options: CockpitRuntimeHeroTitleOptions): string {
+  return renderCockpitRuntimeMarkup(createElement("div", {
+    "data-region": "hero-title",
+    "data-package-runtime-surface": "operations-cockpit-hero-title"
+  },
+    createElement(Text, {
+      className: "eyebrow",
+      "data-tcrn-component": "Text",
+      "data-package-runtime-component": "Text",
+      "data-package-runtime-source": "@tcrn/ui-react",
+      "data-package-runtime-surface": "operations-cockpit-hero-title"
+    } as ComponentProps<typeof Text> & RuntimeDataProps, options.eyebrow),
+    createElement(Heading, {
+      level: 1,
+      "data-tcrn-component": "Heading",
+      "data-package-runtime-component": "Heading",
+      "data-package-runtime-source": "@tcrn/ui-react",
+      "data-package-runtime-surface": "operations-cockpit-hero-title"
+    } as ComponentProps<typeof Heading> & RuntimeDataProps, options.title)
+  ), "aos-hero-title-");
+}
 
 export function renderCockpitRuntimeShellSidebar(options: CockpitRuntimeShellSidebarOptions): string {
   const navGroup = createElement(NavGroup, {
@@ -474,10 +501,13 @@ export function renderCockpitRuntimeWorkIndexCluster(options: CockpitRuntimeWork
     "data-package-runtime-surface": "operations-cockpit-work-index"
   },
     createElement("header", { className: "work-index-head" },
-      createElement("h2", {
-        className: "tcrn-heading tcrn-heading--2",
-        "data-tcrn-component": "Heading"
-      }, "Work Index"),
+      createElement(Heading, {
+        "data-tcrn-component": "Heading",
+        "data-package-runtime-component": "Heading",
+        "data-package-runtime-source": "@tcrn/ui-react",
+        "data-package-runtime-surface": "operations-cockpit-work-index",
+        level: 2
+      } as ComponentProps<typeof Heading> & RuntimeDataProps, "Work Index"),
       createElement(Field, {
         label: "Search",
         children: createElement(SearchInput, {

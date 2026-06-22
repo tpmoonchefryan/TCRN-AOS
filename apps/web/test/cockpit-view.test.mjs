@@ -69,7 +69,7 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.equal(aosDesignSystemConsumerBridge.tokenPackage, "@tcrn/ui-tokens");
   assert.equal(aosDesignSystemConsumerBridge.copyStatePackage, "@tcrn/ui-copy-state");
   assert.equal(aosDesignSystemConsumerBridge.uiReactPackage, "@tcrn/ui-react");
-  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_strips");
+  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_completion");
   assert.equal(aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering, true);
   assert.equal(aosDesignSystemConsumerBridge.designSystemSourceHead, "b0c00828a813d3c62392eb6e53d7d6b85b6affeb");
   assert.equal(copyAosState("external_proof_required"), "External proof required");
@@ -93,6 +93,8 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.match(html, /data-package-runtime-surface="operations-cockpit-topbar-checkpoint"/);
   assert.match(html, /data-package-runtime-component="EvidenceStrip"/);
   assert.match(html, /data-package-runtime-surface="operations-cockpit-claim-risk-strips"/);
+  assert.match(html, /data-region="hero-title"/);
+  assert.match(html, /data-package-runtime-surface="operations-cockpit-hero-title"/);
   assert.match(html, /data-package-runtime-component="WorkIndex"/);
   assert.match(html, /data-package-runtime-component="SearchInput"/);
   assert.match(html, /data-package-runtime-component="TableShell"/);
@@ -105,6 +107,18 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.match(html, /--tcrn-color-brand-primary/);
   assert.match(html, /\.tcrn-sr-only\s*\{[^}]*position: absolute;[^}]*width: 1px;[^}]*overflow: hidden;/);
   assert.match(html, /@media \(max-width: 520px\)[\s\S]*\.work-table \.tcrn-table-shell__cell::before\s*\{[^}]*content: attr\(data-label\)/);
+});
+
+test("Operations Cockpit completion leaves no marker-only registered component claims", () => {
+  const html = renderOperationsCockpitHtml();
+  const markerOnlyComponents = Array.from(html.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)([^>]*)>/g))
+    .map((match) => ({ tag: match[1], component: match[2] }));
+
+  assert.deepEqual(markerOnlyComponents, []);
+  assert.match(html, /data-region="hero-title"[^>]*data-package-runtime-surface="operations-cockpit-hero-title"/);
+  assert.match(html, /<p\b(?=[^>]*data-tcrn-component="Text")(?=[^>]*data-package-runtime-component="Text")(?=[^>]*data-package-runtime-surface="operations-cockpit-hero-title")[^>]*class="tcrn-text eyebrow"[^>]*>Operations Cockpit<\/p>/);
+  assert.match(html, /<h1 data-tcrn-component="Heading" data-package-runtime-component="Heading"[^>]*class="tcrn-heading tcrn-heading--1">TCRN-AOS<\/h1>/);
+  assert.match(html, /<h2 data-tcrn-component="Heading" data-package-runtime-component="Heading"[^>]*data-package-runtime-surface="operations-cockpit-work-index"[^>]*class="tcrn-heading tcrn-heading--2">Work Index<\/h2>/);
 });
 
 test("Operations Cockpit claim strip and risk lane render package-backed EvidenceStrip runtime controls", () => {
