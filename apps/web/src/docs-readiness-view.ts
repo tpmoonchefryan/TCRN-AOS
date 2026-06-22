@@ -11,7 +11,7 @@ import {
   type ProjectSearchIndexRecord,
   type ReleaseCandidateLinkage
 } from "../../../packages/domain/src/index.js";
-import { tcrnComponentAttr, tcrnStaticNavItem } from "./static-component-registry.js";
+import { renderDocsReadinessRuntimeSurface } from "./docs-readiness-ui-react-runtime.js";
 
 export const slice9bWorkflowPacketBasis = "624127182da417f65c790de155e3297e77828181";
 export const slice9bPreImplementationBasis = "9d7980f46245bb783b520c9f90945da8609c01ce";
@@ -354,7 +354,6 @@ export function createSlice9bDocsSearchReleaseReadModel(): DocsSearchReleaseInsp
 }
 
 export function renderDocsSearchReleaseReadinessHtml(model: DocsSearchReleaseInspectionModel = createSlice9bDocsSearchReleaseReadModel()): string {
-  const selectedRow = model.rows[0];
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -365,153 +364,7 @@ export function renderDocsSearchReleaseReadinessHtml(model: DocsSearchReleaseIns
     <style>${docsReadinessCss}</style>
   </head>
   <body>
-    <main class="aos-shell" ${tcrnComponentAttr("Surface")} data-region="docs-surface-shell" data-surface="docs-search-release-readiness" data-docs-search-release-surfaces-visible="${model.context.docsSearchReleaseSurfacesVisible}" data-product-design-acceptance="not_claimed">
-      <aside class="aos-sidebar tcrn-side-nav" ${tcrnComponentAttr("SideNav")} aria-label="AOS navigation">
-        <a class="brand-lockup tcrn-link-button tcrn-link-button--quiet" ${tcrnComponentAttr("LinkButton")} data-region="brand-lockup" href="#inspection" aria-label="TCRN AOS">
-          <span class="brand-tcrn">TCRN</span>
-          <span class="brand-aos">AOS</span>
-        </a>
-        <nav class="nav-stack tcrn-nav-group" ${tcrnComponentAttr("NavGroup")} aria-label="Primary views">
-          ${navButton("Dashboard", false)}
-          ${navButton("Cockpit", false)}
-          ${navButton("Docs Readiness", true)}
-          ${navButton("Evidence", false)}
-          ${navButton("Release Linkage", false)}
-        </nav>
-        <footer class="sidebar-note">
-          <span class="state-dot state-current"></span>
-          <span>Local checkpoint observed</span>
-        </footer>
-      </aside>
-      <section class="aos-main" id="inspection">
-        <header class="topbar tcrn-top-bar" ${tcrnComponentAttr("TopBar")}>
-          <label class="project-selector tcrn-field" ${tcrnComponentAttr("Field")} for="project-select">
-            <span class="tcrn-field__label">Project</span>
-            <select class="tcrn-select" ${tcrnComponentAttr("Select")} id="project-select" aria-label="Project selector">
-              <option>${escapeHtml(model.context.projectId)}</option>
-            </select>
-          </label>
-          <div class="checkpoint-strip tcrn-readback-panel" ${tcrnComponentAttr("ReadbackPanel")} aria-label="Local checkpoint">
-            <span>Visible inspection</span>
-            <strong>${escapeHtml(model.context.localCheckpoint)}</strong>
-            <em class="tcrn-badge" ${tcrnComponentAttr("StatusBadge")}>readback current</em>
-          </div>
-          <button type="button" class="top-action tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")}>Refresh readback</button>
-        </header>
-        <div class="workspace">
-          <section class="hero-row">
-            <div>
-              <p class="eyebrow tcrn-text" ${tcrnComponentAttr("Text")}>Docs / Search / Release-Candidate</p>
-              <h1 class="tcrn-heading tcrn-heading--1" ${tcrnComponentAttr("Heading")}>Visible Readiness Inspection</h1>
-            </div>
-            <div class="claim-strip tcrn-evidence-strip" ${tcrnComponentAttr("EvidenceStrip")} data-region="header-claim-strip" aria-label="Claim boundaries">
-              <span class="tcrn-badge" ${tcrnComponentAttr("StatusBadge")}>publication not executed</span>
-              <span class="tcrn-badge" ${tcrnComponentAttr("StatusBadge")}>release creation not executed</span>
-              <span class="tcrn-badge" ${tcrnComponentAttr("StatusBadge")}>final visual review pending</span>
-            </div>
-          </section>
-          <section class="summary-grid">
-            <article class="panel tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="docs-readiness-board" aria-label="Docs readiness board">
-              <div class="panel-head">
-                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Docs Readiness</h2>
-                <span class="count tcrn-badge" ${tcrnComponentAttr("Badge")}>${model.aggregateIndex.docsReadinessRecordIds.length}</span>
-              </div>
-              <dl class="posture-list tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")}>
-                <div><dt>State</dt><dd><span class="state-dot state-review"></span>${copyPosture(model.docsReadiness.readinessState)}</dd></div>
-                <div><dt>Freshness</dt><dd>${copyPosture(model.docsReadiness.freshnessState)}</dd></div>
-                <div><dt>Blocker</dt><dd>${escapeHtml(model.docsReadiness.blockers[0] ?? "external proof required")}</dd></div>
-                <div><dt>Evidence</dt><dd>${model.docsReadiness.linkedEvidenceIds.length} metadata link</dd></div>
-              </dl>
-            </article>
-            <article class="panel tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="search-inspection" aria-label="Search inspection">
-              <div class="panel-head">
-                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Search Inspection</h2>
-                <span class="tag tcrn-badge" ${tcrnComponentAttr("Badge")}>metadata only</span>
-              </div>
-              <p class="compact-copy tcrn-text" ${tcrnComponentAttr("Text")}>${escapeHtml(model.searchIndex.summary)}</p>
-              <div class="term-list">
-                ${model.searchIndex.sanitizedTerms.map((term) => `<span>${escapeHtml(term)}</span>`).join("")}
-              </div>
-            </article>
-            <article class="panel tcrn-surface" ${tcrnComponentAttr("Surface")} data-region="github-prci-linkage" aria-label="GitHub metadata and PR CI linkage">
-              <div class="panel-head">
-                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>GitHub / PR CI</h2>
-                <span class="state-chip tcrn-badge" ${tcrnComponentAttr("StatusBadge")}>${copyPosture(model.githubMetadata.readbackState)}</span>
-              </div>
-              <dl class="posture-list tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")}>
-                <div><dt>Repo</dt><dd>${escapeHtml(model.githubMetadata.repositoryName)}</dd></div>
-                <div><dt>PR</dt><dd>${escapeHtml(model.githubMetadata.pullRequestRefs[0] ?? "metadata missing")}</dd></div>
-                <div><dt>CI</dt><dd>${copyPosture(model.prCiReadiness.ciState)}</dd></div>
-                <div><dt>Mutation</dt><dd>not executed</dd></div>
-              </dl>
-            </article>
-            <article class="panel tcrn-gate-readiness-panel" ${tcrnComponentAttr("GateReadinessPanel")} data-region="release-candidate-linkage" aria-label="Release-candidate linkage">
-              <div class="panel-head">
-                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Release Candidate</h2>
-                <span class="state-chip tcrn-badge release_proof_required" ${tcrnComponentAttr("StatusBadge")}>proof required</span>
-              </div>
-              <dl class="posture-list tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")}>
-                <div><dt>Label</dt><dd>${escapeHtml(model.releaseCandidate.releaseCandidateLabel)}</dd></div>
-                <div><dt>Dependencies</dt><dd>${model.releaseCandidate.dependencyBlockerIds.length} blocker</dd></div>
-                <div><dt>Resources</dt><dd>${model.releaseCandidate.resourceBlockerIds.length} blocker</dd></div>
-                <div><dt>Creation</dt><dd>not executed</dd></div>
-              </dl>
-            </article>
-          </section>
-          <section class="content-grid">
-            <section class="work-index tcrn-surface" ${tcrnComponentAttr("WorkIndex")} aria-label="Docs readiness work index">
-              <header class="work-index-head">
-                <h2 class="tcrn-heading tcrn-heading--2" ${tcrnComponentAttr("Heading")}>Inspection Rows</h2>
-                <label class="search-box tcrn-field" ${tcrnComponentAttr("Field")} for="readiness-search">
-                  <span class="tcrn-field__label">Search inspection rows</span>
-                  <span class="tcrn-search-input" ${tcrnComponentAttr("SearchInput")} data-search-input="true">
-                    <input class="tcrn-input tcrn-search-input__control" ${tcrnComponentAttr("Input")} id="readiness-search" type="search" placeholder="Filter docs, GitHub, candidate rows" />
-                  </span>
-                </label>
-                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button">Columns</button>
-              </header>
-              <div class="filter-row tcrn-filter-bar" ${tcrnComponentAttr("FilterBar")} aria-label="Local filters">
-                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button">Project: ${escapeHtml(model.context.projectId)}</button>
-                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button">Scope: Slice 9B</button>
-                <button class="tcrn-button tcrn-button--secondary" ${tcrnComponentAttr("Button")} type="button">Storage: local first</button>
-              </div>
-              <div class="readiness-table tcrn-table-shell" ${tcrnComponentAttr("TableShell")} role="table" style="--tcrn-table-column-count: 6;">
-                <div class="readiness-row table-head tcrn-table-shell__head" role="row">
-                  <span>Story</span><span>Surface</span><span>State</span><span>Owner</span><span>Blocker</span><span>Evidence</span>
-                </div>
-                ${model.rows.map((row, index) => inspectionRowHtml(row, index)).join("")}
-              </div>
-              <div class="empty-state tcrn-state-view" ${tcrnComponentAttr("StateView")} data-empty-state hidden>
-                <strong>No local metadata rows match this filter.</strong>
-                <span>Adjust the local filter or open the evidence readback panel.</span>
-              </div>
-            </section>
-            <aside class="detail-drawer tcrn-detail-drawer" ${tcrnComponentAttr("DetailDrawer")} data-region="detail-panel" aria-label="Selected readiness detail">
-              <div class="drawer-head">
-                <span class="tag tcrn-badge" ${tcrnComponentAttr("Badge")} data-detail-kind>${escapeHtml(selectedRow?.kind ?? "Detail")}</span>
-                <button class="tcrn-button tcrn-button--quiet" ${tcrnComponentAttr("Button")} type="button" aria-label="Close detail">Close</button>
-              </div>
-              <h2 class="tcrn-heading tcrn-heading--3" ${tcrnComponentAttr("Heading")} data-detail-title>${escapeHtml(selectedRow?.title ?? "Selected local row")}</h2>
-              <dl class="detail-list tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")}>
-                <div><dt>Story</dt><dd data-detail-story>${escapeHtml(selectedRow?.storyId ?? "AOS-S057")}</dd></div>
-                <div><dt>State</dt><dd data-detail-status>${copyPosture(selectedRow?.status ?? "metadata_only")}</dd></div>
-                <div><dt>Blocker</dt><dd data-detail-blocker>${escapeHtml(selectedRow?.blocker ?? "external proof required")}</dd></div>
-                <div><dt>Detail</dt><dd data-detail-copy>${escapeHtml(selectedRow?.detail ?? "metadata present")}</dd></div>
-              </dl>
-              <section class="evidence-panel tcrn-readback-panel" ${tcrnComponentAttr("ReadbackPanel")} data-region="evidence-readback-panel" aria-label="Evidence readback panel">
-                <h3 class="tcrn-heading tcrn-heading--3" ${tcrnComponentAttr("Heading")}>Evidence Readback</h3>
-                <dl class="detail-list tcrn-key-value-list" ${tcrnComponentAttr("KeyValueList")}>
-                  <div><dt>Command</dt><dd>${escapeHtml(model.evidencePanel.command)}</dd></div>
-                  <div><dt>Target</dt><dd>${escapeHtml(model.evidencePanel.evidenceTarget)}</dd></div>
-                  <div><dt>TCRN-TMS</dt><dd>${escapeHtml(model.evidencePanel.tcrnTmsBoundary)}</dd></div>
-                  <div><dt>Wrong sibling</dt><dd>${copyPosture(model.evidencePanel.wrongSiblingQuarantine)}</dd></div>
-                </dl>
-              </section>
-            </aside>
-          </section>
-        </div>
-      </section>
-    </main>
+    ${renderDocsReadinessRuntimeSurface(model)}
     <script>${docsReadinessClientScript}</script>
   </body>
 </html>`;
@@ -530,20 +383,6 @@ function inspectionRow(storyId: string, kind: string, title: string, status: str
     detail,
     terms
   };
-}
-
-function inspectionRowHtml(row: InspectionRow, index: number): string {
-  const searchText = [row.storyId, row.kind, row.title, row.status, row.owner, row.blocker, row.detail, ...row.terms].join(" ");
-  return `<button class="readiness-row inspection-row tcrn-table-shell__row${index === 0 ? " active" : ""}" ${tcrnComponentAttr("TableShell")} data-readiness-row data-search="${escapeHtml(searchText.toLowerCase())}" data-story="${escapeHtml(row.storyId)}" data-kind="${escapeHtml(row.kind)}" data-title="${escapeHtml(row.title)}" data-status="${escapeHtml(copyPosture(row.status))}" data-blocker="${escapeHtml(row.blocker)}" data-detail="${escapeHtml(row.detail)}" type="button" role="row"><span class="tcrn-table-shell__cell">${escapeHtml(row.storyId)}</span><span class="tcrn-table-shell__cell">${escapeHtml(row.kind)}</span><span class="tcrn-table-shell__cell">${copyPosture(row.status)}</span><span class="tcrn-table-shell__cell">${escapeHtml(row.owner)}</span><span class="tcrn-table-shell__cell">${escapeHtml(row.blocker)}</span><span class="tcrn-table-shell__cell">${row.linkedEvidenceCount} link</span></button>`;
-}
-
-function navButton(label: string, active: boolean): string {
-  return tcrnStaticNavItem({
-    active,
-    activeHref: "#docs-readiness",
-    disabledReason: `${label} view is held for a later routed AOS slice; this docs readiness metadata checkpoint keeps Docs readiness available only.`,
-    label
-  });
 }
 
 function copyPosture(value: string): string {
@@ -600,12 +439,20 @@ strong, b { font-weight: 500; }
 .nav-row.active, .nav-row:hover { background: rgba(255, 255, 255, 0.12); }
 .nav-row.active { box-shadow: inset 4px 0 0 var(--teal-500); }
 .nav-row.active::before { background: var(--teal-500); }
+.tcrn-nav-group__label { padding: 0 10px 4px; color: #9fb5c4; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+.tcrn-nav-group__items { display: grid; gap: 6px; }
+.tcrn-nav-item__content { min-width: 0; }
+.tcrn-nav-item__label { min-width: 0; }
+.tcrn-nav-item__disabled-reason { display: block; margin-top: 2px; color: #b8cad5; font-size: 11px; font-weight: 400; line-height: 1.25; }
 .nav-label { min-width: 0; }
 .nav-unavailable-reason { display: block; margin-top: 2px; color: #b8cad5; font-size: 11px; font-weight: 400; line-height: 1.25; }
 .sidebar-note { display: flex; align-items: center; gap: 8px; color: #deedf4; font-size: 12px; }
 .aos-main { min-width: 0; }
 .aos-main, .workspace, .hero-row, .summary-grid, .content-grid, .panel, .work-index, .detail-drawer, .topbar { max-width: 100%; min-width: 0; }
-.topbar { display: grid; grid-template-columns: 220px minmax(0, 1fr) max-content; align-items: center; gap: 14px; min-height: 64px; padding: 0 22px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.96); }
+.topbar { display: grid; grid-template-columns: auto auto minmax(0, 1fr); align-items: center; gap: 14px; min-height: 64px; padding: 0 22px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.96); }
+.tcrn-top-bar__brand, .tcrn-top-bar__module { white-space: nowrap; font-size: 13px; font-weight: 500; color: #29374a; }
+.tcrn-top-bar__module { color: var(--muted); }
+.tcrn-top-bar__actions { display: grid; grid-template-columns: 220px minmax(0, 1fr) max-content; align-items: center; gap: 14px; min-width: 0; }
 .project-selector { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 8px; min-height: 38px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 5px; background: var(--surface); font-size: 14px; }
 .project-selector select { min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text); font-weight: 500; }
 .checkpoint-strip { display: flex; align-items: center; gap: 12px; min-width: 0; color: #26364a; font-size: 13px; }
@@ -642,7 +489,8 @@ dd { margin: 0; color: #162437; font-size: 12px; }
 .work-index { border-radius: 6px 0 0 6px; overflow: auto; }
 .work-index-head { display: grid; grid-template-columns: auto minmax(220px, 1fr) 88px; align-items: center; gap: 14px; padding: 18px; border-bottom: 1px solid var(--line); }
 .search-box { display: grid; grid-template-columns: 1fr; min-height: 36px; }
-.search-box span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.search-box > .tcrn-field__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.search-box .tcrn-search-input { width: 100%; }
 .search-box input { width: 100%; border: 1px solid var(--line-strong); border-radius: 5px; padding: 0 12px; color: var(--text); }
 .filter-row { display: flex; flex-wrap: wrap; gap: 10px; padding: 12px 18px; border-bottom: 1px solid var(--line); }
 .readiness-table { min-width: 860px; }
@@ -657,7 +505,7 @@ dd { margin: 0; color: #162437; font-size: 12px; }
 .detail-drawer { border-radius: 0 6px 6px 0; border-left: 0; padding: 20px; }
 .drawer-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .drawer-head button { border: 0; background: transparent; color: #1a293d; }
-.detail-drawer h2 { margin: 14px 0; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: #162437; font-size: 18px; line-height: 1.25; letter-spacing: 0; text-transform: none; }
+.detail-drawer h2, .detail-drawer h3:first-child { margin: 14px 0; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: #162437; font-size: 18px; line-height: 1.25; letter-spacing: 0; text-transform: none; }
 .detail-list { margin-bottom: 18px; }
 .evidence-panel { border: 1px solid var(--line); border-radius: 5px; padding: 12px; background: var(--surface-weak); }
 .evidence-panel h3 { margin: 0 0 10px; font-size: 12px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
@@ -671,7 +519,7 @@ dd { margin: 0; color: #162437; font-size: 12px; }
   .aos-shell { grid-template-columns: 1fr; }
   .aos-sidebar { position: static; height: auto; gap: 14px; padding: 18px 14px; }
   .nav-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .topbar, .work-index-head, .summary-grid { grid-template-columns: minmax(0, 1fr); }
+  .topbar, .tcrn-top-bar__actions, .work-index-head, .summary-grid { grid-template-columns: minmax(0, 1fr); }
   .topbar { padding: 14px; }
   .checkpoint-strip { align-items: start; flex-direction: column; gap: 4px; }
   .checkpoint-strip strong { white-space: normal; overflow-wrap: anywhere; }

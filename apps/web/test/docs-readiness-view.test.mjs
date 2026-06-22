@@ -51,10 +51,49 @@ test("Slice 9B static HTML exposes required visible inspection regions", () => {
   }
   assert.match(html, /data-surface="docs-search-release-readiness"/);
   assert.match(html, /data-docs-search-release-surfaces-visible="true"/);
+  assert.match(html, /data-package-backed-react-runtime-rendering="true"/);
+  assert.match(html, /data-package-runtime-surface="docs_readiness_search_release_package_runtime_adoption"/);
   assert.match(html, /id="readiness-search"/);
   assert.match(html, /data-empty-state/);
   assert.match(html, /publication not executed/);
   assert.match(html, /release creation not executed/);
+});
+
+test("Slice 9B Docs Readiness runtime uses package-backed components instead of marker-only claims", () => {
+  const html = renderDocsSearchReleaseReadinessHtml();
+  const requiredPackageComponents = [
+    "Surface",
+    "SideNav",
+    "NavGroup",
+    "NavItem",
+    "LinkButton",
+    "TopBar",
+    "Field",
+    "Select",
+    "Button",
+    "Badge",
+    "StatusBadge",
+    "EvidenceStrip",
+    "ReadbackPanel",
+    "Text",
+    "Heading",
+    "KeyValueList",
+    "WorkIndex",
+    "TableShell",
+    "SearchInput",
+    "FilterBar",
+    "StateView",
+    "DetailDrawer"
+  ];
+
+  for (const component of requiredPackageComponents) {
+    assert.match(html, new RegExp(`data-package-runtime-component="${component}"`), `${component} is package-runtime rendered`);
+  }
+
+  const markerOnlyClaims = Array.from(html.matchAll(/<[^>]+data-tcrn-component="([^"]+)"[^>]*>/g))
+    .filter((match) => !match[0].includes("data-package-runtime-component=") && !match[0].includes("data-package-runtime-subcomponent="))
+    .map((match) => match[1]);
+  assert.deepEqual(markerOnlyClaims, []);
 });
 
 test("Slice 9B static HTML removes forbidden overclaim copy", () => {
@@ -75,7 +114,7 @@ test("Slice 9B disabled Design System NavItems are non-actionable with reasons",
     assert.match(item.attributes, /\baria-describedby="[^"]+"/, `disabled NavItem has accessible reason linkage: ${item.attributes}`);
     assert.match(item.attributes, /\bdata-disabled-reason="[^"]+"/, `disabled NavItem has reason metadata: ${item.attributes}`);
     assert.match(item.attributes, /\btitle="[^"]+"/, `disabled NavItem has title reason: ${item.attributes}`);
-    assert.match(item.body, /\bnav-unavailable-reason\b/, "disabled NavItem has visible reason text");
+    assert.match(item.body, /\btcrn-nav-item__disabled-reason\b/, "disabled NavItem has package visible reason text");
   }
 });
 

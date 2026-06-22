@@ -18,16 +18,27 @@ import {
   aosDesignSystemConsumerBridge
 } from "../dist/apps/web/src/design-system-bridge.js";
 import {
+  aosDocsReadinessUiReactRuntime,
+  renderDocsReadinessRuntimeSurface
+} from "../dist/apps/web/src/docs-readiness-ui-react-runtime.js";
+import {
+  createSlice9bDocsSearchReleaseReadModel,
+  renderDocsSearchReleaseReadinessHtml
+} from "../dist/apps/web/src/docs-readiness-view.js";
+import {
   renderOperationsCockpitHtml
 } from "../dist/apps/web/src/cockpit-view.js";
 
 const repoRoot = process.cwd();
-const route = "route_tcrn_aos_design_system_frontend_rebuild_59av_operations_cockpit_package_runtime_completion_implementation";
+const route = "route_tcrn_aos_design_system_frontend_rebuild_59aw_docs_readiness_package_runtime_adoption_implementation";
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const packageJson = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8"));
 const runtimeSourcePath = "apps/web/src/cockpit-ui-react-runtime.ts";
+const docsRuntimeSourcePath = "apps/web/src/docs-readiness-ui-react-runtime.ts";
 const runtimeSource = readFileSync(join(repoRoot, runtimeSourcePath), "utf8");
+const docsRuntimeSource = readFileSync(join(repoRoot, docsRuntimeSourcePath), "utf8");
 const cockpitHtml = renderOperationsCockpitHtml();
+const docsReadinessHtml = renderDocsSearchReleaseReadinessHtml();
 const shellSidebarRuntimeReadback = inspectPackageRuntimeShellSidebar(cockpitHtml);
 const claimRiskEvidenceStripRuntimeReadback = inspectPackageRuntimeClaimRiskStrips(cockpitHtml);
 const topbarCheckpointRuntimeReadback = inspectPackageRuntimeTopbarCheckpoint(cockpitHtml);
@@ -37,7 +48,9 @@ const detailDrawerRuntimeReadback = inspectPackageRuntimeDetailDrawer(cockpitHtm
 const gateReadbackCardsRuntimeReadback = inspectPackageRuntimeGateReadbackCards(cockpitHtml);
 const stagePhaseRuntimeReadback = inspectPackageRuntimeStagePhaseCards(cockpitHtml);
 const operationsCockpitCompletionRuntimeReadback = inspectOperationsCockpitCompletionRuntime(cockpitHtml);
+const docsReadinessRuntimeReadback = inspectDocsReadinessRuntime(docsReadinessHtml);
 const fullDocumentAccessibilityReadback = inspectFullDocumentAccessibility(cockpitHtml);
+const docsReadinessFullDocumentAccessibilityReadback = inspectFullDocumentAccessibility(docsReadinessHtml);
 const visualStyleReadback = inspectAosRuntimeStyleContract(cockpitHtml);
 const importReadback = inspectImports();
 const dependencyReadback = inspectDependencies();
@@ -62,7 +75,9 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && gateReadbackCardsRuntimeReadback.ok
   && stagePhaseRuntimeReadback.ok
   && operationsCockpitCompletionRuntimeReadback.ok
+  && docsReadinessRuntimeReadback.ok
   && fullDocumentAccessibilityReadback.ok
+  && docsReadinessFullDocumentAccessibilityReadback.ok
   && visualStyleReadback.ok
   && storybookReferenceReadback.ok
   && noOverclaimReadback.ok
@@ -73,11 +88,11 @@ const summary = {
   route,
   sourceHead,
   claimScope: {
-    implementationKind: "operations_cockpit_package_runtime_completion",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_shell_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_and_typography_completion",
-    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_claim_risk_shell_sidebar_and_typography_component_reference_only",
+    implementationKind: "operations_cockpit_package_runtime_completion_plus_docs_readiness_package_runtime_adoption",
+    packageBackedReactRuntimeRendering: "operations_cockpit_completion_and_docs_readiness_search_release_runtime_adoption",
+    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_claim_risk_shell_sidebar_typography_and_docs_readiness_component_reference_only",
     broadUiReactRuntimeMigration: false,
-    docsReadinessPackageRuntimeRendering: false,
+    docsReadinessPackageRuntimeRendering: true,
     aosWidePackageRuntimeRendering: false,
     productAcceptanceReady: false,
     finalMvpAcceptanceReady: false,
@@ -102,7 +117,9 @@ const summary = {
   gateReadbackCardsRuntimeReadback,
   stagePhaseRuntimeReadback,
   operationsCockpitCompletionRuntimeReadback,
+  docsReadinessRuntimeReadback,
   fullDocumentAccessibilityReadback,
+  docsReadinessFullDocumentAccessibilityReadback,
   visualStyleReadback,
   storybookReferenceReadback,
   noOverclaimReadback
@@ -157,6 +174,12 @@ console.log(JSON.stringify({
   packageRuntimeStagePhaseFailures: summary.stagePhaseRuntimeReadback.failures.length,
   operationsCockpitCompletionMarkerOnlyCount: summary.operationsCockpitCompletionRuntimeReadback.markerOnlyComponents.length,
   operationsCockpitCompletionFailures: summary.operationsCockpitCompletionRuntimeReadback.failures.length,
+  docsReadinessRuntimeComponentCount: summary.docsReadinessRuntimeReadback.packageRuntimeComponents.length,
+  docsReadinessMarkerOnlyCount: summary.docsReadinessRuntimeReadback.markerOnlyComponents.length,
+  docsReadinessRuntimeFailures: summary.docsReadinessRuntimeReadback.failures.length,
+  docsReadinessDuplicateDomIdCount: summary.docsReadinessFullDocumentAccessibilityReadback.duplicateIds.length,
+  docsReadinessAriaReferenceFailureCount: summary.docsReadinessFullDocumentAccessibilityReadback.ariaReferenceFailures.length,
+  docsReadinessDisabledDescriptionMismatchCount: summary.docsReadinessFullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length,
   duplicateDomIdCount: summary.fullDocumentAccessibilityReadback.duplicateIds.length,
   ariaReferenceFailureCount: summary.fullDocumentAccessibilityReadback.ariaReferenceFailures.length,
   disabledDescriptionMismatchCount: summary.fullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length,
@@ -195,8 +218,11 @@ function inspectDependencies() {
 }
 
 function inspectImports() {
+  const combinedRuntimeSource = `${runtimeSource}\n${docsRuntimeSource}`;
   const packageImportPresent = /from\s+["']@tcrn\/ui-react["']/.test(runtimeSource);
+  const docsPackageImportPresent = /from\s+["']@tcrn\/ui-react["']/.test(docsRuntimeSource);
   const reactServerRenderingPresent = /from\s+["']react-dom\/server["']/.test(runtimeSource);
+  const docsReactServerRenderingPresent = /from\s+["']react-dom\/server["']/.test(docsRuntimeSource);
   const requiredPublicComponentImports = [
     "NavItem",
     "SideNav",
@@ -220,10 +246,13 @@ function inspectImports() {
     "StatusBadge",
     "GateReadinessPanel",
     "ReadbackPanel",
-    "EvidenceStrip"
+    "EvidenceStrip",
+    "SideNav",
+    "NavGroup",
+    "LinkButton"
   ];
   const publicComponentImportPresence = Object.fromEntries(
-    requiredPublicComponentImports.map((name) => [name, new RegExp(`\\b${name}\\b`).test(runtimeSource)])
+    Array.from(new Set(requiredPublicComponentImports)).map((name) => [name, new RegExp(`\\b${name}\\b`).test(combinedRuntimeSource)])
   );
   const deepImportHits = runRg([
     "-n",
@@ -240,16 +269,21 @@ function inspectImports() {
     "apps/web/src",
     "apps/web/test",
     "scripts"
-  ]).filter((line) => !line.includes(runtimeSourcePath));
+  ]).filter((line) => !line.includes(runtimeSourcePath) && !line.includes(docsRuntimeSourcePath));
   return {
     ok: packageImportPresent
+      && docsPackageImportPresent
       && reactServerRenderingPresent
+      && docsReactServerRenderingPresent
       && Object.values(publicComponentImportPresence).every(Boolean)
       && deepImportHits.length === 0
       && copiedSourceHits.length === 0,
     runtimeSourcePath,
+    docsRuntimeSourcePath,
     packageImportPresent,
+    docsPackageImportPresent,
     reactServerRenderingPresent,
+    docsReactServerRenderingPresent,
     publicComponentImportPresence,
     deepImportHits,
     copiedSourceHits
@@ -1092,6 +1126,130 @@ function inspectOperationsCockpitCompletionRuntime(html) {
   };
 }
 
+function inspectDocsReadinessRuntime(html) {
+  const mainHtml = extractDocsReadinessMainHtml(html);
+  const failures = [];
+  if (!mainHtml) {
+    return {
+      ok: false,
+      present: false,
+      surface: "docs-readiness-package-runtime-adoption",
+      requiredComponents: [],
+      packageRuntimeComponents: [],
+      markerOnlyComponents: [],
+      missingComponents: [],
+      failures: ["docs_readiness_main_missing"]
+    };
+  }
+
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(mainHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = Array.from(aosDocsReadinessUiReactRuntime.componentScope);
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  if (missingComponents.length > 0) failures.push("docs_readiness_required_package_components_missing");
+
+  const markerOnlyComponents = Array.from(mainHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)(?![^>]*data-package-runtime-subcomponent=)([^>]*)>/g))
+    .map((match) => ({
+      tag: match[1],
+      component: match[2],
+      snippet: redactAttributeSnippet(match[0])
+    }));
+  if (markerOnlyComponents.length > 0) failures.push("docs_readiness_marker_only_component_claim_present");
+
+  const mainAttributes = parseAttributes(mainHtml.match(/<main\b([^>]*)>/)?.[1] ?? "");
+  if (mainAttributes["data-package-runtime-surface"] !== aosDocsReadinessUiReactRuntime.implementationKind) {
+    failures.push("docs_readiness_runtime_surface_mismatch");
+  }
+  if (mainAttributes["data-package-runtime-component-scope"] !== aosDocsReadinessUiReactRuntime.componentScope.join(",")) {
+    failures.push("docs_readiness_component_scope_mismatch");
+  }
+  if (mainAttributes["data-surface"] !== "docs-search-release-readiness") failures.push("docs_readiness_surface_marker_missing");
+  if (mainAttributes["data-package-backed-react-runtime-rendering"] !== "true") failures.push("docs_readiness_runtime_flag_missing");
+  if (mainAttributes["data-product-design-acceptance"] !== "not_claimed") failures.push("docs_readiness_product_design_boundary_missing");
+
+  const requiredRegions = [
+    "docs-surface-shell",
+    "brand-lockup",
+    "header-claim-strip",
+    "docs-readiness-board",
+    "search-inspection",
+    "github-prci-linkage",
+    "release-candidate-linkage",
+    "evidence-readback-panel",
+    "detail-panel"
+  ];
+  const missingRegions = requiredRegions.filter((region) => !mainHtml.includes(`data-region="${region}"`));
+  if (missingRegions.length > 0) failures.push("docs_readiness_required_regions_missing");
+
+  const navItems = Array.from(mainHtml.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g))
+    .map((match) => ({ attributes: match[1], body: match[2], parsed: parseAttributes(match[1]) }));
+  const packageRuntimeNavItems = navItems.filter((item) => item.parsed["data-package-runtime-component"] === "NavItem");
+  const disabledNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-disabled"] === "true");
+  const activeNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-current"] === "page");
+  if (navItems.length !== 5) failures.push("docs_readiness_navitem_count_mismatch");
+  if (packageRuntimeNavItems.length !== 5) failures.push("docs_readiness_navitem_runtime_count_mismatch");
+  if (disabledNavItems.length !== 4) failures.push("docs_readiness_disabled_navitem_count_mismatch");
+  if (activeNavItems.length !== 1) failures.push("docs_readiness_active_navitem_count_mismatch");
+  for (const item of disabledNavItems) {
+    const label = extractVisibleText(item.body, "tcrn-nav-item__label");
+    const visibleReason = findVisibleDisabledReason(item.body, item.parsed["aria-describedby"]);
+    const itemFailures = [];
+    if (item.parsed.href) itemFailures.push("disabled_navitem_has_href");
+    if (item.parsed.tabindex !== "-1") itemFailures.push("disabled_navitem_missing_tabindex_minus_1");
+    if (!item.parsed.title?.trim()) itemFailures.push("disabled_navitem_missing_title");
+    if (!item.parsed["data-disabled-reason"]?.trim()) itemFailures.push("disabled_navitem_missing_data_disabled_reason");
+    if (!item.parsed["aria-describedby"]?.trim()) itemFailures.push("disabled_navitem_missing_aria_describedby");
+    if (!visibleReason.resolved) itemFailures.push("disabled_navitem_aria_describedby_unresolved");
+    if (visibleReason.resolved && !visibleReason.text.trim()) itemFailures.push("disabled_navitem_visible_reason_empty");
+    if (visibleReason.text && item.parsed["data-disabled-reason"] && normalizeText(visibleReason.text) !== normalizeText(item.parsed["data-disabled-reason"])) {
+      itemFailures.push("disabled_navitem_visible_reason_mismatch");
+    }
+    if (itemFailures.length > 0) failures.push({ label, failures: itemFailures });
+  }
+
+  if (!mainHtml.includes('data-package-runtime-subcomponent="SearchInput.control"')) failures.push("docs_readiness_search_input_control_missing");
+  if (mainHtml.includes('data-package-runtime-component="Input"')) failures.push("docs_readiness_input_scope_overclaim_present");
+  if (!mainHtml.includes("data-detail-title")) failures.push("docs_readiness_detail_title_hook_missing");
+  if (!mainHtml.includes("publication not executed")) failures.push("docs_readiness_publication_boundary_copy_missing");
+  if (!mainHtml.includes("release creation not executed")) failures.push("docs_readiness_release_boundary_copy_missing");
+  if (!mainHtml.includes("GitHub / PR CI")) failures.push("docs_readiness_github_panel_missing");
+  if (!mainHtml.includes("release proof required")) failures.push("docs_readiness_release_proof_copy_missing");
+
+  const forbiddenClaimHits = [
+    "docs published",
+    "github write enabled",
+    "ci mutation complete",
+    "canonical promotion complete",
+    "release ready",
+    "release created",
+    "product accepted",
+    "final mvp accepted"
+  ].filter((phrase) => mainHtml.toLowerCase().includes(phrase));
+  if (forbiddenClaimHits.length > 0) failures.push("docs_readiness_forbidden_overclaim_copy_present");
+
+  const sampleRenderedHtmlSha256 = createHash("sha256").update(renderDocsReadinessRuntimeSurface(createSlice9bDocsSearchReleaseReadModel())).digest("hex");
+
+  return {
+    ok: failures.length === 0,
+    present: true,
+    surface: "docs-readiness-package-runtime-adoption",
+    implementationKind: mainAttributes["data-package-runtime-surface"] ?? "",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    markerOnlyComponents,
+    missingRegions,
+    packageRuntimeNavItemCount: packageRuntimeNavItems.length,
+    disabledNavItemCount: disabledNavItems.length,
+    activeNavItemCount: activeNavItems.length,
+    searchInputControlDisposition: "internal_subcomponent_not_separate_package_runtime_scope",
+    forbiddenClaimHits,
+    sampleRenderedHtmlSha256,
+    failures
+  };
+}
+
 function inspectFullDocumentAccessibility(html) {
   const idEntries = collectRealIdEntries(html);
   const idCounts = new Map();
@@ -1193,12 +1351,16 @@ function inspectSourceContentDigest() {
   const sourcePaths = [
     "apps/web/src/cockpit-ui-react-runtime.ts",
     "apps/web/src/cockpit-view.ts",
+    "apps/web/src/docs-readiness-ui-react-runtime.ts",
+    "apps/web/src/docs-readiness-view.ts",
     "apps/web/src/design-system-bridge.ts",
     "apps/web/test/cockpit-view.test.mjs",
+    "apps/web/test/docs-readiness-view.test.mjs",
     "scripts/aos-design-system-package-runtime-proof.mjs",
     "scripts/aos-design-system-component-registry-proof.mjs",
     "scripts/aos-design-system-consumer-slice-1-proof.mjs",
     "scripts/aos-design-system-consumer-slice-2-proof.mjs",
+    "scripts/slice-9b-visible-readiness-proof.mjs",
     "scripts/slice-4b-style-proof.mjs"
   ];
   const digestInput = sourcePaths
@@ -1276,6 +1438,16 @@ function normalizeText(value) {
 
 function extractMainShellHtml(html) {
   const marker = 'data-surface="operations-cockpit"';
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<main", markerIndex);
+  const end = html.indexOf("</main>", markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + "</main>".length);
+}
+
+function extractDocsReadinessMainHtml(html) {
+  const marker = 'data-surface="docs-search-release-readiness"';
   const markerIndex = html.indexOf(marker);
   if (markerIndex === -1) return "";
   const start = html.lastIndexOf("<main", markerIndex);
@@ -1498,10 +1670,18 @@ function markdownReceipt(summary) {
   const completionRows = summary.operationsCockpitCompletionRuntimeReadback.failures.length === 0
     ? "- Operations Cockpit completion marker-only failures: 0"
     : summary.operationsCockpitCompletionRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
+  const docsReadinessRows = summary.docsReadinessRuntimeReadback.failures.length === 0
+    ? "- Docs Readiness package-runtime failures: 0"
+    : summary.docsReadinessRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
   const accessibilityRows = [
     `- Full-document duplicate real DOM ids: ${summary.fullDocumentAccessibilityReadback.duplicateIds.length}`,
     `- Full-document aria reference failures: ${summary.fullDocumentAccessibilityReadback.ariaReferenceFailures.length}`,
     `- Full-document disabled-description mismatches: ${summary.fullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length}`
+  ].join("\n");
+  const docsAccessibilityRows = [
+    `- Docs Readiness duplicate real DOM ids: ${summary.docsReadinessFullDocumentAccessibilityReadback.duplicateIds.length}`,
+    `- Docs Readiness aria reference failures: ${summary.docsReadinessFullDocumentAccessibilityReadback.ariaReferenceFailures.length}`,
+    `- Docs Readiness disabled-description mismatches: ${summary.docsReadinessFullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length}`
   ].join("\n");
   return `# AOS Design System Package Runtime Proof\n\n`
     + `- Route: ${summary.route}\n`
@@ -1525,6 +1705,9 @@ function markdownReceipt(summary) {
     + `- Package runtime Stage/Phase components: ${summary.stagePhaseRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Package runtime Stage/Phase counts: ${summary.stagePhaseRuntimeReadback.stageCount} stages / ${summary.stagePhaseRuntimeReadback.phaseRowCount} phase rows\n`
     + `- Operations Cockpit marker-only package component claims: ${summary.operationsCockpitCompletionRuntimeReadback.markerOnlyComponents.length}\n`
+    + `- Docs Readiness package runtime components: ${summary.docsReadinessRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
+    + `- Docs Readiness marker-only package component claims: ${summary.docsReadinessRuntimeReadback.markerOnlyComponents.length}\n`
+    + `- Docs Readiness disabled package NavItems: ${summary.docsReadinessRuntimeReadback.disabledNavItemCount}\n`
     + `- Marker-only NavItems in cockpit nav: ${summary.navRuntimeReadback.markerOnlyNavItemCount}\n`
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
@@ -1538,7 +1721,9 @@ function markdownReceipt(summary) {
     + `${gateReadbackRows}\n`
     + `${stagePhaseRows}\n`
     + `${completionRows}\n`
+    + `${docsReadinessRows}\n`
     + `${accessibilityRows}\n\n`
+    + `${docsAccessibilityRows}\n\n`
     + `## Boundaries\n\n`
-    + `This is an Operations Cockpit package-runtime completion checkpoint covering Shell / Sidebar, NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, AI Employee Phase, Topbar / Checkpoint, Claim Strip / Risk Lane, and cockpit typography residues only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
+    + `This is an Operations Cockpit package-runtime completion plus Docs Readiness package-runtime adoption checkpoint. AOS-wide Product Design remains marker/static-renderer only. It is not broad AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, docs publication, release, GitHub mutation, CI mutation, VM freshness, or Owner Intent execution.\n`;
 }

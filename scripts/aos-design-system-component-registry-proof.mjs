@@ -95,6 +95,7 @@ const surfaceReadbacks = surfaces.map((surface) => {
 });
 const browserReadbackPathLeakage = inspectBrowserReadbackPathLeakage(browserSummaryPath);
 const packageRuntimeReadback = inspectPackageRuntimeReadback(surfaces.find((surface) => surface.id === "operations-cockpit"));
+const docsReadinessPackageRuntimeReadback = inspectDocsReadinessPackageRuntimeReadback(surfaces.find((surface) => surface.id === "docs-search-release-readiness"));
 const proofSelfChecks = runProofSelfChecks();
 
 const ok = localRegistryDiff.length === 0
@@ -102,6 +103,7 @@ const ok = localRegistryDiff.length === 0
   && surfaceReadbacks.every((readback) => readback.missingRequired.length === 0)
   && surfaceReadbacks.every((readback) => readback.disabledNavItemSemanticFailures.length === 0)
   && packageRuntimeReadback.ok
+  && docsReadinessPackageRuntimeReadback.ok
   && browserReadbackPathLeakage.present === true
   && browserReadbackPathLeakage.absolutePathHits.length === 0
   && proofSelfChecks.every((check) => check.passed);
@@ -112,10 +114,10 @@ const summary = {
   registrySource: relative(repoRoot, designSystemRegistrySourcePath),
   designSystemBasis,
   claimScope: {
-    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_package_runtime_completion",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_shell_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_and_typography_completion",
+    implementationKind: "mixed_static_renderer_registered_component_metadata_with_operations_cockpit_completion_and_docs_readiness_package_runtime",
+    packageBackedReactRuntimeRendering: "operations_cockpit_completion_and_docs_readiness_search_release_runtime_adoption",
     storybookVisualStyleParity: "not_claimed_by_registered_component_proof",
-    docsReadinessPackageRuntimeRendering: false,
+    docsReadinessPackageRuntimeRendering: true,
     aosWidePackageRuntimeRendering: false,
     productAcceptanceReady: false,
     finalMvpAcceptanceReady: false
@@ -123,6 +125,7 @@ const summary = {
   localRegistryDiff,
   surfaces: surfaceReadbacks,
   packageRuntimeReadback,
+  docsReadinessPackageRuntimeReadback,
   browserReadbackPathLeakage,
   proofSelfChecks,
   noOverclaim: {
@@ -449,6 +452,76 @@ function inspectPackageRuntimeReadback(surface) {
     stagePhaseRuntimeReadback: stagePhase,
     operationsCockpitCompletionRuntimeReadback: completion,
     packageBackedReactRuntimeShellMarkerPresent: surface.html.includes('data-package-backed-react-runtime-rendering="true"')
+  };
+}
+
+function inspectDocsReadinessPackageRuntimeReadback(surface) {
+  if (!surface) {
+    return {
+      ok: false,
+      surface: "docs-search-release-readiness",
+      failures: ["docs_readiness_surface_missing"]
+    };
+  }
+  const html = surface.html;
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(html.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "Badge",
+    "Button",
+    "DetailDrawer",
+    "EvidenceStrip",
+    "Field",
+    "FilterBar",
+    "Heading",
+    "KeyValueList",
+    "LinkButton",
+    "NavGroup",
+    "NavItem",
+    "ReadbackPanel",
+    "SearchInput",
+    "Select",
+    "SideNav",
+    "StateView",
+    "StatusBadge",
+    "Surface",
+    "TableShell",
+    "Text",
+    "TopBar",
+    "WorkIndex"
+  ];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  const markerOnlyComponents = Array.from(html.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)(?![^>]*data-package-runtime-subcomponent=)([^>]*)>/g))
+    .map((match) => ({ tag: match[1], component: match[2] }));
+  const mainAttributes = parseAttributes(html.match(/<main\b([^>]*)>/)?.[1] ?? "");
+  const navItems = Array.from(html.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g))
+    .map((match) => ({ attributes: match[1], body: match[2], parsed: parseAttributes(match[1]) }));
+  const disabledNavItems = navItems.filter((item) => item.parsed["aria-disabled"] === "true");
+  const failures = [];
+  if (missingComponents.length > 0) failures.push("docs_readiness_required_package_components_missing");
+  if (markerOnlyComponents.length > 0) failures.push("docs_readiness_marker_only_component_claim_present");
+  if (mainAttributes["data-package-runtime-surface"] !== "docs_readiness_search_release_package_runtime_adoption") failures.push("docs_readiness_runtime_surface_mismatch");
+  if (mainAttributes["data-package-backed-react-runtime-rendering"] !== "true") failures.push("docs_readiness_runtime_flag_missing");
+  if (navItems.length !== 5) failures.push("docs_readiness_navitem_count_mismatch");
+  if (disabledNavItems.length !== 4) failures.push("docs_readiness_disabled_navitem_count_mismatch");
+  if (!html.includes('data-package-runtime-subcomponent="SearchInput.control"')) failures.push("docs_readiness_search_input_control_missing");
+  if (html.includes('data-package-runtime-component="Input"')) failures.push("docs_readiness_input_scope_overclaim_present");
+  if (!html.includes("data-detail-title")) failures.push("docs_readiness_detail_title_hook_missing");
+  return {
+    ok: failures.length === 0,
+    surface: surface.id,
+    packageRuntimeComponent: "Surface+SideNav+NavGroup+LinkButton+NavItem+TopBar+EvidenceStrip+ReadbackPanel+WorkIndex+DetailDrawer",
+    packageRuntimeSource: "@tcrn/ui-react",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    markerOnlyComponents,
+    packageRuntimeNavItemCount: navItems.length,
+    disabledPackageRuntimeNavItemCount: disabledNavItems.length,
+    searchInputControlDisposition: "internal_subcomponent_not_separate_package_runtime_scope",
+    packageBackedReactRuntimeShellMarkerPresent: html.includes('data-package-backed-react-runtime-rendering="true"'),
+    failures
   };
 }
 
