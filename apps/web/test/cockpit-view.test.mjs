@@ -69,7 +69,7 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.equal(aosDesignSystemConsumerBridge.tokenPackage, "@tcrn/ui-tokens");
   assert.equal(aosDesignSystemConsumerBridge.copyStatePackage, "@tcrn/ui-copy-state");
   assert.equal(aosDesignSystemConsumerBridge.uiReactPackage, "@tcrn/ui-react");
-  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_strips");
+  assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_strips");
   assert.equal(aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering, true);
   assert.equal(aosDesignSystemConsumerBridge.designSystemSourceHead, "b0c00828a813d3c62392eb6e53d7d6b85b6affeb");
   assert.equal(copyAosState("external_proof_required"), "External proof required");
@@ -81,7 +81,12 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.match(html, /data-design-system-copy-state="@tcrn\/ui-copy-state"/);
   assert.match(html, /data-design-system-ui-react="@tcrn\/ui-react"/);
   assert.match(html, /data-package-backed-react-runtime-rendering="true"/);
-  assert.match(html, /data-package-runtime-component-scope="NavItem,TopBar,WorkIndex,TableShell,SearchInput,Field,Select,FilterBar,Button,IconButton,Badge,StateView,DetailDrawer,KeyValueList,Surface,Heading,Text,StatusBadge,GateReadinessPanel,ReadbackPanel,EvidenceStrip"/);
+  assert.match(html, /data-package-runtime-component-scope="NavItem,SideNav,NavGroup,LinkButton,TopBar,WorkIndex,TableShell,SearchInput,Field,Select,FilterBar,Button,IconButton,Badge,StateView,DetailDrawer,KeyValueList,Surface,Heading,Text,StatusBadge,GateReadinessPanel,ReadbackPanel,EvidenceStrip"/);
+  assert.match(html, /data-package-runtime-component="Surface"/);
+  assert.match(html, /data-package-runtime-component="SideNav"/);
+  assert.match(html, /data-package-runtime-component="NavGroup"/);
+  assert.match(html, /data-package-runtime-component="LinkButton"/);
+  assert.match(html, /data-package-runtime-surface="operations-cockpit-shell-sidebar"/);
   assert.match(html, /data-package-runtime-component="TopBar"/);
   assert.match(html, /data-package-runtime-component="Select"/);
   assert.match(html, /data-package-runtime-component="IconButton"/);

@@ -112,8 +112,8 @@ const summary = {
   registrySource: relative(repoRoot, designSystemRegistrySourcePath),
   designSystemBasis,
   claimScope: {
-    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_claim_risk_package_runtime",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
+    implementationKind: "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_shell_sidebar_package_runtime",
+    packageBackedReactRuntimeRendering: "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
     storybookVisualStyleParity: "not_claimed_by_registered_component_proof",
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -382,6 +382,7 @@ function inspectPackageRuntimeReadback(surface) {
   const disabledPackageRuntimeNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-disabled"] === "true");
   const activePackageRuntimeNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-current"] === "page");
   const claimRisk = inspectClaimRiskEvidenceStripRuntime(surface.html);
+  const shellSidebar = inspectShellSidebarRuntime(surface.html);
   const topbarCheckpoint = inspectTopbarCheckpointRuntime(surface.html);
   const workIndexCluster = extractWorkIndexClusterHtml(surface.html);
   const workIndexPackageRuntimeComponents = Array.from(new Set(
@@ -412,6 +413,7 @@ function inspectPackageRuntimeReadback(surface) {
       && markerOnlyNavItems.length === 0
       && disabledPackageRuntimeNavItems.length === 9
       && activePackageRuntimeNavItems.length === 1
+      && shellSidebar.ok
       && claimRisk.ok
       && topbarCheckpoint.ok
       && workIndexCluster.includes('data-package-runtime-component="WorkIndex"')
@@ -425,8 +427,9 @@ function inspectPackageRuntimeReadback(surface) {
       && stagePhase.ok
       && surface.html.includes('data-package-backed-react-runtime-rendering="true"'),
     surface: surface.id,
-    packageRuntimeComponent: "NavItem+TopBar+EvidenceStrip+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel+StagePhase",
+    packageRuntimeComponent: "Surface+SideNav+NavGroup+LinkButton+NavItem+TopBar+EvidenceStrip+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel+StagePhase",
     packageRuntimeSource: "@tcrn/ui-react",
+    shellSidebarRuntimeReadback: shellSidebar,
     claimRiskEvidenceStripRuntimeReadback: claimRisk,
     topbarCheckpointRuntimeReadback: topbarCheckpoint,
     packageRuntimeNavItemCount: packageRuntimeNavItems.length,
@@ -443,6 +446,66 @@ function inspectPackageRuntimeReadback(surface) {
     gateReadbackCardsRuntimeReadback: gateReadbackCards,
     stagePhaseRuntimeReadback: stagePhase,
     packageBackedReactRuntimeShellMarkerPresent: surface.html.includes('data-package-backed-react-runtime-rendering="true"')
+  };
+}
+
+function inspectShellSidebarRuntime(html) {
+  const mainHtml = extractMainShellHtml(html);
+  const sidebarHtml = extractSidebarHtml(html);
+  const brandHtml = extractRegionElementHtml(html, "brand-lockup", "a");
+  const mainTagHtml = mainHtml.match(/<main\b[^>]*>/)?.[0] ?? "";
+  const combinedHtml = `${mainTagHtml}\n${sidebarHtml}`;
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(combinedHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "LinkButton",
+    "NavGroup",
+    "NavItem",
+    "SideNav",
+    "Surface",
+    "Text"
+  ];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  const failures = [];
+  const mainAttributes = parseAttributes(mainHtml.match(/<main\b([^>]*)>/)?.[1] ?? "");
+  const sidebarAttributes = parseAttributes(sidebarHtml.match(/<nav\b([^>]*)>/)?.[1] ?? "");
+  const brandAttributes = parseAttributes(brandHtml.match(/<a\b([^>]*)>/)?.[1] ?? "");
+  const navGroupAttributes = parseAttributes(sidebarHtml.match(/<div\b(?=[^>]*data-package-runtime-component="NavGroup")([^>]*)>/)?.[1] ?? "");
+
+  if (!mainHtml) failures.push("shell_surface_missing");
+  if (!sidebarHtml) failures.push("sidebar_nav_missing");
+  if (!brandHtml) failures.push("brand_lockup_missing");
+  if (missingComponents.length > 0) failures.push("shell_sidebar_required_components_missing");
+  if (mainAttributes["data-package-runtime-component"] !== "Surface") failures.push("shell_surface_missing_runtime_marker");
+  if (mainAttributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push("shell_surface_missing_package_source");
+  if (!/shell_sidebar/.test(mainAttributes["data-package-runtime-surface"] ?? "")) failures.push("shell_surface_implementation_scope_mismatch");
+  if (sidebarAttributes["data-package-runtime-component"] !== "SideNav") failures.push("sidebar_missing_runtime_marker");
+  if (sidebarAttributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push("sidebar_missing_package_source");
+  if (sidebarAttributes["data-region"] !== "sidebar-nav") failures.push("sidebar_region_missing");
+  if (sidebarAttributes["data-navigation-primitive"] !== "side-nav") failures.push("sidebar_primitive_missing");
+  if (brandAttributes["data-package-runtime-component"] !== "LinkButton") failures.push("brand_missing_linkbutton_runtime_marker");
+  if (brandAttributes["data-region"] !== "brand-lockup") failures.push("brand_region_missing");
+  if (brandAttributes.href !== "#cockpit") failures.push("brand_href_mismatch");
+  if (navGroupAttributes["data-package-runtime-component"] !== "NavGroup") failures.push("nav_group_missing_runtime_marker");
+  if (navGroupAttributes["data-package-runtime-scope"] !== "operations-cockpit-navitem") failures.push("nav_group_scope_missing");
+  if (!/Primary cockpit views/.test(sidebarHtml)) failures.push("nav_group_label_missing");
+  if (!/Local posture recorded/.test(sidebarHtml)) failures.push("sidebar_footer_copy_missing");
+  if (!/data-package-runtime-component="Text"/.test(sidebarHtml)) failures.push("sidebar_footer_text_runtime_missing");
+
+  const markerOnlyComponents = Array.from(sidebarHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)([^>]*)>/g))
+    .map((match) => ({ tag: match[1], component: match[2] }));
+  if (markerOnlyComponents.length > 0) failures.push("shell_sidebar_marker_only_runtime_claim_present");
+
+  return {
+    ok: failures.length === 0,
+    surface: "operations-cockpit-shell-sidebar",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    markerOnlyComponents,
+    navItemCount: (sidebarHtml.match(/data-package-runtime-component="NavItem"/g) ?? []).length,
+    failures
   };
 }
 
@@ -682,6 +745,36 @@ function inspectDetailDrawerRuntime(html) {
     keyValueRowCount: detailHtml.match(/<dt>/g)?.length ?? 0,
     failures
   };
+}
+
+function extractMainShellHtml(html) {
+  const marker = 'data-surface="operations-cockpit"';
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<main", markerIndex);
+  const end = html.indexOf("</main>", markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + "</main>".length);
+}
+
+function extractSidebarHtml(html) {
+  const marker = 'data-region="sidebar-nav"';
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<nav", markerIndex);
+  const end = html.indexOf("</nav>", markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + "</nav>".length);
+}
+
+function extractRegionElementHtml(html, region, tag) {
+  const marker = `data-region="${region}"`;
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf(`<${tag}`, markerIndex);
+  const end = html.indexOf(`</${tag}>`, markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + `</${tag}>`.length);
 }
 
 function extractHeaderHtml(html, region) {

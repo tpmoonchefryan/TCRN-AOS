@@ -15,8 +15,8 @@
     }
   },
   "claimScope": {
-    "implementationKind": "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_claim_risk_package_runtime",
-    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
+    "implementationKind": "mixed_static_renderer_registered_component_metadata_and_operations_cockpit_shell_sidebar_package_runtime",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
     "storybookVisualStyleParity": "not_claimed_by_registered_component_proof",
     "docsReadinessPackageRuntimeRendering": false,
     "aosWidePackageRuntimeRendering": false,
@@ -28,7 +28,7 @@
     {
       "id": "operations-cockpit",
       "path": "apps/web/static/operations-cockpit.html",
-      "componentCount": 104,
+      "componentCount": 105,
       "registeredComponents": [
         "Badge",
         "Button",
@@ -190,8 +190,32 @@
   "packageRuntimeReadback": {
     "ok": true,
     "surface": "operations-cockpit",
-    "packageRuntimeComponent": "NavItem+TopBar+EvidenceStrip+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel+StagePhase",
+    "packageRuntimeComponent": "Surface+SideNav+NavGroup+LinkButton+NavItem+TopBar+EvidenceStrip+WorkIndex+DetailDrawer+GateReadinessPanel+ReadbackPanel+StagePhase",
     "packageRuntimeSource": "@tcrn/ui-react",
+    "shellSidebarRuntimeReadback": {
+      "ok": true,
+      "surface": "operations-cockpit-shell-sidebar",
+      "requiredComponents": [
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "SideNav",
+        "Surface",
+        "Text"
+      ],
+      "packageRuntimeComponents": [
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "SideNav",
+        "Surface",
+        "Text"
+      ],
+      "missingComponents": [],
+      "markerOnlyComponents": [],
+      "navItemCount": 10,
+      "failures": []
+    },
     "claimRiskEvidenceStripRuntimeReadback": {
       "ok": true,
       "surface": "operations-cockpit-claim-risk-strips",

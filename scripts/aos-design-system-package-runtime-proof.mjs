@@ -8,6 +8,7 @@ import {
   renderCockpitRuntimeDetailDrawer,
   renderCockpitRuntimeGateReadbackCards,
   renderCockpitRuntimeNavItems,
+  renderCockpitRuntimeShellSidebar,
   renderCockpitRuntimeStagePhaseCards,
   renderCockpitRuntimeTopbarCheckpoint,
   renderCockpitRuntimeWorkIndexCluster
@@ -20,12 +21,13 @@ import {
 } from "../dist/apps/web/src/cockpit-view.js";
 
 const repoRoot = process.cwd();
-const route = "route_tcrn_aos_design_system_frontend_rebuild_59at_claim_risk_evidence_strip_package_runtime_implementation";
+const route = "route_tcrn_aos_design_system_frontend_rebuild_59au_cockpit_shell_sidebar_package_runtime_implementation";
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const packageJson = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8"));
 const runtimeSourcePath = "apps/web/src/cockpit-ui-react-runtime.ts";
 const runtimeSource = readFileSync(join(repoRoot, runtimeSourcePath), "utf8");
 const cockpitHtml = renderOperationsCockpitHtml();
+const shellSidebarRuntimeReadback = inspectPackageRuntimeShellSidebar(cockpitHtml);
 const claimRiskEvidenceStripRuntimeReadback = inspectPackageRuntimeClaimRiskStrips(cockpitHtml);
 const topbarCheckpointRuntimeReadback = inspectPackageRuntimeTopbarCheckpoint(cockpitHtml);
 const navRuntimeReadback = inspectPackageRuntimeNavItems(cockpitHtml);
@@ -49,6 +51,7 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && aosCockpitUiReactRuntime.packageBackedReactRuntimeRendering === true
   && dependencyReadback.ok
   && importReadback.ok
+  && shellSidebarRuntimeReadback.ok
   && claimRiskEvidenceStripRuntimeReadback.ok
   && topbarCheckpointRuntimeReadback.ok
   && navRuntimeReadback.ok
@@ -67,9 +70,9 @@ const summary = {
   route,
   sourceHead,
   claimScope: {
-    implementationKind: "operations_cockpit_claim_risk_evidence_strip_package_runtime_expansion",
-    packageBackedReactRuntimeRendering: "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
-    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_and_claim_risk_component_reference_only",
+    implementationKind: "operations_cockpit_shell_sidebar_package_runtime_expansion",
+    packageBackedReactRuntimeRendering: "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
+    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_claim_risk_and_shell_sidebar_component_reference_only",
     broadUiReactRuntimeMigration: false,
     docsReadinessPackageRuntimeRendering: false,
     aosWidePackageRuntimeRendering: false,
@@ -87,6 +90,7 @@ const summary = {
   },
   dependencyReadback,
   importReadback,
+  shellSidebarRuntimeReadback,
   claimRiskEvidenceStripRuntimeReadback,
   topbarCheckpointRuntimeReadback,
   navRuntimeReadback,
@@ -127,6 +131,8 @@ console.log(JSON.stringify({
   sourceFreshnessStrategy: summary.sourceFreshnessReadback.strategy,
   sourceContentDigest: summary.sourceFreshnessReadback.sourceContentDigest,
   implementationKind: summary.claimScope.implementationKind,
+  packageRuntimeShellSidebarComponentCount: summary.shellSidebarRuntimeReadback.packageRuntimeComponents.length,
+  packageRuntimeShellSidebarFailures: summary.shellSidebarRuntimeReadback.failures.length,
   packageRuntimeClaimRiskEvidenceStripComponentCount: summary.claimRiskEvidenceStripRuntimeReadback.packageRuntimeComponents.length,
   packageRuntimeClaimRiskEvidenceStripFailures: summary.claimRiskEvidenceStripRuntimeReadback.failures.length,
   packageRuntimeClaimCount: summary.claimRiskEvidenceStripRuntimeReadback.claimCount,
@@ -187,6 +193,9 @@ function inspectImports() {
   const reactServerRenderingPresent = /from\s+["']react-dom\/server["']/.test(runtimeSource);
   const requiredPublicComponentImports = [
     "NavItem",
+    "SideNav",
+    "NavGroup",
+    "LinkButton",
     "TopBar",
     "WorkIndex",
     "SearchInput",
@@ -221,7 +230,7 @@ function inspectImports() {
   ]);
   const copiedSourceHits = runRg([
     "-n",
-    "function\\s+(NavItem|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel|EvidenceStrip)|const\\s+(NavItem|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel|EvidenceStrip)|export\\s+function\\s+(NavItem|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel|EvidenceStrip)",
+    "function\\s+(NavItem|SideNav|NavGroup|LinkButton|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel|EvidenceStrip)|const\\s+(NavItem|SideNav|NavGroup|LinkButton|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel|EvidenceStrip)|export\\s+function\\s+(NavItem|SideNav|NavGroup|LinkButton|TopBar|WorkIndex|TableShell|SearchInput|Field|Select|FilterBar|Button|IconButton|Badge|StateView|DetailDrawer|KeyValueList|Surface|Heading|Text|StatusBadge|GateReadinessPanel|ReadbackPanel|EvidenceStrip)",
     "apps/web/src",
     "apps/web/test",
     "scripts"
@@ -238,6 +247,100 @@ function inspectImports() {
     publicComponentImportPresence,
     deepImportHits,
     copiedSourceHits
+  };
+}
+
+function inspectPackageRuntimeShellSidebar(html) {
+  const mainHtml = extractMainShellHtml(html);
+  const sidebarHtml = extractSidebarHtml(html);
+  const brandHtml = extractRegionElementHtml(html, "brand-lockup", "a");
+  const failures = [];
+
+  if (!mainHtml) failures.push("shell_surface_missing");
+  if (!sidebarHtml) failures.push("sidebar_nav_missing");
+  if (!brandHtml) failures.push("brand_lockup_missing");
+
+  const mainTagHtml = mainHtml.match(/<main\b[^>]*>/)?.[0] ?? "";
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(`${mainTagHtml}\n${sidebarHtml}`.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const requiredComponents = [
+    "LinkButton",
+    "NavGroup",
+    "NavItem",
+    "SideNav",
+    "Surface",
+    "Text"
+  ];
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  if (missingComponents.length > 0) failures.push("shell_sidebar_required_package_components_missing");
+
+  const mainAttributes = parseAttributes(mainHtml.match(/<main\b([^>]*)>/)?.[1] ?? "");
+  const sidebarAttributes = parseAttributes(sidebarHtml.match(/<nav\b([^>]*)>/)?.[1] ?? "");
+  const brandAttributes = parseAttributes(brandHtml.match(/<a\b([^>]*)>/)?.[1] ?? "");
+  const navGroupAttributes = parseAttributes(sidebarHtml.match(/<div\b(?=[^>]*data-package-runtime-component="NavGroup")([^>]*)>/)?.[1] ?? "");
+
+  if (mainAttributes["data-package-runtime-component"] !== "Surface") failures.push("shell_surface_missing_runtime_marker");
+  if (mainAttributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push("shell_surface_missing_package_source");
+  if (mainAttributes["data-package-runtime-surface"] !== aosCockpitUiReactRuntime.implementationKind) failures.push("shell_surface_implementation_scope_mismatch");
+  if (mainAttributes["data-surface"] !== "operations-cockpit") failures.push("shell_surface_aos_metadata_missing");
+  if (sidebarAttributes["data-package-runtime-component"] !== "SideNav") failures.push("sidebar_missing_sidenav_runtime_marker");
+  if (sidebarAttributes["data-package-runtime-source"] !== "@tcrn/ui-react") failures.push("sidebar_missing_package_source");
+  if (sidebarAttributes["data-package-runtime-surface"] !== "operations-cockpit-shell-sidebar") failures.push("sidebar_missing_runtime_surface");
+  if (sidebarAttributes["data-region"] !== "sidebar-nav") failures.push("sidebar_region_missing");
+  if (sidebarAttributes["aria-label"] !== "AOS navigation") failures.push("sidebar_label_mismatch");
+  if (sidebarAttributes["data-navigation-primitive"] !== "side-nav") failures.push("sidebar_navigation_primitive_missing");
+  if (brandAttributes["data-package-runtime-component"] !== "LinkButton") failures.push("brand_lockup_missing_linkbutton_runtime_marker");
+  if (brandAttributes["data-region"] !== "brand-lockup") failures.push("brand_lockup_region_missing");
+  if (brandAttributes.href !== "#cockpit") failures.push("brand_lockup_href_mismatch");
+  if (!/class="brand-tcrn">TCRN<\/span>/.test(brandHtml) || !/class="brand-aos">AOS<\/span>/.test(brandHtml)) {
+    failures.push("brand_lockup_copy_missing");
+  }
+  if (navGroupAttributes["data-package-runtime-component"] !== "NavGroup") failures.push("nav_group_missing_runtime_marker");
+  if (navGroupAttributes["data-package-runtime-scope"] !== "operations-cockpit-navitem") failures.push("nav_group_scope_missing");
+  if (navGroupAttributes["data-navigation-primitive"] !== "nav-group") failures.push("nav_group_primitive_missing");
+  if (!/Primary cockpit views/.test(sidebarHtml)) failures.push("nav_group_label_missing");
+  if (!/Local posture recorded/.test(sidebarHtml)) failures.push("sidebar_footer_copy_missing");
+  if (!/data-package-runtime-component="Text"/.test(sidebarHtml)) failures.push("sidebar_footer_text_runtime_missing");
+
+  const navItems = Array.from(sidebarHtml.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g));
+  if (navItems.length !== 10) failures.push("sidebar_navitem_count_mismatch");
+  const markerOnlyComponents = Array.from(sidebarHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)([^>]*)>/g))
+    .map((match) => ({ tag: match[1], component: match[2] }));
+  if (markerOnlyComponents.length > 0) failures.push("shell_sidebar_marker_only_runtime_claim_present");
+
+  const sampleRenderedHtmlSha256 = createHash("sha256").update(renderCockpitRuntimeShellSidebar({
+    brandAriaLabel: "TCRN AOS",
+    brandHref: "#cockpit",
+    brandPrimaryLabel: "TCRN",
+    brandSecondaryLabel: "AOS",
+    footerLabel: "Local posture recorded",
+    navItems: [
+      {
+        active: false,
+        disabledReason: "Sample disabled reason for shell sidebar proof.",
+        href: "#cockpit",
+        label: "Sample"
+      }
+    ],
+    navLabel: "Primary cockpit views",
+    shellAttributesHtml: 'data-surface="operations-cockpit" data-service-backed="false" data-cockpit-api="/api/cockpit" data-package-backed-react-runtime-rendering="true" data-package-runtime-surface="sample" data-package-runtime-component-scope="NavItem,SideNav,NavGroup,LinkButton,Surface,Text"'
+  })).digest("hex");
+
+  return {
+    ok: failures.length === 0,
+    present: Boolean(mainHtml && sidebarHtml && brandHtml),
+    surface: "operations-cockpit-shell-sidebar",
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    navItemCount: navItems.length,
+    markerOnlyComponents,
+    brandLockupRegionPresent: Boolean(brandAttributes["data-region"]),
+    sidebarRegionPresent: Boolean(sidebarAttributes["data-region"]),
+    footerReadback: /Local posture recorded/.test(sidebarHtml),
+    sampleRenderedHtmlSha256,
+    failures
   };
 }
 
@@ -1086,6 +1189,36 @@ function normalizeText(value) {
   return decodeHtml(stripTags(value)).replace(/\s+/g, " ").trim();
 }
 
+function extractMainShellHtml(html) {
+  const marker = 'data-surface="operations-cockpit"';
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<main", markerIndex);
+  const end = html.indexOf("</main>", markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + "</main>".length);
+}
+
+function extractSidebarHtml(html) {
+  const marker = 'data-region="sidebar-nav"';
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf("<nav", markerIndex);
+  const end = html.indexOf("</nav>", markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + "</nav>".length);
+}
+
+function extractRegionElementHtml(html, region, tag) {
+  const marker = `data-region="${region}"`;
+  const markerIndex = html.indexOf(marker);
+  if (markerIndex === -1) return "";
+  const start = html.lastIndexOf(`<${tag}`, markerIndex);
+  const end = html.indexOf(`</${tag}>`, markerIndex);
+  if (start === -1 || end === -1) return "";
+  return html.slice(start, end + `</${tag}>`.length);
+}
+
 function extractHeaderHtml(html, region) {
   const marker = `data-region="${region}"`;
   const markerIndex = html.indexOf(marker);
@@ -1249,6 +1382,9 @@ function escapeRegExp(value) {
 }
 
 function markdownReceipt(summary) {
+  const shellSidebarRows = summary.shellSidebarRuntimeReadback.failures.length === 0
+    ? "- Shell / Sidebar package-runtime failures: 0"
+    : summary.shellSidebarRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
   const claimRiskRows = summary.claimRiskEvidenceStripRuntimeReadback.failures.length === 0
     ? "- Claim Strip / Risk Lane package-runtime failures: 0"
     : summary.claimRiskEvidenceStripRuntimeReadback.failures.map((failure) => typeof failure === "string" ? `- ${failure}` : `- ${failure.label}: ${failure.failures.join(", ")}`).join("\n");
@@ -1284,6 +1420,7 @@ function markdownReceipt(summary) {
     + `- Runtime rendering claim: ${summary.claimScope.packageBackedReactRuntimeRendering}\n`
     + `- Design System source head: ${summary.designSystemReadback.sourceHead}\n`
     + `- UI React package: ${summary.designSystemReadback.uiReactPackage} (${summary.designSystemReadback.uiReactPackageSpecifier})\n`
+    + `- Package runtime Shell/Sidebar components: ${summary.shellSidebarRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Package runtime Claim/Risk components: ${summary.claimRiskEvidenceStripRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
     + `- Package runtime Claim/Risk counts: ${summary.claimRiskEvidenceStripRuntimeReadback.claimCount} claims / ${summary.claimRiskEvidenceStripRuntimeReadback.riskWarningCount} risk warnings\n`
     + `- Package runtime Topbar/Checkpoint components: ${summary.topbarCheckpointRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
@@ -1299,6 +1436,7 @@ function markdownReceipt(summary) {
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
     + `- AOS runtime sr-only / mobile TableShell style proof ok: ${summary.visualStyleReadback.ok}\n`
+    + `${shellSidebarRows}\n`
     + `${claimRiskRows}\n`
     + `${topbarRows}\n`
     + `${rows}\n`
@@ -1308,5 +1446,5 @@ function markdownReceipt(summary) {
     + `${stagePhaseRows}\n`
     + `${accessibilityRows}\n\n`
     + `## Boundaries\n\n`
-    + `This is an Operations Cockpit NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, AI Employee Phase, Topbar / Checkpoint, and Claim Strip / Risk Lane package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
+    + `This is an Operations Cockpit Shell / Sidebar, NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, AI Employee Phase, Topbar / Checkpoint, and Claim Strip / Risk Lane package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.\n`;
 }

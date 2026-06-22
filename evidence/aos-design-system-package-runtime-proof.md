@@ -1,13 +1,14 @@
 # AOS Design System Package Runtime Proof
 
-- Route: route_tcrn_aos_design_system_frontend_rebuild_59at_claim_risk_evidence_strip_package_runtime_implementation
-- Source head at proof run: 4e0963c57b0b79174a66b1f41c262b665a035b6e
+- Route: route_tcrn_aos_design_system_frontend_rebuild_59au_cockpit_shell_sidebar_package_runtime_implementation
+- Source head at proof run: 55dd6a66fbb3547c0eda620e1742889156af5a2a
 - Source freshness strategy: source_content_digest_for_mutating_receipts
-- Source content digest: 701311e08a5b4c06e84bc3da1f860e28d244b4865245efc792eb7a1e32c21f3c
-- Scope: operations_cockpit_claim_risk_evidence_strip_package_runtime_expansion
-- Runtime rendering claim: operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips
+- Source content digest: 7f3fbd81cfca17337b080f030f3967f6f8b521b280a9af1ede123057dfff4eb9
+- Scope: operations_cockpit_shell_sidebar_package_runtime_expansion
+- Runtime rendering claim: operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips
 - Design System source head: b0c00828a813d3c62392eb6e53d7d6b85b6affeb
 - UI React package: @tcrn/ui-react (file:../TCRN-Design-System/packages/ui-react)
+- Package runtime Shell/Sidebar components: LinkButton, NavGroup, NavItem, SideNav, Surface, Text
 - Package runtime Claim/Risk components: Badge, EvidenceStrip, StatusBadge
 - Package runtime Claim/Risk counts: 3 claims / 4 risk warnings
 - Package runtime Topbar/Checkpoint components: Badge, Button, Field, Heading, IconButton, ReadbackPanel, Select, StatusBadge, TopBar
@@ -24,6 +25,7 @@
 - Storybook NavItem disabled reason reference ok: true
 
 - AOS runtime sr-only / mobile TableShell style proof ok: true
+- Shell / Sidebar package-runtime failures: 0
 - Claim Strip / Risk Lane package-runtime failures: 0
 - Topbar / Checkpoint package-runtime failures: 0
 - Disabled package-runtime NavItem semantic failures: 0
@@ -37,4 +39,4 @@
 
 ## Boundaries
 
-This is an Operations Cockpit NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, AI Employee Phase, Topbar / Checkpoint, and Claim Strip / Risk Lane package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.
+This is an Operations Cockpit Shell / Sidebar, NavItem, Work Index, selected detail drawer, Gate Work Order card, Readback Posture card, Stage Map, AI Employee Phase, Topbar / Checkpoint, and Claim Strip / Risk Lane package-runtime expansion only. Docs Readiness and AOS-wide Product Design remain marker/static-renderer surfaces. It is not AOS-wide @tcrn/ui-react migration, product UI acceptance, product acceptance, final MVP acceptance, publication, release, VM freshness, or Owner Intent execution.

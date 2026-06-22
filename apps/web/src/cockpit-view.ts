@@ -27,7 +27,7 @@ import {
   renderCockpitRuntimeClaimRiskStrips,
   renderCockpitRuntimeDetailDrawer,
   renderCockpitRuntimeGateReadbackCards,
-  renderCockpitRuntimeNavItems,
+  renderCockpitRuntimeShellSidebar,
   renderCockpitRuntimeStagePhaseCards,
   renderCockpitRuntimeTopbarCheckpoint,
   renderCockpitRuntimeWorkIndexCluster,
@@ -35,6 +35,7 @@ import {
   type CockpitRuntimeDetailDrawerOptions,
   type CockpitRuntimeGateReadbackCardsOptions,
   type CockpitRuntimeNavItem,
+  type CockpitRuntimeShellSidebarOptions,
   type CockpitRuntimeStagePhaseOptions,
   type CockpitRuntimeTopbarCheckpointOptions,
   type CockpitRuntimeWorkIndexRow
@@ -247,6 +248,12 @@ export function renderOperationsCockpitHtml(
   const claimRiskStripParts = claimRiskStripsHtml.split(claimRiskStripSeparator);
   const claimStripHtml = claimRiskStripParts[0] ?? "";
   const riskLaneHtml = claimRiskStripParts.slice(1).join(claimRiskStripSeparator);
+  const shellSidebarHtml = renderCockpitRuntimeShellSidebar(createCockpitRuntimeShellSidebarOptions({
+    cockpitApiPath,
+    model,
+    serviceBacked,
+    serviceReadback
+  }));
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -257,20 +264,7 @@ export function renderOperationsCockpitHtml(
     <style>${operationsCockpitCss}</style>
   </head>
   <body>
-    <main class="aos-shell" ${tcrnComponentAttr("Surface")} data-surface="operations-cockpit" data-service-backed="${serviceBacked ? "true" : "false"}" data-cockpit-api="${escapeHtml(cockpitApiPath)}" data-product-design-acceptance="${model.nonClaims.productDesignAcceptance}" data-design-system-consumer="${aosDesignSystemConsumerBridge.adoptionPosture}" data-design-system-tokens="${aosDesignSystemConsumerBridge.tokenPackage}" data-design-system-copy-state="${aosDesignSystemConsumerBridge.copyStatePackage}" data-design-system-ui-react="${aosDesignSystemConsumerBridge.uiReactPackage}" data-design-system-source-head="${aosDesignSystemConsumerBridge.designSystemSourceHead}" data-package-backed-react-runtime-rendering="${aosCockpitUiReactRuntime.packageBackedReactRuntimeRendering}" data-package-runtime-surface="${aosCockpitUiReactRuntime.implementationKind}" data-package-runtime-component-scope="${aosCockpitUiReactRuntime.componentScope.join(",")}" data-service-model-schema="${serviceReadback.schemaVersion}" data-service-read-model-source="${serviceReadback.source}" data-service-work-row-count="${serviceReadback.surfaces.workIndex.rowCount}" data-service-selected-story-id="${escapeHtml(serviceReadback.surfaces.workIndex.selectedStoryId)}" data-service-detail-id="${escapeHtml(serviceReadback.surfaces.detail.selectedId)}" data-service-detail-type="${serviceReadback.surfaces.detail.selectedType}" data-service-gate-count="${serviceReadback.surfaces.gate.roleGateCount + serviceReadback.surfaces.gate.ownerIntentGateCount}" data-service-evidence-readback-count="${serviceReadback.surfaces.readback.evidenceReadbackCount}" data-service-runtime-data-committed="${serviceReadback.surfaces.readback.runtimeDataCommittedToGit}">
-      <aside class="aos-sidebar tcrn-side-nav" ${tcrnComponentAttr("SideNav")} data-region="sidebar-nav" aria-label="AOS navigation">
-        <a class="brand-lockup tcrn-link-button tcrn-link-button--quiet" ${tcrnComponentAttr("LinkButton")} data-region="brand-lockup" href="#cockpit" aria-label="TCRN AOS">
-          <span class="brand-tcrn">TCRN</span>
-          <span class="brand-aos">AOS</span>
-        </a>
-        <nav class="nav-stack tcrn-nav-group" ${tcrnComponentAttr("NavGroup")} data-package-runtime-scope="operations-cockpit-navitem" aria-label="Primary cockpit views">
-          ${renderCockpitRuntimeNavItems(createCockpitRuntimeNavItems())}
-        </nav>
-        <footer class="sidebar-note">
-          <span class="state-dot state-current"></span>
-          <span>Local posture recorded</span>
-        </footer>
-      </aside>
+    ${shellSidebarHtml}
       <section class="aos-main" id="cockpit">
         ${renderCockpitRuntimeTopbarCheckpoint(createCockpitRuntimeTopbarCheckpointOptions({
           model,
@@ -363,7 +357,9 @@ strong, b { font-weight: 500; }
 .brand-lockup { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; min-height: 42px; padding: 0 10px 8px; }
 .brand-tcrn { font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 29px; line-height: 1; font-weight: 500; letter-spacing: 0.17em; color: #f7fbff; }
 .brand-aos { display: inline-block; font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 32px; line-height: 1; font-weight: 800; letter-spacing: 0; color: transparent; background: linear-gradient(135deg, #18d7c8 6%, #08a99d 56%, #15c4b5 100%); -webkit-background-clip: text; background-clip: text; transform: skewX(-5deg); }
-.nav-stack { display: grid; align-content: start; gap: 6px; }
+.nav-stack { display: grid; align-content: start; gap: 8px; }
+.nav-stack .tcrn-nav-group__label { color: #a9bfcc; font-size: var(--type-micro); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+.nav-stack .tcrn-nav-group__items { display: grid; gap: 6px; }
 .nav-row { display: grid; grid-template-columns: 8px 1fr; align-items: center; gap: 10px; width: 100%; min-height: 38px; border: 1px solid transparent; border-radius: 6px; padding: 7px 10px; background: transparent; color: #e5eef3; text-align: left; font-size: var(--type-ui); font-weight: 400; }
 .nav-row::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: #7891a2; }
 .nav-row.active, .nav-row:hover { background: rgba(255, 255, 255, 0.12); }
@@ -375,6 +371,7 @@ strong, b { font-weight: 500; }
 .nav-label { min-width: 0; }
 .nav-unavailable-reason { display: block; margin-top: 2px; color: #b8cad5; font-size: var(--type-micro); font-weight: 400; line-height: var(--line-compact); }
 .sidebar-note { display: flex; align-items: center; gap: 8px; color: #deedf4; font-size: var(--type-label); }
+.sidebar-note .tcrn-text { margin: 0; color: inherit; font-size: inherit; line-height: inherit; }
 .aos-main { min-width: 0; }
 .topbar { display: grid; grid-template-columns: max-content minmax(0, 1fr); grid-template-areas: "brand actions" "module actions"; align-items: center; column-gap: 14px; row-gap: 4px; min-height: 64px; min-width: 0; padding: 8px 22px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.96); }
 .tcrn-top-bar__brand { grid-area: brand; color: #0f2437; font-size: var(--type-label); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
@@ -474,7 +471,7 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
 @media (max-width: 760px) {
   .aos-shell { grid-template-columns: 1fr; }
   .aos-sidebar { position: static; height: auto; gap: 14px; padding: 18px 14px; }
-  .nav-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nav-stack .tcrn-nav-group__items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .nav-row { min-height: 34px; }
   .topbar, .tcrn-top-bar__actions, .work-index-head, .summary-grid { grid-template-columns: 1fr; }
   .topbar { grid-template-areas: "brand" "module" "actions"; padding: 14px; }
@@ -714,6 +711,51 @@ function createCockpitRuntimeNavItems(): CockpitRuntimeNavItem[] {
     href: "#cockpit",
     label
   }));
+}
+
+function createCockpitRuntimeShellSidebarOptions(input: {
+  cockpitApiPath: string;
+  model: OperationsCockpitReadModel;
+  serviceBacked: boolean;
+  serviceReadback: CockpitServiceReadModelReadback;
+}): CockpitRuntimeShellSidebarOptions {
+  const serviceReadback = input.serviceReadback;
+  const shellAttributes = [
+    ["data-surface", "operations-cockpit"],
+    ["data-service-backed", input.serviceBacked ? "true" : "false"],
+    ["data-cockpit-api", input.cockpitApiPath],
+    ["data-product-design-acceptance", input.model.nonClaims.productDesignAcceptance],
+    ["data-design-system-consumer", aosDesignSystemConsumerBridge.adoptionPosture],
+    ["data-design-system-tokens", aosDesignSystemConsumerBridge.tokenPackage],
+    ["data-design-system-copy-state", aosDesignSystemConsumerBridge.copyStatePackage],
+    ["data-design-system-ui-react", aosDesignSystemConsumerBridge.uiReactPackage],
+    ["data-design-system-source-head", aosDesignSystemConsumerBridge.designSystemSourceHead],
+    ["data-package-backed-react-runtime-rendering", String(aosCockpitUiReactRuntime.packageBackedReactRuntimeRendering)],
+    ["data-package-runtime-surface", aosCockpitUiReactRuntime.implementationKind],
+    ["data-package-runtime-component-scope", aosCockpitUiReactRuntime.componentScope.join(",")],
+    ["data-service-model-schema", serviceReadback.schemaVersion],
+    ["data-service-read-model-source", serviceReadback.source],
+    ["data-service-work-row-count", String(serviceReadback.surfaces.workIndex.rowCount)],
+    ["data-service-selected-story-id", serviceReadback.surfaces.workIndex.selectedStoryId],
+    ["data-service-detail-id", serviceReadback.surfaces.detail.selectedId],
+    ["data-service-detail-type", serviceReadback.surfaces.detail.selectedType],
+    ["data-service-gate-count", String(serviceReadback.surfaces.gate.roleGateCount + serviceReadback.surfaces.gate.ownerIntentGateCount)],
+    ["data-service-evidence-readback-count", String(serviceReadback.surfaces.readback.evidenceReadbackCount)],
+    ["data-service-runtime-data-committed", String(serviceReadback.surfaces.readback.runtimeDataCommittedToGit)]
+  ] as const;
+
+  return {
+    brandAriaLabel: "TCRN AOS",
+    brandHref: "#cockpit",
+    brandPrimaryLabel: "TCRN",
+    brandSecondaryLabel: "AOS",
+    footerLabel: "Local posture recorded",
+    navItems: createCockpitRuntimeNavItems(),
+    navLabel: "Primary cockpit views",
+    shellAttributesHtml: shellAttributes
+      .map(([name, value]) => `${name}="${escapeHtml(value)}"`)
+      .join(" ")
+  };
 }
 
 function createCockpitRuntimeTopbarCheckpointOptions(input: {

@@ -9,16 +9,19 @@ import {
 } from "@tcrn/ui-copy-state";
 
 export const aosDesignSystemConsumerBridge = {
-  route: "route_tcrn_aos_design_system_frontend_rebuild_59at_claim_risk_evidence_strip_package_runtime_implementation",
+  route: "route_tcrn_aos_design_system_frontend_rebuild_59au_cockpit_shell_sidebar_package_runtime_implementation",
   adoptionPosture: "tokens_copy_state_ui_react_operations_cockpit_runtime_pilot",
   designSystemSourceHead: "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
   tokenPackage: "@tcrn/ui-tokens",
   copyStatePackage: "@tcrn/ui-copy-state",
   uiReactPackage: "@tcrn/ui-react",
   uiReactPackageSpecifier: "file:../TCRN-Design-System/packages/ui-react",
-  uiReactRuntimeSurface: "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_strips",
+  uiReactRuntimeSurface: "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_strips",
   uiReactRuntimeComponentScope: [
     "NavItem",
+    "SideNav",
+    "NavGroup",
+    "LinkButton",
     "TopBar",
     "WorkIndex",
     "TableShell",

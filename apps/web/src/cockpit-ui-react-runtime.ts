@@ -11,10 +11,13 @@ import {
   Heading,
   IconButton,
   KeyValueList,
+  LinkButton,
   NavItem,
+  NavGroup,
   ReadbackPanel,
   SearchInput,
   Select,
+  SideNav,
   StatusBadge,
   Surface,
   StateView,
@@ -30,9 +33,12 @@ export const aosCockpitUiReactRuntime = {
   packageName: "@tcrn/ui-react",
   packageSpecifier: aosDesignSystemConsumerBridge.uiReactPackageSpecifier,
   designSystemSourceHead: aosDesignSystemConsumerBridge.designSystemSourceHead,
-  implementationKind: "operations_cockpit_claim_risk_topbar_checkpoint_stage_phase_gate_readback_cards_package_runtime_expansion",
+  implementationKind: "operations_cockpit_shell_sidebar_claim_risk_topbar_checkpoint_stage_phase_gate_readback_cards_package_runtime_expansion",
   componentScope: [
     "NavItem",
+    "SideNav",
+    "NavGroup",
+    "LinkButton",
     "TopBar",
     "WorkIndex",
     "TableShell",
@@ -65,6 +71,17 @@ export interface CockpitRuntimeNavItem {
   disabledReason: string;
   href: string;
   label: string;
+}
+
+export interface CockpitRuntimeShellSidebarOptions {
+  brandAriaLabel: string;
+  brandHref: string;
+  brandPrimaryLabel: string;
+  brandSecondaryLabel: string;
+  footerLabel: string;
+  navItems: readonly CockpitRuntimeNavItem[];
+  navLabel: string;
+  shellAttributesHtml: string;
 }
 
 export interface CockpitRuntimeWorkIndexRow {
@@ -195,6 +212,71 @@ type RuntimeNavItemProps = ComponentProps<typeof NavItem> & {
 };
 
 type RuntimeDataProps = Record<`data-${string}`, string | boolean | undefined>;
+
+export function renderCockpitRuntimeShellSidebar(options: CockpitRuntimeShellSidebarOptions): string {
+  const navGroup = createElement(NavGroup, {
+    "aria-label": options.navLabel,
+    children: options.navItems.map((item) => createElement(CockpitRuntimeNavItemElement, {
+      item,
+      key: item.label
+    })),
+    className: "nav-stack",
+    "data-tcrn-component": "NavGroup",
+    "data-package-runtime-component": "NavGroup",
+    "data-package-runtime-source": "@tcrn/ui-react",
+    "data-package-runtime-surface": "operations-cockpit-shell-sidebar",
+    "data-package-runtime-scope": "operations-cockpit-navitem",
+    label: options.navLabel
+  } as ComponentProps<typeof NavGroup> & RuntimeDataProps);
+  const sidebarChildren = [
+    createElement(LinkButton, {
+      "aria-label": options.brandAriaLabel,
+      className: "brand-lockup",
+      "data-region": "brand-lockup",
+      "data-tcrn-component": "LinkButton",
+      "data-package-runtime-component": "LinkButton",
+      "data-package-runtime-source": "@tcrn/ui-react",
+      "data-package-runtime-surface": "operations-cockpit-shell-sidebar",
+      href: options.brandHref,
+      key: "brand-lockup",
+      variant: "quiet"
+    } as ComponentProps<typeof LinkButton> & RuntimeDataProps & { key: string },
+      createElement("span", { className: "brand-tcrn" }, options.brandPrimaryLabel),
+      createElement("span", { className: "brand-aos" }, options.brandSecondaryLabel)
+    ),
+    createElement(Fragment, { key: "nav-group" }, navGroup),
+    createElement("footer", {
+      className: "sidebar-note",
+      "data-package-runtime-footer": "local-posture",
+      key: "local-posture"
+    },
+      createElement("span", { className: "state-dot state-current" }),
+      createElement(Text, {
+        "data-tcrn-component": "Text",
+        "data-package-runtime-component": "Text",
+        "data-package-runtime-source": "@tcrn/ui-react"
+      } as ComponentProps<typeof Text> & RuntimeDataProps, options.footerLabel)
+    )
+  ];
+  const tree = createElement(Surface, {
+    className: "aos-shell",
+    children: createElement(SideNav, {
+      children: sidebarChildren,
+      className: "aos-sidebar",
+      "data-region": "sidebar-nav",
+      "data-tcrn-component": "SideNav",
+      "data-package-runtime-component": "SideNav",
+      "data-package-runtime-source": "@tcrn/ui-react",
+      "data-package-runtime-surface": "operations-cockpit-shell-sidebar",
+      label: "AOS navigation"
+    } as ComponentProps<typeof SideNav> & RuntimeDataProps)
+  });
+
+  return addAosShellSidebarRuntimeAttributes(
+    renderCockpitRuntimeMarkup(tree, "aos-shell-sidebar-"),
+    options.shellAttributesHtml
+  );
+}
 
 export function renderCockpitRuntimeTopbarCheckpoint(options: CockpitRuntimeTopbarCheckpointOptions): string {
   const projectOptions = options.projectOptions.map((project) => ({
@@ -338,6 +420,10 @@ export function renderCockpitRuntimeNavItems(items: readonly CockpitRuntimeNavIt
 }
 
 export function renderCockpitRuntimeNavItem(item: CockpitRuntimeNavItem, identifierPrefix = "aos-nav-single-"): string {
+  return renderCockpitRuntimeMarkup(createElement(CockpitRuntimeNavItemElement, { item }), identifierPrefix);
+}
+
+function CockpitRuntimeNavItemElement({ item }: { item: CockpitRuntimeNavItem }) {
   const props: RuntimeNavItemProps = {
     children: item.label,
     className: `nav-row${item.active ? " active" : ""}`,
@@ -354,7 +440,7 @@ export function renderCockpitRuntimeNavItem(item: CockpitRuntimeNavItem, identif
     props.disabledReason = item.disabledReason;
   }
 
-  return renderCockpitRuntimeMarkup(createElement(NavItem, props), identifierPrefix);
+  return createElement(NavItem, props);
 }
 
 export function renderCockpitRuntimeWorkIndexCluster(options: CockpitRuntimeWorkIndexOptions): string {
@@ -720,6 +806,18 @@ function cockpitStageStatusBadgeState(stage: CockpitRuntimeStageMapItem): Compon
 
 function renderCockpitRuntimeMarkup(node: ReturnType<typeof createElement>, identifierPrefix: string): string {
   return renderToStaticMarkup(node, { identifierPrefix });
+}
+
+function addAosShellSidebarRuntimeAttributes(html: string, shellAttributesHtml: string): string {
+  return html
+    .replace(
+      /<section class="tcrn-surface aos-shell">/,
+      `<main class="tcrn-surface aos-shell" data-tcrn-component="Surface" data-package-runtime-component="Surface" data-package-runtime-source="@tcrn/ui-react" ${shellAttributesHtml}>`
+    )
+    .replace(
+      /<\/section>$/,
+      ""
+    );
 }
 
 function addAosTopbarCheckpointRuntimeAttributes(html: string): string {

@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "route": "route_tcrn_aos_design_system_frontend_rebuild_59at_claim_risk_evidence_strip_package_runtime_implementation",
-  "sourceHead": "4e0963c57b0b79174a66b1f41c262b665a035b6e",
+  "route": "route_tcrn_aos_design_system_frontend_rebuild_59au_cockpit_shell_sidebar_package_runtime_implementation",
+  "sourceHead": "55dd6a66fbb3547c0eda620e1742889156af5a2a",
   "claimScope": {
-    "implementationKind": "operations_cockpit_claim_risk_evidence_strip_package_runtime_expansion",
-    "packageBackedReactRuntimeRendering": "operations_cockpit_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
-    "storybookVisualStyleParity": "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_and_claim_risk_component_reference_only",
+    "implementationKind": "operations_cockpit_shell_sidebar_package_runtime_expansion",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_and_claim_risk_strips",
+    "storybookVisualStyleParity": "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_claim_risk_and_shell_sidebar_component_reference_only",
     "broadUiReactRuntimeMigration": false,
     "docsReadinessPackageRuntimeRendering": false,
     "aosWidePackageRuntimeRendering": false,
@@ -16,9 +16,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "4e0963c57b0b79174a66b1f41c262b665a035b6e",
+    "sourceHeadAtProofRun": "55dd6a66fbb3547c0eda620e1742889156af5a2a",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "701311e08a5b4c06e84bc3da1f860e28d244b4865245efc792eb7a1e32c21f3c",
+    "sourceContentDigest": "7f3fbd81cfca17337b080f030f3967f6f8b521b280a9af1ede123057dfff4eb9",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
@@ -35,9 +35,12 @@
     "sourceHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
     "uiReactPackage": "@tcrn/ui-react",
     "uiReactPackageSpecifier": "file:../TCRN-Design-System/packages/ui-react",
-    "runtimeSurface": "operations_cockpit_navitem_sidebar_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_strips",
+    "runtimeSurface": "operations_cockpit_shell_sidebar_navitem_work_index_selected_detail_drawer_gate_readback_cards_stage_phase_topbar_checkpoint_claim_risk_strips",
     "runtimeComponentScope": [
       "NavItem",
+      "SideNav",
+      "NavGroup",
+      "LinkButton",
       "TopBar",
       "WorkIndex",
       "TableShell",
@@ -85,6 +88,9 @@
     "reactServerRenderingPresent": true,
     "publicComponentImportPresence": {
       "NavItem": true,
+      "SideNav": true,
+      "NavGroup": true,
+      "LinkButton": true,
       "TopBar": true,
       "WorkIndex": true,
       "SearchInput": true,
@@ -107,6 +113,35 @@
     },
     "deepImportHits": [],
     "copiedSourceHits": []
+  },
+  "shellSidebarRuntimeReadback": {
+    "ok": true,
+    "present": true,
+    "surface": "operations-cockpit-shell-sidebar",
+    "requiredComponents": [
+      "LinkButton",
+      "NavGroup",
+      "NavItem",
+      "SideNav",
+      "Surface",
+      "Text"
+    ],
+    "packageRuntimeComponents": [
+      "LinkButton",
+      "NavGroup",
+      "NavItem",
+      "SideNav",
+      "Surface",
+      "Text"
+    ],
+    "missingComponents": [],
+    "navItemCount": 10,
+    "markerOnlyComponents": [],
+    "brandLockupRegionPresent": true,
+    "sidebarRegionPresent": true,
+    "footerReadback": true,
+    "sampleRenderedHtmlSha256": "5e0be6cea9527b2d7c94c07e83ae4796da9ea881672d0baaac05fb0a2c2058fb",
+    "failures": []
   },
   "claimRiskEvidenceStripRuntimeReadback": {
     "ok": true,
@@ -180,6 +215,9 @@
     "ok": true,
     "packageRuntimeComponents": [
       "NavItem",
+      "SideNav",
+      "NavGroup",
+      "LinkButton",
       "TopBar",
       "WorkIndex",
       "TableShell",
