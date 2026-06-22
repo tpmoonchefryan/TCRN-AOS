@@ -107,6 +107,7 @@ function createCockpitServicePayload(runtime: AosRuntimeFixture, url: URL) {
   const model = createServiceCockpitReadModel(runtime, url);
   const readback = runtime.readback();
   const serviceReadModel = createCockpitServiceReadback(model, { serviceBacked: true });
+  const workRows = model.workstreams.flatMap((group) => group.rows);
   return {
     ok: readback.ok,
     serviceBacked: true,
@@ -118,6 +119,60 @@ function createCockpitServicePayload(runtime: AosRuntimeFixture, url: URL) {
     model,
     serviceReadModel,
     readback,
+    ownerTrial: {
+      schemaVersion: "aos.owner_trial_service_frontend.v1",
+      serviceReadModelSchema: serviceReadModel.schemaVersion,
+      rootServiceUrl: "/operations-cockpit.html",
+      apiPath: "/api/cockpit",
+      freshness: {
+        state: model.contextHeader.dataFreshness,
+        generatedAt: new Date().toISOString(),
+        runtimeDatabase: "local_fixture",
+        runtimeDataCommitted: false
+      },
+      workIndex: {
+        rowCount: workRows.length,
+        selectedStoryId: serviceReadModel.surfaces.workIndex.selectedStoryId,
+        selectedDetailId: serviceReadModel.surfaces.detail.selectedId
+      },
+      readinessLane: {
+        localServicePreview: true,
+        serviceBackedState: true,
+        releasePublicationReady: false,
+        ownerIntentExecutionReady: false,
+        liveDispatchReady: false,
+        disabledActions: [
+          {
+            id: "gate-work-order",
+            label: "Gate work order",
+            reason: serviceReadModel.surfaces.gate.unavailableReason
+          },
+          {
+            id: "owner-intent",
+            label: "Owner Intent",
+            reason: "Owner Intent actions require an explicit owner route and are unavailable in this local service preview."
+          },
+          {
+            id: "release-publication",
+            label: "Release publication",
+            reason: "Release and publication actions require separate release authority."
+          },
+          {
+            id: "live-dispatch",
+            label: "Live dispatch",
+            reason: "Live dispatch remains unavailable for this owner-trial service preview."
+          }
+        ]
+      },
+      nonClaims: {
+        productAcceptance: false,
+        finalMvpAcceptance: false,
+        releasePublication: false,
+        ownerIntentExecution: false,
+        liveDispatch: false,
+        parentGoalCompletion: false
+      }
+    },
     boundaries: {
       serviceProofOnly: true,
       productAcceptance: false,

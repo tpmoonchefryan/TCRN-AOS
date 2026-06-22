@@ -15,7 +15,7 @@ try {
     && health.externalQueue === "none"
     && health.liveCodexDispatchAuthorized === false
     && readback.ok
-    && readback.operationalRecordCounts.stories === 1
+    && readback.operationalRecordCounts.stories === 2
     && cockpit.ok
     && cockpit.serviceBacked === true
     && cockpit.serviceReadModel?.schemaVersion === "aos.cockpit.service_read_model.v1"
@@ -23,7 +23,10 @@ try {
     && cockpit.serviceReadModel?.surfaces?.workIndex?.rowCount === cockpit.model.workstreams[0].rows.length
     && cockpit.serviceReadModel?.surfaces?.gate?.autoExecutableCount === 0
     && cockpit.model.contextHeader.localCheckpoint === "owner-trial-service-readback"
-    && cockpit.model.workstreams[0].rows.length === 1
+    && cockpit.model.workstreams[0].rows.length === 2
+    && cockpit.ownerTrial?.schemaVersion === "aos.owner_trial_service_frontend.v1"
+    && cockpit.ownerTrial?.readinessLane?.serviceBackedState === true
+    && cockpit.ownerTrial?.nonClaims?.parentGoalCompletion === false
     && cockpit.boundaries.productAcceptance === false
     && cockpit.boundaries.finalMvpAcceptance === false
     && closed;
@@ -50,6 +53,7 @@ try {
       workRows: cockpit.model.workstreams[0].rows.length,
       serviceReadModelSchema: cockpit.serviceReadModel?.schemaVersion,
       serviceReadModelSource: cockpit.serviceReadModel?.source,
+      ownerTrialSchema: cockpit.ownerTrial?.schemaVersion,
       selectedStoryId: cockpit.serviceReadModel?.surfaces?.workIndex?.selectedStoryId,
       gateCount: (cockpit.serviceReadModel?.surfaces?.gate?.roleGateCount ?? 0) + (cockpit.serviceReadModel?.surfaces?.gate?.ownerIntentGateCount ?? 0),
       autoExecutableCount: cockpit.serviceReadModel?.surfaces?.gate?.autoExecutableCount,

@@ -534,7 +534,9 @@ function createRiskWarnings(
       type: gate.type === "owner_intent" ? "route" : "proof",
       state: gate.status === "blocked" ? "blocked" : "review_required",
       ownerRole: gate.ownerRole,
-      summary: gate.blocker ?? `${gate.type} requires explicit review`,
+      summary: gate.blocker ?? (gate.type === "owner_intent"
+        ? "Owner action requires explicit review."
+        : "Evidence review requires explicit review."),
       linkedGateIds: [gate.id],
       linkedEvidenceIds: gate.inputEvidenceIds
     } satisfies RiskWarningItem));
@@ -545,7 +547,7 @@ function createRiskWarnings(
       type: "dependency",
       state: dependency.posture === "evidence_missing" ? "evidence_missing" : dependency.posture === "blocked" ? "blocked" : dependency.posture === "accepted_with_residual_risk" ? "accepted_with_residual_risk" : "review_required",
       ownerRole: dependency.approvalOwnerRole,
-      summary: `${dependency.packageName} posture is ${dependency.posture}`,
+      summary: `${dependency.packageName} dependency review is pending.`,
       linkedGateIds: dependency.linkedGateIds,
       linkedEvidenceIds: []
     } satisfies RiskWarningItem));
@@ -556,7 +558,7 @@ function createRiskWarnings(
       type: "resource",
       state: resource.approvalState === "blocked" ? "blocked" : resource.approvalState === "accepted_with_residual_risk" ? "accepted_with_residual_risk" : "review_required",
       ownerRole: "security",
-      summary: `${resource.title} resource approval is ${resource.approvalState}`,
+      summary: `${resource.title} resource approval is pending.`,
       linkedGateIds: resource.linkedGateIds,
       linkedEvidenceIds: []
     } satisfies RiskWarningItem));

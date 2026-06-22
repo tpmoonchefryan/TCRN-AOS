@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_full_rebuild_planning_and_implementation_packet",
-  "sourceHead": "249a56ba2d488a3665c3e77fe7e3f009dfd100ef",
+  "sourceHead": "0e10b2dd4d66ac7d9d54b87fdaee2beed9326304",
   "claimScope": {
     "implementationKind": "aos_product_frontend_rebuilt_registered_design_system_runtime",
     "packageBackedReactRuntimeRendering": "operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild",
@@ -16,12 +16,14 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "249a56ba2d488a3665c3e77fe7e3f009dfd100ef",
+    "sourceHeadAtProofRun": "0e10b2dd4d66ac7d9d54b87fdaee2beed9326304",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "cd9a63b9fbb4318f4737f007c2e12d89c749079df8e625f45b4389c59f96cced",
+    "sourceContentDigest": "643fc5902928083a2a8bc945c77c808eedfe8201b67e956d73c88cb8094a59f9",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
+      "apps/web/src/cockpit.ts",
+      "apps/api/src/server.ts",
       "apps/web/src/docs-readiness-ui-react-runtime.ts",
       "apps/web/src/docs-readiness-view.ts",
       "apps/web/src/aos-wide-product-design-data.ts",
@@ -29,12 +31,17 @@
       "apps/web/src/aos-wide-product-design-view.ts",
       "apps/web/src/design-system-bridge.ts",
       "apps/web/test/cockpit-view.test.mjs",
+      "apps/api/test/service-smoke.test.mjs",
+      "packages/db/src/runtime-fixture.ts",
+      "packages/db/test/runtime-fixture.test.mjs",
       "apps/web/test/docs-readiness-view.test.mjs",
       "apps/web/test/aos-wide-product-design-view.test.mjs",
       "scripts/aos-design-system-package-runtime-proof.mjs",
       "scripts/aos-design-system-component-registry-proof.mjs",
       "scripts/aos-design-system-consumer-slice-1-proof.mjs",
       "scripts/aos-design-system-consumer-slice-2-proof.mjs",
+      "scripts/aos-owner-trial-service-backed-frontend-proof.mjs",
+      "scripts/service-smoke.mjs",
       "scripts/slice-9b-visible-readiness-proof.mjs",
       "scripts/slice-10-aos-wide-product-design-proof.mjs",
       "scripts/slice-4b-style-proof.mjs"
@@ -691,7 +698,7 @@
         "surface": "operationsCockpit",
         "ok": true,
         "hits": [],
-        "scannedTextLength": 5449
+        "scannedTextLength": 5446
       },
       {
         "surface": "docsReadiness",

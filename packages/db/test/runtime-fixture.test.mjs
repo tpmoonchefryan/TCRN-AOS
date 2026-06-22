@@ -8,7 +8,7 @@ test("runtime fixture applies, reads back representative records, proves safety,
   assert.equal(readback.ok, true);
   assert.equal(readback.storageMode, "os_temp_ephemeral");
   assert.equal(readback.runtimeDataCommitted, false);
-  assert.equal(readback.operationalRecordCounts.stories, 1);
+  assert.equal(readback.operationalRecordCounts.stories, 2);
   assert.equal(readback.operationalRecordCounts.gates, 2);
   assert.equal(readback.operationalRecordCounts.dependencyFindings, 1);
   assert.equal(readback.operationalRecordCounts.materializationRequests, 1);

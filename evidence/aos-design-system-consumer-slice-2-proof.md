@@ -3,13 +3,13 @@
 Status: passed.
 
 Route: `route_tcrn_aos_design_system_frontend_rebuild_slice_2_service_read_model_stabilization_implementation`
-AOS source head: `249a56ba2d488a3665c3e77fe7e3f009dfd100ef`
+AOS source head: `0e10b2dd4d66ac7d9d54b87fdaee2beed9326304`
 Design System source basis: `b0c00828a813d3c62392eb6e53d7d6b85b6affeb`
 
 ## Service Contract Readback
 
 - schema: `aos.cockpit.service_read_model.v1`
-- work rows: 1
+- work rows: 2
 - selected story: `story_6a8345aeed11e98d`
 - gate count: 2
 - selected detail round trip: true
@@ -30,8 +30,8 @@ Design System source basis: `b0c00828a813d3c62392eb6e53d7d6b85b6affeb`
 
 | Viewport | Screenshot | SHA-256 | DOM matches API | Detail drawer runtime ok | Gate/readback card runtime ok | Raw visible copy hits | Forbidden claim hits | Disabled controls missing reason | Stale disabled reason hits | Body overflow |
 | --- | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
-| desktop-1440x900 | `evidence/aos-design-system-consumer-slice-2-browser/249a56ba2d488a3665c3e77fe7e3f009dfd100ef/desktop-1440x900-service-read-model.png` | `8907e3c8046fa77a24ef8c23b0c4ac9e10a26af536566c2c975e9d64cfd7a8da` | yes | yes | yes | 0 | 0 | 0 | 0 | no |
-| mobile-390x844 | `evidence/aos-design-system-consumer-slice-2-browser/249a56ba2d488a3665c3e77fe7e3f009dfd100ef/mobile-390x844-service-read-model.png` | `32868682eb9f74e6c113bd9cb0c5226ce2794c6ca44e6f198f2a221a15910959` | yes | yes | yes | 0 | 0 | 0 | 0 | no |
+| desktop-1440x900 | `evidence/aos-design-system-consumer-slice-2-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/desktop-1440x900-service-read-model.png` | `da2f2a9cce52e29393477ebd3aca2378ce05e4478e4028eab174b58352cc9290` | yes | yes | yes | 0 | 0 | 0 | 0 | no |
+| mobile-390x844 | `evidence/aos-design-system-consumer-slice-2-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/mobile-390x844-service-read-model.png` | `fb5abe8272df5ac74d07f69ac3987ffa6b6e85bd4e84ed521e9f6a40ccdf3efe` | yes | yes | yes | 0 | 0 | 0 | 0 | no |
 
 ## No-Overclaim Boundaries
 

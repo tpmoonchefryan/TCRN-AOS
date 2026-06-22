@@ -160,6 +160,17 @@ export class AosRuntimeFixture {
       estimate,
       subTasks: []
     }, this.actor);
+    this.store.createStory({
+      epicId: epic.id,
+      title: "Validate service-backed owner trial",
+      problem: "The owner-trial cockpit needs more than a static fixture row to prove service-backed selection.",
+      user: "owner observer",
+      expectedBehavior: "AOS serves multiple work items from the local service and keeps detail state aligned with the selected row.",
+      acceptanceCriteria: ["service API row set", "row selection round trip", "refresh preserves prior data", "unavailable actions stay disabled"],
+      status: "in_progress",
+      estimate,
+      subTasks: []
+    }, this.actor);
     const subTask = this.store.addSubTask(story.id, {
       id: createId("subtask", { storyId: story.id, title: "Runtime proof" }),
       title: "Run local DB fixture proof",
@@ -388,7 +399,7 @@ export class AosRuntimeFixture {
       operationalRecordCounts: {
         initiatives: this.records ? 1 : 0,
         epics: this.records ? 1 : 0,
-        stories: this.records ? 1 : 0,
+        stories: this.records ? this.store.listStories().length : 0,
         subtasks: this.records ? 1 : 0,
         comments: this.records ? 1 : 0,
         evidence: this.records ? 1 : 0,

@@ -15,6 +15,7 @@
     "source-export:proof": "node scripts/source-export-prerequisite-proof.mjs",
     "service:start": "pnpm build && node scripts/service-start.mjs",
     "service:smoke": "pnpm build && node scripts/service-smoke.mjs",
+    "aos:owner-trial-service-backed-proof": "pnpm build && node scripts/aos-owner-trial-service-backed-frontend-proof.mjs",
     "slice3:proof": "pnpm build && node scripts/slice-3-proof.mjs",
     "slice4:proof": "pnpm build && node scripts/slice-4-proof.mjs",
     "slice4b:proof": "pnpm build && node scripts/slice-4b-style-proof.mjs",

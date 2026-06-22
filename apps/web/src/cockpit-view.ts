@@ -510,12 +510,17 @@ const serviceModelReadback = document.querySelector("[data-service-model-readbac
 const emptyState = document.querySelector("[data-empty-state]");
 let currentRows = Array.from(document.querySelectorAll("[data-work-row]"));
 let activeStoryId = currentRows[0]?.getAttribute("data-row-id") || "";
+let serviceRefreshCount = 0;
 
 function setServiceStatus(text, state) {
   if (!serviceStatus) return;
   serviceStatus.textContent = text;
   serviceStatus.classList.toggle("loading", state === "loading");
   serviceStatus.classList.toggle("blocked", state === "blocked");
+  shell?.setAttribute("data-service-refresh-state", state);
+  if (state === "loading") {
+    shell?.setAttribute("data-service-bootstrap-state", "loading");
+  }
 }
 
 function cockpitUrl(selectedId) {
@@ -530,6 +535,7 @@ function cockpitUrl(selectedId) {
 async function loadCockpit(selectedId) {
   if (!serviceBacked) return;
   refreshButton?.setAttribute("disabled", "true");
+  refreshButton?.setAttribute("aria-busy", "true");
   setServiceStatus("reading service API", "loading");
   try {
     const response = await fetch(cockpitUrl(selectedId), { headers: { accept: "application/json" } });
@@ -538,12 +544,19 @@ async function loadCockpit(selectedId) {
     if (!payload.ok || !payload.model) throw new Error("cockpit_payload_not_ok");
     if (!payload.serviceReadModel) throw new Error("cockpit_service_read_model_missing");
     renderPayload(payload);
+    serviceRefreshCount += 1;
+    shell?.setAttribute("data-service-bootstrap-state", "ready");
+    shell?.setAttribute("data-service-last-read-at", payload.generatedAt || "");
+    shell?.setAttribute("data-service-refresh-count", String(serviceRefreshCount));
+    shell?.setAttribute("data-owner-trial-readiness-lane", payload.ownerTrial?.readinessLane?.serviceBackedState ? "service-backed" : "unavailable");
     setServiceStatus("service API read " + new Date(payload.generatedAt).toLocaleTimeString(), "ok");
   } catch (error) {
+    shell?.setAttribute("data-service-bootstrap-state", activeStoryId ? "ready_with_unavailable_refresh" : "unavailable");
+    shell?.setAttribute("data-service-last-error", error instanceof Error ? error.message : String(error));
     setServiceStatus("service API read failed", "blocked");
-    console.error("AOS cockpit service read failed", error);
   } finally {
     refreshButton?.removeAttribute("disabled");
+    refreshButton?.removeAttribute("aria-busy");
   }
 }
 
@@ -573,6 +586,7 @@ function applyServiceReadModel(readback) {
   shell.setAttribute("data-service-gate-count", String((gate.roleGateCount ?? 0) + (gate.ownerIntentGateCount ?? 0)));
   shell.setAttribute("data-service-evidence-readback-count", String(readbackSurface.evidenceReadbackCount ?? 0));
   shell.setAttribute("data-service-runtime-data-committed", String(readbackSurface.runtimeDataCommittedToGit === true));
+  shell.setAttribute("data-service-selected-detail-round-trip", workIndex.selectedStoryId === detail.selectedId ? "true" : "false");
   if (serviceModelReadback) {
     serviceModelReadback.textContent = serviceReadModelSummary(readback);
   }
@@ -599,6 +613,7 @@ function renderRows(rows) {
     button.setAttribute("data-package-runtime-component", "TableShell");
     button.setAttribute("data-package-runtime-source", "@tcrn/ui-react");
     button.setAttribute("data-package-runtime-surface", "operations-cockpit-work-index");
+    button.setAttribute("data-service-row-source", "api");
     button.setAttribute("data-work-row", "");
     button.setAttribute("data-row-id", row.storyId);
     button.setAttribute("data-title", row.title);
@@ -740,7 +755,11 @@ function createCockpitRuntimeShellSidebarOptions(input: {
     ["data-service-detail-type", serviceReadback.surfaces.detail.selectedType],
     ["data-service-gate-count", String(serviceReadback.surfaces.gate.roleGateCount + serviceReadback.surfaces.gate.ownerIntentGateCount)],
     ["data-service-evidence-readback-count", String(serviceReadback.surfaces.readback.evidenceReadbackCount)],
-    ["data-service-runtime-data-committed", String(serviceReadback.surfaces.readback.runtimeDataCommittedToGit)]
+    ["data-service-runtime-data-committed", String(serviceReadback.surfaces.readback.runtimeDataCommittedToGit)],
+    ["data-service-bootstrap-state", input.serviceBacked ? "pending" : "static"],
+    ["data-service-refresh-state", "idle"],
+    ["data-service-refresh-count", "0"],
+    ["data-owner-trial-service-frontend", input.serviceBacked ? "enabled" : "static-preview"]
   ] as const;
 
   return {
