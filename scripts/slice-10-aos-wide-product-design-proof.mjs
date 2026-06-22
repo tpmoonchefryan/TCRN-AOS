@@ -337,7 +337,7 @@ async function collectPageReadback(page, label) {
       }
     }
     const disabledControlDescriptionFailures = [];
-    const disabledControls = Array.from(document.querySelectorAll("button:disabled, [aria-disabled='true']"));
+    const disabledControls = Array.from(new Set(Array.from(document.querySelectorAll("button:disabled, select:disabled, input:disabled, textarea:disabled, a[aria-disabled='true'], [aria-disabled='true']"))));
     for (const element of disabledControls) {
       const dataDisabledReason = element.getAttribute("data-disabled-reason")?.trim() ?? "";
       const title = element.getAttribute("title")?.trim() ?? "";

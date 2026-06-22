@@ -1539,14 +1539,19 @@ function inspectSourceContentDigest() {
     "apps/web/src/cockpit-view.ts",
     "apps/web/src/docs-readiness-ui-react-runtime.ts",
     "apps/web/src/docs-readiness-view.ts",
+    "apps/web/src/aos-wide-product-design-data.ts",
+    "apps/web/src/aos-wide-product-design-ui-react-runtime.ts",
+    "apps/web/src/aos-wide-product-design-view.ts",
     "apps/web/src/design-system-bridge.ts",
     "apps/web/test/cockpit-view.test.mjs",
     "apps/web/test/docs-readiness-view.test.mjs",
+    "apps/web/test/aos-wide-product-design-view.test.mjs",
     "scripts/aos-design-system-package-runtime-proof.mjs",
     "scripts/aos-design-system-component-registry-proof.mjs",
     "scripts/aos-design-system-consumer-slice-1-proof.mjs",
     "scripts/aos-design-system-consumer-slice-2-proof.mjs",
     "scripts/slice-9b-visible-readiness-proof.mjs",
+    "scripts/slice-10-aos-wide-product-design-proof.mjs",
     "scripts/slice-4b-style-proof.mjs"
   ];
   const digestInput = sourcePaths
@@ -1604,14 +1609,31 @@ function collectAriaReferences(html) {
 }
 
 function collectDisabledControls(html) {
-  return Array.from(html.matchAll(/<(button|a)\b([^>]*)>([\s\S]*?)<\/\1>/g))
-    .map((match) => ({
-      tag: match[1].toLowerCase(),
-      attributes: match[2],
-      body: match[3],
-      parsed: parseAttributes(match[2] ?? "")
-    }))
-    .filter((control) => control.parsed.disabled === "true" || control.parsed["aria-disabled"] === "true");
+  const controls = [];
+  const disabledNativeControls = new Set(["button", "input", "select", "textarea"]);
+
+  for (const match of html.matchAll(/<([a-zA-Z][\w:-]*)\b([^>]*)>/g)) {
+    const tag = match[1].toLowerCase();
+    const attributes = match[2] ?? "";
+    const parsed = parseAttributes(attributes);
+    const isNativeDisabled = disabledNativeControls.has(tag)
+      && Object.prototype.hasOwnProperty.call(parsed, "disabled");
+    const isAriaDisabled = parsed["aria-disabled"] === "true";
+    if (!isNativeDisabled && !isAriaDisabled) continue;
+    if (tag === "a" && !isAriaDisabled) continue;
+
+    const closingMatch = html
+      .slice(match.index + match[0].length)
+      .match(new RegExp(`([\\s\\S]*?)<\\/${escapeRegExp(tag)}>`, "i"));
+    controls.push({
+      tag,
+      attributes,
+      body: closingMatch ? closingMatch[1] : "",
+      parsed
+    });
+  }
+
+  return controls;
 }
 
 function splitIdRefs(value) {

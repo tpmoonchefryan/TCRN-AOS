@@ -3,7 +3,7 @@
 Status: passed.
 
 Route: `route_tcrn_aos_design_system_frontend_rebuild_59av_operations_cockpit_package_runtime_completion_implementation`
-AOS source head: `a305237f7dea0366de3f7229bc98cc966fb9b67d`
+AOS source head: `59357a5cc7610f6f1d45aecf2deacd7ed4c96808`
 Design System source basis: `b0c00828a813d3c62392eb6e53d7d6b85b6affeb`
 
 ## Consumption Readback
@@ -18,8 +18,8 @@ Design System source basis: `b0c00828a813d3c62392eb6e53d7d6b85b6affeb`
 
 | Viewport | Screenshot | SHA-256 | Raw visible copy hits | Forbidden claim hits | Disabled controls missing reason |
 | --- | --- | --- | ---: | ---: | ---: |
-| desktop-1440x900 | `evidence/aos-design-system-consumer-slice-1-browser/a305237f7dea0366de3f7229bc98cc966fb9b67d/desktop-1440x900-operations-cockpit.png` | `db430fa7a87faaecffa4faeb60714db744bdf949d2b77911a86a7e929a18a8d7` | 0 | 0 | 0 |
-| mobile-390x844 | `evidence/aos-design-system-consumer-slice-1-browser/a305237f7dea0366de3f7229bc98cc966fb9b67d/mobile-390x844-operations-cockpit.png` | `7321fe2cc35e3e9b3be5974fa58cb21658445fa91ea34c76beeb218ebf2b0052` | 0 | 0 | 0 |
+| desktop-1440x900 | `evidence/aos-design-system-consumer-slice-1-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/desktop-1440x900-operations-cockpit.png` | `444f04fa027bdfcfd39262abe957994dd50918a05eb2b98272019b15cf238488` | 0 | 0 | 0 |
+| mobile-390x844 | `evidence/aos-design-system-consumer-slice-1-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/mobile-390x844-operations-cockpit.png` | `988d01d81fe58ece0e00de2d6d2c4adaa92b002a78a50b8d3dc338aadd809a37` | 0 | 0 | 0 |
 
 ## No-Overclaim Boundaries
 

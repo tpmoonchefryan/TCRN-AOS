@@ -92,6 +92,28 @@ test("Slice 10 disabled Design System NavItems are non-actionable with reasons",
   }
 });
 
+test("Slice 10 disabled target path Select exposes a resolved reason", () => {
+  const html = renderAOSWideProductDesignHtml();
+  const selectMatch = html.match(/<select\b(?=[^>]*\bid="aos-wide-target-path")([^>]*)>([\s\S]*?)<\/select>/);
+
+  assert.ok(selectMatch, "target path Select is rendered");
+  const attributes = selectMatch[1] ?? "";
+  assert.match(attributes, /\bdisabled(?:="true")?/, "target path Select remains disabled");
+  const reasonMatch = attributes.match(/\bdata-disabled-reason="([^"]+)"/);
+  assert.ok(reasonMatch?.[1], "disabled Select has data-disabled-reason");
+  assert.match(attributes, /\btitle="[^"]+"/, "disabled Select has title reason");
+  const describedbyMatch = attributes.match(/\baria-describedby="([^"]+)"/);
+  assert.ok(describedbyMatch?.[1], "disabled Select has aria-describedby");
+
+  const describedbyIds = describedbyMatch[1].split(/\s+/).filter(Boolean);
+  assert.equal(describedbyIds.length, 1, "disabled Select has one reason target");
+  const reasonId = describedbyIds[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const reasonTarget = html.match(new RegExp(`<span\\b(?=[^>]*\\bid="${reasonId}")[^>]*>([\\s\\S]*?)<\\/span>`));
+  assert.ok(reasonTarget, "disabled Select reason target resolves");
+  const resolvedText = reasonTarget[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+  assert.equal(resolvedText, reasonMatch[1], "disabled Select reason matches resolved target text");
+});
+
 test("AOS-wide Product Design target-set renders package-backed runtime components", () => {
   const html = renderAOSWideProductDesignHtml();
   const packageComponents = Array.from(new Set(

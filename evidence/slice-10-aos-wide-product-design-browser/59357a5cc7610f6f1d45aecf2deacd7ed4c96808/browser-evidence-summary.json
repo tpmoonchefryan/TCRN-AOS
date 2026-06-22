@@ -1,0 +1,2714 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_design_system_frontend_rebuild_59ax_aos_wide_product_design_target_set_package_runtime_adoption_implementation",
+  "sourceHead": "59357a5cc7610f6f1d45aecf2deacd7ed4c96808",
+  "checkpoint": {
+    "workflowPacketBasis": "bcff619a406f2028e6c70ea76a3ade1674e3ca21",
+    "preImplementationBasis": "06cded11e97be6d4a738a21ae942128d5b4688cd",
+    "localCheckpoint": "slice-10-aos-wide-product-design-surface-set"
+  },
+  "staticRender": {
+    "path": "apps/web/static/aos-wide-product-design.html",
+    "bytes": 76482,
+    "sha256": "d56687539ed8102404b9553b81fddea5b09edf9461ebf3c38eda4312f32cc999",
+    "productDesignStatus": "target_set_implemented_pending_review",
+    "selectorProof": [
+      {
+        "selector": "[data-region='aos-wide-shell']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='brand-lockup']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='target-path-readback']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-dashboard-hierarchy']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='initiative-ticket-drillthrough']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='ai-employee-profile']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-owner-intent']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='conference-minutes']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gateway-adapter-health']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='knowledge-release-modules']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='dependency-governance-console']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='resource-library-traceability']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='admin-access-audit-shell']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='surface-index']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='detail-panel']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='evidence-readiness-panel']",
+        "present": true
+      }
+    ]
+  },
+  "targetPathReadback": {
+    "operationsCockpit": {
+      "path": "apps/web/static/operations-cockpit.html",
+      "exists": true
+    },
+    "docsSearchRelease": {
+      "path": "apps/web/static/docs-search-release-readiness.html",
+      "exists": true
+    },
+    "aosWideTarget": {
+      "path": "apps/web/static/aos-wide-product-design.html",
+      "exists": true
+    }
+  },
+  "surfaceReadiness": {
+    "count": 10,
+    "rows": [
+      {
+        "id": "project-hierarchy",
+        "title": "Project Dashboard",
+        "state": "current",
+        "desktopReadyForCapture": true,
+        "mobileReadyForCapture": true,
+        "bodyOverflowExpected": false,
+        "denseOverflowConfinedTo": "surface-index-table",
+        "consolePageErrorExpectation": "none_expected"
+      },
+      {
+        "id": "ticket-drillthrough",
+        "title": "Initiative Detail",
+        "state": "review_required",
+        "desktopReadyForCapture": true,
+        "mobileReadyForCapture": true,
+        "bodyOverflowExpected": false,
+        "denseOverflowConfinedTo": "surface-index-table",
+        "consolePageErrorExpectation": "none_expected"
+      },
+      {
+        "id": "ai-employee-profile",
+        "title": "AI Employee",
+        "state": "current",
+        "desktopReadyForCapture": true,
+        "mobileReadyForCapture": true,
+        "bodyOverflowExpected": false,
+        "denseOverflowConfinedTo": "surface-index-table",
+        "consolePageErrorExpectation": "none_expected"
+      },
+      {
+        "id": "gates-owner-intent",
+        "title": "Gate Queue",
+        "state": "blocked",
+        "desktopReadyForCapture": true,
+        "mobileReadyForCapture": true,
+        "bodyOverflowExpected": false,
+        "denseOverflowConfinedTo": "surface-index-table",
+        "consolePageErrorExpectation": "none_expected"
+      },
+      {
+        "id": "conference-minutes",
+        "title": "Conference",
+        "state": "review_required",
+        "desktopReadyForCapture": true,
+        "mobileReadyForCapture": true,
+        "bodyOverflowExpected": false,
+        "denseOverflowConfinedTo": "surface-index-table",
+        "consolePageErrorExpectation": "none_expected"
+      },
+      {
+        "id": "gateway-adapter",
+        "title": "Gateway / Adapter",
+        "state": "current",
+        "desktopReadyForCapture": true,
+        "mobileReadyForCapture": true,
+        "bodyOverflowExpected": false,
+        "denseOverflowConfinedTo": "surface-index-table",
+        "consolePageErrorExpectation": "none_expected"
+      },
+      {
+        "id": "knowledge-release",
+        "title": "Knowledge Modules",
+        "state": "pending_external_proof",
+        "desktopReadyForCapture": true,
+        "mobileReadyForCapture": true,
+        "bodyOverflowExpected": false,
+        "denseOverflowConfinedTo": "surface-index-table",
+        "consolePageErrorExpectation": "none_expected"
+      },
+      {
+        "id": "dependency-license",
+        "title": "Dependency Console",
+        "state": "blocked",
+        "desktopReadyForCapture": true,
+        "mobileReadyForCapture": true,
+        "bodyOverflowExpected": false,
+        "denseOverflowConfinedTo": "surface-index-table",
+        "consolePageErrorExpectation": "none_expected"
+      },
+      {
+        "id": "resource-library",
+        "title": "Resource Library",
+        "state": "blocked",
+        "desktopReadyForCapture": true,
+        "mobileReadyForCapture": true,
+        "bodyOverflowExpected": false,
+        "denseOverflowConfinedTo": "surface-index-table",
+        "consolePageErrorExpectation": "none_expected"
+      },
+      {
+        "id": "admin-access-audit",
+        "title": "Admin / Access",
+        "state": "blocked",
+        "desktopReadyForCapture": true,
+        "mobileReadyForCapture": true,
+        "bodyOverflowExpected": false,
+        "denseOverflowConfinedTo": "surface-index-table",
+        "consolePageErrorExpectation": "none_expected"
+      }
+    ]
+  },
+  "interactionReadiness": {
+    "primaryNavigation": true,
+    "searchFilter": true,
+    "stateFilters": true,
+    "rowDetailSelection": true,
+    "emptyState": true,
+    "disabledGateControls": true,
+    "focusStateCss": true
+  },
+  "overflowReadiness": {
+    "bodyPageOverflowExpected": false,
+    "shellClipsHorizontalOverflow": true,
+    "denseTableOverflowConfined": true,
+    "mobileDenseTableWidth": true
+  },
+  "copyScan": {
+    "forbiddenHits": [],
+    "productionSurfaceOnly": true
+  },
+  "requiredState": {
+    "productDesignStatus": "target_set_implemented_pending_review",
+    "aosWideProductDesignAccepted": false,
+    "deploymentProof": "not_claimed",
+    "liveDispatch": false,
+    "threadRegistryMutation": false,
+    "releaseReadiness": "not_claimed",
+    "productAcceptance": "not_claimed",
+    "finalMvpAcceptance": "not_claimed",
+    "docsExport": "not_executed",
+    "docsPublication": "not_claimed",
+    "canonicalPromotion": "not_claimed",
+    "githubMutation": false,
+    "scannerIngestion": false,
+    "materializationExecuted": false,
+    "productRepoWrite": false,
+    "codexSecurityScan": "not_run",
+    "externalProofRequired": true
+  },
+  "noOverclaim": {
+    "aosWideProductDesignAccepted": false,
+    "deploymentProof": "not_claimed",
+    "liveDispatch": false,
+    "threadRegistryMutation": false,
+    "releaseReadiness": "not_claimed",
+    "productAcceptance": "not_claimed",
+    "finalMvpAcceptance": "not_claimed",
+    "docsExport": "not_executed",
+    "docsPublication": "not_claimed",
+    "canonicalPromotion": "not_claimed",
+    "githubMutation": false,
+    "scannerIngestion": false,
+    "materializationExecuted": false,
+    "productRepoWrite": false,
+    "codexSecurityScan": "not_run"
+  },
+  "d024Boundary": {
+    "localFirstOperationalData": true,
+    "gitTracksOnlySourceSchemasFixturesDocsScriptsTestsEvidence": true,
+    "runtimeOperationalDumpCommitted": false,
+    "rawPrivatePayloadStored": false
+  },
+  "restrictedPayloadCheck": {
+    "rawSourceStored": false,
+    "secretsStored": false,
+    "authStateStored": false,
+    "shellHistoryStored": false,
+    "browserKeychainStored": false,
+    "rawScannerOutputStored": false,
+    "localAbsolutePathStored": false
+  },
+  "browserReadback": {
+    "ok": true,
+    "captureMode": "no_server_playwright_file_url_aos_wide_product_design_package_runtime",
+    "staticTarget": "apps/web/static/aos-wide-product-design.html",
+    "browserEngine": "chromium",
+    "pageErrors": [],
+    "consoleErrors": [],
+    "requestFailures": [],
+    "screenshots": [
+      {
+        "file": "evidence/slice-10-aos-wide-product-design-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/desktop-1440x900-initial.png",
+        "sha256": "5f13ec238ce84242f20e87e6f61206287bee15937a3249cd2576b1ee2a19374a",
+        "bytes": 486062
+      },
+      {
+        "file": "evidence/slice-10-aos-wide-product-design-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/desktop-1440x900-blocked-filter.png",
+        "sha256": "fcef3586967fd722d54b621b22d66de18c4c367032e570ce2a2df8441a6cf0eb",
+        "bytes": 449246
+      },
+      {
+        "file": "evidence/slice-10-aos-wide-product-design-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/desktop-1440x900-no-match.png",
+        "sha256": "d7393b2d57353b7b783bca6b4f1f8ac1c039573a236930bec00621d6522fee11",
+        "bytes": 437029
+      },
+      {
+        "file": "evidence/slice-10-aos-wide-product-design-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/desktop-1440x900-resource-detail.png",
+        "sha256": "6106f183c780a958bd973a4c6e910d3cc09271baa921f3bf6d2607d023673591",
+        "bytes": 450669
+      },
+      {
+        "file": "evidence/slice-10-aos-wide-product-design-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/mobile-390x844-initial.png",
+        "sha256": "b16a214292ae4fc250823c317a2362d29374cb2fe706e733ea5a448cc0acbf4f",
+        "bytes": 474204
+      },
+      {
+        "file": "evidence/slice-10-aos-wide-product-design-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/mobile-390x844-blocked-filter.png",
+        "sha256": "1ef6f31d6d71b698b5f5fc983bdcbf45fa5dac8851ed54d40ac005df3a778c29",
+        "bytes": 457816
+      },
+      {
+        "file": "evidence/slice-10-aos-wide-product-design-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/mobile-390x844-no-match.png",
+        "sha256": "e086d3a52f34bdd4718b2f73883257165785fe13c8a27ce5e2c64eed7fbeea92",
+        "bytes": 458698
+      },
+      {
+        "file": "evidence/slice-10-aos-wide-product-design-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/mobile-390x844-resource-detail.png",
+        "sha256": "78eb1e85239c056b40573a7672084f9bf6b9c7cf75ed50d564acd5de28636910",
+        "bytes": 459071
+      }
+    ],
+    "viewportReadbacks": [
+      {
+        "ok": true,
+        "label": "desktop-1440x900-initial",
+        "packageRuntimeComponents": [
+          "Badge",
+          "Button",
+          "DetailDrawer",
+          "EvidenceStrip",
+          "Field",
+          "FilterBar",
+          "GateReadinessPanel",
+          "Heading",
+          "KeyValueList",
+          "LinkButton",
+          "NavGroup",
+          "NavItem",
+          "ReadbackPanel",
+          "SearchInput",
+          "Select",
+          "SideNav",
+          "StateView",
+          "StatusBadge",
+          "Surface",
+          "TableShell",
+          "Text",
+          "TopBar",
+          "WorkIndex"
+        ],
+        "missingRuntimeComponents": [],
+        "markerOnlyComponents": [],
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlDescriptionFailures": [],
+        "disabledControlsCount": 14,
+        "disabledControlsWithReasonCount": 14,
+        "bodyHorizontalOverflow": false,
+        "viewportWidth": 1440,
+        "documentScrollWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "wideRegions": [],
+        "denseTableOverflowContained": true,
+        "surfaceIndexScrollWidth": 1186,
+        "surfaceIndexClientWidth": 1186,
+        "targetPathLinks": [
+          "/operations-cockpit.html",
+          "/docs-search-release-readiness.html",
+          "/aos-wide-product-design.html"
+        ],
+        "targetPathOk": true,
+        "regionProof": [
+          {
+            "region": "aos-wide-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 1440,
+              "top": 0,
+              "bottom": 2721.671875,
+              "width": 1440,
+              "height": 2721.671875
+            },
+            "scrollWidth": 1870,
+            "clientWidth": 1440
+          },
+          {
+            "region": "brand-lockup",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 14,
+              "right": 238,
+              "top": 24,
+              "bottom": 66,
+              "width": 224,
+              "height": 42
+            },
+            "scrollWidth": 224,
+            "clientWidth": 224
+          },
+          {
+            "region": "target-path-readback",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 252,
+              "right": 1440,
+              "top": 282.4375,
+              "bottom": 376.4375,
+              "width": 1188,
+              "height": 94
+            },
+            "scrollWidth": 1188,
+            "clientWidth": 1188
+          },
+          {
+            "region": "project-dashboard-hierarchy",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 252,
+              "right": 480,
+              "top": 376.4375,
+              "bottom": 714.390625,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "initiative-ticket-drillthrough",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 492,
+              "right": 720,
+              "top": 376.4375,
+              "bottom": 714.390625,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "ai-employee-profile",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 732,
+              "right": 960,
+              "top": 376.4375,
+              "bottom": 714.390625,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "gate-owner-intent",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 972,
+              "right": 1200,
+              "top": 376.4375,
+              "bottom": 714.390625,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "conference-minutes",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 1212,
+              "right": 1440,
+              "top": 376.4375,
+              "bottom": 714.390625,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "gateway-adapter-health",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 252,
+              "right": 480,
+              "top": 726.390625,
+              "bottom": 1081.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "knowledge-release-modules",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 492,
+              "right": 720,
+              "top": 726.390625,
+              "bottom": 1081.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "dependency-governance-console",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 732,
+              "right": 960,
+              "top": 726.390625,
+              "bottom": 1081.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "resource-library-traceability",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 972,
+              "right": 1200,
+              "top": 726.390625,
+              "bottom": 1081.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "admin-access-audit-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 1212,
+              "right": 1440,
+              "top": 726.390625,
+              "bottom": 1081.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "surface-index",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 252,
+              "right": 1440,
+              "top": 1081.734375,
+              "bottom": 1856.734375,
+              "width": 1188,
+              "height": 775
+            },
+            "scrollWidth": 1186,
+            "clientWidth": 1186
+          },
+          {
+            "region": "detail-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 252,
+              "right": 1440,
+              "top": 1856.734375,
+              "bottom": 2651.671875,
+              "width": 1188,
+              "height": 794.9375
+            },
+            "scrollWidth": 1187,
+            "clientWidth": 1187
+          },
+          {
+            "region": "evidence-readiness-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 272,
+              "right": 1419,
+              "top": 2428.671875,
+              "bottom": 2630.671875,
+              "width": 1147,
+              "height": 202
+            },
+            "scrollWidth": 1145,
+            "clientWidth": 1145
+          }
+        ],
+        "visibleRows": 10,
+        "expectedVisibleRows": 10,
+        "selectedDetail": "Project Dashboard",
+        "expectedSelectedDetail": "Project Dashboard",
+        "emptyStateVisible": false,
+        "forbiddenHits": []
+      },
+      {
+        "ok": true,
+        "label": "desktop-1440x900-blocked-filter",
+        "packageRuntimeComponents": [
+          "Badge",
+          "Button",
+          "DetailDrawer",
+          "EvidenceStrip",
+          "Field",
+          "FilterBar",
+          "GateReadinessPanel",
+          "Heading",
+          "KeyValueList",
+          "LinkButton",
+          "NavGroup",
+          "NavItem",
+          "ReadbackPanel",
+          "SearchInput",
+          "Select",
+          "SideNav",
+          "StateView",
+          "StatusBadge",
+          "Surface",
+          "TableShell",
+          "Text",
+          "TopBar",
+          "WorkIndex"
+        ],
+        "missingRuntimeComponents": [],
+        "markerOnlyComponents": [],
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlDescriptionFailures": [],
+        "disabledControlsCount": 14,
+        "disabledControlsWithReasonCount": 14,
+        "bodyHorizontalOverflow": false,
+        "viewportWidth": 1440,
+        "documentScrollWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "wideRegions": [],
+        "denseTableOverflowContained": true,
+        "surfaceIndexScrollWidth": 1186,
+        "surfaceIndexClientWidth": 1186,
+        "targetPathLinks": [
+          "/operations-cockpit.html",
+          "/docs-search-release-readiness.html",
+          "/aos-wide-product-design.html"
+        ],
+        "targetPathOk": true,
+        "regionProof": [
+          {
+            "region": "aos-wide-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 1440,
+              "top": -782,
+              "bottom": 1639.671875,
+              "width": 1440,
+              "height": 2421.671875
+            },
+            "scrollWidth": 1870,
+            "clientWidth": 1440
+          },
+          {
+            "region": "brand-lockup",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 14,
+              "right": 238,
+              "top": 24,
+              "bottom": 66,
+              "width": 224,
+              "height": 42
+            },
+            "scrollWidth": 224,
+            "clientWidth": 224
+          },
+          {
+            "region": "target-path-readback",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 252,
+              "right": 1440,
+              "top": -499.5625,
+              "bottom": -405.5625,
+              "width": 1188,
+              "height": 94
+            },
+            "scrollWidth": 1188,
+            "clientWidth": 1188
+          },
+          {
+            "region": "project-dashboard-hierarchy",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 252,
+              "right": 480,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "initiative-ticket-drillthrough",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 492,
+              "right": 720,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "ai-employee-profile",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 732,
+              "right": 960,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "gate-owner-intent",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 972,
+              "right": 1200,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "conference-minutes",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 1212,
+              "right": 1440,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "gateway-adapter-health",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 252,
+              "right": 480,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "knowledge-release-modules",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 492,
+              "right": 720,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "dependency-governance-console",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 732,
+              "right": 960,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "resource-library-traceability",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 972,
+              "right": 1200,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "admin-access-audit-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 1212,
+              "right": 1440,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "surface-index",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 252,
+              "right": 1440,
+              "top": 299.734375,
+              "bottom": 774.734375,
+              "width": 1188,
+              "height": 475
+            },
+            "scrollWidth": 1186,
+            "clientWidth": 1186
+          },
+          {
+            "region": "detail-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 252,
+              "right": 1440,
+              "top": 774.734375,
+              "bottom": 1569.671875,
+              "width": 1188,
+              "height": 794.9375
+            },
+            "scrollWidth": 1187,
+            "clientWidth": 1187
+          },
+          {
+            "region": "evidence-readiness-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 272,
+              "right": 1419,
+              "top": 1346.671875,
+              "bottom": 1548.671875,
+              "width": 1147,
+              "height": 202
+            },
+            "scrollWidth": 1145,
+            "clientWidth": 1145
+          }
+        ],
+        "visibleRows": 4,
+        "expectedVisibleRows": 4,
+        "selectedDetail": "Gate Queue",
+        "expectedSelectedDetail": "Gate Queue",
+        "emptyStateVisible": false,
+        "forbiddenHits": []
+      },
+      {
+        "ok": true,
+        "label": "desktop-1440x900-no-match",
+        "packageRuntimeComponents": [
+          "Badge",
+          "Button",
+          "DetailDrawer",
+          "EvidenceStrip",
+          "Field",
+          "FilterBar",
+          "GateReadinessPanel",
+          "Heading",
+          "KeyValueList",
+          "LinkButton",
+          "NavGroup",
+          "NavItem",
+          "ReadbackPanel",
+          "SearchInput",
+          "Select",
+          "SideNav",
+          "StateView",
+          "StatusBadge",
+          "Surface",
+          "TableShell",
+          "Text",
+          "TopBar",
+          "WorkIndex"
+        ],
+        "missingRuntimeComponents": [],
+        "markerOnlyComponents": [],
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlDescriptionFailures": [],
+        "disabledControlsCount": 14,
+        "disabledControlsWithReasonCount": 14,
+        "bodyHorizontalOverflow": false,
+        "viewportWidth": 1440,
+        "documentScrollWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "wideRegions": [],
+        "denseTableOverflowContained": true,
+        "surfaceIndexScrollWidth": 1186,
+        "surfaceIndexClientWidth": 1186,
+        "targetPathLinks": [
+          "/operations-cockpit.html",
+          "/docs-search-release-readiness.html",
+          "/aos-wide-product-design.html"
+        ],
+        "targetPathOk": true,
+        "regionProof": [
+          {
+            "region": "aos-wide-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 1440,
+              "top": -782,
+              "bottom": 1611.734375,
+              "width": 1440,
+              "height": 2393.734375
+            },
+            "scrollWidth": 1870,
+            "clientWidth": 1440
+          },
+          {
+            "region": "brand-lockup",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 14,
+              "right": 238,
+              "top": 24,
+              "bottom": 66,
+              "width": 224,
+              "height": 42
+            },
+            "scrollWidth": 224,
+            "clientWidth": 224
+          },
+          {
+            "region": "target-path-readback",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 252,
+              "right": 1440,
+              "top": -499.5625,
+              "bottom": -405.5625,
+              "width": 1188,
+              "height": 94
+            },
+            "scrollWidth": 1188,
+            "clientWidth": 1188
+          },
+          {
+            "region": "project-dashboard-hierarchy",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 252,
+              "right": 480,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "initiative-ticket-drillthrough",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 492,
+              "right": 720,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "ai-employee-profile",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 732,
+              "right": 960,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "gate-owner-intent",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 972,
+              "right": 1200,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "conference-minutes",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 1212,
+              "right": 1440,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "gateway-adapter-health",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 252,
+              "right": 480,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "knowledge-release-modules",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 492,
+              "right": 720,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "dependency-governance-console",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 732,
+              "right": 960,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "resource-library-traceability",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 972,
+              "right": 1200,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "admin-access-audit-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 1212,
+              "right": 1440,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "surface-index",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 252,
+              "right": 1440,
+              "top": 299.734375,
+              "bottom": 746.796875,
+              "width": 1188,
+              "height": 447.0625
+            },
+            "scrollWidth": 1186,
+            "clientWidth": 1186
+          },
+          {
+            "region": "detail-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 252,
+              "right": 1440,
+              "top": 746.796875,
+              "bottom": 1541.734375,
+              "width": 1188,
+              "height": 794.9375
+            },
+            "scrollWidth": 1187,
+            "clientWidth": 1187
+          },
+          {
+            "region": "evidence-readiness-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 272,
+              "right": 1419,
+              "top": 1318.734375,
+              "bottom": 1520.734375,
+              "width": 1147,
+              "height": 202
+            },
+            "scrollWidth": 1145,
+            "clientWidth": 1145
+          }
+        ],
+        "visibleRows": 0,
+        "expectedVisibleRows": 0,
+        "selectedDetail": "Project Dashboard",
+        "expectedSelectedDetail": "Project Dashboard",
+        "emptyStateVisible": true,
+        "forbiddenHits": []
+      },
+      {
+        "ok": true,
+        "label": "desktop-1440x900-resource-detail",
+        "packageRuntimeComponents": [
+          "Badge",
+          "Button",
+          "DetailDrawer",
+          "EvidenceStrip",
+          "Field",
+          "FilterBar",
+          "GateReadinessPanel",
+          "Heading",
+          "KeyValueList",
+          "LinkButton",
+          "NavGroup",
+          "NavItem",
+          "ReadbackPanel",
+          "SearchInput",
+          "Select",
+          "SideNav",
+          "StateView",
+          "StatusBadge",
+          "Surface",
+          "TableShell",
+          "Text",
+          "TopBar",
+          "WorkIndex"
+        ],
+        "missingRuntimeComponents": [],
+        "markerOnlyComponents": [],
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlDescriptionFailures": [],
+        "disabledControlsCount": 14,
+        "disabledControlsWithReasonCount": 14,
+        "bodyHorizontalOverflow": false,
+        "viewportWidth": 1440,
+        "documentScrollWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "wideRegions": [],
+        "denseTableOverflowContained": true,
+        "surfaceIndexScrollWidth": 1186,
+        "surfaceIndexClientWidth": 1186,
+        "targetPathLinks": [
+          "/operations-cockpit.html",
+          "/docs-search-release-readiness.html",
+          "/aos-wide-product-design.html"
+        ],
+        "targetPathOk": true,
+        "regionProof": [
+          {
+            "region": "aos-wide-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 1440,
+              "top": -782,
+              "bottom": 1639.671875,
+              "width": 1440,
+              "height": 2421.671875
+            },
+            "scrollWidth": 1870,
+            "clientWidth": 1440
+          },
+          {
+            "region": "brand-lockup",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 14,
+              "right": 238,
+              "top": 24,
+              "bottom": 66,
+              "width": 224,
+              "height": 42
+            },
+            "scrollWidth": 224,
+            "clientWidth": 224
+          },
+          {
+            "region": "target-path-readback",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 252,
+              "right": 1440,
+              "top": -499.5625,
+              "bottom": -405.5625,
+              "width": 1188,
+              "height": 94
+            },
+            "scrollWidth": 1188,
+            "clientWidth": 1188
+          },
+          {
+            "region": "project-dashboard-hierarchy",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 252,
+              "right": 480,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "initiative-ticket-drillthrough",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 492,
+              "right": 720,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "ai-employee-profile",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 732,
+              "right": 960,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "gate-owner-intent",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 972,
+              "right": 1200,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "conference-minutes",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 1212,
+              "right": 1440,
+              "top": -405.5625,
+              "bottom": -67.609375,
+              "width": 228,
+              "height": 337.953125
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "gateway-adapter-health",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 252,
+              "right": 480,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "knowledge-release-modules",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 492,
+              "right": 720,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "dependency-governance-console",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 732,
+              "right": 960,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "resource-library-traceability",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 972,
+              "right": 1200,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "admin-access-audit-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 1212,
+              "right": 1440,
+              "top": -55.609375,
+              "bottom": 299.734375,
+              "width": 228,
+              "height": 355.34375
+            },
+            "scrollWidth": 226,
+            "clientWidth": 226
+          },
+          {
+            "region": "surface-index",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 252,
+              "right": 1440,
+              "top": 299.734375,
+              "bottom": 774.734375,
+              "width": 1188,
+              "height": 475
+            },
+            "scrollWidth": 1186,
+            "clientWidth": 1186
+          },
+          {
+            "region": "detail-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 252,
+              "right": 1440,
+              "top": 774.734375,
+              "bottom": 1569.671875,
+              "width": 1188,
+              "height": 794.9375
+            },
+            "scrollWidth": 1187,
+            "clientWidth": 1187
+          },
+          {
+            "region": "evidence-readiness-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 272,
+              "right": 1419,
+              "top": 1346.671875,
+              "bottom": 1548.671875,
+              "width": 1147,
+              "height": 202
+            },
+            "scrollWidth": 1145,
+            "clientWidth": 1145
+          }
+        ],
+        "visibleRows": 4,
+        "expectedVisibleRows": 4,
+        "selectedDetail": "Resource Library",
+        "expectedSelectedDetail": "Resource Library",
+        "emptyStateVisible": false,
+        "forbiddenHits": []
+      },
+      {
+        "ok": true,
+        "label": "mobile-390x844-initial",
+        "packageRuntimeComponents": [
+          "Badge",
+          "Button",
+          "DetailDrawer",
+          "EvidenceStrip",
+          "Field",
+          "FilterBar",
+          "GateReadinessPanel",
+          "Heading",
+          "KeyValueList",
+          "LinkButton",
+          "NavGroup",
+          "NavItem",
+          "ReadbackPanel",
+          "SearchInput",
+          "Select",
+          "SideNav",
+          "StateView",
+          "StatusBadge",
+          "Surface",
+          "TableShell",
+          "Text",
+          "TopBar",
+          "WorkIndex"
+        ],
+        "missingRuntimeComponents": [],
+        "markerOnlyComponents": [],
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlDescriptionFailures": [],
+        "disabledControlsCount": 14,
+        "disabledControlsWithReasonCount": 14,
+        "bodyHorizontalOverflow": false,
+        "viewportWidth": 390,
+        "documentScrollWidth": 390,
+        "bodyScrollWidth": 390,
+        "wideRegions": [],
+        "denseTableOverflowContained": true,
+        "surfaceIndexScrollWidth": 1002,
+        "surfaceIndexClientWidth": 388,
+        "targetPathLinks": [
+          "/operations-cockpit.html",
+          "/docs-search-release-readiness.html",
+          "/aos-wide-product-design.html"
+        ],
+        "targetPathOk": true,
+        "regionProof": [
+          {
+            "region": "aos-wide-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 6370.5625,
+              "width": 390,
+              "height": 6370.5625
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390
+          },
+          {
+            "region": "brand-lockup",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 14,
+              "right": 376,
+              "top": 18,
+              "bottom": 62,
+              "width": 362,
+              "height": 44
+            },
+            "scrollWidth": 362,
+            "clientWidth": 362
+          },
+          {
+            "region": "target-path-readback",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 1233.03125,
+              "bottom": 1495.03125,
+              "width": 390,
+              "height": 262
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390
+          },
+          {
+            "region": "project-dashboard-hierarchy",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 1495.03125,
+              "bottom": 1783.390625,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "initiative-ticket-drillthrough",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 1795.390625,
+              "bottom": 2083.75,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "ai-employee-profile",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 2095.75,
+              "bottom": 2384.109375,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "gate-owner-intent",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 2396.109375,
+              "bottom": 2684.46875,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "conference-minutes",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 2696.46875,
+              "bottom": 2984.828125,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "gateway-adapter-health",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 2996.828125,
+              "bottom": 3285.1875,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "knowledge-release-modules",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 3297.1875,
+              "bottom": 3585.546875,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "dependency-governance-console",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 3597.546875,
+              "bottom": 3885.90625,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "resource-library-traceability",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 3897.90625,
+              "bottom": 4186.265625,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "admin-access-audit-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 4198.265625,
+              "bottom": 4486.625,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "surface-index",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 4486.625,
+              "bottom": 5219.625,
+              "width": 390,
+              "height": 733
+            },
+            "scrollWidth": 1002,
+            "clientWidth": 388
+          },
+          {
+            "region": "detail-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 5219.625,
+              "bottom": 6152.5625,
+              "width": 390,
+              "height": 932.9375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "evidence-readiness-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 21,
+              "right": 369,
+              "top": 5929.5625,
+              "bottom": 6131.5625,
+              "width": 348,
+              "height": 202
+            },
+            "scrollWidth": 346,
+            "clientWidth": 346
+          }
+        ],
+        "visibleRows": 10,
+        "expectedVisibleRows": 10,
+        "selectedDetail": "Project Dashboard",
+        "expectedSelectedDetail": "Project Dashboard",
+        "emptyStateVisible": false,
+        "forbiddenHits": []
+      },
+      {
+        "ok": true,
+        "label": "mobile-390x844-blocked-filter",
+        "packageRuntimeComponents": [
+          "Badge",
+          "Button",
+          "DetailDrawer",
+          "EvidenceStrip",
+          "Field",
+          "FilterBar",
+          "GateReadinessPanel",
+          "Heading",
+          "KeyValueList",
+          "LinkButton",
+          "NavGroup",
+          "NavItem",
+          "ReadbackPanel",
+          "SearchInput",
+          "Select",
+          "SideNav",
+          "StateView",
+          "StatusBadge",
+          "Surface",
+          "TableShell",
+          "Text",
+          "TopBar",
+          "WorkIndex"
+        ],
+        "missingRuntimeComponents": [],
+        "markerOnlyComponents": [],
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlDescriptionFailures": [],
+        "disabledControlsCount": 14,
+        "disabledControlsWithReasonCount": 14,
+        "bodyHorizontalOverflow": false,
+        "viewportWidth": 390,
+        "documentScrollWidth": 390,
+        "bodyScrollWidth": 390,
+        "wideRegions": [],
+        "denseTableOverflowContained": true,
+        "surfaceIndexScrollWidth": 1002,
+        "surfaceIndexClientWidth": 388,
+        "targetPathLinks": [
+          "/operations-cockpit.html",
+          "/docs-search-release-readiness.html",
+          "/aos-wide-product-design.html"
+        ],
+        "targetPathOk": true,
+        "regionProof": [
+          {
+            "region": "aos-wide-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -4219,
+              "bottom": 1851.5625,
+              "width": 390,
+              "height": 6070.5625
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390
+          },
+          {
+            "region": "brand-lockup",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 14,
+              "right": 376,
+              "top": -4201,
+              "bottom": -4157,
+              "width": 362,
+              "height": 44
+            },
+            "scrollWidth": 362,
+            "clientWidth": 362
+          },
+          {
+            "region": "target-path-readback",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -2985.96875,
+              "bottom": -2723.96875,
+              "width": 390,
+              "height": 262
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390
+          },
+          {
+            "region": "project-dashboard-hierarchy",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -2723.96875,
+              "bottom": -2435.609375,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "initiative-ticket-drillthrough",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -2423.609375,
+              "bottom": -2135.25,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "ai-employee-profile",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -2123.25,
+              "bottom": -1834.890625,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "gate-owner-intent",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -1822.890625,
+              "bottom": -1534.53125,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "conference-minutes",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -1522.53125,
+              "bottom": -1234.171875,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "gateway-adapter-health",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -1222.171875,
+              "bottom": -933.8125,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "knowledge-release-modules",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -921.8125,
+              "bottom": -633.453125,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "dependency-governance-console",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -621.453125,
+              "bottom": -333.09375,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "resource-library-traceability",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -321.09375,
+              "bottom": -32.734375,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "admin-access-audit-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -20.734375,
+              "bottom": 267.625,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "surface-index",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 267.625,
+              "bottom": 700.625,
+              "width": 390,
+              "height": 433
+            },
+            "scrollWidth": 1002,
+            "clientWidth": 388
+          },
+          {
+            "region": "detail-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 700.625,
+              "bottom": 1633.5625,
+              "width": 390,
+              "height": 932.9375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "evidence-readiness-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 21,
+              "right": 369,
+              "top": 1410.5625,
+              "bottom": 1612.5625,
+              "width": 348,
+              "height": 202
+            },
+            "scrollWidth": 346,
+            "clientWidth": 346
+          }
+        ],
+        "visibleRows": 4,
+        "expectedVisibleRows": 4,
+        "selectedDetail": "Gate Queue",
+        "expectedSelectedDetail": "Gate Queue",
+        "emptyStateVisible": false,
+        "forbiddenHits": []
+      },
+      {
+        "ok": true,
+        "label": "mobile-390x844-no-match",
+        "packageRuntimeComponents": [
+          "Badge",
+          "Button",
+          "DetailDrawer",
+          "EvidenceStrip",
+          "Field",
+          "FilterBar",
+          "GateReadinessPanel",
+          "Heading",
+          "KeyValueList",
+          "LinkButton",
+          "NavGroup",
+          "NavItem",
+          "ReadbackPanel",
+          "SearchInput",
+          "Select",
+          "SideNav",
+          "StateView",
+          "StatusBadge",
+          "Surface",
+          "TableShell",
+          "Text",
+          "TopBar",
+          "WorkIndex"
+        ],
+        "missingRuntimeComponents": [],
+        "markerOnlyComponents": [],
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlDescriptionFailures": [],
+        "disabledControlsCount": 14,
+        "disabledControlsWithReasonCount": 14,
+        "bodyHorizontalOverflow": false,
+        "viewportWidth": 390,
+        "documentScrollWidth": 390,
+        "bodyScrollWidth": 390,
+        "wideRegions": [],
+        "denseTableOverflowContained": true,
+        "surfaceIndexScrollWidth": 1002,
+        "surfaceIndexClientWidth": 388,
+        "targetPathLinks": [
+          "/operations-cockpit.html",
+          "/docs-search-release-readiness.html",
+          "/aos-wide-product-design.html"
+        ],
+        "targetPathOk": true,
+        "regionProof": [
+          {
+            "region": "aos-wide-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -4219,
+              "bottom": 1823.625,
+              "width": 390,
+              "height": 6042.625
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390
+          },
+          {
+            "region": "brand-lockup",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 14,
+              "right": 376,
+              "top": -4201,
+              "bottom": -4157,
+              "width": 362,
+              "height": 44
+            },
+            "scrollWidth": 362,
+            "clientWidth": 362
+          },
+          {
+            "region": "target-path-readback",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -2985.96875,
+              "bottom": -2723.96875,
+              "width": 390,
+              "height": 262
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390
+          },
+          {
+            "region": "project-dashboard-hierarchy",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -2723.96875,
+              "bottom": -2435.609375,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "initiative-ticket-drillthrough",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -2423.609375,
+              "bottom": -2135.25,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "ai-employee-profile",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -2123.25,
+              "bottom": -1834.890625,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "gate-owner-intent",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -1822.890625,
+              "bottom": -1534.53125,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "conference-minutes",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -1522.53125,
+              "bottom": -1234.171875,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "gateway-adapter-health",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -1222.171875,
+              "bottom": -933.8125,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "knowledge-release-modules",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -921.8125,
+              "bottom": -633.453125,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "dependency-governance-console",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -621.453125,
+              "bottom": -333.09375,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "resource-library-traceability",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -321.09375,
+              "bottom": -32.734375,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "admin-access-audit-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -20.734375,
+              "bottom": 267.625,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "surface-index",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 267.625,
+              "bottom": 672.6875,
+              "width": 390,
+              "height": 405.0625
+            },
+            "scrollWidth": 1002,
+            "clientWidth": 388
+          },
+          {
+            "region": "detail-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 672.6875,
+              "bottom": 1605.625,
+              "width": 390,
+              "height": 932.9375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "evidence-readiness-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 21,
+              "right": 369,
+              "top": 1382.625,
+              "bottom": 1584.625,
+              "width": 348,
+              "height": 202
+            },
+            "scrollWidth": 346,
+            "clientWidth": 346
+          }
+        ],
+        "visibleRows": 0,
+        "expectedVisibleRows": 0,
+        "selectedDetail": "Project Dashboard",
+        "expectedSelectedDetail": "Project Dashboard",
+        "emptyStateVisible": true,
+        "forbiddenHits": []
+      },
+      {
+        "ok": true,
+        "label": "mobile-390x844-resource-detail",
+        "packageRuntimeComponents": [
+          "Badge",
+          "Button",
+          "DetailDrawer",
+          "EvidenceStrip",
+          "Field",
+          "FilterBar",
+          "GateReadinessPanel",
+          "Heading",
+          "KeyValueList",
+          "LinkButton",
+          "NavGroup",
+          "NavItem",
+          "ReadbackPanel",
+          "SearchInput",
+          "Select",
+          "SideNav",
+          "StateView",
+          "StatusBadge",
+          "Surface",
+          "TableShell",
+          "Text",
+          "TopBar",
+          "WorkIndex"
+        ],
+        "missingRuntimeComponents": [],
+        "markerOnlyComponents": [],
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlDescriptionFailures": [],
+        "disabledControlsCount": 14,
+        "disabledControlsWithReasonCount": 14,
+        "bodyHorizontalOverflow": false,
+        "viewportWidth": 390,
+        "documentScrollWidth": 390,
+        "bodyScrollWidth": 390,
+        "wideRegions": [],
+        "denseTableOverflowContained": true,
+        "surfaceIndexScrollWidth": 1002,
+        "surfaceIndexClientWidth": 388,
+        "targetPathLinks": [
+          "/operations-cockpit.html",
+          "/docs-search-release-readiness.html",
+          "/aos-wide-product-design.html"
+        ],
+        "targetPathOk": true,
+        "regionProof": [
+          {
+            "region": "aos-wide-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -4219,
+              "bottom": 1851.5625,
+              "width": 390,
+              "height": 6070.5625
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390
+          },
+          {
+            "region": "brand-lockup",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 14,
+              "right": 376,
+              "top": -4201,
+              "bottom": -4157,
+              "width": 362,
+              "height": 44
+            },
+            "scrollWidth": 362,
+            "clientWidth": 362
+          },
+          {
+            "region": "target-path-readback",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -2985.96875,
+              "bottom": -2723.96875,
+              "width": 390,
+              "height": 262
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390
+          },
+          {
+            "region": "project-dashboard-hierarchy",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -2723.96875,
+              "bottom": -2435.609375,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "initiative-ticket-drillthrough",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -2423.609375,
+              "bottom": -2135.25,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "ai-employee-profile",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -2123.25,
+              "bottom": -1834.890625,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "gate-owner-intent",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -1822.890625,
+              "bottom": -1534.53125,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "conference-minutes",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -1522.53125,
+              "bottom": -1234.171875,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "gateway-adapter-health",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -1222.171875,
+              "bottom": -933.8125,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "knowledge-release-modules",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -921.8125,
+              "bottom": -633.453125,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "dependency-governance-console",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -621.453125,
+              "bottom": -333.09375,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "resource-library-traceability",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -321.09375,
+              "bottom": -32.734375,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "admin-access-audit-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -20.734375,
+              "bottom": 267.625,
+              "width": 390,
+              "height": 288.359375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "surface-index",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 267.625,
+              "bottom": 700.625,
+              "width": 390,
+              "height": 433
+            },
+            "scrollWidth": 1002,
+            "clientWidth": 388
+          },
+          {
+            "region": "detail-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 700.625,
+              "bottom": 1633.5625,
+              "width": 390,
+              "height": 932.9375
+            },
+            "scrollWidth": 388,
+            "clientWidth": 388
+          },
+          {
+            "region": "evidence-readiness-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 21,
+              "right": 369,
+              "top": 1410.5625,
+              "bottom": 1612.5625,
+              "width": 348,
+              "height": 202
+            },
+            "scrollWidth": 346,
+            "clientWidth": 346
+          }
+        ],
+        "visibleRows": 4,
+        "expectedVisibleRows": 4,
+        "selectedDetail": "Resource Library",
+        "expectedSelectedDetail": "Resource Library",
+        "emptyStateVisible": false,
+        "forbiddenHits": []
+      }
+    ]
+  },
+  "evidenceReadiness": {
+    "markdownReceipt": "evidence/slice-10-aos-wide-product-design-surface-set-proof.md",
+    "browserSummaryPath": "evidence/slice-10-aos-wide-product-design-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/browser-evidence-summary.json",
+    "stableBrowserSummaryPath": "evidence/slice-10-aos-wide-product-design-browser/browser-evidence-summary.json",
+    "consolePageErrorReadiness": "none_observed"
+  }
+}

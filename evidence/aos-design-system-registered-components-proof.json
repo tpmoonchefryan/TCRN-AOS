@@ -130,7 +130,7 @@
     {
       "id": "aos-wide-product-design",
       "path": "apps/web/static/aos-wide-product-design.html",
-      "componentCount": 142,
+      "componentCount": 141,
       "registeredComponents": [
         "Badge",
         "Button",

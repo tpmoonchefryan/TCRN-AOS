@@ -1,0 +1,1105 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_design_system_frontend_rebuild_59aw_docs_readiness_package_runtime_adoption_implementation",
+  "sourceHead": "59357a5cc7610f6f1d45aecf2deacd7ed4c96808",
+  "checkpoint": {
+    "workflowPacketBasis": "624127182da417f65c790de155e3297e77828181",
+    "preImplementationBasis": "9d7980f46245bb783b520c9f90945da8609c01ce",
+    "localCheckpoint": "slice-9b-visible-readiness-inspection"
+  },
+  "staticRender": {
+    "path": "apps/web/static/docs-search-release-readiness.html",
+    "bytes": 39088,
+    "sha256": "1fee55dd010455eae7c782c0e3e86b11e6a2a75fe2301d2169744e8b31283ee5",
+    "docsSearchReleaseSurfacesVisible": true,
+    "selectorProof": [
+      {
+        "selector": "[data-region='docs-surface-shell']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='brand-lockup']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='header-claim-strip']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='docs-readiness-board']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='search-inspection']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='github-prci-linkage']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='release-candidate-linkage']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='evidence-readback-panel']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='detail-panel']",
+        "present": true
+      }
+    ]
+  },
+  "sourceFreshnessReadback": {
+    "ok": true,
+    "strategy": "source_content_digest_for_mutating_docs_readiness_browser_receipts",
+    "sourceHeadAtProofRun": "59357a5cc7610f6f1d45aecf2deacd7ed4c96808",
+    "exactFinalCommitHeadRequired": false,
+    "sourceContentDigest": "9bb5b9077b5973ee27eef2be7b823948e5fc98819b845a3f378e09909b9eef9f",
+    "sourcePaths": [
+      "apps/web/src/docs-readiness-ui-react-runtime.ts",
+      "apps/web/src/docs-readiness-view.ts",
+      "apps/web/test/docs-readiness-view.test.mjs",
+      "scripts/aos-design-system-package-runtime-proof.mjs",
+      "scripts/aos-design-system-component-registry-proof.mjs",
+      "scripts/slice-9b-visible-readiness-proof.mjs"
+    ]
+  },
+  "docsReadinessRuntimeReadback": {
+    "ok": true,
+    "packageRuntimeComponents": [
+      "Badge",
+      "Button",
+      "DetailDrawer",
+      "EvidenceStrip",
+      "Field",
+      "FilterBar",
+      "Heading",
+      "KeyValueList",
+      "LinkButton",
+      "NavGroup",
+      "NavItem",
+      "ReadbackPanel",
+      "SearchInput",
+      "Select",
+      "SideNav",
+      "StateView",
+      "StatusBadge",
+      "Surface",
+      "TableShell",
+      "Text",
+      "TopBar",
+      "WorkIndex"
+    ],
+    "missingRuntimeComponents": [],
+    "markerOnlyComponents": [],
+    "disabledNavItemCount": 4,
+    "disabledNavItemFailures": [],
+    "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
+    "forbiddenRuntimeHits": []
+  },
+  "browserReadback": {
+    "ok": true,
+    "captureMode": "no_server_playwright_file_url_package_runtime_docs_readiness",
+    "staticTarget": "apps/web/static/docs-search-release-readiness.html",
+    "browserEngine": "chromium",
+    "pageErrors": [],
+    "consoleErrors": [],
+    "requestFailures": [],
+    "screenshots": [
+      {
+        "file": "evidence/slice-9b-visible-readiness-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/desktop-1440x900-initial.png",
+        "sha256": "26df71d6be1fb9f69fe52d640017721142c7c9e70a3be4425e14fda691c10f4a",
+        "bytes": 227102
+      },
+      {
+        "file": "evidence/slice-9b-visible-readiness-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/desktop-1440x900-search-github.png",
+        "sha256": "11662a8d664b8370ffe53be059bc4729fb7ca0042d85c12d9bf9ed18d2ab94fe",
+        "bytes": 207562
+      },
+      {
+        "file": "evidence/slice-9b-visible-readiness-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/desktop-1440x900-search-empty.png",
+        "sha256": "3e779157e8c5cda4bd82832350ae98f986f5d53e382e5c86ef0b021fda71bbff",
+        "bytes": 212150
+      },
+      {
+        "file": "evidence/slice-9b-visible-readiness-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/mobile-390x844-initial.png",
+        "sha256": "58bae22def0c41dfe20af4ef60187e82f780a36336bdaaf923c7e15282d5b14f",
+        "bytes": 205153
+      },
+      {
+        "file": "evidence/slice-9b-visible-readiness-browser/59357a5cc7610f6f1d45aecf2deacd7ed4c96808/mobile-390x844-search-candidate.png",
+        "sha256": "b216f234a33da91f727f6e23c5fed0155f07e3c802950a77fa832c33c20973a2",
+        "bytes": 199545
+      }
+    ],
+    "viewportReadbacks": [
+      {
+        "ok": true,
+        "label": "desktop-1440x900-initial",
+        "packageRuntimeComponents": [
+          "Badge",
+          "Button",
+          "DetailDrawer",
+          "EvidenceStrip",
+          "Field",
+          "FilterBar",
+          "Heading",
+          "KeyValueList",
+          "LinkButton",
+          "NavGroup",
+          "NavItem",
+          "ReadbackPanel",
+          "SearchInput",
+          "Select",
+          "SideNav",
+          "StateView",
+          "StatusBadge",
+          "Surface",
+          "TableShell",
+          "Text",
+          "TopBar",
+          "WorkIndex"
+        ],
+        "missingRuntimeComponents": [],
+        "markerOnlyComponents": [],
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlDescriptionFailures": [],
+        "disabledControlsCount": 4,
+        "disabledControlsWithReasonCount": 4,
+        "docsSearchReleaseSurfacesVisible": true,
+        "bodyHorizontalOverflow": false,
+        "viewportWidth": 1440,
+        "documentScrollWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "wideRegions": [],
+        "regionProof": [
+          {
+            "region": "docs-surface-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 1440,
+              "top": 0,
+              "bottom": 900,
+              "width": 1440,
+              "height": 900
+            },
+            "scrollWidth": 1440,
+            "clientWidth": 1440
+          },
+          {
+            "region": "brand-lockup",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 14,
+              "right": 238,
+              "top": 24,
+              "bottom": 66,
+              "width": 224,
+              "height": 42
+            },
+            "scrollWidth": 224,
+            "clientWidth": 224
+          },
+          {
+            "region": "header-claim-strip",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 903.25,
+              "right": 1422,
+              "top": 105.59375,
+              "bottom": 135.59375,
+              "width": 518.75,
+              "height": 30
+            },
+            "scrollWidth": 519,
+            "clientWidth": 519
+          },
+          {
+            "region": "docs-readiness-board",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 270,
+              "right": 548.25,
+              "top": 153.59375,
+              "bottom": 349.59375,
+              "width": 278.25,
+              "height": 196
+            },
+            "scrollWidth": 276,
+            "clientWidth": 276
+          },
+          {
+            "region": "search-inspection",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 561.25,
+              "right": 839.5,
+              "top": 153.59375,
+              "bottom": 349.59375,
+              "width": 278.25,
+              "height": 196
+            },
+            "scrollWidth": 276,
+            "clientWidth": 276
+          },
+          {
+            "region": "github-prci-linkage",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 852.5,
+              "right": 1130.75,
+              "top": 153.59375,
+              "bottom": 349.59375,
+              "width": 278.25,
+              "height": 196
+            },
+            "scrollWidth": 276,
+            "clientWidth": 276
+          },
+          {
+            "region": "release-candidate-linkage",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 1143.75,
+              "right": 1422,
+              "top": 153.59375,
+              "bottom": 349.59375,
+              "width": 278.25,
+              "height": 196
+            },
+            "scrollWidth": 276,
+            "clientWidth": 276
+          },
+          {
+            "region": "evidence-readback-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 1106,
+              "right": 1401,
+              "top": 622.09375,
+              "bottom": 841.59375,
+              "width": 295,
+              "height": 219.5
+            },
+            "scrollWidth": 413,
+            "clientWidth": 293
+          },
+          {
+            "region": "detail-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 1086,
+              "right": 1422,
+              "top": 367.59375,
+              "bottom": 862.59375,
+              "width": 336,
+              "height": 495
+            },
+            "scrollWidth": 434,
+            "clientWidth": 335
+          }
+        ],
+        "visibleRows": 4,
+        "selectedDetail": "Release note draft",
+        "expectedSelectedDetail": "Release note draft",
+        "emptyStateVisible": false,
+        "forbiddenHits": []
+      },
+      {
+        "ok": true,
+        "label": "desktop-1440x900-search-github",
+        "packageRuntimeComponents": [
+          "Badge",
+          "Button",
+          "DetailDrawer",
+          "EvidenceStrip",
+          "Field",
+          "FilterBar",
+          "Heading",
+          "KeyValueList",
+          "LinkButton",
+          "NavGroup",
+          "NavItem",
+          "ReadbackPanel",
+          "SearchInput",
+          "Select",
+          "SideNav",
+          "StateView",
+          "StatusBadge",
+          "Surface",
+          "TableShell",
+          "Text",
+          "TopBar",
+          "WorkIndex"
+        ],
+        "missingRuntimeComponents": [],
+        "markerOnlyComponents": [],
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlDescriptionFailures": [],
+        "disabledControlsCount": 4,
+        "disabledControlsWithReasonCount": 4,
+        "docsSearchReleaseSurfacesVisible": true,
+        "bodyHorizontalOverflow": false,
+        "viewportWidth": 1440,
+        "documentScrollWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "wideRegions": [],
+        "regionProof": [
+          {
+            "region": "docs-surface-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 1440,
+              "top": 0,
+              "bottom": 900,
+              "width": 1440,
+              "height": 900
+            },
+            "scrollWidth": 1440,
+            "clientWidth": 1440
+          },
+          {
+            "region": "brand-lockup",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 14,
+              "right": 238,
+              "top": 24,
+              "bottom": 66,
+              "width": 224,
+              "height": 42
+            },
+            "scrollWidth": 224,
+            "clientWidth": 224
+          },
+          {
+            "region": "header-claim-strip",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 903.25,
+              "right": 1422,
+              "top": 105.59375,
+              "bottom": 135.59375,
+              "width": 518.75,
+              "height": 30
+            },
+            "scrollWidth": 519,
+            "clientWidth": 519
+          },
+          {
+            "region": "docs-readiness-board",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 270,
+              "right": 548.25,
+              "top": 153.59375,
+              "bottom": 349.59375,
+              "width": 278.25,
+              "height": 196
+            },
+            "scrollWidth": 276,
+            "clientWidth": 276
+          },
+          {
+            "region": "search-inspection",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 561.25,
+              "right": 839.5,
+              "top": 153.59375,
+              "bottom": 349.59375,
+              "width": 278.25,
+              "height": 196
+            },
+            "scrollWidth": 276,
+            "clientWidth": 276
+          },
+          {
+            "region": "github-prci-linkage",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 852.5,
+              "right": 1130.75,
+              "top": 153.59375,
+              "bottom": 349.59375,
+              "width": 278.25,
+              "height": 196
+            },
+            "scrollWidth": 276,
+            "clientWidth": 276
+          },
+          {
+            "region": "release-candidate-linkage",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 1143.75,
+              "right": 1422,
+              "top": 153.59375,
+              "bottom": 349.59375,
+              "width": 278.25,
+              "height": 196
+            },
+            "scrollWidth": 276,
+            "clientWidth": 276
+          },
+          {
+            "region": "evidence-readback-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 1106,
+              "right": 1401,
+              "top": 622.09375,
+              "bottom": 841.59375,
+              "width": 295,
+              "height": 219.5
+            },
+            "scrollWidth": 413,
+            "clientWidth": 293
+          },
+          {
+            "region": "detail-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 1086,
+              "right": 1422,
+              "top": 367.59375,
+              "bottom": 862.59375,
+              "width": 336,
+              "height": 495
+            },
+            "scrollWidth": 434,
+            "clientWidth": 335
+          }
+        ],
+        "visibleRows": 1,
+        "selectedDetail": "TCRN-AOS-local",
+        "expectedSelectedDetail": "TCRN-AOS-local",
+        "emptyStateVisible": false,
+        "forbiddenHits": []
+      },
+      {
+        "ok": true,
+        "label": "desktop-1440x900-search-empty",
+        "packageRuntimeComponents": [
+          "Badge",
+          "Button",
+          "DetailDrawer",
+          "EvidenceStrip",
+          "Field",
+          "FilterBar",
+          "Heading",
+          "KeyValueList",
+          "LinkButton",
+          "NavGroup",
+          "NavItem",
+          "ReadbackPanel",
+          "SearchInput",
+          "Select",
+          "SideNav",
+          "StateView",
+          "StatusBadge",
+          "Surface",
+          "TableShell",
+          "Text",
+          "TopBar",
+          "WorkIndex"
+        ],
+        "missingRuntimeComponents": [],
+        "markerOnlyComponents": [],
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlDescriptionFailures": [],
+        "disabledControlsCount": 4,
+        "disabledControlsWithReasonCount": 4,
+        "docsSearchReleaseSurfacesVisible": true,
+        "bodyHorizontalOverflow": false,
+        "viewportWidth": 1440,
+        "documentScrollWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "wideRegions": [],
+        "regionProof": [
+          {
+            "region": "docs-surface-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 1440,
+              "top": 0,
+              "bottom": 900,
+              "width": 1440,
+              "height": 900
+            },
+            "scrollWidth": 1440,
+            "clientWidth": 1440
+          },
+          {
+            "region": "brand-lockup",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 14,
+              "right": 238,
+              "top": 24,
+              "bottom": 66,
+              "width": 224,
+              "height": 42
+            },
+            "scrollWidth": 224,
+            "clientWidth": 224
+          },
+          {
+            "region": "header-claim-strip",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 903.25,
+              "right": 1422,
+              "top": 105.59375,
+              "bottom": 135.59375,
+              "width": 518.75,
+              "height": 30
+            },
+            "scrollWidth": 519,
+            "clientWidth": 519
+          },
+          {
+            "region": "docs-readiness-board",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 270,
+              "right": 548.25,
+              "top": 153.59375,
+              "bottom": 349.59375,
+              "width": 278.25,
+              "height": 196
+            },
+            "scrollWidth": 276,
+            "clientWidth": 276
+          },
+          {
+            "region": "search-inspection",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 561.25,
+              "right": 839.5,
+              "top": 153.59375,
+              "bottom": 349.59375,
+              "width": 278.25,
+              "height": 196
+            },
+            "scrollWidth": 276,
+            "clientWidth": 276
+          },
+          {
+            "region": "github-prci-linkage",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 852.5,
+              "right": 1130.75,
+              "top": 153.59375,
+              "bottom": 349.59375,
+              "width": 278.25,
+              "height": 196
+            },
+            "scrollWidth": 276,
+            "clientWidth": 276
+          },
+          {
+            "region": "release-candidate-linkage",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 1143.75,
+              "right": 1422,
+              "top": 153.59375,
+              "bottom": 349.59375,
+              "width": 278.25,
+              "height": 196
+            },
+            "scrollWidth": 276,
+            "clientWidth": 276
+          },
+          {
+            "region": "evidence-readback-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 1106,
+              "right": 1401,
+              "top": 622.09375,
+              "bottom": 841.59375,
+              "width": 295,
+              "height": 219.5
+            },
+            "scrollWidth": 413,
+            "clientWidth": 293
+          },
+          {
+            "region": "detail-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 1086,
+              "right": 1422,
+              "top": 367.59375,
+              "bottom": 862.59375,
+              "width": 336,
+              "height": 495
+            },
+            "scrollWidth": 434,
+            "clientWidth": 335
+          }
+        ],
+        "visibleRows": 0,
+        "selectedDetail": "TCRN-AOS-local",
+        "expectedSelectedDetail": "",
+        "emptyStateVisible": true,
+        "forbiddenHits": []
+      },
+      {
+        "ok": true,
+        "label": "mobile-390x844-initial",
+        "packageRuntimeComponents": [
+          "Badge",
+          "Button",
+          "DetailDrawer",
+          "EvidenceStrip",
+          "Field",
+          "FilterBar",
+          "Heading",
+          "KeyValueList",
+          "LinkButton",
+          "NavGroup",
+          "NavItem",
+          "ReadbackPanel",
+          "SearchInput",
+          "Select",
+          "SideNav",
+          "StateView",
+          "StatusBadge",
+          "Surface",
+          "TableShell",
+          "Text",
+          "TopBar",
+          "WorkIndex"
+        ],
+        "missingRuntimeComponents": [],
+        "markerOnlyComponents": [],
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlDescriptionFailures": [],
+        "disabledControlsCount": 4,
+        "disabledControlsWithReasonCount": 4,
+        "docsSearchReleaseSurfacesVisible": true,
+        "bodyHorizontalOverflow": false,
+        "viewportWidth": 390,
+        "documentScrollWidth": 390,
+        "bodyScrollWidth": 390,
+        "wideRegions": [],
+        "regionProof": [
+          {
+            "region": "docs-surface-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": 0,
+              "bottom": 2914,
+              "width": 390,
+              "height": 2914
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390
+          },
+          {
+            "region": "brand-lockup",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 14,
+              "right": 376,
+              "top": 18,
+              "bottom": 60,
+              "width": 362,
+              "height": 42
+            },
+            "scrollWidth": 362,
+            "clientWidth": 362
+          },
+          {
+            "region": "header-claim-strip",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 12,
+              "right": 378,
+              "top": 1000,
+              "bottom": 1068,
+              "width": 366,
+              "height": 68
+            },
+            "scrollWidth": 366,
+            "clientWidth": 366
+          },
+          {
+            "region": "docs-readiness-board",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 12,
+              "right": 378,
+              "top": 1086,
+              "bottom": 1270,
+              "width": 366,
+              "height": 184
+            },
+            "scrollWidth": 364,
+            "clientWidth": 364
+          },
+          {
+            "region": "search-inspection",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 12,
+              "right": 378,
+              "top": 1283,
+              "bottom": 1467,
+              "width": 366,
+              "height": 184
+            },
+            "scrollWidth": 364,
+            "clientWidth": 364
+          },
+          {
+            "region": "github-prci-linkage",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 12,
+              "right": 378,
+              "top": 1480,
+              "bottom": 1664,
+              "width": 366,
+              "height": 184
+            },
+            "scrollWidth": 364,
+            "clientWidth": 364
+          },
+          {
+            "region": "release-candidate-linkage",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 12,
+              "right": 378,
+              "top": 1677,
+              "bottom": 1861,
+              "width": 366,
+              "height": 184
+            },
+            "scrollWidth": 364,
+            "clientWidth": 364
+          },
+          {
+            "region": "evidence-readback-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 33,
+              "right": 357,
+              "top": 2629.5,
+              "bottom": 2865,
+              "width": 324,
+              "height": 235.5
+            },
+            "scrollWidth": 322,
+            "clientWidth": 322
+          },
+          {
+            "region": "detail-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 12,
+              "right": 378,
+              "top": 2375,
+              "bottom": 2886,
+              "width": 366,
+              "height": 511
+            },
+            "scrollWidth": 364,
+            "clientWidth": 364
+          }
+        ],
+        "visibleRows": 4,
+        "selectedDetail": "Release note draft",
+        "expectedSelectedDetail": "Release note draft",
+        "emptyStateVisible": false,
+        "forbiddenHits": []
+      },
+      {
+        "ok": true,
+        "label": "mobile-390x844-search-candidate",
+        "packageRuntimeComponents": [
+          "Badge",
+          "Button",
+          "DetailDrawer",
+          "EvidenceStrip",
+          "Field",
+          "FilterBar",
+          "Heading",
+          "KeyValueList",
+          "LinkButton",
+          "NavGroup",
+          "NavItem",
+          "ReadbackPanel",
+          "SearchInput",
+          "Select",
+          "SideNav",
+          "StateView",
+          "StatusBadge",
+          "Surface",
+          "TableShell",
+          "Text",
+          "TopBar",
+          "WorkIndex"
+        ],
+        "missingRuntimeComponents": [],
+        "markerOnlyComponents": [],
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlDescriptionFailures": [],
+        "disabledControlsCount": 4,
+        "disabledControlsWithReasonCount": 4,
+        "docsSearchReleaseSurfacesVisible": true,
+        "bodyHorizontalOverflow": false,
+        "viewportWidth": 390,
+        "documentScrollWidth": 390,
+        "bodyScrollWidth": 390,
+        "wideRegions": [],
+        "regionProof": [
+          {
+            "region": "docs-surface-shell",
+            "present": true,
+            "display": "grid",
+            "rect": {
+              "left": 0,
+              "right": 390,
+              "top": -1784,
+              "bottom": 1002,
+              "width": 390,
+              "height": 2786
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390
+          },
+          {
+            "region": "brand-lockup",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 14,
+              "right": 376,
+              "top": -1766,
+              "bottom": -1724,
+              "width": 362,
+              "height": 42
+            },
+            "scrollWidth": 362,
+            "clientWidth": 362
+          },
+          {
+            "region": "header-claim-strip",
+            "present": true,
+            "display": "flex",
+            "rect": {
+              "left": 12,
+              "right": 378,
+              "top": -784,
+              "bottom": -716,
+              "width": 366,
+              "height": 68
+            },
+            "scrollWidth": 366,
+            "clientWidth": 366
+          },
+          {
+            "region": "docs-readiness-board",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 12,
+              "right": 378,
+              "top": -698,
+              "bottom": -514,
+              "width": 366,
+              "height": 184
+            },
+            "scrollWidth": 364,
+            "clientWidth": 364
+          },
+          {
+            "region": "search-inspection",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 12,
+              "right": 378,
+              "top": -501,
+              "bottom": -317,
+              "width": 366,
+              "height": 184
+            },
+            "scrollWidth": 364,
+            "clientWidth": 364
+          },
+          {
+            "region": "github-prci-linkage",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 12,
+              "right": 378,
+              "top": -304,
+              "bottom": -120,
+              "width": 366,
+              "height": 184
+            },
+            "scrollWidth": 364,
+            "clientWidth": 364
+          },
+          {
+            "region": "release-candidate-linkage",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 12,
+              "right": 378,
+              "top": -107,
+              "bottom": 77,
+              "width": 366,
+              "height": 184
+            },
+            "scrollWidth": 364,
+            "clientWidth": 364
+          },
+          {
+            "region": "evidence-readback-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 33,
+              "right": 357,
+              "top": 717.5,
+              "bottom": 953,
+              "width": 324,
+              "height": 235.5
+            },
+            "scrollWidth": 322,
+            "clientWidth": 322
+          },
+          {
+            "region": "detail-panel",
+            "present": true,
+            "display": "block",
+            "rect": {
+              "left": 12,
+              "right": 378,
+              "top": 447,
+              "bottom": 974,
+              "width": 366,
+              "height": 527
+            },
+            "scrollWidth": 364,
+            "clientWidth": 364
+          }
+        ],
+        "visibleRows": 1,
+        "selectedDetail": "slice-9b-local-candidate",
+        "expectedSelectedDetail": "slice-9b-local-candidate",
+        "emptyStateVisible": false,
+        "forbiddenHits": []
+      }
+    ]
+  },
+  "readModel": {
+    "rowCount": 4,
+    "storyScope": [
+      "AOS-S057",
+      "AOS-S058",
+      "AOS-S062",
+      "AOS-S063"
+    ],
+    "docsReadiness": 1,
+    "searchIndexRecords": 1,
+    "githubMetadata": 1,
+    "prCiReadiness": 1,
+    "releaseCandidates": 1,
+    "blockedReadiness": 1,
+    "blockedReleaseCandidates": 1
+  },
+  "copyScan": {
+    "forbiddenHits": [],
+    "productionSurfaceOnly": true
+  },
+  "noExecutionClaims": {
+    "docsPublished": false,
+    "rawSourceIndexed": false,
+    "githubWriteExecuted": false,
+    "releaseCreated": false,
+    "ciStatusMutated": false,
+    "deploymentExecuted": false,
+    "productAccepted": false,
+    "finalMvpAccepted": false
+  },
+  "noOverclaim": {
+    "docsPublication": false,
+    "docsExport": false,
+    "canonicalPromotion": false,
+    "githubMutation": false,
+    "releaseCreation": false,
+    "ciMutation": false,
+    "deployment": false,
+    "liveCodexDispatch": false,
+    "productDesignFinalAcceptance": false,
+    "browserAcceptanceCloseout": false,
+    "productAcceptance": false,
+    "finalMvpAcceptance": false
+  },
+  "evidenceReadback": {
+    "evidenceTarget": "evidence/slice-9b-visible-readiness-inspection-proof.md",
+    "command": "pnpm slice9b:proof",
+    "tcrnTmsBoundary": "6356d3b6b730311fe09a0d3eb2f57a07b10bb3c5",
+    "wrongSiblingQuarantine": "absent_acceptable"
+  }
+}

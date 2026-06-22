@@ -246,13 +246,15 @@ function renderSidebar(model: AOSWideProductDesignModel): ReactNode {
 }
 
 function renderTopbar(model: AOSWideProductDesignModel): ReactNode {
+  const targetPathDisabledReason = "Target path selection is held for this local read-only checkpoint";
+
   return createElement(TopBar, {
     productName: "AOS Product Design",
     moduleName: "Target-set checkpoint",
     actions: [
       createElement(
         Field,
-        { key: "target", label: "Target path" },
+        { key: "target", label: "Target path", hint: targetPathDisabledReason },
         createElement(
           Select,
           {
@@ -260,12 +262,14 @@ function renderTopbar(model: AOSWideProductDesignModel): ReactNode {
             name: "target-path",
             value: model.targetPathReadback.aosWideTarget,
             disabled: true,
+            title: targetPathDisabledReason,
             options: [
               {
                 value: model.targetPathReadback.aosWideTarget,
                 label: model.targetPathReadback.aosWideTarget,
               },
             ],
+            "data-disabled-reason": targetPathDisabledReason,
             "data-package-runtime-component": "Select",
             "data-package-runtime-source": packageRuntimeSource,
             "data-tcrn-component": "Select",

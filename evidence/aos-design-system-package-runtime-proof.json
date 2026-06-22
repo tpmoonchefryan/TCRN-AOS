@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_rebuild_59ax_aos_wide_product_design_target_set_package_runtime_adoption_implementation",
-  "sourceHead": "a305237f7dea0366de3f7229bc98cc966fb9b67d",
+  "sourceHead": "59357a5cc7610f6f1d45aecf2deacd7ed4c96808",
   "claimScope": {
     "implementationKind": "operations_cockpit_package_runtime_completion_plus_docs_readiness_and_aos_wide_target_set_package_runtime_adoption",
     "packageBackedReactRuntimeRendering": "operations_cockpit_completion_docs_readiness_and_aos_wide_target_set_runtime_adoption",
@@ -16,22 +16,27 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "a305237f7dea0366de3f7229bc98cc966fb9b67d",
+    "sourceHeadAtProofRun": "59357a5cc7610f6f1d45aecf2deacd7ed4c96808",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "ab75cf5f063d0a98d3d541d32c1c902892a9ca0447c8f7863a928c8294b9709e",
+    "sourceContentDigest": "efb219a5073b2a19a412abd62430072efa87e62dc4569f0315d06dd53b03cbfc",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
       "apps/web/src/docs-readiness-ui-react-runtime.ts",
       "apps/web/src/docs-readiness-view.ts",
+      "apps/web/src/aos-wide-product-design-data.ts",
+      "apps/web/src/aos-wide-product-design-ui-react-runtime.ts",
+      "apps/web/src/aos-wide-product-design-view.ts",
       "apps/web/src/design-system-bridge.ts",
       "apps/web/test/cockpit-view.test.mjs",
       "apps/web/test/docs-readiness-view.test.mjs",
+      "apps/web/test/aos-wide-product-design-view.test.mjs",
       "scripts/aos-design-system-package-runtime-proof.mjs",
       "scripts/aos-design-system-component-registry-proof.mjs",
       "scripts/aos-design-system-consumer-slice-1-proof.mjs",
       "scripts/aos-design-system-consumer-slice-2-proof.mjs",
       "scripts/slice-9b-visible-readiness-proof.mjs",
+      "scripts/slice-10-aos-wide-product-design-proof.mjs",
       "scripts/slice-4b-style-proof.mjs"
     ]
   },
@@ -593,7 +598,7 @@
     "disabledButtonFailures": [],
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "1722b612ed1bae49092c776d99e2d3dc1ed976f4cb0f3a42a5e24efdc59a0fab",
+    "sampleRenderedHtmlSha256": "1ad1357aa293afd2da1468dcfacb63af882b1680cbee0b9e90184ee28351bc63",
     "failures": []
   },
   "fullDocumentAccessibilityReadback": {
@@ -602,8 +607,8 @@
     "duplicateIds": [],
     "ariaReferenceFailures": [],
     "disabledControlDescriptionFailures": [],
-    "disabledControlsCount": 9,
-    "disabledControlsWithReasonCount": 9
+    "disabledControlsCount": 16,
+    "disabledControlsWithReasonCount": 16
   },
   "docsReadinessFullDocumentAccessibilityReadback": {
     "ok": true,
@@ -616,12 +621,12 @@
   },
   "aosWideFullDocumentAccessibilityReadback": {
     "ok": true,
-    "idCount": 29,
+    "idCount": 30,
     "duplicateIds": [],
     "ariaReferenceFailures": [],
     "disabledControlDescriptionFailures": [],
-    "disabledControlsCount": 9,
-    "disabledControlsWithReasonCount": 9
+    "disabledControlsCount": 14,
+    "disabledControlsWithReasonCount": 14
   },
   "visualStyleReadback": {
     "ok": true,
