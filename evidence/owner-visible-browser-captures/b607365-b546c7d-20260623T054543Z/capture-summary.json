@@ -1,0 +1,538 @@
+{
+  "captureDir": "/tmp/tcrn-aos-b607365-owner-visible-browser-capture-20260623T054543Z",
+  "results": [
+    {
+      "surface": "operations",
+      "viewport": {
+        "label": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "mobile": false
+      },
+      "url": "http://127.0.0.1:4317/operations-cockpit.html",
+      "title": "TCRN AOS Operations Cockpit",
+      "screenshotPath": "/tmp/tcrn-aos-b607365-owner-visible-browser-capture-20260623T054543Z/operations-desktop-1440x900.png",
+      "sha256": "e46de1a560fc0155c0aea9d85fc3dab001067fbd2516ef33ff5d48244dc3ea6f",
+      "bytes": 233914,
+      "nonblankScreenshot": true,
+      "dom": {
+        "title": "TCRN AOS Operations Cockpit",
+        "expectedPresence": {
+          "Operations Cockpit": true,
+          "@tcrn/ui-react": true,
+          "data-design-system-consumer": true
+        },
+        "staleE61": false,
+        "currentB607": false,
+        "productBasisB546": false,
+        "uiReact": true,
+        "designSystemConsumer": true,
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlCount": 16,
+        "disabledFailures": [],
+        "disabledDescriptionMismatches": [],
+        "bodyHorizontalOverflow": false,
+        "scrollWidth": 1440,
+        "viewportWidth": 1440,
+        "wideRegions": [],
+        "forbiddenVisibleHits": [],
+        "forbiddenClaims": {
+          "productAcceptanceTrue": false,
+          "finalMvpAcceptanceTrue": false,
+          "releasePublicationTrue": false,
+          "ownerIntentExecutionTrue": false,
+          "liveDispatchTrue": false
+        },
+        "nonblankSignals": {
+          "textLength": 2972,
+          "elementCount": 246,
+          "bodyRect": {
+            "width": 1440,
+            "height": 1215
+          }
+        },
+        "resourceFailures": [],
+        "sampleText": "TCRN AOS PRIMARY COCKPIT VIEWS Dashboard Dashboard opens when that AOS workspace is available. Cockpit Work Index Work Index opens when that AOS workspace is available. Stage Map Stage Map opens when that AOS workspace is available. Gate Queue Gate Queue opens when that AOS workspace is available. Conferences Conferences opens when that AOS workspace is available. Evidence Evidence opens when that AOS workspace is available. Dependency Dependency opens when that AOS workspace is available. Resou"
+      },
+      "pageErrors": [],
+      "consoleErrors": [],
+      "warningLogs": [],
+      "requestFailures": [],
+      "cdpEventCounts": {
+        "total": 22,
+        "networkLoadingFailed": 0,
+        "runtimeException": 0,
+        "logError": 0
+      }
+    },
+    {
+      "surface": "operations",
+      "viewport": {
+        "label": "mobile",
+        "width": 390,
+        "height": 844,
+        "deviceScaleFactor": 2,
+        "mobile": true
+      },
+      "url": "http://127.0.0.1:4317/operations-cockpit.html",
+      "title": "TCRN AOS Operations Cockpit",
+      "screenshotPath": "/tmp/tcrn-aos-b607365-owner-visible-browser-capture-20260623T054543Z/operations-mobile-390x844.png",
+      "sha256": "582a49bac299d1903b82087176f1a6a721a0b3f944f065107bf5d0bac6974483",
+      "bytes": 210155,
+      "nonblankScreenshot": true,
+      "dom": {
+        "title": "TCRN AOS Operations Cockpit",
+        "expectedPresence": {
+          "Operations Cockpit": true,
+          "@tcrn/ui-react": true,
+          "data-design-system-consumer": true
+        },
+        "staleE61": false,
+        "currentB607": false,
+        "productBasisB546": false,
+        "uiReact": true,
+        "designSystemConsumer": true,
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlCount": 16,
+        "disabledFailures": [],
+        "disabledDescriptionMismatches": [],
+        "bodyHorizontalOverflow": false,
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "wideRegions": [],
+        "forbiddenVisibleHits": [],
+        "forbiddenClaims": {
+          "productAcceptanceTrue": false,
+          "finalMvpAcceptanceTrue": false,
+          "releasePublicationTrue": false,
+          "ownerIntentExecutionTrue": false,
+          "liveDispatchTrue": false
+        },
+        "nonblankSignals": {
+          "textLength": 2950,
+          "elementCount": 246,
+          "bodyRect": {
+            "width": 390,
+            "height": 3571
+          }
+        },
+        "resourceFailures": [],
+        "sampleText": "TCRN AOS PRIMARY COCKPIT VIEWS Dashboard Dashboard opens when that AOS workspace is available. Cockpit Work Index Work Index opens when that AOS workspace is available. Stage Map Stage Map opens when that AOS workspace is available. Gate Queue Gate Queue opens when that AOS workspace is available. Conferences Conferences opens when that AOS workspace is available. Evidence Evidence opens when that AOS workspace is available. Dependency Dependency opens when that AOS workspace is available. Resou"
+      },
+      "pageErrors": [],
+      "consoleErrors": [],
+      "warningLogs": [],
+      "requestFailures": [],
+      "cdpEventCounts": {
+        "total": 22,
+        "networkLoadingFailed": 0,
+        "runtimeException": 0,
+        "logError": 0
+      }
+    },
+    {
+      "surface": "docs-readiness",
+      "viewport": {
+        "label": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "mobile": false
+      },
+      "url": "http://127.0.0.1:4317/docs-search-release-readiness.html",
+      "title": "TCRN AOS Docs Readiness Inspection",
+      "screenshotPath": "/tmp/tcrn-aos-b607365-owner-visible-browser-capture-20260623T054543Z/docs-readiness-desktop-1440x900.png",
+      "sha256": "0c5ab8d97b3b4500fa1ce0ac0d333ebeff146c38a5f55c360e6bd41c8a7e6b99",
+      "bytes": 188019,
+      "nonblankScreenshot": true,
+      "dom": {
+        "title": "TCRN AOS Docs Readiness Inspection",
+        "expectedPresence": {
+          "Docs Readiness": true,
+          "@tcrn/ui-react": true,
+          "data-design-system-consumer": true
+        },
+        "staleE61": false,
+        "currentB607": false,
+        "productBasisB546": false,
+        "uiReact": true,
+        "designSystemConsumer": true,
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlCount": 4,
+        "disabledFailures": [],
+        "disabledDescriptionMismatches": [],
+        "bodyHorizontalOverflow": false,
+        "scrollWidth": 1440,
+        "viewportWidth": 1440,
+        "wideRegions": [],
+        "forbiddenVisibleHits": [],
+        "forbiddenClaims": {
+          "productAcceptanceTrue": false,
+          "finalMvpAcceptanceTrue": false,
+          "releasePublicationTrue": false,
+          "ownerIntentExecutionTrue": false,
+          "liveDispatchTrue": false
+        },
+        "nonblankSignals": {
+          "textLength": 1783,
+          "elementCount": 211,
+          "bodyRect": {
+            "width": 1440,
+            "height": 900
+          }
+        },
+        "resourceFailures": [],
+        "sampleText": "TCRN AOS PRIMARY VIEWS Dashboard Dashboard opens when that AOS workspace is available. Cockpit Cockpit opens when that AOS workspace is available. Docs Readiness Evidence Evidence opens when that AOS workspace is available. Release Linkage Release Linkage opens when that AOS workspace is available. Local readiness data TCRN AOS Docs Readiness Project TCRN-AOS Readiness status Local docs workspace Current Refresh DOCS / SEARCH / RELEASE-CANDIDATE Docs Readiness Drafts stay local Release actions d"
+      },
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "source": "network",
+          "level": "error",
+          "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": 1782193550364.223,
+          "url": "http://127.0.0.1:4317/docs/brand/aos-favicon.png",
+          "networkRequestId": "59498.2"
+        }
+      ],
+      "warningLogs": [],
+      "requestFailures": [],
+      "cdpEventCounts": {
+        "total": 24,
+        "networkLoadingFailed": 0,
+        "runtimeException": 0,
+        "logError": 1
+      }
+    },
+    {
+      "surface": "docs-readiness",
+      "viewport": {
+        "label": "mobile",
+        "width": 390,
+        "height": 844,
+        "deviceScaleFactor": 2,
+        "mobile": true
+      },
+      "url": "http://127.0.0.1:4317/docs-search-release-readiness.html",
+      "title": "TCRN AOS Docs Readiness Inspection",
+      "screenshotPath": "/tmp/tcrn-aos-b607365-owner-visible-browser-capture-20260623T054543Z/docs-readiness-mobile-390x844.png",
+      "sha256": "b24879109086137b3712cf340da32df0f7b9a751fa8ce3474a2b3955c287299f",
+      "bytes": 149313,
+      "nonblankScreenshot": true,
+      "dom": {
+        "title": "TCRN AOS Docs Readiness Inspection",
+        "expectedPresence": {
+          "Docs Readiness": true,
+          "@tcrn/ui-react": true,
+          "data-design-system-consumer": true
+        },
+        "staleE61": false,
+        "currentB607": false,
+        "productBasisB546": false,
+        "uiReact": true,
+        "designSystemConsumer": true,
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlCount": 4,
+        "disabledFailures": [],
+        "disabledDescriptionMismatches": [],
+        "bodyHorizontalOverflow": false,
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "wideRegions": [
+          {
+            "tag": "div",
+            "id": "",
+            "cls": "readiness-table tcrn-table-shell",
+            "width": 836,
+            "text": "StorySurfaceStateOwnerBlockerEvidenceAOS-S057Docs readinessneeds reviewreviewrel"
+          },
+          {
+            "tag": "div",
+            "id": "",
+            "cls": "readiness-row table-head tcrn-table-shell__head",
+            "width": 836,
+            "text": "StorySurfaceStateOwnerBlockerEvidence"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "readiness-row inspection-row tcrn-table-shell__row active",
+            "width": 836,
+            "text": "AOS-S057Docs readinessneeds reviewreviewrelease review pending1 link"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "readiness-row inspection-row tcrn-table-shell__row",
+            "width": 836,
+            "text": "AOS-S058Search indexmetadata onlyreviewraw payload rejected1 link"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "readiness-row inspection-row tcrn-table-shell__row",
+            "width": 836,
+            "text": "AOS-S062GitHub and PR/CIwarningverificationexternal review pending1 link"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "readiness-row inspection-row tcrn-table-shell__row",
+            "width": 836,
+            "text": "AOS-S063Release candidate linkagereview neededrelease-reviewdependency and resou"
+          }
+        ],
+        "forbiddenVisibleHits": [],
+        "forbiddenClaims": {
+          "productAcceptanceTrue": false,
+          "finalMvpAcceptanceTrue": false,
+          "releasePublicationTrue": false,
+          "ownerIntentExecutionTrue": false,
+          "liveDispatchTrue": false
+        },
+        "nonblankSignals": {
+          "textLength": 1783,
+          "elementCount": 211,
+          "bodyRect": {
+            "width": 390,
+            "height": 2761
+          }
+        },
+        "resourceFailures": [],
+        "sampleText": "TCRN AOS PRIMARY VIEWS Dashboard Dashboard opens when that AOS workspace is available. Cockpit Cockpit opens when that AOS workspace is available. Docs Readiness Evidence Evidence opens when that AOS workspace is available. Release Linkage Release Linkage opens when that AOS workspace is available. Local readiness data TCRN AOS Docs Readiness Project TCRN-AOS Readiness status Local docs workspace Current Refresh DOCS / SEARCH / RELEASE-CANDIDATE Docs Readiness Drafts stay local Release actions d"
+      },
+      "pageErrors": [],
+      "consoleErrors": [],
+      "warningLogs": [],
+      "requestFailures": [],
+      "cdpEventCounts": {
+        "total": 16,
+        "networkLoadingFailed": 0,
+        "runtimeException": 0,
+        "logError": 0
+      }
+    },
+    {
+      "surface": "aos-wide-product-design",
+      "viewport": {
+        "label": "desktop",
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "mobile": false
+      },
+      "url": "http://127.0.0.1:4317/aos-wide-product-design.html",
+      "title": "TCRN AOS Product Design Surface Set",
+      "screenshotPath": "/tmp/tcrn-aos-b607365-owner-visible-browser-capture-20260623T054543Z/aos-wide-product-design-desktop-1440x900.png",
+      "sha256": "7035d848086d4ddf640b1a1d77603843ef35a007825282dafaf1d8a606df24e4",
+      "bytes": 264063,
+      "nonblankScreenshot": true,
+      "dom": {
+        "title": "TCRN AOS Product Design Surface Set",
+        "expectedPresence": {
+          "Product Design": true,
+          "@tcrn/ui-react": true,
+          "data-design-system-consumer": true
+        },
+        "staleE61": false,
+        "currentB607": false,
+        "productBasisB546": false,
+        "uiReact": true,
+        "designSystemConsumer": true,
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlCount": 14,
+        "disabledFailures": [],
+        "disabledDescriptionMismatches": [],
+        "bodyHorizontalOverflow": false,
+        "scrollWidth": 1440,
+        "viewportWidth": 1440,
+        "wideRegions": [],
+        "forbiddenVisibleHits": [],
+        "forbiddenClaims": {
+          "productAcceptanceTrue": false,
+          "finalMvpAcceptanceTrue": false,
+          "releasePublicationTrue": false,
+          "ownerIntentExecutionTrue": false,
+          "liveDispatchTrue": false
+        },
+        "nonblankSignals": {
+          "textLength": 5913,
+          "elementCount": 444,
+          "bodyRect": {
+            "width": 1440,
+            "height": 2725
+          }
+        },
+        "resourceFailures": [],
+        "sampleText": "AOS AOS product design Product workspace TARGET MODULES Project Dashboard Initiative Detail This workspace opens when the corresponding AOS module is available. AI Employee This workspace opens when the corresponding AOS module is available. Gate Queue This workspace opens when the corresponding AOS module is available. Conference This workspace opens when the corresponding AOS module is available. Gateway / Adapter This workspace opens when the corresponding AOS module is available. Knowledge M"
+      },
+      "pageErrors": [],
+      "consoleErrors": [],
+      "warningLogs": [],
+      "requestFailures": [],
+      "cdpEventCounts": {
+        "total": 16,
+        "networkLoadingFailed": 0,
+        "runtimeException": 0,
+        "logError": 0
+      }
+    },
+    {
+      "surface": "aos-wide-product-design",
+      "viewport": {
+        "label": "mobile",
+        "width": 390,
+        "height": 844,
+        "deviceScaleFactor": 2,
+        "mobile": true
+      },
+      "url": "http://127.0.0.1:4317/aos-wide-product-design.html",
+      "title": "TCRN AOS Product Design Surface Set",
+      "screenshotPath": "/tmp/tcrn-aos-b607365-owner-visible-browser-capture-20260623T054543Z/aos-wide-product-design-mobile-390x844.png",
+      "sha256": "0c7bf2353f54524354a5ac795c517f9e42112826e3ef95b195a7d6dd7ec610c7",
+      "bytes": 215387,
+      "nonblankScreenshot": true,
+      "dom": {
+        "title": "TCRN AOS Product Design Surface Set",
+        "expectedPresence": {
+          "Product Design": true,
+          "@tcrn/ui-react": true,
+          "data-design-system-consumer": true
+        },
+        "staleE61": false,
+        "currentB607": false,
+        "productBasisB546": false,
+        "uiReact": true,
+        "designSystemConsumer": true,
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlCount": 14,
+        "disabledFailures": [],
+        "disabledDescriptionMismatches": [],
+        "bodyHorizontalOverflow": false,
+        "scrollWidth": 390,
+        "viewportWidth": 390,
+        "wideRegions": [
+          {
+            "tag": "div",
+            "id": "",
+            "cls": "surface-table tcrn-table-shell",
+            "width": 1002,
+            "text": "TargetStateOwnerGuardrailEvidenceActionProject DashboardCurrent stateMara / Ilya"
+          },
+          {
+            "tag": "div",
+            "id": "",
+            "cls": "tcrn-table-shell__head",
+            "width": 1002,
+            "text": "TargetStateOwnerGuardrailEvidenceAction"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "surface-row tcrn-table-shell__row active",
+            "width": 1002,
+            "text": "Project DashboardCurrent stateMara / IlyaReview evidence pendingfresh local evid"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "surface-row tcrn-table-shell__row",
+            "width": 1002,
+            "text": "Initiative DetailReview requiredIlyaGate evidence review neededlinked metadataIn"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "surface-row tcrn-table-shell__row",
+            "width": 1002,
+            "text": "AI EmployeeCurrent stateAriadne / IlyaThread status review pendingrole snapshotI"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "surface-row tcrn-table-shell__row",
+            "width": 1002,
+            "text": "Gate QueueBlockedVerity / owner gateOwner approval requiredgate work orderInspec"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "surface-row tcrn-table-shell__row",
+            "width": 1002,
+            "text": "ConferenceReview requiredArturoParticipant review pendingminutes metadataInspect"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "surface-row tcrn-table-shell__row",
+            "width": 1002,
+            "text": "Gateway / AdapterCurrent stateIlya / SableLive operations blockedaudit metadataI"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "surface-row tcrn-table-shell__row",
+            "width": 1002,
+            "text": "Knowledge ModulesUnknownMneme / RowanExport review pendingdocs metadataInspect"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "surface-row tcrn-table-shell__row",
+            "width": 1002,
+            "text": "Dependency ConsoleBlockedSableReview gate requiredlicense metadataInspect"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "surface-row tcrn-table-shell__row",
+            "width": 1002,
+            "text": "Resource LibraryBlockedSable / AtlasMaterialization disabledresource metadataIns"
+          },
+          {
+            "tag": "button",
+            "id": "",
+            "cls": "surface-row tcrn-table-shell__row",
+            "width": 1002,
+            "text": "Admin / AccessBlockedSable / AriadneBreak-glass unavailableaudit metadataInspect"
+          }
+        ],
+        "forbiddenVisibleHits": [],
+        "forbiddenClaims": {
+          "productAcceptanceTrue": false,
+          "finalMvpAcceptanceTrue": false,
+          "releasePublicationTrue": false,
+          "ownerIntentExecutionTrue": false,
+          "liveDispatchTrue": false
+        },
+        "nonblankSignals": {
+          "textLength": 5913,
+          "elementCount": 444,
+          "bodyRect": {
+            "width": 390,
+            "height": 6519
+          }
+        },
+        "resourceFailures": [],
+        "sampleText": "AOS AOS product design Product workspace TARGET MODULES Project Dashboard Initiative Detail This workspace opens when the corresponding AOS module is available. AI Employee This workspace opens when the corresponding AOS module is available. Gate Queue This workspace opens when the corresponding AOS module is available. Conference This workspace opens when the corresponding AOS module is available. Gateway / Adapter This workspace opens when the corresponding AOS module is available. Knowledge M"
+      },
+      "pageErrors": [],
+      "consoleErrors": [],
+      "warningLogs": [],
+      "requestFailures": [],
+      "cdpEventCounts": {
+        "total": 16,
+        "networkLoadingFailed": 0,
+        "runtimeException": 0,
+        "logError": 0
+      }
+    }
+  ]
+}
