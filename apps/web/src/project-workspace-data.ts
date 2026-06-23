@@ -25,6 +25,10 @@ export const forbiddenProjectWorkspaceVisibleCopy = [
   "readback",
   "checkpoint",
   "route",
+  "slice",
+  "implementation",
+  "workflow",
+  "proof",
   "proof required",
   "external proof required",
   "package-runtime",
@@ -94,12 +98,35 @@ function mapStory(row: WorkstreamStoryRow): ProjectWorkspaceStory {
     id: row.storyId,
     title: row.title,
     status: row.status,
-    owner: row.nextOwnerRole,
+    owner: presentOwnerRole(row.nextOwnerRole),
     freshness: row.freshness,
     blocker: row.blocker ?? "No blocker recorded",
     linkedEvidenceCount: row.linkedEvidenceIds.length,
     linkedGateCount: row.linkedGateIds.length
   };
+}
+
+function presentOwnerRole(role: string): string {
+  const normalized = role.trim().toLowerCase();
+  if (normalized === "implementation") return "Workspace team";
+  if (normalized === "product") return "Product team";
+  if (normalized === "design") return "Design team";
+  if (normalized === "qa") return "Quality team";
+  return role
+    .split(/[-_\s]+/)
+    .filter(Boolean)
+    .map((part) => `${part.slice(0, 1).toUpperCase()}${part.slice(1).toLowerCase()}`)
+    .join(" ");
+}
+
+function presentStageLabel(label: string): string {
+  const normalized = label.trim().toLowerCase();
+  if (normalized === "implementation") return "Build";
+  return label
+    .split(/[-_\s]+/)
+    .filter(Boolean)
+    .map((part) => `${part.slice(0, 1).toUpperCase()}${part.slice(1).toLowerCase()}`)
+    .join(" ");
 }
 
 export function createProjectWorkspaceModel(source: OperationsCockpitReadModel = createSlice4bCockpitReadModel()): ProjectWorkspaceModel {
@@ -114,7 +141,7 @@ export function createProjectWorkspaceModel(source: OperationsCockpitReadModel =
     id: "story-unavailable",
     title: "Selected work",
     status: "blocked",
-    owner: "implementation",
+    owner: "Workspace team",
     freshness: "unknown",
     blocker: "No work item is available from the local service preview.",
     linkedEvidenceCount: 0,
@@ -153,7 +180,7 @@ export function createProjectWorkspaceModel(source: OperationsCockpitReadModel =
     },
     stageSummary: source.stageMap.map((stage) => ({
       id: stage.stageId,
-      label: stage.label,
+      label: presentStageLabel(stage.label),
       state: stage.state,
       blockers: stage.blockers
     })),
@@ -169,9 +196,9 @@ export function createProjectWorkspaceModel(source: OperationsCockpitReadModel =
     ],
     unavailableActions: [
       { label: "Switch project", reason: "Project switching is read-only in this local workspace preview." },
-      { label: "Create initiative", reason: "Initiative creation requires a separately authorized product workflow." },
+      { label: "Create initiative", reason: "Initiative creation is not enabled from this local workspace preview." },
       { label: "Send owner action", reason: "Owner actions are not enabled from the local workspace preview." },
-      { label: "Publish workspace", reason: "Publishing is outside this local implementation slice." }
+      { label: "Publish workspace", reason: "Publishing is not enabled from this local workspace preview." }
     ]
   };
 }

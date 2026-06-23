@@ -1,0 +1,322 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_4b9253b_ilya_project_workspace_copy_proof_table_repair_after_elara_review",
+  "sourceHead": "4b9253bf195796c62b578fad4f5e28b4ee1e4622",
+  "generatedAt": "2026-06-23T22:44:10.675Z",
+  "staticTarget": "apps/web/static/project-workspace.html",
+  "staticSha256": "1844f076693e06ff1141d622b46d1dab39b2e30d8785cc763cea7682cf2a3ffc",
+  "staticBytes": 37923,
+  "dsStandardsConsumed": [
+    "ds-aos-target-set-v1",
+    "ds-aos-operations-cockpit-v1"
+  ],
+  "storybookOraclesConsumed": [
+    "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+    "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+  ],
+  "taliaChecklistItemAdvanced": "Project Dashboard / Project-Initiative-Epic-Story hierarchy standalone visible shell",
+  "staticReadback": {
+    "packageComponents": [
+      "Badge",
+      "Button",
+      "DetailDrawer",
+      "EvidenceStrip",
+      "Heading",
+      "KeyValueList",
+      "LinkButton",
+      "NavGroup",
+      "NavItem",
+      "ReadbackPanel",
+      "Select",
+      "SideNav",
+      "StatusBadge",
+      "Surface",
+      "TableShell",
+      "Text",
+      "TopBar"
+    ],
+    "missingComponents": [],
+    "markerOnlyComponents": [],
+    "selectorProof": [
+      {
+        "selector": "[data-surface='project-workspace']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-shell']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-nav']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-topbar']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-summary']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-hierarchy']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-index']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-detail']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-actions']",
+        "present": true
+      }
+    ],
+    "forbiddenVisibleHits": [],
+    "failures": []
+  },
+  "viewportReadbacks": [
+    {
+      "viewport": "desktop-1440x900",
+      "screenshot": "evidence/project-workspace-browser/4b9253bf195796c62b578fad4f5e28b4ee1e4622/project-workspace-desktop-1440x900.png",
+      "screenshotSha256": "58956f45c98355a2217369ac611b44e98a0bc79119f88bab9f9bd5dd66d06c8f",
+      "screenshotBytes": 247797,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='project-workspace']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-hierarchy']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-index']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-actions']",
+          "present": true
+        }
+      ],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 6,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "Select",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar"
+      ],
+      "markerOnlyComponents": [],
+      "navItemCount": 4,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "ownerCellCount": 1,
+      "ownerCellFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    },
+    {
+      "viewport": "mobile-390x844",
+      "screenshot": "evidence/project-workspace-browser/4b9253bf195796c62b578fad4f5e28b4ee1e4622/project-workspace-mobile-390x844.png",
+      "screenshotSha256": "7fd0b2121a9fea92c287653d29eddc3884ca25d1f70cc1c80ad03878758cc92c",
+      "screenshotBytes": 218322,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='project-workspace']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-hierarchy']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-index']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-actions']",
+          "present": true
+        }
+      ],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 6,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "Select",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar"
+      ],
+      "markerOnlyComponents": [],
+      "navItemCount": 4,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "ownerCellCount": 1,
+      "ownerCellFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "requestFailures": [],
+  "sourceFreshnessReadback": {
+    "strategy": "project_workspace_visible_slice_source_content_digest_v1",
+    "sourceHead": "4b9253bf195796c62b578fad4f5e28b4ee1e4622",
+    "sourcePaths": [
+      "apps/web/src/cockpit.ts",
+      "apps/web/src/project-workspace-data.ts",
+      "apps/web/src/project-workspace-ui-react-runtime.ts",
+      "apps/web/src/project-workspace-view.ts",
+      "apps/web/src/design-system-bridge.ts",
+      "apps/web/test/project-workspace-view.test.mjs",
+      "apps/api/src/server.ts",
+      "apps/api/test/service-smoke.test.mjs",
+      "scripts/project-workspace-proof.mjs",
+      "scripts/service-start.mjs",
+      "package.json"
+    ],
+    "inputs": [
+      {
+        "path": "apps/web/src/cockpit.ts",
+        "exists": true,
+        "sha256": "431243eaa90e0c371ee879abb98fb5284b908afc27e7eb4b5f782a14cbb5d94c"
+      },
+      {
+        "path": "apps/web/src/project-workspace-data.ts",
+        "exists": true,
+        "sha256": "e1c81cccb0d93b1b72bbe5f526bd2facee9437884afc89a4de00f2f2c1d256b6"
+      },
+      {
+        "path": "apps/web/src/project-workspace-ui-react-runtime.ts",
+        "exists": true,
+        "sha256": "bff675efff1a7d2aa6f0c23574e71af03aab7b216ffd924f56b9576ae4e7954c"
+      },
+      {
+        "path": "apps/web/src/project-workspace-view.ts",
+        "exists": true,
+        "sha256": "c301413ff07e48609edb13a1af48eecc786b4000ca36d983230557633cd294fa"
+      },
+      {
+        "path": "apps/web/src/design-system-bridge.ts",
+        "exists": true,
+        "sha256": "60203401947c5dd54054d10a30bbf31db09e9bdfc19fdfba26d5e8594f60823d"
+      },
+      {
+        "path": "apps/web/test/project-workspace-view.test.mjs",
+        "exists": true,
+        "sha256": "4b2058d24a9584e3571e8f104d23c6777ecbc10d7b13e6aa3dc12f820d7c2ea7"
+      },
+      {
+        "path": "apps/api/src/server.ts",
+        "exists": true,
+        "sha256": "6f5cbfe1c03f6d0620242ad646ebd658c0124aa51ae720e153ae88681ed0172d"
+      },
+      {
+        "path": "apps/api/test/service-smoke.test.mjs",
+        "exists": true,
+        "sha256": "3f2e36bbe129193e89be873c5e2e36d328f9c7544c8d7fbf641cd839e9c49d8a"
+      },
+      {
+        "path": "scripts/project-workspace-proof.mjs",
+        "exists": true,
+        "sha256": "6425eabb956a062786986b7de6a26c20c7505f573c92edcc1fec62cdb9083294"
+      },
+      {
+        "path": "scripts/service-start.mjs",
+        "exists": true,
+        "sha256": "7fd4e4c5696808eda9b4290b7685ca1a6674823286a6b2e24d50adef6715b51a"
+      },
+      {
+        "path": "package.json",
+        "exists": true,
+        "sha256": "406e61e4d56677a5a8bbd4fcd4bcfeac075494754b4e2e6826a7b7fc19b0af19"
+      }
+    ],
+    "sourceContentDigest": "97fee535b078e44b24f8a4657a20055d3ae2899ed038e97f146a3ff148399e67"
+  },
+  "noOverclaimReadback": {
+    "productAcceptance": false,
+    "finalMvpAcceptance": false,
+    "releasePublication": false,
+    "ownerIntentExecution": false,
+    "liveDispatch": false,
+    "parentGoalCompletion": false
+  },
+  "failures": []
+}

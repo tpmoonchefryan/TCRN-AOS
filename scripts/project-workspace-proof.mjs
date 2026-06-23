@@ -11,7 +11,7 @@ import {
 } from "../dist/apps/web/src/project-workspace-view.js";
 
 const repoRoot = process.cwd();
-const route = "route_tcrn_aos_a5c9ffc_ilya_implementation_first_visible_aos_shell_navigation_slice_after_product_scope_record";
+const route = "route_tcrn_aos_4b9253b_ilya_project_workspace_copy_proof_table_repair_after_elara_review";
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const checkCurrentSource = process.argv.includes("--check-current-source");
 const html = renderProjectWorkspaceHtml();
@@ -126,7 +126,31 @@ try {
           labelHeight: label ? Math.round(label.getBoundingClientRect().height) : 0
         };
       }).filter((item) => item.contentWidth < args.minNavLabelWidth || item.labelHeight > 42);
-      const visibleText = document.body.innerText.toLowerCase();
+      const ownerCells = Array.from(document.querySelectorAll(".project-workspace__table-shell [data-label='Owner']"));
+      const ownerCellFailures = ownerCells.map((cell) => {
+        const text = cell.textContent?.trim() ?? "";
+        return {
+          text,
+          clientWidth: Math.round(cell.clientWidth),
+          scrollWidth: Math.round(cell.scrollWidth),
+          height: Math.round(cell.getBoundingClientRect().height)
+        };
+      }).filter((cell) =>
+        cell.text.toLowerCase().includes("implementation")
+          || (args.isDesktop && (cell.scrollWidth > cell.clientWidth + 1 || cell.height > 48))
+      );
+      const accessibilityText = [
+        ...Array.from(document.querySelectorAll("[aria-label]")).map((node) => node.getAttribute("aria-label") ?? ""),
+        ...Array.from(document.querySelectorAll("[title]")).map((node) => node.getAttribute("title") ?? ""),
+        ...Array.from(document.querySelectorAll("[data-disabled-reason]")).map((node) => node.getAttribute("data-disabled-reason") ?? ""),
+        ...Array.from(document.querySelectorAll("[aria-describedby]")).flatMap((node) =>
+          (node.getAttribute("aria-describedby") ?? "")
+            .split(/\s+/)
+            .filter(Boolean)
+            .map((id) => document.getElementById(id)?.textContent?.trim() ?? "")
+        )
+      ].join(" ");
+      const visibleText = `${document.body.innerText} ${accessibilityText}`.toLowerCase();
       const forbiddenVisibleHits = forbiddenTerms.filter((term) => visibleText.includes(term.toLowerCase()));
       const bodyHorizontalOverflow = document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
       const nonblank = document.body.innerText.trim().length > 1000 && document.querySelectorAll("[data-package-runtime-component]").length >= 16;
@@ -142,6 +166,8 @@ try {
         navItemCount: navItems.length,
         navIconlessCount,
         navReadabilityFailures,
+        ownerCellCount: ownerCells.length,
+        ownerCellFailures,
         forbiddenVisibleHits,
         bodyHorizontalOverflow,
         nonblank
@@ -149,7 +175,8 @@ try {
     }, {
       requiredSelectors: [...requiredProjectWorkspaceSelectors],
       forbiddenTerms: [...forbiddenProjectWorkspaceVisibleCopy],
-      minNavLabelWidth: viewport.minNavLabelWidth
+      minNavLabelWidth: viewport.minNavLabelWidth,
+      isDesktop: viewport.width >= 980
     });
 
     viewportReadbacks.push({
@@ -180,6 +207,7 @@ for (const readback of viewportReadbacks) {
     ...readback.disabledFailures.map((failure) => `disabled_reason_failure:${readback.viewport}:${failure.html}`),
     ...readback.markerOnlyComponents.map((component) => `marker_only_component:${readback.viewport}:${component}`),
     ...readback.forbiddenVisibleHits.map((hit) => `forbidden_visible_copy:${readback.viewport}:${hit}`),
+    ...readback.ownerCellFailures.map((failure) => `work_index_owner_cell_failure:${readback.viewport}:${failure.text}:${failure.clientWidth}:${failure.scrollWidth}:${failure.height}`),
     ...readback.navReadabilityFailures.map((failure) => `nav_readability_failure:${readback.viewport}:${failure.label}:${failure.contentWidth}:${failure.labelHeight}`)
   );
   if (!readback.nonblank) failures.push(`blank_or_sparse_render:${readback.viewport}`);
@@ -255,7 +283,7 @@ function inspectStaticHtml(renderedHtml) {
     const present = region ? renderedHtml.includes(`data-region="${region}"`) : surface ? renderedHtml.includes(`data-surface="${surface}"`) : false;
     return { selector, present };
   });
-  const visibleText = productVisibleText(renderedHtml).toLowerCase();
+  const visibleText = productVisibleAndAccessibilityText(renderedHtml).toLowerCase();
   const forbiddenVisibleHits = forbiddenProjectWorkspaceVisibleCopy.filter((phrase) => visibleText.includes(phrase.toLowerCase()));
   const failures = [
     ...missingComponents.map((component) => `missing_component:${component}`),
@@ -268,14 +296,18 @@ function inspectStaticHtml(renderedHtml) {
   return { packageComponents, missingComponents, markerOnlyComponents, selectorProof, forbiddenVisibleHits, failures };
 }
 
-function productVisibleText(renderedHtml) {
-  return renderedHtml
+function productVisibleAndAccessibilityText(renderedHtml) {
+  const attributeText = Array.from(renderedHtml.matchAll(/\b(?:aria-label|title|data-disabled-reason)="([^"]*)"/g))
+    .map((match) => match[1])
+    .join(" ");
+  const visibleText = renderedHtml
     .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
     .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
     .replace(/\b(?:class|data-[\w:-]+|id|href|src|style)="[^"]*"/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+  return `${visibleText} ${attributeText}`.replace(/\s+/g, " ").trim();
 }
 
 function inspectSourceContentDigest() {
@@ -328,7 +360,7 @@ function markdownReceipt(summary) {
 
 ## Browser Evidence
 
-${summary.viewportReadbacks.map((readback) => `- ${readback.viewport}: ${readback.screenshot} sha256=${readback.screenshotSha256} bytes=${readback.screenshotBytes} overflow=${readback.bodyHorizontalOverflow} duplicateIds=${readback.duplicateIds.length} ariaFailures=${readback.ariaReferenceFailures.length} disabledFailures=${readback.disabledFailures.length} iconlessNavItems=${readback.navIconlessCount}`).join("\n")}
+${summary.viewportReadbacks.map((readback) => `- ${readback.viewport}: ${readback.screenshot} sha256=${readback.screenshotSha256} bytes=${readback.screenshotBytes} overflow=${readback.bodyHorizontalOverflow} duplicateIds=${readback.duplicateIds.length} ariaFailures=${readback.ariaReferenceFailures.length} disabledFailures=${readback.disabledFailures.length} iconlessNavItems=${readback.navIconlessCount} ownerCellFailures=${readback.ownerCellFailures.length}`).join("\n")}
 
 ## Boundaries
 

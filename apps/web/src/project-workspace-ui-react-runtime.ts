@@ -174,7 +174,7 @@ function renderTopbar(model: ProjectWorkspaceModel) {
             ...packageAttrs("Button"),
             variant: "secondary",
             disabled: true,
-            disabledReason: "Refresh is handled by the Operations Cockpit service view for this slice."
+            disabledReason: "Refresh is available from the Operations Cockpit while this workspace stays in local preview mode."
           },
           "Refresh"
         )

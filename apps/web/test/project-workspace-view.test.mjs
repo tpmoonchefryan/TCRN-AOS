@@ -100,6 +100,14 @@ test("Project Workspace disabled controls carry their own reasons", () => {
     assert.match(control.attributes, /\btitle="[^"]+"/, `disabled control has title: ${control.attributes}`);
     assert.match(control.attributes, /\baria-describedby="[^"]+"/, `disabled control has aria-describedby: ${control.attributes}`);
     assert.equal(control.resolvedReason, control.reason, `disabled reason target matches for ${control.reason}`);
+    assert.equal(control.title, control.reason, `disabled title matches for ${control.reason}`);
+    assert.deepEqual(
+      forbiddenProjectWorkspaceVisibleCopy.filter((phrase) =>
+        `${control.reason} ${control.title} ${control.resolvedReason}`.toLowerCase().includes(phrase)
+      ),
+      [],
+      `disabled reason avoids internal copy: ${control.attributes}`
+    );
   }
 });
 
@@ -115,22 +123,27 @@ test("Project Workspace nav items use DS icons for Storybook-aligned side naviga
 });
 
 function productVisibleAndA11yText(html) {
-  return html
+  const attributeText = Array.from(html.matchAll(/\b(?:aria-label|title|data-disabled-reason)="([^"]*)"/g))
+    .map((match) => match[1])
+    .join(" ");
+  const visibleText = html
     .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
     .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
     .replace(/\b(?:class|data-[\w:-]+|id|href|src|style)="[^"]*"/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+  return `${visibleText} ${attributeText}`.replace(/\s+/g, " ").trim();
 }
 
-const productVisibleInternalTermsPattern = /\b(readback|checkpoint|route|proof required|external proof required|package-runtime|package runtime|functional contract|held for later|unavailable in this route|not claimed|not_claimed)\b/i;
+const productVisibleInternalTermsPattern = /\b(readback|checkpoint|route|slice|implementation|workflow|proof|package-runtime|package runtime|functional contract|held for later|unavailable in this route|not claimed|not_claimed)\b/i;
 
 function disabledControlReadbacks(html) {
   const controls = Array.from(html.matchAll(/<(button|select|input|textarea|a)\b(?=[^>]*(?:\bdisabled\b|\baria-disabled="true"))([^>]*)>([\s\S]*?)<\/\1>/g));
   return controls.map((match) => {
     const attributes = match[2] ?? "";
     const reason = attributes.match(/\bdata-disabled-reason="([^"]+)"/)?.[1] ?? "";
+    const title = attributes.match(/\btitle="([^"]+)"/)?.[1] ?? "";
     const describedby = attributes.match(/\baria-describedby="([^"]+)"/)?.[1] ?? "";
     const resolvedReason = describedby
       .split(/\s+/)
@@ -144,6 +157,6 @@ function disabledControlReadbacks(html) {
       })
       .filter(Boolean)
       .join(" ");
-    return { attributes, reason, resolvedReason };
+    return { attributes, reason, title, resolvedReason };
   });
 }

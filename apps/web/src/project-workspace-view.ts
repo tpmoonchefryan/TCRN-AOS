@@ -108,10 +108,12 @@ ${aosDesignSystemNavigationCss}
 .project-workspace__stage-list { display: grid; gap: 8px; }
 .project-workspace__stage-item { display: grid; grid-template-columns: minmax(120px, 1fr) max-content minmax(120px, 1.4fr); align-items: center; gap: 10px; min-width: 0; border: 1px solid var(--line); border-radius: 6px; padding: 10px; background: var(--surface-weak); }
 .project-workspace__table-shell { min-width: 0; overflow-x: auto; }
-.tcrn-table-shell { min-width: 820px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: #fff; }
-.tcrn-table-shell__head, .tcrn-table-shell__row { display: grid; grid-template-columns: minmax(220px, 1.7fr) 130px 140px minmax(200px, 1.2fr) 90px; align-items: stretch; }
+.tcrn-table-shell { min-width: 880px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: #fff; }
+.tcrn-table-shell__head, .tcrn-table-shell__row { display: grid; grid-template-columns: minmax(220px, 1.55fr) 130px minmax(164px, 0.8fr) minmax(220px, 1.2fr) 90px; align-items: stretch; }
 .tcrn-table-shell__head { background: #f2f6f9; color: #4d5d70; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-.tcrn-table-shell__head span, .tcrn-table-shell__cell { display: flex; align-items: center; min-width: 0; padding: 11px 12px; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.tcrn-table-shell__head span, .tcrn-table-shell__cell { display: flex; align-items: center; min-width: 0; padding: 11px 12px; border-bottom: 1px solid var(--line); overflow-wrap: break-word; word-break: normal; }
+.tcrn-table-shell__cell[data-label="Owner"] { overflow-wrap: normal; word-break: keep-all; }
+.tcrn-table-shell__cell[data-label="Blocker"] { overflow-wrap: anywhere; }
 .tcrn-table-shell__cell + .tcrn-table-shell__cell, .tcrn-table-shell__head span + span { border-left: 1px solid var(--line); }
 .project-workspace__detail .tcrn-detail-drawer, .project-workspace__readiness .tcrn-readback-panel { display: grid; gap: 12px; min-width: 0; border: 1px solid var(--line); border-radius: 6px; padding: 16px; background: var(--surface); }
 .project-workspace__actions { display: grid; gap: 12px; }
