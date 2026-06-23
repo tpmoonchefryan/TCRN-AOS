@@ -365,6 +365,19 @@ test("disabled cockpit navigation exposes held reasons visibly and accessibly", 
   }
 });
 
+test("Operations Cockpit navigation aligns with consumed SideNav Storybook standard", () => {
+  const html = renderOperationsCockpitHtml();
+
+  assert.doesNotMatch(html, /\baos-sidebar\b|\bnav-row\b|\bnav-stack\b/);
+  assert.match(html, /class="tcrn-side-nav"/);
+  assert.match(html, /data-navigation-primitive="side-nav"/);
+  assert.match(html, /class="tcrn-nav-group"/);
+  assert.match(html, /data-navigation-primitive="nav-group"/);
+  assert.match(html, /class="tcrn-nav-item"/);
+  assert.match(html, /data-selected="true"/);
+  assert.match(html, /class="tcrn-nav-item__disabled-reason"/);
+});
+
 test("AOS cockpit static renderer uses only registered Design System components", () => {
   const html = renderOperationsCockpitHtml();
   const registered = new Set(aosDesignSystemRegisteredComponentNames);

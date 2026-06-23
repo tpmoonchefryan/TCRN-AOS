@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_full_rebuild_planning_and_implementation_packet",
-  "sourceHead": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
+  "sourceHead": "1af2514baafa395f91c4abba3cd5fa1c874d00f5",
   "claimScope": {
     "implementationKind": "aos_product_frontend_rebuilt_registered_design_system_runtime",
     "packageBackedReactRuntimeRendering": "operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild",
@@ -16,9 +16,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
+    "sourceHeadAtProofRun": "1af2514baafa395f91c4abba3cd5fa1c874d00f5",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "ddcc136392db423f4ec7c6538448eb6439cfa04b297e8f48b763a77ac9d65819",
+    "sourceContentDigest": "d3f51f50e5456a1a7b83167fd84d604acbe1f3bde2a82fcdfea8f871bdd0bdc6",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
@@ -180,7 +180,7 @@
     "brandLockupRegionPresent": true,
     "sidebarRegionPresent": true,
     "footerReadback": true,
-    "sampleRenderedHtmlSha256": "cc7ef5c3421d1fe76bc7d331c8e5689fd571fb488e3f4dc39ce95c8357a2cbb7",
+    "sampleRenderedHtmlSha256": "3a8e06d60e9d328d8cd92029d74e315b594bedb587c98ff72f0ab2dcbd9bf45b",
     "failures": []
   },
   "claimRiskEvidenceStripRuntimeReadback": {
@@ -287,7 +287,7 @@
     "disabledNavItemFailures": [],
     "packageRuntimeShellMarkerPresent": true,
     "packageRuntimeScopeMarkerPresent": true,
-    "sampleRenderedHtmlSha256": "9f1384e4664bf3a6e5b55b9bd4c4ad3d965c5e0c97a264cd8700d7e1355439dc"
+    "sampleRenderedHtmlSha256": "2119a4b0e0b4a0aad7010fdba52f7a1d5ac8b734e2af710a5a1ff2ff7ebe47e3"
   },
   "workIndexRuntimeReadback": {
     "ok": true,
@@ -555,7 +555,7 @@
     "activeNavItemCount": 1,
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "98e5f9a6793c0cfb2638fba7d275789da8d61fce9c0e8e1e6d1524bedec84548",
+    "sampleRenderedHtmlSha256": "ea5e55a7b03ec68f3a37628d6218592ac6779284ae1498b7f0553063875b937a",
     "failures": []
   },
   "aosWideTargetSetRuntimeReadback": {
@@ -623,7 +623,7 @@
     "disabledButtonFailures": [],
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "c1605bea94a7b71f638261114510ad96954287230807149183ee578ee33f9a5a",
+    "sampleRenderedHtmlSha256": "f9142d228ca505b2818f92ab8d99f313c990a34e6283ec8b861c776bd8bdc1e3",
     "failures": []
   },
   "fullDocumentAccessibilityReadback": {
@@ -660,6 +660,54 @@
     "disabledButtonSrOnlyReasonMarkupPresent": true,
     "mobileTableShellStackingRulePresent": true,
     "tableDataLabelsPresent": true,
+    "failures": []
+  },
+  "navigationStorybookAlignmentReadback": {
+    "ok": true,
+    "source": "TCRN-AOS served navigation consumes DS 4d03f4b SideNav/NavGroup/NavItem Storybook standard without product-local aos-sidebar/nav-row/nav-stack overrides",
+    "consumedStorybookIds": [
+      "tcrn-design-system-patterns--aos-operations-cockpit-standard",
+      "tcrn-design-system-patterns--aos-docs-readiness-standard",
+      "tcrn-design-system-patterns--aos-product-design-target-set-standard"
+    ],
+    "surfaceReadbacks": [
+      {
+        "id": "operationsCockpit",
+        "ok": true,
+        "sideNavClass": "tcrn-side-nav",
+        "sideNavPrimitive": "side-nav",
+        "navGroupCount": 1,
+        "navItemCount": 10,
+        "selectedNavItemCount": 1,
+        "forbiddenClassHits": [],
+        "forbiddenStyleSelectorHits": [],
+        "failures": []
+      },
+      {
+        "id": "docsReadiness",
+        "ok": true,
+        "sideNavClass": "tcrn-side-nav",
+        "sideNavPrimitive": "side-nav",
+        "navGroupCount": 1,
+        "navItemCount": 5,
+        "selectedNavItemCount": 1,
+        "forbiddenClassHits": [],
+        "forbiddenStyleSelectorHits": [],
+        "failures": []
+      },
+      {
+        "id": "aosWideProductDesign",
+        "ok": true,
+        "sideNavClass": "tcrn-side-nav",
+        "sideNavPrimitive": "side-nav",
+        "navGroupCount": 1,
+        "navItemCount": 10,
+        "selectedNavItemCount": 1,
+        "forbiddenClassHits": [],
+        "forbiddenStyleSelectorHits": [],
+        "failures": []
+      }
+    ],
     "failures": []
   },
   "storybookReferenceReadback": {

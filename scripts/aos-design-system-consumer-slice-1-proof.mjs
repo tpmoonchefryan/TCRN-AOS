@@ -181,7 +181,7 @@ try {
       });
       const disabledButtonsMissingReason = disabledButtons.filter((button) => !button.dataDisabledReason || !button.ariaDescription || !button.title);
       const disabledNavItemsMissingReason = disabledNavItems.filter((item) => !item.reason || !item.describedbyResolved);
-      const disabledNavButtons = disabledButtons.filter((button) => String(button.className).includes("nav-row"));
+      const disabledNavButtons = disabledButtons.filter((button) => String(button.className).includes("tcrn-nav-item"));
       const srOnlyHiddenReadbacks = Array.from(document.querySelectorAll("button:disabled .tcrn-sr-only")).map((element) => {
         const style = getComputedStyle(element);
         const rect = element.getBoundingClientRect();

@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_full_rebuild_parent_objective_remaining_surface_component_gap_audit_repair_implementation",
-  "sourceHead": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
+  "sourceHead": "1af2514baafa395f91c4abba3cd5fa1c874d00f5",
   "canonicalParentObjective": {
     "ownerDirective": "不再做任何迁移，移除AOS现有所有前端组件，按照Design System要求和组件重建UI",
     "disposition": "parent_objective_remaining_surface_component_gap_audit"
@@ -104,8 +104,8 @@
         "aos-data-semantics-product-owned"
       ],
       "exceptionRecordPresent": true,
-      "staticSha256": "b82af3a49fdab1add38d193d138fb083e2198e7678724bb9f95b670a7045d18c",
-      "renderedSha256": "b82af3a49fdab1add38d193d138fb083e2198e7678724bb9f95b670a7045d18c",
+      "staticSha256": "feb1f8b363fa6a256c658e4714255701e668f41589e651a77acfbb318ee6991b",
+      "renderedSha256": "feb1f8b363fa6a256c658e4714255701e668f41589e651a77acfbb318ee6991b",
       "staticOutputCurrent": true,
       "componentInstanceCount": 105,
       "registeredComponents": [
@@ -188,6 +188,17 @@
         "disabledControlCount": 16,
         "disabledControlReasonFailures": []
       },
+      "navigationStorybookAlignmentReadback": {
+        "ok": true,
+        "sideNavClass": "tcrn-side-nav",
+        "sideNavPrimitive": "side-nav",
+        "navGroupCount": 1,
+        "navItemCount": 10,
+        "selectedNavItemCount": 2,
+        "forbiddenClassHits": [],
+        "forbiddenStyleSelectorHits": [],
+        "failures": []
+      },
       "packageRuntimeSourceFailures": [],
       "failures": []
     },
@@ -207,8 +218,8 @@
         "aos-data-semantics-product-owned"
       ],
       "exceptionRecordPresent": true,
-      "staticSha256": "deef59ae0425130093043831b221d134ea7159f5ad42d2b97c5d53f96f462a48",
-      "renderedSha256": "deef59ae0425130093043831b221d134ea7159f5ad42d2b97c5d53f96f462a48",
+      "staticSha256": "0506415476922b36c2b2e27a6a4cd52fde8b15bc9523fe571fc30214fa17e960",
+      "renderedSha256": "0506415476922b36c2b2e27a6a4cd52fde8b15bc9523fe571fc30214fa17e960",
       "staticOutputCurrent": true,
       "componentInstanceCount": 61,
       "registeredComponents": [
@@ -287,6 +298,17 @@
         "disabledControlCount": 4,
         "disabledControlReasonFailures": []
       },
+      "navigationStorybookAlignmentReadback": {
+        "ok": true,
+        "sideNavClass": "tcrn-side-nav",
+        "sideNavPrimitive": "side-nav",
+        "navGroupCount": 1,
+        "navItemCount": 5,
+        "selectedNavItemCount": 2,
+        "forbiddenClassHits": [],
+        "forbiddenStyleSelectorHits": [],
+        "failures": []
+      },
       "packageRuntimeSourceFailures": [],
       "failures": []
     },
@@ -307,8 +329,8 @@
         "aos-data-semantics-product-owned"
       ],
       "exceptionRecordPresent": true,
-      "staticSha256": "e64c66507de93c88e16ebca1775a02fdec87637f58802ebd86a8c782349d2910",
-      "renderedSha256": "e64c66507de93c88e16ebca1775a02fdec87637f58802ebd86a8c782349d2910",
+      "staticSha256": "1b7ab181276fed0dc3c23b1696694d0af5c832bb84a9f27eb62139d766bfb0e9",
+      "renderedSha256": "1b7ab181276fed0dc3c23b1696694d0af5c832bb84a9f27eb62139d766bfb0e9",
       "staticOutputCurrent": true,
       "componentInstanceCount": 136,
       "registeredComponents": [
@@ -388,6 +410,17 @@
         "ariaReferenceFailures": [],
         "disabledControlCount": 14,
         "disabledControlReasonFailures": []
+      },
+      "navigationStorybookAlignmentReadback": {
+        "ok": true,
+        "sideNavClass": "tcrn-side-nav",
+        "sideNavPrimitive": "side-nav",
+        "navGroupCount": 1,
+        "navItemCount": 10,
+        "selectedNavItemCount": 2,
+        "forbiddenClassHits": [],
+        "forbiddenStyleSelectorHits": [],
+        "failures": []
       },
       "packageRuntimeSourceFailures": [],
       "failures": []
@@ -553,9 +586,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_parent_surface_inventory",
-    "sourceHeadAtProofRun": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
+    "sourceHeadAtProofRun": "1af2514baafa395f91c4abba3cd5fa1c874d00f5",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "68741f357eb4ab029076224b06a5dd1f1971bc39bde8ca853c08e6c3a226453c",
+    "sourceContentDigest": "7204fb3267ac8831bc6297374384bada28c37cf96513e2e8156bb0679e0bddfe",
     "sourcePaths": [
       "apps/api/src/server.ts",
       "apps/web/src/aos-wide-product-design-data.ts",

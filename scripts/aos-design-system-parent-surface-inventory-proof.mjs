@@ -251,6 +251,7 @@ function inspectProductSurface(surface, registeredComponentNames) {
   const unregisteredComponents = componentNames.filter((name) => !registered.has(name));
   const productVisibleCopyReadback = inspectProductVisibleCopy(surface.html);
   const fullDocumentAccessibilityReadback = inspectFullDocumentAccessibility(surface.html);
+  const navigationStorybookAlignmentReadback = inspectNavigationStorybookAlignment(surface.html);
   const packageRuntimeSourceFailures = componentInstances
     .filter((component) => component.attributes.includes("data-package-runtime-component=") && !component.attributes.includes("data-package-runtime-source=\"@tcrn/ui-react\""))
     .map((component) => ({ component: component.component, attributes: component.attributes }));
@@ -264,6 +265,7 @@ function inspectProductSurface(surface, registeredComponentNames) {
     ...fullDocumentAccessibilityReadback.duplicateIds.map((item) => `duplicate_id:${item.id}`),
     ...fullDocumentAccessibilityReadback.ariaReferenceFailures.map((item) => `aria_reference_failure:${item.attribute}:${item.value}`),
     ...fullDocumentAccessibilityReadback.disabledControlReasonFailures.map((item) => `disabled_control_reason_failure:${item.label}:${item.failures.join("+")}`),
+    ...navigationStorybookAlignmentReadback.failures.map((failure) => `navigation_storybook_alignment:${failure}`),
     ...packageRuntimeSourceFailures.map((item) => `missing_package_runtime_source:${item.component}`)
   ];
   return {
@@ -286,7 +288,45 @@ function inspectProductSurface(surface, registeredComponentNames) {
     markerOnlyComponents,
     productVisibleCopyReadback,
     fullDocumentAccessibilityReadback,
+    navigationStorybookAlignmentReadback,
     packageRuntimeSourceFailures,
+    failures
+  };
+}
+
+function inspectNavigationStorybookAlignment(html) {
+  const sidebarHtml = html.match(/<nav\b(?=[^>]*data-region="sidebar-nav")[\s\S]*?<\/nav>/)?.[0] ?? "";
+  const styleText = Array.from(html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi))
+    .map((match) => match[1] ?? "")
+    .join("\n");
+  const sidebarAttributes = parseAttributes(sidebarHtml.match(/<nav\b([^>]*)>/)?.[1] ?? "");
+  const navGroupCount = (sidebarHtml.match(/data-navigation-primitive="nav-group"/g) ?? []).length;
+  const navItemCount = (sidebarHtml.match(/data-navigation-primitive="nav-item"/g) ?? []).length;
+  const selectedNavItemCount = (sidebarHtml.match(/data-selected="true"|aria-current="page"/g) ?? []).length;
+  const forbiddenClassHits = Array.from(html.matchAll(/class="[^"]*(?:\baos-sidebar\b|\bnav-row\b|\bnav-stack\b)[^"]*"/g))
+    .map((match) => match[0]);
+  const forbiddenStyleSelectorHits = [".aos-sidebar", ".nav-row", ".nav-stack"]
+    .filter((selector) => styleText.includes(selector));
+  const failures = [];
+
+  if (!sidebarHtml) failures.push("sidebar_missing");
+  if (!sidebarAttributes.class?.split(/\s+/).includes("tcrn-side-nav")) failures.push("sidebar_class_not_storybook_sidenav");
+  if (sidebarAttributes["data-navigation-primitive"] !== "side-nav") failures.push("sidebar_primitive_missing");
+  if (navGroupCount === 0) failures.push("nav_group_missing");
+  if (navItemCount === 0) failures.push("nav_item_missing");
+  if (selectedNavItemCount === 0) failures.push("selected_nav_item_missing");
+  if (forbiddenClassHits.length > 0) failures.push("product_local_navigation_class_hit");
+  if (forbiddenStyleSelectorHits.length > 0) failures.push("product_local_navigation_style_selector_hit");
+
+  return {
+    ok: failures.length === 0,
+    sideNavClass: sidebarAttributes.class ?? "",
+    sideNavPrimitive: sidebarAttributes["data-navigation-primitive"] ?? "",
+    navGroupCount,
+    navItemCount,
+    selectedNavItemCount,
+    forbiddenClassHits,
+    forbiddenStyleSelectorHits,
     failures
   };
 }
@@ -627,7 +667,7 @@ function escapeRegExp(value) {
 
 function markdownReceipt(summary) {
   const surfaceRows = summary.productSurfaceReadbacks
-    .map((surface) => `| ${surface.id} | ${surface.componentInstanceCount} | ${surface.unregisteredComponents.length} | ${surface.markerOnlyComponents.length} | ${surface.productVisibleCopyReadback.hits.length} | ${surface.fullDocumentAccessibilityReadback.duplicateIds.length} | ${surface.fullDocumentAccessibilityReadback.ariaReferenceFailures.length} | ${surface.fullDocumentAccessibilityReadback.disabledControlReasonFailures.length} |`)
+    .map((surface) => `| ${surface.id} | ${surface.componentInstanceCount} | ${surface.unregisteredComponents.length} | ${surface.markerOnlyComponents.length} | ${surface.productVisibleCopyReadback.hits.length} | ${surface.navigationStorybookAlignmentReadback.failures.length} | ${surface.fullDocumentAccessibilityReadback.duplicateIds.length} | ${surface.fullDocumentAccessibilityReadback.ariaReferenceFailures.length} | ${surface.fullDocumentAccessibilityReadback.disabledControlReasonFailures.length} |`)
     .join("\n");
   return `# AOS Design System Parent Surface Inventory Proof
 
@@ -644,8 +684,8 @@ function markdownReceipt(summary) {
 - Source freshness strategy: ${summary.sourceFreshnessReadback.strategy}
 - Source content digest: ${summary.sourceFreshnessReadback.sourceContentDigest}
 
-| Surface | Component instances | Unregistered | Marker-only | Internal copy hits | Duplicate IDs | ARIA failures | Disabled reason failures |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Surface | Component instances | Unregistered | Marker-only | Internal copy hits | Navigation alignment failures | Duplicate IDs | ARIA failures | Disabled reason failures |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 ${surfaceRows}
 
 ## Boundaries

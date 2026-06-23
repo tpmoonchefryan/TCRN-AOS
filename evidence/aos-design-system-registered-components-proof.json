@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_rebuild_registered_component_proof",
-  "sourceHead": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
+  "sourceHead": "1af2514baafa395f91c4abba3cd5fa1c874d00f5",
   "registrySource": "../TCRN-Design-System/packages/ui-react/src/index.tsx",
   "designSystemBasis": {
     "trackedHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",

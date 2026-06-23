@@ -4,6 +4,10 @@ import {
   requiredAosWideSelectors,
   type AOSWideProductDesignModel
 } from "./aos-wide-product-design-data.js";
+import {
+  aosDesignSystemNavigationCss,
+  aosDesignSystemTokenCss
+} from "./design-system-bridge.js";
 import { renderAOSWideProductDesignRuntimeSurface } from "./aos-wide-product-design-ui-react-runtime.js";
 
 export {
@@ -33,6 +37,7 @@ export function renderAOSWideProductDesignHtml(model: AOSWideProductDesignModel 
 }
 
 const aosWideProductDesignCss = `
+${aosDesignSystemTokenCss}
 :root {
   color-scheme: light;
   --navy-950: #061a2c;
@@ -61,27 +66,16 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 strong, b { font-weight: 500; }
 .tcrn-sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap !important; border: 0 !important; }
 .aos-shell { display: grid; grid-template-columns: 252px minmax(0, 1fr); min-height: 100vh; max-width: 100%; overflow-x: clip; }
-.aos-sidebar { position: sticky; top: 0; align-self: start; display: grid; grid-template-rows: auto 1fr auto; gap: 22px; height: 100vh; padding: 24px 14px 20px; overflow: auto; background: linear-gradient(180deg, var(--navy-900), var(--navy-950)); color: #d9e8f0; }
-.brand-lockup { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; min-height: 42px; padding: 0 10px 8px; }
-.brand-mark { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 6px; background: rgba(20, 184, 173, 0.18); color: #f7fbff; font-weight: 700; }
+.aos-shell > .tcrn-side-nav { position: sticky; top: 0; align-self: start; grid-template-rows: auto 1fr auto; height: 100vh; overflow: auto; }
+${aosDesignSystemNavigationCss}
+.brand-lockup { display: flex; align-items: center; gap: 10px; min-height: 42px; color: var(--tcrn-color-text-primary); text-decoration: none; }
+.brand-mark { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 6px; background: color-mix(in srgb, var(--tcrn-color-brand-primary-bg) 72%, transparent); color: var(--tcrn-color-text-primary); font-weight: 700; }
 .brand-copy { display: grid; gap: 2px; }
-.brand-copy strong { color: #f7fbff; font-size: 14px; }
-.brand-copy small { color: #b8cad5; font-size: 11px; }
-.brand-tcrn { font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 29px; line-height: 1; font-weight: 500; letter-spacing: 0.17em; color: #f7fbff; }
+.brand-copy strong { color: var(--tcrn-color-text-primary); font-size: 14px; }
+.brand-copy small { color: var(--tcrn-color-text-muted); font-size: 11px; }
+.brand-tcrn { font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 29px; line-height: 1; font-weight: 500; letter-spacing: 0.17em; color: var(--tcrn-color-text-primary); }
 .brand-aos { display: inline-block; font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 32px; line-height: 1; font-weight: 800; letter-spacing: 0; color: transparent; background: linear-gradient(135deg, #18d7c8 6%, #08a99d 56%, #15c4b5 100%); -webkit-background-clip: text; background-clip: text; transform: skewX(-5deg); }
-.nav-stack { display: grid; align-content: start; gap: 6px; }
-.tcrn-nav-group__label { margin: 0 10px 6px; color: #b8cad5; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
-.tcrn-nav-group__items { display: grid; align-content: start; gap: 6px; }
-.nav-row { display: grid; grid-template-columns: 8px minmax(0, 1fr); align-items: center; gap: 10px; width: 100%; min-height: 38px; border: 1px solid transparent; border-radius: 6px; padding: 8px 10px; background: transparent; color: #e5eef3; text-align: left; font-size: 13px; font-weight: 400; }
-.nav-row::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: #7891a2; }
-.nav-row.active, .nav-row:hover { background: rgba(255, 255, 255, 0.12); }
-.nav-row.active { box-shadow: inset 4px 0 0 var(--teal-500); }
-.nav-row.active::before { background: var(--teal-500); }
-.nav-label, .tcrn-nav-item__content, .tcrn-nav-item__label { min-width: 0; }
-.tcrn-nav-item__content { display: grid; gap: 3px; }
-.nav-unavailable-reason, .tcrn-nav-item__disabled-reason { display: block; margin-top: 2px; color: #b8cad5; font-size: 11px; font-weight: 400; line-height: 1.3; white-space: normal; overflow-wrap: anywhere; }
-.nav-row[aria-disabled="true"] { align-items: start; min-height: 52px; }
-.sidebar-note { display: flex; align-items: center; gap: 8px; color: #deedf4; font-size: 12px; }
+.sidebar-note { display: flex; align-items: center; gap: 8px; padding: 0 8px; color: var(--tcrn-color-text-muted); font-size: 12px; }
 .aos-main, .workspace, .title-row, .module-grid, .content-grid, .surface-index, .detail-drawer, .topbar, .path-grid { max-width: 100%; min-width: 0; }
 .topbar { display: grid; grid-template-columns: 220px minmax(0, 1fr); align-items: start; gap: 14px 18px; min-height: 64px; padding: 14px 22px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.96); }
 .tcrn-top-bar__brand, .tcrn-top-bar__module { min-width: 0; color: #25364a; font-size: 13px; font-weight: 500; }
@@ -161,8 +155,7 @@ dd { margin: 0; color: #162437; font-size: 12px; overflow-wrap: anywhere; }
 }
 @media (max-width: 900px) {
   .aos-shell { grid-template-columns: 1fr; }
-  .aos-sidebar { position: static; height: auto; gap: 14px; padding: 18px 14px; }
-  .nav-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .aos-shell > .tcrn-side-nav { position: static; height: auto; }
   .topbar, .surface-index-head, .path-grid, .module-grid, .tcrn-top-bar__actions { grid-template-columns: minmax(0, 1fr); }
   .topbar { padding: 14px; }
   .title-row { align-items: start; flex-direction: column; }
@@ -172,7 +165,6 @@ dd { margin: 0; color: #162437; font-size: 12px; overflow-wrap: anywhere; }
   .surface-table { width: max-content; min-width: 820px; }
 }
 @media (max-width: 460px) {
-  .nav-stack { grid-template-columns: 1fr; }
   .module-card { min-height: 0; }
   .detail-list div { grid-template-columns: minmax(92px, 0.42fr) minmax(0, 1fr); }
 }`;

@@ -99,16 +99,16 @@ export function tcrnStaticNavItem({
   label,
   reasonId
 }: AosStaticNavItemOptions): string {
-  const labelMarkup = `<span class="nav-label">${escapeAttribute(label)}</span>`;
+  const labelMarkup = `<span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">${escapeAttribute(label)}</span></span>`;
   const extra = extraAttributes.trim() ? ` ${extraAttributes.trim()}` : "";
 
   if (active) {
-    return `<a class="nav-row tcrn-nav-item active" ${tcrnComponentAttr("NavItem")} data-navigation-primitive="nav-item" href="${escapeAttribute(activeHref)}" aria-current="page" data-selected="true"${extra}>${labelMarkup}</a>`;
+    return `<a class="tcrn-nav-item" ${tcrnComponentAttr("NavItem")} data-navigation-primitive="nav-item" href="${escapeAttribute(activeHref)}" aria-current="page" data-selected="true"${extra}>${labelMarkup}</a>`;
   }
 
   const reason = normalizedDisabledReason(disabledReason);
   const resolvedReasonId = reasonId ?? `nav-reason-${slugify(label)}`;
-  return `<a class="nav-row tcrn-nav-item" ${tcrnComponentAttr("NavItem")} data-navigation-primitive="nav-item" aria-disabled="true" tabindex="-1" aria-describedby="${escapeAttribute(resolvedReasonId)}" title="${escapeAttribute(reason)}" data-disabled-reason="${escapeAttribute(reason)}"${extra}>${labelMarkup}<span class="nav-unavailable-reason" id="${escapeAttribute(resolvedReasonId)}">Held for later route</span></a>`;
+  return `<a class="tcrn-nav-item" ${tcrnComponentAttr("NavItem")} data-navigation-primitive="nav-item" aria-disabled="true" tabindex="-1" aria-describedby="${escapeAttribute(resolvedReasonId)}" title="${escapeAttribute(reason)}" data-disabled-reason="${escapeAttribute(reason)}"${extra}><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">${escapeAttribute(label)}</span><span class="tcrn-nav-item__disabled-reason" id="${escapeAttribute(resolvedReasonId)}">${escapeAttribute(reason)}</span></span></a>`;
 }
 
 function normalizedDisabledReason(reason: string | undefined): string {

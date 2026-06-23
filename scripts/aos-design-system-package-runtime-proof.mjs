@@ -104,6 +104,11 @@ const productVisibleCopyReadback = inspectProductVisibleCopy({
   docsReadiness: docsReadinessHtml,
   aosWideProductDesign: aosWideHtml
 });
+const navigationStorybookAlignmentReadback = inspectServedNavigationStorybookAlignment({
+  operationsCockpit: cockpitHtml,
+  docsReadiness: docsReadinessHtml,
+  aosWideProductDesign: aosWideHtml
+});
 const designSystemCertificationReadback = inspectDesignSystemCertification();
 const sourceContentReadback = inspectSourceContentDigest();
 const summaryPath = join(repoRoot, "evidence", "aos-design-system-package-runtime-proof.json");
@@ -132,6 +137,7 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && visualStyleReadback.ok
   && storybookReferenceReadback.ok
   && designSystemCertificationReadback.ok
+  && navigationStorybookAlignmentReadback.ok
   && noOverclaimReadback.ok
   && productVisibleCopyReadback.ok
   && sourceContentReadback.ok;
@@ -179,6 +185,7 @@ const summary = {
   docsReadinessFullDocumentAccessibilityReadback,
   aosWideFullDocumentAccessibilityReadback,
   visualStyleReadback,
+  navigationStorybookAlignmentReadback,
   storybookReferenceReadback,
   designSystemCertificationReadback,
   noOverclaimReadback,
@@ -253,6 +260,7 @@ console.log(JSON.stringify({
   workIndexFailureCount: summary.workIndexRuntimeReadback.failures.length,
   detailDrawerFailureCount: summary.detailDrawerRuntimeReadback.failures.length,
   visualStyleFailureCount: summary.visualStyleReadback.failures.length,
+  navigationStorybookAlignmentFailureCount: summary.navigationStorybookAlignmentReadback.failures.length,
   markerOnlyNavItemCount: summary.navRuntimeReadback.markerOnlyNavItemCount,
   deepImportHits: summary.importReadback.deepImportHits,
   storybookReferenceOk: summary.storybookReferenceReadback.ok,
@@ -1579,6 +1587,61 @@ function inspectAosRuntimeStyleContract(html) {
   };
 }
 
+function inspectServedNavigationStorybookAlignment(surfaces) {
+  const surfaceReadbacks = Object.entries(surfaces).map(([id, html]) => {
+    const sidebarHtml = extractSidebarHtml(html);
+    const styleText = Array.from(html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi))
+      .map((match) => match[1] ?? "")
+      .join("\n");
+    const sidebarAttributes = parseAttributes(sidebarHtml.match(/<nav\b([^>]*)>/)?.[1] ?? "");
+    const navGroupMatches = Array.from(sidebarHtml.matchAll(/<div\b(?=[^>]*data-navigation-primitive="nav-group")([^>]*)>/g));
+    const navItemMatches = Array.from(sidebarHtml.matchAll(/<a\b(?=[^>]*data-navigation-primitive="nav-item")([^>]*)>/g));
+    const selectedNavItems = navItemMatches
+      .map((match) => parseAttributes(match[1] ?? ""))
+      .filter((attributes) => attributes["data-selected"] === "true" || attributes["aria-current"] === "page");
+    const forbiddenClassHits = Array.from(html.matchAll(/class="[^"]*(?:\baos-sidebar\b|\bnav-row\b|\bnav-stack\b)[^"]*"/g))
+      .map((match) => match[0]);
+    const forbiddenStyleSelectorHits = [".aos-sidebar", ".nav-row", ".nav-stack"]
+      .filter((selector) => styleText.includes(selector));
+    const failures = [];
+
+    if (!sidebarHtml) failures.push("sidebar_missing");
+    if (!sidebarAttributes.class?.split(/\s+/).includes("tcrn-side-nav")) failures.push("sidebar_class_not_storybook_sidenav");
+    if (sidebarAttributes["data-navigation-primitive"] !== "side-nav") failures.push("sidebar_primitive_missing");
+    if (navGroupMatches.length === 0) failures.push("nav_group_missing");
+    if (navItemMatches.length === 0) failures.push("nav_item_missing");
+    if (selectedNavItems.length === 0) failures.push("selected_nav_item_missing");
+    if (forbiddenClassHits.length > 0) failures.push("product_local_navigation_class_hit");
+    if (forbiddenStyleSelectorHits.length > 0) failures.push("product_local_navigation_style_selector_hit");
+
+    return {
+      id,
+      ok: failures.length === 0,
+      sideNavClass: sidebarAttributes.class ?? "",
+      sideNavPrimitive: sidebarAttributes["data-navigation-primitive"] ?? "",
+      navGroupCount: navGroupMatches.length,
+      navItemCount: navItemMatches.length,
+      selectedNavItemCount: selectedNavItems.length,
+      forbiddenClassHits,
+      forbiddenStyleSelectorHits,
+      failures
+    };
+  });
+  const failures = surfaceReadbacks.flatMap((surface) => surface.failures.map((failure) => `${surface.id}:${failure}`));
+
+  return {
+    ok: failures.length === 0,
+    source: "TCRN-AOS served navigation consumes DS 4d03f4b SideNav/NavGroup/NavItem Storybook standard without product-local aos-sidebar/nav-row/nav-stack overrides",
+    consumedStorybookIds: [
+      servedSurfaceStandardMap.operationsCockpit.storybookId,
+      servedSurfaceStandardMap.docsReadiness.storybookId,
+      servedSurfaceStandardMap.aosWideProductDesign.storybookId
+    ],
+    surfaceReadbacks,
+    failures
+  };
+}
+
 function inspectSourceContentDigest() {
   const sourcePaths = [
     "apps/web/src/cockpit-ui-react-runtime.ts",
@@ -2161,6 +2224,7 @@ function markdownReceipt(summary) {
     + `- AOS product-visible copy proof source: ${summary.designSystemCertificationReadback.productVisibleCopyProofDisposition.source}\n`
     + `- DS synthetic Storybook vocabulary disposition: ${summary.designSystemCertificationReadback.productVisibleCopyProofDisposition.dsSyntheticStorybookVocabularyDisposition}\n\n`
     + `- AOS runtime sr-only / mobile TableShell style proof ok: ${summary.visualStyleReadback.ok}\n`
+    + `- Served navigation Storybook alignment ok: ${summary.navigationStorybookAlignmentReadback.ok}\n`
     + `- Product-visible internal-copy hits: ${summary.productVisibleCopyReadback.surfaceReadbacks.reduce((count, readback) => count + readback.hits.length, 0)}\n`
     + `${shellSidebarRows}\n`
     + `${claimRiskRows}\n`

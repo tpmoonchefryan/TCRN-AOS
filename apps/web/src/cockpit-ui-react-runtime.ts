@@ -250,7 +250,6 @@ export function renderCockpitRuntimeShellSidebar(options: CockpitRuntimeShellSid
       item,
       key: item.label
     })),
-    className: "nav-stack",
     "data-tcrn-component": "NavGroup",
     "data-package-runtime-component": "NavGroup",
     "data-package-runtime-source": "@tcrn/ui-react",
@@ -292,7 +291,6 @@ export function renderCockpitRuntimeShellSidebar(options: CockpitRuntimeShellSid
     className: "aos-shell",
     children: createElement(SideNav, {
       children: sidebarChildren,
-      className: "aos-sidebar",
       "data-region": "sidebar-nav",
       "data-tcrn-component": "SideNav",
       "data-package-runtime-component": "SideNav",
@@ -456,7 +454,6 @@ export function renderCockpitRuntimeNavItem(item: CockpitRuntimeNavItem, identif
 function CockpitRuntimeNavItemElement({ item }: { item: CockpitRuntimeNavItem }) {
   const props: RuntimeNavItemProps = {
     children: item.label,
-    className: `nav-row${item.active ? " active" : ""}`,
     selected: item.active,
     href: item.href,
     "data-tcrn-component": "NavItem",

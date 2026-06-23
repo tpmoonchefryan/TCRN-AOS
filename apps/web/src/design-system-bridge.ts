@@ -75,6 +75,88 @@ const tokenMap = createTokenMap();
 
 export const aosDesignSystemTokenCss = tcrnTokenCss;
 
+export const aosDesignSystemNavigationCss = `
+.tcrn-side-nav {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--tcrn-color-border-subtle) 82%, transparent);
+  border-radius: var(--tcrn-radius-surface);
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--tcrn-color-brand-primary-bg) 42%, transparent) 0%, transparent 38%),
+    linear-gradient(180deg, var(--tcrn-color-surface-panel) 0%, color-mix(in srgb, var(--tcrn-color-brand-secondary-bg) 36%, var(--tcrn-color-surface-panel)) 100%);
+  padding: 10px;
+}
+.tcrn-nav-group {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.tcrn-nav-group__label {
+  padding: 0 8px;
+  color: var(--tcrn-color-text-primary);
+  font-size: var(--tcrn-type-size-caption);
+  font-weight: 700;
+}
+.tcrn-nav-group__items {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.tcrn-nav-item {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  min-height: 34px;
+  min-width: 0;
+  border: 1px solid transparent;
+  border-radius: var(--tcrn-radius-control);
+  color: var(--tcrn-color-text-secondary);
+  padding: 7px 9px;
+  text-decoration: none;
+  width: 100%;
+}
+.tcrn-nav-item:hover {
+  border-color: color-mix(in srgb, var(--tcrn-color-border-subtle) 86%, var(--tcrn-color-brand-primary-bg));
+  background: color-mix(in srgb, var(--tcrn-color-brand-primary-bg) 42%, transparent);
+  color: var(--tcrn-color-text-primary);
+}
+.tcrn-nav-item[aria-current="page"],
+.tcrn-nav-item[data-selected="true"] {
+  border-color: color-mix(in srgb, var(--tcrn-color-brand-primary) 26%, var(--tcrn-color-border-subtle));
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--tcrn-color-brand-primary-bg) 84%, var(--tcrn-color-surface-panel)) 0%, color-mix(in srgb, var(--tcrn-color-brand-secondary-bg) 34%, var(--tcrn-color-surface-panel)) 100%);
+  color: var(--tcrn-color-text-primary);
+  box-shadow: inset 4px 0 0 color-mix(in srgb, var(--tcrn-color-brand-primary) 74%, var(--tcrn-color-brand-secondary));
+}
+.tcrn-nav-item[aria-disabled="true"] {
+  cursor: not-allowed;
+  color: var(--tcrn-color-text-muted);
+  opacity: 0.74;
+}
+.tcrn-nav-item__content {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.tcrn-nav-item__label,
+.tcrn-nav-item__disabled-reason {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.tcrn-nav-item__disabled-reason {
+  color: var(--tcrn-color-text-muted);
+  font-size: 12px;
+  line-height: 1.25;
+}
+.tcrn-nav-item .tcrn-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--tcrn-color-brand-primary);
+}
+`;
+
 export const aosDesignSystemTokenReadback = {
   textPrimary: tokenMap["--tcrn-color-text-primary"],
   surfaceCanvas: tokenMap["--tcrn-color-surface-canvas"],

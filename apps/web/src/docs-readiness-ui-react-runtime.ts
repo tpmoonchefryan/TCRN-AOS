@@ -124,7 +124,6 @@ function renderSidebar(): ReactNode {
   ];
 
   return createElement(SideNav, {
-    className: "aos-sidebar",
     "data-region": "sidebar-nav",
     "data-tcrn-component": "SideNav",
     "data-package-runtime-component": "SideNav",
@@ -148,7 +147,6 @@ function renderSidebar(): ReactNode {
     ),
     createElement(NavGroup, {
       "aria-label": "Primary views",
-      className: "nav-stack",
       "data-tcrn-component": "NavGroup",
       "data-package-runtime-component": "NavGroup",
       "data-package-runtime-source": "@tcrn/ui-react",
@@ -156,7 +154,6 @@ function renderSidebar(): ReactNode {
       label: "Primary views"
     } as unknown as ComponentProps<typeof NavGroup> & RuntimeDataProps,
       navItems.map((item) => createElement(NavItem, {
-        className: `nav-row${item.active ? " active" : ""}`,
         disabled: !item.active,
         disabledReason: item.active ? undefined : item.disabledReason,
         href: item.href,

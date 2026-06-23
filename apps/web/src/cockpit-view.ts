@@ -7,6 +7,7 @@ import {
 import {
   aosClientCopyStateLabels,
   aosDesignSystemConsumerBridge,
+  aosDesignSystemNavigationCss,
   aosDesignSystemTokenCss,
   copyAosAction,
   copyAosFreshness,
@@ -352,24 +353,12 @@ button:disabled { cursor: not-allowed; opacity: 0.58; }
 strong, b { font-weight: 500; }
 .tcrn-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .aos-shell { display: grid; grid-template-columns: 252px minmax(0, 1fr); min-height: 100vh; }
-.aos-sidebar { position: sticky; top: 0; align-self: start; display: grid; grid-template-rows: auto 1fr auto; gap: 22px; height: 100vh; padding: 24px 14px 20px; overflow: auto; background: linear-gradient(180deg, var(--navy-900), var(--navy-950)); color: #d9e8f0; }
-.brand-lockup { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; min-height: 42px; padding: 0 10px 8px; }
-.brand-tcrn { font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 29px; line-height: 1; font-weight: 500; letter-spacing: 0.17em; color: #f7fbff; }
+.aos-shell > .tcrn-side-nav { position: sticky; top: 0; align-self: start; grid-template-rows: auto 1fr auto; height: 100vh; overflow: auto; }
+${aosDesignSystemNavigationCss}
+.brand-lockup { display: flex; align-items: center; gap: 10px; min-height: 42px; color: var(--tcrn-color-text-primary); text-decoration: none; }
+.brand-tcrn { font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 29px; line-height: 1; font-weight: 500; letter-spacing: 0.17em; color: var(--tcrn-color-text-primary); }
 .brand-aos { display: inline-block; font-family: Futura, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 32px; line-height: 1; font-weight: 800; letter-spacing: 0; color: transparent; background: linear-gradient(135deg, #18d7c8 6%, #08a99d 56%, #15c4b5 100%); -webkit-background-clip: text; background-clip: text; transform: skewX(-5deg); }
-.nav-stack { display: grid; align-content: start; gap: 8px; }
-.nav-stack .tcrn-nav-group__label { color: #a9bfcc; font-size: var(--type-micro); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
-.nav-stack .tcrn-nav-group__items { display: grid; gap: 6px; }
-.nav-row { display: grid; grid-template-columns: 8px 1fr; align-items: center; gap: 10px; width: 100%; min-height: 38px; border: 1px solid transparent; border-radius: 6px; padding: 7px 10px; background: transparent; color: #e5eef3; text-align: left; font-size: var(--type-ui); font-weight: 400; }
-.nav-row::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: #7891a2; }
-.nav-row.active, .nav-row:hover { background: rgba(255, 255, 255, 0.12); }
-.nav-row.active { box-shadow: inset 4px 0 0 var(--teal-500); }
-.nav-row.active::before { background: var(--teal-500); }
-.tcrn-nav-item__content { display: grid; min-width: 0; gap: 2px; }
-.tcrn-nav-item__label { min-width: 0; }
-.tcrn-nav-item__disabled-reason { color: #b8cad5; font-size: var(--type-micro); font-weight: 400; line-height: var(--line-compact); overflow-wrap: anywhere; }
-.nav-label { min-width: 0; }
-.nav-unavailable-reason { display: block; margin-top: 2px; color: #b8cad5; font-size: var(--type-micro); font-weight: 400; line-height: var(--line-compact); }
-.sidebar-note { display: flex; align-items: center; gap: 8px; color: #deedf4; font-size: var(--type-label); }
+.sidebar-note { display: flex; align-items: center; gap: 8px; padding: 0 8px; color: var(--tcrn-color-text-muted); font-size: var(--type-label); }
 .sidebar-note .tcrn-text { margin: 0; color: inherit; font-size: inherit; line-height: inherit; }
 .aos-main { min-width: 0; }
 .topbar { display: grid; grid-template-columns: max-content minmax(0, 1fr); grid-template-areas: "brand actions" "module actions"; align-items: center; column-gap: 14px; row-gap: 4px; min-height: 64px; min-width: 0; padding: 8px 22px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.96); }
@@ -469,9 +458,7 @@ dd { margin: 0; color: #162437; font-size: var(--type-ui); }
 }
 @media (max-width: 760px) {
   .aos-shell { grid-template-columns: 1fr; }
-  .aos-sidebar { position: static; height: auto; gap: 14px; padding: 18px 14px; }
-  .nav-stack .tcrn-nav-group__items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .nav-row { min-height: 34px; }
+  .aos-shell > .tcrn-side-nav { position: static; height: auto; }
   .topbar, .tcrn-top-bar__actions, .work-index-head, .summary-grid { grid-template-columns: 1fr; }
   .topbar { grid-template-areas: "brand" "module" "actions"; padding: 14px; }
   .hero-row { align-items: start; flex-direction: column; }

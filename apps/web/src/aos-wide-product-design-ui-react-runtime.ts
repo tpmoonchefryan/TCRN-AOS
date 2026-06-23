@@ -179,7 +179,6 @@ function renderSidebar(model: AOSWideProductDesignModel): ReactNode {
   return createElement(
     SideNav,
     {
-      className: "aos-sidebar tcrn-side-nav",
       label: "AOS-wide target-set navigation",
       "data-region": "sidebar-nav",
       "data-package-runtime-component": "SideNav",
@@ -209,7 +208,6 @@ function renderSidebar(model: AOSWideProductDesignModel): ReactNode {
       createElement(
         NavGroup,
         {
-          className: "nav-stack tcrn-nav-group",
           label: "Target modules",
           "data-package-runtime-component": "NavGroup",
           "data-package-runtime-source": packageRuntimeSource,
@@ -220,7 +218,6 @@ function renderSidebar(model: AOSWideProductDesignModel): ReactNode {
             NavItem,
             {
               key: surface.id,
-              className: "nav-row",
               href: index === 0 ? `#${surface.id}` : undefined,
               selected: index === 0,
               disabled: index !== 0,

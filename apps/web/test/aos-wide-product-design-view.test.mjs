@@ -94,6 +94,19 @@ test("Slice 10 disabled Design System NavItems are non-actionable with reasons",
   }
 });
 
+test("Slice 10 navigation aligns with consumed SideNav Storybook standard", () => {
+  const html = renderAOSWideProductDesignHtml();
+
+  assert.doesNotMatch(html, /\baos-sidebar\b|\bnav-row\b|\bnav-stack\b/);
+  assert.match(html, /class="tcrn-side-nav"/);
+  assert.match(html, /data-navigation-primitive="side-nav"/);
+  assert.match(html, /class="tcrn-nav-group"/);
+  assert.match(html, /data-navigation-primitive="nav-group"/);
+  assert.match(html, /class="tcrn-nav-item"/);
+  assert.match(html, /data-selected="true"/);
+  assert.match(html, /class="tcrn-nav-item__disabled-reason"/);
+});
+
 test("Slice 10 disabled target path Select exposes a resolved reason", () => {
   const html = renderAOSWideProductDesignHtml();
   const selectMatch = html.match(/<select\b(?=[^>]*\bid="aos-wide-target-path")([^>]*)>([\s\S]*?)<\/select>/);
