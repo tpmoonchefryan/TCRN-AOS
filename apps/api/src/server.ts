@@ -9,6 +9,7 @@ import {
 import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
 import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
+import { createProjectWorkspaceModel, renderProjectWorkspaceHtml } from "../../web/src/project-workspace-view.js";
 import { apiHealthReadback, createAosApiApp } from "./index.js";
 
 export interface StartedAosLocalService {
@@ -64,6 +65,10 @@ function handleRequest(
   }
   if (path === "/docs-readiness" || path === "/docs-search-release-readiness" || path === "/docs-search-release-readiness.html" || path === "/apps/web/static/docs-search-release-readiness.html") {
     sendHtml(request, response, renderDocsSearchReleaseReadinessHtml());
+    return;
+  }
+  if (path === "/project-workspace" || path === "/project-workspace.html" || path === "/apps/web/static/project-workspace.html") {
+    sendHtml(request, response, renderProjectWorkspaceHtml(createProjectWorkspaceModel(createServiceCockpitReadModel(runtime))));
     return;
   }
   if (path === "/aos-wide-product-design" || path === "/aos-wide-product-design.html" || path === "/apps/web/static/aos-wide-product-design.html") {

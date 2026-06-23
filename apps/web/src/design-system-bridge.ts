@@ -19,6 +19,7 @@ export const aosDesignSystemConsumerBridge = {
   servedSurfaceStandardIds: {
     operationsCockpit: "ds-aos-operations-cockpit-v1",
     docsSearchReleaseReadiness: "ds-aos-docs-readiness-v1",
+    projectWorkspace: "ds-aos-target-set-v1",
     aosWideProductDesign: "ds-aos-target-set-v1"
   },
   acceptedExceptionRecords: [

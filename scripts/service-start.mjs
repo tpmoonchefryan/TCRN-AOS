@@ -11,6 +11,7 @@ console.log(JSON.stringify({
   url: service.url,
   routes: {
     cockpit: `${service.url}/`,
+    projectWorkspace: `${service.url}/project-workspace`,
     docsReadiness: `${service.url}/docs-readiness`,
     productDesign: `${service.url}/aos-wide-product-design`,
     health: `${service.url}/health`,

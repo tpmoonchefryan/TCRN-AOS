@@ -20,6 +20,11 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
     const docsReadiness = await fetch(`${service.url}/docs-readiness`).then((response) => response.text());
     assert.match(docsReadiness, /data-region="docs-surface-shell"/);
 
+    const projectWorkspace = await fetch(`${service.url}/project-workspace`).then((response) => response.text());
+    assert.match(projectWorkspace, /data-surface="project-workspace"/);
+    assert.match(projectWorkspace, /data-region="project-workspace-nav"/);
+    assert.match(projectWorkspace, /data-ds-standard-ids="ds-aos-target-set-v1 ds-aos-operations-cockpit-v1"/);
+
     const productDesign = await fetch(`${service.url}/aos-wide-product-design`).then((response) => response.text());
     assert.match(productDesign, /data-surface="aos-wide-product-design"/);
 

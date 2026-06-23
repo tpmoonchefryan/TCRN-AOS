@@ -63,6 +63,7 @@ export interface WorkstreamGroup {
   projectId: string;
   initiativeId: string;
   epicId: string;
+  epicTitle: string;
   status: string;
   rows: WorkstreamStoryRow[];
 }
@@ -500,6 +501,7 @@ function createWorkstreams(store: AosStore, initiative: InitiativeRecord, storie
       projectId: initiative.projectId,
       initiativeId: initiative.id,
       epicId: epic.id,
+      epicTitle: epic.title,
       status: rows.some((row) => row.status === "blocked") ? "blocked" : epic.status,
       rows
     };
