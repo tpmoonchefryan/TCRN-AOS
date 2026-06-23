@@ -88,6 +88,8 @@ export function renderDocsReadinessRuntimeSurface(model: DocsSearchReleaseInspec
     "data-design-system-source-head": aosDesignSystemConsumerBridge.designSystemSourceHead,
     "data-design-system-tokens": aosDesignSystemConsumerBridge.tokenPackage,
     "data-design-system-copy-state": aosDesignSystemConsumerBridge.copyStatePackage,
+    "data-design-system-certified-standard-id": aosDesignSystemConsumerBridge.servedSurfaceStandardIds.docsSearchReleaseReadiness,
+    "data-design-system-exception-records": aosDesignSystemConsumerBridge.acceptedExceptionRecords.join(","),
     "data-package-backed-react-runtime-rendering": true,
     "data-package-runtime-component": "Surface",
     "data-package-runtime-component-scope": aosDocsReadinessUiReactRuntime.componentScope.join(","),

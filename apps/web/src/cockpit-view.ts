@@ -745,6 +745,8 @@ function createCockpitRuntimeShellSidebarOptions(input: {
     ["data-design-system-copy-state", aosDesignSystemConsumerBridge.copyStatePackage],
     ["data-design-system-ui-react", aosDesignSystemConsumerBridge.uiReactPackage],
     ["data-design-system-source-head", aosDesignSystemConsumerBridge.designSystemSourceHead],
+    ["data-design-system-certified-standard-id", aosDesignSystemConsumerBridge.servedSurfaceStandardIds.operationsCockpit],
+    ["data-design-system-exception-records", aosDesignSystemConsumerBridge.acceptedExceptionRecords.join(",")],
     ["data-package-backed-react-runtime-rendering", String(aosCockpitUiReactRuntime.packageBackedReactRuntimeRendering)],
     ["data-package-runtime-surface", aosCockpitUiReactRuntime.implementationKind],
     ["data-package-runtime-component-scope", aosCockpitUiReactRuntime.componentScope.join(",")],

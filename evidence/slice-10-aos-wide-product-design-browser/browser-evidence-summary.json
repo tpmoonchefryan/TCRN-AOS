@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_rebuild_59ax_aos_wide_product_design_target_set_package_runtime_adoption_implementation",
-  "sourceHead": "0e10b2dd4d66ac7d9d54b87fdaee2beed9326304",
+  "sourceHead": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
   "checkpoint": {
     "workflowPacketBasis": "bcff619a406f2028e6c70ea76a3ade1674e3ca21",
     "preImplementationBasis": "06cded11e97be6d4a738a21ae942128d5b4688cd",
@@ -9,8 +9,8 @@
   },
   "staticRender": {
     "path": "apps/web/static/aos-wide-product-design.html",
-    "bytes": 74955,
-    "sha256": "0cfd9343edaa0a49f022a4aae7a4293739f0227c344b6d6f4d3df2fedd7b35d8",
+    "bytes": 75305,
+    "sha256": "e64c66507de93c88e16ebca1775a02fdec87637f58802ebd86a8c782349d2910",
     "productDesignStatus": "target_set_implemented_pending_review",
     "selectorProof": [
       {
@@ -96,9 +96,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_aos_wide_browser_receipts",
-    "sourceHeadAtProofRun": "0e10b2dd4d66ac7d9d54b87fdaee2beed9326304",
+    "sourceHeadAtProofRun": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "9657b9116fb3c744a1be0d4f5ccce4923a42a6205029db296d872c877aa406d5",
+    "sourceContentDigest": "3357e24068a001ad6ef6f6ac5e518ed4119347a9e9a5897f6a19909e71213370",
     "sourcePaths": [
       "apps/web/src/aos-wide-product-design-data.ts",
       "apps/web/src/aos-wide-product-design-ui-react-runtime.ts",
@@ -295,44 +295,44 @@
     "requestFailures": [],
     "screenshots": [
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/desktop-1440x900-initial.png",
-        "sha256": "1c07663c242b08a3c0207f747ac680fae94f1839a04498fd0f83c6dfebc7848e",
-        "bytes": 461277
+        "file": "evidence/slice-10-aos-wide-product-design-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/desktop-1440x900-initial.png",
+        "sha256": "f73f28ba5e1190bfd43d4132b2ae5594f00f7a5345766637b95a9f3deb48869e",
+        "bytes": 456353
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/desktop-1440x900-blocked-filter.png",
-        "sha256": "e7b00739a2a97aa23a648b8e14f8fb393c6551cde53e62b9f5584f759379fb6a",
-        "bytes": 422287
+        "file": "evidence/slice-10-aos-wide-product-design-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/desktop-1440x900-blocked-filter.png",
+        "sha256": "7b150b8e26a5c15693b41bcd3ed06fd364369ad0a375b3e0c938d5913d4bdc65",
+        "bytes": 417243
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/desktop-1440x900-no-match.png",
-        "sha256": "789208b4f75c405eb116e006da24a8869e81e277e6dde7d57990b83c000a4a5a",
-        "bytes": 410472
+        "file": "evidence/slice-10-aos-wide-product-design-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/desktop-1440x900-no-match.png",
+        "sha256": "6b8e0a3dd4e639611f596b7a9032f05703d776a7041fbdd871120ff720174933",
+        "bytes": 404814
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/desktop-1440x900-resource-detail.png",
-        "sha256": "9c68d10032b68c554e8946910a819fd6c7c6a020a5488b16148982a97f5d1112",
-        "bytes": 423747
+        "file": "evidence/slice-10-aos-wide-product-design-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/desktop-1440x900-resource-detail.png",
+        "sha256": "789eaf599e66430ec778f6cea3e2564ab83f0c02967fce1bcfa684d205fa18d6",
+        "bytes": 418676
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/mobile-390x844-initial.png",
-        "sha256": "87c6cf23303e2624e44891bbc17945073e7fa7d6dd0edd630d5166c7053cb620",
-        "bytes": 442162
+        "file": "evidence/slice-10-aos-wide-product-design-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/mobile-390x844-initial.png",
+        "sha256": "a541035bfcfadd7e68ffadb5207c75ce08520453274d117e8927094e4f0394c2",
+        "bytes": 438539
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/mobile-390x844-blocked-filter.png",
-        "sha256": "a5f7136be6fba5bb628715399725c602dc2efe9719eb99e543c002acf678a2d0",
-        "bytes": 426366
+        "file": "evidence/slice-10-aos-wide-product-design-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/mobile-390x844-blocked-filter.png",
+        "sha256": "f0f984360d424e3849815aac307153a4a491031267c0055f970379889dc7df91",
+        "bytes": 422698
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/mobile-390x844-no-match.png",
-        "sha256": "d80dadbca648b95d63802c35eb747a297ecb07fe55e73ad4747161de907d4e00",
-        "bytes": 427584
+        "file": "evidence/slice-10-aos-wide-product-design-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/mobile-390x844-no-match.png",
+        "sha256": "ad2a0357fb60e343e58e25ce94fa900446e44fb569211a9d8ce6681e52398030",
+        "bytes": 423694
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/mobile-390x844-resource-detail.png",
-        "sha256": "11b78bf3f2032515ad7d1422eb45ee11b9bf50c198b16b18e5e31624e8a21d8b",
-        "bytes": 427932
+        "file": "evidence/slice-10-aos-wide-product-design-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/mobile-390x844-resource-detail.png",
+        "sha256": "868fa5a391df04309ea88abdc02f8eb1a4af901dc736b53d81f56f898f4bd503",
+        "bytes": 424221
       }
     ],
     "viewportReadbacks": [
@@ -1590,9 +1590,9 @@
               "left": 0,
               "right": 390,
               "top": 0,
-              "bottom": 6518.875,
+              "bottom": 6512.875,
               "width": 390,
-              "height": 6518.875
+              "height": 6512.875
             },
             "scrollWidth": 390,
             "clientWidth": 390
@@ -1619,8 +1619,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 1551.34375,
-              "bottom": 1791.34375,
+              "top": 1565.34375,
+              "bottom": 1805.34375,
               "width": 390,
               "height": 240
             },
@@ -1634,8 +1634,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 1791.34375,
-              "bottom": 2079.703125,
+              "top": 1805.34375,
+              "bottom": 2093.703125,
               "width": 390,
               "height": 288.359375
             },
@@ -1649,8 +1649,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 2091.703125,
-              "bottom": 2380.0625,
+              "top": 2105.703125,
+              "bottom": 2394.0625,
               "width": 390,
               "height": 288.359375
             },
@@ -1664,8 +1664,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 2392.0625,
-              "bottom": 2680.421875,
+              "top": 2406.0625,
+              "bottom": 2694.421875,
               "width": 390,
               "height": 288.359375
             },
@@ -1679,8 +1679,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 2692.421875,
-              "bottom": 2980.78125,
+              "top": 2706.421875,
+              "bottom": 2994.78125,
               "width": 390,
               "height": 288.359375
             },
@@ -1694,8 +1694,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 2992.78125,
-              "bottom": 3281.140625,
+              "top": 3006.78125,
+              "bottom": 3295.140625,
               "width": 390,
               "height": 288.359375
             },
@@ -1709,8 +1709,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 3293.140625,
-              "bottom": 3581.5,
+              "top": 3307.140625,
+              "bottom": 3595.5,
               "width": 390,
               "height": 288.359375
             },
@@ -1724,8 +1724,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 3593.5,
-              "bottom": 3881.859375,
+              "top": 3607.5,
+              "bottom": 3895.859375,
               "width": 390,
               "height": 288.359375
             },
@@ -1739,8 +1739,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 3893.859375,
-              "bottom": 4182.21875,
+              "top": 3907.859375,
+              "bottom": 4196.21875,
               "width": 390,
               "height": 288.359375
             },
@@ -1754,8 +1754,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 4194.21875,
-              "bottom": 4482.578125,
+              "top": 4208.21875,
+              "bottom": 4496.578125,
               "width": 390,
               "height": 288.359375
             },
@@ -1769,8 +1769,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 4494.578125,
-              "bottom": 4782.9375,
+              "top": 4508.578125,
+              "bottom": 4796.9375,
               "width": 390,
               "height": 288.359375
             },
@@ -1784,10 +1784,10 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 4782.9375,
-              "bottom": 5543.9375,
+              "top": 4796.9375,
+              "bottom": 5537.9375,
               "width": 390,
-              "height": 761
+              "height": 741
             },
             "scrollWidth": 1002,
             "clientWidth": 388
@@ -1799,8 +1799,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 5543.9375,
-              "bottom": 6448.875,
+              "top": 5537.9375,
+              "bottom": 6442.875,
               "width": 390,
               "height": 904.9375
             },
@@ -1814,8 +1814,8 @@
             "rect": {
               "left": 21,
               "right": 369,
-              "top": 6225.875,
-              "bottom": 6427.875,
+              "top": 6219.875,
+              "bottom": 6421.875,
               "width": 348,
               "height": 202
             },
@@ -1888,10 +1888,10 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -4543,
+              "top": -4537,
               "bottom": 1675.875,
               "width": 390,
-              "height": 6218.875
+              "height": 6212.875
             },
             "scrollWidth": 390,
             "clientWidth": 390
@@ -1903,8 +1903,8 @@
             "rect": {
               "left": 14,
               "right": 376,
-              "top": -4525,
-              "bottom": -4481,
+              "top": -4519,
+              "bottom": -4475,
               "width": 362,
               "height": 44
             },
@@ -1918,8 +1918,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -2991.65625,
-              "bottom": -2751.65625,
+              "top": -2971.65625,
+              "bottom": -2731.65625,
               "width": 390,
               "height": 240
             },
@@ -1933,8 +1933,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -2751.65625,
-              "bottom": -2463.296875,
+              "top": -2731.65625,
+              "bottom": -2443.296875,
               "width": 390,
               "height": 288.359375
             },
@@ -1948,8 +1948,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -2451.296875,
-              "bottom": -2162.9375,
+              "top": -2431.296875,
+              "bottom": -2142.9375,
               "width": 390,
               "height": 288.359375
             },
@@ -1963,8 +1963,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -2150.9375,
-              "bottom": -1862.578125,
+              "top": -2130.9375,
+              "bottom": -1842.578125,
               "width": 390,
               "height": 288.359375
             },
@@ -1978,8 +1978,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -1850.578125,
-              "bottom": -1562.21875,
+              "top": -1830.578125,
+              "bottom": -1542.21875,
               "width": 390,
               "height": 288.359375
             },
@@ -1993,8 +1993,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -1550.21875,
-              "bottom": -1261.859375,
+              "top": -1530.21875,
+              "bottom": -1241.859375,
               "width": 390,
               "height": 288.359375
             },
@@ -2008,8 +2008,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -1249.859375,
-              "bottom": -961.5,
+              "top": -1229.859375,
+              "bottom": -941.5,
               "width": 390,
               "height": 288.359375
             },
@@ -2023,8 +2023,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -949.5,
-              "bottom": -661.140625,
+              "top": -929.5,
+              "bottom": -641.140625,
               "width": 390,
               "height": 288.359375
             },
@@ -2038,8 +2038,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -649.140625,
-              "bottom": -360.78125,
+              "top": -629.140625,
+              "bottom": -340.78125,
               "width": 390,
               "height": 288.359375
             },
@@ -2053,8 +2053,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -348.78125,
-              "bottom": -60.421875,
+              "top": -328.78125,
+              "bottom": -40.421875,
               "width": 390,
               "height": 288.359375
             },
@@ -2068,8 +2068,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -48.421875,
-              "bottom": 239.9375,
+              "top": -28.421875,
+              "bottom": 259.9375,
               "width": 390,
               "height": 288.359375
             },
@@ -2083,10 +2083,10 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 239.9375,
+              "top": 259.9375,
               "bottom": 700.9375,
               "width": 390,
-              "height": 461
+              "height": 441
             },
             "scrollWidth": 1002,
             "clientWidth": 388
@@ -2187,10 +2187,10 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -4543,
+              "top": -4537,
               "bottom": 1647.9375,
               "width": 390,
-              "height": 6190.9375
+              "height": 6184.9375
             },
             "scrollWidth": 390,
             "clientWidth": 390
@@ -2202,8 +2202,8 @@
             "rect": {
               "left": 14,
               "right": 376,
-              "top": -4525,
-              "bottom": -4481,
+              "top": -4519,
+              "bottom": -4475,
               "width": 362,
               "height": 44
             },
@@ -2217,8 +2217,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -2991.65625,
-              "bottom": -2751.65625,
+              "top": -2971.65625,
+              "bottom": -2731.65625,
               "width": 390,
               "height": 240
             },
@@ -2232,8 +2232,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -2751.65625,
-              "bottom": -2463.296875,
+              "top": -2731.65625,
+              "bottom": -2443.296875,
               "width": 390,
               "height": 288.359375
             },
@@ -2247,8 +2247,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -2451.296875,
-              "bottom": -2162.9375,
+              "top": -2431.296875,
+              "bottom": -2142.9375,
               "width": 390,
               "height": 288.359375
             },
@@ -2262,8 +2262,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -2150.9375,
-              "bottom": -1862.578125,
+              "top": -2130.9375,
+              "bottom": -1842.578125,
               "width": 390,
               "height": 288.359375
             },
@@ -2277,8 +2277,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -1850.578125,
-              "bottom": -1562.21875,
+              "top": -1830.578125,
+              "bottom": -1542.21875,
               "width": 390,
               "height": 288.359375
             },
@@ -2292,8 +2292,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -1550.21875,
-              "bottom": -1261.859375,
+              "top": -1530.21875,
+              "bottom": -1241.859375,
               "width": 390,
               "height": 288.359375
             },
@@ -2307,8 +2307,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -1249.859375,
-              "bottom": -961.5,
+              "top": -1229.859375,
+              "bottom": -941.5,
               "width": 390,
               "height": 288.359375
             },
@@ -2322,8 +2322,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -949.5,
-              "bottom": -661.140625,
+              "top": -929.5,
+              "bottom": -641.140625,
               "width": 390,
               "height": 288.359375
             },
@@ -2337,8 +2337,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -649.140625,
-              "bottom": -360.78125,
+              "top": -629.140625,
+              "bottom": -340.78125,
               "width": 390,
               "height": 288.359375
             },
@@ -2352,8 +2352,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -348.78125,
-              "bottom": -60.421875,
+              "top": -328.78125,
+              "bottom": -40.421875,
               "width": 390,
               "height": 288.359375
             },
@@ -2367,8 +2367,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -48.421875,
-              "bottom": 239.9375,
+              "top": -28.421875,
+              "bottom": 259.9375,
               "width": 390,
               "height": 288.359375
             },
@@ -2382,10 +2382,10 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 239.9375,
+              "top": 259.9375,
               "bottom": 673,
               "width": 390,
-              "height": 433.0625
+              "height": 413.0625
             },
             "scrollWidth": 1002,
             "clientWidth": 388
@@ -2486,10 +2486,10 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -4543,
+              "top": -4537,
               "bottom": 1675.875,
               "width": 390,
-              "height": 6218.875
+              "height": 6212.875
             },
             "scrollWidth": 390,
             "clientWidth": 390
@@ -2501,8 +2501,8 @@
             "rect": {
               "left": 14,
               "right": 376,
-              "top": -4525,
-              "bottom": -4481,
+              "top": -4519,
+              "bottom": -4475,
               "width": 362,
               "height": 44
             },
@@ -2516,8 +2516,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -2991.65625,
-              "bottom": -2751.65625,
+              "top": -2971.65625,
+              "bottom": -2731.65625,
               "width": 390,
               "height": 240
             },
@@ -2531,8 +2531,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -2751.65625,
-              "bottom": -2463.296875,
+              "top": -2731.65625,
+              "bottom": -2443.296875,
               "width": 390,
               "height": 288.359375
             },
@@ -2546,8 +2546,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -2451.296875,
-              "bottom": -2162.9375,
+              "top": -2431.296875,
+              "bottom": -2142.9375,
               "width": 390,
               "height": 288.359375
             },
@@ -2561,8 +2561,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -2150.9375,
-              "bottom": -1862.578125,
+              "top": -2130.9375,
+              "bottom": -1842.578125,
               "width": 390,
               "height": 288.359375
             },
@@ -2576,8 +2576,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -1850.578125,
-              "bottom": -1562.21875,
+              "top": -1830.578125,
+              "bottom": -1542.21875,
               "width": 390,
               "height": 288.359375
             },
@@ -2591,8 +2591,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -1550.21875,
-              "bottom": -1261.859375,
+              "top": -1530.21875,
+              "bottom": -1241.859375,
               "width": 390,
               "height": 288.359375
             },
@@ -2606,8 +2606,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -1249.859375,
-              "bottom": -961.5,
+              "top": -1229.859375,
+              "bottom": -941.5,
               "width": 390,
               "height": 288.359375
             },
@@ -2621,8 +2621,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -949.5,
-              "bottom": -661.140625,
+              "top": -929.5,
+              "bottom": -641.140625,
               "width": 390,
               "height": 288.359375
             },
@@ -2636,8 +2636,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -649.140625,
-              "bottom": -360.78125,
+              "top": -629.140625,
+              "bottom": -340.78125,
               "width": 390,
               "height": 288.359375
             },
@@ -2651,8 +2651,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -348.78125,
-              "bottom": -60.421875,
+              "top": -328.78125,
+              "bottom": -40.421875,
               "width": 390,
               "height": 288.359375
             },
@@ -2666,8 +2666,8 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": -48.421875,
-              "bottom": 239.9375,
+              "top": -28.421875,
+              "bottom": 259.9375,
               "width": 390,
               "height": 288.359375
             },
@@ -2681,10 +2681,10 @@
             "rect": {
               "left": 0,
               "right": 390,
-              "top": 239.9375,
+              "top": 259.9375,
               "bottom": 700.9375,
               "width": 390,
-              "height": 461
+              "height": 441
             },
             "scrollWidth": 1002,
             "clientWidth": 388
@@ -2732,7 +2732,7 @@
   },
   "evidenceReadiness": {
     "markdownReceipt": "evidence/slice-10-aos-wide-product-design-surface-set-proof.md",
-    "browserSummaryPath": "evidence/slice-10-aos-wide-product-design-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/browser-evidence-summary.json",
+    "browserSummaryPath": "evidence/slice-10-aos-wide-product-design-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/browser-evidence-summary.json",
     "stableBrowserSummaryPath": "evidence/slice-10-aos-wide-product-design-browser/browser-evidence-summary.json",
     "consolePageErrorReadiness": "none_observed"
   }

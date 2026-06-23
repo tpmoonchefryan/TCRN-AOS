@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_full_rebuild_parent_objective_remaining_surface_component_gap_audit_repair_implementation",
-  "sourceHead": "b546c7dc99bcc9e518135c9edfb299ff81b7892d",
+  "sourceHead": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
   "canonicalParentObjective": {
     "ownerDirective": "不再做任何迁移，移除AOS现有所有前端组件，按照Design System要求和组件重建UI",
     "disposition": "parent_objective_remaining_surface_component_gap_audit"
@@ -97,8 +97,15 @@
         "apps/web/src/cockpit-ui-react-runtime.ts",
         "apps/web/src/cockpit.ts"
       ],
-      "staticSha256": "98c7f735825eab63e24cd2f5b399c07d7ad883a4ad405183c6d938800d28049f",
-      "renderedSha256": "98c7f735825eab63e24cd2f5b399c07d7ad883a4ad405183c6d938800d28049f",
+      "certifiedStandardId": "ds-aos-operations-cockpit-v1",
+      "certifiedStandardPresent": true,
+      "acceptedExceptionRecords": [
+        "aos-brand-lockup-product-specific",
+        "aos-data-semantics-product-owned"
+      ],
+      "exceptionRecordPresent": true,
+      "staticSha256": "b82af3a49fdab1add38d193d138fb083e2198e7678724bb9f95b670a7045d18c",
+      "renderedSha256": "b82af3a49fdab1add38d193d138fb083e2198e7678724bb9f95b670a7045d18c",
       "staticOutputCurrent": true,
       "componentInstanceCount": 105,
       "registeredComponents": [
@@ -193,8 +200,15 @@
         "apps/web/src/docs-readiness-view.ts",
         "apps/web/src/docs-readiness-ui-react-runtime.ts"
       ],
-      "staticSha256": "1de39e05d7a5d868e38cbc9664756b7b54154bdeab4fa221be5a74987881bf1d",
-      "renderedSha256": "1de39e05d7a5d868e38cbc9664756b7b54154bdeab4fa221be5a74987881bf1d",
+      "certifiedStandardId": "ds-aos-docs-readiness-v1",
+      "certifiedStandardPresent": true,
+      "acceptedExceptionRecords": [
+        "aos-brand-lockup-product-specific",
+        "aos-data-semantics-product-owned"
+      ],
+      "exceptionRecordPresent": true,
+      "staticSha256": "deef59ae0425130093043831b221d134ea7159f5ad42d2b97c5d53f96f462a48",
+      "renderedSha256": "deef59ae0425130093043831b221d134ea7159f5ad42d2b97c5d53f96f462a48",
       "staticOutputCurrent": true,
       "componentInstanceCount": 61,
       "registeredComponents": [
@@ -286,10 +300,17 @@
         "apps/web/src/aos-wide-product-design-ui-react-runtime.ts",
         "apps/web/src/aos-wide-product-design-data.ts"
       ],
-      "staticSha256": "0cfd9343edaa0a49f022a4aae7a4293739f0227c344b6d6f4d3df2fedd7b35d8",
-      "renderedSha256": "0cfd9343edaa0a49f022a4aae7a4293739f0227c344b6d6f4d3df2fedd7b35d8",
+      "certifiedStandardId": "ds-aos-target-set-v1",
+      "certifiedStandardPresent": true,
+      "acceptedExceptionRecords": [
+        "aos-brand-lockup-product-specific",
+        "aos-data-semantics-product-owned"
+      ],
+      "exceptionRecordPresent": true,
+      "staticSha256": "e64c66507de93c88e16ebca1775a02fdec87637f58802ebd86a8c782349d2910",
+      "renderedSha256": "e64c66507de93c88e16ebca1775a02fdec87637f58802ebd86a8c782349d2910",
       "staticOutputCurrent": true,
-      "componentInstanceCount": 135,
+      "componentInstanceCount": 136,
       "registeredComponents": [
         "Badge",
         "Button",
@@ -441,7 +462,7 @@
   },
   "designSystemBoundaryReadback": {
     "ok": true,
-    "trackedHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
+    "trackedHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
     "registrySourcePath": "../TCRN-Design-System/packages/ui-react/src/index.tsx",
     "registrySourceReadable": true,
     "unacceptedStylesheetDraft": {
@@ -451,6 +472,61 @@
       "gitStatus": "?? packages/ui-react/src/styles.css",
       "disposition": "unaccepted_context_only_not_imported_copied_or_used_as_truth"
     }
+  },
+  "designSystemCertificationReadback": {
+    "ok": true,
+    "designSystemHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
+    "expectedDesignSystemHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
+    "consumedDsStandardIds": [
+      "ds-aos-operations-cockpit-v1",
+      "ds-aos-docs-readiness-v1",
+      "ds-aos-target-set-v1"
+    ],
+    "consumedExceptionRecords": [
+      "aos-brand-lockup-product-specific",
+      "aos-data-semantics-product-owned"
+    ],
+    "receiptReadbacks": [
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha/aos-served-surface-standard-proof.json",
+        "bytes": 7949,
+        "sha256": "df79288f437cc71cd042352df9a763ade87707e81c234f9d8d2563c658c8081d"
+      },
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha/visual-baseline-manifest.json",
+        "bytes": 44749,
+        "sha256": "c0872dcfa4788e4e4f74eab0b2d91cfaa4acb1b539151501ea87c058713dcfd2"
+      },
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha/intentional-diff-manifest.json",
+        "bytes": 35779,
+        "sha256": "b5bcfc6fea4946350e4388a2f662e169257e9be8bab85f0caf6be976fdadfad9"
+      },
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha/browser-proof-summary.json",
+        "bytes": 58513,
+        "sha256": "2f9c05db128678e713ec2900ae758c80d28ed9779573b7d3954b924c3a9a0346"
+      },
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha-hardening-proof.json",
+        "bytes": 2796,
+        "sha256": "f97d3d31c55c619d5654c8abd235a81eb8832a74c24e474dda9fdf421e482428"
+      }
+    ],
+    "exceptionCoverage": [
+      {
+        "id": "aos-brand-lockup-product-specific",
+        "present": true,
+        "broadVisualSystemException": false
+      },
+      {
+        "id": "aos-data-semantics-product-owned",
+        "present": true,
+        "broadVisualSystemException": false
+      }
+    ],
+    "productVisibleCopyProofDisposition": "AOS served surface visible and accessibility text remains the proof source; DS synthetic Storybook fixture vocabulary is not substituted.",
+    "failures": []
   },
   "browserReceiptReadback": {
     "ok": true,
@@ -477,9 +553,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_parent_surface_inventory",
-    "sourceHeadAtProofRun": "b546c7dc99bcc9e518135c9edfb299ff81b7892d",
+    "sourceHeadAtProofRun": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "3527aa877f71bc55d2a20d3c21680cd1246955a245b1f244f51057e0f601b33d",
+    "sourceContentDigest": "68741f357eb4ab029076224b06a5dd1f1971bc39bde8ca853c08e6c3a226453c",
     "sourcePaths": [
       "apps/api/src/server.ts",
       "apps/web/src/aos-wide-product-design-data.ts",

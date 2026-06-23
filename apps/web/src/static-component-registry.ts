@@ -5,6 +5,7 @@ export const aosDesignSystemRegisteredComponentNames = [
   "LinkButton",
   "Field",
   "Input",
+  "Textarea",
   "SearchInput",
   "Select",
   "Checkbox",

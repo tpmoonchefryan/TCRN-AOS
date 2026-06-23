@@ -16,12 +16,18 @@ const serverSourcePath = "apps/api/src/server.ts";
 const designSystemRoot = join(repoRoot, "..", "TCRN-Design-System");
 const designSystemRegistrySourcePath = join(designSystemRoot, "packages/ui-react/src/index.tsx");
 const designSystemStylesheetDraftPath = join(designSystemRoot, "packages/ui-react/src/styles.css");
+const expectedDesignSystemCertificationHead = "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3";
+const acceptedExceptionRecordIds = [
+  "aos-brand-lockup-product-specific",
+  "aos-data-semantics-product-owned"
+];
 const receiptPath = join(repoRoot, "evidence/aos-design-system-parent-surface-inventory-proof.json");
 const markdownPath = join(repoRoot, "evidence/aos-design-system-parent-surface-inventory-proof.md");
 
 const expectedProductSurfaces = [
   {
     id: "operations-cockpit",
+    certifiedStandardId: "ds-aos-operations-cockpit-v1",
     path: "apps/web/static/operations-cockpit.html",
     renderer: "renderOperationsCockpitHtml",
     html: renderOperationsCockpitHtml(),
@@ -30,6 +36,7 @@ const expectedProductSurfaces = [
   },
   {
     id: "docs-search-release-readiness",
+    certifiedStandardId: "ds-aos-docs-readiness-v1",
     path: "apps/web/static/docs-search-release-readiness.html",
     renderer: "renderDocsSearchReleaseReadinessHtml",
     html: renderDocsSearchReleaseReadinessHtml(),
@@ -38,6 +45,7 @@ const expectedProductSurfaces = [
   },
   {
     id: "aos-wide-product-design",
+    certifiedStandardId: "ds-aos-target-set-v1",
     path: "apps/web/static/aos-wide-product-design.html",
     renderer: "renderAOSWideProductDesignHtml",
     html: renderAOSWideProductDesignHtml(),
@@ -73,6 +81,7 @@ const excludedFrontendArtifacts = inspectExcludedFrontendArtifacts();
 const sourceBoundaryReadback = inspectSourceBoundary();
 const sourceFreshnessReadback = inspectSourceFreshness();
 const designSystemBoundaryReadback = inspectDesignSystemBoundary();
+const designSystemCertificationReadback = inspectDesignSystemCertification();
 const browserReceiptReadback = inspectExistingBrowserReceipts();
 const ok = serverRouteReadback.ok
   && staticOutputReadback.ok
@@ -81,6 +90,7 @@ const ok = serverRouteReadback.ok
   && sourceBoundaryReadback.ok
   && sourceFreshnessReadback.ok
   && designSystemBoundaryReadback.ok
+  && designSystemCertificationReadback.ok
   && browserReceiptReadback.ok;
 
 const summary = {
@@ -107,6 +117,7 @@ const summary = {
   excludedFrontendArtifacts,
   sourceBoundaryReadback,
   designSystemBoundaryReadback,
+  designSystemCertificationReadback,
   browserReceiptReadback,
   sourceFreshnessReadback
 };
@@ -223,6 +234,8 @@ function inspectProductSurface(surface, registeredComponentNames) {
   const staticHtml = readFileSync(join(repoRoot, surface.path), "utf8");
   const renderedHash = sha256(surface.html);
   const staticHash = sha256(staticHtml);
+  const certifiedStandardPresent = surface.html.includes(`data-design-system-certified-standard-id="${surface.certifiedStandardId}"`);
+  const exceptionRecordPresent = acceptedExceptionRecordIds.every((id) => surface.html.includes(id));
   const componentInstances = Array.from(surface.html.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")([^>]*)>/g))
     .map((match) => ({
       element: match[1],
@@ -243,6 +256,8 @@ function inspectProductSurface(surface, registeredComponentNames) {
     .map((component) => ({ component: component.component, attributes: component.attributes }));
   const failures = [
     ...(staticHash !== renderedHash ? ["static_output_not_current_with_renderer"] : []),
+    ...(certifiedStandardPresent ? [] : [`certified_standard_marker_missing:${surface.certifiedStandardId}`]),
+    ...(exceptionRecordPresent ? [] : ["design_system_exception_records_missing"]),
     ...unregisteredComponents.map((name) => `unregistered_component:${name}`),
     ...markerOnlyComponents.map((component) => `marker_only_component:${component.component}`),
     ...productVisibleCopyReadback.hits.map((hit) => `product_visible_internal_copy:${hit.term}`),
@@ -257,6 +272,10 @@ function inspectProductSurface(surface, registeredComponentNames) {
     path: surface.path,
     renderer: surface.renderer,
     sourcePaths: surface.sourcePaths,
+    certifiedStandardId: surface.certifiedStandardId,
+    certifiedStandardPresent,
+    acceptedExceptionRecords: acceptedExceptionRecordIds,
+    exceptionRecordPresent,
     staticSha256: staticHash,
     renderedSha256: renderedHash,
     staticOutputCurrent: staticHash === renderedHash,
@@ -357,6 +376,59 @@ function inspectDesignSystemBoundary() {
       gitStatus,
       disposition: "unaccepted_context_only_not_imported_copied_or_used_as_truth"
     }
+  };
+}
+
+function inspectDesignSystemCertification() {
+  const expectedStandards = expectedProductSurfaces.map((surface) => surface.certifiedStandardId);
+  const receiptPaths = [
+    "docs/verification/internal-alpha/aos-served-surface-standard-proof.json",
+    "docs/verification/internal-alpha/visual-baseline-manifest.json",
+    "docs/verification/internal-alpha/intentional-diff-manifest.json",
+    "docs/verification/internal-alpha/browser-proof-summary.json",
+    "docs/verification/internal-alpha-hardening-proof.json"
+  ];
+  const trackedHead = execFileSync("git", ["-C", designSystemRoot, "rev-parse", "HEAD"], { encoding: "utf8" }).trim();
+  const standardProof = JSON.parse(readFileSync(join(designSystemRoot, "docs/verification/internal-alpha/aos-served-surface-standard-proof.json"), "utf8"));
+  const hardeningProof = JSON.parse(readFileSync(join(designSystemRoot, "docs/verification/internal-alpha-hardening-proof.json"), "utf8"));
+  const receiptReadbacks = receiptPaths.map((path) => {
+    const content = readFileSync(join(designSystemRoot, path));
+    return {
+      path: relative(repoRoot, join(designSystemRoot, path)),
+      bytes: content.length,
+      sha256: sha256(content)
+    };
+  });
+  const exceptionCoverage = acceptedExceptionRecordIds.map((id) => {
+    const record = standardProof.exceptionReadback?.find((item) => item.id === id);
+    return {
+      id,
+      present: Boolean(record),
+      broadVisualSystemException: record?.broadVisualSystemException ?? null
+    };
+  });
+  const failures = [];
+  if (trackedHead !== expectedDesignSystemCertificationHead) failures.push("design_system_head_mismatch");
+  if (standardProof.ok !== true) failures.push("aos_served_surface_standard_proof_not_ok");
+  if (hardeningProof.ok !== true) failures.push("internal_alpha_hardening_proof_not_ok");
+  for (const id of expectedStandards) {
+    if (!standardProof.acceptedDsStandardIds?.includes(id)) failures.push(`certified_standard_missing:${id}`);
+    if (!hardeningProof.aosServedSurfaceStandardIds?.includes(id)) failures.push(`hardening_standard_missing:${id}`);
+  }
+  for (const readback of exceptionCoverage) {
+    if (!readback.present) failures.push(`exception_record_missing:${readback.id}`);
+    if (readback.broadVisualSystemException !== false) failures.push(`exception_scope_too_broad:${readback.id}`);
+  }
+  return {
+    ok: failures.length === 0,
+    designSystemHead: trackedHead,
+    expectedDesignSystemHead: expectedDesignSystemCertificationHead,
+    consumedDsStandardIds: expectedStandards,
+    consumedExceptionRecords: acceptedExceptionRecordIds,
+    receiptReadbacks,
+    exceptionCoverage,
+    productVisibleCopyProofDisposition: "AOS served surface visible and accessibility text remains the proof source; DS synthetic Storybook fixture vocabulary is not substituted.",
+    failures
   };
 }
 
@@ -565,6 +637,10 @@ function markdownReceipt(summary) {
 - Product-facing HTML route count: ${summary.serverRouteReadback.htmlRoutes.length}
 - Static product HTML outputs: ${summary.staticOutputReadback.htmlFiles.join(", ")}
 - Excluded reference-only frontend artifacts: ${summary.excludedFrontendArtifacts.artifacts.map((artifact) => artifact.path).join(", ")}
+- Design System certification head: ${summary.designSystemCertificationReadback.designSystemHead}
+- Consumed DS standard IDs: ${summary.designSystemCertificationReadback.consumedDsStandardIds.join(", ")}
+- Consumed DS exception records: ${summary.designSystemCertificationReadback.consumedExceptionRecords.join(", ")}
+- Product-visible copy proof disposition: ${summary.designSystemCertificationReadback.productVisibleCopyProofDisposition}
 - Source freshness strategy: ${summary.sourceFreshnessReadback.strategy}
 - Source content digest: ${summary.sourceFreshnessReadback.sourceContentDigest}
 

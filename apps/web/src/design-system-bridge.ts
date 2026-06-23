@@ -9,13 +9,32 @@ import {
 } from "@tcrn/ui-copy-state";
 
 export const aosDesignSystemConsumerBridge = {
-  route: "route_tcrn_aos_design_system_frontend_full_rebuild_planning_and_implementation_packet",
+  route: "route_tcrn_aos_c3e1aa8_narrow_aos_ds_certification_consumption_repair_proof_refresh_after_mara_triage",
   adoptionPosture: "tokens_copy_state_ui_react_product_frontend_rebuild",
-  designSystemSourceHead: "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
+  designSystemSourceHead: "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
   tokenPackage: "@tcrn/ui-tokens",
   copyStatePackage: "@tcrn/ui-copy-state",
   uiReactPackage: "@tcrn/ui-react",
   uiReactPackageSpecifier: "file:../TCRN-Design-System/packages/ui-react",
+  servedSurfaceStandardIds: {
+    operationsCockpit: "ds-aos-operations-cockpit-v1",
+    docsSearchReleaseReadiness: "ds-aos-docs-readiness-v1",
+    aosWideProductDesign: "ds-aos-target-set-v1"
+  },
+  acceptedExceptionRecords: [
+    "aos-brand-lockup-product-specific",
+    "aos-data-semantics-product-owned"
+  ],
+  designSystemCertificationReceipts: [
+    "../TCRN-Design-System/docs/verification/internal-alpha/aos-served-surface-standard-proof.json",
+    "../TCRN-Design-System/docs/verification/internal-alpha/aos-served-surface-standard-proof.md",
+    "../TCRN-Design-System/docs/verification/internal-alpha/visual-baseline-manifest.json",
+    "../TCRN-Design-System/docs/verification/internal-alpha/intentional-diff-manifest.json",
+    "../TCRN-Design-System/docs/verification/internal-alpha/browser-proof-summary.json",
+    "../TCRN-Design-System/docs/verification/internal-alpha-hardening-proof.json"
+  ],
+  productVisibleCopyProofSource: "AOS served Operations Cockpit, Docs Readiness, and AOS-wide product HTML/accessibility text only",
+  designSystemSyntheticStorybookVocabularyDisposition: "accepted_as_design_system_fixture_evidence_not_aos_customer_copy_proof",
   uiReactRuntimeSurface: "aos_product_frontend_rebuilt_registered_design_system_runtime",
   uiReactRuntimeComponentScope: [
     "NavItem",

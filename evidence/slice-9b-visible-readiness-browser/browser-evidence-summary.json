@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_rebuild_59aw_docs_readiness_package_runtime_adoption_implementation",
-  "sourceHead": "0e10b2dd4d66ac7d9d54b87fdaee2beed9326304",
+  "sourceHead": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
   "checkpoint": {
     "workflowPacketBasis": "624127182da417f65c790de155e3297e77828181",
     "preImplementationBasis": "9d7980f46245bb783b520c9f90945da8609c01ce",
@@ -9,8 +9,8 @@
   },
   "staticRender": {
     "path": "apps/web/static/docs-search-release-readiness.html",
-    "bytes": 37678,
-    "sha256": "1de39e05d7a5d868e38cbc9664756b7b54154bdeab4fa221be5a74987881bf1d",
+    "bytes": 37865,
+    "sha256": "deef59ae0425130093043831b221d134ea7159f5ad42d2b97c5d53f96f462a48",
     "docsSearchReleaseSurfacesVisible": true,
     "selectorProof": [
       {
@@ -54,9 +54,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_docs_readiness_browser_receipts",
-    "sourceHeadAtProofRun": "0e10b2dd4d66ac7d9d54b87fdaee2beed9326304",
+    "sourceHeadAtProofRun": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "64c8504b008256b809cb434601ca7b884ec93c43b33eaf6174c277665d52b25c",
+    "sourceContentDigest": "3f7f3623186bc73c38d00a3635829df1b1d40f099570a4881d1deadaf1dc67b4",
     "sourcePaths": [
       "apps/web/src/docs-readiness-ui-react-runtime.ts",
       "apps/web/src/docs-readiness-view.ts",
@@ -109,27 +109,27 @@
     "requestFailures": [],
     "screenshots": [
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/desktop-1440x900-initial.png",
+        "file": "evidence/slice-9b-visible-readiness-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/desktop-1440x900-initial.png",
         "sha256": "0c5ab8d97b3b4500fa1ce0ac0d333ebeff146c38a5f55c360e6bd41c8a7e6b99",
         "bytes": 188019
       },
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/desktop-1440x900-search-github.png",
+        "file": "evidence/slice-9b-visible-readiness-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/desktop-1440x900-search-github.png",
         "sha256": "02f58b3d1f80c5431424da7db134d91937651fc47b39fbb67f46b7185a24ccd1",
         "bytes": 167095
       },
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/desktop-1440x900-search-empty.png",
+        "file": "evidence/slice-9b-visible-readiness-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/desktop-1440x900-search-empty.png",
         "sha256": "de7e6c498b5d6fc7c43206fa2cf30d3eb39a9a11cb7ce85fa89024e490e2a76f",
         "bytes": 171611
       },
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/mobile-390x844-initial.png",
+        "file": "evidence/slice-9b-visible-readiness-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/mobile-390x844-initial.png",
         "sha256": "c8975f6dd8459e2675ceab82ff181314b9c107db4e0172003dda70abaaac18fb",
         "bytes": 167384
       },
       {
-        "file": "evidence/slice-9b-visible-readiness-browser/0e10b2dd4d66ac7d9d54b87fdaee2beed9326304/mobile-390x844-search-candidate.png",
+        "file": "evidence/slice-9b-visible-readiness-browser/b3cf6898e641c854eeab766e7bdb9cbea8692aba/mobile-390x844-search-candidate.png",
         "sha256": "c83e6a4ab1070ae31cf13a5fa017a2419e919dc3c0b994ef79eb409c749893f9",
         "bytes": 160809
       }

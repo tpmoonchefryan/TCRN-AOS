@@ -47,6 +47,36 @@ const aosWideRuntimeSourcePath = "apps/web/src/aos-wide-product-design-ui-react-
 const runtimeSource = readFileSync(join(repoRoot, runtimeSourcePath), "utf8");
 const docsRuntimeSource = readFileSync(join(repoRoot, docsRuntimeSourcePath), "utf8");
 const aosWideRuntimeSource = readFileSync(join(repoRoot, aosWideRuntimeSourcePath), "utf8");
+const designSystemRoot = join(repoRoot, "..", "TCRN-Design-System");
+const certifiedDsStandardIds = [
+  "ds-aos-operations-cockpit-v1",
+  "ds-aos-docs-readiness-v1",
+  "ds-aos-target-set-v1"
+];
+const acceptedExceptionRecordIds = [
+  "aos-brand-lockup-product-specific",
+  "aos-data-semantics-product-owned"
+];
+const servedSurfaceStandardMap = {
+  operationsCockpit: {
+    surface: "operations-cockpit",
+    standardId: "ds-aos-operations-cockpit-v1",
+    storyId: "aos-operations-cockpit-standard",
+    storybookId: "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+  },
+  docsReadiness: {
+    surface: "docs-search-release-readiness",
+    standardId: "ds-aos-docs-readiness-v1",
+    storyId: "aos-docs-readiness-standard",
+    storybookId: "tcrn-design-system-patterns--aos-docs-readiness-standard"
+  },
+  aosWideProductDesign: {
+    surface: "aos-wide-product-design",
+    standardId: "ds-aos-target-set-v1",
+    storyId: "aos-product-design-target-set-standard",
+    storybookId: "tcrn-design-system-patterns--aos-product-design-target-set-standard"
+  }
+};
 const cockpitHtml = renderOperationsCockpitHtml();
 const docsReadinessHtml = renderDocsSearchReleaseReadinessHtml();
 const aosWideHtml = renderAOSWideProductDesignHtml();
@@ -74,13 +104,14 @@ const productVisibleCopyReadback = inspectProductVisibleCopy({
   docsReadiness: docsReadinessHtml,
   aosWideProductDesign: aosWideHtml
 });
+const designSystemCertificationReadback = inspectDesignSystemCertification();
 const sourceContentReadback = inspectSourceContentDigest();
 const summaryPath = join(repoRoot, "evidence", "aos-design-system-package-runtime-proof.json");
 const markdownPath = join(repoRoot, "evidence", "aos-design-system-package-runtime-proof.md");
 const checkCurrentSource = process.argv.includes("--check-current-source");
 
 const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
-  && aosDesignSystemConsumerBridge.designSystemSourceHead === "b0c00828a813d3c62392eb6e53d7d6b85b6affeb"
+  && aosDesignSystemConsumerBridge.designSystemSourceHead === "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3"
   && aosCockpitUiReactRuntime.packageBackedReactRuntimeRendering === true
   && dependencyReadback.ok
   && importReadback.ok
@@ -100,6 +131,7 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && aosWideFullDocumentAccessibilityReadback.ok
   && visualStyleReadback.ok
   && storybookReferenceReadback.ok
+  && designSystemCertificationReadback.ok
   && noOverclaimReadback.ok
   && productVisibleCopyReadback.ok
   && sourceContentReadback.ok;
@@ -111,7 +143,7 @@ const summary = {
   claimScope: {
     implementationKind: "aos_product_frontend_rebuilt_registered_design_system_runtime",
     packageBackedReactRuntimeRendering: "operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild",
-    storybookVisualStyleParity: "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_claim_risk_shell_sidebar_typography_docs_readiness_and_aos_wide_component_reference_only",
+    storybookVisualStyleParity: "consumed_ds_4d03f4b_certified_visual_standard_receipts_for_served_scope",
     broadUiReactRuntimeMigration: false,
     docsReadinessPackageRuntimeRendering: true,
     aosWidePackageRuntimeRendering: true,
@@ -125,7 +157,10 @@ const summary = {
     uiReactPackage: aosDesignSystemConsumerBridge.uiReactPackage,
     uiReactPackageSpecifier: aosDesignSystemConsumerBridge.uiReactPackageSpecifier,
     runtimeSurface: aosDesignSystemConsumerBridge.uiReactRuntimeSurface,
-    runtimeComponentScope: aosDesignSystemConsumerBridge.uiReactRuntimeComponentScope
+    runtimeComponentScope: aosDesignSystemConsumerBridge.uiReactRuntimeComponentScope,
+    servedSurfaceStandardIds: aosDesignSystemConsumerBridge.servedSurfaceStandardIds,
+    acceptedExceptionRecords: aosDesignSystemConsumerBridge.acceptedExceptionRecords,
+    certificationReceipts: aosDesignSystemConsumerBridge.designSystemCertificationReceipts
   },
   dependencyReadback,
   importReadback,
@@ -145,6 +180,7 @@ const summary = {
   aosWideFullDocumentAccessibilityReadback,
   visualStyleReadback,
   storybookReferenceReadback,
+  designSystemCertificationReadback,
   noOverclaimReadback,
   productVisibleCopyReadback
 };
@@ -220,6 +256,9 @@ console.log(JSON.stringify({
   markerOnlyNavItemCount: summary.navRuntimeReadback.markerOnlyNavItemCount,
   deepImportHits: summary.importReadback.deepImportHits,
   storybookReferenceOk: summary.storybookReferenceReadback.ok,
+  designSystemCertificationOk: summary.designSystemCertificationReadback.ok,
+  consumedDsStandardIds: summary.designSystemCertificationReadback.consumedDsStandardIds,
+  consumedExceptionRecords: summary.designSystemCertificationReadback.consumedExceptionRecords,
   receipt: relative(repoRoot, summaryPath)
 }, null, 2));
 
@@ -1552,6 +1591,7 @@ function inspectSourceContentDigest() {
     "apps/web/src/aos-wide-product-design-ui-react-runtime.ts",
     "apps/web/src/aos-wide-product-design-view.ts",
     "apps/web/src/design-system-bridge.ts",
+    "apps/web/src/static-component-registry.ts",
     "apps/web/test/cockpit-view.test.mjs",
     "apps/api/test/service-smoke.test.mjs",
     "packages/db/src/runtime-fixture.ts",
@@ -1809,6 +1849,120 @@ function inspectNoOverclaim(html) {
   };
 }
 
+function inspectDesignSystemCertification() {
+  const dsHead = execFileSync("git", ["-C", designSystemRoot, "rev-parse", "HEAD"], { encoding: "utf8" }).trim();
+  const receiptPaths = [
+    "docs/verification/internal-alpha/aos-served-surface-standard-proof.json",
+    "docs/verification/internal-alpha/aos-served-surface-standard-proof.md",
+    "docs/verification/internal-alpha/visual-baseline-manifest.json",
+    "docs/verification/internal-alpha/intentional-diff-manifest.json",
+    "docs/verification/internal-alpha/browser-proof-summary.json",
+    "docs/verification/internal-alpha-hardening-proof.json"
+  ];
+  const receiptReadbacks = receiptPaths.map((path) => readDesignSystemReceipt(path));
+  const standardProof = readDesignSystemJson("docs/verification/internal-alpha/aos-served-surface-standard-proof.json");
+  const hardeningProof = readDesignSystemJson("docs/verification/internal-alpha-hardening-proof.json");
+  const visualBaseline = readDesignSystemJson("docs/verification/internal-alpha/visual-baseline-manifest.json");
+  const intentionalDiff = readDesignSystemJson("docs/verification/internal-alpha/intentional-diff-manifest.json");
+  const browserProof = readDesignSystemJson("docs/verification/internal-alpha/browser-proof-summary.json");
+
+  const standardCoverage = Object.values(servedSurfaceStandardMap).map((expected) => {
+    const standard = standardProof.standardReadback?.find((item) => item.standardId === expected.standardId);
+    const visualBaselineText = JSON.stringify(visualBaseline);
+    const intentionalDiffText = JSON.stringify(intentionalDiff);
+    const browserProofText = JSON.stringify(browserProof);
+    return {
+      ...expected,
+      standardProofPresent: Boolean(standard),
+      storyRegistered: standard?.storyRegistered === true,
+      visualStandardMarkerPresent: standard?.visualStandardMarkerPresent === true,
+      servedSurfaceMarkerPresent: standard?.servedSurfaceMarkerPresent === true,
+      visualBaselinePresent: visualBaselineText.includes(expected.storyId),
+      intentionalDiffPresent: intentionalDiffText.includes(expected.storyId),
+      browserProofPresent: browserProofText.includes(expected.storyId) || browserProofText.includes(expected.storybookId)
+    };
+  });
+  const exceptionCoverage = acceptedExceptionRecordIds.map((id) => {
+    const exception = standardProof.exceptionReadback?.find((item) => item.id === id);
+    return {
+      id,
+      present: Boolean(exception),
+      disposition: exception?.disposition ?? "missing",
+      broadVisualSystemException: exception?.broadVisualSystemException ?? null
+    };
+  });
+  const failures = [];
+  if (dsHead !== "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3") failures.push("design_system_head_mismatch");
+  if (aosDesignSystemConsumerBridge.designSystemSourceHead !== dsHead) failures.push("aos_bridge_design_system_head_not_current");
+  if (standardProof.ok !== true) failures.push("aos_served_surface_standard_proof_not_ok");
+  if (hardeningProof.ok !== true) failures.push("internal_alpha_hardening_proof_not_ok");
+  if (browserProof.ok !== true) failures.push("browser_proof_summary_not_ok");
+  for (const id of certifiedDsStandardIds) {
+    if (!standardProof.acceptedDsStandardIds?.includes(id)) failures.push(`certified_standard_missing:${id}`);
+    if (!hardeningProof.aosServedSurfaceStandardIds?.includes(id)) failures.push(`hardening_standard_missing:${id}`);
+  }
+  for (const readback of standardCoverage) {
+    for (const [key, value] of Object.entries(readback)) {
+      if (key.endsWith("Present") && value !== true) failures.push(`standard_coverage_missing:${readback.standardId}:${key}`);
+    }
+    if (readback.storyRegistered !== true) failures.push(`standard_story_not_registered:${readback.standardId}`);
+    if (readback.visualStandardMarkerPresent !== true) failures.push(`standard_visual_marker_missing:${readback.standardId}`);
+    if (readback.servedSurfaceMarkerPresent !== true) failures.push(`standard_surface_marker_missing:${readback.standardId}`);
+  }
+  for (const readback of exceptionCoverage) {
+    if (!readback.present) failures.push(`exception_record_missing:${readback.id}`);
+    if (readback.broadVisualSystemException !== false) failures.push(`exception_scope_too_broad:${readback.id}`);
+  }
+  if (receiptReadbacks.some((receipt) => !receipt.exists)) failures.push("design_system_certification_receipt_missing");
+  if (standardProof.noOverclaim?.productAdoptionClaimed !== false) failures.push("ds_standard_claims_product_adoption");
+  if (standardProof.noOverclaim?.productAcceptanceClaimed !== false) failures.push("ds_standard_claims_product_acceptance");
+  if (hardeningProof.claimBoundaries?.syntheticFixturesOnly !== true) failures.push("ds_hardening_synthetic_fixture_boundary_missing");
+
+  return {
+    ok: failures.length === 0,
+    designSystemHead: dsHead,
+    expectedDesignSystemHead: "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
+    authorityDisposition: "consume_existing_certified_DS_4d03f4b_standards",
+    standardAuthoringRoute: standardProof.route,
+    hardeningRoute: hardeningProof.route,
+    consumedDsStandardIds: certifiedDsStandardIds,
+    consumedExceptionRecords: acceptedExceptionRecordIds,
+    standardCoverage,
+    exceptionCoverage,
+    receiptReadbacks,
+    productVisibleCopyProofDisposition: {
+      source: aosDesignSystemConsumerBridge.productVisibleCopyProofSource,
+      dsSyntheticStorybookVocabularyDisposition: aosDesignSystemConsumerBridge.designSystemSyntheticStorybookVocabularyDisposition,
+      aosProductVisibleCopyOk: productVisibleCopyReadback.ok,
+      aosProductVisibleCopySurfaceReadbacks: productVisibleCopyReadback.surfaceReadbacks
+    },
+    failures
+  };
+}
+
+function readDesignSystemJson(path) {
+  return JSON.parse(readFileSync(join(designSystemRoot, path), "utf8"));
+}
+
+function readDesignSystemReceipt(path) {
+  const absolutePath = join(designSystemRoot, path);
+  if (!existsSync(absolutePath)) {
+    return {
+      path: `../TCRN-Design-System/${path}`,
+      exists: false,
+      bytes: 0,
+      sha256: null
+    };
+  }
+  const content = readFileSync(absolutePath);
+  return {
+    path: `../TCRN-Design-System/${path}`,
+    exists: true,
+    bytes: content.length,
+    sha256: createHash("sha256").update(content).digest("hex")
+  };
+}
+
 function inspectProductVisibleCopy(surfaces) {
   const bannedTerms = [
     { id: "readback", pattern: /\breadback\b/i },
@@ -2000,6 +2154,12 @@ function markdownReceipt(summary) {
     + `- Marker-only NavItems in cockpit nav: ${summary.navRuntimeReadback.markerOnlyNavItemCount}\n`
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`
+    + `- Design System certification head: ${summary.designSystemCertificationReadback.designSystemHead}\n`
+    + `- Consumed DS standard IDs: ${summary.designSystemCertificationReadback.consumedDsStandardIds.join(", ")}\n`
+    + `- Consumed DS exception records: ${summary.designSystemCertificationReadback.consumedExceptionRecords.join(", ")}\n`
+    + `- Design System certification failures: ${summary.designSystemCertificationReadback.failures.length}\n`
+    + `- AOS product-visible copy proof source: ${summary.designSystemCertificationReadback.productVisibleCopyProofDisposition.source}\n`
+    + `- DS synthetic Storybook vocabulary disposition: ${summary.designSystemCertificationReadback.productVisibleCopyProofDisposition.dsSyntheticStorybookVocabularyDisposition}\n\n`
     + `- AOS runtime sr-only / mobile TableShell style proof ok: ${summary.visualStyleReadback.ok}\n`
     + `- Product-visible internal-copy hits: ${summary.productVisibleCopyReadback.surfaceReadbacks.reduce((count, readback) => count + readback.hits.length, 0)}\n`
     + `${shellSidebarRows}\n`

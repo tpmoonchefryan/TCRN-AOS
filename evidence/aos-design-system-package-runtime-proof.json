@@ -1,11 +1,11 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_full_rebuild_planning_and_implementation_packet",
-  "sourceHead": "6202f5b530b16cbcb41c0e7546c7ed029de5f2f8",
+  "sourceHead": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
   "claimScope": {
     "implementationKind": "aos_product_frontend_rebuilt_registered_design_system_runtime",
     "packageBackedReactRuntimeRendering": "operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild",
-    "storybookVisualStyleParity": "navitem_disabled_reason_work_index_selected_detail_gate_readback_stage_phase_topbar_checkpoint_claim_risk_shell_sidebar_typography_docs_readiness_and_aos_wide_component_reference_only",
+    "storybookVisualStyleParity": "consumed_ds_4d03f4b_certified_visual_standard_receipts_for_served_scope",
     "broadUiReactRuntimeMigration": false,
     "docsReadinessPackageRuntimeRendering": true,
     "aosWidePackageRuntimeRendering": true,
@@ -16,9 +16,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "6202f5b530b16cbcb41c0e7546c7ed029de5f2f8",
+    "sourceHeadAtProofRun": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "831ace89d56151fcac37d540e49def63a3a0e1dc2b8e0766805c6c120d95a4c2",
+    "sourceContentDigest": "ddcc136392db423f4ec7c6538448eb6439cfa04b297e8f48b763a77ac9d65819",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
@@ -30,6 +30,7 @@
       "apps/web/src/aos-wide-product-design-ui-react-runtime.ts",
       "apps/web/src/aos-wide-product-design-view.ts",
       "apps/web/src/design-system-bridge.ts",
+      "apps/web/src/static-component-registry.ts",
       "apps/web/test/cockpit-view.test.mjs",
       "apps/api/test/service-smoke.test.mjs",
       "packages/db/src/runtime-fixture.ts",
@@ -48,7 +49,7 @@
     ]
   },
   "designSystemReadback": {
-    "sourceHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
+    "sourceHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
     "uiReactPackage": "@tcrn/ui-react",
     "uiReactPackageSpecifier": "file:../TCRN-Design-System/packages/ui-react",
     "runtimeSurface": "aos_product_frontend_rebuilt_registered_design_system_runtime",
@@ -77,6 +78,23 @@
       "GateReadinessPanel",
       "ReadbackPanel",
       "EvidenceStrip"
+    ],
+    "servedSurfaceStandardIds": {
+      "operationsCockpit": "ds-aos-operations-cockpit-v1",
+      "docsSearchReleaseReadiness": "ds-aos-docs-readiness-v1",
+      "aosWideProductDesign": "ds-aos-target-set-v1"
+    },
+    "acceptedExceptionRecords": [
+      "aos-brand-lockup-product-specific",
+      "aos-data-semantics-product-owned"
+    ],
+    "certificationReceipts": [
+      "../TCRN-Design-System/docs/verification/internal-alpha/aos-served-surface-standard-proof.json",
+      "../TCRN-Design-System/docs/verification/internal-alpha/aos-served-surface-standard-proof.md",
+      "../TCRN-Design-System/docs/verification/internal-alpha/visual-baseline-manifest.json",
+      "../TCRN-Design-System/docs/verification/internal-alpha/intentional-diff-manifest.json",
+      "../TCRN-Design-System/docs/verification/internal-alpha/browser-proof-summary.json",
+      "../TCRN-Design-System/docs/verification/internal-alpha-hardening-proof.json"
     ]
   },
   "dependencyReadback": {
@@ -303,7 +321,7 @@
     "packageRuntimeFilterBarPresent": true,
     "packageRuntimeTableShellPresent": true,
     "packageRuntimeEmptyStatePresent": true,
-    "sampleRenderedHtmlSha256": "41687011b6eef19fbcea30eb8fa0f38389722fd5027794bd7329a69d31cdf51d",
+    "sampleRenderedHtmlSha256": "47a5c0e5b2cc6a5d92de47bf6ed3bebffc702df8fb3fd56e019c3e64234fb60f",
     "failures": []
   },
   "detailDrawerRuntimeReadback": {
@@ -537,7 +555,7 @@
     "activeNavItemCount": 1,
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "c9724fc7183ac5867b18f7d6df21b51d635e82fe646f86e164ab005829894ab4",
+    "sampleRenderedHtmlSha256": "98e5f9a6793c0cfb2638fba7d275789da8d61fce9c0e8e1e6d1524bedec84548",
     "failures": []
   },
   "aosWideTargetSetRuntimeReadback": {
@@ -605,7 +623,7 @@
     "disabledButtonFailures": [],
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "1b7589c44d0e4b93ad97dc1efc740dfeb2c8a044561580cccb67ff36ff46991a",
+    "sampleRenderedHtmlSha256": "c1605bea94a7b71f638261114510ad96954287230807149183ee578ee33f9a5a",
     "failures": []
   },
   "fullDocumentAccessibilityReadback": {
@@ -673,6 +691,142 @@
       ],
       "ok": true
     }
+  },
+  "designSystemCertificationReadback": {
+    "ok": true,
+    "designSystemHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
+    "expectedDesignSystemHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
+    "authorityDisposition": "consume_existing_certified_DS_4d03f4b_standards",
+    "standardAuthoringRoute": "route_tcrn_design_system_aos_served_surface_visual_standard_component_registration_authoring_after_f728e9c",
+    "hardeningRoute": "route_tcrn_design_system_internal_alpha_hardening_proof_implementation",
+    "consumedDsStandardIds": [
+      "ds-aos-operations-cockpit-v1",
+      "ds-aos-docs-readiness-v1",
+      "ds-aos-target-set-v1"
+    ],
+    "consumedExceptionRecords": [
+      "aos-brand-lockup-product-specific",
+      "aos-data-semantics-product-owned"
+    ],
+    "standardCoverage": [
+      {
+        "surface": "operations-cockpit",
+        "standardId": "ds-aos-operations-cockpit-v1",
+        "storyId": "aos-operations-cockpit-standard",
+        "storybookId": "tcrn-design-system-patterns--aos-operations-cockpit-standard",
+        "standardProofPresent": true,
+        "storyRegistered": true,
+        "visualStandardMarkerPresent": true,
+        "servedSurfaceMarkerPresent": true,
+        "visualBaselinePresent": true,
+        "intentionalDiffPresent": true,
+        "browserProofPresent": true
+      },
+      {
+        "surface": "docs-search-release-readiness",
+        "standardId": "ds-aos-docs-readiness-v1",
+        "storyId": "aos-docs-readiness-standard",
+        "storybookId": "tcrn-design-system-patterns--aos-docs-readiness-standard",
+        "standardProofPresent": true,
+        "storyRegistered": true,
+        "visualStandardMarkerPresent": true,
+        "servedSurfaceMarkerPresent": true,
+        "visualBaselinePresent": true,
+        "intentionalDiffPresent": true,
+        "browserProofPresent": true
+      },
+      {
+        "surface": "aos-wide-product-design",
+        "standardId": "ds-aos-target-set-v1",
+        "storyId": "aos-product-design-target-set-standard",
+        "storybookId": "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+        "standardProofPresent": true,
+        "storyRegistered": true,
+        "visualStandardMarkerPresent": true,
+        "servedSurfaceMarkerPresent": true,
+        "visualBaselinePresent": true,
+        "intentionalDiffPresent": true,
+        "browserProofPresent": true
+      }
+    ],
+    "exceptionCoverage": [
+      {
+        "id": "aos-brand-lockup-product-specific",
+        "present": true,
+        "disposition": "product_specific_exception",
+        "broadVisualSystemException": false
+      },
+      {
+        "id": "aos-data-semantics-product-owned",
+        "present": true,
+        "disposition": "product_specific_exception",
+        "broadVisualSystemException": false
+      }
+    ],
+    "receiptReadbacks": [
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha/aos-served-surface-standard-proof.json",
+        "exists": true,
+        "bytes": 7949,
+        "sha256": "df79288f437cc71cd042352df9a763ade87707e81c234f9d8d2563c658c8081d"
+      },
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha/aos-served-surface-standard-proof.md",
+        "exists": true,
+        "bytes": 3010,
+        "sha256": "b517158604e7befbe66ac976c9373057eed23ff011f2b6c78182d02700f6fa8a"
+      },
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha/visual-baseline-manifest.json",
+        "exists": true,
+        "bytes": 44749,
+        "sha256": "c0872dcfa4788e4e4f74eab0b2d91cfaa4acb1b539151501ea87c058713dcfd2"
+      },
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha/intentional-diff-manifest.json",
+        "exists": true,
+        "bytes": 35779,
+        "sha256": "b5bcfc6fea4946350e4388a2f662e169257e9be8bab85f0caf6be976fdadfad9"
+      },
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha/browser-proof-summary.json",
+        "exists": true,
+        "bytes": 58513,
+        "sha256": "2f9c05db128678e713ec2900ae758c80d28ed9779573b7d3954b924c3a9a0346"
+      },
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha-hardening-proof.json",
+        "exists": true,
+        "bytes": 2796,
+        "sha256": "f97d3d31c55c619d5654c8abd235a81eb8832a74c24e474dda9fdf421e482428"
+      }
+    ],
+    "productVisibleCopyProofDisposition": {
+      "source": "AOS served Operations Cockpit, Docs Readiness, and AOS-wide product HTML/accessibility text only",
+      "dsSyntheticStorybookVocabularyDisposition": "accepted_as_design_system_fixture_evidence_not_aos_customer_copy_proof",
+      "aosProductVisibleCopyOk": true,
+      "aosProductVisibleCopySurfaceReadbacks": [
+        {
+          "surface": "operationsCockpit",
+          "ok": true,
+          "hits": [],
+          "scannedTextLength": 5446
+        },
+        {
+          "surface": "docsReadiness",
+          "ok": true,
+          "hits": [],
+          "scannedTextLength": 2663
+        },
+        {
+          "surface": "aosWideProductDesign",
+          "ok": true,
+          "hits": [],
+          "scannedTextLength": 8087
+        }
+      ]
+    },
+    "failures": []
   },
   "noOverclaimReadback": {
     "ok": true,

@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join, relative } from "node:path";
@@ -13,6 +14,7 @@ import { renderOperationsCockpitHtml } from "../dist/apps/web/src/cockpit-view.j
 import { renderDocsSearchReleaseReadinessHtml } from "../dist/apps/web/src/docs-readiness-view.js";
 
 const repoRoot = process.cwd();
+const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const designSystemRoot = join(repoRoot, "..", "TCRN-Design-System");
 const designSystemRegistrySourcePath = join(designSystemRoot, "packages/ui-react/src/index.tsx");
 const designSystemStylesheetDraftPath = join(designSystemRoot, "packages/ui-react/src/styles.css");
@@ -100,6 +102,7 @@ const browserReadbackPathLeakage = inspectBrowserReadbackPathLeakage(browserSumm
 const packageRuntimeReadback = inspectPackageRuntimeReadback(surfaces.find((surface) => surface.id === "operations-cockpit"));
 const docsReadinessPackageRuntimeReadback = inspectDocsReadinessPackageRuntimeReadback(surfaces.find((surface) => surface.id === "docs-search-release-readiness"));
 const aosWidePackageRuntimeReadback = inspectAosWidePackageRuntimeReadback(surfaces.find((surface) => surface.id === "aos-wide-product-design"));
+const designSystemCertificationReadback = inspectDesignSystemCertification();
 const proofSelfChecks = runProofSelfChecks();
 
 const ok = localRegistryDiff.length === 0
@@ -109,6 +112,7 @@ const ok = localRegistryDiff.length === 0
   && packageRuntimeReadback.ok
   && docsReadinessPackageRuntimeReadback.ok
   && aosWidePackageRuntimeReadback.ok
+  && designSystemCertificationReadback.ok
   && browserReadbackPathLeakage.present === true
   && browserReadbackPathLeakage.absolutePathHits.length === 0
   && proofSelfChecks.every((check) => check.passed);
@@ -116,12 +120,13 @@ const ok = localRegistryDiff.length === 0
 const summary = {
   ok,
   route: "route_tcrn_aos_design_system_frontend_rebuild_registered_component_proof",
+  sourceHead,
   registrySource: relative(repoRoot, designSystemRegistrySourcePath),
   designSystemBasis,
   claimScope: {
     implementationKind: "mixed_static_renderer_registered_component_metadata_with_operations_cockpit_completion_docs_readiness_and_aos_wide_target_set_package_runtime",
     packageBackedReactRuntimeRendering: "operations_cockpit_completion_docs_readiness_search_release_and_aos_wide_target_set_runtime_adoption",
-    storybookVisualStyleParity: "not_claimed_by_registered_component_proof",
+    storybookVisualStyleParity: "consumed_ds_4d03f4b_certified_visual_standard_receipts_for_served_scope",
     docsReadinessPackageRuntimeRendering: true,
     aosWidePackageRuntimeRendering: true,
     productAcceptanceReady: false,
@@ -132,6 +137,7 @@ const summary = {
   packageRuntimeReadback,
   docsReadinessPackageRuntimeReadback,
   aosWidePackageRuntimeReadback,
+  designSystemCertificationReadback,
   browserReadbackPathLeakage,
   proofSelfChecks,
   noOverclaim: {
@@ -319,6 +325,68 @@ function findAbsoluteLocalPathHits(raw) {
     Array.from(raw.matchAll(/(?:file:\/\/)?(?:\/Users|\/private|\/Volumes|\/var\/folders|\/tmp)\/[^\s"',)\\]+/g))
       .map((match) => match[0])
   )).sort();
+}
+
+function inspectDesignSystemCertification() {
+  const expectedHead = "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3";
+  const expectedStandards = [
+    "ds-aos-operations-cockpit-v1",
+    "ds-aos-docs-readiness-v1",
+    "ds-aos-target-set-v1"
+  ];
+  const expectedExceptions = [
+    "aos-brand-lockup-product-specific",
+    "aos-data-semantics-product-owned"
+  ];
+  const receiptPaths = [
+    "docs/verification/internal-alpha/aos-served-surface-standard-proof.json",
+    "docs/verification/internal-alpha/visual-baseline-manifest.json",
+    "docs/verification/internal-alpha/intentional-diff-manifest.json",
+    "docs/verification/internal-alpha/browser-proof-summary.json",
+    "docs/verification/internal-alpha-hardening-proof.json"
+  ];
+  const dsHead = git(["rev-parse", "HEAD"], designSystemRoot).trim();
+  const standardProof = JSON.parse(readFileSync(join(designSystemRoot, "docs/verification/internal-alpha/aos-served-surface-standard-proof.json"), "utf8"));
+  const hardeningProof = JSON.parse(readFileSync(join(designSystemRoot, "docs/verification/internal-alpha-hardening-proof.json"), "utf8"));
+  const receiptReadbacks = receiptPaths.map((path) => {
+    const content = readFileSync(join(designSystemRoot, path));
+    return {
+      path: relative(repoRoot, join(designSystemRoot, path)),
+      bytes: content.length,
+      sha256: createHash("sha256").update(content).digest("hex")
+    };
+  });
+  const exceptionCoverage = expectedExceptions.map((id) => {
+    const record = standardProof.exceptionReadback?.find((item) => item.id === id);
+    return {
+      id,
+      present: Boolean(record),
+      broadVisualSystemException: record?.broadVisualSystemException ?? null
+    };
+  });
+  const failures = [];
+  if (dsHead !== expectedHead) failures.push("design_system_head_mismatch");
+  if (standardProof.ok !== true) failures.push("aos_served_surface_standard_proof_not_ok");
+  if (hardeningProof.ok !== true) failures.push("internal_alpha_hardening_proof_not_ok");
+  for (const id of expectedStandards) {
+    if (!standardProof.acceptedDsStandardIds?.includes(id)) failures.push(`certified_standard_missing:${id}`);
+    if (!hardeningProof.aosServedSurfaceStandardIds?.includes(id)) failures.push(`hardening_standard_missing:${id}`);
+  }
+  for (const record of exceptionCoverage) {
+    if (!record.present) failures.push(`exception_record_missing:${record.id}`);
+    if (record.broadVisualSystemException !== false) failures.push(`exception_scope_too_broad:${record.id}`);
+  }
+  return {
+    ok: failures.length === 0,
+    designSystemHead: dsHead,
+    expectedDesignSystemHead: expectedHead,
+    consumedDsStandardIds: expectedStandards,
+    consumedExceptionRecords: expectedExceptions,
+    exceptionCoverage,
+    receiptReadbacks,
+    productVisibleCopyBoundary: "AOS product-visible/accessibility-visible copy proof remains owned by AOS served surface proofs, not DS synthetic Storybook fixtures.",
+    failures
+  };
 }
 
 function inspectDesignSystemBasis() {

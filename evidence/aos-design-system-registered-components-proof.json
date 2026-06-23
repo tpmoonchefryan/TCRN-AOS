@@ -1,9 +1,10 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_rebuild_registered_component_proof",
+  "sourceHead": "b3cf6898e641c854eeab766e7bdb9cbea8692aba",
   "registrySource": "../TCRN-Design-System/packages/ui-react/src/index.tsx",
   "designSystemBasis": {
-    "trackedHead": "b0c00828a813d3c62392eb6e53d7d6b85b6affeb",
+    "trackedHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
     "registrySourcePath": "../TCRN-Design-System/packages/ui-react/src/index.tsx",
     "registrySourceTracked": true,
     "unacceptedStylesheetDraft": {
@@ -17,7 +18,7 @@
   "claimScope": {
     "implementationKind": "mixed_static_renderer_registered_component_metadata_with_operations_cockpit_completion_docs_readiness_and_aos_wide_target_set_package_runtime",
     "packageBackedReactRuntimeRendering": "operations_cockpit_completion_docs_readiness_search_release_and_aos_wide_target_set_runtime_adoption",
-    "storybookVisualStyleParity": "not_claimed_by_registered_component_proof",
+    "storybookVisualStyleParity": "consumed_ds_4d03f4b_certified_visual_standard_receipts_for_served_scope",
     "docsReadinessPackageRuntimeRendering": true,
     "aosWidePackageRuntimeRendering": true,
     "productAcceptanceReady": false,
@@ -130,7 +131,7 @@
     {
       "id": "aos-wide-product-design",
       "path": "apps/web/static/aos-wide-product-design.html",
-      "componentCount": 135,
+      "componentCount": 136,
       "registeredComponents": [
         "Badge",
         "Button",
@@ -547,6 +548,61 @@
     "surfaceRowFailureCount": 0,
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "packageBackedReactRuntimeShellMarkerPresent": true,
+    "failures": []
+  },
+  "designSystemCertificationReadback": {
+    "ok": true,
+    "designSystemHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
+    "expectedDesignSystemHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
+    "consumedDsStandardIds": [
+      "ds-aos-operations-cockpit-v1",
+      "ds-aos-docs-readiness-v1",
+      "ds-aos-target-set-v1"
+    ],
+    "consumedExceptionRecords": [
+      "aos-brand-lockup-product-specific",
+      "aos-data-semantics-product-owned"
+    ],
+    "exceptionCoverage": [
+      {
+        "id": "aos-brand-lockup-product-specific",
+        "present": true,
+        "broadVisualSystemException": false
+      },
+      {
+        "id": "aos-data-semantics-product-owned",
+        "present": true,
+        "broadVisualSystemException": false
+      }
+    ],
+    "receiptReadbacks": [
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha/aos-served-surface-standard-proof.json",
+        "bytes": 7949,
+        "sha256": "df79288f437cc71cd042352df9a763ade87707e81c234f9d8d2563c658c8081d"
+      },
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha/visual-baseline-manifest.json",
+        "bytes": 44749,
+        "sha256": "c0872dcfa4788e4e4f74eab0b2d91cfaa4acb1b539151501ea87c058713dcfd2"
+      },
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha/intentional-diff-manifest.json",
+        "bytes": 35779,
+        "sha256": "b5bcfc6fea4946350e4388a2f662e169257e9be8bab85f0caf6be976fdadfad9"
+      },
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha/browser-proof-summary.json",
+        "bytes": 58513,
+        "sha256": "2f9c05db128678e713ec2900ae758c80d28ed9779573b7d3954b924c3a9a0346"
+      },
+      {
+        "path": "../TCRN-Design-System/docs/verification/internal-alpha-hardening-proof.json",
+        "bytes": 2796,
+        "sha256": "f97d3d31c55c619d5654c8abd235a81eb8832a74c24e474dda9fdf421e482428"
+      }
+    ],
+    "productVisibleCopyBoundary": "AOS product-visible/accessibility-visible copy proof remains owned by AOS served surface proofs, not DS synthetic Storybook fixtures.",
     "failures": []
   },
   "browserReadbackPathLeakage": {

@@ -1,12 +1,12 @@
 # AOS Design System Package Runtime Proof
 
 - Route: route_tcrn_aos_design_system_frontend_full_rebuild_planning_and_implementation_packet
-- Source head at proof run: 6202f5b530b16cbcb41c0e7546c7ed029de5f2f8
+- Source head at proof run: b3cf6898e641c854eeab766e7bdb9cbea8692aba
 - Source freshness strategy: source_content_digest_for_mutating_receipts
-- Source content digest: 831ace89d56151fcac37d540e49def63a3a0e1dc2b8e0766805c6c120d95a4c2
+- Source content digest: ddcc136392db423f4ec7c6538448eb6439cfa04b297e8f48b763a77ac9d65819
 - Scope: aos_product_frontend_rebuilt_registered_design_system_runtime
 - Runtime rendering claim: operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild
-- Design System source head: b0c00828a813d3c62392eb6e53d7d6b85b6affeb
+- Design System source head: 4d03f4b4e5079f5c49a775f0bc613cfd3889fae3
 - UI React package: @tcrn/ui-react (file:../TCRN-Design-System/packages/ui-react)
 - Package runtime Shell/Sidebar components: LinkButton, NavGroup, NavItem, SideNav, Surface, Text
 - Package runtime Claim/Risk components: Badge, EvidenceStrip, StatusBadge
@@ -31,6 +31,13 @@
 - Marker-only NavItems in cockpit nav: 0
 - Deep import hits: 0
 - Storybook NavItem disabled reason reference ok: true
+
+- Design System certification head: 4d03f4b4e5079f5c49a775f0bc613cfd3889fae3
+- Consumed DS standard IDs: ds-aos-operations-cockpit-v1, ds-aos-docs-readiness-v1, ds-aos-target-set-v1
+- Consumed DS exception records: aos-brand-lockup-product-specific, aos-data-semantics-product-owned
+- Design System certification failures: 0
+- AOS product-visible copy proof source: AOS served Operations Cockpit, Docs Readiness, and AOS-wide product HTML/accessibility text only
+- DS synthetic Storybook vocabulary disposition: accepted_as_design_system_fixture_evidence_not_aos_customer_copy_proof
 
 - AOS runtime sr-only / mobile TableShell style proof ok: true
 - Product-visible internal-copy hits: 0

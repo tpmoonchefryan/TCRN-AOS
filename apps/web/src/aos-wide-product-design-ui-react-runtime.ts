@@ -139,6 +139,13 @@ function AOSWideProductDesignRuntimeSurface({
       ),
       "data-design-system-consumer":
         aosDesignSystemConsumerBridge.adoptionPosture,
+      "data-design-system-source-head":
+        aosDesignSystemConsumerBridge.designSystemSourceHead,
+      "data-design-system-certified-standard-id":
+        aosDesignSystemConsumerBridge.servedSurfaceStandardIds
+          .aosWideProductDesign,
+      "data-design-system-exception-records":
+        aosDesignSystemConsumerBridge.acceptedExceptionRecords.join(","),
       "data-package-backed-react-runtime-rendering": "true",
       "data-package-runtime-component": "Surface",
       "data-package-runtime-component-scope": runtimeScope,
@@ -254,7 +261,7 @@ function renderTopbar(model: AOSWideProductDesignModel): ReactNode {
     actions: [
       createElement(
         Field,
-        { key: "target", label: "Target path", hint: targetPathDisabledReason },
+        { key: "target", label: "Target path" },
         createElement(
           Select,
           {
@@ -262,6 +269,7 @@ function renderTopbar(model: AOSWideProductDesignModel): ReactNode {
             name: "target-path",
             value: model.targetPathReadback.aosWideTarget,
             disabled: true,
+            disabledReason: targetPathDisabledReason,
             title: targetPathDisabledReason,
             options: [
               {
