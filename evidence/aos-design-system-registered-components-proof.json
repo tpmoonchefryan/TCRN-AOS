@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_rebuild_registered_component_proof",
-  "sourceHead": "5c521ce4b6f60e4639be3c5ea8f1127469d5b125",
+  "sourceHead": "ad6da052c84866f5457d9be10188bd01c607730e",
   "registrySource": "../TCRN-Design-System/packages/ui-react/src/index.tsx",
   "designSystemBasis": {
     "trackedHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
@@ -9,9 +9,9 @@
     "registrySourceTracked": true,
     "unacceptedStylesheetDraft": {
       "path": "../TCRN-Design-System/packages/ui-react/src/styles.css",
-      "present": true,
+      "present": false,
       "tracked": false,
-      "gitStatus": "?? packages/ui-react/src/styles.css",
+      "gitStatus": "absent_or_clean",
       "disposition": "unaccepted_context_only_not_used_as_registry_truth"
     }
   },

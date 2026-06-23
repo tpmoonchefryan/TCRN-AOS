@@ -10,9 +10,10 @@ console.log(JSON.stringify({
   service: "tcrn-aos-owner-trial",
   url: service.url,
   routes: {
-    cockpit: `${service.url}/`,
-    projectWorkspace: `${service.url}/project-workspace`,
-    docsReadiness: `${service.url}/docs-readiness`,
+	    cockpit: `${service.url}/`,
+	    projectWorkspace: `${service.url}/project-workspace`,
+	    initiativeDetail: `${service.url}/initiative-detail`,
+	    docsReadiness: `${service.url}/docs-readiness`,
     productDesign: `${service.url}/aos-wide-product-design`,
     health: `${service.url}/health`,
     policy: `${service.url}/policy`,

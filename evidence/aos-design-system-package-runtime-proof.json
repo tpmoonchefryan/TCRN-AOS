@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_full_rebuild_planning_and_implementation_packet",
-  "sourceHead": "5c521ce4b6f60e4639be3c5ea8f1127469d5b125",
+  "sourceHead": "ad6da052c84866f5457d9be10188bd01c607730e",
   "claimScope": {
     "implementationKind": "aos_product_frontend_rebuilt_registered_design_system_runtime",
     "packageBackedReactRuntimeRendering": "operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild",
@@ -16,9 +16,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "5c521ce4b6f60e4639be3c5ea8f1127469d5b125",
+    "sourceHeadAtProofRun": "ad6da052c84866f5457d9be10188bd01c607730e",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "a77ddc9ad1460e82d13fe14a89b570950a6b8da25ce207dc5cb8f75844e3bf5d",
+    "sourceContentDigest": "9a8c9d7c2c305a00566fe4723ef79e499b9f848772fda179f65eaba74f54c485",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
@@ -82,6 +82,8 @@
     "servedSurfaceStandardIds": {
       "operationsCockpit": "ds-aos-operations-cockpit-v1",
       "docsSearchReleaseReadiness": "ds-aos-docs-readiness-v1",
+      "projectWorkspace": "ds-aos-target-set-v1",
+      "initiativeDetail": "ds-aos-target-set-v1",
       "aosWideProductDesign": "ds-aos-target-set-v1"
     },
     "acceptedExceptionRecords": [

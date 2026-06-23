@@ -9,6 +9,7 @@ import {
 import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
 import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
+import { createInitiativeDetailModel, renderInitiativeDetailHtml } from "../../web/src/initiative-detail-view.js";
 import { createProjectWorkspaceModel, renderProjectWorkspaceHtml } from "../../web/src/project-workspace-view.js";
 import { apiHealthReadback, createAosApiApp } from "./index.js";
 
@@ -69,6 +70,10 @@ function handleRequest(
   }
   if (path === "/project-workspace" || path === "/project-workspace.html" || path === "/apps/web/static/project-workspace.html") {
     sendHtml(request, response, renderProjectWorkspaceHtml(createProjectWorkspaceModel(createServiceCockpitReadModel(runtime))));
+    return;
+  }
+  if (path === "/initiative-detail" || path === "/initiative-detail.html" || path === "/apps/web/static/initiative-detail.html") {
+    sendHtml(request, response, renderInitiativeDetailHtml(createInitiativeDetailModel(createServiceCockpitReadModel(runtime, url))));
     return;
   }
   if (path === "/aos-wide-product-design" || path === "/aos-wide-product-design.html" || path === "/apps/web/static/aos-wide-product-design.html") {
