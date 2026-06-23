@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_full_rebuild_parent_objective_remaining_surface_component_gap_audit_repair_implementation",
-  "sourceHead": "249a56ba2d488a3665c3e77fe7e3f009dfd100ef",
+  "sourceHead": "b546c7dc99bcc9e518135c9edfb299ff81b7892d",
   "canonicalParentObjective": {
     "ownerDirective": "不再做任何迁移，移除AOS现有所有前端组件，按照Design System要求和组件重建UI",
     "disposition": "parent_objective_remaining_surface_component_gap_audit"
@@ -97,8 +97,8 @@
         "apps/web/src/cockpit-ui-react-runtime.ts",
         "apps/web/src/cockpit.ts"
       ],
-      "staticSha256": "a93a7f7d74883d540799d83ec25b9d8906377185e7d8b8ffd1a15809b016306b",
-      "renderedSha256": "a93a7f7d74883d540799d83ec25b9d8906377185e7d8b8ffd1a15809b016306b",
+      "staticSha256": "98c7f735825eab63e24cd2f5b399c07d7ad883a4ad405183c6d938800d28049f",
+      "renderedSha256": "98c7f735825eab63e24cd2f5b399c07d7ad883a4ad405183c6d938800d28049f",
       "staticOutputCurrent": true,
       "componentInstanceCount": 105,
       "registeredComponents": [
@@ -172,7 +172,7 @@
           "slice_language"
         ],
         "hits": [],
-        "scannedTextLength": 5464
+        "scannedTextLength": 5461
       },
       "fullDocumentAccessibilityReadback": {
         "ok": true,
@@ -477,9 +477,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_parent_surface_inventory",
-    "sourceHeadAtProofRun": "249a56ba2d488a3665c3e77fe7e3f009dfd100ef",
+    "sourceHeadAtProofRun": "b546c7dc99bcc9e518135c9edfb299ff81b7892d",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "318c9f146f98ff68cb51a305de20f6eb573d96feab81850c3e1d15f33c18465d",
+    "sourceContentDigest": "3527aa877f71bc55d2a20d3c21680cd1246955a245b1f244f51057e0f601b33d",
     "sourcePaths": [
       "apps/api/src/server.ts",
       "apps/web/src/aos-wide-product-design-data.ts",

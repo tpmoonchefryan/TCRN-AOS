@@ -1,11 +1,11 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_59ah_owner_trial_service_backed_frontend_implementation_after_talia_story_breakdown",
-  "sourceHead": "6202f5b530b16cbcb41c0e7546c7ed029de5f2f8",
+  "sourceHead": "b546c7dc99bcc9e518135c9edfb299ff81b7892d",
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_owner_trial_service_browser_receipt",
-    "sourceHeadAtProofRun": "6202f5b530b16cbcb41c0e7546c7ed029de5f2f8",
+    "sourceHeadAtProofRun": "b546c7dc99bcc9e518135c9edfb299ff81b7892d",
     "exactFinalCommitHeadRequired": false,
     "sourceContentDigest": "c9246d14ac645d161c6c1fb91a3c5717d73b60d399bde48c8763370208e2543f",
     "sourcePaths": [
@@ -92,7 +92,7 @@
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 1,
-        "lastReadAt": "2026-06-22T23:19:28.250Z",
+        "lastReadAt": "2026-06-23T04:05:26.953Z",
         "selectedStoryId": "story_6a8345aeed11e98d",
         "detailId": "story_6a8345aeed11e98d",
         "detailType": "story",
@@ -117,7 +117,7 @@
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 2,
-        "lastReadAt": "2026-06-22T23:19:28.335Z",
+        "lastReadAt": "2026-06-23T04:05:27.064Z",
         "selectedStoryId": "story_6a8345aeed11e98d",
         "detailId": "story_6a8345aeed11e98d",
         "detailType": "story",
@@ -162,7 +162,7 @@
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 3,
-        "lastReadAt": "2026-06-22T23:19:28.414Z",
+        "lastReadAt": "2026-06-23T04:05:27.176Z",
         "selectedStoryId": "story_70ba04a9a97c3b47",
         "detailId": "story_70ba04a9a97c3b47",
         "detailType": "story",
@@ -175,7 +175,7 @@
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 3,
-        "lastReadAt": "2026-06-22T23:19:28.414Z",
+        "lastReadAt": "2026-06-23T04:05:27.176Z",
         "selectedStoryId": "story_70ba04a9a97c3b47",
         "detailId": "story_70ba04a9a97c3b47",
         "detailType": "story",
@@ -208,9 +208,9 @@
         "bodyScrollWidth": 1440
       },
       "screenshot": {
-        "path": "evidence/aos-owner-trial-service-backed-frontend/6202f5b530b16cbcb41c0e7546c7ed029de5f2f8/desktop-1440x900-owner-trial-service-backed.png",
-        "sha256": "ffa76244062dbbf5d844d2877efae3ca3331b0e8e518a3035cdb7a7e271641e4",
-        "bytes": 199747
+        "path": "evidence/aos-owner-trial-service-backed-frontend/b546c7dc99bcc9e518135c9edfb299ff81b7892d/desktop-1440x900-owner-trial-service-backed.png",
+        "sha256": "58e8c53fa6c594c7af70e59acbc49349765ee0b9fc20eea7557571317b196e8f",
+        "bytes": 199779
       }
     },
     {
@@ -227,7 +227,7 @@
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 1,
-        "lastReadAt": "2026-06-22T23:19:28.580Z",
+        "lastReadAt": "2026-06-23T04:05:27.342Z",
         "selectedStoryId": "story_6a8345aeed11e98d",
         "detailId": "story_6a8345aeed11e98d",
         "detailType": "story",
@@ -252,7 +252,7 @@
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 2,
-        "lastReadAt": "2026-06-22T23:19:28.648Z",
+        "lastReadAt": "2026-06-23T04:05:27.410Z",
         "selectedStoryId": "story_6a8345aeed11e98d",
         "detailId": "story_6a8345aeed11e98d",
         "detailType": "story",
@@ -297,7 +297,7 @@
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 3,
-        "lastReadAt": "2026-06-22T23:19:28.731Z",
+        "lastReadAt": "2026-06-23T04:05:27.493Z",
         "selectedStoryId": "story_70ba04a9a97c3b47",
         "detailId": "story_70ba04a9a97c3b47",
         "detailType": "story",
@@ -310,7 +310,7 @@
         "bootstrapState": "ready",
         "refreshState": "ok",
         "refreshCount": 3,
-        "lastReadAt": "2026-06-22T23:19:28.731Z",
+        "lastReadAt": "2026-06-23T04:05:27.493Z",
         "selectedStoryId": "story_70ba04a9a97c3b47",
         "detailId": "story_70ba04a9a97c3b47",
         "detailType": "story",
@@ -343,9 +343,9 @@
         "bodyScrollWidth": 390
       },
       "screenshot": {
-        "path": "evidence/aos-owner-trial-service-backed-frontend/6202f5b530b16cbcb41c0e7546c7ed029de5f2f8/mobile-390x844-owner-trial-service-backed.png",
-        "sha256": "c71b75dfc62e09446161298e015d54ad1b98ceb7109657dc7c4c55f3bd78ca58",
-        "bytes": 193072
+        "path": "evidence/aos-owner-trial-service-backed-frontend/b546c7dc99bcc9e518135c9edfb299ff81b7892d/mobile-390x844-owner-trial-service-backed.png",
+        "sha256": "4e4dcb310bf51bebe64da27a811166a145eb213e957cb6f3e456deee23541859",
+        "bytes": 192907
       }
     }
   ],
