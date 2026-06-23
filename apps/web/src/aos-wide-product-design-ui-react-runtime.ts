@@ -24,6 +24,7 @@ import {
   Text,
   TopBar,
   WorkIndex,
+  type IconName,
   type KeyValueItem,
   type TableColumn,
 } from "@tcrn/ui-react";
@@ -38,6 +39,19 @@ import type {
 } from "./aos-wide-product-design-data.js";
 
 type RuntimeDataProps = Record<`data-${string}`, string | number | boolean | undefined>;
+
+const aosWideNavIconNames: Record<SurfaceRow["id"], IconName> = {
+  "project-hierarchy": "home",
+  "ticket-drillthrough": "search",
+  "ai-employee-profile": "info",
+  "gates-owner-intent": "check",
+  "conference-minutes": "book-open",
+  "gateway-adapter": "settings",
+  "knowledge-release": "book-open",
+  "dependency-license": "package",
+  "resource-library": "database",
+  "admin-access-audit": "settings"
+};
 
 const createElement = (
   type: unknown,
@@ -223,6 +237,7 @@ function renderSidebar(model: AOSWideProductDesignModel): ReactNode {
               disabled: index !== 0,
               disabledReason: index === 0 ? undefined : disabledReason,
               "data-nav-surface": index === 0 ? surface.id : undefined,
+              iconName: aosWideNavIconNames[surface.id],
               "data-package-runtime-component": "NavItem",
               "data-package-runtime-source": packageRuntimeSource,
               "data-tcrn-component": "NavItem",

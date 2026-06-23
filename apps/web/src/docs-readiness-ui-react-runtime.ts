@@ -22,6 +22,7 @@ import {
   TableShell,
   Text,
   TopBar,
+  type IconName,
   type KeyValueItem,
   type TableColumn
 } from "@tcrn/ui-react";
@@ -68,6 +69,7 @@ interface DocsRuntimeNavItem {
   active: boolean;
   disabledReason: string;
   href: string;
+  iconName: IconName;
   label: string;
 }
 
@@ -116,11 +118,11 @@ export function renderDocsReadinessRuntimeSurface(model: DocsSearchReleaseInspec
 
 function renderSidebar(): ReactNode {
   const navItems: DocsRuntimeNavItem[] = [
-    docsNavItem("Dashboard", false),
-    docsNavItem("Cockpit", false),
-    docsNavItem("Docs Readiness", true),
-    docsNavItem("Evidence", false),
-    docsNavItem("Release Linkage", false)
+    docsNavItem("Dashboard", false, "home"),
+    docsNavItem("Cockpit", false, "panel-left-open"),
+    docsNavItem("Docs Readiness", true, "book-open"),
+    docsNavItem("Evidence", false, "check"),
+    docsNavItem("Release Linkage", false, "package")
   ];
 
   return createElement(SideNav, {
@@ -157,6 +159,7 @@ function renderSidebar(): ReactNode {
         disabled: !item.active,
         disabledReason: item.active ? undefined : item.disabledReason,
         href: item.href,
+        iconName: item.iconName,
         key: item.label,
         selected: item.active,
         "data-tcrn-component": "NavItem",
@@ -505,11 +508,12 @@ function runtimeBadge(label: string, component: "Badge", className?: string): Re
   } as ComponentProps<typeof Badge> & RuntimeDataProps, label);
 }
 
-function docsNavItem(label: string, active: boolean): DocsRuntimeNavItem {
+function docsNavItem(label: string, active: boolean, iconName: IconName): DocsRuntimeNavItem {
   return {
     active,
     disabledReason: `${label} opens when that AOS workspace is available.`,
     href: "#docs-readiness",
+    iconName,
     label
   };
 }

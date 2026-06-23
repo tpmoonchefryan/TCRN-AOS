@@ -1,0 +1,370 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_59ah_owner_trial_service_backed_frontend_implementation_after_talia_story_breakdown",
+  "sourceHead": "5c521ce4b6f60e4639be3c5ea8f1127469d5b125",
+  "sourceFreshnessReadback": {
+    "ok": true,
+    "strategy": "source_content_digest_for_owner_trial_service_browser_receipt",
+    "sourceHeadAtProofRun": "5c521ce4b6f60e4639be3c5ea8f1127469d5b125",
+    "exactFinalCommitHeadRequired": false,
+    "sourceContentDigest": "39ef2ba55185abf210c0a299623749565c06d3e73c1ed1fa0362de7eb45f00eb",
+    "sourcePaths": [
+      "apps/api/src/server.ts",
+      "apps/api/test/service-smoke.test.mjs",
+      "apps/web/src/cockpit.ts",
+      "apps/web/src/cockpit-view.ts",
+      "apps/web/src/cockpit-ui-react-runtime.ts",
+      "apps/web/test/cockpit-view.test.mjs",
+      "package.json",
+      "packages/db/src/runtime-fixture.ts",
+      "packages/db/test/runtime-fixture.test.mjs",
+      "scripts/aos-design-system-package-runtime-proof.mjs",
+      "scripts/aos-owner-trial-service-backed-frontend-proof.mjs",
+      "scripts/service-smoke.mjs"
+    ]
+  },
+  "serviceLifecycle": {
+    "loopbackOnly": true,
+    "ephemeralPort": true,
+    "stopped": true
+  },
+  "apiContract": {
+    "ok": true,
+    "schemaVersion": "aos.cockpit.service_read_model.v1",
+    "ownerTrialSchema": "aos.owner_trial_service_frontend.v1",
+    "workRowCount": 2,
+    "selectedStoryId": "story_6a8345aeed11e98d",
+    "firstStoryId": "story_6a8345aeed11e98d",
+    "secondStoryId": "story_70ba04a9a97c3b47",
+    "secondStoryRoundTrip": true,
+    "disabledActionCount": 4,
+    "disabledActions": [
+      {
+        "id": "gate-work-order",
+        "label": "Gate work order",
+        "reason": "Gate actions remain disabled until this workspace has approved action authority."
+      },
+      {
+        "id": "owner-intent",
+        "label": "Owner Intent",
+        "reason": "Owner Intent actions require an explicit owner route and are unavailable in this local service preview."
+      },
+      {
+        "id": "release-publication",
+        "label": "Release publication",
+        "reason": "Release and publication actions require separate release authority."
+      },
+      {
+        "id": "live-dispatch",
+        "label": "Live dispatch",
+        "reason": "Live dispatch remains unavailable for this owner-trial service preview."
+      }
+    ],
+    "productAcceptance": false,
+    "finalMvpAcceptance": false,
+    "ownerIntentExecution": false,
+    "liveDispatch": false,
+    "parentGoalCompletion": false
+  },
+  "frontendStories": {
+    "serviceBackedReadModelApi": true,
+    "serviceDrivenBootstrap": true,
+    "refreshAndHealthReadback": true,
+    "workIndexSearchFilterSelection": true,
+    "workIndexCellSemantics": true,
+    "detailRoundTrip": true,
+    "unavailableActionLane": true,
+    "responsiveProductDesignCleanup": true,
+    "retainedBrowserProof": true
+  },
+  "viewportReadbacks": [
+    {
+      "label": "desktop-1440x900",
+      "width": 1440,
+      "height": 900,
+      "apiCallCount": 3,
+      "apiCalls": [
+        "/api/cockpit?selectedType=story&selectedId=story_6a8345aeed11e98d",
+        "/api/cockpit?selectedType=story&selectedId=story_6a8345aeed11e98d",
+        "/api/cockpit?selectedType=story&selectedId=story_70ba04a9a97c3b47"
+      ],
+      "initialState": {
+        "bootstrapState": "ready",
+        "refreshState": "ok",
+        "refreshCount": 1,
+        "lastReadAt": "2026-06-23T17:11:31.068Z",
+        "selectedStoryId": "story_6a8345aeed11e98d",
+        "detailId": "story_6a8345aeed11e98d",
+        "detailType": "story",
+        "selectedDetailRoundTrip": "true",
+        "ownerTrialReadinessLane": "service-backed",
+        "drawerDetailId": "story_6a8345aeed11e98d",
+        "drawerClosed": false
+      },
+      "initialWorkIndexState": {
+        "totalRowCount": 2,
+        "visibleRowCount": 2,
+        "visibleRowIds": [
+          "story_6a8345aeed11e98d",
+          "story_70ba04a9a97c3b47"
+        ],
+        "apiSourcedRowCount": 2,
+        "emptyStateVisible": false,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
+      },
+      "afterRefreshState": {
+        "bootstrapState": "ready",
+        "refreshState": "ok",
+        "refreshCount": 2,
+        "lastReadAt": "2026-06-23T17:11:31.122Z",
+        "selectedStoryId": "story_6a8345aeed11e98d",
+        "detailId": "story_6a8345aeed11e98d",
+        "detailType": "story",
+        "selectedDetailRoundTrip": "true",
+        "ownerTrialReadinessLane": "service-backed",
+        "drawerDetailId": "story_6a8345aeed11e98d",
+        "drawerClosed": false
+      },
+      "searchState": {
+        "totalRowCount": 2,
+        "visibleRowCount": 1,
+        "visibleRowIds": [
+          "story_70ba04a9a97c3b47"
+        ],
+        "apiSourcedRowCount": 2,
+        "emptyStateVisible": false,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
+      },
+      "zeroMatchState": {
+        "totalRowCount": 2,
+        "visibleRowCount": 0,
+        "visibleRowIds": [],
+        "apiSourcedRowCount": 2,
+        "emptyStateVisible": true,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
+      },
+      "selectedWorkIndexState": {
+        "totalRowCount": 2,
+        "visibleRowCount": 2,
+        "visibleRowIds": [
+          "story_6a8345aeed11e98d",
+          "story_70ba04a9a97c3b47"
+        ],
+        "apiSourcedRowCount": 2,
+        "emptyStateVisible": false,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
+      },
+      "selectedDetailState": {
+        "bootstrapState": "ready",
+        "refreshState": "ok",
+        "refreshCount": 3,
+        "lastReadAt": "2026-06-23T17:11:31.205Z",
+        "selectedStoryId": "story_70ba04a9a97c3b47",
+        "detailId": "story_70ba04a9a97c3b47",
+        "detailType": "story",
+        "selectedDetailRoundTrip": "true",
+        "ownerTrialReadinessLane": "service-backed",
+        "drawerDetailId": "story_70ba04a9a97c3b47",
+        "drawerClosed": false
+      },
+      "closedDetailState": {
+        "bootstrapState": "ready",
+        "refreshState": "ok",
+        "refreshCount": 3,
+        "lastReadAt": "2026-06-23T17:11:31.205Z",
+        "selectedStoryId": "story_70ba04a9a97c3b47",
+        "detailId": "story_70ba04a9a97c3b47",
+        "detailType": "story",
+        "selectedDetailRoundTrip": "true",
+        "ownerTrialReadinessLane": "service-backed",
+        "drawerDetailId": "story_70ba04a9a97c3b47",
+        "drawerClosed": true
+      },
+      "documentReadback": {
+        "serviceBacked": "true",
+        "bootstrapState": "ready",
+        "refreshState": "ok",
+        "refreshCount": 3,
+        "ownerTrialReadinessLane": "service-backed",
+        "selectedDetailRoundTrip": "true",
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlCount": 16,
+        "disabledControlFailures": [],
+        "internalCopyHits": [],
+        "enumLeakHits": [],
+        "noOverclaimHits": [],
+        "bodyHorizontalOverflow": false,
+        "bodyTextIncludesServiceStatus": true,
+        "bodyTextIncludesUnavailableActions": true,
+        "visibleRowCount": 2,
+        "totalRowCount": 2,
+        "viewportWidth": 1440,
+        "documentScrollWidth": 1440,
+        "bodyScrollWidth": 1440
+      },
+      "screenshot": {
+        "path": "evidence/aos-owner-trial-service-backed-frontend/5c521ce4b6f60e4639be3c5ea8f1127469d5b125/desktop-1440x900-owner-trial-service-backed.png",
+        "sha256": "389788ecf2bc21ed711915d5411b18dbaf6c91e96128e1f88918568974ac1c0b",
+        "bytes": 256871
+      }
+    },
+    {
+      "label": "mobile-390x844",
+      "width": 390,
+      "height": 844,
+      "apiCallCount": 3,
+      "apiCalls": [
+        "/api/cockpit?selectedType=story&selectedId=story_6a8345aeed11e98d",
+        "/api/cockpit?selectedType=story&selectedId=story_6a8345aeed11e98d",
+        "/api/cockpit?selectedType=story&selectedId=story_70ba04a9a97c3b47"
+      ],
+      "initialState": {
+        "bootstrapState": "ready",
+        "refreshState": "ok",
+        "refreshCount": 1,
+        "lastReadAt": "2026-06-23T17:11:31.380Z",
+        "selectedStoryId": "story_6a8345aeed11e98d",
+        "detailId": "story_6a8345aeed11e98d",
+        "detailType": "story",
+        "selectedDetailRoundTrip": "true",
+        "ownerTrialReadinessLane": "service-backed",
+        "drawerDetailId": "story_6a8345aeed11e98d",
+        "drawerClosed": false
+      },
+      "initialWorkIndexState": {
+        "totalRowCount": 2,
+        "visibleRowCount": 2,
+        "visibleRowIds": [
+          "story_6a8345aeed11e98d",
+          "story_70ba04a9a97c3b47"
+        ],
+        "apiSourcedRowCount": 2,
+        "emptyStateVisible": false,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
+      },
+      "afterRefreshState": {
+        "bootstrapState": "ready",
+        "refreshState": "ok",
+        "refreshCount": 2,
+        "lastReadAt": "2026-06-23T17:11:31.439Z",
+        "selectedStoryId": "story_6a8345aeed11e98d",
+        "detailId": "story_6a8345aeed11e98d",
+        "detailType": "story",
+        "selectedDetailRoundTrip": "true",
+        "ownerTrialReadinessLane": "service-backed",
+        "drawerDetailId": "story_6a8345aeed11e98d",
+        "drawerClosed": false
+      },
+      "searchState": {
+        "totalRowCount": 2,
+        "visibleRowCount": 1,
+        "visibleRowIds": [
+          "story_70ba04a9a97c3b47"
+        ],
+        "apiSourcedRowCount": 2,
+        "emptyStateVisible": false,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
+      },
+      "zeroMatchState": {
+        "totalRowCount": 2,
+        "visibleRowCount": 0,
+        "visibleRowIds": [],
+        "apiSourcedRowCount": 2,
+        "emptyStateVisible": true,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
+      },
+      "selectedWorkIndexState": {
+        "totalRowCount": 2,
+        "visibleRowCount": 2,
+        "visibleRowIds": [
+          "story_6a8345aeed11e98d",
+          "story_70ba04a9a97c3b47"
+        ],
+        "apiSourcedRowCount": 2,
+        "emptyStateVisible": false,
+        "serviceRenderedRowCount": 2,
+        "rowCellSemanticFailures": []
+      },
+      "selectedDetailState": {
+        "bootstrapState": "ready",
+        "refreshState": "ok",
+        "refreshCount": 3,
+        "lastReadAt": "2026-06-23T17:11:31.522Z",
+        "selectedStoryId": "story_70ba04a9a97c3b47",
+        "detailId": "story_70ba04a9a97c3b47",
+        "detailType": "story",
+        "selectedDetailRoundTrip": "true",
+        "ownerTrialReadinessLane": "service-backed",
+        "drawerDetailId": "story_70ba04a9a97c3b47",
+        "drawerClosed": false
+      },
+      "closedDetailState": {
+        "bootstrapState": "ready",
+        "refreshState": "ok",
+        "refreshCount": 3,
+        "lastReadAt": "2026-06-23T17:11:31.522Z",
+        "selectedStoryId": "story_70ba04a9a97c3b47",
+        "detailId": "story_70ba04a9a97c3b47",
+        "detailType": "story",
+        "selectedDetailRoundTrip": "true",
+        "ownerTrialReadinessLane": "service-backed",
+        "drawerDetailId": "story_70ba04a9a97c3b47",
+        "drawerClosed": true
+      },
+      "documentReadback": {
+        "serviceBacked": "true",
+        "bootstrapState": "ready",
+        "refreshState": "ok",
+        "refreshCount": 3,
+        "ownerTrialReadinessLane": "service-backed",
+        "selectedDetailRoundTrip": "true",
+        "duplicateIds": [],
+        "ariaReferenceFailures": [],
+        "disabledControlCount": 16,
+        "disabledControlFailures": [],
+        "internalCopyHits": [],
+        "enumLeakHits": [],
+        "noOverclaimHits": [],
+        "bodyHorizontalOverflow": false,
+        "bodyTextIncludesServiceStatus": true,
+        "bodyTextIncludesUnavailableActions": true,
+        "visibleRowCount": 2,
+        "totalRowCount": 2,
+        "viewportWidth": 390,
+        "documentScrollWidth": 390,
+        "bodyScrollWidth": 390
+      },
+      "screenshot": {
+        "path": "evidence/aos-owner-trial-service-backed-frontend/5c521ce4b6f60e4639be3c5ea8f1127469d5b125/mobile-390x844-owner-trial-service-backed.png",
+        "sha256": "820f9e35df297dd5ea8ef2b71f73b93b3c7c9d1dc49deaf09b7d6da7b6b93bbc",
+        "bytes": 239049
+      }
+    }
+  ],
+  "browserHealth": {
+    "pageErrors": [],
+    "consoleErrors": [],
+    "requestFailures": []
+  },
+  "noOverclaim": {
+    "productUiAcceptance": false,
+    "productDesignAcceptance": false,
+    "productAcceptance": false,
+    "finalMvpAcceptance": false,
+    "ownerFinalAcceptance": false,
+    "phaseAcceptance": false,
+    "releasePublicationReadiness": false,
+    "ownerVisibleFreshness": false,
+    "ownerIntentExecution": false,
+    "liveDispatch": false,
+    "parentGoalCompletion": false
+  }
+}

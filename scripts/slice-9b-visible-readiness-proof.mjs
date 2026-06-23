@@ -413,6 +413,35 @@ async function collectPageReadback(page, label) {
     const productVisibleInternalHits = productVisibleInternalTerms.filter((term) => productVisibleText.includes(term));
     const bodyHorizontalOverflow = Math.ceil(document.body.scrollWidth) > window.innerWidth + 1
       || Math.ceil(document.documentElement.scrollWidth) > window.innerWidth + 1;
+    const sideNavReadability = (() => {
+      const itemReadbacks = Array.from(document.querySelectorAll('[data-navigation-primitive="nav-item"]')).map((item) => {
+        const iconCount = item.querySelectorAll("[data-icon-name]").length;
+        const content = item.querySelector(".tcrn-nav-item__content");
+        const labelElement = item.querySelector(".tcrn-nav-item__label");
+        const contentRect = content?.getBoundingClientRect();
+        const labelRect = labelElement?.getBoundingClientRect();
+        const labelText = normalizeText(labelElement?.textContent ?? item.textContent ?? "");
+        const failures = [];
+        if (iconCount !== 1) failures.push("navitem_icon_count_not_one");
+        if (!contentRect || contentRect.width < 72) failures.push("navitem_content_width_collapsed");
+        if (labelText.length > 3 && (!labelRect || labelRect.width < 48)) failures.push("navitem_label_width_collapsed");
+        return {
+          label: labelText,
+          iconCount,
+          contentWidth: contentRect?.width ?? 0,
+          labelWidth: labelRect?.width ?? 0,
+          failures
+        };
+      });
+      const failures = itemReadbacks.filter((item) => item.failures.length > 0);
+      return {
+        ok: itemReadbacks.length > 0 && failures.length === 0,
+        itemCount: itemReadbacks.length,
+        iconCount: itemReadbacks.reduce((count, item) => count + item.iconCount, 0),
+        failures,
+        minContentWidth: itemReadbacks.reduce((min, item) => Math.min(min, item.contentWidth), Number.POSITIVE_INFINITY)
+      };
+    })();
     const ok = Boolean(surface)
       && surface?.getAttribute("data-package-backed-react-runtime-rendering") === "true"
       && missingRuntimeComponents.length === 0
@@ -424,6 +453,7 @@ async function collectPageReadback(page, label) {
       && wideRegions.length === 0
       && forbiddenHits.length === 0
       && productVisibleInternalHits.length === 0
+      && sideNavReadability.ok
       && selectedDetail.length > 0
       && (!expectedSelectedDetail || selectedDetail === expectedSelectedDetail)
       && !bodyHorizontalOverflow;
@@ -443,6 +473,7 @@ async function collectPageReadback(page, label) {
       viewportWidth: window.innerWidth,
       documentScrollWidth: document.documentElement.scrollWidth,
       bodyScrollWidth: document.body.scrollWidth,
+      sideNavReadability,
       wideRegions,
       regionProof,
       visibleRows: visibleRows.length,

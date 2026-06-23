@@ -114,6 +114,19 @@ const cockpitNavLabels = [
   "Audit"
 ] as const;
 
+const cockpitNavIconNames: Record<(typeof cockpitNavLabels)[number], CockpitRuntimeNavItem["iconName"]> = {
+  Dashboard: "home",
+  Cockpit: "panel-left-open",
+  "Work Index": "search",
+  "Stage Map": "menu",
+  "Gate Queue": "check",
+  Conferences: "info",
+  Evidence: "book-open",
+  Dependency: "package",
+  Resources: "database",
+  Audit: "settings"
+};
+
 export function createSlice4bCockpitReadModel(): OperationsCockpitReadModel {
   const store = new AosStore(createDefaultSeed());
   const initiative = store.createInitiative({
@@ -711,6 +724,7 @@ function createCockpitRuntimeNavItems(): CockpitRuntimeNavItem[] {
     active: label === "Cockpit",
     disabledReason: `${label} opens when that AOS workspace is available.`,
     href: "#cockpit",
+    iconName: cockpitNavIconNames[label],
     label
   }));
 }

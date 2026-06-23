@@ -83,6 +83,7 @@ try {
       const text = document.body.innerText;
       const lower = text.toLowerCase();
       const rootStyles = getComputedStyle(document.documentElement);
+      const normalizeText = (value) => value.replace(/\s+/g, " ").trim();
       const readDisabledReason = (element) => {
         const ariaDescription = (element.getAttribute("aria-describedby") ?? "")
           .split(/\s+/)
@@ -179,6 +180,35 @@ try {
           ...disabledReason
         };
       });
+      const sideNavReadability = (() => {
+        const itemReadbacks = Array.from(document.querySelectorAll('[data-navigation-primitive="nav-item"]')).map((item) => {
+          const iconCount = item.querySelectorAll("[data-icon-name]").length;
+          const content = item.querySelector(".tcrn-nav-item__content");
+          const label = item.querySelector(".tcrn-nav-item__label");
+          const contentRect = content?.getBoundingClientRect();
+          const labelRect = label?.getBoundingClientRect();
+          const labelText = normalizeText(label?.textContent ?? item.textContent ?? "");
+          const failures = [];
+          if (iconCount !== 1) failures.push("navitem_icon_count_not_one");
+          if (!contentRect || contentRect.width < 72) failures.push("navitem_content_width_collapsed");
+          if (labelText.length > 3 && (!labelRect || labelRect.width < 48)) failures.push("navitem_label_width_collapsed");
+          return {
+            label: labelText,
+            iconCount,
+            contentWidth: contentRect?.width ?? 0,
+            labelWidth: labelRect?.width ?? 0,
+            failures
+          };
+        });
+        const failures = itemReadbacks.filter((item) => item.failures.length > 0);
+        return {
+          ok: itemReadbacks.length > 0 && failures.length === 0,
+          itemCount: itemReadbacks.length,
+          iconCount: itemReadbacks.reduce((count, item) => count + item.iconCount, 0),
+          failures,
+          minContentWidth: itemReadbacks.reduce((min, item) => Math.min(min, item.contentWidth), Number.POSITIVE_INFINITY)
+        };
+      })();
       const disabledButtonsMissingReason = disabledButtons.filter((button) => !button.dataDisabledReason || !button.ariaDescription || !button.title);
       const disabledNavItemsMissingReason = disabledNavItems.filter((item) => !item.reason || !item.describedbyResolved);
       const disabledNavButtons = disabledButtons.filter((button) => String(button.className).includes("tcrn-nav-item"));
@@ -257,6 +287,7 @@ try {
         columnsHeldReasonVisibleLeak,
         workIndexMobileReadability,
         fullDocumentAccessibilityReadback,
+        sideNavReadability,
         disabledNavItems,
         disabledNavItemsMissingReason,
         disabledNavButtonCount: disabledNavButtons.length,
@@ -304,6 +335,7 @@ try {
     && viewportReadbacks.every((readback) => readback.columnsHeldReasonVisibleLeak === false)
     && viewportReadbacks.every((readback) => !readback.workIndexMobileReadability.applies || readback.workIndexMobileReadability.ok)
     && viewportReadbacks.every((readback) => readback.fullDocumentAccessibilityReadback.ok)
+    && viewportReadbacks.every((readback) => readback.sideNavReadability.ok)
     && viewportReadbacks.every((readback) => readback.hasSidebarUnavailableReasons)
     && viewportReadbacks.every((readback) => readback.hasTokenCss)
     && viewportReadbacks.every((readback) => readback.hasProductDisabledCopy)

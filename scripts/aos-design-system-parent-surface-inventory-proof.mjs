@@ -301,7 +301,23 @@ function inspectNavigationStorybookAlignment(html) {
     .join("\n");
   const sidebarAttributes = parseAttributes(sidebarHtml.match(/<nav\b([^>]*)>/)?.[1] ?? "");
   const navGroupCount = (sidebarHtml.match(/data-navigation-primitive="nav-group"/g) ?? []).length;
-  const navItemCount = (sidebarHtml.match(/data-navigation-primitive="nav-item"/g) ?? []).length;
+  const navItemBlocks = Array.from(sidebarHtml.matchAll(/<a\b(?=[^>]*data-navigation-primitive="nav-item")([^>]*)>([\s\S]*?)<\/a>/g))
+    .map((match) => ({
+      attributes: parseAttributes(match[1] ?? ""),
+      body: match[2] ?? ""
+    }));
+  const navItemIconReadbacks = navItemBlocks.map((item) => ({
+    label: visibleText(item.body),
+    iconNames: Array.from(item.body.matchAll(/data-icon-name="([^"]+)"/g)).map((match) => match[1])
+  }));
+  const navItemsMissingIcons = navItemIconReadbacks
+    .filter((item) => item.iconNames.length === 0)
+    .map((item) => item.label);
+  const navItemsWithMultipleIcons = navItemIconReadbacks
+    .filter((item) => item.iconNames.length > 1)
+    .map((item) => ({ label: item.label, iconNames: item.iconNames }));
+  const iconColumnCssPresent = /\.tcrn-nav-item\s*\{[^}]*grid-template-columns:\s*18px\s+minmax\(0,\s*1fr\)/s.test(styleText);
+  const navItemCount = navItemBlocks.length;
   const selectedNavItemCount = (sidebarHtml.match(/data-selected="true"|aria-current="page"/g) ?? []).length;
   const forbiddenClassHits = Array.from(html.matchAll(/class="[^"]*(?:\baos-sidebar\b|\bnav-row\b|\bnav-stack\b)[^"]*"/g))
     .map((match) => match[0]);
@@ -315,6 +331,9 @@ function inspectNavigationStorybookAlignment(html) {
   if (navGroupCount === 0) failures.push("nav_group_missing");
   if (navItemCount === 0) failures.push("nav_item_missing");
   if (selectedNavItemCount === 0) failures.push("selected_nav_item_missing");
+  if (!iconColumnCssPresent) failures.push("navitem_icon_column_css_missing");
+  if (iconColumnCssPresent && navItemsMissingIcons.length > 0) failures.push("icon_column_navitem_missing_icon");
+  if (navItemsWithMultipleIcons.length > 0) failures.push("navitem_icon_count_not_one");
   if (forbiddenClassHits.length > 0) failures.push("product_local_navigation_class_hit");
   if (forbiddenStyleSelectorHits.length > 0) failures.push("product_local_navigation_style_selector_hit");
 
@@ -324,6 +343,10 @@ function inspectNavigationStorybookAlignment(html) {
     sideNavPrimitive: sidebarAttributes["data-navigation-primitive"] ?? "",
     navGroupCount,
     navItemCount,
+    navItemIconCount: navItemIconReadbacks.reduce((count, item) => count + item.iconNames.length, 0),
+    navItemsMissingIcons,
+    navItemsWithMultipleIcons,
+    iconColumnCssPresent,
     selectedNavItemCount,
     forbiddenClassHits,
     forbiddenStyleSelectorHits,

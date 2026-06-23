@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_full_rebuild_planning_and_implementation_packet",
-  "sourceHead": "1af2514baafa395f91c4abba3cd5fa1c874d00f5",
+  "sourceHead": "5c521ce4b6f60e4639be3c5ea8f1127469d5b125",
   "claimScope": {
     "implementationKind": "aos_product_frontend_rebuilt_registered_design_system_runtime",
     "packageBackedReactRuntimeRendering": "operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild",
@@ -16,9 +16,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "1af2514baafa395f91c4abba3cd5fa1c874d00f5",
+    "sourceHeadAtProofRun": "5c521ce4b6f60e4639be3c5ea8f1127469d5b125",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "d3f51f50e5456a1a7b83167fd84d604acbe1f3bde2a82fcdfea8f871bdd0bdc6",
+    "sourceContentDigest": "a77ddc9ad1460e82d13fe14a89b570950a6b8da25ce207dc5cb8f75844e3bf5d",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
@@ -555,7 +555,7 @@
     "activeNavItemCount": 1,
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "ea5e55a7b03ec68f3a37628d6218592ac6779284ae1498b7f0553063875b937a",
+    "sampleRenderedHtmlSha256": "73bc80a78f04c22b3d24cc4d41e8267c04f3e7cbae837956af85e83d705e444a",
     "failures": []
   },
   "aosWideTargetSetRuntimeReadback": {
@@ -623,7 +623,7 @@
     "disabledButtonFailures": [],
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "f9142d228ca505b2818f92ab8d99f313c990a34e6283ec8b861c776bd8bdc1e3",
+    "sampleRenderedHtmlSha256": "93b6eeae7bafdbd3d8ee7ffb62d7839c64dcd5d3767b8e0460fa59876cf46d89",
     "failures": []
   },
   "fullDocumentAccessibilityReadback": {
@@ -678,6 +678,10 @@
         "sideNavPrimitive": "side-nav",
         "navGroupCount": 1,
         "navItemCount": 10,
+        "navItemIconCount": 10,
+        "navItemsMissingIcons": [],
+        "navItemsWithMultipleIcons": [],
+        "iconColumnCssPresent": true,
         "selectedNavItemCount": 1,
         "forbiddenClassHits": [],
         "forbiddenStyleSelectorHits": [],
@@ -690,6 +694,10 @@
         "sideNavPrimitive": "side-nav",
         "navGroupCount": 1,
         "navItemCount": 5,
+        "navItemIconCount": 5,
+        "navItemsMissingIcons": [],
+        "navItemsWithMultipleIcons": [],
+        "iconColumnCssPresent": true,
         "selectedNavItemCount": 1,
         "forbiddenClassHits": [],
         "forbiddenStyleSelectorHits": [],
@@ -702,6 +710,10 @@
         "sideNavPrimitive": "side-nav",
         "navGroupCount": 1,
         "navItemCount": 10,
+        "navItemIconCount": 10,
+        "navItemsMissingIcons": [],
+        "navItemsWithMultipleIcons": [],
+        "iconColumnCssPresent": true,
         "selectedNavItemCount": 1,
         "forbiddenClassHits": [],
         "forbiddenStyleSelectorHits": [],

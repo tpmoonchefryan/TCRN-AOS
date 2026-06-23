@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_full_rebuild_parent_objective_remaining_surface_component_gap_audit_repair_implementation",
-  "sourceHead": "1af2514baafa395f91c4abba3cd5fa1c874d00f5",
+  "sourceHead": "5c521ce4b6f60e4639be3c5ea8f1127469d5b125",
   "canonicalParentObjective": {
     "ownerDirective": "不再做任何迁移，移除AOS现有所有前端组件，按照Design System要求和组件重建UI",
     "disposition": "parent_objective_remaining_surface_component_gap_audit"
@@ -104,8 +104,8 @@
         "aos-data-semantics-product-owned"
       ],
       "exceptionRecordPresent": true,
-      "staticSha256": "feb1f8b363fa6a256c658e4714255701e668f41589e651a77acfbb318ee6991b",
-      "renderedSha256": "feb1f8b363fa6a256c658e4714255701e668f41589e651a77acfbb318ee6991b",
+      "staticSha256": "be1192e47b16e5fc1a883fa641ece213f254e8084cd58cea1a7635eaeda90cd7",
+      "renderedSha256": "be1192e47b16e5fc1a883fa641ece213f254e8084cd58cea1a7635eaeda90cd7",
       "staticOutputCurrent": true,
       "componentInstanceCount": 105,
       "registeredComponents": [
@@ -194,6 +194,10 @@
         "sideNavPrimitive": "side-nav",
         "navGroupCount": 1,
         "navItemCount": 10,
+        "navItemIconCount": 10,
+        "navItemsMissingIcons": [],
+        "navItemsWithMultipleIcons": [],
+        "iconColumnCssPresent": true,
         "selectedNavItemCount": 2,
         "forbiddenClassHits": [],
         "forbiddenStyleSelectorHits": [],
@@ -218,8 +222,8 @@
         "aos-data-semantics-product-owned"
       ],
       "exceptionRecordPresent": true,
-      "staticSha256": "0506415476922b36c2b2e27a6a4cd52fde8b15bc9523fe571fc30214fa17e960",
-      "renderedSha256": "0506415476922b36c2b2e27a6a4cd52fde8b15bc9523fe571fc30214fa17e960",
+      "staticSha256": "15d3cb6e3717c63ef22a88567f75787cb419c580d429dfeae1f27f47f3079ecb",
+      "renderedSha256": "15d3cb6e3717c63ef22a88567f75787cb419c580d429dfeae1f27f47f3079ecb",
       "staticOutputCurrent": true,
       "componentInstanceCount": 61,
       "registeredComponents": [
@@ -304,6 +308,10 @@
         "sideNavPrimitive": "side-nav",
         "navGroupCount": 1,
         "navItemCount": 5,
+        "navItemIconCount": 5,
+        "navItemsMissingIcons": [],
+        "navItemsWithMultipleIcons": [],
+        "iconColumnCssPresent": true,
         "selectedNavItemCount": 2,
         "forbiddenClassHits": [],
         "forbiddenStyleSelectorHits": [],
@@ -329,8 +337,8 @@
         "aos-data-semantics-product-owned"
       ],
       "exceptionRecordPresent": true,
-      "staticSha256": "1b7ab181276fed0dc3c23b1696694d0af5c832bb84a9f27eb62139d766bfb0e9",
-      "renderedSha256": "1b7ab181276fed0dc3c23b1696694d0af5c832bb84a9f27eb62139d766bfb0e9",
+      "staticSha256": "2f5abd21c6749082fbc7ae4c37463fced3cd1efc7fe9cd40c74aa1a580ca7389",
+      "renderedSha256": "2f5abd21c6749082fbc7ae4c37463fced3cd1efc7fe9cd40c74aa1a580ca7389",
       "staticOutputCurrent": true,
       "componentInstanceCount": 136,
       "registeredComponents": [
@@ -417,6 +425,10 @@
         "sideNavPrimitive": "side-nav",
         "navGroupCount": 1,
         "navItemCount": 10,
+        "navItemIconCount": 10,
+        "navItemsMissingIcons": [],
+        "navItemsWithMultipleIcons": [],
+        "iconColumnCssPresent": true,
         "selectedNavItemCount": 2,
         "forbiddenClassHits": [],
         "forbiddenStyleSelectorHits": [],
@@ -586,9 +598,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_parent_surface_inventory",
-    "sourceHeadAtProofRun": "1af2514baafa395f91c4abba3cd5fa1c874d00f5",
+    "sourceHeadAtProofRun": "5c521ce4b6f60e4639be3c5ea8f1127469d5b125",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "7204fb3267ac8831bc6297374384bada28c37cf96513e2e8156bb0679e0bddfe",
+    "sourceContentDigest": "68c6be4481f39a247c5980a046eb82b83296739fc6006f68fecefada825c43c9",
     "sourcePaths": [
       "apps/api/src/server.ts",
       "apps/web/src/aos-wide-product-design-data.ts",

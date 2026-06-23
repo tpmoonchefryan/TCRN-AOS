@@ -1,9 +1,9 @@
 # AOS Design System Package Runtime Proof
 
 - Route: route_tcrn_aos_design_system_frontend_full_rebuild_planning_and_implementation_packet
-- Source head at proof run: 1af2514baafa395f91c4abba3cd5fa1c874d00f5
+- Source head at proof run: 5c521ce4b6f60e4639be3c5ea8f1127469d5b125
 - Source freshness strategy: source_content_digest_for_mutating_receipts
-- Source content digest: d3f51f50e5456a1a7b83167fd84d604acbe1f3bde2a82fcdfea8f871bdd0bdc6
+- Source content digest: a77ddc9ad1460e82d13fe14a89b570950a6b8da25ce207dc5cb8f75844e3bf5d
 - Scope: aos_product_frontend_rebuilt_registered_design_system_runtime
 - Runtime rendering claim: operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild
 - Design System source head: 4d03f4b4e5079f5c49a775f0bc613cfd3889fae3

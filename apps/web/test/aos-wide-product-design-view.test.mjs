@@ -105,6 +105,11 @@ test("Slice 10 navigation aligns with consumed SideNav Storybook standard", () =
   assert.match(html, /class="tcrn-nav-item"/);
   assert.match(html, /data-selected="true"/);
   assert.match(html, /class="tcrn-nav-item__disabled-reason"/);
+
+  const navItems = navItemReadbacks(html);
+  assert.equal(navItems.length, 10, "all AOS-wide target NavItems are rendered");
+  assert.equal(navItems.filter((item) => item.iconNames.length === 0).length, 0, "all AOS-wide target NavItems render DS icons");
+  assert.ok(navItems.every((item) => item.iconNames.every((name) => tcrnIconNames.has(name))), "AOS-wide target NavItems use registered DS icon names");
 });
 
 test("Slice 10 disabled target path Select exposes a resolved reason", () => {
@@ -180,6 +185,16 @@ function disabledNavItemReadbacks(html) {
     .map((match) => ({ attributes: match[1], body: match[2] }));
 }
 
+function navItemReadbacks(html) {
+  return Array.from(html.matchAll(/<a\b(?=[^>]*data-navigation-primitive="nav-item")([^>]*)>([\s\S]*?)<\/a>/g))
+    .map((match) => ({
+      attributes: match[1],
+      body: match[2],
+      iconNames: Array.from(match[2].matchAll(/data-icon-name="([^"]+)"/g)).map((iconMatch) => iconMatch[1]),
+      label: match[2].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()
+    }));
+}
+
 function visibleText(html) {
   return html
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
@@ -191,6 +206,29 @@ function visibleText(html) {
 
 const productVisibleInternalTermsPattern =
   /\breadback\b|\bcheckpoint\b|\broute\b|\bfixture\b|proof required|external proof required|package-runtime pilot|functional contract readback only|held for later|unavailable in this route|not claimed|not_claimed/i;
+
+const tcrnIconNames = new Set([
+  "alert-triangle",
+  "arrow-left",
+  "arrow-right",
+  "book-open",
+  "check",
+  "chevron-down",
+  "chevron-left",
+  "chevron-right",
+  "database",
+  "external-link",
+  "home",
+  "info",
+  "loader-circle",
+  "menu",
+  "package",
+  "panel-left-close",
+  "panel-left-open",
+  "search",
+  "settings",
+  "x"
+]);
 
 function productVisibleAndA11yText(html) {
   const attributeText = Array.from(html.matchAll(/\s(?:aria-label|title|data-disabled-reason|placeholder|alt)="([^"]*)"/g))

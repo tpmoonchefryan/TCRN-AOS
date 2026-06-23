@@ -24,6 +24,7 @@ import {
   Text,
   TopBar,
   WorkIndex,
+  type IconName,
   type KeyValueItem,
   type WorkIndexRow
 } from "@tcrn/ui-react";
@@ -74,6 +75,7 @@ export interface CockpitRuntimeNavItem {
   disabledReason: string;
   href: string;
   label: string;
+  iconName: IconName;
 }
 
 export interface CockpitRuntimeShellSidebarOptions {
@@ -456,6 +458,7 @@ function CockpitRuntimeNavItemElement({ item }: { item: CockpitRuntimeNavItem })
     children: item.label,
     selected: item.active,
     href: item.href,
+    iconName: item.iconName,
     "data-tcrn-component": "NavItem",
     "data-package-runtime-component": "NavItem",
     "data-package-runtime-source": "@tcrn/ui-react",

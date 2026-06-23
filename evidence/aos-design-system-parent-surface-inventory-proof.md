@@ -1,7 +1,7 @@
 # AOS Design System Parent Surface Inventory Proof
 
 - Route: route_tcrn_aos_design_system_frontend_full_rebuild_parent_objective_remaining_surface_component_gap_audit_repair_implementation
-- Source head at proof run: 1af2514baafa395f91c4abba3cd5fa1c874d00f5
+- Source head at proof run: 5c521ce4b6f60e4639be3c5ea8f1127469d5b125
 - OK: true
 - Product-facing HTML route count: 3
 - Static product HTML outputs: aos-wide-product-design.html, docs-search-release-readiness.html, operations-cockpit.html
@@ -11,7 +11,7 @@
 - Consumed DS exception records: aos-brand-lockup-product-specific, aos-data-semantics-product-owned
 - Product-visible copy proof disposition: AOS served surface visible and accessibility text remains the proof source; DS synthetic Storybook fixture vocabulary is not substituted.
 - Source freshness strategy: source_content_digest_for_parent_surface_inventory
-- Source content digest: 7204fb3267ac8831bc6297374384bada28c37cf96513e2e8156bb0679e0bddfe
+- Source content digest: 68c6be4481f39a247c5980a046eb82b83296739fc6006f68fecefada825c43c9
 
 | Surface | Component instances | Unregistered | Marker-only | Internal copy hits | Navigation alignment failures | Duplicate IDs | ARIA failures | Disabled reason failures |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
