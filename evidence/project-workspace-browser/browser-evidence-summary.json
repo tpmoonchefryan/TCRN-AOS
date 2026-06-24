@@ -1,11 +1,11 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_4b9253b_ilya_project_workspace_copy_proof_table_repair_after_elara_review",
-  "sourceHead": "ad6da052c84866f5457d9be10188bd01c607730e",
-  "generatedAt": "2026-06-23T23:45:07.646Z",
+  "sourceHead": "91e248902eb01f67986a5bd1893605b482bf638d",
+  "generatedAt": "2026-06-24T21:27:01.194Z",
   "staticTarget": "apps/web/static/project-workspace.html",
-  "staticSha256": "9bd42ea4d1285f0757973199a291e87ac7b26f0409bcded0bfd48cbd0122a26b",
-  "staticBytes": 38621,
+  "staticSha256": "d63dd49d4474d797036ac52490f4c6ad5d6c1bda2a9e3ca635e8c844ad7759c1",
+  "staticBytes": 39263,
   "dsStandardsConsumed": [
     "ds-aos-target-set-v1",
     "ds-aos-operations-cockpit-v1"
@@ -81,9 +81,9 @@
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/project-workspace-browser/ad6da052c84866f5457d9be10188bd01c607730e/project-workspace-desktop-1440x900.png",
-      "screenshotSha256": "b9ff710ab40c74750605906a48bf0bace545825b83f6f5010d7f52e276337cb9",
-      "screenshotBytes": 249661,
+      "screenshot": "evidence/project-workspace-browser/91e248902eb01f67986a5bd1893605b482bf638d/project-workspace-desktop-1440x900.png",
+      "screenshotSha256": "f6a61f0a6e88866b87870ab1f088cc6befe8e155ed919b0bfe40e26a2faeeb9c",
+      "screenshotBytes": 251986,
       "selectorProof": [
         {
           "selector": "[data-surface='project-workspace']",
@@ -146,7 +146,7 @@
         "TopBar"
       ],
       "markerOnlyComponents": [],
-      "navItemCount": 5,
+      "navItemCount": 6,
       "navIconlessCount": 0,
       "navReadabilityFailures": [],
       "ownerCellCount": 1,
@@ -157,9 +157,9 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/project-workspace-browser/ad6da052c84866f5457d9be10188bd01c607730e/project-workspace-mobile-390x844.png",
-      "screenshotSha256": "95dbebcffc75d99be9e1a75a8bb0c8e97d55a9fc079061fc09fb07f323faaf85",
-      "screenshotBytes": 224481,
+      "screenshot": "evidence/project-workspace-browser/91e248902eb01f67986a5bd1893605b482bf638d/project-workspace-mobile-390x844.png",
+      "screenshotSha256": "048fb432c728e3c6371832f128c2e04546c1db2303f13059a87fc6440e346797",
+      "screenshotBytes": 228815,
       "selectorProof": [
         {
           "selector": "[data-surface='project-workspace']",
@@ -222,7 +222,7 @@
         "TopBar"
       ],
       "markerOnlyComponents": [],
-      "navItemCount": 5,
+      "navItemCount": 6,
       "navIconlessCount": 0,
       "navReadabilityFailures": [],
       "ownerCellCount": 1,
@@ -237,7 +237,7 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "project_workspace_visible_slice_source_content_digest_v1",
-    "sourceHead": "ad6da052c84866f5457d9be10188bd01c607730e",
+    "sourceHead": "91e248902eb01f67986a5bd1893605b482bf638d",
     "sourcePaths": [
       "apps/web/src/cockpit.ts",
       "apps/web/src/project-workspace-data.ts",
@@ -265,7 +265,7 @@
       {
         "path": "apps/web/src/project-workspace-ui-react-runtime.ts",
         "exists": true,
-        "sha256": "f5fc322696d77f22cac7d25b0fde51e68fd5d9a0f87f05056aed74962de4b011"
+        "sha256": "724aaed8d374cf6d4bb53c9c3d069b8358834ff9c902d7d20e8a8943a15c7e50"
       },
       {
         "path": "apps/web/src/project-workspace-view.ts",
@@ -280,17 +280,17 @@
       {
         "path": "apps/web/test/project-workspace-view.test.mjs",
         "exists": true,
-        "sha256": "f139c5a89de8ca2faab1f4230958b9486efb64eba9301200973d4361c56c5a24"
+        "sha256": "2be4f76ce7d10d0755b4d4223f11f764ecad88dd68ccd39db7e1e04ad5a13bd2"
       },
       {
         "path": "apps/api/src/server.ts",
         "exists": true,
-        "sha256": "9eea4c843c59d16f7b27982ed8f1d32d90302312db52b5553e627c6a5ffd4156"
+        "sha256": "2e398bb6b57ec7acb5b10a6f9f720de0ab412f4680ee4393c90d442bb564b1f1"
       },
       {
         "path": "apps/api/test/service-smoke.test.mjs",
         "exists": true,
-        "sha256": "6c4ef260aa354025739d23887cc83be561476388c17ba60f9e57d9df19e2f763"
+        "sha256": "17a1afc41fc8ec2b6ff2badbe48580b7c9952c3dce3e4da53e64d88e0121d355"
       },
       {
         "path": "scripts/project-workspace-proof.mjs",
@@ -305,10 +305,10 @@
       {
         "path": "package.json",
         "exists": true,
-        "sha256": "52f86e45a4a742181056c31c17e56112e184cb55aa12ffd56dbc93d33c7b43f1"
+        "sha256": "9be5c8cf1e2f6a4a0de18cf748c82e26cdfa7f0026a6d4672056ef1a810d9b9c"
       }
     ],
-    "sourceContentDigest": "aef4f0579870b1e9468a7a550578c133648d26506dfab07bcc02c8dd2c228401"
+    "sourceContentDigest": "f1654fa35dc2c3445ed1fc879dcafe9dac0b5b5d26858a6c89f30df09ceb30b9"
   },
   "noOverclaimReadback": {
     "productAcceptance": false,
