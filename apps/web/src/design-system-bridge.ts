@@ -11,7 +11,7 @@ import {
 export const aosDesignSystemConsumerBridge = {
   route: "route_tcrn_aos_c3e1aa8_narrow_aos_ds_certification_consumption_repair_proof_refresh_after_mara_triage",
   adoptionPosture: "tokens_copy_state_ui_react_product_frontend_rebuild",
-  designSystemSourceHead: "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
+  designSystemSourceHead: "8c91fe6a1aa2e3f75c5cacf939bd8ebe6be5be3c",
   tokenPackage: "@tcrn/ui-tokens",
   copyStatePackage: "@tcrn/ui-copy-state",
   uiReactPackage: "@tcrn/ui-react",
@@ -20,6 +20,7 @@ export const aosDesignSystemConsumerBridge = {
     operationsCockpit: "ds-aos-operations-cockpit-v1",
     docsSearchReleaseReadiness: "ds-aos-docs-readiness-v1",
     projectWorkspace: "ds-aos-target-set-v1",
+    gateQueue: "ds-aos-target-set-v1",
     initiativeDetail: "ds-aos-target-set-v1",
     aosWideProductDesign: "ds-aos-target-set-v1"
   },
@@ -35,7 +36,7 @@ export const aosDesignSystemConsumerBridge = {
     "../TCRN-Design-System/docs/verification/internal-alpha/browser-proof-summary.json",
     "../TCRN-Design-System/docs/verification/internal-alpha-hardening-proof.json"
   ],
-  productVisibleCopyProofSource: "AOS served Operations Cockpit, Docs Readiness, and AOS-wide product HTML/accessibility text only",
+  productVisibleCopyProofSource: "AOS served Operations Cockpit, Docs Readiness, AOS-wide Product Design, Project Workspace, and Gate Queue HTML/accessibility text only",
   designSystemSyntheticStorybookVocabularyDisposition: "accepted_as_design_system_fixture_evidence_not_aos_customer_copy_proof",
   uiReactRuntimeSurface: "aos_product_frontend_rebuilt_registered_design_system_runtime",
   uiReactRuntimeComponentScope: [

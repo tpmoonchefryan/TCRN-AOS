@@ -1,10 +1,10 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_rebuild_registered_component_proof",
-  "sourceHead": "ad6da052c84866f5457d9be10188bd01c607730e",
+  "sourceHead": "1962430040cf73dc295df5dec474806024ee01b4",
   "registrySource": "../TCRN-Design-System/packages/ui-react/src/index.tsx",
   "designSystemBasis": {
-    "trackedHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
+    "trackedHead": "8c91fe6a1aa2e3f75c5cacf939bd8ebe6be5be3c",
     "registrySourcePath": "../TCRN-Design-System/packages/ui-react/src/index.tsx",
     "registrySourceTracked": true,
     "unacceptedStylesheetDraft": {
@@ -16,11 +16,13 @@
     }
   },
   "claimScope": {
-    "implementationKind": "mixed_static_renderer_registered_component_metadata_with_operations_cockpit_completion_docs_readiness_and_aos_wide_target_set_package_runtime",
-    "packageBackedReactRuntimeRendering": "operations_cockpit_completion_docs_readiness_search_release_and_aos_wide_target_set_runtime_adoption",
-    "storybookVisualStyleParity": "consumed_ds_4d03f4b_certified_visual_standard_receipts_for_served_scope",
+    "implementationKind": "mixed_static_renderer_registered_component_metadata_with_served_scope_and_standalone_surface_runtime",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_completion_docs_readiness_search_release_aos_wide_target_set_project_workspace_and_gate_queue_runtime_adoption",
+    "storybookVisualStyleParity": "consumed_current_certified_ds_visual_standard_receipts_for_served_scope_and_standalone_surface_reachability",
     "docsReadinessPackageRuntimeRendering": true,
     "aosWidePackageRuntimeRendering": true,
+    "projectWorkspaceStandaloneRendering": true,
+    "gateQueueStandaloneRendering": true,
     "productAcceptanceReady": false,
     "finalMvpAcceptanceReady": false
   },
@@ -183,6 +185,66 @@
         "Resource Library",
         "Admin / Access"
       ]
+    },
+    {
+      "id": "project-workspace",
+      "path": "apps/web/static/project-workspace.html",
+      "componentCount": 65,
+      "registeredComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "Select",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar"
+      ],
+      "unregistered": [],
+      "missingRequired": [],
+      "expectedDisabledNavItems": [],
+      "disabledNavItemSemanticFailures": [],
+      "disabledNavItemCount": 0,
+      "disabledNavItemLabels": []
+    },
+    {
+      "id": "gate-queue",
+      "path": "apps/web/static/gate-queue.html",
+      "componentCount": 42,
+      "registeredComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "Select",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar"
+      ],
+      "unregistered": [],
+      "missingRequired": [],
+      "expectedDisabledNavItems": [],
+      "disabledNavItemSemanticFailures": [],
+      "disabledNavItemCount": 0,
+      "disabledNavItemLabels": []
     }
   ],
   "packageRuntimeReadback": {
@@ -552,8 +614,8 @@
   },
   "designSystemCertificationReadback": {
     "ok": true,
-    "designSystemHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
-    "expectedDesignSystemHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
+    "designSystemHead": "8c91fe6a1aa2e3f75c5cacf939bd8ebe6be5be3c",
+    "expectedDesignSystemHead": "8c91fe6a1aa2e3f75c5cacf939bd8ebe6be5be3c",
     "consumedDsStandardIds": [
       "ds-aos-operations-cockpit-v1",
       "ds-aos-docs-readiness-v1",
@@ -579,22 +641,22 @@
       {
         "path": "../TCRN-Design-System/docs/verification/internal-alpha/aos-served-surface-standard-proof.json",
         "bytes": 7949,
-        "sha256": "df79288f437cc71cd042352df9a763ade87707e81c234f9d8d2563c658c8081d"
+        "sha256": "96e78a37d471eeeb2e084fd627bfd5af65bdfc6f7ca751b72aa8e23ef12ca418"
       },
       {
         "path": "../TCRN-Design-System/docs/verification/internal-alpha/visual-baseline-manifest.json",
-        "bytes": 44749,
-        "sha256": "c0872dcfa4788e4e4f74eab0b2d91cfaa4acb1b539151501ea87c058713dcfd2"
+        "bytes": 44762,
+        "sha256": "bcca4a7b32f4d18e352f731efeeaca1fa937b1bec941e9e07902619d13197142"
       },
       {
         "path": "../TCRN-Design-System/docs/verification/internal-alpha/intentional-diff-manifest.json",
         "bytes": 35779,
-        "sha256": "b5bcfc6fea4946350e4388a2f662e169257e9be8bab85f0caf6be976fdadfad9"
+        "sha256": "d016f8afc8c47b06d4e5cd462630b0dbed67e83cd4f58a152a79d5bcebd930c9"
       },
       {
         "path": "../TCRN-Design-System/docs/verification/internal-alpha/browser-proof-summary.json",
         "bytes": 58513,
-        "sha256": "2f9c05db128678e713ec2900ae758c80d28ed9779573b7d3954b924c3a9a0346"
+        "sha256": "347976ff5f8daa73dcd10ac17612547f59c035b384399bb8cbd834b93e359d77"
       },
       {
         "path": "../TCRN-Design-System/docs/verification/internal-alpha-hardening-proof.json",

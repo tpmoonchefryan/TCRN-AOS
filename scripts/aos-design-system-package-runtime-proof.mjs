@@ -34,6 +34,16 @@ import {
   renderDocsSearchReleaseReadinessHtml
 } from "../dist/apps/web/src/docs-readiness-view.js";
 import {
+  forbiddenGateQueueVisibleCopy,
+  renderGateQueueHtml,
+  requiredGateQueueSelectors
+} from "../dist/apps/web/src/gate-queue-view.js";
+import {
+  forbiddenProjectWorkspaceVisibleCopy,
+  renderProjectWorkspaceHtml,
+  requiredProjectWorkspaceSelectors
+} from "../dist/apps/web/src/project-workspace-view.js";
+import {
   renderOperationsCockpitHtml
 } from "../dist/apps/web/src/cockpit-view.js";
 
@@ -75,11 +85,25 @@ const servedSurfaceStandardMap = {
     standardId: "ds-aos-target-set-v1",
     storyId: "aos-product-design-target-set-standard",
     storybookId: "tcrn-design-system-patterns--aos-product-design-target-set-standard"
+  },
+  projectWorkspace: {
+    surface: "project-workspace",
+    standardId: "ds-aos-target-set-v1",
+    storyId: "aos-product-design-target-set-standard",
+    storybookId: "tcrn-design-system-patterns--aos-product-design-target-set-standard"
+  },
+  gateQueue: {
+    surface: "gate-queue",
+    standardId: "ds-aos-target-set-v1",
+    storyId: "aos-product-design-target-set-standard",
+    storybookId: "tcrn-design-system-patterns--aos-product-design-target-set-standard"
   }
 };
 const cockpitHtml = renderOperationsCockpitHtml();
 const docsReadinessHtml = renderDocsSearchReleaseReadinessHtml();
 const aosWideHtml = renderAOSWideProductDesignHtml();
+const projectWorkspaceHtml = renderProjectWorkspaceHtml();
+const gateQueueHtml = renderGateQueueHtml();
 const shellSidebarRuntimeReadback = inspectPackageRuntimeShellSidebar(cockpitHtml);
 const claimRiskEvidenceStripRuntimeReadback = inspectPackageRuntimeClaimRiskStrips(cockpitHtml);
 const topbarCheckpointRuntimeReadback = inspectPackageRuntimeTopbarCheckpoint(cockpitHtml);
@@ -91,6 +115,63 @@ const stagePhaseRuntimeReadback = inspectPackageRuntimeStagePhaseCards(cockpitHt
 const operationsCockpitCompletionRuntimeReadback = inspectOperationsCockpitCompletionRuntime(cockpitHtml);
 const docsReadinessRuntimeReadback = inspectDocsReadinessRuntime(docsReadinessHtml);
 const aosWideTargetSetRuntimeReadback = inspectAosWideTargetSetRuntime(aosWideHtml);
+const projectWorkspaceStandaloneRuntimeReadback = inspectStandaloneSurfaceRuntime({
+  id: "projectWorkspace",
+  surfaceName: "project-workspace",
+  html: projectWorkspaceHtml,
+  requiredComponents: [
+    "Surface",
+    "SideNav",
+    "NavGroup",
+    "NavItem",
+    "LinkButton",
+    "TopBar",
+    "Select",
+    "Button",
+    "Badge",
+    "StatusBadge",
+    "EvidenceStrip",
+    "ReadbackPanel",
+    "Text",
+    "Heading",
+    "KeyValueList",
+    "TableShell",
+    "DetailDrawer"
+  ],
+  requiredSelectors: requiredProjectWorkspaceSelectors,
+  forbiddenVisibleCopy: forbiddenProjectWorkspaceVisibleCopy,
+  expectedNavItemCount: 6,
+  expectedDisabledNavItemCount: 0
+});
+const gateQueueStandaloneRuntimeReadback = inspectStandaloneSurfaceRuntime({
+  id: "gateQueue",
+  surfaceName: "gate-queue",
+  html: gateQueueHtml,
+  requiredComponents: [
+    "Surface",
+    "SideNav",
+    "NavGroup",
+    "NavItem",
+    "LinkButton",
+    "TopBar",
+    "Select",
+    "Button",
+    "Badge",
+    "StatusBadge",
+    "EvidenceStrip",
+    "ReadbackPanel",
+    "Text",
+    "Heading",
+    "KeyValueList",
+    "TableShell",
+    "DetailDrawer"
+  ],
+  requiredSelectors: requiredGateQueueSelectors,
+  forbiddenVisibleCopy: forbiddenGateQueueVisibleCopy,
+  expectedNavItemCount: 6,
+  expectedDisabledNavItemCount: 0,
+  requireParentGoalCompletionBoundary: true
+});
 const fullDocumentAccessibilityReadback = inspectFullDocumentAccessibility(cockpitHtml);
 const docsReadinessFullDocumentAccessibilityReadback = inspectFullDocumentAccessibility(docsReadinessHtml);
 const aosWideFullDocumentAccessibilityReadback = inspectFullDocumentAccessibility(aosWideHtml);
@@ -98,16 +179,20 @@ const visualStyleReadback = inspectAosRuntimeStyleContract(cockpitHtml);
 const importReadback = inspectImports();
 const dependencyReadback = inspectDependencies();
 const storybookReferenceReadback = inspectStorybookReference();
-const noOverclaimReadback = inspectNoOverclaim(`${cockpitHtml}\n${docsReadinessHtml}\n${aosWideHtml}`);
+const noOverclaimReadback = inspectNoOverclaim(`${cockpitHtml}\n${docsReadinessHtml}\n${aosWideHtml}\n${projectWorkspaceHtml}\n${gateQueueHtml}`);
 const productVisibleCopyReadback = inspectProductVisibleCopy({
   operationsCockpit: cockpitHtml,
   docsReadiness: docsReadinessHtml,
-  aosWideProductDesign: aosWideHtml
+  aosWideProductDesign: aosWideHtml,
+  projectWorkspace: projectWorkspaceHtml,
+  gateQueue: gateQueueHtml
 });
 const navigationStorybookAlignmentReadback = inspectServedNavigationStorybookAlignment({
   operationsCockpit: cockpitHtml,
   docsReadiness: docsReadinessHtml,
-  aosWideProductDesign: aosWideHtml
+  aosWideProductDesign: aosWideHtml,
+  projectWorkspace: projectWorkspaceHtml,
+  gateQueue: gateQueueHtml
 });
 const designSystemCertificationReadback = inspectDesignSystemCertification();
 const sourceContentReadback = inspectSourceContentDigest();
@@ -116,7 +201,6 @@ const markdownPath = join(repoRoot, "evidence", "aos-design-system-package-runti
 const checkCurrentSource = process.argv.includes("--check-current-source");
 
 const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
-  && aosDesignSystemConsumerBridge.designSystemSourceHead === "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3"
   && aosCockpitUiReactRuntime.packageBackedReactRuntimeRendering === true
   && dependencyReadback.ok
   && importReadback.ok
@@ -131,6 +215,8 @@ const ok = aosDesignSystemConsumerBridge.uiReactPackage === "@tcrn/ui-react"
   && operationsCockpitCompletionRuntimeReadback.ok
   && docsReadinessRuntimeReadback.ok
   && aosWideTargetSetRuntimeReadback.ok
+  && projectWorkspaceStandaloneRuntimeReadback.ok
+  && gateQueueStandaloneRuntimeReadback.ok
   && fullDocumentAccessibilityReadback.ok
   && docsReadinessFullDocumentAccessibilityReadback.ok
   && aosWideFullDocumentAccessibilityReadback.ok
@@ -148,11 +234,13 @@ const summary = {
   sourceHead,
   claimScope: {
     implementationKind: "aos_product_frontend_rebuilt_registered_design_system_runtime",
-    packageBackedReactRuntimeRendering: "operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild",
-    storybookVisualStyleParity: "consumed_ds_4d03f4b_certified_visual_standard_receipts_for_served_scope",
+    packageBackedReactRuntimeRendering: "operations_cockpit_docs_readiness_aos_wide_project_workspace_and_gate_queue_runtime_rebuild",
+    storybookVisualStyleParity: "consumed_current_certified_ds_visual_standard_receipts_for_served_scope_and_standalone_surface_reachability",
     broadUiReactRuntimeMigration: false,
     docsReadinessPackageRuntimeRendering: true,
     aosWidePackageRuntimeRendering: true,
+    projectWorkspaceStandaloneRendering: true,
+    gateQueueStandaloneRendering: true,
     productAcceptanceReady: false,
     finalMvpAcceptanceReady: false,
     releasePublicationReady: false
@@ -181,6 +269,8 @@ const summary = {
   operationsCockpitCompletionRuntimeReadback,
   docsReadinessRuntimeReadback,
   aosWideTargetSetRuntimeReadback,
+  projectWorkspaceStandaloneRuntimeReadback,
+  gateQueueStandaloneRuntimeReadback,
   fullDocumentAccessibilityReadback,
   docsReadinessFullDocumentAccessibilityReadback,
   aosWideFullDocumentAccessibilityReadback,
@@ -247,6 +337,12 @@ console.log(JSON.stringify({
   aosWideTargetSetRuntimeComponentCount: summary.aosWideTargetSetRuntimeReadback.packageRuntimeComponents.length,
   aosWideTargetSetMarkerOnlyCount: summary.aosWideTargetSetRuntimeReadback.markerOnlyComponents.length,
   aosWideTargetSetRuntimeFailures: summary.aosWideTargetSetRuntimeReadback.failures.length,
+  projectWorkspaceRuntimeComponentCount: summary.projectWorkspaceStandaloneRuntimeReadback.packageRuntimeComponents.length,
+  projectWorkspaceMarkerOnlyCount: summary.projectWorkspaceStandaloneRuntimeReadback.markerOnlyComponents.length,
+  projectWorkspaceRuntimeFailures: summary.projectWorkspaceStandaloneRuntimeReadback.failures.length,
+  gateQueueRuntimeComponentCount: summary.gateQueueStandaloneRuntimeReadback.packageRuntimeComponents.length,
+  gateQueueMarkerOnlyCount: summary.gateQueueStandaloneRuntimeReadback.markerOnlyComponents.length,
+  gateQueueRuntimeFailures: summary.gateQueueStandaloneRuntimeReadback.failures.length,
   docsReadinessDuplicateDomIdCount: summary.docsReadinessFullDocumentAccessibilityReadback.duplicateIds.length,
   docsReadinessAriaReferenceFailureCount: summary.docsReadinessFullDocumentAccessibilityReadback.ariaReferenceFailures.length,
   docsReadinessDisabledDescriptionMismatchCount: summary.docsReadinessFullDocumentAccessibilityReadback.disabledControlDescriptionFailures.length,
@@ -1490,6 +1586,121 @@ function inspectAosWideTargetSetRuntime(html) {
   };
 }
 
+function inspectStandaloneSurfaceRuntime({
+  id,
+  surfaceName,
+  html,
+  requiredComponents,
+  requiredSelectors,
+  forbiddenVisibleCopy,
+  expectedNavItemCount,
+  expectedDisabledNavItemCount,
+  requireParentGoalCompletionBoundary = false
+}) {
+  const mainHtml = html.match(/<main\b[\s\S]*<\/main>/)?.[0] ?? "";
+  const failures = [];
+  if (!mainHtml) {
+    return {
+      ok: false,
+      present: false,
+      surface: surfaceName,
+      requiredComponents: [],
+      packageRuntimeComponents: [],
+      markerOnlyComponents: [],
+      missingComponents: [],
+      selectorProof: [],
+      forbiddenVisibleHits: [],
+      failures: [`${surfaceName}_main_missing`]
+    };
+  }
+
+  const packageRuntimeComponents = Array.from(new Set(
+    Array.from(mainHtml.matchAll(/data-package-runtime-component="([^"]+)"/g)).map((match) => match[1])
+  )).sort();
+  const missingComponents = requiredComponents.filter((component) => !packageRuntimeComponents.includes(component));
+  if (missingComponents.length > 0) failures.push(`${surfaceName}_required_package_components_missing`);
+
+  const markerOnlyComponents = Array.from(mainHtml.matchAll(/<([a-zA-Z][\w:-]*)\b(?=[^>]*data-tcrn-component="([^"]+)")(?![^>]*data-package-runtime-component=)(?![^>]*data-package-runtime-subcomponent=)([^>]*)>/g))
+    .map((match) => ({
+      tag: match[1],
+      component: match[2],
+      snippet: redactAttributeSnippet(match[0])
+    }));
+  if (markerOnlyComponents.length > 0) failures.push(`${surfaceName}_marker_only_component_claim_present`);
+
+  const selectorProof = requiredSelectors.map((selector) => {
+    const region = selector.match(/data-region='([^']+)'/)?.[1];
+    const surface = selector.match(/data-surface='([^']+)'/)?.[1];
+    const present = region ? mainHtml.includes(`data-region="${region}"`) : surface ? mainHtml.includes(`data-surface="${surface}"`) : false;
+    return { selector, present };
+  });
+  if (selectorProof.some((item) => !item.present)) failures.push(`${surfaceName}_required_regions_missing`);
+
+  const mainAttributes = parseAttributes(mainHtml.match(/<main\b([^>]*)>/)?.[1] ?? "");
+  if (mainAttributes["data-surface"] !== surfaceName) failures.push(`${surfaceName}_surface_marker_missing`);
+  if (mainAttributes["data-design-system-consumer"] !== "tcrn-aos") failures.push(`${surfaceName}_design_system_consumer_missing`);
+  if (mainAttributes["data-product-acceptance"] !== "false") failures.push(`${surfaceName}_product_acceptance_boundary_missing`);
+  if (mainAttributes["data-live-dispatch"] !== "false") failures.push(`${surfaceName}_live_dispatch_boundary_missing`);
+  if (requireParentGoalCompletionBoundary && mainAttributes["data-parent-goal-completion"] !== "false") {
+    failures.push(`${surfaceName}_parent_goal_completion_boundary_missing`);
+  }
+
+  const navItems = Array.from(mainHtml.matchAll(/<a\b(?=[^>]*data-tcrn-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g))
+    .map((match) => ({ attributes: match[1], body: match[2], parsed: parseAttributes(match[1]) }));
+  const packageRuntimeNavItems = navItems.filter((item) => item.parsed["data-package-runtime-component"] === "NavItem");
+  const disabledNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-disabled"] === "true");
+  const activeNavItems = packageRuntimeNavItems.filter((item) => item.parsed["aria-current"] === "page");
+  if (packageRuntimeNavItems.length !== expectedNavItemCount) failures.push(`${surfaceName}_navitem_runtime_count_mismatch`);
+  if (disabledNavItems.length !== expectedDisabledNavItemCount) failures.push(`${surfaceName}_disabled_navitem_count_mismatch`);
+  if (activeNavItems.length !== 1) failures.push(`${surfaceName}_active_navitem_count_mismatch`);
+
+  const navItemsMissingIcons = packageRuntimeNavItems
+    .map((item) => ({
+      label: extractVisibleText(item.body, "tcrn-nav-item__label") || stripTags(item.body).replace(/\s+/g, " ").trim(),
+      iconCount: Array.from(item.body.matchAll(/data-icon-name="([^"]+)"/g)).length
+    }))
+    .filter((item) => item.iconCount === 0);
+  if (navItemsMissingIcons.length > 0) failures.push(`${surfaceName}_iconless_navitem_present`);
+
+  for (const item of disabledNavItems) {
+    const label = extractVisibleText(item.body, "tcrn-nav-item__label");
+    const visibleReason = findVisibleDisabledReason(item.body, item.parsed["aria-describedby"]);
+    const itemFailures = [];
+    if (item.parsed.href) itemFailures.push("disabled_navitem_has_href");
+    if (item.parsed.tabindex !== "-1") itemFailures.push("disabled_navitem_missing_tabindex_minus_1");
+    if (!item.parsed.title?.trim()) itemFailures.push("disabled_navitem_missing_title");
+    if (!item.parsed["data-disabled-reason"]?.trim()) itemFailures.push("disabled_navitem_missing_data_disabled_reason");
+    if (!item.parsed["aria-describedby"]?.trim()) itemFailures.push("disabled_navitem_missing_aria_describedby");
+    if (!visibleReason.resolved) itemFailures.push("disabled_navitem_aria_describedby_unresolved");
+    if (visibleReason.resolved && !visibleReason.text.trim()) itemFailures.push("disabled_navitem_visible_reason_empty");
+    if (visibleReason.text && item.parsed["data-disabled-reason"] && normalizeText(visibleReason.text) !== normalizeText(item.parsed["data-disabled-reason"])) {
+      itemFailures.push("disabled_navitem_visible_reason_mismatch");
+    }
+    if (itemFailures.length > 0) failures.push({ label, failures: itemFailures });
+  }
+
+  const forbiddenVisibleHits = forbiddenVisibleCopy.filter((phrase) => productVisibleAndA11yText(mainHtml).toLowerCase().includes(phrase.toLowerCase()));
+  if (forbiddenVisibleHits.length > 0) failures.push(`${surfaceName}_forbidden_visible_copy_present`);
+
+  return {
+    ok: failures.length === 0,
+    present: true,
+    id,
+    surface: surfaceName,
+    requiredComponents,
+    packageRuntimeComponents,
+    missingComponents,
+    markerOnlyComponents,
+    selectorProof,
+    packageRuntimeNavItemCount: packageRuntimeNavItems.length,
+    disabledNavItemCount: disabledNavItems.length,
+    activeNavItemCount: activeNavItems.length,
+    navItemsMissingIcons: navItemsMissingIcons.map((item) => item.label),
+    forbiddenVisibleHits,
+    failures
+  };
+}
+
 function inspectFullDocumentAccessibility(html) {
   const idEntries = collectRealIdEntries(html);
   const idCounts = new Map();
@@ -1653,11 +1864,13 @@ function inspectServedNavigationStorybookAlignment(surfaces) {
 
   return {
     ok: failures.length === 0,
-    source: "TCRN-AOS served navigation consumes DS 4d03f4b SideNav/NavGroup/NavItem Storybook standard without product-local aos-sidebar/nav-row/nav-stack overrides",
+    source: "TCRN-AOS served navigation consumes the current certified DS SideNav/NavGroup/NavItem Storybook standard without product-local aos-sidebar/nav-row/nav-stack overrides",
     consumedStorybookIds: [
       servedSurfaceStandardMap.operationsCockpit.storybookId,
       servedSurfaceStandardMap.docsReadiness.storybookId,
-      servedSurfaceStandardMap.aosWideProductDesign.storybookId
+      servedSurfaceStandardMap.aosWideProductDesign.storybookId,
+      servedSurfaceStandardMap.projectWorkspace.storybookId,
+      servedSurfaceStandardMap.gateQueue.storybookId
     ],
     surfaceReadbacks,
     failures
@@ -1672,6 +1885,12 @@ function inspectSourceContentDigest() {
     "apps/api/src/server.ts",
     "apps/web/src/docs-readiness-ui-react-runtime.ts",
     "apps/web/src/docs-readiness-view.ts",
+    "apps/web/src/project-workspace-ui-react-runtime.ts",
+    "apps/web/src/project-workspace-view.ts",
+    "apps/web/src/project-workspace-data.ts",
+    "apps/web/src/gate-queue-ui-react-runtime.ts",
+    "apps/web/src/gate-queue-view.ts",
+    "apps/web/src/gate-queue-data.ts",
     "apps/web/src/aos-wide-product-design-data.ts",
     "apps/web/src/aos-wide-product-design-ui-react-runtime.ts",
     "apps/web/src/aos-wide-product-design-view.ts",
@@ -1682,12 +1901,16 @@ function inspectSourceContentDigest() {
     "packages/db/src/runtime-fixture.ts",
     "packages/db/test/runtime-fixture.test.mjs",
     "apps/web/test/docs-readiness-view.test.mjs",
+    "apps/web/test/project-workspace-view.test.mjs",
+    "apps/web/test/gate-queue-view.test.mjs",
     "apps/web/test/aos-wide-product-design-view.test.mjs",
     "scripts/aos-design-system-package-runtime-proof.mjs",
     "scripts/aos-design-system-component-registry-proof.mjs",
     "scripts/aos-design-system-consumer-slice-1-proof.mjs",
     "scripts/aos-design-system-consumer-slice-2-proof.mjs",
     "scripts/aos-owner-trial-service-backed-frontend-proof.mjs",
+    "scripts/project-workspace-proof.mjs",
+    "scripts/gate-queue-proof.mjs",
     "scripts/service-smoke.mjs",
     "scripts/slice-9b-visible-readiness-proof.mjs",
     "scripts/slice-10-aos-wide-product-design-proof.mjs",
@@ -1806,11 +2029,12 @@ function extractDocsReadinessMainHtml(html) {
 function extractSidebarHtml(html) {
   const marker = 'data-region="sidebar-nav"';
   const markerIndex = html.indexOf(marker);
-  if (markerIndex === -1) return "";
-  const start = html.lastIndexOf("<nav", markerIndex);
-  const end = html.indexOf("</nav>", markerIndex);
-  if (start === -1 || end === -1) return "";
-  return html.slice(start, end + "</nav>".length);
+  if (markerIndex !== -1) {
+    const start = html.lastIndexOf("<nav", markerIndex);
+    const end = html.indexOf("</nav>", markerIndex);
+    if (start !== -1 && end !== -1) return html.slice(start, end + "</nav>".length);
+  }
+  return html.match(/<nav\b(?=[^>]*data-package-runtime-component="SideNav")[\s\S]*?<\/nav>/)?.[0] ?? "";
 }
 
 function extractRegionElementHtml(html, region, tag) {
@@ -1977,7 +2201,7 @@ function inspectDesignSystemCertification() {
     };
   });
   const failures = [];
-  if (dsHead !== "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3") failures.push("design_system_head_mismatch");
+  if (dsHead !== aosDesignSystemConsumerBridge.designSystemSourceHead) failures.push("design_system_head_mismatch");
   if (aosDesignSystemConsumerBridge.designSystemSourceHead !== dsHead) failures.push("aos_bridge_design_system_head_not_current");
   if (standardProof.ok !== true) failures.push("aos_served_surface_standard_proof_not_ok");
   if (hardeningProof.ok !== true) failures.push("internal_alpha_hardening_proof_not_ok");
@@ -2006,8 +2230,8 @@ function inspectDesignSystemCertification() {
   return {
     ok: failures.length === 0,
     designSystemHead: dsHead,
-    expectedDesignSystemHead: "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
-    authorityDisposition: "consume_existing_certified_DS_4d03f4b_standards",
+    expectedDesignSystemHead: aosDesignSystemConsumerBridge.designSystemSourceHead,
+    authorityDisposition: "consume_existing_certified_ds_standards_current_head",
     standardAuthoringRoute: standardProof.route,
     hardeningRoute: hardeningProof.route,
     consumedDsStandardIds: certifiedDsStandardIds,
@@ -2067,11 +2291,19 @@ function inspectProductVisibleCopy(surfaces) {
     { id: "workflow", pattern: /\bworkflow\b/i },
     { id: "owner_intent", pattern: /\bowner intent\b|owner_intent_required/i }
   ];
+  const standaloneBannedTerms = [
+    { id: "slice", pattern: /\bslice\b/i },
+    { id: "implementation", pattern: /\bimplementation\b/i },
+    { id: "workflow", pattern: /\bworkflow\b/i },
+    { id: "owner_intent", pattern: /\bowner intent\b|owner_intent_required/i }
+  ];
   const surfaceReadbacks = Object.entries(surfaces).map(([surface, html]) => {
     const text = productVisibleAndA11yText(html);
     const bannedTerms = surface === "operationsCockpit"
       ? [...commonBannedTerms, ...cockpitOnlyBannedTerms]
-      : commonBannedTerms;
+      : surface === "projectWorkspace" || surface === "gateQueue"
+        ? [...commonBannedTerms, ...standaloneBannedTerms]
+        : commonBannedTerms;
     const hits = bannedTerms
       .filter((term) => term.pattern.test(text))
       .map((term) => term.id);
@@ -2086,6 +2318,7 @@ function inspectProductVisibleCopy(surfaces) {
     ok: surfaceReadbacks.every((readback) => readback.ok),
     bannedTerms: commonBannedTerms.map((term) => term.id),
     cockpitOnlyBannedTerms: cockpitOnlyBannedTerms.map((term) => term.id),
+    standaloneBannedTerms: standaloneBannedTerms.map((term) => term.id),
     surfaceReadbacks
   };
 }
@@ -2245,6 +2478,12 @@ function markdownReceipt(summary) {
     + `- AOS-wide product design marker-only package component claims: ${summary.aosWideTargetSetRuntimeReadback.markerOnlyComponents.length}\n`
     + `- AOS-wide product design surface rows: ${summary.aosWideTargetSetRuntimeReadback.surfaceRowCount}\n`
     + `- AOS-wide product design disabled package NavItems: ${summary.aosWideTargetSetRuntimeReadback.disabledNavItemCount}\n`
+    + `- Project Workspace package runtime components: ${summary.projectWorkspaceStandaloneRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
+    + `- Project Workspace marker-only package component claims: ${summary.projectWorkspaceStandaloneRuntimeReadback.markerOnlyComponents.length}\n`
+    + `- Project Workspace disabled package NavItems: ${summary.projectWorkspaceStandaloneRuntimeReadback.disabledNavItemCount}\n`
+    + `- Gate Queue package runtime components: ${summary.gateQueueStandaloneRuntimeReadback.packageRuntimeComponents.join(", ")}\n`
+    + `- Gate Queue marker-only package component claims: ${summary.gateQueueStandaloneRuntimeReadback.markerOnlyComponents.length}\n`
+    + `- Gate Queue disabled package NavItems: ${summary.gateQueueStandaloneRuntimeReadback.disabledNavItemCount}\n`
     + `- Marker-only NavItems in cockpit nav: ${summary.navRuntimeReadback.markerOnlyNavItemCount}\n`
     + `- Deep import hits: ${summary.importReadback.deepImportHits.length}\n`
     + `- Storybook NavItem disabled reason reference ok: ${summary.storybookReferenceReadback.ok}\n\n`

@@ -72,7 +72,7 @@ test("AOS Design System consumer bridge exposes token and copy-state contracts",
   assert.equal(aosDesignSystemConsumerBridge.uiReactPackage, "@tcrn/ui-react");
   assert.equal(aosDesignSystemConsumerBridge.uiReactRuntimeSurface, "aos_product_frontend_rebuilt_registered_design_system_runtime");
   assert.equal(aosDesignSystemConsumerBridge.packageBackedReactRuntimeRendering, true);
-  assert.equal(aosDesignSystemConsumerBridge.designSystemSourceHead, "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3");
+  assert.equal(aosDesignSystemConsumerBridge.designSystemSourceHead, "8c91fe6a1aa2e3f75c5cacf939bd8ebe6be5be3c");
   assert.equal(copyAosState("external_proof_required"), "Evidence review pending");
   assert.equal(copyAosState("not_claimed"), "Not enabled");
   assert.equal(copyAosState("record_participant_position"), "Record participant position");

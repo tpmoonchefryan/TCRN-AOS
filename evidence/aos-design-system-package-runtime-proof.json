@@ -1,14 +1,16 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_full_rebuild_planning_and_implementation_packet",
-  "sourceHead": "ad6da052c84866f5457d9be10188bd01c607730e",
+  "sourceHead": "1962430040cf73dc295df5dec474806024ee01b4",
   "claimScope": {
     "implementationKind": "aos_product_frontend_rebuilt_registered_design_system_runtime",
-    "packageBackedReactRuntimeRendering": "operations_cockpit_docs_readiness_and_aos_wide_product_design_runtime_rebuild",
-    "storybookVisualStyleParity": "consumed_ds_4d03f4b_certified_visual_standard_receipts_for_served_scope",
+    "packageBackedReactRuntimeRendering": "operations_cockpit_docs_readiness_aos_wide_project_workspace_and_gate_queue_runtime_rebuild",
+    "storybookVisualStyleParity": "consumed_current_certified_ds_visual_standard_receipts_for_served_scope_and_standalone_surface_reachability",
     "broadUiReactRuntimeMigration": false,
     "docsReadinessPackageRuntimeRendering": true,
     "aosWidePackageRuntimeRendering": true,
+    "projectWorkspaceStandaloneRendering": true,
+    "gateQueueStandaloneRendering": true,
     "productAcceptanceReady": false,
     "finalMvpAcceptanceReady": false,
     "releasePublicationReady": false
@@ -16,9 +18,9 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_receipts",
-    "sourceHeadAtProofRun": "ad6da052c84866f5457d9be10188bd01c607730e",
+    "sourceHeadAtProofRun": "1962430040cf73dc295df5dec474806024ee01b4",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "9a8c9d7c2c305a00566fe4723ef79e499b9f848772fda179f65eaba74f54c485",
+    "sourceContentDigest": "8e98857d0b8414c7f772eef2be856f1a4f1f7aba2098b6484938250a29188529",
     "sourcePaths": [
       "apps/web/src/cockpit-ui-react-runtime.ts",
       "apps/web/src/cockpit-view.ts",
@@ -26,6 +28,12 @@
       "apps/api/src/server.ts",
       "apps/web/src/docs-readiness-ui-react-runtime.ts",
       "apps/web/src/docs-readiness-view.ts",
+      "apps/web/src/project-workspace-ui-react-runtime.ts",
+      "apps/web/src/project-workspace-view.ts",
+      "apps/web/src/project-workspace-data.ts",
+      "apps/web/src/gate-queue-ui-react-runtime.ts",
+      "apps/web/src/gate-queue-view.ts",
+      "apps/web/src/gate-queue-data.ts",
       "apps/web/src/aos-wide-product-design-data.ts",
       "apps/web/src/aos-wide-product-design-ui-react-runtime.ts",
       "apps/web/src/aos-wide-product-design-view.ts",
@@ -36,12 +44,16 @@
       "packages/db/src/runtime-fixture.ts",
       "packages/db/test/runtime-fixture.test.mjs",
       "apps/web/test/docs-readiness-view.test.mjs",
+      "apps/web/test/project-workspace-view.test.mjs",
+      "apps/web/test/gate-queue-view.test.mjs",
       "apps/web/test/aos-wide-product-design-view.test.mjs",
       "scripts/aos-design-system-package-runtime-proof.mjs",
       "scripts/aos-design-system-component-registry-proof.mjs",
       "scripts/aos-design-system-consumer-slice-1-proof.mjs",
       "scripts/aos-design-system-consumer-slice-2-proof.mjs",
       "scripts/aos-owner-trial-service-backed-frontend-proof.mjs",
+      "scripts/project-workspace-proof.mjs",
+      "scripts/gate-queue-proof.mjs",
       "scripts/service-smoke.mjs",
       "scripts/slice-9b-visible-readiness-proof.mjs",
       "scripts/slice-10-aos-wide-product-design-proof.mjs",
@@ -49,7 +61,7 @@
     ]
   },
   "designSystemReadback": {
-    "sourceHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
+    "sourceHead": "8c91fe6a1aa2e3f75c5cacf939bd8ebe6be5be3c",
     "uiReactPackage": "@tcrn/ui-react",
     "uiReactPackageSpecifier": "file:../TCRN-Design-System/packages/ui-react",
     "runtimeSurface": "aos_product_frontend_rebuilt_registered_design_system_runtime",
@@ -83,6 +95,7 @@
       "operationsCockpit": "ds-aos-operations-cockpit-v1",
       "docsSearchReleaseReadiness": "ds-aos-docs-readiness-v1",
       "projectWorkspace": "ds-aos-target-set-v1",
+      "gateQueue": "ds-aos-target-set-v1",
       "initiativeDetail": "ds-aos-target-set-v1",
       "aosWideProductDesign": "ds-aos-target-set-v1"
     },
@@ -323,7 +336,7 @@
     "packageRuntimeFilterBarPresent": true,
     "packageRuntimeTableShellPresent": true,
     "packageRuntimeEmptyStatePresent": true,
-    "sampleRenderedHtmlSha256": "47a5c0e5b2cc6a5d92de47bf6ed3bebffc702df8fb3fd56e019c3e64234fb60f",
+    "sampleRenderedHtmlSha256": "1d12acf4bc6326ca30fbdaba8b1abb6b2785a8a7f874d8abbbe2d5e3768d0904",
     "failures": []
   },
   "detailDrawerRuntimeReadback": {
@@ -388,7 +401,7 @@
     "readbackPostureComponent": "ReadbackPanel",
     "disabledActionButtonCount": 2,
     "readbackKeyValueRowCount": 4,
-    "sampleRenderedHtmlSha256": "da9c8c31b318d1358976e7f099fa88a501c0229688b8d6de1db085391f18a68a",
+    "sampleRenderedHtmlSha256": "3ef368aa84cda70790b49d96a8977e32f519b6616208133edaeeab3ae1797a9b",
     "failures": []
   },
   "stagePhaseRuntimeReadback": {
@@ -422,7 +435,7 @@
       "phaseLabelRulePresent": true,
       "mobileStageWrapRulePresent": true
     },
-    "sampleRenderedHtmlSha256": "fae3a670508197aee4563676e99d57609d05f27360c97cc7328fdab95a004059",
+    "sampleRenderedHtmlSha256": "f55260dc960a6df0baa86df5e41a5827194ce7578cf9cd68f1533098e7ee0438",
     "failures": []
   },
   "operationsCockpitCompletionRuntimeReadback": {
@@ -557,7 +570,7 @@
     "activeNavItemCount": 1,
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "73bc80a78f04c22b3d24cc4d41e8267c04f3e7cbae837956af85e83d705e444a",
+    "sampleRenderedHtmlSha256": "efc0ac83f888e7c73669cfa4541d31e8d9b20ce8de1e4788e7440d2b800ba96a",
     "failures": []
   },
   "aosWideTargetSetRuntimeReadback": {
@@ -625,7 +638,187 @@
     "disabledButtonFailures": [],
     "searchInputControlDisposition": "internal_subcomponent_not_separate_package_runtime_scope",
     "forbiddenClaimHits": [],
-    "sampleRenderedHtmlSha256": "93b6eeae7bafdbd3d8ee7ffb62d7839c64dcd5d3767b8e0460fa59876cf46d89",
+    "sampleRenderedHtmlSha256": "249cc252892b0acec56efb2b0cbfb312c9c6e84ceda3fbb964bc13eae1ff5bfb",
+    "failures": []
+  },
+  "projectWorkspaceStandaloneRuntimeReadback": {
+    "ok": true,
+    "present": true,
+    "id": "projectWorkspace",
+    "surface": "project-workspace",
+    "requiredComponents": [
+      "Surface",
+      "SideNav",
+      "NavGroup",
+      "NavItem",
+      "LinkButton",
+      "TopBar",
+      "Select",
+      "Button",
+      "Badge",
+      "StatusBadge",
+      "EvidenceStrip",
+      "ReadbackPanel",
+      "Text",
+      "Heading",
+      "KeyValueList",
+      "TableShell",
+      "DetailDrawer"
+    ],
+    "packageRuntimeComponents": [
+      "Badge",
+      "Button",
+      "DetailDrawer",
+      "EvidenceStrip",
+      "Heading",
+      "KeyValueList",
+      "LinkButton",
+      "NavGroup",
+      "NavItem",
+      "ReadbackPanel",
+      "Select",
+      "SideNav",
+      "StatusBadge",
+      "Surface",
+      "TableShell",
+      "Text",
+      "TopBar"
+    ],
+    "missingComponents": [],
+    "markerOnlyComponents": [],
+    "selectorProof": [
+      {
+        "selector": "[data-surface='project-workspace']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-shell']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-nav']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-topbar']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-summary']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-hierarchy']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-index']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-detail']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='project-workspace-actions']",
+        "present": true
+      }
+    ],
+    "packageRuntimeNavItemCount": 6,
+    "disabledNavItemCount": 0,
+    "activeNavItemCount": 1,
+    "navItemsMissingIcons": [],
+    "forbiddenVisibleHits": [],
+    "failures": []
+  },
+  "gateQueueStandaloneRuntimeReadback": {
+    "ok": true,
+    "present": true,
+    "id": "gateQueue",
+    "surface": "gate-queue",
+    "requiredComponents": [
+      "Surface",
+      "SideNav",
+      "NavGroup",
+      "NavItem",
+      "LinkButton",
+      "TopBar",
+      "Select",
+      "Button",
+      "Badge",
+      "StatusBadge",
+      "EvidenceStrip",
+      "ReadbackPanel",
+      "Text",
+      "Heading",
+      "KeyValueList",
+      "TableShell",
+      "DetailDrawer"
+    ],
+    "packageRuntimeComponents": [
+      "Badge",
+      "Button",
+      "DetailDrawer",
+      "EvidenceStrip",
+      "Heading",
+      "KeyValueList",
+      "LinkButton",
+      "NavGroup",
+      "NavItem",
+      "ReadbackPanel",
+      "Select",
+      "SideNav",
+      "StatusBadge",
+      "Surface",
+      "TableShell",
+      "Text",
+      "TopBar"
+    ],
+    "missingComponents": [],
+    "markerOnlyComponents": [],
+    "selectorProof": [
+      {
+        "selector": "[data-surface='gate-queue']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-shell']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-nav']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-topbar']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-summary']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-list']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-detail']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-service']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-actions']",
+        "present": true
+      }
+    ],
+    "packageRuntimeNavItemCount": 6,
+    "disabledNavItemCount": 0,
+    "activeNavItemCount": 1,
+    "navItemsMissingIcons": [],
+    "forbiddenVisibleHits": [],
     "failures": []
   },
   "fullDocumentAccessibilityReadback": {
@@ -666,10 +859,12 @@
   },
   "navigationStorybookAlignmentReadback": {
     "ok": true,
-    "source": "TCRN-AOS served navigation consumes DS 4d03f4b SideNav/NavGroup/NavItem Storybook standard without product-local aos-sidebar/nav-row/nav-stack overrides",
+    "source": "TCRN-AOS served navigation consumes the current certified DS SideNav/NavGroup/NavItem Storybook standard without product-local aos-sidebar/nav-row/nav-stack overrides",
     "consumedStorybookIds": [
       "tcrn-design-system-patterns--aos-operations-cockpit-standard",
       "tcrn-design-system-patterns--aos-docs-readiness-standard",
+      "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+      "tcrn-design-system-patterns--aos-product-design-target-set-standard",
       "tcrn-design-system-patterns--aos-product-design-target-set-standard"
     ],
     "surfaceReadbacks": [
@@ -720,6 +915,38 @@
         "forbiddenClassHits": [],
         "forbiddenStyleSelectorHits": [],
         "failures": []
+      },
+      {
+        "id": "projectWorkspace",
+        "ok": true,
+        "sideNavClass": "tcrn-side-nav project-workspace__nav",
+        "sideNavPrimitive": "side-nav",
+        "navGroupCount": 1,
+        "navItemCount": 6,
+        "navItemIconCount": 6,
+        "navItemsMissingIcons": [],
+        "navItemsWithMultipleIcons": [],
+        "iconColumnCssPresent": true,
+        "selectedNavItemCount": 1,
+        "forbiddenClassHits": [],
+        "forbiddenStyleSelectorHits": [],
+        "failures": []
+      },
+      {
+        "id": "gateQueue",
+        "ok": true,
+        "sideNavClass": "tcrn-side-nav gate-queue__nav",
+        "sideNavPrimitive": "side-nav",
+        "navGroupCount": 1,
+        "navItemCount": 6,
+        "navItemIconCount": 6,
+        "navItemsMissingIcons": [],
+        "navItemsWithMultipleIcons": [],
+        "iconColumnCssPresent": true,
+        "selectedNavItemCount": 1,
+        "forbiddenClassHits": [],
+        "forbiddenStyleSelectorHits": [],
+        "failures": []
       }
     ],
     "failures": []
@@ -756,9 +983,9 @@
   },
   "designSystemCertificationReadback": {
     "ok": true,
-    "designSystemHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
-    "expectedDesignSystemHead": "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3",
-    "authorityDisposition": "consume_existing_certified_DS_4d03f4b_standards",
+    "designSystemHead": "8c91fe6a1aa2e3f75c5cacf939bd8ebe6be5be3c",
+    "expectedDesignSystemHead": "8c91fe6a1aa2e3f75c5cacf939bd8ebe6be5be3c",
+    "authorityDisposition": "consume_existing_certified_ds_standards_current_head",
     "standardAuthoringRoute": "route_tcrn_design_system_aos_served_surface_visual_standard_component_registration_authoring_after_f728e9c",
     "hardeningRoute": "route_tcrn_design_system_internal_alpha_hardening_proof_implementation",
     "consumedDsStandardIds": [
@@ -809,6 +1036,32 @@
         "visualBaselinePresent": true,
         "intentionalDiffPresent": true,
         "browserProofPresent": true
+      },
+      {
+        "surface": "project-workspace",
+        "standardId": "ds-aos-target-set-v1",
+        "storyId": "aos-product-design-target-set-standard",
+        "storybookId": "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+        "standardProofPresent": true,
+        "storyRegistered": true,
+        "visualStandardMarkerPresent": true,
+        "servedSurfaceMarkerPresent": true,
+        "visualBaselinePresent": true,
+        "intentionalDiffPresent": true,
+        "browserProofPresent": true
+      },
+      {
+        "surface": "gate-queue",
+        "standardId": "ds-aos-target-set-v1",
+        "storyId": "aos-product-design-target-set-standard",
+        "storybookId": "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+        "standardProofPresent": true,
+        "storyRegistered": true,
+        "visualStandardMarkerPresent": true,
+        "servedSurfaceMarkerPresent": true,
+        "visualBaselinePresent": true,
+        "intentionalDiffPresent": true,
+        "browserProofPresent": true
       }
     ],
     "exceptionCoverage": [
@@ -830,7 +1083,7 @@
         "path": "../TCRN-Design-System/docs/verification/internal-alpha/aos-served-surface-standard-proof.json",
         "exists": true,
         "bytes": 7949,
-        "sha256": "df79288f437cc71cd042352df9a763ade87707e81c234f9d8d2563c658c8081d"
+        "sha256": "96e78a37d471eeeb2e084fd627bfd5af65bdfc6f7ca751b72aa8e23ef12ca418"
       },
       {
         "path": "../TCRN-Design-System/docs/verification/internal-alpha/aos-served-surface-standard-proof.md",
@@ -841,20 +1094,20 @@
       {
         "path": "../TCRN-Design-System/docs/verification/internal-alpha/visual-baseline-manifest.json",
         "exists": true,
-        "bytes": 44749,
-        "sha256": "c0872dcfa4788e4e4f74eab0b2d91cfaa4acb1b539151501ea87c058713dcfd2"
+        "bytes": 44762,
+        "sha256": "bcca4a7b32f4d18e352f731efeeaca1fa937b1bec941e9e07902619d13197142"
       },
       {
         "path": "../TCRN-Design-System/docs/verification/internal-alpha/intentional-diff-manifest.json",
         "exists": true,
         "bytes": 35779,
-        "sha256": "b5bcfc6fea4946350e4388a2f662e169257e9be8bab85f0caf6be976fdadfad9"
+        "sha256": "d016f8afc8c47b06d4e5cd462630b0dbed67e83cd4f58a152a79d5bcebd930c9"
       },
       {
         "path": "../TCRN-Design-System/docs/verification/internal-alpha/browser-proof-summary.json",
         "exists": true,
         "bytes": 58513,
-        "sha256": "2f9c05db128678e713ec2900ae758c80d28ed9779573b7d3954b924c3a9a0346"
+        "sha256": "347976ff5f8daa73dcd10ac17612547f59c035b384399bb8cbd834b93e359d77"
       },
       {
         "path": "../TCRN-Design-System/docs/verification/internal-alpha-hardening-proof.json",
@@ -864,7 +1117,7 @@
       }
     ],
     "productVisibleCopyProofDisposition": {
-      "source": "AOS served Operations Cockpit, Docs Readiness, and AOS-wide product HTML/accessibility text only",
+      "source": "AOS served Operations Cockpit, Docs Readiness, AOS-wide Product Design, Project Workspace, and Gate Queue HTML/accessibility text only",
       "dsSyntheticStorybookVocabularyDisposition": "accepted_as_design_system_fixture_evidence_not_aos_customer_copy_proof",
       "aosProductVisibleCopyOk": true,
       "aosProductVisibleCopySurfaceReadbacks": [
@@ -872,7 +1125,7 @@
           "surface": "operationsCockpit",
           "ok": true,
           "hits": [],
-          "scannedTextLength": 5446
+          "scannedTextLength": 5497
         },
         {
           "surface": "docsReadiness",
@@ -885,6 +1138,18 @@
           "ok": true,
           "hits": [],
           "scannedTextLength": 8087
+        },
+        {
+          "surface": "projectWorkspace",
+          "ok": true,
+          "hits": [],
+          "scannedTextLength": 2946
+        },
+        {
+          "surface": "gateQueue",
+          "ok": true,
+          "hits": [],
+          "scannedTextLength": 2940
         }
       ]
     },
@@ -909,12 +1174,23 @@
       "unavailable_in_this_route",
       "not_claimed"
     ],
+    "cockpitOnlyBannedTerms": [
+      "implementation",
+      "workflow",
+      "owner_intent"
+    ],
+    "standaloneBannedTerms": [
+      "slice",
+      "implementation",
+      "workflow",
+      "owner_intent"
+    ],
     "surfaceReadbacks": [
       {
         "surface": "operationsCockpit",
         "ok": true,
         "hits": [],
-        "scannedTextLength": 5446
+        "scannedTextLength": 5497
       },
       {
         "surface": "docsReadiness",
@@ -927,6 +1203,18 @@
         "ok": true,
         "hits": [],
         "scannedTextLength": 8087
+      },
+      {
+        "surface": "projectWorkspace",
+        "ok": true,
+        "hits": [],
+        "scannedTextLength": 2946
+      },
+      {
+        "surface": "gateQueue",
+        "ok": true,
+        "hits": [],
+        "scannedTextLength": 2940
       }
     ]
   }

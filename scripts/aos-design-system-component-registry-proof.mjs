@@ -3,6 +3,9 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join, relative } from "node:path";
 import {
+  aosDesignSystemConsumerBridge
+} from "../dist/apps/web/src/design-system-bridge.js";
+import {
   aosDesignSystemRegisteredComponentNames,
   aosRequiredStaticSurfaceComponents
 } from "../dist/apps/web/src/static-component-registry.js";
@@ -12,6 +15,8 @@ import {
 import { renderAOSWideProductDesignHtml } from "../dist/apps/web/src/aos-wide-product-design-view.js";
 import { renderOperationsCockpitHtml } from "../dist/apps/web/src/cockpit-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../dist/apps/web/src/docs-readiness-view.js";
+import { renderGateQueueHtml } from "../dist/apps/web/src/gate-queue-view.js";
+import { renderProjectWorkspaceHtml } from "../dist/apps/web/src/project-workspace-view.js";
 
 const repoRoot = process.cwd();
 const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
@@ -74,6 +79,56 @@ const surfaces = [
       "Resource Library",
       "Admin / Access"
     ]
+  },
+  {
+    id: "project-workspace",
+    path: "apps/web/static/project-workspace.html",
+    html: renderProjectWorkspaceHtml(),
+    required: [
+      "Surface",
+      "SideNav",
+      "NavGroup",
+      "NavItem",
+      "LinkButton",
+      "TopBar",
+      "Select",
+      "Button",
+      "Badge",
+      "StatusBadge",
+      "EvidenceStrip",
+      "ReadbackPanel",
+      "Text",
+      "Heading",
+      "KeyValueList",
+      "TableShell",
+      "DetailDrawer"
+    ],
+    expectedDisabledNavItems: []
+  },
+  {
+    id: "gate-queue",
+    path: "apps/web/static/gate-queue.html",
+    html: renderGateQueueHtml(),
+    required: [
+      "Surface",
+      "SideNav",
+      "NavGroup",
+      "NavItem",
+      "LinkButton",
+      "TopBar",
+      "Select",
+      "Button",
+      "Badge",
+      "StatusBadge",
+      "EvidenceStrip",
+      "ReadbackPanel",
+      "Text",
+      "Heading",
+      "KeyValueList",
+      "TableShell",
+      "DetailDrawer"
+    ],
+    expectedDisabledNavItems: []
   }
 ];
 const browserSummaryPath = join(repoRoot, "evidence", "aos-design-system-browser-readback", "summary.json");
@@ -124,11 +179,13 @@ const summary = {
   registrySource: relative(repoRoot, designSystemRegistrySourcePath),
   designSystemBasis,
   claimScope: {
-    implementationKind: "mixed_static_renderer_registered_component_metadata_with_operations_cockpit_completion_docs_readiness_and_aos_wide_target_set_package_runtime",
-    packageBackedReactRuntimeRendering: "operations_cockpit_completion_docs_readiness_search_release_and_aos_wide_target_set_runtime_adoption",
-    storybookVisualStyleParity: "consumed_ds_4d03f4b_certified_visual_standard_receipts_for_served_scope",
+    implementationKind: "mixed_static_renderer_registered_component_metadata_with_served_scope_and_standalone_surface_runtime",
+    packageBackedReactRuntimeRendering: "operations_cockpit_completion_docs_readiness_search_release_aos_wide_target_set_project_workspace_and_gate_queue_runtime_adoption",
+    storybookVisualStyleParity: "consumed_current_certified_ds_visual_standard_receipts_for_served_scope_and_standalone_surface_reachability",
     docsReadinessPackageRuntimeRendering: true,
     aosWidePackageRuntimeRendering: true,
+    projectWorkspaceStandaloneRendering: true,
+    gateQueueStandaloneRendering: true,
     productAcceptanceReady: false,
     finalMvpAcceptanceReady: false
   },
@@ -328,7 +385,7 @@ function findAbsoluteLocalPathHits(raw) {
 }
 
 function inspectDesignSystemCertification() {
-  const expectedHead = "4d03f4b4e5079f5c49a775f0bc613cfd3889fae3";
+  const expectedHead = aosDesignSystemConsumerBridge.designSystemSourceHead;
   const expectedStandards = [
     "ds-aos-operations-cockpit-v1",
     "ds-aos-docs-readiness-v1",
