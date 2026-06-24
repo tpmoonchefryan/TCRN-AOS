@@ -512,7 +512,7 @@ function visibleText(html) {
 }
 
 const productVisibleInternalTermsPattern =
-  /\breadback\b|\bcheckpoint\b|\broute\b|\bfixture\b|proof required|external proof required|package-runtime pilot|functional contract readback only|held for later|unavailable in this route|not claimed|not_claimed/i;
+  /\breadback\b|\bcheckpoint\b|\broute\b|\bfixture\b|\bimplementation\b|\bworkflow\b|\bowner intent\b|owner_intent_required|proof required|external proof required|package-runtime pilot|functional contract readback only|held for later|unavailable in this route|not claimed|not_claimed/i;
 
 const tcrnIconNames = new Set([
   "alert-triangle",

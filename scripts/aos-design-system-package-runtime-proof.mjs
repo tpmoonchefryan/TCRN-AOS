@@ -779,13 +779,13 @@ function inspectPackageRuntimeWorkIndexCluster(html) {
 
   const sampleRenderedHtmlSha256 = createHash("sha256").update(renderCockpitRuntimeWorkIndexCluster({
     columnsDisabledReason: "Sample disabled reason for package runtime proof.",
-    filters: [{ label: "Project: TCRN-AOS" }, { label: "Freshness: Readback current" }],
+    filters: [{ label: "Project: TCRN-AOS" }, { label: "Freshness: Current state" }],
     rows: [
       {
         active: true,
         evidenceLabel: "1 conference link",
         gateLabel: "3 local actions",
-        owner: "implementation",
+        owner: "Workspace team",
         searchText: "sample work index row",
         stateLabel: "In progress",
         storyId: "sample_story",
@@ -974,11 +974,11 @@ function inspectPackageRuntimeGateReadbackCards(html) {
     gateWorkOrder: {
       count: 2,
       disabledReason: "Sample gate request disabled reason.",
-      gateModeLabel: "Owner Intent separated",
-      gateOwnerRole: "owner",
-      gateStatusLabel: "Owner Intent required",
-      gateSummary: "Owner Intent gate: Owner Intent required; Owner Intent separated.",
-      gateTypeLabel: "Owner Intent gate"
+      gateModeLabel: "Action approval separated",
+      gateOwnerRole: "Workspace owner",
+      gateStatusLabel: "Action approval required",
+      gateSummary: "Action approval gate: Action approval required; Action approval separated.",
+      gateTypeLabel: "Action approval gate"
     },
     readbackPosture: {
       dependencyLabel: "Review required",
@@ -1101,11 +1101,11 @@ function inspectPackageRuntimeStagePhaseCards(html) {
     stages: [
       {
         evidenceCount: 2,
-        freshnessLabel: "Readback current",
+        freshnessLabel: "Current state",
         index: 0,
         label: "Sample stage",
-        ownerRoles: ["implementation", "review"],
-        releaseReadinessLabel: "Not claimed",
+        ownerRoles: ["Workspace team", "Review"],
+        releaseReadinessLabel: "Not enabled",
         sourceGateCount: 1,
         stageId: "sample-stage",
         state: "active",
@@ -2049,7 +2049,7 @@ function readDesignSystemReceipt(path) {
 }
 
 function inspectProductVisibleCopy(surfaces) {
-  const bannedTerms = [
+  const commonBannedTerms = [
     { id: "readback", pattern: /\breadback\b/i },
     { id: "checkpoint", pattern: /\bcheckpoint\b/i },
     { id: "route", pattern: /\broute\b/i },
@@ -2062,8 +2062,16 @@ function inspectProductVisibleCopy(surfaces) {
     { id: "unavailable_in_this_route", pattern: /unavailable in this route/i },
     { id: "not_claimed", pattern: /not claimed|not_claimed/i }
   ];
+  const cockpitOnlyBannedTerms = [
+    { id: "implementation", pattern: /\bimplementation\b/i },
+    { id: "workflow", pattern: /\bworkflow\b/i },
+    { id: "owner_intent", pattern: /\bowner intent\b|owner_intent_required/i }
+  ];
   const surfaceReadbacks = Object.entries(surfaces).map(([surface, html]) => {
     const text = productVisibleAndA11yText(html);
+    const bannedTerms = surface === "operationsCockpit"
+      ? [...commonBannedTerms, ...cockpitOnlyBannedTerms]
+      : commonBannedTerms;
     const hits = bannedTerms
       .filter((term) => term.pattern.test(text))
       .map((term) => term.id);
@@ -2076,7 +2084,8 @@ function inspectProductVisibleCopy(surfaces) {
   });
   return {
     ok: surfaceReadbacks.every((readback) => readback.ok),
-    bannedTerms: bannedTerms.map((term) => term.id),
+    bannedTerms: commonBannedTerms.map((term) => term.id),
+    cockpitOnlyBannedTerms: cockpitOnlyBannedTerms.map((term) => term.id),
     surfaceReadbacks
   };
 }

@@ -620,7 +620,7 @@ function renderRows(rows) {
     [
       row.title,
       copyState(row.status),
-      row.nextOwnerRole
+      copyRole(row.nextOwnerRole)
     ].forEach((value, index) => {
       const cell = document.createElement("span");
       cell.className = "tcrn-table-shell__cell";
@@ -661,7 +661,7 @@ function renderDetail(model) {
     ["Conference links", String(detail.linkedConferenceIds.length)],
     ["Evidence links", String(detail.linkedEvidenceIds.length)],
     ["Local actions", detail.nextAllowedLocalActions.map(copyAction).join(", ") || copyAction("open_evidence_metadata")],
-    ["Blocked actions", detail.blockedActions.map((item) => copyAction(item.action)).join(", ") || "No local readback blockers"],
+    ["Blocked actions", detail.blockedActions.map((item) => copyAction(item.action)).join(", ") || "No local blockers"],
     ["Operating loop", detail.operatingLoopSummary],
     ["Action posture", detail.noOverclaimSummary]
   ]);
@@ -698,6 +698,15 @@ function copyState(value) {
 
 function copyAction(value) {
   return copyState(value);
+}
+
+function copyRole(value) {
+  const key = String(value || "unknown").trim().toLowerCase().replace(/_/g, " ");
+  if (key === "implementation") return "Workspace team";
+  if (key === "owner") return "Workspace owner";
+  if (key === "product strategy") return "Product strategy";
+  if (key === "release") return "Release review";
+  return key.split(" ").filter(Boolean).map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
 }
 
 function copyFreshness(value) {
@@ -794,7 +803,7 @@ function createCockpitRuntimeTopbarCheckpointOptions(input: {
     projectOptions: [
       input.model.contextHeader.selectedProjectId,
       "TCRN-TMS",
-      "TCRN Workflow"
+      "Governance workspace"
     ],
     refreshLabel: "Refresh status",
     serviceReadbackLabel: serviceReadModelSummary(input.serviceReadback),
@@ -847,16 +856,17 @@ function createCockpitRuntimeWorkIndexRows(rows: WorkstreamStoryRow[]): CockpitR
     const evidenceLabel = `${row.linkedConferenceIds.length} conference link`;
     const gateLabel = `${row.nextAllowedLocalActions.length} local actions`;
     const stateLabel = copyState(row.status);
+    const ownerLabel = copyCockpitRoleLabel(row.nextOwnerRole);
     return {
       active: index === 0,
       evidenceLabel,
       gateLabel,
-      owner: row.nextOwnerRole,
+      owner: ownerLabel,
       searchText: [
         row.storyId,
         row.title,
         stateLabel,
-        row.nextOwnerRole,
+        ownerLabel,
         evidenceLabel,
         gateLabel
       ].join(" ").toLowerCase(),
@@ -879,8 +889,8 @@ function createCockpitRuntimeStagePhaseOptions(
       evidenceCount: model.evidenceReadbacks.length,
       freshnessLabel: copyFreshness(model.contextHeader.dataFreshness),
       index,
-      label: stage.label,
-      ownerRoles: stage.ownerRoles,
+      label: copyCockpitStageLabel(stage.label),
+      ownerRoles: stage.ownerRoles.map(copyCockpitRoleLabel),
       releaseReadinessLabel: copyState(model.nonClaims.releaseReadinessClaim),
       sourceGateCount: model.ownerIntentQueue.length + model.roleGateQueue.length,
       stageId: stage.stageId,
@@ -909,10 +919,10 @@ interface GateReadbackCardsOptionInput {
 
 function createCockpitRuntimeGateReadbackCardsOptions(input: GateReadbackCardsOptionInput): CockpitRuntimeGateReadbackCardsOptions {
   const gate = input.blockingGate;
-  const gateTypeLabel = gate ? copyState(gate.type) : copyState("none");
-  const gateOwnerRole = gate?.ownerRole ?? "No local gate rows";
-  const gateStatusLabel = gate ? copyState(gate.status) : "No local gate rows";
-  const gateModeLabel = gate ? (gate.ownerIntent ? "Owner Intent separated" : "Role gate pending") : "No local gate rows";
+  const gateTypeLabel = gate ? copyCockpitGateTypeLabel(gate.type) : copyState("none");
+  const gateOwnerRole = gate ? copyCockpitRoleLabel(gate.ownerRole) : "No local gate rows";
+  const gateStatusLabel = gate ? copyCockpitGateStatusLabel(gate.status) : "No local gate rows";
+  const gateModeLabel = gate ? copyCockpitGateModeLabel(gate) : "No local gate rows";
   return {
     gateWorkOrder: {
       count: input.model.ownerIntentQueue.length + input.model.roleGateQueue.length,
@@ -951,7 +961,9 @@ function createCockpitRuntimeDetailDrawerOptions(input: DetailDrawerOptionInput)
     {
       key: "gate-flow",
       label: "Gate flow",
-      value: input.blockingGate ? `${input.blockingGate.ownerRole} - ${copyState(input.blockingGate.status)}` : copyState("none")
+      value: input.blockingGate
+        ? `${copyCockpitRoleLabel(input.blockingGate.ownerRole)} - ${copyCockpitGateStatusLabel(input.blockingGate.status)}`
+        : copyState("none")
     },
     {
       key: "conference",
@@ -1025,7 +1037,7 @@ function gateBlock(gate: GateQueueItem | undefined): string {
   if (!gate) {
     return `<div class="gate-block tcrn-state-view" ${tcrnComponentAttr("StateView")}><strong>${copyState("none")}</strong><span>No local gate rows.</span></div>`;
   }
-  return `<div class="gate-block tcrn-state-view" ${tcrnComponentAttr("StateView")}><span>${copyState(gate.type)}</span><strong>${escapeHtml(gate.ownerRole)}</strong><span>${copyState(gate.status)}</span><span>${gate.ownerIntent ? "Owner Intent separated" : "Role gate pending"}</span></div>`;
+  return `<div class="gate-block tcrn-state-view" ${tcrnComponentAttr("StateView")}><span>${copyCockpitGateTypeLabel(gate.type)}</span><strong>${escapeHtml(copyCockpitRoleLabel(gate.ownerRole))}</strong><span>${copyCockpitGateStatusLabel(gate.status)}</span><span>${copyCockpitGateModeLabel(gate)}</span></div>`;
 }
 
 function workRow(row: WorkstreamStoryRow, index: number): string {
@@ -1038,6 +1050,37 @@ function copyState(state: string): string {
 
 function copyFreshness(freshness: string): string {
   return copyAosFreshness(freshness);
+}
+
+function copyCockpitStageLabel(label: string): string {
+  const normalized = label.trim().toLowerCase().replace(/_/g, " ");
+  if (normalized === "implementation") return "Build";
+  if (normalized === "release") return "Release review";
+  if (normalized === "product strategy") return "Product strategy";
+  return normalized.replace(/\b\w/g, (character) => character.toUpperCase());
+}
+
+function copyCockpitRoleLabel(role: string): string {
+  const normalized = role.trim().toLowerCase().replace(/_/g, " ");
+  if (normalized === "implementation") return "Workspace team";
+  if (normalized === "product strategy") return "Product strategy";
+  if (normalized === "owner") return "Workspace owner";
+  if (normalized === "release") return "Release review";
+  return normalized.replace(/\b\w/g, (character) => character.toUpperCase());
+}
+
+function copyCockpitGateTypeLabel(type: string): string {
+  if (type === "owner_intent") return "Action approval gate";
+  return copyState(type);
+}
+
+function copyCockpitGateStatusLabel(status: string): string {
+  if (status === "owner_intent_required") return "Action approval required";
+  return copyState(status);
+}
+
+function copyCockpitGateModeLabel(gate: GateQueueItem): string {
+  return gate.ownerIntent ? "Action approval separated" : "Role review pending";
 }
 
 function copyPosture(posture: string): string {
