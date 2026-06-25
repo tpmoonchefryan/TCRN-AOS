@@ -1,8 +1,8 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_4b9253b_ilya_project_workspace_copy_proof_table_repair_after_elara_review",
-  "sourceHead": "7c5622aa35409f99824c351d51a718d1c5676446",
-  "generatedAt": "2026-06-25T09:36:58.417Z",
+  "sourceHead": "71880d9aad2760608ed4433b319f4e69252f1a8b",
+  "generatedAt": "2026-06-25T09:53:39.713Z",
   "staticTarget": "apps/web/static/project-workspace.html",
   "staticSha256": "0392a0e8bbad30788fe8bdab5a48ee1c302753975c0d243ae3b6b4315f747412",
   "staticBytes": 40845,
@@ -81,7 +81,7 @@
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/project-workspace-browser/7c5622aa35409f99824c351d51a718d1c5676446/project-workspace-desktop-1440x900.png",
+      "screenshot": "evidence/project-workspace-browser/71880d9aad2760608ed4433b319f4e69252f1a8b/project-workspace-desktop-1440x900.png",
       "screenshotSha256": "404c692ff0dcd0dcc477d8ffeb4f09015a0fca6cdfb79ef999aad32a83291d22",
       "screenshotBytes": 258157,
       "selectorProof": [
@@ -157,7 +157,7 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/project-workspace-browser/7c5622aa35409f99824c351d51a718d1c5676446/project-workspace-mobile-390x844.png",
+      "screenshot": "evidence/project-workspace-browser/71880d9aad2760608ed4433b319f4e69252f1a8b/project-workspace-mobile-390x844.png",
       "screenshotSha256": "53cd052861736659dd3a69a0aca65c1c45125c2ea40df13b733eca6eaf8ac092",
       "screenshotBytes": 239371,
       "selectorProof": [
@@ -237,7 +237,7 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "project_workspace_visible_slice_source_content_digest_v1",
-    "sourceHead": "7c5622aa35409f99824c351d51a718d1c5676446",
+    "sourceHead": "71880d9aad2760608ed4433b319f4e69252f1a8b",
     "sourcePaths": [
       "apps/web/src/cockpit.ts",
       "apps/web/src/project-workspace-data.ts",
@@ -285,12 +285,12 @@
       {
         "path": "apps/api/src/server.ts",
         "exists": true,
-        "sha256": "8d874b20ee98f4b50b11277268015b40bc30aed076b4351638b566804c141671"
+        "sha256": "e9c20dff90d51a1994cd62cc726921cda821ec0d28e6ce27c55486966e4d91d4"
       },
       {
         "path": "apps/api/test/service-smoke.test.mjs",
         "exists": true,
-        "sha256": "0f429d41f29a42157f67eeb28d1457495147d9ad012e6f6412c032573dc1fe9c"
+        "sha256": "169f27a7e8bbb765447c7fb5835f764345be5523366d1e77ebb874a37bd03a63"
       },
       {
         "path": "scripts/project-workspace-proof.mjs",
@@ -308,7 +308,7 @@
         "sha256": "317031279417629dedac30c6653bed0f9720bc383366d7fdb31a8cdbe7478bf5"
       }
     ],
-    "sourceContentDigest": "0ef6630b36756e821ee840e3ad1513832cdb74445d5a7b22b98140514b956f80"
+    "sourceContentDigest": "b3d3aa8d5644ce33a22c94883b06acbcde718592eded467d2f063bd97632572e"
   },
   "noOverclaimReadback": {
     "productAcceptance": false,

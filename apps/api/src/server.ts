@@ -8,6 +8,7 @@ import {
 } from "../../web/src/cockpit.js";
 import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
+import { renderInitiativeDetailHtml } from "../../web/src/initiative-detail-view.js";
 import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
 import { renderProjectWorkspaceHtml } from "../../web/src/project-workspace-view.js";
 import { renderRebuildBaselineHtml } from "../../web/src/rebuild-baseline-view.js";
@@ -109,11 +110,19 @@ function handleRequest(
     return;
   }
 
-  const rebuildAliases = new Set([
-    "/",
+  const initiativeDetailAliases = new Set([
     "/initiative-detail",
     "/initiative-detail.html",
-    "/apps/web/static/initiative-detail.html",
+    "/apps/web/static/initiative-detail.html"
+  ]);
+
+  if (initiativeDetailAliases.has(path)) {
+    sendHtml(request, response, renderInitiativeDetailHtml());
+    return;
+  }
+
+  const rebuildAliases = new Set([
+    "/",
     "/ai-employee",
     "/ai-employee.html",
     "/apps/web/static/ai-employee.html",

@@ -1,0 +1,341 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_0b349cf_ilya_initiative_detail_ticket_drillthrough_visible_slice_after_project_workspace_sync",
+  "sourceHead": "71880d9aad2760608ed4433b319f4e69252f1a8b",
+  "generatedAt": "2026-06-25T09:53:39.879Z",
+  "staticTarget": "apps/web/static/initiative-detail.html",
+  "staticSha256": "7dc1e9363946f0f25c3dd3b3aeb60d86478a2bbcd9884e07ba2e7f3e7a6ba65a",
+  "staticBytes": 42072,
+  "dsStandardsConsumed": [
+    "ds-aos-target-set-v1",
+    "ds-aos-operations-cockpit-v1"
+  ],
+  "storybookOraclesConsumed": [
+    "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+    "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+  ],
+  "taliaChecklistItemAdvanced": "Initiative Detail / Ticket drill-through standalone visible surface",
+  "routeAliases": [
+    "/initiative-detail",
+    "/initiative-detail.html",
+    "/apps/web/static/initiative-detail.html"
+  ],
+  "staticReadback": {
+    "packageComponents": [
+      "Badge",
+      "Button",
+      "DetailDrawer",
+      "EvidenceStrip",
+      "Heading",
+      "KeyValueList",
+      "LinkButton",
+      "NavGroup",
+      "NavItem",
+      "ReadbackPanel",
+      "Select",
+      "SideNav",
+      "StatusBadge",
+      "Surface",
+      "TableShell",
+      "Text",
+      "TopBar"
+    ],
+    "missingComponents": [],
+    "markerOnlyComponents": [],
+    "selectorProof": [
+      {
+        "selector": "[data-surface='initiative-detail']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='initiative-detail-shell']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='initiative-detail-nav']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='initiative-detail-topbar']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='initiative-detail-summary']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='initiative-detail-ticket']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='initiative-detail-links']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='initiative-detail-activity']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='initiative-detail-actions']",
+        "present": true
+      }
+    ],
+    "forbiddenVisibleHits": [],
+    "navItemCount": 8,
+    "iconlessNavItemCount": 0,
+    "failures": []
+  },
+  "viewportReadbacks": [
+    {
+      "viewport": "desktop-1440x900",
+      "screenshot": "evidence/initiative-detail-browser/71880d9aad2760608ed4433b319f4e69252f1a8b/initiative-detail-desktop-1440x900.png",
+      "screenshotSha256": "a7bf46db0dfa4d65bf4c803b14eb9d2c0593d3336ff485aa55356a87714f8462",
+      "screenshotBytes": 320858,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='initiative-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-ticket']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-links']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-activity']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-actions']",
+          "present": true
+        }
+      ],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 6,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "Select",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar"
+      ],
+      "markerOnlyComponents": [],
+      "navItemCount": 8,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "linkRowCount": 11,
+      "linkRowFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    },
+    {
+      "viewport": "mobile-390x844",
+      "screenshot": "evidence/initiative-detail-browser/71880d9aad2760608ed4433b319f4e69252f1a8b/initiative-detail-mobile-390x844.png",
+      "screenshotSha256": "48fd9517404b1c7af1ab60bdb9aad440663058349fb3855e5e7e248e36113bd0",
+      "screenshotBytes": 340635,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='initiative-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-ticket']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-links']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-activity']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-actions']",
+          "present": true
+        }
+      ],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 6,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "Select",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar"
+      ],
+      "markerOnlyComponents": [],
+      "navItemCount": 8,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "linkRowCount": 11,
+      "linkRowFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "requestFailures": [],
+  "sourceFreshnessReadback": {
+    "strategy": "initiative_detail_visible_slice_source_content_digest_v1",
+    "sourceHead": "71880d9aad2760608ed4433b319f4e69252f1a8b",
+    "sourcePaths": [
+      "apps/web/src/cockpit.ts",
+      "apps/web/src/initiative-detail-data.ts",
+      "apps/web/src/initiative-detail-ui-react-runtime.ts",
+      "apps/web/src/initiative-detail-view.ts",
+      "apps/web/src/project-workspace-ui-react-runtime.ts",
+      "apps/web/src/design-system-bridge.ts",
+      "apps/web/test/initiative-detail-view.test.mjs",
+      "apps/web/test/project-workspace-view.test.mjs",
+      "apps/api/src/server.ts",
+      "apps/api/test/service-smoke.test.mjs",
+      "scripts/initiative-detail-proof.mjs",
+      "scripts/service-start.mjs",
+      "package.json"
+    ],
+    "inputs": [
+      {
+        "path": "apps/web/src/cockpit.ts",
+        "exists": true,
+        "sha256": "431243eaa90e0c371ee879abb98fb5284b908afc27e7eb4b5f782a14cbb5d94c"
+      },
+      {
+        "path": "apps/web/src/initiative-detail-data.ts",
+        "exists": true,
+        "sha256": "88d6b46da7327ebe3126694c28fe60968ea17ddd3ad3349ff54ed928650e4c81"
+      },
+      {
+        "path": "apps/web/src/initiative-detail-ui-react-runtime.ts",
+        "exists": true,
+        "sha256": "69220cdfa5480b8782964693bae425ed8c5cfbc9caaf02fb2afdb1396fc0d73e"
+      },
+      {
+        "path": "apps/web/src/initiative-detail-view.ts",
+        "exists": true,
+        "sha256": "0ef36cc7becda899bdafe9e143838096a8557dc6ee43bf7f21a2bf16b00883d4"
+      },
+      {
+        "path": "apps/web/src/project-workspace-ui-react-runtime.ts",
+        "exists": true,
+        "sha256": "95245e955645f3f2736eec8ad599a8c7507642ec39cd125ae151ff57fed584fd"
+      },
+      {
+        "path": "apps/web/src/design-system-bridge.ts",
+        "exists": true,
+        "sha256": "58f14ce186b755d33279ce8d6c84a3f58623a4a67adb126c9e29e067235f5c27"
+      },
+      {
+        "path": "apps/web/test/initiative-detail-view.test.mjs",
+        "exists": true,
+        "sha256": "23bbf851526760606c200f621132ddc92614b74795f4a405b40271836318b944"
+      },
+      {
+        "path": "apps/web/test/project-workspace-view.test.mjs",
+        "exists": true,
+        "sha256": "4dc8f2a71a7fd3cad40e03f648ba2d0d45f69743d606f2f139109179ce018a7b"
+      },
+      {
+        "path": "apps/api/src/server.ts",
+        "exists": true,
+        "sha256": "e9c20dff90d51a1994cd62cc726921cda821ec0d28e6ce27c55486966e4d91d4"
+      },
+      {
+        "path": "apps/api/test/service-smoke.test.mjs",
+        "exists": true,
+        "sha256": "169f27a7e8bbb765447c7fb5835f764345be5523366d1e77ebb874a37bd03a63"
+      },
+      {
+        "path": "scripts/initiative-detail-proof.mjs",
+        "exists": true,
+        "sha256": "a456c02d9a25f439cf9b79f9694b532500a6416e29d6dd54ef58123bb338bb69"
+      },
+      {
+        "path": "scripts/service-start.mjs",
+        "exists": true,
+        "sha256": "57214e84c339cd441c125071906e5d62f1791abf14785bab98778b2aa6826338"
+      },
+      {
+        "path": "package.json",
+        "exists": true,
+        "sha256": "317031279417629dedac30c6653bed0f9720bc383366d7fdb31a8cdbe7478bf5"
+      }
+    ],
+    "sourceContentDigest": "3178d08f9594b19cd2e4d437900c5ccc804efe2d4b56181d3dcb20bf4cba2ede"
+  },
+  "noOverclaimReadback": {
+    "productAcceptance": false,
+    "finalMvpAcceptance": false,
+    "releasePublication": false,
+    "ownerIntentExecution": false,
+    "liveDispatch": false,
+    "parentGoalCompletion": false
+  },
+  "failures": []
+}
