@@ -5,7 +5,7 @@ Status: observed local proof receipt
 ## Checkpoint Identity
 
 - Route: `route_tcrn_aos_design_system_frontend_rebuild_59ax_aos_wide_product_design_target_set_package_runtime_adoption_implementation`
-- Source head at proof run: `06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505`
+- Source head at proof run: `45f8b8891f4729f57c143ed199e072bcc42a8a95`
 - Workflow packet basis: `bcff619a406f2028e6c70ea76a3ade1674e3ca21`
 - Pre-implementation basis: `06cded11e97be6d4a738a21ae942128d5b4688cd`
 - Static target: `apps/web/static/aos-wide-product-design.html`
@@ -38,14 +38,14 @@ Status: observed local proof receipt
 
 Retained artifacts:
 
-- `evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/desktop-1440x900-initial.png` sha256 `72fa0dc862e22f10f939a490ba9a0e3a2981da1653955cc9bfdcd134eed9e415`
-- `evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/desktop-1440x900-blocked-filter.png` sha256 `b6f28764d9cfa0c6b4b75edba250b55954fec7c09b78fc36adb9a7ae09559a73`
-- `evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/desktop-1440x900-no-match.png` sha256 `6dd0f143e6b8aea428601453ba56ba6fda44351b4fc4c91501fc09796c70ba98`
-- `evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/desktop-1440x900-resource-detail.png` sha256 `a62f4b3034908501782ffde3cb1c53cab03c9f8296c01bc806d69e37709b3fd7`
-- `evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/mobile-390x844-initial.png` sha256 `d310f6693df8744831e6e58af25c21a708db199e11c765dc39ecc66dd8348785`
-- `evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/mobile-390x844-blocked-filter.png` sha256 `ad64300c797b5b475e35028f3c09d0201d4aa3e7acbd97b8503eae2f2e54dd87`
-- `evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/mobile-390x844-no-match.png` sha256 `d34b1e031368b98490235d8bf6d731dd9607baf9a7a8de628366a78309ba6de8`
-- `evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/mobile-390x844-resource-detail.png` sha256 `c81834edf9c216316b23ed73153ed7574afdc4ddac0fcdd1224a050524650437`
+- `evidence/slice-10-aos-wide-product-design-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/desktop-1440x900-initial.png` sha256 `72fa0dc862e22f10f939a490ba9a0e3a2981da1653955cc9bfdcd134eed9e415`
+- `evidence/slice-10-aos-wide-product-design-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/desktop-1440x900-blocked-filter.png` sha256 `b6f28764d9cfa0c6b4b75edba250b55954fec7c09b78fc36adb9a7ae09559a73`
+- `evidence/slice-10-aos-wide-product-design-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/desktop-1440x900-no-match.png` sha256 `a799d1df9b8e40ccd44c9801a347e61f3bf79fabf944ec5a7dffba3321845d97`
+- `evidence/slice-10-aos-wide-product-design-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/desktop-1440x900-resource-detail.png` sha256 `a62f4b3034908501782ffde3cb1c53cab03c9f8296c01bc806d69e37709b3fd7`
+- `evidence/slice-10-aos-wide-product-design-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/mobile-390x844-initial.png` sha256 `d310f6693df8744831e6e58af25c21a708db199e11c765dc39ecc66dd8348785`
+- `evidence/slice-10-aos-wide-product-design-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/mobile-390x844-blocked-filter.png` sha256 `a30d152397338d7776a14610313a9e2a7185326197f6b8f77ff349f2b19d7613`
+- `evidence/slice-10-aos-wide-product-design-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/mobile-390x844-no-match.png` sha256 `d34b1e031368b98490235d8bf6d731dd9607baf9a7a8de628366a78309ba6de8`
+- `evidence/slice-10-aos-wide-product-design-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/mobile-390x844-resource-detail.png` sha256 `c81834edf9c216316b23ed73153ed7574afdc4ddac0fcdd1224a050524650437`
 
 ## No-Overclaim Boundaries
 

@@ -1,0 +1,285 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_f5611d_ilya_resume_total_frontend_rebuild_after_ai_employee_status_sync",
+  "sourceHead": "45f8b8891f4729f57c143ed199e072bcc42a8a95",
+  "generatedAt": "2026-06-25T10:54:13.596Z",
+  "staticTarget": "apps/web/static/conference.html",
+  "staticSha256": "9e7b59695fb099f7e197d2e9fba0bb4874ba772d9859d9e31d8adf3ad5dca0a4",
+  "staticBytes": 35588,
+  "dsStandardsConsumed": [
+    "ds-aos-target-set-v1",
+    "ds-aos-operations-cockpit-v1"
+  ],
+  "storybookOraclesConsumed": [
+    "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+    "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+  ],
+  "checklistItemAdvanced": "conference-list-detail-minutes",
+  "routeAliases": [
+    "/conference",
+    "/conference.html",
+    "/apps/web/static/conference.html"
+  ],
+  "staticReadback": {
+    "packageComponents": [
+      "Badge",
+      "Button",
+      "DetailDrawer",
+      "EvidenceStrip",
+      "Heading",
+      "KeyValueList",
+      "LinkButton",
+      "NavGroup",
+      "NavItem",
+      "ReadbackPanel",
+      "Select",
+      "SideNav",
+      "StatusBadge",
+      "Surface",
+      "TableShell",
+      "Text",
+      "TopBar"
+    ],
+    "missingComponents": [],
+    "markerOnlyComponents": [],
+    "selectorProof": [
+      {
+        "selector": "[data-surface='conference']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='conference-shell']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='conference-nav']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='conference-topbar']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='conference-summary']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='conference-list']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='conference-detail']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='conference-service']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='conference-actions']",
+        "present": true
+      }
+    ],
+    "forbiddenVisibleHits": [],
+    "navItemCount": 9,
+    "iconlessNavItemCount": 0,
+    "failures": []
+  },
+  "viewportReadbacks": [
+    {
+      "viewport": "desktop-1440x900",
+      "screenshot": "evidence/conference-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/conference-desktop-1440x900.png",
+      "screenshotSha256": "9dee085c5594e0b193e73d8a3c60030aad90625e2ba80d59795a01ca79b94f63",
+      "screenshotBytes": 237427,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='conference']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-service']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-actions']",
+          "present": true
+        }
+      ],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 6,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "Select",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar"
+      ],
+      "markerOnlyComponents": [],
+      "navItemCount": 9,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "conferenceRowCount": 1,
+      "conferenceRowFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    },
+    {
+      "viewport": "mobile-390x844",
+      "screenshot": "evidence/conference-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/conference-mobile-390x844.png",
+      "screenshotSha256": "61f3ceeb7a5402f738f13585fc5edef9d9420197c366e1084299e0027207cc41",
+      "screenshotBytes": 221927,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='conference']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-service']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-actions']",
+          "present": true
+        }
+      ],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 6,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "Select",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar"
+      ],
+      "markerOnlyComponents": [],
+      "navItemCount": 9,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "conferenceRowCount": 1,
+      "conferenceRowFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "requestFailures": [],
+  "sourceFreshnessReadback": {
+    "strategy": "conference_visible_slice_source_content_digest_v1",
+    "sourceHeadAtProofRun": "45f8b8891f4729f57c143ed199e072bcc42a8a95",
+    "exactFinalCommitHeadRequired": false,
+    "sourceContentDigest": "86998794e67ce207cc359743a88e96f8a5bd98f1b72ce798ec8e6afbe0f57c21",
+    "sourcePaths": [
+      "apps/web/src/conference-data.ts",
+      "apps/web/src/conference-ui-react-runtime.ts",
+      "apps/web/src/conference-view.ts",
+      "apps/web/src/ai-employee-ui-react-runtime.ts",
+      "apps/web/src/gate-queue-ui-react-runtime.ts",
+      "apps/web/src/initiative-detail-ui-react-runtime.ts",
+      "apps/web/src/project-workspace-ui-react-runtime.ts",
+      "apps/web/src/cockpit.ts",
+      "apps/web/src/design-system-bridge.ts",
+      "apps/web/test/conference-view.test.mjs",
+      "apps/web/test/ai-employee-view.test.mjs",
+      "apps/web/test/gate-queue-view.test.mjs",
+      "apps/web/test/initiative-detail-view.test.mjs",
+      "apps/web/test/project-workspace-view.test.mjs",
+      "apps/api/src/server.ts",
+      "apps/api/test/service-smoke.test.mjs",
+      "scripts/conference-proof.mjs",
+      "scripts/ai-employee-proof.mjs",
+      "scripts/gate-queue-proof.mjs",
+      "scripts/initiative-detail-proof.mjs",
+      "scripts/project-workspace-proof.mjs",
+      "scripts/service-start.mjs",
+      "package.json"
+    ]
+  },
+  "noOverclaimReadback": {
+    "productAcceptance": false,
+    "finalMvpAcceptance": false,
+    "releasePublication": false,
+    "ownerIntentExecution": false,
+    "liveDispatch": false,
+    "parentGoalCompletion": false
+  },
+  "failures": []
+}

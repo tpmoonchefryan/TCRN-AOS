@@ -25,6 +25,13 @@ const staticTargets = rebuildBaselineRoutes.map((routePath) => ({
   routePath,
   filePath: join(repoRoot, "apps/web/static", routePath.replace(/^.*\//, ""))
 }));
+const fallbackRoutePath = "/";
+const fallbackProofPath = join(evidenceDir, "rebuild-baseline-root.html");
+const browserProofTarget = staticTargets[0] ?? {
+  routePath: fallbackRoutePath,
+  filePath: fallbackProofPath,
+  generatedForProofOnly: true
+};
 const viewports = [
   { label: "desktop-1440x900", width: 1440, height: 900, minNavLabelWidth: 120, checklistMode: "desktop", minChecklistRowWidth: 880 },
   { label: "mobile-390x844", width: 390, height: 844, minNavLabelWidth: 100, checklistMode: "mobile", minChecklistRowWidth: 0 }
@@ -52,6 +59,9 @@ mkdirSync(evidenceDir, { recursive: true });
 for (const target of staticTargets) {
   mkdirSync(dirname(target.filePath), { recursive: true });
   writeFileSync(target.filePath, renderRebuildBaselineHtml(target.routePath));
+}
+if (staticTargets.length === 0) {
+  writeFileSync(browserProofTarget.filePath, renderRebuildBaselineHtml(fallbackRoutePath));
 }
 
 const designSystemRequire = createRequire(join(repoRoot, "..", "TCRN-Design-System", "package.json"));
@@ -83,7 +93,7 @@ try {
     });
     page.on("requestfailed", (request) => requestFailures.push(`${viewport.label}: ${request.url()} ${request.failure()?.errorText ?? "request_failed"}`));
 
-    await page.goto(pathToFileURL(staticTargets[0].filePath).href, { waitUntil: "domcontentloaded" });
+    await page.goto(pathToFileURL(browserProofTarget.filePath).href, { waitUntil: "domcontentloaded" });
     await page.waitForSelector("[data-surface='aos-rebuild-workspace']");
     const screenshotPath = join(evidenceDir, `rebuild-baseline-${viewport.label}.png`);
     await page.screenshot({ path: screenshotPath, fullPage: true });
@@ -263,6 +273,11 @@ const summary = {
   route,
   sourceHead,
   generatedAt: new Date().toISOString(),
+  browserProofTarget: {
+    routePath: browserProofTarget.routePath,
+    staticTarget: relative(repoRoot, browserProofTarget.filePath),
+    generatedForProofOnly: browserProofTarget.generatedForProofOnly === true
+  },
   replacedStaticTargets: staticTargetsReadback,
   viewportReadbacks,
   pageErrors,
@@ -330,6 +345,10 @@ Source content digest: \`${summary.sourceFreshnessReadback.sourceContentDigest}\
 ## Replaced static targets
 
 ${summary.replacedStaticTargets.map((item) => `- ${item.routePath} -> ${item.staticTarget} sha256=${item.sha256} bytes=${item.bytes} baseline=${item.hasBaselineSurface} checklist=${item.hasChecklist}`).join("\n")}
+
+## Browser proof target
+
+- ${summary.browserProofTarget.routePath} -> ${summary.browserProofTarget.staticTarget} generatedForProofOnly=${summary.browserProofTarget.generatedForProofOnly}
 
 ## Browser Evidence
 

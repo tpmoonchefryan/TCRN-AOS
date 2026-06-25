@@ -10,9 +10,7 @@ export const rebuildBaselineStorybookIds = [
   "tcrn-design-system-patterns--aos-product-design-target-set-standard"
 ] as const;
 
-export const rebuildBaselineRoutes = [
-  "/dependency-console.html"
-] as const;
+export const rebuildBaselineRoutes = [] as const;
 
 export const requiredRebuildBaselineSelectors = [
   "[data-surface='aos-rebuild-workspace']",
@@ -80,7 +78,7 @@ const checklistRows: RebuildChecklistRow[] = [
   row("ai-employee", "AI Employee", "reopened", "DS AI employee standard", "AI employee profiles are active again from the reset baseline."),
   row("gate-queue", "Gate Queue", "reopened", "DS gate queue standard", "Gate queue is active again from the reset baseline."),
   row("conference", "Conference", "reopened", "DS conference standard", "Conference list, detail, and minutes are active again from the reset baseline."),
-  row("dependency-console", "Dependency Console", "rebuild_queued", "Total-scope checklist", "Dependency governance will restart from the new baseline."),
+  row("dependency-console", "Dependency Console", "reopened", "DS dependency console standard", "Dependency governance is active again from the reset baseline."),
   row("resource-library", "Resource Library", "rebuild_queued", "Total-scope checklist", "Resource audit and materialization will restart from the new baseline."),
   row("knowledge-modules", "Knowledge Modules", "rebuild_queued", "Total-scope checklist", "Knowledge, guide, and release-note modules will restart from the new baseline."),
   row("admin-access", "Admin / Access", "rebuild_queued", "Total-scope checklist", "Admin and access shell will restart from the new baseline.")

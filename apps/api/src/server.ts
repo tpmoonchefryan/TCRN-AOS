@@ -9,6 +9,7 @@ import {
 import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
 import { renderAiEmployeeHtml } from "../../web/src/ai-employee-view.js";
 import { renderConferenceHtml } from "../../web/src/conference-view.js";
+import { renderDependencyConsoleHtml } from "../../web/src/dependency-console-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
 import { renderGateQueueHtml } from "../../web/src/gate-queue-view.js";
 import { renderInitiativeDetailHtml } from "../../web/src/initiative-detail-view.js";
@@ -157,11 +158,19 @@ function handleRequest(
     return;
   }
 
-  const rebuildAliases = new Set([
-    "/",
+  const dependencyConsoleAliases = new Set([
     "/dependency-console",
     "/dependency-console.html",
     "/apps/web/static/dependency-console.html"
+  ]);
+
+  if (dependencyConsoleAliases.has(path)) {
+    sendHtml(request, response, renderDependencyConsoleHtml());
+    return;
+  }
+
+  const rebuildAliases = new Set([
+    "/"
   ]);
   if (rebuildAliases.has(path)) {
     sendHtml(request, response, renderRebuildBaselineHtml(path === "/" ? "/operations-cockpit.html" : path));

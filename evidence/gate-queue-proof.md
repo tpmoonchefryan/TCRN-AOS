@@ -3,8 +3,8 @@
 Status: passed.
 
 Route: `route_tcrn_aos_c2924d0_ilya_resume_total_frontend_rebuild_after_internal_coordination_repair`
-AOS source head: `06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505`
-Source content digest: `29130d24377b22aed9ced2f4661c0135a3172ea8c5b0bff77a57f9fbb9fe176e`
+AOS source head: `45f8b8891f4729f57c143ed199e072bcc42a8a95`
+Source content digest: `9269fa1818997bc07aa7c04b6b2f9e0e98a188c7ade8e9ded19765dde72cacec`
 
 ## Static Surface
 
@@ -16,8 +16,8 @@ Source content digest: `29130d24377b22aed9ced2f4661c0135a3172ea8c5b0bff77a57f9fb
 
 ## Browser Evidence
 
-- desktop-1440x900: evidence/gate-queue-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/gate-queue-desktop-1440x900.png sha256=acc3443af3e607a2037345283151d9db84d4eff8fd3212a2b5e95c375ece2c63 bytes=248289 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 queueRowFailures=0
-- mobile-390x844: evidence/gate-queue-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/gate-queue-mobile-390x844.png sha256=b06c98bf081b617e525ac2226f0315958dfd678ba7b0f90ac0b9356dfe87a459 bytes=233236 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 queueRowFailures=0
+- desktop-1440x900: evidence/gate-queue-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/gate-queue-desktop-1440x900.png sha256=acc3443af3e607a2037345283151d9db84d4eff8fd3212a2b5e95c375ece2c63 bytes=248289 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 queueRowFailures=0
+- mobile-390x844: evidence/gate-queue-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/gate-queue-mobile-390x844.png sha256=b06c98bf081b617e525ac2226f0315958dfd678ba7b0f90ac0b9356dfe87a459 bytes=233236 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 queueRowFailures=0
 
 ## Boundaries
 

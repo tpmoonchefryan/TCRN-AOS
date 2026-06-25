@@ -1,24 +1,20 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_storybook_first_rebuild_reset_after_owner_direction_clarification",
-  "sourceHead": "06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505",
-  "generatedAt": "2026-06-25T10:38:15.424Z",
-  "replacedStaticTargets": [
-    {
-      "routePath": "/dependency-console.html",
-      "staticTarget": "apps/web/static/dependency-console.html",
-      "sha256": "ae2e89082da406b28e04d47c769c0a29b4b76e83045761b281c23f51d5724781",
-      "bytes": 48319,
-      "hasBaselineSurface": true,
-      "hasChecklist": true
-    }
-  ],
+  "sourceHead": "45f8b8891f4729f57c143ed199e072bcc42a8a95",
+  "generatedAt": "2026-06-25T10:54:14.083Z",
+  "browserProofTarget": {
+    "routePath": "/",
+    "staticTarget": "evidence/rebuild-baseline-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/rebuild-baseline-root.html",
+    "generatedForProofOnly": true
+  },
+  "replacedStaticTargets": [],
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/rebuild-baseline-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/rebuild-baseline-desktop-1440x900.png",
-      "screenshotSha256": "9b26d48a79bf517bc04f4998b75725cae084179fb83d14e7a74d544d317f8505",
-      "screenshotBytes": 428429,
+      "screenshot": "evidence/rebuild-baseline-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/rebuild-baseline-desktop-1440x900.png",
+      "screenshotSha256": "2d0327d75eade0a45a8db512662a222eb87e92b40fab290ad94a35d70383187b",
+      "screenshotBytes": 429947,
       "selectorProof": [
         {
           "selector": "[data-surface='aos-rebuild-workspace']",
@@ -130,9 +126,9 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/rebuild-baseline-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/rebuild-baseline-mobile-390x844.png",
-      "screenshotSha256": "48781f65f3d7f56a7a05d6d0967746a5e699cbb933e85493f67e27f25f86224d",
-      "screenshotBytes": 509353,
+      "screenshot": "evidence/rebuild-baseline-browser/45f8b8891f4729f57c143ed199e072bcc42a8a95/rebuild-baseline-mobile-390x844.png",
+      "screenshotSha256": "81540a39c92c3c2a33e37f098889cf1a77bd21d39643e4bb2c22b9b7b65ebf7f",
+      "screenshotBytes": 511709,
       "selectorProof": [
         {
           "selector": "[data-surface='aos-rebuild-workspace']",
@@ -248,9 +244,9 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "rebuild_baseline_reset_source_content_digest_v1",
-    "sourceHeadAtProofRun": "06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505",
+    "sourceHeadAtProofRun": "45f8b8891f4729f57c143ed199e072bcc42a8a95",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "ee5c54824e3f50977975c6780a217d486d499c2b598ac316b236e8f23e1bbf5d",
+    "sourceContentDigest": "0615964e0c3e72fc72c84f0b60f51bb56f7a0fab92868548479401760410e8c2",
     "sourcePaths": [
       "apps/web/src/rebuild-baseline-data.ts",
       "apps/web/src/rebuild-baseline-ui-react-runtime.ts",

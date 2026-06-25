@@ -53,9 +53,14 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
     assert.match(conferenceHtml, /Conference/, "/conference.html exposes conference module heading");
     assert.doesNotMatch(conferenceHtml, /AOS Rebuild Workspace/, "/conference.html is no longer the reset baseline");
 
+    const dependencyConsoleHtml = await fetch(`${service.url}/dependency-console.html`).then((response) => response.text());
+    assert.match(dependencyConsoleHtml, /data-surface="dependency-console"/, "/dependency-console.html serves rebuilt dependency console");
+    assert.match(dependencyConsoleHtml, /TCRN AOS Dependency Console/, "/dependency-console.html exposes dependency console title");
+    assert.match(dependencyConsoleHtml, /Dependency Console/, "/dependency-console.html exposes dependency console module heading");
+    assert.doesNotMatch(dependencyConsoleHtml, /AOS Rebuild Workspace/, "/dependency-console.html is no longer the reset baseline");
+
     const rebuildTargets = [
-      "/",
-      "/dependency-console.html"
+      "/"
     ];
     for (const target of rebuildTargets) {
       const html = await fetch(`${service.url}${target}`).then((response) => response.text());
