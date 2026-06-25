@@ -3,20 +3,20 @@
 Status: passed.
 
 Route: `route_tcrn_aos_storybook_first_rebuild_reset_after_owner_direction_clarification`
-AOS source head: `a131293b44ba1faf802bbcff16f493fb13f0c3f6`
-Source content digest: `0d8b83cd54265ba06daf75544c910a9d50cf56b3f792ce1fe79b0d7e1b28fec8`
+AOS source head: `1e2b0e52c2d44fcb1c338cea14722c9d0c74afea`
+Source content digest: `e8b7d3e2466071cd1ff747f954ede8883afbd92ee8653e28b3ceebce7afb85e6`
 
 ## Replaced static targets
 
-- /operations-cockpit.html -> apps/web/static/operations-cockpit.html sha256=b239be27a634686d1ac5380c43b0173e816f393127ffab780a3dffa11cf960e7 bytes=69700 baseline=true checklist=true
-- /docs-search-release-readiness.html -> apps/web/static/docs-search-release-readiness.html sha256=a769389d2693dac5b338f31cd1b2aadb3e51d70ca31ebba28fe7cac359a64c1e bytes=69703 baseline=true checklist=true
-- /aos-wide-product-design.html -> apps/web/static/aos-wide-product-design.html sha256=189820598cae18ee6252f1265ba21725a7c9c0a2aa2f9555e68ab6201a659918 bytes=69678 baseline=true checklist=true
-- /project-workspace.html -> apps/web/static/project-workspace.html sha256=02b926cd13918965074dd28a11df6be8473dc23264396399656265228bfb73d3 bytes=69697 baseline=true checklist=true
-- /initiative-detail.html -> apps/web/static/initiative-detail.html sha256=1a4703b365623c44eeb39109664c0263ca80b40747df00d7ff3bb2886e15c72f bytes=69697 baseline=true checklist=true
-- /ai-employee.html -> apps/web/static/ai-employee.html sha256=4e163af6f8340176a6f97ee9eba0b1a82458dcc2e72b5dcc89ac6f1673d5b7c1 bytes=69679 baseline=true checklist=true
-- /gate-queue.html -> apps/web/static/gate-queue.html sha256=47ee3c4b1e1a7f9eecd0a702e12d6e2cb0aa95386952e5f0102809cd236e0b21 bytes=69676 baseline=true checklist=true
-- /conference.html -> apps/web/static/conference.html sha256=f8bb977f3e57109b7ef8b15917ce7cad463695926c9a4b7e1e499e4076c03686 bytes=69676 baseline=true checklist=true
-- /dependency-console.html -> apps/web/static/dependency-console.html sha256=abc5093c34999298faef44348091b44f11db66af8324fce9f7c31ec8c7c76af5 bytes=69700 baseline=true checklist=true
+- /operations-cockpit.html -> apps/web/static/operations-cockpit.html sha256=7c030856bfbe81132f881d0967effa8019fe0d3e0cf30a9aa51c664e6008cb3f bytes=77304 baseline=true checklist=true
+- /docs-search-release-readiness.html -> apps/web/static/docs-search-release-readiness.html sha256=89cf894a3a50c0c3ca12e0de3fbecf862e92fc92c9eefd43281eb27f746133d0 bytes=77307 baseline=true checklist=true
+- /aos-wide-product-design.html -> apps/web/static/aos-wide-product-design.html sha256=64ef0651ed9d38cf98d933289bb9e4d103a9b43d6ebc9219866279241b59e297 bytes=77282 baseline=true checklist=true
+- /project-workspace.html -> apps/web/static/project-workspace.html sha256=47022b7de23a5fb3cee0f1df96f94883ee43fdebfd3b930e299c3bb428ade121 bytes=77301 baseline=true checklist=true
+- /initiative-detail.html -> apps/web/static/initiative-detail.html sha256=236e8331e8cfbb45fd2ac107b59a8013777d8baf9ed4e437b19ceae1c6968d25 bytes=77301 baseline=true checklist=true
+- /ai-employee.html -> apps/web/static/ai-employee.html sha256=b055e03f92edbb4a48e5a1038cdaa6f5c94c4e64d67df992db2e532e90f39713 bytes=77283 baseline=true checklist=true
+- /gate-queue.html -> apps/web/static/gate-queue.html sha256=0d16a166275ef97fc7ea717a1df41790d9c3ab73cd4e504f9d0d22ff7b1c4466 bytes=77280 baseline=true checklist=true
+- /conference.html -> apps/web/static/conference.html sha256=b381e833ef45c200a12bc10d9e1980b486d2402c08c8a029d32d806cefcc8270 bytes=77280 baseline=true checklist=true
+- /dependency-console.html -> apps/web/static/dependency-console.html sha256=c0e35e3ee4cd1b684011745e887969cc86a0f7d3894b5e6dd9bb40c30bfcb2ea bytes=77304 baseline=true checklist=true
 
 ## Browser proof target
 
@@ -24,8 +24,8 @@ Source content digest: `0d8b83cd54265ba06daf75544c910a9d50cf56b3f792ce1fe79b0d7e
 
 ## Browser Evidence
 
-- desktop-1440x900: evidence/rebuild-baseline-browser/a131293b44ba1faf802bbcff16f493fb13f0c3f6/rebuild-baseline-desktop-1440x900.png sha256=22d4eb0ac9674368e81c472dde6449ba950c41b7ae053bff995c1fbc8cf91070 bytes=681165 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 checklistFailures=0
-- mobile-390x844: evidence/rebuild-baseline-browser/a131293b44ba1faf802bbcff16f493fb13f0c3f6/rebuild-baseline-mobile-390x844.png sha256=34ae622d761f5d279a3b76298fa1db04f585548fa1505d486d0dec01421c5997 bytes=799799 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 checklistFailures=0
+- desktop-1440x900: evidence/rebuild-baseline-browser/1e2b0e52c2d44fcb1c338cea14722c9d0c74afea/rebuild-baseline-desktop-1440x900.png sha256=a7bc7b50412eeb0a0a7802aa957a40c5ff85476494ac42da35ff3a0cf763dbf2 bytes=803163 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 checklistFailures=0
+- mobile-390x844: evidence/rebuild-baseline-browser/1e2b0e52c2d44fcb1c338cea14722c9d0c74afea/rebuild-baseline-mobile-390x844.png sha256=19d9c1432907300220edb4eb171c00059dfa0cf1022dc46d57afad8f4deb3c6f bytes=911713 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 checklistFailures=0
 
 ## Boundaries
 

@@ -1,0 +1,425 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_storybook_first_rebuild_reset_after_owner_direction_clarification",
+  "sourceHead": "1e2b0e52c2d44fcb1c338cea14722c9d0c74afea",
+  "generatedAt": "2026-06-25T13:57:25.006Z",
+  "browserProofTarget": {
+    "routePath": "/operations-cockpit.html",
+    "staticTarget": "apps/web/static/operations-cockpit.html",
+    "generatedForProofOnly": false
+  },
+  "replacedStaticTargets": [
+    {
+      "routePath": "/operations-cockpit.html",
+      "staticTarget": "apps/web/static/operations-cockpit.html",
+      "sha256": "7c030856bfbe81132f881d0967effa8019fe0d3e0cf30a9aa51c664e6008cb3f",
+      "bytes": 77304,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/docs-search-release-readiness.html",
+      "staticTarget": "apps/web/static/docs-search-release-readiness.html",
+      "sha256": "89cf894a3a50c0c3ca12e0de3fbecf862e92fc92c9eefd43281eb27f746133d0",
+      "bytes": 77307,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/aos-wide-product-design.html",
+      "staticTarget": "apps/web/static/aos-wide-product-design.html",
+      "sha256": "64ef0651ed9d38cf98d933289bb9e4d103a9b43d6ebc9219866279241b59e297",
+      "bytes": 77282,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/project-workspace.html",
+      "staticTarget": "apps/web/static/project-workspace.html",
+      "sha256": "47022b7de23a5fb3cee0f1df96f94883ee43fdebfd3b930e299c3bb428ade121",
+      "bytes": 77301,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/initiative-detail.html",
+      "staticTarget": "apps/web/static/initiative-detail.html",
+      "sha256": "236e8331e8cfbb45fd2ac107b59a8013777d8baf9ed4e437b19ceae1c6968d25",
+      "bytes": 77301,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/ai-employee.html",
+      "staticTarget": "apps/web/static/ai-employee.html",
+      "sha256": "b055e03f92edbb4a48e5a1038cdaa6f5c94c4e64d67df992db2e532e90f39713",
+      "bytes": 77283,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/gate-queue.html",
+      "staticTarget": "apps/web/static/gate-queue.html",
+      "sha256": "0d16a166275ef97fc7ea717a1df41790d9c3ab73cd4e504f9d0d22ff7b1c4466",
+      "bytes": 77280,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/conference.html",
+      "staticTarget": "apps/web/static/conference.html",
+      "sha256": "b381e833ef45c200a12bc10d9e1980b486d2402c08c8a029d32d806cefcc8270",
+      "bytes": 77280,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/dependency-console.html",
+      "staticTarget": "apps/web/static/dependency-console.html",
+      "sha256": "c0e35e3ee4cd1b684011745e887969cc86a0f7d3894b5e6dd9bb40c30bfcb2ea",
+      "bytes": 77304,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    }
+  ],
+  "viewportReadbacks": [
+    {
+      "viewport": "desktop-1440x900",
+      "screenshot": "evidence/rebuild-baseline-browser/1e2b0e52c2d44fcb1c338cea14722c9d0c74afea/rebuild-baseline-desktop-1440x900.png",
+      "screenshotSha256": "a7bc7b50412eeb0a0a7802aa957a40c5ff85476494ac42da35ff3a0cf763dbf2",
+      "screenshotBytes": 803163,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='aos-rebuild-workspace']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='cockpit-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='cockpit-work-index']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='cockpit-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='docs-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='docs-filter']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='docs-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='target-set-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='target-set-modules']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='target-set-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-checklist']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-boundaries']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-actions']",
+          "present": true
+        }
+      ],
+      "forbiddenSelectorHits": [],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 25,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "FilterBar",
+        "GateReadinessPanel",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar",
+        "WorkIndex"
+      ],
+      "markerOnlyComponents": [],
+      "checklistReadback": {
+        "tableWidth": 1110,
+        "tableScrollWidth": 1108,
+        "headDisplay": "grid",
+        "rowDisplay": "grid",
+        "headCellCount": 4,
+        "rowCount": 12,
+        "cellCount": 4,
+        "cellDisplays": [
+          "flex",
+          "flex",
+          "flex",
+          "flex"
+        ],
+        "cellRects": [
+          {
+            "label": "Module",
+            "x": 292,
+            "y": 2187,
+            "width": 295,
+            "height": 89
+          },
+          {
+            "label": "Status",
+            "x": 587,
+            "y": 2187,
+            "width": 132,
+            "height": 89
+          },
+          {
+            "label": "Source",
+            "x": 719,
+            "y": 2187,
+            "width": 231,
+            "height": 89
+          },
+          {
+            "label": "Note",
+            "x": 951,
+            "y": 2187,
+            "width": 449,
+            "height": 89
+          }
+        ]
+      },
+      "checklistReadabilityFailures": [],
+      "navItemCount": 15,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    },
+    {
+      "viewport": "mobile-390x844",
+      "screenshot": "evidence/rebuild-baseline-browser/1e2b0e52c2d44fcb1c338cea14722c9d0c74afea/rebuild-baseline-mobile-390x844.png",
+      "screenshotSha256": "19d9c1432907300220edb4eb171c00059dfa0cf1022dc46d57afad8f4deb3c6f",
+      "screenshotBytes": 911713,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='aos-rebuild-workspace']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='cockpit-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='cockpit-work-index']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='cockpit-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='docs-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='docs-filter']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='docs-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='target-set-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='target-set-modules']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='target-set-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-checklist']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-boundaries']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-actions']",
+          "present": true
+        }
+      ],
+      "forbiddenSelectorHits": [],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 25,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "FilterBar",
+        "GateReadinessPanel",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar",
+        "WorkIndex"
+      ],
+      "markerOnlyComponents": [],
+      "checklistReadback": {
+        "tableWidth": 328,
+        "tableScrollWidth": 328,
+        "headDisplay": "none",
+        "rowDisplay": "grid",
+        "headCellCount": 4,
+        "rowCount": 12,
+        "cellCount": 4,
+        "cellDisplays": [
+          "grid",
+          "grid",
+          "grid",
+          "grid"
+        ],
+        "cellRects": [
+          {
+            "label": "Module",
+            "x": 32,
+            "y": 5725,
+            "width": 326,
+            "height": 45
+          },
+          {
+            "label": "Status",
+            "x": 32,
+            "y": 5770,
+            "width": 326,
+            "height": 44
+          },
+          {
+            "label": "Source",
+            "x": 32,
+            "y": 5814,
+            "width": 326,
+            "height": 67
+          },
+          {
+            "label": "Note",
+            "x": 32,
+            "y": 5881,
+            "width": 326,
+            "height": 133
+          }
+        ]
+      },
+      "checklistReadabilityFailures": [],
+      "navItemCount": 15,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "requestFailures": [],
+  "sourceFreshnessReadback": {
+    "strategy": "rebuild_baseline_reset_source_content_digest_v1",
+    "sourceHeadAtProofRun": "1e2b0e52c2d44fcb1c338cea14722c9d0c74afea",
+    "exactFinalCommitHeadRequired": false,
+    "sourceContentDigest": "e8b7d3e2466071cd1ff747f954ede8883afbd92ee8653e28b3ceebce7afb85e6",
+    "sourcePaths": [
+      "apps/web/src/rebuild-baseline-data.ts",
+      "apps/web/src/rebuild-baseline-ui-react-runtime.ts",
+      "apps/web/src/rebuild-baseline-view.ts",
+      "apps/api/src/server.ts",
+      "apps/api/test/service-smoke.test.mjs",
+      "apps/web/test/rebuild-baseline-view.test.mjs",
+      "scripts/rebuild-baseline-proof.mjs",
+      "package.json"
+    ]
+  },
+  "noOverclaimReadback": {
+    "productAcceptance": false,
+    "finalMvpAcceptance": false,
+    "releasePublication": false,
+    "ownerIntentExecution": false,
+    "liveDispatch": false,
+    "parentGoalCompletion": false
+  },
+  "failures": []
+}
