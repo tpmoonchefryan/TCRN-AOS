@@ -6,15 +6,7 @@ import {
   createOperationsCockpitReadModel,
   type CockpitDetailPanel
 } from "../../web/src/cockpit.js";
-import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
-import { createAiEmployeeModel, renderAiEmployeeHtml } from "../../web/src/ai-employee-view.js";
-import { createConferenceModel, renderConferenceHtml } from "../../web/src/conference-view.js";
-import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
-import { createDependencyConsoleModel, renderDependencyConsoleHtml } from "../../web/src/dependency-console-view.js";
-import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
-import { createGateQueueModel, renderGateQueueHtml } from "../../web/src/gate-queue-view.js";
-import { createInitiativeDetailModel, renderInitiativeDetailHtml } from "../../web/src/initiative-detail-view.js";
-import { createProjectWorkspaceModel, renderProjectWorkspaceHtml } from "../../web/src/project-workspace-view.js";
+import { renderRebuildBaselineHtml } from "../../web/src/rebuild-baseline-view.js";
 import { apiHealthReadback, createAosApiApp } from "./index.js";
 
 export interface StartedAosLocalService {
@@ -61,43 +53,40 @@ function handleRequest(
   const url = parseRequestUrl(request);
   const path = url.pathname;
 
-  if (path === "/" || path === "/cockpit" || path === "/operations-cockpit" || path === "/operations-cockpit.html" || path === "/apps/web/static/operations-cockpit.html") {
-    sendHtml(request, response, renderOperationsCockpitHtml(createServiceCockpitReadModel(runtime), {
-      serviceBacked: true,
-      cockpitApiPath: "/api/cockpit"
-    }));
-    return;
-  }
-  if (path === "/docs-readiness" || path === "/docs-search-release-readiness" || path === "/docs-search-release-readiness.html" || path === "/apps/web/static/docs-search-release-readiness.html") {
-    sendHtml(request, response, renderDocsSearchReleaseReadinessHtml());
-    return;
-  }
-  if (path === "/project-workspace" || path === "/project-workspace.html" || path === "/apps/web/static/project-workspace.html") {
-    sendHtml(request, response, renderProjectWorkspaceHtml(createProjectWorkspaceModel(createServiceCockpitReadModel(runtime))));
-    return;
-  }
-  if (path === "/ai-employee" || path === "/ai-employee.html" || path === "/apps/web/static/ai-employee.html") {
-    sendHtml(request, response, renderAiEmployeeHtml(createAiEmployeeModel(createServiceCockpitReadModel(runtime))));
-    return;
-  }
-  if (path === "/conference" || path === "/conference.html" || path === "/apps/web/static/conference.html") {
-    sendHtml(request, response, renderConferenceHtml(createConferenceModel(createServiceCockpitReadModel(runtime))));
-    return;
-  }
-  if (path === "/dependency-console" || path === "/dependency-console.html" || path === "/apps/web/static/dependency-console.html") {
-    sendHtml(request, response, renderDependencyConsoleHtml(createDependencyConsoleModel()));
-    return;
-  }
-  if (path === "/gate-queue" || path === "/gate-queue.html" || path === "/apps/web/static/gate-queue.html") {
-    sendHtml(request, response, renderGateQueueHtml(createGateQueueModel(createServiceCockpitReadModel(runtime))));
-    return;
-  }
-  if (path === "/initiative-detail" || path === "/initiative-detail.html" || path === "/apps/web/static/initiative-detail.html") {
-    sendHtml(request, response, renderInitiativeDetailHtml(createInitiativeDetailModel(createServiceCockpitReadModel(runtime, url))));
-    return;
-  }
-  if (path === "/aos-wide-product-design" || path === "/aos-wide-product-design.html" || path === "/apps/web/static/aos-wide-product-design.html") {
-    sendHtml(request, response, renderAOSWideProductDesignHtml());
+  const rebuildAliases = new Set([
+    "/",
+    "/cockpit",
+    "/operations-cockpit",
+    "/operations-cockpit.html",
+    "/apps/web/static/operations-cockpit.html",
+    "/docs-readiness",
+    "/docs-search-release-readiness",
+    "/docs-search-release-readiness.html",
+    "/apps/web/static/docs-search-release-readiness.html",
+    "/project-workspace",
+    "/project-workspace.html",
+    "/apps/web/static/project-workspace.html",
+    "/initiative-detail",
+    "/initiative-detail.html",
+    "/apps/web/static/initiative-detail.html",
+    "/ai-employee",
+    "/ai-employee.html",
+    "/apps/web/static/ai-employee.html",
+    "/gate-queue",
+    "/gate-queue.html",
+    "/apps/web/static/gate-queue.html",
+    "/conference",
+    "/conference.html",
+    "/apps/web/static/conference.html",
+    "/dependency-console",
+    "/dependency-console.html",
+    "/apps/web/static/dependency-console.html",
+    "/aos-wide-product-design",
+    "/aos-wide-product-design.html",
+    "/apps/web/static/aos-wide-product-design.html"
+  ]);
+  if (rebuildAliases.has(path)) {
+    sendHtml(request, response, renderRebuildBaselineHtml(path === "/" ? "/operations-cockpit.html" : path));
     return;
   }
   if (path === "/health" || path === "/api/health") {

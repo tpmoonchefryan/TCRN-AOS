@@ -5,66 +5,26 @@ import { startAosLocalServiceProof } from "../../../dist/apps/api/src/server.js"
 test("local service proof serves owner-trial UI, health, and readback, then stops cleanly", async () => {
   const service = await startAosLocalServiceProof();
   try {
-    const cockpit = await fetch(`${service.url}/`).then((response) => response.text());
-    assert.match(cockpit, /data-surface="operations-cockpit"/);
-    assert.match(cockpit, /data-service-backed="true"/);
-    assert.match(cockpit, /data-cockpit-api="\/api\/cockpit"/);
-    assert.match(cockpit, /data-refresh-readback/);
-    assert.match(cockpit, /data-work-table/);
-    assert.match(cockpit, /TCRN/);
-    assert.match(cockpit, /AOS/);
-
-    const cockpitAlias = await fetch(`${service.url}/cockpit`).then((response) => response.text());
-    assert.match(cockpitAlias, /data-surface="operations-cockpit"/);
-
-    const docsReadiness = await fetch(`${service.url}/docs-readiness`).then((response) => response.text());
-    assert.match(docsReadiness, /data-region="docs-surface-shell"/);
-
-    const projectWorkspace = await fetch(`${service.url}/project-workspace`).then((response) => response.text());
-    assert.match(projectWorkspace, /data-surface="project-workspace"/);
-    assert.match(projectWorkspace, /data-region="project-workspace-nav"/);
-    assert.match(projectWorkspace, /data-ds-standard-ids="ds-aos-target-set-v1 ds-aos-operations-cockpit-v1"/);
-    assert.match(projectWorkspace, /href="\/ai-employee.html"/);
-    assert.match(projectWorkspace, /href="\/gate-queue.html"/);
-    assert.match(projectWorkspace, /href="\/initiative-detail.html"/);
-
-    const aiEmployee = await fetch(`${service.url}/ai-employee`).then((response) => response.text());
-    assert.match(aiEmployee, /data-surface="ai-employee"/);
-    assert.match(aiEmployee, /data-region="ai-employee-roster"/);
-    assert.match(aiEmployee, /data-ds-standard-ids="ds-aos-target-set-v1 ds-aos-operations-cockpit-v1"/);
-    assert.match(aiEmployee, /Role identity, thread status, assignments, and contact posture from the local service model\./);
-    assert.doesNotMatch(aiEmployee, /implementation|workflow|package-runtime pilot|unavailable in this route/i);
-
-    const conference = await fetch(`${service.url}/conference`).then((response) => response.text());
-    assert.match(conference, /data-surface="conference"/);
-    assert.match(conference, /data-region="conference-list"/);
-    assert.match(conference, /data-ds-standard-ids="ds-aos-target-set-v1 ds-aos-operations-cockpit-v1"/);
-    assert.match(conference, /Conference list, detail, agenda, and minutes posture from the local service model\./);
-    assert.doesNotMatch(conference, /slice|implementation|workflow|package-runtime pilot|unavailable in this route/i);
-
-    const gateQueue = await fetch(`${service.url}/gate-queue`).then((response) => response.text());
-    assert.match(gateQueue, /data-surface="gate-queue"/);
-    assert.match(gateQueue, /data-region="gate-queue-list"/);
-    assert.match(gateQueue, /data-ds-standard-ids="ds-aos-target-set-v1 ds-aos-operations-cockpit-v1"/);
-    assert.match(gateQueue, /Action approvals and role reviews from the local service model\./);
-    assert.doesNotMatch(gateQueue, /owner intent|owner_intent_required|package-runtime pilot|unavailable in this route/i);
-
-    const dependencyConsole = await fetch(`${service.url}/dependency-console`).then((response) => response.text());
-    assert.match(dependencyConsole, /data-surface="dependency-console"/);
-    assert.match(dependencyConsole, /data-region="dependency-console-list"/);
-    assert.match(dependencyConsole, /data-ds-standard-ids="ds-aos-target-set-v1 ds-aos-operations-cockpit-v1"/);
-    assert.match(dependencyConsole, /Dependency lifecycle, license posture, evidence state, and blocked remediation from the local governance model\./);
-    assert.doesNotMatch(dependencyConsole, /slice|implementation|workflow|package-runtime pilot|unavailable in this route/i);
-
-    const initiativeDetail = await fetch(`${service.url}/initiative-detail`).then((response) => response.text());
-    assert.match(initiativeDetail, /data-surface="initiative-detail"/);
-    assert.match(initiativeDetail, /data-region="initiative-detail-ticket"/);
-    assert.match(initiativeDetail, /data-ds-standard-ids="ds-aos-target-set-v1 ds-aos-operations-cockpit-v1"/);
-    assert.match(initiativeDetail, /Ticket Drill-through/);
-    assert.doesNotMatch(initiativeDetail, /local implementation slice|package-runtime pilot|unavailable in this route/i);
-
-    const productDesign = await fetch(`${service.url}/aos-wide-product-design`).then((response) => response.text());
-    assert.match(productDesign, /data-surface="aos-wide-product-design"/);
+    const rebuildTargets = [
+      "/",
+      "/cockpit",
+      "/operations-cockpit.html",
+      "/docs-search-release-readiness.html",
+      "/project-workspace.html",
+      "/initiative-detail.html",
+      "/ai-employee.html",
+      "/gate-queue.html",
+      "/conference.html",
+      "/dependency-console.html",
+      "/aos-wide-product-design.html"
+    ];
+    for (const target of rebuildTargets) {
+      const html = await fetch(`${service.url}${target}`).then((response) => response.text());
+      assert.match(html, /data-surface="aos-rebuild-workspace"/, `${target} serves rebuild baseline`);
+      assert.match(html, /AOS Rebuild Workspace/, `${target} exposes rebuild heading`);
+      assert.match(html, /Module rebuild checklist/, `${target} exposes rebuild checklist`);
+      assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
+    }
 
     const health = await fetch(`${service.url}/health`).then((response) => response.json());
     assert.equal(health.ok, true);
