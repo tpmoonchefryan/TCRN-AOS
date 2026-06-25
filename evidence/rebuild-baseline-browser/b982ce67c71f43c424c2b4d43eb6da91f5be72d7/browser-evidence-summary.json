@@ -1,0 +1,601 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_storybook_first_rebuild_reset_after_owner_direction_clarification",
+  "sourceHead": "b982ce67c71f43c424c2b4d43eb6da91f5be72d7",
+  "generatedAt": "2026-06-25T14:53:41.763Z",
+  "browserProofTarget": {
+    "routePath": "/operations-cockpit.html",
+    "staticTarget": "apps/web/static/operations-cockpit.html",
+    "generatedForProofOnly": false
+  },
+  "replacedStaticTargets": [
+    {
+      "routePath": "/operations-cockpit.html",
+      "staticTarget": "apps/web/static/operations-cockpit.html",
+      "sha256": "fdf88f810f8bc8fa945d3437f609add88c926589606f8dba4ec3caebd02aa4ca",
+      "bytes": 131240,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/docs-search-release-readiness.html",
+      "staticTarget": "apps/web/static/docs-search-release-readiness.html",
+      "sha256": "77dc78f8e68d409a933a3fcab0b67f08ccecdc74fb486d8fae24008b847850a4",
+      "bytes": 131243,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/aos-wide-product-design.html",
+      "staticTarget": "apps/web/static/aos-wide-product-design.html",
+      "sha256": "272380a2a09ef99485bb59c57b84246dbd143fbb80b8765eb19f40472fd8d752",
+      "bytes": 131218,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/project-workspace.html",
+      "staticTarget": "apps/web/static/project-workspace.html",
+      "sha256": "785223888ca0be3273dfe6a9bee3dd0a255821da6a14245f506944e416ae3e99",
+      "bytes": 131237,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/initiative-detail.html",
+      "staticTarget": "apps/web/static/initiative-detail.html",
+      "sha256": "bae2118c35b85f3a1fb02ad0ff70c85aecd2c3b741c36d356dc206c1b1dafce1",
+      "bytes": 131237,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/ai-employee.html",
+      "staticTarget": "apps/web/static/ai-employee.html",
+      "sha256": "98841fb1655c735e983413c05832d7a8304145d499ea599b3d0b1779277be254",
+      "bytes": 131219,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/gate-queue.html",
+      "staticTarget": "apps/web/static/gate-queue.html",
+      "sha256": "6a23a8bb6b476ee3158c77f48d4d6b2e47b7086b56b18cafaf67f497015740b7",
+      "bytes": 131216,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/conference.html",
+      "staticTarget": "apps/web/static/conference.html",
+      "sha256": "4462b664cee09fcf8d8a0cacfd95e8ae371aafe8a11c1b06c1d5f52db237c4d5",
+      "bytes": 131216,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/dependency-console.html",
+      "staticTarget": "apps/web/static/dependency-console.html",
+      "sha256": "0b7f0819c063eec922067a0a23ff15a0c3569844ccded4ec2130bfbadc07c3d5",
+      "bytes": 131240,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    }
+  ],
+  "viewportReadbacks": [
+    {
+      "viewport": "desktop-1440x900",
+      "screenshot": "evidence/rebuild-baseline-browser/b982ce67c71f43c424c2b4d43eb6da91f5be72d7/rebuild-baseline-desktop-1440x900.png",
+      "screenshotSha256": "ba70cc46fae7e12762628cac502f82fd9c67bb0b9fd019166e162a332a6a1e5b",
+      "screenshotBytes": 1455779,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='aos-rebuild-workspace']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='cockpit-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='cockpit-work-index']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='cockpit-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='docs-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='docs-filter']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='docs-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='target-set-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='target-set-modules']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='target-set-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-hierarchy']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-ticket']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-links']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-activity']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='ai-employee-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='ai-employee-roster']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='ai-employee-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='dependency-console-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='dependency-console-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='dependency-console-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='resource-library-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='resource-library-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='resource-library-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-checklist']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-boundaries']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-actions']",
+          "present": true
+        }
+      ],
+      "forbiddenSelectorHits": [],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 46,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "FilterBar",
+        "GateReadinessPanel",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar",
+        "WorkIndex"
+      ],
+      "markerOnlyComponents": [],
+      "checklistReadback": {
+        "tableWidth": 1110,
+        "tableScrollWidth": 1108,
+        "headDisplay": "grid",
+        "rowDisplay": "grid",
+        "headCellCount": 4,
+        "rowCount": 12,
+        "cellCount": 4,
+        "cellDisplays": [
+          "flex",
+          "flex",
+          "flex",
+          "flex"
+        ],
+        "cellRects": [
+          {
+            "label": "Module",
+            "x": 292,
+            "y": 5259,
+            "width": 295,
+            "height": 89
+          },
+          {
+            "label": "Status",
+            "x": 587,
+            "y": 5259,
+            "width": 132,
+            "height": 89
+          },
+          {
+            "label": "Source",
+            "x": 719,
+            "y": 5259,
+            "width": 231,
+            "height": 89
+          },
+          {
+            "label": "Note",
+            "x": 951,
+            "y": 5259,
+            "width": 449,
+            "height": 89
+          }
+        ]
+      },
+      "checklistReadabilityFailures": [],
+      "navItemCount": 15,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    },
+    {
+      "viewport": "mobile-390x844",
+      "screenshot": "evidence/rebuild-baseline-browser/b982ce67c71f43c424c2b4d43eb6da91f5be72d7/rebuild-baseline-mobile-390x844.png",
+      "screenshotSha256": "7c63db59b335b68fbbe353160f8406a5d05504711fda08a70c0bbe5198355be8",
+      "screenshotBytes": 1516051,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='aos-rebuild-workspace']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='cockpit-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='cockpit-work-index']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='cockpit-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='docs-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='docs-filter']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='docs-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='target-set-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='target-set-modules']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='target-set-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-hierarchy']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='project-workspace-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-ticket']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-links']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='initiative-detail-activity']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='ai-employee-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='ai-employee-roster']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='ai-employee-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='conference-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='dependency-console-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='dependency-console-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='dependency-console-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='resource-library-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='resource-library-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='resource-library-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-checklist']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-boundaries']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-actions']",
+          "present": true
+        }
+      ],
+      "forbiddenSelectorHits": [],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 46,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "FilterBar",
+        "GateReadinessPanel",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar",
+        "WorkIndex"
+      ],
+      "markerOnlyComponents": [],
+      "checklistReadback": {
+        "tableWidth": 328,
+        "tableScrollWidth": 328,
+        "headDisplay": "none",
+        "rowDisplay": "grid",
+        "headCellCount": 4,
+        "rowCount": 12,
+        "cellCount": 4,
+        "cellDisplays": [
+          "grid",
+          "grid",
+          "grid",
+          "grid"
+        ],
+        "cellRects": [
+          {
+            "label": "Module",
+            "x": 32,
+            "y": 13255,
+            "width": 326,
+            "height": 45
+          },
+          {
+            "label": "Status",
+            "x": 32,
+            "y": 13300,
+            "width": 326,
+            "height": 44
+          },
+          {
+            "label": "Source",
+            "x": 32,
+            "y": 13345,
+            "width": 326,
+            "height": 67
+          },
+          {
+            "label": "Note",
+            "x": 32,
+            "y": 13412,
+            "width": 326,
+            "height": 133
+          }
+        ]
+      },
+      "checklistReadabilityFailures": [],
+      "navItemCount": 15,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "requestFailures": [],
+  "sourceFreshnessReadback": {
+    "strategy": "rebuild_baseline_reset_source_content_digest_v1",
+    "sourceHeadAtProofRun": "b982ce67c71f43c424c2b4d43eb6da91f5be72d7",
+    "exactFinalCommitHeadRequired": false,
+    "sourceContentDigest": "f7f2fbaa2df5599fc43e12a530108e89a409281e075021b497792a3985757033",
+    "sourcePaths": [
+      "apps/web/src/rebuild-baseline-data.ts",
+      "apps/web/src/rebuild-baseline-ui-react-runtime.ts",
+      "apps/web/src/rebuild-baseline-view.ts",
+      "apps/api/src/server.ts",
+      "apps/api/test/service-smoke.test.mjs",
+      "apps/web/test/rebuild-baseline-view.test.mjs",
+      "scripts/rebuild-baseline-proof.mjs",
+      "package.json"
+    ]
+  },
+  "noOverclaimReadback": {
+    "productAcceptance": false,
+    "finalMvpAcceptance": false,
+    "releasePublication": false,
+    "ownerIntentExecution": false,
+    "liveDispatch": false,
+    "parentGoalCompletion": false
+  },
+  "failures": []
+}

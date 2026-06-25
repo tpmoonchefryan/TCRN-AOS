@@ -1,8 +1,8 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_storybook_first_rebuild_reset_after_owner_direction_clarification",
-  "sourceHead": "1e0185b8fb407e02dff693e39e632bfb58ee8d31",
-  "generatedAt": "2026-06-25T14:40:10.385Z",
+  "sourceHead": "b982ce67c71f43c424c2b4d43eb6da91f5be72d7",
+  "generatedAt": "2026-06-25T14:53:41.763Z",
   "browserProofTarget": {
     "routePath": "/operations-cockpit.html",
     "staticTarget": "apps/web/static/operations-cockpit.html",
@@ -12,72 +12,72 @@
     {
       "routePath": "/operations-cockpit.html",
       "staticTarget": "apps/web/static/operations-cockpit.html",
-      "sha256": "70bbf5832e876f758a6287d9d41d7c489451f8f619eecb000d48654168c9584e",
-      "bytes": 124197,
+      "sha256": "fdf88f810f8bc8fa945d3437f609add88c926589606f8dba4ec3caebd02aa4ca",
+      "bytes": 131240,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/docs-search-release-readiness.html",
       "staticTarget": "apps/web/static/docs-search-release-readiness.html",
-      "sha256": "ab0213dcf2c8721d1e105cfcd54a3976dc7ff67c415d56a247b4d9009ec5a458",
-      "bytes": 124200,
+      "sha256": "77dc78f8e68d409a933a3fcab0b67f08ccecdc74fb486d8fae24008b847850a4",
+      "bytes": 131243,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/aos-wide-product-design.html",
       "staticTarget": "apps/web/static/aos-wide-product-design.html",
-      "sha256": "2476710a4a94f1617f5b23d11539f5c7549111e6ae1989fbc08b7fbd9fe810f1",
-      "bytes": 124175,
+      "sha256": "272380a2a09ef99485bb59c57b84246dbd143fbb80b8765eb19f40472fd8d752",
+      "bytes": 131218,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/project-workspace.html",
       "staticTarget": "apps/web/static/project-workspace.html",
-      "sha256": "48288d8dda3173319a6757a26a19dff06348e1a581bdcc6d83f3e3b9b78aeed0",
-      "bytes": 124194,
+      "sha256": "785223888ca0be3273dfe6a9bee3dd0a255821da6a14245f506944e416ae3e99",
+      "bytes": 131237,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/initiative-detail.html",
       "staticTarget": "apps/web/static/initiative-detail.html",
-      "sha256": "b6ea653c964b60d3079ae176c9012a01188121f0a1e3bc4a22f6c5928e987533",
-      "bytes": 124194,
+      "sha256": "bae2118c35b85f3a1fb02ad0ff70c85aecd2c3b741c36d356dc206c1b1dafce1",
+      "bytes": 131237,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/ai-employee.html",
       "staticTarget": "apps/web/static/ai-employee.html",
-      "sha256": "993d9b59c33534d6666986613d361f0b97b1d1356a9935e0845618522daa9f81",
-      "bytes": 124176,
+      "sha256": "98841fb1655c735e983413c05832d7a8304145d499ea599b3d0b1779277be254",
+      "bytes": 131219,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/gate-queue.html",
       "staticTarget": "apps/web/static/gate-queue.html",
-      "sha256": "e6afab532145aa47418fdb5d5648d7d362e98b2948ce253e94bf588ad3618f59",
-      "bytes": 124173,
+      "sha256": "6a23a8bb6b476ee3158c77f48d4d6b2e47b7086b56b18cafaf67f497015740b7",
+      "bytes": 131216,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/conference.html",
       "staticTarget": "apps/web/static/conference.html",
-      "sha256": "766f90ed1d529b5d9a139f343796e20a1795517f325231940feda6a143567f9d",
-      "bytes": 124173,
+      "sha256": "4462b664cee09fcf8d8a0cacfd95e8ae371aafe8a11c1b06c1d5f52db237c4d5",
+      "bytes": 131216,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/dependency-console.html",
       "staticTarget": "apps/web/static/dependency-console.html",
-      "sha256": "956e9aa5c07558d22c38122c65a8ab145baf3de527cbb4997d29dd57b839bfb4",
-      "bytes": 124197,
+      "sha256": "0b7f0819c063eec922067a0a23ff15a0c3569844ccded4ec2130bfbadc07c3d5",
+      "bytes": 131240,
       "hasBaselineSurface": true,
       "hasChecklist": true
     }
@@ -85,9 +85,9 @@
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/rebuild-baseline-browser/1e0185b8fb407e02dff693e39e632bfb58ee8d31/rebuild-baseline-desktop-1440x900.png",
-      "screenshotSha256": "e4e4f36b55bb93ef2e12f162f324d919ac452cd45eefcb2f2cfaf35154650831",
-      "screenshotBytes": 1365368,
+      "screenshot": "evidence/rebuild-baseline-browser/b982ce67c71f43c424c2b4d43eb6da91f5be72d7/rebuild-baseline-desktop-1440x900.png",
+      "screenshotSha256": "ba70cc46fae7e12762628cac502f82fd9c67bb0b9fd019166e162a332a6a1e5b",
+      "screenshotBytes": 1455779,
       "selectorProof": [
         {
           "selector": "[data-surface='aos-rebuild-workspace']",
@@ -222,6 +222,18 @@
           "present": true
         },
         {
+          "selector": "[data-region='resource-library-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='resource-library-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='resource-library-detail']",
+          "present": true
+        },
+        {
           "selector": "[data-region='rebuild-checklist']",
           "present": true
         },
@@ -237,7 +249,7 @@
       "forbiddenSelectorHits": [],
       "duplicateIds": [],
       "ariaReferenceFailures": [],
-      "disabledControlsCount": 43,
+      "disabledControlsCount": 46,
       "disabledFailures": [],
       "packageComponents": [
         "Badge",
@@ -279,28 +291,28 @@
           {
             "label": "Module",
             "x": 292,
-            "y": 4919,
+            "y": 5259,
             "width": 295,
             "height": 89
           },
           {
             "label": "Status",
             "x": 587,
-            "y": 4919,
+            "y": 5259,
             "width": 132,
             "height": 89
           },
           {
             "label": "Source",
             "x": 719,
-            "y": 4919,
+            "y": 5259,
             "width": 231,
             "height": 89
           },
           {
             "label": "Note",
             "x": 951,
-            "y": 4919,
+            "y": 5259,
             "width": 449,
             "height": 89
           }
@@ -316,9 +328,9 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/rebuild-baseline-browser/1e0185b8fb407e02dff693e39e632bfb58ee8d31/rebuild-baseline-mobile-390x844.png",
-      "screenshotSha256": "b156fced738bfc6e17ad500412c37a805041cf817bdb7cdfd7569486dc2a9360",
-      "screenshotBytes": 1427068,
+      "screenshot": "evidence/rebuild-baseline-browser/b982ce67c71f43c424c2b4d43eb6da91f5be72d7/rebuild-baseline-mobile-390x844.png",
+      "screenshotSha256": "7c63db59b335b68fbbe353160f8406a5d05504711fda08a70c0bbe5198355be8",
+      "screenshotBytes": 1516051,
       "selectorProof": [
         {
           "selector": "[data-surface='aos-rebuild-workspace']",
@@ -453,6 +465,18 @@
           "present": true
         },
         {
+          "selector": "[data-region='resource-library-start']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='resource-library-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='resource-library-detail']",
+          "present": true
+        },
+        {
           "selector": "[data-region='rebuild-checklist']",
           "present": true
         },
@@ -468,7 +492,7 @@
       "forbiddenSelectorHits": [],
       "duplicateIds": [],
       "ariaReferenceFailures": [],
-      "disabledControlsCount": 43,
+      "disabledControlsCount": 46,
       "disabledFailures": [],
       "packageComponents": [
         "Badge",
@@ -510,28 +534,28 @@
           {
             "label": "Module",
             "x": 32,
-            "y": 12285,
+            "y": 13255,
             "width": 326,
             "height": 45
           },
           {
             "label": "Status",
             "x": 32,
-            "y": 12330,
+            "y": 13300,
             "width": 326,
             "height": 44
           },
           {
             "label": "Source",
             "x": 32,
-            "y": 12374,
+            "y": 13345,
             "width": 326,
             "height": 67
           },
           {
             "label": "Note",
             "x": 32,
-            "y": 12441,
+            "y": 13412,
             "width": 326,
             "height": 133
           }
@@ -551,9 +575,9 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "rebuild_baseline_reset_source_content_digest_v1",
-    "sourceHeadAtProofRun": "1e0185b8fb407e02dff693e39e632bfb58ee8d31",
+    "sourceHeadAtProofRun": "b982ce67c71f43c424c2b4d43eb6da91f5be72d7",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "7f3112103ed3418c3a5309eae8537270f3e27239f6c30e9766452ad0a31cf624",
+    "sourceContentDigest": "f7f2fbaa2df5599fc43e12a530108e89a409281e075021b497792a3985757033",
     "sourcePaths": [
       "apps/web/src/rebuild-baseline-data.ts",
       "apps/web/src/rebuild-baseline-ui-react-runtime.ts",
