@@ -227,9 +227,7 @@ function renderSummary(model: RebuildBaselineModel) {
   );
 }
 
-const supersededFreshSectionRenderers = [
-  renderCockpitStart,
-  renderDocsStart,
+const futureFreshSectionRenderers = [
   renderTargetSetStart,
   renderProjectWorkspaceStart,
   renderInitiativeDetailStart,
@@ -239,7 +237,7 @@ const supersededFreshSectionRenderers = [
   renderDependencyConsoleStart,
   renderResourceLibraryStart
 ];
-void supersededFreshSectionRenderers;
+void futureFreshSectionRenderers;
 
 function renderCockpitStart(model: RebuildCockpitStartModel) {
   return createElement(
@@ -1317,6 +1315,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         renderTopbar(model),
         renderSummary(model),
         renderCockpitStart(model.cockpitStart),
+        renderDocsStart(model.docsStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()

@@ -16,7 +16,7 @@ const retiredFrontendTargets = [
   "/dependency-console.html"
 ];
 
-test("local service now serves a non-product reset checkpoint while APIs remain available", async () => {
+test("local service now serves the reset shell plus cockpit and docs slices while APIs remain available", async () => {
   const service = await startAosLocalServiceProof();
   try {
     for (const target of retiredFrontendTargets) {
@@ -25,9 +25,11 @@ test("local service now serves a non-product reset checkpoint while APIs remain 
       assert.match(html, /AOS Frontend Reset Notice/, `${target} exposes reset notice heading`);
       assert.match(html, /Operations cockpit starting surface/, `${target} exposes the first fresh cockpit section`);
       assert.match(html, /Operations cockpit starting work/, `${target} exposes cockpit work index`);
+      assert.match(html, /Docs readiness starting surface/, `${target} exposes the docs slice`);
+      assert.match(html, /Docs inspection rows/, `${target} exposes docs inspection rows`);
       assert.match(html, /Retired frontend inventory/, `${target} exposes retired inventory`);
       assert.match(html, /Retired served scope/, `${target} exposes retired served scope`);
-      assert.doesNotMatch(html, /Docs readiness starting surface|Product design target-set starting surface|Project workspace starting surface|Initiative detail starting surface|AI employee starting surface|Gate queue starting surface|Conference starting surface|Dependency console starting surface|Resource library starting surface|Docs inspection rows|AOS-wide surface index|Project workspace current work|Initiative detail linked records|AI employee roster|Gate queue rows|Conference list|Dependency governance rows|Resource library rows/i, `${target} still omits later fresh product sections`);
+      assert.doesNotMatch(html, /Product design target-set starting surface|Project workspace starting surface|Initiative detail starting surface|AI employee starting surface|Gate queue starting surface|Conference starting surface|Dependency console starting surface|Resource library starting surface|AOS-wide surface index|Project workspace current work|Initiative detail linked records|AI employee roster|Gate queue rows|Conference list|Dependency governance rows|Resource library rows/i, `${target} still omits later fresh product sections`);
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
     }
 
