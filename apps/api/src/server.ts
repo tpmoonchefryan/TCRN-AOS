@@ -7,6 +7,7 @@ import {
   type CockpitDetailPanel
 } from "../../web/src/cockpit.js";
 import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
+import { renderAiEmployeeHtml } from "../../web/src/ai-employee-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
 import { renderInitiativeDetailHtml } from "../../web/src/initiative-detail-view.js";
 import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
@@ -121,11 +122,19 @@ function handleRequest(
     return;
   }
 
-  const rebuildAliases = new Set([
-    "/",
+  const aiEmployeeAliases = new Set([
     "/ai-employee",
     "/ai-employee.html",
-    "/apps/web/static/ai-employee.html",
+    "/apps/web/static/ai-employee.html"
+  ]);
+
+  if (aiEmployeeAliases.has(path)) {
+    sendHtml(request, response, renderAiEmployeeHtml());
+    return;
+  }
+
+  const rebuildAliases = new Set([
+    "/",
     "/gate-queue",
     "/gate-queue.html",
     "/apps/web/static/gate-queue.html",

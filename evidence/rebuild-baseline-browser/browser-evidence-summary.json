@@ -1,38 +1,30 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_storybook_first_rebuild_reset_after_owner_direction_clarification",
-  "sourceHead": "71880d9aad2760608ed4433b319f4e69252f1a8b",
-  "generatedAt": "2026-06-25T09:53:39.999Z",
+  "sourceHead": "145f1da240fe9cc5d077af57aa4216a95b06f17a",
+  "generatedAt": "2026-06-25T10:08:30.627Z",
   "replacedStaticTargets": [
-    {
-      "routePath": "/ai-employee.html",
-      "staticTarget": "apps/web/static/ai-employee.html",
-      "sha256": "0faccda6b0aa0cc68d69f5809341c4b36b208be9e738e0192c525058bea58a00",
-      "bytes": 48277,
-      "hasBaselineSurface": true,
-      "hasChecklist": true
-    },
     {
       "routePath": "/gate-queue.html",
       "staticTarget": "apps/web/static/gate-queue.html",
-      "sha256": "1fb2768d97234120186563d5db49e9a4c8a3ccaceb44b106f1e26e5160d9f3d7",
-      "bytes": 48274,
+      "sha256": "22f57be433399f40c59b0641d35c3dcbad55e9953777ed44f25145e401b20aef",
+      "bytes": 48291,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/conference.html",
       "staticTarget": "apps/web/static/conference.html",
-      "sha256": "42e668398e8bec648c9fe9a58608247b5e3a9deb0537d936d88798745090d717",
-      "bytes": 48274,
+      "sha256": "5911ed03380edf94c4941b42f0e04127268e3bf2b7a95c882c2a10a8419ad722",
+      "bytes": 48291,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/dependency-console.html",
       "staticTarget": "apps/web/static/dependency-console.html",
-      "sha256": "0c0ba56c4bc135de00e20a8fc45b5805e5d39f88a607c8916fd05125d6c9ff06",
-      "bytes": 48298,
+      "sha256": "b67d21974c13361f2cb4b83914821482606bcc8af86f3f988ff4cf42ed3cb0cc",
+      "bytes": 48315,
       "hasBaselineSurface": true,
       "hasChecklist": true
     }
@@ -40,9 +32,9 @@
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/rebuild-baseline-browser/71880d9aad2760608ed4433b319f4e69252f1a8b/rebuild-baseline-desktop-1440x900.png",
-      "screenshotSha256": "761410dbdf29cb118292b2ddedb86462037a5012a151a8315be41a95e415d1db",
-      "screenshotBytes": 425280,
+      "screenshot": "evidence/rebuild-baseline-browser/145f1da240fe9cc5d077af57aa4216a95b06f17a/rebuild-baseline-desktop-1440x900.png",
+      "screenshotSha256": "ded8caa638efd9772ec846a5b11fd414828a5e3e3cfcf4151c7d2ac3e3b98293",
+      "screenshotBytes": 429316,
       "selectorProof": [
         {
           "selector": "[data-surface='aos-rebuild-workspace']",
@@ -154,9 +146,9 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/rebuild-baseline-browser/71880d9aad2760608ed4433b319f4e69252f1a8b/rebuild-baseline-mobile-390x844.png",
-      "screenshotSha256": "a7136c936d4704d8b4abe16fa37a4f261b9a5b070c1ab675f6196690c7855419",
-      "screenshotBytes": 506590,
+      "screenshot": "evidence/rebuild-baseline-browser/145f1da240fe9cc5d077af57aa4216a95b06f17a/rebuild-baseline-mobile-390x844.png",
+      "screenshotSha256": "adcb7109bba3701f6e83f5efb77b7f3f98cf0b0d7a57e10ec7cf477a0cd3d48d",
+      "screenshotBytes": 508133,
       "selectorProof": [
         {
           "selector": "[data-surface='aos-rebuild-workspace']",
@@ -272,9 +264,9 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "rebuild_baseline_reset_source_content_digest_v1",
-    "sourceHeadAtProofRun": "71880d9aad2760608ed4433b319f4e69252f1a8b",
+    "sourceHeadAtProofRun": "145f1da240fe9cc5d077af57aa4216a95b06f17a",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "8efb62508f1ce2cba70417b5ab0fca48b25e72fc10bfbedf9b043351c82975c0",
+    "sourceContentDigest": "efe59109cbfc4ad1cd5a9a9822ebf9aa743ec9107a51c19fa843d1c6d9e4229c",
     "sourcePaths": [
       "apps/web/src/rebuild-baseline-data.ts",
       "apps/web/src/rebuild-baseline-ui-react-runtime.ts",
