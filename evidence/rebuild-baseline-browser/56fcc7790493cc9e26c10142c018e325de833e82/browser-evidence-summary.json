@@ -1,0 +1,314 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_storybook_first_rebuild_reset_after_owner_direction_clarification",
+  "sourceHead": "56fcc7790493cc9e26c10142c018e325de833e82",
+  "generatedAt": "2026-06-25T09:22:42.456Z",
+  "replacedStaticTargets": [
+    {
+      "routePath": "/project-workspace.html",
+      "staticTarget": "apps/web/static/project-workspace.html",
+      "sha256": "cfcfa6b3ac31ea9659f3baf0619fb528221b5b7d59aaa8d1ae99f6ebea8e1c68",
+      "bytes": 48274,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/initiative-detail.html",
+      "staticTarget": "apps/web/static/initiative-detail.html",
+      "sha256": "19f0d75d4383bd7b6b042e00e8125085f4ffb7d293db3cc1456b319c4110ebc6",
+      "bytes": 48274,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/ai-employee.html",
+      "staticTarget": "apps/web/static/ai-employee.html",
+      "sha256": "7062fdd6dcee2c9a8492f4d4c7e427c66cb359a5fa988840a47388f475cc3147",
+      "bytes": 48256,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/gate-queue.html",
+      "staticTarget": "apps/web/static/gate-queue.html",
+      "sha256": "960a5000d80f03a85437de62bf11fe49de72b83eb274d2468c664632fcf3b94c",
+      "bytes": 48253,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/conference.html",
+      "staticTarget": "apps/web/static/conference.html",
+      "sha256": "0de9e66adb87cb7e5a36e5a2446be5022c59396bd734e64a181ec8f2cd5921b8",
+      "bytes": 48253,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    },
+    {
+      "routePath": "/dependency-console.html",
+      "staticTarget": "apps/web/static/dependency-console.html",
+      "sha256": "6882a40a42d6cc1791b307580254f94528062c48573dac23705dbb6240da34f6",
+      "bytes": 48277,
+      "hasBaselineSurface": true,
+      "hasChecklist": true
+    }
+  ],
+  "viewportReadbacks": [
+    {
+      "viewport": "desktop-1440x900",
+      "screenshot": "evidence/rebuild-baseline-browser/56fcc7790493cc9e26c10142c018e325de833e82/rebuild-baseline-desktop-1440x900.png",
+      "screenshotSha256": "0974e38022b668ea06d4c6386ce77f83746679ca052d705c0ecdec932f9c9d01",
+      "screenshotBytes": 426122,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='aos-rebuild-workspace']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-checklist']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-boundaries']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-actions']",
+          "present": true
+        }
+      ],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 13,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "EvidenceStrip",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar"
+      ],
+      "markerOnlyComponents": [],
+      "checklistReadback": {
+        "tableWidth": 1110,
+        "tableScrollWidth": 1108,
+        "headDisplay": "grid",
+        "rowDisplay": "grid",
+        "headCellCount": 4,
+        "rowCount": 12,
+        "cellCount": 4,
+        "cellDisplays": [
+          "flex",
+          "flex",
+          "flex",
+          "flex"
+        ],
+        "cellRects": [
+          {
+            "label": "Module",
+            "x": 292,
+            "y": 434,
+            "width": 295,
+            "height": 45
+          },
+          {
+            "label": "Status",
+            "x": 587,
+            "y": 434,
+            "width": 132,
+            "height": 45
+          },
+          {
+            "label": "Source",
+            "x": 719,
+            "y": 434,
+            "width": 231,
+            "height": 45
+          },
+          {
+            "label": "Note",
+            "x": 951,
+            "y": 434,
+            "width": 449,
+            "height": 45
+          }
+        ]
+      },
+      "checklistReadabilityFailures": [],
+      "navItemCount": 12,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    },
+    {
+      "viewport": "mobile-390x844",
+      "screenshot": "evidence/rebuild-baseline-browser/56fcc7790493cc9e26c10142c018e325de833e82/rebuild-baseline-mobile-390x844.png",
+      "screenshotSha256": "50714ed358bcd10143f5434a32f8cd33633a49e0e14e8a48e0e6411b5c5a3cee",
+      "screenshotBytes": 505684,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='aos-rebuild-workspace']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-checklist']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-boundaries']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='rebuild-actions']",
+          "present": true
+        }
+      ],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 13,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "EvidenceStrip",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar"
+      ],
+      "markerOnlyComponents": [],
+      "checklistReadback": {
+        "tableWidth": 328,
+        "tableScrollWidth": 328,
+        "headDisplay": "none",
+        "rowDisplay": "grid",
+        "headCellCount": 4,
+        "rowCount": 12,
+        "cellCount": 4,
+        "cellDisplays": [
+          "grid",
+          "grid",
+          "grid",
+          "grid"
+        ],
+        "cellRects": [
+          {
+            "label": "Module",
+            "x": 32,
+            "y": 1724,
+            "width": 326,
+            "height": 45
+          },
+          {
+            "label": "Status",
+            "x": 32,
+            "y": 1769,
+            "width": 326,
+            "height": 44
+          },
+          {
+            "label": "Source",
+            "x": 32,
+            "y": 1813,
+            "width": 326,
+            "height": 45
+          },
+          {
+            "label": "Note",
+            "x": 32,
+            "y": 1858,
+            "width": 326,
+            "height": 89
+          }
+        ]
+      },
+      "checklistReadabilityFailures": [],
+      "navItemCount": 12,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "requestFailures": [],
+  "sourceFreshnessReadback": {
+    "strategy": "rebuild_baseline_reset_source_content_digest_v1",
+    "sourceHeadAtProofRun": "56fcc7790493cc9e26c10142c018e325de833e82",
+    "exactFinalCommitHeadRequired": false,
+    "sourceContentDigest": "069a2d17092c39ae7278ab74c9275c686734c0df69854b3d32e043322daa5995",
+    "sourcePaths": [
+      "apps/web/src/rebuild-baseline-data.ts",
+      "apps/web/src/rebuild-baseline-ui-react-runtime.ts",
+      "apps/web/src/rebuild-baseline-view.ts",
+      "apps/api/src/server.ts",
+      "apps/api/test/service-smoke.test.mjs",
+      "apps/web/test/rebuild-baseline-view.test.mjs",
+      "scripts/rebuild-baseline-proof.mjs",
+      "package.json"
+    ]
+  },
+  "noOverclaimReadback": {
+    "productAcceptance": false,
+    "finalMvpAcceptance": false,
+    "releasePublication": false,
+    "ownerIntentExecution": false,
+    "liveDispatch": false,
+    "parentGoalCompletion": false
+  },
+  "failures": []
+}

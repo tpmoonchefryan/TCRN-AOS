@@ -17,6 +17,12 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
     assert.match(docsHtml, /Docs Readiness/, "/docs-search-release-readiness.html exposes docs readiness module heading");
     assert.doesNotMatch(docsHtml, /AOS Rebuild Workspace/, "/docs-search-release-readiness.html is no longer the reset baseline");
 
+    const aosWideHtml = await fetch(`${service.url}/aos-wide-product-design.html`).then((response) => response.text());
+    assert.match(aosWideHtml, /data-surface="aos-wide-product-design"/, "/aos-wide-product-design.html serves rebuilt product design target set");
+    assert.match(aosWideHtml, /TCRN AOS Product Design Surface Set/, "/aos-wide-product-design.html exposes product design title");
+    assert.match(aosWideHtml, /Product Design/, "/aos-wide-product-design.html exposes product design module heading");
+    assert.doesNotMatch(aosWideHtml, /AOS Rebuild Workspace/, "/aos-wide-product-design.html is no longer the reset baseline");
+
     const rebuildTargets = [
       "/",
       "/project-workspace.html",
@@ -24,8 +30,7 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
       "/ai-employee.html",
       "/gate-queue.html",
       "/conference.html",
-      "/dependency-console.html",
-      "/aos-wide-product-design.html"
+      "/dependency-console.html"
     ];
     for (const target of rebuildTargets) {
       const html = await fetch(`${service.url}${target}`).then((response) => response.text());

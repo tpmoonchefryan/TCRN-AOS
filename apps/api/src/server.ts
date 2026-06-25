@@ -6,6 +6,7 @@ import {
   createOperationsCockpitReadModel,
   type CockpitDetailPanel
 } from "../../web/src/cockpit.js";
+import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
 import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
 import { renderRebuildBaselineHtml } from "../../web/src/rebuild-baseline-view.js";
@@ -85,6 +86,17 @@ function handleRequest(
     return;
   }
 
+  const aosWideAliases = new Set([
+    "/aos-wide-product-design",
+    "/aos-wide-product-design.html",
+    "/apps/web/static/aos-wide-product-design.html"
+  ]);
+
+  if (aosWideAliases.has(path)) {
+    sendHtml(request, response, renderAOSWideProductDesignHtml());
+    return;
+  }
+
   const rebuildAliases = new Set([
     "/",
     "/project-workspace",
@@ -104,10 +116,7 @@ function handleRequest(
     "/apps/web/static/conference.html",
     "/dependency-console",
     "/dependency-console.html",
-    "/apps/web/static/dependency-console.html",
-    "/aos-wide-product-design",
-    "/aos-wide-product-design.html",
-    "/apps/web/static/aos-wide-product-design.html"
+    "/apps/web/static/dependency-console.html"
   ]);
   if (rebuildAliases.has(path)) {
     sendHtml(request, response, renderRebuildBaselineHtml(path === "/" ? "/operations-cockpit.html" : path));
