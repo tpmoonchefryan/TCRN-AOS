@@ -1,8 +1,8 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_5f51817_ilya_resume_total_frontend_rebuild_after_watchdog_recovery",
-  "sourceHead": "1a3222ce1f3ba86a6730a2ea352e2304268da5d6",
-  "generatedAt": "2026-06-25T05:30:48.765Z",
+  "sourceHead": "c83798e7a86ec04b94438f442b98c6f341d9788f",
+  "generatedAt": "2026-06-25T06:15:12.376Z",
   "staticTarget": "apps/web/static/ai-employee.html",
   "staticSha256": "93413f1b4049ac472f216234269c4e9e1691a1d1318cd586e9408d41c04848b7",
   "staticBytes": 35442,
@@ -88,7 +88,7 @@
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/ai-employee-browser/1a3222ce1f3ba86a6730a2ea352e2304268da5d6/ai-employee-desktop-1440x900.png",
+      "screenshot": "evidence/ai-employee-browser/c83798e7a86ec04b94438f442b98c6f341d9788f/ai-employee-desktop-1440x900.png",
       "screenshotSha256": "6dc9bef466bf7a5e7de25848560b71c461713678a7cee518c10d73ac58acbf03",
       "screenshotBytes": 239583,
       "selectorProof": [
@@ -164,7 +164,7 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/ai-employee-browser/1a3222ce1f3ba86a6730a2ea352e2304268da5d6/ai-employee-mobile-390x844.png",
+      "screenshot": "evidence/ai-employee-browser/c83798e7a86ec04b94438f442b98c6f341d9788f/ai-employee-mobile-390x844.png",
       "screenshotSha256": "9214f33ebba488251ef53fc31da6ed449e909136c9b4f0430fffdf1209ab4004",
       "screenshotBytes": 229811,
       "selectorProof": [
@@ -244,9 +244,9 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "ai_employee_visible_slice_source_content_digest_v1",
-    "sourceHeadAtProofRun": "1a3222ce1f3ba86a6730a2ea352e2304268da5d6",
+    "sourceHeadAtProofRun": "c83798e7a86ec04b94438f442b98c6f341d9788f",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "77a6b93dffdadd7a79a0ab1ac139dd36308e4e0364c8e79f55b0983f6d5c8164",
+    "sourceContentDigest": "a39eacfa2b79111d0a82f0852b71e118aa88f4154c78040ea0095fc52d6caffc",
     "sourcePaths": [
       "apps/web/src/ai-employee-data.ts",
       "apps/web/src/ai-employee-ui-react-runtime.ts",
