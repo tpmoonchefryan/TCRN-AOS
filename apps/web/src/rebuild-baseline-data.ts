@@ -442,7 +442,7 @@ const checklistRows: RebuildChecklistRow[] = [
   row("gate-queue", "Gate Queue", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
   row("conference", "Conference", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
   row("dependency-console", "Dependency Console", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
-  row("resource-library", "Resource Library", "rebuild_queued", "Total-scope checklist", "Fresh rebuild surface not started yet."),
+  row("resource-library", "Resource Library", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."),
   row("knowledge-modules", "Knowledge Modules", "rebuild_queued", "Total-scope checklist", "Fresh rebuild surface not started yet."),
   row("admin-access", "Admin / Access", "rebuild_queued", "Total-scope checklist", "Fresh rebuild surface not started yet.")
 ];

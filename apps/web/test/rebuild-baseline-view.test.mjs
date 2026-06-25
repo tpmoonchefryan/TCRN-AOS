@@ -13,9 +13,15 @@ import {
 
 test("Rebuild baseline model now represents the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, dependency-console, and resource-library fresh slices", () => {
   const model = createRebuildBaselineModel("/operations-cockpit.html");
+  const resourceLibraryRow = model.checklist.find((row) => row.id === "resource-library");
 
   assert.equal(model.currentAliasLabel, "Operations Cockpit");
   assert.equal(model.selectedRebuiltStartingSlice, "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-dependency-console-resource-library-foundation");
+  assert.equal(resourceLibraryRow?.status, "retired");
+  assert.equal(
+    resourceLibraryRow?.note,
+    "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."
+  );
   assert.equal(model.noClaims.productAcceptance, false);
   assert.equal(model.noClaims.finalMvpAcceptance, false);
   assert.equal(model.noClaims.releasePublication, false);
@@ -69,6 +75,7 @@ test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-
   assert.match(html, />Conference starting surface</);
   assert.match(html, />Dependency console starting surface</);
   assert.match(html, />Resource library starting surface</);
+  assert.match(html, /Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired\./);
   assert.match(html, />Retired frontend inventory</);
   assert.match(html, />Retired served scope</);
 
@@ -88,6 +95,10 @@ test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-
   assert.match(html, /Conference list/);
   assert.match(html, /Dependency governance rows/);
   assert.match(html, /Resource library rows/);
+  assert.equal(
+    countMatches(html, /Fresh rebuild surface not started yet\./g),
+    2
+  );
   assert.doesNotMatch(productVisibleAndA11yText(html), productVisibleInternalTermsPattern);
 });
 
@@ -224,6 +235,10 @@ function productVisibleAndA11yText(html) {
     .replace(/\s+/g, " ")
     .trim();
   return `${visibleText} ${attributeText}`.replace(/\s+/g, " ").trim();
+}
+
+function countMatches(text, pattern) {
+  return Array.from(text.matchAll(pattern)).length;
 }
 
 const productVisibleInternalTermsPattern = /\b(readback|checkpoint|route|slice|implementation|workflow|proof|package-runtime|package runtime|functional contract|held for later|unavailable in this route|not claimed|not_claimed)\b/i;
