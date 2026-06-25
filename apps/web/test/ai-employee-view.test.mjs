@@ -117,7 +117,7 @@ test("AI Employee nav items use DS icons for Storybook-aligned side navigation",
   const html = renderAiEmployeeHtml();
   const navItems = Array.from(html.matchAll(/<a\b(?=[^>]*data-package-runtime-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g));
 
-  assert.equal(navItems.length, 7);
+  assert.equal(navItems.length, 8);
   for (const [, attributes, body] of navItems) {
     assert.match(body, /\btcrn-icon\b/, "NavItem body includes a DS icon");
     assert.match(body, /class="tcrn-nav-item__label"/, "NavItem body includes label content");
@@ -125,6 +125,7 @@ test("AI Employee nav items use DS icons for Storybook-aligned side navigation",
       assert.match(attributes, /\baria-current="page"/, "AI Employee nav item is selected");
     }
   }
+  assert.match(html, /href="\/dependency-console\.html"/);
 });
 
 function productVisibleAndA11yText(html) {

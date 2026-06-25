@@ -1,11 +1,11 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_f5611d_ilya_resume_total_frontend_rebuild_after_ai_employee_status_sync",
-  "sourceHead": "c83798e7a86ec04b94438f442b98c6f341d9788f",
-  "generatedAt": "2026-06-25T06:15:13.021Z",
+  "sourceHead": "769ecb8db227092609eb2ef05d886e4c951d86cc",
+  "generatedAt": "2026-06-25T06:49:33.892Z",
   "staticTarget": "apps/web/static/conference.html",
-  "staticSha256": "ee542ee738b4adde34e63f100309701df9fde0d8b1f54540a62acd1aeb313adc",
-  "staticBytes": 34716,
+  "staticSha256": "9e7b59695fb099f7e197d2e9fba0bb4874ba772d9859d9e31d8adf3ad5dca0a4",
+  "staticBytes": 35588,
   "dsStandardsConsumed": [
     "ds-aos-target-set-v1",
     "ds-aos-operations-cockpit-v1"
@@ -81,16 +81,16 @@
       }
     ],
     "forbiddenVisibleHits": [],
-    "navItemCount": 8,
+    "navItemCount": 9,
     "iconlessNavItemCount": 0,
     "failures": []
   },
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/conference-browser/c83798e7a86ec04b94438f442b98c6f341d9788f/conference-desktop-1440x900.png",
-      "screenshotSha256": "5a23d845eafda4b3f2535b6436e40560a8fa4a49af3732bc3b50e2a81825522b",
-      "screenshotBytes": 233679,
+      "screenshot": "evidence/conference-browser/769ecb8db227092609eb2ef05d886e4c951d86cc/conference-desktop-1440x900.png",
+      "screenshotSha256": "9dee085c5594e0b193e73d8a3c60030aad90625e2ba80d59795a01ca79b94f63",
+      "screenshotBytes": 237427,
       "selectorProof": [
         {
           "selector": "[data-surface='conference']",
@@ -153,7 +153,7 @@
         "TopBar"
       ],
       "markerOnlyComponents": [],
-      "navItemCount": 8,
+      "navItemCount": 9,
       "navIconlessCount": 0,
       "navReadabilityFailures": [],
       "conferenceRowCount": 1,
@@ -164,9 +164,9 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/conference-browser/c83798e7a86ec04b94438f442b98c6f341d9788f/conference-mobile-390x844.png",
-      "screenshotSha256": "081de8911b34f798562b7367dca7095c749885eec2c3fbc8c173c961bcbfc771",
-      "screenshotBytes": 213926,
+      "screenshot": "evidence/conference-browser/769ecb8db227092609eb2ef05d886e4c951d86cc/conference-mobile-390x844.png",
+      "screenshotSha256": "61f3ceeb7a5402f738f13585fc5edef9d9420197c366e1084299e0027207cc41",
+      "screenshotBytes": 221927,
       "selectorProof": [
         {
           "selector": "[data-surface='conference']",
@@ -229,7 +229,7 @@
         "TopBar"
       ],
       "markerOnlyComponents": [],
-      "navItemCount": 8,
+      "navItemCount": 9,
       "navIconlessCount": 0,
       "navReadabilityFailures": [],
       "conferenceRowCount": 1,
@@ -244,9 +244,9 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "conference_visible_slice_source_content_digest_v1",
-    "sourceHeadAtProofRun": "c83798e7a86ec04b94438f442b98c6f341d9788f",
+    "sourceHeadAtProofRun": "769ecb8db227092609eb2ef05d886e4c951d86cc",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "b9cbf48ebbd53f1bcd76a80f57d63b14fa665d36b2ccc7f94a5a870da8204752",
+    "sourceContentDigest": "39435619428306849d8efea13d6f5408f01aaeed8ad9457e68473bd698836781",
     "sourcePaths": [
       "apps/web/src/conference-data.ts",
       "apps/web/src/conference-ui-react-runtime.ts",

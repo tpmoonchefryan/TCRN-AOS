@@ -3,21 +3,21 @@
 Status: passed.
 
 Route: `route_tcrn_aos_f5611d_ilya_resume_total_frontend_rebuild_after_ai_employee_status_sync`
-AOS source head: `c83798e7a86ec04b94438f442b98c6f341d9788f`
-Source content digest: `b9cbf48ebbd53f1bcd76a80f57d63b14fa665d36b2ccc7f94a5a870da8204752`
+AOS source head: `769ecb8db227092609eb2ef05d886e4c951d86cc`
+Source content digest: `39435619428306849d8efea13d6f5408f01aaeed8ad9457e68473bd698836781`
 
 ## Static Surface
 
 - Static target: `apps/web/static/conference.html`
-- Static sha256: `ee542ee738b4adde34e63f100309701df9fde0d8b1f54540a62acd1aeb313adc`
+- Static sha256: `9e7b59695fb099f7e197d2e9fba0bb4874ba772d9859d9e31d8adf3ad5dca0a4`
 - DS standards: ds-aos-target-set-v1, ds-aos-operations-cockpit-v1
 - Storybook oracles: tcrn-design-system-patterns--aos-product-design-target-set-standard, tcrn-design-system-patterns--aos-operations-cockpit-standard
 - Advanced checklist item: conference-list-detail-minutes
 
 ## Browser Evidence
 
-- desktop-1440x900: evidence/conference-browser/c83798e7a86ec04b94438f442b98c6f341d9788f/conference-desktop-1440x900.png sha256=5a23d845eafda4b3f2535b6436e40560a8fa4a49af3732bc3b50e2a81825522b bytes=233679 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 conferenceRowFailures=0
-- mobile-390x844: evidence/conference-browser/c83798e7a86ec04b94438f442b98c6f341d9788f/conference-mobile-390x844.png sha256=081de8911b34f798562b7367dca7095c749885eec2c3fbc8c173c961bcbfc771 bytes=213926 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 conferenceRowFailures=0
+- desktop-1440x900: evidence/conference-browser/769ecb8db227092609eb2ef05d886e4c951d86cc/conference-desktop-1440x900.png sha256=9dee085c5594e0b193e73d8a3c60030aad90625e2ba80d59795a01ca79b94f63 bytes=237427 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 conferenceRowFailures=0
+- mobile-390x844: evidence/conference-browser/769ecb8db227092609eb2ef05d886e4c951d86cc/conference-mobile-390x844.png sha256=61f3ceeb7a5402f738f13585fc5edef9d9420197c366e1084299e0027207cc41 bytes=221927 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 conferenceRowFailures=0
 
 ## Boundaries
 

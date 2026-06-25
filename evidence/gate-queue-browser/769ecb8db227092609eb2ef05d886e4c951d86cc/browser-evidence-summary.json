@@ -1,0 +1,273 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_c2924d0_ilya_resume_total_frontend_rebuild_after_internal_coordination_repair",
+  "sourceHead": "769ecb8db227092609eb2ef05d886e4c951d86cc",
+  "generatedAt": "2026-06-25T06:49:32.575Z",
+  "staticTarget": "apps/web/static/gate-queue.html",
+  "staticSha256": "e31e2791fee606b54ff182976dfbe47823823b08b69f7ba7196b5e1f05070f59",
+  "staticBytes": 35450,
+  "dsStandardsConsumed": [
+    "ds-aos-target-set-v1",
+    "ds-aos-operations-cockpit-v1"
+  ],
+  "storybookOraclesConsumed": [
+    "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+    "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+  ],
+  "checklistItemAdvanced": "gate-queue-approvals-owner-intent",
+  "routeAliases": [
+    "/gate-queue",
+    "/gate-queue.html",
+    "/apps/web/static/gate-queue.html"
+  ],
+  "staticReadback": {
+    "packageComponents": [
+      "Badge",
+      "Button",
+      "DetailDrawer",
+      "EvidenceStrip",
+      "Heading",
+      "KeyValueList",
+      "LinkButton",
+      "NavGroup",
+      "NavItem",
+      "ReadbackPanel",
+      "Select",
+      "SideNav",
+      "StatusBadge",
+      "Surface",
+      "TableShell",
+      "Text",
+      "TopBar"
+    ],
+    "missingComponents": [],
+    "markerOnlyComponents": [],
+    "selectorProof": [
+      {
+        "selector": "[data-surface='gate-queue']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-shell']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-nav']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-topbar']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-summary']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-list']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-detail']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-service']",
+        "present": true
+      },
+      {
+        "selector": "[data-region='gate-queue-actions']",
+        "present": true
+      }
+    ],
+    "forbiddenVisibleHits": [],
+    "navItemCount": 8,
+    "iconlessNavItemCount": 0,
+    "failures": []
+  },
+  "viewportReadbacks": [
+    {
+      "viewport": "desktop-1440x900",
+      "screenshot": "evidence/gate-queue-browser/769ecb8db227092609eb2ef05d886e4c951d86cc/gate-queue-desktop-1440x900.png",
+      "screenshotSha256": "acc3443af3e607a2037345283151d9db84d4eff8fd3212a2b5e95c375ece2c63",
+      "screenshotBytes": 248289,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='gate-queue']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-service']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-actions']",
+          "present": true
+        }
+      ],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 6,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "Select",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar"
+      ],
+      "markerOnlyComponents": [],
+      "navItemCount": 8,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "queueRowCount": 2,
+      "queueRowFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    },
+    {
+      "viewport": "mobile-390x844",
+      "screenshot": "evidence/gate-queue-browser/769ecb8db227092609eb2ef05d886e4c951d86cc/gate-queue-mobile-390x844.png",
+      "screenshotSha256": "b06c98bf081b617e525ac2226f0315958dfd678ba7b0f90ac0b9356dfe87a459",
+      "screenshotBytes": 233236,
+      "selectorProof": [
+        {
+          "selector": "[data-surface='gate-queue']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-shell']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-nav']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-topbar']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-summary']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-list']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-detail']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-service']",
+          "present": true
+        },
+        {
+          "selector": "[data-region='gate-queue-actions']",
+          "present": true
+        }
+      ],
+      "duplicateIds": [],
+      "ariaReferenceFailures": [],
+      "disabledControlsCount": 6,
+      "disabledFailures": [],
+      "packageComponents": [
+        "Badge",
+        "Button",
+        "DetailDrawer",
+        "EvidenceStrip",
+        "Heading",
+        "KeyValueList",
+        "LinkButton",
+        "NavGroup",
+        "NavItem",
+        "ReadbackPanel",
+        "Select",
+        "SideNav",
+        "StatusBadge",
+        "Surface",
+        "TableShell",
+        "Text",
+        "TopBar"
+      ],
+      "markerOnlyComponents": [],
+      "navItemCount": 8,
+      "navIconlessCount": 0,
+      "navReadabilityFailures": [],
+      "queueRowCount": 2,
+      "queueRowFailures": [],
+      "forbiddenVisibleHits": [],
+      "bodyHorizontalOverflow": false,
+      "nonblank": true
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "requestFailures": [],
+  "sourceFreshnessReadback": {
+    "strategy": "gate_queue_visible_slice_source_content_digest_v1",
+    "sourceHeadAtProofRun": "769ecb8db227092609eb2ef05d886e4c951d86cc",
+    "exactFinalCommitHeadRequired": false,
+    "sourceContentDigest": "d6ee9d3428e998861bb2c0321f61300bfa81fc8dc2a194690b4b9396971d6634",
+    "sourcePaths": [
+      "apps/web/src/cockpit.ts",
+      "apps/web/src/gate-queue-data.ts",
+      "apps/web/src/gate-queue-ui-react-runtime.ts",
+      "apps/web/src/gate-queue-view.ts",
+      "apps/web/src/design-system-bridge.ts",
+      "apps/web/test/gate-queue-view.test.mjs",
+      "apps/api/src/server.ts",
+      "apps/api/test/service-smoke.test.mjs",
+      "scripts/gate-queue-proof.mjs",
+      "scripts/service-start.mjs",
+      "package.json"
+    ]
+  },
+  "noOverclaimReadback": {
+    "productAcceptance": false,
+    "finalMvpAcceptance": false,
+    "releasePublication": false,
+    "ownerIntentExecution": false,
+    "liveDispatch": false,
+    "parentGoalCompletion": false
+  },
+  "failures": []
+}

@@ -35,12 +35,26 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
     assert.match(aiEmployee, /Role identity, thread status, assignments, and contact posture from the local service model\./);
     assert.doesNotMatch(aiEmployee, /implementation|workflow|package-runtime pilot|unavailable in this route/i);
 
+    const conference = await fetch(`${service.url}/conference`).then((response) => response.text());
+    assert.match(conference, /data-surface="conference"/);
+    assert.match(conference, /data-region="conference-list"/);
+    assert.match(conference, /data-ds-standard-ids="ds-aos-target-set-v1 ds-aos-operations-cockpit-v1"/);
+    assert.match(conference, /Conference list, detail, agenda, and minutes posture from the local service model\./);
+    assert.doesNotMatch(conference, /slice|implementation|workflow|package-runtime pilot|unavailable in this route/i);
+
     const gateQueue = await fetch(`${service.url}/gate-queue`).then((response) => response.text());
     assert.match(gateQueue, /data-surface="gate-queue"/);
     assert.match(gateQueue, /data-region="gate-queue-list"/);
     assert.match(gateQueue, /data-ds-standard-ids="ds-aos-target-set-v1 ds-aos-operations-cockpit-v1"/);
     assert.match(gateQueue, /Action approvals and role reviews from the local service model\./);
     assert.doesNotMatch(gateQueue, /owner intent|owner_intent_required|package-runtime pilot|unavailable in this route/i);
+
+    const dependencyConsole = await fetch(`${service.url}/dependency-console`).then((response) => response.text());
+    assert.match(dependencyConsole, /data-surface="dependency-console"/);
+    assert.match(dependencyConsole, /data-region="dependency-console-list"/);
+    assert.match(dependencyConsole, /data-ds-standard-ids="ds-aos-target-set-v1 ds-aos-operations-cockpit-v1"/);
+    assert.match(dependencyConsole, /Dependency lifecycle, license posture, evidence state, and blocked remediation from the local governance model\./);
+    assert.doesNotMatch(dependencyConsole, /slice|implementation|workflow|package-runtime pilot|unavailable in this route/i);
 
     const initiativeDetail = await fetch(`${service.url}/initiative-detail`).then((response) => response.text());
     assert.match(initiativeDetail, /data-surface="initiative-detail"/);

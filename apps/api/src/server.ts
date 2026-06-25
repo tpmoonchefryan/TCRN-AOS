@@ -8,7 +8,9 @@ import {
 } from "../../web/src/cockpit.js";
 import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
 import { createAiEmployeeModel, renderAiEmployeeHtml } from "../../web/src/ai-employee-view.js";
+import { createConferenceModel, renderConferenceHtml } from "../../web/src/conference-view.js";
 import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
+import { createDependencyConsoleModel, renderDependencyConsoleHtml } from "../../web/src/dependency-console-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
 import { createGateQueueModel, renderGateQueueHtml } from "../../web/src/gate-queue-view.js";
 import { createInitiativeDetailModel, renderInitiativeDetailHtml } from "../../web/src/initiative-detail-view.js";
@@ -76,6 +78,14 @@ function handleRequest(
   }
   if (path === "/ai-employee" || path === "/ai-employee.html" || path === "/apps/web/static/ai-employee.html") {
     sendHtml(request, response, renderAiEmployeeHtml(createAiEmployeeModel(createServiceCockpitReadModel(runtime))));
+    return;
+  }
+  if (path === "/conference" || path === "/conference.html" || path === "/apps/web/static/conference.html") {
+    sendHtml(request, response, renderConferenceHtml(createConferenceModel(createServiceCockpitReadModel(runtime))));
+    return;
+  }
+  if (path === "/dependency-console" || path === "/dependency-console.html" || path === "/apps/web/static/dependency-console.html") {
+    sendHtml(request, response, renderDependencyConsoleHtml(createDependencyConsoleModel()));
     return;
   }
   if (path === "/gate-queue" || path === "/gate-queue.html" || path === "/apps/web/static/gate-queue.html") {

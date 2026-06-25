@@ -288,7 +288,7 @@ function inspectStaticHtml(renderedHtml) {
   if (!renderedHtml.includes("data-product-acceptance=\"false\"")) failures.push("missing_product_acceptance_false");
   if (!renderedHtml.includes("data-live-dispatch=\"false\"")) failures.push("missing_live_dispatch_false");
   if (!renderedHtml.includes("data-parent-goal-completion=\"false\"")) failures.push("missing_parent_goal_completion_false");
-  if (navItemCount !== 8) failures.push(`nav_item_count:${navItemCount}`);
+  if (navItemCount !== 9) failures.push(`nav_item_count:${navItemCount}`);
   if (iconlessNavItemCount > 0) failures.push(`iconless_nav_item_count:${iconlessNavItemCount}`);
   return { packageComponents, missingComponents, markerOnlyComponents, selectorProof, forbiddenVisibleHits, navItemCount, iconlessNavItemCount, failures };
 }

@@ -81,6 +81,7 @@ function renderSidebar() {
     { label: "Initiative Detail", href: "/initiative-detail.html", iconName: "search" },
     { label: "AI Employee", href: "/ai-employee.html", iconName: "info" },
     { label: "Gate Queue", href: "/gate-queue.html", iconName: "check" },
+    { label: "Dependency Console", href: "/dependency-console.html", iconName: "package" },
     { label: "Docs Readiness", href: "/docs-search-release-readiness.html", iconName: "book-open" },
     { label: "Product Design", href: "/aos-wide-product-design.html", iconName: "package" }
   ];
