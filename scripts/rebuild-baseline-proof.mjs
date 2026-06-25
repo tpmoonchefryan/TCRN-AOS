@@ -26,8 +26,8 @@ const staticTargets = rebuildBaselineRoutes.map((routePath) => ({
   filePath: join(repoRoot, "apps/web/static", routePath.replace(/^.*\//, ""))
 }));
 const viewports = [
-  { label: "desktop-1440x900", width: 1440, height: 900, minNavLabelWidth: 120 },
-  { label: "mobile-390x844", width: 390, height: 844, minNavLabelWidth: 100 }
+  { label: "desktop-1440x900", width: 1440, height: 900, minNavLabelWidth: 120, checklistMode: "desktop", minChecklistRowWidth: 880 },
+  { label: "mobile-390x844", width: 390, height: 844, minNavLabelWidth: 100, checklistMode: "mobile", minChecklistRowWidth: 0 }
 ];
 
 if (checkCurrentSource) {
@@ -118,6 +118,53 @@ try {
       const markerOnlyComponents = Array.from(document.querySelectorAll("[data-tcrn-component]"))
         .filter((node) => !node.hasAttribute("data-package-runtime-component") && !node.hasAttribute("data-package-runtime-subcomponent"))
         .map((node) => node.getAttribute("data-tcrn-component"));
+      const checklistTable = document.querySelector("[data-region='rebuild-checklist'] .tcrn-table-shell");
+      const checklistHead = checklistTable?.querySelector(".tcrn-table-shell__head") ?? null;
+      const checklistRows = Array.from(checklistTable?.querySelectorAll(".tcrn-table-shell__row") ?? []);
+      const firstChecklistRow = checklistRows[0] ?? null;
+      const checklistCells = Array.from(firstChecklistRow?.querySelectorAll(".tcrn-table-shell__cell") ?? []);
+      const checklistReadback = checklistTable ? {
+        tableWidth: Math.round(checklistTable.getBoundingClientRect().width),
+        tableScrollWidth: checklistTable.scrollWidth,
+        headDisplay: checklistHead ? getComputedStyle(checklistHead).display : null,
+        rowDisplay: firstChecklistRow ? getComputedStyle(firstChecklistRow).display : null,
+        headCellCount: checklistHead ? checklistHead.querySelectorAll("[role='columnheader']").length : 0,
+        rowCount: checklistRows.length,
+        cellCount: checklistCells.length,
+        cellDisplays: checklistCells.map((cell) => getComputedStyle(cell).display),
+        cellRects: checklistCells.map((cell) => {
+          const rect = cell.getBoundingClientRect();
+          return {
+            label: cell.getAttribute("data-label") ?? "",
+            x: Math.round(rect.x),
+            y: Math.round(rect.y),
+            width: Math.round(rect.width),
+            height: Math.round(rect.height)
+          };
+        })
+      } : null;
+      const checklistDistinctXCount = checklistReadback ? new Set(checklistReadback.cellRects.map((cell) => cell.x)).size : 0;
+      const checklistDistinctYCount = checklistReadback ? new Set(checklistReadback.cellRects.map((cell) => cell.y)).size : 0;
+      const checklistReadabilityFailures = [];
+      if (!checklistReadback) {
+        checklistReadabilityFailures.push("missing_checklist_table");
+      } else {
+        if (checklistReadback.headCellCount !== 4) checklistReadabilityFailures.push(`unexpected_head_cell_count:${checklistReadback.headCellCount}`);
+        if (checklistReadback.cellCount !== 4) checklistReadabilityFailures.push(`unexpected_row_cell_count:${checklistReadback.cellCount}`);
+        if (checklistReadback.rowCount < 10) checklistReadabilityFailures.push(`unexpected_row_count:${checklistReadback.rowCount}`);
+        if (args.checklistMode === "desktop") {
+          if (checklistReadback.headDisplay !== "grid") checklistReadabilityFailures.push(`desktop_head_display:${checklistReadback.headDisplay ?? "missing"}`);
+          if (checklistReadback.rowDisplay !== "grid") checklistReadabilityFailures.push(`desktop_row_display:${checklistReadback.rowDisplay ?? "missing"}`);
+          if (checklistReadback.tableScrollWidth < args.minChecklistRowWidth) checklistReadabilityFailures.push(`desktop_table_width:${checklistReadback.tableScrollWidth}`);
+          if (!checklistReadback.cellDisplays.every((display) => display === "flex")) checklistReadabilityFailures.push(`desktop_cell_displays:${checklistReadback.cellDisplays.join(",")}`);
+          if (checklistDistinctXCount !== 4) checklistReadabilityFailures.push(`desktop_distinct_x_count:${checklistDistinctXCount}`);
+        } else {
+          if (checklistReadback.headDisplay !== "none") checklistReadabilityFailures.push(`mobile_head_display:${checklistReadback.headDisplay ?? "missing"}`);
+          if (checklistReadback.rowDisplay !== "grid") checklistReadabilityFailures.push(`mobile_row_display:${checklistReadback.rowDisplay ?? "missing"}`);
+          if (!checklistReadback.cellDisplays.every((display) => display === "grid")) checklistReadabilityFailures.push(`mobile_cell_displays:${checklistReadback.cellDisplays.join(",")}`);
+          if (checklistDistinctYCount !== 4) checklistReadabilityFailures.push(`mobile_distinct_y_count:${checklistDistinctYCount}`);
+        }
+      }
       const navItems = Array.from(document.querySelectorAll("[data-package-runtime-component='NavItem']"));
       const navIconlessCount = navItems.filter((item) => !item.querySelector(".tcrn-icon")).length;
       const navReadabilityFailures = navItems.map((item) => {
@@ -147,6 +194,8 @@ try {
         disabledFailures,
         packageComponents,
         markerOnlyComponents,
+        checklistReadback,
+        checklistReadabilityFailures,
         navItemCount: navItems.length,
         navIconlessCount,
         navReadabilityFailures,
@@ -157,7 +206,9 @@ try {
     }, {
       requiredSelectors: [...requiredRebuildBaselineSelectors],
       forbiddenTerms: [...forbiddenRebuildBaselineVisibleCopy],
-      minNavLabelWidth: viewport.minNavLabelWidth
+      minNavLabelWidth: viewport.minNavLabelWidth,
+      checklistMode: viewport.checklistMode,
+      minChecklistRowWidth: viewport.minChecklistRowWidth
     });
 
     viewportReadbacks.push({
@@ -198,6 +249,7 @@ for (const readback of viewportReadbacks) {
     ...readback.ariaReferenceFailures.map((failure) => `aria_reference_failure:${readback.viewport}:${failure.attr}:${failure.id}:${failure.count}`),
     ...readback.disabledFailures.map((failure) => `disabled_reason_failure:${readback.viewport}:${failure.html}`),
     ...readback.markerOnlyComponents.map((component) => `marker_only_component:${readback.viewport}:${component}`),
+    ...readback.checklistReadabilityFailures.map((failure) => `checklist_readability_failure:${readback.viewport}:${failure}`),
     ...readback.forbiddenVisibleHits.map((hit) => `forbidden_visible_copy:${readback.viewport}:${hit}`),
     ...readback.navReadabilityFailures.map((failure) => `nav_readability_failure:${readback.viewport}:${failure.label}:${failure.contentWidth}:${failure.labelHeight}`)
   );
@@ -281,7 +333,7 @@ ${summary.replacedStaticTargets.map((item) => `- ${item.routePath} -> ${item.sta
 
 ## Browser Evidence
 
-${summary.viewportReadbacks.map((readback) => `- ${readback.viewport}: ${readback.screenshot} sha256=${readback.screenshotSha256} bytes=${readback.screenshotBytes} overflow=${readback.bodyHorizontalOverflow} duplicateIds=${readback.duplicateIds.length} ariaFailures=${readback.ariaReferenceFailures.length} disabledFailures=${readback.disabledFailures.length} iconlessNavItems=${readback.navIconlessCount}`).join("\n")}
+${summary.viewportReadbacks.map((readback) => `- ${readback.viewport}: ${readback.screenshot} sha256=${readback.screenshotSha256} bytes=${readback.screenshotBytes} overflow=${readback.bodyHorizontalOverflow} duplicateIds=${readback.duplicateIds.length} ariaFailures=${readback.ariaReferenceFailures.length} disabledFailures=${readback.disabledFailures.length} iconlessNavItems=${readback.navIconlessCount} checklistFailures=${readback.checklistReadabilityFailures.length}`).join("\n")}
 
 ## Boundaries
 

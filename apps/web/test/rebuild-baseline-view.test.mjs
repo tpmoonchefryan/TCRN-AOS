@@ -52,6 +52,27 @@ test("Rebuild baseline HTML exposes the reset shell and removes old active surfa
   assert.doesNotMatch(productVisibleAndA11yText(html), productVisibleInternalTermsPattern);
 });
 
+test("Rebuild baseline checklist includes table layout rules for desktop and mobile readability", () => {
+  const html = renderRebuildBaselineHtml("/operations-cockpit.html");
+
+  assert.match(
+    html,
+    /\.rebuild-baseline__checklist \.tcrn-table-shell__head, \.rebuild-baseline__checklist \.tcrn-table-shell__row \{ display: grid; grid-template-columns: minmax\(180px, 1\.15fr\) 132px minmax\(180px, 0\.9fr\) minmax\(320px, 1\.75fr\); align-items: stretch; \}/
+  );
+  assert.match(
+    html,
+    /\.rebuild-baseline__checklist \.tcrn-table-shell__head span, \.rebuild-baseline__checklist \.tcrn-table-shell__cell \{ display: flex; align-items: center; min-width: 0; padding: 11px 12px; border-bottom: 1px solid var\(--line\);/
+  );
+  assert.match(
+    html,
+    /\.rebuild-baseline__checklist \.tcrn-table-shell__head \{ display: none; \}/
+  );
+  assert.match(
+    html,
+    /\.rebuild-baseline__checklist \.tcrn-table-shell__cell \{ display: grid; grid-template-columns: 92px minmax\(0, 1fr\);/
+  );
+});
+
 test("Rebuild baseline renders package-backed public Design System components", () => {
   const html = renderRebuildBaselineHtml("/project-workspace.html");
   const requiredPackageComponents = [
