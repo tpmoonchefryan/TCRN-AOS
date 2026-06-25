@@ -1321,6 +1321,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         renderInitiativeDetailStart(model.initiativeDetailStart),
         renderAiEmployeeStart(model.aiEmployeeStart),
         renderGateQueueStart(model.gateQueueStart),
+        renderConferenceStart(model.conferenceStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()
