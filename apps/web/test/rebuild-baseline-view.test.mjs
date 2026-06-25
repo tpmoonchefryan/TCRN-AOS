@@ -11,7 +11,7 @@ import {
   requiredRebuildBaselineSelectors
 } from "../../../dist/apps/web/src/rebuild-baseline-view.js";
 
-test("Rebuild baseline model now represents the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, dependency-console, resource-library, knowledge-modules, admin-access, and GitHub release-linkage fresh slices", () => {
+test("Rebuild baseline model now represents the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, gateway-adapter, dependency-console, resource-library, knowledge-modules, admin-access, and GitHub release-linkage fresh slices", () => {
   const model = createRebuildBaselineModel("/operations-cockpit.html");
   const resourceLibraryRow = model.checklist.find((row) => row.id === "resource-library");
   const knowledgeModulesRow = model.checklist.find((row) => row.id === "knowledge-modules");
@@ -19,7 +19,7 @@ test("Rebuild baseline model now represents the reset shell plus cockpit, docs, 
   const githubReleaseLinkageRow = model.checklist.find((row) => row.id === "github-release-linkage");
 
   assert.equal(model.currentAliasLabel, "Operations Cockpit");
-  assert.equal(model.selectedRebuiltStartingSlice, "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-dependency-console-resource-library-knowledge-modules-admin-access-github-workflow-sync-release-linkage-foundation");
+  assert.equal(model.selectedRebuiltStartingSlice, "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-gateway-adapter-dependency-console-resource-library-knowledge-modules-admin-access-github-workflow-sync-release-linkage-foundation");
   assert.equal(resourceLibraryRow?.status, "retired");
   assert.equal(
     resourceLibraryRow?.note,
@@ -69,7 +69,7 @@ test("Rebuild baseline model now represents the reset shell plus cockpit, docs, 
   ]);
 });
 
-test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, dependency-console, resource-library, knowledge-modules, admin-access, and GitHub release-linkage fresh slices while omitting later sections", () => {
+test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, gateway-adapter, dependency-console, resource-library, knowledge-modules, admin-access, and GitHub release-linkage fresh slices while omitting later sections", () => {
   const html = renderRebuildBaselineHtml("/operations-cockpit.html");
 
   for (const selector of requiredRebuildBaselineSelectors) {
@@ -91,6 +91,7 @@ test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-
   assert.match(html, />AI employee starting surface</);
   assert.match(html, />Gate queue starting surface</);
   assert.match(html, />Conference starting surface</);
+  assert.match(html, />Gateway and adapter starting surface</);
   assert.match(html, />Dependency console starting surface</);
   assert.match(html, />Resource library starting surface</);
   assert.match(html, />Knowledge modules starting surface</);
@@ -114,6 +115,7 @@ test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-
   assert.match(html, /AI employee roster/);
   assert.match(html, /Gate queue rows/);
   assert.match(html, /Conference list/);
+  assert.match(html, /Gateway and adapter rows/);
   assert.match(html, /Dependency governance rows/);
   assert.match(html, /Resource library rows/);
   assert.match(html, /Knowledge module rows/);
@@ -180,7 +182,7 @@ test("Rebuild checkpoint visible copy avoids internal workflow vocabulary", () =
   assert.deepEqual(hits, []);
 });
 
-test("Rebuild checkpoint exposes the fresh cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, dependency-console, resource-library, knowledge-modules, admin-access, and GitHub release-linkage sections while still keeping later fresh sections suppressed", () => {
+test("Rebuild checkpoint exposes the fresh cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, gateway-adapter, dependency-console, resource-library, knowledge-modules, admin-access, and GitHub release-linkage sections while still keeping later fresh sections suppressed", () => {
   const html = renderRebuildBaselineHtml("/operations-cockpit.html");
 
   assert.match(html, /data-region="cockpit-start"/);
@@ -222,6 +224,11 @@ test("Rebuild checkpoint exposes the fresh cockpit, docs, target-set, project-wo
   assert.match(html, /data-region="conference-detail"/);
   assert.match(html, /Conference starting surface/);
   assert.match(html, /Conference list/);
+  assert.match(html, /data-region="gateway-adapter-start"/);
+  assert.match(html, /data-region="gateway-adapter-list"/);
+  assert.match(html, /data-region="gateway-adapter-detail"/);
+  assert.match(html, /Gateway and adapter starting surface/);
+  assert.match(html, /Gateway and adapter rows/);
   assert.match(html, /data-region="dependency-console-start"/);
   assert.match(html, /data-region="dependency-console-list"/);
   assert.match(html, /data-region="dependency-console-detail"/);

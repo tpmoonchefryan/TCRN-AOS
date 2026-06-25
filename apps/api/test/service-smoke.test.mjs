@@ -16,7 +16,7 @@ const retiredFrontendTargets = [
   "/dependency-console.html"
 ];
 
-test("local service now serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, dependency-console, resource-library, knowledge-modules, admin-access, and GitHub release-linkage slices while APIs remain available", async () => {
+test("local service now serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, gateway-adapter, dependency-console, resource-library, knowledge-modules, admin-access, and GitHub release-linkage slices while APIs remain available", async () => {
   const service = await startAosLocalServiceProof();
   try {
     for (const target of retiredFrontendTargets) {
@@ -39,6 +39,8 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
       assert.match(html, /Gate queue rows/, `${target} exposes the gate queue rows`);
       assert.match(html, /Conference starting surface/, `${target} exposes the conference slice`);
       assert.match(html, /Conference list/, `${target} exposes the conference list`);
+      assert.match(html, /Gateway and adapter starting surface/, `${target} exposes the gateway adapter slice`);
+      assert.match(html, /Gateway and adapter rows/, `${target} exposes the gateway adapter rows`);
       assert.match(html, /Dependency console starting surface/, `${target} exposes the dependency console slice`);
       assert.match(html, /Dependency governance rows/, `${target} exposes the dependency console rows`);
       assert.match(html, /Resource library starting surface/, `${target} exposes the resource library slice`);

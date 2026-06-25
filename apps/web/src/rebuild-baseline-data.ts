@@ -53,6 +53,9 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='conference-start']",
   "[data-region='conference-list']",
   "[data-region='conference-detail']",
+  "[data-region='gateway-adapter-start']",
+  "[data-region='gateway-adapter-list']",
+  "[data-region='gateway-adapter-detail']",
   "[data-region='dependency-console-start']",
   "[data-region='dependency-console-list']",
   "[data-region='dependency-console-detail']",
@@ -358,6 +361,33 @@ export interface RebuildConferenceModel {
   actions: readonly RebuildProjectWorkspaceAction[];
 }
 
+export interface RebuildGatewayAdapterRow {
+  title: string;
+  transport: string;
+  posture: string;
+  audit: string;
+  nextAction: string;
+  status: "current" | "blocked";
+}
+
+export interface RebuildGatewayAdapterDetailItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildGatewayAdapterModel {
+  title: string;
+  summary: string;
+  standardIds: readonly string[];
+  storybookIds: readonly string[];
+  evidence: readonly string[];
+  rows: readonly RebuildGatewayAdapterRow[];
+  detailTitle: string;
+  detailItems: readonly RebuildGatewayAdapterDetailItem[];
+  actions: readonly RebuildProjectWorkspaceAction[];
+}
+
 export interface RebuildDependencyConsoleRow {
   packageName: string;
   lifecycle: string;
@@ -509,6 +539,7 @@ export interface RebuildBaselineModel {
   aiEmployeeStart: RebuildAiEmployeeModel;
   gateQueueStart: RebuildGateQueueModel;
   conferenceStart: RebuildConferenceModel;
+  gatewayAdapterStart: RebuildGatewayAdapterModel;
   dependencyConsoleStart: RebuildDependencyConsoleModel;
   resourceLibraryStart: RebuildResourceLibraryModel;
   knowledgeModulesStart: RebuildKnowledgeModulesModel;
@@ -564,7 +595,7 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
       "packages/db runtime fixture and migrations",
       "local service policy, health, and service endpoints"
     ],
-    selectedRebuiltStartingSlice: "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-dependency-console-resource-library-knowledge-modules-admin-access-github-workflow-sync-release-linkage-foundation",
+    selectedRebuiltStartingSlice: "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-gateway-adapter-dependency-console-resource-library-knowledge-modules-admin-access-github-workflow-sync-release-linkage-foundation",
     cockpitStart: {
       title: "Operations cockpit starting surface",
       summary: "The first fresh rebuilt surface starts here: a DS-aligned cockpit shell for local workspace status, work items, and unavailable action posture.",
@@ -1007,6 +1038,59 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
         {
           label: "Record notes",
           reason: "Minutes updates remain unavailable while the conference surface stays in local preview."
+        }
+      ]
+    },
+    gatewayAdapterStart: {
+      title: "Gateway and adapter starting surface",
+      summary: "The next fresh rebuilt surface adds a DS-aligned control-plane workspace for gateway health, adapter dry-run outbox posture, and blocked live operations inside the shared replacement shell.",
+      standardIds: ["ds-aos-target-set-v1", "ds-aos-operations-cockpit-v1"],
+      storybookIds: [
+        "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+        "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+      ],
+      evidence: [
+        "Gateway health",
+        "Dry-run outbox",
+        "Local preview only"
+      ],
+      rows: [
+        {
+          title: "Gateway health",
+          transport: "Accepted method families visible",
+          posture: "Read-only status",
+          audit: "Audit metadata present",
+          nextAction: "Inspect gateway detail",
+          status: "current"
+        },
+        {
+          title: "Adapter outbox",
+          transport: "Dry-run records only",
+          posture: "Live operations blocked",
+          audit: "Retry and stale-state visible",
+          nextAction: "Review blocked live actions",
+          status: "blocked"
+        }
+      ],
+      detailTitle: "Selected gateway detail",
+      detailItems: [
+        { key: "surface", label: "Surface", value: "Gateway health" },
+        { key: "transport", label: "Transport", value: "Accepted method families visible" },
+        { key: "outbox", label: "Adapter posture", value: "Dry-run outbox and return collection only" },
+        { key: "boundary", label: "Boundary", value: "Live dispatch and thread actions remain unavailable" }
+      ],
+      actions: [
+        {
+          label: "Read gateway status",
+          reason: "Gateway status refresh remains unavailable while the gateway and adapter surface stays inside the shared replacement shell."
+        },
+        {
+          label: "Send live dispatch",
+          reason: "Live dispatch remains unavailable while the gateway and adapter surface stays in local preview."
+        },
+        {
+          label: "Retry outbox record",
+          reason: "Outbox retry remains unavailable while the gateway and adapter surface stays in local preview."
         }
       ]
     },

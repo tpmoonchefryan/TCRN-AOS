@@ -30,6 +30,7 @@ import type {
   RebuildAdminAccessModel,
   RebuildResourceLibraryModel,
   RebuildKnowledgeModulesModel,
+  RebuildGatewayAdapterModel,
   RebuildDependencyConsoleModel,
   RebuildConferenceModel,
   RebuildGateQueueModel,
@@ -237,6 +238,7 @@ const futureFreshSectionRenderers = [
   renderAiEmployeeStart,
   renderGateQueueStart,
   renderConferenceStart,
+  renderGatewayAdapterStart,
   renderDependencyConsoleStart,
   renderResourceLibraryStart,
   renderKnowledgeModulesStart,
@@ -1037,6 +1039,94 @@ function renderConferenceStart(model: RebuildConferenceModel) {
   );
 }
 
+function renderGatewayAdapterStart(model: RebuildGatewayAdapterModel) {
+  return createElement(
+    "section",
+    { className: "rebuild-baseline__gateway-adapter-start", "data-region": "gateway-adapter-start" },
+    createElement(
+      "div",
+      { className: "rebuild-baseline__cockpit-grid" },
+      createElement(
+        Surface,
+        { ...packageAttrs("Surface", { className: "rebuild-baseline__cockpit-surface" }) },
+        createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Next fresh surface"),
+        createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, model.title),
+        createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.summary),
+        createElement(
+          "div",
+          packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
+          createElement(EvidenceStrip, { items: [...model.evidence] })
+        ),
+        createElement(
+          "div",
+          packageAttrs("TableShell", { "data-region": "gateway-adapter-list" }),
+          createElement(TableShell, {
+            label: "Gateway and adapter rows",
+            columns: [
+              { key: "title", label: "Control area" },
+              { key: "transport", label: "Transport" },
+              { key: "posture", label: "Posture" },
+              { key: "audit", label: "Audit" },
+              { key: "nextAction", label: "Next action" },
+              { key: "status", label: "Status" }
+            ],
+            rows: model.rows.map((row) => ({
+              title: row.title,
+              transport: row.transport,
+              posture: row.posture,
+              audit: row.audit,
+              nextAction: row.nextAction,
+              status: createElement(StatusBadge, {
+                ...packageAttrs("StatusBadge"),
+                state: row.status === "blocked"
+                  ? { state: "blocked" }
+                  : { state: "local_only", label: "Current state" }
+              })
+            }))
+          })
+        )
+      ),
+      createElement(
+        "div",
+        { className: "rebuild-baseline__cockpit-side" },
+        createElement(
+          "div",
+          packageAttrs("DetailDrawer", { "data-region": "gateway-adapter-detail" }),
+          createElement(DetailDrawer, { title: model.detailTitle, open: true },
+            renderKeyValueList(model.detailItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              value: item.value
+            }))),
+            createElement(
+              "div",
+              { className: "rebuild-baseline__action-list" },
+              model.actions.map((action) =>
+                createElement(Button, {
+                  ...packageAttrs("Button", { key: action.label }),
+                  disabled: true,
+                  disabledReason: action.reason
+                }, action.label)
+              )
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("GateReadinessPanel"),
+          createElement(GateReadinessPanel, {
+            state: {
+              state: "blocked",
+              label: "Unavailable",
+              description: "Live gateway, adapter, and dispatch actions stay unavailable while the gateway and adapter surface remains inside the shared replacement shell."
+            }
+          })
+        )
+      )
+    )
+  );
+}
+
 function renderDependencyConsoleStart(model: RebuildDependencyConsoleModel) {
   return createElement(
     "section",
@@ -1592,6 +1682,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         renderAiEmployeeStart(model.aiEmployeeStart),
         renderGateQueueStart(model.gateQueueStart),
         renderConferenceStart(model.conferenceStart),
+        renderGatewayAdapterStart(model.gatewayAdapterStart),
         renderDependencyConsoleStart(model.dependencyConsoleStart),
         renderResourceLibraryStart(model.resourceLibraryStart),
         renderKnowledgeModulesStart(model.knowledgeModulesStart),
