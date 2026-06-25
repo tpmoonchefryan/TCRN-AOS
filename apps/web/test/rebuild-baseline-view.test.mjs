@@ -59,6 +59,7 @@ test("Rebuild baseline HTML exposes the reset shell and removes old active surfa
   assert.match(html, />AOS Frontend Replacement Workspace</);
   assert.match(html, />Current served frontend has been retired</);
   assert.match(html, />Operations cockpit starting surface</);
+  assert.match(html, />Docs readiness starting surface</);
   assert.match(html, />Retired frontend inventory</);
   assert.match(html, />Retired served scope</);
   assert.doesNotMatch(html, />Active now</);
@@ -101,6 +102,7 @@ test("Rebuild baseline renders package-backed public Design System components", 
     "EvidenceStrip",
     "ReadbackPanel",
     "DetailDrawer",
+    "FilterBar",
     "GateReadinessPanel",
     "Text",
     "Heading",
@@ -133,6 +135,21 @@ test("Rebuild baseline exposes the first fresh cockpit surface inside the replac
   assert.match(html, /First fresh surface/);
   assert.match(html, /data-package-runtime-component="GateReadinessPanel"/);
   assert.match(html, /data-package-runtime-component="DetailDrawer"/);
+});
+
+test("Rebuild baseline exposes the next fresh docs readiness surface inside the replacement workspace", () => {
+  const html = renderRebuildBaselineHtml("/docs-search-release-readiness.html");
+
+  assert.match(html, /data-region="docs-start"/);
+  assert.match(html, /data-region="docs-filter"/);
+  assert.match(html, /data-region="docs-detail"/);
+  assert.match(html, /Docs readiness starting surface/);
+  assert.match(html, /Docs inspection rows/);
+  assert.match(html, /Docs readiness standard reference/);
+  assert.match(html, /data-package-runtime-component="FilterBar"/);
+  assert.match(html, /class="tcrn-search-input"/);
+  assert.match(html, /class="tcrn-select"/);
+  assert.match(html, /class="tcrn-field"/);
 });
 
 test("Rebuild baseline nav uses DS icons and disabled reasons for reference and retired modules", () => {

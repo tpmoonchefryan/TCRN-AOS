@@ -31,6 +31,9 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='cockpit-start']",
   "[data-region='cockpit-work-index']",
   "[data-region='cockpit-detail']",
+  "[data-region='docs-start']",
+  "[data-region='docs-filter']",
+  "[data-region='docs-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
@@ -94,6 +97,42 @@ export interface RebuildCockpitStartModel {
   actions: readonly RebuildCockpitStartAction[];
 }
 
+export interface RebuildDocsStartFilterOption {
+  value: string;
+  label: string;
+}
+
+export interface RebuildDocsStartRow {
+  path: string;
+  state: "current" | "blocked";
+  linkage: string;
+}
+
+export interface RebuildDocsStartDetailItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildDocsStartAction {
+  label: string;
+  reason: string;
+}
+
+export interface RebuildDocsStartModel {
+  title: string;
+  summary: string;
+  standardId: string;
+  storybookId: string;
+  evidence: readonly string[];
+  searchPlaceholder: string;
+  stateOptions: readonly RebuildDocsStartFilterOption[];
+  rows: readonly RebuildDocsStartRow[];
+  detailTitle: string;
+  detailItems: readonly RebuildDocsStartDetailItem[];
+  actions: readonly RebuildDocsStartAction[];
+}
+
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
@@ -103,6 +142,7 @@ export interface RebuildBaselineModel {
   survivingNonFrontendScope: string[];
   selectedRebuiltStartingSlice: string;
   cockpitStart: RebuildCockpitStartModel;
+  docsStart: RebuildDocsStartModel;
   checklist: RebuildChecklistRow[];
   noClaims: {
     productAcceptance: false;
@@ -208,6 +248,46 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
         {
           label: "Run live action",
           reason: "Live actions stay disabled while the fresh cockpit surface remains in local preview."
+        }
+      ]
+    },
+    docsStart: {
+      title: "Docs readiness starting surface",
+      summary: "The next fresh rebuilt surface adds a DS-aligned inspection workspace for docs readiness, search state, and blocked publication posture.",
+      standardId: "ds-aos-docs-readiness-v1",
+      storybookId: "tcrn-design-system-patterns--aos-docs-readiness-standard",
+      evidence: [
+        "Docs standard",
+        "Reference links",
+        "No external mutation"
+      ],
+      searchPlaceholder: "Search local docs",
+      stateOptions: [
+        { value: "all", label: "All states" },
+        { value: "blocked", label: "Blocked" }
+      ],
+      rows: [
+        {
+          path: "docs/readiness.md",
+          state: "current",
+          linkage: "PR reference only"
+        },
+        {
+          path: "release-candidate.md",
+          state: "blocked",
+          linkage: "CI reference only"
+        }
+      ],
+      detailTitle: "Selected docs readiness detail",
+      detailItems: [
+        { key: "path", label: "Path", value: "docs/readiness.md" },
+        { key: "linkage", label: "Linkage", value: "Reference-only GitHub and CI metadata" },
+        { key: "boundary", label: "Boundary", value: "Publishing remains unavailable" }
+      ],
+      actions: [
+        {
+          label: "Publish docs",
+          reason: "Publishing remains unavailable while docs readiness stays inside the fresh replacement workspace."
         }
       ]
     },

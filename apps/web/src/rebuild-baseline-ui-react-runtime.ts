@@ -5,6 +5,8 @@ import {
   Button,
   DetailDrawer,
   EvidenceStrip,
+  Field,
+  FilterBar,
   GateReadinessPanel,
   Heading,
   KeyValueList,
@@ -12,7 +14,10 @@ import {
   NavGroup,
   NavItem,
   ReadbackPanel,
+  SearchInput,
+  Select,
   SideNav,
+  StateView,
   StatusBadge,
   Surface,
   TableShell,
@@ -20,7 +25,7 @@ import {
   TopBar,
   WorkIndex
 } from "@tcrn/ui-react";
-import type { RebuildBaselineModel, RebuildCockpitStartModel } from "./rebuild-baseline-data.js";
+import type { RebuildBaselineModel, RebuildCockpitStartModel, RebuildDocsStartModel } from "./rebuild-baseline-data.js";
 
 const createElement = React.createElement as unknown as (type: unknown, props?: Record<string, unknown> | null, ...children: unknown[]) => React.ReactElement;
 
@@ -305,6 +310,116 @@ function renderCockpitStart(model: RebuildCockpitStartModel) {
   );
 }
 
+function renderDocsStart(model: RebuildDocsStartModel) {
+  return createElement(
+    "section",
+    { className: "rebuild-baseline__docs-start", "data-region": "docs-start" },
+    createElement(
+      "div",
+      { className: "rebuild-baseline__cockpit-grid" },
+      createElement(
+        Surface,
+        { ...packageAttrs("Surface", { className: "rebuild-baseline__cockpit-surface" }) },
+        createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Next fresh surface"),
+        createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, model.title),
+        createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.summary),
+        createElement(
+          "div",
+          packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
+          createElement(EvidenceStrip, { items: [...model.evidence] })
+        ),
+        createElement(
+          "div",
+          packageAttrs("FilterBar", { "data-region": "docs-filter" }),
+          createElement(FilterBar, { label: "Docs readiness filters" },
+            createElement(Field, { label: "Search" },
+              createElement(SearchInput, { placeholder: model.searchPlaceholder })
+            ),
+            createElement(Field, { label: "State" },
+              createElement(Select, {
+                defaultValue: model.stateOptions[0]?.value,
+                options: [...model.stateOptions]
+              })
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("TableShell"),
+          createElement(TableShell, {
+            label: "Docs inspection rows",
+            columns: [
+              { key: "path", label: "Repo path" },
+              { key: "state", label: "State" },
+              { key: "linkage", label: "Linkage" }
+            ],
+            rows: model.rows.map((row) => ({
+              path: row.path,
+              state: createElement(StatusBadge, {
+                ...packageAttrs("StatusBadge"),
+                state: { state: row.state }
+              }),
+              linkage: row.linkage
+            })),
+            emptyState: createElement(StateView, {
+              state: { state: "not_configured" },
+              title: "No docs match"
+            })
+          })
+        )
+      ),
+      createElement(
+        "div",
+        { className: "rebuild-baseline__cockpit-side" },
+        createElement(
+          "div",
+          packageAttrs("ReadbackPanel"),
+          createElement(ReadbackPanel, { title: "Docs readiness standard reference" },
+            renderKeyValueList([
+              { key: "standard", label: "Standard id", value: model.standardId },
+              { key: "storybook", label: "Storybook id", value: model.storybookId },
+              { key: "posture", label: "Workspace posture", value: "Reference-only inspection" }
+            ])
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("DetailDrawer", { "data-region": "docs-detail" }),
+          createElement(DetailDrawer, { title: model.detailTitle, open: true },
+            renderKeyValueList(model.detailItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              value: item.value
+            }))),
+            createElement(
+              "div",
+              { className: "rebuild-baseline__action-list" },
+              model.actions.map((action) =>
+                createElement(Button, {
+                  ...packageAttrs("Button", { key: action.label }),
+                  disabled: true,
+                  disabledReason: action.reason
+                }, action.label)
+              )
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("GateReadinessPanel"),
+          createElement(GateReadinessPanel, {
+            state: {
+              state: "blocked",
+              label: "Unavailable",
+              description: "External publication stays unavailable while docs readiness remains inside the fresh replacement workspace."
+            }
+          })
+        )
+      )
+    )
+  );
+}
+
 function renderChecklist(model: RebuildBaselineModel) {
   return createElement(
     "section",
@@ -413,6 +528,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         renderTopbar(model),
         renderSummary(model),
         renderCockpitStart(model.cockpitStart),
+        renderDocsStart(model.docsStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()

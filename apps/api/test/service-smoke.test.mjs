@@ -24,6 +24,8 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
       assert.match(html, /AOS Frontend Replacement Workspace/, `${target} exposes replacement heading`);
       assert.match(html, /Operations cockpit starting surface/, `${target} exposes the first fresh cockpit surface`);
       assert.match(html, /Operations cockpit starting work/, `${target} exposes cockpit work index`);
+      assert.match(html, /Docs readiness starting surface/, `${target} exposes the next fresh docs surface`);
+      assert.match(html, /Docs inspection rows/, `${target} exposes docs inspection rows`);
       assert.match(html, /Retired frontend inventory/, `${target} exposes retirement inventory`);
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
     }
