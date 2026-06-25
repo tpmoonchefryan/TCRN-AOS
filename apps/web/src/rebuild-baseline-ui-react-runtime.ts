@@ -27,11 +27,12 @@ import {
 } from "@tcrn/ui-react";
 import type {
   RebuildBaselineModel,
+  RebuildAiEmployeeModel,
   RebuildCockpitStartModel,
   RebuildDocsStartModel,
-  RebuildTargetSetModel,
+  RebuildInitiativeDetailModel,
   RebuildProjectWorkspaceModel,
-  RebuildInitiativeDetailModel
+  RebuildTargetSetModel
 } from "./rebuild-baseline-data.js";
 
 const createElement = React.createElement as unknown as (type: unknown, props?: Record<string, unknown> | null, ...children: unknown[]) => React.ReactElement;
@@ -750,6 +751,94 @@ function renderInitiativeDetailStart(model: RebuildInitiativeDetailModel) {
   );
 }
 
+function renderAiEmployeeStart(model: RebuildAiEmployeeModel) {
+  return createElement(
+    "section",
+    { className: "rebuild-baseline__ai-employee-start", "data-region": "ai-employee-start" },
+    createElement(
+      "div",
+      { className: "rebuild-baseline__cockpit-grid" },
+      createElement(
+        Surface,
+        { ...packageAttrs("Surface", { className: "rebuild-baseline__cockpit-surface" }) },
+        createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Next fresh surface"),
+        createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, model.title),
+        createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.summary),
+        createElement(
+          "div",
+          packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
+          createElement(EvidenceStrip, { items: [...model.evidence] })
+        ),
+        createElement(
+          "div",
+          packageAttrs("TableShell", { "data-region": "ai-employee-roster" }),
+          createElement(TableShell, {
+            label: "AI employee roster",
+            columns: [
+              { key: "employee", label: "Employee" },
+              { key: "role", label: "Role" },
+              { key: "thread", label: "Thread" },
+              { key: "stories", label: "Stories" },
+              { key: "conferences", label: "Conferences" },
+              { key: "status", label: "Status" }
+            ],
+            rows: model.rows.map((row) => ({
+              employee: row.name,
+              role: row.role,
+              thread: row.thread,
+              stories: row.stories,
+              conferences: row.conferences,
+              status: createElement(StatusBadge, {
+                ...packageAttrs("StatusBadge"),
+                state: row.status === "blocked"
+                  ? { state: "blocked" }
+                  : { state: "local_only", label: "Current state" }
+              })
+            }))
+          })
+        )
+      ),
+      createElement(
+        "div",
+        { className: "rebuild-baseline__cockpit-side" },
+        createElement(
+          "div",
+          packageAttrs("ReadbackPanel", { "data-region": "ai-employee-detail" }),
+          createElement(ReadbackPanel, { title: model.detailTitle },
+            renderKeyValueList(model.detailItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              value: item.value
+            })))
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("GateReadinessPanel"),
+          createElement(GateReadinessPanel, {
+            state: {
+              state: "blocked",
+              label: "Unavailable",
+              description: "Employee updates stay unavailable while the AI employee surface remains inside the shared replacement shell."
+            }
+          })
+        ),
+        createElement(
+          "div",
+          { className: "rebuild-baseline__action-list" },
+          model.actions.map((action) =>
+            createElement(Button, {
+              ...packageAttrs("Button", { key: action.label }),
+              disabled: true,
+              disabledReason: action.reason
+            }, action.label)
+          )
+        )
+      )
+    )
+  );
+}
+
 function renderChecklist(model: RebuildBaselineModel) {
   return createElement(
     "section",
@@ -862,6 +951,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         renderTargetSetStart(model.targetSetStart),
         renderProjectWorkspaceStart(model.projectWorkspaceStart),
         renderInitiativeDetailStart(model.initiativeDetailStart),
+        renderAiEmployeeStart(model.aiEmployeeStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()

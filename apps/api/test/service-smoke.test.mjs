@@ -32,6 +32,8 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
       assert.match(html, /Project workspace current work/, `${target} exposes project workspace current work`);
       assert.match(html, /Initiative detail starting surface/, `${target} exposes the next fresh initiative detail surface`);
       assert.match(html, /Initiative detail linked records/, `${target} exposes initiative detail linked records`);
+      assert.match(html, /AI employee starting surface/, `${target} exposes the next fresh AI employee surface`);
+      assert.match(html, /AI employee roster/, `${target} exposes AI employee roster`);
       assert.match(html, /Retired frontend inventory/, `${target} exposes retirement inventory`);
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
     }

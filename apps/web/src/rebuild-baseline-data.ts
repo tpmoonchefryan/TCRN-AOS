@@ -44,6 +44,9 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='initiative-detail-ticket']",
   "[data-region='initiative-detail-links']",
   "[data-region='initiative-detail-activity']",
+  "[data-region='ai-employee-start']",
+  "[data-region='ai-employee-roster']",
+  "[data-region='ai-employee-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
@@ -249,6 +252,34 @@ export interface RebuildInitiativeDetailModel {
   actions: readonly RebuildProjectWorkspaceAction[];
 }
 
+export interface RebuildAiEmployeeRow {
+  id: string;
+  name: string;
+  role: string;
+  thread: string;
+  stories: string;
+  conferences: string;
+  status: "current" | "blocked";
+}
+
+export interface RebuildAiEmployeeDetailItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildAiEmployeeModel {
+  title: string;
+  summary: string;
+  standardIds: readonly string[];
+  storybookIds: readonly string[];
+  evidence: readonly string[];
+  rows: readonly RebuildAiEmployeeRow[];
+  detailTitle: string;
+  detailItems: readonly RebuildAiEmployeeDetailItem[];
+  actions: readonly RebuildProjectWorkspaceAction[];
+}
+
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
@@ -262,6 +293,7 @@ export interface RebuildBaselineModel {
   targetSetStart: RebuildTargetSetModel;
   projectWorkspaceStart: RebuildProjectWorkspaceModel;
   initiativeDetailStart: RebuildInitiativeDetailModel;
+  aiEmployeeStart: RebuildAiEmployeeModel;
   checklist: RebuildChecklistRow[];
   noClaims: {
     productAcceptance: false;
@@ -584,6 +616,70 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
         {
           label: "Publish update",
           reason: "Publishing remains unavailable while the initiative detail surface stays inside the shared replacement shell."
+        }
+      ]
+    },
+    aiEmployeeStart: {
+      title: "AI employee starting surface",
+      summary: "The next fresh rebuilt surface adds a DS-aligned employee roster and profile detail inside the shared replacement shell.",
+      standardIds: ["ds-aos-target-set-v1", "ds-aos-operations-cockpit-v1"],
+      storybookIds: [
+        "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+        "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+      ],
+      evidence: [
+        "Employee roster",
+        "Thread status",
+        "Local preview only"
+      ],
+      rows: [
+        {
+          id: "employee-ilya",
+          name: "Ilya",
+          role: "Delivery engineer",
+          thread: "workspace-owner",
+          stories: "2",
+          conferences: "1",
+          status: "current"
+        },
+        {
+          id: "employee-arturo",
+          name: "Arturo",
+          role: "Coordinator",
+          thread: "workspace-coordinator",
+          stories: "1",
+          conferences: "1",
+          status: "current"
+        },
+        {
+          id: "employee-sable",
+          name: "Sable",
+          role: "Security reviewer",
+          thread: "specialist-review",
+          stories: "0",
+          conferences: "1",
+          status: "blocked"
+        }
+      ],
+      detailTitle: "Selected profile",
+      detailItems: [
+        { key: "role", label: "Role", value: "Delivery engineer" },
+        { key: "thread", label: "Thread", value: "workspace-owner" },
+        { key: "authority", label: "Authority posture", value: "AOS source edits only" },
+        { key: "contact", label: "Contact when", value: "Fresh rebuild work needs execution" }
+      ],
+      actions: [
+        {
+          label: "Open thread",
+          reason: "Thread actions remain read-only while the AI employee surface stays inside the shared replacement shell."
+        },
+        {
+          label: "Reassign work",
+          reason: "Assignment changes remain unavailable while the AI employee surface stays in local preview."
+        },
+        {
+          label: "Send live update",
+          reason: "Live updates remain unavailable while the AI employee surface stays in local preview."
         }
       ]
     },

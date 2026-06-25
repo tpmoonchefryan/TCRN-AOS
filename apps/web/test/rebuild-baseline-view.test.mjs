@@ -63,6 +63,7 @@ test("Rebuild baseline HTML exposes the reset shell and removes old active surfa
   assert.match(html, />Product design target-set starting surface</);
   assert.match(html, />Project workspace starting surface</);
   assert.match(html, />Initiative detail starting surface</);
+  assert.match(html, />AI employee starting surface</);
   assert.match(html, />Retired frontend inventory</);
   assert.match(html, />Retired served scope</);
   assert.doesNotMatch(html, />Active now</);
@@ -193,6 +194,18 @@ test("Rebuild baseline exposes the next fresh initiative detail surface inside t
   assert.match(html, /Selected ticket/);
   assert.match(html, /Activity Notes/);
   assert.match(html, /Request owner action/);
+});
+
+test("Rebuild baseline exposes the next fresh AI employee surface inside the replacement workspace", () => {
+  const html = renderRebuildBaselineHtml("/ai-employee.html");
+
+  assert.match(html, /data-region="ai-employee-start"/);
+  assert.match(html, /data-region="ai-employee-roster"/);
+  assert.match(html, /data-region="ai-employee-detail"/);
+  assert.match(html, /AI employee starting surface/);
+  assert.match(html, /AI employee roster/);
+  assert.match(html, /Selected profile/);
+  assert.match(html, /Reassign work/);
 });
 
 test("Rebuild baseline nav uses DS icons and disabled reasons for reference and retired modules", () => {
