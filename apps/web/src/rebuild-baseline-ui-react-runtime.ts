@@ -1316,6 +1316,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         { className: "rebuild-baseline__content", "data-region": "rebuild-shell" },
         renderTopbar(model),
         renderSummary(model),
+        renderCockpitStart(model.cockpitStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()

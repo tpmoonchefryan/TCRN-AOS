@@ -28,15 +28,15 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='rebuild-nav']",
   "[data-region='rebuild-topbar']",
   "[data-region='rebuild-summary']",
+  "[data-region='cockpit-start']",
+  "[data-region='cockpit-work-index']",
+  "[data-region='cockpit-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
 ] as const;
 
 export const forbiddenRebuildBaselineFreshSectionSelectors = [
-  "[data-region='cockpit-start']",
-  "[data-region='cockpit-work-index']",
-  "[data-region='cockpit-detail']",
   "[data-region='docs-start']",
   "[data-region='docs-filter']",
   "[data-region='docs-detail']",
@@ -470,7 +470,7 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
       "packages/db runtime fixture and migrations",
       "local service policy, health, and service endpoints"
     ],
-    selectedRebuiltStartingSlice: "frontend-reset-checkpoint",
+    selectedRebuiltStartingSlice: "fresh-cockpit-starting-surface",
     cockpitStart: {
       title: "Operations cockpit starting surface",
       summary: "The first fresh rebuilt surface starts here: a DS-aligned cockpit shell for local workspace status, work items, and unavailable action posture.",
