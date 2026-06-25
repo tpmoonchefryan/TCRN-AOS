@@ -260,12 +260,18 @@ test("Rebuild checkpoint nav uses DS icons and disabled reasons", () => {
   const html = renderRebuildBaselineHtml("/conference.html");
   const navItems = Array.from(html.matchAll(/<a\b(?=[^>]*data-package-runtime-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g));
   const disabledCount = navItems.filter((match) => match[1].includes('aria-disabled="true"')).length;
+  const enabledCount = navItems.length - disabledCount;
 
-  assert.ok(navItems.length >= 10);
-  assert.equal(disabledCount, navItems.length);
+  assert.ok(navItems.length >= 20);
+  assert.ok(enabledCount >= 10);
+  assert.ok(disabledCount >= 10);
   for (const [, attributes, body] of navItems) {
     assert.match(body, /\btcrn-icon\b/, "NavItem body includes a DS icon");
-    assert.match(attributes, /\bdata-disabled-reason="[^"]+"/, "disabled rebuild nav item includes a reason");
+    if (attributes.includes('aria-disabled="true"')) {
+      assert.match(attributes, /\bdata-disabled-reason="[^"]+"/, "disabled rebuild nav item includes a reason");
+    } else {
+      assert.match(attributes, /\bhref="#[^"]+"/, "enabled rebuilt module nav item includes an in-page anchor");
+    }
   }
 });
 

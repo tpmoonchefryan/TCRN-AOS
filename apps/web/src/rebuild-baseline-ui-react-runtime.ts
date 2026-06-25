@@ -62,6 +62,22 @@ function renderSidebar(model: RebuildBaselineModel) {
     { label: "Docs standard", iconName: "book-open" },
     { label: "Target-set standard", iconName: "package" }
   ];
+  const rebuiltModuleNavItems = [
+    { label: "Operations Cockpit", iconName: "home", anchor: "cockpit-start" },
+    { label: "Docs Readiness", iconName: "book-open", anchor: "docs-start" },
+    { label: "Product Design set", iconName: "package", anchor: "target-set-start", selectedLabels: ["Product Design target set", "Product Design set"] },
+    { label: "Project Workspace", iconName: "package", anchor: "project-workspace-start" },
+    { label: "Initiative Detail", iconName: "package", anchor: "initiative-detail-start" },
+    { label: "AI Employee", iconName: "package", anchor: "ai-employee-start" },
+    { label: "Gate Queue", iconName: "package", anchor: "gate-queue-start" },
+    { label: "Conference", iconName: "package", anchor: "conference-start" },
+    { label: "Gateway / Adapter", iconName: "package", anchor: "gateway-adapter-start" },
+    { label: "Dependency Console", iconName: "package", anchor: "dependency-console-start" },
+    { label: "Resource Library", iconName: "package", anchor: "resource-library-start" },
+    { label: "Knowledge Modules", iconName: "package", anchor: "knowledge-modules-start" },
+    { label: "Admin / Access", iconName: "package", anchor: "admin-access-start" },
+    { label: "GitHub release linkage", iconName: "package", anchor: "github-release-linkage-start" }
+  ];
   const legacyAliasNavItems = [
     "Operations Cockpit",
     "Docs Readiness",
@@ -119,6 +135,27 @@ function renderSidebar(model: RebuildBaselineModel) {
             }),
             disabled: true,
             disabledReason: "These Design System standards are reference material while the replacement workspace is established."
+          },
+          item.label
+        )
+      )
+    ),
+    createElement(
+      NavGroup,
+      { ...packageAttrs("NavGroup", { className: "rebuild-baseline__nav-group" }), label: "Rebuilt modules" },
+      rebuiltModuleNavItems.map((item) =>
+        createElement(
+          NavItem,
+          {
+            ...packageAttrs("NavItem", {
+              key: item.label,
+              iconName: item.iconName,
+              selected: "selectedLabels" in item
+                ? item.selectedLabels.includes(model.currentAliasLabel)
+                : model.currentAliasLabel === item.label,
+              className: "rebuild-baseline__nav-item"
+            }),
+            href: `#${item.anchor}`
           },
           item.label
         )
@@ -250,7 +287,7 @@ void futureFreshSectionRenderers;
 function renderCockpitStart(model: RebuildCockpitStartModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__cockpit-start", "data-region": "cockpit-start" },
+    { id: "cockpit-start", className: "rebuild-baseline__cockpit-start", "data-region": "cockpit-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
@@ -347,7 +384,7 @@ function renderCockpitStart(model: RebuildCockpitStartModel) {
 function renderDocsStart(model: RebuildDocsStartModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__docs-start", "data-region": "docs-start" },
+    { id: "docs-start", className: "rebuild-baseline__docs-start", "data-region": "docs-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
@@ -459,7 +496,7 @@ function renderDocsStart(model: RebuildDocsStartModel) {
 function renderTargetSetStart(model: RebuildTargetSetModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__target-set-start", "data-region": "target-set-start" },
+    { id: "target-set-start", className: "rebuild-baseline__target-set-start", "data-region": "target-set-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
@@ -563,7 +600,7 @@ function renderTargetSetStart(model: RebuildTargetSetModel) {
 function renderProjectWorkspaceStart(model: RebuildProjectWorkspaceModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__project-workspace-start", "data-region": "project-workspace-start" },
+    { id: "project-workspace-start", className: "rebuild-baseline__project-workspace-start", "data-region": "project-workspace-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
@@ -662,7 +699,7 @@ function renderProjectWorkspaceStart(model: RebuildProjectWorkspaceModel) {
 function renderInitiativeDetailStart(model: RebuildInitiativeDetailModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__initiative-detail-start", "data-region": "initiative-detail-start" },
+    { id: "initiative-detail-start", className: "rebuild-baseline__initiative-detail-start", "data-region": "initiative-detail-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
@@ -778,7 +815,7 @@ function renderInitiativeDetailStart(model: RebuildInitiativeDetailModel) {
 function renderAiEmployeeStart(model: RebuildAiEmployeeModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__ai-employee-start", "data-region": "ai-employee-start" },
+    { id: "ai-employee-start", className: "rebuild-baseline__ai-employee-start", "data-region": "ai-employee-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
@@ -866,7 +903,7 @@ function renderAiEmployeeStart(model: RebuildAiEmployeeModel) {
 function renderGateQueueStart(model: RebuildGateQueueModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__gate-queue-start", "data-region": "gate-queue-start" },
+    { id: "gate-queue-start", className: "rebuild-baseline__gate-queue-start", "data-region": "gate-queue-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
@@ -954,7 +991,7 @@ function renderGateQueueStart(model: RebuildGateQueueModel) {
 function renderConferenceStart(model: RebuildConferenceModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__conference-start", "data-region": "conference-start" },
+    { id: "conference-start", className: "rebuild-baseline__conference-start", "data-region": "conference-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
@@ -1042,7 +1079,7 @@ function renderConferenceStart(model: RebuildConferenceModel) {
 function renderGatewayAdapterStart(model: RebuildGatewayAdapterModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__gateway-adapter-start", "data-region": "gateway-adapter-start" },
+    { id: "gateway-adapter-start", className: "rebuild-baseline__gateway-adapter-start", "data-region": "gateway-adapter-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
@@ -1130,7 +1167,7 @@ function renderGatewayAdapterStart(model: RebuildGatewayAdapterModel) {
 function renderDependencyConsoleStart(model: RebuildDependencyConsoleModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__dependency-console-start", "data-region": "dependency-console-start" },
+    { id: "dependency-console-start", className: "rebuild-baseline__dependency-console-start", "data-region": "dependency-console-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
@@ -1218,7 +1255,7 @@ function renderDependencyConsoleStart(model: RebuildDependencyConsoleModel) {
 function renderResourceLibraryStart(model: RebuildResourceLibraryModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__resource-library-start", "data-region": "resource-library-start" },
+    { id: "resource-library-start", className: "rebuild-baseline__resource-library-start", "data-region": "resource-library-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
@@ -1306,7 +1343,7 @@ function renderResourceLibraryStart(model: RebuildResourceLibraryModel) {
 function renderKnowledgeModulesStart(model: RebuildKnowledgeModulesModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__knowledge-modules-start", "data-region": "knowledge-modules-start" },
+    { id: "knowledge-modules-start", className: "rebuild-baseline__knowledge-modules-start", "data-region": "knowledge-modules-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
@@ -1394,7 +1431,7 @@ function renderKnowledgeModulesStart(model: RebuildKnowledgeModulesModel) {
 function renderAdminAccessStart(model: RebuildAdminAccessModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__admin-access-start", "data-region": "admin-access-start" },
+    { id: "admin-access-start", className: "rebuild-baseline__admin-access-start", "data-region": "admin-access-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
@@ -1482,7 +1519,7 @@ function renderAdminAccessStart(model: RebuildAdminAccessModel) {
 function renderGitHubReleaseLinkageStart(model: RebuildGitHubReleaseLinkageModel) {
   return createElement(
     "section",
-    { className: "rebuild-baseline__github-release-linkage-start", "data-region": "github-release-linkage-start" },
+    { id: "github-release-linkage-start", className: "rebuild-baseline__github-release-linkage-start", "data-region": "github-release-linkage-start" },
     createElement(
       "div",
       { className: "rebuild-baseline__cockpit-grid" },
