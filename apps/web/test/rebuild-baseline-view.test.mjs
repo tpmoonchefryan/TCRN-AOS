@@ -65,6 +65,7 @@ test("Rebuild baseline HTML exposes the reset shell and removes old active surfa
   assert.match(html, />Initiative detail starting surface</);
   assert.match(html, />AI employee starting surface</);
   assert.match(html, />Gate queue starting surface</);
+  assert.match(html, />Conference starting surface</);
   assert.match(html, />Retired frontend inventory</);
   assert.match(html, />Retired served scope</);
   assert.doesNotMatch(html, />Active now</);
@@ -219,6 +220,18 @@ test("Rebuild baseline exposes the next fresh gate queue surface inside the repl
   assert.match(html, /Gate queue rows/);
   assert.match(html, /Selected gate/);
   assert.match(html, /Approve gate/);
+});
+
+test("Rebuild baseline exposes the next fresh conference surface inside the replacement workspace", () => {
+  const html = renderRebuildBaselineHtml("/conference.html");
+
+  assert.match(html, /data-region="conference-start"/);
+  assert.match(html, /data-region="conference-list"/);
+  assert.match(html, /data-region="conference-detail"/);
+  assert.match(html, /Conference starting surface/);
+  assert.match(html, /Conference list/);
+  assert.match(html, /Selected conference/);
+  assert.match(html, /Send invite/);
 });
 
 test("Rebuild baseline nav uses DS icons and disabled reasons for reference and retired modules", () => {

@@ -50,6 +50,9 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='gate-queue-start']",
   "[data-region='gate-queue-list']",
   "[data-region='gate-queue-detail']",
+  "[data-region='conference-start']",
+  "[data-region='conference-list']",
+  "[data-region='conference-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
@@ -310,6 +313,33 @@ export interface RebuildGateQueueModel {
   actions: readonly RebuildProjectWorkspaceAction[];
 }
 
+export interface RebuildConferenceRow {
+  title: string;
+  initiator: string;
+  participants: string;
+  minutes: string;
+  evidence: string;
+  status: "current" | "blocked";
+}
+
+export interface RebuildConferenceDetailItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildConferenceModel {
+  title: string;
+  summary: string;
+  standardIds: readonly string[];
+  storybookIds: readonly string[];
+  evidence: readonly string[];
+  rows: readonly RebuildConferenceRow[];
+  detailTitle: string;
+  detailItems: readonly RebuildConferenceDetailItem[];
+  actions: readonly RebuildProjectWorkspaceAction[];
+}
+
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
@@ -325,6 +355,7 @@ export interface RebuildBaselineModel {
   initiativeDetailStart: RebuildInitiativeDetailModel;
   aiEmployeeStart: RebuildAiEmployeeModel;
   gateQueueStart: RebuildGateQueueModel;
+  conferenceStart: RebuildConferenceModel;
   checklist: RebuildChecklistRow[];
   noClaims: {
     productAcceptance: false;
@@ -764,6 +795,59 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
         {
           label: "Release gate",
           reason: "Release actions remain unavailable while the gate queue surface stays in local preview."
+        }
+      ]
+    },
+    conferenceStart: {
+      title: "Conference starting surface",
+      summary: "The next fresh rebuilt surface adds a DS-aligned conference workspace for list, detail, agenda, and minutes posture inside the shared replacement shell.",
+      standardIds: ["ds-aos-target-set-v1", "ds-aos-operations-cockpit-v1"],
+      storybookIds: [
+        "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+        "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+      ],
+      evidence: [
+        "Conference list",
+        "Minutes posture",
+        "Local preview only"
+      ],
+      rows: [
+        {
+          title: "Weekly rebuild coordination",
+          initiator: "Arturo",
+          participants: "3 total",
+          minutes: "Ready for notes",
+          evidence: "1",
+          status: "current"
+        },
+        {
+          title: "Design review handoff",
+          initiator: "Ilya",
+          participants: "2 total",
+          minutes: "Blocked",
+          evidence: "1",
+          status: "blocked"
+        }
+      ],
+      detailTitle: "Selected conference",
+      detailItems: [
+        { key: "initiator", label: "Initiator", value: "Arturo" },
+        { key: "participants", label: "Participants", value: "Arturo, Ilya, Sable" },
+        { key: "stories", label: "Linked stories", value: "Workspace shell and hierarchy" },
+        { key: "minutes", label: "Minutes summary", value: "Minutes stay in draft-ready local preview until a reviewed note is recorded." }
+      ],
+      actions: [
+        {
+          label: "Send invite",
+          reason: "Live invite sending remains unavailable while the conference surface stays inside the shared replacement shell."
+        },
+        {
+          label: "Record position",
+          reason: "Participant updates remain unavailable while the conference surface stays in local preview."
+        },
+        {
+          label: "Record notes",
+          reason: "Minutes updates remain unavailable while the conference surface stays in local preview."
         }
       ]
     },
