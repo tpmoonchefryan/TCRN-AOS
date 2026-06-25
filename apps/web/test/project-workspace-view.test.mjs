@@ -115,11 +115,12 @@ test("Project Workspace nav items use DS icons for Storybook-aligned side naviga
   const html = renderProjectWorkspaceHtml();
   const navItems = Array.from(html.matchAll(/<a\b(?=[^>]*data-package-runtime-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g));
 
-  assert.equal(navItems.length, 6);
+  assert.equal(navItems.length, 7);
   for (const [, attributes, body] of navItems) {
     assert.match(body, /\btcrn-icon\b/, "NavItem body includes a DS icon");
     assert.match(body, /class="tcrn-nav-item__label"/, "NavItem body includes label content");
   }
+  assert.match(html, /href="\/ai-employee\.html"/);
   assert.match(html, /href="\/gate-queue\.html"/);
 });
 

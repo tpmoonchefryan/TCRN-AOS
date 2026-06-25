@@ -2,9 +2,9 @@
 
 - ok: true
 - route: route_tcrn_aos_4b9253b_ilya_project_workspace_copy_proof_table_repair_after_elara_review
-- sourceHead: 91e248902eb01f67986a5bd1893605b482bf638d
+- sourceHead: 1a3222ce1f3ba86a6730a2ea352e2304268da5d6
 - staticTarget: apps/web/static/project-workspace.html
-- staticSha256: d63dd49d4474d797036ac52490f4c6ad5d6c1bda2a9e3ca635e8c844ad7759c1
+- staticSha256: 2e6a1ecde8f50524ffaa1d6ec82eec36e25fc54677ffeb8b9aa5834a387d9c02
 - DS standards consumed: ds-aos-target-set-v1, ds-aos-operations-cockpit-v1
 - Storybook oracles consumed: tcrn-design-system-patterns--aos-product-design-target-set-standard, tcrn-design-system-patterns--aos-operations-cockpit-standard
 - Talia checklist item advanced: Project Dashboard / Project-Initiative-Epic-Story hierarchy standalone visible shell
@@ -12,8 +12,8 @@
 
 ## Browser Evidence
 
-- desktop-1440x900: evidence/project-workspace-browser/91e248902eb01f67986a5bd1893605b482bf638d/project-workspace-desktop-1440x900.png sha256=f6a61f0a6e88866b87870ab1f088cc6befe8e155ed919b0bfe40e26a2faeeb9c bytes=251986 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 ownerCellFailures=0
-- mobile-390x844: evidence/project-workspace-browser/91e248902eb01f67986a5bd1893605b482bf638d/project-workspace-mobile-390x844.png sha256=048fb432c728e3c6371832f128c2e04546c1db2303f13059a87fc6440e346797 bytes=228815 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 ownerCellFailures=0
+- desktop-1440x900: evidence/project-workspace-browser/1a3222ce1f3ba86a6730a2ea352e2304268da5d6/project-workspace-desktop-1440x900.png sha256=45d9cc02df38ceb516b794952eb44e97b4b483adaec0b3bc0fe84bd5d60a848b bytes=254361 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 ownerCellFailures=0
+- mobile-390x844: evidence/project-workspace-browser/1a3222ce1f3ba86a6730a2ea352e2304268da5d6/project-workspace-mobile-390x844.png sha256=6aee8c3b450cb360f553034a57817e828d0910b34782c15576634f2cf08d5b46 bytes=233897 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 ownerCellFailures=0
 
 ## Boundaries
 

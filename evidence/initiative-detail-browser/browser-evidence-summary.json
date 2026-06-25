@@ -1,11 +1,11 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_0b349cf_ilya_initiative_detail_ticket_drillthrough_visible_slice_after_project_workspace_sync",
-  "sourceHead": "ad6da052c84866f5457d9be10188bd01c607730e",
-  "generatedAt": "2026-06-23T23:45:01.940Z",
+  "sourceHead": "1a3222ce1f3ba86a6730a2ea352e2304268da5d6",
+  "generatedAt": "2026-06-25T05:30:47.499Z",
   "staticTarget": "apps/web/static/initiative-detail.html",
-  "staticSha256": "536d21e085ac62ae0e571d5157447ed92d97a78904a8c30458dc900fd35d3942",
-  "staticBytes": 39848,
+  "staticSha256": "1e319e4503a82e0207aee52a77622fc4efe014aac9dfe2ddd08da62842f90b80",
+  "staticBytes": 41193,
   "dsStandardsConsumed": [
     "ds-aos-target-set-v1",
     "ds-aos-operations-cockpit-v1"
@@ -81,16 +81,16 @@
       }
     ],
     "forbiddenVisibleHits": [],
-    "navItemCount": 5,
+    "navItemCount": 7,
     "iconlessNavItemCount": 0,
     "failures": []
   },
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/initiative-detail-browser/ad6da052c84866f5457d9be10188bd01c607730e/initiative-detail-desktop-1440x900.png",
-      "screenshotSha256": "73c5fbed502e83e72731f0d7117f88f9481488eca4dcb94b03faa74bd1368130",
-      "screenshotBytes": 312102,
+      "screenshot": "evidence/initiative-detail-browser/1a3222ce1f3ba86a6730a2ea352e2304268da5d6/initiative-detail-desktop-1440x900.png",
+      "screenshotSha256": "0a04845fb46de544b7c336b8803da5a11574421efc448b989c1793579e4feec2",
+      "screenshotBytes": 318213,
       "selectorProof": [
         {
           "selector": "[data-surface='initiative-detail']",
@@ -153,7 +153,7 @@
         "TopBar"
       ],
       "markerOnlyComponents": [],
-      "navItemCount": 5,
+      "navItemCount": 7,
       "navIconlessCount": 0,
       "navReadabilityFailures": [],
       "linkRowCount": 11,
@@ -164,9 +164,9 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/initiative-detail-browser/ad6da052c84866f5457d9be10188bd01c607730e/initiative-detail-mobile-390x844.png",
-      "screenshotSha256": "6d39468a6844fe8e70885c621bb09705e67b71023f986f7a2879984307d7a46c",
-      "screenshotBytes": 325021,
+      "screenshot": "evidence/initiative-detail-browser/1a3222ce1f3ba86a6730a2ea352e2304268da5d6/initiative-detail-mobile-390x844.png",
+      "screenshotSha256": "347eecdd61cbe08c6a977b53ffd5b6329824980e89b91e3c3cd9a0de9e39014e",
+      "screenshotBytes": 335547,
       "selectorProof": [
         {
           "selector": "[data-surface='initiative-detail']",
@@ -229,7 +229,7 @@
         "TopBar"
       ],
       "markerOnlyComponents": [],
-      "navItemCount": 5,
+      "navItemCount": 7,
       "navIconlessCount": 0,
       "navReadabilityFailures": [],
       "linkRowCount": 11,
@@ -244,7 +244,7 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "initiative_detail_visible_slice_source_content_digest_v1",
-    "sourceHead": "ad6da052c84866f5457d9be10188bd01c607730e",
+    "sourceHead": "1a3222ce1f3ba86a6730a2ea352e2304268da5d6",
     "sourcePaths": [
       "apps/web/src/cockpit.ts",
       "apps/web/src/initiative-detail-data.ts",
@@ -274,7 +274,7 @@
       {
         "path": "apps/web/src/initiative-detail-ui-react-runtime.ts",
         "exists": true,
-        "sha256": "b4ddd54a11b6de6490c620e054d8feb7e4651497afbfcf71ebb965ec6b4b9160"
+        "sha256": "a361512bba759064207ad8b7ad8506deae19896fbfe4dd9f6eabb221d5a7fab2"
       },
       {
         "path": "apps/web/src/initiative-detail-view.ts",
@@ -284,37 +284,37 @@
       {
         "path": "apps/web/src/project-workspace-ui-react-runtime.ts",
         "exists": true,
-        "sha256": "f5fc322696d77f22cac7d25b0fde51e68fd5d9a0f87f05056aed74962de4b011"
+        "sha256": "9aa6b8859df1b735e98b03d8cb8da423bcc758e49e700711323f9c64e708a31c"
       },
       {
         "path": "apps/web/src/design-system-bridge.ts",
         "exists": true,
-        "sha256": "6145a08514400fc370ead4b3e71b4670ccec7727fbc9145c6ca395fc86d03532"
+        "sha256": "58f14ce186b755d33279ce8d6c84a3f58623a4a67adb126c9e29e067235f5c27"
       },
       {
         "path": "apps/web/test/initiative-detail-view.test.mjs",
         "exists": true,
-        "sha256": "27b1980559c4c3a041368e756514d89a434b2d2cdd161c8d92cbac2545ea7f17"
+        "sha256": "52c90ad222ec5bd80ae13c3b683dd381630ec2d96b899e7bd57418680971f7ca"
       },
       {
         "path": "apps/web/test/project-workspace-view.test.mjs",
         "exists": true,
-        "sha256": "f139c5a89de8ca2faab1f4230958b9486efb64eba9301200973d4361c56c5a24"
+        "sha256": "8452745a88e688636b8b91fd26ec2d89b52f4352c695013709cf483e7311fa3c"
       },
       {
         "path": "apps/api/src/server.ts",
         "exists": true,
-        "sha256": "9eea4c843c59d16f7b27982ed8f1d32d90302312db52b5553e627c6a5ffd4156"
+        "sha256": "a0f5c531bfeaac9b35a3df431b4edc4196efb84721ab92828896ae0a868f4175"
       },
       {
         "path": "apps/api/test/service-smoke.test.mjs",
         "exists": true,
-        "sha256": "6c4ef260aa354025739d23887cc83be561476388c17ba60f9e57d9df19e2f763"
+        "sha256": "cc042e38286efd43962537a781155b3b135942e887e22fa85b6d2659e72552a8"
       },
       {
         "path": "scripts/initiative-detail-proof.mjs",
         "exists": true,
-        "sha256": "2d33ca0c3622812a6e7e2a5394ce0341a9e2a6d81c4d412d805a3a15be956b9e"
+        "sha256": "676079a98439283d2ab1c392efd0c48a5bdc04b074d201e3b8888e423b463221"
       },
       {
         "path": "scripts/service-start.mjs",
@@ -324,10 +324,10 @@
       {
         "path": "package.json",
         "exists": true,
-        "sha256": "52f86e45a4a742181056c31c17e56112e184cb55aa12ffd56dbc93d33c7b43f1"
+        "sha256": "5adf07256fe0ff61711bcc987aedcd36640d012dd7676197cd38ac126478ec71"
       }
     ],
-    "sourceContentDigest": "6234f16020d30d695b7505c4280471c6b80b327f353cfde19b156f32eb70cb05"
+    "sourceContentDigest": "28bd0b69896b1bde0abb63f5bedd06e9684ff384da296c1fdbc9d884fe8b4456"
   },
   "noOverclaimReadback": {
     "productAcceptance": false,

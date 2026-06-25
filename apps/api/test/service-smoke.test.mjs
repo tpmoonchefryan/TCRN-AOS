@@ -24,8 +24,16 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
     assert.match(projectWorkspace, /data-surface="project-workspace"/);
     assert.match(projectWorkspace, /data-region="project-workspace-nav"/);
     assert.match(projectWorkspace, /data-ds-standard-ids="ds-aos-target-set-v1 ds-aos-operations-cockpit-v1"/);
+    assert.match(projectWorkspace, /href="\/ai-employee.html"/);
     assert.match(projectWorkspace, /href="\/gate-queue.html"/);
     assert.match(projectWorkspace, /href="\/initiative-detail.html"/);
+
+    const aiEmployee = await fetch(`${service.url}/ai-employee`).then((response) => response.text());
+    assert.match(aiEmployee, /data-surface="ai-employee"/);
+    assert.match(aiEmployee, /data-region="ai-employee-roster"/);
+    assert.match(aiEmployee, /data-ds-standard-ids="ds-aos-target-set-v1 ds-aos-operations-cockpit-v1"/);
+    assert.match(aiEmployee, /Role identity, thread status, assignments, and contact posture from the local service model\./);
+    assert.doesNotMatch(aiEmployee, /implementation|workflow|package-runtime pilot|unavailable in this route/i);
 
     const gateQueue = await fetch(`${service.url}/gate-queue`).then((response) => response.text());
     assert.match(gateQueue, /data-surface="gate-queue"/);

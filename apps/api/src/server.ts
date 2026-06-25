@@ -7,6 +7,7 @@ import {
   type CockpitDetailPanel
 } from "../../web/src/cockpit.js";
 import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
+import { createAiEmployeeModel, renderAiEmployeeHtml } from "../../web/src/ai-employee-view.js";
 import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
 import { createGateQueueModel, renderGateQueueHtml } from "../../web/src/gate-queue-view.js";
@@ -71,6 +72,10 @@ function handleRequest(
   }
   if (path === "/project-workspace" || path === "/project-workspace.html" || path === "/apps/web/static/project-workspace.html") {
     sendHtml(request, response, renderProjectWorkspaceHtml(createProjectWorkspaceModel(createServiceCockpitReadModel(runtime))));
+    return;
+  }
+  if (path === "/ai-employee" || path === "/ai-employee.html" || path === "/apps/web/static/ai-employee.html") {
+    sendHtml(request, response, renderAiEmployeeHtml(createAiEmployeeModel(createServiceCockpitReadModel(runtime))));
     return;
   }
   if (path === "/gate-queue" || path === "/gate-queue.html" || path === "/apps/web/static/gate-queue.html") {

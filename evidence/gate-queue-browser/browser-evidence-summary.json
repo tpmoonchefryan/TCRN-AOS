@@ -1,11 +1,11 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_c2924d0_ilya_resume_total_frontend_rebuild_after_internal_coordination_repair",
-  "sourceHead": "91e248902eb01f67986a5bd1893605b482bf638d",
-  "generatedAt": "2026-06-24T21:27:03.311Z",
+  "sourceHead": "1a3222ce1f3ba86a6730a2ea352e2304268da5d6",
+  "generatedAt": "2026-06-25T05:30:48.132Z",
   "staticTarget": "apps/web/static/gate-queue.html",
-  "staticSha256": "b6f98d598185c3655d8723adaac81880652cd20264788f20c5e345d31189382c",
-  "staticBytes": 33882,
+  "staticSha256": "0c43918ae939f385d66b9ce1cbfaf7c3ecd69ccf3aee4d0cf80dcab65b4ebe3f",
+  "staticBytes": 34578,
   "dsStandardsConsumed": [
     "ds-aos-target-set-v1",
     "ds-aos-operations-cockpit-v1"
@@ -81,16 +81,16 @@
       }
     ],
     "forbiddenVisibleHits": [],
-    "navItemCount": 6,
+    "navItemCount": 7,
     "iconlessNavItemCount": 0,
     "failures": []
   },
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/gate-queue-browser/91e248902eb01f67986a5bd1893605b482bf638d/gate-queue-desktop-1440x900.png",
-      "screenshotSha256": "8017d6111cabc1b255ce7f64c9418d1d8d1b6dcd7f41af185f477c07d17b1b93",
-      "screenshotBytes": 242188,
+      "screenshot": "evidence/gate-queue-browser/1a3222ce1f3ba86a6730a2ea352e2304268da5d6/gate-queue-desktop-1440x900.png",
+      "screenshotSha256": "d30a7f8026aa6894002fd9e30c833f8af0516d6e6f2e47c3566ded2658b9320c",
+      "screenshotBytes": 244633,
       "selectorProof": [
         {
           "selector": "[data-surface='gate-queue']",
@@ -153,7 +153,7 @@
         "TopBar"
       ],
       "markerOnlyComponents": [],
-      "navItemCount": 6,
+      "navItemCount": 7,
       "navIconlessCount": 0,
       "navReadabilityFailures": [],
       "queueRowCount": 2,
@@ -164,9 +164,9 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/gate-queue-browser/91e248902eb01f67986a5bd1893605b482bf638d/gate-queue-mobile-390x844.png",
-      "screenshotSha256": "506c30686e252876dca706ad45a97ea2122f2d00193d282d337f97097ee316f2",
-      "screenshotBytes": 219916,
+      "screenshot": "evidence/gate-queue-browser/1a3222ce1f3ba86a6730a2ea352e2304268da5d6/gate-queue-mobile-390x844.png",
+      "screenshotSha256": "efb1049299a5ced5e1f383d5dd232850a1fbfd2efc5620d326b5709a71a9f78f",
+      "screenshotBytes": 226196,
       "selectorProof": [
         {
           "selector": "[data-surface='gate-queue']",
@@ -229,7 +229,7 @@
         "TopBar"
       ],
       "markerOnlyComponents": [],
-      "navItemCount": 6,
+      "navItemCount": 7,
       "navIconlessCount": 0,
       "navReadabilityFailures": [],
       "queueRowCount": 2,
@@ -244,9 +244,9 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "gate_queue_visible_slice_source_content_digest_v1",
-    "sourceHeadAtProofRun": "91e248902eb01f67986a5bd1893605b482bf638d",
+    "sourceHeadAtProofRun": "1a3222ce1f3ba86a6730a2ea352e2304268da5d6",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "b1fac4293f6bc2af71346f725d8bce273feba95078f8f0c410e0da9fece2ce6c",
+    "sourceContentDigest": "89256b70185b118c3d6739212cdb46ff8b832e2cfcb71d2cb9c115d8ae22897a",
     "sourcePaths": [
       "apps/web/src/cockpit.ts",
       "apps/web/src/gate-queue-data.ts",

@@ -3,21 +3,21 @@
 Status: passed.
 
 Route: `route_tcrn_aos_c2924d0_ilya_resume_total_frontend_rebuild_after_internal_coordination_repair`
-AOS source head: `91e248902eb01f67986a5bd1893605b482bf638d`
-Source content digest: `b1fac4293f6bc2af71346f725d8bce273feba95078f8f0c410e0da9fece2ce6c`
+AOS source head: `1a3222ce1f3ba86a6730a2ea352e2304268da5d6`
+Source content digest: `89256b70185b118c3d6739212cdb46ff8b832e2cfcb71d2cb9c115d8ae22897a`
 
 ## Static Surface
 
 - Static target: `apps/web/static/gate-queue.html`
-- Static sha256: `b6f98d598185c3655d8723adaac81880652cd20264788f20c5e345d31189382c`
+- Static sha256: `0c43918ae939f385d66b9ce1cbfaf7c3ecd69ccf3aee4d0cf80dcab65b4ebe3f`
 - DS standards: ds-aos-target-set-v1, ds-aos-operations-cockpit-v1
 - Storybook oracles: tcrn-design-system-patterns--aos-product-design-target-set-standard, tcrn-design-system-patterns--aos-operations-cockpit-standard
 - Advanced checklist item: gate-queue-approvals-owner-intent
 
 ## Browser Evidence
 
-- desktop-1440x900: evidence/gate-queue-browser/91e248902eb01f67986a5bd1893605b482bf638d/gate-queue-desktop-1440x900.png sha256=8017d6111cabc1b255ce7f64c9418d1d8d1b6dcd7f41af185f477c07d17b1b93 bytes=242188 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 queueRowFailures=0
-- mobile-390x844: evidence/gate-queue-browser/91e248902eb01f67986a5bd1893605b482bf638d/gate-queue-mobile-390x844.png sha256=506c30686e252876dca706ad45a97ea2122f2d00193d282d337f97097ee316f2 bytes=219916 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 queueRowFailures=0
+- desktop-1440x900: evidence/gate-queue-browser/1a3222ce1f3ba86a6730a2ea352e2304268da5d6/gate-queue-desktop-1440x900.png sha256=d30a7f8026aa6894002fd9e30c833f8af0516d6e6f2e47c3566ded2658b9320c bytes=244633 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 queueRowFailures=0
+- mobile-390x844: evidence/gate-queue-browser/1a3222ce1f3ba86a6730a2ea352e2304268da5d6/gate-queue-mobile-390x844.png sha256=efb1049299a5ced5e1f383d5dd232850a1fbfd2efc5620d326b5709a71a9f78f bytes=226196 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 queueRowFailures=0
 
 ## Boundaries
 
