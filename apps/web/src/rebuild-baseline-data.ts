@@ -59,6 +59,9 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='resource-library-start']",
   "[data-region='resource-library-list']",
   "[data-region='resource-library-detail']",
+  "[data-region='knowledge-modules-start']",
+  "[data-region='knowledge-modules-list']",
+  "[data-region='knowledge-modules-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
@@ -403,6 +406,33 @@ export interface RebuildResourceLibraryModel {
   actions: readonly RebuildProjectWorkspaceAction[];
 }
 
+export interface RebuildKnowledgeModulesRow {
+  title: string;
+  scope: string;
+  readiness: string;
+  posture: string;
+  nextAction: string;
+  status: "current" | "blocked";
+}
+
+export interface RebuildKnowledgeModulesDetailItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildKnowledgeModulesModel {
+  title: string;
+  summary: string;
+  standardIds: readonly string[];
+  storybookIds: readonly string[];
+  evidence: readonly string[];
+  rows: readonly RebuildKnowledgeModulesRow[];
+  detailTitle: string;
+  detailItems: readonly RebuildKnowledgeModulesDetailItem[];
+  actions: readonly RebuildProjectWorkspaceAction[];
+}
+
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
@@ -421,6 +451,7 @@ export interface RebuildBaselineModel {
   conferenceStart: RebuildConferenceModel;
   dependencyConsoleStart: RebuildDependencyConsoleModel;
   resourceLibraryStart: RebuildResourceLibraryModel;
+  knowledgeModulesStart: RebuildKnowledgeModulesModel;
   checklist: RebuildChecklistRow[];
   noClaims: {
     productAcceptance: false;
@@ -443,7 +474,7 @@ const checklistRows: RebuildChecklistRow[] = [
   row("conference", "Conference", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
   row("dependency-console", "Dependency Console", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
   row("resource-library", "Resource Library", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."),
-  row("knowledge-modules", "Knowledge Modules", "rebuild_queued", "Total-scope checklist", "Fresh rebuild surface not started yet."),
+  row("knowledge-modules", "Knowledge Modules", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."),
   row("admin-access", "Admin / Access", "rebuild_queued", "Total-scope checklist", "Fresh rebuild surface not started yet.")
 ];
 
@@ -470,7 +501,7 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
       "packages/db runtime fixture and migrations",
       "local service policy, health, and service endpoints"
     ],
-    selectedRebuiltStartingSlice: "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-dependency-console-resource-library-foundation",
+    selectedRebuiltStartingSlice: "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-dependency-console-resource-library-knowledge-modules-foundation",
     cockpitStart: {
       title: "Operations cockpit starting surface",
       summary: "The first fresh rebuilt surface starts here: a DS-aligned cockpit shell for local workspace status, work items, and unavailable action posture.",
@@ -1019,6 +1050,59 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
         {
           label: "Export manifest",
           reason: "Export remains unavailable while the resource library surface stays in local preview."
+        }
+      ]
+    },
+    knowledgeModulesStart: {
+      title: "Knowledge modules starting surface",
+      summary: "The next fresh rebuilt surface adds a DS-aligned knowledge workspace for module indexes, readiness posture, and blocked export or publish actions inside the shared replacement shell.",
+      standardIds: ["ds-aos-docs-readiness-v1", "ds-aos-target-set-v1"],
+      storybookIds: [
+        "tcrn-design-system-patterns--aos-docs-readiness-standard",
+        "tcrn-design-system-patterns--aos-product-design-target-set-standard"
+      ],
+      evidence: [
+        "Module indexes",
+        "Readiness posture",
+        "Local preview only"
+      ],
+      rows: [
+        {
+          title: "Knowledge Base",
+          scope: "How-to indexes and local guidance",
+          readiness: "Review in progress",
+          posture: "Export disabled",
+          nextAction: "Inspect module detail",
+          status: "current"
+        },
+        {
+          title: "Release Notes",
+          scope: "Change summary and release narrative",
+          readiness: "Blocked pending review",
+          posture: "Publish disabled",
+          nextAction: "Review blocked items",
+          status: "blocked"
+        }
+      ],
+      detailTitle: "Selected module",
+      detailItems: [
+        { key: "module", label: "Module", value: "Knowledge Base" },
+        { key: "scope", label: "Scope", value: "How-to indexes and local guidance" },
+        { key: "readiness", label: "Readiness", value: "Review in progress" },
+        { key: "boundary", label: "Boundary", value: "Export and publish actions remain unavailable" }
+      ],
+      actions: [
+        {
+          label: "Export docs",
+          reason: "Export remains unavailable while the knowledge modules surface stays inside the shared replacement shell."
+        },
+        {
+          label: "Publish module",
+          reason: "Publishing remains unavailable while the knowledge modules surface stays in local preview."
+        },
+        {
+          label: "Open review proposal",
+          reason: "Review proposal updates remain unavailable while the knowledge modules surface stays in local preview."
         }
       ]
     },

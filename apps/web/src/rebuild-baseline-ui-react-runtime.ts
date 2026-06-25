@@ -27,6 +27,7 @@ import {
 } from "@tcrn/ui-react";
 import type {
   RebuildResourceLibraryModel,
+  RebuildKnowledgeModulesModel,
   RebuildDependencyConsoleModel,
   RebuildConferenceModel,
   RebuildGateQueueModel,
@@ -235,7 +236,8 @@ const futureFreshSectionRenderers = [
   renderGateQueueStart,
   renderConferenceStart,
   renderDependencyConsoleStart,
-  renderResourceLibraryStart
+  renderResourceLibraryStart,
+  renderKnowledgeModulesStart
 ];
 void futureFreshSectionRenderers;
 
@@ -1207,6 +1209,94 @@ function renderResourceLibraryStart(model: RebuildResourceLibraryModel) {
   );
 }
 
+function renderKnowledgeModulesStart(model: RebuildKnowledgeModulesModel) {
+  return createElement(
+    "section",
+    { className: "rebuild-baseline__knowledge-modules-start", "data-region": "knowledge-modules-start" },
+    createElement(
+      "div",
+      { className: "rebuild-baseline__cockpit-grid" },
+      createElement(
+        Surface,
+        { ...packageAttrs("Surface", { className: "rebuild-baseline__cockpit-surface" }) },
+        createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Next fresh surface"),
+        createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, model.title),
+        createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.summary),
+        createElement(
+          "div",
+          packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
+          createElement(EvidenceStrip, { items: [...model.evidence] })
+        ),
+        createElement(
+          "div",
+          packageAttrs("TableShell", { "data-region": "knowledge-modules-list" }),
+          createElement(TableShell, {
+            label: "Knowledge module rows",
+            columns: [
+              { key: "title", label: "Module" },
+              { key: "scope", label: "Scope" },
+              { key: "readiness", label: "Readiness" },
+              { key: "posture", label: "Posture" },
+              { key: "nextAction", label: "Next action" },
+              { key: "status", label: "Status" }
+            ],
+            rows: model.rows.map((row) => ({
+              title: row.title,
+              scope: row.scope,
+              readiness: row.readiness,
+              posture: row.posture,
+              nextAction: row.nextAction,
+              status: createElement(StatusBadge, {
+                ...packageAttrs("StatusBadge"),
+                state: row.status === "blocked"
+                  ? { state: "blocked" }
+                  : { state: "local_only", label: "Current state" }
+              })
+            }))
+          })
+        )
+      ),
+      createElement(
+        "div",
+        { className: "rebuild-baseline__cockpit-side" },
+        createElement(
+          "div",
+          packageAttrs("DetailDrawer", { "data-region": "knowledge-modules-detail" }),
+          createElement(DetailDrawer, { title: model.detailTitle, open: true },
+            renderKeyValueList(model.detailItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              value: item.value
+            }))),
+            createElement(
+              "div",
+              { className: "rebuild-baseline__action-list" },
+              model.actions.map((action) =>
+                createElement(Button, {
+                  ...packageAttrs("Button", { key: action.label }),
+                  disabled: true,
+                  disabledReason: action.reason
+                }, action.label)
+              )
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("GateReadinessPanel"),
+          createElement(GateReadinessPanel, {
+            state: {
+              state: "blocked",
+              label: "Unavailable",
+              description: "Export and publish actions stay unavailable while the knowledge modules surface remains inside the shared replacement shell."
+            }
+          })
+        )
+      )
+    )
+  );
+}
+
 function renderChecklist(model: RebuildBaselineModel) {
   return createElement(
     "section",
@@ -1324,6 +1414,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         renderConferenceStart(model.conferenceStart),
         renderDependencyConsoleStart(model.dependencyConsoleStart),
         renderResourceLibraryStart(model.resourceLibraryStart),
+        renderKnowledgeModulesStart(model.knowledgeModulesStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()

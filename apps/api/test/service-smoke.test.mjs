@@ -16,7 +16,7 @@ const retiredFrontendTargets = [
   "/dependency-console.html"
 ];
 
-test("local service now serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, dependency-console, and resource-library slices while APIs remain available", async () => {
+test("local service now serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, dependency-console, resource-library, and knowledge-modules slices while APIs remain available", async () => {
   const service = await startAosLocalServiceProof();
   try {
     for (const target of retiredFrontendTargets) {
@@ -43,10 +43,12 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
       assert.match(html, /Dependency governance rows/, `${target} exposes the dependency console rows`);
       assert.match(html, /Resource library starting surface/, `${target} exposes the resource library slice`);
       assert.match(html, /Resource library rows/, `${target} exposes the resource library rows`);
+      assert.match(html, /Knowledge modules starting surface/, `${target} exposes the knowledge modules slice`);
+      assert.match(html, /Knowledge module rows/, `${target} exposes the knowledge module rows`);
       assert.match(html, /Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired\./, `${target} exposes the active resource library checklist note`);
       assert.match(html, /Retired frontend inventory/, `${target} exposes retired inventory`);
       assert.match(html, /Retired served scope/, `${target} exposes retired served scope`);
-      assert.equal(Array.from(html.matchAll(/Fresh rebuild surface not started yet\./g)).length, 2, `${target} only keeps later queued checklist rows`);
+      assert.equal(Array.from(html.matchAll(/Fresh rebuild surface not started yet\./g)).length, 1, `${target} only keeps later queued checklist rows`);
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
     }
 
