@@ -26,6 +26,7 @@ import {
   WorkIndex
 } from "@tcrn/ui-react";
 import type {
+  RebuildResourceLibraryModel,
   RebuildDependencyConsoleModel,
   RebuildConferenceModel,
   RebuildGateQueueModel,
@@ -1106,6 +1107,94 @@ function renderDependencyConsoleStart(model: RebuildDependencyConsoleModel) {
   );
 }
 
+function renderResourceLibraryStart(model: RebuildResourceLibraryModel) {
+  return createElement(
+    "section",
+    { className: "rebuild-baseline__resource-library-start", "data-region": "resource-library-start" },
+    createElement(
+      "div",
+      { className: "rebuild-baseline__cockpit-grid" },
+      createElement(
+        Surface,
+        { ...packageAttrs("Surface", { className: "rebuild-baseline__cockpit-surface" }) },
+        createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Next fresh surface"),
+        createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, model.title),
+        createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.summary),
+        createElement(
+          "div",
+          packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
+          createElement(EvidenceStrip, { items: [...model.evidence] })
+        ),
+        createElement(
+          "div",
+          packageAttrs("TableShell", { "data-region": "resource-library-list" }),
+          createElement(TableShell, {
+            label: "Resource library rows",
+            columns: [
+              { key: "title", label: "Resource" },
+              { key: "manifest", label: "Manifest" },
+              { key: "traceability", label: "Traceability" },
+              { key: "audit", label: "Audit" },
+              { key: "nextAction", label: "Next action" },
+              { key: "status", label: "Status" }
+            ],
+            rows: model.rows.map((row) => ({
+              title: row.title,
+              manifest: row.manifest,
+              traceability: row.traceability,
+              audit: row.audit,
+              nextAction: row.nextAction,
+              status: createElement(StatusBadge, {
+                ...packageAttrs("StatusBadge"),
+                state: row.status === "blocked"
+                  ? { state: "blocked" }
+                  : { state: "local_only", label: "Current state" }
+              })
+            }))
+          })
+        )
+      ),
+      createElement(
+        "div",
+        { className: "rebuild-baseline__cockpit-side" },
+        createElement(
+          "div",
+          packageAttrs("DetailDrawer", { "data-region": "resource-library-detail" }),
+          createElement(DetailDrawer, { title: model.detailTitle, open: true },
+            renderKeyValueList(model.detailItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              value: item.value
+            }))),
+            createElement(
+              "div",
+              { className: "rebuild-baseline__action-list" },
+              model.actions.map((action) =>
+                createElement(Button, {
+                  ...packageAttrs("Button", { key: action.label }),
+                  disabled: true,
+                  disabledReason: action.reason
+                }, action.label)
+              )
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("GateReadinessPanel"),
+          createElement(GateReadinessPanel, {
+            state: {
+              state: "blocked",
+              label: "Unavailable",
+              description: "Resource materialization stays unavailable while the resource library surface remains inside the shared replacement shell."
+            }
+          })
+        )
+      )
+    )
+  );
+}
+
 function renderChecklist(model: RebuildBaselineModel) {
   return createElement(
     "section",
@@ -1222,6 +1311,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         renderGateQueueStart(model.gateQueueStart),
         renderConferenceStart(model.conferenceStart),
         renderDependencyConsoleStart(model.dependencyConsoleStart),
+        renderResourceLibraryStart(model.resourceLibraryStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()

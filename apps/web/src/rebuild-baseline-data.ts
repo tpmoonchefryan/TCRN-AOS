@@ -56,6 +56,9 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='dependency-console-start']",
   "[data-region='dependency-console-list']",
   "[data-region='dependency-console-detail']",
+  "[data-region='resource-library-start']",
+  "[data-region='resource-library-list']",
+  "[data-region='resource-library-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
@@ -370,6 +373,33 @@ export interface RebuildDependencyConsoleModel {
   actions: readonly RebuildProjectWorkspaceAction[];
 }
 
+export interface RebuildResourceLibraryRow {
+  title: string;
+  manifest: string;
+  traceability: string;
+  audit: string;
+  nextAction: string;
+  status: "current" | "blocked";
+}
+
+export interface RebuildResourceLibraryDetailItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildResourceLibraryModel {
+  title: string;
+  summary: string;
+  standardIds: readonly string[];
+  storybookIds: readonly string[];
+  evidence: readonly string[];
+  rows: readonly RebuildResourceLibraryRow[];
+  detailTitle: string;
+  detailItems: readonly RebuildResourceLibraryDetailItem[];
+  actions: readonly RebuildProjectWorkspaceAction[];
+}
+
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
@@ -387,6 +417,7 @@ export interface RebuildBaselineModel {
   gateQueueStart: RebuildGateQueueModel;
   conferenceStart: RebuildConferenceModel;
   dependencyConsoleStart: RebuildDependencyConsoleModel;
+  resourceLibraryStart: RebuildResourceLibraryModel;
   checklist: RebuildChecklistRow[];
   noClaims: {
     productAcceptance: false;
@@ -932,6 +963,59 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
         {
           label: "Export report",
           reason: "Export remains unavailable while the dependency console surface stays in local preview."
+        }
+      ]
+    },
+    resourceLibraryStart: {
+      title: "Resource library starting surface",
+      summary: "The next fresh rebuilt surface adds a DS-aligned resource library workspace for materialization records, manifests, audit posture, and blocked updates inside the shared replacement shell.",
+      standardIds: ["ds-aos-target-set-v1", "ds-aos-operations-cockpit-v1"],
+      storybookIds: [
+        "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+        "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+      ],
+      evidence: [
+        "Resource records",
+        "Traceability",
+        "Local preview only"
+      ],
+      rows: [
+        {
+          title: "Owner-visible browser capture",
+          manifest: "capture-manifest.json",
+          traceability: "Owner preview trace linked",
+          audit: "Audit metadata present",
+          nextAction: "Materialize resource",
+          status: "blocked"
+        },
+        {
+          title: "Storybook baseline export",
+          manifest: "storybook-baseline.json",
+          traceability: "Manifest and screenshot linked",
+          audit: "Audit metadata present",
+          nextAction: "Inspect metadata",
+          status: "current"
+        }
+      ],
+      detailTitle: "Selected resource",
+      detailItems: [
+        { key: "resource", label: "Resource", value: "Owner-visible browser capture" },
+        { key: "manifest", label: "Manifest", value: "capture-manifest.json" },
+        { key: "traceability", label: "Traceability", value: "Owner preview trace linked" },
+        { key: "boundary", label: "Boundary", value: "Materialization remains unavailable" }
+      ],
+      actions: [
+        {
+          label: "Materialize resource",
+          reason: "Materialization remains unavailable while the resource library surface stays inside the shared replacement shell."
+        },
+        {
+          label: "Rollback resource",
+          reason: "Rollback remains unavailable while the resource library surface stays in local preview."
+        },
+        {
+          label: "Export manifest",
+          reason: "Export remains unavailable while the resource library surface stays in local preview."
         }
       ]
     },

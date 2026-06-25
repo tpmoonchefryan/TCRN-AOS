@@ -80,9 +80,9 @@ ${aosDesignSystemNavigationCss}
 .rebuild-baseline__topbar-copy { display: grid; gap: 4px; min-width: 0; }
 .rebuild-baseline__topbar-copy .tcrn-heading { margin: 0; font-size: 24px; line-height: 1.15; font-weight: 600; letter-spacing: 0; }
 .rebuild-baseline__summary, .rebuild-baseline__boundaries { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.95fr); gap: 14px; min-width: 0; }
-.rebuild-baseline__summary, .rebuild-baseline__cockpit-start, .rebuild-baseline__checklist, .rebuild-baseline__boundaries, .rebuild-baseline__action-lane { padding-inline: 22px; }
+.rebuild-baseline__summary, .rebuild-baseline__cockpit-start, .rebuild-baseline__resource-library-start, .rebuild-baseline__checklist, .rebuild-baseline__boundaries, .rebuild-baseline__action-lane { padding-inline: 22px; }
 .rebuild-baseline__summary { margin-top: 22px; margin-bottom: 14px; }
-.rebuild-baseline__cockpit-start, .rebuild-baseline__docs-start, .rebuild-baseline__target-set-start, .rebuild-baseline__project-workspace-start, .rebuild-baseline__initiative-detail-start, .rebuild-baseline__ai-employee-start, .rebuild-baseline__gate-queue-start, .rebuild-baseline__conference-start, .rebuild-baseline__dependency-console-start { margin-bottom: 14px; }
+.rebuild-baseline__cockpit-start, .rebuild-baseline__docs-start, .rebuild-baseline__target-set-start, .rebuild-baseline__project-workspace-start, .rebuild-baseline__initiative-detail-start, .rebuild-baseline__ai-employee-start, .rebuild-baseline__gate-queue-start, .rebuild-baseline__conference-start, .rebuild-baseline__dependency-console-start, .rebuild-baseline__resource-library-start { margin-bottom: 14px; }
 .rebuild-baseline__checklist, .rebuild-baseline__boundaries { margin-bottom: 14px; }
 .rebuild-baseline__action-lane { margin-bottom: 28px; }
 .rebuild-baseline__cockpit-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.95fr); gap: 14px; min-width: 0; }
@@ -127,7 +127,7 @@ ${aosDesignSystemNavigationCss}
   .rebuild-baseline__hierarchy-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
-  .rebuild-baseline__summary, .rebuild-baseline__cockpit-start, .rebuild-baseline__checklist, .rebuild-baseline__boundaries, .rebuild-baseline__action-lane { padding-inline: 14px; }
+  .rebuild-baseline__summary, .rebuild-baseline__cockpit-start, .rebuild-baseline__resource-library-start, .rebuild-baseline__checklist, .rebuild-baseline__boundaries, .rebuild-baseline__action-lane { padding-inline: 14px; }
   .rebuild-baseline__topbar { padding-inline: 14px; }
   .tcrn-key-value-list { grid-template-columns: 1fr; }
   .rebuild-baseline__checklist .tcrn-table-shell { min-width: 0; border: 0; background: transparent; }

@@ -40,6 +40,8 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
       assert.match(html, /Conference list/, `${target} exposes conference list`);
       assert.match(html, /Dependency console starting surface/, `${target} exposes the next fresh dependency console surface`);
       assert.match(html, /Dependency governance rows/, `${target} exposes dependency governance rows`);
+      assert.match(html, /Resource library starting surface/, `${target} exposes the next fresh resource library surface`);
+      assert.match(html, /Resource library rows/, `${target} exposes resource library rows`);
       assert.match(html, /Retired frontend inventory/, `${target} exposes retirement inventory`);
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
     }
