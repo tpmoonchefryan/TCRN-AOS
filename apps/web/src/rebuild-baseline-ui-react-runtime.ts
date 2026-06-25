@@ -26,6 +26,7 @@ import {
   WorkIndex
 } from "@tcrn/ui-react";
 import type {
+  RebuildDependencyConsoleModel,
   RebuildConferenceModel,
   RebuildGateQueueModel,
   RebuildBaselineModel,
@@ -1017,6 +1018,94 @@ function renderConferenceStart(model: RebuildConferenceModel) {
   );
 }
 
+function renderDependencyConsoleStart(model: RebuildDependencyConsoleModel) {
+  return createElement(
+    "section",
+    { className: "rebuild-baseline__dependency-console-start", "data-region": "dependency-console-start" },
+    createElement(
+      "div",
+      { className: "rebuild-baseline__cockpit-grid" },
+      createElement(
+        Surface,
+        { ...packageAttrs("Surface", { className: "rebuild-baseline__cockpit-surface" }) },
+        createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Next fresh surface"),
+        createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, model.title),
+        createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.summary),
+        createElement(
+          "div",
+          packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
+          createElement(EvidenceStrip, { items: [...model.evidence] })
+        ),
+        createElement(
+          "div",
+          packageAttrs("TableShell", { "data-region": "dependency-console-list" }),
+          createElement(TableShell, {
+            label: "Dependency governance rows",
+            columns: [
+              { key: "package", label: "Package" },
+              { key: "lifecycle", label: "Lifecycle" },
+              { key: "posture", label: "Posture" },
+              { key: "license", label: "License" },
+              { key: "nextAction", label: "Next action" },
+              { key: "status", label: "Status" }
+            ],
+            rows: model.rows.map((row) => ({
+              package: row.packageName,
+              lifecycle: row.lifecycle,
+              posture: row.posture,
+              license: row.license,
+              nextAction: row.nextAction,
+              status: createElement(StatusBadge, {
+                ...packageAttrs("StatusBadge"),
+                state: row.status === "blocked"
+                  ? { state: "blocked" }
+                  : { state: "local_only", label: "Current state" }
+              })
+            }))
+          })
+        )
+      ),
+      createElement(
+        "div",
+        { className: "rebuild-baseline__cockpit-side" },
+        createElement(
+          "div",
+          packageAttrs("DetailDrawer", { "data-region": "dependency-console-detail" }),
+          createElement(DetailDrawer, { title: model.detailTitle, open: true },
+            renderKeyValueList(model.detailItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              value: item.value
+            }))),
+            createElement(
+              "div",
+              { className: "rebuild-baseline__action-list" },
+              model.actions.map((action) =>
+                createElement(Button, {
+                  ...packageAttrs("Button", { key: action.label }),
+                  disabled: true,
+                  disabledReason: action.reason
+                }, action.label)
+              )
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("GateReadinessPanel"),
+          createElement(GateReadinessPanel, {
+            state: {
+              state: "blocked",
+              label: "Unavailable",
+              description: "Dependency governance actions stay unavailable while the dependency console surface remains inside the shared replacement shell."
+            }
+          })
+        )
+      )
+    )
+  );
+}
+
 function renderChecklist(model: RebuildBaselineModel) {
   return createElement(
     "section",
@@ -1132,6 +1221,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         renderAiEmployeeStart(model.aiEmployeeStart),
         renderGateQueueStart(model.gateQueueStart),
         renderConferenceStart(model.conferenceStart),
+        renderDependencyConsoleStart(model.dependencyConsoleStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()

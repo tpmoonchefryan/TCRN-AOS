@@ -53,6 +53,9 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='conference-start']",
   "[data-region='conference-list']",
   "[data-region='conference-detail']",
+  "[data-region='dependency-console-start']",
+  "[data-region='dependency-console-list']",
+  "[data-region='dependency-console-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
@@ -340,6 +343,33 @@ export interface RebuildConferenceModel {
   actions: readonly RebuildProjectWorkspaceAction[];
 }
 
+export interface RebuildDependencyConsoleRow {
+  packageName: string;
+  lifecycle: string;
+  posture: string;
+  license: string;
+  nextAction: string;
+  status: "current" | "blocked";
+}
+
+export interface RebuildDependencyConsoleDetailItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildDependencyConsoleModel {
+  title: string;
+  summary: string;
+  standardIds: readonly string[];
+  storybookIds: readonly string[];
+  evidence: readonly string[];
+  rows: readonly RebuildDependencyConsoleRow[];
+  detailTitle: string;
+  detailItems: readonly RebuildDependencyConsoleDetailItem[];
+  actions: readonly RebuildProjectWorkspaceAction[];
+}
+
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
@@ -356,6 +386,7 @@ export interface RebuildBaselineModel {
   aiEmployeeStart: RebuildAiEmployeeModel;
   gateQueueStart: RebuildGateQueueModel;
   conferenceStart: RebuildConferenceModel;
+  dependencyConsoleStart: RebuildDependencyConsoleModel;
   checklist: RebuildChecklistRow[];
   noClaims: {
     productAcceptance: false;
@@ -848,6 +879,59 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
         {
           label: "Record notes",
           reason: "Minutes updates remain unavailable while the conference surface stays in local preview."
+        }
+      ]
+    },
+    dependencyConsoleStart: {
+      title: "Dependency console starting surface",
+      summary: "The next fresh rebuilt surface adds a DS-aligned dependency governance workspace for lifecycle, posture, and blocked remediation inside the shared replacement shell.",
+      standardIds: ["ds-aos-target-set-v1", "ds-aos-operations-cockpit-v1"],
+      storybookIds: [
+        "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+        "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+      ],
+      evidence: [
+        "Dependency governance",
+        "Blocked remediation",
+        "Local preview only"
+      ],
+      rows: [
+        {
+          packageName: "fixture-current",
+          lifecycle: "Current",
+          posture: "Review required",
+          license: "MIT",
+          nextAction: "None",
+          status: "current"
+        },
+        {
+          packageName: "fixture-denied",
+          lifecycle: "Denied",
+          posture: "Blocked",
+          license: "GPL-3.0-only",
+          nextAction: "Replace dependency",
+          status: "blocked"
+        }
+      ],
+      detailTitle: "Selected dependency",
+      detailItems: [
+        { key: "package", label: "Package", value: "fixture-denied" },
+        { key: "lifecycle", label: "Lifecycle", value: "Denied" },
+        { key: "license", label: "License", value: "GPL-3.0-only" },
+        { key: "risk", label: "Residual risk", value: "Blocked until reviewed replacement work is available." }
+      ],
+      actions: [
+        {
+          label: "Approve dependency",
+          reason: "Dependency approvals remain unavailable while the dependency console surface stays inside the shared replacement shell."
+        },
+        {
+          label: "Replace dependency",
+          reason: "Package mutation remains unavailable while the dependency console surface stays in local preview."
+        },
+        {
+          label: "Export report",
+          reason: "Export remains unavailable while the dependency console surface stays in local preview."
         }
       ]
     },
