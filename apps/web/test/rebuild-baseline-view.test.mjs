@@ -11,11 +11,11 @@ import {
   requiredRebuildBaselineSelectors
 } from "../../../dist/apps/web/src/rebuild-baseline-view.js";
 
-test("Rebuild baseline model now represents the reset shell plus cockpit, docs, target-set, project-workspace, and initiative-detail fresh slices", () => {
+test("Rebuild baseline model now represents the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, and ai-employee fresh slices", () => {
   const model = createRebuildBaselineModel("/operations-cockpit.html");
 
   assert.equal(model.currentAliasLabel, "Operations Cockpit");
-  assert.equal(model.selectedRebuiltStartingSlice, "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-foundation");
+  assert.equal(model.selectedRebuiltStartingSlice, "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-foundation");
   assert.equal(model.noClaims.productAcceptance, false);
   assert.equal(model.noClaims.finalMvpAcceptance, false);
   assert.equal(model.noClaims.releasePublication, false);
@@ -45,7 +45,7 @@ test("Rebuild baseline model now represents the reset shell plus cockpit, docs, 
   ]);
 });
 
-test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-set, project-workspace, and initiative-detail fresh slices while omitting later sections", () => {
+test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, and ai-employee fresh slices while omitting later sections", () => {
   const html = renderRebuildBaselineHtml("/operations-cockpit.html");
 
   for (const selector of requiredRebuildBaselineSelectors) {
@@ -64,6 +64,7 @@ test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-
   assert.match(html, />Product design target-set starting surface</);
   assert.match(html, />Project workspace starting surface</);
   assert.match(html, />Initiative detail starting surface</);
+  assert.match(html, />AI employee starting surface</);
   assert.match(html, />Retired frontend inventory</);
   assert.match(html, />Retired served scope</);
 
@@ -76,16 +77,17 @@ test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-
 
   assert.doesNotMatch(
     html,
-    /AI employee starting surface|Gate queue starting surface|Conference starting surface|Dependency console starting surface|Resource library starting surface/
+    /Gate queue starting surface|Conference starting surface|Dependency console starting surface|Resource library starting surface/
   );
   assert.doesNotMatch(
     html,
-    /AI employee roster|Gate queue rows|Conference list|Dependency governance rows|Resource library rows/
+    /Gate queue rows|Conference list|Dependency governance rows|Resource library rows/
   );
   assert.match(html, /Docs inspection rows/);
   assert.match(html, /AOS-wide surface index/);
   assert.match(html, /Project workspace current work/);
   assert.match(html, /Initiative detail linked records/);
+  assert.match(html, /AI employee roster/);
   assert.doesNotMatch(productVisibleAndA11yText(html), productVisibleInternalTermsPattern);
 });
 
@@ -143,7 +145,7 @@ test("Rebuild checkpoint visible copy avoids internal workflow vocabulary", () =
   assert.deepEqual(hits, []);
 });
 
-test("Rebuild checkpoint exposes the fresh cockpit, docs, target-set, project-workspace, and initiative-detail sections while still keeping later fresh sections suppressed", () => {
+test("Rebuild checkpoint exposes the fresh cockpit, docs, target-set, project-workspace, initiative-detail, and ai-employee sections while still keeping later fresh sections suppressed", () => {
   const html = renderRebuildBaselineHtml("/operations-cockpit.html");
 
   assert.match(html, /data-region="cockpit-start"/);
@@ -170,7 +172,12 @@ test("Rebuild checkpoint exposes the fresh cockpit, docs, target-set, project-wo
   assert.match(html, /data-region="initiative-detail-activity"/);
   assert.match(html, /Initiative detail starting surface/);
   assert.match(html, /Initiative detail linked records/);
-  assert.doesNotMatch(html, /AI employee starting surface|Gate queue starting surface|Conference starting surface|Dependency console starting surface|Resource library starting surface/);
+  assert.match(html, /data-region="ai-employee-start"/);
+  assert.match(html, /data-region="ai-employee-roster"/);
+  assert.match(html, /data-region="ai-employee-detail"/);
+  assert.match(html, /AI employee starting surface/);
+  assert.match(html, /AI employee roster/);
+  assert.doesNotMatch(html, /Gate queue starting surface|Conference starting surface|Dependency console starting surface|Resource library starting surface/);
 });
 
 test("Rebuild checkpoint nav uses DS icons and disabled reasons", () => {
