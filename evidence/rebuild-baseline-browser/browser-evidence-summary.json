@@ -1,30 +1,22 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_storybook_first_rebuild_reset_after_owner_direction_clarification",
-  "sourceHead": "145f1da240fe9cc5d077af57aa4216a95b06f17a",
-  "generatedAt": "2026-06-25T10:08:30.627Z",
+  "sourceHead": "4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b",
+  "generatedAt": "2026-06-25T10:23:55.882Z",
   "replacedStaticTargets": [
-    {
-      "routePath": "/gate-queue.html",
-      "staticTarget": "apps/web/static/gate-queue.html",
-      "sha256": "22f57be433399f40c59b0641d35c3dcbad55e9953777ed44f25145e401b20aef",
-      "bytes": 48291,
-      "hasBaselineSurface": true,
-      "hasChecklist": true
-    },
     {
       "routePath": "/conference.html",
       "staticTarget": "apps/web/static/conference.html",
-      "sha256": "5911ed03380edf94c4941b42f0e04127268e3bf2b7a95c882c2a10a8419ad722",
-      "bytes": 48291,
+      "sha256": "2928a60ed0d6e7507b98ebdabcfef2e89297d7fb41239290d711936f1d24daa6",
+      "bytes": 48283,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/dependency-console.html",
       "staticTarget": "apps/web/static/dependency-console.html",
-      "sha256": "b67d21974c13361f2cb4b83914821482606bcc8af86f3f988ff4cf42ed3cb0cc",
-      "bytes": 48315,
+      "sha256": "9a45378909c684bfd3e4efe5e72c1e1c9c60da2ee0edf17524eb0c43113356bb",
+      "bytes": 48307,
       "hasBaselineSurface": true,
       "hasChecklist": true
     }
@@ -32,9 +24,9 @@
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/rebuild-baseline-browser/145f1da240fe9cc5d077af57aa4216a95b06f17a/rebuild-baseline-desktop-1440x900.png",
-      "screenshotSha256": "ded8caa638efd9772ec846a5b11fd414828a5e3e3cfcf4151c7d2ac3e3b98293",
-      "screenshotBytes": 429316,
+      "screenshot": "evidence/rebuild-baseline-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/rebuild-baseline-desktop-1440x900.png",
+      "screenshotSha256": "3eaf0f8e1c5d45aeb677a1c622a0940004a1096521241cab28228e6b4211d00a",
+      "screenshotBytes": 425873,
       "selectorProof": [
         {
           "selector": "[data-surface='aos-rebuild-workspace']",
@@ -146,9 +138,9 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/rebuild-baseline-browser/145f1da240fe9cc5d077af57aa4216a95b06f17a/rebuild-baseline-mobile-390x844.png",
-      "screenshotSha256": "adcb7109bba3701f6e83f5efb77b7f3f98cf0b0d7a57e10ec7cf477a0cd3d48d",
-      "screenshotBytes": 508133,
+      "screenshot": "evidence/rebuild-baseline-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/rebuild-baseline-mobile-390x844.png",
+      "screenshotSha256": "a84eefcec9290b5fd3d11a4663b574fd7d611ea5492fa870a76658750bc6b326",
+      "screenshotBytes": 506798,
       "selectorProof": [
         {
           "selector": "[data-surface='aos-rebuild-workspace']",
@@ -264,9 +256,9 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "rebuild_baseline_reset_source_content_digest_v1",
-    "sourceHeadAtProofRun": "145f1da240fe9cc5d077af57aa4216a95b06f17a",
+    "sourceHeadAtProofRun": "4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "efe59109cbfc4ad1cd5a9a9822ebf9aa743ec9107a51c19fa843d1c6d9e4229c",
+    "sourceContentDigest": "7a289ce14dee43c13566a3b4ae96dd5fe04bff2aa4b3c2c5e270a70933c66a08",
     "sourcePaths": [
       "apps/web/src/rebuild-baseline-data.ts",
       "apps/web/src/rebuild-baseline-ui-react-runtime.ts",

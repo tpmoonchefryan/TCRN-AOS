@@ -2,9 +2,9 @@
 
 - ok: true
 - route: route_tcrn_aos_0b349cf_ilya_initiative_detail_ticket_drillthrough_visible_slice_after_project_workspace_sync
-- sourceHead: 145f1da240fe9cc5d077af57aa4216a95b06f17a
+- sourceHead: 4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b
 - staticTarget: apps/web/static/initiative-detail.html
-- staticSha256: 53bdf8711069800d3452cc2a2ba76bf0b0fbde1a6ef999fafe7628069b4fffba
+- staticSha256: 6522b97dd97d3416e80b9c7eeb2f5ffa7f972928e143e6145180ae14a3eb4bb8
 - DS standards consumed: ds-aos-target-set-v1, ds-aos-operations-cockpit-v1
 - Storybook oracles consumed: tcrn-design-system-patterns--aos-product-design-target-set-standard, tcrn-design-system-patterns--aos-operations-cockpit-standard
 - Talia checklist item advanced: Initiative Detail / Ticket drill-through standalone visible surface
@@ -13,8 +13,8 @@
 
 ## Browser Evidence
 
-- desktop-1440x900: evidence/initiative-detail-browser/145f1da240fe9cc5d077af57aa4216a95b06f17a/initiative-detail-desktop-1440x900.png sha256=5cb2329f22088fb92075823bfd7db704d213b94c05d92f9f61da9608c8bc5be6 bytes=319490 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 linkRows=11
-- mobile-390x844: evidence/initiative-detail-browser/145f1da240fe9cc5d077af57aa4216a95b06f17a/initiative-detail-mobile-390x844.png sha256=7b8e8e48f4189eb166f6851cfb4ed5023cdbf69cf4358c4b3636785ecc4e6dc8 bytes=339006 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 linkRows=11
+- desktop-1440x900: evidence/initiative-detail-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/initiative-detail-desktop-1440x900.png sha256=829258650d3a522d3862b6cbbe156266069472251687d09ec5afc8d7eea89d60 bytes=319854 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 linkRows=11
+- mobile-390x844: evidence/initiative-detail-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/initiative-detail-mobile-390x844.png sha256=ce645186a4d7f9fd038b5e24cdc1a680060239ec1640acaec2615cced2896acb bytes=339951 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 linkRows=11
 
 ## Boundaries
 

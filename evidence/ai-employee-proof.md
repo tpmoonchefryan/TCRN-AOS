@@ -3,8 +3,8 @@
 Status: passed.
 
 Route: `route_tcrn_aos_5f51817_ilya_resume_total_frontend_rebuild_after_watchdog_recovery`
-AOS source head: `145f1da240fe9cc5d077af57aa4216a95b06f17a`
-Source content digest: `525cb2d5aa3ffe6b4cc4798f324292745580b28937337888e2ecd1f9bb8b8fd9`
+AOS source head: `4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b`
+Source content digest: `9c6f7ef0d8ab7884675a49a14aed234c1f6219af2aeb9872abc432ceb7a2de20`
 
 ## Static Surface
 
@@ -16,8 +16,8 @@ Source content digest: `525cb2d5aa3ffe6b4cc4798f324292745580b28937337888e2ecd1f9
 
 ## Browser Evidence
 
-- desktop-1440x900: evidence/ai-employee-browser/145f1da240fe9cc5d077af57aa4216a95b06f17a/ai-employee-desktop-1440x900.png sha256=14e30362b376f89b99dff1e53ab872fbbed1e867e78ec24138e28f118b18e812 bytes=243297 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 rosterRowFailures=0
-- mobile-390x844: evidence/ai-employee-browser/145f1da240fe9cc5d077af57aa4216a95b06f17a/ai-employee-mobile-390x844.png sha256=512148a01ff3304aacc0e4e84d8bd83d5e27206ae0c386d58bb222ff65729b7c bytes=236479 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 rosterRowFailures=0
+- desktop-1440x900: evidence/ai-employee-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/ai-employee-desktop-1440x900.png sha256=14e30362b376f89b99dff1e53ab872fbbed1e867e78ec24138e28f118b18e812 bytes=243297 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 rosterRowFailures=0
+- mobile-390x844: evidence/ai-employee-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/ai-employee-mobile-390x844.png sha256=512148a01ff3304aacc0e4e84d8bd83d5e27206ae0c386d58bb222ff65729b7c bytes=236479 overflow=false duplicateIds=0 ariaFailures=0 disabledFailures=0 iconlessNavItems=0 rosterRowFailures=0
 
 ## Boundaries
 

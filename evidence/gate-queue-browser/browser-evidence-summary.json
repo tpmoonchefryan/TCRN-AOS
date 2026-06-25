@@ -1,8 +1,8 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_c2924d0_ilya_resume_total_frontend_rebuild_after_internal_coordination_repair",
-  "sourceHead": "769ecb8db227092609eb2ef05d886e4c951d86cc",
-  "generatedAt": "2026-06-25T06:49:32.575Z",
+  "sourceHead": "4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b",
+  "generatedAt": "2026-06-25T10:23:55.805Z",
   "staticTarget": "apps/web/static/gate-queue.html",
   "staticSha256": "e31e2791fee606b54ff182976dfbe47823823b08b69f7ba7196b5e1f05070f59",
   "staticBytes": 35450,
@@ -88,7 +88,7 @@
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/gate-queue-browser/769ecb8db227092609eb2ef05d886e4c951d86cc/gate-queue-desktop-1440x900.png",
+      "screenshot": "evidence/gate-queue-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/gate-queue-desktop-1440x900.png",
       "screenshotSha256": "acc3443af3e607a2037345283151d9db84d4eff8fd3212a2b5e95c375ece2c63",
       "screenshotBytes": 248289,
       "selectorProof": [
@@ -164,7 +164,7 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/gate-queue-browser/769ecb8db227092609eb2ef05d886e4c951d86cc/gate-queue-mobile-390x844.png",
+      "screenshot": "evidence/gate-queue-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/gate-queue-mobile-390x844.png",
       "screenshotSha256": "b06c98bf081b617e525ac2226f0315958dfd678ba7b0f90ac0b9356dfe87a459",
       "screenshotBytes": 233236,
       "selectorProof": [
@@ -244,9 +244,9 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "gate_queue_visible_slice_source_content_digest_v1",
-    "sourceHeadAtProofRun": "769ecb8db227092609eb2ef05d886e4c951d86cc",
+    "sourceHeadAtProofRun": "4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "d6ee9d3428e998861bb2c0321f61300bfa81fc8dc2a194690b4b9396971d6634",
+    "sourceContentDigest": "80e5aa61125325bc7ba267cd780b114a8baefad45ac8ac227b20a68a69630db3",
     "sourcePaths": [
       "apps/web/src/cockpit.ts",
       "apps/web/src/gate-queue-data.ts",

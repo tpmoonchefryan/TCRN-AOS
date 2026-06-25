@@ -9,6 +9,7 @@ import {
 import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
 import { renderAiEmployeeHtml } from "../../web/src/ai-employee-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
+import { renderGateQueueHtml } from "../../web/src/gate-queue-view.js";
 import { renderInitiativeDetailHtml } from "../../web/src/initiative-detail-view.js";
 import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
 import { renderProjectWorkspaceHtml } from "../../web/src/project-workspace-view.js";
@@ -133,11 +134,19 @@ function handleRequest(
     return;
   }
 
-  const rebuildAliases = new Set([
-    "/",
+  const gateQueueAliases = new Set([
     "/gate-queue",
     "/gate-queue.html",
-    "/apps/web/static/gate-queue.html",
+    "/apps/web/static/gate-queue.html"
+  ]);
+
+  if (gateQueueAliases.has(path)) {
+    sendHtml(request, response, renderGateQueueHtml());
+    return;
+  }
+
+  const rebuildAliases = new Set([
+    "/",
     "/conference",
     "/conference.html",
     "/apps/web/static/conference.html",

@@ -41,9 +41,14 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
     assert.match(aiEmployeeHtml, /AI Employee/, "/ai-employee.html exposes AI employee module heading");
     assert.doesNotMatch(aiEmployeeHtml, /AOS Rebuild Workspace/, "/ai-employee.html is no longer the reset baseline");
 
+    const gateQueueHtml = await fetch(`${service.url}/gate-queue.html`).then((response) => response.text());
+    assert.match(gateQueueHtml, /data-surface="gate-queue"/, "/gate-queue.html serves rebuilt gate queue");
+    assert.match(gateQueueHtml, /TCRN AOS Gate Queue/, "/gate-queue.html exposes gate queue title");
+    assert.match(gateQueueHtml, /Gate Queue/, "/gate-queue.html exposes gate queue module heading");
+    assert.doesNotMatch(gateQueueHtml, /AOS Rebuild Workspace/, "/gate-queue.html is no longer the reset baseline");
+
     const rebuildTargets = [
       "/",
-      "/gate-queue.html",
       "/conference.html",
       "/dependency-console.html"
     ];

@@ -11,7 +11,6 @@ export const rebuildBaselineStorybookIds = [
 ] as const;
 
 export const rebuildBaselineRoutes = [
-  "/gate-queue.html",
   "/conference.html",
   "/dependency-console.html"
 ] as const;
@@ -80,7 +79,7 @@ const checklistRows: RebuildChecklistRow[] = [
   row("project-workspace", "Project Workspace", "reopened", "DS project workspace standard", "Project workspace is active again from the reset baseline."),
   row("initiative-detail", "Initiative Detail", "reopened", "DS initiative detail standard", "Initiative detail is active again from the reset baseline."),
   row("ai-employee", "AI Employee", "reopened", "DS AI employee standard", "AI employee profiles are active again from the reset baseline."),
-  row("gate-queue", "Gate Queue", "rebuild_queued", "Total-scope checklist", "Approvals and gate work order will restart from the new baseline."),
+  row("gate-queue", "Gate Queue", "reopened", "DS gate queue standard", "Gate queue is active again from the reset baseline."),
   row("conference", "Conference", "rebuild_queued", "Total-scope checklist", "Conference list, detail, and minutes will restart from the new baseline."),
   row("dependency-console", "Dependency Console", "rebuild_queued", "Total-scope checklist", "Dependency governance will restart from the new baseline."),
   row("resource-library", "Resource Library", "rebuild_queued", "Total-scope checklist", "Resource audit and materialization will restart from the new baseline."),
