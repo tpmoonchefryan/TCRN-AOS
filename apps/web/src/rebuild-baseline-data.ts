@@ -47,6 +47,9 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='ai-employee-start']",
   "[data-region='ai-employee-roster']",
   "[data-region='ai-employee-detail']",
+  "[data-region='gate-queue-start']",
+  "[data-region='gate-queue-list']",
+  "[data-region='gate-queue-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
@@ -280,6 +283,33 @@ export interface RebuildAiEmployeeModel {
   actions: readonly RebuildProjectWorkspaceAction[];
 }
 
+export interface RebuildGateQueueRow {
+  queue: string;
+  gate: string;
+  owner: string;
+  work: string;
+  evidence: string;
+  status: "current" | "blocked";
+}
+
+export interface RebuildGateQueueDetailItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildGateQueueModel {
+  title: string;
+  summary: string;
+  standardIds: readonly string[];
+  storybookIds: readonly string[];
+  evidence: readonly string[];
+  rows: readonly RebuildGateQueueRow[];
+  detailTitle: string;
+  detailItems: readonly RebuildGateQueueDetailItem[];
+  actions: readonly RebuildProjectWorkspaceAction[];
+}
+
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
@@ -294,6 +324,7 @@ export interface RebuildBaselineModel {
   projectWorkspaceStart: RebuildProjectWorkspaceModel;
   initiativeDetailStart: RebuildInitiativeDetailModel;
   aiEmployeeStart: RebuildAiEmployeeModel;
+  gateQueueStart: RebuildGateQueueModel;
   checklist: RebuildChecklistRow[];
   noClaims: {
     productAcceptance: false;
@@ -680,6 +711,59 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
         {
           label: "Send live update",
           reason: "Live updates remain unavailable while the AI employee surface stays in local preview."
+        }
+      ]
+    },
+    gateQueueStart: {
+      title: "Gate queue starting surface",
+      summary: "The next fresh rebuilt surface adds a DS-aligned approvals workspace for action approvals, role reviews, and blocked execution posture inside the shared replacement shell.",
+      standardIds: ["ds-aos-target-set-v1", "ds-aos-operations-cockpit-v1"],
+      storybookIds: [
+        "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+        "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+      ],
+      evidence: [
+        "Action approvals",
+        "Role reviews",
+        "Local preview only"
+      ],
+      rows: [
+        {
+          queue: "Action approvals",
+          gate: "Action approval gate",
+          owner: "Workspace owner",
+          work: "Current work",
+          evidence: "1",
+          status: "blocked"
+        },
+        {
+          queue: "Role reviews",
+          gate: "Evidence review gate",
+          owner: "Quality team",
+          work: "Workspace shell and hierarchy",
+          evidence: "1",
+          status: "current"
+        }
+      ],
+      detailTitle: "Selected gate",
+      detailItems: [
+        { key: "queue", label: "Queue", value: "Action approvals" },
+        { key: "owner", label: "Owner", value: "Workspace owner" },
+        { key: "work", label: "Linked work", value: "Current work" },
+        { key: "blocker", label: "Blocker", value: "Action approval remains required before this gate can move." }
+      ],
+      actions: [
+        {
+          label: "Approve gate",
+          reason: "Approvals remain unavailable while the gate queue surface stays inside the shared replacement shell."
+        },
+        {
+          label: "Request owner action",
+          reason: "Owner actions remain unavailable while the gate queue surface stays in local preview."
+        },
+        {
+          label: "Release gate",
+          reason: "Release actions remain unavailable while the gate queue surface stays in local preview."
         }
       ]
     },

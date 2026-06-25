@@ -26,6 +26,7 @@ import {
   WorkIndex
 } from "@tcrn/ui-react";
 import type {
+  RebuildGateQueueModel,
   RebuildBaselineModel,
   RebuildAiEmployeeModel,
   RebuildCockpitStartModel,
@@ -839,6 +840,94 @@ function renderAiEmployeeStart(model: RebuildAiEmployeeModel) {
   );
 }
 
+function renderGateQueueStart(model: RebuildGateQueueModel) {
+  return createElement(
+    "section",
+    { className: "rebuild-baseline__gate-queue-start", "data-region": "gate-queue-start" },
+    createElement(
+      "div",
+      { className: "rebuild-baseline__cockpit-grid" },
+      createElement(
+        Surface,
+        { ...packageAttrs("Surface", { className: "rebuild-baseline__cockpit-surface" }) },
+        createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Next fresh surface"),
+        createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, model.title),
+        createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.summary),
+        createElement(
+          "div",
+          packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
+          createElement(EvidenceStrip, { items: [...model.evidence] })
+        ),
+        createElement(
+          "div",
+          packageAttrs("TableShell", { "data-region": "gate-queue-list" }),
+          createElement(TableShell, {
+            label: "Gate queue rows",
+            columns: [
+              { key: "queue", label: "Queue" },
+              { key: "gate", label: "Gate" },
+              { key: "owner", label: "Owner" },
+              { key: "work", label: "Work item" },
+              { key: "state", label: "State" },
+              { key: "evidence", label: "Evidence" }
+            ],
+            rows: model.rows.map((row) => ({
+              queue: row.queue,
+              gate: row.gate,
+              owner: row.owner,
+              work: row.work,
+              state: createElement(StatusBadge, {
+                ...packageAttrs("StatusBadge"),
+                state: row.status === "blocked"
+                  ? { state: "blocked" }
+                  : { state: "local_only", label: "Current state" }
+              }),
+              evidence: row.evidence
+            }))
+          })
+        )
+      ),
+      createElement(
+        "div",
+        { className: "rebuild-baseline__cockpit-side" },
+        createElement(
+          "div",
+          packageAttrs("DetailDrawer", { "data-region": "gate-queue-detail" }),
+          createElement(DetailDrawer, { title: model.detailTitle, open: true },
+            renderKeyValueList(model.detailItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              value: item.value
+            }))),
+            createElement(
+              "div",
+              { className: "rebuild-baseline__action-list" },
+              model.actions.map((action) =>
+                createElement(Button, {
+                  ...packageAttrs("Button", { key: action.label }),
+                  disabled: true,
+                  disabledReason: action.reason
+                }, action.label)
+              )
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("GateReadinessPanel"),
+          createElement(GateReadinessPanel, {
+            state: {
+              state: "blocked",
+              label: "Unavailable",
+              description: "Approvals stay unavailable while the gate queue surface remains inside the shared replacement shell."
+            }
+          })
+        )
+      )
+    )
+  );
+}
+
 function renderChecklist(model: RebuildBaselineModel) {
   return createElement(
     "section",
@@ -952,6 +1041,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         renderProjectWorkspaceStart(model.projectWorkspaceStart),
         renderInitiativeDetailStart(model.initiativeDetailStart),
         renderAiEmployeeStart(model.aiEmployeeStart),
+        renderGateQueueStart(model.gateQueueStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()
