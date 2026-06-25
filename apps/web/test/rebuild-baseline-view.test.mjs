@@ -58,6 +58,7 @@ test("Rebuild baseline HTML exposes the reset shell and removes old active surfa
   assert.match(html, /data-product-acceptance="false"/);
   assert.match(html, />AOS Frontend Replacement Workspace</);
   assert.match(html, />Current served frontend has been retired</);
+  assert.match(html, />Operations cockpit starting surface</);
   assert.match(html, />Retired frontend inventory</);
   assert.match(html, />Retired served scope</);
   assert.doesNotMatch(html, />Active now</);
@@ -99,10 +100,13 @@ test("Rebuild baseline renders package-backed public Design System components", 
     "StatusBadge",
     "EvidenceStrip",
     "ReadbackPanel",
+    "DetailDrawer",
+    "GateReadinessPanel",
     "Text",
     "Heading",
     "KeyValueList",
-    "TableShell"
+    "TableShell",
+    "WorkIndex"
   ];
 
   for (const component of requiredPackageComponents) {
@@ -116,6 +120,19 @@ test("Rebuild baseline visible copy avoids internal workflow vocabulary", () => 
   const hits = forbiddenRebuildBaselineVisibleCopy.filter((phrase) => visibleText.includes(phrase));
 
   assert.deepEqual(hits, []);
+});
+
+test("Rebuild baseline exposes the first fresh cockpit surface inside the replacement workspace", () => {
+  const html = renderRebuildBaselineHtml("/operations-cockpit.html");
+
+  assert.match(html, /data-region="cockpit-start"/);
+  assert.match(html, /data-region="cockpit-work-index"/);
+  assert.match(html, /data-region="cockpit-detail"/);
+  assert.match(html, /Cockpit standard reference/);
+  assert.match(html, /Operations cockpit starting work/);
+  assert.match(html, /First fresh surface/);
+  assert.match(html, /data-package-runtime-component="GateReadinessPanel"/);
+  assert.match(html, /data-package-runtime-component="DetailDrawer"/);
 });
 
 test("Rebuild baseline nav uses DS icons and disabled reasons for reference and retired modules", () => {

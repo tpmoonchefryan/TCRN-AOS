@@ -28,6 +28,9 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='rebuild-nav']",
   "[data-region='rebuild-topbar']",
   "[data-region='rebuild-summary']",
+  "[data-region='cockpit-start']",
+  "[data-region='cockpit-work-index']",
+  "[data-region='cockpit-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
@@ -60,6 +63,37 @@ export interface RebuildChecklistRow {
   note: string;
 }
 
+export interface RebuildCockpitStartItem {
+  id: string;
+  title: string;
+  state: "current" | "blocked";
+  owner: string;
+}
+
+export interface RebuildCockpitStartDetailItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildCockpitStartAction {
+  label: string;
+  reason: string;
+}
+
+export interface RebuildCockpitStartModel {
+  title: string;
+  summary: string;
+  standardId: string;
+  storybookId: string;
+  evidence: readonly string[];
+  workItems: readonly RebuildCockpitStartItem[];
+  detailTitle: string;
+  detailItems: readonly RebuildCockpitStartDetailItem[];
+  postureItems: readonly RebuildCockpitStartDetailItem[];
+  actions: readonly RebuildCockpitStartAction[];
+}
+
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
@@ -68,6 +102,7 @@ export interface RebuildBaselineModel {
   replacedFrontendScope: string[];
   survivingNonFrontendScope: string[];
   selectedRebuiltStartingSlice: string;
+  cockpitStart: RebuildCockpitStartModel;
   checklist: RebuildChecklistRow[];
   noClaims: {
     productAcceptance: false;
@@ -118,6 +153,64 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
       "local service policy, health, and service endpoints"
     ],
     selectedRebuiltStartingSlice: "storybook-first-replacement-workspace-shell",
+    cockpitStart: {
+      title: "Operations cockpit starting surface",
+      summary: "The first fresh rebuilt surface starts here: a DS-aligned cockpit shell for local workspace status, work items, and unavailable action posture.",
+      standardId: "ds-aos-operations-cockpit-v1",
+      storybookId: "tcrn-design-system-patterns--aos-operations-cockpit-standard",
+      evidence: [
+        "Cockpit standard",
+        "Local preview",
+        "Service host retained"
+      ],
+      workItems: [
+        {
+          id: "cockpit-shell",
+          title: "Cockpit shell and status lane",
+          state: "current",
+          owner: "Workspace team"
+        },
+        {
+          id: "work-index",
+          title: "Work queue and selected detail",
+          state: "current",
+          owner: "Product surface"
+        },
+        {
+          id: "action-posture",
+          title: "Unavailable action posture",
+          state: "blocked",
+          owner: "Local preview"
+        }
+      ],
+      detailTitle: "Selected operation detail",
+      detailItems: [
+        { key: "selection", label: "Selection", value: "Cockpit shell and status lane" },
+        { key: "standard", label: "Design standard", value: "AOS operations cockpit standard" },
+        { key: "execution", label: "Execution", value: "Local preview only" },
+        { key: "boundary", label: "Boundary", value: "Live actions remain disabled" }
+      ],
+      postureItems: [
+        { key: "surface", label: "Fresh surface", value: "Operations Cockpit foundation" },
+        { key: "design", label: "Storybook reference", value: "Cockpit standard v1" },
+        { key: "release", label: "Release", value: "Not enabled" },
+        { key: "live", label: "Live actions", value: "Not enabled" }
+      ],
+      actions: [
+        {
+          label: "Refresh workspace",
+          reason: "Refresh stays disabled until the fresh cockpit surface is connected to its rebuilt data source."
+        },
+        {
+          label: "Open work queue",
+          reason: "Work queue drill-through opens after the fresh cockpit surface expands beyond this starting shell."
+        },
+        {
+          label: "Run live action",
+          reason: "Live actions stay disabled while the fresh cockpit surface remains in local preview."
+        }
+      ]
+    },
     checklist: checklistRows,
     noClaims: {
       productAcceptance: false,

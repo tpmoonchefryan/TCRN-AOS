@@ -22,6 +22,8 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
       const html = await fetch(`${service.url}${target}`).then((response) => response.text());
       assert.match(html, /data-surface="aos-rebuild-workspace"/, `${target} serves rebuild baseline`);
       assert.match(html, /AOS Frontend Replacement Workspace/, `${target} exposes replacement heading`);
+      assert.match(html, /Operations cockpit starting surface/, `${target} exposes the first fresh cockpit surface`);
+      assert.match(html, /Operations cockpit starting work/, `${target} exposes cockpit work index`);
       assert.match(html, /Retired frontend inventory/, `${target} exposes retirement inventory`);
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
     }

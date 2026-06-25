@@ -3,7 +3,9 @@ import { renderToStaticMarkup } from "react-dom/server";
 import {
   Badge,
   Button,
+  DetailDrawer,
   EvidenceStrip,
+  GateReadinessPanel,
   Heading,
   KeyValueList,
   LinkButton,
@@ -15,9 +17,10 @@ import {
   Surface,
   TableShell,
   Text,
-  TopBar
+  TopBar,
+  WorkIndex
 } from "@tcrn/ui-react";
-import type { RebuildBaselineModel } from "./rebuild-baseline-data.js";
+import type { RebuildBaselineModel, RebuildCockpitStartModel } from "./rebuild-baseline-data.js";
 
 const createElement = React.createElement as unknown as (type: unknown, props?: Record<string, unknown> | null, ...children: unknown[]) => React.ReactElement;
 
@@ -207,6 +210,101 @@ function renderSummary(model: RebuildBaselineModel) {
   );
 }
 
+function renderCockpitStart(model: RebuildCockpitStartModel) {
+  return createElement(
+    "section",
+    { className: "rebuild-baseline__cockpit-start", "data-region": "cockpit-start" },
+    createElement(
+      "div",
+      { className: "rebuild-baseline__cockpit-grid" },
+      createElement(
+        Surface,
+        { ...packageAttrs("Surface", { className: "rebuild-baseline__cockpit-surface" }) },
+        createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "First fresh surface"),
+        createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, model.title),
+        createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.summary),
+        createElement(
+          "div",
+          packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
+          createElement(EvidenceStrip, { items: [...model.evidence] })
+        ),
+        createElement(
+          "div",
+          packageAttrs("WorkIndex", { "data-region": "cockpit-work-index" }),
+          createElement(WorkIndex, {
+            rows: model.workItems.map((item) => ({
+              id: item.id,
+              title: item.title,
+              state: { state: item.state },
+              owner: item.owner
+            })),
+            label: "Operations cockpit starting work"
+          })
+        )
+      ),
+      createElement(
+        "div",
+        { className: "rebuild-baseline__cockpit-side" },
+        createElement(
+          "div",
+          packageAttrs("ReadbackPanel"),
+          createElement(ReadbackPanel, { title: "Cockpit standard reference" },
+            renderKeyValueList([
+              { key: "standard", label: "Standard id", value: model.standardId },
+              { key: "storybook", label: "Storybook id", value: model.storybookId },
+              { key: "posture", label: "Workspace posture", value: "Local preview" }
+            ])
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("DetailDrawer", { "data-region": "cockpit-detail" }),
+          createElement(DetailDrawer, { title: model.detailTitle, open: true },
+            renderKeyValueList(model.detailItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              value: item.value
+            }))),
+            createElement(
+              "div",
+              { className: "rebuild-baseline__action-list" },
+              model.actions.map((action) =>
+                createElement(Button, {
+                  ...packageAttrs("Button", { key: action.label }),
+                  disabled: true,
+                  disabledReason: action.reason
+                }, action.label)
+              )
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("GateReadinessPanel"),
+          createElement(GateReadinessPanel, {
+            state: {
+              state: "blocked",
+              label: "Unavailable",
+              description: "Live execution remains unavailable while the fresh cockpit surface is rebuilt inside the replacement workspace."
+            }
+          })
+        ),
+        createElement(
+          "div",
+          packageAttrs("ReadbackPanel"),
+          createElement(ReadbackPanel, { title: "Cockpit posture" },
+            renderKeyValueList(model.postureItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              value: item.value
+            })))
+          )
+        )
+      )
+    )
+  );
+}
+
 function renderChecklist(model: RebuildBaselineModel) {
   return createElement(
     "section",
@@ -314,6 +412,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         { className: "rebuild-baseline__content", "data-region": "rebuild-shell" },
         renderTopbar(model),
         renderSummary(model),
+        renderCockpitStart(model.cockpitStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()
