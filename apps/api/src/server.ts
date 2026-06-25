@@ -80,9 +80,24 @@ function handleRequest(
     "/conference",
     "/conference.html",
     "/apps/web/static/conference.html",
+    "/gateway-adapter",
+    "/gateway-adapter.html",
+    "/apps/web/static/gateway-adapter.html",
     "/dependency-console",
     "/dependency-console.html",
-    "/apps/web/static/dependency-console.html"
+    "/apps/web/static/dependency-console.html",
+    "/resource-library",
+    "/resource-library.html",
+    "/apps/web/static/resource-library.html",
+    "/knowledge-modules",
+    "/knowledge-modules.html",
+    "/apps/web/static/knowledge-modules.html",
+    "/admin-access",
+    "/admin-access.html",
+    "/apps/web/static/admin-access.html",
+    "/github-release-linkage",
+    "/github-release-linkage.html",
+    "/apps/web/static/github-release-linkage.html"
   ]);
 
   if (retiredFrontendAliases.has(path)) {

@@ -19,7 +19,12 @@ export const rebuildBaselineRoutes = [
   "/ai-employee.html",
   "/gate-queue.html",
   "/conference.html",
-  "/dependency-console.html"
+  "/gateway-adapter.html",
+  "/dependency-console.html",
+  "/resource-library.html",
+  "/knowledge-modules.html",
+  "/admin-access.html",
+  "/github-release-linkage.html"
 ] as const;
 
 export const requiredRebuildBaselineSelectors = [
@@ -1385,6 +1390,11 @@ function presentAlias(value: string): string {
   if (value.includes("ai-employee")) return "AI Employee";
   if (value.includes("gate-queue")) return "Gate Queue";
   if (value.includes("conference")) return "Conference";
+  if (value.includes("gateway-adapter")) return "Gateway / Adapter";
   if (value.includes("dependency-console")) return "Dependency Console";
+  if (value.includes("resource-library")) return "Resource Library";
+  if (value.includes("knowledge-modules")) return "Knowledge Modules";
+  if (value.includes("admin-access")) return "Admin / Access";
+  if (value.includes("github-release-linkage")) return "GitHub Release Linkage";
   return "Replacement workspace";
 }

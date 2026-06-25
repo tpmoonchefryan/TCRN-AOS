@@ -65,8 +65,21 @@ test("Rebuild baseline model now represents the reset shell plus cockpit, docs, 
     "/ai-employee.html",
     "/gate-queue.html",
     "/conference.html",
-    "/dependency-console.html"
+    "/gateway-adapter.html",
+    "/dependency-console.html",
+    "/resource-library.html",
+    "/knowledge-modules.html",
+    "/admin-access.html",
+    "/github-release-linkage.html"
   ]);
+});
+
+test("Rebuild baseline recognizes later rebuilt module alias routes as active workspace entries", () => {
+  assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentAliasLabel, "Gateway / Adapter");
+  assert.equal(createRebuildBaselineModel("/resource-library.html").currentAliasLabel, "Resource Library");
+  assert.equal(createRebuildBaselineModel("/knowledge-modules.html").currentAliasLabel, "Knowledge Modules");
+  assert.equal(createRebuildBaselineModel("/admin-access.html").currentAliasLabel, "Admin / Access");
+  assert.equal(createRebuildBaselineModel("/github-release-linkage.html").currentAliasLabel, "GitHub Release Linkage");
 });
 
 test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, gateway-adapter, dependency-console, resource-library, knowledge-modules, admin-access, and GitHub release-linkage fresh slices while omitting later sections", () => {

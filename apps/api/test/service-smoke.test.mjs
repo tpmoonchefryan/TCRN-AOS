@@ -13,7 +13,12 @@ const retiredFrontendTargets = [
   "/ai-employee.html",
   "/gate-queue.html",
   "/conference.html",
-  "/dependency-console.html"
+  "/gateway-adapter.html",
+  "/dependency-console.html",
+  "/resource-library.html",
+  "/knowledge-modules.html",
+  "/admin-access.html",
+  "/github-release-linkage.html"
 ];
 
 test("local service now serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, gateway-adapter, dependency-console, resource-library, knowledge-modules, admin-access, and GitHub release-linkage slices while APIs remain available", async () => {
