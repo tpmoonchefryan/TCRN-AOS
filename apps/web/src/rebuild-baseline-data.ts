@@ -11,7 +11,6 @@ export const rebuildBaselineStorybookIds = [
 ] as const;
 
 export const rebuildBaselineRoutes = [
-  "/project-workspace.html",
   "/initiative-detail.html",
   "/ai-employee.html",
   "/gate-queue.html",
@@ -80,7 +79,7 @@ const checklistRows: RebuildChecklistRow[] = [
   row("operations-cockpit", "Operations Cockpit", "reopened", "DS cockpit standard", "First rebuilt surface is active again from the reset baseline."),
   row("docs-readiness", "Docs Readiness", "reopened", "DS docs readiness standard", "Docs readiness is active again from the reset baseline."),
   row("product-design", "Product Design target set", "reopened", "DS target-set standard", "Product design target set is active again from the reset baseline."),
-  row("project-workspace", "Project Workspace", "rebuild_queued", "Total-scope checklist", "Standalone workbench is queued for rebuild from the new baseline."),
+  row("project-workspace", "Project Workspace", "reopened", "DS project workspace standard", "Project workspace is active again from the reset baseline."),
   row("initiative-detail", "Initiative Detail", "rebuild_queued", "Total-scope checklist", "Ticket drill-through will restart from the new baseline."),
   row("ai-employee", "AI Employee", "rebuild_queued", "Total-scope checklist", "Profile surfaces will restart from the new baseline."),
   row("gate-queue", "Gate Queue", "rebuild_queued", "Total-scope checklist", "Approvals and gate work order will restart from the new baseline."),

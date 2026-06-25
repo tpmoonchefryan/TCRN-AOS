@@ -9,6 +9,7 @@ import {
 import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
 import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
+import { renderProjectWorkspaceHtml } from "../../web/src/project-workspace-view.js";
 import { renderRebuildBaselineHtml } from "../../web/src/rebuild-baseline-view.js";
 import { apiHealthReadback, createAosApiApp } from "./index.js";
 
@@ -97,11 +98,19 @@ function handleRequest(
     return;
   }
 
-  const rebuildAliases = new Set([
-    "/",
+  const projectWorkspaceAliases = new Set([
     "/project-workspace",
     "/project-workspace.html",
-    "/apps/web/static/project-workspace.html",
+    "/apps/web/static/project-workspace.html"
+  ]);
+
+  if (projectWorkspaceAliases.has(path)) {
+    sendHtml(request, response, renderProjectWorkspaceHtml());
+    return;
+  }
+
+  const rebuildAliases = new Set([
+    "/",
     "/initiative-detail",
     "/initiative-detail.html",
     "/apps/web/static/initiative-detail.html",
