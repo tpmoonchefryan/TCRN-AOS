@@ -53,15 +53,15 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='conference-start']",
   "[data-region='conference-list']",
   "[data-region='conference-detail']",
+  "[data-region='dependency-console-start']",
+  "[data-region='dependency-console-list']",
+  "[data-region='dependency-console-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
 ] as const;
 
 export const forbiddenRebuildBaselineFreshSectionSelectors = [
-  "[data-region='dependency-console-start']",
-  "[data-region='dependency-console-list']",
-  "[data-region='dependency-console-detail']",
   "[data-region='resource-library-start']",
   "[data-region='resource-library-list']",
   "[data-region='resource-library-detail']"
@@ -470,7 +470,7 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
       "packages/db runtime fixture and migrations",
       "local service policy, health, and service endpoints"
     ],
-    selectedRebuiltStartingSlice: "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-foundation",
+    selectedRebuiltStartingSlice: "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-dependency-console-foundation",
     cockpitStart: {
       title: "Operations cockpit starting surface",
       summary: "The first fresh rebuilt surface starts here: a DS-aligned cockpit shell for local workspace status, work items, and unavailable action posture.",

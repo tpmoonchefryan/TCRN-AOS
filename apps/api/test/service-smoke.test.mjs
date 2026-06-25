@@ -16,7 +16,7 @@ const retiredFrontendTargets = [
   "/dependency-console.html"
 ];
 
-test("local service now serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, and conference slices while APIs remain available", async () => {
+test("local service now serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, and dependency-console slices while APIs remain available", async () => {
   const service = await startAosLocalServiceProof();
   try {
     for (const target of retiredFrontendTargets) {
@@ -39,9 +39,11 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
       assert.match(html, /Gate queue rows/, `${target} exposes the gate queue rows`);
       assert.match(html, /Conference starting surface/, `${target} exposes the conference slice`);
       assert.match(html, /Conference list/, `${target} exposes the conference list`);
+      assert.match(html, /Dependency console starting surface/, `${target} exposes the dependency console slice`);
+      assert.match(html, /Dependency governance rows/, `${target} exposes the dependency console rows`);
       assert.match(html, /Retired frontend inventory/, `${target} exposes retired inventory`);
       assert.match(html, /Retired served scope/, `${target} exposes retired served scope`);
-      assert.doesNotMatch(html, /Dependency console starting surface|Resource library starting surface|Dependency governance rows|Resource library rows/i, `${target} still omits later fresh product sections`);
+      assert.doesNotMatch(html, /Resource library starting surface|Resource library rows/i, `${target} still omits later fresh product sections`);
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
     }
 
