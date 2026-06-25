@@ -26,6 +26,7 @@ import {
   WorkIndex
 } from "@tcrn/ui-react";
 import type {
+  RebuildGitHubReleaseLinkageModel,
   RebuildAdminAccessModel,
   RebuildResourceLibraryModel,
   RebuildKnowledgeModulesModel,
@@ -239,7 +240,8 @@ const futureFreshSectionRenderers = [
   renderDependencyConsoleStart,
   renderResourceLibraryStart,
   renderKnowledgeModulesStart,
-  renderAdminAccessStart
+  renderAdminAccessStart,
+  renderGitHubReleaseLinkageStart
 ];
 void futureFreshSectionRenderers;
 
@@ -1387,6 +1389,94 @@ function renderAdminAccessStart(model: RebuildAdminAccessModel) {
   );
 }
 
+function renderGitHubReleaseLinkageStart(model: RebuildGitHubReleaseLinkageModel) {
+  return createElement(
+    "section",
+    { className: "rebuild-baseline__github-release-linkage-start", "data-region": "github-release-linkage-start" },
+    createElement(
+      "div",
+      { className: "rebuild-baseline__cockpit-grid" },
+      createElement(
+        Surface,
+        { ...packageAttrs("Surface", { className: "rebuild-baseline__cockpit-surface" }) },
+        createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Next fresh surface"),
+        createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, model.title),
+        createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.summary),
+        createElement(
+          "div",
+          packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
+          createElement(EvidenceStrip, { items: [...model.evidence] })
+        ),
+        createElement(
+          "div",
+          packageAttrs("TableShell", { "data-region": "github-release-linkage-list" }),
+          createElement(TableShell, {
+            label: "GitHub release linkage rows",
+            columns: [
+              { key: "title", label: "Linkage area" },
+              { key: "repo", label: "Reference" },
+              { key: "posture", label: "Posture" },
+              { key: "blocker", label: "Blocker" },
+              { key: "nextAction", label: "Next action" },
+              { key: "status", label: "Status" }
+            ],
+            rows: model.rows.map((row) => ({
+              title: row.title,
+              repo: row.repo,
+              posture: row.posture,
+              blocker: row.blocker,
+              nextAction: row.nextAction,
+              status: createElement(StatusBadge, {
+                ...packageAttrs("StatusBadge"),
+                state: row.status === "blocked"
+                  ? { state: "blocked" }
+                  : { state: "local_only", label: "Current state" }
+              })
+            }))
+          })
+        )
+      ),
+      createElement(
+        "div",
+        { className: "rebuild-baseline__cockpit-side" },
+        createElement(
+          "div",
+          packageAttrs("DetailDrawer", { "data-region": "github-release-linkage-detail" }),
+          createElement(DetailDrawer, { title: model.detailTitle, open: true },
+            renderKeyValueList(model.detailItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              value: item.value
+            }))),
+            createElement(
+              "div",
+              { className: "rebuild-baseline__action-list" },
+              model.actions.map((action) =>
+                createElement(Button, {
+                  ...packageAttrs("Button", { key: action.label }),
+                  disabled: true,
+                  disabledReason: action.reason
+                }, action.label)
+              )
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("GateReadinessPanel"),
+          createElement(GateReadinessPanel, {
+            state: {
+              state: "blocked",
+              label: "Unavailable",
+              description: "GitHub mutation, release creation, and CI updates stay unavailable while the release linkage surface remains inside the shared replacement shell."
+            }
+          })
+        )
+      )
+    )
+  );
+}
+
 function renderChecklist(model: RebuildBaselineModel) {
   return createElement(
     "section",
@@ -1506,6 +1596,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         renderResourceLibraryStart(model.resourceLibraryStart),
         renderKnowledgeModulesStart(model.knowledgeModulesStart),
         renderAdminAccessStart(model.adminAccessStart),
+        renderGitHubReleaseLinkageStart(model.githubReleaseLinkageStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()

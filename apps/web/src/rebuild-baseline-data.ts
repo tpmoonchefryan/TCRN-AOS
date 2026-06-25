@@ -65,6 +65,9 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='admin-access-start']",
   "[data-region='admin-access-list']",
   "[data-region='admin-access-detail']",
+  "[data-region='github-release-linkage-start']",
+  "[data-region='github-release-linkage-list']",
+  "[data-region='github-release-linkage-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
@@ -463,6 +466,33 @@ export interface RebuildAdminAccessModel {
   actions: readonly RebuildProjectWorkspaceAction[];
 }
 
+export interface RebuildGitHubReleaseLinkageRow {
+  title: string;
+  repo: string;
+  posture: string;
+  blocker: string;
+  nextAction: string;
+  status: "current" | "blocked";
+}
+
+export interface RebuildGitHubReleaseLinkageDetailItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildGitHubReleaseLinkageModel {
+  title: string;
+  summary: string;
+  standardIds: readonly string[];
+  storybookIds: readonly string[];
+  evidence: readonly string[];
+  rows: readonly RebuildGitHubReleaseLinkageRow[];
+  detailTitle: string;
+  detailItems: readonly RebuildGitHubReleaseLinkageDetailItem[];
+  actions: readonly RebuildProjectWorkspaceAction[];
+}
+
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
@@ -483,6 +513,7 @@ export interface RebuildBaselineModel {
   resourceLibraryStart: RebuildResourceLibraryModel;
   knowledgeModulesStart: RebuildKnowledgeModulesModel;
   adminAccessStart: RebuildAdminAccessModel;
+  githubReleaseLinkageStart: RebuildGitHubReleaseLinkageModel;
   checklist: RebuildChecklistRow[];
   noClaims: {
     productAcceptance: false;
@@ -506,7 +537,8 @@ const checklistRows: RebuildChecklistRow[] = [
   row("dependency-console", "Dependency Console", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
   row("resource-library", "Resource Library", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."),
   row("knowledge-modules", "Knowledge Modules", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."),
-  row("admin-access", "Admin / Access", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired.")
+  row("admin-access", "Admin / Access", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."),
+  row("github-release-linkage", "GitHub Release Linkage", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired.")
 ];
 
 export function createRebuildBaselineModel(currentAlias: string): RebuildBaselineModel {
@@ -532,7 +564,7 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
       "packages/db runtime fixture and migrations",
       "local service policy, health, and service endpoints"
     ],
-    selectedRebuiltStartingSlice: "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-dependency-console-resource-library-knowledge-modules-admin-access-foundation",
+    selectedRebuiltStartingSlice: "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-dependency-console-resource-library-knowledge-modules-admin-access-github-workflow-sync-release-linkage-foundation",
     cockpitStart: {
       title: "Operations cockpit starting surface",
       summary: "The first fresh rebuilt surface starts here: a DS-aligned cockpit shell for local workspace status, work items, and unavailable action posture.",
@@ -1187,6 +1219,59 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
         {
           label: "Export audit log",
           reason: "Audit export remains unavailable while the admin and access surface stays in local preview."
+        }
+      ]
+    },
+    githubReleaseLinkageStart: {
+      title: "GitHub release linkage starting surface",
+      summary: "The next fresh rebuilt surface adds a DS-aligned release-linkage workspace for repository metadata, PR and CI posture, and blocked release follow-through inside the shared replacement shell.",
+      standardIds: ["ds-aos-docs-readiness-v1", "ds-aos-target-set-v1"],
+      storybookIds: [
+        "tcrn-design-system-patterns--aos-docs-readiness-standard",
+        "tcrn-design-system-patterns--aos-product-design-target-set-standard"
+      ],
+      evidence: [
+        "Repository metadata",
+        "PR and CI posture",
+        "Local preview only"
+      ],
+      rows: [
+        {
+          title: "Repository metadata",
+          repo: "TCRN-AOS-local",
+          posture: "Read-only linkage",
+          blocker: "External review pending",
+          nextAction: "Inspect metadata detail",
+          status: "current"
+        },
+        {
+          title: "Release candidate linkage",
+          repo: "local-release-candidate",
+          posture: "Release follow-through disabled",
+          blocker: "Dependency and resource blockers",
+          nextAction: "Review linked blockers",
+          status: "blocked"
+        }
+      ],
+      detailTitle: "Selected release linkage",
+      detailItems: [
+        { key: "repo", label: "Repository", value: "TCRN-AOS-local" },
+        { key: "branch", label: "Branch", value: "main" },
+        { key: "posture", label: "Posture", value: "Repository, PR, and CI references remain local metadata only" },
+        { key: "boundary", label: "Boundary", value: "GitHub mutation and release creation remain unavailable" }
+      ],
+      actions: [
+        {
+          label: "Sync repository",
+          reason: "Repository sync remains unavailable while the release linkage surface stays inside the shared replacement shell."
+        },
+        {
+          label: "Create release",
+          reason: "Release creation remains unavailable while the release linkage surface stays in local preview."
+        },
+        {
+          label: "Update CI state",
+          reason: "CI mutation remains unavailable while the release linkage surface stays in local preview."
         }
       ]
     },

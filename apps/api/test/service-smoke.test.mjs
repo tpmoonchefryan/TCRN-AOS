@@ -16,7 +16,7 @@ const retiredFrontendTargets = [
   "/dependency-console.html"
 ];
 
-test("local service now serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, dependency-console, resource-library, knowledge-modules, and admin-access slices while APIs remain available", async () => {
+test("local service now serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, dependency-console, resource-library, knowledge-modules, admin-access, and GitHub release-linkage slices while APIs remain available", async () => {
   const service = await startAosLocalServiceProof();
   try {
     for (const target of retiredFrontendTargets) {
@@ -47,6 +47,8 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
       assert.match(html, /Knowledge module rows/, `${target} exposes the knowledge module rows`);
       assert.match(html, /Admin and access starting surface/, `${target} exposes the admin and access slice`);
       assert.match(html, /Admin and access rows/, `${target} exposes the admin and access rows`);
+      assert.match(html, /GitHub release linkage starting surface/, `${target} exposes the GitHub release linkage slice`);
+      assert.match(html, /GitHub release linkage rows/, `${target} exposes the GitHub release linkage rows`);
       assert.match(html, /Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired\./, `${target} exposes the active resource library checklist note`);
       assert.match(html, /Retired frontend inventory/, `${target} exposes retired inventory`);
       assert.match(html, /Retired served scope/, `${target} exposes retired served scope`);
