@@ -40,6 +40,10 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='project-workspace-start']",
   "[data-region='project-workspace-hierarchy']",
   "[data-region='project-workspace-detail']",
+  "[data-region='initiative-detail-start']",
+  "[data-region='initiative-detail-ticket']",
+  "[data-region='initiative-detail-links']",
+  "[data-region='initiative-detail-activity']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
@@ -214,6 +218,37 @@ export interface RebuildProjectWorkspaceModel {
   actions: readonly RebuildProjectWorkspaceAction[];
 }
 
+export interface RebuildInitiativeDetailLink {
+  type: string;
+  label: string;
+  target: string;
+  state: string;
+}
+
+export interface RebuildInitiativeDecision {
+  label: string;
+  summary: string;
+  state: string;
+}
+
+export interface RebuildInitiativeActivity {
+  label: string;
+  summary: string;
+}
+
+export interface RebuildInitiativeDetailModel {
+  title: string;
+  summary: string;
+  standardIds: readonly string[];
+  storybookIds: readonly string[];
+  evidence: readonly string[];
+  ticketItems: readonly RebuildProjectWorkspaceDetailItem[];
+  links: readonly RebuildInitiativeDetailLink[];
+  decisions: readonly RebuildInitiativeDecision[];
+  activity: readonly RebuildInitiativeActivity[];
+  actions: readonly RebuildProjectWorkspaceAction[];
+}
+
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
@@ -226,6 +261,7 @@ export interface RebuildBaselineModel {
   docsStart: RebuildDocsStartModel;
   targetSetStart: RebuildTargetSetModel;
   projectWorkspaceStart: RebuildProjectWorkspaceModel;
+  initiativeDetailStart: RebuildInitiativeDetailModel;
   checklist: RebuildChecklistRow[];
   noClaims: {
     productAcceptance: false;
@@ -487,6 +523,67 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
         {
           label: "Send owner action",
           reason: "Owner actions remain unavailable while the workspace surface stays in local preview."
+        }
+      ]
+    },
+    initiativeDetailStart: {
+      title: "Initiative detail starting surface",
+      summary: "The next fresh rebuilt surface adds a DS-aligned ticket drill-through for selected work, linked records, and activity notes inside the shared replacement shell.",
+      standardIds: ["ds-aos-target-set-v1", "ds-aos-operations-cockpit-v1"],
+      storybookIds: [
+        "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+        "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+      ],
+      evidence: [
+        "Selected ticket",
+        "Linked records",
+        "Local preview only"
+      ],
+      ticketItems: [
+        { key: "story", label: "Selected work", value: "Workspace shell and hierarchy" },
+        { key: "owner", label: "Owner", value: "Workspace team" },
+        { key: "freshness", label: "Freshness", value: "Local preview only" },
+        { key: "blocker", label: "Blocker", value: "No blocker recorded" }
+      ],
+      links: [
+        { type: "Gate", label: "Gate 1", target: "gate-work-order", state: "Linked" },
+        { type: "Evidence", label: "Evidence 1", target: "service-status", state: "Metadata available" },
+        { type: "Thread", label: "Thread 1", target: "workspace-team", state: "Local record" },
+        { type: "History", label: "History 1", target: "history-entry", state: "Local event" }
+      ],
+      decisions: [
+        {
+          label: "Decision 1",
+          summary: "Mutable ticket actions remain disabled while this drill-through stays in local preview.",
+          state: "Action disabled"
+        }
+      ],
+      activity: [
+        {
+          label: "Ticket note",
+          summary: "No blocker recorded."
+        },
+        {
+          label: "Linked records",
+          summary: "1 gate, 1 evidence record, and 1 thread record are linked."
+        },
+        {
+          label: "History",
+          summary: "1 local history event is linked."
+        }
+      ],
+      actions: [
+        {
+          label: "Edit ticket",
+          reason: "Ticket editing remains unavailable while the initiative detail surface stays inside the shared replacement shell."
+        },
+        {
+          label: "Request owner action",
+          reason: "Owner actions remain unavailable while the initiative detail surface stays in local preview."
+        },
+        {
+          label: "Publish update",
+          reason: "Publishing remains unavailable while the initiative detail surface stays inside the shared replacement shell."
         }
       ]
     },

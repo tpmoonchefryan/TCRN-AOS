@@ -30,7 +30,8 @@ import type {
   RebuildCockpitStartModel,
   RebuildDocsStartModel,
   RebuildTargetSetModel,
-  RebuildProjectWorkspaceModel
+  RebuildProjectWorkspaceModel,
+  RebuildInitiativeDetailModel
 } from "./rebuild-baseline-data.js";
 
 const createElement = React.createElement as unknown as (type: unknown, props?: Record<string, unknown> | null, ...children: unknown[]) => React.ReactElement;
@@ -633,6 +634,122 @@ function renderProjectWorkspaceStart(model: RebuildProjectWorkspaceModel) {
   );
 }
 
+function renderInitiativeDetailStart(model: RebuildInitiativeDetailModel) {
+  return createElement(
+    "section",
+    { className: "rebuild-baseline__initiative-detail-start", "data-region": "initiative-detail-start" },
+    createElement(
+      "div",
+      { className: "rebuild-baseline__cockpit-grid" },
+      createElement(
+        Surface,
+        { ...packageAttrs("Surface", { className: "rebuild-baseline__cockpit-surface" }) },
+        createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Next fresh surface"),
+        createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, model.title),
+        createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.summary),
+        createElement(
+          "div",
+          packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
+          createElement(EvidenceStrip, { items: [...model.evidence] })
+        ),
+        createElement(
+          "div",
+          packageAttrs("DetailDrawer", { "data-region": "initiative-detail-ticket" }),
+          createElement(DetailDrawer, { title: "Selected ticket", open: true },
+            renderKeyValueList(model.ticketItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              value: item.value
+            })))
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("TableShell", { "data-region": "initiative-detail-links" }),
+          createElement(TableShell, {
+            label: "Initiative detail linked records",
+            columns: [
+              { key: "type", label: "Type" },
+              { key: "label", label: "Label" },
+              { key: "target", label: "Target" },
+              { key: "state", label: "State" }
+            ],
+            rows: model.links.map((link) => ({
+              type: link.type,
+              label: link.label,
+              target: link.target,
+              state: link.state
+            }))
+          })
+        )
+      ),
+      createElement(
+        "div",
+        { className: "rebuild-baseline__cockpit-side", "data-region": "initiative-detail-activity" },
+        createElement(
+          "div",
+          packageAttrs("ReadbackPanel"),
+          createElement(ReadbackPanel, { title: "Decisions" },
+            createElement(
+              "div",
+              { className: "rebuild-baseline__activity-list" },
+              model.decisions.map((decision) =>
+                createElement(
+                  Surface,
+                  { ...packageAttrs("Surface", { key: decision.label }) },
+                  createElement(Badge, { ...packageAttrs("Badge"), tone: "neutral" }, decision.label),
+                  createElement(Text, { ...packageAttrs("Text", { className: "rebuild-baseline__strong-text" }) }, decision.state),
+                  createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, decision.summary)
+                )
+              )
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("ReadbackPanel"),
+          createElement(ReadbackPanel, { title: "Activity Notes" },
+            createElement(
+              "div",
+              { className: "rebuild-baseline__activity-list" },
+              model.activity.map((item) =>
+                createElement(
+                  Surface,
+                  { ...packageAttrs("Surface", { key: item.label }) },
+                  createElement(Badge, { ...packageAttrs("Badge"), tone: "neutral" }, item.label),
+                  createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, item.summary)
+                )
+              )
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("GateReadinessPanel"),
+          createElement(GateReadinessPanel, {
+            state: {
+              state: "blocked",
+              label: "Unavailable",
+              description: "Owner actions stay unavailable while the initiative detail surface remains inside the shared replacement shell."
+            }
+          })
+        ),
+        createElement(
+          "div",
+          { className: "rebuild-baseline__action-list" },
+          model.actions.map((action) =>
+            createElement(Button, {
+              ...packageAttrs("Button", { key: action.label }),
+              disabled: true,
+              disabledReason: action.reason
+            }, action.label)
+          )
+        )
+      )
+    )
+  );
+}
+
 function renderChecklist(model: RebuildBaselineModel) {
   return createElement(
     "section",
@@ -744,6 +861,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         renderDocsStart(model.docsStart),
         renderTargetSetStart(model.targetSetStart),
         renderProjectWorkspaceStart(model.projectWorkspaceStart),
+        renderInitiativeDetailStart(model.initiativeDetailStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()
