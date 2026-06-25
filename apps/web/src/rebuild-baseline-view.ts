@@ -31,7 +31,7 @@ export function renderRebuildBaselineHtml(currentAlias: string): string {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>TCRN AOS Frontend Reset Notice</title>
+    <title>TCRN AOS Rebuild Workspace</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='6'%20fill='%2308243b'/%3E%3Ctext%20x='16'%20y='21'%20font-size='12'%20text-anchor='middle'%20fill='%2314b8ad'%20font-family='Arial'%3EA%3C/text%3E%3C/svg%3E" />
     <style>${rebuildBaselineCss}</style>
   </head>

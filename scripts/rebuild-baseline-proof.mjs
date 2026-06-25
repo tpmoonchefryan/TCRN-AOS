@@ -246,7 +246,7 @@ const staticTargetsReadback = staticTargets.map((target) => {
     sha256: createHash("sha256").update(html).digest("hex"),
     bytes: Buffer.byteLength(html),
     hasBaselineSurface: html.includes('data-surface="aos-rebuild-workspace"'),
-    hasChecklist: html.includes("Retired frontend inventory")
+    hasChecklist: html.includes('data-region="rebuild-checklist"')
   };
 });
 

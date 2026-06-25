@@ -22,7 +22,7 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
     for (const target of retiredFrontendTargets) {
       const html = await fetch(`${service.url}${target}`).then((response) => response.text());
       assert.match(html, /data-surface="aos-rebuild-workspace"/, `${target} serves reset checkpoint`);
-      assert.match(html, /AOS Frontend Reset Notice/, `${target} exposes reset notice heading`);
+      assert.match(html, /AOS Rebuild Workspace/, `${target} exposes rebuild workspace heading`);
       assert.match(html, /Operations cockpit starting surface/, `${target} exposes the first fresh cockpit section`);
       assert.match(html, /Operations cockpit starting work/, `${target} exposes cockpit work index`);
       assert.match(html, /Docs readiness starting surface/, `${target} exposes the docs slice`);
@@ -52,8 +52,8 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
       assert.match(html, /GitHub release linkage starting surface/, `${target} exposes the GitHub release linkage slice`);
       assert.match(html, /GitHub release linkage rows/, `${target} exposes the GitHub release linkage rows`);
       assert.match(html, /Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired\./, `${target} exposes the active resource library checklist note`);
-      assert.match(html, /Retired frontend inventory/, `${target} exposes retired inventory`);
-      assert.match(html, /Retired served scope/, `${target} exposes retired served scope`);
+      assert.match(html, /Retired standalone inventory/, `${target} exposes retired inventory`);
+      assert.match(html, /Retired standalone scope/, `${target} exposes retired served scope`);
       assert.equal(Array.from(html.matchAll(/Fresh rebuild surface not started yet\./g)).length, 0, `${target} only keeps later queued checklist rows`);
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
     }

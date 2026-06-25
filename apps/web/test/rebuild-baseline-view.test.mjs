@@ -81,8 +81,8 @@ test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-
 
   assert.match(html, /data-ds-standard-ids="ds-aos-operations-cockpit-v1 ds-aos-docs-readiness-v1 ds-aos-target-set-v1"/);
   assert.match(html, /data-product-acceptance="false"/);
-  assert.match(html, />AOS Frontend Reset Notice</);
-  assert.match(html, />Served AOS frontend is unavailable</);
+  assert.match(html, />AOS Rebuild Workspace</);
+  assert.match(html, />AOS rebuilt workspace is active</);
   assert.match(html, />Operations cockpit starting surface</);
   assert.match(html, />Docs readiness starting surface</);
   assert.match(html, />Product design target-set starting surface</);
@@ -98,8 +98,8 @@ test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-
   assert.match(html, />Admin and access starting surface</);
   assert.match(html, />GitHub release linkage starting surface</);
   assert.match(html, /Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired\./);
-  assert.match(html, />Retired frontend inventory</);
-  assert.match(html, />Retired served scope</);
+  assert.match(html, />Retired standalone inventory</);
+  assert.match(html, />Retired standalone scope</);
 
   for (const selector of forbiddenRebuildBaselineFreshSectionSelectors) {
     const region = selector.match(/data-region='([^']+)'/)?.[1];

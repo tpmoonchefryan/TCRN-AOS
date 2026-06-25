@@ -93,7 +93,7 @@ function renderSidebar(model: RebuildBaselineModel) {
           href: "/",
           className: "rebuild-baseline__brand",
           "data-region": "brand-lockup",
-          "aria-label": "TCRN AOS Frontend Reset Notice"
+          "aria-label": "TCRN AOS Rebuild Workspace"
         }),
         variant: "quiet"
       },
@@ -102,7 +102,7 @@ function renderSidebar(model: RebuildBaselineModel) {
         "span",
         { className: "rebuild-baseline__brand-text" },
         createElement(Text, { ...packageAttrs("Text", { className: "rebuild-baseline__brand-kicker" }) }, "TCRN"),
-        createElement(Text, { ...packageAttrs("Text", { className: "rebuild-baseline__brand-name" }) }, "Reset Notice")
+        createElement(Text, { ...packageAttrs("Text", { className: "rebuild-baseline__brand-name" }) }, "Rebuild Workspace")
       )
     ),
     createElement(
@@ -152,7 +152,7 @@ function renderSidebar(model: RebuildBaselineModel) {
           "data-region": "rebuild-local-mode"
         })
       },
-      "Served frontend retired"
+      "Shared rebuilt workspace"
     )
   );
 }
@@ -166,27 +166,27 @@ function renderTopbar(model: RebuildBaselineModel) {
     }),
     createElement(TopBar, {
       productName: "TCRN AOS",
-      moduleName: "Reset Notice",
+      moduleName: "Rebuild Workspace",
       actions: createElement(
         "div",
         { className: "rebuild-baseline__actions" },
         createElement(StatusBadge, {
           ...packageAttrs("StatusBadge"),
-          state: { state: "blocked", label: "Retired" }
+          state: { state: "local_only", label: "Current" }
         }),
         createElement(Badge, { ...packageAttrs("Badge"), tone: "neutral" }, "Local preview"),
         createElement(Button, {
           ...packageAttrs("Button"),
           disabled: true,
-          disabledReason: "Publishing is unavailable while the frontend reset notice is active."
+          disabledReason: "Publishing remains unavailable while the rebuilt workspace stays in local preview."
         }, "Publish")
       )
     }),
     createElement(
       "div",
       { className: "rebuild-baseline__topbar-copy" },
-      createElement(Heading, { ...packageAttrs("Heading"), level: 1 }, "AOS Frontend Reset Notice"),
-      createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, `Normal product serving is retired for ${model.currentAliasLabel}.`)
+      createElement(Heading, { ...packageAttrs("Heading"), level: 1 }, "AOS Rebuild Workspace"),
+      createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, `Shared rebuilt workspace for ${model.currentAliasLabel}.`)
     )
   );
 }
@@ -198,18 +198,18 @@ function renderSummary(model: RebuildBaselineModel) {
     createElement(
       Surface,
       { ...packageAttrs("Surface", { className: "rebuild-baseline__hero" }) },
-      createElement(Badge, { ...packageAttrs("Badge"), tone: "warning" }, "Served frontend retired"),
-      createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, "Served AOS frontend is unavailable"),
-      createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, "These paths now serve a non-product reset notice while the next rebuild baseline is prepared from certified Storybook standards."),
+      createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Rebuilt workspace"),
+      createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, "AOS rebuilt workspace is active"),
+      createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, "These paths now open the shared rebuilt workspace while standalone surfaces remain retired."),
       createElement(
         "div",
         packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
         createElement(EvidenceStrip, {
           items: [
             `Standards: ${model.dsStandardIds.length}`,
-            "Retired aliases: 9",
+            "Single rebuilt shell",
             `Requested alias: ${model.currentAliasLabel}`,
-            "Served UI: Unavailable",
+            "Served UI: Local preview",
             "Backend service retained"
           ]
         })
@@ -219,11 +219,11 @@ function renderSummary(model: RebuildBaselineModel) {
       "div",
       packageAttrs("ReadbackPanel", { className: "rebuild-baseline__status" }),
       createElement(ReadbackPanel, {
-        title: "Reset status"
+        title: "Workspace status"
       },
       renderKeyValueList([
-        { key: "starting-module", label: "Reset state", value: "Frontend reset notice" },
-        { key: "surface-state", label: "Served frontend", value: "Unavailable for product use" },
+        { key: "starting-module", label: "Shell state", value: "Rebuilt workspace active" },
+        { key: "surface-state", label: "Served frontend", value: "Shared shell in local preview" },
         { key: "storyboard-source", label: "Design source", value: "Certified Storybook standards" },
         { key: "acceptance", label: "Acceptance", value: "Not enabled" }
       ]))
@@ -1574,7 +1574,7 @@ function renderChecklist(model: RebuildBaselineModel) {
     createElement(
       Surface,
       { ...packageAttrs("Surface") },
-      createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, "Retired frontend inventory"),
+      createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, "Retired standalone inventory"),
       createElement(
         "div",
         packageAttrs("TableShell"),
@@ -1607,7 +1607,7 @@ function renderBoundaries(model: RebuildBaselineModel) {
     createElement(
       Surface,
       { ...packageAttrs("Surface") },
-      createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, "Retired served scope"),
+      createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, "Retired standalone scope"),
       renderKeyValueList(model.replacedFrontendScope.map((label, index) => ({
           key: `replaced-${index}`,
           label: `Surface ${index + 1}`,
@@ -1637,9 +1637,9 @@ function renderActions() {
       "div",
       { className: "rebuild-baseline__action-list" },
       [
-        ["Open live workspace", "Live workspace entry is unavailable while the frontend reset notice is active."],
-        ["Start owner action", "Owner actions remain unavailable while the frontend reset notice is active."],
-        ["Publish module", "Publishing is unavailable while the frontend reset notice is active."]
+        ["Open live workspace", "Live workspace entry remains unavailable while the rebuilt workspace stays in local preview."],
+        ["Start owner action", "Owner actions remain unavailable while the rebuilt workspace stays in local preview."],
+        ["Publish module", "Publishing remains unavailable while the rebuilt workspace stays in local preview."]
       ].map(([label, reason]) =>
         createElement(Button, {
           ...packageAttrs("Button", { key: String(label) }),
