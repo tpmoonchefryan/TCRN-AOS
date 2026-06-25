@@ -62,6 +62,9 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='knowledge-modules-start']",
   "[data-region='knowledge-modules-list']",
   "[data-region='knowledge-modules-detail']",
+  "[data-region='admin-access-start']",
+  "[data-region='admin-access-list']",
+  "[data-region='admin-access-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
@@ -433,6 +436,33 @@ export interface RebuildKnowledgeModulesModel {
   actions: readonly RebuildProjectWorkspaceAction[];
 }
 
+export interface RebuildAdminAccessRow {
+  title: string;
+  permissions: string;
+  audit: string;
+  posture: string;
+  nextAction: string;
+  status: "current" | "blocked";
+}
+
+export interface RebuildAdminAccessDetailItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildAdminAccessModel {
+  title: string;
+  summary: string;
+  standardIds: readonly string[];
+  storybookIds: readonly string[];
+  evidence: readonly string[];
+  rows: readonly RebuildAdminAccessRow[];
+  detailTitle: string;
+  detailItems: readonly RebuildAdminAccessDetailItem[];
+  actions: readonly RebuildProjectWorkspaceAction[];
+}
+
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
@@ -452,6 +482,7 @@ export interface RebuildBaselineModel {
   dependencyConsoleStart: RebuildDependencyConsoleModel;
   resourceLibraryStart: RebuildResourceLibraryModel;
   knowledgeModulesStart: RebuildKnowledgeModulesModel;
+  adminAccessStart: RebuildAdminAccessModel;
   checklist: RebuildChecklistRow[];
   noClaims: {
     productAcceptance: false;
@@ -475,7 +506,7 @@ const checklistRows: RebuildChecklistRow[] = [
   row("dependency-console", "Dependency Console", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
   row("resource-library", "Resource Library", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."),
   row("knowledge-modules", "Knowledge Modules", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."),
-  row("admin-access", "Admin / Access", "rebuild_queued", "Total-scope checklist", "Fresh rebuild surface not started yet.")
+  row("admin-access", "Admin / Access", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired.")
 ];
 
 export function createRebuildBaselineModel(currentAlias: string): RebuildBaselineModel {
@@ -501,7 +532,7 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
       "packages/db runtime fixture and migrations",
       "local service policy, health, and service endpoints"
     ],
-    selectedRebuiltStartingSlice: "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-dependency-console-resource-library-knowledge-modules-foundation",
+    selectedRebuiltStartingSlice: "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-dependency-console-resource-library-knowledge-modules-admin-access-foundation",
     cockpitStart: {
       title: "Operations cockpit starting surface",
       summary: "The first fresh rebuilt surface starts here: a DS-aligned cockpit shell for local workspace status, work items, and unavailable action posture.",
@@ -1103,6 +1134,59 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
         {
           label: "Open review proposal",
           reason: "Review proposal updates remain unavailable while the knowledge modules surface stays in local preview."
+        }
+      ]
+    },
+    adminAccessStart: {
+      title: "Admin and access starting surface",
+      summary: "The next fresh rebuilt surface adds a DS-aligned admin workspace for access posture, role permissions, audit trail visibility, and blocked break-glass actions inside the shared replacement shell.",
+      standardIds: ["ds-aos-target-set-v1", "ds-aos-operations-cockpit-v1"],
+      storybookIds: [
+        "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+        "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+      ],
+      evidence: [
+        "Access posture",
+        "Audit trail",
+        "Local preview only"
+      ],
+      rows: [
+        {
+          title: "Role permissions",
+          permissions: "Read-only shell access",
+          audit: "Audit metadata present",
+          posture: "Admin updates disabled",
+          nextAction: "Inspect permission detail",
+          status: "current"
+        },
+        {
+          title: "Break-glass controls",
+          permissions: "Owner-only boundary",
+          audit: "Blocked escalation note",
+          posture: "Break-glass unavailable",
+          nextAction: "Review blocked controls",
+          status: "blocked"
+        }
+      ],
+      detailTitle: "Selected admin detail",
+      detailItems: [
+        { key: "surface", label: "Surface", value: "Role permissions" },
+        { key: "permissions", label: "Permissions", value: "Read-only shell access" },
+        { key: "audit", label: "Audit trail", value: "Audit metadata present" },
+        { key: "boundary", label: "Boundary", value: "Mutable admin and break-glass actions remain unavailable" }
+      ],
+      actions: [
+        {
+          label: "Update role access",
+          reason: "Admin updates remain unavailable while the admin and access surface stays inside the shared replacement shell."
+        },
+        {
+          label: "Open break-glass path",
+          reason: "Break-glass actions remain unavailable while the admin and access surface stays in local preview."
+        },
+        {
+          label: "Export audit log",
+          reason: "Audit export remains unavailable while the admin and access surface stays in local preview."
         }
       ]
     },
