@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   createRebuildBaselineModel,
+  forbiddenRebuildBaselineFreshSectionSelectors,
   forbiddenRebuildBaselineVisibleCopy,
   rebuildBaselineDsStandardIds,
   rebuildBaselineRoutes,
@@ -10,11 +11,11 @@ import {
   requiredRebuildBaselineSelectors
 } from "../../../dist/apps/web/src/rebuild-baseline-view.js";
 
-test("Rebuild baseline model resets the current AOS frontend to Storybook-first scope", () => {
+test("Rebuild baseline model now represents a hard-cut reset checkpoint", () => {
   const model = createRebuildBaselineModel("/operations-cockpit.html");
 
   assert.equal(model.currentAliasLabel, "Operations Cockpit");
-  assert.equal(model.selectedRebuiltStartingSlice, "storybook-first-replacement-workspace-shell");
+  assert.equal(model.selectedRebuiltStartingSlice, "frontend-reset-checkpoint");
   assert.equal(model.noClaims.productAcceptance, false);
   assert.equal(model.noClaims.finalMvpAcceptance, false);
   assert.equal(model.noClaims.releasePublication, false);
@@ -42,10 +43,9 @@ test("Rebuild baseline model resets the current AOS frontend to Storybook-first 
     "/conference.html",
     "/dependency-console.html"
   ]);
-  assert.ok(model.checklist.length >= 10);
 });
 
-test("Rebuild baseline HTML exposes the reset shell and removes old active surface assumptions", () => {
+test("Rebuild checkpoint HTML serves a non-product reset surface and omits fresh product sections", () => {
   const html = renderRebuildBaselineHtml("/operations-cockpit.html");
 
   for (const selector of requiredRebuildBaselineSelectors) {
@@ -54,27 +54,33 @@ test("Rebuild baseline HTML exposes the reset shell and removes old active surfa
     if (region) assert.ok(html.includes(`data-region="${region}"`), `production HTML includes ${selector}`);
     if (surface) assert.ok(html.includes(`data-surface="${surface}"`), `production HTML includes ${selector}`);
   }
+
   assert.match(html, /data-ds-standard-ids="ds-aos-operations-cockpit-v1 ds-aos-docs-readiness-v1 ds-aos-target-set-v1"/);
   assert.match(html, /data-product-acceptance="false"/);
-  assert.match(html, />AOS Frontend Replacement Workspace</);
-  assert.match(html, />Current served frontend has been retired</);
-  assert.match(html, />Operations cockpit starting surface</);
-  assert.match(html, />Docs readiness starting surface</);
-  assert.match(html, />Product design target-set starting surface</);
-  assert.match(html, />Project workspace starting surface</);
-  assert.match(html, />Initiative detail starting surface</);
-  assert.match(html, />AI employee starting surface</);
-  assert.match(html, />Gate queue starting surface</);
-  assert.match(html, />Conference starting surface</);
-  assert.match(html, />Dependency console starting surface</);
-  assert.match(html, />Resource library starting surface</);
+  assert.match(html, />AOS Frontend Reset Notice</);
+  assert.match(html, />Served AOS frontend is unavailable</);
   assert.match(html, />Retired frontend inventory</);
   assert.match(html, />Retired served scope</);
-  assert.doesNotMatch(html, />Active now</);
+
+  for (const selector of forbiddenRebuildBaselineFreshSectionSelectors) {
+    const region = selector.match(/data-region='([^']+)'/)?.[1];
+    if (region) {
+      assert.doesNotMatch(html, new RegExp(`data-region="${region}"`), `served checkpoint omits ${selector}`);
+    }
+  }
+
+  assert.doesNotMatch(
+    html,
+    /Operations cockpit starting surface|Docs readiness starting surface|Product design target-set starting surface|Project workspace starting surface|Initiative detail starting surface|AI employee starting surface|Gate queue starting surface|Conference starting surface|Dependency console starting surface|Resource library starting surface/
+  );
+  assert.doesNotMatch(
+    html,
+    /Operations cockpit starting work|Docs inspection rows|AOS-wide surface index|Project workspace current work|Initiative detail linked records|AI employee roster|Gate queue rows|Conference list|Dependency governance rows|Resource library rows/
+  );
   assert.doesNotMatch(productVisibleAndA11yText(html), productVisibleInternalTermsPattern);
 });
 
-test("Rebuild baseline checklist includes table layout rules for desktop and mobile readability", () => {
+test("Rebuild checkpoint keeps the checklist readable on desktop and mobile", () => {
   const html = renderRebuildBaselineHtml("/operations-cockpit.html");
 
   assert.match(
@@ -95,7 +101,7 @@ test("Rebuild baseline checklist includes table layout rules for desktop and mob
   );
 });
 
-test("Rebuild baseline renders package-backed public Design System components", () => {
+test("Rebuild checkpoint still renders package-backed Design System primitives", () => {
   const html = renderRebuildBaselineHtml("/project-workspace.html");
   const requiredPackageComponents = [
     "Surface",
@@ -109,14 +115,10 @@ test("Rebuild baseline renders package-backed public Design System components", 
     "StatusBadge",
     "EvidenceStrip",
     "ReadbackPanel",
-    "DetailDrawer",
-    "FilterBar",
-    "GateReadinessPanel",
     "Text",
     "Heading",
     "KeyValueList",
-    "TableShell",
-    "WorkIndex"
+    "TableShell"
   ];
 
   for (const component of requiredPackageComponents) {
@@ -124,7 +126,7 @@ test("Rebuild baseline renders package-backed public Design System components", 
   }
 });
 
-test("Rebuild baseline visible copy avoids internal workflow vocabulary", () => {
+test("Rebuild checkpoint visible copy avoids internal workflow vocabulary", () => {
   const html = renderRebuildBaselineHtml("/dependency-console.html");
   const visibleText = productVisibleAndA11yText(html).toLowerCase();
   const hits = forbiddenRebuildBaselineVisibleCopy.filter((phrase) => visibleText.includes(phrase));
@@ -132,135 +134,7 @@ test("Rebuild baseline visible copy avoids internal workflow vocabulary", () => 
   assert.deepEqual(hits, []);
 });
 
-test("Rebuild baseline exposes the first fresh cockpit surface inside the replacement workspace", () => {
-  const html = renderRebuildBaselineHtml("/operations-cockpit.html");
-
-  assert.match(html, /data-region="cockpit-start"/);
-  assert.match(html, /data-region="cockpit-work-index"/);
-  assert.match(html, /data-region="cockpit-detail"/);
-  assert.match(html, /Cockpit standard reference/);
-  assert.match(html, /Operations cockpit starting work/);
-  assert.match(html, /First fresh surface/);
-  assert.match(html, /data-package-runtime-component="GateReadinessPanel"/);
-  assert.match(html, /data-package-runtime-component="DetailDrawer"/);
-});
-
-test("Rebuild baseline exposes the next fresh docs readiness surface inside the replacement workspace", () => {
-  const html = renderRebuildBaselineHtml("/docs-search-release-readiness.html");
-
-  assert.match(html, /data-region="docs-start"/);
-  assert.match(html, /data-region="docs-filter"/);
-  assert.match(html, /data-region="docs-detail"/);
-  assert.match(html, /Docs readiness starting surface/);
-  assert.match(html, /Docs inspection rows/);
-  assert.match(html, /Docs readiness standard reference/);
-  assert.match(html, /data-package-runtime-component="FilterBar"/);
-  assert.match(html, /class="tcrn-search-input"/);
-  assert.match(html, /class="tcrn-select"/);
-  assert.match(html, /class="tcrn-field"/);
-});
-
-test("Rebuild baseline exposes the next fresh product design target-set surface inside the replacement workspace", () => {
-  const html = renderRebuildBaselineHtml("/aos-wide-product-design.html");
-
-  assert.match(html, /data-region="target-set-start"/);
-  assert.match(html, /data-region="target-set-modules"/);
-  assert.match(html, /data-region="target-set-detail"/);
-  assert.match(html, /Product design target-set starting surface/);
-  assert.match(html, /AOS-wide surface index/);
-  assert.match(html, /Target-set standard reference/);
-  assert.match(html, /Target path and module cards/);
-  assert.match(html, /Disabled gate panel/);
-});
-
-test("Rebuild baseline exposes the next fresh project workspace surface inside the replacement workspace", () => {
-  const html = renderRebuildBaselineHtml("/project-workspace.html");
-
-  assert.match(html, /data-region="project-workspace-start"/);
-  assert.match(html, /data-region="project-workspace-hierarchy"/);
-  assert.match(html, /data-region="project-workspace-detail"/);
-  assert.match(html, /Project workspace starting surface/);
-  assert.match(html, /Project workspace current work/);
-  assert.match(html, /Project workspace standards/);
-  assert.match(html, /Workspace shell and hierarchy/);
-  assert.match(html, /Send owner action/);
-});
-
-test("Rebuild baseline exposes the next fresh initiative detail surface inside the replacement workspace", () => {
-  const html = renderRebuildBaselineHtml("/initiative-detail.html");
-
-  assert.match(html, /data-region="initiative-detail-start"/);
-  assert.match(html, /data-region="initiative-detail-ticket"/);
-  assert.match(html, /data-region="initiative-detail-links"/);
-  assert.match(html, /data-region="initiative-detail-activity"/);
-  assert.match(html, /Initiative detail starting surface/);
-  assert.match(html, /Initiative detail linked records/);
-  assert.match(html, /Selected ticket/);
-  assert.match(html, /Activity Notes/);
-  assert.match(html, /Request owner action/);
-});
-
-test("Rebuild baseline exposes the next fresh AI employee surface inside the replacement workspace", () => {
-  const html = renderRebuildBaselineHtml("/ai-employee.html");
-
-  assert.match(html, /data-region="ai-employee-start"/);
-  assert.match(html, /data-region="ai-employee-roster"/);
-  assert.match(html, /data-region="ai-employee-detail"/);
-  assert.match(html, /AI employee starting surface/);
-  assert.match(html, /AI employee roster/);
-  assert.match(html, /Selected profile/);
-  assert.match(html, /Reassign work/);
-});
-
-test("Rebuild baseline exposes the next fresh gate queue surface inside the replacement workspace", () => {
-  const html = renderRebuildBaselineHtml("/gate-queue.html");
-
-  assert.match(html, /data-region="gate-queue-start"/);
-  assert.match(html, /data-region="gate-queue-list"/);
-  assert.match(html, /data-region="gate-queue-detail"/);
-  assert.match(html, /Gate queue starting surface/);
-  assert.match(html, /Gate queue rows/);
-  assert.match(html, /Selected gate/);
-  assert.match(html, /Approve gate/);
-});
-
-test("Rebuild baseline exposes the next fresh conference surface inside the replacement workspace", () => {
-  const html = renderRebuildBaselineHtml("/conference.html");
-
-  assert.match(html, /data-region="conference-start"/);
-  assert.match(html, /data-region="conference-list"/);
-  assert.match(html, /data-region="conference-detail"/);
-  assert.match(html, /Conference starting surface/);
-  assert.match(html, /Conference list/);
-  assert.match(html, /Selected conference/);
-  assert.match(html, /Send invite/);
-});
-
-test("Rebuild baseline exposes the next fresh dependency console surface inside the replacement workspace", () => {
-  const html = renderRebuildBaselineHtml("/dependency-console.html");
-
-  assert.match(html, /data-region="dependency-console-start"/);
-  assert.match(html, /data-region="dependency-console-list"/);
-  assert.match(html, /data-region="dependency-console-detail"/);
-  assert.match(html, /Dependency console starting surface/);
-  assert.match(html, /Dependency governance rows/);
-  assert.match(html, /Selected dependency/);
-  assert.match(html, /Approve dependency/);
-});
-
-test("Rebuild baseline exposes the next fresh resource library surface inside the replacement workspace", () => {
-  const html = renderRebuildBaselineHtml("/dependency-console.html");
-
-  assert.match(html, /data-region="resource-library-start"/);
-  assert.match(html, /data-region="resource-library-list"/);
-  assert.match(html, /data-region="resource-library-detail"/);
-  assert.match(html, /Resource library starting surface/);
-  assert.match(html, /Resource library rows/);
-  assert.match(html, /Selected resource/);
-  assert.match(html, /Materialize resource/);
-});
-
-test("Rebuild baseline nav uses DS icons and disabled reasons for reference and retired modules", () => {
+test("Rebuild checkpoint nav uses DS icons and disabled reasons", () => {
   const html = renderRebuildBaselineHtml("/conference.html");
   const navItems = Array.from(html.matchAll(/<a\b(?=[^>]*data-package-runtime-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g));
   const disabledCount = navItems.filter((match) => match[1].includes('aria-disabled="true"')).length;

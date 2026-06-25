@@ -5,6 +5,7 @@ import { createRequire } from "node:module";
 import { dirname, join, relative } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
+  forbiddenRebuildBaselineFreshSectionSelectors,
   forbiddenRebuildBaselineVisibleCopy,
   rebuildBaselineRoutes,
   renderRebuildBaselineHtml,
@@ -100,6 +101,7 @@ try {
     const screenshotBytes = readFileSync(screenshotPath);
     const domReadback = await page.evaluate((args) => {
       const selectorProof = args.requiredSelectors.map((selector) => ({ selector, present: Boolean(document.querySelector(selector)) }));
+      const forbiddenSelectorHits = args.forbiddenSelectors.filter((selector) => Boolean(document.querySelector(selector)));
       const ids = Array.from(document.querySelectorAll("[id]")).map((node) => node.id);
       const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
       const ariaReferenceFailures = [];
@@ -198,6 +200,7 @@ try {
 
       return {
         selectorProof,
+        forbiddenSelectorHits,
         duplicateIds: Array.from(new Set(duplicateIds)),
         ariaReferenceFailures,
         disabledControlsCount: disabledControls.length,
@@ -215,6 +218,7 @@ try {
       };
     }, {
       requiredSelectors: [...requiredRebuildBaselineSelectors],
+      forbiddenSelectors: [...forbiddenRebuildBaselineFreshSectionSelectors],
       forbiddenTerms: [...forbiddenRebuildBaselineVisibleCopy],
       minNavLabelWidth: viewport.minNavLabelWidth,
       checklistMode: viewport.checklistMode,
@@ -255,6 +259,7 @@ const failures = [
 for (const readback of viewportReadbacks) {
   failures.push(
     ...readback.selectorProof.filter((item) => !item.present).map((item) => `missing_selector:${readback.viewport}:${item.selector}`),
+    ...readback.forbiddenSelectorHits.map((selector) => `forbidden_selector_present:${readback.viewport}:${selector}`),
     ...readback.duplicateIds.map((id) => `duplicate_id:${readback.viewport}:${id}`),
     ...readback.ariaReferenceFailures.map((failure) => `aria_reference_failure:${readback.viewport}:${failure.attr}:${failure.id}:${failure.count}`),
     ...readback.disabledFailures.map((failure) => `disabled_reason_failure:${readback.viewport}:${failure.html}`),

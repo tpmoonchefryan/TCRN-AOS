@@ -28,6 +28,12 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='rebuild-nav']",
   "[data-region='rebuild-topbar']",
   "[data-region='rebuild-summary']",
+  "[data-region='rebuild-checklist']",
+  "[data-region='rebuild-boundaries']",
+  "[data-region='rebuild-actions']"
+] as const;
+
+export const forbiddenRebuildBaselineFreshSectionSelectors = [
   "[data-region='cockpit-start']",
   "[data-region='cockpit-work-index']",
   "[data-region='cockpit-detail']",
@@ -58,10 +64,7 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='dependency-console-detail']",
   "[data-region='resource-library-start']",
   "[data-region='resource-library-list']",
-  "[data-region='resource-library-detail']",
-  "[data-region='rebuild-checklist']",
-  "[data-region='rebuild-boundaries']",
-  "[data-region='rebuild-actions']"
+  "[data-region='resource-library-detail']"
 ] as const;
 
 export const forbiddenRebuildBaselineVisibleCopy = [
@@ -467,7 +470,7 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
       "packages/db runtime fixture and migrations",
       "local service policy, health, and service endpoints"
     ],
-    selectedRebuiltStartingSlice: "storybook-first-replacement-workspace-shell",
+    selectedRebuiltStartingSlice: "frontend-reset-checkpoint",
     cockpitStart: {
       title: "Operations cockpit starting surface",
       summary: "The first fresh rebuilt surface starts here: a DS-aligned cockpit shell for local workspace status, work items, and unavailable action posture.",

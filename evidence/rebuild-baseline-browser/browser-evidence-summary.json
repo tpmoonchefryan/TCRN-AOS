@@ -1,8 +1,8 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_storybook_first_rebuild_reset_after_owner_direction_clarification",
-  "sourceHead": "fc2355b41909623cc94b21902de931328af52b61",
-  "generatedAt": "2026-06-25T13:19:39.506Z",
+  "sourceHead": "b553cd2abf29f2e39da2957f8bf8707554275bb6",
+  "generatedAt": "2026-06-25T13:34:50.618Z",
   "browserProofTarget": {
     "routePath": "/operations-cockpit.html",
     "staticTarget": "apps/web/static/operations-cockpit.html",
@@ -12,72 +12,72 @@
     {
       "routePath": "/operations-cockpit.html",
       "staticTarget": "apps/web/static/operations-cockpit.html",
-      "sha256": "0de3b5f34cb0fea290d858924a3d9f5e1d199a98955da67f7481ea937beeeb49",
-      "bytes": 131615,
+      "sha256": "bbb489fc8cc4d19abcf3d56637b78288a9a0edd6b056c14e210f7618d2388a81",
+      "bytes": 55382,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/docs-search-release-readiness.html",
       "staticTarget": "apps/web/static/docs-search-release-readiness.html",
-      "sha256": "d4820f4c87711109c01108a548c36a10ed7b325b5cd428d4e2e83312c18ce9e1",
-      "bytes": 131618,
+      "sha256": "9248e93e0bbd95f9f059af52915e73bdc1a68fba4ea1bff42474374340e41ed3",
+      "bytes": 55385,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/aos-wide-product-design.html",
       "staticTarget": "apps/web/static/aos-wide-product-design.html",
-      "sha256": "8021e77a13adce939696ae7b392fc18a870d81ffe8b8583e256ef87d8546f8f0",
-      "bytes": 131593,
+      "sha256": "a4882f3a9984c98dd7b21d769121894c850c5e0f8cc21b19d508517e1f51bfd1",
+      "bytes": 55360,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/project-workspace.html",
       "staticTarget": "apps/web/static/project-workspace.html",
-      "sha256": "3d753775aa3c7dee2911756186e02db0c8d997a740e7c851eadc6d1e9449aab7",
-      "bytes": 131612,
+      "sha256": "862f2a0bc189eefdd193b044004a7ce8134bde4048801957857f4610723cc8bd",
+      "bytes": 55379,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/initiative-detail.html",
       "staticTarget": "apps/web/static/initiative-detail.html",
-      "sha256": "29103bf0bf272d81b0470d24bdff90112d918d92969c59b28ce545abfff63c65",
-      "bytes": 131612,
+      "sha256": "9602e9e75511c7f683c63457a825640176291dd5e7245bfff3379805cd7c059a",
+      "bytes": 55379,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/ai-employee.html",
       "staticTarget": "apps/web/static/ai-employee.html",
-      "sha256": "44ec01d97feb3d90a240c0db90d2c8b31e673372dd2bef834cf5525f889d6151",
-      "bytes": 131594,
+      "sha256": "3c484ff31d0dd7da31edaf78a7629332f6cc4a37987aa37e2dd43d5469eb05bb",
+      "bytes": 55361,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/gate-queue.html",
       "staticTarget": "apps/web/static/gate-queue.html",
-      "sha256": "69c801ba80c1c97032f24a0d3541b387e8cb3b918bfc35f83a8f33717555b3f7",
-      "bytes": 131591,
+      "sha256": "61cc250cdbcf6d5c44cf4d833d8528f87119fc24f91e78495df6f7bf6d1f4a22",
+      "bytes": 55358,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/conference.html",
       "staticTarget": "apps/web/static/conference.html",
-      "sha256": "a2611c699f5cbbd71febca983d66bd7ca65ad6dd87c8437d8a9ca586ff22a77b",
-      "bytes": 131591,
+      "sha256": "dc7b4eca554f7efa9dabd7d7fe75d6e6fe3e9cf81ab5190e7cc3ff7d2ab868ce",
+      "bytes": 55358,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/dependency-console.html",
       "staticTarget": "apps/web/static/dependency-console.html",
-      "sha256": "f346213ada347f489208c6a5701e92c93bfc448c64e0f91e95d142b3f4e8e329",
-      "bytes": 131615,
+      "sha256": "7983652d0a6fcd05b3ed013c44b76d5054dfd7e1a3818df3a0e170e1a0c8c321",
+      "bytes": 55382,
       "hasBaselineSurface": true,
       "hasChecklist": true
     }
@@ -85,9 +85,9 @@
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/rebuild-baseline-browser/fc2355b41909623cc94b21902de931328af52b61/rebuild-baseline-desktop-1440x900.png",
-      "screenshotSha256": "4837fea938464895b22f5403a27d143fd0bf30c173c91832a0f2361f73e54afb",
-      "screenshotBytes": 1474170,
+      "screenshot": "evidence/rebuild-baseline-browser/b553cd2abf29f2e39da2957f8bf8707554275bb6/rebuild-baseline-desktop-1440x900.png",
+      "screenshotSha256": "fe7cc67484c8045981f39561dcf271fcbb2611af690af1f5e8a9060d26e9ba86",
+      "screenshotBytes": 467569,
       "selectorProof": [
         {
           "selector": "[data-surface='aos-rebuild-workspace']",
@@ -110,130 +110,6 @@
           "present": true
         },
         {
-          "selector": "[data-region='cockpit-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='cockpit-work-index']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='cockpit-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='docs-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='docs-filter']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='docs-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='target-set-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='target-set-modules']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='target-set-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='project-workspace-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='project-workspace-hierarchy']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='project-workspace-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='initiative-detail-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='initiative-detail-ticket']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='initiative-detail-links']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='initiative-detail-activity']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='ai-employee-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='ai-employee-roster']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='ai-employee-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='gate-queue-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='gate-queue-list']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='gate-queue-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='conference-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='conference-list']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='conference-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='dependency-console-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='dependency-console-list']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='dependency-console-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='resource-library-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='resource-library-list']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='resource-library-detail']",
-          "present": true
-        },
-        {
           "selector": "[data-region='rebuild-checklist']",
           "present": true
         },
@@ -246,17 +122,15 @@
           "present": true
         }
       ],
+      "forbiddenSelectorHits": [],
       "duplicateIds": [],
       "ariaReferenceFailures": [],
-      "disabledControlsCount": 46,
+      "disabledControlsCount": 19,
       "disabledFailures": [],
       "packageComponents": [
         "Badge",
         "Button",
-        "DetailDrawer",
         "EvidenceStrip",
-        "FilterBar",
-        "GateReadinessPanel",
         "Heading",
         "KeyValueList",
         "LinkButton",
@@ -268,8 +142,7 @@
         "Surface",
         "TableShell",
         "Text",
-        "TopBar",
-        "WorkIndex"
+        "TopBar"
       ],
       "markerOnlyComponents": [],
       "checklistReadback": {
@@ -290,28 +163,28 @@
           {
             "label": "Module",
             "x": 292,
-            "y": 5282,
+            "y": 463,
             "width": 295,
             "height": 89
           },
           {
             "label": "Status",
             "x": 587,
-            "y": 5282,
+            "y": 463,
             "width": 132,
             "height": 89
           },
           {
             "label": "Source",
             "x": 719,
-            "y": 5282,
+            "y": 463,
             "width": 231,
             "height": 89
           },
           {
             "label": "Note",
             "x": 951,
-            "y": 5282,
+            "y": 463,
             "width": 449,
             "height": 89
           }
@@ -327,9 +200,9 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/rebuild-baseline-browser/fc2355b41909623cc94b21902de931328af52b61/rebuild-baseline-mobile-390x844.png",
-      "screenshotSha256": "5d258f44a25fd320f4fd561740a7de65afb776f7baabb03c06d0cccf6b8c58e3",
-      "screenshotBytes": 1534880,
+      "screenshot": "evidence/rebuild-baseline-browser/b553cd2abf29f2e39da2957f8bf8707554275bb6/rebuild-baseline-mobile-390x844.png",
+      "screenshotSha256": "64abff4c9e2ac4368e98113535258e4f90f65244cdae0a4f31b7705dec6350a7",
+      "screenshotBytes": 607751,
       "selectorProof": [
         {
           "selector": "[data-surface='aos-rebuild-workspace']",
@@ -352,130 +225,6 @@
           "present": true
         },
         {
-          "selector": "[data-region='cockpit-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='cockpit-work-index']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='cockpit-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='docs-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='docs-filter']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='docs-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='target-set-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='target-set-modules']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='target-set-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='project-workspace-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='project-workspace-hierarchy']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='project-workspace-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='initiative-detail-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='initiative-detail-ticket']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='initiative-detail-links']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='initiative-detail-activity']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='ai-employee-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='ai-employee-roster']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='ai-employee-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='gate-queue-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='gate-queue-list']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='gate-queue-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='conference-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='conference-list']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='conference-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='dependency-console-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='dependency-console-list']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='dependency-console-detail']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='resource-library-start']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='resource-library-list']",
-          "present": true
-        },
-        {
-          "selector": "[data-region='resource-library-detail']",
-          "present": true
-        },
-        {
           "selector": "[data-region='rebuild-checklist']",
           "present": true
         },
@@ -488,17 +237,15 @@
           "present": true
         }
       ],
+      "forbiddenSelectorHits": [],
       "duplicateIds": [],
       "ariaReferenceFailures": [],
-      "disabledControlsCount": 46,
+      "disabledControlsCount": 19,
       "disabledFailures": [],
       "packageComponents": [
         "Badge",
         "Button",
-        "DetailDrawer",
         "EvidenceStrip",
-        "FilterBar",
-        "GateReadinessPanel",
         "Heading",
         "KeyValueList",
         "LinkButton",
@@ -510,8 +257,7 @@
         "Surface",
         "TableShell",
         "Text",
-        "TopBar",
-        "WorkIndex"
+        "TopBar"
       ],
       "markerOnlyComponents": [],
       "checklistReadback": {
@@ -532,28 +278,28 @@
           {
             "label": "Module",
             "x": 32,
-            "y": 13306,
+            "y": 2094,
             "width": 326,
             "height": 45
           },
           {
             "label": "Status",
             "x": 32,
-            "y": 13351,
+            "y": 2139,
             "width": 326,
             "height": 44
           },
           {
             "label": "Source",
             "x": 32,
-            "y": 13395,
+            "y": 2183,
             "width": 326,
             "height": 67
           },
           {
             "label": "Note",
             "x": 32,
-            "y": 13462,
+            "y": 2250,
             "width": 326,
             "height": 133
           }
@@ -573,9 +319,9 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "rebuild_baseline_reset_source_content_digest_v1",
-    "sourceHeadAtProofRun": "fc2355b41909623cc94b21902de931328af52b61",
+    "sourceHeadAtProofRun": "b553cd2abf29f2e39da2957f8bf8707554275bb6",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "67f87ce2de90f02ab5a78a12344c731683ab4f04b9c722c65a2c107b4de9af4b",
+    "sourceContentDigest": "401a5e2682000cb3c7a49500ef5eec64cc269ba5c6e625ec12028233b1879da1",
     "sourcePaths": [
       "apps/web/src/rebuild-baseline-data.ts",
       "apps/web/src/rebuild-baseline-ui-react-runtime.ts",
