@@ -11,7 +11,6 @@ export const rebuildBaselineStorybookIds = [
 ] as const;
 
 export const rebuildBaselineRoutes = [
-  "/operations-cockpit.html",
   "/docs-search-release-readiness.html",
   "/aos-wide-product-design.html",
   "/project-workspace.html",
@@ -55,7 +54,7 @@ export const forbiddenRebuildBaselineVisibleCopy = [
 export interface RebuildChecklistRow {
   id: string;
   label: string;
-  status: "reset_started" | "rebuild_queued" | "standard_ready";
+  status: "reset_started" | "rebuild_queued" | "standard_ready" | "reopened";
   source: string;
   note: string;
 }
@@ -80,7 +79,7 @@ export interface RebuildBaselineModel {
 }
 
 const checklistRows: RebuildChecklistRow[] = [
-  row("operations-cockpit", "Operations Cockpit", "standard_ready", "DS cockpit standard", "Certified shell and workbench standard is the first rebuild anchor."),
+  row("operations-cockpit", "Operations Cockpit", "reopened", "DS cockpit standard", "First rebuilt surface is active again from the reset baseline."),
   row("docs-readiness", "Docs Readiness", "standard_ready", "DS docs readiness standard", "Certified inspection standard stays available for later rebuild steps."),
   row("product-design", "Product Design target set", "standard_ready", "DS target-set standard", "Certified target-set standard stays available for later rebuild steps."),
   row("project-workspace", "Project Workspace", "rebuild_queued", "Total-scope checklist", "Standalone workbench is queued for rebuild from the new baseline."),

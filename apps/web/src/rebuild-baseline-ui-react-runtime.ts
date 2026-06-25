@@ -193,8 +193,8 @@ function renderSummary(model: RebuildBaselineModel) {
         title: "Baseline status"
       },
       renderKeyValueList([
-        { key: "starting-module", label: "Starting module", value: "Operations cockpit rebuild baseline" },
-        { key: "surface-state", label: "Surface state", value: "Reset in progress" },
+        { key: "starting-module", label: "Starting module", value: "Operations cockpit rebuild" },
+        { key: "surface-state", label: "Surface state", value: "First rebuilt surface active" },
         { key: "storyboard-source", label: "Design source", value: "Certified Storybook standards" },
         { key: "acceptance", label: "Acceptance", value: "Not enabled" }
       ]))
@@ -223,7 +223,9 @@ function renderChecklist(model: RebuildBaselineModel) {
           ],
           rows: model.checklist.map((row) => ({
             label: row.label,
-            status: row.status === "standard_ready"
+            status: row.status === "reopened"
+              ? createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Active now")
+              : row.status === "standard_ready"
               ? createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Standard ready")
               : row.status === "reset_started"
                 ? createElement(Badge, { ...packageAttrs("Badge"), tone: "warning" }, "Reset started")

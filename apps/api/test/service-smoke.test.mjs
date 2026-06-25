@@ -5,10 +5,14 @@ import { startAosLocalServiceProof } from "../../../dist/apps/api/src/server.js"
 test("local service proof serves owner-trial UI, health, and readback, then stops cleanly", async () => {
   const service = await startAosLocalServiceProof();
   try {
+    const cockpitHtml = await fetch(`${service.url}/operations-cockpit.html`).then((response) => response.text());
+    assert.match(cockpitHtml, /data-surface="operations-cockpit"/, "/operations-cockpit.html serves rebuilt cockpit");
+    assert.match(cockpitHtml, /TCRN AOS Operations Cockpit/, "/operations-cockpit.html exposes cockpit title");
+    assert.match(cockpitHtml, /Work Index/, "/operations-cockpit.html exposes rebuilt cockpit work index");
+    assert.doesNotMatch(cockpitHtml, /AOS Rebuild Workspace/, "/operations-cockpit.html is no longer the reset baseline");
+
     const rebuildTargets = [
       "/",
-      "/cockpit",
-      "/operations-cockpit.html",
       "/docs-search-release-readiness.html",
       "/project-workspace.html",
       "/initiative-detail.html",

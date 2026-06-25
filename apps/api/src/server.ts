@@ -6,6 +6,7 @@ import {
   createOperationsCockpitReadModel,
   type CockpitDetailPanel
 } from "../../web/src/cockpit.js";
+import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
 import { renderRebuildBaselineHtml } from "../../web/src/rebuild-baseline-view.js";
 import { apiHealthReadback, createAosApiApp } from "./index.js";
 
@@ -52,13 +53,27 @@ function handleRequest(
   }
   const url = parseRequestUrl(request);
   const path = url.pathname;
-
-  const rebuildAliases = new Set([
-    "/",
+  const operationsCockpitAliases = new Set([
     "/cockpit",
     "/operations-cockpit",
     "/operations-cockpit.html",
-    "/apps/web/static/operations-cockpit.html",
+    "/apps/web/static/operations-cockpit.html"
+  ]);
+
+  if (operationsCockpitAliases.has(path)) {
+    sendHtml(
+      request,
+      response,
+      renderOperationsCockpitHtml(createServiceCockpitReadModel(runtime, url), {
+        serviceBacked: true,
+        cockpitApiPath: "/api/cockpit"
+      })
+    );
+    return;
+  }
+
+  const rebuildAliases = new Set([
+    "/",
     "/docs-readiness",
     "/docs-search-release-readiness",
     "/docs-search-release-readiness.html",
