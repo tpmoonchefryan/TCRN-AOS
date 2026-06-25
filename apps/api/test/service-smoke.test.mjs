@@ -28,6 +28,8 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
       assert.match(html, /Docs inspection rows/, `${target} exposes docs inspection rows`);
       assert.match(html, /Product design target-set starting surface/, `${target} exposes the next fresh target-set surface`);
       assert.match(html, /AOS-wide surface index/, `${target} exposes target-set surface index`);
+      assert.match(html, /Project workspace starting surface/, `${target} exposes the next fresh project workspace surface`);
+      assert.match(html, /Project workspace current work/, `${target} exposes project workspace current work`);
       assert.match(html, /Retired frontend inventory/, `${target} exposes retirement inventory`);
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
     }

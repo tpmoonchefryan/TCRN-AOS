@@ -37,6 +37,9 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='target-set-start']",
   "[data-region='target-set-modules']",
   "[data-region='target-set-detail']",
+  "[data-region='project-workspace-start']",
+  "[data-region='project-workspace-hierarchy']",
+  "[data-region='project-workspace-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
@@ -174,6 +177,43 @@ export interface RebuildTargetSetModel {
   actions: readonly RebuildTargetSetAction[];
 }
 
+export interface RebuildProjectWorkspaceHierarchyItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildProjectWorkspaceStory {
+  id: string;
+  title: string;
+  state: "current" | "blocked";
+  owner: string;
+}
+
+export interface RebuildProjectWorkspaceDetailItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildProjectWorkspaceAction {
+  label: string;
+  reason: string;
+}
+
+export interface RebuildProjectWorkspaceModel {
+  title: string;
+  summary: string;
+  standardIds: readonly string[];
+  storybookIds: readonly string[];
+  evidence: readonly string[];
+  hierarchy: readonly RebuildProjectWorkspaceHierarchyItem[];
+  stories: readonly RebuildProjectWorkspaceStory[];
+  detailTitle: string;
+  detailItems: readonly RebuildProjectWorkspaceDetailItem[];
+  actions: readonly RebuildProjectWorkspaceAction[];
+}
+
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
@@ -185,6 +225,7 @@ export interface RebuildBaselineModel {
   cockpitStart: RebuildCockpitStartModel;
   docsStart: RebuildDocsStartModel;
   targetSetStart: RebuildTargetSetModel;
+  projectWorkspaceStart: RebuildProjectWorkspaceModel;
   checklist: RebuildChecklistRow[];
   noClaims: {
     productAcceptance: false;
@@ -385,6 +426,67 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
         {
           label: "Run product action",
           reason: "Execution remains unavailable while the target-set surface stays in local preview."
+        }
+      ]
+    },
+    projectWorkspaceStart: {
+      title: "Project workspace starting surface",
+      summary: "The next fresh rebuilt surface adds a DS-aligned project workspace for hierarchy, current work, and blocked owner actions inside the shared replacement shell.",
+      standardIds: ["ds-aos-target-set-v1", "ds-aos-operations-cockpit-v1"],
+      storybookIds: [
+        "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+        "tcrn-design-system-patterns--aos-operations-cockpit-standard"
+      ],
+      evidence: [
+        "Workspace hierarchy",
+        "Current work",
+        "Local preview only"
+      ],
+      hierarchy: [
+        { key: "project", label: "Project", value: "TCRN-AOS" },
+        { key: "initiative", label: "Initiative", value: "Frontend replacement" },
+        { key: "epic", label: "Epic", value: "Workspace shell and current work" },
+        { key: "stories", label: "Stories", value: "3 visible" }
+      ],
+      stories: [
+        {
+          id: "workspace-shell",
+          title: "Workspace shell and hierarchy",
+          state: "current",
+          owner: "Workspace team"
+        },
+        {
+          id: "selected-work",
+          title: "Current work and blocked actions",
+          state: "current",
+          owner: "Product surface"
+        },
+        {
+          id: "owner-action",
+          title: "Owner action lane",
+          state: "blocked",
+          owner: "Local preview"
+        }
+      ],
+      detailTitle: "Selected workspace detail",
+      detailItems: [
+        { key: "story", label: "Selected work", value: "Workspace shell and hierarchy" },
+        { key: "owner", label: "Owner", value: "Workspace team" },
+        { key: "freshness", label: "Freshness", value: "Local preview only" },
+        { key: "boundary", label: "Boundary", value: "Owner actions remain disabled" }
+      ],
+      actions: [
+        {
+          label: "Switch project",
+          reason: "Project switching remains unavailable while the workspace surface stays inside the shared replacement shell."
+        },
+        {
+          label: "Create initiative",
+          reason: "Initiative creation remains unavailable while the workspace surface stays inside the shared replacement shell."
+        },
+        {
+          label: "Send owner action",
+          reason: "Owner actions remain unavailable while the workspace surface stays in local preview."
         }
       ]
     },

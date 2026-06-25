@@ -25,7 +25,13 @@ import {
   TopBar,
   WorkIndex
 } from "@tcrn/ui-react";
-import type { RebuildBaselineModel, RebuildCockpitStartModel, RebuildDocsStartModel, RebuildTargetSetModel } from "./rebuild-baseline-data.js";
+import type {
+  RebuildBaselineModel,
+  RebuildCockpitStartModel,
+  RebuildDocsStartModel,
+  RebuildTargetSetModel,
+  RebuildProjectWorkspaceModel
+} from "./rebuild-baseline-data.js";
 
 const createElement = React.createElement as unknown as (type: unknown, props?: Record<string, unknown> | null, ...children: unknown[]) => React.ReactElement;
 
@@ -528,6 +534,105 @@ function renderTargetSetStart(model: RebuildTargetSetModel) {
   );
 }
 
+function renderProjectWorkspaceStart(model: RebuildProjectWorkspaceModel) {
+  return createElement(
+    "section",
+    { className: "rebuild-baseline__project-workspace-start", "data-region": "project-workspace-start" },
+    createElement(
+      "div",
+      { className: "rebuild-baseline__cockpit-grid" },
+      createElement(
+        Surface,
+        { ...packageAttrs("Surface", { className: "rebuild-baseline__cockpit-surface" }) },
+        createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Next fresh surface"),
+        createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, model.title),
+        createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.summary),
+        createElement(
+          "div",
+          packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
+          createElement(EvidenceStrip, { items: [...model.evidence] })
+        ),
+        createElement(
+          "div",
+          { className: "rebuild-baseline__hierarchy-grid", "data-region": "project-workspace-hierarchy" },
+          model.hierarchy.map((item) =>
+            createElement(
+              Surface,
+              { ...packageAttrs("Surface", { key: item.key }) },
+              createElement(Heading, { ...packageAttrs("Heading"), level: 3 }, item.label),
+              createElement(Text, { ...packageAttrs("Text", { className: "rebuild-baseline__strong-text" }) }, item.value)
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("WorkIndex"),
+          createElement(WorkIndex, {
+            rows: model.stories.map((story) => ({
+              id: story.id,
+              title: story.title,
+              state: story.state === "blocked"
+                ? { state: "blocked" }
+                : { state: "local_only", label: "Current state" },
+              owner: story.owner
+            })),
+            label: "Project workspace current work"
+          })
+        )
+      ),
+      createElement(
+        "div",
+        { className: "rebuild-baseline__cockpit-side" },
+        createElement(
+          "div",
+          packageAttrs("ReadbackPanel"),
+          createElement(ReadbackPanel, { title: "Project workspace standards" },
+            renderKeyValueList([
+              { key: "standard-1", label: "Standard id 1", value: model.standardIds[0] },
+              { key: "standard-2", label: "Standard id 2", value: model.standardIds[1] },
+              { key: "storybook-1", label: "Storybook id 1", value: model.storybookIds[0] },
+              { key: "storybook-2", label: "Storybook id 2", value: model.storybookIds[1] }
+            ])
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("DetailDrawer", { "data-region": "project-workspace-detail" }),
+          createElement(DetailDrawer, { title: model.detailTitle, open: true },
+            renderKeyValueList(model.detailItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              value: item.value
+            }))),
+            createElement(
+              "div",
+              { className: "rebuild-baseline__action-list" },
+              model.actions.map((action) =>
+                createElement(Button, {
+                  ...packageAttrs("Button", { key: action.label }),
+                  disabled: true,
+                  disabledReason: action.reason
+                }, action.label)
+              )
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("GateReadinessPanel"),
+          createElement(GateReadinessPanel, {
+            state: {
+              state: "blocked",
+              label: "Unavailable",
+              description: "Owner actions stay unavailable while the project workspace surface remains inside the shared replacement shell."
+            }
+          })
+        )
+      )
+    )
+  );
+}
+
 function renderChecklist(model: RebuildBaselineModel) {
   return createElement(
     "section",
@@ -638,6 +743,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         renderCockpitStart(model.cockpitStart),
         renderDocsStart(model.docsStart),
         renderTargetSetStart(model.targetSetStart),
+        renderProjectWorkspaceStart(model.projectWorkspaceStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()
