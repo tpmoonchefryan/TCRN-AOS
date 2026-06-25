@@ -20,25 +20,25 @@ test("Rebuild baseline model now represents the reset shell plus cockpit, docs, 
 
   assert.equal(model.currentAliasLabel, "Operations Cockpit");
   assert.equal(model.selectedRebuiltStartingSlice, "fresh-cockpit-docs-target-set-project-workspace-initiative-detail-ai-employee-gate-queue-conference-gateway-adapter-dependency-console-resource-library-knowledge-modules-admin-access-github-workflow-sync-release-linkage-foundation");
-  assert.equal(resourceLibraryRow?.status, "retired");
+  assert.equal(resourceLibraryRow?.status, "workspace_active");
   assert.equal(
     resourceLibraryRow?.note,
-    "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."
+    "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."
   );
-  assert.equal(knowledgeModulesRow?.status, "retired");
+  assert.equal(knowledgeModulesRow?.status, "workspace_active");
   assert.equal(
     knowledgeModulesRow?.note,
-    "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."
+    "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."
   );
-  assert.equal(adminAccessRow?.status, "retired");
+  assert.equal(adminAccessRow?.status, "workspace_active");
   assert.equal(
     adminAccessRow?.note,
-    "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."
+    "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."
   );
-  assert.equal(githubReleaseLinkageRow?.status, "retired");
+  assert.equal(githubReleaseLinkageRow?.status, "workspace_active");
   assert.equal(
     githubReleaseLinkageRow?.note,
-    "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."
+    "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."
   );
   assert.equal(model.noClaims.productAcceptance, false);
   assert.equal(model.noClaims.finalMvpAcceptance, false);
@@ -97,9 +97,9 @@ test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-
   assert.match(html, />Knowledge modules starting surface</);
   assert.match(html, />Admin and access starting surface</);
   assert.match(html, />GitHub release linkage starting surface</);
-  assert.match(html, /Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired\./);
-  assert.match(html, />Retired standalone inventory</);
-  assert.match(html, />Retired standalone scope</);
+  assert.match(html, /Fresh rebuilt module is active in the shared workspace while the standalone page remains retired\./);
+  assert.match(html, />Rebuilt module directory</);
+  assert.match(html, />Legacy standalone scope</);
 
   for (const selector of forbiddenRebuildBaselineFreshSectionSelectors) {
     const region = selector.match(/data-region='([^']+)'/)?.[1];

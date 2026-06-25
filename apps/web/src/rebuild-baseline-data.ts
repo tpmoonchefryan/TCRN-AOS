@@ -101,7 +101,7 @@ export const forbiddenRebuildBaselineVisibleCopy = [
 export interface RebuildChecklistRow {
   id: string;
   label: string;
-  status: "retired" | "rebuild_queued";
+  status: "workspace_active" | "rebuild_queued";
   source: string;
   note: string;
 }
@@ -557,19 +557,19 @@ export interface RebuildBaselineModel {
 }
 
 const checklistRows: RebuildChecklistRow[] = [
-  row("operations-cockpit", "Operations Cockpit", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
-  row("docs-readiness", "Docs Readiness", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
-  row("product-design", "Product Design target set", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
-  row("project-workspace", "Project Workspace", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
-  row("initiative-detail", "Initiative Detail", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
-  row("ai-employee", "AI Employee", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
-  row("gate-queue", "Gate Queue", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
-  row("conference", "Conference", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
-  row("dependency-console", "Dependency Console", "retired", "Transitional served frontend", "This former standalone page now resolves to the replacement workspace while the previous frontend is retired."),
-  row("resource-library", "Resource Library", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."),
-  row("knowledge-modules", "Knowledge Modules", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."),
-  row("admin-access", "Admin / Access", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired."),
-  row("github-release-linkage", "GitHub Release Linkage", "retired", "Replacement workspace shell", "Fresh rebuild section is now active inside the replacement workspace while the standalone surface remains retired.")
+  row("operations-cockpit", "Operations Cockpit", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
+  row("docs-readiness", "Docs Readiness", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
+  row("product-design", "Product Design target set", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
+  row("project-workspace", "Project Workspace", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
+  row("initiative-detail", "Initiative Detail", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
+  row("ai-employee", "AI Employee", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
+  row("gate-queue", "Gate Queue", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
+  row("conference", "Conference", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
+  row("dependency-console", "Dependency Console", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
+  row("resource-library", "Resource Library", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
+  row("knowledge-modules", "Knowledge Modules", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
+  row("admin-access", "Admin / Access", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
+  row("github-release-linkage", "GitHub Release Linkage", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired.")
 ];
 
 export function createRebuildBaselineModel(currentAlias: string): RebuildBaselineModel {

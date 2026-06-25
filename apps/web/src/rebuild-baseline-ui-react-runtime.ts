@@ -62,7 +62,7 @@ function renderSidebar(model: RebuildBaselineModel) {
     { label: "Docs standard", iconName: "book-open" },
     { label: "Target-set standard", iconName: "package" }
   ];
-  const retiredAliasNavItems = [
+  const legacyAliasNavItems = [
     "Operations Cockpit",
     "Docs Readiness",
     "Product Design set",
@@ -126,8 +126,8 @@ function renderSidebar(model: RebuildBaselineModel) {
     ),
     createElement(
       NavGroup,
-      { ...packageAttrs("NavGroup", { className: "rebuild-baseline__nav-group" }), label: "Retired served aliases" },
-      retiredAliasNavItems.map((label) =>
+      { ...packageAttrs("NavGroup", { className: "rebuild-baseline__nav-group" }), label: "Legacy entry aliases" },
+      legacyAliasNavItems.map((label) =>
         createElement(
           NavItem,
           {
@@ -138,7 +138,7 @@ function renderSidebar(model: RebuildBaselineModel) {
               className: "rebuild-baseline__nav-item"
             }),
             disabled: true,
-            disabledReason: "This served alias now resolves to the replacement workspace while the previous frontend is retired."
+            disabledReason: "This entry now opens the rebuilt workspace while the former standalone page stays retired."
           },
           label
         )
@@ -1574,7 +1574,7 @@ function renderChecklist(model: RebuildBaselineModel) {
     createElement(
       Surface,
       { ...packageAttrs("Surface") },
-      createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, "Retired standalone inventory"),
+      createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, "Rebuilt module directory"),
       createElement(
         "div",
         packageAttrs("TableShell"),
@@ -1588,8 +1588,8 @@ function renderChecklist(model: RebuildBaselineModel) {
           ],
           rows: model.checklist.map((row) => ({
             label: row.label,
-            status: row.status === "retired"
-              ? createElement(Badge, { ...packageAttrs("Badge"), tone: "neutral" }, "Retired")
+            status: row.status === "workspace_active"
+              ? createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Active")
               : createElement(Badge, { ...packageAttrs("Badge"), tone: "warning" }, "Queued"),
             source: row.source,
             note: row.note
@@ -1607,7 +1607,7 @@ function renderBoundaries(model: RebuildBaselineModel) {
     createElement(
       Surface,
       { ...packageAttrs("Surface") },
-      createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, "Retired standalone scope"),
+      createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, "Legacy standalone scope"),
       renderKeyValueList(model.replacedFrontendScope.map((label, index) => ({
           key: `replaced-${index}`,
           label: `Surface ${index + 1}`,
