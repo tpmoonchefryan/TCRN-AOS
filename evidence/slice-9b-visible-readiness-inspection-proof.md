@@ -4,7 +4,7 @@ Status: observed local proof receipt
 
 ## Checkpoint Identity
 
-- Source head at proof run: `4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b`
+- Source head at proof run: `06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505`
 - Workflow packet basis: `624127182da417f65c790de155e3297e77828181`
 - Pre-implementation basis: `9d7980f46245bb783b520c9f90945da8609c01ce`
 - Static target: `apps/web/static/docs-search-release-readiness.html`
@@ -30,11 +30,11 @@ Status: observed local proof receipt
 
 Retained artifacts:
 
-- `evidence/slice-9b-visible-readiness-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/desktop-1440x900-initial.png` sha256 `1ab677e849ffab2dd10c0e925bfa41aef6b097721751cf2e453f106319dad446`
-- `evidence/slice-9b-visible-readiness-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/desktop-1440x900-search-github.png` sha256 `7d0eee2116f00c37dc9f45339e18bf0352f6012bf5fd855930a68535173b21bd`
-- `evidence/slice-9b-visible-readiness-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/desktop-1440x900-search-empty.png` sha256 `d1edcdc4ecdc99d628fe7a327c2e3bbdd201d66fb2e788444207eec88ee984db`
-- `evidence/slice-9b-visible-readiness-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/mobile-390x844-initial.png` sha256 `9eb88b58007dd3f85ce8d0a53def3e11af8e832279616081620b61213b9ecf9b`
-- `evidence/slice-9b-visible-readiness-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/mobile-390x844-search-candidate.png` sha256 `bf162aab4b530dd6c1c2a5c6513be222d4887889e7465e56e87bf3d2f7edc218`
+- `evidence/slice-9b-visible-readiness-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/desktop-1440x900-initial.png` sha256 `1ab677e849ffab2dd10c0e925bfa41aef6b097721751cf2e453f106319dad446`
+- `evidence/slice-9b-visible-readiness-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/desktop-1440x900-search-github.png` sha256 `686acff24a0b15c7aa4ed7787da5a18c9988169eaee4d35a3b3572281e7588ff`
+- `evidence/slice-9b-visible-readiness-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/desktop-1440x900-search-empty.png` sha256 `d1edcdc4ecdc99d628fe7a327c2e3bbdd201d66fb2e788444207eec88ee984db`
+- `evidence/slice-9b-visible-readiness-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/mobile-390x844-initial.png` sha256 `9eb88b58007dd3f85ce8d0a53def3e11af8e832279616081620b61213b9ecf9b`
+- `evidence/slice-9b-visible-readiness-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/mobile-390x844-search-candidate.png` sha256 `bf162aab4b530dd6c1c2a5c6513be222d4887889e7465e56e87bf3d2f7edc218`
 
 ## No-Overclaim Boundaries
 

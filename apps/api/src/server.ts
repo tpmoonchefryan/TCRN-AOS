@@ -8,6 +8,7 @@ import {
 } from "../../web/src/cockpit.js";
 import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
 import { renderAiEmployeeHtml } from "../../web/src/ai-employee-view.js";
+import { renderConferenceHtml } from "../../web/src/conference-view.js";
 import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
 import { renderGateQueueHtml } from "../../web/src/gate-queue-view.js";
 import { renderInitiativeDetailHtml } from "../../web/src/initiative-detail-view.js";
@@ -145,11 +146,19 @@ function handleRequest(
     return;
   }
 
-  const rebuildAliases = new Set([
-    "/",
+  const conferenceAliases = new Set([
     "/conference",
     "/conference.html",
-    "/apps/web/static/conference.html",
+    "/apps/web/static/conference.html"
+  ]);
+
+  if (conferenceAliases.has(path)) {
+    sendHtml(request, response, renderConferenceHtml());
+    return;
+  }
+
+  const rebuildAliases = new Set([
+    "/",
     "/dependency-console",
     "/dependency-console.html",
     "/apps/web/static/dependency-console.html"

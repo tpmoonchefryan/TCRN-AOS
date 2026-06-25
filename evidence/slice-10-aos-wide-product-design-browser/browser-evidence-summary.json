@@ -1,7 +1,7 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_design_system_frontend_rebuild_59ax_aos_wide_product_design_target_set_package_runtime_adoption_implementation",
-  "sourceHead": "4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b",
+  "sourceHead": "06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505",
   "checkpoint": {
     "workflowPacketBasis": "bcff619a406f2028e6c70ea76a3ade1674e3ca21",
     "preImplementationBasis": "06cded11e97be6d4a738a21ae942128d5b4688cd",
@@ -96,7 +96,7 @@
   "sourceFreshnessReadback": {
     "ok": true,
     "strategy": "source_content_digest_for_mutating_aos_wide_browser_receipts",
-    "sourceHeadAtProofRun": "4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b",
+    "sourceHeadAtProofRun": "06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505",
     "exactFinalCommitHeadRequired": false,
     "sourceContentDigest": "1764796d24a690d4f0c50350e98969def147b1e0a13d24476d1029d231f6d67f",
     "sourcePaths": [
@@ -295,44 +295,44 @@
     "requestFailures": [],
     "screenshots": [
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/desktop-1440x900-initial.png",
+        "file": "evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/desktop-1440x900-initial.png",
         "sha256": "72fa0dc862e22f10f939a490ba9a0e3a2981da1653955cc9bfdcd134eed9e415",
         "bytes": 526626
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/desktop-1440x900-blocked-filter.png",
+        "file": "evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/desktop-1440x900-blocked-filter.png",
         "sha256": "b6f28764d9cfa0c6b4b75edba250b55954fec7c09b78fc36adb9a7ae09559a73",
         "bytes": 489129
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/desktop-1440x900-no-match.png",
-        "sha256": "a799d1df9b8e40ccd44c9801a347e61f3bf79fabf944ec5a7dffba3321845d97",
-        "bytes": 476342
+        "file": "evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/desktop-1440x900-no-match.png",
+        "sha256": "6dd0f143e6b8aea428601453ba56ba6fda44351b4fc4c91501fc09796c70ba98",
+        "bytes": 476341
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/desktop-1440x900-resource-detail.png",
-        "sha256": "fd1eea1e5b2b23f23e63171cdf188116dd37a4fd3a039bf06027532313a23cee",
-        "bytes": 490571
+        "file": "evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/desktop-1440x900-resource-detail.png",
+        "sha256": "a62f4b3034908501782ffde3cb1c53cab03c9f8296c01bc806d69e37709b3fd7",
+        "bytes": 490573
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/mobile-390x844-initial.png",
+        "file": "evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/mobile-390x844-initial.png",
         "sha256": "d310f6693df8744831e6e58af25c21a708db199e11c765dc39ecc66dd8348785",
         "bytes": 511369
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/mobile-390x844-blocked-filter.png",
-        "sha256": "a30d152397338d7776a14610313a9e2a7185326197f6b8f77ff349f2b19d7613",
-        "bytes": 495698
+        "file": "evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/mobile-390x844-blocked-filter.png",
+        "sha256": "ad64300c797b5b475e35028f3c09d0201d4aa3e7acbd97b8503eae2f2e54dd87",
+        "bytes": 495692
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/mobile-390x844-no-match.png",
+        "file": "evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/mobile-390x844-no-match.png",
         "sha256": "d34b1e031368b98490235d8bf6d731dd9607baf9a7a8de628366a78309ba6de8",
         "bytes": 496085
       },
       {
-        "file": "evidence/slice-10-aos-wide-product-design-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/mobile-390x844-resource-detail.png",
-        "sha256": "79bb02045ddb80f2dadb71ebda346c10789cf2faa3ae56fee19b22d76de5495a",
-        "bytes": 497247
+        "file": "evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/mobile-390x844-resource-detail.png",
+        "sha256": "c81834edf9c216316b23ed73153ed7574afdc4ddac0fcdd1224a050524650437",
+        "bytes": 497251
       }
     ],
     "viewportReadbacks": [
@@ -2788,7 +2788,7 @@
   },
   "evidenceReadiness": {
     "markdownReceipt": "evidence/slice-10-aos-wide-product-design-surface-set-proof.md",
-    "browserSummaryPath": "evidence/slice-10-aos-wide-product-design-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/browser-evidence-summary.json",
+    "browserSummaryPath": "evidence/slice-10-aos-wide-product-design-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/browser-evidence-summary.json",
     "stableBrowserSummaryPath": "evidence/slice-10-aos-wide-product-design-browser/browser-evidence-summary.json",
     "consolePageErrorReadiness": "none_observed"
   }

@@ -1,10 +1,10 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_0b349cf_ilya_initiative_detail_ticket_drillthrough_visible_slice_after_project_workspace_sync",
-  "sourceHead": "4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b",
-  "generatedAt": "2026-06-25T10:23:55.883Z",
+  "sourceHead": "06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505",
+  "generatedAt": "2026-06-25T10:38:15.325Z",
   "staticTarget": "apps/web/static/initiative-detail.html",
-  "staticSha256": "6522b97dd97d3416e80b9c7eeb2f5ffa7f972928e143e6145180ae14a3eb4bb8",
+  "staticSha256": "69f75f7a368d47c523dec6b83488f6794eb1cc5b76d19d6ab54d918fb4855488",
   "staticBytes": 42072,
   "dsStandardsConsumed": [
     "ds-aos-target-set-v1",
@@ -88,9 +88,9 @@
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/initiative-detail-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/initiative-detail-desktop-1440x900.png",
-      "screenshotSha256": "829258650d3a522d3862b6cbbe156266069472251687d09ec5afc8d7eea89d60",
-      "screenshotBytes": 319854,
+      "screenshot": "evidence/initiative-detail-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/initiative-detail-desktop-1440x900.png",
+      "screenshotSha256": "4a56dfa893ef9b5da6a47df39e13bcdaa7d216899575ed46569bbe0c37d1ab6c",
+      "screenshotBytes": 321270,
       "selectorProof": [
         {
           "selector": "[data-surface='initiative-detail']",
@@ -164,9 +164,9 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/initiative-detail-browser/4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b/initiative-detail-mobile-390x844.png",
-      "screenshotSha256": "ce645186a4d7f9fd038b5e24cdc1a680060239ec1640acaec2615cced2896acb",
-      "screenshotBytes": 339951,
+      "screenshot": "evidence/initiative-detail-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/initiative-detail-mobile-390x844.png",
+      "screenshotSha256": "9f4458664474651c77a9f3dbac7003f76e55cf0ad21c3e7977135ef90604101e",
+      "screenshotBytes": 340562,
       "selectorProof": [
         {
           "selector": "[data-surface='initiative-detail']",
@@ -244,7 +244,7 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "initiative_detail_visible_slice_source_content_digest_v1",
-    "sourceHead": "4ee5852ce70ca4e65b6bf9bf4014796e149bfb5b",
+    "sourceHead": "06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505",
     "sourcePaths": [
       "apps/web/src/cockpit.ts",
       "apps/web/src/initiative-detail-data.ts",
@@ -304,12 +304,12 @@
       {
         "path": "apps/api/src/server.ts",
         "exists": true,
-        "sha256": "2c2cfa9c630dc586d15373c9ad4d9f376e626da4c2fd966f548706433daf7249"
+        "sha256": "a9d696fd3f2938229dc536589291a71177f38c6eee2d20d77866404391e60806"
       },
       {
         "path": "apps/api/test/service-smoke.test.mjs",
         "exists": true,
-        "sha256": "a1739443dbde9337c6efa4489fa0b68df4f5ec738dda8997ae48763f7c66bd1c"
+        "sha256": "a7080ee3fdca43284bbe851099244cdcff4da710087ab4cb86c438c45adf42d7"
       },
       {
         "path": "scripts/initiative-detail-proof.mjs",
@@ -327,7 +327,7 @@
         "sha256": "317031279417629dedac30c6653bed0f9720bc383366d7fdb31a8cdbe7478bf5"
       }
     ],
-    "sourceContentDigest": "023ac26affeefbdde6a489db98b928419b2fd82d652e9256037066c9526193cd"
+    "sourceContentDigest": "54e91819a369dd117f8c34fcad530a55ac2e5d7db5b979389c9d32ff5f379b54"
   },
   "noOverclaimReadback": {
     "productAcceptance": false,

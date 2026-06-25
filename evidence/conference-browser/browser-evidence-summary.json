@@ -1,8 +1,8 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_f5611d_ilya_resume_total_frontend_rebuild_after_ai_employee_status_sync",
-  "sourceHead": "769ecb8db227092609eb2ef05d886e4c951d86cc",
-  "generatedAt": "2026-06-25T06:49:33.892Z",
+  "sourceHead": "06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505",
+  "generatedAt": "2026-06-25T10:38:15.651Z",
   "staticTarget": "apps/web/static/conference.html",
   "staticSha256": "9e7b59695fb099f7e197d2e9fba0bb4874ba772d9859d9e31d8adf3ad5dca0a4",
   "staticBytes": 35588,
@@ -88,7 +88,7 @@
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/conference-browser/769ecb8db227092609eb2ef05d886e4c951d86cc/conference-desktop-1440x900.png",
+      "screenshot": "evidence/conference-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/conference-desktop-1440x900.png",
       "screenshotSha256": "9dee085c5594e0b193e73d8a3c60030aad90625e2ba80d59795a01ca79b94f63",
       "screenshotBytes": 237427,
       "selectorProof": [
@@ -164,7 +164,7 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/conference-browser/769ecb8db227092609eb2ef05d886e4c951d86cc/conference-mobile-390x844.png",
+      "screenshot": "evidence/conference-browser/06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505/conference-mobile-390x844.png",
       "screenshotSha256": "61f3ceeb7a5402f738f13585fc5edef9d9420197c366e1084299e0027207cc41",
       "screenshotBytes": 221927,
       "selectorProof": [
@@ -244,9 +244,9 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "conference_visible_slice_source_content_digest_v1",
-    "sourceHeadAtProofRun": "769ecb8db227092609eb2ef05d886e4c951d86cc",
+    "sourceHeadAtProofRun": "06ec1db1ddbbd48fbb9ca9ae018f9eb5bbaab505",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "39435619428306849d8efea13d6f5408f01aaeed8ad9457e68473bd698836781",
+    "sourceContentDigest": "762706f369d595bca6accc474d1f0afc9b43d93740e670c0e7dfa3097265f6d4",
     "sourcePaths": [
       "apps/web/src/conference-data.ts",
       "apps/web/src/conference-ui-react-runtime.ts",
