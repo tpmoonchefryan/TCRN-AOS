@@ -16,7 +16,7 @@ const retiredFrontendTargets = [
   "/dependency-console.html"
 ];
 
-test("local service now serves the reset shell plus cockpit, docs, target-set, and project-workspace slices while APIs remain available", async () => {
+test("local service now serves the reset shell plus cockpit, docs, target-set, project-workspace, and initiative-detail slices while APIs remain available", async () => {
   const service = await startAosLocalServiceProof();
   try {
     for (const target of retiredFrontendTargets) {
@@ -31,9 +31,11 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, a
       assert.match(html, /AOS-wide surface index/, `${target} exposes the target-set work index`);
       assert.match(html, /Project workspace starting surface/, `${target} exposes the project workspace slice`);
       assert.match(html, /Project workspace current work/, `${target} exposes the project workspace work index`);
+      assert.match(html, /Initiative detail starting surface/, `${target} exposes the initiative detail slice`);
+      assert.match(html, /Initiative detail linked records/, `${target} exposes the initiative detail linked records`);
       assert.match(html, /Retired frontend inventory/, `${target} exposes retired inventory`);
       assert.match(html, /Retired served scope/, `${target} exposes retired served scope`);
-      assert.doesNotMatch(html, /Initiative detail starting surface|AI employee starting surface|Gate queue starting surface|Conference starting surface|Dependency console starting surface|Resource library starting surface|Initiative detail linked records|AI employee roster|Gate queue rows|Conference list|Dependency governance rows|Resource library rows/i, `${target} still omits later fresh product sections`);
+      assert.doesNotMatch(html, /AI employee starting surface|Gate queue starting surface|Conference starting surface|Dependency console starting surface|Resource library starting surface|AI employee roster|Gate queue rows|Conference list|Dependency governance rows|Resource library rows/i, `${target} still omits later fresh product sections`);
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
     }
 
