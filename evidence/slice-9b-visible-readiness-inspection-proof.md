@@ -4,11 +4,11 @@ Status: observed local proof receipt
 
 ## Checkpoint Identity
 
-- Source head at proof run: `5c521ce4b6f60e4639be3c5ea8f1127469d5b125`
+- Source head at proof run: `f7f336db8fb34672a516d7d6d8d7c587303a90e8`
 - Workflow packet basis: `624127182da417f65c790de155e3297e77828181`
 - Pre-implementation basis: `9d7980f46245bb783b520c9f90945da8609c01ce`
 - Static target: `apps/web/static/docs-search-release-readiness.html`
-- Source content digest: `159f52f1542c73a1061807b104bace4d24c085399ee3831991b8d3886a08e2d3`
+- Source content digest: `2b26794104c086036a8133f66490a8b1348e285907e0a14cc4d7ed787a330867`
 - Product-local proof command: `pnpm slice9b:proof`
 
 ## Package Runtime Readback
@@ -30,11 +30,11 @@ Status: observed local proof receipt
 
 Retained artifacts:
 
-- `evidence/slice-9b-visible-readiness-browser/5c521ce4b6f60e4639be3c5ea8f1127469d5b125/desktop-1440x900-initial.png` sha256 `1ab677e849ffab2dd10c0e925bfa41aef6b097721751cf2e453f106319dad446`
-- `evidence/slice-9b-visible-readiness-browser/5c521ce4b6f60e4639be3c5ea8f1127469d5b125/desktop-1440x900-search-github.png` sha256 `7d0eee2116f00c37dc9f45339e18bf0352f6012bf5fd855930a68535173b21bd`
-- `evidence/slice-9b-visible-readiness-browser/5c521ce4b6f60e4639be3c5ea8f1127469d5b125/desktop-1440x900-search-empty.png` sha256 `8856876ba1ff0138c85646c3785e1fe58e32e910d34e9eba17a3164c3257d97f`
-- `evidence/slice-9b-visible-readiness-browser/5c521ce4b6f60e4639be3c5ea8f1127469d5b125/mobile-390x844-initial.png` sha256 `9eb88b58007dd3f85ce8d0a53def3e11af8e832279616081620b61213b9ecf9b`
-- `evidence/slice-9b-visible-readiness-browser/5c521ce4b6f60e4639be3c5ea8f1127469d5b125/mobile-390x844-search-candidate.png` sha256 `bf162aab4b530dd6c1c2a5c6513be222d4887889e7465e56e87bf3d2f7edc218`
+- `evidence/slice-9b-visible-readiness-browser/f7f336db8fb34672a516d7d6d8d7c587303a90e8/desktop-1440x900-initial.png` sha256 `1ab677e849ffab2dd10c0e925bfa41aef6b097721751cf2e453f106319dad446`
+- `evidence/slice-9b-visible-readiness-browser/f7f336db8fb34672a516d7d6d8d7c587303a90e8/desktop-1440x900-search-github.png` sha256 `7d0eee2116f00c37dc9f45339e18bf0352f6012bf5fd855930a68535173b21bd`
+- `evidence/slice-9b-visible-readiness-browser/f7f336db8fb34672a516d7d6d8d7c587303a90e8/desktop-1440x900-search-empty.png` sha256 `8856876ba1ff0138c85646c3785e1fe58e32e910d34e9eba17a3164c3257d97f`
+- `evidence/slice-9b-visible-readiness-browser/f7f336db8fb34672a516d7d6d8d7c587303a90e8/mobile-390x844-initial.png` sha256 `9eb88b58007dd3f85ce8d0a53def3e11af8e832279616081620b61213b9ecf9b`
+- `evidence/slice-9b-visible-readiness-browser/f7f336db8fb34672a516d7d6d8d7c587303a90e8/mobile-390x844-search-candidate.png` sha256 `bf162aab4b530dd6c1c2a5c6513be222d4887889e7465e56e87bf3d2f7edc218`
 
 ## No-Overclaim Boundaries
 

@@ -11,7 +11,6 @@ export const rebuildBaselineStorybookIds = [
 ] as const;
 
 export const rebuildBaselineRoutes = [
-  "/docs-search-release-readiness.html",
   "/aos-wide-product-design.html",
   "/project-workspace.html",
   "/initiative-detail.html",
@@ -80,7 +79,7 @@ export interface RebuildBaselineModel {
 
 const checklistRows: RebuildChecklistRow[] = [
   row("operations-cockpit", "Operations Cockpit", "reopened", "DS cockpit standard", "First rebuilt surface is active again from the reset baseline."),
-  row("docs-readiness", "Docs Readiness", "standard_ready", "DS docs readiness standard", "Certified inspection standard stays available for later rebuild steps."),
+  row("docs-readiness", "Docs Readiness", "reopened", "DS docs readiness standard", "Docs readiness is active again from the reset baseline."),
   row("product-design", "Product Design target set", "standard_ready", "DS target-set standard", "Certified target-set standard stays available for later rebuild steps."),
   row("project-workspace", "Project Workspace", "rebuild_queued", "Total-scope checklist", "Standalone workbench is queued for rebuild from the new baseline."),
   row("initiative-detail", "Initiative Detail", "rebuild_queued", "Total-scope checklist", "Ticket drill-through will restart from the new baseline."),

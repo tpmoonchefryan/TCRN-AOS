@@ -6,6 +6,7 @@ import {
   createOperationsCockpitReadModel,
   type CockpitDetailPanel
 } from "../../web/src/cockpit.js";
+import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
 import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
 import { renderRebuildBaselineHtml } from "../../web/src/rebuild-baseline-view.js";
 import { apiHealthReadback, createAosApiApp } from "./index.js";
@@ -72,12 +73,20 @@ function handleRequest(
     return;
   }
 
-  const rebuildAliases = new Set([
-    "/",
+  const docsReadinessAliases = new Set([
     "/docs-readiness",
     "/docs-search-release-readiness",
     "/docs-search-release-readiness.html",
-    "/apps/web/static/docs-search-release-readiness.html",
+    "/apps/web/static/docs-search-release-readiness.html"
+  ]);
+
+  if (docsReadinessAliases.has(path)) {
+    sendHtml(request, response, renderDocsSearchReleaseReadinessHtml());
+    return;
+  }
+
+  const rebuildAliases = new Set([
+    "/",
     "/project-workspace",
     "/project-workspace.html",
     "/apps/web/static/project-workspace.html",

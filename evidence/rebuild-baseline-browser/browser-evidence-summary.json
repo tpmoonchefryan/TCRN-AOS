@@ -1,70 +1,62 @@
 {
   "ok": true,
   "route": "route_tcrn_aos_storybook_first_rebuild_reset_after_owner_direction_clarification",
-  "sourceHead": "79203d69e27d899a893eca4ee2ae37fef2dfaf0a",
-  "generatedAt": "2026-06-25T08:44:54.431Z",
+  "sourceHead": "f7f336db8fb34672a516d7d6d8d7c587303a90e8",
+  "generatedAt": "2026-06-25T09:02:57.703Z",
   "replacedStaticTargets": [
-    {
-      "routePath": "/docs-search-release-readiness.html",
-      "staticTarget": "apps/web/static/docs-search-release-readiness.html",
-      "sha256": "82117f5188a7fa3472537e2e284bcb8260d2738356d6fa3dabee7583e63b7ef0",
-      "bytes": 48348,
-      "hasBaselineSurface": true,
-      "hasChecklist": true
-    },
     {
       "routePath": "/aos-wide-product-design.html",
       "staticTarget": "apps/web/static/aos-wide-product-design.html",
-      "sha256": "496364e1a332f6a69707c73f08a9c662b8bd4369b81947c1c384b7c0819788d4",
-      "bytes": 48364,
+      "sha256": "740c29308c27830ba9e43e2de8474738e1c0ad39a20110dba490810edf079f95",
+      "bytes": 48345,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/project-workspace.html",
       "staticTarget": "apps/web/static/project-workspace.html",
-      "sha256": "60168908c357702857a8d3dfe83753c59567867687a3d19bfc6a30ce496b1b92",
-      "bytes": 48301,
+      "sha256": "e8d10c3775abce52a6d1888d81f52787f2899b0325a2bceb5da58817a151f72b",
+      "bytes": 48282,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/initiative-detail.html",
       "staticTarget": "apps/web/static/initiative-detail.html",
-      "sha256": "319ea6434eac3d78ef9ff5b1af9857bb80cf6034f1ce892afc36d8f344d28ec9",
-      "bytes": 48301,
+      "sha256": "eb0dc63bfd120089162ee94c41b238b6b8429074a746e15f30c94134f5c05ca0",
+      "bytes": 48282,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/ai-employee.html",
       "staticTarget": "apps/web/static/ai-employee.html",
-      "sha256": "9c5cd69a3bfffa5ba61585d8b293ee36ee5aef33fe6ebeffa94e2da70da3236d",
-      "bytes": 48283,
+      "sha256": "14377e362f3f51c2cb00d8960025b2786e4ea461032702357246b7ab1c9f2384",
+      "bytes": 48264,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/gate-queue.html",
       "staticTarget": "apps/web/static/gate-queue.html",
-      "sha256": "82ffce633fcc979f96062b3b733c04a8a7fc1957220de77985c2c15e6fa5f514",
-      "bytes": 48280,
+      "sha256": "ebdf1ddddbff1cdebad8cb4d0611c77eaa25198aa700db44ad20c30857853499",
+      "bytes": 48261,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/conference.html",
       "staticTarget": "apps/web/static/conference.html",
-      "sha256": "59ef2c79f6c24c017e9943eb74f97cd63309ef513f89db5571b68fbaa4d4e41c",
-      "bytes": 48280,
+      "sha256": "047f73482b9c50157894d2ed4872a6ffef194d490d6269fdc79b50e1c600893c",
+      "bytes": 48261,
       "hasBaselineSurface": true,
       "hasChecklist": true
     },
     {
       "routePath": "/dependency-console.html",
       "staticTarget": "apps/web/static/dependency-console.html",
-      "sha256": "5afe3ed7f2f559ba33d0f0c2b4bbba5c0d9f835c53b5f4e11bf854bdcac19a9c",
-      "bytes": 48304,
+      "sha256": "695ffcfa59717fa4f25128001ff776a2493a7234b67812e8487a24991a3001f0",
+      "bytes": 48285,
       "hasBaselineSurface": true,
       "hasChecklist": true
     }
@@ -72,9 +64,9 @@
   "viewportReadbacks": [
     {
       "viewport": "desktop-1440x900",
-      "screenshot": "evidence/rebuild-baseline-browser/79203d69e27d899a893eca4ee2ae37fef2dfaf0a/rebuild-baseline-desktop-1440x900.png",
-      "screenshotSha256": "c9fab58d32ea37a55bbca69283a23ddb32613a9ec722869292c968c86141ae86",
-      "screenshotBytes": 431061,
+      "screenshot": "evidence/rebuild-baseline-browser/f7f336db8fb34672a516d7d6d8d7c587303a90e8/rebuild-baseline-desktop-1440x900.png",
+      "screenshotSha256": "40c52ae6be4ce3a397ed59d219b81507a712f589e57c7bebace6cdba1693126d",
+      "screenshotBytes": 427234,
       "selectorProof": [
         {
           "selector": "[data-surface='aos-rebuild-workspace']",
@@ -186,9 +178,9 @@
     },
     {
       "viewport": "mobile-390x844",
-      "screenshot": "evidence/rebuild-baseline-browser/79203d69e27d899a893eca4ee2ae37fef2dfaf0a/rebuild-baseline-mobile-390x844.png",
-      "screenshotSha256": "7c55b9ea6a782edc7b85c17ed950ddd48ccb59d306b0dc81836dd8b1cb2dd096",
-      "screenshotBytes": 506808,
+      "screenshot": "evidence/rebuild-baseline-browser/f7f336db8fb34672a516d7d6d8d7c587303a90e8/rebuild-baseline-mobile-390x844.png",
+      "screenshotSha256": "b1e45c368710f5695caabb16da76c988f23125109c75fd8eb9156e562544f8fa",
+      "screenshotBytes": 507158,
       "selectorProof": [
         {
           "selector": "[data-surface='aos-rebuild-workspace']",
@@ -304,9 +296,9 @@
   "requestFailures": [],
   "sourceFreshnessReadback": {
     "strategy": "rebuild_baseline_reset_source_content_digest_v1",
-    "sourceHeadAtProofRun": "79203d69e27d899a893eca4ee2ae37fef2dfaf0a",
+    "sourceHeadAtProofRun": "f7f336db8fb34672a516d7d6d8d7c587303a90e8",
     "exactFinalCommitHeadRequired": false,
-    "sourceContentDigest": "ec0b3fb05e2407d57fe087aa4b8c18f5f3ab3dc3c782dc04e960dc36fee0a3dd",
+    "sourceContentDigest": "52ff67b0a290598598dac31a5ae762ad1bc6532eed19bba123321e3c1002b81c",
     "sourcePaths": [
       "apps/web/src/rebuild-baseline-data.ts",
       "apps/web/src/rebuild-baseline-ui-react-runtime.ts",

@@ -11,9 +11,14 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
     assert.match(cockpitHtml, /Work Index/, "/operations-cockpit.html exposes rebuilt cockpit work index");
     assert.doesNotMatch(cockpitHtml, /AOS Rebuild Workspace/, "/operations-cockpit.html is no longer the reset baseline");
 
+    const docsHtml = await fetch(`${service.url}/docs-search-release-readiness.html`).then((response) => response.text());
+    assert.match(docsHtml, /data-surface="docs-search-release-readiness"/, "/docs-search-release-readiness.html serves rebuilt docs readiness");
+    assert.match(docsHtml, /TCRN AOS Docs Readiness Inspection/, "/docs-search-release-readiness.html exposes docs readiness title");
+    assert.match(docsHtml, /Docs Readiness/, "/docs-search-release-readiness.html exposes docs readiness module heading");
+    assert.doesNotMatch(docsHtml, /AOS Rebuild Workspace/, "/docs-search-release-readiness.html is no longer the reset baseline");
+
     const rebuildTargets = [
       "/",
-      "/docs-search-release-readiness.html",
       "/project-workspace.html",
       "/initiative-detail.html",
       "/ai-employee.html",
