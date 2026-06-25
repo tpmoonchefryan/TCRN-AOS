@@ -5,68 +5,24 @@ import { startAosLocalServiceProof } from "../../../dist/apps/api/src/server.js"
 test("local service proof serves owner-trial UI, health, and readback, then stops cleanly", async () => {
   const service = await startAosLocalServiceProof();
   try {
-    const cockpitHtml = await fetch(`${service.url}/operations-cockpit.html`).then((response) => response.text());
-    assert.match(cockpitHtml, /data-surface="operations-cockpit"/, "/operations-cockpit.html serves rebuilt cockpit");
-    assert.match(cockpitHtml, /TCRN AOS Operations Cockpit/, "/operations-cockpit.html exposes cockpit title");
-    assert.match(cockpitHtml, /Work Index/, "/operations-cockpit.html exposes rebuilt cockpit work index");
-    assert.doesNotMatch(cockpitHtml, /AOS Rebuild Workspace/, "/operations-cockpit.html is no longer the reset baseline");
-
-    const docsHtml = await fetch(`${service.url}/docs-search-release-readiness.html`).then((response) => response.text());
-    assert.match(docsHtml, /data-surface="docs-search-release-readiness"/, "/docs-search-release-readiness.html serves rebuilt docs readiness");
-    assert.match(docsHtml, /TCRN AOS Docs Readiness Inspection/, "/docs-search-release-readiness.html exposes docs readiness title");
-    assert.match(docsHtml, /Docs Readiness/, "/docs-search-release-readiness.html exposes docs readiness module heading");
-    assert.doesNotMatch(docsHtml, /AOS Rebuild Workspace/, "/docs-search-release-readiness.html is no longer the reset baseline");
-
-    const aosWideHtml = await fetch(`${service.url}/aos-wide-product-design.html`).then((response) => response.text());
-    assert.match(aosWideHtml, /data-surface="aos-wide-product-design"/, "/aos-wide-product-design.html serves rebuilt product design target set");
-    assert.match(aosWideHtml, /TCRN AOS Product Design Surface Set/, "/aos-wide-product-design.html exposes product design title");
-    assert.match(aosWideHtml, /Product Design/, "/aos-wide-product-design.html exposes product design module heading");
-    assert.doesNotMatch(aosWideHtml, /AOS Rebuild Workspace/, "/aos-wide-product-design.html is no longer the reset baseline");
-
-    const projectWorkspaceHtml = await fetch(`${service.url}/project-workspace.html`).then((response) => response.text());
-    assert.match(projectWorkspaceHtml, /data-surface="project-workspace"/, "/project-workspace.html serves rebuilt project workspace");
-    assert.match(projectWorkspaceHtml, /TCRN AOS Project Workspace/, "/project-workspace.html exposes project workspace title");
-    assert.match(projectWorkspaceHtml, /Project Workspace/, "/project-workspace.html exposes project workspace module heading");
-    assert.doesNotMatch(projectWorkspaceHtml, /AOS Rebuild Workspace/, "/project-workspace.html is no longer the reset baseline");
-
-    const initiativeDetailHtml = await fetch(`${service.url}/initiative-detail.html`).then((response) => response.text());
-    assert.match(initiativeDetailHtml, /data-surface="initiative-detail"/, "/initiative-detail.html serves rebuilt initiative detail");
-    assert.match(initiativeDetailHtml, /TCRN AOS Initiative Detail/, "/initiative-detail.html exposes initiative detail title");
-    assert.match(initiativeDetailHtml, /Initiative Detail/, "/initiative-detail.html exposes initiative detail module heading");
-    assert.doesNotMatch(initiativeDetailHtml, /AOS Rebuild Workspace/, "/initiative-detail.html is no longer the reset baseline");
-
-    const aiEmployeeHtml = await fetch(`${service.url}/ai-employee.html`).then((response) => response.text());
-    assert.match(aiEmployeeHtml, /data-surface="ai-employee"/, "/ai-employee.html serves rebuilt AI employee");
-    assert.match(aiEmployeeHtml, /TCRN AOS AI Employee/, "/ai-employee.html exposes AI employee title");
-    assert.match(aiEmployeeHtml, /AI Employee/, "/ai-employee.html exposes AI employee module heading");
-    assert.doesNotMatch(aiEmployeeHtml, /AOS Rebuild Workspace/, "/ai-employee.html is no longer the reset baseline");
-
-    const gateQueueHtml = await fetch(`${service.url}/gate-queue.html`).then((response) => response.text());
-    assert.match(gateQueueHtml, /data-surface="gate-queue"/, "/gate-queue.html serves rebuilt gate queue");
-    assert.match(gateQueueHtml, /TCRN AOS Gate Queue/, "/gate-queue.html exposes gate queue title");
-    assert.match(gateQueueHtml, /Gate Queue/, "/gate-queue.html exposes gate queue module heading");
-    assert.doesNotMatch(gateQueueHtml, /AOS Rebuild Workspace/, "/gate-queue.html is no longer the reset baseline");
-
-    const conferenceHtml = await fetch(`${service.url}/conference.html`).then((response) => response.text());
-    assert.match(conferenceHtml, /data-surface="conference"/, "/conference.html serves rebuilt conference");
-    assert.match(conferenceHtml, /TCRN AOS Conference/, "/conference.html exposes conference title");
-    assert.match(conferenceHtml, /Conference/, "/conference.html exposes conference module heading");
-    assert.doesNotMatch(conferenceHtml, /AOS Rebuild Workspace/, "/conference.html is no longer the reset baseline");
-
-    const dependencyConsoleHtml = await fetch(`${service.url}/dependency-console.html`).then((response) => response.text());
-    assert.match(dependencyConsoleHtml, /data-surface="dependency-console"/, "/dependency-console.html serves rebuilt dependency console");
-    assert.match(dependencyConsoleHtml, /TCRN AOS Dependency Console/, "/dependency-console.html exposes dependency console title");
-    assert.match(dependencyConsoleHtml, /Dependency Console/, "/dependency-console.html exposes dependency console module heading");
-    assert.doesNotMatch(dependencyConsoleHtml, /AOS Rebuild Workspace/, "/dependency-console.html is no longer the reset baseline");
-
-    const rebuildTargets = [
-      "/"
+    const retiredFrontendTargets = [
+      "/",
+      "/cockpit",
+      "/operations-cockpit.html",
+      "/docs-search-release-readiness.html",
+      "/aos-wide-product-design.html",
+      "/project-workspace.html",
+      "/initiative-detail.html",
+      "/ai-employee.html",
+      "/gate-queue.html",
+      "/conference.html",
+      "/dependency-console.html"
     ];
-    for (const target of rebuildTargets) {
+    for (const target of retiredFrontendTargets) {
       const html = await fetch(`${service.url}${target}`).then((response) => response.text());
       assert.match(html, /data-surface="aos-rebuild-workspace"/, `${target} serves rebuild baseline`);
-      assert.match(html, /AOS Rebuild Workspace/, `${target} exposes rebuild heading`);
-      assert.match(html, /Module rebuild checklist/, `${target} exposes rebuild checklist`);
+      assert.match(html, /AOS Frontend Replacement Workspace/, `${target} exposes replacement heading`);
+      assert.match(html, /Retired frontend inventory/, `${target} exposes retirement inventory`);
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
     }
 
@@ -97,6 +53,7 @@ test("local service proof serves owner-trial UI, health, and readback, then stop
     assert.equal(cockpitModel.serviceReadModel.surfaces.cockpit.serviceBacked, true);
     assert.equal(cockpitModel.serviceReadModel.surfaces.workIndex.rowCount, 2);
     assert.equal(cockpitModel.ownerTrial.schemaVersion, "aos.owner_trial_service_frontend.v1");
+    assert.equal(cockpitModel.ownerTrial.rootServiceUrl, "/");
     assert.equal(cockpitModel.ownerTrial.workIndex.rowCount, 2);
     assert.equal(cockpitModel.ownerTrial.readinessLane.serviceBackedState, true);
     assert.equal(cockpitModel.ownerTrial.nonClaims.productAcceptance, false);

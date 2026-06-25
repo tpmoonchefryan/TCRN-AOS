@@ -14,7 +14,7 @@ test("Rebuild baseline model resets the current AOS frontend to Storybook-first 
   const model = createRebuildBaselineModel("/operations-cockpit.html");
 
   assert.equal(model.currentAliasLabel, "Operations Cockpit");
-  assert.equal(model.selectedRebuiltStartingSlice, "storyboard-first-aos-rebuild-workspace-baseline");
+  assert.equal(model.selectedRebuiltStartingSlice, "storybook-first-replacement-workspace-shell");
   assert.equal(model.noClaims.productAcceptance, false);
   assert.equal(model.noClaims.finalMvpAcceptance, false);
   assert.equal(model.noClaims.releasePublication, false);
@@ -31,6 +31,17 @@ test("Rebuild baseline model resets the current AOS frontend to Storybook-first 
     "tcrn-design-system-patterns--aos-docs-readiness-standard",
     "tcrn-design-system-patterns--aos-product-design-target-set-standard"
   ]);
+  assert.deepEqual(rebuildBaselineRoutes, [
+    "/operations-cockpit.html",
+    "/docs-search-release-readiness.html",
+    "/aos-wide-product-design.html",
+    "/project-workspace.html",
+    "/initiative-detail.html",
+    "/ai-employee.html",
+    "/gate-queue.html",
+    "/conference.html",
+    "/dependency-console.html"
+  ]);
   assert.ok(model.checklist.length >= 10);
 });
 
@@ -45,10 +56,11 @@ test("Rebuild baseline HTML exposes the reset shell and removes old active surfa
   }
   assert.match(html, /data-ds-standard-ids="ds-aos-operations-cockpit-v1 ds-aos-docs-readiness-v1 ds-aos-target-set-v1"/);
   assert.match(html, /data-product-acceptance="false"/);
-  assert.match(html, />AOS Rebuild Workspace</);
-  assert.match(html, />Current AOS frontend is being replaced</);
-  assert.match(html, />Module rebuild checklist</);
-  assert.match(html, />Replaced frontend scope</);
+  assert.match(html, />AOS Frontend Replacement Workspace</);
+  assert.match(html, />Current served frontend has been retired</);
+  assert.match(html, />Retired frontend inventory</);
+  assert.match(html, />Retired served scope</);
+  assert.doesNotMatch(html, />Active now</);
   assert.doesNotMatch(productVisibleAndA11yText(html), productVisibleInternalTermsPattern);
 });
 
@@ -106,18 +118,16 @@ test("Rebuild baseline visible copy avoids internal workflow vocabulary", () => 
   assert.deepEqual(hits, []);
 });
 
-test("Rebuild baseline nav uses DS icons and disabled reasons for queued modules", () => {
+test("Rebuild baseline nav uses DS icons and disabled reasons for reference and retired modules", () => {
   const html = renderRebuildBaselineHtml("/conference.html");
   const navItems = Array.from(html.matchAll(/<a\b(?=[^>]*data-package-runtime-component="NavItem")([^>]*)>([\s\S]*?)<\/a>/g));
   const disabledCount = navItems.filter((match) => match[1].includes('aria-disabled="true"')).length;
 
   assert.ok(navItems.length >= 10);
-  assert.ok(disabledCount >= 6);
+  assert.equal(disabledCount, navItems.length);
   for (const [, attributes, body] of navItems) {
     assert.match(body, /\btcrn-icon\b/, "NavItem body includes a DS icon");
-    if (attributes.includes('aria-disabled="true"')) {
-      assert.match(attributes, /\bdata-disabled-reason="[^"]+"/, "disabled rebuild nav item includes a reason");
-    }
+    assert.match(attributes, /\bdata-disabled-reason="[^"]+"/, "disabled rebuild nav item includes a reason");
   }
 });
 

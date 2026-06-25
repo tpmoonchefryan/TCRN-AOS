@@ -6,15 +6,6 @@ import {
   createOperationsCockpitReadModel,
   type CockpitDetailPanel
 } from "../../web/src/cockpit.js";
-import { renderAOSWideProductDesignHtml } from "../../web/src/aos-wide-product-design-view.js";
-import { renderAiEmployeeHtml } from "../../web/src/ai-employee-view.js";
-import { renderConferenceHtml } from "../../web/src/conference-view.js";
-import { renderDependencyConsoleHtml } from "../../web/src/dependency-console-view.js";
-import { renderDocsSearchReleaseReadinessHtml } from "../../web/src/docs-readiness-view.js";
-import { renderGateQueueHtml } from "../../web/src/gate-queue-view.js";
-import { renderInitiativeDetailHtml } from "../../web/src/initiative-detail-view.js";
-import { renderOperationsCockpitHtml } from "../../web/src/cockpit-view.js";
-import { renderProjectWorkspaceHtml } from "../../web/src/project-workspace-view.js";
 import { renderRebuildBaselineHtml } from "../../web/src/rebuild-baseline-view.js";
 import { apiHealthReadback, createAosApiApp } from "./index.js";
 
@@ -61,119 +52,41 @@ function handleRequest(
   }
   const url = parseRequestUrl(request);
   const path = url.pathname;
-  const operationsCockpitAliases = new Set([
+  const retiredFrontendAliases = new Set([
+    "/",
     "/cockpit",
     "/operations-cockpit",
     "/operations-cockpit.html",
-    "/apps/web/static/operations-cockpit.html"
-  ]);
-
-  if (operationsCockpitAliases.has(path)) {
-    sendHtml(
-      request,
-      response,
-      renderOperationsCockpitHtml(createServiceCockpitReadModel(runtime, url), {
-        serviceBacked: true,
-        cockpitApiPath: "/api/cockpit"
-      })
-    );
-    return;
-  }
-
-  const docsReadinessAliases = new Set([
+    "/apps/web/static/operations-cockpit.html",
     "/docs-readiness",
     "/docs-search-release-readiness",
     "/docs-search-release-readiness.html",
-    "/apps/web/static/docs-search-release-readiness.html"
-  ]);
-
-  if (docsReadinessAliases.has(path)) {
-    sendHtml(request, response, renderDocsSearchReleaseReadinessHtml());
-    return;
-  }
-
-  const aosWideAliases = new Set([
+    "/apps/web/static/docs-search-release-readiness.html",
     "/aos-wide-product-design",
     "/aos-wide-product-design.html",
-    "/apps/web/static/aos-wide-product-design.html"
-  ]);
-
-  if (aosWideAliases.has(path)) {
-    sendHtml(request, response, renderAOSWideProductDesignHtml());
-    return;
-  }
-
-  const projectWorkspaceAliases = new Set([
+    "/apps/web/static/aos-wide-product-design.html",
     "/project-workspace",
     "/project-workspace.html",
-    "/apps/web/static/project-workspace.html"
-  ]);
-
-  if (projectWorkspaceAliases.has(path)) {
-    sendHtml(request, response, renderProjectWorkspaceHtml());
-    return;
-  }
-
-  const initiativeDetailAliases = new Set([
+    "/apps/web/static/project-workspace.html",
     "/initiative-detail",
     "/initiative-detail.html",
-    "/apps/web/static/initiative-detail.html"
-  ]);
-
-  if (initiativeDetailAliases.has(path)) {
-    sendHtml(request, response, renderInitiativeDetailHtml());
-    return;
-  }
-
-  const aiEmployeeAliases = new Set([
+    "/apps/web/static/initiative-detail.html",
     "/ai-employee",
     "/ai-employee.html",
-    "/apps/web/static/ai-employee.html"
-  ]);
-
-  if (aiEmployeeAliases.has(path)) {
-    sendHtml(request, response, renderAiEmployeeHtml());
-    return;
-  }
-
-  const gateQueueAliases = new Set([
+    "/apps/web/static/ai-employee.html",
     "/gate-queue",
     "/gate-queue.html",
-    "/apps/web/static/gate-queue.html"
-  ]);
-
-  if (gateQueueAliases.has(path)) {
-    sendHtml(request, response, renderGateQueueHtml());
-    return;
-  }
-
-  const conferenceAliases = new Set([
+    "/apps/web/static/gate-queue.html",
     "/conference",
     "/conference.html",
-    "/apps/web/static/conference.html"
-  ]);
-
-  if (conferenceAliases.has(path)) {
-    sendHtml(request, response, renderConferenceHtml());
-    return;
-  }
-
-  const dependencyConsoleAliases = new Set([
+    "/apps/web/static/conference.html",
     "/dependency-console",
     "/dependency-console.html",
     "/apps/web/static/dependency-console.html"
   ]);
 
-  if (dependencyConsoleAliases.has(path)) {
-    sendHtml(request, response, renderDependencyConsoleHtml());
-    return;
-  }
-
-  const rebuildAliases = new Set([
-    "/"
-  ]);
-  if (rebuildAliases.has(path)) {
-    sendHtml(request, response, renderRebuildBaselineHtml(path === "/" ? "/operations-cockpit.html" : path));
+  if (retiredFrontendAliases.has(path)) {
+    sendHtml(request, response, renderRebuildBaselineHtml(path));
     return;
   }
   if (path === "/health" || path === "/api/health") {
@@ -228,7 +141,7 @@ function createCockpitServicePayload(runtime: AosRuntimeFixture, url: URL) {
     ownerTrial: {
       schemaVersion: "aos.owner_trial_service_frontend.v1",
       serviceReadModelSchema: serviceReadModel.schemaVersion,
-      rootServiceUrl: "/operations-cockpit.html",
+      rootServiceUrl: "/",
       apiPath: "/api/cockpit",
       freshness: {
         state: model.contextHeader.dataFreshness,
