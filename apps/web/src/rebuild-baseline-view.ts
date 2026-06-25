@@ -82,12 +82,13 @@ ${aosDesignSystemNavigationCss}
 .rebuild-baseline__summary, .rebuild-baseline__boundaries { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.95fr); gap: 14px; min-width: 0; }
 .rebuild-baseline__summary, .rebuild-baseline__cockpit-start, .rebuild-baseline__checklist, .rebuild-baseline__boundaries, .rebuild-baseline__action-lane { padding-inline: 22px; }
 .rebuild-baseline__summary { margin-top: 22px; margin-bottom: 14px; }
-.rebuild-baseline__cockpit-start, .rebuild-baseline__docs-start { margin-bottom: 14px; }
+.rebuild-baseline__cockpit-start, .rebuild-baseline__docs-start, .rebuild-baseline__target-set-start { margin-bottom: 14px; }
 .rebuild-baseline__checklist, .rebuild-baseline__boundaries { margin-bottom: 14px; }
 .rebuild-baseline__action-lane { margin-bottom: 28px; }
 .rebuild-baseline__cockpit-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.95fr); gap: 14px; min-width: 0; }
 .rebuild-baseline__cockpit-side { display: grid; gap: 14px; min-width: 0; }
 .rebuild-baseline__cockpit-surface { min-width: 0; }
+.rebuild-baseline__module-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; min-width: 0; }
 .rebuild-baseline__cockpit-start .tcrn-detail-drawer { display: grid; gap: 12px; border: 1px solid var(--line); border-radius: 6px; padding: 16px; background: var(--surface); box-shadow: 0 10px 26px rgba(8, 36, 59, 0.05); }
 .tcrn-surface { display: grid; align-content: start; gap: 12px; min-width: 0; border: 1px solid var(--line); border-radius: 6px; padding: 16px; background: var(--surface); box-shadow: 0 10px 26px rgba(8, 36, 59, 0.05); }
 .rebuild-baseline__hero { background: linear-gradient(180deg, #ffffff, #f7fbfc); }
@@ -119,6 +120,7 @@ ${aosDesignSystemNavigationCss}
   .rebuild-baseline__topbar .tcrn-top-bar__actions { justify-content: start; flex-wrap: wrap; }
   .rebuild-baseline__summary, .rebuild-baseline__boundaries { grid-template-columns: 1fr; }
   .rebuild-baseline__cockpit-grid { grid-template-columns: 1fr; }
+  .rebuild-baseline__module-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
   .rebuild-baseline__summary, .rebuild-baseline__cockpit-start, .rebuild-baseline__checklist, .rebuild-baseline__boundaries, .rebuild-baseline__action-lane { padding-inline: 14px; }

@@ -60,6 +60,7 @@ test("Rebuild baseline HTML exposes the reset shell and removes old active surfa
   assert.match(html, />Current served frontend has been retired</);
   assert.match(html, />Operations cockpit starting surface</);
   assert.match(html, />Docs readiness starting surface</);
+  assert.match(html, />Product design target-set starting surface</);
   assert.match(html, />Retired frontend inventory</);
   assert.match(html, />Retired served scope</);
   assert.doesNotMatch(html, />Active now</);
@@ -150,6 +151,19 @@ test("Rebuild baseline exposes the next fresh docs readiness surface inside the 
   assert.match(html, /class="tcrn-search-input"/);
   assert.match(html, /class="tcrn-select"/);
   assert.match(html, /class="tcrn-field"/);
+});
+
+test("Rebuild baseline exposes the next fresh product design target-set surface inside the replacement workspace", () => {
+  const html = renderRebuildBaselineHtml("/aos-wide-product-design.html");
+
+  assert.match(html, /data-region="target-set-start"/);
+  assert.match(html, /data-region="target-set-modules"/);
+  assert.match(html, /data-region="target-set-detail"/);
+  assert.match(html, /Product design target-set starting surface/);
+  assert.match(html, /AOS-wide surface index/);
+  assert.match(html, /Target-set standard reference/);
+  assert.match(html, /Target path and module cards/);
+  assert.match(html, /Disabled gate panel/);
 });
 
 test("Rebuild baseline nav uses DS icons and disabled reasons for reference and retired modules", () => {

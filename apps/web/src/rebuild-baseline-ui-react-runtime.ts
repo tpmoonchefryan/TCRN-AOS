@@ -25,7 +25,7 @@ import {
   TopBar,
   WorkIndex
 } from "@tcrn/ui-react";
-import type { RebuildBaselineModel, RebuildCockpitStartModel, RebuildDocsStartModel } from "./rebuild-baseline-data.js";
+import type { RebuildBaselineModel, RebuildCockpitStartModel, RebuildDocsStartModel, RebuildTargetSetModel } from "./rebuild-baseline-data.js";
 
 const createElement = React.createElement as unknown as (type: unknown, props?: Record<string, unknown> | null, ...children: unknown[]) => React.ReactElement;
 
@@ -240,7 +240,9 @@ function renderCockpitStart(model: RebuildCockpitStartModel) {
             rows: model.workItems.map((item) => ({
               id: item.id,
               title: item.title,
-              state: { state: item.state },
+              state: item.state === "blocked"
+                ? { state: "blocked" }
+                : { state: "local_only", label: "Current state" },
               owner: item.owner
             })),
             label: "Operations cockpit starting work"
@@ -357,7 +359,9 @@ function renderDocsStart(model: RebuildDocsStartModel) {
               path: row.path,
               state: createElement(StatusBadge, {
                 ...packageAttrs("StatusBadge"),
-                state: { state: row.state }
+                state: row.state === "blocked"
+                  ? { state: "blocked" }
+                  : { state: "local_only", label: "Current state" }
               }),
               linkage: row.linkage
             })),
@@ -412,6 +416,110 @@ function renderDocsStart(model: RebuildDocsStartModel) {
               state: "blocked",
               label: "Unavailable",
               description: "External publication stays unavailable while docs readiness remains inside the fresh replacement workspace."
+            }
+          })
+        )
+      )
+    )
+  );
+}
+
+function renderTargetSetStart(model: RebuildTargetSetModel) {
+  return createElement(
+    "section",
+    { className: "rebuild-baseline__target-set-start", "data-region": "target-set-start" },
+    createElement(
+      "div",
+      { className: "rebuild-baseline__cockpit-grid" },
+      createElement(
+        Surface,
+        { ...packageAttrs("Surface", { className: "rebuild-baseline__cockpit-surface" }) },
+        createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Next fresh surface"),
+        createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, model.title),
+        createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.summary),
+        createElement(
+          "div",
+          packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
+          createElement(EvidenceStrip, { items: [...model.evidence] })
+        ),
+        createElement(
+          "div",
+          { className: "rebuild-baseline__module-grid", "data-region": "target-set-modules" },
+          model.cards.map((card) =>
+            createElement(
+              Surface,
+              { ...packageAttrs("Surface", { key: card.id }) },
+              createElement(Heading, { ...packageAttrs("Heading"), level: 3 }, card.title),
+              createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, card.detail),
+              createElement(StatusBadge, {
+                ...packageAttrs("StatusBadge"),
+                state: card.state === "blocked"
+                  ? { state: "blocked" }
+                  : { state: "local_only", label: "Current state" }
+              })
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("WorkIndex"),
+          createElement(WorkIndex, {
+            rows: model.indexRows.map((row) => ({
+              id: row.id,
+              title: row.title,
+              state: row.state === "blocked"
+                ? { state: "blocked" }
+                : { state: "local_only", label: "Current state" },
+              owner: row.owner
+            })),
+            label: "AOS-wide surface index"
+          })
+        )
+      ),
+      createElement(
+        "div",
+        { className: "rebuild-baseline__cockpit-side" },
+        createElement(
+          "div",
+          packageAttrs("ReadbackPanel"),
+          createElement(ReadbackPanel, { title: "Target-set standard reference" },
+            renderKeyValueList([
+              { key: "standard", label: "Standard id", value: model.standardId },
+              { key: "storybook", label: "Storybook id", value: model.storybookId },
+              { key: "posture", label: "Workspace posture", value: "Presentation-only inspection" }
+            ])
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("DetailDrawer", { "data-region": "target-set-detail" }),
+          createElement(DetailDrawer, { title: model.detailTitle, open: true },
+            renderKeyValueList(model.detailItems.map((item) => ({
+              key: item.key,
+              label: item.label,
+              value: item.value
+            }))),
+            createElement(
+              "div",
+              { className: "rebuild-baseline__action-list" },
+              model.actions.map((action) =>
+                createElement(Button, {
+                  ...packageAttrs("Button", { key: action.label }),
+                  disabled: true,
+                  disabledReason: action.reason
+                }, action.label)
+              )
+            )
+          )
+        ),
+        createElement(
+          "div",
+          packageAttrs("GateReadinessPanel"),
+          createElement(GateReadinessPanel, {
+            state: {
+              state: "blocked",
+              label: "Unavailable",
+              description: "Execution stays unavailable while the target-set surface remains inside the shared replacement workspace."
             }
           })
         )
@@ -529,6 +637,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         renderSummary(model),
         renderCockpitStart(model.cockpitStart),
         renderDocsStart(model.docsStart),
+        renderTargetSetStart(model.targetSetStart),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()

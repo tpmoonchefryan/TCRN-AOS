@@ -34,6 +34,9 @@ export const requiredRebuildBaselineSelectors = [
   "[data-region='docs-start']",
   "[data-region='docs-filter']",
   "[data-region='docs-detail']",
+  "[data-region='target-set-start']",
+  "[data-region='target-set-modules']",
+  "[data-region='target-set-detail']",
   "[data-region='rebuild-checklist']",
   "[data-region='rebuild-boundaries']",
   "[data-region='rebuild-actions']"
@@ -133,6 +136,44 @@ export interface RebuildDocsStartModel {
   actions: readonly RebuildDocsStartAction[];
 }
 
+export interface RebuildTargetSetCard {
+  id: string;
+  title: string;
+  state: "current" | "blocked";
+  detail: string;
+}
+
+export interface RebuildTargetSetRow {
+  id: string;
+  title: string;
+  state: "current" | "blocked";
+  owner: string;
+}
+
+export interface RebuildTargetSetDetailItem {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface RebuildTargetSetAction {
+  label: string;
+  reason: string;
+}
+
+export interface RebuildTargetSetModel {
+  title: string;
+  summary: string;
+  standardId: string;
+  storybookId: string;
+  evidence: readonly string[];
+  cards: readonly RebuildTargetSetCard[];
+  indexRows: readonly RebuildTargetSetRow[];
+  detailTitle: string;
+  detailItems: readonly RebuildTargetSetDetailItem[];
+  actions: readonly RebuildTargetSetAction[];
+}
+
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
@@ -143,6 +184,7 @@ export interface RebuildBaselineModel {
   selectedRebuiltStartingSlice: string;
   cockpitStart: RebuildCockpitStartModel;
   docsStart: RebuildDocsStartModel;
+  targetSetStart: RebuildTargetSetModel;
   checklist: RebuildChecklistRow[];
   noClaims: {
     productAcceptance: false;
@@ -288,6 +330,61 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
         {
           label: "Publish docs",
           reason: "Publishing remains unavailable while docs readiness stays inside the fresh replacement workspace."
+        }
+      ]
+    },
+    targetSetStart: {
+      title: "Product design target-set starting surface",
+      summary: "The next fresh rebuilt surface adds a DS-aligned target-set workspace for module cards, surface index, and blocked execution posture.",
+      standardId: "ds-aos-target-set-v1",
+      storybookId: "tcrn-design-system-patterns--aos-product-design-target-set-standard",
+      evidence: [
+        "Target-set standard",
+        "Module cards",
+        "Safe claim boundary"
+      ],
+      cards: [
+        {
+          id: "target-path",
+          title: "Target path and module cards",
+          state: "current",
+          detail: "Cards outline product areas while standalone surfaces are rebuilt inside the shared workspace."
+        },
+        {
+          id: "gate-panel",
+          title: "Disabled gate panel",
+          state: "blocked",
+          detail: "Execution and publication controls remain disabled until later rebuilt surfaces are available."
+        }
+      ],
+      indexRows: [
+        {
+          id: "target-index",
+          title: "Target path and module cards",
+          state: "current",
+          owner: "Design standard"
+        },
+        {
+          id: "target-gate",
+          title: "Blocked execution panel",
+          state: "blocked",
+          owner: "Local preview"
+        }
+      ],
+      detailTitle: "Product design inspection detail",
+      detailItems: [
+        { key: "target", label: "Target", value: "AOS-wide presentation standard" },
+        { key: "gate", label: "Gate", value: "Execution remains unavailable" },
+        { key: "evidence", label: "Evidence", value: "Registered components and synthetic rows only" }
+      ],
+      actions: [
+        {
+          label: "Edit target path",
+          reason: "Target path editing remains unavailable while the target-set surface stays inside the shared replacement workspace."
+        },
+        {
+          label: "Run product action",
+          reason: "Execution remains unavailable while the target-set surface stays in local preview."
         }
       ]
     },
