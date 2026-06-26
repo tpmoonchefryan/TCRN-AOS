@@ -267,6 +267,42 @@ function renderTopbar(model: RebuildBaselineModel) {
 }
 
 function renderSummary(model: RebuildBaselineModel) {
+  const currentPathOverviewRows = model.currentEntryFocus
+    ? [
+        {
+          module: model.currentEntryFocus.label,
+          role: createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Active module"),
+          focus: model.currentEntryFocus.entryMode,
+          action: createElement(
+            LinkButton,
+            {
+              ...packageAttrs("LinkButton", {
+                href: `#${model.currentEntryFocus.anchor}`,
+                className: "rebuild-baseline__entry-button"
+              }),
+              variant: "quiet"
+            },
+            `Open ${model.currentEntryFocus.label}`
+          )
+        },
+        ...model.currentEntryFocus.relatedEntries.map((entry) => ({
+          module: entry.label,
+          role: createElement(Badge, { ...packageAttrs("Badge"), tone: "neutral" }, "Related"),
+          focus: entry.focus,
+          action: createElement(
+            LinkButton,
+            {
+              ...packageAttrs("LinkButton", {
+                href: `#${entry.anchor}`,
+                className: "rebuild-baseline__entry-button"
+              }),
+              variant: "quiet"
+            },
+            `Open ${entry.label}`
+          )
+        }))
+      ]
+    : [];
   return createElement(
     "section",
     { className: "rebuild-baseline__summary", "data-region": "rebuild-summary" },
@@ -335,6 +371,28 @@ function renderSummary(model: RebuildBaselineModel) {
                 { key: "entry-mode", label: "Entry mode", value: model.currentEntryFocus.entryMode },
                 { key: "entry-anchor", label: "Focus anchor", value: `#${model.currentEntryFocus.anchor}` }
               ]),
+              currentPathOverviewRows.length > 0
+                ? createElement(
+                    "div",
+                    packageAttrs("ReadbackPanel", { "data-region": "current-path-overview" }),
+                    createElement(ReadbackPanel, { title: "Current path overview" },
+                      createElement(
+                        "div",
+                        packageAttrs("TableShell"),
+                        createElement(TableShell, {
+                          label: "Current path overview",
+                          columns: [
+                            { key: "module", label: "Module" },
+                            { key: "role", label: "Role" },
+                            { key: "focus", label: "Focus" },
+                            { key: "action", label: "Action" }
+                          ],
+                          rows: currentPathOverviewRows
+                        })
+                      )
+                    )
+                  )
+                : null,
               model.currentEntryFocus.relatedEntries.length > 0
                 ? createElement(
                     "div",

@@ -96,6 +96,8 @@ test("Rebuild checkpoint foregrounds the current alias entry inside the shared s
   assert.match(html, /data-current-entry="gateway-adapter"/);
   assert.match(html, /Current module entry/);
   assert.match(html, /Direct entry/);
+  assert.match(html, /Current path overview/);
+  assert.match(html, /Active module/);
   assert.match(html, /Current path actions/);
   assert.match(html, /Open Gateway \/ Adapter/);
   assert.match(html, /Open Dependency Console/);

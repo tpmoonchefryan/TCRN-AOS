@@ -65,6 +65,8 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
 
       if (target === "/gateway-adapter.html") {
         assert.match(html, /Current path/, `${target} exposes current-path navigation`);
+        assert.match(html, /Current path overview/, `${target} exposes current-path overview`);
+        assert.match(html, /Active module/, `${target} exposes current module role labeling`);
         assert.match(html, /Current path actions/, `${target} exposes current-path action lane`);
         assert.match(html, /Open Gateway \/ Adapter/, `${target} exposes focused module action`);
         assert.match(html, /Open Dependency Console/, `${target} exposes related module action`);
