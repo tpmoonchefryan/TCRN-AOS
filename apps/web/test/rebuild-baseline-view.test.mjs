@@ -76,12 +76,15 @@ test("Rebuild baseline model now represents the reset shell plus cockpit, docs, 
 
 test("Rebuild baseline recognizes later rebuilt module alias routes as active workspace entries", () => {
   assert.equal(createRebuildBaselineModel("/").currentEntryFocus?.anchor, "cockpit-start");
+  assert.equal(createRebuildBaselineModel("/").currentEntryFocus?.entryPath, "/");
   assert.equal(createRebuildBaselineModel("/").currentEntryFocus?.entryMode, "Workspace default");
   assert.equal(createRebuildBaselineModel("/").currentEntryFocus?.relatedEntries.length, 3);
   assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentAliasLabel, "Gateway / Adapter");
   assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentEntryFocus?.anchor, "gateway-adapter-start");
+  assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentEntryFocus?.entryPath, "/gateway-adapter.html");
   assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentEntryFocus?.entryMode, "Direct entry");
   assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentEntryFocus?.relatedEntries[0]?.label, "Dependency Console");
+  assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentEntryFocus?.relatedEntries[0]?.entryPath, "/dependency-console.html");
   assert.equal(createRebuildBaselineModel("/resource-library.html").currentAliasLabel, "Resource Library");
   assert.equal(createRebuildBaselineModel("/knowledge-modules.html").currentAliasLabel, "Knowledge Modules");
   assert.equal(createRebuildBaselineModel("/admin-access.html").currentAliasLabel, "Admin / Access");
@@ -95,9 +98,11 @@ test("Rebuild checkpoint foregrounds the current alias entry inside the shared s
   assert.match(html, /data-region="current-entry-panel"/);
   assert.match(html, /data-current-entry="gateway-adapter"/);
   assert.match(html, /Current module entry/);
+  assert.match(html, /Path alias/);
   assert.match(html, /Direct entry/);
   assert.match(html, /Current path overview/);
   assert.match(html, /Active module/);
+  assert.match(html, /\/gateway-adapter\.html/);
   assert.match(html, /Current path actions/);
   assert.match(html, /Open Gateway \/ Adapter/);
   assert.match(html, /Open Dependency Console/);
@@ -106,6 +111,8 @@ test("Rebuild checkpoint foregrounds the current alias entry inside the shared s
   assert.match(html, /Related rebuilt modules/);
   assert.match(html, /Health and governance/);
   assert.match(html, /Release records/);
+  assert.match(html, /\/dependency-console\.html/);
+  assert.match(html, /\/github-release-linkage\.html/);
   assert.match(html, /Go to Dependency Console/);
   assert.match(html, /Go to GitHub Release Linkage/);
   assert.match(html, /data-current-entry-row="gateway-adapter"/);

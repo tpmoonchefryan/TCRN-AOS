@@ -60,6 +60,7 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
       assert.match(html, /Rebuilt module directory/, `${target} exposes rebuilt module directory`);
       assert.match(html, /Legacy standalone scope/, `${target} exposes legacy standalone scope`);
       assert.match(html, /Current module entry/, `${target} exposes the current module entry panel`);
+      assert.match(html, /Path alias/, `${target} exposes the current module path alias`);
       assert.equal(Array.from(html.matchAll(/Fresh rebuild surface not started yet\./g)).length, 0, `${target} only keeps later queued checklist rows`);
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
 
@@ -67,6 +68,7 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
         assert.match(html, /Current path/, `${target} exposes current-path navigation`);
         assert.match(html, /Current path overview/, `${target} exposes current-path overview`);
         assert.match(html, /Active module/, `${target} exposes current module role labeling`);
+        assert.match(html, /\/gateway-adapter\.html/, `${target} exposes the focused module path context`);
         assert.match(html, /Current path actions/, `${target} exposes current-path action lane`);
         assert.match(html, /Open Gateway \/ Adapter/, `${target} exposes focused module action`);
         assert.match(html, /Open Dependency Console/, `${target} exposes related module action`);
@@ -74,6 +76,8 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
         assert.match(html, /Related rebuilt modules/, `${target} exposes related rebuilt module links`);
         assert.match(html, /Health and governance/, `${target} exposes related module focus context`);
         assert.match(html, /Release records/, `${target} exposes release linkage context`);
+        assert.match(html, /\/dependency-console\.html/, `${target} exposes the related module path context`);
+        assert.match(html, /\/github-release-linkage\.html/, `${target} exposes the release linkage path context`);
         assert.ok(
           html.indexOf('data-region="gateway-adapter-start"') < html.indexOf('data-region="cockpit-start"'),
           `${target} foregrounds the gateway adapter section before the default cockpit section`

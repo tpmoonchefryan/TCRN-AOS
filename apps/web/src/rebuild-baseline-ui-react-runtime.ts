@@ -272,6 +272,7 @@ function renderSummary(model: RebuildBaselineModel) {
         {
           module: model.currentEntryFocus.label,
           role: createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Active module"),
+          path: model.currentEntryFocus.entryPath,
           focus: model.currentEntryFocus.entryMode,
           action: createElement(
             LinkButton,
@@ -288,6 +289,7 @@ function renderSummary(model: RebuildBaselineModel) {
         ...model.currentEntryFocus.relatedEntries.map((entry) => ({
           module: entry.label,
           role: createElement(Badge, { ...packageAttrs("Badge"), tone: "neutral" }, "Related"),
+          path: entry.entryPath,
           focus: entry.focus,
           action: createElement(
             LinkButton,
@@ -322,7 +324,7 @@ function renderSummary(model: RebuildBaselineModel) {
         Text,
         { ...packageAttrs("Text", { className: "tcrn-text--muted" }) },
         model.currentEntryFocus
-          ? model.currentEntryFocus.summary
+          ? `${model.currentEntryFocus.summary} Current path stays anchored to ${model.currentEntryFocus.entryPath}.`
           : "These paths now open the shared rebuilt workspace while standalone surfaces remain retired."
       ),
       createElement(
@@ -368,6 +370,7 @@ function renderSummary(model: RebuildBaselineModel) {
               createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.currentEntryFocus.summary),
               renderKeyValueList([
                 { key: "entry-target", label: "Entry target", value: model.currentEntryFocus.label },
+                { key: "entry-path", label: "Path alias", value: model.currentEntryFocus.entryPath },
                 { key: "entry-mode", label: "Entry mode", value: model.currentEntryFocus.entryMode },
                 { key: "entry-anchor", label: "Focus anchor", value: `#${model.currentEntryFocus.anchor}` }
               ]),
@@ -384,6 +387,7 @@ function renderSummary(model: RebuildBaselineModel) {
                           columns: [
                             { key: "module", label: "Module" },
                             { key: "role", label: "Role" },
+                            { key: "path", label: "Path" },
                             { key: "focus", label: "Focus" },
                             { key: "action", label: "Action" }
                           ],
@@ -405,11 +409,13 @@ function renderSummary(model: RebuildBaselineModel) {
                           label: "Related rebuilt modules",
                           columns: [
                             { key: "module", label: "Module" },
+                            { key: "path", label: "Path" },
                             { key: "focus", label: "Focus" },
                             { key: "action", label: "Action" }
                           ],
                           rows: model.currentEntryFocus.relatedEntries.map((entry) => ({
                             module: entry.label,
+                            path: entry.entryPath,
                             focus: entry.focus,
                             action: createElement(
                               LinkButton,

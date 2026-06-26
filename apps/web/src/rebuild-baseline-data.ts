@@ -115,6 +115,7 @@ export interface RebuildCurrentEntryFocus {
   label: string;
   anchor: string;
   checklistId: string;
+  entryPath: string;
   entryMode: string;
   summary: string;
   relatedEntries: readonly RebuildCurrentEntryLink[];
@@ -124,6 +125,7 @@ export interface RebuildCurrentEntryLink {
   label: string;
   anchor: string;
   checklistId: string;
+  entryPath: string;
   focus: string;
 }
 
@@ -1405,117 +1407,120 @@ function resolveCurrentEntryFocus(value: string): RebuildCurrentEntryFocus | nul
       label: "Operations Cockpit",
       anchor: "cockpit-start",
       checklistId: "operations-cockpit",
+      entryPath: "/",
       entryMode: "Workspace default",
       summary: "Root entry foregrounds the cockpit section while every rebuilt module remains available inside the same shared workspace.",
       relatedEntries: [
-        link("Docs Readiness", "docs-start", "docs-readiness", "Documentation state"),
-        link("Project Workspace", "project-workspace-start", "project-workspace", "Delivery coordination"),
-        link("Initiative Detail", "initiative-detail-start", "initiative-detail", "Ticket traceability")
+        link("Docs Readiness", "docs-start", "docs-readiness", "/docs-search-release-readiness.html", "Documentation state"),
+        link("Project Workspace", "project-workspace-start", "project-workspace", "/project-workspace.html", "Delivery coordination"),
+        link("Initiative Detail", "initiative-detail-start", "initiative-detail", "/initiative-detail.html", "Ticket traceability")
       ]
     };
   }
-  if (value === "/cockpit" || value.includes("operations-cockpit")) return legacyEntryFocus("Operations Cockpit", "cockpit-start", "operations-cockpit", [
-    link("Docs Readiness", "docs-start", "docs-readiness", "Documentation state"),
-    link("Project Workspace", "project-workspace-start", "project-workspace", "Delivery coordination"),
-    link("Initiative Detail", "initiative-detail-start", "initiative-detail", "Ticket traceability")
+  if (value === "/cockpit" || value.includes("operations-cockpit")) return legacyEntryFocus("Operations Cockpit", "cockpit-start", "operations-cockpit", value, [
+    link("Docs Readiness", "docs-start", "docs-readiness", "/docs-search-release-readiness.html", "Documentation state"),
+    link("Project Workspace", "project-workspace-start", "project-workspace", "/project-workspace.html", "Delivery coordination"),
+    link("Initiative Detail", "initiative-detail-start", "initiative-detail", "/initiative-detail.html", "Ticket traceability")
   ]);
-  if (value.includes("docs-readiness")) return legacyEntryFocus("Docs Readiness", "docs-start", "docs-readiness", [
-    link("Product Design target set", "target-set-start", "product-design", "Target coverage"),
-    link("Knowledge Modules", "knowledge-modules-start", "knowledge-modules", "Reference material"),
-    link("GitHub Release Linkage", "github-release-linkage-start", "github-release-linkage", "Release records")
+  if (value.includes("docs-readiness")) return legacyEntryFocus("Docs Readiness", "docs-start", "docs-readiness", value, [
+    link("Product Design target set", "target-set-start", "product-design", "/aos-wide-product-design.html", "Target coverage"),
+    link("Knowledge Modules", "knowledge-modules-start", "knowledge-modules", "/knowledge-modules.html", "Reference material"),
+    link("GitHub Release Linkage", "github-release-linkage-start", "github-release-linkage", "/github-release-linkage.html", "Release records")
   ]);
-  if (value.includes("docs-search-release-readiness")) return legacyEntryFocus("Docs Readiness", "docs-start", "docs-readiness", [
-    link("Product Design target set", "target-set-start", "product-design", "Target coverage"),
-    link("Knowledge Modules", "knowledge-modules-start", "knowledge-modules", "Reference material"),
-    link("GitHub Release Linkage", "github-release-linkage-start", "github-release-linkage", "Release records")
+  if (value.includes("docs-search-release-readiness")) return legacyEntryFocus("Docs Readiness", "docs-start", "docs-readiness", value, [
+    link("Product Design target set", "target-set-start", "product-design", "/aos-wide-product-design.html", "Target coverage"),
+    link("Knowledge Modules", "knowledge-modules-start", "knowledge-modules", "/knowledge-modules.html", "Reference material"),
+    link("GitHub Release Linkage", "github-release-linkage-start", "github-release-linkage", "/github-release-linkage.html", "Release records")
   ]);
-  if (value.includes("aos-wide-product-design")) return legacyEntryFocus("Product Design target set", "target-set-start", "product-design", [
-    link("Project Workspace", "project-workspace-start", "project-workspace", "Delivery coordination"),
-    link("Resource Library", "resource-library-start", "resource-library", "Shared assets"),
-    link("Knowledge Modules", "knowledge-modules-start", "knowledge-modules", "Reference material")
+  if (value.includes("aos-wide-product-design")) return legacyEntryFocus("Product Design target set", "target-set-start", "product-design", value, [
+    link("Project Workspace", "project-workspace-start", "project-workspace", "/project-workspace.html", "Delivery coordination"),
+    link("Resource Library", "resource-library-start", "resource-library", "/resource-library.html", "Shared assets"),
+    link("Knowledge Modules", "knowledge-modules-start", "knowledge-modules", "/knowledge-modules.html", "Reference material")
   ]);
-  if (value.includes("project-workspace")) return legacyEntryFocus("Project Workspace", "project-workspace-start", "project-workspace", [
-    link("Initiative Detail", "initiative-detail-start", "initiative-detail", "Ticket traceability"),
-    link("Resource Library", "resource-library-start", "resource-library", "Shared assets"),
-    link("Admin / Access", "admin-access-start", "admin-access", "Access posture")
+  if (value.includes("project-workspace")) return legacyEntryFocus("Project Workspace", "project-workspace-start", "project-workspace", value, [
+    link("Initiative Detail", "initiative-detail-start", "initiative-detail", "/initiative-detail.html", "Ticket traceability"),
+    link("Resource Library", "resource-library-start", "resource-library", "/resource-library.html", "Shared assets"),
+    link("Admin / Access", "admin-access-start", "admin-access", "/admin-access.html", "Access posture")
   ]);
-  if (value.includes("initiative-detail")) return legacyEntryFocus("Initiative Detail", "initiative-detail-start", "initiative-detail", [
-    link("Project Workspace", "project-workspace-start", "project-workspace", "Delivery coordination"),
-    link("Conference", "conference-start", "conference", "Team decisions"),
-    link("Knowledge Modules", "knowledge-modules-start", "knowledge-modules", "Reference material")
+  if (value.includes("initiative-detail")) return legacyEntryFocus("Initiative Detail", "initiative-detail-start", "initiative-detail", value, [
+    link("Project Workspace", "project-workspace-start", "project-workspace", "/project-workspace.html", "Delivery coordination"),
+    link("Conference", "conference-start", "conference", "/conference.html", "Team decisions"),
+    link("Knowledge Modules", "knowledge-modules-start", "knowledge-modules", "/knowledge-modules.html", "Reference material")
   ]);
-  if (value.includes("ai-employee")) return legacyEntryFocus("AI Employee", "ai-employee-start", "ai-employee", [
-    link("Gate Queue", "gate-queue-start", "gate-queue", "Operational approvals"),
-    link("Admin / Access", "admin-access-start", "admin-access", "Access posture"),
-    link("Project Workspace", "project-workspace-start", "project-workspace", "Delivery coordination")
+  if (value.includes("ai-employee")) return legacyEntryFocus("AI Employee", "ai-employee-start", "ai-employee", value, [
+    link("Gate Queue", "gate-queue-start", "gate-queue", "/gate-queue.html", "Operational approvals"),
+    link("Admin / Access", "admin-access-start", "admin-access", "/admin-access.html", "Access posture"),
+    link("Project Workspace", "project-workspace-start", "project-workspace", "/project-workspace.html", "Delivery coordination")
   ]);
-  if (value.includes("gate-queue")) return legacyEntryFocus("Gate Queue", "gate-queue-start", "gate-queue", [
-    link("Conference", "conference-start", "conference", "Team decisions"),
-    link("AI Employee", "ai-employee-start", "ai-employee", "Assignment posture"),
-    link("Initiative Detail", "initiative-detail-start", "initiative-detail", "Ticket traceability")
+  if (value.includes("gate-queue")) return legacyEntryFocus("Gate Queue", "gate-queue-start", "gate-queue", value, [
+    link("Conference", "conference-start", "conference", "/conference.html", "Team decisions"),
+    link("AI Employee", "ai-employee-start", "ai-employee", "/ai-employee.html", "Assignment posture"),
+    link("Initiative Detail", "initiative-detail-start", "initiative-detail", "/initiative-detail.html", "Ticket traceability")
   ]);
-  if (value.includes("conference")) return legacyEntryFocus("Conference", "conference-start", "conference", [
-    link("Gate Queue", "gate-queue-start", "gate-queue", "Operational approvals"),
-    link("Gateway / Adapter", "gateway-adapter-start", "gateway-adapter", "Control-plane state"),
-    link("Initiative Detail", "initiative-detail-start", "initiative-detail", "Ticket traceability")
+  if (value.includes("conference")) return legacyEntryFocus("Conference", "conference-start", "conference", value, [
+    link("Gate Queue", "gate-queue-start", "gate-queue", "/gate-queue.html", "Operational approvals"),
+    link("Gateway / Adapter", "gateway-adapter-start", "gateway-adapter", "/gateway-adapter.html", "Control-plane state"),
+    link("Initiative Detail", "initiative-detail-start", "initiative-detail", "/initiative-detail.html", "Ticket traceability")
   ]);
-  if (value.includes("gateway-adapter")) return directEntryFocus("Gateway / Adapter", "gateway-adapter-start", "gateway-adapter", [
-    link("Dependency Console", "dependency-console-start", "dependency-console", "Health and governance"),
-    link("GitHub Release Linkage", "github-release-linkage-start", "github-release-linkage", "Release records"),
-    link("Admin / Access", "admin-access-start", "admin-access", "Access posture")
+  if (value.includes("gateway-adapter")) return directEntryFocus("Gateway / Adapter", "gateway-adapter-start", "gateway-adapter", value, [
+    link("Dependency Console", "dependency-console-start", "dependency-console", "/dependency-console.html", "Health and governance"),
+    link("GitHub Release Linkage", "github-release-linkage-start", "github-release-linkage", "/github-release-linkage.html", "Release records"),
+    link("Admin / Access", "admin-access-start", "admin-access", "/admin-access.html", "Access posture")
   ]);
-  if (value.includes("dependency-console")) return legacyEntryFocus("Dependency Console", "dependency-console-start", "dependency-console", [
-    link("Gateway / Adapter", "gateway-adapter-start", "gateway-adapter", "Control-plane state"),
-    link("Resource Library", "resource-library-start", "resource-library", "Shared assets"),
-    link("Admin / Access", "admin-access-start", "admin-access", "Access posture")
+  if (value.includes("dependency-console")) return legacyEntryFocus("Dependency Console", "dependency-console-start", "dependency-console", value, [
+    link("Gateway / Adapter", "gateway-adapter-start", "gateway-adapter", "/gateway-adapter.html", "Control-plane state"),
+    link("Resource Library", "resource-library-start", "resource-library", "/resource-library.html", "Shared assets"),
+    link("Admin / Access", "admin-access-start", "admin-access", "/admin-access.html", "Access posture")
   ]);
-  if (value.includes("resource-library")) return directEntryFocus("Resource Library", "resource-library-start", "resource-library", [
-    link("Knowledge Modules", "knowledge-modules-start", "knowledge-modules", "Reference material"),
-    link("Project Workspace", "project-workspace-start", "project-workspace", "Delivery coordination"),
-    link("Docs Readiness", "docs-start", "docs-readiness", "Documentation state")
+  if (value.includes("resource-library")) return directEntryFocus("Resource Library", "resource-library-start", "resource-library", value, [
+    link("Knowledge Modules", "knowledge-modules-start", "knowledge-modules", "/knowledge-modules.html", "Reference material"),
+    link("Project Workspace", "project-workspace-start", "project-workspace", "/project-workspace.html", "Delivery coordination"),
+    link("Docs Readiness", "docs-start", "docs-readiness", "/docs-search-release-readiness.html", "Documentation state")
   ]);
-  if (value.includes("knowledge-modules")) return directEntryFocus("Knowledge Modules", "knowledge-modules-start", "knowledge-modules", [
-    link("Resource Library", "resource-library-start", "resource-library", "Shared assets"),
-    link("Initiative Detail", "initiative-detail-start", "initiative-detail", "Ticket traceability"),
-    link("Docs Readiness", "docs-start", "docs-readiness", "Documentation state")
+  if (value.includes("knowledge-modules")) return directEntryFocus("Knowledge Modules", "knowledge-modules-start", "knowledge-modules", value, [
+    link("Resource Library", "resource-library-start", "resource-library", "/resource-library.html", "Shared assets"),
+    link("Initiative Detail", "initiative-detail-start", "initiative-detail", "/initiative-detail.html", "Ticket traceability"),
+    link("Docs Readiness", "docs-start", "docs-readiness", "/docs-search-release-readiness.html", "Documentation state")
   ]);
-  if (value.includes("admin-access")) return directEntryFocus("Admin / Access", "admin-access-start", "admin-access", [
-    link("GitHub Release Linkage", "github-release-linkage-start", "github-release-linkage", "Release records"),
-    link("Gateway / Adapter", "gateway-adapter-start", "gateway-adapter", "Control-plane state"),
-    link("Resource Library", "resource-library-start", "resource-library", "Shared assets")
+  if (value.includes("admin-access")) return directEntryFocus("Admin / Access", "admin-access-start", "admin-access", value, [
+    link("GitHub Release Linkage", "github-release-linkage-start", "github-release-linkage", "/github-release-linkage.html", "Release records"),
+    link("Gateway / Adapter", "gateway-adapter-start", "gateway-adapter", "/gateway-adapter.html", "Control-plane state"),
+    link("Resource Library", "resource-library-start", "resource-library", "/resource-library.html", "Shared assets")
   ]);
-  if (value.includes("github-release-linkage")) return directEntryFocus("GitHub Release Linkage", "github-release-linkage-start", "github-release-linkage", [
-    link("Gateway / Adapter", "gateway-adapter-start", "gateway-adapter", "Control-plane state"),
-    link("Admin / Access", "admin-access-start", "admin-access", "Access posture"),
-    link("Docs Readiness", "docs-start", "docs-readiness", "Documentation state")
+  if (value.includes("github-release-linkage")) return directEntryFocus("GitHub Release Linkage", "github-release-linkage-start", "github-release-linkage", value, [
+    link("Gateway / Adapter", "gateway-adapter-start", "gateway-adapter", "/gateway-adapter.html", "Control-plane state"),
+    link("Admin / Access", "admin-access-start", "admin-access", "/admin-access.html", "Access posture"),
+    link("Docs Readiness", "docs-start", "docs-readiness", "/docs-search-release-readiness.html", "Documentation state")
   ]);
   return null;
 }
 
-function legacyEntryFocus(label: string, anchor: string, checklistId: string, relatedEntries: readonly RebuildCurrentEntryLink[]): RebuildCurrentEntryFocus {
+function legacyEntryFocus(label: string, anchor: string, checklistId: string, entryPath: string, relatedEntries: readonly RebuildCurrentEntryLink[]): RebuildCurrentEntryFocus {
   return {
     label,
     anchor,
     checklistId,
+    entryPath,
     entryMode: "Legacy entry",
     summary: "This entry now foregrounds the rebuilt module section inside the shared workspace while the former standalone page stays retired.",
     relatedEntries
   };
 }
 
-function directEntryFocus(label: string, anchor: string, checklistId: string, relatedEntries: readonly RebuildCurrentEntryLink[]): RebuildCurrentEntryFocus {
+function directEntryFocus(label: string, anchor: string, checklistId: string, entryPath: string, relatedEntries: readonly RebuildCurrentEntryLink[]): RebuildCurrentEntryFocus {
   return {
     label,
     anchor,
     checklistId,
+    entryPath,
     entryMode: "Direct entry",
     summary: "This entry now foregrounds the rebuilt module section directly inside the shared workspace.",
     relatedEntries
   };
 }
 
-function link(label: string, anchor: string, checklistId: string, focus: string): RebuildCurrentEntryLink {
-  return { label, anchor, checklistId, focus };
+function link(label: string, anchor: string, checklistId: string, entryPath: string, focus: string): RebuildCurrentEntryLink {
+  return { label, anchor, checklistId, entryPath, focus };
 }
 
 function presentAlias(value: string): string {
