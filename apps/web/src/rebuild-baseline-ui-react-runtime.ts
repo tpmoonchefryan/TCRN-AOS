@@ -203,7 +203,7 @@ function renderTopbar(model: RebuildBaselineModel) {
     }),
     createElement(TopBar, {
       productName: "TCRN AOS",
-      moduleName: "Rebuild Workspace",
+      moduleName: model.currentEntryFocus?.label ?? "Rebuild Workspace",
       actions: createElement(
         "div",
         { className: "rebuild-baseline__actions" },
@@ -212,6 +212,9 @@ function renderTopbar(model: RebuildBaselineModel) {
           state: { state: "local_only", label: "Current" }
         }),
         createElement(Badge, { ...packageAttrs("Badge"), tone: "neutral" }, "Local preview"),
+        model.currentEntryFocus
+          ? createElement(Badge, { ...packageAttrs("Badge"), tone: "neutral" }, model.currentEntryFocus.entryMode)
+          : null,
         createElement(Button, {
           ...packageAttrs("Button"),
           disabled: true,
@@ -223,7 +226,13 @@ function renderTopbar(model: RebuildBaselineModel) {
       "div",
       { className: "rebuild-baseline__topbar-copy" },
       createElement(Heading, { ...packageAttrs("Heading"), level: 1 }, "AOS Rebuild Workspace"),
-      createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, `Shared rebuilt workspace for ${model.currentAliasLabel}.`)
+      createElement(
+        Text,
+        { ...packageAttrs("Text", { className: "tcrn-text--muted" }) },
+        model.currentEntryFocus
+          ? `Shared rebuilt workspace opened through ${model.currentEntryFocus.label}.`
+          : `Shared rebuilt workspace for ${model.currentAliasLabel}.`
+      )
     )
   );
 }
@@ -235,9 +244,22 @@ function renderSummary(model: RebuildBaselineModel) {
     createElement(
       Surface,
       { ...packageAttrs("Surface", { className: "rebuild-baseline__hero" }) },
-      createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Rebuilt workspace"),
-      createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, "AOS rebuilt workspace is active"),
-      createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, "These paths now open the shared rebuilt workspace while standalone surfaces remain retired."),
+      createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, model.currentEntryFocus ? "Current entry" : "Rebuilt workspace"),
+      model.currentEntryFocus
+        ? createElement(Badge, { ...packageAttrs("Badge"), tone: "neutral" }, model.currentEntryFocus.entryMode)
+        : null,
+      createElement(
+        Heading,
+        { ...packageAttrs("Heading"), level: 2 },
+        model.currentEntryFocus ? `${model.currentEntryFocus.label} is foregrounded in the rebuilt workspace` : "AOS rebuilt workspace is active"
+      ),
+      createElement(
+        Text,
+        { ...packageAttrs("Text", { className: "tcrn-text--muted" }) },
+        model.currentEntryFocus
+          ? model.currentEntryFocus.summary
+          : "These paths now open the shared rebuilt workspace while standalone surfaces remain retired."
+      ),
       createElement(
         "div",
         packageAttrs("EvidenceStrip", { className: "rebuild-baseline__evidence-strip" }),
@@ -245,7 +267,8 @@ function renderSummary(model: RebuildBaselineModel) {
           items: [
             `Standards: ${model.dsStandardIds.length}`,
             "Single rebuilt shell",
-            `Requested alias: ${model.currentAliasLabel}`,
+            `Current entry: ${model.currentEntryFocus?.label ?? model.currentAliasLabel}`,
+            `Shared modules: ${model.checklist.length}`,
             "Served UI: Local preview",
             "Backend service retained"
           ]
@@ -283,6 +306,32 @@ function renderSummary(model: RebuildBaselineModel) {
                 { key: "entry-mode", label: "Entry mode", value: model.currentEntryFocus.entryMode },
                 { key: "entry-anchor", label: "Focus anchor", value: `#${model.currentEntryFocus.anchor}` }
               ]),
+              model.currentEntryFocus.relatedEntries.length > 0
+                ? createElement(
+                    "div",
+                    packageAttrs("ReadbackPanel", { "data-region": "current-entry-related" }),
+                    createElement(ReadbackPanel, { title: "Related rebuilt modules" },
+                      createElement(
+                        "div",
+                        { className: "rebuild-baseline__entry-link" },
+                        model.currentEntryFocus.relatedEntries.map((entry) =>
+                          createElement(
+                            LinkButton,
+                            {
+                              ...packageAttrs("LinkButton", {
+                                key: entry.anchor,
+                                href: `#${entry.anchor}`,
+                                className: "rebuild-baseline__entry-button"
+                              }),
+                              variant: "quiet"
+                            },
+                            `Go to ${entry.label}`
+                          )
+                        )
+                      )
+                    )
+                  )
+                : null,
               createElement(
                 "div",
                 { className: "rebuild-baseline__entry-link" },
@@ -1642,6 +1691,12 @@ function renderGitHubReleaseLinkageStart(model: RebuildGitHubReleaseLinkageModel
 }
 
 function renderChecklist(model: RebuildBaselineModel) {
+  const orderedChecklist = model.currentEntryFocus
+    ? [
+        ...model.checklist.filter((row) => row.id === model.currentEntryFocus?.checklistId),
+        ...model.checklist.filter((row) => row.id !== model.currentEntryFocus?.checklistId)
+      ]
+    : model.checklist;
   return createElement(
     "section",
     { className: "rebuild-baseline__checklist", "data-region": "rebuild-checklist" },
@@ -1660,7 +1715,7 @@ function renderChecklist(model: RebuildBaselineModel) {
             { key: "source", label: "Source" },
             { key: "note", label: "Note" }
           ],
-          rows: model.checklist.map((row) => ({
+          rows: orderedChecklist.map((row) => ({
             label: row.id === model.currentEntryFocus?.checklistId
               ? createElement(
                   "div",

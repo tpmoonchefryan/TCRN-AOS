@@ -117,6 +117,12 @@ export interface RebuildCurrentEntryFocus {
   checklistId: string;
   entryMode: string;
   summary: string;
+  relatedEntries: readonly RebuildCurrentEntryLink[];
+}
+
+export interface RebuildCurrentEntryLink {
+  label: string;
+  anchor: string;
 }
 
 export interface RebuildCockpitStartItem {
@@ -1398,45 +1404,116 @@ function resolveCurrentEntryFocus(value: string): RebuildCurrentEntryFocus | nul
       anchor: "cockpit-start",
       checklistId: "operations-cockpit",
       entryMode: "Workspace default",
-      summary: "Root entry foregrounds the cockpit section while every rebuilt module remains available inside the same shared workspace."
+      summary: "Root entry foregrounds the cockpit section while every rebuilt module remains available inside the same shared workspace.",
+      relatedEntries: [
+        link("Docs Readiness", "docs-start"),
+        link("Project Workspace", "project-workspace-start"),
+        link("Initiative Detail", "initiative-detail-start")
+      ]
     };
   }
-  if (value === "/cockpit" || value.includes("operations-cockpit")) return legacyEntryFocus("Operations Cockpit", "cockpit-start", "operations-cockpit");
-  if (value.includes("docs-readiness")) return legacyEntryFocus("Docs Readiness", "docs-start", "docs-readiness");
-  if (value.includes("docs-search-release-readiness")) return legacyEntryFocus("Docs Readiness", "docs-start", "docs-readiness");
-  if (value.includes("aos-wide-product-design")) return legacyEntryFocus("Product Design target set", "target-set-start", "product-design");
-  if (value.includes("project-workspace")) return legacyEntryFocus("Project Workspace", "project-workspace-start", "project-workspace");
-  if (value.includes("initiative-detail")) return legacyEntryFocus("Initiative Detail", "initiative-detail-start", "initiative-detail");
-  if (value.includes("ai-employee")) return legacyEntryFocus("AI Employee", "ai-employee-start", "ai-employee");
-  if (value.includes("gate-queue")) return legacyEntryFocus("Gate Queue", "gate-queue-start", "gate-queue");
-  if (value.includes("conference")) return legacyEntryFocus("Conference", "conference-start", "conference");
-  if (value.includes("gateway-adapter")) return directEntryFocus("Gateway / Adapter", "gateway-adapter-start", "gateway-adapter");
-  if (value.includes("dependency-console")) return legacyEntryFocus("Dependency Console", "dependency-console-start", "dependency-console");
-  if (value.includes("resource-library")) return directEntryFocus("Resource Library", "resource-library-start", "resource-library");
-  if (value.includes("knowledge-modules")) return directEntryFocus("Knowledge Modules", "knowledge-modules-start", "knowledge-modules");
-  if (value.includes("admin-access")) return directEntryFocus("Admin / Access", "admin-access-start", "admin-access");
-  if (value.includes("github-release-linkage")) return directEntryFocus("GitHub Release Linkage", "github-release-linkage-start", "github-release-linkage");
+  if (value === "/cockpit" || value.includes("operations-cockpit")) return legacyEntryFocus("Operations Cockpit", "cockpit-start", "operations-cockpit", [
+    link("Docs Readiness", "docs-start"),
+    link("Project Workspace", "project-workspace-start"),
+    link("Initiative Detail", "initiative-detail-start")
+  ]);
+  if (value.includes("docs-readiness")) return legacyEntryFocus("Docs Readiness", "docs-start", "docs-readiness", [
+    link("Product Design target set", "target-set-start"),
+    link("Knowledge Modules", "knowledge-modules-start"),
+    link("GitHub Release Linkage", "github-release-linkage-start")
+  ]);
+  if (value.includes("docs-search-release-readiness")) return legacyEntryFocus("Docs Readiness", "docs-start", "docs-readiness", [
+    link("Product Design target set", "target-set-start"),
+    link("Knowledge Modules", "knowledge-modules-start"),
+    link("GitHub Release Linkage", "github-release-linkage-start")
+  ]);
+  if (value.includes("aos-wide-product-design")) return legacyEntryFocus("Product Design target set", "target-set-start", "product-design", [
+    link("Project Workspace", "project-workspace-start"),
+    link("Resource Library", "resource-library-start"),
+    link("Knowledge Modules", "knowledge-modules-start")
+  ]);
+  if (value.includes("project-workspace")) return legacyEntryFocus("Project Workspace", "project-workspace-start", "project-workspace", [
+    link("Initiative Detail", "initiative-detail-start"),
+    link("Resource Library", "resource-library-start"),
+    link("Admin / Access", "admin-access-start")
+  ]);
+  if (value.includes("initiative-detail")) return legacyEntryFocus("Initiative Detail", "initiative-detail-start", "initiative-detail", [
+    link("Project Workspace", "project-workspace-start"),
+    link("Conference", "conference-start"),
+    link("Knowledge Modules", "knowledge-modules-start")
+  ]);
+  if (value.includes("ai-employee")) return legacyEntryFocus("AI Employee", "ai-employee-start", "ai-employee", [
+    link("Gate Queue", "gate-queue-start"),
+    link("Admin / Access", "admin-access-start"),
+    link("Project Workspace", "project-workspace-start")
+  ]);
+  if (value.includes("gate-queue")) return legacyEntryFocus("Gate Queue", "gate-queue-start", "gate-queue", [
+    link("Conference", "conference-start"),
+    link("AI Employee", "ai-employee-start"),
+    link("Initiative Detail", "initiative-detail-start")
+  ]);
+  if (value.includes("conference")) return legacyEntryFocus("Conference", "conference-start", "conference", [
+    link("Gate Queue", "gate-queue-start"),
+    link("Gateway / Adapter", "gateway-adapter-start"),
+    link("Initiative Detail", "initiative-detail-start")
+  ]);
+  if (value.includes("gateway-adapter")) return directEntryFocus("Gateway / Adapter", "gateway-adapter-start", "gateway-adapter", [
+    link("Dependency Console", "dependency-console-start"),
+    link("GitHub Release Linkage", "github-release-linkage-start"),
+    link("Admin / Access", "admin-access-start")
+  ]);
+  if (value.includes("dependency-console")) return legacyEntryFocus("Dependency Console", "dependency-console-start", "dependency-console", [
+    link("Gateway / Adapter", "gateway-adapter-start"),
+    link("Resource Library", "resource-library-start"),
+    link("Admin / Access", "admin-access-start")
+  ]);
+  if (value.includes("resource-library")) return directEntryFocus("Resource Library", "resource-library-start", "resource-library", [
+    link("Knowledge Modules", "knowledge-modules-start"),
+    link("Project Workspace", "project-workspace-start"),
+    link("Docs Readiness", "docs-start")
+  ]);
+  if (value.includes("knowledge-modules")) return directEntryFocus("Knowledge Modules", "knowledge-modules-start", "knowledge-modules", [
+    link("Resource Library", "resource-library-start"),
+    link("Initiative Detail", "initiative-detail-start"),
+    link("Docs Readiness", "docs-start")
+  ]);
+  if (value.includes("admin-access")) return directEntryFocus("Admin / Access", "admin-access-start", "admin-access", [
+    link("GitHub Release Linkage", "github-release-linkage-start"),
+    link("Gateway / Adapter", "gateway-adapter-start"),
+    link("Resource Library", "resource-library-start")
+  ]);
+  if (value.includes("github-release-linkage")) return directEntryFocus("GitHub Release Linkage", "github-release-linkage-start", "github-release-linkage", [
+    link("Gateway / Adapter", "gateway-adapter-start"),
+    link("Admin / Access", "admin-access-start"),
+    link("Docs Readiness", "docs-start")
+  ]);
   return null;
 }
 
-function legacyEntryFocus(label: string, anchor: string, checklistId: string): RebuildCurrentEntryFocus {
+function legacyEntryFocus(label: string, anchor: string, checklistId: string, relatedEntries: readonly RebuildCurrentEntryLink[]): RebuildCurrentEntryFocus {
   return {
     label,
     anchor,
     checklistId,
     entryMode: "Legacy entry",
-    summary: "This entry now foregrounds the rebuilt module section inside the shared workspace while the former standalone page stays retired."
+    summary: "This entry now foregrounds the rebuilt module section inside the shared workspace while the former standalone page stays retired.",
+    relatedEntries
   };
 }
 
-function directEntryFocus(label: string, anchor: string, checklistId: string): RebuildCurrentEntryFocus {
+function directEntryFocus(label: string, anchor: string, checklistId: string, relatedEntries: readonly RebuildCurrentEntryLink[]): RebuildCurrentEntryFocus {
   return {
     label,
     anchor,
     checklistId,
     entryMode: "Direct entry",
-    summary: "This entry now foregrounds the rebuilt module section directly inside the shared workspace."
+    summary: "This entry now foregrounds the rebuilt module section directly inside the shared workspace.",
+    relatedEntries
   };
+}
+
+function link(label: string, anchor: string): RebuildCurrentEntryLink {
+  return { label, anchor };
 }
 
 function presentAlias(value: string): string {

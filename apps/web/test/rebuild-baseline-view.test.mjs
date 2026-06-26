@@ -77,9 +77,11 @@ test("Rebuild baseline model now represents the reset shell plus cockpit, docs, 
 test("Rebuild baseline recognizes later rebuilt module alias routes as active workspace entries", () => {
   assert.equal(createRebuildBaselineModel("/").currentEntryFocus?.anchor, "cockpit-start");
   assert.equal(createRebuildBaselineModel("/").currentEntryFocus?.entryMode, "Workspace default");
+  assert.equal(createRebuildBaselineModel("/").currentEntryFocus?.relatedEntries.length, 3);
   assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentAliasLabel, "Gateway / Adapter");
   assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentEntryFocus?.anchor, "gateway-adapter-start");
   assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentEntryFocus?.entryMode, "Direct entry");
+  assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentEntryFocus?.relatedEntries[0]?.label, "Dependency Console");
   assert.equal(createRebuildBaselineModel("/resource-library.html").currentAliasLabel, "Resource Library");
   assert.equal(createRebuildBaselineModel("/knowledge-modules.html").currentAliasLabel, "Knowledge Modules");
   assert.equal(createRebuildBaselineModel("/admin-access.html").currentAliasLabel, "Admin / Access");
@@ -94,10 +96,19 @@ test("Rebuild checkpoint foregrounds the current alias entry inside the shared s
   assert.match(html, /Current module entry/);
   assert.match(html, /Direct entry/);
   assert.match(html, /Jump to Gateway \/ Adapter/);
+  assert.match(html, /Gateway \/ Adapter is foregrounded in the rebuilt workspace/);
+  assert.match(html, /Related rebuilt modules/);
+  assert.match(html, /Go to Dependency Console/);
+  assert.match(html, /Go to GitHub Release Linkage/);
   assert.match(html, /data-current-entry-row="gateway-adapter"/);
   assert.ok(
     html.indexOf('data-region="gateway-adapter-start"') < html.indexOf('data-region="cockpit-start"'),
     "current alias section is foregrounded before the default cockpit section"
+  );
+  const checklistHtml = html.slice(html.indexOf("Rebuilt module directory"), html.indexOf("Legacy standalone scope"));
+  assert.ok(
+    checklistHtml.indexOf("Gateway / Adapter") < checklistHtml.indexOf("Operations Cockpit"),
+    "current alias row is foregrounded before the default checklist ordering"
   );
 });
 
@@ -114,7 +125,7 @@ test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-
   assert.match(html, /data-ds-standard-ids="ds-aos-operations-cockpit-v1 ds-aos-docs-readiness-v1 ds-aos-target-set-v1"/);
   assert.match(html, /data-product-acceptance="false"/);
   assert.match(html, />AOS Rebuild Workspace</);
-  assert.match(html, />AOS rebuilt workspace is active</);
+  assert.match(html, />Operations Cockpit is foregrounded in the rebuilt workspace</);
   assert.match(html, />Operations cockpit starting surface</);
   assert.match(html, />Docs readiness starting surface</);
   assert.match(html, />Product design target-set starting surface</);
