@@ -71,6 +71,14 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
           html.indexOf('data-region="gateway-adapter-start"') < html.indexOf('data-region="cockpit-start"'),
           `${target} foregrounds the gateway adapter section before the default cockpit section`
         );
+        assert.ok(
+          html.indexOf('data-region="dependency-console-start"') < html.indexOf('data-region="cockpit-start"'),
+          `${target} foregrounds the dependency console section before the default cockpit section`
+        );
+        assert.ok(
+          html.indexOf('data-region="github-release-linkage-start"') < html.indexOf('data-region="cockpit-start"'),
+          `${target} foregrounds the GitHub release linkage section before the default cockpit section`
+        );
         const checklistHtml = html.slice(html.indexOf("Rebuilt module directory"), html.indexOf("Legacy standalone scope"));
         assert.ok(
           checklistHtml.indexOf("Gateway / Adapter") < checklistHtml.indexOf("Operations Cockpit"),
@@ -79,6 +87,10 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
         assert.ok(
           checklistHtml.indexOf("Dependency Console") < checklistHtml.indexOf("Operations Cockpit"),
           `${target} foregrounds related rows before the default checklist ordering`
+        );
+        assert.ok(
+          checklistHtml.indexOf("GitHub Release Linkage") < checklistHtml.indexOf("Operations Cockpit"),
+          `${target} foregrounds related GitHub release linkage rows before the default checklist ordering`
         );
       }
     }

@@ -107,6 +107,14 @@ test("Rebuild checkpoint foregrounds the current alias entry inside the shared s
     html.indexOf('data-region="gateway-adapter-start"') < html.indexOf('data-region="cockpit-start"'),
     "current alias section is foregrounded before the default cockpit section"
   );
+  assert.ok(
+    html.indexOf('data-region="dependency-console-start"') < html.indexOf('data-region="cockpit-start"'),
+    "related dependency console section is foregrounded before the default cockpit section"
+  );
+  assert.ok(
+    html.indexOf('data-region="github-release-linkage-start"') < html.indexOf('data-region="cockpit-start"'),
+    "related GitHub release linkage section is foregrounded before the default cockpit section"
+  );
   const checklistHtml = html.slice(html.indexOf("Rebuilt module directory"), html.indexOf("Legacy standalone scope"));
   assert.ok(
     checklistHtml.indexOf("Gateway / Adapter") < checklistHtml.indexOf("Operations Cockpit"),
@@ -115,6 +123,10 @@ test("Rebuild checkpoint foregrounds the current alias entry inside the shared s
   assert.ok(
     checklistHtml.indexOf("Dependency Console") < checklistHtml.indexOf("Operations Cockpit"),
     "related rows are foregrounded before the default checklist ordering"
+  );
+  assert.ok(
+    checklistHtml.indexOf("GitHub Release Linkage") < checklistHtml.indexOf("Operations Cockpit"),
+    "related GitHub release linkage row is foregrounded before the default checklist ordering"
   );
 });
 

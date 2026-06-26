@@ -1854,7 +1854,17 @@ function renderOrderedModuleSections(model: RebuildBaselineModel) {
   if (!model.currentEntryFocus) return sections.map((section) => section.element);
   const selected = sections.find((section) => section.anchor === model.currentEntryFocus?.anchor);
   if (!selected) return sections.map((section) => section.element);
-  return [selected, ...sections.filter((section) => section.anchor !== selected.anchor)].map((section) => section.element);
+  const relatedAnchors = model.currentEntryFocus.relatedEntries.map((entry) => entry.anchor);
+  const relatedSections = relatedAnchors.flatMap((anchor) => {
+    const section = sections.find((candidate) => candidate.anchor === anchor);
+    return section ? [section] : [];
+  });
+  const prioritizedAnchors = new Set([selected.anchor, ...relatedAnchors]);
+  return [
+    selected,
+    ...relatedSections,
+    ...sections.filter((section) => !prioritizedAnchors.has(section.anchor))
+  ].map((section) => section.element);
 }
 
 export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel): string {
