@@ -254,16 +254,53 @@ function renderSummary(model: RebuildBaselineModel) {
     ),
     createElement(
       "div",
-      packageAttrs("ReadbackPanel", { className: "rebuild-baseline__status" }),
-      createElement(ReadbackPanel, {
-        title: "Workspace status"
-      },
-      renderKeyValueList([
-        { key: "starting-module", label: "Shell state", value: "Rebuilt workspace active" },
-        { key: "surface-state", label: "Served frontend", value: "Shared shell in local preview" },
-        { key: "storyboard-source", label: "Design source", value: "Certified Storybook standards" },
-        { key: "acceptance", label: "Acceptance", value: "Not enabled" }
-      ]))
+      { className: "rebuild-baseline__status-stack" },
+      createElement(
+        "div",
+        packageAttrs("ReadbackPanel", { className: "rebuild-baseline__status" }),
+        createElement(ReadbackPanel, {
+          title: "Workspace status"
+        },
+        renderKeyValueList([
+          { key: "starting-module", label: "Shell state", value: "Rebuilt workspace active" },
+          { key: "surface-state", label: "Served frontend", value: "Shared shell in local preview" },
+          { key: "storyboard-source", label: "Design source", value: "Certified Storybook standards" },
+          { key: "acceptance", label: "Acceptance", value: "Not enabled" }
+        ]))
+      ),
+      model.currentEntryFocus
+        ? createElement(
+            "div",
+            packageAttrs("ReadbackPanel", {
+              className: "rebuild-baseline__status",
+              "data-region": "current-entry-panel",
+              "data-current-entry": model.currentEntryFocus.checklistId
+            }),
+            createElement(ReadbackPanel, { title: "Current module entry" },
+              createElement(Text, { ...packageAttrs("Text", { className: "tcrn-text--muted" }) }, model.currentEntryFocus.summary),
+              renderKeyValueList([
+                { key: "entry-target", label: "Entry target", value: model.currentEntryFocus.label },
+                { key: "entry-mode", label: "Entry mode", value: model.currentEntryFocus.entryMode },
+                { key: "entry-anchor", label: "Focus anchor", value: `#${model.currentEntryFocus.anchor}` }
+              ]),
+              createElement(
+                "div",
+                { className: "rebuild-baseline__entry-link" },
+                createElement(
+                  LinkButton,
+                  {
+                    ...packageAttrs("LinkButton", {
+                      href: `#${model.currentEntryFocus.anchor}`,
+                      className: "rebuild-baseline__entry-button"
+                    }),
+                    variant: "quiet"
+                  },
+                  `Jump to ${model.currentEntryFocus.label}`
+                )
+              )
+            )
+          )
+        : null
     )
   );
 }
@@ -1624,7 +1661,17 @@ function renderChecklist(model: RebuildBaselineModel) {
             { key: "note", label: "Note" }
           ],
           rows: model.checklist.map((row) => ({
-            label: row.label,
+            label: row.id === model.currentEntryFocus?.checklistId
+              ? createElement(
+                  "div",
+                  {
+                    className: "rebuild-baseline__current-label",
+                    "data-current-entry-row": row.id
+                  },
+                  createElement("span", null, row.label),
+                  createElement(Badge, { ...packageAttrs("Badge"), tone: "neutral" }, "Current entry")
+                )
+              : row.label,
             status: row.status === "workspace_active"
               ? createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Active")
               : createElement(Badge, { ...packageAttrs("Badge"), tone: "warning" }, "Queued"),
@@ -1688,6 +1735,29 @@ function renderActions() {
   );
 }
 
+function renderOrderedModuleSections(model: RebuildBaselineModel) {
+  const sections = [
+    { anchor: "cockpit-start", element: renderCockpitStart(model.cockpitStart) },
+    { anchor: "docs-start", element: renderDocsStart(model.docsStart) },
+    { anchor: "target-set-start", element: renderTargetSetStart(model.targetSetStart) },
+    { anchor: "project-workspace-start", element: renderProjectWorkspaceStart(model.projectWorkspaceStart) },
+    { anchor: "initiative-detail-start", element: renderInitiativeDetailStart(model.initiativeDetailStart) },
+    { anchor: "ai-employee-start", element: renderAiEmployeeStart(model.aiEmployeeStart) },
+    { anchor: "gate-queue-start", element: renderGateQueueStart(model.gateQueueStart) },
+    { anchor: "conference-start", element: renderConferenceStart(model.conferenceStart) },
+    { anchor: "gateway-adapter-start", element: renderGatewayAdapterStart(model.gatewayAdapterStart) },
+    { anchor: "dependency-console-start", element: renderDependencyConsoleStart(model.dependencyConsoleStart) },
+    { anchor: "resource-library-start", element: renderResourceLibraryStart(model.resourceLibraryStart) },
+    { anchor: "knowledge-modules-start", element: renderKnowledgeModulesStart(model.knowledgeModulesStart) },
+    { anchor: "admin-access-start", element: renderAdminAccessStart(model.adminAccessStart) },
+    { anchor: "github-release-linkage-start", element: renderGitHubReleaseLinkageStart(model.githubReleaseLinkageStart) }
+  ];
+  if (!model.currentEntryFocus) return sections.map((section) => section.element);
+  const selected = sections.find((section) => section.anchor === model.currentEntryFocus?.anchor);
+  if (!selected) return sections.map((section) => section.element);
+  return [selected, ...sections.filter((section) => section.anchor !== selected.anchor)].map((section) => section.element);
+}
+
 export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel): string {
   return renderToStaticMarkup(
     createElement(
@@ -1711,20 +1781,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         { className: "rebuild-baseline__content", "data-region": "rebuild-shell" },
         renderTopbar(model),
         renderSummary(model),
-        renderCockpitStart(model.cockpitStart),
-        renderDocsStart(model.docsStart),
-        renderTargetSetStart(model.targetSetStart),
-        renderProjectWorkspaceStart(model.projectWorkspaceStart),
-        renderInitiativeDetailStart(model.initiativeDetailStart),
-        renderAiEmployeeStart(model.aiEmployeeStart),
-        renderGateQueueStart(model.gateQueueStart),
-        renderConferenceStart(model.conferenceStart),
-        renderGatewayAdapterStart(model.gatewayAdapterStart),
-        renderDependencyConsoleStart(model.dependencyConsoleStart),
-        renderResourceLibraryStart(model.resourceLibraryStart),
-        renderKnowledgeModulesStart(model.knowledgeModulesStart),
-        renderAdminAccessStart(model.adminAccessStart),
-        renderGitHubReleaseLinkageStart(model.githubReleaseLinkageStart),
+        ...renderOrderedModuleSections(model),
         renderChecklist(model),
         renderBoundaries(model),
         renderActions()

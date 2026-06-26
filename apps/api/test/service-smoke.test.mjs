@@ -59,8 +59,16 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
       assert.match(html, /Fresh rebuilt module is active in the shared workspace while the standalone page remains retired\./, `${target} exposes the active rebuilt module note`);
       assert.match(html, /Rebuilt module directory/, `${target} exposes rebuilt module directory`);
       assert.match(html, /Legacy standalone scope/, `${target} exposes legacy standalone scope`);
+      assert.match(html, /Current module entry/, `${target} exposes the current module entry panel`);
       assert.equal(Array.from(html.matchAll(/Fresh rebuild surface not started yet\./g)).length, 0, `${target} only keeps later queued checklist rows`);
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
+
+      if (target === "/gateway-adapter.html") {
+        assert.ok(
+          html.indexOf('data-region="gateway-adapter-start"') < html.indexOf('data-region="cockpit-start"'),
+          `${target} foregrounds the gateway adapter section before the default cockpit section`
+        );
+      }
     }
 
     const health = await fetch(`${service.url}/health`).then((response) => response.json());

@@ -75,11 +75,30 @@ test("Rebuild baseline model now represents the reset shell plus cockpit, docs, 
 });
 
 test("Rebuild baseline recognizes later rebuilt module alias routes as active workspace entries", () => {
+  assert.equal(createRebuildBaselineModel("/").currentEntryFocus?.anchor, "cockpit-start");
+  assert.equal(createRebuildBaselineModel("/").currentEntryFocus?.entryMode, "Workspace default");
   assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentAliasLabel, "Gateway / Adapter");
+  assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentEntryFocus?.anchor, "gateway-adapter-start");
+  assert.equal(createRebuildBaselineModel("/gateway-adapter.html").currentEntryFocus?.entryMode, "Direct entry");
   assert.equal(createRebuildBaselineModel("/resource-library.html").currentAliasLabel, "Resource Library");
   assert.equal(createRebuildBaselineModel("/knowledge-modules.html").currentAliasLabel, "Knowledge Modules");
   assert.equal(createRebuildBaselineModel("/admin-access.html").currentAliasLabel, "Admin / Access");
   assert.equal(createRebuildBaselineModel("/github-release-linkage.html").currentAliasLabel, "GitHub Release Linkage");
+});
+
+test("Rebuild checkpoint foregrounds the current alias entry inside the shared shell", () => {
+  const html = renderRebuildBaselineHtml("/gateway-adapter.html");
+
+  assert.match(html, /data-region="current-entry-panel"/);
+  assert.match(html, /data-current-entry="gateway-adapter"/);
+  assert.match(html, /Current module entry/);
+  assert.match(html, /Direct entry/);
+  assert.match(html, /Jump to Gateway \/ Adapter/);
+  assert.match(html, /data-current-entry-row="gateway-adapter"/);
+  assert.ok(
+    html.indexOf('data-region="gateway-adapter-start"') < html.indexOf('data-region="cockpit-start"'),
+    "current alias section is foregrounded before the default cockpit section"
+  );
 });
 
 test("Rebuild checkpoint HTML serves the reset shell plus cockpit, docs, target-set, project-workspace, initiative-detail, ai-employee, gate-queue, conference, gateway-adapter, dependency-console, resource-library, knowledge-modules, admin-access, and GitHub release-linkage fresh slices while omitting later sections", () => {

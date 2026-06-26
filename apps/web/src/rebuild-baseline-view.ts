@@ -82,6 +82,7 @@ ${aosDesignSystemNavigationCss}
 .rebuild-baseline__topbar-copy { display: grid; gap: 4px; min-width: 0; }
 .rebuild-baseline__topbar-copy .tcrn-heading { margin: 0; font-size: 24px; line-height: 1.15; font-weight: 600; letter-spacing: 0; }
 .rebuild-baseline__summary, .rebuild-baseline__boundaries { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.95fr); gap: 14px; min-width: 0; }
+.rebuild-baseline__status-stack { display: grid; gap: 14px; min-width: 0; }
 .rebuild-baseline__summary, .rebuild-baseline__cockpit-start, .rebuild-baseline__resource-library-start, .rebuild-baseline__knowledge-modules-start, .rebuild-baseline__admin-access-start, .rebuild-baseline__github-release-linkage-start, .rebuild-baseline__gateway-adapter-start, .rebuild-baseline__checklist, .rebuild-baseline__boundaries, .rebuild-baseline__action-lane { padding-inline: 22px; }
 .rebuild-baseline__summary { margin-top: 22px; margin-bottom: 14px; }
 .rebuild-baseline__cockpit-start, .rebuild-baseline__docs-start, .rebuild-baseline__target-set-start, .rebuild-baseline__project-workspace-start, .rebuild-baseline__initiative-detail-start, .rebuild-baseline__ai-employee-start, .rebuild-baseline__gate-queue-start, .rebuild-baseline__conference-start, .rebuild-baseline__gateway-adapter-start, .rebuild-baseline__dependency-console-start, .rebuild-baseline__resource-library-start, .rebuild-baseline__knowledge-modules-start, .rebuild-baseline__admin-access-start, .rebuild-baseline__github-release-linkage-start { margin-bottom: 14px; }
@@ -116,6 +117,8 @@ ${aosDesignSystemNavigationCss}
 .rebuild-baseline__checklist .tcrn-table-shell__cell[data-label="Source"] { overflow-wrap: normal; word-break: keep-all; }
 .rebuild-baseline__checklist .tcrn-table-shell__cell[data-label="Note"] { overflow-wrap: anywhere; }
 .rebuild-baseline__checklist .tcrn-table-shell__cell + .tcrn-table-shell__cell, .rebuild-baseline__checklist .tcrn-table-shell__head span + span { border-left: 1px solid var(--line); }
+.rebuild-baseline__current-label { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.rebuild-baseline__entry-link { display: flex; flex-wrap: wrap; gap: 8px; }
 .rebuild-baseline__action-list { display: flex; flex-wrap: wrap; gap: 8px; }
 .tcrn-button, .tcrn-link-button { display: inline-flex; align-items: center; justify-content: center; min-height: 34px; border: 1px solid var(--line-strong); border-radius: 5px; padding: 0 12px; background: #fff; color: var(--text); font-weight: 600; text-decoration: none; }
 @media (max-width: 980px) {

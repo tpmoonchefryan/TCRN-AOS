@@ -111,6 +111,14 @@ export interface RebuildChecklistRow {
   note: string;
 }
 
+export interface RebuildCurrentEntryFocus {
+  label: string;
+  anchor: string;
+  checklistId: string;
+  entryMode: string;
+  summary: string;
+}
+
 export interface RebuildCockpitStartItem {
   id: string;
   title: string;
@@ -531,6 +539,7 @@ export interface RebuildGitHubReleaseLinkageModel {
 export interface RebuildBaselineModel {
   currentAlias: string;
   currentAliasLabel: string;
+  currentEntryFocus: RebuildCurrentEntryFocus | null;
   dsStandardIds: readonly string[];
   storybookIds: readonly string[];
   replacedFrontendScope: string[];
@@ -570,6 +579,7 @@ const checklistRows: RebuildChecklistRow[] = [
   row("ai-employee", "AI Employee", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
   row("gate-queue", "Gate Queue", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
   row("conference", "Conference", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
+  row("gateway-adapter", "Gateway / Adapter", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
   row("dependency-console", "Dependency Console", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
   row("resource-library", "Resource Library", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
   row("knowledge-modules", "Knowledge Modules", "workspace_active", "Rebuilt workspace section", "Fresh rebuilt module is active in the shared workspace while the standalone page remains retired."),
@@ -581,6 +591,7 @@ export function createRebuildBaselineModel(currentAlias: string): RebuildBaselin
   return {
     currentAlias,
     currentAliasLabel: presentAlias(currentAlias),
+    currentEntryFocus: resolveCurrentEntryFocus(currentAlias),
     dsStandardIds: rebuildBaselineDsStandardIds,
     storybookIds: rebuildBaselineStorybookIds,
     replacedFrontendScope: [
@@ -1380,9 +1391,59 @@ function row(id: string, label: string, status: RebuildChecklistRow["status"], s
   return { id, label, status, source, note };
 }
 
+function resolveCurrentEntryFocus(value: string): RebuildCurrentEntryFocus | null {
+  if (value === "/") {
+    return {
+      label: "Operations Cockpit",
+      anchor: "cockpit-start",
+      checklistId: "operations-cockpit",
+      entryMode: "Workspace default",
+      summary: "Root entry foregrounds the cockpit section while every rebuilt module remains available inside the same shared workspace."
+    };
+  }
+  if (value === "/cockpit" || value.includes("operations-cockpit")) return legacyEntryFocus("Operations Cockpit", "cockpit-start", "operations-cockpit");
+  if (value.includes("docs-readiness")) return legacyEntryFocus("Docs Readiness", "docs-start", "docs-readiness");
+  if (value.includes("docs-search-release-readiness")) return legacyEntryFocus("Docs Readiness", "docs-start", "docs-readiness");
+  if (value.includes("aos-wide-product-design")) return legacyEntryFocus("Product Design target set", "target-set-start", "product-design");
+  if (value.includes("project-workspace")) return legacyEntryFocus("Project Workspace", "project-workspace-start", "project-workspace");
+  if (value.includes("initiative-detail")) return legacyEntryFocus("Initiative Detail", "initiative-detail-start", "initiative-detail");
+  if (value.includes("ai-employee")) return legacyEntryFocus("AI Employee", "ai-employee-start", "ai-employee");
+  if (value.includes("gate-queue")) return legacyEntryFocus("Gate Queue", "gate-queue-start", "gate-queue");
+  if (value.includes("conference")) return legacyEntryFocus("Conference", "conference-start", "conference");
+  if (value.includes("gateway-adapter")) return directEntryFocus("Gateway / Adapter", "gateway-adapter-start", "gateway-adapter");
+  if (value.includes("dependency-console")) return legacyEntryFocus("Dependency Console", "dependency-console-start", "dependency-console");
+  if (value.includes("resource-library")) return directEntryFocus("Resource Library", "resource-library-start", "resource-library");
+  if (value.includes("knowledge-modules")) return directEntryFocus("Knowledge Modules", "knowledge-modules-start", "knowledge-modules");
+  if (value.includes("admin-access")) return directEntryFocus("Admin / Access", "admin-access-start", "admin-access");
+  if (value.includes("github-release-linkage")) return directEntryFocus("GitHub Release Linkage", "github-release-linkage-start", "github-release-linkage");
+  return null;
+}
+
+function legacyEntryFocus(label: string, anchor: string, checklistId: string): RebuildCurrentEntryFocus {
+  return {
+    label,
+    anchor,
+    checklistId,
+    entryMode: "Legacy entry",
+    summary: "This entry now foregrounds the rebuilt module section inside the shared workspace while the former standalone page stays retired."
+  };
+}
+
+function directEntryFocus(label: string, anchor: string, checklistId: string): RebuildCurrentEntryFocus {
+  return {
+    label,
+    anchor,
+    checklistId,
+    entryMode: "Direct entry",
+    summary: "This entry now foregrounds the rebuilt module section directly inside the shared workspace."
+  };
+}
+
 function presentAlias(value: string): string {
   if (value === "/") return "Root workspace";
+  if (value === "/cockpit") return "Operations Cockpit";
   if (value.includes("operations-cockpit")) return "Operations Cockpit";
+  if (value.includes("docs-readiness")) return "Docs Readiness";
   if (value.includes("docs-search-release-readiness")) return "Docs Readiness";
   if (value.includes("aos-wide-product-design")) return "Product Design target set";
   if (value.includes("project-workspace")) return "Project Workspace";
