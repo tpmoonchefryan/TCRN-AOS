@@ -91,6 +91,7 @@ test("Rebuild baseline recognizes later rebuilt module alias routes as active wo
 test("Rebuild checkpoint foregrounds the current alias entry inside the shared shell", () => {
   const html = renderRebuildBaselineHtml("/gateway-adapter.html");
 
+  assert.match(html, /Current path/);
   assert.match(html, /data-region="current-entry-panel"/);
   assert.match(html, /data-current-entry="gateway-adapter"/);
   assert.match(html, /Current module entry/);
@@ -101,6 +102,7 @@ test("Rebuild checkpoint foregrounds the current alias entry inside the shared s
   assert.match(html, /Go to Dependency Console/);
   assert.match(html, /Go to GitHub Release Linkage/);
   assert.match(html, /data-current-entry-row="gateway-adapter"/);
+  assert.match(html, />Related</);
   assert.ok(
     html.indexOf('data-region="gateway-adapter-start"') < html.indexOf('data-region="cockpit-start"'),
     "current alias section is foregrounded before the default cockpit section"
@@ -109,6 +111,10 @@ test("Rebuild checkpoint foregrounds the current alias entry inside the shared s
   assert.ok(
     checklistHtml.indexOf("Gateway / Adapter") < checklistHtml.indexOf("Operations Cockpit"),
     "current alias row is foregrounded before the default checklist ordering"
+  );
+  assert.ok(
+    checklistHtml.indexOf("Dependency Console") < checklistHtml.indexOf("Operations Cockpit"),
+    "related rows are foregrounded before the default checklist ordering"
   );
 });
 

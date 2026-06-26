@@ -92,6 +92,16 @@ function renderSidebar(model: RebuildBaselineModel) {
     "Knowledge Modules",
     "Admin / Access"
   ];
+  const currentPathNavItems = model.currentEntryFocus
+    ? [
+        { label: model.currentEntryFocus.label, anchor: model.currentEntryFocus.anchor, selected: true },
+        ...model.currentEntryFocus.relatedEntries.map((entry) => ({
+          label: entry.label,
+          anchor: entry.anchor,
+          selected: false
+        }))
+      ]
+    : [];
 
   return createElement(
     SideNav,
@@ -135,6 +145,25 @@ function renderSidebar(model: RebuildBaselineModel) {
             }),
             disabled: true,
             disabledReason: "These Design System standards are reference material while the replacement workspace is established."
+          },
+          item.label
+        )
+      )
+    ),
+    createElement(
+      NavGroup,
+      { ...packageAttrs("NavGroup", { className: "rebuild-baseline__nav-group" }), label: "Current path" },
+      currentPathNavItems.map((item) =>
+        createElement(
+          NavItem,
+          {
+            ...packageAttrs("NavItem", {
+              key: item.anchor,
+              iconName: "package",
+              selected: item.selected,
+              className: "rebuild-baseline__nav-item"
+            }),
+            href: `#${item.anchor}`
           },
           item.label
         )
@@ -1691,10 +1720,18 @@ function renderGitHubReleaseLinkageStart(model: RebuildGitHubReleaseLinkageModel
 }
 
 function renderChecklist(model: RebuildBaselineModel) {
+  const relatedChecklistRows = model.currentEntryFocus
+    ? model.currentEntryFocus.relatedEntries.flatMap((entry) => {
+        const row = model.checklist.find((candidate) => candidate.id === entry.checklistId);
+        return row ? [row] : [];
+      })
+    : [];
   const orderedChecklist = model.currentEntryFocus
     ? [
         ...model.checklist.filter((row) => row.id === model.currentEntryFocus?.checklistId),
+        ...relatedChecklistRows,
         ...model.checklist.filter((row) => row.id !== model.currentEntryFocus?.checklistId)
+          .filter((row) => !model.currentEntryFocus?.relatedEntries.some((entry) => entry.checklistId === row.id))
       ]
     : model.checklist;
   return createElement(
@@ -1726,6 +1763,13 @@ function renderChecklist(model: RebuildBaselineModel) {
                   createElement("span", null, row.label),
                   createElement(Badge, { ...packageAttrs("Badge"), tone: "neutral" }, "Current entry")
                 )
+              : model.currentEntryFocus?.relatedEntries.some((entry) => entry.checklistId === row.id)
+                ? createElement(
+                    "div",
+                    { className: "rebuild-baseline__current-label" },
+                    createElement("span", null, row.label),
+                    createElement(Badge, { ...packageAttrs("Badge"), tone: "neutral" }, "Related")
+                  )
               : row.label,
             status: row.status === "workspace_active"
               ? createElement(Badge, { ...packageAttrs("Badge"), tone: "positive" }, "Active")

@@ -64,6 +64,7 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
       assert.doesNotMatch(html, /package-runtime pilot|unavailable in this route|not_claimed/i, `${target} avoids stale internal copy`);
 
       if (target === "/gateway-adapter.html") {
+        assert.match(html, /Current path/, `${target} exposes current-path navigation`);
         assert.match(html, /Gateway \/ Adapter is foregrounded in the rebuilt workspace/, `${target} exposes route-aware summary copy`);
         assert.match(html, /Related rebuilt modules/, `${target} exposes related rebuilt module links`);
         assert.ok(
@@ -74,6 +75,10 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
         assert.ok(
           checklistHtml.indexOf("Gateway / Adapter") < checklistHtml.indexOf("Operations Cockpit"),
           `${target} foregrounds the gateway adapter row before the default checklist ordering`
+        );
+        assert.ok(
+          checklistHtml.indexOf("Dependency Console") < checklistHtml.indexOf("Operations Cockpit"),
+          `${target} foregrounds related rows before the default checklist ordering`
         );
       }
     }
