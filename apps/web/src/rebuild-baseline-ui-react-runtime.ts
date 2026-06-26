@@ -342,21 +342,31 @@ function renderSummary(model: RebuildBaselineModel) {
                     createElement(ReadbackPanel, { title: "Related rebuilt modules" },
                       createElement(
                         "div",
-                        { className: "rebuild-baseline__entry-link" },
-                        model.currentEntryFocus.relatedEntries.map((entry) =>
-                          createElement(
-                            LinkButton,
-                            {
-                              ...packageAttrs("LinkButton", {
-                                key: entry.anchor,
-                                href: `#${entry.anchor}`,
-                                className: "rebuild-baseline__entry-button"
-                              }),
-                              variant: "quiet"
-                            },
-                            `Go to ${entry.label}`
-                          )
-                        )
+                        packageAttrs("TableShell"),
+                        createElement(TableShell, {
+                          label: "Related rebuilt modules",
+                          columns: [
+                            { key: "module", label: "Module" },
+                            { key: "focus", label: "Focus" },
+                            { key: "action", label: "Action" }
+                          ],
+                          rows: model.currentEntryFocus.relatedEntries.map((entry) => ({
+                            module: entry.label,
+                            focus: entry.focus,
+                            action: createElement(
+                              LinkButton,
+                              {
+                                ...packageAttrs("LinkButton", {
+                                  key: entry.anchor,
+                                  href: `#${entry.anchor}`,
+                                  className: "rebuild-baseline__entry-button"
+                                }),
+                                variant: "quiet"
+                              },
+                              `Go to ${entry.label}`
+                            )
+                          }))
+                        })
                       )
                     )
                   )
@@ -1811,19 +1821,29 @@ function renderBoundaries(model: RebuildBaselineModel) {
   );
 }
 
-function renderActions() {
+function renderActions(model: RebuildBaselineModel) {
+  const currentPathActions = model.currentEntryFocus
+    ? [
+        [ `Open ${model.currentEntryFocus.label}`, `${model.currentEntryFocus.label} remains read-only while the rebuilt workspace stays in local preview.` ],
+        ...model.currentEntryFocus.relatedEntries.map((entry) => ([
+          `Open ${entry.label}`,
+          `${entry.label} remains a related rebuilt module inside the shared workspace while local preview stays read-only.`
+        ] as const)),
+        [ "Publish module", "Publishing remains unavailable while the rebuilt workspace stays in local preview." ] as const
+      ]
+    : [
+        [ "Open live workspace", "Live workspace entry remains unavailable while the rebuilt workspace stays in local preview." ],
+        [ "Start owner action", "Owner actions remain unavailable while the rebuilt workspace stays in local preview." ],
+        [ "Publish module", "Publishing remains unavailable while the rebuilt workspace stays in local preview." ]
+      ];
   return createElement(
     "section",
     { className: "rebuild-baseline__action-lane", "data-region": "rebuild-actions", "aria-label": "Unavailable rebuild actions" },
-    createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, "Unavailable actions"),
+    createElement(Heading, { ...packageAttrs("Heading"), level: 2 }, model.currentEntryFocus ? "Current path actions" : "Unavailable actions"),
     createElement(
       "div",
       { className: "rebuild-baseline__action-list" },
-      [
-        ["Open live workspace", "Live workspace entry remains unavailable while the rebuilt workspace stays in local preview."],
-        ["Start owner action", "Owner actions remain unavailable while the rebuilt workspace stays in local preview."],
-        ["Publish module", "Publishing remains unavailable while the rebuilt workspace stays in local preview."]
-      ].map(([label, reason]) =>
+      currentPathActions.map(([label, reason]) =>
         createElement(Button, {
           ...packageAttrs("Button", { key: String(label) }),
           disabled: true,
@@ -1893,7 +1913,7 @@ export function renderRebuildBaselineRuntimeSurface(model: RebuildBaselineModel)
         ...renderOrderedModuleSections(model),
         renderChecklist(model),
         renderBoundaries(model),
-        renderActions()
+        renderActions(model)
       )
     )
   );

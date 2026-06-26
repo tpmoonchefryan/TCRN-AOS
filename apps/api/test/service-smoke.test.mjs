@@ -65,8 +65,13 @@ test("local service now serves the reset shell plus cockpit, docs, target-set, p
 
       if (target === "/gateway-adapter.html") {
         assert.match(html, /Current path/, `${target} exposes current-path navigation`);
+        assert.match(html, /Current path actions/, `${target} exposes current-path action lane`);
+        assert.match(html, /Open Gateway \/ Adapter/, `${target} exposes focused module action`);
+        assert.match(html, /Open Dependency Console/, `${target} exposes related module action`);
         assert.match(html, /Gateway \/ Adapter is foregrounded in the rebuilt workspace/, `${target} exposes route-aware summary copy`);
         assert.match(html, /Related rebuilt modules/, `${target} exposes related rebuilt module links`);
+        assert.match(html, /Health and governance/, `${target} exposes related module focus context`);
+        assert.match(html, /Release records/, `${target} exposes release linkage context`);
         assert.ok(
           html.indexOf('data-region="gateway-adapter-start"') < html.indexOf('data-region="cockpit-start"'),
           `${target} foregrounds the gateway adapter section before the default cockpit section`
