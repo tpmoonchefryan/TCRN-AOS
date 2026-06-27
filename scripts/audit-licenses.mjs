@@ -5,42 +5,9 @@ const runtimeDeps = Object.keys(rootPackage.dependencies ?? {});
 const devDeps = Object.keys(rootPackage.devDependencies ?? {});
 const expectedDevDeps = new Map([
   ["@types/node", { version: "24.0.3", license: "MIT" }],
-  ["@types/react", { version: "19.1.8", license: "MIT" }],
-  ["@types/react-dom", { version: "19.1.6", license: "MIT" }],
   ["typescript", { version: "5.8.3", license: "Apache-2.0" }]
 ]);
-const allowedRuntimeDeps = new Map([
-  ["@tcrn/ui-copy-state", {
-    specifier: "file:../TCRN-Design-System/packages/ui-copy-state",
-    version: "0.0.0-private",
-    license: "local_private_tcrn_design_system_package",
-    allowedDependencies: []
-  }],
-  ["@tcrn/ui-react", {
-    specifier: "file:../TCRN-Design-System/packages/ui-react",
-    version: "0.0.0-private",
-    license: "local_private_tcrn_design_system_package",
-    allowedDependencies: ["@tcrn/ui-copy-state", "@tcrn/ui-tokens", "lucide-react"]
-  }],
-  ["@tcrn/ui-tokens", {
-    specifier: "file:../TCRN-Design-System/packages/ui-tokens",
-    version: "0.0.0-private",
-    license: "local_private_tcrn_design_system_package",
-    allowedDependencies: []
-  }],
-  ["react", {
-    specifier: "19.1.0",
-    version: "19.1.0",
-    license: "MIT",
-    allowedDependencies: []
-  }],
-  ["react-dom", {
-    specifier: "19.1.0",
-    version: "19.1.0",
-    license: "MIT",
-    allowedDependencies: ["scheduler"]
-  }]
-]);
+const allowedRuntimeDeps = new Map();
 const unexpected = devDeps.filter((name) => !expectedDevDeps.has(name));
 const missingDev = [...expectedDevDeps.keys()].filter((name) => !devDeps.includes(name));
 const packageLicenses = [];

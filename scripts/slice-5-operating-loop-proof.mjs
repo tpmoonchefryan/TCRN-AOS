@@ -5,10 +5,6 @@ import {
 } from "../dist/packages/domain/src/index.js";
 import { CodexIntegrationAdapter } from "../dist/packages/adapter-codex/src/index.js";
 import { McpGateway } from "../dist/packages/mcp-gateway/src/index.js";
-import {
-  forbiddenProductionCopy,
-  renderOperationsCockpitHtml
-} from "../dist/apps/web/src/cockpit-view.js";
 
 const actor = {
   employeeId: "employee-ilya",
@@ -40,26 +36,19 @@ const scenarioProofs = [
 ];
 
 const gatewayProof = proveGatewayMethods();
-const html = renderOperationsCockpitHtml();
-const staticProof = {
-  workIndexDrillThroughMarker: html.includes('data-slice5="work-index-drill-through"'),
-  conferenceLoopRegion: html.includes('data-region="conference-operating-loop"'),
-  forbiddenProductionCopyHits: forbiddenProductionCopy.filter((phrase) => html.toLowerCase().includes(phrase.toLowerCase())),
-  actionPostureCopyPresent: html.includes("Release and live operations remain disabled in this workspace.")
-};
-
 const ok = scenarioProofs.every((scenario) => scenario.ok)
-  && gatewayProof.ok
-  && staticProof.workIndexDrillThroughMarker
-  && staticProof.conferenceLoopRegion
-  && staticProof.forbiddenProductionCopyHits.length === 0
-  && staticProof.actionPostureCopyPresent;
+  && gatewayProof.ok;
 
 console.log(JSON.stringify({
   ok,
   scenarios: scenarioProofs,
   gatewayProof,
-  staticProof,
+  frontendDisposition: {
+    codeRemoved: true,
+    browserProof: "removed_pending_owner_led_design_restart",
+    productUiAcceptance: false,
+    ownerReviewRequiredBeforeNewFrontend: true
+  },
   noOverclaim: {
     liveCodexDispatch: false,
     threadRegistryMutation: false,
@@ -73,8 +62,8 @@ console.log(JSON.stringify({
   },
   productDesignStatus: {
     brief: "accepted",
-    ownerStyleBaseline: "accepted_for_now_from_slice_4b",
-    visualIdeation: "not_required_for_local_operating_loop_drill_through",
+    ownerStyleBaseline: "superseded_by_owner_frontend_reset",
+    visualIdeation: "required_before_any_new_frontend_development",
     prototype: "not_claimed",
     browserVisualAcceptance: "not_claimed",
     uxLayoutVisualAcceptance: "not_claimed"

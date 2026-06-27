@@ -1,12 +1,6 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { once } from "node:events";
 import { createAppliedRuntimeFixture, type AosRuntimeFixture } from "../../../packages/db/src/index.js";
-import {
-  createCockpitServiceReadback,
-  createOperationsCockpitReadModel,
-  type CockpitDetailPanel
-} from "../../web/src/cockpit.js";
-import { renderRebuildBaselineHtml } from "../../web/src/rebuild-baseline-view.js";
 import { apiHealthReadback, createAosApiApp } from "./index.js";
 
 export interface StartedAosLocalService {
@@ -52,56 +46,43 @@ function handleRequest(
   }
   const url = parseRequestUrl(request);
   const path = url.pathname;
-  const retiredFrontendAliases = new Set([
+  const removedFrontendAliases = new Set([
     "/",
     "/cockpit",
     "/operations-cockpit",
     "/operations-cockpit.html",
-    "/apps/web/static/operations-cockpit.html",
     "/docs-readiness",
     "/docs-search-release-readiness",
     "/docs-search-release-readiness.html",
-    "/apps/web/static/docs-search-release-readiness.html",
     "/aos-wide-product-design",
     "/aos-wide-product-design.html",
-    "/apps/web/static/aos-wide-product-design.html",
     "/project-workspace",
     "/project-workspace.html",
-    "/apps/web/static/project-workspace.html",
     "/initiative-detail",
     "/initiative-detail.html",
-    "/apps/web/static/initiative-detail.html",
     "/ai-employee",
     "/ai-employee.html",
-    "/apps/web/static/ai-employee.html",
     "/gate-queue",
     "/gate-queue.html",
-    "/apps/web/static/gate-queue.html",
     "/conference",
     "/conference.html",
-    "/apps/web/static/conference.html",
     "/gateway-adapter",
     "/gateway-adapter.html",
-    "/apps/web/static/gateway-adapter.html",
     "/dependency-console",
     "/dependency-console.html",
-    "/apps/web/static/dependency-console.html",
     "/resource-library",
     "/resource-library.html",
-    "/apps/web/static/resource-library.html",
     "/knowledge-modules",
     "/knowledge-modules.html",
-    "/apps/web/static/knowledge-modules.html",
     "/admin-access",
     "/admin-access.html",
-    "/apps/web/static/admin-access.html",
     "/github-release-linkage",
     "/github-release-linkage.html",
-    "/apps/web/static/github-release-linkage.html"
+    "/api/cockpit"
   ]);
 
-  if (retiredFrontendAliases.has(path)) {
-    sendHtml(request, response, renderRebuildBaselineHtml(path));
+  if (removedFrontendAliases.has(path)) {
+    sendJson(response, 410, createFrontendRemovedPayload(path));
     return;
   }
   if (path === "/health" || path === "/api/health") {
@@ -116,10 +97,6 @@ function handleRequest(
       projectCount: readback.projectCount,
       auditEventCount: readback.operationalRecordCounts.auditEvents
     });
-    return;
-  }
-  if (path === "/api/cockpit") {
-    sendJson(response, 200, createCockpitServicePayload(runtime, url));
     return;
   }
   if (path === "/readback" || path === "/api/readback") {
@@ -137,119 +114,18 @@ function handleRequest(
   sendJson(response, 404, { ok: false, error: "not_found" });
 }
 
-function createCockpitServicePayload(runtime: AosRuntimeFixture, url: URL) {
-  const model = createServiceCockpitReadModel(runtime, url);
-  const readback = runtime.readback();
-  const serviceReadModel = createCockpitServiceReadback(model, { serviceBacked: true });
-  const workRows = model.workstreams.flatMap((group) => group.rows);
+function createFrontendRemovedPayload(path: string) {
   return {
-    ok: readback.ok,
-    serviceBacked: true,
-    generatedAt: new Date().toISOString(),
-    runtimeDatabase: "local_fixture",
-    runtimeDataCommitted: false,
-    externalQueue: "none",
-    liveCodexDispatchAuthorized: false,
-    model,
-    serviceReadModel,
-    readback,
-    ownerTrial: {
-      schemaVersion: "aos.owner_trial_service_frontend.v1",
-      serviceReadModelSchema: serviceReadModel.schemaVersion,
-      rootServiceUrl: "/",
-      apiPath: "/api/cockpit",
-      freshness: {
-        state: model.contextHeader.dataFreshness,
-        generatedAt: new Date().toISOString(),
-        runtimeDatabase: "local_fixture",
-        runtimeDataCommitted: false
-      },
-      workIndex: {
-        rowCount: workRows.length,
-        selectedStoryId: serviceReadModel.surfaces.workIndex.selectedStoryId,
-        selectedDetailId: serviceReadModel.surfaces.detail.selectedId
-      },
-      readinessLane: {
-        localServicePreview: true,
-        serviceBackedState: true,
-        releasePublicationReady: false,
-        ownerIntentExecutionReady: false,
-        liveDispatchReady: false,
-        disabledActions: [
-          {
-            id: "gate-work-order",
-            label: "Gate work order",
-            reason: serviceReadModel.surfaces.gate.unavailableReason
-          },
-          {
-            id: "owner-intent",
-            label: "Owner Intent",
-            reason: "Owner Intent actions require an explicit owner route and are unavailable in this local service preview."
-          },
-          {
-            id: "release-publication",
-            label: "Release publication",
-            reason: "Release and publication actions require separate release authority."
-          },
-          {
-            id: "live-dispatch",
-            label: "Live dispatch",
-            reason: "Live dispatch remains unavailable for this owner-trial service preview."
-          }
-        ]
-      },
-      nonClaims: {
-        productAcceptance: false,
-        finalMvpAcceptance: false,
-        releasePublication: false,
-        ownerIntentExecution: false,
-        liveDispatch: false,
-        parentGoalCompletion: false
-      }
-    },
-    boundaries: {
-      serviceProofOnly: true,
-      productAcceptance: false,
-      finalMvpAcceptance: false,
-      githubPush: false,
-      releasePublication: false,
-      batchPushGate: false,
-      ownerIntentExecution: false,
-      liveDispatch: false,
-      registryMutation: false
-    }
+    ok: false,
+    error: "aos_frontend_removed",
+    path,
+    frontendCodeDisposition: "removed_pending_owner_led_design_restart",
+    ownerReviewRequired: true,
+    replacementSurfaceAvailable: false,
+    productUiAcceptance: false,
+    releaseReadiness: false,
+    liveDispatch: false
   };
-}
-
-function createServiceCockpitReadModel(runtime: AosRuntimeFixture, url?: URL) {
-  const readback = runtime.readback();
-  const representativeIds = readback.representativeIds;
-  const selectedId = url?.searchParams.get("selectedId") ?? representativeIds?.storyId;
-  const selectedTypeParam = url?.searchParams.get("selectedType");
-  const selectedType = isCockpitDetailType(selectedTypeParam) ? selectedTypeParam : "story";
-  if (!representativeIds?.initiativeId) {
-    throw new Error("AOS service cockpit requires representative runtime records");
-  }
-  const cockpitInput: Parameters<typeof createOperationsCockpitReadModel>[0] = {
-    store: runtime.getStore(),
-    projectId: "TCRN-AOS",
-    initiativeId: representativeIds.initiativeId,
-    localCheckpoint: "owner-trial-service-readback"
-  };
-  if (selectedId) {
-    cockpitInput.selectedDetail = { id: selectedId, type: selectedType };
-  }
-  return createOperationsCockpitReadModel(cockpitInput);
-}
-
-function isCockpitDetailType(value: string | null | undefined): value is CockpitDetailPanel["selectedType"] {
-  return value === "story"
-    || value === "gate"
-    || value === "conference"
-    || value === "evidence"
-    || value === "dependency"
-    || value === "resource"
-    || value === "stage";
 }
 
 function parseRequestUrl(request: IncomingMessage): URL {
@@ -258,16 +134,6 @@ function parseRequestUrl(request: IncomingMessage): URL {
   } catch {
     return new URL("/", "http://127.0.0.1");
   }
-}
-
-function sendHtml(request: IncomingMessage, response: ServerResponse, html: string): void {
-  response.statusCode = 200;
-  response.setHeader("content-type", "text/html; charset=utf-8");
-  if (request.method === "HEAD") {
-    response.end();
-    return;
-  }
-  response.end(html);
 }
 
 function sendJson(response: ServerResponse, statusCode: number, body: unknown): void {

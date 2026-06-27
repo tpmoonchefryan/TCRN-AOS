@@ -51,50 +51,22 @@ Slice 3 adds runtime-backed MCP Gateway and Codex Adapter dry-run/outbox/readbac
 
 Slice 3 evidence receipt: `../evidence/slice-3-gateway-adapter-proof.md`.
 
-## Slice 4 Operations Cockpit Functional Contract Coverage
+## Frontend Reset Supersession
 
-Slice 4 adds non-visual Operations Cockpit read-model proof for owner observation and inspection surfaces:
-
-- `AOS-S045..AOS-S047`: stage-map readback is shaped with required state names, linked stories/gates/evidence, blockers, owner roles, and `manualReadinessOverrideAllowed=false`.
-- `AOS-S049`, `AOS-S050`, `AOS-S052`, `AOS-S053`: context header, workstream overview, gate queues, risk warnings, owner-intent separation, and no-overclaim states are exposed as functional contract data.
-- `AOS-S038..AOS-S042`: conference visibility exposes initiator, participants, missing responses, agenda, linked tickets/evidence, status, decision class, and minutes summary when present.
-- `AOS-S014..AOS-S018`, `AOS-S020..AOS-S024`: AI employee responsibility, role-owned gates, and Owner Intent gates remain separate; Owner Intent readbacks are not auto-executable.
-- `AOS-S029`, `AOS-S031`, `AOS-S054..AOS-S056`, `AOS-S060`, `AOS-S061`: evidence/readback freshness and source-truth links are metadata-only and do not copy raw private payloads.
-- `AOS-S064`, `AOS-S065`: access/audit guardrails remain readback-only in this slice.
-- `AOS-S069..AOS-S074`: dependency/license inspection shows posture, evidence status, SBOM/NOTICE obligation, and linked gates without dependency-clean or legal-completion claims.
-- `AOS-S075..AOS-S082`, `AOS-S084`: Resource Library inspection shows copyright, lifecycle, approval, manifest, and gate state without scanner ingestion or materialization execution.
-
-Slice 4 proof receipt: `../evidence/slice-4-operations-cockpit-proof.md`.
-
-Product Design status: brief accepted only. Visual ideation, prototype, browser visual acceptance, UX/layout/visual acceptance, Product Design acceptance, deployment, release readiness, product acceptance, and final MVP acceptance remain unclaimed.
-
-## Slice 4B Frontend Style Baseline Coverage
-
-Slice 4B records the owner-accepted static Operations Cockpit style baseline and implements it as a production-facing local static web surface:
-
-- `AOS-S045..AOS-S047`: stage-map readback is visible in the local static cockpit with source-derived proof states.
-- `AOS-S049`, `AOS-S050`, `AOS-S052`, `AOS-S053`: cockpit shell, project selector, local checkpoint strip, work index, gate card, readback posture card, and detail drawer are represented as production-surface regions.
-- `AOS-S014..AOS-S018`, `AOS-S020..AOS-S024`: AI employee phase visibility and Owner Intent separation remain visible without automatic execution.
-- `AOS-S038..AOS-S042`: conference visibility remains part of the detail/readback model.
-- `AOS-S069..AOS-S074`: dependency/license inspection uses posture language only and does not claim dependency-clean or legal completion.
-- `AOS-S075..AOS-S082`, `AOS-S084`: Resource Library inspection remains metadata/posture only; scanner ingestion and materialization are not claimed.
-
-Slice 4B evidence receipt: `../evidence/slice-4b-frontend-style-baseline-proof.md`.
-
-Product Design status: brief and owner style baseline accepted for now. Product Design UX/layout/visual acceptance, browser acceptance, deployment, release readiness, product acceptance, and final MVP acceptance remain unclaimed.
+Prior Operations Cockpit, frontend style baseline, visible readiness, and AOS-wide static surfaces are superseded by the owner-directed frontend reset. Current AOS source intentionally contains no frontend implementation and no current browser or static UI evidence. Future frontend work requires owner-led design before development and explicit Owner Review before any visual surface is registered, consumed, certified, or treated as Design System truth.
 
 ## Slice 5 Conference And AI Operating Loop Coverage
 
-Slice 5 adds local operating-loop drill-through on top of the accepted Slice 4B cockpit baseline:
+Slice 5 remains as local domain/gateway/adapter operating-loop proof only:
 
 - `AOS-S038..AOS-S042`: conference request, typed/default conference behavior, dry-run invite outbox linkage, participant position collection, missing participant readback, and minutes/outcome metadata are covered by domain/gateway/adapter tests and `pnpm slice5:proof`.
 - `AOS-S014..AOS-S018`: AI employee identity, thread identity, assignment, run summary, and authority snapshots are used as operating-loop inputs and readbacks.
 - `AOS-S020..AOS-S024`: role-owned gate work orders, Owner Intent separation, ticket gate state, and stale-route follow-up remain explicit local records; high-risk owner actions do not auto-execute.
 - `AOS-S032..AOS-S036`: Codex Adapter dry-run dispatch/readback/return/retry contracts now link `conference_invite` outbox records back to conference operating-loop readbacks; live dispatch remains blocked.
-- `AOS-S049`, `AOS-S050`, `AOS-S052`, `AOS-S053`: work-index rows and the detail drawer expose story, assignment, gate, conference, evidence, audit, risk, owner-intent, and local action context.
+- `AOS-S049`, `AOS-S050`, `AOS-S052`, `AOS-S053`: work-index and drill-through models expose story, assignment, gate, conference, evidence, audit, risk, owner-intent, and local action context without a frontend surface.
 - Supporting `AOS-S029`, `AOS-S031`, `AOS-S045..AOS-S047`, `AOS-S060`, `AOS-S061`, `AOS-S064`, `AOS-S065`, and `AOS-S068`: evidence links, audit stream, source-truth metadata, stage-map readback, access/role binding, and seed/test posture remain local and inspectable.
 
-Still deferred: `AOS-S043` action-item automation, `AOS-S044` deep conference search, final visual/UX acceptance, browser acceptance closeout, deployment, live Codex dispatch, thread registry mutation, release readiness, product acceptance, and final MVP acceptance.
+Still deferred: `AOS-S043` action-item automation, `AOS-S044` deep conference search, all frontend development, final visual/UX acceptance, browser acceptance closeout, deployment, live Codex dispatch, thread registry mutation, release readiness, product acceptance, and final MVP acceptance.
 
 Slice 5 evidence receipt: `../evidence/slice-5-conference-ai-operating-loop-proof.md`.
 
@@ -166,37 +138,4 @@ Still deferred: docs publication/export, canonical knowledge promotion, live Git
 
 Slice 9 evidence receipt: `../evidence/slice-9-docs-search-release-linkage-proof.md`.
 
-## Slice 9B Docs/Search/Release Visible Inspection Coverage
-
-Slice 9B adds a local static/browser inspection surface for the Slice 9 docs/search and release-candidate linkage records:
-
-- `AOS-S057`: docs readiness state, freshness, blockers, stage context, and evidence links are visible in the docs readiness board.
-- `AOS-S058`: sanitized search terms and metadata-only summaries are visible in the search inspection region and filterable work-index rows.
-- `AOS-S059`: aggregate docs/search readback counts, blocked ids, linked stories, evidence, and gates are represented through the static read model and proof script.
-- `AOS-S062`: GitHub repository, branch, PR, and CI metadata remain local fixture/readback fields and are visible without GitHub writes or CI mutation.
-- `AOS-S063`: release-candidate linkage shows dependency/resource blockers, gate/evidence linkage, PR/CI metadata, and residual-risk posture without release creation or release-readiness claims.
-
-Supporting `AOS-S054..AOS-S056` and `AOS-S060..AOS-S061` remain local documentation/source-truth metadata. Dependency/resource blocker context from prior governance slices is shown as posture only.
-
-Slice 9B evidence receipt: `../evidence/slice-9b-visible-readiness-inspection-proof.md`.
-
-Still unclaimed: docs publication/export, canonical knowledge promotion, live GitHub writes, GitHub release creation, CI mutation, deployment, live Codex dispatch, scanner ingestion, resource materialization, public/legal/dependency-clean readiness, Product Design final UX/layout/visual acceptance, browser acceptance closeout, product acceptance, and final MVP acceptance.
-
-## Slice 10 AOS-Wide Product Design Surface Set Coverage
-
-Slice 10 adds a local static AOS-wide Product Design target-set surface that composes the accepted Operations Cockpit and Docs/Search/Release readiness anchors without replacing either anchor or claiming broad acceptance:
-
-- Project dashboard/hierarchy coverage exposes the project header, initiative summary, Epic/Story hierarchy, stage ownership, blockers, and evidence freshness.
-- Initiative/ticket drill-through coverage exposes assignments, gates, evidence links, decisions, comments, subtasks, row/detail selection, state/owner filtering, and blocked action posture.
-- AI employee list/profile coverage exposes role identity, thread identity, lifecycle, assignment scope, authority posture, active/idle/blocked states, and last readback.
-- Approvals/gates and Owner Intent coverage keeps role-owned gate work orders, Owner Intent indicators, required evidence, residual blockers, disabled true-owner actions, and no-auto-approval posture visible.
-- Conference list/detail/minutes coverage exposes metadata, participants, positions, linked tickets/evidence, outcomes, minutes, residual actions, and dry-run/no-live-dispatch posture.
-- MCP Gateway and Codex Adapter coverage exposes local health/readback, dry-run outbox, idempotency/dedupe, role/thread binding, audit, and redaction posture.
-- Knowledge Base/User Guide/Release Notes coverage links local module indexes, proposal/readiness states, and blocked export/publish/canonical-promotion posture to the docs readiness anchor.
-- Dependency/license coverage exposes lifecycle, license evidence, SBOM/NOTICE obligations, review gates, and residual risk without legal-completion or dependency-clean claims.
-- Resource Library/materialization/audit/traceability coverage exposes resource records, requests/history, manifests, update/rollback posture, fail-closed no-execution flags, and traceability without materialization execution.
-- Minimal admin/access/audit coverage exposes read-only access posture, authz boundary, role permission summary, audit status, and blocked break-glass posture without mutable admin CRUD or mutable audit actions.
-
-Slice 10 evidence receipt: `../evidence/slice-10-aos-wide-product-design-surface-set-proof.md`.
-
-Still unclaimed: AOS-wide Product Design acceptance, Product Design final UX/layout/visual acceptance, product acceptance, final MVP acceptance, deployment, release readiness, publication, Selene closeout, push, docs publication/export, canonical knowledge promotion, live GitHub writes, live dispatch, scanner ingestion, resource materialization, product repo writes, public/legal/dependency-clean readiness, and Codex Security scan completion.
+Visible inspection and AOS-wide static surface coverage are also superseded by the owner-directed frontend reset. The remaining Slice 9 evidence is model/control-plane readiness only.

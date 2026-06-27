@@ -10,15 +10,15 @@ console.log(JSON.stringify({
   service: "tcrn-aos-owner-trial",
   url: service.url,
   routes: {
-	    cockpit: `${service.url}/`,
-	    projectWorkspace: `${service.url}/project-workspace`,
-	    initiativeDetail: `${service.url}/initiative-detail`,
-	    docsReadiness: `${service.url}/docs-readiness`,
-    productDesign: `${service.url}/aos-wide-product-design`,
     health: `${service.url}/health`,
     policy: `${service.url}/policy`,
-    readback: `${service.url}/readback`,
-    cockpitApi: `${service.url}/api/cockpit`
+    readback: `${service.url}/readback`
+  },
+  frontend: {
+    codeDisposition: "removed_pending_owner_led_design_restart",
+    routeDisposition: "gone_410",
+    replacementSurfaceAvailable: false,
+    ownerReviewRequired: true
   },
   runtimeDataCommitted: false,
   externalQueue: "none",

@@ -17,7 +17,7 @@ It does not replace:
 - `packages/adapter-codex`: Codex Integration Adapter contracts with dry-run dispatch/readback/return parsing only.
 - `packages/db`: PostgreSQL schema, seed data, and an ephemeral local fixture runtime for apply/readback/reset proof.
 - `apps/api`: API composition shell around the MCP Gateway plus a short-lived local HTTP health/readback service for proof.
-- `apps/web`: cockpit read model shell for inspection.
+- Frontend code: removed pending an owner-led design restart. No AOS web shell, Storybook-backed surface, or visual standard is currently accepted as product truth.
 
 ## Deferred
 

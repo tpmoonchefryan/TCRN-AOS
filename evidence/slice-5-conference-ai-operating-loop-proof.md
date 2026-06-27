@@ -18,7 +18,7 @@ Evidence note: this receipt records observed proof for the Slice 5 implementatio
 
 - `D-024`: runtime operational data stays local-first in AOS storage. Git receives source, schema, tests, scripts, docs, and explicit product-local evidence only.
 - Slice 5: conference records, AI employee operating-loop visibility, Owner Intent separation, Codex dry-run/readback posture, and work-index drill-through.
-- Product Design boundary: the accepted Slice 4B style baseline is consumed as a local functional/web surface baseline only; this receipt does not claim final UX/layout/visual acceptance.
+- Product Design boundary: the prior Slice 4B web/style baseline has been superseded by the owner-directed frontend reset. This receipt does not claim current UX/layout/visual acceptance.
 
 ## Story And Capability Coverage
 
@@ -54,8 +54,7 @@ Component receipt:
 - `pnpm runtime:db:proof`: passed with `ok=true`, `storageMode=os_temp_ephemeral`, `runtimeDataCommitted=false`, representative counts including `stories=1`, `gates=2`, `knowledgeEntries=2`, `stageMapItems=4`, and `auditEvents=18`; audit proof blocked query-result mutation and rejected update/delete; redaction proof rejected and audited the synthetic local-path fixture; reset proof ended with `runtimeDataExistsAfterReset=false`.
 - `pnpm service:smoke`: passed with `ok=true`, loopback-only ephemeral service lifecycle, clean stop, `runtimeDatabase=local_fixture`, `runtimeDataCommitted=false`, `externalQueue=none`, `liveCodexDispatchAuthorized=false`, and `copiedHelperExecution=false`.
 - `pnpm slice3:proof`: passed with `ok=true`.
-- `pnpm slice4:proof`: passed with `ok=true`.
-- `pnpm slice4b:proof`: passed with `ok=true`, static render size `21977` bytes, required production selectors `10 / 10`, and forbidden production-copy hits `0`.
+- Frontend proof note: prior Slice 4 and Slice 4B static/browser proofs are superseded by the owner-directed frontend reset and are no longer current AOS proof commands.
 - `pnpm slice5:proof`: passed with `ok=true`; details are recorded below.
 
 ### `pnpm test`
@@ -69,7 +68,7 @@ Additional Slice 5 coverage included:
 - gateway conference position, minutes, and work-index drill-through methods.
 - gateway restricted-content rejection for conference payloads.
 - adapter conference-invite dry-run dispatch linkage back to the conference operating loop.
-- cockpit static view markers for work-index drill-through and conference operating-loop visibility.
+- domain/gateway/adapter work-index drill-through for conference operating-loop visibility.
 
 ### `pnpm slice5:proof`
 
@@ -86,33 +85,18 @@ Scenario summary:
 Proof summary:
 
 - `gatewayProof=true`.
-- `staticProof.workIndexDrillThrough=true`.
-- `staticProof.conferenceOperatingLoop=true`.
-- `staticProof.forbiddenCopyHits=[]`.
+- `frontendDisposition.codeRemoved=true`.
+- `frontendDisposition.browserProof=removed_pending_owner_led_design_restart`.
+- `frontendDisposition.ownerReviewRequiredBeforeNewFrontend=true`.
 - `liveDispatchAuthorized=false`.
 - `threadRegistryMutation=false`.
 - `copiedHelperExecution=false`.
 
-## Browser Static Proof Receipt
+## Frontend Reset Supersession
 
-Rendered target: `apps/web/static/operations-cockpit.html` through a temporary loopback static server.
+The former browser/static proof is superseded. AOS frontend code and frontend evidence have been removed pending owner-led design restart, and the service now returns reset-aware 410 JSON for former UI routes. Future AOS frontend work requires final Owner Review before any visual component, pattern, Storybook entry, reusable surface, or visual standard is registered, consumed, visually certified, or treated as accepted Design System truth.
 
-Observed browser proof:
-
-- Page title: `TCRN AOS Operations Cockpit`.
-- Console warnings/errors: `0`.
-- Desktop viewport: default browser viewport, required regions present `11 / 11`.
-- Desktop required regions included sidebar, brand lockup, project selector, stage map, AI employee phase card, gate card, readback posture card, work index, detail drawer, Slice 5 drill-through marker, and conference operating-loop marker.
-- Desktop horizontal overflow: `false`.
-- Desktop production forbidden-copy hits: `0`.
-- Mobile/narrow viewport: `390 x 844`.
-- Mobile required regions present: `11 / 11`.
-- Mobile horizontal overflow: `false`.
-- Mobile clipped key text count: `0`.
-- Mobile conference loop, detail drawer, work index, and stage map remained visible.
-- Temporary screenshots were captured for desktop and mobile proof, but screenshot file paths are not committed because they are machine-local artifacts.
-
-This browser/static proof remains a local implementation proof. It is not Product Design final visual acceptance, not browser acceptance closeout, not deployment proof, and not product acceptance.
+This reset receipt is not Product Design final visual acceptance, not browser acceptance closeout, not deployment proof, and not product acceptance.
 
 ## Dependency And License Posture
 
