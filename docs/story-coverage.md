@@ -51,9 +51,11 @@ Slice 3 adds runtime-backed MCP Gateway and Codex Adapter dry-run/outbox/readbac
 
 Slice 3 evidence receipt: `../evidence/slice-3-gateway-adapter-proof.md`.
 
-## Frontend Reset Supersession
+## Frontend Shell Slice
 
-Prior Operations Cockpit, frontend style baseline, visible readiness, and AOS-wide static surfaces are superseded by the owner-directed frontend reset. Current AOS source intentionally contains no frontend implementation and no current browser or static UI evidence. Future frontend work requires owner-led design before development and explicit Owner Review before any visual surface is registered, consumed, certified, or treated as Design System truth.
+Current AOS source now includes the first frontend shell slice under `apps/web/src/**`. This shell restores a local visible surface after the owner-directed reset without reviving the prior implementation: it serves an attached AOS product shell, dummy Cockpit, Jira-like work entry, placeholder module surfaces, Design System-backed theme/locale/search controls, and backend readbacks from `/api/health`, `/api/readback`, and `/api/policy`.
+
+The shell is a structural implementation slice only. Final cockpit aggregation, Product Design final UX/layout/visual acceptance, product acceptance, release readiness, external queue use, live dispatch, package publication, and hosted publication remain deferred.
 
 ## Slice 5 Conference And AI Operating Loop Coverage
 
@@ -138,4 +140,4 @@ Still deferred: docs publication/export, canonical knowledge promotion, live Git
 
 Slice 9 evidence receipt: `../evidence/slice-9-docs-search-release-linkage-proof.md`.
 
-Visible inspection and AOS-wide static surface coverage are also superseded by the owner-directed frontend reset. The remaining Slice 9 evidence is model/control-plane readiness only.
+Visible inspection for Slice 9 remains model/control-plane readiness only. The current frontend shell can link to Docs/Search/Release placeholders, but it does not promote docs publication, search/public readiness, GitHub mutation, release creation, deployment, release readiness, product acceptance, final MVP acceptance, or Product Design final UX/layout/visual acceptance.

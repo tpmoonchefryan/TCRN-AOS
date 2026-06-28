@@ -15,7 +15,7 @@ This repository is a local product shell only. It does not publish, deploy, muta
 - Codex dispatch is dry-run only in this checkpoint.
 - No Redis or external queue is used.
 - Runtime operational data stays in local ephemeral storage for proof runs. Git stores source, schema, fixture seed, tests, and evidence notes only.
-- The web surface is a functional contract shell, not a Product Design accepted cockpit UX.
+- The web surface is now a first-slice frontend shell with a dummy Cockpit and Jira-like work entry. It is not a final cockpit aggregation and is not Product Design accepted UX.
 
 ## Local Commands
 
@@ -24,8 +24,8 @@ pnpm install
 pnpm verify
 pnpm runtime:db:proof
 pnpm service:smoke
+pnpm aos:frontend-shell-proof
 pnpm slice3:proof
-pnpm slice4:proof
 ```
 
 ## Brand Assets
@@ -37,6 +37,9 @@ pnpm slice4:proof
 - Rounded-square favicon: `docs/brand/aos-favicon.png` and `docs/brand/favicon.ico`
 - README impression image: `docs/brand/tcrn-aos-impression.png`
 
-## Frontend Mockup
+## Frontend Shell
 
-- Static AOS core modules sample page: `apps/web/mockup/index.html`
+- Static React shell source: `apps/web/src/**`
+- Generated shell artifact: `apps/web/dist/index.html` from `pnpm build`
+- Served local routes: `/`, `/cockpit`, `/work`, and placeholder module aliases through `pnpm service:start`
+- Scope boundary: dummy Cockpit only, no final aggregation API, no live dispatch, no external queue, no product acceptance, and no release-readiness claim.

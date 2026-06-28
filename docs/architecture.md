@@ -17,8 +17,14 @@ It does not replace:
 - `packages/adapter-codex`: Codex Integration Adapter contracts with dry-run dispatch/readback/return parsing only.
 - `packages/db`: PostgreSQL schema, seed data, and an ephemeral local fixture runtime for apply/readback/reset proof.
 - `apps/api`: API composition shell around the MCP Gateway plus a short-lived local HTTP health/readback service for proof.
-- Frontend code: removed pending an owner-led design restart. No AOS web shell, Storybook-backed surface, or visual standard is currently accepted as product truth.
+- `apps/web`: first frontend shell slice rendered as static React output at build time and served by `apps/api` for `/`, `/cockpit`, `/work`, and planned module aliases. The shell consumes current TCRN Design System packages for public React primitives, tokens, and copy-state/i18n posture.
+
+## Frontend Shell Boundary
+
+The current shell establishes attached product navigation, compact theme/locale/search controls, a dummy Cockpit, a Jira-like work module entry, placeholder module surfaces, and browser-side fail-closed reads of `/api/health`, `/api/readback`, and `/api/policy`.
+
+It deliberately does not implement final cockpit aggregation. `/api/cockpit` remains a deferred JSON endpoint with `410 aos_cockpit_api_deferred`; browser surfaces must not treat the dummy Cockpit as live aggregation, external queue evidence, product acceptance, release readiness, or live dispatch proof.
 
 ## Deferred
 
-NestJS, Refine, Payload, deployed PostgreSQL proof, deployment, live Codex sends, scanner ingestion, resource binary materialization, and GitHub remote publication require separate routes.
+NestJS, Refine, Payload, deployed PostgreSQL proof, final cockpit aggregation, deployment, live Codex sends, scanner ingestion, resource binary materialization, and GitHub remote publication require separate routes.

@@ -44,10 +44,12 @@ console.log(JSON.stringify({
   scenarios: scenarioProofs,
   gatewayProof,
   frontendDisposition: {
-    codeRemoved: true,
-    browserProof: "removed_pending_owner_led_design_restart",
+    shellSliceAvailable: true,
+    shellProof: "aos_frontend_shell_first_slice",
+    dummyCockpitOnly: true,
+    finalCockpitAggregation: false,
     productUiAcceptance: false,
-    ownerReviewRequiredBeforeNewFrontend: true
+    ownerReviewRequiredBeforeAcceptance: true
   },
   noOverclaim: {
     liveCodexDispatch: false,
@@ -62,8 +64,8 @@ console.log(JSON.stringify({
   },
   productDesignStatus: {
     brief: "accepted",
-    ownerStyleBaseline: "superseded_by_owner_frontend_reset",
-    visualIdeation: "required_before_any_new_frontend_development",
+    ownerStyleBaseline: "first_shell_slice_consumes_ds_contract_not_final_visual_acceptance",
+    visualIdeation: "not_claimed_by_slice5_model_proof",
     prototype: "not_claimed",
     browserVisualAcceptance: "not_claimed",
     uxLayoutVisualAcceptance: "not_claimed"

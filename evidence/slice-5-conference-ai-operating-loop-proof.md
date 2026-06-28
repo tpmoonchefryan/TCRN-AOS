@@ -54,7 +54,7 @@ Component receipt:
 - `pnpm runtime:db:proof`: passed with `ok=true`, `storageMode=os_temp_ephemeral`, `runtimeDataCommitted=false`, representative counts including `stories=1`, `gates=2`, `knowledgeEntries=2`, `stageMapItems=4`, and `auditEvents=18`; audit proof blocked query-result mutation and rejected update/delete; redaction proof rejected and audited the synthetic local-path fixture; reset proof ended with `runtimeDataExistsAfterReset=false`.
 - `pnpm service:smoke`: passed with `ok=true`, loopback-only ephemeral service lifecycle, clean stop, `runtimeDatabase=local_fixture`, `runtimeDataCommitted=false`, `externalQueue=none`, `liveCodexDispatchAuthorized=false`, and `copiedHelperExecution=false`.
 - `pnpm slice3:proof`: passed with `ok=true`.
-- Frontend proof note: prior Slice 4 and Slice 4B static/browser proofs are superseded by the owner-directed frontend reset and are no longer current AOS proof commands.
+- Historical frontend proof note: prior Slice 4 and Slice 4B static/browser proofs were superseded by the owner-directed frontend reset at this Slice 5 checkpoint. Current AOS frontend shell proof is now `pnpm aos:frontend-shell-proof`; this Slice 5 receipt remains model/control-plane evidence only.
 - `pnpm slice5:proof`: passed with `ok=true`; details are recorded below.
 
 ### `pnpm test`
@@ -85,9 +85,7 @@ Scenario summary:
 Proof summary:
 
 - `gatewayProof=true`.
-- `frontendDisposition.codeRemoved=true`.
-- `frontendDisposition.browserProof=removed_pending_owner_led_design_restart`.
-- `frontendDisposition.ownerReviewRequiredBeforeNewFrontend=true`.
+- Historical Slice 5 frontend disposition recorded frontend removal at that older checkpoint. Current AOS frontend posture is first shell slice available, dummy Cockpit only, final Cockpit aggregation deferred, and Product Design final acceptance not claimed.
 - `liveDispatchAuthorized=false`.
 - `threadRegistryMutation=false`.
 - `copiedHelperExecution=false`.

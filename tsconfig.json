@@ -6,6 +6,7 @@
     "rootDir": ".",
     "outDir": "dist",
     "strict": true,
+    "jsx": "react-jsx",
     "declaration": true,
     "sourceMap": true,
     "noUncheckedIndexedAccess": true,
@@ -15,6 +16,7 @@
   },
   "include": [
     "apps/**/*.ts",
+    "apps/**/*.tsx",
     "packages/**/*.ts"
   ]
 }

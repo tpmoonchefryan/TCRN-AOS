@@ -1,10 +1,10 @@
 # AOS Frontend Reset Proof
 
-Status: current AOS frontend code removed.
+Status: historical reset receipt, superseded by the first frontend shell slice.
 
 Owner directive: all existing AOS frontend implementation is invalid for product use and must be restarted only after owner-led design review.
 
-Current disposition:
+Historical disposition at the reset checkpoint:
 
 - `apps/web` is removed.
 - Static product UI routes are gone from the local service and return `410` with `aos_frontend_removed`.
@@ -19,8 +19,6 @@ No-overclaim:
 - No Product UI acceptance, Product Design acceptance, release readiness, hosted deployment readiness, live dispatch, publication, or product acceptance is claimed.
 - Any future AOS frontend, reusable visual pattern, Storybook entry, or Design System truth requires explicit Owner Review before registration or consumption.
 
-Verification entrypoint:
+Current replacement:
 
-```sh
-pnpm aos:frontend-reset-proof
-```
+The current proof entrypoint is `pnpm aos:frontend-shell-proof`, with current evidence recorded in `evidence/aos-frontend-shell-proof.md`.

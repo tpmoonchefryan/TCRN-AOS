@@ -1,6 +1,9 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { once } from "node:events";
+import { existsSync, readFileSync } from "node:fs";
+import { extname, join, normalize } from "node:path";
 import { createAppliedRuntimeFixture, type AosRuntimeFixture } from "../../../packages/db/src/index.js";
+import { frontendShellRoutes } from "../../web/src/data.js";
 import { apiHealthReadback, createAosApiApp } from "./index.js";
 
 export interface StartedAosLocalService {
@@ -46,43 +49,17 @@ function handleRequest(
   }
   const url = parseRequestUrl(request);
   const path = url.pathname;
-  const removedFrontendAliases = new Set([
-    "/",
-    "/cockpit",
-    "/operations-cockpit",
-    "/operations-cockpit.html",
-    "/docs-readiness",
-    "/docs-search-release-readiness",
-    "/docs-search-release-readiness.html",
-    "/aos-wide-product-design",
-    "/aos-wide-product-design.html",
-    "/project-workspace",
-    "/project-workspace.html",
-    "/initiative-detail",
-    "/initiative-detail.html",
-    "/ai-employee",
-    "/ai-employee.html",
-    "/gate-queue",
-    "/gate-queue.html",
-    "/conference",
-    "/conference.html",
-    "/gateway-adapter",
-    "/gateway-adapter.html",
-    "/dependency-console",
-    "/dependency-console.html",
-    "/resource-library",
-    "/resource-library.html",
-    "/knowledge-modules",
-    "/knowledge-modules.html",
-    "/admin-access",
-    "/admin-access.html",
-    "/github-release-linkage",
-    "/github-release-linkage.html",
-    "/api/cockpit"
-  ]);
 
-  if (removedFrontendAliases.has(path)) {
-    sendJson(response, 410, createFrontendRemovedPayload(path));
+  if (path.startsWith("/assets/")) {
+    sendStaticAsset(request, response, path);
+    return;
+  }
+  if (frontendShellRouteSet.has(path)) {
+    sendShellHtml(request, response);
+    return;
+  }
+  if (path === "/api/cockpit") {
+    sendJson(response, 410, createCockpitApiDeferredPayload(path));
     return;
   }
   if (path === "/health" || path === "/api/health") {
@@ -114,18 +91,69 @@ function handleRequest(
   sendJson(response, 404, { ok: false, error: "not_found" });
 }
 
-function createFrontendRemovedPayload(path: string) {
+const frontendShellRouteSet = new Set<string>(frontendShellRoutes);
+
+function createCockpitApiDeferredPayload(path: string) {
   return {
     ok: false,
-    error: "aos_frontend_removed",
+    error: "aos_cockpit_api_deferred",
     path,
-    frontendCodeDisposition: "removed_pending_owner_led_design_restart",
-    ownerReviewRequired: true,
-    replacementSurfaceAvailable: false,
+    frontendShellAvailable: true,
+    dummyCockpitOnly: true,
+    finalCockpitAggregationAvailable: false,
+    backendReadbackRoutes: ["/api/health", "/api/readback", "/api/policy"],
     productUiAcceptance: false,
     releaseReadiness: false,
     liveDispatch: false
   };
+}
+
+function sendShellHtml(request: IncomingMessage, response: ServerResponse): void {
+  const shellPath = join(process.cwd(), "apps/web/dist/index.html");
+  if (!existsSync(shellPath)) {
+    sendJson(response, 503, {
+      ok: false,
+      error: "aos_frontend_shell_not_built",
+      expectedArtifact: "apps/web/dist/index.html",
+      remediation: "run pnpm build"
+    });
+    return;
+  }
+  response.statusCode = 200;
+  response.setHeader("content-type", "text/html; charset=utf-8");
+  response.setHeader("cache-control", "no-store");
+  response.end(request.method === "HEAD" ? undefined : readFileSync(shellPath));
+}
+
+function sendStaticAsset(request: IncomingMessage, response: ServerResponse, path: string): void {
+  const assetRoot = join(process.cwd(), "apps/web/dist");
+  const relativePath = normalize(decodeURIComponent(path).replace(/^\/+/, ""));
+  if (relativePath.includes("..")) {
+    sendJson(response, 400, { ok: false, error: "invalid_asset_path" });
+    return;
+  }
+  const assetPath = join(assetRoot, relativePath);
+  if (!assetPath.startsWith(assetRoot) || !existsSync(assetPath)) {
+    sendJson(response, 404, { ok: false, error: "asset_not_found" });
+    return;
+  }
+  response.statusCode = 200;
+  response.setHeader("content-type", contentTypeForAsset(assetPath));
+  response.setHeader("cache-control", "no-store");
+  response.end(request.method === "HEAD" ? undefined : readFileSync(assetPath));
+}
+
+function contentTypeForAsset(path: string): string {
+  switch (extname(path)) {
+    case ".png":
+      return "image/png";
+    case ".ico":
+      return "image/x-icon";
+    case ".svg":
+      return "image/svg+xml";
+    default:
+      return "application/octet-stream";
+  }
 }
 
 function parseRequestUrl(request: IncomingMessage): URL {

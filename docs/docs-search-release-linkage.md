@@ -56,6 +56,6 @@ This checkpoint does not claim docs publication, docs export, search/public read
 
 Related evidence receipt: `../evidence/slice-9-docs-search-release-linkage-proof.md`.
 
-## Frontend Reset Supersession
+## Frontend Shell Context
 
-The prior visible readiness inspection surface is removed by the owner-directed frontend reset. Slice 9 remains a local model/control-plane readiness checkpoint only. Any future visible docs/search/release review surface requires owner-led design before frontend development and Owner Review before registration, certification, or product consumption.
+The current AOS frontend shell includes a placeholder Docs/Search/Release Linkage module entry for navigation continuity only. Slice 9 remains a local model/control-plane readiness checkpoint; the placeholder does not claim docs publication, search/public readiness, GitHub mutation, release creation, deployment, release readiness, product acceptance, final MVP acceptance, or Product Design final UX/layout/visual acceptance.

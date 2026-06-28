@@ -2,9 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { startAosLocalServiceProof } from "../../../dist/apps/api/src/server.js";
 
-const removedFrontendTargets = [
+const shellTargets = [
   "/",
   "/cockpit",
+  "/work",
   "/operations-cockpit.html",
   "/docs-search-release-readiness.html",
   "/aos-wide-product-design.html",
@@ -18,26 +19,31 @@ const removedFrontendTargets = [
   "/resource-library.html",
   "/knowledge-modules.html",
   "/admin-access.html",
-  "/github-release-linkage.html",
-  "/api/cockpit"
+  "/github-release-linkage.html"
 ];
 
-test("local service keeps backend readbacks available while AOS frontend routes stay removed", async () => {
+test("local service serves the AOS shell while backend readbacks stay available", async () => {
   const service = await startAosLocalServiceProof();
   try {
-    for (const target of removedFrontendTargets) {
+    for (const target of shellTargets) {
       const response = await fetch(`${service.url}${target}`);
-      const payload = await response.json();
-      assert.equal(response.status, 410, `${target} is gone after frontend reset`);
-      assert.equal(payload.ok, false);
-      assert.equal(payload.error, "aos_frontend_removed");
-      assert.equal(payload.frontendCodeDisposition, "removed_pending_owner_led_design_restart");
-      assert.equal(payload.ownerReviewRequired, true);
-      assert.equal(payload.replacementSurfaceAvailable, false);
-      assert.equal(payload.productUiAcceptance, false);
-      assert.equal(payload.releaseReadiness, false);
-      assert.equal(payload.liveDispatch, false);
+      const html = await response.text();
+      assert.equal(response.status, 200, `${target} serves the first shell slice`);
+      assert.match(response.headers.get("content-type") ?? "", /text\/html/);
+      assert.match(html, /data-aos-shell="first-frontend-slice"/);
+      assert.match(html, /data-design-system-source="@tcrn\/ui-react @tcrn\/ui-tokens @tcrn\/ui-copy-state"/);
+      assert.match(html, /data-aos-dummy-cockpit="true"/);
+      assert.match(html, /data-aos-work-module-entry="jira-like"/);
+      assert.doesNotMatch(html, /ai-consumption-contract\.json/);
     }
+
+    const cockpitApi = await fetch(`${service.url}/api/cockpit`);
+    const cockpitPayload = await cockpitApi.json();
+    assert.equal(cockpitApi.status, 410);
+    assert.equal(cockpitPayload.error, "aos_cockpit_api_deferred");
+    assert.equal(cockpitPayload.dummyCockpitOnly, true);
+    assert.equal(cockpitPayload.finalCockpitAggregationAvailable, false);
+    assert.equal(cockpitPayload.liveDispatch, false);
 
     const health = await fetch(`${service.url}/health`).then((response) => response.json());
     assert.equal(health.ok, true);
