@@ -30,11 +30,8 @@ pnpm slice3:proof
 
 ## Brand Assets
 
-- Selected geometric wordmark: `docs/brand/tcrn-aos-wordmark-geometric-dark.png`
-- Selected geometric wordmark preview: `docs/brand/tcrn-aos-wordmark-geometric-dark-preview.png`
-- Selected geometric wordmark spec: `docs/brand/tcrn-aos-wordmark-geometric-spec.md`
-- Previous pure text wordmark: `docs/brand/tcrn-aos-wordmark.svg` and `docs/brand/tcrn-aos-wordmark.png`
-- Rounded-square favicon: `docs/brand/aos-favicon.png` and `docs/brand/favicon.ico`
+- Registered shell brand source: `@tcrn/ui-react` `ShellBrandLockup` with the Design System `tcrn-brand-mark.svg`.
+- Deprecated local AOS wordmark and favicon assets have been removed from the current shell path and must not be restored without a fresh brand admission route.
 - README impression image: `docs/brand/tcrn-aos-impression.png`
 
 ## Frontend Shell
@@ -43,6 +40,6 @@ pnpm slice3:proof
 - Generated shell artifact: `apps/web/dist/index.html` from `pnpm build`
 - Served local routes: `/`, `/cockpit`, `/work`, and legacy compatibility aliases through `pnpm service:start`
 - Visible primary navigation is limited to the admitted shell entries: dummy Cockpit and Work. Planned modules are not registered product IA in this slice.
-- The admitted geometric wordmark image is the visible product brand surface; generic icons or text-only marks are not substituted for the AOS brand.
+- The visible product brand surface uses the registered Design System `ShellBrandLockup` and `tcrn-brand-mark.svg`; local AOS wordmark images and favicon assets are not emitted.
 - The locale menu, side navigation collapse, theme toggle, search, readback surfaces, and no-overclaim posture are covered by `pnpm aos:frontend-shell-proof`.
 - Scope boundary: dummy Cockpit only, no final aggregation API, no live dispatch, no external queue, no product acceptance, and no release-readiness claim.

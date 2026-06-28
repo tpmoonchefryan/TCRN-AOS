@@ -53,7 +53,7 @@ Slice 3 evidence receipt: `../evidence/slice-3-gateway-adapter-proof.md`.
 
 ## Frontend Shell Slice
 
-Current AOS source now includes the first frontend shell slice under `apps/web/src/**`. This shell restores a local visible surface after the owner-directed reset without reviving the prior implementation: it serves an attached AOS product shell, dummy Cockpit, Jira-like Work entry, Design System-backed theme/locale/search controls, side navigation collapse, admitted AOS wordmark asset, and backend readbacks from `/api/health`, `/api/readback`, and `/api/policy`. Planned module aliases may still serve shell HTML for compatibility, but they are not visible primary navigation or registered module cards in this slice.
+Current AOS source now includes the first frontend shell slice under `apps/web/src/**`. This shell restores a local visible surface after the owner-directed reset without reviving the prior implementation: it serves an attached AOS product shell, dummy Cockpit, Jira-like Work entry, Design System-backed theme/locale/search controls, side navigation collapse, registered Design System brand lockup, and backend readbacks from `/api/health`, `/api/readback`, and `/api/policy`. Planned module aliases may still serve shell HTML for compatibility, but they are not visible primary navigation or registered module cards in this slice.
 
 The shell is a structural implementation slice only. Final cockpit aggregation, Product Design final UX/layout/visual acceptance, product acceptance, release readiness, external queue use, live dispatch, package publication, and hosted publication remain deferred.
 

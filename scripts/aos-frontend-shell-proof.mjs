@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { findForbiddenPositiveClaimHits, tcrnLocaleMetadata } from "@tcrn/ui-copy-state";
 import { frontendShellRoutes, forbiddenHumanAiTopbarMarkers } from "../dist/apps/web/src/data.js";
 import { startAosLocalServiceProof } from "../dist/apps/api/src/server.js";
@@ -20,9 +21,14 @@ const requiredMarkers = [
   'data-side-nav-toggle="true"',
   'data-side-nav-persisted-key="tcrn-aos-side-nav-collapsed"',
   'data-registered-navigation-only="true"',
-  'data-admitted-brand-asset="tcrn-aos-wordmark-geometric-dark"',
-  'data-brand-asset-path="/assets/tcrn-aos-wordmark-geometric-dark.png"',
-  'data-visible-brand-wordmark="true"',
+  'data-registered-brand-lockup="@tcrn/ui-react/ShellBrandLockup"',
+  'data-brand-asset-path="/assets/tcrn-brand-mark.svg"',
+  'data-tcrn-brand-mark="registered"',
+  'data-package-backed-brand-lockup="shell"',
+  'data-package-backed-shell-control="locale-menu"',
+  'data-package-backed-shell-control="theme-toggle"',
+  'data-package-backed-shell-control="side-nav-collapse"',
+  'data-tcrn-component-style-source="@tcrn/ui-react"',
   'data-aos-dummy-cockpit="true"',
   'data-aos-work-module-entry="jira-like"',
   'data-aos-registered-module-boundary="cockpit-work-only"',
@@ -46,17 +52,41 @@ const forbiddenPlannedPrimaryLabels = [
   "Module placeholders"
 ];
 
+const forbiddenAosBrandAssetMarkers = [
+  "tcrn-aos-wordmark",
+  "aos-favicon.png",
+  "favicon.ico",
+  "data-admitted-brand-asset"
+];
+
 const missingMarkers = requiredMarkers.filter((marker) => !html.includes(marker));
 const missingLocales = tcrnLocaleMetadata.map((entry) => entry.nativeName).filter((name) => !html.includes(name));
 const forbiddenAiMarkers = forbiddenHumanAiTopbarMarkers.filter((marker) => html.includes(marker));
 const forbiddenPositiveClaimHits = findForbiddenPositiveClaimHits(html);
 const forbiddenPlannedStaticHits = forbiddenPlannedPrimaryLabels.filter((label) => html.includes(label));
+const forbiddenAosBrandHtmlHits = forbiddenAosBrandAssetMarkers.filter((marker) => html.includes(marker));
+const forbiddenAosBrandDistHits = listRelativeFiles(new URL("../apps/web/dist", import.meta.url))
+  .filter((file) => forbiddenAosBrandAssetMarkers.some((marker) => file.includes(marker.replace(/^\//, ""))));
+const forbiddenAosBrandDocHits = [
+  "../README.md",
+  "../docs/architecture.md",
+  "../docs/story-coverage.md",
+  "../evidence/aos-frontend-shell-proof.md"
+].flatMap((relativePath) => {
+  const source = readFileSync(new URL(relativePath, import.meta.url), "utf8");
+  return forbiddenAosBrandAssetMarkers
+    .filter((marker) => source.includes(marker))
+    .map((marker) => ({ file: relativePath.replace(/^\.\.\//, ""), marker }));
+});
 
 assert.deepEqual(missingMarkers, [], "required shell and DS-consumption markers are present");
 assert.deepEqual(missingLocales, [], "locale menu uses native locale names");
 assert.deepEqual(forbiddenAiMarkers, [], "AI consumption contract is not exposed as a human top-bar control");
 assert.deepEqual(forbiddenPositiveClaimHits, [], "shell HTML has no forbidden positive-claim phrases");
 assert.deepEqual(forbiddenPlannedStaticHits, [], "planned/unregistered modules are not visible as primary navigation or module cards");
+assert.deepEqual(forbiddenAosBrandHtmlHits, [], "forbidden AOS wordmark/favicon markers are absent from shell HTML");
+assert.deepEqual(forbiddenAosBrandDistHits, [], "forbidden AOS wordmark/favicon files are absent from built dist assets");
+assert.deepEqual(forbiddenAosBrandDocHits, [], "current docs/evidence do not reference forbidden AOS wordmark/favicon assets");
 
 const service = await startAosLocalServiceProof();
 let closed = false;
@@ -74,11 +104,28 @@ try {
       dummyCockpitMarker: body.includes('data-aos-dummy-cockpit="true"'),
       workMarker: body.includes('data-aos-work-module-entry="jira-like"'),
       registeredNavigationOnly: body.includes('data-registered-navigation-only="true"'),
-      plannedPrimaryHits: forbiddenPlannedPrimaryLabels.filter((label) => body.includes(label))
+      registeredBrandLockup: body.includes('data-registered-brand-lockup="@tcrn/ui-react/ShellBrandLockup"'),
+      packageBackedShellControls: [
+        'data-package-backed-shell-control="locale-menu"',
+        'data-package-backed-shell-control="theme-toggle"',
+        'data-package-backed-shell-control="side-nav-collapse"'
+      ].every((marker) => body.includes(marker)),
+      plannedPrimaryHits: forbiddenPlannedPrimaryLabels.filter((label) => body.includes(label)),
+      forbiddenBrandHits: forbiddenAosBrandAssetMarkers.filter((marker) => body.includes(marker))
     });
   }
 
-  const asset = await fetch(`${service.url}/assets/tcrn-aos-wordmark-geometric-dark.png`);
+  const asset = await fetch(`${service.url}/assets/tcrn-brand-mark.svg`);
+  const forbiddenAssetReadbacks = [];
+  for (const forbiddenAsset of [
+    "/assets/tcrn-aos-wordmark-geometric-dark.png",
+    "/assets/tcrn-aos-wordmark.png",
+    "/assets/aos-favicon.png",
+    "/assets/favicon.ico"
+  ]) {
+    const assetResponse = await fetch(`${service.url}${forbiddenAsset}`);
+    forbiddenAssetReadbacks.push({ asset: forbiddenAsset, status: assetResponse.status });
+  }
   const health = await fetch(`${service.url}/api/health`).then((response) => response.json());
   const readback = await fetch(`${service.url}/api/readback`).then((response) => response.json());
   const policy = await fetch(`${service.url}/api/policy`).then((response) => response.json());
@@ -89,9 +136,10 @@ try {
   const stopped = await service.close();
   closed = stopped.stopped && stopped.runtimeReset;
 
-  const ok = routeReadbacks.every((entry) => entry.status === 200 && entry.html && entry.shellMarker && entry.dummyCockpitMarker && entry.workMarker && entry.registeredNavigationOnly && entry.plannedPrimaryHits.length === 0)
+  const ok = routeReadbacks.every((entry) => entry.status === 200 && entry.html && entry.shellMarker && entry.dummyCockpitMarker && entry.workMarker && entry.registeredNavigationOnly && entry.registeredBrandLockup && entry.packageBackedShellControls && entry.plannedPrimaryHits.length === 0 && entry.forbiddenBrandHits.length === 0)
     && asset.status === 200
-    && (asset.headers.get("content-type") ?? "").includes("image/png")
+    && (asset.headers.get("content-type") ?? "").includes("image/svg+xml")
+    && forbiddenAssetReadbacks.every((entry) => entry.status === 404)
     && health.ok === true
     && health.externalQueue === "none"
     && health.liveCodexDispatchAuthorized === false
@@ -119,15 +167,18 @@ try {
       status: asset.status,
       contentType: asset.headers.get("content-type")
     },
+    forbiddenAssetReadbacks,
     dsContractConsumption: {
       packages: ["@tcrn/ui-react", "@tcrn/ui-tokens", "@tcrn/ui-copy-state"],
+      componentStylesheet: "tcrnComponentCss",
       themeControl: "compact_icon_only_explicit_toggle",
       themeTransition: "whole_page_wash",
       localeSelector: "globe_trigger_native_names_with_escape_outside_selection_close",
       sideNavigation: "package_backed_side_nav_with_persisted_collapse",
       search: "compact_rest_expands_on_focus_with_results",
       readbackUx: "readback_panel_key_value_evidence_primary_raw_json_secondary_disclosure",
-      brandAsset: "/assets/tcrn-aos-wordmark-geometric-dark.png",
+      brandAsset: "/assets/tcrn-brand-mark.svg",
+      brandLockup: "@tcrn/ui-react/ShellBrandLockup",
       aiContractHumanTopbarLink: false
     },
     browserProof,
@@ -158,7 +209,10 @@ try {
       finalCockpitAggregation: false,
       forbiddenPositiveClaimHits,
       forbiddenAiMarkers,
-      forbiddenPlannedStaticHits
+      forbiddenPlannedStaticHits,
+      forbiddenAosBrandHtmlHits,
+      forbiddenAosBrandDistHits,
+      forbiddenAosBrandDocHits
     },
     serviceLifecycle: {
       loopbackOnly: true,
@@ -206,7 +260,7 @@ async function runBrowserProof(baseUrl) {
     assert.equal(await desktopPage.locator("html").getAttribute("data-tcrn-theme"), "dark", "dark theme query applies");
     assert.equal(await desktopPage.locator("html").getAttribute("lang"), "zh-CN", "zh-CN locale query applies");
 
-    const brandReadback = await desktopPage.locator("[data-visible-brand-wordmark]").evaluate((img) => {
+    const brandReadback = await desktopPage.locator('[data-tcrn-brand-mark="registered"]').evaluate((img) => {
       const image = img;
       const rect = image.getBoundingClientRect();
       return {
@@ -218,11 +272,12 @@ async function runBrowserProof(baseUrl) {
         height: rect.height
       };
     });
-    assert.equal(brandReadback.src, "/assets/tcrn-aos-wordmark-geometric-dark.png");
-    assert.equal(brandReadback.alt, "TCRN AOS geometric wordmark");
+    assert.equal(brandReadback.src, "/assets/tcrn-brand-mark.svg");
+    assert.equal(brandReadback.alt, "TCRN registered brand mark");
     assert.equal(brandReadback.naturalWidth > 0, true, "brand asset loads");
-    assert.equal(brandReadback.width >= 120, true, "expanded brand is visibly sized");
+    assert.equal(brandReadback.width >= 34, true, "registered brand mark is visibly sized");
     assert.equal(brandReadback.height >= 30, true, "expanded brand has visible height");
+    assert.equal(await desktopPage.locator('[data-package-backed-brand-lockup="shell"]').isVisible(), true, "package-backed shell brand lockup is visible");
 
     const localeTrigger = desktopPage.locator("[data-locale-menu-toggle]");
     const localeMenu = desktopPage.locator("[data-locale-menu]");
@@ -267,6 +322,9 @@ async function runBrowserProof(baseUrl) {
       assert.equal(visibleText.includes(label), false, `${label} is not visible in product IA`);
     }
     assert.equal(visibleText.includes("ai-consumption-contract.json"), false, "AI contract JSON is not a human top-bar link");
+    for (const marker of forbiddenAosBrandAssetMarkers) {
+      assert.equal(await desktopPage.locator("body").evaluate((body, value) => body.innerHTML.includes(value), marker), false, `${marker} is not present in rendered browser DOM`);
+    }
     assert.equal(await desktopPage.locator(".aos-api-json").isVisible(), false, "raw JSON is not primary visible Cockpit UX");
     assert.equal(await desktopPage.locator('[data-raw-json-disclosure="secondary"]').isVisible(), true, "raw payload is available only through secondary disclosure");
 
@@ -293,7 +351,7 @@ async function runBrowserProof(baseUrl) {
     assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "mobile side nav collapse state updates");
     const mobileNoOverflow = await mobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
     assert.equal(mobileNoOverflow, true, "mobile shell has no horizontal page overflow");
-    assert.equal(await mobilePage.locator('[data-visible-brand-wordmark]').isVisible(), true, "mobile brand asset remains visible");
+    assert.equal(await mobilePage.locator('[data-tcrn-brand-mark="registered"]').isVisible(), true, "mobile registered brand mark remains visible");
     await mobileContext.close();
 
     const relevantConsoleMessages = consoleMessages.filter((message) => !/favicon|DevTools/.test(message.text));
@@ -342,6 +400,25 @@ function findLocalChromeExecutable() {
     "/Applications/Chromium.app/Contents/MacOS/Chromium"
   ].filter(Boolean);
   return candidates.find((candidate) => existsSync(candidate)) ?? undefined;
+}
+
+function listRelativeFiles(rootUrl) {
+  const rootPath = fileURLToPath(rootUrl);
+  if (!existsSync(rootPath)) return [];
+  const files = [];
+  const visit = (dir, prefix = "") => {
+    for (const entry of readdirSync(dir)) {
+      const fullPath = `${dir}/${entry}`;
+      const relative = prefix ? `${prefix}/${entry}` : entry;
+      if (statSync(fullPath).isDirectory()) {
+        visit(fullPath, relative);
+      } else {
+        files.push(relative);
+      }
+    }
+  };
+  visit(rootPath);
+  return files;
 }
 
 function capturePageHealth(page, consoleMessages, pageErrors, requestFailures) {

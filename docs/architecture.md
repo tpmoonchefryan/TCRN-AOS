@@ -21,7 +21,7 @@ It does not replace:
 
 ## Frontend Shell Boundary
 
-The current shell establishes attached product navigation limited to the admitted dummy Cockpit and Work entries, compact theme/locale/search controls, side navigation collapse, the admitted AOS geometric wordmark asset, and browser-side fail-closed reads of `/api/health`, `/api/readback`, and `/api/policy`. Legacy aliases may still serve the shell for local compatibility, but planned modules are not visible primary navigation or registered module cards in this slice.
+The current shell establishes attached product navigation limited to the admitted dummy Cockpit and Work entries, compact theme/locale/search controls, side navigation collapse, a registered Design System `ShellBrandLockup` using `tcrn-brand-mark.svg`, and browser-side fail-closed reads of `/api/health`, `/api/readback`, and `/api/policy`. Legacy aliases may still serve the shell for local compatibility, but planned modules are not visible primary navigation or registered module cards in this slice.
 
 It deliberately does not implement final cockpit aggregation. `/api/cockpit` remains a deferred JSON endpoint with `410 aos_cockpit_api_deferred`; browser surfaces must not treat the dummy Cockpit as live aggregation, external queue evidence, product acceptance, release readiness, or live dispatch proof.
 

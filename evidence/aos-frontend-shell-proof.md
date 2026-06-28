@@ -12,7 +12,7 @@ Current disposition:
 - Theme control is compact, circular, icon-only, and explicit; locale control uses a globe trigger and native names, closes on selection/outside pointer/Escape, and returns focus on keyboard or selection dismissal; shell search expands on focus and has real local result behavior.
 - Side navigation uses package-backed SideNav/NavGroup/NavItem surfaces with a keyboard-accessible collapse/expand control and persisted collapsed state.
 - Visible primary navigation is limited to the admitted dummy Cockpit and Work entries. Legacy aliases remain compatibility routes only and are not registered product IA.
-- The admitted AOS geometric wordmark from `docs/brand/tcrn-aos-wordmark-geometric-dark.png` is the visible product brand asset.
+- The visible product brand uses the registered Design System `ShellBrandLockup` and `tcrn-brand-mark.svg`; deprecated local AOS wordmark/favicon assets are absent from shell HTML, dist assets, and current docs.
 - Backend readback uses DS readback/key-value/evidence surfaces first; raw JSON is secondary disclosure, not the primary Cockpit UX.
 
 No-overclaim:
