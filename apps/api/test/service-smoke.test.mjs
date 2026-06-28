@@ -22,6 +22,16 @@ const shellTargets = [
   "/github-release-linkage.html"
 ];
 
+const forbiddenPlannedVisibleLabels = [
+  "Conference",
+  "Dependency",
+  "Resource",
+  "Docs / Search / Release Linkage",
+  "Dispatch Readback",
+  "Settings / Admin",
+  "Module placeholders"
+];
+
 test("local service serves the AOS shell while backend readbacks stay available", async () => {
   const service = await startAosLocalServiceProof();
   try {
@@ -34,7 +44,14 @@ test("local service serves the AOS shell while backend readbacks stay available"
       assert.match(html, /data-design-system-source="@tcrn\/ui-react @tcrn\/ui-tokens @tcrn\/ui-copy-state"/);
       assert.match(html, /data-aos-dummy-cockpit="true"/);
       assert.match(html, /data-aos-work-module-entry="jira-like"/);
+      assert.match(html, /data-aos-registered-module-boundary="cockpit-work-only"/);
+      assert.match(html, /data-admitted-brand-asset="tcrn-aos-wordmark-geometric-dark"/);
+      assert.match(html, /data-side-nav-toggle="true"/);
+      assert.match(html, /data-registered-navigation-only="true"/);
       assert.doesNotMatch(html, /ai-consumption-contract\.json/);
+      for (const label of forbiddenPlannedVisibleLabels) {
+        assert.equal(html.includes(label), false, `${label} is not rendered as visible product IA`);
+      }
     }
 
     const cockpitApi = await fetch(`${service.url}/api/cockpit`);

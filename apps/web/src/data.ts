@@ -88,8 +88,8 @@ export interface ShellNavItem {
   label: string;
   path: string;
   description: string;
-  icon: "home" | "database" | "book-open" | "settings" | "package";
-  status: "active" | "placeholder";
+  icon: "home" | "database";
+  status: "active";
 }
 
 export const shellNavItems: ShellNavItem[] = [
@@ -108,54 +108,6 @@ export const shellNavItems: ShellNavItem[] = [
     description: "Jira-like project, initiative, story, gate, evidence, and assignment entry.",
     icon: "database",
     status: "active"
-  },
-  {
-    id: "conference",
-    label: "Conference",
-    path: "/conference",
-    description: "Local operating-loop placeholder; no external meeting queue.",
-    icon: "package",
-    status: "placeholder"
-  },
-  {
-    id: "dependency",
-    label: "Dependency",
-    path: "/dependency",
-    description: "Dependency console placeholder with local proof posture.",
-    icon: "package",
-    status: "placeholder"
-  },
-  {
-    id: "resource",
-    label: "Resource",
-    path: "/resource",
-    description: "Resource library placeholder; no materialization claim.",
-    icon: "book-open",
-    status: "placeholder"
-  },
-  {
-    id: "docs",
-    label: "Docs / Search / Release Linkage",
-    path: "/docs",
-    description: "Readiness linkage placeholder; no docs publication or release-ready claim.",
-    icon: "book-open",
-    status: "placeholder"
-  },
-  {
-    id: "dispatch",
-    label: "Dispatch Readback",
-    path: "/dispatch",
-    description: "Read-only dispatch posture placeholder; no live dispatch.",
-    icon: "database",
-    status: "placeholder"
-  },
-  {
-    id: "settings",
-    label: "Settings / Admin",
-    path: "/settings",
-    description: "Access and policy placeholder for future admin surfaces.",
-    icon: "settings",
-    status: "placeholder"
   }
 ];
 

@@ -41,5 +41,8 @@ pnpm slice3:proof
 
 - Static React shell source: `apps/web/src/**`
 - Generated shell artifact: `apps/web/dist/index.html` from `pnpm build`
-- Served local routes: `/`, `/cockpit`, `/work`, and placeholder module aliases through `pnpm service:start`
+- Served local routes: `/`, `/cockpit`, `/work`, and legacy compatibility aliases through `pnpm service:start`
+- Visible primary navigation is limited to the admitted shell entries: dummy Cockpit and Work. Planned modules are not registered product IA in this slice.
+- The admitted geometric wordmark image is the visible product brand surface; generic icons or text-only marks are not substituted for the AOS brand.
+- The locale menu, side navigation collapse, theme toggle, search, readback surfaces, and no-overclaim posture are covered by `pnpm aos:frontend-shell-proof`.
 - Scope boundary: dummy Cockpit only, no final aggregation API, no live dispatch, no external queue, no product acceptance, and no release-readiness claim.

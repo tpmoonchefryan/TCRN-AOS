@@ -53,7 +53,7 @@ Slice 3 evidence receipt: `../evidence/slice-3-gateway-adapter-proof.md`.
 
 ## Frontend Shell Slice
 
-Current AOS source now includes the first frontend shell slice under `apps/web/src/**`. This shell restores a local visible surface after the owner-directed reset without reviving the prior implementation: it serves an attached AOS product shell, dummy Cockpit, Jira-like work entry, placeholder module surfaces, Design System-backed theme/locale/search controls, and backend readbacks from `/api/health`, `/api/readback`, and `/api/policy`.
+Current AOS source now includes the first frontend shell slice under `apps/web/src/**`. This shell restores a local visible surface after the owner-directed reset without reviving the prior implementation: it serves an attached AOS product shell, dummy Cockpit, Jira-like Work entry, Design System-backed theme/locale/search controls, side navigation collapse, admitted AOS wordmark asset, and backend readbacks from `/api/health`, `/api/readback`, and `/api/policy`. Planned module aliases may still serve shell HTML for compatibility, but they are not visible primary navigation or registered module cards in this slice.
 
 The shell is a structural implementation slice only. Final cockpit aggregation, Product Design final UX/layout/visual acceptance, product acceptance, release readiness, external queue use, live dispatch, package publication, and hosted publication remain deferred.
 
@@ -140,4 +140,4 @@ Still deferred: docs publication/export, canonical knowledge promotion, live Git
 
 Slice 9 evidence receipt: `../evidence/slice-9-docs-search-release-linkage-proof.md`.
 
-Visible inspection for Slice 9 remains model/control-plane readiness only. The current frontend shell can link to Docs/Search/Release placeholders, but it does not promote docs publication, search/public readiness, GitHub mutation, release creation, deployment, release readiness, product acceptance, final MVP acceptance, or Product Design final UX/layout/visual acceptance.
+Visible inspection for Slice 9 remains model/control-plane readiness only. The current frontend shell does not promote Docs/Search/Release as registered navigation or module cards; docs publication, search/public readiness, GitHub mutation, release creation, deployment, release readiness, product acceptance, final MVP acceptance, and Product Design final UX/layout/visual acceptance remain deferred.

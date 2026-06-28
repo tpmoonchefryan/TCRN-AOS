@@ -2,6 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import {
   Badge,
   EnvironmentBanner,
+  EvidenceStrip,
   Heading,
   Icon,
   IconButton,
@@ -12,7 +13,7 @@ import {
   SearchInput,
   SideNav,
   StatusBadge,
-  Surface,
+  ReadbackPanel,
   TableShell,
   Text,
   TopBar
@@ -29,7 +30,7 @@ import { localeCopy, shellNavItems, workModuleRows } from "./data.js";
 const shellSearchRecords = [
   ...shellNavItems.map((item) => ({
     title: item.label,
-    meta: item.status === "active" ? "Active shell entry" : "Placeholder module",
+    meta: "Registered shell entry",
     href: item.path,
     tokens: `${item.label} ${item.description}`
   })),
@@ -73,22 +74,45 @@ function AosShell() {
       data-design-system-source="@tcrn/ui-react @tcrn/ui-tokens @tcrn/ui-copy-state"
       data-storybook-contract-consumed="shell-theme-locale-search-state-copy"
       data-cockpit-aggregation="deferred"
+      data-side-nav-collapsed="false"
     >
       <a className="tcrn-skip-link aos-skip-link" href="#content">Skip to shell content</a>
       <aside className="aos-sidebar" data-shell-region="side-navigation">
-        <a className="aos-brand" href="/" aria-label="TCRN AOS home">
-          <img src="/assets/tcrn-aos-wordmark-geometric-dark.png" alt="TCRN AOS" />
-        </a>
-        <SideNav label="AOS modules" className="aos-nav">
-          <NavGroup label="Active workspace" selected>
-            {shellNavItems.filter((item) => item.status === "active").map((item) => (
-              <NavItem key={item.id} href={item.path} iconName={item.icon} data-route-path={item.path}>
-                {item.label}
-              </NavItem>
-            ))}
-          </NavGroup>
-          <NavGroup label="Planned module placeholders">
-            {shellNavItems.filter((item) => item.status === "placeholder").map((item) => (
+        <div className="aos-sidebar-header">
+          <a
+            className="aos-brand"
+            href="/"
+            aria-label="TCRN AOS home"
+            data-admitted-brand-asset="tcrn-aos-wordmark-geometric-dark"
+            data-brand-asset-path="/assets/tcrn-aos-wordmark-geometric-dark.png"
+          >
+            <img
+              src="/assets/tcrn-aos-wordmark-geometric-dark.png"
+              alt="TCRN AOS geometric wordmark"
+              width="197"
+              height="59"
+              data-visible-brand-wordmark="true"
+            />
+          </a>
+          <IconButton
+            ariaLabel="Collapse side navigation"
+            className="aos-side-nav-toggle"
+            data-side-nav-toggle="true"
+            data-side-nav-persisted-key="tcrn-aos-side-nav-collapsed"
+            aria-controls="aos-primary-side-nav"
+            aria-expanded="true"
+            title="Collapse side navigation"
+            icon={
+              <>
+                <span data-side-nav-icon="collapse"><Icon name="panel-left-close" /></span>
+                <span data-side-nav-icon="expand"><Icon name="panel-left-open" /></span>
+              </>
+            }
+          />
+        </div>
+        <SideNav id="aos-primary-side-nav" label="Registered AOS modules" className="aos-nav" data-registered-navigation-only="true">
+          <NavGroup label="Registered shell entries" selected>
+            {shellNavItems.map((item) => (
               <NavItem key={item.id} href={item.path} iconName={item.icon} data-route-path={item.path}>
                 {item.label}
               </NavItem>
@@ -160,7 +184,7 @@ function AosShell() {
             <div>
               <Heading level={1} id="aos-overview-heading">AOS frontend shell</Heading>
               <Text>
-                First implementation slice: attached product navigation, DS-backed controls, i18n/theme posture, API readbacks, and module placeholders.
+                First implementation slice: attached product navigation, DS-backed controls, i18n/theme posture, API readbacks, dummy Cockpit, and the Work entry.
               </Text>
             </div>
             <div className="aos-status-grid" aria-label="Runtime readbacks">
@@ -177,8 +201,7 @@ function AosShell() {
               <Badge tone="warning">structural placeholder</Badge>
             </div>
             <div className="aos-cockpit-grid">
-              <Surface className="aos-panel">
-                <Heading level={3}>Operational posture</Heading>
+              <ReadbackPanel title="Operational posture">
                 <KeyValueList
                   items={[
                     { key: "queue", label: "External queue", value: "none" },
@@ -187,12 +210,24 @@ function AosShell() {
                     { key: "release", label: "Release readiness", value: "not claimed" }
                   ]}
                 />
-              </Surface>
-              <Surface className="aos-panel" data-api-readback-panel="true">
-                <Heading level={3}>Backend readback</Heading>
+                <EvidenceStrip items={["local fixture", "dummy Cockpit only", "no live dispatch"]} />
+              </ReadbackPanel>
+              <ReadbackPanel title="Backend readback">
                 <p className="aos-api-state" data-api-state>Waiting for /api/health, /api/readback, and /api/policy.</p>
-                <pre className="aos-api-json" data-api-summary>{JSON.stringify({ status: "pending" }, null, 2)}</pre>
-              </Surface>
+                <KeyValueList
+                  items={[
+                    { key: "runtime", label: "Runtime", value: <span data-api-runtime>pending</span> },
+                    { key: "queue", label: "External queue", value: <span data-api-queue>pending</span> },
+                    { key: "policy", label: "Policy", value: <span data-api-policy>pending</span> },
+                    { key: "readback", label: "Readback counts", value: <span data-api-counts>pending</span> }
+                  ]}
+                />
+                <EvidenceStrip items={["/api/health", "/api/readback", "/api/policy"]} />
+                <details className="aos-debug-disclosure" data-raw-json-disclosure="secondary">
+                  <summary>Raw API payload disclosure</summary>
+                  <pre className="aos-api-json" data-api-summary>{JSON.stringify({ status: "pending" }, null, 2)}</pre>
+                </details>
+              </ReadbackPanel>
             </div>
           </section>
 
@@ -224,21 +259,19 @@ function AosShell() {
             />
           </section>
 
-          <section className="aos-section" aria-labelledby="modules-heading" data-aos-placeholder-modules="true">
+          <section className="aos-section" aria-labelledby="slice-boundary-heading" data-aos-registered-module-boundary="cockpit-work-only">
             <div className="aos-section-heading">
-              <Heading level={2} id="modules-heading">Module placeholders</Heading>
-              <Badge tone="neutral">ready for later slices</Badge>
+              <Heading level={2} id="slice-boundary-heading">Registered slice boundary</Heading>
+              <Badge tone="neutral">Cockpit + Work only</Badge>
             </div>
-            <div className="aos-module-grid">
-              {shellNavItems.filter((item) => item.status === "placeholder").map((item) => (
-                <article key={item.id} className="aos-module-tile" id={item.id}>
-                  <div className="aos-module-tile__icon"><Icon name={item.icon} /></div>
-                  <Heading level={3}>{item.label}</Heading>
-                  <Text>{item.description}</Text>
-                  <StatusBadge state={{ state: "not_claimed" }} />
-                </article>
-              ))}
-            </div>
+            <KeyValueList
+              items={[
+                { key: "visible-nav", label: "Visible primary navigation", value: "Cockpit and Work" },
+                { key: "alias-routes", label: "Legacy aliases", value: "served for compatibility, not registered IA" },
+                { key: "future-modules", label: "Future modules", value: "require separate owner route" },
+                { key: "acceptance", label: "Acceptance", value: "not claimed" }
+              ]}
+            />
           </section>
         </main>
       </div>
@@ -316,6 +349,20 @@ function createClientScript(): string {
     }
   }
 
+  function applySideNavCollapsed(collapsed) {
+    const isCollapsed = collapsed === true || collapsed === "true";
+    const shell = document.querySelector("[data-aos-shell]");
+    const toggle = document.querySelector("[data-side-nav-toggle]");
+    shell?.setAttribute("data-side-nav-collapsed", String(isCollapsed));
+    storage.setItem("tcrn-aos-side-nav-collapsed", String(isCollapsed));
+    if (toggle) {
+      toggle.setAttribute("aria-expanded", String(!isCollapsed));
+      toggle.setAttribute("aria-label", isCollapsed ? "Expand side navigation" : "Collapse side navigation");
+      toggle.setAttribute("title", isCollapsed ? "Expand side navigation" : "Collapse side navigation");
+      toggle.setAttribute("data-side-nav-collapsed", String(isCollapsed));
+    }
+  }
+
   function transitionTheme(nextTheme) {
     body.dataset.themeSwitching = "true";
     const update = () => applyTheme(nextTheme);
@@ -340,6 +387,7 @@ function createClientScript(): string {
   const initialTheme = params.get("theme") || storage.getItem("tcrn-aos-theme") || "light";
   applyLocale(initialLocale);
   applyTheme(initialTheme);
+  applySideNavCollapsed(storage.getItem("tcrn-aos-side-nav-collapsed") === "true");
 
   if (routeLabel && matchedRoute) routeLabel.textContent = matchedRoute.label;
   document.querySelectorAll("[data-route-path]").forEach((node) => {
@@ -352,19 +400,50 @@ function createClientScript(): string {
     transitionTheme(root.dataset.tcrnTheme === "dark" ? "light" : "dark");
   });
 
+  document.querySelector("[data-side-nav-toggle]")?.addEventListener("click", () => {
+    const shell = document.querySelector("[data-aos-shell]");
+    applySideNavCollapsed(shell?.getAttribute("data-side-nav-collapsed") !== "true");
+  });
+
   const localeTrigger = document.querySelector("[data-locale-menu-toggle]");
   const localeMenu = document.querySelector("[data-locale-menu]");
+  function isLocaleMenuOpen() {
+    return Boolean(localeMenu && !localeMenu.hidden);
+  }
+  function openLocaleMenu() {
+    if (!localeMenu || !localeTrigger) return;
+    localeMenu.hidden = false;
+    localeTrigger.setAttribute("aria-expanded", "true");
+  }
+  function closeLocaleMenu(options) {
+    if (!localeMenu || !localeTrigger) return;
+    localeMenu.hidden = true;
+    localeTrigger.setAttribute("aria-expanded", "false");
+    if (options?.returnFocus) {
+      localeTrigger.focus({ preventScroll: true });
+    }
+  }
   localeTrigger?.addEventListener("click", () => {
-    const nextOpen = localeMenu?.hidden ?? true;
-    if (localeMenu) localeMenu.hidden = !nextOpen;
-    localeTrigger.setAttribute("aria-expanded", String(nextOpen));
+    if (isLocaleMenuOpen()) closeLocaleMenu({ returnFocus: false });
+    else openLocaleMenu();
   });
   document.querySelectorAll("[data-locale-option]").forEach((option) => {
     option.addEventListener("click", () => {
       applyLocale(option.getAttribute("data-locale-option"));
-      if (localeMenu) localeMenu.hidden = true;
-      localeTrigger?.setAttribute("aria-expanded", "false");
+      closeLocaleMenu({ returnFocus: true });
     });
+  });
+  document.addEventListener("pointerdown", (event) => {
+    if (!isLocaleMenuOpen()) return;
+    const target = event.target;
+    if (target instanceof Node && (localeMenu?.contains(target) || localeTrigger?.contains(target))) return;
+    closeLocaleMenu({ returnFocus: false });
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !isLocaleMenuOpen()) return;
+    const target = event.target;
+    const withinLocaleControl = target instanceof Node && (localeMenu?.contains(target) || localeTrigger?.contains(target));
+    closeLocaleMenu({ returnFocus: withinLocaleControl });
   });
 
   const searchInput = document.querySelector("[data-aos-shell-search]");
@@ -402,10 +481,18 @@ function createClientScript(): string {
       readbackCounts: readback.operationalRecordCounts,
       policy: { allowedRuntimeMutation: policy.allowedRuntimeMutation, serviceProofOnly: policy.serviceProofOnly }
     };
+    setText("[data-api-runtime]", health.runtimeDatabase || "local fixture");
+    setText("[data-api-queue]", health.externalQueue || "none");
+    setText("[data-api-policy]", policy.serviceProofOnly ? "service proof only" : "unavailable");
+    setText("[data-api-counts]", "stories " + (readback.operationalRecordCounts?.stories ?? "--") + ", gates " + (readback.operationalRecordCounts?.gates ?? "--"));
     setText("[data-api-summary]", JSON.stringify(summary, null, 2));
   }).catch((error) => {
     setText("[data-metric-value='runtime']", "fail-closed");
     setText("[data-api-state]", "API readbacks unavailable: " + error.message);
+    setText("[data-api-runtime]", "fail-closed");
+    setText("[data-api-queue]", "unavailable");
+    setText("[data-api-policy]", "unavailable");
+    setText("[data-api-counts]", "unavailable");
     setText("[data-api-summary]", JSON.stringify({ ok: false, error: error.message }, null, 2));
   });
 })();`;
@@ -451,6 +538,10 @@ button, input { font: inherit; }
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--tcrn-color-brand-secondary-bg), transparent 22%), transparent 34rem),
     var(--tcrn-color-surface-canvas);
+  transition: grid-template-columns var(--tcrn-motion-duration-md) ease;
+}
+.aos-shell[data-side-nav-collapsed="true"] {
+  grid-template-columns: 88px minmax(0, 1fr);
 }
 .aos-sidebar {
   position: sticky;
@@ -463,20 +554,50 @@ button, input { font: inherit; }
   border-right: 1px solid var(--tcrn-color-border-subtle);
   background: color-mix(in srgb, var(--tcrn-color-surface-panel), var(--tcrn-color-surface-canvas) 12%);
 }
+.aos-sidebar-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 38px;
+  align-items: center;
+  gap: 8px;
+}
 .aos-brand {
   display: flex;
   align-items: center;
-  height: 42px;
+  min-width: 0;
+  min-height: 52px;
   padding: 4px 8px;
+  overflow: hidden;
 }
 .aos-brand img {
   display: block;
-  max-width: 178px;
-  max-height: 42px;
+  width: 197px;
+  max-width: 100%;
+  height: auto;
+  min-height: 40px;
   object-fit: contain;
   filter: var(--aos-brand-filter, none);
 }
 html[data-tcrn-theme="dark"] .aos-brand img { --aos-brand-filter: invert(1) saturate(0.7) brightness(1.2); }
+.aos-side-nav-toggle {
+  inline-size: 38px;
+  block-size: 38px;
+  padding: 0;
+  border-radius: 8px;
+}
+[data-side-nav-icon="expand"] { display: none; }
+.aos-shell[data-side-nav-collapsed="true"] [data-side-nav-icon="collapse"] { display: none; }
+.aos-shell[data-side-nav-collapsed="true"] [data-side-nav-icon="expand"] { display: inline-flex; }
+.aos-shell[data-side-nav-collapsed="true"] .aos-sidebar-header { grid-template-columns: 1fr; justify-items: center; }
+.aos-shell[data-side-nav-collapsed="true"] .aos-brand {
+  inline-size: 42px;
+  min-height: 42px;
+  padding: 3px;
+}
+.aos-shell[data-side-nav-collapsed="true"] .aos-brand img {
+  min-width: 140px;
+  transform: translateX(-3px);
+  transform-origin: left center;
+}
 .tcrn-side-nav { display: flex; flex-direction: column; gap: 18px; }
 .tcrn-nav-group { display: grid; gap: 8px; }
 .tcrn-nav-group__label {
@@ -507,6 +628,24 @@ html[data-tcrn-theme="dark"] .aos-brand img { --aos-brand-filter: invert(1) satu
 }
 .tcrn-nav-item:hover { background: var(--tcrn-color-surface-muted); color: var(--tcrn-color-text-primary); }
 .tcrn-nav-item__label { overflow-wrap: anywhere; }
+.aos-shell[data-side-nav-collapsed="true"] .tcrn-side-nav { align-items: center; }
+.aos-shell[data-side-nav-collapsed="true"] .tcrn-nav-group { width: 48px; }
+.aos-shell[data-side-nav-collapsed="true"] .tcrn-nav-group__label,
+.aos-shell[data-side-nav-collapsed="true"] .tcrn-nav-item__label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.aos-shell[data-side-nav-collapsed="true"] .tcrn-nav-item {
+  grid-template-columns: 20px;
+  justify-content: center;
+  inline-size: 44px;
+  min-height: 42px;
+  padding: 8px;
+}
 .aos-workspace { min-width: 0; display: grid; grid-template-rows: auto 1fr; }
 .tcrn-top-bar {
   position: sticky;
@@ -616,6 +755,10 @@ html[data-tcrn-theme="dark"] .aos-brand img { --aos-brand-filter: invert(1) satu
   background: var(--tcrn-color-surface-panel);
   box-shadow: var(--tcrn-elevation-floating);
 }
+.aos-locale-menu[hidden],
+.aos-search-results[hidden] {
+  display: none;
+}
 .aos-locale-menu button {
   border: 0;
   border-radius: 6px;
@@ -669,7 +812,7 @@ html[data-tcrn-theme="dark"] [data-theme-icon="dark"] { display: inline-flex; }
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
-.aos-metric, .aos-panel, .aos-module-tile, .aos-section {
+.aos-metric, .tcrn-readback-panel, .aos-section {
   border: 1px solid var(--tcrn-color-border-subtle);
   border-radius: 8px;
   background: var(--tcrn-color-surface-panel);
@@ -712,7 +855,13 @@ html[data-tcrn-theme="dark"] [data-theme-icon="dark"] { display: inline-flex; }
   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
   gap: 12px;
 }
-.aos-panel { padding: 14px; overflow: hidden; }
+.tcrn-readback-panel { padding: 14px; overflow: hidden; }
+.tcrn-evidence-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
 .tcrn-key-value-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -763,26 +912,16 @@ html[data-tcrn-theme="dark"] [data-theme-icon="dark"] { display: inline-flex; }
   border-bottom: 1px solid var(--tcrn-color-border-subtle);
 }
 .tcrn-table-shell__row:last-child .tcrn-table-shell__cell { border-bottom: 0; }
-.aos-module-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+.aos-debug-disclosure {
+  margin-top: 12px;
+  border-top: 1px solid var(--tcrn-color-border-subtle);
+  padding-top: 10px;
 }
-.aos-module-tile {
-  display: grid;
-  align-content: start;
-  gap: 8px;
-  min-height: 164px;
-  padding: 14px;
-}
-.aos-module-tile__icon {
-  inline-size: 34px;
-  block-size: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  background: var(--tcrn-color-brand-secondary-bg);
-  color: var(--tcrn-color-brand-secondary);
+.aos-debug-disclosure summary {
+  cursor: pointer;
+  color: var(--tcrn-color-text-secondary);
+  font-weight: 700;
+  font-size: 13px;
 }
 .tcrn-skip-link {
   position: fixed;
@@ -797,8 +936,35 @@ html[data-tcrn-theme="dark"] [data-theme-icon="dark"] { display: inline-flex; }
 }
 .tcrn-skip-link:focus { transform: translateY(0); }
 @media (max-width: 980px) {
-  .aos-shell { grid-template-columns: 1fr; }
+  .aos-shell, .aos-shell[data-side-nav-collapsed="true"] { grid-template-columns: 1fr; }
   .aos-sidebar { position: static; height: auto; padding: 12px; border-right: 0; border-bottom: 1px solid var(--tcrn-color-border-subtle); }
+  .aos-shell[data-side-nav-collapsed="true"] .aos-sidebar-header { grid-template-columns: minmax(0, 1fr) 38px; justify-items: stretch; }
+  .aos-shell[data-side-nav-collapsed="true"] .aos-brand {
+    inline-size: auto;
+    min-height: 52px;
+    padding: 4px 8px;
+  }
+  .aos-shell[data-side-nav-collapsed="true"] .aos-brand img {
+    max-width: 197px;
+    min-width: 0;
+    transform: none;
+  }
+  .aos-shell[data-side-nav-collapsed="true"] .tcrn-side-nav { align-items: stretch; }
+  .aos-shell[data-side-nav-collapsed="true"] .tcrn-nav-group { width: auto; }
+  .aos-shell[data-side-nav-collapsed="true"] .tcrn-nav-group__label,
+  .aos-shell[data-side-nav-collapsed="true"] .tcrn-nav-item__label {
+    position: static;
+    inline-size: auto;
+    block-size: auto;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+  }
+  .aos-shell[data-side-nav-collapsed="true"] .tcrn-nav-item {
+    grid-template-columns: 20px minmax(0, 1fr);
+    inline-size: auto;
+    justify-content: stretch;
+  }
   .tcrn-side-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .tcrn-top-bar { position: static; grid-template-columns: 1fr; align-items: stretch; }
   .aos-top-actions { grid-template-columns: 1fr max-content max-content; justify-content: stretch; }
@@ -806,7 +972,6 @@ html[data-tcrn-theme="dark"] [data-theme-icon="dark"] { display: inline-flex; }
   .aos-search-wrap { justify-self: stretch; width: 100%; }
   .aos-search-wrap.is-searching { width: 100%; }
   .aos-overview, .aos-cockpit-grid { grid-template-columns: 1fr; }
-  .aos-module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 620px) {
   .tcrn-side-nav { grid-template-columns: 1fr; }
@@ -814,7 +979,7 @@ html[data-tcrn-theme="dark"] [data-theme-icon="dark"] { display: inline-flex; }
   .aos-top-actions { grid-template-columns: 1fr max-content; }
   .aos-locale-control { justify-self: end; }
   .aos-theme-button { justify-self: end; }
-  .aos-status-grid, .aos-module-grid, .tcrn-key-value-list { grid-template-columns: 1fr; }
+  .aos-status-grid, .tcrn-key-value-list { grid-template-columns: 1fr; }
   .aos-no-overclaim, .tcrn-environment-banner { align-items: flex-start; flex-direction: column; gap: 4px; }
 }
 @media (prefers-reduced-motion: reduce) {
