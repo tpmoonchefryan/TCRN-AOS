@@ -184,7 +184,7 @@ try {
       themeTransition: "whole_page_wash",
       localeSelector: "globe_trigger_native_names_with_escape_outside_selection_close",
       sideNavigation: "package_backed_side_nav_with_persisted_collapse",
-      search: "compact_rest_expands_on_focus_with_results",
+      search: "compact_rest_expands_on_focus_with_results_and_outside_tab_dismissal",
       readbackUx: "readback_panel_key_value_evidence_primary_raw_json_secondary_disclosure",
       brandAsset: "/assets/tcrn-brand-mark.svg",
       brandLockup: "@tcrn/ui-react/ShellBrandLockup",
@@ -375,11 +375,52 @@ async function runBrowserProof(baseUrl) {
     const searchWidthFocused = await searchWrap.evaluate((node) => node.getBoundingClientRect().width);
     assert.equal(searchWidthFocused >= searchWidthAtRest, true, "search expands or preserves full width on focus");
     await searchInput.fill("shell");
-    await desktopPage.waitForSelector("[data-search-result]");
+    await desktopPage.waitForFunction(() => {
+      const layer = document.querySelector("[data-search-results]");
+      return layer && !layer.hidden && layer.querySelector("[data-search-result]");
+    });
     assert.equal(await desktopPage.locator("[data-search-result]").count() > 0, true, "search shows local results while focused");
     await desktopPage.locator("#content").click({ position: { x: 24, y: 24 } });
     await desktopPage.waitForFunction(() => !document.querySelector(".aos-search-wrap")?.classList.contains("is-searching"));
     assert.equal(await desktopPage.locator("[data-search-results]").isVisible(), false, "search collapses and hides results on blur");
+
+    await searchInput.focus();
+    await searchInput.fill("shell");
+    await desktopPage.waitForFunction(() => {
+      const layer = document.querySelector("[data-search-results]");
+      return layer && !layer.hidden && layer.querySelector("[data-search-result]");
+    });
+    const outsidePointerSearchReadback = await desktopPage.evaluate(() => {
+      const input = document.querySelector("[data-aos-shell-search]");
+      const content = document.querySelector("#content");
+      content?.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerId: 1, pointerType: "mouse" }));
+      content?.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      content?.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+      content?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      return {
+        activeIsSearch: document.activeElement === input,
+        wrapSearching: input?.closest(".aos-search-wrap")?.classList.contains("is-searching") ?? false,
+        resultsHidden: document.querySelector("[data-search-results]")?.hidden ?? false
+      };
+    });
+    assert.equal(outsidePointerSearchReadback.activeIsSearch, false, "outside pointer dismissal intentionally blurs shell search");
+    assert.equal(outsidePointerSearchReadback.wrapSearching, false, "outside pointer dismissal returns search to compact rest state");
+    assert.equal(outsidePointerSearchReadback.resultsHidden, true, "outside pointer dismissal hides search results");
+
+    await searchInput.focus();
+    await searchInput.fill("shell");
+    await desktopPage.waitForFunction(() => {
+      const layer = document.querySelector("[data-search-results]");
+      return layer && !layer.hidden && layer.querySelector("[data-search-result]");
+    });
+    await desktopPage.keyboard.press("Tab");
+    await desktopPage.waitForFunction(() => {
+      const input = document.querySelector("[data-aos-shell-search]");
+      const layer = document.querySelector("[data-search-results]");
+      return document.activeElement !== input
+        && !document.querySelector(".aos-search-wrap")?.classList.contains("is-searching")
+        && layer?.hidden === true;
+    });
 
     const visibleText = await desktopPage.locator("body").innerText();
     for (const label of forbiddenPlannedPrimaryLabels) {
@@ -471,6 +512,8 @@ async function runBrowserProof(baseUrl) {
         localeEscapeDismissalFocusReturn: true,
         localeSelectionFocusReturn: true,
         searchFocusExpansionBlurCollapse: true,
+        searchOutsidePointerCollapse: true,
+        searchTabCollapse: true,
         sideNavCollapseExpandAriaPersistence: true,
         brandAssetVisible: true,
         plannedModuleNavigationAbsent: true,

@@ -437,14 +437,36 @@ function createClientScript(): string {
 
   const searchInput = document.querySelector("[data-aos-shell-search]");
   const searchWrap = searchInput?.closest(".aos-search-wrap");
+  function collapseSearch(options) {
+    searchWrap?.classList.remove("is-searching");
+    const layer = document.querySelector("[data-search-results]");
+    if (layer) layer.hidden = true;
+    if (options?.blur && document.activeElement === searchInput && typeof searchInput.blur === "function") {
+      searchInput.blur();
+    }
+  }
   searchInput?.addEventListener("focus", () => searchWrap?.classList.add("is-searching"));
   searchInput?.addEventListener("input", (event) => renderSearchResults(event.target.value || ""));
   searchInput?.addEventListener("blur", () => {
-    window.setTimeout(() => {
-      searchWrap?.classList.remove("is-searching");
-      const layer = document.querySelector("[data-search-results]");
-      if (layer) layer.hidden = true;
-    }, 140);
+    window.setTimeout(() => collapseSearch({ blur: false }), 140);
+  });
+  searchInput?.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      collapseSearch({ blur: true });
+      return;
+    }
+    if (event.key === "Tab") {
+      collapseSearch({ blur: false });
+      window.setTimeout(() => {
+        if (document.activeElement === searchInput) collapseSearch({ blur: true });
+      }, 0);
+    }
+  });
+  document.addEventListener("pointerdown", (event) => {
+    const target = event.target;
+    if (!searchWrap || !(target instanceof Node) || searchWrap.contains(target)) return;
+    collapseSearch({ blur: true });
   });
   window.addEventListener("keydown", (event) => {
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
