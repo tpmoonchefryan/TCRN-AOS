@@ -761,6 +761,17 @@ function compareProductShellMetrics(dsMetrics, aosMetrics) {
   compareString(add, "searchInput.borderRadius", dsMetrics.measured.searchInput.borderRadius, aosMetrics.measured.searchInput.borderRadius);
   compareString(add, "searchInput.display", dsMetrics.measured.searchInput.display, aosMetrics.measured.searchInput.display);
   compareSearchGrid(add, "searchInput.gridTemplateColumns", dsMetrics.measured.searchInput.gridTemplateColumns, aosMetrics.measured.searchInput.gridTemplateColumns);
+  compareNumber(add, "topBar.height", dsMetrics.measured.topBar.height, aosMetrics.measured.topBar.height, 0.5);
+  compareString(add, "topBar.display", dsMetrics.measured.topBar.display, aosMetrics.measured.topBar.display);
+  compareString(add, "topBar.position", dsMetrics.measured.topBar.position, aosMetrics.measured.topBar.position);
+  compareString(add, "topBar.gap", dsMetrics.measured.topBar.gap, aosMetrics.measured.topBar.gap);
+  compareString(add, "topBar.paddingLeft", dsMetrics.measured.topBar.paddingLeft, aosMetrics.measured.topBar.paddingLeft);
+  compareString(add, "topBar.paddingRight", dsMetrics.measured.topBar.paddingRight, aosMetrics.measured.topBar.paddingRight);
+  compareString(add, "topBar.borderRadius", dsMetrics.measured.topBar.borderRadius, aosMetrics.measured.topBar.borderRadius);
+  compareString(add, "topBar.borderStyle", dsMetrics.measured.topBar.borderStyle, aosMetrics.measured.topBar.borderStyle);
+  compareString(add, "topBar.borderWidth", dsMetrics.measured.topBar.borderWidth, aosMetrics.measured.topBar.borderWidth);
+  compareString(add, "topBar.backgroundColor", dsMetrics.measured.topBar.backgroundColor, aosMetrics.measured.topBar.backgroundColor);
+  compareTopBarGrid(add, "topBar.gridTemplateColumns", dsMetrics.measured.topBar.gridTemplateColumns, aosMetrics.measured.topBar.gridTemplateColumns);
   compareString(add, "shell.transitionProperty", dsMetrics.shell.transitionProperty, aosMetrics.shell.transitionProperty);
   compareString(add, "shell.themeWashAnimationName", dsMetrics.shell.themeWashAnimationName, aosMetrics.shell.themeWashAnimationName);
   add("aos-no-horizontal-overflow", aosMetrics.viewport.hasHorizontalOverflow === false, { aosHasHorizontalOverflow: aosMetrics.viewport.hasHorizontalOverflow });
@@ -818,6 +829,18 @@ function compareSearchGrid(add, name, ds, aos) {
     ds,
     aos,
     disposition: "same DS three-column SearchInput grid; middle/shortcut tracks respond to available width"
+  });
+}
+
+function compareTopBarGrid(add, name, ds, aos) {
+  const parse = (value) => String(value).split(/\s+/).filter(Boolean);
+  const dsColumns = parse(ds);
+  const aosColumns = parse(aos);
+  const passed = dsColumns.length === 3 && aosColumns.length === 3;
+  add(name, passed, {
+    ds,
+    aos,
+    disposition: "same DS ProductShell topbar three-column grid; column widths vary by shell workspace width"
   });
 }
 
