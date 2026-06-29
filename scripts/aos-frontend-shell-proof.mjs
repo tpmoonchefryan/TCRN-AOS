@@ -14,28 +14,35 @@ rmSync(screenshotRoot, { recursive: true, force: true });
 mkdirSync(screenshotRoot, { recursive: true });
 
 const html = readFileSync(shellPath, "utf8");
+const appSource = readFileSync(new URL("../apps/web/src/app.tsx", import.meta.url), "utf8");
 const requiredMarkers = [
   'data-aos-shell="first-frontend-slice"',
   'data-design-system-source="@tcrn/ui-react @tcrn/ui-tokens @tcrn/ui-copy-state"',
-  'data-storybook-contract-consumed="shell-theme-locale-search-state-copy"',
+  'data-storybook-contract-consumed="product-shell-semantic-boundary"',
+  'data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"',
+  'data-package-backed-product-shell-boundary="side-nav-shell-v1"',
+  'data-product-shell-semantic-api="collapse-theme-locale-search"',
+  'data-product-shell-effect-boundary="ds-owned-tokens-motion-focus"',
+  'data-product-shell-consumer-scope="ia-data-route-labels-content-callbacks"',
+  'data-search-semantic-api="onQueryChange-onExpandedChange-onDismiss-onResultActivate"',
+  'data-search-dismissal-contract="blur-outside-pointer-tab-escape"',
+  'data-local-wrapper-event-delegation="absent"',
+  'data-aos-local-shell-effect-clones="removed"',
   'data-aos-proof-banner-stack="spaced"',
-  'data-side-nav-storage="session"',
-  'data-responsive-shell-posture="desktop-expanded-mobile-collapsed"',
   'data-tcrn-theme="light"',
-  'data-theme-toggle="true"',
-  'data-aos-shell-search="true"',
-  'data-locale-control="native-name-menu"',
   'data-side-nav-toggle="true"',
   'data-side-nav-persisted-key="tcrn-aos-side-nav-collapsed"',
   'data-registered-navigation-only="true"',
   'data-registered-brand-lockup="@tcrn/ui-react/ShellBrandLockup"',
-  'data-brand-asset-path="/assets/tcrn-brand-mark.svg"',
   'data-tcrn-brand-mark="registered"',
   'data-package-backed-brand-lockup="shell"',
   'data-package-backed-shell-control="locale-menu"',
   'data-package-backed-shell-control="theme-toggle"',
   'data-package-backed-shell-control="side-nav-collapse"',
+  'data-package-backed-shell-control="product-shell-search"',
   'data-tcrn-component-style-source="@tcrn/ui-react"',
+  'data-aos-shell-client="ds-product-shell-semantic-boundary"',
+  '/assets/aos-client.js',
   'data-aos-dummy-cockpit="true"',
   'data-aos-work-module-entry="jira-like"',
   'data-aos-registered-module-boundary="cockpit-work-only"',
@@ -45,8 +52,8 @@ const requiredMarkers = [
   'data-product-acceptance="not-claimed"',
   'data-release-readiness="not-claimed"',
   'data-live-dispatch="not-enabled"',
-  'body[data-theme-switching="true"]::after',
-  "aos-theme-wash"
+  "useProductShellController",
+  "ProductShell"
 ];
 
 const forbiddenPlannedPrimaryLabels = [
@@ -86,6 +93,17 @@ const forbiddenAosBrandDocHits = [
     .filter((marker) => source.includes(marker))
     .map((marker) => ({ file: relativePath.replace(/^\.\.\//, ""), marker }));
 });
+const forbiddenLocalShellEffectPatterns = [
+  "createClientScript",
+  "document.querySelector(\"[data-theme-toggle]\")?.addEventListener",
+  "document.querySelector(\"[data-side-nav-toggle]\")?.addEventListener",
+  "document.addEventListener(\"pointerdown\"",
+  "data-aos-shell-search",
+  ".aos-search-wrap",
+  ".aos-sidebar",
+  "aos-theme-wash",
+  "transitionTheme("
+].filter((marker) => appSource.includes(marker));
 
 assert.deepEqual(missingMarkers, [], "required shell and DS-consumption markers are present");
 assert.deepEqual(missingLocales, [], "locale menu uses native locale names");
@@ -96,6 +114,7 @@ assert.deepEqual(forbiddenAosBrandHtmlHits, [], "forbidden AOS wordmark/favicon 
 assert.deepEqual(concatenatedBannerStaticHits, [], "banner and alert text are not statically concatenated");
 assert.deepEqual(forbiddenAosBrandDistHits, [], "forbidden AOS wordmark/favicon files are absent from built dist assets");
 assert.deepEqual(forbiddenAosBrandDocHits, [], "current docs/evidence do not reference forbidden AOS wordmark/favicon assets");
+assert.deepEqual(forbiddenLocalShellEffectPatterns, [], "AOS source does not own DS shell/search/locale/theme event delegation or local shell effects");
 
 const service = await startAosLocalServiceProof();
 let closed = false;
@@ -114,10 +133,15 @@ try {
       workMarker: body.includes('data-aos-work-module-entry="jira-like"'),
       registeredNavigationOnly: body.includes('data-registered-navigation-only="true"'),
       registeredBrandLockup: body.includes('data-registered-brand-lockup="@tcrn/ui-react/ShellBrandLockup"'),
+      productShellBoundary: body.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"')
+        && body.includes('data-package-backed-product-shell-boundary="side-nav-shell-v1"')
+        && body.includes('data-product-shell-semantic-api="collapse-theme-locale-search"')
+        && body.includes('data-local-wrapper-event-delegation="absent"'),
       packageBackedShellControls: [
         'data-package-backed-shell-control="locale-menu"',
         'data-package-backed-shell-control="theme-toggle"',
-        'data-package-backed-shell-control="side-nav-collapse"'
+        'data-package-backed-shell-control="side-nav-collapse"',
+        'data-package-backed-shell-control="product-shell-search"'
       ].every((marker) => body.includes(marker)),
       plannedPrimaryHits: forbiddenPlannedPrimaryLabels.filter((label) => body.includes(label)),
       forbiddenBrandHits: forbiddenAosBrandAssetMarkers.filter((marker) => body.includes(marker))
@@ -145,7 +169,7 @@ try {
   const stopped = await service.close();
   closed = stopped.stopped && stopped.runtimeReset;
 
-  const ok = routeReadbacks.every((entry) => entry.status === 200 && entry.html && entry.shellMarker && entry.dummyCockpitMarker && entry.workMarker && entry.registeredNavigationOnly && entry.registeredBrandLockup && entry.packageBackedShellControls && entry.plannedPrimaryHits.length === 0 && entry.forbiddenBrandHits.length === 0)
+  const ok = routeReadbacks.every((entry) => entry.status === 200 && entry.html && entry.shellMarker && entry.dummyCockpitMarker && entry.workMarker && entry.registeredNavigationOnly && entry.registeredBrandLockup && entry.productShellBoundary && entry.packageBackedShellControls && entry.plannedPrimaryHits.length === 0 && entry.forbiddenBrandHits.length === 0)
     && asset.status === 200
     && (asset.headers.get("content-type") ?? "").includes("image/svg+xml")
     && forbiddenAssetReadbacks.every((entry) => entry.status === 404)
@@ -180,11 +204,14 @@ try {
     dsContractConsumption: {
       packages: ["@tcrn/ui-react", "@tcrn/ui-tokens", "@tcrn/ui-copy-state"],
       componentStylesheet: "tcrnComponentCss",
+      productShellBoundary: "ProductShell/useProductShellController/ProductShellSearch",
+      localWrapperEventDelegation: false,
+      localShellEffectClones: false,
       themeControl: "compact_icon_only_explicit_toggle",
-      themeTransition: "whole_page_wash",
+      themeTransition: "ds_product_shell_controller",
       localeSelector: "globe_trigger_native_names_with_escape_outside_selection_close",
-      sideNavigation: "package_backed_side_nav_with_persisted_collapse",
-      search: "compact_rest_expands_on_focus_with_results_and_outside_tab_dismissal",
+      sideNavigation: "ProductShell package boundary with persisted collapse callback",
+      search: "ProductShellSearch controlled by useProductShellController with dismissal/result callbacks",
       readbackUx: "readback_panel_key_value_evidence_primary_raw_json_secondary_disclosure",
       brandAsset: "/assets/tcrn-brand-mark.svg",
       brandLockup: "@tcrn/ui-react/ShellBrandLockup",
@@ -347,18 +374,18 @@ async function runBrowserProof(baseUrl) {
 
     const sideNavToggle = desktopPage.locator("[data-side-nav-toggle]");
     assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "true", "side nav starts expanded");
-    assert.equal(await desktopPage.locator('[data-route-path="/cockpit"]').getAttribute("aria-current"), "page", "active cockpit route is marked");
-    const expandedSideNavWidth = await desktopPage.locator(".aos-sidebar").evaluate((node) => node.getBoundingClientRect().width);
+    assert.equal(await desktopPage.locator('[data-product-shell-route="cockpit"]').getAttribute("aria-current"), "page", "active cockpit route is marked");
+    const expandedSideNavWidth = await desktopPage.locator(".tcrn-product-shell__sidebar").evaluate((node) => node.getBoundingClientRect().width);
     await sideNavToggle.click();
     assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "false", "collapse sets aria-expanded false");
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "shell records collapsed side nav");
-    assert.equal(await desktopPage.evaluate(() => sessionStorage.getItem("tcrn-aos-side-nav-collapsed")), "true", "side nav collapse persists in route-owned session storage");
-    assert.equal(await desktopPage.locator('[data-route-path="/cockpit"]').getAttribute("aria-current"), "page", "active cockpit route preserved while collapsed");
+    assert.equal(await desktopPage.evaluate(() => localStorage.getItem("tcrn-aos-side-nav-collapsed")), "true", "side nav collapse persists in route-owned local storage");
+    assert.equal(await desktopPage.locator('[data-product-shell-route="cockpit"]').getAttribute("aria-current"), "page", "active cockpit route preserved while collapsed");
     await desktopPage.waitForFunction((expandedWidth) => {
-      const width = document.querySelector(".aos-sidebar")?.getBoundingClientRect().width ?? expandedWidth;
+      const width = document.querySelector(".tcrn-product-shell__sidebar")?.getBoundingClientRect().width ?? expandedWidth;
       return width < expandedWidth - 90;
     }, expandedSideNavWidth);
-    const collapsedSideNavWidth = await desktopPage.locator(".aos-sidebar").evaluate((node) => node.getBoundingClientRect().width);
+    const collapsedSideNavWidth = await desktopPage.locator(".tcrn-product-shell__sidebar").evaluate((node) => node.getBoundingClientRect().width);
     assert.equal(collapsedSideNavWidth < expandedSideNavWidth - 90, true, "collapsed side nav has a deliberate narrower visual state");
     await desktopPage.screenshot({ path: `${screenshotRoot}/02-desktop-cockpit-collapsed.png`, fullPage: false });
     await desktopPage.reload({ waitUntil: "networkidle" });
@@ -367,60 +394,64 @@ async function runBrowserProof(baseUrl) {
     await desktopPage.locator("[data-side-nav-toggle]").click();
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "side nav expands");
 
-    const searchWrap = desktopPage.locator(".aos-search-wrap");
-    const searchInput = desktopPage.locator("[data-aos-shell-search]");
+    const searchWrap = desktopPage.locator('[data-shell-control="product-shell-search"]');
+    const searchInput = desktopPage.locator('.tcrn-product-shell-search input[aria-label="Search AOS shell"]');
     const searchWidthAtRest = await searchWrap.evaluate((node) => node.getBoundingClientRect().width);
     await searchInput.focus();
-    await desktopPage.waitForFunction(() => document.querySelector(".aos-search-wrap")?.classList.contains("is-searching"));
+    await desktopPage.waitForFunction(() => document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "true");
     const searchWidthFocused = await searchWrap.evaluate((node) => node.getBoundingClientRect().width);
     assert.equal(searchWidthFocused >= searchWidthAtRest, true, "search expands or preserves full width on focus");
     await searchInput.fill("shell");
     await desktopPage.waitForFunction(() => {
-      const layer = document.querySelector("[data-search-results]");
+      const layer = document.querySelector("[data-product-shell-search-results]");
       return layer && !layer.hidden && layer.querySelector("[data-search-result]");
     });
     assert.equal(await desktopPage.locator("[data-search-result]").count() > 0, true, "search shows local results while focused");
     await desktopPage.locator("#content").click({ position: { x: 24, y: 24 } });
-    await desktopPage.waitForFunction(() => !document.querySelector(".aos-search-wrap")?.classList.contains("is-searching"));
-    assert.equal(await desktopPage.locator("[data-search-results]").isVisible(), false, "search collapses and hides results on blur");
+    await desktopPage.waitForFunction(() => document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "false");
+    assert.equal(await desktopPage.locator("[data-product-shell-search-results]").isVisible(), false, "search collapses and hides results on blur");
+    assert.equal(await desktopPage.evaluate(() => document.activeElement?.matches('.tcrn-product-shell-search input[aria-label="Search AOS shell"]')), false, "real outside click moves focus away from shell search");
 
     await searchInput.focus();
     await searchInput.fill("shell");
     await desktopPage.waitForFunction(() => {
-      const layer = document.querySelector("[data-search-results]");
+      const layer = document.querySelector("[data-product-shell-search-results]");
       return layer && !layer.hidden && layer.querySelector("[data-search-result]");
     });
-    const outsidePointerSearchReadback = await desktopPage.evaluate(() => {
-      const input = document.querySelector("[data-aos-shell-search]");
-      const content = document.querySelector("#content");
-      content?.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerId: 1, pointerType: "mouse" }));
-      content?.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-      content?.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
-      content?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      return {
-        activeIsSearch: document.activeElement === input,
-        wrapSearching: input?.closest(".aos-search-wrap")?.classList.contains("is-searching") ?? false,
-        resultsHidden: document.querySelector("[data-search-results]")?.hidden ?? false
-      };
+    await desktopPage.locator("#content").click({ position: { x: 36, y: 36 } });
+    await desktopPage.waitForFunction(() => {
+      const input = document.querySelector('.tcrn-product-shell-search input[aria-label="Search AOS shell"]');
+      const layer = document.querySelector("[data-product-shell-search-results]");
+      return document.activeElement !== input
+        && document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "false"
+        && layer?.hasAttribute("hidden") === true;
     });
-    assert.equal(outsidePointerSearchReadback.activeIsSearch, false, "outside pointer dismissal intentionally blurs shell search");
-    assert.equal(outsidePointerSearchReadback.wrapSearching, false, "outside pointer dismissal returns search to compact rest state");
+    const outsidePointerSearchReadback = await desktopPage.evaluate(() => ({
+      searchExpanded: document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "true",
+      resultsHidden: document.querySelector("[data-product-shell-search-results]")?.hasAttribute("hidden") ?? false
+    }));
+    assert.equal(outsidePointerSearchReadback.searchExpanded, false, "outside pointer dismissal returns search to compact rest state");
     assert.equal(outsidePointerSearchReadback.resultsHidden, true, "outside pointer dismissal hides search results");
 
     await searchInput.focus();
     await searchInput.fill("shell");
     await desktopPage.waitForFunction(() => {
-      const layer = document.querySelector("[data-search-results]");
+      const layer = document.querySelector("[data-product-shell-search-results]");
       return layer && !layer.hidden && layer.querySelector("[data-search-result]");
     });
     await desktopPage.keyboard.press("Tab");
     await desktopPage.waitForFunction(() => {
-      const input = document.querySelector("[data-aos-shell-search]");
-      const layer = document.querySelector("[data-search-results]");
+      const input = document.querySelector('.tcrn-product-shell-search input[aria-label="Search AOS shell"]');
+      const layer = document.querySelector("[data-product-shell-search-results]");
       return document.activeElement !== input
-        && !document.querySelector(".aos-search-wrap")?.classList.contains("is-searching")
-        && layer?.hidden === true;
+        && document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "false"
+        && layer?.hasAttribute("hidden") === true;
     });
+    await searchInput.focus();
+    await searchInput.fill("Cockpit");
+    await desktopPage.waitForSelector("[data-search-result]");
+    await desktopPage.locator("[data-search-result]").first().click();
+    assert.equal(await desktopPage.evaluate(() => sessionStorage.getItem("tcrn-aos-last-search-result") ?? localStorage.getItem("tcrn-aos-last-search-result")), "route-cockpit", "search result activation flows through DS semantic callback");
 
     const visibleText = await desktopPage.locator("body").innerText();
     for (const label of forbiddenPlannedPrimaryLabels) {
@@ -441,7 +472,7 @@ async function runBrowserProof(baseUrl) {
     await desktopPage.waitForFunction(() => document.querySelector("[data-api-state]")?.textContent?.includes("available"));
     assert.equal(await desktopPage.locator("html").getAttribute("data-tcrn-theme"), "dark", "dark theme query applies");
     assert.equal(await desktopPage.locator("html").getAttribute("lang"), "zh-CN", "zh-CN locale query applies");
-    assert.equal(await desktopPage.locator('[data-route-path="/work"]').getAttribute("aria-current"), "page", "active work route is marked in dark proof");
+    assert.equal(await desktopPage.locator('[data-product-shell-route="work"]').getAttribute("aria-current"), "page", "active work route is marked in dark proof");
     const warningContrast = await desktopPage.locator("[data-aos-no-overclaim-banner]").evaluate((node) => {
       function parseRgb(value) {
         const match = value.match(/rgba?\(([^)]+)\)/);
@@ -482,15 +513,17 @@ async function runBrowserProof(baseUrl) {
     await mobilePage.waitForSelector('[data-aos-work-module-entry="jira-like"]');
     assert.equal(await mobilePage.locator("html").getAttribute("data-tcrn-theme"), "dark", "mobile dark theme query applies");
     assert.equal(await mobilePage.locator("html").getAttribute("lang"), "zh-CN", "mobile zh-CN locale query applies");
-    assert.equal(await mobilePage.locator('[data-route-path="/work"]').getAttribute("aria-current"), "page", "mobile active work route is preserved");
+    assert.equal(await mobilePage.locator('[data-product-shell-route="work"]').getAttribute("aria-current"), "page", "mobile active work route is preserved");
     assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "mobile first viewport starts with navigation collapsed");
-    assert.equal(await mobilePage.locator(".aos-nav").isVisible(), false, "mobile collapsed navigation is tucked away from first viewport");
+    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-product-shell-responsive"), "desktop-attached-mobile-stacked", "mobile uses DS product shell responsive posture");
     const mobileHeadingTop = await mobilePage.locator("#aos-overview-heading").evaluate((node) => node.getBoundingClientRect().top);
-    assert.equal(mobileHeadingTop < 560, true, "mobile first viewport reaches the main shell content promptly");
+    const mobileProofStackTop = await mobilePage.locator('[data-aos-proof-banner-stack="spaced"]').evaluate((node) => node.getBoundingClientRect().top);
+    assert.equal(mobileProofStackTop < 560, true, "mobile first viewport reaches proof/readback content after the DS shell controls");
+    assert.equal(mobileHeadingTop < 760, true, "mobile first viewport reaches the main shell heading within the DS stacked shell posture");
     await mobilePage.screenshot({ path: `${screenshotRoot}/04-mobile-work-dark.png`, fullPage: false });
     await mobilePage.locator("[data-side-nav-toggle]").click();
     assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "mobile side nav expands from compact first viewport");
-    assert.equal(await mobilePage.locator(".aos-nav").isVisible(), true, "mobile expanded navigation is visible on demand");
+    assert.equal(await mobilePage.locator(".tcrn-product-shell__nav").isVisible(), true, "mobile expanded navigation is visible on demand");
     const mobileNoOverflow = await mobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
     assert.equal(mobileNoOverflow, true, "mobile shell has no horizontal page overflow");
     assert.equal(await mobilePage.locator('[data-tcrn-brand-mark="registered"]').isVisible(), true, "mobile registered brand mark remains visible");

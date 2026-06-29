@@ -52,16 +52,21 @@ test("local service serves the AOS shell while backend readbacks stay available"
       assert.match(html, /data-aos-dummy-cockpit="true"/);
       assert.match(html, /data-aos-work-module-entry="jira-like"/);
       assert.match(html, /data-aos-registered-module-boundary="cockpit-work-only"/);
+      assert.match(html, /data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"/);
+      assert.match(html, /data-package-backed-product-shell-boundary="side-nav-shell-v1"/);
+      assert.match(html, /data-product-shell-semantic-api="collapse-theme-locale-search"/);
+      assert.match(html, /data-product-shell-effect-boundary="ds-owned-tokens-motion-focus"/);
+      assert.match(html, /data-local-wrapper-event-delegation="absent"/);
       assert.match(html, /data-registered-brand-lockup="@tcrn\/ui-react\/ShellBrandLockup"/);
-      assert.match(html, /data-brand-asset-path="\/assets\/tcrn-brand-mark\.svg"/);
       assert.match(html, /data-tcrn-brand-mark="registered"/);
       assert.match(html, /data-package-backed-brand-lockup="shell"/);
-      assert.match(html, /data-side-nav-toggle="true"/);
       assert.match(html, /data-package-backed-shell-control="side-nav-collapse"/);
       assert.match(html, /data-package-backed-shell-control="locale-menu"/);
       assert.match(html, /data-package-backed-shell-control="theme-toggle"/);
+      assert.match(html, /data-package-backed-shell-control="product-shell-search"/);
       assert.match(html, /data-tcrn-component-style-source="@tcrn\/ui-react"/);
       assert.match(html, /data-registered-navigation-only="true"/);
+      assert.match(html, /\/assets\/aos-client\.js/);
       assert.doesNotMatch(html, /ai-consumption-contract\.json/);
       for (const marker of forbiddenAosBrandAssetMarkers) {
         assert.equal(html.includes(marker), false, `${marker} is absent from shell HTML`);

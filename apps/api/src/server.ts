@@ -145,6 +145,8 @@ function sendStaticAsset(request: IncomingMessage, response: ServerResponse, pat
 
 function contentTypeForAsset(path: string): string {
   switch (extname(path)) {
+    case ".js":
+      return "text/javascript";
     case ".png":
       return "image/png";
     case ".ico":

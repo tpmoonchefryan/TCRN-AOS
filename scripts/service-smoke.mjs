@@ -26,10 +26,14 @@ try {
     && shell.status === 200
     && shellHtml.includes('data-aos-shell="first-frontend-slice"')
     && shellHtml.includes('data-aos-dummy-cockpit="true"')
+    && shellHtml.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"')
+    && shellHtml.includes('data-package-backed-product-shell-boundary="side-nav-shell-v1"')
+    && shellHtml.includes('data-product-shell-semantic-api="collapse-theme-locale-search"')
     && cockpit.status === 200
-    && cockpitHtml.includes('data-current-route-label')
+    && cockpitHtml.includes('data-product-shell-route="cockpit"')
     && work.status === 200
     && workHtml.includes('data-aos-work-module-entry="jira-like"')
+    && workHtml.includes('data-product-shell-route="work"')
     && deferredCockpitApi.status === 410
     && deferredCockpitApiPayload.error === "aos_cockpit_api_deferred"
     && deferredCockpitApiPayload.dummyCockpitOnly === true
@@ -57,6 +61,7 @@ try {
       workStatus: work.status,
       shellMarkerPresent: shellHtml.includes('data-aos-shell="first-frontend-slice"'),
       dummyCockpitMarkerPresent: shellHtml.includes('data-aos-dummy-cockpit="true"'),
+      productShellBoundaryPresent: shellHtml.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"'),
       workModuleMarkerPresent: workHtml.includes('data-aos-work-module-entry="jira-like"'),
       deferredCockpitApiStatus: deferredCockpitApi.status,
       deferredCockpitApiError: deferredCockpitApiPayload.error

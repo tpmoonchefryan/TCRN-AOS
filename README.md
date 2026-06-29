@@ -37,9 +37,10 @@ pnpm slice3:proof
 ## Frontend Shell
 
 - Static React shell source: `apps/web/src/**`
-- Generated shell artifact: `apps/web/dist/index.html` from `pnpm build`
+- Generated shell artifacts: `apps/web/dist/index.html` and `apps/web/dist/assets/aos-client.js` from `pnpm build`
 - Served local routes: `/`, `/cockpit`, `/work`, and legacy compatibility aliases through `pnpm service:start`
 - Visible primary navigation is limited to the admitted shell entries: dummy Cockpit and Work. Planned modules are not registered product IA in this slice.
 - The visible product brand surface uses the registered Design System `ShellBrandLockup` and `tcrn-brand-mark.svg`; local AOS wordmark images and favicon assets are not emitted.
-- The locale menu, route-owned side navigation collapse, theme toggle, search, readback surfaces, mobile posture, and no-overclaim posture are covered by `pnpm aos:frontend-shell-proof`.
+- Shell behavior consumes the registered Design System `ProductShell`, `ProductShellSearch`, and `useProductShellController` semantic boundary; AOS supplies product IA/data/content and callback storage only.
+- The locale menu, side navigation collapse, theme toggle, search, readback surfaces, mobile posture, and no-overclaim posture are covered by `pnpm aos:frontend-shell-proof`.
 - Scope boundary: dummy Cockpit only, no final aggregation API, no live dispatch, no external queue, no product acceptance, and no release-readiness claim.

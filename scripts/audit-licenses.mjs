@@ -7,6 +7,7 @@ const expectedDevDeps = new Map([
   ["@types/node", { version: "24.0.3", license: "MIT" }],
   ["@types/react", { version: "19.1.8", license: "MIT" }],
   ["@types/react-dom", { version: "19.1.6", license: "MIT" }],
+  ["esbuild", { version: "0.28.1", license: "MIT" }],
   ["typescript", { version: "5.8.3", license: "Apache-2.0" }]
 ]);
 const allowedRuntimeDeps = new Map([
