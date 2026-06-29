@@ -15,7 +15,7 @@ This repository is a local product shell only. It does not publish, deploy, muta
 - Codex dispatch is dry-run only in this checkpoint.
 - No Redis or external queue is used.
 - Runtime operational data stays in local ephemeral storage for proof runs. Git stores source, schema, fixture seed, tests, and evidence notes only.
-- The web surface is now a first-slice frontend shell with a dummy Cockpit and Jira-like work entry. It is not a final cockpit aggregation and is not Product Design accepted UX.
+- The web surface is now a repaired first-slice frontend shell with a dummy Cockpit and Jira-like work entry. It still requires PM/browser QA before any owner-facing return; it is not a final cockpit aggregation and is not Product Design accepted UX.
 
 ## Local Commands
 
@@ -41,5 +41,5 @@ pnpm slice3:proof
 - Served local routes: `/`, `/cockpit`, `/work`, and legacy compatibility aliases through `pnpm service:start`
 - Visible primary navigation is limited to the admitted shell entries: dummy Cockpit and Work. Planned modules are not registered product IA in this slice.
 - The visible product brand surface uses the registered Design System `ShellBrandLockup` and `tcrn-brand-mark.svg`; local AOS wordmark images and favicon assets are not emitted.
-- The locale menu, side navigation collapse, theme toggle, search, readback surfaces, and no-overclaim posture are covered by `pnpm aos:frontend-shell-proof`.
+- The locale menu, route-owned side navigation collapse, theme toggle, search, readback surfaces, mobile posture, and no-overclaim posture are covered by `pnpm aos:frontend-shell-proof`.
 - Scope boundary: dummy Cockpit only, no final aggregation API, no live dispatch, no external queue, no product acceptance, and no release-readiness claim.

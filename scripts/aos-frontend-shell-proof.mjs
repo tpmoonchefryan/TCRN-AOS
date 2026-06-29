@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { findForbiddenPositiveClaimHits, tcrnLocaleMetadata } from "@tcrn/ui-copy-state";
 import { frontendShellRoutes, forbiddenHumanAiTopbarMarkers } from "../dist/apps/web/src/data.js";
@@ -9,11 +9,18 @@ import { startAosLocalServiceProof } from "../dist/apps/api/src/server.js";
 const shellPath = new URL("../apps/web/dist/index.html", import.meta.url);
 assert.equal(existsSync(shellPath), true, "apps/web/dist/index.html exists after pnpm build");
 
+const screenshotRoot = "/tmp/tcrn-aos-shell-qa";
+rmSync(screenshotRoot, { recursive: true, force: true });
+mkdirSync(screenshotRoot, { recursive: true });
+
 const html = readFileSync(shellPath, "utf8");
 const requiredMarkers = [
   'data-aos-shell="first-frontend-slice"',
   'data-design-system-source="@tcrn/ui-react @tcrn/ui-tokens @tcrn/ui-copy-state"',
   'data-storybook-contract-consumed="shell-theme-locale-search-state-copy"',
+  'data-aos-proof-banner-stack="spaced"',
+  'data-side-nav-storage="session"',
+  'data-responsive-shell-posture="desktop-expanded-mobile-collapsed"',
   'data-tcrn-theme="light"',
   'data-theme-toggle="true"',
   'data-aos-shell-search="true"',
@@ -65,6 +72,7 @@ const forbiddenAiMarkers = forbiddenHumanAiTopbarMarkers.filter((marker) => html
 const forbiddenPositiveClaimHits = findForbiddenPositiveClaimHits(html);
 const forbiddenPlannedStaticHits = forbiddenPlannedPrimaryLabels.filter((label) => html.includes(label));
 const forbiddenAosBrandHtmlHits = forbiddenAosBrandAssetMarkers.filter((marker) => html.includes(marker));
+const concatenatedBannerStaticHits = ["sliceLocal", "onlyLocal", "onlyLocal fixture"].filter((marker) => html.includes(marker));
 const forbiddenAosBrandDistHits = listRelativeFiles(new URL("../apps/web/dist", import.meta.url))
   .filter((file) => forbiddenAosBrandAssetMarkers.some((marker) => file.includes(marker.replace(/^\//, ""))));
 const forbiddenAosBrandDocHits = [
@@ -85,6 +93,7 @@ assert.deepEqual(forbiddenAiMarkers, [], "AI consumption contract is not exposed
 assert.deepEqual(forbiddenPositiveClaimHits, [], "shell HTML has no forbidden positive-claim phrases");
 assert.deepEqual(forbiddenPlannedStaticHits, [], "planned/unregistered modules are not visible as primary navigation or module cards");
 assert.deepEqual(forbiddenAosBrandHtmlHits, [], "forbidden AOS wordmark/favicon markers are absent from shell HTML");
+assert.deepEqual(concatenatedBannerStaticHits, [], "banner and alert text are not statically concatenated");
 assert.deepEqual(forbiddenAosBrandDistHits, [], "forbidden AOS wordmark/favicon files are absent from built dist assets");
 assert.deepEqual(forbiddenAosBrandDocHits, [], "current docs/evidence do not reference forbidden AOS wordmark/favicon assets");
 
@@ -182,6 +191,7 @@ try {
       aiContractHumanTopbarLink: false
     },
     browserProof,
+    screenshotReadback: browserProof.screenshots,
     apiReadbacks: {
       health: {
         ok: health.ok,
@@ -211,6 +221,7 @@ try {
       forbiddenAiMarkers,
       forbiddenPlannedStaticHits,
       forbiddenAosBrandHtmlHits,
+      concatenatedBannerStaticHits,
       forbiddenAosBrandDistHits,
       forbiddenAosBrandDocHits
     },
@@ -245,20 +256,55 @@ async function runBrowserProof(baseUrl) {
   try {
     const desktopContext = await browser.newContext({
       viewport: { width: 1440, height: 900 },
-      colorScheme: "dark",
-      locale: "zh-CN",
+      colorScheme: "light",
+      locale: "en",
       timezoneId: "UTC",
       reducedMotion: "reduce",
       deviceScaleFactor: 1
     });
     const desktopPage = await desktopContext.newPage();
     capturePageHealth(desktopPage, consoleMessages, pageErrors, requestFailures);
-    await desktopPage.goto(`${baseUrl}/cockpit?locale=zh-CN&theme=dark`, { waitUntil: "networkidle" });
+    await desktopPage.goto(`${baseUrl}/cockpit`, { waitUntil: "networkidle" });
     await desktopPage.waitForSelector('[data-aos-shell="first-frontend-slice"]');
     await desktopPage.waitForFunction(() => document.querySelector("[data-api-state]")?.textContent?.includes("available"));
 
-    assert.equal(await desktopPage.locator("html").getAttribute("data-tcrn-theme"), "dark", "dark theme query applies");
-    assert.equal(await desktopPage.locator("html").getAttribute("lang"), "zh-CN", "zh-CN locale query applies");
+    assert.equal(await desktopPage.title(), "TCRN AOS Rebuild Workspace", "desktop page identity is correct");
+    assert.equal(await desktopPage.locator("html").getAttribute("data-tcrn-theme"), "light", "default theme is light");
+    assert.equal(await desktopPage.locator("html").getAttribute("lang"), "en", "default locale is en");
+
+    const bannerReadback = await desktopPage.locator('[data-aos-proof-banner-stack="spaced"]').evaluate((stack) => {
+      const environmentBanner = stack.querySelector(".tcrn-environment-banner");
+      const alert = stack.querySelector("[data-aos-no-overclaim-banner]");
+      const environmentStyle = environmentBanner ? getComputedStyle(environmentBanner) : null;
+      const alertStyle = alert ? getComputedStyle(alert) : null;
+      const environmentRect = environmentBanner?.getBoundingClientRect();
+      const alertRect = alert?.getBoundingClientRect();
+      const environmentLabelRect = environmentBanner?.querySelector("strong")?.getBoundingClientRect();
+      const environmentCopyRect = environmentBanner?.querySelector("span")?.getBoundingClientRect();
+      const alertLabelRect = alert?.querySelector("strong")?.getBoundingClientRect();
+      const alertCopyRect = alert?.querySelector(".aos-alert-copy")?.getBoundingClientRect();
+      return {
+        text: stack.innerText ?? "",
+        environmentDisplay: environmentStyle?.display,
+        environmentColumnGap: environmentStyle?.columnGap,
+        environmentVisualGap: environmentLabelRect && environmentCopyRect ? environmentCopyRect.left - environmentLabelRect.right : 0,
+        alertDisplay: alertStyle?.display,
+        alertColumnGap: alertStyle?.columnGap,
+        alertVisualGap: alertLabelRect && alertCopyRect ? alertCopyRect.left - alertLabelRect.right : 0,
+        verticalGap: environmentRect && alertRect ? alertRect.top - environmentRect.bottom : 0
+      };
+    });
+    assert.equal(bannerReadback.text.includes("sliceLocal"), false, "environment banner text is not concatenated");
+    assert.equal(bannerReadback.text.includes("onlyLocal"), false, "alert text is not concatenated");
+    assert.equal(bannerReadback.environmentDisplay, "grid", "environment banner uses explicit product spacing grid");
+    assert.equal(bannerReadback.alertDisplay, "grid", "alert banner uses explicit product spacing grid");
+    assert.equal(parseFloat(bannerReadback.environmentColumnGap) >= 8, true, "environment banner has visible column gap");
+    assert.equal(parseFloat(bannerReadback.alertColumnGap) >= 8, true, "alert banner has visible column gap");
+    assert.equal(bannerReadback.environmentVisualGap >= 8, true, "environment label and state are visibly separated");
+    assert.equal(bannerReadback.alertVisualGap >= 8, true, "alert label and copy are visibly separated");
+    assert.equal(bannerReadback.verticalGap >= 8, true, "proof banners have visible vertical spacing");
+
+    await desktopPage.screenshot({ path: `${screenshotRoot}/01-desktop-cockpit-default.png`, fullPage: false });
 
     const brandReadback = await desktopPage.locator('[data-tcrn-brand-mark="registered"]').evaluate((img) => {
       const image = img;
@@ -294,28 +340,46 @@ async function runBrowserProof(baseUrl) {
     assert.equal(await desktopPage.evaluate(() => document.activeElement?.matches("[data-locale-menu-toggle]")), true, "Escape returns focus to locale trigger");
 
     await localeTrigger.click();
-    await desktopPage.locator('[data-locale-option="en"]').click();
+    await desktopPage.locator('[data-locale-option="zh-CN"]').click();
     assert.equal(await localeTrigger.getAttribute("aria-expanded"), "false", "selection closes locale menu");
-    assert.equal(await desktopPage.locator("html").getAttribute("lang"), "en", "selection updates locale");
+    assert.equal(await desktopPage.locator("html").getAttribute("lang"), "zh-CN", "selection updates locale");
     assert.equal(await desktopPage.evaluate(() => document.activeElement?.matches("[data-locale-menu-toggle]")), true, "selection returns focus to locale trigger");
 
     const sideNavToggle = desktopPage.locator("[data-side-nav-toggle]");
     assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "true", "side nav starts expanded");
     assert.equal(await desktopPage.locator('[data-route-path="/cockpit"]').getAttribute("aria-current"), "page", "active cockpit route is marked");
+    const expandedSideNavWidth = await desktopPage.locator(".aos-sidebar").evaluate((node) => node.getBoundingClientRect().width);
     await sideNavToggle.click();
     assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "false", "collapse sets aria-expanded false");
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "shell records collapsed side nav");
-    assert.equal(await desktopPage.evaluate(() => localStorage.getItem("tcrn-aos-side-nav-collapsed")), "true", "side nav collapse persists");
+    assert.equal(await desktopPage.evaluate(() => sessionStorage.getItem("tcrn-aos-side-nav-collapsed")), "true", "side nav collapse persists in route-owned session storage");
     assert.equal(await desktopPage.locator('[data-route-path="/cockpit"]').getAttribute("aria-current"), "page", "active cockpit route preserved while collapsed");
+    await desktopPage.waitForFunction((expandedWidth) => {
+      const width = document.querySelector(".aos-sidebar")?.getBoundingClientRect().width ?? expandedWidth;
+      return width < expandedWidth - 90;
+    }, expandedSideNavWidth);
+    const collapsedSideNavWidth = await desktopPage.locator(".aos-sidebar").evaluate((node) => node.getBoundingClientRect().width);
+    assert.equal(collapsedSideNavWidth < expandedSideNavWidth - 90, true, "collapsed side nav has a deliberate narrower visual state");
+    await desktopPage.screenshot({ path: `${screenshotRoot}/02-desktop-cockpit-collapsed.png`, fullPage: false });
     await desktopPage.reload({ waitUntil: "networkidle" });
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "side nav collapse survives reload");
     assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("aria-expanded"), "false", "side nav toggle reflects persisted collapse");
     await desktopPage.locator("[data-side-nav-toggle]").click();
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "side nav expands");
 
-    await desktopPage.locator("[data-theme-toggle]").click();
-    await desktopPage.waitForFunction(() => document.documentElement.dataset.tcrnTheme === "light");
-    assert.equal(await desktopPage.locator("html").getAttribute("data-tcrn-theme"), "light", "theme toggle switches to light");
+    const searchWrap = desktopPage.locator(".aos-search-wrap");
+    const searchInput = desktopPage.locator("[data-aos-shell-search]");
+    const searchWidthAtRest = await searchWrap.evaluate((node) => node.getBoundingClientRect().width);
+    await searchInput.focus();
+    await desktopPage.waitForFunction(() => document.querySelector(".aos-search-wrap")?.classList.contains("is-searching"));
+    const searchWidthFocused = await searchWrap.evaluate((node) => node.getBoundingClientRect().width);
+    assert.equal(searchWidthFocused >= searchWidthAtRest, true, "search expands or preserves full width on focus");
+    await searchInput.fill("shell");
+    await desktopPage.waitForSelector("[data-search-result]");
+    assert.equal(await desktopPage.locator("[data-search-result]").count() > 0, true, "search shows local results while focused");
+    await desktopPage.locator("#content").click({ position: { x: 24, y: 24 } });
+    await desktopPage.waitForFunction(() => !document.querySelector(".aos-search-wrap")?.classList.contains("is-searching"));
+    assert.equal(await desktopPage.locator("[data-search-results]").isVisible(), false, "search collapses and hides results on blur");
 
     const visibleText = await desktopPage.locator("body").innerText();
     for (const label of forbiddenPlannedPrimaryLabels) {
@@ -331,12 +395,41 @@ async function runBrowserProof(baseUrl) {
     const desktopOverflow = await desktopPage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
     assert.equal(desktopOverflow, true, "desktop shell has no horizontal overflow");
 
+    await desktopPage.goto(`${baseUrl}/work?locale=zh-CN&theme=dark`, { waitUntil: "networkidle" });
+    await desktopPage.waitForSelector('[data-aos-work-module-entry="jira-like"]');
+    await desktopPage.waitForFunction(() => document.querySelector("[data-api-state]")?.textContent?.includes("available"));
+    assert.equal(await desktopPage.locator("html").getAttribute("data-tcrn-theme"), "dark", "dark theme query applies");
+    assert.equal(await desktopPage.locator("html").getAttribute("lang"), "zh-CN", "zh-CN locale query applies");
+    assert.equal(await desktopPage.locator('[data-route-path="/work"]').getAttribute("aria-current"), "page", "active work route is marked in dark proof");
+    const warningContrast = await desktopPage.locator("[data-aos-no-overclaim-banner]").evaluate((node) => {
+      function parseRgb(value) {
+        const match = value.match(/rgba?\(([^)]+)\)/);
+        if (!match) return [0, 0, 0];
+        return match[1].split(",").slice(0, 3).map((part) => Number.parseFloat(part.trim()));
+      }
+      function channel(value) {
+        const normalized = value / 255;
+        return normalized <= 0.03928 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
+      }
+      function luminance(rgb) {
+        return 0.2126 * channel(rgb[0]) + 0.7152 * channel(rgb[1]) + 0.0722 * channel(rgb[2]);
+      }
+      const style = getComputedStyle(node);
+      const fg = luminance(parseRgb(style.color));
+      const bg = luminance(parseRgb(style.backgroundColor));
+      const lighter = Math.max(fg, bg);
+      const darker = Math.min(fg, bg);
+      return (lighter + 0.05) / (darker + 0.05);
+    });
+    assert.equal(warningContrast >= 4.5, true, "dark warning/no-overclaim banner keeps readable contrast");
+    await desktopPage.screenshot({ path: `${screenshotRoot}/03-desktop-work-dark.png`, fullPage: false });
+
     await desktopContext.close();
 
     const mobileContext = await browser.newContext({
       viewport: { width: 390, height: 844 },
-      colorScheme: "light",
-      locale: "ja",
+      colorScheme: "dark",
+      locale: "zh-CN",
       timezoneId: "UTC",
       reducedMotion: "reduce",
       deviceScaleFactor: 1,
@@ -344,11 +437,19 @@ async function runBrowserProof(baseUrl) {
     });
     const mobilePage = await mobileContext.newPage();
     capturePageHealth(mobilePage, consoleMessages, pageErrors, requestFailures);
-    await mobilePage.goto(`${baseUrl}/work?locale=ja&theme=light`, { waitUntil: "networkidle" });
+    await mobilePage.goto(`${baseUrl}/work?locale=zh-CN&theme=dark`, { waitUntil: "networkidle" });
     await mobilePage.waitForSelector('[data-aos-work-module-entry="jira-like"]');
+    assert.equal(await mobilePage.locator("html").getAttribute("data-tcrn-theme"), "dark", "mobile dark theme query applies");
+    assert.equal(await mobilePage.locator("html").getAttribute("lang"), "zh-CN", "mobile zh-CN locale query applies");
     assert.equal(await mobilePage.locator('[data-route-path="/work"]').getAttribute("aria-current"), "page", "mobile active work route is preserved");
+    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "mobile first viewport starts with navigation collapsed");
+    assert.equal(await mobilePage.locator(".aos-nav").isVisible(), false, "mobile collapsed navigation is tucked away from first viewport");
+    const mobileHeadingTop = await mobilePage.locator("#aos-overview-heading").evaluate((node) => node.getBoundingClientRect().top);
+    assert.equal(mobileHeadingTop < 560, true, "mobile first viewport reaches the main shell content promptly");
+    await mobilePage.screenshot({ path: `${screenshotRoot}/04-mobile-work-dark.png`, fullPage: false });
     await mobilePage.locator("[data-side-nav-toggle]").click();
-    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "mobile side nav collapse state updates");
+    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "mobile side nav expands from compact first viewport");
+    assert.equal(await mobilePage.locator(".aos-nav").isVisible(), true, "mobile expanded navigation is visible on demand");
     const mobileNoOverflow = await mobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
     assert.equal(mobileNoOverflow, true, "mobile shell has no horizontal page overflow");
     assert.equal(await mobilePage.locator('[data-tcrn-brand-mark="registered"]').isVisible(), true, "mobile registered brand mark remains visible");
@@ -365,16 +466,25 @@ async function runBrowserProof(baseUrl) {
       browserExecutable: executablePath ? "local_chrome" : "playwright_default",
       viewports: ["desktop-1440x900", "mobile-390x844"],
       checks: {
+        bannerSpacingNoConcatenation: true,
         localeOutsideDismissal: true,
         localeEscapeDismissalFocusReturn: true,
         localeSelectionFocusReturn: true,
+        searchFocusExpansionBlurCollapse: true,
         sideNavCollapseExpandAriaPersistence: true,
         brandAssetVisible: true,
         plannedModuleNavigationAbsent: true,
         rawJsonNotPrimary: true,
-        lightDarkThemeChecked: true,
+        lightDarkThemeReadabilityChecked: true,
+        mobileNavigationCompactFirstViewport: true,
         desktopMobileOverflowChecked: true
-      }
+      },
+      screenshots: [
+        `${screenshotRoot}/01-desktop-cockpit-default.png`,
+        `${screenshotRoot}/02-desktop-cockpit-collapsed.png`,
+        `${screenshotRoot}/03-desktop-work-dark.png`,
+        `${screenshotRoot}/04-mobile-work-dark.png`
+      ]
     };
   } finally {
     await browser.close();

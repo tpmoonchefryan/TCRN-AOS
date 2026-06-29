@@ -1,6 +1,6 @@
 # AOS Frontend Shell Proof
 
-Status: current first frontend shell implementation slice.
+Status: current first frontend shell changes-requested repair slice. PM/browser QA is still required before any owner-facing return.
 
 Current disposition:
 
@@ -9,11 +9,13 @@ Current disposition:
 - `/api/health`, `/api/readback`, and `/api/policy` remain backend JSON readbacks.
 - `/api/cockpit` remains deferred with `410 aos_cockpit_api_deferred`; the shell Cockpit is dummy-only and not final aggregation.
 - The shell consumes public TCRN Design System packages: `@tcrn/ui-react`, `@tcrn/ui-tokens`, and `@tcrn/ui-copy-state`.
-- Theme control is compact, circular, icon-only, and explicit; locale control uses a globe trigger and native names, closes on selection/outside pointer/Escape, and returns focus on keyboard or selection dismissal; shell search expands on focus and has real local result behavior.
-- Side navigation uses package-backed SideNav/NavGroup/NavItem surfaces with a keyboard-accessible collapse/expand control and persisted collapsed state.
+- Theme control is compact, circular, icon-only, and explicit; locale control uses a globe trigger and native names, closes on selection/outside pointer/Escape, and returns focus on keyboard or selection dismissal; shell search expands on focus, collapses on blur, and has real local result behavior.
+- Side navigation uses package-backed SideNav/NavGroup/NavItem surfaces with a keyboard-accessible collapse/expand control, route-owned session collapse state, expanded desktop first-load posture, and compact mobile first-load posture.
+- The proof banner and no-overclaim alert are rendered as spaced shell rows, not concatenated debug text. Dark mode uses a single coherent shell theme and a readable warning surface.
 - Visible primary navigation is limited to the admitted dummy Cockpit and Work entries. Legacy aliases remain compatibility routes only and are not registered product IA.
 - The visible product brand uses the registered Design System `ShellBrandLockup` and `tcrn-brand-mark.svg`; deprecated local AOS wordmark/favicon assets are absent from shell HTML, dist assets, and current docs.
 - Backend readback uses DS readback/key-value/evidence surfaces first; raw JSON is secondary disclosure, not the primary Cockpit UX.
+- `pnpm aos:frontend-shell-proof` writes non-committed QA screenshots under `/tmp/tcrn-aos-shell-qa/` for desktop default, desktop collapsed, desktop dark work, and mobile dark work states.
 
 No-overclaim:
 

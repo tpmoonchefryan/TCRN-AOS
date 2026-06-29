@@ -80,6 +80,8 @@ function AosShell() {
       data-storybook-contract-consumed="shell-theme-locale-search-state-copy"
       data-cockpit-aggregation="deferred"
       data-side-nav-collapsed="false"
+      data-side-nav-storage="session"
+      data-responsive-shell-posture="desktop-expanded-mobile-collapsed"
     >
       <SkipLink className="aos-skip-link" href="#content">Skip to shell content</SkipLink>
       <aside className="aos-sidebar" data-shell-region="side-navigation">
@@ -151,13 +153,15 @@ function AosShell() {
         />
 
         <main id="content" className="aos-main" data-shell-region="content">
-          <EnvironmentBanner label="AOS frontend shell slice" state={{ state: "local_only" }} />
-          <InlineAlert tone="warning" className="aos-no-overclaim" data-aos-no-overclaim-banner="true">
-            <strong data-i18n="localOnly">Local structural slice only</strong>
-            <span data-i18n="noOverclaim">
-              Local fixture data only; no external queue, live dispatch, product acceptance, or release-readiness state is claimed.
-            </span>
-          </InlineAlert>
+          <div className="aos-proof-stack" data-aos-proof-banner-stack="spaced">
+            <EnvironmentBanner label="AOS frontend shell slice" state={{ state: "local_only" }} />
+            <InlineAlert tone="warning" className="aos-no-overclaim" data-aos-no-overclaim-banner="true">
+              <strong data-i18n="localOnly">Local structural slice only</strong>
+              <span className="aos-alert-copy" data-i18n="noOverclaim">
+                Local fixture data only; no external queue, live dispatch, product acceptance, or release-readiness state is claimed.
+              </span>
+            </InlineAlert>
+          </div>
 
           <section className="aos-overview" aria-labelledby="aos-overview-heading" data-current-path-overview="true">
             <div>
@@ -203,7 +207,7 @@ function AosShell() {
                 />
                 <EvidenceStrip items={["/api/health", "/api/readback", "/api/policy"]} />
                 <details className="aos-debug-disclosure" data-raw-json-disclosure="secondary">
-                  <summary>Raw API payload disclosure</summary>
+                  <summary>Technical API payload</summary>
                   <pre className="aos-api-json" data-api-summary>{JSON.stringify({ status: "pending" }, null, 2)}</pre>
                 </details>
               </ReadbackPanel>
@@ -282,10 +286,12 @@ function createClientScript(): string {
   const root = document.documentElement;
   const body = document.body;
   const storage = window.localStorage;
+  const sideNavStorage = window.sessionStorage;
   const params = new URLSearchParams(window.location.search);
   const routeLabel = document.querySelector("[data-current-route-label]");
   const currentPath = window.location.pathname;
   const matchedRoute = config.routes.find((route) => route.path === currentPath) || config.routes.find((route) => currentPath.endsWith(route.path + ".html")) || config.routes[0];
+  const mobileNavQuery = window.matchMedia("(max-width: 720px)");
 
   function setText(selector, value) {
     document.querySelectorAll(selector).forEach((node) => { node.textContent = value; });
@@ -328,12 +334,14 @@ function createClientScript(): string {
     }
   }
 
-  function applySideNavCollapsed(collapsed) {
+  function applySideNavCollapsed(collapsed, options) {
     const isCollapsed = collapsed === true || collapsed === "true";
     const shell = document.querySelector("[data-aos-shell]");
     const toggle = document.querySelector("[data-side-nav-toggle]");
     shell?.setAttribute("data-side-nav-collapsed", String(isCollapsed));
-    storage.setItem("tcrn-aos-side-nav-collapsed", String(isCollapsed));
+    if (options?.persist !== false) {
+      sideNavStorage.setItem("tcrn-aos-side-nav-collapsed", String(isCollapsed));
+    }
     if (toggle) {
       toggle.setAttribute("aria-expanded", String(!isCollapsed));
       toggle.setAttribute("aria-label", isCollapsed ? "Expand side navigation" : "Collapse side navigation");
@@ -364,9 +372,11 @@ function createClientScript(): string {
 
   const initialLocale = resolveLocale(params.get("locale") || storage.getItem("tcrn-aos-locale") || config.defaultLocale);
   const initialTheme = params.get("theme") || storage.getItem("tcrn-aos-theme") || "light";
+  const storedSideNav = sideNavStorage.getItem("tcrn-aos-side-nav-collapsed");
+  const initialSideNavCollapsed = storedSideNav === null ? mobileNavQuery.matches : storedSideNav === "true";
   applyLocale(initialLocale);
   applyTheme(initialTheme);
-  applySideNavCollapsed(storage.getItem("tcrn-aos-side-nav-collapsed") === "true");
+  applySideNavCollapsed(initialSideNavCollapsed, { persist: false });
 
   if (routeLabel && matchedRoute) routeLabel.textContent = matchedRoute.label;
   document.querySelectorAll("[data-route-path]").forEach((node) => {
@@ -513,14 +523,14 @@ button, input { font: inherit; }
 .aos-shell {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 272px minmax(0, 1fr);
+  grid-template-columns: 280px minmax(0, 1fr);
   background:
-    linear-gradient(135deg, color-mix(in srgb, var(--tcrn-color-brand-secondary-bg), transparent 22%), transparent 34rem),
+    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--tcrn-color-brand-secondary-bg), transparent 18%), transparent 30rem),
     var(--tcrn-color-surface-canvas);
   transition: grid-template-columns var(--tcrn-motion-duration-md) ease;
 }
 .aos-shell[data-side-nav-collapsed="true"] {
-  grid-template-columns: 88px minmax(0, 1fr);
+  grid-template-columns: 92px minmax(0, 1fr);
 }
 .aos-sidebar {
   position: sticky;
@@ -531,7 +541,8 @@ button, input { font: inherit; }
   gap: 18px;
   padding: 18px 14px;
   border-right: 1px solid var(--tcrn-color-border-subtle);
-  background: color-mix(in srgb, var(--tcrn-color-surface-panel), var(--tcrn-color-surface-canvas) 12%);
+  background: color-mix(in srgb, var(--tcrn-color-surface-panel), var(--tcrn-color-surface-canvas) 8%);
+  box-shadow: 8px 0 32px color-mix(in srgb, var(--tcrn-color-border-subtle), transparent 82%);
 }
 .aos-sidebar-header {
   display: grid;
@@ -594,10 +605,11 @@ button, input { font: inherit; }
   top: 0;
   z-index: 20;
   grid-template-columns: max-content max-content minmax(0, 1fr);
+  background: color-mix(in srgb, var(--tcrn-color-surface-panel), transparent 3%);
 }
 .aos-top-actions {
   display: grid;
-  grid-template-columns: max-content minmax(190px, 420px) max-content max-content;
+  grid-template-columns: max-content minmax(220px, 360px) max-content max-content;
   justify-content: end;
   align-items: center;
   gap: 10px;
@@ -641,16 +653,39 @@ button, input { font: inherit; }
 }
 .aos-main {
   display: grid;
-  gap: 18px;
-  width: min(1280px, 100%);
-  padding: 22px;
+  gap: 20px;
+  width: min(1180px, 100%);
+  padding: 24px 28px 44px;
 }
-.aos-no-overclaim { background: var(--tcrn-color-state-warning-bg); color: var(--tcrn-color-text-primary); }
+.aos-proof-stack {
+  display: grid;
+  gap: 10px;
+}
+.aos-proof-stack .tcrn-environment-banner,
+.aos-no-overclaim {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 4px;
+}
+.aos-no-overclaim {
+  background: color-mix(in srgb, var(--tcrn-color-state-warning-bg), var(--tcrn-color-surface-panel) 20%);
+  border-color: color-mix(in srgb, var(--tcrn-color-state-warning), transparent 55%);
+  color: var(--tcrn-color-text-primary);
+}
+html[data-tcrn-theme="dark"] .aos-no-overclaim {
+  background: #2f2411;
+  border-color: #ffd27a;
+  color: #f2f7ff;
+}
+.aos-alert-copy { min-width: 0; }
 .aos-overview {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
-  gap: 18px;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  gap: 24px;
   align-items: start;
+  padding: 8px 0 2px;
 }
 .aos-status-grid {
   display: grid;
@@ -673,7 +708,8 @@ button, input { font: inherit; }
 .aos-section {
   display: grid;
   gap: 14px;
-  padding: 16px;
+  padding: 18px;
+  box-shadow: 0 18px 44px color-mix(in srgb, var(--tcrn-color-border-subtle), transparent 82%);
 }
 .aos-section-heading {
   display: flex;
@@ -706,9 +742,24 @@ button, input { font: inherit; }
   font-weight: 700;
   font-size: 13px;
 }
-@media (max-width: 980px) {
+@media (max-width: 1080px) {
+  .aos-shell { grid-template-columns: 240px minmax(0, 1fr); }
+  .aos-top-actions { grid-template-columns: minmax(180px, 280px) max-content max-content; }
+  .aos-location-readback { grid-column: 1 / -1; display: flex; gap: 8px; align-items: baseline; }
+  .aos-overview { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
   .aos-shell, .aos-shell[data-side-nav-collapsed="true"] { grid-template-columns: 1fr; }
-  .aos-sidebar { position: static; height: auto; padding: 12px; border-right: 0; border-bottom: 1px solid var(--tcrn-color-border-subtle); }
+  .aos-sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    height: auto;
+    padding: 12px 14px;
+    border-right: 0;
+    border-bottom: 1px solid var(--tcrn-color-border-subtle);
+    box-shadow: 0 10px 28px color-mix(in srgb, var(--tcrn-color-border-subtle), transparent 78%);
+  }
   .aos-shell[data-side-nav-collapsed="true"] .aos-sidebar-header { grid-template-columns: minmax(0, 1fr) 38px; justify-items: stretch; }
   .aos-shell[data-side-nav-collapsed="true"] .aos-brand {
     inline-size: auto;
@@ -739,22 +790,27 @@ button, input { font: inherit; }
     inline-size: auto;
     justify-content: stretch;
   }
-  .aos-sidebar .tcrn-side-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .aos-shell[data-side-nav-collapsed="true"] .aos-nav { display: none; }
+  .aos-sidebar .tcrn-side-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 4px; }
   .aos-workspace > .tcrn-top-bar { position: static; grid-template-columns: 1fr; align-items: stretch; }
-  .aos-top-actions { grid-template-columns: 1fr max-content max-content; justify-content: stretch; }
-  .aos-location-readback { grid-column: 1 / -1; }
+  .aos-top-actions { grid-template-columns: minmax(0, 1fr) max-content max-content; justify-content: stretch; }
+  .aos-location-readback { grid-column: 1 / -1; display: flex; gap: 8px; align-items: baseline; min-width: 0; }
   .aos-search-wrap { justify-self: stretch; width: 100%; }
   .aos-search-wrap.is-searching { width: 100%; }
   .aos-overview, .aos-cockpit-grid { grid-template-columns: 1fr; }
+  .aos-main { width: 100%; padding: 18px 14px 34px; }
+  .aos-section { padding: 14px; }
 }
 @media (max-width: 620px) {
   .aos-sidebar .tcrn-side-nav { grid-template-columns: 1fr; }
-  .aos-main { padding: 14px; }
-  .aos-top-actions { grid-template-columns: 1fr max-content; }
-  .aos-locale-control { justify-self: end; }
+  .aos-top-actions { grid-template-columns: minmax(0, 1fr) max-content; }
+  .aos-search-wrap { grid-column: 1 / -1; }
+  .aos-locale-control { justify-self: stretch; }
   .aos-theme-button { justify-self: end; }
   .aos-status-grid, .tcrn-key-value-list { grid-template-columns: 1fr; }
-  .aos-no-overclaim, .tcrn-environment-banner { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .aos-proof-stack .tcrn-environment-banner,
+  .aos-no-overclaim { grid-template-columns: 1fr; align-items: start; }
+  .aos-section-heading { align-items: flex-start; flex-direction: column; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
