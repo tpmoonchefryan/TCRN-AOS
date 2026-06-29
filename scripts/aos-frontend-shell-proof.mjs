@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
+import { createServer } from "node:http";
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { extname, join } from "node:path";
 import { findForbiddenPositiveClaimHits, tcrnLocaleMetadata } from "@tcrn/ui-copy-state";
 import { frontendShellRoutes, forbiddenHumanAiTopbarMarkers } from "../dist/apps/web/src/data.js";
 import { startAosLocalServiceProof } from "../dist/apps/api/src/server.js";
@@ -246,6 +248,7 @@ try {
       localWrapperEventDelegation: false,
       localShellEffectClones: false,
       visibleClassNamespace: "DS-owned tcrn-* only under product shell content",
+      storybookComparator: "components.html#navigation-shell-spec package-backed ProductShell comparator",
       themeControl: "compact_icon_only_explicit_toggle",
       themeTransition: "ds_product_shell_controller",
       localeSelector: "globe_trigger_native_names_with_escape_outside_selection_close",
@@ -311,6 +314,7 @@ try {
 async function runBrowserProof(baseUrl) {
   const { chromium, source } = loadPlaywrightChromium();
   const executablePath = findLocalChromeExecutable();
+  const dsComparatorServer = await startDesignSystemComparatorServer();
   const browser = await chromium.launch({
     headless: true,
     ...(executablePath ? { executablePath } : {})
@@ -320,12 +324,14 @@ async function runBrowserProof(baseUrl) {
   const requestFailures = [];
 
   try {
+    const visualComparatorProof = await runVisualComparatorProof(browser, baseUrl, dsComparatorServer.url);
+
     const desktopContext = await browser.newContext({
       viewport: { width: 1440, height: 900 },
       colorScheme: "light",
       locale: "en",
       timezoneId: "UTC",
-      reducedMotion: "reduce",
+      reducedMotion: "no-preference",
       deviceScaleFactor: 1
     });
     const desktopPage = await desktopContext.newPage();
@@ -374,7 +380,7 @@ async function runBrowserProof(baseUrl) {
     await localeTrigger.click();
     assert.equal(await localeTrigger.getAttribute("aria-expanded"), "true", "locale opens with aria-expanded true");
     assert.equal(await localeMenu.isVisible(), true, "locale menu visible after click");
-    await desktopPage.locator("#content").click({ position: { x: 20, y: 20 } });
+    await clickStableContentPoint(desktopPage);
     assert.equal(await localeTrigger.getAttribute("aria-expanded"), "false", "outside click closes locale menu");
     assert.equal(await localeMenu.isVisible(), false, "locale menu hidden after outside click");
 
@@ -424,7 +430,7 @@ async function runBrowserProof(baseUrl) {
       return layer && !layer.hidden && layer.querySelector("[data-search-result]");
     });
     assert.equal(await desktopPage.locator("[data-search-result]").count() > 0, true, "search shows local results while focused");
-    await desktopPage.locator("#content").click({ position: { x: 24, y: 24 } });
+    await clickStableContentPoint(desktopPage);
     await desktopPage.waitForFunction(() => document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "false");
     assert.equal(await desktopPage.locator("[data-product-shell-search-results]").isVisible(), false, "search collapses and hides results on blur");
     assert.equal(await desktopPage.evaluate(() => document.activeElement?.matches('.tcrn-product-shell-search input[aria-label="Search AOS shell"]')), false, "real outside click moves focus away from shell search");
@@ -435,7 +441,7 @@ async function runBrowserProof(baseUrl) {
       const layer = document.querySelector("[data-product-shell-search-results]");
       return layer && !layer.hidden && layer.querySelector("[data-search-result]");
     });
-    await desktopPage.locator("#content").click({ position: { x: 36, y: 36 } });
+    await clickStableContentPoint(desktopPage);
     await desktopPage.waitForFunction(() => {
       const input = document.querySelector('.tcrn-product-shell-search input[aria-label="Search AOS shell"]');
       const layer = document.querySelector("[data-product-shell-search-results]");
@@ -560,8 +566,11 @@ async function runBrowserProof(baseUrl) {
       ok: true,
       runner: source,
       browserExecutable: executablePath ? "local_chrome" : "playwright_default",
+      dsStorybookComparatorProof: visualComparatorProof,
       viewports: ["desktop-1440x900", "mobile-390x844"],
       checks: {
+        renderedMetricParityAgainstDsStorybook: visualComparatorProof.ok,
+        motionParityAgainstDsStorybook: visualComparatorProof.motionParityOk,
         bannerSpacingNoConcatenation: true,
         localeOutsideDismissal: true,
         localeEscapeDismissalFocusReturn: true,
@@ -587,6 +596,284 @@ async function runBrowserProof(baseUrl) {
     };
   } finally {
     await browser.close();
+    await dsComparatorServer.close();
+  }
+}
+
+async function runVisualComparatorProof(browser, aosBaseUrl, dsBaseUrl) {
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    colorScheme: "light",
+    locale: "en",
+    timezoneId: "UTC",
+    reducedMotion: "no-preference",
+    deviceScaleFactor: 1
+  });
+  const reducedMotionContext = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    colorScheme: "light",
+    locale: "en",
+    timezoneId: "UTC",
+    reducedMotion: "reduce",
+    deviceScaleFactor: 1
+  });
+
+  try {
+    const dsPage = await context.newPage();
+    const aosPage = await context.newPage();
+    await dsPage.goto(`${dsBaseUrl}/components.html#navigation-shell-spec`, { waitUntil: "networkidle" });
+    await aosPage.goto(`${aosBaseUrl}/cockpit?locale=en&theme=light`, { waitUntil: "networkidle" });
+    await dsPage.waitForSelector(".tcrn-product-shell-contract-proof .tcrn-product-shell");
+    await aosPage.waitForSelector('[data-aos-shell="first-frontend-slice"]');
+    const dsMetrics = await collectProductShellComparatorMetrics(dsPage, ".tcrn-product-shell-contract-proof .tcrn-product-shell");
+    const aosMetrics = await collectProductShellComparatorMetrics(aosPage, '[data-aos-shell="first-frontend-slice"]');
+
+    const reducedDsPage = await reducedMotionContext.newPage();
+    const reducedAosPage = await reducedMotionContext.newPage();
+    await reducedDsPage.goto(`${dsBaseUrl}/components.html#navigation-shell-spec`, { waitUntil: "networkidle" });
+    await reducedAosPage.goto(`${aosBaseUrl}/cockpit?locale=en&theme=light`, { waitUntil: "networkidle" });
+    await reducedDsPage.waitForSelector(".tcrn-product-shell-contract-proof .tcrn-product-shell");
+    await reducedAosPage.waitForSelector('[data-aos-shell="first-frontend-slice"]');
+    const reducedDsMetrics = await collectProductShellComparatorMetrics(reducedDsPage, ".tcrn-product-shell-contract-proof .tcrn-product-shell");
+    const reducedAosMetrics = await collectProductShellComparatorMetrics(reducedAosPage, '[data-aos-shell="first-frontend-slice"]');
+
+    const parity = compareProductShellMetrics(dsMetrics, aosMetrics);
+    const reducedParity = compareReducedMotionMetrics(reducedDsMetrics, reducedAosMetrics);
+    assert.deepEqual(parity.failures, [], "AOS rendered ProductShell controls match the DS Storybook package-backed comparator");
+    assert.deepEqual(reducedParity.failures, [], "AOS reduced-motion ProductShell behavior matches the DS Storybook package-backed comparator");
+    return {
+      ok: true,
+      comparator: "DS Storybook components.html#navigation-shell-spec",
+      comparatorStyleSource: "@tcrn/ui-react/tcrnComponentCss",
+      aosRoute: "/cockpit?locale=en&theme=light",
+      dsMetrics,
+      aosMetrics,
+      parityChecks: parity.checks,
+      parityFailures: parity.failures,
+      reducedMotionChecks: reducedParity.checks,
+      reducedMotionFailures: reducedParity.failures,
+      motionParityOk: true
+    };
+  } finally {
+    await context.close();
+    await reducedMotionContext.close();
+  }
+}
+
+async function collectProductShellComparatorMetrics(page, rootSelector) {
+  return page.evaluate((selector) => {
+    const root = document.querySelector(selector);
+    if (!root) return { missing: true, selector };
+    const readMetric = (name, childSelector) => {
+      const element = root.querySelector(childSelector);
+      if (!element) return { missing: true, selector: childSelector };
+      const rect = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+      return {
+        name,
+        selector: childSelector,
+        width: Number(rect.width.toFixed(3)),
+        height: Number(rect.height.toFixed(3)),
+        display: style.display,
+        position: style.position,
+        gridTemplateColumns: style.gridTemplateColumns,
+        gap: style.gap,
+        paddingLeft: style.paddingLeft,
+        paddingRight: style.paddingRight,
+        borderRadius: style.borderRadius,
+        borderStyle: style.borderStyle,
+        borderWidth: style.borderWidth,
+        backgroundColor: style.backgroundColor,
+        color: style.color,
+        transitionProperty: style.transitionProperty,
+        transitionDuration: style.transitionDuration,
+        animationName: style.animationName
+      };
+    };
+    const shellStyle = getComputedStyle(root);
+    const shellAfterStyle = getComputedStyle(root, "::after");
+    return {
+      missing: false,
+      selector,
+      sourceMarkers: {
+        packageBoundary: root.getAttribute("data-package-backed-product-shell-boundary"),
+        effectBoundary: root.getAttribute("data-product-shell-effect-boundary"),
+        semanticApi: root.getAttribute("data-product-shell-semantic-api"),
+        responsive: root.getAttribute("data-product-shell-responsive")
+      },
+      shell: {
+        width: Number(root.getBoundingClientRect().width.toFixed(3)),
+        height: Number(root.getBoundingClientRect().height.toFixed(3)),
+        gridTemplateColumns: shellStyle.gridTemplateColumns,
+        transitionProperty: shellStyle.transitionProperty,
+        transitionDuration: shellStyle.transitionDuration,
+        backgroundColor: shellStyle.backgroundColor,
+        color: shellStyle.color,
+        themeWashAnimationName: shellAfterStyle.animationName,
+        themeWashAnimationDuration: shellAfterStyle.animationDuration
+      },
+      measured: {
+        themeToggle: readMetric("themeToggle", ".tcrn-shell-theme-toggle"),
+        localeTrigger: readMetric("localeTrigger", ".tcrn-shell-locale-menu__trigger"),
+        sideNavToggle: readMetric("sideNavToggle", ".tcrn-shell-side-nav-toggle"),
+        searchWrapper: readMetric("searchWrapper", ".tcrn-product-shell-search"),
+        searchInput: readMetric("searchInput", ".tcrn-search-input"),
+        topBar: readMetric("topBar", ".tcrn-top-bar"),
+        selectedNavItem: readMetric("selectedNavItem", ".tcrn-nav-item[data-selected=\"true\"]")
+      },
+      viewport: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        hasHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth + 1
+      }
+    };
+  }, rootSelector);
+}
+
+function compareProductShellMetrics(dsMetrics, aosMetrics) {
+  const failures = [];
+  const checks = [];
+  const add = (name, passed, readback) => {
+    checks.push({ name, passed, ...readback });
+    if (!passed) failures.push({ name, ...readback });
+  };
+  add("shell-present", dsMetrics.missing === false && aosMetrics.missing === false, { dsMissing: dsMetrics.missing, aosMissing: aosMetrics.missing });
+  for (const key of ["packageBoundary", "effectBoundary", "semanticApi", "responsive"]) {
+    add(`source-marker-${key}`, dsMetrics.sourceMarkers?.[key] === aosMetrics.sourceMarkers?.[key], {
+      ds: dsMetrics.sourceMarkers?.[key],
+      aos: aosMetrics.sourceMarkers?.[key]
+    });
+  }
+  for (const control of ["themeToggle", "sideNavToggle"]) {
+    compareNumber(add, `${control}.width`, dsMetrics.measured[control].width, aosMetrics.measured[control].width, 0.5);
+    compareNumber(add, `${control}.height`, dsMetrics.measured[control].height, aosMetrics.measured[control].height, 0.5);
+    compareString(add, `${control}.borderRadius`, dsMetrics.measured[control].borderRadius, aosMetrics.measured[control].borderRadius);
+    compareString(add, `${control}.display`, dsMetrics.measured[control].display, aosMetrics.measured[control].display);
+  }
+  compareNumber(add, "localeTrigger.height", dsMetrics.measured.localeTrigger.height, aosMetrics.measured.localeTrigger.height, 0.5);
+  compareString(add, "localeTrigger.borderRadius", dsMetrics.measured.localeTrigger.borderRadius, aosMetrics.measured.localeTrigger.borderRadius);
+  compareString(add, "localeTrigger.display", dsMetrics.measured.localeTrigger.display, aosMetrics.measured.localeTrigger.display);
+  compareResponsiveSearchWidth(add, "searchWrapper.width", dsMetrics.measured.searchWrapper.width, aosMetrics.measured.searchWrapper.width);
+  compareNumber(add, "searchWrapper.height", dsMetrics.measured.searchWrapper.height, aosMetrics.measured.searchWrapper.height, 0.5);
+  compareString(add, "searchWrapper.transitionProperty", dsMetrics.measured.searchWrapper.transitionProperty, aosMetrics.measured.searchWrapper.transitionProperty);
+  compareResponsiveSearchWidth(add, "searchInput.width", dsMetrics.measured.searchInput.width, aosMetrics.measured.searchInput.width);
+  compareNumber(add, "searchInput.height", dsMetrics.measured.searchInput.height, aosMetrics.measured.searchInput.height, 0.5);
+  compareString(add, "searchInput.borderRadius", dsMetrics.measured.searchInput.borderRadius, aosMetrics.measured.searchInput.borderRadius);
+  compareString(add, "searchInput.display", dsMetrics.measured.searchInput.display, aosMetrics.measured.searchInput.display);
+  compareSearchGrid(add, "searchInput.gridTemplateColumns", dsMetrics.measured.searchInput.gridTemplateColumns, aosMetrics.measured.searchInput.gridTemplateColumns);
+  compareString(add, "shell.transitionProperty", dsMetrics.shell.transitionProperty, aosMetrics.shell.transitionProperty);
+  compareString(add, "shell.themeWashAnimationName", dsMetrics.shell.themeWashAnimationName, aosMetrics.shell.themeWashAnimationName);
+  add("aos-no-horizontal-overflow", aosMetrics.viewport.hasHorizontalOverflow === false, { aosHasHorizontalOverflow: aosMetrics.viewport.hasHorizontalOverflow });
+  return { checks, failures };
+}
+
+function compareReducedMotionMetrics(dsMetrics, aosMetrics) {
+  const failures = [];
+  const checks = [];
+  const add = (name, passed, readback) => {
+    checks.push({ name, passed, ...readback });
+    if (!passed) failures.push({ name, ...readback });
+  };
+  compareString(add, "reduced.shell.transitionProperty", dsMetrics.shell.transitionProperty, aosMetrics.shell.transitionProperty);
+  compareString(add, "reduced.shell.themeWashAnimationName", dsMetrics.shell.themeWashAnimationName, aosMetrics.shell.themeWashAnimationName);
+  compareString(add, "reduced.themeToggle.transitionProperty", dsMetrics.measured.themeToggle.transitionProperty, aosMetrics.measured.themeToggle.transitionProperty);
+  compareString(add, "reduced.localeTrigger.transitionProperty", dsMetrics.measured.localeTrigger.transitionProperty, aosMetrics.measured.localeTrigger.transitionProperty);
+  compareString(add, "reduced.sideNavToggle.transitionProperty", dsMetrics.measured.sideNavToggle.transitionProperty, aosMetrics.measured.sideNavToggle.transitionProperty);
+  compareString(add, "reduced.searchWrapper.transitionProperty", dsMetrics.measured.searchWrapper.transitionProperty, aosMetrics.measured.searchWrapper.transitionProperty);
+  return { checks, failures };
+}
+
+function compareNumber(add, name, ds, aos, tolerance) {
+  const delta = Math.abs(Number(ds) - Number(aos));
+  add(name, delta <= tolerance, { ds, aos, tolerance, delta: Number(delta.toFixed(3)) });
+}
+
+function compareString(add, name, ds, aos) {
+  add(name, ds === aos, { ds, aos });
+}
+
+function compareResponsiveSearchWidth(add, name, ds, aos) {
+  const dsNumber = Number(ds);
+  const aosNumber = Number(aos);
+  const minAllowed = 220;
+  const maxAllowed = 260;
+  const passed = dsNumber >= minAllowed && dsNumber <= maxAllowed && aosNumber >= minAllowed && aosNumber <= maxAllowed;
+  add(name, passed, {
+    ds,
+    aos,
+    allowedRange: `${minAllowed}-${maxAllowed}`,
+    disposition: "same DS ProductShellSearch width rule; value may differ with comparator story vs product topbar available width"
+  });
+}
+
+function compareSearchGrid(add, name, ds, aos) {
+  const parse = (value) => String(value).split(/\s+/).filter(Boolean);
+  const dsColumns = parse(ds);
+  const aosColumns = parse(aos);
+  const passed = dsColumns.length === 3
+    && aosColumns.length === 3
+    && dsColumns[0] === aosColumns[0]
+    && dsColumns[0] === "22px";
+  add(name, passed, {
+    ds,
+    aos,
+    disposition: "same DS three-column SearchInput grid; middle/shortcut tracks respond to available width"
+  });
+}
+
+async function startDesignSystemComparatorServer() {
+  return startStaticFileServer(findDesignSystemStaticRoot());
+}
+
+function findDesignSystemStaticRoot() {
+  const candidates = [
+    new URL("../../TCRN-DESIGN-SYSTEM/apps/storybook/storybook-static/", import.meta.url),
+    new URL("../../TCRN-Design-System/apps/storybook/storybook-static/", import.meta.url)
+  ];
+  const found = candidates.find((candidate) => existsSync(fileURLToPath(new URL("components.html", candidate))));
+  assert.ok(found, "local DS Storybook static comparator exists at apps/storybook/storybook-static/components.html");
+  return found;
+}
+
+async function startStaticFileServer(rootUrl) {
+  const rootPath = fileURLToPath(rootUrl);
+  const server = createServer((request, response) => {
+    const rawPath = decodeURIComponent((request.url ?? "/").split("?")[0].split("#")[0]);
+    const relativePath = rawPath === "/" ? "index.html" : rawPath.replace(/^\/+/, "");
+    const filePath = join(rootPath, relativePath);
+    if (!filePath.startsWith(rootPath) || !existsSync(filePath) || statSync(filePath).isDirectory()) {
+      response.writeHead(404, { "content-type": "text/plain; charset=utf-8" });
+      response.end("not found");
+      return;
+    }
+    response.writeHead(200, { "content-type": contentTypeForPath(filePath) });
+    response.end(readFileSync(filePath));
+  });
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const address = server.address();
+  assert.ok(address && typeof address === "object", "static comparator server has a port");
+  return {
+    url: `http://127.0.0.1:${address.port}`,
+    close: () => new Promise((resolve) => server.close(resolve))
+  };
+}
+
+function contentTypeForPath(filePath) {
+  switch (extname(filePath)) {
+    case ".html":
+      return "text/html; charset=utf-8";
+    case ".css":
+      return "text/css; charset=utf-8";
+    case ".js":
+      return "text/javascript; charset=utf-8";
+    case ".svg":
+      return "image/svg+xml";
+    case ".json":
+      return "application/json; charset=utf-8";
+    case ".txt":
+      return "text/plain; charset=utf-8";
+    default:
+      return "application/octet-stream";
   }
 }
 
@@ -623,6 +910,21 @@ async function inspectContentRegion(page) {
       bannerOverlap: Boolean(environmentRect && alertRect && alertRect.top < environmentRect.bottom && alertRect.bottom > environmentRect.top)
     };
   });
+}
+
+async function clickStableContentPoint(page) {
+  const point = await page.evaluate(() => {
+    const content = document.querySelector('[data-product-shell-region="content"]');
+    const topBar = document.querySelector(".tcrn-top-bar");
+    const contentRect = content?.getBoundingClientRect();
+    const topBarRect = topBar?.getBoundingClientRect();
+    const x = Math.min(window.innerWidth - 24, Math.max(24, (contentRect?.left ?? 0) + 48));
+    const yFloor = (topBarRect?.bottom ?? 0) + 96;
+    const contentY = (contentRect?.top ?? 0) + 96;
+    const y = Math.min(window.innerHeight - 24, Math.max(96, yFloor, contentY));
+    return { x, y };
+  });
+  await page.mouse.click(point.x, point.y);
 }
 
 function loadPlaywrightChromium() {
