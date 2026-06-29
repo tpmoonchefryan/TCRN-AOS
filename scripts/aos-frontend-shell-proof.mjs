@@ -27,8 +27,7 @@ const requiredMarkers = [
   'data-search-semantic-api="onQueryChange-onExpandedChange-onDismiss-onResultActivate"',
   'data-search-dismissal-contract="blur-outside-pointer-tab-escape"',
   'data-local-wrapper-event-delegation="absent"',
-  'data-aos-local-shell-effect-clones="removed"',
-  'data-aos-proof-banner-stack="spaced"',
+  'data-local-shell-effect-clones="removed"',
   'data-tcrn-theme="light"',
   'data-side-nav-toggle="true"',
   'data-side-nav-persisted-key="tcrn-aos-side-nav-collapsed"',
@@ -41,13 +40,13 @@ const requiredMarkers = [
   'data-package-backed-shell-control="side-nav-collapse"',
   'data-package-backed-shell-control="product-shell-search"',
   'data-tcrn-component-style-source="@tcrn/ui-react"',
-  'data-aos-shell-client="ds-product-shell-semantic-boundary"',
+  'data-product-document-baseline="tcrn-token-inheritance"',
+  'data-product-shell-client="ds-product-shell-semantic-boundary"',
   '/assets/aos-client.js',
   'data-aos-dummy-cockpit="true"',
   'data-aos-work-module-entry="jira-like"',
   'data-aos-registered-module-boundary="cockpit-work-only"',
   'data-raw-json-disclosure="secondary"',
-  'data-aos-no-overclaim-banner="true"',
   'data-cockpit-aggregation="deferred"',
   'data-product-acceptance="not-claimed"',
   'data-release-readiness="not-claimed"',
@@ -95,6 +94,14 @@ const forbiddenAosBrandDocHits = [
 });
 const forbiddenLocalShellEffectPatterns = [
   "createClientScript",
+  "createShellCss",
+  "MetricCard",
+  "data-aos-shell-style",
+  'className="aos-',
+  "className='aos-",
+  ".aos-",
+  "style={{",
+  "document.querySelector",
   "document.querySelector(\"[data-theme-toggle]\")?.addEventListener",
   "document.querySelector(\"[data-side-nav-toggle]\")?.addEventListener",
   "document.addEventListener(\"pointerdown\"",
@@ -104,6 +111,29 @@ const forbiddenLocalShellEffectPatterns = [
   "aos-theme-wash",
   "transitionTheme("
 ].filter((marker) => appSource.includes(marker));
+
+const clientBundlePath = new URL("../apps/web/dist/assets/aos-client.js", import.meta.url);
+const clientBundle = existsSync(clientBundlePath) ? readFileSync(clientBundlePath, "utf8") : "";
+const strictRegisteredSurfaceSourceHits = [
+  { label: "MetricCard function", regex: /\b(function|const)\s+MetricCard\b/ },
+  { label: "createShellCss helper", regex: /\bcreateShellCss\b/ },
+  { label: "AOS visible className", regex: /className\s*=\s*(?:"|'|{\s*(?:"|'|`))[^"'`]*aos-/ },
+  { label: "AOS visible CSS selector", regex: /\.(?:aos-[A-Za-z0-9_-]+)/ },
+  { label: "AOS shell style tag", regex: /data-aos-shell-style/ },
+  { label: "inline primary layout style", regex: /style=\{\{/ },
+  { label: "wrapper DOM delegation", regex: /document\.querySelector|document\.addEventListener\("pointerdown"/ },
+  { label: "Storybook shell demo class", regex: /tcrn-(?:shell-demo|compact-shell|knowledge-shell)/ },
+  { label: "Storybook-only shell demo import", regex: /TmsDenseShellDemo|KnowledgeBaseShellDemo|CompactToolShellDemo/ }
+].filter((entry) => entry.regex.test(appSource)).map((entry) => entry.label);
+const strictRegisteredSurfaceBuiltHits = [
+  { label: "AOS class in built HTML", value: html, regex: /class="[^"]*\baos-/ },
+  { label: "AOS CSS selector in built HTML", value: html, regex: /\.(?:aos-[A-Za-z0-9_-]+)/ },
+  { label: "AOS shell style in built HTML", value: html, regex: /data-aos-shell-style/ },
+  { label: "MetricCard in built HTML/client", value: `${html}\n${clientBundle}`, regex: /MetricCard|tcrn-compact-shell__metric/ },
+  { label: "Storybook shell demo in built HTML/client", value: `${html}\n${clientBundle}`, regex: /tcrn-(?:shell-demo|compact-shell|knowledge-shell)/ },
+  { label: "AOS class in client bundle", value: clientBundle, regex: /className[=:][^,\n}]*aos-|class="[^"]*\baos-/ },
+  { label: "AOS CSS selector in client bundle", value: clientBundle, regex: /\.(?:aos-[A-Za-z0-9_-]+)/ }
+].filter((entry) => entry.regex.test(entry.value)).map((entry) => entry.label);
 
 assert.deepEqual(missingMarkers, [], "required shell and DS-consumption markers are present");
 assert.deepEqual(missingLocales, [], "locale menu uses native locale names");
@@ -115,6 +145,8 @@ assert.deepEqual(concatenatedBannerStaticHits, [], "banner and alert text are no
 assert.deepEqual(forbiddenAosBrandDistHits, [], "forbidden AOS wordmark/favicon files are absent from built dist assets");
 assert.deepEqual(forbiddenAosBrandDocHits, [], "current docs/evidence do not reference forbidden AOS wordmark/favicon assets");
 assert.deepEqual(forbiddenLocalShellEffectPatterns, [], "AOS source does not own DS shell/search/locale/theme event delegation or local shell effects");
+assert.deepEqual(strictRegisteredSurfaceSourceHits, [], "AOS source has no unregistered local visible UI components/classes/selectors/effects");
+assert.deepEqual(strictRegisteredSurfaceBuiltHits, [], "built shell has no unregistered AOS local visible classes/CSS/demo surfaces");
 
 const service = await startAosLocalServiceProof();
 let closed = false;
@@ -136,13 +168,19 @@ try {
       productShellBoundary: body.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"')
         && body.includes('data-package-backed-product-shell-boundary="side-nav-shell-v1"')
         && body.includes('data-product-shell-semantic-api="collapse-theme-locale-search"')
-        && body.includes('data-local-wrapper-event-delegation="absent"'),
+        && body.includes('data-local-wrapper-event-delegation="absent"')
+        && body.includes('data-local-shell-effect-clones="removed"'),
       packageBackedShellControls: [
         'data-package-backed-shell-control="locale-menu"',
         'data-package-backed-shell-control="theme-toggle"',
         'data-package-backed-shell-control="side-nav-collapse"',
         'data-package-backed-shell-control="product-shell-search"'
       ].every((marker) => body.includes(marker)),
+      strictRegisteredSurface: !/class="[^"]*\baos-/.test(body)
+        && !/\.(?:aos-[A-Za-z0-9_-]+)/.test(body)
+        && !body.includes("MetricCard")
+        && !body.includes("data-aos-shell-style")
+        && body.includes('data-product-document-baseline="tcrn-token-inheritance"'),
       plannedPrimaryHits: forbiddenPlannedPrimaryLabels.filter((label) => body.includes(label)),
       forbiddenBrandHits: forbiddenAosBrandAssetMarkers.filter((marker) => body.includes(marker))
     });
@@ -169,7 +207,7 @@ try {
   const stopped = await service.close();
   closed = stopped.stopped && stopped.runtimeReset;
 
-  const ok = routeReadbacks.every((entry) => entry.status === 200 && entry.html && entry.shellMarker && entry.dummyCockpitMarker && entry.workMarker && entry.registeredNavigationOnly && entry.registeredBrandLockup && entry.productShellBoundary && entry.packageBackedShellControls && entry.plannedPrimaryHits.length === 0 && entry.forbiddenBrandHits.length === 0)
+  const ok = routeReadbacks.every((entry) => entry.status === 200 && entry.html && entry.shellMarker && entry.dummyCockpitMarker && entry.workMarker && entry.registeredNavigationOnly && entry.registeredBrandLockup && entry.productShellBoundary && entry.packageBackedShellControls && entry.strictRegisteredSurface && entry.plannedPrimaryHits.length === 0 && entry.forbiddenBrandHits.length === 0)
     && asset.status === 200
     && (asset.headers.get("content-type") ?? "").includes("image/svg+xml")
     && forbiddenAssetReadbacks.every((entry) => entry.status === 404)
@@ -207,6 +245,7 @@ try {
       productShellBoundary: "ProductShell/useProductShellController/ProductShellSearch",
       localWrapperEventDelegation: false,
       localShellEffectClones: false,
+      visibleClassNamespace: "DS-owned tcrn-* only under product shell content",
       themeControl: "compact_icon_only_explicit_toggle",
       themeTransition: "ds_product_shell_controller",
       localeSelector: "globe_trigger_native_names_with_escape_outside_selection_close",
@@ -299,37 +338,15 @@ async function runBrowserProof(baseUrl) {
     assert.equal(await desktopPage.locator("html").getAttribute("data-tcrn-theme"), "light", "default theme is light");
     assert.equal(await desktopPage.locator("html").getAttribute("lang"), "en", "default locale is en");
 
-    const bannerReadback = await desktopPage.locator('[data-aos-proof-banner-stack="spaced"]').evaluate((stack) => {
-      const environmentBanner = stack.querySelector(".tcrn-environment-banner");
-      const alert = stack.querySelector("[data-aos-no-overclaim-banner]");
-      const environmentStyle = environmentBanner ? getComputedStyle(environmentBanner) : null;
-      const alertStyle = alert ? getComputedStyle(alert) : null;
-      const environmentRect = environmentBanner?.getBoundingClientRect();
-      const alertRect = alert?.getBoundingClientRect();
-      const environmentLabelRect = environmentBanner?.querySelector("strong")?.getBoundingClientRect();
-      const environmentCopyRect = environmentBanner?.querySelector("span")?.getBoundingClientRect();
-      const alertLabelRect = alert?.querySelector("strong")?.getBoundingClientRect();
-      const alertCopyRect = alert?.querySelector(".aos-alert-copy")?.getBoundingClientRect();
-      return {
-        text: stack.innerText ?? "",
-        environmentDisplay: environmentStyle?.display,
-        environmentColumnGap: environmentStyle?.columnGap,
-        environmentVisualGap: environmentLabelRect && environmentCopyRect ? environmentCopyRect.left - environmentLabelRect.right : 0,
-        alertDisplay: alertStyle?.display,
-        alertColumnGap: alertStyle?.columnGap,
-        alertVisualGap: alertLabelRect && alertCopyRect ? alertCopyRect.left - alertLabelRect.right : 0,
-        verticalGap: environmentRect && alertRect ? alertRect.top - environmentRect.bottom : 0
-      };
-    });
-    assert.equal(bannerReadback.text.includes("sliceLocal"), false, "environment banner text is not concatenated");
-    assert.equal(bannerReadback.text.includes("onlyLocal"), false, "alert text is not concatenated");
-    assert.equal(bannerReadback.environmentDisplay, "grid", "environment banner uses explicit product spacing grid");
-    assert.equal(bannerReadback.alertDisplay, "grid", "alert banner uses explicit product spacing grid");
-    assert.equal(parseFloat(bannerReadback.environmentColumnGap) >= 8, true, "environment banner has visible column gap");
-    assert.equal(parseFloat(bannerReadback.alertColumnGap) >= 8, true, "alert banner has visible column gap");
-    assert.equal(bannerReadback.environmentVisualGap >= 8, true, "environment label and state are visibly separated");
-    assert.equal(bannerReadback.alertVisualGap >= 8, true, "alert label and copy are visibly separated");
-    assert.equal(bannerReadback.verticalGap >= 8, true, "proof banners have visible vertical spacing");
+    const desktopContentReadback = await inspectContentRegion(desktopPage);
+    assert.deepEqual(desktopContentReadback.aosClassHits, [], "desktop content region has no AOS-local visible class namespace");
+    assert.deepEqual(desktopContentReadback.storybookDemoClassHits, [], "desktop content region has no Storybook-only shell demo classes");
+    assert.equal(desktopContentReadback.environmentBannerVisible, true, "environment banner is rendered by DS");
+    assert.equal(desktopContentReadback.inlineAlertVisible, true, "no-overclaim alert is rendered by DS");
+    assert.equal(desktopContentReadback.text.includes("sliceLocal"), false, "environment banner text is not concatenated");
+    assert.equal(desktopContentReadback.text.includes("onlyLocal"), false, "alert text is not concatenated");
+    assert.equal(desktopContentReadback.bannerOverlap, false, "environment banner and alert do not overlap");
+    assert.equal(desktopContentReadback.dsOwnedClassCount > 0, true, "primary UX uses DS-owned tcrn-* classes");
 
     await desktopPage.screenshot({ path: `${screenshotRoot}/01-desktop-cockpit-default.png`, fullPage: false });
 
@@ -461,7 +478,7 @@ async function runBrowserProof(baseUrl) {
     for (const marker of forbiddenAosBrandAssetMarkers) {
       assert.equal(await desktopPage.locator("body").evaluate((body, value) => body.innerHTML.includes(value), marker), false, `${marker} is not present in rendered browser DOM`);
     }
-    assert.equal(await desktopPage.locator(".aos-api-json").isVisible(), false, "raw JSON is not primary visible Cockpit UX");
+    assert.equal(await desktopPage.locator("[data-api-summary]").isVisible(), false, "raw JSON is not primary visible Cockpit UX");
     assert.equal(await desktopPage.locator('[data-raw-json-disclosure="secondary"]').isVisible(), true, "raw payload is available only through secondary disclosure");
 
     const desktopOverflow = await desktopPage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
@@ -473,7 +490,9 @@ async function runBrowserProof(baseUrl) {
     assert.equal(await desktopPage.locator("html").getAttribute("data-tcrn-theme"), "dark", "dark theme query applies");
     assert.equal(await desktopPage.locator("html").getAttribute("lang"), "zh-CN", "zh-CN locale query applies");
     assert.equal(await desktopPage.locator('[data-product-shell-route="work"]').getAttribute("aria-current"), "page", "active work route is marked in dark proof");
-    const warningContrast = await desktopPage.locator("[data-aos-no-overclaim-banner]").evaluate((node) => {
+    const darkContentReadback = await inspectContentRegion(desktopPage);
+    assert.deepEqual(darkContentReadback.aosClassHits, [], "dark work content region has no AOS-local visible classes");
+    const warningContrast = await desktopPage.locator(".tcrn-inline-alert--warning").evaluate((node) => {
       function parseRgb(value) {
         const match = value.match(/rgba?\(([^)]+)\)/);
         if (!match) return [0, 0, 0];
@@ -516,9 +535,12 @@ async function runBrowserProof(baseUrl) {
     assert.equal(await mobilePage.locator('[data-product-shell-route="work"]').getAttribute("aria-current"), "page", "mobile active work route is preserved");
     assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "mobile first viewport starts with navigation collapsed");
     assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-product-shell-responsive"), "desktop-attached-mobile-stacked", "mobile uses DS product shell responsive posture");
-    const mobileHeadingTop = await mobilePage.locator("#aos-overview-heading").evaluate((node) => node.getBoundingClientRect().top);
-    const mobileProofStackTop = await mobilePage.locator('[data-aos-proof-banner-stack="spaced"]').evaluate((node) => node.getBoundingClientRect().top);
-    assert.equal(mobileProofStackTop < 560, true, "mobile first viewport reaches proof/readback content after the DS shell controls");
+    const mobileContentReadback = await inspectContentRegion(mobilePage);
+    assert.deepEqual(mobileContentReadback.aosClassHits, [], "mobile content region has no AOS-local visible classes");
+    assert.deepEqual(mobileContentReadback.storybookDemoClassHits, [], "mobile content region has no Storybook-only shell demo classes");
+    const mobileHeadingTop = await mobilePage.locator("#shell-overview-heading").evaluate((node) => node.getBoundingClientRect().top);
+    const mobileEnvironmentTop = await mobilePage.locator(".tcrn-environment-banner").evaluate((node) => node.getBoundingClientRect().top);
+    assert.equal(mobileEnvironmentTop < 560, true, "mobile first viewport reaches proof/readback content after the DS shell controls");
     assert.equal(mobileHeadingTop < 760, true, "mobile first viewport reaches the main shell heading within the DS stacked shell posture");
     await mobilePage.screenshot({ path: `${screenshotRoot}/04-mobile-work-dark.png`, fullPage: false });
     await mobilePage.locator("[data-side-nav-toggle]").click();
@@ -551,6 +573,7 @@ async function runBrowserProof(baseUrl) {
         brandAssetVisible: true,
         plannedModuleNavigationAbsent: true,
         rawJsonNotPrimary: true,
+        strictRegisteredSurfaceContentClasses: true,
         lightDarkThemeReadabilityChecked: true,
         mobileNavigationCompactFirstViewport: true,
         desktopMobileOverflowChecked: true
@@ -565,6 +588,41 @@ async function runBrowserProof(baseUrl) {
   } finally {
     await browser.close();
   }
+}
+
+async function inspectContentRegion(page) {
+  return page.locator('[data-product-shell-region="content"]').evaluate((content) => {
+    const classedNodes = Array.from(content.querySelectorAll("[class]"));
+    const aosClassHits = [];
+    const storybookDemoClassHits = [];
+    let dsOwnedClassCount = 0;
+    for (const node of classedNodes) {
+      for (const className of Array.from(node.classList)) {
+        if (className.startsWith("aos-")) {
+          aosClassHits.push({ tagName: node.tagName.toLowerCase(), className });
+        }
+        if (/^tcrn-(shell-demo|compact-shell|knowledge-shell)/.test(className)) {
+          storybookDemoClassHits.push({ tagName: node.tagName.toLowerCase(), className });
+        }
+        if (className.startsWith("tcrn-")) {
+          dsOwnedClassCount += 1;
+        }
+      }
+    }
+    const environmentBanner = content.querySelector(".tcrn-environment-banner");
+    const inlineAlert = content.querySelector(".tcrn-inline-alert--warning");
+    const environmentRect = environmentBanner?.getBoundingClientRect();
+    const alertRect = inlineAlert?.getBoundingClientRect();
+    return {
+      text: content.innerText ?? "",
+      aosClassHits,
+      storybookDemoClassHits,
+      dsOwnedClassCount,
+      environmentBannerVisible: Boolean(environmentRect && environmentRect.width > 0 && environmentRect.height > 0),
+      inlineAlertVisible: Boolean(alertRect && alertRect.width > 0 && alertRect.height > 0),
+      bannerOverlap: Boolean(environmentRect && alertRect && alertRect.top < environmentRect.bottom && alertRect.bottom > environmentRect.top)
+    };
+  });
 }
 
 function loadPlaywrightChromium() {

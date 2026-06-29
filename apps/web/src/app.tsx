@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
   Badge,
+  DisclosurePanel,
   EnvironmentBanner,
   EvidenceStrip,
   Heading,
@@ -89,7 +90,7 @@ export function renderAosShellHtml(): string {
   const appHtml = renderToStaticMarkup(<AosShellApp />);
 
   return `<!doctype html>
-<html lang="en" data-tcrn-theme="light" data-aos-locale="${tcrnDefaultLocale}" data-aos-shell-html="true">
+<html lang="en" data-tcrn-theme="light" data-current-locale="${tcrnDefaultLocale}" data-product-shell-html="true">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -100,11 +101,11 @@ export function renderAosShellHtml(): string {
     <link rel="icon" href="/assets/tcrn-brand-mark.svg" type="image/svg+xml" />
     <style data-tcrn-token-source="@tcrn/ui-tokens">${tcrnTokenCss}</style>
     <style data-tcrn-component-style-source="@tcrn/ui-react">${tcrnComponentCss}</style>
-    <style data-aos-shell-style="product-content-glue">${createShellCss()}</style>
+    <style data-product-document-baseline="tcrn-token-inheritance">${createDocumentCss()}</style>
   </head>
-  <body data-aos-shell-body="first-frontend-slice" data-product-acceptance="not-claimed" data-release-readiness="not-claimed" data-live-dispatch="not-enabled">
+  <body data-product-shell-body="first-frontend-slice" data-product-acceptance="not-claimed" data-release-readiness="not-claimed" data-live-dispatch="not-enabled">
     <div id="aos-root">${appHtml}</div>
-    <script type="module" src="/assets/aos-client.js" data-aos-shell-client="ds-product-shell-semantic-boundary"></script>
+    <script type="module" src="/assets/aos-client.js" data-product-shell-client="ds-product-shell-semantic-boundary"></script>
   </body>
 </html>`;
 }
@@ -215,6 +216,8 @@ export function AosShellApp() {
   const currentLocale = resolveLocale(controller.locale);
   const currentCopy = localeCopy[currentLocale] ?? localeCopy.en;
   const shellSearchPlaceholder = currentCopy.shellSearch ?? localeCopy.en.shellSearch ?? "Search modules, work items, or proof";
+  const dummyCockpitLabel = currentCopy.dummyCockpit ?? localeCopy.en.dummyCockpit ?? "Dummy Cockpit";
+  const workModuleLabel = currentCopy.workModule ?? localeCopy.en.workModule ?? "Work module entry";
   const navGroups: ProductShellNavGroup[] = [
     {
       id: "registered-shell-entries",
@@ -233,7 +236,6 @@ export function AosShellApp() {
   return (
     <ProductShell
       {...controller.productShellControlProps}
-      className="aos-product-shell"
       productName="AOS Rebuild Workspace"
       moduleName="Frontend shell slice"
       brandSuffix="AOS"
@@ -262,79 +264,69 @@ export function AosShellApp() {
       data-storybook-contract-consumed="product-shell-semantic-boundary"
       data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"
       data-local-wrapper-event-delegation="absent"
-      data-aos-local-shell-effect-clones="removed"
+      data-local-shell-effect-clones="removed"
       data-cockpit-aggregation="deferred"
       data-aos-registered-module-boundary="cockpit-work-only"
       data-search-activation-readback={lastSearchResult}
       data-current-path={currentPath}
     >
-      <div className="aos-content">
-        <div className="aos-proof-stack" data-aos-proof-banner-stack="spaced">
-          <EnvironmentBanner label="AOS frontend shell slice" state={{ state: "local_only" }} />
-          <InlineAlert tone="warning" className="aos-no-overclaim" data-aos-no-overclaim-banner="true">
-            <strong>{currentCopy.localOnly}</strong>
-            <span className="aos-alert-copy">
-              {currentCopy.noOverclaim}
-            </span>
-          </InlineAlert>
-        </div>
+      <EnvironmentBanner label="AOS frontend shell slice" state={{ state: "local_only" }} />
+      <InlineAlert tone="warning">
+        <strong>{currentCopy.localOnly}</strong>
+        <span>{currentCopy.noOverclaim}</span>
+      </InlineAlert>
 
-        <section className="aos-overview" aria-labelledby="aos-overview-heading" data-current-path-overview="true">
-          <div>
-            <Heading level={1} id="aos-overview-heading">AOS frontend shell</Heading>
-            <Text>
-              First implementation slice: DS ProductShell navigation, package-owned shell controls, i18n/theme posture, API readbacks, dummy Cockpit, and the Work entry.
-            </Text>
-          </div>
-          <div className="aos-status-grid" aria-label="Runtime readbacks">
-            <MetricCard label="Runtime" value={apiReadback.metrics.runtime} marker="runtime" />
-            <MetricCard label="Stories" value={apiReadback.metrics.stories} marker="stories" />
-            <MetricCard label="Gates" value={apiReadback.metrics.gates} marker="gates" />
-            <MetricCard label="Audit events" value={apiReadback.metrics.auditEvents} marker="auditEvents" />
-          </div>
-        </section>
+      <ReadbackPanel title="AOS frontend shell">
+        <Heading level={1} id="shell-overview-heading">AOS frontend shell</Heading>
+        <Text>
+          First implementation slice: DS ProductShell navigation, package-owned shell controls, i18n/theme posture, API readbacks, dummy Cockpit, and the Work entry.
+        </Text>
+        <KeyValueList
+          items={[
+            { key: "runtime", label: "Runtime", value: <span data-metric-value="runtime">{apiReadback.metrics.runtime}</span> },
+            { key: "stories", label: "Stories", value: <span data-metric-value="stories">{apiReadback.metrics.stories}</span> },
+            { key: "gates", label: "Gates", value: <span data-metric-value="gates">{apiReadback.metrics.gates}</span> },
+            { key: "auditEvents", label: "Audit events", value: <span data-metric-value="auditEvents">{apiReadback.metrics.auditEvents}</span> }
+          ]}
+        />
+        <EvidenceStrip items={["registered DS surfaces", "ProductShell boundary", "Cockpit + Work only"]} />
+      </ReadbackPanel>
 
-        <section id="cockpit" className="aos-section" data-aos-dummy-cockpit="true" aria-labelledby="cockpit-heading">
-          <div className="aos-section-heading">
-            <Heading level={2} id="cockpit-heading">{currentCopy.dummyCockpit}</Heading>
-            <Badge tone="warning">structural placeholder</Badge>
-          </div>
-          <div className="aos-cockpit-grid">
-            <ReadbackPanel title="Operational posture">
-              <KeyValueList
-                items={[
-                  { key: "queue", label: "External queue", value: "none" },
-                  { key: "dispatch", label: "Live dispatch", value: "not enabled" },
-                  { key: "acceptance", label: "Product acceptance", value: "not claimed" },
-                  { key: "release", label: "Release readiness", value: "not claimed" }
-                ]}
-              />
-              <EvidenceStrip items={["local fixture", "dummy Cockpit only", "no live dispatch"]} />
-            </ReadbackPanel>
-            <ReadbackPanel title="Backend readback">
-              <p className="aos-api-state" data-api-state>{apiReadback.statusText}</p>
-              <KeyValueList
-                items={[
-                  { key: "runtime", label: "Runtime", value: <span data-api-runtime>{apiReadback.runtime}</span> },
-                  { key: "queue", label: "External queue", value: <span data-api-queue>{apiReadback.queue}</span> },
-                  { key: "policy", label: "Policy", value: <span data-api-policy>{apiReadback.policy}</span> },
-                  { key: "readback", label: "Readback counts", value: <span data-api-counts>{apiReadback.counts}</span> }
-                ]}
-              />
-              <EvidenceStrip items={["/api/health", "/api/readback", "/api/policy"]} />
-              <details className="aos-debug-disclosure" data-raw-json-disclosure="secondary">
-                <summary>Technical API payload</summary>
-                <pre className="aos-api-json" data-api-summary>{JSON.stringify(apiReadback.summary, null, 2)}</pre>
-              </details>
-            </ReadbackPanel>
-          </div>
-        </section>
+      <section id="cockpit" data-aos-dummy-cockpit="true" aria-labelledby="cockpit-heading">
+        <ReadbackPanel title={dummyCockpitLabel}>
+          <Heading level={2} id="cockpit-heading">{dummyCockpitLabel}</Heading>
+          <Badge tone="warning">structural placeholder</Badge>
+          <KeyValueList
+            items={[
+              { key: "queue", label: "External queue", value: "none" },
+              { key: "dispatch", label: "Live dispatch", value: "not enabled" },
+              { key: "acceptance", label: "Product acceptance", value: "not claimed" },
+              { key: "release", label: "Release readiness", value: "not claimed" }
+            ]}
+          />
+          <EvidenceStrip items={["local fixture", "dummy Cockpit only", "no live dispatch"]} />
+        </ReadbackPanel>
+        <ReadbackPanel title="Backend readback">
+          <Text data-api-state>{apiReadback.statusText}</Text>
+          <KeyValueList
+            items={[
+              { key: "runtime", label: "Runtime", value: <span data-api-runtime>{apiReadback.runtime}</span> },
+              { key: "queue", label: "External queue", value: <span data-api-queue>{apiReadback.queue}</span> },
+              { key: "policy", label: "Policy", value: <span data-api-policy>{apiReadback.policy}</span> },
+              { key: "readback", label: "Readback counts", value: <span data-api-counts>{apiReadback.counts}</span> }
+            ]}
+          />
+          <EvidenceStrip items={["/api/health", "/api/readback", "/api/policy"]} />
+          <DisclosurePanel expanded={false} title="Technical API payload" data-raw-json-disclosure="secondary">
+            <pre hidden data-api-summary>{JSON.stringify(apiReadback.summary, null, 2)}</pre>
+          </DisclosurePanel>
+        </ReadbackPanel>
+      </section>
 
-        <section id="work" className="aos-section" data-aos-work-module-entry="jira-like" aria-labelledby="work-heading">
-          <div className="aos-section-heading">
-            <Heading level={2} id="work-heading">{currentCopy.workModule}</Heading>
-            <Badge tone="neutral">fixture-safe rows</Badge>
-          </div>
+      <section id="work" data-aos-work-module-entry="jira-like" aria-labelledby="work-heading">
+        <ReadbackPanel title={workModuleLabel}>
+          <Heading level={2} id="work-heading">{workModuleLabel}</Heading>
+          <Badge tone="neutral">fixture-safe rows</Badge>
           <TableShell
             label="AOS work module entry"
             columns={[
@@ -356,13 +348,13 @@ export function AosShellApp() {
               state: <StatusBadge state={{ state: row.state }} />
             }))}
           />
-        </section>
+        </ReadbackPanel>
+      </section>
 
-        <section className="aos-section" aria-labelledby="slice-boundary-heading" data-aos-registered-module-boundary="cockpit-work-only">
-          <div className="aos-section-heading">
-            <Heading level={2} id="slice-boundary-heading">Registered slice boundary</Heading>
-            <Badge tone="neutral">Cockpit + Work only</Badge>
-          </div>
+      <section aria-labelledby="slice-boundary-heading" data-aos-registered-module-boundary="cockpit-work-only">
+        <ReadbackPanel title="Registered slice boundary">
+          <Heading level={2} id="slice-boundary-heading">Registered slice boundary</Heading>
+          <Badge tone="neutral">Cockpit + Work only</Badge>
           <KeyValueList
             items={[
               { key: "visible-nav", label: "Visible primary navigation", value: "Cockpit and Work" },
@@ -371,18 +363,9 @@ export function AosShellApp() {
               { key: "acceptance", label: "Acceptance", value: "not claimed" }
             ]}
           />
-        </section>
-      </div>
+        </ReadbackPanel>
+      </section>
     </ProductShell>
-  );
-}
-
-function MetricCard({ label, value, marker }: { label: string; value: string; marker: string }) {
-  return (
-    <div className="aos-metric" data-metric={marker}>
-      <span>{label}</span>
-      <strong data-metric-value={marker}>{value}</strong>
-    </div>
   );
 }
 
@@ -436,10 +419,10 @@ function applyRootTheme(theme: "light" | "dark"): void {
 function applyRootLocale(locale: TcrnLocale): void {
   if (typeof document === "undefined") return;
   document.documentElement.lang = locale;
-  document.documentElement.dataset.aosLocale = locale;
+  document.documentElement.dataset.currentLocale = locale;
 }
 
-function createShellCss(): string {
+function createDocumentCss(): string {
   return `
 * { box-sizing: border-box; }
 html {
@@ -460,113 +443,5 @@ body {
 }
 a { color: inherit; }
 button, input { font: inherit; }
-.aos-content {
-  display: grid;
-  gap: 20px;
-  width: min(1180px, 100%);
-}
-.aos-proof-stack {
-  display: grid;
-  gap: 10px;
-}
-.aos-proof-stack .tcrn-environment-banner,
-.aos-no-overclaim {
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  align-items: center;
-  column-gap: 12px;
-  row-gap: 4px;
-}
-.aos-no-overclaim {
-  background: color-mix(in srgb, var(--tcrn-color-state-warning-bg), var(--tcrn-color-surface-panel) 20%);
-  border-color: color-mix(in srgb, var(--tcrn-color-state-warning), transparent 55%);
-  color: var(--tcrn-color-text-primary);
-}
-html[data-tcrn-theme="dark"] .aos-no-overclaim {
-  background: color-mix(in srgb, var(--tcrn-color-state-warning-bg), var(--tcrn-color-surface-panel) 24%);
-  color: var(--tcrn-color-text-primary);
-}
-.aos-alert-copy { min-width: 0; }
-.aos-overview {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
-  gap: 24px;
-  align-items: start;
-  padding: 8px 0 2px;
-}
-.aos-status-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-.aos-metric, .aos-section {
-  border: 1px solid var(--tcrn-color-border-subtle);
-  border-radius: 8px;
-  background: var(--tcrn-color-surface-panel);
-}
-.aos-metric {
-  display: grid;
-  gap: 6px;
-  min-height: 78px;
-  padding: 12px;
-}
-.aos-metric span { color: var(--tcrn-color-text-secondary); font-size: 12px; }
-.aos-metric strong { font-size: 20px; overflow-wrap: anywhere; }
-.aos-section {
-  display: grid;
-  gap: 14px;
-  padding: 18px;
-}
-.aos-section-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-.aos-cockpit-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  gap: 12px;
-}
-.aos-api-json {
-  max-height: 235px;
-  overflow: auto;
-  padding: 10px;
-  border-radius: 8px;
-  background: var(--tcrn-color-surface-muted);
-  font-size: 12px;
-  white-space: pre-wrap;
-}
-.aos-debug-disclosure {
-  margin-top: 12px;
-  border-top: 1px solid var(--tcrn-color-border-subtle);
-  padding-top: 10px;
-}
-.aos-debug-disclosure summary {
-  cursor: pointer;
-  color: var(--tcrn-color-text-secondary);
-  font-weight: 700;
-  font-size: 13px;
-}
-@media (max-width: 1080px) {
-  .aos-overview { grid-template-columns: 1fr; }
-}
-@media (max-width: 760px) {
-  .aos-content { width: 100%; }
-  .aos-overview, .aos-cockpit-grid { grid-template-columns: 1fr; }
-  .aos-section { padding: 14px; }
-}
-@media (max-width: 620px) {
-  .aos-status-grid { grid-template-columns: 1fr; }
-  .aos-proof-stack .tcrn-environment-banner,
-  .aos-no-overclaim { grid-template-columns: 1fr; align-items: start; }
-  .aos-section-heading { align-items: flex-start; flex-direction: column; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .aos-content *, .aos-content *::before, .aos-content *::after {
-    animation-duration: 1ms !important;
-    transition-duration: 1ms !important;
-    scroll-behavior: auto !important;
-  }
-}`;
+`;
 }
