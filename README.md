@@ -42,5 +42,6 @@ pnpm slice3:proof
 - Visible primary navigation is limited to the admitted shell entries: dummy Cockpit and Work. Planned modules are not registered product IA in this slice.
 - The visible product brand surface uses the registered Design System `ShellBrandLockup` and `tcrn-brand-mark.svg`; local AOS wordmark images and favicon assets are not emitted.
 - Shell behavior consumes the registered Design System `ProductShell`, `ProductShellSearch`, and `useProductShellController` semantic boundary; AOS supplies product IA/data/content and callback storage only.
+- Current parity proof maps AOS route states to the accepted DS Storybook visual-instance oracle `aos-frontend-shell-slice` (`components.html#aos-frontend-shell-slice`, DS `ff112982`); this is internal remediation evidence, not owner-visible readiness.
 - The locale menu, side navigation collapse, theme toggle, search, readback surfaces, mobile posture, and no-overclaim posture are covered by `pnpm aos:frontend-shell-proof`.
 - Scope boundary: dummy Cockpit only, no final aggregation API, no live dispatch, no external queue, no product acceptance, and no release-readiness claim.

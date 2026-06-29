@@ -48,7 +48,12 @@ test("local service serves the AOS shell while backend readbacks stay available"
       assert.equal(response.status, 200, `${target} serves the first shell slice`);
       assert.match(response.headers.get("content-type") ?? "", /text\/html/);
       assert.match(html, /data-aos-shell="first-frontend-slice"/);
+      assert.match(html, /data-storybook-visual-instance="aos-frontend-shell-slice"/);
+      assert.match(html, /data-visual-instance-name="AosFrontendShellSliceVisualInstance"/);
+      assert.match(html, /data-visual-instance-disposition="ds_oracle_review_required_before_owner_admission"/);
+      assert.match(html, /data-aos-visual-instance-oracle="true"/);
       assert.match(html, /data-design-system-source="@tcrn\/ui-react @tcrn\/ui-tokens @tcrn\/ui-copy-state"/);
+      assert.match(html, /data-storybook-visual-instance-consumed="aos-frontend-shell-slice"/);
       assert.match(html, /data-aos-dummy-cockpit="true"/);
       assert.match(html, /data-aos-work-module-entry="jira-like"/);
       assert.match(html, /data-aos-registered-module-boundary="cockpit-work-only"/);

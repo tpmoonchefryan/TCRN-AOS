@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
   Badge,
@@ -84,6 +84,17 @@ interface InitialShellState {
   locale: TcrnLocale;
   currentPath: string;
   lastSearchResult: string;
+  initialSearchQuery: string;
+  initialSearchExpanded: boolean;
+}
+
+type AosRouteId = "cockpit" | "work";
+type VisualInstanceSearchState = "rest" | "results";
+type VisualInstanceViewportState = "desktop" | "mobile";
+
+interface BrowserVisualState {
+  viewport: VisualInstanceViewportState;
+  reducedMotion: boolean;
 }
 
 export function renderAosShellHtml(): string {
@@ -112,9 +123,11 @@ export function renderAosShellHtml(): string {
 
 export function AosShellApp() {
   const initialShellState = useMemo(() => readInitialShellState(), []);
+  const initialSearchApplied = useRef(false);
   const [currentPath] = useState(initialShellState.currentPath);
   const [lastSearchResult, setLastSearchResult] = useState(initialShellState.lastSearchResult);
   const [apiReadback, setApiReadback] = useState<ApiReadbackState>(initialApiReadback);
+  const [browserVisualState, setBrowserVisualState] = useState<BrowserVisualState>(() => readBrowserVisualState());
 
   const currentRoute = resolveCurrentRoute(currentPath);
   const controller = useProductShellController({
@@ -142,12 +155,39 @@ export function AosShellApp() {
   });
 
   useEffect(() => {
+    if (initialSearchApplied.current) return;
+    initialSearchApplied.current = true;
+    if (!initialShellState.initialSearchQuery) return;
+    controller.setSearchQuery(initialShellState.initialSearchQuery);
+    controller.setSearchExpanded(initialShellState.initialSearchExpanded, "controller");
+  }, [controller.setSearchExpanded, controller.setSearchQuery, initialShellState.initialSearchExpanded, initialShellState.initialSearchQuery]);
+
+  useEffect(() => {
     applyRootTheme(controller.theme);
   }, [controller.theme]);
 
   useEffect(() => {
     applyRootLocale(resolveLocale(controller.locale));
   }, [controller.locale]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const viewportMedia = window.matchMedia("(max-width: 760px)");
+    const reducedMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updateVisualState = () => {
+      setBrowserVisualState({
+        viewport: viewportMedia.matches ? "mobile" : "desktop",
+        reducedMotion: reducedMotionMedia.matches
+      });
+    };
+    updateVisualState();
+    viewportMedia.addEventListener("change", updateVisualState);
+    reducedMotionMedia.addEventListener("change", updateVisualState);
+    return () => {
+      viewportMedia.removeEventListener("change", updateVisualState);
+      reducedMotionMedia.removeEventListener("change", updateVisualState);
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -215,17 +255,30 @@ export function AosShellApp() {
 
   const currentLocale = resolveLocale(controller.locale);
   const currentCopy = localeCopy[currentLocale] ?? localeCopy.en;
-  const shellSearchPlaceholder = currentCopy.shellSearch ?? localeCopy.en.shellSearch ?? "Search modules, work items, or proof";
-  const dummyCockpitLabel = currentCopy.dummyCockpit ?? localeCopy.en.dummyCockpit ?? "Dummy Cockpit";
-  const workModuleLabel = currentCopy.workModule ?? localeCopy.en.workModule ?? "Work module entry";
+  const currentRouteId = currentRoute.id as AosRouteId;
+  const searchState: VisualInstanceSearchState = controller.searchExpanded && controller.searchResults.length > 0 ? "results" : "rest";
+  const visualInstanceVariant = resolveVisualInstanceVariant({
+    route: currentRouteId,
+    theme: controller.theme,
+    locale: currentLocale,
+    collapsed: controller.collapsed,
+    searchState,
+    viewport: browserVisualState.viewport,
+    reducedMotion: browserVisualState.reducedMotion
+  });
+  const shellSearchPlaceholder = copyText(currentCopy, "shellSearch", "Search modules, work items, or proof");
+  const dummyCockpitLabel = copyText(currentCopy, "dummyCockpit", "Dummy Cockpit");
+  const workModuleLabel = copyText(currentCopy, "workModule", "Work module entry");
   const navGroups: ProductShellNavGroup[] = [
     {
       id: "registered-shell-entries",
-      label: "Registered shell entries",
+      label: copyText(currentCopy, "navGroupLabel", "Registered shell entries"),
       selected: true,
       items: shellNavItems.map((item) => ({
         id: item.id,
-        label: item.label,
+        label: item.id === "work"
+          ? copyText(currentCopy, "workLabel", item.label)
+          : copyText(currentCopy, "cockpitLabel", item.label),
         href: item.path,
         iconName: item.icon,
         selected: item.path === currentRoute.path
@@ -236,32 +289,53 @@ export function AosShellApp() {
   return (
     <ProductShell
       {...controller.productShellControlProps}
-      productName="AOS Rebuild Workspace"
-      moduleName="Frontend shell slice"
+      productName={copyText(currentCopy, "productName", "AOS Rebuild Workspace")}
+      moduleName={copyText(currentCopy, "moduleName", "Frontend shell slice")}
       brandSuffix="AOS"
-      brandCaption="Rebuild workspace"
+      brandCaption={copyText(currentCopy, "brandCaption", "Rebuild workspace")}
       brandMarkSrc="/assets/tcrn-brand-mark.svg"
       brandMarkAlt="TCRN registered brand mark"
-      currentRouteLabel={currentRoute.label}
-      navLabel="Registered AOS modules"
+      currentRouteLabel={currentRouteId === "work"
+        ? copyText(currentCopy, "workLabel", currentRoute.label)
+        : copyText(currentCopy, "cockpitLabel", currentRoute.label)}
+      navLabel={copyText(currentCopy, "navLabel", "Registered AOS modules")}
       navGroups={navGroups}
       locales={tcrnLocaleMetadata}
       collapsedStorageKey={sideNavStorageKey}
       contentId="content"
       contentRole="main"
-      contentLabel="AOS shell content"
-      skipLinkLabel="Skip to shell content"
+      contentLabel={copyText(currentCopy, "contentLabel", "AOS shell content")}
+      skipLinkLabel={copyText(currentCopy, "skipLink", "Skip to shell content")}
       search={{
         ...controller.productShellSearchProps,
-        label: "Search AOS shell",
+        label: copyText(currentCopy, "searchLabel", "Search AOS shell"),
         placeholder: shellSearchPlaceholder,
         shortcut: "auto",
-        resultsLabel: "AOS shell search results",
-        emptyLabel: "No local fixture results"
+        resultsLabel: copyText(currentCopy, "searchResults", "AOS shell search results"),
+        emptyLabel: copyText(currentCopy, "emptySearch", "No local fixture results")
       }}
       data-aos-shell="first-frontend-slice"
+      data-storybook-visual-instance="aos-frontend-shell-slice"
+      data-visual-instance-name="AosFrontendShellSliceVisualInstance"
+      data-visual-instance-disposition="ds_oracle_review_required_before_owner_admission"
+      data-visual-instance-style-source="@tcrn/ui-react/tcrnComponentCss"
+      data-visual-instance-slots="brand side-nav topbar search content secondary-disclosure"
+      data-visual-instance-primary-ia="cockpit-work-only"
+      data-visual-instance-negative-criteria="no-local-visible-css no-storybook-only-prototype no-raw-primary no-owner-readiness"
+      data-visual-instance-variant={visualInstanceVariant}
+      data-visual-instance-theme={controller.theme}
+      data-tcrn-theme={controller.theme}
+      data-visual-instance-locale={currentLocale}
+      data-visual-instance-collapsed={controller.collapsed ? "true" : "false"}
+      data-visual-instance-route={currentRouteId}
+      data-visual-instance-search={searchState}
+      data-visual-instance-viewport={browserVisualState.viewport}
+      data-visual-instance-reduced-motion={browserVisualState.reducedMotion ? "true" : "false"}
+      data-visual-instance-content={currentRouteId}
+      data-aos-visual-instance-oracle="true"
       data-design-system-source="@tcrn/ui-react @tcrn/ui-tokens @tcrn/ui-copy-state"
       data-storybook-contract-consumed="product-shell-semantic-boundary"
+      data-storybook-visual-instance-consumed="aos-frontend-shell-slice"
       data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"
       data-local-wrapper-event-delegation="absent"
       data-local-shell-effect-clones="removed"
@@ -270,116 +344,252 @@ export function AosShellApp() {
       data-search-activation-readback={lastSearchResult}
       data-current-path={currentPath}
     >
-      <EnvironmentBanner label="AOS frontend shell slice" state={{ state: "local_only" }} />
-      <InlineAlert tone="warning">
-        <strong>{currentCopy.localOnly}</strong>
-        <span>{currentCopy.noOverclaim}</span>
-      </InlineAlert>
-
-      <ReadbackPanel title="AOS frontend shell">
-        <Heading level={1} id="shell-overview-heading">AOS frontend shell</Heading>
-        <Text>
-          First implementation slice: DS ProductShell navigation, package-owned shell controls, i18n/theme posture, API readbacks, dummy Cockpit, and the Work entry.
-        </Text>
-        <KeyValueList
-          items={[
-            { key: "runtime", label: "Runtime", value: <span data-metric-value="runtime">{apiReadback.metrics.runtime}</span> },
-            { key: "stories", label: "Stories", value: <span data-metric-value="stories">{apiReadback.metrics.stories}</span> },
-            { key: "gates", label: "Gates", value: <span data-metric-value="gates">{apiReadback.metrics.gates}</span> },
-            { key: "auditEvents", label: "Audit events", value: <span data-metric-value="auditEvents">{apiReadback.metrics.auditEvents}</span> }
-          ]}
-        />
-        <EvidenceStrip items={["registered DS surfaces", "ProductShell boundary", "Cockpit + Work only"]} />
-      </ReadbackPanel>
-
-      <section id="cockpit" data-aos-dummy-cockpit="true" aria-labelledby="cockpit-heading">
-        <ReadbackPanel title={dummyCockpitLabel}>
-          <Heading level={2} id="cockpit-heading">{dummyCockpitLabel}</Heading>
-          <Badge tone="warning">structural placeholder</Badge>
-          <KeyValueList
-            items={[
-              { key: "queue", label: "External queue", value: "none" },
-              { key: "dispatch", label: "Live dispatch", value: "not enabled" },
-              { key: "acceptance", label: "Product acceptance", value: "not claimed" },
-              { key: "release", label: "Release readiness", value: "not claimed" }
-            ]}
-          />
-          <EvidenceStrip items={["local fixture", "dummy Cockpit only", "no live dispatch"]} />
-        </ReadbackPanel>
-        <ReadbackPanel title="Backend readback">
-          <Text data-api-state>{apiReadback.statusText}</Text>
-          <KeyValueList
-            items={[
-              { key: "runtime", label: "Runtime", value: <span data-api-runtime>{apiReadback.runtime}</span> },
-              { key: "queue", label: "External queue", value: <span data-api-queue>{apiReadback.queue}</span> },
-              { key: "policy", label: "Policy", value: <span data-api-policy>{apiReadback.policy}</span> },
-              { key: "readback", label: "Readback counts", value: <span data-api-counts>{apiReadback.counts}</span> }
-            ]}
-          />
-          <EvidenceStrip items={["/api/health", "/api/readback", "/api/policy"]} />
-          <DisclosurePanel expanded={false} title="Technical API payload" data-raw-json-disclosure="secondary">
-            <pre hidden data-api-summary>{JSON.stringify(apiReadback.summary, null, 2)}</pre>
-          </DisclosurePanel>
-        </ReadbackPanel>
-      </section>
-
-      <section id="work" data-aos-work-module-entry="jira-like" aria-labelledby="work-heading">
-        <ReadbackPanel title={workModuleLabel}>
-          <Heading level={2} id="work-heading">{workModuleLabel}</Heading>
-          <Badge tone="neutral">fixture-safe rows</Badge>
-          <TableShell
-            label="AOS work module entry"
-            columns={[
-              { key: "project", label: "Project" },
-              { key: "initiative", label: "Initiative" },
-              { key: "story", label: "Story" },
-              { key: "gate", label: "Gate" },
-              { key: "evidence", label: "Evidence" },
-              { key: "assignment", label: "Assignment" },
-              { key: "state", label: "State" }
-            ]}
-            rows={workModuleRows.map((row) => ({
-              project: row.project,
-              initiative: row.initiative,
-              story: row.story,
-              gate: row.gate,
-              evidence: row.evidence,
-              assignment: row.assignment,
-              state: <StatusBadge state={{ state: row.state }} />
-            }))}
-          />
-        </ReadbackPanel>
-      </section>
-
-      <section aria-labelledby="slice-boundary-heading" data-aos-registered-module-boundary="cockpit-work-only">
-        <ReadbackPanel title="Registered slice boundary">
-          <Heading level={2} id="slice-boundary-heading">Registered slice boundary</Heading>
-          <Badge tone="neutral">Cockpit + Work only</Badge>
-          <KeyValueList
-            items={[
-              { key: "visible-nav", label: "Visible primary navigation", value: "Cockpit and Work" },
-              { key: "alias-routes", label: "Legacy aliases", value: "served for compatibility, not registered IA" },
-              { key: "future-modules", label: "Future modules", value: "require separate owner route" },
-              { key: "acceptance", label: "Acceptance", value: "not claimed" }
-            ]}
-          />
-        </ReadbackPanel>
-      </section>
+      {currentRouteId === "cockpit" ? (
+        <>
+          <EnvironmentBanner label={copyText(currentCopy, "localOnly", "Local structural slice only")} state={{ state: "local_only" }} />
+          <InlineAlert tone="warning">
+            <strong>{copyText(currentCopy, "localOnly", "Local structural slice only")}</strong>
+            <span>{copyText(currentCopy, "noOverclaim", "Local fixture data only; no external queue, live dispatch, product acceptance, or release-readiness state is claimed.")}</span>
+          </InlineAlert>
+          <ReadbackPanel title={copyText(currentCopy, "shellOverview", "AOS frontend shell")}>
+            <Heading level={1} id="shell-overview-heading">{copyText(currentCopy, "shellOverview", "AOS frontend shell")}</Heading>
+            <Text>{copyText(currentCopy, "shellOverviewText", "This product surface consumes the accepted DS Storybook visual instance.")}</Text>
+            <KeyValueList
+              items={[
+                { key: "runtime", label: copyText(currentCopy, "runtime", "Runtime"), value: <span data-metric-value="runtime">{apiReadback.metrics.runtime}</span> },
+                { key: "stories", label: copyText(currentCopy, "stories", "Stories"), value: <span data-metric-value="stories">{apiReadback.metrics.stories}</span> },
+                { key: "gates", label: copyText(currentCopy, "gates", "Gates"), value: <span data-metric-value="gates">{apiReadback.metrics.gates}</span> },
+                { key: "auditEvents", label: copyText(currentCopy, "auditEvents", "Audit events"), value: <span data-metric-value="auditEvents">{apiReadback.metrics.auditEvents}</span> }
+              ]}
+            />
+            <EvidenceStrip items={[
+              currentLocale === "zh-CN" ? "已注册 DS 表面" : "registered DS surfaces",
+              "ProductShell boundary",
+              currentLocale === "zh-CN" ? "仅 Cockpit + Work" : "Cockpit + Work only"
+            ]} />
+          </ReadbackPanel>
+          {renderCockpitSection({ currentCopy, dummyCockpitLabel })}
+          {renderWorkSection({ currentCopy, workModuleLabel, currentLocale, apiReadback })}
+          {renderBoundarySection(currentCopy)}
+        </>
+      ) : (
+        <>
+          {renderWorkSection({ currentCopy, workModuleLabel, currentLocale, apiReadback })}
+          {renderCockpitSection({ currentCopy, dummyCockpitLabel })}
+          {renderBoundarySection(currentCopy)}
+        </>
+      )}
     </ProductShell>
   );
+}
+
+function renderCockpitSection({
+  currentCopy,
+  dummyCockpitLabel
+}: {
+  currentCopy: Record<string, string>;
+  dummyCockpitLabel: string;
+}) {
+  return (
+    <section id="cockpit" data-aos-dummy-cockpit="true" aria-labelledby="cockpit-heading">
+      <ReadbackPanel title={dummyCockpitLabel}>
+        <Heading level={2} id="cockpit-heading">{dummyCockpitLabel}</Heading>
+        <Badge tone="warning">{copyText(currentCopy, "structuralPlaceholder", "structural placeholder")}</Badge>
+        <KeyValueList
+          items={[
+            { key: "queue", label: copyText(currentCopy, "externalQueue", "External queue"), value: copyText(currentCopy, "none", "none") },
+            { key: "dispatch", label: copyText(currentCopy, "liveDispatch", "Live dispatch"), value: copyText(currentCopy, "notEnabled", "not enabled") },
+            { key: "acceptance", label: copyText(currentCopy, "productAcceptance", "Product acceptance"), value: copyText(currentCopy, "notClaimed", "not claimed") },
+            { key: "release", label: copyText(currentCopy, "releaseReadiness", "Release readiness"), value: copyText(currentCopy, "notClaimed", "not claimed") }
+          ]}
+        />
+        <EvidenceStrip items={[
+          copyText(currentCopy, "localFixture", "local fixture"),
+          copyText(currentCopy, "dummyCockpitOnly", "Dummy Cockpit only"),
+          copyText(currentCopy, "noLiveDispatch", "no live dispatch")
+        ]} />
+      </ReadbackPanel>
+    </section>
+  );
+}
+
+function renderWorkSection({
+  currentCopy,
+  workModuleLabel,
+  currentLocale,
+  apiReadback
+}: {
+  currentCopy: Record<string, string>;
+  workModuleLabel: string;
+  currentLocale: TcrnLocale;
+  apiReadback: ApiReadbackState;
+}) {
+  return (
+    <section id="work" data-aos-work-module-entry="jira-like" aria-labelledby="work-heading">
+      <ReadbackPanel title={workModuleLabel}>
+        <Heading level={2} id="work-heading">{workModuleLabel}</Heading>
+        <Badge tone="neutral">{copyText(currentCopy, "fixtureRows", "fixture-safe rows")}</Badge>
+        <TableShell
+          label={workModuleLabel}
+          columns={[
+            { key: "project", label: copyText(currentCopy, "project", "Project") },
+            { key: "initiative", label: copyText(currentCopy, "initiative", "Initiative") },
+            { key: "story", label: copyText(currentCopy, "story", "Story") },
+            { key: "gate", label: copyText(currentCopy, "gate", "Gate") },
+            { key: "evidence", label: copyText(currentCopy, "evidence", "Evidence") },
+            { key: "assignment", label: copyText(currentCopy, "assignment", "Assignment") },
+            { key: "state", label: copyText(currentCopy, "state", "State") }
+          ]}
+          rows={localizedWorkRows(currentLocale).map((row) => ({
+            project: row.project,
+            initiative: row.initiative,
+            story: row.story,
+            gate: row.gate,
+            evidence: row.evidence,
+            assignment: row.assignment,
+            state: <StatusBadge state={{ state: row.state }} />
+          }))}
+        />
+      </ReadbackPanel>
+      <ReadbackPanel title={copyText(currentCopy, "backendReadback", "Backend readback")}>
+        <Text data-api-state>{apiReadback.statusText}</Text>
+        <Text>{copyText(currentCopy, "backendReadbackText", "API readbacks use fixture-safe service summaries, not a primary raw JSON/debug surface.")}</Text>
+        <KeyValueList
+          items={[
+            { key: "runtime", label: copyText(currentCopy, "runtime", "Runtime"), value: <span data-api-runtime>{apiReadback.runtime}</span> },
+            { key: "queue", label: copyText(currentCopy, "externalQueue", "External queue"), value: <span data-api-queue>{apiReadback.queue}</span> },
+            { key: "policy", label: "Policy", value: <span data-api-policy>{apiReadback.policy}</span> },
+            { key: "readback", label: copyText(currentCopy, "readbackCounts", "Readback counts"), value: <span data-api-counts>{apiReadback.counts}</span> }
+          ]}
+        />
+        <EvidenceStrip items={["/api/health", "/api/readback", "/api/policy"]} />
+        <DisclosurePanel expanded={false} title={copyText(currentCopy, "technicalPayload", "Technical API payload")} data-raw-json-disclosure="secondary">
+          <pre hidden data-api-summary>{JSON.stringify(apiReadback.summary, null, 2)}</pre>
+        </DisclosurePanel>
+      </ReadbackPanel>
+    </section>
+  );
+}
+
+function renderBoundarySection(currentCopy: Record<string, string>) {
+  return (
+    <section aria-labelledby="slice-boundary-heading" data-aos-registered-module-boundary="cockpit-work-only">
+      <ReadbackPanel title={copyText(currentCopy, "registeredBoundary", "Registered slice boundary")}>
+        <Heading level={2} id="slice-boundary-heading">{copyText(currentCopy, "registeredBoundary", "Registered slice boundary")}</Heading>
+        <Badge tone="neutral">{copyText(currentCopy, "cockpitAndWork", "Cockpit and Work")}</Badge>
+        <KeyValueList
+          items={[
+            { key: "visible-nav", label: copyText(currentCopy, "visibleNavigation", "Visible primary navigation"), value: copyText(currentCopy, "cockpitAndWork", "Cockpit and Work") },
+            { key: "future-modules", label: copyText(currentCopy, "futureModules", "Future modules"), value: copyText(currentCopy, "separateOwnerRoute", "require separate owner route") },
+            { key: "raw-payload", label: copyText(currentCopy, "rawPayload", "Raw technical payload"), value: copyText(currentCopy, "secondaryDisclosureOnly", "secondary disclosure only") },
+            { key: "acceptance", label: copyText(currentCopy, "acceptance", "Acceptance"), value: copyText(currentCopy, "notClaimed", "not claimed") }
+          ]}
+        />
+      </ReadbackPanel>
+    </section>
+  );
+}
+
+function localizedWorkRows(locale: TcrnLocale) {
+  const copy = localeCopy[locale] ?? localeCopy.en;
+  if (locale !== "zh-CN") return workModuleRows;
+  return [
+    {
+      key: "aos-shell",
+      project: "TCRN-AOS",
+      initiative: copyText(copy, "frontendRecovery", "前端壳恢复"),
+      story: copyText(copy, "registeredShellSlice", "已注册壳切片"),
+      gate: copyText(copy, "dsVisualInstance", "DS 视觉实例"),
+      evidence: copyText(copy, "storybookParityProof", "Storybook 奇偶性证明"),
+      assignment: "Ilya",
+      state: "local_only" as const
+    },
+    {
+      key: "cockpit-final",
+      project: "TCRN-AOS",
+      initiative: copyText(copy, "cockpitStory", "驾驶舱"),
+      story: copyText(copy, "dummyCockpitOnly", "仅 Dummy Cockpit"),
+      gate: copyText(copy, "deferredAggregation", "聚合延后"),
+      evidence: copyText(copy, "noLiveDispatch", "无实时派发"),
+      assignment: copyText(copy, "productRoute", "产品路线"),
+      state: "proof_required" as const
+    },
+    {
+      key: "readback",
+      project: "TCRN-AOS",
+      initiative: copyText(copy, "runtimeReadbacks", "运行时读回"),
+      story: copyText(copy, "healthPolicyApi", "健康、策略、读回 API"),
+      gate: copyText(copy, "browserFetchFailClosed", "浏览器拉取失败关闭"),
+      evidence: "/api/health /api/readback /api/policy",
+      assignment: copyText(copy, "localFixture", "本地样例"),
+      state: "fixture_only" as const
+    }
+  ];
+}
+
+function copyText(copy: Record<string, string>, key: string, fallback: string): string {
+  return copy[key] ?? localeCopy.en[key] ?? fallback;
 }
 
 function readInitialShellState(): InitialShellState {
   const params = typeof window === "undefined" ? undefined : new URLSearchParams(window.location.search);
   const currentPath = typeof window === "undefined" ? "/cockpit" : window.location.pathname;
-  const mobileDefault = typeof window !== "undefined" && window.matchMedia("(max-width: 760px)").matches;
+  const collapsedFromQuery = params?.get("collapsed");
+  const initialSearchQuery = params?.get("search") ?? "";
   return {
-    collapsed: readStoredBoolean(sideNavStorageKey, mobileDefault),
+    collapsed: collapsedFromQuery === "true" ? true : collapsedFromQuery === "false" ? false : readStoredBoolean(sideNavStorageKey, false),
     theme: resolveTheme(params?.get("theme") ?? readBrowserStorage(themeStorageKey)),
     locale: resolveLocale(params?.get("locale") ?? readBrowserStorage(localeStorageKey)),
     currentPath,
-    lastSearchResult: readBrowserStorage(lastSearchResultStorageKey) ?? "none"
+    lastSearchResult: readBrowserStorage(lastSearchResultStorageKey) ?? "none",
+    initialSearchQuery,
+    initialSearchExpanded: initialSearchQuery.trim().length > 0
   };
+}
+
+function readBrowserVisualState(): BrowserVisualState {
+  if (typeof window === "undefined") {
+    return { viewport: "desktop", reducedMotion: false };
+  }
+  return {
+    viewport: window.matchMedia("(max-width: 760px)").matches ? "mobile" : "desktop",
+    reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  };
+}
+
+function resolveVisualInstanceVariant({
+  route,
+  theme,
+  locale,
+  collapsed,
+  searchState,
+  viewport,
+  reducedMotion
+}: {
+  route: AosRouteId;
+  theme: "light" | "dark";
+  locale: TcrnLocale;
+  collapsed: boolean;
+  searchState: VisualInstanceSearchState;
+  viewport: VisualInstanceViewportState;
+  reducedMotion: boolean;
+}): string {
+  if (reducedMotion && route === "cockpit" && theme === "light" && locale === "en" && !collapsed) {
+    return "reduced-motion";
+  }
+  if (viewport === "mobile" && route === "work" && theme === "dark" && locale === "zh-CN") {
+    return "mobile-dark-work-stacked";
+  }
+  if (route === "work" && theme === "light" && locale === "en" && collapsed) {
+    return "desktop-light-collapsed-work";
+  }
+  if (route === "cockpit" && theme === "dark" && locale === "en" && !collapsed) {
+    return "desktop-dark-expanded-cockpit";
+  }
+  if (route === "cockpit" && theme === "light" && locale === "en" && !collapsed && searchState === "results") {
+    return "desktop-light-expanded-cockpit-search-results";
+  }
+  return "aos-route-state-outside-accepted-oracle-matrix";
 }
 
 function resolveCurrentRoute(path: string): ShellNavItem {
