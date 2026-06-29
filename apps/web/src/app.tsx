@@ -32,6 +32,8 @@ const themeStorageKey = "tcrn-aos-theme";
 const localeStorageKey = "tcrn-aos-locale";
 const lastSearchResultStorageKey = "tcrn-aos-last-search-result";
 const defaultShellRoute = shellNavItems[0] as ShellNavItem;
+const defaultCockpitRestVariant = "desktop-light-expanded-cockpit-search-rest";
+const outsideAcceptedVisualInstanceMatrix = "aos-route-state-outside-accepted-oracle-matrix";
 
 const shellSearchRecords: ProductShellSearchResult[] = [
   ...shellNavItems.map((item) => ({
@@ -536,10 +538,17 @@ function readInitialShellState(): InitialShellState {
   const currentPath = typeof window === "undefined" ? "/cockpit" : window.location.pathname;
   const collapsedFromQuery = params?.get("collapsed");
   const initialSearchQuery = params?.get("search") ?? "";
+  const ownerReviewCockpitRestRoute = isOwnerReviewCockpitRestRoute(currentPath, params);
   return {
-    collapsed: collapsedFromQuery === "true" ? true : collapsedFromQuery === "false" ? false : readStoredBoolean(sideNavStorageKey, false),
-    theme: resolveTheme(params?.get("theme") ?? readBrowserStorage(themeStorageKey)),
-    locale: resolveLocale(params?.get("locale") ?? readBrowserStorage(localeStorageKey)),
+    collapsed: ownerReviewCockpitRestRoute
+      ? false
+      : collapsedFromQuery === "true"
+        ? true
+        : collapsedFromQuery === "false"
+          ? false
+          : readStoredBoolean(sideNavStorageKey, false),
+    theme: ownerReviewCockpitRestRoute ? "light" : resolveTheme(params?.get("theme") ?? readBrowserStorage(themeStorageKey)),
+    locale: ownerReviewCockpitRestRoute ? tcrnDefaultLocale : resolveLocale(params?.get("locale") ?? readBrowserStorage(localeStorageKey)),
     currentPath,
     lastSearchResult: readBrowserStorage(lastSearchResultStorageKey) ?? "none",
     initialSearchQuery,
@@ -574,22 +583,38 @@ function resolveVisualInstanceVariant({
   viewport: VisualInstanceViewportState;
   reducedMotion: boolean;
 }): string {
-  if (reducedMotion && route === "cockpit" && theme === "light" && locale === "en" && !collapsed) {
+  if (reducedMotion && viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en" && !collapsed) {
     return "reduced-motion";
   }
   if (viewport === "mobile" && route === "work" && theme === "dark" && locale === "zh-CN") {
     return "mobile-dark-work-stacked";
   }
-  if (route === "work" && theme === "light" && locale === "en" && collapsed) {
+  if (viewport === "desktop" && route === "work" && theme === "light" && locale === "en" && collapsed) {
     return "desktop-light-collapsed-work";
   }
-  if (route === "cockpit" && theme === "dark" && locale === "en" && !collapsed) {
+  if (viewport === "desktop" && route === "cockpit" && theme === "dark" && locale === "en" && !collapsed) {
     return "desktop-dark-expanded-cockpit";
   }
-  if (route === "cockpit" && theme === "light" && locale === "en" && !collapsed && searchState === "results") {
+  if (viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en" && !collapsed && searchState === "results") {
     return "desktop-light-expanded-cockpit-search-results";
   }
-  return "aos-route-state-outside-accepted-oracle-matrix";
+  if (viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en" && !collapsed && searchState === "rest") {
+    return defaultCockpitRestVariant;
+  }
+  return outsideAcceptedVisualInstanceMatrix;
+}
+
+function isOwnerReviewCockpitRestRoute(path: string, params: URLSearchParams | undefined): boolean {
+  const route = resolveCurrentRoute(path).id;
+  if (route !== "cockpit") return false;
+  const theme = params?.get("theme") ?? null;
+  const locale = params?.get("locale") ?? null;
+  const collapsed = params?.get("collapsed") ?? null;
+  const search = params?.get("search")?.trim() ?? "";
+  if (search !== "") return false;
+  return (theme === null || theme === "light")
+    && (locale === null || locale === tcrnDefaultLocale)
+    && (collapsed === null || collapsed === "false");
 }
 
 function resolveCurrentRoute(path: string): ShellNavItem {

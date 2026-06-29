@@ -110,6 +110,28 @@ const acceptedVisualInstanceOracle = {
       }
     },
     {
+      id: "desktop-light-expanded-cockpit-search-rest",
+      dsSelector: '[data-storybook-visual-instance="aos-frontend-shell-slice"][data-visual-instance-variant="desktop-light-expanded-cockpit-search-rest"]',
+      aosPath: "/cockpit?locale=en&theme=light",
+      viewport: { width: 1440, height: 900 },
+      colorScheme: "light",
+      locale: "en",
+      reducedMotion: "no-preference",
+      expectedState: {
+        theme: "light",
+        locale: "en",
+        collapsed: "false",
+        route: "cockpit",
+        selectedRoute: "cockpit",
+        search: "rest",
+        searchExpanded: "false",
+        searchResultsVisible: "false",
+        viewport: "desktop",
+        reducedMotion: "false",
+        content: "cockpit"
+      }
+    },
+    {
       id: "desktop-dark-expanded-cockpit",
       dsSelector: '[data-storybook-visual-instance="aos-frontend-shell-slice"][data-visual-instance-variant="desktop-dark-expanded-cockpit"]',
       aosPath: "/cockpit?locale=en&theme=dark&collapsed=false",
@@ -198,7 +220,23 @@ const acceptedVisualInstanceOracle = {
         content: "cockpit"
       }
     }
-  ]
+  ],
+  persistedCockpitRestPolicy: {
+    defaultCockpitRestVariant: "desktop-light-expanded-cockpit-search-rest",
+    coveredOwnerReachableRoutes: [
+      "/",
+      "/cockpit",
+      "/cockpit?locale=en&theme=light",
+      "post-search-dismissal:/cockpit?locale=en&theme=light&collapsed=false&search=shell"
+    ],
+    outsideMatrixMarkerForbiddenForOwnerReview: "aos-route-state-outside-accepted-oracle-matrix",
+    notAutomaticallyAdmitted: [
+      "zh-CN Cockpit rest",
+      "collapsed Cockpit rest",
+      "dark zh-CN Cockpit rest",
+      "mobile Cockpit rest"
+    ]
+  }
 };
 
 const missingMarkers = requiredMarkers.filter((marker) => !html.includes(marker));
@@ -375,7 +413,7 @@ try {
       localWrapperEventDelegation: false,
       localShellEffectClones: false,
       visibleClassNamespace: "DS-owned tcrn-* only under product shell content",
-      storybookComparator: "components.html#aos-frontend-shell-slice accepted AOS visual-instance oracle",
+      storybookComparator: "components.html#aos-frontend-shell-slice accepted AOS visual-instance oracle on DS 1531f96",
       designSystemVisualInstanceParityDisposition: "aos_routes_mapped_to_accepted_storybook_visual_instance_oracle",
       themeControl: "compact_icon_only_explicit_toggle",
       themeTransition: "ds_product_shell_controller",
@@ -454,6 +492,7 @@ async function runBrowserProof(baseUrl) {
   try {
     const visualInstanceParityProof = await runVisualInstanceParityProof(browser, baseUrl, dsComparatorServer.url);
     const visualComparatorProof = visualInstanceParityProof.productShellComparatorReadback;
+    const ownerReachableRouteMatrixReadback = await runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessages, pageErrors, requestFailures);
 
     const desktopContext = await browser.newContext({
       viewport: { width: 1440, height: 900 },
@@ -540,11 +579,14 @@ async function runBrowserProof(baseUrl) {
     const collapsedSideNavWidth = await desktopPage.locator(".tcrn-product-shell__sidebar").evaluate((node) => node.getBoundingClientRect().width);
     assert.equal(collapsedSideNavWidth < expandedSideNavWidth - 90, true, "collapsed side nav has a deliberate narrower visual state");
     await desktopPage.screenshot({ path: `${screenshotRoot}/02-desktop-cockpit-collapsed.png`, fullPage: false });
-    await desktopPage.reload({ waitUntil: "networkidle" });
-    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "side nav collapse survives reload");
+    await desktopPage.goto(`${baseUrl}/work?locale=en&theme=light`, { waitUntil: "networkidle" });
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "side nav collapse persists outside owner-review Cockpit rest routes");
     assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("aria-expanded"), "false", "side nav toggle reflects persisted collapse");
+    assert.equal(await desktopPage.locator('[data-product-shell-route="work"]').getAttribute("aria-current"), "page", "active work route is preserved while collapsed");
     await desktopPage.locator("[data-side-nav-toggle]").click();
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "side nav expands");
+    await desktopPage.goto(`${baseUrl}/cockpit?locale=en&theme=light`, { waitUntil: "networkidle" });
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "owner-review Cockpit rest route remains expanded after persistence check");
 
     const searchWrap = desktopPage.locator('[data-shell-control="product-shell-search"]');
     const searchInput = desktopPage.locator('.tcrn-product-shell-search input[type="search"]');
@@ -689,16 +731,18 @@ async function runBrowserProof(baseUrl) {
     assert.deepEqual(relevantConsoleMessages, [], "browser console warnings/errors are absent");
 
     return {
-      ok: visualInstanceParityProof.ok,
+      ok: visualInstanceParityProof.ok && ownerReachableRouteMatrixReadback.ok,
       runner: source,
       browserExecutable: executablePath ? "local_chrome" : "playwright_default",
       dsStorybookComparatorProof: visualComparatorProof,
       designSystemVisualInstanceParityDisposition: "aos_routes_mapped_to_accepted_storybook_visual_instance_oracle",
       designSystemVisualInstanceParityReadback: visualInstanceParityProof,
+      ownerReachableRouteMatrixReadback,
       viewports: ["desktop-1440x900", "mobile-390x844"],
       checks: {
         renderedMetricParityAgainstDsStorybook: visualInstanceParityProof.ok,
         motionParityAgainstDsStorybook: visualInstanceParityProof.motionParityOk,
+        ownerReachableRoutesInsideAcceptedMatrix: ownerReachableRouteMatrixReadback.ok,
         bannerSpacingNoConcatenation: true,
         localeOutsideDismissal: true,
         localeEscapeDismissalFocusReturn: true,
@@ -725,6 +769,118 @@ async function runBrowserProof(baseUrl) {
   } finally {
     await browser.close();
     await dsComparatorServer.close();
+  }
+}
+
+async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessages, pageErrors, requestFailures) {
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    colorScheme: "light",
+    locale: "en",
+    timezoneId: "UTC",
+    reducedMotion: "no-preference",
+    deviceScaleFactor: 1
+  });
+  await context.addInitScript(() => {
+    window.localStorage.setItem("tcrn-aos-side-nav-collapsed", "true");
+    window.localStorage.setItem("tcrn-aos-theme", "dark");
+    window.localStorage.setItem("tcrn-aos-locale", "zh-CN");
+  });
+
+  const reviewedRoutes = [
+    {
+      id: "root",
+      path: "/",
+      expectedVariant: acceptedVisualInstanceOracle.persistedCockpitRestPolicy.defaultCockpitRestVariant
+    },
+    {
+      id: "cockpit",
+      path: "/cockpit",
+      expectedVariant: acceptedVisualInstanceOracle.persistedCockpitRestPolicy.defaultCockpitRestVariant
+    },
+    {
+      id: "cockpit-light-query",
+      path: "/cockpit?locale=en&theme=light",
+      expectedVariant: acceptedVisualInstanceOracle.persistedCockpitRestPolicy.defaultCockpitRestVariant
+    },
+    {
+      id: "post-search-dismissal",
+      path: "/cockpit?locale=en&theme=light&collapsed=false&search=shell",
+      expectedVariant: acceptedVisualInstanceOracle.persistedCockpitRestPolicy.defaultCockpitRestVariant,
+      dismissSearch: true
+    }
+  ];
+  const readbacks = [];
+  try {
+    const page = await context.newPage();
+    capturePageHealth(page, consoleMessages, pageErrors, requestFailures);
+    for (const route of reviewedRoutes) {
+      await page.goto(`${baseUrl}${route.path}`, { waitUntil: "networkidle" });
+      await page.waitForSelector('[data-aos-shell="first-frontend-slice"]');
+      await page.waitForFunction(() => document.querySelector("[data-api-state]")?.textContent?.includes("available"));
+      if (route.dismissSearch) {
+        await page.waitForFunction(() => {
+          const layer = document.querySelector("[data-product-shell-search-results]");
+          return layer && !layer.hasAttribute("hidden") && layer.querySelector("[data-search-result]");
+        });
+        await clickStableContentPoint(page);
+        await page.waitForFunction(() => {
+          const layer = document.querySelector("[data-product-shell-search-results]");
+          return document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "false"
+            && layer?.hasAttribute("hidden") === true;
+        });
+      }
+      const readback = await page.locator('[data-aos-shell="first-frontend-slice"]').evaluate((root) => {
+        const searchWrapper = root.querySelector(".tcrn-product-shell-search");
+        const searchResults = root.querySelector("[data-product-shell-search-results]");
+        const selectedNavItem = root.querySelector(".tcrn-nav-item[aria-current=\"page\"], .tcrn-nav-item[data-selected=\"true\"]");
+        return {
+          variant: root.getAttribute("data-visual-instance-variant"),
+          theme: root.getAttribute("data-visual-instance-theme"),
+          locale: root.getAttribute("data-visual-instance-locale"),
+          collapsed: root.getAttribute("data-visual-instance-collapsed"),
+          route: root.getAttribute("data-visual-instance-route"),
+          selectedRoute: selectedNavItem?.getAttribute("data-product-shell-route") ?? null,
+          search: root.getAttribute("data-visual-instance-search"),
+          searchExpanded: searchWrapper?.getAttribute("data-search-expanded") ?? null,
+          searchResultsVisible: searchResults ? String(!searchResults.hasAttribute("hidden")) : "false",
+          viewport: root.getAttribute("data-visual-instance-viewport"),
+          reducedMotion: root.getAttribute("data-visual-instance-reduced-motion"),
+          content: root.getAttribute("data-visual-instance-content")
+        };
+      });
+      readbacks.push({
+        ...route,
+        readback
+      });
+      assert.notEqual(
+        readback.variant,
+        acceptedVisualInstanceOracle.persistedCockpitRestPolicy.outsideMatrixMarkerForbiddenForOwnerReview,
+        `${route.id} must not render outside accepted visual-instance matrix`
+      );
+      assert.equal(readback.variant, route.expectedVariant, `${route.id} maps to default Cockpit rest variant`);
+      assert.equal(readback.theme, "light", `${route.id} normalizes to light theme for owner-review proof`);
+      assert.equal(readback.locale, "en", `${route.id} normalizes to en locale for owner-review proof`);
+      assert.equal(readback.collapsed, "false", `${route.id} normalizes to expanded side nav for owner-review proof`);
+      assert.equal(readback.route, "cockpit", `${route.id} remains on Cockpit route`);
+      assert.equal(readback.search, "rest", `${route.id} lands in search rest state`);
+      assert.equal(readback.searchExpanded, "false", `${route.id} search is compact at rest`);
+      assert.equal(readback.searchResultsVisible, "false", `${route.id} search results are hidden at rest`);
+    }
+    return {
+      ok: true,
+      poisonedPersistedState: {
+        collapsed: "true",
+        theme: "dark",
+        locale: "zh-CN"
+      },
+      defaultCockpitRestVariant: acceptedVisualInstanceOracle.persistedCockpitRestPolicy.defaultCockpitRestVariant,
+      outsideMatrixMarkerForbiddenForOwnerReview: acceptedVisualInstanceOracle.persistedCockpitRestPolicy.outsideMatrixMarkerForbiddenForOwnerReview,
+      reviewedRoutes: readbacks,
+      notAutomaticallyAdmitted: acceptedVisualInstanceOracle.persistedCockpitRestPolicy.notAutomaticallyAdmitted
+    };
+  } finally {
+    await context.close();
   }
 }
 
@@ -807,7 +963,7 @@ async function runVisualInstanceParityProof(browser, aosBaseUrl, dsBaseUrl) {
       storyId: acceptedVisualInstanceOracle.storyId,
       page: acceptedVisualInstanceOracle.page,
       selector: acceptedVisualInstanceOracle.selector,
-      dsBasis: "TCRN-DESIGN-SYSTEM ff112982ed9ba75b696a1a39ec0d842a14484ad1",
+      dsBasis: "TCRN-DESIGN-SYSTEM 1531f96c0cfb2aacf570e2b1ffb9c0d8224605b2",
       ownerVisualAdmissionBoundary: "internal_ds_oracle_review_required_before_owner_visual_admission"
     },
     variants: variantReadbacks,
