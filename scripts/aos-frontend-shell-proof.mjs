@@ -699,6 +699,55 @@ async function runBrowserProof(baseUrl) {
     const iconCenterReadback = await measureSideNavIconCenterDelta(desktopPage);
     assert.equal(iconCenterReadback.centerDelta <= 1, true, "side-nav collapse icon is centered within the 38px control");
     assert.equal(await sideNavToggle.isDisabled(), false, "browser exposes side-nav collapse affordance as enabled");
+    const sideNavKeyboardReadback = [];
+    const recordSideNavKeyboardState = async (step) => {
+      const readback = await desktopPage.locator("[data-side-nav-toggle]").evaluate((button) => {
+        const root = document.querySelector("[data-aos-shell]");
+        const sidebar = document.querySelector(".tcrn-product-shell__sidebar");
+        return {
+          activeIsToggle: document.activeElement === button,
+          ariaExpanded: button.getAttribute("aria-expanded"),
+          collapsed: root?.getAttribute("data-side-nav-collapsed") ?? null,
+          label: button.getAttribute("aria-label"),
+          sidebarWidth: sidebar ? Number(sidebar.getBoundingClientRect().width.toFixed(3)) : null,
+          variant: root?.getAttribute("data-visual-instance-variant") ?? null
+        };
+      });
+      sideNavKeyboardReadback.push({ step, ...readback });
+      return readback;
+    };
+    await sideNavToggle.focus();
+    await desktopPage.keyboard.press("Enter");
+    await desktopPage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "true");
+    await desktopPage.waitForTimeout(260);
+    let keyboardState = await recordSideNavKeyboardState("expanded-enter-collapse");
+    assert.equal(keyboardState.ariaExpanded, "false", "Enter collapses expanded side nav and updates aria-expanded");
+    assert.equal(keyboardState.variant, "desktop-light-operations-cockpit-collapsed", "Enter collapse maps to admitted collapsed Cockpit variant");
+    assert.equal(Math.abs((keyboardState.sidebarWidth ?? 0) - 92) <= 2, true, "Enter collapse reaches DS 92px rail");
+    await sideNavToggle.focus();
+    await desktopPage.keyboard.press("Enter");
+    await desktopPage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "false");
+    await desktopPage.waitForTimeout(260);
+    keyboardState = await recordSideNavKeyboardState("collapsed-enter-expand");
+    assert.equal(keyboardState.ariaExpanded, "true", "Enter expands collapsed side nav and updates aria-expanded");
+    assert.equal(keyboardState.variant, "desktop-light-operations-cockpit", "Enter expand maps to admitted expanded Cockpit variant");
+    assert.equal(Math.abs((keyboardState.sidebarWidth ?? 0) - 280) <= 2, true, "Enter expand restores DS 280px rail");
+    await sideNavToggle.focus();
+    await desktopPage.keyboard.press("Space");
+    await desktopPage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "true");
+    await desktopPage.waitForTimeout(260);
+    keyboardState = await recordSideNavKeyboardState("expanded-space-collapse");
+    assert.equal(keyboardState.ariaExpanded, "false", "Space collapses expanded side nav and updates aria-expanded");
+    assert.equal(keyboardState.variant, "desktop-light-operations-cockpit-collapsed", "Space collapse maps to admitted collapsed Cockpit variant");
+    assert.equal(Math.abs((keyboardState.sidebarWidth ?? 0) - 92) <= 2, true, "Space collapse reaches DS 92px rail");
+    await sideNavToggle.focus();
+    await desktopPage.keyboard.press("Space");
+    await desktopPage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "false");
+    await desktopPage.waitForTimeout(260);
+    keyboardState = await recordSideNavKeyboardState("collapsed-space-expand");
+    assert.equal(keyboardState.ariaExpanded, "true", "Space expands collapsed side nav and updates aria-expanded");
+    assert.equal(keyboardState.variant, "desktop-light-operations-cockpit", "Space expand maps to admitted expanded Cockpit variant");
+    assert.equal(Math.abs((keyboardState.sidebarWidth ?? 0) - 280) <= 2, true, "Space expand restores DS 280px rail");
     await sideNavToggle.click();
     await desktopPage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "true");
     await desktopPage.waitForTimeout(260);
@@ -966,6 +1015,7 @@ async function runBrowserProof(baseUrl) {
         renderedMetricParityAgainstDsStorybook: visualInstanceParityProof.ok,
         motionParityAgainstDsStorybook: visualInstanceParityProof.motionParityOk,
         ownerReachableRoutesInsideAcceptedMatrix: ownerReachableRouteMatrixReadback.ok,
+        sideNavKeyboardEnterSpaceToggle: sideNavKeyboardReadback.length === 4,
         mobilePageLevelOverflowGuard: !mobileOverflowReadback.pageHasHorizontalOverflow,
         mobileTableOverflowContainedToInternalScroller: mobileOverflowReadback.tableInternalScrollAllowed,
         bannerSpacingNoConcatenation: true,
@@ -985,6 +1035,7 @@ async function runBrowserProof(baseUrl) {
         mobileNavigationCompactFirstViewport: true,
         desktopMobileOverflowChecked: true
       },
+      sideNavKeyboardReadback,
       mobileOverflowReadback,
       screenshots: [
         `${screenshotRoot}/01-desktop-cockpit-default.png`,
