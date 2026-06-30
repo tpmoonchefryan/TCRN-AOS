@@ -329,6 +329,9 @@ export function AosShellApp() {
       }))
     }
   ];
+  const ownerQualitySideNavCollapseProps = ownerQualityExpandedOnly
+    ? { sideNavCollapseDisabledReason: copyText(currentCopy, "sideNavFixed", "Side navigation stays expanded for owner-review routes") }
+    : {};
 
   return (
     <ProductShell
@@ -345,6 +348,7 @@ export function AosShellApp() {
       navGroups={navGroups}
       locales={tcrnLocaleMetadata}
       collapsedStorageKey={sideNavStorageKey}
+      {...ownerQualitySideNavCollapseProps}
       contentId="content"
       contentRole="main"
       contentLabel={copyText(currentCopy, "contentLabel", "AOS operations workspace")}

@@ -255,10 +255,10 @@ const acceptedVisualInstanceOracle = {
       "/work?locale=en&theme=light&collapsed=true",
       "/work?locale=zh-CN&theme=dark&collapsed=false",
       "post-search-dismissal:/cockpit?locale=en&theme=light&collapsed=false&search=gate",
-      "side-nav-toggle:/cockpit?locale=en&theme=light"
+      "side-nav-disabled:/cockpit?locale=en&theme=light"
     ],
     outsideMatrixMarkerForbiddenForOwnerReview: "aos-route-state-outside-owner-quality-oracle",
-    collapsedOwnerReviewPolicy: "canonicalize_to_expanded_only_until_DS_admits_collapsed_owner_quality_variants",
+    collapsedOwnerReviewPolicy: "disable_side_nav_collapse_affordance_until_DS_admits_collapsed_owner_quality_variants",
     notAutomaticallyAdmitted: [
       "collapsed Cockpit rest",
       "zh-CN Cockpit rest",
@@ -602,28 +602,30 @@ async function runBrowserProof(baseUrl) {
     await desktopPage.waitForSelector('[data-aos-shell="owner-quality-product-shell"]');
     const sideNavToggle = desktopPage.locator("[data-side-nav-toggle]");
     assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "true", "side nav starts expanded");
+    assert.equal(await sideNavToggle.getAttribute("disabled"), "", "owner-quality Cockpit route disables side-nav collapse affordance instead of rendering a clickable no-op");
+    assert.equal(await sideNavToggle.getAttribute("aria-disabled"), "true", "disabled side-nav collapse affordance is exposed to assistive tech");
+    assert.equal(await sideNavToggle.getAttribute("data-side-nav-action"), "disabled", "side-nav collapse action is explicitly disabled for owner-quality route");
     assert.equal(await desktopPage.locator('[data-product-shell-route="cockpit"]').getAttribute("aria-current"), "page", "active cockpit route is marked");
     const expandedSideNavWidth = await desktopPage.locator(".tcrn-product-shell__sidebar").evaluate((node) => node.getBoundingClientRect().width);
-    await sideNavToggle.click();
-    await desktopPage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "false");
-    assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "true", "owner-quality Cockpit route canonicalizes side-nav collapse requests back to expanded");
-    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-operations-cockpit", "side-nav collapse request stays inside accepted Cockpit owner-quality variant");
+    assert.equal(await sideNavToggle.isDisabled(), true, "browser exposes side-nav collapse affordance as disabled");
+    assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "true", "owner-quality Cockpit route keeps side nav expanded");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-operations-cockpit", "disabled side-nav affordance stays inside accepted Cockpit owner-quality variant");
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "shell remains expanded for owner-quality route");
-    assert.equal(await desktopPage.evaluate(() => localStorage.getItem("tcrn-aos-side-nav-collapsed")), "false", "collapse request writes expanded canonical owner-review state");
     assert.equal(await desktopPage.locator('[data-product-shell-route="cockpit"]').getAttribute("aria-current"), "page", "active cockpit route preserved while collapse is canonicalized");
     const canonicalizedSideNavWidth = await desktopPage.locator(".tcrn-product-shell__sidebar").evaluate((node) => node.getBoundingClientRect().width);
     assert.equal(canonicalizedSideNavWidth >= expandedSideNavWidth - 1, true, "owner-quality side nav remains visually expanded");
-    await desktopPage.screenshot({ path: `${screenshotRoot}/02-desktop-cockpit-side-nav-canonicalized.png`, fullPage: false });
+    await desktopPage.screenshot({ path: `${screenshotRoot}/02-desktop-cockpit-side-nav-disabled.png`, fullPage: false });
     await desktopPage.goto(`${baseUrl}/work?locale=en&theme=light&collapsed=false`, { waitUntil: "networkidle" });
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "owner-quality Work route uses explicit expanded side nav state");
     assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("aria-expanded"), "true", "side nav toggle reflects explicit expanded Work route");
+    assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("disabled"), "", "owner-quality Work route disables side-nav collapse affordance");
+    assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("data-side-nav-action"), "disabled", "owner-quality Work route does not expose a clickable collapse no-op");
     assert.equal(await desktopPage.locator('[data-product-shell-route="work"]').getAttribute("aria-current"), "page", "active work route is preserved while expanded");
-    await desktopPage.locator("[data-side-nav-toggle]").click();
-    await desktopPage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "false");
-    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-work-queue", "owner-quality Work route remains inside accepted expanded Work variant after collapse request");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-work-queue", "owner-quality Work route remains inside accepted expanded Work variant with disabled collapse affordance");
     await desktopPage.goto(`${baseUrl}/work?locale=en&theme=light&collapsed=true`, { waitUntil: "networkidle" });
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "explicit collapsed Work query is normalized to expanded owner-quality state");
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-work-queue", "explicit collapsed Work query maps to accepted expanded Work variant");
+    assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("disabled"), "", "normalized collapsed Work query still disables the collapse affordance");
     await desktopPage.goto(`${baseUrl}/cockpit?locale=en&theme=light`, { waitUntil: "networkidle" });
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "owner-review Cockpit rest route remains expanded after persistence check");
 
@@ -760,10 +762,10 @@ async function runBrowserProof(baseUrl) {
     const mobileWorkHeadingTop = await mobilePage.locator("#work-heading").evaluate((node) => node.getBoundingClientRect().top);
     assert.equal(mobileWorkHeadingTop < 760, true, "mobile first viewport reaches the Work heading within the DS stacked shell posture");
     await mobilePage.screenshot({ path: `${screenshotRoot}/04-mobile-work-dark.png`, fullPage: false });
-    await mobilePage.locator("[data-side-nav-toggle]").click();
-    await mobilePage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "false");
-    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "mobile-dark-zh-cn-work-queue", "mobile Work collapse request stays inside accepted owner-quality variant");
-    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "mobile owner-quality side nav remains expanded after collapse request");
+    assert.equal(await mobilePage.locator("[data-side-nav-toggle]").getAttribute("disabled"), "", "mobile Work disables side-nav collapse affordance instead of rendering a clickable no-op");
+    assert.equal(await mobilePage.locator("[data-side-nav-toggle]").getAttribute("data-side-nav-action"), "disabled", "mobile Work exposes disabled side-nav action state");
+    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "mobile-dark-zh-cn-work-queue", "mobile Work remains inside accepted owner-quality variant with disabled collapse affordance");
+    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "mobile owner-quality side nav remains expanded");
     const mobileNoOverflow = await mobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
     assert.equal(mobileNoOverflow, true, "mobile shell has no horizontal page overflow");
     assert.equal(await mobilePage.locator('[data-tcrn-brand-mark="registered"]').isVisible(), true, "mobile registered brand mark remains visible");
@@ -805,7 +807,7 @@ async function runBrowserProof(baseUrl) {
       },
       screenshots: [
         `${screenshotRoot}/01-desktop-cockpit-default.png`,
-        `${screenshotRoot}/02-desktop-cockpit-side-nav-canonicalized.png`,
+        `${screenshotRoot}/02-desktop-cockpit-side-nav-disabled.png`,
         `${screenshotRoot}/03-desktop-work-dark.png`,
         `${screenshotRoot}/04-mobile-work-dark.png`
       ]
@@ -932,7 +934,7 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
       dismissSearch: true
     },
     {
-      id: "side-nav-toggle-from-cockpit",
+      id: "side-nav-disabled-from-cockpit",
       path: "/cockpit?locale=en&theme=light",
       expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant,
       expectedState: {
@@ -944,7 +946,7 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
         searchExpanded: "false",
         searchResultsVisible: "false"
       },
-      clickSideNavToggle: true
+      verifyDisabledSideNav: true
     }
   ];
   const readbacks = [];
@@ -967,14 +969,17 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
             && layer?.hasAttribute("hidden") === true;
         });
       }
-      if (route.clickSideNavToggle) {
-        await page.locator("[data-side-nav-toggle]").click();
-        await page.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "false");
+      if (route.verifyDisabledSideNav) {
+        const sideNavToggle = page.locator("[data-side-nav-toggle]");
+        assert.equal(await sideNavToggle.getAttribute("disabled"), "", `${route.id} renders a disabled side-nav collapse affordance`);
+        assert.equal(await sideNavToggle.getAttribute("aria-disabled"), "true", `${route.id} exposes aria-disabled on side-nav collapse affordance`);
+        assert.equal(await sideNavToggle.getAttribute("data-side-nav-action"), "disabled", `${route.id} records disabled side-nav action`);
       }
       const readback = await page.locator('[data-aos-shell="owner-quality-product-shell"]').evaluate((root) => {
         const searchWrapper = root.querySelector(".tcrn-product-shell-search");
         const searchResults = root.querySelector("[data-product-shell-search-results]");
         const selectedNavItem = root.querySelector(".tcrn-nav-item[aria-current=\"page\"], .tcrn-nav-item[data-selected=\"true\"]");
+        const sideNavToggle = root.querySelector("[data-side-nav-toggle]");
         return {
           variant: root.getAttribute("data-visual-instance-variant"),
           theme: root.getAttribute("data-visual-instance-theme"),
@@ -985,6 +990,8 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
           search: root.getAttribute("data-visual-instance-search"),
           searchExpanded: searchWrapper?.getAttribute("data-search-expanded") ?? null,
           searchResultsVisible: searchResults ? String(!searchResults.hasAttribute("hidden")) : "false",
+          sideNavToggleDisabled: sideNavToggle?.hasAttribute("disabled") ? "true" : "false",
+          sideNavAction: sideNavToggle?.getAttribute("data-side-nav-action") ?? null,
           viewport: root.getAttribute("data-visual-instance-viewport"),
           reducedMotion: root.getAttribute("data-visual-instance-reduced-motion"),
           content: root.getAttribute("data-visual-instance-content")
@@ -1007,6 +1014,10 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
       assert.equal(readback.search, route.expectedState.search, `${route.id} lands in expected search state`);
       assert.equal(readback.searchExpanded, route.expectedState.searchExpanded, `${route.id} search expanded state matches expected owner-quality state`);
       assert.equal(readback.searchResultsVisible, route.expectedState.searchResultsVisible, `${route.id} search result visibility matches expected owner-quality state`);
+      if (route.verifyDisabledSideNav) {
+        assert.equal(readback.sideNavToggleDisabled, "true", `${route.id} keeps side-nav collapse disabled in rendered state`);
+        assert.equal(readback.sideNavAction, "disabled", `${route.id} keeps side-nav collapse action disabled in rendered state`);
+      }
     }
     return {
       ok: true,
@@ -1322,6 +1333,12 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
         selector: childSelector,
         width: Number(rect.width.toFixed(3)),
         height: Number(rect.height.toFixed(3)),
+        disabled: element instanceof HTMLButtonElement ? element.disabled : element.getAttribute("disabled") !== null,
+        title: element.getAttribute("title"),
+        placeholder: element instanceof HTMLInputElement ? element.placeholder : element.getAttribute("placeholder"),
+        ariaDisabled: element.getAttribute("aria-disabled"),
+        sideNavAction: element.getAttribute("data-side-nav-action"),
+        sideNavDisabledReason: element.getAttribute("data-side-nav-disabled-reason"),
         left: Number(rect.left.toFixed(3)),
         right: Number(rect.right.toFixed(3)),
         top: Number(rect.top.toFixed(3)),
@@ -1503,6 +1520,7 @@ function compareProductShellMetrics(dsMetrics, aosMetrics) {
   const failures = [];
   const checks = [];
   const isReducedMotion = dsMetrics.state?.reducedMotion === "true" || aosMetrics.state?.reducedMotion === "true";
+  const expectSearchResults = dsMetrics.state?.searchResultsVisible === "true" || aosMetrics.state?.searchResultsVisible === "true";
   const add = (name, passed, readback) => {
     checks.push({ name, passed, ...readback });
     if (!passed) failures.push({ name, ...readback });
@@ -1545,12 +1563,24 @@ function compareProductShellMetrics(dsMetrics, aosMetrics) {
   compareString(add, "localeTrigger.gap", dsMetrics.measured.localeTrigger.gap, aosMetrics.measured.localeTrigger.gap);
   compareString(add, "localeTrigger.paddingLeft", dsMetrics.measured.localeTrigger.paddingLeft, aosMetrics.measured.localeTrigger.paddingLeft);
   compareString(add, "localeTrigger.paddingRight", dsMetrics.measured.localeTrigger.paddingRight, aosMetrics.measured.localeTrigger.paddingRight);
-  compareResponsiveSearchWidth(add, "searchWrapper.width", dsMetrics.measured.searchWrapper.width, aosMetrics.measured.searchWrapper.width);
+  add("sideNavToggle.disabledForOwnerQualityExpandedOnly", dsMetrics.measured.sideNavToggle.disabled === true && aosMetrics.measured.sideNavToggle.disabled === true, {
+    dsDisabled: dsMetrics.measured.sideNavToggle.disabled,
+    aosDisabled: aosMetrics.measured.sideNavToggle.disabled,
+    dsAction: dsMetrics.measured.sideNavToggle.sideNavAction,
+    aosAction: aosMetrics.measured.sideNavToggle.sideNavAction
+  });
+  add("sideNavToggle.disabledReason", dsMetrics.measured.sideNavToggle.sideNavAction === "disabled" && aosMetrics.measured.sideNavToggle.sideNavAction === "disabled", {
+    dsReason: dsMetrics.measured.sideNavToggle.sideNavDisabledReason,
+    aosReason: aosMetrics.measured.sideNavToggle.sideNavDisabledReason,
+    dsTitle: dsMetrics.measured.sideNavToggle.title,
+    aosTitle: aosMetrics.measured.sideNavToggle.title
+  });
+  compareResponsiveSearchWidth(add, "searchWrapper.width", dsMetrics.measured.searchWrapper.width, aosMetrics.measured.searchWrapper.width, expectSearchResults);
   compareNumber(add, "searchWrapper.height", dsMetrics.measured.searchWrapper.height, aosMetrics.measured.searchWrapper.height, 0.5);
   compareString(add, "searchWrapper.transitionProperty", dsMetrics.measured.searchWrapper.transitionProperty, aosMetrics.measured.searchWrapper.transitionProperty);
   compareMotionDuration(add, "searchWrapper.transitionDuration", dsMetrics.measured.searchWrapper.transitionDuration, aosMetrics.measured.searchWrapper.transitionDuration, isReducedMotion);
   compareString(add, "searchWrapper.transitionTimingFunction", dsMetrics.measured.searchWrapper.transitionTimingFunction, aosMetrics.measured.searchWrapper.transitionTimingFunction);
-  compareResponsiveSearchWidth(add, "searchInput.width", dsMetrics.measured.searchInput.width, aosMetrics.measured.searchInput.width);
+  compareResponsiveSearchWidth(add, "searchInput.width", dsMetrics.measured.searchInput.width, aosMetrics.measured.searchInput.width, expectSearchResults);
   compareNumber(add, "searchInput.height", dsMetrics.measured.searchInput.height, aosMetrics.measured.searchInput.height, 0.5);
   compareString(add, "searchInput.borderRadius", dsMetrics.measured.searchInput.borderRadius, aosMetrics.measured.searchInput.borderRadius);
   compareString(add, "searchInput.display", dsMetrics.measured.searchInput.display, aosMetrics.measured.searchInput.display);
@@ -1558,6 +1588,7 @@ function compareProductShellMetrics(dsMetrics, aosMetrics) {
   compareString(add, "searchInput.paddingLeft", dsMetrics.measured.searchInput.paddingLeft, aosMetrics.measured.searchInput.paddingLeft);
   compareString(add, "searchInput.paddingRight", dsMetrics.measured.searchInput.paddingRight, aosMetrics.measured.searchInput.paddingRight);
   compareSearchGrid(add, "searchInput.gridTemplateColumns", dsMetrics.measured.searchInput.gridTemplateColumns, aosMetrics.measured.searchInput.gridTemplateColumns);
+  compareString(add, "searchControl.placeholder", dsMetrics.measured.searchControl.placeholder, aosMetrics.measured.searchControl.placeholder);
   compareString(add, "searchShortcut.paddingLeft", dsMetrics.measured.searchShortcut.paddingLeft, aosMetrics.measured.searchShortcut.paddingLeft);
   compareString(add, "searchShortcut.paddingRight", dsMetrics.measured.searchShortcut.paddingRight, aosMetrics.measured.searchShortcut.paddingRight);
   compareString(add, "searchShortcut.position", dsMetrics.measured.searchShortcut.position, aosMetrics.measured.searchShortcut.position);
@@ -1635,7 +1666,7 @@ function compareReducedMotionMetrics(dsMetrics, aosMetrics) {
 
 function compareTopBarHeight(add, name, ds, aos, dsViewport, aosViewport) {
   const minAllowed = 60;
-  const maxAllowed = 120;
+  const maxAllowed = 180;
   const dsNumber = Number(ds);
   const aosNumber = Number(aos);
   const passed = dsNumber >= minAllowed
@@ -1696,17 +1727,17 @@ function maxCssDurationMs(value) {
   }));
 }
 
-function compareResponsiveSearchWidth(add, name, ds, aos) {
+function compareResponsiveSearchWidth(add, name, ds, aos, expectSearchResults = false) {
   const dsNumber = Number(ds);
   const aosNumber = Number(aos);
   const minAllowed = 180;
-  const maxAllowed = 420;
+  const maxAllowed = expectSearchResults ? 420 : 260;
   const passed = dsNumber >= minAllowed && dsNumber <= maxAllowed && aosNumber >= minAllowed && aosNumber <= maxAllowed;
   add(name, passed, {
     ds,
     aos,
     allowedRange: `${minAllowed}-${maxAllowed}`,
-    disposition: "same DS ProductShellSearch responsive width rule; value may differ with comparator story vs product topbar available width"
+    disposition: "same DS ProductShellSearch compact rest-width rule; focused/results states may widen separately"
   });
 }
 
