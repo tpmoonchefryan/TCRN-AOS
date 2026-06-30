@@ -42,7 +42,7 @@ export const frontendShellRoutes = [
 
 export const localeCopy: Record<TcrnLocale, Record<string, string>> = {
   "zh-CN": {
-    productName: "AOS 重建工作区",
+    productName: "TCRN AOS",
     moduleName: "运营驾驶舱",
     navLabel: "AOS 运营导航",
     navGroupLabel: "运营模块",
@@ -132,7 +132,7 @@ export const localeCopy: Record<TcrnLocale, Record<string, string>> = {
     noOverclaim: "只读示例数据；未接入外部队列、实时派发、产品验收或发布准备状态。"
   },
   en: {
-    productName: "AOS Rebuild Workspace",
+    productName: "TCRN AOS",
     moduleName: "Operations Cockpit",
     navLabel: "AOS operations navigation",
     navGroupLabel: "Operations modules",

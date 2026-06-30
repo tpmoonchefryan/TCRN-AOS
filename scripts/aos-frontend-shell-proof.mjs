@@ -624,7 +624,7 @@ async function runBrowserProof(baseUrl) {
     await desktopPage.waitForSelector('[data-aos-shell="owner-quality-product-shell"]');
     await desktopPage.waitForFunction(() => document.querySelector("[data-api-state]")?.textContent?.includes("available"));
 
-    assert.equal(await desktopPage.title(), "TCRN AOS Rebuild Workspace", "desktop page identity is correct");
+    assert.equal(await desktopPage.title(), "TCRN AOS Operations Cockpit", "desktop page identity is correct");
     assert.equal(await desktopPage.locator("html").getAttribute("data-tcrn-theme"), "light", "default theme is light");
     assert.equal(await desktopPage.locator("html").getAttribute("lang"), "en", "default locale is en");
 
@@ -673,6 +673,66 @@ async function runBrowserProof(baseUrl) {
     assert.equal(brandReadback.height >= 30, true, "expanded brand has visible height");
     assert.equal(brandReadback.captionPresent, false, "ProductLogo does not render the old Rebuild workspace brand caption");
     assert.equal(await desktopPage.locator('[data-registered-product-logo="@tcrn/ui-react/ProductLogo"]').first().isVisible(), true, "package-backed ProductLogo is visible");
+
+    const topbarCleanupReadback = await desktopPage.locator('[data-aos-shell="owner-quality-product-shell"]').evaluate((root) => {
+      const topbar = root.querySelector(".tcrn-top-bar");
+      const currentLocation = topbar?.querySelector(".tcrn-product-shell__current-location");
+      const search = topbar?.querySelector(".tcrn-product-shell-search");
+      const theme = topbar?.querySelector(".tcrn-shell-theme-toggle");
+      const locale = topbar?.querySelector(".tcrn-shell-locale-menu");
+      const rect = (element) => {
+        const bounds = element?.getBoundingClientRect();
+        if (!bounds) return null;
+        return {
+          left: Number(bounds.left.toFixed(3)),
+          right: Number(bounds.right.toFixed(3)),
+          top: Number(bounds.top.toFixed(3)),
+          width: Number(bounds.width.toFixed(3)),
+          height: Number(bounds.height.toFixed(3))
+        };
+      };
+      return {
+        topbarText: topbar?.textContent?.replace(/\s+/g, " ").trim() ?? "",
+        staleWorkspaceTitlePresent: Boolean(topbar?.textContent?.includes("AOS Rebuild Workspace")),
+        brandCellPresent: Boolean(topbar?.querySelector(".tcrn-top-bar__brand")),
+        moduleCellPresent: Boolean(topbar?.querySelector(".tcrn-top-bar__module")),
+        currentLocationText: currentLocation?.textContent?.replace(/\s+/g, " ").trim() ?? "",
+        topbar: rect(topbar),
+        currentLocation: rect(currentLocation),
+        search: rect(search),
+        theme: rect(theme),
+        locale: rect(locale),
+        h1Text: root.querySelector("h1")?.textContent?.trim() ?? null,
+        h1Count: root.querySelectorAll("h1").length
+      };
+    });
+    assert.equal(topbarCleanupReadback.staleWorkspaceTitlePresent, false, "topbar no longer renders stale AOS Rebuild Workspace title copy");
+    assert.equal(topbarCleanupReadback.brandCellPresent, false, "ProductShell owner-quality topbar does not render legacy brand title cell");
+    assert.equal(topbarCleanupReadback.moduleCellPresent, false, "ProductShell owner-quality topbar does not render legacy module title cell");
+    assert.equal(topbarCleanupReadback.currentLocationText.includes("Current location"), true, "topbar keeps current-location label");
+    assert.equal(topbarCleanupReadback.currentLocationText.includes("Operations Cockpit"), true, "topbar keeps Operations Cockpit route value");
+    assert.equal(topbarCleanupReadback.h1Text, "AOS Operations Cockpit", "page context remains in the H1 rather than stale topbar branding");
+    assert.equal(topbarCleanupReadback.h1Count, 1, "topbar cleanup preserves exactly one semantic H1");
+    assert.equal(
+      topbarCleanupReadback.currentLocation.left <= topbarCleanupReadback.topbar.left + 32,
+      true,
+      "current-location block is anchored at the left edge of the utility topbar"
+    );
+    assert.equal(
+      topbarCleanupReadback.currentLocation.right <= topbarCleanupReadback.search.left + 1,
+      true,
+      "current-location block precedes search in the topbar order"
+    );
+    assert.equal(
+      topbarCleanupReadback.search.right <= topbarCleanupReadback.theme.left + 1,
+      true,
+      "search precedes theme toggle in the topbar order"
+    );
+    assert.equal(
+      topbarCleanupReadback.theme.right <= topbarCleanupReadback.locale.left + 1,
+      true,
+      "theme toggle precedes locale menu in the topbar order"
+    );
 
     const localeTrigger = desktopPage.locator("[data-locale-menu-toggle]");
     const localeMenu = desktopPage.locator("[data-locale-menu]");
@@ -1046,6 +1106,9 @@ async function runBrowserProof(baseUrl) {
         localeSelectionFocusReturn: true,
         searchFocusExpansionBlurCollapse: true,
         searchMotionHydratedTimeline: true,
+        topbarCurrentLocationCleanup: !topbarCleanupReadback.staleWorkspaceTitlePresent
+          && !topbarCleanupReadback.brandCellPresent
+          && !topbarCleanupReadback.moduleCellPresent,
         searchOutsidePointerCollapse: true,
         searchTabCollapse: true,
         sideNavDesktopActionableToggle: true,
@@ -1059,6 +1122,7 @@ async function runBrowserProof(baseUrl) {
         desktopMobileOverflowChecked: true
       },
       sideNavKeyboardReadback,
+      topbarCleanupReadback,
       hydratedSearchMotionReadback,
       mobileOverflowReadback,
       screenshots: [
@@ -1665,6 +1729,7 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
     const shellStyle = getComputedStyle(root);
     const shellAfterStyle = getComputedStyle(root, "::after");
     const selectedNavItem = root.querySelector(".tcrn-nav-item[aria-current=\"page\"], .tcrn-nav-item[data-selected=\"true\"]");
+    const topBar = root.querySelector(".tcrn-top-bar");
     const searchWrapper = root.querySelector(".tcrn-product-shell-search");
     const searchResults = root.querySelector("[data-product-shell-search-results]");
     const utilityRow = root.querySelector(".tcrn-product-shell__utility-row");
@@ -1678,6 +1743,12 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
           return child.className || child.tagName.toLowerCase();
         })
       : [];
+    const topbarReadback = {
+      text: topBar?.textContent?.replace(/\s+/g, " ").trim() ?? "",
+      staleWorkspaceTitlePresent: Boolean(topBar?.textContent?.includes("AOS Rebuild Workspace")),
+      brandCellPresent: Boolean(topBar?.querySelector(".tcrn-top-bar__brand")),
+      moduleCellPresent: Boolean(topBar?.querySelector(".tcrn-top-bar__module"))
+    };
     const primaryHeading = root.querySelector("[data-owner-quality-primary-heading=\"true\"] h1, [data-owner-quality-primary-heading=\"true\"] .tcrn-heading");
     const h1Elements = Array.from(root.querySelectorAll("h1"));
     const contentText = root.textContent ?? "";
@@ -1803,7 +1874,6 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
       ownerReadinessHits: ["owner ready", "owner-ready", "release ready", "release-readiness achieved", "product accepted"].filter((marker) => contentText.toLowerCase().includes(marker))
     };
     const rootRect = root.getBoundingClientRect();
-    const topBar = root.querySelector(".tcrn-top-bar");
     const topBarRect = topBar?.getBoundingClientRect();
     const controlBounds = [".tcrn-shell-theme-toggle", ".tcrn-shell-locale-menu__trigger", ".tcrn-product-shell-search"]
       .map((selector) => {
@@ -1867,6 +1937,7 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
       },
       searchMotionTimeline,
       controlOrder,
+      topbarReadback,
       productLogo: {
         productId: productLogo?.getAttribute("data-product-id") ?? null,
         assetId: productLogo?.getAttribute("data-product-logo-asset-id") ?? null,
@@ -1923,6 +1994,17 @@ function compareProductShellMetrics(dsMetrics, aosMetrics) {
   add("controlOrder.currentLocation-search-theme-locale", (dsMetrics.controlOrder ?? []).join(">") === (aosMetrics.controlOrder ?? []).join(">"), {
     ds: dsMetrics.controlOrder,
     aos: aosMetrics.controlOrder
+  });
+  add("topBar.noStaleAosRebuildWorkspaceTitle", dsMetrics.topbarReadback?.staleWorkspaceTitlePresent === false && aosMetrics.topbarReadback?.staleWorkspaceTitlePresent === false, {
+    ds: dsMetrics.topbarReadback,
+    aos: aosMetrics.topbarReadback
+  });
+  add("topBar.noProductTitleCells", dsMetrics.topbarReadback?.brandCellPresent === false
+    && dsMetrics.topbarReadback?.moduleCellPresent === false
+    && aosMetrics.topbarReadback?.brandCellPresent === false
+    && aosMetrics.topbarReadback?.moduleCellPresent === false, {
+    ds: dsMetrics.topbarReadback,
+    aos: aosMetrics.topbarReadback
   });
   for (const control of ["themeToggle", "sideNavToggle"]) {
     compareNumber(add, `${control}.width`, dsMetrics.measured[control].width, aosMetrics.measured[control].width, 0.5);
@@ -2275,11 +2357,11 @@ function compareTopBarGrid(add, name, ds, aos) {
   const parse = (value) => String(value).split(/\s+/).filter(Boolean);
   const dsColumns = parse(ds);
   const aosColumns = parse(aos);
-  const passed = dsColumns.length === 3 && aosColumns.length === 3;
+  const passed = dsColumns.length === 1 && aosColumns.length === 1;
   add(name, passed, {
     ds,
     aos,
-    disposition: "same DS ProductShell topbar three-column grid; column widths vary by shell workspace width"
+    disposition: "same DS ProductShell topbar single control-row grid; current location replaces stale product-title cells"
   });
 }
 

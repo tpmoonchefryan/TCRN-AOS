@@ -129,7 +129,7 @@ export function renderAosShellHtml(): string {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>TCRN AOS Rebuild Workspace</title>
+    <title>TCRN AOS Operations Cockpit</title>
     <meta name="tcrn-aOS-owner-quality-oracle" content="aos-owner-quality-product-shell" />
     <meta name="tcrn-design-system-source" content="@tcrn/ui-react @tcrn/ui-tokens @tcrn/ui-copy-state" />
     <meta name="tcrn-aOS-brand-source" content="@tcrn/ui-react ProductShell/ShellBrandLockup/ProductLogo with registered tcrnProductLogoRegistry aos asset" />
@@ -333,7 +333,7 @@ export function AosShellApp() {
   return (
     <ProductShell
       {...productShellControlProps}
-      productName={copyText(currentCopy, "productName", "AOS Rebuild Workspace")}
+      productName={copyText(currentCopy, "productName", "TCRN AOS")}
       moduleName={copyText(currentCopy, "moduleName", "Operations Cockpit")}
       brandProductId="aos"
       brandMarkSrc="/assets/tcrn-brand-mark.svg"
