@@ -890,8 +890,61 @@ async function runBrowserProof(baseUrl) {
     assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-owner-quality-collapse-policy"), "mobile-hidden-collapse-affordance", "mobile Work records accepted hidden collapse policy");
     assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "mobile-dark-zh-cn-work-queue", "mobile Work remains inside accepted owner-quality variant with hidden collapse affordance");
     assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "mobile owner-quality side nav remains expanded");
-    const mobileNoOverflow = await mobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
-    assert.equal(mobileNoOverflow, true, "mobile shell has no horizontal page overflow");
+    const mobileOverflowReadback = await mobilePage.evaluate(() => {
+      const readElement = (selector) => {
+        const element = document.querySelector(selector);
+        if (!element) return null;
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        return {
+          selector,
+          width: Number(rect.width.toFixed(3)),
+          right: Number(rect.right.toFixed(3)),
+          clientWidth: element.clientWidth,
+          scrollWidth: element.scrollWidth,
+          overflowX: style.overflowX,
+          gridTemplateColumns: style.gridTemplateColumns
+        };
+      };
+      const html = document.documentElement;
+      const body = document.body;
+      const viewportWidth = window.innerWidth;
+      const contentStack = readElement(".tcrn-product-shell-content-stack");
+      const sectionGrid = readElement(".tcrn-product-shell-section-grid");
+      const workSurface = readElement('[data-owner-quality-work-queue="true"]');
+      const gatesSurface = readElement('[data-owner-quality-gates="true"]');
+      const tableShells = Array.from(document.querySelectorAll(".tcrn-table-shell")).map((element) => {
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        return {
+          width: Number(rect.width.toFixed(3)),
+          right: Number(rect.right.toFixed(3)),
+          clientWidth: element.clientWidth,
+          scrollWidth: element.scrollWidth,
+          overflowX: style.overflowX
+        };
+      });
+      return {
+        viewportWidth,
+        htmlClientWidth: html.clientWidth,
+        htmlScrollWidth: html.scrollWidth,
+        bodyClientWidth: body.clientWidth,
+        bodyScrollWidth: body.scrollWidth,
+        pageHasHorizontalOverflow: html.scrollWidth > viewportWidth + 1 || body.scrollWidth > viewportWidth + 1,
+        contentStack,
+        sectionGrid,
+        workSurface,
+        gatesSurface,
+        tableShells,
+        tableInternalScrollAllowed: tableShells.every((table) => table.overflowX === "auto" && table.right <= viewportWidth + 1)
+      };
+    });
+    assert.equal(mobileOverflowReadback.pageHasHorizontalOverflow, false, "mobile shell has no horizontal page overflow");
+    assert.equal(mobileOverflowReadback.contentStack.scrollWidth <= mobileOverflowReadback.contentStack.clientWidth + 1, true, "mobile content stack contains its grid track within the viewport column");
+    assert.equal(mobileOverflowReadback.sectionGrid.scrollWidth <= mobileOverflowReadback.sectionGrid.clientWidth + 1, true, "mobile section grid contains its package rhythm track within the viewport column");
+    assert.equal(mobileOverflowReadback.workSurface.right <= mobileOverflowReadback.viewportWidth + 1, true, "mobile Work surface stays within the viewport");
+    assert.equal(mobileOverflowReadback.gatesSurface.right <= mobileOverflowReadback.viewportWidth + 1, true, "mobile Gates surface stays within the viewport");
+    assert.equal(mobileOverflowReadback.tableInternalScrollAllowed, true, "mobile table overflow remains contained to table scrollers, not page-level overflow");
     assert.equal(await mobilePage.locator('[data-tcrn-brand-mark="registered"]').isVisible(), true, "mobile registered brand mark remains visible");
     await mobileContext.close();
 
@@ -913,6 +966,8 @@ async function runBrowserProof(baseUrl) {
         renderedMetricParityAgainstDsStorybook: visualInstanceParityProof.ok,
         motionParityAgainstDsStorybook: visualInstanceParityProof.motionParityOk,
         ownerReachableRoutesInsideAcceptedMatrix: ownerReachableRouteMatrixReadback.ok,
+        mobilePageLevelOverflowGuard: !mobileOverflowReadback.pageHasHorizontalOverflow,
+        mobileTableOverflowContainedToInternalScroller: mobileOverflowReadback.tableInternalScrollAllowed,
         bannerSpacingNoConcatenation: true,
         localeOutsideDismissal: true,
         localeEscapeDismissalFocusReturn: true,
@@ -930,6 +985,7 @@ async function runBrowserProof(baseUrl) {
         mobileNavigationCompactFirstViewport: true,
         desktopMobileOverflowChecked: true
       },
+      mobileOverflowReadback,
       screenshots: [
         `${screenshotRoot}/01-desktop-cockpit-default.png`,
         `${screenshotRoot}/02-desktop-cockpit-side-nav-collapsed.png`,
