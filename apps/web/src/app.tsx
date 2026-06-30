@@ -13,6 +13,7 @@ import {
   TableShell,
   Text,
   WorkIndex,
+  getTcrnProductLogoAsset,
   tcrnComponentCss,
   useProductShellController,
   type ProductShellNavGroup,
@@ -35,6 +36,7 @@ const lastSearchResultStorageKey = "tcrn-aos-last-search-result";
 const defaultShellRoute = shellNavItems[0] as ShellNavItem;
 const defaultOwnerQualityVariant = "desktop-light-operations-cockpit";
 const outsideAcceptedOwnerQualityMatrix = "aos-route-state-outside-owner-quality-oracle";
+const aosProductLogoAsset = getTcrnProductLogoAsset("aos");
 
 const shellSearchRecords: ProductShellSearchResult[] = [
   ...shellNavItems.map((item) => ({
@@ -113,10 +115,10 @@ interface BrowserVisualState {
 }
 
 interface OwnerQualityRoutePolicy {
-  expandedOnly: boolean;
+  forceExpanded: boolean;
   theme?: "light" | "dark";
   locale?: TcrnLocale;
-  reason: "accepted_owner_quality_variant" | "unclaimed_state";
+  reason: "accepted_owner_quality_variant" | "search_results_expanded_variant" | "mobile_collapse_hidden_policy" | "unclaimed_state";
 }
 
 export function renderAosShellHtml(): string {
@@ -130,7 +132,7 @@ export function renderAosShellHtml(): string {
     <title>TCRN AOS Rebuild Workspace</title>
     <meta name="tcrn-aOS-owner-quality-oracle" content="aos-owner-quality-product-shell" />
     <meta name="tcrn-design-system-source" content="@tcrn/ui-react @tcrn/ui-tokens @tcrn/ui-copy-state" />
-    <meta name="tcrn-aOS-brand-source" content="@tcrn/ui-react ProductShell/ShellBrandLockup with registered tcrn-brand-mark.svg" />
+    <meta name="tcrn-aOS-brand-source" content="@tcrn/ui-react ProductShell/ShellBrandLockup/ProductLogo with registered tcrnProductLogoRegistry aos asset" />
     <link rel="icon" href="/assets/tcrn-brand-mark.svg" type="image/svg+xml" />
     <style data-tcrn-token-source="@tcrn/ui-tokens">${tcrnTokenCss}</style>
     <style data-tcrn-component-style-source="@tcrn/ui-react">${tcrnComponentCss}</style>
@@ -279,7 +281,7 @@ export function AosShellApp() {
   const currentCopy = localeCopy[currentLocale] ?? localeCopy.en;
   const currentRouteId = currentRoute.id as AosRouteId;
   const searchState: VisualInstanceSearchState = controller.searchExpanded && controller.searchResults.length > 0 ? "results" : "rest";
-  const ownerQualityExpandedOnly = isAcceptedOwnerQualityExpandedOnlyState({
+  const forceExpandedOwnerQualityState = isForceExpandedOwnerQualityState({
     route: currentRouteId,
     theme: controller.theme,
     locale: currentLocale,
@@ -287,7 +289,7 @@ export function AosShellApp() {
     viewport: browserVisualState.viewport,
     reducedMotion: browserVisualState.reducedMotion
   });
-  const visualInstanceCollapsed = ownerQualityExpandedOnly ? false : controller.collapsed;
+  const visualInstanceCollapsed = forceExpandedOwnerQualityState ? false : controller.collapsed;
   const visualInstanceVariant = resolveVisualInstanceVariant({
     route: currentRouteId,
     theme: controller.theme,
@@ -301,10 +303,9 @@ export function AosShellApp() {
     ...controller.productShellControlProps,
     collapsed: visualInstanceCollapsed,
     onCollapsedChange: (collapsed: boolean) => {
-      if (ownerQualityExpandedOnly) {
-        controller.setCollapsed(false);
-        writeBrowserStorage(sideNavStorageKey, "false");
-        return;
+      if (collapsed && controller.searchExpanded) {
+        controller.setSearchExpanded(false, "controller");
+        controller.setSearchQuery("");
       }
       controller.setCollapsed(collapsed);
     }
@@ -329,26 +330,19 @@ export function AosShellApp() {
       }))
     }
   ];
-  const ownerQualitySideNavCollapseProps = ownerQualityExpandedOnly
-    ? { sideNavCollapseDisabledReason: copyText(currentCopy, "sideNavFixed", "Side navigation stays expanded for owner-review routes") }
-    : {};
-
   return (
     <ProductShell
       {...productShellControlProps}
       productName={copyText(currentCopy, "productName", "AOS Rebuild Workspace")}
       moduleName={copyText(currentCopy, "moduleName", "Operations Cockpit")}
-      brandSuffix="AOS"
-      brandCaption={copyText(currentCopy, "brandCaption", "Rebuild workspace")}
+      brandProductId="aos"
       brandMarkSrc="/assets/tcrn-brand-mark.svg"
-      brandMarkAlt="TCRN registered brand mark"
       currentRouteLabel={currentRouteLabel}
       currentLocationLabel={copyText(currentCopy, "currentLocation", "Current location")}
       navLabel={copyText(currentCopy, "navLabel", "AOS operations navigation")}
       navGroups={navGroups}
       locales={tcrnLocaleMetadata}
       collapsedStorageKey={sideNavStorageKey}
-      {...ownerQualitySideNavCollapseProps}
       contentId="content"
       contentRole="main"
       contentLabel={copyText(currentCopy, "contentLabel", "AOS operations workspace")}
@@ -367,15 +361,20 @@ export function AosShellApp() {
       data-visual-instance-disposition="ds_oracle_review_required_before_owner_admission"
       data-visual-instance-style-source="@tcrn/ui-react/tcrnComponentCss"
       data-visual-instance-owner-quality="product-first"
-      data-visual-instance-slots="brand side-nav topbar search operations-cockpit work-queue gates-evidence owner-actions service-health secondary-disclosure"
+      data-visual-instance-slots="registered-product-logo side-nav topbar search operations-cockpit work-queue gates-evidence owner-actions service-health secondary-disclosure"
       data-visual-instance-primary-ia="operations-cockpit-work-queue"
       data-visual-instance-negative-criteria="no-proof-scaffold-hero no-dummy-cockpit no-raw-primary no-owner-readiness"
+      data-visual-instance-product-logo={aosProductLogoAsset.assetId}
+      data-product-logo-asset-id={aosProductLogoAsset.assetId}
+      data-product-logo-line-one={aosProductLogoAsset.lineOne}
+      data-product-logo-line-two={aosProductLogoAsset.lineTwo}
+      data-visual-instance-mobile-collapse-policy="hidden-affordance"
       data-visual-instance-variant={visualInstanceVariant}
       data-visual-instance-theme={controller.theme}
       data-tcrn-theme={controller.theme}
       data-visual-instance-locale={currentLocale}
       data-visual-instance-collapsed={visualInstanceCollapsed ? "true" : "false"}
-      data-owner-quality-collapse-policy={ownerQualityExpandedOnly ? "expanded-only-canonicalized" : "unclaimed-state"}
+      data-owner-quality-collapse-policy={browserVisualState.viewport === "mobile" ? "mobile-hidden-collapse-affordance" : "desktop-actionable-collapse-toggle"}
       data-visual-instance-route={currentRouteId}
       data-visual-instance-search={searchState}
       data-visual-instance-viewport={browserVisualState.viewport}
@@ -419,7 +418,7 @@ function OwnerQualityContent({
 }) {
   const isWorkFirst = route === "work";
   return (
-    <>
+    <div className="tcrn-product-shell-content-stack" data-package-owned-spacing-rhythm="product-shell-content-stack">
       <Surface
         data-owner-quality-primary-heading="true"
         data-owner-quality-first-viewport="product-led"
@@ -440,24 +439,26 @@ function OwnerQualityContent({
           copyText(copy, "noDispatch", "No live dispatch")
         ]} />
       </Surface>
-      <Surface data-owner-quality-work-queue="true" data-aos-work-module-entry="owner-quality-work-queue" aria-label={`${copyText(copy, "workTitle", "Work queue")}: ${variant}`}>
-        <Heading level={2}>{copyText(copy, "workTitle", "Work queue")}</Heading>
-        <WorkIndex rows={ownerQualityQueueRows(locale)} label={copyText(copy, "workTitle", "Work queue")} locale={locale} />
-      </Surface>
-      <Surface data-owner-quality-gates="true" aria-label={`${copyText(copy, "gateTitle", "Gates and evidence")}: ${variant}`}>
-        <Heading level={2}>{copyText(copy, "gateTitle", "Gates and evidence")}</Heading>
-        <TableShell
-          label={copyText(copy, "gateTitle", "Gates and evidence")}
-          columns={[
-            { key: "gate", label: copyText(copy, "gate", "Gate") },
-            { key: "evidence", label: copyText(copy, "evidence", "Evidence") },
-            { key: "decision", label: copyText(copy, "decision", "Decision") },
-            { key: "owner", label: "Owner" },
-            { key: "state", label: copyText(copy, "state", "State") }
-          ]}
-          rows={ownerQualityGateRows(locale)}
-        />
-      </Surface>
+      <div className="tcrn-product-shell-section-grid" data-package-owned-section-rhythm="work-gates">
+        <Surface data-owner-quality-work-queue="true" data-aos-work-module-entry="owner-quality-work-queue" aria-label={`${copyText(copy, "workTitle", "Work queue")}: ${variant}`}>
+          <Heading level={2}>{copyText(copy, "workTitle", "Work queue")}</Heading>
+          <WorkIndex rows={ownerQualityQueueRows(locale)} label={copyText(copy, "workTitle", "Work queue")} locale={locale} />
+        </Surface>
+        <Surface data-owner-quality-gates="true" aria-label={`${copyText(copy, "gateTitle", "Gates and evidence")}: ${variant}`}>
+          <Heading level={2}>{copyText(copy, "gateTitle", "Gates and evidence")}</Heading>
+          <TableShell
+            label={copyText(copy, "gateTitle", "Gates and evidence")}
+            columns={[
+              { key: "gate", label: copyText(copy, "gate", "Gate") },
+              { key: "evidence", label: copyText(copy, "evidence", "Evidence") },
+              { key: "decision", label: copyText(copy, "decision", "Decision") },
+              { key: "owner", label: "Owner" },
+              { key: "state", label: copyText(copy, "state", "State") }
+            ]}
+            rows={ownerQualityGateRows(locale)}
+          />
+        </Surface>
+      </div>
       <Surface data-owner-quality-actions="true" aria-label={`${copyText(copy, "actionTitle", "Owner actions")}: ${variant}`}>
         <Heading level={2}>{copyText(copy, "actionTitle", "Owner actions")}</Heading>
         <TableShell
@@ -498,7 +499,7 @@ function OwnerQualityContent({
         <Text>{copyText(copy, "developerDetailsText", "Technical receipts, API summaries, and debug payloads stay in secondary disclosure and must not become the owner first-viewport story.")}</Text>
         <pre hidden data-api-summary>{JSON.stringify(apiReadback.summary, null, 2)}</pre>
       </DisclosurePanel>
-    </>
+    </div>
   );
 }
 
@@ -590,7 +591,7 @@ function readInitialShellState(): InitialShellState {
   const initialSearchQuery = params?.get("search") ?? "";
   const ownerQualityRoutePolicy = resolveOwnerQualityRoutePolicy(currentPath, params);
   return {
-    collapsed: ownerQualityRoutePolicy.expandedOnly
+    collapsed: ownerQualityRoutePolicy.forceExpanded
       ? false
       : collapsedFromQuery === "true"
         ? true
@@ -639,17 +640,17 @@ function resolveVisualInstanceVariant({
   if (viewport === "mobile" && route === "work" && theme === "dark" && locale === "zh-CN") {
     return "mobile-dark-zh-cn-work-queue";
   }
-  if (viewport === "desktop" && route === "work" && theme === "light" && locale === "en" && !collapsed) {
-    return "desktop-light-work-queue";
+  if (viewport === "desktop" && route === "work" && theme === "light" && locale === "en") {
+    return collapsed ? "desktop-light-work-queue-collapsed" : "desktop-light-work-queue";
   }
-  if (viewport === "desktop" && route === "cockpit" && theme === "dark" && locale === "en" && !collapsed) {
-    return "desktop-dark-operations-cockpit";
+  if (viewport === "desktop" && route === "cockpit" && theme === "dark" && locale === "en" && searchState === "rest") {
+    return collapsed ? "desktop-dark-operations-cockpit-collapsed" : "desktop-dark-operations-cockpit";
   }
   if (viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en" && !collapsed && searchState === "results") {
     return "desktop-light-operations-search-results";
   }
-  if (viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en" && !collapsed && searchState === "rest") {
-    return defaultOwnerQualityVariant;
+  if (viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en" && searchState === "rest") {
+    return collapsed ? "desktop-light-operations-cockpit-collapsed" : defaultOwnerQualityVariant;
   }
   return outsideAcceptedOwnerQualityMatrix;
 }
@@ -661,24 +662,27 @@ function resolveOwnerQualityRoutePolicy(path: string, params: URLSearchParams | 
   const search = params?.get("search")?.trim() ?? "";
   if (route === "cockpit" && (locale === null || locale === tcrnDefaultLocale)) {
     if (theme === "dark" && search === "") {
-      return { expandedOnly: true, theme: "dark", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
+      return { forceExpanded: false, theme: "dark", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
     }
-    if ((theme === null || theme === "light") && (search === "" || search.length > 0)) {
-      return { expandedOnly: true, theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
+    if ((theme === null || theme === "light") && search === "") {
+      return { forceExpanded: false, theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
+    }
+    if ((theme === null || theme === "light") && search.length > 0) {
+      return { forceExpanded: true, theme: "light", locale: tcrnDefaultLocale, reason: "search_results_expanded_variant" };
     }
   }
   if (route === "work" && search === "") {
     if ((theme === null || theme === "light") && (locale === null || locale === tcrnDefaultLocale)) {
-      return { expandedOnly: true, theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
+      return { forceExpanded: false, theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
     }
     if (theme === "dark" && locale === "zh-CN") {
-      return { expandedOnly: true, theme: "dark", locale: "zh-CN", reason: "accepted_owner_quality_variant" };
+      return { forceExpanded: true, theme: "dark", locale: "zh-CN", reason: "mobile_collapse_hidden_policy" };
     }
   }
-  return { expandedOnly: false, reason: "unclaimed_state" };
+  return { forceExpanded: false, reason: "unclaimed_state" };
 }
 
-function isAcceptedOwnerQualityExpandedOnlyState({
+function isForceExpandedOwnerQualityState({
   route,
   theme,
   locale,
@@ -695,10 +699,7 @@ function isAcceptedOwnerQualityExpandedOnlyState({
 }): boolean {
   if (reducedMotion && viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en") return true;
   if (viewport === "mobile" && route === "work" && theme === "dark" && locale === "zh-CN") return true;
-  if (viewport === "desktop" && route === "work" && theme === "light" && locale === "en") return true;
-  if (viewport === "desktop" && route === "cockpit" && theme === "dark" && locale === "en") return true;
   if (viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en" && searchState === "results") return true;
-  if (viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en" && searchState === "rest") return true;
   return false;
 }
 

@@ -43,8 +43,12 @@ const requiredMarkers = [
   'data-side-nav-persisted-key="tcrn-aos-side-nav-collapsed"',
   'data-registered-navigation-only="true"',
   'data-registered-brand-lockup="@tcrn/ui-react/ShellBrandLockup"',
+  'data-registered-product-logo="@tcrn/ui-react/ProductLogo"',
+  'data-product-id="aos"',
+  'data-product-logo-asset-id="tcrn-aos-two-line"',
+  'data-product-logo-line-one="TCRN AOS"',
+  'data-product-logo-line-two="AI Operation System"',
   'data-tcrn-brand-mark="registered"',
-  'data-package-backed-brand-lockup="shell"',
   'data-package-backed-shell-control="locale-menu"',
   'data-package-backed-shell-control="theme-toggle"',
   'data-package-backed-shell-control="side-nav-collapse"',
@@ -68,7 +72,8 @@ const requiredMarkers = [
   'data-release-readiness="not-claimed"',
   'data-live-dispatch="not-enabled"',
   "useProductShellController",
-  "ProductShell"
+  "ProductShell",
+  "ProductLogo"
 ];
 
 const forbiddenPlannedPrimaryLabels = [
@@ -132,6 +137,28 @@ const acceptedVisualInstanceOracle = {
       }
     },
     {
+      id: "desktop-light-operations-cockpit-collapsed",
+      dsSelector: '[data-storybook-visual-instance="aos-owner-quality-product-shell"][data-visual-instance-variant="desktop-light-operations-cockpit-collapsed"]',
+      aosPath: "/cockpit?locale=en&theme=light&collapsed=true",
+      viewport: { width: 1440, height: 900 },
+      colorScheme: "light",
+      locale: "en",
+      reducedMotion: "no-preference",
+      expectedState: {
+        theme: "light",
+        locale: "en",
+        collapsed: "true",
+        route: "cockpit",
+        selectedRoute: "cockpit",
+        search: "rest",
+        searchExpanded: "false",
+        searchResultsVisible: "false",
+        viewport: "desktop",
+        reducedMotion: "false",
+        content: "cockpit"
+      }
+    },
+    {
       id: "desktop-dark-operations-cockpit",
       dsSelector: '[data-storybook-visual-instance="aos-owner-quality-product-shell"][data-visual-instance-variant="desktop-dark-operations-cockpit"]',
       aosPath: "/cockpit?locale=en&theme=dark&collapsed=false",
@@ -154,6 +181,28 @@ const acceptedVisualInstanceOracle = {
       }
     },
     {
+      id: "desktop-dark-operations-cockpit-collapsed",
+      dsSelector: '[data-storybook-visual-instance="aos-owner-quality-product-shell"][data-visual-instance-variant="desktop-dark-operations-cockpit-collapsed"]',
+      aosPath: "/cockpit?locale=en&theme=dark&collapsed=true",
+      viewport: { width: 1440, height: 900 },
+      colorScheme: "dark",
+      locale: "en",
+      reducedMotion: "no-preference",
+      expectedState: {
+        theme: "dark",
+        locale: "en",
+        collapsed: "true",
+        route: "cockpit",
+        selectedRoute: "cockpit",
+        search: "rest",
+        searchExpanded: "false",
+        searchResultsVisible: "false",
+        viewport: "desktop",
+        reducedMotion: "false",
+        content: "cockpit"
+      }
+    },
+    {
       id: "desktop-light-work-queue",
       dsSelector: '[data-storybook-visual-instance="aos-owner-quality-product-shell"][data-visual-instance-variant="desktop-light-work-queue"]',
       aosPath: "/work?locale=en&theme=light&collapsed=false",
@@ -165,6 +214,28 @@ const acceptedVisualInstanceOracle = {
         theme: "light",
         locale: "en",
         collapsed: "false",
+        route: "work",
+        selectedRoute: "work",
+        search: "rest",
+        searchExpanded: "false",
+        searchResultsVisible: "false",
+        viewport: "desktop",
+        reducedMotion: "false",
+        content: "work"
+      }
+    },
+    {
+      id: "desktop-light-work-queue-collapsed",
+      dsSelector: '[data-storybook-visual-instance="aos-owner-quality-product-shell"][data-visual-instance-variant="desktop-light-work-queue-collapsed"]',
+      aosPath: "/work?locale=en&theme=light&collapsed=true",
+      viewport: { width: 1440, height: 900 },
+      colorScheme: "light",
+      locale: "en",
+      reducedMotion: "no-preference",
+      expectedState: {
+        theme: "light",
+        locale: "en",
+        collapsed: "true",
         route: "work",
         selectedRoute: "work",
         search: "rest",
@@ -251,18 +322,19 @@ const acceptedVisualInstanceOracle = {
       "/",
       "/cockpit",
       "/cockpit?locale=en&theme=light",
+      "/cockpit?locale=en&theme=light&collapsed=true",
       "/cockpit?locale=en&theme=dark",
+      "/cockpit?locale=en&theme=dark&collapsed=true",
       "/work?locale=en&theme=light",
       "/work?locale=en&theme=light&collapsed=false",
       "/work?locale=en&theme=light&collapsed=true",
       "/work?locale=zh-CN&theme=dark&collapsed=false",
       "post-search-dismissal:/cockpit?locale=en&theme=light&collapsed=false&search=gate",
-      "side-nav-disabled:/cockpit?locale=en&theme=light"
+      "side-nav-toggle:/cockpit?locale=en&theme=light"
     ],
     outsideMatrixMarkerForbiddenForOwnerReview: "aos-route-state-outside-owner-quality-oracle",
-    collapsedOwnerReviewPolicy: "disable_side_nav_collapse_affordance_until_DS_admits_collapsed_owner_quality_variants",
+    collapsedOwnerReviewPolicy: "desktop_actionable_toggle_mobile_hidden_until_mobile_collapsed_variants",
     notAutomaticallyAdmitted: [
-      "collapsed Cockpit rest",
       "zh-CN Cockpit rest",
       "dark zh-CN Cockpit rest",
       "mobile Cockpit rest"
@@ -561,24 +633,38 @@ async function runBrowserProof(baseUrl) {
 
     await desktopPage.screenshot({ path: `${screenshotRoot}/01-desktop-cockpit-default.png`, fullPage: false });
 
-    const brandReadback = await desktopPage.locator('[data-tcrn-brand-mark="registered"]').evaluate((img) => {
-      const image = img;
-      const rect = image.getBoundingClientRect();
+    const brandReadback = await desktopPage.locator('.tcrn-product-logo[data-product-logo-asset-id="tcrn-aos-two-line"]').evaluate((logo) => {
+      const image = logo.querySelector('[data-tcrn-brand-mark="registered"]');
+      const rect = logo.getBoundingClientRect();
+      const imageRect = image?.getBoundingClientRect();
       return {
-        src: image.getAttribute("src"),
-        alt: image.getAttribute("alt"),
-        naturalWidth: image.naturalWidth,
-        naturalHeight: image.naturalHeight,
+        productId: logo.getAttribute("data-product-id"),
+        assetId: logo.getAttribute("data-product-logo-asset-id"),
+        lineOne: logo.querySelector(".tcrn-product-logo__line-one")?.textContent?.trim() ?? null,
+        lineTwo: logo.querySelector(".tcrn-product-logo__line-two")?.textContent?.trim() ?? null,
+        src: image?.getAttribute("src") ?? null,
+        alt: image?.getAttribute("alt") ?? null,
+        naturalWidth: image instanceof HTMLImageElement ? image.naturalWidth : 0,
+        naturalHeight: image instanceof HTMLImageElement ? image.naturalHeight : 0,
         width: rect.width,
-        height: rect.height
+        height: rect.height,
+        markWidth: imageRect?.width ?? 0,
+        markHeight: imageRect?.height ?? 0,
+        captionPresent: Boolean(logo.querySelector(".tcrn-shell-brand-lockup__caption"))
       };
     });
+    assert.equal(brandReadback.productId, "aos", "registered AOS product logo id is used");
+    assert.equal(brandReadback.assetId, "tcrn-aos-two-line", "registered AOS product logo asset id is used");
+    assert.equal(brandReadback.lineOne, "TCRN AOS", "registered AOS product logo line one is rendered");
+    assert.equal(brandReadback.lineTwo, "AI Operation System", "registered AOS product logo line two is rendered");
     assert.equal(brandReadback.src, "/assets/tcrn-brand-mark.svg");
-    assert.equal(brandReadback.alt, "TCRN registered brand mark");
+    assert.equal(brandReadback.alt, "TCRN AOS AI Operation System");
     assert.equal(brandReadback.naturalWidth > 0, true, "brand asset loads");
-    assert.equal(brandReadback.width >= 34, true, "registered brand mark is visibly sized");
+    assert.equal(brandReadback.markWidth >= 34, true, "registered brand mark is visibly sized inside ProductLogo");
+    assert.equal(brandReadback.markHeight >= 30, true, "registered brand mark has visible height inside ProductLogo");
     assert.equal(brandReadback.height >= 30, true, "expanded brand has visible height");
-    assert.equal(await desktopPage.locator('[data-package-backed-brand-lockup="shell"]').isVisible(), true, "package-backed shell brand lockup is visible");
+    assert.equal(brandReadback.captionPresent, false, "ProductLogo does not render the old Rebuild workspace brand caption");
+    assert.equal(await desktopPage.locator('[data-registered-product-logo="@tcrn/ui-react/ProductLogo"]').first().isVisible(), true, "package-backed ProductLogo is visible");
 
     const localeTrigger = desktopPage.locator("[data-locale-menu-toggle]");
     const localeMenu = desktopPage.locator("[data-locale-menu]");
@@ -604,32 +690,47 @@ async function runBrowserProof(baseUrl) {
     await desktopPage.waitForSelector('[data-aos-shell="owner-quality-product-shell"]');
     const sideNavToggle = desktopPage.locator("[data-side-nav-toggle]");
     assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "true", "side nav starts expanded");
-    assert.equal(await sideNavToggle.getAttribute("disabled"), "", "owner-quality Cockpit route disables side-nav collapse affordance instead of rendering a clickable no-op");
-    assert.equal(await sideNavToggle.getAttribute("aria-disabled"), "true", "disabled side-nav collapse affordance is exposed to assistive tech");
-    assert.equal(await sideNavToggle.getAttribute("data-side-nav-action"), "disabled", "side-nav collapse action is explicitly disabled for owner-quality route");
+    assert.equal(await sideNavToggle.getAttribute("disabled"), null, "desktop owner-quality Cockpit exposes actionable side-nav collapse");
+    assert.equal(await sideNavToggle.getAttribute("aria-disabled"), null, "desktop side-nav collapse is not aria-disabled");
+    assert.equal(await sideNavToggle.getAttribute("data-side-nav-action"), "toggle", "side-nav collapse action is an actionable toggle");
     assert.equal(await desktopPage.locator('[data-product-shell-route="cockpit"]').getAttribute("aria-current"), "page", "active cockpit route is marked");
     const expandedSideNavWidth = await desktopPage.locator(".tcrn-product-shell__sidebar").evaluate((node) => node.getBoundingClientRect().width);
-    assert.equal(await sideNavToggle.isDisabled(), true, "browser exposes side-nav collapse affordance as disabled");
-    assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "true", "owner-quality Cockpit route keeps side nav expanded");
-    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-operations-cockpit", "disabled side-nav affordance stays inside accepted Cockpit owner-quality variant");
-    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "shell remains expanded for owner-quality route");
-    assert.equal(await desktopPage.locator('[data-product-shell-route="cockpit"]').getAttribute("aria-current"), "page", "active cockpit route preserved while collapse is canonicalized");
-    const canonicalizedSideNavWidth = await desktopPage.locator(".tcrn-product-shell__sidebar").evaluate((node) => node.getBoundingClientRect().width);
-    assert.equal(canonicalizedSideNavWidth >= expandedSideNavWidth - 1, true, "owner-quality side nav remains visually expanded");
-    await desktopPage.screenshot({ path: `${screenshotRoot}/02-desktop-cockpit-side-nav-disabled.png`, fullPage: false });
+    assert.equal(Math.abs(expandedSideNavWidth - 280) <= 2, true, "desktop expanded rail matches DS 280px rail");
+    const iconCenterReadback = await measureSideNavIconCenterDelta(desktopPage);
+    assert.equal(iconCenterReadback.centerDelta <= 1, true, "side-nav collapse icon is centered within the 38px control");
+    assert.equal(await sideNavToggle.isDisabled(), false, "browser exposes side-nav collapse affordance as enabled");
+    await sideNavToggle.click();
+    await desktopPage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "true");
+    await desktopPage.waitForTimeout(260);
+    assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "false", "click collapse updates aria-expanded");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-operations-cockpit-collapsed", "click collapse maps to admitted collapsed Cockpit owner-quality variant");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "shell data state reflects collapsed rail");
+    assert.equal(await desktopPage.locator('[data-product-shell-route="cockpit"]').getAttribute("aria-current"), "page", "active cockpit route preserved while collapsed");
+    const collapsedSideNavWidth = await desktopPage.locator(".tcrn-product-shell__sidebar").evaluate((node) => node.getBoundingClientRect().width);
+    assert.equal(Math.abs(collapsedSideNavWidth - 92) <= 2, true, "desktop collapsed rail matches DS 92px rail");
+    await desktopPage.screenshot({ path: `${screenshotRoot}/02-desktop-cockpit-side-nav-collapsed.png`, fullPage: false });
+    await sideNavToggle.focus();
+    await desktopPage.keyboard.press("Enter");
+    await desktopPage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "false");
+    await desktopPage.waitForTimeout(260);
+    assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "true", "keyboard expand restores aria-expanded");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-operations-cockpit", "keyboard expand maps back to admitted expanded Cockpit variant");
     await desktopPage.goto(`${baseUrl}/work?locale=en&theme=light&collapsed=false`, { waitUntil: "networkidle" });
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "owner-quality Work route uses explicit expanded side nav state");
     assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("aria-expanded"), "true", "side nav toggle reflects explicit expanded Work route");
-    assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("disabled"), "", "owner-quality Work route disables side-nav collapse affordance");
-    assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("data-side-nav-action"), "disabled", "owner-quality Work route does not expose a clickable collapse no-op");
+    assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("disabled"), null, "owner-quality Work route exposes actionable desktop collapse");
+    assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("data-side-nav-action"), "toggle", "owner-quality Work route uses toggle side-nav action");
     assert.equal(await desktopPage.locator('[data-product-shell-route="work"]').getAttribute("aria-current"), "page", "active work route is preserved while expanded");
-    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-work-queue", "owner-quality Work route remains inside accepted expanded Work variant with disabled collapse affordance");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-work-queue", "owner-quality Work route remains inside accepted expanded Work variant with actionable collapse affordance");
     await desktopPage.goto(`${baseUrl}/work?locale=en&theme=light&collapsed=true`, { waitUntil: "networkidle" });
-    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "explicit collapsed Work query is normalized to expanded owner-quality state");
-    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-work-queue", "explicit collapsed Work query maps to accepted expanded Work variant");
-    assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("disabled"), "", "normalized collapsed Work query still disables the collapse affordance");
-    await desktopPage.goto(`${baseUrl}/cockpit?locale=en&theme=light`, { waitUntil: "networkidle" });
-    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "owner-review Cockpit rest route remains expanded after persistence check");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "explicit collapsed Work query remains collapsed under admitted DS variant");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-work-queue-collapsed", "explicit collapsed Work query maps to admitted collapsed Work variant");
+    assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("disabled"), null, "collapsed Work route keeps actionable collapse affordance");
+    await desktopPage.goto(`${baseUrl}/cockpit?locale=en&theme=light&collapsed=true`, { waitUntil: "networkidle" });
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "explicit collapsed Cockpit rest route stays collapsed");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-operations-cockpit-collapsed", "explicit collapsed Cockpit rest maps to admitted collapsed Cockpit variant");
+    await desktopPage.locator("[data-side-nav-toggle]").click();
+    await desktopPage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "false");
 
     const searchWrap = desktopPage.locator('[data-shell-control="product-shell-search"]');
     const searchInput = desktopPage.locator('.tcrn-product-shell-search input[type="search"]');
@@ -785,9 +886,9 @@ async function runBrowserProof(baseUrl) {
     );
     assert.equal(mobileSearchReadback.placeholder, "搜索运营", "mobile zh-CN search uses localized owner-quality placeholder");
     await mobilePage.screenshot({ path: `${screenshotRoot}/04-mobile-work-dark.png`, fullPage: false });
-    assert.equal(await mobilePage.locator("[data-side-nav-toggle]").getAttribute("disabled"), "", "mobile Work disables side-nav collapse affordance instead of rendering a clickable no-op");
-    assert.equal(await mobilePage.locator("[data-side-nav-toggle]").getAttribute("data-side-nav-action"), "disabled", "mobile Work exposes disabled side-nav action state");
-    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "mobile-dark-zh-cn-work-queue", "mobile Work remains inside accepted owner-quality variant with disabled collapse affordance");
+    assert.equal(await mobilePage.locator("[data-side-nav-toggle]").isVisible(), false, "mobile Work hides side-nav collapse affordance until mobile collapsed variants are admitted");
+    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-owner-quality-collapse-policy"), "mobile-hidden-collapse-affordance", "mobile Work records accepted hidden collapse policy");
+    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "mobile-dark-zh-cn-work-queue", "mobile Work remains inside accepted owner-quality variant with hidden collapse affordance");
     assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "mobile owner-quality side nav remains expanded");
     const mobileNoOverflow = await mobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
     assert.equal(mobileNoOverflow, true, "mobile shell has no horizontal page overflow");
@@ -819,7 +920,8 @@ async function runBrowserProof(baseUrl) {
         searchFocusExpansionBlurCollapse: true,
         searchOutsidePointerCollapse: true,
         searchTabCollapse: true,
-        sideNavOwnerQualityExpandedCanonicalization: true,
+        sideNavDesktopActionableToggle: true,
+        sideNavMobileHiddenAffordance: true,
         brandAssetVisible: true,
         plannedModuleNavigationAbsent: true,
         rawJsonNotPrimary: true,
@@ -830,7 +932,7 @@ async function runBrowserProof(baseUrl) {
       },
       screenshots: [
         `${screenshotRoot}/01-desktop-cockpit-default.png`,
-        `${screenshotRoot}/02-desktop-cockpit-side-nav-disabled.png`,
+        `${screenshotRoot}/02-desktop-cockpit-side-nav-collapsed.png`,
         `${screenshotRoot}/03-desktop-work-dark.png`,
         `${screenshotRoot}/04-mobile-work-dark.png`
       ]
@@ -860,11 +962,11 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
     {
       id: "root",
       path: "/",
-      expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant,
+      expectedVariant: "desktop-light-operations-cockpit-collapsed",
       expectedState: {
         theme: "light",
         locale: "en",
-        collapsed: "false",
+        collapsed: "true",
         route: "cockpit",
         search: "rest",
         searchExpanded: "false",
@@ -874,11 +976,11 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
     {
       id: "cockpit",
       path: "/cockpit",
-      expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant,
+      expectedVariant: "desktop-light-operations-cockpit-collapsed",
       expectedState: {
         theme: "light",
         locale: "en",
-        collapsed: "false",
+        collapsed: "true",
         route: "cockpit",
         search: "rest",
         searchExpanded: "false",
@@ -888,11 +990,11 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
     {
       id: "cockpit-light-query",
       path: "/cockpit?locale=en&theme=light",
-      expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant,
+      expectedVariant: "desktop-light-operations-cockpit-collapsed",
       expectedState: {
         theme: "light",
         locale: "en",
-        collapsed: "false",
+        collapsed: "true",
         route: "cockpit",
         search: "rest",
         searchExpanded: "false",
@@ -902,11 +1004,11 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
     {
       id: "cockpit-dark-query",
       path: "/cockpit?locale=en&theme=dark",
-      expectedVariant: "desktop-dark-operations-cockpit",
+      expectedVariant: "desktop-dark-operations-cockpit-collapsed",
       expectedState: {
         theme: "dark",
         locale: "en",
-        collapsed: "false",
+        collapsed: "true",
         route: "cockpit",
         search: "rest",
         searchExpanded: "false",
@@ -916,11 +1018,11 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
     {
       id: "work-light-query",
       path: "/work?locale=en&theme=light",
-      expectedVariant: "desktop-light-work-queue",
+      expectedVariant: "desktop-light-work-queue-collapsed",
       expectedState: {
         theme: "light",
         locale: "en",
-        collapsed: "false",
+        collapsed: "true",
         route: "work",
         search: "rest",
         searchExpanded: "false",
@@ -930,11 +1032,11 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
     {
       id: "work-light-collapsed-query",
       path: "/work?locale=en&theme=light&collapsed=true",
-      expectedVariant: "desktop-light-work-queue",
+      expectedVariant: "desktop-light-work-queue-collapsed",
       expectedState: {
         theme: "light",
         locale: "en",
-        collapsed: "false",
+        collapsed: "true",
         route: "work",
         search: "rest",
         searchExpanded: "false",
@@ -957,8 +1059,8 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
       dismissSearch: true
     },
     {
-      id: "side-nav-disabled-from-cockpit",
-      path: "/cockpit?locale=en&theme=light",
+      id: "side-nav-toggle-from-cockpit",
+      path: "/cockpit?locale=en&theme=light&collapsed=false",
       expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant,
       expectedState: {
         theme: "light",
@@ -969,7 +1071,7 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
         searchExpanded: "false",
         searchResultsVisible: "false"
       },
-      verifyDisabledSideNav: true
+      verifySideNavToggle: true
     }
   ];
   const readbacks = [];
@@ -992,11 +1094,11 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
             && layer?.hasAttribute("hidden") === true;
         });
       }
-      if (route.verifyDisabledSideNav) {
+      if (route.verifySideNavToggle) {
         const sideNavToggle = page.locator("[data-side-nav-toggle]");
-        assert.equal(await sideNavToggle.getAttribute("disabled"), "", `${route.id} renders a disabled side-nav collapse affordance`);
-        assert.equal(await sideNavToggle.getAttribute("aria-disabled"), "true", `${route.id} exposes aria-disabled on side-nav collapse affordance`);
-        assert.equal(await sideNavToggle.getAttribute("data-side-nav-action"), "disabled", `${route.id} records disabled side-nav action`);
+        assert.equal(await sideNavToggle.getAttribute("disabled"), null, `${route.id} renders an enabled side-nav collapse affordance`);
+        assert.equal(await sideNavToggle.getAttribute("aria-disabled"), null, `${route.id} does not expose aria-disabled on actionable side-nav collapse affordance`);
+        assert.equal(await sideNavToggle.getAttribute("data-side-nav-action"), "toggle", `${route.id} records toggle side-nav action`);
       }
       const readback = await page.locator('[data-aos-shell="owner-quality-product-shell"]').evaluate((root) => {
         const searchWrapper = root.querySelector(".tcrn-product-shell-search");
@@ -1032,14 +1134,18 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
       assert.equal(readback.variant, route.expectedVariant, `${route.id} maps to accepted owner-quality variant`);
       assert.equal(readback.theme, route.expectedState.theme, `${route.id} maps to expected owner-quality theme`);
       assert.equal(readback.locale, route.expectedState.locale, `${route.id} maps to expected owner-quality locale`);
-      assert.equal(readback.collapsed, route.expectedState.collapsed, `${route.id} normalizes to expanded side nav for owner-review proof`);
+      assert.equal(readback.collapsed, route.expectedState.collapsed, `${route.id} maps to expected side-nav collapsed state`);
       assert.equal(readback.route, route.expectedState.route, `${route.id} maps to expected owner-quality route`);
       assert.equal(readback.search, route.expectedState.search, `${route.id} lands in expected search state`);
       assert.equal(readback.searchExpanded, route.expectedState.searchExpanded, `${route.id} search expanded state matches expected owner-quality state`);
       assert.equal(readback.searchResultsVisible, route.expectedState.searchResultsVisible, `${route.id} search result visibility matches expected owner-quality state`);
-      if (route.verifyDisabledSideNav) {
-        assert.equal(readback.sideNavToggleDisabled, "true", `${route.id} keeps side-nav collapse disabled in rendered state`);
-        assert.equal(readback.sideNavAction, "disabled", `${route.id} keeps side-nav collapse action disabled in rendered state`);
+      if (route.verifySideNavToggle) {
+        assert.equal(readback.sideNavToggleDisabled, "false", `${route.id} keeps side-nav collapse enabled in rendered state`);
+        assert.equal(readback.sideNavAction, "toggle", `${route.id} keeps side-nav collapse action actionable in rendered state`);
+        await page.locator("[data-side-nav-toggle]").click();
+        await page.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "true");
+        assert.equal(await page.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-operations-cockpit-collapsed", `${route.id} click maps to admitted collapsed Cockpit variant`);
+        assert.equal(await page.locator('[data-product-shell-route="cockpit"]').getAttribute("aria-current"), "page", `${route.id} preserves active route after collapse`);
       }
     }
     return {
@@ -1190,12 +1296,36 @@ function compareVisualInstanceState(variant, dsMetrics, aosMetrics) {
     ds: dsMetrics.state.ownerVisualAdmissionBoundary,
     aos: aosMetrics.state.ownerVisualAdmissionBoundary
   });
+  add("brand.registeredProductLogoAsset", dsMetrics.productLogo.assetId === "tcrn-aos-two-line" && aosMetrics.productLogo.assetId === "tcrn-aos-two-line", {
+    expected: "tcrn-aos-two-line",
+    ds: dsMetrics.productLogo,
+    aos: aosMetrics.productLogo
+  });
+  add("brand.registeredProductLogoText", dsMetrics.productLogo.lineOne === "TCRN AOS" && dsMetrics.productLogo.lineTwo === "AI Operation System" && aosMetrics.productLogo.lineOne === "TCRN AOS" && aosMetrics.productLogo.lineTwo === "AI Operation System", {
+    expected: { lineOne: "TCRN AOS", lineTwo: "AI Operation System" },
+    ds: dsMetrics.productLogo,
+    aos: aosMetrics.productLogo
+  });
+  add("brand.noTextComposedCaption", dsMetrics.productLogo.captionPresent === false && aosMetrics.productLogo.captionPresent === false, {
+    dsCaptionPresent: dsMetrics.productLogo.captionPresent,
+    aosCaptionPresent: aosMetrics.productLogo.captionPresent
+  });
   add("content.requiredSurfaces", aosMetrics.content.hasOperationsCockpit && aosMetrics.content.hasWork, {
     hasOperationsCockpit: aosMetrics.content.hasOperationsCockpit,
     hasWork: aosMetrics.content.hasWork
   });
   add("content.productLedFirstViewport", aosMetrics.content.productLedFirstViewport === true, {
     productLedFirstViewport: aosMetrics.content.productLedFirstViewport
+  });
+  add("content.packageOwnedSpacingRhythm", dsMetrics.content.hasPackageContentStack === true && dsMetrics.content.hasPackageSectionGrid === true && aosMetrics.content.hasPackageContentStack === true && aosMetrics.content.hasPackageSectionGrid === true, {
+    ds: {
+      contentStack: dsMetrics.content.hasPackageContentStack,
+      sectionGrid: dsMetrics.content.hasPackageSectionGrid
+    },
+    aos: {
+      contentStack: aosMetrics.content.hasPackageContentStack,
+      sectionGrid: aosMetrics.content.hasPackageSectionGrid
+    }
   });
   add("content.singlePrimaryH1", aosMetrics.content.primaryH1Count === 1, {
     primaryH1Count: aosMetrics.content.primaryH1Count,
@@ -1400,6 +1530,7 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
     const searchWrapper = root.querySelector(".tcrn-product-shell-search");
     const searchResults = root.querySelector("[data-product-shell-search-results]");
     const utilityRow = root.querySelector(".tcrn-product-shell__utility-row");
+    const productLogo = root.querySelector('[data-product-logo-asset-id]');
     const controlOrder = utilityRow
       ? Array.from(utilityRow.children).map((child) => {
           if (child.matches(".tcrn-product-shell__current-location")) return "currentLocation";
@@ -1429,6 +1560,7 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
       viewport: root.getAttribute("data-visual-instance-viewport"),
       reducedMotion: root.getAttribute("data-visual-instance-reduced-motion"),
       content: root.getAttribute("data-visual-instance-content"),
+      productLogoAssetId: root.getAttribute("data-visual-instance-product-logo") ?? productLogo?.getAttribute("data-product-logo-asset-id") ?? null,
       ownerVisualAdmissionBoundary: root.getAttribute("data-visual-instance-disposition")
     };
     const contentReadback = {
@@ -1436,6 +1568,8 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
       primaryH1Text: primaryHeading?.textContent?.trim() ?? "",
       primaryH1Count: h1Elements.length,
       productLedFirstViewport: Boolean(root.querySelector("[data-owner-quality-first-viewport=\"product-led\"]")),
+      hasPackageContentStack: Boolean(root.querySelector(".tcrn-product-shell-content-stack[data-package-owned-spacing-rhythm=\"product-shell-content-stack\"]")),
+      hasPackageSectionGrid: Boolean(root.querySelector(".tcrn-product-shell-section-grid[data-package-owned-section-rhythm=\"work-gates\"]")),
       hasEnvironmentBanner: Boolean(root.querySelector(".tcrn-environment-banner")),
       hasInlineAlert: Boolean(root.querySelector(".tcrn-inline-alert")),
       hasOperationsCockpit: Boolean(root.querySelector("[data-owner-quality-primary-heading=\"true\"]")),
@@ -1472,6 +1606,15 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
           withinViewport: Boolean(rect && rect.left >= -1 && rect.right <= window.innerWidth + 1)
         };
       });
+    const sideNavToggle = root.querySelector("[data-side-nav-toggle]");
+    const visibleSideNavIcon = sideNavToggle
+      ? Array.from(sideNavToggle.querySelectorAll("[data-side-nav-icon]")).find((icon) => getComputedStyle(icon).display !== "none")
+      : null;
+    const sideNavToggleRect = sideNavToggle?.getBoundingClientRect();
+    const visibleSideNavIconRect = visibleSideNavIcon?.getBoundingClientRect();
+    const sideNavIconCenterDelta = sideNavToggleRect && visibleSideNavIconRect
+      ? Math.abs((visibleSideNavIconRect.left + visibleSideNavIconRect.width / 2) - (sideNavToggleRect.left + sideNavToggleRect.width / 2))
+      : Number.POSITIVE_INFINITY;
     return {
       missing: false,
       selector,
@@ -1509,6 +1652,20 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
         selectedNavItem: await readMetric("selectedNavItem", ".tcrn-nav-item[data-selected=\"true\"], .tcrn-nav-item[aria-current=\"page\"]")
       },
       controlOrder,
+      productLogo: {
+        productId: productLogo?.getAttribute("data-product-id") ?? null,
+        assetId: productLogo?.getAttribute("data-product-logo-asset-id") ?? null,
+        lineOne: productLogo?.querySelector(".tcrn-product-logo__line-one")?.textContent?.trim() ?? null,
+        lineTwo: productLogo?.querySelector(".tcrn-product-logo__line-two")?.textContent?.trim() ?? null,
+        captionPresent: Boolean(productLogo?.querySelector(".tcrn-shell-brand-lockup__caption"))
+      },
+      sideNavIconCenter: {
+        buttonWidth: sideNavToggleRect ? Number(sideNavToggleRect.width.toFixed(3)) : null,
+        buttonHeight: sideNavToggleRect ? Number(sideNavToggleRect.height.toFixed(3)) : null,
+        iconWidth: visibleSideNavIconRect ? Number(visibleSideNavIconRect.width.toFixed(3)) : null,
+        iconHeight: visibleSideNavIconRect ? Number(visibleSideNavIconRect.height.toFixed(3)) : null,
+        centerDelta: Number(sideNavIconCenterDelta.toFixed(3))
+      },
       state: stateReadback,
       content: contentReadback,
       viewport: {
@@ -1579,17 +1736,22 @@ function compareProductShellMetrics(dsMetrics, aosMetrics) {
   compareString(add, "localeTrigger.gap", dsMetrics.measured.localeTrigger.gap, aosMetrics.measured.localeTrigger.gap);
   compareString(add, "localeTrigger.paddingLeft", dsMetrics.measured.localeTrigger.paddingLeft, aosMetrics.measured.localeTrigger.paddingLeft);
   compareString(add, "localeTrigger.paddingRight", dsMetrics.measured.localeTrigger.paddingRight, aosMetrics.measured.localeTrigger.paddingRight);
-  add("sideNavToggle.disabledForOwnerQualityExpandedOnly", dsMetrics.measured.sideNavToggle.disabled === true && aosMetrics.measured.sideNavToggle.disabled === true, {
+  add("sideNavToggle.desktopActionableToggle", dsMetrics.measured.sideNavToggle.disabled === false && aosMetrics.measured.sideNavToggle.disabled === false && dsMetrics.measured.sideNavToggle.sideNavAction === "toggle" && aosMetrics.measured.sideNavToggle.sideNavAction === "toggle", {
     dsDisabled: dsMetrics.measured.sideNavToggle.disabled,
     aosDisabled: aosMetrics.measured.sideNavToggle.disabled,
     dsAction: dsMetrics.measured.sideNavToggle.sideNavAction,
     aosAction: aosMetrics.measured.sideNavToggle.sideNavAction
   });
-  add("sideNavToggle.disabledReason", dsMetrics.measured.sideNavToggle.sideNavAction === "disabled" && aosMetrics.measured.sideNavToggle.sideNavAction === "disabled", {
+  add("sideNavToggle.noDisabledReason", !dsMetrics.measured.sideNavToggle.sideNavDisabledReason && !aosMetrics.measured.sideNavToggle.sideNavDisabledReason, {
     dsReason: dsMetrics.measured.sideNavToggle.sideNavDisabledReason,
     aosReason: aosMetrics.measured.sideNavToggle.sideNavDisabledReason,
     dsTitle: dsMetrics.measured.sideNavToggle.title,
     aosTitle: aosMetrics.measured.sideNavToggle.title
+  });
+  add("sideNavToggle.iconCenterDelta.max1px", dsMetrics.sideNavIconCenter.centerDelta <= 1 && aosMetrics.sideNavIconCenter.centerDelta <= 1, {
+    ds: dsMetrics.sideNavIconCenter,
+    aos: aosMetrics.sideNavIconCenter,
+    maxPx: 1
   });
   compareResponsiveSearchWidth(add, "searchWrapper.width", dsMetrics.measured.searchWrapper.width, aosMetrics.measured.searchWrapper.width, expectSearchResults);
   compareNumber(add, "searchWrapper.height", dsMetrics.measured.searchWrapper.height, aosMetrics.measured.searchWrapper.height, 0.5);
@@ -1912,6 +2074,23 @@ async function inspectContentRegion(page) {
       bannerOverlap: Boolean(environmentRect && alertRect && alertRect.top < environmentRect.bottom && alertRect.bottom > environmentRect.top)
     };
   }, forbiddenScaffoldPrimaryLabels);
+}
+
+async function measureSideNavIconCenterDelta(page) {
+  return page.locator("[data-side-nav-toggle]").evaluate((button) => {
+    const icon = button.querySelector('[data-side-nav-icon="collapse"]')?.getBoundingClientRect();
+    const buttonRect = button.getBoundingClientRect();
+    const centerDelta = icon
+      ? Math.abs((icon.left + icon.width / 2) - (buttonRect.left + buttonRect.width / 2))
+      : Number.POSITIVE_INFINITY;
+    return {
+      buttonWidth: Number(buttonRect.width.toFixed(3)),
+      buttonHeight: Number(buttonRect.height.toFixed(3)),
+      iconWidth: icon ? Number(icon.width.toFixed(3)) : null,
+      iconHeight: icon ? Number(icon.height.toFixed(3)) : null,
+      centerDelta: Number(centerDelta.toFixed(3))
+    };
+  });
 }
 
 async function clickStableContentPoint(page) {

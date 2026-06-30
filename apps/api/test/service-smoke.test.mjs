@@ -80,8 +80,13 @@ test("local service serves the AOS shell while backend readbacks stay available"
       assert.match(html, /data-product-shell-effect-boundary="ds-owned-tokens-motion-focus"/);
       assert.match(html, /data-local-wrapper-event-delegation="absent"/);
       assert.match(html, /data-registered-brand-lockup="@tcrn\/ui-react\/ShellBrandLockup"/);
+      assert.match(html, /data-registered-product-logo="@tcrn\/ui-react\/ProductLogo"/);
+      assert.match(html, /data-product-id="aos"/);
+      assert.match(html, /data-product-logo-asset-id="tcrn-aos-two-line"/);
+      assert.match(html, /TCRN AOS/);
+      assert.match(html, /AI Operation System/);
       assert.match(html, /data-tcrn-brand-mark="registered"/);
-      assert.match(html, /data-package-backed-brand-lockup="shell"/);
+      assert.doesNotMatch(html, /<span class="tcrn-shell-brand-lockup__caption">/);
       assert.match(html, /data-package-backed-shell-control="side-nav-collapse"/);
       assert.match(html, /data-package-backed-shell-control="locale-menu"/);
       assert.match(html, /data-package-backed-shell-control="theme-toggle"/);

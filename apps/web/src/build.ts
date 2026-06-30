@@ -32,7 +32,7 @@ console.log(JSON.stringify({
     "apps/web/dist/assets/aos-client.js"
   ],
   clientBundle: "apps/web/dist/assets/aos-client.js",
-  brandSurface: "registered_ds_brand_mark_via_shell_brand_lockup",
+  brandSurface: "registered_ds_product_logo_via_shell_brand_lockup",
   productShellBoundary: "ProductShell/useProductShellController/ProductShellSearch",
   forbiddenAosWordmarkAssetsEmitted: false,
   productAcceptance: false,

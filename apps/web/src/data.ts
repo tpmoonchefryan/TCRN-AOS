@@ -44,7 +44,6 @@ export const localeCopy: Record<TcrnLocale, Record<string, string>> = {
   "zh-CN": {
     productName: "AOS 重建工作区",
     moduleName: "运营驾驶舱",
-    brandCaption: "重建工作区",
     navLabel: "AOS 运营导航",
     navGroupLabel: "运营模块",
     cockpitLabel: "运营驾驶舱",
@@ -74,7 +73,6 @@ export const localeCopy: Record<TcrnLocale, Record<string, string>> = {
     boundary: "只读预览",
     localProof: "仅本地证明",
     noDispatch: "无实时派发",
-    sideNavFixed: "owner 评审路线保持展开导航",
     developerDetailsText: "技术收据、API 摘要和调试载荷必须留在二级披露中，不能成为 owner 首屏故事。",
     structuralPlaceholder: "等待评审",
     fixtureRows: "合成运营数据",
@@ -136,7 +134,6 @@ export const localeCopy: Record<TcrnLocale, Record<string, string>> = {
   en: {
     productName: "AOS Rebuild Workspace",
     moduleName: "Operations Cockpit",
-    brandCaption: "Rebuild workspace",
     navLabel: "AOS operations navigation",
     navGroupLabel: "Operations modules",
     cockpitLabel: "Operations Cockpit",
@@ -166,7 +163,6 @@ export const localeCopy: Record<TcrnLocale, Record<string, string>> = {
     boundary: "Read-only preview",
     localProof: "Local proof only",
     noDispatch: "No live dispatch",
-    sideNavFixed: "Side navigation stays expanded for owner-review routes",
     developerDetailsText: "Technical receipts, API summaries, and debug payloads stay in secondary disclosure and must not become the owner first-viewport story.",
     structuralPlaceholder: "review queued",
     fixtureRows: "synthetic operations rows",
