@@ -32,6 +32,18 @@ const forbiddenPlannedVisibleLabels = [
   "Module placeholders"
 ];
 
+const forbiddenScaffoldVisibleLabels = [
+  "AOS frontend shell",
+  "Frontend shell slice",
+  "Local structural slice only",
+  "Dummy Cockpit",
+  "structural placeholder",
+  "Storybook parity proof",
+  "runtime readbacks",
+  "Backend readback",
+  "Registered slice boundary"
+];
+
 const forbiddenAosBrandAssetMarkers = [
   "tcrn-aos-wordmark",
   "aos-favicon.png",
@@ -45,17 +57,22 @@ test("local service serves the AOS shell while backend readbacks stay available"
     for (const target of shellTargets) {
       const response = await fetch(`${service.url}${target}`);
       const html = await response.text();
-      assert.equal(response.status, 200, `${target} serves the first shell slice`);
+      assert.equal(response.status, 200, `${target} serves the owner-quality product shell`);
       assert.match(response.headers.get("content-type") ?? "", /text\/html/);
-      assert.match(html, /data-aos-shell="first-frontend-slice"/);
-      assert.match(html, /data-storybook-visual-instance="aos-frontend-shell-slice"/);
-      assert.match(html, /data-visual-instance-name="AosFrontendShellSliceVisualInstance"/);
+      assert.match(html, /data-aos-shell="owner-quality-product-shell"/);
+      assert.match(html, /data-storybook-visual-instance="aos-owner-quality-product-shell"/);
+      assert.match(html, /data-visual-instance-name="AosOwnerQualityProductShell"/);
       assert.match(html, /data-visual-instance-disposition="ds_oracle_review_required_before_owner_admission"/);
-      assert.match(html, /data-aos-visual-instance-oracle="true"/);
+      assert.match(html, /data-visual-instance-owner-quality="product-first"/);
+      assert.match(html, /data-owner-quality-product-shell-oracle="true"/);
       assert.match(html, /data-design-system-source="@tcrn\/ui-react @tcrn\/ui-tokens @tcrn\/ui-copy-state"/);
-      assert.match(html, /data-storybook-visual-instance-consumed="aos-frontend-shell-slice"/);
-      assert.match(html, /data-aos-dummy-cockpit="true"/);
-      assert.match(html, /data-aos-work-module-entry="jira-like"/);
+      assert.match(html, /data-storybook-visual-instance-consumed="aos-owner-quality-product-shell"/);
+      assert.match(html, /data-owner-quality-first-viewport="product-led"/);
+      assert.match(html, /data-owner-quality-work-queue="true"/);
+      assert.match(html, /data-owner-quality-gates="true"/);
+      assert.match(html, /data-owner-quality-actions="true"/);
+      assert.match(html, /data-owner-quality-service-health="true"/);
+      assert.match(html, /data-aos-work-module-entry="owner-quality-work-queue"/);
       assert.match(html, /data-aos-registered-module-boundary="cockpit-work-only"/);
       assert.match(html, /data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"/);
       assert.match(html, /data-package-backed-product-shell-boundary="side-nav-shell-v1"/);
@@ -78,6 +95,9 @@ test("local service serves the AOS shell while backend readbacks stay available"
       }
       for (const label of forbiddenPlannedVisibleLabels) {
         assert.equal(html.includes(label), false, `${label} is not rendered as visible product IA`);
+      }
+      for (const label of forbiddenScaffoldVisibleLabels) {
+        assert.equal(html.includes(label), false, `${label} is not rendered in owner-quality shell HTML`);
       }
     }
 
