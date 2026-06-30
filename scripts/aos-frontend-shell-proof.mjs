@@ -105,7 +105,7 @@ const acceptedVisualInstanceOracle = {
   page: "components.html#aos-owner-quality-product-shell",
   selector: '[data-storybook-visual-instance="aos-owner-quality-product-shell"]',
   ownerVisualAdmissionBoundary: "ds_oracle_review_required_before_owner_admission",
-  dsBasis: "TCRN-DESIGN-SYSTEM 0292b074f0ef19e5312145d80c91b647edbd1ae7",
+  dsBasis: "current local TCRN-DESIGN-SYSTEM package-backed owner-quality oracle",
   variants: [
     {
       id: "desktop-light-operations-cockpit",
@@ -1287,23 +1287,54 @@ async function runVisualComparatorProof(browser, aosBaseUrl, dsBaseUrl) {
 }
 
 async function collectProductShellComparatorMetrics(page, rootSelector) {
-  return page.evaluate(({ selector, plannedPrimaryLabels, forbiddenScaffoldPrimaryLabels, brandAssetMarkers }) => {
+  return page.evaluate(async ({ selector, plannedPrimaryLabels, forbiddenScaffoldPrimaryLabels, brandAssetMarkers }) => {
     const root = document.querySelector(selector);
     if (!root) return { missing: true, selector };
-    const readMetric = (name, childSelector) => {
+    const waitForFocusTransition = () => new Promise((resolve) => window.setTimeout(resolve, 190));
+    const readMetric = async (name, childSelector) => {
       const element = root.querySelector(childSelector);
       if (!element) return { missing: true, selector: childSelector };
       const rect = element.getBoundingClientRect();
       const style = getComputedStyle(element);
+      const focusTarget = element.matches("button, input, a, select, textarea, [tabindex]")
+        ? element
+        : element.querySelector("button, input, a, select, textarea, [tabindex]");
+      const previousActive = document.activeElement;
+      let focus = null;
+      if (focusTarget instanceof HTMLElement) {
+        focusTarget.focus({ preventScroll: true });
+        await waitForFocusTransition();
+        const focusStyle = getComputedStyle(focusTarget);
+        focus = {
+          outlineWidth: focusStyle.outlineWidth,
+          outlineStyle: focusStyle.outlineStyle,
+          outlineColor: focusStyle.outlineColor,
+          outlineOffset: focusStyle.outlineOffset,
+          boxShadow: focusStyle.boxShadow
+        };
+        focusTarget.blur();
+        if (previousActive instanceof HTMLElement && previousActive !== focusTarget) {
+          previousActive.focus({ preventScroll: true });
+        }
+      }
       return {
         name,
         selector: childSelector,
         width: Number(rect.width.toFixed(3)),
         height: Number(rect.height.toFixed(3)),
+        left: Number(rect.left.toFixed(3)),
+        right: Number(rect.right.toFixed(3)),
+        top: Number(rect.top.toFixed(3)),
+        bottom: Number(rect.bottom.toFixed(3)),
+        scrollWidth: element.scrollWidth,
+        clientWidth: element.clientWidth,
         display: style.display,
         position: style.position,
         gridTemplateColumns: style.gridTemplateColumns,
         gap: style.gap,
+        columnGap: style.columnGap,
+        rowGap: style.rowGap,
+        justifyContent: style.justifyContent,
         paddingLeft: style.paddingLeft,
         paddingRight: style.paddingRight,
         borderRadius: style.borderRadius,
@@ -1311,9 +1342,23 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
         borderWidth: style.borderWidth,
         backgroundColor: style.backgroundColor,
         color: style.color,
+        fontFamily: style.fontFamily,
+        fontSize: style.fontSize,
+        fontWeight: style.fontWeight,
+        lineHeight: style.lineHeight,
+        letterSpacing: style.letterSpacing,
+        boxShadow: style.boxShadow,
+        outlineWidth: style.outlineWidth,
+        outlineStyle: style.outlineStyle,
+        outlineColor: style.outlineColor,
+        outlineOffset: style.outlineOffset,
         transitionProperty: style.transitionProperty,
         transitionDuration: style.transitionDuration,
-        animationName: style.animationName
+        transitionTimingFunction: style.transitionTimingFunction,
+        animationName: style.animationName,
+        animationDuration: style.animationDuration,
+        animationTimingFunction: style.animationTimingFunction,
+        focus
       };
     };
     const shellStyle = getComputedStyle(root);
@@ -1321,9 +1366,61 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
     const selectedNavItem = root.querySelector(".tcrn-nav-item[aria-current=\"page\"], .tcrn-nav-item[data-selected=\"true\"]");
     const searchWrapper = root.querySelector(".tcrn-product-shell-search");
     const searchResults = root.querySelector("[data-product-shell-search-results]");
+    const utilityRow = root.querySelector(".tcrn-product-shell__utility-row");
+    const controlOrder = utilityRow
+      ? Array.from(utilityRow.children).map((child) => {
+          if (child.matches(".tcrn-product-shell__current-location")) return "currentLocation";
+          if (child.matches(".tcrn-product-shell-search")) return "searchWrapper";
+          if (child.matches(".tcrn-shell-theme-toggle")) return "themeToggle";
+          if (child.matches(".tcrn-shell-locale-menu")) return "localeTrigger";
+          return child.className || child.tagName.toLowerCase();
+        })
+      : [];
     const primaryHeading = root.querySelector("[data-owner-quality-primary-heading=\"true\"] h1, [data-owner-quality-primary-heading=\"true\"] .tcrn-heading");
     const h1Elements = Array.from(root.querySelectorAll("h1"));
     const contentText = root.textContent ?? "";
+    const stateReadback = {
+      variant: root.getAttribute("data-visual-instance-variant"),
+      theme: root.getAttribute("data-visual-instance-theme"),
+      productShellTheme: root.getAttribute("data-product-shell-theme"),
+      tcrnTheme: root.getAttribute("data-tcrn-theme"),
+      locale: root.getAttribute("data-visual-instance-locale"),
+      collapsed: root.getAttribute("data-visual-instance-collapsed"),
+      productShellCollapsed: root.getAttribute("data-product-shell-collapsed"),
+      sideNavCollapsed: root.getAttribute("data-side-nav-collapsed"),
+      route: root.getAttribute("data-visual-instance-route"),
+      selectedRoute: selectedNavItem?.getAttribute("data-product-shell-route") ?? null,
+      search: root.getAttribute("data-visual-instance-search"),
+      searchExpanded: searchWrapper?.getAttribute("data-search-expanded") ?? null,
+      searchResultsVisible: searchResults ? String(!searchResults.hasAttribute("hidden")) : "false",
+      viewport: root.getAttribute("data-visual-instance-viewport"),
+      reducedMotion: root.getAttribute("data-visual-instance-reduced-motion"),
+      content: root.getAttribute("data-visual-instance-content"),
+      ownerVisualAdmissionBoundary: root.getAttribute("data-visual-instance-disposition")
+    };
+    const contentReadback = {
+      visibleText: contentText,
+      primaryH1Text: primaryHeading?.textContent?.trim() ?? "",
+      primaryH1Count: h1Elements.length,
+      productLedFirstViewport: Boolean(root.querySelector("[data-owner-quality-first-viewport=\"product-led\"]")),
+      hasEnvironmentBanner: Boolean(root.querySelector(".tcrn-environment-banner")),
+      hasInlineAlert: Boolean(root.querySelector(".tcrn-inline-alert")),
+      hasOperationsCockpit: Boolean(root.querySelector("[data-owner-quality-primary-heading=\"true\"]")),
+      hasWork: Boolean(root.querySelector("[data-aos-work-module-entry=\"owner-quality-work-queue\"]")),
+      hasGates: Boolean(root.querySelector("[data-owner-quality-gates=\"true\"]")),
+      hasOwnerActions: Boolean(root.querySelector("[data-owner-quality-actions=\"true\"]")),
+      hasServiceHealth: Boolean(root.querySelector("[data-owner-quality-service-health=\"true\"]")),
+      rawJsonVisible: Boolean(root.querySelector("[data-api-summary]") && getComputedStyle(root.querySelector("[data-api-summary]")).display !== "none"),
+      containsPlannedPrimaryLabels: plannedPrimaryLabels.filter((label) => contentText.includes(label)),
+      containsForbiddenScaffoldPrimaryLabels: forbiddenScaffoldPrimaryLabels.filter((label) => contentText.includes(label)),
+      containsBrandAssetMarkers: brandAssetMarkers.filter((label) => contentText.includes(label)),
+      containsLocalProofOnly: contentText.includes("Local proof only"),
+      containsZhLocalProofOnly: contentText.includes("仅本地证明"),
+      plannedPrimaryHits: plannedPrimaryLabels.filter((label) => contentText.includes(label)),
+      scaffoldPrimaryHits: forbiddenScaffoldPrimaryLabels.filter((label) => contentText.includes(label)),
+      forbiddenBrandHits: brandAssetMarkers.filter((marker) => contentText.includes(marker)),
+      ownerReadinessHits: ["owner ready", "owner-ready", "release ready", "release-readiness achieved", "product accepted"].filter((marker) => contentText.toLowerCase().includes(marker))
+    };
     const rootRect = root.getBoundingClientRect();
     const topBar = root.querySelector(".tcrn-top-bar");
     const topBarRect = topBar?.getBoundingClientRect();
@@ -1357,57 +1454,30 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
         gridTemplateColumns: shellStyle.gridTemplateColumns,
         transitionProperty: shellStyle.transitionProperty,
         transitionDuration: shellStyle.transitionDuration,
+        transitionTimingFunction: shellStyle.transitionTimingFunction,
         backgroundColor: shellStyle.backgroundColor,
         color: shellStyle.color,
         themeWashAnimationName: shellAfterStyle.animationName,
-        themeWashAnimationDuration: shellAfterStyle.animationDuration
+        themeWashAnimationDuration: shellAfterStyle.animationDuration,
+        themeWashAnimationTimingFunction: shellAfterStyle.animationTimingFunction
       },
       measured: {
-        themeToggle: readMetric("themeToggle", ".tcrn-shell-theme-toggle"),
-        localeTrigger: readMetric("localeTrigger", ".tcrn-shell-locale-menu__trigger"),
-        sideNavToggle: readMetric("sideNavToggle", ".tcrn-shell-side-nav-toggle"),
-        searchWrapper: readMetric("searchWrapper", ".tcrn-product-shell-search"),
-        searchInput: readMetric("searchInput", ".tcrn-search-input"),
-        topBar: readMetric("topBar", ".tcrn-top-bar"),
-        selectedNavItem: readMetric("selectedNavItem", ".tcrn-nav-item[data-selected=\"true\"]")
+        themeToggle: await readMetric("themeToggle", ".tcrn-shell-theme-toggle"),
+        localeTrigger: await readMetric("localeTrigger", ".tcrn-shell-locale-menu__trigger"),
+        sideNavToggle: await readMetric("sideNavToggle", ".tcrn-shell-side-nav-toggle"),
+        searchWrapper: await readMetric("searchWrapper", ".tcrn-product-shell-search"),
+        searchInput: await readMetric("searchInput", ".tcrn-search-input"),
+        searchControl: await readMetric("searchControl", ".tcrn-search-input__control"),
+        searchShortcut: await readMetric("searchShortcut", ".tcrn-search-input__shortcut"),
+        currentLocation: await readMetric("currentLocation", ".tcrn-product-shell__current-location"),
+        localeChevron: await readMetric("localeChevron", ".tcrn-shell-locale-menu__chevron"),
+        topBar: await readMetric("topBar", ".tcrn-top-bar"),
+        utilityRow: await readMetric("utilityRow", ".tcrn-product-shell__utility-row"),
+        selectedNavItem: await readMetric("selectedNavItem", ".tcrn-nav-item[data-selected=\"true\"], .tcrn-nav-item[aria-current=\"page\"]")
       },
-      state: {
-        variant: root.getAttribute("data-visual-instance-variant"),
-        theme: root.getAttribute("data-visual-instance-theme"),
-        productShellTheme: root.getAttribute("data-product-shell-theme"),
-        tcrnTheme: root.getAttribute("data-tcrn-theme"),
-        locale: root.getAttribute("data-visual-instance-locale"),
-        collapsed: root.getAttribute("data-visual-instance-collapsed"),
-        productShellCollapsed: root.getAttribute("data-product-shell-collapsed"),
-        sideNavCollapsed: root.getAttribute("data-side-nav-collapsed"),
-        route: root.getAttribute("data-visual-instance-route"),
-        selectedRoute: selectedNavItem?.getAttribute("data-product-shell-route") ?? null,
-        search: root.getAttribute("data-visual-instance-search"),
-        searchExpanded: searchWrapper?.getAttribute("data-search-expanded") ?? null,
-        searchResultsVisible: searchResults ? String(!searchResults.hasAttribute("hidden")) : "false",
-        viewport: root.getAttribute("data-visual-instance-viewport"),
-        reducedMotion: root.getAttribute("data-visual-instance-reduced-motion"),
-        content: root.getAttribute("data-visual-instance-content"),
-        ownerVisualAdmissionBoundary: root.getAttribute("data-visual-instance-disposition")
-      },
-      content: {
-        visibleText: contentText,
-        primaryH1Text: primaryHeading?.textContent?.trim() ?? "",
-        primaryH1Count: h1Elements.length,
-        productLedFirstViewport: Boolean(root.querySelector("[data-owner-quality-first-viewport=\"product-led\"]")),
-        hasEnvironmentBanner: Boolean(root.querySelector(".tcrn-environment-banner")),
-        hasInlineAlert: Boolean(root.querySelector(".tcrn-inline-alert")),
-        hasOperationsCockpit: Boolean(root.querySelector("[data-owner-quality-primary-heading=\"true\"]")),
-        hasWork: Boolean(root.querySelector("[data-aos-work-module-entry=\"owner-quality-work-queue\"]")),
-        hasGates: Boolean(root.querySelector("[data-owner-quality-gates=\"true\"]")),
-        hasOwnerActions: Boolean(root.querySelector("[data-owner-quality-actions=\"true\"]")),
-        hasServiceHealth: Boolean(root.querySelector("[data-owner-quality-service-health=\"true\"]")),
-        rawJsonVisible: Boolean(root.querySelector("[data-api-summary]") && getComputedStyle(root.querySelector("[data-api-summary]")).display !== "none"),
-        plannedPrimaryHits: plannedPrimaryLabels.filter((label) => contentText.includes(label)),
-        scaffoldPrimaryHits: forbiddenScaffoldPrimaryLabels.filter((label) => contentText.includes(label)),
-        forbiddenBrandHits: brandAssetMarkers.filter((marker) => contentText.includes(marker)),
-        ownerReadinessHits: ["owner ready", "owner-ready", "release ready", "release-readiness achieved", "product accepted"].filter((marker) => contentText.toLowerCase().includes(marker))
-      },
+      controlOrder,
+      state: stateReadback,
+      content: contentReadback,
       viewport: {
         width: window.innerWidth,
         height: window.innerHeight,
@@ -1432,6 +1502,7 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
 function compareProductShellMetrics(dsMetrics, aosMetrics) {
   const failures = [];
   const checks = [];
+  const isReducedMotion = dsMetrics.state?.reducedMotion === "true" || aosMetrics.state?.reducedMotion === "true";
   const add = (name, passed, readback) => {
     checks.push({ name, passed, ...readback });
     if (!passed) failures.push({ name, ...readback });
@@ -1443,27 +1514,58 @@ function compareProductShellMetrics(dsMetrics, aosMetrics) {
       aos: aosMetrics.sourceMarkers?.[key]
     });
   }
+  add("controlOrder.currentLocation-search-theme-locale", (dsMetrics.controlOrder ?? []).join(">") === (aosMetrics.controlOrder ?? []).join(">"), {
+    ds: dsMetrics.controlOrder,
+    aos: aosMetrics.controlOrder
+  });
   for (const control of ["themeToggle", "sideNavToggle"]) {
     compareNumber(add, `${control}.width`, dsMetrics.measured[control].width, aosMetrics.measured[control].width, 0.5);
     compareNumber(add, `${control}.height`, dsMetrics.measured[control].height, aosMetrics.measured[control].height, 0.5);
     compareString(add, `${control}.borderRadius`, dsMetrics.measured[control].borderRadius, aosMetrics.measured[control].borderRadius);
     compareString(add, `${control}.display`, dsMetrics.measured[control].display, aosMetrics.measured[control].display);
   }
+  for (const control of ["themeToggle", "sideNavToggle", "localeTrigger", "searchInput", "searchControl", "searchShortcut", "currentLocation", "selectedNavItem", "topBar"]) {
+    for (const property of ["fontFamily", "fontSize", "fontWeight", "lineHeight", "letterSpacing"]) {
+      compareString(add, `${control}.${property}`, dsMetrics.measured[control][property], aosMetrics.measured[control][property]);
+    }
+  }
+  for (const control of ["themeToggle", "sideNavToggle", "localeTrigger", "searchInput", "searchShortcut", "selectedNavItem", "topBar"]) {
+    for (const property of ["backgroundColor", "borderStyle", "borderWidth", "boxShadow"]) {
+      compareString(add, `${control}.${property}`, dsMetrics.measured[control][property], aosMetrics.measured[control][property]);
+    }
+  }
+  for (const control of ["themeToggle", "sideNavToggle", "localeTrigger", "searchControl", "searchInput"]) {
+    for (const property of ["outlineWidth", "outlineStyle", "outlineColor", "outlineOffset", "boxShadow"]) {
+      compareString(add, `${control}.focus.${property}`, dsMetrics.measured[control].focus?.[property], aosMetrics.measured[control].focus?.[property]);
+    }
+  }
   compareNumber(add, "localeTrigger.height", dsMetrics.measured.localeTrigger.height, aosMetrics.measured.localeTrigger.height, 0.5);
   compareString(add, "localeTrigger.borderRadius", dsMetrics.measured.localeTrigger.borderRadius, aosMetrics.measured.localeTrigger.borderRadius);
   compareString(add, "localeTrigger.display", dsMetrics.measured.localeTrigger.display, aosMetrics.measured.localeTrigger.display);
+  compareString(add, "localeTrigger.gap", dsMetrics.measured.localeTrigger.gap, aosMetrics.measured.localeTrigger.gap);
+  compareString(add, "localeTrigger.paddingLeft", dsMetrics.measured.localeTrigger.paddingLeft, aosMetrics.measured.localeTrigger.paddingLeft);
+  compareString(add, "localeTrigger.paddingRight", dsMetrics.measured.localeTrigger.paddingRight, aosMetrics.measured.localeTrigger.paddingRight);
   compareResponsiveSearchWidth(add, "searchWrapper.width", dsMetrics.measured.searchWrapper.width, aosMetrics.measured.searchWrapper.width);
   compareNumber(add, "searchWrapper.height", dsMetrics.measured.searchWrapper.height, aosMetrics.measured.searchWrapper.height, 0.5);
   compareString(add, "searchWrapper.transitionProperty", dsMetrics.measured.searchWrapper.transitionProperty, aosMetrics.measured.searchWrapper.transitionProperty);
+  compareMotionDuration(add, "searchWrapper.transitionDuration", dsMetrics.measured.searchWrapper.transitionDuration, aosMetrics.measured.searchWrapper.transitionDuration, isReducedMotion);
+  compareString(add, "searchWrapper.transitionTimingFunction", dsMetrics.measured.searchWrapper.transitionTimingFunction, aosMetrics.measured.searchWrapper.transitionTimingFunction);
   compareResponsiveSearchWidth(add, "searchInput.width", dsMetrics.measured.searchInput.width, aosMetrics.measured.searchInput.width);
   compareNumber(add, "searchInput.height", dsMetrics.measured.searchInput.height, aosMetrics.measured.searchInput.height, 0.5);
   compareString(add, "searchInput.borderRadius", dsMetrics.measured.searchInput.borderRadius, aosMetrics.measured.searchInput.borderRadius);
   compareString(add, "searchInput.display", dsMetrics.measured.searchInput.display, aosMetrics.measured.searchInput.display);
+  compareString(add, "searchInput.gap", dsMetrics.measured.searchInput.gap, aosMetrics.measured.searchInput.gap);
+  compareString(add, "searchInput.paddingLeft", dsMetrics.measured.searchInput.paddingLeft, aosMetrics.measured.searchInput.paddingLeft);
+  compareString(add, "searchInput.paddingRight", dsMetrics.measured.searchInput.paddingRight, aosMetrics.measured.searchInput.paddingRight);
   compareSearchGrid(add, "searchInput.gridTemplateColumns", dsMetrics.measured.searchInput.gridTemplateColumns, aosMetrics.measured.searchInput.gridTemplateColumns);
+  compareString(add, "searchShortcut.paddingLeft", dsMetrics.measured.searchShortcut.paddingLeft, aosMetrics.measured.searchShortcut.paddingLeft);
+  compareString(add, "searchShortcut.paddingRight", dsMetrics.measured.searchShortcut.paddingRight, aosMetrics.measured.searchShortcut.paddingRight);
+  compareString(add, "searchShortcut.position", dsMetrics.measured.searchShortcut.position, aosMetrics.measured.searchShortcut.position);
   compareTopBarHeight(add, "topBar.height", dsMetrics.measured.topBar.height, aosMetrics.measured.topBar.height, dsMetrics.viewport, aosMetrics.viewport);
   compareString(add, "topBar.display", dsMetrics.measured.topBar.display, aosMetrics.measured.topBar.display);
   compareString(add, "topBar.position", dsMetrics.measured.topBar.position, aosMetrics.measured.topBar.position);
   compareString(add, "topBar.gap", dsMetrics.measured.topBar.gap, aosMetrics.measured.topBar.gap);
+  compareString(add, "topBar.justifyContent", dsMetrics.measured.topBar.justifyContent, aosMetrics.measured.topBar.justifyContent);
   compareString(add, "topBar.paddingLeft", dsMetrics.measured.topBar.paddingLeft, aosMetrics.measured.topBar.paddingLeft);
   compareString(add, "topBar.paddingRight", dsMetrics.measured.topBar.paddingRight, aosMetrics.measured.topBar.paddingRight);
   compareString(add, "topBar.borderRadius", dsMetrics.measured.topBar.borderRadius, aosMetrics.measured.topBar.borderRadius);
@@ -1490,7 +1592,18 @@ function compareProductShellMetrics(dsMetrics, aosMetrics) {
     aosControlsOutOfViewport: aosMetrics.viewport.controlsOutOfViewport
   });
   compareString(add, "shell.transitionProperty", dsMetrics.shell.transitionProperty, aosMetrics.shell.transitionProperty);
+  compareMotionDuration(add, "shell.transitionDuration", dsMetrics.shell.transitionDuration, aosMetrics.shell.transitionDuration, isReducedMotion);
+  compareString(add, "shell.transitionTimingFunction", dsMetrics.shell.transitionTimingFunction, aosMetrics.shell.transitionTimingFunction);
   compareString(add, "shell.themeWashAnimationName", dsMetrics.shell.themeWashAnimationName, aosMetrics.shell.themeWashAnimationName);
+  compareMotionDuration(add, "shell.themeWashAnimationDuration", dsMetrics.shell.themeWashAnimationDuration, aosMetrics.shell.themeWashAnimationDuration, isReducedMotion);
+  compareString(add, "shell.themeWashAnimationTimingFunction", dsMetrics.shell.themeWashAnimationTimingFunction, aosMetrics.shell.themeWashAnimationTimingFunction);
+  for (const control of ["themeToggle", "sideNavToggle", "localeTrigger", "localeChevron"]) {
+    compareString(add, `${control}.transitionProperty`, dsMetrics.measured[control].transitionProperty, aosMetrics.measured[control].transitionProperty);
+    compareMotionDuration(add, `${control}.transitionDuration`, dsMetrics.measured[control].transitionDuration, aosMetrics.measured[control].transitionDuration, isReducedMotion);
+    compareString(add, `${control}.transitionTimingFunction`, dsMetrics.measured[control].transitionTimingFunction, aosMetrics.measured[control].transitionTimingFunction);
+  }
+  compareString(add, "utilityRow.gap", dsMetrics.measured.utilityRow.gap, aosMetrics.measured.utilityRow.gap);
+  compareString(add, "utilityRow.justifyContent", dsMetrics.measured.utilityRow.justifyContent, aosMetrics.measured.utilityRow.justifyContent);
   add("aos-no-horizontal-overflow", aosMetrics.viewport.hasHorizontalOverflow === false, { aosHasHorizontalOverflow: aosMetrics.viewport.hasHorizontalOverflow });
   return { checks, failures };
 }
@@ -1508,6 +1621,15 @@ function compareReducedMotionMetrics(dsMetrics, aosMetrics) {
   compareString(add, "reduced.localeTrigger.transitionProperty", dsMetrics.measured.localeTrigger.transitionProperty, aosMetrics.measured.localeTrigger.transitionProperty);
   compareString(add, "reduced.sideNavToggle.transitionProperty", dsMetrics.measured.sideNavToggle.transitionProperty, aosMetrics.measured.sideNavToggle.transitionProperty);
   compareString(add, "reduced.searchWrapper.transitionProperty", dsMetrics.measured.searchWrapper.transitionProperty, aosMetrics.measured.searchWrapper.transitionProperty);
+  compareString(add, "reduced.localeChevron.transitionProperty", dsMetrics.measured.localeChevron.transitionProperty, aosMetrics.measured.localeChevron.transitionProperty);
+  for (const control of ["themeToggle", "localeTrigger", "sideNavToggle", "searchWrapper", "localeChevron"]) {
+    compareReducedDuration(add, `reduced.${control}.transitionDuration`, dsMetrics.measured[control].transitionDuration, aosMetrics.measured[control].transitionDuration);
+    compareString(add, `reduced.${control}.transitionTimingFunction`, dsMetrics.measured[control].transitionTimingFunction, aosMetrics.measured[control].transitionTimingFunction);
+  }
+  compareReducedDuration(add, "reduced.shell.transitionDuration", dsMetrics.shell.transitionDuration, aosMetrics.shell.transitionDuration);
+  compareString(add, "reduced.shell.transitionTimingFunction", dsMetrics.shell.transitionTimingFunction, aosMetrics.shell.transitionTimingFunction);
+  compareReducedDuration(add, "reduced.shell.themeWashAnimationDuration", dsMetrics.shell.themeWashAnimationDuration, aosMetrics.shell.themeWashAnimationDuration);
+  compareString(add, "reduced.shell.themeWashAnimationTimingFunction", dsMetrics.shell.themeWashAnimationTimingFunction, aosMetrics.shell.themeWashAnimationTimingFunction);
   return { checks, failures };
 }
 
@@ -1541,6 +1663,37 @@ function compareNumber(add, name, ds, aos, tolerance) {
 
 function compareString(add, name, ds, aos) {
   add(name, ds === aos, { ds, aos });
+}
+
+function compareMotionDuration(add, name, ds, aos, isReducedMotion) {
+  if (isReducedMotion) {
+    compareReducedDuration(add, name, ds, aos);
+    return;
+  }
+  compareString(add, name, ds, aos);
+}
+
+function compareReducedDuration(add, name, ds, aos) {
+  const dsMaxMs = maxCssDurationMs(ds);
+  const aosMaxMs = maxCssDurationMs(aos);
+  const maxAllowedMs = 0.02;
+  add(name, dsMaxMs <= maxAllowedMs && aosMaxMs <= maxAllowedMs, {
+    ds,
+    aos,
+    dsMaxMs,
+    aosMaxMs,
+    allowedMaxMs: maxAllowedMs,
+    disposition: "reduced-motion zero-duration fallback accepts browser-normalized 0s or 1e-05s forms"
+  });
+}
+
+function maxCssDurationMs(value) {
+  return Math.max(0, ...String(value).split(",").map((part) => {
+    const trimmed = part.trim();
+    if (trimmed.endsWith("ms")) return Number(trimmed.slice(0, -2));
+    if (trimmed.endsWith("s")) return Number(trimmed.slice(0, -1)) * 1000;
+    return Number(trimmed) || 0;
+  }));
 }
 
 function compareResponsiveSearchWidth(add, name, ds, aos) {
