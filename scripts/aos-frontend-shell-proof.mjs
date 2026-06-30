@@ -247,11 +247,16 @@ const acceptedVisualInstanceOracle = {
       "/",
       "/cockpit",
       "/cockpit?locale=en&theme=light",
+      "/cockpit?locale=en&theme=dark",
+      "/work?locale=en&theme=light",
       "/work?locale=en&theme=light&collapsed=false",
+      "/work?locale=en&theme=light&collapsed=true",
       "/work?locale=zh-CN&theme=dark&collapsed=false",
-      "post-search-dismissal:/cockpit?locale=en&theme=light&collapsed=false&search=gate"
+      "post-search-dismissal:/cockpit?locale=en&theme=light&collapsed=false&search=gate",
+      "side-nav-toggle:/cockpit?locale=en&theme=light"
     ],
     outsideMatrixMarkerForbiddenForOwnerReview: "aos-route-state-outside-owner-quality-oracle",
+    collapsedOwnerReviewPolicy: "canonicalize_to_expanded_only_until_DS_admits_collapsed_owner_quality_variants",
     notAutomaticallyAdmitted: [
       "collapsed Cockpit rest",
       "zh-CN Cockpit rest",
@@ -591,30 +596,32 @@ async function runBrowserProof(baseUrl) {
     assert.equal(await desktopPage.locator("html").getAttribute("lang"), "zh-CN", "selection updates locale");
     assert.equal(await desktopPage.evaluate(() => document.activeElement?.matches("[data-locale-menu-toggle]")), true, "selection returns focus to locale trigger");
 
+    await desktopPage.goto(`${baseUrl}/cockpit?locale=en&theme=light`, { waitUntil: "networkidle" });
+    await desktopPage.waitForSelector('[data-aos-shell="owner-quality-product-shell"]');
     const sideNavToggle = desktopPage.locator("[data-side-nav-toggle]");
     assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "true", "side nav starts expanded");
     assert.equal(await desktopPage.locator('[data-product-shell-route="cockpit"]').getAttribute("aria-current"), "page", "active cockpit route is marked");
     const expandedSideNavWidth = await desktopPage.locator(".tcrn-product-shell__sidebar").evaluate((node) => node.getBoundingClientRect().width);
     await sideNavToggle.click();
-    assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "false", "collapse sets aria-expanded false");
-    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "shell records collapsed side nav");
-    assert.equal(await desktopPage.evaluate(() => localStorage.getItem("tcrn-aos-side-nav-collapsed")), "true", "side nav collapse persists in route-owned local storage");
-    assert.equal(await desktopPage.locator('[data-product-shell-route="cockpit"]').getAttribute("aria-current"), "page", "active cockpit route preserved while collapsed");
-    await desktopPage.waitForFunction((expandedWidth) => {
-      const width = document.querySelector(".tcrn-product-shell__sidebar")?.getBoundingClientRect().width ?? expandedWidth;
-      return width < expandedWidth - 90;
-    }, expandedSideNavWidth);
-    const collapsedSideNavWidth = await desktopPage.locator(".tcrn-product-shell__sidebar").evaluate((node) => node.getBoundingClientRect().width);
-    assert.equal(collapsedSideNavWidth < expandedSideNavWidth - 90, true, "collapsed side nav has a deliberate narrower visual state");
-    await desktopPage.screenshot({ path: `${screenshotRoot}/02-desktop-cockpit-collapsed.png`, fullPage: false });
+    await desktopPage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "false");
+    assert.equal(await sideNavToggle.getAttribute("aria-expanded"), "true", "owner-quality Cockpit route canonicalizes side-nav collapse requests back to expanded");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-operations-cockpit", "side-nav collapse request stays inside accepted Cockpit owner-quality variant");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "shell remains expanded for owner-quality route");
+    assert.equal(await desktopPage.evaluate(() => localStorage.getItem("tcrn-aos-side-nav-collapsed")), "false", "collapse request writes expanded canonical owner-review state");
+    assert.equal(await desktopPage.locator('[data-product-shell-route="cockpit"]').getAttribute("aria-current"), "page", "active cockpit route preserved while collapse is canonicalized");
+    const canonicalizedSideNavWidth = await desktopPage.locator(".tcrn-product-shell__sidebar").evaluate((node) => node.getBoundingClientRect().width);
+    assert.equal(canonicalizedSideNavWidth >= expandedSideNavWidth - 1, true, "owner-quality side nav remains visually expanded");
+    await desktopPage.screenshot({ path: `${screenshotRoot}/02-desktop-cockpit-side-nav-canonicalized.png`, fullPage: false });
     await desktopPage.goto(`${baseUrl}/work?locale=en&theme=light&collapsed=false`, { waitUntil: "networkidle" });
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "owner-quality Work route uses explicit expanded side nav state");
     assert.equal(await desktopPage.locator("[data-side-nav-toggle]").getAttribute("aria-expanded"), "true", "side nav toggle reflects explicit expanded Work route");
-    assert.equal(await desktopPage.locator('[data-product-shell-route="work"]').getAttribute("aria-current"), "page", "active work route is preserved while collapsed");
+    assert.equal(await desktopPage.locator('[data-product-shell-route="work"]').getAttribute("aria-current"), "page", "active work route is preserved while expanded");
     await desktopPage.locator("[data-side-nav-toggle]").click();
-    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "side nav still collapses on demand outside the claimed Work variant");
-    await desktopPage.locator("[data-side-nav-toggle]").click();
-    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "side nav expands again for the claimed Work variant");
+    await desktopPage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "false");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-work-queue", "owner-quality Work route remains inside accepted expanded Work variant after collapse request");
+    await desktopPage.goto(`${baseUrl}/work?locale=en&theme=light&collapsed=true`, { waitUntil: "networkidle" });
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "explicit collapsed Work query is normalized to expanded owner-quality state");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-work-queue", "explicit collapsed Work query maps to accepted expanded Work variant");
     await desktopPage.goto(`${baseUrl}/cockpit?locale=en&theme=light`, { waitUntil: "networkidle" });
     assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "owner-review Cockpit rest route remains expanded after persistence check");
 
@@ -752,7 +759,9 @@ async function runBrowserProof(baseUrl) {
     assert.equal(mobileWorkHeadingTop < 760, true, "mobile first viewport reaches the Work heading within the DS stacked shell posture");
     await mobilePage.screenshot({ path: `${screenshotRoot}/04-mobile-work-dark.png`, fullPage: false });
     await mobilePage.locator("[data-side-nav-toggle]").click();
-    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "true", "mobile side nav collapses on demand from the accepted expanded state");
+    await mobilePage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "false");
+    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "mobile-dark-zh-cn-work-queue", "mobile Work collapse request stays inside accepted owner-quality variant");
+    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "mobile owner-quality side nav remains expanded after collapse request");
     const mobileNoOverflow = await mobilePage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
     assert.equal(mobileNoOverflow, true, "mobile shell has no horizontal page overflow");
     assert.equal(await mobilePage.locator('[data-tcrn-brand-mark="registered"]').isVisible(), true, "mobile registered brand mark remains visible");
@@ -783,7 +792,7 @@ async function runBrowserProof(baseUrl) {
         searchFocusExpansionBlurCollapse: true,
         searchOutsidePointerCollapse: true,
         searchTabCollapse: true,
-        sideNavCollapseExpandAriaPersistence: true,
+        sideNavOwnerQualityExpandedCanonicalization: true,
         brandAssetVisible: true,
         plannedModuleNavigationAbsent: true,
         rawJsonNotPrimary: true,
@@ -794,7 +803,7 @@ async function runBrowserProof(baseUrl) {
       },
       screenshots: [
         `${screenshotRoot}/01-desktop-cockpit-default.png`,
-        `${screenshotRoot}/02-desktop-cockpit-collapsed.png`,
+        `${screenshotRoot}/02-desktop-cockpit-side-nav-canonicalized.png`,
         `${screenshotRoot}/03-desktop-work-dark.png`,
         `${screenshotRoot}/04-mobile-work-dark.png`
       ]
@@ -824,23 +833,116 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
     {
       id: "root",
       path: "/",
-      expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant
+      expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant,
+      expectedState: {
+        theme: "light",
+        locale: "en",
+        collapsed: "false",
+        route: "cockpit",
+        search: "rest",
+        searchExpanded: "false",
+        searchResultsVisible: "false"
+      }
     },
     {
       id: "cockpit",
       path: "/cockpit",
-      expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant
+      expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant,
+      expectedState: {
+        theme: "light",
+        locale: "en",
+        collapsed: "false",
+        route: "cockpit",
+        search: "rest",
+        searchExpanded: "false",
+        searchResultsVisible: "false"
+      }
     },
     {
       id: "cockpit-light-query",
       path: "/cockpit?locale=en&theme=light",
-      expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant
+      expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant,
+      expectedState: {
+        theme: "light",
+        locale: "en",
+        collapsed: "false",
+        route: "cockpit",
+        search: "rest",
+        searchExpanded: "false",
+        searchResultsVisible: "false"
+      }
+    },
+    {
+      id: "cockpit-dark-query",
+      path: "/cockpit?locale=en&theme=dark",
+      expectedVariant: "desktop-dark-operations-cockpit",
+      expectedState: {
+        theme: "dark",
+        locale: "en",
+        collapsed: "false",
+        route: "cockpit",
+        search: "rest",
+        searchExpanded: "false",
+        searchResultsVisible: "false"
+      }
+    },
+    {
+      id: "work-light-query",
+      path: "/work?locale=en&theme=light",
+      expectedVariant: "desktop-light-work-queue",
+      expectedState: {
+        theme: "light",
+        locale: "en",
+        collapsed: "false",
+        route: "work",
+        search: "rest",
+        searchExpanded: "false",
+        searchResultsVisible: "false"
+      }
+    },
+    {
+      id: "work-light-collapsed-query",
+      path: "/work?locale=en&theme=light&collapsed=true",
+      expectedVariant: "desktop-light-work-queue",
+      expectedState: {
+        theme: "light",
+        locale: "en",
+        collapsed: "false",
+        route: "work",
+        search: "rest",
+        searchExpanded: "false",
+        searchResultsVisible: "false"
+      }
     },
     {
       id: "post-search-dismissal",
       path: "/cockpit?locale=en&theme=light&collapsed=false&search=gate",
       expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant,
+      expectedState: {
+        theme: "light",
+        locale: "en",
+        collapsed: "false",
+        route: "cockpit",
+        search: "rest",
+        searchExpanded: "false",
+        searchResultsVisible: "false"
+      },
       dismissSearch: true
+    },
+    {
+      id: "side-nav-toggle-from-cockpit",
+      path: "/cockpit?locale=en&theme=light",
+      expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant,
+      expectedState: {
+        theme: "light",
+        locale: "en",
+        collapsed: "false",
+        route: "cockpit",
+        search: "rest",
+        searchExpanded: "false",
+        searchResultsVisible: "false"
+      },
+      clickSideNavToggle: true
     }
   ];
   const readbacks = [];
@@ -862,6 +964,10 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
           return document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "false"
             && layer?.hasAttribute("hidden") === true;
         });
+      }
+      if (route.clickSideNavToggle) {
+        await page.locator("[data-side-nav-toggle]").click();
+        await page.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "false");
       }
       const readback = await page.locator('[data-aos-shell="owner-quality-product-shell"]').evaluate((root) => {
         const searchWrapper = root.querySelector(".tcrn-product-shell-search");
@@ -891,14 +997,14 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
         acceptedVisualInstanceOracle.ownerQualityPolicy.outsideMatrixMarkerForbiddenForOwnerReview,
         `${route.id} must not render outside accepted owner-quality visual-instance matrix`
       );
-      assert.equal(readback.variant, route.expectedVariant, `${route.id} maps to default owner-quality Operations Cockpit variant`);
-      assert.equal(readback.theme, "light", `${route.id} normalizes to light theme for owner-review proof`);
-      assert.equal(readback.locale, "en", `${route.id} normalizes to en locale for owner-review proof`);
-      assert.equal(readback.collapsed, "false", `${route.id} normalizes to expanded side nav for owner-review proof`);
-      assert.equal(readback.route, "cockpit", `${route.id} remains on Cockpit route`);
-      assert.equal(readback.search, "rest", `${route.id} lands in search rest state`);
-      assert.equal(readback.searchExpanded, "false", `${route.id} search is compact at rest`);
-      assert.equal(readback.searchResultsVisible, "false", `${route.id} search results are hidden at rest`);
+      assert.equal(readback.variant, route.expectedVariant, `${route.id} maps to accepted owner-quality variant`);
+      assert.equal(readback.theme, route.expectedState.theme, `${route.id} maps to expected owner-quality theme`);
+      assert.equal(readback.locale, route.expectedState.locale, `${route.id} maps to expected owner-quality locale`);
+      assert.equal(readback.collapsed, route.expectedState.collapsed, `${route.id} normalizes to expanded side nav for owner-review proof`);
+      assert.equal(readback.route, route.expectedState.route, `${route.id} maps to expected owner-quality route`);
+      assert.equal(readback.search, route.expectedState.search, `${route.id} lands in expected search state`);
+      assert.equal(readback.searchExpanded, route.expectedState.searchExpanded, `${route.id} search expanded state matches expected owner-quality state`);
+      assert.equal(readback.searchResultsVisible, route.expectedState.searchResultsVisible, `${route.id} search result visibility matches expected owner-quality state`);
     }
     return {
       ok: true,
@@ -909,6 +1015,7 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
       },
       defaultCockpitVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant,
       outsideMatrixMarkerForbiddenForOwnerReview: acceptedVisualInstanceOracle.ownerQualityPolicy.outsideMatrixMarkerForbiddenForOwnerReview,
+      collapsedOwnerReviewPolicy: acceptedVisualInstanceOracle.ownerQualityPolicy.collapsedOwnerReviewPolicy,
       reviewedRoutes: readbacks,
       notAutomaticallyAdmitted: acceptedVisualInstanceOracle.ownerQualityPolicy.notAutomaticallyAdmitted
     };

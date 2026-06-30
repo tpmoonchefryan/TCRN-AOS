@@ -112,6 +112,13 @@ interface BrowserVisualState {
   reducedMotion: boolean;
 }
 
+interface OwnerQualityRoutePolicy {
+  expandedOnly: boolean;
+  theme?: "light" | "dark";
+  locale?: TcrnLocale;
+  reason: "accepted_owner_quality_variant" | "unclaimed_state";
+}
+
 export function renderAosShellHtml(): string {
   const appHtml = renderToStaticMarkup(<AosShellApp />);
 
@@ -272,15 +279,36 @@ export function AosShellApp() {
   const currentCopy = localeCopy[currentLocale] ?? localeCopy.en;
   const currentRouteId = currentRoute.id as AosRouteId;
   const searchState: VisualInstanceSearchState = controller.searchExpanded && controller.searchResults.length > 0 ? "results" : "rest";
-  const visualInstanceVariant = resolveVisualInstanceVariant({
+  const ownerQualityExpandedOnly = isAcceptedOwnerQualityExpandedOnlyState({
     route: currentRouteId,
     theme: controller.theme,
     locale: currentLocale,
-    collapsed: controller.collapsed,
     searchState,
     viewport: browserVisualState.viewport,
     reducedMotion: browserVisualState.reducedMotion
   });
+  const visualInstanceCollapsed = ownerQualityExpandedOnly ? false : controller.collapsed;
+  const visualInstanceVariant = resolveVisualInstanceVariant({
+    route: currentRouteId,
+    theme: controller.theme,
+    locale: currentLocale,
+    collapsed: visualInstanceCollapsed,
+    searchState,
+    viewport: browserVisualState.viewport,
+    reducedMotion: browserVisualState.reducedMotion
+  });
+  const productShellControlProps = {
+    ...controller.productShellControlProps,
+    collapsed: visualInstanceCollapsed,
+    onCollapsedChange: (collapsed: boolean) => {
+      if (ownerQualityExpandedOnly) {
+        controller.setCollapsed(false);
+        writeBrowserStorage(sideNavStorageKey, "false");
+        return;
+      }
+      controller.setCollapsed(collapsed);
+    }
+  };
   const shellSearchPlaceholder = copyText(currentCopy, "shellSearch", "Search work, gates, evidence, or owner actions");
   const currentRouteLabel = currentRouteId === "work"
     ? copyText(currentCopy, "workLabel", currentRoute.label)
@@ -304,7 +332,7 @@ export function AosShellApp() {
 
   return (
     <ProductShell
-      {...controller.productShellControlProps}
+      {...productShellControlProps}
       productName={copyText(currentCopy, "productName", "AOS Rebuild Workspace")}
       moduleName={copyText(currentCopy, "moduleName", "Operations Cockpit")}
       brandSuffix="AOS"
@@ -342,7 +370,8 @@ export function AosShellApp() {
       data-visual-instance-theme={controller.theme}
       data-tcrn-theme={controller.theme}
       data-visual-instance-locale={currentLocale}
-      data-visual-instance-collapsed={controller.collapsed ? "true" : "false"}
+      data-visual-instance-collapsed={visualInstanceCollapsed ? "true" : "false"}
+      data-owner-quality-collapse-policy={ownerQualityExpandedOnly ? "expanded-only-canonicalized" : "unclaimed-state"}
       data-visual-instance-route={currentRouteId}
       data-visual-instance-search={searchState}
       data-visual-instance-viewport={browserVisualState.viewport}
@@ -554,17 +583,17 @@ function readInitialShellState(): InitialShellState {
   const currentPath = typeof window === "undefined" ? "/cockpit" : window.location.pathname;
   const collapsedFromQuery = params?.get("collapsed");
   const initialSearchQuery = params?.get("search") ?? "";
-  const ownerReviewCockpitRestRoute = isOwnerReviewCockpitRestRoute(currentPath, params);
+  const ownerQualityRoutePolicy = resolveOwnerQualityRoutePolicy(currentPath, params);
   return {
-    collapsed: ownerReviewCockpitRestRoute
+    collapsed: ownerQualityRoutePolicy.expandedOnly
       ? false
       : collapsedFromQuery === "true"
         ? true
         : collapsedFromQuery === "false"
           ? false
           : readStoredBoolean(sideNavStorageKey, false),
-    theme: ownerReviewCockpitRestRoute ? "light" : resolveTheme(params?.get("theme") ?? readBrowserStorage(themeStorageKey)),
-    locale: ownerReviewCockpitRestRoute ? tcrnDefaultLocale : resolveLocale(params?.get("locale") ?? readBrowserStorage(localeStorageKey)),
+    theme: ownerQualityRoutePolicy.theme ?? resolveTheme(params?.get("theme") ?? readBrowserStorage(themeStorageKey)),
+    locale: ownerQualityRoutePolicy.locale ?? resolveLocale(params?.get("locale") ?? readBrowserStorage(localeStorageKey)),
     currentPath,
     lastSearchResult: readBrowserStorage(lastSearchResultStorageKey) ?? "none",
     initialSearchQuery,
@@ -620,17 +649,52 @@ function resolveVisualInstanceVariant({
   return outsideAcceptedOwnerQualityMatrix;
 }
 
-function isOwnerReviewCockpitRestRoute(path: string, params: URLSearchParams | undefined): boolean {
+function resolveOwnerQualityRoutePolicy(path: string, params: URLSearchParams | undefined): OwnerQualityRoutePolicy {
   const route = resolveCurrentRoute(path).id;
-  if (route !== "cockpit") return false;
   const theme = params?.get("theme") ?? null;
   const locale = params?.get("locale") ?? null;
-  const collapsed = params?.get("collapsed") ?? null;
   const search = params?.get("search")?.trim() ?? "";
-  if (search !== "") return false;
-  return (theme === null || theme === "light")
-    && (locale === null || locale === tcrnDefaultLocale)
-    && (collapsed === null || collapsed === "false");
+  if (route === "cockpit" && (locale === null || locale === tcrnDefaultLocale)) {
+    if (theme === "dark" && search === "") {
+      return { expandedOnly: true, theme: "dark", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
+    }
+    if ((theme === null || theme === "light") && (search === "" || search.length > 0)) {
+      return { expandedOnly: true, theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
+    }
+  }
+  if (route === "work" && search === "") {
+    if ((theme === null || theme === "light") && (locale === null || locale === tcrnDefaultLocale)) {
+      return { expandedOnly: true, theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
+    }
+    if (theme === "dark" && locale === "zh-CN") {
+      return { expandedOnly: true, theme: "dark", locale: "zh-CN", reason: "accepted_owner_quality_variant" };
+    }
+  }
+  return { expandedOnly: false, reason: "unclaimed_state" };
+}
+
+function isAcceptedOwnerQualityExpandedOnlyState({
+  route,
+  theme,
+  locale,
+  searchState,
+  viewport,
+  reducedMotion
+}: {
+  route: AosRouteId;
+  theme: "light" | "dark";
+  locale: TcrnLocale;
+  searchState: VisualInstanceSearchState;
+  viewport: VisualInstanceViewportState;
+  reducedMotion: boolean;
+}): boolean {
+  if (reducedMotion && viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en") return true;
+  if (viewport === "mobile" && route === "work" && theme === "dark" && locale === "zh-CN") return true;
+  if (viewport === "desktop" && route === "work" && theme === "light" && locale === "en") return true;
+  if (viewport === "desktop" && route === "cockpit" && theme === "dark" && locale === "en") return true;
+  if (viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en" && searchState === "results") return true;
+  if (viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en" && searchState === "rest") return true;
+  return false;
 }
 
 function resolveCurrentRoute(path: string): ShellNavItem {
