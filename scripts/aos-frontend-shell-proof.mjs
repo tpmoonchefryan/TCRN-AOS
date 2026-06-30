@@ -676,6 +676,7 @@ async function runBrowserProof(baseUrl) {
 
     const topbarCleanupReadback = await desktopPage.locator('[data-aos-shell="owner-quality-product-shell"]').evaluate((root) => {
       const topbar = root.querySelector(".tcrn-top-bar");
+      const topbarStyle = topbar ? getComputedStyle(topbar) : null;
       const currentLocation = topbar?.querySelector(".tcrn-product-shell__current-location");
       const search = topbar?.querySelector(".tcrn-product-shell-search");
       const theme = topbar?.querySelector(".tcrn-shell-theme-toggle");
@@ -698,6 +699,8 @@ async function runBrowserProof(baseUrl) {
         moduleCellPresent: Boolean(topbar?.querySelector(".tcrn-top-bar__module")),
         currentLocationText: currentLocation?.textContent?.replace(/\s+/g, " ").trim() ?? "",
         topbar: rect(topbar),
+        topbarPaddingLeft: Number.parseFloat(topbarStyle?.paddingLeft ?? "0") || 0,
+        topbarPaddingRight: Number.parseFloat(topbarStyle?.paddingRight ?? "0") || 0,
         currentLocation: rect(currentLocation),
         search: rect(search),
         theme: rect(theme),
@@ -717,6 +720,11 @@ async function runBrowserProof(baseUrl) {
       topbarCleanupReadback.currentLocation.left <= topbarCleanupReadback.topbar.left + 32,
       true,
       "current-location block is anchored at the left edge of the utility topbar"
+    );
+    assert.equal(
+      Math.abs(topbarCleanupReadback.topbar.right - topbarCleanupReadback.locale.right - topbarCleanupReadback.topbarPaddingRight) <= 4,
+      true,
+      "search/theme/locale utility cluster is trailing aligned inside the topbar"
     );
     assert.equal(
       topbarCleanupReadback.currentLocation.right <= topbarCleanupReadback.search.left + 1,
@@ -1734,6 +1742,31 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
     const searchResults = root.querySelector("[data-product-shell-search-results]");
     const utilityRow = root.querySelector(".tcrn-product-shell__utility-row");
     const productLogo = root.querySelector('[data-product-logo-asset-id]');
+    const readRect = (element) => {
+      const rect = element?.getBoundingClientRect();
+      if (!rect) return null;
+      return {
+        left: Number(rect.left.toFixed(3)),
+        right: Number(rect.right.toFixed(3)),
+        top: Number(rect.top.toFixed(3)),
+        bottom: Number(rect.bottom.toFixed(3)),
+        width: Number(rect.width.toFixed(3)),
+        height: Number(rect.height.toFixed(3))
+      };
+    };
+    const readTopbarAlignment = () => {
+      const topBarStyle = topBar ? getComputedStyle(topBar) : null;
+      return {
+        topBar: readRect(topBar),
+        currentLocation: readRect(topBar?.querySelector(".tcrn-product-shell__current-location")),
+        search: readRect(topBar?.querySelector(".tcrn-product-shell-search")),
+        theme: readRect(topBar?.querySelector(".tcrn-shell-theme-toggle")),
+        locale: readRect(topBar?.querySelector(".tcrn-shell-locale-menu__trigger")),
+        paddingLeft: topBarStyle?.paddingLeft ?? "0px",
+        paddingRight: topBarStyle?.paddingRight ?? "0px"
+      };
+    };
+    const topbarAlignmentReadback = readTopbarAlignment();
     const controlOrder = utilityRow
       ? Array.from(utilityRow.children).map((child) => {
           if (child.matches(".tcrn-product-shell__current-location")) return "currentLocation";
@@ -1938,6 +1971,7 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
       searchMotionTimeline,
       controlOrder,
       topbarReadback,
+      topbarAlignmentReadback,
       productLogo: {
         productId: productLogo?.getAttribute("data-product-id") ?? null,
         assetId: productLogo?.getAttribute("data-product-logo-asset-id") ?? null,
@@ -2005,6 +2039,13 @@ function compareProductShellMetrics(dsMetrics, aosMetrics) {
     && aosMetrics.topbarReadback?.moduleCellPresent === false, {
     ds: dsMetrics.topbarReadback,
     aos: aosMetrics.topbarReadback
+  });
+  const dsTopbarAlignment = readTopBarUtilityAlignment(dsMetrics);
+  const aosTopbarAlignment = readTopBarUtilityAlignment(aosMetrics);
+  add("topBar.currentLocationLeftUtilityClusterTrailing", dsTopbarAlignment.passed && aosTopbarAlignment.passed, {
+    ds: dsTopbarAlignment,
+    aos: aosTopbarAlignment,
+    disposition: "current location owns the leading slot while search/theme/locale remain anchored to the trailing edge"
   });
   for (const control of ["themeToggle", "sideNavToggle"]) {
     compareNumber(add, `${control}.width`, dsMetrics.measured[control].width, aosMetrics.measured[control].width, 0.5);
@@ -2164,6 +2205,147 @@ function compareTopBarHeight(add, name, ds, aos, dsViewport, aosViewport) {
     allowedRange: `${minAllowed}-${maxAllowed}`,
     disposition: "same DS ProductShell topbar may wrap to a taller row in the Storybook fixture than in the product viewport; proof fails on clipping, overflow, or out-of-bounds controls."
   });
+}
+
+function readTopBarUtilityAlignment(metrics) {
+  if (metrics.topbarAlignmentReadback?.topBar) {
+    return readTopBarUtilityAlignmentFromSnapshot(metrics.topbarAlignmentReadback);
+  }
+  const measured = metrics.measured ?? {};
+  const topBar = measured.topBar;
+  const currentLocation = measured.currentLocation;
+  const search = measured.searchWrapper;
+  const theme = measured.themeToggle;
+  const locale = measured.localeTrigger;
+  const required = { topBar, currentLocation, search, theme, locale };
+  for (const [name, metric] of Object.entries(required)) {
+    if (!metric || metric.missing) {
+      return { passed: false, reason: `missing-${name}` };
+    }
+  }
+
+  const paddingLeft = parseCssPixels(topBar.paddingLeft);
+  const paddingRight = parseCssPixels(topBar.paddingRight);
+  const currentLocationLeadingGap = Number((currentLocation.left - topBar.left - paddingLeft).toFixed(3));
+  const utilityTrailingGap = Number((topBar.right - locale.right - paddingRight).toFixed(3));
+  const searchTrailingGap = Number((topBar.right - search.right - paddingRight).toFixed(3));
+  const themeTrailingGap = Number((topBar.right - theme.right - paddingRight).toFixed(3));
+  const currentLocationSharesSearchRow = controlsShareVerticalRow(currentLocation, search);
+  const searchSharesThemeRow = controlsShareVerticalRow(search, theme);
+  const themeSharesLocaleRow = controlsShareVerticalRow(theme, locale);
+  const currentBeforeSearch = !currentLocationSharesSearchRow || currentLocation.right <= search.left + 1;
+  const searchBeforeTheme = !searchSharesThemeRow || search.right <= theme.left + 1;
+  const themeBeforeLocale = !themeSharesLocaleRow || theme.right <= locale.left + 1;
+  const currentLocationLeadingAligned = Math.abs(currentLocationLeadingGap) <= 4;
+  const utilityTrailingAligned = Math.abs(utilityTrailingGap) <= 4;
+  const wrappedSearchTrailingAligned = searchSharesThemeRow || Math.abs(searchTrailingGap) <= 4;
+  const wrappedThemeTrailingAligned = themeSharesLocaleRow || Math.abs(themeTrailingGap) <= 4;
+
+  return {
+    passed: currentLocationLeadingAligned
+      && utilityTrailingAligned
+      && wrappedSearchTrailingAligned
+      && wrappedThemeTrailingAligned
+      && currentBeforeSearch
+      && searchBeforeTheme
+      && themeBeforeLocale,
+    currentLocationLeadingGap,
+    utilityTrailingGap,
+    searchTrailingGap,
+    themeTrailingGap,
+    currentLocationLeadingAligned,
+    utilityTrailingAligned,
+    wrappedSearchTrailingAligned,
+    wrappedThemeTrailingAligned,
+    currentLocationSharesSearchRow,
+    searchSharesThemeRow,
+    themeSharesLocaleRow,
+    currentBeforeSearch,
+    searchBeforeTheme,
+    themeBeforeLocale,
+    topBar: { left: topBar.left, right: topBar.right, paddingLeft, paddingRight },
+    currentLocation: { left: currentLocation.left, right: currentLocation.right },
+    search: { left: search.left, right: search.right },
+    theme: { left: theme.left, right: theme.right },
+    locale: { left: locale.left, right: locale.right }
+  };
+}
+
+function readTopBarUtilityAlignmentFromSnapshot(snapshot) {
+  const topBar = {
+    ...snapshot.topBar,
+    paddingLeft: snapshot.paddingLeft,
+    paddingRight: snapshot.paddingRight
+  };
+  const currentLocation = snapshot.currentLocation;
+  const search = snapshot.search;
+  const theme = snapshot.theme;
+  const locale = snapshot.locale;
+  const required = { topBar, currentLocation, search, theme, locale };
+  for (const [name, metric] of Object.entries(required)) {
+    if (!metric) {
+      return { passed: false, reason: `missing-${name}` };
+    }
+  }
+  return calculateTopBarUtilityAlignment({ topBar, currentLocation, search, theme, locale });
+}
+
+function calculateTopBarUtilityAlignment({ topBar, currentLocation, search, theme, locale }) {
+  const paddingLeft = parseCssPixels(topBar.paddingLeft);
+  const paddingRight = parseCssPixels(topBar.paddingRight);
+  const currentLocationLeadingGap = Number((currentLocation.left - topBar.left - paddingLeft).toFixed(3));
+  const utilityTrailingGap = Number((topBar.right - locale.right - paddingRight).toFixed(3));
+  const searchTrailingGap = Number((topBar.right - search.right - paddingRight).toFixed(3));
+  const themeTrailingGap = Number((topBar.right - theme.right - paddingRight).toFixed(3));
+  const currentLocationSharesSearchRow = controlsShareVerticalRow(currentLocation, search);
+  const searchSharesThemeRow = controlsShareVerticalRow(search, theme);
+  const themeSharesLocaleRow = controlsShareVerticalRow(theme, locale);
+  const currentBeforeSearch = !currentLocationSharesSearchRow || currentLocation.right <= search.left + 1;
+  const searchBeforeTheme = !searchSharesThemeRow || search.right <= theme.left + 1;
+  const themeBeforeLocale = !themeSharesLocaleRow || theme.right <= locale.left + 1;
+  const currentLocationLeadingAligned = Math.abs(currentLocationLeadingGap) <= 4;
+  const utilityTrailingAligned = Math.abs(utilityTrailingGap) <= 4;
+  const wrappedSearchTrailingAligned = searchSharesThemeRow || Math.abs(searchTrailingGap) <= 4;
+  const wrappedThemeTrailingAligned = themeSharesLocaleRow || Math.abs(themeTrailingGap) <= 4;
+
+  return {
+    passed: currentLocationLeadingAligned
+      && utilityTrailingAligned
+      && wrappedSearchTrailingAligned
+      && wrappedThemeTrailingAligned
+      && currentBeforeSearch
+      && searchBeforeTheme
+      && themeBeforeLocale,
+    currentLocationLeadingGap,
+    utilityTrailingGap,
+    searchTrailingGap,
+    themeTrailingGap,
+    currentLocationLeadingAligned,
+    utilityTrailingAligned,
+    wrappedSearchTrailingAligned,
+    wrappedThemeTrailingAligned,
+    currentLocationSharesSearchRow,
+    searchSharesThemeRow,
+    themeSharesLocaleRow,
+    currentBeforeSearch,
+    searchBeforeTheme,
+    themeBeforeLocale,
+    topBar: { left: topBar.left, right: topBar.right, paddingLeft, paddingRight },
+    currentLocation: { left: currentLocation.left, right: currentLocation.right },
+    search: { left: search.left, right: search.right },
+    theme: { left: theme.left, right: theme.right },
+    locale: { left: locale.left, right: locale.right }
+  };
+}
+
+function controlsShareVerticalRow(a, b) {
+  const overlap = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+  return overlap > 1;
+}
+
+function parseCssPixels(value) {
+  const parsed = Number.parseFloat(String(value).replace("px", ""));
+  return Number.isFinite(parsed) ? parsed : 0;
 }
 
 function compareNumber(add, name, ds, aos, tolerance) {
