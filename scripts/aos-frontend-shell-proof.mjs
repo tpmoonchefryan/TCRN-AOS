@@ -106,6 +106,14 @@ const forbiddenAosBrandAssetMarkers = [
 ];
 
 const ownerQualityMobileSearchMaxPx = 320;
+const ownerQualitySearchMotionStandard = {
+  transitionProperties: ["flex-basis", "width", "max-width"],
+  durationMs: 320,
+  timingFunctionIncludes: "cubic-bezier(0.2, 0, 0.2, 1)",
+  finalFrameEarliestMs: 240,
+  minIntermediateSamples: 2,
+  endpointTolerancePx: 2
+};
 
 const acceptedVisualInstanceOracle = {
   storyId: "aos-owner-quality-product-shell",
@@ -820,6 +828,20 @@ async function runBrowserProof(baseUrl) {
     assert.equal(outsidePointerSearchReadback.searchExpanded, false, "outside pointer dismissal returns search to compact rest state");
     assert.equal(outsidePointerSearchReadback.resultsHidden, true, "outside pointer dismissal hides search results");
 
+    const hydratedSearchMotionReadback = await collectHydratedSearchMotionReadback(desktopPage);
+    for (const phase of ["focusExpand", "escapeCollapse", "blurCollapse"]) {
+      const summary = summarizeSearchMotionPhase(hydratedSearchMotionReadback[phase]);
+      assert.equal(
+        Math.abs(summary.durationMs - ownerQualitySearchMotionStandard.durationMs) <= 1,
+        true,
+        `${phase} uses the DS search motion duration: ${JSON.stringify(summary)}`
+      );
+      assert.equal(String(summary.timingFunction).includes(ownerQualitySearchMotionStandard.timingFunctionIncludes), true, `${phase} uses the DS search motion easing`);
+      assert.equal(summary.intermediateCount >= ownerQualitySearchMotionStandard.minIntermediateSamples, true, `${phase} samples intermediate search widths`);
+      assert.equal(summary.monotonic, true, `${phase} search width progression is monotonic`);
+      assert.equal(summary.finalReachedAtMs >= ownerQualitySearchMotionStandard.finalFrameEarliestMs, true, `${phase} does not jump directly to its endpoint`);
+    }
+
     await searchInput.focus();
     await searchInput.fill("gate");
     await desktopPage.waitForFunction(() => {
@@ -1023,6 +1045,7 @@ async function runBrowserProof(baseUrl) {
         localeEscapeDismissalFocusReturn: true,
         localeSelectionFocusReturn: true,
         searchFocusExpansionBlurCollapse: true,
+        searchMotionHydratedTimeline: true,
         searchOutsidePointerCollapse: true,
         searchTabCollapse: true,
         sideNavDesktopActionableToggle: true,
@@ -1036,6 +1059,7 @@ async function runBrowserProof(baseUrl) {
         desktopMobileOverflowChecked: true
       },
       sideNavKeyboardReadback,
+      hydratedSearchMotionReadback,
       mobileOverflowReadback,
       screenshots: [
         `${screenshotRoot}/01-desktop-cockpit-default.png`,
@@ -1581,6 +1605,13 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
           previousActive.focus({ preventScroll: true });
         }
       }
+      if (element.matches(".tcrn-product-shell-search, .tcrn-search-input, .tcrn-search-input__control, .tcrn-search-input__shortcut") ||
+        element.closest(".tcrn-product-shell-search")) {
+        const searchWrapper = root.querySelector(".tcrn-product-shell-search");
+        searchWrapper?.setAttribute("data-search-expanded", "false");
+        searchWrapper?.setAttribute("data-search-results-visible", "false");
+        await new Promise((resolve) => window.setTimeout(resolve, 360));
+      }
       return {
         name,
         selector: childSelector,
@@ -1670,6 +1701,82 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
       productLogoAssetId: root.getAttribute("data-visual-instance-product-logo") ?? productLogo?.getAttribute("data-product-logo-asset-id") ?? null,
       ownerVisualAdmissionBoundary: root.getAttribute("data-visual-instance-disposition")
     };
+    const sampleSearchMotionTimeline = async () => {
+      if (!searchWrapper) return { missing: true };
+      const originalExpanded = searchWrapper.getAttribute("data-search-expanded");
+      const originalResultsVisible = searchWrapper.getAttribute("data-search-results-visible");
+      const readWidth = () => Number(searchWrapper.getBoundingClientRect().width.toFixed(3));
+      const readMotion = () => {
+        const style = getComputedStyle(searchWrapper);
+        return {
+          transitionProperty: style.transitionProperty,
+          transitionDuration: style.transitionDuration,
+          transitionTimingFunction: style.transitionTimingFunction
+        };
+      };
+      const settle = () => new Promise((resolve) => window.setTimeout(resolve, 440));
+      const capture = async (name, action) => {
+        const samples = [];
+        const start = performance.now();
+        const read = () => {
+          samples.push({
+            t: Number((performance.now() - start).toFixed(1)),
+            width: readWidth(),
+            expanded: searchWrapper.getAttribute("data-search-expanded")
+          });
+        };
+        read();
+        action();
+        await new Promise((resolve) => {
+          const tick = () => {
+            read();
+            if (performance.now() - start >= 430) {
+              resolve();
+            } else {
+              requestAnimationFrame(tick);
+            }
+          };
+          requestAnimationFrame(tick);
+        });
+        return { name, motion: readMotion(), samples };
+      };
+      searchWrapper.setAttribute("data-search-expanded", "false");
+      searchWrapper.setAttribute("data-search-results-visible", "false");
+      await settle();
+      const restWidth = readWidth();
+      const expand = await capture("expand", () => {
+        searchWrapper.setAttribute("data-search-expanded", "true");
+        searchWrapper.setAttribute("data-search-results-visible", "false");
+      });
+      await settle();
+      const expandedWidth = readWidth();
+      const collapse = await capture("collapse", () => {
+        searchWrapper.setAttribute("data-search-expanded", "false");
+        searchWrapper.setAttribute("data-search-results-visible", "false");
+      });
+      await settle();
+      if (originalExpanded === null) {
+        searchWrapper.removeAttribute("data-search-expanded");
+      } else {
+        searchWrapper.setAttribute("data-search-expanded", originalExpanded);
+      }
+      if (originalResultsVisible === null) {
+        searchWrapper.removeAttribute("data-search-results-visible");
+      } else {
+        searchWrapper.setAttribute("data-search-results-visible", originalResultsVisible);
+      }
+      return {
+        restWidth,
+        expandedWidth,
+        expand,
+        collapse,
+        restored: {
+          expanded: searchWrapper.getAttribute("data-search-expanded"),
+          resultsVisible: searchWrapper.getAttribute("data-search-results-visible")
+        }
+      };
+    };
+    const searchMotionTimeline = await sampleSearchMotionTimeline();
     const contentReadback = {
       visibleText: contentText,
       primaryH1Text: primaryHeading?.textContent?.trim() ?? "",
@@ -1758,6 +1865,7 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
         utilityRow: await readMetric("utilityRow", ".tcrn-product-shell__utility-row"),
         selectedNavItem: await readMetric("selectedNavItem", ".tcrn-nav-item[data-selected=\"true\"], .tcrn-nav-item[aria-current=\"page\"]")
       },
+      searchMotionTimeline,
       controlOrder,
       productLogo: {
         productId: productLogo?.getAttribute("data-product-id") ?? null,
@@ -1865,6 +1973,10 @@ function compareProductShellMetrics(dsMetrics, aosMetrics) {
   compareString(add, "searchWrapper.transitionProperty", dsMetrics.measured.searchWrapper.transitionProperty, aosMetrics.measured.searchWrapper.transitionProperty);
   compareMotionDuration(add, "searchWrapper.transitionDuration", dsMetrics.measured.searchWrapper.transitionDuration, aosMetrics.measured.searchWrapper.transitionDuration, isReducedMotion);
   compareString(add, "searchWrapper.transitionTimingFunction", dsMetrics.measured.searchWrapper.transitionTimingFunction, aosMetrics.measured.searchWrapper.transitionTimingFunction);
+  if (!isReducedMotion) {
+    compareSearchMotionTimeline(add, "expand", dsMetrics.searchMotionTimeline, aosMetrics.searchMotionTimeline);
+    compareSearchMotionTimeline(add, "collapse", dsMetrics.searchMotionTimeline, aosMetrics.searchMotionTimeline);
+  }
   compareResponsiveSearchWidth(add, "searchInput.width", dsMetrics.measured.searchInput.width, aosMetrics.measured.searchInput.width, expectSearchResults);
   compareNumber(add, "searchInput.height", dsMetrics.measured.searchInput.height, aosMetrics.measured.searchInput.height, 0.5);
   compareString(add, "searchInput.borderRadius", dsMetrics.measured.searchInput.borderRadius, aosMetrics.measured.searchInput.borderRadius);
@@ -2010,6 +2122,91 @@ function maxCssDurationMs(value) {
     if (trimmed.endsWith("s")) return Number(trimmed.slice(0, -1)) * 1000;
     return Number(trimmed) || 0;
   }));
+}
+
+function transitionPropertyIncludes(value, property) {
+  const properties = String(value).split(",").map((part) => part.trim());
+  return properties.includes(property) || properties.includes("all");
+}
+
+function summarizeSearchMotionPhase(phaseTimeline) {
+  const samples = phaseTimeline?.samples ?? [];
+  const start = samples[0]?.width;
+  const end = samples[samples.length - 1]?.width;
+  if (!Number.isFinite(start) || !Number.isFinite(end) || Math.abs(end - start) < 8) {
+    return {
+      validDelta: false,
+      start,
+      end,
+      intermediateCount: 0,
+      monotonic: false,
+      finalReachedAtMs: 0
+    };
+  }
+  const direction = end > start ? 1 : -1;
+  const low = Math.min(start, end) + ownerQualitySearchMotionStandard.endpointTolerancePx;
+  const high = Math.max(start, end) - ownerQualitySearchMotionStandard.endpointTolerancePx;
+  const intermediateCount = samples.filter((sample) => sample.width > low && sample.width < high).length;
+  const monotonic = samples.every((sample, index) => {
+    if (index === 0) return true;
+    const previous = samples[index - 1].width;
+    return direction > 0 ? sample.width + 1 >= previous : sample.width - 1 <= previous;
+  });
+  const finalReached = samples.find((sample) => Math.abs(sample.width - end) <= ownerQualitySearchMotionStandard.endpointTolerancePx);
+  return {
+    validDelta: true,
+    start,
+    end,
+    intermediateCount,
+    monotonic,
+    finalReachedAtMs: finalReached?.t ?? null,
+    durationMs: maxCssDurationMs(phaseTimeline?.motion?.transitionDuration),
+    timingFunction: phaseTimeline?.motion?.transitionTimingFunction,
+    transitionProperty: phaseTimeline?.motion?.transitionProperty
+  };
+}
+
+function compareSearchMotionTimeline(add, phase, dsTimeline, aosTimeline) {
+  const dsPhase = dsTimeline?.[phase];
+  const aosPhase = aosTimeline?.[phase];
+  const dsSummary = summarizeSearchMotionPhase(dsPhase);
+  const aosSummary = summarizeSearchMotionPhase(aosPhase);
+  add(`searchMotion.${phase}.duration320ms`, Math.abs(dsSummary.durationMs - ownerQualitySearchMotionStandard.durationMs) <= 1 && Math.abs(aosSummary.durationMs - ownerQualitySearchMotionStandard.durationMs) <= 1, {
+    dsDurationMs: dsSummary.durationMs,
+    aosDurationMs: aosSummary.durationMs,
+    expectedDurationMs: ownerQualitySearchMotionStandard.durationMs
+  });
+  add(`searchMotion.${phase}.timingFunction`, String(dsSummary.timingFunction).includes(ownerQualitySearchMotionStandard.timingFunctionIncludes) && dsSummary.timingFunction === aosSummary.timingFunction, {
+    dsTimingFunction: dsSummary.timingFunction,
+    aosTimingFunction: aosSummary.timingFunction
+  });
+  for (const property of ownerQualitySearchMotionStandard.transitionProperties) {
+    add(`searchMotion.${phase}.transitionProperty.${property}`, transitionPropertyIncludes(dsSummary.transitionProperty, property) && transitionPropertyIncludes(aosSummary.transitionProperty, property), {
+      property,
+      dsTransitionProperty: dsSummary.transitionProperty,
+      aosTransitionProperty: aosSummary.transitionProperty
+    });
+  }
+  add(`searchMotion.${phase}.intermediateFrames`, dsSummary.intermediateCount >= ownerQualitySearchMotionStandard.minIntermediateSamples && aosSummary.intermediateCount >= ownerQualitySearchMotionStandard.minIntermediateSamples, {
+    dsIntermediateCount: dsSummary.intermediateCount,
+    aosIntermediateCount: aosSummary.intermediateCount,
+    minimum: ownerQualitySearchMotionStandard.minIntermediateSamples
+  });
+  add(`searchMotion.${phase}.monotonic`, dsSummary.monotonic && aosSummary.monotonic, {
+    dsSummary,
+    aosSummary
+  });
+  add(`searchMotion.${phase}.notInstantJump`, dsSummary.finalReachedAtMs >= ownerQualitySearchMotionStandard.finalFrameEarliestMs && aosSummary.finalReachedAtMs >= ownerQualitySearchMotionStandard.finalFrameEarliestMs, {
+    dsFinalReachedAtMs: dsSummary.finalReachedAtMs,
+    aosFinalReachedAtMs: aosSummary.finalReachedAtMs,
+    earliestAllowedMs: ownerQualitySearchMotionStandard.finalFrameEarliestMs
+  });
+  add(`searchMotion.${phase}.dsAosEndpointParity`, Math.abs(dsSummary.start - aosSummary.start) <= 2 && Math.abs(dsSummary.end - aosSummary.end) <= 4, {
+    dsStart: dsSummary.start,
+    aosStart: aosSummary.start,
+    dsEnd: dsSummary.end,
+    aosEnd: aosSummary.end
+  });
 }
 
 function compareResponsiveSearchWidth(add, name, ds, aos, expectSearchResults = false) {
@@ -2213,6 +2410,84 @@ async function clickStableContentPoint(page) {
     return { x, y };
   });
   await page.mouse.click(point.x, point.y);
+}
+
+async function collectHydratedSearchMotionReadback(page) {
+  const searchInput = page.locator('.tcrn-product-shell-search input[type="search"]');
+  const searchInputCount = await searchInput.count();
+  assert.equal(searchInputCount, 1, "hydrated search motion proof has exactly one ProductShellSearch input");
+
+  async function capturePhase(name, action) {
+    await page.evaluate(() => {
+      const search = document.querySelector(".tcrn-product-shell-search");
+      window.__tcrnSearchMotionSamples = [];
+      const start = performance.now();
+      const read = () => {
+        const style = getComputedStyle(search);
+        window.__tcrnSearchMotionSamples.push({
+          t: Number((performance.now() - start).toFixed(1)),
+          width: Number(search.getBoundingClientRect().width.toFixed(3)),
+          expanded: search.getAttribute("data-search-expanded"),
+          resultsVisible: search.getAttribute("data-search-results-visible"),
+          transitionProperty: style.transitionProperty,
+          transitionDuration: style.transitionDuration,
+          transitionTimingFunction: style.transitionTimingFunction
+        });
+      };
+      read();
+      const tick = () => {
+        read();
+        if (performance.now() - start < 430) {
+          requestAnimationFrame(tick);
+        }
+      };
+      requestAnimationFrame(tick);
+    });
+    await action();
+    await page.waitForTimeout(460);
+    const samples = await page.evaluate(() => window.__tcrnSearchMotionSamples ?? []);
+    const firstMotionSample = samples.find((sample) => sample.transitionProperty) ?? {};
+    return {
+      name,
+      motion: {
+        transitionProperty: firstMotionSample.transitionProperty ?? null,
+        transitionDuration: firstMotionSample.transitionDuration ?? null,
+        transitionTimingFunction: firstMotionSample.transitionTimingFunction ?? null
+      },
+      samples
+    };
+  }
+
+  await page.evaluate(() => document.querySelector('.tcrn-product-shell-search input[type="search"]')?.blur());
+  await page.waitForFunction(() => document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "false");
+  const focusExpand = await capturePhase("focus-expand", () => searchInput.focus());
+
+  await searchInput.fill("gate");
+  await page.waitForFunction(() => {
+    const layer = document.querySelector("[data-product-shell-search-results]");
+    return layer && !layer.hidden && layer.querySelector("[data-search-result]");
+  });
+  await page.waitForTimeout(360);
+  const escapeCollapse = await capturePhase("escape-collapse", () => page.keyboard.press("Escape"));
+
+  await searchInput.focus();
+  await searchInput.fill("gate");
+  await page.waitForFunction(() => {
+    const layer = document.querySelector("[data-product-shell-search-results]");
+    return layer && !layer.hidden && layer.querySelector("[data-search-result]");
+  });
+  await page.waitForTimeout(360);
+  const blurCollapse = await capturePhase("blur-collapse", () => page.evaluate(() => {
+    document.querySelector('.tcrn-product-shell-search input[type="search"]')?.blur();
+  }));
+  await page.waitForFunction(() => document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "false");
+
+  return {
+    standard: ownerQualitySearchMotionStandard,
+    focusExpand,
+    escapeCollapse,
+    blurCollapse
+  };
 }
 
 function loadPlaywrightChromium() {
