@@ -444,7 +444,7 @@ try {
       localWrapperEventDelegation: false,
       localShellEffectClones: false,
       visibleClassNamespace: "DS-owned tcrn-* only under product shell content",
-      storybookComparator: "components.html#aos-owner-quality-product-shell accepted AOS owner-quality oracle on DS 0292b07",
+      storybookComparator: "components.html#aos-owner-quality-product-shell accepted AOS owner-quality oracle from the current local DS package basis",
       designSystemVisualInstanceParityDisposition: "aos_routes_mapped_to_accepted_owner_quality_storybook_visual_instance_oracle",
       themeControl: "compact_icon_only_explicit_toggle",
       themeTransition: "ds_product_shell_controller",
