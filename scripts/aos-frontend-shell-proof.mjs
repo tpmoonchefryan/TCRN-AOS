@@ -100,6 +100,8 @@ const forbiddenAosBrandAssetMarkers = [
   "data-admitted-brand-asset"
 ];
 
+const ownerQualityMobileSearchMaxPx = 320;
+
 const acceptedVisualInstanceOracle = {
   storyId: "aos-owner-quality-product-shell",
   page: "components.html#aos-owner-quality-product-shell",
@@ -761,6 +763,27 @@ async function runBrowserProof(baseUrl) {
     assert.deepEqual(mobileContentReadback.storybookDemoClassHits, [], "mobile content region has no Storybook-only shell demo classes");
     const mobileWorkHeadingTop = await mobilePage.locator("#work-heading").evaluate((node) => node.getBoundingClientRect().top);
     assert.equal(mobileWorkHeadingTop < 760, true, "mobile first viewport reaches the Work heading within the DS stacked shell posture");
+    const mobileSearchReadback = await mobilePage.evaluate(() => {
+      const wrapper = document.querySelector(".tcrn-product-shell-search");
+      const input = document.querySelector(".tcrn-search-input");
+      const control = document.querySelector(".tcrn-search-input__control");
+      return {
+        wrapperWidth: wrapper ? Number(wrapper.getBoundingClientRect().width.toFixed(3)) : null,
+        inputWidth: input ? Number(input.getBoundingClientRect().width.toFixed(3)) : null,
+        placeholder: control?.getAttribute("placeholder") ?? null
+      };
+    });
+    assert.equal(
+      typeof mobileSearchReadback.wrapperWidth === "number" && mobileSearchReadback.wrapperWidth <= ownerQualityMobileSearchMaxPx + 1,
+      true,
+      `mobile search wrapper respects owner-quality max width ${ownerQualityMobileSearchMaxPx}px`
+    );
+    assert.equal(
+      typeof mobileSearchReadback.inputWidth === "number" && mobileSearchReadback.inputWidth <= ownerQualityMobileSearchMaxPx + 1,
+      true,
+      `mobile search input respects owner-quality max width ${ownerQualityMobileSearchMaxPx}px`
+    );
+    assert.equal(mobileSearchReadback.placeholder, "搜索运营", "mobile zh-CN search uses localized owner-quality placeholder");
     await mobilePage.screenshot({ path: `${screenshotRoot}/04-mobile-work-dark.png`, fullPage: false });
     assert.equal(await mobilePage.locator("[data-side-nav-toggle]").getAttribute("disabled"), "", "mobile Work disables side-nav collapse affordance instead of rendering a clickable no-op");
     assert.equal(await mobilePage.locator("[data-side-nav-toggle]").getAttribute("data-side-nav-action"), "disabled", "mobile Work exposes disabled side-nav action state");
@@ -1072,14 +1095,7 @@ async function runVisualInstanceParityProof(browser, aosBaseUrl, dsBaseUrl) {
       const dsMetrics = await collectProductShellComparatorMetrics(dsPage, variant.dsSelector);
       const aosMetrics = await collectProductShellComparatorMetrics(aosPage, aosSelector);
       const renderedParity = variant.expectedState.viewport === "mobile"
-        ? {
-            checks: [{
-              name: "mobile-rendered-state-proof",
-              passed: true,
-              disposition: "mobile visual-instance parity is asserted through state markers, responsive posture, no-overflow, and required content; desktop exact control metrics remain covered by desktop fixtures."
-            }],
-            failures: []
-          }
+        ? compareMobileOwnerQualitySearchWidth(dsMetrics, aosMetrics)
         : compareProductShellMetrics(dsMetrics, aosMetrics);
       const stateParity = compareVisualInstanceState(variant, dsMetrics, aosMetrics);
       const motionParity = variant.reducedMotion === "reduce"
@@ -1739,6 +1755,39 @@ function compareResponsiveSearchWidth(add, name, ds, aos, expectSearchResults = 
     allowedRange: `${minAllowed}-${maxAllowed}`,
     disposition: "same DS ProductShellSearch compact rest-width rule; focused/results states may widen separately"
   });
+}
+
+function compareMobileOwnerQualitySearchWidth(dsMetrics, aosMetrics) {
+  const failures = [];
+  const checks = [];
+  const add = (name, passed, readback) => {
+    checks.push({ name, passed, ...readback });
+    if (!passed) failures.push({ name, ...readback });
+  };
+  const dsWrapperWidth = Number(dsMetrics.measured.searchWrapper?.width);
+  const aosWrapperWidth = Number(aosMetrics.measured.searchWrapper?.width);
+  const dsInputWidth = Number(dsMetrics.measured.searchInput?.width);
+  const aosInputWidth = Number(aosMetrics.measured.searchInput?.width);
+  add("mobile.searchWrapper.width.max320", dsWrapperWidth <= ownerQualityMobileSearchMaxPx + 1 && aosWrapperWidth <= ownerQualityMobileSearchMaxPx + 1, {
+    ds: dsMetrics.measured.searchWrapper?.width,
+    aos: aosMetrics.measured.searchWrapper?.width,
+    maxPx: ownerQualityMobileSearchMaxPx,
+    disposition: "mobile owner-quality search wrapper must respect accepted DS AI contract mobileMaxPx"
+  });
+  add("mobile.searchInput.width.max320", dsInputWidth <= ownerQualityMobileSearchMaxPx + 1 && aosInputWidth <= ownerQualityMobileSearchMaxPx + 1, {
+    ds: dsMetrics.measured.searchInput?.width,
+    aos: aosMetrics.measured.searchInput?.width,
+    maxPx: ownerQualityMobileSearchMaxPx,
+    disposition: "mobile owner-quality search input must respect accepted DS AI contract mobileMaxPx"
+  });
+  add("mobile.searchControl.placeholder.zhCN", aosMetrics.measured.searchControl?.placeholder === "搜索运营", {
+    ds: dsMetrics.measured.searchControl?.placeholder,
+    aos: aosMetrics.measured.searchControl?.placeholder
+  });
+  add("mobile.rendered-state-proof", true, {
+    disposition: "mobile visual-instance parity also asserts state markers, responsive posture, no-overflow, and required localized content"
+  });
+  return { checks, failures };
 }
 
 function compareSearchGrid(add, name, ds, aos) {
