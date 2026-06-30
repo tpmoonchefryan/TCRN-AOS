@@ -432,6 +432,7 @@ function OwnerQualityContent({
         </Text>
         <EvidenceStrip items={[
           copyText(copy, "boundary", "Read-only preview"),
+          copyText(copy, "localProof", "Local proof only"),
           copyText(copy, "noDispatch", "No live dispatch")
         ]} />
       </Surface>

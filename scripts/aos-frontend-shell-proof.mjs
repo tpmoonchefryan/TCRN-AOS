@@ -194,7 +194,9 @@ const acceptedVisualInstanceOracle = {
         viewport: "mobile",
         reducedMotion: "false",
         content: "work"
-      }
+      },
+      requiredText: ["工作项", "状态", "负责人", "需要评审", "已阻止", "未配置", "仅本地证明"],
+      forbiddenText: ["Work item", "State", "Unknown", "Blocked", "Not configured", "Local proof only"]
     },
     {
       id: "desktop-light-operations-search-results",
@@ -1201,6 +1203,24 @@ function compareVisualInstanceState(variant, dsMetrics, aosMetrics) {
       primaryH1Text: aosMetrics.content.primaryH1Text
     });
   }
+  if (Array.isArray(variant.requiredText)) {
+    for (const text of variant.requiredText) {
+      add(`content.requiredText.${text}`, dsMetrics.content.visibleText.includes(text) && aosMetrics.content.visibleText.includes(text), {
+        text,
+        dsPresent: dsMetrics.content.visibleText.includes(text),
+        aosPresent: aosMetrics.content.visibleText.includes(text)
+      });
+    }
+  }
+  if (Array.isArray(variant.forbiddenText)) {
+    const dsHits = variant.forbiddenText.filter((text) => dsMetrics.content.visibleText.includes(text));
+    const aosHits = variant.forbiddenText.filter((text) => aosMetrics.content.visibleText.includes(text));
+    add("content.noForbiddenLocaleText", dsHits.length === 0 && aosHits.length === 0, {
+      forbiddenText: variant.forbiddenText,
+      dsHits,
+      aosHits
+    });
+  }
   return { checks, failures };
 }
 
@@ -1371,6 +1391,7 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
         ownerVisualAdmissionBoundary: root.getAttribute("data-visual-instance-disposition")
       },
       content: {
+        visibleText: contentText,
         primaryH1Text: primaryHeading?.textContent?.trim() ?? "",
         primaryH1Count: h1Elements.length,
         productLedFirstViewport: Boolean(root.querySelector("[data-owner-quality-first-viewport=\"product-led\"]")),
