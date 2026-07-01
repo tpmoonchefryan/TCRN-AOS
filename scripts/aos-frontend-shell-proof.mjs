@@ -1104,6 +1104,7 @@ async function runBrowserProof(baseUrl) {
       checks: {
         renderedMetricParityAgainstDsStorybook: visualInstanceParityProof.ok,
         staticWorkManagementMockupsRendered: staticWorkMockupBrowserReadback.ok,
+        staticWorkManagementContentContract: staticWorkMockupBrowserReadback.contentContractReadback.ok,
         motionParityAgainstDsStorybook: visualInstanceParityProof.motionParityOk,
         ownerReachableRoutesInsideAcceptedMatrix: ownerReachableRouteMatrixReadback.ok,
         sideNavKeyboardEnterSpaceToggle: sideNavKeyboardReadback.length === 4,
@@ -1163,6 +1164,7 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
   ];
   const screenshots = [];
   const desktopReadbacks = [];
+  const contractCorpus = [];
   const context = await browser.newContext({
     viewport: { width: 1440, height: 900 },
     colorScheme: "light",
@@ -1206,9 +1208,13 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           productShellSearchControlCount: document.querySelectorAll('[data-shell-control="product-shell-search"]').length,
           pageHasHorizontalOverflow: html.scrollWidth > window.innerWidth + 1 || body.scrollWidth > window.innerWidth + 1,
           ownerAcceptanceClaimed: body.innerText.includes("Owner acceptance: accepted") || body.innerText.includes("Release ready"),
-          codexActivityAttachedToWorkItem: Boolean(document.querySelector('[data-work-codex-activity-page="true"]')) ? body.innerText.includes("attaches to Work Items") : true
+          codexActivityAttachedToWorkItem: Boolean(document.querySelector('[data-work-codex-activity-page="true"]'))
+            ? body.innerText.includes("Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item.")
+            : true
         };
       });
+      const visibleText = await page.evaluate(() => document.body.innerText);
+      contractCorpus.push({ route: route.id, text: visibleText });
       const forbiddenWorkApiRequests = requestPaths.filter((path) => /^\/api\/(?:work|gates|evidence|codex-activity|routes)/.test(path));
       assert.equal(readback.staticFixture, "true", `${route.id} renders static fixture marker`);
       assert.equal(readback.apiIntegration, "absent", `${route.id} declares no Work API integration`);
@@ -1231,6 +1237,40 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
   } finally {
     await context.close();
   }
+
+  const contractText = contractCorpus.map((entry) => entry.text).join("\n");
+  const requiredRelationshipTerms = [
+    "blocks",
+    "blocked_by",
+    "depends_on",
+    "relates_to",
+    "duplicates",
+    "supersedes",
+    "split_from",
+    "caused_by",
+    "implements",
+    "verifies",
+    "reviews",
+    "refreshes"
+  ];
+  const contentContractReadback = {
+    ok: true,
+    relationshipVocabulary: {
+      requiredTerms: requiredRelationshipTerms,
+      missingTerms: requiredRelationshipTerms.filter((term) => !contractText.includes(term))
+    },
+    storySmallestAcceptableResult: contractText.includes("Story is the smallest acceptable human/business/workflow result."),
+    taskSmallestExecutableUnit: contractText.includes("Task / Work Item is the smallest executable ticket/task unit."),
+    codexActivityAttachedExecutionEvidenceContext: contractText.includes("Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item.")
+  };
+  contentContractReadback.ok = contentContractReadback.relationshipVocabulary.missingTerms.length === 0
+    && contentContractReadback.storySmallestAcceptableResult
+    && contentContractReadback.taskSmallestExecutableUnit
+    && contentContractReadback.codexActivityAttachedExecutionEvidenceContext;
+  assert.deepEqual(contentContractReadback.relationshipVocabulary.missingTerms, [], "static Work mockups render the full PRD relationship vocabulary");
+  assert.equal(contentContractReadback.storySmallestAcceptableResult, true, "static Work mockups state Story is the smallest acceptable human/business/workflow result");
+  assert.equal(contentContractReadback.taskSmallestExecutableUnit, true, "static Work mockups state Task / Work Item is the smallest executable ticket/task unit");
+  assert.equal(contentContractReadback.codexActivityAttachedExecutionEvidenceContext, true, "static Work mockups state Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item");
 
   const mobileContext = await browser.newContext({
     viewport: { width: 390, height: 844 },
@@ -1269,6 +1309,7 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
       ok: true,
       desktopRoutes: desktopReadbacks,
       mobileReadback,
+      contentContractReadback,
       screenshots
     };
   } finally {

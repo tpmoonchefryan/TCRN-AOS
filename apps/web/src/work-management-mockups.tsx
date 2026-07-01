@@ -241,6 +241,8 @@ const relationRows = [
   { relation: "blocks", source: "AOS-144", target: "Owner Inspection Handoff", state: "active", note: "PM readiness is blocked until review and QA pass." },
   { relation: "blocked_by", source: "AOS-144", target: "AOS-142", state: "active", note: "Static discussion surface must be reviewed first." },
   { relation: "depends_on", source: "AOS-142", target: "DS-88", state: "resolved", note: "Uses DS optional-search contract." },
+  { relation: "relates_to", source: "AOS-142", target: "DS component gap list", state: "active", note: "Related discussion without ordering or blocking." },
+  { relation: "duplicates", source: "Owner note: fake search", target: "AOS-128", state: "resolved", note: "Duplicate owner feedback merges into the no-global-search item." },
   { relation: "implements", source: "AOS-142", target: "Story: PM can discuss Work flows", state: "active", note: "Static routes implement the discussion surface only." },
   { relation: "verifies", source: "EVD-41", target: "AOS-128", state: "resolved", note: "AOS proof verifies no global search and URL locale." },
   { relation: "reviews", source: "ELR-23", target: "AOS-142", state: "pending", note: "Elara review after Atlas refresh." },
@@ -248,6 +250,15 @@ const relationRows = [
   { relation: "supersedes", source: "AOS-128", target: "previous search-results claim", state: "resolved", note: "Fake search route claim replaced by no-search boundary." },
   { relation: "split_from", source: "AOS-142", target: "Work Management MVP", state: "active", note: "Static mockup slice split from full implementation planning." },
   { relation: "caused_by", source: "AOS-128", target: "Owner feedback: no fake search", state: "resolved", note: "Owner-approved scope change." }
+];
+
+const hierarchyDefinitionRows = [
+  { layer: "Initiative", definition: "Initiative is the complete objective and why.", boundary: "Highest product/work goal." },
+  { layer: "Epic", definition: "Epic is a larger deliverable work package.", boundary: "Capability Epic or Workstream Epic." },
+  { layer: "Story", definition: "Story is the smallest acceptable human/business/workflow result.", boundary: "Not the execution ticket." },
+  { layer: "Task / Work Item", definition: "Task / Work Item is the smallest executable ticket/task unit.", boundary: "Executable owner, proof, and gate unit." },
+  { layer: "Subtask / Evidence Task", definition: "Subtask / Evidence Task is execution/proof detail.", boundary: "Supports a Work Item." },
+  { layer: "Codex Activity", definition: "Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item.", boundary: "Routes, threads, handoff returns, commits, proof, and blockers." }
 ];
 
 const gateRows = [
@@ -386,9 +397,10 @@ function QueuePage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path
           ]} />
         </Surface>
       </div>
+      <HierarchyDefinitionSummary locale={locale} />
       <Surface>
         <Heading level={2}>{locale === "zh-CN" ? "关系摘要" : "Relationship summary"}</Heading>
-        <RelationshipTable locale={locale} rows={relationRows.slice(0, 6)} />
+        <RelationshipTable locale={locale} rows={relationRows.slice(0, 8)} />
         <LinkButton href={routeHref("/work/items/AOS-128")} variant="secondary">{locale === "zh-CN" ? "查看 AOS-128 详情" : "Open AOS-128 detail"}</LinkButton>
       </Surface>
     </>
@@ -507,9 +519,15 @@ function EvidencePage({ locale }: { locale: TcrnLocale }) {
 
 function CodexActivityPage({ locale }: { locale: TcrnLocale }) {
   return (
-    <Surface data-work-codex-activity-page="true">
+    <Surface data-work-codex-activity-page="true" data-work-codex-activity-contract="attached-execution-evidence-context">
       <Heading level={2}>{locale === "zh-CN" ? "Codex 活动附着在工作项下" : "Codex Activity attaches to Work Items"}</Heading>
-      <Text>{locale === "zh-CN" ? "Route 是执行记录，不替代 Story 或 Work Item。" : "Routes are execution records; they do not replace Stories or Work Items."}</Text>
+      <Text>{locale === "zh-CN" ? "Codex Activity 是附着在 Work Item 下的执行/证据上下文，不替代 Story 或 Task / Work Item。" : "Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item."}</Text>
+      <EvidenceStrip items={[
+        locale === "zh-CN" ? "附着到 Work Item" : "Attached to Work Item",
+        locale === "zh-CN" ? "证据上下文" : "Evidence context",
+        locale === "zh-CN" ? "不替代 Story" : "Not a Story replacement",
+        locale === "zh-CN" ? "不替代 Task / Work Item" : "Not a Task / Work Item replacement"
+      ]} />
       <TableShell
         label="Codex Activity"
         columns={columns(locale, ["route", "item", "thread", "status", "next"])}
@@ -564,11 +582,26 @@ function InitiativeGraphPage({ locale }: { locale: TcrnLocale }) {
           <GraphColumn title="Subtasks / Evidence Tasks" items={["Screenshot proof", "QA summary", "API readback", "Commit readback"]} />
         </div>
       </Surface>
+      <HierarchyDefinitionSummary locale={locale} />
       <Surface>
         <Heading level={2}>{locale === "zh-CN" ? "关系词汇" : "Relationship vocabulary"}</Heading>
         <RelationshipTable locale={locale} rows={relationRows} />
       </Surface>
     </>
+  );
+}
+
+function HierarchyDefinitionSummary({ locale }: { locale: TcrnLocale }) {
+  return (
+    <Surface data-work-hierarchy-definitions="prd-content-contract">
+      <Heading level={2}>{locale === "zh-CN" ? "PRD 层级定义" : "PRD hierarchy contract"}</Heading>
+      <Text>{locale === "zh-CN" ? "这些定义让静态示例区分可验收结果、可执行工作单和执行证据。" : "These definitions keep acceptable outcomes, executable tickets, and execution evidence separate in the static mockups."}</Text>
+      <TableShell
+        label={locale === "zh-CN" ? "层级定义" : "Hierarchy definitions"}
+        columns={columns(locale, ["layer", "definition", "boundary"])}
+        rows={hierarchyDefinitionRows.map((row) => localizeRow(row, locale))}
+      />
+    </Surface>
   );
 }
 
@@ -666,6 +699,7 @@ function translateColumn(key: string, locale: TcrnLocale): string {
     input: "输入",
     item: "工作项",
     key: "编号",
+    layer: "层级",
     missing: "缺口",
     next: "下一步",
     nextOwner: "下一 owner",
@@ -706,6 +740,18 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "DS-88 Optional search contract": "DS-88 可选搜索合同",
     "Mobile zh-CN no-overflow regression": "移动端 zh-CN 无溢出回归",
     "AOS-128 No global search": "AOS-128 无全局搜索",
+    "Initiative is the complete objective and why.": "Initiative 是完整目标与原因。",
+    "Epic is a larger deliverable work package.": "Epic 是较大的交付工作包。",
+    "Story is the smallest acceptable human/business/workflow result.": "Story 是最小可验收的人类、业务或工作流结果。",
+    "Task / Work Item is the smallest executable ticket/task unit.": "Task / Work Item 是最小可执行任务单元。",
+    "Subtask / Evidence Task is execution/proof detail.": "Subtask / Evidence Task 是执行或证明细节。",
+    "Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item.": "Codex Activity 是附着在 Work Item 下的执行/证据上下文，不替代 Story 或 Task / Work Item。",
+    "Highest product/work goal.": "最高层产品/工作目标。",
+    "Capability Epic or Workstream Epic.": "Capability Epic 或 Workstream Epic。",
+    "Not the execution ticket.": "不是执行任务单。",
+    "Executable owner, proof, and gate unit.": "可执行 owner、证明与门禁单元。",
+    "Supports a Work Item.": "支撑一个 Work Item。",
+    "Routes, threads, handoff returns, commits, proof, and blockers.": "Route、线程、handoff return、commit、证明与 blocker。",
     "Blocked until gates pass": "门禁通过前阻塞",
     Backlog: "待整理",
     "In Progress": "进行中",
