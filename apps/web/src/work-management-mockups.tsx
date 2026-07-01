@@ -44,6 +44,7 @@ interface WorkManagementMockupsProps {
 }
 
 type GateState = "pending" | "passed" | "changes_requested" | "blocked" | "accepted" | "not_started";
+type NeededDsLevel = "primitive" | "pattern" | "composite";
 
 interface WorkItemFixture {
   key: string;
@@ -63,6 +64,15 @@ interface WorkItemFixture {
   gate: string;
   blocker: string;
   updated: string;
+}
+
+interface NeededDsComponentFixture {
+  name: string;
+  purpose: string;
+  whereUsed: string;
+  whyDsInsufficient: string;
+  dsLevel: NeededDsLevel;
+  priority: "High" | "Medium";
 }
 
 const workPages: WorkMockupPage[] = [
@@ -280,6 +290,81 @@ const evidenceRows = [
   { id: "EVD-46", type: "Preview link", item: "AOS-142", source: "Atlas", artifact: "http://127.0.0.1:4317/", status: "pending refresh" }
 ];
 
+const neededDsComponentRows: NeededDsComponentFixture[] = [
+  {
+    name: "Work Management subnav/tabs pattern",
+    purpose: "Dense in-module Work route switching without global search.",
+    whereUsed: "/work route set header and Work management page switcher",
+    whyDsInsufficient: "Current mockup uses repeated LinkButton text links; DS does not yet provide a compact workbench subnav pattern.",
+    dsLevel: "pattern",
+    priority: "High"
+  },
+  {
+    name: "Work Board / Kanban lane composite",
+    purpose: "Responsive board lanes with status counts and lane-local scrolling.",
+    whereUsed: "/work/board",
+    whyDsInsufficient: "Current mockup composes Surface blocks in a CSS grid; DS has no reusable board lane composite.",
+    dsLevel: "composite",
+    priority: "High"
+  },
+  {
+    name: "Work hierarchy graph / dependency map composite",
+    purpose: "Represent Initiative, Epic, Story, Work Item, Subtask, Evidence Task, and relationship edges.",
+    whereUsed: "/work/initiatives/work-management-mvp",
+    whyDsInsufficient: "Current mockup uses static Surface columns and relationship tables instead of a reusable graph/map component.",
+    dsLevel: "composite",
+    priority: "High"
+  },
+  {
+    name: "Relationship chip/link primitive",
+    purpose: "Consistent display for blocks, depends_on, verifies, reviews, duplicates, and related work links.",
+    whereUsed: "/work, /work/items/AOS-128, /work/initiatives/work-management-mvp",
+    whyDsInsufficient: "Current mockup falls back to Badge and TableShell text; DS has no relationship-specific chip/link primitive.",
+    dsLevel: "primitive",
+    priority: "High"
+  },
+  {
+    name: "Gate pipeline / compliance table pattern",
+    purpose: "Show DS Review, Implementation Proof, Atlas Refresh, Elara Review, Rowan QA, Mara PM Readiness, and Owner Handoff as a gated pipeline.",
+    whereUsed: "/work/gates and Work Item detail",
+    whyDsInsufficient: "Current mockup uses TableShell plus StatusBadge; DS lacks a reusable gate pipeline/readiness pattern.",
+    dsLevel: "pattern",
+    priority: "High"
+  },
+  {
+    name: "Evidence attachment gallery/list composite",
+    purpose: "Display screenshots, artifact directories, QA summaries, API readbacks, commits, and preview links attached to Work Items.",
+    whereUsed: "/work/evidence and Work Item detail",
+    whyDsInsufficient: "Current mockup uses TableShell and EvidenceStrip; DS has no attachment gallery/list composite with artifact metadata.",
+    dsLevel: "composite",
+    priority: "Medium"
+  },
+  {
+    name: "Work Item detail / inspector layout pattern",
+    purpose: "Combine status sidebar, hierarchy, subtasks/evidence tasks, blockers, and guarded actions.",
+    whereUsed: "/work/items/AOS-128",
+    whyDsInsufficient: "Current mockup composes Surface grids, KeyValueList, TableShell, and disabled Button manually.",
+    dsLevel: "pattern",
+    priority: "High"
+  },
+  {
+    name: "Saved view / filter toolbar pattern",
+    purpose: "Reusable saved Work views and local filters without reintroducing global search.",
+    whereUsed: "/work/views/owner-feedback",
+    whyDsInsufficient: "Current mockup uses EvidenceStrip filters and disabled actions; DS lacks a compact saved-view toolbar.",
+    dsLevel: "pattern",
+    priority: "Medium"
+  },
+  {
+    name: "Machine-token / execution-record cell pattern",
+    purpose: "Render long route, thread, commit, or machine identifiers readably while preserving full IDs.",
+    whereUsed: "/work/codex-activity and evidence tables",
+    whyDsInsufficient: "Current mockup uses a local static RouteIdCell to contain long route IDs; DS could standardize this reusable table-cell behavior.",
+    dsLevel: "pattern",
+    priority: "Medium"
+  }
+];
+
 const codexRows = [
   {
     route: "route_tcrn_aos_no_global_search_url_locale_ilya_implementation_after_owner_approval",
@@ -459,18 +544,66 @@ function BoardPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path
 
 function BacklogPage({ locale }: { locale: TcrnLocale }) {
   return (
-    <Surface>
-      <Heading level={2}>{locale === "zh-CN" ? "待收敛输入" : "Inputs needing shaping"}</Heading>
+    <>
+      <Surface>
+        <Heading level={2}>{locale === "zh-CN" ? "待收敛输入" : "Inputs needing shaping"}</Heading>
+        <TableShell
+          label={locale === "zh-CN" ? "待整理" : "Backlog"}
+          columns={columns(locale, ["input", "type", "missing", "suggestedOwner"])}
+          rows={[
+            { input: "Owner: search should not exist", type: "Owner Feedback", missing: "Scope already approved", suggestedOwner: "Ilya" },
+            { input: "Work item numbering policy", type: "Open Question", missing: "Global or product-scoped key", suggestedOwner: "Mara" },
+            { input: "Owner can see Work Item?", type: "Open Question", missing: "Visibility policy", suggestedOwner: "Mara" }
+          ].map((row) => localizeRow(row, locale))}
+        />
+      </Surface>
+      <NeededDsComponentsSection locale={locale} />
+    </>
+  );
+}
+
+function NeededDsComponentsSection({ locale }: { locale: TcrnLocale }) {
+  return (
+    <Surface
+      data-needed-ds-components-list="true"
+      data-needed-ds-components-implementation="skipped-static-mockup-only"
+      data-needed-ds-components-count={neededDsComponentRows.length}
+    >
+      <Heading level={2}>{locale === "zh-CN" ? "需要新增的 DS 组件 / 模式" : "Needed DS components / patterns"}</Heading>
+      <Text>
+        {locale === "zh-CN"
+          ? "Owner 要求静态 mockup 阶段先跳过新增 DS 组件实现；以下列表只用于讨论与后续规划。"
+          : "Owner requested new DS component work to be skipped during static mockups; this list is for discussion and future planning only."}
+      </Text>
       <TableShell
-        label={locale === "zh-CN" ? "待整理" : "Backlog"}
-        columns={columns(locale, ["input", "type", "missing", "suggestedOwner"])}
-        rows={[
-          { input: "Owner: search should not exist", type: "Owner Feedback", missing: "Scope already approved", suggestedOwner: "Ilya" },
-          { input: "Work item numbering policy", type: "Open Question", missing: "Global or product-scoped key", suggestedOwner: "Mara" },
-          { input: "Owner can see Work Item?", type: "Open Question", missing: "Visibility policy", suggestedOwner: "Mara" }
-        ].map((row) => localizeRow(row, locale))}
+        label={locale === "zh-CN" ? "需要新增的 DS 组件 / 模式" : "Needed DS components and patterns"}
+        columns={columns(locale, ["name", "purpose", "whereUsed", "whyDsInsufficient", "dsLevel", "priority"])}
+        rows={neededDsComponentRows.map((row) => ({
+          name: <NeededDsComponentNameCell item={row} />,
+          purpose: translatePhrase(row.purpose, locale),
+          whereUsed: row.whereUsed,
+          whyDsInsufficient: translatePhrase(row.whyDsInsufficient, locale),
+          dsLevel: row.dsLevel,
+          priority: translatePhrase(row.priority, locale)
+        }))}
       />
     </Surface>
+  );
+}
+
+function NeededDsComponentNameCell({ item }: { item: NeededDsComponentFixture }) {
+  return (
+    <span
+      data-needed-ds-component-item="true"
+      data-needed-ds-component-name={item.name}
+      data-needed-ds-component-purpose={item.purpose}
+      data-needed-ds-component-where-used={item.whereUsed}
+      data-needed-ds-component-why-insufficient={item.whyDsInsufficient}
+      data-needed-ds-component-level={item.dsLevel}
+      data-needed-ds-component-priority={item.priority}
+    >
+      {item.name}
+    </span>
   );
 }
 
@@ -759,12 +892,14 @@ function translateColumn(key: string, locale: TcrnLocale): string {
     key: "编号",
     layer: "层级",
     missing: "缺口",
+    name: "名称",
     next: "下一步",
     nextOwner: "下一 owner",
     note: "说明",
     owner: "Owner",
     priority: "优先级",
     proof: "证明",
+    purpose: "目的",
     relation: "关系",
     route: "Route",
     source: "来源",
@@ -775,7 +910,10 @@ function translateColumn(key: string, locale: TcrnLocale): string {
     task: "任务",
     thread: "线程",
     title: "标题",
-    type: "类型"
+    type: "类型",
+    whereUsed: "使用位置",
+    whyDsInsufficient: "当前 DS 缺口",
+    dsLevel: "DS 层级"
   };
   return labels[key] ?? key;
 }
@@ -798,6 +936,15 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "DS-88 Optional search contract": "DS-88 可选搜索合同",
     "Mobile zh-CN no-overflow regression": "移动端 zh-CN 无溢出回归",
     "AOS-128 No global search": "AOS-128 无全局搜索",
+    "Work Management subnav/tabs pattern": "Work Management 子导航 / 标签模式",
+    "Work Board / Kanban lane composite": "Work Board / 看板泳道组合",
+    "Work hierarchy graph / dependency map composite": "工作层级图 / 依赖地图组合",
+    "Relationship chip/link primitive": "关系标签 / 链接基础组件",
+    "Gate pipeline / compliance table pattern": "门禁流水线 / 合规表模式",
+    "Evidence attachment gallery/list composite": "证据附件图库 / 列表组合",
+    "Work Item detail / inspector layout pattern": "工作项详情 / 检查器布局模式",
+    "Saved view / filter toolbar pattern": "保存视图 / 过滤工具栏模式",
+    "Machine-token / execution-record cell pattern": "机器标识 / 执行记录单元格模式",
     "Initiative is the complete objective and why.": "Initiative 是完整目标与原因。",
     "Epic is a larger deliverable work package.": "Epic 是较大的交付工作包。",
     "Story is the smallest acceptable human/business/workflow result.": "Story 是最小可验收的人类、业务或工作流结果。",

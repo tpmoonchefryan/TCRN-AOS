@@ -127,6 +127,18 @@ const ownerQualitySearchMotionStandard = {
   endpointTolerancePx: 2
 };
 
+const requiredNeededDsComponentNames = [
+  "Work Management subnav/tabs pattern",
+  "Work Board / Kanban lane composite",
+  "Work hierarchy graph / dependency map composite",
+  "Relationship chip/link primitive",
+  "Gate pipeline / compliance table pattern",
+  "Evidence attachment gallery/list composite",
+  "Work Item detail / inspector layout pattern",
+  "Saved view / filter toolbar pattern",
+  "Machine-token / execution-record cell pattern"
+];
+
 const acceptedVisualInstanceOracle = {
   storyId: "aos-owner-quality-product-shell",
   page: "components.html#aos-owner-quality-product-shell",
@@ -1208,11 +1220,55 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           productShellSearchControlCount: document.querySelectorAll('[data-shell-control="product-shell-search"]').length,
           pageHasHorizontalOverflow: html.scrollWidth > window.innerWidth + 1 || body.scrollWidth > window.innerWidth + 1,
           ownerAcceptanceClaimed: body.innerText.includes("Owner acceptance: accepted") || body.innerText.includes("Release ready"),
+          neededDsComponentsReadback: readNeededDsComponents(),
           codexActivityRouteReadability: readCodexActivityRouteReadability(),
           codexActivityAttachedToWorkItem: Boolean(document.querySelector('[data-work-codex-activity-page="true"]'))
             ? body.innerText.includes("Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item.")
             : true
         };
+
+        function readNeededDsComponents() {
+          const section = document.querySelector("[data-needed-ds-components-list]");
+          if (!section) {
+            return {
+              present: false,
+              count: 0,
+              declaredCount: null,
+              implementationBoundary: null,
+              staticOnlyCopyVisible: false,
+              missingRequiredFields: [],
+              items: []
+            };
+          }
+          const items = Array.from(section.querySelectorAll("[data-needed-ds-component-item]")).map((item) => {
+            const read = (name) => item.getAttribute(name) ?? "";
+            const fields = {
+              name: read("data-needed-ds-component-name"),
+              purpose: read("data-needed-ds-component-purpose"),
+              whereUsed: read("data-needed-ds-component-where-used"),
+              whyDsInsufficient: read("data-needed-ds-component-why-insufficient"),
+              dsLevel: read("data-needed-ds-component-level"),
+              priority: read("data-needed-ds-component-priority")
+            };
+            const missingFields = Object.entries(fields)
+              .filter(([, value]) => value.trim().length === 0)
+              .map(([key]) => key);
+            return {
+              ...fields,
+              missingFields,
+              visibleText: item.textContent?.trim() ?? ""
+            };
+          });
+          return {
+            present: true,
+            count: items.length,
+            declaredCount: section.getAttribute("data-needed-ds-components-count"),
+            implementationBoundary: section.getAttribute("data-needed-ds-components-implementation"),
+            staticOnlyCopyVisible: section.textContent?.includes("skipped during static mockups") ?? false,
+            missingRequiredFields: items.flatMap((item) => item.missingFields.map((field) => `${item.name}:${field}`)),
+            items
+          };
+        }
 
         function readCodexActivityRouteReadability() {
           const routeSummaries = Array.from(document.querySelectorAll("[data-work-route-summary]"));
@@ -1277,6 +1333,33 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
       assert.equal(readback.pageHasHorizontalOverflow, false, `${route.id} has no page-level horizontal overflow`);
       assert.equal(readback.ownerAcceptanceClaimed, false, `${route.id} has no owner/release positive claim`);
       assert.equal(readback.codexActivityAttachedToWorkItem, true, `${route.id} keeps Codex activity attached to Work Items`);
+      if (route.id === "backlog") {
+        assert.equal(readback.neededDsComponentsReadback.present, true, "Backlog renders the explicit Needed DS components / patterns section");
+        assert.equal(readback.neededDsComponentsReadback.implementationBoundary, "skipped-static-mockup-only", "Needed DS list records that component implementation was skipped");
+        assert.equal(readback.neededDsComponentsReadback.staticOnlyCopyVisible, true, "Needed DS list explains the static-only planning boundary");
+        assert.equal(readback.neededDsComponentsReadback.count, requiredNeededDsComponentNames.length, "Needed DS list renders every required item");
+        assert.equal(readback.neededDsComponentsReadback.declaredCount, String(requiredNeededDsComponentNames.length), "Needed DS list count marker matches rendered rows");
+        assert.deepEqual(
+          readback.neededDsComponentsReadback.items.map((item) => item.name),
+          requiredNeededDsComponentNames,
+          "Needed DS list renders the expected component/pattern names"
+        );
+        assert.deepEqual(
+          readback.neededDsComponentsReadback.missingRequiredFields,
+          [],
+          "Needed DS component entries include name, purpose, where used, why DS is insufficient, DS level, and priority"
+        );
+        assert.equal(
+          readback.neededDsComponentsReadback.items.every((item) => ["primitive", "pattern", "composite"].includes(item.dsLevel)),
+          true,
+          "Needed DS component entries classify the suggested DS level"
+        );
+        assert.equal(
+          readback.neededDsComponentsReadback.items.every((item) => ["High", "Medium"].includes(item.priority)),
+          true,
+          "Needed DS component entries include priority"
+        );
+      }
       if (route.id === "codex-activity") {
         assert.equal(readback.codexActivityRouteReadability.routeSummaryCount, 3, "Codex Activity renders readable route summary cells");
         assert.equal(readback.codexActivityRouteReadability.fullRouteIdsPreserved, true, "Codex Activity preserves full route ids in non-layout title/data attributes");
@@ -1365,11 +1448,46 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
     const mobileScreenshot = `${screenshotRoot}/work-mobile-initiative-graph.png`;
     await mobilePage.screenshot({ path: mobileScreenshot, fullPage: true });
     screenshots.push(mobileScreenshot);
+    await mobilePage.goto(`${baseUrl}/work/backlog?locale=zh-CN&theme=dark`, { waitUntil: "networkidle" });
+    await mobilePage.waitForSelector('[data-needed-ds-components-list="true"]');
+    const mobileBacklogReadback = await mobilePage.evaluate(() => {
+      const section = document.querySelector("[data-needed-ds-components-list]");
+      const tableShells = Array.from(document.querySelectorAll(".tcrn-table-shell")).map((element) => {
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        return {
+          width: Number(rect.width.toFixed(3)),
+          right: Number(rect.right.toFixed(3)),
+          clientWidth: element.clientWidth,
+          scrollWidth: element.scrollWidth,
+          overflowX: style.overflowX
+        };
+      });
+      return {
+        page: document.querySelector('[data-work-management-mockup="static-prd-v0.1"]')?.getAttribute("data-work-management-page") ?? null,
+        neededDsListPresent: Boolean(section),
+        neededDsItemCount: section?.querySelectorAll("[data-needed-ds-component-item]").length ?? 0,
+        implementationBoundary: section?.getAttribute("data-needed-ds-components-implementation") ?? null,
+        pageHasHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth + 1 || document.body.scrollWidth > window.innerWidth + 1,
+        tableInternalScrollAllowed: tableShells.every((table) => table.overflowX === "auto" && table.right <= window.innerWidth + 1),
+        tableShells
+      };
+    });
+    assert.equal(mobileBacklogReadback.page, "backlog", "mobile backlog route renders backlog page");
+    assert.equal(mobileBacklogReadback.neededDsListPresent, true, "mobile backlog route renders the needed DS components list");
+    assert.equal(mobileBacklogReadback.neededDsItemCount, requiredNeededDsComponentNames.length, "mobile backlog route keeps every needed DS component entry");
+    assert.equal(mobileBacklogReadback.implementationBoundary, "skipped-static-mockup-only", "mobile needed DS list preserves static-only implementation boundary");
+    assert.equal(mobileBacklogReadback.pageHasHorizontalOverflow, false, "mobile backlog route has no page-level horizontal overflow");
+    assert.equal(mobileBacklogReadback.tableInternalScrollAllowed, true, "mobile needed DS table overflow is contained to table scrollers");
+    const mobileBacklogScreenshot = `${screenshotRoot}/work-mobile-needed-ds-components.png`;
+    await mobilePage.screenshot({ path: mobileBacklogScreenshot, fullPage: true });
+    screenshots.push(mobileBacklogScreenshot);
     await mobilePage.close();
     return {
       ok: true,
       desktopRoutes: desktopReadbacks,
       mobileReadback,
+      mobileBacklogReadback,
       contentContractReadback,
       screenshots
     };
