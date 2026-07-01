@@ -1208,10 +1208,60 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           productShellSearchControlCount: document.querySelectorAll('[data-shell-control="product-shell-search"]').length,
           pageHasHorizontalOverflow: html.scrollWidth > window.innerWidth + 1 || body.scrollWidth > window.innerWidth + 1,
           ownerAcceptanceClaimed: body.innerText.includes("Owner acceptance: accepted") || body.innerText.includes("Release ready"),
+          codexActivityRouteReadability: readCodexActivityRouteReadability(),
           codexActivityAttachedToWorkItem: Boolean(document.querySelector('[data-work-codex-activity-page="true"]'))
             ? body.innerText.includes("Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item.")
             : true
         };
+
+        function readCodexActivityRouteReadability() {
+          const routeSummaries = Array.from(document.querySelectorAll("[data-work-route-summary]"));
+          if (routeSummaries.length === 0) {
+            return {
+              routeSummaryCount: 0,
+              fullRouteIdsPreserved: true,
+              overflowingCells: [],
+              overlapHits: [],
+              rows: []
+            };
+          }
+          const rows = routeSummaries.map((summary) => {
+            const cell = summary.closest(".tcrn-table-shell__cell");
+            const row = cell?.closest(".tcrn-table-shell__row");
+            const cells = row ? Array.from(row.querySelectorAll(".tcrn-table-shell__cell")) : [];
+            const cellIndex = cell ? cells.indexOf(cell) : -1;
+            const nextCell = cellIndex >= 0 ? cells[cellIndex + 1] : null;
+            const token = summary.querySelector("[data-work-route-id-token]");
+            const cellRect = cell?.getBoundingClientRect();
+            const nextRect = nextCell?.getBoundingClientRect();
+            const tokenRect = token?.getBoundingClientRect();
+            const tokenStyle = token ? getComputedStyle(token) : null;
+            const fullRouteId = summary.getAttribute("data-full-route-id") ?? "";
+            return {
+              fullRouteId,
+              title: summary.getAttribute("title"),
+              label: summary.querySelector("[data-work-route-label]")?.textContent?.trim() ?? "",
+              token: token?.textContent?.trim() ?? "",
+              cellWidth: cellRect ? Number(cellRect.width.toFixed(3)) : null,
+              cellClientWidth: cell?.clientWidth ?? null,
+              cellScrollWidth: cell?.scrollWidth ?? null,
+              cellOverflows: cell ? cell.scrollWidth > cell.clientWidth + 1 : true,
+              tokenRight: tokenRect ? Number(tokenRect.right.toFixed(3)) : null,
+              nextCellLeft: nextRect ? Number(nextRect.left.toFixed(3)) : null,
+              tokenOverlapsNextCell: Boolean(tokenRect && nextRect && tokenRect.right > nextRect.left + 1),
+              overflowWrap: tokenStyle?.overflowWrap ?? null,
+              wordBreak: tokenStyle?.wordBreak ?? null,
+              whiteSpace: tokenStyle?.whiteSpace ?? null
+            };
+          });
+          return {
+            routeSummaryCount: routeSummaries.length,
+            fullRouteIdsPreserved: rows.every((row) => row.fullRouteId.startsWith("route_tcrn_") && row.title === row.fullRouteId),
+            overflowingCells: rows.filter((row) => row.cellOverflows).map((row) => row.fullRouteId),
+            overlapHits: rows.filter((row) => row.tokenOverlapsNextCell).map((row) => row.fullRouteId),
+            rows
+          };
+        }
       });
       const visibleText = await page.evaluate(() => document.body.innerText);
       contractCorpus.push({ route: route.id, text: visibleText });
@@ -1227,6 +1277,17 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
       assert.equal(readback.pageHasHorizontalOverflow, false, `${route.id} has no page-level horizontal overflow`);
       assert.equal(readback.ownerAcceptanceClaimed, false, `${route.id} has no owner/release positive claim`);
       assert.equal(readback.codexActivityAttachedToWorkItem, true, `${route.id} keeps Codex activity attached to Work Items`);
+      if (route.id === "codex-activity") {
+        assert.equal(readback.codexActivityRouteReadability.routeSummaryCount, 3, "Codex Activity renders readable route summary cells");
+        assert.equal(readback.codexActivityRouteReadability.fullRouteIdsPreserved, true, "Codex Activity preserves full route ids in non-layout title/data attributes");
+        assert.deepEqual(readback.codexActivityRouteReadability.overflowingCells, [], "Codex Activity route summary cells do not overflow their table cells");
+        assert.deepEqual(readback.codexActivityRouteReadability.overlapHits, [], "Codex Activity route summary tokens do not overlap the Item column");
+        assert.equal(
+          readback.codexActivityRouteReadability.rows.every((row) => row.overflowWrap === "anywhere" && row.whiteSpace === "normal"),
+          true,
+          "Codex Activity route tokens use wrapping-safe text treatment"
+        );
+      }
       assert.deepEqual(forbiddenWorkApiRequests, [], `${route.id} does not call Work mockup API endpoints`);
       const screenshotPath = `${screenshotRoot}/work-${route.id}.png`;
       await page.screenshot({ path: screenshotPath, fullPage: true });

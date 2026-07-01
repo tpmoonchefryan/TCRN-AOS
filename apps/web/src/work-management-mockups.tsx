@@ -281,9 +281,33 @@ const evidenceRows = [
 ];
 
 const codexRows = [
-  { route: "route_tcrn_aos_no_global_search_url_locale_ilya_implementation_after_owner_approval", item: "AOS-128", thread: "Ilya", status: "success", next: "Atlas refresh" },
-  { route: "route_tcrn_aos_work_management_static_mockups_ilya_after_owner_prd_review_4802c19", item: "AOS-142", thread: "Ilya", status: "in progress", next: "Implementation return" },
-  { route: "route_tcrn_aos_owner_topbar_utility_alignment_rowan_qa_retry_after_elara_acceptance", item: "AOS-144", thread: "Rowan", status: "superseded", next: "New QA required after mockups" }
+  {
+    route: "route_tcrn_aos_no_global_search_url_locale_ilya_implementation_after_owner_approval",
+    routeLabel: "No global search + URL locale",
+    routeToken: "route_tcrn_aos_no_global_search_url_locale",
+    item: "AOS-128",
+    thread: "Ilya",
+    status: "success",
+    next: "Atlas refresh"
+  },
+  {
+    route: "route_tcrn_aos_work_management_static_mockups_ilya_after_owner_prd_review_4802c19",
+    routeLabel: "Static Work mockups",
+    routeToken: "route_tcrn_aos_work_management_mockups",
+    item: "AOS-142",
+    thread: "Ilya",
+    status: "in progress",
+    next: "Implementation return"
+  },
+  {
+    route: "route_tcrn_aos_owner_topbar_utility_alignment_rowan_qa_retry_after_elara_acceptance",
+    routeLabel: "Topbar utility QA retry",
+    routeToken: "route_tcrn_aos_topbar_alignment_qa_retry",
+    item: "AOS-144",
+    thread: "Rowan",
+    status: "superseded",
+    next: "New QA required after mockups"
+  }
 ];
 
 export function resolveWorkMockupPageId(path: string): WorkMockupPageId {
@@ -531,9 +555,43 @@ function CodexActivityPage({ locale }: { locale: TcrnLocale }) {
       <TableShell
         label="Codex Activity"
         columns={columns(locale, ["route", "item", "thread", "status", "next"])}
-        rows={codexRows.map((row) => localizeRow(row, locale))}
+        rows={codexRows.map((row) => ({
+          route: <RouteIdCell route={row.route} label={translatePhrase(row.routeLabel, locale)} token={row.routeToken} />,
+          item: row.item,
+          thread: row.thread,
+          status: translatePhrase(row.status, locale),
+          next: translatePhrase(row.next, locale)
+        }))}
       />
     </Surface>
+  );
+}
+
+function RouteIdCell({ route, label, token }: { route: string; label: string; token: string }) {
+  return (
+    <span
+      data-work-route-summary="true"
+      data-full-route-id={route}
+      title={route}
+      aria-label={`${label}: ${route}`}
+      style={{ display: "grid", gap: "2px", minWidth: 0 }}
+    >
+      <strong data-work-route-label="true">{label}</strong>
+      <code
+        data-work-route-id-token="true"
+        style={{
+          display: "block",
+          maxWidth: "100%",
+          overflowWrap: "anywhere",
+          wordBreak: "break-word",
+          whiteSpace: "normal",
+          fontSize: "11px",
+          lineHeight: 1.35
+        }}
+      >
+        {token}
+      </code>
+    </span>
   );
 }
 
