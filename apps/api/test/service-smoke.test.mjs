@@ -6,6 +6,14 @@ const shellTargets = [
   "/",
   "/cockpit",
   "/work",
+  "/work/board",
+  "/work/backlog",
+  "/work/items/AOS-128",
+  "/work/gates",
+  "/work/evidence",
+  "/work/codex-activity",
+  "/work/views/owner-feedback",
+  "/work/initiatives/work-management-mvp",
   "/operations-cockpit.html",
   "/docs-search-release-readiness.html",
   "/aos-wide-product-design.html",
@@ -68,11 +76,19 @@ test("local service serves the AOS shell while backend readbacks stay available"
       assert.match(html, /data-design-system-source="@tcrn\/ui-react @tcrn\/ui-tokens @tcrn\/ui-copy-state"/);
       assert.match(html, /data-storybook-visual-instance-consumed="aos-owner-quality-product-shell"/);
       assert.match(html, /data-owner-quality-first-viewport="product-led"/);
-      assert.match(html, /data-owner-quality-work-queue="true"/);
-      assert.match(html, /data-owner-quality-gates="true"/);
-      assert.match(html, /data-owner-quality-actions="true"/);
-      assert.match(html, /data-owner-quality-service-health="true"/);
-      assert.match(html, /data-aos-work-module-entry="owner-quality-work-queue"/);
+      if (target.startsWith("/work")) {
+        assert.match(html, /data-work-management-mockup="static-prd-v0\.1"/);
+        assert.match(html, /data-work-management-static-fixture="true"/);
+        assert.match(html, /data-work-management-api-integration="absent"/);
+        assert.match(html, /data-work-management-live-dispatch="not-enabled"/);
+        assert.match(html, /data-work-management-hierarchy="initiative-epic-story-work-item-subtask-evidence-task"/);
+      } else {
+        assert.match(html, /data-owner-quality-work-queue="true"/);
+        assert.match(html, /data-owner-quality-gates="true"/);
+        assert.match(html, /data-owner-quality-actions="true"/);
+        assert.match(html, /data-owner-quality-service-health="true"/);
+        assert.match(html, /data-aos-work-module-entry="owner-quality-work-queue"/);
+      }
       assert.match(html, /data-aos-registered-module-boundary="cockpit-work-only"/);
       assert.match(html, /data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search"/);
       assert.match(html, /data-package-backed-product-shell-boundary="side-nav-shell-v1"/);
@@ -101,8 +117,10 @@ test("local service serves the AOS shell while backend readbacks stay available"
       for (const marker of forbiddenAosBrandAssetMarkers) {
         assert.equal(html.includes(marker), false, `${marker} is absent from shell HTML`);
       }
-      for (const label of forbiddenPlannedVisibleLabels) {
-        assert.equal(html.includes(label), false, `${label} is not rendered as visible product IA`);
+      if (!target.startsWith("/work")) {
+        for (const label of forbiddenPlannedVisibleLabels) {
+          assert.equal(html.includes(label), false, `${label} is not rendered as visible product IA`);
+        }
       }
       for (const label of forbiddenScaffoldVisibleLabels) {
         assert.equal(html.includes(label), false, `${label} is not rendered in owner-quality shell HTML`);

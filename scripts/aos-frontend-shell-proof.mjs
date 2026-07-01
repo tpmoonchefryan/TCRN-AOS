@@ -421,11 +421,29 @@ assert.deepEqual(strictRegisteredSurfaceBuiltHits, [], "built shell has no unreg
 const service = await startAosLocalServiceProof();
 let closed = false;
 const routeReadbacks = [];
+const staticWorkMockupRoutes = [
+  "/work",
+  "/work/board",
+  "/work/backlog",
+  "/work/items/AOS-128",
+  "/work/gates",
+  "/work/evidence",
+  "/work/codex-activity",
+  "/work/views/owner-feedback",
+  "/work/initiatives/work-management-mvp"
+];
 
 try {
-  for (const route of ["/", "/cockpit", "/work", "/conference", "/docs", "/settings"]) {
+  for (const route of ["/", "/cockpit", ...staticWorkMockupRoutes, "/conference", "/docs", "/settings"]) {
     const response = await fetch(`${service.url}${route}`);
     const body = await response.text();
+    const staticWorkMockup = {
+      present: body.includes('data-work-management-mockup="static-prd-v0.1"'),
+      staticFixture: body.includes('data-work-management-static-fixture="true"'),
+      apiIntegrationAbsent: body.includes('data-work-management-api-integration="absent"'),
+      liveDispatchDisabled: body.includes('data-work-management-live-dispatch="not-enabled"'),
+      hierarchyPresent: body.includes('data-work-management-hierarchy="initiative-epic-story-work-item-subtask-evidence-task"')
+    };
     routeReadbacks.push({
       route,
       status: response.status,
@@ -433,7 +451,8 @@ try {
       shellMarker: body.includes('data-aos-shell="owner-quality-product-shell"'),
       ownerQualityMarker: body.includes('data-owner-quality-product-shell-oracle="true"'),
       productLedMarker: body.includes('data-owner-quality-first-viewport="product-led"'),
-      workMarker: body.includes('data-aos-work-module-entry="owner-quality-work-queue"'),
+      workMarker: body.includes('data-aos-work-module-entry="owner-quality-work-queue"') || staticWorkMockup.present,
+      staticWorkMockup,
       registeredNavigationOnly: body.includes('data-registered-navigation-only="true"'),
       registeredBrandLockup: body.includes('data-registered-brand-lockup="@tcrn/ui-react/ShellBrandLockup"'),
       productShellBoundary: body.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search"')
@@ -480,7 +499,21 @@ try {
   const stopped = await service.close();
   closed = stopped.stopped && stopped.runtimeReset;
 
-  const ok = routeReadbacks.every((entry) => entry.status === 200 && entry.html && entry.shellMarker && entry.ownerQualityMarker && entry.productLedMarker && entry.workMarker && entry.registeredNavigationOnly && entry.registeredBrandLockup && entry.productShellBoundary && entry.packageBackedShellControls && entry.strictRegisteredSurface && entry.plannedPrimaryHits.length === 0 && entry.scaffoldPrimaryHits.length === 0 && entry.forbiddenBrandHits.length === 0)
+  const ok = routeReadbacks.every((entry) => entry.status === 200
+    && entry.html
+    && entry.shellMarker
+    && entry.ownerQualityMarker
+    && entry.productLedMarker
+    && entry.workMarker
+    && (!entry.route.startsWith("/work") || (entry.staticWorkMockup.present && entry.staticWorkMockup.staticFixture && entry.staticWorkMockup.apiIntegrationAbsent && entry.staticWorkMockup.liveDispatchDisabled && entry.staticWorkMockup.hierarchyPresent))
+    && entry.registeredNavigationOnly
+    && entry.registeredBrandLockup
+    && entry.productShellBoundary
+    && entry.packageBackedShellControls
+    && entry.strictRegisteredSurface
+    && entry.plannedPrimaryHits.length === 0
+    && entry.scaffoldPrimaryHits.length === 0
+    && entry.forbiddenBrandHits.length === 0)
     && asset.status === 200
     && (asset.headers.get("content-type") ?? "").includes("image/svg+xml")
     && forbiddenAssetReadbacks.every((entry) => entry.status === 404)
@@ -959,7 +992,7 @@ async function runBrowserProof(baseUrl) {
     const mobilePage = await mobileContext.newPage();
     capturePageHealth(mobilePage, consoleMessages, pageErrors, requestFailures);
     await mobilePage.goto(`${baseUrl}/work?locale=zh-CN&theme=dark`, { waitUntil: "networkidle" });
-    await mobilePage.waitForSelector('[data-aos-work-module-entry="owner-quality-work-queue"]');
+    await mobilePage.waitForSelector('[data-work-management-mockup="static-prd-v0.1"]');
     assert.equal(await mobilePage.locator("html").getAttribute("data-tcrn-theme"), "dark", "mobile dark theme query applies");
     assert.equal(await mobilePage.locator("html").getAttribute("lang"), "zh-CN", "mobile zh-CN locale query applies");
     assert.equal(await mobilePage.locator('[data-product-shell-route="work"]').getAttribute("aria-current"), "page", "mobile active work route is preserved");
@@ -1016,7 +1049,7 @@ async function runBrowserProof(baseUrl) {
       const contentStack = readElement(".tcrn-product-shell-content-stack");
       const sectionGrid = readElement(".tcrn-product-shell-section-grid");
       const workSurface = readElement('[data-owner-quality-work-queue="true"]');
-      const gatesSurface = readElement('[data-owner-quality-gates="true"]');
+      const blockerChainSurface = readElement('[data-work-dependency-chain="true"]');
       const tableShells = Array.from(document.querySelectorAll(".tcrn-table-shell")).map((element) => {
         const rect = element.getBoundingClientRect();
         const style = getComputedStyle(element);
@@ -1038,7 +1071,7 @@ async function runBrowserProof(baseUrl) {
         contentStack,
         sectionGrid,
         workSurface,
-        gatesSurface,
+        blockerChainSurface,
         tableShells,
         tableInternalScrollAllowed: tableShells.every((table) => table.overflowX === "auto" && table.right <= viewportWidth + 1)
       };
@@ -1047,10 +1080,12 @@ async function runBrowserProof(baseUrl) {
     assert.equal(mobileOverflowReadback.contentStack.scrollWidth <= mobileOverflowReadback.contentStack.clientWidth + 1, true, "mobile content stack contains its grid track within the viewport column");
     assert.equal(mobileOverflowReadback.sectionGrid.scrollWidth <= mobileOverflowReadback.sectionGrid.clientWidth + 1, true, "mobile section grid contains its package rhythm track within the viewport column");
     assert.equal(mobileOverflowReadback.workSurface.right <= mobileOverflowReadback.viewportWidth + 1, true, "mobile Work surface stays within the viewport");
-    assert.equal(mobileOverflowReadback.gatesSurface.right <= mobileOverflowReadback.viewportWidth + 1, true, "mobile Gates surface stays within the viewport");
+    assert.equal(mobileOverflowReadback.blockerChainSurface.right <= mobileOverflowReadback.viewportWidth + 1, true, "mobile static blocker-chain surface stays within the viewport");
     assert.equal(mobileOverflowReadback.tableInternalScrollAllowed, true, "mobile table overflow remains contained to table scrollers, not page-level overflow");
     assert.equal(await mobilePage.locator('[data-tcrn-brand-mark="registered"]').isVisible(), true, "mobile registered brand mark remains visible");
     await mobileContext.close();
+
+    const staticWorkMockupBrowserReadback = await runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages, pageErrors, requestFailures);
 
     const relevantConsoleMessages = consoleMessages.filter((message) => !/favicon|DevTools/.test(message.text));
     assert.deepEqual(pageErrors, [], "browser page errors are absent");
@@ -1058,7 +1093,7 @@ async function runBrowserProof(baseUrl) {
     assert.deepEqual(relevantConsoleMessages, [], "browser console warnings/errors are absent");
 
     return {
-      ok: visualInstanceParityProof.ok && ownerReachableRouteMatrixReadback.ok,
+      ok: visualInstanceParityProof.ok && ownerReachableRouteMatrixReadback.ok && staticWorkMockupBrowserReadback.ok,
       runner: source,
       browserExecutable: executablePath ? "local_chrome" : "playwright_default",
       dsStorybookComparatorProof: visualComparatorProof,
@@ -1068,6 +1103,7 @@ async function runBrowserProof(baseUrl) {
       viewports: ["desktop-1440x900", "mobile-390x844"],
       checks: {
         renderedMetricParityAgainstDsStorybook: visualInstanceParityProof.ok,
+        staticWorkManagementMockupsRendered: staticWorkMockupBrowserReadback.ok,
         motionParityAgainstDsStorybook: visualInstanceParityProof.motionParityOk,
         ownerReachableRoutesInsideAcceptedMatrix: ownerReachableRouteMatrixReadback.ok,
         sideNavKeyboardEnterSpaceToggle: sideNavKeyboardReadback.length === 4,
@@ -1098,16 +1134,145 @@ async function runBrowserProof(baseUrl) {
       noSearchReadback,
       localeUrlReadback,
       mobileOverflowReadback,
+      staticWorkMockupBrowserReadback,
       screenshots: [
         `${screenshotRoot}/01-desktop-cockpit-default.png`,
         `${screenshotRoot}/02-desktop-cockpit-side-nav-collapsed.png`,
         `${screenshotRoot}/03-desktop-work-dark.png`,
-        `${screenshotRoot}/04-mobile-work-dark.png`
+        `${screenshotRoot}/04-mobile-work-dark.png`,
+        ...staticWorkMockupBrowserReadback.screenshots
       ]
     };
   } finally {
     await browser.close();
     await dsComparatorServer.close();
+  }
+}
+
+async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages, pageErrors, requestFailures) {
+  const desktopRoutes = [
+    { id: "queue", path: "/work" },
+    { id: "board", path: "/work/board" },
+    { id: "backlog", path: "/work/backlog" },
+    { id: "detail", path: "/work/items/AOS-128" },
+    { id: "gates", path: "/work/gates" },
+    { id: "evidence", path: "/work/evidence" },
+    { id: "codex-activity", path: "/work/codex-activity" },
+    { id: "owner-feedback-view", path: "/work/views/owner-feedback" },
+    { id: "initiative-graph", path: "/work/initiatives/work-management-mvp" }
+  ];
+  const screenshots = [];
+  const desktopReadbacks = [];
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    colorScheme: "light",
+    locale: "en",
+    timezoneId: "UTC",
+    reducedMotion: "no-preference",
+    deviceScaleFactor: 1
+  });
+  try {
+    for (const route of desktopRoutes) {
+      const page = await context.newPage();
+      const requestPaths = [];
+      page.on("request", (request) => {
+        try {
+          requestPaths.push(new URL(request.url()).pathname);
+        } catch {
+          requestPaths.push(request.url());
+        }
+      });
+      capturePageHealth(page, consoleMessages, pageErrors, requestFailures);
+      await page.goto(`${baseUrl}${route.path}?locale=en&theme=light&collapsed=false`, { waitUntil: "networkidle" });
+      await page.waitForSelector('[data-work-management-mockup="static-prd-v0.1"]');
+      await page.waitForFunction(() => document.querySelector("[data-api-state]")?.textContent?.includes("available"));
+      const readback = await page.locator('[data-work-management-mockup="static-prd-v0.1"]').evaluate((root) => {
+        const html = document.documentElement;
+        const body = document.body;
+        const shell = document.querySelector("[data-aos-shell]");
+        const h1s = Array.from(document.querySelectorAll("h1")).map((node) => node.textContent?.trim() ?? "");
+        return {
+          page: root.getAttribute("data-work-management-page"),
+          route: root.getAttribute("data-work-management-route"),
+          staticFixture: root.getAttribute("data-work-management-static-fixture"),
+          apiIntegration: root.getAttribute("data-work-management-api-integration"),
+          liveDispatch: root.getAttribute("data-work-management-live-dispatch"),
+          hierarchy: root.getAttribute("data-work-management-hierarchy"),
+          visualVariant: shell?.getAttribute("data-visual-instance-variant") ?? null,
+          selectedRoute: document.querySelector('[data-product-shell-route="work"]')?.getAttribute("aria-current") ?? null,
+          h1Count: h1s.length,
+          h1Text: h1s[0] ?? null,
+          searchWrapperCount: document.querySelectorAll(".tcrn-product-shell-search").length,
+          productShellSearchControlCount: document.querySelectorAll('[data-shell-control="product-shell-search"]').length,
+          pageHasHorizontalOverflow: html.scrollWidth > window.innerWidth + 1 || body.scrollWidth > window.innerWidth + 1,
+          ownerAcceptanceClaimed: body.innerText.includes("Owner acceptance: accepted") || body.innerText.includes("Release ready"),
+          codexActivityAttachedToWorkItem: Boolean(document.querySelector('[data-work-codex-activity-page="true"]')) ? body.innerText.includes("attaches to Work Items") : true
+        };
+      });
+      const forbiddenWorkApiRequests = requestPaths.filter((path) => /^\/api\/(?:work|gates|evidence|codex-activity|routes)/.test(path));
+      assert.equal(readback.staticFixture, "true", `${route.id} renders static fixture marker`);
+      assert.equal(readback.apiIntegration, "absent", `${route.id} declares no Work API integration`);
+      assert.equal(readback.liveDispatch, "not-enabled", `${route.id} declares no live dispatch`);
+      assert.equal(readback.hierarchy, "initiative-epic-story-work-item-subtask-evidence-task", `${route.id} renders PRD hierarchy marker`);
+      assert.equal(readback.selectedRoute, "page", `${route.id} keeps Work nav selected`);
+      assert.equal(readback.h1Count, 1, `${route.id} has exactly one H1`);
+      assert.equal(readback.searchWrapperCount, 0, `${route.id} does not reintroduce topbar ProductShellSearch`);
+      assert.equal(readback.productShellSearchControlCount, 0, `${route.id} does not render product-shell-search control`);
+      assert.equal(readback.pageHasHorizontalOverflow, false, `${route.id} has no page-level horizontal overflow`);
+      assert.equal(readback.ownerAcceptanceClaimed, false, `${route.id} has no owner/release positive claim`);
+      assert.equal(readback.codexActivityAttachedToWorkItem, true, `${route.id} keeps Codex activity attached to Work Items`);
+      assert.deepEqual(forbiddenWorkApiRequests, [], `${route.id} does not call Work mockup API endpoints`);
+      const screenshotPath = `${screenshotRoot}/work-${route.id}.png`;
+      await page.screenshot({ path: screenshotPath, fullPage: true });
+      screenshots.push(screenshotPath);
+      desktopReadbacks.push({ ...route, readback, forbiddenWorkApiRequests });
+      await page.close();
+    }
+  } finally {
+    await context.close();
+  }
+
+  const mobileContext = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    colorScheme: "dark",
+    locale: "zh-CN",
+    timezoneId: "UTC",
+    reducedMotion: "reduce",
+    deviceScaleFactor: 1,
+    isMobile: true
+  });
+  try {
+    const mobilePage = await mobileContext.newPage();
+    capturePageHealth(mobilePage, consoleMessages, pageErrors, requestFailures);
+    await mobilePage.goto(`${baseUrl}/work/initiatives/work-management-mvp?locale=zh-CN&theme=dark`, { waitUntil: "networkidle" });
+    await mobilePage.waitForSelector('[data-work-management-mockup="static-prd-v0.1"]');
+    const mobileReadback = await mobilePage.evaluate(() => ({
+      page: document.querySelector('[data-work-management-mockup="static-prd-v0.1"]')?.getAttribute("data-work-management-page") ?? null,
+      lang: document.documentElement.lang,
+      theme: document.documentElement.dataset.tcrnTheme,
+      pageHasHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth + 1 || document.body.scrollWidth > window.innerWidth + 1,
+      searchWrapperCount: document.querySelectorAll(".tcrn-product-shell-search").length,
+      hiddenMobileCollapse: !document.querySelector("[data-side-nav-toggle]") || getComputedStyle(document.querySelector("[data-side-nav-toggle]")).display === "none",
+      hierarchyTextVisible: document.body.innerText.includes("Initiative")
+    }));
+    assert.equal(mobileReadback.page, "initiativeGraph", "mobile static graph route renders initiative graph page");
+    assert.equal(mobileReadback.lang, "zh-CN", "mobile static mockup preserves URL locale");
+    assert.equal(mobileReadback.theme, "dark", "mobile static mockup preserves URL theme");
+    assert.equal(mobileReadback.pageHasHorizontalOverflow, false, "mobile static mockup has no page-level horizontal overflow");
+    assert.equal(mobileReadback.searchWrapperCount, 0, "mobile static mockup does not render global search");
+    assert.equal(mobileReadback.hiddenMobileCollapse, true, "mobile static mockup preserves hidden collapse affordance policy");
+    const mobileScreenshot = `${screenshotRoot}/work-mobile-initiative-graph.png`;
+    await mobilePage.screenshot({ path: mobileScreenshot, fullPage: true });
+    screenshots.push(mobileScreenshot);
+    await mobilePage.close();
+    return {
+      ok: true,
+      desktopRoutes: desktopReadbacks,
+      mobileReadback,
+      screenshots
+    };
+  } finally {
+    await mobileContext.close();
   }
 }
 

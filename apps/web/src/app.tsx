@@ -27,6 +27,7 @@ import {
 } from "@tcrn/ui-copy-state";
 import { tcrnTokenCss } from "@tcrn/ui-tokens";
 import { localeCopy, shellNavItems, type ShellNavItem } from "./data.js";
+import { WorkManagementMockups, getWorkMockupPageTitle } from "./work-management-mockups.js";
 
 const sideNavStorageKey = "tcrn-aos-side-nav-collapsed";
 const themeStorageKey = "tcrn-aos-theme";
@@ -87,11 +88,21 @@ interface OwnerQualityRoutePolicy {
   reason: "accepted_owner_quality_variant" | "mobile_collapse_hidden_policy" | "unclaimed_state";
 }
 
-export function renderAosShellHtml(): string {
-  const appHtml = renderToStaticMarkup(<AosShellApp />);
+interface AosShellAppProps {
+  initialShellState?: InitialShellState;
+}
+
+interface RenderAosShellHtmlOptions {
+  path?: string;
+  search?: string;
+}
+
+export function renderAosShellHtml(options: RenderAosShellHtmlOptions = {}): string {
+  const initialShellState = readInitialShellState(options.path, options.search);
+  const appHtml = renderToStaticMarkup(<AosShellApp initialShellState={initialShellState} />);
 
   return `<!doctype html>
-<html lang="en" data-tcrn-theme="light" data-current-locale="${tcrnDefaultLocale}" data-product-shell-html="true">
+<html lang="${initialShellState.locale}" data-tcrn-theme="${initialShellState.theme}" data-current-locale="${initialShellState.locale}" data-product-shell-html="true">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -105,14 +116,14 @@ export function renderAosShellHtml(): string {
     <style data-product-document-baseline="tcrn-token-inheritance">${createDocumentCss()}</style>
   </head>
   <body data-product-shell-body="owner-quality-product-shell" data-product-acceptance="not-claimed" data-release-readiness="not-claimed" data-live-dispatch="not-enabled">
-    <div id="aos-root">${appHtml}</div>
+    <div id="aos-root" data-ssr-path="${escapeHtmlAttribute(initialShellState.currentPath)}">${appHtml}</div>
     <script type="module" src="/assets/aos-client.js" data-product-shell-client="ds-product-shell-semantic-boundary"></script>
   </body>
 </html>`;
 }
 
-export function AosShellApp() {
-  const initialShellState = useMemo(() => readInitialShellState(), []);
+export function AosShellApp({ initialShellState: initialShellStateOverride }: AosShellAppProps = {}) {
+  const initialShellState = useMemo(() => initialShellStateOverride ?? readInitialShellState(), [initialShellStateOverride]);
   const [currentPath] = useState(initialShellState.currentPath);
   const [apiReadback, setApiReadback] = useState<ApiReadbackState>(initialApiReadback);
   const [browserVisualState, setBrowserVisualState] = useState<BrowserVisualState>(() => readBrowserVisualState());
@@ -266,7 +277,7 @@ export function AosShellApp() {
     onLocaleChange: controller.setLocale
   };
   const currentRouteLabel = currentRouteId === "work"
-    ? copyText(currentCopy, "workLabel", currentRoute.label)
+    ? getWorkMockupPageTitle(currentPath, currentLocale)
     : copyText(currentCopy, "cockpitLabel", currentRoute.label);
   const navGroups: ProductShellNavGroup[] = [
     {
@@ -347,9 +358,17 @@ export function AosShellApp() {
       <OwnerQualityContent
         apiReadback={apiReadback}
         copy={currentCopy}
+        currentPath={currentPath}
+        collapsed={visualInstanceCollapsed}
+        theme={controller.theme}
         locale={currentLocale}
         route={currentRouteId}
         variant={visualInstanceVariant}
+        routeHref={(path) => buildRouteHref(path, {
+          locale: currentLocale,
+          theme: controller.theme,
+          collapsed: visualInstanceCollapsed
+        })}
       />
     </ProductShell>
   );
@@ -358,17 +377,41 @@ export function AosShellApp() {
 function OwnerQualityContent({
   apiReadback,
   copy,
+  currentPath,
+  collapsed,
+  theme,
   locale,
   route,
-  variant
+  variant,
+  routeHref
 }: {
   apiReadback: ApiReadbackState;
   copy: Record<string, string>;
+  currentPath: string;
+  collapsed: boolean;
+  theme: "light" | "dark";
   locale: TcrnLocale;
   route: AosRouteId;
   variant: string;
+  routeHref: (path: string) => string;
 }) {
   const isWorkFirst = route === "work";
+  if (isWorkFirst) {
+    return (
+      <>
+        <WorkManagementMockups
+          path={currentPath}
+          locale={locale}
+          theme={theme}
+          collapsed={collapsed}
+          variant={variant}
+          routeHref={routeHref}
+        />
+        <EnvironmentBanner label={copyText(copy, "boundary", "Read-only preview")} state={{ state: "local_only" }} locale={locale} />
+        <DeveloperDisclosure apiReadback={apiReadback} copy={copy} />
+      </>
+    );
+  }
   return (
     <div className="tcrn-product-shell-content-stack" data-package-owned-spacing-rhythm="product-shell-content-stack">
       <Surface
@@ -432,26 +475,32 @@ function OwnerQualityContent({
         <Text>{copyText(copy, "activityText", "Recent activity focuses on the DS baseline, AOS implementation, QA evidence, and PM readiness.")}</Text>
       </Surface>
       <EnvironmentBanner label={copyText(copy, "boundary", "Read-only preview")} state={{ state: "local_only" }} locale={locale} />
-      <DisclosurePanel
-        expanded={false}
-        title={copyText(copy, "disclosureTitle", "Developer details")}
-        data-owner-quality-secondary-disclosure="true"
-        data-aos-registered-module-boundary="cockpit-work-only"
-        data-raw-json-disclosure="secondary"
-      >
-        <Text data-api-state>{apiReadback.statusText}</Text>
-        <KeyValueList
-          items={[
-            { key: "runtime", label: copyText(copy, "api", "API"), value: <span data-api-runtime>{apiReadback.runtime}</span> },
-            { key: "queue", label: copyText(copy, "externalQueue", "External queue"), value: <span data-api-queue>{apiReadback.queue}</span> },
-            { key: "policy", label: "Policy", value: <span data-api-policy>{apiReadback.policy}</span> },
-            { key: "counts", label: copyText(copy, "readbackCounts", "Readback counts"), value: <span data-api-counts>{apiReadback.counts}</span> }
-          ]}
-        />
-        <Text>{copyText(copy, "developerDetailsText", "Technical receipts, API summaries, and debug payloads stay in secondary disclosure and must not become the owner first-viewport story.")}</Text>
-        <pre hidden data-api-summary>{JSON.stringify(apiReadback.summary, null, 2)}</pre>
-      </DisclosurePanel>
+      <DeveloperDisclosure apiReadback={apiReadback} copy={copy} />
     </div>
+  );
+}
+
+function DeveloperDisclosure({ apiReadback, copy }: { apiReadback: ApiReadbackState; copy: Record<string, string> }) {
+  return (
+    <DisclosurePanel
+      expanded={false}
+      title={copyText(copy, "disclosureTitle", "Developer details")}
+      data-owner-quality-secondary-disclosure="true"
+      data-aos-registered-module-boundary="cockpit-work-only"
+      data-raw-json-disclosure="secondary"
+    >
+      <Text data-api-state>{apiReadback.statusText}</Text>
+      <KeyValueList
+        items={[
+          { key: "runtime", label: copyText(copy, "api", "API"), value: <span data-api-runtime>{apiReadback.runtime}</span> },
+          { key: "queue", label: copyText(copy, "externalQueue", "External queue"), value: <span data-api-queue>{apiReadback.queue}</span> },
+          { key: "policy", label: "Policy", value: <span data-api-policy>{apiReadback.policy}</span> },
+          { key: "counts", label: copyText(copy, "readbackCounts", "Readback counts"), value: <span data-api-counts>{apiReadback.counts}</span> }
+        ]}
+      />
+      <Text>{copyText(copy, "developerDetailsText", "Technical receipts, API summaries, and debug payloads stay in secondary disclosure and must not become the owner first-viewport story.")}</Text>
+      <pre hidden data-api-summary>{JSON.stringify(apiReadback.summary, null, 2)}</pre>
+    </DisclosurePanel>
   );
 }
 
@@ -536,9 +585,11 @@ function copyText(copy: Record<string, string>, key: string, fallback: string): 
   return copy[key] ?? localeCopy.en[key] ?? fallback;
 }
 
-function readInitialShellState(): InitialShellState {
-  const params = typeof window === "undefined" ? undefined : new URLSearchParams(window.location.search);
-  const currentPath = typeof window === "undefined" ? "/cockpit" : window.location.pathname;
+function readInitialShellState(ssrPath = "/cockpit", ssrSearch = ""): InitialShellState {
+  const params = typeof window === "undefined"
+    ? new URLSearchParams(ssrSearch.replace(/^\?/, ""))
+    : new URLSearchParams(window.location.search);
+  const currentPath = typeof window === "undefined" ? ssrPath : window.location.pathname;
   const collapsedFromQuery = params?.get("collapsed");
   const ownerQualityRoutePolicy = resolveOwnerQualityRoutePolicy(currentPath, params);
   return {
@@ -669,6 +720,7 @@ function removeUnsupportedSearchParam(): void {
 
 function resolveCurrentRoute(path: string): ShellNavItem {
   return shellNavItems.find((item) => item.path === path)
+    ?? shellNavItems.find((item) => item.id === "work" && path.startsWith("/work/"))
     ?? shellNavItems.find((item) => path.endsWith(`${item.path}.html`))
     ?? defaultShellRoute;
 }
@@ -707,6 +759,14 @@ function applyRootLocale(locale: TcrnLocale): void {
   document.documentElement.dataset.currentLocale = locale;
 }
 
+function escapeHtmlAttribute(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 function createDocumentCss(): string {
   return `
 * { box-sizing: border-box; }
@@ -728,5 +788,54 @@ body {
 }
 a { color: inherit; }
 button, input { font: inherit; }
+[data-work-page-eyebrow="true"] {
+  margin: 0 0 6px;
+  color: var(--tcrn-color-text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+[data-work-mockup-nav="true"],
+[data-work-action-row="true"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+[data-work-board="static-lanes"],
+[data-work-graph="true"] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+[data-work-detail-layout="true"] {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.65fr);
+  gap: 16px;
+  align-items: start;
+}
+[data-work-list="compact"],
+[data-work-chain="true"] {
+  margin: 0;
+  padding-left: 18px;
+}
+[data-work-list="compact"] li,
+[data-work-chain="true"] li {
+  margin: 8px 0;
+}
+[data-work-graph-column] {
+  min-width: 0;
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: 6px;
+  padding: 12px;
+  background: var(--tcrn-color-surface-subtle);
+}
+@media (max-width: 760px) {
+  [data-work-detail-layout="true"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 `;
 }

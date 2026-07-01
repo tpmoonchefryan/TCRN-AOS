@@ -3,6 +3,7 @@ import { once } from "node:events";
 import { existsSync, readFileSync } from "node:fs";
 import { extname, join, normalize } from "node:path";
 import { createAppliedRuntimeFixture, type AosRuntimeFixture } from "../../../packages/db/src/index.js";
+import { renderAosShellHtml } from "../../web/src/app.js";
 import { frontendShellRoutes } from "../../web/src/data.js";
 import { apiHealthReadback, createAosApiApp } from "./index.js";
 
@@ -55,7 +56,7 @@ function handleRequest(
     return;
   }
   if (frontendShellRouteSet.has(path)) {
-    sendShellHtml(request, response);
+    sendShellHtml(request, response, url);
     return;
   }
   if (path === "/api/cockpit") {
@@ -108,7 +109,7 @@ function createCockpitApiDeferredPayload(path: string) {
   };
 }
 
-function sendShellHtml(request: IncomingMessage, response: ServerResponse): void {
+function sendShellHtml(request: IncomingMessage, response: ServerResponse, url: URL): void {
   const shellPath = join(process.cwd(), "apps/web/dist/index.html");
   if (!existsSync(shellPath)) {
     sendJson(response, 503, {
@@ -122,7 +123,7 @@ function sendShellHtml(request: IncomingMessage, response: ServerResponse): void
   response.statusCode = 200;
   response.setHeader("content-type", "text/html; charset=utf-8");
   response.setHeader("cache-control", "no-store");
-  response.end(request.method === "HEAD" ? undefined : readFileSync(shellPath));
+  response.end(request.method === "HEAD" ? undefined : renderAosShellHtml({ path: url.pathname, search: url.search }));
 }
 
 function sendStaticAsset(request: IncomingMessage, response: ServerResponse, path: string): void {
