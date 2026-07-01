@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
   Badge,
@@ -17,7 +17,6 @@ import {
   tcrnComponentCss,
   useProductShellController,
   type ProductShellNavGroup,
-  type ProductShellSearchResult,
   type WorkIndexRow
 } from "@tcrn/ui-react";
 import {
@@ -27,43 +26,14 @@ import {
   type TcrnLocale
 } from "@tcrn/ui-copy-state";
 import { tcrnTokenCss } from "@tcrn/ui-tokens";
-import { localeCopy, shellNavItems, workModuleRows, type ShellNavItem } from "./data.js";
+import { localeCopy, shellNavItems, type ShellNavItem } from "./data.js";
 
 const sideNavStorageKey = "tcrn-aos-side-nav-collapsed";
 const themeStorageKey = "tcrn-aos-theme";
-const localeStorageKey = "tcrn-aos-locale";
-const lastSearchResultStorageKey = "tcrn-aos-last-search-result";
 const defaultShellRoute = shellNavItems[0] as ShellNavItem;
 const defaultOwnerQualityVariant = "desktop-light-operations-cockpit";
 const outsideAcceptedOwnerQualityMatrix = "aos-route-state-outside-owner-quality-oracle";
 const aosProductLogoAsset = getTcrnProductLogoAsset("aos");
-
-const shellSearchRecords: ProductShellSearchResult[] = [
-  ...shellNavItems.map((item) => ({
-    id: `route-${item.id}`,
-    title: item.label,
-    meta: `AOS operations route / ${item.description}`,
-    href: item.path
-  })),
-  {
-    id: "gate-owner-review",
-    title: "Owner review gate",
-    meta: "Evidence packet required",
-    href: "/cockpit"
-  },
-  {
-    id: "service-health",
-    title: "Service health",
-    meta: "Read-only local summary",
-    href: "/cockpit"
-  },
-  ...workModuleRows.map((row) => ({
-    id: `work-${row.key}`,
-    title: row.story,
-    meta: `${row.project} / ${row.initiative} / ${row.gate} / ${row.evidence} / ${row.assignment}`,
-    href: "/work"
-  }))
-];
 
 interface ApiReadbackState {
   statusText: string;
@@ -100,13 +70,9 @@ interface InitialShellState {
   theme: "light" | "dark";
   locale: TcrnLocale;
   currentPath: string;
-  lastSearchResult: string;
-  initialSearchQuery: string;
-  initialSearchExpanded: boolean;
 }
 
 type AosRouteId = "cockpit" | "work";
-type VisualInstanceSearchState = "rest" | "results";
 type VisualInstanceViewportState = "desktop" | "mobile";
 
 interface BrowserVisualState {
@@ -118,7 +84,7 @@ interface OwnerQualityRoutePolicy {
   forceExpanded: boolean;
   theme?: "light" | "dark";
   locale?: TcrnLocale;
-  reason: "accepted_owner_quality_variant" | "search_results_expanded_variant" | "mobile_collapse_hidden_policy" | "unclaimed_state";
+  reason: "accepted_owner_quality_variant" | "mobile_collapse_hidden_policy" | "unclaimed_state";
 }
 
 export function renderAosShellHtml(): string {
@@ -147,9 +113,7 @@ export function renderAosShellHtml(): string {
 
 export function AosShellApp() {
   const initialShellState = useMemo(() => readInitialShellState(), []);
-  const initialSearchApplied = useRef(false);
   const [currentPath] = useState(initialShellState.currentPath);
-  const [lastSearchResult, setLastSearchResult] = useState(initialShellState.lastSearchResult);
   const [apiReadback, setApiReadback] = useState<ApiReadbackState>(initialApiReadback);
   const [browserVisualState, setBrowserVisualState] = useState<BrowserVisualState>(() => readBrowserVisualState());
 
@@ -159,7 +123,6 @@ export function AosShellApp() {
     initialTheme: initialShellState.theme,
     initialLocale: initialShellState.locale,
     navId: "aos-primary-side-nav",
-    searchRecords: shellSearchRecords,
     onCollapsedChange: (collapsed) => {
       writeBrowserStorage(sideNavStorageKey, String(collapsed));
     },
@@ -169,22 +132,14 @@ export function AosShellApp() {
     },
     onLocaleChange: (locale) => {
       const resolvedLocale = resolveLocale(locale);
-      writeBrowserStorage(localeStorageKey, resolvedLocale);
+      updateUrlLocale(resolvedLocale);
       applyRootLocale(resolvedLocale);
-    },
-    onSearchResultActivate: (result) => {
-      writeBrowserStorage(lastSearchResultStorageKey, result.id);
-      setLastSearchResult(result.id);
     }
   });
 
   useEffect(() => {
-    if (initialSearchApplied.current) return;
-    initialSearchApplied.current = true;
-    if (!initialShellState.initialSearchQuery) return;
-    controller.setSearchQuery(initialShellState.initialSearchQuery);
-    controller.setSearchExpanded(initialShellState.initialSearchExpanded, "controller");
-  }, [controller.setSearchExpanded, controller.setSearchQuery, initialShellState.initialSearchExpanded, initialShellState.initialSearchQuery]);
+    removeUnsupportedSearchParam();
+  }, []);
 
   useEffect(() => {
     applyRootTheme(controller.theme);
@@ -280,12 +235,10 @@ export function AosShellApp() {
   const currentLocale = resolveLocale(controller.locale);
   const currentCopy = localeCopy[currentLocale] ?? localeCopy.en;
   const currentRouteId = currentRoute.id as AosRouteId;
-  const searchState: VisualInstanceSearchState = controller.searchExpanded && controller.searchResults.length > 0 ? "results" : "rest";
   const forceExpandedOwnerQualityState = isForceExpandedOwnerQualityState({
     route: currentRouteId,
     theme: controller.theme,
     locale: currentLocale,
-    searchState,
     viewport: browserVisualState.viewport,
     reducedMotion: browserVisualState.reducedMotion
   });
@@ -295,22 +248,23 @@ export function AosShellApp() {
     theme: controller.theme,
     locale: currentLocale,
     collapsed: visualInstanceCollapsed,
-    searchState,
     viewport: browserVisualState.viewport,
     reducedMotion: browserVisualState.reducedMotion
   });
   const productShellControlProps = {
-    ...controller.productShellControlProps,
     collapsed: visualInstanceCollapsed,
+    collapsedStorageKey: sideNavStorageKey,
+    currentTheme: controller.theme,
+    currentLocale,
+    localeMenuOpen: controller.localeMenuOpen,
+    navId: "aos-primary-side-nav",
     onCollapsedChange: (collapsed: boolean) => {
-      if (collapsed && controller.searchExpanded) {
-        controller.setSearchExpanded(false, "controller");
-        controller.setSearchQuery("");
-      }
       controller.setCollapsed(collapsed);
-    }
+    },
+    onThemeChange: controller.setTheme,
+    onLocaleMenuOpenChange: controller.setLocaleMenuOpen,
+    onLocaleChange: controller.setLocale
   };
-  const shellSearchPlaceholder = copyText(currentCopy, "shellSearch", "Search work, gates, evidence, or owner actions");
   const currentRouteLabel = currentRouteId === "work"
     ? copyText(currentCopy, "workLabel", currentRoute.label)
     : copyText(currentCopy, "cockpitLabel", currentRoute.label);
@@ -324,7 +278,11 @@ export function AosShellApp() {
         label: item.id === "work"
           ? copyText(currentCopy, "workLabel", item.label)
           : copyText(currentCopy, "cockpitLabel", item.label),
-        href: item.path,
+        href: buildRouteHref(item.path, {
+          locale: currentLocale,
+          theme: controller.theme,
+          collapsed: visualInstanceCollapsed
+        }),
         iconName: item.icon,
         selected: item.path === currentRoute.path
       }))
@@ -347,21 +305,13 @@ export function AosShellApp() {
       contentRole="main"
       contentLabel={copyText(currentCopy, "contentLabel", "AOS operations workspace")}
       skipLinkLabel={copyText(currentCopy, "skipLink", "Skip to operations content")}
-      search={{
-        ...controller.productShellSearchProps,
-        label: copyText(currentCopy, "searchLabel", "Search AOS operations"),
-        placeholder: shellSearchPlaceholder,
-        shortcut: "auto",
-        resultsLabel: copyText(currentCopy, "searchResults", "AOS operations search results"),
-        emptyLabel: copyText(currentCopy, "emptySearch", "No matching operations records")
-      }}
       data-aos-shell="owner-quality-product-shell"
       data-storybook-visual-instance="aos-owner-quality-product-shell"
       data-visual-instance-name="AosOwnerQualityProductShell"
       data-visual-instance-disposition="ds_oracle_review_required_before_owner_admission"
       data-visual-instance-style-source="@tcrn/ui-react/tcrnComponentCss"
       data-visual-instance-owner-quality="product-first"
-      data-visual-instance-slots="registered-product-logo side-nav topbar search operations-cockpit work-queue gates-evidence owner-actions service-health secondary-disclosure"
+      data-visual-instance-slots="registered-product-logo side-nav topbar theme-locale operations-cockpit work-queue gates-evidence owner-actions service-health secondary-disclosure"
       data-visual-instance-primary-ia="operations-cockpit-work-queue"
       data-visual-instance-negative-criteria="no-proof-scaffold-hero no-dummy-cockpit no-raw-primary no-owner-readiness"
       data-visual-instance-product-logo={aosProductLogoAsset.assetId}
@@ -376,7 +326,7 @@ export function AosShellApp() {
       data-visual-instance-collapsed={visualInstanceCollapsed ? "true" : "false"}
       data-owner-quality-collapse-policy={browserVisualState.viewport === "mobile" ? "mobile-hidden-collapse-affordance" : "desktop-actionable-collapse-toggle"}
       data-visual-instance-route={currentRouteId}
-      data-visual-instance-search={searchState}
+      data-visual-instance-search="not-rendered"
       data-visual-instance-viewport={browserVisualState.viewport}
       data-visual-instance-reduced-motion={browserVisualState.reducedMotion ? "true" : "false"}
       data-visual-instance-content={currentRouteId}
@@ -384,12 +334,14 @@ export function AosShellApp() {
       data-design-system-source="@tcrn/ui-react @tcrn/ui-tokens @tcrn/ui-copy-state"
       data-storybook-contract-consumed="product-shell-semantic-boundary"
       data-storybook-visual-instance-consumed="aos-owner-quality-product-shell"
-      data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"
+      data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search"
+      data-product-shell-global-search="not-rendered"
+      data-product-shell-search-capability="absent"
+      data-product-shell-locale-persistence="url-canonical"
       data-local-wrapper-event-delegation="absent"
       data-local-shell-effect-clones="removed"
       data-cockpit-aggregation="deferred"
       data-aos-registered-module-boundary="cockpit-work-only"
-      data-search-activation-readback={lastSearchResult}
       data-current-path={currentPath}
     >
       <OwnerQualityContent
@@ -588,7 +540,6 @@ function readInitialShellState(): InitialShellState {
   const params = typeof window === "undefined" ? undefined : new URLSearchParams(window.location.search);
   const currentPath = typeof window === "undefined" ? "/cockpit" : window.location.pathname;
   const collapsedFromQuery = params?.get("collapsed");
-  const initialSearchQuery = params?.get("search") ?? "";
   const ownerQualityRoutePolicy = resolveOwnerQualityRoutePolicy(currentPath, params);
   return {
     collapsed: ownerQualityRoutePolicy.forceExpanded
@@ -599,11 +550,8 @@ function readInitialShellState(): InitialShellState {
           ? false
           : readStoredBoolean(sideNavStorageKey, false),
     theme: ownerQualityRoutePolicy.theme ?? resolveTheme(params?.get("theme") ?? readBrowserStorage(themeStorageKey)),
-    locale: ownerQualityRoutePolicy.locale ?? resolveLocale(params?.get("locale") ?? readBrowserStorage(localeStorageKey)),
-    currentPath,
-    lastSearchResult: readBrowserStorage(lastSearchResultStorageKey) ?? "none",
-    initialSearchQuery,
-    initialSearchExpanded: initialSearchQuery.trim().length > 0
+    locale: ownerQualityRoutePolicy.locale ?? resolveLocale(params?.get("locale")),
+    currentPath
   };
 }
 
@@ -622,7 +570,6 @@ function resolveVisualInstanceVariant({
   theme,
   locale,
   collapsed,
-  searchState,
   viewport,
   reducedMotion
 }: {
@@ -630,7 +577,6 @@ function resolveVisualInstanceVariant({
   theme: "light" | "dark";
   locale: TcrnLocale;
   collapsed: boolean;
-  searchState: VisualInstanceSearchState;
   viewport: VisualInstanceViewportState;
   reducedMotion: boolean;
 }): string {
@@ -643,13 +589,10 @@ function resolveVisualInstanceVariant({
   if (viewport === "desktop" && route === "work" && theme === "light" && locale === "en") {
     return collapsed ? "desktop-light-work-queue-collapsed" : "desktop-light-work-queue";
   }
-  if (viewport === "desktop" && route === "cockpit" && theme === "dark" && locale === "en" && searchState === "rest") {
+  if (viewport === "desktop" && route === "cockpit" && theme === "dark" && locale === "en") {
     return collapsed ? "desktop-dark-operations-cockpit-collapsed" : "desktop-dark-operations-cockpit";
   }
-  if (viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en" && !collapsed && searchState === "results") {
-    return "desktop-light-operations-search-results";
-  }
-  if (viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en" && searchState === "rest") {
+  if (viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en") {
     return collapsed ? "desktop-light-operations-cockpit-collapsed" : defaultOwnerQualityVariant;
   }
   return outsideAcceptedOwnerQualityMatrix;
@@ -659,19 +602,15 @@ function resolveOwnerQualityRoutePolicy(path: string, params: URLSearchParams | 
   const route = resolveCurrentRoute(path).id;
   const theme = params?.get("theme") ?? null;
   const locale = params?.get("locale") ?? null;
-  const search = params?.get("search")?.trim() ?? "";
   if (route === "cockpit" && (locale === null || locale === tcrnDefaultLocale)) {
-    if (theme === "dark" && search === "") {
+    if (theme === "dark") {
       return { forceExpanded: false, theme: "dark", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
     }
-    if ((theme === null || theme === "light") && search === "") {
+    if (theme === null || theme === "light") {
       return { forceExpanded: false, theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
     }
-    if ((theme === null || theme === "light") && search.length > 0) {
-      return { forceExpanded: true, theme: "light", locale: tcrnDefaultLocale, reason: "search_results_expanded_variant" };
-    }
   }
-  if (route === "work" && search === "") {
+  if (route === "work") {
     if ((theme === null || theme === "light") && (locale === null || locale === tcrnDefaultLocale)) {
       return { forceExpanded: false, theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
     }
@@ -686,21 +625,46 @@ function isForceExpandedOwnerQualityState({
   route,
   theme,
   locale,
-  searchState,
   viewport,
   reducedMotion
 }: {
   route: AosRouteId;
   theme: "light" | "dark";
   locale: TcrnLocale;
-  searchState: VisualInstanceSearchState;
   viewport: VisualInstanceViewportState;
   reducedMotion: boolean;
 }): boolean {
   if (reducedMotion && viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en") return true;
   if (viewport === "mobile" && route === "work" && theme === "dark" && locale === "zh-CN") return true;
-  if (viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en" && searchState === "results") return true;
   return false;
+}
+
+function buildRouteHref(
+  path: string,
+  state: { locale: TcrnLocale; theme: "light" | "dark"; collapsed: boolean }
+): string {
+  const params = new URLSearchParams();
+  params.set("locale", state.locale);
+  params.set("theme", state.theme);
+  params.set("collapsed", state.collapsed ? "true" : "false");
+  return `${path}?${params.toString()}`;
+}
+
+function updateUrlLocale(locale: TcrnLocale): void {
+  if (typeof window === "undefined") return;
+  const url = new URL(window.location.href);
+  url.searchParams.set("locale", locale);
+  url.searchParams.delete("search");
+  window.history.replaceState(window.history.state, "", `${url.pathname}?${url.searchParams.toString()}${url.hash}`);
+}
+
+function removeUnsupportedSearchParam(): void {
+  if (typeof window === "undefined") return;
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has("search")) return;
+  url.searchParams.delete("search");
+  const query = url.searchParams.toString();
+  window.history.replaceState(window.history.state, "", `${url.pathname}${query ? `?${query}` : ""}${url.hash}`);
 }
 
 function resolveCurrentRoute(path: string): ShellNavItem {

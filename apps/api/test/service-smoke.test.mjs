@@ -74,9 +74,10 @@ test("local service serves the AOS shell while backend readbacks stay available"
       assert.match(html, /data-owner-quality-service-health="true"/);
       assert.match(html, /data-aos-work-module-entry="owner-quality-work-queue"/);
       assert.match(html, /data-aos-registered-module-boundary="cockpit-work-only"/);
-      assert.match(html, /data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"/);
+      assert.match(html, /data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search"/);
       assert.match(html, /data-package-backed-product-shell-boundary="side-nav-shell-v1"/);
-      assert.match(html, /data-product-shell-semantic-api="collapse-theme-locale-search"/);
+      assert.match(html, /data-product-shell-semantic-api="collapse-theme-locale"/);
+      assert.match(html, /data-product-shell-global-search="not-rendered"/);
       assert.match(html, /data-product-shell-effect-boundary="ds-owned-tokens-motion-focus"/);
       assert.match(html, /data-local-wrapper-event-delegation="absent"/);
       assert.match(html, /data-registered-brand-lockup="@tcrn\/ui-react\/ShellBrandLockup"/);
@@ -90,7 +91,9 @@ test("local service serves the AOS shell while backend readbacks stay available"
       assert.match(html, /data-package-backed-shell-control="side-nav-collapse"/);
       assert.match(html, /data-package-backed-shell-control="locale-menu"/);
       assert.match(html, /data-package-backed-shell-control="theme-toggle"/);
-      assert.match(html, /data-package-backed-shell-control="product-shell-search"/);
+      assert.doesNotMatch(html, /data-package-backed-shell-control="product-shell-search"/);
+      assert.doesNotMatch(html, /data-shell-control="product-shell-search"/);
+      assert.doesNotMatch(html, /Ctrl\+K|⌘K|Search operations|搜索运营/);
       assert.match(html, /data-tcrn-component-style-source="@tcrn\/ui-react"/);
       assert.match(html, /data-registered-navigation-only="true"/);
       assert.match(html, /\/assets\/aos-client\.js/);

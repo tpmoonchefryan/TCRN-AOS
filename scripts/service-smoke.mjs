@@ -27,9 +27,11 @@ try {
     && shellHtml.includes('data-aos-shell="owner-quality-product-shell"')
     && shellHtml.includes('data-owner-quality-product-shell-oracle="true"')
     && shellHtml.includes('data-owner-quality-first-viewport="product-led"')
-    && shellHtml.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"')
+    && shellHtml.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search"')
     && shellHtml.includes('data-package-backed-product-shell-boundary="side-nav-shell-v1"')
-    && shellHtml.includes('data-product-shell-semantic-api="collapse-theme-locale-search"')
+    && shellHtml.includes('data-product-shell-semantic-api="collapse-theme-locale"')
+    && shellHtml.includes('data-product-shell-global-search="not-rendered"')
+    && !shellHtml.includes('data-shell-control="product-shell-search"')
     && cockpit.status === 200
     && cockpitHtml.includes('data-product-shell-route="cockpit"')
     && work.status === 200
@@ -63,7 +65,8 @@ try {
       shellMarkerPresent: shellHtml.includes('data-aos-shell="owner-quality-product-shell"'),
       ownerQualityMarkerPresent: shellHtml.includes('data-owner-quality-product-shell-oracle="true"'),
       productLedMarkerPresent: shellHtml.includes('data-owner-quality-first-viewport="product-led"'),
-      productShellBoundaryPresent: shellHtml.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"'),
+      productShellBoundaryPresent: shellHtml.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search"'),
+      globalSearchAbsent: !shellHtml.includes('data-shell-control="product-shell-search"'),
       workModuleMarkerPresent: workHtml.includes('data-aos-work-module-entry="owner-quality-work-queue"'),
       deferredCockpitApiStatus: deferredCockpitApi.status,
       deferredCockpitApiError: deferredCockpitApiPayload.error

@@ -29,13 +29,14 @@ const requiredMarkers = [
   'data-design-system-source="@tcrn/ui-react @tcrn/ui-tokens @tcrn/ui-copy-state"',
   'data-storybook-contract-consumed="product-shell-semantic-boundary"',
   'data-storybook-visual-instance-consumed="aos-owner-quality-product-shell"',
-  'data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"',
+  'data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search"',
   'data-package-backed-product-shell-boundary="side-nav-shell-v1"',
-  'data-product-shell-semantic-api="collapse-theme-locale-search"',
+  'data-product-shell-semantic-api="collapse-theme-locale"',
   'data-product-shell-effect-boundary="ds-owned-tokens-motion-focus"',
   'data-product-shell-consumer-scope="ia-data-route-labels-content-callbacks"',
-  'data-search-semantic-api="onQueryChange-onExpandedChange-onDismiss-onResultActivate"',
-  'data-search-dismissal-contract="blur-outside-pointer-tab-escape"',
+  'data-product-shell-global-search="not-rendered"',
+  'data-product-shell-search-capability="absent"',
+  'data-product-shell-locale-persistence="url-canonical"',
   'data-local-wrapper-event-delegation="absent"',
   'data-local-shell-effect-clones="removed"',
   'data-tcrn-theme="light"',
@@ -52,7 +53,6 @@ const requiredMarkers = [
   'data-package-backed-shell-control="locale-menu"',
   'data-package-backed-shell-control="theme-toggle"',
   'data-package-backed-shell-control="side-nav-collapse"',
-  'data-package-backed-shell-control="product-shell-search"',
   'data-tcrn-component-style-source="@tcrn/ui-react"',
   'data-product-document-baseline="tcrn-token-inheritance"',
   'data-product-shell-client="ds-product-shell-semantic-boundary"',
@@ -73,7 +73,19 @@ const requiredMarkers = [
   'data-live-dispatch="not-enabled"',
   "useProductShellController",
   "ProductShell",
-  "ProductLogo"
+  "ProductLogo",
+  "no-global-search"
+];
+
+const forbiddenSearchCapabilityMarkers = [
+  'data-shell-control="product-shell-search"',
+  'data-package-backed-shell-control="product-shell-search"',
+  'data-search-semantic-api="onQueryChange-onExpandedChange-onDismiss-onResultActivate"',
+  'data-search-dismissal-contract="blur-outside-pointer-tab-escape"',
+  'data-product-shell-search-results',
+  'data-search-result',
+  "Ctrl+K",
+  "⌘K"
 ];
 
 const forbiddenPlannedPrimaryLabels = [
@@ -136,8 +148,8 @@ const acceptedVisualInstanceOracle = {
         collapsed: "false",
         route: "cockpit",
         selectedRoute: "cockpit",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false",
         viewport: "desktop",
         reducedMotion: "false",
@@ -158,8 +170,8 @@ const acceptedVisualInstanceOracle = {
         collapsed: "true",
         route: "cockpit",
         selectedRoute: "cockpit",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false",
         viewport: "desktop",
         reducedMotion: "false",
@@ -180,8 +192,8 @@ const acceptedVisualInstanceOracle = {
         collapsed: "false",
         route: "cockpit",
         selectedRoute: "cockpit",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false",
         viewport: "desktop",
         reducedMotion: "false",
@@ -202,8 +214,8 @@ const acceptedVisualInstanceOracle = {
         collapsed: "true",
         route: "cockpit",
         selectedRoute: "cockpit",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false",
         viewport: "desktop",
         reducedMotion: "false",
@@ -224,8 +236,8 @@ const acceptedVisualInstanceOracle = {
         collapsed: "false",
         route: "work",
         selectedRoute: "work",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false",
         viewport: "desktop",
         reducedMotion: "false",
@@ -246,8 +258,8 @@ const acceptedVisualInstanceOracle = {
         collapsed: "true",
         route: "work",
         selectedRoute: "work",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false",
         viewport: "desktop",
         reducedMotion: "false",
@@ -269,8 +281,8 @@ const acceptedVisualInstanceOracle = {
         collapsed: "false",
         route: "work",
         selectedRoute: "work",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false",
         viewport: "mobile",
         reducedMotion: "false",
@@ -278,28 +290,6 @@ const acceptedVisualInstanceOracle = {
       },
       requiredText: ["工作项", "状态", "负责人", "需要评审", "已阻止", "未配置", "仅本地证明"],
       forbiddenText: ["Work item", "State", "Unknown", "Blocked", "Not configured", "Local proof only"]
-    },
-    {
-      id: "desktop-light-operations-search-results",
-      dsSelector: '[data-storybook-visual-instance="aos-owner-quality-product-shell"][data-visual-instance-variant="desktop-light-operations-search-results"]',
-      aosPath: "/cockpit?locale=en&theme=light&collapsed=false&search=gate",
-      viewport: { width: 1440, height: 900 },
-      colorScheme: "light",
-      locale: "en",
-      reducedMotion: "no-preference",
-      expectedState: {
-        theme: "light",
-        locale: "en",
-        collapsed: "false",
-        route: "cockpit",
-        selectedRoute: "cockpit",
-        search: "results",
-        searchExpanded: "true",
-        searchResultsVisible: "true",
-        viewport: "desktop",
-        reducedMotion: "false",
-        content: "cockpit"
-      }
     },
     {
       id: "reduced-motion",
@@ -315,8 +305,8 @@ const acceptedVisualInstanceOracle = {
         collapsed: "false",
         route: "cockpit",
         selectedRoute: "cockpit",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false",
         viewport: "desktop",
         reducedMotion: "true",
@@ -337,7 +327,7 @@ const acceptedVisualInstanceOracle = {
       "/work?locale=en&theme=light&collapsed=false",
       "/work?locale=en&theme=light&collapsed=true",
       "/work?locale=zh-CN&theme=dark&collapsed=false",
-      "post-search-dismissal:/cockpit?locale=en&theme=light&collapsed=false&search=gate",
+      "unsupported-search-param-canonicalized:/cockpit?locale=en&theme=light&collapsed=false&search=gate",
       "side-nav-toggle:/cockpit?locale=en&theme=light"
     ],
     outsideMatrixMarkerForbiddenForOwnerReview: "aos-route-state-outside-owner-quality-oracle",
@@ -446,17 +436,18 @@ try {
       workMarker: body.includes('data-aos-work-module-entry="owner-quality-work-queue"'),
       registeredNavigationOnly: body.includes('data-registered-navigation-only="true"'),
       registeredBrandLockup: body.includes('data-registered-brand-lockup="@tcrn/ui-react/ShellBrandLockup"'),
-      productShellBoundary: body.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController ProductShellSearch"')
+      productShellBoundary: body.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search"')
         && body.includes('data-package-backed-product-shell-boundary="side-nav-shell-v1"')
-        && body.includes('data-product-shell-semantic-api="collapse-theme-locale-search"')
+        && body.includes('data-product-shell-semantic-api="collapse-theme-locale"')
+        && body.includes('data-product-shell-global-search="not-rendered"')
         && body.includes('data-local-wrapper-event-delegation="absent"')
         && body.includes('data-local-shell-effect-clones="removed"'),
       packageBackedShellControls: [
         'data-package-backed-shell-control="locale-menu"',
         'data-package-backed-shell-control="theme-toggle"',
-        'data-package-backed-shell-control="side-nav-collapse"',
-        'data-package-backed-shell-control="product-shell-search"'
-      ].every((marker) => body.includes(marker)),
+        'data-package-backed-shell-control="side-nav-collapse"'
+      ].every((marker) => body.includes(marker))
+        && forbiddenSearchCapabilityMarkers.every((marker) => !body.includes(marker)),
       strictRegisteredSurface: !/class="[^"]*\baos-/.test(body)
         && !/\.(?:aos-[A-Za-z0-9_-]+)/.test(body)
         && !body.includes("MetricCard")
@@ -524,7 +515,7 @@ try {
     dsContractConsumption: {
       packages: ["@tcrn/ui-react", "@tcrn/ui-tokens", "@tcrn/ui-copy-state"],
       componentStylesheet: "tcrnComponentCss",
-      productShellBoundary: "ProductShell/useProductShellController/ProductShellSearch",
+      productShellBoundary: "ProductShell/useProductShellController/no-global-search",
       localWrapperEventDelegation: false,
       localShellEffectClones: false,
       visibleClassNamespace: "DS-owned tcrn-* only under product shell content",
@@ -534,7 +525,7 @@ try {
       themeTransition: "ds_product_shell_controller",
       localeSelector: "globe_trigger_native_names_with_escape_outside_selection_close",
       sideNavigation: "ProductShell package boundary with persisted collapse callback",
-      search: "ProductShellSearch controlled by useProductShellController with dismissal/result callbacks",
+      search: "not rendered; AOS has no owner-approved global search capability",
       readbackUx: "owner_quality_product_surfaces_with_secondary_developer_disclosure",
       brandAsset: "/assets/tcrn-brand-mark.svg",
       brandLockup: "@tcrn/ui-react/ShellBrandLockup",
@@ -678,7 +669,6 @@ async function runBrowserProof(baseUrl) {
       const topbar = root.querySelector(".tcrn-top-bar");
       const topbarStyle = topbar ? getComputedStyle(topbar) : null;
       const currentLocation = topbar?.querySelector(".tcrn-product-shell__current-location");
-      const search = topbar?.querySelector(".tcrn-product-shell-search");
       const theme = topbar?.querySelector(".tcrn-shell-theme-toggle");
       const locale = topbar?.querySelector(".tcrn-shell-locale-menu");
       const rect = (element) => {
@@ -702,7 +692,7 @@ async function runBrowserProof(baseUrl) {
         topbarPaddingLeft: Number.parseFloat(topbarStyle?.paddingLeft ?? "0") || 0,
         topbarPaddingRight: Number.parseFloat(topbarStyle?.paddingRight ?? "0") || 0,
         currentLocation: rect(currentLocation),
-        search: rect(search),
+        search: rect(topbar?.querySelector(".tcrn-product-shell-search")),
         theme: rect(theme),
         locale: rect(locale),
         h1Text: root.querySelector("h1")?.textContent?.trim() ?? null,
@@ -724,17 +714,17 @@ async function runBrowserProof(baseUrl) {
     assert.equal(
       Math.abs(topbarCleanupReadback.topbar.right - topbarCleanupReadback.locale.right - topbarCleanupReadback.topbarPaddingRight) <= 4,
       true,
-      "search/theme/locale utility cluster is trailing aligned inside the topbar"
+      "theme/locale utility cluster is trailing aligned inside the topbar"
     );
     assert.equal(
-      topbarCleanupReadback.currentLocation.right <= topbarCleanupReadback.search.left + 1,
-      true,
-      "current-location block precedes search in the topbar order"
+      topbarCleanupReadback.search,
+      null,
+      "topbar renders no AOS global-search control"
     );
     assert.equal(
-      topbarCleanupReadback.search.right <= topbarCleanupReadback.theme.left + 1,
+      topbarCleanupReadback.currentLocation.right <= topbarCleanupReadback.theme.left + 1,
       true,
-      "search precedes theme toggle in the topbar order"
+      "current-location block precedes theme toggle in the no-search topbar order"
     );
     assert.equal(
       topbarCleanupReadback.theme.right <= topbarCleanupReadback.locale.left + 1,
@@ -857,78 +847,55 @@ async function runBrowserProof(baseUrl) {
     await desktopPage.locator("[data-side-nav-toggle]").click();
     await desktopPage.waitForFunction(() => document.querySelector("[data-aos-shell]")?.getAttribute("data-side-nav-collapsed") === "false");
 
-    const searchWrap = desktopPage.locator('[data-shell-control="product-shell-search"]');
-    const searchInput = desktopPage.locator('.tcrn-product-shell-search input[type="search"]');
-    const searchWidthAtRest = await searchWrap.evaluate((node) => node.getBoundingClientRect().width);
-    await searchInput.focus();
-    await desktopPage.waitForFunction(() => document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "true");
-    const searchWidthFocused = await searchWrap.evaluate((node) => node.getBoundingClientRect().width);
-    assert.equal(searchWidthFocused >= searchWidthAtRest, true, "search expands or preserves full width on focus");
-    await searchInput.fill("gate");
-    await desktopPage.waitForFunction(() => {
-      const layer = document.querySelector("[data-product-shell-search-results]");
-      return layer && !layer.hidden && layer.querySelector("[data-search-result]");
-    });
-    assert.equal(await desktopPage.locator("[data-search-result]").count() > 0, true, "search shows local results while focused");
-    await clickStableContentPoint(desktopPage);
-    await desktopPage.waitForFunction(() => document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "false");
-    assert.equal(await desktopPage.locator("[data-product-shell-search-results]").isVisible(), false, "search collapses and hides results on blur");
-    assert.equal(await desktopPage.evaluate(() => document.activeElement?.matches('.tcrn-product-shell-search input[type="search"]')), false, "real outside click moves focus away from shell search");
+    const noSearchReadback = await desktopPage.evaluate((forbiddenMarkers) => {
+      const bodyHtml = document.body.innerHTML;
+      return {
+        wrapperCount: document.querySelectorAll(".tcrn-product-shell-search").length,
+        shellControlCount: document.querySelectorAll('[data-shell-control="product-shell-search"]').length,
+        resultSurfaceCount: document.querySelectorAll("[data-product-shell-search-results]").length,
+        shortcutTextPresent: /Ctrl\+K|⌘K/.test(document.body.innerText ?? ""),
+        markerHits: forbiddenMarkers.filter((marker) => bodyHtml.includes(marker)),
+        semanticApi: document.querySelector("[data-aos-shell]")?.getAttribute("data-product-shell-semantic-api") ?? null,
+        searchCapability: document.querySelector("[data-aos-shell]")?.getAttribute("data-product-shell-search-capability") ?? null
+      };
+    }, forbiddenSearchCapabilityMarkers);
+    assert.equal(noSearchReadback.wrapperCount, 0, "AOS renders no ProductShellSearch wrapper");
+    assert.equal(noSearchReadback.shellControlCount, 0, "AOS renders no product-shell-search control");
+    assert.equal(noSearchReadback.resultSurfaceCount, 0, "AOS renders no search-results surface");
+    assert.equal(noSearchReadback.shortcutTextPresent, false, "AOS renders no Ctrl+K global search shortcut");
+    assert.deepEqual(noSearchReadback.markerHits, [], "AOS contains no stale global-search markers");
+    assert.equal(noSearchReadback.semanticApi, "collapse-theme-locale", "AOS ProductShell semantic API excludes search");
+    assert.equal(noSearchReadback.searchCapability, "absent", "AOS declares no global search capability");
 
-    await searchInput.focus();
-    await searchInput.fill("gate");
-    await desktopPage.waitForFunction(() => {
-      const layer = document.querySelector("[data-product-shell-search-results]");
-      return layer && !layer.hidden && layer.querySelector("[data-search-result]");
-    });
-    await clickStableContentPoint(desktopPage);
-    await desktopPage.waitForFunction(() => {
-      const input = document.querySelector('.tcrn-product-shell-search input[type="search"]');
-      const layer = document.querySelector("[data-product-shell-search-results]");
-      return document.activeElement !== input
-        && document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "false"
-        && layer?.hasAttribute("hidden") === true;
-    });
-    const outsidePointerSearchReadback = await desktopPage.evaluate(() => ({
-      searchExpanded: document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "true",
-      resultsHidden: document.querySelector("[data-product-shell-search-results]")?.hasAttribute("hidden") ?? false
+    await desktopPage.goto(`${baseUrl}/cockpit?locale=en&theme=light&collapsed=false&search=gate`, { waitUntil: "networkidle" });
+    await desktopPage.waitForSelector('[data-aos-shell="owner-quality-product-shell"]');
+    await desktopPage.waitForFunction(() => !new URL(window.location.href).searchParams.has("search"));
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "desktop-light-operations-cockpit", "unsupported search URL param canonicalizes to Cockpit rest variant");
+    assert.equal(await desktopPage.locator("[data-aos-shell]").getAttribute("data-visual-instance-search"), "not-rendered", "unsupported search URL param does not create a search state");
+
+    await desktopPage.goto(`${baseUrl}/cockpit?locale=en&theme=light&collapsed=false`, { waitUntil: "networkidle" });
+    await desktopPage.locator("[data-locale-menu-toggle]").click();
+    await desktopPage.locator(".tcrn-shell-locale-menu__option", { hasText: "简体中文" }).click();
+    await desktopPage.waitForFunction(() => new URL(window.location.href).searchParams.get("locale") === "zh-CN");
+    await desktopPage.waitForFunction(() => document.documentElement.lang === "zh-CN" && document.documentElement.dataset.currentLocale === "zh-CN");
+    const localeUrlReadback = await desktopPage.evaluate(() => ({
+      locale: new URL(window.location.href).searchParams.get("locale"),
+      theme: new URL(window.location.href).searchParams.get("theme"),
+      collapsed: new URL(window.location.href).searchParams.get("collapsed"),
+      search: new URL(window.location.href).searchParams.get("search"),
+      htmlLang: document.documentElement.lang,
+      currentLocale: document.documentElement.dataset.currentLocale
     }));
-    assert.equal(outsidePointerSearchReadback.searchExpanded, false, "outside pointer dismissal returns search to compact rest state");
-    assert.equal(outsidePointerSearchReadback.resultsHidden, true, "outside pointer dismissal hides search results");
-
-    const hydratedSearchMotionReadback = await collectHydratedSearchMotionReadback(desktopPage);
-    for (const phase of ["focusExpand", "escapeCollapse", "blurCollapse"]) {
-      const summary = summarizeSearchMotionPhase(hydratedSearchMotionReadback[phase]);
-      assert.equal(
-        Math.abs(summary.durationMs - ownerQualitySearchMotionStandard.durationMs) <= 1,
-        true,
-        `${phase} uses the DS search motion duration: ${JSON.stringify(summary)}`
-      );
-      assert.equal(String(summary.timingFunction).includes(ownerQualitySearchMotionStandard.timingFunctionIncludes), true, `${phase} uses the DS search motion easing`);
-      assert.equal(summary.intermediateCount >= ownerQualitySearchMotionStandard.minIntermediateSamples, true, `${phase} samples intermediate search widths`);
-      assert.equal(summary.monotonic, true, `${phase} search width progression is monotonic`);
-      assert.equal(summary.finalReachedAtMs >= ownerQualitySearchMotionStandard.finalFrameEarliestMs, true, `${phase} does not jump directly to its endpoint`);
-    }
-
-    await searchInput.focus();
-    await searchInput.fill("gate");
-    await desktopPage.waitForFunction(() => {
-      const layer = document.querySelector("[data-product-shell-search-results]");
-      return layer && !layer.hidden && layer.querySelector("[data-search-result]");
-    });
-    await desktopPage.keyboard.press("Tab");
-    await desktopPage.waitForFunction(() => {
-      const input = document.querySelector('.tcrn-product-shell-search input[type="search"]');
-      const layer = document.querySelector("[data-product-shell-search-results]");
-      return document.activeElement !== input
-        && document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "false"
-        && layer?.hasAttribute("hidden") === true;
-    });
-    await searchInput.focus();
-    await searchInput.fill("Cockpit");
-    await desktopPage.waitForSelector("[data-search-result]");
-    await desktopPage.locator("[data-search-result]").first().click();
-    assert.equal(await desktopPage.evaluate(() => sessionStorage.getItem("tcrn-aos-last-search-result") ?? localStorage.getItem("tcrn-aos-last-search-result")), "route-cockpit", "search result activation flows through DS semantic callback");
+    assert.deepEqual(localeUrlReadback, {
+      locale: "zh-CN",
+      theme: "light",
+      collapsed: "false",
+      search: null,
+      htmlLang: "zh-CN",
+      currentLocale: "zh-CN"
+    }, "locale selection is URL-canonical and preserves route params without search");
+    await desktopPage.reload({ waitUntil: "networkidle" });
+    await desktopPage.waitForFunction(() => document.documentElement.lang === "zh-CN" && document.querySelector("[data-aos-shell]")?.getAttribute("data-visual-instance-locale") === "zh-CN");
 
     const visibleText = await desktopPage.locator("body").innerText();
     for (const label of forbiddenPlannedPrimaryLabels) {
@@ -1003,27 +970,25 @@ async function runBrowserProof(baseUrl) {
     assert.deepEqual(mobileContentReadback.storybookDemoClassHits, [], "mobile content region has no Storybook-only shell demo classes");
     const mobileWorkHeadingTop = await mobilePage.locator("#work-heading").evaluate((node) => node.getBoundingClientRect().top);
     assert.equal(mobileWorkHeadingTop < 760, true, "mobile first viewport reaches the Work heading within the DS stacked shell posture");
-    const mobileSearchReadback = await mobilePage.evaluate(() => {
+    const mobileNoSearchReadback = await mobilePage.evaluate(() => {
       const wrapper = document.querySelector(".tcrn-product-shell-search");
       const input = document.querySelector(".tcrn-search-input");
       const control = document.querySelector(".tcrn-search-input__control");
       return {
-        wrapperWidth: wrapper ? Number(wrapper.getBoundingClientRect().width.toFixed(3)) : null,
-        inputWidth: input ? Number(input.getBoundingClientRect().width.toFixed(3)) : null,
-        placeholder: control?.getAttribute("placeholder") ?? null
+        wrapperCount: document.querySelectorAll(".tcrn-product-shell-search").length,
+        inputCount: document.querySelectorAll(".tcrn-search-input").length,
+        controlCount: document.querySelectorAll(".tcrn-search-input__control").length,
+        placeholder: control?.getAttribute("placeholder") ?? null,
+        searchCapability: document.querySelector("[data-aos-shell]")?.getAttribute("data-product-shell-search-capability") ?? null
       };
     });
-    assert.equal(
-      typeof mobileSearchReadback.wrapperWidth === "number" && mobileSearchReadback.wrapperWidth <= ownerQualityMobileSearchMaxPx + 1,
-      true,
-      `mobile search wrapper respects owner-quality max width ${ownerQualityMobileSearchMaxPx}px`
-    );
-    assert.equal(
-      typeof mobileSearchReadback.inputWidth === "number" && mobileSearchReadback.inputWidth <= ownerQualityMobileSearchMaxPx + 1,
-      true,
-      `mobile search input respects owner-quality max width ${ownerQualityMobileSearchMaxPx}px`
-    );
-    assert.equal(mobileSearchReadback.placeholder, "搜索运营", "mobile zh-CN search uses localized owner-quality placeholder");
+    assert.deepEqual(mobileNoSearchReadback, {
+      wrapperCount: 0,
+      inputCount: 0,
+      controlCount: 0,
+      placeholder: null,
+      searchCapability: "absent"
+    }, "mobile zh-CN Work renders no global search control");
     await mobilePage.screenshot({ path: `${screenshotRoot}/04-mobile-work-dark.png`, fullPage: false });
     assert.equal(await mobilePage.locator("[data-side-nav-toggle]").isVisible(), false, "mobile Work hides side-nav collapse affordance until mobile collapsed variants are admitted");
     assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-owner-quality-collapse-policy"), "mobile-hidden-collapse-affordance", "mobile Work records accepted hidden collapse policy");
@@ -1112,13 +1077,12 @@ async function runBrowserProof(baseUrl) {
         localeOutsideDismissal: true,
         localeEscapeDismissalFocusReturn: true,
         localeSelectionFocusReturn: true,
-        searchFocusExpansionBlurCollapse: true,
-        searchMotionHydratedTimeline: true,
+        noGlobalSearchRendered: noSearchReadback.wrapperCount === 0 && noSearchReadback.shellControlCount === 0 && noSearchReadback.resultSurfaceCount === 0,
+        unsupportedSearchUrlParamCanonicalized: true,
+        urlCanonicalLocalePersistence: localeUrlReadback.locale === "zh-CN" && localeUrlReadback.htmlLang === "zh-CN",
         topbarCurrentLocationCleanup: !topbarCleanupReadback.staleWorkspaceTitlePresent
           && !topbarCleanupReadback.brandCellPresent
           && !topbarCleanupReadback.moduleCellPresent,
-        searchOutsidePointerCollapse: true,
-        searchTabCollapse: true,
         sideNavDesktopActionableToggle: true,
         sideNavMobileHiddenAffordance: true,
         brandAssetVisible: true,
@@ -1131,7 +1095,8 @@ async function runBrowserProof(baseUrl) {
       },
       sideNavKeyboardReadback,
       topbarCleanupReadback,
-      hydratedSearchMotionReadback,
+      noSearchReadback,
+      localeUrlReadback,
       mobileOverflowReadback,
       screenshots: [
         `${screenshotRoot}/01-desktop-cockpit-default.png`,
@@ -1171,8 +1136,8 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
         locale: "en",
         collapsed: "true",
         route: "cockpit",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false"
       }
     },
@@ -1185,8 +1150,8 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
         locale: "en",
         collapsed: "true",
         route: "cockpit",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false"
       }
     },
@@ -1199,8 +1164,8 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
         locale: "en",
         collapsed: "true",
         route: "cockpit",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false"
       }
     },
@@ -1213,8 +1178,8 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
         locale: "en",
         collapsed: "true",
         route: "cockpit",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false"
       }
     },
@@ -1227,8 +1192,8 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
         locale: "en",
         collapsed: "true",
         route: "work",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false"
       }
     },
@@ -1241,13 +1206,13 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
         locale: "en",
         collapsed: "true",
         route: "work",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false"
       }
     },
     {
-      id: "post-search-dismissal",
+      id: "unsupported-search-param-canonicalization",
       path: "/cockpit?locale=en&theme=light&collapsed=false&search=gate",
       expectedVariant: acceptedVisualInstanceOracle.ownerQualityPolicy.defaultCockpitVariant,
       expectedState: {
@@ -1255,11 +1220,10 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
         locale: "en",
         collapsed: "false",
         route: "cockpit",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false"
-      },
-      dismissSearch: true
+      }
     },
     {
       id: "side-nav-toggle-from-cockpit",
@@ -1270,8 +1234,8 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
         locale: "en",
         collapsed: "false",
         route: "cockpit",
-        search: "rest",
-        searchExpanded: "false",
+        search: "not-rendered",
+        searchExpanded: "absent",
         searchResultsVisible: "false"
       },
       verifySideNavToggle: true
@@ -1285,18 +1249,7 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
       await page.goto(`${baseUrl}${route.path}`, { waitUntil: "networkidle" });
       await page.waitForSelector('[data-aos-shell="owner-quality-product-shell"]');
       await page.waitForFunction(() => document.querySelector("[data-api-state]")?.textContent?.includes("available"));
-      if (route.dismissSearch) {
-        await page.waitForFunction(() => {
-          const layer = document.querySelector("[data-product-shell-search-results]");
-          return layer && !layer.hasAttribute("hidden") && layer.querySelector("[data-search-result]");
-        });
-        await clickStableContentPoint(page);
-        await page.waitForFunction(() => {
-          const layer = document.querySelector("[data-product-shell-search-results]");
-          return document.querySelector('[data-shell-control="product-shell-search"]')?.getAttribute("data-search-expanded") === "false"
-            && layer?.hasAttribute("hidden") === true;
-        });
-      }
+      await page.waitForFunction(() => !new URL(window.location.href).searchParams.has("search"));
       if (route.verifySideNavToggle) {
         const sideNavToggle = page.locator("[data-side-nav-toggle]");
         assert.equal(await sideNavToggle.getAttribute("disabled"), null, `${route.id} renders an enabled side-nav collapse affordance`);
@@ -1316,7 +1269,7 @@ async function runOwnerReachableRouteMatrixProof(browser, baseUrl, consoleMessag
           route: root.getAttribute("data-visual-instance-route"),
           selectedRoute: selectedNavItem?.getAttribute("data-product-shell-route") ?? null,
           search: root.getAttribute("data-visual-instance-search"),
-          searchExpanded: searchWrapper?.getAttribute("data-search-expanded") ?? null,
+          searchExpanded: searchWrapper?.getAttribute("data-search-expanded") ?? "absent",
           searchResultsVisible: searchResults ? String(!searchResults.hasAttribute("hidden")) : "false",
           sideNavToggleDisabled: sideNavToggle?.hasAttribute("disabled") ? "true" : "false",
           sideNavAction: sideNavToggle?.getAttribute("data-side-nav-action") ?? null,
@@ -1450,7 +1403,7 @@ async function runVisualInstanceParityProof(browser, aosBaseUrl, dsBaseUrl) {
     productShellComparatorReadback,
     delegatedInteractionProofs: [
       "Locale menu dismissal/focus-return is exercised through ShellLocaleMenu/ProductShell browser checks.",
-      "Search blur/outside-pointer/tab/result activation is exercised through ProductShellSearch browser checks.",
+      "AOS global search is intentionally absent; proof fails if ProductShellSearch, Ctrl+K, or search-results surfaces render in AOS.",
       "This AOS proof maps rendered routes/states to the accepted DS visual-instance oracle; it is not owner-visible readiness."
     ],
     negativeCriteria: {
@@ -1473,7 +1426,8 @@ function compareVisualInstanceState(variant, dsMetrics, aosMetrics) {
   for (const [stateName, expected] of Object.entries(variant.expectedState)) {
     const dsActual = stateName === "selectedRoute" ? dsMetrics.state.selectedRoute : dsMetrics.state[stateName];
     const aosActual = aosMetrics.state[stateName];
-    add(`state.${stateName}`, dsActual === expected && aosActual === expected, {
+    const dsSearchField = ["search", "searchExpanded", "searchResultsVisible"].includes(stateName);
+    add(`state.${stateName}`, (dsSearchField || dsActual === expected) && aosActual === expected, {
       expected,
       ds: dsActual,
       aos: aosActual
@@ -1797,7 +1751,7 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
       route: root.getAttribute("data-visual-instance-route"),
       selectedRoute: selectedNavItem?.getAttribute("data-product-shell-route") ?? null,
       search: root.getAttribute("data-visual-instance-search"),
-      searchExpanded: searchWrapper?.getAttribute("data-search-expanded") ?? null,
+      searchExpanded: searchWrapper?.getAttribute("data-search-expanded") ?? "absent",
       searchResultsVisible: searchResults ? String(!searchResults.hasAttribute("hidden")) : "false",
       viewport: root.getAttribute("data-visual-instance-viewport"),
       reducedMotion: root.getAttribute("data-visual-instance-reduced-motion"),
@@ -1919,8 +1873,8 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
           right: rect ? Number(rect.right.toFixed(3)) : null,
           top: rect ? Number(rect.top.toFixed(3)) : null,
           bottom: rect ? Number(rect.bottom.toFixed(3)) : null,
-          withinRoot: Boolean(rect && rect.left >= rootRect.left - 1 && rect.right <= rootRect.right + 1),
-          withinViewport: Boolean(rect && rect.left >= -1 && rect.right <= window.innerWidth + 1)
+          withinRoot: !element || Boolean(rect && rect.left >= rootRect.left - 1 && rect.right <= rootRect.right + 1),
+          withinViewport: !element || Boolean(rect && rect.left >= -1 && rect.right <= window.innerWidth + 1)
         };
       });
     const sideNavToggle = root.querySelector("[data-side-nav-toggle]");
@@ -2020,12 +1974,20 @@ function compareProductShellMetrics(dsMetrics, aosMetrics) {
   };
   add("shell-present", dsMetrics.missing === false && aosMetrics.missing === false, { dsMissing: dsMetrics.missing, aosMissing: aosMetrics.missing });
   for (const key of ["packageBoundary", "effectBoundary", "semanticApi", "responsive"]) {
-    add(`source-marker-${key}`, dsMetrics.sourceMarkers?.[key] === aosMetrics.sourceMarkers?.[key], {
-      ds: dsMetrics.sourceMarkers?.[key],
-      aos: aosMetrics.sourceMarkers?.[key]
+    const dsValue = dsMetrics.sourceMarkers?.[key];
+    const aosValue = aosMetrics.sourceMarkers?.[key];
+    const passed = key === "semanticApi"
+      ? dsValue === "collapse-theme-locale-search" && aosValue === "collapse-theme-locale"
+      : dsValue === aosValue;
+    add(`source-marker-${key}`, passed, {
+      ds: dsValue,
+      aos: aosValue,
+      disposition: key === "semanticApi" ? "DS Storybook may demonstrate search; AOS omits global search by product capability." : undefined
     });
   }
-  add("controlOrder.currentLocation-search-theme-locale", (dsMetrics.controlOrder ?? []).join(">") === (aosMetrics.controlOrder ?? []).join(">"), {
+  add("controlOrder.currentLocation-optionalSearch-theme-locale",
+    (dsMetrics.controlOrder ?? []).join(">") === "currentLocation>searchWrapper>themeToggle>localeTrigger"
+      && (aosMetrics.controlOrder ?? []).join(">") === "currentLocation>themeToggle>localeTrigger", {
     ds: dsMetrics.controlOrder,
     aos: aosMetrics.controlOrder
   });
@@ -2053,17 +2015,17 @@ function compareProductShellMetrics(dsMetrics, aosMetrics) {
     compareString(add, `${control}.borderRadius`, dsMetrics.measured[control].borderRadius, aosMetrics.measured[control].borderRadius);
     compareString(add, `${control}.display`, dsMetrics.measured[control].display, aosMetrics.measured[control].display);
   }
-  for (const control of ["themeToggle", "sideNavToggle", "localeTrigger", "searchInput", "searchControl", "searchShortcut", "currentLocation", "selectedNavItem", "topBar"]) {
+  for (const control of ["themeToggle", "sideNavToggle", "localeTrigger", "currentLocation", "selectedNavItem", "topBar"]) {
     for (const property of ["fontFamily", "fontSize", "fontWeight", "lineHeight", "letterSpacing"]) {
       compareString(add, `${control}.${property}`, dsMetrics.measured[control][property], aosMetrics.measured[control][property]);
     }
   }
-  for (const control of ["themeToggle", "sideNavToggle", "localeTrigger", "searchInput", "searchShortcut", "selectedNavItem", "topBar"]) {
+  for (const control of ["themeToggle", "sideNavToggle", "localeTrigger", "selectedNavItem", "topBar"]) {
     for (const property of ["backgroundColor", "borderStyle", "borderWidth", "boxShadow"]) {
       compareString(add, `${control}.${property}`, dsMetrics.measured[control][property], aosMetrics.measured[control][property]);
     }
   }
-  for (const control of ["themeToggle", "sideNavToggle", "localeTrigger", "searchControl", "searchInput"]) {
+  for (const control of ["themeToggle", "sideNavToggle", "localeTrigger"]) {
     for (const property of ["outlineWidth", "outlineStyle", "outlineColor", "outlineOffset", "boxShadow"]) {
       compareString(add, `${control}.focus.${property}`, dsMetrics.measured[control].focus?.[property], aosMetrics.measured[control].focus?.[property]);
     }
@@ -2091,27 +2053,15 @@ function compareProductShellMetrics(dsMetrics, aosMetrics) {
     aos: aosMetrics.sideNavIconCenter,
     maxPx: 1
   });
-  compareResponsiveSearchWidth(add, "searchWrapper.width", dsMetrics.measured.searchWrapper.width, aosMetrics.measured.searchWrapper.width, expectSearchResults);
-  compareNumber(add, "searchWrapper.height", dsMetrics.measured.searchWrapper.height, aosMetrics.measured.searchWrapper.height, 0.5);
-  compareString(add, "searchWrapper.transitionProperty", dsMetrics.measured.searchWrapper.transitionProperty, aosMetrics.measured.searchWrapper.transitionProperty);
-  compareMotionDuration(add, "searchWrapper.transitionDuration", dsMetrics.measured.searchWrapper.transitionDuration, aosMetrics.measured.searchWrapper.transitionDuration, isReducedMotion);
-  compareString(add, "searchWrapper.transitionTimingFunction", dsMetrics.measured.searchWrapper.transitionTimingFunction, aosMetrics.measured.searchWrapper.transitionTimingFunction);
-  if (!isReducedMotion) {
-    compareSearchMotionTimeline(add, "expand", dsMetrics.searchMotionTimeline, aosMetrics.searchMotionTimeline);
-    compareSearchMotionTimeline(add, "collapse", dsMetrics.searchMotionTimeline, aosMetrics.searchMotionTimeline);
-  }
-  compareResponsiveSearchWidth(add, "searchInput.width", dsMetrics.measured.searchInput.width, aosMetrics.measured.searchInput.width, expectSearchResults);
-  compareNumber(add, "searchInput.height", dsMetrics.measured.searchInput.height, aosMetrics.measured.searchInput.height, 0.5);
-  compareString(add, "searchInput.borderRadius", dsMetrics.measured.searchInput.borderRadius, aosMetrics.measured.searchInput.borderRadius);
-  compareString(add, "searchInput.display", dsMetrics.measured.searchInput.display, aosMetrics.measured.searchInput.display);
-  compareString(add, "searchInput.gap", dsMetrics.measured.searchInput.gap, aosMetrics.measured.searchInput.gap);
-  compareString(add, "searchInput.paddingLeft", dsMetrics.measured.searchInput.paddingLeft, aosMetrics.measured.searchInput.paddingLeft);
-  compareString(add, "searchInput.paddingRight", dsMetrics.measured.searchInput.paddingRight, aosMetrics.measured.searchInput.paddingRight);
-  compareSearchGrid(add, "searchInput.gridTemplateColumns", dsMetrics.measured.searchInput.gridTemplateColumns, aosMetrics.measured.searchInput.gridTemplateColumns);
-  compareString(add, "searchControl.placeholder", dsMetrics.measured.searchControl.placeholder, aosMetrics.measured.searchControl.placeholder);
-  compareString(add, "searchShortcut.paddingLeft", dsMetrics.measured.searchShortcut.paddingLeft, aosMetrics.measured.searchShortcut.paddingLeft);
-  compareString(add, "searchShortcut.paddingRight", dsMetrics.measured.searchShortcut.paddingRight, aosMetrics.measured.searchShortcut.paddingRight);
-  compareString(add, "searchShortcut.position", dsMetrics.measured.searchShortcut.position, aosMetrics.measured.searchShortcut.position);
+  add("aosNoGlobalSearch.wrapperAbsent", aosMetrics.measured.searchWrapper?.missing === true, {
+    dsSearchPresent: dsMetrics.measured.searchWrapper?.missing === false,
+    aosSearchMissing: aosMetrics.measured.searchWrapper?.missing
+  });
+  add("aosNoGlobalSearch.inputAbsent", aosMetrics.measured.searchInput?.missing === true && aosMetrics.measured.searchControl?.missing === true && aosMetrics.measured.searchShortcut?.missing === true, {
+    aosSearchInput: aosMetrics.measured.searchInput,
+    aosSearchControl: aosMetrics.measured.searchControl,
+    aosSearchShortcut: aosMetrics.measured.searchShortcut
+  });
   compareTopBarHeight(add, "topBar.height", dsMetrics.measured.topBar.height, aosMetrics.measured.topBar.height, dsMetrics.viewport, aosMetrics.viewport);
   compareString(add, "topBar.display", dsMetrics.measured.topBar.display, aosMetrics.measured.topBar.display);
   compareString(add, "topBar.position", dsMetrics.measured.topBar.position, aosMetrics.measured.topBar.position);
@@ -2171,9 +2121,11 @@ function compareReducedMotionMetrics(dsMetrics, aosMetrics) {
   compareString(add, "reduced.themeToggle.transitionProperty", dsMetrics.measured.themeToggle.transitionProperty, aosMetrics.measured.themeToggle.transitionProperty);
   compareString(add, "reduced.localeTrigger.transitionProperty", dsMetrics.measured.localeTrigger.transitionProperty, aosMetrics.measured.localeTrigger.transitionProperty);
   compareString(add, "reduced.sideNavToggle.transitionProperty", dsMetrics.measured.sideNavToggle.transitionProperty, aosMetrics.measured.sideNavToggle.transitionProperty);
-  compareString(add, "reduced.searchWrapper.transitionProperty", dsMetrics.measured.searchWrapper.transitionProperty, aosMetrics.measured.searchWrapper.transitionProperty);
   compareString(add, "reduced.localeChevron.transitionProperty", dsMetrics.measured.localeChevron.transitionProperty, aosMetrics.measured.localeChevron.transitionProperty);
-  for (const control of ["themeToggle", "localeTrigger", "sideNavToggle", "searchWrapper", "localeChevron"]) {
+  add("reduced.aosNoGlobalSearch.wrapperAbsent", aosMetrics.measured.searchWrapper?.missing === true, {
+    aosSearchMissing: aosMetrics.measured.searchWrapper?.missing
+  });
+  for (const control of ["themeToggle", "localeTrigger", "sideNavToggle", "localeChevron"]) {
     compareReducedDuration(add, `reduced.${control}.transitionDuration`, dsMetrics.measured[control].transitionDuration, aosMetrics.measured[control].transitionDuration);
     compareString(add, `reduced.${control}.transitionTimingFunction`, dsMetrics.measured[control].transitionTimingFunction, aosMetrics.measured[control].transitionTimingFunction);
   }
@@ -2217,7 +2169,7 @@ function readTopBarUtilityAlignment(metrics) {
   const search = measured.searchWrapper;
   const theme = measured.themeToggle;
   const locale = measured.localeTrigger;
-  const required = { topBar, currentLocation, search, theme, locale };
+  const required = { topBar, currentLocation, theme, locale };
   for (const [name, metric] of Object.entries(required)) {
     if (!metric || metric.missing) {
       return { passed: false, reason: `missing-${name}` };
@@ -2228,17 +2180,18 @@ function readTopBarUtilityAlignment(metrics) {
   const paddingRight = parseCssPixels(topBar.paddingRight);
   const currentLocationLeadingGap = Number((currentLocation.left - topBar.left - paddingLeft).toFixed(3));
   const utilityTrailingGap = Number((topBar.right - locale.right - paddingRight).toFixed(3));
-  const searchTrailingGap = Number((topBar.right - search.right - paddingRight).toFixed(3));
+  const searchTrailingGap = search?.missing ? null : Number((topBar.right - search.right - paddingRight).toFixed(3));
   const themeTrailingGap = Number((topBar.right - theme.right - paddingRight).toFixed(3));
-  const currentLocationSharesSearchRow = controlsShareVerticalRow(currentLocation, search);
-  const searchSharesThemeRow = controlsShareVerticalRow(search, theme);
+  const currentLocationSharesSearchRow = search?.missing ? false : controlsShareVerticalRow(currentLocation, search);
+  const searchSharesThemeRow = search?.missing ? false : controlsShareVerticalRow(search, theme);
   const themeSharesLocaleRow = controlsShareVerticalRow(theme, locale);
-  const currentBeforeSearch = !currentLocationSharesSearchRow || currentLocation.right <= search.left + 1;
-  const searchBeforeTheme = !searchSharesThemeRow || search.right <= theme.left + 1;
+  const currentBeforeSearch = search?.missing ? true : !currentLocationSharesSearchRow || currentLocation.right <= search.left + 1;
+  const searchBeforeTheme = search?.missing ? true : !searchSharesThemeRow || search.right <= theme.left + 1;
+  const currentBeforeTheme = !controlsShareVerticalRow(currentLocation, theme) || currentLocation.right <= theme.left + 1;
   const themeBeforeLocale = !themeSharesLocaleRow || theme.right <= locale.left + 1;
   const currentLocationLeadingAligned = Math.abs(currentLocationLeadingGap) <= 4;
   const utilityTrailingAligned = Math.abs(utilityTrailingGap) <= 4;
-  const wrappedSearchTrailingAligned = searchSharesThemeRow || Math.abs(searchTrailingGap) <= 4;
+  const wrappedSearchTrailingAligned = search?.missing ? true : searchSharesThemeRow || Math.abs(searchTrailingGap) <= 4;
   const wrappedThemeTrailingAligned = themeSharesLocaleRow || Math.abs(themeTrailingGap) <= 4;
 
   return {
@@ -2246,6 +2199,7 @@ function readTopBarUtilityAlignment(metrics) {
       && utilityTrailingAligned
       && wrappedSearchTrailingAligned
       && wrappedThemeTrailingAligned
+      && currentBeforeTheme
       && currentBeforeSearch
       && searchBeforeTheme
       && themeBeforeLocale,
@@ -2261,11 +2215,12 @@ function readTopBarUtilityAlignment(metrics) {
     searchSharesThemeRow,
     themeSharesLocaleRow,
     currentBeforeSearch,
+    currentBeforeTheme,
     searchBeforeTheme,
     themeBeforeLocale,
     topBar: { left: topBar.left, right: topBar.right, paddingLeft, paddingRight },
     currentLocation: { left: currentLocation.left, right: currentLocation.right },
-    search: { left: search.left, right: search.right },
+    search: search?.missing ? null : { left: search.left, right: search.right },
     theme: { left: theme.left, right: theme.right },
     locale: { left: locale.left, right: locale.right }
   };
@@ -2281,7 +2236,7 @@ function readTopBarUtilityAlignmentFromSnapshot(snapshot) {
   const search = snapshot.search;
   const theme = snapshot.theme;
   const locale = snapshot.locale;
-  const required = { topBar, currentLocation, search, theme, locale };
+  const required = { topBar, currentLocation, theme, locale };
   for (const [name, metric] of Object.entries(required)) {
     if (!metric) {
       return { passed: false, reason: `missing-${name}` };
@@ -2295,17 +2250,19 @@ function calculateTopBarUtilityAlignment({ topBar, currentLocation, search, them
   const paddingRight = parseCssPixels(topBar.paddingRight);
   const currentLocationLeadingGap = Number((currentLocation.left - topBar.left - paddingLeft).toFixed(3));
   const utilityTrailingGap = Number((topBar.right - locale.right - paddingRight).toFixed(3));
-  const searchTrailingGap = Number((topBar.right - search.right - paddingRight).toFixed(3));
+  const hasSearch = Boolean(search);
+  const searchTrailingGap = hasSearch ? Number((topBar.right - search.right - paddingRight).toFixed(3)) : null;
   const themeTrailingGap = Number((topBar.right - theme.right - paddingRight).toFixed(3));
-  const currentLocationSharesSearchRow = controlsShareVerticalRow(currentLocation, search);
-  const searchSharesThemeRow = controlsShareVerticalRow(search, theme);
+  const currentLocationSharesSearchRow = hasSearch ? controlsShareVerticalRow(currentLocation, search) : false;
+  const searchSharesThemeRow = hasSearch ? controlsShareVerticalRow(search, theme) : false;
   const themeSharesLocaleRow = controlsShareVerticalRow(theme, locale);
-  const currentBeforeSearch = !currentLocationSharesSearchRow || currentLocation.right <= search.left + 1;
-  const searchBeforeTheme = !searchSharesThemeRow || search.right <= theme.left + 1;
+  const currentBeforeSearch = !hasSearch || !currentLocationSharesSearchRow || currentLocation.right <= search.left + 1;
+  const searchBeforeTheme = !hasSearch || !searchSharesThemeRow || search.right <= theme.left + 1;
+  const currentBeforeTheme = !controlsShareVerticalRow(currentLocation, theme) || currentLocation.right <= theme.left + 1;
   const themeBeforeLocale = !themeSharesLocaleRow || theme.right <= locale.left + 1;
   const currentLocationLeadingAligned = Math.abs(currentLocationLeadingGap) <= 4;
   const utilityTrailingAligned = Math.abs(utilityTrailingGap) <= 4;
-  const wrappedSearchTrailingAligned = searchSharesThemeRow || Math.abs(searchTrailingGap) <= 4;
+  const wrappedSearchTrailingAligned = !hasSearch || searchSharesThemeRow || Math.abs(searchTrailingGap) <= 4;
   const wrappedThemeTrailingAligned = themeSharesLocaleRow || Math.abs(themeTrailingGap) <= 4;
 
   return {
@@ -2313,6 +2270,7 @@ function calculateTopBarUtilityAlignment({ topBar, currentLocation, search, them
       && utilityTrailingAligned
       && wrappedSearchTrailingAligned
       && wrappedThemeTrailingAligned
+      && currentBeforeTheme
       && currentBeforeSearch
       && searchBeforeTheme
       && themeBeforeLocale,
@@ -2328,11 +2286,12 @@ function calculateTopBarUtilityAlignment({ topBar, currentLocation, search, them
     searchSharesThemeRow,
     themeSharesLocaleRow,
     currentBeforeSearch,
+    currentBeforeTheme,
     searchBeforeTheme,
     themeBeforeLocale,
     topBar: { left: topBar.left, right: topBar.right, paddingLeft, paddingRight },
     currentLocation: { left: currentLocation.left, right: currentLocation.right },
-    search: { left: search.left, right: search.right },
+    search: hasSearch ? { left: search.left, right: search.right } : null,
     theme: { left: theme.left, right: theme.right },
     locale: { left: locale.left, right: locale.right }
   };
@@ -2495,24 +2454,23 @@ function compareMobileOwnerQualitySearchWidth(dsMetrics, aosMetrics) {
     if (!passed) failures.push({ name, ...readback });
   };
   const dsWrapperWidth = Number(dsMetrics.measured.searchWrapper?.width);
-  const aosWrapperWidth = Number(aosMetrics.measured.searchWrapper?.width);
   const dsInputWidth = Number(dsMetrics.measured.searchInput?.width);
-  const aosInputWidth = Number(aosMetrics.measured.searchInput?.width);
-  add("mobile.searchWrapper.width.max320", dsWrapperWidth <= ownerQualityMobileSearchMaxPx + 1 && aosWrapperWidth <= ownerQualityMobileSearchMaxPx + 1, {
+  add("mobile.dsSearchWrapper.width.max320", dsWrapperWidth <= ownerQualityMobileSearchMaxPx + 1, {
     ds: dsMetrics.measured.searchWrapper?.width,
-    aos: aosMetrics.measured.searchWrapper?.width,
     maxPx: ownerQualityMobileSearchMaxPx,
-    disposition: "mobile owner-quality search wrapper must respect accepted DS AI contract mobileMaxPx"
+    disposition: "DS owner-quality Storybook keeps mobile search wrapper under accepted mobileMaxPx; AOS omits global search."
   });
-  add("mobile.searchInput.width.max320", dsInputWidth <= ownerQualityMobileSearchMaxPx + 1 && aosInputWidth <= ownerQualityMobileSearchMaxPx + 1, {
+  add("mobile.dsSearchInput.width.max320", dsInputWidth <= ownerQualityMobileSearchMaxPx + 1, {
     ds: dsMetrics.measured.searchInput?.width,
-    aos: aosMetrics.measured.searchInput?.width,
     maxPx: ownerQualityMobileSearchMaxPx,
-    disposition: "mobile owner-quality search input must respect accepted DS AI contract mobileMaxPx"
+    disposition: "DS owner-quality Storybook keeps mobile search input under accepted mobileMaxPx; AOS omits global search."
   });
-  add("mobile.searchControl.placeholder.zhCN", aosMetrics.measured.searchControl?.placeholder === "搜索运营", {
-    ds: dsMetrics.measured.searchControl?.placeholder,
-    aos: aosMetrics.measured.searchControl?.placeholder
+  add("mobile.aosNoGlobalSearch.absent", aosMetrics.measured.searchWrapper?.missing === true
+    && aosMetrics.measured.searchInput?.missing === true
+    && aosMetrics.measured.searchControl?.missing === true, {
+    aosSearchWrapper: aosMetrics.measured.searchWrapper,
+    aosSearchInput: aosMetrics.measured.searchInput,
+    aosSearchControl: aosMetrics.measured.searchControl
   });
   add("mobile.rendered-state-proof", true, {
     disposition: "mobile visual-instance parity also asserts state markers, responsive posture, no-overflow, and required localized content"
