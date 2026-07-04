@@ -84,6 +84,7 @@ test("local service serves the AOS shell while backend readbacks stay available"
         assert.match(html, /data-work-management-hierarchy="initiative-epic-story-work-item-subtask-evidence-task"/);
         assert.match(html, /data-design-system-work-components="registered-package-components"/);
         assert.match(html, /data-product-local-work-component-clones="absent"/);
+        assert.doesNotMatch(html, /pending Atlas refresh|等待 Atlas 刷新/);
       } else {
         assert.match(html, /data-owner-quality-work-queue="true"/);
         assert.match(html, /data-owner-quality-gates="true"/);
@@ -126,6 +127,13 @@ test("local service serves the AOS shell while backend readbacks stay available"
       }
       for (const label of forbiddenScaffoldVisibleLabels) {
         assert.equal(html.includes(label), false, `${label} is not rendered in owner-quality shell HTML`);
+      }
+      if (target === "/work/items/AOS-128") {
+        assert.match(html, /data-full-token="cae4d52"/);
+        assert.doesNotMatch(html, /7836dca/);
+        assert.match(html, /4317 retained preview refreshed; PM freshness retry pending/);
+        assert.match(html, /Owner inspection package remains blocked until PM freshness accepts the repaired retained basis\./);
+        assert.doesNotMatch(html, /Owner inspection package is blocked until gates pass/);
       }
     }
 

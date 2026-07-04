@@ -1245,6 +1245,7 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           productShellSearchControlCount: document.querySelectorAll('[data-shell-control="product-shell-search"]').length,
           pageHasHorizontalOverflow: html.scrollWidth > window.innerWidth + 1 || body.scrollWidth > window.innerWidth + 1,
           ownerAcceptanceClaimed: body.innerText.includes("Owner acceptance: accepted") || body.innerText.includes("Release ready"),
+          workDetailBasisAndGatePostureReadback: readWorkDetailBasisAndGatePosture(),
           registeredDsWorkComponentsReadback: readRegisteredDsWorkComponents(),
           workManagementPatternReadback: readWorkManagementPatterns(),
           staleNeededDsListPresent: Boolean(document.querySelector("[data-needed-ds-components-list]")),
@@ -1292,6 +1293,29 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
             implementationBoundary: section.getAttribute("data-registered-ds-work-components-implementation"),
             missingRequiredFields: items.flatMap((item) => item.missingFields.map((field) => `${item.name}:${field}`)),
             items
+          };
+        }
+
+        function readWorkDetailBasisAndGatePosture() {
+          const text = body.innerText;
+          const machineTokens = Array.from(document.querySelectorAll(".tcrn-machine-token")).map((token) => ({
+            kind: token.getAttribute("data-machine-token-kind") ?? "",
+            fullToken: token.getAttribute("data-full-token") ?? "",
+            text: token.textContent?.replace(/\s+/g, " ").trim() ?? ""
+          }));
+          return {
+            present: Boolean(document.querySelector('[data-work-management-pattern="work-item-inspector"]')),
+            currentAosBasisVisible: text.includes("cae4d52") || machineTokens.some((token) => token.fullToken === "cae4d52"),
+            staleAosBasisVisible: text.includes("7836dca") || machineTokens.some((token) => token.fullToken === "7836dca"),
+            dsBasisVisible: text.includes("01714b9") || machineTokens.some((token) => token.fullToken === "01714b9"),
+            workflowBasisVisible: text.includes("380232c") || machineTokens.some((token) => token.fullToken === "380232c"),
+            previewPendingAtlasRefreshVisible: text.includes("pending Atlas refresh") || text.includes("等待 Atlas 刷新"),
+            retainedRefreshPostureVisible: text.includes("4317 retained preview refreshed") || text.includes("4317 保留预览已刷新"),
+            pmFreshnessRetryVisible: text.includes("PM freshness retry pending") || text.includes("PM freshness 重试"),
+            staleOwnerInspectionGateVisible: text.includes("Owner inspection package is blocked until gates pass"),
+            ownerInspectionStillGuardedVisible: text.includes("Owner inspection package remains blocked until PM freshness accepts"),
+            ownerAcceptanceClaimed: text.includes("Owner acceptance: accepted") || text.includes("Release ready"),
+            machineTokens
           };
         }
 
@@ -1400,6 +1424,17 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
       if (route.id === "detail") {
         assert.equal(readback.workManagementPatternReadback.patterns.includes("work-item-inspector"), true, "Detail route consumes DS WorkItemInspector");
         assert.equal(readback.workManagementPatternReadback.patterns.includes("evidence-attachment-list"), true, "Detail route consumes DS EvidenceAttachmentList inside the inspector");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.present, true, "Detail route exposes the Work item inspector basis readback");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.currentAosBasisVisible, true, "Detail route surfaces current AOS cae4d52 basis");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.staleAosBasisVisible, false, "Detail route does not surface stale AOS 7836dca basis");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.dsBasisVisible, true, "Detail route keeps current DS 01714b9 basis visible");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.workflowBasisVisible, true, "Detail route keeps Workflow 380232c basis visible");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.previewPendingAtlasRefreshVisible, false, "Detail route no longer says pending Atlas refresh after retained 4317 was refreshed");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.retainedRefreshPostureVisible, true, "Detail route states retained 4317 was refreshed");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.pmFreshnessRetryVisible, true, "Detail route keeps PM freshness retry pending without claiming acceptance");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.staleOwnerInspectionGateVisible, false, "Detail route removes the pre-Atlas owner inspection blocked copy");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.ownerInspectionStillGuardedVisible, true, "Detail route still guards owner inspection until PM freshness accepts");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.ownerAcceptanceClaimed, false, "Detail route still does not claim owner or release acceptance");
       }
       if (route.id === "gates") {
         assert.equal(readback.workManagementPatternReadback.patterns.includes("gate-pipeline"), true, "Gates route consumes DS GatePipeline");

@@ -188,7 +188,7 @@ const workItems: WorkItemFixture[] = [
     key: "AOS-128",
     title: "Remove unsupported global search",
     type: "Owner Feedback",
-    status: "PM Readiness",
+    status: "PM Changes Requested",
     priority: "High",
     product: "AOS",
     module: "Shell",
@@ -198,9 +198,9 @@ const workItems: WorkItemFixture[] = [
     story: "Owner can inspect an AOS shell without fake global search",
     owner: "Mara",
     assignee: "Ilya",
-    nextOwner: "Atlas",
-    gate: "Implementation Proof passed",
-    blocker: "Refresh/review pending",
+    nextOwner: "Ilya",
+    gate: "PM freshness changes requested",
+    blocker: "Stale basis/posture copy on refreshed retained preview",
     updated: "2026-07-01"
   },
   {
@@ -245,7 +245,7 @@ const workItems: WorkItemFixture[] = [
     key: "AOS-144",
     title: "Owner inspection handoff package",
     type: "Release Gate",
-    status: "Blocked",
+    status: "PM Changes Requested",
     priority: "High",
     product: "AOS",
     module: "Owner Inspection",
@@ -256,22 +256,22 @@ const workItems: WorkItemFixture[] = [
     owner: "Mara",
     assignee: "Mara",
     nextOwner: "Mara",
-    gate: "PM Readiness pending",
-    blocker: "Elara/Rowan gates must pass on fresh preview",
+    gate: "PM freshness changes requested",
+    blocker: "Retained 4317 is refreshed, but Mara requested a basis/posture copy repair before owner handoff.",
     updated: "2026-07-01"
   }
 ];
 
 const relationRows = [
-  { relation: "blocks", source: "AOS-144", target: "Owner Inspection Handoff", state: "active", note: "PM readiness is blocked until review and QA pass." },
+  { relation: "blocks", source: "AOS-144", target: "Owner Inspection Handoff", state: "active", note: "PM freshness is changes_requested after retained 4317 refresh; no owner handoff yet." },
   { relation: "blocked_by", source: "AOS-144", target: "AOS-142", state: "active", note: "Static discussion surface must be reviewed first." },
   { relation: "depends_on", source: "AOS-142", target: "DS-88", state: "resolved", note: "Uses DS optional-search contract." },
   { relation: "relates_to", source: "AOS-142", target: "Registered DS Work components", state: "active", note: "Consumes the admitted DS Work Management package patterns without API integration." },
   { relation: "duplicates", source: "Owner note: fake search", target: "AOS-128", state: "resolved", note: "Duplicate owner feedback merges into the no-global-search item." },
   { relation: "implements", source: "AOS-142", target: "Story: PM can discuss Work flows", state: "active", note: "Static routes implement the discussion surface only." },
   { relation: "verifies", source: "EVD-41", target: "AOS-128", state: "resolved", note: "AOS proof verifies no global search and URL locale." },
-  { relation: "reviews", source: "ELR-23", target: "AOS-142", state: "pending", note: "Elara review after Atlas refresh." },
-  { relation: "refreshes", source: "ATL-31", target: "AOS-142", state: "pending", note: "Retained 4317 preview refresh is downstream." },
+  { relation: "reviews", source: "ELR-23", target: "AOS-142", state: "resolved", note: "Elara rendered/DS review passed before the retained refresh." },
+  { relation: "refreshes", source: "ATL-31", target: "AOS-142", state: "resolved", note: "Retained 4317 preview was refreshed to AOS cae4d52 before Mara PM freshness." },
   { relation: "supersedes", source: "AOS-128", target: "previous search-results claim", state: "resolved", note: "Fake search route claim replaced by no-search boundary." },
   { relation: "split_from", source: "AOS-142", target: "Work Management MVP", state: "active", note: "Static mockup slice split from full implementation planning." },
   { relation: "caused_by", source: "AOS-128", target: "Owner feedback: no fake search", state: "resolved", note: "Owner-approved scope change." }
@@ -287,13 +287,13 @@ const hierarchyDefinitionRows = [
 ];
 
 const gateRows = [
-  { gate: "DS Review", owner: "Elara", state: "accepted", evidence: "ProductShell optional search contract", next: "AOS consumes DS package behavior" },
-  { gate: "Implementation Proof", owner: "Ilya", state: "pending", evidence: "Static route proof, screenshots, no API fixture", next: "Commit and return to Arturo" },
-  { gate: "Atlas Refresh", owner: "Atlas", state: "pending", evidence: "Retained 4317 preview route/API readback", next: "Refresh after implementation" },
-  { gate: "Elara Rendered Review", owner: "Elara", state: "pending", evidence: "Owner-eye review of static Work mockups", next: "Review DS usage and visual quality" },
-  { gate: "Rowan QA", owner: "Rowan", state: "pending", evidence: "Browser matrix, mobile, no-overclaim proof", next: "QA after Elara acceptance" },
-  { gate: "Mara PM Readiness", owner: "Mara", state: "blocked", evidence: "Needs Elara + Rowan pass", next: "No owner handoff yet" },
-  { gate: "Owner Inspection Handoff", owner: "Mara", state: "not_started", evidence: "Bounded package draft only", next: "Blocked until PM readiness" }
+  { gate: "DS Review", owner: "Elara", state: "accepted", evidence: "ProductShell optional search contract", next: "Accepted on the AOS rebuild basis" },
+  { gate: "Implementation Proof", owner: "Ilya", state: "accepted", evidence: "Static route proof, screenshots, no API fixture", next: "Repair stale basis copy and return to Arturo" },
+  { gate: "Atlas Refresh", owner: "Atlas", state: "accepted", evidence: "Retained 4317 preview route/API readback", next: "Refresh again only after this repair/review/QA pass" },
+  { gate: "Elara Rendered Review", owner: "Elara", state: "accepted", evidence: "Owner-eye review of static Work mockups", next: "Re-review this focused basis copy repair" },
+  { gate: "Rowan QA", owner: "Rowan", state: "accepted", evidence: "Browser matrix, mobile, no-overclaim proof", next: "QA retry after Elara accepts the repair" },
+  { gate: "Mara PM Readiness", owner: "Mara", state: "changes_requested", evidence: "Retained 4317 PM freshness check", next: "Pending this focused source repair and next Atlas refresh" },
+  { gate: "Owner Inspection Handoff", owner: "Mara", state: "not_started", evidence: "Bounded package draft only", next: "No owner handoff before PM freshness acceptance" }
 ];
 
 const evidenceRows = [
@@ -302,7 +302,7 @@ const evidenceRows = [
   { id: "EVD-43", type: "QA summary", item: "AOS-144", source: "Rowan", artifact: "summary-final.json", status: "superseded by new scope" },
   { id: "EVD-44", type: "API readback", item: "AOS-128", source: "Atlas", artifact: "/api/cockpit 410 deferred", status: "current no-live posture" },
   { id: "EVD-45", type: "Commit", item: "DS-88", source: "Ilya", artifact: "01714b9", status: "current" },
-  { id: "EVD-46", type: "Preview link", item: "AOS-142", source: "Atlas", artifact: "http://127.0.0.1:4317/", status: "pending refresh" }
+  { id: "EVD-46", type: "Preview link", item: "AOS-142", source: "Atlas", artifact: "http://127.0.0.1:4317/", status: "retained refreshed; PM changes requested" }
 ];
 
 const registeredDsWorkComponentRows: RegisteredDsWorkComponentFixture[] = workManagementPatternRegistry.map((item) => {
@@ -428,8 +428,8 @@ function workBoardLanes(locale: TcrnLocale): WorkBoardLane[] {
           title: "Owner inspection handoff package",
           state: { state: "blocked" },
           owner: "Mara",
-          meta: translatePhrase("Blocked until gates pass", locale),
-          relationships: [{ relation: "blocked_by", target: "Rowan QA" }]
+          meta: translatePhrase("PM freshness changes requested", locale),
+          relationships: [{ relation: "blocked_by", target: "Mara PM Readiness" }]
         }
       ]
     },
@@ -470,8 +470,8 @@ function workBoardLanes(locale: TcrnLocale): WorkBoardLane[] {
           title: "AOS source-visible freshness check",
           state: { state: "blocked" },
           owner: "Mara",
-          meta: translatePhrase("No owner handoff yet", locale),
-          relationships: [{ relation: "blocked_by", target: "Atlas refresh" }]
+          meta: translatePhrase("PM freshness changes requested", locale),
+          relationships: [{ relation: "blocked_by", target: "Ilya basis repair" }]
         }
       ]
     }
@@ -494,7 +494,7 @@ function workGatePipeline(locale: TcrnLocale): GatePipelineGate[] {
     owner: row.owner,
     state: row.state === "accepted"
       ? { state: "local_only", label: locale === "zh-CN" ? "已接受" : "Accepted" }
-      : row.state === "blocked"
+      : row.state === "blocked" || row.state === "changes_requested"
         ? { state: "blocked" }
         : row.state === "not_started"
           ? { state: "not_claimed" }
@@ -782,10 +782,10 @@ function DetailPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (pat
         { key: "workItem", label: "Work Item", value: <MachineToken token="AOS-128" kind="work-item" /> }
       ]}
       details={[
-        { key: "aos", label: "AOS", value: <MachineToken token="7836dca" label="HEAD" kind="commit" /> },
+        { key: "aos", label: "AOS", value: <MachineToken token="cae4d52" label="HEAD" kind="commit" /> },
         { key: "ds", label: "DS", value: <MachineToken token="01714b9" label="Storybook" kind="commit" /> },
         { key: "workflow", label: "Workflow", value: <MachineToken token="380232c" label="retained-basis" kind="commit" /> },
-        { key: "preview", label: "Preview", value: locale === "zh-CN" ? "等待 Atlas 刷新" : "pending Atlas refresh" },
+        { key: "preview", label: "Preview", value: translatePhrase("4317 retained preview refreshed; PM freshness retry pending", locale) },
         { key: "ownerAcceptance", label: "Owner acceptance", value: "not claimed" },
         { key: "release", label: "Release readiness", value: "not claimed" }
       ]}
@@ -793,15 +793,16 @@ function DetailPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (pat
       subtasks={[
         { id: "remove-search", title: translatePhrase("Remove ProductShellSearch prop", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已通过" : "Passed" }, owner: "Ilya" },
         { id: "url-locale", title: translatePhrase("URL locale canonicalization", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已通过" : "Passed" }, owner: "Ilya" },
-        { id: "refresh-preview", title: translatePhrase("Refresh 4317 preview", locale), state: { state: "blocked" }, owner: "Atlas" },
-        { id: "professional-qa", title: translatePhrase("Professional QA", locale), state: { state: "review_required" }, owner: "Rowan" }
+        { id: "refresh-preview", title: translatePhrase("Retained 4317 refresh", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已刷新" : "Refreshed" }, owner: "Atlas" },
+        { id: "professional-qa", title: translatePhrase("Professional QA", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已通过" : "Passed" }, owner: "Rowan" },
+        { id: "pm-freshness-copy-repair", title: translatePhrase("PM freshness basis copy repair", locale), state: { state: "blocked", label: locale === "zh-CN" ? "需要修改" : "Changes requested" }, owner: "Ilya" }
       ]}
       evidence={evidenceAttachments(locale)}
       actions={[
         {
           id: "prepare-owner-package",
           label: locale === "zh-CN" ? "准备 Owner 检查包" : "Prepare owner inspection package",
-          disabledReason: "Owner inspection package is blocked until gates pass"
+          disabledReason: translatePhrase("Owner inspection package remains blocked until PM freshness accepts the repaired retained basis.", locale)
         }
       ]}
     />
@@ -952,7 +953,7 @@ function workIndexRows(locale: TcrnLocale): WorkIndexRow[] {
   return workItems.map((item) => ({
     id: item.key,
     title: isZh ? translatePhrase(item.title, locale) : `${item.key} ${item.title}`,
-    state: { state: item.status === "Blocked" ? "blocked" : item.status === "Done" ? "not_configured" : "review_required" },
+    state: { state: item.status === "Blocked" || item.status === "PM Changes Requested" ? "blocked" : item.status === "Done" ? "not_configured" : "review_required" },
     owner: item.assignee
   }));
 }
@@ -1050,6 +1051,10 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "Static Work Management PRD mockups": "静态 Work Management PRD 示例",
     "ProductShell optional search contract": "ProductShell 可选搜索合同",
     "Owner inspection handoff package": "Owner 检查交接包",
+    "PM Changes Requested": "PM 要求修改",
+    "PM freshness changes requested": "PM freshness 要求修改",
+    "Stale basis/posture copy on refreshed retained preview": "已刷新保留预览里仍有过期 basis / 姿态文案",
+    "Retained 4317 is refreshed, but Mara requested a basis/posture copy repair before owner handoff.": "4317 保留预览已刷新，但 Mara 要求先修复 basis / 姿态文案后再进入 owner handoff。",
     "Owner request: Work visibility": "Owner 请求：Work 可视化",
     "DS component gap list": "DS 组件缺口列表",
     "Registered DS Work components": "已注册 DS Work 组件",
@@ -1100,11 +1105,24 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "No API integration": "未接 API",
     "URL locale authority": "URL locale 权威",
     "DS contract accepted": "DS 合同已接受",
+    "Accepted on the AOS rebuild basis": "AOS 重建 basis 已接受",
+    "Repair stale basis copy and return to Arturo": "修复过期 basis 文案并返回 Arturo",
+    "Retained 4317 preview route/API readback": "4317 保留预览 route/API 读回",
+    "Refresh again only after this repair/review/QA pass": "仅在本次修复、评审和 QA 通过后再次刷新",
+    "Re-review this focused basis copy repair": "复审本次聚焦 basis 文案修复",
+    "QA retry after Elara accepts the repair": "Elara 接受修复后重跑 QA",
+    "Retained 4317 PM freshness check": "4317 保留预览 PM freshness 检查",
+    "Pending this focused source repair and next Atlas refresh": "等待本次聚焦源码修复和下一轮 Atlas 刷新",
+    "No owner handoff before PM freshness acceptance": "PM freshness 接受前不进行 owner handoff",
     "No owner handoff yet": "尚无 owner handoff",
     "No downstream claim": "不声明下游通过",
     "Remove ProductShellSearch prop": "移除 ProductShellSearch 属性",
     "URL locale canonicalization": "URL locale 规范化",
     "Refresh 4317 preview": "刷新 4317 预览",
+    "Retained 4317 refresh": "4317 保留预览刷新",
+    "PM freshness basis copy repair": "PM freshness basis 文案修复",
+    "4317 retained preview refreshed; PM freshness retry pending": "4317 保留预览已刷新；等待 PM freshness 重试",
+    "Owner inspection package remains blocked until PM freshness accepts the repaired retained basis.": "Owner 检查包仍保持阻塞，直到 PM freshness 接受修复后的保留预览 basis。",
     "Professional QA": "专业 QA",
     "Command proof": "命令证明",
     "Screenshot": "截图",
@@ -1115,6 +1133,8 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "proof artifact target": "证明 artifact 目标",
     "superseded by new scope": "已被新范围替代",
     "pending refresh": "等待刷新",
+    "retained refreshed; PM changes requested": "保留预览已刷新；PM 要求修改",
+    changes_requested: "需要修改",
     "Blocked until gates pass": "门禁通过前阻塞",
     Backlog: "待整理",
     "In Progress": "进行中",
