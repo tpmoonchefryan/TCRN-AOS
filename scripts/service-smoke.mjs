@@ -72,11 +72,14 @@ try {
     && workDetailHtml.includes("post-review-source")
     && workDetailHtml.includes("33222fa")
     && workDetailHtml.includes("d17bdc6")
-    && workDetailHtml.includes("Prior 4317 retained preview refreshed to the reviewed basis; next Atlas refresh required for this source repair before PM freshness retry.")
-    && workDetailHtml.includes("Next Atlas refresh is required for this source repair before PM freshness retry; owner and product acceptance remain unclaimed.")
+    && workDetailHtml.includes("Use Atlas/source markers for retained preview freshness; PM freshness retry pending.")
+    && workDetailHtml.includes("PM freshness retry pending; owner and product acceptance remain unclaimed.")
     && !workDetailHtml.includes("cae4d52")
     && !workDetailHtml.includes("7836dca")
     && !workDetailHtml.includes("pending Atlas refresh")
+    && !workDetailHtml.includes("Atlas refresh required after source repair")
+    && !workDetailHtml.includes("source 修复后需要 Atlas 刷新")
+    && !workDetailHtml.includes("Next Atlas refresh required for this source repair")
     && !workDetailHtml.includes("Pending AOS consumption review")
     && !workDetailHtml.includes("retained preview is not refreshed")
     && !workDetailHtml.includes("不刷新保留预览")
@@ -122,10 +125,13 @@ try {
         workflowBasisVisible: workDetailHtml.includes("d17bdc6"),
         priorAosBasisVisible: workDetailHtml.includes("cae4d52"),
         staleAosBasisVisible: workDetailHtml.includes("7836dca"),
-        retainedRefreshPostureVisible: workDetailHtml.includes("Prior 4317 retained preview refreshed to the reviewed basis"),
-        nextAtlasRefreshRequiredVisible: workDetailHtml.includes("Next Atlas refresh is required for this source repair before PM freshness retry"),
+        atlasMarkerPostureVisible: workDetailHtml.includes("Use Atlas/source markers for retained preview freshness; PM freshness retry pending."),
+        pmFreshnessRetryVisible: workDetailHtml.includes("PM freshness retry pending; owner and product acceptance remain unclaimed."),
         staleRetainedPostureVisible: workDetailHtml.includes("4317 retained preview remains stale until post-review refresh"),
         stalePendingRefreshVisible: workDetailHtml.includes("pending Atlas refresh"),
+        staleAtlasRefreshRequiredVisible: workDetailHtml.includes("Atlas refresh required after source repair")
+          || workDetailHtml.includes("source 修复后需要 Atlas 刷新")
+          || workDetailHtml.includes("Next Atlas refresh required for this source repair"),
         staleAosConsumptionReviewVisible: workDetailHtml.includes("Pending AOS consumption review"),
         staleRetainedNotRefreshedVisible: workDetailHtml.includes("retained preview is not refreshed") || workDetailHtml.includes("不刷新保留预览"),
         staleConditionalRefreshCopyVisible: workDetailHtml.includes("Refresh retry only if this copy repair changes source"),

@@ -243,7 +243,7 @@ const workItems: WorkItemFixture[] = [
     assignee: "Ilya",
     nextOwner: "Ilya",
     gate: "PM freshness retry pending",
-    blocker: "Prior retained 4317 refreshed to reviewed basis; next Atlas refresh required for this source repair before PM freshness retry.",
+    blocker: "PM freshness retry pending; owner and product acceptance are not claimed.",
     updated: "2026-07-01"
   },
   {
@@ -300,13 +300,13 @@ const workItems: WorkItemFixture[] = [
     assignee: "Mara",
     nextOwner: "Mara",
     gate: "PM freshness retry pending",
-    blocker: "Prior retained 4317 refreshed to reviewed basis; next Atlas refresh required for this source repair before PM freshness retry.",
+    blocker: "PM freshness retry pending; owner and product acceptance are not claimed.",
     updated: "2026-07-01"
   }
 ];
 
 const relationRows = [
-  { relation: "blocks", source: "AOS-144", target: "Owner Inspection Readiness", state: "active", note: "Prior retained 4317 refresh is complete; this source repair needs the next Atlas refresh before inspection readiness." },
+  { relation: "blocks", source: "AOS-144", target: "Owner Inspection Readiness", state: "active", note: "PM freshness retry remains required before inspection readiness." },
   { relation: "blocked_by", source: "AOS-144", target: "AOS-142", state: "active", note: "Static discussion surface must be reviewed first." },
   { relation: "depends_on", source: "AOS-142", target: "DS-88", state: "resolved", note: "Uses DS optional-search contract." },
   { relation: "relates_to", source: "AOS-142", target: "Registered DS Work components", state: "active", note: "Consumes the admitted DS Work Management package patterns without API integration." },
@@ -332,7 +332,7 @@ const hierarchyDefinitionRows = [
 const gateRows = [
   { gate: "DS Review", owner: "Elara", state: "accepted", evidence: "ProductShell optional search contract", next: "Accepted on the AOS rebuild basis" },
   { gate: "Implementation Proof", owner: "Ilya", state: "accepted", evidence: "Static route proof, screenshots, no API fixture", next: "Copy-state repair proof in progress" },
-  { gate: "Atlas Refresh", owner: "Atlas", state: "accepted", evidence: "Retained 4317 refreshed to reviewed basis", next: "Next Atlas refresh required for this source repair before PM freshness retry" },
+  { gate: "Atlas Refresh", owner: "Atlas", state: "accepted", evidence: "Retained 4317 refreshed to reviewed basis", next: "PM freshness retry pending; no owner or product acceptance claimed" },
   { gate: "Elara Rendered Review", owner: "Elara", state: "accepted", evidence: "Owner-eye review of compact Work mockups", next: "Focused review on copy-state repair if routed" },
   { gate: "Rowan QA", owner: "Rowan", state: "accepted", evidence: "Browser matrix, mobile, no-overclaim proof", next: "Focused QA on copy-state repair if routed" },
   { gate: "Mara PM Readiness", owner: "Mara", state: "changes_requested", evidence: "PM freshness retry pending after copy repair", next: "Retry after source repair and retained refresh" },
@@ -345,7 +345,7 @@ const evidenceRows = [
   { id: "EVD-43", type: "QA summary", item: "AOS-144", source: "Rowan", artifact: "summary-final.json", status: "superseded by new scope" },
   { id: "EVD-44", type: "API readback", item: "AOS-128", source: "Atlas", artifact: "/api/cockpit 410 deferred", status: "current no-live posture" },
   { id: "EVD-45", type: "Commit", item: "DS-88", source: "Ilya", artifact: "33222fa", status: "current" },
-  { id: "EVD-46", type: "Preview link", item: "AOS-142", source: "Atlas", artifact: "http://127.0.0.1:4317/", status: "prior retained refresh complete; next Atlas refresh required" }
+  { id: "EVD-46", type: "Preview link", item: "AOS-142", source: "Atlas", artifact: "http://127.0.0.1:4317/", status: "PM freshness retry pending; use Atlas markers for freshness" }
 ];
 
 const registeredDsWorkComponentRows: RegisteredDsWorkComponentFixture[] = workManagementPatternRegistry.map((item) => {
@@ -997,7 +997,7 @@ function DetailPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (pat
       summary={locale === "zh-CN"
         ? "Owner 认可：AOS 没有真实全局搜索能力，不应展示顶栏搜索框或全局搜索快捷键。"
         : "Owner-approved scope: AOS has no real global search capability, so the shell must not render topbar search or a global search shortcut."}
-      state={{ state: "blocked", label: translatePhrase("Atlas refresh required after source repair", locale) }}
+      state={{ state: "blocked", label: translatePhrase("PM freshness retry pending", locale) }}
       main={<div className="tcrn-work-module-detail-stack">
         <WorkFieldPanel title={locale === "zh-CN" ? "层级" : "Hierarchy"} items={[
           { key: "initiative", label: "Initiative", value: "AOS product shell recovery" },
@@ -1191,7 +1191,7 @@ function detailMetadataItems(locale: TcrnLocale): KeyValueItem[] {
     { key: "aos", label: "AOS", value: <MachineTokenCell token={currentAosConsumptionBasis.aos} label="source" kind="generic" density="compact" /> },
     { key: "ds", label: "DS", value: <MachineTokenCell token={currentAosConsumptionBasis.ds} label="Storybook" kind="commit" density="compact" /> },
     { key: "workflow", label: "Workflow", value: <MachineTokenCell token={currentAosConsumptionBasis.workflow} label="plan" kind="commit" density="compact" /> },
-    { key: "preview", label: "Preview", value: translatePhrase("Prior 4317 retained preview refreshed to the reviewed basis; next Atlas refresh required for this source repair before PM freshness retry.", locale) },
+    { key: "preview", label: "Preview", value: translatePhrase("Use Atlas/source markers for retained preview freshness; PM freshness retry pending.", locale) },
     { key: "ownerAcceptance", label: "Owner acceptance", value: "not claimed" },
     { key: "release", label: "Release readiness", value: "not claimed" }
   ];
@@ -1204,7 +1204,7 @@ function activityItems(locale: TcrnLocale) {
       actor: "Ilya",
       action: translatePhrase("AOS consumes DS Work density exports", locale),
       timestamp: "2026-07-05",
-      summary: translatePhrase("AOS uses public DS APIs; prior retained 4317 was refreshed to the reviewed basis, and this source repair needs the next Atlas refresh before PM freshness retry.", locale),
+      summary: translatePhrase("AOS uses public DS APIs; retained preview freshness is read from Atlas/source markers, and PM freshness retry remains pending.", locale),
       state: { state: "review_required" }
     },
     {
@@ -1220,7 +1220,7 @@ function activityItems(locale: TcrnLocale) {
       actor: "Arturo",
       action: translatePhrase("PM freshness retry pending", locale),
       timestamp: "pending",
-      summary: translatePhrase("Next Atlas refresh is required for this source repair before PM freshness retry; owner and product acceptance remain unclaimed.", locale),
+      summary: translatePhrase("PM freshness retry pending; owner and product acceptance remain unclaimed.", locale),
       state: { state: "not_claimed" }
     }
   ];
@@ -1363,8 +1363,7 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "PM Changes Requested": "PM 要求修改",
     "PM Freshness Retry Pending": "PM freshness 重试待完成",
     "PM freshness retry pending": "PM freshness 重试待完成",
-    "Atlas refresh required after source repair": "source 修复后需要 Atlas 刷新",
-    "Prior retained 4317 refreshed to reviewed basis; next Atlas refresh required for this source repair before PM freshness retry.": "此前保留的 4317 已刷新到已评审 basis；本次 source 修复需要下一次 Atlas 刷新后再进行 PM freshness 重试。",
+    "PM freshness retry pending; owner and product acceptance are not claimed.": "PM freshness 重试待完成；不声明 owner 或 product acceptance。",
     "Owner request: Work visibility": "Owner 请求：Work 可视化",
     "DS component gap list": "DS 组件缺口列表",
     "Registered DS Work components": "已注册 DS Work 组件",
@@ -1423,7 +1422,7 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "Accepted on the AOS rebuild basis": "AOS 重建 basis 已接受",
     "Return AOS consumption proof to Arturo": "将 AOS 消费证明返回 Arturo",
     "Retained 4317 refreshed to reviewed basis": "4317 保留预览已刷新到已评审 basis",
-    "Next Atlas refresh required for this source repair before PM freshness retry": "本次 source 修复需要下一次 Atlas 刷新后再进行 PM freshness 重试",
+    "PM freshness retry pending; no owner or product acceptance claimed": "PM freshness 重试待完成；不声明 owner 或 product acceptance",
     "Review compact DS-consumed Work routes": "评审紧凑 DS 消费 Work 路由",
     "QA after Elara and Sable accept": "Elara 和 Sable 接受后进入 QA",
     "PM freshness retry pending after copy repair": "copy 修复后等待 PM freshness 重试",
@@ -1436,10 +1435,9 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "Refresh 4317 preview": "刷新 4317 预览",
     "Retained 4317 refresh": "4317 保留预览刷新",
     "PM freshness basis copy repair": "PM freshness basis 文案修复",
-    "4317 retained preview refreshed; PM freshness retry pending": "4317 保留预览已刷新；PM freshness 重试待完成",
-    "Prior 4317 retained preview refreshed to the reviewed basis; next Atlas refresh required for this source repair before PM freshness retry.": "此前 4317 保留预览已刷新到已评审 basis；本次 source 修复需要下一次 Atlas 刷新后再进行 PM freshness 重试。",
-    "AOS uses public DS APIs; prior retained 4317 was refreshed to the reviewed basis, and this source repair needs the next Atlas refresh before PM freshness retry.": "AOS 使用公开 DS API；此前保留的 4317 已刷新到已评审 basis，本次 source 修复需要下一次 Atlas 刷新后再进行 PM freshness 重试。",
-    "Next Atlas refresh is required for this source repair before PM freshness retry; owner and product acceptance remain unclaimed.": "本次 source 修复需要下一次 Atlas 刷新后再进行 PM freshness 重试；仍不声明 owner 或 product acceptance。",
+    "Use Atlas/source markers for retained preview freshness; PM freshness retry pending.": "使用 Atlas/source marker 确认保留预览 freshness；PM freshness 重试待完成。",
+    "AOS uses public DS APIs; retained preview freshness is read from Atlas/source markers, and PM freshness retry remains pending.": "AOS 使用公开 DS API；保留预览 freshness 由 Atlas/source marker 读回确认，PM freshness 重试仍待完成。",
+    "PM freshness retry pending; owner and product acceptance remain unclaimed.": "PM freshness 重试待完成；仍不声明 owner 或 product acceptance。",
     "Professional QA": "专业 QA",
     "Command proof": "命令证明",
     "Screenshot": "截图",
@@ -1450,7 +1448,7 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "proof artifact target": "证明 artifact 目标",
     "superseded by new scope": "已被新范围替代",
     "pending refresh": "等待刷新",
-    "prior retained refresh complete; next Atlas refresh required": "此前保留预览刷新已完成；需要下一次 Atlas 刷新",
+    "PM freshness retry pending; use Atlas markers for freshness": "PM freshness 重试待完成；使用 Atlas marker 确认 freshness",
     "Shaped for design confirmation": "已收敛用于设计确认",
     "Unshaped owner inputs": "待收敛 owner 输入",
     "AOS-142 Work module route matrix": "AOS-142 Work 模块路由矩阵",
@@ -1464,8 +1462,7 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "Route action disabled in static fixture": "静态示例中 route 动作禁用",
     "Promote blocked until PM shapes numbering scope": "等待 PM 收敛编号范围后才能提升",
     "Route action disabled; no owner handoff in this route": "route 动作禁用；本路由不进行 owner 交接",
-    "Prior retained 4317 refresh is complete; this source repair needs the next Atlas refresh before inspection readiness.": "此前 4317 保留预览刷新已完成；本次 source 修复需要下一次 Atlas 刷新后才能进入 inspection readiness。",
-    "PM freshness retry pending; owner and product acceptance are not claimed.": "PM freshness 重试待完成；不声明 owner 或 product acceptance。",
+    "PM freshness retry remains required before inspection readiness.": "inspection readiness 前仍需 PM freshness 重试。",
     "AOS consumption review accepted before retained refresh.": "AOS 消费评审已在保留预览刷新前接受。",
     "Retained 4317 refreshed to the reviewed AOS consumption basis.": "4317 保留预览已刷新到已评审的 AOS 消费 basis。",
     changes_requested: "需要修改",
