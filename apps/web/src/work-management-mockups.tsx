@@ -2,15 +2,31 @@ import type { ReactNode } from "react";
 import {
   Badge,
   Button,
+  EvidenceAttachmentList,
   EvidenceStrip,
+  GatePipeline,
   Heading,
-  KeyValueList,
   LinkButton,
+  MachineToken,
+  RelationshipChip,
+  SavedViewToolbar,
   StatusBadge,
   Surface,
   TableShell,
   Text,
+  WorkBoard,
+  WorkHierarchy,
   WorkIndex,
+  WorkItemInspector,
+  WorkManagementSubnav,
+  workManagementPatternRegistry,
+  type EvidenceAttachment,
+  type GatePipelineGate,
+  type RelationshipChipProps,
+  type SavedViewToolbarFilter,
+  type WorkBoardLane,
+  type WorkHierarchyEdge,
+  type WorkHierarchyNode,
   type WorkIndexRow
 } from "@tcrn/ui-react";
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
@@ -44,7 +60,6 @@ interface WorkManagementMockupsProps {
 }
 
 type GateState = "pending" | "passed" | "changes_requested" | "blocked" | "accepted" | "not_started";
-type NeededDsLevel = "primitive" | "pattern" | "composite";
 
 interface WorkItemFixture {
   key: string;
@@ -66,13 +81,13 @@ interface WorkItemFixture {
   updated: string;
 }
 
-interface NeededDsComponentFixture {
-  name: string;
+interface RegisteredDsWorkComponentFixture {
+  componentName: string;
+  candidateId: string;
   purpose: string;
   whereUsed: string;
-  whyDsInsufficient: string;
-  dsLevel: NeededDsLevel;
-  priority: "High" | "Medium";
+  consumptionDisposition: string;
+  dsLevel: "primitive" | "pattern" | "composite";
 }
 
 const workPages: WorkMockupPage[] = [
@@ -177,7 +192,7 @@ const workItems: WorkItemFixture[] = [
     priority: "High",
     product: "AOS",
     module: "Shell",
-    initiative: "AOS frontend shell recovery",
+    initiative: "AOS product shell recovery",
     epic: "Product Shell Owner Feedback Recovery",
     epicKind: "Workstream Epic",
     story: "Owner can inspect an AOS shell without fake global search",
@@ -215,7 +230,7 @@ const workItems: WorkItemFixture[] = [
     priority: "Medium",
     product: "DS",
     module: "ProductShell",
-    initiative: "AOS frontend shell recovery",
+    initiative: "AOS product shell recovery",
     epic: "Reusable Shell Standards",
     epicKind: "Capability Epic",
     story: "Products can omit topbar search when capability is absent",
@@ -234,7 +249,7 @@ const workItems: WorkItemFixture[] = [
     priority: "High",
     product: "AOS",
     module: "Owner Inspection",
-    initiative: "AOS frontend shell recovery",
+    initiative: "AOS product shell recovery",
     epic: "Owner Inspection Package",
     epicKind: "Capability Epic",
     story: "Mara can prepare a bounded owner inspection package",
@@ -251,7 +266,7 @@ const relationRows = [
   { relation: "blocks", source: "AOS-144", target: "Owner Inspection Handoff", state: "active", note: "PM readiness is blocked until review and QA pass." },
   { relation: "blocked_by", source: "AOS-144", target: "AOS-142", state: "active", note: "Static discussion surface must be reviewed first." },
   { relation: "depends_on", source: "AOS-142", target: "DS-88", state: "resolved", note: "Uses DS optional-search contract." },
-  { relation: "relates_to", source: "AOS-142", target: "DS component gap list", state: "active", note: "Related discussion without ordering or blocking." },
+  { relation: "relates_to", source: "AOS-142", target: "Registered DS Work components", state: "active", note: "Consumes the admitted DS Work Management package patterns without API integration." },
   { relation: "duplicates", source: "Owner note: fake search", target: "AOS-128", state: "resolved", note: "Duplicate owner feedback merges into the no-global-search item." },
   { relation: "implements", source: "AOS-142", target: "Story: PM can discuss Work flows", state: "active", note: "Static routes implement the discussion surface only." },
   { relation: "verifies", source: "EVD-41", target: "AOS-128", state: "resolved", note: "AOS proof verifies no global search and URL locale." },
@@ -286,84 +301,62 @@ const evidenceRows = [
   { id: "EVD-42", type: "Screenshot", item: "AOS-142", source: "Ilya", artifact: "/tmp/tcrn-aos-shell-qa/work-*.png", status: "proof artifact target" },
   { id: "EVD-43", type: "QA summary", item: "AOS-144", source: "Rowan", artifact: "summary-final.json", status: "superseded by new scope" },
   { id: "EVD-44", type: "API readback", item: "AOS-128", source: "Atlas", artifact: "/api/cockpit 410 deferred", status: "current no-live posture" },
-  { id: "EVD-45", type: "Commit", item: "DS-88", source: "Ilya", artifact: "94dea5d", status: "current" },
+  { id: "EVD-45", type: "Commit", item: "DS-88", source: "Ilya", artifact: "01714b9", status: "current" },
   { id: "EVD-46", type: "Preview link", item: "AOS-142", source: "Atlas", artifact: "http://127.0.0.1:4317/", status: "pending refresh" }
 ];
 
-const neededDsComponentRows: NeededDsComponentFixture[] = [
-  {
-    name: "Work Management subnav/tabs pattern",
-    purpose: "Dense in-module Work route switching without global search.",
-    whereUsed: "/work route set header and Work management page switcher",
-    whyDsInsufficient: "Current mockup uses repeated LinkButton text links; DS does not yet provide a compact workbench subnav pattern.",
-    dsLevel: "pattern",
-    priority: "High"
-  },
-  {
-    name: "Work Board / Kanban lane composite",
-    purpose: "Responsive board lanes with status counts and lane-local scrolling.",
-    whereUsed: "/work/board",
-    whyDsInsufficient: "Current mockup composes Surface blocks in a CSS grid; DS has no reusable board lane composite.",
-    dsLevel: "composite",
-    priority: "High"
-  },
-  {
-    name: "Work hierarchy graph / dependency map composite",
-    purpose: "Represent Initiative, Epic, Story, Work Item, Subtask, Evidence Task, and relationship edges.",
-    whereUsed: "/work/initiatives/work-management-mvp",
-    whyDsInsufficient: "Current mockup uses static Surface columns and relationship tables instead of a reusable graph/map component.",
-    dsLevel: "composite",
-    priority: "High"
-  },
-  {
-    name: "Relationship chip/link primitive",
-    purpose: "Consistent display for blocks, depends_on, verifies, reviews, duplicates, and related work links.",
-    whereUsed: "/work, /work/items/AOS-128, /work/initiatives/work-management-mvp",
-    whyDsInsufficient: "Current mockup falls back to Badge and TableShell text; DS has no relationship-specific chip/link primitive.",
-    dsLevel: "primitive",
-    priority: "High"
-  },
-  {
-    name: "Gate pipeline / compliance table pattern",
-    purpose: "Show DS Review, Implementation Proof, Atlas Refresh, Elara Review, Rowan QA, Mara PM Readiness, and Owner Handoff as a gated pipeline.",
-    whereUsed: "/work/gates and Work Item detail",
-    whyDsInsufficient: "Current mockup uses TableShell plus StatusBadge; DS lacks a reusable gate pipeline/readiness pattern.",
-    dsLevel: "pattern",
-    priority: "High"
-  },
-  {
-    name: "Evidence attachment gallery/list composite",
-    purpose: "Display screenshots, artifact directories, QA summaries, API readbacks, commits, and preview links attached to Work Items.",
-    whereUsed: "/work/evidence and Work Item detail",
-    whyDsInsufficient: "Current mockup uses TableShell and EvidenceStrip; DS has no attachment gallery/list composite with artifact metadata.",
-    dsLevel: "composite",
-    priority: "Medium"
-  },
-  {
-    name: "Work Item detail / inspector layout pattern",
-    purpose: "Combine status sidebar, hierarchy, subtasks/evidence tasks, blockers, and guarded actions.",
-    whereUsed: "/work/items/AOS-128",
-    whyDsInsufficient: "Current mockup composes Surface grids, KeyValueList, TableShell, and disabled Button manually.",
-    dsLevel: "pattern",
-    priority: "High"
-  },
-  {
-    name: "Saved view / filter toolbar pattern",
-    purpose: "Reusable saved Work views and local filters without reintroducing global search.",
-    whereUsed: "/work/views/owner-feedback",
-    whyDsInsufficient: "Current mockup uses EvidenceStrip filters and disabled actions; DS lacks a compact saved-view toolbar.",
-    dsLevel: "pattern",
-    priority: "Medium"
-  },
-  {
-    name: "Machine-token / execution-record cell pattern",
-    purpose: "Render long route, thread, commit, or machine identifiers readably while preserving full IDs.",
-    whereUsed: "/work/codex-activity and evidence tables",
-    whyDsInsufficient: "Current mockup uses a local static RouteIdCell to contain long route IDs; DS could standardize this reusable table-cell behavior.",
-    dsLevel: "pattern",
-    priority: "Medium"
-  }
-];
+const registeredDsWorkComponentRows: RegisteredDsWorkComponentFixture[] = workManagementPatternRegistry.map((item) => {
+  const routeUse: Record<string, { whereUsed: string; consumptionDisposition: string }> = {
+    WorkManagementSubnav: {
+      whereUsed: "/work route set",
+      consumptionDisposition: "Replaces local LinkButton route switcher with package WorkManagementSubnav."
+    },
+    WorkBoard: {
+      whereUsed: "/work/board",
+      consumptionDisposition: "Consumes package WorkBoard lanes and relationship chips instead of local Surface lane CSS."
+    },
+    WorkHierarchy: {
+      whereUsed: "/work/initiatives/work-management-mvp",
+      consumptionDisposition: "Consumes package WorkHierarchy graph/table fallback for Initiative to Evidence Task hierarchy."
+    },
+    RelationshipChip: {
+      whereUsed: "/work, /work/items/AOS-128, /work/initiatives/work-management-mvp",
+      consumptionDisposition: "Consumes package RelationshipChip for blocks, depends_on, verifies, reviews, refreshes, and related edges."
+    },
+    GatePipeline: {
+      whereUsed: "/work/gates",
+      consumptionDisposition: "Consumes package GatePipeline for review/readiness sequence without claiming PM or owner acceptance."
+    },
+    EvidenceAttachmentList: {
+      whereUsed: "/work/evidence and /work/items/AOS-128",
+      consumptionDisposition: "Consumes package EvidenceAttachmentList for screenshots, artifacts, QA summaries, API readbacks, commits, and previews."
+    },
+    WorkItemInspector: {
+      whereUsed: "/work/items/AOS-128",
+      consumptionDisposition: "Consumes package WorkItemInspector for hierarchy, status, subtasks, evidence tasks, and guarded actions."
+    },
+    SavedViewToolbar: {
+      whereUsed: "/work/views/owner-feedback",
+      consumptionDisposition: "Consumes package SavedViewToolbar for saved views and local filters without ProductShell global search."
+    },
+    MachineToken: {
+      whereUsed: "/work/codex-activity, /work/evidence, and graph fallback",
+      consumptionDisposition: "Consumes package MachineToken for long route, thread, commit, artifact, and work-item identifiers."
+    }
+  };
+  const route = routeUse[item.componentName] ?? {
+    whereUsed: "/work",
+    consumptionDisposition: "Consumed from the registered DS Work Management package registry."
+  };
+  return {
+    componentName: item.componentName,
+    candidateId: item.candidateId,
+    purpose: item.purpose,
+    whereUsed: route.whereUsed,
+    consumptionDisposition: route.consumptionDisposition,
+    dsLevel: item.level
+  };
+});
 
 const codexRows = [
   {
@@ -395,6 +388,190 @@ const codexRows = [
   }
 ];
 
+function workSubnavItems(pageId: WorkMockupPageId, locale: TcrnLocale, routeHref: (path: string) => string) {
+  const counts: Record<WorkMockupPageId, number> = {
+    queue: 4,
+    board: 6,
+    backlog: 3,
+    detail: 1,
+    gates: 7,
+    evidence: 6,
+    codexActivity: 3,
+    ownerFeedbackView: 2,
+    initiativeGraph: 6
+  };
+  return workPages.map((page) => ({
+    id: page.id,
+    label: localized(page.title, locale),
+    href: routeHref(page.path),
+    current: page.id === pageId,
+    count: counts[page.id]
+  }));
+}
+
+function workBoardLanes(locale: TcrnLocale): WorkBoardLane[] {
+  const lanes: WorkBoardLane[] = [
+    {
+      id: "backlog",
+      title: "Backlog",
+      cards: [
+        {
+          id: "AOS-142",
+          title: "Rebuild Work routes with DS Work components",
+          state: { state: "review_required" },
+          owner: "Ilya",
+          meta: translatePhrase("No API integration", locale),
+          relationships: [{ relation: "implements", target: "Work Management MVP" }]
+        },
+        {
+          id: "AOS-144",
+          title: "Owner inspection handoff package",
+          state: { state: "blocked" },
+          owner: "Mara",
+          meta: translatePhrase("Blocked until gates pass", locale),
+          relationships: [{ relation: "blocked_by", target: "Rowan QA" }]
+        }
+      ]
+    },
+    {
+      id: "in-progress",
+      title: "In Progress",
+      cards: [
+        {
+          id: "AOS-128",
+          title: "Remove unsupported global search",
+          state: { state: "local_only" },
+          owner: "Ilya",
+          meta: translatePhrase("URL locale authority", locale),
+          relationships: [{ relation: "verifies", target: "no-global-search" }]
+        }
+      ]
+    },
+    {
+      id: "review",
+      title: "Review",
+      cards: [
+        {
+          id: "DS-88",
+          title: "ProductShell optional search contract",
+          state: { state: "local_only" },
+          owner: "Elara",
+          meta: translatePhrase("DS contract accepted", locale),
+          relationships: [{ relation: "depends_on", target: "ProductShell" }]
+        }
+      ]
+    },
+    {
+      id: "pm-readiness",
+      title: "PM Readiness",
+      cards: [
+        {
+          id: "PM-17",
+          title: "AOS source-visible freshness check",
+          state: { state: "blocked" },
+          owner: "Mara",
+          meta: translatePhrase("No owner handoff yet", locale),
+          relationships: [{ relation: "blocked_by", target: "Atlas refresh" }]
+        }
+      ]
+    }
+  ];
+
+  return lanes.map((lane) => ({
+    ...lane,
+    title: translateLane(lane.title, locale),
+    cards: lane.cards.map((card) => ({
+      ...card,
+      title: translatePhrase(card.title, locale)
+    }))
+  }));
+}
+
+function workGatePipeline(locale: TcrnLocale): GatePipelineGate[] {
+  return gateRows.map((row) => ({
+    id: row.gate.toLowerCase().replace(/\s+/g, "-"),
+    label: translatePhrase(row.gate, locale),
+    owner: row.owner,
+    state: row.state === "accepted"
+      ? { state: "local_only", label: locale === "zh-CN" ? "已接受" : "Accepted" }
+      : row.state === "blocked"
+        ? { state: "blocked" }
+        : row.state === "not_started"
+          ? { state: "not_claimed" }
+          : { state: "review_required", label: translatePhrase(row.state, locale) },
+    evidence: [translatePhrase(row.evidence, locale)],
+    nextAction: translatePhrase(row.next, locale)
+  }));
+}
+
+function evidenceAttachments(locale: TcrnLocale): EvidenceAttachment[] {
+  return evidenceRows.map((row) => ({
+    id: row.id,
+    type: row.type === "Screenshot"
+      ? "screenshot"
+      : row.type === "QA summary"
+        ? "qa_summary"
+        : row.type === "API readback"
+          ? "api_readback"
+          : row.type === "Commit"
+            ? "commit"
+            : row.type === "Preview link"
+              ? "preview"
+              : "artifact_dir",
+    label: translatePhrase(row.type, locale),
+    reference: row.artifact,
+    state: row.status === "current"
+      ? { state: "local_only", label: locale === "zh-CN" ? "当前" : "Current" }
+      : row.status === "pending refresh"
+        ? { state: "blocked" }
+        : { state: "review_required", label: translatePhrase(row.status, locale) }
+  }));
+}
+
+function inspectorRelationships(routeHref?: (path: string) => string): RelationshipChipProps[] {
+  const blockedBy: RelationshipChipProps = { relation: "blocked_by", target: "AOS-142", source: "AOS-144" };
+  if (routeHref) {
+    blockedBy.href = routeHref("/work/items/AOS-128");
+  }
+  return [
+    { relation: "blocks", target: "Owner Inspection Handoff", source: "AOS-144" },
+    blockedBy,
+    { relation: "verifies", target: "EVD-41", source: "AOS-128" },
+    { relation: "depends_on", target: "DS-88", source: "AOS-142" }
+  ];
+}
+
+function workHierarchyNodes(locale: TcrnLocale): WorkHierarchyNode[] {
+  const nodes: WorkHierarchyNode[] = [
+    { id: "INIT-WORK-MGMT", level: "Initiative", title: "Work Management MVP", owner: "Mara", state: { state: "review_required" } },
+    { id: "EPIC-LIFECYCLE", level: "Epic", title: "Work Item Lifecycle", owner: "Mara", parentId: "INIT-WORK-MGMT" },
+    { id: "EPIC-EVIDENCE", level: "Epic", title: "Evidence and Gates", owner: "Rowan", parentId: "INIT-WORK-MGMT" },
+    { id: "STORY-PM-DISCUSS", level: "Story", title: "PM can discuss Work flows before API planning", owner: "Mara", parentId: "EPIC-LIFECYCLE" },
+    { id: "AOS-142", level: "Task / Work Item", title: "Static Work Management DS consumption", owner: "Ilya", parentId: "STORY-PM-DISCUSS", state: { state: "review_required" } },
+    { id: "EVD-42", level: "Subtask / Evidence Task", title: "Rendered static Work proof", owner: "Ilya", parentId: "AOS-142", state: { state: "review_required" } }
+  ];
+  return nodes.map((node) => ({ ...node, title: translatePhrase(node.title, locale) }));
+}
+
+function workHierarchyEdges(): WorkHierarchyEdge[] {
+  return [
+    { from: "EPIC-LIFECYCLE", to: "INIT-WORK-MGMT", relation: "split_from" },
+    { from: "EPIC-EVIDENCE", to: "INIT-WORK-MGMT", relation: "relates_to" },
+    { from: "STORY-PM-DISCUSS", to: "EPIC-LIFECYCLE", relation: "implements" },
+    { from: "AOS-142", to: "STORY-PM-DISCUSS", relation: "implements" },
+    { from: "EVD-42", to: "AOS-142", relation: "verifies" },
+    { from: "AOS-144", to: "AOS-142", relation: "blocked_by" }
+  ];
+}
+
+function savedViewFilters(locale: TcrnLocale): SavedViewToolbarFilter[] {
+  return [
+    { id: "owner-feedback", label: "Type", value: translatePhrase("Owner Feedback", locale) },
+    { id: "qa-blocked", label: "Gate", value: locale === "zh-CN" ? "QA 阻塞" : "QA blocked" },
+    { id: "no-overclaim", label: "Boundary", value: locale === "zh-CN" ? "无 readiness 声明" : "No readiness claim" }
+  ].map((filter) => ({ ...filter, label: translateColumn(filter.label.toLowerCase(), locale) }));
+}
+
 export function resolveWorkMockupPageId(path: string): WorkMockupPageId {
   if (path === "/work/board") return "board";
   if (path === "/work/backlog") return "backlog";
@@ -419,11 +596,14 @@ export function WorkManagementMockups({ path, locale, theme, collapsed, variant,
     <div
       className="tcrn-product-shell-content-stack"
       data-package-owned-spacing-rhythm="product-shell-content-stack"
-      data-work-management-mockup="static-prd-v0.1"
+      data-work-management-mockup="storybook-ds-work-management-v1"
       data-work-management-static-fixture="true"
       data-work-management-api-integration="absent"
       data-work-management-live-dispatch="not-enabled"
       data-work-management-hierarchy="initiative-epic-story-work-item-subtask-evidence-task"
+      data-work-management-ds-standard="work-management-components-spec"
+      data-design-system-work-components="registered-package-components"
+      data-product-local-work-component-clones="absent"
       data-work-management-page={pageId}
       data-work-management-route={page.path}
       data-visual-instance-variant-readback={variant}
@@ -450,19 +630,12 @@ export function WorkManagementMockups({ path, locale, theme, collapsed, variant,
 
 function WorkMockupSubnav({ pageId, locale, routeHref }: { pageId: WorkMockupPageId; locale: TcrnLocale; routeHref: (path: string) => string }) {
   return (
-    <nav data-work-mockup-nav="true" aria-label={locale === "zh-CN" ? "工作管理页面" : "Work management pages"}>
-      {workPages.map((page) => (
-        <LinkButton
-          key={page.id}
-          href={routeHref(page.path)}
-          variant={page.id === pageId ? "primary" : "secondary"}
-          aria-current={page.id === pageId ? "page" : undefined}
-          data-work-mockup-nav-item={page.id}
-        >
-          {localized(page.title, locale)}
-        </LinkButton>
-      ))}
-    </nav>
+    <div data-work-mockup-nav="package-work-management-subnav">
+      <WorkManagementSubnav
+        label={locale === "zh-CN" ? "工作管理页面" : "Work management pages"}
+        items={workSubnavItems(pageId, locale, routeHref)}
+      />
+    </div>
   );
 }
 
@@ -473,7 +646,7 @@ function renderWorkMockupPage(pageId: WorkMockupPageId, locale: TcrnLocale, rout
     case "backlog":
       return <BacklogPage locale={locale} />;
     case "detail":
-      return <DetailPage locale={locale} />;
+      return <DetailPage locale={locale} routeHref={routeHref} />;
     case "gates":
       return <GatesPage locale={locale} />;
     case "evidence":
@@ -517,28 +690,17 @@ function QueuePage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path
 }
 
 function BoardPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path: string) => string }) {
-  const lanes = [
-    { lane: "Backlog", items: ["Owner request: Work visibility", "DS component gap list"] },
-    { lane: "In Progress", items: ["AOS-142 Static Work mockups"] },
-    { lane: "Review", items: ["DS-88 Optional search contract"] },
-    { lane: "QA", items: ["Mobile zh-CN no-overflow regression"] },
-    { lane: "PM Readiness", items: ["AOS-128 No global search"] },
-    { lane: "Owner Inspection", items: ["Blocked until gates pass"] }
-  ];
   return (
-    <div data-work-board="static-lanes">
-      {lanes.map((lane) => (
-        <Surface key={lane.lane} data-work-board-lane={lane.lane}>
-          <Heading level={2} visualLevel={3}>{translateLane(lane.lane, locale)}</Heading>
-          <ul data-work-list="compact">
-            {lane.items.map((item) => <li key={item}>{translatePhrase(item, locale)}</li>)}
-          </ul>
-          {lane.lane === "In Progress" ? (
-            <LinkButton href={routeHref("/work/items/AOS-128")} variant="secondary">{locale === "zh-CN" ? "打开工作项" : "Open item"}</LinkButton>
-          ) : null}
-        </Surface>
-      ))}
-    </div>
+    <Surface data-aos-work-module-entry="registered-ds-work-board">
+      <Heading level={2}>{locale === "zh-CN" ? "DS 注册 WorkBoard" : "Registered DS WorkBoard"}</Heading>
+      <WorkBoard
+        label={locale === "zh-CN" ? "工作看板" : "Work board"}
+        lanes={workBoardLanes(locale)}
+      />
+      <div data-work-action-row="true">
+        <LinkButton href={routeHref("/work/items/AOS-128")} variant="secondary">{locale === "zh-CN" ? "打开工作项" : "Open item"}</LinkButton>
+      </div>
+    </Surface>
   );
 }
 
@@ -557,94 +719,92 @@ function BacklogPage({ locale }: { locale: TcrnLocale }) {
           ].map((row) => localizeRow(row, locale))}
         />
       </Surface>
-      <NeededDsComponentsSection locale={locale} />
+      <RegisteredDsWorkComponentsSection locale={locale} />
     </>
   );
 }
 
-function NeededDsComponentsSection({ locale }: { locale: TcrnLocale }) {
+function RegisteredDsWorkComponentsSection({ locale }: { locale: TcrnLocale }) {
   return (
     <Surface
-      data-needed-ds-components-list="true"
-      data-needed-ds-components-implementation="skipped-static-mockup-only"
-      data-needed-ds-components-count={neededDsComponentRows.length}
+      data-registered-ds-work-components="true"
+      data-registered-ds-work-components-implementation="package-consumed-storybook-first"
+      data-registered-ds-work-components-count={registeredDsWorkComponentRows.length}
     >
-      <Heading level={2}>{locale === "zh-CN" ? "需要新增的 DS 组件 / 模式" : "Needed DS components / patterns"}</Heading>
+      <Heading level={2}>{locale === "zh-CN" ? "已消费的 DS Work 组件 / 模式" : "Consumed DS Work components / patterns"}</Heading>
       <Text>
         {locale === "zh-CN"
-          ? "Owner 要求静态 mockup 阶段先跳过新增 DS 组件实现；以下列表只用于讨论与后续规划。"
-          : "Owner requested new DS component work to be skipped during static mockups; this list is for discussion and future planning only."}
+          ? "新版 Storybook 已正式收录 Work Management 组件。AOS 当前 Work 路由只消费公开 DS package API，不复制 Storybook 文档壳或自建可复用视觉系统。"
+          : "The new Storybook formally admits Work Management components. Current AOS Work routes consume public DS package APIs only; they do not copy Storybook doc-shell chrome or invent reusable local visual systems."}
       </Text>
       <TableShell
-        label={locale === "zh-CN" ? "需要新增的 DS 组件 / 模式" : "Needed DS components and patterns"}
-        columns={columns(locale, ["name", "purpose", "whereUsed", "whyDsInsufficient", "dsLevel", "priority"])}
-        rows={neededDsComponentRows.map((row) => ({
-          name: <NeededDsComponentNameCell item={row} />,
+        label={locale === "zh-CN" ? "已消费的 DS Work 组件 / 模式" : "Consumed DS Work components and patterns"}
+        columns={columns(locale, ["name", "purpose", "whereUsed", "consumptionDisposition", "dsLevel"])}
+        rows={registeredDsWorkComponentRows.map((row) => ({
+          name: <RegisteredDsWorkComponentNameCell item={row} />,
           purpose: translatePhrase(row.purpose, locale),
           whereUsed: row.whereUsed,
-          whyDsInsufficient: translatePhrase(row.whyDsInsufficient, locale),
-          dsLevel: row.dsLevel,
-          priority: translatePhrase(row.priority, locale)
+          consumptionDisposition: translatePhrase(row.consumptionDisposition, locale),
+          dsLevel: row.dsLevel
         }))}
       />
     </Surface>
   );
 }
 
-function NeededDsComponentNameCell({ item }: { item: NeededDsComponentFixture }) {
+function RegisteredDsWorkComponentNameCell({ item }: { item: RegisteredDsWorkComponentFixture }) {
   return (
     <span
-      data-needed-ds-component-item="true"
-      data-needed-ds-component-name={item.name}
-      data-needed-ds-component-purpose={item.purpose}
-      data-needed-ds-component-where-used={item.whereUsed}
-      data-needed-ds-component-why-insufficient={item.whyDsInsufficient}
-      data-needed-ds-component-level={item.dsLevel}
-      data-needed-ds-component-priority={item.priority}
+      data-registered-ds-work-component-item="true"
+      data-registered-ds-work-component-name={item.componentName}
+      data-registered-ds-work-component-candidate-id={item.candidateId}
+      data-registered-ds-work-component-purpose={item.purpose}
+      data-registered-ds-work-component-where-used={item.whereUsed}
+      data-registered-ds-work-component-disposition={item.consumptionDisposition}
+      data-registered-ds-work-component-level={item.dsLevel}
     >
-      {item.name}
+      {item.componentName}
     </span>
   );
 }
 
-function DetailPage({ locale }: { locale: TcrnLocale }) {
+function DetailPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path: string) => string }) {
   return (
-    <div data-work-detail-layout="true">
-      <Surface data-work-item-detail="AOS-128">
-        <Heading level={2}>AOS-128 · {locale === "zh-CN" ? "移除顶栏全局搜索" : "Remove unsupported global search"}</Heading>
-        <Text>{locale === "zh-CN" ? "Owner 认可：AOS 没有真实全局搜索能力，不应展示顶栏搜索框或全局搜索快捷键。" : "Owner-approved scope: AOS has no real global search capability, so the shell must not render topbar search or a global search shortcut."}</Text>
-        <EvidenceStrip items={["Owner Feedback", "Implementation Proof", "No API integration", "URL locale authority"]} />
-        <KeyValueList items={[
-          { key: "hierarchy", label: "Hierarchy", value: "Initiative > Workstream Epic > Story > Work Item > Evidence Task" },
-          { key: "status", label: "Status", value: <StatusBadge state={{ state: "review_required" }} locale={locale} /> },
-          { key: "nextOwner", label: "Next owner", value: "Atlas" },
-          { key: "blocker", label: "Owner inspection", value: locale === "zh-CN" ? "刷新、评审、QA、PM 之前阻塞" : "Blocked until refresh, review, QA, and PM readiness" }
-        ]} />
-        <Heading level={3}>{locale === "zh-CN" ? "子任务 / 证据任务" : "Subtasks / Evidence Tasks"}</Heading>
-        <TableShell
-          label="Subtasks"
-          columns={columns(locale, ["task", "owner", "proof", "state"])}
-          rows={[
-            { task: "Remove ProductShellSearch prop", owner: "Ilya", proof: "service:smoke", state: badge("passed", locale) },
-            { task: "URL locale canonicalization", owner: "Ilya", proof: "browser proof", state: badge("passed", locale) },
-            { task: "Refresh 4317 preview", owner: "Atlas", proof: "route/API readback", state: badge("pending", locale) },
-            { task: "Professional QA", owner: "Rowan", proof: "artifact dir", state: badge("pending", locale) }
-          ]}
-        />
-      </Surface>
-      <Surface>
-        <Heading level={2}>{locale === "zh-CN" ? "右侧状态栏" : "Status sidebar"}</Heading>
-        <KeyValueList items={[
-          { key: "aos", label: "AOS", value: "996295f" },
-          { key: "ds", label: "DS", value: "94dea5d" },
-          { key: "workflow", label: "Workflow", value: "4802c19" },
-          { key: "preview", label: "Preview", value: "pending Atlas refresh" },
-          { key: "ownerAcceptance", label: "Owner acceptance", value: "not claimed" },
-          { key: "release", label: "Release readiness", value: "not claimed" }
-        ]} />
-        <Button disabled disabledReason="Owner inspection package is blocked until gates pass">{locale === "zh-CN" ? "准备 Owner 检查包" : "Prepare owner inspection package"}</Button>
-      </Surface>
-    </div>
+    <WorkItemInspector
+      title={`AOS-128 · ${locale === "zh-CN" ? "移除顶栏全局搜索" : "Remove unsupported global search"}`}
+      summary={locale === "zh-CN"
+        ? "Owner 认可：AOS 没有真实全局搜索能力，不应展示顶栏搜索框或全局搜索快捷键。"
+        : "Owner-approved scope: AOS has no real global search capability, so the shell must not render topbar search or a global search shortcut."}
+      hierarchy={[
+        { key: "initiative", label: "Initiative", value: "AOS product shell recovery" },
+        { key: "epic", label: "Epic", value: "Product Shell Owner Feedback Recovery" },
+        { key: "story", label: "Story", value: "Owner can inspect an AOS shell without fake global search" },
+        { key: "workItem", label: "Work Item", value: <MachineToken token="AOS-128" kind="work-item" /> }
+      ]}
+      details={[
+        { key: "aos", label: "AOS", value: <MachineToken token="7836dca" label="HEAD" kind="commit" /> },
+        { key: "ds", label: "DS", value: <MachineToken token="01714b9" label="Storybook" kind="commit" /> },
+        { key: "workflow", label: "Workflow", value: <MachineToken token="380232c" label="retained-basis" kind="commit" /> },
+        { key: "preview", label: "Preview", value: locale === "zh-CN" ? "等待 Atlas 刷新" : "pending Atlas refresh" },
+        { key: "ownerAcceptance", label: "Owner acceptance", value: "not claimed" },
+        { key: "release", label: "Release readiness", value: "not claimed" }
+      ]}
+      relationships={inspectorRelationships(routeHref)}
+      subtasks={[
+        { id: "remove-search", title: translatePhrase("Remove ProductShellSearch prop", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已通过" : "Passed" }, owner: "Ilya" },
+        { id: "url-locale", title: translatePhrase("URL locale canonicalization", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已通过" : "Passed" }, owner: "Ilya" },
+        { id: "refresh-preview", title: translatePhrase("Refresh 4317 preview", locale), state: { state: "blocked" }, owner: "Atlas" },
+        { id: "professional-qa", title: translatePhrase("Professional QA", locale), state: { state: "review_required" }, owner: "Rowan" }
+      ]}
+      evidence={evidenceAttachments(locale)}
+      actions={[
+        {
+          id: "prepare-owner-package",
+          label: locale === "zh-CN" ? "准备 Owner 检查包" : "Prepare owner inspection package",
+          disabledReason: "Owner inspection package is blocked until gates pass"
+        }
+      ]}
+    />
   );
 }
 
@@ -652,11 +812,7 @@ function GatesPage({ locale }: { locale: TcrnLocale }) {
   return (
     <Surface data-work-gates-page="true">
       <Heading level={2}>{locale === "zh-CN" ? "门禁聚合" : "Gate aggregation"}</Heading>
-      <TableShell
-        label={locale === "zh-CN" ? "门禁" : "Gates"}
-        columns={columns(locale, ["gate", "owner", "state", "evidence", "next"])}
-        rows={gateRows.map((row) => ({ ...localizeRow(row, locale), state: badge(row.state, locale) }))}
-      />
+      <GatePipeline label={locale === "zh-CN" ? "门禁流水线" : "Gate pipeline"} gates={workGatePipeline(locale)} />
     </Surface>
   );
 }
@@ -665,10 +821,9 @@ function EvidencePage({ locale }: { locale: TcrnLocale }) {
   return (
     <Surface data-work-evidence-page="true">
       <Heading level={2}>{locale === "zh-CN" ? "证据中心" : "Evidence Center"}</Heading>
-      <TableShell
-        label={locale === "zh-CN" ? "证据" : "Evidence"}
-        columns={columns(locale, ["id", "type", "item", "source", "artifact", "status"])}
-        rows={evidenceRows.map((row) => localizeRow(row, locale))}
+      <EvidenceAttachmentList
+        label={locale === "zh-CN" ? "证据附件" : "Evidence attachments"}
+        items={evidenceAttachments(locale)}
       />
     </Surface>
   );
@@ -689,7 +844,7 @@ function CodexActivityPage({ locale }: { locale: TcrnLocale }) {
         label="Codex Activity"
         columns={columns(locale, ["route", "item", "thread", "status", "next"])}
         rows={codexRows.map((row) => ({
-          route: <RouteIdCell route={row.route} label={translatePhrase(row.routeLabel, locale)} token={row.routeToken} />,
+          route: <MachineToken token={row.route} label={translatePhrase(row.routeLabel, locale)} kind="route" />,
           item: row.item,
           thread: row.thread,
           status: translatePhrase(row.status, locale),
@@ -700,40 +855,17 @@ function CodexActivityPage({ locale }: { locale: TcrnLocale }) {
   );
 }
 
-function RouteIdCell({ route, label, token }: { route: string; label: string; token: string }) {
-  return (
-    <span
-      data-work-route-summary="true"
-      data-full-route-id={route}
-      title={route}
-      aria-label={`${label}: ${route}`}
-      style={{ display: "grid", gap: "2px", minWidth: 0 }}
-    >
-      <strong data-work-route-label="true">{label}</strong>
-      <code
-        data-work-route-id-token="true"
-        style={{
-          display: "block",
-          maxWidth: "100%",
-          overflowWrap: "anywhere",
-          wordBreak: "break-word",
-          whiteSpace: "normal",
-          fontSize: "11px",
-          lineHeight: 1.35
-        }}
-      >
-        {token}
-      </code>
-    </span>
-  );
-}
-
 function SavedViewPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path: string) => string }) {
   return (
     <>
       <Surface data-work-saved-view="owner-feedback">
         <Heading level={2}>{locale === "zh-CN" ? "保存视图：Owner Feedback" : "Saved view: Owner Feedback"}</Heading>
-        <EvidenceStrip items={["Owner Feedback", "QA Blocked", "Waiting for Atlas", "Ready for PM", "Superseded"]} />
+        <SavedViewToolbar
+          label={locale === "zh-CN" ? "保存 Work 视图" : "Saved Work views"}
+          views={workSubnavItems("ownerFeedbackView", locale, routeHref).filter((item) => ["queue", "ownerFeedbackView", "gates"].includes(item.id))}
+          filters={savedViewFilters(locale)}
+          resetLabel={locale === "zh-CN" ? "重置视图" : "Reset view"}
+        />
         <TableShell
           label="Owner feedback saved view"
           columns={columns(locale, ["key", "title", "status", "gate", "nextOwner", "blocker"])}
@@ -764,14 +896,11 @@ function InitiativeGraphPage({ locale }: { locale: TcrnLocale }) {
     <>
       <Surface data-work-initiative-graph="true">
         <Heading level={2}>Initiative → Epic → Story → Work Item → Evidence Task</Heading>
-        <div data-work-graph="true">
-          <GraphColumn title="Initiative" items={["Work Management MVP"]} />
-          <GraphColumn title="Capability Epics" items={["Work Item Lifecycle", "Work Graph and Dependencies", "Evidence and Gates"]} />
-          <GraphColumn title="Workstream Epic" items={["AOS Static Mockup Implementation"]} />
-          <GraphColumn title="Stories" items={["PM can create work from owner feedback", "PM can see blockers between work items", "Reviewer can verify gates with evidence"]} />
-          <GraphColumn title="Work Items" items={["AOS-142", "AOS-128", "DS-88", "AOS-144"]} />
-          <GraphColumn title="Subtasks / Evidence Tasks" items={["Screenshot proof", "QA summary", "API readback", "Commit readback"]} />
-        </div>
+        <WorkHierarchy
+          label={locale === "zh-CN" ? "工作层级" : "Work hierarchy"}
+          nodes={workHierarchyNodes(locale)}
+          edges={workHierarchyEdges()}
+        />
       </Surface>
       <HierarchyDefinitionSummary locale={locale} />
       <Surface>
@@ -793,17 +922,6 @@ function HierarchyDefinitionSummary({ locale }: { locale: TcrnLocale }) {
         rows={hierarchyDefinitionRows.map((row) => localizeRow(row, locale))}
       />
     </Surface>
-  );
-}
-
-function GraphColumn({ title, items }: { title: string; items: string[] }) {
-  return (
-    <div data-work-graph-column={title}>
-      <strong>{title}</strong>
-      <ul data-work-list="compact">
-        {items.map((item) => <li key={item}>{item}</li>)}
-      </ul>
-    </div>
   );
 }
 
@@ -884,6 +1002,8 @@ function translateColumn(key: string, locale: TcrnLocale): string {
     artifact: "材料",
     assignee: "执行人",
     blocker: "阻塞",
+    boundary: "边界",
+    consumptionDisposition: "消费方式",
     evidence: "证据",
     gate: "门禁",
     id: "编号",
@@ -912,7 +1032,6 @@ function translateColumn(key: string, locale: TcrnLocale): string {
     title: "标题",
     type: "类型",
     whereUsed: "使用位置",
-    whyDsInsufficient: "当前 DS 缺口",
     dsLevel: "DS 层级"
   };
   return labels[key] ?? key;
@@ -927,12 +1046,15 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
   const phrases: Record<string, string> = {
     "AOS-128 Remove unsupported global search": "AOS-128 移除不支持的全局搜索",
     "Remove unsupported global search": "移除不支持的全局搜索",
+    "Rebuild Work routes with DS Work components": "用 DS Work 组件重建 Work 路由",
     "Static Work Management PRD mockups": "静态 Work Management PRD 示例",
     "ProductShell optional search contract": "ProductShell 可选搜索合同",
     "Owner inspection handoff package": "Owner 检查交接包",
     "Owner request: Work visibility": "Owner 请求：Work 可视化",
     "DS component gap list": "DS 组件缺口列表",
+    "Registered DS Work components": "已注册 DS Work 组件",
     "AOS-142 Static Work mockups": "AOS-142 静态 Work 示例",
+    "AOS source-visible freshness check": "AOS 源码可见新鲜度检查",
     "DS-88 Optional search contract": "DS-88 可选搜索合同",
     "Mobile zh-CN no-overflow regression": "移动端 zh-CN 无溢出回归",
     "AOS-128 No global search": "AOS-128 无全局搜索",
@@ -945,6 +1067,24 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "Work Item detail / inspector layout pattern": "工作项详情 / 检查器布局模式",
     "Saved view / filter toolbar pattern": "保存视图 / 过滤工具栏模式",
     "Machine-token / execution-record cell pattern": "机器标识 / 执行记录单元格模式",
+    "Dense in-module navigation for Work Management pages without global search.": "用于 Work Management 页面的紧凑模块内导航，不依赖全局搜索。",
+    "Read-only work board lanes with status counts and local overflow containment.": "只读工作看板泳道，包含状态计数和局部溢出控制。",
+    "Initiative, Epic, Story, Work Item, and Evidence Task hierarchy with table fallback.": "Initiative、Epic、Story、Work Item 与 Evidence Task 的层级视图，并提供表格回退。",
+    "Relationship vocabulary display for blocks, depends_on, verifies, reviews, refreshes, and related edges.": "展示 blocks、depends_on、verifies、reviews、refreshes 等关系词汇。",
+    "Gate sequence status, owner, evidence, and next-action scanning without readiness overclaim.": "扫描门禁顺序、状态、owner、证据与下一步动作，不夸大 readiness。",
+    "Compact evidence references for screenshots, artifact directories, QA summaries, API readbacks, commits, and previews.": "紧凑展示截图、artifact 目录、QA 摘要、API 读回、commit 与预览证据。",
+    "Structured Work Item detail surface with hierarchy, status, subtasks, evidence tasks, and guarded actions.": "结构化工作项详情，包含层级、状态、子任务、证据任务和受保护动作。",
+    "Saved Work views and local filter chips without ProductShell global search.": "保存 Work 视图与局部过滤标签，不引入 ProductShell 全局搜索。",
+    "Readable route, thread, commit, and artifact tokens that preserve full values while preventing cell overlap.": "可读展示 route、thread、commit 与 artifact 标识，保留完整值并避免单元格重叠。",
+    "Replaces local LinkButton route switcher with package WorkManagementSubnav.": "用 package WorkManagementSubnav 替换本地 LinkButton 路由切换器。",
+    "Consumes package WorkBoard lanes and relationship chips instead of local Surface lane CSS.": "消费 package WorkBoard 泳道与关系标签，而不是本地 Surface 泳道 CSS。",
+    "Consumes package WorkHierarchy graph/table fallback for Initiative to Evidence Task hierarchy.": "消费 package WorkHierarchy 图谱/表格回退，展示 Initiative 到 Evidence Task 的层级。",
+    "Consumes package RelationshipChip for blocks, depends_on, verifies, reviews, refreshes, and related edges.": "消费 package RelationshipChip 展示 blocks、depends_on、verifies、reviews、refreshes 与相关边。",
+    "Consumes package GatePipeline for review/readiness sequence without claiming PM or owner acceptance.": "消费 package GatePipeline 展示评审/readiness 顺序，但不声明 PM 或 owner acceptance。",
+    "Consumes package EvidenceAttachmentList for screenshots, artifacts, QA summaries, API readbacks, commits, and previews.": "消费 package EvidenceAttachmentList 展示截图、artifact、QA 摘要、API 读回、commit 与预览。",
+    "Consumes package WorkItemInspector for hierarchy, status, subtasks, evidence tasks, and guarded actions.": "消费 package WorkItemInspector 展示层级、状态、子任务、证据任务和受保护动作。",
+    "Consumes package SavedViewToolbar for saved views and local filters without ProductShell global search.": "消费 package SavedViewToolbar 展示保存视图与本地过滤，不引入 ProductShell 全局搜索。",
+    "Consumes package MachineToken for long route, thread, commit, artifact, and work-item identifiers.": "消费 package MachineToken 展示长 route、thread、commit、artifact 与工作项标识。",
     "Initiative is the complete objective and why.": "Initiative 是完整目标与原因。",
     "Epic is a larger deliverable work package.": "Epic 是较大的交付工作包。",
     "Story is the smallest acceptable human/business/workflow result.": "Story 是最小可验收的人类、业务或工作流结果。",
@@ -957,6 +1097,24 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "Executable owner, proof, and gate unit.": "可执行 owner、证明与门禁单元。",
     "Supports a Work Item.": "支撑一个 Work Item。",
     "Routes, threads, handoff returns, commits, proof, and blockers.": "Route、线程、handoff return、commit、证明与 blocker。",
+    "No API integration": "未接 API",
+    "URL locale authority": "URL locale 权威",
+    "DS contract accepted": "DS 合同已接受",
+    "No owner handoff yet": "尚无 owner handoff",
+    "No downstream claim": "不声明下游通过",
+    "Remove ProductShellSearch prop": "移除 ProductShellSearch 属性",
+    "URL locale canonicalization": "URL locale 规范化",
+    "Refresh 4317 preview": "刷新 4317 预览",
+    "Professional QA": "专业 QA",
+    "Command proof": "命令证明",
+    "Screenshot": "截图",
+    "QA summary": "QA 摘要",
+    "API readback": "API 读回",
+    "Commit": "Commit",
+    "Preview link": "预览链接",
+    "proof artifact target": "证明 artifact 目标",
+    "superseded by new scope": "已被新范围替代",
+    "pending refresh": "等待刷新",
     "Blocked until gates pass": "门禁通过前阻塞",
     Backlog: "待整理",
     "In Progress": "进行中",

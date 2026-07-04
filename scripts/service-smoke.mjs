@@ -43,18 +43,22 @@ try {
     && cockpit.status === 200
     && cockpitHtml.includes('data-product-shell-route="cockpit"')
     && work.status === 200
-    && workHtml.includes('data-work-management-mockup="static-prd-v0.1"')
+    && workHtml.includes('data-work-management-mockup="storybook-ds-work-management-v1"')
     && workHtml.includes('data-work-management-static-fixture="true"')
     && workHtml.includes('data-work-management-api-integration="absent"')
     && workHtml.includes('data-work-management-live-dispatch="not-enabled"')
     && workHtml.includes('data-work-management-hierarchy="initiative-epic-story-work-item-subtask-evidence-task"')
+    && workHtml.includes('data-design-system-work-components="registered-package-components"')
+    && workHtml.includes('data-product-local-work-component-clones="absent"')
     && workHtml.includes('data-product-shell-route="work"')
     && workBoard.status === 200
     && workBoardHtml.includes('data-work-management-page="board"')
+    && workBoardHtml.includes('data-work-management-pattern="work-board"')
     && workDetail.status === 200
-    && workDetailHtml.includes('data-work-item-detail="AOS-128"')
+    && workDetailHtml.includes('data-work-management-pattern="work-item-inspector"')
     && workEvidence.status === 200
     && workEvidenceHtml.includes('data-work-evidence-page="true"')
+    && workEvidenceHtml.includes('data-work-management-pattern="evidence-attachment-list"')
     && workActivity.status === 200
     && workActivityHtml.includes('data-work-codex-activity-page="true"')
     && deferredCockpitApi.status === 410
@@ -91,9 +95,11 @@ try {
       productLedMarkerPresent: shellHtml.includes('data-owner-quality-first-viewport="product-led"'),
       productShellBoundaryPresent: shellHtml.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search"'),
       globalSearchAbsent: !shellHtml.includes('data-shell-control="product-shell-search"'),
-      workModuleMarkerPresent: workHtml.includes('data-work-management-mockup="static-prd-v0.1"'),
+      workModuleMarkerPresent: workHtml.includes('data-work-management-mockup="storybook-ds-work-management-v1"'),
       workMockupStaticFixture: workHtml.includes('data-work-management-static-fixture="true"'),
       workMockupNoApiIntegration: workHtml.includes('data-work-management-api-integration="absent"'),
+      workMockupRegisteredDsComponents: workHtml.includes('data-design-system-work-components="registered-package-components"'),
+      workMockupLocalClonesAbsent: workHtml.includes('data-product-local-work-component-clones="absent"'),
       deferredCockpitApiStatus: deferredCockpitApi.status,
       deferredCockpitApiError: deferredCockpitApiPayload.error
     },

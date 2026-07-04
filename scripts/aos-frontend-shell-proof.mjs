@@ -127,16 +127,26 @@ const ownerQualitySearchMotionStandard = {
   endpointTolerancePx: 2
 };
 
-const requiredNeededDsComponentNames = [
-  "Work Management subnav/tabs pattern",
-  "Work Board / Kanban lane composite",
-  "Work hierarchy graph / dependency map composite",
-  "Relationship chip/link primitive",
-  "Gate pipeline / compliance table pattern",
-  "Evidence attachment gallery/list composite",
-  "Work Item detail / inspector layout pattern",
-  "Saved view / filter toolbar pattern",
-  "Machine-token / execution-record cell pattern"
+const requiredRegisteredWorkComponentNames = [
+  "WorkManagementSubnav",
+  "WorkBoard",
+  "WorkHierarchy",
+  "RelationshipChip",
+  "GatePipeline",
+  "EvidenceAttachmentList",
+  "WorkItemInspector",
+  "SavedViewToolbar",
+  "MachineToken"
+];
+
+const requiredWorkManagementPatterns = [
+  "subnav",
+  "work-board",
+  "work-hierarchy",
+  "gate-pipeline",
+  "evidence-attachment-list",
+  "work-item-inspector",
+  "saved-view-toolbar"
 ];
 
 const acceptedVisualInstanceOracle = {
@@ -450,11 +460,14 @@ try {
     const response = await fetch(`${service.url}${route}`);
     const body = await response.text();
     const staticWorkMockup = {
-      present: body.includes('data-work-management-mockup="static-prd-v0.1"'),
+      present: body.includes('data-work-management-mockup="storybook-ds-work-management-v1"'),
       staticFixture: body.includes('data-work-management-static-fixture="true"'),
       apiIntegrationAbsent: body.includes('data-work-management-api-integration="absent"'),
       liveDispatchDisabled: body.includes('data-work-management-live-dispatch="not-enabled"'),
-      hierarchyPresent: body.includes('data-work-management-hierarchy="initiative-epic-story-work-item-subtask-evidence-task"')
+      hierarchyPresent: body.includes('data-work-management-hierarchy="initiative-epic-story-work-item-subtask-evidence-task"'),
+      dsStandard: body.includes('data-work-management-ds-standard="work-management-components-spec"'),
+      registeredComponents: body.includes('data-design-system-work-components="registered-package-components"'),
+      localClonesAbsent: body.includes('data-product-local-work-component-clones="absent"')
     };
     routeReadbacks.push({
       route,
@@ -517,7 +530,16 @@ try {
     && entry.ownerQualityMarker
     && entry.productLedMarker
     && entry.workMarker
-    && (!entry.route.startsWith("/work") || (entry.staticWorkMockup.present && entry.staticWorkMockup.staticFixture && entry.staticWorkMockup.apiIntegrationAbsent && entry.staticWorkMockup.liveDispatchDisabled && entry.staticWorkMockup.hierarchyPresent))
+    && (!entry.route.startsWith("/work") || (
+      entry.staticWorkMockup.present
+      && entry.staticWorkMockup.staticFixture
+      && entry.staticWorkMockup.apiIntegrationAbsent
+      && entry.staticWorkMockup.liveDispatchDisabled
+      && entry.staticWorkMockup.hierarchyPresent
+      && entry.staticWorkMockup.dsStandard
+      && entry.staticWorkMockup.registeredComponents
+      && entry.staticWorkMockup.localClonesAbsent
+    ))
     && entry.registeredNavigationOnly
     && entry.registeredBrandLockup
     && entry.productShellBoundary
@@ -685,6 +707,8 @@ async function runBrowserProof(baseUrl) {
         productId: logo.getAttribute("data-product-id"),
         assetId: logo.getAttribute("data-product-logo-asset-id"),
         lineOne: logo.querySelector(".tcrn-product-logo__line-one")?.textContent?.trim() ?? null,
+        lineOneCompact: logo.querySelector(".tcrn-product-logo__line-one")?.textContent?.replace(/\s+/g, "") ?? null,
+        suffix: logo.querySelector(".tcrn-product-logo__line-one-suffix")?.textContent?.trim() ?? null,
         lineTwo: logo.querySelector(".tcrn-product-logo__line-two")?.textContent?.trim() ?? null,
         src: image?.getAttribute("src") ?? null,
         alt: image?.getAttribute("alt") ?? null,
@@ -699,7 +723,8 @@ async function runBrowserProof(baseUrl) {
     });
     assert.equal(brandReadback.productId, "aos", "registered AOS product logo id is used");
     assert.equal(brandReadback.assetId, "tcrn-aos-two-line", "registered AOS product logo asset id is used");
-    assert.equal(brandReadback.lineOne, "TCRN AOS", "registered AOS product logo line one is rendered");
+    assert.equal(brandReadback.lineOneCompact, "TCRNAOS", "registered AOS product logo line one is rendered");
+    assert.equal(brandReadback.suffix, "AOS", "registered AOS ProductLogo preserves the product suffix span");
     assert.equal(brandReadback.lineTwo, "AI Operation System", "registered AOS product logo line two is rendered");
     assert.equal(brandReadback.src, "/assets/tcrn-brand-mark.svg");
     assert.equal(brandReadback.alt, "TCRN AOS AI Operation System");
@@ -1004,7 +1029,7 @@ async function runBrowserProof(baseUrl) {
     const mobilePage = await mobileContext.newPage();
     capturePageHealth(mobilePage, consoleMessages, pageErrors, requestFailures);
     await mobilePage.goto(`${baseUrl}/work?locale=zh-CN&theme=dark`, { waitUntil: "networkidle" });
-    await mobilePage.waitForSelector('[data-work-management-mockup="static-prd-v0.1"]');
+    await mobilePage.waitForSelector('[data-work-management-mockup="storybook-ds-work-management-v1"]');
     assert.equal(await mobilePage.locator("html").getAttribute("data-tcrn-theme"), "dark", "mobile dark theme query applies");
     assert.equal(await mobilePage.locator("html").getAttribute("lang"), "zh-CN", "mobile zh-CN locale query applies");
     assert.equal(await mobilePage.locator('[data-product-shell-route="work"]').getAttribute("aria-current"), "page", "mobile active work route is preserved");
@@ -1198,9 +1223,9 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
       });
       capturePageHealth(page, consoleMessages, pageErrors, requestFailures);
       await page.goto(`${baseUrl}${route.path}?locale=en&theme=light&collapsed=false`, { waitUntil: "networkidle" });
-      await page.waitForSelector('[data-work-management-mockup="static-prd-v0.1"]');
+      await page.waitForSelector('[data-work-management-mockup="storybook-ds-work-management-v1"]');
       await page.waitForFunction(() => document.querySelector("[data-api-state]")?.textContent?.includes("available"));
-      const readback = await page.locator('[data-work-management-mockup="static-prd-v0.1"]').evaluate((root) => {
+      const readback = await page.locator('[data-work-management-mockup="storybook-ds-work-management-v1"]').evaluate((root) => {
         const html = document.documentElement;
         const body = document.body;
         const shell = document.querySelector("[data-aos-shell]");
@@ -1220,35 +1245,36 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           productShellSearchControlCount: document.querySelectorAll('[data-shell-control="product-shell-search"]').length,
           pageHasHorizontalOverflow: html.scrollWidth > window.innerWidth + 1 || body.scrollWidth > window.innerWidth + 1,
           ownerAcceptanceClaimed: body.innerText.includes("Owner acceptance: accepted") || body.innerText.includes("Release ready"),
-          neededDsComponentsReadback: readNeededDsComponents(),
+          registeredDsWorkComponentsReadback: readRegisteredDsWorkComponents(),
+          workManagementPatternReadback: readWorkManagementPatterns(),
+          staleNeededDsListPresent: Boolean(document.querySelector("[data-needed-ds-components-list]")),
           codexActivityRouteReadability: readCodexActivityRouteReadability(),
           codexActivityAttachedToWorkItem: Boolean(document.querySelector('[data-work-codex-activity-page="true"]'))
             ? body.innerText.includes("Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item.")
             : true
         };
 
-        function readNeededDsComponents() {
-          const section = document.querySelector("[data-needed-ds-components-list]");
+        function readRegisteredDsWorkComponents() {
+          const section = document.querySelector("[data-registered-ds-work-components]");
           if (!section) {
             return {
               present: false,
               count: 0,
               declaredCount: null,
               implementationBoundary: null,
-              staticOnlyCopyVisible: false,
               missingRequiredFields: [],
               items: []
             };
           }
-          const items = Array.from(section.querySelectorAll("[data-needed-ds-component-item]")).map((item) => {
+          const items = Array.from(section.querySelectorAll("[data-registered-ds-work-component-item]")).map((item) => {
             const read = (name) => item.getAttribute(name) ?? "";
             const fields = {
-              name: read("data-needed-ds-component-name"),
-              purpose: read("data-needed-ds-component-purpose"),
-              whereUsed: read("data-needed-ds-component-where-used"),
-              whyDsInsufficient: read("data-needed-ds-component-why-insufficient"),
-              dsLevel: read("data-needed-ds-component-level"),
-              priority: read("data-needed-ds-component-priority")
+              name: read("data-registered-ds-work-component-name"),
+              candidateId: read("data-registered-ds-work-component-candidate-id"),
+              purpose: read("data-registered-ds-work-component-purpose"),
+              whereUsed: read("data-registered-ds-work-component-where-used"),
+              consumptionDisposition: read("data-registered-ds-work-component-disposition"),
+              dsLevel: read("data-registered-ds-work-component-level")
             };
             const missingFields = Object.entries(fields)
               .filter(([, value]) => value.trim().length === 0)
@@ -1262,16 +1288,27 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           return {
             present: true,
             count: items.length,
-            declaredCount: section.getAttribute("data-needed-ds-components-count"),
-            implementationBoundary: section.getAttribute("data-needed-ds-components-implementation"),
-            staticOnlyCopyVisible: section.textContent?.includes("skipped during static mockups") ?? false,
+            declaredCount: section.getAttribute("data-registered-ds-work-components-count"),
+            implementationBoundary: section.getAttribute("data-registered-ds-work-components-implementation"),
             missingRequiredFields: items.flatMap((item) => item.missingFields.map((field) => `${item.name}:${field}`)),
             items
           };
         }
 
+        function readWorkManagementPatterns() {
+          const patterns = Array.from(document.querySelectorAll("[data-work-management-pattern]"))
+            .map((node) => node.getAttribute("data-work-management-pattern") ?? "")
+            .filter(Boolean);
+          return {
+            patterns,
+            patternCount: patterns.length,
+            relationshipChipCount: document.querySelectorAll("[data-work-relationship]").length,
+            machineTokenCount: document.querySelectorAll(".tcrn-machine-token").length
+          };
+        }
+
         function readCodexActivityRouteReadability() {
-          const routeSummaries = Array.from(document.querySelectorAll("[data-work-route-summary]"));
+          const routeSummaries = Array.from(document.querySelectorAll(".tcrn-machine-token[data-machine-token-kind='route']"));
           if (routeSummaries.length === 0) {
             return {
               routeSummaryCount: 0,
@@ -1287,16 +1324,16 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
             const cells = row ? Array.from(row.querySelectorAll(".tcrn-table-shell__cell")) : [];
             const cellIndex = cell ? cells.indexOf(cell) : -1;
             const nextCell = cellIndex >= 0 ? cells[cellIndex + 1] : null;
-            const token = summary.querySelector("[data-work-route-id-token]");
+            const token = summary.querySelector(".tcrn-machine-token__value");
             const cellRect = cell?.getBoundingClientRect();
             const nextRect = nextCell?.getBoundingClientRect();
             const tokenRect = token?.getBoundingClientRect();
             const tokenStyle = token ? getComputedStyle(token) : null;
-            const fullRouteId = summary.getAttribute("data-full-route-id") ?? "";
+            const fullRouteId = summary.getAttribute("data-full-token") ?? "";
             return {
               fullRouteId,
               title: summary.getAttribute("title"),
-              label: summary.querySelector("[data-work-route-label]")?.textContent?.trim() ?? "",
+              label: summary.querySelector(".tcrn-machine-token__label")?.textContent?.trim() ?? "",
               token: token?.textContent?.trim() ?? "",
               cellWidth: cellRect ? Number(cellRect.width.toFixed(3)) : null,
               cellClientWidth: cell?.clientWidth ?? null,
@@ -1333,32 +1370,48 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
       assert.equal(readback.pageHasHorizontalOverflow, false, `${route.id} has no page-level horizontal overflow`);
       assert.equal(readback.ownerAcceptanceClaimed, false, `${route.id} has no owner/release positive claim`);
       assert.equal(readback.codexActivityAttachedToWorkItem, true, `${route.id} keeps Codex activity attached to Work Items`);
+      assert.equal(readback.staleNeededDsListPresent, false, `${route.id} does not render the superseded needed-DS gap list`);
+      assert.equal(readback.workManagementPatternReadback.patterns.includes("subnav"), true, `${route.id} consumes DS WorkManagementSubnav`);
       if (route.id === "backlog") {
-        assert.equal(readback.neededDsComponentsReadback.present, true, "Backlog renders the explicit Needed DS components / patterns section");
-        assert.equal(readback.neededDsComponentsReadback.implementationBoundary, "skipped-static-mockup-only", "Needed DS list records that component implementation was skipped");
-        assert.equal(readback.neededDsComponentsReadback.staticOnlyCopyVisible, true, "Needed DS list explains the static-only planning boundary");
-        assert.equal(readback.neededDsComponentsReadback.count, requiredNeededDsComponentNames.length, "Needed DS list renders every required item");
-        assert.equal(readback.neededDsComponentsReadback.declaredCount, String(requiredNeededDsComponentNames.length), "Needed DS list count marker matches rendered rows");
+        assert.equal(readback.registeredDsWorkComponentsReadback.present, true, "Backlog renders the registered DS Work components consumption map");
+        assert.equal(readback.registeredDsWorkComponentsReadback.implementationBoundary, "package-consumed-storybook-first", "registered DS Work map records package consumption boundary");
+        assert.equal(readback.registeredDsWorkComponentsReadback.count, requiredRegisteredWorkComponentNames.length, "registered DS Work map renders every admitted component");
+        assert.equal(readback.registeredDsWorkComponentsReadback.declaredCount, String(requiredRegisteredWorkComponentNames.length), "registered DS Work map count marker matches rendered rows");
         assert.deepEqual(
-          readback.neededDsComponentsReadback.items.map((item) => item.name),
-          requiredNeededDsComponentNames,
-          "Needed DS list renders the expected component/pattern names"
+          readback.registeredDsWorkComponentsReadback.items.map((item) => item.name),
+          requiredRegisteredWorkComponentNames,
+          "registered DS Work map renders the expected package component names"
         );
         assert.deepEqual(
-          readback.neededDsComponentsReadback.missingRequiredFields,
+          readback.registeredDsWorkComponentsReadback.missingRequiredFields,
           [],
-          "Needed DS component entries include name, purpose, where used, why DS is insufficient, DS level, and priority"
+          "registered DS Work component entries include component name, candidate id, purpose, where used, consumption disposition, and DS level"
         );
         assert.equal(
-          readback.neededDsComponentsReadback.items.every((item) => ["primitive", "pattern", "composite"].includes(item.dsLevel)),
+          readback.registeredDsWorkComponentsReadback.items.every((item) => ["primitive", "pattern", "composite"].includes(item.dsLevel)),
           true,
-          "Needed DS component entries classify the suggested DS level"
+          "registered DS Work component entries classify the admitted DS level"
         );
-        assert.equal(
-          readback.neededDsComponentsReadback.items.every((item) => ["High", "Medium"].includes(item.priority)),
-          true,
-          "Needed DS component entries include priority"
-        );
+      }
+      if (route.id === "board") {
+        assert.equal(readback.workManagementPatternReadback.patterns.includes("work-board"), true, "Board route consumes DS WorkBoard");
+        assert.equal(readback.workManagementPatternReadback.relationshipChipCount > 0, true, "Board route renders DS RelationshipChip entries");
+      }
+      if (route.id === "detail") {
+        assert.equal(readback.workManagementPatternReadback.patterns.includes("work-item-inspector"), true, "Detail route consumes DS WorkItemInspector");
+        assert.equal(readback.workManagementPatternReadback.patterns.includes("evidence-attachment-list"), true, "Detail route consumes DS EvidenceAttachmentList inside the inspector");
+      }
+      if (route.id === "gates") {
+        assert.equal(readback.workManagementPatternReadback.patterns.includes("gate-pipeline"), true, "Gates route consumes DS GatePipeline");
+      }
+      if (route.id === "evidence") {
+        assert.equal(readback.workManagementPatternReadback.patterns.includes("evidence-attachment-list"), true, "Evidence route consumes DS EvidenceAttachmentList");
+      }
+      if (route.id === "owner-feedback-view") {
+        assert.equal(readback.workManagementPatternReadback.patterns.includes("saved-view-toolbar"), true, "Saved view route consumes DS SavedViewToolbar");
+      }
+      if (route.id === "initiative-graph") {
+        assert.equal(readback.workManagementPatternReadback.patterns.includes("work-hierarchy"), true, "Initiative graph route consumes DS WorkHierarchy");
       }
       if (route.id === "codex-activity") {
         assert.equal(readback.codexActivityRouteReadability.routeSummaryCount, 3, "Codex Activity renders readable route summary cells");
@@ -1383,6 +1436,8 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
   }
 
   const contractText = contractCorpus.map((entry) => entry.text).join("\n");
+  const desktopPatternCoverage = Array.from(new Set(desktopReadbacks.flatMap((entry) => entry.readback.workManagementPatternReadback.patterns))).sort();
+  const missingWorkManagementPatterns = requiredWorkManagementPatterns.filter((pattern) => !desktopPatternCoverage.includes(pattern));
   const requiredRelationshipTerms = [
     "blocks",
     "blocked_by",
@@ -1403,15 +1458,22 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
       requiredTerms: requiredRelationshipTerms,
       missingTerms: requiredRelationshipTerms.filter((term) => !contractText.includes(term))
     },
+    workManagementPatternCoverage: {
+      requiredPatterns: requiredWorkManagementPatterns,
+      renderedPatterns: desktopPatternCoverage,
+      missingPatterns: missingWorkManagementPatterns
+    },
     storySmallestAcceptableResult: contractText.includes("Story is the smallest acceptable human/business/workflow result."),
     taskSmallestExecutableUnit: contractText.includes("Task / Work Item is the smallest executable ticket/task unit."),
     codexActivityAttachedExecutionEvidenceContext: contractText.includes("Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item.")
   };
   contentContractReadback.ok = contentContractReadback.relationshipVocabulary.missingTerms.length === 0
+    && contentContractReadback.workManagementPatternCoverage.missingPatterns.length === 0
     && contentContractReadback.storySmallestAcceptableResult
     && contentContractReadback.taskSmallestExecutableUnit
     && contentContractReadback.codexActivityAttachedExecutionEvidenceContext;
   assert.deepEqual(contentContractReadback.relationshipVocabulary.missingTerms, [], "static Work mockups render the full PRD relationship vocabulary");
+  assert.deepEqual(missingWorkManagementPatterns, [], "static Work mockups consume every registered DS Work Management pattern");
   assert.equal(contentContractReadback.storySmallestAcceptableResult, true, "static Work mockups state Story is the smallest acceptable human/business/workflow result");
   assert.equal(contentContractReadback.taskSmallestExecutableUnit, true, "static Work mockups state Task / Work Item is the smallest executable ticket/task unit");
   assert.equal(contentContractReadback.codexActivityAttachedExecutionEvidenceContext, true, "static Work mockups state Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item");
@@ -1429,9 +1491,9 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
     const mobilePage = await mobileContext.newPage();
     capturePageHealth(mobilePage, consoleMessages, pageErrors, requestFailures);
     await mobilePage.goto(`${baseUrl}/work/initiatives/work-management-mvp?locale=zh-CN&theme=dark`, { waitUntil: "networkidle" });
-    await mobilePage.waitForSelector('[data-work-management-mockup="static-prd-v0.1"]');
+    await mobilePage.waitForSelector('[data-work-management-mockup="storybook-ds-work-management-v1"]');
     const mobileReadback = await mobilePage.evaluate(() => ({
-      page: document.querySelector('[data-work-management-mockup="static-prd-v0.1"]')?.getAttribute("data-work-management-page") ?? null,
+      page: document.querySelector('[data-work-management-mockup="storybook-ds-work-management-v1"]')?.getAttribute("data-work-management-page") ?? null,
       lang: document.documentElement.lang,
       theme: document.documentElement.dataset.tcrnTheme,
       pageHasHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth + 1 || document.body.scrollWidth > window.innerWidth + 1,
@@ -1449,9 +1511,9 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
     await mobilePage.screenshot({ path: mobileScreenshot, fullPage: true });
     screenshots.push(mobileScreenshot);
     await mobilePage.goto(`${baseUrl}/work/backlog?locale=zh-CN&theme=dark`, { waitUntil: "networkidle" });
-    await mobilePage.waitForSelector('[data-needed-ds-components-list="true"]');
+    await mobilePage.waitForSelector('[data-registered-ds-work-components="true"]');
     const mobileBacklogReadback = await mobilePage.evaluate(() => {
-      const section = document.querySelector("[data-needed-ds-components-list]");
+      const section = document.querySelector("[data-registered-ds-work-components]");
       const tableShells = Array.from(document.querySelectorAll(".tcrn-table-shell")).map((element) => {
         const rect = element.getBoundingClientRect();
         const style = getComputedStyle(element);
@@ -1464,22 +1526,24 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
         };
       });
       return {
-        page: document.querySelector('[data-work-management-mockup="static-prd-v0.1"]')?.getAttribute("data-work-management-page") ?? null,
-        neededDsListPresent: Boolean(section),
-        neededDsItemCount: section?.querySelectorAll("[data-needed-ds-component-item]").length ?? 0,
-        implementationBoundary: section?.getAttribute("data-needed-ds-components-implementation") ?? null,
+        page: document.querySelector('[data-work-management-mockup="storybook-ds-work-management-v1"]')?.getAttribute("data-work-management-page") ?? null,
+        registeredDsWorkComponentsPresent: Boolean(section),
+        registeredDsWorkComponentCount: section?.querySelectorAll("[data-registered-ds-work-component-item]").length ?? 0,
+        implementationBoundary: section?.getAttribute("data-registered-ds-work-components-implementation") ?? null,
+        staleNeededDsListPresent: Boolean(document.querySelector("[data-needed-ds-components-list]")),
         pageHasHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth + 1 || document.body.scrollWidth > window.innerWidth + 1,
         tableInternalScrollAllowed: tableShells.every((table) => table.overflowX === "auto" && table.right <= window.innerWidth + 1),
         tableShells
       };
     });
     assert.equal(mobileBacklogReadback.page, "backlog", "mobile backlog route renders backlog page");
-    assert.equal(mobileBacklogReadback.neededDsListPresent, true, "mobile backlog route renders the needed DS components list");
-    assert.equal(mobileBacklogReadback.neededDsItemCount, requiredNeededDsComponentNames.length, "mobile backlog route keeps every needed DS component entry");
-    assert.equal(mobileBacklogReadback.implementationBoundary, "skipped-static-mockup-only", "mobile needed DS list preserves static-only implementation boundary");
+    assert.equal(mobileBacklogReadback.registeredDsWorkComponentsPresent, true, "mobile backlog route renders the registered DS Work components map");
+    assert.equal(mobileBacklogReadback.registeredDsWorkComponentCount, requiredRegisteredWorkComponentNames.length, "mobile backlog route keeps every registered DS Work component entry");
+    assert.equal(mobileBacklogReadback.implementationBoundary, "package-consumed-storybook-first", "mobile registered DS Work map preserves package-consumption boundary");
+    assert.equal(mobileBacklogReadback.staleNeededDsListPresent, false, "mobile backlog route does not render the superseded needed-DS list");
     assert.equal(mobileBacklogReadback.pageHasHorizontalOverflow, false, "mobile backlog route has no page-level horizontal overflow");
-    assert.equal(mobileBacklogReadback.tableInternalScrollAllowed, true, "mobile needed DS table overflow is contained to table scrollers");
-    const mobileBacklogScreenshot = `${screenshotRoot}/work-mobile-needed-ds-components.png`;
+    assert.equal(mobileBacklogReadback.tableInternalScrollAllowed, true, "mobile registered DS Work table overflow is contained to table scrollers");
+    const mobileBacklogScreenshot = `${screenshotRoot}/work-mobile-registered-ds-work-components.png`;
     await mobilePage.screenshot({ path: mobileBacklogScreenshot, fullPage: true });
     screenshots.push(mobileBacklogScreenshot);
     await mobilePage.close();
@@ -1843,8 +1907,8 @@ function compareVisualInstanceState(variant, dsMetrics, aosMetrics) {
     ds: dsMetrics.productLogo,
     aos: aosMetrics.productLogo
   });
-  add("brand.registeredProductLogoText", dsMetrics.productLogo.lineOne === "TCRN AOS" && dsMetrics.productLogo.lineTwo === "AI Operation System" && aosMetrics.productLogo.lineOne === "TCRN AOS" && aosMetrics.productLogo.lineTwo === "AI Operation System", {
-    expected: { lineOne: "TCRN AOS", lineTwo: "AI Operation System" },
+  add("brand.registeredProductLogoText", dsMetrics.productLogo.lineOneCompact === "TCRNAOS" && dsMetrics.productLogo.suffix === "AOS" && dsMetrics.productLogo.lineTwo === "AI Operation System" && aosMetrics.productLogo.lineOneCompact === "TCRNAOS" && aosMetrics.productLogo.suffix === "AOS" && aosMetrics.productLogo.lineTwo === "AI Operation System", {
+    expected: { lineOneCompact: "TCRNAOS", suffix: "AOS", lineTwo: "AI Operation System" },
     ds: dsMetrics.productLogo,
     aos: aosMetrics.productLogo
   });
@@ -2315,6 +2379,8 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
         productId: productLogo?.getAttribute("data-product-id") ?? null,
         assetId: productLogo?.getAttribute("data-product-logo-asset-id") ?? null,
         lineOne: productLogo?.querySelector(".tcrn-product-logo__line-one")?.textContent?.trim() ?? null,
+        lineOneCompact: productLogo?.querySelector(".tcrn-product-logo__line-one")?.textContent?.replace(/\s+/g, "") ?? null,
+        suffix: productLogo?.querySelector(".tcrn-product-logo__line-one-suffix")?.textContent?.trim() ?? null,
         lineTwo: productLogo?.querySelector(".tcrn-product-logo__line-two")?.textContent?.trim() ?? null,
         captionPresent: Boolean(productLogo?.querySelector(".tcrn-shell-brand-lockup__caption"))
       },

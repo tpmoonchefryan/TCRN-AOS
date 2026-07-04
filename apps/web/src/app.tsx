@@ -796,25 +796,12 @@ button, input { font: inherit; }
   text-transform: uppercase;
   letter-spacing: 0;
 }
-[data-work-mockup-nav="true"],
+[data-work-mockup-nav="package-work-management-subnav"],
 [data-work-action-row="true"] {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
-}
-[data-work-board="static-lanes"],
-[data-work-graph="true"] {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
-  align-items: stretch;
-}
-[data-work-detail-layout="true"] {
-  display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.65fr);
-  gap: 16px;
-  align-items: start;
 }
 [data-work-list="compact"],
 [data-work-chain="true"] {
@@ -825,17 +812,17 @@ button, input { font: inherit; }
 [data-work-chain="true"] li {
   margin: 8px 0;
 }
-[data-work-graph-column] {
+[data-registered-ds-work-components="true"],
+[data-aos-work-module-entry="registered-ds-work-board"],
+[data-work-initiative-graph="true"],
+[data-work-evidence-page="true"],
+[data-work-gates-page="true"],
+[data-work-codex-activity-page="true"],
+[data-work-saved-view="owner-feedback"] {
   min-width: 0;
-  border: 1px solid var(--tcrn-color-border-subtle);
-  border-radius: 6px;
-  padding: 12px;
-  background: var(--tcrn-color-surface-subtle);
 }
-@media (max-width: 760px) {
-  [data-work-detail-layout="true"] {
-    grid-template-columns: minmax(0, 1fr);
-  }
+[data-registered-ds-work-components="true"] * {
+  min-width: 0;
 }
 `;
 }

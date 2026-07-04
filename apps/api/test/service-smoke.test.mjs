@@ -77,11 +77,13 @@ test("local service serves the AOS shell while backend readbacks stay available"
       assert.match(html, /data-storybook-visual-instance-consumed="aos-owner-quality-product-shell"/);
       assert.match(html, /data-owner-quality-first-viewport="product-led"/);
       if (target.startsWith("/work")) {
-        assert.match(html, /data-work-management-mockup="static-prd-v0\.1"/);
+        assert.match(html, /data-work-management-mockup="storybook-ds-work-management-v1"/);
         assert.match(html, /data-work-management-static-fixture="true"/);
         assert.match(html, /data-work-management-api-integration="absent"/);
         assert.match(html, /data-work-management-live-dispatch="not-enabled"/);
         assert.match(html, /data-work-management-hierarchy="initiative-epic-story-work-item-subtask-evidence-task"/);
+        assert.match(html, /data-design-system-work-components="registered-package-components"/);
+        assert.match(html, /data-product-local-work-component-clones="absent"/);
       } else {
         assert.match(html, /data-owner-quality-work-queue="true"/);
         assert.match(html, /data-owner-quality-gates="true"/);
