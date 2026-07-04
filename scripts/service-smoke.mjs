@@ -59,18 +59,21 @@ try {
     && workHtml.includes('data-work-static-authority-disposition="aos_static_work_mockup_consumes_storybook_ds_work_management_contract"')
     && workHtml.includes('data-work-route-proof-targets="/work /work/board /work/backlog /work/items/AOS-128 /work/views/owner-feedback /work/gates /work/evidence /work/codex-activity /work/initiatives/work-management-mvp"')
     && workHtml.includes('data-work-mobile-proof-targets="/work/backlog?locale=zh-CN&amp;theme=dark /work/items/AOS-128?locale=zh-CN&amp;theme=dark /work/initiatives/work-management-mvp?locale=zh-CN&amp;theme=dark"')
-    && workHtml.includes('data-work-clean-room-layout="issue-style-tcrn-owned-no-atlassian-assets"')
+    && workHtml.includes('data-work-clean-room-layout="tcrn-clean-room-work-layout-no-third-party-assets"')
     && workHtml.includes('data-design-system-work-components="registered-package-components"')
     && workHtml.includes('data-product-local-work-component-clones="absent"')
     && workHtml.includes('data-work-route-acceptance-target="/work"')
     && workHtml.includes('data-product-shell-route="work"')
     && workBoard.status === 200
     && workBoardHtml.includes('data-work-management-page="board"')
-    && workBoardHtml.includes('data-work-management-pattern="work-board"')
+    && workBoardHtml.includes('data-aos-work-module-entry="registered-ds-work-board"')
     && workDetail.status === 200
-    && workDetailHtml.includes('data-work-management-pattern="work-item-inspector"')
-    && workDetailHtml.includes('data-full-token="cae4d52"')
-    && workDetailHtml.includes("4317 retained preview refreshed; PM freshness retry pending")
+    && workDetailHtml.includes('data-work-management-page="detail"')
+    && workDetailHtml.includes("post-review-source")
+    && workDetailHtml.includes("33222fa")
+    && workDetailHtml.includes("d17bdc6")
+    && workDetailHtml.includes("4317 retained preview remains stale until post-review refresh")
+    && !workDetailHtml.includes("cae4d52")
     && !workDetailHtml.includes("7836dca")
     && !workDetailHtml.includes("pending Atlas refresh")
     && !workDetailHtml.includes("Owner inspection package is blocked until gates pass")
@@ -107,9 +110,12 @@ try {
       workBoardStatus: workBoard.status,
       workDetailStatus: workDetail.status,
       workDetailBasisPosture: {
-        currentAosBasisVisible: workDetailHtml.includes('data-full-token="cae4d52"'),
+        currentAosBasisVisible: workDetailHtml.includes("post-review-source"),
+        dsBasisVisible: workDetailHtml.includes("33222fa"),
+        workflowBasisVisible: workDetailHtml.includes("d17bdc6"),
+        priorAosBasisVisible: workDetailHtml.includes("cae4d52"),
         staleAosBasisVisible: workDetailHtml.includes("7836dca"),
-        retainedRefreshPostureVisible: workDetailHtml.includes("4317 retained preview refreshed; PM freshness retry pending"),
+        retainedRefreshPostureVisible: workDetailHtml.includes("4317 retained preview remains stale until post-review refresh"),
         stalePendingRefreshVisible: workDetailHtml.includes("pending Atlas refresh"),
         staleOwnerInspectionGateVisible: workDetailHtml.includes("Owner inspection package is blocked until gates pass")
       },

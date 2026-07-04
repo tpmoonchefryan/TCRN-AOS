@@ -3,32 +3,37 @@ import {
   Badge,
   Button,
   EvidenceAttachmentList,
-  EvidenceStrip,
-  GatePipeline,
+  GatePipelineCompact,
   Heading,
-  InlineAlert,
   LinkButton,
   MachineToken,
+  MachineTokenCell,
+  MetadataRail,
   RelationshipChip,
-  SavedViewToolbar,
   StatusBadge,
   Surface,
   TableShell,
   Text,
-  WorkBoard,
+  WorkBoardView,
+  WorkBacklogGroup,
+  WorkDetailLayout,
+  WorkActivityFeed,
+  WorkFieldPanel,
   WorkHierarchy,
-  WorkIndex,
-  WorkItemInspector,
-  WorkManagementSubnav,
+  WorkList,
+  WorkPageHeader,
+  WorkQuickFilters,
+  WorkSplitView,
+  WorkViewTabs,
   workManagementPatternRegistry,
   type EvidenceAttachment,
   type GatePipelineGate,
+  type KeyValueItem,
   type RelationshipChipProps,
-  type SavedViewToolbarFilter,
   type WorkBoardLane,
+  type WorkItemRowProps,
   type WorkHierarchyEdge,
-  type WorkHierarchyNode,
-  type WorkIndexRow
+  type WorkHierarchyNode
 } from "@tcrn/ui-react";
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
 
@@ -121,6 +126,12 @@ const mobileWorkRouteProofTargets = [
   "/work/items/AOS-128?locale=zh-CN&theme=dark",
   "/work/initiatives/work-management-mvp?locale=zh-CN&theme=dark"
 ];
+
+const currentAosConsumptionBasis = {
+  aos: "post-review-source",
+  ds: "33222fa",
+  workflow: "d17bdc6"
+} as const;
 
 const workPages: WorkMockupPage[] = [
   {
@@ -289,21 +300,21 @@ const workItems: WorkItemFixture[] = [
     assignee: "Mara",
     nextOwner: "Mara",
     gate: "PM freshness changes requested",
-    blocker: "Retained 4317 is refreshed, but Mara requested a basis/posture copy repair before owner handoff.",
+    blocker: "Retained 4317 remains stale until this AOS consumption slice passes review and refresh gates.",
     updated: "2026-07-01"
   }
 ];
 
 const relationRows = [
-  { relation: "blocks", source: "AOS-144", target: "Owner Inspection Handoff", state: "active", note: "PM freshness is changes_requested after retained 4317 refresh; no owner handoff yet." },
+  { relation: "blocks", source: "AOS-144", target: "Owner Inspection Handoff", state: "active", note: "Owner handoff remains blocked until review, QA, retained refresh, and PM freshness pass." },
   { relation: "blocked_by", source: "AOS-144", target: "AOS-142", state: "active", note: "Static discussion surface must be reviewed first." },
   { relation: "depends_on", source: "AOS-142", target: "DS-88", state: "resolved", note: "Uses DS optional-search contract." },
   { relation: "relates_to", source: "AOS-142", target: "Registered DS Work components", state: "active", note: "Consumes the admitted DS Work Management package patterns without API integration." },
   { relation: "duplicates", source: "Owner note: fake search", target: "AOS-128", state: "resolved", note: "Duplicate owner feedback merges into the no-global-search item." },
   { relation: "implements", source: "AOS-142", target: "Story: PM can discuss Work flows", state: "active", note: "Static routes implement the discussion surface only." },
   { relation: "verifies", source: "EVD-41", target: "AOS-128", state: "resolved", note: "AOS proof verifies no global search and URL locale." },
-  { relation: "reviews", source: "ELR-23", target: "AOS-142", state: "resolved", note: "Elara rendered/DS review passed before the retained refresh." },
-  { relation: "refreshes", source: "ATL-31", target: "AOS-142", state: "resolved", note: "Retained 4317 preview was refreshed to AOS cae4d52 before Mara PM freshness." },
+  { relation: "reviews", source: "ELR-23", target: "AOS-142", state: "active", note: "AOS consumption review is required before retained refresh." },
+  { relation: "refreshes", source: "ATL-31", target: "AOS-142", state: "active", note: "Next retained 4317 refresh is held until AOS consumption review and QA pass." },
   { relation: "supersedes", source: "AOS-128", target: "previous capability claim", state: "resolved", note: "Unsupported route claim replaced by no-search boundary." },
   { relation: "split_from", source: "AOS-142", target: "Work Management MVP", state: "active", note: "Static mockup slice split from full implementation planning." },
   { relation: "caused_by", source: "AOS-128", target: "Owner feedback: no fake search", state: "resolved", note: "Owner-approved scope change." }
@@ -320,32 +331,76 @@ const hierarchyDefinitionRows = [
 
 const gateRows = [
   { gate: "DS Review", owner: "Elara", state: "accepted", evidence: "ProductShell optional search contract", next: "Accepted on the AOS rebuild basis" },
-  { gate: "Implementation Proof", owner: "Ilya", state: "accepted", evidence: "Static route proof, screenshots, no API fixture", next: "Repair stale basis copy and return to Arturo" },
-  { gate: "Atlas Refresh", owner: "Atlas", state: "accepted", evidence: "Retained 4317 preview route/API readback", next: "Refresh again only after this repair/review/QA pass" },
-  { gate: "Elara Rendered Review", owner: "Elara", state: "accepted", evidence: "Owner-eye review of static Work mockups", next: "Re-review this focused basis copy repair" },
-  { gate: "Rowan QA", owner: "Rowan", state: "accepted", evidence: "Browser matrix, mobile, no-overclaim proof", next: "QA retry after Elara accepts the repair" },
-  { gate: "Mara PM Readiness", owner: "Mara", state: "changes_requested", evidence: "Retained 4317 PM freshness check", next: "Pending this focused source repair and next Atlas refresh" },
+  { gate: "Implementation Proof", owner: "Ilya", state: "pending", evidence: "Static route proof, screenshots, no API fixture", next: "Return AOS consumption proof to Arturo" },
+  { gate: "Atlas Refresh", owner: "Atlas", state: "not_started", evidence: "Retained 4317 refresh held", next: "Refresh only after implementation review, Sable, and QA pass" },
+  { gate: "Elara Rendered Review", owner: "Elara", state: "pending", evidence: "Owner-eye review of static Work mockups", next: "Review compact DS-consumed Work routes" },
+  { gate: "Rowan QA", owner: "Rowan", state: "pending", evidence: "Browser matrix, mobile, no-overclaim proof", next: "QA after Elara and Sable accept" },
+  { gate: "Mara PM Readiness", owner: "Mara", state: "not_started", evidence: "PM freshness held", next: "PM retry after Atlas refresh" },
   { gate: "Owner Inspection Handoff", owner: "Mara", state: "not_started", evidence: "Bounded package draft only", next: "No owner handoff before PM freshness acceptance" }
 ];
 
 const evidenceRows = [
   { id: "EVD-41", type: "Command proof", item: "AOS-128", source: "Ilya", artifact: "pnpm aos:frontend-shell-proof", status: "current" },
-  { id: "EVD-42", type: "Screenshot", item: "AOS-142", source: "Ilya", artifact: "/tmp/tcrn-aos-shell-qa/work-*.png", status: "proof artifact target" },
+  { id: "EVD-42", type: "Screenshot", item: "AOS-142", source: "Ilya", artifact: "non-retained QA screenshot capture", status: "proof artifact target" },
   { id: "EVD-43", type: "QA summary", item: "AOS-144", source: "Rowan", artifact: "summary-final.json", status: "superseded by new scope" },
   { id: "EVD-44", type: "API readback", item: "AOS-128", source: "Atlas", artifact: "/api/cockpit 410 deferred", status: "current no-live posture" },
-  { id: "EVD-45", type: "Commit", item: "DS-88", source: "Ilya", artifact: "01714b9", status: "current" },
-  { id: "EVD-46", type: "Preview link", item: "AOS-142", source: "Atlas", artifact: "http://127.0.0.1:4317/", status: "retained refreshed; PM changes requested" }
+  { id: "EVD-45", type: "Commit", item: "DS-88", source: "Ilya", artifact: "33222fa", status: "current" },
+  { id: "EVD-46", type: "Preview link", item: "AOS-142", source: "Atlas", artifact: "http://127.0.0.1:4317/", status: "retained stale until review and refresh" }
 ];
 
 const registeredDsWorkComponentRows: RegisteredDsWorkComponentFixture[] = workManagementPatternRegistry.map((item) => {
   const routeUse: Record<string, { whereUsed: string; consumptionDisposition: string }> = {
-    WorkManagementSubnav: {
+    WorkPageHeader: {
       whereUsed: "/work route set",
-      consumptionDisposition: "Replaces local LinkButton route switcher with package WorkManagementSubnav."
+      consumptionDisposition: "Consumes package WorkPageHeader for compact route context above operational content."
     },
-    WorkBoard: {
+    WorkViewTabs: {
+      whereUsed: "/work route set",
+      consumptionDisposition: "Consumes package WorkViewTabs for local Work route navigation instead of a duplicated chip band."
+    },
+    WorkQuickFilters: {
+      whereUsed: "/work, /work/board, /work/backlog, /work/views/owner-feedback",
+      consumptionDisposition: "Consumes package WorkQuickFilters for fixture-only Work controls without ProductShell global search."
+    },
+    WorkItemRow: {
+      whereUsed: "/work, /work/backlog, /work/views/owner-feedback",
+      consumptionDisposition: "Consumes package WorkItemRow for dense owner-feedback and Work rows."
+    },
+    WorkList: {
+      whereUsed: "/work, /work/backlog, /work/views/owner-feedback",
+      consumptionDisposition: "Consumes package WorkList as the repeated dense list surface."
+    },
+    WorkSplitView: {
+      whereUsed: "/work, /work/board, /work/backlog",
+      consumptionDisposition: "Consumes package WorkSplitView for desktop list/detail composition while mobile uses full detail routes."
+    },
+    WorkBacklogGroup: {
+      whereUsed: "/work/backlog",
+      consumptionDisposition: "Consumes package WorkBacklogGroup for shaped and unshaped static planning groups."
+    },
+    WorkInlineCreateStatic: {
+      whereUsed: "/work/backlog",
+      consumptionDisposition: "Consumes package WorkInlineCreateStatic for disabled no-backend create affordances."
+    },
+    WorkBoardView: {
       whereUsed: "/work/board",
-      consumptionDisposition: "Consumes package WorkBoard lanes and relationship chips instead of local Surface lane CSS."
+      consumptionDisposition: "Consumes package WorkBoardView compact board composition instead of local lane/card CSS."
+    },
+    WorkDetailLayout: {
+      whereUsed: "/work/items/AOS-128 and split preview rails",
+      consumptionDisposition: "Consumes package WorkDetailLayout for main content plus metadata rail."
+    },
+    MetadataRail: {
+      whereUsed: "/work/items/AOS-128 and split preview rails",
+      consumptionDisposition: "Consumes package MetadataRail for compact owner/gate/basis metadata."
+    },
+    WorkFieldPanel: {
+      whereUsed: "/work/items/AOS-128, /work/gates, /work/evidence",
+      consumptionDisposition: "Consumes package WorkFieldPanel for dense field groups and summaries."
+    },
+    WorkActivityFeed: {
+      whereUsed: "/work/items/AOS-128, /work/codex-activity",
+      consumptionDisposition: "Consumes package WorkActivityFeed for route and review activity."
     },
     WorkHierarchy: {
       whereUsed: "/work/initiatives/work-management-mvp",
@@ -359,21 +414,21 @@ const registeredDsWorkComponentRows: RegisteredDsWorkComponentFixture[] = workMa
       whereUsed: "/work/gates",
       consumptionDisposition: "Consumes package GatePipeline for review/readiness sequence without claiming PM or owner acceptance."
     },
+    GatePipelineCompact: {
+      whereUsed: "/work/gates and /work/items/AOS-128",
+      consumptionDisposition: "Consumes package GatePipelineCompact for compact gate summaries."
+    },
     EvidenceAttachmentList: {
       whereUsed: "/work/evidence and /work/items/AOS-128",
       consumptionDisposition: "Consumes package EvidenceAttachmentList for screenshots, artifacts, QA summaries, API readbacks, commits, and previews."
     },
-    WorkItemInspector: {
-      whereUsed: "/work/items/AOS-128",
-      consumptionDisposition: "Consumes package WorkItemInspector for hierarchy, status, subtasks, evidence tasks, and guarded actions."
-    },
-    SavedViewToolbar: {
-      whereUsed: "/work/views/owner-feedback",
-      consumptionDisposition: "Consumes package SavedViewToolbar for saved views and local filters without a topbar search capability."
-    },
     MachineToken: {
       whereUsed: "/work/codex-activity, /work/evidence, and graph fallback",
       consumptionDisposition: "Consumes package MachineToken for long route, thread, commit, artifact, and work-item identifiers."
+    },
+    MachineTokenCell: {
+      whereUsed: "/work/codex-activity, /work/evidence, detail metadata, and compact rows",
+      consumptionDisposition: "Consumes package MachineTokenCell for dense contained machine identifiers."
     }
   };
   const route = routeUse[item.componentName] ?? {
@@ -647,12 +702,13 @@ function workHierarchyEdges(): WorkHierarchyEdge[] {
   ];
 }
 
-function savedViewFilters(locale: TcrnLocale): SavedViewToolbarFilter[] {
+function workQuickFilters(pageId: WorkMockupPageId, locale: TcrnLocale, routeHref: (path: string) => string) {
   return [
-    { id: "owner-feedback", label: "Type", value: translatePhrase("Owner Feedback", locale) },
-    { id: "qa-blocked", label: "Gate", value: locale === "zh-CN" ? "QA 阻塞" : "QA blocked" },
-    { id: "no-overclaim", label: "Boundary", value: locale === "zh-CN" ? "无 readiness 声明" : "No readiness claim" }
-  ].map((filter) => ({ ...filter, label: translateColumn(filter.label.toLowerCase(), locale) }));
+    { id: "owner-feedback", label: translatePhrase("Owner Feedback", locale), value: "AOS-128", href: routeHref("/work/views/owner-feedback"), current: pageId === "ownerFeedbackView", count: 2 },
+    { id: "blocked", label: locale === "zh-CN" ? "阻塞" : "Blocked", value: translatePhrase("PM freshness changes requested", locale), href: routeHref("/work/gates"), current: pageId === "gates", count: 2 },
+    { id: "no-live", label: locale === "zh-CN" ? "边界" : "Boundary", value: locale === "zh-CN" ? "静态 / 无后端" : "Static / no backend", disabled: true, disabledReason: translatePhrase("Static mockup only; route actions are not wired", locale) },
+    { id: "selected", label: locale === "zh-CN" ? "选中项" : "Selected", value: "AOS-128", href: routeHref("/work/items/AOS-128"), current: pageId === "detail" }
+  ];
 }
 
 export function resolveWorkMockupPageId(path: string): WorkMockupPageId {
@@ -697,7 +753,7 @@ export function WorkManagementMockups({ path, locale, theme, collapsed, variant,
       data-work-static-authority-disposition={workStorybookContractAnchors.staticAuthorityDisposition}
       data-work-route-proof-targets={exactWorkRouteProofTargets.join(" ")}
       data-work-mobile-proof-targets={mobileWorkRouteProofTargets.join(" ")}
-      data-work-clean-room-layout="issue-style-tcrn-owned-no-atlassian-assets"
+      data-work-clean-room-layout="tcrn-clean-room-work-layout-no-third-party-assets"
       data-design-system-work-components="registered-package-components"
       data-product-local-work-component-clones="absent"
       data-work-route-acceptance-target={page.path}
@@ -708,34 +764,54 @@ export function WorkManagementMockups({ path, locale, theme, collapsed, variant,
       data-visual-instance-collapsed-readback={collapsed ? "true" : "false"}
       data-work-split-inspector-viewport-policy={showSplitInspector ? "desktop-split" : "mobile-detail-route"}
     >
-      <Surface data-owner-quality-primary-heading="true" data-owner-quality-first-viewport="product-led">
-        <Text data-work-page-eyebrow="true">{localized(page.eyebrow, locale)}</Text>
-        <Heading level={1} visualLevel={2} id="work-heading">
-          {localized(page.title, locale)}
-        </Heading>
-        <Text>{localized(page.description, locale)}</Text>
-        <EvidenceStrip items={[
-          locale === "zh-CN" ? "静态示例数据" : "Static fixture data",
-          locale === "zh-CN" ? "未接 API" : "No API integration",
-          locale === "zh-CN" ? "无实时派发" : "No live dispatch",
-          workStorybookContractAnchors.componentsRoute,
-          workStorybookContractAnchors.patternsRoute
-        ]} />
-      </Surface>
-      <WorkMockupSubnav pageId={pageId} locale={locale} routeHref={routeHref} />
+      <WorkRouteChrome page={page} pageId={pageId} locale={locale} routeHref={routeHref} />
       {renderWorkMockupPage(pageId, locale, routeHref, showSplitInspector)}
     </div>
   );
 }
 
-function WorkMockupSubnav({ pageId, locale, routeHref }: { pageId: WorkMockupPageId; locale: TcrnLocale; routeHref: (path: string) => string }) {
+function WorkRouteChrome({
+  page,
+  pageId,
+  locale,
+  routeHref
+}: {
+  page: WorkMockupPage;
+  pageId: WorkMockupPageId;
+  locale: TcrnLocale;
+  routeHref: (path: string) => string;
+}) {
   return (
-    <div data-work-mockup-nav="package-work-management-subnav">
-      <WorkManagementSubnav
-        label={locale === "zh-CN" ? "工作管理页面" : "Work management pages"}
-        items={workSubnavItems(pageId, locale, routeHref)}
+    <section data-work-route-chrome="compact-ds-public-exports" data-owner-quality-first-viewport="work-operational">
+      <Heading level={1} visualLevel={2} id="work-heading" className="tcrn-work-module-sr-only">
+        {localized(page.title, locale)}
+      </Heading>
+      <WorkPageHeader
+        title={localized(page.title, locale)}
+        description={localized(page.description, locale)}
+        breadcrumbs={[
+          { id: "work", label: locale === "zh-CN" ? "工作" : "Work", href: routeHref("/work") },
+          { id: page.id, label: localized(page.eyebrow, locale) }
+        ]}
+        meta={<MachineTokenCell token={page.path} label={locale === "zh-CN" ? "路由" : "Route"} kind="route" density="compact" />}
+        actions={[
+          {
+            id: "route-action",
+            label: locale === "zh-CN" ? "静态动作" : "Static action",
+            disabledReason: translatePhrase("Static mockup only; route actions are not wired", locale)
+          }
+        ]}
+        density="compact"
       />
-    </div>
+      <WorkViewTabs
+        label={locale === "zh-CN" ? "工作视图" : "Work views"}
+        tabs={workSubnavItems(pageId, locale, routeHref)}
+      />
+      <WorkQuickFilters
+        label={locale === "zh-CN" ? "工作快速过滤" : "Work quick filters"}
+        filters={workQuickFilters(pageId, locale, routeHref)}
+      />
+    </section>
   );
 }
 
@@ -763,30 +839,31 @@ function renderWorkMockupPage(pageId: WorkMockupPageId, locale: TcrnLocale, rout
 }
 
 function QueuePage({ locale, routeHref, showSplitInspector }: { locale: TcrnLocale; routeHref: (path: string) => string; showSplitInspector: boolean }) {
+  const queueList = <WorkList rows={workListRows(locale, routeHref)} label={locale === "zh-CN" ? "优先工作列表" : "Priority work list"} density="compact" />;
   return (
     <>
-      <WorkSavedViewControls pageId="queue" locale={locale} routeHref={routeHref} />
-      <div className="tcrn-product-shell-section-grid" data-package-owned-section-rhythm="work-gates" data-work-page-grid="queue">
-        <Surface data-aos-work-module-entry="owner-quality-work-queue" data-owner-quality-work-queue="true">
-          <Heading level={2}>{locale === "zh-CN" ? "优先队列" : "Priority queue"}</Heading>
-          <WorkIndex rows={workIndexRows(locale)} label={locale === "zh-CN" ? "工作项" : "Work items"} locale={locale} />
-        </Surface>
-        <Surface data-work-dependency-chain="true">
-          <Heading level={2}>{locale === "zh-CN" ? "阻塞链" : "Blocker chain"}</Heading>
-          <WorkChain rows={[
-            ["AOS-142", "implements", "Story: discuss Work flows"],
-            ["AOS-144", "blocked_by", "AOS-142"],
-            ["Owner Inspection", "blocked_by", "Mara PM Readiness"]
-          ]} />
-        </Surface>
+      <section data-aos-work-module-entry="owner-quality-work-queue" data-owner-quality-work-queue="true">
+        {showSplitInspector ? (
+          <WorkSplitView
+            label={locale === "zh-CN" ? "队列与详情预览" : "Queue and detail preview"}
+            list={queueList}
+            detail={<SelectedItemDetailPreview locale={locale} routeHref={routeHref} />}
+            density="compact"
+          />
+        ) : queueList}
+      </section>
+      <div className="tcrn-work-module-secondary-grid">
+        <WorkFieldPanel
+          title={locale === "zh-CN" ? "阻塞链" : "Blocker chain"}
+          items={blockerChainItems(locale)}
+          density="compact"
+        />
+        <WorkFieldPanel
+          title={locale === "zh-CN" ? "关系摘要" : "Relationship summary"}
+          items={relationshipSummaryItems(locale).slice(0, 4)}
+          density="compact"
+        />
       </div>
-      {showSplitInspector ? <SelectedItemSplitInspector locale={locale} routeHref={routeHref} /> : null}
-      <HierarchyDefinitionSummary locale={locale} />
-      <Surface>
-        <Heading level={2}>{locale === "zh-CN" ? "关系摘要" : "Relationship summary"}</Heading>
-        <RelationshipTable locale={locale} rows={relationRows.slice(0, 8)} />
-        <LinkButton href={routeHref("/work/items/AOS-128")} variant="secondary">{locale === "zh-CN" ? "查看 AOS-128 详情" : "Open AOS-128 detail"}</LinkButton>
-      </Surface>
     </>
   );
 }
@@ -794,18 +871,15 @@ function QueuePage({ locale, routeHref, showSplitInspector }: { locale: TcrnLoca
 function BoardPage({ locale, routeHref, showSplitInspector }: { locale: TcrnLocale; routeHref: (path: string) => string; showSplitInspector: boolean }) {
   return (
     <>
-      <WorkSavedViewControls pageId="board" locale={locale} routeHref={routeHref} />
-      <Surface data-aos-work-module-entry="registered-ds-work-board">
-        <Heading level={2}>{locale === "zh-CN" ? "DS 注册 WorkBoard" : "Registered DS WorkBoard"}</Heading>
-        <WorkBoard
+      <section data-aos-work-module-entry="registered-ds-work-board">
+        <WorkBoardView
           label={locale === "zh-CN" ? "工作看板" : "Work board"}
           lanes={workBoardLanes(locale)}
+          density="compact"
+          toolbar={<WorkQuickFilters label={locale === "zh-CN" ? "看板过滤" : "Board filters"} filters={workQuickFilters("board", locale, routeHref)} />}
         />
-        <div data-work-action-row="true">
-          <LinkButton href={routeHref("/work/items/AOS-128")} variant="secondary">{locale === "zh-CN" ? "打开工作项" : "Open item"}</LinkButton>
-        </div>
-      </Surface>
-      {showSplitInspector ? <SelectedItemSplitInspector locale={locale} routeHref={routeHref} /> : null}
+      </section>
+      {showSplitInspector ? <SelectedItemDetailPreview locale={locale} routeHref={routeHref} /> : null}
     </>
   );
 }
@@ -813,57 +887,10 @@ function BoardPage({ locale, routeHref, showSplitInspector }: { locale: TcrnLoca
 function BacklogPage({ locale, routeHref, showSplitInspector }: { locale: TcrnLocale; routeHref: (path: string) => string; showSplitInspector: boolean }) {
   return (
     <>
-      <WorkSavedViewControls pageId="backlog" locale={locale} routeHref={routeHref} />
-      <Surface>
-        <Heading level={2}>{locale === "zh-CN" ? "待收敛输入" : "Inputs needing shaping"}</Heading>
-        <TableShell
-          label={locale === "zh-CN" ? "待整理" : "Backlog"}
-          columns={columns(locale, ["input", "type", "missing", "suggestedOwner"])}
-          rows={[
-            { input: "Owner: search should not exist", type: "Owner Feedback", missing: "Scope already approved", suggestedOwner: "Ilya" },
-            { input: "Work item numbering policy", type: "Open Question", missing: "Global or product-scoped key", suggestedOwner: "Mara" },
-            { input: "Owner can see Work Item?", type: "Open Question", missing: "Visibility policy", suggestedOwner: "Mara" }
-          ].map((row) => localizeRow(row, locale))}
-        />
-      </Surface>
       <BacklogGroupSections locale={locale} />
-      {showSplitInspector ? <SelectedItemSplitInspector locale={locale} routeHref={routeHref} /> : null}
+      {showSplitInspector ? <SelectedItemDetailPreview locale={locale} routeHref={routeHref} /> : null}
       <RegisteredDsWorkComponentsSection locale={locale} />
     </>
-  );
-}
-
-function WorkSavedViewControls({
-  pageId,
-  locale,
-  routeHref
-}: {
-  pageId: WorkMockupPageId;
-  locale: TcrnLocale;
-  routeHref: (path: string) => string;
-}) {
-  const views = workSubnavItems(pageId, locale, routeHref).filter((item) => ["queue", "board", "backlog", "ownerFeedbackView"].includes(item.id));
-  return (
-    <Surface
-      data-work-saved-view-toolbar-wrapper="static-fixture-ds-saved-view-toolbar"
-      data-work-saved-view-toolbar-route={pageId}
-      data-work-static-filter-source="fixture-only"
-    >
-      <SavedViewToolbar
-        label={locale === "zh-CN" ? "Work 保存视图和过滤" : "Work saved views and filters"}
-        views={views}
-        filters={savedViewFilters(locale)}
-        resetLabel={locale === "zh-CN" ? "重置静态过滤" : "Reset static filters"}
-      />
-      <InlineAlert
-        tone="neutral"
-        title={locale === "zh-CN" ? "静态过滤" : "Static filters"}
-      >
-        {locale === "zh-CN"
-          ? "过滤器仅用于设计确认，不写入后端、不派发 route、不创建外部集成。"
-          : "Filters are fixture-only for design confirmation; they do not write backend state, dispatch routes, or create external integrations."}
-      </InlineAlert>
-    </Surface>
   );
 }
 
@@ -871,53 +898,41 @@ function BacklogGroupSections({ locale }: { locale: TcrnLocale }) {
   return (
     <div className="tcrn-product-shell-section-grid" data-work-backlog-groups="shaped-unshaped">
       {backlogGroups.map((group) => (
-        <Surface key={group.id} data-work-backlog-group={group.id}>
-          <Heading level={2}>{translatePhrase(group.title, locale)}</Heading>
-          <TableShell
-            label={translatePhrase(group.title, locale)}
-            columns={columns(locale, ["input", "rank", "missingDecision", "suggestedOwner", "action"])}
-            rows={group.rows.map((row) => ({
-              input: `${translatePhrase(row.input, locale)} · ${translatePhrase(row.type, locale)}`,
-              rank: `${row.rank} / #${row.order}`,
-              missingDecision: translatePhrase(row.missingDecision, locale),
-              suggestedOwner: row.suggestedOwner,
-              action: (
-                <Button disabled disabledReason={translatePhrase(row.disabledAction, locale)}>
-                  {locale === "zh-CN" ? "提升" : "Promote"}
-                </Button>
-              )
-            }))}
+        <div key={group.id} data-work-backlog-group={group.id}>
+          <WorkBacklogGroup
+            title={translatePhrase(group.title, locale)}
+            description={locale === "zh-CN" ? "静态规划分组，无后端写入。" : "Static planning group with no backend writes."}
+            rows={backlogRowsForGroup(group, locale)}
+            actions={[{ id: "route", label: locale === "zh-CN" ? "路由" : "Route", disabledReason: translatePhrase("Route action disabled in static fixture", locale) }]}
+            inlineCreate={{
+              label: locale === "zh-CN" ? "添加静态输入" : "Add static input",
+              disabledReason: translatePhrase(group.rows[0]?.disabledAction ?? "Static mockup only; route actions are not wired", locale),
+              hint: locale === "zh-CN" ? "仅展示布局，不创建后端记录。" : "Layout only; no backend record is created."
+            }}
+            density="compact"
           />
-        </Surface>
+        </div>
       ))}
     </div>
   );
 }
 
-function SelectedItemSplitInspector({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path: string) => string }) {
+function SelectedItemDetailPreview({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path: string) => string }) {
   return (
     <div data-work-split-inspector="AOS-128" data-work-split-inspector-mode="desktop-split-mobile-full-route">
-      <WorkItemInspector
+      <WorkDetailLayout
         title={`AOS-128 · ${locale === "zh-CN" ? "能力边界确认" : "Capability boundary confirmation"}`}
         summary={locale === "zh-CN"
           ? "该静态检查器在队列、看板和待整理页保持同一个选中工作项，并链接到完整详情页。"
           : "This static inspector keeps the selected work item visible across queue, board, and backlog routes and links to the full detail page."}
-        hierarchy={[
-          { key: "initiative", label: "Initiative", value: "AOS product shell recovery" },
-          { key: "story", label: "Story", value: translatePhrase("Owner can inspect the shell capability boundary without fake controls", locale) },
-          { key: "workItem", label: "Work Item", value: <MachineToken token="AOS-128" kind="work-item" /> }
-        ]}
-        details={[
+        state={{ state: "review_required" }}
+        main={<WorkFieldPanel title={locale === "zh-CN" ? "摘要" : "Summary"} items={[
           { key: "selected", label: locale === "zh-CN" ? "选中项" : "Selected item", value: <LinkButton href={routeHref("/work/items/AOS-128")} variant="secondary">AOS-128</LinkButton> },
           { key: "mode", label: locale === "zh-CN" ? "模式" : "Mode", value: locale === "zh-CN" ? "桌面分栏；移动端详情路由" : "Desktop split; mobile detail route" },
           { key: "api", label: "API", value: locale === "zh-CN" ? "未接入" : "Not integrated" }
-        ]}
-        relationships={inspectorRelationships(routeHref)}
-        subtasks={[
-          { id: "split-inspector", title: translatePhrase("Static split inspector", locale), state: { state: "fixture_only" }, owner: "Ilya" },
-          { id: "detail-link", title: translatePhrase("Full detail route remains canonical", locale), state: { state: "review_required" }, owner: "Elara" }
-        ]}
-        evidence={evidenceAttachments(locale).slice(0, 3)}
+        ]} density="compact" />}
+        metadata={<MetadataRail title={locale === "zh-CN" ? "元数据" : "Metadata"} items={detailMetadataItems(locale)} density="compact" />}
+        activity={<WorkActivityFeed items={activityItems(locale).slice(0, 2)} density="compact" />}
         actions={[
           {
             id: "open-detail",
@@ -925,6 +940,7 @@ function SelectedItemSplitInspector({ locale, routeHref }: { locale: TcrnLocale;
             disabledReason: translatePhrase("Static mockup only; route actions are not wired", locale)
           }
         ]}
+        density="compact"
       />
     </div>
   );
@@ -976,41 +992,37 @@ function RegisteredDsWorkComponentNameCell({ item }: { item: RegisteredDsWorkCom
 
 function DetailPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path: string) => string }) {
   return (
-    <WorkItemInspector
+    <WorkDetailLayout
       title={`AOS-128 · ${locale === "zh-CN" ? "移除顶栏全局搜索" : "Remove unsupported global search"}`}
       summary={locale === "zh-CN"
         ? "Owner 认可：AOS 没有真实全局搜索能力，不应展示顶栏搜索框或全局搜索快捷键。"
         : "Owner-approved scope: AOS has no real global search capability, so the shell must not render topbar search or a global search shortcut."}
-      hierarchy={[
-        { key: "initiative", label: "Initiative", value: "AOS product shell recovery" },
-        { key: "epic", label: "Epic", value: "Product Shell Owner Feedback Recovery" },
-        { key: "story", label: "Story", value: "Owner can inspect an AOS shell without fake global search" },
-        { key: "workItem", label: "Work Item", value: <MachineToken token="AOS-128" kind="work-item" /> }
-      ]}
-      details={[
-        { key: "aos", label: "AOS", value: <MachineToken token="cae4d52" label="HEAD" kind="commit" /> },
-        { key: "ds", label: "DS", value: <MachineToken token="01714b9" label="Storybook" kind="commit" /> },
-        { key: "workflow", label: "Workflow", value: <MachineToken token="380232c" label="retained-basis" kind="commit" /> },
-        { key: "preview", label: "Preview", value: translatePhrase("4317 retained preview refreshed; PM freshness retry pending", locale) },
-        { key: "ownerAcceptance", label: "Owner acceptance", value: "not claimed" },
-        { key: "release", label: "Release readiness", value: "not claimed" }
-      ]}
-      relationships={inspectorRelationships(routeHref)}
-      subtasks={[
-        { id: "remove-search", title: translatePhrase("Remove unsupported topbar search prop", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已通过" : "Passed" }, owner: "Ilya" },
-        { id: "url-locale", title: translatePhrase("URL locale canonicalization", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已通过" : "Passed" }, owner: "Ilya" },
-        { id: "refresh-preview", title: translatePhrase("Retained 4317 refresh", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已刷新" : "Refreshed" }, owner: "Atlas" },
-        { id: "professional-qa", title: translatePhrase("Professional QA", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已通过" : "Passed" }, owner: "Rowan" },
-        { id: "pm-freshness-copy-repair", title: translatePhrase("PM freshness basis copy repair", locale), state: { state: "blocked", label: locale === "zh-CN" ? "需要修改" : "Changes requested" }, owner: "Ilya" }
-      ]}
-      evidence={evidenceAttachments(locale)}
+      state={{ state: "blocked", label: locale === "zh-CN" ? "等待 AOS 消费评审" : "Pending AOS consumption review" }}
+      main={<div className="tcrn-work-module-detail-stack">
+        <WorkFieldPanel title={locale === "zh-CN" ? "层级" : "Hierarchy"} items={[
+          { key: "initiative", label: "Initiative", value: "AOS product shell recovery" },
+          { key: "epic", label: "Epic", value: "Product Shell Owner Feedback Recovery" },
+          { key: "story", label: "Story", value: translatePhrase("Owner can inspect an AOS shell without fake global search", locale) },
+          { key: "workItem", label: "Work Item", value: <MachineToken token="AOS-128" kind="work-item" /> }
+        ]} density="compact" />
+        <WorkFieldPanel title={locale === "zh-CN" ? "关系" : "Relationships"} items={inspectorRelationships(routeHref).map((relationship, index) => ({
+          key: `${relationship.relation}-${index}`,
+          label: relationship.relation,
+          value: <RelationshipChip {...relationship} source={relationship.source ?? "AOS-128"} />
+        }))} density="compact" />
+        <GatePipelineCompact label={locale === "zh-CN" ? "门禁摘要" : "Gate summary"} gates={workGatePipeline(locale).slice(0, 5)} />
+        <EvidenceAttachmentList label={locale === "zh-CN" ? "证据" : "Evidence"} items={evidenceAttachments(locale)} density="compact" />
+      </div>}
+      metadata={<MetadataRail title={locale === "zh-CN" ? "元数据" : "Metadata"} items={detailMetadataItems(locale)} density="compact" />}
+      activity={<WorkActivityFeed label={locale === "zh-CN" ? "活动" : "Activity"} items={activityItems(locale)} density="compact" />}
       actions={[
         {
           id: "prepare-owner-package",
           label: locale === "zh-CN" ? "准备 Owner 检查包" : "Prepare owner inspection package",
-          disabledReason: translatePhrase("Owner inspection package remains blocked until PM freshness accepts the repaired retained basis.", locale)
+          disabledReason: translatePhrase("Owner handoff remains blocked until review, QA, retained refresh, and PM freshness pass.", locale)
         }
       ]}
+      density="compact"
     />
   );
 }
@@ -1019,7 +1031,7 @@ function GatesPage({ locale }: { locale: TcrnLocale }) {
   return (
     <Surface data-work-gates-page="true">
       <Heading level={2}>{locale === "zh-CN" ? "门禁聚合" : "Gate aggregation"}</Heading>
-      <GatePipeline label={locale === "zh-CN" ? "门禁流水线" : "Gate pipeline"} gates={workGatePipeline(locale)} />
+      <GatePipelineCompact label={locale === "zh-CN" ? "门禁流水线" : "Gate pipeline"} gates={workGatePipeline(locale)} />
     </Surface>
   );
 }
@@ -1031,6 +1043,7 @@ function EvidencePage({ locale }: { locale: TcrnLocale }) {
       <EvidenceAttachmentList
         label={locale === "zh-CN" ? "证据附件" : "Evidence attachments"}
         items={evidenceAttachments(locale)}
+        density="compact"
       />
     </Surface>
   );
@@ -1041,22 +1054,10 @@ function CodexActivityPage({ locale }: { locale: TcrnLocale }) {
     <Surface data-work-codex-activity-page="true" data-work-codex-activity-contract="attached-execution-evidence-context">
       <Heading level={2}>{locale === "zh-CN" ? "Codex 活动附着在工作项下" : "Codex Activity attaches to Work Items"}</Heading>
       <Text>{locale === "zh-CN" ? "Codex Activity 是附着在 Work Item 下的执行/证据上下文，不替代 Story 或 Task / Work Item。" : "Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item."}</Text>
-      <EvidenceStrip items={[
-        locale === "zh-CN" ? "附着到 Work Item" : "Attached to Work Item",
-        locale === "zh-CN" ? "证据上下文" : "Evidence context",
-        locale === "zh-CN" ? "不替代 Story" : "Not a Story replacement",
-        locale === "zh-CN" ? "不替代 Task / Work Item" : "Not a Task / Work Item replacement"
-      ]} />
-      <TableShell
+      <WorkActivityFeed
         label="Codex Activity"
-        columns={columns(locale, ["route", "item", "thread", "status", "next"])}
-        rows={codexRows.map((row) => ({
-          route: <MachineToken token={row.route} label={translatePhrase(row.routeLabel, locale)} kind="route" />,
-          item: row.item,
-          thread: row.thread,
-          status: translatePhrase(row.status, locale),
-          next: translatePhrase(row.next, locale)
-        }))}
+        items={codexActivityItems(locale)}
+        density="compact"
       />
     </Surface>
   );
@@ -1067,23 +1068,11 @@ function SavedViewPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (
     <>
       <Surface data-work-saved-view="owner-feedback">
         <Heading level={2}>{locale === "zh-CN" ? "保存视图：Owner Feedback" : "Saved view: Owner Feedback"}</Heading>
-        <SavedViewToolbar
-          label={locale === "zh-CN" ? "保存 Work 视图" : "Saved Work views"}
-          views={workSubnavItems("ownerFeedbackView", locale, routeHref).filter((item) => ["queue", "ownerFeedbackView", "gates"].includes(item.id))}
-          filters={savedViewFilters(locale)}
-          resetLabel={locale === "zh-CN" ? "重置视图" : "Reset view"}
-        />
-        <TableShell
+        <WorkQuickFilters label={locale === "zh-CN" ? "保存视图过滤" : "Saved view filters"} filters={workQuickFilters("ownerFeedbackView", locale, routeHref)} />
+        <WorkList
           label="Owner feedback saved view"
-          columns={columns(locale, ["key", "title", "status", "gate", "nextOwner", "blocker"])}
-          rows={workItems.filter((item) => item.type === "Owner Feedback" || item.status === "Blocked").map((item) => ({
-            key: item.key,
-            title: item.title,
-            status: item.status,
-            gate: item.gate,
-            nextOwner: item.nextOwner,
-            blocker: item.blocker
-          }))}
+          rows={workListRows(locale, routeHref).filter((item) => item.id === "AOS-128" || item.id === "AOS-144")}
+          density="compact"
         />
       </Surface>
       <Surface>
@@ -1110,10 +1099,7 @@ function InitiativeGraphPage({ locale }: { locale: TcrnLocale }) {
         />
       </Surface>
       <HierarchyDefinitionSummary locale={locale} />
-      <Surface>
-        <Heading level={2}>{locale === "zh-CN" ? "关系词汇" : "Relationship vocabulary"}</Heading>
-        <RelationshipTable locale={locale} rows={relationRows} />
-      </Surface>
+      <WorkFieldPanel title={locale === "zh-CN" ? "关系词汇" : "Relationship vocabulary"} items={relationshipSummaryItems(locale)} density="compact" />
     </>
   );
 }
@@ -1154,7 +1140,120 @@ function WorkChain({ rows }: { rows: Array<[string, string, string]> }) {
   );
 }
 
-function workIndexRows(locale: TcrnLocale): WorkIndexRow[] {
+function workListRows(locale: TcrnLocale, routeHref: (path: string) => string): WorkItemRowProps[] {
+  const isZh = locale === "zh-CN";
+  return workItems.map((item, index) => {
+    const row: WorkItemRowProps = {
+      id: item.key,
+      title: isZh ? translatePhrase(item.title, locale) : item.title,
+      selected: item.key === "AOS-128",
+      rank: `P${Math.min(index, 2)}`,
+      priority: item.priority,
+      owner: item.assignee,
+      state: item.status === "Blocked" || item.status === "PM Changes Requested"
+        ? { state: "blocked", label: locale === "zh-CN" ? "已阻止" : "Blocked" }
+        : item.status === "Done"
+          ? { state: "local_only", label: locale === "zh-CN" ? "仅本地证明" : "Local proof only" }
+          : { state: "review_required", label: locale === "zh-CN" ? "需要评审" : "Review required" },
+      summary: translatePhrase(item.story, locale),
+      fields: [
+        { key: "status", label: translateColumn("status", locale), value: translatePhrase(item.status, locale) },
+        { key: "gate", label: translateColumn("gate", locale), value: translatePhrase(item.gate, locale) },
+        { key: "nextOwner", label: translateColumn("nextOwner", locale), value: item.nextOwner }
+      ],
+      relationships: item.key === "AOS-128"
+        ? inspectorRelationships().slice(0, 2)
+        : [{ relation: "relates_to", target: item.initiative }]
+    };
+    return row;
+  });
+}
+
+function backlogRowsForGroup(group: typeof backlogGroups[number], locale: TcrnLocale): WorkItemRowProps[] {
+  return group.rows.map((row) => ({
+    id: `${group.id}-${row.order}`,
+    title: translatePhrase(row.input, locale),
+    rank: `${row.rank} / #${row.order}`,
+    priority: translatePhrase(row.type, locale),
+    owner: row.suggestedOwner,
+    state: { state: "review_required" },
+    summary: translatePhrase(row.missingDecision, locale),
+    fields: [
+      { key: "missingDecision", label: translateColumn("missingDecision", locale), value: translatePhrase(row.missingDecision, locale) },
+      { key: "suggestedOwner", label: translateColumn("suggestedOwner", locale), value: row.suggestedOwner },
+      { key: "action", label: translateColumn("action", locale), value: translatePhrase(row.disabledAction, locale) }
+    ]
+  }));
+}
+
+function detailMetadataItems(locale: TcrnLocale): KeyValueItem[] {
+  return [
+    { key: "aos", label: "AOS", value: <MachineTokenCell token={currentAosConsumptionBasis.aos} label="source" kind="generic" density="compact" /> },
+    { key: "ds", label: "DS", value: <MachineTokenCell token={currentAosConsumptionBasis.ds} label="Storybook" kind="commit" density="compact" /> },
+    { key: "workflow", label: "Workflow", value: <MachineTokenCell token={currentAosConsumptionBasis.workflow} label="plan" kind="commit" density="compact" /> },
+    { key: "preview", label: "Preview", value: translatePhrase("4317 retained preview remains stale until post-review refresh", locale) },
+    { key: "ownerAcceptance", label: "Owner acceptance", value: "not claimed" },
+    { key: "release", label: "Release readiness", value: "not claimed" }
+  ];
+}
+
+function activityItems(locale: TcrnLocale) {
+  return [
+    {
+      id: "aos-consumption",
+      actor: "Ilya",
+      action: translatePhrase("AOS consumes DS Work density exports", locale),
+      timestamp: "2026-07-05",
+      summary: locale === "zh-CN" ? "使用公开 DS API 重组 Work 页面；不刷新保留预览。" : "Recompose Work pages with public DS APIs; retained preview is not refreshed.",
+      state: { state: "review_required" }
+    },
+    {
+      id: "sable-required",
+      actor: "Sable",
+      action: translatePhrase("Post-consumption clean-room re-review required", locale),
+      timestamp: "pending",
+      summary: locale === "zh-CN" ? "AOS 消费后仍需 clean-room 复审。" : "Clean-room re-review remains required after AOS consumption.",
+      state: { state: "blocked" }
+    },
+    {
+      id: "owner-visible-held",
+      actor: "Arturo",
+      action: translatePhrase("Owner-visible refresh held", locale),
+      timestamp: "pending",
+      summary: locale === "zh-CN" ? "Atlas 刷新必须等待评审和 QA。" : "Atlas refresh waits for review and QA.",
+      state: { state: "not_claimed" }
+    }
+  ];
+}
+
+function codexActivityItems(locale: TcrnLocale) {
+  return codexRows.map((row) => ({
+    id: row.item,
+    actor: row.thread,
+    action: translatePhrase(row.routeLabel, locale),
+    timestamp: translatePhrase(row.status, locale),
+    summary: <MachineToken token={row.route} label={translatePhrase(row.routeLabel, locale)} kind="route" />,
+    state: { state: row.status === "success" ? "local_only" : row.status === "superseded" ? "not_claimed" : "review_required" }
+  }));
+}
+
+function blockerChainItems(locale: TcrnLocale): KeyValueItem[] {
+  return [
+    { key: "AOS-142", label: "AOS-142", value: `implements · ${translatePhrase("Story: PM can discuss Work flows", locale)}` },
+    { key: "AOS-144", label: "AOS-144", value: `blocked_by · AOS-142` },
+    { key: "owner-inspection", label: "Owner Inspection", value: `blocked_by · ${translatePhrase("Mara PM Readiness", locale)}` }
+  ];
+}
+
+function relationshipSummaryItems(locale: TcrnLocale): KeyValueItem[] {
+  return relationRows.map((row) => ({
+    key: `${row.source}-${row.relation}-${row.target}`,
+    label: row.relation,
+    value: `${row.source} → ${row.target}: ${translatePhrase(row.note, locale)}`
+  }));
+}
+
+function workIndexRows(locale: TcrnLocale) {
   const isZh = locale === "zh-CN";
   return workItems.map((item) => ({
     id: item.key,
@@ -1264,7 +1363,7 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "PM Changes Requested": "PM 要求修改",
     "PM freshness changes requested": "PM freshness 要求修改",
     "Stale basis/posture copy on refreshed retained preview": "已刷新保留预览里仍有过期 basis / 姿态文案",
-    "Retained 4317 is refreshed, but Mara requested a basis/posture copy repair before owner handoff.": "4317 保留预览已刷新，但 Mara 要求先修复 basis / 姿态文案后再进入 owner handoff。",
+    "Retained 4317 remains stale until this AOS consumption slice passes review and refresh gates.": "4317 保留预览在本次 AOS 消费切片通过评审和刷新门禁前保持过期。",
     "Owner request: Work visibility": "Owner 请求：Work 可视化",
     "DS component gap list": "DS 组件缺口列表",
     "Registered DS Work components": "已注册 DS Work 组件",
@@ -1274,7 +1373,7 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "Mobile zh-CN no-overflow regression": "移动端 zh-CN 无溢出回归",
     "AOS-128 No global search": "AOS-128 无全局搜索",
     "Work Management subnav/tabs pattern": "Work Management 子导航 / 标签模式",
-    "Work Board / Kanban lane composite": "Work Board / 看板泳道组合",
+    "Work Board / compact lane composite": "Work Board / 紧凑泳道组合",
     "Work hierarchy graph / dependency map composite": "工作层级图 / 依赖地图组合",
     "Relationship chip/link primitive": "关系标签 / 链接基础组件",
     "Gate pipeline / compliance table pattern": "门禁流水线 / 合规表模式",
@@ -1321,13 +1420,13 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "URL locale authority": "URL locale 权威",
     "DS contract accepted": "DS 合同已接受",
     "Accepted on the AOS rebuild basis": "AOS 重建 basis 已接受",
-    "Repair stale basis copy and return to Arturo": "修复过期 basis 文案并返回 Arturo",
-    "Retained 4317 preview route/API readback": "4317 保留预览 route/API 读回",
-    "Refresh again only after this repair/review/QA pass": "仅在本次修复、评审和 QA 通过后再次刷新",
-    "Re-review this focused basis copy repair": "复审本次聚焦 basis 文案修复",
-    "QA retry after Elara accepts the repair": "Elara 接受修复后重跑 QA",
-    "Retained 4317 PM freshness check": "4317 保留预览 PM freshness 检查",
-    "Pending this focused source repair and next Atlas refresh": "等待本次聚焦源码修复和下一轮 Atlas 刷新",
+    "Return AOS consumption proof to Arturo": "将 AOS 消费证明返回 Arturo",
+    "Retained 4317 refresh held": "4317 保留预览刷新保持暂停",
+    "Refresh only after implementation review, Sable, and QA pass": "仅在实现评审、Sable 和 QA 通过后刷新",
+    "Review compact DS-consumed Work routes": "评审紧凑 DS 消费 Work 路由",
+    "QA after Elara and Sable accept": "Elara 和 Sable 接受后进入 QA",
+    "PM freshness held": "PM freshness 保持暂停",
+    "PM retry after Atlas refresh": "Atlas 刷新后再进行 PM 重试",
     "No owner handoff before PM freshness acceptance": "PM freshness 接受前不进行 owner handoff",
     "No owner handoff yet": "尚无 owner handoff",
     "No downstream claim": "不声明下游通过",
@@ -1336,7 +1435,7 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "Refresh 4317 preview": "刷新 4317 预览",
     "Retained 4317 refresh": "4317 保留预览刷新",
     "PM freshness basis copy repair": "PM freshness basis 文案修复",
-    "4317 retained preview refreshed; PM freshness retry pending": "4317 保留预览已刷新；等待 PM freshness 重试",
+    "4317 retained preview remains stale until post-review refresh": "4317 保留预览在评审后刷新前保持过期",
     "Owner inspection package remains blocked until PM freshness accepts the repaired retained basis.": "Owner 检查包仍保持阻塞，直到 PM freshness 接受修复后的保留预览 basis。",
     "Professional QA": "专业 QA",
     "Command proof": "命令证明",
@@ -1348,7 +1447,7 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "proof artifact target": "证明 artifact 目标",
     "superseded by new scope": "已被新范围替代",
     "pending refresh": "等待刷新",
-    "retained refreshed; PM changes requested": "保留预览已刷新；PM 要求修改",
+    "retained stale until review and refresh": "保留预览待评审和刷新",
     "Shaped for design confirmation": "已收敛用于设计确认",
     "Unshaped owner inputs": "待收敛 owner 输入",
     "AOS-142 Work module route matrix": "AOS-142 Work 模块路由矩阵",
@@ -1362,6 +1461,9 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "Route action disabled in static fixture": "静态示例中 route 动作禁用",
     "Promote blocked until PM shapes numbering scope": "等待 PM 收敛编号范围后才能提升",
     "Route action disabled; no owner handoff in this route": "route 动作禁用；本路由不进行 owner 交接",
+    "Owner handoff remains blocked until review, QA, retained refresh, and PM freshness pass.": "Owner 交接需等待评审、QA、保留预览刷新和 PM freshness 通过。",
+    "AOS consumption review is required before retained refresh.": "保留预览刷新前需要 AOS 消费评审。",
+    "Next retained 4317 refresh is held until AOS consumption review and QA pass.": "下一次 4317 保留预览刷新需等待 AOS 消费评审和 QA 通过。",
     changes_requested: "需要修改",
     "Blocked until gates pass": "门禁通过前阻塞",
     Backlog: "待整理",

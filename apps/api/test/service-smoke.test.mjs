@@ -76,8 +76,8 @@ test("local service serves the AOS shell while backend readbacks stay available"
       assert.match(html, /data-owner-quality-product-shell-oracle="true"/);
       assert.match(html, /data-design-system-source="@tcrn\/ui-react @tcrn\/ui-tokens @tcrn\/ui-copy-state"/);
       assert.match(html, /data-storybook-visual-instance-consumed="aos-owner-quality-product-shell"/);
-      assert.match(html, /data-owner-quality-first-viewport="product-led"/);
       if (target.startsWith("/work")) {
+        assert.match(html, /data-owner-quality-first-viewport="work-operational"/);
         assert.match(html, /data-work-management-mockup="storybook-ds-work-management-v1"/);
         assert.match(html, /data-work-management-static-fixture="true"/);
         assert.match(html, /data-work-management-api-integration="absent"/);
@@ -94,7 +94,7 @@ test("local service serves the AOS shell while backend readbacks stay available"
         assert.match(html, /data-work-static-authority-disposition="aos_static_work_mockup_consumes_storybook_ds_work_management_contract"/);
         assert.match(html, /data-work-route-proof-targets="\/work \/work\/board \/work\/backlog \/work\/items\/AOS-128 \/work\/views\/owner-feedback \/work\/gates \/work\/evidence \/work\/codex-activity \/work\/initiatives\/work-management-mvp"/);
         assert.match(html, /data-work-mobile-proof-targets="\/work\/backlog\?locale=zh-CN&amp;theme=dark \/work\/items\/AOS-128\?locale=zh-CN&amp;theme=dark \/work\/initiatives\/work-management-mvp\?locale=zh-CN&amp;theme=dark"/);
-        assert.match(html, /data-work-clean-room-layout="issue-style-tcrn-owned-no-atlassian-assets"/);
+        assert.match(html, /data-work-clean-room-layout="tcrn-clean-room-work-layout-no-third-party-assets"/);
         assert.match(html, /data-design-system-work-components="registered-package-components"/);
         assert.match(html, /data-product-local-work-component-clones="absent"/);
         assert.match(html, new RegExp(`data-work-route-acceptance-target="${target.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`));
@@ -103,6 +103,7 @@ test("local service serves the AOS shell while backend readbacks stay available"
         assert.doesNotMatch(bodyHtml, /data-doc-shell|tcrn-doc-shell|tcrn-doc-header|tcrn-doc-sidebar|tcrn-doc-nav/);
         assert.doesNotMatch(bodyHtml, /tcrn-product-shell-search|tcrn-search-input|data-product-shell-search-results|data-search-result/);
       } else {
+        assert.match(html, /data-owner-quality-first-viewport="product-led"/);
         assert.match(html, /data-owner-quality-work-queue="true"/);
         assert.match(html, /data-owner-quality-gates="true"/);
         assert.match(html, /data-owner-quality-actions="true"/);
@@ -146,10 +147,13 @@ test("local service serves the AOS shell while backend readbacks stay available"
         assert.equal(html.includes(label), false, `${label} is not rendered in owner-quality shell HTML`);
       }
       if (target === "/work/items/AOS-128") {
-        assert.match(html, /data-full-token="cae4d52"/);
+        assert.match(html, /post-review-source/);
+        assert.match(html, /33222fa/);
+        assert.match(html, /d17bdc6/);
+        assert.doesNotMatch(html, /cae4d52/);
         assert.doesNotMatch(html, /7836dca/);
-        assert.match(html, /4317 retained preview refreshed; PM freshness retry pending/);
-        assert.match(html, /Owner inspection package remains blocked until PM freshness accepts the repaired retained basis\./);
+        assert.match(html, /4317 retained preview remains stale until post-review refresh/);
+        assert.doesNotMatch(html, /Owner inspection package remains blocked until PM freshness accepts the repaired retained basis\./);
         assert.doesNotMatch(html, /Owner inspection package is blocked until gates pass/);
       }
     }

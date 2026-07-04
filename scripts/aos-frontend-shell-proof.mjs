@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 import { createServer } from "node:http";
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { extname, join } from "node:path";
 import { findForbiddenPositiveClaimHits, tcrnLocaleMetadata } from "@tcrn/ui-copy-state";
@@ -11,7 +12,7 @@ import { startAosLocalServiceProof } from "../dist/apps/api/src/server.js";
 const shellPath = new URL("../apps/web/dist/index.html", import.meta.url);
 assert.equal(existsSync(shellPath), true, "apps/web/dist/index.html exists after pnpm build");
 
-const screenshotRoot = "/tmp/tcrn-aos-shell-qa";
+const screenshotRoot = join(tmpdir(), "tcrn-aos-shell-qa");
 rmSync(screenshotRoot, { recursive: true, force: true });
 mkdirSync(screenshotRoot, { recursive: true });
 
@@ -136,17 +137,43 @@ const requiredRegisteredWorkComponentNames = [
   "EvidenceAttachmentList",
   "WorkItemInspector",
   "SavedViewToolbar",
-  "MachineToken"
+  "MachineToken",
+  "MachineTokenCell",
+  "WorkPageHeader",
+  "WorkViewTabs",
+  "WorkQuickFilters",
+  "WorkItemRow",
+  "WorkList",
+  "WorkSplitView",
+  "WorkBacklogGroup",
+  "WorkInlineCreateStatic",
+  "WorkBoardView",
+  "WorkDetailLayout",
+  "MetadataRail",
+  "WorkFieldPanel",
+  "WorkActivityFeed",
+  "GatePipelineCompact"
 ];
 
 const requiredWorkManagementPatterns = [
-  "subnav",
+  "machine-token-cell",
+  "work-page-header",
+  "work-view-tabs",
+  "work-quick-filters",
+  "work-item-row",
+  "work-list",
+  "work-split-view",
+  "work-backlog-group",
+  "work-inline-create-static",
   "work-board",
+  "work-board-view",
+  "work-detail-layout",
+  "metadata-rail",
+  "work-field-panel",
+  "work-activity-feed",
   "work-hierarchy",
   "gate-pipeline",
-  "evidence-attachment-list",
-  "work-item-inspector",
-  "saved-view-toolbar"
+  "evidence-attachment-list"
 ];
 
 const acceptedVisualInstanceOracle = {
@@ -310,8 +337,8 @@ const acceptedVisualInstanceOracle = {
         reducedMotion: "false",
         content: "work"
       },
-      requiredText: ["工作项", "状态", "负责人", "需要评审", "已阻止", "未配置", "仅本地证明"],
-      forbiddenText: ["Work item", "State", "Unknown", "Blocked", "Not configured", "Local proof only"]
+      requiredText: ["工作队列", "需要评审", "已阻止", "仅本地证明"],
+      forbiddenText: ["Work item", "State", "Unknown", "Blocked", "Not configured", "Local proof only", "Jira", "Atlassian"]
     },
     {
       id: "reduced-motion",
@@ -518,7 +545,7 @@ try {
       routeAcceptanceTarget: body.includes(`data-work-route-acceptance-target="${route}"`),
       registeredComponents: body.includes('data-design-system-work-components="registered-package-components"'),
       localClonesAbsent: body.includes('data-product-local-work-component-clones="absent"'),
-      cleanRoomLayout: body.includes('data-work-clean-room-layout="issue-style-tcrn-owned-no-atlassian-assets"'),
+      cleanRoomLayout: body.includes('data-work-clean-room-layout="tcrn-clean-room-work-layout-no-third-party-assets"'),
       exactRouteTargets: requiredWorkRouteProofTargets.every((target) => body.includes(target.replaceAll("&", "&amp;"))),
       mobileRouteTargets: requiredMobileWorkRouteProofTargets.every((target) => body.includes(target.replaceAll("&", "&amp;"))),
       forbiddenVisibleBrandHits: forbiddenWorkVisibleBrandTerms.filter((term) => body.includes(term)),
@@ -543,7 +570,8 @@ try {
       html: response.headers.get("content-type")?.includes("text/html") ?? false,
       shellMarker: body.includes('data-aos-shell="owner-quality-product-shell"'),
       ownerQualityMarker: body.includes('data-owner-quality-product-shell-oracle="true"'),
-      productLedMarker: body.includes('data-owner-quality-first-viewport="product-led"'),
+      productLedMarker: body.includes('data-owner-quality-first-viewport="product-led"')
+        || body.includes('data-owner-quality-first-viewport="work-operational"'),
       workMarker: body.includes('data-aos-work-module-entry="owner-quality-work-queue"') || staticWorkMockup.present,
       staticWorkMockup,
       registeredNavigationOnly: body.includes('data-registered-navigation-only="true"'),
@@ -1161,8 +1189,9 @@ async function runBrowserProof(baseUrl) {
       const viewportWidth = window.innerWidth;
       const contentStack = readElement(".tcrn-product-shell-content-stack");
       const sectionGrid = readElement(".tcrn-product-shell-section-grid");
+      const routeChrome = readElement('[data-work-route-chrome="compact-ds-public-exports"]');
       const workSurface = readElement('[data-owner-quality-work-queue="true"]');
-      const blockerChainSurface = readElement('[data-work-dependency-chain="true"]');
+      const secondaryGrid = readElement(".tcrn-work-module-secondary-grid");
       const tableShells = Array.from(document.querySelectorAll(".tcrn-table-shell")).map((element) => {
         const rect = element.getBoundingClientRect();
         const style = getComputedStyle(element);
@@ -1183,17 +1212,21 @@ async function runBrowserProof(baseUrl) {
         pageHasHorizontalOverflow: html.scrollWidth > viewportWidth + 1 || body.scrollWidth > viewportWidth + 1,
         contentStack,
         sectionGrid,
+        routeChrome,
         workSurface,
-        blockerChainSurface,
+        secondaryGrid,
         tableShells,
         tableInternalScrollAllowed: tableShells.every((table) => table.overflowX === "auto" && table.right <= viewportWidth + 1)
       };
     });
     assert.equal(mobileOverflowReadback.pageHasHorizontalOverflow, false, "mobile shell has no horizontal page overflow");
     assert.equal(mobileOverflowReadback.contentStack.scrollWidth <= mobileOverflowReadback.contentStack.clientWidth + 1, true, "mobile content stack contains its grid track within the viewport column");
-    assert.equal(mobileOverflowReadback.sectionGrid.scrollWidth <= mobileOverflowReadback.sectionGrid.clientWidth + 1, true, "mobile section grid contains its package rhythm track within the viewport column");
+    if (mobileOverflowReadback.sectionGrid) {
+      assert.equal(mobileOverflowReadback.sectionGrid.scrollWidth <= mobileOverflowReadback.sectionGrid.clientWidth + 1, true, "mobile section grid contains its package rhythm track within the viewport column");
+    }
+    assert.equal(mobileOverflowReadback.routeChrome.scrollWidth <= mobileOverflowReadback.routeChrome.clientWidth + 1, true, "mobile compact Work route chrome stays within the viewport column");
     assert.equal(mobileOverflowReadback.workSurface.right <= mobileOverflowReadback.viewportWidth + 1, true, "mobile Work surface stays within the viewport");
-    assert.equal(mobileOverflowReadback.blockerChainSurface.right <= mobileOverflowReadback.viewportWidth + 1, true, "mobile static blocker-chain surface stays within the viewport");
+    assert.equal(mobileOverflowReadback.secondaryGrid.right <= mobileOverflowReadback.viewportWidth + 1, true, "mobile secondary Work summary grid stays within the viewport");
     assert.equal(mobileOverflowReadback.tableInternalScrollAllowed, true, "mobile table overflow remains contained to table scrollers, not page-level overflow");
     assert.equal(await mobilePage.locator('[data-tcrn-brand-mark="registered"]').isVisible(), true, "mobile registered brand mark remains visible");
     await mobileContext.close();
@@ -1339,7 +1372,18 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           forbiddenClassHits: Array.from(root.querySelectorAll("[class]"))
             .map((node) => node.getAttribute("class") ?? "")
             .filter((className) => /jira|atlassian|openproject|linear|plane|huly|twenty/i.test(className)),
-          savedViewToolbarWrapperCount: root.querySelectorAll("[data-work-saved-view-toolbar-wrapper]").length,
+          workRouteChromeCount: root.querySelectorAll('[data-work-route-chrome="compact-ds-public-exports"]').length,
+          workPageHeaderCount: root.querySelectorAll('[data-work-management-pattern="work-page-header"]').length,
+          workViewTabsCount: root.querySelectorAll('[data-work-management-pattern="work-view-tabs"]').length,
+          workQuickFiltersCount: root.querySelectorAll('[data-work-management-pattern="work-quick-filters"]').length,
+          workListCount: root.querySelectorAll('[data-work-management-pattern="work-list"]').length,
+          workSplitViewCount: root.querySelectorAll('[data-work-management-pattern="work-split-view"]').length,
+          workBoardViewCount: root.querySelectorAll('[data-work-management-pattern="work-board-view"]').length,
+          workBacklogGroupCount: root.querySelectorAll('[data-work-management-pattern="work-backlog-group"]').length,
+          workInlineCreateStaticCount: root.querySelectorAll('[data-work-management-pattern="work-inline-create-static"]').length,
+          workDetailLayoutCount: root.querySelectorAll('[data-work-management-pattern="work-detail-layout"]').length,
+          metadataRailCount: root.querySelectorAll('[data-work-management-pattern="metadata-rail"]').length,
+          workActivityFeedCount: root.querySelectorAll('[data-work-management-pattern="work-activity-feed"]').length,
           splitInspectorCount: root.querySelectorAll("[data-work-split-inspector='AOS-128']").length,
           detailRouteLinkCount: root.querySelectorAll('a[href^="/work/items/AOS-128"], a[href*="/work/items/AOS-128?"]').length,
           backlogGroupIds: Array.from(root.querySelectorAll("[data-work-backlog-group]")).map((node) => node.getAttribute("data-work-backlog-group")),
@@ -1405,16 +1449,18 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
             text: token.textContent?.replace(/\s+/g, " ").trim() ?? ""
           }));
           return {
-            present: Boolean(document.querySelector('[data-work-management-pattern="work-item-inspector"]')),
-            currentAosBasisVisible: text.includes("cae4d52") || machineTokens.some((token) => token.fullToken === "cae4d52"),
+            present: Boolean(document.querySelector('[data-work-management-pattern="work-detail-layout"]')),
+            sourceLocalBasisVisible: text.includes("post-review-source") || machineTokens.some((token) => token.fullToken === "post-review-source"),
             staleAosBasisVisible: text.includes("7836dca") || machineTokens.some((token) => token.fullToken === "7836dca"),
-            dsBasisVisible: text.includes("01714b9") || machineTokens.some((token) => token.fullToken === "01714b9"),
-            workflowBasisVisible: text.includes("380232c") || machineTokens.some((token) => token.fullToken === "380232c"),
+            priorAosBasisVisible: text.includes("cae4d52") || machineTokens.some((token) => token.fullToken === "cae4d52"),
+            dsBasisVisible: text.includes("33222fa") || machineTokens.some((token) => token.fullToken === "33222fa"),
+            workflowBasisVisible: text.includes("d17bdc6") || machineTokens.some((token) => token.fullToken === "d17bdc6"),
             previewPendingAtlasRefreshVisible: text.includes("pending Atlas refresh") || text.includes("等待 Atlas 刷新"),
             retainedRefreshPostureVisible: text.includes("4317 retained preview refreshed") || text.includes("4317 保留预览已刷新"),
             pmFreshnessRetryVisible: text.includes("PM freshness retry pending") || text.includes("PM freshness 重试"),
             staleOwnerInspectionGateVisible: text.includes("Owner inspection package is blocked until gates pass"),
-            ownerInspectionStillGuardedVisible: text.includes("Owner inspection package remains blocked until PM freshness accepts"),
+            ownerInspectionStillGuardedVisible: text.includes("Owner handoff remains blocked") || text.includes("Owner 交接需等待"),
+            retainedPreviewStaleUntilReviewVisible: text.includes("4317 retained preview remains stale until post-review refresh") || text.includes("4317 保留预览在评审后刷新前保持过期"),
             ownerAcceptanceClaimed: text.includes("Owner acceptance: accepted") || text.includes("Release ready"),
             machineTokens
           };
@@ -1433,7 +1479,7 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
         }
 
         function readCodexActivityRouteReadability() {
-          const routeSummaries = Array.from(document.querySelectorAll(".tcrn-machine-token[data-machine-token-kind='route']"));
+          const routeSummaries = Array.from(document.querySelectorAll(".tcrn-work-activity-feed .tcrn-machine-token[data-machine-token-kind='route']"));
           if (routeSummaries.length === 0) {
             return {
               routeSummaryCount: 0,
@@ -1445,25 +1491,28 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           }
           const rows = routeSummaries.map((summary) => {
             const cell = summary.closest(".tcrn-table-shell__cell");
+            const activityItem = summary.closest(".tcrn-work-activity-feed__item");
+            const container = cell ?? activityItem ?? summary.parentElement;
             const row = cell?.closest(".tcrn-table-shell__row");
             const cells = row ? Array.from(row.querySelectorAll(".tcrn-table-shell__cell")) : [];
             const cellIndex = cell ? cells.indexOf(cell) : -1;
             const nextCell = cellIndex >= 0 ? cells[cellIndex + 1] : null;
             const token = summary.querySelector(".tcrn-machine-token__value");
-            const cellRect = cell?.getBoundingClientRect();
+            const cellRect = container?.getBoundingClientRect();
             const nextRect = nextCell?.getBoundingClientRect();
             const tokenRect = token?.getBoundingClientRect();
             const tokenStyle = token ? getComputedStyle(token) : null;
             const fullRouteId = summary.getAttribute("data-full-token") ?? "";
+            const containerOverflows = container ? container.scrollWidth > container.clientWidth + 1 : true;
             return {
               fullRouteId,
               title: summary.getAttribute("title"),
               label: summary.querySelector(".tcrn-machine-token__label")?.textContent?.trim() ?? "",
               token: token?.textContent?.trim() ?? "",
               cellWidth: cellRect ? Number(cellRect.width.toFixed(3)) : null,
-              cellClientWidth: cell?.clientWidth ?? null,
-              cellScrollWidth: cell?.scrollWidth ?? null,
-              cellOverflows: cell ? cell.scrollWidth > cell.clientWidth + 1 : true,
+              cellClientWidth: container?.clientWidth ?? null,
+              cellScrollWidth: container?.scrollWidth ?? null,
+              cellOverflows: containerOverflows,
               tokenRight: tokenRect ? Number(tokenRect.right.toFixed(3)) : null,
               nextCellLeft: nextRect ? Number(nextRect.left.toFixed(3)) : null,
               tokenOverlapsNextCell: Boolean(tokenRect && nextRect && tokenRect.right > nextRect.left + 1),
@@ -1499,7 +1548,7 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
       assert.equal(readback.staticAuthorityDisposition, requiredWorkStorybookContractAnchors.staticAuthorityDisposition, `${route.id} records static authority disposition`);
       assert.deepEqual(readback.routeProofTargets, requiredWorkRouteProofTargets, `${route.id} records exact Work proof route targets`);
       assert.deepEqual(readback.mobileProofTargets, requiredMobileWorkRouteProofTargets, `${route.id} records mobile Work proof route targets`);
-      assert.equal(readback.cleanRoomLayout, "issue-style-tcrn-owned-no-atlassian-assets", `${route.id} records clean-room issue-style layout boundary`);
+      assert.equal(readback.cleanRoomLayout, "tcrn-clean-room-work-layout-no-third-party-assets", `${route.id} records clean-room third-party-free layout boundary`);
       assert.equal(readback.routeAcceptanceTarget, route.path, `${route.id} records exact route acceptance marker`);
       assert.equal(readback.selectedRoute, "page", `${route.id} keeps Work nav selected`);
       assert.equal(readback.h1Count, 1, `${route.id} has exactly one H1`);
@@ -1514,9 +1563,13 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
       assert.equal(readback.ownerAcceptanceClaimed, false, `${route.id} has no owner/release positive claim`);
       assert.equal(readback.codexActivityAttachedToWorkItem, true, `${route.id} keeps Codex activity attached to Work Items`);
       assert.equal(readback.staleNeededDsListPresent, false, `${route.id} does not render the superseded needed-DS gap list`);
-      assert.equal(readback.workManagementPatternReadback.patterns.includes("subnav"), true, `${route.id} consumes DS WorkManagementSubnav`);
+      assert.equal(readback.workRouteChromeCount, 1, `${route.id} renders compact DS Work route chrome`);
+      assert.equal(readback.workPageHeaderCount, 1, `${route.id} consumes DS WorkPageHeader`);
+      assert.equal(readback.workViewTabsCount, 1, `${route.id} consumes DS WorkViewTabs`);
+      assert.equal(readback.workQuickFiltersCount >= 1, true, `${route.id} consumes DS WorkQuickFilters`);
       if (route.id === "backlog") {
-        assert.equal(readback.savedViewToolbarWrapperCount, 1, "Backlog route wraps package SavedViewToolbar in the local static filter shell");
+        assert.equal(readback.workBacklogGroupCount, 2, "Backlog route renders compact DS WorkBacklogGroup sections");
+        assert.equal(readback.workInlineCreateStaticCount, 2, "Backlog route renders disabled DS WorkInlineCreateStatic affordances");
         assert.equal(readback.splitInspectorCount, 1, "Backlog route renders the selected item split inspector");
         assert.equal(readback.detailRouteLinkCount > 0, true, "Backlog split inspector links to the canonical AOS-128 detail route");
         assert.deepEqual(readback.backlogGroupIds, ["shaped", "unshaped"], "Backlog route renders shaped and unshaped groups");
@@ -1542,30 +1595,33 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
         );
       }
       if (route.id === "board") {
-        assert.equal(readback.savedViewToolbarWrapperCount, 1, "Board route wraps package SavedViewToolbar for static board filters");
+        assert.equal(readback.workBoardViewCount, 1, "Board route consumes DS WorkBoardView");
         assert.equal(readback.splitInspectorCount, 1, "Board route renders the selected item split inspector");
         assert.equal(readback.detailRouteLinkCount > 0, true, "Board split inspector links to the canonical AOS-128 detail route");
         assert.equal(readback.workManagementPatternReadback.patterns.includes("work-board"), true, "Board route consumes DS WorkBoard");
         assert.equal(readback.workManagementPatternReadback.relationshipChipCount > 0, true, "Board route renders DS RelationshipChip entries");
       }
       if (route.id === "queue") {
-        assert.equal(readback.savedViewToolbarWrapperCount, 1, "Queue route wraps package SavedViewToolbar for static queue filters");
+        assert.equal(readback.workSplitViewCount, 1, "Queue route consumes DS WorkSplitView");
+        assert.equal(readback.workListCount >= 1, true, "Queue route consumes DS WorkList");
         assert.equal(readback.splitInspectorCount, 1, "Queue route renders the selected item split inspector");
         assert.equal(readback.detailRouteLinkCount > 0, true, "Queue split inspector links to the canonical AOS-128 detail route");
       }
       if (route.id === "detail") {
-        assert.equal(readback.workManagementPatternReadback.patterns.includes("work-item-inspector"), true, "Detail route consumes DS WorkItemInspector");
+        assert.equal(readback.workManagementPatternReadback.patterns.includes("work-detail-layout"), true, "Detail route consumes DS WorkDetailLayout");
         assert.equal(readback.workManagementPatternReadback.patterns.includes("evidence-attachment-list"), true, "Detail route consumes DS EvidenceAttachmentList inside the inspector");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.present, true, "Detail route exposes the Work item inspector basis readback");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.currentAosBasisVisible, true, "Detail route surfaces current AOS cae4d52 basis");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.present, true, "Detail route exposes the Work detail layout basis readback");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.sourceLocalBasisVisible, true, "Detail route surfaces source-local AOS consumption basis without stale commit claim");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.staleAosBasisVisible, false, "Detail route does not surface stale AOS 7836dca basis");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.dsBasisVisible, true, "Detail route keeps current DS 01714b9 basis visible");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.workflowBasisVisible, true, "Detail route keeps Workflow 380232c basis visible");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.previewPendingAtlasRefreshVisible, false, "Detail route no longer says pending Atlas refresh after retained 4317 was refreshed");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.retainedRefreshPostureVisible, true, "Detail route states retained 4317 was refreshed");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.pmFreshnessRetryVisible, true, "Detail route keeps PM freshness retry pending without claiming acceptance");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.priorAosBasisVisible, false, "Detail route does not surface prior AOS cae4d52 basis as current");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.dsBasisVisible, true, "Detail route keeps current DS 33222fa basis visible");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.workflowBasisVisible, true, "Detail route keeps Workflow d17bdc6 plan basis visible");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.previewPendingAtlasRefreshVisible, false, "Detail route does not say pending Atlas refresh as a stale pre-Atlas blocker");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.retainedRefreshPostureVisible, false, "Detail route does not claim retained 4317 was refreshed for this source basis");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.pmFreshnessRetryVisible, false, "Detail route does not claim PM freshness retry before Atlas refresh");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.staleOwnerInspectionGateVisible, false, "Detail route removes the pre-Atlas owner inspection blocked copy");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.ownerInspectionStillGuardedVisible, true, "Detail route still guards owner inspection until PM freshness accepts");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.retainedPreviewStaleUntilReviewVisible, true, "Detail route states retained 4317 remains stale until post-review refresh");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.ownerAcceptanceClaimed, false, "Detail route still does not claim owner or release acceptance");
       }
       if (route.id === "gates") {
@@ -1575,7 +1631,8 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
         assert.equal(readback.workManagementPatternReadback.patterns.includes("evidence-attachment-list"), true, "Evidence route consumes DS EvidenceAttachmentList");
       }
       if (route.id === "owner-feedback-view") {
-        assert.equal(readback.workManagementPatternReadback.patterns.includes("saved-view-toolbar"), true, "Saved view route consumes DS SavedViewToolbar");
+        assert.equal(readback.workManagementPatternReadback.patterns.includes("work-quick-filters"), true, "Saved view route consumes DS WorkQuickFilters");
+        assert.equal(readback.workManagementPatternReadback.patterns.includes("work-list"), true, "Saved view route consumes DS WorkList");
       }
       if (route.id === "initiative-graph") {
         assert.equal(readback.workManagementPatternReadback.patterns.includes("work-hierarchy"), true, "Initiative graph route consumes DS WorkHierarchy");
@@ -1714,7 +1771,7 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
     await mobilePage.screenshot({ path: mobileBacklogScreenshot, fullPage: true });
     screenshots.push(mobileBacklogScreenshot);
     await mobilePage.goto(`${baseUrl}/work/items/AOS-128?locale=zh-CN&theme=dark`, { waitUntil: "networkidle" });
-    await mobilePage.waitForSelector('[data-work-management-pattern="work-item-inspector"]');
+    await mobilePage.waitForSelector('[data-work-management-pattern="work-detail-layout"]');
     const mobileDetailReadback = await mobilePage.evaluate(() => {
       const root = document.querySelector('[data-work-management-mockup="storybook-ds-work-management-v1"]');
       const html = document.documentElement;
@@ -1727,10 +1784,12 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
         theme: html.dataset.tcrnTheme,
         pageHasHorizontalOverflow: html.scrollWidth > window.innerWidth + 1 || body.scrollWidth > window.innerWidth + 1,
         searchWrapperCount: document.querySelectorAll(".tcrn-product-shell-search, .tcrn-search-input").length,
-        inspectorPresent: Boolean(document.querySelector('[data-work-management-pattern="work-item-inspector"]')),
-        currentAosBasisVisible: body.innerText.includes("cae4d52"),
+        detailLayoutPresent: Boolean(document.querySelector('[data-work-management-pattern="work-detail-layout"]')),
+        sourceLocalBasisVisible: body.innerText.includes("post-review-source"),
         staleAosBasisVisible: body.innerText.includes("7836dca"),
+        priorAosBasisVisible: body.innerText.includes("cae4d52"),
         retainedRefreshPostureVisible: body.innerText.includes("4317 保留预览已刷新"),
+        retainedPreviewStaleUntilReviewVisible: body.innerText.includes("4317 保留预览在评审后刷新前保持过期"),
         ownerAcceptanceClaimed: /Owner acceptance:\s*accepted|Release ready|Product acceptance:\s*accepted|Final MVP accepted|Live dispatch enabled/i.test(body.innerText)
       };
     });
@@ -1741,10 +1800,12 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
     assert.equal(mobileDetailReadback.theme, "dark", "mobile detail route preserves URL theme");
     assert.equal(mobileDetailReadback.pageHasHorizontalOverflow, false, "mobile detail route has no page-level horizontal overflow");
     assert.equal(mobileDetailReadback.searchWrapperCount, 0, "mobile detail route has no search or search-result clone");
-    assert.equal(mobileDetailReadback.inspectorPresent, true, "mobile detail route renders full WorkItemInspector");
-    assert.equal(mobileDetailReadback.currentAosBasisVisible, true, "mobile detail route surfaces current AOS basis");
+    assert.equal(mobileDetailReadback.detailLayoutPresent, true, "mobile detail route renders full WorkDetailLayout");
+    assert.equal(mobileDetailReadback.sourceLocalBasisVisible, true, "mobile detail route surfaces source-local AOS consumption basis without stale commit claim");
     assert.equal(mobileDetailReadback.staleAosBasisVisible, false, "mobile detail route hides stale AOS basis");
-    assert.equal(mobileDetailReadback.retainedRefreshPostureVisible, true, "mobile detail route keeps accurate retained-preview posture");
+    assert.equal(mobileDetailReadback.priorAosBasisVisible, false, "mobile detail route does not surface prior AOS cae4d52 basis as current");
+    assert.equal(mobileDetailReadback.retainedRefreshPostureVisible, false, "mobile detail route does not claim retained 4317 refresh for this source basis");
+    assert.equal(mobileDetailReadback.retainedPreviewStaleUntilReviewVisible, true, "mobile detail route keeps accurate stale retained-preview posture");
     assert.equal(mobileDetailReadback.ownerAcceptanceClaimed, false, "mobile detail route does not claim owner/product/release acceptance");
     const mobileDetailScreenshot = `${screenshotRoot}/work-mobile-detail.png`;
     await mobilePage.screenshot({ path: mobileDetailScreenshot, fullPage: true });
@@ -2072,6 +2133,7 @@ async function runVisualInstanceParityProof(browser, aosBaseUrl, dsBaseUrl) {
 function compareVisualInstanceState(variant, dsMetrics, aosMetrics) {
   const checks = [];
   const failures = [];
+  const isWorkVariant = variant.expectedState.content === "work";
   const add = (name, passed, readback) => {
     checks.push({ name, passed, ...readback });
     if (!passed) failures.push({ name, ...readback });
@@ -2120,21 +2182,23 @@ function compareVisualInstanceState(variant, dsMetrics, aosMetrics) {
     dsCaptionPresent: dsMetrics.productLogo.captionPresent,
     aosCaptionPresent: aosMetrics.productLogo.captionPresent
   });
-  add("content.requiredSurfaces", aosMetrics.content.hasOperationsCockpit && aosMetrics.content.hasWork, {
+  add("content.requiredSurfaces", isWorkVariant ? aosMetrics.content.hasWork : (aosMetrics.content.hasOperationsCockpit && aosMetrics.content.hasWork), {
     hasOperationsCockpit: aosMetrics.content.hasOperationsCockpit,
     hasWork: aosMetrics.content.hasWork
   });
-  add("content.productLedFirstViewport", aosMetrics.content.productLedFirstViewport === true, {
-    productLedFirstViewport: aosMetrics.content.productLedFirstViewport
+  add("content.ownerQualityFirstViewport", isWorkVariant ? aosMetrics.content.workOperationalFirstViewport === true : aosMetrics.content.productLedFirstViewport === true, {
+    productLedFirstViewport: aosMetrics.content.productLedFirstViewport,
+    workOperationalFirstViewport: aosMetrics.content.workOperationalFirstViewport
   });
-  add("content.packageOwnedSpacingRhythm", dsMetrics.content.hasPackageContentStack === true && dsMetrics.content.hasPackageSectionGrid === true && aosMetrics.content.hasPackageContentStack === true && aosMetrics.content.hasPackageSectionGrid === true, {
+  add("content.packageOwnedSpacingRhythm", dsMetrics.content.hasPackageContentStack === true && dsMetrics.content.hasPackageSectionGrid === true && aosMetrics.content.hasPackageContentStack === true && (isWorkVariant ? aosMetrics.content.hasWorkRouteChrome === true : aosMetrics.content.hasPackageSectionGrid === true), {
     ds: {
       contentStack: dsMetrics.content.hasPackageContentStack,
       sectionGrid: dsMetrics.content.hasPackageSectionGrid
     },
     aos: {
       contentStack: aosMetrics.content.hasPackageContentStack,
-      sectionGrid: aosMetrics.content.hasPackageSectionGrid
+      sectionGrid: aosMetrics.content.hasPackageSectionGrid,
+      workRouteChrome: aosMetrics.content.hasWorkRouteChrome
     }
   });
   add("content.singlePrimaryH1", aosMetrics.content.primaryH1Count === 1, {
@@ -2161,8 +2225,9 @@ function compareVisualInstanceState(variant, dsMetrics, aosMetrics) {
     viewport: aosMetrics.viewport
   });
   if (variant.expectedState.content === "work") {
-    add("content.workLedFirstViewport", /Work queue|工作队列/.test(aosMetrics.content.primaryH1Text), {
-      primaryH1Text: aosMetrics.content.primaryH1Text
+    add("content.workLedFirstViewport", /Work queue|工作队列/.test(aosMetrics.content.primaryH1Text) || /Work queue|工作队列/.test(aosMetrics.content.visibleText), {
+      primaryH1Text: aosMetrics.content.primaryH1Text,
+      visibleTextHasWorkQueue: /Work queue|工作队列/.test(aosMetrics.content.visibleText)
     });
   }
   if (variant.expectedState.content === "cockpit") {
@@ -2493,8 +2558,10 @@ async function collectProductShellComparatorMetrics(page, rootSelector) {
       primaryH1Text: primaryHeading?.textContent?.trim() ?? "",
       primaryH1Count: h1Elements.length,
       productLedFirstViewport: Boolean(root.querySelector("[data-owner-quality-first-viewport=\"product-led\"]")),
+      workOperationalFirstViewport: Boolean(root.querySelector("[data-owner-quality-first-viewport=\"work-operational\"]")),
       hasPackageContentStack: Boolean(root.querySelector(".tcrn-product-shell-content-stack[data-package-owned-spacing-rhythm=\"product-shell-content-stack\"]")),
       hasPackageSectionGrid: Boolean(root.querySelector(".tcrn-product-shell-section-grid[data-package-owned-section-rhythm=\"work-gates\"]")),
+      hasWorkRouteChrome: Boolean(root.querySelector("[data-work-route-chrome=\"compact-ds-public-exports\"]")),
       hasEnvironmentBanner: Boolean(root.querySelector(".tcrn-environment-banner")),
       hasInlineAlert: Boolean(root.querySelector(".tcrn-inline-alert")),
       hasOperationsCockpit: Boolean(root.querySelector("[data-owner-quality-primary-heading=\"true\"]")),
