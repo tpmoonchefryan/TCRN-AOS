@@ -6,6 +6,7 @@ import {
   EvidenceStrip,
   GatePipeline,
   Heading,
+  InlineAlert,
   LinkButton,
   MachineToken,
   RelationshipChip,
@@ -56,6 +57,7 @@ interface WorkManagementMockupsProps {
   theme: "light" | "dark";
   collapsed: boolean;
   variant: string;
+  viewport: "desktop" | "mobile";
   routeHref: (path: string) => string;
 }
 
@@ -89,6 +91,36 @@ interface RegisteredDsWorkComponentFixture {
   consumptionDisposition: string;
   dsLevel: "primitive" | "pattern" | "composite";
 }
+
+const workStorybookContractAnchors = {
+  componentsRoute: "components.html#work-management-components-spec",
+  patternsRoute: "patterns.html#work-management-patterns",
+  componentsStoryId: "tcrn-design-system-components--work-management-components-spec",
+  patternsStoryId: "tcrn-design-system-patterns--work-management-patterns",
+  aiContractVersion: "ai_consumption_contract_v1",
+  foundationRegistryId: "foundation-visual-standards-v1",
+  consumerVisualStyleContract: "consumerVisualStyleContract",
+  docShellOracle: "original-storybook-doc-shell-v1",
+  staticAuthorityDisposition: "aos_static_work_mockup_consumes_storybook_ds_work_management_contract"
+} as const;
+
+const exactWorkRouteProofTargets = [
+  "/work",
+  "/work/board",
+  "/work/backlog",
+  "/work/items/AOS-128",
+  "/work/views/owner-feedback",
+  "/work/gates",
+  "/work/evidence",
+  "/work/codex-activity",
+  "/work/initiatives/work-management-mvp"
+];
+
+const mobileWorkRouteProofTargets = [
+  "/work/backlog?locale=zh-CN&theme=dark",
+  "/work/items/AOS-128?locale=zh-CN&theme=dark",
+  "/work/initiatives/work-management-mvp?locale=zh-CN&theme=dark"
+];
 
 const workPages: WorkMockupPage[] = [
   {
@@ -195,7 +227,7 @@ const workItems: WorkItemFixture[] = [
     initiative: "AOS product shell recovery",
     epic: "Product Shell Owner Feedback Recovery",
     epicKind: "Workstream Epic",
-    story: "Owner can inspect an AOS shell without fake global search",
+    story: "Owner can inspect the shell capability boundary without fake controls",
     owner: "Mara",
     assignee: "Ilya",
     nextOwner: "Ilya",
@@ -272,7 +304,7 @@ const relationRows = [
   { relation: "verifies", source: "EVD-41", target: "AOS-128", state: "resolved", note: "AOS proof verifies no global search and URL locale." },
   { relation: "reviews", source: "ELR-23", target: "AOS-142", state: "resolved", note: "Elara rendered/DS review passed before the retained refresh." },
   { relation: "refreshes", source: "ATL-31", target: "AOS-142", state: "resolved", note: "Retained 4317 preview was refreshed to AOS cae4d52 before Mara PM freshness." },
-  { relation: "supersedes", source: "AOS-128", target: "previous search-results claim", state: "resolved", note: "Fake search route claim replaced by no-search boundary." },
+  { relation: "supersedes", source: "AOS-128", target: "previous capability claim", state: "resolved", note: "Unsupported route claim replaced by no-search boundary." },
   { relation: "split_from", source: "AOS-142", target: "Work Management MVP", state: "active", note: "Static mockup slice split from full implementation planning." },
   { relation: "caused_by", source: "AOS-128", target: "Owner feedback: no fake search", state: "resolved", note: "Owner-approved scope change." }
 ];
@@ -337,7 +369,7 @@ const registeredDsWorkComponentRows: RegisteredDsWorkComponentFixture[] = workMa
     },
     SavedViewToolbar: {
       whereUsed: "/work/views/owner-feedback",
-      consumptionDisposition: "Consumes package SavedViewToolbar for saved views and local filters without ProductShell global search."
+      consumptionDisposition: "Consumes package SavedViewToolbar for saved views and local filters without a topbar search capability."
     },
     MachineToken: {
       whereUsed: "/work/codex-activity, /work/evidence, and graph fallback",
@@ -385,6 +417,57 @@ const codexRows = [
     thread: "Rowan",
     status: "superseded",
     next: "New QA required after mockups"
+  }
+];
+
+const backlogGroups = [
+  {
+    id: "shaped",
+    title: "Shaped for design confirmation",
+    rows: [
+      {
+        input: "AOS-142 Work module route matrix",
+        type: "Shaped Work Item",
+        rank: "P0",
+        order: "1",
+        missingDecision: "Review only; no backend API",
+        suggestedOwner: "Elara",
+        disabledAction: "Promote blocked until rendered DS review accepts"
+      },
+      {
+        input: "AOS-128 capability boundary detail",
+        type: "Shaped Work Item",
+        rank: "P0",
+        order: "2",
+        missingDecision: "Keep no-search proof visible without claiming readiness",
+        suggestedOwner: "Rowan",
+        disabledAction: "Route action disabled in static fixture"
+      }
+    ]
+  },
+  {
+    id: "unshaped",
+    title: "Unshaped owner inputs",
+    rows: [
+      {
+        input: "Work item numbering policy",
+        type: "Open Question",
+        rank: "P1",
+        order: "3",
+        missingDecision: "Global or product-scoped key",
+        suggestedOwner: "Mara",
+        disabledAction: "Promote blocked until PM shapes numbering scope"
+      },
+      {
+        input: "Owner visibility policy for Work items",
+        type: "Open Question",
+        rank: "P1",
+        order: "4",
+        missingDecision: "Which evidence can enter an owner handoff",
+        suggestedOwner: "Mara",
+        disabledAction: "Route action disabled; no owner handoff in this route"
+      }
+    ]
   }
 ];
 
@@ -589,9 +672,10 @@ export function getWorkMockupPageTitle(path: string, locale: TcrnLocale): string
   return localized(page.title, locale);
 }
 
-export function WorkManagementMockups({ path, locale, theme, collapsed, variant, routeHref }: WorkManagementMockupsProps) {
+export function WorkManagementMockups({ path, locale, theme, collapsed, variant, viewport, routeHref }: WorkManagementMockupsProps) {
   const page = getWorkMockupPage(resolveWorkMockupPageId(path));
   const pageId = page.id;
+  const showSplitInspector = viewport === "desktop";
   return (
     <div
       className="tcrn-product-shell-content-stack"
@@ -602,13 +686,27 @@ export function WorkManagementMockups({ path, locale, theme, collapsed, variant,
       data-work-management-live-dispatch="not-enabled"
       data-work-management-hierarchy="initiative-epic-story-work-item-subtask-evidence-task"
       data-work-management-ds-standard="work-management-components-spec"
+      data-ds-work-components-anchor={workStorybookContractAnchors.componentsRoute}
+      data-ds-work-patterns-anchor={workStorybookContractAnchors.patternsRoute}
+      data-storybook-components-story-id={workStorybookContractAnchors.componentsStoryId}
+      data-storybook-patterns-story-id={workStorybookContractAnchors.patternsStoryId}
+      data-ai-consumption-contract-version={workStorybookContractAnchors.aiContractVersion}
+      data-foundation-visual-standards-registry={workStorybookContractAnchors.foundationRegistryId}
+      data-consumer-visual-style-contract={workStorybookContractAnchors.consumerVisualStyleContract}
+      data-storybook-doc-shell-oracle={workStorybookContractAnchors.docShellOracle}
+      data-work-static-authority-disposition={workStorybookContractAnchors.staticAuthorityDisposition}
+      data-work-route-proof-targets={exactWorkRouteProofTargets.join(" ")}
+      data-work-mobile-proof-targets={mobileWorkRouteProofTargets.join(" ")}
+      data-work-clean-room-layout="issue-style-tcrn-owned-no-atlassian-assets"
       data-design-system-work-components="registered-package-components"
       data-product-local-work-component-clones="absent"
+      data-work-route-acceptance-target={page.path}
       data-work-management-page={pageId}
       data-work-management-route={page.path}
       data-visual-instance-variant-readback={variant}
       data-visual-instance-theme-readback={theme}
       data-visual-instance-collapsed-readback={collapsed ? "true" : "false"}
+      data-work-split-inspector-viewport-policy={showSplitInspector ? "desktop-split" : "mobile-detail-route"}
     >
       <Surface data-owner-quality-primary-heading="true" data-owner-quality-first-viewport="product-led">
         <Text data-work-page-eyebrow="true">{localized(page.eyebrow, locale)}</Text>
@@ -619,11 +717,13 @@ export function WorkManagementMockups({ path, locale, theme, collapsed, variant,
         <EvidenceStrip items={[
           locale === "zh-CN" ? "静态示例数据" : "Static fixture data",
           locale === "zh-CN" ? "未接 API" : "No API integration",
-          locale === "zh-CN" ? "无实时派发" : "No live dispatch"
+          locale === "zh-CN" ? "无实时派发" : "No live dispatch",
+          workStorybookContractAnchors.componentsRoute,
+          workStorybookContractAnchors.patternsRoute
         ]} />
       </Surface>
       <WorkMockupSubnav pageId={pageId} locale={locale} routeHref={routeHref} />
-      {renderWorkMockupPage(pageId, locale, routeHref)}
+      {renderWorkMockupPage(pageId, locale, routeHref, showSplitInspector)}
     </div>
   );
 }
@@ -639,12 +739,12 @@ function WorkMockupSubnav({ pageId, locale, routeHref }: { pageId: WorkMockupPag
   );
 }
 
-function renderWorkMockupPage(pageId: WorkMockupPageId, locale: TcrnLocale, routeHref: (path: string) => string) {
+function renderWorkMockupPage(pageId: WorkMockupPageId, locale: TcrnLocale, routeHref: (path: string) => string, showSplitInspector: boolean) {
   switch (pageId) {
     case "board":
-      return <BoardPage locale={locale} routeHref={routeHref} />;
+      return <BoardPage locale={locale} routeHref={routeHref} showSplitInspector={showSplitInspector} />;
     case "backlog":
-      return <BacklogPage locale={locale} />;
+      return <BacklogPage locale={locale} routeHref={routeHref} showSplitInspector={showSplitInspector} />;
     case "detail":
       return <DetailPage locale={locale} routeHref={routeHref} />;
     case "gates":
@@ -658,13 +758,14 @@ function renderWorkMockupPage(pageId: WorkMockupPageId, locale: TcrnLocale, rout
     case "initiativeGraph":
       return <InitiativeGraphPage locale={locale} />;
     default:
-      return <QueuePage locale={locale} routeHref={routeHref} />;
+      return <QueuePage locale={locale} routeHref={routeHref} showSplitInspector={showSplitInspector} />;
   }
 }
 
-function QueuePage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path: string) => string }) {
+function QueuePage({ locale, routeHref, showSplitInspector }: { locale: TcrnLocale; routeHref: (path: string) => string; showSplitInspector: boolean }) {
   return (
     <>
+      <WorkSavedViewControls pageId="queue" locale={locale} routeHref={routeHref} />
       <div className="tcrn-product-shell-section-grid" data-package-owned-section-rhythm="work-gates" data-work-page-grid="queue">
         <Surface data-aos-work-module-entry="owner-quality-work-queue" data-owner-quality-work-queue="true">
           <Heading level={2}>{locale === "zh-CN" ? "优先队列" : "Priority queue"}</Heading>
@@ -679,6 +780,7 @@ function QueuePage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path
           ]} />
         </Surface>
       </div>
+      {showSplitInspector ? <SelectedItemSplitInspector locale={locale} routeHref={routeHref} /> : null}
       <HierarchyDefinitionSummary locale={locale} />
       <Surface>
         <Heading level={2}>{locale === "zh-CN" ? "关系摘要" : "Relationship summary"}</Heading>
@@ -689,24 +791,29 @@ function QueuePage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path
   );
 }
 
-function BoardPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path: string) => string }) {
+function BoardPage({ locale, routeHref, showSplitInspector }: { locale: TcrnLocale; routeHref: (path: string) => string; showSplitInspector: boolean }) {
   return (
-    <Surface data-aos-work-module-entry="registered-ds-work-board">
-      <Heading level={2}>{locale === "zh-CN" ? "DS 注册 WorkBoard" : "Registered DS WorkBoard"}</Heading>
-      <WorkBoard
-        label={locale === "zh-CN" ? "工作看板" : "Work board"}
-        lanes={workBoardLanes(locale)}
-      />
-      <div data-work-action-row="true">
-        <LinkButton href={routeHref("/work/items/AOS-128")} variant="secondary">{locale === "zh-CN" ? "打开工作项" : "Open item"}</LinkButton>
-      </div>
-    </Surface>
+    <>
+      <WorkSavedViewControls pageId="board" locale={locale} routeHref={routeHref} />
+      <Surface data-aos-work-module-entry="registered-ds-work-board">
+        <Heading level={2}>{locale === "zh-CN" ? "DS 注册 WorkBoard" : "Registered DS WorkBoard"}</Heading>
+        <WorkBoard
+          label={locale === "zh-CN" ? "工作看板" : "Work board"}
+          lanes={workBoardLanes(locale)}
+        />
+        <div data-work-action-row="true">
+          <LinkButton href={routeHref("/work/items/AOS-128")} variant="secondary">{locale === "zh-CN" ? "打开工作项" : "Open item"}</LinkButton>
+        </div>
+      </Surface>
+      {showSplitInspector ? <SelectedItemSplitInspector locale={locale} routeHref={routeHref} /> : null}
+    </>
   );
 }
 
-function BacklogPage({ locale }: { locale: TcrnLocale }) {
+function BacklogPage({ locale, routeHref, showSplitInspector }: { locale: TcrnLocale; routeHref: (path: string) => string; showSplitInspector: boolean }) {
   return (
     <>
+      <WorkSavedViewControls pageId="backlog" locale={locale} routeHref={routeHref} />
       <Surface>
         <Heading level={2}>{locale === "zh-CN" ? "待收敛输入" : "Inputs needing shaping"}</Heading>
         <TableShell
@@ -719,8 +826,107 @@ function BacklogPage({ locale }: { locale: TcrnLocale }) {
           ].map((row) => localizeRow(row, locale))}
         />
       </Surface>
+      <BacklogGroupSections locale={locale} />
+      {showSplitInspector ? <SelectedItemSplitInspector locale={locale} routeHref={routeHref} /> : null}
       <RegisteredDsWorkComponentsSection locale={locale} />
     </>
+  );
+}
+
+function WorkSavedViewControls({
+  pageId,
+  locale,
+  routeHref
+}: {
+  pageId: WorkMockupPageId;
+  locale: TcrnLocale;
+  routeHref: (path: string) => string;
+}) {
+  const views = workSubnavItems(pageId, locale, routeHref).filter((item) => ["queue", "board", "backlog", "ownerFeedbackView"].includes(item.id));
+  return (
+    <Surface
+      data-work-saved-view-toolbar-wrapper="static-fixture-ds-saved-view-toolbar"
+      data-work-saved-view-toolbar-route={pageId}
+      data-work-static-filter-source="fixture-only"
+    >
+      <SavedViewToolbar
+        label={locale === "zh-CN" ? "Work 保存视图和过滤" : "Work saved views and filters"}
+        views={views}
+        filters={savedViewFilters(locale)}
+        resetLabel={locale === "zh-CN" ? "重置静态过滤" : "Reset static filters"}
+      />
+      <InlineAlert
+        tone="neutral"
+        title={locale === "zh-CN" ? "静态过滤" : "Static filters"}
+      >
+        {locale === "zh-CN"
+          ? "过滤器仅用于设计确认，不写入后端、不派发 route、不创建外部集成。"
+          : "Filters are fixture-only for design confirmation; they do not write backend state, dispatch routes, or create external integrations."}
+      </InlineAlert>
+    </Surface>
+  );
+}
+
+function BacklogGroupSections({ locale }: { locale: TcrnLocale }) {
+  return (
+    <div className="tcrn-product-shell-section-grid" data-work-backlog-groups="shaped-unshaped">
+      {backlogGroups.map((group) => (
+        <Surface key={group.id} data-work-backlog-group={group.id}>
+          <Heading level={2}>{translatePhrase(group.title, locale)}</Heading>
+          <TableShell
+            label={translatePhrase(group.title, locale)}
+            columns={columns(locale, ["input", "rank", "missingDecision", "suggestedOwner", "action"])}
+            rows={group.rows.map((row) => ({
+              input: `${translatePhrase(row.input, locale)} · ${translatePhrase(row.type, locale)}`,
+              rank: `${row.rank} / #${row.order}`,
+              missingDecision: translatePhrase(row.missingDecision, locale),
+              suggestedOwner: row.suggestedOwner,
+              action: (
+                <Button disabled disabledReason={translatePhrase(row.disabledAction, locale)}>
+                  {locale === "zh-CN" ? "提升" : "Promote"}
+                </Button>
+              )
+            }))}
+          />
+        </Surface>
+      ))}
+    </div>
+  );
+}
+
+function SelectedItemSplitInspector({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path: string) => string }) {
+  return (
+    <div data-work-split-inspector="AOS-128" data-work-split-inspector-mode="desktop-split-mobile-full-route">
+      <WorkItemInspector
+        title={`AOS-128 · ${locale === "zh-CN" ? "能力边界确认" : "Capability boundary confirmation"}`}
+        summary={locale === "zh-CN"
+          ? "该静态检查器在队列、看板和待整理页保持同一个选中工作项，并链接到完整详情页。"
+          : "This static inspector keeps the selected work item visible across queue, board, and backlog routes and links to the full detail page."}
+        hierarchy={[
+          { key: "initiative", label: "Initiative", value: "AOS product shell recovery" },
+          { key: "story", label: "Story", value: translatePhrase("Owner can inspect the shell capability boundary without fake controls", locale) },
+          { key: "workItem", label: "Work Item", value: <MachineToken token="AOS-128" kind="work-item" /> }
+        ]}
+        details={[
+          { key: "selected", label: locale === "zh-CN" ? "选中项" : "Selected item", value: <LinkButton href={routeHref("/work/items/AOS-128")} variant="secondary">AOS-128</LinkButton> },
+          { key: "mode", label: locale === "zh-CN" ? "模式" : "Mode", value: locale === "zh-CN" ? "桌面分栏；移动端详情路由" : "Desktop split; mobile detail route" },
+          { key: "api", label: "API", value: locale === "zh-CN" ? "未接入" : "Not integrated" }
+        ]}
+        relationships={inspectorRelationships(routeHref)}
+        subtasks={[
+          { id: "split-inspector", title: translatePhrase("Static split inspector", locale), state: { state: "fixture_only" }, owner: "Ilya" },
+          { id: "detail-link", title: translatePhrase("Full detail route remains canonical", locale), state: { state: "review_required" }, owner: "Elara" }
+        ]}
+        evidence={evidenceAttachments(locale).slice(0, 3)}
+        actions={[
+          {
+            id: "open-detail",
+            label: locale === "zh-CN" ? "使用详情路由" : "Use detail route",
+            disabledReason: translatePhrase("Static mockup only; route actions are not wired", locale)
+          }
+        ]}
+      />
+    </div>
   );
 }
 
@@ -791,7 +997,7 @@ function DetailPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (pat
       ]}
       relationships={inspectorRelationships(routeHref)}
       subtasks={[
-        { id: "remove-search", title: translatePhrase("Remove ProductShellSearch prop", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已通过" : "Passed" }, owner: "Ilya" },
+        { id: "remove-search", title: translatePhrase("Remove unsupported topbar search prop", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已通过" : "Passed" }, owner: "Ilya" },
         { id: "url-locale", title: translatePhrase("URL locale canonicalization", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已通过" : "Passed" }, owner: "Ilya" },
         { id: "refresh-preview", title: translatePhrase("Retained 4317 refresh", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已刷新" : "Refreshed" }, owner: "Atlas" },
         { id: "professional-qa", title: translatePhrase("Professional QA", locale), state: { state: "local_only", label: locale === "zh-CN" ? "已通过" : "Passed" }, owner: "Rowan" },
@@ -1013,14 +1219,17 @@ function translateColumn(key: string, locale: TcrnLocale): string {
     key: "编号",
     layer: "层级",
     missing: "缺口",
+    missingDecision: "缺少决策",
     name: "名称",
     next: "下一步",
     nextOwner: "下一 owner",
     note: "说明",
+    order: "顺序",
     owner: "Owner",
     priority: "优先级",
     proof: "证明",
     purpose: "目的",
+    rank: "排序",
     relation: "关系",
     route: "Route",
     source: "来源",
@@ -1047,6 +1256,7 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
   const phrases: Record<string, string> = {
     "AOS-128 Remove unsupported global search": "AOS-128 移除不支持的全局搜索",
     "Remove unsupported global search": "移除不支持的全局搜索",
+    "Owner can inspect the shell capability boundary without fake controls": "Owner 可以检查没有虚假控件的壳层能力边界",
     "Rebuild Work routes with DS Work components": "用 DS Work 组件重建 Work 路由",
     "Static Work Management PRD mockups": "静态 Work Management PRD 示例",
     "ProductShell optional search contract": "ProductShell 可选搜索合同",
@@ -1088,7 +1298,7 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "Consumes package GatePipeline for review/readiness sequence without claiming PM or owner acceptance.": "消费 package GatePipeline 展示评审/readiness 顺序，但不声明 PM 或 owner acceptance。",
     "Consumes package EvidenceAttachmentList for screenshots, artifacts, QA summaries, API readbacks, commits, and previews.": "消费 package EvidenceAttachmentList 展示截图、artifact、QA 摘要、API 读回、commit 与预览。",
     "Consumes package WorkItemInspector for hierarchy, status, subtasks, evidence tasks, and guarded actions.": "消费 package WorkItemInspector 展示层级、状态、子任务、证据任务和受保护动作。",
-    "Consumes package SavedViewToolbar for saved views and local filters without ProductShell global search.": "消费 package SavedViewToolbar 展示保存视图与本地过滤，不引入 ProductShell 全局搜索。",
+    "Consumes package SavedViewToolbar for saved views and local filters without a topbar search capability.": "消费 package SavedViewToolbar 展示保存视图与本地过滤，不引入顶栏搜索能力。",
     "Consumes package MachineToken for long route, thread, commit, artifact, and work-item identifiers.": "消费 package MachineToken 展示长 route、thread、commit、artifact 与工作项标识。",
     "Initiative is the complete objective and why.": "Initiative 是完整目标与原因。",
     "Epic is a larger deliverable work package.": "Epic 是较大的交付工作包。",
@@ -1103,6 +1313,11 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "Supports a Work Item.": "支撑一个 Work Item。",
     "Routes, threads, handoff returns, commits, proof, and blockers.": "Route、线程、handoff return、commit、证明与 blocker。",
     "No API integration": "未接 API",
+    "Not integrated": "未接入",
+    "Static filters": "静态过滤",
+    "Static split inspector": "静态分栏检查器",
+    "Full detail route remains canonical": "完整详情路由保持权威",
+    "Static mockup only; route actions are not wired": "仅静态示例；route 动作未接线",
     "URL locale authority": "URL locale 权威",
     "DS contract accepted": "DS 合同已接受",
     "Accepted on the AOS rebuild basis": "AOS 重建 basis 已接受",
@@ -1116,7 +1331,7 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "No owner handoff before PM freshness acceptance": "PM freshness 接受前不进行 owner handoff",
     "No owner handoff yet": "尚无 owner handoff",
     "No downstream claim": "不声明下游通过",
-    "Remove ProductShellSearch prop": "移除 ProductShellSearch 属性",
+    "Remove unsupported topbar search prop": "移除不支持的顶栏搜索属性",
     "URL locale canonicalization": "URL locale 规范化",
     "Refresh 4317 preview": "刷新 4317 预览",
     "Retained 4317 refresh": "4317 保留预览刷新",
@@ -1134,6 +1349,19 @@ function translatePhrase(value: string, locale: TcrnLocale): string {
     "superseded by new scope": "已被新范围替代",
     "pending refresh": "等待刷新",
     "retained refreshed; PM changes requested": "保留预览已刷新；PM 要求修改",
+    "Shaped for design confirmation": "已收敛用于设计确认",
+    "Unshaped owner inputs": "待收敛 owner 输入",
+    "AOS-142 Work module route matrix": "AOS-142 Work 模块路由矩阵",
+    "AOS-128 capability boundary detail": "AOS-128 能力边界详情",
+    "Owner visibility policy for Work items": "Work 项 owner 可见性策略",
+    "Shaped Work Item": "已收敛工作项",
+    "Review only; no backend API": "仅供评审；无后端 API",
+    "Keep no-search proof visible without claiming readiness": "保留无搜索证明，但不声明 readiness",
+    "Which evidence can enter an owner handoff": "哪些证据可进入 owner 交接",
+    "Promote blocked until rendered DS review accepts": "等待渲染 DS 评审接受后才能提升",
+    "Route action disabled in static fixture": "静态示例中 route 动作禁用",
+    "Promote blocked until PM shapes numbering scope": "等待 PM 收敛编号范围后才能提升",
+    "Route action disabled; no owner handoff in this route": "route 动作禁用；本路由不进行 owner 交接",
     changes_requested: "需要修改",
     "Blocked until gates pass": "门禁通过前阻塞",
     Backlog: "待整理",

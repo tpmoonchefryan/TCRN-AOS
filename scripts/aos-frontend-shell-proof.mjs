@@ -455,6 +455,46 @@ const staticWorkMockupRoutes = [
   "/work/initiatives/work-management-mvp"
 ];
 
+const requiredWorkRouteProofTargets = [
+  "/work",
+  "/work/board",
+  "/work/backlog",
+  "/work/items/AOS-128",
+  "/work/views/owner-feedback",
+  "/work/gates",
+  "/work/evidence",
+  "/work/codex-activity",
+  "/work/initiatives/work-management-mvp"
+];
+
+const requiredMobileWorkRouteProofTargets = [
+  "/work/backlog?locale=zh-CN&theme=dark",
+  "/work/items/AOS-128?locale=zh-CN&theme=dark",
+  "/work/initiatives/work-management-mvp?locale=zh-CN&theme=dark"
+];
+
+const requiredWorkStorybookContractAnchors = {
+  componentsRoute: "components.html#work-management-components-spec",
+  patternsRoute: "patterns.html#work-management-patterns",
+  componentsStoryId: "tcrn-design-system-components--work-management-components-spec",
+  patternsStoryId: "tcrn-design-system-patterns--work-management-patterns",
+  aiContractVersion: "ai_consumption_contract_v1",
+  foundationRegistry: "foundation-visual-standards-v1",
+  consumerVisualStyleContract: "consumerVisualStyleContract",
+  docShellOracle: "original-storybook-doc-shell-v1",
+  staticAuthorityDisposition: "aos_static_work_mockup_consumes_storybook_ds_work_management_contract"
+};
+
+const forbiddenWorkVisibleBrandTerms = [
+  "Atlassian",
+  "Jira",
+  "OpenProject",
+  "Linear",
+  "Plane",
+  "Huly",
+  "Twenty"
+];
+
 try {
   for (const route of ["/", "/cockpit", ...staticWorkMockupRoutes, "/conference", "/docs", "/settings"]) {
     const response = await fetch(`${service.url}${route}`);
@@ -466,8 +506,36 @@ try {
       liveDispatchDisabled: body.includes('data-work-management-live-dispatch="not-enabled"'),
       hierarchyPresent: body.includes('data-work-management-hierarchy="initiative-epic-story-work-item-subtask-evidence-task"'),
       dsStandard: body.includes('data-work-management-ds-standard="work-management-components-spec"'),
+      contractAnchors: body.includes(`data-ds-work-components-anchor="${requiredWorkStorybookContractAnchors.componentsRoute}"`)
+        && body.includes(`data-ds-work-patterns-anchor="${requiredWorkStorybookContractAnchors.patternsRoute}"`)
+        && body.includes(`data-storybook-components-story-id="${requiredWorkStorybookContractAnchors.componentsStoryId}"`)
+        && body.includes(`data-storybook-patterns-story-id="${requiredWorkStorybookContractAnchors.patternsStoryId}"`)
+        && body.includes(`data-ai-consumption-contract-version="${requiredWorkStorybookContractAnchors.aiContractVersion}"`)
+        && body.includes(`data-foundation-visual-standards-registry="${requiredWorkStorybookContractAnchors.foundationRegistry}"`)
+        && body.includes(`data-consumer-visual-style-contract="${requiredWorkStorybookContractAnchors.consumerVisualStyleContract}"`)
+        && body.includes(`data-storybook-doc-shell-oracle="${requiredWorkStorybookContractAnchors.docShellOracle}"`)
+        && body.includes(`data-work-static-authority-disposition="${requiredWorkStorybookContractAnchors.staticAuthorityDisposition}"`),
+      routeAcceptanceTarget: body.includes(`data-work-route-acceptance-target="${route}"`),
       registeredComponents: body.includes('data-design-system-work-components="registered-package-components"'),
-      localClonesAbsent: body.includes('data-product-local-work-component-clones="absent"')
+      localClonesAbsent: body.includes('data-product-local-work-component-clones="absent"'),
+      cleanRoomLayout: body.includes('data-work-clean-room-layout="issue-style-tcrn-owned-no-atlassian-assets"'),
+      exactRouteTargets: requiredWorkRouteProofTargets.every((target) => body.includes(target.replaceAll("&", "&amp;"))),
+      mobileRouteTargets: requiredMobileWorkRouteProofTargets.every((target) => body.includes(target.replaceAll("&", "&amp;"))),
+      forbiddenVisibleBrandHits: forbiddenWorkVisibleBrandTerms.filter((term) => body.includes(term)),
+      productShellSearchCloneHits: [
+        'class="tcrn-product-shell-search',
+        'class="tcrn-search-input',
+        'data-product-shell-search-results',
+        'data-search-result',
+        'data-shell-control="product-shell-search"'
+      ].filter((marker) => body.includes(marker)),
+      storybookDocShellHits: [
+        'data-doc-shell=',
+        'class="tcrn-doc-shell',
+        'class="tcrn-doc-header',
+        'class="tcrn-doc-sidebar',
+        'class="tcrn-doc-nav'
+      ].filter((marker) => body.includes(marker))
     };
     routeReadbacks.push({
       route,
@@ -537,8 +605,16 @@ try {
       && entry.staticWorkMockup.liveDispatchDisabled
       && entry.staticWorkMockup.hierarchyPresent
       && entry.staticWorkMockup.dsStandard
+      && entry.staticWorkMockup.contractAnchors
+      && entry.staticWorkMockup.routeAcceptanceTarget
       && entry.staticWorkMockup.registeredComponents
       && entry.staticWorkMockup.localClonesAbsent
+      && entry.staticWorkMockup.cleanRoomLayout
+      && entry.staticWorkMockup.exactRouteTargets
+      && entry.staticWorkMockup.mobileRouteTargets
+      && entry.staticWorkMockup.forbiddenVisibleBrandHits.length === 0
+      && entry.staticWorkMockup.productShellSearchCloneHits.length === 0
+      && entry.staticWorkMockup.storybookDocShellHits.length === 0
     ))
     && entry.registeredNavigationOnly
     && entry.registeredBrandLockup
@@ -1237,14 +1313,39 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           apiIntegration: root.getAttribute("data-work-management-api-integration"),
           liveDispatch: root.getAttribute("data-work-management-live-dispatch"),
           hierarchy: root.getAttribute("data-work-management-hierarchy"),
+          dsComponentsAnchor: root.getAttribute("data-ds-work-components-anchor"),
+          dsPatternsAnchor: root.getAttribute("data-ds-work-patterns-anchor"),
+          componentsStoryId: root.getAttribute("data-storybook-components-story-id"),
+          patternsStoryId: root.getAttribute("data-storybook-patterns-story-id"),
+          aiContractVersion: root.getAttribute("data-ai-consumption-contract-version"),
+          foundationRegistry: root.getAttribute("data-foundation-visual-standards-registry"),
+          consumerVisualStyleContract: root.getAttribute("data-consumer-visual-style-contract"),
+          storybookDocShellOracle: root.getAttribute("data-storybook-doc-shell-oracle"),
+          staticAuthorityDisposition: root.getAttribute("data-work-static-authority-disposition"),
+          routeProofTargets: (root.getAttribute("data-work-route-proof-targets") ?? "").split(/\s+/).filter(Boolean),
+          mobileProofTargets: (root.getAttribute("data-work-mobile-proof-targets") ?? "").split(/\s+/).filter(Boolean),
+          cleanRoomLayout: root.getAttribute("data-work-clean-room-layout"),
+          routeAcceptanceTarget: root.getAttribute("data-work-route-acceptance-target"),
           visualVariant: shell?.getAttribute("data-visual-instance-variant") ?? null,
           selectedRoute: document.querySelector('[data-product-shell-route="work"]')?.getAttribute("aria-current") ?? null,
           h1Count: h1s.length,
           h1Text: h1s[0] ?? null,
           searchWrapperCount: document.querySelectorAll(".tcrn-product-shell-search").length,
+          searchInputCloneCount: document.querySelectorAll(".tcrn-search-input").length,
           productShellSearchControlCount: document.querySelectorAll('[data-shell-control="product-shell-search"]').length,
+          productShellSearchResultsCount: document.querySelectorAll("[data-product-shell-search-results], [data-search-result]").length,
+          storybookDocShellCloneCount: document.querySelectorAll('[data-doc-shell], .tcrn-doc-shell, .tcrn-doc-header, .tcrn-doc-sidebar, .tcrn-doc-nav').length,
+          forbiddenVisibleBrandHits: ["Atlassian", "Jira", "OpenProject", "Linear", "Plane", "Huly", "Twenty"].filter((term) => body.innerText.includes(term)),
+          forbiddenClassHits: Array.from(root.querySelectorAll("[class]"))
+            .map((node) => node.getAttribute("class") ?? "")
+            .filter((className) => /jira|atlassian|openproject|linear|plane|huly|twenty/i.test(className)),
+          savedViewToolbarWrapperCount: root.querySelectorAll("[data-work-saved-view-toolbar-wrapper]").length,
+          splitInspectorCount: root.querySelectorAll("[data-work-split-inspector='AOS-128']").length,
+          detailRouteLinkCount: root.querySelectorAll('a[href^="/work/items/AOS-128"], a[href*="/work/items/AOS-128?"]').length,
+          backlogGroupIds: Array.from(root.querySelectorAll("[data-work-backlog-group]")).map((node) => node.getAttribute("data-work-backlog-group")),
+          disabledActionReasonCount: root.querySelectorAll("[data-work-backlog-group] [aria-describedby]").length,
           pageHasHorizontalOverflow: html.scrollWidth > window.innerWidth + 1 || body.scrollWidth > window.innerWidth + 1,
-          ownerAcceptanceClaimed: body.innerText.includes("Owner acceptance: accepted") || body.innerText.includes("Release ready"),
+          ownerAcceptanceClaimed: /Owner acceptance:\s*accepted|Release ready|Product acceptance:\s*accepted|Final MVP accepted|Live dispatch enabled/i.test(body.innerText),
           workDetailBasisAndGatePostureReadback: readWorkDetailBasisAndGatePosture(),
           registeredDsWorkComponentsReadback: readRegisteredDsWorkComponents(),
           workManagementPatternReadback: readWorkManagementPatterns(),
@@ -1387,16 +1488,39 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
       assert.equal(readback.apiIntegration, "absent", `${route.id} declares no Work API integration`);
       assert.equal(readback.liveDispatch, "not-enabled", `${route.id} declares no live dispatch`);
       assert.equal(readback.hierarchy, "initiative-epic-story-work-item-subtask-evidence-task", `${route.id} renders PRD hierarchy marker`);
+      assert.equal(readback.dsComponentsAnchor, requiredWorkStorybookContractAnchors.componentsRoute, `${route.id} records DS Work component Storybook anchor`);
+      assert.equal(readback.dsPatternsAnchor, requiredWorkStorybookContractAnchors.patternsRoute, `${route.id} records DS Work patterns Storybook anchor`);
+      assert.equal(readback.componentsStoryId, requiredWorkStorybookContractAnchors.componentsStoryId, `${route.id} records component Storybook id`);
+      assert.equal(readback.patternsStoryId, requiredWorkStorybookContractAnchors.patternsStoryId, `${route.id} records patterns Storybook id`);
+      assert.equal(readback.aiContractVersion, requiredWorkStorybookContractAnchors.aiContractVersion, `${route.id} records AI contract version`);
+      assert.equal(readback.foundationRegistry, requiredWorkStorybookContractAnchors.foundationRegistry, `${route.id} records foundation registry`);
+      assert.equal(readback.consumerVisualStyleContract, requiredWorkStorybookContractAnchors.consumerVisualStyleContract, `${route.id} records consumer visual style contract`);
+      assert.equal(readback.storybookDocShellOracle, requiredWorkStorybookContractAnchors.docShellOracle, `${route.id} records DS doc shell oracle`);
+      assert.equal(readback.staticAuthorityDisposition, requiredWorkStorybookContractAnchors.staticAuthorityDisposition, `${route.id} records static authority disposition`);
+      assert.deepEqual(readback.routeProofTargets, requiredWorkRouteProofTargets, `${route.id} records exact Work proof route targets`);
+      assert.deepEqual(readback.mobileProofTargets, requiredMobileWorkRouteProofTargets, `${route.id} records mobile Work proof route targets`);
+      assert.equal(readback.cleanRoomLayout, "issue-style-tcrn-owned-no-atlassian-assets", `${route.id} records clean-room issue-style layout boundary`);
+      assert.equal(readback.routeAcceptanceTarget, route.path, `${route.id} records exact route acceptance marker`);
       assert.equal(readback.selectedRoute, "page", `${route.id} keeps Work nav selected`);
       assert.equal(readback.h1Count, 1, `${route.id} has exactly one H1`);
       assert.equal(readback.searchWrapperCount, 0, `${route.id} does not reintroduce topbar ProductShellSearch`);
+      assert.equal(readback.searchInputCloneCount, 0, `${route.id} does not render SearchInput/search affordance clones`);
       assert.equal(readback.productShellSearchControlCount, 0, `${route.id} does not render product-shell-search control`);
+      assert.equal(readback.productShellSearchResultsCount, 0, `${route.id} does not render search result surfaces`);
+      assert.equal(readback.storybookDocShellCloneCount, 0, `${route.id} does not render Storybook doc-shell chrome`);
+      assert.deepEqual(readback.forbiddenVisibleBrandHits, [], `${route.id} has no forbidden third-party brand text in runtime UI`);
+      assert.deepEqual(readback.forbiddenClassHits, [], `${route.id} has no forbidden third-party brand classes`);
       assert.equal(readback.pageHasHorizontalOverflow, false, `${route.id} has no page-level horizontal overflow`);
       assert.equal(readback.ownerAcceptanceClaimed, false, `${route.id} has no owner/release positive claim`);
       assert.equal(readback.codexActivityAttachedToWorkItem, true, `${route.id} keeps Codex activity attached to Work Items`);
       assert.equal(readback.staleNeededDsListPresent, false, `${route.id} does not render the superseded needed-DS gap list`);
       assert.equal(readback.workManagementPatternReadback.patterns.includes("subnav"), true, `${route.id} consumes DS WorkManagementSubnav`);
       if (route.id === "backlog") {
+        assert.equal(readback.savedViewToolbarWrapperCount, 1, "Backlog route wraps package SavedViewToolbar in the local static filter shell");
+        assert.equal(readback.splitInspectorCount, 1, "Backlog route renders the selected item split inspector");
+        assert.equal(readback.detailRouteLinkCount > 0, true, "Backlog split inspector links to the canonical AOS-128 detail route");
+        assert.deepEqual(readback.backlogGroupIds, ["shaped", "unshaped"], "Backlog route renders shaped and unshaped groups");
+        assert.equal(readback.disabledActionReasonCount >= 2, true, "Backlog route keeps disabled promote/route actions with reasons");
         assert.equal(readback.registeredDsWorkComponentsReadback.present, true, "Backlog renders the registered DS Work components consumption map");
         assert.equal(readback.registeredDsWorkComponentsReadback.implementationBoundary, "package-consumed-storybook-first", "registered DS Work map records package consumption boundary");
         assert.equal(readback.registeredDsWorkComponentsReadback.count, requiredRegisteredWorkComponentNames.length, "registered DS Work map renders every admitted component");
@@ -1418,8 +1542,16 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
         );
       }
       if (route.id === "board") {
+        assert.equal(readback.savedViewToolbarWrapperCount, 1, "Board route wraps package SavedViewToolbar for static board filters");
+        assert.equal(readback.splitInspectorCount, 1, "Board route renders the selected item split inspector");
+        assert.equal(readback.detailRouteLinkCount > 0, true, "Board split inspector links to the canonical AOS-128 detail route");
         assert.equal(readback.workManagementPatternReadback.patterns.includes("work-board"), true, "Board route consumes DS WorkBoard");
         assert.equal(readback.workManagementPatternReadback.relationshipChipCount > 0, true, "Board route renders DS RelationshipChip entries");
+      }
+      if (route.id === "queue") {
+        assert.equal(readback.savedViewToolbarWrapperCount, 1, "Queue route wraps package SavedViewToolbar for static queue filters");
+        assert.equal(readback.splitInspectorCount, 1, "Queue route renders the selected item split inspector");
+        assert.equal(readback.detailRouteLinkCount > 0, true, "Queue split inspector links to the canonical AOS-128 detail route");
       }
       if (route.id === "detail") {
         assert.equal(readback.workManagementPatternReadback.patterns.includes("work-item-inspector"), true, "Detail route consumes DS WorkItemInspector");
@@ -1581,12 +1713,49 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
     const mobileBacklogScreenshot = `${screenshotRoot}/work-mobile-registered-ds-work-components.png`;
     await mobilePage.screenshot({ path: mobileBacklogScreenshot, fullPage: true });
     screenshots.push(mobileBacklogScreenshot);
+    await mobilePage.goto(`${baseUrl}/work/items/AOS-128?locale=zh-CN&theme=dark`, { waitUntil: "networkidle" });
+    await mobilePage.waitForSelector('[data-work-management-pattern="work-item-inspector"]');
+    const mobileDetailReadback = await mobilePage.evaluate(() => {
+      const root = document.querySelector('[data-work-management-mockup="storybook-ds-work-management-v1"]');
+      const html = document.documentElement;
+      const body = document.body;
+      return {
+        page: root?.getAttribute("data-work-management-page") ?? null,
+        route: root?.getAttribute("data-work-management-route") ?? null,
+        routeAcceptanceTarget: root?.getAttribute("data-work-route-acceptance-target") ?? null,
+        lang: html.lang,
+        theme: html.dataset.tcrnTheme,
+        pageHasHorizontalOverflow: html.scrollWidth > window.innerWidth + 1 || body.scrollWidth > window.innerWidth + 1,
+        searchWrapperCount: document.querySelectorAll(".tcrn-product-shell-search, .tcrn-search-input").length,
+        inspectorPresent: Boolean(document.querySelector('[data-work-management-pattern="work-item-inspector"]')),
+        currentAosBasisVisible: body.innerText.includes("cae4d52"),
+        staleAosBasisVisible: body.innerText.includes("7836dca"),
+        retainedRefreshPostureVisible: body.innerText.includes("4317 保留预览已刷新"),
+        ownerAcceptanceClaimed: /Owner acceptance:\s*accepted|Release ready|Product acceptance:\s*accepted|Final MVP accepted|Live dispatch enabled/i.test(body.innerText)
+      };
+    });
+    assert.equal(mobileDetailReadback.page, "detail", "mobile detail route renders AOS-128 detail page");
+    assert.equal(mobileDetailReadback.route, "/work/items/AOS-128", "mobile detail route records canonical path");
+    assert.equal(mobileDetailReadback.routeAcceptanceTarget, "/work/items/AOS-128", "mobile detail route records acceptance marker");
+    assert.equal(mobileDetailReadback.lang, "zh-CN", "mobile detail route preserves URL locale");
+    assert.equal(mobileDetailReadback.theme, "dark", "mobile detail route preserves URL theme");
+    assert.equal(mobileDetailReadback.pageHasHorizontalOverflow, false, "mobile detail route has no page-level horizontal overflow");
+    assert.equal(mobileDetailReadback.searchWrapperCount, 0, "mobile detail route has no search or search-result clone");
+    assert.equal(mobileDetailReadback.inspectorPresent, true, "mobile detail route renders full WorkItemInspector");
+    assert.equal(mobileDetailReadback.currentAosBasisVisible, true, "mobile detail route surfaces current AOS basis");
+    assert.equal(mobileDetailReadback.staleAosBasisVisible, false, "mobile detail route hides stale AOS basis");
+    assert.equal(mobileDetailReadback.retainedRefreshPostureVisible, true, "mobile detail route keeps accurate retained-preview posture");
+    assert.equal(mobileDetailReadback.ownerAcceptanceClaimed, false, "mobile detail route does not claim owner/product/release acceptance");
+    const mobileDetailScreenshot = `${screenshotRoot}/work-mobile-detail.png`;
+    await mobilePage.screenshot({ path: mobileDetailScreenshot, fullPage: true });
+    screenshots.push(mobileDetailScreenshot);
     await mobilePage.close();
     return {
       ok: true,
       desktopRoutes: desktopReadbacks,
       mobileReadback,
       mobileBacklogReadback,
+      mobileDetailReadback,
       contentContractReadback,
       screenshots
     };

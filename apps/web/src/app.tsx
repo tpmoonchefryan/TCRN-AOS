@@ -364,6 +364,7 @@ export function AosShellApp({ initialShellState: initialShellStateOverride }: Ao
         locale={currentLocale}
         route={currentRouteId}
         variant={visualInstanceVariant}
+        viewport={browserVisualState.viewport}
         routeHref={(path) => buildRouteHref(path, {
           locale: currentLocale,
           theme: controller.theme,
@@ -383,6 +384,7 @@ function OwnerQualityContent({
   locale,
   route,
   variant,
+  viewport,
   routeHref
 }: {
   apiReadback: ApiReadbackState;
@@ -393,6 +395,7 @@ function OwnerQualityContent({
   locale: TcrnLocale;
   route: AosRouteId;
   variant: string;
+  viewport: VisualInstanceViewportState;
   routeHref: (path: string) => string;
 }) {
   const isWorkFirst = route === "work";
@@ -405,6 +408,7 @@ function OwnerQualityContent({
           theme={theme}
           collapsed={collapsed}
           variant={variant}
+          viewport={viewport}
           routeHref={routeHref}
         />
         <EnvironmentBanner label={copyText(copy, "boundary", "Read-only preview")} state={{ state: "local_only" }} locale={locale} />
@@ -818,11 +822,26 @@ button, input { font: inherit; }
 [data-work-evidence-page="true"],
 [data-work-gates-page="true"],
 [data-work-codex-activity-page="true"],
-[data-work-saved-view="owner-feedback"] {
+[data-work-saved-view="owner-feedback"],
+[data-work-saved-view-toolbar-wrapper],
+[data-work-split-inspector],
+[data-work-backlog-groups] {
   min-width: 0;
 }
-[data-registered-ds-work-components="true"] * {
+[data-registered-ds-work-components="true"] *,
+[data-work-saved-view-toolbar-wrapper] *,
+[data-work-split-inspector] *,
+[data-work-backlog-groups] * {
   min-width: 0;
+}
+[data-work-saved-view-toolbar-wrapper],
+[data-work-split-inspector] {
+  display: grid;
+  gap: var(--tcrn-space-4);
+}
+[data-work-backlog-groups="shaped-unshaped"] {
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
 }
 `;
 }

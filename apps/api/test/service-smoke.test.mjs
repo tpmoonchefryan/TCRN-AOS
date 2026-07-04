@@ -65,6 +65,7 @@ test("local service serves the AOS shell while backend readbacks stay available"
     for (const target of shellTargets) {
       const response = await fetch(`${service.url}${target}`);
       const html = await response.text();
+      const bodyHtml = html.slice(html.indexOf("<body"));
       assert.equal(response.status, 200, `${target} serves the owner-quality product shell`);
       assert.match(response.headers.get("content-type") ?? "", /text\/html/);
       assert.match(html, /data-aos-shell="owner-quality-product-shell"/);
@@ -82,9 +83,25 @@ test("local service serves the AOS shell while backend readbacks stay available"
         assert.match(html, /data-work-management-api-integration="absent"/);
         assert.match(html, /data-work-management-live-dispatch="not-enabled"/);
         assert.match(html, /data-work-management-hierarchy="initiative-epic-story-work-item-subtask-evidence-task"/);
+        assert.match(html, /data-ds-work-components-anchor="components\.html#work-management-components-spec"/);
+        assert.match(html, /data-ds-work-patterns-anchor="patterns\.html#work-management-patterns"/);
+        assert.match(html, /data-storybook-components-story-id="tcrn-design-system-components--work-management-components-spec"/);
+        assert.match(html, /data-storybook-patterns-story-id="tcrn-design-system-patterns--work-management-patterns"/);
+        assert.match(html, /data-ai-consumption-contract-version="ai_consumption_contract_v1"/);
+        assert.match(html, /data-foundation-visual-standards-registry="foundation-visual-standards-v1"/);
+        assert.match(html, /data-consumer-visual-style-contract="consumerVisualStyleContract"/);
+        assert.match(html, /data-storybook-doc-shell-oracle="original-storybook-doc-shell-v1"/);
+        assert.match(html, /data-work-static-authority-disposition="aos_static_work_mockup_consumes_storybook_ds_work_management_contract"/);
+        assert.match(html, /data-work-route-proof-targets="\/work \/work\/board \/work\/backlog \/work\/items\/AOS-128 \/work\/views\/owner-feedback \/work\/gates \/work\/evidence \/work\/codex-activity \/work\/initiatives\/work-management-mvp"/);
+        assert.match(html, /data-work-mobile-proof-targets="\/work\/backlog\?locale=zh-CN&amp;theme=dark \/work\/items\/AOS-128\?locale=zh-CN&amp;theme=dark \/work\/initiatives\/work-management-mvp\?locale=zh-CN&amp;theme=dark"/);
+        assert.match(html, /data-work-clean-room-layout="issue-style-tcrn-owned-no-atlassian-assets"/);
         assert.match(html, /data-design-system-work-components="registered-package-components"/);
         assert.match(html, /data-product-local-work-component-clones="absent"/);
+        assert.match(html, new RegExp(`data-work-route-acceptance-target="${target.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`));
         assert.doesNotMatch(html, /pending Atlas refresh|等待 Atlas 刷新/);
+        assert.doesNotMatch(bodyHtml, /Atlassian|Jira|OpenProject|Linear|Plane|Huly|Twenty/);
+        assert.doesNotMatch(bodyHtml, /data-doc-shell|tcrn-doc-shell|tcrn-doc-header|tcrn-doc-sidebar|tcrn-doc-nav/);
+        assert.doesNotMatch(bodyHtml, /tcrn-product-shell-search|tcrn-search-input|data-product-shell-search-results|data-search-result/);
       } else {
         assert.match(html, /data-owner-quality-work-queue="true"/);
         assert.match(html, /data-owner-quality-gates="true"/);
