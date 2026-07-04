@@ -72,10 +72,15 @@ try {
     && workDetailHtml.includes("post-review-source")
     && workDetailHtml.includes("33222fa")
     && workDetailHtml.includes("d17bdc6")
-    && workDetailHtml.includes("4317 retained preview refreshed; PM freshness retry pending")
+    && workDetailHtml.includes("Prior 4317 retained preview refreshed to the reviewed basis; next Atlas refresh required for this source repair before PM freshness retry.")
+    && workDetailHtml.includes("Next Atlas refresh is required for this source repair before PM freshness retry; owner and product acceptance remain unclaimed.")
     && !workDetailHtml.includes("cae4d52")
     && !workDetailHtml.includes("7836dca")
     && !workDetailHtml.includes("pending Atlas refresh")
+    && !workDetailHtml.includes("Pending AOS consumption review")
+    && !workDetailHtml.includes("retained preview is not refreshed")
+    && !workDetailHtml.includes("不刷新保留预览")
+    && !workDetailHtml.includes("Refresh retry only if this copy repair changes source")
     && !workDetailHtml.includes("Owner inspection package is blocked until gates pass")
     && !workDetailHtml.includes("Owner handoff remains blocked until review, QA, retained refresh, and PM freshness pass.")
     && !workDetailHtml.includes("retained stale until review and refresh")
@@ -117,9 +122,13 @@ try {
         workflowBasisVisible: workDetailHtml.includes("d17bdc6"),
         priorAosBasisVisible: workDetailHtml.includes("cae4d52"),
         staleAosBasisVisible: workDetailHtml.includes("7836dca"),
-        retainedRefreshPostureVisible: workDetailHtml.includes("4317 retained preview refreshed; PM freshness retry pending"),
+        retainedRefreshPostureVisible: workDetailHtml.includes("Prior 4317 retained preview refreshed to the reviewed basis"),
+        nextAtlasRefreshRequiredVisible: workDetailHtml.includes("Next Atlas refresh is required for this source repair before PM freshness retry"),
         staleRetainedPostureVisible: workDetailHtml.includes("4317 retained preview remains stale until post-review refresh"),
         stalePendingRefreshVisible: workDetailHtml.includes("pending Atlas refresh"),
+        staleAosConsumptionReviewVisible: workDetailHtml.includes("Pending AOS consumption review"),
+        staleRetainedNotRefreshedVisible: workDetailHtml.includes("retained preview is not refreshed") || workDetailHtml.includes("不刷新保留预览"),
+        staleConditionalRefreshCopyVisible: workDetailHtml.includes("Refresh retry only if this copy repair changes source"),
         staleOwnerInspectionGateVisible: workDetailHtml.includes("Owner inspection package is blocked until gates pass"),
         staleOwnerHandoffBlockedVisible: workDetailHtml.includes("Owner handoff remains blocked until review, QA, retained refresh, and PM freshness pass.")
       },

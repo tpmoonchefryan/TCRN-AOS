@@ -152,8 +152,12 @@ test("local service serves the AOS shell while backend readbacks stay available"
         assert.match(html, /d17bdc6/);
         assert.doesNotMatch(html, /cae4d52/);
         assert.doesNotMatch(html, /7836dca/);
-        assert.match(html, /4317 retained preview refreshed; PM freshness retry pending/);
-        assert.match(html, /PM freshness retry pending; owner and product acceptance are not claimed\./);
+        assert.match(html, /Prior 4317 retained preview refreshed to the reviewed basis; next Atlas refresh required for this source repair before PM freshness retry\./);
+        assert.match(html, /Next Atlas refresh is required for this source repair before PM freshness retry; owner and product acceptance remain unclaimed\./);
+        assert.doesNotMatch(html, /Pending AOS consumption review/);
+        assert.doesNotMatch(html, /retained preview is not refreshed/);
+        assert.doesNotMatch(html, /不刷新保留预览/);
+        assert.doesNotMatch(html, /Refresh retry only if this copy repair changes source/);
         assert.doesNotMatch(html, /4317 retained preview remains stale until post-review refresh/);
         assert.doesNotMatch(html, /Owner handoff remains blocked until review, QA, retained refresh, and PM freshness pass\./);
         assert.doesNotMatch(html, /retained stale until review and refresh/);

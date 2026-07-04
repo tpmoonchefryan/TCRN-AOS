@@ -1457,7 +1457,11 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
             workflowBasisVisible: text.includes("d17bdc6") || machineTokens.some((token) => token.fullToken === "d17bdc6"),
             previewPendingAtlasRefreshVisible: text.includes("pending Atlas refresh") || text.includes("等待 Atlas 刷新"),
             retainedRefreshPostureVisible: text.includes("4317 retained preview refreshed") || text.includes("4317 保留预览已刷新"),
+            nextAtlasRefreshRequiredVisible: text.includes("Next Atlas refresh is required for this source repair before PM freshness retry") || text.includes("source 修复需要下一次 Atlas 刷新"),
             pmFreshnessRetryVisible: text.includes("PM freshness retry pending") || text.includes("PM freshness 重试"),
+            staleAosConsumptionReviewVisible: text.includes("Pending AOS consumption review") || text.includes("等待 AOS 消费评审"),
+            staleRetainedNotRefreshedVisible: text.includes("retained preview is not refreshed") || text.includes("不刷新保留预览"),
+            staleConditionalRefreshCopyVisible: text.includes("Refresh retry only if this copy repair changes source"),
             staleOwnerInspectionGateVisible: text.includes("Owner inspection package is blocked until gates pass"),
             ownerInspectionStillGuardedVisible: text.includes("Owner handoff remains blocked") || text.includes("Owner 交接需等待"),
             retainedPreviewStaleUntilReviewVisible: text.includes("4317 retained preview remains stale until post-review refresh") || text.includes("4317 保留预览在评审后刷新前保持过期"),
@@ -1618,7 +1622,11 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
         assert.equal(readback.workDetailBasisAndGatePostureReadback.workflowBasisVisible, true, "Detail route keeps Workflow d17bdc6 plan basis visible");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.previewPendingAtlasRefreshVisible, false, "Detail route does not say pending Atlas refresh as a stale pre-Atlas blocker");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.retainedRefreshPostureVisible, true, "Detail route states retained 4317 was refreshed to this reviewed basis");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.nextAtlasRefreshRequiredVisible, true, "Detail route states this source repair needs the next Atlas refresh before PM freshness retry");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.pmFreshnessRetryVisible, true, "Detail route states PM freshness retry is pending without overclaiming readiness");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.staleAosConsumptionReviewVisible, false, "Detail route removes stale AOS consumption review pending label");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.staleRetainedNotRefreshedVisible, false, "Detail route removes stale retained-preview-not-refreshed activity copy");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.staleConditionalRefreshCopyVisible, false, "Detail route removes conditional refresh retry copy");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.staleOwnerInspectionGateVisible, false, "Detail route removes the pre-Atlas owner inspection blocked copy");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.ownerInspectionStillGuardedVisible, false, "Detail route removes the stale owner-handoff blocked copy");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.retainedPreviewStaleUntilReviewVisible, false, "Detail route removes stale retained-preview pre-refresh posture");
@@ -1789,8 +1797,11 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
         staleAosBasisVisible: body.innerText.includes("7836dca"),
         priorAosBasisVisible: body.innerText.includes("cae4d52"),
         retainedRefreshPostureVisible: body.innerText.includes("4317 保留预览已刷新"),
+        nextAtlasRefreshRequiredVisible: body.innerText.includes("source 修复需要下一次 Atlas 刷新"),
         retainedPreviewStaleUntilReviewVisible: body.innerText.includes("4317 保留预览在评审后刷新前保持过期"),
         pmFreshnessRetryVisible: body.innerText.includes("PM freshness 重试"),
+        staleAosConsumptionReviewVisible: body.innerText.includes("等待 AOS 消费评审"),
+        staleRetainedNotRefreshedVisible: body.innerText.includes("不刷新保留预览"),
         staleOwnerHandoffBlockedVisible: body.innerText.includes("Owner 交接需等待"),
         ownerAcceptanceClaimed: /Owner acceptance:\s*accepted|Release ready|Product acceptance:\s*accepted|Final MVP accepted|Live dispatch enabled/i.test(body.innerText)
       };
@@ -1807,7 +1818,10 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
     assert.equal(mobileDetailReadback.staleAosBasisVisible, false, "mobile detail route hides stale AOS basis");
     assert.equal(mobileDetailReadback.priorAosBasisVisible, false, "mobile detail route does not surface prior AOS cae4d52 basis as current");
     assert.equal(mobileDetailReadback.retainedRefreshPostureVisible, true, "mobile detail route states retained 4317 refresh for this reviewed basis");
+    assert.equal(mobileDetailReadback.nextAtlasRefreshRequiredVisible, true, "mobile detail route states this source repair needs next Atlas refresh");
     assert.equal(mobileDetailReadback.pmFreshnessRetryVisible, true, "mobile detail route states PM freshness retry is pending");
+    assert.equal(mobileDetailReadback.staleAosConsumptionReviewVisible, false, "mobile detail route removes stale AOS consumption review pending label");
+    assert.equal(mobileDetailReadback.staleRetainedNotRefreshedVisible, false, "mobile detail route removes stale retained-preview-not-refreshed copy");
     assert.equal(mobileDetailReadback.retainedPreviewStaleUntilReviewVisible, false, "mobile detail route removes stale retained-preview pre-refresh posture");
     assert.equal(mobileDetailReadback.staleOwnerHandoffBlockedVisible, false, "mobile detail route removes stale owner-handoff blocked copy");
     assert.equal(mobileDetailReadback.ownerAcceptanceClaimed, false, "mobile detail route does not claim owner/product/release acceptance");
