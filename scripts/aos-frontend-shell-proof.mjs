@@ -1617,11 +1617,11 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
         assert.equal(readback.workDetailBasisAndGatePostureReadback.dsBasisVisible, true, "Detail route keeps current DS 33222fa basis visible");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.workflowBasisVisible, true, "Detail route keeps Workflow d17bdc6 plan basis visible");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.previewPendingAtlasRefreshVisible, false, "Detail route does not say pending Atlas refresh as a stale pre-Atlas blocker");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.retainedRefreshPostureVisible, false, "Detail route does not claim retained 4317 was refreshed for this source basis");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.pmFreshnessRetryVisible, false, "Detail route does not claim PM freshness retry before Atlas refresh");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.retainedRefreshPostureVisible, true, "Detail route states retained 4317 was refreshed to this reviewed basis");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.pmFreshnessRetryVisible, true, "Detail route states PM freshness retry is pending without overclaiming readiness");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.staleOwnerInspectionGateVisible, false, "Detail route removes the pre-Atlas owner inspection blocked copy");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.ownerInspectionStillGuardedVisible, true, "Detail route still guards owner inspection until PM freshness accepts");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.retainedPreviewStaleUntilReviewVisible, true, "Detail route states retained 4317 remains stale until post-review refresh");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.ownerInspectionStillGuardedVisible, false, "Detail route removes the stale owner-handoff blocked copy");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.retainedPreviewStaleUntilReviewVisible, false, "Detail route removes stale retained-preview pre-refresh posture");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.ownerAcceptanceClaimed, false, "Detail route still does not claim owner or release acceptance");
       }
       if (route.id === "gates") {
@@ -1790,6 +1790,8 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
         priorAosBasisVisible: body.innerText.includes("cae4d52"),
         retainedRefreshPostureVisible: body.innerText.includes("4317 保留预览已刷新"),
         retainedPreviewStaleUntilReviewVisible: body.innerText.includes("4317 保留预览在评审后刷新前保持过期"),
+        pmFreshnessRetryVisible: body.innerText.includes("PM freshness 重试"),
+        staleOwnerHandoffBlockedVisible: body.innerText.includes("Owner 交接需等待"),
         ownerAcceptanceClaimed: /Owner acceptance:\s*accepted|Release ready|Product acceptance:\s*accepted|Final MVP accepted|Live dispatch enabled/i.test(body.innerText)
       };
     });
@@ -1804,8 +1806,10 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
     assert.equal(mobileDetailReadback.sourceLocalBasisVisible, true, "mobile detail route surfaces source-local AOS consumption basis without stale commit claim");
     assert.equal(mobileDetailReadback.staleAosBasisVisible, false, "mobile detail route hides stale AOS basis");
     assert.equal(mobileDetailReadback.priorAosBasisVisible, false, "mobile detail route does not surface prior AOS cae4d52 basis as current");
-    assert.equal(mobileDetailReadback.retainedRefreshPostureVisible, false, "mobile detail route does not claim retained 4317 refresh for this source basis");
-    assert.equal(mobileDetailReadback.retainedPreviewStaleUntilReviewVisible, true, "mobile detail route keeps accurate stale retained-preview posture");
+    assert.equal(mobileDetailReadback.retainedRefreshPostureVisible, true, "mobile detail route states retained 4317 refresh for this reviewed basis");
+    assert.equal(mobileDetailReadback.pmFreshnessRetryVisible, true, "mobile detail route states PM freshness retry is pending");
+    assert.equal(mobileDetailReadback.retainedPreviewStaleUntilReviewVisible, false, "mobile detail route removes stale retained-preview pre-refresh posture");
+    assert.equal(mobileDetailReadback.staleOwnerHandoffBlockedVisible, false, "mobile detail route removes stale owner-handoff blocked copy");
     assert.equal(mobileDetailReadback.ownerAcceptanceClaimed, false, "mobile detail route does not claim owner/product/release acceptance");
     const mobileDetailScreenshot = `${screenshotRoot}/work-mobile-detail.png`;
     await mobilePage.screenshot({ path: mobileDetailScreenshot, fullPage: true });

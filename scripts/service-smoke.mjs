@@ -72,11 +72,13 @@ try {
     && workDetailHtml.includes("post-review-source")
     && workDetailHtml.includes("33222fa")
     && workDetailHtml.includes("d17bdc6")
-    && workDetailHtml.includes("4317 retained preview remains stale until post-review refresh")
+    && workDetailHtml.includes("4317 retained preview refreshed; PM freshness retry pending")
     && !workDetailHtml.includes("cae4d52")
     && !workDetailHtml.includes("7836dca")
     && !workDetailHtml.includes("pending Atlas refresh")
     && !workDetailHtml.includes("Owner inspection package is blocked until gates pass")
+    && !workDetailHtml.includes("Owner handoff remains blocked until review, QA, retained refresh, and PM freshness pass.")
+    && !workDetailHtml.includes("retained stale until review and refresh")
     && workEvidence.status === 200
     && workEvidenceHtml.includes('data-work-evidence-page="true"')
     && workEvidenceHtml.includes('data-work-management-pattern="evidence-attachment-list"')
@@ -115,9 +117,11 @@ try {
         workflowBasisVisible: workDetailHtml.includes("d17bdc6"),
         priorAosBasisVisible: workDetailHtml.includes("cae4d52"),
         staleAosBasisVisible: workDetailHtml.includes("7836dca"),
-        retainedRefreshPostureVisible: workDetailHtml.includes("4317 retained preview remains stale until post-review refresh"),
+        retainedRefreshPostureVisible: workDetailHtml.includes("4317 retained preview refreshed; PM freshness retry pending"),
+        staleRetainedPostureVisible: workDetailHtml.includes("4317 retained preview remains stale until post-review refresh"),
         stalePendingRefreshVisible: workDetailHtml.includes("pending Atlas refresh"),
-        staleOwnerInspectionGateVisible: workDetailHtml.includes("Owner inspection package is blocked until gates pass")
+        staleOwnerInspectionGateVisible: workDetailHtml.includes("Owner inspection package is blocked until gates pass"),
+        staleOwnerHandoffBlockedVisible: workDetailHtml.includes("Owner handoff remains blocked until review, QA, retained refresh, and PM freshness pass.")
       },
       workEvidenceStatus: workEvidence.status,
       workActivityStatus: workActivity.status,
