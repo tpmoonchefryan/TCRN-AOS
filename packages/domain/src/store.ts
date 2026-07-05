@@ -1,5 +1,5 @@
 import { assertNoRestrictedContent, redactForAudit } from "./security.js";
-import { createId } from "./idempotency.js";
+import { createId, digest } from "./idempotency.js";
 import { POLICY_VERSION, resolveGateOwner } from "./policies.js";
 import type {
   AIEmployee,
@@ -49,6 +49,9 @@ import type {
   StoryRecord,
   StructuredComment,
   SubTask,
+  TicketListParams,
+  TicketListReadback,
+  TicketListRow,
   UserGuidePageDraft,
   WorkIndexDrillThrough
 } from "./types.js";
@@ -595,6 +598,136 @@ export class AosStore {
       });
     }
     return conference;
+  }
+
+  listTickets(params: TicketListParams = {}): TicketListReadback {
+    const query = normalizeTicketListParams(params);
+    const cursor = decodeTicketListCursor(query.cursor, query.filterDigest, query.limit);
+    const rows = this.listStories()
+      .map((story) => this.createTicketListRow(story))
+      .filter((row) => ticketListRowMatches(row, query.filters))
+      .sort(compareTicketListRows);
+    const cursorFiltered = cursor
+      ? rows.filter((row) => row.updatedAt < cursor.last.updatedAt || (row.updatedAt === cursor.last.updatedAt && row.storyId > cursor.last.storyId))
+      : rows;
+    const pageRows = cursorFiltered.slice(0, query.limit);
+    const hasMore = cursorFiltered.length > query.limit;
+    return {
+      ok: true,
+      method: "aos.ticket.list",
+      schemaVersion: TICKET_LIST_SCHEMA_VERSION,
+      rowGrain: TICKET_LIST_ROW_GRAIN,
+      rows: pageRows,
+      page: {
+        limit: query.limit,
+        returnedCount: pageRows.length,
+        hasMore,
+        nextCursor: hasMore && pageRows.length > 0
+          ? encodeTicketListCursor(pageRows[pageRows.length - 1]!, query.filterDigest, query.limit)
+          : null,
+        filterDigest: query.filterDigest,
+        sortVersion: TICKET_LIST_SORT_VERSION
+      }
+    };
+  }
+
+  private createTicketListRow(story: StoryRecord): TicketListRow {
+    const epic = this.epics.get(story.epicId);
+    if (!epic) {
+      throw new Error(`ticket_list_missing_epic:${story.epicId}`);
+    }
+    const initiative = this.initiatives.get(epic.initiativeId);
+    if (!initiative) {
+      throw new Error(`ticket_list_missing_initiative:${epic.initiativeId}`);
+    }
+    const assignments = [...this.assignments.values()]
+      .filter((assignment) => assignment.targetType === "story" && assignment.targetId === story.id)
+      .sort((left, right) => left.id.localeCompare(right.id));
+    const assignmentIds = assignments.map((assignment) => assignment.id);
+    const assignmentIdSet = new Set(assignmentIds);
+    const runs = [...this.runs.values()]
+      .filter((run) => assignmentIdSet.has(run.assignmentId))
+      .sort((left, right) => (right.endedAt ?? right.startedAt).localeCompare(left.endedAt ?? left.startedAt) || left.id.localeCompare(right.id));
+    const gates = [...this.gates.values()]
+      .filter((gate) => gate.linkedTicketId === story.id)
+      .sort((left, right) => {
+        const leftAudit = latestByTimestamp(this.auditEvents.filter((event) => event.targetId === left.id));
+        const rightAudit = latestByTimestamp(this.auditEvents.filter((event) => event.targetId === right.id));
+        return (rightAudit?.timestamp ?? "").localeCompare(leftAudit?.timestamp ?? "") || left.id.localeCompare(right.id);
+      });
+    const evidenceIds = new Set<string>([
+      ...story.evidenceIds,
+      ...gates.flatMap((gate) => gate.inputEvidenceIds)
+    ]);
+    const evidence = [...evidenceIds]
+      .map((evidenceId) => this.evidence.get(evidenceId))
+      .filter((item): item is EvidenceLink => Boolean(item))
+      .sort((left, right) => right.createdAt.localeCompare(left.createdAt) || left.id.localeCompare(right.id));
+    const targetIds = new Set<string>([
+      story.id,
+      ...assignmentIds,
+      ...runs.map((run) => run.id),
+      ...gates.map((gate) => gate.id),
+      ...evidence.map((item) => item.id)
+    ]);
+    const auditEvents = this.auditEvents
+      .filter((event) => targetIds.has(event.targetId))
+      .sort((left, right) => right.timestamp.localeCompare(left.timestamp) || left.id.localeCompare(right.id));
+    const latestAudit = auditEvents[0] ?? null;
+    const latestGate = gates[0] ?? null;
+    const latestEvidence = evidence[0] ?? null;
+    const updatedAt = latestTimestamp([
+      latestAudit?.timestamp,
+      latestEvidence?.createdAt,
+      ...runs.map((run) => run.endedAt ?? run.startedAt)
+    ]);
+    return {
+      initiativeId: initiative.id,
+      initiativeTitle: initiative.title,
+      initiativeStatus: initiative.status,
+      epicId: epic.id,
+      epicTitle: epic.title,
+      epicStatus: epic.status,
+      storyId: story.id,
+      storyTitle: story.title,
+      storyStatus: story.status,
+      updatedAt,
+      subtaskSummaries: story.subTasks.map((subtask) => ({
+        id: subtask.id,
+        title: subtask.title,
+        status: subtask.status,
+        ownerRole: subtask.ownerRole
+      })),
+      assignmentIds,
+      assigneeEmployeeIds: unique(assignments.map((assignment) => assignment.employeeId)).sort((left, right) => left.localeCompare(right)),
+      runReferences: runs.map((run) => compactRunReference(run)),
+      latestGate: latestGate
+        ? {
+            id: latestGate.id,
+            type: latestGate.type,
+            status: latestGate.status,
+            auditTimestamp: latestByTimestamp(auditEvents.filter((event) => event.targetId === latestGate.id))?.timestamp ?? null
+          }
+        : null,
+      latestEvidence: latestEvidence
+        ? {
+            id: latestEvidence.id,
+            type: latestEvidence.type,
+            redactionState: latestEvidence.redactionState,
+            ...(latestEvidence.digest ? { digest: latestEvidence.digest } : {}),
+            timestamp: latestEvidence.createdAt
+          }
+        : null,
+      latestAudit: latestAudit
+        ? {
+            id: latestAudit.id,
+            action: latestAudit.action,
+            outcome: latestAudit.outcome,
+            timestamp: latestAudit.timestamp
+          }
+        : null,
+      auditCount: auditEvents.length
+    };
   }
 
   createWorkIndexDrillThrough(storyId: string): WorkIndexDrillThrough {
@@ -1771,6 +1904,192 @@ export function now(): string {
 
 function unique(values: string[]): string[] {
   return [...new Set(values)];
+}
+
+const TICKET_LIST_SCHEMA_VERSION = "aos.ticket.list.v1";
+const TICKET_LIST_ROW_GRAIN = "story";
+const TICKET_LIST_SORT_VERSION = "updated-desc-story-id-asc-v1";
+const TICKET_LIST_DEFAULT_LIMIT = 5;
+const TICKET_LIST_MAX_LIMIT = 20;
+const ticketListAllowedKeys = new Set([
+  "initiativeId",
+  "epicId",
+  "storyId",
+  "status",
+  "assigneeEmployeeId",
+  "limit",
+  "cursor",
+  "idempotencyKey"
+]);
+const workStatuses = new Set([
+  "proposed",
+  "accepted",
+  "in_progress",
+  "blocked",
+  "in_review",
+  "verified",
+  "released",
+  "archived",
+  "superseded"
+]);
+
+interface NormalizedTicketListParams {
+  filters: {
+    initiativeId?: string | undefined;
+    epicId?: string | undefined;
+    storyId?: string | undefined;
+    status?: TicketListParams["status"] | undefined;
+    assigneeEmployeeId?: string | undefined;
+  };
+  limit: number;
+  cursor?: string | undefined;
+  filterDigest: string;
+}
+
+interface DecodedTicketListCursor {
+  schemaVersion: typeof TICKET_LIST_SCHEMA_VERSION;
+  rowGrain: typeof TICKET_LIST_ROW_GRAIN;
+  sortVersion: typeof TICKET_LIST_SORT_VERSION;
+  filterDigest: string;
+  limit: number;
+  last: {
+    updatedAt: string;
+    storyId: string;
+  };
+}
+
+function normalizeTicketListParams(params: TicketListParams): NormalizedTicketListParams {
+  const unsupported = Object.keys(params)
+    .filter((key) => !ticketListAllowedKeys.has(key) && (params as Record<string, unknown>)[key] !== undefined)
+    .sort((left, right) => left.localeCompare(right));
+  if (unsupported.length > 0) {
+    throw new Error(`unsupported_ticket_list_filter:${unsupported.join(",")}`);
+  }
+  const status = optionalTicketFilter(params.status, "status") as TicketListParams["status"] | undefined;
+  if (status && !workStatuses.has(status)) {
+    throw new Error("invalid_ticket_list_filter:status");
+  }
+  const filters = compactTicketListFilters({
+    initiativeId: optionalTicketFilter(params.initiativeId, "initiativeId"),
+    epicId: optionalTicketFilter(params.epicId, "epicId"),
+    storyId: optionalTicketFilter(params.storyId, "storyId"),
+    status,
+    assigneeEmployeeId: optionalTicketFilter(params.assigneeEmployeeId, "assigneeEmployeeId")
+  });
+  const limit = normalizeTicketListLimit(params.limit);
+  const cursor = params.cursor === undefined || params.cursor === null
+    ? undefined
+    : optionalTicketFilter(params.cursor, "cursor");
+  return {
+    filters,
+    limit,
+    cursor,
+    filterDigest: digest(filters)
+  };
+}
+
+function optionalTicketFilter(value: unknown, field: string): string | undefined {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error(`invalid_ticket_list_filter:${field}`);
+  }
+  return value;
+}
+
+function normalizeTicketListLimit(value: unknown): number {
+  if (value === undefined || value === null) {
+    return TICKET_LIST_DEFAULT_LIMIT;
+  }
+  if (typeof value !== "number" || !Number.isInteger(value) || value < 1) {
+    throw new Error("invalid_ticket_list_limit");
+  }
+  if (value > TICKET_LIST_MAX_LIMIT) {
+    throw new Error("ticket_list_limit_exceeded");
+  }
+  return value;
+}
+
+function compactTicketListFilters(filters: NormalizedTicketListParams["filters"]): NormalizedTicketListParams["filters"] {
+  return Object.fromEntries(Object.entries(filters).filter(([, value]) => value !== undefined)) as NormalizedTicketListParams["filters"];
+}
+
+function decodeTicketListCursor(value: string | undefined, expectedFilterDigest: string, expectedLimit: number): DecodedTicketListCursor | null {
+  if (!value) {
+    return null;
+  }
+  let decoded: unknown;
+  try {
+    decoded = JSON.parse(Buffer.from(value, "base64url").toString("utf8"));
+  } catch {
+    throw new Error("invalid_ticket_list_cursor");
+  }
+  if (!isTicketListCursor(decoded)) {
+    throw new Error("invalid_ticket_list_cursor");
+  }
+  if (decoded.filterDigest !== expectedFilterDigest || decoded.limit !== expectedLimit) {
+    throw new Error("ticket_list_cursor_filter_mismatch");
+  }
+  return decoded;
+}
+
+function isTicketListCursor(value: unknown): value is DecodedTicketListCursor {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+  const candidate = value as DecodedTicketListCursor;
+  return candidate.schemaVersion === TICKET_LIST_SCHEMA_VERSION &&
+    candidate.rowGrain === TICKET_LIST_ROW_GRAIN &&
+    candidate.sortVersion === TICKET_LIST_SORT_VERSION &&
+    typeof candidate.filterDigest === "string" &&
+    typeof candidate.limit === "number" &&
+    Boolean(candidate.last) &&
+    typeof candidate.last.updatedAt === "string" &&
+    typeof candidate.last.storyId === "string";
+}
+
+function encodeTicketListCursor(row: TicketListRow, filterDigest: string, limit: number): string {
+  return Buffer.from(JSON.stringify({
+    schemaVersion: TICKET_LIST_SCHEMA_VERSION,
+    rowGrain: TICKET_LIST_ROW_GRAIN,
+    sortVersion: TICKET_LIST_SORT_VERSION,
+    filterDigest,
+    limit,
+    last: {
+      updatedAt: row.updatedAt,
+      storyId: row.storyId
+    }
+  }), "utf8").toString("base64url");
+}
+
+function ticketListRowMatches(row: TicketListRow, filters: NormalizedTicketListParams["filters"]): boolean {
+  return (!filters.initiativeId || row.initiativeId === filters.initiativeId) &&
+    (!filters.epicId || row.epicId === filters.epicId) &&
+    (!filters.storyId || row.storyId === filters.storyId) &&
+    (!filters.status || row.storyStatus === filters.status) &&
+    (!filters.assigneeEmployeeId || row.assigneeEmployeeIds.includes(filters.assigneeEmployeeId));
+}
+
+function compareTicketListRows(left: TicketListRow, right: TicketListRow): number {
+  return right.updatedAt.localeCompare(left.updatedAt) || left.storyId.localeCompare(right.storyId);
+}
+
+function compactRunReference(run: AgentRun): TicketListRow["runReferences"][number] {
+  return {
+    id: run.id,
+    status: run.status,
+    startedAt: run.startedAt,
+    ...(run.endedAt ? { endedAt: run.endedAt } : {})
+  };
+}
+
+function latestTimestamp(values: Array<string | undefined>): string {
+  return values.filter((value): value is string => Boolean(value)).sort((left, right) => right.localeCompare(left))[0] ?? "1970-01-01T00:00:00.000Z";
+}
+
+function latestByTimestamp<T extends { timestamp: string; id: string }>(items: T[]): T | undefined {
+  return [...items].sort((left, right) => right.timestamp.localeCompare(left.timestamp) || left.id.localeCompare(right.id))[0];
 }
 
 function countBy(values: string[]): Record<string, number> {

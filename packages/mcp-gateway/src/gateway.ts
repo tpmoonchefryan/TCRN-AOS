@@ -39,6 +39,7 @@ import type {
 export const allowedMcpMethods = [
   "aos.ticket.propose",
   "aos.ticket.comment",
+  "aos.ticket.list",
   "aos.run.summary.create",
   "aos.gate.request",
   "aos.evidence.link",
@@ -166,6 +167,8 @@ export class McpGateway {
           actor,
           body: requireString(params.body, "body")
         }, actor);
+      case "aos.ticket.list":
+        return this.store.listTickets(params);
       case "aos.run.summary.create":
         return this.recordRunSummary(actor, params);
       case "aos.gate.request":
@@ -487,7 +490,7 @@ export class McpGateway {
   }
 
   private isReadMethod(method: AllowedMcpMethod): boolean {
-    return ["aos.policy.read", "aos.stage_map.read", "aos.work_index.drill_through.read", "aos.documentation.index.read", "aos.release_candidate.linkage.read", "aos.dependency.governance.read", "aos.resource.governance.read", "aos.resource.materialization_control.read", "aos.audit.query"].includes(method);
+    return ["aos.policy.read", "aos.ticket.list", "aos.stage_map.read", "aos.work_index.drill_through.read", "aos.documentation.index.read", "aos.release_candidate.linkage.read", "aos.dependency.governance.read", "aos.resource.governance.read", "aos.resource.materialization_control.read", "aos.audit.query"].includes(method);
   }
 
   private requireProjectScope(value: unknown): string {

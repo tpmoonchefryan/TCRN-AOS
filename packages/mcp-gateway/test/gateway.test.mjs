@@ -63,6 +63,7 @@ test("gateway exposes only the accepted local MCP method families", () => {
     "aos.run.summary.create",
     "aos.stage_map.read",
     "aos.ticket.comment",
+    "aos.ticket.list",
     "aos.ticket.propose",
     "aos.work_index.drill_through.read"
   ].sort());
@@ -154,6 +155,131 @@ test("ticket proposal, idempotency, dedupe, comments, evidence, and audit work t
   assert.equal(evidence.ok, true);
   assert.equal(audit.status, "read");
   assert.ok(audit.result.length >= 1);
+});
+
+test("aos.ticket.list returns story-centric safe rows with opaque cursors", () => {
+  const { store, gateway } = gatewayFixture();
+  const initiative = gateway.handle({
+    method: "aos.ticket.propose",
+    actor,
+    params: {
+      ticketType: "initiative",
+      projectId: "TCRN-AOS",
+      title: "Phase 3 Ticket List",
+      problem: "Dogfood needs persisted story-centric readback.",
+      expectedOutcome: "Safe ticket-list rows are available."
+    }
+  });
+  const epic = gateway.handle({
+    method: "aos.ticket.propose",
+    actor,
+    params: {
+      ticketType: "epic",
+      initiativeId: initiative.result.id,
+      title: "Ticket list readback",
+      goal: "Expose safe story metadata only."
+    }
+  });
+  const story = gateway.handle({
+    method: "aos.ticket.propose",
+    actor,
+    params: {
+      ticketType: "story",
+      epicId: epic.result.id,
+      title: "List story safely",
+      problem: "phase3-forbidden-problem-value",
+      user: "phase3-forbidden-user-value",
+      expectedBehavior: "phase3-forbidden-expected-behavior-value",
+      acceptanceCriteria: ["phase3-forbidden-acceptance-value"],
+      estimate,
+      subTasks: [{
+        id: "subtask-phase3-safe",
+        title: "Safe row metadata",
+        ownerRole: "implementation",
+        status: "in_progress",
+        dependencyIds: [],
+        proofExpectation: "phase3-forbidden-proof-expectation-value"
+      }]
+    }
+  });
+  const assignment = store.createAssignment({
+    employeeId: actor.employeeId,
+    targetId: story.result.id,
+    targetType: "story",
+    role: "implementation",
+    status: "in_progress",
+    dueState: "none",
+    proofExpectation: "phase3 ticket list test"
+  }, actor);
+  store.recordAgentRun({
+    assignmentId: assignment.id,
+    status: "success",
+    startedAt: "2026-07-05T20:00:00.000Z",
+    endedAt: "2026-07-05T20:01:00.000Z",
+    readback: "phase3-forbidden-run-readback-value",
+    outputSummary: "phase3-forbidden-output-summary-value"
+  }, actor);
+  const evidence = gateway.handle({
+    method: "aos.evidence.link",
+    actor,
+    params: {
+      type: "artifact_id",
+      target: "phase3-forbidden-evidence-target-value",
+      digest: "sha256:phase3-ticket-list",
+      redactionState: "metadata_only"
+    }
+  });
+  gateway.handle({
+    method: "aos.gate.request",
+    actor,
+    params: {
+      type: "evidence_proof",
+      linkedTicketId: story.result.id,
+      inputEvidenceIds: [evidence.result.id]
+    }
+  });
+
+  const page = gateway.handle({
+    method: "aos.ticket.list",
+    actor,
+    params: { storyId: story.result.id, limit: 1 }
+  });
+  assert.equal(page.ok, true);
+  assert.equal(page.status, "read");
+  assert.equal(page.result.method, "aos.ticket.list");
+  assert.equal(page.result.schemaVersion, "aos.ticket.list.v1");
+  assert.equal(page.result.rowGrain, "story");
+  assert.equal(page.result.rows.length, 1);
+  const row = page.result.rows[0];
+  assert.equal(row.storyId, story.result.id);
+  assert.equal(row.storyTitle, "List story safely");
+  assert.deepEqual(row.assignmentIds, [assignment.id]);
+  assert.deepEqual(row.assigneeEmployeeIds, [actor.employeeId]);
+  assert.equal(row.runReferences[0].status, "success");
+  assert.equal(row.latestGate.type, "evidence_proof");
+  assert.equal(row.latestEvidence.digest, "sha256:phase3-ticket-list");
+  assert.equal(row.latestAudit.action.length > 0, true);
+  const responseText = JSON.stringify(page.result);
+  for (const forbidden of [
+    "phase3-forbidden-problem-value",
+    "phase3-forbidden-user-value",
+    "phase3-forbidden-expected-behavior-value",
+    "phase3-forbidden-acceptance-value",
+    "phase3-forbidden-proof-expectation-value",
+    "phase3-forbidden-run-readback-value",
+    "phase3-forbidden-output-summary-value",
+    "phase3-forbidden-evidence-target-value"
+  ]) {
+    assert.equal(responseText.includes(forbidden), false, forbidden);
+  }
+
+  const unsupported = gateway.handle({
+    method: "aos.ticket.list",
+    actor,
+    params: { updatedSince: "2026-07-05T00:00:00.000Z" }
+  });
+  assert.equal(unsupported.ok, false);
+  assert.match(unsupported.error, /unsupported_ticket_list_filter/);
 });
 
 test("authz, role-thread binding, owner intent separation, and restricted payload rejection fail closed", () => {

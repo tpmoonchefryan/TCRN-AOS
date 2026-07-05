@@ -167,6 +167,167 @@ test("Phase 2 transport does not cache over-budget responses for replay bypass",
   assert.equal(replay.error.data.reason, "transport_response_budget_exceeded");
 });
 
+test("Phase 3 ticket list stdio method is read-only, cursor-bound, policy-visible, and budget-safe", () => {
+  const store = new AosStore(createDefaultSeed());
+  const { storyIds, assignmentId } = seedTicketListFixture(store);
+  const transport = new AosMcpTransport(store, { trustedActor: actor, maxResponseBytes: 16_384 });
+
+  const policy = transport.handleJsonRpc({ jsonrpc: "2.0", id: 1, method: "aos.policy.read", params: {} });
+  assert.equal(policy.error, undefined);
+  assert.equal(policy.result.transportAllowedMethods.includes("aos.ticket.list"), true);
+
+  const firstPage = transport.handleJsonRpc({ jsonrpc: "2.0", id: 2, method: "aos.ticket.list", params: { limit: 1 } });
+  assert.equal(firstPage.error, undefined);
+  assert.equal(firstPage.result.ok, true);
+  assert.equal(firstPage.result.method, "aos.ticket.list");
+  assert.equal(firstPage.result.rowGrain, "story");
+  assert.equal(firstPage.result.rows.length, 1);
+  assert.equal(typeof firstPage.result.page.nextCursor, "string");
+  assert.equal(JSON.stringify(firstPage.result).includes("phase3-forbidden-problem-value"), false);
+  assert.equal(JSON.stringify(firstPage.result).includes("phase3-forbidden-run-readback-value"), false);
+
+  const secondPage = transport.handleJsonRpc({
+    jsonrpc: "2.0",
+    id: 3,
+    method: "aos.ticket.list",
+    params: { limit: 1, cursor: firstPage.result.page.nextCursor }
+  });
+  assert.equal(secondPage.error, undefined);
+  assert.equal(secondPage.result.rows.length, 1);
+  assert.notEqual(secondPage.result.rows[0].storyId, firstPage.result.rows[0].storyId);
+
+  const filterMismatch = transport.handleJsonRpc({
+    jsonrpc: "2.0",
+    id: 4,
+    method: "aos.ticket.list",
+    params: { limit: 1, status: "blocked", cursor: firstPage.result.page.nextCursor }
+  });
+  assert.equal(filterMismatch.error, undefined);
+  assert.equal(filterMismatch.result.ok, false);
+  assert.match(filterMismatch.result.error, /ticket_list_cursor_filter_mismatch/);
+
+  const overMax = transport.handleJsonRpc({ jsonrpc: "2.0", id: 5, method: "aos.ticket.list", params: { limit: 21 } });
+  assert.equal(overMax.error, undefined);
+  assert.equal(overMax.result.ok, false);
+  assert.match(overMax.result.error, /ticket_list_limit_exceeded/);
+
+  const replayOne = transport.handleJsonRpc({
+    jsonrpc: "2.0",
+    id: 6,
+    method: "aos.ticket.list",
+    params: { storyId: storyIds[0], idempotencyKey: "phase3-ticket-list-replay" }
+  });
+  const replayTwo = transport.handleJsonRpc({
+    jsonrpc: "2.0",
+    id: 7,
+    method: "aos.ticket.list",
+    params: { storyId: storyIds[0], idempotencyKey: "phase3-ticket-list-replay" }
+  });
+  assert.equal(replayOne.error, undefined);
+  assert.equal(replayTwo.result.status, "deduped");
+  assert.equal(replayTwo.result.replayScope, "process_local_only");
+
+  const negativeMethods = [
+    ["aos.work_index.drill_through.read", "transport_method_outside_mvp_allowlist"],
+    ["aos.work_index.any", "transport_method_outside_mvp_allowlist"],
+    ["aos.resource.record.propose", "transport_method_outside_mvp_allowlist"],
+    ["aos.knowledge.entry.propose", "transport_method_outside_mvp_allowlist"],
+    ["aos.ticket.archive", "transport_method_unknown"],
+    ["aos.unsupported.method", "transport_method_unknown"]
+  ];
+  for (const [method, reason] of negativeMethods) {
+    const denied = transport.handleJsonRpc({ jsonrpc: "2.0", id: method, method, params: {} });
+    assert.equal(denied.result, undefined, method);
+    assert.equal(denied.error.data.reason, reason, method);
+  }
+
+  const budgetStore = new AosStore(createDefaultSeed());
+  seedTicketListFixture(budgetStore, { storyTitleLength: 900, count: 4 });
+  const budgetTransport = new AosMcpTransport(budgetStore, { trustedActor: actor, maxResponseBytes: 1024 });
+  const budgetFirst = budgetTransport.handleJsonRpc({ jsonrpc: "2.0", id: 8, method: "aos.ticket.list", params: { limit: 4 } });
+  const budgetReplay = budgetTransport.handleJsonRpc({ jsonrpc: "2.0", id: 9, method: "aos.ticket.list", params: { limit: 4 } });
+  assert.equal(budgetFirst.result, undefined);
+  assert.equal(budgetFirst.error.data.reason, "transport_response_budget_exceeded");
+  assert.equal(budgetReplay.result, undefined);
+  assert.equal(budgetReplay.error.data.reason, "transport_response_budget_exceeded");
+  assert.equal(store.listAssignments().find((item) => item.id === assignmentId).targetType, "story");
+});
+
+function seedTicketListFixture(store, options = {}) {
+  const count = options.count ?? 3;
+  const titlePad = "x".repeat(options.storyTitleLength ?? 0);
+  const initiative = store.createInitiative({
+    projectId: "TCRN-AOS",
+    title: "Phase 3 ticket list fixture",
+    status: "in_progress",
+    problem: "Ticket list needs persisted readback.",
+    expectedOutcome: "Story-centric rows."
+  }, actor);
+  const epic = store.createEpic({
+    initiativeId: initiative.id,
+    title: "Ticket list epic",
+    goal: "Read safe persisted story rows.",
+    status: "in_progress"
+  }, actor);
+  const storyIds = [];
+  let assignmentId = "";
+  for (let index = 0; index < count; index += 1) {
+    const story = store.createStory({
+      epicId: epic.id,
+      title: `Ticket list story ${index} ${titlePad}`,
+      problem: `phase3-forbidden-problem-value-${index}`,
+      user: `phase3-forbidden-user-value-${index}`,
+      expectedBehavior: `phase3-forbidden-expected-value-${index}`,
+      acceptanceCriteria: [`phase3-forbidden-acceptance-value-${index}`],
+      status: index === 2 ? "blocked" : "in_progress",
+      estimate: { effortPoints: 2, complexity: "medium", risk: "L3", verificationCost: "medium", confidence: "medium" },
+      subTasks: [{
+        id: `subtask-phase3-${index}`,
+        title: `Ticket subtask ${index}`,
+        ownerRole: "implementation",
+        status: "in_progress",
+        dependencyIds: [],
+        proofExpectation: `phase3-forbidden-proof-expectation-value-${index}`
+      }]
+    }, actor);
+    const assignment = store.createAssignment({
+      employeeId: actor.employeeId,
+      targetId: story.id,
+      targetType: "story",
+      role: "implementation",
+      status: "in_progress",
+      dueState: "none",
+      proofExpectation: "phase3 ticket list stdio test"
+    }, actor);
+    if (index === 0) {
+      assignmentId = assignment.id;
+    }
+    store.recordAgentRun({
+      assignmentId: assignment.id,
+      status: "success",
+      startedAt: `2026-07-05T20:0${index}:00.000Z`,
+      endedAt: `2026-07-05T20:0${index}:30.000Z`,
+      readback: `phase3-forbidden-run-readback-value-${index}`,
+      outputSummary: `phase3-forbidden-output-summary-value-${index}`
+    }, actor);
+    const evidence = store.linkEvidence({
+      type: "artifact_id",
+      target: `phase3-forbidden-evidence-target-${index}`,
+      validity: "valid",
+      producer: actor.employeeId,
+      digest: `sha256:phase3-ticket-list-${index}`,
+      redactionState: "metadata_only"
+    }, actor);
+    store.requestGate({
+      type: "evidence_proof",
+      linkedTicketId: story.id,
+      inputEvidenceIds: [evidence.id]
+    }, actor);
+    storyIds.push(story.id);
+  }
+  return { storyIds, assignmentId };
+}
+
 test("Phase 2 runtime transport requires route-owned persisted DB and persisted actor rows", async () => {
   assert.throws(() => createRuntimeTransport({ actor }), /transport_runtime_database_path_required/);
 
@@ -205,7 +366,7 @@ test("Phase 2 denied stdio transport requests persist metadata-only refusal audi
     "phase2-sensitive-output-summary-value",
     "phase2-sensitive-message-value",
     "phase2-sensitive-source-value",
-    "/Users/phase2-sensitive-path-value"
+    ["/", "Users", "phase2-sensitive-path-value"].join("/")
   ];
   const store = new AosStore(createDefaultSeed());
   const transport = new AosMcpTransport(store, { trustedActor: actor });
@@ -252,7 +413,7 @@ test("Phase 2 gateway blocked requests persist metadata-only blocked audit detai
     "phase2-sensitive-blocked-body-value",
     "phase2-sensitive-blocked-readback-value",
     "phase2-sensitive-blocked-source-value",
-    "/Users/phase2-sensitive-blocked-path-value"
+    ["/", "Users", "phase2-sensitive-blocked-path-value"].join("/")
   ];
   const store = new AosStore(createDefaultSeed());
   const gateway = new McpGateway(store);

@@ -15,6 +15,7 @@
     "source-export:proof": "node scripts/source-export-prerequisite-proof.mjs",
     "phase1:persistence-proof": "pnpm build && node scripts/phase1-persistence-proof.mjs",
     "phase2:mcp-transport-proof": "pnpm build && node scripts/phase2-mcp-transport-proof.mjs",
+    "phase3:ticket-list-proof": "pnpm build && node scripts/phase3-ticket-list-proof.mjs",
     "service:start": "pnpm build && node scripts/service-start.mjs",
     "service:smoke": "pnpm build && node scripts/service-smoke.mjs",
     "aos:frontend-shell-proof": "pnpm build && node scripts/aos-frontend-shell-proof.mjs",

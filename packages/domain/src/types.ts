@@ -325,6 +325,92 @@ export interface WorkIndexDrillThrough {
   blockedActions: BlockedActionReason[];
 }
 
+export interface TicketListSubtaskSummary {
+  id: AosId;
+  title: string;
+  status: WorkStatus;
+  ownerRole: ActorRole;
+}
+
+export interface TicketListRunReference {
+  id: AosId;
+  status: AgentRun["status"];
+  startedAt: ISODateTime;
+  endedAt?: ISODateTime;
+}
+
+export interface TicketListGateSummary {
+  id: AosId;
+  type: GateWorkOrder["type"];
+  status: GateStatus;
+  auditTimestamp: ISODateTime | null;
+}
+
+export interface TicketListEvidenceSummary {
+  id: AosId;
+  type: EvidenceLink["type"];
+  redactionState: EvidenceRedactionState;
+  digest?: string;
+  timestamp: ISODateTime;
+}
+
+export interface TicketListAuditSummary {
+  id: AosId;
+  action: string;
+  outcome: AuditEvent["outcome"];
+  timestamp: ISODateTime;
+}
+
+export interface TicketListRow {
+  initiativeId: AosId;
+  initiativeTitle: string;
+  initiativeStatus: WorkStatus;
+  epicId: AosId;
+  epicTitle: string;
+  epicStatus: WorkStatus;
+  storyId: AosId;
+  storyTitle: string;
+  storyStatus: WorkStatus;
+  updatedAt: ISODateTime;
+  subtaskSummaries: TicketListSubtaskSummary[];
+  assignmentIds: AosId[];
+  assigneeEmployeeIds: AosId[];
+  runReferences: TicketListRunReference[];
+  latestGate: TicketListGateSummary | null;
+  latestEvidence: TicketListEvidenceSummary | null;
+  latestAudit: TicketListAuditSummary | null;
+  auditCount: number;
+}
+
+export interface TicketListPage {
+  limit: number;
+  returnedCount: number;
+  hasMore: boolean;
+  nextCursor: string | null;
+  filterDigest: string;
+  sortVersion: string;
+}
+
+export interface TicketListReadback {
+  ok: true;
+  method: "aos.ticket.list";
+  schemaVersion: "aos.ticket.list.v1";
+  rowGrain: "story";
+  rows: TicketListRow[];
+  page: TicketListPage;
+}
+
+export interface TicketListParams {
+  initiativeId?: string;
+  epicId?: string;
+  storyId?: string;
+  status?: WorkStatus;
+  assigneeEmployeeId?: string;
+  limit?: number;
+  cursor?: string;
+  idempotencyKey?: string;
+}
+
 export interface LocalConferenceOperatingLoop {
   conferenceId: AosId;
   linkedTicketIds: AosId[];

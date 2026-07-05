@@ -21,6 +21,7 @@ import { McpGateway, type McpResponse } from "../../mcp-gateway/src/index.js";
 export const transportMvpMethods = [
   "aos.ticket.propose",
   "aos.ticket.comment",
+  "aos.ticket.list",
   "aos.run.summary.create",
   "aos.evidence.link",
   "aos.gate.request",
@@ -33,6 +34,7 @@ export type TransportMvpMethod = typeof transportMvpMethods[number];
 
 export const transportReadMethods: readonly TransportMvpMethod[] = [
   "aos.policy.read",
+  "aos.ticket.list",
   "aos.stage_map.read",
   "aos.audit.query"
 ];
@@ -181,6 +183,9 @@ export class AosMcpTransport {
       params,
       idempotencyKey: typeof params.idempotencyKey === "string" ? params.idempotencyKey : replayKey
     });
+    if (method === "aos.ticket.list" && response.ok) {
+      return this.cacheBudgetedResult(replayKey, response.result);
+    }
     const result = normalizeGatewayResponse(response);
     return this.cacheBudgetedResult(replayKey, result);
   }
