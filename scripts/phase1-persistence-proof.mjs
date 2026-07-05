@@ -145,6 +145,15 @@ async function runProof() {
       dueState: "none",
       proofExpectation: "phase1:persistence-proof"
     }, actor);
+    const nonStoryAssignmentCollision = store.createAssignment({
+      employeeId: actor.employeeId,
+      targetId: story.id,
+      targetType: "gate",
+      role: "implementation",
+      status: "in_progress",
+      dueState: "none",
+      proofExpectation: "phase1 trace collision exclusion"
+    }, actor);
     const run = store.recordAgentRun({
       assignmentId: assignment.id,
       status: "success",
@@ -177,6 +186,9 @@ async function runProof() {
     });
     assert.equal(gateResponse.ok, true);
 
+    const schemaIntegrity = repository.schemaIntegrityReadback();
+    receiptPaths.push(writeReceipt("sqlite-schema-integrity-proof.json", schemaIntegrity));
+
     const digestBeforeRestart = repository.databaseDigest();
     const countsBeforeRestart = repository.tableCounts();
     const appendOnly = repository.rejectAuditMutationForProof();
@@ -195,11 +207,18 @@ async function runProof() {
     receiptPaths.push(writeReceipt("story-traceability-join-proof.json", {
       ok: trace.subtaskIds.includes(subtask.id) &&
         trace.assignmentIds.includes(assignment.id) &&
+        !trace.assignmentIds.includes(nonStoryAssignmentCollision.id) &&
         trace.agentRunIds.includes(run.id) &&
         trace.evidenceIds.includes(evidenceResponse.result.id) &&
         trace.gateIds.includes(gateResponse.result.id) &&
         trace.auditEventIds.length > 0,
       storyId: story.id,
+      collisionFixture: {
+        nonStoryAssignmentId: nonStoryAssignmentCollision.id,
+        targetIdSharedWithStory: true,
+        targetType: nonStoryAssignmentCollision.targetType,
+        excludedFromStoryTrace: !trace.assignmentIds.includes(nonStoryAssignmentCollision.id)
+      },
       trace
     }));
 
@@ -435,6 +454,7 @@ function scanEvidencePrivacy() {
     "sqlite-migration-validation.json",
     "core-table-contract.json",
     "audit-append-only-proof.json",
+    "sqlite-schema-integrity-proof.json",
     "repository-write-through-hydrate-proof.json",
     "kill-restart-proof.json",
     "story-traceability-join-proof.json",

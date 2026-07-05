@@ -8,15 +8,19 @@
     "lifecycle",
     "contactWhen"
   ],
-  "insertedCount": 19,
+  "canonicalMergeCount": 2,
+  "duplicateNonNullThreadIdCount": 0,
+  "insertedCount": 17,
   "localPathStored": false,
   "ok": true,
   "rawPromptsStored": false,
   "rawThreadMessagesStored": false,
-  "rowCount": 22,
+  "registryJobTitlePreserved": true,
+  "rowCount": 20,
   "secondSeedNoop": true,
   "sourceDigest": "85dc48d49eb349d25fb934759d23a9c1cf509046bce6780e7ac68c248de6168b",
   "sourceTruth": "Workflow registry read-only projection",
+  "staticAliasDisposition": "static employees sharing canonical registry thread ids are merged into the existing canonical row; non-registry fixture aliases remain separate only when their thread id is unique",
   "staticSeedRowCount": 3,
   "workflowMutation": false
 }

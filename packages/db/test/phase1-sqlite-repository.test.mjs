@@ -35,6 +35,23 @@ test("Phase 1 SQLite repository applies core migrations, persists store writes, 
     assert.deepEqual(phase1CoreTables.every((table) => repository.tableNames().includes(table)), true);
     assert.deepEqual(phase1ExcludedRuntimeTables.some((table) => repository.tableNames().includes(table)), false);
     repository.seedAiEmployees(createDefaultSeed().employees, "test-seed");
+    const registryProjection = repository.projectThreadRegistryEmployees({
+      threads: [
+        {
+          codexAgentSlug: "tcrn-thread-ilya-full-stack-implementer",
+          name: "Ilya, Full-Stack Implementer",
+          jobTitle: "Full-Stack Implementer",
+          threadId: actor.threadId,
+          status: "active",
+          lifecycle: "persistent",
+          contactWhen: "Narrow implementation route is ready."
+        }
+      ]
+    }, "test-registry-digest").readback;
+    assert.equal(registryProjection.canonicalMergeCount, 1);
+    assert.equal(registryProjection.duplicateNonNullThreadIdCount, 0);
+    assert.equal(registryProjection.secondSeedNoop, true);
+    assert.equal(registryProjection.registryJobTitlePreserved, true);
 
     const store = new AosStore(createDefaultSeed(), { persistence: repository });
     store.upsertProject(createDefaultSeed().projects.find((project) => project.id === "TCRN-AOS"), actor);
@@ -74,6 +91,15 @@ test("Phase 1 SQLite repository applies core migrations, persists store writes, 
       dueState: "none",
       proofExpectation: "phase1 persistence test"
     }, actor);
+    const nonStoryAssignmentCollision = store.createAssignment({
+      employeeId: actor.employeeId,
+      targetId: story.id,
+      targetType: "gate",
+      role: "implementation",
+      status: "in_progress",
+      dueState: "none",
+      proofExpectation: "trace collision exclusion"
+    }, actor);
     store.recordAgentRun({
       assignmentId: assignment.id,
       status: "success",
@@ -92,6 +118,17 @@ test("Phase 1 SQLite repository applies core migrations, persists store writes, 
     }, actor);
     store.requestGate({ type: "evidence_proof", linkedTicketId: story.id, inputEvidenceIds: [evidence.id] }, actor);
 
+    const schemaIntegrity = repository.schemaIntegrityReadback();
+    assert.equal(schemaIntegrity.ok, true);
+    assert.deepEqual(schemaIntegrity.missingJsonCheckTables, []);
+    assert.equal(schemaIntegrity.jsonCheckTables.length, phase1CoreTables.length);
+    assert.equal(Object.values(schemaIntegrity.invalidJsonRejected).every(Boolean), true);
+    assert.equal(Object.values(schemaIntegrity.invalidEnumRejected).every(Boolean), true);
+
+    const trace = repository.traceStory(story.id);
+    assert.equal(trace.assignmentIds.includes(assignment.id), true);
+    assert.equal(trace.assignmentIds.includes(nonStoryAssignmentCollision.id), false);
+
     const digestBefore = repository.databaseDigest();
     const audit = repository.rejectAuditMutationForProof();
     assert.equal(audit.updateRejected, true);
@@ -104,7 +141,7 @@ test("Phase 1 SQLite repository applies core migrations, persists store writes, 
     const hydrated = new AosStore(createDefaultSeed(), { persistence: restarted });
     assert.equal(restarted.databaseDigest(), digestBefore);
     assert.equal(hydrated.listStories().some((item) => item.id === story.id), true);
-    assert.equal(hydrated.createWorkIndexDrillThrough(story.id).linkedAssignmentIds.length, 1);
+    assert.deepEqual(restarted.traceStory(story.id).assignmentIds, [assignment.id]);
     restarted.close();
   } finally {
     await rm(root, { recursive: true, force: true });

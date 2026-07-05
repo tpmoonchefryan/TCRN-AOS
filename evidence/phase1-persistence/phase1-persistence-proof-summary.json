@@ -37,7 +37,7 @@
     "aos_pr_ci_story_readiness_records",
     "aos_release_candidate_linkages"
   ],
-  "generatedAt": "2026-07-05T15:14:18.387Z",
+  "generatedAt": "2026-07-05T15:32:40.934Z",
   "noOverclaim": {
     "liveDispatchClaimed": false,
     "ownerAcceptanceClaimed": false,
@@ -48,10 +48,11 @@
   },
   "ok": true,
   "phase1PersistenceDisposition": "implemented_bounded_sqlite_core_persistence",
-  "receiptCount": 10,
+  "receiptCount": 11,
   "receipts": [
     "sqlite-migration-validation.json",
     "core-table-contract.json",
+    "sqlite-schema-integrity-proof.json",
     "audit-append-only-proof.json",
     "story-traceability-join-proof.json",
     "repository-write-through-hydrate-proof.json",

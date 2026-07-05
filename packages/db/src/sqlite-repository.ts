@@ -81,8 +81,21 @@ export interface ThreadRegistryProjectionReadback {
   sourceDigest: string;
   rowCount: number;
   insertedCount: number;
+  canonicalMergeCount: number;
+  duplicateNonNullThreadIdCount: number;
   allowlistedFields: string[];
   secondSeedNoop: boolean;
+  registryJobTitlePreserved: boolean;
+  staticAliasDisposition: string;
+}
+
+export interface SchemaIntegrityReadback {
+  ok: boolean;
+  jsonCheckTables: string[];
+  missingJsonCheckTables: string[];
+  enumCheckColumns: string[];
+  invalidJsonRejected: Record<string, boolean>;
+  invalidEnumRejected: Record<string, boolean>;
 }
 
 export interface AosSqliteRepositoryOptions {
@@ -91,6 +104,8 @@ export interface AosSqliteRepositoryOptions {
 }
 
 const defaultMigrationsDir = new URL("../migrations/sqlite", import.meta.url);
+
+type SqlProbeValue = string | number | bigint | null | Buffer;
 
 export class AosSqliteRepository implements AosPersistenceRepository {
   private readonly database: DatabaseSync;
@@ -241,12 +256,13 @@ export class AosSqliteRepository implements AosPersistenceRepository {
     let insertedCount = 0;
     this.runInTransaction(() => {
       for (const employee of employees) {
-        const existing = this.database.prepare("SELECT record_json, source_digest FROM aos_ai_employees WHERE id = ?").get(employee.id) as { record_json: string; source_digest: string | null } | undefined;
-        const recordJson = stableJson(employee);
+        const canonicalEmployee = this.canonicalEmployee(employee);
+        const existing = this.database.prepare("SELECT record_json, source_digest FROM aos_ai_employees WHERE id = ?").get(canonicalEmployee.id) as { record_json: string; source_digest: string | null } | undefined;
+        const recordJson = stableJson(canonicalEmployee);
         if (existing && existing.record_json === recordJson && (sourceDigest === null || existing.source_digest === sourceDigest)) {
           continue;
         }
-        this.saveEmployee(employee, sourceDigest);
+        this.saveEmployee(canonicalEmployee, sourceDigest);
         if (!existing) {
           insertedCount += 1;
         }
@@ -262,18 +278,79 @@ export class AosSqliteRepository implements AosPersistenceRepository {
         ? (registry as { threads: unknown[] }).threads
         : [];
     const employees = rows.map((row, index) => projectThreadRow(row as Record<string, unknown>, index));
+    const canonicalMergeCount = employees.filter((employee) => {
+      const existing = this.employeeByThreadId(employee.threadIdentity.threadId);
+      return existing && existing.id !== employee.id;
+    }).length;
     const first = this.seedAiEmployees(employees, sourceDigest);
     const second = this.seedAiEmployees(employees, sourceDigest);
+    const canonicality = this.employeeCanonicalityReadback();
     return {
       employees,
       readback: {
-        ok: second.insertedCount === 0,
+        ok: second.insertedCount === 0 && canonicality.duplicateNonNullThreadIdCount === 0,
         sourceDigest,
         rowCount: first.rowCount,
         insertedCount: first.insertedCount,
+        canonicalMergeCount,
+        duplicateNonNullThreadIdCount: canonicality.duplicateNonNullThreadIdCount,
         allowlistedFields: ["codexAgentSlug", "name", "jobTitle", "threadId", "status", "lifecycle", "contactWhen"],
-        secondSeedNoop: second.insertedCount === 0
+        secondSeedNoop: second.insertedCount === 0,
+        registryJobTitlePreserved: employees.every((employee) => employee.authoritySummary.startsWith("Workflow registry projection for ")),
+        staticAliasDisposition: "static employees sharing canonical registry thread ids are merged into the existing canonical row; non-registry fixture aliases remain separate only when their thread id is unique"
       }
+    };
+  }
+
+  schemaIntegrityReadback(): SchemaIntegrityReadback {
+    const createSqlByTable = Object.fromEntries((this.database.prepare(`
+      SELECT name, sql FROM sqlite_master
+      WHERE type = 'table' AND name LIKE 'aos_%'
+      ORDER BY name
+    `).all() as Array<{ name: string; sql: string }>).map((row) => [row.name, row.sql]));
+    const jsonCheckTables = phase1CoreTables.filter((table) => /\bCHECK\s*\(\s*json_valid\s*\(\s*record_json\s*\)\s*\)/i.test(createSqlByTable[table] ?? ""));
+    const missingJsonCheckTables = phase1CoreTables.filter((table) => !jsonCheckTables.includes(table));
+    const enumChecks: Array<[string, string]> = [
+      ["aos_projects", "registry_status"],
+      ["aos_projects", "status"],
+      ["aos_projects", "gate_state"],
+      ["aos_ai_employees", "role"],
+      ["aos_ai_employees", "lifecycle"],
+      ["aos_initiatives", "status"],
+      ["aos_epics", "status"],
+      ["aos_stories", "status"],
+      ["aos_subtasks", "owner_role"],
+      ["aos_subtasks", "status"],
+      ["aos_assignments", "target_type"],
+      ["aos_assignments", "role"],
+      ["aos_assignments", "status"],
+      ["aos_agent_runs", "status"],
+      ["aos_gate_work_orders", "type"],
+      ["aos_gate_work_orders", "owner_role"],
+      ["aos_gate_work_orders", "status"],
+      ["aos_evidence_links", "type"],
+      ["aos_evidence_links", "redaction_state"],
+      ["aos_audit_events", "outcome"]
+    ];
+    const enumCheckColumns = enumChecks
+      .filter(([table, column]) => new RegExp(`\\b${column}\\b[^,]*CHECK\\s*\\(`, "i").test(createSqlByTable[table] ?? ""))
+      .map(([table, column]) => `${table}.${column}`);
+    const invalidJsonRejected = Object.fromEntries(phase1CoreTables.map((table) => [table, this.rejectInvalidJsonForTable(table)]));
+    const invalidEnumRejected = {
+      "aos_projects.status": this.rejectProbe("INSERT INTO aos_projects(id, name, registry_status, status, gate_state, record_json) VALUES ('probe-project-enum', 'Probe', 'planned', 'invalid_status', 'pending_role', '{}')"),
+      "aos_assignments.target_type": this.rejectProbe("INSERT INTO aos_assignments(id, employee_id, target_id, target_type, role, status, record_json) VALUES ('probe-assignment-enum', ?, ?, 'invalid_target', 'implementation', 'in_progress', '{}')", this.firstEmployeeId(), this.firstStoryId()),
+      "aos_audit_events.outcome": this.rejectProbe("INSERT INTO aos_audit_events(id, target_type, target_id, action, outcome, actor_ref, timestamp, record_json) VALUES ('probe-audit-enum', 'probe', 'probe', 'probe', 'invalid_outcome', 'system', '2026-07-05T00:00:00.000Z', '{}')")
+    };
+    return {
+      ok: missingJsonCheckTables.length === 0 &&
+        enumCheckColumns.length === enumChecks.length &&
+        Object.values(invalidJsonRejected).every(Boolean) &&
+        Object.values(invalidEnumRejected).every(Boolean),
+      jsonCheckTables,
+      missingJsonCheckTables,
+      enumCheckColumns,
+      invalidJsonRejected,
+      invalidEnumRejected
     };
   }
 
@@ -296,7 +373,7 @@ export class AosSqliteRepository implements AosPersistenceRepository {
 
   traceStory(storyId: string): StoryTraceabilityReadback {
     const subtaskIds = this.selectIds("aos_subtasks", "story_id", storyId);
-    const assignmentIds = this.selectIds("aos_assignments", "target_id", storyId);
+    const assignmentIds = (this.database.prepare("SELECT id FROM aos_assignments WHERE target_type = 'story' AND target_id = ? ORDER BY id").all(storyId) as Array<{ id: string }>).map((row) => row.id);
     const agentRunIds = assignmentIds.flatMap((assignmentId) => this.selectIds("aos_agent_runs", "assignment_id", assignmentId));
     const gateIds = this.selectIds("aos_gate_work_orders", "linked_ticket_id", storyId);
     const gateEvidence = gateIds.flatMap((gateId) => {
@@ -370,6 +447,11 @@ export class AosSqliteRepository implements AosPersistenceRepository {
       ON CONFLICT(id) DO UPDATE SET name = excluded.name, role = excluded.role, thread_id = excluded.thread_id, lifecycle = excluded.lifecycle, source_digest = coalesce(excluded.source_digest, aos_ai_employees.source_digest), record_json = excluded.record_json, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
     `).run(employee.id, employee.name, employee.role, employee.threadIdentity.threadId, employee.lifecycle, sourceDigest, stableJson(employee));
     return Number(result.changes ?? 0);
+  }
+
+  private canonicalEmployee(employee: AIEmployee): AIEmployee {
+    const existing = this.employeeByThreadId(employee.threadIdentity.threadId);
+    return existing && existing.id !== employee.id ? { ...employee, id: existing.id } : employee;
   }
 
   private saveInitiative(record: InitiativeRecord): void {
@@ -451,6 +533,105 @@ export class AosSqliteRepository implements AosPersistenceRepository {
 
   private selectIds(table: string, column: string, value: string): string[] {
     return (this.database.prepare(`SELECT id FROM ${table} WHERE ${column} = ? ORDER BY id`).all(value) as Array<{ id: string }>).map((row) => row.id);
+  }
+
+  private employeeByThreadId(threadId: string): { id: string; record_json: string; source_digest: string | null } | undefined {
+    return this.database.prepare("SELECT id, record_json, source_digest FROM aos_ai_employees WHERE thread_id = ?").get(threadId) as { id: string; record_json: string; source_digest: string | null } | undefined;
+  }
+
+  private employeeCanonicalityReadback(): { duplicateNonNullThreadIdCount: number } {
+    const rows = this.database.prepare(`
+      SELECT thread_id, count(*) as count
+      FROM aos_ai_employees
+      WHERE thread_id IS NOT NULL
+      GROUP BY thread_id
+      HAVING count(*) > 1
+    `).all() as Array<{ thread_id: string; count: number }>;
+    return { duplicateNonNullThreadIdCount: rows.length };
+  }
+
+  private firstEmployeeId(): string {
+    const row = this.database.prepare("SELECT id FROM aos_ai_employees ORDER BY id LIMIT 1").get() as { id: string } | undefined;
+    if (!row) {
+      throw new Error("phase1_schema_integrity_probe_missing_employee");
+    }
+    return row.id;
+  }
+
+  private firstStoryId(): string {
+    const row = this.database.prepare("SELECT id FROM aos_stories ORDER BY id LIMIT 1").get() as { id: string } | undefined;
+    if (!row) {
+      throw new Error("phase1_schema_integrity_probe_missing_story");
+    }
+    return row.id;
+  }
+
+  private firstInitiativeId(): string {
+    const row = this.database.prepare("SELECT id FROM aos_initiatives ORDER BY id LIMIT 1").get() as { id: string } | undefined;
+    if (!row) {
+      throw new Error("phase1_schema_integrity_probe_missing_initiative");
+    }
+    return row.id;
+  }
+
+  private firstEpicId(): string {
+    const row = this.database.prepare("SELECT id FROM aos_epics ORDER BY id LIMIT 1").get() as { id: string } | undefined;
+    if (!row) {
+      throw new Error("phase1_schema_integrity_probe_missing_epic");
+    }
+    return row.id;
+  }
+
+  private firstAssignmentId(): string {
+    const row = this.database.prepare("SELECT id FROM aos_assignments ORDER BY id LIMIT 1").get() as { id: string } | undefined;
+    if (!row) {
+      throw new Error("phase1_schema_integrity_probe_missing_assignment");
+    }
+    return row.id;
+  }
+
+  private rejectInvalidJsonForTable(table: string): boolean {
+    const invalidJson = "{invalid-json";
+    switch (table) {
+      case "aos_projects":
+        return this.rejectProbe("INSERT INTO aos_projects(id, name, registry_status, status, gate_state, record_json) VALUES ('probe-project-json', 'Probe', 'planned', 'proposed', 'pending_role', ?)", invalidJson);
+      case "aos_ai_employees":
+        return this.rejectProbe("INSERT INTO aos_ai_employees(id, name, role, thread_id, lifecycle, source_digest, record_json) VALUES ('probe-employee-json', 'Probe', 'implementation', 'probe-thread-json', 'active', 'probe', ?)", invalidJson);
+      case "aos_initiatives":
+        return this.rejectProbe("INSERT INTO aos_initiatives(id, project_id, title, status, record_json) VALUES ('probe-initiative-json', 'TCRN-AOS', 'Probe', 'proposed', ?)", invalidJson);
+      case "aos_epics":
+        return this.rejectProbe("INSERT INTO aos_epics(id, initiative_id, title, status, record_json) VALUES ('probe-epic-json', ?, 'Probe', 'proposed', ?)", this.firstInitiativeId(), invalidJson);
+      case "aos_stories":
+        return this.rejectProbe("INSERT INTO aos_stories(id, epic_id, title, status, record_json) VALUES ('probe-story-json', ?, 'Probe', 'proposed', ?)", this.firstEpicId(), invalidJson);
+      case "aos_subtasks":
+        return this.rejectProbe("INSERT INTO aos_subtasks(id, story_id, owner_role, status, record_json) VALUES ('probe-subtask-json', ?, 'implementation', 'proposed', ?)", this.firstStoryId(), invalidJson);
+      case "aos_assignments":
+        return this.rejectProbe("INSERT INTO aos_assignments(id, employee_id, target_id, target_type, role, status, record_json) VALUES ('probe-assignment-json', ?, ?, 'story', 'implementation', 'proposed', ?)", this.firstEmployeeId(), this.firstStoryId(), invalidJson);
+      case "aos_agent_runs":
+        return this.rejectProbe("INSERT INTO aos_agent_runs(id, assignment_id, status, started_at, ended_at, record_json) VALUES ('probe-run-json', ?, 'success', '2026-07-05T00:00:00.000Z', NULL, ?)", this.firstAssignmentId(), invalidJson);
+      case "aos_gate_work_orders":
+        return this.rejectProbe("INSERT INTO aos_gate_work_orders(id, linked_ticket_id, type, owner_role, status, record_json) VALUES ('probe-gate-json', ?, 'evidence_proof', 'evidence', 'pending_role', ?)", this.firstStoryId(), invalidJson);
+      case "aos_evidence_links":
+        return this.rejectProbe("INSERT INTO aos_evidence_links(id, type, target, digest, redaction_state, record_json) VALUES ('probe-evidence-json', 'artifact_id', 'probe-artifact', NULL, 'metadata_only', ?)", invalidJson);
+      case "aos_audit_events":
+        return this.rejectProbe("INSERT INTO aos_audit_events(id, target_type, target_id, action, outcome, actor_ref, timestamp, record_json) VALUES ('probe-audit-json', 'probe', 'probe', 'probe', 'accepted', 'system', '2026-07-05T00:00:00.000Z', ?)", invalidJson);
+      default:
+        return false;
+    }
+  }
+
+  private rejectProbe(sql: string, ...values: SqlProbeValue[]): boolean {
+    const savepoint = `phase1_probe_${Math.random().toString(16).slice(2)}`;
+    this.database.exec(`SAVEPOINT ${savepoint}`);
+    try {
+      this.database.prepare(sql).run(...values);
+      return false;
+    } catch {
+      return true;
+    } finally {
+      this.database.exec(`ROLLBACK TO ${savepoint}`);
+      this.database.exec(`RELEASE ${savepoint}`);
+    }
   }
 
   private pragmaValue(name: string): unknown {
