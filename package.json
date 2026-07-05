@@ -27,6 +27,7 @@
     "live-dispatch:terminal-ingestion-proof": "pnpm build && node scripts/live-dispatch-terminal-return-ingestion-proof.mjs",
     "live-dispatch:real-terminal-ingestion-proof": "pnpm build && node scripts/live-dispatch-real-terminal-return-ingestion-proof.mjs",
     "audit:licenses": "node scripts/audit-licenses.mjs",
+    "verify:fast": "pnpm typecheck && pnpm validate:migrations && pnpm test",
     "verify": "pnpm typecheck && pnpm validate:migrations && pnpm audit:licenses && pnpm test && pnpm runtime:db:proof && pnpm service:smoke && pnpm aos:frontend-shell-proof && pnpm slice3:proof && pnpm slice5:proof && pnpm slice6:proof && pnpm slice7:proof && pnpm slice8:proof && pnpm slice9:proof && pnpm live-dispatch:dry-run-proof && pnpm live-dispatch:execution-readiness-proof && pnpm live-dispatch:terminal-ingestion-proof"
   },
   "dependencies": {
