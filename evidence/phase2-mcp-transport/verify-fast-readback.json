@@ -3,8 +3,8 @@
   "ok": true,
   "route": "route_tcrn_aos_phase2_mcp_transport_ilya_targeted_topology_repair_after_daedalus_changes_requested_b6a5ed3_20260705",
   "command": "pnpm --dir TCRN-AOS verify:fast",
-  "generatedAt": "2026-07-05T17:59:56.189Z",
-  "sourceHead": "b6a5ed342e2bce1d66e2df5615b7c530c2dbbb7b",
+  "generatedAt": "2026-07-05T18:00:45.331Z",
+  "sourceHead": "21f24763a1e4bdc9984fb8964a4a35e7df87c111",
   "sourceContentDigest": "036fdafadf72fd7f7278ff445dadf1fd448daeca005277e653a7f4a7bc3388a3",
   "sourceFiles": [
     {
@@ -38,7 +38,7 @@
   ],
   "routeOwnedDbRoot": {
     "class": "os_temp_route_owned_redacted",
-    "rootDigest": "8b5bfb5cb29aa03c835138b632edb361c1737a97bea21d1f71bb244b8513b3f0",
+    "rootDigest": "2e3dcc4facfb665c53e36482578704679225cccb09852b1e7fc91dc2c03a6c15",
     "rawPathRecorded": false
   },
   "actorProof": {
@@ -64,7 +64,7 @@
     "broadCodexSecurityPluginScanClaimed": false
   },
   "exitCode": 0,
-  "stdoutDigest": "5fe5fa275a70956d642ed58fab41265d2746fba0dc5396c9c0ff9b548b840349",
+  "stdoutDigest": "f531a96c81506c9e7056d2c4a600a3b7b8a2e44412ecb97c2ae191df66dc9724",
   "stderrDigest": "4f72ac5ce8f8109588e139d527b794964d38946e452e55e2965662673a1f509c",
   "outputStored": "digest_only",
   "typecheckIncluded": true,
