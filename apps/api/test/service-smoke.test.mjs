@@ -99,7 +99,7 @@ test("local service serves the AOS shell while backend readbacks stay available"
         assert.match(html, /data-product-local-work-component-clones="absent"/);
         assert.match(html, new RegExp(`data-work-route-acceptance-target="${target.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`));
         assert.doesNotMatch(html, /pending Atlas refresh|等待 Atlas 刷新/);
-        assert.doesNotMatch(bodyHtml, /Atlassian|Jira|OpenProject|Linear|Plane|Huly|Twenty/);
+        assert.doesNotMatch(bodyHtml, /Atlassian|Jira|Confluence|Fable5|Fable|OpenProject|Linear|Plane|Huly|Twenty/);
         assert.doesNotMatch(bodyHtml, /data-doc-shell|tcrn-doc-shell|tcrn-doc-header|tcrn-doc-sidebar|tcrn-doc-nav/);
         assert.doesNotMatch(bodyHtml, /tcrn-product-shell-search|tcrn-search-input|data-product-shell-search-results|data-search-result/);
       } else {
@@ -147,9 +147,21 @@ test("local service serves the AOS shell while backend readbacks stay available"
         assert.equal(html.includes(label), false, `${label} is not rendered in owner-quality shell HTML`);
       }
       if (target === "/work/items/AOS-128") {
-        assert.match(html, /post-review-source/);
-        assert.match(html, /33222fa/);
-        assert.match(html, /d17bdc6/);
+        assert.match(html, /meridian-knowledge-source/);
+        assert.match(html, /d385428/);
+        assert.match(html, /fce130df/);
+        assert.match(html, /data-aos-knowledge-management-consumption="public-ds-exports-v1"/);
+        assert.match(html, /data-ds-knowledge-components-anchor="components\.html#knowledge-management-components-spec"/);
+        assert.match(html, /data-storybook-knowledge-components-story-id="tcrn-design-system-components--knowledge-management-components-spec"/);
+        assert.match(html, /data-knowledge-static-authority-disposition="aos_static_knowledge_mockup_consumes_meridian_ds_knowledge_management_contract"/);
+        assert.match(html, /data-knowledge-management-ds-basis="d385428"/);
+        assert.match(html, /data-knowledge-management-api-integration="absent"/);
+        assert.match(html, /data-knowledge-management-live-dispatch="not-enabled"/);
+        assert.match(html, /data-knowledge-management-backend-persistence="absent"/);
+        assert.match(html, /data-knowledge-management-global-search="not-rendered"/);
+        assert.match(html, /data-product-local-knowledge-component-clones="absent"/);
+        assert.match(html, /data-registered-ds-knowledge-component-name="KnowledgePageTree"/);
+        assert.match(html, /data-registered-ds-knowledge-component-name="KnowledgeSearchResults"/);
         assert.doesNotMatch(html, /cae4d52/);
         assert.doesNotMatch(html, /7836dca/);
         assert.match(html, /Use Atlas\/source markers for retained preview freshness; PM freshness retry pending\./);

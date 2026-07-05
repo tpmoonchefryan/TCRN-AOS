@@ -69,9 +69,21 @@ try {
     && workBoardHtml.includes('data-aos-work-module-entry="registered-ds-work-board"')
     && workDetail.status === 200
     && workDetailHtml.includes('data-work-management-page="detail"')
-    && workDetailHtml.includes("post-review-source")
-    && workDetailHtml.includes("33222fa")
-    && workDetailHtml.includes("d17bdc6")
+    && workDetailHtml.includes("meridian-knowledge-source")
+    && workDetailHtml.includes("d385428")
+    && workDetailHtml.includes("fce130df")
+    && workDetailHtml.includes('data-aos-knowledge-management-consumption="public-ds-exports-v1"')
+    && workDetailHtml.includes('data-ds-knowledge-components-anchor="components.html#knowledge-management-components-spec"')
+    && workDetailHtml.includes('data-storybook-knowledge-components-story-id="tcrn-design-system-components--knowledge-management-components-spec"')
+    && workDetailHtml.includes('data-knowledge-static-authority-disposition="aos_static_knowledge_mockup_consumes_meridian_ds_knowledge_management_contract"')
+    && workDetailHtml.includes('data-knowledge-management-ds-basis="d385428"')
+    && workDetailHtml.includes('data-knowledge-management-api-integration="absent"')
+    && workDetailHtml.includes('data-knowledge-management-live-dispatch="not-enabled"')
+    && workDetailHtml.includes('data-knowledge-management-backend-persistence="absent"')
+    && workDetailHtml.includes('data-knowledge-management-global-search="not-rendered"')
+    && workDetailHtml.includes('data-product-local-knowledge-component-clones="absent"')
+    && workDetailHtml.includes('data-registered-ds-knowledge-component-name="KnowledgePageTree"')
+    && workDetailHtml.includes('data-registered-ds-knowledge-component-name="KnowledgeSearchResults"')
     && workDetailHtml.includes("Use Atlas/source markers for retained preview freshness; PM freshness retry pending.")
     && workDetailHtml.includes("PM freshness retry pending; owner and product acceptance remain unclaimed.")
     && !workDetailHtml.includes("cae4d52")
@@ -120,9 +132,13 @@ try {
       workBoardStatus: workBoard.status,
       workDetailStatus: workDetail.status,
       workDetailBasisPosture: {
-        currentAosBasisVisible: workDetailHtml.includes("post-review-source"),
-        dsBasisVisible: workDetailHtml.includes("33222fa"),
-        workflowBasisVisible: workDetailHtml.includes("d17bdc6"),
+        currentAosBasisVisible: workDetailHtml.includes("meridian-knowledge-source"),
+        dsBasisVisible: workDetailHtml.includes("d385428"),
+        workflowBasisVisible: workDetailHtml.includes("fce130df"),
+        knowledgePublicExportConsumptionVisible: workDetailHtml.includes('data-aos-knowledge-management-consumption="public-ds-exports-v1"'),
+        knowledgeDsBasisVisible: workDetailHtml.includes('data-knowledge-management-ds-basis="d385428"'),
+        knowledgeNoBackendVisible: workDetailHtml.includes('data-knowledge-management-backend-persistence="absent"'),
+        knowledgeNoGlobalSearchVisible: workDetailHtml.includes('data-knowledge-management-global-search="not-rendered"'),
         priorAosBasisVisible: workDetailHtml.includes("cae4d52"),
         staleAosBasisVisible: workDetailHtml.includes("7836dca"),
         atlasMarkerPostureVisible: workDetailHtml.includes("Use Atlas/source markers for retained preview freshness; PM freshness retry pending."),

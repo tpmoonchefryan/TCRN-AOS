@@ -18,6 +18,7 @@ mkdirSync(screenshotRoot, { recursive: true });
 
 const html = readFileSync(shellPath, "utf8");
 const appSource = readFileSync(new URL("../apps/web/src/app.tsx", import.meta.url), "utf8");
+const workMockupSource = readFileSync(new URL("../apps/web/src/work-management-mockups.tsx", import.meta.url), "utf8");
 const requiredMarkers = [
   'data-aos-shell="owner-quality-product-shell"',
   'data-storybook-visual-instance="aos-owner-quality-product-shell"',
@@ -174,6 +175,28 @@ const requiredWorkManagementPatterns = [
   "work-hierarchy",
   "gate-pipeline",
   "evidence-attachment-list"
+];
+
+const requiredRegisteredKnowledgeComponentNames = [
+  "KnowledgePageTree",
+  "KnowledgeDocumentCanvas",
+  "KnowledgeTocRail",
+  "KnowledgeInlineCommentList",
+  "KnowledgeMetadataRail",
+  "KnowledgeLabelSet",
+  "KnowledgeVersionHistory",
+  "KnowledgeSearchResults"
+];
+
+const requiredKnowledgeManagementPatterns = [
+  "knowledge-page-tree",
+  "knowledge-document-canvas",
+  "knowledge-toc-rail",
+  "knowledge-inline-comment-list",
+  "knowledge-metadata-rail",
+  "knowledge-label-set",
+  "knowledge-version-history",
+  "knowledge-search-results"
 ];
 
 const acceptedVisualInstanceOracle = {
@@ -452,6 +475,14 @@ const strictRegisteredSurfaceBuiltHits = [
   { label: "AOS class in client bundle", value: clientBundle, regex: /className[=:][^,\n}]*aos-|class="[^"]*\baos-/ },
   { label: "AOS CSS selector in client bundle", value: clientBundle, regex: /\.(?:aos-[A-Za-z0-9_-]+)/ }
 ].filter((entry) => entry.regex.test(entry.value)).map((entry) => entry.label);
+const knowledgeConsumptionSourceBoundaryHits = [
+  { label: "DS deep import", regex: /@tcrn\/ui-react\// },
+  { label: "Design System source path", regex: /TCRN-DESIGN-SYSTEM|packages\/ui-react\/src|apps\/storybook\/src/ },
+  { label: "Storybook doc shell copy", regex: /data-doc-shell|tcrn-doc-shell|storybook-static/ },
+  { label: "Third-party runtime vocabulary", regex: /Atlassian|Jira|Confluence|Fable5|Fable/ },
+  { label: "Local absolute path", regex: /\/Users\/|\/tmp\/|file:\/\// },
+  { label: "Knowledge backend/live claim", regex: /\/api\/knowledge|knowledge API is wired|persistence enabled|live dispatch enabled/i }
+].filter((entry) => entry.regex.test(workMockupSource)).map((entry) => entry.label);
 
 assert.deepEqual(missingMarkers, [], "required shell and DS-consumption markers are present");
 assert.deepEqual(missingLocales, [], "locale menu uses native locale names");
@@ -466,6 +497,7 @@ assert.deepEqual(forbiddenAosBrandDocHits, [], "current docs/evidence do not ref
 assert.deepEqual(forbiddenLocalShellEffectPatterns, [], "AOS source does not own DS shell/search/locale/theme event delegation or local shell effects");
 assert.deepEqual(strictRegisteredSurfaceSourceHits, [], "AOS source has no unregistered local visible UI components/classes/selectors/effects");
 assert.deepEqual(strictRegisteredSurfaceBuiltHits, [], "built shell has no unregistered AOS local visible classes/CSS/demo surfaces");
+assert.deepEqual(knowledgeConsumptionSourceBoundaryHits, [], "AOS Knowledge consumption uses public DS exports without deep imports, copied Storybook chrome, local paths, third-party vocabulary, or backend/live claims");
 
 const service = await startAosLocalServiceProof();
 let closed = false;
@@ -512,9 +544,19 @@ const requiredWorkStorybookContractAnchors = {
   staticAuthorityDisposition: "aos_static_work_mockup_consumes_storybook_ds_work_management_contract"
 };
 
+const requiredKnowledgeStorybookContractAnchors = {
+  componentsRoute: "components.html#knowledge-management-components-spec",
+  componentsStoryId: "tcrn-design-system-components--knowledge-management-components-spec",
+  staticAuthorityDisposition: "aos_static_knowledge_mockup_consumes_meridian_ds_knowledge_management_contract",
+  dsBasis: "d385428"
+};
+
 const forbiddenWorkVisibleBrandTerms = [
   "Atlassian",
   "Jira",
+  "Confluence",
+  "Fable",
+  "Fable5",
   "OpenProject",
   "Linear",
   "Plane",
@@ -542,9 +584,23 @@ try {
         && body.includes(`data-consumer-visual-style-contract="${requiredWorkStorybookContractAnchors.consumerVisualStyleContract}"`)
         && body.includes(`data-storybook-doc-shell-oracle="${requiredWorkStorybookContractAnchors.docShellOracle}"`)
         && body.includes(`data-work-static-authority-disposition="${requiredWorkStorybookContractAnchors.staticAuthorityDisposition}"`),
+      knowledgeContractAnchors: body.includes(`data-ds-knowledge-components-anchor="${requiredKnowledgeStorybookContractAnchors.componentsRoute}"`)
+        && body.includes(`data-storybook-knowledge-components-story-id="${requiredKnowledgeStorybookContractAnchors.componentsStoryId}"`)
+        && body.includes(`data-knowledge-static-authority-disposition="${requiredKnowledgeStorybookContractAnchors.staticAuthorityDisposition}"`)
+        && body.includes(`data-knowledge-management-ds-basis="${requiredKnowledgeStorybookContractAnchors.dsBasis}"`),
       routeAcceptanceTarget: body.includes(`data-work-route-acceptance-target="${route}"`),
       registeredComponents: body.includes('data-design-system-work-components="registered-package-components"'),
       localClonesAbsent: body.includes('data-product-local-work-component-clones="absent"'),
+      registeredKnowledgeComponents: body.includes('data-design-system-knowledge-components="registered-package-components"'),
+      localKnowledgeClonesAbsent: body.includes('data-product-local-knowledge-component-clones="absent"'),
+      knowledgeConsumptionPresent: body.includes('data-aos-knowledge-management-consumption="public-ds-exports-v1"'),
+      knowledgeApiIntegrationAbsent: body.includes('data-knowledge-management-api-integration="absent"'),
+      knowledgeLiveDispatchDisabled: body.includes('data-knowledge-management-live-dispatch="not-enabled"'),
+      knowledgeBackendPersistenceAbsent: body.includes('data-knowledge-management-backend-persistence="absent"'),
+      knowledgeExternalIntegrationAbsent: body.includes('data-knowledge-management-external-integration="absent"'),
+      knowledgeGlobalSearchAbsent: body.includes('data-knowledge-management-global-search="not-rendered"'),
+      knowledgeRegisteredComponentNames: requiredRegisteredKnowledgeComponentNames.filter((name) => body.includes(`data-registered-ds-knowledge-component-name="${name}"`)),
+      knowledgePatterns: requiredKnowledgeManagementPatterns.filter((pattern) => body.includes(`data-knowledge-management-pattern="${pattern}"`)),
       cleanRoomLayout: body.includes('data-work-clean-room-layout="tcrn-clean-room-work-layout-no-third-party-assets"'),
       exactRouteTargets: requiredWorkRouteProofTargets.every((target) => body.includes(target.replaceAll("&", "&amp;"))),
       mobileRouteTargets: requiredMobileWorkRouteProofTargets.every((target) => body.includes(target.replaceAll("&", "&amp;"))),
@@ -637,6 +693,19 @@ try {
       && entry.staticWorkMockup.routeAcceptanceTarget
       && entry.staticWorkMockup.registeredComponents
       && entry.staticWorkMockup.localClonesAbsent
+      && entry.staticWorkMockup.knowledgeContractAnchors
+      && entry.staticWorkMockup.registeredKnowledgeComponents
+      && entry.staticWorkMockup.localKnowledgeClonesAbsent
+      && (!entry.route.startsWith("/work/items/AOS-128") || (
+        entry.staticWorkMockup.knowledgeConsumptionPresent
+        && entry.staticWorkMockup.knowledgeApiIntegrationAbsent
+        && entry.staticWorkMockup.knowledgeLiveDispatchDisabled
+        && entry.staticWorkMockup.knowledgeBackendPersistenceAbsent
+        && entry.staticWorkMockup.knowledgeExternalIntegrationAbsent
+        && entry.staticWorkMockup.knowledgeGlobalSearchAbsent
+        && entry.staticWorkMockup.knowledgeRegisteredComponentNames.length === requiredRegisteredKnowledgeComponentNames.length
+        && entry.staticWorkMockup.knowledgePatterns.length === requiredKnowledgeManagementPatterns.length
+      ))
       && entry.staticWorkMockup.cleanRoomLayout
       && entry.staticWorkMockup.exactRouteTargets
       && entry.staticWorkMockup.mobileRouteTargets
@@ -1355,6 +1424,12 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           consumerVisualStyleContract: root.getAttribute("data-consumer-visual-style-contract"),
           storybookDocShellOracle: root.getAttribute("data-storybook-doc-shell-oracle"),
           staticAuthorityDisposition: root.getAttribute("data-work-static-authority-disposition"),
+          dsKnowledgeComponentsAnchor: root.getAttribute("data-ds-knowledge-components-anchor"),
+          knowledgeComponentsStoryId: root.getAttribute("data-storybook-knowledge-components-story-id"),
+          knowledgeStaticAuthorityDisposition: root.getAttribute("data-knowledge-static-authority-disposition"),
+          knowledgeDsBasis: root.getAttribute("data-knowledge-management-ds-basis"),
+          registeredKnowledgeComponentsBoundary: root.getAttribute("data-design-system-knowledge-components"),
+          localKnowledgeClonesBoundary: root.getAttribute("data-product-local-knowledge-component-clones"),
           routeProofTargets: (root.getAttribute("data-work-route-proof-targets") ?? "").split(/\s+/).filter(Boolean),
           mobileProofTargets: (root.getAttribute("data-work-mobile-proof-targets") ?? "").split(/\s+/).filter(Boolean),
           cleanRoomLayout: root.getAttribute("data-work-clean-room-layout"),
@@ -1368,10 +1443,10 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           productShellSearchControlCount: document.querySelectorAll('[data-shell-control="product-shell-search"]').length,
           productShellSearchResultsCount: document.querySelectorAll("[data-product-shell-search-results], [data-search-result]").length,
           storybookDocShellCloneCount: document.querySelectorAll('[data-doc-shell], .tcrn-doc-shell, .tcrn-doc-header, .tcrn-doc-sidebar, .tcrn-doc-nav').length,
-          forbiddenVisibleBrandHits: ["Atlassian", "Jira", "OpenProject", "Linear", "Plane", "Huly", "Twenty"].filter((term) => body.innerText.includes(term)),
+          forbiddenVisibleBrandHits: ["Atlassian", "Jira", "Confluence", "Fable", "Fable5", "OpenProject", "Linear", "Plane", "Huly", "Twenty"].filter((term) => body.innerText.includes(term)),
           forbiddenClassHits: Array.from(root.querySelectorAll("[class]"))
             .map((node) => node.getAttribute("class") ?? "")
-            .filter((className) => /jira|atlassian|openproject|linear|plane|huly|twenty/i.test(className)),
+            .filter((className) => /jira|atlassian|confluence|fable|openproject|linear|plane|huly|twenty/i.test(className)),
           workRouteChromeCount: root.querySelectorAll('[data-work-route-chrome="compact-ds-public-exports"]').length,
           workPageHeaderCount: root.querySelectorAll('[data-work-management-pattern="work-page-header"]').length,
           workViewTabsCount: root.querySelectorAll('[data-work-management-pattern="work-view-tabs"]').length,
@@ -1392,7 +1467,9 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           ownerAcceptanceClaimed: /Owner acceptance:\s*accepted|Release ready|Product acceptance:\s*accepted|Final MVP accepted|Live dispatch enabled/i.test(body.innerText),
           workDetailBasisAndGatePostureReadback: readWorkDetailBasisAndGatePosture(),
           registeredDsWorkComponentsReadback: readRegisteredDsWorkComponents(),
+          knowledgeConsumptionReadback: readKnowledgeConsumption(),
           workManagementPatternReadback: readWorkManagementPatterns(),
+          knowledgeManagementPatternReadback: readKnowledgeManagementPatterns(),
           staleNeededDsListPresent: Boolean(document.querySelector("[data-needed-ds-components-list]")),
           codexActivityRouteReadability: readCodexActivityRouteReadability(),
           codexActivityAttachedToWorkItem: Boolean(document.querySelector('[data-work-codex-activity-page="true"]'))
@@ -1441,6 +1518,67 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           };
         }
 
+        function readKnowledgeConsumption() {
+          const section = document.querySelector('[data-aos-knowledge-management-consumption="public-ds-exports-v1"]');
+          if (!section) {
+            return {
+              present: false,
+              apiIntegration: null,
+              liveDispatch: null,
+              backendPersistence: null,
+              globalSearch: null,
+              externalIntegration: null,
+              dsBasis: null,
+              contractAnchor: null,
+              storyId: null,
+              staticAuthorityDisposition: null,
+              registeredComponentSectionPresent: false,
+              registeredComponentCount: 0,
+              declaredCount: null,
+              registeredComponentNames: [],
+              missingRequiredFields: [],
+              localPathHits: [],
+              productWideSearchClaimed: false
+            };
+          }
+          const componentsSection = section.querySelector("[data-registered-ds-knowledge-components]");
+          const items = Array.from(section.querySelectorAll("[data-registered-ds-knowledge-component-item]")).map((item) => {
+            const read = (name) => item.getAttribute(name) ?? "";
+            const fields = {
+              name: read("data-registered-ds-knowledge-component-name"),
+              candidateId: read("data-registered-ds-knowledge-component-candidate-id"),
+              purpose: read("data-registered-ds-knowledge-component-purpose"),
+              whereUsed: read("data-registered-ds-knowledge-component-where-used"),
+              consumptionDisposition: read("data-registered-ds-knowledge-component-disposition"),
+              dsLevel: read("data-registered-ds-knowledge-component-level")
+            };
+            const missingFields = Object.entries(fields)
+              .filter(([, value]) => value.trim().length === 0)
+              .map(([key]) => key);
+            return { ...fields, missingFields };
+          });
+          const html = section.outerHTML;
+          return {
+            present: true,
+            apiIntegration: section.getAttribute("data-knowledge-management-api-integration"),
+            liveDispatch: section.getAttribute("data-knowledge-management-live-dispatch"),
+            backendPersistence: section.getAttribute("data-knowledge-management-backend-persistence"),
+            globalSearch: section.getAttribute("data-knowledge-management-global-search"),
+            externalIntegration: section.getAttribute("data-knowledge-management-external-integration"),
+            dsBasis: section.getAttribute("data-knowledge-management-ds-basis"),
+            contractAnchor: section.getAttribute("data-ds-knowledge-components-anchor"),
+            storyId: section.getAttribute("data-storybook-knowledge-components-story-id"),
+            staticAuthorityDisposition: section.getAttribute("data-knowledge-static-authority-disposition"),
+            registeredComponentSectionPresent: Boolean(componentsSection),
+            registeredComponentCount: items.length,
+            declaredCount: componentsSection?.getAttribute("data-registered-ds-knowledge-components-count") ?? null,
+            registeredComponentNames: items.map((item) => item.name),
+            missingRequiredFields: items.flatMap((item) => item.missingFields.map((field) => `${item.name}:${field}`)),
+            localPathHits: ["/Users/", "/tmp/", "file://", "/srv/tcrn", "/var/folders", "/private/tmp"].filter((marker) => html.includes(marker)),
+            productWideSearchClaimed: /product-wide search (?:is )?(?:enabled|wired)|global search enabled|external search index (?:is )?(?:enabled|wired)/i.test(section.textContent ?? "")
+          };
+        }
+
         function readWorkDetailBasisAndGatePosture() {
           const text = body.innerText;
           const machineTokens = Array.from(document.querySelectorAll(".tcrn-machine-token")).map((token) => ({
@@ -1450,11 +1588,11 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
           }));
           return {
             present: Boolean(document.querySelector('[data-work-management-pattern="work-detail-layout"]')),
-            sourceLocalBasisVisible: text.includes("post-review-source") || machineTokens.some((token) => token.fullToken === "post-review-source"),
+            sourceLocalBasisVisible: text.includes("meridian-knowledge-source") || machineTokens.some((token) => token.fullToken === "meridian-knowledge-source"),
             staleAosBasisVisible: text.includes("7836dca") || machineTokens.some((token) => token.fullToken === "7836dca"),
             priorAosBasisVisible: text.includes("cae4d52") || machineTokens.some((token) => token.fullToken === "cae4d52"),
-            dsBasisVisible: text.includes("33222fa") || machineTokens.some((token) => token.fullToken === "33222fa"),
-            workflowBasisVisible: text.includes("d17bdc6") || machineTokens.some((token) => token.fullToken === "d17bdc6"),
+            dsBasisVisible: text.includes("d385428") || machineTokens.some((token) => token.fullToken === "d385428"),
+            workflowBasisVisible: text.includes("fce130df") || machineTokens.some((token) => token.fullToken === "fce130df"),
             previewPendingAtlasRefreshVisible: text.includes("pending Atlas refresh") || text.includes("等待 Atlas 刷新"),
             atlasMarkerPostureVisible: text.includes("Use Atlas/source markers for retained preview freshness") || text.includes("Atlas/source marker"),
             pmFreshnessRetryVisible: text.includes("PM freshness retry pending") || text.includes("PM freshness 重试"),
@@ -1483,6 +1621,17 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
             patternCount: patterns.length,
             relationshipChipCount: document.querySelectorAll("[data-work-relationship]").length,
             machineTokenCount: document.querySelectorAll(".tcrn-machine-token").length
+          };
+        }
+
+        function readKnowledgeManagementPatterns() {
+          const patterns = Array.from(document.querySelectorAll("[data-knowledge-management-pattern]"))
+            .map((node) => node.getAttribute("data-knowledge-management-pattern") ?? "")
+            .filter(Boolean);
+          return {
+            patterns,
+            patternCount: patterns.length,
+            localFixtureResultCount: document.querySelectorAll('[data-knowledge-management-pattern="knowledge-search-results"][data-search-capability="static-local-fixture"]').length
           };
         }
 
@@ -1554,6 +1703,12 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
       assert.equal(readback.consumerVisualStyleContract, requiredWorkStorybookContractAnchors.consumerVisualStyleContract, `${route.id} records consumer visual style contract`);
       assert.equal(readback.storybookDocShellOracle, requiredWorkStorybookContractAnchors.docShellOracle, `${route.id} records DS doc shell oracle`);
       assert.equal(readback.staticAuthorityDisposition, requiredWorkStorybookContractAnchors.staticAuthorityDisposition, `${route.id} records static authority disposition`);
+      assert.equal(readback.dsKnowledgeComponentsAnchor, requiredKnowledgeStorybookContractAnchors.componentsRoute, `${route.id} records DS Knowledge component Storybook anchor`);
+      assert.equal(readback.knowledgeComponentsStoryId, requiredKnowledgeStorybookContractAnchors.componentsStoryId, `${route.id} records Knowledge component Storybook id`);
+      assert.equal(readback.knowledgeStaticAuthorityDisposition, requiredKnowledgeStorybookContractAnchors.staticAuthorityDisposition, `${route.id} records Knowledge static authority disposition`);
+      assert.equal(readback.knowledgeDsBasis, requiredKnowledgeStorybookContractAnchors.dsBasis, `${route.id} records DS Meridian Knowledge basis`);
+      assert.equal(readback.registeredKnowledgeComponentsBoundary, "registered-package-components", `${route.id} records package-registered Knowledge components boundary`);
+      assert.equal(readback.localKnowledgeClonesBoundary, "absent", `${route.id} records absence of local Knowledge clones`);
       assert.deepEqual(readback.routeProofTargets, requiredWorkRouteProofTargets, `${route.id} records exact Work proof route targets`);
       assert.deepEqual(readback.mobileProofTargets, requiredMobileWorkRouteProofTargets, `${route.id} records mobile Work proof route targets`);
       assert.equal(readback.cleanRoomLayout, "tcrn-clean-room-work-layout-no-third-party-assets", `${route.id} records clean-room third-party-free layout boundary`);
@@ -1619,11 +1774,11 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
         assert.equal(readback.workManagementPatternReadback.patterns.includes("work-detail-layout"), true, "Detail route consumes DS WorkDetailLayout");
         assert.equal(readback.workManagementPatternReadback.patterns.includes("evidence-attachment-list"), true, "Detail route consumes DS EvidenceAttachmentList inside the inspector");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.present, true, "Detail route exposes the Work detail layout basis readback");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.sourceLocalBasisVisible, true, "Detail route surfaces source-local AOS consumption basis without stale commit claim");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.sourceLocalBasisVisible, true, "Detail route surfaces Meridian Knowledge AOS consumption source basis without stale commit claim");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.staleAosBasisVisible, false, "Detail route does not surface stale AOS 7836dca basis");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.priorAosBasisVisible, false, "Detail route does not surface prior AOS cae4d52 basis as current");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.dsBasisVisible, true, "Detail route keeps current DS 33222fa basis visible");
-        assert.equal(readback.workDetailBasisAndGatePostureReadback.workflowBasisVisible, true, "Detail route keeps Workflow d17bdc6 plan basis visible");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.dsBasisVisible, true, "Detail route keeps current DS d385428 basis visible");
+        assert.equal(readback.workDetailBasisAndGatePostureReadback.workflowBasisVisible, true, "Detail route keeps Workflow fce130df plan basis visible");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.previewPendingAtlasRefreshVisible, false, "Detail route does not say pending Atlas refresh as a stale pre-Atlas blocker");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.atlasMarkerPostureVisible, true, "Detail route points retained-preview freshness to Atlas/source markers instead of static refresh-required copy");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.pmFreshnessRetryVisible, true, "Detail route states PM freshness retry is pending without overclaiming readiness");
@@ -1635,6 +1790,29 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
         assert.equal(readback.workDetailBasisAndGatePostureReadback.ownerInspectionStillGuardedVisible, false, "Detail route removes the stale owner-handoff blocked copy");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.retainedPreviewStaleUntilReviewVisible, false, "Detail route removes stale retained-preview pre-refresh posture");
         assert.equal(readback.workDetailBasisAndGatePostureReadback.ownerAcceptanceClaimed, false, "Detail route still does not claim owner or release acceptance");
+        assert.equal(readback.knowledgeConsumptionReadback.present, true, "Detail route renders the DS Knowledge public-export support packet");
+        assert.equal(readback.knowledgeConsumptionReadback.apiIntegration, "absent", "Knowledge support packet declares no API integration");
+        assert.equal(readback.knowledgeConsumptionReadback.liveDispatch, "not-enabled", "Knowledge support packet declares no live dispatch");
+        assert.equal(readback.knowledgeConsumptionReadback.backendPersistence, "absent", "Knowledge support packet declares no backend persistence");
+        assert.equal(readback.knowledgeConsumptionReadback.globalSearch, "not-rendered", "Knowledge support packet does not create a global search capability");
+        assert.equal(readback.knowledgeConsumptionReadback.externalIntegration, "absent", "Knowledge support packet declares no external workspace integration");
+        assert.equal(readback.knowledgeConsumptionReadback.dsBasis, requiredKnowledgeStorybookContractAnchors.dsBasis, "Knowledge support packet records the DS Meridian basis");
+        assert.equal(readback.knowledgeConsumptionReadback.contractAnchor, requiredKnowledgeStorybookContractAnchors.componentsRoute, "Knowledge support packet records the DS Knowledge Storybook anchor");
+        assert.equal(readback.knowledgeConsumptionReadback.storyId, requiredKnowledgeStorybookContractAnchors.componentsStoryId, "Knowledge support packet records the Knowledge Storybook id");
+        assert.equal(readback.knowledgeConsumptionReadback.staticAuthorityDisposition, requiredKnowledgeStorybookContractAnchors.staticAuthorityDisposition, "Knowledge support packet records static authority disposition");
+        assert.equal(readback.knowledgeConsumptionReadback.registeredComponentSectionPresent, true, "Knowledge support packet renders registered DS Knowledge component readback");
+        assert.equal(readback.knowledgeConsumptionReadback.registeredComponentCount, requiredRegisteredKnowledgeComponentNames.length, "Knowledge support packet lists each consumed DS Knowledge component");
+        assert.equal(readback.knowledgeConsumptionReadback.declaredCount, String(requiredRegisteredKnowledgeComponentNames.length), "Knowledge support packet count marker matches rendered component rows");
+        assert.deepEqual(readback.knowledgeConsumptionReadback.registeredComponentNames, requiredRegisteredKnowledgeComponentNames, "Knowledge support packet lists the expected public DS Knowledge component names");
+        assert.deepEqual(readback.knowledgeConsumptionReadback.missingRequiredFields, [], "Knowledge component entries include name, candidate id, purpose, route usage, disposition, and DS level");
+        assert.deepEqual(readback.knowledgeConsumptionReadback.localPathHits, [], "Knowledge support packet has no local absolute path leakage");
+        assert.equal(readback.knowledgeConsumptionReadback.productWideSearchClaimed, false, "Knowledge support packet does not claim product-wide or external search");
+        assert.deepEqual(
+          requiredKnowledgeManagementPatterns.filter((pattern) => !readback.knowledgeManagementPatternReadback.patterns.includes(pattern)),
+          [],
+          "Detail route consumes the expected DS Knowledge Management public patterns"
+        );
+        assert.equal(readback.knowledgeManagementPatternReadback.localFixtureResultCount, 1, "Detail route uses static local Knowledge results without ProductShell/global search");
       }
       if (route.id === "gates") {
         assert.equal(readback.workManagementPatternReadback.patterns.includes("gate-pipeline"), true, "Gates route consumes DS GatePipeline");
@@ -1674,6 +1852,8 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
   const contractText = contractCorpus.map((entry) => entry.text).join("\n");
   const desktopPatternCoverage = Array.from(new Set(desktopReadbacks.flatMap((entry) => entry.readback.workManagementPatternReadback.patterns))).sort();
   const missingWorkManagementPatterns = requiredWorkManagementPatterns.filter((pattern) => !desktopPatternCoverage.includes(pattern));
+  const desktopKnowledgePatternCoverage = Array.from(new Set(desktopReadbacks.flatMap((entry) => entry.readback.knowledgeManagementPatternReadback.patterns))).sort();
+  const missingKnowledgeManagementPatterns = requiredKnowledgeManagementPatterns.filter((pattern) => !desktopKnowledgePatternCoverage.includes(pattern));
   const requiredRelationshipTerms = [
     "blocks",
     "blocked_by",
@@ -1699,17 +1879,24 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
       renderedPatterns: desktopPatternCoverage,
       missingPatterns: missingWorkManagementPatterns
     },
+    knowledgeManagementPatternCoverage: {
+      requiredPatterns: requiredKnowledgeManagementPatterns,
+      renderedPatterns: desktopKnowledgePatternCoverage,
+      missingPatterns: missingKnowledgeManagementPatterns
+    },
     storySmallestAcceptableResult: contractText.includes("Story is the smallest acceptable human/business/workflow result."),
     taskSmallestExecutableUnit: contractText.includes("Task / Work Item is the smallest executable ticket/task unit."),
     codexActivityAttachedExecutionEvidenceContext: contractText.includes("Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item.")
   };
   contentContractReadback.ok = contentContractReadback.relationshipVocabulary.missingTerms.length === 0
     && contentContractReadback.workManagementPatternCoverage.missingPatterns.length === 0
+    && contentContractReadback.knowledgeManagementPatternCoverage.missingPatterns.length === 0
     && contentContractReadback.storySmallestAcceptableResult
     && contentContractReadback.taskSmallestExecutableUnit
     && contentContractReadback.codexActivityAttachedExecutionEvidenceContext;
   assert.deepEqual(contentContractReadback.relationshipVocabulary.missingTerms, [], "static Work mockups render the full PRD relationship vocabulary");
   assert.deepEqual(missingWorkManagementPatterns, [], "static Work mockups consume every registered DS Work Management pattern");
+  assert.deepEqual(missingKnowledgeManagementPatterns, [], "static Work mockups consume the targeted DS Knowledge Management public patterns");
   assert.equal(contentContractReadback.storySmallestAcceptableResult, true, "static Work mockups state Story is the smallest acceptable human/business/workflow result");
   assert.equal(contentContractReadback.taskSmallestExecutableUnit, true, "static Work mockups state Task / Work Item is the smallest executable ticket/task unit");
   assert.equal(contentContractReadback.codexActivityAttachedExecutionEvidenceContext, true, "static Work mockups state Codex Activity is execution/evidence context attached to Work Items, not a replacement for Story or Task / Work Item");
@@ -1797,7 +1984,13 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
         pageHasHorizontalOverflow: html.scrollWidth > window.innerWidth + 1 || body.scrollWidth > window.innerWidth + 1,
         searchWrapperCount: document.querySelectorAll(".tcrn-product-shell-search, .tcrn-search-input").length,
         detailLayoutPresent: Boolean(document.querySelector('[data-work-management-pattern="work-detail-layout"]')),
-        sourceLocalBasisVisible: body.innerText.includes("post-review-source"),
+        sourceLocalBasisVisible: body.innerText.includes("meridian-knowledge-source"),
+        knowledgeSupportPresent: Boolean(document.querySelector('[data-aos-knowledge-management-consumption="public-ds-exports-v1"]')),
+        knowledgePatterns: Array.from(new Set(Array.from(document.querySelectorAll("[data-knowledge-management-pattern]")).map((node) => node.getAttribute("data-knowledge-management-pattern") ?? "").filter(Boolean))),
+        knowledgeApiIntegration: document.querySelector('[data-aos-knowledge-management-consumption="public-ds-exports-v1"]')?.getAttribute("data-knowledge-management-api-integration") ?? null,
+        knowledgeGlobalSearch: document.querySelector('[data-aos-knowledge-management-consumption="public-ds-exports-v1"]')?.getAttribute("data-knowledge-management-global-search") ?? null,
+        knowledgeDsBasis: document.querySelector('[data-aos-knowledge-management-consumption="public-ds-exports-v1"]')?.getAttribute("data-knowledge-management-ds-basis") ?? null,
+        knowledgeLocalPathHits: ["/Users/", "/tmp/", "file://", "/srv/tcrn", "/var/folders", "/private/tmp"].filter((marker) => document.querySelector('[data-aos-knowledge-management-consumption="public-ds-exports-v1"]')?.outerHTML.includes(marker)),
         staleAosBasisVisible: body.innerText.includes("7836dca"),
         priorAosBasisVisible: body.innerText.includes("cae4d52"),
         atlasMarkerPostureVisible: body.innerText.includes("Atlas/source marker"),
@@ -1819,7 +2012,17 @@ async function runStaticWorkMockupBrowserProof(browser, baseUrl, consoleMessages
     assert.equal(mobileDetailReadback.pageHasHorizontalOverflow, false, "mobile detail route has no page-level horizontal overflow");
     assert.equal(mobileDetailReadback.searchWrapperCount, 0, "mobile detail route has no search or search-result clone");
     assert.equal(mobileDetailReadback.detailLayoutPresent, true, "mobile detail route renders full WorkDetailLayout");
-    assert.equal(mobileDetailReadback.sourceLocalBasisVisible, true, "mobile detail route surfaces source-local AOS consumption basis without stale commit claim");
+    assert.equal(mobileDetailReadback.sourceLocalBasisVisible, true, "mobile detail route surfaces Meridian Knowledge source basis without stale commit claim");
+    assert.equal(mobileDetailReadback.knowledgeSupportPresent, true, "mobile detail route renders DS Knowledge public-export support packet");
+    assert.deepEqual(
+      requiredKnowledgeManagementPatterns.filter((pattern) => !mobileDetailReadback.knowledgePatterns.includes(pattern)),
+      [],
+      "mobile detail route renders the consumed Knowledge public patterns"
+    );
+    assert.equal(mobileDetailReadback.knowledgeApiIntegration, "absent", "mobile Knowledge support packet declares no API integration");
+    assert.equal(mobileDetailReadback.knowledgeGlobalSearch, "not-rendered", "mobile Knowledge support packet does not create global search");
+    assert.equal(mobileDetailReadback.knowledgeDsBasis, requiredKnowledgeStorybookContractAnchors.dsBasis, "mobile Knowledge support packet records DS Meridian basis");
+    assert.deepEqual(mobileDetailReadback.knowledgeLocalPathHits, [], "mobile Knowledge support packet has no local path leakage");
     assert.equal(mobileDetailReadback.staleAosBasisVisible, false, "mobile detail route hides stale AOS basis");
     assert.equal(mobileDetailReadback.priorAosBasisVisible, false, "mobile detail route does not surface prior AOS cae4d52 basis as current");
     assert.equal(mobileDetailReadback.atlasMarkerPostureVisible, true, "mobile detail route points retained-preview freshness to Atlas/source markers");

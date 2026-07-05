@@ -5,6 +5,14 @@ import {
   EvidenceAttachmentList,
   GatePipelineCompact,
   Heading,
+  KnowledgeDocumentCanvas,
+  KnowledgeInlineCommentList,
+  KnowledgeLabelSet,
+  KnowledgeMetadataRail,
+  KnowledgePageTree,
+  KnowledgeSearchResults,
+  KnowledgeTocRail,
+  KnowledgeVersionHistory,
   LinkButton,
   MachineToken,
   MachineTokenCell,
@@ -25,6 +33,7 @@ import {
   WorkQuickFilters,
   WorkSplitView,
   WorkViewTabs,
+  knowledgeManagementPatternRegistry,
   workManagementPatternRegistry,
   type EvidenceAttachment,
   type GatePipelineGate,
@@ -97,6 +106,15 @@ interface RegisteredDsWorkComponentFixture {
   dsLevel: "primitive" | "pattern" | "composite";
 }
 
+interface RegisteredDsKnowledgeComponentFixture {
+  componentName: string;
+  candidateId: string;
+  purpose: string;
+  whereUsed: string;
+  consumptionDisposition: string;
+  dsLevel: "primitive" | "pattern" | "composite";
+}
+
 const workStorybookContractAnchors = {
   componentsRoute: "components.html#work-management-components-spec",
   patternsRoute: "patterns.html#work-management-patterns",
@@ -107,6 +125,17 @@ const workStorybookContractAnchors = {
   consumerVisualStyleContract: "consumerVisualStyleContract",
   docShellOracle: "original-storybook-doc-shell-v1",
   staticAuthorityDisposition: "aos_static_work_mockup_consumes_storybook_ds_work_management_contract"
+} as const;
+
+const knowledgeStorybookContractAnchors = {
+  componentsRoute: "components.html#knowledge-management-components-spec",
+  componentsStoryId: "tcrn-design-system-components--knowledge-management-components-spec",
+  aiContractVersion: "ai_consumption_contract_v1",
+  foundationRegistryId: "foundation-visual-standards-v1",
+  consumerVisualStyleContract: "consumerVisualStyleContract",
+  docShellOracle: "original-storybook-doc-shell-v1",
+  staticAuthorityDisposition: "aos_static_knowledge_mockup_consumes_meridian_ds_knowledge_management_contract",
+  dsBasis: "d385428"
 } as const;
 
 const exactWorkRouteProofTargets = [
@@ -128,9 +157,9 @@ const mobileWorkRouteProofTargets = [
 ];
 
 const currentAosConsumptionBasis = {
-  aos: "post-review-source",
-  ds: "33222fa",
-  workflow: "d17bdc6"
+  aos: "meridian-knowledge-source",
+  ds: "d385428",
+  workflow: "fce130df"
 } as const;
 
 const workPages: WorkMockupPage[] = [
@@ -445,6 +474,68 @@ const registeredDsWorkComponentRows: RegisteredDsWorkComponentFixture[] = workMa
   };
 });
 
+const consumedKnowledgeComponentNames = [
+  "KnowledgePageTree",
+  "KnowledgeDocumentCanvas",
+  "KnowledgeTocRail",
+  "KnowledgeInlineCommentList",
+  "KnowledgeMetadataRail",
+  "KnowledgeLabelSet",
+  "KnowledgeVersionHistory",
+  "KnowledgeSearchResults"
+] as const;
+
+const registeredDsKnowledgeComponentRows: RegisteredDsKnowledgeComponentFixture[] = knowledgeManagementPatternRegistry
+  .filter((item) => consumedKnowledgeComponentNames.includes(item.componentName as typeof consumedKnowledgeComponentNames[number]))
+  .map((item) => {
+    const routeUse: Record<string, { whereUsed: string; consumptionDisposition: string }> = {
+      KnowledgePageTree: {
+        whereUsed: "/work/items/AOS-128 knowledge support packet",
+        consumptionDisposition: "Consumes package KnowledgePageTree for static page context beside the Work detail."
+      },
+      KnowledgeDocumentCanvas: {
+        whereUsed: "/work/items/AOS-128 knowledge support packet",
+        consumptionDisposition: "Consumes package KnowledgeDocumentCanvas for source-bounded runbook content."
+      },
+      KnowledgeTocRail: {
+        whereUsed: "/work/items/AOS-128 knowledge support packet",
+        consumptionDisposition: "Consumes package KnowledgeTocRail for local document section navigation."
+      },
+      KnowledgeInlineCommentList: {
+        whereUsed: "/work/items/AOS-128 knowledge support packet",
+        consumptionDisposition: "Consumes package KnowledgeInlineCommentList for static review notes without collaboration claims."
+      },
+      KnowledgeMetadataRail: {
+        whereUsed: "/work/items/AOS-128 knowledge support packet",
+        consumptionDisposition: "Consumes package KnowledgeMetadataRail for DS basis, owner state, and no-live policy metadata."
+      },
+      KnowledgeLabelSet: {
+        whereUsed: "/work/items/AOS-128 knowledge support packet",
+        consumptionDisposition: "Consumes package KnowledgeLabelSet for compact topic and policy labels."
+      },
+      KnowledgeVersionHistory: {
+        whereUsed: "/work/items/AOS-128 knowledge support packet",
+        consumptionDisposition: "Consumes package KnowledgeVersionHistory for static version readbacks without publishing claims."
+      },
+      KnowledgeSearchResults: {
+        whereUsed: "/work/items/AOS-128 knowledge support packet",
+        consumptionDisposition: "Consumes package KnowledgeSearchResults as local fixture results only, not ProductShell/global search."
+      }
+    };
+    const route = routeUse[item.componentName] ?? {
+      whereUsed: "/work/items/AOS-128",
+      consumptionDisposition: "Consumed from the registered DS Knowledge Management package registry."
+    };
+    return {
+      componentName: item.componentName,
+      candidateId: item.candidateId,
+      purpose: item.purpose,
+      whereUsed: route.whereUsed,
+      consumptionDisposition: route.consumptionDisposition,
+      dsLevel: item.level
+    };
+  });
+
 const codexRows = [
   {
     route: "route_tcrn_aos_no_global_search_url_locale_ilya_implementation_after_owner_approval",
@@ -751,6 +842,12 @@ export function WorkManagementMockups({ path, locale, theme, collapsed, variant,
       data-consumer-visual-style-contract={workStorybookContractAnchors.consumerVisualStyleContract}
       data-storybook-doc-shell-oracle={workStorybookContractAnchors.docShellOracle}
       data-work-static-authority-disposition={workStorybookContractAnchors.staticAuthorityDisposition}
+      data-ds-knowledge-components-anchor={knowledgeStorybookContractAnchors.componentsRoute}
+      data-storybook-knowledge-components-story-id={knowledgeStorybookContractAnchors.componentsStoryId}
+      data-knowledge-static-authority-disposition={knowledgeStorybookContractAnchors.staticAuthorityDisposition}
+      data-knowledge-management-ds-basis={knowledgeStorybookContractAnchors.dsBasis}
+      data-design-system-knowledge-components="registered-package-components"
+      data-product-local-knowledge-component-clones="absent"
       data-work-route-proof-targets={exactWorkRouteProofTargets.join(" ")}
       data-work-mobile-proof-targets={mobileWorkRouteProofTargets.join(" ")}
       data-work-clean-room-layout="tcrn-clean-room-work-layout-no-third-party-assets"
@@ -990,6 +1087,225 @@ function RegisteredDsWorkComponentNameCell({ item }: { item: RegisteredDsWorkCom
   );
 }
 
+function KnowledgeManagementSupportSection({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path: string) => string }) {
+  const isZh = locale === "zh-CN";
+  const labels = isZh
+    ? ["静态", "DS 公开导出", "无后端"]
+    : ["Static", "DS public exports", "No backend"];
+  const pageTreeItems = [
+    {
+      id: "aos-work-runbook",
+      title: isZh ? "AOS Work 检查运行手册" : "AOS Work inspection runbook",
+      href: routeHref("/work/items/AOS-128"),
+      current: true,
+      state: { state: "review_required", label: isZh ? "PM freshness 重试待定" : "PM freshness retry pending" }
+    },
+    {
+      id: "proof-receipts",
+      title: isZh ? "证明读回" : "Proof readbacks",
+      href: routeHref("/work/evidence"),
+      state: { state: "local_only", label: isZh ? "静态 fixture" : "Static fixture" }
+    },
+    {
+      id: "route-activity",
+      title: isZh ? "Route 活动" : "Route activity",
+      href: routeHref("/work/codex-activity")
+    }
+  ];
+  const documentSections = [
+    {
+      id: "scope",
+      heading: isZh ? "消费范围" : "Consumption scope",
+      body: isZh
+        ? "AOS 仅消费 Meridian / Knowledge Management 的公开 DS 导出，用于把工作项上下文、证明和静态知识说明放在同一个详情页。"
+        : "AOS consumes Meridian / Knowledge Management public DS exports only, placing Work context, proof, and static knowledge notes in the same detail route."
+    },
+    {
+      id: "boundary",
+      heading: isZh ? "边界" : "Boundary",
+      body: isZh
+        ? "该区域不接入 Knowledge 后端、持久化、全局搜索、外部工作区或 live dispatch；Owner、Product、final MVP 与 release acceptance 均未声明。"
+        : "This region wires no Knowledge backend, persistence, global search, external workspace, or live dispatch; owner, product, final MVP, and release acceptance are not claimed."
+    },
+    {
+      id: "next-proof",
+      heading: isZh ? "下一步证明" : "Next proof",
+      body: isZh
+        ? "下一步应由 Sable、Talia、Elara、Rowan 和 Verity 复核 AOS 消费结果，再由 Atlas 处理保留预览刷新。"
+        : "Next review should route Sable, Talia, Elara, Rowan, and Verity over this AOS consumption result before Atlas handles retained preview refresh."
+    }
+  ];
+  const tocItems = documentSections.map((section, index) => ({
+    id: section.id,
+    label: section.heading,
+    href: `#${section.id}`,
+    current: index === 0
+  }));
+  const comments = [
+    {
+      id: "knowledge-comment-1",
+      author: "Ilya",
+      body: isZh
+        ? "使用公开 DS Knowledge 组件补齐工作项知识上下文，不复制 Storybook 文档壳。"
+        : "Use public DS Knowledge components for Work-item knowledge context without copying Storybook doc-shell chrome.",
+      timestamp: "2026-07-05",
+      state: { state: "review_required", label: isZh ? "待复核" : "Review pending" }
+    },
+    {
+      id: "knowledge-comment-2",
+      author: "Sable",
+      body: isZh
+        ? "保持 clean-room 边界：无第三方品牌、资产、类名、截图或外部集成。"
+        : "Keep the clean-room boundary: no third-party brand, assets, classes, screenshots, or external integration.",
+      timestamp: "pending",
+      state: { state: "not_claimed", label: isZh ? "未声明接受" : "Acceptance not claimed" }
+    }
+  ];
+  const versions = [
+    {
+      id: "knowledge-v1",
+      title: isZh ? "Meridian DS 知识组件消费" : "Meridian DS Knowledge component consumption",
+      author: "Ilya",
+      timestamp: "source repair",
+      state: { state: "review_required", label: isZh ? "待评审" : "Review pending" }
+    },
+    {
+      id: "knowledge-v0",
+      title: isZh ? "Work 密度布局消费" : "Work density layout consumption",
+      author: "Ilya",
+      timestamp: "previous basis",
+      state: { state: "local_only", label: isZh ? "仅本地证明" : "Local proof only" }
+    }
+  ];
+  const searchResults = [
+    {
+      id: "knowledge-result-proof",
+      title: isZh ? "证明与门禁读回" : "Proof and gate readback",
+      href: routeHref("/work/evidence"),
+      excerpt: isZh
+        ? "静态结果引用 AOS Work 证明和门禁上下文，不连接产品级或外部搜索索引。"
+        : "Static result references AOS Work proof and gate context without product-wide or external search indexing.",
+      labels: [isZh ? "证明" : "Proof", isZh ? "静态" : "Static"],
+      state: { state: "local_only", label: isZh ? "静态结果" : "Static result" }
+    },
+    {
+      id: "knowledge-result-activity",
+      title: isZh ? "执行活动说明" : "Execution activity notes",
+      href: routeHref("/work/codex-activity"),
+      excerpt: isZh
+        ? "静态结果指向 route 活动说明；不会触发 live dispatch 或外部动作。"
+        : "Static result links to route activity notes; it does not trigger live dispatch or external action.",
+      labels: [isZh ? "活动" : "Activity", isZh ? "无 live" : "No live"],
+      state: { state: "not_claimed", label: isZh ? "无外部动作" : "No external action" }
+    }
+  ];
+
+  return (
+    <Surface
+      data-aos-knowledge-management-consumption="public-ds-exports-v1"
+      data-knowledge-management-api-integration="absent"
+      data-knowledge-management-live-dispatch="not-enabled"
+      data-knowledge-management-backend-persistence="absent"
+      data-knowledge-management-global-search="not-rendered"
+      data-knowledge-management-external-integration="absent"
+      data-knowledge-management-ds-basis={knowledgeStorybookContractAnchors.dsBasis}
+      data-ds-knowledge-components-anchor={knowledgeStorybookContractAnchors.componentsRoute}
+      data-storybook-knowledge-components-story-id={knowledgeStorybookContractAnchors.componentsStoryId}
+      data-knowledge-static-authority-disposition={knowledgeStorybookContractAnchors.staticAuthorityDisposition}
+      data-registered-ds-knowledge-components-count={registeredDsKnowledgeComponentRows.length}
+      data-registered-ds-knowledge-components={registeredDsKnowledgeComponentRows.map((row) => row.componentName).join(" ")}
+      data-product-local-knowledge-component-clones="absent"
+      data-clean-room-knowledge-boundary="tcrn-clean-room-knowledge-no-third-party-assets"
+    >
+      <Heading level={2}>{isZh ? "Knowledge 支持包" : "Knowledge support packet"}</Heading>
+      <Text>
+        {isZh
+          ? "该详情区域消费 DS Meridian / Knowledge Management 公开组件，把静态知识说明、门禁证明和工作项上下文放在一起；不声明 owner/product/release 接受。"
+          : "This detail region consumes DS Meridian / Knowledge Management public components to place static knowledge notes, gate proof, and Work-item context together; it does not claim owner, product, or release acceptance."}
+      </Text>
+      <div className="tcrn-work-module-secondary-grid">
+        <KnowledgePageTree
+          label={isZh ? "知识页面树" : "Knowledge page tree"}
+          items={pageTreeItems}
+          density="compact"
+        />
+        <KnowledgeDocumentCanvas
+          title={isZh ? "AOS-128 静态知识说明" : "AOS-128 static knowledge note"}
+          summary={isZh
+            ? "从 DS `d385428` 消费公开 Knowledge 组件；保留预览新鲜度仍由 Atlas/source marker 判定。"
+            : "Consumes public Knowledge components from DS `d385428`; retained-preview freshness remains determined by Atlas/source markers."}
+          labels={labels}
+          meta={<MachineTokenCell token={knowledgeStorybookContractAnchors.dsBasis} label="DS" kind="commit" density="compact" />}
+          sections={documentSections}
+          density="compact"
+        />
+      </div>
+      <div className="tcrn-work-module-secondary-grid">
+        <KnowledgeTocRail label={isZh ? "本页目录" : "On this page"} items={tocItems} density="compact" />
+        <KnowledgeMetadataRail
+          title={isZh ? "知识元数据" : "Knowledge metadata"}
+          labels={labels}
+          items={[
+            { key: "ds", label: "DS", value: <MachineTokenCell token={knowledgeStorybookContractAnchors.dsBasis} label="Knowledge" kind="commit" density="compact" /> },
+            { key: "source", label: isZh ? "来源" : "Source", value: isZh ? "AOS 静态 fixture" : "AOS static fixture" },
+            { key: "state", label: isZh ? "状态" : "State", value: translatePhrase("PM freshness retry pending", locale) },
+            { key: "backend", label: isZh ? "后端" : "Backend", value: isZh ? "未接入" : "Not integrated" },
+            { key: "acceptance", label: isZh ? "接受" : "Acceptance", value: isZh ? "未声明" : "Not claimed" }
+          ]}
+          actions={[
+            {
+              id: "route-review",
+              label: isZh ? "路由复核" : "Route review",
+              disabledReason: translatePhrase("Static mockup only; route actions are not wired", locale)
+            }
+          ]}
+          density="compact"
+        />
+      </div>
+      <div className="tcrn-work-module-secondary-grid">
+        <KnowledgeInlineCommentList label={isZh ? "静态评论" : "Static comments"} comments={comments} density="compact" />
+        <KnowledgeVersionHistory label={isZh ? "静态版本" : "Static versions"} versions={versions} density="compact" />
+      </div>
+      <div className="tcrn-work-module-secondary-grid">
+        <KnowledgeSearchResults label={isZh ? "静态知识结果" : "Static knowledge results"} results={searchResults} density="compact" />
+        <div
+          data-registered-ds-knowledge-components="true"
+          data-registered-ds-knowledge-components-implementation="package-consumed-public-exports"
+          data-registered-ds-knowledge-components-count={registeredDsKnowledgeComponentRows.length}
+        >
+          <KnowledgeLabelSet labels={labels} label={isZh ? "知识标签" : "Knowledge labels"} density="compact" />
+          <TableShell
+            label={isZh ? "已消费的 DS Knowledge 组件" : "Consumed DS Knowledge components"}
+            columns={columns(locale, ["name", "whereUsed", "consumptionDisposition", "dsLevel"])}
+            rows={registeredDsKnowledgeComponentRows.map((row) => ({
+              name: <RegisteredDsKnowledgeComponentNameCell item={row} />,
+              whereUsed: row.whereUsed,
+              consumptionDisposition: translatePhrase(row.consumptionDisposition, locale),
+              dsLevel: row.dsLevel
+            }))}
+          />
+        </div>
+      </div>
+    </Surface>
+  );
+}
+
+function RegisteredDsKnowledgeComponentNameCell({ item }: { item: RegisteredDsKnowledgeComponentFixture }) {
+  return (
+    <span
+      data-registered-ds-knowledge-component-item="true"
+      data-registered-ds-knowledge-component-name={item.componentName}
+      data-registered-ds-knowledge-component-candidate-id={item.candidateId}
+      data-registered-ds-knowledge-component-purpose={item.purpose}
+      data-registered-ds-knowledge-component-where-used={item.whereUsed}
+      data-registered-ds-knowledge-component-disposition={item.consumptionDisposition}
+      data-registered-ds-knowledge-component-level={item.dsLevel}
+    >
+      {item.componentName}
+    </span>
+  );
+}
+
 function DetailPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (path: string) => string }) {
   return (
     <WorkDetailLayout
@@ -1012,6 +1328,7 @@ function DetailPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (pat
         }))} density="compact" />
         <GatePipelineCompact label={locale === "zh-CN" ? "门禁摘要" : "Gate summary"} gates={workGatePipeline(locale).slice(0, 5)} />
         <EvidenceAttachmentList label={locale === "zh-CN" ? "证据" : "Evidence"} items={evidenceAttachments(locale)} density="compact" />
+        <KnowledgeManagementSupportSection locale={locale} routeHref={routeHref} />
       </div>}
       metadata={<MetadataRail title={locale === "zh-CN" ? "元数据" : "Metadata"} items={detailMetadataItems(locale)} density="compact" />}
       activity={<WorkActivityFeed label={locale === "zh-CN" ? "活动" : "Activity"} items={activityItems(locale)} density="compact" />}
