@@ -1,0 +1,72 @@
+{
+  "receiptName": "blocked-role-refusal-proof.json",
+  "ok": true,
+  "route": "route_tcrn_aos_phase2_mcp_transport_ilya_bounded_implementation_after_mara_pm_success_7808400_12d73bd_20260705",
+  "command": "pnpm --dir TCRN-AOS phase2:mcp-transport-proof",
+  "generatedAt": "2026-07-05T17:36:58.139Z",
+  "sourceHead": "12d73bdcf90f64d8f7f8cec665a8f4c4092c38ed",
+  "sourceContentDigest": "ae5ae393948a18ffbab5a2b09a8a4a1df10e4d09de0e3237b32c94a9a9ea8a9d",
+  "sourceFiles": [
+    {
+      "file": "package.json",
+      "digest": "ece8f5099bccb0b4d23129766789c18a35567bb19b97e6208255acac16e3b3ff"
+    },
+    {
+      "file": "packages/mcp-gateway/src/gateway.ts",
+      "digest": "df84769fed67ab3ff819ca1e77ca45b4515d2b674d9f3d1a3ed83860b7e74633"
+    },
+    {
+      "file": "packages/mcp-server/src/index.ts",
+      "digest": "c3c91f41be5a7856ff257f58226cc3e7136b98efa7597567254aa62c56e266db"
+    },
+    {
+      "file": "packages/mcp-server/src/transport.ts",
+      "digest": "5e41a70d63f745655b0104f8b235e0144caa70f3bcbb285c4d7e2fdcba83f4bd"
+    },
+    {
+      "file": "packages/mcp-server/src/stdio-server.ts",
+      "digest": "e31bf92853c2ec731cc40a6de89977faffd786765f220757afeb466c15c8d035"
+    },
+    {
+      "file": "packages/mcp-server/test/stdio-transport.test.mjs",
+      "digest": "f8a0a6a6cbfef09b292d1bf8ec2be42287180963ad9f5ed592c8390d088cb6d1"
+    },
+    {
+      "file": "scripts/phase2-mcp-transport-proof.mjs",
+      "digest": "788f4448d37abc320b012b17d6e495dfb0b7a0a9ce5bca8d2511a89793bde8c8"
+    }
+  ],
+  "routeOwnedDbRoot": {
+    "class": "os_temp_route_owned_redacted",
+    "rootDigest": "2366917ac8bc027684933a8adb9866c1bc56866b9f076d481057462824d65efa",
+    "rawPathRecorded": false
+  },
+  "actorProof": {
+    "employeeId": "employee-ilya",
+    "role": "implementation",
+    "threadId": "019eb6d7-f130-70a0-8805-169cc337229b",
+    "trustedServerConfig": true,
+    "clientSuppliedAuthorityTrusted": false
+  },
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "productRepoMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "durableRuntimeDbActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "retainedPreviewFreshnessClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false
+  },
+  "actorSource": "trusted_server_config",
+  "readOnlyRole": "owner_observer",
+  "policyReadOk": true,
+  "writeBlocked": true,
+  "errorReason": "transport_actor_blocked_role",
+  "refusalAuditAction": "mcp.transport.refusal"
+}

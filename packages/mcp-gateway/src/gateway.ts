@@ -11,6 +11,7 @@ import {
 import type {
   ActorIdentity,
   AuditEvent,
+  AgentRun,
   DependencyDetectionFinding,
   DependencyLifecycleRecord,
   DocsReadinessRecord,
@@ -166,10 +167,7 @@ export class McpGateway {
           body: requireString(params.body, "body")
         }, actor);
       case "aos.run.summary.create":
-        return this.store.appendAudit(actor, "run.summary.create", "run", requireString(params.assignmentId, "assignmentId"), "accepted", {
-          status: params.status,
-          summary: params.summary
-        });
+        return this.recordRunSummary(actor, params);
       case "aos.gate.request":
         return this.requestGate(actor, params);
       case "aos.evidence.link":
@@ -349,6 +347,21 @@ export class McpGateway {
       linkedTicketId: requireString(params.linkedTicketId, "linkedTicketId"),
       inputEvidenceIds: requireStringArray(params.inputEvidenceIds, "inputEvidenceIds")
     }, actor);
+  }
+
+  private recordRunSummary(actor: ActorIdentity, params: Record<string, unknown>): AgentRun {
+    const run: Omit<AgentRun, "id"> = {
+      assignmentId: requireString(params.assignmentId, "assignmentId"),
+      status: requireString(params.status, "status") as AgentRun["status"],
+      startedAt: requireString(params.startedAt ?? new Date().toISOString(), "startedAt"),
+      readback: requireString(params.readback ?? params.summary, "readback"),
+      outputSummary: requireString(params.outputSummary ?? params.summary, "outputSummary")
+    };
+    const endedAt = optionalString(params.endedAt);
+    if (endedAt) {
+      run.endedAt = endedAt;
+    }
+    return this.store.recordAgentRun(run, actor);
   }
 
   private linkEvidence(actor: ActorIdentity, params: Record<string, unknown>): EvidenceLink {

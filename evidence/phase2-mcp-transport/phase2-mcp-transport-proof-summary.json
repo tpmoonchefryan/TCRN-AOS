@@ -1,0 +1,64 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_phase2_mcp_transport_ilya_bounded_implementation_after_mara_pm_success_7808400_12d73bd_20260705",
+  "command": "pnpm --dir TCRN-AOS phase2:mcp-transport-proof",
+  "generatedAt": "2026-07-05T17:37:01.789Z",
+  "sourceHead": "12d73bdcf90f64d8f7f8cec665a8f4c4092c38ed",
+  "sourceContentDigest": "ae5ae393948a18ffbab5a2b09a8a4a1df10e4d09de0e3237b32c94a9a9ea8a9d",
+  "receiptInventory": [
+    "real-stdio-client-session.json",
+    "transport-method-allowlist-proof.json",
+    "policy-read-filter-proof.json",
+    "actor-identity-and-refusal-audit-proof.json",
+    "blocked-role-refusal-proof.json",
+    "response-budget-pagination-proof.json",
+    "idempotency-replay-scope-proof.json",
+    "restart-reconnect-proof.json",
+    "persisted-agent-run-proof.json",
+    "dependency-license-security-readback.json",
+    "privacy-no-overclaim-scan.json",
+    "verify-fast-readback.json"
+  ],
+  "receiptCount": 12,
+  "childReceiptsOk": {
+    "real-stdio-client-session.json": true,
+    "transport-method-allowlist-proof.json": true,
+    "policy-read-filter-proof.json": true,
+    "actor-identity-and-refusal-audit-proof.json": true,
+    "blocked-role-refusal-proof.json": true,
+    "response-budget-pagination-proof.json": true,
+    "idempotency-replay-scope-proof.json": true,
+    "restart-reconnect-proof.json": true,
+    "persisted-agent-run-proof.json": true,
+    "dependency-license-security-readback.json": true,
+    "privacy-no-overclaim-scan.json": true,
+    "verify-fast-readback.json": true
+  },
+  "missingReceipts": [],
+  "extraUnclassifiedReceipts": [],
+  "sourceProvenanceConsistent": true,
+  "privacyScanClean": true,
+  "noOverclaimFlags": {
+    "productRepoMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "durableRuntimeDbActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "retainedPreviewFreshnessClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false
+  },
+  "routeOwnedDbRoot": {
+    "class": "os_temp_route_owned_redacted",
+    "rootDigest": "2366917ac8bc027684933a8adb9866c1bc56866b9f076d481057462824d65efa",
+    "rawPathRecorded": false
+  },
+  "cleanupReadback": {
+    "attempted": false,
+    "removed": false,
+    "rawPathRecorded": false
+  }
+}
