@@ -6,6 +6,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   AosMcpTransport,
+  createRuntimeTransport,
   transportMvpMethods
 } from "../../../dist/packages/mcp-server/src/index.js";
 import {
@@ -144,6 +145,50 @@ test("Phase 2 stdio transport filters methods, refuses client authority, persist
     assert.equal(restartedStore.listRuns().some((item) => item.id === run.result.result.id), true);
     assert.equal(restartedStore.listAssignments().find((item) => item.id === assignment.id).runIds.includes(run.result.result.id), true);
     restartedRepository.close();
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("Phase 2 transport does not cache over-budget responses for replay bypass", async () => {
+  const store = new AosStore(createDefaultSeed());
+  const transport = new AosMcpTransport(store, { trustedActor: actor, maxResponseBytes: 1024 });
+  store.appendAudit(actor, "phase2.large.audit", "proof", "budget", "accepted", {
+    summary: "x".repeat(5000)
+  });
+
+  const first = transport.handleJsonRpc({ jsonrpc: "2.0", id: 1, method: "aos.audit.query", params: { action: "phase2.large.audit" } });
+  const replay = transport.handleJsonRpc({ jsonrpc: "2.0", id: 2, method: "aos.audit.query", params: { action: "phase2.large.audit" } });
+
+  assert.equal(first.result, undefined);
+  assert.equal(first.error.data.reason, "transport_response_budget_exceeded");
+  assert.equal(replay.result, undefined);
+  assert.equal(replay.error.data.reason, "transport_response_budget_exceeded");
+});
+
+test("Phase 2 runtime transport requires route-owned persisted DB and persisted actor rows", async () => {
+  assert.throws(() => createRuntimeTransport({ actor }), /transport_runtime_database_path_required/);
+
+  const root = await mkdtemp(join(tmpdir(), "tcrn-aos-phase2-runtime-empty-"));
+  await writeFile(join(root, ".tcrn-aos-phase1-root"), "owned-by-phase2-runtime-test\n", "utf8");
+  try {
+    const repository = new AosSqliteRepository({ databasePath: join(root, "phase2-empty.sqlite"), migrationsDir });
+    repository.applyMigrations();
+    repository.close();
+    const runtime = createRuntimeTransport({
+      actor,
+      databasePath: join(root, "phase2-empty.sqlite"),
+      databaseRoot: root,
+      repoRoot,
+      migrationsDir
+    });
+    try {
+      const policy = runtime.transport.handleJsonRpc({ jsonrpc: "2.0", id: 1, method: "aos.policy.read", params: {} });
+      assert.equal(policy.result, undefined);
+      assert.equal(policy.error.data.reason, "transport_actor_unknown");
+    } finally {
+      runtime.close();
+    }
   } finally {
     await rm(root, { recursive: true, force: true });
   }

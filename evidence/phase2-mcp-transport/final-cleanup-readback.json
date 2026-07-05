@@ -1,0 +1,74 @@
+{
+  "receiptName": "final-cleanup-readback.json",
+  "ok": true,
+  "route": "route_tcrn_aos_phase2_mcp_transport_ilya_targeted_topology_repair_after_daedalus_changes_requested_b6a5ed3_20260705",
+  "command": "pnpm --dir TCRN-AOS phase2:mcp-transport-proof",
+  "generatedAt": "2026-07-05T17:59:56.190Z",
+  "sourceHead": "b6a5ed342e2bce1d66e2df5615b7c530c2dbbb7b",
+  "sourceContentDigest": "036fdafadf72fd7f7278ff445dadf1fd448daeca005277e653a7f4a7bc3388a3",
+  "sourceFiles": [
+    {
+      "file": "package.json",
+      "digest": "ece8f5099bccb0b4d23129766789c18a35567bb19b97e6208255acac16e3b3ff"
+    },
+    {
+      "file": "packages/mcp-gateway/src/gateway.ts",
+      "digest": "df84769fed67ab3ff819ca1e77ca45b4515d2b674d9f3d1a3ed83860b7e74633"
+    },
+    {
+      "file": "packages/mcp-server/src/index.ts",
+      "digest": "c3c91f41be5a7856ff257f58226cc3e7136b98efa7597567254aa62c56e266db"
+    },
+    {
+      "file": "packages/mcp-server/src/transport.ts",
+      "digest": "7f21fcaefbb74e450d490561cefb0d7e2b5a6ae1d30d547684376a777fab9272"
+    },
+    {
+      "file": "packages/mcp-server/src/stdio-server.ts",
+      "digest": "e31bf92853c2ec731cc40a6de89977faffd786765f220757afeb466c15c8d035"
+    },
+    {
+      "file": "packages/mcp-server/test/stdio-transport.test.mjs",
+      "digest": "0467571e37878d3a8909c5d7509e6ccb17a3ef43321c1c324015de7066866f8c"
+    },
+    {
+      "file": "scripts/phase2-mcp-transport-proof.mjs",
+      "digest": "804c2ffd245f986950c2140ef4f04ad0e9a689b217ab7efa6fd4507dfaf5242f"
+    }
+  ],
+  "routeOwnedDbRoot": {
+    "class": "os_temp_route_owned_redacted",
+    "rootDigest": "8b5bfb5cb29aa03c835138b632edb361c1737a97bea21d1f71bb244b8513b3f0",
+    "rawPathRecorded": false
+  },
+  "actorProof": {
+    "employeeId": "employee-ilya",
+    "role": "implementation",
+    "threadId": "019eb6d7-f130-70a0-8805-169cc337229b",
+    "trustedServerConfig": true,
+    "clientSuppliedAuthorityTrusted": false
+  },
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "productRepoMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "durableRuntimeDbActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "retainedPreviewFreshnessClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false
+  },
+  "finalCleanupCompletedAfterProofWrites": true,
+  "cleanupReadback": {
+    "attempted": true,
+    "removed": true,
+    "rawPathRecorded": false
+  },
+  "restartReceiptDisposition": "restart-reconnect-proof links to this final cleanup receipt",
+  "rawPathRecorded": false
+}

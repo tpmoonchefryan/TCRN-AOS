@@ -1,10 +1,11 @@
 import { stdin as processStdin, stdout as processStdout } from "node:process";
 import { createInterface } from "node:readline";
+import { homedir } from "node:os";
+import { dirname, relative, resolve, sep } from "node:path";
 import {
   AosStore,
   POLICY_VERSION,
   canWrite,
-  createDefaultSeed,
   digest,
   redactForAudit,
   type ActorIdentity,
@@ -13,6 +14,7 @@ import {
   type AuditEvent
 } from "../../domain/src/index.js";
 import { AosSqliteRepository } from "../../db/src/index.js";
+import { assertRouteOwnedSqliteRoot } from "../../db/src/index.js";
 import { McpGateway, type McpResponse } from "../../mcp-gateway/src/index.js";
 
 export const transportMvpMethods = [
@@ -43,7 +45,10 @@ export interface AosMcpTransportConfig {
 export interface AosMcpRuntimeConfig {
   actor: ActorIdentity;
   databasePath?: string;
+  databaseRoot?: string;
+  repoRoot?: string;
   migrationsDir?: string;
+  routeOwnedMarkerFile?: string;
   auditPageLimit?: number;
   maxResponseBytes?: number;
 }
@@ -142,13 +147,13 @@ export class AosMcpTransport {
     const replayKey = replayKeyFor(method, actor.employeeId, params);
     const replayed = this.replayByKey.get(replayKey);
     if (replayed) {
-      return {
+      return this.enforceBudget({
         ok: true,
         method,
         status: "deduped",
         replayScope: "process_local_only",
         result: replayed
-      };
+      });
     }
 
     if (method === "aos.policy.read") {
@@ -157,8 +162,7 @@ export class AosMcpTransport {
         method,
         transportAllowedMethods: transportMvpMethods
       });
-      this.replayByKey.set(replayKey, result);
-      return this.enforceBudget(result);
+      return this.cacheBudgetedResult(replayKey, result);
     }
     if (method === "aos.audit.query") {
       const result = this.auditQuery(params);
@@ -167,8 +171,7 @@ export class AosMcpTransport {
         returnedCount: result.returnedCount,
         hasMore: result.hasMore
       });
-      this.replayByKey.set(replayKey, result);
-      return this.enforceBudget(result);
+      return this.cacheBudgetedResult(replayKey, result);
     }
 
     const response = this.gateway.handle({
@@ -178,8 +181,7 @@ export class AosMcpTransport {
       idempotencyKey: typeof params.idempotencyKey === "string" ? params.idempotencyKey : replayKey
     });
     const result = normalizeGatewayResponse(response);
-    this.replayByKey.set(replayKey, result);
-    return this.enforceBudget(result);
+    return this.cacheBudgetedResult(replayKey, result);
   }
 
   private resolveTrustedActor(method: string): ActorIdentity {
@@ -311,21 +313,24 @@ export class AosMcpTransport {
     }
     throw new TransportError("transport_response_budget_exceeded", `MCP stdio response exceeded ${this.maxResponseBytes} bytes`);
   }
+
+  private cacheBudgetedResult(replayKey: string, value: unknown): unknown {
+    const budgeted = this.enforceBudget(value);
+    this.replayByKey.set(replayKey, budgeted);
+    return budgeted;
+  }
 }
 
 export function createRuntimeTransport(config: AosMcpRuntimeConfig): RuntimeTransport {
-  const repository = config.databasePath
-    ? new AosSqliteRepository(compactRepositoryOptions(config.databasePath, config.migrationsDir))
-    : undefined;
-  repository?.applyMigrations();
-  const store = repository
-    ? new AosStore(createDefaultSeed(), { persistence: repository })
-    : new AosStore(createDefaultSeed());
+  const databaseReadback = validateRuntimeDatabaseConfig(config);
+  const repository = new AosSqliteRepository(compactRepositoryOptions(databaseReadback.databasePath, config.migrationsDir));
+  repository.applyMigrations();
+  const store = new AosStore(undefined, { persistence: repository });
   const transport = new AosMcpTransport(store, compactTransportConfig(config));
   return {
     transport,
     close() {
-      repository?.close();
+      repository.close();
     }
   };
 }
@@ -371,6 +376,44 @@ function normalizeGatewayResponse(response: McpResponse): Record<string, unknown
 
 function compactRepositoryOptions(databasePath: string, migrationsDir: string | undefined): { databasePath: string; migrationsDir?: string } {
   return migrationsDir ? { databasePath, migrationsDir } : { databasePath };
+}
+
+function validateRuntimeDatabaseConfig(config: AosMcpRuntimeConfig): { databasePath: string; rootDigest: string } {
+  if (!config.databasePath) {
+    throw new Error("transport_runtime_database_path_required");
+  }
+  if (!config.databaseRoot) {
+    throw new Error("transport_runtime_database_root_required");
+  }
+  const databasePath = resolve(config.databasePath);
+  const databaseRoot = resolve(config.databaseRoot);
+  denyUnsafeRuntimePath(databasePath);
+  denyUnsafeRuntimePath(databaseRoot);
+  const repoRoot = config.repoRoot ? resolve(config.repoRoot) : process.cwd();
+  const markerFile = config.routeOwnedMarkerFile ?? ".tcrn-aos-phase1-root";
+  const rootReadback = assertRouteOwnedSqliteRoot(databaseRoot, repoRoot, markerFile);
+  const relativeToRoot = relative(databaseRoot, databasePath);
+  if (relativeToRoot.startsWith("..") || relativeToRoot === "" || relativeToRoot.split(sep).includes("..")) {
+    throw new Error("transport_runtime_database_path_outside_route_owned_root");
+  }
+  if (dirname(databasePath) !== databaseRoot) {
+    throw new Error("transport_runtime_database_nested_path_denied");
+  }
+  return { databasePath, rootDigest: rootReadback.rootDigest };
+}
+
+function denyUnsafeRuntimePath(path: string): void {
+  const home = homedir();
+  const normalized = path.split(sep).join("/");
+  if (normalized.startsWith("/srv/") || normalized === "/srv") {
+    throw new Error("transport_runtime_srv_path_denied");
+  }
+  if (normalized.includes("/.tcrn") || (home && normalized.startsWith(`${home}/.tcrn`))) {
+    throw new Error("transport_runtime_durable_home_path_denied");
+  }
+  if (/retained|owner-trial|preview/i.test(normalized)) {
+    throw new Error("transport_runtime_retained_or_owner_visible_path_denied");
+  }
 }
 
 function compactTransportConfig(config: AosMcpRuntimeConfig): AosMcpTransportConfig {

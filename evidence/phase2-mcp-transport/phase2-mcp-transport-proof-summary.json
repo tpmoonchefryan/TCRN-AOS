@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "route": "route_tcrn_aos_phase2_mcp_transport_ilya_bounded_implementation_after_mara_pm_success_7808400_12d73bd_20260705",
+  "route": "route_tcrn_aos_phase2_mcp_transport_ilya_targeted_topology_repair_after_daedalus_changes_requested_b6a5ed3_20260705",
   "command": "pnpm --dir TCRN-AOS phase2:mcp-transport-proof",
-  "generatedAt": "2026-07-05T17:38:04.487Z",
-  "sourceHead": "0e4173697eba96d1c1ec0eee4ac6d9b9370852c4",
-  "sourceContentDigest": "ae5ae393948a18ffbab5a2b09a8a4a1df10e4d09de0e3237b32c94a9a9ea8a9d",
+  "generatedAt": "2026-07-05T17:59:56.191Z",
+  "sourceHead": "b6a5ed342e2bce1d66e2df5615b7c530c2dbbb7b",
+  "sourceContentDigest": "036fdafadf72fd7f7278ff445dadf1fd448daeca005277e653a7f4a7bc3388a3",
   "receiptInventory": [
     "real-stdio-client-session.json",
     "transport-method-allowlist-proof.json",
@@ -16,10 +16,11 @@
     "restart-reconnect-proof.json",
     "persisted-agent-run-proof.json",
     "dependency-license-security-readback.json",
+    "final-cleanup-readback.json",
     "privacy-no-overclaim-scan.json",
     "verify-fast-readback.json"
   ],
-  "receiptCount": 12,
+  "receiptCount": 13,
   "childReceiptsOk": {
     "real-stdio-client-session.json": true,
     "transport-method-allowlist-proof.json": true,
@@ -31,6 +32,7 @@
     "restart-reconnect-proof.json": true,
     "persisted-agent-run-proof.json": true,
     "dependency-license-security-readback.json": true,
+    "final-cleanup-readback.json": true,
     "privacy-no-overclaim-scan.json": true,
     "verify-fast-readback.json": true
   },
@@ -53,12 +55,12 @@
   },
   "routeOwnedDbRoot": {
     "class": "os_temp_route_owned_redacted",
-    "rootDigest": "0d39e37acd073ff84ae28de68d3de3fa46d21c1b73b74876275708cb4fb3a46c",
+    "rootDigest": "8b5bfb5cb29aa03c835138b632edb361c1737a97bea21d1f71bb244b8513b3f0",
     "rawPathRecorded": false
   },
   "cleanupReadback": {
-    "attempted": false,
-    "removed": false,
+    "attempted": true,
+    "removed": true,
     "rawPathRecorded": false
   }
 }

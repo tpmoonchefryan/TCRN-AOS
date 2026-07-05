@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { spawn, spawnSync } from "node:child_process";
 import { createInterface } from "node:readline";
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   AosSqliteRepository,
@@ -15,7 +15,7 @@ import {
 import { AosStore, createDefaultSeed } from "../dist/packages/domain/src/index.js";
 import { transportMvpMethods } from "../dist/packages/mcp-server/src/index.js";
 
-const route = "route_tcrn_aos_phase2_mcp_transport_ilya_bounded_implementation_after_mara_pm_success_7808400_12d73bd_20260705";
+const route = "route_tcrn_aos_phase2_mcp_transport_ilya_targeted_topology_repair_after_daedalus_changes_requested_b6a5ed3_20260705";
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const evidenceRoot = join(repoRoot, "evidence/phase2-mcp-transport");
 const migrationsDir = join(repoRoot, "packages/db/migrations/sqlite");
@@ -45,6 +45,7 @@ const receiptInventory = [
   "restart-reconnect-proof.json",
   "persisted-agent-run-proof.json",
   "dependency-license-security-readback.json",
+  "final-cleanup-readback.json",
   "privacy-no-overclaim-scan.json",
   "verify-fast-readback.json"
 ];
@@ -96,10 +97,13 @@ async function runProof() {
   const dbPath = join(tempRoot, "phase2.sqlite");
   const writtenReceipts = [];
   let cleanupReadback = { attempted: false, removed: false, rawPathRecorded: false };
+  let rootReadback;
 
   try {
-    const rootReadback = assertRouteOwnedSqliteRoot(tempRoot, repoRoot, markerFile);
+    rootReadback = assertRouteOwnedSqliteRoot(tempRoot, repoRoot, markerFile);
     const seed = seedProofDatabase(dbPath);
+    const budgetReplay = await proveBudgetReplayDenial(dbPath);
+    const emptyPersistedActor = await proveEmptyPersistedActorDenied();
     const server = await startClientSession(dbPath, actor);
     try {
       const policy = await server.send("aos.policy.read", {});
@@ -207,10 +211,15 @@ async function runProof() {
 
       writtenReceipts.push(writeReceipt("actor-identity-and-refusal-audit-proof.json", source, rootReadback, {
         ok: clientAuthority.error?.data?.reason === "client_supplied_authority_denied" &&
-          forbiddenSlice.error?.data?.reason === "transport_method_outside_mvp_allowlist",
+          forbiddenSlice.error?.data?.reason === "transport_method_outside_mvp_allowlist" &&
+          emptyPersistedActor.emptyPersistedEmployeeDenied,
         actorSource: "trusted_server_config",
         clientSuppliedActorRejected: true,
         unknownMethodRejected: true,
+        emptyPersistedEmployeeDenied: emptyPersistedActor.emptyPersistedEmployeeDenied,
+        emptyPersistedEmployeeDeniedReason: emptyPersistedActor.errorReason,
+        runtimeRequiresPersistedDbPath: true,
+        runtimeRequiresRouteOwnedDbRoot: true,
         refusalAuditAction: "mcp.transport.refusal",
         actorProof: {
           employeeId: actor.employeeId,
@@ -238,14 +247,18 @@ async function runProof() {
         ok: auditPayload.returnedCount === 2 &&
           auditPayload.hasMore === true &&
           typeof auditPayload.nextCursor === "string" &&
-          responsePayload(auditPageTwo).returnedCount > 0,
+          responsePayload(auditPageTwo).returnedCount > 0 &&
+          budgetReplay.firstRejected === true &&
+          budgetReplay.replayRejected === true &&
+          budgetReplay.replayNotDeduped === true,
         method: "aos.audit.query",
         limit: auditPayload.limit,
         returnedCount: auditPayload.returnedCount,
         hasMore: auditPayload.hasMore,
         nextCursorPresent: typeof auditPayload.nextCursor === "string",
         boundedHistoryDump: true,
-        maxResponseBytes: responsePayload(policy).responseBudget.maxResponseBytes
+        maxResponseBytes: responsePayload(policy).responseBudget.maxResponseBytes,
+        overBudgetReplayProof: budgetReplay
       }));
 
       writtenReceipts.push(writeReceipt("idempotency-replay-scope-proof.json", source, rootReadback, {
@@ -268,7 +281,7 @@ async function runProof() {
         runSurvived: restartProof.runSurvived,
         assignmentRunLinkSurvived: restartProof.assignmentRunLinkSurvived,
         reconnectedQueryOk: restartProof.reconnectedQueryOk,
-        cleanupReadback: "pending_finally_cleanup"
+        cleanupReadback: "final_cleanup_recorded_in_final-cleanup-readback.json"
       }));
 
       writtenReceipts.push(writeReceipt("persisted-agent-run-proof.json", source, rootReadback, {
@@ -290,41 +303,50 @@ async function runProof() {
     } finally {
       await server.stop();
     }
-
-    const privacy = privacyScan(writtenReceipts);
-    writtenReceipts.push(writeReceipt("privacy-no-overclaim-scan.json", source, rootReadback, privacy));
-    const childReadbacks = readReceipts(receiptInventory);
-    const summary = {
-      ok: childReadbacks.every((receipt) => receipt.ok === true) &&
-        privacy.ok === true &&
-        receiptInventory.length === childReadbacks.length,
-      route,
-      command,
-      generatedAt: new Date().toISOString(),
-      sourceHead: source.sourceHead,
-      sourceContentDigest: source.sourceContentDigest,
-      receiptInventory,
-      receiptCount: childReadbacks.length,
-      childReceiptsOk: Object.fromEntries(childReadbacks.map((receipt) => [receipt.receiptName, receipt.ok])),
-      missingReceipts: receiptInventory.filter((name) => !childReadbacks.some((receipt) => receipt.receiptName === name)),
-      extraUnclassifiedReceipts: [],
-      sourceProvenanceConsistent: childReadbacks.every((receipt) => receipt.sourceContentDigest === source.sourceContentDigest),
-      privacyScanClean: privacy.ok,
-      noOverclaimFlags,
-      routeOwnedDbRoot: {
-        class: "os_temp_route_owned_redacted",
-        rootDigest: rootReadback.rootDigest,
-        rawPathRecorded: false
-      },
-      cleanupReadback
-    };
-    writeFileSync(join(evidenceRoot, "phase2-mcp-transport-proof-summary.json"), `${JSON.stringify(summary, null, 2)}\n`, "utf8");
-    assert.equal(summary.ok, true);
-    console.log(JSON.stringify({ ok: true, receiptInventory: ["phase2-mcp-transport-proof-summary.json", ...receiptInventory] }, null, 2));
   } finally {
     rmSync(tempRoot, { recursive: true, force: true });
-    cleanupReadback = { attempted: true, removed: true, rawPathRecorded: false };
+    cleanupReadback = { attempted: true, removed: !existsSync(tempRoot), rawPathRecorded: false };
   }
+
+  writtenReceipts.push(writeReceipt("final-cleanup-readback.json", source, rootReadback, {
+    ok: cleanupReadback.attempted === true &&
+      cleanupReadback.removed === true &&
+      cleanupReadback.rawPathRecorded === false,
+    finalCleanupCompletedAfterProofWrites: true,
+    cleanupReadback,
+    restartReceiptDisposition: "restart-reconnect-proof links to this final cleanup receipt",
+    rawPathRecorded: false
+  }));
+  const privacy = privacyScan(writtenReceipts);
+  writtenReceipts.push(writeReceipt("privacy-no-overclaim-scan.json", source, rootReadback, privacy));
+  const childReadbacks = readReceipts(receiptInventory);
+  const summary = {
+    ok: childReadbacks.every((receipt) => receipt.ok === true) &&
+      privacy.ok === true &&
+      receiptInventory.length === childReadbacks.length,
+    route,
+    command,
+    generatedAt: new Date().toISOString(),
+    sourceHead: source.sourceHead,
+    sourceContentDigest: source.sourceContentDigest,
+    receiptInventory,
+    receiptCount: childReadbacks.length,
+    childReceiptsOk: Object.fromEntries(childReadbacks.map((receipt) => [receipt.receiptName, receipt.ok])),
+    missingReceipts: receiptInventory.filter((name) => !childReadbacks.some((receipt) => receipt.receiptName === name)),
+    extraUnclassifiedReceipts: [],
+    sourceProvenanceConsistent: childReadbacks.every((receipt) => receipt.sourceContentDigest === source.sourceContentDigest),
+    privacyScanClean: privacy.ok,
+    noOverclaimFlags,
+    routeOwnedDbRoot: {
+      class: "os_temp_route_owned_redacted",
+      rootDigest: rootReadback.rootDigest,
+      rawPathRecorded: false
+    },
+    cleanupReadback
+  };
+  writeFileSync(join(evidenceRoot, "phase2-mcp-transport-proof-summary.json"), `${JSON.stringify(summary, null, 2)}\n`, "utf8");
+  assert.equal(summary.ok, true);
+  console.log(JSON.stringify({ ok: true, receiptInventory: ["phase2-mcp-transport-proof-summary.json", ...receiptInventory] }, null, 2));
 }
 
 function seedProofDatabase(dbPath) {
@@ -372,13 +394,17 @@ function seedProofDatabase(dbPath) {
   return { initiativeId: initiative.id, storyId: story.id, assignmentId: assignment.id };
 }
 
-async function startClientSession(dbPath, sessionActor) {
+async function startClientSession(dbPath, sessionActor, overrides = {}) {
   const config = Buffer.from(JSON.stringify({
     actor: sessionActor,
     databasePath: dbPath,
+    databaseRoot: dirname(dbPath),
+    repoRoot,
+    routeOwnedMarkerFile: ".tcrn-aos-phase1-root",
     migrationsDir,
     auditPageLimit: 2,
-    maxResponseBytes: 16384
+    maxResponseBytes: 16384,
+    ...overrides
   }), "utf8").toString("base64url");
   const child = spawn(process.execPath, [serverEntrypoint], {
     cwd: repoRoot,
@@ -413,6 +439,62 @@ async function startClientSession(dbPath, sessionActor) {
       lines.close();
     }
   };
+}
+
+async function proveBudgetReplayDenial(dbPath) {
+  const repository = new AosSqliteRepository({ databasePath: dbPath, migrationsDir });
+  repository.applyMigrations();
+  const store = new AosStore(undefined, { persistence: repository });
+  store.appendAudit(actor, "phase2.large.audit", "proof", "budget", "accepted", {
+    summary: "x".repeat(5000)
+  });
+  repository.close();
+
+  const server = await startClientSession(dbPath, actor, { maxResponseBytes: 1024 });
+  try {
+    const first = await server.send("aos.audit.query", { action: "phase2.large.audit" });
+    const replay = await server.send("aos.audit.query", { action: "phase2.large.audit" });
+    return {
+      firstRejected: first.error?.data?.reason === "transport_response_budget_exceeded",
+      replayRejected: replay.error?.data?.reason === "transport_response_budget_exceeded",
+      replayNotDeduped: replay.result?.status !== "deduped",
+      firstReason: first.error?.data?.reason ?? null,
+      replayReason: replay.error?.data?.reason ?? null,
+      cacheBypassClosed: first.error?.data?.reason === "transport_response_budget_exceeded" &&
+        replay.error?.data?.reason === "transport_response_budget_exceeded" &&
+        replay.result?.status !== "deduped"
+    };
+  } finally {
+    await server.stop();
+  }
+}
+
+async function proveEmptyPersistedActorDenied() {
+  const root = await mkdtemp(join(tmpdir(), "tcrn-aos-phase2-empty-actor-"));
+  const markerFile = ".tcrn-aos-phase1-root";
+  writeFileSync(join(root, markerFile), "owned-by-phase2-empty-actor-proof\n", "utf8");
+  const emptyDbPath = join(root, "phase2-empty.sqlite");
+  try {
+    assertRouteOwnedSqliteRoot(root, repoRoot, markerFile);
+    const repository = new AosSqliteRepository({ databasePath: emptyDbPath, migrationsDir });
+    repository.applyMigrations();
+    repository.close();
+
+    const server = await startClientSession(emptyDbPath, actor);
+    try {
+      const policy = await server.send("aos.policy.read", {});
+      return {
+        emptyPersistedEmployeeDenied: policy.error?.data?.reason === "transport_actor_unknown",
+        errorReason: policy.error?.data?.reason ?? null,
+        rawPathRecorded: false,
+        cleanupReadback: "proof_temp_root_removed"
+      };
+    } finally {
+      await server.stop();
+    }
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 }
 
 async function proveBlockedRole(dbPath) {

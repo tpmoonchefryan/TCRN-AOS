@@ -1,11 +1,11 @@
 {
   "receiptName": "verify-fast-readback.json",
   "ok": true,
-  "route": "route_tcrn_aos_phase2_mcp_transport_ilya_bounded_implementation_after_mara_pm_success_7808400_12d73bd_20260705",
+  "route": "route_tcrn_aos_phase2_mcp_transport_ilya_targeted_topology_repair_after_daedalus_changes_requested_b6a5ed3_20260705",
   "command": "pnpm --dir TCRN-AOS verify:fast",
-  "generatedAt": "2026-07-05T17:38:04.485Z",
-  "sourceHead": "0e4173697eba96d1c1ec0eee4ac6d9b9370852c4",
-  "sourceContentDigest": "ae5ae393948a18ffbab5a2b09a8a4a1df10e4d09de0e3237b32c94a9a9ea8a9d",
+  "generatedAt": "2026-07-05T17:59:56.189Z",
+  "sourceHead": "b6a5ed342e2bce1d66e2df5615b7c530c2dbbb7b",
+  "sourceContentDigest": "036fdafadf72fd7f7278ff445dadf1fd448daeca005277e653a7f4a7bc3388a3",
   "sourceFiles": [
     {
       "file": "package.json",
@@ -21,7 +21,7 @@
     },
     {
       "file": "packages/mcp-server/src/transport.ts",
-      "digest": "5e41a70d63f745655b0104f8b235e0144caa70f3bcbb285c4d7e2fdcba83f4bd"
+      "digest": "7f21fcaefbb74e450d490561cefb0d7e2b5a6ae1d30d547684376a777fab9272"
     },
     {
       "file": "packages/mcp-server/src/stdio-server.ts",
@@ -29,16 +29,16 @@
     },
     {
       "file": "packages/mcp-server/test/stdio-transport.test.mjs",
-      "digest": "f8a0a6a6cbfef09b292d1bf8ec2be42287180963ad9f5ed592c8390d088cb6d1"
+      "digest": "0467571e37878d3a8909c5d7509e6ccb17a3ef43321c1c324015de7066866f8c"
     },
     {
       "file": "scripts/phase2-mcp-transport-proof.mjs",
-      "digest": "788f4448d37abc320b012b17d6e495dfb0b7a0a9ce5bca8d2511a89793bde8c8"
+      "digest": "804c2ffd245f986950c2140ef4f04ad0e9a689b217ab7efa6fd4507dfaf5242f"
     }
   ],
   "routeOwnedDbRoot": {
     "class": "os_temp_route_owned_redacted",
-    "rootDigest": "0d39e37acd073ff84ae28de68d3de3fa46d21c1b73b74876275708cb4fb3a46c",
+    "rootDigest": "8b5bfb5cb29aa03c835138b632edb361c1737a97bea21d1f71bb244b8513b3f0",
     "rawPathRecorded": false
   },
   "actorProof": {
@@ -64,7 +64,7 @@
     "broadCodexSecurityPluginScanClaimed": false
   },
   "exitCode": 0,
-  "stdoutDigest": "fdeb8a5422e21c57163c2dbd5fd3188dd3e178f9d1e77e62cff84899f9fbb623",
+  "stdoutDigest": "5fe5fa275a70956d642ed58fab41265d2746fba0dc5396c9c0ff9b548b840349",
   "stderrDigest": "4f72ac5ce8f8109588e139d527b794964d38946e452e55e2965662673a1f509c",
   "outputStored": "digest_only",
   "typecheckIncluded": true,
