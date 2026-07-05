@@ -1,0 +1,111 @@
+{
+  "receiptName": "negative-methods-proof.json",
+  "ok": true,
+  "route": "route_tcrn_aos_phase3_dogfood_ilya_implementation_aos_ticket_list_after_mara_pm_scope_success_fa594d6_5b09469_20260705",
+  "command": "pnpm --dir TCRN-AOS phase3:ticket-list-proof",
+  "generatedAt": "2026-07-05T21:15:46.935Z",
+  "sourceHead": "da372040cdc5ac0aa383bc35b270367c2b7dd48d",
+  "sourceContentDigest": "275d6d9400c11c1841c8a5c392ac6150056fc3a2a338f63959ec5100b2fa3b22",
+  "sourceFiles": [
+    {
+      "file": "package.json",
+      "digest": "fa642e7295de3b8ad68e02fdb481787cbcdf062aad9d5dee6821053669ec31de"
+    },
+    {
+      "file": "packages/domain/src/types.ts",
+      "digest": "f8ea1aa90103c272a6d86c31e0c7b9aff0d496b7e22628406934474de2986413"
+    },
+    {
+      "file": "packages/domain/src/store.ts",
+      "digest": "ec821ec8e42314999c0a51ee3f1d290583cf90eb111e0cba56c6def1b2f64584"
+    },
+    {
+      "file": "packages/mcp-gateway/src/gateway.ts",
+      "digest": "b3cc560e9e21cd806b012e0361908b489088363acdc36fe2c0b1ee8852967a3d"
+    },
+    {
+      "file": "packages/mcp-gateway/test/gateway.test.mjs",
+      "digest": "b28bea49a3dffea5c1ddbee009d0d32db0bdf23897b410e573e83fecfc526aa6"
+    },
+    {
+      "file": "packages/mcp-server/src/transport.ts",
+      "digest": "42b4edb08a79cacbe691466a3f343633ef9996413e7f50db1c8294ce4141df6e"
+    },
+    {
+      "file": "packages/mcp-server/test/stdio-transport.test.mjs",
+      "digest": "5c9bd36137e78c78fa08e07d651ef40e56dfce99f317c702191384b3785031e3"
+    },
+    {
+      "file": "scripts/phase3-ticket-list-proof.mjs",
+      "digest": "4e2dbac4c1dddfb87d7b281d96c79f5f3d02c4a685bf074b04bed040dc928c16"
+    }
+  ],
+  "routeOwnedDbRoot": {
+    "class": "os_temp_route_owned_redacted",
+    "rootDigest": "6fd5f7cf656006680dc0d0b09baa58553a7ce0dbe350fc4398aa0680b12e8798",
+    "rawPathRecorded": false
+  },
+  "actorProof": {
+    "employeeId": "employee-ilya",
+    "role": "implementation",
+    "threadId": "019eb6d7-f130-70a0-8805-169cc337229b",
+    "trustedServerConfig": true,
+    "clientSuppliedAuthorityTrusted": false
+  },
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "productRepoMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "durableRuntimeDbActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "retainedPreviewFreshnessClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false
+  },
+  "negativeMethods": [
+    {
+      "method": "aos.work_index.drill_through.read",
+      "reason": "transport_method_outside_mvp_allowlist",
+      "expectedReason": "transport_method_outside_mvp_allowlist",
+      "rejected": true
+    },
+    {
+      "method": "aos.work_index.any",
+      "reason": "transport_method_outside_mvp_allowlist",
+      "expectedReason": "transport_method_outside_mvp_allowlist",
+      "rejected": true
+    },
+    {
+      "method": "aos.resource.record.propose",
+      "reason": "transport_method_outside_mvp_allowlist",
+      "expectedReason": "transport_method_outside_mvp_allowlist",
+      "rejected": true
+    },
+    {
+      "method": "aos.knowledge.entry.propose",
+      "reason": "transport_method_outside_mvp_allowlist",
+      "expectedReason": "transport_method_outside_mvp_allowlist",
+      "rejected": true
+    },
+    {
+      "method": "aos.ticket.archive",
+      "reason": "transport_method_unknown",
+      "expectedReason": "transport_method_unknown",
+      "rejected": true
+    },
+    {
+      "method": "aos.unsupported.method",
+      "reason": "transport_method_unknown",
+      "expectedReason": "transport_method_unknown",
+      "rejected": true
+    }
+  ],
+  "workIndexDrillThroughRejected": true,
+  "slices6To9Rejected": true,
+  "broaderGatewayListAuthorityUsed": false
+}

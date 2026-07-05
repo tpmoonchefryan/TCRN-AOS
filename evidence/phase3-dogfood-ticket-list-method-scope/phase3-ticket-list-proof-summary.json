@@ -1,0 +1,52 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_phase3_dogfood_ilya_implementation_aos_ticket_list_after_mara_pm_scope_success_fa594d6_5b09469_20260705",
+  "command": "pnpm --dir TCRN-AOS phase3:ticket-list-proof",
+  "generatedAt": "2026-07-05T21:15:53.678Z",
+  "sourceHead": "da372040cdc5ac0aa383bc35b270367c2b7dd48d",
+  "sourceContentDigest": "275d6d9400c11c1841c8a5c392ac6150056fc3a2a338f63959ec5100b2fa3b22",
+  "receiptInventory": [
+    "schema-row-grain-proof.json",
+    "cursor-filter-limit-proof.json",
+    "allowlist-policy-proof.json",
+    "negative-methods-proof.json",
+    "response-budget-replay-proof.json",
+    "redaction-privacy-proof.json",
+    "source-provenance.json",
+    "verify-fast-readback.json"
+  ],
+  "receiptCount": 8,
+  "childReceiptsOk": {
+    "schema-row-grain-proof.json": true,
+    "cursor-filter-limit-proof.json": true,
+    "allowlist-policy-proof.json": true,
+    "negative-methods-proof.json": true,
+    "response-budget-replay-proof.json": true,
+    "redaction-privacy-proof.json": true,
+    "source-provenance.json": true,
+    "verify-fast-readback.json": true
+  },
+  "missingReceipts": [],
+  "extraUnclassifiedReceipts": [],
+  "sourceProvenanceConsistent": true,
+  "privacyScanClean": true,
+  "receiptPrivacyFindings": [],
+  "noOverclaimFlags": {
+    "productRepoMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "durableRuntimeDbActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "retainedPreviewFreshnessClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false
+  },
+  "cleanupReadback": {
+    "attempted": true,
+    "removed": true,
+    "rawPathRecorded": false
+  }
+}
