@@ -3,8 +3,8 @@
   "ok": true,
   "route": "route_tcrn_aos_phase2_mcp_transport_ilya_bounded_implementation_after_mara_pm_success_7808400_12d73bd_20260705",
   "command": "pnpm --dir TCRN-AOS phase2:mcp-transport-proof",
-  "generatedAt": "2026-07-05T17:36:58.187Z",
-  "sourceHead": "12d73bdcf90f64d8f7f8cec665a8f4c4092c38ed",
+  "generatedAt": "2026-07-05T17:37:59.655Z",
+  "sourceHead": "0e4173697eba96d1c1ec0eee4ac6d9b9370852c4",
   "sourceContentDigest": "ae5ae393948a18ffbab5a2b09a8a4a1df10e4d09de0e3237b32c94a9a9ea8a9d",
   "sourceFiles": [
     {
@@ -38,7 +38,7 @@
   ],
   "routeOwnedDbRoot": {
     "class": "os_temp_route_owned_redacted",
-    "rootDigest": "2366917ac8bc027684933a8adb9866c1bc56866b9f076d481057462824d65efa",
+    "rootDigest": "0d39e37acd073ff84ae28de68d3de3fa46d21c1b73b74876275708cb4fb3a46c",
     "rawPathRecorded": false
   },
   "actorProof": {
