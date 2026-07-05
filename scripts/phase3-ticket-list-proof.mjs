@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { createInterface } from "node:readline";
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { mkdtemp } from "node:fs/promises";
+import { mkdtemp, realpath } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -96,7 +96,8 @@ await runProof();
 async function runProof() {
   mkdirSync(evidenceRoot, { recursive: true });
   const source = sourceProvenance();
-  const tempRoot = await mkdtemp(join(tmpdir(), "tcrn-aos-phase3-ticket-list-"));
+  const safeTmpRoot = await realpath(tmpdir());
+  const tempRoot = await mkdtemp(join(safeTmpRoot, "tcrn-aos-phase3-ticket-list-"));
   const markerFile = ".tcrn-aos-phase1-root";
   writeFileSync(join(tempRoot, markerFile), "owned-by-phase3-ticket-list-proof\n", "utf8");
   const dbPath = join(tempRoot, "phase3-ticket-list.sqlite");
@@ -442,7 +443,7 @@ async function proveNegativeMethods(server) {
 }
 
 async function proveBudgetReplay() {
-  const root = await mkdtemp(join(tmpdir(), "tcrn-aos-phase3-ticket-list-budget-"));
+  const root = await mkdtemp(join(await realpath(tmpdir()), "tcrn-aos-phase3-ticket-list-budget-"));
   const markerFile = ".tcrn-aos-phase1-root";
   writeFileSync(join(root, markerFile), "owned-by-phase3-ticket-list-budget-proof\n", "utf8");
   const dbPath = join(root, "phase3-budget.sqlite");

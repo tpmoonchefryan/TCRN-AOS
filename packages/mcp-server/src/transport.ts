@@ -1,7 +1,8 @@
 import { stdin as processStdin, stdout as processStdout } from "node:process";
 import { createInterface } from "node:readline";
 import { homedir } from "node:os";
-import { dirname, relative, resolve, sep } from "node:path";
+import { existsSync, lstatSync, realpathSync } from "node:fs";
+import { basename, dirname, parse, relative, resolve, sep } from "node:path";
 import {
   AosStore,
   POLICY_VERSION,
@@ -397,6 +398,7 @@ function validateRuntimeDatabaseConfig(config: AosMcpRuntimeConfig): { databaseP
   denyUnsafeRuntimePath(databaseRoot);
   const repoRoot = config.repoRoot ? resolve(config.repoRoot) : process.cwd();
   const markerFile = config.routeOwnedMarkerFile ?? ".tcrn-aos-phase1-root";
+  assertExistingPathSegmentsHaveNoSymlink(databaseRoot, "transport_runtime_database_root_symlink_ancestor_denied");
   const rootReadback = assertRouteOwnedSqliteRoot(databaseRoot, repoRoot, markerFile);
   const relativeToRoot = relative(databaseRoot, databasePath);
   if (relativeToRoot.startsWith("..") || relativeToRoot === "" || relativeToRoot.split(sep).includes("..")) {
@@ -405,7 +407,34 @@ function validateRuntimeDatabaseConfig(config: AosMcpRuntimeConfig): { databaseP
   if (dirname(databasePath) !== databaseRoot) {
     throw new Error("transport_runtime_database_nested_path_denied");
   }
+  assertExistingPathSegmentsHaveNoSymlink(dirname(databasePath), "transport_runtime_database_path_symlink_ancestor_denied");
+  if (existsSync(databasePath) && lstatSync(databasePath).isSymbolicLink()) {
+    throw new Error("transport_runtime_database_file_symlink_denied");
+  }
+  const canonicalRoot = realpathSync(databaseRoot);
+  const canonicalDatabaseParent = realpathSync(dirname(databasePath));
+  const canonicalDatabasePath = resolve(canonicalDatabaseParent, basename(databasePath));
+  const canonicalRelativeToRoot = relative(canonicalRoot, canonicalDatabasePath);
+  if (canonicalDatabaseParent !== canonicalRoot || canonicalRelativeToRoot.startsWith("..") || canonicalRelativeToRoot.split(sep).includes("..")) {
+    throw new Error("transport_runtime_database_canonical_path_outside_route_owned_root");
+  }
   return { databasePath, rootDigest: rootReadback.rootDigest };
+}
+
+function assertExistingPathSegmentsHaveNoSymlink(targetPath: string, reason: string): void {
+  const resolvedPath = resolve(targetPath);
+  const root = parse(resolvedPath).root;
+  const parts = resolvedPath.slice(root.length).split(sep).filter(Boolean);
+  let currentPath = root;
+  for (const part of parts) {
+    currentPath = currentPath === root ? `${root}${part}` : `${currentPath}${sep}${part}`;
+    if (!existsSync(currentPath)) {
+      return;
+    }
+    if (lstatSync(currentPath).isSymbolicLink()) {
+      throw new Error(reason);
+    }
+  }
 }
 
 function denyUnsafeRuntimePath(path: string): void {

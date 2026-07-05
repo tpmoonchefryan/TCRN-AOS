@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { spawn, spawnSync } from "node:child_process";
 import { createInterface } from "node:readline";
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { mkdtemp } from "node:fs/promises";
+import { mkdtemp, realpath } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -93,7 +93,8 @@ await runProof();
 async function runProof() {
   mkdirSync(evidenceRoot, { recursive: true });
   const source = sourceProvenance();
-  const tempRoot = await mkdtemp(join(tmpdir(), "tcrn-aos-phase2-mcp-"));
+  const safeTmpRoot = await realpath(tmpdir());
+  const tempRoot = await mkdtemp(join(safeTmpRoot, "tcrn-aos-phase2-mcp-"));
   const markerFile = ".tcrn-aos-phase1-root";
   writeFileSync(join(tempRoot, markerFile), "owned-by-phase2-mcp-proof\n", "utf8");
   const dbPath = join(tempRoot, "phase2.sqlite");
@@ -496,7 +497,7 @@ async function proveBudgetReplayDenial(dbPath) {
 }
 
 async function proveEmptyPersistedActorDenied() {
-  const root = await mkdtemp(join(tmpdir(), "tcrn-aos-phase2-empty-actor-"));
+  const root = await mkdtemp(join(await realpath(tmpdir()), "tcrn-aos-phase2-empty-actor-"));
   const markerFile = ".tcrn-aos-phase1-root";
   writeFileSync(join(root, markerFile), "owned-by-phase2-empty-actor-proof\n", "utf8");
   const emptyDbPath = join(root, "phase2-empty.sqlite");

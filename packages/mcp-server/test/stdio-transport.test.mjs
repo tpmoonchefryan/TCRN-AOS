@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, realpath, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -331,7 +331,8 @@ function seedTicketListFixture(store, options = {}) {
 test("Phase 2 runtime transport requires route-owned persisted DB and persisted actor rows", async () => {
   assert.throws(() => createRuntimeTransport({ actor }), /transport_runtime_database_path_required/);
 
-  const root = await mkdtemp(join(tmpdir(), "tcrn-aos-phase2-runtime-empty-"));
+  const safeTmp = await realpath(tmpdir());
+  const root = await mkdtemp(join(safeTmp, "tcrn-aos-phase2-runtime-empty-"));
   await writeFile(join(root, ".tcrn-aos-phase1-root"), "owned-by-phase2-runtime-test\n", "utf8");
   try {
     const repository = new AosSqliteRepository({ databasePath: join(root, "phase2-empty.sqlite"), migrationsDir });
@@ -353,6 +354,48 @@ test("Phase 2 runtime transport requires route-owned persisted DB and persisted 
     }
   } finally {
     await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("Phase 2 runtime transport rejects DB file symlinks and symlink ancestors before SQLite opens", async () => {
+  const markerFile = ".tcrn-aos-phase1-root";
+  const safeTmp = await realpath(tmpdir());
+  const dbSymlinkRoot = await mkdtemp(join(safeTmp, "tcrn-aos-phase2-runtime-db-symlink-"));
+  const outsideRoot = await mkdtemp(join(safeTmp, "tcrn-aos-phase2-runtime-outside-"));
+  await writeFile(join(dbSymlinkRoot, markerFile), "owned-by-phase2-runtime-symlink-test\n", "utf8");
+  await writeFile(join(outsideRoot, "outside.sqlite"), "", "utf8");
+  await symlink(join(outsideRoot, "outside.sqlite"), join(dbSymlinkRoot, "phase2.sqlite"));
+  try {
+    assert.throws(() => createRuntimeTransport({
+      actor,
+      databasePath: join(dbSymlinkRoot, "phase2.sqlite"),
+      databaseRoot: dbSymlinkRoot,
+      repoRoot,
+      migrationsDir
+    }), /transport_runtime_database_file_symlink_denied/);
+  } finally {
+    await rm(dbSymlinkRoot, { recursive: true, force: true });
+    await rm(outsideRoot, { recursive: true, force: true });
+  }
+
+  const ancestorParent = await mkdtemp(join(safeTmp, "tcrn-aos-phase2-runtime-ancestor-"));
+  const realParent = join(ancestorParent, "real-parent");
+  const linkedParent = join(ancestorParent, "linked-parent");
+  const linkedRouteRoot = join(linkedParent, "route-root");
+  await mkdir(realParent, { recursive: true });
+  await symlink(realParent, linkedParent, "dir");
+  await mkdir(linkedRouteRoot, { recursive: true });
+  await writeFile(join(linkedRouteRoot, markerFile), "owned-by-phase2-runtime-symlink-test\n", "utf8");
+  try {
+    assert.throws(() => createRuntimeTransport({
+      actor,
+      databasePath: join(linkedRouteRoot, "phase2.sqlite"),
+      databaseRoot: linkedRouteRoot,
+      repoRoot,
+      migrationsDir
+    }), /transport_runtime_database_root_symlink_ancestor_denied/);
+  } finally {
+    await rm(ancestorParent, { recursive: true, force: true });
   }
 });
 
