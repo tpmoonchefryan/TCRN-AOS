@@ -1,19 +1,23 @@
 {
   "receiptName": "privacy-no-overclaim-scan.json",
   "ok": true,
-  "route": "route_tcrn_aos_phase2_mcp_transport_ilya_targeted_topology_repair_after_daedalus_changes_requested_b6a5ed3_20260705",
+  "route": "route_tcrn_aos_phase2_mcp_transport_ilya_audit_redaction_privacy_repair_after_sable_changes_requested_0e615a2_20260705",
   "command": "pnpm --dir TCRN-AOS phase2:mcp-transport-proof",
-  "generatedAt": "2026-07-05T18:00:45.333Z",
-  "sourceHead": "21f24763a1e4bdc9984fb8964a4a35e7df87c111",
-  "sourceContentDigest": "036fdafadf72fd7f7278ff445dadf1fd448daeca005277e653a7f4a7bc3388a3",
+  "generatedAt": "2026-07-05T18:24:36.389Z",
+  "sourceHead": "0e615a2620ce2ec0a4cac3bb0873f1a615cbdb6c",
+  "sourceContentDigest": "78fc870d574eccbfb645f465d8d551145e7169b3542e99c47c9cdccf2a5e6214",
   "sourceFiles": [
     {
       "file": "package.json",
       "digest": "ece8f5099bccb0b4d23129766789c18a35567bb19b97e6208255acac16e3b3ff"
     },
     {
+      "file": "packages/domain/src/security.ts",
+      "digest": "edbebf7ae25285c4b97a7980e152dc16f685881740bbebc75589eb38ad960136"
+    },
+    {
       "file": "packages/mcp-gateway/src/gateway.ts",
-      "digest": "df84769fed67ab3ff819ca1e77ca45b4515d2b674d9f3d1a3ed83860b7e74633"
+      "digest": "fb0034b013cd3f921c912d3990367c119f3a49c9ae0e9f372dcf253c08e21934"
     },
     {
       "file": "packages/mcp-server/src/index.ts",
@@ -21,7 +25,7 @@
     },
     {
       "file": "packages/mcp-server/src/transport.ts",
-      "digest": "7f21fcaefbb74e450d490561cefb0d7e2b5a6ae1d30d547684376a777fab9272"
+      "digest": "30933f648e023b7ea4171177bb21c6aa438d11d8d62293c12adafe58376eb616"
     },
     {
       "file": "packages/mcp-server/src/stdio-server.ts",
@@ -29,16 +33,16 @@
     },
     {
       "file": "packages/mcp-server/test/stdio-transport.test.mjs",
-      "digest": "0467571e37878d3a8909c5d7509e6ccb17a3ef43321c1c324015de7066866f8c"
+      "digest": "338aecb7138f9cdffd12bd20fa1bf71483b2c9f24b2ff6918b6080c0bbdb1c5e"
     },
     {
       "file": "scripts/phase2-mcp-transport-proof.mjs",
-      "digest": "804c2ffd245f986950c2140ef4f04ad0e9a689b217ab7efa6fd4507dfaf5242f"
+      "digest": "c6252ab4f42cc1418efa5e5df5f8697e7f88176980a55acbb598d24ecce59723"
     }
   ],
   "routeOwnedDbRoot": {
     "class": "os_temp_route_owned_redacted",
-    "rootDigest": "2e3dcc4facfb665c53e36482578704679225cccb09852b1e7fc91dc2c03a6c15",
+    "rootDigest": "fd9330e18609023dc09a33fb86145db3c9bf46372240b2fb6627aa37d0fd5359",
     "rawPathRecorded": false
   },
   "actorProof": {
@@ -63,13 +67,14 @@
     "releasePublicationPushClaimed": false,
     "broadCodexSecurityPluginScanClaimed": false
   },
-  "scannedReceiptCount": 12,
+  "scannedReceiptCount": 13,
   "forbiddenPatterns": [
     "local_users_path",
     "tmp_path",
     "private_tmp_path",
     "srv_path",
     "file_uri",
+    "phase2_sensitive_fixture_value",
     "secret_like",
     "acceptance_overclaim",
     "live_dispatch_claim"

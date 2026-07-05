@@ -15,7 +15,7 @@ import {
 import { AosStore, createDefaultSeed } from "../dist/packages/domain/src/index.js";
 import { transportMvpMethods } from "../dist/packages/mcp-server/src/index.js";
 
-const route = "route_tcrn_aos_phase2_mcp_transport_ilya_targeted_topology_repair_after_daedalus_changes_requested_b6a5ed3_20260705";
+const route = "route_tcrn_aos_phase2_mcp_transport_ilya_audit_redaction_privacy_repair_after_sable_changes_requested_0e615a2_20260705";
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const evidenceRoot = join(repoRoot, "evidence/phase2-mcp-transport");
 const migrationsDir = join(repoRoot, "packages/db/migrations/sqlite");
@@ -39,6 +39,7 @@ const receiptInventory = [
   "transport-method-allowlist-proof.json",
   "policy-read-filter-proof.json",
   "actor-identity-and-refusal-audit-proof.json",
+  "denial-audit-redaction-proof.json",
   "blocked-role-refusal-proof.json",
   "response-budget-pagination-proof.json",
   "idempotency-replay-scope-proof.json",
@@ -51,6 +52,7 @@ const receiptInventory = [
 ];
 const sourceFiles = [
   "package.json",
+  "packages/domain/src/security.ts",
   "packages/mcp-gateway/src/gateway.ts",
   "packages/mcp-server/src/index.ts",
   "packages/mcp-server/src/transport.ts",
@@ -104,6 +106,7 @@ async function runProof() {
     const seed = seedProofDatabase(dbPath);
     const budgetReplay = await proveBudgetReplayDenial(dbPath);
     const emptyPersistedActor = await proveEmptyPersistedActorDenied();
+    const denialAuditRedaction = await proveDenialAuditRedaction(dbPath, seed.storyId);
     const server = await startClientSession(dbPath, actor);
     try {
       const policy = await server.send("aos.policy.read", {});
@@ -230,6 +233,29 @@ async function runProof() {
           lifecycleRequired: "active"
         },
         negativeFailures: [clientAuthority.error?.data?.reason, forbiddenSlice.error?.data?.reason].filter(Boolean)
+      }));
+
+      writtenReceipts.push(writeReceipt("denial-audit-redaction-proof.json", source, rootReadback, {
+        ok: denialAuditRedaction.transportRefusalMetadataOnly === true &&
+          denialAuditRedaction.gatewayBlockedMetadataOnly === true &&
+          denialAuditRedaction.rawValuesAbsentFromAuditRows === true &&
+          denialAuditRedaction.rawValuesAbsentFromTransportErrors === true &&
+          denialAuditRedaction.receiptStoresRawValues === false,
+        transportRefusalReason: denialAuditRedaction.transportRefusalReason,
+        gatewayBlockedStatus: denialAuditRedaction.gatewayBlockedStatus,
+        transportRefusalMetadataOnly: denialAuditRedaction.transportRefusalMetadataOnly,
+        gatewayBlockedMetadataOnly: denialAuditRedaction.gatewayBlockedMetadataOnly,
+        rawValuesAbsentFromAuditRows: denialAuditRedaction.rawValuesAbsentFromAuditRows,
+        rawValuesAbsentFromTransportErrors: denialAuditRedaction.rawValuesAbsentFromTransportErrors,
+        rawValueDigests: denialAuditRedaction.rawValueDigests,
+        transportSensitiveKeys: denialAuditRedaction.transportSensitiveKeys,
+        gatewaySensitiveKeys: denialAuditRedaction.gatewaySensitiveKeys,
+        auditDetailShape: "metadata_only_param_summary",
+        receiptStoresRawValues: false,
+        rawClientEnvStored: false,
+        rawPromptOrMessageStored: false,
+        rawSourceStored: false,
+        rawPathStored: false
       }));
 
       const blockedRole = await proveBlockedRole(dbPath);
@@ -446,7 +472,7 @@ async function proveBudgetReplayDenial(dbPath) {
   repository.applyMigrations();
   const store = new AosStore(undefined, { persistence: repository });
   store.appendAudit(actor, "phase2.large.audit", "proof", "budget", "accepted", {
-    summary: "x".repeat(5000)
+    volume: "x".repeat(5000)
   });
   repository.close();
 
@@ -495,6 +521,72 @@ async function proveEmptyPersistedActorDenied() {
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+}
+
+async function proveDenialAuditRedaction(dbPath, storyId) {
+  const rawFixtures = {
+    authorization: "Bearer phase2-sensitive-authorization-value",
+    authToken: "phase2-sensitive-auth-token-value",
+    clientEnv: "phase2-sensitive-client-env-value",
+    body: "phase2-sensitive-body-value",
+    readback: "phase2-sensitive-readback-value",
+    outputSummary: "phase2-sensitive-output-summary-value",
+    message: "phase2-sensitive-message-value",
+    source: "phase2-sensitive-source-value",
+    path: "/Users/phase2-sensitive-path-value"
+  };
+  const rawValues = Object.values(rawFixtures);
+  const server = await startClientSession(dbPath, actor);
+  let transportRefusal;
+  let gatewayBlocked;
+  try {
+    transportRefusal = await server.send("aos.ticket.comment", {
+      authorization: rawFixtures.authorization,
+      auth: { token: rawFixtures.authToken },
+      clientEnv: { HOME: rawFixtures.clientEnv },
+      ticketId: storyId,
+      type: "agent_observation",
+      body: rawFixtures.body,
+      readback: rawFixtures.readback,
+      outputSummary: rawFixtures.outputSummary,
+      messages: [rawFixtures.message],
+      source: rawFixtures.source,
+      path: rawFixtures.path
+    });
+    gatewayBlocked = await server.send("aos.ticket.comment", {
+      type: "agent_observation",
+      body: rawFixtures.body,
+      readback: rawFixtures.readback,
+      source: rawFixtures.source,
+      path: rawFixtures.path
+    });
+  } finally {
+    await server.stop();
+  }
+
+  const repository = new AosSqliteRepository({ databasePath: dbPath, migrationsDir });
+  repository.applyMigrations();
+  const store = new AosStore(undefined, { persistence: repository });
+  const transportAudit = store.queryAudit({ action: "mcp.transport.refusal" })
+    .find((event) => Array.isArray(event.details?.paramSummary?.keys) && event.details.paramSummary.keys.includes("authorization"));
+  const gatewayAudit = store.queryAudit({ action: "mcp.blocked" })
+    .find((event) => Array.isArray(event.details?.paramSummary?.keys) && event.details.paramSummary.keys.includes("path"));
+  repository.close();
+
+  const auditText = JSON.stringify([transportAudit, gatewayAudit]);
+  const errorText = JSON.stringify([transportRefusal, gatewayBlocked]);
+  return {
+    transportRefusalReason: transportRefusal.error?.data?.reason ?? null,
+    gatewayBlockedStatus: gatewayBlocked.result?.status ?? null,
+    transportRefusalMetadataOnly: transportAudit?.details?.paramSummary?.rawValuesStored === false,
+    gatewayBlockedMetadataOnly: gatewayAudit?.details?.paramSummary?.rawValuesStored === false,
+    rawValuesAbsentFromAuditRows: !rawValues.some((raw) => auditText.includes(raw)),
+    rawValuesAbsentFromTransportErrors: !rawValues.some((raw) => errorText.includes(raw)),
+    transportSensitiveKeys: transportAudit?.details?.paramSummary?.sensitiveKeys ?? [],
+    gatewaySensitiveKeys: gatewayAudit?.details?.paramSummary?.sensitiveKeys ?? [],
+    rawValueDigests: Object.fromEntries(Object.entries(rawFixtures).map(([key, value]) => [key, sha256(value)])),
+    receiptStoresRawValues: false
+  };
 }
 
 async function proveBlockedRole(dbPath) {
@@ -630,6 +722,7 @@ function privacyScan(receiptPaths) {
     { key: "private_tmp_path", regex: /\/private\/tmp\// },
     { key: "srv_path", regex: /\/srv\/tcrn/ },
     { key: "file_uri", regex: /file:\/\// },
+    { key: "phase2_sensitive_fixture_value", regex: /phase2-sensitive-|\/Users\/phase2-sensitive/ },
     { key: "secret_like", regex: /(AKIA[0-9A-Z]{16}|BEGIN (?:RSA |OPENSSH |EC |DSA )?PRIVATE KEY|ghp_[A-Za-z0-9_]{20,})/ },
     { key: "acceptance_overclaim", regex: /\b(owner acceptance|product acceptance|final MVP acceptance|dogfood runtime readiness|release readiness)\b/i },
     { key: "live_dispatch_claim", regex: /\blive dispatch authorized\b/i }

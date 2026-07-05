@@ -4,9 +4,9 @@ import {
   canWrite,
   createId,
   idempotencyKey,
-  redactForAudit,
   requiresOwnerIntent,
-  scanForRestrictedContent
+  scanForRestrictedContent,
+  summarizePayloadForAudit
 } from "../../domain/src/index.js";
 import type {
   ActorIdentity,
@@ -140,7 +140,7 @@ export class McpGateway {
       const audit = this.store.appendAudit(request.actor, "mcp.blocked", "mcp_request", key, "blocked", {
         method: request.method,
         error: message,
-        params: redactForAudit(request.params)
+        paramSummary: summarizePayloadForAudit(request.params)
       });
       const response: McpResponse = {
         ok: false,

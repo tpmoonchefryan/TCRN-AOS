@@ -14,6 +14,7 @@ import {
   assertRouteOwnedSqliteRoot
 } from "../../../dist/packages/db/src/index.js";
 import { AosStore, createDefaultSeed } from "../../../dist/packages/domain/src/index.js";
+import { McpGateway } from "../../../dist/packages/mcp-gateway/src/index.js";
 
 const repoRoot = fileURLToPath(new URL("../../..", import.meta.url));
 const migrationsDir = fileURLToPath(new URL("../../db/migrations/sqlite", import.meta.url));
@@ -154,7 +155,7 @@ test("Phase 2 transport does not cache over-budget responses for replay bypass",
   const store = new AosStore(createDefaultSeed());
   const transport = new AosMcpTransport(store, { trustedActor: actor, maxResponseBytes: 1024 });
   store.appendAudit(actor, "phase2.large.audit", "proof", "budget", "accepted", {
-    summary: "x".repeat(5000)
+    volume: "x".repeat(5000)
   });
 
   const first = transport.handleJsonRpc({ jsonrpc: "2.0", id: 1, method: "aos.audit.query", params: { action: "phase2.large.audit" } });
@@ -193,3 +194,98 @@ test("Phase 2 runtime transport requires route-owned persisted DB and persisted 
     await rm(root, { recursive: true, force: true });
   }
 });
+
+test("Phase 2 denied stdio transport requests persist metadata-only refusal audit details", () => {
+  const rawValues = [
+    "Bearer phase2-sensitive-authorization-value",
+    "phase2-sensitive-auth-token",
+    "phase2-sensitive-client-env-value",
+    "phase2-sensitive-body-value",
+    "phase2-sensitive-readback-value",
+    "phase2-sensitive-output-summary-value",
+    "phase2-sensitive-message-value",
+    "phase2-sensitive-source-value",
+    "/Users/phase2-sensitive-path-value"
+  ];
+  const store = new AosStore(createDefaultSeed());
+  const transport = new AosMcpTransport(store, { trustedActor: actor });
+  const response = transport.handleJsonRpc({
+    jsonrpc: "2.0",
+    id: 1,
+    method: "aos.ticket.comment",
+    params: {
+      authorization: rawValues[0],
+      auth: { token: rawValues[1] },
+      clientEnv: { HOME: rawValues[2] },
+      ticketId: "story-phase2-sensitive-denial",
+      type: "agent_observation",
+      body: rawValues[3],
+      readback: rawValues[4],
+      outputSummary: rawValues[5],
+      messages: [rawValues[6]],
+      source: rawValues[7],
+      path: rawValues[8]
+    }
+  });
+
+  assert.equal(response.result, undefined);
+  assert.equal(response.error.data.reason, "client_supplied_authority_denied");
+  assertNoRawValues(response, rawValues);
+  const refusal = store.queryAudit({ action: "mcp.transport.refusal" }).at(-1);
+  assert.equal(refusal.details.paramSummary.rawValuesStored, false);
+  assert.deepEqual(refusal.details.paramSummary.sensitiveKeys.sort(), [
+    "auth",
+    "authorization",
+    "body",
+    "clientEnv",
+    "messages",
+    "outputSummary",
+    "path",
+    "readback",
+    "source"
+  ].sort());
+  assertNoRawValues(refusal.details, rawValues);
+});
+
+test("Phase 2 gateway blocked requests persist metadata-only blocked audit details", () => {
+  const rawValues = [
+    "phase2-sensitive-blocked-body-value",
+    "phase2-sensitive-blocked-readback-value",
+    "phase2-sensitive-blocked-source-value",
+    "/Users/phase2-sensitive-blocked-path-value"
+  ];
+  const store = new AosStore(createDefaultSeed());
+  const gateway = new McpGateway(store);
+  const response = gateway.handle({
+    method: "aos.ticket.comment",
+    actor,
+    params: {
+      type: "agent_observation",
+      body: rawValues[0],
+      readback: rawValues[1],
+      source: rawValues[2],
+      path: rawValues[3]
+    },
+    idempotencyKey: "phase2-sensitive-gateway-blocked"
+  });
+
+  assert.equal(response.ok, false);
+  assert.equal(response.status, "blocked");
+  assertNoRawValues(response, rawValues);
+  const blocked = store.queryAudit({ action: "mcp.blocked" }).at(-1);
+  assert.equal(blocked.details.paramSummary.rawValuesStored, false);
+  assert.deepEqual(blocked.details.paramSummary.sensitiveKeys.sort(), [
+    "body",
+    "path",
+    "readback",
+    "source"
+  ].sort());
+  assertNoRawValues(blocked.details, rawValues);
+});
+
+function assertNoRawValues(value, rawValues) {
+  const text = JSON.stringify(value);
+  for (const raw of rawValues) {
+    assert.equal(text.includes(raw), false, `raw sensitive value leaked: ${raw}`);
+  }
+}

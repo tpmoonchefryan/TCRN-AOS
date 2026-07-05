@@ -8,6 +8,7 @@ import {
   canWrite,
   digest,
   redactForAudit,
+  summarizePayloadForAudit,
   type ActorIdentity,
   type ActorRole,
   type AgentRun,
@@ -299,7 +300,7 @@ export class AosMcpTransport {
       this.store.appendAudit({ system: "aos-mcp-stdio-transport" }, "mcp.transport.refusal", "mcp_request", method, "blocked", {
         method,
         reason,
-        params: redactForAudit(params)
+        paramSummary: summarizePayloadForAudit(params)
       });
     } catch {
       // Refusal audit must never convert a denial into an allowed transport response.

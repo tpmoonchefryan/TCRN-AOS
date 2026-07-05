@@ -1,15 +1,16 @@
 {
   "ok": true,
-  "route": "route_tcrn_aos_phase2_mcp_transport_ilya_targeted_topology_repair_after_daedalus_changes_requested_b6a5ed3_20260705",
+  "route": "route_tcrn_aos_phase2_mcp_transport_ilya_audit_redaction_privacy_repair_after_sable_changes_requested_0e615a2_20260705",
   "command": "pnpm --dir TCRN-AOS phase2:mcp-transport-proof",
-  "generatedAt": "2026-07-05T18:00:45.333Z",
-  "sourceHead": "21f24763a1e4bdc9984fb8964a4a35e7df87c111",
-  "sourceContentDigest": "036fdafadf72fd7f7278ff445dadf1fd448daeca005277e653a7f4a7bc3388a3",
+  "generatedAt": "2026-07-05T18:24:36.391Z",
+  "sourceHead": "0e615a2620ce2ec0a4cac3bb0873f1a615cbdb6c",
+  "sourceContentDigest": "78fc870d574eccbfb645f465d8d551145e7169b3542e99c47c9cdccf2a5e6214",
   "receiptInventory": [
     "real-stdio-client-session.json",
     "transport-method-allowlist-proof.json",
     "policy-read-filter-proof.json",
     "actor-identity-and-refusal-audit-proof.json",
+    "denial-audit-redaction-proof.json",
     "blocked-role-refusal-proof.json",
     "response-budget-pagination-proof.json",
     "idempotency-replay-scope-proof.json",
@@ -20,12 +21,13 @@
     "privacy-no-overclaim-scan.json",
     "verify-fast-readback.json"
   ],
-  "receiptCount": 13,
+  "receiptCount": 14,
   "childReceiptsOk": {
     "real-stdio-client-session.json": true,
     "transport-method-allowlist-proof.json": true,
     "policy-read-filter-proof.json": true,
     "actor-identity-and-refusal-audit-proof.json": true,
+    "denial-audit-redaction-proof.json": true,
     "blocked-role-refusal-proof.json": true,
     "response-budget-pagination-proof.json": true,
     "idempotency-replay-scope-proof.json": true,
@@ -55,7 +57,7 @@
   },
   "routeOwnedDbRoot": {
     "class": "os_temp_route_owned_redacted",
-    "rootDigest": "2e3dcc4facfb665c53e36482578704679225cccb09852b1e7fc91dc2c03a6c15",
+    "rootDigest": "fd9330e18609023dc09a33fb86145db3c9bf46372240b2fb6627aa37d0fd5359",
     "rawPathRecorded": false
   },
   "cleanupReadback": {
