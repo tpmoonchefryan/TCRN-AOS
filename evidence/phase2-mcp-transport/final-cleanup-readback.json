@@ -3,8 +3,8 @@
   "ok": true,
   "route": "route_tcrn_aos_phase2_mcp_transport_ilya_audit_redaction_privacy_repair_after_sable_changes_requested_0e615a2_20260705",
   "command": "pnpm --dir TCRN-AOS phase2:mcp-transport-proof",
-  "generatedAt": "2026-07-05T18:24:36.386Z",
-  "sourceHead": "0e615a2620ce2ec0a4cac3bb0873f1a615cbdb6c",
+  "generatedAt": "2026-07-05T18:25:33.369Z",
+  "sourceHead": "74a7f10ae9e2361302ec593cdf518727d679c9b3",
   "sourceContentDigest": "78fc870d574eccbfb645f465d8d551145e7169b3542e99c47c9cdccf2a5e6214",
   "sourceFiles": [
     {
@@ -42,7 +42,7 @@
   ],
   "routeOwnedDbRoot": {
     "class": "os_temp_route_owned_redacted",
-    "rootDigest": "fd9330e18609023dc09a33fb86145db3c9bf46372240b2fb6627aa37d0fd5359",
+    "rootDigest": "af2f98a1f20d5f15104c218dabd0689eeb29b34473a2e527464398157c93ed6d",
     "rawPathRecorded": false
   },
   "actorProof": {
