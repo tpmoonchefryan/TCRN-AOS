@@ -1,0 +1,22 @@
+{
+  "allowlistedFields": [
+    "codexAgentSlug",
+    "name",
+    "jobTitle",
+    "threadId",
+    "status",
+    "lifecycle",
+    "contactWhen"
+  ],
+  "insertedCount": 19,
+  "localPathStored": false,
+  "ok": true,
+  "rawPromptsStored": false,
+  "rawThreadMessagesStored": false,
+  "rowCount": 22,
+  "secondSeedNoop": true,
+  "sourceDigest": "85dc48d49eb349d25fb934759d23a9c1cf509046bce6780e7ac68c248de6168b",
+  "sourceTruth": "Workflow registry read-only projection",
+  "staticSeedRowCount": 3,
+  "workflowMutation": false
+}

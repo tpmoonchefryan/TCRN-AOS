@@ -1,0 +1,53 @@
+{
+  "countsAfterHydrate": {
+    "aos_agent_runs": 1,
+    "aos_ai_employees": 22,
+    "aos_assignments": 1,
+    "aos_audit_events": 13,
+    "aos_epics": 1,
+    "aos_evidence_links": 1,
+    "aos_gate_work_orders": 1,
+    "aos_initiatives": 1,
+    "aos_projects": 2,
+    "aos_schema_migrations": 1,
+    "aos_stories": 1,
+    "aos_subtasks": 1
+  },
+  "countsBeforeRestart": {
+    "aos_agent_runs": 1,
+    "aos_ai_employees": 22,
+    "aos_assignments": 1,
+    "aos_audit_events": 13,
+    "aos_epics": 1,
+    "aos_evidence_links": 1,
+    "aos_gate_work_orders": 1,
+    "aos_initiatives": 1,
+    "aos_projects": 2,
+    "aos_schema_migrations": 1,
+    "aos_stories": 1,
+    "aos_subtasks": 1
+  },
+  "createdIds": {
+    "agentRunId": "run_d63341c447128174",
+    "assignmentId": "assignment_54729a6199a59c40",
+    "epicId": "epic_11db3314c18bb576",
+    "evidenceId": "evidence_0a5f03ec8cccce45",
+    "gateId": "gate_4285eb8da61ac79f",
+    "initiativeId": "init_0bcd4accdd1997b9",
+    "storyId": "story_4c6dfbde27750ecc",
+    "subtaskId": "subtask-phase1-sqlite-proof"
+  },
+  "digestAfterRestart": "ace20721a4d09263f0f70ce8a7a37592463b29616471e8f16a7c233b70261290",
+  "digestBeforeRestart": "ace20721a4d09263f0f70ce8a7a37592463b29616471e8f16a7c233b70261290",
+  "domainWrites": [
+    "addSubTask",
+    "createAssignment",
+    "recordAgentRun"
+  ],
+  "gatewayVisibleWrites": [
+    "aos.ticket.propose",
+    "aos.evidence.link",
+    "aos.gate.request"
+  ],
+  "ok": true
+}

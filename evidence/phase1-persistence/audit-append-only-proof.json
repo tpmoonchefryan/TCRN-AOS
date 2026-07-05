@@ -1,0 +1,10 @@
+{
+  "afterCount": 13,
+  "appLayerAppendOnly": true,
+  "beforeCount": 13,
+  "digestUnchanged": true,
+  "ok": true,
+  "rollbackEvidence": "failed mutation statement aborted by SQLite trigger",
+  "sqliteTriggerDeleteRejected": true,
+  "sqliteTriggerUpdateRejected": true
+}

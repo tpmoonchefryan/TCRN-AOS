@@ -1,0 +1,13 @@
+{
+  "attemptedWrites": 40,
+  "mode": "child_process_multi_connection_wal_writers",
+  "ok": true,
+  "retryPolicy": "bounded retry on SQLITE_BUSY/database is locked",
+  "retryableBusyErrors": 0,
+  "successfulWrites": 40,
+  "terminalLockState": false,
+  "unrecoverableErrors": [],
+  "workerCount": 4,
+  "writesPerWorker": 10,
+  "zeroLostWrites": true
+}

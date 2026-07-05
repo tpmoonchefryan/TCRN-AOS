@@ -1,0 +1,30 @@
+{
+  "ok": true,
+  "storyId": "story_4c6dfbde27750ecc",
+  "trace": {
+    "agentRunIds": [
+      "run_d63341c447128174"
+    ],
+    "assignmentIds": [
+      "assignment_54729a6199a59c40"
+    ],
+    "auditEventIds": [
+      "audit_452edc8d473b0891",
+      "audit_6ffe8f30cf42852b",
+      "audit_171f2fb8891071e0",
+      "audit_ccb86432a1e4b873",
+      "audit_d0512e60a645ff05",
+      "audit_fb838dda99e719c6"
+    ],
+    "evidenceIds": [
+      "evidence_0a5f03ec8cccce45"
+    ],
+    "gateIds": [
+      "gate_4285eb8da61ac79f"
+    ],
+    "storyId": "story_4c6dfbde27750ecc",
+    "subtaskIds": [
+      "subtask-phase1-sqlite-proof"
+    ]
+  }
+}

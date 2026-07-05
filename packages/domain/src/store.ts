@@ -59,6 +59,44 @@ export interface AosSeed {
   stageDefinitions: StageDefinition[];
 }
 
+export type AosCorePersistenceKind =
+  | "project"
+  | "initiative"
+  | "epic"
+  | "story"
+  | "subtask"
+  | "employee"
+  | "assignment"
+  | "gate"
+  | "evidence"
+  | "audit"
+  | "agentRun";
+
+export interface AosCorePersistenceSnapshot {
+  projects: ProjectRecord[];
+  employees: AIEmployee[];
+  initiatives: InitiativeRecord[];
+  epics: EpicRecord[];
+  stories: StoryRecord[];
+  assignments: Assignment[];
+  runs: AgentRun[];
+  gates: GateWorkOrder[];
+  evidence: EvidenceLink[];
+  auditEvents: AuditEvent[];
+}
+
+export interface AosPersistenceRepository {
+  hydrateCore(): Partial<AosCorePersistenceSnapshot>;
+  runInTransaction<T>(operation: () => T): T;
+  saveCoreRecord(kind: AosCorePersistenceKind, record: unknown): void;
+  appendAuditEvent(event: AuditEvent): void;
+}
+
+export interface AosStoreOptions {
+  persistence?: AosPersistenceRepository;
+  hydrate?: boolean;
+}
+
 export class AosStore {
   private projects = new Map<ProjectId, ProjectRecord>();
   private initiatives = new Map<string, InitiativeRecord>();
@@ -94,11 +132,16 @@ export class AosStore {
   private ownerIntents = new Map<string, OwnerIntent>();
   private stageDefinitions = new Map<string, StageDefinition>();
   private auditEvents: AuditEvent[] = [];
+  private readonly persistence: AosPersistenceRepository | undefined;
 
-  constructor(seed?: AosSeed) {
+  constructor(seed?: AosSeed, options: AosStoreOptions = {}) {
+    this.persistence = options.persistence;
     seed?.projects.forEach((project) => this.projects.set(project.id, project));
     seed?.employees.forEach((employee) => this.employees.set(employee.id, employee));
     seed?.stageDefinitions.forEach((stage) => this.stageDefinitions.set(stage.id, stage));
+    if (options.hydrate !== false) {
+      this.hydrateFromPersistence();
+    }
   }
 
   getEmployee(employeeId: string): AIEmployee | undefined {
@@ -234,123 +277,157 @@ export class AosStore {
   }
 
   upsertProject(project: ProjectRecord, actor: ActorIdentity): ProjectRecord {
-    this.ensureSafe(project, "project");
-    this.projects.set(project.id, project);
-    this.appendAudit(actor, "project.upsert", "project", project.id, "accepted", { status: project.status });
-    return project;
+    return this.withPersistenceTransaction(() => {
+      this.ensureSafe(project, "project");
+      this.projects.set(project.id, project);
+      this.persistCoreRecord("project", project);
+      this.appendAudit(actor, "project.upsert", "project", project.id, "accepted", { status: project.status });
+      return project;
+    });
   }
 
   createInitiative(input: Omit<InitiativeRecord, "id" | "epicIds" | "storyIds" | "gateIds" | "evidenceIds" | "decisionHistory">, actor: ActorIdentity): InitiativeRecord {
-    this.ensureSafe(input, "initiative");
-    const initiative: InitiativeRecord = {
-      ...input,
-      id: createId("init", input),
-      epicIds: [],
-      storyIds: [],
-      gateIds: [],
-      evidenceIds: [],
-      decisionHistory: []
-    };
-    this.initiatives.set(initiative.id, initiative);
-    this.appendAudit(actor, "initiative.create", "initiative", initiative.id, "accepted", { projectId: initiative.projectId });
-    return initiative;
+    return this.withPersistenceTransaction(() => {
+      this.ensureSafe(input, "initiative");
+      const initiative: InitiativeRecord = {
+        ...input,
+        id: createId("init", input),
+        epicIds: [],
+        storyIds: [],
+        gateIds: [],
+        evidenceIds: [],
+        decisionHistory: []
+      };
+      this.initiatives.set(initiative.id, initiative);
+      this.persistCoreRecord("initiative", initiative);
+      this.appendAudit(actor, "initiative.create", "initiative", initiative.id, "accepted", { projectId: initiative.projectId });
+      return initiative;
+    });
   }
 
   createEpic(input: Omit<EpicRecord, "id" | "storyIds" | "gateIds" | "evidenceIds">, actor: ActorIdentity): EpicRecord {
-    this.ensureSafe(input, "epic");
-    const epic: EpicRecord = {
-      ...input,
-      id: createId("epic", input),
-      storyIds: [],
-      gateIds: [],
-      evidenceIds: []
-    };
-    this.epics.set(epic.id, epic);
-    const initiative = this.initiatives.get(epic.initiativeId);
-    initiative?.epicIds.push(epic.id);
-    this.appendAudit(actor, "epic.create", "epic", epic.id, "accepted", { initiativeId: epic.initiativeId });
-    return epic;
+    return this.withPersistenceTransaction(() => {
+      this.ensureSafe(input, "epic");
+      const epic: EpicRecord = {
+        ...input,
+        id: createId("epic", input),
+        storyIds: [],
+        gateIds: [],
+        evidenceIds: []
+      };
+      this.epics.set(epic.id, epic);
+      const initiative = this.initiatives.get(epic.initiativeId);
+      initiative?.epicIds.push(epic.id);
+      if (initiative) {
+        this.persistCoreRecord("initiative", initiative);
+      }
+      this.persistCoreRecord("epic", epic);
+      this.appendAudit(actor, "epic.create", "epic", epic.id, "accepted", { initiativeId: epic.initiativeId });
+      return epic;
+    });
   }
 
   createStory(input: Omit<StoryRecord, "id" | "comments" | "links" | "gateIds" | "assignmentIds" | "evidenceIds" | "decisionHistory">, actor: ActorIdentity): StoryRecord {
-    this.ensureSafe(input, "story");
-    const story: StoryRecord = {
-      ...input,
-      id: createId("story", input),
-      comments: [],
-      links: [],
-      gateIds: [],
-      assignmentIds: [],
-      evidenceIds: [],
-      decisionHistory: []
-    };
-    this.stories.set(story.id, story);
-    const epic = this.epics.get(story.epicId);
-    epic?.storyIds.push(story.id);
-    const initiative = epic ? this.initiatives.get(epic.initiativeId) : undefined;
-    initiative?.storyIds.push(story.id);
-    this.appendAudit(actor, "story.create", "story", story.id, "accepted", { epicId: story.epicId });
-    return story;
+    return this.withPersistenceTransaction(() => {
+      this.ensureSafe(input, "story");
+      const story: StoryRecord = {
+        ...input,
+        id: createId("story", input),
+        comments: [],
+        links: [],
+        gateIds: [],
+        assignmentIds: [],
+        evidenceIds: [],
+        decisionHistory: []
+      };
+      this.stories.set(story.id, story);
+      const epic = this.epics.get(story.epicId);
+      epic?.storyIds.push(story.id);
+      const initiative = epic ? this.initiatives.get(epic.initiativeId) : undefined;
+      initiative?.storyIds.push(story.id);
+      if (epic) {
+        this.persistCoreRecord("epic", epic);
+      }
+      if (initiative) {
+        this.persistCoreRecord("initiative", initiative);
+      }
+      this.persistCoreRecord("story", story);
+      this.appendAudit(actor, "story.create", "story", story.id, "accepted", { epicId: story.epicId });
+      return story;
+    });
   }
 
   createAssignment(input: Omit<Assignment, "id" | "runIds">, actor: ActorIdentity): Assignment {
-    this.ensureSafe(input, "assignment");
-    if (!this.employees.has(input.employeeId)) {
-      throw new Error(`Unknown employee: ${input.employeeId}`);
-    }
-    if (input.targetType === "story") {
-      this.requireStory(input.targetId);
-    }
-    const assignment: Assignment = {
-      ...input,
-      id: createId("assignment", input),
-      runIds: []
-    };
-    this.assignments.set(assignment.id, assignment);
-    const story = input.targetType === "story" ? this.stories.get(input.targetId) : undefined;
-    story?.assignmentIds.push(assignment.id);
-    this.appendAudit(actor, "assignment.create", "assignment", assignment.id, "accepted", {
-      employeeId: assignment.employeeId,
-      targetType: assignment.targetType,
-      targetId: assignment.targetId
+    return this.withPersistenceTransaction(() => {
+      this.ensureSafe(input, "assignment");
+      if (!this.employees.has(input.employeeId)) {
+        throw new Error(`Unknown employee: ${input.employeeId}`);
+      }
+      if (input.targetType === "story") {
+        this.requireStory(input.targetId);
+      }
+      const assignment: Assignment = {
+        ...input,
+        id: createId("assignment", input),
+        runIds: []
+      };
+      this.assignments.set(assignment.id, assignment);
+      const story = input.targetType === "story" ? this.stories.get(input.targetId) : undefined;
+      story?.assignmentIds.push(assignment.id);
+      if (story) {
+        this.persistCoreRecord("story", story);
+      }
+      this.persistCoreRecord("assignment", assignment);
+      this.appendAudit(actor, "assignment.create", "assignment", assignment.id, "accepted", {
+        employeeId: assignment.employeeId,
+        targetType: assignment.targetType,
+        targetId: assignment.targetId
+      });
+      return assignment;
     });
-    return assignment;
   }
 
   recordAgentRun(input: Omit<AgentRun, "id">, actor: ActorIdentity): AgentRun {
-    this.ensureSafe(input, "agentRun");
-    const assignment = this.assignments.get(input.assignmentId);
-    if (!assignment) {
-      throw new Error(`Unknown assignment: ${input.assignmentId}`);
-    }
-    const run: AgentRun = {
-      ...input,
-      id: createId("run", input)
-    };
-    this.runs.set(run.id, run);
-    assignment.runIds.push(run.id);
-    assignment.status = run.status === "success" ? "verified" : run.status === "blocked" ? "blocked" : "in_review";
-    this.appendAudit(actor, "agent_run.record", "run", run.id, "accepted", {
-      assignmentId: run.assignmentId,
-      status: run.status
+    return this.withPersistenceTransaction(() => {
+      this.ensureSafe(input, "agentRun");
+      const assignment = this.assignments.get(input.assignmentId);
+      if (!assignment) {
+        throw new Error(`Unknown assignment: ${input.assignmentId}`);
+      }
+      const run: AgentRun = {
+        ...input,
+        id: createId("run", input)
+      };
+      this.runs.set(run.id, run);
+      assignment.runIds.push(run.id);
+      assignment.status = run.status === "success" ? "verified" : run.status === "blocked" ? "blocked" : "in_review";
+      this.persistCoreRecord("assignment", assignment);
+      this.persistCoreRecord("agentRun", run);
+      this.appendAudit(actor, "agent_run.record", "run", run.id, "accepted", {
+        assignmentId: run.assignmentId,
+        status: run.status
+      });
+      return run;
     });
-    return run;
   }
 
   updateGateStatus(gateId: string, status: GateWorkOrder["status"], actor: ActorIdentity, blocker?: string): GateWorkOrder {
-    const gate = this.gates.get(gateId);
-    if (!gate) {
-      throw new Error(`Unknown gate: ${gateId}`);
-    }
-    gate.status = status;
-    if (blocker) {
-      gate.blocker = blocker;
-    }
-    this.appendAudit(actor, "gate.status.update", "gate", gate.id, status === "blocked" ? "blocked" : "accepted", {
-      status,
-      blocker: blocker ?? null
+    return this.withPersistenceTransaction(() => {
+      const gate = this.gates.get(gateId);
+      if (!gate) {
+        throw new Error(`Unknown gate: ${gateId}`);
+      }
+      gate.status = status;
+      if (blocker) {
+        gate.blocker = blocker;
+      }
+      this.persistCoreRecord("gate", gate);
+      this.appendAudit(actor, "gate.status.update", "gate", gate.id, status === "blocked" ? "blocked" : "accepted", {
+        status,
+        blocker: blocker ?? null
+      });
+      return gate;
     });
-    return gate;
   }
 
   updateConferenceStatus(conferenceId: string, status: ConferenceRequest["status"], actor: ActorIdentity): ConferenceRequest {
@@ -366,11 +443,15 @@ export class AosStore {
   }
 
   addSubTask(storyId: string, subTask: SubTask, actor: ActorIdentity): SubTask {
-    this.ensureSafe(subTask, "subTask");
-    const story = this.requireStory(storyId);
-    story.subTasks.push(subTask);
-    this.appendAudit(actor, "story.subtask.add", "story", storyId, "accepted", { subTaskId: subTask.id });
-    return subTask;
+    return this.withPersistenceTransaction(() => {
+      this.ensureSafe(subTask, "subTask");
+      const story = this.requireStory(storyId);
+      story.subTasks.push(subTask);
+      this.persistCoreRecord("story", story);
+      this.persistCoreRecord("subtask", { ...subTask, storyId });
+      this.appendAudit(actor, "story.subtask.add", "story", storyId, "accepted", { subTaskId: subTask.id });
+      return subTask;
+    });
   }
 
   addComment(input: Omit<StructuredComment, "id" | "createdAt" | "appendOnly">, actor: ActorIdentity): StructuredComment {
@@ -388,38 +469,47 @@ export class AosStore {
   }
 
   linkEvidence(input: Omit<EvidenceLink, "id" | "createdAt">, actor: ActorIdentity): EvidenceLink {
-    this.ensureSafe(input, "evidence");
-    const evidence: EvidenceLink = {
-      ...input,
-      id: createId("evidence", input),
-      createdAt: now()
-    };
-    this.evidence.set(evidence.id, evidence);
-    this.appendAudit(actor, "evidence.link", "evidence", evidence.id, "accepted", {
-      type: evidence.type,
-      redactionState: evidence.redactionState
+    return this.withPersistenceTransaction(() => {
+      this.ensureSafe(input, "evidence");
+      const evidence: EvidenceLink = {
+        ...input,
+        id: createId("evidence", input),
+        createdAt: now()
+      };
+      this.evidence.set(evidence.id, evidence);
+      this.persistCoreRecord("evidence", evidence);
+      this.appendAudit(actor, "evidence.link", "evidence", evidence.id, "accepted", {
+        type: evidence.type,
+        redactionState: evidence.redactionState
+      });
+      return evidence;
     });
-    return evidence;
   }
 
   requestGate(input: Omit<GateWorkOrder, "id" | "ownerRole" | "status">, actor: ActorIdentity): GateWorkOrder {
-    this.ensureSafe(input, "gate");
-    const ownerRole = resolveGateOwner(input.type);
-    const gate: GateWorkOrder = {
-      ...input,
-      id: createId("gate", input),
-      ownerRole,
-      status: input.type === "owner_intent" ? "owner_intent_required" : "pending_role"
-    };
-    this.gates.set(gate.id, gate);
-    const story = this.stories.get(gate.linkedTicketId);
-    story?.gateIds.push(gate.id);
-    this.appendAudit(actor, "gate.request", "gate", gate.id, "accepted", {
-      type: gate.type,
-      ownerRole,
-      status: gate.status
+    return this.withPersistenceTransaction(() => {
+      this.ensureSafe(input, "gate");
+      const ownerRole = resolveGateOwner(input.type);
+      const gate: GateWorkOrder = {
+        ...input,
+        id: createId("gate", input),
+        ownerRole,
+        status: input.type === "owner_intent" ? "owner_intent_required" : "pending_role"
+      };
+      this.gates.set(gate.id, gate);
+      const story = this.stories.get(gate.linkedTicketId);
+      story?.gateIds.push(gate.id);
+      if (story) {
+        this.persistCoreRecord("story", story);
+      }
+      this.persistCoreRecord("gate", gate);
+      this.appendAudit(actor, "gate.request", "gate", gate.id, "accepted", {
+        type: gate.type,
+        ownerRole,
+        status: gate.status
+      });
+      return gate;
     });
-    return gate;
   }
 
   captureOwnerIntent(input: Omit<OwnerIntent, "id" | "status" | "auditEventId">, actor: ActorIdentity): OwnerIntent {
@@ -1643,7 +1733,35 @@ export class AosStore {
       details: redactForAudit(details) as Record<string, unknown>
     };
     this.auditEvents.push(Object.freeze(event));
+    this.persistence?.appendAuditEvent(event);
     return event;
+  }
+
+  private hydrateFromPersistence(): void {
+    const snapshot = this.persistence?.hydrateCore();
+    if (!snapshot) {
+      return;
+    }
+    snapshot.projects?.forEach((project) => this.projects.set(project.id, project));
+    snapshot.employees?.forEach((employee) => this.employees.set(employee.id, employee));
+    snapshot.initiatives?.forEach((initiative) => this.initiatives.set(initiative.id, initiative));
+    snapshot.epics?.forEach((epic) => this.epics.set(epic.id, epic));
+    snapshot.stories?.forEach((story) => this.stories.set(story.id, story));
+    snapshot.assignments?.forEach((assignment) => this.assignments.set(assignment.id, assignment));
+    snapshot.runs?.forEach((run) => this.runs.set(run.id, run));
+    snapshot.gates?.forEach((gate) => this.gates.set(gate.id, gate));
+    snapshot.evidence?.forEach((evidence) => this.evidence.set(evidence.id, evidence));
+    if (snapshot.auditEvents) {
+      this.auditEvents = snapshot.auditEvents.map((event) => Object.freeze(event));
+    }
+  }
+
+  private withPersistenceTransaction<T>(operation: () => T): T {
+    return this.persistence ? this.persistence.runInTransaction(operation) : operation();
+  }
+
+  private persistCoreRecord(kind: AosCorePersistenceKind, record: unknown): void {
+    this.persistence?.saveCoreRecord(kind, record);
   }
 }
 
