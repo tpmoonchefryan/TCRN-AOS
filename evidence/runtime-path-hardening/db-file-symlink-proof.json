@@ -1,0 +1,47 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_phase3_dogfood_ilya_runtime_path_hardening_repair_after_sable_changes_requested_5805cd8_d6a648a_20260705",
+  "command": "pnpm build && node scripts/runtime-path-hardening-proof.mjs",
+  "generatedAt": "2026-07-05T22:39:49.306Z",
+  "sourceHead": "44e4c8081563c7b3841f839fc1718f8578b3553d",
+  "sourceContentDigest": "e2d656c7355c1b330be4e035e6b416827c4d5e1bce3d4e412036af0f4634c9e7",
+  "sourceFiles": [
+    {
+      "file": "packages/mcp-server/src/transport.ts",
+      "digest": "1edc3893bdaa7ac6a6015edddb7c98140bb269ab089a2882bbed86ce185aec1e"
+    },
+    {
+      "file": "packages/mcp-server/test/stdio-transport.test.mjs",
+      "digest": "6dd62167cc0ae568d7e2c866677f807beaf036b53837fb6054880d555dd59684"
+    },
+    {
+      "file": "scripts/runtime-path-hardening-proof.mjs",
+      "digest": "1560e4f733d9f97cc5562f854a6fda9a13f839af034ede3f323f2eaf6253aeec"
+    }
+  ],
+  "noOverclaimFlags": {
+    "productRepoMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "durableRuntimeDbActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "retainedPreviewFreshnessClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false
+  },
+  "failures": [],
+  "negativeFailures": [],
+  "dbFileSymlinkRejected": true,
+  "rejectionReason": "transport_runtime_database_file_symlink_denied",
+  "outsideTargetUnchanged": true,
+  "sqliteOpenPrevented": true,
+  "rawPathRecorded": false,
+  "cleanupReadback": {
+    "attempted": true,
+    "removed": true,
+    "rawPathRecorded": false
+  }
+}
