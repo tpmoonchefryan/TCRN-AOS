@@ -1,0 +1,102 @@
+{
+  "receiptName": "concurrency-lock-restart-proof.json",
+  "ok": true,
+  "route": "route_tcrn_aos_phase3_dogfood_ilya_runtime_profile_implementation_proof_after_minerva_status_sync_f5dc8b1_6deeb08_20260705",
+  "command": "pnpm --dir TCRN-AOS phase3:runtime-profile-proof",
+  "generatedAt": "2026-07-06T04:06:23.827Z",
+  "sourceHead": "4196251e3a091bf29e4887480a8d06c2ba63f2cb",
+  "sourceContentDigest": "f8f0667c1961716bc0cb3b27f4410e00a99f608fbe0f1d6d7844af4806905b40",
+  "sourceFiles": [
+    {
+      "file": "package.json",
+      "digest": "a7c32b8a0c1019f423a5a867cb283a3cc045490c7444967b43772f54cb2947fe"
+    },
+    {
+      "file": "packages/domain/src/store.ts",
+      "digest": "db1c74874a28dc0ccf1d55a911ea8d4163d4ca8be7e29c091b1c2b9d4f4eece9"
+    },
+    {
+      "file": "packages/db/src/sqlite-repository.ts",
+      "digest": "8de0d042e5cb0966f9ea8789be8eb48693760949e041ae2a0384535f172db78e"
+    },
+    {
+      "file": "packages/mcp-gateway/src/gateway.ts",
+      "digest": "d5620da1d229b62d05daff3a8c67197829696c845f88dd61445bf50aace24e3e"
+    },
+    {
+      "file": "packages/mcp-server/src/transport.ts",
+      "digest": "e1f24c1473e2afeedc6a1865254a936634ad6d540227bdd68d978d340db24fd2"
+    },
+    {
+      "file": "packages/mcp-server/src/stdio-server.ts",
+      "digest": "e31bf92853c2ec731cc40a6de89977faffd786765f220757afeb466c15c8d035"
+    },
+    {
+      "file": "packages/mcp-server/test/stdio-transport.test.mjs",
+      "digest": "8cd6dec891e76b0468ba13191323753717815f4887eafc8b377678a619c92ded"
+    },
+    {
+      "file": "scripts/phase3-runtime-profile-proof.mjs",
+      "digest": "e77a69a3f1f5ca1546996235f8806eb7513281e8fa26942be155c179782e1c50"
+    }
+  ],
+  "workflowBasis": "f5dc8b1c57ea07ea89d40043be420cd349e90d22",
+  "aosBasis": "4196251e3a091bf29e4887480a8d06c2ba63f2cb",
+  "methodsUnderReview": [
+    "aos.assignment.claim",
+    "aos.assignment.update",
+    "aos.gate.decision.record",
+    "aos.ticket.list",
+    "aos.audit.query"
+  ],
+  "routeOwnedProfileRoot": {
+    "class": "os_temp_route_owned_redacted",
+    "rootDigest": "8100307ab8a5365ac59809ffddbc054f4b474d2bd1e5de60725277fa5631af0f",
+    "rawPathRecorded": false
+  },
+  "actorProof": {
+    "employeeId": "employee-ilya",
+    "role": "implementation",
+    "threadId": "019eb6d7-f130-70a0-8805-169cc337229b",
+    "trustedServerConfig": true,
+    "persistedEmployeeIdentityRequired": true,
+    "clientSuppliedAuthorityTrusted": false
+  },
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "productRepoMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "durableRuntimeDbActivation": false,
+    "defaultRuntimeDbActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "retainedPreviewRuntimeActivation": false,
+    "retainedPreviewFreshnessClaimed": false,
+    "ownerVisibleRuntimeDbActivated": false,
+    "liveDispatchAuthorized": false,
+    "ownerIntentExecutionAuthorized": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false,
+    "janusReadinessClaimed": false,
+    "phase3CloseoutClaimed": false
+  },
+  "multiProcessClaimRace": {
+    "attempts": 2,
+    "successes": 2,
+    "activeAssignmentCount": 1,
+    "assignmentIds": [
+      "assignment_f4991b2b26340f7d"
+    ],
+    "noDuplicateActiveAssignment": true
+  },
+  "restartReadback": {
+    "childProcessRestarted": true,
+    "ticketReadbackOk": true,
+    "auditReadbackOk": true
+  },
+  "lockState": "no_unrecoverable_lock_state",
+  "durableCrossRestartDedupeClaimed": false
+}
