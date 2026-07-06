@@ -1,0 +1,84 @@
+{
+  "receiptName": "response-budget-replay-idempotency-proof.json",
+  "ok": true,
+  "route": "route_tcrn_aos_phase3_dogfood_ilya_missing_work_loop_methods_implementation_after_minerva_handoff_64e613b_c8c61f5_20260705",
+  "command": "pnpm --dir TCRN-AOS phase3:work-loop-method-proof",
+  "generatedAt": "2026-07-06T01:19:26.583Z",
+  "sourceHead": "14e04923ad4c4d862a9eeea3797a650c26c6e318",
+  "sourceContentDigest": "3be050a91890158c8110f64b40ee8d442c2c14475180d7971cbebf3e0e11c180",
+  "sourceFiles": [
+    {
+      "file": "package.json",
+      "digest": "c40c8908d684845086dce09feb51d1874c71b1f4ae0148112f5564dcdf061ecb"
+    },
+    {
+      "file": "packages/domain/src/store.ts",
+      "digest": "db1c74874a28dc0ccf1d55a911ea8d4163d4ca8be7e29c091b1c2b9d4f4eece9"
+    },
+    {
+      "file": "packages/domain/src/types.ts",
+      "digest": "f8ea1aa90103c272a6d86c31e0c7b9aff0d496b7e22628406934474de2986413"
+    },
+    {
+      "file": "packages/mcp-gateway/src/gateway.ts",
+      "digest": "d5620da1d229b62d05daff3a8c67197829696c845f88dd61445bf50aace24e3e"
+    },
+    {
+      "file": "packages/mcp-server/src/transport.ts",
+      "digest": "35109e1b3bcf30870021d29dad2dafe09a40834094848b144c9ba822ce8e0753"
+    },
+    {
+      "file": "packages/mcp-server/test/stdio-transport.test.mjs",
+      "digest": "08c32e697596ea3932348adc00930f14813d0c990daf1f7dcde3f70ae3eaa1bd"
+    },
+    {
+      "file": "scripts/phase3-work-loop-method-proof.mjs",
+      "digest": "163f1b5a4cf30db60440203a4535bf5d4cd2a6ead0d8093e79f5c12bed3f5f48"
+    }
+  ],
+  "workflowBasis": "64e613bec2c64659879257f4163811ea60ad3710",
+  "aosBasis": "14e04923ad4c4d862a9eeea3797a650c26c6e318",
+  "methodsUnderReview": [
+    "aos.assignment.claim",
+    "aos.assignment.update",
+    "aos.gate.decision.record"
+  ],
+  "routeOwnedDbRoot": {
+    "class": "os_temp_route_owned_redacted",
+    "rootDigest": "56c61c46194ea55ac0ff35421640690649e93bdf6288ec2db0ffaf5994c21c05",
+    "rawPathRecorded": false
+  },
+  "actorProof": {
+    "employeeId": "employee-ilya",
+    "role": "implementation",
+    "threadId": "019eb6d7-f130-70a0-8805-169cc337229b",
+    "trustedServerConfig": true,
+    "persistedEmployeeIdentityRequired": true,
+    "clientSuppliedAuthorityTrusted": false
+  },
+  "fixtureMatrix": {},
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "productRepoMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "durableRuntimeDbActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "retainedPreviewFreshnessClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false,
+    "methodAcceptanceClaimed": false,
+    "phase3CloseoutClaimed": false
+  },
+  "responseBudgetFirstReason": "transport_response_budget_exceeded",
+  "responseBudgetReplayReason": "transport_response_budget_exceeded",
+  "responseBudgetReplayBypassClosed": true,
+  "processLocalReplayForTransport": true,
+  "crossRestartDurableDedupeClaimed": false,
+  "claimByStateReplayProven": true,
+  "normalClaimResponseBudgeted": true
+}

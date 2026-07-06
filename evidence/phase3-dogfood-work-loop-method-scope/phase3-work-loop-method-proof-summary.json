@@ -1,0 +1,70 @@
+{
+  "receiptName": "phase3-work-loop-method-proof-summary.json",
+  "ok": true,
+  "route": "route_tcrn_aos_phase3_dogfood_ilya_missing_work_loop_methods_implementation_after_minerva_handoff_64e613b_c8c61f5_20260705",
+  "command": "pnpm --dir TCRN-AOS phase3:work-loop-method-proof",
+  "generatedAt": "2026-07-06T01:19:29.913Z",
+  "sourceHead": "14e04923ad4c4d862a9eeea3797a650c26c6e318",
+  "sourceContentDigest": "3be050a91890158c8110f64b40ee8d442c2c14475180d7971cbebf3e0e11c180",
+  "workflowBasis": "64e613bec2c64659879257f4163811ea60ad3710",
+  "aosBasis": "14e04923ad4c4d862a9eeea3797a650c26c6e318",
+  "methodsUnderReview": [
+    "aos.assignment.claim",
+    "aos.assignment.update",
+    "aos.gate.decision.record"
+  ],
+  "receiptInventory": [
+    "source-provenance.json",
+    "method-schema-proof.json",
+    "assignment-claim-proof.json",
+    "assignment-update-proof.json",
+    "gate-decision-record-proof.json",
+    "actor-role-denial-matrix-proof.json",
+    "allowlist-policy-negative-method-proof.json",
+    "audit-redaction-privacy-proof.json",
+    "response-budget-replay-idempotency-proof.json",
+    "concurrency-race-persistence-proof.json",
+    "runtime-path-no-overclaim-cleanup-proof.json",
+    "verify-fast-readback.json"
+  ],
+  "receiptCount": 12,
+  "childReceiptsOk": {
+    "source-provenance.json": true,
+    "method-schema-proof.json": true,
+    "assignment-claim-proof.json": true,
+    "assignment-update-proof.json": true,
+    "gate-decision-record-proof.json": true,
+    "actor-role-denial-matrix-proof.json": true,
+    "allowlist-policy-negative-method-proof.json": true,
+    "audit-redaction-privacy-proof.json": true,
+    "response-budget-replay-idempotency-proof.json": true,
+    "concurrency-race-persistence-proof.json": true,
+    "runtime-path-no-overclaim-cleanup-proof.json": true,
+    "verify-fast-readback.json": true
+  },
+  "missingReceipts": [],
+  "extraUnclassifiedReceipts": [],
+  "sourceProvenanceConsistent": true,
+  "privacyScanClean": true,
+  "receiptPrivacyFindings": [],
+  "noOverclaimFlags": {
+    "productRepoMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "durableRuntimeDbActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "retainedPreviewFreshnessClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false,
+    "methodAcceptanceClaimed": false,
+    "phase3CloseoutClaimed": false
+  },
+  "cleanupReadback": {
+    "attempted": true,
+    "removed": true,
+    "rawPathRecorded": false
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "receiptName": "audit-redaction-privacy-proof.json",
+  "ok": true,
+  "route": "route_tcrn_aos_phase3_dogfood_ilya_missing_work_loop_methods_implementation_after_minerva_handoff_64e613b_c8c61f5_20260705",
+  "command": "pnpm --dir TCRN-AOS phase3:work-loop-method-proof",
+  "generatedAt": "2026-07-06T01:19:26.583Z",
+  "sourceHead": "14e04923ad4c4d862a9eeea3797a650c26c6e318",
+  "sourceContentDigest": "3be050a91890158c8110f64b40ee8d442c2c14475180d7971cbebf3e0e11c180",
+  "sourceFiles": [
+    {
+      "file": "package.json",
+      "digest": "c40c8908d684845086dce09feb51d1874c71b1f4ae0148112f5564dcdf061ecb"
+    },
+    {
+      "file": "packages/domain/src/store.ts",
+      "digest": "db1c74874a28dc0ccf1d55a911ea8d4163d4ca8be7e29c091b1c2b9d4f4eece9"
+    },
+    {
+      "file": "packages/domain/src/types.ts",
+      "digest": "f8ea1aa90103c272a6d86c31e0c7b9aff0d496b7e22628406934474de2986413"
+    },
+    {
+      "file": "packages/mcp-gateway/src/gateway.ts",
+      "digest": "d5620da1d229b62d05daff3a8c67197829696c845f88dd61445bf50aace24e3e"
+    },
+    {
+      "file": "packages/mcp-server/src/transport.ts",
+      "digest": "35109e1b3bcf30870021d29dad2dafe09a40834094848b144c9ba822ce8e0753"
+    },
+    {
+      "file": "packages/mcp-server/test/stdio-transport.test.mjs",
+      "digest": "08c32e697596ea3932348adc00930f14813d0c990daf1f7dcde3f70ae3eaa1bd"
+    },
+    {
+      "file": "scripts/phase3-work-loop-method-proof.mjs",
+      "digest": "163f1b5a4cf30db60440203a4535bf5d4cd2a6ead0d8093e79f5c12bed3f5f48"
+    }
+  ],
+  "workflowBasis": "64e613bec2c64659879257f4163811ea60ad3710",
+  "aosBasis": "14e04923ad4c4d862a9eeea3797a650c26c6e318",
+  "methodsUnderReview": [
+    "aos.assignment.claim",
+    "aos.assignment.update",
+    "aos.gate.decision.record"
+  ],
+  "routeOwnedDbRoot": {
+    "class": "os_temp_route_owned_redacted",
+    "rootDigest": "56c61c46194ea55ac0ff35421640690649e93bdf6288ec2db0ffaf5994c21c05",
+    "rawPathRecorded": false
+  },
+  "actorProof": {
+    "employeeId": "employee-ilya",
+    "role": "implementation",
+    "threadId": "019eb6d7-f130-70a0-8805-169cc337229b",
+    "trustedServerConfig": true,
+    "persistedEmployeeIdentityRequired": true,
+    "clientSuppliedAuthorityTrusted": false
+  },
+  "fixtureMatrix": {},
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "productRepoMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "durableRuntimeDbActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "retainedPreviewFreshnessClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false,
+    "methodAcceptanceClaimed": false,
+    "phase3CloseoutClaimed": false
+  },
+  "auditRowsScanned": 49,
+  "responsePayloadsScanned": 26,
+  "rawValuesAbsentFromResponses": true,
+  "rawValuesAbsentFromAuditRows": true,
+  "rawValuesAbsentFromReceipts": true,
+  "sourceFixtureFindingsOutsideProofScript": [],
+  "rawValueDigests": {
+    "fixture_0": "b020302c9489922dec67cfb07fbeaa16bcc99f50af7c0ada646ca53bcf791acf",
+    "fixture_1": "7f3078de7bc5ed8a5dfa9ceab7bbc76ffda06d555281a009cd1ae821974a4172",
+    "fixture_2": "40180dfb761c36aef0849160b728deac61e3232fde72e4be44c043d34ac0cfdb",
+    "fixture_3": "40db329b8f41af93a156e5bad4cdc1a097c112925cde1cd1008490afd750f7bd",
+    "fixture_4": "d0c7f88fd231541cb0406f65a2b142288e58b07a12e7025da4772d07ab2a77b2",
+    "fixture_5": "c9455d889218a295851d4026e05d49506c4843e7aa0737cb6e96c2be93f5d405",
+    "fixture_6": "b28242cf6f49b9f509577297aa116687b7395fcf5bf4891dff719b7eb4d60077",
+    "fixture_7": "7bfd7517109c8760e5e7b9d421635662e9345900b4d8c770f3e50872c5461230",
+    "fixture_8": "fbc93c1f2d09ffc63e1c003cfa84b5891308b8987ec2e96d9c9385938c804623"
+  },
+  "metadataOnlyAuditRows": true,
+  "rawRequestBodyStored": false,
+  "rawEnvAuthStored": false,
+  "rawMessagesOrOutputStored": false,
+  "rawSourceOrVaultSnippetStored": false,
+  "rawLocalPathStored": false,
+  "rawDbRowsStored": false,
+  "screenshotsStored": false,
+  "secretsOrPiiStored": false
+}
