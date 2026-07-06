@@ -1,0 +1,572 @@
+{
+  "receiptName": "d3-real-dogfood-workload-readback.json",
+  "ok": true,
+  "route": "route_tcrn_aos_phase4_d3_real_dogfood_workload_creation_ilya_after_minerva_d2_status_sync_success_1419ad9_bce717a_20260706",
+  "command": "pnpm --dir TCRN-AOS d3:real-dogfood-workload-proof",
+  "generatedAt": "2026-07-06T15:22:18.429Z",
+  "sourceHead": "a19c5b9fa80a65f1e88128c44cc7382808341775",
+  "sourceContentDigest": "4375fe49156b37503d709f820ce4fedd16527f8ad8971a2bc53f10527275a15c",
+  "sourceFiles": [
+    {
+      "file": "package.json",
+      "digest": "d86bab9c84e447c9622c4f533dc73b5cc6b4f2b567e1569cfc3ec98f6c04f722"
+    },
+    {
+      "file": "scripts/d3-real-dogfood-workload-proof.mjs",
+      "digest": "8c2e684930228ac16bd37713d57d80788a43ce0ff9798b196e036614587be197"
+    },
+    {
+      "file": "scripts/d2-runtime-profile-activation-proof.mjs",
+      "digest": "764b421c7dd39a963466263067fe2d94e07bbc828e0b9dbb9f59d44ef05f4331"
+    },
+    {
+      "file": "packages/db/src/sqlite-repository.ts",
+      "digest": "8de0d042e5cb0966f9ea8789be8eb48693760949e041ae2a0384535f172db78e"
+    },
+    {
+      "file": "packages/domain/src/store.ts",
+      "digest": "db1c74874a28dc0ccf1d55a911ea8d4163d4ca8be7e29c091b1c2b9d4f4eece9"
+    },
+    {
+      "file": "packages/domain/src/seed.ts",
+      "digest": "5624c0e60b51d7d179ab6410e6444df7f86f973a13732b9582420cc53e904f67"
+    },
+    {
+      "file": "packages/mcp-gateway/src/gateway.ts",
+      "digest": "d5620da1d229b62d05daff3a8c67197829696c845f88dd61445bf50aace24e3e"
+    },
+    {
+      "file": "packages/mcp-server/src/transport.ts",
+      "digest": "fa2bd7eef3031d6529993d616973332e7699ea65dd56401adeb874d09ef775b4"
+    }
+  ],
+  "workflowBasis": "1419ad9c4ef39db741729b55fe11f8fdf68519df",
+  "aosBasis": "a19c5b9fa80a65f1e88128c44cc7382808341775",
+  "methodsUnderReview": [
+    "aos.assignment.claim",
+    "aos.assignment.update",
+    "aos.run.summary.create",
+    "aos.evidence.link",
+    "aos.gate.decision.record",
+    "aos.ticket.list",
+    "aos.audit.query",
+    "aos.policy.read"
+  ],
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "localD2RuntimeProfileDbUsed": true,
+    "d3RealDogfoodWorkloadCreated": true,
+    "productRepoEvidenceMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "tmsMutation": false,
+    "activeCodexMutation": false,
+    "maintainedHookSourceMutation": false,
+    "hookBehaviorReliance": false,
+    "hookMappingImplemented": false,
+    "hookRetirementPerformed": false,
+    "activeParityClaimed": false,
+    "phase4StoryImplementationPerformed": false,
+    "pilotVaultImportImplemented": false,
+    "registryMutationPerformed": false,
+    "d4FrictionTicketsCreated": false,
+    "d5StatusMigrationPerformed": false,
+    "durableRuntimeDbActivation": false,
+    "defaultRuntimeDbActivation": false,
+    "remoteRuntimeActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "productReadinessClaimed": false,
+    "phase3AcceptanceClaimed": false,
+    "phase4CloseoutClaimed": false,
+    "ownerFacingSurfaceCreated": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false
+  },
+  "selectedRoot": {
+    "profileRootClass": "os_temp_route_owned_local_activation_root",
+    "explicitRootProvided": false,
+    "rootDigest": "fded235ff9fa2a56b5c85050ded69b5d325e2b230137afcfbea4a5a791ed0a2e",
+    "rawPathRecorded": false
+  },
+  "d3WorkloadCreationReadback": {
+    "ok": true,
+    "route": "route_tcrn_aos_phase4_d3_real_dogfood_workload_creation_ilya_after_minerva_d2_status_sync_success_1419ad9_bce717a_20260706",
+    "sourceHead": "a19c5b9fa80a65f1e88128c44cc7382808341775",
+    "workflowBasis": "1419ad9c4ef39db741729b55fe11f8fdf68519df",
+    "command": "pnpm --dir TCRN-AOS d3:real-dogfood-workload-proof",
+    "startingAosBasis": "a19c5b9fa80a65f1e88128c44cc7382808341775",
+    "localRuntimeProfileSource": "owner_authorized_D2_local_activation_profile",
+    "profileRootClass": "os_temp_route_owned_local_activation_root",
+    "rootDigest": "51911e9eb77f924f447573b95a68ddbe0006f10719f48c5adb84340712a085ca",
+    "databaseFileName": "aos-d2-local-runtime-profile.sqlite",
+    "databaseDigest": "d0c44bb8e21dba185d5add6564904a675dc736d3787ac7b43b32a63c652858a5",
+    "rawPathRecorded": false,
+    "rawDbDumpRecorded": false,
+    "beforeD3StoryCount": 4,
+    "afterD3StoryCount": 4,
+    "initiativeId": "init_e9113ca32eb81e0b",
+    "epicId": "epic_de12d9eab23da28b",
+    "storyIds": [
+      "story_10db64b0554c3642",
+      "story_ede6d4d3393283f0",
+      "story_0d5e15dc49f40f2d",
+      "story_8c9e42aaea3f38b8"
+    ],
+    "gateIds": [
+      "gate_5f2b4f2791f0f414",
+      "gate_46daedc0a0f3d11d",
+      "gate_016a3af397b2100f",
+      "gate_1621e1f49b7002ad"
+    ],
+    "assignmentIds": [
+      "assignment_5f7abb44ce1bdded",
+      "assignment_90438063b0c7081e",
+      "assignment_c785cf286a476c8a",
+      "assignment_25960b6f7600a48a"
+    ],
+    "evidenceLinkIds": [
+      "evidence_fb6d4f001b5d0a63",
+      "evidence_576b5021fe150465",
+      "evidence_ce02a3f1034d32e5",
+      "evidence_696a609a8f718248",
+      "evidence_37114986634bd05e",
+      "evidence_c63f267024bfb55c",
+      "evidence_2a51963ff43cd4fa",
+      "evidence_9c6d3225ea40130b"
+    ],
+    "runIds": [
+      "run_aa8776d96dd4454d"
+    ],
+    "auditEventIds": [],
+    "d3WorkItemKeys": [
+      "hook_gate_to_aos_method_mapping_table",
+      "pilot_vault_import",
+      "crew_reduction",
+      "agents_boot_cost_rewrite_backfill"
+    ],
+    "phase4WorkItemsImplemented": false
+  },
+  "initiativeEpicStoryReadback": {
+    "ok": true,
+    "initiative": {
+      "id": "init_e9113ca32eb81e0b",
+      "title": "AOS human readback v1",
+      "status": "in_progress",
+      "epicIds": [
+        "epic_2084717a6888c6f4",
+        "epic_de12d9eab23da28b"
+      ],
+      "storyCount": 5
+    },
+    "epic": {
+      "id": "epic_de12d9eab23da28b",
+      "title": "Phase 4 friction workflow thinning dogfood workload",
+      "status": "in_progress",
+      "storyCount": 4
+    },
+    "stories": [
+      {
+        "id": "story_10db64b0554c3642",
+        "title": "Hook-gate to AOS-method mapping table",
+        "status": "accepted",
+        "subtaskCount": 1,
+        "assignmentIds": [
+          "assignment_5f7abb44ce1bdded"
+        ],
+        "gateIds": [
+          "gate_b5a6fa750fa04c49",
+          "gate_5f2b4f2791f0f414"
+        ],
+        "criteriaDigest": "525bc764c4e1a50d089b3724b9c5730eff8c0e69e3b66c19cf269440ecbec202"
+      },
+      {
+        "id": "story_ede6d4d3393283f0",
+        "title": "Pilot vault import",
+        "status": "accepted",
+        "subtaskCount": 1,
+        "assignmentIds": [
+          "assignment_90438063b0c7081e"
+        ],
+        "gateIds": [
+          "gate_55ee6a110f024aae",
+          "gate_46daedc0a0f3d11d"
+        ],
+        "criteriaDigest": "d83713cab87573c4e5092b688a8ba1ded995f4048ed698580041edb41b5756be"
+      },
+      {
+        "id": "story_0d5e15dc49f40f2d",
+        "title": "Crew reduction plan",
+        "status": "accepted",
+        "subtaskCount": 1,
+        "assignmentIds": [
+          "assignment_c785cf286a476c8a"
+        ],
+        "gateIds": [
+          "gate_2708bd0af78e40e5",
+          "gate_016a3af397b2100f"
+        ],
+        "criteriaDigest": "72393645030e98dc94bd2b7a6160f2cf047ae21d526b64247d12fec118f8b17d"
+      },
+      {
+        "id": "story_8c9e42aaea3f38b8",
+        "title": "AGENTS.md boot-cost rewrite backfill",
+        "status": "verified",
+        "subtaskCount": 1,
+        "assignmentIds": [
+          "assignment_25960b6f7600a48a"
+        ],
+        "gateIds": [
+          "gate_780418eaffcadbb7",
+          "gate_1621e1f49b7002ad"
+        ],
+        "criteriaDigest": "7b1bf8b39dc80978c4887d3c23014a39592ab39c5698eacf7a51b919c911668a"
+      }
+    ],
+    "requiredWorkItemsPresent": true,
+    "optionalAgentsBackfillIncluded": true,
+    "hookGateMappingStoryCarriesDivergenceBlocker": true,
+    "pilotVaultImportImplementationPerformed": false,
+    "crewReductionRegistryMutationPerformed": false,
+    "agentsBackfillWorkflowMutationPerformed": false
+  },
+  "claimRunEvidenceGateAuditReadback": {
+    "ok": true,
+    "methodsExercised": [
+      "aos.assignment.claim",
+      "aos.assignment.update",
+      "aos.run.summary.create",
+      "aos.evidence.link",
+      "aos.gate.decision.record",
+      "aos.ticket.list",
+      "aos.audit.query",
+      "aos.policy.read"
+    ],
+    "assignments": [
+      {
+        "storyId": "story_10db64b0554c3642",
+        "assignmentId": "assignment_5f7abb44ce1bdded",
+        "status": "in_progress",
+        "method": "aos.assignment.claim",
+        "reused": true,
+        "auditEventId": null
+      },
+      {
+        "storyId": "story_ede6d4d3393283f0",
+        "assignmentId": "assignment_90438063b0c7081e",
+        "status": "in_progress",
+        "method": "aos.assignment.claim",
+        "reused": true,
+        "auditEventId": null
+      },
+      {
+        "storyId": "story_0d5e15dc49f40f2d",
+        "assignmentId": "assignment_c785cf286a476c8a",
+        "status": "in_progress",
+        "method": "aos.assignment.claim",
+        "reused": true,
+        "auditEventId": null
+      },
+      {
+        "storyId": "story_8c9e42aaea3f38b8",
+        "assignmentId": "assignment_25960b6f7600a48a",
+        "status": "verified",
+        "method": "aos.assignment.claim",
+        "reused": true,
+        "auditEventId": null
+      }
+    ],
+    "runs": [
+      {
+        "runId": "run_aa8776d96dd4454d",
+        "status": "success",
+        "reused": true,
+        "auditEventId": null
+      }
+    ],
+    "evidenceLinks": [
+      {
+        "id": "evidence_fb6d4f001b5d0a63",
+        "methodEvidenceId": "evidence_576b5021fe150465",
+        "type": "artifact_id",
+        "targetClass": "artifact_id",
+        "validity": "valid",
+        "redactionState": "metadata_only",
+        "digest": "sha256:6d45a05bf4d3396f0ad283f970689b1462461953145b2903710350124eea747a",
+        "methodExercised": "aos.evidence.link",
+        "rawPathRecorded": false
+      },
+      {
+        "id": "evidence_ce02a3f1034d32e5",
+        "methodEvidenceId": "evidence_696a609a8f718248",
+        "type": "artifact_id",
+        "targetClass": "artifact_id",
+        "validity": "valid",
+        "redactionState": "metadata_only",
+        "digest": "sha256:18bd381d033a789ee0e4919cc5b169a0b0fbd517113791f49b5258377e10f30f",
+        "methodExercised": "aos.evidence.link",
+        "rawPathRecorded": false
+      },
+      {
+        "id": "evidence_37114986634bd05e",
+        "methodEvidenceId": "evidence_c63f267024bfb55c",
+        "type": "artifact_id",
+        "targetClass": "artifact_id",
+        "validity": "valid",
+        "redactionState": "metadata_only",
+        "digest": "sha256:5b841d588fe0c580b76c6e25396a288b16f5770bd5a5391d56811af948b9c92f",
+        "methodExercised": "aos.evidence.link",
+        "rawPathRecorded": false
+      },
+      {
+        "id": "evidence_2a51963ff43cd4fa",
+        "methodEvidenceId": "evidence_9c6d3225ea40130b",
+        "type": "artifact_id",
+        "targetClass": "artifact_id",
+        "validity": "valid",
+        "redactionState": "metadata_only",
+        "digest": "sha256:cee5536a581fe903f383bfc19b0fd0875e10d7b4c79b6a99395d4fb8a6bf3d4d",
+        "methodExercised": "aos.evidence.link",
+        "rawPathRecorded": false
+      }
+    ],
+    "gates": [
+      {
+        "id": "gate_5f2b4f2791f0f414",
+        "type": "security_license",
+        "ownerRole": "security",
+        "linkedTicketId": "story_10db64b0554c3642",
+        "inputEvidenceIds": [
+          "evidence_fb6d4f001b5d0a63"
+        ],
+        "status": "pending_role",
+        "decisionId": null,
+        "decisionClass": null
+      },
+      {
+        "id": "gate_46daedc0a0f3d11d",
+        "type": "security_license",
+        "ownerRole": "security",
+        "linkedTicketId": "story_ede6d4d3393283f0",
+        "inputEvidenceIds": [
+          "evidence_ce02a3f1034d32e5"
+        ],
+        "status": "pending_role",
+        "decisionId": null,
+        "decisionClass": null
+      },
+      {
+        "id": "gate_016a3af397b2100f",
+        "type": "security_license",
+        "ownerRole": "security",
+        "linkedTicketId": "story_0d5e15dc49f40f2d",
+        "inputEvidenceIds": [
+          "evidence_37114986634bd05e"
+        ],
+        "status": "pending_role",
+        "decisionId": null,
+        "decisionClass": null
+      },
+      {
+        "id": "gate_1621e1f49b7002ad",
+        "type": "security_license",
+        "ownerRole": "security",
+        "linkedTicketId": "story_8c9e42aaea3f38b8",
+        "inputEvidenceIds": [
+          "evidence_2a51963ff43cd4fa"
+        ],
+        "status": "accepted",
+        "decisionId": "decision_f4885186263b6695",
+        "decisionClass": "role_decision"
+      }
+    ],
+    "ticketListReadback": {
+      "ok": true,
+      "method": "aos.ticket.list",
+      "schemaVersion": "aos.ticket.list.v1",
+      "rowGrain": "story",
+      "returnedCount": 4,
+      "storyIds": [
+        "story_8c9e42aaea3f38b8",
+        "story_0d5e15dc49f40f2d",
+        "story_ede6d4d3393283f0",
+        "story_10db64b0554c3642"
+      ],
+      "rawRowsStored": false
+    },
+    "selectedStoryAuditReadback": {
+      "ok": true,
+      "method": "aos.audit.query",
+      "targetId": "story_10db64b0554c3642",
+      "returnedCount": 1,
+      "hasMore": false,
+      "detailsRedacted": true,
+      "rawDetailsStored": false
+    },
+    "auditEventIds": [],
+    "redactedDetailsOnly": true,
+    "rawRequestBodyStored": false,
+    "rawDbRowsStored": false
+  },
+  "localProfileRootPrivacyReadback": {
+    "ok": true,
+    "profileRootClass": "os_temp_route_owned_local_activation_root",
+    "rootDigest": "51911e9eb77f924f447573b95a68ddbe0006f10719f48c5adb84340712a085ca",
+    "marker": {
+      "ok": true,
+      "markerFile": ".tcrn-aos-phase1-root",
+      "markerDigest": "b998b52fa2a1c91bb0903e63d777bf222a55b2ac748f29a698376902a77a8432",
+      "markerKeySet": [
+        "markerVersion",
+        "purpose",
+        "rootDigest",
+        "route"
+      ],
+      "markerVersion": "phase4-d2-runtime-profile.v1",
+      "markerPurpose": "d2-local-dogfood-runtime-profile-activation",
+      "routeMatches": true,
+      "rootDigest": "fded235ff9fa2a56b5c85050ded69b5d325e2b230137afcfbea4a5a791ed0a2e",
+      "rootDigestMatches": true,
+      "rawPathRecorded": false
+    },
+    "databaseFileName": "aos-d2-local-runtime-profile.sqlite",
+    "databaseDirectChildOfRoot": true,
+    "runtimeTransportOpened": true,
+    "retainedForOwnerAuthorizedLocalD2Use": true,
+    "rawPathRecorded": false,
+    "rawDbDumpRecorded": false,
+    "committedDbArtifacts": false,
+    "cleanupAttempted": false,
+    "cleanupDisposition": "d2_local_activation_root_intentionally_retained_for_owner_authorized_local_use"
+  },
+  "methodAuthorityBoundaryReadback": {
+    "ok": true,
+    "acceptedMethodsExercised": [
+      "aos.assignment.claim",
+      "aos.assignment.update",
+      "aos.run.summary.create",
+      "aos.evidence.link",
+      "aos.gate.decision.record",
+      "aos.ticket.list",
+      "aos.audit.query",
+      "aos.policy.read"
+    ],
+    "negativeMethods": [
+      {
+        "method": "aos.work_index.drill_through.read",
+        "expectedReason": "transport_method_outside_mvp_allowlist",
+        "reason": "transport_method_outside_mvp_allowlist",
+        "rejected": true
+      },
+      {
+        "method": "aos.gate.status.update",
+        "expectedReason": "transport_method_unknown",
+        "reason": "transport_method_unknown",
+        "rejected": true
+      },
+      {
+        "method": "aos.assignment.create",
+        "expectedReason": "transport_method_unknown",
+        "reason": "transport_method_unknown",
+        "rejected": true
+      },
+      {
+        "method": "aos.resource.record.propose",
+        "expectedReason": "transport_method_outside_mvp_allowlist",
+        "reason": "transport_method_outside_mvp_allowlist",
+        "rejected": true
+      },
+      {
+        "method": "aos.documentation.index.read",
+        "expectedReason": "transport_method_outside_mvp_allowlist",
+        "reason": "transport_method_outside_mvp_allowlist",
+        "rejected": true
+      },
+      {
+        "method": "aos.gateway.dump",
+        "expectedReason": "transport_method_unknown",
+        "reason": "transport_method_unknown",
+        "rejected": true
+      }
+    ],
+    "broadGatewayExposureUsed": false,
+    "workIndexUsed": false,
+    "phase4ItemImplementationPerformed": false,
+    "clientSuppliedAuthorityTrusted": false,
+    "liveDispatchAuthorized": false,
+    "ownerIntentExecutionAuthorized": false,
+    "registryMutationPerformed": false
+  },
+  "d4FrictionCaptureReadback_or_none": {
+    "friction": "none",
+    "reason": "D3 workload creation completed using existing D2 local profile, store, and MCP method surfaces without a route-blocking product friction.",
+    "d4FrictionTicketsCreated": false,
+    "p0P1FrictionTicketIdsInvented": false
+  },
+  "activeHookDivergenceBoundaryReadback": {
+    "parityReceiptPath": "TCRN Workflow/.context/platform/plans/evidence/2026-07-05-phase4-friction-workflow-thinning-entry/phase4-hook-runtime-parity-readback.json",
+    "cmpExit": 1,
+    "byteIdentical": false,
+    "parityProven": false,
+    "carriedIntoStoryId": "story_10db64b0554c3642",
+    "hookBehaviorReliedOn": false,
+    "hookMappingImplemented": false,
+    "hookRetirementPerformed": false,
+    "activeCodexMutation": false,
+    "maintainedHookSourceMutation": false
+  },
+  "validation_readbacks": {
+    "ok": true,
+    "noCommittedDbArtifacts": true,
+    "databaseDirectChild": true,
+    "jsonReceiptParseAttempted": true,
+    "jsonReceiptParseOk": true,
+    "workflowMutationPerformed": false,
+    "designSystemMutationPerformed": false,
+    "tmsMutationPerformed": false
+  },
+  "privacyNoOverclaimScan": {
+    "ok": true,
+    "findings": [],
+    "scannedSurface": "d3_workload_creation_receipt_payload",
+    "rawPathRecorded": false,
+    "rawDbDumpRecorded": false,
+    "rawClientEnvStored": false,
+    "privateEvidencePayloadStored": false,
+    "secretsOrPiiStored": false,
+    "broadCodexSecurityPluginScanClaimed": false,
+    "noOverclaimFlags": {
+      "localD2RuntimeProfileDbUsed": true,
+      "d3RealDogfoodWorkloadCreated": true,
+      "productRepoEvidenceMutationOnly": true,
+      "workflowMutation": false,
+      "designSystemMutation": false,
+      "tmsMutation": false,
+      "activeCodexMutation": false,
+      "maintainedHookSourceMutation": false,
+      "hookBehaviorReliance": false,
+      "hookMappingImplemented": false,
+      "hookRetirementPerformed": false,
+      "activeParityClaimed": false,
+      "phase4StoryImplementationPerformed": false,
+      "pilotVaultImportImplemented": false,
+      "registryMutationPerformed": false,
+      "d4FrictionTicketsCreated": false,
+      "d5StatusMigrationPerformed": false,
+      "durableRuntimeDbActivation": false,
+      "defaultRuntimeDbActivation": false,
+      "remoteRuntimeActivation": false,
+      "dogfoodRuntimeReadinessClaimed": false,
+      "productReadinessClaimed": false,
+      "phase3AcceptanceClaimed": false,
+      "phase4CloseoutClaimed": false,
+      "ownerFacingSurfaceCreated": false,
+      "ownerAcceptanceClaimed": false,
+      "productAcceptanceClaimed": false,
+      "releasePublicationPushClaimed": false,
+      "broadCodexSecurityPluginScanClaimed": false
+    }
+  }
+}
