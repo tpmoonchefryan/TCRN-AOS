@@ -1,0 +1,86 @@
+{
+  "receiptName": "api-method-boundary-proof.json",
+  "ok": true,
+  "route": "route_tcrn_aos_phase3_dogfood_ilya_frontend_readback_implementation_after_elara_readiness_cfa889d_4643e4c_20260705",
+  "command": "pnpm --dir TCRN-AOS phase3:frontend-readback-proof",
+  "generatedAt": "2026-07-06T06:59:51.030Z",
+  "sourceHead": "6b2b8cd70f2b2f6f1627f604dad892cdee0c21fe",
+  "sourceContentDigest": "42f0c914c5a3522282a83f7caebd36f14baa1ad45a5ba102635f8e0a0f3fc4a1",
+  "sourceFiles": [
+    {
+      "file": "package.json",
+      "digest": "39c1a8ef24bce0b45e8482c9f570ac2774db2f0f87d9625e44aa68576db61f67"
+    },
+    {
+      "file": "apps/web/src/app.tsx",
+      "digest": "425dd61b14747568fd396aceca451b28b8142deb1d3a40af5adfb0ce6298a03d"
+    },
+    {
+      "file": "apps/web/src/data.ts",
+      "digest": "418d72c17427f49f883cb84db32fefe3fd22e4c11d893f76c6bd60a25739f5f8"
+    },
+    {
+      "file": "apps/web/src/phase3-dogfood-readback.tsx",
+      "digest": "93145f9cbc0d14e106977dcdb5341a795698ed6a74636f9c2aa96bd64f48d937"
+    },
+    {
+      "file": "apps/api/test/frontend-readback-route.test.mjs",
+      "digest": "000516b19f258211925c131590916b1b32311ad243916b2bc016c53b002b78bb"
+    },
+    {
+      "file": "scripts/phase3-frontend-readback-proof.mjs",
+      "digest": "6bff4ae6e907d5b7d56ff91080762f6c851113fde60f63039584bfe36b9f4f61"
+    }
+  ],
+  "workflowBasis": "4643e4c27aafdf294e1960cb2a64588f5091d53d",
+  "actorProof": {
+    "browserClientIsAuthority": false,
+    "trustedServerConfigurationOnly": true,
+    "writesExposed": false
+  },
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "productRepoMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "durableRuntimeDbActivation": false,
+    "defaultRuntimeDbActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "retainedPreviewRuntimeActivation": false,
+    "retainedPreviewFreshnessClaimed": false,
+    "ownerVisibleRuntimeDbActivated": false,
+    "liveDispatchAuthorized": false,
+    "ownerIntentExecutionAuthorized": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "finalMvpAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false,
+    "phase3CloseoutClaimed": false,
+    "parentGoalCompletionClaimed": false
+  },
+  "browserApiRequests": [
+    "/api/work/readback/tickets?limit=1",
+    "/api/work/readback/policy",
+    "/api/work/readback/audit?targetId=story_6a8345aeed11e98d&limit=5",
+    "/api/work/readback/tickets?limit=1&cursor=eyJzY2hlbWFWZXJzaW9uIjoiYW9zLnRpY2tldC5saXN0LnYxIiwicm93R3JhaW4iOiJzdG9yeSIsInNvcnRWZXJzaW9uIjoidXBkYXRlZC1kZXNjLXN0b3J5LWlkLWFzYy12MSIsImZpbHRlckRpZ2VzdCI6IjQ0MTM2ZmEzNTViMzY3OGExMTQ2YWQxNmY3ZTg2NDllOTRmYjRmYzIxZmU3N2U4MzEwYzA2MGY2MWNhYWZmOGEiLCJsaW1pdCI6MSwibGFzdCI6eyJ1cGRhdGVkQXQiOiIyMDI2LTA3LTA2VDA2OjU5OjQ0LjA3M1oiLCJzdG9yeUlkIjoic3RvcnlfNmE4MzQ1YWVlZDExZTk4ZCJ9fQ",
+    "/api/work/readback/audit?targetId=story_70ba04a9a97c3b47&limit=5",
+    "/api/work/readback/tickets?limit=10",
+    "/api/work/readback/tickets?storyId=story_6a8345aeed11e98d&limit=10",
+    "/api/work/readback/tickets?storyId=story_6a8345aeed11e98d&status=blocked&limit=10"
+  ],
+  "allowedBrowserApiPrefixes": [
+    "/api/work/readback/tickets",
+    "/api/work/readback/audit",
+    "/api/work/readback/policy"
+  ],
+  "forbiddenBrowserApiRequests": [],
+  "genericMcpEndpointStatus": 404,
+  "genericGatewayEndpointStatus": 404,
+  "postTicketsStatus": 405,
+  "methodDispatchQueryReason": "unsupported_filter",
+  "workIndexFamilyRejected": true,
+  "writeAliasRejected": true,
+  "docsFamilyRejected": true
+}
