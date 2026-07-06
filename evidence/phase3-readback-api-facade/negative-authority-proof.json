@@ -1,0 +1,122 @@
+{
+  "receiptName": "negative-authority-proof.json",
+  "ok": true,
+  "route": "route_tcrn_aos_phase3_dogfood_ilya_readback_api_facade_implementation_after_calder_success_4643e4c_ecc289d_20260705",
+  "command": "pnpm --dir TCRN-AOS phase3:readback-api-proof",
+  "generatedAt": "2026-07-06T06:25:38.920Z",
+  "sourceHead": "96ea618fb27bf0218460bc736967fd2cb009a03a",
+  "sourceContentDigest": "65dbc128b98fb1fec8f106aebe3fc87f5f16a71e8dbe63b49e95dc2901b54cdd",
+  "sourceFiles": [
+    {
+      "file": "package.json",
+      "digest": "40f71072ca5258b70df4470387278248ea609185d34b423f336379f0bac0fe3d"
+    },
+    {
+      "file": "apps/api/src/server.ts",
+      "digest": "468073c835fabeff87d9239816c3c5db78a6c96eed828377ee22e4a21f92d8db"
+    },
+    {
+      "file": "apps/api/src/work-readback.ts",
+      "digest": "17621419b6f182fade294a7a6d0b60516cd2e565a9011d32a0704a1a51c66b04"
+    },
+    {
+      "file": "apps/api/test/readback-facade.test.mjs",
+      "digest": "0dacdfc5447d6810abe03fb85742357a03170818baf6c561baaeccbffc307683"
+    },
+    {
+      "file": "scripts/phase3-readback-api-proof.mjs",
+      "digest": "ff887d3b182108e04e24b9e846077d12bca0dbf1b3f79deb6055fda0c4e4dd04"
+    }
+  ],
+  "workflowBasis": "4643e4c27aafdf294e1960cb2a64588f5091d53d",
+  "actorProof": {
+    "browserClientIsAuthority": false,
+    "trustedServerConfigurationOnly": true,
+    "writesExposed": false
+  },
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "productRepoMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "durableRuntimeDbActivation": false,
+    "defaultRuntimeDbActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "retainedPreviewRuntimeActivation": false,
+    "retainedPreviewFreshnessClaimed": false,
+    "ownerVisibleRuntimeDbActivated": false,
+    "liveDispatchAuthorized": false,
+    "ownerIntentExecutionAuthorized": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "finalMvpAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false,
+    "phase3CloseoutClaimed": false,
+    "parentGoalCompletionClaimed": false
+  },
+  "getOnly": true,
+  "postPutPatchDeleteRejected": true,
+  "genericMcpGatewayFacadeAbsent": true,
+  "readbackMethodDispatcherAbsent": true,
+  "clientSuppliedAuthorityTrusted": false,
+  "rejectedAuthorityKeys": [
+    "employeeId",
+    "authorization"
+  ],
+  "blockedFamilies": [
+    "aos.work_index.*",
+    "aos.gate.status.update",
+    "docs/resource/release/dependency/knowledge",
+    "unknown gateway-like methods",
+    "unaccepted writes"
+  ],
+  "negativeResponses": [
+    {
+      "name": "post_tickets",
+      "status": 405,
+      "reason": "method_not_allowed"
+    },
+    {
+      "name": "api_mcp",
+      "status": 404,
+      "reason": "not_found"
+    },
+    {
+      "name": "api_gateway",
+      "status": 404,
+      "reason": "not_found"
+    },
+    {
+      "name": "work_index_path",
+      "status": 404,
+      "reason": "not_found"
+    },
+    {
+      "name": "work_index_query",
+      "status": 400,
+      "reason": "unsupported_filter"
+    },
+    {
+      "name": "docs_family_query",
+      "status": 400,
+      "reason": "unsupported_filter"
+    },
+    {
+      "name": "gate_status_update_query",
+      "status": 400,
+      "reason": "unsupported_filter"
+    },
+    {
+      "name": "ticket_client_authority",
+      "status": 400,
+      "reason": "client_authority_denied"
+    },
+    {
+      "name": "audit_client_authority",
+      "status": 400,
+      "reason": "client_authority_denied"
+    }
+  ]
+}
