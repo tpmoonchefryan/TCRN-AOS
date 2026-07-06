@@ -1,7 +1,7 @@
 import { stdin as processStdin, stdout as processStdout } from "node:process";
 import { createInterface } from "node:readline";
 import { homedir } from "node:os";
-import { existsSync, lstatSync, realpathSync } from "node:fs";
+import { existsSync, lstatSync, readFileSync, realpathSync } from "node:fs";
 import { basename, dirname, parse, relative, resolve, sep } from "node:path";
 import {
   AosStore,
@@ -16,7 +16,7 @@ import {
   type AuditEvent
 } from "../../domain/src/index.js";
 import { AosSqliteRepository } from "../../db/src/index.js";
-import { assertRouteOwnedSqliteRoot } from "../../db/src/index.js";
+import { assertRouteOwnedSqliteRoot, sha256 as sqliteSha256 } from "../../db/src/index.js";
 import { McpGateway, type McpResponse } from "../../mcp-gateway/src/index.js";
 
 export const transportMvpMethods = [
@@ -56,6 +56,11 @@ export interface AosMcpRuntimeConfig {
   repoRoot?: string;
   migrationsDir?: string;
   routeOwnedMarkerFile?: string;
+  runtimeProfileMarker?: {
+    route: string;
+    markerVersion: string;
+    purpose?: string;
+  };
   auditPageLimit?: number;
   maxResponseBytes?: number;
 }
@@ -405,6 +410,7 @@ function validateRuntimeDatabaseConfig(config: AosMcpRuntimeConfig): { databaseP
   const markerFile = config.routeOwnedMarkerFile ?? ".tcrn-aos-phase1-root";
   assertExistingPathSegmentsHaveNoSymlink(databaseRoot, "transport_runtime_database_root_symlink_ancestor_denied");
   const rootReadback = assertRouteOwnedSqliteRoot(databaseRoot, repoRoot, markerFile);
+  validateRuntimeProfileMarker(databaseRoot, markerFile, config.runtimeProfileMarker);
   const relativeToRoot = relative(databaseRoot, databasePath);
   if (relativeToRoot.startsWith("..") || relativeToRoot === "" || relativeToRoot.split(sep).includes("..")) {
     throw new Error("transport_runtime_database_path_outside_route_owned_root");
@@ -424,6 +430,54 @@ function validateRuntimeDatabaseConfig(config: AosMcpRuntimeConfig): { databaseP
     throw new Error("transport_runtime_database_canonical_path_outside_route_owned_root");
   }
   return { databasePath, rootDigest: rootReadback.rootDigest };
+}
+
+function validateRuntimeProfileMarker(
+  databaseRoot: string,
+  markerFile: string,
+  expected: AosMcpRuntimeConfig["runtimeProfileMarker"] | undefined
+): void {
+  const markerText = readFileSync(resolve(databaseRoot, markerFile), "utf8");
+  const parsed = parseMarkerJson(markerText);
+  if (!expected) {
+    if (parsed && declaresRuntimeProfileMarker(parsed)) {
+      throw new Error("transport_runtime_profile_marker_expectation_required");
+    }
+    return;
+  }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new Error("transport_runtime_profile_marker_invalid");
+  }
+  const marker = parsed as Record<string, unknown>;
+  const expectedRootDigest = sqliteSha256(resolve(databaseRoot));
+  const purposeMatches = expected.purpose === undefined || marker.purpose === expected.purpose;
+  if (
+    marker.route !== expected.route ||
+    marker.markerVersion !== expected.markerVersion ||
+    marker.rootDigest !== expectedRootDigest ||
+    !purposeMatches
+  ) {
+    throw new Error("transport_runtime_profile_marker_stale_or_mismatched");
+  }
+}
+
+function parseMarkerJson(markerText: string): unknown | null {
+  try {
+    return JSON.parse(markerText);
+  } catch {
+    return null;
+  }
+}
+
+function declaresRuntimeProfileMarker(value: unknown): boolean {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return false;
+  }
+  const marker = value as Record<string, unknown>;
+  return marker.route !== undefined ||
+    marker.markerVersion !== undefined ||
+    marker.rootDigest !== undefined ||
+    marker.purpose !== undefined;
 }
 
 function assertExistingPathSegmentsHaveNoSymlink(targetPath: string, reason: string): void {

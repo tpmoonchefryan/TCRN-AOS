@@ -559,6 +559,7 @@ async function startClientSession(dbPath, sessionActor, overrides = {}) {
     databaseRoot: dirname(dbPath),
     repoRoot,
     routeOwnedMarkerFile: markerFile,
+    runtimeProfileMarker: runtimeProfileMarkerExpectation(),
     migrationsDir,
     auditPageLimit: 5,
     maxResponseBytes: 16_384,
@@ -603,6 +604,7 @@ async function startClientSession(dbPath, sessionActor, overrides = {}) {
 }
 
 function proveRuntimeRootPath(runtimeRoot, dbPath, rootReadback) {
+  const staleMarkerReadback = proveStaleMarkerRejected();
   const cases = {
     routeOwnedPositive: true,
     canonicalDirectChild: dirname(dbPath) === runtimeRoot,
@@ -645,7 +647,7 @@ function proveRuntimeRootPath(runtimeRoot, dbPath, rootReadback) {
       migrationsDir
     }, "transport_runtime_wrong_sibling_path_denied"),
     missingMarkerRejected: proveMissingMarkerRejected(),
-    staleMarkerRejected: proveStaleMarkerRejected(),
+    staleMarkerRejected: staleMarkerReadback.rejected === true && staleMarkerReadback.databaseFileCreated === false,
     symlinkRootRejected: proveSymlinkRootRejected(),
     symlinkAncestorRejected: proveSymlinkAncestorRejected(),
     dbFileSymlinkRejected: proveDbFileSymlinkRejected(),
@@ -655,6 +657,7 @@ function proveRuntimeRootPath(runtimeRoot, dbPath, rootReadback) {
       databaseRoot: runtimeRoot,
       repoRoot,
       routeOwnedMarkerFile: markerFile,
+      runtimeProfileMarker: runtimeProfileMarkerExpectation(),
       migrationsDir
     }, "transport_runtime_database_nested_path_denied"),
     outsideDbPathRejected: expectCreateRuntimeReject({
@@ -663,6 +666,7 @@ function proveRuntimeRootPath(runtimeRoot, dbPath, rootReadback) {
       databaseRoot: runtimeRoot,
       repoRoot,
       routeOwnedMarkerFile: markerFile,
+      runtimeProfileMarker: runtimeProfileMarkerExpectation(),
       migrationsDir
     }, "transport_runtime_database_path_outside_route_owned_root")
   };
@@ -670,6 +674,7 @@ function proveRuntimeRootPath(runtimeRoot, dbPath, rootReadback) {
     ok: Object.values(cases).every(Boolean),
     ...cases,
     canonicalDatabasePathInsideRouteOwnedRoot: true,
+    staleMarkerRuntimeRejection: staleMarkerReadback,
     rawPathRecorded: false,
     committedDbArtifact: false,
     activationClaimed: false,
@@ -848,6 +853,7 @@ function runClaimWorker() {
     databaseRoot: dirname(payload.dbPath),
     repoRoot,
     routeOwnedMarkerFile: markerFile,
+    runtimeProfileMarker: runtimeProfileMarkerExpectation(),
     migrationsDir,
     maxResponseBytes: 16_384
   });
@@ -1095,15 +1101,12 @@ function profileMarkerContent(root) {
   };
 }
 
-function profileMarkerIsFresh(root) {
-  try {
-    const marker = JSON.parse(readFileSync(join(root, markerFile), "utf8"));
-    return marker.route === route &&
-      marker.markerVersion === "phase3-runtime-profile.v1" &&
-      marker.rootDigest === sha256(resolve(root));
-  } catch {
-    return false;
-  }
+function runtimeProfileMarkerExpectation() {
+  return {
+    route,
+    markerVersion: "phase3-runtime-profile.v1",
+    purpose: "route-owned-temp-runtime-profile-proof"
+  };
 }
 
 function proveMissingMarkerRejected() {
@@ -1124,10 +1127,25 @@ function proveMissingMarkerRejected() {
 
 function proveStaleMarkerRejected() {
   const root = mkdtempSync(join(realpathSync(tmpdir()), "tcrn-aos-phase3-runtime-stale-marker-"));
+  const dbPath = join(root, "runtime.sqlite");
   try {
     writeProfileMarker(root, { route: "stale-route", markerVersion: "phase3-runtime-profile.v1", rootDigest: "stale" });
-    const fresh = profileMarkerIsFresh(root);
-    return fresh === false;
+    const rejection = expectCreateRuntimeRejectReadback({
+      actor,
+      databasePath: dbPath,
+      databaseRoot: root,
+      repoRoot,
+      routeOwnedMarkerFile: markerFile,
+      runtimeProfileMarker: runtimeProfileMarkerExpectation(),
+      migrationsDir
+    }, "transport_runtime_profile_marker_stale_or_mismatched");
+    return {
+      rejected: rejection.rejected,
+      reason: rejection.reason,
+      runtimeValidationPath: "createRuntimeTransport",
+      localFreshnessHelperOnly: false,
+      databaseFileCreated: existsSync(dbPath)
+    };
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -1191,6 +1209,7 @@ function proveDbFileSymlinkRejected() {
       databaseRoot: root,
       repoRoot,
       routeOwnedMarkerFile: markerFile,
+      runtimeProfileMarker: runtimeProfileMarkerExpectation(),
       migrationsDir
     }, "transport_runtime_database_file_symlink_denied");
   } finally {
@@ -1200,12 +1219,17 @@ function proveDbFileSymlinkRejected() {
 }
 
 function expectCreateRuntimeReject(config, expectedReason) {
+  return expectCreateRuntimeRejectReadback(config, expectedReason).rejected;
+}
+
+function expectCreateRuntimeRejectReadback(config, expectedReason) {
   try {
     const runtime = createRuntimeTransport(config);
     runtime.close();
-    return false;
+    return { rejected: false, reason: null, expectedReason };
   } catch (error) {
-    return error instanceof Error && error.message.includes(expectedReason);
+    const reason = error instanceof Error ? error.message : String(error);
+    return { rejected: reason.includes(expectedReason), reason, expectedReason };
   }
 }
 

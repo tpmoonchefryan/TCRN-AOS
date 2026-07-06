@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, realpath, rm, symlink, writeFile } from "node:fs/promises";
+import { access, mkdir, mkdtemp, realpath, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -624,6 +624,37 @@ test("Phase 2 runtime transport rejects DB file symlinks and symlink ancestors b
     }), /transport_runtime_database_root_symlink_ancestor_denied/);
   } finally {
     await rm(ancestorParent, { recursive: true, force: true });
+  }
+});
+
+test("Phase 3 runtime transport rejects stale runtime profile markers before SQLite opens", async () => {
+  const markerFile = ".tcrn-aos-phase1-root";
+  const safeTmp = await realpath(tmpdir());
+  const root = await mkdtemp(join(safeTmp, "tcrn-aos-phase3-runtime-stale-marker-"));
+  const dbPath = join(root, "phase3-runtime.sqlite");
+  const expectedMarker = {
+    route: "phase3-runtime-profile-test-route",
+    markerVersion: "phase3-runtime-profile.v1",
+    purpose: "route-owned-temp-runtime-profile-proof"
+  };
+  await writeFile(join(root, markerFile), JSON.stringify({
+    ...expectedMarker,
+    route: "stale-route",
+    rootDigest: "stale-root-digest"
+  }), "utf8");
+  try {
+    assert.throws(() => createRuntimeTransport({
+      actor,
+      databasePath: dbPath,
+      databaseRoot: root,
+      repoRoot,
+      migrationsDir,
+      routeOwnedMarkerFile: markerFile,
+      runtimeProfileMarker: expectedMarker
+    }), /transport_runtime_profile_marker_stale_or_mismatched/);
+    await assert.rejects(access(dbPath), /ENOENT/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
   }
 });
 
