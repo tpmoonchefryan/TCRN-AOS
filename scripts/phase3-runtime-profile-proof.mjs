@@ -19,30 +19,50 @@ import {
   assertRouteOwnedSqliteRoot,
   sha256
 } from "../dist/packages/db/src/index.js";
+import { createWorkReadbackApiResponse } from "../dist/apps/api/src/work-readback.js";
+import { renderAosShellHtml } from "../dist/apps/web/src/app.js";
 import { AosStore, createDefaultSeed } from "../dist/packages/domain/src/index.js";
 import { createRuntimeTransport, transportMvpMethods } from "../dist/packages/mcp-server/src/index.js";
 
-const route = "route_tcrn_aos_phase3_dogfood_ilya_runtime_profile_implementation_proof_after_minerva_status_sync_f5dc8b1_6deeb08_20260705";
-const workflowBasis = "f5dc8b1c57ea07ea89d40043be420cd349e90d22";
+const defaultRoute = "route_tcrn_aos_phase3_dogfood_ilya_runtime_profile_implementation_proof_after_minerva_status_sync_f5dc8b1_6deeb08_20260705";
+const defaultWorkflowBasis = "f5dc8b1c57ea07ea89d40043be420cd349e90d22";
+const proofMode = process.env.TCRN_AOS_PHASE3_RUNTIME_PROFILE_MODE ?? "runtime-profile";
+const isDogfoodExecutionProof = proofMode === "dogfood-execution-runtime-profile";
+const route = process.env.TCRN_AOS_PHASE3_RUNTIME_PROFILE_ROUTE ?? defaultRoute;
+const workflowBasis = process.env.TCRN_AOS_PHASE3_RUNTIME_PROFILE_WORKFLOW_BASIS ?? defaultWorkflowBasis;
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
-const evidenceRoot = join(repoRoot, "evidence/phase3-runtime-profile-dogfood");
+const evidenceRoot = join(repoRoot, process.env.TCRN_AOS_PHASE3_RUNTIME_PROFILE_EVIDENCE_DIR ?? "evidence/phase3-runtime-profile-dogfood");
 const migrationsDir = join(repoRoot, "packages/db/migrations/sqlite");
 const serverEntrypoint = join(repoRoot, "dist/packages/mcp-server/src/stdio-server.js");
-const command = "pnpm --dir TCRN-AOS phase3:runtime-profile-proof";
+const command = process.env.TCRN_AOS_PHASE3_RUNTIME_PROFILE_COMMAND ?? "pnpm --dir TCRN-AOS phase3:runtime-profile-proof";
 const markerFile = ".tcrn-aos-phase1-root";
-const methodsUnderReview = [
+const markerPurpose = isDogfoodExecutionProof
+  ? "route-owned-temp-dogfood-execution-runtime-profile-proof"
+  : "route-owned-temp-runtime-profile-proof";
+const runtimeProfileMethodsUnderReview = [
   "aos.assignment.claim",
   "aos.assignment.update",
   "aos.gate.decision.record",
   "aos.ticket.list",
   "aos.audit.query"
 ];
+const dogfoodExecutionMethodsUnderReview = [
+  "aos.assignment.claim",
+  "aos.assignment.update",
+  "aos.run.summary.create",
+  "aos.evidence.link",
+  "aos.gate.decision.record",
+  "aos.ticket.list",
+  "aos.audit.query",
+  "aos.policy.read"
+];
+const methodsUnderReview = isDogfoodExecutionProof ? dogfoodExecutionMethodsUnderReview : runtimeProfileMethodsUnderReview;
 const selectedWriteMethods = [
   "aos.assignment.claim",
   "aos.assignment.update",
   "aos.gate.decision.record"
 ];
-const receiptInventory = [
+const baseReceiptInventory = [
   "source-provenance.json",
   "runtime-root-path-proof.json",
   "runtime-config-actor-binding-proof.json",
@@ -56,7 +76,18 @@ const receiptInventory = [
   "privacy-no-overclaim-scan.json",
   "verify-fast-readback.json"
 ];
-const sourceFiles = [
+const dogfoodExecutionReceiptInventory = [
+  "run-evidence-gate-traceability-proof.json",
+  "ticket-list-frontend-readback-proof.json",
+  "selected-story-audit-proof.json"
+];
+const receiptInventory = isDogfoodExecutionProof
+  ? [...baseReceiptInventory, ...dogfoodExecutionReceiptInventory]
+  : baseReceiptInventory;
+const summaryReceiptName = isDogfoodExecutionProof
+  ? "phase3-dogfood-execution-runtime-profile-proof-summary.json"
+  : "runtime-profile-proof-summary.json";
+const baseSourceFiles = [
   "package.json",
   "packages/domain/src/store.ts",
   "packages/db/src/sqlite-repository.ts",
@@ -66,6 +97,14 @@ const sourceFiles = [
   "packages/mcp-server/test/stdio-transport.test.mjs",
   "scripts/phase3-runtime-profile-proof.mjs"
 ];
+const dogfoodExecutionSourceFiles = [
+  "apps/api/src/work-readback.ts",
+  "apps/web/src/app.tsx",
+  "apps/web/src/phase3-dogfood-readback.tsx"
+];
+const sourceFiles = isDogfoodExecutionProof
+  ? [...baseSourceFiles, ...dogfoodExecutionSourceFiles]
+  : baseSourceFiles;
 const noOverclaimFlags = {
   productRepoMutationOnly: true,
   workflowMutation: false,
@@ -228,6 +267,24 @@ async function runProof() {
         initiativeId: seed.initiativeId,
         epicId: seed.epicId
       });
+      const run = await main.send("aos.run.summary.create", {
+        assignmentId,
+        status: "success",
+        startedAt: "2026-07-06T09:00:00.000Z",
+        endedAt: "2026-07-06T09:02:00.000Z",
+        readback: "metadata-only Phase 3 dogfood execution runtime profile proof",
+        outputSummary: "Bounded local runtime profile persisted AgentRun",
+        idempotencyKey: "phase3-dogfood-execution-run"
+      });
+      const runReplay = await main.send("aos.run.summary.create", {
+        assignmentId,
+        status: "success",
+        startedAt: "2026-07-06T09:00:00.000Z",
+        endedAt: "2026-07-06T09:02:00.000Z",
+        readback: "metadata-only Phase 3 dogfood execution runtime profile proof",
+        outputSummary: "Bounded local runtime profile persisted AgentRun",
+        idempotencyKey: "phase3-dogfood-execution-run"
+      });
       const evidence = await main.send("aos.evidence.link", {
         type: "artifact_id",
         target: "phase3-runtime-profile-participation-proof",
@@ -258,6 +315,8 @@ async function runProof() {
       auditSession = await startClientSession(dbPath, actor);
       const audit = await auditSession.send("aos.audit.query", { limit: 5 });
       const auditNext = await auditSession.send("aos.audit.query", { limit: 2, cursor: responsePayload(audit).nextCursor ?? undefined });
+      const finalTicketReadback = await auditSession.send("aos.ticket.list", { storyId: seed.storyId, limit: 1 });
+      const selectedStoryAuditReadback = await auditSession.send("aos.audit.query", { targetId: seed.storyId, limit: 5 });
       const clientAuthorityDenied = await auditSession.send("aos.assignment.claim", {
         actor,
         authorization: `Bearer ${forbiddenRawValues[0]}`,
@@ -291,11 +350,15 @@ async function runProof() {
         claim,
         stateReplay,
         update,
+        run,
+        runReplay,
         evidence,
         gate,
         staleGate,
         audit,
         auditNext,
+        finalTicketReadback,
+        selectedStoryAuditReadback,
         clientAuthorityDenied,
         observerWriteDenied,
         ...negativeMethods.map((item) => item.response)
@@ -337,6 +400,8 @@ async function runProof() {
         updateStatus: responsePayload(update).result.assignment.status,
         gateDecisionStatus: responsePayload(gate).result.gate.status,
         staleGateRaceReason: responseReason(staleGate),
+        persistedAgentRunMethodUsed: responsePayload(run).method === "aos.run.summary.create",
+        runReplayStatus: responsePayload(runReplay).status,
         liveDispatchAuthorized: false,
         ownerIntentExecutionAuthorized: false,
         runtimeActivationClaimed: false
@@ -375,6 +440,21 @@ async function runProof() {
         rawAuditDetailsReturned: false,
         rawDbRowsReturned: false
       }));
+
+      if (isDogfoodExecutionProof) {
+        writtenReceipts.push(writeReceipt("run-evidence-gate-traceability-proof.json", source, rootReadback, proveRunEvidenceGateTraceability(dbPath, seed, {
+          claim,
+          update,
+          run,
+          runReplay,
+          evidence,
+          gate,
+          staleGate,
+          finalTicketReadback
+        })));
+        writtenReceipts.push(writeReceipt("ticket-list-frontend-readback-proof.json", source, rootReadback, proveTicketListFrontendReadback(dbPath, seed)));
+        writtenReceipts.push(writeReceipt("selected-story-audit-proof.json", source, rootReadback, proveSelectedStoryAudit(dbPath, seed, selectedStoryAuditReadback)));
+      }
 
       writtenReceipts.push(writeReceipt("response-budget-cursor-replay-idempotency-proof.json", source, rootReadback, {
         ok: responseBudget.ok &&
@@ -437,7 +517,7 @@ async function runProof() {
 
   const childReadbacks = readReceipts(receiptInventory);
   const summary = {
-    receiptName: "runtime-profile-proof-summary.json",
+    receiptName: summaryReceiptName,
     ok: childReadbacks.every((receipt) => receipt.ok === true) &&
       receiptInventory.length === childReadbacks.length,
     route,
@@ -457,9 +537,9 @@ async function runProof() {
     noOverclaimFlags,
     cleanupReadback
   };
-  writeFileSync(join(evidenceRoot, "runtime-profile-proof-summary.json"), `${JSON.stringify(summary, null, 2)}\n`, "utf8");
+  writeFileSync(join(evidenceRoot, summaryReceiptName), `${JSON.stringify(summary, null, 2)}\n`, "utf8");
   assert.equal(summary.ok, true);
-  console.log(JSON.stringify({ ok: true, receiptInventory: ["runtime-profile-proof-summary.json", ...receiptInventory] }, null, 2));
+  console.log(JSON.stringify({ ok: true, receiptInventory: [summaryReceiptName, ...receiptInventory] }, null, 2));
 }
 
 function seedRuntimeProfileDatabase(dbPath, options = {}) {
@@ -743,6 +823,205 @@ function proveOneInitiativeOneEpicBinding(dbPath, seed, pages) {
     componentGapStoryPresent: stories.some((story) => story.id === seed.componentGapStoryId),
     ticketListRowsBoundToInitiative: rowText.includes(seed.initiativeId),
     ticketListRowsBoundToEpic: rowText.includes(seed.epicId),
+    rawDbRowsReturned: false
+  };
+}
+
+function proveRunEvidenceGateTraceability(dbPath, seed, responses) {
+  const repository = new AosSqliteRepository({ databasePath: dbPath, migrationsDir });
+  repository.applyMigrations();
+  const store = new AosStore(createProofSeed(), { persistence: repository });
+  const story = store.listStories().find((row) => row.id === seed.storyId);
+  const assignments = store.listAssignments().filter((assignment) => assignment.targetType === "story" && assignment.targetId === seed.storyId);
+  const assignmentIds = new Set(assignments.map((assignment) => assignment.id));
+  const runs = store.listRuns().filter((run) => assignmentIds.has(run.assignmentId));
+  const gates = store.listGates().filter((gate) => gate.linkedTicketId === seed.storyId);
+  const gateEvidenceIds = new Set(gates.flatMap((gate) => gate.inputEvidenceIds));
+  const linkedEvidenceId = responsePayload(responses.evidence).result.id;
+  const evidence = store.listEvidence().filter((row) => gateEvidenceIds.has(row.id) || row.id === linkedEvidenceId);
+  const tracedTargetIds = new Set([
+    seed.storyId,
+    ...assignmentIds,
+    ...runs.map((run) => run.id),
+    ...gates.map((gate) => gate.id),
+    ...evidence.map((row) => row.id)
+  ]);
+  const auditRows = store.queryAudit().filter((event) => tracedTargetIds.has(event.targetId));
+  const ticketRow = store.listTickets({ storyId: seed.storyId, limit: 1 }).rows[0] ?? null;
+  repository.close();
+
+  const claimPayload = responsePayload(responses.claim);
+  const updatePayload = responsePayload(responses.update);
+  const runPayload = responsePayload(responses.run);
+  const runReplayPayload = responsePayload(responses.runReplay);
+  const gatePayload = responsePayload(responses.gate);
+  const finalTicketPayload = responsePayload(responses.finalTicketReadback);
+  const runId = runPayload.result.id;
+  const gateId = gatePayload.result.gate.id;
+  const assignmentId = claimPayload.result.assignment.id;
+  const auditActions = [...new Set(auditRows.map((event) => event.action))].sort((left, right) => left.localeCompare(right));
+  const finalTicketRow = finalTicketPayload.rows[0] ?? ticketRow;
+  const ok = Boolean(story) &&
+    assignmentIds.has(assignmentId) &&
+    runs.some((run) => run.id === runId) &&
+    evidence.some((row) => row.id === seed.evidenceId) &&
+    evidence.some((row) => row.id === linkedEvidenceId) &&
+    gates.some((gate) => gate.id === gateId && gate.status === "accepted") &&
+    finalTicketRow?.runReferences?.some((run) => run.id === runId) === true &&
+    finalTicketRow?.latestGate?.id === gateId &&
+    finalTicketRow?.latestEvidence?.id === seed.evidenceId &&
+    auditActions.includes("agent_run.record") &&
+    auditActions.includes("gate.decision.record");
+
+  return {
+    ok,
+    storyId: seed.storyId,
+    assignmentId,
+    assignmentInitialStatus: claimPayload.result.assignment.status,
+    assignmentUpdatedStatus: updatePayload.result.assignment.status,
+    persistedRunId: runId,
+    runStatus: runPayload.result.status,
+    runReplayStatus: runReplayPayload.status,
+    linkedEvidenceIds: [seed.evidenceId, linkedEvidenceId].sort((left, right) => left.localeCompare(right)),
+    gateId,
+    gateDecisionStatus: gatePayload.result.gate.status,
+    gateRequestSource: "route_owned_seeded_gate_work_order",
+    ticketListRunReferencePresent: finalTicketRow?.runReferences?.some((run) => run.id === runId) === true,
+    ticketListLatestGatePresent: finalTicketRow?.latestGate?.id === gateId,
+    ticketListLatestEvidencePresent: finalTicketRow?.latestEvidence?.id === seed.evidenceId,
+    tracedAuditActionSet: auditActions,
+    traceTargetCounts: {
+      assignments: assignments.length,
+      runs: runs.length,
+      evidence: evidence.length,
+      gates: gates.length,
+      auditEvents: auditRows.length
+    },
+    rawRunReadbackReturned: false,
+    rawEvidenceTargetReturned: false,
+    rawAuditDetailsReturned: false,
+    rawDbRowsReturned: false
+  };
+}
+
+function proveTicketListFrontendReadback(dbPath, seed) {
+  const repository = new AosSqliteRepository({ databasePath: dbPath, migrationsDir });
+  repository.applyMigrations();
+  const store = new AosStore(createProofSeed(), { persistence: repository });
+  const ticketResponse = createWorkReadbackApiResponse(
+    store,
+    "/api/work/readback/tickets",
+    new URLSearchParams({ storyId: seed.storyId, limit: "10" })
+  );
+  const auditResponse = createWorkReadbackApiResponse(
+    store,
+    "/api/work/readback/audit",
+    new URLSearchParams({ targetId: seed.storyId, limit: "5" })
+  );
+  const policyResponse = createWorkReadbackApiResponse(
+    store,
+    "/api/work/readback/policy",
+    new URLSearchParams()
+  );
+  repository.close();
+
+  const html = renderAosShellHtml({ path: "/work/readback", search: "?locale=en&theme=light" });
+  const row = Array.isArray(ticketResponse.body.rows) ? ticketResponse.body.rows[0] : null;
+  const endpoints = [
+    "/api/work/readback/tickets",
+    "/api/work/readback/audit",
+    "/api/work/readback/policy"
+  ];
+  const htmlEndpointBounded = endpoints.every((endpoint) => html.includes(endpoint)) &&
+    html.includes('data-generic-mcp-facade="unused"') &&
+    html.includes('data-generic-gateway-facade="unused"') &&
+    html.includes('data-method-dispatch-facade="absent"');
+  const policyMethods = Array.isArray(policyResponse.body.readbackMethods) ? policyResponse.body.readbackMethods : [];
+  const ok = ticketResponse.statusCode === 200 &&
+    auditResponse.statusCode === 200 &&
+    policyResponse.statusCode === 200 &&
+    ticketResponse.body.method === "aos.ticket.list" &&
+    ticketResponse.body.schemaVersion === "aos.ticket.list.v1" &&
+    ticketResponse.body.rowGrain === "story" &&
+    row?.initiativeId === seed.initiativeId &&
+    row?.epicId === seed.epicId &&
+    row?.storyId === seed.storyId &&
+    auditResponse.body.method === "aos.audit.query" &&
+    policyMethods.includes("aos.ticket.list") &&
+    policyMethods.includes("aos.audit.query") &&
+    policyResponse.body.fullGatewayMethodListExposed === false &&
+    htmlEndpointBounded;
+
+  return {
+    ok,
+    frontendRoute: "/work/readback",
+    frontendHtmlDigest: sha256(html),
+    frontendHtmlStoredRaw: false,
+    htmlEndpointBounded,
+    apiSurface: "work.readback",
+    ticketEndpointStatus: ticketResponse.statusCode,
+    ticketMethod: ticketResponse.body.method,
+    ticketSchemaVersion: ticketResponse.body.schemaVersion,
+    ticketRowGrain: ticketResponse.body.rowGrain,
+    ticketRowBoundToInitiative: row?.initiativeId === seed.initiativeId,
+    ticketRowBoundToEpic: row?.epicId === seed.epicId,
+    ticketRowBoundToStory: row?.storyId === seed.storyId,
+    latestEvidenceSummaryOnly: Boolean(row?.latestEvidence?.id && row?.latestEvidence?.redactionState),
+    runReferencesSummaryOnly: Array.isArray(row?.runReferences),
+    auditEndpointStatus: auditResponse.statusCode,
+    auditTargetScoped: Array.isArray(auditResponse.body.items) &&
+      auditResponse.body.items.every((item) => item.targetId === seed.storyId),
+    policyEndpointStatus: policyResponse.statusCode,
+    policyReadbackMethods: policyMethods,
+    fullGatewayMethodListExposed: policyResponse.body.fullGatewayMethodListExposed,
+    genericMcpGatewayMethodDispatchUsed: false,
+    rawDbRowsReturned: false,
+    rawRecordJsonReturned: false,
+    ownerVisiblePreviewClaimed: false
+  };
+}
+
+function proveSelectedStoryAudit(dbPath, seed, selectedStoryAuditReadback) {
+  const repository = new AosSqliteRepository({ databasePath: dbPath, migrationsDir });
+  repository.applyMigrations();
+  const store = new AosStore(createProofSeed(), { persistence: repository });
+  const targeted = createWorkReadbackApiResponse(
+    store,
+    "/api/work/readback/audit",
+    new URLSearchParams({ targetId: seed.storyId, limit: "5" })
+  );
+  const unscoped = createWorkReadbackApiResponse(store, "/api/work/readback/audit", new URLSearchParams());
+  const invalidCursor = createWorkReadbackApiResponse(
+    store,
+    "/api/work/readback/audit",
+    new URLSearchParams({ targetId: seed.storyId, cursor: "not-a-valid-audit-cursor" })
+  );
+  repository.close();
+
+  const transportPayload = responsePayload(selectedStoryAuditReadback);
+  const targetedItems = Array.isArray(targeted.body.items) ? targeted.body.items : [];
+  const transportItems = Array.isArray(transportPayload.items) ? transportPayload.items : [];
+  const ok = targeted.statusCode === 200 &&
+    targetedItems.length > 0 &&
+    targetedItems.every((item) => item.targetId === seed.storyId) &&
+    unscoped.statusCode === 400 &&
+    unscoped.body.reason === "audit_scope_required" &&
+    invalidCursor.statusCode === 400 &&
+    invalidCursor.body.reason === "invalid_audit_cursor" &&
+    transportItems.every((item) => item.targetId === seed.storyId);
+
+  return {
+    ok,
+    targetId: seed.storyId,
+    browserFacadeAuditStatus: targeted.statusCode,
+    browserFacadeReturnedCount: targeted.body.returnedCount,
+    transportAuditReturnedCount: transportPayload.returnedCount,
+    allBrowserItemsTargetScoped: targetedItems.every((item) => item.targetId === seed.storyId),
+    allTransportItemsTargetScoped: transportItems.every((item) => item.targetId === seed.storyId),
+    unscopedAuditRejected: unscoped.body.reason,
+    invalidAuditCursorRejected: invalidCursor.body.reason,
+    globalAllWorkTimelineExposed: false,
+    rawAuditDetailsReturned: false,
     rawDbRowsReturned: false
   };
 }
@@ -1097,7 +1376,7 @@ function profileMarkerContent(root) {
     route,
     markerVersion: "phase3-runtime-profile.v1",
     rootDigest: sha256(resolve(root)),
-    purpose: "route-owned-temp-runtime-profile-proof"
+    purpose: markerPurpose
   };
 }
 
@@ -1105,7 +1384,7 @@ function runtimeProfileMarkerExpectation() {
   return {
     route,
     markerVersion: "phase3-runtime-profile.v1",
-    purpose: "route-owned-temp-runtime-profile-proof"
+    purpose: markerPurpose
   };
 }
 

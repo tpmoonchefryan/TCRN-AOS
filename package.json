@@ -18,6 +18,7 @@
     "phase3:ticket-list-proof": "pnpm build && node scripts/phase3-ticket-list-proof.mjs",
     "phase3:work-loop-method-proof": "pnpm build && node scripts/phase3-work-loop-method-proof.mjs",
     "phase3:runtime-profile-proof": "pnpm build && node scripts/phase3-runtime-profile-proof.mjs",
+    "phase3:dogfood-execution-runtime-profile-proof": "pnpm build && TCRN_AOS_PHASE3_RUNTIME_PROFILE_MODE=dogfood-execution-runtime-profile TCRN_AOS_PHASE3_RUNTIME_PROFILE_ROUTE=route_tcrn_aos_phase3_dogfood_ilya_execution_runtime_profile_implementation_proof_after_mara_success_01d8af4_deaa1bd_20260705 TCRN_AOS_PHASE3_RUNTIME_PROFILE_WORKFLOW_BASIS=01d8af4c32b3c3aa954f36bc8f19b818ea2624d1 TCRN_AOS_PHASE3_RUNTIME_PROFILE_EVIDENCE_DIR=evidence/phase3-dogfood-execution-runtime-profile TCRN_AOS_PHASE3_RUNTIME_PROFILE_COMMAND='pnpm --dir TCRN-AOS phase3:dogfood-execution-runtime-profile-proof' node scripts/phase3-runtime-profile-proof.mjs",
     "phase3:readback-api-proof": "pnpm build && node scripts/phase3-readback-api-proof.mjs",
     "phase3:frontend-readback-proof": "pnpm build && node scripts/phase3-frontend-readback-proof.mjs",
     "service:start": "pnpm build && node scripts/service-start.mjs",
