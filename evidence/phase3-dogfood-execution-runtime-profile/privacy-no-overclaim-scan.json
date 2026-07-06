@@ -1,0 +1,129 @@
+{
+  "receiptName": "privacy-no-overclaim-scan.json",
+  "ok": true,
+  "route": "route_tcrn_aos_phase3_dogfood_ilya_execution_runtime_profile_implementation_proof_after_mara_success_01d8af4_deaa1bd_20260705",
+  "command": "pnpm --dir TCRN-AOS phase3:dogfood-execution-runtime-profile-proof",
+  "generatedAt": "2026-07-06T09:10:35.469Z",
+  "sourceHead": "40eb9ee1476dba7ee09557d5370ff89b80227bbb",
+  "sourceContentDigest": "9531ed0f571fed06b8c6b831b6b6b64a8b856f13d96f01b321adbe7dda02fc37",
+  "sourceFiles": [
+    {
+      "file": "package.json",
+      "digest": "da9cffa5894b82c54556732a9df1ad51bfec87fe00a211bdfe15da974965c1f4"
+    },
+    {
+      "file": "packages/domain/src/store.ts",
+      "digest": "db1c74874a28dc0ccf1d55a911ea8d4163d4ca8be7e29c091b1c2b9d4f4eece9"
+    },
+    {
+      "file": "packages/db/src/sqlite-repository.ts",
+      "digest": "8de0d042e5cb0966f9ea8789be8eb48693760949e041ae2a0384535f172db78e"
+    },
+    {
+      "file": "packages/mcp-gateway/src/gateway.ts",
+      "digest": "d5620da1d229b62d05daff3a8c67197829696c845f88dd61445bf50aace24e3e"
+    },
+    {
+      "file": "packages/mcp-server/src/transport.ts",
+      "digest": "fa2bd7eef3031d6529993d616973332e7699ea65dd56401adeb874d09ef775b4"
+    },
+    {
+      "file": "packages/mcp-server/src/stdio-server.ts",
+      "digest": "e31bf92853c2ec731cc40a6de89977faffd786765f220757afeb466c15c8d035"
+    },
+    {
+      "file": "packages/mcp-server/test/stdio-transport.test.mjs",
+      "digest": "f2bf31d63a537bb102e09f77b894a73241ca7fee8f8cadc3665d0b5c769a557c"
+    },
+    {
+      "file": "scripts/phase3-runtime-profile-proof.mjs",
+      "digest": "31aeac33434849a7fcb2582e2bbae4e02991a20e406c44867879ddf3a3b0922a"
+    },
+    {
+      "file": "apps/api/src/work-readback.ts",
+      "digest": "17621419b6f182fade294a7a6d0b60516cd2e565a9011d32a0704a1a51c66b04"
+    },
+    {
+      "file": "apps/web/src/app.tsx",
+      "digest": "425dd61b14747568fd396aceca451b28b8142deb1d3a40af5adfb0ce6298a03d"
+    },
+    {
+      "file": "apps/web/src/phase3-dogfood-readback.tsx",
+      "digest": "93145f9cbc0d14e106977dcdb5341a795698ed6a74636f9c2aa96bd64f48d937"
+    }
+  ],
+  "workflowBasis": "01d8af4c32b3c3aa954f36bc8f19b818ea2624d1",
+  "aosBasis": "40eb9ee1476dba7ee09557d5370ff89b80227bbb",
+  "methodsUnderReview": [
+    "aos.assignment.claim",
+    "aos.assignment.update",
+    "aos.run.summary.create",
+    "aos.evidence.link",
+    "aos.gate.decision.record",
+    "aos.ticket.list",
+    "aos.audit.query",
+    "aos.policy.read"
+  ],
+  "routeOwnedProfileRoot": {
+    "class": "os_temp_route_owned_redacted",
+    "rootDigest": "600ed80c83f5968187a8c6545aa62eea3d4c0b1c995f124be4d2e0b542121c7d",
+    "rawPathRecorded": false
+  },
+  "actorProof": {
+    "employeeId": "employee-ilya",
+    "role": "implementation",
+    "threadId": "019eb6d7-f130-70a0-8805-169cc337229b",
+    "trustedServerConfig": true,
+    "persistedEmployeeIdentityRequired": true,
+    "clientSuppliedAuthorityTrusted": false
+  },
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "productRepoMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "durableRuntimeDbActivation": false,
+    "defaultRuntimeDbActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "retainedPreviewRuntimeActivation": false,
+    "retainedPreviewFreshnessClaimed": false,
+    "ownerVisibleRuntimeDbActivated": false,
+    "liveDispatchAuthorized": false,
+    "ownerIntentExecutionAuthorized": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false,
+    "janusReadinessClaimed": false,
+    "phase3CloseoutClaimed": false
+  },
+  "rawValuesAbsentFromResponses": true,
+  "rawValuesAbsentFromAuditRows": true,
+  "rawValuesAbsentFromReceipts": true,
+  "responsePayloadsScanned": 31,
+  "auditRowsScanned": 54,
+  "receiptFilesScanned": 11,
+  "sourceFilesScanned": 11,
+  "receiptFindings": [],
+  "responseFindings": [],
+  "auditFindings": [],
+  "sourceFindings": [],
+  "rawValueDigests": {
+    "fixture_0": "3b09645b9b12b4eb2481198fa47b8a117948e1498ea1e0d4028222896fc6a888",
+    "fixture_1": "1c7c37856198f49b94768bb6fada83667eb9b3d641a163d061335ff6bbf865e1",
+    "fixture_2": "4a81538c66e14121a45bd2590e7ffa2f361ec1db4ce696bd47653f0dfcfa4053",
+    "fixture_3": "efbde2fad631af2077d94f9a6127f71428a56e7c352450ee381d6f206f59bf84",
+    "fixture_4": "cde060d6b01e351de8e3b1c3bdae11a9c8bee01f8ec31d046e0f0d74db72e2d4",
+    "fixture_5": "bdec3894de450f50f6c8116a0daee8f3fa9e5b575b4d690e3ad536be265e40f8",
+    "fixture_6": "5e58979c07ae5e4af56a4ece5bc1c8549a1509078edace8bf5f5e6d4249e0402",
+    "fixture_7": "c341b1b7cabfc812cb61b3f5d213e8410ff58508585e6b882ec3a19c17d75a4e",
+    "fixture_8": "386b952546ebed65c41e05513be13ff4952445d9302e9bb14e282e4aaa14efa1"
+  },
+  "rawPathRecorded": false,
+  "rawDbDumpRecorded": false,
+  "rawClientEnvStored": false,
+  "rawTranscriptBodiesStored": false,
+  "secretsOrPiiStored": false,
+  "overclaimLanguagePresent": false
+}
