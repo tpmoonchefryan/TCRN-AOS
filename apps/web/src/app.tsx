@@ -27,6 +27,7 @@ import {
 } from "@tcrn/ui-copy-state";
 import { tcrnTokenCss } from "@tcrn/ui-tokens";
 import { localeCopy, shellNavItems, type ShellNavItem } from "./data.js";
+import { Phase3DogfoodReadback } from "./phase3-dogfood-readback.js";
 import { WorkManagementMockups, getWorkMockupPageTitle } from "./work-management-mockups.js";
 
 const sideNavStorageKey = "tcrn-aos-side-nav-collapsed";
@@ -181,6 +182,28 @@ export function AosShellApp({ initialShellState: initialShellStateOverride }: Ao
 
   useEffect(() => {
     let cancelled = false;
+    if (currentPath === "/work/readback") {
+      setApiReadback({
+        statusText: "Scoped Work readback route uses /api/work/readback only.",
+        runtime: "scoped readback",
+        queue: "none",
+        policy: "filtered readback methods",
+        counts: "ticket list and story audit only",
+        metrics: {
+          runtime: "service proof only",
+          stories: "--",
+          gates: "--",
+          auditEvents: "--"
+        },
+        summary: {
+          ok: true,
+          surface: "work.readback",
+          legacyReadbackFetched: false,
+          endpoints: ["/api/work/readback/tickets", "/api/work/readback/audit", "/api/work/readback/policy"]
+        }
+      });
+      return;
+    }
     async function fetchJson(path: string) {
       const response = await fetch(path, { headers: { accept: "application/json" } });
       if (!response.ok) throw new Error(`${path} returned ${response.status}`);
@@ -241,7 +264,7 @@ export function AosShellApp({ initialShellState: initialShellStateOverride }: Ao
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [currentPath]);
 
   const currentLocale = resolveLocale(controller.locale);
   const currentCopy = localeCopy[currentLocale] ?? localeCopy.en;
@@ -277,7 +300,9 @@ export function AosShellApp({ initialShellState: initialShellStateOverride }: Ao
     onLocaleChange: controller.setLocale
   };
   const currentRouteLabel = currentRouteId === "work"
-    ? getWorkMockupPageTitle(currentPath, currentLocale)
+    ? currentPath === "/work/readback"
+      ? copyText(currentCopy, "workReadbackLabel", currentLocale === "zh-CN" ? "工作读回" : "Work readback")
+      : getWorkMockupPageTitle(currentPath, currentLocale)
     : copyText(currentCopy, "cockpitLabel", currentRoute.label);
   const navGroups: ProductShellNavGroup[] = [
     {
@@ -400,6 +425,15 @@ function OwnerQualityContent({
 }) {
   const isWorkFirst = route === "work";
   if (isWorkFirst) {
+    if (currentPath === "/work/readback") {
+      return (
+        <Phase3DogfoodReadback
+          locale={locale}
+          theme={theme}
+          routeHref={routeHref}
+        />
+      );
+    }
     return (
       <>
         <WorkManagementMockups
@@ -865,6 +899,62 @@ button, input { font: inherit; }
 [data-work-backlog-groups="shaped-unshaped"] {
   align-items: start;
   grid-template-columns: minmax(0, 1fr);
+}
+.tcrn-phase3-readback {
+  display: grid;
+  gap: var(--tcrn-space-4);
+  min-width: 0;
+}
+.tcrn-phase3-readback *,
+.tcrn-phase3-readback__layout,
+.tcrn-phase3-readback__detail,
+.tcrn-phase3-readback__story-summary {
+  min-width: 0;
+}
+.tcrn-phase3-readback__filter-band,
+.tcrn-phase3-readback__policy,
+.tcrn-phase3-readback__section-heading,
+.tcrn-phase3-readback__story-card,
+.tcrn-phase3-readback__audit-card {
+  display: grid;
+  gap: var(--tcrn-space-3);
+}
+.tcrn-phase3-readback__tokens,
+.tcrn-phase3-readback__pagination,
+.tcrn-phase3-readback__status-line,
+.tcrn-phase3-readback__empty,
+.tcrn-phase3-readback__subtask {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-phase3-readback__layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.95fr) minmax(320px, 1.35fr);
+  gap: var(--tcrn-space-4);
+  align-items: start;
+}
+.tcrn-phase3-readback__list,
+.tcrn-phase3-readback__detail {
+  display: grid;
+  gap: var(--tcrn-space-3);
+}
+.tcrn-phase3-readback__story-summary {
+  display: grid;
+  gap: var(--tcrn-space-3);
+}
+.tcrn-phase3-readback__subtasks {
+  display: grid;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-phase3-readback__error {
+  border-color: var(--tcrn-color-border-warning);
+}
+@media (max-width: 820px) {
+  .tcrn-phase3-readback__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 `;
 }
