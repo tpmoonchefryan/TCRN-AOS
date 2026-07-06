@@ -6,6 +6,7 @@ import { createAppliedRuntimeFixture, type AosRuntimeFixture } from "../../../pa
 import { renderAosShellHtml } from "../../web/src/app.js";
 import { frontendShellRoutes } from "../../web/src/data.js";
 import { apiHealthReadback, createAosApiApp } from "./index.js";
+import { createWorkReadbackApiResponse } from "./work-readback.js";
 
 export interface StartedAosLocalService {
   server: Server;
@@ -79,6 +80,11 @@ function handleRequest(
   }
   if (path === "/readback" || path === "/api/readback") {
     sendJson(response, 200, runtime.readback());
+    return;
+  }
+  if (path.startsWith("/api/work/readback/")) {
+    const result = createWorkReadbackApiResponse(runtime.getStore(), path, url.searchParams);
+    sendJson(response, result.statusCode, result.body);
     return;
   }
   if (path === "/policy" || path === "/api/policy") {
