@@ -3,9 +3,9 @@
   "ok": true,
   "route": "route_tcrn_aos_phase3_dogfood_ilya_runtime_profile_implementation_proof_after_minerva_status_sync_f5dc8b1_6deeb08_20260705",
   "command": "pnpm --dir TCRN-AOS phase3:runtime-profile-proof",
-  "generatedAt": "2026-07-06T04:06:23.827Z",
-  "sourceHead": "4196251e3a091bf29e4887480a8d06c2ba63f2cb",
-  "sourceContentDigest": "f8f0667c1961716bc0cb3b27f4410e00a99f608fbe0f1d6d7844af4806905b40",
+  "generatedAt": "2026-07-06T04:32:08.236Z",
+  "sourceHead": "8a950f408f9c734449c66a5a729a07da6e4a7204",
+  "sourceContentDigest": "7d299eadef1c558a8538ccc01a41c11edcdc33243ae4f70bcfd985d43f62a9cd",
   "sourceFiles": [
     {
       "file": "package.json",
@@ -25,7 +25,7 @@
     },
     {
       "file": "packages/mcp-server/src/transport.ts",
-      "digest": "e1f24c1473e2afeedc6a1865254a936634ad6d540227bdd68d978d340db24fd2"
+      "digest": "fa2bd7eef3031d6529993d616973332e7699ea65dd56401adeb874d09ef775b4"
     },
     {
       "file": "packages/mcp-server/src/stdio-server.ts",
@@ -33,15 +33,15 @@
     },
     {
       "file": "packages/mcp-server/test/stdio-transport.test.mjs",
-      "digest": "8cd6dec891e76b0468ba13191323753717815f4887eafc8b377678a619c92ded"
+      "digest": "f2bf31d63a537bb102e09f77b894a73241ca7fee8f8cadc3665d0b5c769a557c"
     },
     {
       "file": "scripts/phase3-runtime-profile-proof.mjs",
-      "digest": "e77a69a3f1f5ca1546996235f8806eb7513281e8fa26942be155c179782e1c50"
+      "digest": "934d928fd4d8bf61ae9b392a6b6627aee9c031fb7ace160642c4e185ff6d460e"
     }
   ],
   "workflowBasis": "f5dc8b1c57ea07ea89d40043be420cd349e90d22",
-  "aosBasis": "4196251e3a091bf29e4887480a8d06c2ba63f2cb",
+  "aosBasis": "8a950f408f9c734449c66a5a729a07da6e4a7204",
   "methodsUnderReview": [
     "aos.assignment.claim",
     "aos.assignment.update",
@@ -51,7 +51,7 @@
   ],
   "routeOwnedProfileRoot": {
     "class": "os_temp_route_owned_redacted",
-    "rootDigest": "8100307ab8a5365ac59809ffddbc054f4b474d2bd1e5de60725277fa5631af0f",
+    "rootDigest": "adef4ac18ef0f04ad3f4f5bd5bb3f743ba25ad17e2e670a65d051fd1d121e78d",
     "rawPathRecorded": false
   },
   "actorProof": {
