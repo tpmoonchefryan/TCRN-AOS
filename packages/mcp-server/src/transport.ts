@@ -400,6 +400,8 @@ function validateRuntimeDatabaseConfig(config: AosMcpRuntimeConfig): { databaseP
   denyUnsafeRuntimePath(databasePath);
   denyUnsafeRuntimePath(databaseRoot);
   const repoRoot = config.repoRoot ? resolve(config.repoRoot) : process.cwd();
+  denyWrongSiblingRuntimePath(databasePath, repoRoot);
+  denyWrongSiblingRuntimePath(databaseRoot, repoRoot);
   const markerFile = config.routeOwnedMarkerFile ?? ".tcrn-aos-phase1-root";
   assertExistingPathSegmentsHaveNoSymlink(databaseRoot, "transport_runtime_database_root_symlink_ancestor_denied");
   const rootReadback = assertRouteOwnedSqliteRoot(databaseRoot, repoRoot, markerFile);
@@ -451,6 +453,14 @@ function denyUnsafeRuntimePath(path: string): void {
   }
   if (/retained|owner-trial|preview/i.test(normalized)) {
     throw new Error("transport_runtime_retained_or_owner_visible_path_denied");
+  }
+}
+
+function denyWrongSiblingRuntimePath(path: string, repoRoot: string): void {
+  const wrongSibling = resolve(dirname(dirname(repoRoot)), "TCRN-AOS");
+  const normalized = resolve(path);
+  if (normalized === wrongSibling || normalized.startsWith(`${wrongSibling}${sep}`)) {
+    throw new Error("transport_runtime_wrong_sibling_path_denied");
   }
 }
 

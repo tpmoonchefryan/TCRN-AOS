@@ -580,6 +580,14 @@ test("Phase 2 runtime transport requires route-owned persisted DB and persisted 
 test("Phase 2 runtime transport rejects DB file symlinks and symlink ancestors before SQLite opens", async () => {
   const markerFile = ".tcrn-aos-phase1-root";
   const safeTmp = await realpath(tmpdir());
+  assert.throws(() => createRuntimeTransport({
+    actor,
+    databasePath: join(repoRoot, "..", "..", "TCRN-AOS", "phase3-runtime-profile", "runtime.sqlite"),
+    databaseRoot: join(repoRoot, "..", "..", "TCRN-AOS", "phase3-runtime-profile"),
+    repoRoot,
+    migrationsDir
+  }), /transport_runtime_wrong_sibling_path_denied/);
+
   const dbSymlinkRoot = await mkdtemp(join(safeTmp, "tcrn-aos-phase2-runtime-db-symlink-"));
   const outsideRoot = await mkdtemp(join(safeTmp, "tcrn-aos-phase2-runtime-outside-"));
   await writeFile(join(dbSymlinkRoot, markerFile), "owned-by-phase2-runtime-symlink-test\n", "utf8");
