@@ -24,6 +24,18 @@ const actor = {
   threadId: "019eb6d7-f130-70a0-8805-169cc337229b",
   sessionId: "phase2-mcp-server-test"
 };
+const secondImplementationActor = {
+  employeeId: "employee-phase3-second-impl",
+  role: "implementation",
+  threadId: "phase3-second-implementation-thread",
+  sessionId: "phase3-work-loop-method-test"
+};
+const sableActor = {
+  employeeId: "employee-sable",
+  role: "security",
+  threadId: "sable-thread",
+  sessionId: "phase3-work-loop-method-test"
+};
 
 test("Phase 2 stdio transport filters methods, refuses client authority, persists AgentRun, and paginates audit", async () => {
   const root = await mkdtemp(join(tmpdir(), "tcrn-aos-phase2-mcp-test-"));
@@ -253,6 +265,173 @@ test("Phase 3 ticket list stdio method is read-only, cursor-bound, policy-visibl
   assert.equal(store.listAssignments().find((item) => item.id === assignmentId).targetType, "story");
 });
 
+test("Phase 3 work-loop stdio methods claim assignments, update assignee state, record gate decisions, and reject aliases", () => {
+  const seed = createDefaultSeed();
+  const store = new AosStore({
+    ...seed,
+    employees: [
+      ...seed.employees,
+      {
+        id: secondImplementationActor.employeeId,
+        name: "Second Implementation Fixture",
+        role: "implementation",
+        authoritySummary: "Fixture employee for same-role claim conflict proof.",
+        contactWhen: "Phase 3 proof only.",
+        lifecycle: "active",
+        threadIdentity: {
+          threadId: secondImplementationActor.threadId,
+          status: "active",
+          lifecycle: "ephemeral"
+        },
+        roleContractRefs: ["phase3-work-loop-fixture"],
+        skillRefs: []
+      }
+    ]
+  });
+  const fixture = seedWorkLoopFixture(store);
+  const transport = new AosMcpTransport(store, { trustedActor: actor, maxResponseBytes: 16_384 });
+  const secondTransport = new AosMcpTransport(store, { trustedActor: secondImplementationActor, maxResponseBytes: 16_384 });
+  const sableTransport = new AosMcpTransport(store, { trustedActor: sableActor, maxResponseBytes: 16_384 });
+
+  const policy = transport.handleJsonRpc({ jsonrpc: "2.0", id: 1, method: "aos.policy.read", params: {} });
+  assert.equal(policy.error, undefined);
+  assert.equal(policy.result.transportAllowedMethods.includes("aos.assignment.claim"), true);
+  assert.equal(policy.result.transportAllowedMethods.includes("aos.assignment.update"), true);
+  assert.equal(policy.result.transportAllowedMethods.includes("aos.gate.decision.record"), true);
+  assert.equal(policy.result.fullGatewayMethodListExposed, false);
+
+  const claim = transport.handleJsonRpc({
+    jsonrpc: "2.0",
+    id: 2,
+    method: "aos.assignment.claim",
+    params: {
+      targetType: "story",
+      targetId: fixture.story.id,
+      initiativeId: fixture.initiative.id,
+      epicId: fixture.epic.id,
+      idempotencyKey: "phase3-claim-first"
+    }
+  });
+  assert.equal(claim.error, undefined);
+  assert.equal(claim.result.ok, true);
+  assert.equal(claim.result.result.assignment.status, "accepted");
+  assert.equal(claim.result.result.assignment.targetType, "story");
+
+  const stateReplay = transport.handleJsonRpc({
+    jsonrpc: "2.0",
+    id: 3,
+    method: "aos.assignment.claim",
+    params: {
+      targetType: "story",
+      targetId: fixture.story.id,
+      initiativeId: fixture.initiative.id,
+      epicId: fixture.epic.id,
+      idempotencyKey: "phase3-claim-state-replay"
+    }
+  });
+  assert.equal(stateReplay.result.ok, true);
+  assert.equal(stateReplay.result.result.replayedByState, true);
+  assert.equal(stateReplay.result.result.assignment.id, claim.result.result.assignment.id);
+
+  const secondActorConflict = secondTransport.handleJsonRpc({
+    jsonrpc: "2.0",
+    id: 4,
+    method: "aos.assignment.claim",
+    params: {
+      targetType: "story",
+      targetId: fixture.story.id,
+      initiativeId: fixture.initiative.id,
+      epicId: fixture.epic.id
+    }
+  });
+  assert.equal(secondActorConflict.result.ok, false);
+  assert.match(secondActorConflict.result.error, /already_claimed/);
+
+  const update = transport.handleJsonRpc({
+    jsonrpc: "2.0",
+    id: 5,
+    method: "aos.assignment.update",
+    params: {
+      assignmentId: claim.result.result.assignment.id,
+      priorStatus: "accepted",
+      status: "in_progress",
+      initiativeId: fixture.initiative.id,
+      epicId: fixture.epic.id
+    }
+  });
+  assert.equal(update.result.ok, true);
+  assert.equal(update.result.result.assignment.status, "in_progress");
+
+  const staleUpdate = transport.handleJsonRpc({
+    jsonrpc: "2.0",
+    id: 6,
+    method: "aos.assignment.update",
+    params: {
+      assignmentId: claim.result.result.assignment.id,
+      priorStatus: "accepted",
+      status: "blocked",
+      initiativeId: fixture.initiative.id,
+      epicId: fixture.epic.id
+    }
+  });
+  assert.equal(staleUpdate.result.ok, false);
+  assert.match(staleUpdate.result.error, /assignment_update_stale_status/);
+
+  const roleMismatchDecision = transport.handleJsonRpc({
+    jsonrpc: "2.0",
+    id: 7,
+    method: "aos.gate.decision.record",
+    params: {
+      gateId: fixture.gate.id,
+      priorStatus: "pending_role",
+      decision: "accepted",
+      initiativeId: fixture.initiative.id,
+      epicId: fixture.epic.id,
+      evidenceIds: [fixture.evidence.id]
+    }
+  });
+  assert.equal(roleMismatchDecision.result.ok, false);
+  assert.match(roleMismatchDecision.result.error, /gate_decision_role_mismatch/);
+
+  const gateDecision = sableTransport.handleJsonRpc({
+    jsonrpc: "2.0",
+    id: 8,
+    method: "aos.gate.decision.record",
+    params: {
+      gateId: fixture.gate.id,
+      priorStatus: "pending_role",
+      decision: "accepted",
+      initiativeId: fixture.initiative.id,
+      epicId: fixture.epic.id,
+      evidenceIds: [fixture.evidence.id]
+    }
+  });
+  assert.equal(gateDecision.result.ok, true);
+  assert.equal(gateDecision.result.result.gate.status, "accepted");
+  assert.equal(JSON.stringify(gateDecision.result).includes("phase3-work-loop-forbidden-evidence-target"), false);
+
+  const negativeMethods = [
+    "aos.gate.status.update",
+    "aos.assignment.create",
+    "aos.assignment.write",
+    "aos.gate.write",
+    "aos.work_index.drill_through.read",
+    "aos.resource.record.propose",
+    "aos.knowledge.entry.propose",
+    "aos.unknown.method"
+  ];
+  for (const method of negativeMethods) {
+    const denied = transport.handleJsonRpc({ jsonrpc: "2.0", id: method, method, params: {} });
+    assert.equal(denied.result, undefined, method);
+    assert.notEqual(denied.error, undefined, method);
+  }
+
+  const text = JSON.stringify({ claim, update, gateDecision });
+  assert.equal(text.includes("proofExpectation"), false);
+  assert.equal(text.includes("record_json"), false);
+  assert.equal(text.includes("phase3-work-loop-forbidden"), false);
+});
+
 function seedTicketListFixture(store, options = {}) {
   const count = options.count ?? 3;
   const titlePad = "x".repeat(options.storyTitleLength ?? 0);
@@ -326,6 +505,47 @@ function seedTicketListFixture(store, options = {}) {
     storyIds.push(story.id);
   }
   return { storyIds, assignmentId };
+}
+
+function seedWorkLoopFixture(store) {
+  const initiative = store.createInitiative({
+    projectId: "TCRN-AOS",
+    title: "AOS human readback v1",
+    status: "in_progress",
+    problem: "Participating MCP-thread work loop needs selected methods.",
+    expectedOutcome: "Assignment claim/update and decision-first gate recording."
+  }, actor);
+  const epic = store.createEpic({
+    initiativeId: initiative.id,
+    title: "Phase 3 selected work-loop methods",
+    goal: "Prove bounded write methods.",
+    status: "in_progress"
+  }, actor);
+  const story = store.createStory({
+    epicId: epic.id,
+    title: "Selected method scope story",
+    problem: "phase3-work-loop-forbidden-problem",
+    user: "phase3-work-loop-forbidden-user",
+    expectedBehavior: "phase3-work-loop-forbidden-expected",
+    acceptanceCriteria: ["phase3-work-loop-forbidden-criteria"],
+    status: "in_progress",
+    estimate: { effortPoints: 2, complexity: "medium", risk: "L3", verificationCost: "medium", confidence: "medium" },
+    subTasks: []
+  }, actor);
+  const evidence = store.linkEvidence({
+    type: "artifact_id",
+    target: "phase3-work-loop-forbidden-evidence-target",
+    validity: "valid",
+    producer: sableActor.employeeId,
+    digest: "sha256:phase3-work-loop-evidence",
+    redactionState: "metadata_only"
+  }, sableActor);
+  const gate = store.requestGate({
+    type: "security_license",
+    linkedTicketId: story.id,
+    inputEvidenceIds: [evidence.id]
+  }, sableActor);
+  return { initiative, epic, story, evidence, gate };
 }
 
 test("Phase 2 runtime transport requires route-owned persisted DB and persisted actor rows", async () => {

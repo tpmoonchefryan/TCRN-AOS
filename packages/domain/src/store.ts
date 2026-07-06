@@ -1,6 +1,6 @@
 import { assertNoRestrictedContent, redactForAudit } from "./security.js";
 import { createId, digest } from "./idempotency.js";
-import { POLICY_VERSION, resolveGateOwner } from "./policies.js";
+import { POLICY_VERSION, canApproveGate, resolveGateOwner } from "./policies.js";
 import type {
   AIEmployee,
   ActorIdentity,
@@ -99,6 +99,41 @@ export interface AosStoreOptions {
   persistence?: AosPersistenceRepository;
   hydrate?: boolean;
 }
+
+type WorkLoopScopeInput = {
+  initiativeId: string;
+  epicId: string;
+};
+
+type AssignmentClaimInput = WorkLoopScopeInput & {
+  targetType: "story" | "gate";
+  targetId: string;
+};
+
+type AssignmentUpdateInput = WorkLoopScopeInput & {
+  assignmentId: string;
+  priorStatus: Assignment["status"];
+  status: Assignment["status"];
+  runId?: string;
+  evidenceId?: string;
+};
+
+type GateDecisionRecordInput = WorkLoopScopeInput & {
+  gateId: string;
+  priorStatus: GateWorkOrder["status"];
+  decision: "accepted" | "blocked" | "superseded" | "owner_intent_required";
+  evidenceIds?: string[];
+};
+
+const activeAssignmentStatuses: Assignment["status"][] = ["accepted", "in_progress", "blocked", "in_review"];
+const terminalAssignmentStatuses: Assignment["status"][] = ["verified", "released", "archived", "superseded"];
+const terminalGateStatuses: GateWorkOrder["status"][] = ["accepted", "blocked", "superseded"];
+const assignmentStatusTransitions = new Set([
+  "accepted->in_progress",
+  "in_progress->blocked",
+  "blocked->in_progress",
+  "in_progress->in_review"
+]);
 
 export class AosStore {
   private projects = new Map<ProjectId, ProjectRecord>();
@@ -390,6 +425,100 @@ export class AosStore {
     });
   }
 
+  claimAssignment(input: AssignmentClaimInput, actor: ActorIdentity): { assignment: Assignment; replayedByState: boolean; auditEventId: string | null; scope: { initiativeId: string; epicId: string; storyId: string } } {
+    return this.withPersistenceTransaction(() => {
+      this.hydrateFromPersistence();
+      this.ensureSafe(input, "assignmentClaim");
+      if (!["story", "gate"].includes(input.targetType)) {
+        throw new Error("assignment_claim_target_type_denied");
+      }
+      const story = this.resolveWorkLoopStory(input.targetType, input.targetId);
+      const scope = this.requireWorkLoopScope(story, input);
+      const existing = this.findActiveAssignment(input.targetType, input.targetId, actor.role);
+      if (existing) {
+        if (existing.employeeId === actor.employeeId) {
+          return { assignment: { ...existing, runIds: [...existing.runIds] }, replayedByState: true, auditEventId: null, scope };
+        }
+        throw new Error("already_claimed");
+      }
+      if (!this.employees.has(actor.employeeId)) {
+        throw new Error(`Unknown employee: ${actor.employeeId}`);
+      }
+      const assignment: Assignment = {
+        id: createId("assignment", {
+          targetType: input.targetType,
+          targetId: input.targetId,
+          role: actor.role,
+          employeeId: actor.employeeId
+        }),
+        employeeId: actor.employeeId,
+        targetId: input.targetId,
+        targetType: input.targetType,
+        role: actor.role,
+        status: "accepted",
+        dueState: "none",
+        proofExpectation: "phase3_work_loop_assignment_claim_metadata_only",
+        runIds: []
+      };
+      this.assignments.set(assignment.id, assignment);
+      if (input.targetType === "story" && !story.assignmentIds.includes(assignment.id)) {
+        story.assignmentIds.push(assignment.id);
+        this.persistCoreRecord("story", story);
+      }
+      this.persistCoreRecord("assignment", assignment);
+      const audit = this.appendAudit(actor, "assignment.claim", "assignment", assignment.id, "accepted", {
+        targetType: assignment.targetType,
+        targetId: assignment.targetId,
+        role: assignment.role,
+        replayedByState: false
+      });
+      return { assignment: { ...assignment, runIds: [] }, replayedByState: false, auditEventId: audit.id, scope };
+    });
+  }
+
+  updateAssignment(input: AssignmentUpdateInput, actor: ActorIdentity): { assignment: Assignment; auditEventId: string; scope: { initiativeId: string; epicId: string; storyId: string } } {
+    return this.withPersistenceTransaction(() => {
+      this.hydrateFromPersistence();
+      this.ensureSafe(input, "assignmentUpdate");
+      const assignment = this.assignments.get(input.assignmentId);
+      if (!assignment) {
+        throw new Error("assignment_update_unknown_assignment");
+      }
+      if (assignment.employeeId !== actor.employeeId) {
+        throw new Error("assignment_update_non_assignee_denied");
+      }
+      if (terminalAssignmentStatuses.includes(assignment.status) || !activeAssignmentStatuses.includes(assignment.status)) {
+        throw new Error("assignment_update_terminal_or_inactive_status_denied");
+      }
+      if (assignment.status !== input.priorStatus) {
+        throw new Error("assignment_update_stale_status");
+      }
+      if (!assignmentStatusTransitions.has(`${assignment.status}->${input.status}`)) {
+        throw new Error("assignment_update_transition_denied");
+      }
+      if (assignment.targetType !== "story" && assignment.targetType !== "gate") {
+        throw new Error("assignment_update_target_type_denied");
+      }
+      const story = this.resolveWorkLoopStory(assignment.targetType, assignment.targetId);
+      const scope = this.requireWorkLoopScope(story, input);
+      if (input.runId && !assignment.runIds.includes(input.runId)) {
+        throw new Error("assignment_update_run_reference_not_in_assignment");
+      }
+      if (input.evidenceId && !this.evidenceBelongsToStory(input.evidenceId, story)) {
+        throw new Error("assignment_update_evidence_reference_not_in_scope");
+      }
+      assignment.status = input.status;
+      this.persistCoreRecord("assignment", assignment);
+      const audit = this.appendAudit(actor, "assignment.update", "assignment", assignment.id, input.status === "blocked" ? "blocked" : "accepted", {
+        fromStatus: input.priorStatus,
+        toStatus: input.status,
+        hasRunReference: Boolean(input.runId),
+        hasEvidenceReference: Boolean(input.evidenceId)
+      });
+      return { assignment: { ...assignment, runIds: [...assignment.runIds] }, auditEventId: audit.id, scope };
+    });
+  }
+
   recordAgentRun(input: Omit<AgentRun, "id">, actor: ActorIdentity): AgentRun {
     return this.withPersistenceTransaction(() => {
       this.ensureSafe(input, "agentRun");
@@ -430,6 +559,61 @@ export class AosStore {
         blocker: blocker ?? null
       });
       return gate;
+    });
+  }
+
+  recordGateDecision(input: GateDecisionRecordInput, actor: ActorIdentity): { gate: GateWorkOrder; auditEventId: string; scope: { initiativeId: string; epicId: string; storyId: string } } {
+    return this.withPersistenceTransaction(() => {
+      this.hydrateFromPersistence();
+      this.ensureSafe(input, "gateDecisionRecord");
+      const gate = this.gates.get(input.gateId);
+      if (!gate) {
+        throw new Error("gate_decision_unknown_gate");
+      }
+      const story = this.requireStory(gate.linkedTicketId);
+      const scope = this.requireWorkLoopScope(story, input);
+      if (terminalGateStatuses.includes(gate.status)) {
+        throw new Error("gate_decision_terminal_status_denied");
+      }
+      if (gate.status !== input.priorStatus) {
+        throw new Error("gate_decision_stale_status");
+      }
+      if (!this.canRecordGateDecision(actor, gate, input.decision)) {
+        throw new Error("gate_decision_role_mismatch");
+      }
+      const evidenceIds = input.evidenceIds ?? [];
+      this.assertGateDecisionEvidence(gate, input.decision, evidenceIds);
+      const decision: NonNullable<GateWorkOrder["decision"]> = {
+        id: createId("decision", {
+          gateId: gate.id,
+          decision: input.decision,
+          actor: actor.employeeId,
+          evidenceIds
+        }),
+        decisionClass: input.decision === "blocked"
+          ? "blocked"
+          : input.decision === "owner_intent_required"
+            ? "owner_intent_required"
+            : "role_decision",
+        actor,
+        summary: `phase3_gate_decision:${input.decision}`,
+        evidenceIds,
+        createdAt: now()
+      };
+      gate.status = input.decision;
+      gate.decision = decision;
+      if (input.decision === "blocked") {
+        gate.blocker = "phase3_gate_decision:blocked";
+      }
+      this.persistCoreRecord("gate", gate);
+      const audit = this.appendAudit(actor, "gate.decision.record", "gate", gate.id, input.decision === "blocked" ? "blocked" : "accepted", {
+        gateType: gate.type,
+        decision: input.decision,
+        evidenceCount: evidenceIds.length,
+        ownerIntentExecution: false,
+        liveDispatchAuthorized: false
+      });
+      return { gate: { ...gate, inputEvidenceIds: [...gate.inputEvidenceIds] }, auditEventId: audit.id, scope };
     });
   }
 
@@ -1670,6 +1854,69 @@ export class AosStore {
         && (!filter.action || event.action === filter.action)
         && (!filter.actorEmployeeId || actorEmployeeId === filter.actorEmployeeId);
     }).map((event) => ({ ...event, details: { ...event.details } }));
+  }
+
+  private resolveWorkLoopStory(targetType: "story" | "gate", targetId: string): StoryRecord {
+    if (targetType === "story") {
+      return this.requireStory(targetId);
+    }
+    const gate = this.requireGate(targetId);
+    return this.requireStory(gate.linkedTicketId);
+  }
+
+  private requireWorkLoopScope(story: StoryRecord, input: WorkLoopScopeInput): { initiativeId: string; epicId: string; storyId: string } {
+    const epic = this.epics.get(story.epicId);
+    if (!epic) {
+      throw new Error("work_loop_missing_epic");
+    }
+    const initiative = this.initiatives.get(epic.initiativeId);
+    if (!initiative) {
+      throw new Error("work_loop_missing_initiative");
+    }
+    if (epic.id !== input.epicId || initiative.id !== input.initiativeId || initiative.projectId !== "TCRN-AOS") {
+      throw new Error("work_loop_scope_mismatch");
+    }
+    return { initiativeId: initiative.id, epicId: epic.id, storyId: story.id };
+  }
+
+  private findActiveAssignment(targetType: Assignment["targetType"], targetId: string, role: Assignment["role"]): Assignment | undefined {
+    return [...this.assignments.values()].find((assignment) =>
+      assignment.targetType === targetType
+      && assignment.targetId === targetId
+      && assignment.role === role
+      && activeAssignmentStatuses.includes(assignment.status)
+    );
+  }
+
+  private evidenceBelongsToStory(evidenceId: string, story: StoryRecord): boolean {
+    this.requireEvidence(evidenceId);
+    return story.evidenceIds.includes(evidenceId)
+      || story.gateIds
+        .map((gateId) => this.gates.get(gateId))
+        .filter((gate): gate is GateWorkOrder => gate !== undefined)
+        .some((gate) => gate.inputEvidenceIds.includes(evidenceId));
+  }
+
+  private canRecordGateDecision(actor: ActorIdentity, gate: GateWorkOrder, decision: GateDecisionRecordInput["decision"]): boolean {
+    if (decision === "owner_intent_required") {
+      return gate.type === "owner_intent" && actor.role === "owner_intent_submitter";
+    }
+    return canApproveGate(actor, gate.type) || actor.role === gate.ownerRole;
+  }
+
+  private assertGateDecisionEvidence(gate: GateWorkOrder, decision: GateDecisionRecordInput["decision"], evidenceIds: string[]): void {
+    if (decision === "owner_intent_required" && gate.type !== "owner_intent") {
+      throw new Error("gate_decision_owner_intent_requirement_incompatible");
+    }
+    for (const evidenceId of evidenceIds) {
+      const evidence = this.requireEvidence(evidenceId);
+      if (!gate.inputEvidenceIds.includes(evidenceId) || evidence.validity !== "valid" || evidence.redactionState === "restricted") {
+        throw new Error("gate_decision_incompatible_evidence");
+      }
+    }
+    if (decision === "accepted" && gate.inputEvidenceIds.length > 0 && !gate.inputEvidenceIds.every((evidenceId) => evidenceIds.includes(evidenceId))) {
+      throw new Error("gate_decision_required_evidence_missing");
+    }
   }
 
   private requireStory(storyId: string): StoryRecord {

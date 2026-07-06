@@ -27,6 +27,8 @@ function gatewayFixture() {
 
 test("gateway exposes only the accepted local MCP method families", () => {
   assert.deepEqual([...allowedMcpMethods].sort(), [
+    "aos.assignment.claim",
+    "aos.assignment.update",
     "aos.audit.query",
     "aos.conference.position.record",
     "aos.conference.minutes.record",
@@ -38,6 +40,7 @@ test("gateway exposes only the accepted local MCP method families", () => {
     "aos.docs.search.index",
     "aos.documentation.index.read",
     "aos.evidence.link",
+    "aos.gate.decision.record",
     "aos.gate.request",
     "aos.github.metadata.record",
     "aos.guide.page.draft",

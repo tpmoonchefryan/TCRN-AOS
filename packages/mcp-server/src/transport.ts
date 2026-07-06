@@ -23,9 +23,12 @@ export const transportMvpMethods = [
   "aos.ticket.propose",
   "aos.ticket.comment",
   "aos.ticket.list",
+  "aos.assignment.claim",
+  "aos.assignment.update",
   "aos.run.summary.create",
   "aos.evidence.link",
   "aos.gate.request",
+  "aos.gate.decision.record",
   "aos.policy.read",
   "aos.stage_map.read",
   "aos.audit.query"

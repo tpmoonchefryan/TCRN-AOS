@@ -10,6 +10,7 @@ import {
 } from "../../domain/src/index.js";
 import type {
   ActorIdentity,
+  Assignment,
   AuditEvent,
   AgentRun,
   DependencyDetectionFinding,
@@ -40,8 +41,11 @@ export const allowedMcpMethods = [
   "aos.ticket.propose",
   "aos.ticket.comment",
   "aos.ticket.list",
+  "aos.assignment.claim",
+  "aos.assignment.update",
   "aos.run.summary.create",
   "aos.gate.request",
+  "aos.gate.decision.record",
   "aos.evidence.link",
   "aos.policy.read",
   "aos.conference.request",
@@ -169,10 +173,16 @@ export class McpGateway {
         }, actor);
       case "aos.ticket.list":
         return this.store.listTickets(params);
+      case "aos.assignment.claim":
+        return this.claimAssignment(actor, params);
+      case "aos.assignment.update":
+        return this.updateAssignment(actor, params);
       case "aos.run.summary.create":
         return this.recordRunSummary(actor, params);
       case "aos.gate.request":
         return this.requestGate(actor, params);
+      case "aos.gate.decision.record":
+        return this.recordGateDecision(actor, params);
       case "aos.evidence.link":
         return this.linkEvidence(actor, params);
       case "aos.policy.read":
@@ -352,6 +362,74 @@ export class McpGateway {
     }, actor);
   }
 
+  private claimAssignment(actor: ActorIdentity, params: Record<string, unknown>): Record<string, unknown> {
+    rejectClientAuthorityParams(params);
+    const result = this.store.claimAssignment({
+      targetType: requireString(params.targetType, "targetType") as "story" | "gate",
+      targetId: requireString(params.targetId, "targetId"),
+      initiativeId: requireString(params.initiativeId, "initiativeId"),
+      epicId: requireString(params.epicId, "epicId")
+    }, actor);
+    return {
+      ok: true,
+      method: "aos.assignment.claim",
+      assignment: safeAssignment(result.assignment),
+      replayedByState: result.replayedByState,
+      scope: result.scope,
+      auditEventId: result.auditEventId
+    };
+  }
+
+  private updateAssignment(actor: ActorIdentity, params: Record<string, unknown>): Record<string, unknown> {
+    rejectClientAuthorityParams(params);
+    const updateInput: Parameters<AosStore["updateAssignment"]>[0] = {
+      assignmentId: requireString(params.assignmentId, "assignmentId"),
+      priorStatus: requireString(params.priorStatus, "priorStatus") as Parameters<AosStore["updateAssignment"]>[0]["priorStatus"],
+      status: requireString(params.status, "status") as Parameters<AosStore["updateAssignment"]>[0]["status"],
+      initiativeId: requireString(params.initiativeId, "initiativeId"),
+      epicId: requireString(params.epicId, "epicId")
+    };
+    const runId = optionalString(params.runId);
+    if (runId) {
+      updateInput.runId = runId;
+    }
+    const evidenceId = optionalString(params.evidenceId);
+    if (evidenceId) {
+      updateInput.evidenceId = evidenceId;
+    }
+    const result = this.store.updateAssignment(updateInput, actor);
+    return {
+      ok: true,
+      method: "aos.assignment.update",
+      assignment: safeAssignment(result.assignment),
+      scope: result.scope,
+      auditEventId: result.auditEventId
+    };
+  }
+
+  private recordGateDecision(actor: ActorIdentity, params: Record<string, unknown>): Record<string, unknown> {
+    rejectClientAuthorityParams(params);
+    const decisionInput: Parameters<AosStore["recordGateDecision"]>[0] = {
+      gateId: requireString(params.gateId, "gateId"),
+      priorStatus: requireString(params.priorStatus, "priorStatus") as Parameters<AosStore["recordGateDecision"]>[0]["priorStatus"],
+      decision: requireString(params.decision, "decision") as Parameters<AosStore["recordGateDecision"]>[0]["decision"],
+      initiativeId: requireString(params.initiativeId, "initiativeId"),
+      epicId: requireString(params.epicId, "epicId")
+    };
+    const evidenceIds = optionalStringArray(params.evidenceIds);
+    if (evidenceIds) {
+      decisionInput.evidenceIds = evidenceIds;
+    }
+    const result = this.store.recordGateDecision(decisionInput, actor);
+    return {
+      ok: true,
+      method: "aos.gate.decision.record",
+      gate: safeGate(result.gate),
+      scope: result.scope,
+      auditEventId: result.auditEventId
+    };
+  }
+
   private recordRunSummary(actor: ActorIdentity, params: Record<string, unknown>): AgentRun {
     const run: Omit<AgentRun, "id"> = {
       assignmentId: requireString(params.assignmentId, "assignmentId"),
@@ -518,6 +596,54 @@ function requireStringArray(value: unknown, field: string): string[] {
     throw new Error(`Missing required string array field: ${field}`);
   }
   return value;
+}
+
+function optionalStringArray(value: unknown): string[] | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+  if (!Array.isArray(value) || !value.every((item) => typeof item === "string")) {
+    throw new Error("Invalid optional string array field");
+  }
+  return value;
+}
+
+function rejectClientAuthorityParams(params: Record<string, unknown>): void {
+  const forbidden = ["actor", "employeeId", "role", "threadId", "sessionId", "auth", "authorization", "clientEnv"];
+  const supplied = forbidden.filter((key) => params[key] !== undefined);
+  if (supplied.length > 0) {
+    throw new Error(`client_authority_param_denied:${supplied.join(",")}`);
+  }
+}
+
+function safeAssignment(assignment: Assignment): Record<string, unknown> {
+  return {
+    id: assignment.id,
+    employeeId: assignment.employeeId,
+    targetId: assignment.targetId,
+    targetType: assignment.targetType,
+    role: assignment.role,
+    status: assignment.status,
+    dueState: assignment.dueState,
+    runIds: assignment.runIds
+  };
+}
+
+function safeGate(gate: GateWorkOrder): Record<string, unknown> {
+  return {
+    id: gate.id,
+    type: gate.type,
+    ownerRole: gate.ownerRole,
+    linkedTicketId: gate.linkedTicketId,
+    status: gate.status,
+    decision: gate.decision ? {
+      id: gate.decision.id,
+      decisionClass: gate.decision.decisionClass,
+      actorEmployeeId: gate.decision.actor.employeeId,
+      evidenceIds: gate.decision.evidenceIds,
+      createdAt: gate.decision.createdAt
+    } : undefined
+  };
 }
 
 function resultType(value: unknown): string {
