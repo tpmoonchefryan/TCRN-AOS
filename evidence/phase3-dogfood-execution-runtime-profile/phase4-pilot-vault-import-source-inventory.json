@@ -1,0 +1,1080 @@
+{
+  "receiptName": "phase4-pilot-vault-import-source-inventory.json",
+  "ok": true,
+  "route": "route_tcrn_aos_phase4_pilot_vault_import_ilya_implementation_proof_after_minerva_precondition_641a959_4ceec7b_20260707",
+  "command": "pnpm --dir TCRN-AOS phase4:pilot-vault-import-proof",
+  "generatedAt": "2026-07-07T04:32:46.354Z",
+  "sourceHead": "96a5d97468af28aeae2bc86a34e2edffa1d47702",
+  "sourceContentDigest": "d4f69b41510ff43bda940f6812408ae4a057400d7072d97e02cacf681c89fbf9",
+  "sourceFiles": [
+    {
+      "file": "package.json",
+      "digest": "03e200a8516d96edbc0870ee5947c93514383252fe349d2d69f4657dbc6093cf"
+    },
+    {
+      "file": "scripts/phase4-pilot-vault-import-proof.mjs",
+      "digest": "f6a6e547fd16ca84a37053971b3ec2bae0f04d54eecfcb248f1069697be2fa80"
+    },
+    {
+      "file": "scripts/d2-runtime-profile-activation-proof.mjs",
+      "digest": "764b421c7dd39a963466263067fe2d94e07bbc828e0b9dbb9f59d44ef05f4331"
+    },
+    {
+      "file": "scripts/d3-real-dogfood-workload-proof.mjs",
+      "digest": "8c2e684930228ac16bd37713d57d80788a43ce0ff9798b196e036614587be197"
+    },
+    {
+      "file": "scripts/d4-friction-capture-proof.mjs",
+      "digest": "337b7360d2fd5ef53bf9c12960c7f0b17fa3b5ee6857eb1409225d8dfce55e2b"
+    },
+    {
+      "file": "packages/db/src/sqlite-repository.ts",
+      "digest": "8de0d042e5cb0966f9ea8789be8eb48693760949e041ae2a0384535f172db78e"
+    },
+    {
+      "file": "packages/domain/src/store.ts",
+      "digest": "db1c74874a28dc0ccf1d55a911ea8d4163d4ca8be7e29c091b1c2b9d4f4eece9"
+    },
+    {
+      "file": "packages/domain/src/seed.ts",
+      "digest": "5624c0e60b51d7d179ab6410e6444df7f86f973a13732b9582420cc53e904f67"
+    },
+    {
+      "file": "packages/mcp-server/src/transport.ts",
+      "digest": "fa2bd7eef3031d6529993d616973332e7699ea65dd56401adeb874d09ef775b4"
+    }
+  ],
+  "workflowBasis": "641a959317b2ec8c5cd6966bda1bcf84e3452823",
+  "aosBasis": "96a5d97468af28aeae2bc86a34e2edffa1d47702",
+  "packageId": "tcrn-aos-product-foundation",
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "pilotVaultImportImplemented": true,
+    "migrationAsDataOnly": true,
+    "localD2RuntimeProfileDbUsed": true,
+    "productRepoEvidenceMutationOnly": true,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "tmsMutation": false,
+    "activeCodexMutation": false,
+    "maintainedHookSourceMutation": false,
+    "hookBehaviorReliance": false,
+    "hookRuntimeImplementation": false,
+    "hookMappingImplemented": false,
+    "hookRetirementPerformed": false,
+    "activeParityClaimed": false,
+    "registryMutationPerformed": false,
+    "generatedAgentMutationPerformed": false,
+    "aosSeedDataAuthorityMutation": false,
+    "crewReductionImplemented": false,
+    "agentsRewriteImplemented": false,
+    "frictionFixImplemented": false,
+    "p0P1ClassificationPerformed": false,
+    "d5StatusMigrationPerformed": false,
+    "durableRuntimeDbActivation": false,
+    "defaultRuntimeDbActivation": false,
+    "remoteRuntimeActivation": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "productReadinessClaimed": false,
+    "phase3AcceptanceClaimed": false,
+    "phase4CloseoutClaimed": false,
+    "ownerFacingSurfaceCreated": false,
+    "ownerAcceptanceClaimed": false,
+    "productAcceptanceClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false
+  },
+  "source": {
+    "sourceHead": "96a5d97468af28aeae2bc86a34e2edffa1d47702",
+    "workflowBasis": "641a959317b2ec8c5cd6966bda1bcf84e3452823",
+    "files": [
+      {
+        "file": "package.json",
+        "digest": "03e200a8516d96edbc0870ee5947c93514383252fe349d2d69f4657dbc6093cf"
+      },
+      {
+        "file": "scripts/phase4-pilot-vault-import-proof.mjs",
+        "digest": "f6a6e547fd16ca84a37053971b3ec2bae0f04d54eecfcb248f1069697be2fa80"
+      },
+      {
+        "file": "scripts/d2-runtime-profile-activation-proof.mjs",
+        "digest": "764b421c7dd39a963466263067fe2d94e07bbc828e0b9dbb9f59d44ef05f4331"
+      },
+      {
+        "file": "scripts/d3-real-dogfood-workload-proof.mjs",
+        "digest": "8c2e684930228ac16bd37713d57d80788a43ce0ff9798b196e036614587be197"
+      },
+      {
+        "file": "scripts/d4-friction-capture-proof.mjs",
+        "digest": "337b7360d2fd5ef53bf9c12960c7f0b17fa3b5ee6857eb1409225d8dfce55e2b"
+      },
+      {
+        "file": "packages/db/src/sqlite-repository.ts",
+        "digest": "8de0d042e5cb0966f9ea8789be8eb48693760949e041ae2a0384535f172db78e"
+      },
+      {
+        "file": "packages/domain/src/store.ts",
+        "digest": "db1c74874a28dc0ccf1d55a911ea8d4163d4ca8be7e29c091b1c2b9d4f4eece9"
+      },
+      {
+        "file": "packages/domain/src/seed.ts",
+        "digest": "5624c0e60b51d7d179ab6410e6444df7f86f973a13732b9582420cc53e904f67"
+      },
+      {
+        "file": "packages/mcp-server/src/transport.ts",
+        "digest": "fa2bd7eef3031d6529993d616973332e7699ea65dd56401adeb874d09ef775b4"
+      }
+    ],
+    "sourceContentDigest": "d4f69b41510ff43bda940f6812408ae4a057400d7072d97e02cacf681c89fbf9",
+    "sourceGitStatusDigestOnly": "bec1b66fb94e007f44bba9376076a8ee16a227fbcf57d99709e1e0ab09e1bb2a",
+    "sourceGitStatusStoredRaw": false
+  },
+  "sourcePackageInventoryReadback": {
+    "ok": true,
+    "packageId": "tcrn-aos-product-foundation",
+    "packageRoot": "TCRN Workflow/vault/initiatives/cross-project/active/tcrn-aos-product-foundation",
+    "packageRootStoredAsRelativePathOnly": true,
+    "rawAbsolutePathRecorded": false,
+    "fileCount": 102,
+    "markdownHeadingCount": 1631,
+    "inventoryDigest": "dd3213943d6acdee3bd7248485f3360f3d999a58bbf00072cfe541e95342bd12",
+    "files": [
+      {
+        "packageRelativePath": "00-brief.md",
+        "sha256": "cf32596633278afce50b373b9b401408c2a20a10ebbd021910cdc5d6349d9d58",
+        "bytes": 2603,
+        "markdownHeadingCount": 7,
+        "primarySectionId": "00-brief.md#h1",
+        "primaryHeadingDigest": "29f2cebf149f658c1c856660f4f374a96f8ea32cada1ebf2335e08f5b00f5bea",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "10-context-assembly.md",
+        "sha256": "0c98c69a8a095d46687bc969f4abb22130687ecb163e4e247b8619e67f732afc",
+        "bytes": 2578,
+        "markdownHeadingCount": 6,
+        "primarySectionId": "10-context-assembly.md#h1",
+        "primaryHeadingDigest": "b910302fcf68e3afe467aecaa7a75fbda6c8c7f2f4bbcdc10edad90beb942bc7",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "20-spec.md",
+        "sha256": "082e3dba4b53e636d74488a8d947702773b354151a487cc3fde1800c991660f3",
+        "bytes": 14586,
+        "markdownHeadingCount": 26,
+        "primarySectionId": "20-spec.md#h1",
+        "primaryHeadingDigest": "1cb18af9a5e4786fd6b91c126b0ef1194f0c7742bd15d64a3ed9771e25103092",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "25-epics-and-stories.md",
+        "sha256": "7fb268a037eeb23f74dfe1586b679e07f9735c92b7deabaa58874c88953173cf",
+        "bytes": 59726,
+        "markdownHeadingCount": 110,
+        "primarySectionId": "25-epics-and-stories.md#h1",
+        "primaryHeadingDigest": "4559a74b2a81d3059a5c188738aae7d4078ee03141a785c1b080407300c7cdac",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "30-review-board.md",
+        "sha256": "a29b9ee23ab99da27d07e6cd4f8e7e760b20ed7a5c135413edf41b701b2f1159",
+        "bytes": 45426,
+        "markdownHeadingCount": 25,
+        "primarySectionId": "30-review-board.md#h1",
+        "primaryHeadingDigest": "156bfabb9019d36f51b12725e82648e38abf8ecd3b15dd5a74bb4a1723de1085",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "35-architecture-topology-review.md",
+        "sha256": "0f72393c84bcedfe57782810208f7c5d68cbf8a0af2635f5e591bc2ae6207efc",
+        "bytes": 13523,
+        "markdownHeadingCount": 17,
+        "primarySectionId": "35-architecture-topology-review.md#h1",
+        "primaryHeadingDigest": "1811879bbece66736be975efcee69c2fc0af34dfc75aea39b2df77cf824402a5",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "36-bootstrap-registration-project-shell-packet.md",
+        "sha256": "382af6b63ee84bbf3aa144bcb2ee289082529426b79d318aca792908108fce7c",
+        "bytes": 4876,
+        "markdownHeadingCount": 8,
+        "primarySectionId": "36-bootstrap-registration-project-shell-packet.md#h1",
+        "primaryHeadingDigest": "a6c7b2596c37997d3574948a4b20bd12994ec68b7149fb38b3d3ffd7e7cc8e44",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "37-mvp-landing-first-slice-kickoff.md",
+        "sha256": "b6e246e04a2ed1c7145b9bf13a5bdd7aaae99dd4a8bb96cf847da7d9e1cd02f6",
+        "bytes": 19075,
+        "markdownHeadingCount": 17,
+        "primarySectionId": "37-mvp-landing-first-slice-kickoff.md#h1",
+        "primaryHeadingDigest": "a26f7640052895c175bf7d6ccb04816b01dc2a20e98d7f6f50277ad536a49263",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "38-mvp-landing-slice-2-runtime-db-service-proof-kickoff.md",
+        "sha256": "68e6664b9e3c7a4044ecb7b85e4da031710879ef6a922afcbb807b3db8cd3569",
+        "bytes": 13365,
+        "markdownHeadingCount": 16,
+        "primarySectionId": "38-mvp-landing-slice-2-runtime-db-service-proof-kickoff.md#h1",
+        "primaryHeadingDigest": "4ed9e84645c4527ca09431b5eace7078cea5d56b2fb3872965ecc69a42028ffd",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "39-mvp-landing-slice-3-mcp-gateway-codex-adapter-kickoff.md",
+        "sha256": "32bb083456257eca1bc70c2230df1845b50a46df8a50c86ddd25b36091d7ea4f",
+        "bytes": 19496,
+        "markdownHeadingCount": 19,
+        "primarySectionId": "39-mvp-landing-slice-3-mcp-gateway-codex-adapter-kickoff.md#h1",
+        "primaryHeadingDigest": "b1f2d804069f1f989de00480ba6dbee7bf51430b594f3dbf5eab8d70c2246625",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "40-decisions.md",
+        "sha256": "fcad96686be3868b429b493e96e3a4735dc54b14794beaaee8d410bfe41a9eb2",
+        "bytes": 119334,
+        "markdownHeadingCount": 84,
+        "primarySectionId": "40-decisions.md#h1",
+        "primaryHeadingDigest": "be9b3960509fff7a526c5b595451e9d3d0ba780c3c5ad0253d2d3cce99c2e45f",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "41-mvp-landing-slice-4-product-design-framing.md",
+        "sha256": "909431b82ba96ababe34e82819c21cae049132d80f478663a417fa0a02051d47",
+        "bytes": 10287,
+        "markdownHeadingCount": 13,
+        "primarySectionId": "41-mvp-landing-slice-4-product-design-framing.md#h1",
+        "primaryHeadingDigest": "9bedf2ee9015a7e0d645aea4a0b948b43d9ed70e2fad8f9fe911cf7a9f3eaade",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "42-mvp-landing-slice-4-operations-cockpit-functional-contract-kickoff.md",
+        "sha256": "e1e75b94ac78c706fd2d53ea21fc16185c85b4ecd17fc09d1e010ffcbd84dff3",
+        "bytes": 20283,
+        "markdownHeadingCount": 15,
+        "primarySectionId": "42-mvp-landing-slice-4-operations-cockpit-functional-contract-kickoff.md#h1",
+        "primaryHeadingDigest": "2277c59697b429c58c42a0d9da13f3979281b98186691014f01909f505e17924",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "43-mvp-landing-frontend-style-baseline-implementation-kickoff.md",
+        "sha256": "f4330a427e7c93ee7c408dbf00748886f205fcb699edfe9e2c9836c2b024172c",
+        "bytes": 20851,
+        "markdownHeadingCount": 17,
+        "primarySectionId": "43-mvp-landing-frontend-style-baseline-implementation-kickoff.md#h1",
+        "primaryHeadingDigest": "09b0cd5203a5a8478bf83eca844f81ad94045b1a28cddb2c0a61d7a289812361",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "44-mvp-landing-slice-5-conference-ai-operating-loop-kickoff.md",
+        "sha256": "776caaff8f3031f7110e1ba0f3d0131698f93a97c787be4609a05f2c28bc0d3c",
+        "bytes": 19706,
+        "markdownHeadingCount": 15,
+        "primarySectionId": "44-mvp-landing-slice-5-conference-ai-operating-loop-kickoff.md#h1",
+        "primaryHeadingDigest": "712e0f85521604556e9ee02ecd3985ac30c1667f628e9f318325c4a787d73770",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "45-deferred-and-out-of-scope.md",
+        "sha256": "40f287ac6e8a34eab22ded66ab5056b4f30ab49196fea953abf3b889872013bf",
+        "bytes": 96544,
+        "markdownHeadingCount": 65,
+        "primarySectionId": "45-deferred-and-out-of-scope.md#h1",
+        "primaryHeadingDigest": "889901fe6831db85754e184b3905bbcaad6f1868716001bb4db9965eaa96e7e4",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "46-mvp-landing-slice-6-knowledge-guide-release-notes-kickoff.md",
+        "sha256": "2fac17702a0aabe634f26d46b1819770b903da4342051d01e8220ba7df2a5c9a",
+        "bytes": 21684,
+        "markdownHeadingCount": 15,
+        "primarySectionId": "46-mvp-landing-slice-6-knowledge-guide-release-notes-kickoff.md#h1",
+        "primaryHeadingDigest": "305eea6ab3930757a85acae62a9713d7efd4e0431517719c1086207b1ca28bef",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "47-mvp-landing-slice-7-dependency-license-resource-library-kickoff.md",
+        "sha256": "f1ee14c20a7d07054b62685996a173f248304a0ca7bf15e4b3aa31a56d328915",
+        "bytes": 13342,
+        "markdownHeadingCount": 14,
+        "primarySectionId": "47-mvp-landing-slice-7-dependency-license-resource-library-kickoff.md#h1",
+        "primaryHeadingDigest": "6443b417f6e2512473bc5fc063e2c681358914fdcccfef7243b83a87dbef9122",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "48-mvp-landing-slice-8-resource-materialization-history-rollback-kickoff.md",
+        "sha256": "5d6edd6a74b1431d869ebd9060a2c4ff14c96fed11918986e80959e153612369",
+        "bytes": 14368,
+        "markdownHeadingCount": 15,
+        "primarySectionId": "48-mvp-landing-slice-8-resource-materialization-history-rollback-kickoff.md#h1",
+        "primaryHeadingDigest": "c3f6d6934306764eaf5cf67200d46ac44eac5ad7d704211467f25a28cea79c41",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "49-mvp-remaining-route-disposition-after-slice-8.md",
+        "sha256": "dfa209565fc8acf6a4d18812cfa8f2aea94e52b20dcbe948effd0ea83511a6b3",
+        "bytes": 14194,
+        "markdownHeadingCount": 15,
+        "primarySectionId": "49-mvp-remaining-route-disposition-after-slice-8.md#h1",
+        "primaryHeadingDigest": "a3f611327ec2a0190b671362215125c1776d28a9810c9ac1d6bbf69a7d1e6cec",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "50-implementation-plan.md",
+        "sha256": "a65313836b54b6d8c07f7c307a083fbd5995fa8bc4441c9620299e3c78cc6c26",
+        "bytes": 181003,
+        "markdownHeadingCount": 38,
+        "primarySectionId": "50-implementation-plan.md#h1",
+        "primaryHeadingDigest": "f95f743282b95e74029f5f77335c3ac3afbbfc1ccdc0ba0a295fc65e91312ba2",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "51-mvp-local-foundation-stage-readiness-disposition-after-slice-9.md",
+        "sha256": "7a0d7419a4ef2e5a8638732ee02a3875abf0bf2a93a176997abb8d998d8c936c",
+        "bytes": 10622,
+        "markdownHeadingCount": 14,
+        "primarySectionId": "51-mvp-local-foundation-stage-readiness-disposition-after-slice-9.md#h1",
+        "primaryHeadingDigest": "96e609a928698bbb52cade5cfeb8a2612d99c1e358c0a7ebd0415813d3c03664",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "52-post-stage-closeout-product-gate-disposition.md",
+        "sha256": "7e30a0ba02c43887b331178e13b7cf3048e78a4251a29948215e5d059d7a99d9",
+        "bytes": 8132,
+        "markdownHeadingCount": 10,
+        "primarySectionId": "52-post-stage-closeout-product-gate-disposition.md#h1",
+        "primaryHeadingDigest": "386f2b9cf23f9e3c22e46e48d754b4e2053db785fc963bb0207f3d115a55d14a",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "53-post-cockpit-product-facing-gate-disposition.md",
+        "sha256": "5d9482a4c2c162fcf3213311f277d58494badd29601430588689d52be47fda47",
+        "bytes": 10719,
+        "markdownHeadingCount": 11,
+        "primarySectionId": "53-post-cockpit-product-facing-gate-disposition.md#h1",
+        "primaryHeadingDigest": "5db8b03aa8401f66d6f41b350af3e6da7404aa0617d05ae93892fe0a7724c83a",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "54-mvp-landing-slice-9-visible-readiness-inspection-kickoff.md",
+        "sha256": "4043f9fd76d41606eb044a7afbac02153df638bdd6009a96ffbb38d9f8ce0bbe",
+        "bytes": 13602,
+        "markdownHeadingCount": 15,
+        "primarySectionId": "54-mvp-landing-slice-9-visible-readiness-inspection-kickoff.md#h1",
+        "primaryHeadingDigest": "22b6594437ac99d27faaf2daa8c9dec4dbc9d68f6f3431fc42e4c9620dd74973",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "55-post-slice9b-product-stage-gate-disposition.md",
+        "sha256": "034c2d4ef395918af7da63af418d944ea229be14bdd3f83e3254ee6bb0914f2e",
+        "bytes": 10026,
+        "markdownHeadingCount": 10,
+        "primarySectionId": "55-post-slice9b-product-stage-gate-disposition.md#h1",
+        "primaryHeadingDigest": "4b99b8dd417e4a0a08d22683d4f854870f5947a58f54b9591621af066f46e6b3",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "56-aos-wide-product-design-target-set-disposition.md",
+        "sha256": "7500b6326dd98717af27ad9bcae0515cd5d6a87aa7c1d442883b7c96f76f5882",
+        "bytes": 11367,
+        "markdownHeadingCount": 11,
+        "primarySectionId": "56-aos-wide-product-design-target-set-disposition.md#h1",
+        "primaryHeadingDigest": "fae752b1f1ec6c59e54b1b19e743d5a155d43b24f9f0db9893a63470387b5176",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "57-aos-wide-product-design-implementation-evidence-stage-packet.md",
+        "sha256": "49ef358cc74942acd366b2f84d31855475097f6eba6cfb8f8e2bc1176925db46",
+        "bytes": 14063,
+        "markdownHeadingCount": 14,
+        "primarySectionId": "57-aos-wide-product-design-implementation-evidence-stage-packet.md#h1",
+        "primaryHeadingDigest": "ae5c1c695686bca3469ccfe3f403fd99f2b522eee2dfa406d0d6f132a3db11d7",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "58-post-slice10-product-gate-stage-disposition.md",
+        "sha256": "eb974785379eb4136d90efb62a0e70ad7a8fe5502c91711c6114431ec67c0687",
+        "bytes": 10135,
+        "markdownHeadingCount": 10,
+        "primarySectionId": "58-post-slice10-product-gate-stage-disposition.md#h1",
+        "primaryHeadingDigest": "97a406db537d54291eaa6e3950c398cce3e08dd4669b30152adca11ec4d3c80b",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59-aos-product-acceptance-readiness-residual-gate-matrix.md",
+        "sha256": "38d3c1f31b68dd2aca5b51c5376e9495669f4294789206d189e07629ea72180e",
+        "bytes": 10468,
+        "markdownHeadingCount": 10,
+        "primarySectionId": "59-aos-product-acceptance-readiness-residual-gate-matrix.md#h1",
+        "primaryHeadingDigest": "a3c42fc02aebc62e8a577508d1becbf2d92058ecbf2d79aa6a4582165a93166d",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59a-residual-gate-sequencing-deployment-dispatch.md",
+        "sha256": "a712f6a7d62ef3e449f93ef96d31f005e4060c0d9ce762be2bd323ff9845424a",
+        "bytes": 9716,
+        "markdownHeadingCount": 12,
+        "primarySectionId": "59a-residual-gate-sequencing-deployment-dispatch.md#h1",
+        "primaryHeadingDigest": "88979e0409ab6028d84e9b3f8ca5d281928b48ac45c8cf747b8cfb6ac41707f4",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59aa-persistent-db-storage-prerequisite-post-correction-status-evidence-sync.md",
+        "sha256": "6e42bb45652550958bb6aa04fa8783a59587c7d221b161477ca648fb721bb97f",
+        "bytes": 5799,
+        "markdownHeadingCount": 8,
+        "primarySectionId": "59aa-persistent-db-storage-prerequisite-post-correction-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "9280148a5c905de77212c066c6b7168169990bc863d66797a9ff85606bd09736",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ab-transfer-evidence-filtering-allowlist-prerequisite-packet.md",
+        "sha256": "279929c1163342296579d57599519595865777f74022d6f1ad50137e2d2a657f",
+        "bytes": 11803,
+        "markdownHeadingCount": 13,
+        "primarySectionId": "59ab-transfer-evidence-filtering-allowlist-prerequisite-packet.md#h1",
+        "primaryHeadingDigest": "ab9afe8458e3b4e50efc32c695e23a254e114dc5940aabaaf0af3f828bbd1c0e",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ac-transfer-evidence-filtering-allowlist-review-convergence-status-sync.md",
+        "sha256": "4b636daf62938a262af9c32e23b734033af47528c50f07c3cd895f9dfc7ce410",
+        "bytes": 5866,
+        "markdownHeadingCount": 8,
+        "primarySectionId": "59ac-transfer-evidence-filtering-allowlist-review-convergence-status-sync.md#h1",
+        "primaryHeadingDigest": "18b5e5ee6cce88124d7061177dfd970719a8fc3b43958295a007d9f3c88ba637",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ad-target-host-persistent-runtime-execution-proof-packet.md",
+        "sha256": "99dbd4a66e186db6626fbc5b591c6d18f2cf9b30d2faa9e7f5a018b3496ef14f",
+        "bytes": 15191,
+        "markdownHeadingCount": 18,
+        "primarySectionId": "59ad-target-host-persistent-runtime-execution-proof-packet.md#h1",
+        "primaryHeadingDigest": "31612a39bf5b5e8b3b33cff089dd52616a7cf1e59b6ab4e260893167023061f8",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ae-59ad-post-sable-status-evidence-sync.md",
+        "sha256": "2d67914c539015612f70eb6b2940cc43a2aad23b5a493b9a57565d8b43cd6fe5",
+        "bytes": 2496,
+        "markdownHeadingCount": 6,
+        "primarySectionId": "59ae-59ad-post-sable-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "19a766d508a2f5b1bf4bccaf1775f368cf6fddc4e4f6b82ff7d1dd7f6f7bf719",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59af-source-export-prerequisite-review-convergence-status-evidence-sync.md",
+        "sha256": "a2bfbabc6a1143df9b11756d5d515e17dec6910acec519205584981977a7c9cb",
+        "bytes": 8153,
+        "markdownHeadingCount": 9,
+        "primarySectionId": "59af-source-export-prerequisite-review-convergence-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "464565b9d8bdf09ac74c3a309a1d6ed9f00e437326a8e98ea8a574bbe789940f",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ag-target-host-persistent-runtime-execution-status-evidence-sync.md",
+        "sha256": "2d4e6f91b19dc7d05c115a241032b5e8b5bf0a640a748a93f8a1ebabfd8b886f",
+        "bytes": 7402,
+        "markdownHeadingCount": 9,
+        "primarySectionId": "59ag-target-host-persistent-runtime-execution-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "bc77bdd3afe7ff23857a5422d7f43924724ba423fdf3ef2149b5ee41b9b2442e",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ah-owner-trial-service-backed-frontend-initiative.md",
+        "sha256": "83c80bae7c4e956ae6b236803a2749485b42d084d021ec7b82cfc5b5574c25fb",
+        "bytes": 9440,
+        "markdownHeadingCount": 10,
+        "primarySectionId": "59ah-owner-trial-service-backed-frontend-initiative.md#h1",
+        "primaryHeadingDigest": "e9d8262d1dae957310f1ee5d62188c5e7bb9c65a3610cdcbb5dcceb4438e2a63",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ai-aos-design-system-frontend-rebuild-plan.md",
+        "sha256": "e0bc1bae10cc8e10aa7d8f32d6d6e093994d44d8f04bcb0239ec8f15739ebc0d",
+        "bytes": 10294,
+        "markdownHeadingCount": 14,
+        "primarySectionId": "59ai-aos-design-system-frontend-rebuild-plan.md#h1",
+        "primaryHeadingDigest": "489d100d38d7886322748ea504b4cfa67bb1b179f1d65d2609e0dc8d6cc587c8",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59aj-aos-design-system-consumer-slice-1-status-evidence-sync.md",
+        "sha256": "abd15a3dfbd31ea3aa574cd9c98b4b1943122582a5ce57e13cd115f2fb684af2",
+        "bytes": 6074,
+        "markdownHeadingCount": 9,
+        "primarySectionId": "59aj-aos-design-system-consumer-slice-1-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "2fd792acdb73e02c1243094b5dbaa5abb4a8094f3dbafa20c4244bf0c9ced31f",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ak-aos-design-system-consumer-slice-2-service-read-model-status-evidence-sync.md",
+        "sha256": "076aa36f885239d7fedf4a58fffae190faf8d32d717af0f5b9a87a7c2ee97642",
+        "bytes": 6877,
+        "markdownHeadingCount": 10,
+        "primarySectionId": "59ak-aos-design-system-consumer-slice-2-service-read-model-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "74d05f3199f188369d05f975449cae5020158adfea29c3b8bceb3d66f472cb3f",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59al-aos-design-system-consumer-slice-2-disabled-reason-repair-status-evidence-sync.md",
+        "sha256": "c7a35c479acade3a6b6166a4065e5bbeea710a4f79e3bd3cccb2e2b35b1c3213",
+        "bytes": 7467,
+        "markdownHeadingCount": 9,
+        "primarySectionId": "59al-aos-design-system-consumer-slice-2-disabled-reason-repair-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "e58945e3e63e2790cb118f3087ceacfeb7fa5e5e5d5bc6715421349233fa6c26",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59am-aos-design-system-registered-component-marker-proof-status-evidence-sync.md",
+        "sha256": "a7710b730fa969d9d2665395b5336c79890ed4f81793b42740b1fab2dc7da051",
+        "bytes": 8919,
+        "markdownHeadingCount": 10,
+        "primarySectionId": "59am-aos-design-system-registered-component-marker-proof-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "097ffb39b1d754b155e0517b532772f82da9733fff6e9c62735708010abf6144",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59an-aos-design-system-operations-cockpit-package-runtime-status-evidence-sync.md",
+        "sha256": "8af98572f7717762b79314547660eb18ab84363e4b3ac84539e4e9d03f9bb72c",
+        "bytes": 12116,
+        "markdownHeadingCount": 12,
+        "primarySectionId": "59an-aos-design-system-operations-cockpit-package-runtime-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "a4634d2affef8eaf7dbb4091c3d8fffb34567ea4d926fb57c9596b54db191e8c",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ao-aos-design-system-operations-cockpit-work-index-package-runtime-visual-style-repair-status-evidence-sync.md",
+        "sha256": "c5b0e24fe141fc253a163afee439b1356d11b8fa7c9331fad9a8770be5e9df30",
+        "bytes": 14681,
+        "markdownHeadingCount": 14,
+        "primarySectionId": "59ao-aos-design-system-operations-cockpit-work-index-package-runtime-visual-style-repair-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "cb0c28a298cfc9000d428a36ac7762d8f677187b64176fe4671471777a93e843",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ap-aos-design-system-selected-detail-package-runtime-status-evidence-sync.md",
+        "sha256": "0c9b6a496a5de785f6c89b7d1f807faf39ae1771401a3c70e9437211f8f94e75",
+        "bytes": 11244,
+        "markdownHeadingCount": 12,
+        "primarySectionId": "59ap-aos-design-system-selected-detail-package-runtime-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "de7654dc78c3fce304c2f6721de015b72a69b804d0153ed445d80bf1778f2d4f",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59aq-aos-design-system-gate-readback-cards-package-runtime-status-evidence-sync.md",
+        "sha256": "77b0e79a3e5fc9972bc8cdfc410aa15c981984528505526cda3ffbb56b89bec1",
+        "bytes": 15714,
+        "markdownHeadingCount": 12,
+        "primarySectionId": "59aq-aos-design-system-gate-readback-cards-package-runtime-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "01dfe97d45857ba392d87432d5880b034c42613ff0c0cc7798a89901f1132d26",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ar-aos-design-system-stage-phase-package-runtime-status-evidence-sync.md",
+        "sha256": "902cd0c3330586bb6803f37bd1ca069c4a70ec318d8e7830e53d6632dcc43eff",
+        "bytes": 11992,
+        "markdownHeadingCount": 12,
+        "primarySectionId": "59ar-aos-design-system-stage-phase-package-runtime-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "c6cab9ba07aa5b3776acf162620573710d727c8d579214b77a7c7614c23898d6",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59as-aos-design-system-topbar-checkpoint-service-status-package-runtime-status-evidence-sync.md",
+        "sha256": "7b472b756dbe3bd7652f09f4fccd6511d7c9fa1a157a2c9f533e3ec7f271595b",
+        "bytes": 14324,
+        "markdownHeadingCount": 12,
+        "primarySectionId": "59as-aos-design-system-topbar-checkpoint-service-status-package-runtime-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "97e843209af8aa61efb269261dfd4f560350799e6891b4b80902ff53ff58de84",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59at-aos-design-system-claim-risk-evidence-strip-package-runtime-status-evidence-sync.md",
+        "sha256": "425ad55c8250a0eef0027c9bb5e64f6c27e20b44132d8fc206411ccc4755d356",
+        "bytes": 14762,
+        "markdownHeadingCount": 12,
+        "primarySectionId": "59at-aos-design-system-claim-risk-evidence-strip-package-runtime-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "d049b3c0e421182d70118c5fed248c19e5abcc22be2e74ddce90ac7fbf6d04c5",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59au-aos-design-system-shell-sidebar-package-runtime-status-evidence-sync.md",
+        "sha256": "557498b2d05ae028a8bd82a014ecd498d3b25bf90059e7e40a04021033752365",
+        "bytes": 13228,
+        "markdownHeadingCount": 12,
+        "primarySectionId": "59au-aos-design-system-shell-sidebar-package-runtime-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "ce139fe839c1e7c30337620852d45d786ea79e70801b3470705f091ea41311e1",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59av-aos-design-system-operations-cockpit-package-runtime-completion-status-evidence-sync.md",
+        "sha256": "6ae8b06a05eedac10559c7cb14c67a98f5a62fb029bff2b4fbd39de873089fcc",
+        "bytes": 13528,
+        "markdownHeadingCount": 12,
+        "primarySectionId": "59av-aos-design-system-operations-cockpit-package-runtime-completion-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "955ecad60045b631fa27f54b69e3a84cbb468d80f45af72b961cf2de6378abe9",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59aw-aos-design-system-docs-readiness-package-runtime-status-evidence-sync.md",
+        "sha256": "12799738f6dcbc179a4fc19ecb3eee5cca0fd2c4fd327e0a4432b54f67f8c801",
+        "bytes": 8035,
+        "markdownHeadingCount": 11,
+        "primarySectionId": "59aw-aos-design-system-docs-readiness-package-runtime-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "627be081db60d6e9d98c052f34423010a4534373c8a9c28d2d5802f383108b6c",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ax-aos-design-system-aos-wide-product-design-package-runtime-status-evidence-sync.md",
+        "sha256": "f60cbc7a3a3856032aea4e9ebf303f345dbb909479b1e841e297b41cd08d67a9",
+        "bytes": 8288,
+        "markdownHeadingCount": 11,
+        "primarySectionId": "59ax-aos-design-system-aos-wide-product-design-package-runtime-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "e9671520460da86bb48b219032163e1738caa6db3a000a18f3b50658d3bec440",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ay-aos-design-system-full-frontend-rebuild-status-evidence-sync.md",
+        "sha256": "13f42706aaf5d0108293fbc9ad7b50eea4b77f1bd4874fa259f5e30e0ec7a6ca",
+        "bytes": 12064,
+        "markdownHeadingCount": 8,
+        "primarySectionId": "59ay-aos-design-system-full-frontend-rebuild-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "7ed9e03177c926df5740536431f49bd499ed33bda1a03368aaf6e9d733c43445",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59az-aos-design-system-parent-objective-exact-final-head-status-evidence-sync.md",
+        "sha256": "30305d95fab23ebea6e5964cd10d0d3499060fe2e2fa4ee857b7940744f32dbb",
+        "bytes": 10706,
+        "markdownHeadingCount": 9,
+        "primarySectionId": "59az-aos-design-system-parent-objective-exact-final-head-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "278d3e34de54db6dd61f20df14e0ff31ca78742908e73a28a888a8f769dea774",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59b-deployment-runtime-topology-readiness.md",
+        "sha256": "de7c52dbe3d08fed2346994063633f4f3d7ab0bf1fca91e2297a3cf58f2981f5",
+        "bytes": 13669,
+        "markdownHeadingCount": 14,
+        "primarySectionId": "59b-deployment-runtime-topology-readiness.md#h1",
+        "primaryHeadingDigest": "7b35279482aeafa631fb8517e7b2c3e74537b196ec4ab9f39fa1f4269fd261c5",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59ba-aos-design-system-parent-surface-inventory-proof-convergence-status-evidence-sync.md",
+        "sha256": "1dd66ea9ea167de63c98b9f88997f02ed1adf3abffbd96e2f128fb43fa263be5",
+        "bytes": 84329,
+        "markdownHeadingCount": 22,
+        "primarySectionId": "59ba-aos-design-system-parent-surface-inventory-proof-convergence-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "8932b610831a6dec15c074253187c2f5c3b037edfdb83631aa40ebcf5fb60b84",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bb-aos-design-system-navigation-storybook-alignment-repair-status-evidence-sync.md",
+        "sha256": "b96587b3cf7dbdb2648ce1e5bad63cbe80789d504bd0372e66856e91a7f29f0b",
+        "bytes": 7727,
+        "markdownHeadingCount": 7,
+        "primarySectionId": "59bb-aos-design-system-navigation-storybook-alignment-repair-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "83676e6287c9a72b22424b44815627ea5cfe4cecae283b0d14ccb66dcce06452",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bc-aos-design-system-actual-bounded-recompletion-status-closeout-record.md",
+        "sha256": "6de77b382541bd566d0adb4f93ae861dfff6a701f843c23524efb86367460b98",
+        "bytes": 7546,
+        "markdownHeadingCount": 7,
+        "primarySectionId": "59bc-aos-design-system-actual-bounded-recompletion-status-closeout-record.md#h1",
+        "primaryHeadingDigest": "38090d3445d6fa4efad075ecb0e9823bc8bfbcdeafc9162f149f201388141e03",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bd-aos-design-system-actual-bounded-acceptance-revalidation-status-closeout-record.md",
+        "sha256": "13ca7533418e29e232fd9af967eff2c0e907432cb7af9c700fd87f87aa66f99c",
+        "bytes": 6796,
+        "markdownHeadingCount": 6,
+        "primarySectionId": "59bd-aos-design-system-actual-bounded-acceptance-revalidation-status-closeout-record.md#h1",
+        "primaryHeadingDigest": "77f3b816474e02161344ffcc96bd1fb7bfc9e81b09c697fda536d8103b836420",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59be-aos-design-system-actual-parent-closeout-completion-status-closeout-record.md",
+        "sha256": "c242b932dddf51a972e5254ba2fefef899992b5fe6685e872e40af57d8d9453c",
+        "bytes": 8554,
+        "markdownHeadingCount": 7,
+        "primarySectionId": "59be-aos-design-system-actual-parent-closeout-completion-status-closeout-record.md#h1",
+        "primaryHeadingDigest": "08ef6db54a18f4771ab4f511ad8410b65e8bd5e0ba8d89b903166ef43222b5fc",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bf-aos-design-system-parent-goal-reopen-after-served-scope-overclaim.md",
+        "sha256": "916d7a304425781a90948c0476241d1c20c0146eff3ddf3f079d6d60221a0742",
+        "bytes": 5189,
+        "markdownHeadingCount": 6,
+        "primarySectionId": "59bf-aos-design-system-parent-goal-reopen-after-served-scope-overclaim.md#h1",
+        "primaryHeadingDigest": "83fa555d619cc5fe22be6ea1f1df5cbb9f88657426a5bb07727c97e9b0886949",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bg-aos-design-system-total-product-scope-decision-status-record.md",
+        "sha256": "014b47bead3ec7fcc81d2a61af6a2b7ea9a08be812c5b212dd24b67902adc51f",
+        "bytes": 7413,
+        "markdownHeadingCount": 6,
+        "primarySectionId": "59bg-aos-design-system-total-product-scope-decision-status-record.md#h1",
+        "primaryHeadingDigest": "3a655b2acb7becab45011e8e8cf424655774d04351ff3e2ae10088b3637521e6",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bh-aos-design-system-project-workspace-movement-status-evidence-sync.md",
+        "sha256": "eb25bda08aa9c77df28f215b4914fac28c6f88f5581775e6c3ebbd750f0b193f",
+        "bytes": 7054,
+        "markdownHeadingCount": 7,
+        "primarySectionId": "59bh-aos-design-system-project-workspace-movement-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "839ef6a8d2d1e6a0d1bc8e1332d831244d5bdd7e4e4c7710796425770018ce35",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bi-aos-design-system-actual-cockpit-only-completion-acceptance-status-evidence-sync.md",
+        "sha256": "634925fab019a6284ba3d805629f2c5c2d89f93e927dd239039c286a6c607746",
+        "bytes": 6183,
+        "markdownHeadingCount": 6,
+        "primarySectionId": "59bi-aos-design-system-actual-cockpit-only-completion-acceptance-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "bdae5ef5e34185dac220015d6c82a9a955eef1c4c67e19538725a43bcac280f8",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bj-aos-design-system-cockpit-only-parent-completion-closeout-status-record.md",
+        "sha256": "fc86d9e2c9b7f2a8752bfd5c7460b6c499f8a68858635cb3a4ee7c413ecdd2da",
+        "bytes": 7530,
+        "markdownHeadingCount": 5,
+        "primarySectionId": "59bj-aos-design-system-cockpit-only-parent-completion-closeout-status-record.md#h1",
+        "primaryHeadingDigest": "f18b91e76df9534566c3f0210b8b5bbd6fb85ee06b1b1694c618bc06753bd674",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bk-aos-design-system-frontend-rebuild-reopen-after-false-cockpit-complete.md",
+        "sha256": "928cc598f38be17a522a903c136e8dcf6453613103b4d94b8fe8065916c17430",
+        "bytes": 5604,
+        "markdownHeadingCount": 5,
+        "primarySectionId": "59bk-aos-design-system-frontend-rebuild-reopen-after-false-cockpit-complete.md#h1",
+        "primaryHeadingDigest": "6404856b5846aba272ef6689d0d2df515b63c2c2281f6ce97bee4702428c2d4f",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bl-aos-design-system-gate-queue-project-workspace-shared-proof-current-status-evidence-sync.md",
+        "sha256": "bc99e0efefecc6094b70abd50d7a0d73008727917c5a27f309a746149b4d2d53",
+        "bytes": 5965,
+        "markdownHeadingCount": 7,
+        "primarySectionId": "59bl-aos-design-system-gate-queue-project-workspace-shared-proof-current-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "16cbaf270697033f5f215481931993beb45be69119f3b1d814e6ea642fa9d9a3",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bm-aos-design-system-ai-employee-sibling-navigation-status-evidence-sync.md",
+        "sha256": "0f7ce62885fc3612a6424f8870298e62d9e0ed8b58ae124d43b8f5fb7a4b576f",
+        "bytes": 10899,
+        "markdownHeadingCount": 8,
+        "primarySectionId": "59bm-aos-design-system-ai-employee-sibling-navigation-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "9256b7490805fc3bcbd91b13336c97e7665aeb8baf8771e2e87c180364386b80",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bn-aos-design-system-conference-sibling-navigation-status-evidence-sync.md",
+        "sha256": "e362dca001a9ed27128dd969a859a747cb38e3ff791423be7ef61c0ec4ff64ff",
+        "bytes": 10782,
+        "markdownHeadingCount": 8,
+        "primarySectionId": "59bn-aos-design-system-conference-sibling-navigation-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "912ee097a1bf83c6a7b3b844e5c558b5ea4bb5e12ff658fcd593a96160ddd6dd",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bo-aos-work-module-jira-reference-layout-redesign-plan-packet.md",
+        "sha256": "f334d7c0a77b3b27f989cc5012af47eb9a1483fff9e053a4a98af7a60656e72a",
+        "bytes": 16672,
+        "markdownHeadingCount": 12,
+        "primarySectionId": "59bo-aos-work-module-jira-reference-layout-redesign-plan-packet.md#h1",
+        "primaryHeadingDigest": "69b4b671b13f84baa13f1dbf6d3699de8804f6de353a1dd3aa6f024f34ff5910",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59bp-atlassian-class-meridian-ds-storybook-aos-plan-packet.md",
+        "sha256": "4ebfe0a97680ed61b560d3bc51f8b989cae46c07d2dcca48addcd1d003bfb7d5",
+        "bytes": 15306,
+        "markdownHeadingCount": 15,
+        "primarySectionId": "59bp-atlassian-class-meridian-ds-storybook-aos-plan-packet.md#h1",
+        "primaryHeadingDigest": "958edcb189c6e3a63839dc83acaf3be2afff4ca20fbf9d6cb126d4f436a66dd2",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59c-deployment-runtime-execution-packet-draft.md",
+        "sha256": "f19a0952f447e1ed380d6f8205bd5ae7a78eec1787bd245414ef3cf9777f0f16",
+        "bytes": 16420,
+        "markdownHeadingCount": 21,
+        "primarySectionId": "59c-deployment-runtime-execution-packet-draft.md#h1",
+        "primaryHeadingDigest": "4d0b9e7c0e1d1f8f0533b3edadc9e83759c83331e6055c35ce9e7557131fe2b7",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59d-live-dispatch-thread-authority-topology-readiness.md",
+        "sha256": "57c8c309990809a7ab854bc05a3bd350cc231269f6a1d2ffbbe0651b3affd155",
+        "bytes": 12942,
+        "markdownHeadingCount": 15,
+        "primarySectionId": "59d-live-dispatch-thread-authority-topology-readiness.md#h1",
+        "primaryHeadingDigest": "17f9419dabfa1c0837fcf7a3fa398a3800ab206fd6914323585e18e6518516e4",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59e-post-59d-residual-gate-convergence-deferral-disposition.md",
+        "sha256": "de77e484fbd0ee3b5b308a1cf86db7ebb0128bcf86899305cf572e942c6975c1",
+        "bytes": 10026,
+        "markdownHeadingCount": 14,
+        "primarySectionId": "59e-post-59d-residual-gate-convergence-deferral-disposition.md#h1",
+        "primaryHeadingDigest": "bb496e79fd420e4cc709c7bf1aa7ce1ad3862c620c33aeb0993b2209f95e9d99",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59f-product-acceptance-readiness-live-dispatch-deferral-classification.md",
+        "sha256": "c742a02b45a7e2d942408ca1d1417ed5f2d8b695b78c1b5b12a02dafeefb02f9",
+        "bytes": 9151,
+        "markdownHeadingCount": 13,
+        "primarySectionId": "59f-product-acceptance-readiness-live-dispatch-deferral-classification.md#h1",
+        "primaryHeadingDigest": "6e1f7fcee705a88456b461928b5021ad454de9c587e83e5d79c05cc9676811a5",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59g-live-dispatch-dry-run-no-send-authority-packet.md",
+        "sha256": "5133560b930c29b18834cc64f78ac8a206f36390c279527761400851e8a0b57b",
+        "bytes": 20734,
+        "markdownHeadingCount": 20,
+        "primarySectionId": "59g-live-dispatch-dry-run-no-send-authority-packet.md#h1",
+        "primaryHeadingDigest": "0594084b00b440c6a88e602920b75821ff76d3ffbefe57546e04546f86af533e",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59h-live-dispatch-dry-run-no-send-implementation-evidence-packet.md",
+        "sha256": "eb2db417d5a0b2f14fdbaff7c1fd83c9021ce6197c0b03ef12c1070ff0051f2d",
+        "bytes": 22702,
+        "markdownHeadingCount": 22,
+        "primarySectionId": "59h-live-dispatch-dry-run-no-send-implementation-evidence-packet.md#h1",
+        "primaryHeadingDigest": "8f76f435d3ed93c49beb431ed11c22a303b223526e8f01a47353f84fcc7e79b6",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59i-post-59h-product-acceptance-residual-gate-disposition.md",
+        "sha256": "ed4d78fb6724a82e18c964e03c4c5b505179d75fdab191ca4d8f3dc55a5aaeb1",
+        "bytes": 12237,
+        "markdownHeadingCount": 12,
+        "primarySectionId": "59i-post-59h-product-acceptance-residual-gate-disposition.md#h1",
+        "primaryHeadingDigest": "01a7051f9282df154d55f0220a5082467558dae3b2504ab8077b19ae8ac3a596",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59j-real-live-dispatch-terminal-return-authority-packet.md",
+        "sha256": "6e9977d83bb4268a7dee26a0e4e6ae7c9111ac886ebce92d584a5fea92e14db6",
+        "bytes": 15156,
+        "markdownHeadingCount": 17,
+        "primarySectionId": "59j-real-live-dispatch-terminal-return-authority-packet.md#h1",
+        "primaryHeadingDigest": "8d538e85e4690ba14e95a6ebd1a918837a51d859a3fc50f2f99e829507cc8ff3",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59k-real-live-dispatch-terminal-return-implementation-execution-packet.md",
+        "sha256": "87839bdca94f1503dda2c5edb0b19d1712d3a59cb17330dd919ecdc795e30713",
+        "bytes": 25026,
+        "markdownHeadingCount": 21,
+        "primarySectionId": "59k-real-live-dispatch-terminal-return-implementation-execution-packet.md#h1",
+        "primaryHeadingDigest": "1294bbf7ef29cd2b718c66876dabbc77cef94ba938827a0690958f25881c4f5b",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59l-stage-b-live-dispatch-execution-authority-decision-packet.md",
+        "sha256": "a187bd7b171c0f80f054229a8e4e4192b86a544d0b362f6f91e7ac601603f878",
+        "bytes": 16457,
+        "markdownHeadingCount": 18,
+        "primarySectionId": "59l-stage-b-live-dispatch-execution-authority-decision-packet.md#h1",
+        "primaryHeadingDigest": "b2b9f4bec5067be70ecce82781dee3936bb497912c46a3f66fa5d4083199a118",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59m-stage-b-live-dispatch-terminal-return-execution-authority-packet.md",
+        "sha256": "8069500273b4912d05ddffb4e54c01404be506d2a97855811755109876a38f38",
+        "bytes": 14269,
+        "markdownHeadingCount": 16,
+        "primarySectionId": "59m-stage-b-live-dispatch-terminal-return-execution-authority-packet.md#h1",
+        "primaryHeadingDigest": "322e34fa85c5c524f77d88d1b3064645dbdeb712011c673961a81f9300785591",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59n-stage-b-live-dispatch-terminal-return-execution-packet-draft.md",
+        "sha256": "8ea924cf2064c5130a6fd321891a2de636efbe0c9f87cf740e145df82012d4c9",
+        "bytes": 17517,
+        "markdownHeadingCount": 16,
+        "primarySectionId": "59n-stage-b-live-dispatch-terminal-return-execution-packet-draft.md#h1",
+        "primaryHeadingDigest": "00a8a990ed7c283ee471d636ba1706426a361ff208011cd225969d1a64f0a764",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59o-post-59n-review-convergence-next-route-disposition.md",
+        "sha256": "7c63ce682a8a43c0dcdd25da4921cd52c373891408d7853b4c8432a9d8aebebf",
+        "bytes": 12976,
+        "markdownHeadingCount": 11,
+        "primarySectionId": "59o-post-59n-review-convergence-next-route-disposition.md#h1",
+        "primaryHeadingDigest": "689f3c9e1d04340aa0b65668eba23aa57ac9bd03bf569dabe6faa0e89abca8de",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59p-stage-b-value-freeze-owner-intent-pre-execution-packet.md",
+        "sha256": "4b869dd542fc58faff436fa8e4d4c171557a00ddfd2e6c682ee3f64578e7771a",
+        "bytes": 23108,
+        "markdownHeadingCount": 15,
+        "primarySectionId": "59p-stage-b-value-freeze-owner-intent-pre-execution-packet.md#h1",
+        "primaryHeadingDigest": "28c1d1c473f07a71076e065a4d228aac24edbf8ada512d2a150cfcfaecb7db9e",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59q-stage-b-live-send-status-evidence-sync.md",
+        "sha256": "ae02fa409738334e84247ca013db21cb6d737ba81dc0c3d1ac84801846dce84c",
+        "bytes": 5140,
+        "markdownHeadingCount": 8,
+        "primarySectionId": "59q-stage-b-live-send-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "510398a222d6e85667b785d91e6b5edac767efdbb066b8da00c6190bcb4035ec",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59r-stage-b-terminal-return-ingestion-authority-packet.md",
+        "sha256": "be1c8c7fbdcd263acada86fb30832e6f4c544d6644626eed16554f20f3766002",
+        "bytes": 11857,
+        "markdownHeadingCount": 14,
+        "primarySectionId": "59r-stage-b-terminal-return-ingestion-authority-packet.md#h1",
+        "primaryHeadingDigest": "bccda8a8db69a7296073f3aa6d68e3832ac1ab43b18e42dd454c43b12e77eaae",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59s-stage-b-terminal-return-ingestion-implementation-execution-packet.md",
+        "sha256": "eb926367b29cd23235c161fa0014b8790206f91567ace4558ce749c1ef0c60a2",
+        "bytes": 16055,
+        "markdownHeadingCount": 16,
+        "primarySectionId": "59s-stage-b-terminal-return-ingestion-implementation-execution-packet.md#h1",
+        "primaryHeadingDigest": "fd938ea6efb20e6389d332f54e4814c9e65b46230bd32f9c5fae89e93ba244a5",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59t-stage-b-terminal-return-ingestion-status-evidence-sync.md",
+        "sha256": "d768e5323b90c44e94bb94726e486540f9b164737b845f8e21fea1f7b9c602e4",
+        "bytes": 4610,
+        "markdownHeadingCount": 6,
+        "primarySectionId": "59t-stage-b-terminal-return-ingestion-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "66f2ee21c74ef4680a2a5bb175955354d70b168cec4f765ad0b1b8ef45ec4acf",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59u-real-terminal-return-ingestion-execution-authority-packet.md",
+        "sha256": "061d5b796a547a2de2aa3333f07a565c2a6cc7f33faf26f7707db7bde36c2031",
+        "bytes": 18161,
+        "markdownHeadingCount": 15,
+        "primarySectionId": "59u-real-terminal-return-ingestion-execution-authority-packet.md#h1",
+        "primaryHeadingDigest": "715b1cfce12710ee4b070498c70c41e8be3240c3e3e8e49dfbfbb2e1c056f744",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59v-stage-b-real-terminal-return-ingestion-post-dpc-status-evidence-sync.md",
+        "sha256": "3e7315ccbf9ad79c4510f1838a6a679f961723c222b8e409ba03ed83dbb487c1",
+        "bytes": 5012,
+        "markdownHeadingCount": 6,
+        "primarySectionId": "59v-stage-b-real-terminal-return-ingestion-post-dpc-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "43e2be0f1438da2a5bea0d291d8a09c75df60a11633b7f40be7dc497656ccaee",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59w-persistent-deployment-runtime-readiness-planning-packet.md",
+        "sha256": "755842b51b6f0b3245e10b59eef4e498932821b52547c9fc422b85002c10bd73",
+        "bytes": 16062,
+        "markdownHeadingCount": 12,
+        "primarySectionId": "59w-persistent-deployment-runtime-readiness-planning-packet.md#h1",
+        "primaryHeadingDigest": "30ad589e4b0ef847c94ad0e137a8f42b25ad7e56b74643052bdc904feb31de95",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59x-persistent-runtime-execution-proof-packet-draft.md",
+        "sha256": "d32c463bcb4610581710fbe095cdacd49d01abd6746a56b09623437e2de84ea5",
+        "bytes": 37244,
+        "markdownHeadingCount": 34,
+        "primarySectionId": "59x-persistent-runtime-execution-proof-packet-draft.md#h1",
+        "primaryHeadingDigest": "5e8a89578b7b7a8704e9163a46f0058dd8036c049cc2563c609177834da7020c",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59y-persistent-runtime-post-repair-review-convergence-status-evidence-sync.md",
+        "sha256": "6c5bfd8057df4be7030048f205341090417ee3f9331dc0abbce9ac18f819cac1",
+        "bytes": 6030,
+        "markdownHeadingCount": 7,
+        "primarySectionId": "59y-persistent-runtime-post-repair-review-convergence-status-evidence-sync.md#h1",
+        "primaryHeadingDigest": "43dfbc9c73ce8eb6213a1cff2ea3aa14347e9576c9296d94b074e44de5053288",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "59z-persistent-runtime-prerequisite-clearance-packet.md",
+        "sha256": "f12e27104b6e8ab0a657f6a3bb0d18e9b03a83679b82e08f729159360bd2698c",
+        "bytes": 15053,
+        "markdownHeadingCount": 12,
+        "primarySectionId": "59z-persistent-runtime-prerequisite-clearance-packet.md#h1",
+        "primaryHeadingDigest": "7be1b035a8c2664b4cfcf89ac114a97d1cf36ffd8c6fa2681ed349ff82cc7fde",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "60-execution-ledger.md",
+        "sha256": "aaf553ad7b1e744e9709e7e1a70ebd61d32f97a802294019b9b570ffdba76467",
+        "bytes": 310973,
+        "markdownHeadingCount": 154,
+        "primarySectionId": "60-execution-ledger.md#h1",
+        "primaryHeadingDigest": "b8f6bf4f13ce5c0ccbb6afc2ab79013650868a2bd753cc96bb2757edb251b68a",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "70-verification.md",
+        "sha256": "3624c1691502f23c2558ccb6b84a1c60abfee4ef2c37891ea7eb50a13c5adf33",
+        "bytes": 133066,
+        "markdownHeadingCount": 6,
+        "primarySectionId": "70-verification.md#h1",
+        "primaryHeadingDigest": "78671e6b5a0d188a8b786ba397f0c6181d64b2ee896f15c88ecc4e63efac84fb",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "80-retrospective.md",
+        "sha256": "8732351854c3ce7ba7176a292fcb96c7634f4630d0383b173a26d061b6db8073",
+        "bytes": 114466,
+        "markdownHeadingCount": 4,
+        "primarySectionId": "80-retrospective.md#h1",
+        "primaryHeadingDigest": "53c5077ed8f6719d291ff924ca01504582a807f980a8e210d878664046482dfc",
+        "sourceTextStored": false
+      },
+      {
+        "packageRelativePath": "STATUS.md",
+        "sha256": "1c1229f276a561da119b32faa42c1dbfc851383b73596655ffb5482a25f155a2",
+        "bytes": 97267,
+        "markdownHeadingCount": 2,
+        "primarySectionId": "STATUS.md#h1",
+        "primaryHeadingDigest": "3f24d4be336e66f1c8792f5f4058ffc9828dafee90eafc7eb5eceeef0e8eee69",
+        "sourceTextStored": false
+      }
+    ]
+  },
+  "deterministicExtractionReadback": {
+    "ok": true,
+    "extractionRules": [
+      "walk selected package files recursively in lexical order",
+      "derive one source record per package file",
+      "store relative path, file digest, heading counts, primary heading digest, and section id only",
+      "never store raw file bodies or raw heading text in receipts",
+      "map deterministic source records to AOS stories, evidence links, and gates by stable id inputs"
+    ],
+    "recordCount": 102,
+    "sourceRecordDigest": "5f7000d71ebbdf40cdf5103c1d535539b6afbfd7506c8a2bf22df405d924ab39",
+    "recordKinds": {
+      "markdown_file": 102
+    },
+    "rawHeadingTextStored": false,
+    "rawSourceBodyStored": false
+  }
+}
