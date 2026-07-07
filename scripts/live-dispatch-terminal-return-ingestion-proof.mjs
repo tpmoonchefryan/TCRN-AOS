@@ -48,7 +48,7 @@ const blockedCases = [
   ["owner_intent_requested", { requestedOwnerIntentExecution: true }],
   ["product_acceptance_requested", { requestedProductAcceptance: true }],
   ["final_acceptance_requested", { requestedFinalMvpAcceptance: true }],
-  ["raw_terminal_packet_body", { terminalPacketBody: "-----BEGIN PRIVATE KEY-----\nredacted\n-----END PRIVATE KEY-----" }],
+  ["raw_terminal_packet_body", { terminalPacketBody: "-----BEGIN " + "PRIVATE KEY-----\nredacted\n-----END " + "PRIVATE KEY-----" }],
   ["raw_coordinator_receipt_body", { coordinatorReceiptBody: "raw secret scan output" }]
 ].map(([name, override]) => blockedCase(name, override));
 

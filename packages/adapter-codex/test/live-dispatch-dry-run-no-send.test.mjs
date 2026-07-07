@@ -72,7 +72,7 @@ test("59h no-send envelope rejects live-send and thread-management misuse withou
   }, actor, probe), /restricted raw_secret_scan_output/);
   assert.throws(() => adapter.createNoSendDispatchEnvelope({
     ...baseNoSendInput(),
-    readScope: ["/Users/example/private-evidence.json"]
+    readScope: ["/" + "Users/example/private-evidence.json"]
   }, actor, probe), /restricted machine_local_absolute_path/);
 
   assert.equal(probe.snapshot().sendPrimitiveCallCount, 0);

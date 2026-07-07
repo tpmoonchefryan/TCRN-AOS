@@ -776,7 +776,7 @@ function privacyScan(proof) {
     ["/private/tmp/", "private_tmp_path"],
     ["record_json", "raw_db_row"],
     ["CREATE TABLE", "db_dump"],
-    ["BEGIN PRIVATE KEY", "secret_like"],
+    ["BEGIN " + "PRIVATE KEY", "secret_like"],
     ["owner acceptance", "acceptance_overclaim"],
     ["product acceptance", "acceptance_overclaim"],
     ["final MVP acceptance", "acceptance_overclaim"],

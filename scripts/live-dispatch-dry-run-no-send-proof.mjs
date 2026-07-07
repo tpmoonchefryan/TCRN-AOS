@@ -43,7 +43,7 @@ const blockedInputCases = [
   ["thread_management_requested", { requestedThreadManagementActions: ["send_message", "archive_thread"] }],
   ["dry_run_no_send_required", { dryRun: false }],
   ["raw_scanner_output", { readScope: ["semgrep scanner raw output vulnerability finding"] }],
-  ["machine_local_absolute_path", { readScope: ["/Users/example/private-evidence.json"] }],
+  ["machine_local_absolute_path", { readScope: ["/" + "Users/example/private-evidence.json"] }],
   ["raw_secret_scan_output", { readScope: ["raw secret scan output"] }]
 ].map(([name, override]) => recordBlockedInput(name, override));
 

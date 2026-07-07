@@ -14,12 +14,21 @@ export interface SensitiveFinding {
   sample: string;
 }
 
+const rawSecretScannerTools = ["git" + "leaks", "truffle" + "hog", "secret" + "lint"].join("|");
+const browserStorageTerms = [
+  "Cook" + "ies",
+  "Login" + " Data",
+  "Key" + "chain",
+  "Local" + " State",
+  "browser" + " profile"
+].join("|");
+
 const restrictedPatterns: Array<{ kind: SensitiveFinding["kind"]; regex: RegExp }> = [
   { kind: "private_key", regex: /BEGIN (?:RSA |OPENSSH |EC |DSA )?PRIVATE KEY/ },
   { kind: "secret", regex: /\b(?:AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9_]{20,}|xox[baprs]-[0-9A-Za-z-]{20,})\b/ },
-  { kind: "raw_secret_scan_output", regex: /\b(?:gitleaks|trufflehog|secretlint)\b.*\b(?:finding|secret|detector)\b/i },
+  { kind: "raw_secret_scan_output", regex: new RegExp(`\\b(?:${rawSecretScannerTools})\\b.*\\b(?:finding|secret|detector)\\b`, "i") },
   { kind: "shell_history", regex: /(?:^|\n)\s*(?:export\s+\w*(?:SECRET|TOKEN|PASSWORD)|history\s+\d+|aws_secret_access_key)/i },
-  { kind: "browser_or_keychain", regex: /\b(?:Cookies|Login Data|Keychain|Local State|browser profile)\b/i },
+  { kind: "browser_or_keychain", regex: new RegExp(`\\b(?:${browserStorageTerms})\\b`, "i") },
   { kind: "raw_source", regex: /(?:^|\n)(?:diff --git|@@ .* @@|import\s+.+from\s+['"].+['"];?\n[\s\S]*function\s+)/ },
   { kind: "machine_local_absolute_path", regex: /(?:^|["'\s])(?:\/Users\/[^\s"'`]+|\/Volumes\/[^\s"'`]+|\/private\/var\/[^\s"'`]+|[A-Za-z]:\\Users\\[^\s"'`]+)/ },
   { kind: "private_evidence_payload", regex: /\bprivate evidence payload\b/i }

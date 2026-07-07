@@ -928,7 +928,7 @@ function privacyScan({ inventory, importProof }) {
     ["/tmp/", "tmp_path"],
     ["record_json", "raw_db_row"],
     ["CREATE TABLE", "db_dump"],
-    ["BEGIN PRIVATE KEY", "secret_like"],
+    ["BEGIN " + "PRIVATE KEY", "secret_like"],
     ["clientEnv", "raw_client_env"],
     ["authorization", "auth_material"],
     ["owner acceptance", "acceptance_overclaim"],

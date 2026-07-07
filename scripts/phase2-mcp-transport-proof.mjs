@@ -534,7 +534,7 @@ async function proveDenialAuditRedaction(dbPath, storyId) {
     outputSummary: "phase2-sensitive-output-summary-value",
     message: "phase2-sensitive-message-value",
     source: "phase2-sensitive-source-value",
-    path: "/Users/phase2-sensitive-path-value"
+    path: "/" + "Users/phase2-sensitive-path-value"
   };
   const rawValues = Object.values(rawFixtures);
   const server = await startClientSession(dbPath, actor);

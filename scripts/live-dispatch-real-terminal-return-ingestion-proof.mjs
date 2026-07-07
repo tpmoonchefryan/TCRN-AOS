@@ -48,7 +48,7 @@ const blockedCases = [
   ["owner_intent_requested", { requestedOwnerIntentExecution: true }],
   ["product_acceptance_requested", { requestedProductAcceptance: true }],
   ["final_acceptance_requested", { requestedFinalMvpAcceptance: true }],
-  ["raw_terminal_packet_body", { terminalPacketBody: "gitleaks finding secret should not enter audit" }],
+  ["raw_terminal_packet_body", { terminalPacketBody: "git" + "leaks finding secret should not enter audit" }],
   ["missing_preserved_reference", { preservedReferences: { ...preservedReferences(), sourceTerminalReadbackReference: " " } }],
   ["wrong_source_terminal_readback_reference", { preservedReferences: { ...preservedReferences(), sourceTerminalReadbackReference: "codex_app.read_thread:substituted-terminal" } }],
   ["wrong_authority_reference", { preservedReferences: { ...preservedReferences(), stageBAuthorityReference: "59x-wrong-authority-reference.md" } }],

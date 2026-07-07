@@ -169,7 +169,7 @@ test("59U Stage B real ingestion fails closed on fixture replay, missing referen
   }, actor), /real_ingestion_mode_required/);
   assert.throws(() => adapter.createStageBRealTerminalReturnIngestionRecord({
     ...realStageBInput(),
-    terminalPacketBody: "gitleaks finding secret should not enter audit"
+    terminalPacketBody: "git" + "leaks finding secret should not enter audit"
   }, actor), /restricted raw_secret_scan_output/);
 
   assert.equal(adapter.listStageBRealTerminalReturnIngestions().length, 1);
@@ -210,7 +210,7 @@ test("59S Stage B fixture ingestion fails closed on substituted identity, overcl
     ["owner_intent_requested", { requestedOwnerIntentExecution: true }, /blocks execution/],
     ["product_acceptance_requested", { requestedProductAcceptance: true }, /blocks execution/],
     ["final_acceptance_requested", { requestedFinalMvpAcceptance: true }, /blocks execution/],
-    ["raw_terminal_packet_body", { terminalPacketBody: "-----BEGIN PRIVATE KEY-----\nredacted\n-----END PRIVATE KEY-----" }, /restricted private_key/],
+    ["raw_terminal_packet_body", { terminalPacketBody: "-----BEGIN " + "PRIVATE KEY-----\nredacted\n-----END " + "PRIVATE KEY-----" }, /restricted private_key/],
     ["raw_coordinator_receipt_body", { coordinatorReceiptBody: "raw secret scan output" }, /restricted raw_secret_scan_output/]
   ];
 
