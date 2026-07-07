@@ -1,0 +1,264 @@
+{
+  "schema": "aos.knowledge_retrieval_layer.kr01.v1",
+  "receiptName": "kr01-schema-fts-readback.json",
+  "ok": true,
+  "generatedAt": "2026-07-08T00:00:00.000Z",
+  "route": "route_tcrn_aos_knowledge_retrieval_layer_kr01_schema_fts_migration_after_kr00_gate_green_1d6076_8dce81_20260708",
+  "workflowBasis": "1d60763f3c0c3eae0fb5465fb50189c4951c48df",
+  "ownerDecisionWorkflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+  "planBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+  "incomingAosBasis": "a21e007ce84b5815e004bfd8a036b3553a0e8507",
+  "aosBasis": "e3bd7fae344c7d26855f00a043d80f73483f166f",
+  "command": "pnpm --dir TCRN-AOS kr01:knowledge-schema-fts-proof",
+  "source": {
+    "sourceHead": "e3bd7fae344c7d26855f00a043d80f73483f166f",
+    "incomingAosBasis": "a21e007ce84b5815e004bfd8a036b3553a0e8507",
+    "workflowBasis": "1d60763f3c0c3eae0fb5465fb50189c4951c48df",
+    "ownerDecisionWorkflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+    "planBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+    "sourceFiles": [
+      "package.json",
+      "packages/db/migrations/sqlite/0002_knowledge_retrieval.sql",
+      "packages/db/src/backup.ts",
+      "packages/db/src/index.ts",
+      "packages/db/src/sqlite-repository.ts",
+      "packages/db/test/kr01-knowledge-schema-fts.test.mjs",
+      "packages/db/test/phase1-sqlite-repository.test.mjs",
+      "scripts/kr01-knowledge-schema-fts-proof.mjs"
+    ],
+    "sourceContentDigest": "71b941a7b4a6af03fd7f1f62cc22efd05e4697cab3734aa11471660e200a4437",
+    "fileDigests": {
+      "package.json": "681728593e8735588e43466f6717eb0328c6ef01913072e962609fe150c8005f",
+      "packages/db/migrations/sqlite/0002_knowledge_retrieval.sql": "6bb510ff0db7088d06ccb81d0fe5a951d3f32181e7de0e0236cb48b544066c35",
+      "packages/db/src/backup.ts": "434a73002292bb63c53721883dde2a53cca6049011eed3b33806d5b38e5e5f2e",
+      "packages/db/src/index.ts": "f70a7edb8afb2acd33bcffb302cba83d584bd28e79c66d664b3b79d20a5169a9",
+      "packages/db/src/sqlite-repository.ts": "bec9847fbc8a3b5efb2a7677587d2251e294d28de29655a89797bee03b7c94fd",
+      "packages/db/test/kr01-knowledge-schema-fts.test.mjs": "6ccf27cf6eb96d569ea9531dbf3583bca8a1fd0ef2de5a496cffa31ae1e5734b",
+      "packages/db/test/phase1-sqlite-repository.test.mjs": "facd5e03c6d66e047298df7b51bbb701072be3b5febe581c2dba7500be275d75",
+      "scripts/kr01-knowledge-schema-fts-proof.mjs": "93b2bed04bad4763d9293529cf3e0b166c1a965cd2b15af0673aff4d42b49fef"
+    },
+    "command": "pnpm --dir TCRN-AOS kr01:knowledge-schema-fts-proof",
+    "durableProfileReadback": {
+      "profileRootClass": "owner_marker_durable_local_profile_root_copy_only",
+      "selectedRootDigest": "d0c6b59abe7d3fa117a86269df6ad6d97262d33bfb41253b96e52b1bcb58f896",
+      "databaseFileName": "aos-p1-durable-runtime-profile.sqlite",
+      "rawPathRecorded": false
+    }
+  },
+  "ftsDriverReadback": {
+    "ok": true,
+    "fts5Available": true,
+    "errorReason": null
+  },
+  "freshProfileMigrationReadback": {
+    "ok": true,
+    "migrationCount": 2,
+    "appliedCount": 2,
+    "appliedMigrations": [
+      "0001_phase1_core",
+      "0002_knowledge_retrieval"
+    ],
+    "schemaOk": true,
+    "fts5Available": true,
+    "searchMode": "fts5",
+    "rawPathRecorded": false
+  },
+  "durableCopyMigrationReadback": {
+    "ok": true,
+    "copiedFromFreshInternalSnapshot": true,
+    "sourceSnapshotId": "kr01-durable-profile-copy-before-migration",
+    "sourceSnapshotDigest": "3d1446a0100a28ea6de4f3f9c3d33a5c15aff512c0380022c16becd00960738b",
+    "sourceSnapshotManifestDigest": "311b475dcf8ac2a4b1ab8c0ed34595db5806b4042a539e36f00be232e9c8b0a9",
+    "appliedCount": 1,
+    "appliedMigrations": [
+      "0002_knowledge_retrieval"
+    ],
+    "liveDurableProfileOverwritePerformed": false,
+    "liveDurableDatabaseDigestBefore": "b565c9c5874c575dc3be8910110dadb6e56592bd9bb2495b14db074a6d13e647",
+    "liveDurableDatabaseDigestAfter": "b565c9c5874c575dc3be8910110dadb6e56592bd9bb2495b14db074a6d13e647",
+    "rawPathRecorded": false
+  },
+  "preMigrationSnapshotReadback": {
+    "ok": true,
+    "hookUsed": true,
+    "preMigrationSnapshots": [
+      {
+        "version": "0002_knowledge_retrieval",
+        "digest": "6bb510ff0db7088d06ccb81d0fe5a951d3f32181e7de0e0236cb48b544066c35",
+        "ok": true,
+        "snapshotId": "kr01-pre-0002_knowledge_retrieval",
+        "manifestDigest": "3a0732e07fb438b82dfc647608f14de8be9e422c5d6767449f252fdc434cfba8"
+      }
+    ],
+    "rawPathRecorded": false
+  },
+  "schemaReadback": {
+    "ok": true,
+    "tableName": "aos_knowledge_entries",
+    "ftsTableName": "aos_knowledge_entries_fts",
+    "requiredColumns": [
+      "id",
+      "title",
+      "role_scope",
+      "project",
+      "category",
+      "knowledge_kind",
+      "status",
+      "last_verified",
+      "staleness_policy",
+      "source_ref",
+      "source_digest",
+      "tags",
+      "summary",
+      "body",
+      "access_count",
+      "last_accessed",
+      "record_json",
+      "created_at",
+      "updated_at"
+    ],
+    "presentColumns": [
+      "id",
+      "title",
+      "role_scope",
+      "project",
+      "category",
+      "knowledge_kind",
+      "status",
+      "last_verified",
+      "staleness_policy",
+      "source_ref",
+      "source_digest",
+      "tags",
+      "summary",
+      "body",
+      "access_count",
+      "last_accessed",
+      "record_json",
+      "created_at",
+      "updated_at"
+    ],
+    "missingColumns": [],
+    "fts5Available": true,
+    "searchMode": "fts5",
+    "statusCheckPresent": true,
+    "bodyWordLimit": 1500,
+    "summaryWordLimit": 120,
+    "accessMetadataColumns": [
+      "access_count",
+      "last_accessed"
+    ]
+  },
+  "bodyCapReadback": {
+    "ok": true,
+    "rejected1501WordBody": true,
+    "structuredError": {
+      "reason": "knowledge_body_word_limit_exceeded",
+      "field": "body",
+      "limit": 1500,
+      "actual": 1501
+    },
+    "accepted1500WordBody": true,
+    "rawPathRecorded": false
+  },
+  "restartPersistenceReadback": {
+    "ok": true,
+    "insertedEntryPersisted": true,
+    "accessMetadataPersisted": true,
+    "ftsSearchPersisted": true,
+    "rawPathRecorded": false
+  },
+  "internalRepositoryReadback": {
+    "ok": true,
+    "acceptedEntryId": "knowledge-kr01-proof-entry",
+    "sourceDigest": "sha256:kr01-proof-source",
+    "tags": [
+      "fts",
+      "kr01",
+      "sqlite"
+    ],
+    "returnedByFtsSearch": true,
+    "accessCountAfterRecord": 1,
+    "bodyWordLimit": 1500,
+    "summaryWordLimit": 120,
+    "rawPathRecorded": false
+  },
+  "workItemEvidenceReadback": {
+    "ok": true,
+    "profileScope": "proof_scratch_profile_no_live_durable_overwrite",
+    "initiativeId": "init_cf0e3c9b34996886",
+    "epicId": "epic_7ddca14af24aa03b",
+    "storyId": "story_0b739ff66016d196",
+    "commentId": "comment_b1df279f45f5eade",
+    "commentBodyDigest": "4539fd67817565fdcd36c3bbbd370aa65fae63e570349dde5bf373114270c97d",
+    "commentAuditEventId": "audit_a8c4def60aef4441",
+    "rawPathRecorded": false
+  },
+  "methodSurfaceBoundaryReadback": {
+    "ok": true,
+    "kr02KnowledgeTransportMethodsRegistered": [],
+    "transportMethodCount": 15,
+    "noGatewayOrTransportExpansionFromKr01": true,
+    "rawPathRecorded": false
+  },
+  "noGitArtifactReadback": {
+    "ok": true,
+    "trackedDbArtifactCount": 0,
+    "trackedBackupArtifactCount": 0,
+    "excludedCodegraphOnly": true,
+    "rawPathRecorded": false
+  },
+  "privacyNoArtifactNoOverclaimReadback": {
+    "rawPathRecorded": false,
+    "rawDbDumpRecorded": false,
+    "secretsOrPiiStored": false,
+    "committedDbArtifacts": 0,
+    "backupOrExportArtifactsCommitted": 0,
+    "releaseReadinessClaimed": false,
+    "ownerFacingAcceptanceClaimed": false,
+    "finalAcceptanceClaimed": false,
+    "kr02MethodSurfaceStarted": false,
+    "kr04HookSwapStarted": false
+  },
+  "validation_readbacks": {
+    "proofCommand": "pnpm --dir TCRN-AOS kr01:knowledge-schema-fts-proof",
+    "proofScriptSyntaxExpected": "node --check scripts/kr01-knowledge-schema-fts-proof.mjs",
+    "targetedTestExpected": "node --test packages/db/test/kr01-knowledge-schema-fts.test.mjs",
+    "verifyFastExpected": "pnpm --dir TCRN-AOS verify:fast",
+    "receiptAssertionsEmbedded": true
+  },
+  "privacyNoOverclaimScan": {
+    "ok": true,
+    "findingCount": 0,
+    "findings": [],
+    "scannedPayloadDigest": "e8c5681d78f83181875cfd6c8cb8be859d8775d929158c45bd0846b7a05a85cd",
+    "rawPathRecorded": false
+  },
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "kr01SchemaFtsImplemented": true,
+    "kr02MethodSurfaceStarted": false,
+    "kr03ReadbackUiStarted": false,
+    "kr04HookSwapStarted": false,
+    "kr05SeedEntriesStarted": false,
+    "kr06KpiStarted": false,
+    "frontendTriggerImplemented": false,
+    "dogfood02TmsMutation": false,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "activeCodexMutation": false,
+    "maintainedHookSourceMutation": false,
+    "pushRun": false,
+    "batchPushGateRun": false,
+    "releaseReadinessClaimed": false,
+    "ownerFacingAcceptanceClaimed": false,
+    "finalAcceptanceClaimed": false,
+    "cleanPlatformClaimed": false,
+    "parentCompletionClaimed": false,
+    "liveDurableProfileOverwritePerformed": false,
+    "broadCodexSecurityPluginScanClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerIntentExecutionAuthorized": false
+  }
+}

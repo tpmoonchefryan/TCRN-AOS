@@ -1,0 +1,91 @@
+{
+  "schema": "aos.knowledge_retrieval_layer.kr01.v1",
+  "receiptName": "kr01-schema-fts-proof-summary.json",
+  "ok": true,
+  "generatedAt": "2026-07-08T00:00:00.000Z",
+  "route": "route_tcrn_aos_knowledge_retrieval_layer_kr01_schema_fts_migration_after_kr00_gate_green_1d6076_8dce81_20260708",
+  "workflowBasis": "1d60763f3c0c3eae0fb5465fb50189c4951c48df",
+  "ownerDecisionWorkflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+  "planBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+  "incomingAosBasis": "a21e007ce84b5815e004bfd8a036b3553a0e8507",
+  "aosBasis": "e3bd7fae344c7d26855f00a043d80f73483f166f",
+  "command": "pnpm --dir TCRN-AOS kr01:knowledge-schema-fts-proof",
+  "source": {
+    "sourceHead": "e3bd7fae344c7d26855f00a043d80f73483f166f",
+    "incomingAosBasis": "a21e007ce84b5815e004bfd8a036b3553a0e8507",
+    "workflowBasis": "1d60763f3c0c3eae0fb5465fb50189c4951c48df",
+    "ownerDecisionWorkflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+    "planBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+    "sourceFiles": [
+      "package.json",
+      "packages/db/migrations/sqlite/0002_knowledge_retrieval.sql",
+      "packages/db/src/backup.ts",
+      "packages/db/src/index.ts",
+      "packages/db/src/sqlite-repository.ts",
+      "packages/db/test/kr01-knowledge-schema-fts.test.mjs",
+      "packages/db/test/phase1-sqlite-repository.test.mjs",
+      "scripts/kr01-knowledge-schema-fts-proof.mjs"
+    ],
+    "sourceContentDigest": "71b941a7b4a6af03fd7f1f62cc22efd05e4697cab3734aa11471660e200a4437",
+    "fileDigests": {
+      "package.json": "681728593e8735588e43466f6717eb0328c6ef01913072e962609fe150c8005f",
+      "packages/db/migrations/sqlite/0002_knowledge_retrieval.sql": "6bb510ff0db7088d06ccb81d0fe5a951d3f32181e7de0e0236cb48b544066c35",
+      "packages/db/src/backup.ts": "434a73002292bb63c53721883dde2a53cca6049011eed3b33806d5b38e5e5f2e",
+      "packages/db/src/index.ts": "f70a7edb8afb2acd33bcffb302cba83d584bd28e79c66d664b3b79d20a5169a9",
+      "packages/db/src/sqlite-repository.ts": "bec9847fbc8a3b5efb2a7677587d2251e294d28de29655a89797bee03b7c94fd",
+      "packages/db/test/kr01-knowledge-schema-fts.test.mjs": "6ccf27cf6eb96d569ea9531dbf3583bca8a1fd0ef2de5a496cffa31ae1e5734b",
+      "packages/db/test/phase1-sqlite-repository.test.mjs": "facd5e03c6d66e047298df7b51bbb701072be3b5febe581c2dba7500be275d75",
+      "scripts/kr01-knowledge-schema-fts-proof.mjs": "93b2bed04bad4763d9293529cf3e0b166c1a965cd2b15af0673aff4d42b49fef"
+    },
+    "command": "pnpm --dir TCRN-AOS kr01:knowledge-schema-fts-proof",
+    "durableProfileReadback": {
+      "profileRootClass": "owner_marker_durable_local_profile_root_copy_only",
+      "selectedRootDigest": "d0c6b59abe7d3fa117a86269df6ad6d97262d33bfb41253b96e52b1bcb58f896",
+      "databaseFileName": "aos-p1-durable-runtime-profile.sqlite",
+      "rawPathRecorded": false
+    }
+  },
+  "receiptInventory": [
+    "kr01-schema-fts-readback.json"
+  ],
+  "receiptCount": 1,
+  "allChildReceiptsOk": true,
+  "missingReceipts": [],
+  "extraUnclassifiedReceipts": [],
+  "readbackReceiptDigest": "485182b997d62a2a4d088258fcb4a0beefeb25cc1467cebff587b6a679d1dc00",
+  "fts5Available": true,
+  "searchMode": "fts5",
+  "durableCopyAppliedMigrations": [
+    "0002_knowledge_retrieval"
+  ],
+  "preMigrationSnapshotCount": 1,
+  "acceptedEntryId": "knowledge-kr01-proof-entry",
+  "workItemStoryId": "story_0b739ff66016d196",
+  "noOverclaimFlags": {
+    "kr01SchemaFtsImplemented": true,
+    "kr02MethodSurfaceStarted": false,
+    "kr03ReadbackUiStarted": false,
+    "kr04HookSwapStarted": false,
+    "kr05SeedEntriesStarted": false,
+    "kr06KpiStarted": false,
+    "frontendTriggerImplemented": false,
+    "dogfood02TmsMutation": false,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "activeCodexMutation": false,
+    "maintainedHookSourceMutation": false,
+    "pushRun": false,
+    "batchPushGateRun": false,
+    "releaseReadinessClaimed": false,
+    "ownerFacingAcceptanceClaimed": false,
+    "finalAcceptanceClaimed": false,
+    "cleanPlatformClaimed": false,
+    "parentCompletionClaimed": false,
+    "liveDurableProfileOverwritePerformed": false,
+    "broadCodexSecurityPluginScanClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerIntentExecutionAuthorized": false
+  },
+  "failures": [],
+  "negativeFailures": []
+}
