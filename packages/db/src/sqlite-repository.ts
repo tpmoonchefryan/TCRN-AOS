@@ -63,7 +63,26 @@ export interface SqliteMigrationReadback {
   migrationCount: number;
   appliedCount: number;
   migrations: Array<{ version: string; digest: string; applied: boolean }>;
+  preMigrationSnapshots: Array<{ version: string; digest: string; ok: boolean; snapshotId: string | null; manifestDigest: string | null }>;
   pragmas: Record<string, unknown>;
+}
+
+export interface SqlitePreMigrationSnapshotInput {
+  version: string;
+  digest: string;
+  fileName: string;
+  pendingIndex: number;
+  pendingMigrationCount: number;
+}
+
+export interface SqlitePreMigrationSnapshotReadback {
+  ok: boolean;
+  snapshotId: string;
+  manifestDigest: string;
+}
+
+export interface SqliteMigrationOptions {
+  preMigrationSnapshot?: (input: SqlitePreMigrationSnapshotInput) => SqlitePreMigrationSnapshotReadback;
 }
 
 export interface StoryTraceabilityReadback {
@@ -123,7 +142,7 @@ export class AosSqliteRepository implements AosPersistenceRepository {
     this.database.close();
   }
 
-  applyMigrations(): SqliteMigrationReadback {
+  applyMigrations(options: SqliteMigrationOptions = {}): SqliteMigrationReadback {
     this.database.exec(`
       CREATE TABLE IF NOT EXISTS aos_schema_migrations (
         version TEXT PRIMARY KEY,
@@ -134,17 +153,46 @@ export class AosSqliteRepository implements AosPersistenceRepository {
     const files = readdirSync(this.migrationsDir)
       .filter((name) => /^\d+.*\.sql$/.test(name))
       .sort();
-    const migrations: SqliteMigrationReadback["migrations"] = [];
-    let appliedCount = 0;
-    for (const file of files) {
+    const migrationFiles = files.map((file) => {
       const version = file.replace(/\.sql$/, "");
       const sql = readFileSync(join(this.migrationsDir, file), "utf8");
-      const digest = sha256(sql);
+      return { file, version, sql, digest: sha256(sql) };
+    });
+    const pendingVersions = migrationFiles.filter(({ version, digest }) => {
       const existing = this.database.prepare("SELECT digest FROM aos_schema_migrations WHERE version = ?").get(version) as { digest: string } | undefined;
       if (existing && existing.digest !== digest) {
         throw new Error(`SQLite migration digest changed after apply: ${version}`);
       }
+      return !existing;
+    }).map(({ version }) => version);
+    const migrations: SqliteMigrationReadback["migrations"] = [];
+    const preMigrationSnapshots: SqliteMigrationReadback["preMigrationSnapshots"] = [];
+    let appliedCount = 0;
+    let pendingIndex = 0;
+    for (const { file, version, sql, digest } of migrationFiles) {
+      const existing = this.database.prepare("SELECT digest FROM aos_schema_migrations WHERE version = ?").get(version) as { digest: string } | undefined;
       if (!existing) {
+        let preMigrationSnapshot: SqlitePreMigrationSnapshotReadback | null = null;
+        if (options.preMigrationSnapshot) {
+          pendingIndex += 1;
+          preMigrationSnapshot = options.preMigrationSnapshot({
+            version,
+            digest,
+            fileName: file,
+            pendingIndex,
+            pendingMigrationCount: pendingVersions.length
+          });
+          if (!preMigrationSnapshot.ok) {
+            throw new Error(`SQLite pre-migration snapshot failed: ${version}`);
+          }
+          preMigrationSnapshots.push({
+            version,
+            digest,
+            ok: preMigrationSnapshot.ok,
+            snapshotId: preMigrationSnapshot.snapshotId,
+            manifestDigest: preMigrationSnapshot.manifestDigest
+          });
+        }
         this.runInTransaction(() => {
           this.database.exec(sql);
           const result = this.database.prepare("INSERT OR IGNORE INTO aos_schema_migrations(version, digest) VALUES (?, ?)").run(version, digest);
@@ -160,6 +208,7 @@ export class AosSqliteRepository implements AosPersistenceRepository {
       migrationCount: files.length,
       appliedCount,
       migrations,
+      preMigrationSnapshots,
       pragmas: this.pragmaReadback()
     };
   }
