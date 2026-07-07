@@ -167,7 +167,28 @@ export interface KnowledgeRetrievalSearchParams {
   category?: string;
   status?: KnowledgeRetrievalStatus;
   includeDraft?: boolean;
+  includeStale?: boolean;
   limit?: number;
+  cursor?: string | null;
+}
+
+export interface KnowledgeRetrievalFreshnessReadback {
+  stale: boolean;
+  stalenessPolicy: string;
+  lastVerified: string;
+  staleAfterDays: number | null;
+}
+
+export interface KnowledgeRetrievalSearchPage {
+  rows: KnowledgeRetrievalEntryRecord[];
+  limit: number;
+  returnedCount: number;
+  nextCursor: string | null;
+  hasMore: boolean;
+  filterDigest: string;
+  searchMode: "fts5" | "like_tokenized";
+  defaultCanonicalFilterApplied: boolean;
+  defaultFreshnessFilterApplied: boolean;
 }
 
 export interface KnowledgeRetrievalSchemaReadback {
@@ -558,7 +579,12 @@ export class AosSqliteRepository implements AosPersistenceRepository {
   }
 
   searchKnowledgeRetrievalEntries(params: KnowledgeRetrievalSearchParams = {}): KnowledgeRetrievalEntryRecord[] {
+    return this.searchKnowledgeRetrievalPage(params).rows;
+  }
+
+  searchKnowledgeRetrievalPage(params: KnowledgeRetrievalSearchParams = {}): KnowledgeRetrievalSearchPage {
     const limit = Math.max(1, Math.min(Math.trunc(params.limit ?? 10), 20));
+    const offset = parseKnowledgeRetrievalCursor(params.cursor);
     const values: SqlProbeValue[] = [];
     const filters: string[] = [];
     if (params.roleScope) {
@@ -573,17 +599,23 @@ export class AosSqliteRepository implements AosPersistenceRepository {
       filters.push("e.category = ?");
       values.push(params.category);
     }
+    const defaultCanonicalFilterApplied = params.status === undefined && !params.includeDraft;
+    const defaultFreshnessFilterApplied = !params.includeStale;
     if (params.status) {
       filters.push("e.status = ?");
       values.push(params.status);
-    } else if (!params.includeDraft) {
+    } else if (params.includeDraft) {
+      filters.push("e.status IN ('canonical', 'draft')");
+    } else {
       filters.push("e.status = 'canonical'");
     }
 
     const queryTerms = tokenizeSearchQuery(params.query ?? "");
     let from = "aos_knowledge_entries e";
+    let searchMode: "fts5" | "like_tokenized" = "like_tokenized";
     if (queryTerms.length > 0) {
       if (this.knowledgeRetrievalFts5Available()) {
+        searchMode = "fts5";
         from = "aos_knowledge_entries e JOIN aos_knowledge_entries_fts ON aos_knowledge_entries_fts.rowid = e.rowid";
         filters.push("aos_knowledge_entries_fts MATCH ?");
         values.push(queryTerms.map((term) => `${term}*`).join(" AND "));
@@ -599,8 +631,31 @@ export class AosSqliteRepository implements AosPersistenceRepository {
       ${where}
       ORDER BY e.updated_at DESC, e.id
       LIMIT ?
-    `).all(...values, limit) as unknown as KnowledgeRetrievalRow[];
-    return rows.map(rowToKnowledgeRetrievalEntry);
+    `).all(...values, 200) as unknown as KnowledgeRetrievalRow[];
+    const filteredRows = rows
+      .map(rowToKnowledgeRetrievalEntry)
+      .filter((entry) => params.includeStale || !knowledgeRetrievalFreshness(entry).stale);
+    const pageRows = filteredRows.slice(offset, offset + limit);
+    const nextOffset = offset + pageRows.length;
+    return {
+      rows: pageRows,
+      limit,
+      returnedCount: pageRows.length,
+      nextCursor: nextOffset < filteredRows.length ? encodeKnowledgeRetrievalCursor(nextOffset) : null,
+      hasMore: nextOffset < filteredRows.length,
+      filterDigest: sha256(stableJson({
+        query: params.query ?? null,
+        roleScope: params.roleScope ?? null,
+        project: params.project ?? null,
+        category: params.category ?? null,
+        status: params.status ?? null,
+        includeDraft: Boolean(params.includeDraft),
+        includeStale: Boolean(params.includeStale)
+      })),
+      searchMode,
+      defaultCanonicalFilterApplied,
+      defaultFreshnessFilterApplied
+    };
   }
 
   recordKnowledgeRetrievalAccess(id: string, accessedAt: string): KnowledgeRetrievalEntryRecord {
@@ -1109,6 +1164,68 @@ function rowToKnowledgeRetrievalEntry(row: KnowledgeRetrievalRow): KnowledgeRetr
     createdAt: row.created_at,
     updatedAt: row.updated_at
   };
+}
+
+export function knowledgeRetrievalFreshness(
+  entry: Pick<KnowledgeRetrievalEntryRecord, "lastVerified" | "stalenessPolicy">,
+  now: Date = new Date()
+): KnowledgeRetrievalFreshnessReadback {
+  const staleAfterDays = parseStalenessPolicyDays(entry.stalenessPolicy);
+  if (staleAfterDays === null) {
+    return {
+      stale: false,
+      stalenessPolicy: entry.stalenessPolicy,
+      lastVerified: entry.lastVerified,
+      staleAfterDays
+    };
+  }
+  const verifiedAt = Date.parse(entry.lastVerified);
+  if (!Number.isFinite(verifiedAt)) {
+    return {
+      stale: true,
+      stalenessPolicy: entry.stalenessPolicy,
+      lastVerified: entry.lastVerified,
+      staleAfterDays
+    };
+  }
+  const staleAt = verifiedAt + staleAfterDays * 24 * 60 * 60 * 1000;
+  return {
+    stale: staleAt < now.getTime(),
+    stalenessPolicy: entry.stalenessPolicy,
+    lastVerified: entry.lastVerified,
+    staleAfterDays
+  };
+}
+
+function parseStalenessPolicyDays(policy: string): number | null {
+  const normalized = policy.trim().toLowerCase();
+  if (["none", "never", "manual", "no_expiry"].includes(normalized)) {
+    return null;
+  }
+  const match = /(?:review_after|stale_after|after)[_-]?(\d+)[_-]?days?/.exec(normalized);
+  if (!match?.[1]) {
+    return null;
+  }
+  return Math.max(0, Number(match[1]));
+}
+
+function encodeKnowledgeRetrievalCursor(offset: number): string {
+  return Buffer.from(`kr02-offset:${offset}`, "utf8").toString("base64url");
+}
+
+function parseKnowledgeRetrievalCursor(value: unknown): number {
+  if (value === undefined || value === null) {
+    return 0;
+  }
+  if (typeof value !== "string") {
+    throw new Error("knowledge_search_cursor_invalid");
+  }
+  const decoded = Buffer.from(value, "base64url").toString("utf8");
+  const match = /^kr02-offset:(\d+)$/.exec(decoded);
+  if (!match?.[1]) {
+    throw new Error("knowledge_search_cursor_invalid");
+  }
+  return Number(match[1]);
 }
 
 function validateKnowledgeStatus(status: KnowledgeRetrievalStatus): KnowledgeRetrievalStatus {

@@ -17,9 +17,14 @@ import {
 } from "../../domain/src/index.js";
 import {
   AosSqliteRepository,
+  knowledgeRetrievalFreshness,
   createSqliteLogicalExport,
   createSqlitePhysicalSnapshot,
-  listBackupArtifacts
+  listBackupArtifacts,
+  stableJson,
+  KnowledgeRetrievalValidationError,
+  type KnowledgeRetrievalEntryRecord,
+  type KnowledgeRetrievalStatus
 } from "../../db/src/index.js";
 import { assertRouteOwnedSqliteRoot, digestFile, sha256 as sqliteSha256 } from "../../db/src/index.js";
 import { McpGateway, type McpResponse } from "../../mcp-gateway/src/index.js";
@@ -35,6 +40,9 @@ export const transportMvpMethods = [
   "aos.backup.snapshot.create",
   "aos.backup.export.create",
   "aos.backup.list",
+  "aos.knowledge.entry.propose",
+  "aos.knowledge.entry.read",
+  "aos.knowledge.search",
   "aos.gate.request",
   "aos.gate.decision.record",
   "aos.policy.read",
@@ -48,6 +56,8 @@ export const transportReadMethods: readonly TransportMvpMethod[] = [
   "aos.policy.read",
   "aos.ticket.list",
   "aos.backup.list",
+  "aos.knowledge.entry.read",
+  "aos.knowledge.search",
   "aos.stage_map.read",
   "aos.audit.query"
 ];
@@ -130,6 +140,12 @@ function isBackupCreateMethod(method: string): boolean {
   return method === "aos.backup.snapshot.create" || method === "aos.backup.export.create";
 }
 
+function isKnowledgeMethod(method: string): boolean {
+  return method === "aos.knowledge.entry.propose" ||
+    method === "aos.knowledge.entry.read" ||
+    method === "aos.knowledge.search";
+}
+
 function backupCreateActorAllowed(actor: ActorIdentity): boolean {
   return actor.employeeId === "employee-atlas" || actor.employeeId === "aos-service-scheduler";
 }
@@ -140,7 +156,11 @@ export class AosMcpTransport {
   private readonly maxResponseBytes: number;
   private readonly replayByKey = new Map<string, unknown>();
 
-  constructor(private readonly store: AosStore, private readonly config: AosMcpTransportConfig) {
+  constructor(
+    private readonly store: AosStore,
+    private readonly config: AosMcpTransportConfig,
+    private readonly repository?: AosSqliteRepository
+  ) {
     this.gateway = new McpGateway(store);
     this.auditPageLimit = Math.max(1, Math.min(config.auditPageLimit ?? DEFAULT_AUDIT_PAGE_LIMIT, DEFAULT_AUDIT_PAGE_LIMIT));
     this.maxResponseBytes = Math.max(1_024, config.maxResponseBytes ?? DEFAULT_MAX_RESPONSE_BYTES);
@@ -231,6 +251,10 @@ export class AosMcpTransport {
       });
       return this.cacheBudgetedResult(replayKey, result);
     }
+    if (isKnowledgeMethod(method)) {
+      const result = this.knowledgeRequest(actor, method, params, replayKey);
+      return this.cacheBudgetedResult(replayKey, result);
+    }
 
     const response = this.gateway.handle({
       method,
@@ -263,7 +287,7 @@ export class AosMcpTransport {
     if (employee.lifecycle !== "active") {
       throw new TransportError("transport_actor_lifecycle_inactive", `Transport actor lifecycle is not active for ${actor.employeeId}`);
     }
-    if (method !== "aos.policy.read" && !isBackupMethod(method) && actor.role === "owner_observer") {
+    if (!transportReadMethods.includes(method as TransportMvpMethod) && !isBackupMethod(method) && actor.role === "owner_observer") {
       throw new TransportError("transport_actor_blocked_role", `Role ${actor.role} is read-only for MCP stdio transport`);
     }
     return actor;
@@ -302,7 +326,8 @@ export class AosMcpTransport {
         ownerIntentExecutionAuthorized: false,
         retainedPreviewFreshnessClaimed: false,
         releasePublicationPushAuthorized: false,
-        slices6To9RegisteredOnTransport: false
+        kr02KnowledgeMethodsRegisteredOnTransport: true,
+        slices7To9RegisteredOnTransport: false
       },
       actorAuthoritySnapshot: {
         employeeId: actor.employeeId,
@@ -434,11 +459,180 @@ export class AosMcpTransport {
     };
   }
 
+  private knowledgeRequest(actor: ActorIdentity, method: string, params: Record<string, unknown>, replayKey: string): Record<string, unknown> {
+    if (method === "aos.knowledge.entry.propose") {
+      return this.knowledgePropose(actor, params, replayKey);
+    }
+    if (method === "aos.knowledge.entry.read") {
+      return this.knowledgeRead(actor, params, replayKey);
+    }
+    return this.knowledgeSearch(actor, params, replayKey);
+  }
+
+  private knowledgePropose(actor: ActorIdentity, params: Record<string, unknown>, replayKey: string): Record<string, unknown> {
+    const repository = this.requireKnowledgeRepository();
+    const status = knowledgeStatusParam(params.status);
+    if (status === "canonical" && !stringParam(params.canonicalGateDecisionId) && !stringParam(params.gateDecisionId)) {
+      throw new TransportError("knowledge_canonical_gate_decision_required", "Canonical knowledge entries require a gate decision id");
+    }
+    const proposedId = stringParam(params.id) ?? `knowledge_${sqliteSha256(stableJson({
+      actor: actor.employeeId,
+      title: stringParam(params.title),
+      roleScope: stringParam(params.roleScope) ?? actor.role,
+      project: stringParam(params.project),
+      category: stringParam(params.category),
+      knowledgeKind: stringParam(params.knowledgeKind),
+      sourceDigest: stringParam(params.sourceDigest),
+      sourceRefDigest: sqliteSha256(stringParam(params.sourceRef) ?? ""),
+      tags: stringArrayParam(params.tags)
+    })).slice(0, 20)}`;
+    try {
+      const entry = repository.createKnowledgeRetrievalEntry({
+        id: proposedId,
+        title: requireStringParam(params.title, "title"),
+        roleScope: stringParam(params.roleScope) ?? actor.role,
+        project: requireStringParam(params.project, "project"),
+        category: requireStringParam(params.category, "category"),
+        knowledgeKind: requireStringParam(params.knowledgeKind, "knowledgeKind"),
+        status,
+        lastVerified: requireStringParam(params.lastVerified, "lastVerified"),
+        stalenessPolicy: requireStringParam(params.stalenessPolicy, "stalenessPolicy"),
+        sourceRef: requireStringParam(params.sourceRef, "sourceRef"),
+        sourceDigest: requireStringParam(params.sourceDigest, "sourceDigest"),
+        tags: stringArrayParam(params.tags),
+        summary: requireStringParam(params.summary, "summary"),
+        body: requireStringParam(params.body, "body")
+      });
+      const audit = this.store.appendAudit(actor, "mcp.transport.aos.knowledge.entry.propose", "knowledge", entry.id, "accepted", {
+        method: "aos.knowledge.entry.propose",
+        replayKeyDigest: digest(replayKey),
+        status: entry.status,
+        canonicalGateDecisionIdDigest: digest(stringParam(params.canonicalGateDecisionId) ?? stringParam(params.gateDecisionId) ?? "draft"),
+        sourceDigest: entry.sourceDigest,
+        sourceRefDigest: sqliteSha256(entry.sourceRef),
+        tagsCount: entry.tags.length,
+        bodyReturned: false,
+        rawRecordJsonReturned: false
+      });
+      return {
+        ok: true,
+        method: "aos.knowledge.entry.propose",
+        entry: knowledgeSnippet(entry),
+        auditEventId: audit.id,
+        idempotency: {
+          idempotencyKey: stringParam(params.idempotencyKey) ?? null,
+          deterministicEntryId: entry.id,
+          processLocalReplayOnly: true
+        },
+        bodyReturned: false,
+        rawRecordJsonReturned: false
+      };
+    } catch (error) {
+      throw toKnowledgeTransportError(error);
+    }
+  }
+
+  private knowledgeRead(actor: ActorIdentity, params: Record<string, unknown>, replayKey: string): Record<string, unknown> {
+    const repository = this.requireKnowledgeRepository();
+    const id = requireStringParam(params.id, "id");
+    try {
+      repository.requireKnowledgeRetrievalEntry(id);
+      const accessed = repository.recordKnowledgeRetrievalAccess(id, new Date().toISOString());
+      const audit = this.store.appendAudit(actor, "mcp.transport.aos.knowledge.entry.read", "knowledge", accessed.id, "read", {
+        method: "aos.knowledge.entry.read",
+        replayKeyDigest: digest(replayKey),
+        bodyReturned: true,
+        bodyWordCount: countWords(accessed.body),
+        sourceRefDigest: sqliteSha256(accessed.sourceRef),
+        rawRecordJsonReturned: false
+      });
+      return {
+        ok: true,
+        method: "aos.knowledge.entry.read",
+        entry: knowledgeDetails(accessed),
+        auditEventId: audit.id,
+        responseBudget: {
+          maxResponseBytes: this.maxResponseBytes,
+          bodyBudgetCappedByTransport: true
+        },
+        rawRecordJsonReturned: false
+      };
+    } catch (error) {
+      throw toKnowledgeTransportError(error);
+    }
+  }
+
+  private knowledgeSearch(actor: ActorIdentity, params: Record<string, unknown>, replayKey: string): Record<string, unknown> {
+    const repository = this.requireKnowledgeRepository();
+    const roleScope = stringParam(params.roleScope) ?? actor.role;
+    if (roleScope !== actor.role) {
+      throw new TransportError("knowledge_role_scope_mismatch", "Knowledge search role_scope must match the trusted actor role");
+    }
+    try {
+      const searchParams: Parameters<AosSqliteRepository["searchKnowledgeRetrievalPage"]>[0] = {
+        roleScope,
+        includeDraft: booleanParam(params.includeDraft),
+        includeStale: booleanParam(params.includeStale)
+      };
+      const query = stringParam(params.query);
+      const project = stringParam(params.project);
+      const category = stringParam(params.category);
+      if (query !== undefined) searchParams.query = query;
+      if (project !== undefined) searchParams.project = project;
+      if (category !== undefined) searchParams.category = category;
+      if (typeof params.limit === "number") searchParams.limit = params.limit;
+      if (typeof params.cursor === "string") searchParams.cursor = params.cursor;
+      const page = repository.searchKnowledgeRetrievalPage(searchParams);
+      const accessedAt = new Date().toISOString();
+      const accessedRows = page.rows.map((entry) => repository.recordKnowledgeRetrievalAccess(entry.id, accessedAt));
+      const audit = this.store.appendAudit(actor, "mcp.transport.aos.knowledge.search", "knowledge_search", page.filterDigest, "read", {
+        method: "aos.knowledge.search",
+        replayKeyDigest: digest(replayKey),
+        returnedCount: accessedRows.length,
+        filterDigest: page.filterDigest,
+        entryIdDigests: accessedRows.map((entry) => digest(entry.id)),
+        defaultCanonicalFilterApplied: page.defaultCanonicalFilterApplied,
+        defaultFreshnessFilterApplied: page.defaultFreshnessFilterApplied,
+        includeDraft: booleanParam(params.includeDraft),
+        includeStale: booleanParam(params.includeStale),
+        bodyReturned: false,
+        rawRecordJsonReturned: false
+      });
+      return {
+        ok: true,
+        method: "aos.knowledge.search",
+        items: accessedRows.map(knowledgeSnippet),
+        page: {
+          limit: page.limit,
+          returnedCount: page.returnedCount,
+          nextCursor: page.nextCursor,
+          hasMore: page.hasMore,
+          filterDigest: page.filterDigest,
+          searchMode: page.searchMode,
+          defaultCanonicalFilterApplied: page.defaultCanonicalFilterApplied,
+          defaultFreshnessFilterApplied: page.defaultFreshnessFilterApplied
+        },
+        auditEventId: audit.id,
+        bodyReturned: false,
+        rawRecordJsonReturned: false
+      };
+    } catch (error) {
+      throw toKnowledgeTransportError(error);
+    }
+  }
+
   private requireRuntimeDatabase(): NonNullable<AosMcpTransportConfig["runtimeDatabase"]> {
     if (!this.config.runtimeDatabase) {
       throw new TransportError("backup_runtime_database_required", "Backup methods require a validated runtime database profile");
     }
     return this.config.runtimeDatabase;
+  }
+
+  private requireKnowledgeRepository(): AosSqliteRepository {
+    if (!this.repository) {
+      throw new TransportError("knowledge_runtime_database_required", "Knowledge methods require a validated runtime database profile");
+    }
+    return this.repository;
   }
 
   private auditRefusal(method: string, reason: string, params: unknown): void {
@@ -473,7 +667,7 @@ export function createRuntimeTransport(config: AosMcpRuntimeConfig): RuntimeTran
   const repository = new AosSqliteRepository(compactRepositoryOptions(databaseReadback.databasePath, config.migrationsDir));
   repository.applyMigrations();
   const store = new AosStore(undefined, { persistence: repository });
-  const transport = new AosMcpTransport(store, compactTransportConfig(config, databaseReadback));
+  const transport = new AosMcpTransport(store, compactTransportConfig(config, databaseReadback), repository);
   return {
     transport,
     close() {
@@ -715,6 +909,85 @@ function normalizeParams(params: unknown): Record<string, unknown> {
 
 function stringParam(value: unknown): string | undefined {
   return typeof value === "string" && value.length > 0 ? value : undefined;
+}
+
+function requireStringParam(value: unknown, field: string): string {
+  const stringValue = stringParam(value);
+  if (!stringValue) {
+    throw new TransportError(`knowledge_${field}_required`, `Missing knowledge field: ${field}`);
+  }
+  return stringValue;
+}
+
+function stringArrayParam(value: unknown): string[] {
+  if (!Array.isArray(value) || value.some((item) => typeof item !== "string" || item.trim().length === 0)) {
+    throw new TransportError("knowledge_tags_required", "Knowledge tags must be a non-empty string array");
+  }
+  return [...new Set(value.map((item) => item.trim()))].sort();
+}
+
+function booleanParam(value: unknown): boolean {
+  return value === true;
+}
+
+function knowledgeStatusParam(value: unknown): KnowledgeRetrievalStatus {
+  if (value === "canonical" || value === "draft" || value === "deprecated") {
+    return value;
+  }
+  throw new TransportError("knowledge_status_invalid", "Knowledge status must be canonical, draft, or deprecated");
+}
+
+function knowledgeSnippet(entry: KnowledgeRetrievalEntryRecord): Record<string, unknown> {
+  const freshness = knowledgeRetrievalFreshness(entry);
+  return {
+    id: entry.id,
+    title: entry.title,
+    roleScope: entry.roleScope,
+    project: entry.project,
+    category: entry.category,
+    knowledgeKind: entry.knowledgeKind,
+    status: entry.status,
+    stale: freshness.stale,
+    freshness,
+    lastVerified: entry.lastVerified,
+    sourceDigest: entry.sourceDigest,
+    sourceRefDigest: sqliteSha256(entry.sourceRef),
+    tags: entry.tags,
+    summary: entry.summary,
+    snippet: entry.summary,
+    accessCount: entry.accessCount,
+    lastAccessed: entry.lastAccessed,
+    bodyIncluded: false
+  };
+}
+
+function knowledgeDetails(entry: KnowledgeRetrievalEntryRecord): Record<string, unknown> {
+  return {
+    ...knowledgeSnippet(entry),
+    body: entry.body,
+    bodyIncluded: true
+  };
+}
+
+function countWords(value: string): number {
+  const trimmed = value.trim();
+  return trimmed.length === 0 ? 0 : trimmed.split(/\s+/).length;
+}
+
+function toKnowledgeTransportError(error: unknown): TransportError {
+  if (error instanceof TransportError) {
+    return error;
+  }
+  if (error instanceof KnowledgeRetrievalValidationError) {
+    return new TransportError(error.reason, error.message);
+  }
+  if (error instanceof Error && error.message.startsWith("knowledge_retrieval_entry_not_found")) {
+    return new TransportError("knowledge_entry_not_found", "Knowledge entry was not found");
+  }
+  if (error instanceof Error && error.message.startsWith("knowledge_")) {
+    return new TransportError(error.message, error.message);
+  }
+  return new TransportError("knowledge_request_failed", error instanceof Error ? error.message : String(error));
 }
 
 function clampLimit(value: unknown, max: number): number {

@@ -243,7 +243,7 @@ test("Phase 3 ticket list stdio method is read-only, cursor-bound, policy-visibl
     ["aos.work_index.drill_through.read", "transport_method_outside_mvp_allowlist"],
     ["aos.work_index.any", "transport_method_outside_mvp_allowlist"],
     ["aos.resource.record.propose", "transport_method_outside_mvp_allowlist"],
-    ["aos.knowledge.entry.propose", "transport_method_outside_mvp_allowlist"],
+    ["aos.knowledge.entry.delete", "transport_method_outside_mvp_allowlist"],
     ["aos.ticket.archive", "transport_method_unknown"],
     ["aos.unsupported.method", "transport_method_unknown"]
   ];
@@ -417,7 +417,7 @@ test("Phase 3 work-loop stdio methods claim assignments, update assignee state, 
     "aos.gate.write",
     "aos.work_index.drill_through.read",
     "aos.resource.record.propose",
-    "aos.knowledge.entry.propose",
+    "aos.knowledge.entry.delete",
     "aos.unknown.method"
   ];
   for (const method of negativeMethods) {

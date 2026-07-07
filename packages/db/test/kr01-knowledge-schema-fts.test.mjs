@@ -107,7 +107,11 @@ test("KR-01 applies additive knowledge schema with FTS5, body caps, durable-copy
     assert.equal(sourceAfterCopy.tableNames().includes("aos_knowledge_entries"), false);
     sourceAfterCopy.close();
 
-    assert.equal(transportMvpMethods.some((method) => method.startsWith("aos.knowledge.")), false);
+    assert.deepEqual(transportMvpMethods.filter((method) => method.startsWith("aos.knowledge.")).sort(), [
+      "aos.knowledge.entry.propose",
+      "aos.knowledge.entry.read",
+      "aos.knowledge.search"
+    ]);
   } finally {
     await rm(root, { recursive: true, force: true });
     await rm(oldMigrationRoot, { recursive: true, force: true });
