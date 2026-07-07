@@ -1,47 +1,118 @@
-# TCRN-AOS
+# TCRN AOS
+
+TCRN AOS, the Agent Operations System, is a local-first operations spine for
+agent-assisted work. It models work as projects, initiatives, epics, story-grain
+tickets, assignments, evidence links, gate work orders, comments, and audit
+events, then exposes bounded MCP-style methods and browser readback surfaces for
+reviewable coordination.
+
+This repository is prepared for public source review and local experimentation.
+It is not a hosted service, not an autonomous dispatch system, and not a claim
+that any TCRN product milestone, runtime, release, or owner-facing workflow is
+accepted.
 
 ![TCRN-AOS product impression](docs/brand/tcrn-aos-impression.png)
 
-Local implementation checkpoint for the TCRN Agent Operations System MVP Operational Spine.
+## Local-First Boundaries
 
-This repository is a local product shell only. It does not publish, deploy, mutate other product repositories, execute copied helpers, or claim AOS product acceptance.
+- AOS stores operational proof data in local SQLite databases or in-memory stores.
+- Runtime profile roots are explicit and marker-checked before SQLite opens.
+- Browser readback is scoped to `/api/work/readback` ticket and audit views.
+- MCP transport methods are allowlisted; generic gateway, raw DB export, and
+  live dispatch surfaces are intentionally absent.
+- Audit and receipt payloads are metadata-oriented and redact sensitive detail.
+- The Codex adapter proof paths are dry-run/no-send unless a separately reviewed
+  live-dispatch lane is implemented and accepted.
+- Workflow governance, thread registry truth, release authority, and owner intent
+  gates remain outside this repository.
 
-## Local-First Posture
+## Architecture
 
-- AOS owns operational tickets, gate work orders, assignments, conferences, audit events, evidence references, dependency/resource posture records, and derived stage-map state.
-- TCRN Workflow remains the source of truth for governance, initiative gates, role contracts, workflow knowledge, and project registry readback.
-- GitHub remains the source of truth for repository, PR, CI, and release state.
-- Product repositories remain the source of truth for product code and docs.
-- Codex dispatch is dry-run only in this checkpoint.
-- No Redis or external queue is used.
-- Runtime operational data stays in local ephemeral storage for proof runs. Git stores source, schema, fixture seed, tests, and evidence notes only.
-- The web surface is now a repaired first-slice frontend shell with a dummy Cockpit and Jira-like work entry. It still requires PM/browser QA before any owner-facing return; it is not a final cockpit aggregation and is not Product Design accepted UX.
+```text
+apps/
+  api/       Local HTTP shell and browser-safe readback facade
+  web/       Static React work/readback shell
+packages/
+  domain/    AOS records, store, policies, idempotency, and redaction
+  db/        SQLite repository, migrations, runtime profile validation
+  mcp-gateway/
+             Domain method dispatcher and method-level idempotency
+  mcp-server/
+             Local JSON-line stdio/runtime transport
+  adapter-codex/
+             Dry-run Codex dispatch and terminal-return ingestion helpers
+scripts/     Proof, validation, smoke, and source-export helpers
+docs/        Architecture, security, runtime, and proof notes
+```
 
-## Local Commands
+## Requirements
+
+- Node.js compatible with the checked `packageManager` field.
+- `pnpm`.
+- A sibling checkout of `TCRN-Design-System` when installing locally, because
+  this package uses local file dependencies:
+
+```text
+TCRN Platform/
+  TCRN-AOS/
+  TCRN-Design-System/
+```
+
+## Quick Start
 
 ```sh
 pnpm install
-pnpm verify
-pnpm runtime:db:proof
-pnpm service:smoke
-pnpm aos:frontend-shell-proof
-pnpm slice3:proof
+pnpm build
+pnpm verify:fast
+pnpm service:start
 ```
 
-## Brand Assets
+The local service serves the static shell and API readbacks. It does not start a
+remote runtime, external queue, live thread dispatch, publication flow, or owner
+intent executor.
 
-- Registered shell brand source: `@tcrn/ui-react` `ShellBrandLockup` with the Design System `tcrn-brand-mark.svg`.
-- Deprecated local AOS wordmark and favicon assets have been removed from the current shell path and must not be restored without a fresh brand admission route.
-- README impression image: `docs/brand/tcrn-aos-impression.png`
+## Useful Commands
 
-## Frontend Shell
+```sh
+pnpm typecheck
+pnpm test
+pnpm verify:fast
+pnpm verify
+pnpm audit:licenses
+pnpm source-export:proof
+pnpm service:smoke
+pnpm phase3:readback-api-proof
+pnpm phase3:frontend-readback-proof
+pnpm p1:durable-runtime-profile-proof
+```
 
-- Static React shell source: `apps/web/src/**`
-- Generated shell artifacts: `apps/web/dist/index.html` and `apps/web/dist/assets/aos-client.js` from `pnpm build`
-- Served local routes: `/`, `/cockpit`, `/work`, and legacy compatibility aliases through `pnpm service:start`
-- Visible primary navigation is limited to the admitted shell entries: dummy Cockpit and Work. Planned modules are not registered product IA in this slice.
-- The visible product brand surface uses the registered Design System `ShellBrandLockup` and `tcrn-brand-mark.svg`; local AOS wordmark images and favicon assets are not emitted.
-- Shell behavior consumes the registered Design System `ProductShell`, `ProductShellSearch`, and `useProductShellController` semantic boundary; AOS supplies product IA/data/content and callback storage only.
-- Current parity proof maps AOS route states to the accepted six-variant DS Storybook visual-instance oracle `aos-frontend-shell-slice` (`components.html#aos-frontend-shell-slice`, DS `1531f96`); this is internal remediation evidence, not owner-visible readiness.
-- The locale menu, side navigation collapse, theme toggle, search, readback surfaces, mobile posture, and no-overclaim posture are covered by `pnpm aos:frontend-shell-proof`.
-- Scope boundary: dummy Cockpit only, no final aggregation API, no live dispatch, no external queue, no product acceptance, and no release-readiness claim.
+`pnpm verify` runs the broader local proof suite. Some proof commands create
+route-owned temporary storage and clean it up; durable local profile proofs are
+explicit about retention and no-overclaim boundaries.
+
+## Security and Privacy Posture
+
+- Do not commit SQLite runtime databases, raw DB dumps, credentials, private
+  evidence payloads, local absolute path dumps, browser/keychain material, shell
+  history, or raw scanner output.
+- Public source export excludes local evidence receipts and generated runtime
+  artifacts by construction.
+- Sensitive content checks are implemented in domain redaction helpers and in
+  source-export/publication proof scripts.
+- Runtime profile validation denies unsafe roots, symlinks, traversal, stale
+  markers, and non-direct-child database paths before SQLite opens.
+- Public repository publication should use a sanitized current-tree export rather
+  than legacy local history unless that history has been independently proven
+  clean.
+
+See also:
+
+- [Security boundaries](docs/security-boundaries.md)
+- [Persistent runtime storage prerequisite](docs/persistent-runtime-storage-prerequisite.md)
+- [Source export prerequisite](docs/source-export-prerequisite.md)
+- [Gateway adapter proof](docs/gateway-adapter-proof.md)
+- [Runtime proof](docs/runtime-proof.md)
+
+## License
+
+Apache-2.0. See [LICENSE](LICENSE).

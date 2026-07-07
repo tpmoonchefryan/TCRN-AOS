@@ -13,6 +13,7 @@ const ROUTE_REQUIRES_RAW_SOURCE_BLOCKED = true;
 
 const ROOT_FILES_ALLOWED = new Set([
   ".gitignore",
+  "LICENSE",
   "README.md",
   "package.json",
   "pnpm-lock.yaml",
@@ -86,6 +87,7 @@ const rawSourceBlockingSupported = !rawSourceArchiveAllowed;
 const forbiddenNegativeRows = buildForbiddenNegativeRows();
 const reviewedAllowedRows = buildReviewedAllowedRows();
 const exportPlan = buildExportPlan(treeEntries);
+const exportIncludedForbidden = exportPlan.included.map((entry) => entry.path).filter(isForbiddenTransferPath);
 const manifestDigest = createManifestDigest(exportPlan.included);
 const proofRoot = await mkdtemp(join(await realpath(tmpdir()), "tcrn-aos-59ad-clean-export-"));
 const stagingRoot = join(proofRoot, "candidate");
@@ -98,7 +100,7 @@ try {
   if (ROUTE_REQUIRES_RAW_SOURCE_BLOCKED && rawSourceArchiveAllowed) {
     throw new Error("source_export_raw_source_blocker_not_observed");
   }
-  if (trackedForbidden.length > 0 || exportPlan.unresolved.length > 0) {
+  if (exportIncludedForbidden.length > 0 || exportPlan.unresolved.length > 0) {
     throw new Error("source_export_manifest_has_unresolved_or_forbidden_tracked_files");
   }
   if (!forbiddenNegativeRows.every((row) => row.rejected) || reviewedAllowedRows.some((row) => row.rejected)) {
@@ -140,6 +142,7 @@ try {
       trackedFiles: trackedFiles.length,
       includedFiles: exportPlan.included.length,
       evidenceExcludedFiles: exportPlan.evidenceExcluded.length,
+      includedForbiddenFiles: exportIncludedForbidden.length,
       ignoredAndUntrackedExcludedByConstruction: ignoredFiles.length + untrackedFiles.length,
       allowedRoots: [...ALLOWED_PREFIXES, ...ROOT_FILES_ALLOWED].sort()
     },
