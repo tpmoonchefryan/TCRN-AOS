@@ -23,6 +23,7 @@
     "d3:real-dogfood-workload-proof": "pnpm build && node scripts/d3-real-dogfood-workload-proof.mjs",
     "d4:friction-capture-proof": "pnpm build && node scripts/d4-friction-capture-proof.mjs",
     "phase4:pilot-vault-import-proof": "pnpm build && node scripts/phase4-pilot-vault-import-proof.mjs",
+    "phase4:crew-ai-employees-seed-proof": "pnpm build && node scripts/phase4-crew-reduction-ai-employees-seed-proof.mjs",
     "phase3:readback-api-proof": "pnpm build && node scripts/phase3-readback-api-proof.mjs",
     "phase3:frontend-readback-proof": "pnpm build && node scripts/phase3-frontend-readback-proof.mjs",
     "service:start": "pnpm build && node scripts/service-start.mjs",
