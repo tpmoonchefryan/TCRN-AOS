@@ -1,12 +1,12 @@
 {
   "ok": true,
-  "route": "route_tcrn_aos_knowledge_retrieval_layer_kr02_mcp_method_surface_after_kr01_gate_green_a1223e_1d6076_20260708",
+  "route": "route_tcrn_aos_knowledge_retrieval_layer_kr02_method_boundary_repair_ilya_after_sable_changes_requested_623faf_1d6076_20260708",
   "command": "pnpm --dir TCRN-AOS kr02:mcp-method-surface-proof",
   "source": {
     "ownerDecisionWorkflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
     "kr00GateGreenWorkflowBasis": "1d60763f3c0c3eae0fb5465fb50189c4951c48df",
-    "incomingAosBasis": "a1223ee654cb026ac0a23d62d10ef143d2ae50ef",
-    "sourceHead": "52e1743b90bed21d77d2c81e783de00a490dfb4b",
+    "incomingAosBasis": "623fafa6419a97d66a29bb287469f8a93d114527",
+    "sourceHead": "25f02b9e96fc417553ad96bc9f11d8505167ba31",
     "sourceFiles": [
       "package.json",
       "packages/db/src/sqlite-repository.ts",
@@ -19,13 +19,13 @@
     "sourceFileDigests": {
       "package.json": "832c96eb78767fd04883c8b5a42b097807ba9c2af137073aeed916309dadbe41",
       "packages/db/src/sqlite-repository.ts": "ebdbda61879518a608c1a442759982c082403a4dc7d226e98fc2dd68ef5a489b",
-      "packages/mcp-server/src/transport.ts": "690cf3927b5892628f6e1e82b48b816292c3015e130375c18839107c221b083d",
-      "packages/mcp-server/test/kr02-knowledge-method-surface.test.mjs": "725ca3b28b90f4ae306137c141ddaa543b79654547e652d121f59a155603e0a7",
+      "packages/mcp-server/src/transport.ts": "1585ec20c02b944a23b97c9b191b7afddd4433b7bced12faea9441e0df46e39e",
+      "packages/mcp-server/test/kr02-knowledge-method-surface.test.mjs": "4217b730b266a8059b289dcebd2b0d3cd4cddb8774e378a942d627aa77c51bd0",
       "packages/db/test/kr01-knowledge-schema-fts.test.mjs": "80cc49ba91c33b8a712ad9c7db81deb8b8072c043b319a59daf416982abacbea",
       "packages/mcp-server/test/stdio-transport.test.mjs": "090c3b06454998d933523a834a06b962ef8c805f301ca0b9c314bd0b83ecef00",
-      "scripts/kr02-mcp-method-surface-proof.mjs": "5f69fbe7951687133206c54eb696f4b9717975b7bc4e103150e81599134b46b5"
+      "scripts/kr02-mcp-method-surface-proof.mjs": "e832c95d364d3cfafa32808cddd929d75517c25d317335d5be65d1615da277eb"
     },
-    "sourceContentDigest": "b93f66bbada8db6593e365a721cbb6ade9ecb67b51e7f4298d21355c0ea32df2"
+    "sourceContentDigest": "00569949d56b84ceab0d8533410997b1058acfcdd47e8a1bedc130f8f8fc7a66"
   },
   "receiptInventory": [
     "kr02-mcp-method-surface-readback.json"
@@ -34,20 +34,21 @@
   "allChildReceiptsOk": true,
   "missingReceipts": [],
   "extraUnclassifiedReceipts": [],
-  "readbackReceiptDigest": "c54ffcd4e383a07e2f0d50c40e7e249c8c8cdfd221cc0f085b1529c859a365fa",
+  "readbackReceiptDigest": "badc8674a0cd7c38e65da5fdef3eb0e3897830ac9b3cffaedca0fdf980575265",
   "methodRegistry": [
     "aos.knowledge.entry.propose",
     "aos.knowledge.entry.read",
     "aos.knowledge.search"
   ],
-  "proposedEntryId": "knowledge-kr02-proof-canonical",
+  "proposedEntryId": "knowledge-kr02-proof-draft",
   "searchReturnedIds": [
-    "knowledge-kr02-proof-second"
+    "knowledge-kr02-proof-canonical"
   ],
-  "readAuditEventId": "audit_1097ca03d291eda7",
+  "readAuditEventId": "audit_cb82597976956fd1",
   "blockedRoleReason": "transport_actor_blocked_role",
   "noOverclaimFlags": {
     "kr02MethodSurfaceImplemented": true,
+    "sableMethodBoundaryRepairApplied": true,
     "kr03ReadbackUiStarted": false,
     "kr04HookSwapStarted": false,
     "kr05SeedEntriesStarted": false,
