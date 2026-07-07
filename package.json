@@ -25,6 +25,7 @@
     "phase4:pilot-vault-import-proof": "pnpm build && node scripts/phase4-pilot-vault-import-proof.mjs",
     "phase4:crew-ai-employees-seed-proof": "pnpm build && node scripts/phase4-crew-reduction-ai-employees-seed-proof.mjs",
     "p1:durable-runtime-profile-proof": "pnpm build && node scripts/p1-durable-runtime-profile-proof.mjs",
+    "df03:status-migration-proof": "pnpm build && node scripts/df03-status-migration-proof.mjs",
     "phase3:readback-api-proof": "pnpm build && node scripts/phase3-readback-api-proof.mjs",
     "phase3:frontend-readback-proof": "pnpm build && node scripts/phase3-frontend-readback-proof.mjs",
     "service:start": "pnpm build && node scripts/service-start.mjs",

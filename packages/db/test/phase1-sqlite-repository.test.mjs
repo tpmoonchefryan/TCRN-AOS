@@ -74,6 +74,12 @@ test("Phase 1 SQLite repository applies core migrations, persists store writes, 
       estimate: { effortPoints: 3, complexity: "medium", risk: "L3", verificationCost: "medium", confidence: "medium" },
       subTasks: []
     }, actor);
+    const comment = store.addComment({
+      ticketId: story.id,
+      type: "agent_observation",
+      actor,
+      body: "Phase 1 persistence test comment."
+    }, actor);
     store.addSubTask(story.id, {
       id: "subtask-phase1-test",
       title: "Persist subtask",
@@ -140,7 +146,9 @@ test("Phase 1 SQLite repository applies core migrations, persists store writes, 
     restarted.applyMigrations();
     const hydrated = new AosStore(createDefaultSeed(), { persistence: restarted });
     assert.equal(restarted.databaseDigest(), digestBefore);
-    assert.equal(hydrated.listStories().some((item) => item.id === story.id), true);
+    const hydratedStory = hydrated.listStories().find((item) => item.id === story.id);
+    assert.equal(Boolean(hydratedStory), true);
+    assert.equal(hydratedStory.comments.some((item) => item.id === comment.id), true);
     assert.deepEqual(restarted.traceStory(story.id).assignmentIds, [assignment.id]);
     restarted.close();
   } finally {

@@ -642,17 +642,20 @@ export class AosStore {
   }
 
   addComment(input: Omit<StructuredComment, "id" | "createdAt" | "appendOnly">, actor: ActorIdentity): StructuredComment {
-    this.ensureSafe(input, "comment");
-    const story = this.requireStory(input.ticketId);
-    const comment: StructuredComment = {
-      ...input,
-      id: createId("comment", input),
-      createdAt: now(),
-      appendOnly: true
-    };
-    story.comments.push(comment);
-    this.appendAudit(actor, "comment.create", "story", story.id, "accepted", { commentId: comment.id, type: comment.type });
-    return comment;
+    return this.withPersistenceTransaction(() => {
+      this.ensureSafe(input, "comment");
+      const story = this.requireStory(input.ticketId);
+      const comment: StructuredComment = {
+        ...input,
+        id: createId("comment", input),
+        createdAt: now(),
+        appendOnly: true
+      };
+      story.comments.push(comment);
+      this.persistCoreRecord("story", story);
+      this.appendAudit(actor, "comment.create", "story", story.id, "accepted", { commentId: comment.id, type: comment.type });
+      return comment;
+    });
   }
 
   linkEvidence(input: Omit<EvidenceLink, "id" | "createdAt">, actor: ActorIdentity): EvidenceLink {
