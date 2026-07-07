@@ -2,7 +2,7 @@ import { stdin as processStdin, stdout as processStdout } from "node:process";
 import { createInterface } from "node:readline";
 import { homedir } from "node:os";
 import { existsSync, lstatSync, readFileSync, realpathSync } from "node:fs";
-import { basename, dirname, parse, relative, resolve, sep } from "node:path";
+import { basename, dirname, join, parse, relative, resolve, sep } from "node:path";
 import {
   AosStore,
   POLICY_VERSION,
@@ -15,8 +15,13 @@ import {
   type AgentRun,
   type AuditEvent
 } from "../../domain/src/index.js";
-import { AosSqliteRepository } from "../../db/src/index.js";
-import { assertRouteOwnedSqliteRoot, sha256 as sqliteSha256 } from "../../db/src/index.js";
+import {
+  AosSqliteRepository,
+  createSqliteLogicalExport,
+  createSqlitePhysicalSnapshot,
+  listBackupArtifacts
+} from "../../db/src/index.js";
+import { assertRouteOwnedSqliteRoot, digestFile, sha256 as sqliteSha256 } from "../../db/src/index.js";
 import { McpGateway, type McpResponse } from "../../mcp-gateway/src/index.js";
 
 export const transportMvpMethods = [
@@ -27,6 +32,9 @@ export const transportMvpMethods = [
   "aos.assignment.update",
   "aos.run.summary.create",
   "aos.evidence.link",
+  "aos.backup.snapshot.create",
+  "aos.backup.export.create",
+  "aos.backup.list",
   "aos.gate.request",
   "aos.gate.decision.record",
   "aos.policy.read",
@@ -39,6 +47,7 @@ export type TransportMvpMethod = typeof transportMvpMethods[number];
 export const transportReadMethods: readonly TransportMvpMethod[] = [
   "aos.policy.read",
   "aos.ticket.list",
+  "aos.backup.list",
   "aos.stage_map.read",
   "aos.audit.query"
 ];
@@ -47,6 +56,14 @@ export interface AosMcpTransportConfig {
   trustedActor: ActorIdentity;
   auditPageLimit?: number;
   maxResponseBytes?: number;
+  runtimeDatabase?: {
+    databasePath: string;
+    databaseRoot: string;
+    rootDigest: string;
+    backupDir: string;
+    repoRoot: string;
+    migrationsDir?: string;
+  };
 }
 
 export interface AosMcpRuntimeConfig {
@@ -105,6 +122,18 @@ const blockedTransportMethodPrefixes = [
   "aos.work_index."
 ];
 
+function isBackupMethod(method: string): boolean {
+  return method === "aos.backup.list" || isBackupCreateMethod(method);
+}
+
+function isBackupCreateMethod(method: string): boolean {
+  return method === "aos.backup.snapshot.create" || method === "aos.backup.export.create";
+}
+
+function backupCreateActorAllowed(actor: ActorIdentity): boolean {
+  return actor.employeeId === "employee-atlas" || actor.employeeId === "aos-service-scheduler";
+}
+
 export class AosMcpTransport {
   private readonly gateway: McpGateway;
   private readonly auditPageLimit: number;
@@ -152,7 +181,7 @@ export class AosMcpTransport {
     this.rejectClientSuppliedAuthority(params);
     const actor = this.resolveTrustedActor(method);
     const typedMethod = method as TransportMvpMethod;
-    if (!transportReadMethods.includes(typedMethod) && !canWrite(actor)) {
+    if (!transportReadMethods.includes(typedMethod) && !isBackupCreateMethod(method) && !canWrite(actor)) {
       throw new TransportError("transport_actor_read_only", `Role ${actor.role} cannot write through MCP stdio transport`);
     }
 
@@ -182,6 +211,23 @@ export class AosMcpTransport {
         method,
         returnedCount: result.returnedCount,
         hasMore: result.hasMore
+      });
+      return this.cacheBudgetedResult(replayKey, result);
+    }
+    if (method === "aos.backup.list") {
+      const result = this.backupList();
+      this.store.appendAudit(actor, "mcp.transport.aos.backup.list", "mcp_request", replayKey, "read", {
+        method,
+        returnedCount: result.returnedCount
+      });
+      return this.cacheBudgetedResult(replayKey, result);
+    }
+    if (isBackupCreateMethod(method)) {
+      const result = this.backupCreate(actor, method, params);
+      this.store.appendAudit(actor, `mcp.transport.${method}`, "mcp_request", replayKey, "accepted", {
+        method,
+        resultDigest: digest(result),
+        backupCreateAuthority: true
       });
       return this.cacheBudgetedResult(replayKey, result);
     }
@@ -217,7 +263,7 @@ export class AosMcpTransport {
     if (employee.lifecycle !== "active") {
       throw new TransportError("transport_actor_lifecycle_inactive", `Transport actor lifecycle is not active for ${actor.employeeId}`);
     }
-    if (method !== "aos.policy.read" && actor.role === "owner_observer") {
+    if (method !== "aos.policy.read" && !isBackupMethod(method) && actor.role === "owner_observer") {
       throw new TransportError("transport_actor_blocked_role", `Role ${actor.role} is read-only for MCP stdio transport`);
     }
     return actor;
@@ -262,7 +308,8 @@ export class AosMcpTransport {
         employeeId: actor.employeeId,
         role: actor.role,
         threadId: actor.threadId,
-        canWrite: canWrite(actor)
+        canWrite: canWrite(actor),
+        backupCreateAuthority: backupCreateActorAllowed(actor)
       },
       responseBudget: {
         maxResponseBytes: this.maxResponseBytes,
@@ -309,6 +356,91 @@ export class AosMcpTransport {
     };
   }
 
+  private backupList() {
+    const runtime = this.requireRuntimeDatabase();
+    return listBackupArtifacts({
+      backupDir: runtime.backupDir,
+      forbiddenWorktreeRoots: [runtime.repoRoot]
+    });
+  }
+
+  private backupCreate(actor: ActorIdentity, method: string, params: Record<string, unknown>): Record<string, unknown> {
+    if (!backupCreateActorAllowed(actor)) {
+      throw new TransportError("backup_create_actor_denied", `Actor ${actor.employeeId} is not allowed to create backup artifacts`);
+    }
+    const runtime = this.requireRuntimeDatabase();
+    const createdAt = stringParam(params.createdAt) ?? new Date().toISOString();
+    const purpose = stringParam(params.purpose) ?? method.replaceAll(".", "_");
+    const profileId = stringParam(params.profileId) ?? "aos-runtime-profile";
+    const sourceProfileDigest = sqliteSha256(`${runtime.rootDigest}:${digestFile(runtime.databasePath)}`);
+    const idBase = sqliteSha256(JSON.stringify({
+      method,
+      actor: actor.employeeId,
+      purpose,
+      idempotencyKey: stringParam(params.idempotencyKey) ?? "",
+      createdAt
+    })).slice(0, 16);
+    if (method === "aos.backup.snapshot.create") {
+      const snapshotId = stringParam(params.snapshotId) ?? `bk02-method-snapshot-${idBase}`;
+      const snapshot = createSqlitePhysicalSnapshot({
+        sourceDatabasePath: runtime.databasePath,
+        snapshotPath: join(runtime.backupDir, "bk02-method-physical-snapshots", `${snapshotId}.sqlite`),
+        snapshotId,
+        createdAt,
+        purpose,
+        sourceProfileDigest,
+        routeId: "aos.backup.snapshot.create",
+        profileId,
+        forbiddenWorktreeRoots: [runtime.repoRoot]
+      });
+      return {
+        ok: snapshot.ok,
+        method,
+        snapshotId: snapshot.snapshotId,
+        createdWith: snapshot.createdWith,
+        snapshotDigest: snapshot.snapshotDigest,
+        manifestDigest: snapshot.manifestDigest,
+        tableRowCounts: snapshot.manifest.tableRowCounts,
+        liveDatabaseFileCopiedDirectly: snapshot.liveDatabaseFileCopiedDirectly,
+        rawPathRecorded: false
+      };
+    }
+    const exportId = stringParam(params.exportId) ?? `bk02-logical-export-${idBase}`;
+    const logicalExport = createSqliteLogicalExport({
+      sourceDatabasePath: runtime.databasePath,
+      internalSnapshotPath: join(runtime.backupDir, "bk02-logical-export-internal-snapshots", `${exportId}.sqlite`),
+      exportDirectory: join(runtime.backupDir, "bk02-logical-exports", exportId),
+      exportId,
+      internalSnapshotId: `${exportId}-internal-snapshot`,
+      createdAt,
+      purpose,
+      sourceProfileDigest,
+      routeId: "aos.backup.export.create",
+      profileId,
+      forbiddenWorktreeRoots: [runtime.repoRoot]
+    });
+    return {
+      ok: logicalExport.ok,
+      method,
+      exportId: logicalExport.exportId,
+      exportDigest: logicalExport.exportDigest,
+      manifestDigest: logicalExport.manifestDigest,
+      sourceSnapshotId: logicalExport.manifest.sourceSnapshotId,
+      sourceSnapshotDigest: logicalExport.manifest.sourceSnapshotDigest,
+      createdWith: logicalExport.createdWith,
+      liveDatabaseFileReadDirectly: logicalExport.liveDatabaseFileReadDirectly,
+      tableRowCounts: logicalExport.manifest.tableRowCounts,
+      rawPathRecorded: false
+    };
+  }
+
+  private requireRuntimeDatabase(): NonNullable<AosMcpTransportConfig["runtimeDatabase"]> {
+    if (!this.config.runtimeDatabase) {
+      throw new TransportError("backup_runtime_database_required", "Backup methods require a validated runtime database profile");
+    }
+    return this.config.runtimeDatabase;
+  }
+
   private auditRefusal(method: string, reason: string, params: unknown): void {
     try {
       this.store.appendAudit({ system: "aos-mcp-stdio-transport" }, "mcp.transport.refusal", "mcp_request", method, "blocked", {
@@ -341,7 +473,7 @@ export function createRuntimeTransport(config: AosMcpRuntimeConfig): RuntimeTran
   const repository = new AosSqliteRepository(compactRepositoryOptions(databaseReadback.databasePath, config.migrationsDir));
   repository.applyMigrations();
   const store = new AosStore(undefined, { persistence: repository });
-  const transport = new AosMcpTransport(store, compactTransportConfig(config));
+  const transport = new AosMcpTransport(store, compactTransportConfig(config, databaseReadback));
   return {
     transport,
     close() {
@@ -393,7 +525,7 @@ function compactRepositoryOptions(databasePath: string, migrationsDir: string | 
   return migrationsDir ? { databasePath, migrationsDir } : { databasePath };
 }
 
-function validateRuntimeDatabaseConfig(config: AosMcpRuntimeConfig): { databasePath: string; rootDigest: string } {
+function validateRuntimeDatabaseConfig(config: AosMcpRuntimeConfig): { databasePath: string; databaseRoot: string; rootDigest: string } {
   if (!config.databasePath) {
     throw new Error("transport_runtime_database_path_required");
   }
@@ -429,7 +561,7 @@ function validateRuntimeDatabaseConfig(config: AosMcpRuntimeConfig): { databaseP
   if (canonicalDatabaseParent !== canonicalRoot || canonicalRelativeToRoot.startsWith("..") || canonicalRelativeToRoot.split(sep).includes("..")) {
     throw new Error("transport_runtime_database_canonical_path_outside_route_owned_root");
   }
-  return { databasePath, rootDigest: rootReadback.rootDigest };
+  return { databasePath, databaseRoot, rootDigest: rootReadback.rootDigest };
 }
 
 function validateRuntimeProfileMarker(
@@ -518,7 +650,7 @@ function denyWrongSiblingRuntimePath(path: string, repoRoot: string): void {
   }
 }
 
-function compactTransportConfig(config: AosMcpRuntimeConfig): AosMcpTransportConfig {
+function compactTransportConfig(config: AosMcpRuntimeConfig, databaseReadback?: { databasePath: string; databaseRoot: string; rootDigest: string }): AosMcpTransportConfig {
   const transportConfig: AosMcpTransportConfig = { trustedActor: config.actor };
   if (config.auditPageLimit !== undefined) {
     transportConfig.auditPageLimit = config.auditPageLimit;
@@ -526,7 +658,27 @@ function compactTransportConfig(config: AosMcpRuntimeConfig): AosMcpTransportCon
   if (config.maxResponseBytes !== undefined) {
     transportConfig.maxResponseBytes = config.maxResponseBytes;
   }
+  if (databaseReadback) {
+    transportConfig.runtimeDatabase = compactRuntimeDatabaseConfig(config, databaseReadback);
+  }
   return transportConfig;
+}
+
+function compactRuntimeDatabaseConfig(
+  config: AosMcpRuntimeConfig,
+  databaseReadback: { databasePath: string; databaseRoot: string; rootDigest: string }
+): NonNullable<AosMcpTransportConfig["runtimeDatabase"]> {
+  const runtimeDatabase: NonNullable<AosMcpTransportConfig["runtimeDatabase"]> = {
+    databasePath: databaseReadback.databasePath,
+    databaseRoot: databaseReadback.databaseRoot,
+    rootDigest: databaseReadback.rootDigest,
+    backupDir: join(databaseReadback.databaseRoot, "backup"),
+    repoRoot: config.repoRoot ? resolve(config.repoRoot) : process.cwd()
+  };
+  if (config.migrationsDir !== undefined) {
+    runtimeDatabase.migrationsDir = config.migrationsDir;
+  }
+  return runtimeDatabase;
 }
 
 function redactAuditEventForTransport(event: AuditEvent): Record<string, unknown> {

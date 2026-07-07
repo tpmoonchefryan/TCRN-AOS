@@ -70,6 +70,36 @@ export const seedEmployees: AIEmployee[] = [
     },
     roleContractRefs: ["security-review"],
     skillRefs: ["risk-boundary"]
+  },
+  {
+    id: "employee-atlas",
+    name: "Atlas",
+    role: "owner_observer",
+    authoritySummary: "Environment Resource Steward; backup-create authority is method-scoped by AOS transport.",
+    contactWhen: "Route owner-authorized local backup and restore proof work.",
+    lifecycle: "active",
+    threadIdentity: {
+      threadId: "atlas-thread",
+      status: "active",
+      lifecycle: "persistent"
+    },
+    roleContractRefs: ["environment-resource-steward"],
+    skillRefs: ["backup-restore-governance"]
+  },
+  {
+    id: "aos-service-scheduler",
+    name: "AOS Service Scheduler",
+    role: "owner_observer",
+    authoritySummary: "System actor with backup-create authority only; no ticket, gate, or knowledge write authority.",
+    contactWhen: "Backend-only backup scheduler execution.",
+    lifecycle: "active",
+    threadIdentity: {
+      threadId: "aos-service-scheduler-system",
+      status: "active",
+      lifecycle: "persistent"
+    },
+    roleContractRefs: ["aos-service-scheduler"],
+    skillRefs: ["backup-scheduler"]
   }
 ];
 

@@ -1,9 +1,10 @@
 import { digest, redactForAudit, type AosStore, type AuditEvent, type TicketListParams } from "../../../packages/domain/src/index.js";
+import type { BackupListReadback } from "../../../packages/db/src/index.js";
 
 const WORK_READBACK_SURFACE = "work.readback";
 const DEFAULT_RESPONSE_BUDGET_BYTES = 16_384;
 const AUDIT_PAGE_LIMIT = 5;
-const TICKET_READBACK_METHODS = ["aos.ticket.list", "aos.audit.query"] as const;
+const TICKET_READBACK_METHODS = ["aos.ticket.list", "aos.audit.query", "aos.backup.list"] as const;
 
 const noOverclaimFlags = {
   serviceProofOnly: true,
@@ -48,6 +49,10 @@ const auditQueryKeys = new Set([
   "cursor"
 ]);
 
+const backupQueryKeys = new Set([
+  "limit"
+]);
+
 const forbiddenClientAuthorityKeys = new Set([
   "actor",
   "employeeid",
@@ -74,6 +79,7 @@ export interface WorkReadbackApiResult {
 
 export interface WorkReadbackApiOptions {
   responseBudgetBytes?: number;
+  backupListReadback?: BackupListReadback | (() => BackupListReadback);
 }
 
 export function createWorkReadbackApiResponse(
@@ -98,6 +104,15 @@ export function createWorkReadbackApiResponse(
         body: {
           ...commonEnvelope,
           ...auditReadbackFromQuery(store, query)
+        }
+      }, options.responseBudgetBytes);
+    }
+    if (path === "/api/work/readback/backups") {
+      return enforceResponseBudget({
+        statusCode: 200,
+        body: {
+          ...commonEnvelope,
+          ...backupReadbackFromQuery(query, options)
         }
       }, options.responseBudgetBytes);
     }
@@ -172,6 +187,27 @@ function auditReadbackFromQuery(store: AosStore, query: URLSearchParams): Record
     returnedCount: page.length,
     nextCursor: nextOffset < events.length ? encodeAuditCursor(nextOffset) : null,
     hasMore: nextOffset < events.length
+  };
+}
+
+function backupReadbackFromQuery(query: URLSearchParams, options: WorkReadbackApiOptions): Record<string, unknown> {
+  rejectForbiddenClientAuthority(query);
+  rejectUnsupportedQueryKeys(query, backupQueryKeys);
+  const limit = singleQueryValue(query, "limit");
+  const parsedLimit = limit === undefined ? undefined : parsePositiveInteger(limit, "invalid_backup_list_limit");
+  const provider = options.backupListReadback;
+  const readback = provider
+    ? (typeof provider === "function" ? provider() : provider)
+    : { ok: true, method: "aos.backup.list" as const, items: [], returnedCount: 0, fullGatewayMethodListExposed: false as const, rawPathRecorded: false as const };
+  const items = parsedLimit === undefined ? readback.items : readback.items.slice(0, parsedLimit);
+  return {
+    ok: true,
+    method: "aos.backup.list",
+    items,
+    returnedCount: items.length,
+    totalAvailableCount: readback.returnedCount,
+    fullGatewayMethodListExposed: false,
+    rawPathRecorded: false
   };
 }
 
