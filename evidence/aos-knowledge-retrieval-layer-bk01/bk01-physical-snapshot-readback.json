@@ -1,0 +1,467 @@
+{
+  "schema": "aos.knowledge_retrieval_layer.bk01.v1",
+  "receiptName": "bk01-physical-snapshot-readback.json",
+  "ok": true,
+  "generatedAt": "2026-07-08T00:00:00.000Z",
+  "route": "route_tcrn_aos_knowledge_retrieval_layer_bk01_physical_snapshot_retention_restore_drill_implementation_after_owner_decision_checkpoint_20260708",
+  "workflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+  "planBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+  "aosBasis": "db6bdc2c17e2f44ffbf3a57c94abb29266e2a6e4",
+  "command": "pnpm --dir TCRN-AOS bk01:physical-snapshot-proof",
+  "source": {
+    "sourceHead": "7c1ca808c882abd1571c6c1725747137058b61c9",
+    "incomingAosBasis": "db6bdc2c17e2f44ffbf3a57c94abb29266e2a6e4",
+    "workflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+    "planBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+    "sourceFiles": [
+      "package.json",
+      "packages/db/src/backup.ts",
+      "packages/db/src/index.ts",
+      "packages/db/src/sqlite-repository.ts",
+      "packages/db/test/bk01-physical-snapshot.test.mjs",
+      "scripts/bk01-physical-snapshot-proof.mjs"
+    ],
+    "sourceContentDigest": "3ea04fae12ae2b34d8a18e2ea7962131f373b4e8c8cf0cfe5e20bc6527c3b625",
+    "fileDigests": {
+      "package.json": "1650fb12731a2334df62b1329aae7f4b26248deb7a2293f2f5d01b933548cd3a",
+      "packages/db/src/backup.ts": "3f6ffb0e6131e6dca879d6257ee5db2d0b666f9af6d757e389dccb58a84afb21",
+      "packages/db/src/index.ts": "f70a7edb8afb2acd33bcffb302cba83d584bd28e79c66d664b3b79d20a5169a9",
+      "packages/db/src/sqlite-repository.ts": "cd9471beb6f916e905888da77c7de64e14f95be20acec94ba0d91cf08e25801a",
+      "packages/db/test/bk01-physical-snapshot.test.mjs": "a121095d08707f3f8c513e279b58a0e87990754f6221542958da0c07e3bec902",
+      "scripts/bk01-physical-snapshot-proof.mjs": "01ed32d3217097c7a02d01ffa6348ad7ac41ee87f72260f7c68d99c57bd33bcd"
+    },
+    "command": "pnpm --dir TCRN-AOS bk01:physical-snapshot-proof"
+  },
+  "selectedRoot": {
+    "profileRootClass": "owner_marker_durable_local_profile_root",
+    "explicitRootProvided": false,
+    "selectedRootDigest": "d0c6b59abe7d3fa117a86269df6ad6d97262d33bfb41253b96e52b1bcb58f896",
+    "databaseFileName": "aos-p1-durable-runtime-profile.sqlite",
+    "ownerMarkerFile": ".aos-persistent-runtime-owner.json",
+    "routeOwnedMarkerFile": ".tcrn-aos-phase1-root",
+    "rawPathRecorded": false
+  },
+  "snapshotCreationReadback": {
+    "ok": true,
+    "createdWith": "sqlite_vacuum_into",
+    "liveDatabaseFileCopiedDirectly": false,
+    "sourceProfileDigest": "988f6aba888837f18110c43243a752d283172344d7746770b7ac7f7309c1e2dc",
+    "ownerMarkerRootDigest": "9de647d44aebde0e324725f9c281de1276f639b1e2c4e1ccb68dead330561773",
+    "backupRootDigest": "d490684686de7334f5ff2a115844986fccff26836e19f064145dfd1f37e65121",
+    "snapshots": [
+      {
+        "ok": true,
+        "snapshotId": "bk01-daily-2026-07-01",
+        "snapshotDigest": "18983655d5983f54bf90c7c6ef4c5b65f6ff80c6b5674fbbfe8ce3ee447e592f",
+        "manifestDigest": "6d0098575caaff8984488823f5675ac551b6fcfbe9b7cf078fbe49267ad11820",
+        "createdWith": "sqlite_vacuum_into",
+        "liveDatabaseFileCopiedDirectly": false,
+        "createdAt": "2026-07-01T00:00:00.000Z",
+        "purpose": "bk01_daily_keep_3_physical_snapshot",
+        "sourceProfileDigest": "988f6aba888837f18110c43243a752d283172344d7746770b7ac7f7309c1e2dc",
+        "sourceDatabaseDigest": "b517ae463a897e04afbbe2fd9711d2cfed2591de1df12bb098f371bae6b5c84a",
+        "routeDigest": "eaec5f7468b16a49b4c18e3d637c61fab35464032a860711f07ab775d7e94404",
+        "profileDigest": "0cd1679bc06710cd3ef599984454f6b22bbba51092d753c63be93bea70ea0b8d",
+        "snapshotPathDigest": "f83dbebdd3a54b282e472efa1de4d5bb2d6e30fd6baab08e32ecf1c19bb971e9",
+        "tableRowCounts": {
+          "aos_agent_runs": 0,
+          "aos_ai_employees": 3,
+          "aos_assignments": 0,
+          "aos_audit_events": 78,
+          "aos_epics": 4,
+          "aos_evidence_links": 0,
+          "aos_gate_work_orders": 0,
+          "aos_initiatives": 2,
+          "aos_projects": 1,
+          "aos_schema_migrations": 1,
+          "aos_stories": 5,
+          "aos_subtasks": 1
+        },
+        "integrityCheck": {
+          "ok": true,
+          "result": "ok"
+        },
+        "rawPathRecorded": false
+      },
+      {
+        "ok": true,
+        "snapshotId": "bk01-daily-2026-07-02",
+        "snapshotDigest": "18983655d5983f54bf90c7c6ef4c5b65f6ff80c6b5674fbbfe8ce3ee447e592f",
+        "manifestDigest": "03d0fa70bcb3d8d0c6631754a93b5837b84f8c4da06e1a669770712e3bbcbcfb",
+        "createdWith": "sqlite_vacuum_into",
+        "liveDatabaseFileCopiedDirectly": false,
+        "createdAt": "2026-07-02T00:00:00.000Z",
+        "purpose": "bk01_daily_keep_3_physical_snapshot",
+        "sourceProfileDigest": "988f6aba888837f18110c43243a752d283172344d7746770b7ac7f7309c1e2dc",
+        "sourceDatabaseDigest": "b517ae463a897e04afbbe2fd9711d2cfed2591de1df12bb098f371bae6b5c84a",
+        "routeDigest": "eaec5f7468b16a49b4c18e3d637c61fab35464032a860711f07ab775d7e94404",
+        "profileDigest": "0cd1679bc06710cd3ef599984454f6b22bbba51092d753c63be93bea70ea0b8d",
+        "snapshotPathDigest": "9d858ce8236c1fed031a56447ec2724b7d690f3b7f2ab968540bdeb745a5daa4",
+        "tableRowCounts": {
+          "aos_agent_runs": 0,
+          "aos_ai_employees": 3,
+          "aos_assignments": 0,
+          "aos_audit_events": 78,
+          "aos_epics": 4,
+          "aos_evidence_links": 0,
+          "aos_gate_work_orders": 0,
+          "aos_initiatives": 2,
+          "aos_projects": 1,
+          "aos_schema_migrations": 1,
+          "aos_stories": 5,
+          "aos_subtasks": 1
+        },
+        "integrityCheck": {
+          "ok": true,
+          "result": "ok"
+        },
+        "rawPathRecorded": false
+      },
+      {
+        "ok": true,
+        "snapshotId": "bk01-daily-2026-07-03",
+        "snapshotDigest": "18983655d5983f54bf90c7c6ef4c5b65f6ff80c6b5674fbbfe8ce3ee447e592f",
+        "manifestDigest": "c122e48cd6b0bed0e0af6f98929a579f85817ef4bd05102b605095ef5118dd7d",
+        "createdWith": "sqlite_vacuum_into",
+        "liveDatabaseFileCopiedDirectly": false,
+        "createdAt": "2026-07-03T00:00:00.000Z",
+        "purpose": "bk01_daily_keep_3_physical_snapshot",
+        "sourceProfileDigest": "988f6aba888837f18110c43243a752d283172344d7746770b7ac7f7309c1e2dc",
+        "sourceDatabaseDigest": "b517ae463a897e04afbbe2fd9711d2cfed2591de1df12bb098f371bae6b5c84a",
+        "routeDigest": "eaec5f7468b16a49b4c18e3d637c61fab35464032a860711f07ab775d7e94404",
+        "profileDigest": "0cd1679bc06710cd3ef599984454f6b22bbba51092d753c63be93bea70ea0b8d",
+        "snapshotPathDigest": "0417d5fc723d651ef8d69aaa478facd4ab6a4437169cdf9439976d4640ac700d",
+        "tableRowCounts": {
+          "aos_agent_runs": 0,
+          "aos_ai_employees": 3,
+          "aos_assignments": 0,
+          "aos_audit_events": 78,
+          "aos_epics": 4,
+          "aos_evidence_links": 0,
+          "aos_gate_work_orders": 0,
+          "aos_initiatives": 2,
+          "aos_projects": 1,
+          "aos_schema_migrations": 1,
+          "aos_stories": 5,
+          "aos_subtasks": 1
+        },
+        "integrityCheck": {
+          "ok": true,
+          "result": "ok"
+        },
+        "rawPathRecorded": false
+      },
+      {
+        "ok": true,
+        "snapshotId": "bk01-daily-2026-07-04",
+        "snapshotDigest": "18983655d5983f54bf90c7c6ef4c5b65f6ff80c6b5674fbbfe8ce3ee447e592f",
+        "manifestDigest": "92a4ffef90129e1c582f56ab90dd07791970f2262d9d413441b0033e4f785684",
+        "createdWith": "sqlite_vacuum_into",
+        "liveDatabaseFileCopiedDirectly": false,
+        "createdAt": "2026-07-04T00:00:00.000Z",
+        "purpose": "bk01_daily_keep_3_physical_snapshot",
+        "sourceProfileDigest": "988f6aba888837f18110c43243a752d283172344d7746770b7ac7f7309c1e2dc",
+        "sourceDatabaseDigest": "b517ae463a897e04afbbe2fd9711d2cfed2591de1df12bb098f371bae6b5c84a",
+        "routeDigest": "eaec5f7468b16a49b4c18e3d637c61fab35464032a860711f07ab775d7e94404",
+        "profileDigest": "0cd1679bc06710cd3ef599984454f6b22bbba51092d753c63be93bea70ea0b8d",
+        "snapshotPathDigest": "61724e1a85bbc907a4d97d66550aea1303b1bea8b0e3b78398db662ed1cb6953",
+        "tableRowCounts": {
+          "aos_agent_runs": 0,
+          "aos_ai_employees": 3,
+          "aos_assignments": 0,
+          "aos_audit_events": 78,
+          "aos_epics": 4,
+          "aos_evidence_links": 0,
+          "aos_gate_work_orders": 0,
+          "aos_initiatives": 2,
+          "aos_projects": 1,
+          "aos_schema_migrations": 1,
+          "aos_stories": 5,
+          "aos_subtasks": 1
+        },
+        "integrityCheck": {
+          "ok": true,
+          "result": "ok"
+        },
+        "rawPathRecorded": false
+      }
+    ],
+    "rawPathRecorded": false
+  },
+  "serviceStartCatchUpReadback": {
+    "ok": true,
+    "backendOnlyCatchUpPrimitive": "evaluateDailySnapshotCatchUp",
+    "dailyTimerIntervalHours": 24,
+    "serviceStartNoPriorSnapshot": {
+      "ok": true,
+      "due": true,
+      "reason": "no_prior_snapshot",
+      "intervalHours": 24
+    },
+    "serviceStartOverdueSnapshot": {
+      "ok": true,
+      "due": true,
+      "reason": "latest_snapshot_older_than_interval",
+      "intervalHours": 24
+    },
+    "serviceStartRecentSnapshot": {
+      "ok": true,
+      "due": false,
+      "reason": "latest_snapshot_within_interval",
+      "intervalHours": 24
+    },
+    "schedulerActorBoundary": "backend_only_aos_service_scheduler_or_system_actor_future_wiring; no public gateway method exposed by this route"
+  },
+  "retentionRotationReadback": {
+    "ok": true,
+    "policy": "daily_keep_3",
+    "keepDaily": 3,
+    "retainedSnapshotIds": [
+      "bk01-daily-2026-07-02",
+      "bk01-daily-2026-07-03",
+      "bk01-daily-2026-07-04"
+    ],
+    "evictedSnapshotIds": [
+      "bk01-daily-2026-07-01"
+    ],
+    "retainedCount": 3,
+    "evictedCount": 1,
+    "simulatedDays": [
+      "2026-07-01",
+      "2026-07-02",
+      "2026-07-03",
+      "2026-07-04"
+    ],
+    "oldestEvictedOnDayFour": true,
+    "retainedExactlyThreeAfterDayFour": true,
+    "rawPathRecorded": false
+  },
+  "preMigrationSnapshotReadback": {
+    "ok": true,
+    "migrationAppliedCount": 2,
+    "noOpMigrationVersion": "0002_bk01_noop",
+    "preMigrationSnapshots": [
+      {
+        "ok": true,
+        "snapshotId": "bk01-pre-0001_phase1_core",
+        "snapshotDigest": "1dee83c266032b55fd0e50154858ba778130629545755ff3d3171af9ac44dad9",
+        "manifestDigest": "e1b036ad4b9260428260ac02b1f5f6d8d659d692433a9f11735aa6cd80464304",
+        "createdWith": "sqlite_vacuum_into",
+        "liveDatabaseFileCopiedDirectly": false,
+        "createdAt": "2026-07-08T00:00:01.000Z",
+        "purpose": "bk01_pre_migration_snapshot_hook",
+        "sourceProfileDigest": "ac9713229ba84c02da044ae9efb62da52ca98dd81e74d945f04a91b8a5b27f5d",
+        "sourceDatabaseDigest": "40cf07c52bfaa52b334ef341456f970787f6dc701ffe18ad3c572cb5056dbd70",
+        "routeDigest": "eaec5f7468b16a49b4c18e3d637c61fab35464032a860711f07ab775d7e94404",
+        "profileDigest": "0cd1679bc06710cd3ef599984454f6b22bbba51092d753c63be93bea70ea0b8d",
+        "snapshotPathDigest": "cb91165d7e3775c8cee7616604eb34d2a2158759a2a832ec96c31eb1cb97ce24",
+        "tableRowCounts": {
+          "aos_schema_migrations": 0
+        },
+        "integrityCheck": {
+          "ok": true,
+          "result": "ok"
+        },
+        "rawPathRecorded": false
+      },
+      {
+        "ok": true,
+        "snapshotId": "bk01-pre-0002_bk01_noop",
+        "snapshotDigest": "5b92e5a61bac34d3fe0559c689bc683f23f7410584e3d60c6da57cc6db0f3578",
+        "manifestDigest": "736873c94cc1f64125fe7c8864788054d3461be4a69b085c77a91188f42fc02b",
+        "createdWith": "sqlite_vacuum_into",
+        "liveDatabaseFileCopiedDirectly": false,
+        "createdAt": "2026-07-08T00:00:02.000Z",
+        "purpose": "bk01_pre_migration_snapshot_hook",
+        "sourceProfileDigest": "c13b97970748f6cdcced43e1a6418732b5f19a00b963005d0a2138cfd00fe30a",
+        "sourceDatabaseDigest": "40cf07c52bfaa52b334ef341456f970787f6dc701ffe18ad3c572cb5056dbd70",
+        "routeDigest": "eaec5f7468b16a49b4c18e3d637c61fab35464032a860711f07ab775d7e94404",
+        "profileDigest": "0cd1679bc06710cd3ef599984454f6b22bbba51092d753c63be93bea70ea0b8d",
+        "snapshotPathDigest": "e061273fb5deb68395f437a74575b7235cfa7693ccbfa4c64fb9a2636a86cbf8",
+        "tableRowCounts": {
+          "aos_agent_runs": 0,
+          "aos_ai_employees": 0,
+          "aos_assignments": 0,
+          "aos_audit_events": 0,
+          "aos_epics": 0,
+          "aos_evidence_links": 0,
+          "aos_gate_work_orders": 0,
+          "aos_initiatives": 0,
+          "aos_projects": 0,
+          "aos_schema_migrations": 1,
+          "aos_stories": 0,
+          "aos_subtasks": 0
+        },
+        "integrityCheck": {
+          "ok": true,
+          "result": "ok"
+        },
+        "rawPathRecorded": false
+      }
+    ],
+    "runnerHook": "AosSqliteRepository.applyMigrations.preMigrationSnapshot",
+    "rawPathRecorded": false
+  },
+  "restoreDrillReadback": {
+    "ok": true,
+    "restoredToScratchProfile": true,
+    "liveProfileOverwritten": false,
+    "snapshotId": "bk01-daily-2026-07-04",
+    "restoredDatabaseDigest": "18983655d5983f54bf90c7c6ef4c5b65f6ff80c6b5674fbbfe8ce3ee447e592f",
+    "restoredIntegrityCheck": {
+      "ok": true,
+      "result": "ok"
+    },
+    "restoredTableRowCounts": {
+      "aos_agent_runs": 0,
+      "aos_ai_employees": 3,
+      "aos_assignments": 0,
+      "aos_audit_events": 78,
+      "aos_epics": 4,
+      "aos_evidence_links": 0,
+      "aos_gate_work_orders": 0,
+      "aos_initiatives": 2,
+      "aos_projects": 1,
+      "aos_schema_migrations": 1,
+      "aos_stories": 5,
+      "aos_subtasks": 1
+    },
+    "scratchProfileDigest": "c3971defcafe60b9d01261204f6249c7bfc00ff714f8c9ffdbd66503ae9f4c96",
+    "rawPathRecorded": false,
+    "scratchRuntimeReadback": {
+      "ok": true,
+      "openedViaCreateRuntimeTransport": true,
+      "ticketListMethodAvailable": true,
+      "scratchProfileDigest": "c3971defcafe60b9d01261204f6249c7bfc00ff714f8c9ffdbd66503ae9f4c96",
+      "rawPathRecorded": false
+    },
+    "scratchProfileCleanedUpAfterReadback": true,
+    "snapshotDigestMatchesLatestRetained": true
+  },
+  "restoreToLivePromotionBlockReadback": {
+    "ok": true,
+    "blocked": true,
+    "reason": "restore_to_live_profile_requires_owner_intent_route",
+    "liveProfileOverwritePerformed": false,
+    "rawPathRecorded": false
+  },
+  "recurringRestoreDrillTicketReadback": {
+    "ok": true,
+    "storyId": "story_9ca1c627128e655e",
+    "commentId": "comment_aef660f0cbb04ab8",
+    "commentBodyDigest": "3ce3c847b45eec95eb6ea91a6b77044d28faac71ed262ab11f5c1c55206ffd06",
+    "commentAuditEventId": "audit_9c8be4023fd43dd9",
+    "ticketListVisible": true,
+    "auditVisible": true,
+    "secondEnsureNoDuplicate": true,
+    "recurrence": "monthly_restore_drill",
+    "rawPathRecorded": false
+  },
+  "methodAuthorityReadback": {
+    "ok": true,
+    "backupMethodSurfaceIntroduced": false,
+    "backendOnlyHelpers": [
+      "createSqlitePhysicalSnapshot",
+      "applyDailyKeep3Retention",
+      "restoreSnapshotToScratchProfile"
+    ],
+    "existingAosMethodsExercisedForTicketReadback": [
+      "aos.ticket.list",
+      "aos.audit.query"
+    ],
+    "genericGatewayExposed": false,
+    "rawDbExportExposed": false,
+    "liveDispatchAuthorized": false,
+    "ownerIntentExecutionAuthorized": false
+  },
+  "noGitArtifactReadback": {
+    "ok": true,
+    "trackedDbArtifactCount": 0,
+    "excludedCodegraphOnly": true,
+    "backupArtifactsCommitted": false,
+    "rawPathRecorded": false
+  },
+  "privacyNoArtifactNoOverclaimReadback": {
+    "ok": true,
+    "rawPathRecorded": false,
+    "rawDbDumpRecorded": false,
+    "secretsOrPiiStored": false,
+    "backupArtifactsCommitted": false,
+    "restoreArtifactsCommitted": false,
+    "receiptsDigestOnly": true,
+    "noOverclaimFlags": {
+      "bk01PhysicalSnapshotImplemented": true,
+      "bk02LogicalExportImplemented": false,
+      "kr00Started": false,
+      "kr01Started": false,
+      "kr02Started": false,
+      "kr03Started": false,
+      "kr04HookSwapStarted": false,
+      "kr05Started": false,
+      "kr06Started": false,
+      "frontendTriggerImplemented": false,
+      "tmsMutation": false,
+      "workflowMutation": false,
+      "designSystemMutation": false,
+      "activeCodexMutation": false,
+      "maintainedHookSourceMutation": false,
+      "pushRun": false,
+      "batchPushGateRun": false,
+      "releaseReadinessClaimed": false,
+      "ownerFacingAcceptanceClaimed": false,
+      "finalAcceptanceClaimed": false,
+      "cleanPlatformClaimed": false,
+      "parentCompletionClaimed": false,
+      "liveRestorePromotionPerformed": false,
+      "liveProfileOverwritePerformed": false,
+      "broadCodexSecurityPluginScanClaimed": false,
+      "liveDispatchAuthorized": false,
+      "ownerIntentExecutionAuthorized": false
+    }
+  },
+  "validation_readbacks": {
+    "proofScriptSelfCheck": "node --check scripts/bk01-physical-snapshot-proof.mjs",
+    "focusedProofCommand": "pnpm --dir TCRN-AOS bk01:physical-snapshot-proof",
+    "sourceHead": "7c1ca808c882abd1571c6c1725747137058b61c9",
+    "workflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+    "incomingAosBasis": "db6bdc2c17e2f44ffbf3a57c94abb29266e2a6e4"
+  },
+  "privacyNoOverclaimScan": {
+    "ok": true,
+    "findingCount": 0,
+    "findings": [],
+    "scannedPayloadDigest": "ee37d3788862cfeb4321eed7840bba1b3472b3a9c1eacfd60c29af469d506699",
+    "rawPathRecorded": false
+  },
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "bk01PhysicalSnapshotImplemented": true,
+    "bk02LogicalExportImplemented": false,
+    "kr00Started": false,
+    "kr01Started": false,
+    "kr02Started": false,
+    "kr03Started": false,
+    "kr04HookSwapStarted": false,
+    "kr05Started": false,
+    "kr06Started": false,
+    "frontendTriggerImplemented": false,
+    "tmsMutation": false,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "activeCodexMutation": false,
+    "maintainedHookSourceMutation": false,
+    "pushRun": false,
+    "batchPushGateRun": false,
+    "releaseReadinessClaimed": false,
+    "ownerFacingAcceptanceClaimed": false,
+    "finalAcceptanceClaimed": false,
+    "cleanPlatformClaimed": false,
+    "parentCompletionClaimed": false,
+    "liveRestorePromotionPerformed": false,
+    "liveProfileOverwritePerformed": false,
+    "broadCodexSecurityPluginScanClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerIntentExecutionAuthorized": false
+  }
+}
