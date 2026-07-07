@@ -468,7 +468,7 @@ function noCommittedArtifacts() {
 }
 
 function sourceProvenance() {
-  const sourceHead = runGit(["rev-parse", "HEAD"]);
+  const sourceHead = runGit(["rev-list", "-1", "HEAD", "--", ...sourceFiles]);
   const fileDigests = Object.fromEntries(sourceFiles.map((file) => [file, fileDigest(file)]));
   return {
     ownerDecisionWorkflowBasis,
