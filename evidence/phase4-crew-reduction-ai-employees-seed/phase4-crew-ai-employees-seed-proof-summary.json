@@ -1,0 +1,88 @@
+{
+  "receiptName": "phase4-crew-ai-employees-seed-proof-summary.json",
+  "ok": true,
+  "route": "route_tcrn_aos_phase4_crew_reduction_aos_ai_employees_seed_projection_ilya_after_ariadne_registryImpact_success_9c677a_8a23484_20260707",
+  "command": "pnpm --dir TCRN-AOS phase4:crew-ai-employees-seed-proof",
+  "generatedAt": "2026-07-07T06:11:57.446Z",
+  "sourceHead": "4adedb8db142129d7589df8f50fad12a32040cec",
+  "aosBasis": "4adedb8db142129d7589df8f50fad12a32040cec",
+  "incomingAosBasis": "8a23484d71a64c4328c81fb5e3aa5140f10950f6",
+  "workflowBasis": "9c677a73d5b5f014a493c6f6fa73e2b019c2adcb",
+  "embeddedDefaultProfileWorkflowBasis": "aca47822808bbc187e629c4faa1c0d8ea3879cee",
+  "sourceContentDigest": "afc24f71877f7820939553b7019e513b2921d8416e2019b9e0e4171b91d32c79",
+  "sourceFiles": [
+    {
+      "file": "package.json",
+      "digest": "d68cb7c43cc020f29ce9a1b69d87257dacddade0174134ad14e031255912a4e4"
+    },
+    {
+      "file": "scripts/phase4-crew-reduction-ai-employees-seed-proof.mjs",
+      "digest": "7bbc4b6d33daaf6ecdb49495fdf480988388318e79ccc57a6fb669a970d096dc"
+    },
+    {
+      "file": "packages/db/src/sqlite-repository.ts",
+      "digest": "8de0d042e5cb0966f9ea8789be8eb48693760949e041ae2a0384535f172db78e"
+    },
+    {
+      "file": "packages/db/migrations/sqlite/0001_phase1_core.sql",
+      "digest": "8d6e82783a59ec2fcb0af5455f283572b8dd9adbbb1d6a36e50410fb7795c9d6"
+    },
+    {
+      "file": "packages/domain/src/types.ts",
+      "digest": "f8ea1aa90103c272a6d86c31e0c7b9aff0d496b7e22628406934474de2986413"
+    },
+    {
+      "file": "packages/mcp-server/src/transport.ts",
+      "digest": "fa2bd7eef3031d6529993d616973332e7699ea65dd56401adeb874d09ef775b4"
+    }
+  ],
+  "failures": [],
+  "negativeFailures": [],
+  "packageScope": "TCRN-AOS",
+  "receiptInventory": [
+    "phase4-crew-ai-employees-registry-source-readback.json",
+    "phase4-crew-ai-employees-seed-projection-readback.json",
+    "phase4-crew-ai-employees-authority-boundary-proof.json",
+    "phase4-crew-ai-employees-privacy-no-overclaim-scan.json",
+    "phase4-crew-ai-employees-validation-readback.json"
+  ],
+  "receiptCount": 5,
+  "allChildReceiptsOk": true,
+  "missingReceipts": [],
+  "extraUnclassifiedReceipts": [],
+  "sourceBindingDigest": "fba1f830055c9aca7a70a9a85116a1d4461306b46bf6334cc05dadc8f84857c1",
+  "projectedEmployeeCount": 19,
+  "defaultCrewCount": 5,
+  "parkedCount": 14,
+  "duplicateNonNullThreadIdCount": 0,
+  "secondSeedNoop": true,
+  "noOverclaimFlags": {
+    "aiEmployeesSeedProjectionImplemented": true,
+    "productRepoEvidenceMutationOnly": true,
+    "workflowMutation": false,
+    "workflowRegistryMutation": false,
+    "designSystemMutation": false,
+    "tmsMutation": false,
+    "activeCodexMutation": false,
+    "maintainedHookSourceMutation": false,
+    "generatedAgentMutationPerformed": false,
+    "registryDefaultMutationPerformed": false,
+    "hookBehaviorReliance": false,
+    "hookRuntimeImplementation": false,
+    "hookMappingImplemented": false,
+    "hookRetirementPerformed": false,
+    "activeParityClaimed": false,
+    "liveDispatchAuthorized": false,
+    "realThreadSendPerformed": false,
+    "ownerIntentExecutionAuthorized": false,
+    "resourceMutationPerformed": false,
+    "releasePublicationPushClaimed": false,
+    "ownerFacingSurfaceCreated": false,
+    "phase3AcceptanceClaimed": false,
+    "phase4CloseoutClaimed": false,
+    "cleanPlatformClaimed": false,
+    "dogfoodRuntimeReadinessClaimed": false,
+    "productReadinessClaimed": false,
+    "broadCodexSecurityPluginScanClaimed": false
+  }
+}
