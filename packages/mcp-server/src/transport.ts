@@ -472,13 +472,17 @@ export class AosMcpTransport {
   private knowledgePropose(actor: ActorIdentity, params: Record<string, unknown>, replayKey: string): Record<string, unknown> {
     const repository = this.requireKnowledgeRepository();
     const status = knowledgeStatusParam(params.status);
-    if (status === "canonical" && !stringParam(params.canonicalGateDecisionId) && !stringParam(params.gateDecisionId)) {
-      throw new TransportError("knowledge_canonical_gate_decision_required", "Canonical knowledge entries require a gate decision id");
+    const roleScope = stringParam(params.roleScope) ?? actor.role;
+    if (roleScope !== actor.role) {
+      throw new TransportError("knowledge_role_scope_mismatch", "Knowledge propose roleScope must match the trusted actor role");
+    }
+    if (status !== "draft") {
+      throw new TransportError("knowledge_canonical_propose_deferred", "KR-02 public propose accepts draft knowledge only; canonical promotion is separately routed");
     }
     const proposedId = stringParam(params.id) ?? `knowledge_${sqliteSha256(stableJson({
       actor: actor.employeeId,
       title: stringParam(params.title),
-      roleScope: stringParam(params.roleScope) ?? actor.role,
+      roleScope,
       project: stringParam(params.project),
       category: stringParam(params.category),
       knowledgeKind: stringParam(params.knowledgeKind),
@@ -490,7 +494,7 @@ export class AosMcpTransport {
       const entry = repository.createKnowledgeRetrievalEntry({
         id: proposedId,
         title: requireStringParam(params.title, "title"),
-        roleScope: stringParam(params.roleScope) ?? actor.role,
+        roleScope,
         project: requireStringParam(params.project, "project"),
         category: requireStringParam(params.category, "category"),
         knowledgeKind: requireStringParam(params.knowledgeKind, "knowledgeKind"),
@@ -507,7 +511,7 @@ export class AosMcpTransport {
         method: "aos.knowledge.entry.propose",
         replayKeyDigest: digest(replayKey),
         status: entry.status,
-        canonicalGateDecisionIdDigest: digest(stringParam(params.canonicalGateDecisionId) ?? stringParam(params.gateDecisionId) ?? "draft"),
+        canonicalPromotionDeferred: true,
         sourceDigest: entry.sourceDigest,
         sourceRefDigest: sqliteSha256(entry.sourceRef),
         tagsCount: entry.tags.length,
@@ -536,7 +540,10 @@ export class AosMcpTransport {
     const repository = this.requireKnowledgeRepository();
     const id = requireStringParam(params.id, "id");
     try {
-      repository.requireKnowledgeRetrievalEntry(id);
+      const existing = repository.requireKnowledgeRetrievalEntry(id);
+      if (!actorCanReadKnowledgeEntry(actor, existing)) {
+        throw new TransportError("knowledge_role_scope_mismatch", "Knowledge entry read roleScope does not match the trusted actor role");
+      }
       const accessed = repository.recordKnowledgeRetrievalAccess(id, new Date().toISOString());
       const audit = this.store.appendAudit(actor, "mcp.transport.aos.knowledge.entry.read", "knowledge", accessed.id, "read", {
         method: "aos.knowledge.entry.read",
@@ -967,6 +974,10 @@ function knowledgeDetails(entry: KnowledgeRetrievalEntryRecord): Record<string, 
     body: entry.body,
     bodyIncluded: true
   };
+}
+
+function actorCanReadKnowledgeEntry(actor: ActorIdentity, entry: KnowledgeRetrievalEntryRecord): boolean {
+  return actor.role === "owner_observer" || actor.role === entry.roleScope;
 }
 
 function countWords(value: string): number {

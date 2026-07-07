@@ -8,10 +8,10 @@ import { createRuntimeTransport, transportMvpMethods } from "../dist/packages/mc
 import { AosSqliteRepository, sha256, stableJson } from "../dist/packages/db/src/index.js";
 import { createDefaultSeed } from "../dist/packages/domain/src/index.js";
 
-const route = "route_tcrn_aos_knowledge_retrieval_layer_kr02_mcp_method_surface_after_kr01_gate_green_a1223e_1d6076_20260708";
+const route = "route_tcrn_aos_knowledge_retrieval_layer_kr02_method_boundary_repair_ilya_after_sable_changes_requested_623faf_1d6076_20260708";
 const ownerDecisionWorkflowBasis = "8dce81d2e9a6408d1d139e4d84486497c6caf288";
 const kr00GateGreenWorkflowBasis = "1d60763f3c0c3eae0fb5465fb50189c4951c48df";
-const incomingAosBasis = "a1223ee654cb026ac0a23d62d10ef143d2ae50ef";
+const incomingAosBasis = "623fafa6419a97d66a29bb287469f8a93d114527";
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const platformRoot = dirname(repoRoot);
 const evidenceRoot = join(repoRoot, "evidence/aos-knowledge-retrieval-layer-kr02");
@@ -40,6 +40,7 @@ const atlasActor = {
 };
 const noOverclaimFlags = {
   kr02MethodSurfaceImplemented: true,
+  sableMethodBoundaryRepairApplied: true,
   kr03ReadbackUiStarted: false,
   kr04HookSwapStarted: false,
   kr05SeedEntriesStarted: false,
@@ -137,7 +138,7 @@ try {
 async function runProof(root) {
   const databasePath = join(root, "kr02.sqlite");
   await writeFile(join(root, ".tcrn-aos-phase1-root"), "owned-by-kr02-proof\n", "utf8");
-  seedEmployees(databasePath);
+  seedEmployeesAndCanonicalKnowledge(databasePath);
   const runtime = createRuntimeTransport({ actor: ilyaActor, databasePath, databaseRoot: root, repoRoot, migrationsDir });
   let defaultSearch;
   let includeDraft;
@@ -148,48 +149,21 @@ async function runProof(root) {
   try {
     const methodRegistryReadback = methodRegistry();
     const propose = call(runtime, "aos.knowledge.entry.propose", knowledgePayload({
-      id: "knowledge-kr02-proof-canonical",
-      title: "KR02 proof canonical operator runbook",
-      summary: "Canonical KR02 proof snippet for role and keyword retrieval.",
-      body: "Canonical KR02 proof body appears only through by-id fetch.",
-      canonicalGateDecisionId: "gate-decision-kr02-proof"
-    }));
-    assert.equal(propose.ok, true);
-    const replay = call(runtime, "aos.knowledge.entry.propose", knowledgePayload({
-      id: "knowledge-kr02-proof-canonical",
-      title: "KR02 proof canonical operator runbook",
-      summary: "Canonical KR02 proof snippet for role and keyword retrieval.",
-      body: "Canonical KR02 proof body appears only through by-id fetch.",
-      canonicalGateDecisionId: "gate-decision-kr02-proof"
-    }));
-    assert.equal(replay.status, "deduped");
-
-    call(runtime, "aos.knowledge.entry.propose", knowledgePayload({
-      id: "knowledge-kr02-proof-second",
-      title: "KR02 proof canonical paging runbook",
-      summary: "Second canonical KR02 proof snippet for cursor pagination.",
-      body: "Second canonical KR02 proof body.",
-      canonicalGateDecisionId: "gate-decision-kr02-proof-second",
-      idempotencyKey: "kr02-proof-second"
-    }));
-    call(runtime, "aos.knowledge.entry.propose", knowledgePayload({
       id: "knowledge-kr02-proof-draft",
       title: "KR02 proof draft runbook",
       status: "draft",
       summary: "Draft KR02 proof snippet excluded by default.",
-      body: "Draft KR02 proof body.",
-      idempotencyKey: "kr02-proof-draft"
+      body: "Draft KR02 proof body."
     }));
-    call(runtime, "aos.knowledge.entry.propose", knowledgePayload({
-      id: "knowledge-kr02-proof-stale",
-      title: "KR02 proof stale runbook",
-      summary: "Stale KR02 proof snippet excluded by default.",
-      body: "Stale KR02 proof body.",
-      lastVerified: "2026-01-01",
-      stalenessPolicy: "review_after_1_days",
-      canonicalGateDecisionId: "gate-decision-kr02-proof-stale",
-      idempotencyKey: "kr02-proof-stale"
+    assert.equal(propose.ok, true);
+    const replay = call(runtime, "aos.knowledge.entry.propose", knowledgePayload({
+      id: "knowledge-kr02-proof-draft",
+      title: "KR02 proof draft runbook",
+      status: "draft",
+      summary: "Draft KR02 proof snippet excluded by default.",
+      body: "Draft KR02 proof body."
     }));
+    assert.equal(replay.status, "deduped");
 
     defaultSearch = call(runtime, "aos.knowledge.search", { query: "KR02 proof runbook", project: "TCRN-AOS", limit: 1 });
     const cursorPage = call(runtime, "aos.knowledge.search", {
@@ -207,10 +181,23 @@ async function runProof(root) {
     const oversized = errorReason(runtime, "aos.knowledge.entry.propose", knowledgePayload({
       id: "knowledge-kr02-proof-oversized",
       body: words(1501),
-      canonicalGateDecisionId: "gate-decision-kr02-proof-oversized",
+      status: "draft",
       idempotencyKey: "kr02-proof-oversized"
     }));
-    const roleMismatch = errorReason(runtime, "aos.knowledge.search", { query: "KR02", roleScope: "security" });
+    const proposeRoleMismatch = errorReason(runtime, "aos.knowledge.entry.propose", knowledgePayload({
+      id: "knowledge-kr02-proof-role-mismatch",
+      roleScope: "security",
+      status: "draft",
+      idempotencyKey: "kr02-proof-role-mismatch"
+    }));
+    const fakeCanonicalGate = errorReason(runtime, "aos.knowledge.entry.propose", knowledgePayload({
+      id: "knowledge-kr02-proof-fake-canonical",
+      status: "canonical",
+      canonicalGateDecisionId: "fake-gate-decision",
+      idempotencyKey: "kr02-proof-fake-canonical"
+    }));
+    const searchRoleMismatch = errorReason(runtime, "aos.knowledge.search", { query: "KR02", roleScope: "security" });
+    const crossRoleRead = errorReason(runtime, "aos.knowledge.entry.read", { id: "knowledge-kr02-proof-security" });
     const unknownKnowledge = errorReason(runtime, "aos.knowledge.entry.delete", { id: "knowledge-kr02-proof-canonical" });
     const slice789 = errorReason(runtime, "aos.resource.governance.read", {});
 
@@ -227,7 +214,7 @@ async function runProof(root) {
         idempotencyKey: "kr02-proof-owner-blocked"
       }));
       blockedRoleAudit = call(atlasRuntime, "aos.audit.query", { targetId: "aos.knowledge.entry.propose" });
-      ownerRead = call(atlasRuntime, "aos.knowledge.entry.read", { id: "knowledge-kr02-proof-canonical" });
+      ownerRead = call(atlasRuntime, "aos.knowledge.entry.read", { id: "knowledge-kr02-proof-security" });
     } finally {
       atlasRuntime.close();
     }
@@ -255,7 +242,10 @@ async function runProof(root) {
         bodyReturned: propose.bodyReturned,
         rawRecordJsonReturned: propose.rawRecordJsonReturned,
         auditEventId: propose.auditEventId,
-        canonicalGateDecisionRequired: true,
+        draftOnlyPublicPropose: true,
+        canonicalPromotionDeferred: true,
+        fakeCanonicalGateReason: fakeCanonicalGate,
+        roleScopeMismatchReason: proposeRoleMismatch,
         bodyCapOversizedReason: oversized
       },
       searchReadback: {
@@ -292,24 +282,33 @@ async function runProof(root) {
         lastAccessedPresent: typeof entryRead.entry.lastAccessed === "string"
       },
       idempotencyReplayReadback: {
-        ok: replay.status === "deduped" && replay.result.entry.id === "knowledge-kr02-proof-canonical",
+        ok: replay.status === "deduped" && replay.result.entry.id === "knowledge-kr02-proof-draft",
         replayStatus: replay.status,
         replayScope: replay.replayScope,
         duplicateEntryId: replay.result.entry.id
       },
       roleGatingNegativeReadback: {
-        ok: blockedRoleReason === "transport_actor_blocked_role" && ownerRead.ok === true && blockedRoleAudit.items.length >= 1,
+        ok: blockedRoleReason === "transport_actor_blocked_role" &&
+          proposeRoleMismatch === "knowledge_role_scope_mismatch" &&
+          crossRoleRead === "knowledge_role_scope_mismatch" &&
+          ownerRead.ok === true &&
+          blockedRoleAudit.items.length >= 1,
         blockedRoleWriteReason: blockedRoleReason,
+        proposeRoleScopeMismatchReason: proposeRoleMismatch,
+        crossRoleReadReason: crossRoleRead,
         blockedRoleAuditEventIds: blockedRoleAudit.items.map((item) => item.id),
-        ownerObserverReadAllowed: ownerRead.ok === true
+        ownerObserverReadAllowed: ownerRead.ok === true,
+        ownerObserverReadException: "owner_observer may read entries across roleScope by explicit KR02 repair exception"
       },
       negativeAllowlistReadback: {
         ok: unknownKnowledge === "transport_method_outside_mvp_allowlist" &&
           slice789 === "transport_method_outside_mvp_allowlist" &&
-          roleMismatch === "knowledge_role_scope_mismatch",
+          searchRoleMismatch === "knowledge_role_scope_mismatch" &&
+          fakeCanonicalGate === "knowledge_canonical_propose_deferred",
         unknownKnowledgeReason: unknownKnowledge,
         slice789NegativeReason: slice789,
-        roleScopeMismatchReason: roleMismatch
+        searchRoleScopeMismatchReason: searchRoleMismatch,
+        canonicalFakeGateReason: fakeCanonicalGate
       },
       privacyNoArtifactNoOverclaimReadback,
       kr01Kr02CapReadback: {
@@ -356,11 +355,46 @@ function errorReason(runtime, method, params) {
   return response.error.data.reason;
 }
 
-function seedEmployees(databasePath) {
+function seedEmployeesAndCanonicalKnowledge(databasePath) {
   const repository = new AosSqliteRepository({ databasePath, migrationsDir });
   try {
     repository.applyMigrations();
     repository.seedAiEmployees(createDefaultSeed().employees, "kr02-proof-seed");
+    repository.createKnowledgeRetrievalEntry(knowledgePayload({
+      id: "knowledge-kr02-proof-canonical",
+      title: "KR02 proof canonical operator runbook",
+      summary: "Canonical KR02 proof snippet for role and keyword retrieval.",
+      body: "Canonical KR02 proof body appears only through by-id fetch.",
+      status: "canonical",
+      idempotencyKey: undefined
+    }));
+    repository.createKnowledgeRetrievalEntry(knowledgePayload({
+      id: "knowledge-kr02-proof-second",
+      title: "KR02 proof canonical paging runbook",
+      summary: "Second canonical KR02 proof snippet for cursor pagination.",
+      body: "Second canonical KR02 proof body.",
+      status: "canonical",
+      idempotencyKey: undefined
+    }));
+    repository.createKnowledgeRetrievalEntry(knowledgePayload({
+      id: "knowledge-kr02-proof-stale",
+      title: "KR02 proof stale runbook",
+      summary: "Stale KR02 proof snippet excluded by default.",
+      body: "Stale KR02 proof body.",
+      status: "canonical",
+      lastVerified: "2026-01-01",
+      stalenessPolicy: "review_after_1_days",
+      idempotencyKey: undefined
+    }));
+    repository.createKnowledgeRetrievalEntry(knowledgePayload({
+      id: "knowledge-kr02-proof-security",
+      title: "KR02 proof security scoped runbook",
+      roleScope: "security",
+      summary: "Security scoped KR02 proof entry is blocked for implementation by-id read.",
+      body: "Security scoped KR02 proof body.",
+      status: "canonical",
+      idempotencyKey: undefined
+    }));
   } finally {
     repository.close();
   }
@@ -374,7 +408,7 @@ function knowledgePayload(overrides = {}) {
     project: "TCRN-AOS",
     category: "knowledge-retrieval",
     knowledgeKind: "runbook_fact",
-    status: "canonical",
+    status: "draft",
     lastVerified: "2026-07-08",
     stalenessPolicy: "review_after_30_days",
     sourceRef: "workflow-plan-digest-reference",

@@ -32,7 +32,7 @@ test("KR-02 transport exposes bounded knowledge propose/read/search with filters
   const databasePath = join(root, "kr02.sqlite");
   await writeFile(join(root, ".tcrn-aos-phase1-root"), "owned-by-kr02-method-test\n", "utf8");
   try {
-    await seedEmployees(databasePath);
+    await seedEmployeesAndCanonicalKnowledge(databasePath);
     const runtime = createRuntimeTransport({ actor: ilyaActor, databasePath, databaseRoot: root, repoRoot, migrationsDir });
     try {
       assert.deepEqual(transportMvpMethods.filter((method) => method.startsWith("aos.knowledge.")).sort(), [
@@ -41,90 +41,72 @@ test("KR-02 transport exposes bounded knowledge propose/read/search with filters
         "aos.knowledge.search"
       ]);
 
-      const canonical = runtime.transport.handleJsonRpc({
-        jsonrpc: "2.0",
-        id: 1,
-        method: "aos.knowledge.entry.propose",
-        params: knowledgePayload({
-          id: "knowledge-kr02-canonical",
-          title: "KR02 canonical operator runbook",
-          summary: "Canonical KR02 runbook snippet for local operator retrieval.",
-          body: "Canonical KR02 body visible only through by-id read.",
-          canonicalGateDecisionId: "gate-decision-kr02"
-        })
-      });
-      assert.equal(canonical.error, undefined);
-      assert.equal(canonical.result.ok, true);
-      assert.equal(canonical.result.entry.id, "knowledge-kr02-canonical");
-      assert.equal(canonical.result.entry.bodyIncluded, false);
-      assert.equal(Object.hasOwn(canonical.result.entry, "body"), false);
-
-      const replay = runtime.transport.handleJsonRpc({
-        jsonrpc: "2.0",
-        id: 2,
-        method: "aos.knowledge.entry.propose",
-        params: knowledgePayload({
-          id: "knowledge-kr02-canonical",
-          title: "KR02 canonical operator runbook",
-          summary: "Canonical KR02 runbook snippet for local operator retrieval.",
-          body: "Canonical KR02 body visible only through by-id read.",
-          canonicalGateDecisionId: "gate-decision-kr02"
-        })
-      });
-      assert.equal(replay.error, undefined);
-      assert.equal(replay.result.status, "deduped");
-      assert.equal(replay.result.result.entry.id, "knowledge-kr02-canonical");
-
-      const secondCanonical = runtime.transport.handleJsonRpc({
-        jsonrpc: "2.0",
-        id: 3,
-        method: "aos.knowledge.entry.propose",
-        params: knowledgePayload({
-          id: "knowledge-kr02-second",
-          title: "KR02 canonical paging runbook",
-          summary: "Second canonical KR02 runbook snippet for cursor proof.",
-          body: "Second canonical KR02 body.",
-          canonicalGateDecisionId: "gate-decision-kr02-second",
-          idempotencyKey: "kr02-second-propose"
-        })
-      });
-      assert.equal(secondCanonical.error, undefined);
-
       const draft = runtime.transport.handleJsonRpc({
         jsonrpc: "2.0",
-        id: 4,
+        id: 1,
         method: "aos.knowledge.entry.propose",
         params: knowledgePayload({
           id: "knowledge-kr02-draft",
           title: "KR02 draft runbook",
           status: "draft",
           summary: "Draft KR02 runbook snippet excluded by default.",
-          body: "Draft KR02 body.",
-          idempotencyKey: "kr02-draft-propose"
+          body: "Draft KR02 body."
         })
       });
       assert.equal(draft.error, undefined);
+      assert.equal(draft.result.ok, true);
+      assert.equal(draft.result.entry.id, "knowledge-kr02-draft");
+      assert.equal(draft.result.entry.status, "draft");
+      assert.equal(draft.result.entry.bodyIncluded, false);
+      assert.equal(Object.hasOwn(draft.result.entry, "body"), false);
 
-      const stale = runtime.transport.handleJsonRpc({
+      const replay = runtime.transport.handleJsonRpc({
         jsonrpc: "2.0",
-        id: 5,
+        id: 2,
         method: "aos.knowledge.entry.propose",
         params: knowledgePayload({
-          id: "knowledge-kr02-stale",
-          title: "KR02 stale runbook",
-          summary: "Stale KR02 runbook snippet excluded by default.",
-          body: "Stale KR02 body.",
-          lastVerified: "2026-01-01",
-          stalenessPolicy: "review_after_1_days",
-          canonicalGateDecisionId: "gate-decision-kr02-stale",
-          idempotencyKey: "kr02-stale-propose"
+          id: "knowledge-kr02-draft",
+          title: "KR02 draft runbook",
+          status: "draft",
+          summary: "Draft KR02 runbook snippet excluded by default.",
+          body: "Draft KR02 body."
         })
       });
-      assert.equal(stale.error, undefined);
+      assert.equal(replay.error, undefined);
+      assert.equal(replay.result.status, "deduped");
+      assert.equal(replay.result.result.entry.id, "knowledge-kr02-draft");
+
+      const proposeRoleMismatch = runtime.transport.handleJsonRpc({
+        jsonrpc: "2.0",
+        id: 3,
+        method: "aos.knowledge.entry.propose",
+        params: knowledgePayload({
+          id: "knowledge-kr02-role-mismatch",
+          roleScope: "security",
+          status: "draft",
+          idempotencyKey: "kr02-role-mismatch-propose"
+        })
+      });
+      assert.equal(proposeRoleMismatch.result, undefined);
+      assert.equal(proposeRoleMismatch.error.data.reason, "knowledge_role_scope_mismatch");
+
+      const fakeCanonicalGate = runtime.transport.handleJsonRpc({
+        jsonrpc: "2.0",
+        id: 4,
+        method: "aos.knowledge.entry.propose",
+        params: knowledgePayload({
+          id: "knowledge-kr02-fake-canonical",
+          status: "canonical",
+          canonicalGateDecisionId: "fake-gate-decision",
+          idempotencyKey: "kr02-fake-canonical-propose"
+        })
+      });
+      assert.equal(fakeCanonicalGate.result, undefined);
+      assert.equal(fakeCanonicalGate.error.data.reason, "knowledge_canonical_propose_deferred");
 
       const defaultSearch = runtime.transport.handleJsonRpc({
         jsonrpc: "2.0",
-        id: 6,
+        id: 5,
         method: "aos.knowledge.search",
         params: { query: "KR02 runbook", project: "TCRN-AOS", limit: 1 }
       });
@@ -141,7 +123,7 @@ test("KR-02 transport exposes bounded knowledge propose/read/search with filters
 
       const nextPage = runtime.transport.handleJsonRpc({
         jsonrpc: "2.0",
-        id: 7,
+        id: 6,
         method: "aos.knowledge.search",
         params: { query: "KR02 runbook", project: "TCRN-AOS", limit: 1, cursor: defaultSearch.result.page.nextCursor }
       });
@@ -151,7 +133,7 @@ test("KR-02 transport exposes bounded knowledge propose/read/search with filters
 
       const includeDraft = runtime.transport.handleJsonRpc({
         jsonrpc: "2.0",
-        id: 8,
+        id: 7,
         method: "aos.knowledge.search",
         params: { query: "draft", project: "TCRN-AOS", includeDraft: true }
       });
@@ -160,7 +142,7 @@ test("KR-02 transport exposes bounded knowledge propose/read/search with filters
 
       const includeStale = runtime.transport.handleJsonRpc({
         jsonrpc: "2.0",
-        id: 9,
+        id: 8,
         method: "aos.knowledge.search",
         params: { query: "stale", project: "TCRN-AOS", includeStale: true }
       });
@@ -170,7 +152,7 @@ test("KR-02 transport exposes bounded knowledge propose/read/search with filters
 
       const byId = runtime.transport.handleJsonRpc({
         jsonrpc: "2.0",
-        id: 10,
+        id: 9,
         method: "aos.knowledge.entry.read",
         params: { id: "knowledge-kr02-canonical" }
       });
@@ -181,13 +163,13 @@ test("KR-02 transport exposes bounded knowledge propose/read/search with filters
 
       const oversized = runtime.transport.handleJsonRpc({
         jsonrpc: "2.0",
-        id: 11,
+        id: 10,
         method: "aos.knowledge.entry.propose",
         params: knowledgePayload({
           id: "knowledge-kr02-oversized",
           title: "KR02 oversized body",
           body: words(1501),
-          canonicalGateDecisionId: "gate-decision-kr02-oversized",
+          status: "draft",
           idempotencyKey: "kr02-oversized-propose"
         })
       });
@@ -196,12 +178,21 @@ test("KR-02 transport exposes bounded knowledge propose/read/search with filters
 
       const roleMismatch = runtime.transport.handleJsonRpc({
         jsonrpc: "2.0",
-        id: 12,
+        id: 11,
         method: "aos.knowledge.search",
         params: { query: "KR02", roleScope: "security" }
       });
       assert.equal(roleMismatch.result, undefined);
       assert.equal(roleMismatch.error.data.reason, "knowledge_role_scope_mismatch");
+
+      const crossRoleRead = runtime.transport.handleJsonRpc({
+        jsonrpc: "2.0",
+        id: 12,
+        method: "aos.knowledge.entry.read",
+        params: { id: "knowledge-kr02-security" }
+      });
+      assert.equal(crossRoleRead.result, undefined);
+      assert.equal(crossRoleRead.error.data.reason, "knowledge_role_scope_mismatch");
 
       const unknownKnowledge = runtime.transport.handleJsonRpc({
         jsonrpc: "2.0",
@@ -239,10 +230,10 @@ test("KR-02 transport exposes bounded knowledge propose/read/search with filters
         jsonrpc: "2.0",
         id: 16,
         method: "aos.knowledge.entry.read",
-        params: { id: "knowledge-kr02-canonical" }
+        params: { id: "knowledge-kr02-security" }
       });
       assert.equal(ownerRead.error, undefined);
-      assert.equal(ownerRead.result.entry.id, "knowledge-kr02-canonical");
+      assert.equal(ownerRead.result.entry.id, "knowledge-kr02-security");
     } finally {
       atlasRuntime.close();
     }
@@ -251,10 +242,45 @@ test("KR-02 transport exposes bounded knowledge propose/read/search with filters
   }
 });
 
-async function seedEmployees(databasePath) {
+async function seedEmployeesAndCanonicalKnowledge(databasePath) {
   const repository = new AosSqliteRepository({ databasePath, migrationsDir });
   repository.applyMigrations();
   repository.seedAiEmployees(createDefaultSeed().employees, "kr02-method-surface-test-seed");
+  repository.createKnowledgeRetrievalEntry(knowledgePayload({
+    id: "knowledge-kr02-canonical",
+    title: "KR02 canonical operator runbook",
+    summary: "Canonical KR02 runbook snippet for local operator retrieval.",
+    body: "Canonical KR02 body visible only through by-id read.",
+    status: "canonical",
+    idempotencyKey: undefined
+  }));
+  repository.createKnowledgeRetrievalEntry(knowledgePayload({
+    id: "knowledge-kr02-second",
+    title: "KR02 canonical paging runbook",
+    summary: "Second canonical KR02 runbook snippet for cursor proof.",
+    body: "Second canonical KR02 body.",
+    status: "canonical",
+    idempotencyKey: undefined
+  }));
+  repository.createKnowledgeRetrievalEntry(knowledgePayload({
+    id: "knowledge-kr02-stale",
+    title: "KR02 stale runbook",
+    summary: "Stale KR02 runbook snippet excluded by default.",
+    body: "Stale KR02 body.",
+    status: "canonical",
+    lastVerified: "2026-01-01",
+    stalenessPolicy: "review_after_1_days",
+    idempotencyKey: undefined
+  }));
+  repository.createKnowledgeRetrievalEntry(knowledgePayload({
+    id: "knowledge-kr02-security",
+    title: "KR02 security scoped runbook",
+    roleScope: "security",
+    summary: "Security scoped KR02 runbook must not be readable by implementation.",
+    body: "Security scoped KR02 body.",
+    status: "canonical",
+    idempotencyKey: undefined
+  }));
   repository.close();
 }
 
@@ -266,7 +292,7 @@ function knowledgePayload(overrides = {}) {
     project: "TCRN-AOS",
     category: "knowledge-retrieval",
     knowledgeKind: "runbook_fact",
-    status: "canonical",
+    status: "draft",
     lastVerified: "2026-07-08",
     stalenessPolicy: "review_after_30_days",
     sourceRef: "workflow-plan-digest-reference",
