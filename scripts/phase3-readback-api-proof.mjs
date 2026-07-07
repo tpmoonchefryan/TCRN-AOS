@@ -214,7 +214,7 @@ async function runProof() {
         policy.body.method === "aos.policy.read" &&
         policy.body.surface === "work.readback" &&
         policy.body.fullGatewayMethodListExposed === false &&
-        JSON.stringify(policy.body.readbackMethods) === JSON.stringify(["aos.ticket.list", "aos.audit.query"]) &&
+        JSON.stringify(policy.body.readbackMethods) === JSON.stringify(["aos.ticket.list", "aos.audit.query", "aos.backup.list"]) &&
         !JSON.stringify(policy.body).includes("aos.work_index"),
       endpoint: "/api/work/readback/policy",
       optionalPolicyRead: true,

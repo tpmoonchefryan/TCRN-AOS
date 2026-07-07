@@ -84,7 +84,7 @@ test("work readback facade exposes ticket, audit, and policy reads with safe env
     const policy = await getJson(service.url, "/api/work/readback/policy");
     assert.equal(policy.status, 200);
     assert.equal(policy.body.method, "aos.policy.read");
-    assert.deepEqual(policy.body.readbackMethods, ["aos.ticket.list", "aos.audit.query"]);
+    assert.deepEqual(policy.body.readbackMethods, ["aos.ticket.list", "aos.audit.query", "aos.backup.list"]);
     assert.equal(policy.body.fullGatewayMethodListExposed, false);
     assert.equal(JSON.stringify(policy.body).includes("aos.work_index"), false);
 
