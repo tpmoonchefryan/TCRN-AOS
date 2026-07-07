@@ -17,7 +17,7 @@ Status: local AOS product-side 59U ingestion/readback execution proof ready for 
 - Correct AOS repo was clean at `f8b5cd07d6a1a83617ca6aaff433199340fc9c3d` before mutation.
 - Workflow repo was clean at `1cad69eba4837628ef3a9c0a5a064b222f5058ec` and was not mutated.
 - TCRN-TMS was clean/synced at `6356d3b6b730311fe09a0d3eb2f57a07b10bb3c5` and was not mutated.
-- Wrong sibling path `<home>/Code/TCRN-AOS` was absent and treated as `absent_acceptable`; it was not recreated.
+- Wrong legacy sibling checkout path was absent and treated as `absent_acceptable`; it was not recreated.
 - Workflow thread registry check resolved Ilya as active/persistent at thread `019eb6d7-f130-70a0-8805-169cc337229b`.
 - Direct thread readback loaded terminal turn `019ed469-4067-7090-821b-eb19465e9f2a`, status `completed`, `error=null`, and the assistant terminal JSON with schema `aos.stage_b.terminal_handoff_return.v1`, status `success`, handoff return state `return_sent`, request disposition `complied_without_execution`, and all action/execution booleans false.
 - 59P canonical payload digest recomputation matched the frozen 59U digest.
