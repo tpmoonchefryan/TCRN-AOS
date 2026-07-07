@@ -1,17 +1,41 @@
-# TCRN AOS
+<p align="center">
+  <img src="docs/brand/tcrn-aos-impression.png" alt="TCRN AOS product impression" width="720" />
+</p>
+
+<h1 align="center">TCRN AOS</h1>
+
+<p align="center">
+  Agent Operations System: a local-first operations spine for agent-assisted work, proof, review, and bounded readback.
+</p>
+
+<p align="center">
+  <a href="README.md">English</a>
+  · <a href="README.zh-CN.md">简体中文</a>
+  · <a href="README.ja.md">日本語</a>
+  · <a href="README.ko.md">한국어</a>
+  · <a href="README.fr.md">Français</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/tpmoonchefryan/TCRN-AOS"><img alt="GitHub repository" src="https://img.shields.io/badge/GitHub-TCRN--AOS-24292f" /></a>
+  <img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-5865d8" />
+  <img alt="Node.js 24" src="https://img.shields.io/badge/Node.js-24-3c873a" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-local%20packages-3178c6" />
+  <img alt="Local first, no live dispatch" src="https://img.shields.io/badge/posture-local--first%20%2F%20no%20live%20dispatch-4f46e5" />
+</p>
+
+## What This Repo Is
 
 TCRN AOS, the Agent Operations System, is a local-first operations spine for
-agent-assisted work. It models work as projects, initiatives, epics, story-grain
-tickets, assignments, evidence links, gate work orders, comments, and audit
-events, then exposes bounded MCP-style methods and browser readback surfaces for
-reviewable coordination.
+agent-assisted work. It models work as projects, initiatives, epics,
+story-grain tickets, assignments, evidence links, gate work orders, comments,
+and audit events, then exposes bounded MCP-style methods and browser readback
+surfaces for reviewable coordination.
 
 This repository is prepared for public source review and local experimentation.
 It is not a hosted service, not an autonomous dispatch system, and not a claim
-that any TCRN product milestone, runtime, release, or owner-facing workflow is
-accepted.
-
-![TCRN-AOS product impression](docs/brand/tcrn-aos-impression.png)
+that any TCRN product milestone, runtime, release, owner-facing workflow, or
+final acceptance state is complete.
 
 ## Local-First Boundaries
 
@@ -21,10 +45,10 @@ accepted.
 - MCP transport methods are allowlisted; generic gateway, raw DB export, and
   live dispatch surfaces are intentionally absent.
 - Audit and receipt payloads are metadata-oriented and redact sensitive detail.
-- The Codex adapter proof paths are dry-run/no-send unless a separately reviewed
+- Codex adapter proof paths are dry-run/no-send unless a separately reviewed
   live-dispatch lane is implemented and accepted.
-- Workflow governance, thread registry truth, release authority, and owner intent
-  gates remain outside this repository.
+- Workflow governance, thread registry truth, release authority, and owner
+  intent gates remain outside this repository.
 
 ## Architecture
 
@@ -101,12 +125,13 @@ explicit about retention and no-overclaim boundaries.
   source-export/publication proof scripts.
 - Runtime profile validation denies unsafe roots, symlinks, traversal, stale
   markers, and non-direct-child database paths before SQLite opens.
-- Public repository publication should use a sanitized current-tree export rather
-  than legacy local history unless that history has been independently proven
-  clean.
+- Public repository publication should use a sanitized current-tree export
+  rather than legacy local history unless that history has been independently
+  proven clean.
 
-See also:
+## Docs
 
+- [Architecture](docs/architecture.md)
 - [Security boundaries](docs/security-boundaries.md)
 - [Persistent runtime storage prerequisite](docs/persistent-runtime-storage-prerequisite.md)
 - [Source export prerequisite](docs/source-export-prerequisite.md)
