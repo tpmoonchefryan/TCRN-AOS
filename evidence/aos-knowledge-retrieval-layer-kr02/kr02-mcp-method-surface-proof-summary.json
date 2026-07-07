@@ -6,7 +6,7 @@
     "ownerDecisionWorkflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
     "kr00GateGreenWorkflowBasis": "1d60763f3c0c3eae0fb5465fb50189c4951c48df",
     "incomingAosBasis": "a1223ee654cb026ac0a23d62d10ef143d2ae50ef",
-    "sourceHead": "81118b82733e990d29f3870b6526a84190f4ecf7",
+    "sourceHead": "52e1743b90bed21d77d2c81e783de00a490dfb4b",
     "sourceFiles": [
       "package.json",
       "packages/db/src/sqlite-repository.ts",
@@ -23,9 +23,9 @@
       "packages/mcp-server/test/kr02-knowledge-method-surface.test.mjs": "725ca3b28b90f4ae306137c141ddaa543b79654547e652d121f59a155603e0a7",
       "packages/db/test/kr01-knowledge-schema-fts.test.mjs": "80cc49ba91c33b8a712ad9c7db81deb8b8072c043b319a59daf416982abacbea",
       "packages/mcp-server/test/stdio-transport.test.mjs": "090c3b06454998d933523a834a06b962ef8c805f301ca0b9c314bd0b83ecef00",
-      "scripts/kr02-mcp-method-surface-proof.mjs": "a4a225054055f3dd2fec07b88e8ba2ddeaeedab9a1ff4a280358d5b23c5cc197"
+      "scripts/kr02-mcp-method-surface-proof.mjs": "5f69fbe7951687133206c54eb696f4b9717975b7bc4e103150e81599134b46b5"
     },
-    "sourceContentDigest": "2fdaef9cb7cf1d310ce08f1d0b7b4dc850066779f0675a02fd348afbed90c4a1"
+    "sourceContentDigest": "b93f66bbada8db6593e365a721cbb6ade9ecb67b51e7f4298d21355c0ea32df2"
   },
   "receiptInventory": [
     "kr02-mcp-method-surface-readback.json"
@@ -34,7 +34,7 @@
   "allChildReceiptsOk": true,
   "missingReceipts": [],
   "extraUnclassifiedReceipts": [],
-  "readbackReceiptDigest": "4039d34aff33aab1f623399ae9f4b3aec976a1e3e8146e2e24c4f35d88849993",
+  "readbackReceiptDigest": "c54ffcd4e383a07e2f0d50c40e7e249c8c8cdfd221cc0f085b1529c859a365fa",
   "methodRegistry": [
     "aos.knowledge.entry.propose",
     "aos.knowledge.entry.read",
@@ -44,7 +44,7 @@
   "searchReturnedIds": [
     "knowledge-kr02-proof-second"
   ],
-  "readAuditEventId": "audit_8bb68e711df9b6d4",
+  "readAuditEventId": "audit_1097ca03d291eda7",
   "blockedRoleReason": "transport_actor_blocked_role",
   "noOverclaimFlags": {
     "kr02MethodSurfaceImplemented": true,

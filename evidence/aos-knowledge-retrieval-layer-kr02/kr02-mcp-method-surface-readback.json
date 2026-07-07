@@ -6,7 +6,7 @@
     "ownerDecisionWorkflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
     "kr00GateGreenWorkflowBasis": "1d60763f3c0c3eae0fb5465fb50189c4951c48df",
     "incomingAosBasis": "a1223ee654cb026ac0a23d62d10ef143d2ae50ef",
-    "sourceHead": "81118b82733e990d29f3870b6526a84190f4ecf7",
+    "sourceHead": "52e1743b90bed21d77d2c81e783de00a490dfb4b",
     "sourceFiles": [
       "package.json",
       "packages/db/src/sqlite-repository.ts",
@@ -23,9 +23,9 @@
       "packages/mcp-server/test/kr02-knowledge-method-surface.test.mjs": "725ca3b28b90f4ae306137c141ddaa543b79654547e652d121f59a155603e0a7",
       "packages/db/test/kr01-knowledge-schema-fts.test.mjs": "80cc49ba91c33b8a712ad9c7db81deb8b8072c043b319a59daf416982abacbea",
       "packages/mcp-server/test/stdio-transport.test.mjs": "090c3b06454998d933523a834a06b962ef8c805f301ca0b9c314bd0b83ecef00",
-      "scripts/kr02-mcp-method-surface-proof.mjs": "a4a225054055f3dd2fec07b88e8ba2ddeaeedab9a1ff4a280358d5b23c5cc197"
+      "scripts/kr02-mcp-method-surface-proof.mjs": "5f69fbe7951687133206c54eb696f4b9717975b7bc4e103150e81599134b46b5"
     },
-    "sourceContentDigest": "2fdaef9cb7cf1d310ce08f1d0b7b4dc850066779f0675a02fd348afbed90c4a1"
+    "sourceContentDigest": "b93f66bbada8db6593e365a721cbb6ade9ecb67b51e7f4298d21355c0ea32df2"
   },
   "methodRegistryReadback": {
     "ok": true,
@@ -49,7 +49,7 @@
     "status": "canonical",
     "bodyReturned": false,
     "rawRecordJsonReturned": false,
-    "auditEventId": "audit_6f4af5d5096af5a2",
+    "auditEventId": "audit_f9b2d2cdee963efe",
     "canonicalGateDecisionRequired": true,
     "bodyCapOversizedReason": "knowledge_body_word_limit_exceeded"
   },
@@ -83,7 +83,7 @@
     "entryId": "knowledge-kr02-proof-canonical",
     "bodyIncluded": true,
     "bodyDigest": "9f00e6985764e2e34f2c671a2c37959bbc8f5bbee37f658b3bc5b458ddfaad88",
-    "auditEventId": "audit_8bb68e711df9b6d4",
+    "auditEventId": "audit_1097ca03d291eda7",
     "responseBudget": {
       "maxResponseBytes": 16384,
       "bodyBudgetCappedByTransport": true
@@ -93,11 +93,11 @@
   "auditAccessMetadataReadback": {
     "ok": true,
     "readAuditEventIds": [
-      "audit_8bb68e711df9b6d4"
+      "audit_1097ca03d291eda7"
     ],
     "searchAuditEventIds": [
-      "audit_dd39c35709e03b90",
-      "audit_607e0263b6243601"
+      "audit_2b3476c1717af3ee",
+      "audit_2b3476c1717af3ee"
     ],
     "accessCountAfterSearchAndRead": 2,
     "lastAccessedPresent": true
@@ -112,8 +112,8 @@
     "ok": true,
     "blockedRoleWriteReason": "transport_actor_blocked_role",
     "blockedRoleAuditEventIds": [
-      "audit_87d33bcb047250f2",
-      "audit_c9d66d36d39e7fb4"
+      "audit_59633b1e8468f482",
+      "audit_89ea7bbf5b1e1bce"
     ],
     "ownerObserverReadAllowed": true
   },
