@@ -30,9 +30,10 @@ test("Phase 1 SQLite repository applies core migrations, persists store writes, 
     const repository = new AosSqliteRepository({ databasePath: join(root, "phase1.sqlite"), migrationsDir });
     const migration = repository.applyMigrations();
     assert.equal(migration.ok, true);
-    assert.equal(migration.migrationCount, 1);
+    assert.equal(migration.migrationCount, 2);
     assert.equal(repository.applyMigrations().appliedCount, 0);
     assert.deepEqual(phase1CoreTables.every((table) => repository.tableNames().includes(table)), true);
+    assert.equal(repository.tableNames().includes("aos_knowledge_entries"), true);
     assert.deepEqual(phase1ExcludedRuntimeTables.some((table) => repository.tableNames().includes(table)), false);
     repository.seedAiEmployees(createDefaultSeed().employees, "test-seed");
     const registryProjection = repository.projectThreadRegistryEmployees({

@@ -499,8 +499,7 @@ export function sqliteIntegrityCheck(databasePath: string): SqliteIntegrityReadb
 export function readSqliteTableCounts(databasePath: string): Record<string, number> {
   const db = new DatabaseSync(resolve(databasePath));
   try {
-    const tableNames = (db.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name LIKE 'aos_%' ORDER BY name").all() as Array<{ name: string }>).map((row) => row.name);
-    return Object.fromEntries(tableNames.map((table) => {
+    return Object.fromEntries(readAosTableNames(db).map((table) => {
       const row = db.prepare(`SELECT count(*) as count FROM ${table}`).get() as { count: number };
       return [table, Number(row.count)];
     }));
@@ -586,7 +585,7 @@ function exportLogicalTables(input: {
 }
 
 function readAosTableNames(db: DatabaseSync): string[] {
-  return (db.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name LIKE 'aos_%' AND name != 'aos_schema_migrations' ORDER BY name").all() as Array<{ name: string }>).map((row) => row.name);
+  return (db.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name LIKE 'aos_%' AND name != 'aos_schema_migrations' ORDER BY name").all() as Array<{ name: string }>).map((row) => row.name).filter((name) => !/^aos_.*_fts(?:_|$)/.test(name));
 }
 
 function digestRows(db: DatabaseSync, tableName: string): { lines: string[]; columns: string[]; rowDigest: string } {

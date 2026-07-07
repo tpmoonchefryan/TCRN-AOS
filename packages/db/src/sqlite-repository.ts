@@ -48,7 +48,6 @@ export const phase1ExcludedRuntimeTables = [
   "aos_resource_rollback_plans",
   "aos_resource_retirement_records",
   "aos_resource_cleanup_readbacks",
-  "aos_knowledge_entries",
   "aos_user_guide_page_drafts",
   "aos_release_notes",
   "aos_docs_readiness_records",
@@ -115,6 +114,86 @@ export interface SchemaIntegrityReadback {
   enumCheckColumns: string[];
   invalidJsonRejected: Record<string, boolean>;
   invalidEnumRejected: Record<string, boolean>;
+}
+
+export type KnowledgeRetrievalStatus = "canonical" | "draft" | "deprecated";
+
+export interface KnowledgeRetrievalEntryInput {
+  id: string;
+  title: string;
+  roleScope: string;
+  project: string;
+  category: string;
+  knowledgeKind: string;
+  status: KnowledgeRetrievalStatus;
+  lastVerified: string;
+  stalenessPolicy: string;
+  sourceRef: string;
+  sourceDigest: string;
+  tags: string[];
+  summary: string;
+  body: string;
+  accessCount?: number;
+  lastAccessed?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface KnowledgeRetrievalEntryRecord {
+  id: string;
+  title: string;
+  roleScope: string;
+  project: string;
+  category: string;
+  knowledgeKind: string;
+  status: KnowledgeRetrievalStatus;
+  lastVerified: string;
+  stalenessPolicy: string;
+  sourceRef: string;
+  sourceDigest: string;
+  tags: string[];
+  summary: string;
+  body: string;
+  accessCount: number;
+  lastAccessed: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface KnowledgeRetrievalSearchParams {
+  query?: string;
+  roleScope?: string;
+  project?: string;
+  category?: string;
+  status?: KnowledgeRetrievalStatus;
+  includeDraft?: boolean;
+  limit?: number;
+}
+
+export interface KnowledgeRetrievalSchemaReadback {
+  ok: boolean;
+  tableName: "aos_knowledge_entries";
+  ftsTableName: "aos_knowledge_entries_fts";
+  requiredColumns: string[];
+  presentColumns: string[];
+  missingColumns: string[];
+  fts5Available: boolean;
+  searchMode: "fts5" | "like_tokenized";
+  statusCheckPresent: boolean;
+  bodyWordLimit: 1500;
+  summaryWordLimit: 120;
+  accessMetadataColumns: string[];
+}
+
+export class KnowledgeRetrievalValidationError extends Error {
+  constructor(
+    readonly reason: string,
+    readonly field: string,
+    readonly limit: number,
+    readonly actual: number
+  ) {
+    super(reason);
+  }
 }
 
 export interface AosSqliteRepositoryOptions {
@@ -403,8 +482,183 @@ export class AosSqliteRepository implements AosPersistenceRepository {
     };
   }
 
+  createKnowledgeRetrievalEntry(input: KnowledgeRetrievalEntryInput): KnowledgeRetrievalEntryRecord {
+    const entry = normalizeKnowledgeRetrievalEntry(input);
+    this.database.prepare(`
+      INSERT INTO aos_knowledge_entries(
+        id,
+        title,
+        role_scope,
+        project,
+        category,
+        knowledge_kind,
+        status,
+        last_verified,
+        staleness_policy,
+        source_ref,
+        source_digest,
+        tags,
+        summary,
+        body,
+        access_count,
+        last_accessed,
+        record_json,
+        created_at,
+        updated_at
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(id) DO UPDATE SET
+        title = excluded.title,
+        role_scope = excluded.role_scope,
+        project = excluded.project,
+        category = excluded.category,
+        knowledge_kind = excluded.knowledge_kind,
+        status = excluded.status,
+        last_verified = excluded.last_verified,
+        staleness_policy = excluded.staleness_policy,
+        source_ref = excluded.source_ref,
+        source_digest = excluded.source_digest,
+        tags = excluded.tags,
+        summary = excluded.summary,
+        body = excluded.body,
+        access_count = excluded.access_count,
+        last_accessed = excluded.last_accessed,
+        record_json = excluded.record_json,
+        updated_at = excluded.updated_at
+    `).run(
+      entry.id,
+      entry.title,
+      entry.roleScope,
+      entry.project,
+      entry.category,
+      entry.knowledgeKind,
+      entry.status,
+      entry.lastVerified,
+      entry.stalenessPolicy,
+      entry.sourceRef,
+      entry.sourceDigest,
+      JSON.stringify(entry.tags),
+      entry.summary,
+      entry.body,
+      entry.accessCount,
+      entry.lastAccessed,
+      stableJson(entry),
+      entry.createdAt,
+      entry.updatedAt
+    );
+    return this.requireKnowledgeRetrievalEntry(entry.id);
+  }
+
+  requireKnowledgeRetrievalEntry(id: string): KnowledgeRetrievalEntryRecord {
+    const row = this.database.prepare("SELECT * FROM aos_knowledge_entries WHERE id = ?").get(id) as KnowledgeRetrievalRow | undefined;
+    if (!row) {
+      throw new Error(`knowledge_retrieval_entry_not_found:${id}`);
+    }
+    return rowToKnowledgeRetrievalEntry(row);
+  }
+
+  searchKnowledgeRetrievalEntries(params: KnowledgeRetrievalSearchParams = {}): KnowledgeRetrievalEntryRecord[] {
+    const limit = Math.max(1, Math.min(Math.trunc(params.limit ?? 10), 20));
+    const values: SqlProbeValue[] = [];
+    const filters: string[] = [];
+    if (params.roleScope) {
+      filters.push("e.role_scope = ?");
+      values.push(params.roleScope);
+    }
+    if (params.project) {
+      filters.push("e.project = ?");
+      values.push(params.project);
+    }
+    if (params.category) {
+      filters.push("e.category = ?");
+      values.push(params.category);
+    }
+    if (params.status) {
+      filters.push("e.status = ?");
+      values.push(params.status);
+    } else if (!params.includeDraft) {
+      filters.push("e.status = 'canonical'");
+    }
+
+    const queryTerms = tokenizeSearchQuery(params.query ?? "");
+    let from = "aos_knowledge_entries e";
+    if (queryTerms.length > 0) {
+      if (this.knowledgeRetrievalFts5Available()) {
+        from = "aos_knowledge_entries e JOIN aos_knowledge_entries_fts ON aos_knowledge_entries_fts.rowid = e.rowid";
+        filters.push("aos_knowledge_entries_fts MATCH ?");
+        values.push(queryTerms.map((term) => `${term}*`).join(" AND "));
+      } else {
+        filters.push(`(${["e.title", "e.summary", "e.tags", "e.body"].map((column) => `${column} LIKE ?`).join(" OR ")})`);
+        values.push(...Array.from({ length: 4 }, () => `%${queryTerms.join("%")}%`));
+      }
+    }
+    const where = filters.length > 0 ? `WHERE ${filters.join(" AND ")}` : "";
+    const rows = this.database.prepare(`
+      SELECT e.*
+      FROM ${from}
+      ${where}
+      ORDER BY e.updated_at DESC, e.id
+      LIMIT ?
+    `).all(...values, limit) as unknown as KnowledgeRetrievalRow[];
+    return rows.map(rowToKnowledgeRetrievalEntry);
+  }
+
+  recordKnowledgeRetrievalAccess(id: string, accessedAt: string): KnowledgeRetrievalEntryRecord {
+    this.database.prepare(`
+      UPDATE aos_knowledge_entries
+      SET access_count = access_count + 1,
+          last_accessed = ?,
+          updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+      WHERE id = ?
+    `).run(accessedAt, id);
+    return this.requireKnowledgeRetrievalEntry(id);
+  }
+
+  knowledgeRetrievalSchemaReadback(): KnowledgeRetrievalSchemaReadback {
+    const requiredColumns = [
+      "id",
+      "title",
+      "role_scope",
+      "project",
+      "category",
+      "knowledge_kind",
+      "status",
+      "last_verified",
+      "staleness_policy",
+      "source_ref",
+      "source_digest",
+      "tags",
+      "summary",
+      "body",
+      "access_count",
+      "last_accessed",
+      "record_json",
+      "created_at",
+      "updated_at"
+    ];
+    const presentColumns = this.columnNames("aos_knowledge_entries");
+    const missingColumns = requiredColumns.filter((column) => !presentColumns.includes(column));
+    const createSql = this.tableSql("aos_knowledge_entries");
+    const fts5Available = this.knowledgeRetrievalFts5Available();
+    const statusCheckPresent = /status\s+TEXT\s+NOT NULL\s+CHECK\s*\(\s*status\s+IN\s*\('canonical',\s*'draft',\s*'deprecated'\)\s*\)/i.test(createSql);
+    return {
+      ok: missingColumns.length === 0 && statusCheckPresent && fts5Available,
+      tableName: "aos_knowledge_entries",
+      ftsTableName: "aos_knowledge_entries_fts",
+      requiredColumns,
+      presentColumns,
+      missingColumns,
+      fts5Available,
+      searchMode: fts5Available ? "fts5" : "like_tokenized",
+      statusCheckPresent,
+      bodyWordLimit: 1500,
+      summaryWordLimit: 120,
+      accessMetadataColumns: presentColumns.filter((column) => ["access_count", "last_accessed"].includes(column))
+    };
+  }
+
   tableNames(): string[] {
-    return (this.database.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name LIKE 'aos_%' ORDER BY name").all() as Array<{ name: string }>).map((row) => row.name);
+    return (this.database.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name LIKE 'aos_%' ORDER BY name").all() as Array<{ name: string }>).map((row) => row.name).filter(isPublicAosDataTable);
   }
 
   tableCounts(): Record<string, number> {
@@ -578,6 +832,27 @@ export class AosSqliteRepository implements AosPersistenceRepository {
   private tableCount(table: string): number {
     const row = this.database.prepare(`SELECT count(*) as count FROM ${table}`).get() as { count: number };
     return Number(row.count);
+  }
+
+  private knowledgeRetrievalFts5Available(): boolean {
+    if (!this.hasTable("aos_knowledge_entries_fts")) {
+      return false;
+    }
+    try {
+      this.database.prepare("SELECT rowid FROM aos_knowledge_entries_fts WHERE aos_knowledge_entries_fts MATCH ? LIMIT 1").all("unlikely_probe_token");
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  private columnNames(table: string): string[] {
+    return (this.database.prepare(`PRAGMA table_info(${quoteIdentifier(table)})`).all() as Array<{ name: string }>).map((row) => row.name);
+  }
+
+  private tableSql(table: string): string {
+    const row = this.database.prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = ?").get(table) as { sql: string } | undefined;
+    return row?.sql ?? "";
   }
 
   private selectIds(table: string, column: string, value: string): string[] {
@@ -758,8 +1033,154 @@ function placeholders(count: number): string {
   return count > 0 ? Array.from({ length: count }, () => "?").join(", ") : "NULL";
 }
 
+function quoteIdentifier(value: string): string {
+  return `"${value.replaceAll("\"", "\"\"")}"`;
+}
+
 function digestIdentityColumn(table: string): string {
   return table === "aos_schema_migrations" ? "version" : "id";
+}
+
+interface KnowledgeRetrievalRow {
+  id: string;
+  title: string;
+  role_scope: string;
+  project: string;
+  category: string;
+  knowledge_kind: string;
+  status: KnowledgeRetrievalStatus;
+  last_verified: string;
+  staleness_policy: string;
+  source_ref: string;
+  source_digest: string;
+  tags: string;
+  summary: string;
+  body: string;
+  access_count: number;
+  last_accessed: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+function normalizeKnowledgeRetrievalEntry(input: KnowledgeRetrievalEntryInput): KnowledgeRetrievalEntryRecord {
+  const tags = normalizeTags(input.tags);
+  const now = new Date().toISOString();
+  const entry: KnowledgeRetrievalEntryRecord = {
+    id: requireNonEmpty(input.id, "id"),
+    title: requireNonEmpty(input.title, "title"),
+    roleScope: requireNonEmpty(input.roleScope, "roleScope"),
+    project: requireNonEmpty(input.project, "project"),
+    category: requireNonEmpty(input.category, "category"),
+    knowledgeKind: requireNonEmpty(input.knowledgeKind, "knowledgeKind"),
+    status: validateKnowledgeStatus(input.status),
+    lastVerified: requireIsoDate(input.lastVerified),
+    stalenessPolicy: requireNonEmpty(input.stalenessPolicy, "stalenessPolicy"),
+    sourceRef: requireNonEmpty(input.sourceRef, "sourceRef"),
+    sourceDigest: requireNonEmpty(input.sourceDigest, "sourceDigest"),
+    tags,
+    summary: validateWordLimit(input.summary, "summary", 120),
+    body: validateWordLimit(input.body, "body", 1500),
+    accessCount: Math.max(0, Math.trunc(input.accessCount ?? 0)),
+    lastAccessed: input.lastAccessed ?? null,
+    createdAt: input.createdAt ?? now,
+    updatedAt: input.updatedAt ?? now
+  };
+  return entry;
+}
+
+function rowToKnowledgeRetrievalEntry(row: KnowledgeRetrievalRow): KnowledgeRetrievalEntryRecord {
+  return {
+    id: row.id,
+    title: row.title,
+    roleScope: row.role_scope,
+    project: row.project,
+    category: row.category,
+    knowledgeKind: row.knowledge_kind,
+    status: row.status,
+    lastVerified: row.last_verified,
+    stalenessPolicy: row.staleness_policy,
+    sourceRef: row.source_ref,
+    sourceDigest: row.source_digest,
+    tags: normalizeTags(JSON.parse(row.tags) as unknown),
+    summary: row.summary,
+    body: row.body,
+    accessCount: Number(row.access_count),
+    lastAccessed: row.last_accessed,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
+}
+
+function validateKnowledgeStatus(status: KnowledgeRetrievalStatus): KnowledgeRetrievalStatus {
+  if (["canonical", "draft", "deprecated"].includes(status)) {
+    return status;
+  }
+  throw new Error("knowledge_status_invalid");
+}
+
+function normalizeTags(tags: unknown): string[] {
+  if (!Array.isArray(tags) || tags.some((tag) => typeof tag !== "string" || tag.trim().length === 0)) {
+    throw new Error("knowledge_tags_must_be_non_empty_string_array");
+  }
+  return [...new Set(tags.map((tag) => tag.trim()))].sort();
+}
+
+function requireIsoDate(value: string): string {
+  if (!/^\d{4}-\d{2}-\d{2}(?:T.*)?$/.test(value)) {
+    throw new Error("knowledge_last_verified_iso_date_required");
+  }
+  return value;
+}
+
+function requireNonEmpty(value: string, field: string): string {
+  if (typeof value !== "string" || value.trim().length === 0) {
+    throw new Error(`knowledge_${field}_required`);
+  }
+  return value.trim();
+}
+
+function validateWordLimit(value: string, field: string, limit: number): string {
+  const actual = countWords(value);
+  if (actual > limit) {
+    throw new KnowledgeRetrievalValidationError(`knowledge_${field}_word_limit_exceeded`, field, limit, actual);
+  }
+  return value.trim();
+}
+
+function countWords(value: string): number {
+  const trimmed = value.trim();
+  return trimmed.length === 0 ? 0 : trimmed.split(/\s+/).length;
+}
+
+function tokenizeSearchQuery(query: string): string[] {
+  return query
+    .toLowerCase()
+    .split(/[^a-z0-9_:-]+/i)
+    .map((term) => term.replace(/[^a-z0-9_:-]/gi, ""))
+    .filter((term) => term.length > 0)
+    .slice(0, 8);
+}
+
+function isPublicAosDataTable(table: string): boolean {
+  return !isAosFtsInternalTable(table);
+}
+
+function isAosFtsInternalTable(table: string): boolean {
+  return /^aos_.*_fts(?:_|$)/.test(table);
+}
+
+export function probeSqliteFts5Availability(): { ok: boolean; fts5Available: boolean; errorReason: string | null } {
+  const database = new DatabaseSync(":memory:");
+  try {
+    database.exec("CREATE VIRTUAL TABLE kr01_fts_probe USING fts5(value)");
+    database.prepare("INSERT INTO kr01_fts_probe(value) VALUES (?)").run("probe value");
+    const row = database.prepare("SELECT rowid FROM kr01_fts_probe WHERE kr01_fts_probe MATCH ?").get("probe") as { rowid: number } | undefined;
+    return { ok: Boolean(row), fts5Available: Boolean(row), errorReason: null };
+  } catch (error) {
+    return { ok: true, fts5Available: false, errorReason: error instanceof Error ? error.message : String(error) };
+  } finally {
+    database.close();
+  }
 }
 
 function rejects(operation: () => unknown): boolean {
