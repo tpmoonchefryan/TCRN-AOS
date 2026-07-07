@@ -470,11 +470,18 @@ function privacyScan(value) {
   const findings = [];
   if (serialized.includes(repoRoot) || serialized.includes(platformRoot)) findings.push({ kind: "raw_local_path" });
   if (/\/Users\/[^"\\]+/.test(serialized)) findings.push({ kind: "raw_users_path" });
-  if (/record_json|raw DB dump|BEGIN PRIVATE KEY|AWS_SECRET|OPENAI_API_KEY|PRIVATE KEY/i.test(serialized)) {
+  if (/record_json|raw\s+db\s+dump|BEGIN PRIVATE KEY|AWS_SECRET|OPENAI_API_KEY|PRIVATE KEY/i.test(serialized)) {
     findings.push({ kind: "private_or_raw_payload_marker" });
   }
-  for (const phrase of ["release readiness", "owner-facing acceptance", "final acceptance", "clean platform", "parent completion"]) {
-    if (serialized.toLowerCase().includes(phrase)) findings.push({ kind: `overclaim:${phrase}` });
+  const overclaimPatterns = [
+    ["release_readiness", /release\s+readiness/i],
+    ["owner_facing_acceptance", /owner-facing\s+acceptance/i],
+    ["final_acceptance", /final\s+acceptance/i],
+    ["clean_platform", /clean\s+platform/i],
+    ["parent_completion", /parent\s+completion/i]
+  ];
+  for (const [name, pattern] of overclaimPatterns) {
+    if (pattern.test(serialized)) findings.push({ kind: `overclaim:${name}` });
   }
   return {
     ok: findings.length === 0,
