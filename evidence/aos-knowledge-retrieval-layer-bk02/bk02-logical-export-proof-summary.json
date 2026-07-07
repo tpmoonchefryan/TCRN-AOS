@@ -9,7 +9,7 @@
   "aosBasis": "6cbe2870531ad889c306db0f18937a73091989b5",
   "command": "pnpm --dir TCRN-AOS bk02:logical-export-proof",
   "source": {
-    "sourceHead": "aa2c53d3ec5d2d8e3ad89ffac539c3203335847c",
+    "sourceHead": "3489518f7503b4d6a96d43705f2796d2c31e45bc",
     "incomingAosBasis": "6cbe2870531ad889c306db0f18937a73091989b5",
     "workflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
     "planBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
@@ -43,9 +43,9 @@
   "allChildReceiptsOk": true,
   "missingReceipts": [],
   "extraUnclassifiedReceipts": [],
-  "readbackReceiptDigest": "93c152c69036aedf778df10b2557cf5b6d6ea22cdd04a79d2835d13ba57ef543",
+  "readbackReceiptDigest": "c93715c2165b98dcbd1888b0acab41b82deea7962686d7a0a16b038751ad0b42",
   "exportId": "bk02-proof-logical-export",
-  "exportDigest": "db6dfb1e014f6ff84fb7ad498c23c2cf479bb291f0bcdd05bad25b4bda4a968f",
+  "exportDigest": "58756d5ed85299adfbbe322b4f49bafa415ead68c3ec76b927ca8a52764d59da",
   "methodSurface": [
     "aos.backup.snapshot.create",
     "aos.backup.export.create",
