@@ -35,6 +35,14 @@ export interface PersistentRuntimeStorageProofOptions {
   runtimeRoot?: string;
   useTempRuntimeRoot?: boolean;
   repoRoot?: string;
+  ownerMarker?: PersistentRuntimeOwnerMarkerBinding;
+}
+
+export interface PersistentRuntimeOwnerMarkerBinding {
+  profileId: string;
+  routeId: string;
+  runContext: string;
+  owner: string;
 }
 
 export interface RuntimeRootValidationResult {
@@ -118,10 +126,10 @@ export interface PersistentRuntimeStorageProof {
 
 interface OwnerMarker {
   markerSchemaVersion: typeof OWNER_MARKER_SCHEMA_VERSION;
-  profileId: typeof PERSISTENT_RUNTIME_PROFILE_ID;
-  routeId: typeof PERSISTENT_RUNTIME_ROUTE_ID;
-  runContext: typeof PERSISTENT_RUNTIME_RUN_CONTEXT;
-  owner: "aos-product-local-proof";
+  profileId: string;
+  routeId: string;
+  runContext: string;
+  owner: string;
   runtimeRootDigest: string;
 }
 
@@ -177,12 +185,20 @@ export async function runPersistentRuntimeStorageProof(
   const runtimeRoot = options.useTempRuntimeRoot
     ? await mkdtemp(join(await realpath(tmpdir()), "tcrn-aos-persistent-runtime-"))
     : options.runtimeRoot;
-  const validationInput: { runtimeRoot?: string; repoRoot: string; tempRoot: boolean } = {
+  const validationInput: {
+    runtimeRoot?: string;
+    repoRoot: string;
+    tempRoot: boolean;
+    ownerMarker?: PersistentRuntimeOwnerMarkerBinding;
+  } = {
     repoRoot,
     tempRoot: options.useTempRuntimeRoot === true
   };
   if (runtimeRoot !== undefined) {
     validationInput.runtimeRoot = runtimeRoot;
+  }
+  if (options.ownerMarker !== undefined) {
+    validationInput.ownerMarker = options.ownerMarker;
   }
   const validation = await prepareRuntimeRoot(validationInput);
   const resolvedRuntimeRoot = resolve(runtimeRoot!);
@@ -273,15 +289,17 @@ export async function prepareRuntimeRoot(input: {
   runtimeRoot?: string;
   repoRoot?: string;
   tempRoot?: boolean;
+  ownerMarker?: PersistentRuntimeOwnerMarkerBinding;
 }): Promise<RuntimeRootValidationResult> {
   const repoRoot = await realpath(resolve(input.repoRoot ?? process.cwd()));
+  const ownerMarkerBinding = input.ownerMarker ?? defaultOwnerMarkerBinding();
   if (!input.runtimeRoot || input.runtimeRoot.trim().length === 0) {
     throw new Error("runtime_root_missing");
   }
   if (!isAbsolute(input.runtimeRoot)) {
     throw new Error("runtime_root_must_be_absolute");
   }
-  const runtimeRoot = await canonicalizeRuntimeRoot(input.runtimeRoot);
+  const runtimeRoot = await canonicalizeRuntimeRoot(input.runtimeRoot, ownerMarkerBinding);
   if (isSameOrInside(runtimeRoot.canonicalRoot, repoRoot)) {
     throw new Error("runtime_root_inside_git_tree");
   }
@@ -298,7 +316,7 @@ export async function prepareRuntimeRoot(input: {
   }
   const runtimeRootDigest = runtimeRoot.runtimeRootDigest;
   const markerPath = join(runtimeRoot.requestedRoot, OWNER_MARKER_FILE);
-  const existingMarker = await readOwnerMarker(markerPath, runtimeRootDigest);
+  const existingMarker = await readOwnerMarker(markerPath, runtimeRootDigest, ownerMarkerBinding);
   if (!existingMarker && runtimeRootExisted) {
     if (await pathExists(runtimePaths(runtimeRoot.requestedRoot).stateFile)) {
       throw new Error("runtime_root_stale_data_ambiguous");
@@ -311,7 +329,7 @@ export async function prepareRuntimeRoot(input: {
   await assertExistingPathHasNoSymlink(runtimeRoot.requestedRoot);
   const ownerMarkerStatus = existingMarker ? "existing_route_owned" : "created";
   if (!existingMarker) {
-    await writeFile(markerPath, JSON.stringify(ownerMarker(runtimeRootDigest), null, 2));
+    await writeFile(markerPath, JSON.stringify(ownerMarker(runtimeRootDigest, ownerMarkerBinding), null, 2));
   }
   return {
     ok: true,
@@ -538,28 +556,41 @@ function runtimePaths(runtimeRoot: string): { dbDir: string; objectDir: string; 
   };
 }
 
-function ownerMarker(runtimeRootDigest: string): OwnerMarker {
+function defaultOwnerMarkerBinding(): PersistentRuntimeOwnerMarkerBinding {
   return {
-    markerSchemaVersion: OWNER_MARKER_SCHEMA_VERSION,
     profileId: PERSISTENT_RUNTIME_PROFILE_ID,
     routeId: PERSISTENT_RUNTIME_ROUTE_ID,
     runContext: PERSISTENT_RUNTIME_RUN_CONTEXT,
-    owner: "aos-product-local-proof",
+    owner: "aos-product-local-proof"
+  };
+}
+
+function ownerMarker(runtimeRootDigest: string, binding: PersistentRuntimeOwnerMarkerBinding = defaultOwnerMarkerBinding()): OwnerMarker {
+  return {
+    markerSchemaVersion: OWNER_MARKER_SCHEMA_VERSION,
+    profileId: binding.profileId,
+    routeId: binding.routeId,
+    runContext: binding.runContext,
+    owner: binding.owner,
     runtimeRootDigest
   };
 }
 
-async function readOwnerMarker(markerPath: string, expectedRuntimeRootDigest: string): Promise<OwnerMarker | null> {
+async function readOwnerMarker(
+  markerPath: string,
+  expectedRuntimeRootDigest: string,
+  binding: PersistentRuntimeOwnerMarkerBinding = defaultOwnerMarkerBinding()
+): Promise<OwnerMarker | null> {
   if (!await pathExists(markerPath)) {
     return null;
   }
   const marker = JSON.parse(await readFile(markerPath, "utf8")) as Partial<OwnerMarker>;
   if (
     marker.markerSchemaVersion === OWNER_MARKER_SCHEMA_VERSION
-    && marker.profileId === PERSISTENT_RUNTIME_PROFILE_ID
-    && marker.routeId === PERSISTENT_RUNTIME_ROUTE_ID
-    && marker.runContext === PERSISTENT_RUNTIME_RUN_CONTEXT
-    && marker.owner === "aos-product-local-proof"
+    && marker.profileId === binding.profileId
+    && marker.routeId === binding.routeId
+    && marker.runContext === binding.runContext
+    && marker.owner === binding.owner
     && marker.runtimeRootDigest === expectedRuntimeRootDigest
   ) {
     return marker as OwnerMarker;
@@ -584,14 +615,17 @@ async function assertExistingPathHasNoSymlink(targetPath: string): Promise<void>
   }
 }
 
-async function canonicalizeRuntimeRoot(runtimeRoot: string): Promise<CanonicalRuntimeRoot> {
+async function canonicalizeRuntimeRoot(
+  runtimeRoot: string,
+  binding: PersistentRuntimeOwnerMarkerBinding = defaultOwnerMarkerBinding()
+): Promise<CanonicalRuntimeRoot> {
   const requestedRoot = resolve(runtimeRoot);
   await assertExistingPathHasNoSymlink(requestedRoot);
   const canonicalRoot = await canonicalizePathWithExistingAncestor(requestedRoot);
   return {
     requestedRoot,
     canonicalRoot,
-    runtimeRootDigest: digestRuntimeRoot(canonicalRoot)
+    runtimeRootDigest: digestRuntimeRoot(canonicalRoot, binding)
   };
 }
 
@@ -643,11 +677,15 @@ async function directoryIsEmpty(path: string): Promise<boolean> {
   return (await readdir(path)).length === 0;
 }
 
-function digestRuntimeRoot(canonicalRuntimeRoot: string): string {
+function digestRuntimeRoot(
+  canonicalRuntimeRoot: string,
+  binding: PersistentRuntimeOwnerMarkerBinding = defaultOwnerMarkerBinding()
+): string {
   return digest({
-    profileId: PERSISTENT_RUNTIME_PROFILE_ID,
-    routeId: PERSISTENT_RUNTIME_ROUTE_ID,
-    runContext: PERSISTENT_RUNTIME_RUN_CONTEXT,
+    profileId: binding.profileId,
+    routeId: binding.routeId,
+    runContext: binding.runContext,
+    owner: binding.owner,
     runtimeRoot: resolve(canonicalRuntimeRoot)
   });
 }

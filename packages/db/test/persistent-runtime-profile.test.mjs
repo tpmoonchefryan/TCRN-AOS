@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, realpath, rm, symlink, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, realpath, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import {
@@ -125,6 +125,45 @@ test("persistent runtime profile fails closed for unsafe roots and cleanup", asy
   } finally {
     await rm(parent, { recursive: true, force: true });
     await rm(dangerousMarkedRoot, { recursive: true, force: true });
+  }
+});
+
+test("persistent runtime profile supports route-bound owner marker bindings", async () => {
+  const root = await mkdtemp(join(await realpath(tmpdir()), "tcrn-aos-persistent-binding-"));
+  const staleRoot = await mkdtemp(join(await realpath(tmpdir()), "tcrn-aos-persistent-binding-stale-"));
+  const binding = {
+    profileId: "conditional-dogfood-start-p1-clean-start-runtime-profile-v1",
+    routeId: "route_tcrn_conditional_dogfood_start_p1_durable_runtime_profile_root_migration_test",
+    runContext: "conditional-dogfood-start-p1-clean-start-v1",
+    owner: "aos-product-local-p1"
+  };
+  try {
+    const first = await prepareRuntimeRoot({ runtimeRoot: root, repoRoot: process.cwd(), ownerMarker: binding });
+    const second = await prepareRuntimeRoot({ runtimeRoot: root, repoRoot: process.cwd(), ownerMarker: binding });
+    const marker = JSON.parse(await readFile(join(root, ".aos-persistent-runtime-owner.json"), "utf8"));
+
+    assert.equal(first.ownerMarkerStatus, "created");
+    assert.equal(second.ownerMarkerStatus, "existing_route_owned");
+    assert.equal(marker.profileId, binding.profileId);
+    assert.equal(marker.routeId, binding.routeId);
+    assert.equal(marker.runContext, binding.runContext);
+    assert.equal(marker.owner, binding.owner);
+
+    await writeFile(join(staleRoot, ".aos-persistent-runtime-owner.json"), JSON.stringify({
+      markerSchemaVersion: "aos.persistent_runtime_owner.v1",
+      profileId: "unexpected-profile",
+      routeId: binding.routeId,
+      runContext: binding.runContext,
+      owner: binding.owner,
+      runtimeRootDigest: first.runtimeRootDigest
+    }));
+    await assert.rejects(
+      () => prepareRuntimeRoot({ runtimeRoot: staleRoot, repoRoot: process.cwd(), ownerMarker: binding }),
+      /runtime_root_owner_marker_mismatch/
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+    await rm(staleRoot, { recursive: true, force: true });
   }
 });
 
