@@ -1,13 +1,15 @@
 {
   "ok": true,
-  "route": "route_tcrn_aos_knowledge_retrieval_layer_kr05_seed_entries_after_kr04_gate_green_4a5023_40ddb3e2_20260708",
+  "route": "route_tcrn_aos_knowledge_retrieval_layer_kr05_authority_repair_ilya_after_sable_changes_requested_01c0d9_4a5023_20260708",
   "command": "pnpm --dir TCRN-AOS kr05:seed-entry-convention-proof",
   "source": {
     "ownerDecisionWorkflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
     "kr00GateGreenWorkflowBasis": "1d60763f3c0c3eae0fb5465fb50189c4951c48df",
     "kr04MaterializationWorkflowBasis": "4a50236257494a225fc26d3e1d9d0cb207e02d42",
-    "incomingAosBasis": "40ddb3e2c1ac79e96eadcad2ae25b8fc12ca5112",
-    "sourceHead": "0269a4d6608465ca981c3134455be0b0f2bdbb5b",
+    "initialKr05IncomingAosBasis": "40ddb3e2c1ac79e96eadcad2ae25b8fc12ca5112",
+    "previousKr05SourceBasis": "0269a4d6608465ca981c3134455be0b0f2bdbb5b",
+    "incomingAosBasis": "01c0d98983aaa9e1b272d336c502730c07c5aa84",
+    "sourceHead": "06456d9002ccdbb73b98139d1dffb0068f6d8d4b",
     "sourceFiles": [
       "package.json",
       "packages/db/src/index.ts",
@@ -18,11 +20,11 @@
     "sourceFileDigests": {
       "package.json": "6e151151e9ff9888735a623cd427d85f9a6995d5ba1e51ce8e14fbe176b10c69",
       "packages/db/src/index.ts": "e73785996e65ef8404d19623e750371dbd73d7de24a06b57dbd389ff36e10bc0",
-      "packages/db/src/knowledge-seed-convention.ts": "15188d2be22c3a99dbeb4b9fe1286e8ce91d33e60a376462e13fac5a305aa820",
-      "packages/db/test/kr05-seed-entry-convention.test.mjs": "5b35b07ab6b44dff73ecb7cb1502b633337e20ec8f947a27befe6db20295648b",
-      "scripts/kr05-seed-entry-convention-proof.mjs": "bdfa44b3cc93e7cf010cbba86aeb6b251b82257bb8b5620a10e90d8fb24b9329"
+      "packages/db/src/knowledge-seed-convention.ts": "b60c75f5c482a44d4f6b618ae85bdf906a96bd438d94d398336ad147fbfa8521",
+      "packages/db/test/kr05-seed-entry-convention.test.mjs": "e7fb7658a3f2057c88fafafcdc651db95a24367054be30686b46fc215059f7b5",
+      "scripts/kr05-seed-entry-convention-proof.mjs": "cc1e1eadecd856a2930c27d52ab0e573d8987430715142c17773accf3668fb67"
     },
-    "sourceContentDigest": "7a871b46952c4cabc572348a5e3cfa90ffd4d89fbb5e8fb1150512e4f0952a77"
+    "sourceContentDigest": "f5caea1342ac38e1b3e7d05f524b6eb421fd4a633706cbc3ebe84852413c81e7"
   },
   "seedEntryBoundaryReadback": {
     "ok": true,
@@ -40,6 +42,15 @@
     "nonEnumeratedCanonicalSeedEntriesCreated": false,
     "canonicalConventionAllowedByPlan": true,
     "normalProposeGateFlowPreserved": true
+  },
+  "blockerFixReadback": {
+    "ok": true,
+    "blockerId": "TCRN-KR05-SABLE-SEED-AUTHORITY-001",
+    "exactConventionAllowance": "kr05_canonical_convention_entry_allowed_by_plan",
+    "exactConventionEntryId": "knowledge-kr05-fact-card-convention",
+    "spoofedConventionRejected": "kr05_spoofed_canonical_convention_denied",
+    "spoofedConventionAccepted": false,
+    "canonicalConventionExceptionBoundToExactPayload": true
   },
   "searchReadback": {
     "ok": true,
@@ -69,6 +80,9 @@
   },
   "negativeBoundaryReadback": {
     "ok": true,
+    "spoofedCanonicalConventionDenied": "kr05_spoofed_canonical_convention_denied",
+    "spoofedCanonicalConventionAccepted": false,
+    "spoofedCanonicalConventionAcceptedCount": 0,
     "nonEnumeratedCanonicalDenied": "kr05_non_enumerated_canonical_seed_denied",
     "bulkMigrationDenied": "kr05_bulk_vault_migration_forbidden",
     "missingSectionsDenied": "kr05_fact_card_required_sections_missing",
