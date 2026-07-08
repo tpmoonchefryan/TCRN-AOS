@@ -1,0 +1,135 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_knowledge_retrieval_layer_kr05_seed_entries_after_kr04_gate_green_4a5023_40ddb3e2_20260708",
+  "command": "pnpm --dir TCRN-AOS kr05:seed-entry-convention-proof",
+  "source": {
+    "ownerDecisionWorkflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+    "kr00GateGreenWorkflowBasis": "1d60763f3c0c3eae0fb5465fb50189c4951c48df",
+    "kr04MaterializationWorkflowBasis": "4a50236257494a225fc26d3e1d9d0cb207e02d42",
+    "incomingAosBasis": "40ddb3e2c1ac79e96eadcad2ae25b8fc12ca5112",
+    "sourceHead": "0269a4d6608465ca981c3134455be0b0f2bdbb5b",
+    "sourceFiles": [
+      "package.json",
+      "packages/db/src/index.ts",
+      "packages/db/src/knowledge-seed-convention.ts",
+      "packages/db/test/kr05-seed-entry-convention.test.mjs",
+      "scripts/kr05-seed-entry-convention-proof.mjs"
+    ],
+    "sourceFileDigests": {
+      "package.json": "6e151151e9ff9888735a623cd427d85f9a6995d5ba1e51ce8e14fbe176b10c69",
+      "packages/db/src/index.ts": "e73785996e65ef8404d19623e750371dbd73d7de24a06b57dbd389ff36e10bc0",
+      "packages/db/src/knowledge-seed-convention.ts": "15188d2be22c3a99dbeb4b9fe1286e8ce91d33e60a376462e13fac5a305aa820",
+      "packages/db/test/kr05-seed-entry-convention.test.mjs": "5b35b07ab6b44dff73ecb7cb1502b633337e20ec8f947a27befe6db20295648b",
+      "scripts/kr05-seed-entry-convention-proof.mjs": "bdfa44b3cc93e7cf010cbba86aeb6b251b82257bb8b5620a10e90d8fb24b9329"
+    },
+    "sourceContentDigest": "7a871b46952c4cabc572348a5e3cfa90ffd4d89fbb5e8fb1150512e4f0952a77"
+  },
+  "seedEntryBoundaryReadback": {
+    "ok": true,
+    "ownerSeedEntryListDisposition": "none_initial",
+    "ownerEnumeratedCanonicalSeedEntryIds": [],
+    "conventionEntryCreated": true,
+    "conventionEntryStatus": "canonical",
+    "conventionEntryCount": 1,
+    "seedEntriesCreated": 0,
+    "canonicalSeedEntriesCreated": 0,
+    "draftProofFixtureEntriesCreated": 1,
+    "maxPreEpicSeedEntries": 20,
+    "bulkVaultMigrationPerformed": false,
+    "moreThan20PreEpicEntriesCreated": false,
+    "nonEnumeratedCanonicalSeedEntriesCreated": false,
+    "canonicalConventionAllowedByPlan": true,
+    "normalProposeGateFlowPreserved": true
+  },
+  "searchReadback": {
+    "ok": true,
+    "methodSurfaceUnchanged": true,
+    "defaultSearchReturnedIds": [
+      "knowledge-kr05-fact-card-convention"
+    ],
+    "defaultSearchBodyReturned": false,
+    "detailReadEntryId": "knowledge-kr05-fact-card-convention",
+    "detailBodyDigest": "59b586bdb1cf6b56db1f33d6ff6b77e6ac76e1e0219860484a4b642b619e46f1",
+    "draftProposeEntryId": "knowledge-kr05-proof-draft-fact-card",
+    "draftExcludedByDefault": true,
+    "draftIncludedOnlyWithExplicitFlag": [
+      "knowledge-kr05-proof-draft-fact-card"
+    ],
+    "defaultCanonicalFilterApplied": true,
+    "defaultFreshnessFilterApplied": true,
+    "rawRecordPayloadReturned": false
+  },
+  "conventionReadback": {
+    "ok": true,
+    "conventionEntryId": "knowledge-kr05-fact-card-convention",
+    "conventionEntryDigest": "dfd8b8fc0e73f79ba631977efce5b65611fc8e622e580c1fa4a3ce85d1648793",
+    "requiredSectionsPresent": true,
+    "sourceDigest": "sha256:59b586bdb1cf6b56db1f33d6ff6b77e6ac76e1e0219860484a4b642b619e46f1",
+    "sourceRefDigest": "8d4f33612522d26f53f0b3d5c68ebcd6ff59d24c74415688a37c21b906b23e04"
+  },
+  "negativeBoundaryReadback": {
+    "ok": true,
+    "nonEnumeratedCanonicalDenied": "kr05_non_enumerated_canonical_seed_denied",
+    "bulkMigrationDenied": "kr05_bulk_vault_migration_forbidden",
+    "missingSectionsDenied": "kr05_fact_card_required_sections_missing",
+    "overLimitDenied": true,
+    "nonEnumeratedCanonicalSeedEntryAccepted": false,
+    "bulkVaultMigrationAttemptedButRejected": true,
+    "overLimitAcceptedCount": 0
+  },
+  "idempotencyReadback": {
+    "ok": true,
+    "conventionEntrySecondWriteSameId": true,
+    "draftReplayDeduped": true,
+    "duplicateCanonicalSeedCreated": false
+  },
+  "privacyNoArtifactNoOverclaimReadback": {
+    "ok": true,
+    "rawLocalPathsRecorded": false,
+    "rawDbDumpRecorded": false,
+    "rawPrivatePayloadStored": false,
+    "credentialOrPiiStored": false,
+    "committedDbArtifacts": 0,
+    "committedExportArtifacts": 0,
+    "readinessClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "ownerFacingFinalAcceptanceClaimed": false,
+    "kr06KpiClaimed": false
+  },
+  "validation_readbacks": {
+    "noGitArtifactReadback": {
+      "ok": true,
+      "trackedDbArtifactCount": 0,
+      "trackedExportArtifactCount": 0
+    },
+    "receiptShape": "summary_and_readback_pair",
+    "proofUsesScratchProfileOnly": true
+  },
+  "privacyNoOverclaimScan": {
+    "ok": true,
+    "findings": []
+  },
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "kr05SeedEntryConventionOnly": true,
+    "kr06Started": false,
+    "bulkVaultMigrationPerformed": false,
+    "moreThan20PreEpicEntriesCreated": false,
+    "nonEnumeratedCanonicalSeedEntriesCreated": false,
+    "transportMethodExpanded": false,
+    "kr04HookChanged": false,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "tmsMutation": false,
+    "pushRun": false,
+    "batchPushGateRun": false,
+    "releaseReadinessClaimed": false,
+    "ownerFacingAcceptanceClaimed": false,
+    "finalAcceptanceClaimed": false,
+    "cleanPlatformClaimed": false,
+    "parentCompletionClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerIntentExecutionAuthorized": false
+  }
+}

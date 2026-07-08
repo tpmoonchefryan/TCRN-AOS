@@ -1,0 +1,79 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_knowledge_retrieval_layer_kr05_seed_entries_after_kr04_gate_green_4a5023_40ddb3e2_20260708",
+  "command": "pnpm --dir TCRN-AOS kr05:seed-entry-convention-proof",
+  "source": {
+    "ownerDecisionWorkflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+    "kr00GateGreenWorkflowBasis": "1d60763f3c0c3eae0fb5465fb50189c4951c48df",
+    "kr04MaterializationWorkflowBasis": "4a50236257494a225fc26d3e1d9d0cb207e02d42",
+    "incomingAosBasis": "40ddb3e2c1ac79e96eadcad2ae25b8fc12ca5112",
+    "sourceHead": "0269a4d6608465ca981c3134455be0b0f2bdbb5b",
+    "sourceFiles": [
+      "package.json",
+      "packages/db/src/index.ts",
+      "packages/db/src/knowledge-seed-convention.ts",
+      "packages/db/test/kr05-seed-entry-convention.test.mjs",
+      "scripts/kr05-seed-entry-convention-proof.mjs"
+    ],
+    "sourceFileDigests": {
+      "package.json": "6e151151e9ff9888735a623cd427d85f9a6995d5ba1e51ce8e14fbe176b10c69",
+      "packages/db/src/index.ts": "e73785996e65ef8404d19623e750371dbd73d7de24a06b57dbd389ff36e10bc0",
+      "packages/db/src/knowledge-seed-convention.ts": "15188d2be22c3a99dbeb4b9fe1286e8ce91d33e60a376462e13fac5a305aa820",
+      "packages/db/test/kr05-seed-entry-convention.test.mjs": "5b35b07ab6b44dff73ecb7cb1502b633337e20ec8f947a27befe6db20295648b",
+      "scripts/kr05-seed-entry-convention-proof.mjs": "bdfa44b3cc93e7cf010cbba86aeb6b251b82257bb8b5620a10e90d8fb24b9329"
+    },
+    "sourceContentDigest": "7a871b46952c4cabc572348a5e3cfa90ffd4d89fbb5e8fb1150512e4f0952a77"
+  },
+  "receiptInventory": [
+    "kr05-seed-entry-convention-readback.json"
+  ],
+  "receiptCount": 1,
+  "allChildReceiptsOk": true,
+  "missingReceipts": [],
+  "extraUnclassifiedReceipts": [],
+  "readbackReceiptDigest": "5c7cc5f965437912b6bdf08366392674159831fa5cbef7d56caf43af36044449",
+  "seedEntryBoundaryReadback": {
+    "ok": true,
+    "ownerSeedEntryListDisposition": "none_initial",
+    "ownerEnumeratedCanonicalSeedEntryIds": [],
+    "conventionEntryCreated": true,
+    "conventionEntryStatus": "canonical",
+    "conventionEntryCount": 1,
+    "seedEntriesCreated": 0,
+    "canonicalSeedEntriesCreated": 0,
+    "draftProofFixtureEntriesCreated": 1,
+    "maxPreEpicSeedEntries": 20,
+    "bulkVaultMigrationPerformed": false,
+    "moreThan20PreEpicEntriesCreated": false,
+    "nonEnumeratedCanonicalSeedEntriesCreated": false,
+    "canonicalConventionAllowedByPlan": true,
+    "normalProposeGateFlowPreserved": true
+  },
+  "conventionEntryId": "knowledge-kr05-fact-card-convention",
+  "searchReturnedIds": [
+    "knowledge-kr05-fact-card-convention"
+  ],
+  "noOverclaimFlags": {
+    "kr05SeedEntryConventionOnly": true,
+    "kr06Started": false,
+    "bulkVaultMigrationPerformed": false,
+    "moreThan20PreEpicEntriesCreated": false,
+    "nonEnumeratedCanonicalSeedEntriesCreated": false,
+    "transportMethodExpanded": false,
+    "kr04HookChanged": false,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "tmsMutation": false,
+    "pushRun": false,
+    "batchPushGateRun": false,
+    "releaseReadinessClaimed": false,
+    "ownerFacingAcceptanceClaimed": false,
+    "finalAcceptanceClaimed": false,
+    "cleanPlatformClaimed": false,
+    "parentCompletionClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerIntentExecutionAuthorized": false
+  },
+  "failures": [],
+  "negativeFailures": []
+}
