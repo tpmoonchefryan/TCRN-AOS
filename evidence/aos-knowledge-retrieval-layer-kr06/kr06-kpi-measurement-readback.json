@@ -1,0 +1,135 @@
+{
+  "ok": true,
+  "route": "route_tcrn_aos_knowledge_retrieval_layer_kr06_kpi_measurement_after_kr05_gate_green_1fa3b8_4a5023_20260708",
+  "command": "pnpm --dir TCRN-AOS kr06:kpi-measurement-proof",
+  "source": {
+    "ownerDecisionWorkflowBasis": "8dce81d2e9a6408d1d139e4d84486497c6caf288",
+    "kr04MaterializationWorkflowBasis": "4a50236257494a225fc26d3e1d9d0cb207e02d42",
+    "incomingAosBasis": "1fa3b80554e32e13733ba377626c2e9d13e25792",
+    "kr05RepairSourceBasis": "06456d9002ccdbb73b98139d1dffb0068f6d8d4b",
+    "sourceHead": "f718fcb7b6ef04b5302872a6a95431e252af4cfd",
+    "sourceFiles": [
+      "package.json",
+      "packages/domain/src/index.ts",
+      "packages/domain/src/knowledge-kpi.ts",
+      "packages/domain/test/kr06-knowledge-kpi.test.mjs",
+      "scripts/kr06-kpi-measurement-proof.mjs"
+    ],
+    "sourceFileDigests": {
+      "package.json": "6cc54024ba6c9e35781b9c1e47b385bf5634eb3e82c9539087a1655b4b54017d",
+      "packages/domain/src/index.ts": "207355187e3b483ff9dfe7eebc6a81a28ed7b3753c26734c37f44c599dfdb5f4",
+      "packages/domain/src/knowledge-kpi.ts": "fa000c870ae4300196de9912acbf654ea2dcc7ff63661ae4212645d08943dccd",
+      "packages/domain/test/kr06-knowledge-kpi.test.mjs": "4e0e70ae76b07ecc7d9bb83533ec886cbdf5f6155a725cd56f981d00ab30a4bd",
+      "scripts/kr06-kpi-measurement-proof.mjs": "f11fb4ae50d82295f83b365ff4aa8570f4c805d89e1ee9a18c41f91c2f862bc8"
+    },
+    "sourceContentDigest": "68c85b0712cf12cd971fde5e7ae6a049ac76747cd66dbff165b1d629b46cf13a"
+  },
+  "metricDefinitionReadback": {
+    "ok": true,
+    "metricNames": [
+      "retrieval_hit_rate",
+      "retrieval_token_total"
+    ],
+    "hitRateDefinition": "unique entry digests pulled by KR-02 search/read and later referenced by the same session's summary/evidence divided by unique entry digests pulled",
+    "tokenTotalDefinition": "audit-derived estimate: search returnedCount multiplied by configured snippet estimate plus by-id read bodyWordCount",
+    "numerator": "unique retrieved entry digests referenced by same-session summary or evidence",
+    "denominator": "unique entry digests retrieved by KR-02 search/read audit events",
+    "tokenTotalSource": "audit_details_returnedCount_and_bodyWordCount",
+    "snippetEstimatePerSearchResult": 24,
+    "targetThisRound": null
+  },
+  "auditDerivedBaselineReadback": {
+    "ok": true,
+    "dataSourceDisposition": "fixture",
+    "dataCompleteness": "audit_and_reference_data",
+    "retrievalEventCounts": {
+      "total": 2,
+      "search": 1,
+      "read": 1
+    },
+    "hitRate": 1,
+    "numeratorReferencedRetrievedEntryDigestCount": 1,
+    "denominatorRetrievedEntryDigestCount": 1,
+    "estimatedRetrievalTokenTotal": 111,
+    "searchSnippetEstimate": 24,
+    "readBodyWordCount": 87,
+    "actualTokenizerUsed": false,
+    "digestOnlyReadback": {
+      "retrievedEntryDigests": [
+        "1940d5854addf9c637e145dc01bad97cf94346f0bf67f7fca1aea5a445a1bbfa"
+      ],
+      "referencedRetrievedEntryDigests": [
+        "1940d5854addf9c637e145dc01bad97cf94346f0bf67f7fca1aea5a445a1bbfa"
+      ]
+    },
+    "rawPromptStored": false,
+    "rawBodyStored": false
+  },
+  "noDataBaselineReadback": {
+    "ok": true,
+    "dataCompleteness": "no_retrieval_data",
+    "hitRate": null,
+    "denominatorRetrievedEntryDigestCount": 0,
+    "estimatedRetrievalTokenTotal": 0,
+    "noDataDoesNotInventQualityConclusion": true
+  },
+  "dataAvailabilityReadback": {
+    "ok": true,
+    "dogfood02RealDataPresentInProof": false,
+    "proofUsesScratchRuntimeAuditEvents": true,
+    "exactNextDataRequirement": "Run KR-02 search/read during Dogfood 2 sessions and link same-session run-summary/evidence entry references for non-fixture baseline measurement.",
+    "qualityAdequacyConclusionMade": false
+  },
+  "privacyNoArtifactNoOverclaimReadback": {
+    "ok": true,
+    "rawLocalPathsRecorded": false,
+    "rawDbDumpRecorded": false,
+    "rawPromptRecorded": false,
+    "rawBodyRecorded": false,
+    "credentialOrPiiStored": false,
+    "committedDbArtifacts": 0,
+    "committedExportArtifacts": 0,
+    "readinessClaimed": false,
+    "releasePublicationPushClaimed": false,
+    "ownerFacingFinalAcceptanceClaimed": false,
+    "retrievalQualityAdequacyClaimed": false
+  },
+  "validation_readbacks": {
+    "noGitArtifactReadback": {
+      "ok": true,
+      "trackedDbArtifactCount": 0,
+      "trackedExportArtifactCount": 0
+    },
+    "receiptShape": "summary_and_readback_pair",
+    "proofUsesScratchProfileOnly": true,
+    "methodSurfaceExpanded": false,
+    "kr05SeedBoundaryExpanded": false
+  },
+  "privacyNoOverclaimScan": {
+    "ok": true,
+    "findings": []
+  },
+  "failures": [],
+  "negativeFailures": [],
+  "noOverclaimFlags": {
+    "kr06KpiMeasurementOnly": true,
+    "kr05SeedBoundaryExpanded": false,
+    "bulkVaultMigrationPerformed": false,
+    "moreThan20PreEpicEntriesCreated": false,
+    "nonEnumeratedCanonicalSeedEntriesCreated": false,
+    "kr04HookChanged": false,
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "tmsMutation": false,
+    "pushRun": false,
+    "batchPushGateRun": false,
+    "releaseReadinessClaimed": false,
+    "productReadinessClaimed": false,
+    "ownerFacingAcceptanceClaimed": false,
+    "finalAcceptanceClaimed": false,
+    "cleanPlatformClaimed": false,
+    "parentCompletionClaimed": false,
+    "liveDispatchAuthorized": false,
+    "ownerIntentExecutionAuthorized": false
+  }
+}
