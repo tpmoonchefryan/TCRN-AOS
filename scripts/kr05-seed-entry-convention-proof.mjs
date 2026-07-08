@@ -18,12 +18,14 @@ import {
 import { createRuntimeTransport } from "../dist/packages/mcp-server/src/index.js";
 import { createDefaultSeed } from "../dist/packages/domain/src/index.js";
 
-const route = "route_tcrn_aos_knowledge_retrieval_layer_kr05_seed_entries_after_kr04_gate_green_4a5023_40ddb3e2_20260708";
+const route = "route_tcrn_aos_knowledge_retrieval_layer_kr05_authority_repair_ilya_after_sable_changes_requested_01c0d9_4a5023_20260708";
 const command = "pnpm --dir TCRN-AOS kr05:seed-entry-convention-proof";
 const ownerDecisionWorkflowBasis = "8dce81d2e9a6408d1d139e4d84486497c6caf288";
 const kr00GateGreenWorkflowBasis = "1d60763f3c0c3eae0fb5465fb50189c4951c48df";
 const kr04MaterializationWorkflowBasis = "4a50236257494a225fc26d3e1d9d0cb207e02d42";
-const incomingAosBasis = "40ddb3e2c1ac79e96eadcad2ae25b8fc12ca5112";
+const initialKr05IncomingAosBasis = "40ddb3e2c1ac79e96eadcad2ae25b8fc12ca5112";
+const previousKr05SourceBasis = "0269a4d6608465ca981c3134455be0b0f2bdbb5b";
+const incomingAosBasis = "01c0d98983aaa9e1b272d336c502730c07c5aa84";
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const platformRoot = dirname(repoRoot);
 const migrationsDir = join(repoRoot, "packages/db/migrations/sqlite");
@@ -79,6 +81,7 @@ try {
     command,
     source,
     seedEntryBoundaryReadback: proof.seedEntryBoundaryReadback,
+    blockerFixReadback: proof.blockerFixReadback,
     searchReadback: proof.searchReadback,
     conventionReadback: proof.conventionReadback,
     negativeBoundaryReadback: proof.negativeBoundaryReadback,
@@ -102,6 +105,7 @@ try {
     extraUnclassifiedReceipts: [],
     readbackReceiptDigest: sha256(stableJson(readbackReceipt)),
     seedEntryBoundaryReadback: proof.seedEntryBoundaryReadback,
+    blockerFixReadback: proof.blockerFixReadback,
     conventionEntryId: proof.conventionReadback.conventionEntryId,
     searchReturnedIds: proof.searchReadback.defaultSearchReturnedIds,
     noOverclaimFlags,
@@ -200,6 +204,15 @@ async function runProof(root) {
   const noGitArtifactReadback = noCommittedArtifacts();
   return {
     ok: true,
+    blockerFixReadback: {
+      ok: true,
+      blockerId: "TCRN-KR05-SABLE-SEED-AUTHORITY-001",
+      exactConventionAllowance: conventionPolicy.decisions[0]?.reason,
+      exactConventionEntryId: kr05FactCardConventionEntryId,
+      spoofedConventionRejected: negativeBoundaryReadback.spoofedCanonicalConventionDenied,
+      spoofedConventionAccepted: negativeBoundaryReadback.spoofedCanonicalConventionAccepted,
+      canonicalConventionExceptionBoundToExactPayload: true
+    },
     seedEntryBoundaryReadback: {
       ok: true,
       ownerSeedEntryListDisposition: kr05OwnerSeedEntryListDisposition,
@@ -270,6 +283,10 @@ async function runProof(root) {
 }
 
 function negativeBoundaryProof(convention) {
+  const spoofedConvention = kr05SeedEntryBatchReadback([createKr05FactCardConventionEntry({
+    id: "knowledge-kr05-spoofed-convention-canonical",
+    title: "KR-05 spoofed convention canonical"
+  })]);
   const nonEnumeratedCanonical = kr05SeedEntryBatchReadback([createKr05FactCardConventionEntry({
     id: "knowledge-kr05-unlisted-canonical-seed",
     title: "KR-05 unlisted canonical seed",
@@ -297,6 +314,9 @@ function negativeBoundaryProof(convention) {
   })));
   return {
     ok: true,
+    spoofedCanonicalConventionDenied: spoofedConvention.decisions[0]?.reason,
+    spoofedCanonicalConventionAccepted: spoofedConvention.spoofedCanonicalConventionAccepted,
+    spoofedCanonicalConventionAcceptedCount: spoofedConvention.acceptedCount,
     nonEnumeratedCanonicalDenied: nonEnumeratedCanonical.decisions[0]?.reason,
     bulkMigrationDenied: bulkMigration.decisions[0]?.reason,
     missingSectionsDenied: missingSections.decisions[0]?.reason,
@@ -338,6 +358,8 @@ function sourceProvenance() {
     ownerDecisionWorkflowBasis,
     kr00GateGreenWorkflowBasis,
     kr04MaterializationWorkflowBasis,
+    initialKr05IncomingAosBasis,
+    previousKr05SourceBasis,
     incomingAosBasis,
     sourceHead,
     sourceFiles,

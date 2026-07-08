@@ -66,6 +66,7 @@ export interface Kr05SeedEntryBatchReadback {
   draftOrFixtureCount: number;
   bulkVaultMigrationAttempted: boolean;
   nonEnumeratedCanonicalSeedEntryAccepted: boolean;
+  spoofedCanonicalConventionAccepted: boolean;
   overLimitAttemptRejected: boolean;
   decisions: Kr05SeedEntryDecision[];
   acceptedEntries: KnowledgeRetrievalEntryInput[];
@@ -125,6 +126,12 @@ export function kr05SeedEntryBatchReadback(
     draftOrFixtureCount: decisions.filter((decision) => decision.accepted && decision.status !== "canonical").length,
     bulkVaultMigrationAttempted: candidates.some((candidate) => candidate.seedKind === "bulk_vault_migration"),
     nonEnumeratedCanonicalSeedEntryAccepted: canonicalSeedEntryCount > 0,
+    spoofedCanonicalConventionAccepted: decisions.some((decision) =>
+      decision.accepted &&
+      decision.status === "canonical" &&
+      decision.seedKind === "fact_card_convention" &&
+      !isExactKr05FactCardConventionCandidate(requireCandidate(candidates, decision.id))
+    ),
     overLimitAttemptRejected: overLimit && decisions.every((decision) => !decision.accepted),
     decisions,
     acceptedEntries
@@ -166,6 +173,9 @@ function decideCandidate(
     return reject(candidate, "kr05_fact_card_required_sections_missing", missingRequiredSections);
   }
   if (candidate.status === "canonical" && candidate.seedKind === "fact_card_convention") {
+    if (!isExactKr05FactCardConventionCandidate(candidate)) {
+      return reject(candidate, "kr05_spoofed_canonical_convention_denied", missingRequiredSections);
+    }
     if (policy.allowCanonicalConventionEntry ?? true) {
       return accept(candidate, "kr05_canonical_convention_entry_allowed_by_plan", missingRequiredSections);
     }
@@ -187,6 +197,32 @@ function decideCandidate(
     return reject(candidate, "kr05_canonical_entry_kind_not_allowed", missingRequiredSections);
   }
   return accept(candidate, "kr05_draft_or_fixture_entry_allowed_for_proof_only", missingRequiredSections);
+}
+
+function isExactKr05FactCardConventionCandidate(candidate: Kr05SeedEntryCandidate): boolean {
+  const expected = createKr05FactCardConventionEntry();
+  return candidate.id === expected.id &&
+    candidate.title === expected.title &&
+    candidate.roleScope === expected.roleScope &&
+    candidate.project === expected.project &&
+    candidate.category === expected.category &&
+    candidate.knowledgeKind === expected.knowledgeKind &&
+    candidate.status === expected.status &&
+    candidate.lastVerified === expected.lastVerified &&
+    candidate.stalenessPolicy === expected.stalenessPolicy &&
+    candidate.sourceRef === expected.sourceRef &&
+    candidate.sourceDigest === expected.sourceDigest &&
+    candidate.summary === expected.summary &&
+    candidate.body === expected.body &&
+    candidate.seedKind === expected.seedKind &&
+    sameStringArray(candidate.tags, expected.tags);
+}
+
+function sameStringArray(left: string[], right: string[]): boolean {
+  const sortedLeft = [...left].sort();
+  const sortedRight = [...right].sort();
+  return sortedLeft.length === sortedRight.length &&
+    sortedLeft.every((value, index) => value === sortedRight[index]);
 }
 
 function missingFactCardSections(body: string): Kr05FactCardSection[] {

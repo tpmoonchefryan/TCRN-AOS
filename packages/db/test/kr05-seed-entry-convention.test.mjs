@@ -45,6 +45,17 @@ test("KR-05 preserves none-initial seed boundary while storing only the fact-car
     });
     assert.deepEqual(conventionSearch.map((entry) => entry.id), [kr05FactCardConventionEntryId]);
 
+    const spoofedConvention = createKr05FactCardConventionEntry({
+      id: "knowledge-kr05-spoofed-convention-canonical",
+      title: "KR-05 spoofed convention canonical"
+    });
+    const spoofedConventionReadback = kr05SeedEntryBatchReadback([spoofedConvention]);
+    assert.equal(spoofedConventionReadback.ok, true);
+    assert.equal(spoofedConventionReadback.acceptedCount, 0);
+    assert.equal(spoofedConventionReadback.canonicalConventionEntryCount, 0);
+    assert.equal(spoofedConventionReadback.spoofedCanonicalConventionAccepted, false);
+    assert.equal(spoofedConventionReadback.decisions[0]?.reason, "kr05_spoofed_canonical_convention_denied");
+
     const draftFixture = createKr05FactCardConventionEntry({
       id: "knowledge-kr05-draft-proof-fixture",
       title: "KR-05 draft proof fixture",
