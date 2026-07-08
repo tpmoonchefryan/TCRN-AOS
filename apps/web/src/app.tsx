@@ -908,14 +908,20 @@ button, input { font: inherit; }
 .tcrn-phase3-readback *,
 .tcrn-phase3-readback__layout,
 .tcrn-phase3-readback__detail,
-.tcrn-phase3-readback__story-summary {
+.tcrn-phase3-readback__story-summary,
+.tcrn-phase3-readback__knowledge,
+.tcrn-phase3-readback__knowledge-entry {
   min-width: 0;
 }
 .tcrn-phase3-readback__filter-band,
 .tcrn-phase3-readback__policy,
 .tcrn-phase3-readback__section-heading,
 .tcrn-phase3-readback__story-card,
-.tcrn-phase3-readback__audit-card {
+.tcrn-phase3-readback__audit-card,
+.tcrn-phase3-readback__knowledge-search,
+.tcrn-phase3-readback__knowledge-detail,
+.tcrn-phase3-readback__knowledge-results,
+.tcrn-phase3-readback__knowledge-entry {
   display: grid;
   gap: var(--tcrn-space-3);
 }
@@ -923,7 +929,9 @@ button, input { font: inherit; }
 .tcrn-phase3-readback__pagination,
 .tcrn-phase3-readback__status-line,
 .tcrn-phase3-readback__empty,
-.tcrn-phase3-readback__subtask {
+.tcrn-phase3-readback__subtask,
+.tcrn-phase3-readback__knowledge-form,
+.tcrn-phase3-readback__knowledge-result-head {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -944,6 +952,35 @@ button, input { font: inherit; }
   display: grid;
   gap: var(--tcrn-space-3);
 }
+.tcrn-phase3-readback__knowledge {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(320px, 1fr);
+  gap: var(--tcrn-space-4);
+  align-items: start;
+}
+.tcrn-phase3-readback__knowledge-label {
+  font-weight: var(--tcrn-font-weight-semibold);
+}
+.tcrn-phase3-readback__knowledge-input {
+  flex: 1 1 220px;
+  max-width: 34rem;
+  min-height: 2.25rem;
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-2);
+  padding: 0 var(--tcrn-space-3);
+  background: var(--tcrn-color-surface-panel);
+  color: var(--tcrn-color-text-primary);
+}
+.tcrn-phase3-readback__knowledge-result {
+  display: grid;
+  gap: var(--tcrn-space-2);
+  border-block-start: 1px solid var(--tcrn-color-border-subtle);
+  padding-block-start: var(--tcrn-space-3);
+}
+.tcrn-phase3-readback__knowledge-body {
+  display: grid;
+  gap: var(--tcrn-space-2);
+}
 .tcrn-phase3-readback__subtasks {
   display: grid;
   gap: var(--tcrn-space-2);
@@ -952,7 +989,8 @@ button, input { font: inherit; }
   border-color: var(--tcrn-color-border-warning);
 }
 @media (max-width: 820px) {
-  .tcrn-phase3-readback__layout {
+  .tcrn-phase3-readback__layout,
+  .tcrn-phase3-readback__knowledge {
     grid-template-columns: minmax(0, 1fr);
   }
 }

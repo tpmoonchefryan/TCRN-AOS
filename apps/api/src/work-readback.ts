@@ -4,7 +4,13 @@ import type { BackupListReadback } from "../../../packages/db/src/index.js";
 const WORK_READBACK_SURFACE = "work.readback";
 const DEFAULT_RESPONSE_BUDGET_BYTES = 16_384;
 const AUDIT_PAGE_LIMIT = 5;
-const TICKET_READBACK_METHODS = ["aos.ticket.list", "aos.audit.query", "aos.backup.list"] as const;
+const TICKET_READBACK_METHODS = [
+  "aos.ticket.list",
+  "aos.audit.query",
+  "aos.backup.list",
+  "aos.knowledge.search",
+  "aos.knowledge.entry.read"
+] as const;
 
 const noOverclaimFlags = {
   serviceProofOnly: true,
@@ -53,6 +59,20 @@ const backupQueryKeys = new Set([
   "limit"
 ]);
 
+const knowledgeSearchQueryKeys = new Set([
+  "query",
+  "project",
+  "category",
+  "limit",
+  "cursor",
+  "includeDraft",
+  "includeStale"
+]);
+
+const knowledgeEntryQueryKeys = new Set([
+  "id"
+]);
+
 const forbiddenClientAuthorityKeys = new Set([
   "actor",
   "employeeid",
@@ -80,6 +100,12 @@ export interface WorkReadbackApiResult {
 export interface WorkReadbackApiOptions {
   responseBudgetBytes?: number;
   backupListReadback?: BackupListReadback | (() => BackupListReadback);
+  knowledgeReadback?: KnowledgeReadbackProvider;
+}
+
+export interface KnowledgeReadbackProvider {
+  search(params: Record<string, unknown>): Record<string, unknown>;
+  read(params: Record<string, unknown>): Record<string, unknown>;
 }
 
 export function createWorkReadbackApiResponse(
@@ -116,6 +142,24 @@ export function createWorkReadbackApiResponse(
         }
       }, options.responseBudgetBytes);
     }
+    if (path === "/api/work/readback/knowledge/search") {
+      return enforceResponseBudget({
+        statusCode: 200,
+        body: {
+          ...commonEnvelope,
+          ...knowledgeSearchReadbackFromQuery(query, options)
+        }
+      }, options.responseBudgetBytes);
+    }
+    if (path === "/api/work/readback/knowledge/entry") {
+      return enforceResponseBudget({
+        statusCode: 200,
+        body: {
+          ...commonEnvelope,
+          ...knowledgeEntryReadbackFromQuery(query, options)
+        }
+      }, options.responseBudgetBytes);
+    }
     if (path === "/api/work/readback/policy") {
       rejectForbiddenClientAuthority(query);
       rejectUnsupportedQueryKeys(query, new Set<string>());
@@ -126,6 +170,13 @@ export function createWorkReadbackApiResponse(
           ok: true,
           method: "aos.policy.read",
           readbackMethods: TICKET_READBACK_METHODS,
+          readbackEndpoints: [
+            "/api/work/readback/tickets",
+            "/api/work/readback/audit",
+            "/api/work/readback/backups",
+            "/api/work/readback/knowledge/search",
+            "/api/work/readback/knowledge/entry"
+          ],
           optionalPolicyRead: true,
           fullGatewayMethodListExposed: false,
           responseBudgetBytes: options.responseBudgetBytes ?? DEFAULT_RESPONSE_BUDGET_BYTES
@@ -211,6 +262,68 @@ function backupReadbackFromQuery(query: URLSearchParams, options: WorkReadbackAp
   };
 }
 
+function knowledgeSearchReadbackFromQuery(query: URLSearchParams, options: WorkReadbackApiOptions): Record<string, unknown> {
+  rejectForbiddenClientAuthority(query);
+  rejectUnsupportedQueryKeys(query, knowledgeSearchQueryKeys);
+  const provider = requireKnowledgeReadbackProvider(options);
+  const params: Record<string, unknown> = {};
+  for (const key of ["query", "project", "category", "cursor"] as const) {
+    const value = singleQueryValue(query, key);
+    if (value !== undefined) {
+      params[key] = value;
+    }
+  }
+  const limit = singleQueryValue(query, "limit");
+  if (limit !== undefined) {
+    params.limit = parsePositiveInteger(limit, "invalid_knowledge_search_limit");
+  } else {
+    params.limit = 10;
+  }
+  const includeDraft = singleQueryValue(query, "includeDraft");
+  if (includeDraft !== undefined) {
+    params.includeDraft = parseBooleanFlag(includeDraft, "invalid_knowledge_include_draft");
+  }
+  const includeStale = singleQueryValue(query, "includeStale");
+  if (includeStale !== undefined) {
+    params.includeStale = parseBooleanFlag(includeStale, "invalid_knowledge_include_stale");
+  }
+  return sanitizeKnowledgeResult(provider.search(params), false);
+}
+
+function knowledgeEntryReadbackFromQuery(query: URLSearchParams, options: WorkReadbackApiOptions): Record<string, unknown> {
+  rejectForbiddenClientAuthority(query);
+  rejectUnsupportedQueryKeys(query, knowledgeEntryQueryKeys);
+  const id = singleQueryValue(query, "id");
+  if (!id) {
+    throw new WorkReadbackError("knowledge_entry_id_required");
+  }
+  const provider = requireKnowledgeReadbackProvider(options);
+  return sanitizeKnowledgeResult(provider.read({ id }), true);
+}
+
+function requireKnowledgeReadbackProvider(options: WorkReadbackApiOptions): KnowledgeReadbackProvider {
+  if (!options.knowledgeReadback) {
+    throw new WorkReadbackError("knowledge_readback_unavailable");
+  }
+  return options.knowledgeReadback;
+}
+
+function sanitizeKnowledgeResult(result: Record<string, unknown>, bodyAllowed: boolean): Record<string, unknown> {
+  const serialized = JSON.stringify(result);
+  if (/"record_json"|record_json/i.test(serialized)) {
+    throw new WorkReadbackError("knowledge_raw_record_json_blocked");
+  }
+  if (!bodyAllowed && /"body"\s*:/.test(serialized)) {
+    throw new WorkReadbackError("knowledge_body_requires_entry_read");
+  }
+  return {
+    ...result,
+    rawRecordJsonReturned: false,
+    fullGatewayMethodListExposed: false,
+    bodyReturnedOnlyByExplicitEntryRead: bodyAllowed
+  };
+}
+
 function rejectForbiddenClientAuthority(query: URLSearchParams): void {
   const forbidden = [...query.keys()]
     .filter((key) => forbiddenClientAuthorityKeys.has(key.toLowerCase()))
@@ -245,6 +358,12 @@ function parsePositiveInteger(value: string, reason: string): number {
     throw new WorkReadbackError(reason);
   }
   return Number(value);
+}
+
+function parseBooleanFlag(value: string, reason: string): boolean {
+  if (value === "true") return true;
+  if (value === "false") return false;
+  throw new WorkReadbackError(reason);
 }
 
 function parseAuditLimit(value: string | undefined): number {
@@ -318,6 +437,13 @@ function normalizeWorkReadbackError(error: unknown): WorkReadbackApiResult {
     message.startsWith("invalid_ticket_list_filter:")
   ) {
     return errorResponse(400, message.includes(":") ? message.split(":")[0]! : message);
+  }
+  if (typeof error === "object" && error !== null && "reason" in error) {
+    const reason = String((error as { reason: unknown }).reason);
+    return errorResponse(400, reason);
+  }
+  if (/^(knowledge|transport|client_supplied)_/.test(message)) {
+    return errorResponse(400, message);
   }
   return errorResponse(500, "work_readback_failed", { sourceDigest: digest({ message }) });
 }

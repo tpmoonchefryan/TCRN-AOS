@@ -32,6 +32,7 @@
     "bk02:logical-export-proof": "pnpm build && node scripts/bk02-logical-export-proof.mjs",
     "kr01:knowledge-schema-fts-proof": "pnpm build && node scripts/kr01-knowledge-schema-fts-proof.mjs",
     "kr02:mcp-method-surface-proof": "pnpm build && node scripts/kr02-mcp-method-surface-proof.mjs",
+    "kr03:readback-ui-proof": "pnpm build && node scripts/kr03-readback-ui-proof.mjs",
     "phase3:readback-api-proof": "pnpm build && node scripts/phase3-readback-api-proof.mjs",
     "phase3:frontend-readback-proof": "pnpm build && node scripts/phase3-frontend-readback-proof.mjs",
     "service:start": "pnpm build && node scripts/service-start.mjs",

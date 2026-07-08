@@ -84,9 +84,52 @@ test("work readback facade exposes ticket, audit, and policy reads with safe env
     const policy = await getJson(service.url, "/api/work/readback/policy");
     assert.equal(policy.status, 200);
     assert.equal(policy.body.method, "aos.policy.read");
-    assert.deepEqual(policy.body.readbackMethods, ["aos.ticket.list", "aos.audit.query", "aos.backup.list"]);
+    assert.deepEqual(policy.body.readbackMethods, [
+      "aos.ticket.list",
+      "aos.audit.query",
+      "aos.backup.list",
+      "aos.knowledge.search",
+      "aos.knowledge.entry.read"
+    ]);
     assert.equal(policy.body.fullGatewayMethodListExposed, false);
     assert.equal(JSON.stringify(policy.body).includes("aos.work_index"), false);
+
+    const knowledgeSearch = await getJson(service.url, "/api/work/readback/knowledge/search?query=KR03&project=TCRN-AOS&limit=1");
+    assert.equal(knowledgeSearch.status, 200);
+    assert.equal(knowledgeSearch.body.surface, "work.readback");
+    assert.equal(knowledgeSearch.body.method, "aos.knowledge.search");
+    assert.equal(knowledgeSearch.body.items.length, 1);
+    assert.equal(knowledgeSearch.body.items[0].bodyIncluded, false);
+    assert.equal(JSON.stringify(knowledgeSearch.body).includes("\"body\":"), false);
+    assert.equal(knowledgeSearch.body.rawRecordJsonReturned, false);
+    assert.equal(knowledgeSearch.body.fullGatewayMethodListExposed, false);
+    assert.equal(knowledgeSearch.body.page.defaultCanonicalFilterApplied, true);
+    assert.equal(knowledgeSearch.body.page.defaultFreshnessFilterApplied, true);
+
+    const knowledgeEntryId = knowledgeSearch.body.items[0].id;
+    const knowledgeEntry = await getJson(service.url, `/api/work/readback/knowledge/entry?id=${encodeURIComponent(knowledgeEntryId)}`);
+    assert.equal(knowledgeEntry.status, 200);
+    assert.equal(knowledgeEntry.body.method, "aos.knowledge.entry.read");
+    assert.equal(knowledgeEntry.body.entry.id, knowledgeEntryId);
+    assert.equal(knowledgeEntry.body.entry.bodyIncluded, true);
+    assert.equal(typeof knowledgeEntry.body.entry.body, "string");
+    assert.equal(knowledgeEntry.body.rawRecordJsonReturned, false);
+    assert.equal(knowledgeEntry.body.bodyReturnedOnlyByExplicitEntryRead, true);
+
+    const knowledgeClientAuthority = await getJson(service.url, "/api/work/readback/knowledge/search?query=KR03&employeeId=employee-sable");
+    assert.equal(knowledgeClientAuthority.status, 400);
+    assert.equal(knowledgeClientAuthority.body.reason, "client_authority_denied");
+
+    const knowledgeRoleScope = await getJson(service.url, "/api/work/readback/knowledge/search?query=KR03&roleScope=security");
+    assert.equal(knowledgeRoleScope.status, 400);
+    assert.equal(knowledgeRoleScope.body.reason, "unsupported_filter");
+
+    const knowledgeMissingEntry = await getJson(service.url, "/api/work/readback/knowledge/entry");
+    assert.equal(knowledgeMissingEntry.status, 400);
+    assert.equal(knowledgeMissingEntry.body.reason, "knowledge_entry_id_required");
+
+    const knowledgeWritePath = await fetch(`${service.url}/api/work/readback/knowledge/search`, { method: "POST" });
+    assert.equal(knowledgeWritePath.status, 405);
 
     const post = await fetch(`${service.url}/api/work/readback/tickets`, { method: "POST" });
     assert.equal(post.status, 405);

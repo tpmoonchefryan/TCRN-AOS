@@ -22,9 +22,12 @@ import type { TcrnLocale } from "@tcrn/ui-copy-state";
 const ticketEndpoint = "/api/work/readback/tickets";
 const auditEndpoint = "/api/work/readback/audit";
 const policyEndpoint = "/api/work/readback/policy";
+const knowledgeSearchEndpoint = "/api/work/readback/knowledge/search";
+const knowledgeEntryEndpoint = "/api/work/readback/knowledge/entry";
 const ticketDefaultLimit = 10;
 const ticketMaxLimit = 20;
 const auditDefaultLimit = 5;
+const knowledgeDefaultLimit = 5;
 
 const ticketQueryPassThroughKeys = new Set([
   "initiativeId",
@@ -118,8 +121,64 @@ interface PolicyReadback {
   ok: true;
   method: "aos.policy.read";
   readbackMethods: string[];
+  readbackEndpoints?: string[];
   fullGatewayMethodListExposed: boolean;
   responseBudgetBytes?: number;
+}
+
+interface KnowledgeSearchReadback {
+  ok: true;
+  method: "aos.knowledge.search";
+  items: KnowledgeSearchItem[];
+  page: KnowledgeSearchPage;
+  auditEventId?: string;
+  bodyReturned?: boolean;
+  rawRecordJsonReturned?: boolean;
+  bodyReturnedOnlyByExplicitEntryRead?: boolean;
+}
+
+interface KnowledgeEntryReadback {
+  ok: true;
+  method: "aos.knowledge.entry.read";
+  entry: KnowledgeEntryDetail;
+  auditEventId?: string;
+  rawRecordJsonReturned?: boolean;
+  bodyReturnedOnlyByExplicitEntryRead?: boolean;
+}
+
+interface KnowledgeSearchPage {
+  limit: number;
+  returnedCount: number;
+  hasMore: boolean;
+  nextCursor?: string | null;
+  filterDigest?: string;
+  searchMode?: string;
+  defaultCanonicalFilterApplied?: boolean;
+  defaultFreshnessFilterApplied?: boolean;
+}
+
+interface KnowledgeSearchItem {
+  id: string;
+  title: string;
+  roleScope?: string;
+  project?: string;
+  category?: string;
+  knowledgeKind?: string;
+  status?: string;
+  stale?: boolean;
+  lastVerified?: string;
+  sourceDigest?: string;
+  sourceRefDigest?: string;
+  tags?: string[];
+  summary?: string;
+  snippet?: string;
+  accessCount?: number;
+  bodyIncluded?: boolean;
+}
+
+interface KnowledgeEntryDetail extends KnowledgeSearchItem {
+  body?: string;
+  bodyIncluded?: boolean;
 }
 
 interface ReadbackError {
@@ -140,6 +199,8 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
   const [ticketsState, setTicketsState] = useState<RemoteState<TicketListReadback>>({ status: "loading" });
   const [auditState, setAuditState] = useState<RemoteState<AuditReadback>>({ status: "idle" });
   const [policyState, setPolicyState] = useState<RemoteState<PolicyReadback>>({ status: "loading" });
+  const [knowledgeSearchState, setKnowledgeSearchState] = useState<RemoteState<KnowledgeSearchReadback>>({ status: "loading" });
+  const [knowledgeEntryState, setKnowledgeEntryState] = useState<RemoteState<KnowledgeEntryReadback>>({ status: "idle" });
 
   useEffect(() => {
     const onPopState = () => setSearch(readSearchParams());
@@ -148,7 +209,10 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
   }, []);
 
   const ticketApiQuery = useMemo(() => ticketApiQueryFromSearch(search), [search]);
+  const knowledgeQuery = search.get("knowledgeQuery") || "KR03 readback";
+  const knowledgeApiQuery = useMemo(() => knowledgeApiQueryFromSearch(search, knowledgeQuery), [knowledgeQuery, search]);
   const selectedStoryFromUrl = search.get("storyId") ?? undefined;
+  const selectedKnowledgeIdFromUrl = search.get("knowledgeEntryId") ?? undefined;
 
   useEffect(() => {
     let cancelled = false;
@@ -179,10 +243,29 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+    setKnowledgeSearchState({ status: "loading" });
+    fetchReadback<KnowledgeSearchReadback>(`${knowledgeSearchEndpoint}?${knowledgeApiQuery}`)
+      .then((data) => {
+        if (!cancelled) setKnowledgeSearchState({ status: "success", data });
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) setKnowledgeSearchState(toReadbackError(error));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [knowledgeApiQuery]);
+
   const selectedStory = useMemo(() => {
     if (ticketsState.status !== "success") return undefined;
     return ticketsState.data.rows.find((row) => row.storyId === selectedStoryFromUrl) ?? ticketsState.data.rows[0];
   }, [selectedStoryFromUrl, ticketsState]);
+  const selectedKnowledge = useMemo(() => {
+    if (knowledgeSearchState.status !== "success") return undefined;
+    return knowledgeSearchState.data.items.find((item) => item.id === selectedKnowledgeIdFromUrl) ?? knowledgeSearchState.data.items[0];
+  }, [knowledgeSearchState, selectedKnowledgeIdFromUrl]);
 
   useEffect(() => {
     let cancelled = false;
@@ -208,6 +291,29 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
     };
   }, [selectedStory]);
 
+  useEffect(() => {
+    let cancelled = false;
+    if (!selectedKnowledge) {
+      setKnowledgeEntryState({ status: "idle" });
+      return () => {
+        cancelled = true;
+      };
+    }
+    const entryQuery = new URLSearchParams();
+    entryQuery.set("id", selectedKnowledge.id);
+    setKnowledgeEntryState({ status: "loading" });
+    fetchReadback<KnowledgeEntryReadback>(`${knowledgeEntryEndpoint}?${entryQuery.toString()}`)
+      .then((data) => {
+        if (!cancelled) setKnowledgeEntryState({ status: "success", data });
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) setKnowledgeEntryState(toReadbackError(error));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedKnowledge]);
+
   const ticketRows = ticketsState.status === "success"
     ? ticketsState.data.rows.map((row) => ticketRowForWorkList(row, selectedStory?.storyId, search, routeHref, locale))
     : [];
@@ -215,8 +321,12 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
   const selectedStoryTitle = selectedStory?.storyTitle ?? (isZh ? "等待选择故事" : "Waiting for story selection");
   const ticketError = ticketsState.status === "error" ? ticketsState : undefined;
   const auditError = auditState.status === "error" ? auditState : undefined;
+  const knowledgeSearchError = knowledgeSearchState.status === "error" ? knowledgeSearchState : undefined;
+  const knowledgeEntryError = knowledgeEntryState.status === "error" ? knowledgeEntryState : undefined;
   const policyMethods = policyState.status === "success" ? policyState.data.readbackMethods : ["aos.ticket.list", "aos.audit.query"];
   const page = ticketsState.status === "success" ? ticketsState.data.page : undefined;
+  const knowledgePage = knowledgeSearchState.status === "success" ? knowledgeSearchState.data.page : undefined;
+  const knowledgeRows = knowledgeSearchState.status === "success" ? knowledgeSearchState.data.items : [];
 
   return (
     <div
@@ -225,7 +335,13 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
       data-readback-api-surface="work.readback"
       data-readback-api-tickets={ticketEndpoint}
       data-readback-api-audit={auditEndpoint}
+      data-readback-api-knowledge-search={knowledgeSearchEndpoint}
+      data-readback-api-knowledge-entry={knowledgeEntryEndpoint}
       data-readback-api-policy={policyEndpoint}
+      data-kr03-readonly-knowledge-view="true"
+      data-kr03-edit-affordances="absent"
+      data-kr03-propose-affordance="absent"
+      data-kr03-canonical-promotion-affordance="absent"
       data-generic-mcp-facade="unused"
       data-generic-gateway-facade="unused"
       data-method-dispatch-facade="absent"
@@ -262,6 +378,12 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
             ...(typeof page?.returnedCount === "number" ? { count: page.returnedCount } : {})
           },
           { id: "audit", label: isZh ? "故事审计" : "Story audit", current: false, disabled: !selectedStory },
+          {
+            id: "knowledge",
+            label: isZh ? "知识" : "Knowledge",
+            current: false,
+            ...(typeof knowledgePage?.returnedCount === "number" ? { count: knowledgePage.returnedCount } : {})
+          },
           { id: "ds-gaps", label: isZh ? "DS 差距" : "DS gaps", current: false, disabled: true }
         ]}
       />
@@ -334,6 +456,65 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
         </div>
       </section>
 
+      <section
+        className="tcrn-phase3-readback__knowledge"
+        aria-label={isZh ? "只读知识搜索和详情" : "Read-only knowledge search and detail"}
+        data-kr03-knowledge-search-ui="true"
+        data-kr03-knowledge-detail-ui="true"
+        data-kr03-write-ui="absent"
+        data-kr03-gateway-list-ui="absent"
+      >
+        <Surface className="tcrn-phase3-readback__knowledge-search">
+          <div className="tcrn-phase3-readback__section-heading">
+            <Heading level={2}>{isZh ? "知识读回" : "Knowledge readback"}</Heading>
+            <Text>{isZh ? "通过 /work/readback 只读门面搜索 KR-02 知识片段。" : "Search KR-02 knowledge snippets through the read-only /work/readback facade."}</Text>
+          </div>
+          <form className="tcrn-phase3-readback__knowledge-form" method="get" action={routeHref("/work/readback")} role="search" data-kr03-search-form="read-only">
+            <label className="tcrn-phase3-readback__knowledge-label" htmlFor="knowledgeQuery">
+              {isZh ? "搜索知识" : "Search knowledge"}
+            </label>
+            <input
+              id="knowledgeQuery"
+              className="tcrn-phase3-readback__knowledge-input"
+              name="knowledgeQuery"
+              type="search"
+              defaultValue={knowledgeQuery}
+              autoComplete="off"
+            />
+            <Button type="submit" size="sm">{isZh ? "搜索" : "Search"}</Button>
+          </form>
+          {knowledgeSearchError ? <ReadbackErrorPanel error={knowledgeSearchError} locale={locale} endpoint={knowledgeSearchEndpoint} /> : null}
+          {knowledgeSearchState.status === "loading" ? (
+            <StatusLine locale={locale} text={isZh ? "正在搜索知识" : "Searching knowledge"} />
+          ) : knowledgeRows.length > 0 ? (
+            <KnowledgeResultList
+              items={knowledgeRows}
+              selectedId={selectedKnowledge?.id}
+              search={search}
+              routeHref={routeHref}
+              locale={locale}
+            />
+          ) : (
+            <EmptyState locale={locale} text={isZh ? "没有匹配的知识片段。" : "No knowledge snippets match the current query."} />
+          )}
+        </Surface>
+
+        <Surface className="tcrn-phase3-readback__knowledge-detail" data-kr03-entry-detail-body="explicit-read-only-fetch">
+          <div className="tcrn-phase3-readback__section-heading">
+            <Heading level={2}>{isZh ? "知识详情" : "Knowledge detail"}</Heading>
+            <Text>{isZh ? "所选条目的正文、标签和验证元数据。" : "Body, tags, and verification metadata for the selected entry."}</Text>
+          </div>
+          {knowledgeEntryError ? <ReadbackErrorPanel error={knowledgeEntryError} locale={locale} endpoint={knowledgeEntryEndpoint} /> : null}
+          {knowledgeEntryState.status === "loading" ? (
+            <StatusLine locale={locale} text={isZh ? "正在读取知识详情" : "Loading knowledge detail"} />
+          ) : knowledgeEntryState.status === "success" ? (
+            <KnowledgeEntryDetailView readback={knowledgeEntryState.data} locale={locale} />
+          ) : (
+            <EmptyState locale={locale} text={isZh ? "选择知识结果以读取详情。" : "Select a knowledge result to read the entry detail."} />
+          )}
+        </Surface>
+      </section>
+
       <EnvironmentBanner
         label={isZh ? "只读服务证明；未声明 readiness" : "Read-only service proof; readiness not claimed"}
         state={{ state: "local_only" }}
@@ -357,6 +538,24 @@ function ticketApiQueryFromSearch(search: URLSearchParams): string {
   }
   if (!query.has("limit")) {
     query.set("limit", String(ticketDefaultLimit));
+  }
+  return query.toString();
+}
+
+function knowledgeApiQueryFromSearch(search: URLSearchParams, knowledgeQuery: string): string {
+  const query = new URLSearchParams();
+  query.set("query", knowledgeQuery);
+  query.set("project", "TCRN-AOS");
+  query.set("limit", String(knowledgeDefaultLimit));
+  const cursor = search.get("knowledgeCursor");
+  if (cursor) {
+    query.set("cursor", cursor);
+  }
+  if (search.get("includeDraft") === "true") {
+    query.set("includeDraft", "true");
+  }
+  if (search.get("includeStale") === "true") {
+    query.set("includeStale", "true");
   }
   return query.toString();
 }
@@ -394,6 +593,14 @@ function humanReason(reason: string): string {
     invalid_ticket_list_limit: "The ticket page limit is invalid.",
     invalid_audit_cursor: "The audit cursor is invalid.",
     audit_limit_exceeded: "The audit page limit exceeds the readback cap.",
+    invalid_knowledge_search_limit: "The knowledge page limit is invalid.",
+    invalid_knowledge_include_draft: "The draft include flag is invalid.",
+    invalid_knowledge_include_stale: "The stale include flag is invalid.",
+    knowledge_entry_id_required: "Knowledge detail requires a selected entry id.",
+    knowledge_readback_unavailable: "Knowledge readback is unavailable on this service.",
+    knowledge_role_scope_mismatch: "The trusted actor is not allowed to read that knowledge scope.",
+    knowledge_entry_not_found: "The selected knowledge entry was not found.",
+    knowledge_body_requires_entry_read: "Knowledge body text is only returned by explicit entry detail fetch.",
     readback_response_budget_exceeded: "The response budget was exceeded; no partial data was shown."
   };
   return labels[reason] ?? "The readback request failed closed.";
@@ -597,6 +804,77 @@ function PaginationControls({
         </Button>
       )}
     </nav>
+  );
+}
+
+function KnowledgeResultList({
+  items,
+  selectedId,
+  search,
+  routeHref,
+  locale
+}: {
+  items: KnowledgeSearchItem[];
+  selectedId?: string | undefined;
+  search: URLSearchParams;
+  routeHref: (path: string) => string;
+  locale: TcrnLocale;
+}) {
+  const isZh = locale === "zh-CN";
+  return (
+    <div className="tcrn-phase3-readback__knowledge-results" data-kr03-result-list="snippet-grade">
+      {items.map((item) => (
+        <article
+          key={item.id}
+          className="tcrn-phase3-readback__knowledge-result"
+          data-kr03-result-selected={selectedId === item.id ? "true" : "false"}
+          data-kr03-result-body-included={item.bodyIncluded === true ? "true" : "false"}
+        >
+          <div className="tcrn-phase3-readback__knowledge-result-head">
+            <a href={readbackHref(routeHref, new URLSearchParams(search), { knowledgeEntryId: item.id })}>
+              {item.title}
+            </a>
+            <Badge tone={item.status === "canonical" ? "positive" : "neutral"}>{item.status ?? "unknown"}</Badge>
+          </div>
+          <Text>{item.snippet ?? item.summary ?? (isZh ? "无摘要" : "No summary")}</Text>
+          <div className="tcrn-phase3-readback__tokens">
+            <MachineTokenCell token={item.id} kind="generic" copyable={false} />
+            <MachineTokenCell token={item.category ?? "knowledge"} kind="generic" copyable={false} />
+            {(item.tags ?? []).slice(0, 3).map((tag) => <Badge key={tag} tone="neutral">{tag}</Badge>)}
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function KnowledgeEntryDetailView({ readback, locale }: { readback: KnowledgeEntryReadback; locale: TcrnLocale }) {
+  const isZh = locale === "zh-CN";
+  const entry = readback.entry;
+  return (
+    <div className="tcrn-phase3-readback__knowledge-entry" data-kr03-entry-read-method={readback.method}>
+      <MetadataRail
+        title={isZh ? "知识记录" : "Knowledge record"}
+        items={[
+          { key: "entry", label: "entryId", value: <MachineTokenCell token={entry.id} kind="generic" copyable={false} /> },
+          { key: "method", label: isZh ? "读取方法" : "Read method", value: readback.method },
+          { key: "scope", label: "roleScope", value: entry.roleScope ?? "trusted actor" },
+          { key: "status", label: isZh ? "状态" : "Status", value: <Badge tone={entry.status === "canonical" ? "positive" : "neutral"}>{entry.status ?? "unknown"}</Badge> },
+          { key: "fresh", label: isZh ? "陈旧" : "Stale", value: entry.stale ? (isZh ? "是" : "yes") : (isZh ? "否" : "no") },
+          { key: "source", label: isZh ? "来源摘要" : "Source digest", value: entry.sourceDigest ?? "digest" },
+          { key: "audit", label: "auditEventId", value: readback.auditEventId ?? "n/a" }
+        ]}
+      />
+      <div className="tcrn-phase3-readback__knowledge-body" data-kr03-entry-body-visible={entry.bodyIncluded === true ? "true" : "false"}>
+        <Heading level={3}>{entry.title}</Heading>
+        <Text>{entry.body ?? entry.summary ?? (isZh ? "没有正文。" : "No body returned.")}</Text>
+      </div>
+      <div className="tcrn-phase3-readback__tokens" data-kr03-no-edit-affordances="true">
+        <Badge tone="neutral">{isZh ? "只读" : "Read-only"}</Badge>
+        <Badge tone="neutral">{isZh ? "服务证明" : "Service proof"}</Badge>
+        <Badge tone="neutral">KR-03</Badge>
+      </div>
+    </div>
   );
 }
 
