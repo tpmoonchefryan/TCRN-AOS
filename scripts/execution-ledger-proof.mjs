@@ -214,7 +214,21 @@ async function proveNegativeCases(profileRoot, markerPath, commandPath, ledgerRe
   const conflictPath = join(dirname(commandPath), "conflict-command.json");
   await writeFile(stalePath, JSON.stringify({
     ...original,
-    events: original.events.map((event) => ({ ...event, eventKey: event.eventKey + "-stale" }))
+    events: original.events.map((event) => {
+      const sourceEvidenceDigest = digest({ prior: event.sourceEvidenceDigest, variant: "stale" });
+      return {
+        ...event,
+        eventKey: deriveExecutionLedgerEventKey({
+          projectId: original.projectId,
+          targetType: original.targetType,
+          targetId: original.targetId,
+          routeId: original.routeId,
+          eventType: event.type,
+          sourceEvidenceDigest
+        }),
+        sourceEvidenceDigest
+      };
+    })
   }), "utf8");
   await writeFile(conflictPath, JSON.stringify({
     ...original,
