@@ -2,10 +2,10 @@
   "schema": "tcrn.aos.executionLedgerProofReadback.v1",
   "receiptName": "ds2-g0-execution-ledger-readback.json",
   "ok": true,
-  "generatedAt": "2026-07-10T09:53:45.251Z",
+  "generatedAt": "2026-07-10T09:54:55.993Z",
   "route": "route_tcrn_aos_execution_ledger_transition_cli_for_ds2_G0_after_identity_adoption_20260710",
   "workflowBasis": "bb9c8a1a4676318afcc296c10684cea83c427f16",
-  "sourceHead": "c4d78f37b18f3de19da446d886d5f5d8864de387",
+  "sourceHead": "c4084f8e35eec694c3cde6dfdd2cbbb8f2f1ba82",
   "incomingAosBasis": "5909743c8992517660971aa1c0e1bcf2fca5c967",
   "command": "pnpm --dir TCRN-AOS execution:ledger --command <json> --profile-root <dir> --owner-marker <json-or-file> --readback <json>",
   "g0Readback": {
@@ -26,39 +26,39 @@
       {
         "eventType": "route_sent",
         "eventKey": "ds2-g0-route_sent-v1",
-        "auditEventId": "audit_a49db4de0931661d",
+        "auditEventId": "audit_5804fbc7a7ef7f0f",
         "commentId": "comment_b046d06ffd0f70a6"
       },
       {
         "eventType": "first_output",
         "eventKey": "ds2-g0-first_output-v1",
-        "auditEventId": "audit_a5bd7cf49282eb42",
+        "auditEventId": "audit_c5f06125b393e3ef",
         "commentId": "comment_be609b2848cbc84a"
       },
       {
         "eventType": "interrupted",
         "eventKey": "ds2-g0-interrupted-v1",
-        "auditEventId": "audit_111abf16fa75f777",
+        "auditEventId": "audit_aea9aa6630af18bd",
         "commentId": "comment_b20940f76791c1d8"
       },
       {
         "eventType": "recovery_started",
         "eventKey": "ds2-g0-recovery_started-v1",
-        "auditEventId": "audit_4a3c2e0cf0189668",
+        "auditEventId": "audit_047181e11043c6d6",
         "commentId": "comment_af74b406cd45124c"
       }
     ],
-    "firstAuditEventCount": 8,
+    "firstAuditEventCount": 7,
     "firstCommentCount": 4,
-    "replayAuditEventCount": 8,
+    "replayAuditEventCount": 7,
     "replayCommentCount": 4
   },
   "restartPersistence": {
     "ok": true,
     "targetExists": true,
-    "databaseDigestBeforeReopen": "2c8b8b20effd04aba7b282d7ae3bcf493cf2c48aaa1b62d95ff9de05a45ea88a",
-    "databaseDigestAfterReopen": "2c8b8b20effd04aba7b282d7ae3bcf493cf2c48aaa1b62d95ff9de05a45ea88a",
-    "auditEventsForTarget": 8,
+    "databaseDigestBeforeReopen": "94af260ccfadadb009f38b4dcbf6173f9c39c781fcddf8072fde9ec62e4f48ef",
+    "databaseDigestAfterReopen": "94af260ccfadadb009f38b4dcbf6173f9c39c781fcddf8072fde9ec62e4f48ef",
+    "auditEventsForTarget": 7,
     "commentsForTarget": 4
   },
   "eventKeyReplay": {
