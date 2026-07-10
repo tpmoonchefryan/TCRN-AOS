@@ -1,0 +1,161 @@
+{
+  "receiptName": "plan-project-cli-readback.json",
+  "schema": "tcrn.aos.planProjectionCliProof.v1",
+  "ok": true,
+  "route": "route_tcrn_total_repair_aos_generic_plan_projection_cli_followup_20260710",
+  "sourceHead": "4877c5eebc34d2872f88904704388b3dae95ad58",
+  "command": "pnpm --dir TCRN-AOS plan:project-proof",
+  "argumentContract": {
+    "command": "pnpm --dir TCRN-AOS plan:project -- --manifest <absolute-json> --profile-root <absolute-dir> --owner-marker <inline-json-or-absolute-json-file> --readback <absolute-json-inside-profile-root>",
+    "requiredArguments": [
+      "--manifest",
+      "--profile-root",
+      "--owner-marker",
+      "--readback"
+    ],
+    "ownerMarkerFields": [
+      "profileId",
+      "routeId",
+      "runContext",
+      "owner"
+    ],
+    "rootPolicy": [
+      "absolute_path_required",
+      "route_owned_owner_marker_required",
+      "symlink_free",
+      "outside_git_tree",
+      "readback_inside_profile_root"
+    ],
+    "sourceManifestSchema": "tcrn.aos.planProjection.v1"
+  },
+  "firstInvocationReadback": {
+    "profile": {
+      "profileId": "plan-project-cli-proof-profile",
+      "routeId": "route_tcrn_total_repair_aos_generic_plan_projection_cli_followup_20260710",
+      "ownerMarkerDigest": "6f92bb39df10267064c8905e0b9be23525339328400b0c830c3f545e4ab36192",
+      "runtimeRootDigest": "703e5f9b14cd7c820a63225faab42dc5e03d28cf6dd3147fd247c2d1df767496",
+      "sqliteRootDigest": "8174b596692391bce166acec3fb4dd6c1a87358b9a64eea34d1de948c94a8fcd",
+      "ownerMarkerStatus": "created",
+      "rawPathRecorded": false
+    },
+    "manifest": {
+      "schemaVersion": "tcrn.aos.planProjection.v1",
+      "projectionId": "ds2-plan-projection-cli-proof",
+      "sourceDigest": "f671c49d26064dc0b1ea73f4a1c6110f5fb7daa314f939607483c927a2525ac5",
+      "manifestDigest": "ca86dd10ed2eb445ae42fa7aecd2a6f0fa5e52f0136224aa4ea74b453b8710da",
+      "rawPlanBodyRecorded": false
+    },
+    "projectionReadback": {
+      "ok": true,
+      "schemaVersion": "tcrn.aos.planProjection.v1",
+      "projectionId": "ds2-plan-projection-cli-proof",
+      "manifestDigest": "ca86dd10ed2eb445ae42fa7aecd2a6f0fa5e52f0136224aa4ea74b453b8710da",
+      "projectId": "TCRN-DESIGN-SYSTEM",
+      "projectRegistered": true,
+      "recordIds": {
+        "initiatives": {
+          "ds2-cli-proof-initiative": "init_60a7e781faa1d8ec"
+        },
+        "epics": {
+          "ds2-cli-proof-epic": "epic_396a20e06a7b68f9"
+        },
+        "stories": {
+          "ds2-cli-proof-story": "story_a09cb1b116a2a64d"
+        }
+      },
+      "counts": {
+        "initiatives": 1,
+        "epics": 1,
+        "stories": 1,
+        "created": 3,
+        "reconciled": 0,
+        "reused": 0
+      },
+      "sourceMetadataOnly": true
+    },
+    "restartPersistence": {
+      "ok": true,
+      "recordIdsPersisted": true,
+      "databaseDigestBeforeReopen": "fcb92aa387a7c01c3dbf83e05e0d1d89352f502f19746e70eaba82b5ceb97536",
+      "databaseDigestAfterReopen": "fcb92aa387a7c01c3dbf83e05e0d1d89352f502f19746e70eaba82b5ceb97536"
+    }
+  },
+  "secondInvocationReadback": {
+    "profile": {
+      "profileId": "plan-project-cli-proof-profile",
+      "routeId": "route_tcrn_total_repair_aos_generic_plan_projection_cli_followup_20260710",
+      "ownerMarkerDigest": "6f92bb39df10267064c8905e0b9be23525339328400b0c830c3f545e4ab36192",
+      "runtimeRootDigest": "703e5f9b14cd7c820a63225faab42dc5e03d28cf6dd3147fd247c2d1df767496",
+      "sqliteRootDigest": "8174b596692391bce166acec3fb4dd6c1a87358b9a64eea34d1de948c94a8fcd",
+      "ownerMarkerStatus": "existing_route_owned",
+      "rawPathRecorded": false
+    },
+    "manifest": {
+      "schemaVersion": "tcrn.aos.planProjection.v1",
+      "projectionId": "ds2-plan-projection-cli-proof",
+      "sourceDigest": "f671c49d26064dc0b1ea73f4a1c6110f5fb7daa314f939607483c927a2525ac5",
+      "manifestDigest": "ca86dd10ed2eb445ae42fa7aecd2a6f0fa5e52f0136224aa4ea74b453b8710da",
+      "rawPlanBodyRecorded": false
+    },
+    "projectionReadback": {
+      "ok": true,
+      "schemaVersion": "tcrn.aos.planProjection.v1",
+      "projectionId": "ds2-plan-projection-cli-proof",
+      "manifestDigest": "ca86dd10ed2eb445ae42fa7aecd2a6f0fa5e52f0136224aa4ea74b453b8710da",
+      "projectId": "TCRN-DESIGN-SYSTEM",
+      "projectRegistered": true,
+      "recordIds": {
+        "initiatives": {
+          "ds2-cli-proof-initiative": "init_60a7e781faa1d8ec"
+        },
+        "epics": {
+          "ds2-cli-proof-epic": "epic_396a20e06a7b68f9"
+        },
+        "stories": {
+          "ds2-cli-proof-story": "story_a09cb1b116a2a64d"
+        }
+      },
+      "counts": {
+        "initiatives": 1,
+        "epics": 1,
+        "stories": 1,
+        "created": 0,
+        "reconciled": 0,
+        "reused": 3
+      },
+      "sourceMetadataOnly": true
+    },
+    "restartPersistence": {
+      "ok": true,
+      "recordIdsPersisted": true,
+      "databaseDigestBeforeReopen": "fcb92aa387a7c01c3dbf83e05e0d1d89352f502f19746e70eaba82b5ceb97536",
+      "databaseDigestAfterReopen": "fcb92aa387a7c01c3dbf83e05e0d1d89352f502f19746e70eaba82b5ceb97536"
+    }
+  },
+  "storedReadbackMatchesSecondInvocation": true,
+  "failures": [],
+  "negativeFailures": [],
+  "privacyNoArtifactNoOverclaim": {
+    "ok": true,
+    "rawAbsolutePathsRecorded": false,
+    "rawPlanBodiesRecorded": false,
+    "rawDatabaseDumpRecorded": false,
+    "secretsOrPiiRecorded": false,
+    "committedDatabaseArtifacts": false
+  },
+  "noOverclaim": {
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "tmsMutation": false,
+    "frontendImplemented": false,
+    "httpWriteApiImplemented": false,
+    "liveDispatch": false,
+    "ownerIntentExecuted": false,
+    "readinessClaimed": false,
+    "releaseClaimed": false,
+    "acceptanceClaimed": false,
+    "rawDatabaseDumpRecorded": false,
+    "secretsOrPiiRecorded": false,
+    "committedDatabaseArtifact": false
+  }
+}
