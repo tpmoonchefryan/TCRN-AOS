@@ -138,10 +138,7 @@ export function validatePlanProjectionManifest(manifest: PlanProjectionManifest)
 
 export function projectPlanManifest(store: AosStore, manifest: PlanProjectionManifest, actor: ActorIdentity): PlanProjectionReadback {
   validatePlanProjectionManifest(manifest);
-  const registered = store.getProject(manifest.project.id);
-  if (!registered) {
-    fail(`plan_projection_unknown_project:${manifest.project.id}`);
-  }
+  const registered = store.getProject(manifest.project.id) ?? registerAllowedProject(store, manifest.project, actor);
   if (registered.repoRegistryId !== manifest.project.repoRegistryId) {
     fail(`plan_projection_project_registry_mismatch:${manifest.project.id}`);
   }
@@ -238,6 +235,17 @@ export function projectPlanManifest(store: AosStore, manifest: PlanProjectionMan
     },
     sourceMetadataOnly: true
   };
+}
+
+function registerAllowedProject(store: AosStore, project: PlanProjectionProject, actor: ActorIdentity): ProjectRecord {
+  if (project.id !== "TCRN-DESIGN-SYSTEM") {
+    fail(`plan_projection_unknown_project:${project.id}`);
+  }
+  return store.upsertProject({
+    ...project,
+    evidenceIds: [],
+    decisionHistory: []
+  }, actor);
 }
 
 function projectionMetadata(row: PlanProjectionBase, sourceDigest: string, manifestDigest: string): PlanProjectionMetadata {
