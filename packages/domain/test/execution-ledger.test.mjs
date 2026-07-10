@@ -79,6 +79,35 @@ test("execution ledger supports projected initiative transitions using an existi
   assert.equal(store.listStories().find((story) => story.id === ids.storyId)?.comments.length, 4);
 });
 
+test("execution ledger records every supported lifecycle event as a target-scoped audit and comment", () => {
+  const { store, ids } = projectedStore();
+  const allEvents = [
+    "route_sent",
+    "first_output",
+    "interrupted",
+    "recovery_started",
+    "blocked_owner_decision",
+    "in_review",
+    "verified",
+    "terminal_consumed"
+  ];
+  const command = {
+    ...ledgerCommand(ids.storyId),
+    events: allEvents.map((type, index) => ({
+      type,
+      eventKey: "all-events-" + type + "-v1",
+      occurredAt: "2026-07-10T1" + index + ":00:00.000Z",
+      sourceEvidenceDigest: digest({ type, revision: 2 })
+    }))
+  };
+  const readback = applyExecutionLedgerCommand(store, command, ownerMarker);
+  assert.deepEqual(readback.eventReadbacks.map((event) => event.eventType), allEvents);
+  assert.equal(store.listStories().find((story) => story.id === ids.storyId)?.comments.length, allEvents.length);
+  assert.equal(readback.eventReadbacks.every((event) =>
+    store.queryAudit({ targetId: ids.storyId }).some((audit) => audit.id === event.auditEventId)
+  ), true);
+});
+
 function projectedStore() {
   const store = new AosStore(createDefaultSeed());
   const projection = projectPlanManifest(store, manifest(), actor);
