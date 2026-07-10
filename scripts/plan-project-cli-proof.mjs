@@ -35,7 +35,7 @@ try {
     sourceHead,
     command,
     argumentContract: {
-      command: "pnpm --dir TCRN-AOS plan:project -- --manifest <absolute-json> --profile-root <absolute-dir> --owner-marker <inline-json-or-absolute-json-file> --readback <absolute-json-inside-profile-root>",
+      command: "pnpm --dir TCRN-AOS plan:project --manifest <absolute-json> --profile-root <absolute-dir> --owner-marker <inline-json-or-absolute-json-file> --readback <absolute-json-inside-profile-root>",
       requiredArguments: ["--manifest", "--profile-root", "--owner-marker", "--readback"],
       ownerMarkerFields: ["profileId", "routeId", "runContext", "owner"],
       rootPolicy: ["absolute_path_required", "route_owned_owner_marker_required", "symlink_free", "outside_git_tree", "readback_inside_profile_root"],

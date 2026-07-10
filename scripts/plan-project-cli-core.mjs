@@ -39,7 +39,7 @@ export async function runPlanProjectionCli(argv = process.argv.slice(2)) {
   const readback = {
     schema: "tcrn.aos.planProjectionCliReadback.v1",
     ok: rootReadback.ok && sqliteRoot.ok && first.readback.ok && restartPersistence.ok,
-    command: "pnpm --dir TCRN-AOS plan:project -- --manifest <json> --profile-root <dir> --owner-marker <json-or-file> --readback <json>",
+    command: "pnpm --dir TCRN-AOS plan:project --manifest <json> --profile-root <dir> --owner-marker <json-or-file> --readback <json>",
     profile: {
       profileId: inputs.ownerMarker.profileId,
       routeId: inputs.ownerMarker.routeId,
@@ -89,7 +89,7 @@ export function safeCliError(error) {
 }
 
 async function parseInputs(argv) {
-  const args = parseArgumentMap(argv);
+  const args = parsePlanProjectCliArguments(argv);
   const manifestPath = requireAbsolutePath(args.manifest, "manifest");
   const profileRoot = requireAbsolutePath(args["profile-root"], "profile_root");
   const readbackPath = requireAbsolutePath(args.readback, "readback");
@@ -97,7 +97,7 @@ async function parseInputs(argv) {
   return { manifestPath, profileRoot, readbackPath, ownerMarker };
 }
 
-function parseArgumentMap(argv) {
+export function parsePlanProjectCliArguments(argv) {
   if (argv.length === 0) {
     throw new Error("cli_required_argument_missing:manifest");
   }

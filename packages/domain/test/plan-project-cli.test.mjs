@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { digest, PLAN_PROJECTION_SCHEMA_VERSION } from "../../../dist/packages/domain/src/index.js";
+import { parsePlanProjectCliArguments } from "../../../scripts/plan-project-cli-core.mjs";
 
 const repoRoot = fileURLToPath(new URL("../../..", import.meta.url));
 const cli = join(repoRoot, "scripts/plan-project.mjs");
@@ -19,7 +20,7 @@ test("plan projection CLI persists an arbitrary manifest and reuses records on a
   try {
     await writeFile(manifestPath, JSON.stringify(manifest()), "utf8");
     await writeFile(markerPath, JSON.stringify(ownerMarker()), "utf8");
-    const first = invoke(manifestPath, profileRoot, markerPath, readbackPath);
+    const first = invokePackageScript(manifestPath, profileRoot, markerPath, readbackPath);
     assert.equal(first.status, 0, first.stderr);
     const firstReadback = JSON.parse(await readFile(readbackPath, "utf8"));
     assert.equal(firstReadback.ok, true);
@@ -64,8 +65,41 @@ test("plan projection CLI fails closed for missing arguments, invalid marker, in
   }
 });
 
+test("plan projection CLI contract rejects pnpm's standalone separator and accepts direct forwarded flags", () => {
+  const flags = [
+    "--manifest", "/tmp/manifest.json",
+    "--profile-root", "/tmp/profile",
+    "--owner-marker", "/tmp/marker.json",
+    "--readback", "/tmp/profile/readback.json"
+  ];
+  assert.deepEqual(parsePlanProjectCliArguments(flags), {
+    manifest: "/tmp/manifest.json",
+    "profile-root": "/tmp/profile",
+    "owner-marker": "/tmp/marker.json",
+    readback: "/tmp/profile/readback.json"
+  });
+  assert.throws(
+    () => parsePlanProjectCliArguments(["--", ...flags]),
+    /cli_argument_invalid/
+  );
+});
+
 function invoke(manifestPath, profileRoot, markerPath, readbackPath) {
   return spawnSync("node", [cli, "--manifest", manifestPath, "--profile-root", profileRoot, "--owner-marker", markerPath, "--readback", readbackPath], {
+    cwd: repoRoot,
+    encoding: "utf8"
+  });
+}
+
+function invokePackageScript(manifestPath, profileRoot, markerPath, readbackPath) {
+  return spawnSync("pnpm", [
+    "--dir", repoRoot,
+    "plan:project",
+    "--manifest", manifestPath,
+    "--profile-root", profileRoot,
+    "--owner-marker", markerPath,
+    "--readback", readbackPath
+  ], {
     cwd: repoRoot,
     encoding: "utf8"
   });
