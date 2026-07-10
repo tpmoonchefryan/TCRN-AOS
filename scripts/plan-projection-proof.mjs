@@ -149,8 +149,11 @@ function openAndProject(databasePath, manifest) {
   repository.applyMigrations();
   repository.seedAiEmployees(createDefaultSeed().employees, "plan-projection-proof-seed-v1");
   const store = new AosStore(createDefaultSeed(), { persistence: repository });
-  for (const project of createDefaultSeed().projects) {
-    store.upsertProject(project, actor);
+  const persistedProjectIds = new Set((repository.hydrateCore().projects ?? []).map((project) => project.id));
+  if (persistedProjectIds.size === 0) {
+    for (const project of createDefaultSeed().projects) {
+      store.upsertProject(project, actor);
+    }
   }
   return { repository, store, readback: projectPlanManifest(store, manifest, actor) };
 }
