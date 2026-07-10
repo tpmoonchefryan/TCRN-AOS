@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
 import { mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -10,6 +10,7 @@ import { runPlanProjectionCli } from "./plan-project-cli-core.mjs";
 
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const workflowRoot = fileURLToPath(new URL("../../TCRN Workflow", import.meta.url));
+const migrationsDir = fileURLToPath(new URL("../packages/db/migrations/sqlite", import.meta.url));
 const evidenceRoot = join(repoRoot, "evidence/workflow-plan-projection");
 const route = "route_tcrn_aos_execution_ledger_transition_cli_for_ds2_G0_after_identity_adoption_20260710";
 const workflowBasis = "bb9c8a1a4676318afcc296c10684cea83c427f16";
@@ -19,7 +20,7 @@ await main();
 
 async function main() {
   mkdirSync(evidenceRoot, { recursive: true });
-  const root = await mkdtemp(join(tmpdir(), "tcrn-aos-execution-ledger-proof-"));
+  const root = await mkdtemp(join(await realpath(tmpdir()), "tcrn-aos-execution-ledger-proof-"));
   const profileRoot = join(root, "profile");
   const markerPath = join(root, "owner-marker.json");
   const commandPath = join(root, "command.json");
@@ -185,7 +186,10 @@ async function projectedStoryStatuses(profileRoot) {
   const readback = JSON.parse(await readFile(join(profileRoot, "projection-readback.json"), "utf8"));
   const { AosSqliteRepository } = await import("../dist/packages/db/src/index.js");
   const { AosStore, createDefaultSeed } = await import("../dist/packages/domain/src/index.js");
-  const repository = new AosSqliteRepository({ databasePath: join(profileRoot, "db", "aos-plan-projection.sqlite") });
+  const repository = new AosSqliteRepository({
+    databasePath: join(profileRoot, "db", "aos-plan-projection.sqlite"),
+    migrationsDir
+  });
   repository.applyMigrations();
   const store = new AosStore(createDefaultSeed(), { persistence: repository });
   const expectedIds = new Set(Object.values(readback.projectionReadback.recordIds.stories));
