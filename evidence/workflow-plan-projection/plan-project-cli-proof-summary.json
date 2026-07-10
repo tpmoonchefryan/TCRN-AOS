@@ -3,7 +3,7 @@
   "schema": "tcrn.aos.planProjectionCliProofSummary.v1",
   "ok": true,
   "route": "route_tcrn_total_repair_aos_generic_plan_projection_cli_followup_20260710",
-  "sourceHead": "4877c5eebc34d2872f88904704388b3dae95ad58",
+  "sourceHead": "06a4bf29870ff853f69342eb6d71834ddfcc1e04",
   "command": "pnpm --dir TCRN-AOS plan:project-proof",
   "receiptInventory": [
     "plan-project-cli-readback.json"
