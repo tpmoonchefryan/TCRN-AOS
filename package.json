@@ -35,6 +35,7 @@
     "kr03:readback-ui-proof": "pnpm build && node scripts/kr03-readback-ui-proof.mjs",
     "kr05:seed-entry-convention-proof": "pnpm build && node scripts/kr05-seed-entry-convention-proof.mjs",
     "kr06:kpi-measurement-proof": "pnpm build && node scripts/kr06-kpi-measurement-proof.mjs",
+    "plan:projection-proof": "pnpm build && node scripts/plan-projection-proof.mjs",
     "phase3:readback-api-proof": "pnpm build && node scripts/phase3-readback-api-proof.mjs",
     "phase3:frontend-readback-proof": "pnpm build && node scripts/phase3-frontend-readback-proof.mjs",
     "service:start": "pnpm build && node scripts/service-start.mjs",

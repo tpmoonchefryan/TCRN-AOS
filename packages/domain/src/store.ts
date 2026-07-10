@@ -343,6 +343,35 @@ export class AosStore {
     });
   }
 
+  upsertInitiative(input: Omit<InitiativeRecord, "epicIds" | "storyIds" | "gateIds" | "evidenceIds" | "decisionHistory">, actor: ActorIdentity): InitiativeRecord {
+    return this.withPersistenceTransaction(() => {
+      this.ensureSafe(input, "initiative");
+      if (!this.projects.has(input.projectId)) {
+        throw new Error(`Unknown project: ${input.projectId}`);
+      }
+      const existing = this.initiatives.get(input.id);
+      if (existing && existing.projectId !== input.projectId) {
+        throw new Error(`initiative_project_reconciliation_conflict:${input.id}`);
+      }
+      const initiative: InitiativeRecord = {
+        ...existing,
+        ...input,
+        epicIds: existing?.epicIds ?? [],
+        storyIds: existing?.storyIds ?? [],
+        gateIds: existing?.gateIds ?? [],
+        evidenceIds: existing?.evidenceIds ?? [],
+        decisionHistory: existing?.decisionHistory ?? []
+      };
+      this.initiatives.set(initiative.id, initiative);
+      this.persistCoreRecord("initiative", initiative);
+      this.appendAudit(actor, "initiative.upsert", "initiative", initiative.id, "accepted", {
+        projectId: initiative.projectId,
+        projectionKey: initiative.projection?.externalKey ?? null
+      });
+      return initiative;
+    });
+  }
+
   createEpic(input: Omit<EpicRecord, "id" | "storyIds" | "gateIds" | "evidenceIds">, actor: ActorIdentity): EpicRecord {
     return this.withPersistenceTransaction(() => {
       this.ensureSafe(input, "epic");
@@ -361,6 +390,38 @@ export class AosStore {
       }
       this.persistCoreRecord("epic", epic);
       this.appendAudit(actor, "epic.create", "epic", epic.id, "accepted", { initiativeId: epic.initiativeId });
+      return epic;
+    });
+  }
+
+  upsertEpic(input: Omit<EpicRecord, "storyIds" | "gateIds" | "evidenceIds">, actor: ActorIdentity): EpicRecord {
+    return this.withPersistenceTransaction(() => {
+      this.ensureSafe(input, "epic");
+      const initiative = this.initiatives.get(input.initiativeId);
+      if (!initiative) {
+        throw new Error(`Unknown initiative: ${input.initiativeId}`);
+      }
+      const existing = this.epics.get(input.id);
+      if (existing && existing.initiativeId !== input.initiativeId) {
+        throw new Error(`epic_parent_reconciliation_conflict:${input.id}`);
+      }
+      const epic: EpicRecord = {
+        ...existing,
+        ...input,
+        storyIds: existing?.storyIds ?? [],
+        gateIds: existing?.gateIds ?? [],
+        evidenceIds: existing?.evidenceIds ?? []
+      };
+      this.epics.set(epic.id, epic);
+      if (!initiative.epicIds.includes(epic.id)) {
+        initiative.epicIds.push(epic.id);
+        this.persistCoreRecord("initiative", initiative);
+      }
+      this.persistCoreRecord("epic", epic);
+      this.appendAudit(actor, "epic.upsert", "epic", epic.id, "accepted", {
+        initiativeId: epic.initiativeId,
+        projectionKey: epic.projection?.externalKey ?? null
+      });
       return epic;
     });
   }
@@ -391,6 +452,49 @@ export class AosStore {
       }
       this.persistCoreRecord("story", story);
       this.appendAudit(actor, "story.create", "story", story.id, "accepted", { epicId: story.epicId });
+      return story;
+    });
+  }
+
+  upsertStory(input: Omit<StoryRecord, "comments" | "links" | "gateIds" | "assignmentIds" | "evidenceIds" | "decisionHistory">, actor: ActorIdentity): StoryRecord {
+    return this.withPersistenceTransaction(() => {
+      this.ensureSafe(input, "story");
+      const epic = this.epics.get(input.epicId);
+      if (!epic) {
+        throw new Error(`Unknown epic: ${input.epicId}`);
+      }
+      const initiative = this.initiatives.get(epic.initiativeId);
+      if (!initiative) {
+        throw new Error(`Unknown initiative: ${epic.initiativeId}`);
+      }
+      const existing = this.stories.get(input.id);
+      if (existing && existing.epicId !== input.epicId) {
+        throw new Error(`story_parent_reconciliation_conflict:${input.id}`);
+      }
+      const story: StoryRecord = {
+        ...existing,
+        ...input,
+        comments: existing?.comments ?? [],
+        links: existing?.links ?? [],
+        gateIds: existing?.gateIds ?? [],
+        assignmentIds: existing?.assignmentIds ?? [],
+        evidenceIds: existing?.evidenceIds ?? [],
+        decisionHistory: existing?.decisionHistory ?? []
+      };
+      this.stories.set(story.id, story);
+      if (!epic.storyIds.includes(story.id)) {
+        epic.storyIds.push(story.id);
+        this.persistCoreRecord("epic", epic);
+      }
+      if (!initiative.storyIds.includes(story.id)) {
+        initiative.storyIds.push(story.id);
+        this.persistCoreRecord("initiative", initiative);
+      }
+      this.persistCoreRecord("story", story);
+      this.appendAudit(actor, "story.upsert", "story", story.id, "accepted", {
+        epicId: story.epicId,
+        projectionKey: story.projection?.externalKey ?? null
+      });
       return story;
     });
   }

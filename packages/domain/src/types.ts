@@ -143,6 +143,22 @@ export interface ProjectRecord {
   decisionHistory: DecisionHistoryEntry[];
 }
 
+/**
+ * Source-bound metadata for a deterministic plan projection. It deliberately
+ * carries only workflow structure, ownership, and digest references.
+ */
+export interface PlanProjectionMetadata {
+  schemaVersion: "tcrn.aos.planProjection.v1";
+  externalKey: string;
+  dependencyKeys: string[];
+  ownerRefs: string[];
+  writeScopes: string[];
+  gateRequirements: string[];
+  acceptanceCriteriaDigest: string;
+  sourceDigest: string;
+  manifestDigest: string;
+}
+
 export interface InitiativeRecord {
   id: AosId;
   projectId: ProjectId;
@@ -155,6 +171,7 @@ export interface InitiativeRecord {
   gateIds: AosId[];
   evidenceIds: AosId[];
   decisionHistory: DecisionHistoryEntry[];
+  projection?: PlanProjectionMetadata;
 }
 
 export interface EpicRecord {
@@ -167,6 +184,7 @@ export interface EpicRecord {
   estimate?: Estimate;
   gateIds: AosId[];
   evidenceIds: AosId[];
+  projection?: PlanProjectionMetadata;
 }
 
 export interface StoryRecord {
@@ -186,6 +204,7 @@ export interface StoryRecord {
   assignmentIds: AosId[];
   evidenceIds: AosId[];
   decisionHistory: DecisionHistoryEntry[];
+  projection?: PlanProjectionMetadata;
 }
 
 export interface LinkRecord {

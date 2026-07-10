@@ -22,6 +22,17 @@ export const seedProjects: ProjectRecord[] = [
     gateState: "pending_role",
     evidenceIds: [],
     decisionHistory: []
+  },
+  {
+    id: "TCRN-DESIGN-SYSTEM",
+    name: "TCRN Design System",
+    registryStatus: "active",
+    repoRegistryId: "TCRN-DESIGN-SYSTEM",
+    repoPathReference: "../TCRN-Design-System",
+    status: "in_progress",
+    gateState: "pending_role",
+    evidenceIds: [],
+    decisionHistory: []
   }
 ];
 
