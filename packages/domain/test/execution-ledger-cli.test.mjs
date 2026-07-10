@@ -4,7 +4,7 @@ import { mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { digest, PLAN_PROJECTION_SCHEMA_VERSION } from "../../../dist/packages/domain/src/index.js";
+import { deriveExecutionLedgerEventKey, digest, PLAN_PROJECTION_SCHEMA_VERSION } from "../../../dist/packages/domain/src/index.js";
 import { runPlanProjectionCli } from "../../../scripts/plan-project-cli-core.mjs";
 import { parseExecutionLedgerCliArguments, runExecutionLedgerCli } from "../../../scripts/execution-ledger-cli-core.mjs";
 
@@ -124,12 +124,22 @@ function command(targetId) {
       threadId: "019f4b52-e331-7481-8c13-372928cc4e6c",
       sessionId: "execution-ledger-cli-test"
     },
-    events: ["route_sent", "first_output", "interrupted", "recovery_started"].map((type, index) => ({
-      type,
-      eventKey: `ds2-g0-${type}-v1`,
-      occurredAt: `2026-07-10T0${index}:00:00.000Z`,
-      sourceEvidenceDigest: digest({ type, revision: 1 })
-    }))
+    events: ["route_sent", "first_output", "interrupted", "recovery_started"].map((type, index) => {
+      const sourceEvidenceDigest = digest({ type, revision: 1 });
+      return {
+        type,
+        eventKey: deriveExecutionLedgerEventKey({
+          projectId: "TCRN-DESIGN-SYSTEM",
+          targetType: "story",
+          targetId,
+          routeId,
+          eventType: type,
+          sourceEvidenceDigest
+        }),
+        occurredAt: `2026-07-10T0${index}:00:00.000Z`,
+        sourceEvidenceDigest
+      };
+    })
   };
 }
 

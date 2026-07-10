@@ -69,6 +69,17 @@ export interface ExecutionLedgerReadback {
   ownerMarkerDigest: string;
 }
 
+export function deriveExecutionLedgerEventKey(input: {
+  projectId: string;
+  targetType: ExecutionLedgerTargetType;
+  targetId: string;
+  routeId: string;
+  eventType: ExecutionLedgerEventType;
+  sourceEvidenceDigest: string;
+}): string {
+  return `execution_ledger_${digest(input).slice(0, 20)}`;
+}
+
 export class ExecutionLedgerValidationError extends Error {
   constructor(readonly code: string) {
     super(code);
@@ -219,6 +230,16 @@ function validateCommand(command: ExecutionLedgerCommand, ownerMarker: Execution
     }
     if (!/^[a-f0-9]{64}$/i.test(event.sourceEvidenceDigest)) {
       fail("execution_ledger_source_evidence_digest_invalid");
+    }
+    if (event.eventKey !== deriveExecutionLedgerEventKey({
+      projectId: command.projectId,
+      targetType: command.targetType,
+      targetId: command.targetId,
+      routeId: command.routeId,
+      eventType: event.type,
+      sourceEvidenceDigest: event.sourceEvidenceDigest
+    })) {
+      fail("execution_ledger_event_key_not_deterministic");
     }
     if (eventKeys.has(event.eventKey)) {
       fail("execution_ledger_duplicate_event_key");

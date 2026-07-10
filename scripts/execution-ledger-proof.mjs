@@ -4,7 +4,7 @@ import { mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { digest } from "../dist/packages/domain/src/index.js";
+import { deriveExecutionLedgerEventKey, digest } from "../dist/packages/domain/src/index.js";
 import { runExecutionLedgerCli } from "./execution-ledger-cli-core.mjs";
 import { runPlanProjectionCli } from "./plan-project-cli-core.mjs";
 
@@ -173,12 +173,22 @@ function command(targetId) {
       threadId: "019f4b52-e331-7481-8c13-372928cc4e6c",
       sessionId: "ds2-g0-execution-ledger-proof"
     },
-    events: ["route_sent", "first_output", "interrupted", "recovery_started"].map((type, index) => ({
-      type,
-      eventKey: "ds2-g0-" + type + "-v1",
-      occurredAt: "2026-07-10T0" + index + ":00:00.000Z",
-      sourceEvidenceDigest: digest({ route, type, source: "workflow_route_history" })
-    }))
+    events: ["route_sent", "first_output", "interrupted", "recovery_started"].map((type, index) => {
+      const sourceEvidenceDigest = digest({ route, type, source: "workflow_route_history" });
+      return {
+        type,
+        eventKey: deriveExecutionLedgerEventKey({
+          projectId: "TCRN-DESIGN-SYSTEM",
+          targetType: "story",
+          targetId,
+          routeId: route,
+          eventType: type,
+          sourceEvidenceDigest
+        }),
+        occurredAt: "2026-07-10T0" + index + ":00:00.000Z",
+        sourceEvidenceDigest
+      };
+    })
   };
 }
 
@@ -209,7 +219,7 @@ async function proveNegativeCases(profileRoot, markerPath, commandPath, ledgerRe
   await writeFile(conflictPath, JSON.stringify({
     ...original,
     events: original.events.map((event, index) => index === 0
-      ? { ...event, sourceEvidenceDigest: digest("conflicting-source-evidence") }
+      ? { ...event, occurredAt: "2026-07-10T23:59:00.000Z" }
       : event)
   }), "utf8");
   const staleExpectedStatusRejected = await rejects(

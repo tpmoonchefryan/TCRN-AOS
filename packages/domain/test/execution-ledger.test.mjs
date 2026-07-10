@@ -4,6 +4,7 @@ import {
   AosStore,
   applyExecutionLedgerCommand,
   createDefaultSeed,
+  deriveExecutionLedgerEventKey,
   digest,
   EXECUTION_LEDGER_SCHEMA_VERSION,
   ExecutionLedgerValidationError,
@@ -49,11 +50,11 @@ test("execution ledger fails closed for unknown, cross-project, invalid, stale, 
   const { store, ids } = projectedStore();
   const command = ledgerCommand(ids.storyId);
   assert.throws(
-    () => applyExecutionLedgerCommand(store, { ...command, targetId: "story_unknown" }, ownerMarker),
+    () => applyExecutionLedgerCommand(store, ledgerCommand("story_unknown"), ownerMarker),
     (error) => error instanceof ExecutionLedgerValidationError && error.code === "execution_ledger_target_unknown"
   );
   assert.throws(
-    () => applyExecutionLedgerCommand(store, { ...command, projectId: "TCRN-AOS" }, ownerMarker),
+    () => applyExecutionLedgerCommand(store, ledgerCommand(ids.storyId, "story", "TCRN-AOS"), ownerMarker),
     (error) => error instanceof ExecutionLedgerValidationError && error.code === "execution_ledger_cross_project_target"
   );
   assert.throws(
@@ -62,11 +63,15 @@ test("execution ledger fails closed for unknown, cross-project, invalid, stale, 
   );
   applyExecutionLedgerCommand(store, command, ownerMarker);
   assert.throws(
-    () => applyExecutionLedgerCommand(store, { ...command, events: command.events.map((event, index) => index === 0 ? { ...event, sourceEvidenceDigest: digest("conflict") } : event) }, ownerMarker),
+    () => applyExecutionLedgerCommand(store, { ...command, events: command.events.map((event, index) => index === 0 ? { ...event, occurredAt: "2026-07-10T23:59:00.000Z" } : event) }, ownerMarker),
     (error) => error instanceof ExecutionLedgerValidationError && error.code === "execution_ledger_event_key_conflict"
   );
   assert.throws(
-    () => applyExecutionLedgerCommand(store, { ...command, events: command.events.map((event) => ({ ...event, eventKey: `${event.eventKey}-stale` })) }, ownerMarker),
+    () => applyExecutionLedgerCommand(store, { ...command, events: command.events.map((event, index) => index === 0 ? { ...event, eventKey: "caller-random-key" } : event) }, ownerMarker),
+    (error) => error instanceof ExecutionLedgerValidationError && error.code === "execution_ledger_event_key_not_deterministic"
+  );
+  assert.throws(
+    () => applyExecutionLedgerCommand(store, ledgerCommand(ids.storyId, "story", "TCRN-DESIGN-SYSTEM", 2), ownerMarker),
     (error) => error instanceof ExecutionLedgerValidationError && error.code === "execution_ledger_expected_status_stale"
   );
 });
@@ -93,12 +98,22 @@ test("execution ledger records every supported lifecycle event as a target-scope
   ];
   const command = {
     ...ledgerCommand(ids.storyId),
-    events: allEvents.map((type, index) => ({
+    events: allEvents.map((type, index) => {
+      const sourceEvidenceDigest = digest({ type, revision: 2 });
+      return {
       type,
-      eventKey: "all-events-" + type + "-v1",
+      eventKey: deriveExecutionLedgerEventKey({
+        projectId: "TCRN-DESIGN-SYSTEM",
+        targetType: "story",
+        targetId: ids.storyId,
+        routeId: ownerMarker.routeId,
+        eventType: type,
+        sourceEvidenceDigest
+      }),
       occurredAt: "2026-07-10T1" + index + ":00:00.000Z",
-      sourceEvidenceDigest: digest({ type, revision: 2 })
-    }))
+      sourceEvidenceDigest
+    };
+    })
   };
   const readback = applyExecutionLedgerCommand(store, command, ownerMarker);
   assert.deepEqual(readback.eventReadbacks.map((event) => event.eventType), allEvents);
@@ -120,22 +135,32 @@ function projectedStore() {
   };
 }
 
-function ledgerCommand(targetId, targetType = "story") {
+function ledgerCommand(targetId, targetType = "story", projectId = "TCRN-DESIGN-SYSTEM", revision = 1) {
   return {
     schemaVersion: EXECUTION_LEDGER_SCHEMA_VERSION,
-    projectId: "TCRN-DESIGN-SYSTEM",
+    projectId,
     routeId: ownerMarker.routeId,
     targetType,
     targetId,
     expectedStatus: "proposed",
     nextStatus: "in_progress",
     actor,
-    events: ["route_sent", "first_output", "interrupted", "recovery_started"].map((type, index) => ({
-      type,
-      eventKey: `ds2-g0-${type}-v1`,
-      occurredAt: `2026-07-10T0${index}:00:00.000Z`,
-      sourceEvidenceDigest: digest({ type, revision: 1 })
-    }))
+    events: ["route_sent", "first_output", "interrupted", "recovery_started"].map((type, index) => {
+      const sourceEvidenceDigest = digest({ type, revision });
+      return {
+        type,
+        eventKey: deriveExecutionLedgerEventKey({
+          projectId,
+          targetType,
+          targetId,
+          routeId: ownerMarker.routeId,
+          eventType: type,
+          sourceEvidenceDigest
+        }),
+        occurredAt: `2026-07-10T0${index}:00:00.000Z`,
+        sourceEvidenceDigest
+      };
+    })
   };
 }
 
