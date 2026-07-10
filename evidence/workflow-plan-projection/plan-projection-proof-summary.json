@@ -1,0 +1,40 @@
+{
+  "receiptName": "plan-projection-proof-summary.json",
+  "schema": "tcrn.aos.planProjectionProofSummary.v1",
+  "ok": true,
+  "route": "route_tcrn_total_repair_aos_execution_ledger_and_plan_projection_20260710",
+  "sourceHead": "23d561904455fe1c5be96ef9c29184fc24466220",
+  "workflowBasis": "48992704bd21427c80dd20503e487e14e48fe678",
+  "command": "pnpm --dir TCRN-AOS plan:projection-proof",
+  "receiptInventory": [
+    "plan-projection-readback.json"
+  ],
+  "receiptCount": 1,
+  "allChildReceiptsOk": true,
+  "failures": [],
+  "negativeFailures": [],
+  "manifestContractDigest": "15174dbf4f321f6d31a6ecfaa99c950958974dc7c413e0abdd63a00e6f94b2d6",
+  "projectedCounts": {
+    "initiatives": 1,
+    "epics": 2,
+    "stories": 3,
+    "created": 6,
+    "reconciled": 0,
+    "reused": 0
+  },
+  "secondRunZeroDuplicateCreation": true,
+  "noOverclaim": {
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "tmsMutation": false,
+    "frontendImplemented": false,
+    "httpWriteApiImplemented": false,
+    "liveCodexDispatch": false,
+    "ownerIntentExecuted": false,
+    "readinessClaimed": false,
+    "releaseClaimed": false,
+    "productAcceptanceClaimed": false,
+    "committedDatabaseArtifact": false,
+    "rawPlanBodyStoredInReceipt": false
+  }
+}
