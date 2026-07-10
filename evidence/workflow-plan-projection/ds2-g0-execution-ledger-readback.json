@@ -1,0 +1,103 @@
+{
+  "schema": "tcrn.aos.executionLedgerProofReadback.v1",
+  "receiptName": "ds2-g0-execution-ledger-readback.json",
+  "ok": true,
+  "generatedAt": "2026-07-10T09:53:45.251Z",
+  "route": "route_tcrn_aos_execution_ledger_transition_cli_for_ds2_G0_after_identity_adoption_20260710",
+  "workflowBasis": "bb9c8a1a4676318afcc296c10684cea83c427f16",
+  "sourceHead": "c4d78f37b18f3de19da446d886d5f5d8864de387",
+  "incomingAosBasis": "5909743c8992517660971aa1c0e1bcf2fca5c967",
+  "command": "pnpm --dir TCRN-AOS execution:ledger --command <json> --profile-root <dir> --owner-marker <json-or-file> --readback <json>",
+  "g0Readback": {
+    "initiativeId": "init_a445e087614fa8af",
+    "epicId": "epic_02ce1f8f7bec2d2f",
+    "storyId": "story_0166649b9d7fd061",
+    "beforeStatus": "proposed",
+    "afterStatus": "in_progress",
+    "otherStoryCount": 18,
+    "otherStoriesUnchanged": true,
+    "eventTypes": [
+      "route_sent",
+      "first_output",
+      "interrupted",
+      "recovery_started"
+    ],
+    "eventIds": [
+      {
+        "eventType": "route_sent",
+        "eventKey": "ds2-g0-route_sent-v1",
+        "auditEventId": "audit_a49db4de0931661d",
+        "commentId": "comment_b046d06ffd0f70a6"
+      },
+      {
+        "eventType": "first_output",
+        "eventKey": "ds2-g0-first_output-v1",
+        "auditEventId": "audit_a5bd7cf49282eb42",
+        "commentId": "comment_be609b2848cbc84a"
+      },
+      {
+        "eventType": "interrupted",
+        "eventKey": "ds2-g0-interrupted-v1",
+        "auditEventId": "audit_111abf16fa75f777",
+        "commentId": "comment_b20940f76791c1d8"
+      },
+      {
+        "eventType": "recovery_started",
+        "eventKey": "ds2-g0-recovery_started-v1",
+        "auditEventId": "audit_4a3c2e0cf0189668",
+        "commentId": "comment_af74b406cd45124c"
+      }
+    ],
+    "firstAuditEventCount": 8,
+    "firstCommentCount": 4,
+    "replayAuditEventCount": 8,
+    "replayCommentCount": 4
+  },
+  "restartPersistence": {
+    "ok": true,
+    "targetExists": true,
+    "databaseDigestBeforeReopen": "2c8b8b20effd04aba7b282d7ae3bcf493cf2c48aaa1b62d95ff9de05a45ea88a",
+    "databaseDigestAfterReopen": "2c8b8b20effd04aba7b282d7ae3bcf493cf2c48aaa1b62d95ff9de05a45ea88a",
+    "auditEventsForTarget": 8,
+    "commentsForTarget": 4
+  },
+  "eventKeyReplay": {
+    "identicalReplayReused": true,
+    "noDuplicateAuditRows": true,
+    "noDuplicateCommentRows": true,
+    "conflictingReplayRejected": true
+  },
+  "negativeReadback": {
+    "ok": true,
+    "staleExpectedStatusRejected": true,
+    "conflictingReplayRejected": true,
+    "unsafeRootRejected": true
+  },
+  "profile": {
+    "ownerMarkerDigest": "8c69fe5ee6151b2dbadc0e9ec78c75c84b1d538009bd7e915bd246ffa60adc73",
+    "rawPathRecorded": false,
+    "rawDatabaseDumpRecorded": false
+  },
+  "noGitArtifact": {
+    "ok": true,
+    "trackedArtifactCount": 0
+  },
+  "privacy": true,
+  "noOverclaim": {
+    "workflowMutation": false,
+    "designSystemMutation": false,
+    "tmsMutation": false,
+    "frontendImplemented": false,
+    "liveDispatch": false,
+    "ownerIntentExecuted": false,
+    "g0AcceptanceClaimed": false,
+    "readinessClaimed": false,
+    "releaseClaimed": false,
+    "publicationClaimed": false,
+    "pushExecuted": false,
+    "rawDatabaseDumpRecorded": false,
+    "committedDatabaseArtifact": false
+  },
+  "failures": [],
+  "negativeFailures": []
+}
