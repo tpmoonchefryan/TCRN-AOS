@@ -2,9 +2,9 @@
   "schema": "tcrn.aos.executionLedgerProofSummary.v1",
   "receiptName": "ds2-g0-execution-ledger-proof-summary.json",
   "ok": true,
-  "generatedAt": "2026-07-10T09:55:54.270Z",
+  "generatedAt": "2026-07-10T09:58:31.257Z",
   "route": "route_tcrn_aos_execution_ledger_transition_cli_for_ds2_G0_after_identity_adoption_20260710",
-  "sourceHead": "2fbf6da4fd16778c9410da5abab8feee877a8fce",
+  "sourceHead": "0bd891f8b6e9cfc0c2e5e96f28a3dc276f55baaf",
   "workflowBasis": "bb9c8a1a4676318afcc296c10684cea83c427f16",
   "incomingAosBasis": "5909743c8992517660971aa1c0e1bcf2fca5c967",
   "receiptInventory": [

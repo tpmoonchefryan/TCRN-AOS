@@ -2,10 +2,10 @@
   "schema": "tcrn.aos.executionLedgerProofReadback.v1",
   "receiptName": "ds2-g0-execution-ledger-readback.json",
   "ok": true,
-  "generatedAt": "2026-07-10T09:55:54.270Z",
+  "generatedAt": "2026-07-10T09:58:31.257Z",
   "route": "route_tcrn_aos_execution_ledger_transition_cli_for_ds2_G0_after_identity_adoption_20260710",
   "workflowBasis": "bb9c8a1a4676318afcc296c10684cea83c427f16",
-  "sourceHead": "2fbf6da4fd16778c9410da5abab8feee877a8fce",
+  "sourceHead": "0bd891f8b6e9cfc0c2e5e96f28a3dc276f55baaf",
   "incomingAosBasis": "5909743c8992517660971aa1c0e1bcf2fca5c967",
   "command": "pnpm --dir TCRN-AOS execution:ledger --command <json> --profile-root <dir> --owner-marker <json-or-file> --readback <json>",
   "g0Readback": {
@@ -26,25 +26,25 @@
       {
         "eventType": "route_sent",
         "eventKey": "ds2-g0-route_sent-v1",
-        "auditEventId": "audit_5a1909719fb1fc70",
+        "auditEventId": "audit_f637679aac4c3e68",
         "commentId": "comment_b046d06ffd0f70a6"
       },
       {
         "eventType": "first_output",
         "eventKey": "ds2-g0-first_output-v1",
-        "auditEventId": "audit_7ba695dc60d974dc",
+        "auditEventId": "audit_42ac6ee9def9050c",
         "commentId": "comment_be609b2848cbc84a"
       },
       {
         "eventType": "interrupted",
         "eventKey": "ds2-g0-interrupted-v1",
-        "auditEventId": "audit_819b9ab0ef92cf3c",
+        "auditEventId": "audit_af28735168b7934e",
         "commentId": "comment_b20940f76791c1d8"
       },
       {
         "eventType": "recovery_started",
         "eventKey": "ds2-g0-recovery_started-v1",
-        "auditEventId": "audit_f1e0eb8d65bf1354",
+        "auditEventId": "audit_9901ec7c43c947bd",
         "commentId": "comment_af74b406cd45124c"
       }
     ],
@@ -56,8 +56,8 @@
   "restartPersistence": {
     "ok": true,
     "targetExists": true,
-    "databaseDigestBeforeReopen": "dd2bc5930ec7d99ae1ab5c272934100429cbbd3d29e7adc93047e75c9eb813c2",
-    "databaseDigestAfterReopen": "dd2bc5930ec7d99ae1ab5c272934100429cbbd3d29e7adc93047e75c9eb813c2",
+    "databaseDigestBeforeReopen": "2fae7d3fe7060958bc10ce0c9d0382cc9c5b91e9204ac584307f5a8abec3a0f5",
+    "databaseDigestAfterReopen": "2fae7d3fe7060958bc10ce0c9d0382cc9c5b91e9204ac584307f5a8abec3a0f5",
     "auditEventsForTarget": 8,
     "commentsForTarget": 4
   },
