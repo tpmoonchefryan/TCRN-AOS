@@ -16,12 +16,14 @@ test("execution ledger CLI persists a guarded projected-story transition and reu
   const profileRoot = join(root, "profile");
   const manifestPath = join(root, "manifest.json");
   const markerPath = join(root, "owner-marker.json");
+  const invalidMarkerPath = join(root, "invalid-owner-marker.json");
   const projectionReadbackPath = join(profileRoot, "projection-readback.json");
   const commandPath = join(root, "command.json");
   const readbackPath = join(profileRoot, "execution-readback.json");
   try {
     await writeFile(manifestPath, JSON.stringify(manifest()), "utf8");
     await writeFile(markerPath, JSON.stringify(ownerMarker()), "utf8");
+    await writeFile(invalidMarkerPath, JSON.stringify({ profileId: "missing-required-fields" }), "utf8");
     const projection = await runPlanProjectionCli([
       "--manifest", manifestPath,
       "--profile-root", profileRoot,
@@ -30,6 +32,24 @@ test("execution ledger CLI persists a guarded projected-story transition and reu
     ]);
     const targetId = projection.projectionReadback.recordIds.stories["ds2-ledger-cli-story"];
     await writeFile(commandPath, JSON.stringify(command(targetId)), "utf8");
+    await assert.rejects(
+      runExecutionLedgerCli([
+        "--command", commandPath,
+        "--profile-root", profileRoot,
+        "--owner-marker", invalidMarkerPath,
+        "--readback", readbackPath
+      ]),
+      /execution_ledger_cli_owner_marker_invalid/
+    );
+    await assert.rejects(
+      runExecutionLedgerCli([
+        "--command", commandPath,
+        "--profile-root", join(repoRoot, ".execution-ledger-unsafe-root"),
+        "--owner-marker", markerPath,
+        "--readback", join(repoRoot, ".execution-ledger-unsafe-root", "readback.json")
+      ]),
+      /runtime_root_inside_git_tree/
+    );
     const first = await runExecutionLedgerCli([
       "--command", commandPath,
       "--profile-root", profileRoot,
