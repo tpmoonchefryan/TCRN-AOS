@@ -37,6 +37,8 @@ import {
   workManagementPatternRegistry,
   type EvidenceAttachment,
   type GatePipelineGate,
+  Stamp,
+  StampRule,
   type KeyValueItem,
   type RelationshipChipProps,
   type WorkBoardLane,
@@ -1345,10 +1347,24 @@ function DetailPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (pat
 }
 
 function GatesPage({ locale }: { locale: TcrnLocale }) {
+  // Design-system Stamp adoption at the gate-close identity moment. These are sample
+  // gates that reached their reviewed terminal state; the stamp gives that moment the
+  // identity treatment the design system reserves for it, at the same claim strength
+  // as the local_only "Accepted" badge the pipeline already renders. It asserts no
+  // real product acceptance or release state — the page stays inside AOS's
+  // read-only sample-data frame, and the release moment is deliberately not used.
+  const closedSampleGateCount = gateRows.filter((row) => row.state === "accepted").length;
+  const isZh = locale === "zh-CN";
   return (
     <Surface data-work-gates-page="true">
-      <Heading level={2}>{locale === "zh-CN" ? "门禁聚合" : "Gate aggregation"}</Heading>
-      <GatePipelineCompact label={locale === "zh-CN" ? "门禁流水线" : "Gate pipeline"} gates={workGatePipeline(locale)} />
+      <Heading level={2}>{isZh ? "门禁聚合" : "Gate aggregation"}</Heading>
+      <div data-work-gate-stamp="gate-close">
+        <Stamp moment="gate-close">
+          {isZh ? `样本门已闭合 · ${closedSampleGateCount}` : `Sample gates closed · ${closedSampleGateCount}`}
+        </Stamp>
+        <StampRule />
+      </div>
+      <GatePipelineCompact label={isZh ? "门禁流水线" : "Gate pipeline"} gates={workGatePipeline(locale)} />
     </Surface>
   );
 }
