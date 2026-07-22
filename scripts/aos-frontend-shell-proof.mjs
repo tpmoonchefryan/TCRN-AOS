@@ -3074,10 +3074,10 @@ function compareReducedMotionMetrics(dsMetrics, aosMetrics) {
     aosSearchMissing: aosMetrics.measured.searchWrapper?.missing
   });
   for (const control of ["themeToggle", "localeTrigger", "sideNavToggle", "localeChevron"]) {
-    compareReducedDuration(add, `reduced.${control}.transitionDuration`, dsMetrics.measured[control].transitionDuration, aosMetrics.measured[control].transitionDuration);
+    compareReducedTransitionDuration(add, `reduced.${control}.transitionDuration`, dsMetrics.measured[control].transitionDuration, aosMetrics.measured[control].transitionDuration);
     compareString(add, `reduced.${control}.transitionTimingFunction`, dsMetrics.measured[control].transitionTimingFunction, aosMetrics.measured[control].transitionTimingFunction);
   }
-  compareReducedDuration(add, "reduced.shell.transitionDuration", dsMetrics.shell.transitionDuration, aosMetrics.shell.transitionDuration);
+  compareReducedTransitionDuration(add, "reduced.shell.transitionDuration", dsMetrics.shell.transitionDuration, aosMetrics.shell.transitionDuration);
   compareString(add, "reduced.shell.transitionTimingFunction", dsMetrics.shell.transitionTimingFunction, aosMetrics.shell.transitionTimingFunction);
   compareReducedDuration(add, "reduced.shell.themeWashAnimationDuration", dsMetrics.shell.themeWashAnimationDuration, aosMetrics.shell.themeWashAnimationDuration);
   compareString(add, "reduced.shell.themeWashAnimationTimingFunction", dsMetrics.shell.themeWashAnimationTimingFunction, aosMetrics.shell.themeWashAnimationTimingFunction);
@@ -3266,12 +3266,19 @@ function compareString(add, name, ds, aos) {
 
 function compareMotionDuration(add, name, ds, aos, isReducedMotion) {
   if (isReducedMotion) {
-    compareReducedDuration(add, name, ds, aos);
+    // Every caller here compares a transition duration, and since v2 a reduced-motion
+    // transition keeps the comprehension cue at a real duration rather than collapsing
+    // to zero, so the honest test is parity with the DS component (travel removal is
+    // enforced separately by the transitionProperty checks). The theme wash *animation*
+    // still uses compareReducedDuration directly and keeps the zero-duration cap.
+    compareReducedTransitionDuration(add, name, ds, aos);
     return;
   }
   compareString(add, name, ds, aos);
 }
 
+// Loop-style motion (the theme wash animation) must still collapse under reduced
+// motion — a wash that keeps cycling is exactly the travel reduced motion removes.
 function compareReducedDuration(add, name, ds, aos) {
   const dsMaxMs = maxCssDurationMs(ds);
   const aosMaxMs = maxCssDurationMs(aos);
@@ -3282,7 +3289,26 @@ function compareReducedDuration(add, name, ds, aos) {
     dsMaxMs,
     aosMaxMs,
     allowedMaxMs: maxAllowedMs,
-    disposition: "reduced-motion zero-duration fallback accepts browser-normalized 0s or 1e-05s forms"
+    disposition: "reduced-motion loop/animation collapses to a zero-duration fallback (0s or 1e-05s)"
+  });
+}
+
+// Transition durations under reduced motion are a different matter since v2. The
+// ratified reduced-motion semantics keep opacity/colour transitions alive at a real
+// duration (the comprehension cue) and only remove travel, which the transitionProperty
+// checks above already enforce. So the honest test here is parity — AOS must render the
+// same duration the DS component does — not an absolute "collapsed to zero" cap, which
+// was the v1 kill-switch expectation v2 reversed. DS's own smoke owns the absolute value.
+function compareReducedTransitionDuration(add, name, ds, aos) {
+  const dsMaxMs = maxCssDurationMs(ds);
+  const aosMaxMs = maxCssDurationMs(aos);
+  add(name, Math.abs(dsMaxMs - aosMaxMs) <= 1, {
+    ds,
+    aos,
+    dsMaxMs,
+    aosMaxMs,
+    toleranceMs: 1,
+    disposition: "reduced-motion transition duration must match the DS component (comprehension cue survives at a real duration since v2); travel removal is enforced by the transitionProperty checks"
   });
 }
 
