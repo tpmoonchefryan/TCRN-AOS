@@ -29,6 +29,9 @@ import { tcrnTokenCss } from "@tcrn/ui-tokens";
 import { chainPartitions, localeCopy, shellNavGroups, shellNavItems, type ShellNavItem } from "./data.js";
 import { ShellHeaderActions } from "./shell-header-actions.js";
 import { MyWorkView, ProjectsView, WorkItemsView } from "./cockpit-views.js";
+import { WorkItemDetailView } from "./cockpit-detail.js";
+import { BoardView } from "./cockpit-board.js";
+import { DeliberationsView } from "./cockpit-deliberation.js";
 import { Phase3DogfoodReadback } from "./phase3-dogfood-readback.js";
 import { WorkManagementMockups, getWorkMockupPageTitle } from "./work-management-mockups.js";
 
@@ -459,7 +462,19 @@ function OwnerQualityContent({
       return <ProjectsView locale={locale} routeHref={routeHref} />;
     }
     if (moduleId === "work-items") {
-      return <WorkItemsView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />;
+      // A path under the module addresses one item; the module root lists them.
+      const key = modulePath.startsWith("/work-items/")
+        ? decodeURIComponent(modulePath.slice("/work-items/".length))
+        : null;
+      return key
+        ? <WorkItemDetailView locale={locale} routeHref={routeHref} itemKey={key} />
+        : <WorkItemsView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />;
+    }
+    if (moduleId === "deliberations") {
+      return <DeliberationsView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />;
+    }
+    if (moduleId === "dashboard") {
+      return <BoardView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />;
     }
   }
   if (isLegacyWorkRoute) {
@@ -948,6 +963,116 @@ function createDocumentCss(): string {
   color: var(--tcrn-color-brand-primary);
   font-size: var(--tcrn-type-size-meta);
   text-decoration: none;
+}
+.tcrn-aos-detail-head {
+  display: grid;
+  gap: var(--tcrn-space-2h);
+}
+.tcrn-aos-detail-head__title {
+  display: grid;
+  gap: var(--tcrn-space-1);
+}
+.tcrn-aos-detail-head__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-aos-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+  gap: var(--tcrn-space-3);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .tcrn-aos-detail-grid { grid-template-columns: minmax(0, 1fr); }
+}
+.tcrn-aos-detail-main,
+.tcrn-aos-detail-side {
+  display: grid;
+  gap: var(--tcrn-space-3);
+  min-width: 0;
+}
+.tcrn-aos-board {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(180px, 1fr));
+  gap: var(--tcrn-space-2h);
+  align-items: start;
+  overflow-x: auto;
+}
+@media (max-width: 1100px) {
+  .tcrn-aos-board { grid-template-columns: repeat(2, minmax(200px, 1fr)); }
+}
+.tcrn-aos-board__column {
+  display: grid;
+  gap: var(--tcrn-space-2);
+  padding: var(--tcrn-space-2);
+  border-radius: var(--tcrn-radius-surface);
+  background: var(--tcrn-color-surface-muted);
+  align-content: start;
+  min-width: 0;
+}
+.tcrn-aos-board__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-aos-board__cards {
+  display: grid;
+  gap: var(--tcrn-space-1h);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tcrn-aos-board__card {
+  display: grid;
+  gap: var(--tcrn-space-1);
+  padding: var(--tcrn-space-2);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-control);
+  background: var(--tcrn-color-surface-panel);
+  color: inherit;
+  text-decoration: none;
+  min-width: 0;
+}
+.tcrn-aos-board__card-title {
+  font-size: var(--tcrn-type-size-meta);
+  line-height: var(--tcrn-type-line-ui);
+  overflow-wrap: anywhere;
+}
+.tcrn-aos-board__card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tcrn-space-1);
+}
+.tcrn-aos-conference-list {
+  display: grid;
+  gap: var(--tcrn-space-1h);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tcrn-aos-conference-row {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  padding: var(--tcrn-space-2);
+  border-bottom: 1px solid var(--tcrn-color-border-subtle);
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 760px) {
+  .tcrn-aos-conference-row { grid-template-columns: minmax(0, 1fr); }
+}
+.tcrn-aos-conference-row__title {
+  overflow-wrap: anywhere;
+}
+.tcrn-aos-conference-row__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tcrn-space-1);
 }
 .tcrn-aos-filters {
   display: grid;

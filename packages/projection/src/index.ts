@@ -28,3 +28,4 @@ export type {
   ProjectedPosition,
   ProjectedWork
 } from "./types.js";
+export { resolveKeyTable, partitionTokenCandidates, digestOf, WORK_KIND_TOKENS, type KeyNamespace } from "./external-keys.js";

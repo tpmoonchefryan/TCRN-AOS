@@ -3,9 +3,13 @@ import assert from "node:assert/strict";
 
 import {
   ProjectionStore,
+  WORK_KIND_TOKENS,
   buildInbox,
   computeEffectiveUnresolved,
-  reassemblePositions
+  digestOf,
+  partitionTokenCandidates,
+  reassemblePositions,
+  resolveKeyTable
 } from "../../../dist/packages/projection/src/index.js";
 
 const partition = "test-partition";
@@ -217,4 +221,32 @@ test("inbox merges gates, open deliberations, and live open issues with owner in
   assert.ok(items.every((item) => item.recordId !== "gate:2"));
   assert.ok(items.every((item) => item.recordId !== "conference:2"));
   assert.ok(items.every((item) => item.recordId !== "minutes:2"));
+});
+
+
+test("key recovery resolves the derivation from the ids themselves, not from an assumed record", () => {
+  // Real ids from the live cross-project chain, deliberately NOT starting at
+  // INIT-001: the first attempt at this assumed the first Initiative in a page
+  // was INIT-001, the probe failed, and every record in the two largest chains
+  // came back unnamed.
+  const known = [
+    ["TCRN-CROSS-INIT-012", "work:b1b2767f8f2a47ca19e4e16f"],
+    ["TCRN-CROSS-STORY-105", "work:bc4ef2cf3e13d59e84698ced"],
+    ["TCRN-CROSS-EPIC-033", "work:6885af8b58e7ce99e08434e6"]
+  ];
+  const table = resolveKeyTable("work", known.map(([, id]) => id), {
+    partitionTokens: partitionTokenCandidates("cross-project"),
+    kindTokens: WORK_KIND_TOKENS
+  });
+  for (const [key, id] of known) {
+    assert.equal(table.get(digestOf(id)), key, `${id} should resolve to ${key}`);
+  }
+});
+
+test("key recovery yields nothing rather than wrong names when ids do not match", () => {
+  const table = resolveKeyTable("work", ["work:0000000000000000000000ff"], {
+    partitionTokens: ["CROSS"],
+    kindTokens: WORK_KIND_TOKENS
+  });
+  assert.equal(table.size, 0);
 });

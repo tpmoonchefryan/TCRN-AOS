@@ -1,5 +1,5 @@
 import { ChainClient, ChainClientError } from "./chain-client.js";
-import { WORK_KIND_TOKENS, buildKeyTable, digestOf, partitionToken, proveSeparator } from "./external-keys.js";
+import { WORK_KIND_TOKENS, digestOf, partitionTokenCandidates, resolveKeyTable } from "./external-keys.js";
 import type {
   ChainConferenceStatus,
   ChainGateStatus,
@@ -229,16 +229,15 @@ export class ChainIngestor {
       if (records.length < pageSize) break;
     }
 
-    // Keys are recovered by verified digest match; the separator is proven
-    // against a record whose key the enumeration also produces, so a change in
-    // the engine's derivation yields no keys rather than wrong ones.
-    const token = partitionToken(partitionId);
-    const probeKey = `TCRN-${token}-INIT-001`;
-    const probeRow = rows.find((row) => row.kind === "Initiative");
-    const separator = probeRow ? proveSeparator("work", probeKey, probeRow.id) : null;
-    const keyTable = separator === null
-      ? new Map<string, string>()
-      : buildKeyTable("work", { partitionToken: token, kindTokens: WORK_KIND_TOKENS, separator });
+    // Keys are recovered by verified digest match. The derivation variant is
+    // chosen by which one explains the most real ids, so no assumption is made
+    // about which record happens to be first, and a changed derivation yields
+    // unnamed records rather than wrong names.
+    const keyTable = resolveKeyTable(
+      "work",
+      rows.map((row) => row.id),
+      { partitionTokens: partitionTokenCandidates(partitionId), kindTokens: WORK_KIND_TOKENS }
+    );
 
     const live = rows.filter((row) => row.tombstone !== true);
     const work: ProjectedWork[] = [];
