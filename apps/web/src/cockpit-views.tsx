@@ -10,26 +10,15 @@ import {
   WorkPageHeader,
   type WorkItemRowProps
 } from "@tcrn/ui-react";
+import type { ReactNode } from "react";
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
 
 import { cockpitData } from "./cockpit-data.generated.js";
-import { workTitle, type CockpitInboxItem, type CockpitPartition, type CockpitWork } from "./cockpit-types.js";
+import { chainStatusBadge, workTitle, type CockpitInboxItem, type CockpitPartition, type CockpitWork } from "./cockpit-types.js";
 
 interface ViewProps {
   locale: TcrnLocale;
   routeHref: (path: string) => string;
-}
-
-/** Chain status to the state vocabulary the design system's badges speak. */
-function statusState(status: string): { state: string } {
-  switch (status) {
-    case "done": return { state: "ready" };
-    case "active": return { state: "review_required" };
-    case "blocked": return { state: "blocked" };
-    case "cancelled": return { state: "not_claimed" };
-    case "ready": return { state: "local_only" };
-    default: return { state: "not_claimed" };
-  }
 }
 
 function partitionLabel(partition: CockpitPartition | undefined, locale: TcrnLocale): string {
@@ -132,6 +121,16 @@ export function MyWorkView({ locale, routeHref }: ViewProps) {
         empty={isZh ? "尚无已完成项。" : "Nothing completed yet."}
         locale={locale}
         rows={done.slice(0, 12).map((row) => workRow(row, locale, routeHref))}
+        footer={done.length > 12 ? (
+          <Text>
+            {isZh
+              ? `显示最近 12 条,共 ${done.length} 条 · `
+              : `Showing 12 of ${done.length}. `}
+            <a href={routeHref("/work-items?status=done")}>
+              {isZh ? "在工作项页查看全部 →" : "See all in Work items →"}
+            </a>
+          </Text>
+        ) : undefined}
       />
     </div>
   );
@@ -141,14 +140,15 @@ function Band({
   title,
   empty,
   rows,
-  locale
-}: { title: string; empty: string; rows: WorkItemRowProps[]; locale: TcrnLocale }) {
+  footer
+}: { title: string; empty: string; rows: WorkItemRowProps[]; locale: TcrnLocale; footer?: ReactNode }) {
   return (
     <Surface className="tcrn-aos-band">
       <Heading level={2} visualLevel={3}>{title}</Heading>
       {rows.length > 0
         ? <WorkList rows={rows} label={title} />
         : empty ? <EmptyState title={empty} /> : null}
+      {footer ?? null}
     </Surface>
   );
 }
@@ -164,8 +164,11 @@ function inboxRow(item: CockpitInboxItem, locale: TcrnLocale, routeHref: (path: 
     id: item.externalKey ?? item.recordId,
     title: item.title,
     // Owner-intent items are the ones the engine will not clear without the
-    // named actor, so they read as blocked rather than merely needing review.
-    state: { state: item.severity === "owner-intent" ? "blocked" : "review_required" },
+    // named actor; the label says what is owed rather than borrowing the DS
+    // proof vocabulary ("Review required") for a different obligation.
+    state: (item.severity === "owner-intent"
+      ? { state: "blocked", label: isZh ? "等你裁定" : "awaiting owner" }
+      : { state: "review_required", label: isZh ? "待处理" : "attention" }) as never,
     owner: item.severity === "owner-intent" ? "owner:governance" : kindLabel,
     href: routeHref(`/work-items/${item.externalKey ?? item.recordId}`),
     fields: [
@@ -184,7 +187,7 @@ function workRow(row: CockpitWork, locale: TcrnLocale, routeHref: (path: string)
     // A record with no scope annotation has no title; showing its key is honest,
     // inventing prose for it would not be.
     title: title ?? (row.externalKey ?? row.id),
-    state: statusState(row.status) as never,
+    state: chainStatusBadge(row.status) as never,
     owner: row.kind,
     href: routeHref(`/work-items/${row.externalKey ?? row.id}`),
     fields: [

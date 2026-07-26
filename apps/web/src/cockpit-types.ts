@@ -57,6 +57,8 @@ export interface CockpitWork {
   kind: string;
   status: string;
   parentId: string | null;
+  /** How many times the chain has revised this record. */
+  revision: number;
   /** The chain has no title field; scope is where a work item states its intent. */
   scope: string | null;
   decidedBy: readonly string[];
@@ -143,6 +145,28 @@ export interface CockpitData {
   minutesByConference: Readonly<Record<string, CockpitMinutes>>;
   /** Event history keyed by work record id; absent for chains read by fallback. */
   activityByWork: Readonly<Record<string, readonly CockpitActivityEntry[]>>;
+}
+
+/**
+ * Chain work status → StatusBadge input.
+ *
+ * The label is always the chain's own word. The DS copy-state vocabulary was
+ * written for verification claims — "Ready for local use", "Review required" —
+ * and mapping work statuses onto it made every active row claim it needed
+ * review while its own Status field said otherwise: two labels on one row,
+ * contradicting each other. `CopyStateInput.label` exists exactly so a product
+ * can keep the DS tone scale while speaking its own vocabulary; the state token
+ * here picks nothing but the tone.
+ */
+export function chainStatusBadge(status: string): { state: string; label: string } {
+  const tone = status === "done"
+    ? "ready" // positive
+    : status === "active"
+      ? "review_required" // warning: the eye should land on what is in flight
+      : status === "blocked"
+        ? "blocked" // danger
+        : "not_claimed"; // neutral: planned, ready, cancelled — the label tells them apart
+  return { state: tone, label: status };
 }
 
 /**

@@ -128,7 +128,9 @@ function InboxBand({
           rows={items.map((item): WorkItemRowProps => ({
             id: item.externalKey ?? item.recordId,
             title: item.title,
-            state: { state: item.severity === "owner-intent" ? "blocked" : "review_required" } as never,
+            state: (item.severity === "owner-intent"
+              ? { state: "blocked", label: isZh ? "等你裁定" : "awaiting owner" }
+              : { state: "review_required", label: isZh ? "待处理" : "attention" }) as never,
             owner: item.severity === "owner-intent" ? "owner:governance" : item.detail,
             // A deliberation opens in the room; anything else opens where it is
             // decided. Sending every row to the same place would make the list

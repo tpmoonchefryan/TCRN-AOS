@@ -1255,10 +1255,8 @@ function createDocumentCss(): string {
   color: inherit;
   border-radius: var(--tcrn-radius-md);
 }
-.tcrn-aos-picker-row[data-selected="true"] .tcrn-aos-picker-row__link {
-  outline: 2px solid var(--tcrn-color-border-accent, var(--tcrn-color-border-strong));
-  outline-offset: 1px;
-}
+/* Selection is signalled once, by the DS row itself (border + left 3px inset).
+   A wrapper outline on top of that drew a second frame around the same row. */
 .tcrn-aos-preview {
   display: grid;
   gap: var(--tcrn-space-2);
@@ -1272,6 +1270,27 @@ function createDocumentCss(): string {
 }
 .tcrn-aos-preview__open {
   font-size: var(--tcrn-type-size-meta);
+}
+/* Scope annotations and position bodies are written with intentional line
+   breaks; collapsing them merges paragraphs into one block. */
+.tcrn-aos-prose {
+  white-space: pre-wrap;
+}
+/* The DS split view collapses at a 760px viewport, but this page loses another
+   ~260px to the shell nav: between those widths the list column is too narrow
+   for its rows and their meta bleeds into the preview. Collapse earlier, hide
+   the pane when nothing is selected, and surface the selection first when one
+   is — row clicks below this width navigate to the full detail instead. */
+@media (max-width: 1100px) {
+  [data-cockpit-split="work-items"] .tcrn-work-split-view {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  [data-cockpit-split="work-items"][data-has-selection="false"] .tcrn-work-split-view__detail {
+    display: none;
+  }
+  [data-cockpit-split="work-items"][data-has-selection="true"] .tcrn-work-split-view__detail {
+    order: -1;
+  }
 }
 .tcrn-aos-as-of {
   display: inline-flex;

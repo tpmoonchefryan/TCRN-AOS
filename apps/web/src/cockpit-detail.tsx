@@ -15,7 +15,7 @@ import {
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
 
 import { cockpitData } from "./cockpit-data.generated.js";
-import { workTitle, type CockpitWork } from "./cockpit-types.js";
+import { chainStatusBadge, workTitle, type CockpitWork } from "./cockpit-types.js";
 
 /**
  * Work item detail — every field the chain holds, and nothing it does not.
@@ -80,7 +80,7 @@ export function WorkItemDetailView({
       label: isZh ? "裁定源" : "Decided by",
       value: item.decidedBy.length > 0 ? item.decidedBy.join(", ") : "—"
     },
-    { key: "revision", label: isZh ? "修订" : "Revision", value: String(item.id) }
+    { key: "revision", label: isZh ? "修订" : "Revision", value: `r${item.revision}` }
   ];
 
   // Operational fields the cockpit will own once the AOS domain lands. They are
@@ -139,7 +139,7 @@ export function WorkItemDetailView({
           <Surface className="tcrn-aos-band">
             <Heading level={2} visualLevel={3}>{isZh ? "范围" : "Scope"}</Heading>
             {item.scope
-              ? <Text>{item.scope}</Text>
+              ? <Text className="tcrn-aos-prose">{item.scope}</Text>
               : <EmptyState title={isZh ? "该记录没有范围注解——链上确实没有标题。" : "No scope annotation; the chain genuinely holds no title for this record."} />}
           </Surface>
 
@@ -281,7 +281,7 @@ function childRow(row: CockpitWork, locale: TcrnLocale, routeHref: (path: string
   return {
     id: row.externalKey ?? row.id,
     title: workTitle(row) ?? (row.externalKey ?? row.id),
-    state: { state: row.status === "done" ? "ready" : row.status === "blocked" ? "blocked" : "review_required" },
+    state: chainStatusBadge(row.status) as never,
     owner: row.kind,
     href: routeHref(`/work-items/${row.externalKey ?? row.id}`),
     fields: [{ key: "status", label: isZh ? "状态" : "Status", value: row.status }]

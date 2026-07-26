@@ -146,6 +146,7 @@ export const cockpitData: CockpitData = ${JSON.stringify({
       kind: row.kind,
       status: row.status,
       parentId: row.parentId,
+      revision: row.revision,
       scope: row.scope,
       decidedBy: row.decidedBy,
       sprintWorkId: row.sprintWorkId

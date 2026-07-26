@@ -18,7 +18,7 @@ import {
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
 
 import { cockpitData } from "./cockpit-data.generated.js";
-import { workTitle, type CockpitPartition, type CockpitWork } from "./cockpit-types.js";
+import { chainStatusBadge, workTitle, type CockpitPartition, type CockpitWork } from "./cockpit-types.js";
 
 /**
  * Work items — one searchable, filterable, selectable index over every ticket
@@ -101,9 +101,7 @@ export function WorkItemsView({
         <div className="tcrn-aos-searchbar">
           <SearchInput
             aria-label={isZh ? "检索工作项" : "Search work items"}
-            placeholder={isZh
-              ? "按键号 / 类型 / 状态 / 范围注解逐字检索"
-              : "Search key, kind, status, and scope text"}
+            placeholder={isZh ? "检索工作项" : "Search work items"}
             value={query}
             onChange={(event) => setQuery(event.currentTarget.value)}
             data-cockpit-search="work-items"
@@ -188,6 +186,7 @@ export function WorkItemsView({
             : "No work item matches the current filters and search."}
         />
       ) : (
+        <div data-cockpit-split="work-items" data-has-selection={selected ? "true" : "false"}>
         <WorkSplitView
           label={isZh ? "工作项列表与详情" : "Work items list and preview"}
           list={
@@ -224,12 +223,15 @@ export function WorkItemsView({
                         the same destination reached without the reload. */}
                     <a
                       className="tcrn-aos-picker-row__link"
-                      href={facetSelectHref(routeHref, {
-                        project: projectFilter, kind: kindFilter, status: statusFilter,
-                        view: viewFilter, q: query || undefined, selected: key
-                      })}
+                      href={routeHref(`/work-items/${key}`)}
+                      aria-current={key === selectedId ? "true" : undefined}
                       onClick={(event) => {
                         if (event.metaKey || event.ctrlKey || event.shiftKey) return;
+                        // Only hijack the click while the preview pane is on
+                        // screen; below that width the pane is hidden and the
+                        // honest behaviour is the link's own: open the detail.
+                        if (typeof window !== "undefined"
+                          && !window.matchMedia("(min-width: 1101px)").matches) return;
                         event.preventDefault();
                         setSelectedId(key);
                       }}
@@ -237,7 +239,7 @@ export function WorkItemsView({
                       <WorkItemRow
                         id={key}
                         title={workTitle(row) ?? key}
-                        state={statusState(row.status) as never}
+                        state={chainStatusBadge(row.status) as never}
                         owner={row.kind}
                         selected={key === selectedId}
                         fields={[
@@ -264,6 +266,7 @@ export function WorkItemsView({
           }
           detail={<PreviewPane item={selected} locale={locale} routeHref={routeHref} />}
         />
+        </div>
       )}
     </div>
   );
@@ -315,7 +318,7 @@ function PreviewPane({
       </div>
       <Heading level={2} visualLevel={3}>{workTitle(item) ?? key}</Heading>
       {item.scope
-        ? <Text>{item.scope.length > 700 ? `${item.scope.slice(0, 700)}…` : item.scope}</Text>
+        ? <Text className="tcrn-aos-prose">{item.scope.length > 700 ? `${item.scope.slice(0, 700)}…` : item.scope}</Text>
         : (
           <Text>
             {isZh
@@ -542,17 +545,6 @@ function matchesQuery(row: CockpitWork, query: string): boolean {
   return terms.every((term) => haystack.includes(term));
 }
 
-function statusState(status: string): { state: string } {
-  switch (status) {
-    case "done": return { state: "ready" };
-    case "active": return { state: "review_required" };
-    case "blocked": return { state: "blocked" };
-    case "cancelled": return { state: "not_claimed" };
-    case "ready": return { state: "local_only" };
-    default: return { state: "not_claimed" };
-  }
-}
-
 function findPartition(id: string): CockpitPartition | undefined {
   return cockpitData.partitions.find((entry) => entry.id === id);
 }
@@ -560,13 +552,6 @@ function findPartition(id: string): CockpitPartition | undefined {
 function partitionLabel(partition: CockpitPartition | undefined, locale: TcrnLocale): string {
   if (!partition) return "—";
   return locale === "zh-CN" ? partition.labelZh : partition.label;
-}
-
-function facetSelectHref(
-  routeHref: (path: string) => string,
-  params: Record<string, string | undefined>
-): string {
-  return routeHref(`/work-items${buildQuery(params)}`);
 }
 
 function buildQuery(params: Record<string, string | undefined>): string {

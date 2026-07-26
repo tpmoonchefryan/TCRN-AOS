@@ -70,6 +70,13 @@ export function DeliberationsView({
         locale={locale}
         routeHref={routeHref}
       />
+      {closed.length > 30 ? (
+        <Text>
+          {isZh
+            ? `已闭会共 ${closed.length} 场,此处显示最近 30 场。`
+            : `Showing the most recent 30 of ${closed.length} closed deliberations.`}
+        </Text>
+      ) : null}
     </div>
   );
 }
