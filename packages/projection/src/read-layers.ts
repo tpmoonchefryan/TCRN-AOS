@@ -1,4 +1,4 @@
-import type { ProjectedGate, ProjectedMinutes, ProjectedPosition } from "./types.js";
+import type { ProjectedEvent, ProjectedGate, ProjectedMinutes, ProjectedPosition } from "./types.js";
 
 /**
  * Read-layer computations: the things the chain records faithfully but does not
@@ -231,4 +231,65 @@ export function buildInbox(input: {
   const rank = (item: InboxItem) => (item.severity === "owner-intent" ? 0 : 1);
   return items.sort((left, right) =>
     rank(left) - rank(right) || (left.externalKey ?? "").localeCompare(right.externalKey ?? ""));
+}
+
+/**
+ * One line of a work item's history, ready to render.
+ *
+ * The chain records operations, not sentences, so this layer names the
+ * operation and stops there. It never reconstructs a diff ("status changed from
+ * ready to active") because the event payload holds the record's state *after*
+ * the write and nothing about what it replaced — a before-value would have to be
+ * inferred from the neighbouring event, and an inferred before-value presented
+ * as history is a fabrication with a timestamp on it.
+ */
+export interface ActivityEntry {
+  id: string;
+  sequence: number;
+  occurredAt: string;
+  operation: string;
+  /**
+   * Who the chain says acted, or null.
+   *
+   * Null has two distinct causes and `attribution` tells them apart, because
+   * "this partition never recorded actors" and "this event predates the day it
+   * started" are different facts about the same blank space.
+   */
+  actorId: string | null;
+  attribution: "recorded" | "predates-attestation" | "not-enabled";
+}
+
+/**
+ * Build a work item's activity feed from the chain's own event log.
+ *
+ * `attestationFromSequence` is the sequence at which the partition began
+ * recording actors — null when it never did. It is passed in rather than
+ * inferred from whether any event happens to carry an actor: a chain that
+ * enabled attestation and has not been written to since carries no actor on any
+ * event, and inferring from that would report it as never enabled.
+ */
+export function buildActivityFeed(
+  events: readonly ProjectedEvent[],
+  attestationFromSequence: number | null
+): ActivityEntry[] {
+  return [...events]
+    .sort((left, right) => right.sequence - left.sequence)
+    .map((event) => ({
+      id: event.id,
+      sequence: event.sequence,
+      occurredAt: event.occurredAt,
+      operation: event.operation,
+      actorId: event.actorId,
+      attribution: event.actorId
+        ? "recorded" as const
+        : attestationFromSequence === null
+          ? "not-enabled" as const
+          : event.sequence < attestationFromSequence
+            ? "predates-attestation" as const
+            // Attestation is on and this event still carries no actor. Reporting
+            // it as "not recorded" would be a guess about why; the honest label
+            // is the same one used for a chain that never enabled it, so the
+            // reader is told what is missing rather than told a reason.
+            : "not-enabled" as const
+    }));
 }

@@ -23,6 +23,30 @@ export interface CockpitPartition {
    * an unread one look identical, and only one of them is true.
    */
   unavailable: readonly string[];
+  /** Which read path produced this partition; decides what `unavailable` holds. */
+  readVia: "export" | "paginated";
+  /**
+   * Chain sequence from which writes name who made them, or null if this chain
+   * has never enabled actor attestation.
+   */
+  attestationFromSequence: number | null;
+}
+
+/**
+ * One line of a work item's history.
+ *
+ * `attribution` carries why an actor is missing, because the two reasons are
+ * different facts a reader acts on differently: a chain that never enabled
+ * attestation will never name anyone, while an event that merely predates
+ * enablement sits in a log whose later entries do.
+ */
+export interface CockpitActivityEntry {
+  id: string;
+  sequence: number;
+  occurredAt: string;
+  operation: string;
+  actorId: string | null;
+  attribution: "recorded" | "predates-attestation" | "not-enabled";
 }
 
 export interface CockpitWork {
@@ -77,6 +101,35 @@ export interface CockpitEffectiveUnresolved {
   dissolvedCount: number;
 }
 
+/**
+ * One logical position, already reassembled from however many fragments the
+ * byte budget forced it into.
+ *
+ * The budget constrains storage; a reader should see the argument, so the
+ * cockpit renders the whole and keeps the fragment ids for anyone who needs to
+ * reach the individual records.
+ */
+export interface CockpitPosition {
+  conferenceId: string;
+  actorId: string | null;
+  fragmentIds: readonly string[];
+  externalKeys: readonly string[];
+  body: string;
+  fragmentCount: number;
+}
+
+export interface CockpitMinutes {
+  id: string;
+  externalKey: string | null;
+  summary: string | null;
+  outcomeClass: string;
+  decisions: readonly string[];
+  /** Everything recorded as open when these minutes closed. */
+  unresolvedIssues: readonly string[];
+  /** What later minutes have not since settled. */
+  effective: readonly string[];
+}
+
 export interface CockpitData {
   generatedAt: string;
   partitions: readonly CockpitPartition[];
@@ -85,6 +138,11 @@ export interface CockpitData {
   conferences: readonly CockpitConference[];
   inbox: readonly CockpitInboxItem[];
   effectiveUnresolved: readonly CockpitEffectiveUnresolved[];
+  /** Reassembled position threads, keyed by conference id. */
+  threads: Readonly<Record<string, readonly CockpitPosition[]>>;
+  minutesByConference: Readonly<Record<string, CockpitMinutes>>;
+  /** Event history keyed by work record id; absent for chains read by fallback. */
+  activityByWork: Readonly<Record<string, readonly CockpitActivityEntry[]>>;
 }
 
 /**

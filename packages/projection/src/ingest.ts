@@ -9,6 +9,7 @@ import type {
   PartitionFreshness,
   PartitionProjection,
   ProjectedConference,
+  ProjectedEvent,
   ProjectedGate,
   ProjectedMinutes,
   ProjectedPosition,
@@ -112,10 +113,23 @@ export class ChainIngestor {
       chainVersion
     }));
 
+    // Conferences and minutes carry no externalKey in the export either — only
+    // work and projects do — so they get the same verified digest recovery.
+    const conferenceKeys = resolveKeyTable(
+      "conference",
+      live(raw.conferences).map((row) => row.id),
+      { partitionTokens: partitionTokenCandidates(partitionId), kindTokens: ["CONF"] }
+    );
+    const minutesKeys = resolveKeyTable(
+      "minutes",
+      live(raw.conferenceMinutes).map((row) => row.id),
+      { partitionTokens: partitionTokenCandidates(partitionId), kindTokens: ["MIN"] }
+    );
+
     const conferences: ProjectedConference[] = live(raw.conferences).map((row) => ({
       partitionId,
       id: row.id,
-      externalKey: row.externalKey ?? null,
+      externalKey: row.externalKey ?? conferenceKeys.get(digestOf(row.id)) ?? null,
       title: row.title ?? null,
       type: row.type ?? null,
       status: row.status as ChainConferenceStatus,
@@ -145,7 +159,7 @@ export class ChainIngestor {
     const minutes: ProjectedMinutes[] = live(raw.conferenceMinutes).map((row) => ({
       partitionId,
       id: row.id,
-      externalKey: row.externalKey ?? null,
+      externalKey: row.externalKey ?? minutesKeys.get(digestOf(row.id)) ?? null,
       conferenceId: row.conferenceId,
       summary: row.summary ?? null,
       outcomeClass: row.outcomeClass as ChainOutcomeClass,
@@ -154,7 +168,34 @@ export class ChainIngestor {
       chainVersion
     }));
 
-    return { partitionId, chainVersion, verifiedAt, work, gates, conferences, positions, minutes };
+    // The event log, which is where time and causation live. Every other family
+    // above is current state; only this one can answer "what happened to this
+    // item, when, and at whose hand".
+    const events: ProjectedEvent[] = (raw.events ?? []).map((row) => ({
+      partitionId,
+      id: row.id,
+      sequence: row.sequence,
+      occurredAt: row.occurredAt,
+      operation: row.payload?.operation ?? "unknown",
+      subjectId: typeof row.payload?.record?.id === "string" ? row.payload.record.id : null,
+      actorId: typeof row.payload?.actor === "string" ? row.payload.actor : null,
+      chainVersion
+    }));
+
+    return {
+      partitionId,
+      chainVersion,
+      verifiedAt,
+      readVia: "export",
+      work,
+      gates,
+      conferences,
+      positions,
+      minutes,
+      events,
+      actorAttestationFromSequence: events.find(
+        (event) => event.operation === "attestation.actor.enabled")?.sequence ?? null
+    };
   }
 
   /**
@@ -311,11 +352,19 @@ export class ChainIngestor {
       partitionId,
       chainVersion,
       verifiedAt,
+      readVia: "paginated",
       work,
       gates,
       conferences,
       positions: [],
-      minutes: []
+      minutes: [],
+      // The event log has no paginated read at all, so a partition reached this
+      // way has no history to show. Returning empty is only safe because callers
+      // are told which families a partition could not supply and render "not
+      // read" for them; without that, an empty log would read as "nothing ever
+      // happened here" on the two busiest chains on the platform.
+      events: [],
+      actorAttestationFromSequence: null
     };
   }
 }
@@ -345,6 +394,18 @@ interface ExportReceipt {
   conferences?: readonly ExportConferenceRow[];
   conferencePositions?: readonly ExportPositionRow[];
   conferenceMinutes?: readonly ExportMinutesRow[];
+  events?: readonly ExportEventRow[];
+}
+
+interface ExportEventRow {
+  id: string;
+  sequence: number;
+  occurredAt: string;
+  payload?: {
+    operation?: string;
+    actor?: unknown;
+    record?: { id?: unknown };
+  };
 }
 
 interface ExportWorkRow {

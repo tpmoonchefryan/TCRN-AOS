@@ -6,9 +6,11 @@ export {
   type WorkFilter
 } from "./store.js";
 export {
+  buildActivityFeed,
   buildInbox,
   computeEffectiveUnresolved,
   reassemblePositions,
+  type ActivityEntry,
   type EffectiveUnresolved,
   type InboxItem,
   type ReassembledPosition
@@ -23,6 +25,7 @@ export type {
   PartitionId,
   PartitionProjection,
   ProjectedConference,
+  ProjectedEvent,
   ProjectedGate,
   ProjectedMinutes,
   ProjectedPosition,

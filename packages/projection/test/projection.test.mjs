@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   ProjectionStore,
   WORK_KIND_TOKENS,
+  buildActivityFeed,
   buildInbox,
   computeEffectiveUnresolved,
   digestOf,
@@ -24,6 +25,8 @@ function projection(overrides = {}) {
     conferences: [],
     positions: [],
     minutes: [],
+    events: [],
+    actorAttestationFromSequence: null,
     ...overrides
   };
 }
@@ -249,4 +252,63 @@ test("key recovery yields nothing rather than wrong names when ids do not match"
     kindTokens: WORK_KIND_TOKENS
   });
   assert.equal(table.size, 0);
+});
+
+function event(sequence, extra = {}) {
+  return {
+    partitionId: partition,
+    id: `event:${sequence}`,
+    sequence,
+    occurredAt: "2026-07-26T00:00:00Z",
+    operation: "work.updated",
+    subjectId: "work:1",
+    actorId: null,
+    chainVersion: 10,
+    ...extra
+  };
+}
+
+test("an unattributed event says whether the chain could have recorded an actor", () => {
+  // Same blank actor, two different facts: TMS never enabled attestation, while
+  // AOS's early events simply predate the day it did. A feed that showed both as
+  // "unknown" would hide that one of the two chains can never improve.
+  const neverEnabled = buildActivityFeed([event(1), event(2)], null);
+  assert.deepEqual(neverEnabled.map((entry) => entry.attribution), ["not-enabled", "not-enabled"]);
+
+  const enabledLater = buildActivityFeed(
+    [event(1), event(2), event(3, { actorId: "owner:governance" })], 3);
+  assert.deepEqual(
+    enabledLater.map((entry) => `${entry.sequence}:${entry.attribution}`),
+    ["3:recorded", "2:predates-attestation", "1:predates-attestation"]);
+});
+
+test("activity is ordered by sequence, not by the second-precision timestamp", () => {
+  // Three writes inside one second share a timestamp, so sorting by time would
+  // reorder them arbitrarily and show a work item being closed before it was
+  // opened. Sequence is the only ordering the chain guarantees.
+  const sameSecond = [
+    event(7, { operation: "work.created" }),
+    event(8, { operation: "work.annotated" }),
+    event(9, { operation: "work.updated" })
+  ];
+  const feed = buildActivityFeed(sameSecond, null);
+  assert.deepEqual(feed.map((entry) => entry.sequence), [9, 8, 7]);
+});
+
+test("events are stored per subject and replaced with their partition", () => {
+  const store = new ProjectionStore();
+  store.replacePartition(projection({
+    events: [event(1, { subjectId: "work:1" }), event(2, { subjectId: "work:2" })],
+    actorAttestationFromSequence: 2
+  }));
+  assert.equal(store.listEvents({ subjectId: "work:1" }).length, 1);
+  assert.equal(store.attestationFromSequence(partition), 2);
+
+  // A chain that has never enabled attestation records null, which must stay
+  // distinguishable from a partition the store has simply never seen.
+  store.replacePartition(projection({ events: [event(3, { subjectId: "work:1" })] }));
+  assert.equal(store.listEvents({ subjectId: "work:2" }).length, 0);
+  assert.equal(store.attestationFromSequence(partition), null);
+  assert.equal(store.attestationFromSequence("never-projected"), undefined);
+  store.close();
 });

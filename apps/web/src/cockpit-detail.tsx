@@ -8,6 +8,7 @@ import {
   MachineTokenCell,
   Surface,
   Text,
+  WorkActivityFeed,
   WorkList,
   type WorkItemRowProps
 } from "@tcrn/ui-react";
@@ -148,6 +149,8 @@ export function WorkItemDetailView({
               ? <WorkList label={isZh ? "子项" : "Children"} rows={children.map((child) => childRow(child, locale, routeHref))} />
               : <EmptyState title={isZh ? "无子项。Subtask 按公约在开工时切分,不预造。" : "No children. Subtasks are cut when work starts, never pre-created."} />}
           </Surface>
+
+          <ActivityPanel item={item} locale={locale} />
         </div>
 
         <div className="tcrn-aos-detail-side">
@@ -195,6 +198,63 @@ export function WorkItemDetailView({
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * The work item's own history, straight from the chain's event log.
+ *
+ * Three things this panel refuses to do, each because the alternative would read
+ * as fact: it never renders a before-and-after ("ready → active"), because the
+ * event payload holds only the state after the write and the previous value
+ * would have to be inferred; it never leaves the actor column blank, because a
+ * blank reads as an oversight rather than as the chain's answer; and it never
+ * shows an empty feed for a chain whose log was not read, because "nothing
+ * happened" and "not read" are the same picture and opposite facts.
+ */
+function ActivityPanel({ item, locale }: { item: CockpitWork; locale: TcrnLocale }) {
+  const isZh = locale === "zh-CN";
+  const partition = cockpitData.partitions.find((entry) => entry.id === item.partitionId);
+  const entries = cockpitData.activityByWork[item.id] ?? [];
+  const logUnavailable = partition?.unavailable.includes("events") ?? false;
+
+  const attributionNote = partition?.attestationFromSequence === null
+    ? (isZh
+      ? "该链未启用 actor attestation,因此没有任何一条事件记录了执行者——这是链的事实,不是读取缺口。"
+      : "This chain has never enabled actor attestation, so not one of its events records who acted. That is the chain's answer, not a gap in the read.")
+    : (isZh
+      ? `该链自序号 ${partition?.attestationFromSequence} 起记录执行者;更早的事件在该能力启用之前。`
+      : `This chain records the actor from sequence ${partition?.attestationFromSequence}; earlier events predate that capability.`);
+
+  return (
+    <Surface className="tcrn-aos-band" data-detail-panel="activity">
+      <Heading level={2} visualLevel={3}>{isZh ? "活动" : "Activity"}</Heading>
+      {logUnavailable ? (
+        <EmptyState
+          title={isZh
+            ? "该项目的事件日志未读取（链体量超出 export 上限,降级读面没有事件读法）。此处为未取,不是无活动。"
+            : "This project's event log was not read: the chain exceeds the export ceiling and the fallback read surface has no event verb. Not read, not inactive."}
+        />
+      ) : entries.length === 0 ? (
+        <EmptyState title={isZh ? "该记录尚无事件。" : "No event has touched this record yet."} />
+      ) : (
+        <>
+          <Text>{attributionNote}</Text>
+          <WorkActivityFeed
+            label={isZh ? "活动" : "Activity"}
+            items={entries.map((entry) => ({
+              id: entry.id,
+              actor: entry.actorId ?? (entry.attribution === "predates-attestation"
+                ? (isZh ? "未记录（早于 attestation）" : "not recorded (predates attestation)")
+                : (isZh ? "未记录（该链未启用 attestation）" : "not recorded (attestation not enabled)")),
+              action: entry.operation,
+              timestamp: entry.occurredAt,
+              summary: isZh ? `链序号 ${entry.sequence}` : `chain sequence ${entry.sequence}`
+            }))}
+          />
+        </>
+      )}
+    </Surface>
   );
 }
 

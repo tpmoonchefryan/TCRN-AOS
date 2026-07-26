@@ -45,6 +45,8 @@
     "service:start": "pnpm build && node scripts/service-start.mjs",
     "service:smoke": "pnpm build && node scripts/service-smoke.mjs",
     "aos:frontend-shell-proof": "pnpm build && node scripts/aos-frontend-shell-proof.mjs",
+    "cockpit:data": "pnpm build && node scripts/build-cockpit-data.mjs",
+    "cockpit:previews": "pnpm build && node scripts/render-cockpit-previews.mjs",
     "slice3:proof": "pnpm build && node scripts/slice-3-proof.mjs",
     "slice5:proof": "pnpm build && node scripts/slice-5-operating-loop-proof.mjs",
     "slice6:proof": "pnpm build && node scripts/slice-6-knowledge-guide-release-notes-proof.mjs",

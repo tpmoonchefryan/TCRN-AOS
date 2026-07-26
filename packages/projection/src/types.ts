@@ -133,6 +133,36 @@ export interface ProjectedMinutes {
 }
 
 /**
+ * One appended event, as the chain's own log holds it.
+ *
+ * This is the only record family that carries time and causation, which is why
+ * the detail view's activity feed reads from here rather than diffing states.
+ */
+export interface ProjectedEvent {
+  partitionId: PartitionId;
+  id: string;
+  /** Position in the chain; the only ordering that is authoritative. */
+  sequence: number;
+  occurredAt: string;
+  /** e.g. "work.created", "work.annotated", "conference.closed". */
+  operation: string;
+  /** The record this event acted on, when the payload names one. */
+  subjectId: string | null;
+  /**
+   * Who the chain says acted — and null for every event a chain recorded before
+   * it enabled actor attestation.
+   *
+   * That null is a fact about the chain, not a hole in the read: TMS has never
+   * enabled attestation, so not one of its events names an actor, and AOS's
+   * first 61 events predate its own enablement. A feed that left the column
+   * blank would read as "unknown by accident"; it has to say the chain did not
+   * record it.
+   */
+  actorId: string | null;
+  chainVersion: number;
+}
+
+/**
  * What one partition looked like at one chain version.
  *
  * `verifiedAt` is when this projection read the chain, deliberately separate
@@ -144,11 +174,26 @@ export interface PartitionProjection {
   partitionId: PartitionId;
   chainVersion: number;
   verifiedAt: string;
+  /**
+   * Which read path produced this projection.
+   *
+   * Recorded rather than inferred from empty arrays: "the fallback cannot reach
+   * positions" and "this chain has no positions" produce identical data, and a
+   * view has to be able to tell a reader which one it is looking at.
+   */
+  readVia: "export" | "paginated";
   work: readonly ProjectedWork[];
   gates: readonly ProjectedGate[];
   conferences: readonly ProjectedConference[];
   positions: readonly ProjectedPosition[];
   minutes: readonly ProjectedMinutes[];
+  events: readonly ProjectedEvent[];
+  /**
+   * Sequence at which this partition began recording who acted, or null if it
+   * never has. Everything before it is unattributed by design rather than by
+   * omission, and the activity feed says which case a reader is looking at.
+   */
+  actorAttestationFromSequence: number | null;
 }
 
 /**

@@ -3,6 +3,7 @@ import type {
   PartitionFreshness,
   PartitionProjection,
   ProjectedConference,
+  ProjectedEvent,
   ProjectedGate,
   ProjectedMinutes,
   ProjectedPosition,
@@ -105,6 +106,23 @@ export class ProjectionStore {
         chain_version INTEGER NOT NULL,
         PRIMARY KEY (partition_id, id)
       );
+      CREATE TABLE IF NOT EXISTS projected_event (
+        partition_id TEXT NOT NULL,
+        id TEXT NOT NULL,
+        sequence INTEGER NOT NULL,
+        occurred_at TEXT NOT NULL,
+        operation TEXT NOT NULL,
+        subject_id TEXT,
+        actor_id TEXT,
+        chain_version INTEGER NOT NULL,
+        PRIMARY KEY (partition_id, id)
+      );
+      CREATE INDEX IF NOT EXISTS projected_event_subject
+        ON projected_event (partition_id, subject_id, sequence);
+      CREATE TABLE IF NOT EXISTS partition_attestation (
+        partition_id TEXT PRIMARY KEY,
+        from_sequence INTEGER
+      );
     `);
     // Full-text search over the text a reader would actually search for: work
     // scope, conference titles, position bodies, minutes summaries. Contentless
@@ -134,7 +152,7 @@ export class ProjectionStore {
       const p = projection.partitionId;
       for (const table of [
         "projected_work", "projected_gate", "projected_conference",
-        "projected_position", "projected_minutes"
+        "projected_position", "projected_minutes", "projected_event"
       ]) {
         this.db.prepare(`DELETE FROM ${table} WHERE partition_id = ?`).run(p);
       }
@@ -181,6 +199,21 @@ export class ProjectionStore {
           row.outcomeClass, JSON.stringify(row.decisions),
           JSON.stringify(row.unresolvedIssues), row.chainVersion);
       }
+
+      const event = this.db.prepare(`INSERT INTO projected_event
+        (partition_id,id,sequence,occurred_at,operation,subject_id,actor_id,chain_version)
+        VALUES (?,?,?,?,?,?,?,?)`);
+      for (const row of projection.events) {
+        event.run(p, row.id, row.sequence, row.occurredAt, row.operation,
+          row.subjectId, row.actorId, row.chainVersion);
+      }
+      // Recorded per partition rather than inferred from whether any event has an
+      // actor: a chain with attestation enabled but no writes since would look
+      // identical to one that never enabled it, and those are different facts.
+      this.db.prepare(
+        `INSERT INTO partition_attestation (partition_id,from_sequence) VALUES (?,?)
+         ON CONFLICT(partition_id) DO UPDATE SET from_sequence = excluded.from_sequence`
+      ).run(p, projection.actorAttestationFromSequence);
 
       const search = this.db.prepare(
         "INSERT INTO projected_search (partition_id,record_id,record_type,external_key,body) VALUES (?,?,?,?,?)"
@@ -336,6 +369,54 @@ export class ProjectionStore {
       unresolvedIssues: JSON.parse(String(row.unresolved_issues)) as string[],
       chainVersion: Number(row.chain_version)
     }));
+  }
+
+  /**
+   * The event log, oldest first, optionally narrowed to one record.
+   *
+   * Ordered by sequence rather than `occurredAt` because the chain's timestamps
+   * are second-precision and a burst of writes shares one: sequence is the only
+   * ordering the chain actually guarantees.
+   */
+  listEvents(filter: { partitionId?: string; subjectId?: string } = {}): ProjectedEvent[] {
+    const where: string[] = [];
+    const params: string[] = [];
+    if (filter.partitionId) {
+      where.push("partition_id = ?");
+      params.push(filter.partitionId);
+    }
+    if (filter.subjectId) {
+      where.push("subject_id = ?");
+      params.push(filter.subjectId);
+    }
+    const clause = where.length ? ` WHERE ${where.join(" AND ")}` : "";
+    const rows = this.db.prepare(
+      `SELECT * FROM projected_event${clause} ORDER BY partition_id, sequence`
+    ).all(...params) as Array<Record<string, unknown>>;
+    return rows.map((row) => ({
+      partitionId: String(row.partition_id),
+      id: String(row.id),
+      sequence: Number(row.sequence),
+      occurredAt: String(row.occurred_at),
+      operation: String(row.operation),
+      subjectId: (row.subject_id as string) ?? null,
+      actorId: (row.actor_id as string) ?? null,
+      chainVersion: Number(row.chain_version)
+    }));
+  }
+
+  /**
+   * Where a partition began attributing writes, or null if it never has.
+   *
+   * `undefined` means the partition is not in the store at all, which is a
+   * different answer from "recorded, and the answer is never".
+   */
+  attestationFromSequence(partitionId: string): number | null | undefined {
+    const row = this.db.prepare(
+      "SELECT from_sequence AS s FROM partition_attestation WHERE partition_id = ?"
+    ).get(partitionId) as { s?: number | null } | undefined;
+    if (!row) return undefined;
+    return typeof row.s === "number" ? row.s : null;
   }
 
   /** Full-text search across projected records. */

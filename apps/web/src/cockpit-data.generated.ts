@@ -4,17 +4,20 @@
 import type { CockpitData } from "./cockpit-types.js";
 
 export const cockpitData: CockpitData = {
-  "generatedAt": "2026-07-26T14:47:39Z",
+  "generatedAt": "2026-07-26T15:43:26Z",
   "partitions": [
     {
       "id": "cross-project",
       "label": "Platform governance",
       "labelZh": "平台治理",
       "chainVersion": 1254,
-      "verifiedAt": "2026-07-26T14:47:39Z",
+      "verifiedAt": "2026-07-26T15:43:26Z",
+      "readVia": "paginated",
+      "attestationFromSequence": null,
       "unavailable": [
         "positions",
-        "minutes"
+        "minutes",
+        "events"
       ]
     },
     {
@@ -22,10 +25,13 @@ export const cockpitData: CockpitData = {
       "label": "Design System",
       "labelZh": "设计系统",
       "chainVersion": 924,
-      "verifiedAt": "2026-07-26T14:47:39Z",
+      "verifiedAt": "2026-07-26T15:43:26Z",
+      "readVia": "paginated",
+      "attestationFromSequence": null,
       "unavailable": [
         "positions",
-        "minutes"
+        "minutes",
+        "events"
       ]
     },
     {
@@ -33,15 +39,19 @@ export const cockpitData: CockpitData = {
       "label": "TMS",
       "labelZh": "TMS",
       "chainVersion": 228,
-      "verifiedAt": "2026-07-26T14:47:39Z",
+      "verifiedAt": "2026-07-26T15:43:26Z",
+      "readVia": "export",
+      "attestationFromSequence": null,
       "unavailable": []
     },
     {
       "id": "TCRN-AOS",
       "label": "AOS",
       "labelZh": "AOS",
-      "chainVersion": 126,
-      "verifiedAt": "2026-07-26T14:47:39Z",
+      "chainVersion": 213,
+      "verifiedAt": "2026-07-26T15:43:26Z",
+      "readVia": "export",
+      "attestationFromSequence": 62,
       "unavailable": []
     }
   ],
@@ -64,11 +74,11 @@ export const cockpitData: CockpitData = {
       "id": "work:081b1dead46cc439338ac197",
       "externalKey": "TCRN-AOS-EPIC-002",
       "kind": "Epic",
-      "status": "active",
+      "status": "done",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "scope": "壳与全局层:纯 CSR 壳+DS ProductShell 族;我的工作+收件箱(等你决定聚合);项目目录;as-of 规则全线落地",
+      "scope": "壳与全局层:S004 壳、S005 我的工作+收件箱、S006 项目目录 三条全部交付;壳含四组十项导航、DS headerActions 槽承载的项目切换器与 as-of 徽记、纯 CSR、遗留路由条件化保留",
       "decidedBy": [
-        "minutes:5da0b8ea8b8421cb1f3a1e89"
+        "minutes:4fdc3f1caf4adfb2374090f7"
       ],
       "sprintWorkId": null
     },
@@ -77,11 +87,11 @@ export const cockpitData: CockpitData = {
       "id": "work:cc82f8dc93eedd2b1bae0443",
       "externalKey": "TCRN-AOS-EPIC-003",
       "kind": "Epic",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "scope": "工作项管理:一切皆 Ticket——检索管理页/看板/详情字段全谱/安全写面(自动仪式化)",
+      "scope": "工作项管理:S007 检索管理页、S008 看板、S009 详情字段全谱、S010 安全写面 **四条全部交付**;写面在活链实证含拒绝证据;余 UI 拖拽绑定待交互层",
       "decidedBy": [
-        "minutes:5da0b8ea8b8421cb1f3a1e89"
+        "minutes:4fdc3f1caf4adfb2374090f7"
       ],
       "sprintWorkId": null
     },
@@ -92,9 +102,9 @@ export const cockpitData: CockpitData = {
       "kind": "Epic",
       "status": "planned",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "scope": "审议室与发布列车:对话流阅读器四读层增值;列车页;审议采用三步公约(execution:mode+收据+逐轮转写)",
+      "scope": "审议室与发布列车:S011 审议室首版、S012 发布列车页 已交付;余 S013 审议采用三步公约(execution:mode 声明+host-execution 收据+逐轮转写)未开工。S011 的分片重组与有效未决逐会呈现受 INC-005 阻塞(两条最大链无立场读面)",
       "decidedBy": [
-        "minutes:5da0b8ea8b8421cb1f3a1e89"
+        "minutes:4fdc3f1caf4adfb2374090f7"
       ],
       "sprintWorkId": null
     },
@@ -103,11 +113,11 @@ export const cockpitData: CockpitData = {
       "id": "work:82c67feb8895622dda783c2f",
       "externalKey": "TCRN-AOS-EPIC-005",
       "kind": "Epic",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "scope": "知识空间与治理视图:三真值渲染+检索;审计视图(时间戳形状常态化);快照健康+执行观测摄取",
+      "scope": "知识空间与治理视图:S014 知识空间、S015 审计视图、S016 快照健康 三条均已交付首版;各自如实标注未接入面(公约与卡片读取、事件级时间戳形状检查、快照清单读取),不以空列表冒充健康",
       "decidedBy": [
-        "minutes:5da0b8ea8b8421cb1f3a1e89"
+        "minutes:4fdc3f1caf4adfb2374090f7"
       ],
       "sprintWorkId": null
     },
@@ -122,6 +132,17 @@ export const cockpitData: CockpitData = {
       "decidedBy": [
         "minutes:3a0d27be789cadb0ccb353c1"
       ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:e6a70fb7d03f607657d1f13c",
+      "externalKey": "TCRN-AOS-EPIC-007",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "scope": "设计一致性补齐（v2/v3/v4 逐屏对账）。触发=Owner 指出「v2/v3/v4 决策似乎都没有行动」;核实后部分属实。判据为 MIN-003:界面须与已确认设计逐屏一致含 Layout,不一致处以新设计为准。本 Epic 不改方向,只把已确认设计里被让掉的屏内深度补回,并修正对账过程中捕到的三处「已交付但错的」。对账文档:docs/aos-design/delivery-gap.md(平台根)。四条 Story:审议室对话流(v4)、检索页四项交互(v3 屏 A)、详情页活动流(v3 屏 B)、收件箱与仪表盘拆屏。余下未做项全部依赖 STORY-003(AOS 自有域),不属本 Epic。",
+      "decidedBy": [],
       "sprintWorkId": null
     },
     {
@@ -191,12 +212,34 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-AOS",
+      "id": "work:2d7ab5df74f2eaac34b40821",
+      "externalKey": "TCRN-AOS-INC-006",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:e6a70fb7d03f607657d1f13c",
+      "scope": "缺陷:工作项页每一个筛选链接都返回零结果。**已修**(apps/web/src/app.tsx buildRouteHref)。根因=壳状态被**追加**在调用方查询串之后,产生第二个 ? ;浏览器与 URLSearchParams 都把它读成前一个值的一部分,于是 /work-items?project=TCRN-TMS 变成筛选一个叫「TCRN-TMS?locale=en」的项目。页面照常渲染、无报错、无控制台输出,只是永远 0 of 402。修法=合并查询串而非追加,壳的键最后写入,使调用方不能把壳送去别处。教训:这一屏在第一版就「交付」并被 Owner 看过预览,缺陷从未暴露——因为它不产生错误,只产生一个看起来合理的空列表。**空列表是缺陷最好的伪装**,验收筛选面须实际点一次并核对计数,不能只看页面渲染成功。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:156cf302e91dc05e59d0675e",
+      "externalKey": "TCRN-AOS-INC-007",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:e6a70fb7d03f607657d1f13c",
+      "scope": "缺陷:导航承诺三个屏,实际只有两个半。**已修**(data.ts 导航模型 + app.tsx 路由分派 + 新增 cockpit-global.tsx)。现象=/inbox 渲染的是「我的工作」同一个视图(收件箱在设计里是「头号功能」);/dashboard 渲染的是看板,与它自己的描述「跨项目交付与治理指标」不符;/board 根本不存在。修法=收件箱与仪表盘各成一屏,看板移入交付组并可按项目过滤,导航由十项增为十一项。**发现方式值得记**:不是读代码发现的,是把每一屏批量渲染成预览文件后,机器逐个抽 data-cockpit-view 属性做对照表时,发现两个文件名与视图名对不上——**逐屏渲染再逐屏比对,是导航与路由脱节的唯一低成本探针**,人工点击十一个入口不会注意到两个页面长得一样。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
       "id": "work:ff2290f36de29780d18d4323",
       "externalKey": "TCRN-AOS-INIT-001",
       "kind": "Initiative",
       "status": "active",
       "parentId": null,
-      "scope": "AOS 驾驶舱:Jira 形态多项目作业系统承接 Workflow 数据;六 Epic 二十二 Story(MIN-001 分解 + MIN-002 部署 + MIN-003 处置);开发方式=垂直切片+设计领先一模块+三护栏;延后轨道五条带复审条件。**Owner 常设指令(2026-07-26 逐字要点:「在完整交付前,不要再问我是否需要继续」)**:本 INIT 执行期不得以「是否继续」征询到场;按停顿预算常设规则,仅三类必停——owner_intent_required 门、对外发布(推送/合并/tag/发布)、无既有裁定支撑的不可逆方向变更;其余一律 proceed-and-report,产出中标注「已执行待驳回,单点可逆」。复查呈报仍按两栏分列(已执行待驳回 / 真待裁),真待裁须过一道杠:无法用既有裁定与在手证据自行决定。",
+      "scope": "AOS 驾驶舱:Jira 形态多项目作业系统承接 Workflow 数据。**设计一致性补齐已完成(2026-07-26,EPIC-007)**:v4 审议室对话流、v3 屏 A 四项交互(检索/保存视图/分栏/批量)、v3 屏 B 活动流全部实装并在真实浏览器实测;收件箱与仪表盘拆为各自的屏,看板移入交付组,导航十项增为十一项;预览渲染器入库(pnpm cockpit:previews,16 屏)。**补齐过程捕到两处已交付但错的**:INC-006 每个筛选链接因双 ? 永远返回零结果(空列表是缺陷最好的伪装);INC-007 导航承诺三屏实为两个半(逐屏渲染再逐屏比对是唯一低成本探针)。测试 110/110 绿。**余下三项全部依赖 STORY-003(AOS 自有域)**:12 种关系型、评论双轨、负责人与标签的过滤与编辑;看板拖拽另需写通道。EPIC-006 部署与镜像(S017-S020)未开工。**五仓均未推送**,对外发布是必停点。逐屏对账见 docs/aos-design/delivery-gap.md。",
       "decidedBy": [
         "minutes:4fdc3f1caf4adfb2374090f7"
       ],
@@ -298,11 +341,11 @@ export const cockpitData: CockpitData = {
       "id": "work:ee2995a41a5ef6d04a5de77c",
       "externalKey": "TCRN-AOS-STORY-008",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:cc82f8dc93eedd2b1bae0443",
-      "scope": "看板:状态机列;拖拽=work-transition(CAS/时间戳/actor 自动);非法流转由引擎拒绝并回显",
+      "scope": "看板。**已交付(AOS commit d0a24b5)**:列即引擎自身的状态机(planned/ready/active/blocked/done)而非看板自造的列——移动卡片将写 work-transition,引擎会拒绝其状态机不允许的流转,展示别的列等于承诺链会拒绝的动作;每列携带引擎许可的目标态(镜像非拥有,引擎仍是权威),用于在有人尝试之前说明某个移动为何不可用;终态卡片标注 terminal。**当前只读并在页面明示**——安全写面随 S010 落地。实测渲染 203 个真实键号",
       "decidedBy": [
-        "minutes:5da0b8ea8b8421cb1f3a1e89"
+        "minutes:4fdc3f1caf4adfb2374090f7"
       ],
       "sprintWorkId": null
     },
@@ -311,11 +354,11 @@ export const cockpitData: CockpitData = {
       "id": "work:2ebc3421dfafcf898a33b03b",
       "externalKey": "TCRN-AOS-STORY-009",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:cc82f8dc93eedd2b1bae0443",
-      "scope": "详情页字段全谱:祖先链面包屑/链与 AOS 域双轨字段/治理关联只读+自由关联 12 型/子项/活动流;blocks 双轨提示",
+      "scope": "详情页字段全谱。**已交付**:祖先链面包屑(项目 › INIT › EPIC › 本项,实测 TCRN-CROSS-STORY-105 正确显示三级);**双轨字段分区标注**(链上字段不可编辑 / AOS 域字段可编辑)——读者若分不清二者,迟早会试图靠改标签来纠正一条裁定;AOS 域字段虽未落地仍列出并标注,因为「有此字段但未设」与「产品没有此字段」读起来不同而此处只有前者为真;范围区在无 scope 注解时明说「链上确实没有标题」;子项区说明 Subtask 按公约开工时切分不预造;右栏决策与证据(裁定源/门/审议),分区若立场未取则明示详情不完整",
       "decidedBy": [
-        "minutes:5da0b8ea8b8421cb1f3a1e89"
+        "minutes:4fdc3f1caf4adfb2374090f7"
       ],
       "sprintWorkId": null
     },
@@ -324,11 +367,11 @@ export const cockpitData: CockpitData = {
       "id": "work:b2a3e693119857c18ba023fa",
       "externalKey": "TCRN-AOS-STORY-010",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:cc82f8dc93eedd2b1bae0443",
-      "scope": "安全写面:建卡(标题写入 advisory:scope+父级建议+键号自动分配)/批量操作/AOS 域字段编辑;治理写面显式仪式不入本期",
+      "scope": "安全写面。**已交付并在活链实证(AOS commit 4a5c713)**:packages/projection/src/write-surface.ts——建卡/流转/注解/入列四类,CAS、时间戳(引擎要求秒级无小数,在边界处成型而非等拒绝码)与 actor 由客户端自动补齐;**expected-version 取 head 而非先前读到的数字**(渲染与点击之间链可能前进,陈旧值会拒绝一个本来合法的写入;引擎仍串行化写入,故此为顺应并发而非规避);建卡把标题写入 scope 注解(链无 title 字段,意图属于记录;这是两个事件,首个成功后记录即存在——「带标题创建」的诚实分解);拒绝码原样上抛不改写(把 INVALID_TRANSITION 说成「保存失败」会藏掉唯一有用的信息);**六个动词保持仪式**并各附理由(开审议/落立场/闭会/关门/启用 attestation/删除)。**活链实证七步**(evidence/aos-write-surface-live-proof.json,dogfood 于 AOS 自己的链):建 TCRN-AOS-SUBTASK-319→ready→active→注解→**active→planned 被引擎以 INVALID_TRANSITION 拒绝**→done→回读确认;写面需 operator 供权而读面不需,该不对称被实证行使而非绕过(未带 pins 时首个 create 即返 OPERATOR_AUTHORITY_REQUIRED)。**残余**:UI 拖拽绑定待前端交互层接入(当前看板明示只读)",
       "decidedBy": [
-        "minutes:5da0b8ea8b8421cb1f3a1e89"
+        "minutes:4fdc3f1caf4adfb2374090f7"
       ],
       "sprintWorkId": null
     },
@@ -337,11 +380,11 @@ export const cockpitData: CockpitData = {
       "id": "work:46d67962e987427f4e712b56",
       "externalKey": "TCRN-AOS-STORY-011",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:b47471768134fde402c89112",
-      "scope": "审议室阅读器:对话流+分片重组+回合分组+溯源徽记三态(legacy 永不升格)+有效未决净值;纪要置顶",
+      "scope": "审议室阅读器。**首版已交付**:审议列表(进行中/已闭会)带类型与状态徽记;**溯源徽记如实显示「未声明」**——既有审议早于 execution:mode 的引入,读取路径 fail-closed 归为未知而非归为主张;**立场未取的分区明确标注**,不把未读渲染成空线程。**残余**:分片重组与有效未决的逐会呈现待立场可取后接入(见 INC-005,两条最大的链目前无立场/纪要读面);读层计算本身已实现并有 12 条单测(含跨作者不合并、偶然词重叠不消解两条反例)",
       "decidedBy": [
-        "minutes:5da0b8ea8b8421cb1f3a1e89"
+        "minutes:4fdc3f1caf4adfb2374090f7"
       ],
       "sprintWorkId": null
     },
@@ -350,11 +393,11 @@ export const cockpitData: CockpitData = {
       "id": "work:a8195ef3d5d5a870bbbd8b70",
       "externalKey": "TCRN-AOS-STORY-012",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:b47471768134fde402c89112",
-      "scope": "发布列车页:列车列表+成员清单+产出;编组(annotate sprint)走安全写面;发车属治理写面仅指引",
+      "scope": "发布列车页。**已交付(AOS commit 8b1a106)**:列车列表带成员清单与产出;**不做 burndown 与到期日**——引擎无时钟,列车由成员定义而非由日期定义;发车作为唯一发布停点被具名说明而非做成按钮(仪式类写面);成员经 advisory:sprint 反查,已发车/编组中二态。实测渲染 43 个真实键号",
       "decidedBy": [
-        "minutes:5da0b8ea8b8421cb1f3a1e89"
+        "minutes:4fdc3f1caf4adfb2374090f7"
       ],
       "sprintWorkId": null
     },
@@ -376,11 +419,11 @@ export const cockpitData: CockpitData = {
       "id": "work:8e28b5713b859b8433061986",
       "externalKey": "TCRN-AOS-STORY-014",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:82c67feb8895622dda783c2f",
-      "scope": "知识空间:公约文档(git)+知识卡(策展)+纪要三真值渲染;全文检索;新鲜度倒计时仪表;首期无编辑器",
+      "scope": "知识空间。**已交付(AOS commit c928035)**:三类持久文本并列呈现且刻意不合并(公约真值在 git / 知识卡走受治动词 / 纪要根本不可改——三者修改方式不同,一个看起来三者通吃的编辑器会对其中两者撒谎);首期无编辑器为刻意裁定;纪要面已接投影并显示有效未决计数。**公约与知识卡如实标注为未接入**(需 docs 树读取与知识库读面,当前投影只读链;未接入与为空看起来一样,除非视图说明是哪一种)",
       "decidedBy": [
-        "minutes:5da0b8ea8b8421cb1f3a1e89"
+        "minutes:4fdc3f1caf4adfb2374090f7"
       ],
       "sprintWorkId": null
     },
@@ -389,11 +432,11 @@ export const cockpitData: CockpitData = {
       "id": "work:6ff90303d7135e2d88f031bb",
       "externalKey": "TCRN-AOS-STORY-015",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:82c67feb8895622dda783c2f",
-      "scope": "审计视图:时间戳形状检查(整分边界聚集/段落盘时间对照)+actor 分布+链版本核对;只读不裁决",
+      "scope": "审计视图。**已交付**:按分区的记录完整性(工作记录数/已恢复键号/带范围注解/带裁定源/链版本),**未命名记录如实标注为未命名**(其键不合命名公约,编造一个像样的错名比留空更坏);未决项净值面(表面 N → 有效 M,含已消解计数与逐条列出)。**残余并已在页面明示**:时间戳形状检查(整分边界聚集、段落盘时间对照)需事件级读面,当前读面不提供,故审计基于记录而非事件——此为如实声明而非默默省略",
       "decidedBy": [
-        "minutes:5da0b8ea8b8421cb1f3a1e89"
+        "minutes:4fdc3f1caf4adfb2374090f7"
       ],
       "sprintWorkId": null
     },
@@ -402,11 +445,11 @@ export const cockpitData: CockpitData = {
       "id": "work:0067159642aa7871a6b31873",
       "externalKey": "TCRN-AOS-STORY-016",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:82c67feb8895622dda783c2f",
-      "scope": "快照健康(每分区最后 SNAPSHOT_VERIFIED 与 cadence 达标)+执行观测摄取(L2.5 收据/observe 事件展示)",
+      "scope": "快照健康+执行观测。**首版已交付但如实显示为未观测**:快照是链外产物,需读取备份目录的清单而非链本身;在真正读到之前,诚实的报告是「尚未查看」而不是显示健康。页面按分区列出并统一标注未观测。**残余**:接入备份清单读取与 L2.5 执行观测收据",
       "decidedBy": [
-        "minutes:5da0b8ea8b8421cb1f3a1e89"
+        "minutes:4fdc3f1caf4adfb2374090f7"
       ],
       "sprintWorkId": null
     },
@@ -460,6 +503,61 @@ export const cockpitData: CockpitData = {
       "decidedBy": [
         "minutes:3a0d27be789cadb0ccb353c1"
       ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:5c41722d9f448b7f7ead3810",
+      "externalKey": "TCRN-AOS-STORY-021",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:e6a70fb7d03f607657d1f13c",
+      "scope": "审议室对话流（v4 一致性）。**已交付**:apps/web/src/cockpit-deliberation-room.tsx。立场按 persona 气泡呈现;分片重组标「N 片已重组」并保留分片 id(实测 31 条立场里 3 条为多片);回合由轮替推断并在代码里写明只是呈现辅助、不主张谁答了谁;Verity 立场标「对抗复核」(TMS 七场审议含);纪要区显示决策清单与「未决:表面 N → 有效 M」。数据经 build-cockpit-data 预先重组落 threads/minutesByConference。第一版交的是审议列表——这是本次对账里差距最大的一屏,原因是把 INC-005「两条大链取不到立场」错误放大成「这一屏做不了」,而 TMS 15 条立场/9 份纪要、AOS 19 条/3 份本来就可读。未取的两条链在室内明示「立场未取」而非空。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:4dbd6a546e3bf2d1b0df9de7",
+      "externalKey": "TCRN-AOS-STORY-022",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:e6a70fb7d03f607657d1f13c",
+      "scope": "检索管理页四项交互（v3 屏 A）。**已交付**:apps/web/src/cockpit-work-items.tsx。①检索=受控 SearchInput,多词 AND,命中数实时;命名为「逐字匹配」而非「全文搜索」——投影层的 FTS5 在摄取进程后面,此构建无 API 可达,叫全文搜索会承诺一套它没实现的查询语法。②保存视图=六个具名视图存在 URL 里(全部/等你决定/进行中/阻塞/已入列车/无范围注解),各带实时计数;不能被书签、分享、贴给 Owner 的不叫保存视图。③分栏=WorkSplitView,行点击只换右栏不跳页,无脚本时退化为真链接(href 指向同页 selected=KEY)。④批量=勾选+复制键号+导出 JSON(带链版本水位),批量流转按仪式禁用并写明原因(写入须 operator 供权+对链头 CAS,静态构建无写通道)。**实测**:浏览器内逐项验证(点行→右栏换而 URL 不变;输入两词→402 收窄至 2;勾选→批量条计数与禁用原因),不是只看 SSR 结构。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:003168aa62ef03681a9f106c",
+      "externalKey": "TCRN-AOS-STORY-023",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:e6a70fb7d03f607657d1f13c",
+      "scope": "详情页活动流（v3 屏 B）。**已交付**:投影层新增 ProjectedEvent + projected_event 表 + buildActivityFeed;详情页 ActivityPanel 渲染 DS WorkActivityFeed。三条拒绝写进代码:①不渲染前后值(「ready → active」)——事件载荷只有写入后的状态,前值须由邻居事件推断,推断出来的历史带着时间戳就是编造;②执行者不留空——空读起来像疏漏,须说出是链没记;③降级读取的链不显示空流——「没发生过」与「没读过」是同一幅画面、相反的事实。**执行者归属三态**:recorded / predates-attestation / not-enabled。实测:AOS 于序号 62 启用 attestation,之前 61 条不记执行者、之后记为 agent:fable;TMS 228 条事件无一记执行者(该链从未启用);cross 与 DS 走分页降级,事件日志根本读不到,页面显示「未读取」。排序按链序号而非 occurredAt——时间戳为秒精度,同秒多写会被时间排序打乱成「先关闭后创建」。新增 3 条防回归测试。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:03344dfa2db4c8ed729a9063",
+      "externalKey": "TCRN-AOS-STORY-024",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:e6a70fb7d03f607657d1f13c",
+      "scope": "收件箱与仪表盘拆屏 + 预览渲染器入库。**已交付**:apps/web/src/cockpit-global.tsx(InboxView + DashboardView)、scripts/render-cockpit-previews.mjs。收件箱成为自己的屏:按义务性质分带(审批门/进行中审议/未决项)而非按项目,并顶置覆盖声明——两条链的纪要未读取,「已清空」只对已读取的链成立。仪表盘=四链指标,每张卡带读取路径徽记与执行者归属徽记;并显式声明「这里没有燃尽图,是设计决定」——发布列车不带时间盒,没有 sprint 结束日就没有可测终点,画出来的曲线在度量不存在的期限。看板移入交付组并可按项目过滤。预览渲染器把 16 屏渲染进 docs/aos-design/preview/,样本记录按属性挑选(要有子项、要有立场线程)而非写死键号,链前进后重跑不会静默渲染出空屏;脚本头写明预览只证 Layout 与文案,客户端行为须对跑起来的构建验证。新增 pnpm cockpit:data / cockpit:previews 两个入口。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:d0ec852a3c48d6e165389548",
+      "externalKey": "TCRN-AOS-SUBTASK-319",
+      "kind": "Subtask",
+      "status": "done",
+      "parentId": "work:16064e534381996738611aed",
+      "scope": "写面实证:创建、流转、注解三类安全写面均经受治 MCP 成功;时间戳与 actor 自动补齐;仪式类写面未行使(20260726145319)",
+      "decidedBy": [],
       "sprintWorkId": null
     },
     {
@@ -5108,10 +5206,10 @@ export const cockpitData: CockpitData = {
   "conferences": [
     {
       "partitionId": "TCRN-AOS",
-      "id": "conference:35e03ea2c0a281ccd0f4b9b7",
-      "externalKey": null,
-      "title": "既有实现处置:三层定向处置裁定与交付物一致性要求",
-      "type": "architecture",
+      "id": "conference:db86593a43bdb91d9cabfb02",
+      "externalKey": "TCRN-AOS-CONF-001",
+      "title": "AOS 设计:承接 Workflow 数据的驾驶舱——定位、功能族与开发方式",
+      "type": "strategy",
       "status": "closed",
       "workIds": [
         "work:ff2290f36de29780d18d4323"
@@ -5120,7 +5218,7 @@ export const cockpitData: CockpitData = {
     {
       "partitionId": "TCRN-AOS",
       "id": "conference:6f4c580c6ea63e21274f5fdf",
-      "externalKey": null,
+      "externalKey": "TCRN-AOS-CONF-002",
       "title": "部署与真值拓扑:镜像段边界、两段式迁移方向、VM 专机之问与定期备份方案",
       "type": "architecture",
       "status": "closed",
@@ -5130,10 +5228,10 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-AOS",
-      "id": "conference:db86593a43bdb91d9cabfb02",
-      "externalKey": null,
-      "title": "AOS 设计:承接 Workflow 数据的驾驶舱——定位、功能族与开发方式",
-      "type": "strategy",
+      "id": "conference:35e03ea2c0a281ccd0f4b9b7",
+      "externalKey": "TCRN-AOS-CONF-003",
+      "title": "既有实现处置:三层定向处置裁定与交付物一致性要求",
+      "type": "architecture",
       "status": "closed",
       "workIds": [
         "work:ff2290f36de29780d18d4323"
@@ -5637,61 +5735,6 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-TMS",
-      "id": "conference:144e4d45ac02c35a8f8501ee",
-      "externalKey": null,
-      "title": "TCRN-TMS-INIT-001 事实基线重建:收官",
-      "type": "retrospective",
-      "status": "closed",
-      "workIds": [
-        "work:1a4aabcc5db3ae3735bc45f6"
-      ]
-    },
-    {
-      "partitionId": "TCRN-TMS",
-      "id": "conference:186b40c707c99734e2ba7dab",
-      "externalKey": null,
-      "title": "TCRN-TMS-EPIC-002 路由与 API 契约事实:验收",
-      "type": "verification",
-      "status": "closed",
-      "workIds": [
-        "work:693f73727e5212fa1eb10bd6"
-      ]
-    },
-    {
-      "partitionId": "TCRN-TMS",
-      "id": "conference:367504dfee701a143276ad7c",
-      "externalKey": null,
-      "title": "TCRN-TMS-INIT-002:Owner 裁定 DS 通用性原则与 OWNER-01 事实答复",
-      "type": "strategy",
-      "status": "closed",
-      "workIds": [
-        "work:e65f6896e360ac59d0af74fe"
-      ]
-    },
-    {
-      "partitionId": "TCRN-TMS",
-      "id": "conference:5c5596495bdf66d72a8fb8d8",
-      "externalKey": null,
-      "title": "TCRN-TMS-EPIC-006 断言审计与文档裁决:验收",
-      "type": "verification",
-      "status": "closed",
-      "workIds": [
-        "work:4bad155cc46b828c688f0325"
-      ]
-    },
-    {
-      "partitionId": "TCRN-TMS",
-      "id": "conference:89552d4e6d757d2aa541d684",
-      "externalKey": null,
-      "title": "TCRN-TMS-EPIC-001 提取器可信化与分母定钉:验收",
-      "type": "verification",
-      "status": "closed",
-      "workIds": [
-        "work:a1f8ee7b3b4bac70f638b6b0"
-      ]
-    },
-    {
-      "partitionId": "TCRN-TMS",
       "id": "conference:bb4a286b6a7173b0d6539086",
       "externalKey": null,
       "title": "TMS 两条安全发现分流与未合并边界",
@@ -5704,8 +5747,63 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-TMS",
+      "id": "conference:ddc067b73be4cca41b10bfc5",
+      "externalKey": "TCRN-TMS-CONF-001",
+      "title": "TCRN-TMS-INIT-001 事实基线重建:分解形态审议",
+      "type": "architecture",
+      "status": "closed",
+      "workIds": [
+        "work:1a4aabcc5db3ae3735bc45f6"
+      ]
+    },
+    {
+      "partitionId": "TCRN-TMS",
+      "id": "conference:89552d4e6d757d2aa541d684",
+      "externalKey": "TCRN-TMS-CONF-002",
+      "title": "TCRN-TMS-EPIC-001 提取器可信化与分母定钉:验收",
+      "type": "verification",
+      "status": "closed",
+      "workIds": [
+        "work:a1f8ee7b3b4bac70f638b6b0"
+      ]
+    },
+    {
+      "partitionId": "TCRN-TMS",
+      "id": "conference:186b40c707c99734e2ba7dab",
+      "externalKey": "TCRN-TMS-CONF-003",
+      "title": "TCRN-TMS-EPIC-002 路由与 API 契约事实:验收",
+      "type": "verification",
+      "status": "closed",
+      "workIds": [
+        "work:693f73727e5212fa1eb10bd6"
+      ]
+    },
+    {
+      "partitionId": "TCRN-TMS",
+      "id": "conference:5c5596495bdf66d72a8fb8d8",
+      "externalKey": "TCRN-TMS-CONF-004",
+      "title": "TCRN-TMS-EPIC-006 断言审计与文档裁决:验收",
+      "type": "verification",
+      "status": "closed",
+      "workIds": [
+        "work:4bad155cc46b828c688f0325"
+      ]
+    },
+    {
+      "partitionId": "TCRN-TMS",
+      "id": "conference:144e4d45ac02c35a8f8501ee",
+      "externalKey": "TCRN-TMS-CONF-005",
+      "title": "TCRN-TMS-INIT-001 事实基线重建:收官",
+      "type": "retrospective",
+      "status": "closed",
+      "workIds": [
+        "work:1a4aabcc5db3ae3735bc45f6"
+      ]
+    },
+    {
+      "partitionId": "TCRN-TMS",
       "id": "conference:c728cb5d2c5b25ddd7d873d6",
-      "externalKey": null,
+      "externalKey": "TCRN-TMS-CONF-006",
       "title": "TCRN-TMS-INIT-002 前端重建:分区归属与 DS 缺口政策裁定",
       "type": "architecture",
       "status": "closed",
@@ -5716,7 +5814,7 @@ export const cockpitData: CockpitData = {
     {
       "partitionId": "TCRN-TMS",
       "id": "conference:cb7825165199f08a6e2aa948",
-      "externalKey": null,
+      "externalKey": "TCRN-TMS-CONF-007",
       "title": "TCRN-TMS-INIT-002:重建可行性勘察结论与待裁清单",
       "type": "strategy",
       "status": "closed",
@@ -5726,13 +5824,13 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-TMS",
-      "id": "conference:ddc067b73be4cca41b10bfc5",
-      "externalKey": null,
-      "title": "TCRN-TMS-INIT-001 事实基线重建:分解形态审议",
-      "type": "architecture",
+      "id": "conference:367504dfee701a143276ad7c",
+      "externalKey": "TCRN-TMS-CONF-008",
+      "title": "TCRN-TMS-INIT-002:Owner 裁定 DS 通用性原则与 OWNER-01 事实答复",
+      "type": "strategy",
       "status": "closed",
       "workIds": [
-        "work:1a4aabcc5db3ae3735bc45f6"
+        "work:e65f6896e360ac59d0af74fe"
       ]
     },
     {
@@ -6543,69 +6641,6 @@ export const cockpitData: CockpitData = {
     },
     {
       "kind": "unresolved",
-      "partitionId": "TCRN-AOS",
-      "recordId": "minutes:3a0d27be789cadb0ccb353c1",
-      "externalKey": null,
-      "title": "部署与真值拓扑裁定:镜像段四边界+部署纪律;两段式迁移方向(切换带 owner 门与一致性矩阵);镜像段不专机(复审=迁移执行);备份方案分层(域库配对快照/attestations 并入/投影不备);增补 EPIC-006 四 Story",
-      "detail": "3 open of 3 recorded",
-      "severity": "attention"
-    },
-    {
-      "kind": "unresolved",
-      "partitionId": "TCRN-AOS",
-      "recordId": "minutes:4fdc3f1caf4adfb2374090f7",
-      "externalKey": null,
-      "title": "既有实现处置:不整体移除,行三层定向处置(A 删除约三分之一从未执行的死码/B 保留模型无关横切能力/C 前端仅作技术底座起点/D 新建链客户端与瘦投影类型);确立交付物必须与已确认前端设计逐屏一致含 Layout;立两缺陷单",
-      "detail": "3 open of 3 recorded",
-      "severity": "attention"
-    },
-    {
-      "kind": "unresolved",
-      "partitionId": "TCRN-AOS",
-      "recordId": "minutes:5da0b8ea8b8421cb1f3a1e89",
-      "externalKey": null,
-      "title": "AOS 驾驶舱分解裁定:六轮收集闭合(定位与八功能族/开发方式三护栏/Jira 形态九问/一切皆 Ticket 字段全谱/审议室与溯源采用);按交付面分五 Epic 十六 Story;方向四题全裁;延后轨道五条带复审条件;INIT 保持 planned 待启动令",
-      "detail": "3 open of 3 recorded",
-      "severity": "attention"
-    },
-    {
-      "kind": "unresolved",
-      "partitionId": "TCRN-TMS",
-      "recordId": "minutes:1b3de5e0abee5495fb41d1dc",
-      "externalKey": null,
-      "title": "EPIC-001 五条 Story 全部完成并入仓。裁定 GATE-001 置 satisfied、但其绿只覆盖 API handler 一个分母(398、双源逐条互钉、提取器已见红)。前端路由 66、Prisma model 88、RBAC 资源 46 三个分母已登记但仍单源且未见红、不得支撑覆盖率声称。两条红证教训写入门设计:分母门比内容哈希不比计数;以 codegraph 为源须把 sync 纳入门流程。",
-      "detail": "4 open of 4 recorded",
-      "severity": "attention"
-    },
-    {
-      "kind": "unresolved",
-      "partitionId": "TCRN-TMS",
-      "recordId": "minutes:2cdb8e95f2eeaa62757e2e50",
-      "externalKey": null,
-      "title": "EPIC-006 完成。GATE-003 置 satisfied,同时修订其判据:原判据要求 163 条逐条带 status,但清册的核心发现是 43% 的声称可证伪性未定,对其强行标 status 会产出假绿。改为按已完成范围收口并显式登记残余。已捕两条系统性缺陷(批 A 证伪项与批 B 整表缺陷同根于缺 scope 限定)与一条判断修正(OKL 是有主张无证据、不是无定义孤儿)。",
-      "detail": "4 open of 4 recorded",
-      "severity": "attention"
-    },
-    {
-      "kind": "unresolved",
-      "partitionId": "TCRN-TMS",
-      "recordId": "minutes:372e3bd67b82f3dbd876eb21",
-      "externalKey": null,
-      "title": "十三代理四阶段勘察结论:DS 导出一百个公开组件(先前呈报的十三为错报、已更正),但五十六个闭合无回调且恰覆盖 TMS 最吃重的面;三条实测阻断为 RSC、ProductShell 的 SSR 水合失配、以及 TMS 前端根本没有生产路径(Caddyfile 显式 404 且写明仓内 web 运行时已移除)。三份策略提案一致认为「所有组件来自并符合 DS」当前不可满足,须 Owner 修订其可执行定义。两名评审独立指出三份共同漏掉 git submodule 路径。本次不产生分解树,分解形态待 Owner 裁定后再定。",
-      "detail": "10 open of 10 recorded",
-      "severity": "attention"
-    },
-    {
-      "kind": "unresolved",
-      "partitionId": "TCRN-TMS",
-      "recordId": "minutes:56f597652647ed6f0875b39f",
-      "externalKey": null,
-      "title": "EPIC-002 四条 Story 完成。GATE-002 置 satisfied、绿覆盖 API handler 一条派生链:生成器确定性经两次 --check 与重新生成字节比对实证、门的检出能力经变异实证。记录一次自捕假阴性(变异未生效致门假绿不可区分)与一条被读源码证伪的分解建议(openapi diff 已是必需门)。",
-      "detail": "4 open of 4 recorded",
-      "severity": "attention"
-    },
-    {
-      "kind": "unresolved",
       "partitionId": "TCRN-TMS",
       "recordId": "minutes:591d95e3737fb08a61b759bf",
       "externalKey": null,
@@ -6615,27 +6650,72 @@ export const cockpitData: CockpitData = {
     },
     {
       "kind": "unresolved",
+      "partitionId": "TCRN-AOS",
+      "recordId": "minutes:5da0b8ea8b8421cb1f3a1e89",
+      "externalKey": "TCRN-AOS-MIN-001",
+      "title": "AOS 驾驶舱分解裁定:六轮收集闭合(定位与八功能族/开发方式三护栏/Jira 形态九问/一切皆 Ticket 字段全谱/审议室与溯源采用);按交付面分五 Epic 十六 Story;方向四题全裁;延后轨道五条带复审条件;INIT 保持 planned 待启动令",
+      "detail": "3 open of 3 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-AOS",
+      "recordId": "minutes:3a0d27be789cadb0ccb353c1",
+      "externalKey": "TCRN-AOS-MIN-002",
+      "title": "部署与真值拓扑裁定:镜像段四边界+部署纪律;两段式迁移方向(切换带 owner 门与一致性矩阵);镜像段不专机(复审=迁移执行);备份方案分层(域库配对快照/attestations 并入/投影不备);增补 EPIC-006 四 Story",
+      "detail": "3 open of 3 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-AOS",
+      "recordId": "minutes:4fdc3f1caf4adfb2374090f7",
+      "externalKey": "TCRN-AOS-MIN-003",
+      "title": "既有实现处置:不整体移除,行三层定向处置(A 删除约三分之一从未执行的死码/B 保留模型无关横切能力/C 前端仅作技术底座起点/D 新建链客户端与瘦投影类型);确立交付物必须与已确认前端设计逐屏一致含 Layout;立两缺陷单",
+      "detail": "3 open of 3 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
       "partitionId": "TCRN-TMS",
-      "recordId": "minutes:b0456cb6b3312f1760ff9e8a",
-      "externalKey": null,
-      "title": "Owner 裁定 TCRN-TMS-INIT-002 落 TMS 分区而非 cross-project,依据是把 DS 扩建单独成 Initiative 后每个 Initiative 真的只涉及一个子项目。缺口政策裁定为选项二:重建撞上 DS 未提供的承重组件时,允许建 TMS 本地实现但强制登记为 DS 债务并受机器可判定的门看守,由后续 DS 扩建 Initiative 回收;否决了停工等待与逐个升级两案。代理呈报并被采纳的修正:消费契约不能延后,故拆为三 Initiative 顺序(DS 消费契约 → TMS 重建 → DS 扩建),各自单项目。",
+      "recordId": "minutes:bf894e715f287d777b92ef0b",
+      "externalKey": "TCRN-TMS-MIN-001",
+      "title": "三方独立立场(Mara 产品域轴 / Verity 提取器轴 / Minerva 权威拓扑轴)就 TCRN-TMS-INIT-001 分解形态审议。三方一致否决 docs 的 11 域轴:940 行文档是证明状态与对冲语言、不是事实。决定性证据是 Verity 与主线程独立同时捕获的假分母——codegraph 436 route 仅 398 出自 controller。以 436 立分母则全部覆盖率自第一天起为假。398 已由三条独立路径互钉(codegraph 过滤、grep 装饰器、inventory 脚本工件)。裁定采 Verity 提取器轴为主,吸纳 Minerva 的排序原则与三层落点、Mara 的域轴作前端内部维度。另捕获两条真忠实缺陷:platform-admin/README.md:11 称 AC 暴露 Interface/Webhook 管理而两页实渲 AcBusinessRouteUnavailableScreen;public-presence/README.md:10 所称 studio/editor 页零命中。",
       "detail": "5 open of 5 recorded",
       "severity": "attention"
     },
     {
       "kind": "unresolved",
       "partitionId": "TCRN-TMS",
-      "recordId": "minutes:b290715aa181ebe395ec30a4",
-      "externalKey": null,
-      "title": "Owner 答复 OWNER-01:TMS 前端与 DS 完全无关、就是一套本地前端 —— 该事实消解了两名评审共同指出的最大缺陷(重建产物无处可去)并下调 OWNER-04 与 OWNER-08 的门槛。Owner 裁定 DS 与 Storybook 须保持通用、产品设计不得放入、项目如何使用组件由项目自定义。五项建议与一项修正全部获批。实证支撑:污染已发生于 AOS、DS 内四十个领域家具为 AOS 所建。开发机已验证可用并解锁集成测试面。",
-      "detail": "6 open of 6 recorded",
+      "recordId": "minutes:1b3de5e0abee5495fb41d1dc",
+      "externalKey": "TCRN-TMS-MIN-002",
+      "title": "EPIC-001 五条 Story 全部完成并入仓。裁定 GATE-001 置 satisfied、但其绿只覆盖 API handler 一个分母(398、双源逐条互钉、提取器已见红)。前端路由 66、Prisma model 88、RBAC 资源 46 三个分母已登记但仍单源且未见红、不得支撑覆盖率声称。两条红证教训写入门设计:分母门比内容哈希不比计数;以 codegraph 为源须把 sync 纳入门流程。",
+      "detail": "4 open of 4 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-TMS",
+      "recordId": "minutes:56f597652647ed6f0875b39f",
+      "externalKey": "TCRN-TMS-MIN-003",
+      "title": "EPIC-002 四条 Story 完成。GATE-002 置 satisfied、绿覆盖 API handler 一条派生链:生成器确定性经两次 --check 与重新生成字节比对实证、门的检出能力经变异实证。记录一次自捕假阴性(变异未生效致门假绿不可区分)与一条被读源码证伪的分解建议(openapi diff 已是必需门)。",
+      "detail": "4 open of 4 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-TMS",
+      "recordId": "minutes:2cdb8e95f2eeaa62757e2e50",
+      "externalKey": "TCRN-TMS-MIN-004",
+      "title": "EPIC-006 完成。GATE-003 置 satisfied,同时修订其判据:原判据要求 163 条逐条带 status,但清册的核心发现是 43% 的声称可证伪性未定,对其强行标 status 会产出假绿。改为按已完成范围收口并显式登记残余。已捕两条系统性缺陷(批 A 证伪项与批 B 整表缺陷同根于缺 scope 限定)与一条判断修正(OKL 是有主张无证据、不是无定义孤儿)。",
+      "detail": "4 open of 4 recorded",
       "severity": "attention"
     },
     {
       "kind": "unresolved",
       "partitionId": "TCRN-TMS",
       "recordId": "minutes:be9fa4d049de839c22d0a7d8",
-      "externalKey": null,
+      "externalKey": "TCRN-TMS-MIN-005",
       "title": "TCRN-TMS-INIT-001 收官:7 Epic 28 Story 全完、三门全 satisfied、18 提交在整合分支。产出为带证据绑定的事实基线与三道已接 CI 的门。自捕并修复五处自身缺陷。两条产品级发现(subsidiary 零授权、前端仅 1 条 RBAC 门)转 Owner。唯一必停点=合并 main 触发部署,待 Owner 授权。",
       "detail": "6 open of 6 recorded",
       "severity": "attention"
@@ -6643,17 +6723,50 @@ export const cockpitData: CockpitData = {
     {
       "kind": "unresolved",
       "partitionId": "TCRN-TMS",
-      "recordId": "minutes:bf894e715f287d777b92ef0b",
-      "externalKey": null,
-      "title": "三方独立立场(Mara 产品域轴 / Verity 提取器轴 / Minerva 权威拓扑轴)就 TCRN-TMS-INIT-001 分解形态审议。三方一致否决 docs 的 11 域轴:940 行文档是证明状态与对冲语言、不是事实。决定性证据是 Verity 与主线程独立同时捕获的假分母——codegraph 436 route 仅 398 出自 controller。以 436 立分母则全部覆盖率自第一天起为假。398 已由三条独立路径互钉(codegraph 过滤、grep 装饰器、inventory 脚本工件)。裁定采 Verity 提取器轴为主,吸纳 Minerva 的排序原则与三层落点、Mara 的域轴作前端内部维度。另捕获两条真忠实缺陷:platform-admin/README.md:11 称 AC 暴露 Interface/Webhook 管理而两页实渲 AcBusinessRouteUnavailableScreen;public-presence/README.md:10 所称 studio/editor 页零命中。",
+      "recordId": "minutes:b0456cb6b3312f1760ff9e8a",
+      "externalKey": "TCRN-TMS-MIN-006",
+      "title": "Owner 裁定 TCRN-TMS-INIT-002 落 TMS 分区而非 cross-project,依据是把 DS 扩建单独成 Initiative 后每个 Initiative 真的只涉及一个子项目。缺口政策裁定为选项二:重建撞上 DS 未提供的承重组件时,允许建 TMS 本地实现但强制登记为 DS 债务并受机器可判定的门看守,由后续 DS 扩建 Initiative 回收;否决了停工等待与逐个升级两案。代理呈报并被采纳的修正:消费契约不能延后,故拆为三 Initiative 顺序(DS 消费契约 → TMS 重建 → DS 扩建),各自单项目。",
       "detail": "5 open of 5 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-TMS",
+      "recordId": "minutes:372e3bd67b82f3dbd876eb21",
+      "externalKey": "TCRN-TMS-MIN-007",
+      "title": "十三代理四阶段勘察结论:DS 导出一百个公开组件(先前呈报的十三为错报、已更正),但五十六个闭合无回调且恰覆盖 TMS 最吃重的面;三条实测阻断为 RSC、ProductShell 的 SSR 水合失配、以及 TMS 前端根本没有生产路径(Caddyfile 显式 404 且写明仓内 web 运行时已移除)。三份策略提案一致认为「所有组件来自并符合 DS」当前不可满足,须 Owner 修订其可执行定义。两名评审独立指出三份共同漏掉 git submodule 路径。本次不产生分解树,分解形态待 Owner 裁定后再定。",
+      "detail": "10 open of 10 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-TMS",
+      "recordId": "minutes:b290715aa181ebe395ec30a4",
+      "externalKey": "TCRN-TMS-MIN-008",
+      "title": "Owner 答复 OWNER-01:TMS 前端与 DS 完全无关、就是一套本地前端 —— 该事实消解了两名评审共同指出的最大缺陷(重建产物无处可去)并下调 OWNER-04 与 OWNER-08 的门槛。Owner 裁定 DS 与 Storybook 须保持通用、产品设计不得放入、项目如何使用组件由项目自定义。五项建议与一项修正全部获批。实证支撑:污染已发生于 AOS、DS 内四十个领域家具为 AOS 所建。开发机已验证可用并解锁集成测试面。",
+      "detail": "6 open of 6 recorded",
       "severity": "attention"
     }
   ],
   "effectiveUnresolved": [
     {
+      "minutesId": "minutes:5da0b8ea8b8421cb1f3a1e89",
+      "externalKey": "TCRN-AOS-MIN-001",
+      "surface": [
+        "AOS 分区 actor attestation 为单向门;启用与否待 Owner 启动令时裁",
+        "发布停点形态(单 INIT 快车道或入列车)届时呈报",
+        "DS 组件接线面逐模块核验;发现闭合无回调即向 DS 提需求单"
+      ],
+      "effective": [
+        "AOS 分区 actor attestation 为单向门;启用与否待 Owner 启动令时裁",
+        "发布停点形态(单 INIT 快车道或入列车)届时呈报",
+        "DS 组件接线面逐模块核验;发现闭合无回调即向 DS 提需求单"
+      ],
+      "dissolvedCount": 0
+    },
+    {
       "minutesId": "minutes:3a0d27be789cadb0ccb353c1",
-      "externalKey": null,
+      "externalKey": "TCRN-AOS-MIN-002",
       "surface": [
         "VM 访问边界具体形态(认证层或 LAN 信任)S019 执行时定",
         "execution:mode 的 CLI/MCP 暴露缺口向 W 提需求(键号待 W 侧立单)",
@@ -6668,7 +6781,7 @@ export const cockpitData: CockpitData = {
     },
     {
       "minutesId": "minutes:4fdc3f1caf4adfb2374090f7",
-      "externalKey": null,
+      "externalKey": "TCRN-AOS-MIN-003",
       "surface": [
         "既有组件对新 Layout 的承载力待首切片逐一核实",
         "依赖治理的能力去向(是否另立轨道承接外采公约审查)待裁",
@@ -6678,101 +6791,6 @@ export const cockpitData: CockpitData = {
         "既有组件对新 Layout 的承载力待首切片逐一核实",
         "依赖治理的能力去向(是否另立轨道承接外采公约审查)待裁",
         "A 层删除的执行时点:建议随各 Story 就近清理而非单独一刀"
-      ],
-      "dissolvedCount": 0
-    },
-    {
-      "minutesId": "minutes:5da0b8ea8b8421cb1f3a1e89",
-      "externalKey": null,
-      "surface": [
-        "AOS 分区 actor attestation 为单向门;启用与否待 Owner 启动令时裁",
-        "发布停点形态(单 INIT 快车道或入列车)届时呈报",
-        "DS 组件接线面逐模块核验;发现闭合无回调即向 DS 提需求单"
-      ],
-      "effective": [
-        "AOS 分区 actor attestation 为单向门;启用与否待 Owner 启动令时裁",
-        "发布停点形态(单 INIT 快车道或入列车)届时呈报",
-        "DS 组件接线面逐模块核验;发现闭合无回调即向 DS 提需求单"
-      ],
-      "dissolvedCount": 0
-    },
-    {
-      "minutesId": "minutes:1b3de5e0abee5495fb41d1dc",
-      "externalKey": null,
-      "surface": [
-        "证据脚本写工件到当前工作目录而非指定 artifacts 目录、接 CI 前须逐个约定输出路径",
-        "10 个需 DB 或网络的证据脚本可跑性未测",
-        "3 个 .ts 证据脚本需 TS 运行时、未测",
-        "多个脚本工件含 generatedAt 实时时间戳、GATE-002 的确定性比对须剔除该字段"
-      ],
-      "effective": [
-        "证据脚本写工件到当前工作目录而非指定 artifacts 目录、接 CI 前须逐个约定输出路径",
-        "10 个需 DB 或网络的证据脚本可跑性未测",
-        "3 个 .ts 证据脚本需 TS 运行时、未测",
-        "多个脚本工件含 generatedAt 实时时间戳、GATE-002 的确定性比对须剔除该字段"
-      ],
-      "dissolvedCount": 0
-    },
-    {
-      "minutesId": "minutes:2cdb8e95f2eeaa62757e2e50",
-      "externalKey": null,
-      "surface": [
-        "163 条声称中多数未逐条判定、尤其 71 条 prose 类",
-        "11 个 OKL-* 的当前实际状态未重新取证",
-        "troubleshooting 与 getting-started 与 reference 三章未做机械判定",
-        "prose 类声称的可证伪性改写未排期"
-      ],
-      "effective": [
-        "163 条声称中多数未逐条判定、尤其 71 条 prose 类",
-        "11 个 OKL-* 的当前实际状态未重新取证",
-        "troubleshooting 与 getting-started 与 reference 三章未做机械判定",
-        "prose 类声称的可证伪性改写未排期"
-      ],
-      "dissolvedCount": 0
-    },
-    {
-      "minutesId": "minutes:372e3bd67b82f3dbd876eb21",
-      "externalKey": null,
-      "surface": [
-        "OWNER-01 TMS 前端今天如何上生产:仓内无此路径且 Caddyfile 显式写明仓内 web 运行时已移除",
-        "OWNER-02 mvp-adoption-boundary.md 两条 Deferred 的处置:该文件逐字 Defer 了 TMS 依赖变更与 registry 发布而 DS 自己的 tms-adoption-guide 正面教 TMS 接入",
-        "OWNER-03 所有组件来自并符合 DS 的可执行定义:归属式 / 三层棘轮 / 零绕过加例外册 三选一",
-        "OWNER-04 视觉语言更替授权:TMS 现为毛玻璃加三层渐变洗、DS v2 明文清除并设门禁止、换后六十六条路由观感全变",
-        "OWNER-05 locale 契约:DS 五值无 zh_HANT 而 TMS 非测试源码一千五百一十六处在用且为数据模型级类型、边界映射等于静默丢数据",
-        "OWNER-06 图标契约:扩 DS 注册表 / 改受控开集 / 收敛 TMS 用量 三选一",
-        "OWNER-07 消费路径选型:submodule 加 workspace / vendored tarball 加 overrides / 私有 registry / file 加 overrides",
-        "OWNER-08 是否接受 DS 组件在 TMS 全部转为客户端渲染:use client 转出层会把整条 import 子图纳入客户端图",
-        "OWNER-09 DS 产品身份:是否从契约文档加静态夹具变为应用组件库并开放 DataDisplay 全族回调面(不可逆)",
-        "OWNER-10 DS 是否先补 CI 再承接第二个消费方:DS 今日零 workflow 所有门只活在本机"
-      ],
-      "effective": [
-        "OWNER-01 TMS 前端今天如何上生产:仓内无此路径且 Caddyfile 显式写明仓内 web 运行时已移除",
-        "OWNER-02 mvp-adoption-boundary.md 两条 Deferred 的处置:该文件逐字 Defer 了 TMS 依赖变更与 registry 发布而 DS 自己的 tms-adoption-guide 正面教 TMS 接入",
-        "OWNER-03 所有组件来自并符合 DS 的可执行定义:归属式 / 三层棘轮 / 零绕过加例外册 三选一",
-        "OWNER-04 视觉语言更替授权:TMS 现为毛玻璃加三层渐变洗、DS v2 明文清除并设门禁止、换后六十六条路由观感全变",
-        "OWNER-05 locale 契约:DS 五值无 zh_HANT 而 TMS 非测试源码一千五百一十六处在用且为数据模型级类型、边界映射等于静默丢数据",
-        "OWNER-06 图标契约:扩 DS 注册表 / 改受控开集 / 收敛 TMS 用量 三选一",
-        "OWNER-07 消费路径选型:submodule 加 workspace / vendored tarball 加 overrides / 私有 registry / file 加 overrides",
-        "OWNER-08 是否接受 DS 组件在 TMS 全部转为客户端渲染:use client 转出层会把整条 import 子图纳入客户端图",
-        "OWNER-09 DS 产品身份:是否从契约文档加静态夹具变为应用组件库并开放 DataDisplay 全族回调面(不可逆)",
-        "OWNER-10 DS 是否先补 CI 再承接第二个消费方:DS 今日零 workflow 所有门只活在本机"
-      ],
-      "dissolvedCount": 0
-    },
-    {
-      "minutesId": "minutes:56f597652647ed6f0875b39f",
-      "externalKey": null,
-      "surface": [
-        "openapi diff 门的检测能力未做变异红证、只验了接线",
-        "基线与实现在 schema 层的漂移未测",
-        "GET / 是否应加显式排除标记未裁",
-        "139 条缺 @ApiResponse 是补齐还是显式接受为限制未裁"
-      ],
-      "effective": [
-        "openapi diff 门的检测能力未做变异红证、只验了接线",
-        "基线与实现在 schema 层的漂移未测",
-        "GET / 是否应加显式排除标记未裁",
-        "139 条缺 @ApiResponse 是补齐还是显式接受为限制未裁"
       ],
       "dissolvedCount": 0
     },
@@ -6790,48 +6808,78 @@ export const cockpitData: CockpitData = {
       "dissolvedCount": 0
     },
     {
-      "minutesId": "minutes:b0456cb6b3312f1760ff9e8a",
-      "externalKey": null,
+      "minutesId": "minutes:bf894e715f287d777b92ef0b",
+      "externalKey": "TCRN-TMS-MIN-001",
       "surface": [
-        "DS 100 个组件中对 TMS 的有效供给数未定(Work* 与 Knowledge* 族约 30+ 面向他产品)",
-        "消费契约的具体机制未选(发布 npm / dist 入库 / workspace 合并等待评估)",
-        "DS 与 TMS 的样式机制差异未解(DS 不用 Tailwind、TMS 用 Tailwind 4)",
-        "若有效供给覆盖率过低则「所有组件来自 DS」这条约束本身可能需 Owner 重新表述",
-        "TCRN-TMS-INIT-002 的分解形态待勘察工作流回收后裁定"
+        "OKL-G19-* 孤儿限制 ID 的支撑证据随旧 vault 删除、可复原性未知",
+        "openapi-baseline 三份停在 2026-06-13 而末次提交 2026-07-08、实际漂移量未测",
+        "retired-browser-tests 六套的可复活性未裁",
+        "judgment 类(不可机械验证)事实的限额未定",
+        "106 个证据脚本中可实际跑通的比例未测(仅抽样 1 个跑通)"
       ],
       "effective": [
-        "DS 100 个组件中对 TMS 的有效供给数未定(Work* 与 Knowledge* 族约 30+ 面向他产品)",
-        "消费契约的具体机制未选(发布 npm / dist 入库 / workspace 合并等待评估)",
-        "DS 与 TMS 的样式机制差异未解(DS 不用 Tailwind、TMS 用 Tailwind 4)",
-        "若有效供给覆盖率过低则「所有组件来自 DS」这条约束本身可能需 Owner 重新表述",
-        "TCRN-TMS-INIT-002 的分解形态待勘察工作流回收后裁定"
+        "OKL-G19-* 孤儿限制 ID 的支撑证据随旧 vault 删除、可复原性未知",
+        "openapi-baseline 三份停在 2026-06-13 而末次提交 2026-07-08、实际漂移量未测",
+        "retired-browser-tests 六套的可复活性未裁",
+        "judgment 类(不可机械验证)事实的限额未定",
+        "106 个证据脚本中可实际跑通的比例未测(仅抽样 1 个跑通)"
       ],
       "dissolvedCount": 0
     },
     {
-      "minutesId": "minutes:b290715aa181ebe395ec30a4",
-      "externalKey": null,
+      "minutesId": "minutes:1b3de5e0abee5495fb41d1dc",
+      "externalKey": "TCRN-TMS-MIN-002",
       "surface": [
-        "OWNER-02 mvp-adoption-boundary 两条 Deferred 的处置仍未裁",
-        "OWNER-07 消费路径仍未选定",
-        "OWNER-05 locale 契约仍未裁:zh_HANT 在 TMS 非测试源码一千五百一十六处且为数据模型级类型",
-        "OWNER-06 图标契约仍未裁:DS 二十八对 TMS 生产一百零一、精确重合十三",
-        "OWNER-10 DS 是否先补 CI 再承接第二消费方仍未裁",
-        "AOS 迁移到抽出后的领域家具包属 AOS 侧工作、尚未立项"
+        "证据脚本写工件到当前工作目录而非指定 artifacts 目录、接 CI 前须逐个约定输出路径",
+        "10 个需 DB 或网络的证据脚本可跑性未测",
+        "3 个 .ts 证据脚本需 TS 运行时、未测",
+        "多个脚本工件含 generatedAt 实时时间戳、GATE-002 的确定性比对须剔除该字段"
       ],
       "effective": [
-        "OWNER-02 mvp-adoption-boundary 两条 Deferred 的处置仍未裁",
-        "OWNER-07 消费路径仍未选定",
-        "OWNER-05 locale 契约仍未裁:zh_HANT 在 TMS 非测试源码一千五百一十六处且为数据模型级类型",
-        "OWNER-06 图标契约仍未裁:DS 二十八对 TMS 生产一百零一、精确重合十三",
-        "OWNER-10 DS 是否先补 CI 再承接第二消费方仍未裁",
-        "AOS 迁移到抽出后的领域家具包属 AOS 侧工作、尚未立项"
+        "证据脚本写工件到当前工作目录而非指定 artifacts 目录、接 CI 前须逐个约定输出路径",
+        "10 个需 DB 或网络的证据脚本可跑性未测",
+        "3 个 .ts 证据脚本需 TS 运行时、未测",
+        "多个脚本工件含 generatedAt 实时时间戳、GATE-002 的确定性比对须剔除该字段"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:56f597652647ed6f0875b39f",
+      "externalKey": "TCRN-TMS-MIN-003",
+      "surface": [
+        "openapi diff 门的检测能力未做变异红证、只验了接线",
+        "基线与实现在 schema 层的漂移未测",
+        "GET / 是否应加显式排除标记未裁",
+        "139 条缺 @ApiResponse 是补齐还是显式接受为限制未裁"
+      ],
+      "effective": [
+        "openapi diff 门的检测能力未做变异红证、只验了接线",
+        "基线与实现在 schema 层的漂移未测",
+        "GET / 是否应加显式排除标记未裁",
+        "139 条缺 @ApiResponse 是补齐还是显式接受为限制未裁"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:2cdb8e95f2eeaa62757e2e50",
+      "externalKey": "TCRN-TMS-MIN-004",
+      "surface": [
+        "163 条声称中多数未逐条判定、尤其 71 条 prose 类",
+        "11 个 OKL-* 的当前实际状态未重新取证",
+        "troubleshooting 与 getting-started 与 reference 三章未做机械判定",
+        "prose 类声称的可证伪性改写未排期"
+      ],
+      "effective": [
+        "163 条声称中多数未逐条判定、尤其 71 条 prose 类",
+        "11 个 OKL-* 的当前实际状态未重新取证",
+        "troubleshooting 与 getting-started 与 reference 三章未做机械判定",
+        "prose 类声称的可证伪性改写未排期"
       ],
       "dissolvedCount": 0
     },
     {
       "minutesId": "minutes:be9fa4d049de839c22d0a7d8",
-      "externalKey": null,
+      "externalKey": "TCRN-TMS-MIN-005",
       "surface": [
         "整合分支未推远端、未合并 main",
         "163 条声称中多数未逐条判定",
@@ -6851,9 +6899,539 @@ export const cockpitData: CockpitData = {
       "dissolvedCount": 0
     },
     {
-      "minutesId": "minutes:bf894e715f287d777b92ef0b",
-      "externalKey": null,
+      "minutesId": "minutes:b0456cb6b3312f1760ff9e8a",
+      "externalKey": "TCRN-TMS-MIN-006",
       "surface": [
+        "DS 100 个组件中对 TMS 的有效供给数未定(Work* 与 Knowledge* 族约 30+ 面向他产品)",
+        "消费契约的具体机制未选(发布 npm / dist 入库 / workspace 合并等待评估)",
+        "DS 与 TMS 的样式机制差异未解(DS 不用 Tailwind、TMS 用 Tailwind 4)",
+        "若有效供给覆盖率过低则「所有组件来自 DS」这条约束本身可能需 Owner 重新表述",
+        "TCRN-TMS-INIT-002 的分解形态待勘察工作流回收后裁定"
+      ],
+      "effective": [
+        "DS 100 个组件中对 TMS 的有效供给数未定(Work* 与 Knowledge* 族约 30+ 面向他产品)",
+        "消费契约的具体机制未选(发布 npm / dist 入库 / workspace 合并等待评估)",
+        "DS 与 TMS 的样式机制差异未解(DS 不用 Tailwind、TMS 用 Tailwind 4)",
+        "若有效供给覆盖率过低则「所有组件来自 DS」这条约束本身可能需 Owner 重新表述",
+        "TCRN-TMS-INIT-002 的分解形态待勘察工作流回收后裁定"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:372e3bd67b82f3dbd876eb21",
+      "externalKey": "TCRN-TMS-MIN-007",
+      "surface": [
+        "OWNER-01 TMS 前端今天如何上生产:仓内无此路径且 Caddyfile 显式写明仓内 web 运行时已移除",
+        "OWNER-02 mvp-adoption-boundary.md 两条 Deferred 的处置:该文件逐字 Defer 了 TMS 依赖变更与 registry 发布而 DS 自己的 tms-adoption-guide 正面教 TMS 接入",
+        "OWNER-03 所有组件来自并符合 DS 的可执行定义:归属式 / 三层棘轮 / 零绕过加例外册 三选一",
+        "OWNER-04 视觉语言更替授权:TMS 现为毛玻璃加三层渐变洗、DS v2 明文清除并设门禁止、换后六十六条路由观感全变",
+        "OWNER-05 locale 契约:DS 五值无 zh_HANT 而 TMS 非测试源码一千五百一十六处在用且为数据模型级类型、边界映射等于静默丢数据",
+        "OWNER-06 图标契约:扩 DS 注册表 / 改受控开集 / 收敛 TMS 用量 三选一",
+        "OWNER-07 消费路径选型:submodule 加 workspace / vendored tarball 加 overrides / 私有 registry / file 加 overrides",
+        "OWNER-08 是否接受 DS 组件在 TMS 全部转为客户端渲染:use client 转出层会把整条 import 子图纳入客户端图",
+        "OWNER-09 DS 产品身份:是否从契约文档加静态夹具变为应用组件库并开放 DataDisplay 全族回调面(不可逆)",
+        "OWNER-10 DS 是否先补 CI 再承接第二个消费方:DS 今日零 workflow 所有门只活在本机"
+      ],
+      "effective": [
+        "OWNER-01 TMS 前端今天如何上生产:仓内无此路径且 Caddyfile 显式写明仓内 web 运行时已移除",
+        "OWNER-02 mvp-adoption-boundary.md 两条 Deferred 的处置:该文件逐字 Defer 了 TMS 依赖变更与 registry 发布而 DS 自己的 tms-adoption-guide 正面教 TMS 接入",
+        "OWNER-03 所有组件来自并符合 DS 的可执行定义:归属式 / 三层棘轮 / 零绕过加例外册 三选一",
+        "OWNER-04 视觉语言更替授权:TMS 现为毛玻璃加三层渐变洗、DS v2 明文清除并设门禁止、换后六十六条路由观感全变",
+        "OWNER-05 locale 契约:DS 五值无 zh_HANT 而 TMS 非测试源码一千五百一十六处在用且为数据模型级类型、边界映射等于静默丢数据",
+        "OWNER-06 图标契约:扩 DS 注册表 / 改受控开集 / 收敛 TMS 用量 三选一",
+        "OWNER-07 消费路径选型:submodule 加 workspace / vendored tarball 加 overrides / 私有 registry / file 加 overrides",
+        "OWNER-08 是否接受 DS 组件在 TMS 全部转为客户端渲染:use client 转出层会把整条 import 子图纳入客户端图",
+        "OWNER-09 DS 产品身份:是否从契约文档加静态夹具变为应用组件库并开放 DataDisplay 全族回调面(不可逆)",
+        "OWNER-10 DS 是否先补 CI 再承接第二个消费方:DS 今日零 workflow 所有门只活在本机"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:b290715aa181ebe395ec30a4",
+      "externalKey": "TCRN-TMS-MIN-008",
+      "surface": [
+        "OWNER-02 mvp-adoption-boundary 两条 Deferred 的处置仍未裁",
+        "OWNER-07 消费路径仍未选定",
+        "OWNER-05 locale 契约仍未裁:zh_HANT 在 TMS 非测试源码一千五百一十六处且为数据模型级类型",
+        "OWNER-06 图标契约仍未裁:DS 二十八对 TMS 生产一百零一、精确重合十三",
+        "OWNER-10 DS 是否先补 CI 再承接第二消费方仍未裁",
+        "AOS 迁移到抽出后的领域家具包属 AOS 侧工作、尚未立项"
+      ],
+      "effective": [
+        "OWNER-02 mvp-adoption-boundary 两条 Deferred 的处置仍未裁",
+        "OWNER-07 消费路径仍未选定",
+        "OWNER-05 locale 契约仍未裁:zh_HANT 在 TMS 非测试源码一千五百一十六处且为数据模型级类型",
+        "OWNER-06 图标契约仍未裁:DS 二十八对 TMS 生产一百零一、精确重合十三",
+        "OWNER-10 DS 是否先补 CI 再承接第二消费方仍未裁",
+        "AOS 迁移到抽出后的领域家具包属 AOS 侧工作、尚未立项"
+      ],
+      "dissolvedCount": 0
+    }
+  ],
+  "threads": {
+    "conference:db86593a43bdb91d9cabfb02": [
+      {
+        "conferenceId": "conference:db86593a43bdb91d9cabfb02",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:3265ef267a274e3f3f85a4f1",
+          "position:47721894c7191c9488621133"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。次轮立场:开发方式(源=Owner 提议「先一个个模块来做,先前端设计再后端开发」,我方赞同并加三护栏)。\n\n成立理由:此场景后端大头已存在且被钉住——数据面即 MCP/CLI 读面(93 工具、目录派生 schema、预算读窗,2026-07-26 已在双宿主接线并验证),剩余后端仅读层计算+缓存。读驾驶舱的前端设计即产品设计;Owner 为第一用户,设计稿是最廉纠偏点。\n\n三护栏:①垂直切片而非两大阶段——首模块打穿 设计→DS 组件→MCP→真数据渲染→验证 全深度,此后设计领先开发一个模块(设计 N+1 时开发 N),既保跨模块信息架构一致又不积压未验证假设;②设计用真链数据、禁 lorem ipsum——活链 1250+ 事件即设计素材,用真数据画出的界面其每个字段都被证明取得到(设计即验证读路径;规避「handoff 预设偏离代码现实」的既有教训);③选件时验证 DS 组件接线面(TMS 实测 100 组件中 56 个闭合无回调,看着完整接不上线;AOS 由此成为 DS 消费契约的首个试炼场),壳先裁定渲染架构且倾向纯 CSR(TMS ProductShell 的 RSC 水合失配为前车之鉴;AOS local-first、无 SEO 诉求、读为主)。\n\n模块序:0 壳(IA、分区切换、as-of 新鲜度、渲染架构裁定)→1 工作图(数据最简,以最小风险打穿全链路)→2 Owner 收件箱(价值最高,骑已证明的管道)→3 审议阅读器(两个读层修复)→4+ 门证据链、知识仪表、审计视图、快照健康。收件箱低保真稿提前进壳的 IA 讨论——设计序不必与开发序同构。数据面方向题与模块 0/1 并行跑有界实验(真链实测预算化读延迟),接线开始前闭合。\n\nAOS 审议室设计已出(docs/aos-design/v4-conference-room.html,素材=CONF-047 真实攻防):立场对话流(persona 头像+攻方红边标记+曾判 FAIL 徽记)、四个读层增值(分片重组/回合分组/溯源徽记三态+立场级收据绑定态/有效未决净值)、纪要置顶(决策编号+outcomeClass+未决净值)、legacy 一律如实显示未验证不升格。",
+        "fragmentCount": 2
+      },
+      {
+        "conferenceId": "conference:db86593a43bdb91d9cabfb02",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:601cb3bf0364402e5c51e1e1"
+        ],
+        "externalKeys": [],
+        "body": "四条硬边界:①数据面只走 MCP/CLI,绝不自建链 parser(复刻回放语义必漂移;db 包只做以链版本为键的衍生缓存,版本变即失效);②读面先行,写面后置且过供权(带 --actor 的受治 verb+operator bundle;授权≠认证——能读 pins 字节即 operator,故写面须单独立项裁定);③local-first 为架构约束(链与收据在本机;hosted 意味着工作区数据离机,须显式批准);④每视图带 as-of(链版本+视图滞后提示,AOS 不能成为自信撒谎的仪器)。\n\n四道方向题(按 P7 记录,均为倾向待裁):前端续建 vs 重推导(倾向续建 apps/web,组件全走 DS);数据面 MCP/CLI vs 自建(倾向 MCP+CLI 唯一);写面范围(倾向首阶段零写面,写面为带日落条件的独立轨道);W 契约对齐(从 requirements ledger 出发,缺的向 W 侧提需求而非 AOS 侧绕)。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:db86593a43bdb91d9cabfb02",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:7233372552a7d0b2d1b7dfcb"
+        ],
+        "externalKeys": [],
+        "body": "被拒方案(按 P7 留档):后端先行——数据面已存在,先行无对象;两大阶段式全部设计先行——大爆炸,一个数据面意外作废全部设计。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:db86593a43bdb91d9cabfb02",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:99434eaef7127b53ef8330c0"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。分解形状立场(Owner「close CONF-001 拆单」为本批次单一授权)。\n\n轴=交付面五层:EPIC-001 数据面与聚合索引(MCP 摄取/投影库+FTS/AOS 自有域+备份);EPIC-002 壳与全局层(壳 CSR/我的工作+收件箱/项目目录);EPIC-003 工作项管理(检索管理页/看板/详情全谱/安全写面);EPIC-004 审议室与发布列车(审议室阅读器/列车页/审议采用三步公约);EPIC-005 知识空间与治理视图(知识空间/审计视图/快照健康+执行观测)。共 16 Story。被拒方案=按八功能族逐族一 Epic:族与交付面交叉,共享的数据面与组件核验会逐族重复。\n\n开发方式重申:垂直切片,设计领先开发一个模块;首切片=壳+最小摄取打穿 设计→DS→MCP→真数据→验证 全深度。延后轨道五条各带复审条件:多用户/托管(复审=出现第二真实用户或托管需求)、知识编辑器(复审=真实编辑需求出现)、查询语言(复审=结构化过滤不敷用)、立场 reply-to 引擎字段(复审=逐轮转写公约用出真需求)、W 深度集成含幂等与 checkpoint(复审=驾驶舱稳定后)。决策清单:OWNER-NOW 一项(AOS 分区 actor attestation 单向门启用与否,启动时裁);CONDITIONAL 两项(发布停点形态届时呈报;DS 接线面逐模块核验若发现闭合无回调组件则向 DS 提需求单);其余 AGENT 直跑。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:db86593a43bdb91d9cabfb02",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:9b9474c2e0cbaee9de0f7e47"
+        ],
+        "externalKeys": [],
+        "body": "另一设计决定:AOS 域 blocks 关系为备忘性质不驱动链上 blocked 状态,UI 在用户加 blocks 时提示「治理级阻塞请走状态流转」,防关系图与状态机各说各话。字段全谱映射表(Jira 逐字段→链原生/AOS 域/后置/不做)已入 v3 文档(docs/aos-design/v3-tickets.html,屏 A 检索页+屏 B 详情页,真实记录 STORY-105 演示含祖先链面包屑)。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:db86593a43bdb91d9cabfb02",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:a9d79357d6c8d337377abe91"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。第五轮:一切皆 Ticket 与字段全谱(源=Owner 反馈:术语表通过;缺专门的 Ticket 检索管理页;详情页字段与 Jira 差距大;Jira 中 Initiative/Epic/Story/Subtask 都是 ticket 只是类型不同,Story 须体现所属 Epic 与关联)。\n\n我方结论:「一切皆 Ticket」恰是链的原生形态——全部工作记录共用同一 record shape,kind 只是字段,parentId 承载层级(work-show 实证:id/kind/parentId/projectId/revision/status/tombstone)。v2 的缺陷在呈现层(Initiative 树中心),v3 改为 Ticket 中心:新增工作项检索管理页(过滤面=项目/类型/状态/列车/负责人/标签+全文 FTS;保存视图;列表详情分栏;批量操作走安全写面;JQL 等价查询语言列后置轨道),详情页字段全谱化。\n\n三个实查事实定了设计:①引擎无关联类 verb(work-* 仅六个)→自由关联按 Q6 走 AOS 自有域,采用 DS 预置的 12 种 workRelationshipTypes(含 verifies/caused_by/supersedes 等治理语义,比 Jira 默认集富);治理关联(审议锚定/裁定源/门绑定/证据)链上已有,详情页独立区块只读展示,与自由关联双轨。②链上无 title 字段(记录的意义活在审议里)→设计决定:建卡标题写入 advisory:scope(意图上链,改标题=追加注解),AOS 域可存显示别名。③parentId 是严格树且引擎按 kind 校验 expectedParent→Story 必有父 Epic,无 Jira 式自由 Story;建卡 UI 自动建议父级,此差异如实标注不抹平。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:db86593a43bdb91d9cabfb02",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:ac1b77587804828263f2f41a"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。第六轮:审议攻防现状与审议室设计(源=Owner 问「多子代理在一个 conference 里互相攻防是否已实现;AOS 应显示对话记录与纪要」)。\n\n现状三层如实回答:①记录容器已实战——立场逐字上链、persona 署名、首行披露执行形态、分片公约,CONF-033/045/046/047 均为活例;②执行溯源引擎已建但活链未用——v0.6.0 EPIC-019 交付 execution:mode(multi-agent-deliberative vs synthesis-only,骑 conference request extensions 增量落地)与 host-execution 收据(以内容摘要把立场绑定到真实调用输出,防事后改写;自陈绑内容非身份;未声明的旧审议 fail-closed 归类 legacy-unverified,读取路径不向多代理升格);③攻防编排真实发生但在 workflow 子代理层——本平台的对抗复核(如 CONF-047 两轮:抓到编造 fixtureDigest 与两处 F5 硬伤)是真跑的,但链上落的是收敛后立场,中间轮次未逐轮上链。\n\n增补路线(零引擎改动三步+一项远期):①新审议默认声明 execution:mode;②高价值攻防绑定 host-execution 收据;③新公约「高价值裁定逐轮转写」——每轮攻防即时落立场,键名带轮次(如 POS-C0XX-VERITY-R2)、首行注明「回应 POS-…」,默认仍综合转写以省事件预算(每片占 maxRecords=10000 之一);远期:回合 reply-to 结构化字段按 AOS ledger 模式向 W 提需求,真实需求验证后再提,不预造引擎特性。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:db86593a43bdb91d9cabfb02",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:aefaeabd794103a2c9d10990",
+          "position:b26f8bb0b356fec8d575944e"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。首轮立场:AOS 定位与承接面(源=Owner 2026-07-26「AOS 应有哪些功能承接 Workflow 生成数据」)。\n\n定位:Workflow 自陈 between queries it is silent by design——引擎刻意不编排、不主动、无 UI;AOS 就是那只声音:W 负责记录得对,AOS 负责看得见、找得到、该你了。AOS 自述 local-first operations spine for agent-assisted work, proof, review, and bounded readback 与此吻合。设计不从零开始:W 引擎自带 public AOS requirements ledger(封闭、通用、确定性、只读、no-overclaim readback,带 digest),第一步是通读该契约对表;AOS 自有遗产(知识检索层的 schema-fts 与 bounded readback 证明)为 P9 第一环资产。\n\n承接 Workflow 数据的八个功能族:①工作图与列车看板(work 树、状态、Incident、sprint 跨分区成员表);②Owner 收件箱——头号功能(owner_intent_required 门+纪要 OWNER-NOW 项+发布停点,「批量一次坐下清完」的产品化);③审议阅读器含两个读层修复:分片重组(2048 字节预算下活链已有 15 对 1/2+2/2 分片,按同作者连续拼回原文——预算只约束存储不约束阅读)与有效未决计算(unresolvedIssues 不可变、消解靠后续纪要,审计实测 12 条表面未决仅 2 条真);④门证据链解析(minutes-locator→纪要→立场原文→evidence→收据一路点穿,附名册展示);⑤知识卡目录+新鲜度倒计时(卡片过 stale-days 静默跌出默认检索,AOS 使之可见);⑥审计视图(时间戳形状检查常态化——前沿模型自述需外部证据锚定,AOS 即常驻读者);⑦执行观测摄取(codex-execution-observe、App Server 观测、L2.5 收据);⑧快照健康(每分区最后 SNAPSHOT_VERIFIED 与 cadence 达标)。\n\n设计发现(护栏三首次套用,重大):DS 已有整族 work-management 与 knowledge-management 模式组件及注册表——WorkHierarchy/WorkItemRow/WorkDetailLayout/WorkActivityFeed/GatePipeline/GateReadinessPanel/EvidenceStrip/Stamp/ReadbackPanel/MachineToken/ProductShell/ProductSwitcher/Knowledge 全族——与八功能族几乎一一对应。AOS 基本不需要新造组件,需要的是核验并打通接线面(Navigation 族回调已核实存在:onCollapsedChange/onThemeChange/onQueryChange/onResultActivate;Work*/Gate* 族待逐个核,防撞 TMS 实测的 56/100 闭合无回调名单)。\n\n模块 0+1 设计稿已出(docs/aos-design/module-0-1-mockup.html,真链数据):壳=TopBar(品牌+分区切换+as-of 链版本指示)+SideNav 八功能族;工作图第一屏=INIT 树+状态+进度+列车徽记,行点开为 WorkDetailLayout;收件箱低保真=真实三项(TMS 前端重建准入门 pending 为全平台唯一 owner 门+AOS CONF-001 open+MIN-050 待采纳),含「表面未决 12→有效未决 3」净值演示。渲染架构按裁定纯 CSR;写面零,按钮仅指引。",
+        "fragmentCount": 2
+      },
+      {
+        "conferenceId": "conference:db86593a43bdb91d9cabfb02",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:cede999c7aa6509c3031022b"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。第三轮:功课与实验结果(Owner「按你的建议推进」授权本轮)。\n\n功课一,W 侧 requirements ledger 已通读(8 条:1 accepted+7 candidate,mode=offline_reference):其主体是双向深度集成契约——conformance matrix 先于互相发布、幂等修订栅栏、fallback epoch 对账、知识兼容元数据、可移植 checkpoint、投影导入不得替换运营真值、发布清单回读、信任角色-actor 绑定。要点:projection-import-truth-ownership 即「db 只做衍生缓存、链为真值」边界的引擎侧背书;深度集成项(幂等/checkpoint/角色绑定)属驾驶舱之后的阶段,不入本 INIT 首期。功课二,kr01/kr02 遗产收据全绿(schema-fts 迁移与 MCP method surface 均有 proof-summary+readback)。\n\n实验(方向题二,已可闭合):最大活链(cross,约 1250 事件)实测——冷启动 CLI 每请求 spawn 181-193ms;长驻 MCP 单进程连续调用 121-139ms(status/work-list 50 条/work-show 三种读形态一致)。两路均远低于本地驾驶舱交互阈值,结论=MCP/CLI 为唯一数据面、不自建 parser。诚实注记:回放 O(n),链至 maxRecords=10000 上限时约八倍≈1s,届时版本键控缓存由锦上添花转为必需——此为缓存启用判据,一并落档。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:db86593a43bdb91d9cabfb02",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:dff1d71817b17e12772c156e",
+          "position:f660ddd72e7218420d54871e"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。第四轮:Jira 形态重构与九问裁定(源=Owner 两轮反馈)。\n\nOwner 方向修正(要点转述):AOS 不能局限于单项目,参照 Jira 的多项目管理形态;目标是用惯 Jira 与 Confluence 的专业人士可无痛上手。我方九问逐一过后 Owner 裁定:Q1 单操作员先行、多用户按可演进设计(身份字段留位);Q2 重开「首阶段零写面」裁定→首期开放安全写面(建卡/状态流转/注解,CAS、时间戳、actor 自动补齐),治理写(门/审议/发布)保留显式仪式;Q3 全局层置顶(我的工作/收件箱/仪表盘/项目目录),混合 as-of 按项目分别标注;Q4 不叫 Sprint——Owner 逐字要点:「Sprint 在当前阶段可以无视日期是因为我们还没有客户,所以只用于作为 INIT 集合发布的包来用……新词也需要有类似含义,因为我们需要这样去支持」→定名沿用公约既有词「发布列车」,并锚定 Jira 用户的 Releases/fixVersion 心智(一批 issue 打包发布、日期可留空),为未来节奏演进留路(列车公约本就预留 cadence 重钉);Q5 知识空间首期只渲染+检索,编辑器为独立轨道另裁;Q6 assignee/优先级/标签/评论走 AOS 自有域(qualified ref 挂链,链管治理真值、AOS 管运营元数据;评论与立场双轨,UI 引导「要进裁定记录写成立场」);Q7 治理对象永不可编辑、运营字段可编,UI 以链标记区分;Q8 Jira 熟悉面打底+「决策与证据」页签做差异化;Q9 模块序=全局层→项目目录→看板→详情→发布列车→知识空间。\n\n底座结论不变:MCP/CLI 唯一数据通道;聚合索引由缓存升格为核心组件(四链投影一库,链版本键控,truth-ownership 边界);纯 CSR;组件全走 DS;local-first。v2 设计稿已出(docs/aos-design/v2-jira-shaped.html,六屏+术语终审表+裁定落点表+写面分界表,真链数据),已呈 Owner 终审。待办:术语表逐词终审;终审通过即收敛,close 本会议出分解裁定。",
+        "fragmentCount": 2
+      }
+    ],
+    "conference:6f4c580c6ea63e21274f5fdf": [
+      {
+        "conferenceId": "conference:6f4c580c6ea63e21274f5fdf",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:4a51d78b73b4559e27ccbee9"
+        ],
+        "externalKeys": [],
+        "body": "裁定二,两段式真值拓扑(方向裁定,切换带 owner 门):镜像段(现在)=文件链为真值,AOS 只投影;切换段(AOS 通过验收后)=数据迁移与切换,AOS 库承接存储与运营面,W 退为框架层——规范形态、动词、回放语义仍归 W。迁移换容器不换语义:append-only、规范字节、哈希链、可回放、attestation 五件套原样承载,时间见证等工作区外 sidecar 随迁。切换仪式=一致性矩阵双跑证据(引擎 ledger conformance-mutual-release 所指)→owner 门→切换→文件降为导出/归档格式,并备 fallback 对账方案(ledger fallback-epoch-reconciliation);机制候选=migration-plan、exchange 族、export(执行时核验)。只裁方向,不排期;此为平台未来最大单向门,届时全套仪式。local-first 边界按 P5 条件化:「权威 local-first」保留,「服务面本机」放宽为允许镜像外置。\n\n裁定三,专机之问(Owner 采纳「镜像段不专机」):VM 上仅可重建投影,丢失代价=重跑同步;共宿 tcrn-platform-dev 的 k3s,起 tcrn-aos namespace+资源限额。复审条件=迁移切换裁定进入执行,届时专机或专卷+备份 SLA+访问收紧与迁移同门裁定。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:6f4c580c6ea63e21274f5fdf",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:518eb02aaa25124d66c5ccd6"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。部署与真值拓扑批次转写(源=Owner 四轮:①开发在本机、生产在 TMS 开发 VM;②「AOS 和 workflow workspace 互相冲突,workflow 只应选一种模式工作,等 AOS 通过验收就进行数据迁移和切换,workflow 负责框架,AOS 负责数据治理」;③专机之问;④补遗「AOS 的定期备份方案」)。\n\n裁定一,镜像段四边界(Owner 同意):权威不动——链、写面、供权双文件、attestation 收据永留本机,VM 只收投影,供权材料永不上 VM;命名诚实——VM 实例=镜像/服务面,UI 显式标「镜像·数据截至 as-of」;VM 实例首期零写面——安全写面仅本机实例生效,队列中继为延后轨道另裁;访问边界先定后上——镜像含纪要与立场,受众=LAN 信任或加认证层,确认 traefik 不暴露公网。附部署纪律:开发全在本机,VM 改动只经声明式清单进入(k3s apply,沿 /srv/tcrn/remote-services/manifests 惯例),禁止手改运行态;投影库自带源链版本水位与一键重建。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:6f4c580c6ea63e21274f5fdf",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:d5df9ffe7ff75db37c2aae8b"
+        ],
+        "externalKeys": [],
+        "body": "裁定四,定期备份方案(Owner 补遗,按「只备不可重建者」分层):①AOS 自有域库(评论/指派/关系/写日志,唯一不可从链重建)=与链分区快照同刻配对快照——域数据以 qualified ref 引用链记录,时点不一致则恢复后引用悬空,故成对为原则;另加每日兜底;SQLite .backup+integrity_check;方案生效前须先做一次恢复演练;保留沿 backup.retention 公约(5 份,轮转具名删除)。②attestation 收据目录在工作区根之外,现行分区快照不覆盖——即刻并入分区备份同车(快照工具已改)。③投影库与 VM 镜像=可重建导数,明确不备并留此理由。④配置与清单以 git 为备份,secrets 单独处置不入 git。⑤切换段备份升格为治理备份本体,入迁移仪式清单。\n\n执行发现一条(S013 提前 dogfood):execution:mode 骑 conference request 的 extensions 槽(引擎 EPIC-019 已建),但 conference-open 的 CLI/MCP 面未暴露 extensions 旗标——本会仍以首行披露自述执行形态;「引擎有而 CLI 不达」缺口按公约向 W 提需求,不在 AOS 侧绕。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:35e03ea2c0a281ccd0f4b9b7": [
+      {
+        "conferenceId": "conference:35e03ea2c0a281ccd0f4b9b7",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:5cef2f89a110b82ba720bc65"
+        ],
+        "externalKeys": [],
+        "body": "三层处置。A 层删除:资源物化族、文档发布流水线、adapter-codex、Assignment 派工单(⚠ 同结构的 AgentRun 必须留,它是 S016 执行观测的记录体,此对须拆开砍)、依赖生命周期治理(⚠ 删除须记明能力去向:它是外采公约许可证与供应链审查的实现候选,非无人认领死码)。B 层保留:脱敏机、确定性 ID 派生、SQLite 仓储与路径硬化(符号链接祖先拒绝、route-owned 根断言)、backup.ts 全套、mcp-server 传输门控、gateway 六段管线与 rejectClientAuthorityParams、work-readback 权威拒绝与响应预算信封、FTS5 知识检索层、evidence 全部与 95 个测试、execution-ledger 的确定性事件键派生规则(移作投影导入去重,其执行溯源职能让位给链)。C 层前端作起点:app.tsx 998 行 ProductShell(已避开 TMS 的 RSC 水合坑)、work-management-mockups.tsx 1822 行 45 DS 符号 9 页、phase3-dogfood-readback.tsx 913 行只读取数范式。D 层新建:链客户端、链形状瘦投影类型(**不得复用 StoryRecord**,后者要求 problem/user/expectedBehavior/acceptanceCriteria/estimate 而链上全无,强行复用即编造字段,违反 no-overclaim)、AOS 自有域字段、as-of、安全写面。\n\n对切换段的诚实修正:保全派「五件套已建一半」经复核证伪——append-only 记录流与哈希链并未建成(现有为单表触发器,非同一件事)。既有实现是起点非地基,MIN-002 的一致性矩阵与 fallback 要求不放松。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:35e03ea2c0a281ccd0f4b9b7",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:821f73905f79d23418acb2f2"
+        ],
+        "externalKeys": [],
+        "body": "Owner 裁定(逐字要点转写,2026-07-26):「同意,但是你需要给我和我们确认过的前端一致的交付物,包括 Layout」。\n\n据此确立**交付物一致性要求**:三层处置的 C 层「前端作起点」仅指复用其技术底座(ProductShell 集成、主题与多语言、URL 规范化、静态渲染、DS 接线方式、只读取数门控范式),**不得以既有 mockup 页面充当交付物**。最终交付的界面必须与已确认设计逐屏一致:v2 六屏(我的工作/项目目录/看板/详情双轨字段/发布列车/知识空间)、v3 两屏(工作项检索管理页/详情页字段全谱含祖先链面包屑与关联双轨)、v4 审议室(立场对话流/分片重组/回合分组/溯源徽记三态/纪要置顶),**含 Layout 布局本身**(全局层置顶的信息架构、侧栏分组、列表详情分栏、各项目 as-of 徽记位置)。\n\n验收判据:逐屏与设计稿比对;既有 mockup 与新设计不一致处一律以新设计为准;凡复用既有组件装配,须核对其是否真能承载新 Layout,不能则改造或替换而非迁就。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:35e03ea2c0a281ccd0f4b9b7",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:be9ec36bf61c415df4c2dbfa"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合;执笔 agent:fable,署名 Minerva。既有实现处置(源=Owner「授权移除原有,按已确认的新设计开发,如果你认为合适的话」——授权附执行方判断)。方法:四路独立分析(清点/拆除派/保全派/契合度)各经一轮对抗复核;四份初稿全部被判 OVERSTATED,本立场只采经复核幸存的事实。\n\n结论:不宜整体移除,改三层定向处置。决定性三条:①与事件链零连接——LinkRecord 的 tcrn_workflow 是死声明,唯一投影通道读手写 JSON 且硬编码只认 TCRN-DESIGN-SYSTEM 单项目,故真正缺的只有链客户端;②约三分之一确有删除依据且证据极硬——资源物化治理 279 行(占 types.ts 27%)、文档发布流水线约 180 行、adapter-codex 1797 行,其类型签名写着 materializationExecuted/liveDispatchAuthorized/docsPublished 恒 false,从未执行过一次真实动作;③另一批横切能力在新定位下价值不降反升——尤以 packages/db/src/backup.ts 723 行(物理快照+逻辑导出+往返导入+保留策略+拒绝恢复到生产)正是 MIN-002 刚裁的 S020 备份方案的现成实现,且 S014 scope 自身明写「FTS kr01 血统」,拆之即拆我方新立 Story 的依赖。\n\n最重要执行纪律:七个名字对得上(projection/conference/gate/audit/ticket.list/knowledge search/release candidate)但无一语义完全对齐。冲突比缺失危险——缺失会报错,冲突会静默地用旧语义回答新问题。故纪律=凡同名者一律先证伪再复用,默认假设语义不同,优先级高于任何复用便利。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:bb4a286b6a7173b0d6539086": [
+      {
+        "conferenceId": "conference:bb4a286b6a7173b0d6539086",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:ab84964fa3805bb153ff3010"
+        ],
+        "externalKeys": [],
+        "body": "【Owner 原话逐字转录】「按推荐方案执行全部收官。」【上下文绑定说明（执笔代理）】该指令批准前置推荐中的 TMS 处置：建立两条安全事项；第一条跟踪 subsidiaries 的七个 API 端点只有 JWT、没有 RBAC 权限检查的问题并优先修复；第二条跟踪 66 个前端路由中只有一个 RBAC gate、homepage editor 跳到 gate 外 /studio 的架构问题。当前前端无生产路径，第二条不表述为在野利用。现有 feat/tms-init001 只开 PR 运行 CI/服务验证，不合 main。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:bb4a286b6a7173b0d6539086",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:cc017d470310c8a837cbe9bb"
+        ],
+        "externalKeys": [],
+        "body": "【main-thread synthesis；执行身份 agent:codex；persona 仅表示本次安全证据评审立场】事实工件 docs/facts/permissions.md 列出 subsidiaries 七个端点仅受 JwtAuthGuard 保护，而 catalog 已有 subsidiaries:view/create/update/delete，说明身份认证与资源授权断开；修复验收必须包含无权限身份的运行期 403 负证。REBUILD-HANDOFF.md 的前端路由事实显示 66 个 page 路由仅 interface-management 有 AbilityGate，homepage editor 又重定向到 gate 外的 /studio；当前前端是本地、无生产路径，因此这是上线前必须闭合的架构风险而非声称当前生产事故。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:ddc067b73be4cca41b10bfc5": [
+      {
+        "conferenceId": "conference:ddc067b73be4cca41b10bfc5",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:1a8287f1b72ff9b4198659b1"
+        ],
+        "externalKeys": [],
+        "body": "本立场由分派子代理独立产出。\n\nEpic 切分轴不是产品域,而是事实的证明方式。web 有 28 域、api 38 模块,按域切会得到 28 个门完全相同的 Epic;而派生事实(路由、OpenAPI、schema、能力矩阵)与断言事实(指南里的行为声称)的证据形态与门根本不同。\n\n权威悬空是真的,但比预设轻:全仓无任何代码读 ai-governance,它不是坏构建,是坏权威。危害在失效方向——`ai-governance/README.md:15` 称「若冲突,先更新控制源,或在解决前视其为权威」,而控制源 `vault/…` 已不存在,冲突永不可解,ai-governance 遂成唯一可读源,与同文件第 25 行「不得在此存正式规格」自相矛盾。悬空引用四处:该 README 三处、injection-manifest 六条、module README 六条,外加 `apps/web/scripts/verify-module-capability-browser-proof.ts:56` 的 evidenceDir 默认值。\n\n故我把「裁权威序」与「修指针」拆开:裁定是阻塞前置,不裁就无规则说事实落哪;改文件不是,可与派生 Epic 并行。\n\n漂移可测:文档基线 2026-06-10,其后仅 13 次提交、apps/web 仅 24 文件,审计可穷尽。已捕真缺陷:`docs/user-guide/platform-admin/README.md:11` 称 AC 控制台暴露 Interface/Webhook management,但 `e04063b5` 已令两 AC page 渲染 AcBusinessRouteUnavailableScreen 并从 AcShell 删导航;而 `integrations/README.md:9-10` 的「可见管理面」未限定 scope——tenant 侧真、AC 侧假。\n\n故派生 Epic 须先于断言 Epic:没有机器产出的「路由×scope×可见性」矩阵,就没有尺子判这类声称,上述缺陷正是靠源码而非读文档发现的。\n\n三层落点:`docs/facts/` 放可被源码证伪的正文,随代码同 PR 变;链只放裁定、批次验收与声称 status 变迁;知识卡只放跨 Initiative 会再检索的结论,应是个位数。链与卡不得承载正文。\n\n重建开工判据不是 facts 无缺口(不可达),而是三门已关且缺口已登记。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:ddc067b73be4cca41b10bfc5",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:57838fbf9272aaaab8de8b89"
+        ],
+        "externalKeys": [],
+        "body": "本立场由分派子代理独立产出。我保留按证据类别切分的倾向,但据实地勘察修正为按提取器切:一个 Epic = 一个提取器 + 一份入仓工件 + 一道会红的门。改判依据是我当场抓到假分母。codegraph 的 436 route 中仅 398 出自 *.controller.ts,33 出自 apps/api/scripts 的字符串字面量,3 出自 spec,2 出自 bootstrap。以 436 立分母,覆盖率从第一天起就是假的。真分母已三方互钉:我跑通 apps/api/scripts/write-api-registry-controller-inventory.mjs,产 449KB 工件,controllerCount 60 / handlerCount 398 / 带权限 302 / 去重资源动作对 95,与 codegraph 的 controller 子集及我的 grep 独立吻合;归一化后与 OpenAPI 基线并集 396 操作对账 394 命中,差额可全解释。该工件一份即同时承载路由、权限、swagger 元数据三类事实,故这三者不该拆成三个 Epic。仓内已有 106 个证据脚本,零个接入 package.json、turbo 或 CI;ci.yml 只门 lint、typecheck、unit、build。这与六个假门同形:机器在,从不跑。INIT-001 主体是复活并红证化它,不是补写文档。bruno 仅 3 个 health 请求,不可作分母;docs 合计 940 行且是对冲层,我抽验一条即假(/studio/editor 不存在)。证据绑定:fact = 断言 + 提取器路径 + 工件 sha256 + 分母 id + 会红的门。算数=入仓工件字节加已实测出红的门;不算数=文档散文、continue-on-error 步骤、单跑 codegraph query。不可机械化的残余(页面意图、OKL-G19 限制接受、vault 悬空指针所指旧裁定)单列 judgment 类,显式标注无机械证明,限额并由 Owner 裁定,禁止计入覆盖率分子。红证:每道门须先注入变异见红方可信;现成红区已有 62 个 handler 既无权限也非 public、139 个缺 ApiResponse。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:ddc067b73be4cca41b10bfc5",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:cd85562f54cce2f8a5d6adde"
+        ],
+        "externalKeys": [],
+        "body": "本立场由分派子代理独立产出。\n\n主张:按产品域切 Epic,但必须先立一个「事实骨架」Epic,否则每个域各自重造同一批路由/权限/契约事实并互相漂移。\n\n证据推翻了 docs 的 11 域轴。docs/user-guide 与 wiki-draft 共 24 文件 940 行,却要覆盖 68 个 page.tsx、398 个控制器路由装饰器、46 个 RBAC 资源;且它写的是「证明状态」不是事实(通篇 G19、proof slice、尚未接受)。consent、membership、blocklist、translation 在 24 个文档中 0 次提及,而四者都有 Prisma 模型与 UI 组件。最刺眼的反例:apps/web/src/domains/config-dictionary-settings 共 18,937 行 21 文件,是前端最大域,docs 只给它 4 行。\n\n真权威域轴在代码里:apps/web/src/domains/ 有 28 个域目录,结构高度规整(39 个 Screen.tsx、21 个 copy.ts、28 个 api.ts),正是前端重建消费的单位。28 个 Epic 太碎(最大 18,937 行对最小 15 行),归并为 7 个域 Epic。\n\n否决按层级(AC/租户/艺人/公开)切:user-management、interface-management、observability、webhook-management、profile 等在 /ac 与 /tenant 下各有一套页面,层级轴要重复记两遍;域轴只记一次,把层级差异当事实属性。\n\nAPI 事实不必手写:apps/api/openapi-baseline 三份基线并集 396 个 operation,对 398 个装饰器近乎全覆盖,且已有 run-openapi-diff 门。骨架 Epic 只需重生成并接上漂移门。\n\n一条 fact 须带代码锚点、观测方式、作用域与权限绑定、置信等级;域「完成」判据是双向闭包:该域 route 节点被 fact 全覆盖,且每条 fact 锚点可解析。\n\n悬空 vault 指针是小事,仅 4 文件 17 处引用,归骨架 Epic 一条 Story,处置是改指仓内可验证锚点,而非找回 vault。排序:骨架先行,次做身份与访问(权限词汇是其余全域事实的引用基底),再按代码行数乘文档缺口降序。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:89552d4e6d757d2aa541d684": [
+      {
+        "conferenceId": "conference:89552d4e6d757d2aa541d684",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:0286178d0b05361b66919abe"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程综合产出(非分派子代理)。\n\n判定:GATE-001 可置 satisfied,但只对 API handler 一个分母成立,其余三个分母仍未达门。\n\n充分性依据三条。一、分母 398 由两个独立提取器逐条互钉:解析源码的 write-api-registry-controller-inventory.mjs 工件与 codegraph route 节点 ∩ *.controller.ts,归一化路径参数写法后交集 398、双向零分歧。二、废止的 436 已逐条归因:30+3 条为检查器与测试内的字符串字面量、3 条 spec、2 条 bootstrap 中间件挂载,合计可解释。三、提取器已见红:三次变异注入全部检出且还原干净,红证脚本已入仓可复现。\n\n两条红证结果改变了门的设计,故须写入判定。其一,RBAC 资源改名后计数 46→46 不变,只比计数的门会放行,是内容 sha256 抓到的——分母门一律比内容哈希、禁止只比计数。其二,向控制器注入真实新路由后 codegraph 快照仍报 398 且查不到该路由,解析源码的提取器报 399——codegraph 不 sync 即假绿机器,任何以它为源的门须把 sync 纳入门自身流程。\n\n残余边界须显式声明,不得计入本门的绿。前端页面路由 66、Prisma model 88、RBAC 资源 46 三个分母已登记且已算内容哈希,但均为单源、且其提取器未见红,故不得支撑任何覆盖率声称。106 个证据脚本中 10 个需 DB 或网络、3 个 .ts 需 TS 运行时,本次未测。\n\n一条接线缺陷已记录待修:证据脚本把工件写入当前工作目录而非指定 artifacts 目录,一次批量试跑在仓根产生 74 个未跟踪 JSON,接入 CI 前必须逐个约定输出路径。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:186b40c707c99734e2ba7dab": [
+      {
+        "conferenceId": "conference:186b40c707c99734e2ba7dab",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:6a923d4b93201003dad63b81"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程综合产出(非分派子代理)。\n\n判定:GATE-002 可置 satisfied,绿覆盖 API handler 一条派生链。\n\n确定性已实测而非声称。生成器 scripts/facts-generate-api.mjs 无时间戳、固定四键排序,--check 连跑两次哈希一致,重新生成后产物 sha256 与生成前逐字节相同。门的检出能力另经变异证实:手改产物一个数字后 --check 退出 1 并指名漂移文件。\n\n一次自捕的假阴性须写入记录。变异 4 的首次尝试用正则替换施加变异,--check 返回绿——看似门失灵,实为正则漏了 markdown 加粗标记、变异从未生效,门当时是对的。改为先断言字节确已改变再跑门后立即见红。教训:未先证明生效的变异,其绿与门坏掉的绿不可区分;该纪律已写在红证脚本里,但本次是在绕开脚本的手测里栽的,故手测同样适用。\n\n一条分解阶段的建议被读源码证伪,须记录。原建议为把 tooling:openapi:diff 由 advisory 提为 CI 必需门;实况是它已经是必需门,四段证据齐全:PR 触发含 apps/**、security-required 作业设 TCRN_TOOLING_REQUIRE=1、security:check 命令链含该命令、脚本在必需模式下以非零退出。误判源于 advisory 作业里同命令的 continue-on-error 副本。处置为加注释并改名指向真正阻断的那份,不删除。\n\n对账结果:398 条 handler 与基线并集 396 交集 396、基线零多余。基线标注 2026-06-13 早于末次提交 2026-07-08,但路径与方法层面零漂移。schema 层未测,已在产物内显式划界。两条差额均已定性:一条显式 excluded 属正确排除,另一条 GET / 因 AppController 属根 AppModule 而三份文档 include 均不含它,是模块作用域隐式排除。\n\n残余边界:本门的绿只覆盖 API handler 这一条派生链;前端、数据模型、权限三条派生链的生成器尚未建立,不在本门覆盖内。openapi diff 门自身的检测能力未做变异红证,只验了接线。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:5c5596495bdf66d72a8fb8d8": [
+      {
+        "conferenceId": "conference:5c5596495bdf66d72a8fb8d8",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:8905738c105fdd9baf5c385f"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程综合产出(非分派子代理)。\n\n判定:GATE-003 可置 satisfied,但绿的范围必须与原判据一并修订——原判据「每条声称都带 status 且零未标注」未达成,也不应达成。\n\n原判据要求 163 条声称逐条带 status。实际完成的是:批 A 对 platform-admin 的 10 条 AC 面声称逐条机械判定(9 证实 1 证伪),批 B 捕获 integrations 整表的结构性缺陷并修,批 C 与 STORY-024 完成 11 个 OKL 限制 ID 的裁决。71 条 prose 类未逐条判定。\n\n我主张按已完成的范围收口而非降低标准,理由是原判据本身有缺陷。它假定每条声称都能被赋予 status,但清册的核心发现正是 43% 的声称可证伪性未定——对一条无法确定「什么观测能推翻它」的散文强行标 status,产出的是假绿而非覆盖率。诚实的做法是把它标为不可判定并说明,这已在清册与审计文件中做到。\n\n两条系统性发现比逐条覆盖更有价值。其一,批 A 的证伪项与批 B 的整表缺陷同根:都是缺 scope 限定。两处独立出现同一失效模式,证明它是这批文档的写法问题而非笔误,故处置是加 scope 列而非改一行字。其二,OKL 裁决修正了分解阶段的判断——11 个 ID 的定义在仓内存活,死的是它们援引的证明切片,形成一个不可证伪的闭环:声称说没有证明,而验证它需要的正是那份不存在的证明。\n\n残余明确登记且不得被本门的绿掩盖:163 条中多数未逐条判定、11 个 OKL 的当前实际状态未重新取证、troubleshooting 与 getting-started 与 reference 三章未做机械判定。审计文件首段已显式划界,不冒充全覆盖。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:144e4d45ac02c35a8f8501ee": [
+      {
+        "conferenceId": "conference:144e4d45ac02c35a8f8501ee",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:502f52ac47d9f88f17ee5d1c"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程综合产出(非分派子代理)。\n\n判定:TCRN-TMS-INIT-001 可置 done。7 个 Epic、28 条 Story 全部完成,三道门全部 satisfied 且各自边界已写入交接包,18 个提交在整合分支 feat/tms-init001 上。\n\n核心产出是一份带证据绑定的事实基线,不是一份文档。398 条 handler 事实由确定性生成器产出;88 个 model 由四个独立提取器逐条互钉、九次变异全红;66 条前端路由与 28 个域、302 条权限引用、163 条文档声称各有清册。三道门已接入 CI 的 lint 作业。\n\n最有价值的产出可能不是事实本身,而是七个「只比计数的门是假门」的独立实例。RBAC 资源改名 46 到 46、Prisma @@map 改名 88 到 88、生成 client 删字段、迁移表名改动、引擎渲染改名、前端目录改名 66 到 66、分母哈希手算差异——七次计数纹丝不动,全靠内容哈希或逐条互钉抓到。这条教训在本仓已被证明为系统性而非偶然。\n\n本 Initiative 在自己的产物里抓到并修复了五处缺陷,须计入结论而非隐去:分母哈希手算与生成器不一致、api-handlers 全表 302 行权限列渲染成 object Object、README 用作可判伪示例的断言前提为假、清册生成器依赖 gitignore 中间文件、门的红证首次尝试是变异未生效的假阴性。第三条尤其值得记:一条断言可以完美可判伪同时把因果说反,可判伪保证的是错了能被发现而非它是对的。\n\n两条产品级发现须 Owner 单独处置,不在事实基线范围内:subsidiary.controller.ts 全文零授权致 7 条端点任意持 JWT 用户可增删改移;66 条前端路由中仅 1 条带真正的 RBAC 前置门且写在屏组件里。\n\n唯一必停点:合并 main 触发 cd.yml 部署,属对外发布,按停顿预算与交付节奏公约须 Owner 授权。整合分支未推远端。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:c728cb5d2c5b25ddd7d873d6": [
+      {
+        "conferenceId": "conference:c728cb5d2c5b25ddd7d873d6",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:4a8a18eff11b87f68db1d799"
+        ],
+        "externalKeys": [],
+        "body": "【本立场为 Owner 原话逐字转录,由执笔代理记录,未改写】\n\n第一次表态:\n「我认为不需要放cross-project,而是没有的组件先记录下来,这个INIT完成后再开DS的INIT去扩展,你怎么看?」\n\n第二次表态(对代理呈报的两项建议与三选项裁决):\n「同意你的建议,2」\n\n转录说明:第二次表态中的「2」指代理呈报的三个选项中的第二项——重建撞上承重缺口时,允许建 TMS 本地组件但强制登记为 DS 债务并设机器可判定的门,DS 扩建时回收。被否决的另两项为:①停在该 Story 标 blocked 等 DS;③逐个升级给 Owner 裁。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:c728cb5d2c5b25ddd7d873d6",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:9cfed05eb83b69329c6b53e9"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程综合产出(非分派子代理)。\n\n赞成 Owner 的分区裁定,理由比「优先用更窄的分区」更强:把 DS 扩建单独成 Initiative,使每个 Initiative 真的只涉及一个子项目。分区规则按工作实际跨几个子项目判,不按话题涉及谁判,故拆分之后 TMS 重建名副其实地单项目。\n\nOwner 的顺序另有一个未言明的好处:保护 DS 的通用性。边建边扩会让 DS 被单一消费者的即时需求牵着走、逐个组件反应式添加;先记录后统一扩建,DS 拿到的是完整需求图,能做真正的抽象决策。\n\n但消费契约不能同样延后,这是我呈报并被采纳的修正。三项实测阻塞:DS 未发布到 npm(npm view @tcrn/ui-react 返回 E404)、dist 未入库(gitignore 第二行、git ls-files packages/*/dist 为 0)、两仓 pnpm workspace 互不可见且平台根无 workspace;而三个包的 exports 均指向 ./dist。故 TMS 今天无任何标准机制可 import DS。该修复是 DS 侧改动,若塞进 TMS 的 Initiative 则该 Initiative 又跨两仓,刚避开的问题从后门回来。裁定为三 Initiative 顺序:先一个小的 DS 消费契约 Initiative,再 TMS 重建,最后 DS 扩建。\n\n对缺口政策选项二的支撑与警告:选项一会让重建卡成长期半迁移的悬挂状态,选项三使 Owner 成为瓶颈,故选项二正确。但它有一个前提必须同时成立——DS 债务登记册必须是机器可判定的门,否则本地组件会悄悄沉淀为永久的第二套 UI,DS 存在的意义被架空。该门的设计属本 Initiative 的第一个 Epic,不得延后。\n\n一处已更正的自身错误须入记录:我先前呈报 DS 只有 13 个组件,该数字错误。真实为 100 个公开组件加 8 个工具加 3 个已推迟原型,三源核实、遍历源码验证零缺失。错因是数了分类 barrel 文件数而非组件数。该错数字已被写入一个在跑工作流的公共上下文,其结论须据此重新加权。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:cb7825165199f08a6e2aa948": [
+      {
+        "conferenceId": "conference:cb7825165199f08a6e2aa948",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:9fbb04755c9967f60006d302"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程综合十三个分派代理的产出并经独立复核后写成。\n\n三条实测阻断,任一未解则重建的第一行代码都建在流沙上。\n\n一、RSC 阻断已被复现而非推论。DS 全仓 use client 为零,exports 仅根路径,index 用 export star 拉十个 barrel;在 --conditions=react-server 下 import useState 复现 SyntaxError。TMS 是 Next 16 App Router。\n\n二、一条 use client 解不了的水合失配。useProductShellController 在 useState 初始化器里直读 window.localStorage(Navigation.tsx:1078-1080)。客户端组件在 Next 里照样 SSR,故加指令无效;而 ProductShell 是外壳,意味着六十六条路由全中。必须在 DS 侧修,或外壳改为纯客户端挂载。\n\n三、TMS 前端今天没有生产路径,且是被有意移除的。cd.yml 的 matrix 只构建 api 与 worker 两个镜像;infra/docker 下只有 api.Dockerfile 与 worker.Dockerfile,无 web;docker-compose.prod.yml 的 service 为 caddy 与 api 与 worker 与 redis,无 web;infra/caddy/Caddyfile.prod 第 26 行对 web.prod.tcrn-tms.com 的非 /api 路径显式返回 Repo-owned web runtime removed 与 404。引入提交为 c17bff20,message 为 align docs and deployment assets with runtime cutover。\n\n第三条的含义须说清:重建一个没有生产路径的前端,产物无处可去。前端现在究竟跑在哪里,是只有 Owner 知道的事实,不是可勘察的。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:cb7825165199f08a6e2aa948",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:a37bbadd4d43c9d2504657d0"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程综合分派代理产出并经独立复核后写成。\n\n供给面的真实形状:数量够,形状不够。\n\nDS 导出一百个公开组件,注册表与源码实际导出双向互钉、两个差集均为空。但其中四十个是治理与知识库领域家具(Work 族十七、Knowledge 族十、Gate 与 Evidence 五、治理词汇八),外壳与品牌十四,通用余量四十六。\n\n更关键的是行为面:一百个里五十六个是闭合形状,DataDisplay 的三十七个 Props 接口回调数为零、该文件 onClick 出现零次,Pagination 只渲染一个空 nav。而这五十六个恰好覆盖 TMS 最吃重的表格与列表与详情与分页与页签与抽屉。\n\n但有一条被对抗验证推翻的悲观结论须更正:表单族并不需要重建。Form.tsx 第 42 与 53 行显示 InputProps extends InputHTMLAttributes 且 Input 把 props 原样透传到 input,故 type 为 number 与 password 与 date 与 file 与 color 与 radio 以及 value 与 checked 与 onChange 今天全部可用。真正缺的只是成品 RadioGroup 与 Switch 与日历式 DatePicker。Textarea 与 Select 同构。\n\n另一条被推翻的是 density 空操作说:density 除 data-density 外还发 --dense 修饰类,Navigation.tsx 有十三个选择器真改三个密度变量。\n\n需求侧:TMS 的 UI 主要由三百零四个裸 button 与一百七十四个裸 input 与两万两千二百三十六个 Tailwind 类砌成,同语义控件最多存在十二份拷贝。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:cb7825165199f08a6e2aa948",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:d1e751acd43d3224b5a9e1f0"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程综合两名评审的独立打分与致命缺陷清单后写成。\n\n两名评审用不同镜头独立打分,结论互补而非冲突。风险镜头:Minerva 案八分、Verity 案七分、Mara 案四分。可执行性镜头:Verity 案八分、Minerva 案七分、Mara 案四分。Mara 案在两个镜头下同为四分,其头条主张 token 桥被实测证伪——TMS 的 tailwind.config 无 theme.colors 与 theme.spacing,五千六百零四次调色板用量全部解析到 Tailwind 默认板,七十四个 family-step 映到 DS 的三十九个语义色槽是三点三比一坍缩,不是改一处配置即可。\n\n三份提案有一条共同的、被两名评审各自独立指出的致命缺陷:没有一份评估 git submodule 加纳入 TMS 现有 pnpm workspace 这条路径。而 TMS 已有现成范式——@tcrn/shared 是 workspace 星号成员、next.config.js 的 transpilePackages 已证明 Next 16 能消费仓内源码包、actions/checkout 加一行 submodules true 即解 CI、且 submodule 天生钉 commit SHA。它可能同时绕开发布裁定与 DS 发版与快照漂移三个问题。\n\n另一条共有缺陷:三份都把「所有组件来自并符合 DS」当作需要放宽的约束,但都各自提出了例外机制。差别只在强度,不在有无。这说明该约束在当前供给下确实不可满足,不是提案不够努力。\n\n执行者不得自决的理由:约束的可执行定义决定后续每一个 Story 的验收判据;而三种形状(归属式与三层棘轮与零绕过加例外册)对 DS 的产品身份有不同含义。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:367504dfee701a143276ad7c": [
+      {
+        "conferenceId": "conference:367504dfee701a143276ad7c",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:8388ac745fbe180d7d3350e1"
+        ],
+        "externalKeys": [],
+        "body": "【本立场为 Owner 原话逐字转录,由执笔代理记录,未改写】\n\n「全部同意,包括新建INIT,当前TMS前端和DS完全没有关系,就是一套本地的前端。同时本地开发环境的ssh已配置在.ssh/id_tcrn_platform_dev_ed25519,你可以通过这个连接并在上面调试,避免占用过多本机资源,但是资源控制规则依旧适用,完成测试就要放掉服务。」\n\n前一轮 Owner 原话(提出通用性原则):\n「你需要给我一些建议和原因。同时我认为DS和Storybook还得改,不应该直接在Storybook或者DS里面放AOS/TMS设计,DS和Storybook应该保持通用,至于项目怎么用组件是项目需要定义的问题,你怎么看」\n\n转录说明:「全部同意」覆盖代理呈报的五项建议(通用性原则落成门 / 既有领域家具抽出而非删除 / DS 扩建范围重定义为补完通用原语 / TMS 建自己的组合层 / Storybook 只展示组件不展示产品屏)与一项对先前裁定的修正(DS 债务与 TMS 组合层须分为两类)。",
+        "fragmentCount": 1
+      }
+    ]
+  },
+  "minutesByConference": {
+    "conference:db86593a43bdb91d9cabfb02": {
+      "id": "minutes:5da0b8ea8b8421cb1f3a1e89",
+      "externalKey": "TCRN-AOS-MIN-001",
+      "summary": "AOS 驾驶舱分解裁定:六轮收集闭合(定位与八功能族/开发方式三护栏/Jira 形态九问/一切皆 Ticket 字段全谱/审议室与溯源采用);按交付面分五 Epic 十六 Story;方向四题全裁;延后轨道五条带复审条件;INIT 保持 planned 待启动令",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "分解轴=交付面五层;被拒=按八功能族逐族一 Epic(交叉重复)",
+        "EPIC-001 数据面与聚合索引三 Story(MCP 摄取/投影库+FTS/AOS 自有域+备份)",
+        "EPIC-002 壳与全局层三 Story(壳 CSR/我的工作+收件箱/项目目录)",
+        "EPIC-003 工作项管理四 Story(检索页/看板/详情全谱/安全写面)",
+        "EPIC-004 审议室与发布列车三 Story(审议室/列车页/审议采用三步公约)",
+        "EPIC-005 知识空间与治理视图三 Story(知识空间/审计视图/快照健康+执行观测)",
+        "开发方式=垂直切片且设计领先一模块;首切片打穿全深度",
+        "数据面=MCP/CLI 唯一+链版本键控投影库(实测闭合:冷 190ms 驻 130ms;缓存必需判据=链近万级)",
+        "写面=首期安全写面(建卡/流转/注解/入列/AOS 域字段);治理写显式仪式",
+        "延后轨道五条各带复审条件(多用户/知识编辑器/查询语言/reply-to 字段/W 深度集成)",
+        "决策清单=OWNER-NOW 一项(attestation 启动时裁)+CONDITIONAL 两项(发布停点届时呈报;DS 闭合组件转需求单)+其余 AGENT"
+      ],
+      "unresolvedIssues": [
+        "AOS 分区 actor attestation 为单向门;启用与否待 Owner 启动令时裁",
+        "发布停点形态(单 INIT 快车道或入列车)届时呈报",
+        "DS 组件接线面逐模块核验;发现闭合无回调即向 DS 提需求单"
+      ],
+      "effective": [
+        "AOS 分区 actor attestation 为单向门;启用与否待 Owner 启动令时裁",
+        "发布停点形态(单 INIT 快车道或入列车)届时呈报",
+        "DS 组件接线面逐模块核验;发现闭合无回调即向 DS 提需求单"
+      ]
+    },
+    "conference:6f4c580c6ea63e21274f5fdf": {
+      "id": "minutes:3a0d27be789cadb0ccb353c1",
+      "externalKey": "TCRN-AOS-MIN-002",
+      "summary": "部署与真值拓扑裁定:镜像段四边界+部署纪律;两段式迁移方向(切换带 owner 门与一致性矩阵);镜像段不专机(复审=迁移执行);备份方案分层(域库配对快照/attestations 并入/投影不备);增补 EPIC-006 四 Story",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "四边界成立:权威不动/命名诚实(镜像标 as-of)/VM 实例首期零写面/访问边界先定后上",
+        "部署纪律:开发全在本机;VM 改动只经声明式清单;禁手改运行态",
+        "两段式真值拓扑方向成立:镜像段文件为真值;切换段 AOS 承接存储与运营而 W 退为框架;换容器不换语义(五件套原样)",
+        "切换仪式=一致性矩阵双跑→owner 门→切换→文件降为导出归档;备 fallback 对账;只裁方向不排期",
+        "local-first 按 P5 条件化:权威 local-first 保留;服务面允许镜像外置",
+        "镜像段不为 AOS 专开 VM;复审条件=迁移切换裁定进入执行",
+        "备份方案:域库与链快照同刻配对+每日兜底+恢复演练前置;attestations 目录并入分区备份;投影与镜像明确不备;切换段备份入迁移仪式",
+        "增补 EPIC-006 部署与镜像四 Story(S017 投影同步/S018 VM 服务面/S019 访问边界/S020 备份与演练)"
+      ],
+      "unresolvedIssues": [
+        "VM 访问边界具体形态(认证层或 LAN 信任)S019 执行时定",
+        "execution:mode 的 CLI/MCP 暴露缺口向 W 提需求(键号待 W 侧立单)",
+        "切换段全部参数待迁移裁定时另会"
+      ],
+      "effective": [
+        "VM 访问边界具体形态(认证层或 LAN 信任)S019 执行时定",
+        "execution:mode 的 CLI/MCP 暴露缺口向 W 提需求(键号待 W 侧立单)",
+        "切换段全部参数待迁移裁定时另会"
+      ]
+    },
+    "conference:35e03ea2c0a281ccd0f4b9b7": {
+      "id": "minutes:4fdc3f1caf4adfb2374090f7",
+      "externalKey": "TCRN-AOS-MIN-003",
+      "summary": "既有实现处置:不整体移除,行三层定向处置(A 删除约三分之一从未执行的死码/B 保留模型无关横切能力/C 前端仅作技术底座起点/D 新建链客户端与瘦投影类型);确立交付物必须与已确认前端设计逐屏一致含 Layout;立两缺陷单",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "不整体移除;行三层定向处置(A 删除/B 保留/C 起点/D 新建)",
+        "A 层删除:资源物化族、文档发布流水线、adapter-codex、Assignment;AgentRun 留作执行观测记录体;依赖治理删除须记明能力去向(外采公约实现候选)",
+        "B 层保留:脱敏机、确定性 ID、SQLite 仓储与路径硬化、backup.ts(直接服务 S020)、传输门控、网关六段管线、readback 预算信封、FTS5、证据与 95 测试、确定性事件键派生规则",
+        "C 层前端仅作技术底座起点;既有 mockup 不得充当交付物",
+        "D 层新建:链客户端、链形状瘦投影类型(禁复用 StoryRecord",
+        "否则须编造字段违反 no-overclaim)、AOS 自有域字段、as-of、安全写面",
+        "执行纪律:凡同名者先证伪再复用(七个同名概念无一语义对齐;冲突比缺失危险)",
+        "交付物一致性要求:最终界面须与 v2 六屏、v3 两屏、v4 审议室逐屏一致含 Layout;不一致处以新设计为准;既有组件不能承载新 Layout 时改造或替换而非迁就",
+        "切换段修正:五件套中 append-only 记录流与哈希链并未建成;既有实现是起点非地基;MIN-002 一致性矩阵要求不放松"
+      ],
+      "unresolvedIssues": [
+        "既有组件对新 Layout 的承载力待首切片逐一核实",
+        "依赖治理的能力去向(是否另立轨道承接外采公约审查)待裁",
+        "A 层删除的执行时点:建议随各 Story 就近清理而非单独一刀"
+      ],
+      "effective": [
+        "既有组件对新 Layout 的承载力待首切片逐一核实",
+        "依赖治理的能力去向(是否另立轨道承接外采公约审查)待裁",
+        "A 层删除的执行时点:建议随各 Story 就近清理而非单独一刀"
+      ]
+    },
+    "conference:bb4a286b6a7173b0d6539086": {
+      "id": "minutes:591d95e3737fb08a61b759bf",
+      "externalKey": null,
+      "summary": "Owner 批准把两条安全发现立项：subsidiaries API 授权缺口优先处置；前端路由授权缺口纳入 INIT-002 上线前架构。feat/tms-init001 只开 PR 跑验证，在安全项与服务支撑证据未完成前不合 main。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "建立 subsidiaries API 资源授权 Incident 并设为优先 ready",
+        "验收要求无权限身份运行期 403 负证",
+        "建立前端路由 deny-by-default 架构 Incident 并关联 INIT-002",
+        "当前无生产路径故不声称现网事故",
+        "feat/tms-init001 只开 PR 验证且不合 main"
+      ],
+      "unresolvedIssues": [
+        "API 授权代码与服务支撑负证尚未完成",
+        "前端 deny-by-default 路由壳尚未设计和实施"
+      ],
+      "effective": [
+        "API 授权代码与服务支撑负证尚未完成",
+        "前端 deny-by-default 路由壳尚未设计和实施"
+      ]
+    },
+    "conference:ddc067b73be4cca41b10bfc5": {
+      "id": "minutes:bf894e715f287d777b92ef0b",
+      "externalKey": "TCRN-TMS-MIN-001",
+      "summary": "三方独立立场(Mara 产品域轴 / Verity 提取器轴 / Minerva 权威拓扑轴)就 TCRN-TMS-INIT-001 分解形态审议。三方一致否决 docs 的 11 域轴:940 行文档是证明状态与对冲语言、不是事实。决定性证据是 Verity 与主线程独立同时捕获的假分母——codegraph 436 route 仅 398 出自 controller。以 436 立分母则全部覆盖率自第一天起为假。398 已由三条独立路径互钉(codegraph 过滤、grep 装饰器、inventory 脚本工件)。裁定采 Verity 提取器轴为主,吸纳 Minerva 的排序原则与三层落点、Mara 的域轴作前端内部维度。另捕获两条真忠实缺陷:platform-admin/README.md:11 称 AC 暴露 Interface/Webhook 管理而两页实渲 AcBusinessRouteUnavailableScreen;public-presence/README.md:10 所称 studio/editor 页零命中。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "分解轴裁定为提取器轴(Verity):一个 Epic = 一个提取器 + 一份入仓工件 + 一道已见红的门",
+        "否决产品域轴(Mara)与证明方式二分(Minerva)作为顶层轴:前者致 28 域共用同一道门、后者粒度不足以绑定工件",
+        "Mara 域轴保留于两处:E5 前端事实的内部组织维度、以及 docs/facts/ 的归档维度",
+        "Minerva 证明方式序保留为排序原则:全部派生事实 Epic 先于断言审计 Epic",
+        "覆盖门分母裁定为 398(controller 子集)而非 codegraph 原始 436;436 含 33 脚本字面量、3 spec、2 bootstrap 属污染数、已由三方独立互钉",
+        "codegraph route kind 不含前端路由(436 条全在 apps/api);前端分母另取 66 个 page.tsx、两集合不可互换",
+        "权威序就地裁定、不另设阻塞 Epic:runtime > schema > api-contract > source > doc;doc 级证据不得单独支撑 proven",
+        "facts 三层落点:docs/facts/ 承载正文、治理链只放裁定与验收、知识卡限个位数且只放跨 Initiative 会再检索的结论",
+        "门设三道:GATE-001 分母红证门、GATE-002 派生再生成确定性门、GATE-003 断言忠实门;E4 新鲜度机制不设门(其产物本身即检查器)",
+        "重建准入门不挂 INIT-001:记为条件项、未来重建 Initiative 开工时须开 owner_intent_required 准入门并引本 INIT 收官 minutes 作证据",
+        "交付按整合分支 feat/tms-init001、per-Epic commit;合并 main 为本 INIT 唯一必停点(实测 cd.yml 仅 main 与 v* tag 触发部署、feature 分支不部署)",
+        "106 个证据脚本零接线(实测 apps/api/scripts 106 文件、被 package.json/turbo/workflows 引用者 0)裁定为 INIT-001 最大现成资产:主体工作是复活并红证化、不是补写文档",
+        "docs/user-guide 与 wiki-draft 共 940 行整体降级为历史参考、不作 fact 输入源;其忠实性缺陷单列 E6 审计"
+      ],
+      "unresolvedIssues": [
         "OKL-G19-* 孤儿限制 ID 的支撑证据随旧 vault 删除、可复原性未知",
         "openapi-baseline 三份停在 2026-06-13 而末次提交 2026-07-08、实际漂移量未测",
         "retired-browser-tests 六套的可复活性未裁",
@@ -6866,8 +7444,3366 @@ export const cockpitData: CockpitData = {
         "retired-browser-tests 六套的可复活性未裁",
         "judgment 类(不可机械验证)事实的限额未定",
         "106 个证据脚本中可实际跑通的比例未测(仅抽样 1 个跑通)"
+      ]
+    },
+    "conference:89552d4e6d757d2aa541d684": {
+      "id": "minutes:1b3de5e0abee5495fb41d1dc",
+      "externalKey": "TCRN-TMS-MIN-002",
+      "summary": "EPIC-001 五条 Story 全部完成并入仓。裁定 GATE-001 置 satisfied、但其绿只覆盖 API handler 一个分母(398、双源逐条互钉、提取器已见红)。前端路由 66、Prisma model 88、RBAC 资源 46 三个分母已登记但仍单源且未见红、不得支撑覆盖率声称。两条红证教训写入门设计:分母门比内容哈希不比计数;以 codegraph 为源须把 sync 纳入门流程。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "GATE-001 置 satisfied、绿仅覆盖 API handler 分母 398",
+        "分母门一律比对排序清单的内容 sha256、禁止只比计数(实测 RBAC 改名后计数 46→46 不变)",
+        "以 codegraph 为源的分母须把 sync 纳入门自身流程(实测陈旧索引对注入的真路由完全不可见)",
+        "codegraph route 节点仅采信来自 *.controller.ts 者、436 正式废止",
+        "前端路由与 API handler 是不可互换的两个集合、禁止互相对账",
+        "前端 66 / model 88 / RBAC 46 三个分母登记为单源未见红、不得支撑任何覆盖率声称"
       ],
-      "dissolvedCount": 0
+      "unresolvedIssues": [
+        "证据脚本写工件到当前工作目录而非指定 artifacts 目录、接 CI 前须逐个约定输出路径",
+        "10 个需 DB 或网络的证据脚本可跑性未测",
+        "3 个 .ts 证据脚本需 TS 运行时、未测",
+        "多个脚本工件含 generatedAt 实时时间戳、GATE-002 的确定性比对须剔除该字段"
+      ],
+      "effective": [
+        "证据脚本写工件到当前工作目录而非指定 artifacts 目录、接 CI 前须逐个约定输出路径",
+        "10 个需 DB 或网络的证据脚本可跑性未测",
+        "3 个 .ts 证据脚本需 TS 运行时、未测",
+        "多个脚本工件含 generatedAt 实时时间戳、GATE-002 的确定性比对须剔除该字段"
+      ]
+    },
+    "conference:186b40c707c99734e2ba7dab": {
+      "id": "minutes:56f597652647ed6f0875b39f",
+      "externalKey": "TCRN-TMS-MIN-003",
+      "summary": "EPIC-002 四条 Story 完成。GATE-002 置 satisfied、绿覆盖 API handler 一条派生链:生成器确定性经两次 --check 与重新生成字节比对实证、门的检出能力经变异实证。记录一次自捕假阴性(变异未生效致门假绿不可区分)与一条被读源码证伪的分解建议(openapi diff 已是必需门)。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "GATE-002 置 satisfied、绿仅覆盖 API handler 派生链",
+        "确定性契约=无时间戳且固定排序且 --check 重跑字节一致",
+        "未先证明生效的变异不得作为红证依据、手测与脚本同规",
+        "tooling:openapi:diff 已是必需门、分解阶段的提升建议作废",
+        "GET / 缺席基线定性为模块作用域隐式排除、非缺陷",
+        "缺 @ApiOperation 的 10 条判为 homepage 模块级约定缺失",
+        "缺 @ApiResponse 的 139 条判为全仓性约定缺失、不逐条修"
+      ],
+      "unresolvedIssues": [
+        "openapi diff 门的检测能力未做变异红证、只验了接线",
+        "基线与实现在 schema 层的漂移未测",
+        "GET / 是否应加显式排除标记未裁",
+        "139 条缺 @ApiResponse 是补齐还是显式接受为限制未裁"
+      ],
+      "effective": [
+        "openapi diff 门的检测能力未做变异红证、只验了接线",
+        "基线与实现在 schema 层的漂移未测",
+        "GET / 是否应加显式排除标记未裁",
+        "139 条缺 @ApiResponse 是补齐还是显式接受为限制未裁"
+      ]
+    },
+    "conference:5c5596495bdf66d72a8fb8d8": {
+      "id": "minutes:2cdb8e95f2eeaa62757e2e50",
+      "externalKey": "TCRN-TMS-MIN-004",
+      "summary": "EPIC-006 完成。GATE-003 置 satisfied,同时修订其判据:原判据要求 163 条逐条带 status,但清册的核心发现是 43% 的声称可证伪性未定,对其强行标 status 会产出假绿。改为按已完成范围收口并显式登记残余。已捕两条系统性缺陷(批 A 证伪项与批 B 整表缺陷同根于缺 scope 限定)与一条判断修正(OKL 是有主张无证据、不是无定义孤儿)。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "GATE-003 置 satisfied、绿仅覆盖已逐条判定的范围",
+        "修订原判据:不对可证伪性未定的散文强行标 status、标为不可判定并说明",
+        "批 A 证伪项与批 B 整表缺陷判为同一系统性写法问题:缺 scope 限定",
+        "integrations 的 Integration Families 表加 Where 列逐行标注",
+        "11 个 OKL-* 一律标 unverified、保留原文、顶部写明证据基线已移除",
+        "OKL 条目描述的是文档发布策略而非系统能力、须防误读"
+      ],
+      "unresolvedIssues": [
+        "163 条声称中多数未逐条判定、尤其 71 条 prose 类",
+        "11 个 OKL-* 的当前实际状态未重新取证",
+        "troubleshooting 与 getting-started 与 reference 三章未做机械判定",
+        "prose 类声称的可证伪性改写未排期"
+      ],
+      "effective": [
+        "163 条声称中多数未逐条判定、尤其 71 条 prose 类",
+        "11 个 OKL-* 的当前实际状态未重新取证",
+        "troubleshooting 与 getting-started 与 reference 三章未做机械判定",
+        "prose 类声称的可证伪性改写未排期"
+      ]
+    },
+    "conference:144e4d45ac02c35a8f8501ee": {
+      "id": "minutes:be9fa4d049de839c22d0a7d8",
+      "externalKey": "TCRN-TMS-MIN-005",
+      "summary": "TCRN-TMS-INIT-001 收官:7 Epic 28 Story 全完、三门全 satisfied、18 提交在整合分支。产出为带证据绑定的事实基线与三道已接 CI 的门。自捕并修复五处自身缺陷。两条产品级发现(subsidiary 零授权、前端仅 1 条 RBAC 门)转 Owner。唯一必停点=合并 main 触发部署,待 Owner 授权。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "TCRN-TMS-INIT-001 置 done",
+        "三道门的绿各有边界、引用时必须一并转述",
+        "subsidiary 零授权与前端 RBAC 门缺失转 Owner 另立工作项、不在本 Initiative 修",
+        "前端 66 与 RBAC 46 两个分母保持未定钉、不得支撑覆盖率声称",
+        "生成产物入 .prettierignore、字节由确定性门钉住、改格式须改生成器",
+        "合并 main 为唯一必停点、待 Owner 授权"
+      ],
+      "unresolvedIssues": [
+        "整合分支未推远端、未合并 main",
+        "163 条声称中多数未逐条判定",
+        "11 个 OKL-* 未重新取证",
+        "四个数据模型提取器未入仓未接 CI",
+        "403 负证覆盖 11/302 且 10/11 不在 CI",
+        "format:check 全仓 179 文件不合规且未接 CI"
+      ],
+      "effective": [
+        "整合分支未推远端、未合并 main",
+        "163 条声称中多数未逐条判定",
+        "11 个 OKL-* 未重新取证",
+        "四个数据模型提取器未入仓未接 CI",
+        "403 负证覆盖 11/302 且 10/11 不在 CI",
+        "format:check 全仓 179 文件不合规且未接 CI"
+      ]
+    },
+    "conference:c728cb5d2c5b25ddd7d873d6": {
+      "id": "minutes:b0456cb6b3312f1760ff9e8a",
+      "externalKey": "TCRN-TMS-MIN-006",
+      "summary": "Owner 裁定 TCRN-TMS-INIT-002 落 TMS 分区而非 cross-project,依据是把 DS 扩建单独成 Initiative 后每个 Initiative 真的只涉及一个子项目。缺口政策裁定为选项二:重建撞上 DS 未提供的承重组件时,允许建 TMS 本地实现但强制登记为 DS 债务并受机器可判定的门看守,由后续 DS 扩建 Initiative 回收;否决了停工等待与逐个升级两案。代理呈报并被采纳的修正:消费契约不能延后,故拆为三 Initiative 顺序(DS 消费契约 → TMS 重建 → DS 扩建),各自单项目。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "TCRN-TMS-INIT-002 落 TMS 分区、不入 cross-project",
+        "DS 扩建单独成 Initiative 落 DS 分区、下一个可用键为 TCRN-DS-INIT-010",
+        "缺口政策采选项二:可建 TMS 本地组件但强制登记为 DS 债务并受机器可判定的门看守",
+        "否决选项一(停在该 Story 标 blocked)理由是会造成长期半迁移悬挂状态",
+        "否决选项三(逐个升级 Owner)理由是会使 Owner 成为瓶颈",
+        "消费契约不得延后、拆为独立的 DS Initiative 且须先于 TMS 重建",
+        "三 Initiative 顺序:DS 消费契约 → TCRN-TMS-INIT-002 重建 → DS 扩建",
+        "DS 债务登记门为本 Initiative 第一个 Epic、不得延后",
+        "更正:DS 公开组件数为 100 而非先前呈报的 13、三源核实零缺失"
+      ],
+      "unresolvedIssues": [
+        "DS 100 个组件中对 TMS 的有效供给数未定(Work* 与 Knowledge* 族约 30+ 面向他产品)",
+        "消费契约的具体机制未选(发布 npm / dist 入库 / workspace 合并等待评估)",
+        "DS 与 TMS 的样式机制差异未解(DS 不用 Tailwind、TMS 用 Tailwind 4)",
+        "若有效供给覆盖率过低则「所有组件来自 DS」这条约束本身可能需 Owner 重新表述",
+        "TCRN-TMS-INIT-002 的分解形态待勘察工作流回收后裁定"
+      ],
+      "effective": [
+        "DS 100 个组件中对 TMS 的有效供给数未定(Work* 与 Knowledge* 族约 30+ 面向他产品)",
+        "消费契约的具体机制未选(发布 npm / dist 入库 / workspace 合并等待评估)",
+        "DS 与 TMS 的样式机制差异未解(DS 不用 Tailwind、TMS 用 Tailwind 4)",
+        "若有效供给覆盖率过低则「所有组件来自 DS」这条约束本身可能需 Owner 重新表述",
+        "TCRN-TMS-INIT-002 的分解形态待勘察工作流回收后裁定"
+      ]
+    },
+    "conference:cb7825165199f08a6e2aa948": {
+      "id": "minutes:372e3bd67b82f3dbd876eb21",
+      "externalKey": "TCRN-TMS-MIN-007",
+      "summary": "十三代理四阶段勘察结论:DS 导出一百个公开组件(先前呈报的十三为错报、已更正),但五十六个闭合无回调且恰覆盖 TMS 最吃重的面;三条实测阻断为 RSC、ProductShell 的 SSR 水合失配、以及 TMS 前端根本没有生产路径(Caddyfile 显式 404 且写明仓内 web 运行时已移除)。三份策略提案一致认为「所有组件来自并符合 DS」当前不可满足,须 Owner 修订其可执行定义。两名评审独立指出三份共同漏掉 git submodule 路径。本次不产生分解树,分解形态待 Owner 裁定后再定。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "本次审议不产生分解树、分解形态待 Owner 裁定后再定",
+        "更正入册:DS 公开组件为一百个、先前呈报的十三为错报",
+        "对抗验证推翻两条悲观结论:表单族无需重建(Input extends InputHTMLAttributes 且 props 透传)、density 非空操作",
+        "对抗验证更正图标缺口:TMS 生产用一百零一个不同 lucide 图标、DS 注册表二十八、精确名重合十三、缺口八十八",
+        "AOS 的 file 加 overrides 先例不可直接搬:AOS 无 remote 无 CI 而 TMS 有五个 workflow 全为单仓检出",
+        "git submodule 加纳入 TMS 现有 pnpm workspace 须与其余三条消费路径并列评估"
+      ],
+      "unresolvedIssues": [
+        "OWNER-01 TMS 前端今天如何上生产:仓内无此路径且 Caddyfile 显式写明仓内 web 运行时已移除",
+        "OWNER-02 mvp-adoption-boundary.md 两条 Deferred 的处置:该文件逐字 Defer 了 TMS 依赖变更与 registry 发布而 DS 自己的 tms-adoption-guide 正面教 TMS 接入",
+        "OWNER-03 所有组件来自并符合 DS 的可执行定义:归属式 / 三层棘轮 / 零绕过加例外册 三选一",
+        "OWNER-04 视觉语言更替授权:TMS 现为毛玻璃加三层渐变洗、DS v2 明文清除并设门禁止、换后六十六条路由观感全变",
+        "OWNER-05 locale 契约:DS 五值无 zh_HANT 而 TMS 非测试源码一千五百一十六处在用且为数据模型级类型、边界映射等于静默丢数据",
+        "OWNER-06 图标契约:扩 DS 注册表 / 改受控开集 / 收敛 TMS 用量 三选一",
+        "OWNER-07 消费路径选型:submodule 加 workspace / vendored tarball 加 overrides / 私有 registry / file 加 overrides",
+        "OWNER-08 是否接受 DS 组件在 TMS 全部转为客户端渲染:use client 转出层会把整条 import 子图纳入客户端图",
+        "OWNER-09 DS 产品身份:是否从契约文档加静态夹具变为应用组件库并开放 DataDisplay 全族回调面(不可逆)",
+        "OWNER-10 DS 是否先补 CI 再承接第二个消费方:DS 今日零 workflow 所有门只活在本机"
+      ],
+      "effective": [
+        "OWNER-01 TMS 前端今天如何上生产:仓内无此路径且 Caddyfile 显式写明仓内 web 运行时已移除",
+        "OWNER-02 mvp-adoption-boundary.md 两条 Deferred 的处置:该文件逐字 Defer 了 TMS 依赖变更与 registry 发布而 DS 自己的 tms-adoption-guide 正面教 TMS 接入",
+        "OWNER-03 所有组件来自并符合 DS 的可执行定义:归属式 / 三层棘轮 / 零绕过加例外册 三选一",
+        "OWNER-04 视觉语言更替授权:TMS 现为毛玻璃加三层渐变洗、DS v2 明文清除并设门禁止、换后六十六条路由观感全变",
+        "OWNER-05 locale 契约:DS 五值无 zh_HANT 而 TMS 非测试源码一千五百一十六处在用且为数据模型级类型、边界映射等于静默丢数据",
+        "OWNER-06 图标契约:扩 DS 注册表 / 改受控开集 / 收敛 TMS 用量 三选一",
+        "OWNER-07 消费路径选型:submodule 加 workspace / vendored tarball 加 overrides / 私有 registry / file 加 overrides",
+        "OWNER-08 是否接受 DS 组件在 TMS 全部转为客户端渲染:use client 转出层会把整条 import 子图纳入客户端图",
+        "OWNER-09 DS 产品身份:是否从契约文档加静态夹具变为应用组件库并开放 DataDisplay 全族回调面(不可逆)",
+        "OWNER-10 DS 是否先补 CI 再承接第二个消费方:DS 今日零 workflow 所有门只活在本机"
+      ]
+    },
+    "conference:367504dfee701a143276ad7c": {
+      "id": "minutes:b290715aa181ebe395ec30a4",
+      "externalKey": "TCRN-TMS-MIN-008",
+      "summary": "Owner 答复 OWNER-01:TMS 前端与 DS 完全无关、就是一套本地前端 —— 该事实消解了两名评审共同指出的最大缺陷(重建产物无处可去)并下调 OWNER-04 与 OWNER-08 的门槛。Owner 裁定 DS 与 Storybook 须保持通用、产品设计不得放入、项目如何使用组件由项目自定义。五项建议与一项修正全部获批。实证支撑:污染已发生于 AOS、DS 内四十个领域家具为 AOS 所建。开发机已验证可用并解锁集成测试面。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "OWNER-01 已答:TMS 前端与 DS 完全无关、就是一套本地前端、无生产路径且不需要",
+        "OWNER-04 与 OWNER-08 的裁定门槛据此下调:无真实用户受影响、混合态无期限压力、无生产切换与回滚窗口约束",
+        "DS 与 Storybook 须保持通用:不得放入 AOS 或 TMS 的产品设计",
+        "项目如何使用组件由项目自行定义、不由 DS 规定",
+        "通用性判据落成可判定测试:组件属于 DS 当且仅当其 props 能被描述而不提及任何单一产品的业务概念",
+        "该判据须落成词汇门、复用 ui-copy-state 的 forbiddenPositiveClaims 形态",
+        "既有四十个领域家具抽出而非删除、以免打断唯一活消费者 AOS",
+        "领域家具抽出独立立项、不挂在 TMS 重建上",
+        "DS 扩建范围重定义:补完通用原语、不是补 TMS 需要的组件",
+        "TMS 在 apps/web/src/platform 下建自己的组合层、承载 use client 边界与业务形状组合",
+        "Storybook 只展示组件不展示产品屏;TmsDenseShellDemo 移走前须以通用密集外壳示例顶替其三条视觉签名基线",
+        "缺口登记册分两类:DS 债务(通用原语缺口、DS 建成后 TMS 退役本地版)与 TMS 组合层(业务形状、永久留 TMS、不是债务)",
+        "开发机 tcrn-platform-dev 授权用于调试与测试、后台资源治理规则照旧适用"
+      ],
+      "unresolvedIssues": [
+        "OWNER-02 mvp-adoption-boundary 两条 Deferred 的处置仍未裁",
+        "OWNER-07 消费路径仍未选定",
+        "OWNER-05 locale 契约仍未裁:zh_HANT 在 TMS 非测试源码一千五百一十六处且为数据模型级类型",
+        "OWNER-06 图标契约仍未裁:DS 二十八对 TMS 生产一百零一、精确重合十三",
+        "OWNER-10 DS 是否先补 CI 再承接第二消费方仍未裁",
+        "AOS 迁移到抽出后的领域家具包属 AOS 侧工作、尚未立项"
+      ],
+      "effective": [
+        "OWNER-02 mvp-adoption-boundary 两条 Deferred 的处置仍未裁",
+        "OWNER-07 消费路径仍未选定",
+        "OWNER-05 locale 契约仍未裁:zh_HANT 在 TMS 非测试源码一千五百一十六处且为数据模型级类型",
+        "OWNER-06 图标契约仍未裁:DS 二十八对 TMS 生产一百零一、精确重合十三",
+        "OWNER-10 DS 是否先补 CI 再承接第二消费方仍未裁",
+        "AOS 迁移到抽出后的领域家具包属 AOS 侧工作、尚未立项"
+      ]
     }
-  ]
+  },
+  "activityByWork": {
+    "work:e716f832a9f2ed1301d2f449": [
+      {
+        "id": "event:cbc2f414070502b7c6e8d90b",
+        "sequence": 126,
+        "occurredAt": "2026-07-26T14:40:38Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:d9321d25eb29a82d3f34595e",
+        "sequence": 81,
+        "occurredAt": "2026-07-26T12:45:33Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:2a083d8fde3bb4dfb79dbf09",
+        "sequence": 80,
+        "occurredAt": "2026-07-26T12:45:32Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:39743b5a44b888295f4b12dd",
+        "sequence": 40,
+        "occurredAt": "2026-07-26T12:15:55Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:a0f070eed9cad2cb5be0221c",
+        "sequence": 19,
+        "occurredAt": "2026-07-26T12:15:52Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:081b1dead46cc439338ac197": [
+      {
+        "id": "event:e2edee6c976c4d8312ec7324",
+        "sequence": 172,
+        "occurredAt": "2026-07-26T14:59:19Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:dcbeedfae8f1cc657081d211",
+        "sequence": 171,
+        "occurredAt": "2026-07-26T14:59:19Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:59e072f21ea11bcd73e7b20e",
+        "sequence": 83,
+        "occurredAt": "2026-07-26T12:45:33Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:7d703192bbad6899a76867f5",
+        "sequence": 82,
+        "occurredAt": "2026-07-26T12:45:33Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:66ced88723d6c9869256bc23",
+        "sequence": 41,
+        "occurredAt": "2026-07-26T12:15:55Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:ae1ceb28e3b26e692685832e",
+        "sequence": 20,
+        "occurredAt": "2026-07-26T12:15:52Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:cc82f8dc93eedd2b1bae0443": [
+      {
+        "id": "event:2eb94efb7b2df837f5f6dc2b",
+        "sequence": 153,
+        "occurredAt": "2026-07-26T14:54:49Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:6ae045ffb8652301b54e546f",
+        "sequence": 152,
+        "occurredAt": "2026-07-26T14:54:49Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:7fc9ea4cd7711caee2bc4737",
+        "sequence": 151,
+        "occurredAt": "2026-07-26T14:54:48Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:7b5147bf4d75c6212f2e4e18",
+        "sequence": 150,
+        "occurredAt": "2026-07-26T14:54:35Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:4db85b1b5a7f0774bbaf300c",
+        "sequence": 139,
+        "occurredAt": "2026-07-26T14:51:28Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:abe9eb5b29bc174fd8c4dc66",
+        "sequence": 42,
+        "occurredAt": "2026-07-26T12:15:55Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:a469f6c6c0d30876b3a0fafd",
+        "sequence": 21,
+        "occurredAt": "2026-07-26T12:15:53Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:b47471768134fde402c89112": [
+      {
+        "id": "event:a5ea968e5f87cd5808fb2600",
+        "sequence": 166,
+        "occurredAt": "2026-07-26T14:57:21Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:2d111edaa0292e18917867af",
+        "sequence": 43,
+        "occurredAt": "2026-07-26T12:15:55Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:cca773d7e0ad432c0f9db53e",
+        "sequence": 22,
+        "occurredAt": "2026-07-26T12:15:53Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:82c67feb8895622dda783c2f": [
+      {
+        "id": "event:d795cb10c8814325e7f51f12",
+        "sequence": 176,
+        "occurredAt": "2026-07-26T14:59:19Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:039b4fddbc30d3fe221c3025",
+        "sequence": 175,
+        "occurredAt": "2026-07-26T14:59:19Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:f55a0c04aa7ec4bd0b27bb8d",
+        "sequence": 174,
+        "occurredAt": "2026-07-26T14:59:19Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:e4fb66d0c1e800c597ae60a5",
+        "sequence": 173,
+        "occurredAt": "2026-07-26T14:59:19Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:0c0ec408af214174acf0046d",
+        "sequence": 44,
+        "occurredAt": "2026-07-26T12:15:55Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:62bd19d6d5c43fc3c625c597",
+        "sequence": 23,
+        "occurredAt": "2026-07-26T12:15:53Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:4fab089cdf2aee150dbf440b": [
+      {
+        "id": "event:ae58ae50712573d76cfd7977",
+        "sequence": 74,
+        "occurredAt": "2026-07-26T12:45:32Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:e7e3c828237a0fef8630de90",
+        "sequence": 69,
+        "occurredAt": "2026-07-26T12:45:31Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:e6a70fb7d03f607657d1f13c": [
+      {
+        "id": "event:c47c547270759a59557c4bd8",
+        "sequence": 194,
+        "occurredAt": "2026-07-26T15:43:00Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:b0fcc3237bb66dce72532911",
+        "sequence": 193,
+        "occurredAt": "2026-07-26T15:43:00Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:efb6864cafee7b007fc5c02f",
+        "sequence": 192,
+        "occurredAt": "2026-07-26T15:43:00Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:184ad8bcf7eb0f8698ce7574",
+        "sequence": 179,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:e7588e9f9fb3d2d3c234b191",
+        "sequence": 178,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:006a8be9fd0cb9da261c6160": [
+      {
+        "id": "event:31065215c8c921ac96c39207",
+        "sequence": 95,
+        "occurredAt": "2026-07-26T13:40:38Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:4b909881920ff372b51b674b",
+        "sequence": 94,
+        "occurredAt": "2026-07-26T13:40:38Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:22533e81218e2772f3a63dd1": [
+      {
+        "id": "event:2b31fc71261efb355e39bb5a",
+        "sequence": 97,
+        "occurredAt": "2026-07-26T13:40:38Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:494016a1f372b80be57a3f9c",
+        "sequence": 96,
+        "occurredAt": "2026-07-26T13:40:38Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:7454fea395a2af06ede22a14": [
+      {
+        "id": "event:f33d6fca2e5429650d61a234",
+        "sequence": 101,
+        "occurredAt": "2026-07-26T14:11:05Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:49f4b7cb72cd03961de5ebe5",
+        "sequence": 100,
+        "occurredAt": "2026-07-26T13:43:07Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:a1dbf4126fc2c2af2edfa286",
+        "sequence": 99,
+        "occurredAt": "2026-07-26T13:43:06Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:2798f160fa3412137e481b57": [
+      {
+        "id": "event:2e6351149ef29f64b421c13f",
+        "sequence": 107,
+        "occurredAt": "2026-07-26T14:29:09Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:638cb2d586db6531004cd7bb",
+        "sequence": 106,
+        "occurredAt": "2026-07-26T14:29:09Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:3dcf2a5ea0d0969c98de93aa": [
+      {
+        "id": "event:d7aeb105bdebdc57fa7ac057",
+        "sequence": 109,
+        "occurredAt": "2026-07-26T14:29:10Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:dff6bdc1ae94dd7207a8f924",
+        "sequence": 108,
+        "occurredAt": "2026-07-26T14:29:09Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:2d7ab5df74f2eaac34b40821": [
+      {
+        "id": "event:de6b92befbd8638c74ce787a",
+        "sequence": 209,
+        "occurredAt": "2026-07-26T15:43:01Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:01b861a5befe1e1549433726",
+        "sequence": 208,
+        "occurredAt": "2026-07-26T15:43:01Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:1edf38f797e2775f1dbd146d",
+        "sequence": 207,
+        "occurredAt": "2026-07-26T15:43:01Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:71c467612e1a7247fda4162f",
+        "sequence": 189,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:8a7c1e9f20acbf575d0042cf",
+        "sequence": 188,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:156cf302e91dc05e59d0675e": [
+      {
+        "id": "event:1464518e67163f85cb1d05d3",
+        "sequence": 212,
+        "occurredAt": "2026-07-26T15:43:01Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:8c4733a1c38ccc6b99741ce2",
+        "sequence": 211,
+        "occurredAt": "2026-07-26T15:43:01Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:d2d526cda038d30e5e15f731",
+        "sequence": 210,
+        "occurredAt": "2026-07-26T15:43:01Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:ee0b3cdebaff98bcd7e23abc",
+        "sequence": 191,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:6c4c65e473eee3555ac94b5b",
+        "sequence": 190,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:ff2290f36de29780d18d4323": [
+      {
+        "id": "event:b663f7ea1f78a3f68c6eb55b",
+        "sequence": 213,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:07d473aacc6924970960f57c",
+        "sequence": 177,
+        "occurredAt": "2026-07-26T14:59:19Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:622a1cab30dfcb9d3b596207",
+        "sequence": 103,
+        "occurredAt": "2026-07-26T14:14:05Z",
+        "operation": "work.annotated",
+        "actorId": "owner:governance",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:2270ba20b48a0dbae15b639f",
+        "sequence": 79,
+        "occurredAt": "2026-07-26T12:45:32Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:94c1bc4a3fe6bd602fda463a",
+        "sequence": 63,
+        "occurredAt": "2026-07-26T12:27:01Z",
+        "operation": "work.updated",
+        "actorId": "owner:governance",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:8fbb2620b156a48f67c57c1d",
+        "sequence": 61,
+        "occurredAt": "2026-07-26T12:15:58Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:035a3bf0edaac57c8b192046",
+        "sequence": 8,
+        "occurredAt": "2026-07-26T10:59:32Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:e7c026f0d676eccbff100d29",
+        "sequence": 2,
+        "occurredAt": "2026-07-26T10:59:13Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:8194cd2628f9a02db73014ba": [
+      {
+        "id": "event:103ad2472c4e53c171ac821c",
+        "sequence": 122,
+        "occurredAt": "2026-07-26T14:40:38Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:ef6a7e2594aa0e2c2c33bf78",
+        "sequence": 104,
+        "occurredAt": "2026-07-26T14:29:09Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:5a2f731d6453bc6cb3d9453e",
+        "sequence": 85,
+        "occurredAt": "2026-07-26T12:45:33Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:aadd06b698022f82cf224049",
+        "sequence": 84,
+        "occurredAt": "2026-07-26T12:45:33Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:7b557c5c5b30058a8791e0e6",
+        "sequence": 45,
+        "occurredAt": "2026-07-26T12:15:56Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:1078dd91db78f3fab69c3aa2",
+        "sequence": 24,
+        "occurredAt": "2026-07-26T12:15:53Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:929d33faaf759527a970c56e": [
+      {
+        "id": "event:42280268b00a134d44da8474",
+        "sequence": 125,
+        "occurredAt": "2026-07-26T14:40:38Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:023924f3843cee20209e985d",
+        "sequence": 124,
+        "occurredAt": "2026-07-26T14:40:38Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:9b8297e396c15b86280bdc02",
+        "sequence": 123,
+        "occurredAt": "2026-07-26T14:40:38Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:a03f248994667f5dabe59a95",
+        "sequence": 105,
+        "occurredAt": "2026-07-26T14:29:09Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:176c9fdec22136971f34f206",
+        "sequence": 46,
+        "occurredAt": "2026-07-26T12:15:56Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:7f562e80442faa2c7f7fcb73",
+        "sequence": 25,
+        "occurredAt": "2026-07-26T12:15:53Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:ad72557d88653b6d94456b1d": [
+      {
+        "id": "event:52059267df4b184b5a9e5d0c",
+        "sequence": 47,
+        "occurredAt": "2026-07-26T12:15:56Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:60b460ab202df528f368a7c6",
+        "sequence": 26,
+        "occurredAt": "2026-07-26T12:15:53Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:63654a2506cfa4af3413707d": [
+      {
+        "id": "event:6d7d5da8d9c338905550d08a",
+        "sequence": 102,
+        "occurredAt": "2026-07-26T14:11:05Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:1e2ece5bf02b6768eacf2653",
+        "sequence": 98,
+        "occurredAt": "2026-07-26T13:43:06Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:8dcf5225d23a1be7e5bfd487",
+        "sequence": 87,
+        "occurredAt": "2026-07-26T12:45:33Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:2277072b3f86bbd4f69d6f44",
+        "sequence": 86,
+        "occurredAt": "2026-07-26T12:45:33Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:40254714f931b002f4519bd9",
+        "sequence": 48,
+        "occurredAt": "2026-07-26T12:15:56Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:909eec36ed90748c2224e564",
+        "sequence": 27,
+        "occurredAt": "2026-07-26T12:15:53Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:50384512aec2f79c42096d5e": [
+      {
+        "id": "event:6b70e0135c5a1916a3936b0d",
+        "sequence": 113,
+        "occurredAt": "2026-07-26T14:40:37Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:17e55d6a8acf776714aa6f81",
+        "sequence": 112,
+        "occurredAt": "2026-07-26T14:40:36Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:9ce14f7a6ece5f3a62a003b4",
+        "sequence": 111,
+        "occurredAt": "2026-07-26T14:40:36Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:fc0c0bcc4fa32bfc1ff1f093",
+        "sequence": 110,
+        "occurredAt": "2026-07-26T14:40:36Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:684d8b472cab8e8455714c8e",
+        "sequence": 49,
+        "occurredAt": "2026-07-26T12:15:56Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:b2f17038b7e5232cf6172894",
+        "sequence": 28,
+        "occurredAt": "2026-07-26T12:15:53Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:d79178645918caa013a6d5e8": [
+      {
+        "id": "event:fd302e09377ff34d09c5a253",
+        "sequence": 117,
+        "occurredAt": "2026-07-26T14:40:37Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:327dc72c62fbc0b92b523706",
+        "sequence": 116,
+        "occurredAt": "2026-07-26T14:40:37Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:caa4c0651bbf5a50e46d4afb",
+        "sequence": 115,
+        "occurredAt": "2026-07-26T14:40:37Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:03b330b54bfe726c33544867",
+        "sequence": 114,
+        "occurredAt": "2026-07-26T14:40:37Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:2a2d741501cbc5c1b550bd9f",
+        "sequence": 50,
+        "occurredAt": "2026-07-26T12:15:56Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:a192ade3e51be6eba342c3ae",
+        "sequence": 29,
+        "occurredAt": "2026-07-26T12:15:54Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:16064e534381996738611aed": [
+      {
+        "id": "event:c7d07dff61096ec60623266a",
+        "sequence": 121,
+        "occurredAt": "2026-07-26T14:40:38Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:1ae4f9dc3ee89f9be56e8b2d",
+        "sequence": 120,
+        "occurredAt": "2026-07-26T14:40:37Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:6ce7d0784516cd36df621cc2",
+        "sequence": 119,
+        "occurredAt": "2026-07-26T14:40:37Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:3f7d00e0eab126d6161f3259",
+        "sequence": 118,
+        "occurredAt": "2026-07-26T14:40:37Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:339d3d13d9a04d1ab3abd9a2",
+        "sequence": 51,
+        "occurredAt": "2026-07-26T12:15:56Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:bf42b78895788a5adf57a50f",
+        "sequence": 30,
+        "occurredAt": "2026-07-26T12:15:54Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:ee2995a41a5ef6d04a5de77c": [
+      {
+        "id": "event:65c0f7273ca7294aa13bc40f",
+        "sequence": 130,
+        "occurredAt": "2026-07-26T14:51:27Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:a9777d1c07716b992fa993d4",
+        "sequence": 129,
+        "occurredAt": "2026-07-26T14:51:27Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:60505b99bdcdb0ae943394b4",
+        "sequence": 128,
+        "occurredAt": "2026-07-26T14:51:27Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:420cc19ac793501c63877818",
+        "sequence": 127,
+        "occurredAt": "2026-07-26T14:51:27Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:1bc8350541c88b5d6215760d",
+        "sequence": 52,
+        "occurredAt": "2026-07-26T12:15:56Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:bc3e32d5f9c329048c999ac7",
+        "sequence": 31,
+        "occurredAt": "2026-07-26T12:15:54Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:2ebc3421dfafcf898a33b03b": [
+      {
+        "id": "event:a107554e292a32f5b5d89215",
+        "sequence": 134,
+        "occurredAt": "2026-07-26T14:51:28Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:5d6b6d59ed752fbb31733525",
+        "sequence": 133,
+        "occurredAt": "2026-07-26T14:51:27Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:3c03cd858eb39b68747fd44e",
+        "sequence": 132,
+        "occurredAt": "2026-07-26T14:51:27Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:8f208e91dc7a26a50079ee84",
+        "sequence": 131,
+        "occurredAt": "2026-07-26T14:51:27Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:eee23fb1b87ef8eec5077694",
+        "sequence": 53,
+        "occurredAt": "2026-07-26T12:15:57Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:92355c05833d29870142f64c",
+        "sequence": 32,
+        "occurredAt": "2026-07-26T12:15:54Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:b2a3e693119857c18ba023fa": [
+      {
+        "id": "event:4506596ccbb21f247a35ac6e",
+        "sequence": 149,
+        "occurredAt": "2026-07-26T14:54:35Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:e9ebe097a4cd15acc473f2d0",
+        "sequence": 148,
+        "occurredAt": "2026-07-26T14:54:34Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:c6b21d9e7a251e76dfe3c183",
+        "sequence": 147,
+        "occurredAt": "2026-07-26T14:54:34Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:fa67c9b9799f1cbb4ebd5f77",
+        "sequence": 146,
+        "occurredAt": "2026-07-26T14:54:34Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:238f6d8b491081a3408e77b8",
+        "sequence": 54,
+        "occurredAt": "2026-07-26T12:15:57Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:afc89deae183515ef7f46a53",
+        "sequence": 33,
+        "occurredAt": "2026-07-26T12:15:54Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:46d67962e987427f4e712b56": [
+      {
+        "id": "event:d7947cac59ed77bc216cf3d3",
+        "sequence": 138,
+        "occurredAt": "2026-07-26T14:51:28Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:1362a3ccfb9f4968cd280dbb",
+        "sequence": 137,
+        "occurredAt": "2026-07-26T14:51:28Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:d41af3170a56152509f4aca9",
+        "sequence": 136,
+        "occurredAt": "2026-07-26T14:51:28Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:d85595bc26b84319b5933d93",
+        "sequence": 135,
+        "occurredAt": "2026-07-26T14:51:28Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:a698aee8721619c2b45c3e70",
+        "sequence": 55,
+        "occurredAt": "2026-07-26T12:15:57Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:46cff54de871c8a8e9be1416",
+        "sequence": 34,
+        "occurredAt": "2026-07-26T12:15:54Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:a8195ef3d5d5a870bbbd8b70": [
+      {
+        "id": "event:2b6e47fb3d8f044fc4fe076e",
+        "sequence": 157,
+        "occurredAt": "2026-07-26T14:57:19Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:9ad32f5e0685d41d63f947c2",
+        "sequence": 156,
+        "occurredAt": "2026-07-26T14:57:19Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:ea9bce33c3d5fbc073ec2d72",
+        "sequence": 155,
+        "occurredAt": "2026-07-26T14:57:19Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:da85061a5a707504251c75d6",
+        "sequence": 154,
+        "occurredAt": "2026-07-26T14:57:19Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:ef961abaf68cf74bc50c3c33",
+        "sequence": 56,
+        "occurredAt": "2026-07-26T12:15:57Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:fa76b73ae43a96936cee0de0",
+        "sequence": 35,
+        "occurredAt": "2026-07-26T12:15:54Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:361ed77fb0f61d6cabe695d2": [
+      {
+        "id": "event:61fe8713b5c7dcc7d41b40dc",
+        "sequence": 57,
+        "occurredAt": "2026-07-26T12:15:57Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:fb71dc8cb88c3f8ebb06fdc0",
+        "sequence": 36,
+        "occurredAt": "2026-07-26T12:15:54Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:8e28b5713b859b8433061986": [
+      {
+        "id": "event:3fbe48b0d6a6b38e1a7e0826",
+        "sequence": 170,
+        "occurredAt": "2026-07-26T14:59:19Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:ef414c63db8b3ce0e8fdede3",
+        "sequence": 169,
+        "occurredAt": "2026-07-26T14:59:18Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:35674acba8864b5a4c2c6f3a",
+        "sequence": 168,
+        "occurredAt": "2026-07-26T14:59:18Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:5b1148e4dfa62f9a0a870b7a",
+        "sequence": 167,
+        "occurredAt": "2026-07-26T14:59:18Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:84784a107a93649641f77e11",
+        "sequence": 58,
+        "occurredAt": "2026-07-26T12:15:57Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:2d0a8177f11ab03c8c02d14c",
+        "sequence": 37,
+        "occurredAt": "2026-07-26T12:15:55Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:6ff90303d7135e2d88f031bb": [
+      {
+        "id": "event:49df9671d490905f6de73536",
+        "sequence": 161,
+        "occurredAt": "2026-07-26T14:57:20Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:243a2019d16def47f90cb6b1",
+        "sequence": 160,
+        "occurredAt": "2026-07-26T14:57:20Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:b905176b28192885a34b76d0",
+        "sequence": 159,
+        "occurredAt": "2026-07-26T14:57:20Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:27faa923f1ca74b99c6e6a43",
+        "sequence": 158,
+        "occurredAt": "2026-07-26T14:57:20Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:6efa8d89d2f42b1860aa8bc4",
+        "sequence": 59,
+        "occurredAt": "2026-07-26T12:15:57Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:099e87a9a1ead55c67e22705",
+        "sequence": 38,
+        "occurredAt": "2026-07-26T12:15:55Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:0067159642aa7871a6b31873": [
+      {
+        "id": "event:ced2586a441fee7800272b72",
+        "sequence": 165,
+        "occurredAt": "2026-07-26T14:57:21Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:742ffe6b32976661b4f114b5",
+        "sequence": 164,
+        "occurredAt": "2026-07-26T14:57:21Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:63fe895aa98e9abe64d4a1bf",
+        "sequence": 163,
+        "occurredAt": "2026-07-26T14:57:20Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:73fc21c0d611642d1c803285",
+        "sequence": 162,
+        "occurredAt": "2026-07-26T14:57:20Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:daa1927986d0aecc83369366",
+        "sequence": 60,
+        "occurredAt": "2026-07-26T12:15:57Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      },
+      {
+        "id": "event:788a1aaafff1defb17070ad3",
+        "sequence": 39,
+        "occurredAt": "2026-07-26T12:15:55Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "predates-attestation"
+      }
+    ],
+    "work:58e32e52001849dbc63861a7": [
+      {
+        "id": "event:3c1f2da03f70672744fdb13d",
+        "sequence": 75,
+        "occurredAt": "2026-07-26T12:45:32Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:5c4fac4b51915aeef55acf2e",
+        "sequence": 70,
+        "occurredAt": "2026-07-26T12:45:31Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:1a1b5d505a4d63b45f500678": [
+      {
+        "id": "event:428cad690964f20552602ad9",
+        "sequence": 76,
+        "occurredAt": "2026-07-26T12:45:32Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:59a2db9c4afb9b463d5728ca",
+        "sequence": 71,
+        "occurredAt": "2026-07-26T12:45:31Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:e22cde45386d914b64838c11": [
+      {
+        "id": "event:83fd78069355f29370ad17b3",
+        "sequence": 77,
+        "occurredAt": "2026-07-26T12:45:32Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:ec71efa783be5f3bd7224680",
+        "sequence": 72,
+        "occurredAt": "2026-07-26T12:45:31Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:823510ce4fbfbf90d091df76": [
+      {
+        "id": "event:e3855fa5b765bfdfe3fd60a2",
+        "sequence": 88,
+        "occurredAt": "2026-07-26T12:54:14Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:db12dd7c3fba7e33adfffb7e",
+        "sequence": 78,
+        "occurredAt": "2026-07-26T12:45:32Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:8c5864296fc296089fb2d32e",
+        "sequence": 73,
+        "occurredAt": "2026-07-26T12:45:31Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:5c41722d9f448b7f7ead3810": [
+      {
+        "id": "event:5af719841d752b04375f819f",
+        "sequence": 197,
+        "occurredAt": "2026-07-26T15:43:00Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:9cd4794156583e0ffc802708",
+        "sequence": 196,
+        "occurredAt": "2026-07-26T15:43:00Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:c8db66deccd6a6b40a2236de",
+        "sequence": 195,
+        "occurredAt": "2026-07-26T15:43:00Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:6fd21cfeb2532f0862c8b035",
+        "sequence": 181,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:da1a744855553536a071150b",
+        "sequence": 180,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:4dbd6a546e3bf2d1b0df9de7": [
+      {
+        "id": "event:bf6c59b3c315617c177f805b",
+        "sequence": 200,
+        "occurredAt": "2026-07-26T15:43:00Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:36cf83b2ccbc9b0109fdf1a7",
+        "sequence": 199,
+        "occurredAt": "2026-07-26T15:43:00Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:8d4cb87aa6c3e67ccbdcc6d9",
+        "sequence": 198,
+        "occurredAt": "2026-07-26T15:43:00Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:6568691f35bb8b95ef7ad077",
+        "sequence": 183,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:94d234e68a86102950471222",
+        "sequence": 182,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:003168aa62ef03681a9f106c": [
+      {
+        "id": "event:de8a46898b13f130f632b302",
+        "sequence": 203,
+        "occurredAt": "2026-07-26T15:43:01Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:79bc7cee4724e5dc1331f5e0",
+        "sequence": 202,
+        "occurredAt": "2026-07-26T15:43:00Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:44f4bb9cafe0c08c4ae125bd",
+        "sequence": 201,
+        "occurredAt": "2026-07-26T15:43:00Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:1b67c7ff6736b2d1eccbd2dd",
+        "sequence": 185,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:a70ca6329e339662ad9e1abc",
+        "sequence": 184,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:03344dfa2db4c8ed729a9063": [
+      {
+        "id": "event:ffbd1638841a58fa879845be",
+        "sequence": 206,
+        "occurredAt": "2026-07-26T15:43:01Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:78dd0a14e8c73c41ad2dabf1",
+        "sequence": 205,
+        "occurredAt": "2026-07-26T15:43:01Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:c6c12b33cc4e5b8ad9b345c2",
+        "sequence": 204,
+        "occurredAt": "2026-07-26T15:43:01Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:5b1f7ea63f56f2f0ee47fb62",
+        "sequence": 187,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:b41e004909e8db614e49ce99",
+        "sequence": 186,
+        "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:d0ec852a3c48d6e165389548": [
+      {
+        "id": "event:dbbd0d0d2a4b238c3f608036",
+        "sequence": 145,
+        "occurredAt": "2026-07-26T14:53:20Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:64c221df5108bb9a71940bca",
+        "sequence": 144,
+        "occurredAt": "2026-07-26T14:53:19Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:2dda110dfd2fcebcd4ad6487",
+        "sequence": 143,
+        "occurredAt": "2026-07-26T14:53:19Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:b593ec1a34adb7612edeac60",
+        "sequence": 142,
+        "occurredAt": "2026-07-26T14:53:19Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:703383b4c0f64613f33a3968",
+        "sequence": 141,
+        "occurredAt": "2026-07-26T14:53:19Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:75d3e2e55597562d38405b56",
+        "sequence": 140,
+        "occurredAt": "2026-07-26T14:53:19Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:a1f8ee7b3b4bac70f638b6b0": [
+      {
+        "id": "event:98e8a587292782b356abd415",
+        "sequence": 105,
+        "occurredAt": "2026-07-25T15:10:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:117a36494c01739b4e42242a",
+        "sequence": 85,
+        "occurredAt": "2026-07-25T13:40:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:978d8c37ffcf98e9d5cda2b3",
+        "sequence": 84,
+        "occurredAt": "2026-07-25T13:40:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:bd10b38a2f94677b495d4b16",
+        "sequence": 9,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:6817ae0447467574b5d4ea22",
+        "sequence": 8,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:693f73727e5212fa1eb10bd6": [
+      {
+        "id": "event:151405d1f2da7338369ed5d5",
+        "sequence": 124,
+        "occurredAt": "2026-07-25T16:20:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:6bb718bee6177aab4f4f144d",
+        "sequence": 107,
+        "occurredAt": "2026-07-25T15:11:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:b932d6a25420474c72fb9049",
+        "sequence": 106,
+        "occurredAt": "2026-07-25T15:11:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:06be1227ff90073b7507278b",
+        "sequence": 21,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:107de7d032fbd9c94a1397bc",
+        "sequence": 20,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:006e270e68fc63361b808b8e": [
+      {
+        "id": "event:4b2654cc361270fbae8bce75",
+        "sequence": 165,
+        "occurredAt": "2026-07-25T18:03:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:e08c25b6d9abf376b0f7a0cf",
+        "sequence": 164,
+        "occurredAt": "2026-07-25T18:02:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:cc30c7cff957f28176155482",
+        "sequence": 163,
+        "occurredAt": "2026-07-25T18:02:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:72395bc58985269a1ba6770a",
+        "sequence": 31,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:fd2af670baf2fe62cd35e9d3",
+        "sequence": 30,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:6119133f924175d3c75567ba": [
+      {
+        "id": "event:87602892ae361d7ae8acc108",
+        "sequence": 168,
+        "occurredAt": "2026-07-25T18:03:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:cd8f3696be3051f3f2ab0de2",
+        "sequence": 167,
+        "occurredAt": "2026-07-25T18:02:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:e4679a2e4343896314c994fe",
+        "sequence": 166,
+        "occurredAt": "2026-07-25T18:02:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:42f870f09a6360ff0143f71d",
+        "sequence": 41,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:16007a15ba423a1d9c71b47a",
+        "sequence": 40,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:0d16f4811862c3ae0daa37fb": [
+      {
+        "id": "event:1eda963fa2a6292ddc25baca",
+        "sequence": 183,
+        "occurredAt": "2026-07-25T18:23:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:3929a2453aa27b2ba24c1202",
+        "sequence": 182,
+        "occurredAt": "2026-07-25T18:22:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:e99e5913d9fe029fa3b0ab67",
+        "sequence": 181,
+        "occurredAt": "2026-07-25T18:22:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:2212aa23f494d8b403de8cc1",
+        "sequence": 47,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:ed24b5a21bbcc3bddda7438f",
+        "sequence": 46,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:4bad155cc46b828c688f0325": [
+      {
+        "id": "event:872396c20b8f3150ad5217b5",
+        "sequence": 195,
+        "occurredAt": "2026-07-25T18:47:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:81c609f4ffe37a15fd0f9197",
+        "sequence": 136,
+        "occurredAt": "2026-07-25T17:04:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:4d4abe51ac40355a021580f4",
+        "sequence": 135,
+        "occurredAt": "2026-07-25T17:04:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:aa527916110a6e8dbb70d1d0",
+        "sequence": 57,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:d3a9043e8f0ca21e65f9bb39",
+        "sequence": 56,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:92b90fa3fbc702eb202d59f7": [
+      {
+        "id": "event:ede53b443b30fba5e05f4fa4",
+        "sequence": 200,
+        "occurredAt": "2026-07-25T19:01:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:057c1861d40f31e0f6165fd5",
+        "sequence": 126,
+        "occurredAt": "2026-07-25T16:22:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:8577baad79640dd97c79f6a7",
+        "sequence": 125,
+        "occurredAt": "2026-07-25T16:22:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:3fd478bbe5500f36f82d4555",
+        "sequence": 69,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:a369848337ea31572705b8cc",
+        "sequence": 68,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:67b6e4598e24d9fc8aa1f6e7": [
+      {
+        "id": "event:2ef0b2c29672c2b1cce412d4",
+        "sequence": 228,
+        "occurredAt": "2026-07-26T05:14:39Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:d4d69d9d430989dffbfbe7c2",
+        "sequence": 226,
+        "occurredAt": "2026-07-26T05:14:39Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:068eaeefab334dd51b86c696",
+        "sequence": 224,
+        "occurredAt": "2026-07-26T05:13:56Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:fc0e6a3439ce4b29de8204c7": [
+      {
+        "id": "event:389da44aad7e3686015da97a",
+        "sequence": 227,
+        "occurredAt": "2026-07-26T05:14:39Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:ad791d74019539a3c3000ed7",
+        "sequence": 225,
+        "occurredAt": "2026-07-26T05:13:57Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:1a4aabcc5db3ae3735bc45f6": [
+      {
+        "id": "event:8040fd1667ab2c2bb20d114b",
+        "sequence": 204,
+        "occurredAt": "2026-07-25T19:10:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:a6bc16e21948fbbf0c0888bc",
+        "sequence": 83,
+        "occurredAt": "2026-07-25T13:40:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:3c46f34eb9574881ca344be7",
+        "sequence": 82,
+        "occurredAt": "2026-07-25T13:40:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:7f07e2c510281f34ee4fc385",
+        "sequence": 78,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:d6c9c9438f3f8fd33883b018",
+        "sequence": 2,
+        "occurredAt": "2026-07-25T12:41:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:e65f6896e360ac59d0af74fe": [
+      {
+        "id": "event:d9a3b7a7ad875559af2f2f03",
+        "sequence": 206,
+        "occurredAt": "2026-07-25T20:00:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:e4e7827f70df6e045072001e",
+        "sequence": 205,
+        "occurredAt": "2026-07-25T20:00:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:b42ffffd18da52b315df6af4": [
+      {
+        "id": "event:cc026d2300ed9a82c6fa3707",
+        "sequence": 88,
+        "occurredAt": "2026-07-25T14:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:8c4fdeb616ab423e13c38192",
+        "sequence": 87,
+        "occurredAt": "2026-07-25T13:40:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:23209d22d0368f6446b8cd56",
+        "sequence": 86,
+        "occurredAt": "2026-07-25T13:40:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:dda4fda156c768229ec9ff9d",
+        "sequence": 11,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:9bcf2362eac218e39a7e1caf",
+        "sequence": 10,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:4df3a4919e5a9a338b7f8d14": [
+      {
+        "id": "event:dbed4025ffe59270d84b05c8",
+        "sequence": 91,
+        "occurredAt": "2026-07-25T14:20:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:3d3e14788dc47a0d9ed8828d",
+        "sequence": 90,
+        "occurredAt": "2026-07-25T14:01:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:3c5aaf87936ac66f182dbd0a",
+        "sequence": 89,
+        "occurredAt": "2026-07-25T14:01:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:fdd20c874b5af7564eb5e2db",
+        "sequence": 13,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:2804eb4a132c7dae7da5f8d6",
+        "sequence": 12,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:63e8a80a5375d75f253cf05c": [
+      {
+        "id": "event:2ef6272c91a2b7efb1a25aaa",
+        "sequence": 94,
+        "occurredAt": "2026-07-25T14:40:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:a37fb701f8aa962d978ed579",
+        "sequence": 93,
+        "occurredAt": "2026-07-25T14:21:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:d88dd0bbad25ba3e7a747172",
+        "sequence": 92,
+        "occurredAt": "2026-07-25T14:21:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:1de10b7f767effb3a31b673b",
+        "sequence": 15,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:49d9c6d504a8da4f2dbe70df",
+        "sequence": 14,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:77816bbe80259cb27614e2bf": [
+      {
+        "id": "event:fb3ef61086a0907c14abeff7",
+        "sequence": 97,
+        "occurredAt": "2026-07-25T14:50:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:5fc768e5852fedf2fe0387b6",
+        "sequence": 96,
+        "occurredAt": "2026-07-25T14:41:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:e0ee9f8f1812b837b0d25f47",
+        "sequence": 95,
+        "occurredAt": "2026-07-25T14:41:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:c3deda90364c968a529f473a",
+        "sequence": 17,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:6f4c7c8ecacdee94915aaafa",
+        "sequence": 16,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:f90aabf32403f257eda50e6c": [
+      {
+        "id": "event:3f2c4c2f2715f16e7cb276e4",
+        "sequence": 100,
+        "occurredAt": "2026-07-25T15:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:f96d2abe118644b6c1616fce",
+        "sequence": 99,
+        "occurredAt": "2026-07-25T14:51:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:a892f1339840ff7d78f6ad92",
+        "sequence": 98,
+        "occurredAt": "2026-07-25T14:51:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:b5cf25c6d2629a3f81ffb026",
+        "sequence": 19,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:f3a5dd9d265ba9e23d7526f0",
+        "sequence": 18,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:f34cb3a394887db6d17a477a": [
+      {
+        "id": "event:1b303704eaf7d39677fc2b72",
+        "sequence": 110,
+        "occurredAt": "2026-07-25T15:25:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:72d8f8b2a381df1ba5103f0e",
+        "sequence": 109,
+        "occurredAt": "2026-07-25T15:11:30Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:d3959ce81dab1e1c43c44de1",
+        "sequence": 108,
+        "occurredAt": "2026-07-25T15:11:30Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:1b17730416dcb4d0753ece5e",
+        "sequence": 23,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:03dc6514731e734921d6c58b",
+        "sequence": 22,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:2cfb6cb9412126dc798e8938": [
+      {
+        "id": "event:ea192f79fd3ab5ac49f9c5d3",
+        "sequence": 113,
+        "occurredAt": "2026-07-25T15:40:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:912017dc48aad03af07fc120",
+        "sequence": 112,
+        "occurredAt": "2026-07-25T15:26:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:dd7bec59d87d62a2db290847",
+        "sequence": 111,
+        "occurredAt": "2026-07-25T15:26:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:7249db0dabf3fbf99777e05f",
+        "sequence": 25,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:e083c9b8d28439ce02ffeb8c",
+        "sequence": 24,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:3d785c1f784bedfd1bc927a8": [
+      {
+        "id": "event:ee37b9b25b69668128bcfed2",
+        "sequence": 116,
+        "occurredAt": "2026-07-25T15:55:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:6a8d9a33a327f1fea25a6d78",
+        "sequence": 115,
+        "occurredAt": "2026-07-25T15:45:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:e19b6c206452a361d79319e3",
+        "sequence": 114,
+        "occurredAt": "2026-07-25T15:45:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:1199f3959bd8108c9fa8d00b",
+        "sequence": 27,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:f5e03ca5ef746fb5628c9c51",
+        "sequence": 26,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:2b4f12fcf00d5e4231faf25d": [
+      {
+        "id": "event:4052d6008a1f86afcdfc900f",
+        "sequence": 119,
+        "occurredAt": "2026-07-25T16:05:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:0f2ca6e2abf87de40504e19f",
+        "sequence": 118,
+        "occurredAt": "2026-07-25T15:56:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:8850aca0a74401f606183b35",
+        "sequence": 117,
+        "occurredAt": "2026-07-25T15:56:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:05af2a30e81805b61e3e9334",
+        "sequence": 29,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:fab9610fc4c3703046dfe480",
+        "sequence": 28,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:4ad4c24bc6639e54a140258c": [
+      {
+        "id": "event:d82161a397ec0da6e0b8a877",
+        "sequence": 147,
+        "occurredAt": "2026-07-25T18:01:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:148e7dd4bb91fe2db31979e4",
+        "sequence": 146,
+        "occurredAt": "2026-07-25T18:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:4f742cd30003e3498c6c7a43",
+        "sequence": 145,
+        "occurredAt": "2026-07-25T18:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:2ded8ff8632e32dd4a50c0de",
+        "sequence": 33,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:e62201077c004f605cac75fd",
+        "sequence": 32,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:58618befa5d12549dc6f3605": [
+      {
+        "id": "event:2a96dc845fdf33d7585734bb",
+        "sequence": 150,
+        "occurredAt": "2026-07-25T18:01:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:363eebd0314040c7e01cec51",
+        "sequence": 149,
+        "occurredAt": "2026-07-25T18:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:254f68e735a0077ea22a9602",
+        "sequence": 148,
+        "occurredAt": "2026-07-25T18:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:97384493c3ca217b36b5f165",
+        "sequence": 35,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:c328bf9ccb9bfc9058a39bba",
+        "sequence": 34,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:a5cdae19c4bb00cfa23300b9": [
+      {
+        "id": "event:2ad66deedf064222830faa85",
+        "sequence": 153,
+        "occurredAt": "2026-07-25T18:01:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:84e14585d3225f857fdfa4b4",
+        "sequence": 152,
+        "occurredAt": "2026-07-25T18:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:9c46cac37154b1ead313afdb",
+        "sequence": 151,
+        "occurredAt": "2026-07-25T18:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:31fc6e9d065efe20a90bc725",
+        "sequence": 37,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:ec8666cf33d55f660205ef98",
+        "sequence": 36,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:d517a8ace1a8ab214ade4fc7": [
+      {
+        "id": "event:74d65b356e26b1694dcd48a4",
+        "sequence": 156,
+        "occurredAt": "2026-07-25T18:01:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:bfd153dd8b2938fed1193f3f",
+        "sequence": 155,
+        "occurredAt": "2026-07-25T18:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:a7cf3d9763351e8f6155c02d",
+        "sequence": 154,
+        "occurredAt": "2026-07-25T18:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:f1428766cec9b521360caed6",
+        "sequence": 39,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:21b6886711294895544275ad",
+        "sequence": 38,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:fecb0a2161cf51b1b03d2192": [
+      {
+        "id": "event:18fbe43915dd0d460aa100ea",
+        "sequence": 159,
+        "occurredAt": "2026-07-25T18:01:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:e089c9db5364d5374b5089bd",
+        "sequence": 158,
+        "occurredAt": "2026-07-25T18:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:b50fa3a92f4805f257c24199",
+        "sequence": 157,
+        "occurredAt": "2026-07-25T18:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:e46984ab1b936cea327331f3",
+        "sequence": 43,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:acf4d13f8b0edd7bf0ca1c3d",
+        "sequence": 42,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:6cb24b77fbfe487dc55d95d3": [
+      {
+        "id": "event:ebaced7de3e2394a24c5d869",
+        "sequence": 162,
+        "occurredAt": "2026-07-25T18:01:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:92cf357558666ec0bae4f6e8",
+        "sequence": 161,
+        "occurredAt": "2026-07-25T18:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:d0372d3b6bfc026cef8aad42",
+        "sequence": 160,
+        "occurredAt": "2026-07-25T18:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:7cda1256185763e34d4f463a",
+        "sequence": 45,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:685107c4434f6abde44fd14e",
+        "sequence": 44,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:cf6b43e902db4af439e5b15b": [
+      {
+        "id": "event:1e3634607117bb244ef914d8",
+        "sequence": 171,
+        "occurredAt": "2026-07-25T18:21:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:8bdd523ed72e2575973a5004",
+        "sequence": 170,
+        "occurredAt": "2026-07-25T18:20:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:73761c5b308809adc9133eba",
+        "sequence": 169,
+        "occurredAt": "2026-07-25T18:20:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:3270ae312074651046d8bd29",
+        "sequence": 49,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:39cf830f3818d0432ccd4a53",
+        "sequence": 48,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:61905055fc7a8146bcf51d48": [
+      {
+        "id": "event:caad8e21fc10e27461689269",
+        "sequence": 174,
+        "occurredAt": "2026-07-25T18:21:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:db40cdc14f5e3559ee58a9fe",
+        "sequence": 173,
+        "occurredAt": "2026-07-25T18:20:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:728c13046187cacf5f5de73c",
+        "sequence": 172,
+        "occurredAt": "2026-07-25T18:20:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:90d29ad14a90761aec88c5ac",
+        "sequence": 51,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:02181d11c53c5a9e383b4d5c",
+        "sequence": 50,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:1fcba7c4daa8826b489f62f1": [
+      {
+        "id": "event:e0e73ef6d06c3cf2a7e20d12",
+        "sequence": 177,
+        "occurredAt": "2026-07-25T18:21:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:a42c4409f9f121867b7f5126",
+        "sequence": 176,
+        "occurredAt": "2026-07-25T18:20:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:667389a0e4155afb266ede50",
+        "sequence": 175,
+        "occurredAt": "2026-07-25T18:20:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:633a56a00efa5aea6b7557c4",
+        "sequence": 53,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:830906c0c37125c9f9cd6c99",
+        "sequence": 52,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:c3cc9b66ffe07cd8d6fd68c6": [
+      {
+        "id": "event:28843950568807bee9d41ad0",
+        "sequence": 180,
+        "occurredAt": "2026-07-25T18:21:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:080df6af8ea294cb3f400957",
+        "sequence": 179,
+        "occurredAt": "2026-07-25T18:20:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:b917ba41efe7c76fabb64667",
+        "sequence": 178,
+        "occurredAt": "2026-07-25T18:20:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:45810f52f7212e24cf160805",
+        "sequence": 55,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:f2072b98a1b313920b506e56",
+        "sequence": 54,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:41e09e4ee412dddf1af1551a": [
+      {
+        "id": "event:6fa966ff3d6dd99e205128ac",
+        "sequence": 139,
+        "occurredAt": "2026-07-25T17:20:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:e09d9d07567dcd9a6ec6cf97",
+        "sequence": 138,
+        "occurredAt": "2026-07-25T17:04:30Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:6982ce36471d71b8f712da9f",
+        "sequence": 137,
+        "occurredAt": "2026-07-25T17:04:30Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:eac39139a92b45443a751803",
+        "sequence": 59,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:522f1ed89285200f1308e5c0",
+        "sequence": 58,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:bd412466874a297a5e90aadb": [
+      {
+        "id": "event:2c18378d81136943f0306aee",
+        "sequence": 142,
+        "occurredAt": "2026-07-25T17:45:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:d3fe0a90e3eb80d73b481655",
+        "sequence": 141,
+        "occurredAt": "2026-07-25T17:22:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:a56b8a045a9e74f718c38247",
+        "sequence": 140,
+        "occurredAt": "2026-07-25T17:22:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:683e6f8bd26433838e889d7d",
+        "sequence": 61,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:3cb253a8075e651e3c00c141",
+        "sequence": 60,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:d6220f4a6bc8956dac08f5dd": [
+      {
+        "id": "event:39bfbbd1b17d5caf41348bd3",
+        "sequence": 188,
+        "occurredAt": "2026-07-25T18:40:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:38954f77b86ee9adeb7241a5",
+        "sequence": 144,
+        "occurredAt": "2026-07-25T17:50:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:b8a6f665d06bb234d137580c",
+        "sequence": 143,
+        "occurredAt": "2026-07-25T17:50:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:a27006029aa901f076e87dc4",
+        "sequence": 63,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:6373f83703c6fdc84207b330",
+        "sequence": 62,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:8987f1eef2fa7e3c2bcd4272": [
+      {
+        "id": "event:591b7955962ecbb9fc75b64d",
+        "sequence": 189,
+        "occurredAt": "2026-07-25T18:40:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:17fb92780cbecb9d3d5b3476",
+        "sequence": 185,
+        "occurredAt": "2026-07-25T18:25:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:34a658beace3f6a131c3c6a9",
+        "sequence": 184,
+        "occurredAt": "2026-07-25T18:25:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:65c83da879e090e1de687d91",
+        "sequence": 65,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:5c288671c047f7665e3e9c43",
+        "sequence": 64,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:343a14a430b50a856ca474c0": [
+      {
+        "id": "event:21f8f3a560f79a3db9f894c3",
+        "sequence": 190,
+        "occurredAt": "2026-07-25T18:40:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:01d5becd56692f3de3de29ac",
+        "sequence": 187,
+        "occurredAt": "2026-07-25T18:25:30Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:979c729546aed829c72a0230",
+        "sequence": 186,
+        "occurredAt": "2026-07-25T18:25:30Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:338ecec538bccdcd1a857ccc",
+        "sequence": 67,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:2a5310b7dec3f5464de3dafc",
+        "sequence": 66,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:5d2723d0ad24ccad93c4be69": [
+      {
+        "id": "event:3c8e287b54870b9868960760",
+        "sequence": 129,
+        "occurredAt": "2026-07-25T16:40:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:2250d6f8c476ceb1eea8f7a6",
+        "sequence": 128,
+        "occurredAt": "2026-07-25T16:22:30Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:cab856fba9ef9acea388f082",
+        "sequence": 127,
+        "occurredAt": "2026-07-25T16:22:30Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:e508e6600bb3af78c85c19b0",
+        "sequence": 71,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:5bcb2097889c3c7f9f8db29f",
+        "sequence": 70,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:c07a212b2ca791085b0bf9c2": [
+      {
+        "id": "event:b7fb1e68585e8eb53f76d46f",
+        "sequence": 132,
+        "occurredAt": "2026-07-25T17:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:929ab3f3a87fd5a7192056b1",
+        "sequence": 131,
+        "occurredAt": "2026-07-25T16:42:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:1cb4e3008db352f32d82953d",
+        "sequence": 130,
+        "occurredAt": "2026-07-25T16:42:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:2ab4189e04875773654802fc",
+        "sequence": 73,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:e8ebbff6d1b7c014c5fd2626",
+        "sequence": 72,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:e64cbfa30a554a07d8bfb09d": [
+      {
+        "id": "event:3728d7b7fecde13de6835fa1",
+        "sequence": 198,
+        "occurredAt": "2026-07-25T19:00:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:a7258c82374fff1d949b1d56",
+        "sequence": 134,
+        "occurredAt": "2026-07-25T17:02:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:d22bb4bc1f65a66b3af13d02",
+        "sequence": 133,
+        "occurredAt": "2026-07-25T17:02:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:808314c692216b61647a4450",
+        "sequence": 75,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:78149a4774ef3c6664774c5e",
+        "sequence": 74,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ],
+    "work:8b4960cbf3e0286c0e14512a": [
+      {
+        "id": "event:6f8e628ab7cdad0daabe5db8",
+        "sequence": 199,
+        "occurredAt": "2026-07-25T19:00:30Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:43fbccd93206024f133a2bfa",
+        "sequence": 197,
+        "occurredAt": "2026-07-25T18:48:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:3603bd622ac419cdd426d391",
+        "sequence": 196,
+        "occurredAt": "2026-07-25T18:48:00Z",
+        "operation": "work.updated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:2bc72820281a02eac0dd4831",
+        "sequence": 77,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
+      {
+        "id": "event:8f15b058a6ddf6f26ede9b8d",
+        "sequence": 76,
+        "occurredAt": "2026-07-25T13:30:00Z",
+        "operation": "work.created",
+        "actorId": null,
+        "attribution": "not-enabled"
+      }
+    ]
+  }
 };

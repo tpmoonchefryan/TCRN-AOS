@@ -28,12 +28,15 @@ import {
 import { tcrnTokenCss } from "@tcrn/ui-tokens";
 import { chainPartitions, localeCopy, shellNavGroups, shellNavItems, type ShellNavItem } from "./data.js";
 import { ShellHeaderActions } from "./shell-header-actions.js";
-import { MyWorkView, ProjectsView, WorkItemsView } from "./cockpit-views.js";
+import { MyWorkView, ProjectsView } from "./cockpit-views.js";
+import { DashboardView, InboxView } from "./cockpit-global.js";
+import { WorkItemsView } from "./cockpit-work-items.js";
 import { WorkItemDetailView } from "./cockpit-detail.js";
 import { BoardView } from "./cockpit-board.js";
 import { DeliberationsView } from "./cockpit-deliberation.js";
 import { AuditView, ReleaseTrainsView, SnapshotHealthView } from "./cockpit-governance.js";
 import { KnowledgeSpaceView } from "./cockpit-knowledge.js";
+import { DeliberationRoomView } from "./cockpit-deliberation-room.js";
 import { Phase3DogfoodReadback } from "./phase3-dogfood-readback.js";
 import { WorkManagementMockups, getWorkMockupPageTitle } from "./work-management-mockups.js";
 
@@ -457,8 +460,11 @@ function OwnerQualityContent({
   const moduleId = shellNavItems.find((item) =>
     item.path === modulePath || modulePath.startsWith(`${item.path}/`))?.id;
   if (!isLegacyWorkRoute) {
-    if (moduleId === "my-work" || moduleId === "inbox") {
+    if (moduleId === "my-work") {
       return <MyWorkView locale={locale} routeHref={routeHref} />;
+    }
+    if (moduleId === "inbox") {
+      return <InboxView locale={locale} routeHref={routeHref} />;
     }
     if (moduleId === "projects") {
       return <ProjectsView locale={locale} routeHref={routeHref} />;
@@ -473,9 +479,17 @@ function OwnerQualityContent({
         : <WorkItemsView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />;
     }
     if (moduleId === "deliberations") {
-      return <DeliberationsView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />;
+      const key = modulePath.startsWith("/deliberations/")
+        ? decodeURIComponent(modulePath.slice("/deliberations/".length))
+        : null;
+      return key
+        ? <DeliberationRoomView locale={locale} routeHref={routeHref} conferenceKey={key} />
+        : <DeliberationsView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />;
     }
     if (moduleId === "dashboard") {
+      return <DashboardView locale={locale} routeHref={routeHref} />;
+    }
+    if (moduleId === "board") {
       return <BoardView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />;
     }
     if (moduleId === "release-trains") {
@@ -795,15 +809,28 @@ function isForceExpandedOwnerQualityState({
   return false;
 }
 
+/**
+ * A link that carries the shell's own state alongside whatever query the caller
+ * asked for.
+ *
+ * The caller's query is merged rather than appended. Appending produced a second
+ * `?`, which browsers and `URLSearchParams` alike read as part of the preceding
+ * value — so `/work-items?project=TCRN-TMS` plus shell state became a filter for
+ * the project literally named "TCRN-TMS?locale=en", and every facet on the work
+ * items page returned nothing. Shell keys are set last so a caller cannot
+ * accidentally send the shell somewhere the user did not ask to go.
+ */
 function buildRouteHref(
   path: string,
   state: { locale: TcrnLocale; theme: "light" | "dark"; collapsed: boolean }
 ): string {
-  const params = new URLSearchParams();
+  const mark = path.indexOf("?");
+  const pathname = mark >= 0 ? path.slice(0, mark) : path;
+  const params = new URLSearchParams(mark >= 0 ? path.slice(mark + 1) : "");
   params.set("locale", state.locale);
   params.set("theme", state.theme);
   params.set("collapsed", state.collapsed ? "true" : "false");
-  return `${path}?${params.toString()}`;
+  return `${pathname}?${params.toString()}`;
 }
 
 function updateUrlLocale(locale: TcrnLocale): void {
@@ -1060,6 +1087,86 @@ function createDocumentCss(): string {
   flex-wrap: wrap;
   gap: var(--tcrn-space-1);
 }
+.tcrn-aos-room {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+  gap: var(--tcrn-space-3);
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .tcrn-aos-room { grid-template-columns: minmax(0, 1fr); }
+}
+.tcrn-aos-room__thread,
+.tcrn-aos-room__minutes {
+  display: grid;
+  gap: var(--tcrn-space-3);
+  min-width: 0;
+}
+.tcrn-aos-round {
+  display: grid;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-aos-round__label {
+  display: flex;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  color: var(--tcrn-color-text-secondary);
+}
+.tcrn-aos-round__label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--tcrn-color-border-subtle);
+}
+.tcrn-aos-bubble {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--tcrn-space-2h);
+  padding: var(--tcrn-space-3);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-surface);
+  background: var(--tcrn-color-surface-panel);
+}
+/* An adversarial position is the one trying to refute; marking it is what makes
+   an attack-and-answer round legible as one rather than as a list. */
+.tcrn-aos-bubble[data-adversarial="true"] {
+  border-left: 3px solid var(--tcrn-color-state-blocked);
+}
+.tcrn-aos-bubble__avatar {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--tcrn-radius-pill);
+  background: var(--tcrn-color-brand-primary-bg);
+  color: var(--tcrn-color-brand-primary);
+  font-weight: var(--tcrn-type-weight-strong);
+}
+.tcrn-aos-bubble__body {
+  display: grid;
+  gap: var(--tcrn-space-1h);
+  min-width: 0;
+}
+.tcrn-aos-bubble__who {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-aos-bubble__text {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: var(--tcrn-type-size-reading);
+  line-height: var(--tcrn-type-line-reading);
+}
+.tcrn-aos-decisions {
+  display: grid;
+  gap: var(--tcrn-space-1);
+  margin: 0;
+  padding-left: var(--tcrn-space-4);
+  font-size: var(--tcrn-type-size-meta);
+}
 .tcrn-aos-minutes-list {
   display: grid;
   gap: var(--tcrn-space-1h);
@@ -1104,6 +1211,67 @@ function createDocumentCss(): string {
 .tcrn-aos-filters {
   display: grid;
   gap: var(--tcrn-space-2h);
+}
+.tcrn-aos-searchbar {
+  display: flex;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  flex-wrap: wrap;
+}
+.tcrn-aos-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  flex-wrap: wrap;
+}
+.tcrn-aos-reset {
+  font-size: var(--tcrn-type-size-meta);
+  color: var(--tcrn-color-text-secondary);
+}
+.tcrn-aos-batchbar {
+  display: flex;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  flex-wrap: wrap;
+  padding: var(--tcrn-space-2);
+}
+.tcrn-aos-picker {
+  display: grid;
+  gap: var(--tcrn-space-1);
+}
+.tcrn-aos-picker-row {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-aos-picker-row:not(:has(.tcrn-checkbox)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.tcrn-aos-picker-row__link {
+  display: block;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--tcrn-radius-md);
+}
+.tcrn-aos-picker-row[data-selected="true"] .tcrn-aos-picker-row__link {
+  outline: 2px solid var(--tcrn-color-border-accent, var(--tcrn-color-border-strong));
+  outline-offset: 1px;
+}
+.tcrn-aos-preview {
+  display: grid;
+  gap: var(--tcrn-space-2);
+  align-content: start;
+}
+.tcrn-aos-preview__counts,
+.tcrn-aos-preview__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-aos-preview__open {
+  font-size: var(--tcrn-type-size-meta);
 }
 .tcrn-aos-as-of {
   display: inline-flex;

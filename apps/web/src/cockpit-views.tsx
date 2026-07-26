@@ -8,7 +8,6 @@ import {
   Text,
   WorkList,
   WorkPageHeader,
-  WorkQuickFilters,
   type WorkItemRowProps
 } from "@tcrn/ui-react";
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
@@ -247,85 +246,4 @@ function Stat({ label, value }: { label: string; value: number }) {
       <dd>{value}</dd>
     </div>
   );
-}
-
-/**
- * Work items — every ticket, with kind as a filter rather than a separate view.
- *
- * The chain uses one record shape for Initiative, Epic, Story, Subtask, Incident
- * and Release, so the cockpit does too: filtering by kind is a facet, not a
- * different page.
- */
-export function WorkItemsView({ locale, routeHref, search }: ViewProps & { search?: URLSearchParams }) {
-  const isZh = locale === "zh-CN";
-  const projectFilter = search?.get("project") ?? undefined;
-  const kindFilter = search?.get("kind") ?? undefined;
-  const statusFilter = search?.get("status") ?? undefined;
-
-  const rows = cockpitData.work.filter((row) =>
-    (!projectFilter || row.partitionId === projectFilter)
-    && (!kindFilter || row.kind === kindFilter)
-    && (!statusFilter || row.status === statusFilter));
-
-  const facet = (name: string, value: string | undefined, label: string) => ({
-    id: `${name}:${value ?? "all"}`,
-    label,
-    href: routeHref(`/work-items${buildQuery({ project: projectFilter, kind: kindFilter, status: statusFilter, [name]: value })}`),
-    selected: (name === "project" ? projectFilter : name === "kind" ? kindFilter : statusFilter) === value
-  });
-
-  return (
-    <div className="tcrn-aos-view" data-cockpit-view="work-items">
-      <WorkPageHeader
-        title={isZh ? "工作项" : "Work items"}
-        description={isZh
-          ? `${rows.length} / ${cockpitData.work.length} 条 · 类型只是字段,不是另一个系统`
-          : `${rows.length} of ${cockpitData.work.length}; kind is a field, not a separate system.`}
-      />
-      <Surface className="tcrn-aos-filters">
-        <WorkQuickFilters
-          label={isZh ? "项目" : "Project"}
-          filters={[
-            facet("project", undefined, isZh ? "全部项目" : "All projects"),
-            ...cockpitData.partitions.map((partition) =>
-              facet("project", partition.id, partitionLabel(partition, locale)))
-          ]}
-        />
-        <WorkQuickFilters
-          label={isZh ? "类型" : "Kind"}
-          filters={[
-            facet("kind", undefined, isZh ? "全部类型" : "All kinds"),
-            ...["Initiative", "Epic", "Story", "Incident", "Release"].map((kind) => facet("kind", kind, kind))
-          ]}
-        />
-        <WorkQuickFilters
-          label={isZh ? "状态" : "Status"}
-          filters={[
-            facet("status", undefined, isZh ? "全部状态" : "All statuses"),
-            ...["planned", "ready", "active", "blocked", "done"].map((status) => facet("status", status, status))
-          ]}
-        />
-      </Surface>
-      {rows.length > 0 ? (
-        <WorkList
-          label={isZh ? "工作项" : "Work items"}
-          rows={rows.slice(0, 120).map((row) => workRow(row, locale, routeHref))}
-        />
-      ) : (
-        <EmptyState title={isZh ? "当前筛选没有匹配的工作项。" : "No work items match the current filter."} />
-      )}
-      {rows.length > 120 ? (
-        <Text>{isZh ? `显示前 120 条,共 ${rows.length} 条。` : `Showing the first 120 of ${rows.length}.`}</Text>
-      ) : null}
-    </div>
-  );
-}
-
-function buildQuery(params: Record<string, string | undefined>): string {
-  const search = new URLSearchParams();
-  for (const [key, value] of Object.entries(params)) {
-    if (value) search.set(key, value);
-  }
-  const text = search.toString();
-  return text ? `?${text}` : "";
 }

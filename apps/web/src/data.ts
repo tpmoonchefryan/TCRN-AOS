@@ -306,7 +306,7 @@ export const shellNavGroups: ShellNavGroupDefinition[] = [
         labelZh: "仪表盘",
         path: "/dashboard",
         description: "Cross-project delivery and governance indicators.",
-        icon: "layout-grid",
+        icon: "layers",
         status: "active"
       }
     ]
@@ -332,6 +332,20 @@ export const shellNavGroups: ShellNavGroupDefinition[] = [
         path: "/work-items",
         description: "Search and manage every ticket; kind is a field, not a separate system.",
         icon: "database",
+        status: "active"
+      },
+      {
+        // The board sits under Delivery rather than in Global, and separately
+        // from Dashboard, because they answer different questions: the board is
+        // one project's work in the engine's own status columns, the dashboard
+        // is every chain at once. They shared a route until a preview sweep
+        // showed the Dashboard entry opening a board.
+        id: "board",
+        label: "Board",
+        labelZh: "看板",
+        path: "/board",
+        description: "One project's work in the engine's own status columns, with permitted moves marked.",
+        icon: "layout-grid",
         status: "active"
       },
       {
