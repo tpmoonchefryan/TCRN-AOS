@@ -33,6 +33,7 @@ import { WorkItemDetailView } from "./cockpit-detail.js";
 import { BoardView } from "./cockpit-board.js";
 import { DeliberationsView } from "./cockpit-deliberation.js";
 import { AuditView, ReleaseTrainsView, SnapshotHealthView } from "./cockpit-governance.js";
+import { KnowledgeSpaceView } from "./cockpit-knowledge.js";
 import { Phase3DogfoodReadback } from "./phase3-dogfood-readback.js";
 import { WorkManagementMockups, getWorkMockupPageTitle } from "./work-management-mockups.js";
 
@@ -485,6 +486,9 @@ function OwnerQualityContent({
     }
     if (moduleId === "snapshots") {
       return <SnapshotHealthView locale={locale} routeHref={routeHref} />;
+    }
+    if (moduleId === "knowledge-space") {
+      return <KnowledgeSpaceView locale={locale} routeHref={routeHref} />;
     }
   }
   if (isLegacyWorkRoute) {
@@ -1055,6 +1059,19 @@ function createDocumentCss(): string {
   display: flex;
   flex-wrap: wrap;
   gap: var(--tcrn-space-1);
+}
+.tcrn-aos-minutes-list {
+  display: grid;
+  gap: var(--tcrn-space-1h);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tcrn-aos-minutes-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  flex-wrap: wrap;
 }
 .tcrn-aos-conference-list {
   display: grid;
