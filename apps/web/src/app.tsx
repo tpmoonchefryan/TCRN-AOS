@@ -28,6 +28,7 @@ import {
 import { tcrnTokenCss } from "@tcrn/ui-tokens";
 import { chainPartitions, localeCopy, shellNavGroups, shellNavItems, type ShellNavItem } from "./data.js";
 import { ShellHeaderActions } from "./shell-header-actions.js";
+import { MyWorkView, ProjectsView, WorkItemsView } from "./cockpit-views.js";
 import { Phase3DogfoodReadback } from "./phase3-dogfood-readback.js";
 import { WorkManagementMockups, getWorkMockupPageTitle } from "./work-management-mockups.js";
 
@@ -436,8 +437,31 @@ function OwnerQualityContent({
   viewport: VisualInstanceViewportState;
   routeHref: (path: string) => string;
 }) {
+  // Legacy paths are matched on the path itself and matched FIRST. The module
+  // routes below are reached by nav id, and /work/* resolves to the work-items
+  // module so the shell can highlight something truthful — which would otherwise
+  // let a module view swallow the legacy views their receipts still assert.
   const isLegacyWorkRoute = currentPath === "/work" || currentPath.startsWith("/work/");
   const isWorkFirst = isLegacyWorkRoute || route === "work-items";
+
+  // Module views are addressed by their own exact paths, not by the resolved
+  // route id. `resolveCurrentRoute` falls back to a default so the shell always
+  // highlights something, and routing on that fallback would let a module view
+  // swallow every legacy path whose receipts still assert the old content.
+  const modulePath = currentPath === "/" ? "/my-work" : currentPath.split("?")[0] ?? currentPath;
+  const moduleId = shellNavItems.find((item) =>
+    item.path === modulePath || modulePath.startsWith(`${item.path}/`))?.id;
+  if (!isLegacyWorkRoute) {
+    if (moduleId === "my-work" || moduleId === "inbox") {
+      return <MyWorkView locale={locale} routeHref={routeHref} />;
+    }
+    if (moduleId === "projects") {
+      return <ProjectsView locale={locale} routeHref={routeHref} />;
+    }
+    if (moduleId === "work-items") {
+      return <WorkItemsView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />;
+    }
+  }
   if (isLegacyWorkRoute) {
     if (currentPath === "/work/readback") {
       return (
@@ -775,6 +799,14 @@ function removeUnsupportedSearchParam(): void {
  * in the path; everywhere else the cockpit is cross-project and shows the
  * platform governance chain, whose version is the one a global view is read at.
  */
+/** Query string for a route, tolerant of both SSR paths and browser URLs. */
+function readSearch(path: string): URLSearchParams {
+  const mark = path.indexOf("?");
+  if (mark >= 0) return new URLSearchParams(path.slice(mark + 1));
+  if (typeof window !== "undefined") return new URLSearchParams(window.location.search);
+  return new URLSearchParams();
+}
+
 function resolveActivePartition(path: string): string {
   const scoped = chainPartitions.find((partition) => path.startsWith(`/projects/${partition.id}`));
   return scoped?.id ?? "cross-project";
@@ -867,6 +899,59 @@ function createDocumentCss(): string {
   background: var(--tcrn-color-surface-panel);
   color: var(--tcrn-color-text-primary);
   font-weight: var(--tcrn-type-weight-medium);
+}
+.tcrn-aos-view {
+  display: grid;
+  gap: var(--tcrn-space-4);
+}
+.tcrn-aos-band {
+  display: grid;
+  gap: var(--tcrn-space-2h);
+}
+.tcrn-aos-row-asof {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tcrn-space-1h);
+  white-space: nowrap;
+}
+.tcrn-aos-project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--tcrn-space-3);
+}
+.tcrn-aos-project-card {
+  display: grid;
+  gap: var(--tcrn-space-2h);
+  align-content: start;
+}
+.tcrn-aos-project-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-aos-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--tcrn-space-2h);
+  margin: 0;
+}
+.tcrn-aos-stat dt {
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-caption);
+}
+.tcrn-aos-stat dd {
+  margin: 0;
+  font-size: var(--tcrn-type-size-heading-3);
+  font-weight: var(--tcrn-type-weight-strong);
+}
+.tcrn-aos-project-card__link {
+  color: var(--tcrn-color-brand-primary);
+  font-size: var(--tcrn-type-size-meta);
+  text-decoration: none;
+}
+.tcrn-aos-filters {
+  display: grid;
+  gap: var(--tcrn-space-2h);
 }
 .tcrn-aos-as-of {
   display: inline-flex;

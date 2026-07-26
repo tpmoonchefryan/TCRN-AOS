@@ -102,6 +102,12 @@ test("local service serves the AOS shell while backend readbacks stay available"
         assert.doesNotMatch(bodyHtml, /Atlassian|Jira|Confluence|Fable5|Fable|OpenProject|Linear|Plane|Huly|Twenty/);
         assert.doesNotMatch(bodyHtml, /data-doc-shell|tcrn-doc-shell|tcrn-doc-header|tcrn-doc-sidebar|tcrn-doc-nav/);
         assert.doesNotMatch(bodyHtml, /tcrn-product-shell-search|tcrn-search-input|data-product-shell-search-results|data-search-result/);
+      } else if (target === "/") {
+        // The root is the cockpit landing page, and the confirmed information
+        // architecture lands on My work rather than the legacy operations view.
+        // The legacy view keeps its own route and its own assertions below.
+        assert.match(html, /data-cockpit-view="my-work"/);
+        assert.match(html, /data-partition-id="cross-project"/);
       } else {
         assert.match(html, /data-owner-quality-first-viewport="product-led"/);
         assert.match(html, /data-owner-quality-work-queue="true"/);
