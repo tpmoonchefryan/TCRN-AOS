@@ -26,7 +26,8 @@ import {
   type TcrnLocale
 } from "@tcrn/ui-copy-state";
 import { tcrnTokenCss } from "@tcrn/ui-tokens";
-import { localeCopy, shellNavItems, type ShellNavItem } from "./data.js";
+import { chainPartitions, localeCopy, shellNavGroups, shellNavItems, type ShellNavItem } from "./data.js";
+import { ShellHeaderActions } from "./shell-header-actions.js";
 import { Phase3DogfoodReadback } from "./phase3-dogfood-readback.js";
 import { WorkManagementMockups, getWorkMockupPageTitle } from "./work-management-mockups.js";
 
@@ -74,7 +75,8 @@ interface InitialShellState {
   currentPath: string;
 }
 
-type AosRouteId = "cockpit" | "work";
+// Route ids come from the nav model so adding a module cannot forget this union.
+type AosRouteId = (typeof shellNavItems)[number]["id"];
 type VisualInstanceViewportState = "desktop" | "mobile";
 
 interface BrowserVisualState {
@@ -130,6 +132,7 @@ export function AosShellApp({ initialShellState: initialShellStateOverride }: Ao
   const [browserVisualState, setBrowserVisualState] = useState<BrowserVisualState>(() => readBrowserVisualState());
 
   const currentRoute = resolveCurrentRoute(currentPath);
+  const activePartitionId = resolveActivePartition(currentPath);
   const controller = useProductShellController({
     initialCollapsed: initialShellState.collapsed,
     initialTheme: initialShellState.theme,
@@ -299,31 +302,28 @@ export function AosShellApp({ initialShellState: initialShellStateOverride }: Ao
     onLocaleMenuOpenChange: controller.setLocaleMenuOpen,
     onLocaleChange: controller.setLocale
   };
-  const currentRouteLabel = currentRouteId === "work"
-    ? currentPath === "/work/readback"
-      ? copyText(currentCopy, "workReadbackLabel", currentLocale === "zh-CN" ? "工作读回" : "Work readback")
-      : getWorkMockupPageTitle(currentPath, currentLocale)
-    : copyText(currentCopy, "cockpitLabel", currentRoute.label);
-  const navGroups: ProductShellNavGroup[] = [
-    {
-      id: "operations-modules",
-      label: copyText(currentCopy, "navGroupLabel", "Operations modules"),
-      selected: true,
-      items: shellNavItems.map((item) => ({
-        id: item.id,
-        label: item.id === "work"
-          ? copyText(currentCopy, "workLabel", item.label)
-          : copyText(currentCopy, "cockpitLabel", item.label),
-        href: buildRouteHref(item.path, {
-          locale: currentLocale,
-          theme: controller.theme,
-          collapsed: visualInstanceCollapsed
-        }),
-        iconName: item.icon,
-        selected: item.path === currentRoute.path
-      }))
-    }
-  ];
+  const currentRouteLabel = currentPath === "/work/readback"
+    ? copyText(currentCopy, "workReadbackLabel", currentLocale === "zh-CN" ? "工作读回" : "Work readback")
+    : currentPath.startsWith("/work/")
+      ? getWorkMockupPageTitle(currentPath, currentLocale)
+      : currentLocale === "zh-CN" ? currentRoute.labelZh : currentRoute.label;
+  const navGroups: ProductShellNavGroup[] = shellNavGroups.map((group) => ({
+    id: group.id,
+    label: currentLocale === "zh-CN" ? group.labelZh : group.label,
+    sectionLabel: currentLocale === "zh-CN" ? group.labelZh : group.label,
+    selected: group.items.some((item) => item.id === currentRouteId),
+    items: group.items.map((item) => ({
+      id: item.id,
+      label: currentLocale === "zh-CN" ? item.labelZh : item.label,
+      href: buildRouteHref(item.path, {
+        locale: currentLocale,
+        theme: controller.theme,
+        collapsed: visualInstanceCollapsed
+      }),
+      iconName: item.icon,
+      selected: item.id === currentRouteId
+    }))
+  }));
   return (
     <ProductShell
       {...productShellControlProps}
@@ -335,6 +335,18 @@ export function AosShellApp({ initialShellState: initialShellStateOverride }: Ao
       currentLocationLabel={copyText(currentCopy, "currentLocation", "Current location")}
       navLabel={copyText(currentCopy, "navLabel", "AOS operations navigation")}
       navGroups={navGroups}
+      headerActions={
+        <ShellHeaderActions
+          locale={currentLocale}
+          partitions={chainPartitions}
+          activePartitionId={activePartitionId}
+          routeHref={(path) => buildRouteHref(path, {
+            locale: currentLocale,
+            theme: controller.theme,
+            collapsed: visualInstanceCollapsed
+          })}
+        />
+      }
       locales={tcrnLocaleMetadata}
       collapsedStorageKey={sideNavStorageKey}
       contentId="content"
@@ -373,6 +385,7 @@ export function AosShellApp({ initialShellState: initialShellStateOverride }: Ao
       data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search"
       data-product-shell-global-search="not-rendered"
       data-product-shell-search-capability="absent"
+      data-product-shell-header-actions-consumed="workspace-switcher as-of"
       data-product-shell-locale-persistence="url-canonical"
       data-local-wrapper-event-delegation="absent"
       data-local-shell-effect-clones="removed"
@@ -423,8 +436,9 @@ function OwnerQualityContent({
   viewport: VisualInstanceViewportState;
   routeHref: (path: string) => string;
 }) {
-  const isWorkFirst = route === "work";
-  if (isWorkFirst) {
+  const isLegacyWorkRoute = currentPath === "/work" || currentPath.startsWith("/work/");
+  const isWorkFirst = isLegacyWorkRoute || route === "work-items";
+  if (isLegacyWorkRoute) {
     if (currentPath === "/work/readback") {
       return (
         <Phase3DogfoodReadback
@@ -756,11 +770,34 @@ function removeUnsupportedSearchParam(): void {
   window.history.replaceState(window.history.state, "", `${url.pathname}${query ? `?${query}` : ""}${url.hash}`);
 }
 
+/**
+ * Which chain the cockpit is currently scoped to. Project-scoped routes name it
+ * in the path; everywhere else the cockpit is cross-project and shows the
+ * platform governance chain, whose version is the one a global view is read at.
+ */
+function resolveActivePartition(path: string): string {
+  const scoped = chainPartitions.find((partition) => path.startsWith(`/projects/${partition.id}`));
+  return scoped?.id ?? "cross-project";
+}
+
 function resolveCurrentRoute(path: string): ShellNavItem {
-  return shellNavItems.find((item) => item.path === path)
-    ?? shellNavItems.find((item) => item.id === "work" && path.startsWith("/work/"))
-    ?? shellNavItems.find((item) => path.endsWith(`${item.path}.html`))
-    ?? defaultShellRoute;
+  // Longest matching prefix wins, so /work-items/TCRN-CROSS-STORY-105 stays under
+  // its module instead of falling through to the default route.
+  const exact = shellNavItems.find((item) => item.path === path);
+  if (exact) return exact;
+  // Legacy work routes (/work, /work/readback, /work/board …) predate the module
+  // navigation and are asserted by existing receipts. They resolve to the work
+  // items module so the shell highlights something truthful, while their views
+  // continue to render from the path.
+  if (path === "/work" || path.startsWith("/work/")) {
+    const workItems = shellNavItems.find((item) => item.id === "work-items");
+    if (workItems) return workItems;
+  }
+  const prefixed = shellNavItems
+    .filter((item) => path.startsWith(`${item.path}/`))
+    .sort((left, right) => right.path.length - left.path.length)[0];
+  if (prefixed) return prefixed;
+  return shellNavItems.find((item) => path.endsWith(`${item.path}.html`)) ?? defaultShellRoute;
 }
 
 function resolveLocale(value: string | null | undefined): TcrnLocale {
@@ -808,6 +845,35 @@ function escapeHtmlAttribute(value: string): string {
 function createDocumentCss(): string {
   return `
 * { box-sizing: border-box; }
+/* Product-owned header controls. NavItem is styled for the vertical side nav, so
+   the switcher lays its items out horizontally here rather than asking the design
+   system for a second variant of a component that already behaves correctly. */
+.tcrn-aos-workspace-switcher {
+  display: flex;
+  align-items: center;
+  gap: var(--tcrn-space-1);
+  padding: var(--tcrn-space-1);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-pill);
+  background: var(--tcrn-color-surface-muted);
+}
+.tcrn-aos-workspace-switcher .tcrn-nav-item {
+  padding: var(--tcrn-space-1) var(--tcrn-space-2h);
+  border-radius: var(--tcrn-radius-pill);
+  font-size: var(--tcrn-type-size-meta);
+  white-space: nowrap;
+}
+.tcrn-aos-workspace-switcher .tcrn-nav-item[data-selected="true"] {
+  background: var(--tcrn-color-surface-panel);
+  color: var(--tcrn-color-text-primary);
+  font-weight: var(--tcrn-type-weight-medium);
+}
+.tcrn-aos-as-of {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tcrn-space-1h);
+  white-space: nowrap;
+}
 html {
   background: var(--tcrn-color-surface-canvas);
   color: var(--tcrn-color-text-primary);

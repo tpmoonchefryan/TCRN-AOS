@@ -261,30 +261,144 @@ export const localeCopy: Record<TcrnLocale, Record<string, string>> = {
 export interface ShellNavItem {
   id: string;
   label: string;
+  labelZh: string;
   path: string;
   description: string;
-  icon: "home" | "database";
+  /** Must be a name registered in @tcrn/ui-react tcrnIconNames. */
+  icon: "home" | "database" | "layers" | "layout-grid" | "package" | "book-open" | "history" | "shield-check" | "settings" | "check";
   status: "active";
 }
 
-export const shellNavItems: ShellNavItem[] = [
+export interface ShellNavGroupDefinition {
+  id: string;
+  label: string;
+  labelZh: string;
+  items: ShellNavItem[];
+}
+
+export const shellNavGroups: ShellNavGroupDefinition[] = [
   {
-    id: "cockpit",
-    label: "Operations Cockpit",
-    path: "/cockpit",
-    description: "Current rebuild work, gates, evidence, decisions, and owner actions.",
-    icon: "home",
-    status: "active"
+    id: "global",
+    label: "Global",
+    labelZh: "全局",
+    items: [
+      {
+        id: "my-work",
+        label: "My work",
+        labelZh: "我的工作",
+        path: "/my-work",
+        description: "Everything waiting on you, in progress, and finished today across every project.",
+        icon: "home",
+        status: "active"
+      },
+      {
+        id: "inbox",
+        label: "Inbox",
+        labelZh: "收件箱",
+        path: "/inbox",
+        description: "Approval gates, open deliberations, and minutes awaiting a decision.",
+        icon: "check",
+        status: "active"
+      },
+      {
+        id: "dashboard",
+        label: "Dashboard",
+        labelZh: "仪表盘",
+        path: "/dashboard",
+        description: "Cross-project delivery and governance indicators.",
+        icon: "layout-grid",
+        status: "active"
+      }
+    ]
   },
   {
-    id: "work",
-    label: "Work queue",
-    path: "/work",
-    description: "Operational work queue with owners, gates, blockers, and next actions.",
-    icon: "database",
-    status: "active"
+    id: "delivery",
+    label: "Delivery",
+    labelZh: "交付",
+    items: [
+      {
+        id: "projects",
+        label: "Projects",
+        labelZh: "项目",
+        path: "/projects",
+        description: "One project per governed partition, each with its own chain version and as-of.",
+        icon: "layers",
+        status: "active"
+      },
+      {
+        id: "work-items",
+        label: "Work items",
+        labelZh: "工作项",
+        path: "/work-items",
+        description: "Search and manage every ticket; kind is a field, not a separate system.",
+        icon: "database",
+        status: "active"
+      },
+      {
+        id: "release-trains",
+        label: "Release trains",
+        labelZh: "发布列车",
+        path: "/release-trains",
+        description: "Initiatives packaged for release together; no time box.",
+        icon: "package",
+        status: "active"
+      }
+    ]
+  },
+  {
+    id: "knowledge",
+    label: "Knowledge",
+    labelZh: "知识",
+    items: [
+      {
+        id: "knowledge-space",
+        label: "Knowledge space",
+        labelZh: "知识空间",
+        path: "/knowledge",
+        description: "Conventions, curated cards, and minutes — rendered and searchable.",
+        icon: "book-open",
+        status: "active"
+      }
+    ]
+  },
+  {
+    id: "governance",
+    label: "Governance",
+    labelZh: "治理",
+    items: [
+      {
+        id: "deliberations",
+        label: "Deliberations",
+        labelZh: "审议",
+        path: "/deliberations",
+        description: "Position threads and minutes, with execution provenance shown as recorded.",
+        icon: "history",
+        status: "active"
+      },
+      {
+        id: "audit",
+        label: "Audit",
+        labelZh: "审计视图",
+        path: "/audit",
+        description: "Timestamp shape, actor distribution, and chain version checks.",
+        icon: "shield-check",
+        status: "active"
+      },
+      {
+        id: "snapshots",
+        label: "Snapshot health",
+        labelZh: "快照健康",
+        path: "/snapshots",
+        description: "Last verified snapshot per partition and cadence adherence.",
+        icon: "settings",
+        status: "active"
+      }
+    ]
   }
 ];
+
+/** Flattened for route resolution; the shell renders groups, routing needs items. */
+export const shellNavItems: ShellNavItem[] = shellNavGroups.flatMap((group) => group.items);
 
 export interface WorkModuleRow {
   key: string;
@@ -335,3 +449,72 @@ export const forbiddenHumanAiTopbarMarkers = [
   "data-ai-contract-human-topbar-link",
   "AI JSON"
 ] as const;
+
+
+/**
+ * The four governed chains this cockpit reads, with the version and verification
+ * moment each was last projected at.
+ *
+ * These values are a build-time snapshot of the live chains. They exist so the
+ * shell's as-of contract is exercised against real numbers before the ingestion
+ * pipeline (TCRN-AOS-STORY-001/002) can supply them at runtime; once it does,
+ * this constant is replaced by its output rather than edited.
+ */
+export interface ChainPartitionSeed {
+  id: string;
+  label: string;
+  labelZh: string;
+  chainVersion: number;
+  verifiedAt: string;
+  workCount: number;
+  initiatives: number;
+  pendingGates: number;
+  openConferences: number;
+}
+
+export const chainPartitions: ChainPartitionSeed[] = [
+  {
+    id: "cross-project",
+    label: "Platform governance",
+    labelZh: "平台治理",
+    chainVersion: 1254,
+    verifiedAt: "2026-07-26T13:20:00Z",
+    workCount: 177,
+    initiatives: 12,
+    pendingGates: 0,
+    openConferences: 0
+  },
+  {
+    id: "TCRN-Design-System",
+    label: "Design System",
+    labelZh: "设计系统",
+    chainVersion: 924,
+    verifiedAt: "2026-07-26T13:20:00Z",
+    workCount: 153,
+    initiatives: 12,
+    pendingGates: 0,
+    openConferences: 0
+  },
+  {
+    id: "TCRN-TMS",
+    label: "TMS",
+    labelZh: "TMS",
+    chainVersion: 228,
+    verifiedAt: "2026-07-26T13:20:00Z",
+    workCount: 39,
+    initiatives: 2,
+    pendingGates: 1,
+    openConferences: 0
+  },
+  {
+    id: "TCRN-AOS",
+    label: "AOS",
+    labelZh: "AOS",
+    chainVersion: 100,
+    verifiedAt: "2026-07-26T13:20:00Z",
+    workCount: 30,
+    initiatives: 1,
+    pendingGates: 0,
+    openConferences: 0
+  }
+];
