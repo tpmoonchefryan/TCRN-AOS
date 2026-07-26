@@ -32,6 +32,7 @@ import { MyWorkView, ProjectsView, WorkItemsView } from "./cockpit-views.js";
 import { WorkItemDetailView } from "./cockpit-detail.js";
 import { BoardView } from "./cockpit-board.js";
 import { DeliberationsView } from "./cockpit-deliberation.js";
+import { AuditView, ReleaseTrainsView, SnapshotHealthView } from "./cockpit-governance.js";
 import { Phase3DogfoodReadback } from "./phase3-dogfood-readback.js";
 import { WorkManagementMockups, getWorkMockupPageTitle } from "./work-management-mockups.js";
 
@@ -475,6 +476,15 @@ function OwnerQualityContent({
     }
     if (moduleId === "dashboard") {
       return <BoardView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />;
+    }
+    if (moduleId === "release-trains") {
+      return <ReleaseTrainsView locale={locale} routeHref={routeHref} />;
+    }
+    if (moduleId === "audit") {
+      return <AuditView locale={locale} routeHref={routeHref} />;
+    }
+    if (moduleId === "snapshots") {
+      return <SnapshotHealthView locale={locale} routeHref={routeHref} />;
     }
   }
   if (isLegacyWorkRoute) {
