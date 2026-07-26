@@ -16,6 +16,7 @@ import type { TcrnLocale } from "@tcrn/ui-copy-state";
 
 import { cockpitData } from "./cockpit-data.generated.js";
 import { chainStatusBadge, workTitle, type CockpitWork } from "./cockpit-types.js";
+import { DomainPanel } from "./cockpit-domain-panel.js";
 
 /**
  * Work item detail — every field the chain holds, and nothing it does not.
@@ -83,17 +84,6 @@ export function WorkItemDetailView({
     { key: "revision", label: isZh ? "修订" : "Revision", value: `r${item.revision}` }
   ];
 
-  // Operational fields the cockpit will own once the AOS domain lands. They are
-  // listed now, empty and marked, because a field that exists but is unset reads
-  // differently from a field the product does not have — and only one of those
-  // is true here.
-  const operationalFields = [
-    { key: "assignee", label: isZh ? "负责人" : "Assignee", value: isZh ? "未指派" : "unassigned" },
-    { key: "priority", label: isZh ? "优先级" : "Priority", value: "—" },
-    { key: "labels", label: isZh ? "标签" : "Labels", value: "—" },
-    { key: "due", label: isZh ? "截止日" : "Due date", value: "—" }
-  ];
-
   return (
     <div className="tcrn-aos-view" data-cockpit-view="work-item-detail" data-work-item-key={item.externalKey ?? item.id}>
       <Breadcrumb
@@ -130,10 +120,6 @@ export function WorkItemDetailView({
               <Text>{isZh ? "链上字段 · 不可编辑" : "Chain fields, not editable"}</Text>
               <KeyValueList items={chainFields} />
             </div>
-            <div data-field-origin="aos-domain">
-              <Text>{isZh ? "AOS 域字段 · 可编辑（待 STORY-003 落地）" : "AOS domain fields, editable (pending STORY-003)"}</Text>
-              <KeyValueList items={operationalFields} />
-            </div>
           </Surface>
 
           <Surface className="tcrn-aos-band">
@@ -149,6 +135,17 @@ export function WorkItemDetailView({
               ? <WorkList label={isZh ? "子项" : "Children"} rows={children.map((child) => childRow(child, locale, routeHref))} />
               : <EmptyState title={isZh ? "无子项。Subtask 按公约在开工时切分,不预造。" : "No children. Subtasks are cut when work starts, never pre-created."} />}
           </Surface>
+
+          {/* The cockpit's own fields, which are the only editable ones here.
+              They arrived with the domain store; before that this space held a
+              list of empty placeholders marked "pending", which was honest but
+              is now simply the panel. */}
+          <DomainPanel
+            locale={locale}
+            partitionId={item.partitionId}
+            recordId={item.id}
+            externalKey={item.externalKey}
+          />
 
           <ActivityPanel item={item} locale={locale} />
         </div>

@@ -1,4 +1,5 @@
-import { Badge, MachineTokenCell, NavItem } from "@tcrn/ui-react";
+import { useEffect, useRef, useState } from "react";
+import { Badge, MachineTokenCell, SearchableList } from "@tcrn/ui-react";
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
 
 /**
@@ -24,87 +25,170 @@ export interface ChainPartition {
 export interface ShellHeaderActionsProps {
   locale: TcrnLocale;
   partitions: readonly ChainPartition[];
-  activePartitionId: string;
+  /** Null means every project — the honest default for a cross-project route. */
+  activePartitionId: string | null;
   routeHref: (path: string) => string;
+  /**
+   * Routes that can only mean one project — a board has to have columns of
+   * something. There the "all projects" option is offered and refused with its
+   * reason rather than quietly missing.
+   */
+  requiresSingleProject?: boolean;
 }
 
+const ALL = "__all__";
+
 /**
- * Product-owned controls for the shell utility row: which project the cockpit is
- * scoped to, and how fresh that project's data is.
+ * Scope: which project the cockpit is looking at.
  *
- * These live in the shell rather than in page content for the same reason Jira
- * keeps its project picker in the chrome — they apply to every route, and a
- * freshness indicator that scrolls away has stopped being an indicator.
+ * This is the only project control in the product. It used to be a row of one
+ * button per project, which fit four and would not have fit ten — a control
+ * whose width grows with the data it selects from stops working exactly when
+ * that data gets interesting. The button now shows the current scope and the
+ * options live in a panel, so the header costs the same at four projects and at
+ * fifty.
  *
- * The switcher is built from NavItem rather than SegmentedNav: the segmented
- * family (SegmentedNav / ProductSwitcher / ModuleTabs / Breadcrumb) accepts only
- * `{id, label, selected}` and renders buttons with no handler, so it can display
- * a selection but never change one. NavItem extends the anchor attributes and
- * carries `aria-current` and `data-selected` for us.
+ * It lives in the shell rather than in page content for the reason Jira keeps
+ * its project picker in the chrome: it applies to every route, and an indicator
+ * that scrolls away has stopped being an indicator.
  */
 export function ShellHeaderActions({
   locale,
   partitions,
   activePartitionId,
-  routeHref
+  routeHref,
+  requiresSingleProject = false
 }: ShellHeaderActionsProps) {
   const isZh = locale === "zh-CN";
-  const active = partitions.find((partition) => partition.id === activePartitionId) ?? partitions[0];
+  const [open, setOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const active = activePartitionId
+    ? partitions.find((partition) => partition.id === activePartitionId)
+    : undefined;
+
+  // Dismiss on outside click and on Escape. A panel that can only be closed by
+  // choosing something is a trap, and choosing here navigates.
+  useEffect(() => {
+    if (!open || typeof document === "undefined") return;
+    const onPointerDown = (event: MouseEvent) => {
+      if (!wrapperRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
+  const scopeLabel = active
+    ? (isZh ? active.labelZh : active.label)
+    : (isZh ? "全部项目" : "All projects");
 
   return (
-    <>
-      <nav
-        className="tcrn-aos-workspace-switcher"
-        aria-label={isZh ? "项目切换" : "Project switcher"}
-        data-product-control="workspace-switcher"
+    <div className="tcrn-aos-scope" ref={wrapperRef} data-product-control="scope">
+      <button
+        type="button"
+        className="tcrn-aos-scope__trigger"
+        aria-expanded={open}
+        aria-haspopup="true"
+        data-selected={open ? "true" : undefined}
+        data-scope-id={activePartitionId ?? ALL}
+        onClick={() => setOpen(!open)}
       >
-        {partitions.map((partition) => (
-          <NavItem
-            key={partition.id}
-            href={routeHref(`/projects/${partition.id}`)}
-            selected={partition.id === activePartitionId}
-            data-partition-id={partition.id}
-            data-chain-version={partition.chainVersion}
-          >
-            {isZh ? partition.labelZh : partition.label}
-          </NavItem>
-        ))}
-      </nav>
-      {active ? <AsOfIndicator locale={locale} partition={active} /> : null}
-    </>
+        <span className="tcrn-aos-scope__key">{isZh ? "范围" : "Scope"}</span>
+        <strong>{scopeLabel}</strong>
+        <span className="tcrn-aos-scope__caret" aria-hidden="true">▾</span>
+      </button>
+
+      {open ? (
+        <div className="tcrn-aos-scope__panel">
+          <SearchableList
+            label={isZh ? "选择项目" : "Choose a project"}
+            locale={locale}
+            selectedId={activePartitionId ?? ALL}
+            // A threshold rather than an always-on field: a search box over four
+            // options is furniture. The component decides from the count.
+            searchThreshold={8}
+            items={[
+              {
+                id: ALL,
+                label: isZh ? "全部项目" : "All projects",
+                meta: isZh ? `${partitions.length} 条链` : `${partitions.length} chains`,
+                ...(requiresSingleProject ? {} : { href: routeHref("/work-items") }),
+                pinned: true,
+                disabled: requiresSingleProject,
+                disabledReason: isZh
+                  ? "此页面按单个项目呈现,没有跨项目形态"
+                  : "This page renders one project at a time and has no cross-project form"
+              },
+              ...partitions.map((partition) => ({
+                id: partition.id,
+                label: isZh ? partition.labelZh : partition.label,
+                // The chain version travels with the choice: picking a scope and
+                // learning how fresh it is are one question, not two.
+                meta: `v${partition.chainVersion}${partition.stale ? " ⚠" : " ✓"}`,
+                href: routeHref(`/work-items?project=${partition.id}`)
+              }))
+            ]}
+            onSelect={() => setOpen(false)}
+          />
+        </div>
+      ) : null}
+
+      <AsOfIndicator locale={locale} {...(active ? { partition: active } : {})} partitions={partitions} />
+    </div>
   );
 }
 
 /**
- * Chain version plus verification time — never a bare timestamp.
+ * Freshness for whatever the cockpit is currently scoped to.
  *
- * The version is what makes two readings comparable; wall-clock time alone
- * cannot tell a reader whether the projection advanced or merely re-checked.
- * When the projection trails the chain the badge says so instead of rendering a
- * confident number, because a cockpit that hides its own lag is precisely the
- * failure this indicator exists to prevent.
+ * Scoped to one project it names that project's chain version. Scoped to all of
+ * them it says how many chains are in view and whether any is behind, rather
+ * than picking one version to show: the header used to display a single
+ * partition's version beside a list holding four, which stated a freshness the
+ * page did not have.
  */
 export function AsOfIndicator({
   locale,
-  partition
+  partition,
+  partitions
 }: {
   locale: TcrnLocale;
-  partition: ChainPartition;
+  partition?: ChainPartition;
+  partitions: readonly ChainPartition[];
 }) {
   const isZh = locale === "zh-CN";
+  const behind = partitions.filter((entry) => entry.stale);
+  const stale = partition ? Boolean(partition.stale) : behind.length > 0;
+
+  const token = partition
+    ? `v${partition.chainVersion}`
+    : (isZh ? `${partitions.length} 条链` : `${partitions.length} chains`);
+  const title = partition
+    ? (isZh
+      ? `链版本 ${partition.chainVersion} · 投影于 ${partition.verifiedAt} 验证`
+      : `Chain version ${partition.chainVersion}, projection verified ${partition.verifiedAt}`)
+    : partitions
+      .map((entry) => `${isZh ? entry.labelZh : entry.label} v${entry.chainVersion}`)
+      .join(" · ");
+
   return (
     <span
       className="tcrn-aos-as-of"
       data-product-control="as-of"
-      data-chain-version={partition.chainVersion}
-      data-projection-stale={partition.stale ? "true" : "false"}
-      title={isZh
-        ? `链版本 ${partition.chainVersion} · 投影于 ${partition.verifiedAt} 验证`
-        : `Chain version ${partition.chainVersion}, projection verified ${partition.verifiedAt}`}
+      data-chain-version={partition?.chainVersion}
+      data-chain-count={partition ? undefined : partitions.length}
+      data-projection-stale={stale ? "true" : "false"}
+      title={title}
     >
-      <MachineTokenCell token={`v${partition.chainVersion}`} kind="generic" copyable={false} />
-      <Badge tone={partition.stale ? "warning" : "neutral"}>
-        {partition.stale
+      <MachineTokenCell token={token} kind="generic" copyable={false} />
+      <Badge tone={stale ? "warning" : "neutral"}>
+        {stale
           ? (isZh ? "投影落后" : "Projection behind")
           : (isZh ? "已验证" : "Verified")}
       </Badge>

@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "aos.cockpit-service-proof.v1",
+  "ok": true,
+  "boundTo": "127.0.0.1",
+  "steps": [
+    {
+      "name": "health",
+      "status": 200,
+      "chainWriteAvailable": true,
+      "partitions": 4
+    },
+    {
+      "name": "annotation-write",
+      "status": 200,
+      "assignee": "owner:governance",
+      "labels": [
+        "cockpit",
+        "autonomous-batch"
+      ]
+    },
+    {
+      "name": "comment-write",
+      "status": 200,
+      "id": "comment:5b35f5ba-777"
+    },
+    {
+      "name": "relation-write",
+      "status": 200,
+      "relation": "relates_to"
+    },
+    {
+      "name": "domain-readback",
+      "status": 200,
+      "assignee": "owner:governance",
+      "priority": "high",
+      "labels": 2,
+      "comments": 1,
+      "relations": 1
+    },
+    {
+      "name": "chain-illegal-move-refused",
+      "status": 409,
+      "reasonCode": "INVALID_TRANSITION",
+      "refusedByEngine": true
+    },
+    {
+      "name": "domain-export",
+      "status": 200,
+      "annotations": 1
+    }
+  ],
+  "notClaimed": [
+    "the domain store is the cockpit's own commentary and never merges into a chain record",
+    "operator authority pins stay on this machine; the service binds to loopback only",
+    "records created against the live chain here are permanent — the chain is append-only"
+  ]
+}

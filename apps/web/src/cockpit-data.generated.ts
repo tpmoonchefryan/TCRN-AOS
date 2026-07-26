@@ -4,14 +4,14 @@
 import type { CockpitData } from "./cockpit-types.js";
 
 export const cockpitData: CockpitData = {
-  "generatedAt": "2026-07-26T16:11:59Z",
+  "generatedAt": "2026-07-26T19:24:13Z",
   "partitions": [
     {
       "id": "cross-project",
       "label": "Platform governance",
       "labelZh": "平台治理",
-      "chainVersion": 1254,
-      "verifiedAt": "2026-07-26T16:11:59Z",
+      "chainVersion": 1261,
+      "verifiedAt": "2026-07-26T19:24:13Z",
       "readVia": "paginated",
       "attestationFromSequence": null,
       "unavailable": [
@@ -24,8 +24,8 @@ export const cockpitData: CockpitData = {
       "id": "TCRN-Design-System",
       "label": "Design System",
       "labelZh": "设计系统",
-      "chainVersion": 924,
-      "verifiedAt": "2026-07-26T16:11:59Z",
+      "chainVersion": 959,
+      "verifiedAt": "2026-07-26T19:24:13Z",
       "readVia": "paginated",
       "attestationFromSequence": null,
       "unavailable": [
@@ -39,7 +39,7 @@ export const cockpitData: CockpitData = {
       "label": "TMS",
       "labelZh": "TMS",
       "chainVersion": 228,
-      "verifiedAt": "2026-07-26T16:11:59Z",
+      "verifiedAt": "2026-07-26T19:24:13Z",
       "readVia": "export",
       "attestationFromSequence": null,
       "unavailable": []
@@ -48,8 +48,8 @@ export const cockpitData: CockpitData = {
       "id": "TCRN-AOS",
       "label": "AOS",
       "labelZh": "AOS",
-      "chainVersion": 215,
-      "verifiedAt": "2026-07-26T16:11:59Z",
+      "chainVersion": 224,
+      "verifiedAt": "2026-07-26T19:24:13Z",
       "readVia": "export",
       "attestationFromSequence": 62,
       "unavailable": []
@@ -154,6 +154,18 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-AOS",
+      "id": "work:324538e48b1732d764391ef1",
+      "externalKey": "TCRN-AOS-EPIC-008",
+      "kind": "Epic",
+      "status": "planned",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "revision": 2,
+      "scope": "v5.4 过滤面与范围选择器落地。设计已批(Owner 2026-07-27):v5-filters.html(v5.4,三层模型+范围下拉+全量 URL 状态)+v6-selection.html(着墨,规范真值)。三 Story:S025 表头范围选择器 / S026 工作项页三层重构 / S027 着墨消费与清理。**依赖 TCRN-DS-INIT-013(EPIC-029)发包**:S025 消费 SearchableList(DS-S088),S027 消费着墨(DS-S087),故本 Epic 于 DS 侧完成前 blocked-by-design,拆单即止未获执行令。总验收=v5.4 第八节:默认态≤2 行约 96px/每个过滤链接实际点击核对计数(INC-006 教训)/项目控件全站恰一/禁 JS 全可用/URL 完整还原/760-1100px 无叠印/诚实条款不动(逐字匹配命名、未读≠为空横幅、批量流转仪式禁用)。关联 TCRN-AOS-INC-008,落地后随验收关闭。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
       "id": "work:006a8be9fd0cb9da261c6160",
       "externalKey": "TCRN-AOS-INC-001",
       "kind": "Incident",
@@ -242,7 +254,7 @@ export const cockpitData: CockpitData = {
       "status": "done",
       "parentId": "work:e6a70fb7d03f607657d1f13c",
       "revision": 5,
-      "scope": "缺陷:导航承诺三个屏,实际只有两个半。**已修**(data.ts 导航模型 + app.tsx 路由分派 + 新增 cockpit-global.tsx)。现象=/inbox 渲染的是「我的工作」同一个视图(收件箱在设计里是「头号功能」);/dashboard 渲染的是看板,与它自己的描述「跨项目交付与治理指标」不符;/board 根本不存在。修法=收件箱与仪表盘各成一屏,看板移入交付组并可按项目过滤,导航由十项增为十一项。**发现方式值得记**:不是读代码发现的,是把每一屏批量渲染成预览文件后,机器逐个抽 data-cockpit-view 属性做对照表时,发现两个文件名与视图名对不上——**逐屏渲染再逐屏比对,是导航与路由脱节的唯一低成本探针**,人工点击十一个入口不会注意到两个页面长得一样。",
+      "scope": "缺陷:导航承诺三个屏,实际只有两个半。**已修**(data.ts 导航模型 + app.tsx 路由分派 + 新增 cockpit-global.tsx)。现象=/inbox 渲染的是「我的工作」同一个视图(收件��在设计里是「头号功能」);/dashboard 渲染的是看板,与它自己的描述「跨项目交付与治理指标」不符;/board 根本不存在。修法=收件箱与仪表盘各成一屏,看板移入交付组并可按项目过滤,导航由十项增为十一项。**发现方式值得记**:不是读代码发现的,是把每一屏批量渲染成预览文件后,机器逐个抽 data-cockpit-view 属性做对照表时,发现两个文件名与视图名对不上——**逐屏渲染再逐屏比对,是导航与路由脱节的唯一低成本探针**,人工点击十一个入口不会注意到两个页面长得一样。",
       "decidedBy": [],
       "sprintWorkId": null
     },
@@ -253,8 +265,8 @@ export const cockpitData: CockpitData = {
       "kind": "Incident",
       "status": "planned",
       "parentId": "work:e6a70fb7d03f607657d1f13c",
-      "revision": 2,
-      "scope": "Owner 判定(2026-07-26):工作项页过滤面「完全不可容忍,违背基础 UI/UX 设计原则」。判定成立,八条:①三维度全部选项永远铺开(枚举不是过滤,违渐进披露);②六行堆叠约 340px,列表被压到首屏一半以下(违内容优先);③视图/检索/过滤/动作全长成同一种 pill(违视觉层级);④重复控件——「进行中/阻塞」既是视图又是状态 pill,表头切换器与页内项目行管同一件事;⑤选中态只差一根细边框,表头选中 pill 白底压浅灰底;⑥已应用过滤不可单独移除;⑦跨项目页表头宣称「Platform governance·v1254」而列表显示全部四链(范围与内容不符,单链版本冒充四链新鲜度——数据诚实问题不只样式问题);⑧每新增项目/类型永远多一枚 pill(O(n) 膨胀)。**方案 v5 已出待 Owner 复核**:docs/aos-design/v5-filters.html——三层模型(视图=页签 WorkManagementSubnav/条件=一行工具栏 SearchInput+紧凑下拉/已应用=可单独移除标记仅非默认时出现)+表头修语义(增「全部项目」默认选中、切换器与工具栏项目下拉读写同一 ?project=、as-of 拆为四枚逐链版本徽记)。经查 DS 有 Select 与 Popover 可用,无 DS 改动。验收条款对着 INC-006 教训写:每个过滤链接实际点击核对计数、禁 JS 全可用、URL 完整还原。",
+      "revision": 3,
+      "scope": "Owner 判定(2026-07-26):工作项页过滤面「完全不可容忍,违背基础 UI/UX 设计原则」。判定成立,八条(枚举铺开/六行压列表/四层同形/重复控件/选中态弱/不可单独移除/表头范围与内容不符/O(n) 膨胀)+第九条(v5 表头平铺同样不可扩展)。**方案历三轮定稿并获批(2026-07-27)**:v5.4(三层模型:视图=页签/条件=一行工具栏/已应用=可移除标记;范围下拉 O(1) 全站唯一项目控件;全状态住 URL)+v6「着墨」选中语法(双线落账案否决后重设计:墨接管既有结构层,有面着面 6% 墨阶/有框升框墨线,零新增图层;品牌色退出选中)。**落地由 TCRN-AOS-EPIC-008(S025-S027)承载,DS 侧 TCRN-DS-INIT-013(S087-S089)先行发包;两侧完成并按 v5.4 第八节验收后本单关闭。**",
       "decidedBy": [],
       "sprintWorkId": null
     },
@@ -597,6 +609,42 @@ export const cockpitData: CockpitData = {
       "parentId": "work:e6a70fb7d03f607657d1f13c",
       "revision": 5,
       "scope": "收件箱与仪表盘拆屏 + 预览渲染器入库。**已交付**:apps/web/src/cockpit-global.tsx(InboxView + DashboardView)、scripts/render-cockpit-previews.mjs。收件箱成为自己的屏:按义务性质分带(审批门/进行中审议/未决项)而非按项目,并顶置覆盖声明——两条链的纪要未读取,「已清空」只对已读取的链成立。仪表盘=四链指标,每张卡带读取路径徽记与执行者归属徽记;并显式声明「这里没有燃尽图,是设计决定」——发布列车不带时间盒,没有 sprint 结束日就没有可测终点,画出来的曲线在度量不存在的期限。看板移入交付组并可按项目过滤。预览渲染器把 16 屏渲染进 docs/aos-design/preview/,样本记录按属性挑选(要有子项、要有立场线程)而非写死键号,链前进后重跑不会静默渲染出空屏;脚本头写明预览只证 Layout 与文案,客户端行为须对跑起来的构建验证。新增 pnpm cockpit:data / cockpit:previews 两个入口。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:1643aa92bf19dca9922ec7dd",
+      "externalKey": "TCRN-AOS-STORY-025",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:324538e48b1732d764391ef1",
+      "revision": 2,
+      "scope": "表头范围选择器(消费 DS SearchableList,依赖 DS-S088)。按钮只显当前范围+▾,恒定一格 O(1);菜单=「全部项目」置顶,逐项目行内嵌该链版本与验证点,≥8 项自动出检索,列表区滚动;as-of 收敛为单枚(选中单项目=「<项目> vN·快照已验证」,全部=「N 条链·快照已验证」);跨项目页默认全部——范围声明与列表内容永远一致(修 v5 违背清单第 7 条的撒谎);看板等必须单项目的页面「全部」按 DS 惯例禁用并给理由;选择即导航,真链接写 ?project=。**范围为全站唯一项目控件**:工作项页工具栏撤项目下拉(「一个概念一个控件」做到底)。落点=shell-header-actions.tsx。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:f84f96d61eaf90caddf0bc8b",
+      "externalKey": "TCRN-AOS-STORY-026",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:324538e48b1732d764391ef1",
+      "revision": 2,
+      "scope": "工作项页三层重构(v5.4 第二~五节)。①视图页签:六个具名视图(全部/等你决定/进行中/阻塞/已入列车/无范围注解)带实时计数,Subnav 分段轨形态(随 DS-S087);②一行工具栏:SearchInput 包 GET 表单(Enter 无脚本可用)250ms 去抖写 ?q=+类型/状态下拉(基线 DS Select,增强 SearchableList——与范围选择器同一组件不另造方言)+分隔线+命中计数+批量选择右缘;③已应用行:仅非默认态出现,逐条可移除(移除标记=去掉该参数的同页真链接)+重置视图;④全状态住 URL(?view/q/kind/status/selected),范围 ?project= 归表头(S025)。过滤面默认态 ≤2 行约 96px(现行六行 340px 退役)。既有 BatchBar/分栏/预览接线保持。验收=逐链接实际点击核对计数+禁 JS 全部可用+后退还原。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:f3a608f3a5fb3cfa20ad0a05",
+      "externalKey": "TCRN-AOS-STORY-027",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:324538e48b1732d764391ef1",
+      "revision": 2,
+      "scope": "着墨消费与选中样式清理(依赖 DS-S087 发包)。升级 @tcrn/ui-react/@tcrn/ui-tokens 至含着墨版本;删 AOS 侧一切自绘选中样式(picker outline 已于 3f8a9ed 删,余全查:grep 自有 CSS 中 data-selected/aria-current/outline/inset 残留);十一模块视觉走查(我的工作/收件箱/仪表盘/项目/工作项/看板/发布列车/知识空间/审议/审计/快照健康)+中宽度/暗色/reduced-motion 三态;phase3 legacy 收据页(work-management-mockups/phase3-dogfood-readback)按既有收据冻结明示不动。验收=全站选中面与 v6 样机一致,无「轴线+染色+淡底」残留。",
       "decidedBy": [],
       "sprintWorkId": null
     },
@@ -1330,6 +1378,18 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-Design-System",
+      "id": "work:d727bb2ae2c590f8a8641fd6",
+      "externalKey": "TCRN-DS-EPIC-029",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:342cb75349ef10c25939d69e",
+      "revision": 5,
+      "scope": "着墨落地执行组。tokens 新增 --tcrn-selection-fill(text-primary@6%)/--tcrn-selection-fill-hover(@3%),有框族直接用 text-primary。总验收=对照 v6 样机逐面核对;视觉回归基线随改重钉;verify 全门绿;全站(含 Storybook)不得残留「轴线+品牌色染色+淡底」旧样。三 Story:S087 既有组件族换装 / S088 SearchableList 新组件 / S089 Storybook 改消费;两 INC:INC-003 双语法断裂(发现记录)/ INC-004 侧栏复制未消费(发现记录)。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
       "id": "work:33ef36e36a381e135ee5a3b6",
       "externalKey": "TCRN-DS-INC-001",
       "kind": "Incident",
@@ -1352,6 +1412,30 @@ export const cockpitData: CockpitData = {
       "decidedBy": [
         "minutes:aa7045a7440cde1219ceae9b"
       ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:6e1214fdc58e693d7e455e46",
+      "externalKey": "TCRN-DS-INC-003",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:d727bb2ae2c590f8a8641fd6",
+      "revision": 5,
+      "scope": "发现记录:DS 内并存两种选中语法(Owner 2026-07-27 出示线上 Storybook 截图指认,查证成立)。竖向 NavItem=无框+左轴 3px inset+brand 染色+加粗;横向 work 族(Subnav/ViewTabs/QuickFilters)=有框 pill 4px 圆角+底轴 2px inset+边框变灰、不染色不加粗。同为「选中」,视觉 DNA 不同;Storybook 全站基调为线性语法,横向族是唯一盒式族,放入即显异类。DS-STORY-062 只统一了「每朝向一轴」,未统一染色/加粗/框三个自由度。处置=INIT-013「着墨」以单一原则取代双语法(S087 落地);本单在 S087 完成后关闭。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:e64654de0b6c6393fae53fe1",
+      "externalKey": "TCRN-DS-INC-004",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:d727bb2ae2c590f8a8641fd6",
+      "revision": 5,
+      "scope": "发现记录:Storybook 侧栏样式复制未消费。storybook.css 的 .tcrn-bookmark-nav 选中规则逐字节手抄包内 NavItem 语法(inset 3px 0 0+brand+700),不消费包组件或类——今日视觉一致纯属巧合式同步,包侧改样式站点静默落后,即「复制漂移」。这正是平台仪器纪律反对的静默降级的样式版。处置=S089 改为消费;完成后本单关闭。",
+      "decidedBy": [],
       "sprintWorkId": null
     },
     {
@@ -1503,6 +1587,18 @@ export const cockpitData: CockpitData = {
       "parentId": null,
       "revision": 2,
       "scope": "DS 领域家具抽出与通用性门:把为单一产品建的领域家具移出 DS 核心使 DS 回到通用。实测污染面四十个——Work 族十七、Knowledge 族十、Gate 与 Evidence 五、治理词汇八;其消费方是 AOS(自述 Agent Operations System,其 apps/web/src/phase3-dogfood-readback.tsx 实际导入 WorkActivityFeed 与 WorkList 与 WorkPageHeader 与 WorkQuickFilters 与 WorkViewTabs 等)。裁定为抽出而非删除以免打断 DS 唯一活消费者。同时把通用性判据落成词汇门(复用 ui-copy-state 的 forbiddenPositiveClaims 形态)使再次污染可被机器发现,并处置 Storybook 内的产品屏原型(TmsDenseShellDemo 移走前须以通用密集外壳示例顶替其三条视觉签名基线)。AOS 侧迁移属 AOS 工作不在本 Initiative。裁定见 TMS 分区 workspace:f15c5abb6cd777c44453c2c9 的 minutes TCRN-TMS-MIN-008。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:342cb75349ef10c25939d69e",
+      "externalKey": "TCRN-DS-INIT-013",
+      "kind": "Initiative",
+      "status": "done",
+      "parentId": null,
+      "revision": 5,
+      "scope": "「着墨」选中语法全域落地 + 选择组件补全。源=Owner 三轮裁定(2026-07-26/27):①「轴线+品牌色+淡底」判为 AI 模板通式,弃;②「双线落账」案否决(双线与有框 pill 相撞,墨底徽记过重——败在往组件加新图层);③v6「着墨」批准。语法一句话:**选中即着墨,墨接管组件既有的结构层——有面族(导航项/页签/过滤/菜单行)=text-primary@6% 墨阶填充+字重(悬停 3% 半步),有框族(列表卡/有值控件)=边框升墨+字重;不加侧条/下划线/色底**。计数徽记选中时轻反白浮起(panel 底+墨字+细描边);品牌色退出选中专职可操作与焦点;焦点环独立;墨阶取自 text-primary 故暗色自适应。规范真值=平台 docs/aos-design/v6-selection.html(交互样机:分段轨滑动 220ms+prefers-reduced-motion 降级+明暗双主题)。范围=DS 包 + Storybook 站点全部选中面,非仅 AOS。一 Epic 三 Story 两 INC,拆单即止,未获执行令。",
       "decidedBy": [],
       "sprintWorkId": null
     },
@@ -2638,6 +2734,42 @@ export const cockpitData: CockpitData = {
       "decidedBy": [
         "minutes:aa7045a7440cde1219ceae9b"
       ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:5dac8cdeef51647409aefc76",
+      "externalKey": "TCRN-DS-STORY-087",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:d727bb2ae2c590f8a8641fd6",
+      "revision": 5,
+      "scope": "着墨换装既有组件族。①NavItem:弃「左单轴 3px+brand 染色+加粗」→ 墨阶填充+字重(竖向定宽容器保留加粗);②WorkManagementSubnav+WorkViewTabs:形态改**分段轨**(轨=细描边圆角容器,条目无框,着墨滑动 220ms/reduced-motion 静态),弃逐枚描边 pill 与底轴 2px;③WorkQuickFilters+ModuleTabs:可换行组无轨着墨(同语法直接成立);④WorkItemRow[data-selected]:弃「左 3px 单轴+边框变灰」→ 边框升墨+标题字重(单一信号);⑤Select 及有值控件生效态:边框升墨+值字重。横向一律不加粗(防宽度回流);计数徽记选中=panel 底+墨字+细描边浮起。**P5 残余适用性记录:DS-STORY-062「每朝向一种轴」的成立条件(以轴记号表达选中)被「零新增图层」原则取代,该裁定随本 Story 退役,理由留此。**视觉基线重钉;aria-current/data-selected 语义不变;文字对比度不得因选中下降。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:bf6c72c2155edbf5015c164f",
+      "externalKey": "TCRN-DS-STORY-088",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:d727bb2ae2c590f8a8641fd6",
+      "revision": 5,
+      "scope": "SearchableList 新组件(Owner D2-A 已裁,2026-07-27)。它是模式页 selection-list-patterns 既定升级路径的承载体——「大型或远程集合使用搜索列表」写了规格却无组件,此为补全。四态验收=模式页警示条原文:搜索/加载/空状态/键盘状态。API 开放带回调(受控 value/onChange+条目 onSelect),吸取 DS 56 个闭合组件无回调的教训,禁闭合;条目支持前导内容+尾注槽(mono 注记如链版本);支持置顶项与分隔;选项数阈值(≥8)自动出检索框;着墨语法出生即用(选中=墨阶填充,悬停=半步)。Storybook story+契约清单登记+axe 0+视觉门;首个消费方=AOS 表头范围选择器(TCRN-AOS-STORY-025)。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:6d6e495ac2aa6823f9423d65",
+      "externalKey": "TCRN-DS-STORY-089",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:d727bb2ae2c590f8a8641fd6",
+      "revision": 5,
+      "scope": "Storybook 站点外壳改为消费包样式。现状:侧栏 .tcrn-bookmark-nav 的选中样式是 storybook.css 手抄包 NavItem 规则(左轴 3px+brand+700 逐字节照抄)——复制而非消费,包侧演进它静默落后(INC-004 的漂移风险)。改法:侧栏、文档检索行(.tcrn-doc-search-result)及站点全部选中面切换为包类名/包 CSS 或以包 token 组合;着墨落地后全站同语法。验收:grep storybook.css 无手抄选中规则残留;肉眼对照包与站点选中态一致;INC-004 随本 Story 关闭。",
+      "decidedBy": [],
       "sprintWorkId": null
     },
     {
@@ -6724,6 +6856,17 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "cross-project",
+      "id": "conference:9f1f0200e64943e99c9bd1bf",
+      "externalKey": null,
+      "title": "Owner 离席授权批次:AOS 服务化/供权边界/存储/部署/发布六道方向题",
+      "type": "architecture",
+      "status": "closed",
+      "workIds": [
+        "work:b1b2767f8f2a47ca19e4e16f"
+      ]
+    },
+    {
+      "partitionId": "cross-project",
       "id": "conference:9f78ddd68ed76a2795267aee",
       "externalKey": null,
       "title": "STORY-001 产出：8 权威面 × 被锁 verb 矩阵与三处前提修正",
@@ -8370,6 +8513,24 @@ export const cockpitData: CockpitData = {
         "attribution": "recorded"
       }
     ],
+    "work:324538e48b1732d764391ef1": [
+      {
+        "id": "event:7380f16049f04764e32fa401",
+        "sequence": 217,
+        "occurredAt": "2026-07-26T16:51:10Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:06600b19bff86cc392dcb08e",
+        "sequence": 216,
+        "occurredAt": "2026-07-26T16:51:10Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
     "work:006a8be9fd0cb9da261c6160": [
       {
         "id": "event:31065215c8c921ac96c39207",
@@ -8553,6 +8714,14 @@ export const cockpitData: CockpitData = {
       }
     ],
     "work:c2539981e4c4cfe7d803675e": [
+      {
+        "id": "event:8eb683197135ce2fba24169d",
+        "sequence": 224,
+        "occurredAt": "2026-07-26T16:51:10Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
       {
         "id": "event:553e9d68d43db05dc252eb4b",
         "sequence": 215,
@@ -9615,6 +9784,60 @@ export const cockpitData: CockpitData = {
         "id": "event:b41e004909e8db614e49ce99",
         "sequence": 186,
         "occurredAt": "2026-07-26T15:39:18Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:1643aa92bf19dca9922ec7dd": [
+      {
+        "id": "event:bc6e358d45d6fbbf6aa98ed6",
+        "sequence": 219,
+        "occurredAt": "2026-07-26T16:51:10Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:b04676bbe35a6ebfff874791",
+        "sequence": 218,
+        "occurredAt": "2026-07-26T16:51:10Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:f84f96d61eaf90caddf0bc8b": [
+      {
+        "id": "event:2c342334e7a6cfe3dd25a40b",
+        "sequence": 221,
+        "occurredAt": "2026-07-26T16:51:10Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:ce89d702139fd52187e0e17c",
+        "sequence": 220,
+        "occurredAt": "2026-07-26T16:51:10Z",
+        "operation": "work.created",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      }
+    ],
+    "work:f3a608f3a5fb3cfa20ad0a05": [
+      {
+        "id": "event:417967cbbcb5c5e81ebd6e2c",
+        "sequence": 223,
+        "occurredAt": "2026-07-26T16:51:10Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:d1c48d2bde694a1d81480d26",
+        "sequence": 222,
+        "occurredAt": "2026-07-26T16:51:10Z",
         "operation": "work.created",
         "actorId": "agent:fable",
         "attribution": "recorded"

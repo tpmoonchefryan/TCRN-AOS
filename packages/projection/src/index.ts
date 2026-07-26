@@ -32,4 +32,14 @@ export type {
   ProjectedWork
 } from "./types.js";
 export { resolveKeyTable, partitionTokenCandidates, digestOf, WORK_KIND_TOKENS, type KeyNamespace } from "./external-keys.js";
+export {
+  DomainStore,
+  DOMAIN_RELATION_TYPES,
+  type DomainAnnotation,
+  type DomainComment,
+  type DomainPriority,
+  type DomainRelation,
+  type DomainRelationType,
+  type QualifiedRef
+} from "./domain-store.js";
 export { SafeWriteSurface, WriteRefused, CEREMONIAL_WRITES, type WriteContext } from "./write-surface.js";

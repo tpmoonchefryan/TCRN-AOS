@@ -349,6 +349,7 @@ export function AosShellApp({ initialShellState: initialShellStateOverride }: Ao
           locale={currentLocale}
           partitions={chainPartitions}
           activePartitionId={activePartitionId}
+          requiresSingleProject={requiresSingleProject(currentPath)}
           routeHref={(path) => buildRouteHref(path, {
             locale: currentLocale,
             theme: controller.theme,
@@ -863,9 +864,30 @@ function readSearch(path: string): URLSearchParams {
   return new URLSearchParams();
 }
 
-function resolveActivePartition(path: string): string {
+/**
+ * Which project the cockpit is scoped to, or null for all of them.
+ *
+ * It reads the same `?project=` the pages filter on, so the header and the list
+ * can never disagree: they are two views of one value rather than two controls
+ * over the same idea. Null is a real answer — a cross-project route is scoped to
+ * everything, and the header used to claim one partition while the list showed
+ * four, which is a scope statement the page did not honour.
+ */
+function resolveActivePartition(path: string): string | null {
   const scoped = chainPartitions.find((partition) => path.startsWith(`/projects/${partition.id}`));
-  return scoped?.id ?? "cross-project";
+  if (scoped) return scoped.id;
+  const requested = readSearch(path).get("project");
+  return chainPartitions.some((partition) => partition.id === requested) ? requested : null;
+}
+
+/**
+ * Routes that render one project at a time. The board's columns are one
+ * project's work; there is no cross-project form of it, so the scope picker
+ * offers "all projects" disabled with that reason rather than omitting it.
+ */
+function requiresSingleProject(path: string): boolean {
+  const route = path.split("?")[0] ?? path;
+  return route === "/board" || route.startsWith("/board/");
 }
 
 function resolveCurrentRoute(path: string): ShellNavItem {
@@ -933,29 +955,6 @@ function escapeHtmlAttribute(value: string): string {
 function createDocumentCss(): string {
   return `
 * { box-sizing: border-box; }
-/* Product-owned header controls. NavItem is styled for the vertical side nav, so
-   the switcher lays its items out horizontally here rather than asking the design
-   system for a second variant of a component that already behaves correctly. */
-.tcrn-aos-workspace-switcher {
-  display: flex;
-  align-items: center;
-  gap: var(--tcrn-space-1);
-  padding: var(--tcrn-space-1);
-  border: 1px solid var(--tcrn-color-border-subtle);
-  border-radius: var(--tcrn-radius-pill);
-  background: var(--tcrn-color-surface-muted);
-}
-.tcrn-aos-workspace-switcher .tcrn-nav-item {
-  padding: var(--tcrn-space-1) var(--tcrn-space-2h);
-  border-radius: var(--tcrn-radius-pill);
-  font-size: var(--tcrn-type-size-meta);
-  white-space: nowrap;
-}
-.tcrn-aos-workspace-switcher .tcrn-nav-item[data-selected="true"] {
-  background: var(--tcrn-color-surface-panel);
-  color: var(--tcrn-color-text-primary);
-  font-weight: var(--tcrn-type-weight-medium);
-}
 .tcrn-aos-view {
   display: grid;
   gap: var(--tcrn-space-4);
@@ -1212,22 +1211,173 @@ function createDocumentCss(): string {
   display: grid;
   gap: var(--tcrn-space-2h);
 }
-.tcrn-aos-searchbar {
-  display: flex;
-  align-items: center;
-  gap: var(--tcrn-space-2);
-  flex-wrap: wrap;
-}
+/* One row of conditions rather than six rows of enumerated options. */
 .tcrn-aos-toolbar {
   display: flex;
   align-items: center;
   gap: var(--tcrn-space-2);
   flex-wrap: wrap;
 }
+.tcrn-aos-toolbar__rule {
+  inline-size: 1px;
+  block-size: 22px;
+  background: var(--tcrn-color-border-subtle);
+  flex: none;
+}
+.tcrn-aos-toolbar__spacer { flex: 1 1 auto; }
+.tcrn-aos-searchbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1 1 240px;
+  max-inline-size: 26rem;
+  min-inline-size: 0;
+}
+.tcrn-aos-searchbar .tcrn-search-input { inline-size: 100%; }
+/* The honesty note lives in a hover affordance rather than a sentence beside the
+   field: the claim still has to be available, but it is not worth a line of the
+   toolbar on every render. */
+.tcrn-aos-searchbar__note {
+  position: absolute;
+  inset-inline-end: var(--tcrn-space-2);
+  font-size: var(--tcrn-type-size-meta);
+  color: var(--tcrn-color-text-secondary);
+  background: var(--tcrn-color-surface-muted);
+  border-radius: var(--tcrn-radius-control);
+  padding: 2px var(--tcrn-space-1h);
+  cursor: help;
+}
+.tcrn-aos-count {
+  font-size: var(--tcrn-type-size-meta);
+  color: var(--tcrn-color-text-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.tcrn-aos-count strong { color: var(--tcrn-color-text-primary); }
 .tcrn-aos-reset {
   font-size: var(--tcrn-type-size-meta);
   color: var(--tcrn-color-text-secondary);
 }
+
+/* Compact disclosure: current value on the trigger, options in the panel. */
+.tcrn-aos-menu { position: relative; }
+.tcrn-aos-menu__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tcrn-space-1h);
+  min-block-size: 36px;
+  padding: 0 var(--tcrn-space-2h);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-control);
+  background: var(--tcrn-color-surface-panel);
+  cursor: pointer;
+  white-space: nowrap;
+  list-style: none;
+}
+.tcrn-aos-menu__trigger::-webkit-details-marker { display: none; }
+.tcrn-aos-menu__key { color: var(--tcrn-color-text-secondary); }
+.tcrn-aos-menu__caret { color: var(--tcrn-color-text-muted); font-size: var(--tcrn-type-size-meta); }
+/* A dimension with a value in force is a framed control holding a selection, so
+   it says so the way every framed control in the system does: its border. */
+.tcrn-aos-menu[data-set="true"] > .tcrn-aos-menu__trigger {
+  border-color: var(--tcrn-selection-edge);
+}
+.tcrn-aos-menu__panel,
+.tcrn-aos-scope__panel {
+  position: absolute;
+  inset-block-start: calc(100% + var(--tcrn-space-1));
+  inset-inline-start: 0;
+  min-inline-size: 15rem;
+  padding: var(--tcrn-space-1h);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-surface);
+  background: var(--tcrn-color-surface-panel);
+  box-shadow: var(--tcrn-elevation-floating);
+  z-index: var(--tcrn-z-popover);
+}
+
+/* Scope lives in the shell utility row and is the only project control. */
+.tcrn-aos-scope {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-aos-scope__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tcrn-space-1h);
+  min-block-size: 34px;
+  padding: 0 var(--tcrn-space-2h);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-control);
+  background: var(--tcrn-color-surface-panel);
+  color: var(--tcrn-color-text-primary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tcrn-aos-scope__trigger[data-selected="true"] { border-color: var(--tcrn-selection-edge); }
+.tcrn-aos-scope__key { color: var(--tcrn-color-text-secondary); font-size: var(--tcrn-type-size-meta); }
+.tcrn-aos-scope__caret { color: var(--tcrn-color-text-muted); font-size: var(--tcrn-type-size-meta); }
+.tcrn-aos-scope__panel { inset-inline-start: auto; inset-inline-end: 0; min-inline-size: 18rem; }
+
+/* The cockpit's own editable fields, and the discussion beside them. */
+.tcrn-aos-domain-edit {
+  display: grid;
+  gap: var(--tcrn-space-2);
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  align-items: end;
+}
+.tcrn-aos-domain-edit__field {
+  display: grid;
+  gap: var(--tcrn-space-1);
+  font-size: var(--tcrn-type-size-meta);
+  color: var(--tcrn-color-text-secondary);
+  min-inline-size: 0;
+}
+.tcrn-aos-relations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-aos-comments {
+  display: grid;
+  gap: var(--tcrn-space-2h);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tcrn-aos-comments__head {
+  display: flex;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+}
+
+/* Applied conditions: each removable on its own. */
+.tcrn-aos-applied {
+  display: flex;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  flex-wrap: wrap;
+  font-size: var(--tcrn-type-size-meta);
+}
+.tcrn-aos-applied__label { color: var(--tcrn-color-text-secondary); }
+.tcrn-aos-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tcrn-space-1h);
+  padding: 3px var(--tcrn-space-1h) 3px var(--tcrn-space-2h);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-pill);
+  background: var(--tcrn-color-surface-panel);
+  color: var(--tcrn-color-text-primary);
+  text-decoration: none;
+}
+.tcrn-aos-chip:hover { border-color: var(--tcrn-color-border-control); }
+.tcrn-aos-chip__x { color: var(--tcrn-color-text-muted); }
+.tcrn-aos-chip:hover .tcrn-aos-chip__x { color: var(--tcrn-color-text-primary); }
 .tcrn-aos-batchbar {
   display: flex;
   align-items: center;

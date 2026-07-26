@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Badge,
   Button,
@@ -6,13 +6,13 @@ import {
   EmptyState,
   Heading,
   MachineTokenCell,
+  SearchableList,
   SearchInput,
   Surface,
   Text,
   WorkItemRow,
   WorkManagementSubnav,
   WorkPageHeader,
-  WorkQuickFilters,
   WorkSplitView
 } from "@tcrn/ui-react";
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
@@ -71,14 +71,37 @@ export function WorkItemsView({
       project: projectFilter, kind: kindFilter, status: statusFilter, view: viewFilter,
       q: query || undefined, [name]: value
     })}`);
-  const facet = (name: string, value: string | undefined, label: string) => ({
-    id: `${name}:${value ?? "all"}`,
-    label,
-    href: facetHref(name, value),
-    selected: (name === "project" ? projectFilter
-      : name === "kind" ? kindFilter
-        : statusFilter) === value
-  });
+  // What is currently narrowing the list, each removable on its own. The screen
+  // previously offered only a global reset, so taking one condition off meant
+  // rebuilding the rest by hand.
+  const applied = [
+    query ? {
+      id: "q",
+      label: isZh ? "检索" : "Search",
+      value: `“${query}”`,
+      removeHref: facetHref("q", undefined)
+    } : null,
+    kindFilter ? {
+      id: "kind",
+      label: isZh ? "类型" : "Kind",
+      value: kindFilter,
+      removeHref: facetHref("kind", undefined)
+    } : null,
+    statusFilter ? {
+      id: "status",
+      label: isZh ? "状态" : "Status",
+      value: statusFilter,
+      removeHref: facetHref("status", undefined)
+    } : null,
+    viewFilter ? {
+      id: "view",
+      label: isZh ? "视图" : "View",
+      value: viewFilter,
+      removeHref: facetHref("view", undefined)
+    } : null
+    // Project is absent by design: it is the shell's scope, not this page's
+    // filter, and stating it here would say the same thing in two places.
+  ].filter((entry): entry is NonNullable<typeof entry> => entry !== null);
 
   const shown = rows.slice(0, 120);
   const checkedRows = rows.filter((row) => checked.has(row.id));
@@ -92,63 +115,75 @@ export function WorkItemsView({
           : `${rows.length} of ${cockpitData.work.length}; kind is a field, not a separate system.`}
       />
 
+      {/* Three layers, in the order a person uses them: which named view, then
+          which conditions, then what is currently applied. The screen used to
+          lay every option of every dimension out at once — six rows and about
+          340px of chrome above a list of 400 records — which is an enumeration
+          rather than a filter, and it grew by one more chip for every project or
+          kind the platform gained. Project is deliberately absent: it is the
+          shell's scope control, and one idea gets one control. */}
       <Surface className="tcrn-aos-filters">
         <WorkManagementSubnav
           label={isZh ? "保存视图" : "Saved views"}
           items={savedViews(locale, routeHref, viewFilter, statusFilter)}
         />
 
-        <div className="tcrn-aos-searchbar">
-          <SearchInput
-            aria-label={isZh ? "检索工作项" : "Search work items"}
-            placeholder={isZh ? "检索工作项" : "Search work items"}
-            value={query}
-            onChange={(event) => setQuery(event.currentTarget.value)}
-            data-cockpit-search="work-items"
-          />
-          {/* Named for what it does. The projection store carries an FTS5 index
-              with stemming and snippets, but it lives behind the ingestion
-              process and this build has no API to reach it, so what runs here is
-              a literal match over the projected text. Calling that "full-text
-              search" would promise a query language it does not implement. */}
-          <Text>
-            {isZh
-              ? `逐字匹配,多个词须全部命中。命中 ${rows.length} / ${faceted.length} 条。`
-              : `Literal match; every term must hit. ${rows.length} of ${faceted.length} match.`}
-          </Text>
-          {query ? (
-            <Button type="button" variant="quiet" size="sm" onClick={() => setQuery("")}>
-              {isZh ? "清除检索" : "Clear search"}
-            </Button>
-          ) : null}
-        </div>
-
-        <WorkQuickFilters
-          label={isZh ? "项目" : "Project"}
-          filters={[
-            facet("project", undefined, isZh ? "全部项目" : "All projects"),
-            ...cockpitData.partitions.map((partition) =>
-              facet("project", partition.id, partitionLabel(partition, locale)))
-          ]}
-        />
-        <WorkQuickFilters
-          label={isZh ? "类型" : "Kind"}
-          filters={[
-            facet("kind", undefined, isZh ? "全部类型" : "All kinds"),
-            ...["Initiative", "Epic", "Story", "Subtask", "Incident", "Release"]
-              .map((kind) => facet("kind", kind, kind))
-          ]}
-        />
-        <WorkQuickFilters
-          label={isZh ? "状态" : "Status"}
-          filters={[
-            facet("status", undefined, isZh ? "全部状态" : "All statuses"),
-            ...["planned", "ready", "active", "blocked", "done"]
-              .map((status) => facet("status", status, status))
-          ]}
-        />
-
         <div className="tcrn-aos-toolbar">
+          <div className="tcrn-aos-searchbar">
+            <SearchInput
+              aria-label={isZh ? "检索工作项" : "Search work items"}
+              placeholder={isZh ? "检索工作项" : "Search work items"}
+              value={query}
+              onChange={(event) => setQuery(event.currentTarget.value)}
+              data-cockpit-search="work-items"
+            />
+            {/* Named for what it does. The projection store carries an FTS5 index
+                with stemming and snippets, but it lives behind the ingestion
+                process and this build has no API to reach it, so what runs here
+                is a literal match over the projected text. Calling it "full-text
+                search" would promise a query language it does not implement. */}
+            <span
+              className="tcrn-aos-searchbar__note"
+              title={isZh
+                ? "逐字匹配:多个词须全部命中。投影层的 FTS5 索引在摄取进程之后,此构建没有 API 通道,故不称全文搜索。"
+                : "Literal match; every term must hit. The projection's FTS5 index sits behind the ingestion process with no API to reach it, so this is not called full-text search."}
+            >
+              {isZh ? "逐字" : "literal"}
+            </span>
+          </div>
+
+          <FilterMenu
+            label={isZh ? "类型" : "Kind"}
+            allLabel={isZh ? "全部类型" : "All kinds"}
+            value={kindFilter}
+            options={["Initiative", "Epic", "Story", "Subtask", "Incident", "Release"]
+              .map((kind) => ({
+                id: kind,
+                label: kind,
+                count: faceted.filter((row) => row.kind === kind).length
+              }))}
+            hrefFor={(value) => facetHref("kind", value)}
+            locale={locale}
+          />
+          <FilterMenu
+            label={isZh ? "状态" : "Status"}
+            allLabel={isZh ? "全部状态" : "All statuses"}
+            value={statusFilter}
+            options={["planned", "ready", "active", "blocked", "done"].map((status) => ({
+              id: status,
+              label: status,
+              count: faceted.filter((row) => row.status === status).length
+            }))}
+            hrefFor={(value) => facetHref("status", value)}
+            locale={locale}
+          />
+
+          <span className="tcrn-aos-toolbar__rule" aria-hidden="true" />
+          <span className="tcrn-aos-count">
+            <strong>{rows.length}</strong> / {cockpitData.work.length}
+          </span>
+
+          <span className="tcrn-aos-toolbar__spacer" />
           <Button
             type="button"
             variant={batchMode ? "primary" : "secondary"}
@@ -162,12 +197,27 @@ export function WorkItemsView({
           >
             {isZh ? "批量选择" : "Select multiple"}
           </Button>
-          {(projectFilter || kindFilter || statusFilter || viewFilter || query) ? (
+        </div>
+
+        {/* Only when something is applied. A default view owes no chrome, and a
+            reset link with nothing to reset is noise that trains people to
+            ignore the row it sits in. */}
+        {applied.length > 0 ? (
+          <div className="tcrn-aos-applied" data-cockpit-applied="true">
+            <span className="tcrn-aos-applied__label">{isZh ? "已应用" : "Applied"}</span>
+            {applied.map((entry) => (
+              <a key={entry.id} className="tcrn-aos-chip" href={entry.removeHref}
+                data-applied-filter={entry.id}>
+                {entry.label} <b>{entry.value}</b>
+                <span className="tcrn-aos-chip__x" aria-hidden="true">✕</span>
+                <span className="tcrn-sr-only">{isZh ? "移除" : "Remove"}</span>
+              </a>
+            ))}
             <a className="tcrn-aos-reset" href={routeHref("/work-items")}>
               {isZh ? "重置视图" : "Reset view"}
             </a>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </Surface>
 
       {batchMode ? (
@@ -561,4 +611,85 @@ function buildQuery(params: Record<string, string | undefined>): string {
   }
   const text = search.toString();
   return text ? `?${text}` : "";
+}
+
+/**
+ * One filter dimension as a compact control: the current value on the button,
+ * the options behind a disclosure.
+ *
+ * Every option of every dimension used to be on screen at once, which is an
+ * enumeration rather than a filter — it cost about 340px of chrome above the
+ * list, and it grew by one more chip each time the platform gained a kind or a
+ * project. A control that shows its value and hides its options costs the same
+ * at six options and at sixty.
+ *
+ * Options are real links, so the whole screen still works with scripting off:
+ * the disclosure is native `details`, and each option is a URL that reproduces
+ * the same page. Counts come from the already-faceted set, so a reader can see
+ * what a choice will cost before making it.
+ */
+function FilterMenu({
+  label,
+  allLabel,
+  value,
+  options,
+  hrefFor,
+  locale
+}: {
+  label: string;
+  allLabel: string;
+  value: string | undefined;
+  options: ReadonlyArray<{ id: string; label: string; count: number }>;
+  hrefFor: (value: string | undefined) => string;
+  locale: TcrnLocale;
+}) {
+  const ref = useRef<HTMLDetailsElement>(null);
+
+  // Close on outside click and Escape. Native details has neither, and a panel
+  // that only closes by choosing forces a choice to get rid of it.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const close = (event: Event) => {
+      const node = ref.current;
+      if (!node?.open) return;
+      if (event instanceof KeyboardEvent) {
+        if (event.key === "Escape") node.open = false;
+        return;
+      }
+      if (!node.contains(event.target as Node)) node.open = false;
+    };
+    document.addEventListener("mousedown", close);
+    document.addEventListener("keydown", close);
+    return () => {
+      document.removeEventListener("mousedown", close);
+      document.removeEventListener("keydown", close);
+    };
+  }, []);
+
+  return (
+    <details className="tcrn-aos-menu" ref={ref} data-filter-menu={label} data-set={value ? "true" : undefined}>
+      <summary className="tcrn-aos-menu__trigger" data-selected={value ? "true" : undefined}>
+        <span className="tcrn-aos-menu__key">{label}</span>
+        {value ? <b>{value}</b> : <span>{allLabel}</span>}
+        <span className="tcrn-aos-menu__caret" aria-hidden="true">▾</span>
+      </summary>
+      <div className="tcrn-aos-menu__panel">
+        <SearchableList
+          label={label}
+          locale={locale}
+          selectedId={value ?? "__all__"}
+          searchThreshold={12}
+          items={[
+            { id: "__all__", label: allLabel, href: hrefFor(undefined), pinned: true },
+            ...options.map((option) => ({
+              id: option.id,
+              label: option.label,
+              meta: String(option.count),
+              href: hrefFor(option.id)
+            }))
+          ]}
+        />
+      </div>
+    </details>
+  );
 }

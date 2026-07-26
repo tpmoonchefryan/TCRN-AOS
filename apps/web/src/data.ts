@@ -1,4 +1,5 @@
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
+import { cockpitData } from "./cockpit-data.generated.js";
 
 export const frontendShellRoutes = [
   "/",
@@ -486,49 +487,38 @@ export interface ChainPartitionSeed {
   openConferences: number;
 }
 
-export const chainPartitions: ChainPartitionSeed[] = [
-  {
-    id: "cross-project",
-    label: "Platform governance",
-    labelZh: "平台治理",
-    chainVersion: 1254,
-    verifiedAt: "2026-07-26T13:20:00Z",
-    workCount: 177,
-    initiatives: 12,
-    pendingGates: 0,
-    openConferences: 0
-  },
-  {
-    id: "TCRN-Design-System",
-    label: "Design System",
-    labelZh: "设计系统",
-    chainVersion: 924,
-    verifiedAt: "2026-07-26T13:20:00Z",
-    workCount: 153,
-    initiatives: 12,
-    pendingGates: 0,
-    openConferences: 0
-  },
-  {
-    id: "TCRN-TMS",
-    label: "TMS",
-    labelZh: "TMS",
-    chainVersion: 228,
-    verifiedAt: "2026-07-26T13:20:00Z",
-    workCount: 39,
-    initiatives: 2,
-    pendingGates: 1,
-    openConferences: 0
-  },
-  {
-    id: "TCRN-AOS",
-    label: "AOS",
-    labelZh: "AOS",
-    chainVersion: 100,
-    verifiedAt: "2026-07-26T13:20:00Z",
-    workCount: 30,
-    initiatives: 1,
-    pendingGates: 0,
-    openConferences: 0
-  }
-];
+/**
+ * The partitions the shell shows, derived from the projection rather than typed
+ * out here.
+ *
+ * This used to be a hand-written seed carrying its own chain versions, which
+ * drifted the moment the chains moved: the header offered "AOS v100" beside a
+ * list built at v224. A freshness indicator that can be wrong about freshness is
+ * worse than none, so the numbers now come from the same generated projection
+ * the pages render from, and the only thing written by hand is the label.
+ */
+const partitionLabels: Record<string, { label: string; labelZh: string }> = {
+  "cross-project": { label: "Platform governance", labelZh: "平台治理" },
+  "TCRN-Design-System": { label: "Design System", labelZh: "设计系统" },
+  "TCRN-TMS": { label: "TMS", labelZh: "TMS" },
+  "TCRN-AOS": { label: "AOS", labelZh: "AOS" }
+};
+
+export const chainPartitions: ChainPartitionSeed[] = cockpitData.partitions.map((partition) => {
+  const work = cockpitData.work.filter((row) => row.partitionId === partition.id);
+  const named = partitionLabels[partition.id];
+  return {
+    id: partition.id,
+    label: named?.label ?? partition.label,
+    labelZh: named?.labelZh ?? partition.labelZh,
+    chainVersion: partition.chainVersion,
+    verifiedAt: partition.verifiedAt,
+    workCount: work.length,
+    initiatives: work.filter((row) => row.kind === "Initiative").length,
+    pendingGates: cockpitData.gates.filter(
+      (gate) => gate.partitionId === partition.id && gate.status === "pending").length,
+    openConferences: cockpitData.conferences.filter(
+      (conference) => conference.partitionId === partition.id && conference.status === "open").length
+  };
+});
+
