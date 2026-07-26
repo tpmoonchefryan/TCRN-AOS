@@ -23,8 +23,16 @@ export interface CockpitPartition {
    * an unread one look identical, and only one of them is true.
    */
   unavailable: readonly string[];
-  /** Which read path produced this partition; decides what `unavailable` holds. */
-  readVia: "export" | "paginated";
+  /**
+   * Which read path produced this partition; decides what `unavailable` holds.
+   *
+   * `paginated-with-deliberations` is the fallback on a Workflow v0.7.0 engine,
+   * where positions and minutes have their own paginated reads and only the
+   * event log is still out of reach. Naming the three states apart matters:
+   * a chain read this way has real deliberation threads, and one read by the
+   * older fallback has none that anyone could see.
+   */
+  readVia: "export" | "paginated" | "paginated-with-deliberations";
   /**
    * Chain sequence from which writes name who made them, or null if this chain
    * has never enabled actor attestation.

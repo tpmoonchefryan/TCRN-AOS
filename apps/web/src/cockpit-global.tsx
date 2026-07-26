@@ -205,10 +205,16 @@ export function DashboardView({ locale, routeHref }: ViewProps) {
                   {/* How a chain was read decides what this dashboard can even
                       count for it, so it is stated on the card rather than left
                       to be discovered on a screen that comes up empty. */}
-                  <Badge tone={partition.readVia === "export" ? "neutral" : "warning"}>
+                  {/* Three read paths, not two. The middle one reaches
+                      deliberations and only misses the event log, which is a
+                      materially different answer from the old fallback that
+                      could reach neither. */}
+                  <Badge tone={partition.readVia === "paginated" ? "warning" : "neutral"}>
                     {partition.readVia === "export"
                       ? (isZh ? "全量读取" : "read in full")
-                      : (isZh ? "降级分页读取" : "paginated fallback")}
+                      : partition.readVia === "paginated-with-deliberations"
+                        ? (isZh ? "分页读取 · 含审议" : "paginated, with deliberations")
+                        : (isZh ? "降级分页读取" : "paginated fallback")}
                   </Badge>
                   {/* Only a chain read in full can answer this. The fallback
                       path cannot reach the event log at all, so its null means

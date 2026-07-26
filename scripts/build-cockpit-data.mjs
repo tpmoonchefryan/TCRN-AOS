@@ -61,9 +61,15 @@ try {
       // from the read path rather than from empty arrays: the fallback cannot
       // reach these families at all, which is a different fact from a chain
       // that happens to hold none of them.
-      unavailable: projection?.readVia === "paginated"
-        ? ["positions", "minutes", "events"]
-        : []
+      // Which families this read path could not supply. Workflow v0.7.0 gave the
+      // fallback its own paginated reads for positions and minutes, so the
+      // gap narrowed to the event log alone; an older engine still cannot reach
+      // any of the three, and the difference is stated rather than assumed.
+      unavailable: projection?.readVia === "export"
+        ? []
+        : projection?.readVia === "paginated-with-deliberations"
+          ? ["events"]
+          : ["positions", "minutes", "events"]
     });
     process.stderr.write(`  ${source.partitionId} @ v${projection?.chainVersion ?? "?"}\n`);
   }

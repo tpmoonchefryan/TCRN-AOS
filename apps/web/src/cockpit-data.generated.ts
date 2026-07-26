@@ -4,19 +4,17 @@
 import type { CockpitData } from "./cockpit-types.js";
 
 export const cockpitData: CockpitData = {
-  "generatedAt": "2026-07-26T19:36:36Z",
+  "generatedAt": "2026-07-26T21:59:10Z",
   "partitions": [
     {
       "id": "cross-project",
       "label": "Platform governance",
       "labelZh": "平台治理",
-      "chainVersion": 1261,
-      "verifiedAt": "2026-07-26T19:36:36Z",
-      "readVia": "paginated",
+      "chainVersion": 1266,
+      "verifiedAt": "2026-07-26T21:59:10Z",
+      "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
-        "positions",
-        "minutes",
         "events"
       ]
     },
@@ -25,12 +23,10 @@ export const cockpitData: CockpitData = {
       "label": "Design System",
       "labelZh": "设计系统",
       "chainVersion": 959,
-      "verifiedAt": "2026-07-26T19:36:36Z",
-      "readVia": "paginated",
+      "verifiedAt": "2026-07-26T21:59:10Z",
+      "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
-        "positions",
-        "minutes",
         "events"
       ]
     },
@@ -39,7 +35,7 @@ export const cockpitData: CockpitData = {
       "label": "TMS",
       "labelZh": "TMS",
       "chainVersion": 228,
-      "verifiedAt": "2026-07-26T19:36:36Z",
+      "verifiedAt": "2026-07-26T21:59:10Z",
       "readVia": "export",
       "attestationFromSequence": null,
       "unavailable": []
@@ -48,8 +44,8 @@ export const cockpitData: CockpitData = {
       "id": "TCRN-AOS",
       "label": "AOS",
       "labelZh": "AOS",
-      "chainVersion": 228,
-      "verifiedAt": "2026-07-26T19:36:36Z",
+      "chainVersion": 243,
+      "verifiedAt": "2026-07-26T21:59:10Z",
       "readVia": "export",
       "attestationFromSequence": 62,
       "unavailable": []
@@ -157,9 +153,9 @@ export const cockpitData: CockpitData = {
       "id": "work:324538e48b1732d764391ef1",
       "externalKey": "TCRN-AOS-EPIC-008",
       "kind": "Epic",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "revision": 2,
+      "revision": 5,
       "scope": "v5.4 过滤面与范围选择器落地。设计已批(Owner 2026-07-27):v5-filters.html(v5.4,三层模型+范围下拉+全量 URL 状态)+v6-selection.html(着墨,规范真值)。三 Story:S025 表头范围选择器 / S026 工作项页三层重构 / S027 着墨消费与清理。**依赖 TCRN-DS-INIT-013(EPIC-029)发包**:S025 消费 SearchableList(DS-S088),S027 消费着墨(DS-S087),故本 Epic 于 DS 侧完成前 blocked-by-design,拆单即止未获执行令。总验收=v5.4 第八节:默认态≤2 行约 96px/每个过滤链接实际点击核对计数(INC-006 教训)/项目控件全站恰一/禁 JS 全可用/URL 完整还原/760-1100px 无叠印/诚实条款不动(逐字匹配命名、未读≠为空横幅、批量流转仪式禁用)。关联 TCRN-AOS-INC-008,落地后随验收关闭。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -263,9 +259,9 @@ export const cockpitData: CockpitData = {
       "id": "work:c2539981e4c4cfe7d803675e",
       "externalKey": "TCRN-AOS-INC-008",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:e6a70fb7d03f607657d1f13c",
-      "revision": 3,
+      "revision": 6,
       "scope": "Owner 判定(2026-07-26):工作项页过滤面「完全不可容忍,违背基础 UI/UX 设计原则」。判定成立,八条(枚举铺开/六行压列表/四层同形/重复控件/选中态弱/不可单独移除/表头范围与内容不符/O(n) 膨胀)+第九条(v5 表头平铺同样不可扩展)。**方案历三轮定稿并获批(2026-07-27)**:v5.4(三层模型:视图=页签/条件=一行工具栏/已应用=可移除标记;范围下拉 O(1) 全站唯一项目控件;全状态住 URL)+v6「着墨」选中语法(双线落账案否决后重设计:墨接管既有结构层,有面着面 6% 墨阶/有框升框墨线,零新增图层;品牌色退出选中)。**落地由 TCRN-AOS-EPIC-008(S025-S027)承载,DS 侧 TCRN-DS-INIT-013(S087-S089)先行发包;两侧完成并按 v5.4 第八节验收后本单关闭。**",
       "decidedBy": [],
       "sprintWorkId": null
@@ -617,9 +613,9 @@ export const cockpitData: CockpitData = {
       "id": "work:1643aa92bf19dca9922ec7dd",
       "externalKey": "TCRN-AOS-STORY-025",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:324538e48b1732d764391ef1",
-      "revision": 2,
+      "revision": 5,
       "scope": "表头范围选择器(消费 DS SearchableList,依赖 DS-S088)。按钮只显当前范围+▾,恒定一格 O(1);菜单=「全部项目」置顶,逐项目行内嵌该链版本与验证点,≥8 项自动出检索,列表区滚动;as-of 收敛为单枚(选中单项目=「<项目> vN·快照已验证」,全部=「N 条链·快照已验证」);跨项目页默认全部——范围声明与列表内容永远一致(修 v5 违背清单第 7 条的撒谎);看板等必须单项目的页面「全部」按 DS 惯例禁用并给理由;选择即导航,真链接写 ?project=。**范围为全站唯一项目控件**:工作项页工具栏撤项目下拉(「一个概念一个控件」做到底)。落点=shell-header-actions.tsx。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -629,9 +625,9 @@ export const cockpitData: CockpitData = {
       "id": "work:f84f96d61eaf90caddf0bc8b",
       "externalKey": "TCRN-AOS-STORY-026",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:324538e48b1732d764391ef1",
-      "revision": 2,
+      "revision": 5,
       "scope": "工作项页三层重构(v5.4 第二~五节)。①视图页签:六个具名视图(全部/等你决定/进行中/阻塞/已入列车/无范围注解)带实时计数,Subnav 分段轨形态(随 DS-S087);②一行工具栏:SearchInput 包 GET 表单(Enter 无脚本可用)250ms 去抖写 ?q=+类型/状态下拉(基线 DS Select,增强 SearchableList——与范围选择器同一组件不另造方言)+分隔线+命中计数+批量选择右缘;③已应用行:仅非默认态出现,逐条可移除(移除标记=去掉该参数的同页真链接)+重置视图;④全状态住 URL(?view/q/kind/status/selected),范围 ?project= 归表头(S025)。过滤面默认态 ≤2 行约 96px(现行六行 340px 退役)。既有 BatchBar/分栏/预览接线保持。验收=逐链接实际点击核对计数+禁 JS 全部可用+后退还原。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -641,9 +637,9 @@ export const cockpitData: CockpitData = {
       "id": "work:f3a608f3a5fb3cfa20ad0a05",
       "externalKey": "TCRN-AOS-STORY-027",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:324538e48b1732d764391ef1",
-      "revision": 2,
+      "revision": 5,
       "scope": "着墨消费与选中样式清理(依赖 DS-S087 发包)。升级 @tcrn/ui-react/@tcrn/ui-tokens 至含着墨版本;删 AOS 侧一切自绘选中样式(picker outline 已于 3f8a9ed 删,余全查:grep 自有 CSS 中 data-selected/aria-current/outline/inset 残留);十一模块视觉走查(我的工作/收件箱/仪表盘/项目/工作项/看板/发布列车/知识空间/审议/审计/快照健康)+中宽度/暗色/reduced-motion 三态;phase3 legacy 收据页(work-management-mockups/phase3-dogfood-readback)按既有收据冻结明示不动。验收=全站选中面与 v6 样机一致,无「轴线+染色+淡底」残留。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -658,356 +654,6 @@ export const cockpitData: CockpitData = {
       "revision": 6,
       "scope": "写面实证:创建、流转、注解三类安全写面均经受治 MCP 成功;时间戳与 actor 自动补齐;仪式类写面未行使(20260726145319)",
       "decidedBy": [],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:5cb97d1c73bdd9136ea090b1",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:0732b32a4258ece260daf6f8",
-      "revision": 5,
-      "scope": "验证: verify 全门+AOS proof; 签名门预期漂移走 --update-visual-baseline+干净复跑 0 回归",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:70756219b116442394e0b5a0",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:0732b32a4258ece260daf6f8",
-      "revision": 5,
-      "scope": "按裁决表实施: storybook.css 删块与降作用域, 合理样式上移 componentCss",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:928fcfc89f6698e066488ff3",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:0732b32a4258ece260daf6f8",
-      "revision": 5,
-      "scope": "23 个重复选择器逐一 diff,三分类裁决表(纯重复删/docs 增量降作用域/包缺失上移)入 PR 描述",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:5c4de971bd339700ae8b4c5e",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:309b18f0b2a7d8948d9f891c",
-      "revision": 5,
-      "scope": "键盘可达性: 每控件 Tab 可达+focus ring 可见, 读 computed outline 实测; 态验证用 cssRules 契约级证明",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:ca7216503269558259ef1bb0",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:309b18f0b2a7d8948d9f891c",
-      "revision": 5,
-      "scope": "12 控件×(hover/focus-visible/active)矩阵表入 PR; 缺失态按既有语言补齐(shell :active 从 0 补全)",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:9d271a359d9c02a9d760db64",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:4a1f261cd6da820dd1f6b721",
-      "revision": 5,
-      "scope": "shell 两文件 34 处字面量替换; 10px 那 1 处升 11px 或删除",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:b3017f1151382b3e30127d8c",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:4a1f261cd6da820dd1f6b721",
-      "revision": 5,
-      "scope": "componentCss 内部 12px×10/11px×3 归 token; 光学对齐例外行尾标 /* type-scale-exempt: 原因 */",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:ec453876a77ec134bdc2f0ca",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:4a1f261cd6da820dd1f6b721",
-      "revision": 5,
-      "scope": "盘点现有 type token 档位, 制定映射表贴 PR; 档位不够先增 token 不许新字面量",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:0732b32a4258ece260daf6f8",
-      "externalKey": null,
-      "kind": "Epic",
-      "status": "done",
-      "parentId": "work:528ab3c68e7bdcd4d265333c",
-      "revision": 5,
-      "scope": "handoff §2 样式表分层收敛(先行,阻塞 E2-E4): storybook.css 与包 componentCss 的 23 个重复选择器归零",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:309b18f0b2a7d8948d9f891c",
-      "externalKey": null,
-      "kind": "Epic",
-      "status": "done",
-      "parentId": "work:528ab3c68e7bdcd4d265333c",
-      "revision": 5,
-      "scope": "handoff §6 交互态矩阵补齐: 12 个 shell 控件三态齐备, 语言取既有家族不发明",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:4a1f261cd6da820dd1f6b721",
-      "externalKey": null,
-      "kind": "Epic",
-      "status": "done",
-      "parentId": "work:528ab3c68e7bdcd4d265333c",
-      "revision": 5,
-      "scope": "handoff §4 字号刻度统一: 全部字号走 --tcrn-type-size-* 刻度, 消灭 10px",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:6a9e3567f83e35fbf4abdf43",
-      "externalKey": null,
-      "kind": "Epic",
-      "status": "done",
-      "parentId": "work:528ab3c68e7bdcd4d265333c",
-      "revision": 5,
-      "scope": "handoff §7 暗色奇偶校验: 暗色与亮色同等完成度, INIT-005 新增面实测过关",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:89aab893d84a35f6826a01b4",
-      "externalKey": null,
-      "kind": "Epic",
-      "status": "done",
-      "parentId": "work:528ab3c68e7bdcd4d265333c",
-      "revision": 5,
-      "scope": "handoff §3 色彩 token 化收尾: E1 后 shell 两文件残余颜色字面量清零(token 定义处除外)",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:bfb5d2e894aabb6d02223aab",
-      "externalKey": null,
-      "kind": "Epic",
-      "status": "done",
-      "parentId": "work:528ab3c68e7bdcd4d265333c",
-      "revision": 5,
-      "scope": "handoff §5 间距与圆角刻度: 间距归 --tcrn-space-*, 圆角层级成文并 token 化",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:fb599489817176b78dcb712d",
-      "externalKey": null,
-      "kind": "Epic",
-      "status": "done",
-      "parentId": "work:528ab3c68e7bdcd4d265333c",
-      "revision": 5,
-      "scope": "handoff §8 风格门(收官): 5 检测器入 shell-fidelity-proof, 双向验证禁假门",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:1496fed1d6ce8b5fe9bc9658",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:6a9e3567f83e35fbf4abdf43",
-      "revision": 5,
-      "scope": "五页 dark 截图存证入 PR; 复查 text-muted/secondary 的 dark 值(MIN-015 的 3.35:1 教训)",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:420cf833b8d0c12c2c3bddb9",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:6a9e3567f83e35fbf4abdf43",
-      "revision": 5,
-      "scope": "?theme=dark 五页实测: 图标轨/指示条/chips/chevron/EvidenceStrip/斑马纹; 翻转失效优先修 token 映射",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:819f1c4061d312b1cb70b9bd",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:6a9e3567f83e35fbf4abdf43",
-      "revision": 5,
-      "scope": "proof 扩展: runAxe 增加 dark 跑道, 违规计入 axeViolationCount; 对比度 4.5:1 同 light",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:76d89240c9db8267a6ab5934",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:89aab893d84a35f6826a01b4",
-      "revision": 5,
-      "scope": "rgba 阴影收敛为集中声明的共享变量; color-mix(token 衍生)合法保留",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:e49fa29c6492a41df86a9ad0",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:89aab893d84a35f6826a01b4",
-      "revision": 5,
-      "scope": "残余 hex 逐个映射 --tcrn-color-*; 无对应者在 componentCss :root 增 token(light+dark 双态)再引用",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:5ac03fbbaccbfdaf765f705c",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:bfb5d2e894aabb6d02223aab",
-      "revision": 5,
-      "scope": "圆角层级成文 docs/style-scale.md(导航=0/控件=control/卡=surface/面板=panel/徽章=pill)",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:71641c0c5ba968166a294a81",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:bfb5d2e894aabb6d02223aab",
-      "revision": 5,
-      "scope": "999px×15 全部→var(--tcrn-radius-pill); componentCss 裸 6px 与 --tcrn-state-chip-radius 归并裁决",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:8a2fd6031aff8651cbcf37b1",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:bfb5d2e894aabb6d02223aab",
-      "revision": 5,
-      "scope": "间距映射就近归档; 奇数档 7/5/3px 逐一裁决(设计判断非机械替换), 选择及理由列 PR",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:23adcd77d6358400b3eca65a",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:fb599489817176b78dcb712d",
-      "revision": 5,
-      "scope": "逐检测器注入违规跑红+还原跑绿, 两次结果入 PR; tokens:proof 链已含无需另挂; 全量 verify 收官",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
-      "sprintWorkId": null
-    },
-    {
-      "partitionId": "TCRN-Design-System",
-      "id": "work:d6fb1979b47a6afec7e64e2b",
-      "externalKey": null,
-      "kind": "Story",
-      "status": "done",
-      "parentId": "work:fb599489817176b78dcb712d",
-      "revision": 5,
-      "scope": "五检测器实现: hex 禁令/字号刻度门(认 exempt 标记)/间距刻度门(认 style-scale.md 档位)/999px 禁令/重复选择器门(白名单豁免 sr-only 等)",
-      "decidedBy": [
-        "minutes:63d7d41d085f2d77a6c2285b"
-      ],
       "sprintWorkId": null
     },
     {
@@ -1509,6 +1155,356 @@ export const cockpitData: CockpitData = {
       "scope": "handoff=docs/2026-07-22-storybook-style-unification-handoff.md (incl. §0.5 pre-decisions); execution=opus-4.8; status=planned-do-not-execute-until-owner-fires; epics=TCRN-DS-INIT-006-E1..E7 on chain, all planned; pre-decisions=CONF-020/MIN-020",
       "decidedBy": [
         "minutes:d43fded12d8c82a18b99f041"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:0732b32a4258ece260daf6f8",
+      "externalKey": "TCRN-DS-INIT-006-E1",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:528ab3c68e7bdcd4d265333c",
+      "revision": 5,
+      "scope": "handoff §2 样式表分层收敛(先行,阻塞 E2-E4): storybook.css 与包 componentCss 的 23 个重复选择器归零",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:928fcfc89f6698e066488ff3",
+      "externalKey": "TCRN-DS-INIT-006-E1-S1",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:0732b32a4258ece260daf6f8",
+      "revision": 5,
+      "scope": "23 个重复选择器逐一 diff,三分类裁决表(纯重复删/docs 增量降作用域/包缺失上移)入 PR 描述",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:70756219b116442394e0b5a0",
+      "externalKey": "TCRN-DS-INIT-006-E1-S2",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:0732b32a4258ece260daf6f8",
+      "revision": 5,
+      "scope": "按裁决表实施: storybook.css 删块与降作用域, 合理样式上移 componentCss",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:5cb97d1c73bdd9136ea090b1",
+      "externalKey": "TCRN-DS-INIT-006-E1-S3",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:0732b32a4258ece260daf6f8",
+      "revision": 5,
+      "scope": "验证: verify 全门+AOS proof; 签名门预期漂移走 --update-visual-baseline+干净复跑 0 回归",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:89aab893d84a35f6826a01b4",
+      "externalKey": "TCRN-DS-INIT-006-E2",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:528ab3c68e7bdcd4d265333c",
+      "revision": 5,
+      "scope": "handoff §3 色彩 token 化收尾: E1 后 shell 两文件残余颜色字面量清零(token 定义处除外)",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:e49fa29c6492a41df86a9ad0",
+      "externalKey": "TCRN-DS-INIT-006-E2-S1",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:89aab893d84a35f6826a01b4",
+      "revision": 5,
+      "scope": "残余 hex 逐个映射 --tcrn-color-*; 无对应者在 componentCss :root 增 token(light+dark 双态)再引用",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:76d89240c9db8267a6ab5934",
+      "externalKey": "TCRN-DS-INIT-006-E2-S2",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:89aab893d84a35f6826a01b4",
+      "revision": 5,
+      "scope": "rgba 阴影收敛为集中声明的共享变量; color-mix(token 衍生)合法保留",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:4a1f261cd6da820dd1f6b721",
+      "externalKey": "TCRN-DS-INIT-006-E3",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:528ab3c68e7bdcd4d265333c",
+      "revision": 5,
+      "scope": "handoff §4 字号刻度统一: 全部字号走 --tcrn-type-size-* 刻度, 消灭 10px",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:ec453876a77ec134bdc2f0ca",
+      "externalKey": "TCRN-DS-INIT-006-E3-S1",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:4a1f261cd6da820dd1f6b721",
+      "revision": 5,
+      "scope": "盘点现有 type token 档位, 制定映射表贴 PR; 档位不够先增 token 不许新字面量",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:9d271a359d9c02a9d760db64",
+      "externalKey": "TCRN-DS-INIT-006-E3-S2",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:4a1f261cd6da820dd1f6b721",
+      "revision": 5,
+      "scope": "shell 两文件 34 处字面量替换; 10px 那 1 处升 11px 或删除",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:b3017f1151382b3e30127d8c",
+      "externalKey": "TCRN-DS-INIT-006-E3-S3",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:4a1f261cd6da820dd1f6b721",
+      "revision": 5,
+      "scope": "componentCss 内部 12px×10/11px×3 归 token; 光学对齐例外行尾标 /* type-scale-exempt: 原因 */",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:bfb5d2e894aabb6d02223aab",
+      "externalKey": "TCRN-DS-INIT-006-E4",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:528ab3c68e7bdcd4d265333c",
+      "revision": 5,
+      "scope": "handoff §5 间距与圆角刻度: 间距归 --tcrn-space-*, 圆角层级成文并 token 化",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:8a2fd6031aff8651cbcf37b1",
+      "externalKey": "TCRN-DS-INIT-006-E4-S1",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:bfb5d2e894aabb6d02223aab",
+      "revision": 5,
+      "scope": "间距映射就近归档; 奇数档 7/5/3px 逐一裁决(设计判断非机械替换), 选择及理由列 PR",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:71641c0c5ba968166a294a81",
+      "externalKey": "TCRN-DS-INIT-006-E4-S2",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:bfb5d2e894aabb6d02223aab",
+      "revision": 5,
+      "scope": "999px×15 全部→var(--tcrn-radius-pill); componentCss 裸 6px 与 --tcrn-state-chip-radius 归并裁决",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:5ac03fbbaccbfdaf765f705c",
+      "externalKey": "TCRN-DS-INIT-006-E4-S3",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:bfb5d2e894aabb6d02223aab",
+      "revision": 5,
+      "scope": "圆角层级成文 docs/style-scale.md(导航=0/控件=control/卡=surface/面板=panel/徽章=pill)",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:309b18f0b2a7d8948d9f891c",
+      "externalKey": "TCRN-DS-INIT-006-E5",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:528ab3c68e7bdcd4d265333c",
+      "revision": 5,
+      "scope": "handoff §6 交互态矩阵补齐: 12 个 shell 控件三态齐备, 语言取既有家族不发明",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:ca7216503269558259ef1bb0",
+      "externalKey": "TCRN-DS-INIT-006-E5-S1",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:309b18f0b2a7d8948d9f891c",
+      "revision": 5,
+      "scope": "12 控件×(hover/focus-visible/active)矩阵表入 PR; 缺失态按既有语言补齐(shell :active 从 0 补全)",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:5c4de971bd339700ae8b4c5e",
+      "externalKey": "TCRN-DS-INIT-006-E5-S2",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:309b18f0b2a7d8948d9f891c",
+      "revision": 5,
+      "scope": "键盘可达性: 每控件 Tab 可达+focus ring 可见, 读 computed outline 实测; 态验证用 cssRules 契约级证明",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:6a9e3567f83e35fbf4abdf43",
+      "externalKey": "TCRN-DS-INIT-006-E6",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:528ab3c68e7bdcd4d265333c",
+      "revision": 5,
+      "scope": "handoff §7 暗色奇偶校验: 暗色与亮色同等完成度, INIT-005 新增面实测过关",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:420cf833b8d0c12c2c3bddb9",
+      "externalKey": "TCRN-DS-INIT-006-E6-S1",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:6a9e3567f83e35fbf4abdf43",
+      "revision": 5,
+      "scope": "?theme=dark 五页实测: 图标轨/指示条/chips/chevron/EvidenceStrip/斑马纹; 翻转失效优先修 token 映射",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:819f1c4061d312b1cb70b9bd",
+      "externalKey": "TCRN-DS-INIT-006-E6-S2",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:6a9e3567f83e35fbf4abdf43",
+      "revision": 5,
+      "scope": "proof 扩展: runAxe 增加 dark 跑道, 违规计入 axeViolationCount; 对比度 4.5:1 同 light",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:1496fed1d6ce8b5fe9bc9658",
+      "externalKey": "TCRN-DS-INIT-006-E6-S3",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:6a9e3567f83e35fbf4abdf43",
+      "revision": 5,
+      "scope": "五页 dark 截图存证入 PR; 复查 text-muted/secondary 的 dark 值(MIN-015 的 3.35:1 教训)",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:fb599489817176b78dcb712d",
+      "externalKey": "TCRN-DS-INIT-006-E7",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:528ab3c68e7bdcd4d265333c",
+      "revision": 5,
+      "scope": "handoff §8 风格门(收官): 5 检测器入 shell-fidelity-proof, 双向验证禁假门",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:d6fb1979b47a6afec7e64e2b",
+      "externalKey": "TCRN-DS-INIT-006-E7-S1",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:fb599489817176b78dcb712d",
+      "revision": 5,
+      "scope": "五检测器实现: hex 禁令/字号刻度门(认 exempt 标记)/间距刻度门(认 style-scale.md 档位)/999px 禁令/重复选择器门(白名单豁免 sr-only 等)",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:23adcd77d6358400b3eca65a",
+      "externalKey": "TCRN-DS-INIT-006-E7-S2",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:fb599489817176b78dcb712d",
+      "revision": 5,
+      "scope": "逐检测器注入违规跑红+还原跑绿, 两次结果入 PR; tokens:proof 链已含无需另挂; 全量 verify 收官",
+      "decidedBy": [
+        "minutes:63d7d41d085f2d77a6c2285b"
       ],
       "sprintWorkId": null
     },
@@ -4215,6 +4211,18 @@ export const cockpitData: CockpitData = {
       "decidedBy": [
         "minutes:0a8df40ebda0b7dfc966937c"
       ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:c38fc08f5ce97961d42318f9",
+      "externalKey": "TCRN-CROSS-INIT-013",
+      "kind": "Initiative",
+      "status": "done",
+      "parentId": null,
+      "revision": 5,
+      "scope": "W 与 helper 的 AOS 集成。**已交付并发布(2026-07-27)**。授权=Owner 离席全权令目标三,方向裁定见 MIN-052。**W v0.7.0**(tag db336c65…,main 2e6cfe30…):补齐 AOS 提的两条读面缺口——work-list 摘要带 externalKey(此前只有 export 带键而 export 拒超 1MiB,平台四链中两条已超,消费方被迫用暴力摘要匹配反查键号,401 条中 25 条永久无名);新增 conference-position-list 与 conference-minutes-list 两个工作区级分页读(此前立场与纪要只能经 export 取,超限链上「十五条立场的审议」与「零立场的审议」渲染完全相同)。实测:cross 链 export 仍返 INPUT_OVERSIZED,而 position-list 返 140 条可分页、work-list 返真键号。**helper candidate.29**(锚 43f6d441…):重钉 v0.7.0 + 新增 references/aos-integration.md 一份载荷,答两个安装期必现问题(已部署 AOS→用回环健康探测而非提问,因为多数人没有 AOS 而提问会暗示不存在的依赖;纯本地转 AOS→链不搬家,那是心理上的迁移不是事实上的迁移,真正的变化是多出一份不可重建的珍贵存储)。三道门各自抓到一次:git ls-files 与目录遍历不一致致 IDENTITY_MISMATCH、闭合载荷清单拒未登记文件、源归档须最后建。",
+      "decidedBy": [],
       "sprintWorkId": null
     },
     {
@@ -7214,6 +7222,195 @@ export const cockpitData: CockpitData = {
     },
     {
       "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:3f0fcbfb8ce0c4e593e71c66",
+      "externalKey": null,
+      "title": "立 INIT-007 单 INIT 闭合审计全缺口;5 Epic/15 Story 扁平键;收官门唯一必停;决策 ledger 三栏落定",
+      "detail": "1 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:45f7ae98457d1f683d368700",
+      "externalKey": null,
+      "title": "Owner 授权关闭 INIT-008 收官门；17/17 Story 交付且 pnpm verify 全绿；发布另行确认",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:4716b82433e56695d1b5f026",
+      "externalKey": null,
+      "title": "立 INIT-008 单 INIT 解决内容治理审计全部发现;5 Epic/17 Story 扁平键;八裁定点按推荐默认;收官门唯一必停",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:aa7045a7440cde1219ceae9b",
+      "externalKey": null,
+      "title": "Owner 选择方案 B。INIT-010 的 5 Epic 与 19 Story 保留历史 done 事件，但其完成声明没有当前宿主或 origin 的 landed commit/digest 支撑，统一补记为不可作为已验证完成依赖；INC-002 在更正落链后关闭。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:e1df8bcdf19949489fabee7d",
+      "externalKey": null,
+      "title": "立 TCRN-DS-INIT-009：Storybook 展示忠实性清查与交互样式现代化；先审计后拆单",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:031546d33cac5b4541d1cd0f",
+      "externalKey": null,
+      "title": "work-annotate（Scope-on-record）实现完成并验证绿：核心加式操作 work.annotated（非 work.updated，因迁移表无自环）+ 回放守卫防夹带 + CLI 动词 + work-show advisory 读面；6 新 core 测+catalog 金样+全套 584 pass（6 offline 仅裸跑环境）+ 五门绿 + scratch CLI 端到端自证。安全裁定：work.annotated 是新操作，据 WSD-1 会使活链对更旧二进制不可读，故活链 EPIC-005 dogfood 与 skill 成文延后至发布+升级后；scratch e2e 代证。发布属对外发布留 Owner。",
+      "detail": "2 open of 3 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:29603053f5bcf6cb55f83492",
+      "externalKey": null,
+      "title": "E05『链上 advisory』定形。忠告正文已落地并全译（README×5 第243行，遵 AC-N6按轮报/AC-N7带缓解/AC-N8不设门＋§5诚实边界）。耦合裁定＝不并入 chain-migration：OD-C2 已裁选项(1)只忠告不阻断不重构，增量 materialize 属独立后续纲领、非 E05 范围、既有裁定支撑无需 Owner 停。读源发现真缺口＝被引原始样本 docs/verification/2026-07-20-event-chain-ceiling-samples.json 在 W 悬空（7处引用：README×5＋CHANGELOG＋0.1.0发版记；文件仅存平台端，62KB/2000样本/拟合34.66+0.14598n/阈6613 与忠告自洽）。E05 交付物＝落地该证据入 W docs/verification 使引用自洽；发布传播属对外发布留待 Owner。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:38297e18040e1a5737a99f46",
+      "externalKey": null,
+      "title": "S026 三结论:①S030=清库重种(disposable 设计许可,先删目录再 --acknowledge-disposable)②SessionStart 携知识行排除(预算满+知识是拉取非推送,走 S029 按需 query 教学)③【前提翻转】实测真实卡片 8/12/16 张=27/40/54% 全在 60% 线内→引擎修复(EPIC-007)非激活阻断,降级为可选余量优化,S028/S029 与激活解耦。呈 Owner 一个引擎岔路。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:49ae55f57d602be7502ffe76",
+      "externalKey": null,
+      "title": "执行期实证证伪 STORY-021 前提（悬空父早被 else-if+回放拒，非 fail-open）：021 缩为回归测试；022 删已钉死的排序项只留 CLI 白名单+测试；父语义荐从恒 parentless 改 parent-optional（安全论据已证伪，found-in 原生，零引擎改动，Owner 可驳）。教训⑫：给 persona 的事实必须完整读源。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:51bfdfdbdc67922b4a52e29b",
+      "externalKey": null,
+      "title": "DS 线程复查三发现处置完毕：Incident kind 操作面缺口登记为 INIT-004（planned，advisory 公约首用）；candidate.21 notes 勘误已发（锚行完好）；DS 快照补至 v254。教学两条入 candidate.23。根类教训：发布声明必须对应载荷字节。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:729c794de85503538c3be1d6",
+      "externalKey": null,
+      "title": "INIT-005 定形:四 Epic(引擎修复/策展公约/发布列车/内容启动)十一 Story(S023-S033);验收五判据入 Verity 立场;决策清单三分类共 7 项——OWNER-NOW 3(1 已裁 2 待批)/CONDITIONAL 2/AGENT 2;时序 S026→S027→S028→S029→S030→S031/032→S033",
+      "detail": "2 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:79975d0e36983467b5b5d79c",
+      "externalKey": null,
+      "title": "INIT-004 分解裁定（两 persona 四问全收敛+Mara 合成）：仅开 Incident；恒 parentless 校验器强制；图加固通用化先行（8 kind 全覆盖、双侧 fail-closed）；树收两单 EPIC-006→STORY-021/022；发行随 W 列车；无门；奉 Owner 令只拆不做全树 planned；职责以 advisory 入记录。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:9e2ae969f6f716ba2ee6f2a8",
+      "externalKey": null,
+      "title": "persona 署名公约（Owner 裁定）。立场 actor-id 记角色（persona）非模型名。两级：事件 --actor=执笔者/驱动会话，立场 --actor-id=persona id。引擎零改动（assertActorId 的 ACTOR_PREFIXES 含 profile:，直测 profile:tcrn-minerva-v1 ACCEPT）。8 persona 分工（core-reference-personas.ts）：Arturo编排/Ilya实现/Janus验收/Mara产品/Minerva架构/Mneme知识/Sable安全/Verity验证；争议按 mandate 冲突选派 fresh-context。立场首行披露执行形态（dispatched subagent vs main-thread synthesis），诚实边界：披露是声明非证明。本会议自我 dogfood（Minerva 署名立场经引擎接受）。动因：DS 链 21 立场零扇出=单视角自陈冒充审议。历史 append-only 不改，向前生效，载荷改动随 candidate.23。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:b00a1a64ca020da57c7246cf",
+      "externalKey": null,
+      "title": "E05 真开工裁定：Owner 选 (C) 重塑——把 E05 指向价值更清的 advisory 面，否决 (A) 字面搬迁触发散文与 (B) 暂缓。读源坐实并随裁定生效：迁链耦合为空（`WORKSPACE_STORAGE_VERSION=1` 钉死；WSD-1 新词汇走加式事件操作不升版本；非绑定字段＝`required:false` extensions，`validateExtensionMap` 只拒 required:true 且未注册者，故任意 protocol-id 键免注册/免新操作/免版本升/向后兼容，先例 gate-evidence/gate-identity:decision），decomp 待裁的耦合问题当场消解。schema 今日即支持 required:false 广告字段，唯缺写入面——work/project 动词均无 extensions/advisory 旗标（仅 gate 经证据/身份转换特例写过 extensions）。故重塑目标落在『为 work/project 记录开一个受治的非绑定 advisory 写入面』这一有界缺口，具体目标与内容（荐：权威 scope/intent 行＋decided-by 回链治理纪要，由本会话 label≠positions 事故 dogfood）与分解留后续设计会议，Owner 从荐选中定。",
+      "detail": "1 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:b017306eb2765f373ece667d",
+      "externalKey": null,
+      "title": "定 work-annotate 非绑定 advisory 写入面契约（Scope-on-record）：required:false extensions 键 advisory:scope 与 advisory:decided-by，新动词 work-annotate 发 work.updated 并入 extensions，回放仿 gateEvidenceExtensions 精确比对防夹带，非绑定不阻 done。分解 STORY-018 核心写路径/STORY-019 CLI+catalog+regen/STORY-020 读面+成文+dogfood 回填。",
+      "detail": "1 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:ce585e4cf935653f4f996249",
+      "externalKey": null,
+      "title": "复核更正：E05 真义＝链上 advisory 字段（decomp 立场逐字：guidance 由 prose 入链；记录/审议触发从散文迁至链上非绑定字段），deferred 的 chain-migration coupling 指 E05 自身 schema 变更与 E02 合并排期避免二次迁链，非增量 materialize。CONF-E05-KICKOFF/MIN-E05-KICKOFF 误读范围，所裁实为 README 天花板忠告的悬空证据修复；该产出独立成立（7 处已发布引用悬空是真缺陷；已验语义等同、format/source/privacy/verification-map+proof-check 全绿）但属已逐出的 README 质量轨、不定义 E05，STORY-017 挂错 epic。合并排期窗口随 v0.2.0 发布已关；gate-identity 走 extensions 未动 storageVersion（实测仍=1）的先例示真 E05 或免迁链。全链 verify-p1 拒脏检出（P1_EXCLUSIVE_SOURCE_BASIS_REQUIRED），完整证明留 push 门产出。误挂记录处置与真开工留 Owner。",
+      "detail": "2 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:d7012264acee18bca954f4ea",
+      "externalKey": null,
+      "title": "Owner 已批准完整推荐收官包。收官授权覆盖 Workflow v0.6.0 与 helper repin 的对外发布、SPRINT-002 关闭、DS 方案 B 更正、TMS 两条安全事项及仅 PR 验证。此批准不授权 EPIC-025 的任何 host enforce 面。",
+      "detail": "3 open of 3 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:eb1f5317a7e8652a3d7bd307",
+      "externalKey": null,
+      "title": "Fable 复核 v0.3.0：发布链路各项为实（P1_VERIFIED/Release/升级/dogfood/advisory 穿 done 仍在）。更正 MIN-E05-DONE 定性：skill 侧残留非『非阻塞』——bootstrap IDENTITY 硬钉 v0.2.0，resolve 对 v0.3.0 克隆实测 ROOT_IDENTITY_MISMATCH，信任门 resolve 步现已断；回滚桥已烧（活链 v239 含 work.annotated，v0.2.0 不可读），candidate.22 重钉是唯一前进路径（IDENTITY+SKILL.md 版本行+work-annotate 用法三者同批一次 re-pin），发布属 Owner 门。日常 verify-installed-copy 仍绿。另录三低危加固候选（work.updated 不查 extensions 增量/伪造删除键回放可收/scope 无字节上限）。",
+      "detail": "2 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:f622309ae73382406c836f39",
+      "externalKey": null,
+      "title": "E05 收口，INIT-003 五 Epic 全完成。v0.3.0 发布（commit 95cfd88/tag v0.3.0/GitHub Release，verify:p1=P1_VERIFIED 20 门），安装框架升 v0.3.0，活链 dogfood 注解 EPIC-005（v239，work-show 见 scope+decided-by 回链，work.annotated 活链回放绿）。STORY-018/019/020+EPIC-005+INIT-003 全 done。samples 随发布使 README 引用自足。skill 侧成文与快照延后属非阻塞建议。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:fbae19225d75a5600ea13df2",
+      "externalKey": null,
+      "title": "Incident CLI 开通+守卫回归测试落地 W f365029 并双红证；全门绿（protocol/rc1/format/guard/p1/push-gate）。过程两课：红证探针先自检（错 build 命令曾致假存活）、变异须能编译。INIT-004 代码交付达成，用户可见随 v0.3.2 发布列车。父语义采 parent-optional（Owner 可驳）。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:fc81b85294e9a85a888e0f97",
+      "externalKey": null,
+      "title": "SPRINT-002 已批准收官包的发布、纠偏、PR 与边界证据完成核验：Workflow v0.6.0 与 helper candidate.27 已发布并全摘要匹配；DS 证据方案 B 已落链；TMS PR 保持未合并且安全红灯未绕过；carry-over 状态与 host enforce=0 均保留。列车可关闭，不把 carry-over 误报为完成。",
+      "detail": "3 open of 3 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
       "partitionId": "TCRN-AOS",
       "recordId": "minutes:5da0b8ea8b8421cb1f3a1e89",
       "externalKey": "TCRN-AOS-MIN-001",
@@ -7237,6 +7434,582 @@ export const cockpitData: CockpitData = {
       "externalKey": "TCRN-AOS-MIN-003",
       "title": "既有实现处置:不整体移除,行三层定向处置(A 删除约三分之一从未执行的死码/B 保留模型无关横切能力/C 前端仅作技术底座起点/D 新建链客户端与瘦投影类型);确立交付物必须与已确认前端设计逐屏一致含 Layout;立两缺陷单",
       "detail": "3 open of 3 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:26d0b27a4ea134840c607926",
+      "externalKey": "TCRN-CROSS-MIN-001",
+      "title": "Centralized partitions under the platform root; the live workspace stays local and OneDrive becomes the backup destination",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:aac0952ecd46f9cd16750f8e",
+      "externalKey": "TCRN-CROSS-MIN-003",
+      "title": "采 opus 依赖框架+sonnet 切片细化：五 Epic 顺序 E01权威供给→E02 gate-v1→E03 多-skill归档→E04 适配器分发→E05 链上advisory；被依赖者是 STORY-003 身份信号切片而非整个 E01；#6逐出治理树另立README轨；#7降为E01骑附Story待Owner裁定。Owner 确认执行。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:32b3b62ad7cafe921aa2f4c7",
+      "externalKey": "TCRN-CROSS-MIN-004",
+      "title": "补录 E01 七 Story 职责表（INIT-003 分解时只存在于对话预览的欠账）并裁定 Subtask 切分：STORY-001 为一次坐定之工不切 Subtask，其余留各自开工时按需裁。执行序 001→002/003→004→005，006/007 骑附并行。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:3613d74bebbbe471461c2e06",
+      "externalKey": "TCRN-CROSS-MIN-005",
+      "title": "STORY-001 完成：生产 bin 实测只供 write+clock，8 权威面全缺，12 触面 verb 矩阵与拒绝码逐条确立（读源+只读实测双证）。三处修正 MIN-003 前提：无静默降级（品牌不可伪造）／「12 被锁」混了两种锁／身份权威不在八面内故 STORY-003 须重定范围。pins-attestations 的缝在代码中已存在，STORY-002 应 formalise 而非另造。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:1725d22be398cc8503805379",
+      "externalKey": "TCRN-CROSS-MIN-006",
+      "title": "pins／attestations 的缝在代码中已存在：pins＝readAuthorityFile 的带外摘要硬比对（第三方可核）；attestations＝admit*HostInput 的自算校验和＋进程内品牌（不可核）。立规「hostDigest 不是 pin」，并据此定 STORY-003 身份权威必落 pins 轨——落 attestations 轨则接线进程可自称 owner，gate-v1 将无拒绝能力。边界：pins 身份文件给的是 authorization 非 authentication。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:fcd503b817e8d44c77f6db16",
+      "externalKey": "TCRN-CROSS-MIN-008",
+      "title": "供给机制推广既有 --expected-plan-digest 模式（回归终止于人手，与 shasum 比对公布锚点同构）；attestations 面禁上旗标。第三处修正：E01 可诚实交付上限是 7 个 pins 面 verb，5 个 attestations host 面 verb 无法经 CLI 诚实解锁。身份面契约定死但实现挪 E02（此前无消费者）。另发现文件身份契约有两套实现应互钉。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:6eaa974b9321b5fc356dc026",
+      "externalKey": "TCRN-CROSS-MIN-009",
+      "title": "pins 轨供给实现并证明：六 verb 得可选摘要旗标，三点实测＋歧义失败关闭已写入 p5 套件常设化；typecheck／P3／P5／P6／P6B／format-check／guard-check 全绿。W cf4547b 本地提交未推送。残余：compatibility-plan 须先裁可用性。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:8dde9a0d76cd241db4ff7f15",
+      "externalKey": "TCRN-CROSS-MIN-010",
+      "title": "六个已解锁 verb 各自带端到端证明（错摘要负例为关键钉）；context-route 双面、Codex/Claude 双读取器、uninstall 只证拒绝三处刻意分列。P3/P5/P6/P6B+format+guard-check 全绿，W 5e5c63a 本地提交未推送。覆盖＝6/7 pins 面 verb。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:9458c60c80dac90942a40bb1",
+      "externalKey": "TCRN-CROSS-MIN-011",
+      "title": "先测后改：热点不在 build 而在两条守卫跑整套件（75.5s/85s）。改为只跑实测确认的抓手测试，窄化同时更严格且只会大声失败。guard-check 108s→34s（12 守卫全杀），整门 205s→134s 落到 180s 阈值下。残余：verify:p1 90s；另记门的钝式告警扫描隐患待另裁。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:7949577d1cca85fcf7a62cdf",
+      "externalKey": "TCRN-CROSS-MIN-012",
+      "title": "二选一前提消解：仓内压测注释已裁定真实契约为「至多一个赢家」，其证据（两处生产调用点丢弃返回值）经复核属实。1464 行的「恰好一个」是断言强于实现，CI 零赢家非 flake。已对齐并写明理由；灾难方向（两个赢家）断言两处原样保留。连跑三次全绿，整门 133s 绿。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:8a07dd58045bba990a546d94",
+      "externalKey": "TCRN-CROSS-MIN-016",
+      "title": "身份权威契约落地：名册经共享 pins 轨读取器读取、摘要绑定盘上字节；canonical 次序为要求、许可答案只来自读取器产出的上下文、决策记录自足以便回放只校验形状。三处注入红证全被命名对应测试抓住。两处仪式教训（routeAdditions 一次性、amend 悬挂对象）留档。钝式 \\bany\\b lint 由潜伏升级为已观测隐患，未自行改门。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:de60d2532b23d0ac8cff67e8",
+      "externalKey": "TCRN-CROSS-MIN-019",
+      "title": "更正 MIN-013 裁定四的错误引用（应指 MIN-008/009/010 非 MIN-005）。逐条结算遗留项：七条已了结，三条未结算（「7 而非 12」提法修正从未明文批准且 EPIC-001 已 done／verify:p1 提速未排期／分区不可迁移为长期限制）。另观察 EPIC-002 未挂门，是否补门属 Owner 裁量。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:f6fb1a1e87ceca6f0fa15af0",
+      "externalKey": "TCRN-CROSS-MIN-031",
+      "title": "STORY-014 完成：builder fail-closed 守卫落地并两路红证；scripts-only 仪式（skill 归档字节不变、锚不动），全绿已推送 H 7480a05。待你：candidate.20 tag+release 收口 main 与 candidate.19 的源归档漂移，属对外发布必停；建议顺带折入停顿预算 payload 教学。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:03fc6ce5eb584b528a6a2b6d",
+      "externalKey": "TCRN-CROSS-MIN-036",
+      "title": "Owner裁定交付节奏公约(单次收官发布,反-D6默认)并立TCRN-CROSS-INIT-006;分解2 Epic/4 Story全planned;执行不启动,启动权在Owner;INIT挂Owner验收门",
+      "detail": "3 open of 3 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:e070c05cbaad72306a1bcab8",
+      "externalKey": "TCRN-CROSS-MIN-038",
+      "title": "INIT-007 拆解定形:3 Epic/6 Story(公约教学/检测机制/发布收官)落链;三拒案与决策台账入记;执行 go 在 Owner。",
+      "detail": "2 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:a5b8acfc66c5228473902ed3",
+      "externalKey": "TCRN-CROSS-MIN-039",
+      "title": "Owner 授权对外发布,INIT-007 多宿主后台资源治理已上线(W v0.4.0+helper candidate.25,两 Release、安装副本升级、双链回放绿),收官。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:336e32a0cd87d51a45af56cc",
+      "externalKey": "TCRN-CROSS-MIN-040",
+      "title": "INIT-008 定形(B 轻引擎:Release kind+advisory:sprint+读面过滤)+MIN-036 修订裁可(入列批量停点、未入列保持原公约);3 Epic/6 Story 全 planned;执行点火在 Owner。",
+      "detail": "2 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:f3149e451883021785bbeba0",
+      "externalKey": "TCRN-CROSS-MIN-041",
+      "title": "Owner 授权对外发布,INIT-008 sprint 交付批次机制已上线(W v0.5.0+helper candidate.26,两 Release、副本升级、双链回放、S049 首列车 dogfood),收官。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:489e5f863c3306a2f35d1707",
+      "externalKey": "TCRN-CROSS-MIN-043",
+      "title": "Owner 指令双宿主基线对齐：INIT-009 六 Epic 注为双宿主并新增三个 Claude Story；INIT-010 获追认、依赖拆分、Claude 子代理收据机制定形；Claude hook 扩面以 N-2 修宪为硬前置，凭据声称止步归因增强。",
+      "detail": "2 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:5fd796e8a242799b071f7ace",
+      "externalKey": "TCRN-CROSS-MIN-044",
+      "title": "确认 README 内容面滞后 0.1.0 的版本同步债并立 INIT-011 清偿与防再犯；建 SPRINT-002 快车列车，入列 INIT-009/010/011，发布合并至列车收官单一停点。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:1a5c6f7ec7d7fd9e562aa367",
+      "externalKey": "TCRN-CROSS-MIN-045",
+      "title": "INIT-011 扩展裁定：四份根目录文档进五语基线（LICENSE/NOTICE/CHANGELOG 明示不进），译本以 synced-to 摘要钉扎并入发布门；风格规则从既有风格提炼成文、可检子集入门；立 EPIC-028/S087-090，规则沉淀知识卡、分阶段采纳。",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:55cf686f888b70e5e9420b7a",
+      "externalKey": "TCRN-CROSS-MIN-046",
+      "title": "N-2 由唯一 fail-open 面改为逐宿主闭合枚举：observe 六事件获批，fail-open 不阻断且收据缺失非事件缺失；逐 hook 逐宿主实测上线，fixture 不构成 live 声称；enforce 另裁并记录其前置；反对意见如实在录。",
+      "detail": "2 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:5b26238fd23a2cba4430f429",
+      "externalKey": "TCRN-CROSS-MIN-047",
+      "title": "CONF-039 的执行形态如实补记为 legacy-unverified 并保留原状；CONF-040/043 虽确由独立子代理产出但早于采集机制，同样不予升格。自 S055 起以观测收据为多代理审议的唯一判据，诚实上限（归因非身份、采集器同权、转写未签名）已结构化在代码而非叙述中。",
+      "detail": "2 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:0a8df40ebda0b7dfc966937c",
+      "externalKey": "TCRN-CROSS-MIN-048",
+      "title": "INIT-012 分解裁定:P1-P10 按交付面分五 Epic(EPIC-029..033)十五 Story(STORY-091..105);OWNER-NOW 四项批量前置;INIT 保持 planned 不推进",
+      "detail": "4 open of 4 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:1f9eb4cd8da2c029e4994d77",
+      "externalKey": "TCRN-CROSS-MIN-049",
+      "title": "Verity persona 注入事件 remediation:三条裁定由 2026-07-25 注解 prose 转写为可引用纪要;根因为 Step-3 设计缺陷;按 P5 残余适用性分析结论为删除而非条件化",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:31c06e3871d6948fbde20176",
+      "externalKey": "TCRN-CROSS-MIN-050",
+      "title": "P1 重裁:活链实测显示被迫分片仅占逻辑立场的 4.6%、最大缺口 1.27 倍,而提升方案的耦合至少四条且含一条跨包无门项;推荐维持 2048 并保留分片公约,实施待 Owner 裁定",
+      "detail": "4 open of 4 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:31bc6b98b9d01b9d63140abe",
+      "externalKey": "TCRN-CROSS-MIN-052",
+      "title": "Owner 离席全权批次的九道方向题全部裁定。核心:AOS 写面本机服务化、VM 只读镜像、operator pins 不出本机、SQLite 双库物理分离、复用既有 k3s 集群部署、每目标一次收官发布但验证门不免、执行序锁定目标一→二→三、AOS 完整可用以五条判据钉死、S003 本批显式裁剪为四类字段加关系型只读。Verity 的三条追加约束(镜像版构建期剔除写控件、domain.db 备份与 S003 同批、措辞更正)与可用性判据全部采纳。",
+      "detail": "2 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:abf9286da90fff48bf37d314",
+      "externalKey": "TCRN-DS-MIN-001",
+      "title": "DS 去 AI 感重设计的视觉方向裁定：三候选（A 静默仪器/B 治理纸感/C 流体材质）经样张对比与规格评估，Owner 裁定采纳 A+B 混合",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:c6546091d32eff5e33fbd5b4",
+      "externalKey": "TCRN-DS-MIN-002",
+      "title": "INIT-001（DS 视觉重设计）拆分结构裁定：甲/乙/丙三案对比后，Owner 裁定采纳甲案——按工作流拆 5 Epic、15 Story、2 gate",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:1ffa95370ffc2106ebcd027c",
+      "externalKey": "TCRN-DS-MIN-003",
+      "title": "探测性调用变更动词导致 TCRN-DS-STORY-001 进入终态 cancelled；以 TCRN-DS-STORY-016 补偿承接，工程产出未受影响",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:f2cfeb2589fee9b79984acd9",
+      "externalKey": "TCRN-DS-MIN-004",
+      "title": "GATE-001 契约重钉门：Owner 认可三条一致性，附加条件「flake 一并修」已执行并验证",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:bcc8aa56c841c6479505e5e3",
+      "externalKey": "TCRN-DS-MIN-005",
+      "title": "GATE-002 发布门：Owner 认可验收八条全绿，并授权推送、打标 v2.0.0、建 GitHub Release",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:b37f49f8da1fb6c4823d1be5",
+      "externalKey": "TCRN-DS-MIN-006",
+      "title": "视觉基线的不变量：Owner 裁定采纳解法②——以带容差的感知比对取代逐次 sha256",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:aab33863de1f963698d553fc",
+      "externalKey": "TCRN-DS-MIN-007",
+      "title": "INIT-003 review 通过，A 档定案，四项按执笔人建议裁定；工作树为 5 Epic / 12 Story / 2 gate",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:1643e6945e024c8e1a541fb0",
+      "externalKey": "TCRN-DS-MIN-008",
+      "title": "GATE-003 诚实化门：Owner 认可假门处置，含「显式 unchecked 是收紧而非放松」的定性",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:fd7a56a82102596d04232acf",
+      "externalKey": "TCRN-DS-MIN-009",
+      "title": "GATE-004 收口门：Owner 认可基线重建与三面一致，INIT-003 收口；并授权开 PR 合并 main",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:f97dbbe64445b38abb248585",
+      "externalKey": "TCRN-DS-MIN-010",
+      "title": "v2 已合并至 main（698ecc5），main 上独立 verify 绿；已发布标签首次从默认分支可达",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:becbeea6c49e0be02f128eb5",
+      "externalKey": "TCRN-DS-MIN-011",
+      "title": "AOS 视觉 proof 复绿完成：发现并修复 v2 reduced-motion kill-switch 残留，三面对齐 v2 语义",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:1f00d4d02549e8a334386c7f",
+      "externalKey": "TCRN-DS-MIN-012",
+      "title": "Stamp 在 AOS 门禁视图的 gate-close 时刻采用完成，守 no-overclaim 边界，proof 绿",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:492cab1f0b6b4dccbf9a0c05",
+      "externalKey": "TCRN-DS-MIN-013",
+      "title": "B 档外壳重设计原范围已由 INIT-003 + reduced-motion 修复实质满足；Owner 裁定收口，不造为改而改的 sprawl",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:d8b4b1f7865dd525441b44dc",
+      "externalKey": "TCRN-DS-MIN-014",
+      "title": "doc shell 侧栏折叠卡顿（layout-thrash）与折叠态按钮（图标方向+位置+飞窜）已修，PR #3 合并 main，浏览器实测确认",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:5ba8d5c0e5cebef2c3e27894",
+      "externalKey": "TCRN-DS-MIN-015",
+      "title": "切换按钮按组件契约重修（运行时镜像状态属性）、动画恢复且实测≥30fps、hover 补入既有家族；PR #4 合并、Vercel 已部署",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:e9ddad00c472dcdeb91a12d8",
+      "externalKey": "TCRN-DS-MIN-016",
+      "title": "INIT-005 立项：Owner 三缺陷+IA 批评为证据，四工作流章程定序 WS1→WS2→WS4→WS3，逐 WS 验收",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:fa237401d6164c4d2a698fd4",
+      "externalKey": "TCRN-DS-MIN-017",
+      "title": "INIT-005 四工作流全部交付：PR #5/#6/#7/#8 合并 main、独立 verify 绿、Vercel 生产部署确认",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:7ef3599ce17e0269b138b2fb",
+      "externalKey": "TCRN-DS-MIN-018",
+      "title": "导航精修交付：图标轨+单轴选中+章节 chevron,PR #9 合并 Vercel 部署,先出图后落地",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:63d7d41d085f2d77a6c2285b",
+      "externalKey": "TCRN-DS-MIN-019",
+      "title": "INIT-006 立项与七 Epic 拆分完成,交接文档就位,停在 planned 待 Owner 点火",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:d43fded12d8c82a18b99f041",
+      "externalKey": "TCRN-DS-MIN-020",
+      "title": "六项前置裁定完成并写死进 handoff(含两个悬空 token bug 的预决修复),Opus 零裁量;INIT-006 仍 planned",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:8433302fbcb699c3b96468dc",
+      "externalKey": "TCRN-DS-MIN-021",
+      "title": "E1 样式表分层收敛交付:overlap->0,部署站零回归,AOS ok,PR #12 合并 main 独立 verify 绿",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:03da523a2c0698b483c93ad0",
+      "externalKey": "TCRN-DS-MIN-022",
+      "title": "INIT-006 E2 色彩 token 化 交付验收",
+      "detail": "2 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:874cc2403cca78ffa0f664bb",
+      "externalKey": "TCRN-DS-MIN-023",
+      "title": "INIT-006 E3 字号刻度统一 交付验收",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:55ae601f779506a9a02da2a9",
+      "externalKey": "TCRN-DS-MIN-024",
+      "title": "INIT-006 E4 间距与圆角刻度 交付验收",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:361555e1c6b06e721178d4b6",
+      "externalKey": "TCRN-DS-MIN-025",
+      "title": "INIT-006 E5 交互态矩阵 交付验收",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:a1a7603ae6fc365c664f7fec",
+      "externalKey": "TCRN-DS-MIN-026",
+      "title": "INIT-006 E6 暗色奇偶校验 交付验收",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:49c1078bbb22712c612e8cb5",
+      "externalKey": "TCRN-DS-MIN-027",
+      "title": "INIT-006 E7 风格门(收官) 交付验收",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:aef7a7d1f405403e42501a57",
+      "externalKey": "TCRN-DS-MIN-028",
+      "title": "INIT-006 风格统一七 Epic 全交付并收官,PR #12-18 合并 main,Vercel 生产,4 悬空 token 修复",
+      "detail": "1 open of 1 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:5e2b09b3994de8a519052d8b",
+      "externalKey": "TCRN-DS-MIN-048",
+      "title": "TCRN-DS-INIT-010 分解为五个 Epic 十九条 Story,轴取阻塞拓扑。EPIC-024 消费路径选型(实验驱动、四条候选各做真实实测)阻塞其余全部;EPIC-026 水合修复不可推给消费方须 DS 侧修;EPIC-028 的 DS CI Story 受 OWNER-10 支配裁定前不开工。决策清单按 owner-now 与 conditional 与 agent 三分类前置登记。",
+      "detail": "4 open of 4 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:9984e4d2538365742616e230",
+      "externalKey": "TCRN-DS-MIN-049",
+      "title": "四路消费路径实测完成:B(vendored tarball)works 且零硬阻断为推荐主选;A(submodule 加 workspace)works-with-changes 零硬阻断为可接受替代;C(私有 registry)技术可行但受 mvp-adoption-boundary 授权硬阻断;D(file 加 overrides)blocked——CI 单仓检出退出 254 且 file 协议不携带摘要致钉定无解。两路对抗验证均判 experiments-hold,推翻的是证据卫生而非路径结论:三个不可复验的常数已作废并入册。开发机实测零进程零监听、基线未改动。",
+      "detail": "3 open of 4 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:ec27d4fbc5a7efe782ece1ad",
+      "externalKey": "TCRN-DS-MIN-050",
+      "title": "Owner 裁定 OWNER-07:选定路径 B(vendored tarball 加 overrides)为 DS 消费路径。依据为四路真实实测的证据矩阵:B 是唯一 works 且零硬阻断者、CI 零改动、钉定由 pnpm 自身强制且篡改检测已被独立验证方复现、三个 tarball 合计 155K 入 git 可接受。",
+      "detail": "2 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:1f424026befc29a095d3924e",
+      "externalKey": "TCRN-DS-MIN-051",
+      "title": "在选定路径 B 上实测 RSC:失效形态与路径 A 不同且更危险——编译与 TypeScript 均通过,直到静态生成才死于 useRef 不是函数;且与组件相关,不含 hook 的组件直接导入完全正常,只有含 hook 者才炸。barrier 方案经消融实验确证因果:加一行 use client 即通过、去掉即复现失败。裁定 barrier 为必需机制并须配禁止直接 import 的门。",
+      "detail": "3 open of 3 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:5a5a5d88888a00c29a291f7d",
+      "externalKey": "TCRN-DS-MIN-052",
+      "title": "水合失配以微分渲染复现(服务端 data-collapsed false 对客户端 true),并更正了先前基于构建成功得出的未触发结论。修复为初始化器取 fallback 加挂载后 useEffect 同步,验证后两次渲染一致。验证过程另挖出路径 B 的硬陷阱:同版本换内容静默失效且 --force 无效,pnpm 认版本号不认内容,唯一解是版本递增。",
+      "detail": "4 open of 4 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:911186a573aa7d4a8ae71003",
+      "externalKey": "TCRN-DS-MIN-053",
+      "title": "样式交付端到端验证通过:tokens.css 可直接 import、tcrnComponentCss 须消费方注入、构建产物含 DS 类名与 380 处 token 变量。主题结论两次更正:先前称接线断裂不准确、我第一版探针问了更弱的问题而报假绿;精确实况是 DS 组件写六个主题属性但无一为 data-tcrn-theme,而暗色块正以它为选择器,故属契约未接而非接线断裂——合理边界但未文档化且有误导信号。",
+      "detail": "3 open of 3 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:13601a8890d723a580174e8b",
+      "externalKey": "TCRN-DS-MIN-054",
+      "title": "版本语义破损实测量化:v2.0.0 落后 HEAD 八十六提交且 CHANGELOG 无该条目,同一版本号至少对应八十七组字节。与 pnpm 认版本不认内容的陷阱叠加后会导致 DS 已改而消费方仍用旧字节且全绿。故建以内容摘要钉定的消费验证门,校验 tarball 摘要与已装 dist 摘要与 lock integrity 三者一致,第三条补 pnpm 盲区。两类变异红证均通过。门自身初版硬编码包清单致误报,已改为从依赖声明推导。",
+      "detail": "4 open of 4 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:ce9fb7253c69836ff798411e",
+      "externalKey": "TCRN-DS-MIN-055",
+      "title": "Owner 裁定 OWNER-10:DS 须先补 CI 再承接第二个消费方。STORY-086 由此解除阻塞并成为 INIT-010 收口前的最后一条。",
+      "detail": "2 open of 2 recorded",
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-Design-System",
+      "recordId": "minutes:2f1b4cc1a8e5248390a701f0",
+      "externalKey": "TCRN-DS-MIN-056",
+      "title": "DS 第一个 workflow 建成:verify job 十二步逐条独立(不跑 pnpm verify,因其 && 串行会掩盖信号且链内含重生成模式)加 contract job 两步。修掉一个实测缺陷:verify 会把破坏改写成新基线而抹掉证据。三态红证通过。检测力边界诚实写入文件头:API 面钉只一层深、出货类名仅三成二被顺带覆盖、DS 自身测试不构成兜底、契约夹具结构性失明。本 CI 不声称消费方不会被打破。",
+      "detail": "5 open of 5 recorded",
       "severity": "attention"
     },
     {
@@ -7308,56 +8081,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:b290715aa181ebe395ec30a4",
       "externalKey": "TCRN-TMS-MIN-008",
       "title": "Owner 答复 OWNER-01:TMS 前端与 DS 完全无关、就是一套本地前端 —— 该事实消解了两名评审共同指出的最大缺陷(重建产物无处可去)并下调 OWNER-04 与 OWNER-08 的门槛。Owner 裁定 DS 与 Storybook 须保持通用、产品设计不得放入、项目如何使用组件由项目自定义。五项建议与一项修正全部获批。实证支撑:污染已发生于 AOS、DS 内四十个领域家具为 AOS 所建。开发机已验证可用并解锁集成测试面。",
-      "detail": "6 open of 6 recorded",
+      "detail": "4 open of 6 recorded",
       "severity": "attention"
     }
   ],
   "effectiveUnresolved": [
-    {
-      "minutesId": "minutes:5da0b8ea8b8421cb1f3a1e89",
-      "externalKey": "TCRN-AOS-MIN-001",
-      "surface": [
-        "AOS 分区 actor attestation 为单向门;启用与否待 Owner 启动令时裁",
-        "发布停点形态(单 INIT 快车道或入列车)届时呈报",
-        "DS 组件接线面逐模块核验;发现闭合无回调即向 DS 提需求单"
-      ],
-      "effective": [
-        "AOS 分区 actor attestation 为单向门;启用与否待 Owner 启动令时裁",
-        "发布停点形态(单 INIT 快车道或入列车)届时呈报",
-        "DS 组件接线面逐模块核验;发现闭合无回调即向 DS 提需求单"
-      ],
-      "dissolvedCount": 0
-    },
-    {
-      "minutesId": "minutes:3a0d27be789cadb0ccb353c1",
-      "externalKey": "TCRN-AOS-MIN-002",
-      "surface": [
-        "VM 访问边界具体形态(认证层或 LAN 信任)S019 执行时定",
-        "execution:mode 的 CLI/MCP 暴露缺口向 W 提需求(键号待 W 侧立单)",
-        "切换段全部参数待迁移裁定时另会"
-      ],
-      "effective": [
-        "VM 访问边界具体形态(认证层或 LAN 信任)S019 执行时定",
-        "execution:mode 的 CLI/MCP 暴露缺口向 W 提需求(键号待 W 侧立单)",
-        "切换段全部参数待迁移裁定时另会"
-      ],
-      "dissolvedCount": 0
-    },
-    {
-      "minutesId": "minutes:4fdc3f1caf4adfb2374090f7",
-      "externalKey": "TCRN-AOS-MIN-003",
-      "surface": [
-        "既有组件对新 Layout 的承载力待首切片逐一核实",
-        "依赖治理的能力去向(是否另立轨道承接外采公约审查)待裁",
-        "A 层删除的执行时点:建议随各 Story 就近清理而非单独一刀"
-      ],
-      "effective": [
-        "既有组件对新 Layout 的承载力待首切片逐一核实",
-        "依赖治理的能力去向(是否另立轨道承接外采公约审查)待裁",
-        "A 层删除的执行时点:建议随各 Story 就近清理而非单独一刀"
-      ],
-      "dissolvedCount": 0
-    },
     {
       "minutesId": "minutes:591d95e3737fb08a61b759bf",
       "externalKey": null,
@@ -7522,12 +8250,1083 @@ export const cockpitData: CockpitData = {
         "AOS 迁移到抽出后的领域家具包属 AOS 侧工作、尚未立项"
       ],
       "effective": [
-        "OWNER-02 mvp-adoption-boundary 两条 Deferred 的处置仍未裁",
         "OWNER-07 消费路径仍未选定",
         "OWNER-05 locale 契约仍未裁:zh_HANT 在 TMS 非测试源码一千五百一十六处且为数据模型级类型",
         "OWNER-06 图标契约仍未裁:DS 二十八对 TMS 生产一百零一、精确重合十三",
-        "OWNER-10 DS 是否先补 CI 再承接第二消费方仍未裁",
         "AOS 迁移到抽出后的领域家具包属 AOS 侧工作、尚未立项"
+      ],
+      "dissolvedCount": 2
+    },
+    {
+      "minutesId": "minutes:5da0b8ea8b8421cb1f3a1e89",
+      "externalKey": "TCRN-AOS-MIN-001",
+      "surface": [
+        "AOS 分区 actor attestation 为单向门;启用与否待 Owner 启动令时裁",
+        "发布停点形态(单 INIT 快车道或入列车)届时呈报",
+        "DS 组件接线面逐模块核验;发现闭合无回调即向 DS 提需求单"
+      ],
+      "effective": [
+        "AOS 分区 actor attestation 为单向门;启用与否待 Owner 启动令时裁",
+        "发布停点形态(单 INIT 快车道或入列车)届时呈报",
+        "DS 组件接线面逐模块核验;发现闭合无回调即向 DS 提需求单"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:3a0d27be789cadb0ccb353c1",
+      "externalKey": "TCRN-AOS-MIN-002",
+      "surface": [
+        "VM 访问边界具体形态(认证层或 LAN 信任)S019 执行时定",
+        "execution:mode 的 CLI/MCP 暴露缺口向 W 提需求(键号待 W 侧立单)",
+        "切换段全部参数待迁移裁定时另会"
+      ],
+      "effective": [
+        "VM 访问边界具体形态(认证层或 LAN 信任)S019 执行时定",
+        "execution:mode 的 CLI/MCP 暴露缺口向 W 提需求(键号待 W 侧立单)",
+        "切换段全部参数待迁移裁定时另会"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:4fdc3f1caf4adfb2374090f7",
+      "externalKey": "TCRN-AOS-MIN-003",
+      "surface": [
+        "既有组件对新 Layout 的承载力待首切片逐一核实",
+        "依赖治理的能力去向(是否另立轨道承接外采公约审查)待裁",
+        "A 层删除的执行时点:建议随各 Story 就近清理而非单独一刀"
+      ],
+      "effective": [
+        "既有组件对新 Layout 的承载力待首切片逐一核实",
+        "依赖治理的能力去向(是否另立轨道承接外采公约审查)待裁",
+        "A 层删除的执行时点:建议随各 Story 就近清理而非单独一刀"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:3f0fcbfb8ce0c4e593e71c66",
+      "externalKey": null,
+      "surface": [
+        "执行 go 待 Owner(立项≠开工;INIT-006 先例)",
+        "INIT-006 的 18 个 Story 链上仍 planned 而 Epic 已 done——结转补录待 Owner 同意(本会议范围外)"
+      ],
+      "effective": [
+        "INIT-006 的 18 个 Story 链上仍 planned 而 Epic 已 done——结转补录待 Owner 同意(本会议范围外)"
+      ],
+      "dissolvedCount": 1
+    },
+    {
+      "minutesId": "minutes:45f7ae98457d1f683d368700",
+      "externalKey": null,
+      "surface": [
+        "发布授权（push/PR/Vercel 部署）待 Owner 单独确认"
+      ],
+      "effective": [
+        "发布授权（push/PR/Vercel 部署）待 Owner 单独确认"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:4716b82433e56695d1b5f026",
+      "externalKey": null,
+      "surface": [
+        "执行 go 待 Owner(立项≠开工;INIT-006/007 先例)"
+      ],
+      "effective": [
+        "执行 go 待 Owner(立项≠开工;INIT-006/007 先例)"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:aa7045a7440cde1219ceae9b",
+      "externalKey": null,
+      "surface": [
+        "INIT-010 原计划的产品能力仍未在 origin 上落地；是否重新立项由未来范围决策决定"
+      ],
+      "effective": [
+        "INIT-010 原计划的产品能力仍未在 origin 上落地；是否重新立项由未来范围决策决定"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:e1df8bcdf19949489fabee7d",
+      "externalKey": null,
+      "surface": [
+        "拆单树待审计产出后另场裁定"
+      ],
+      "effective": [
+        "拆单树待审计产出后另场裁定"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:abf9286da90fff48bf37d314",
+      "externalKey": "TCRN-DS-MIN-001",
+      "surface": [
+        "无——后续 token v2 RFC 属既定下一步工作，非本裁定遗留"
+      ],
+      "effective": [
+        "无——后续 token v2 RFC 属既定下一步工作，非本裁定遗留"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:c6546091d32eff5e33fbd5b4",
+      "externalKey": "TCRN-DS-MIN-002",
+      "surface": [
+        "无——Story 级增删由后续 work-transition/work-create 按常规纪律处理"
+      ],
+      "effective": [
+        "无——Story 级增删由后续 work-transition/work-create 按常规纪律处理"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:1ffa95370ffc2106ebcd027c",
+      "externalKey": "TCRN-DS-MIN-003",
+      "surface": [
+        "无"
+      ],
+      "effective": [
+        "无"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:f2cfeb2589fee9b79984acd9",
+      "externalKey": "TCRN-DS-MIN-004",
+      "surface": [
+        "截图 hash 是否继续记录、或改感知比对——待 Owner 另行裁定，不阻断 GATE-001"
+      ],
+      "effective": [
+        "截图 hash 是否继续记录、或改感知比对——待 Owner 另行裁定，不阻断 GATE-001"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:bcc8aa56c841c6479505e5e3",
+      "externalKey": "TCRN-DS-MIN-005",
+      "surface": [
+        "无"
+      ],
+      "effective": [
+        "无"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:b37f49f8da1fb6c4823d1be5",
+      "externalKey": "TCRN-DS-MIN-006",
+      "surface": [
+        "基线形态（完整 PNG vs 感知指纹）与容差阈值待实现阶段确定并回报"
+      ],
+      "effective": [
+        "基线形态（完整 PNG vs 感知指纹）与容差阈值待实现阶段确定并回报"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:aab33863de1f963698d553fc",
+      "externalKey": "TCRN-DS-MIN-007",
+      "surface": [
+        "B 档（外壳重设计）范围与时机待本 Initiative 收口后另议"
+      ],
+      "effective": [
+        "B 档（外壳重设计）范围与时机待本 Initiative 收口后另议"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:1643e6945e024c8e1a541fb0",
+      "externalKey": "TCRN-DS-MIN-008",
+      "surface": [
+        "无"
+      ],
+      "effective": [
+        "无"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:fd7a56a82102596d04232acf",
+      "externalKey": "TCRN-DS-MIN-009",
+      "surface": [
+        "两项已知残余，非阻断：AOS 的视觉 proof 未在 v2 下重跑（其单测与 typecheck 已过）；Stamp 已文档化但产品外壳尚未在三个身份时刻采用。B 档外壳重设计待另议。"
+      ],
+      "effective": [
+        "两项已知残余，非阻断：AOS 的视觉 proof 未在 v2 下重跑（其单测与 typecheck 已过）；Stamp 已文档化但产品外壳尚未在三个身份时刻采用。B 档外壳重设计待另议。"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:f97dbbe64445b38abb248585",
+      "externalKey": "TCRN-DS-MIN-010",
+      "surface": [
+        "AOS 视觉 proof 复绿、Stamp 产品采用、B 档外壳重设计——三项按此优先级待议"
+      ],
+      "effective": [
+        "AOS 视觉 proof 复绿、Stamp 产品采用、B 档外壳重设计——三项按此优先级待议"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:becbeea6c49e0be02f128eb5",
+      "externalKey": "TCRN-DS-MIN-011",
+      "surface": [
+        "两仓修复分支未推送、未开 PR（待 Owner 决定是否推送与合并）；Stamp 产品采用与 B 档外壳重设计仍待议"
+      ],
+      "effective": [
+        "两仓修复分支未推送、未开 PR（待 Owner 决定是否推送与合并）；Stamp 产品采用与 B 档外壳重设计仍待议"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:1f00d4d02549e8a334386c7f",
+      "externalKey": "TCRN-DS-MIN-012",
+      "surface": [
+        "ruling/release 时刻真实采用待 tcrn-workflow 前端；B 档外壳重设计（#3）待推进"
+      ],
+      "effective": [
+        "ruling/release 时刻真实采用待 tcrn-workflow 前端；B 档外壳重设计（#3）待推进"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:492cab1f0b6b4dccbf9a0c05",
+      "externalKey": "TCRN-DS-MIN-013",
+      "surface": [
+        "无——真实重设计目标出现前不预立工作"
+      ],
+      "effective": [
+        "无——真实重设计目标出现前不预立工作"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:d8b4b1f7865dd525441b44dc",
+      "externalKey": "TCRN-DS-MIN-014",
+      "surface": [
+        "无"
+      ],
+      "effective": [
+        "无"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:5ba8d5c0e5cebef2c3e27894",
+      "externalKey": "TCRN-DS-MIN-015",
+      "surface": [
+        "storybook.css 的 v1 .tcrn-button 重复块（无交互态）为残债，待独立清理"
+      ],
+      "effective": [
+        "storybook.css 的 v1 .tcrn-button 重复块（无交互态）为残债，待独立清理"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:e9ddad00c472dcdeb91a12d8",
+      "externalKey": "TCRN-DS-MIN-016",
+      "surface": [
+        "WS3 目录拆页 vs 同页折叠的 URL/锚点结构择案，实作时呈报"
+      ],
+      "effective": [
+        "WS3 目录拆页 vs 同页折叠的 URL/锚点结构择案，实作时呈报"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:fa237401d6164c4d2a698fd4",
+      "externalKey": "TCRN-DS-MIN-017",
+      "surface": [
+        "TableToolbar 在 AOS work-index 的真实产品采用（候选，待 Owner 排期）；storybook.css v1 .tcrn-button 重复块残债（MIN-015 已记）"
+      ],
+      "effective": [
+        "TableToolbar 在 AOS work-index 的真实产品采用（候选，待 Owner 排期）；storybook.css v1 .tcrn-button 重复块残债（MIN-015 已记）"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:7ef3599ce17e0269b138b2fb",
+      "externalKey": "TCRN-DS-MIN-018",
+      "surface": [
+        "TableToolbar 的 AOS work-index 采用(候选);storybook.css v1 按钮残债(MIN-015)"
+      ],
+      "effective": [
+        "TableToolbar 的 AOS work-index 采用(候选);storybook.css v1 按钮残债(MIN-015)"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:63d7d41d085f2d77a6c2285b",
+      "externalKey": "TCRN-DS-MIN-019",
+      "surface": [
+        "待 Owner 点火;TableToolbar 的 AOS 采用与 storybook.css 外 v1 残债仍为独立候选"
+      ],
+      "effective": [
+        "待 Owner 点火;TableToolbar 的 AOS 采用与 storybook.css 外 v1 残债仍为独立候选"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:d43fded12d8c82a18b99f041",
+      "externalKey": "TCRN-DS-MIN-020",
+      "surface": [
+        "点火待 Owner;E3/E4 验收时以『零漂移承诺』反查映射实施忠实度"
+      ],
+      "effective": [
+        "点火待 Owner;E3/E4 验收时以『零漂移承诺』反查映射实施忠实度"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:8433302fbcb699c3b96468dc",
+      "externalKey": "TCRN-DS-MIN-021",
+      "surface": [
+        "LinkButton 变体类无样式(候选);非-overlap 组件选择器 docs 通用面(候选);E2-E7 待做"
+      ],
+      "effective": [
+        "LinkButton 变体类无样式(候选);非-overlap 组件选择器 docs 通用面(候选);E2-E7 待做"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:03da523a2c0698b483c93ad0",
+      "externalKey": "TCRN-DS-MIN-022",
+      "surface": [
+        "两处 rgba border 字面量+gradient wash(候选",
+        "独立 rgba pass);independent main verify 延至 E4 检查点统一做"
+      ],
+      "effective": [
+        "两处 rgba border 字面量+gradient wash(候选",
+        "独立 rgba pass);independent main verify 延至 E4 检查点统一做"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:874cc2403cca78ffa0f664bb",
+      "externalKey": "TCRN-DS-MIN-023",
+      "surface": [
+        "E4/E5/E6/E7 待做;independent main verify 待 E4 检查点"
+      ],
+      "effective": [
+        "E4/E5/E6/E7 待做;independent main verify 待 E4 检查点"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:55ae601f779506a9a02da2a9",
+      "externalKey": "TCRN-DS-MIN-024",
+      "surface": [
+        "E5/E6/E7 待做"
+      ],
+      "effective": [
+        "E5/E6/E7 待做"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:361555e1c6b06e721178d4b6",
+      "externalKey": "TCRN-DS-MIN-025",
+      "surface": [
+        "E6/E7 待做"
+      ],
+      "effective": [
+        "E6/E7 待做"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:a1a7603ae6fc365c664f7fec",
+      "externalKey": "TCRN-DS-MIN-026",
+      "surface": [
+        "E7 待做"
+      ],
+      "effective": [
+        "E7 待做"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:49c1078bbb22712c612e8cb5",
+      "externalKey": "TCRN-DS-MIN-027",
+      "surface": [
+        "无——INIT-006 七 Epic 全部收官"
+      ],
+      "effective": [
+        "无——INIT-006 七 Epic 全部收官"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:aef7a7d1f405403e42501a57",
+      "externalKey": "TCRN-DS-MIN-028",
+      "surface": [
+        "候选债:LinkButton 变体类样式、非-overlap 组件通用面、rgba border 字面量(均登记未修)"
+      ],
+      "effective": [
+        "候选债:LinkButton 变体类样式、非-overlap 组件通用面、rgba border 字面量(均登记未修)"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:5e2b09b3994de8a519052d8b",
+      "externalKey": "TCRN-DS-MIN-048",
+      "surface": [
+        "OWNER-07 消费路径未选定",
+        "OWNER-02 mvp-adoption-boundary 两条 Deferred 未处置",
+        "OWNER-10 DS 是否先补 CI 未裁",
+        "开发机能否复现消费方单仓检出的 CI 语义未测"
+      ],
+      "effective": [
+        "OWNER-07 消费路径未选定",
+        "OWNER-02 mvp-adoption-boundary 两条 Deferred 未处置",
+        "OWNER-10 DS 是否先补 CI 未裁",
+        "开发机能否复现消费方单仓检出的 CI 语义未测"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:9984e4d2538365742616e230",
+      "externalKey": "TCRN-DS-MIN-049",
+      "surface": [
+        "OWNER-07 消费路径最终选型待 Owner 裁定(推荐 B)",
+        "OWNER-02 若解禁则 C 路径需重做选型",
+        "B 的 tarball 升级流程与 DS 侧重打包机构未设计",
+        "A 的静默陷阱若选 A 则须设断言防护"
+      ],
+      "effective": [
+        "OWNER-07 消费路径最终选型待 Owner 裁定(推荐 B)",
+        "OWNER-02 若解禁则 C 路径需重做选型",
+        "A 的静默陷阱若选 A 则须设断言防护"
+      ],
+      "dissolvedCount": 1
+    },
+    {
+      "minutesId": "minutes:ec27d4fbc5a7efe782ece1ad",
+      "externalKey": "TCRN-DS-MIN-050",
+      "surface": [
+        "B 的 tarball 升级流程与 DS 侧重打包机构未设计(属 EPIC-028)",
+        "OWNER-02 仍未裁定"
+      ],
+      "effective": [
+        "B 的 tarball 升级流程与 DS 侧重打包机构未设计(属 EPIC-028)",
+        "OWNER-02 仍未裁定"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:1f424026befc29a095d3924e",
+      "externalKey": "TCRN-DS-MIN-051",
+      "surface": [
+        "一百个公开组件中哪些含 hook 未穷举、陷阱边界未知",
+        "barrier 之外是否还有其他导入路径未审",
+        "ProductShell 的 localStorage 水合问题在路径 B 下未单独验证"
+      ],
+      "effective": [
+        "一百个公开组件中哪些含 hook 未穷举、陷阱边界未知",
+        "barrier 之外是否还有其他导入路径未审",
+        "ProductShell 的 localStorage 水合问题在路径 B 下未单独验证"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:5a5a5d88888a00c29a291f7d",
+      "externalKey": "TCRN-DS-MIN-052",
+      "surface": [
+        "theme 与 locale 两个同构缺陷未单独验证",
+        "挂载后同步产生的状态跳变是否可见未测",
+        "版本递增的自动化机构未设计(属 EPIC-028)",
+        "该修复尚未回流到 DS 仓的正式提交"
+      ],
+      "effective": [
+        "theme 与 locale 两个同构缺陷未单独验证",
+        "挂载后同步产生的状态跳变是否可见未测",
+        "版本递增的自动化机构未设计(属 EPIC-028)",
+        "该修复尚未回流到 DS 仓的正式提交"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:911186a573aa7d4a8ae71003",
+      "externalKey": "TCRN-DS-MIN-053",
+      "surface": [
+        "未在真实浏览器验证暗色 token 是否改变计算样式",
+        "DS 侧主题契约的文档化未做",
+        "消费方侧校验根元素属性的门未设"
+      ],
+      "effective": [
+        "未在真实浏览器验证暗色 token 是否改变计算样式",
+        "DS 侧主题契约的文档化未做",
+        "消费方侧校验根元素属性的门未设"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:13601a8890d723a580174e8b",
+      "externalKey": "TCRN-DS-MIN-054",
+      "surface": [
+        "pin 清单重生成未接进升级流程仍是人工步骤",
+        "DS 侧版本递增未自动化",
+        "门未接进消费方 CI",
+        "DS 仓的 CHANGELOG 与 tag 修复尚未回流正式提交"
+      ],
+      "effective": [
+        "pin 清单重生成未接进升级流程仍是人工步骤",
+        "DS 侧版本递增未自动化",
+        "门未接进消费方 CI",
+        "DS 仓的 CHANGELOG 与 tag 修复尚未回流正式提交"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:ce9fb7253c69836ff798411e",
+      "externalKey": "TCRN-DS-MIN-055",
+      "surface": [
+        "CI 的具体形态待勘察后设计",
+        "AOS 无 remote 意味着 CI 无法直接检出它、检测机制待定"
+      ],
+      "effective": [
+        "CI 的具体形态待勘察后设计",
+        "AOS 无 remote 意味着 CI 无法直接检出它、检测机制待定"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:2f1b4cc1a8e5248390a701f0",
+      "externalKey": "TCRN-DS-MIN-056",
+      "surface": [
+        "浏览器门(storybook:smoke 与 browser-proof)未接入、视觉与 a11y 面无 CI 覆盖",
+        "出货 CSS 类名契约缺失、六成八无处断言",
+        "dependency-license-summary 跨环境敏感、未接入漂移门",
+        "真正的消费方保护需 AOS 有 remote 与自己的 CI、超出 DS 范围须呈 Owner",
+        "workflow 尚未提交进 DS 仓、仍在实验床"
+      ],
+      "effective": [
+        "浏览器门(storybook:smoke 与 browser-proof)未接入、视觉与 a11y 面无 CI 覆盖",
+        "出货 CSS 类名契约缺失、六成八无处断言",
+        "dependency-license-summary 跨环境敏感、未接入漂移门",
+        "真正的消费方保护需 AOS 有 remote 与自己的 CI、超出 DS 范围须呈 Owner",
+        "workflow 尚未提交进 DS 仓、仍在实验床"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:031546d33cac5b4541d1cd0f",
+      "externalKey": null,
+      "surface": [
+        "release-of-work-annotate-feature-is-owner-gated-publish",
+        "live-EPIC-005-annotation-and-skill-workflow-operations-doc-pending-post-release",
+        "STORY-017-disposition-pending-owner"
+      ],
+      "effective": [
+        "release-of-work-annotate-feature-is-owner-gated-publish",
+        "live-EPIC-005-annotation-and-skill-workflow-operations-doc-pending-post-release"
+      ],
+      "dissolvedCount": 1
+    },
+    {
+      "minutesId": "minutes:29603053f5bcf6cb55f83492",
+      "externalKey": null,
+      "surface": [
+        "publish-of-samples-into-W-and-release-propagation-pending-owner-decision"
+      ],
+      "effective": [
+        "publish-of-samples-into-W-and-release-propagation-pending-owner-decision"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:38297e18040e1a5737a99f46",
+      "externalKey": null,
+      "surface": [
+        "引擎余量岔路呈 Owner:仅内容激活(defer EPIC-007) vs 附带引擎余量(做 S023-025 并发 v0.3.2)——后者与 INIT-004 的 Incident CLI 发布相纠缠"
+      ],
+      "effective": [
+        "引擎余量岔路呈 Owner:仅内容激活(defer EPIC-007) vs 附带引擎余量(做 S023-025 并发 v0.3.2)——后者与 INIT-004 的 Incident CLI 发布相纠缠"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:49ae55f57d602be7502ffe76",
+      "externalKey": null,
+      "surface": [
+        "父语义 parent-optional vs 恒 parentless 待 Owner 确认（反转已批分解的一部分）"
+      ],
+      "effective": [
+        "父语义 parent-optional vs 恒 parentless 待 Owner 确认（反转已批分解的一部分）"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:51bfdfdbdc67922b4a52e29b",
+      "externalKey": null,
+      "surface": [
+        "INIT-004 启动排期待 Owner"
+      ],
+      "effective": [
+        "INIT-004 启动排期待 Owner"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:729c794de85503538c3be1d6",
+      "externalKey": null,
+      "surface": [
+        "W v0.3.2+candidate.24 发布预授权待 Owner 一句(对外发布类必停)",
+        "策展公约三缺省待 Owner 批(S027 落链)"
+      ],
+      "effective": [
+        "W v0.3.2+candidate.24 发布预授权待 Owner 一句(对外发布类必停)",
+        "策展公约三缺省待 Owner 批(S027 落链)"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:79975d0e36983467b5b5d79c",
+      "externalKey": null,
+      "surface": [
+        "本分解 Owner 可驳回；STORY 执行待 Owner 令"
+      ],
+      "effective": [
+        "本分解 Owner 可驳回；STORY 执行待 Owner 令"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:9e2ae969f6f716ba2ee6f2a8",
+      "externalKey": null,
+      "surface": [
+        "candidate.23-payload-edits-SKILL-and-workflow-operations-and-their-release-are-a-future-owner-gated-ceremony"
+      ],
+      "effective": [
+        "candidate.23-payload-edits-SKILL-and-workflow-operations-and-their-release-are-a-future-owner-gated-ceremony"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:b00a1a64ca020da57c7246cf",
+      "externalKey": null,
+      "surface": [
+        "reshape-target-selection-pending-owner-pick-among-recommended-candidates",
+        "STORY-017-disposition-pending-owner"
+      ],
+      "effective": [
+        "reshape-target-selection-pending-owner-pick-among-recommended-candidates"
+      ],
+      "dissolvedCount": 1
+    },
+    {
+      "minutesId": "minutes:b017306eb2765f373ece667d",
+      "externalKey": null,
+      "surface": [
+        "STORY-017-disposition-pending-owner",
+        "implementation-and-release-of-the-feature-are-a-multi-file-build-ending-in-owner-gated-publish"
+      ],
+      "effective": [
+        "implementation-and-release-of-the-feature-are-a-multi-file-build-ending-in-owner-gated-publish"
+      ],
+      "dissolvedCount": 1
+    },
+    {
+      "minutesId": "minutes:ce585e4cf935653f4f996249",
+      "externalKey": null,
+      "surface": [
+        "STORY-017-disposition-cancel-terminal-or-keep-with-corrected-narrative-pending-owner",
+        "true-E05-kickoff-scheduling-and-advisory-field-design-pending-owner-and-read-source"
+      ],
+      "effective": [
+        "STORY-017-disposition-cancel-terminal-or-keep-with-corrected-narrative-pending-owner",
+        "true-E05-kickoff-scheduling-and-advisory-field-design-pending-owner-and-read-source"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:d7012264acee18bca954f4ea",
+      "externalKey": null,
+      "surface": [
+        "EPIC-025 的三项 enforce 面仍待未来独立 Owner 裁定",
+        "TCRN-CROSS-INC-023 仍未复现",
+        "TMS 两条安全事项尚未修复"
+      ],
+      "effective": [
+        "EPIC-025 的三项 enforce 面仍待未来独立 Owner 裁定",
+        "TCRN-CROSS-INC-023 仍未复现",
+        "TMS 两条安全事项尚未修复"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:eb1f5317a7e8652a3d7bd307",
+      "externalKey": null,
+      "surface": [
+        "candidate.22-repin-and-outward-publish-pending-owner",
+        "release-point-snapshot-recommended-pending-owner"
+      ],
+      "effective": [
+        "candidate.22-repin-and-outward-publish-pending-owner",
+        "release-point-snapshot-recommended-pending-owner"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:f622309ae73382406c836f39",
+      "externalKey": null,
+      "surface": [
+        "skill-workflow-operations-doc-and-a-release-point-snapshot-are-non-blocking-follow-ups"
+      ],
+      "effective": [
+        "skill-workflow-operations-doc-and-a-release-point-snapshot-are-non-blocking-follow-ups"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:fbae19225d75a5600ea13df2",
+      "externalKey": null,
+      "surface": [
+        "父语义 parent-optional 待 Owner 确认；用户可见交付待 v0.3.2 发布（Owner 门）"
+      ],
+      "effective": [
+        "父语义 parent-optional 待 Owner 确认；用户可见交付待 v0.3.2 发布（Owner 门）"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:fc81b85294e9a85a888e0f97",
+      "externalKey": null,
+      "surface": [
+        "EPIC-025 enforce 前置仍待未来 Owner 裁定",
+        "INC-023 未复现仍 planned",
+        "TMS INC-001/002 未解决且 required security gate 保持红灯"
+      ],
+      "effective": [
+        "EPIC-025 enforce 前置仍待未来 Owner 裁定",
+        "INC-023 未复现仍 planned",
+        "TMS INC-001/002 未解决且 required security gate 保持红灯"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:26d0b27a4ea134840c607926",
+      "externalKey": "TCRN-CROSS-MIN-001",
+      "surface": [
+        "partitions-cannot-be-migrated-while-exchange-apply-is-absent"
+      ],
+      "effective": [
+        "partitions-cannot-be-migrated-while-exchange-apply-is-absent"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:aac0952ecd46f9cd16750f8e",
+      "externalKey": "TCRN-CROSS-MIN-003",
+      "surface": [
+        "pins-vs-attestations-trust-story-separation-pending-owner (GATE-001)"
+      ],
+      "effective": [
+        "pins-vs-attestations-trust-story-separation-pending-owner (GATE-001)"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:32b3b62ad7cafe921aa2f4c7",
+      "externalKey": "TCRN-CROSS-MIN-004",
+      "surface": [
+        "STORY-007 的「改不变量还是改实现」待 Owner 裁定"
+      ],
+      "effective": [
+        "STORY-007 的「改不变量还是改实现」待 Owner 裁定"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:3613d74bebbbe471461c2e06",
+      "externalKey": "TCRN-CROSS-MIN-005",
+      "surface": [
+        "STORY-003 范围变更（新增一面而非切既有面）与 E02 依赖形状待 Owner 复核"
+      ],
+      "effective": [
+        "STORY-003 范围变更（新增一面而非切既有面）与 E02 依赖形状待 Owner 复核"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:1725d22be398cc8503805379",
+      "externalKey": "TCRN-CROSS-MIN-006",
+      "surface": [
+        "分离规则与 STORY-003 定轨待 Owner 认可（GATE-001）"
+      ],
+      "effective": [
+        "分离规则与 STORY-003 定轨待 Owner 认可（GATE-001）"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:fcd503b817e8d44c77f6db16",
+      "externalKey": "TCRN-CROSS-MIN-008",
+      "surface": [
+        "身份面实现挪 E02 与「7 而非 12」的交付上限修正待 Owner 认可"
+      ],
+      "effective": [
+        "身份面实现挪 E02 与「7 而非 12」的交付上限修正待 Owner 认可"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:6eaa974b9321b5fc356dc026",
+      "externalKey": "TCRN-CROSS-MIN-009",
+      "surface": [
+        "compatibility-plan 的 availability 裁定；W 推送待 Owner 授权"
+      ],
+      "effective": [
+        "compatibility-plan 的 availability 裁定；W 推送待 Owner 授权"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:8dde9a0d76cd241db4ff7f15",
+      "externalKey": "TCRN-CROSS-MIN-010",
+      "surface": [
+        "compatibility-plan 可用性裁定后补证；W 推送待 Owner 授权"
+      ],
+      "effective": [
+        "compatibility-plan 可用性裁定后补证；W 推送待 Owner 授权"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:9458c60c80dac90942a40bb1",
+      "externalKey": "TCRN-CROSS-MIN-011",
+      "surface": [
+        "门的钝式告警扫描是否收紧待裁；verify:p1 90s 提速另议"
+      ],
+      "effective": [
+        "门的钝式告警扫描是否收紧待裁；verify:p1 90s 提速另议"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:7949577d1cca85fcf7a62cdf",
+      "externalKey": "TCRN-CROSS-MIN-012",
+      "surface": [
+        "Owner 若不认同前提消解可驳回本对齐（单点可逆）"
+      ],
+      "effective": [
+        "Owner 若不认同前提消解可驳回本对齐（单点可逆）"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:8a07dd58045bba990a546d94",
+      "externalKey": "TCRN-CROSS-MIN-016",
+      "surface": [
+        "钝式扫描（lint \\bany\\b 与门的 warning 扫描）是否收紧待 Owner 裁定"
+      ],
+      "effective": [
+        "钝式扫描（lint \\bany\\b 与门的 warning 扫描）是否收紧待 Owner 裁定"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:de60d2532b23d0ac8cff67e8",
+      "externalKey": "TCRN-CROSS-MIN-019",
+      "surface": [
+        "「7 而非 12」交付上限提法修正待 Owner 明文批准；EPIC-002 是否补 owner_intent_required 门待 Owner 裁"
+      ],
+      "effective": [
+        "「7 而非 12」交付上限提法修正待 Owner 明文批准；EPIC-002 是否补 owner_intent_required 门待 Owner 裁"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:f6fb1a1e87ceca6f0fa15af0",
+      "externalKey": "TCRN-CROSS-MIN-031",
+      "surface": [
+        "candidate.20 tag+release 待 Owner 授权（对外发布必停）；建议折入停顿预算 payload 教学"
+      ],
+      "effective": [
+        "candidate.20 tag+release 待 Owner 授权（对外发布必停）；建议折入停顿预算 payload 教学"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:03fc6ce5eb584b528a6a2b6d",
+      "externalKey": "TCRN-CROSS-MIN-036",
+      "surface": [
+        "执行启动时间未定(Owner持有go)",
+        "公约文档git治理位置:默认平台docs/",
+        "若Owner要求git治理则改置或镜像DS仓docs/(执行时呈报)"
+      ],
+      "effective": [
+        "执行启动时间未定(Owner持有go)",
+        "公约文档git治理位置:默认平台docs/",
+        "若Owner要求git治理则改置或镜像DS仓docs/(执行时呈报)"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:e070c05cbaad72306a1bcab8",
+      "externalKey": "TCRN-CROSS-MIN-038",
+      "surface": [
+        "执行 go 在 Owner;全树 planned 待点火",
+        "Codex hook 信任门可用性待 S042 执行时实测"
+      ],
+      "effective": [
+        "执行 go 在 Owner;全树 planned 待点火",
+        "Codex hook 信任门可用性待 S042 执行时实测"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:a5b8acfc66c5228473902ed3",
+      "externalKey": "TCRN-CROSS-MIN-039",
+      "surface": [
+        "检测器自动会话结束接线两宿主 live 仍 Owner 门控(Claude Stop 签名阶梯步、Codex 信任门+session-end 事件待勘)——独立跟进项非本 INIT 遗留缺陷"
+      ],
+      "effective": [
+        "检测器自动会话结束接线两宿主 live 仍 Owner 门控(Claude Stop 签名阶梯步、Codex 信任门+session-end 事件待勘)——独立跟进项非本 INIT 遗留缺陷"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:336e32a0cd87d51a45af56cc",
+      "externalKey": "TCRN-CROSS-MIN-040",
+      "surface": [
+        "执行点火在 Owner;全树 planned",
+        "固定排期公约(阶段二)待有客户时另场重裁"
+      ],
+      "effective": [
+        "执行点火在 Owner;全树 planned",
+        "固定排期公约(阶段二)待有客户时另场重裁"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:f3149e451883021785bbeba0",
+      "externalKey": "TCRN-CROSS-MIN-041",
+      "surface": [
+        "真实多-INIT 批量停点合并(入列 INIT 在执行前预排进 sprint、批次尾一次发布)待未来一个预排 sprint 实证——本轮 dogfood 证机制可用非真实批发"
+      ],
+      "effective": [
+        "真实多-INIT 批量停点合并(入列 INIT 在执行前预排进 sprint、批次尾一次发布)待未来一个预排 sprint 实证——本轮 dogfood 证机制可用非真实批发"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:489e5f863c3306a2f35d1707",
+      "externalKey": "TCRN-CROSS-MIN-043",
+      "surface": [
+        "外发收集器信任根与部署形态未定",
+        "Claude N-2 修宪细则待 S072 失败政策会议"
+      ],
+      "effective": [
+        "外发收集器信任根与部署形态未定",
+        "Claude N-2 修宪细则待 S072 失败政策会议"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:5fd796e8a242799b071f7ace",
+      "externalKey": "TCRN-CROSS-MIN-044",
+      "surface": [
+        "README 内容质量核对依赖 S084/S085 执行期人工逐节对照且无自动等价物"
+      ],
+      "effective": [
+        "README 内容质量核对依赖 S084/S085 执行期人工逐节对照且无自动等价物"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:1a5c6f7ec7d7fd9e562aa367",
+      "externalKey": "TCRN-CROSS-MIN-045",
+      "surface": [
+        "风格规则的措辞类条款无自动核验且依赖 review checklist 执行纪律"
+      ],
+      "effective": [
+        "风格规则的措辞类条款无自动核验且依赖 review checklist 执行纪律"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:55cf686f888b70e5e9420b7a",
+      "externalKey": "TCRN-CROSS-MIN-046",
+      "surface": [
+        "enforce 面的 fail-open/fail-closed 逐面裁定待独立会议",
+        "Codex 侧任何 observe live 收据待 Owner 通知 codex 实测"
+      ],
+      "effective": [
+        "enforce 面的 fail-open/fail-closed 逐面裁定待独立会议",
+        "Codex 侧任何 observe live 收据待 Owner 通知 codex 实测"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:5b26238fd23a2cba4430f429",
+      "externalKey": "TCRN-CROSS-MIN-047",
+      "surface": [
+        "自伪造缓解（会话无写权的外发收集器）仍列 enforce 级前置研究",
+        "尚未实现"
+      ],
+      "effective": [
+        "自伪造缓解（会话无写权的外发收集器）仍列 enforce 级前置研究",
+        "尚未实现"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:0a8df40ebda0b7dfc966937c",
+      "externalKey": "TCRN-CROSS-MIN-048",
+      "surface": [
+        "S095 Verity remediation 需 Owner 逐字立场",
+        "S103 L2.5 常设授权与额度帽待裁",
+        "S099 发布停点形态届时呈报(SPRINT-002 已 done)",
+        "S100 与 S102 宿主配置 diff 须执行时批准"
+      ],
+      "effective": [
+        "S095 Verity remediation 需 Owner 逐字立场",
+        "S103 L2.5 常设授权与额度帽待裁",
+        "S099 发布停点形态届时呈报(SPRINT-002 已 done)",
+        "S100 与 S102 宿主配置 diff 须执行时批准"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:1f9eb4cd8da2c029e4994d77",
+      "externalKey": "TCRN-CROSS-MIN-049",
+      "surface": [
+        "激活阶梯文档中 Step-3/OD-34 相关叙述是否需同步修订待 STORY-097 执行时按实际文本判定"
+      ],
+      "effective": [
+        "激活阶梯文档中 Step-3/OD-34 相关叙述是否需同步修订待 STORY-097 执行时按实际文本判定"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:31c06e3871d6948fbde20176",
+      "externalKey": "TCRN-CROSS-MIN-050",
+      "surface": [
+        "是否采纳 A 待 Owner 裁定",
+        "若不采纳 A 则 B 的目标值与四条耦合的处置顺序待定",
+        "该常量是否按治理约束分类公约登记为能力补偿型并附适用性谓词待 Owner 裁定",
+        "分析第二轮对抗复核仍判 FAIL(一处编造的 fixtureDigest 已在立场中更正为 1943ddf3 开头;记录级不变式建议因漏算事件信封而不成立)"
+      ],
+      "effective": [
+        "是否采纳 A 待 Owner 裁定",
+        "若不采纳 A 则 B 的目标值与四条耦合的处置顺序待定",
+        "该常量是否按治理约束分类公约登记为能力补偿型并附适用性谓词待 Owner 裁定",
+        "分析第二轮对抗复核仍判 FAIL(一处编造的 fixtureDigest 已在立场中更正为 1943ddf3 开头;记录级不变式建议因漏算事件信封而不成立)"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:31bc6b98b9d01b9d63140abe",
+      "externalKey": "TCRN-CROSS-MIN-052",
+      "surface": [
+        "S017 投影同步管道未建时镜像新鲜度靠手工重推，自动化留待后续",
+        "关系型写入 UI 形态无设计稿，需先出稿再开工"
+      ],
+      "effective": [
+        "S017 投影同步管道未建时镜像新鲜度靠手工重推，自动化留待后续",
+        "关系型写入 UI 形态无设计稿，需先出稿再开工"
       ],
       "dissolvedCount": 0
     }
@@ -7702,6 +9501,946 @@ export const cockpitData: CockpitData = {
         "fragmentCount": 1
       }
     ],
+    "conference:080047a28266811c28d57ede": [
+      {
+        "conferenceId": "conference:080047a28266811c28d57ede",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:497edba68b82d66544309c57"
+        ],
+        "externalKeys": [],
+        "body": "【main-thread synthesis；执行身份 agent:codex；persona 仅表示本次证据评审立场】核验基线：当前宿主为 Ryan’s MacBook Air；TCRN-Design-System main 与 origin/main 均为 44afb0039119efb865943edbe326e4c8782ce588，工作树无对应 INIT-010 落地改动；STORY-086 声称的 CI 文件不存在，STORY-078 声称修复的 localStorage 初始化仍在，且不存在可把 5 Epic/19 Story 逐项绑定到落地字节的 commit 或 digest。正确处置是 append-only 更正，而不是重写历史；当前 scope 应明确 done 是历史状态而非验证结论。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:080047a28266811c28d57ede",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:7486d67293bc0819e0f4d08f"
+        ],
+        "externalKeys": [],
+        "body": "【Owner 原话逐字转录】「按推荐方案执行全部收官。」【上下文绑定说明（执笔代理）】该指令批准前置推荐中的 DS 方案 B：对 TCRN-DS-INIT-010 及其 5 个 Epic、19 个 Story 追加治理更正；保留 append-only 历史中的 done 事件，但明确其完成声明在当前宿主与 origin 上没有 landed commit 或 digest 支撑，后续不得把这些声明当作已验证完成；若要继续，应新建计划项并以真实时钟和落地产物重新取证；处置完成后关闭 TCRN-DS-INC-002。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:0a4147aa2254ad56a10880c7": [
+      {
+        "conferenceId": "conference:0a4147aa2254ad56a10880c7",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:2759167d8078b044fd44cf83"
+        ],
+        "externalKeys": [],
+        "body": "「按建议裁定的四项」展开如下，供日后读者无需回溯即可理解裁决内容：① 档位=A 忠实性修复先行，保留七章信息架构；外壳重设计（B）若需要另立 Initiative。② F8 品牌四色渐变字标与六个 --tcrn-brand-accent-* token = **brand 资产，冻结不动**，不入本 Initiative；日后要改走 brand admission 独立路线（与 INIT-001 非目标口径一致）。③ F3 .tcrn-theme-preview = **改 token 驱动的真双主题预览**，不移除——它本是最该忠实的展示件，现状硬编码 v1 深蓝夜色，等于给用户演示已死的设计。④ WS1 假门 = 能机检的（decorativeGradientsOrOrbs / radiusDriftAboveContract / oneNotePaletteDrift）变真检测；无法机检的（nestedCards / genericLeftRailAdminShellCreep / incoherentOverlap）改**显式 unchecked 声明**并撤出 ok 公式与 AI 契约。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:0a4147aa2254ad56a10880c7",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:3db47accb11b14251674e6b2"
+        ],
+        "externalKeys": [],
+        "body": "A 档先行 B 另立，review 通过按你的建议裁定四项，开拆",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:0b3bbf72a00c7b6e5b58b5e2": [
+      {
+        "conferenceId": "conference:0b3bbf72a00c7b6e5b58b5e2",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:a1b4623f72edafae1fedd433"
+        ],
+        "externalKeys": [],
+        "body": "章程 §6 验收八条逐条对照：①License：fonts-proof 通过（发布面零字体二进制、7 个 distributable 栈无专有字体），立场文档 packages/ui-tokens/FONT-LICENSES.md；②AA 对比度：token-contrast-proof 通过，19 组配对 × 浅深双主题全过（文本 4.5:1、控件边界 3:1）；③密度：13px/36px token 未改，Storybook density 样张随构建通过；④双主题同工艺：浅深两套值逐一重设并同证；⑤reduced-motion：位移归零、opacity/色彩保留，证明工具已重写为「无位移 AND 有理解性提示」双向断言；⑥印章白名单：stamp-whitelist-proof 通过（语汇限于组件内、moment 限三值）；⑦契约一致：见 GATE-001 证据卡 TCRN-DS-CONF-004；⑧下游 AOS：typecheck 干净、95 测试通过、无 v1 色值硬编码，file: 链接自动取 v2。三包版本已 bump 至 2.0.0。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:0b3bbf72a00c7b6e5b58b5e2",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:e39a6a2d0588dc55bb5ef30c"
+        ],
+        "externalKeys": [],
+        "body": "认可，关门。并授权发布动作：推送分支 feat/visual-language-v2-a-plus-b、打标 v2.0.0、建 GitHub Release",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:132b74a06afa2da56449e861": [
+      {
+        "conferenceId": "conference:132b74a06afa2da56449e861",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:14bcdd4df896c9b64fa7482b"
+        ],
+        "externalKeys": [],
+        "body": "四 WS 全部交付（各自独立 PR，main 独立 verify 绿，Vercel 生产已部署）：WS1 PR#5=折叠轨 120px、mark+按钮并排入 96px 顶栏带（15/40/12/38/15）、按钮 Y 恒定 29px 只平移 X（222→67）、底缘 67px 离 seam、零基线漂移；WS2 PR#6=单一选中语言（3px 左缘指示条+字重，组行/故事链/折叠缩写同轴向）、去光晕环与底线、去组箭头（计数徽章即内容暗示、整行可点、当前组默认展开）、零基线漂移；WS4 PR#7=TableToolbar 入 @tcrn/ui-react（SearchInput+FilterBar chips+活计数+收起，data-table-toolbar-* 宿主契约，chip 匹配走 data-table-filter-key 键值防 locale 破坏）+ docs 两大表 dogfood（实测搜索 2/11、筛选 7/11、收起、zh 词条）+ 五语言词条 + SSR 测试；axe 两回退（计数对比度 muted→secondary、landmark 重复→role=group）；WS3 PR#8=渐进披露（紧凑索引=标题+一行定位+台账 +/− 记号、手风琴 heading>button、hash 直达先展开再滚动）、API/utility 表去全同值双列改 EvidenceStrip 一次声明、proof 同原则适配（签名/本地化检查证内容先展开，新增披露行为门入 ok）、40 门签名记录式重标定（--update-visual-baseline+干净复跑 0 回归）。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:2225aeeb7aa52e01e6454f23": [
+      {
+        "conferenceId": "conference:2225aeeb7aa52e01e6454f23",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:5280068a4f05e727b0647e0d"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程综合四路实测与两路对抗验证后写成,非分派子代理。\n\n四路判定:B 路径 works 且零硬阻断;A 路径 works-with-changes 零硬阻断;C 路径技术可行但受授权硬阻断;D 路径 blocked 两条硬失败。\n\nD 死于两处且均已实测复现。其一 CI:单仓检出下 pnpm install --frozen-lockfile 退出 254 并报 ENOENT scandir。其二钉定:锁文件对 file 目录依赖只记 resolution type directory 而无 integrity 字段;实测改 DS 产物字节、甚至把主版本从 2.0.0 抬到 3.0.0,frozen 安装仍退出 0 且锁文件 sha 纹丝不动。后者不是配置问题——file 协议本身不携带版本与摘要,救活 CI 也救不回钉定。\n\nC 的阻断是授权而非技术。verdaccio 实测三包可发可装可构建,且 CI 天然满足、钉定最强。但 mvp-adoption-boundary 的 Deferred 逐字把公有与私有发布写在同一句无缝隙,另一条 AOS or TMS dependency changes 又单独挡住消费侧。故 C 的可行性已证,准入未开。\n\nB 与 A 的关键差别在 CI 与钉定的强制形态。B 的 tarball 在仓内,TMS 五个 workflow 零改动;钉定由 pnpm 自身强制,篡改同名 tarball 后 frozen 安装硬失败 ERR_PNPM_TARBALL_INTEGRITY,该链路已被独立验证方在全新 clone 中端到端复现。A 需改五个 workflow 的 checkout 加 submodules true,且有静默陷阱:不加时 install 仍退出 0 只留悬空 symlink,失败推迟到 build。A 的钉定存在 git 树对象里,语义更自然但强制力靠约定不靠工具。\n\n代价实测:B 的三个 tarball 合计 155K,入 git 完全可接受——这是 B 最大的隐忧,实测后不成立。A 需 TMS 侧四处改动 DS 侧零改动,但验证方发现 A 的改动清单漏报了 turbo.json 一处(经语义比对为纯重新序列化无行为变化)。\n\n推荐 B 为主选,理由是它把钉定强制力交给工具而非约定,且不需要动任何 CI 语义。若 Owner 偏好源码级耦合与 git 原生的 pin 语义,A 是可接受的替代。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:2225aeeb7aa52e01e6454f23",
+        "actorId": "profile:tcrn-mneme-v1",
+        "fragmentIds": [
+          "position:713d39e4abdaf71439ee452a"
+        ],
+        "externalKeys": [],
+        "body": "本立场记录本轮实验的证据卫生缺陷,由主线程综合两路对抗验证写成。\n\n三条自捕缺陷,均不改变路径判定但必须入册。\n\n其一,dist 聚合摘要 d1ff2807 开头那个常数不可复验。A 与 B 两路都引用它,但都未记录计算配方;验证方用四种常规配方复现均不相等。其承载的实质主张(装到的字节等于基线)另有独立证据支撑,但该常数本身作废。这与本平台既有教训完全同构:哈希必须由将来实际运行的生成器算出,手算与他算是两个会漂移的真值。\n\n其二,A 的 4.6 秒安装计时与 B 的篡改实验数字均随实验目录删除而销毁,无法复现。判定为无法复现而非被证伪。B 的篡改机制本身经验证方在全新 clone 中独立复现,故结论存活但原始数字作废。\n\n其三,四路报告的 node_modules 体积全部是 du 的表观大小,被 pnpm 硬链接严重放大。实测同一目录 du 为 2.7G 而 du --count-links 为 7.2G,而该目录增长到 2.4G 期间 df 仅增加 1G。故所有体积数字不等于增量磁盘占用,不得据以做容量规划。\n\n教训:实验产生的证据在实验目录被清理时一并消失。今后须区分两类产物——可销毁的工作区与须保留的证据,后者在清理前另存。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:23a94729234203c290284146": [
+      {
+        "conferenceId": "conference:23a94729234203c290284146",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:8ccb6cf22e4222843da03f15"
+        ],
+        "externalKeys": [],
+        "body": "E1 按 handoff 与 D4 交付,验收通过",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:23a94729234203c290284146",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:936b61a2c49135333bddad04"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis] E1 交付(PR #12->main c3db902,独立 verify 绿,AOS proof ok)。关键发现修正 handoff 预设:storybook.css 仅被真 Storybook preview 消费,不入部署站(build.ts 注 componentCss)、不入 verify。删 23 重复组件块(158 行)部署站像素零变、签名零回归——E1 是源码卫生+drift 消除+真 preview 修 v2。preview.ts 改注 tcrnComponentCss;.tcrn-link-button 基样式上移 componentCss(修部署站 LinkButton 无样式),AOS 同享。overlap->0。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:2847e4805948403dab2e37c2": [
+      {
+        "conferenceId": "conference:2847e4805948403dab2e37c2",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:75b6dc95f45ea13cdd5204e4"
+        ],
+        "externalKeys": [],
+        "body": "导航精修没有太大问题。但 Storybook 应该还没有统一设计风格,需要进行一次完整的检查和同步;创建新的 INIT 并拆分,确保足够详细能交由 opus4.8 运行;拆完后先不要执行。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:2847e4805948403dab2e37c2",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:b91e73612fddc1b80300da11"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis] 审计九证据:①storybook.css∩componentCss 重复选择器 23 个(button/badge/inline-alert/side-nav 等 v1 平行实现)=结构性根源;②storybook.css 83 hex 字面量(v1 青色系);③shell 层字号零 token(24+10 字面量,含 1 处 10px);④间距 12 档乱值(7/5/3px 奇数档)space-token 仅 6 处/文件;⑤999px×15 未走 pill token+componentCss 裸 6px;⑥shell 层 :active=0、storybook.css focus-visible=2;⑦INIT-005 新增面 dark 专属规则=0 且 axe 只跑 light;⑧motion 半 token;⑨风格无门。拆分七 Epic:E1 分层收敛(先行)→E2 色彩/E3 字号/E4 间距圆角(并行)→E5 交互态/E6 暗色(并行)→E7 风格门(收官,双向验证)。交接文档 docs/2026-07-22-storybook-style-unification-handoff.md 自包含:证据复现命令、逐 Epic 施工步骤/不许动/验证/基线预算/验收、12 条陷阱手册、治理协议、不做清单。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:2d264788305a5d502b81c87b": [
+      {
+        "conferenceId": "conference:2d264788305a5d502b81c87b",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:852aa7fe4b64a2592ff917bb"
+        ],
+        "externalKeys": [],
+        "body": "本立场记录验证过程中挖出的路径 B 操作陷阱,由主线程实测。\n\n陷阱:同版本换内容会静默失效,且 --force 也救不了。\n\n实测经过。修复 DS 源码并重新 pnpm pack 后,把新 tarball 以同名同版本 2.0.0 覆盖进消费方 vendor 目录,再跑 pnpm install --no-frozen-lockfile。结果:install 退出 0、报 Already up to date、直接跳过解析步骤;装到的 node_modules 里仍是旧字节,探针继续报失配。\n\n进一步:加 --force 重装仍无效。lockfile 里记的 integrity 始终是旧值 sha512-D/9oDhEY 开头,而新 tarball 的实际 sha512 是 k7tDZTtr 开头。即 pnpm 认的是版本号而非内容。\n\n唯一生效的做法是递增版本号到 2.0.1 并同步改消费方的依赖声明,此后 install 装到新字节、探针转绿。\n\n这条对路径 B 的落地是决定性的:tarball 升级流程必须强制版本递增,不得原地覆盖。若有人以为改了 tarball 就生效,他会得到一个安静的旧版本,而所有构建与测试都会通过。\n\n与先前实验的关系:路径 B 的实验代理曾报告过同版本换内容的静默失效,但其原始数字随实验目录清理而销毁、被验证方判为不可复现。本次在修复流程中独立重现了该机制,故该结论现有实测支撑。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:2d264788305a5d502b81c87b",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:fbc99e36db39b78a674d0d5f"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程实测后写成,非分派子代理。\n\n水合失配已复现,证据是确切的 DOM 差异而非控制台警告。\n\n先更正一条先前结论:路径 A 的实验曾报告 ProductShell 的 localStorage 地雷未触发,依据是探针页静态预渲染成功。该依据不成立——构建成功正是预期行为。读源码可见 readStoredBoolean 与 readStoredString 都有 SSR 保护 typeof window 等于 undefined 时返回 fallback,故服务端不会崩;但这恰恰构成经典水合失配:服务端返回 fallback、客户端首帧读 localStorage,两者不同。\n\n观测手段:本机 Playwright 不支持该 OS 且无系统 chromium,故改用微分渲染。该法比浏览器控制台警告更强——警告只是症状,微分渲染直接给出机制与确切 DOM 差异,且可直接固化为回归门。\n\n复现结果:同一个 useProductShellController,在无 window 的全局下 renderToString 得 data-collapsed 等于 false;在 jsdom 且 localStorage 置为 true 的全局下得 data-collapsed 等于 true。两者不同即失配。\n\n修复:三个 useState 初始化器一律改取 fallback 使服务端与客户端首帧相同,存储中的值改由挂载后的 useEffect 同步一次。修复后同一探针两次渲染均为 false 且退出 0。\n\n弱点自陈:探针只覆盖 collapsed 一个状态,theme 与 locale 两个同构缺陷未单独验证,但三者共用同一修复形态。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:331511a2f8cd03b947016162": [
+      {
+        "conferenceId": "conference:331511a2f8cd03b947016162",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:f026eb0f204a5209b91c10ea"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程实测后写成,非分派子代理。\n\n样式交付端到端可用。实测:apps/web 的页面 import at-tcrn/ui-tokens/tokens.css 加把 tcrnComponentCss 以 style 标签注入,next build 退出 0,产物 HTML 含 tcrn-button 类名、data-tcrn-theme 等于 dark 属性、以及 380 处 --tcrn-color 变量引用。tokens.css 是真 CSS 文件可直接 import;tcrnComponentCss 是 73502 字节的 JS 字符串须由消费方注入。\n\n主题接线的结论须更正两次。先前勘察称主题切换未接线,依据是 ProductShell 发 data-product-shell-theme 而 token CSS 键在 data-tcrn-theme 上。我第一版探针问了一个更弱的问题——两个属性集合是否有交集——答案是有(data-current-theme 与 data-theme-icon),于是探针报绿。那是我自己的假绿。\n\n精确追问后的实况:Navigation.js 向 DOM 写六个主题属性,分别是 data-current-theme 与 data-product-shell-theme 与 data-theme-icon 与 data-theme-next 与 data-theme-toggle 与 data-theme-transition-contract,其中没有 data-tcrn-theme;而 tokens.css 第 118 行与 tcrnComponentCss 的暗色块都以 data-tcrn-theme 等于 dark 为选择器。运行期 JS 中该字符串的五处命中全在 CSS 文本内,零处 setAttribute。\n\n故准确表述不是接线断裂而是契约未接:DS 提供 token 与选择器,由消费方决定在哪一层施加主题属性。这本身是合理边界,但它未被文档化,而 ProductShell 发出 data-product-shell-theme 会给人已处理主题的错觉。消费方若不自行设置 data-tcrn-theme,暗色 token 永不生效且无任何提示。\n\n弱点自陈:我未验证消费方设置该属性后暗色 token 是否真的在浏览器里改变了计算样式——那需要真实浏览器,而本机 Playwright 不支持该 OS。本次只证到产物 HTML 含该属性与变量引用。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:353591acf9579e0cfa315fe0": [
+      {
+        "conferenceId": "conference:353591acf9579e0cfa315fe0",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:acd9bade1aaf5db6a6bf7514"
+        ],
+        "externalKeys": [],
+        "body": "2",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:353591acf9579e0cfa315fe0",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:c1090eaaf6b2628c813f8dca"
+        ],
+        "externalKeys": [],
+        "body": "现象：visual-baseline-manifest.json 与 intentional-diff-manifest.json 里的截图 sha256，在同一棵树上重复运行 internal-alpha-browser-proof 时会为一组轮换的 story 变化——实测四轮命中 section-components（每轮都在）、display-primitives-spec、icons-motion、dashboard-page-templates。已排除的成因：动画在飞（INIT-001 期间已修，取样前钉动画+截图用 Playwright animations:\"disabled\"，该修复让 story-coverage-manifest.json 的样式测量变得逐字节稳定，但截图 hash 未被治愈）。剩余成因判断：无头浏览器的栅格化（字体 hinting、GPU 合成、亚像素时序）本就不保证字节级可复现，这是 PNG 字节哈希作为不变量的固有性质，不是某个具体 bug。**影响面已核实**：这些 hash 不被任何门校验——visualBaselineManifest.ok 只比对条目数，internal-alpha-hardening-proof 同样只数 entries.length，全仓无一处比对 sha256 值。故当前后果是「每次跑完证明，工作树必脏一到两个文件」，不是门失效或视觉回归漏网。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:4338a6dc83cd1eeb7377e7f1": [
+      {
+        "conferenceId": "conference:4338a6dc83cd1eeb7377e7f1",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:01dbb33dad0af8dbd89d1c60"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis] E6 交付(PR #17->main 928d6a7)。a11y 门此前只跑 light,暗色从未测对比度。runAxe 现每 section 双跑(light+fresh ?theme=dark),均计入 axeViolationCount 同 4.5:1 门限。**结论:暗色本就正确**——图标轨/左缘指示条/TableToolbar chips+计数/披露 chevron/表格斑马纹/EvidenceStrip 全干净(截图+axe 双证),无需 CSS 改动。谐调坑已解:页 ships light+脚本翻 dark、header/current-location 动画 ~400ms,axe 即跑抓到翻转中帧(浅背景+浅翻文字)报瞬态失败(值随 section 漂=铁证);dark axe 前禁过渡测 settle 态→零违规,与肉眼+settle 截图一致。dark 用 fresh 导航非原地切(per-panel 主题预览只在 runtime 处理下正确)。E6 只改 proof 谐调,无 CSS/AOS 涉。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:4338a6dc83cd1eeb7377e7f1",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:216d345d69a327905644d891"
+        ],
+        "externalKeys": [],
+        "body": "按 handoff 与前置裁定交付,验收通过",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:4e2411e1bb28173133fc9661": [
+      {
+        "conferenceId": "conference:4e2411e1bb28173133fc9661",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:a2c31c3649c205a483c677ad"
+        ],
+        "externalKeys": [],
+        "body": "侧边抽屉动画非常卡顿；收起状态的按钮错误且位置不对",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:4e2411e1bb28173133fc9661",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:c1ce73eba825ead3d4943783"
+        ],
+        "externalKeys": [],
+        "body": "诊断（读源+浏览器实测）：Bug1 卡顿=折叠动画在 .tcrn-doc-global-bar/.tcrn-doc-layout 上过渡 grid-template-columns、在 .tcrn-doc-brand 上过渡 grid/gap/left/top/width、在 .tcrn-doc-sidebar 上过渡 padding——全是布局属性，折叠时 --side-width 从 ~300px 变 88px，每帧全内容区回流（教科书级 layout-thrash）。Bug2=折叠态图标从不旋转（chevron-left `<` 两态都指左，折叠态本该 `>`），按钮过渡 left/top 致其在两位间飞窜，折叠位 top:60px 与 40px 品牌 mark 仅差 6px 局促。修复（emil 规范：只动 transform/opacity）：去四处布局属性过渡→宽度瞬时切换（折叠是偶发操作）；折叠态加图标 rotate(180deg)→`<`翻成`>`；去按钮 left/top 过渡+加 :active scale；折叠位 60→66px。浏览器实测确认：折叠态 icon computed transform=matrix(-1,0,0,-1,0,0)=rotate180；layout 不再带 grid 过渡。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:52cf53b4033d7205bc030b0d": [
+      {
+        "conferenceId": "conference:52cf53b4033d7205bc030b0d",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:542b98bd1ef44d7aa3ee1c5c"
+        ],
+        "externalKeys": [],
+        "body": "Owner 授权（2026-07-24 聊天原文：「授权」，回应收官+全发布二事项，publish 以「INIT-008 同款全发布流程 或 hold」呈报后作出）。承认 TCRN-DS-INIT-009 全 7 Story（S061-S067）已交付、pnpm verify 全绿、7 commit 于 feat/init-009-fidelity-modernization。授权关闭收官门、3 Epic 与 INIT 转 done，并授权全发布（push/PR/合 main/Vercel 部署，同 INIT-008 流程）。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:5ba0d8e3b09c16c7d297e51c": [
+      {
+        "conferenceId": "conference:5ba0d8e3b09c16c7d297e51c",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:0e2abc3b79514ee9091d6c40"
+        ],
+        "externalKeys": [],
+        "body": "A 为底盘，B 印章语汇用于身份时刻（门关闭/裁决/验收），motion 全线按 emil 规范；三方向完整评估见 artifact 9c0d96f6-3c0f-4402-9d69-22f103604d8d",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:5ba0d8e3b09c16c7d297e51c",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:26d5d6ed80ad63dc67c24649"
+        ],
+        "externalKeys": [],
+        "body": "信任态问题在另一线程已处理，视觉方向采纳 A+B 混合，C 不作为整体方向，但其弹簧曲线与按压反馈作为 motion token 进入基线，但是要注意引入素材的license",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:5cecdda5fb7cacfc8f0ab03f": [
+      {
+        "conferenceId": "conference:5cecdda5fb7cacfc8f0ab03f",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:51b87e1b88e2c8fa5742b4fd"
+        ],
+        "externalKeys": [],
+        "body": "为查明 work 状态枚举，我用候选值循环调用了 work-transition——这是 mutates=true 的变更动词。其中 ready/blocked/cancelled 三个值被接受并逐条落链（v34–v36），把 TCRN-DS-STORY-001 走成 planned→ready→blocked→cancelled。引擎迁移表中 cancelled 与 done 均为终态（出边为空），故该记录不可复原。工程产出本身不受影响：A 底盘色板 v2 已完成并经 pnpm verify 全门通过。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:5d858b76692e8ad45d11b05d": [
+      {
+        "conferenceId": "conference:5d858b76692e8ad45d11b05d",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:5e569d7012ab635f9730e800"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis] E5 交付(PR #16->main 09be813)。审计:shell 答 hover/focus 但从不答按压——press-scale 仅在 .tcrn-button,故非-.tcrn-button 的按钮型(theme-toggle/locale-trigger/table-toolbar chip+collapse)无按压反馈。按 D5 press-scale 全按钮型:四者并入 press-scale 规则+reduced-motion 中和块;table-toolbar chip/collapse 补显式 focus-visible 环(渲于 docs 故事体,在 product-shell focus 域外)。文字型控件(nav 行/类目/故事链/披露头/on-this-page/pager/搜索结果)已有色移 hover+容器 focus,文字型不取 press-scale(设计如此)。12 控件矩阵全绿,契约级证明(规则在构建 componentCss+家族已在线上工作)。verify 零回归 axe 0,AOS ok。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:5d858b76692e8ad45d11b05d",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:9f373186048a0af97ee30933"
+        ],
+        "externalKeys": [],
+        "body": "按 handoff 与前置裁定交付,验收通过",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:6cea91919d28ac74e44d3017": [
+      {
+        "conferenceId": "conference:6cea91919d28ac74e44d3017",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:4c02e85097693810e5385561"
+        ],
+        "externalKeys": [],
+        "body": "处置已完成（提交 964d65c）。原七项中六项为字面 false。现状：**真检测三项**——decorativeGradientsOrOrbs / radiusDriftAboveContract / softCloudElevation 由 scripts/shell-fidelity-proof.mjs 扫描外壳源得出；**绑定既有防线一项**——oneNotePaletteDrift 绑到 INIT-002 的感知签名门（真正能抓住色板移动的那道）；**显式 unchecked 三项**——nestedCards / genericLeftRailAdminShellCreep / incoherentOverlap 以 uncheckedClaims 字段声明「本仓无可用机检」，不再断言 false；clippedButtonText 原本即真检测，保留。扫描结果并入 ok 公式，故不可再静默回归。开门即见债：86 装饰渐变、21 处云影（最大 54px）、6 个圆角字面量，现均为 0。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:6cea91919d28ac74e44d3017",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:d7cf3e6317663bad780ca09b"
+        ],
+        "externalKeys": [],
+        "body": "两道门都关，然后开 PR 合并到 main",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:79087e89d2a6b45f4c2ba16e": [
+      {
+        "conferenceId": "conference:79087e89d2a6b45f4c2ba16e",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:98dddda131483845db09ea7f"
+        ],
+        "externalKeys": [],
+        "body": "①按钮边界被顶栏和下部分界线切割部分覆盖——抽屉不要缩这么进去，按钮应平移而无需 Y 轴移动；②选中高亮非常 AI、项目箭头不符合整体风格，要更适合的设计；③storybook 简略不得当，组件目录全量罗列致信息量爆炸但有效信息不多，应重整目录与内容展示，表格提供表内搜索与筛选、收起等设计。总体需要大幅改版。裁定：全量四工作流（推荐），顺序 WS1→WS2→WS4→WS3，逐 WS 验收",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:79087e89d2a6b45f4c2ba16e",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:a3eae8c0d14195f042678621"
+        ],
+        "externalKeys": [],
+        "body": "诊断锚定：①几何实锤——顶栏带 96px，折叠按钮 66+38=104px 跨线 8px 被切；修法=折叠轨 88→120px，品牌 mark(40)与按钮(38)并排入顶栏带（15/40/12/38/15），按钮 Y 恒定只平移 X；②选中项三层堆叠（muted pill+inset 底线+1px 光晕环），光晕环是 AI 感主凶；修法=统一「3px 左缘指示条+字重」单一语言，去环去底线，折叠展开轴向一致；组箭头冗余（右侧计数徽章已是内容暗示），当前组自动展开；③API 表 30+ 行中来源包/入库状态两列全同值=纯噪声；修法=渐进披露+表内工具；④WS4 TableToolbar/FilterableTable 入 @tcrn/ui-react（AOS work-index 同需，真实采用+dogfood）。章程约束：每 WS 独立 PR+验收（verify+AOS proof+main 复验）；超阈值视觉漂移走 INIT-002 记录式重标定；fidelity/no-overclaim 门不动摇。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:7ae2fe44112119b8093b73fb": [
+      {
+        "conferenceId": "conference:7ae2fe44112119b8093b73fb",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:112d1f1b21c21ba30445f2b6"
+        ],
+        "externalKeys": [],
+        "body": "七 Epic 按 handoff+前置裁定交付,收官",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:7ae2fe44112119b8093b73fb",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:8cb4c87bfa643b107748b8e0"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis] INIT-006 七 Epic 全交付(PR #12-18 合并 main 400a579,每 Epic main 独立 verify 绿,Vercel 生产已带新 token)。E1 分层收敛(storybook.css 删 23 重复组件块,发现其仅喂真 Storybook preview 非部署站,link-button 上移 componentCss);E2 色彩 token 化(#fff->text-inverse,非-token 色字面量归零);E3 字号刻度(49 字面量全 token,加 meta 修悬空+heading-2/3 标题真空);E4 间距圆角(定义源归一 ui-tokens+2px 网格全档,473 gap/padding token,radius-pill 修悬空,style-scale.md);E5 交互态(press-scale 全按钮型,12 控件矩阵);E6 暗色(axe 加 dark 跑道,证暗色本就正确,过渡伪影用禁过渡解);E7 风格门(5 检测器双向验证入 tokens:proof)。修 4 个悬空 token(meta/pill 各引用无定义)。全程签名门记录式重标定(E4 3 门),AOS parity 每次联动绿。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:8067dda75a12db05b747253e": [
+      {
+        "conferenceId": "conference:8067dda75a12db05b747253e",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:56183d463d1484fe4df067e4"
+        ],
+        "externalKeys": [],
+        "body": "对齐 v2（推荐）",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:8067dda75a12db05b747253e",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:98757e676c649d66b7debacc"
+        ],
+        "externalKeys": [],
+        "body": "落实 MIN-010 的「AOS 视觉 proof 复绿」时，proof 在 v2 下变红。诊断非色板问题：DS storybook 外壳残留一条 v1 全局 kill-switch —— reduced-motion 块内 `* { transition-duration: 0.01ms !important }`，把 v2 本该保留的 160ms comprehension cue 也抹平。AOS 只注入组件 CSS、无此覆盖，忠实渲染 v2 的 160ms；storybook 比对基准带覆盖显 0.01ms —— **撒谎的是比对基准**。三面互相矛盾：v2 组件语义（cue 存活）／storybook 外壳（全局压零）／AOS proof 规则（compareReducedDuration 要求 ≤0.02ms，即 v1 期望）。这是 INIT-003 忠实性工作漏网的一条：我的 shell-fidelity-proof 当时只扫渐变/圆角/阴影，扫不到 kill-switch。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:9167bd7c70f5efcbf1b560fc": [
+      {
+        "conferenceId": "conference:9167bd7c70f5efcbf1b560fc",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:1c6f23f4c4fe39f8a86072ad"
+        ],
+        "externalKeys": [],
+        "body": "PR #1 已合并（merge commit `698ecc5`），main 与 origin/main 同步。**在 main 上独立复验而非沿用分支结论**：`pnpm verify` 退出 0，工作树零脏文件。结构缺口已闭合：`v2.0.0` 标签指向的 `4d1e2c6` 现为 main 的祖先，已发布标签首次从默认分支可达；main 的 tokens.css 实测含 v2 品牌青 `#17707f` ×4、v1 蓝紫 `#5865d8` ×0。GitHub Release v2.0.0 仍为非草稿且 URL 有效。合并如 PR 描述所声明，连带发布了 Owner 本人 9 个此前未推送的提交（7/04–7/05）。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:9167bd7c70f5efcbf1b560fc",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:d51a4d95c2686851881df6c2"
+        ],
+        "externalKeys": [],
+        "body": "同意合并，按你的建议推进",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:951a87834c3c7dc29c379667": [
+      {
+        "conferenceId": "conference:951a87834c3c7dc29c379667",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:fde99a64dd784abeaac3ff09"
+        ],
+        "externalKeys": [],
+        "body": "Owner 授权(2026-07-23 聊天原文:「授权」),经 Fable 复查呈报两项 Owner-only 事项后作出。承认 TCRN-DS-INIT-007 全部 15 Story 已交付,pnpm verify 全链绿(exit 0;130 感知门 0 回归、axe 0、shell-fidelity 0 dup、记录式重标定),整合分支 feat/init-007-fidelity-closure 18 commit。授权含:①关闭收官门 TCRN-DS-GATE-INIT007-CLOSEOUT;②合入 main 触发 Vercel 部署。执行形态:main-thread synthesis by scribe agent:opus,记 owner:governance 权威;actor≠authentication,本记录为声明非鉴权。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:986181b7b72f0374a0a839aa": [
+      {
+        "conferenceId": "conference:986181b7b72f0374a0a839aa",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:11fcfb4a44ffab2729a02925"
+        ],
+        "externalKeys": [],
+        "body": "两道门都关，然后开 PR 合并到 main",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:986181b7b72f0374a0a839aa",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:db8a6d0a7b9502dd8d7059ac"
+        ],
+        "externalKeys": [],
+        "body": "关门条件对照：**基线重建经 review**——外壳去装饰触发 25 道门（22 处 mobile，chrome 占比最大；另加 theme-preview 在三视口全变），逐条核为预期改动后重建；新增 stamp 故事再触发相邻位移，二次重建后连跑 ok=true、130 道门零回归。**三面一致**——digest 由构建重新派生并经浏览器证明校验；章节清单六处注册表全部同步（group／governance 分类与排序／AI 契约清单与分类／browser proof／shell smoke／smoke test 期望列表／llms.txt）；散文五语同步且无新孤儿键。pnpm verify 退出 0；提交 964d65c / 5fe33a4 / 3c8ffb9 已推送。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:a0aecffd701aa70a5b4e296d": [
+      {
+        "conferenceId": "conference:a0aecffd701aa70a5b4e296d",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:5218466ab5c01b73fdfd6b32"
+        ],
+        "externalKeys": [],
+        "body": "方案先经 visualize 出图(现状vs提案两态)呈 Owner 批准后实作(PR #9→main `2ba3ec7`,Vercel 已部署,线上标记 18 处)：①单轴——选中三处(组行/故事链/折叠图标)统一 3px 左缘指示条钉 x=0+主色+字重,彻底移除圆角与 muted 填充,层级缩进移入文字 padding 与指示线解耦(实测 section bar x==story bar x==18px);②图标轨——折叠态 40×40 图标钮居中 120px 轨(实测 icon center==rail center、bar 贴轨缘),abbr sr-only,组名转 aria;5 图标经包装 Icon 入注册表 AOS 共享;③章节 chevron——chevron-right 展开转 90°(实测 matrix(0,1,-1,0,0,0)),替 +/−(字形随字体/locale 漂);④toggle 回退 chevron 净零。过程侦查陷阱：缩小截图(1440→800 0.555×)把模糊中文误读成省略号——DOM 实测 truncatedCount=0 才是真;结论用测量不用肉眼缩图。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:a0aecffd701aa70a5b4e296d",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:857c7eb043ab11bc8900b23c"
+        ],
+        "externalKeys": [],
+        "body": "四缺陷：①居中/间距不自然;②折叠项过宽;③选中仍 AI(圆角+muted 填充未除净);④完全无收起项目图标。先出方案不落地。裁定：图标轨(40×40 居中钮+aria-label)+单轴台账指示线(钉栏左缘 x=0,选中=主色+字重,零底零圆角)+7 组图标映射(5 新增 lucide 入注册表);章节收起/展开图标=旋转 chevron(方案二);抽屉 toggle 的 panel 图标(未经要求)回退 chevron。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:a18fdec3c06c7baf9e3071ed": [
+      {
+        "conferenceId": "conference:a18fdec3c06c7baf9e3071ed",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:0cb9f774af02fa26ec3ae3a0"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程在选定路径 B 的真实检出上实测后写成,非分派子代理。\n\n关键更正:路径 B 下的 RSC 失效形态与路径 A 完全不同,且更危险。\n\n路径 A 曾观测到编译期硬报错,消息明确指出把依赖 useEffect 的模块导入了 React Server Component。但那是 workspace 加 transpilePackages 的形态,Next 把 DS 当一方代码编译。\n\n路径 B 把 DS 作为普通 node_modules 依赖(来自 tarball),实测形态是:编译成功、TypeScript 通过,直到静态生成阶段才死,报错为 TypeError 括号 0 逗号 c.useRef 不是一个函数。这是最坏的失效形态——安静、迟到、且消息不指向真因。\n\n更危险的是它与组件相关:导入不含 hook 的组件(Badge)时直接导入 server component 完全正常构建;只有导入含 hook 的组件(Dialog 与 Popover)才在预渲染时炸。也就是说这个陷阱会在开发过程中长期潜伏,直到有人用了第一个带交互的组件。\n\nbarrier 方案经消融实验确证因果。在 apps/web/src/platform/ds/index.ts 放一行 use client 加一行 export star from at-tcrn/ui-react,同样的 Dialog 与 Popover 经它导入则 next build 退出 0 且路由静态预渲染成功。去掉那一行 use client 立即复现预渲染失败,加回即通过。\n\n结论:barrier 不是可选的卫生习惯,是路径 B 下的必需机制。且必须配一道门——禁止除 barrier 之外的任何文件直接 import at-tcrn/ui-react,否则失效会以预渲染期的不可读报错形式迟到。\n\n弱点自陈:本次只测了 Dialog 与 Popover 与 Badge 三个组件,未穷举一百个公开组件中哪些含 hook。dist 中含 hook 的模块实测为 Navigation.js 与 Clipboard.js 与 Overlay.js 三个,但未逐个组件核实其传递依赖。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:acfbb25a07b6b93d12b76b53": [
+      {
+        "conferenceId": "conference:acfbb25a07b6b93d12b76b53",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:658092d9c74605cb063182d5"
+        ],
+        "externalKeys": [],
+        "body": "Owner 逐字裁定(2026-07-23,聊天原文):「开一个新的INIT,然后根据发现的内容制定内容,然后拆单,同意一次性补全所有缺口,不分INIT」。\n范围授权=立项+按审计发现制定内容+拆单+单 INIT 覆盖全部缺口;执行 go 未含于本句,依 INIT-006 先例另候 Owner。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:acfbb25a07b6b93d12b76b53",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:8ab0b96b70849fee73ce62e8"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable；Verity 验证角色;证据源=四路实测+两个 dispatched fresh-context 审计子代理读源报告]\n实测基底(2026-07-23,DS main 400a579):①pnpm verify 全链绿,internal-alpha browser-proof 151 截图、130 道感知签名门 0 回归、axe 0 违规;②Vercel 生产契约 digest 与本地构建逐字节一致(6fad585b…);③legacy storybook:visual-proof 实测 134/134 全失配,基线 sourceHead=ec57b606 早于 INIT-001(落后 HEAD 42 commit),而 AI 契约仍指其为 doc-shell oracle;④真 Storybook 缺 4 契约故事、公共注册表漏 3 个真实导出、6 组件零故事、LinkButton 三变体与 Button size 三份样式表均无 CSS;⑤两轨 463 选择器双写、27 已分叉、alpha-styles v1 按钮块与包 CSS ≥7 处值冲突(现多潜伏);⑥234 个组件类中 39 个仅 doc-CSS 支撑、18 个完全无样式;⑦全平台无 CLAUDE.md/AGENTS.md 等 harness 入口,fresh clone 无 JSON 契约。\n风险:S034/S037 涉两轨与包 CSS 大改,须每 Epic 独立 verify+记录式重标定;S035 门扩容防「门只保护它读过的字节」复发;S041 有既有裁定支撑属 Agent 栏。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:acfbb25a07b6b93d12b76b53",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:9680b69f9ba24b6b73c30aab"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable；Mara 产品/范围角色] (2/2)\nEPIC-014 Token 文档注册表化:S039 色板/字号表改 tcrnTokens 注册表驱动、消除 prose 冻值(沿 icons/locales 既有模式);S040 preview 画布色与 theme-color 首帧对齐 canvas token 并加断言。\nEPIC-015 AI 契约保鲜与入口:S041 legacy exact-PNG oracle 退役降级、AI 契约 storybookDocShellVisualOracle 与 llms.txt 指针改指 internal-alpha 感知体系(INIT-002「不可复现的值不要签入」裁定支撑);S042 修改侧入口(仓根 CLAUDE.md/AGENTS.md 薄入口、apps/storybook README、INIT-006 handoff 头部 planned 改 shipped);S043 组件 props/variants 机器清单+fresh-clone 契约路径指引修正。\n交付公约:沿单次收官公约(MIN-036 先例)——整合分支交付、唯一必停点=INIT 收官验收门(owner_intent_required);每 Epic 独立 verify+AOS parity+记录式重标定(INIT-005/006 先例)。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:acfbb25a07b6b93d12b76b53",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:9e0da2ade840fd5cd6c52c04"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable；Mara 产品/范围角色] (1/2)\n提案:立 TCRN-DS-INIT-007,单 Initiative 一次性闭合 2026-07-23 DS↔Storybook 忠实性审计全部缺口(Owner 已裁不分 INIT)。树=5 Epic/15 Story,键回归 helper 公约扁平法(键编码出身不编码层级;INIT-006 层级键为孤例不再沿用)。\nEPIC-011 展示覆盖闭合:S029 CSF 适配器补 4 缺失故事(stamp/work-mgmt-components/work-mgmt-patterns/foundation-visual-standards)+smoke per-story 注册门;S030 注册表补 Stamp/StampRule/TableToolbar;S031 六零故事组件补齐(TopBar 以真组件替换手写冒充标记,近重复者先提废弃裁定);S032 变体/态矩阵补全(Button size、Tooltip/Popover 全 placement、全 tone、Form enabled 态、密度矩阵、暗态)。\nEPIC-012 双轨样式收敛:S033 清 v1 残留(alpha-styles 按钮家族块、storybook.css:296、rgba 边框 4 处);S034 两轨 27 分叉值收敛+463 重复选择器面单源化;S035 duplicate gate 扩容(alpha-styles 入扫描面、全组件 CSS 对比面、非裸选择器形态)。\nEPIC-013 包样式完整性:S036 18 个无样式类逐个裁决(LinkButton 变体/Button size CSS 定案);S037 39 个 doc-CSS-only 组件样式上移包内(demo chrome 留档,有意 doc-only 入豁免清单);S038 token 归一(11 未注册扩展 token、radius-panel 双源、dist 陈旧产物清理+防再发门)。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:aee4152d8893a543f2e8b006": [
+      {
+        "conferenceId": "conference:aee4152d8893a543f2e8b006",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:6284a2ba432634665f1cf0bb"
+        ],
+        "externalKeys": [],
+        "body": "（subagent 审计+main-thread 抽查 D1/D2/D3/D8 实证）14 缺陷：D1 树/本页选中青底填充[包 NAV:2946]；D2 NavItem 选中纯填充无轴且 box-shadow:none[NAV:1892]；D3 WM subnav 填充与 view-tabs 底轴矛盾[NAV:2572/2603]；D4 知识书签 shell 演示用 INIT-005 明令移除的渐变+光晕+胖胶囊且声称镜像→不豁免；D5 手搓折叠按钮/pager 偏离真控件；D6 NavItem 第三语言死 CSS 两处；D7 树/WM/tab/五按钮家族成片缺 hover+focus+press，search-results 锚 UA 蓝；D8 RelationshipChip tone 类全仓 0 规则、href 变体裸奔；D9 NavGroup selected 视觉惰性；D10 press-scale 基表与 reduced-motion 撤销表不一致；D11 双轨漂移 reference-index/knowledge-shell/裸锚补丁仅 Track B；D12 动效演示时长与 token 不符未声明；D13 演示暗色左面不切换；D14 TMS 原型零反馈。归属：包级 D1/2/3/7/8/9/10，演示级 D4/5/6/11/12/13/14。排除面 14 项已查净（WorkItemRow 轴合规/分段控件浮起卡合规/TableToolbar 三态模范等）。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:aee4152d8893a543f2e8b006",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:9ab922bfe7569f52768621ba"
+        ],
+        "externalKeys": [],
+        "body": "（main-thread synthesis）树案：EPIC-021 交互样式现代化（S061 链接 A+B 已 done）；EPIC-022 包级语言收敛：S062=选中语言收敛（D1/D2/D3+捎 D9/D10，树/本页/NavItem 去填充归 3px 左缘轴、水平族归底线轴）、S063=交互反馈家族补全（D7+LinkButton 候选债，hover/focus-visible=elevation-focus/press-scale）、S064=RelationshipChip 语义落地（D8）；EPIC-023 演示忠实与双轨清理：S065=知识 shell 演示对齐部署语言（D4/D5/D13）、S066=死码删除+双轨迁移共享层（D6/D11）、S067=低危修补（D12/D14）。执行序 S062→S063→S064→S066→S065→S067（S066 先迁共享层再改内容避免二次搬）。收官门 TCRN-DS-GATE-INIT009-CLOSEOUT（owner_intent_required）唯一必停。四裁定点按推荐默认：①D2 NavItem 改 3px 左缘轴（执行 INIT-005 已裁语言）②D3 水平导航族归底线轴（subnav 对齐 view-tabs）③D6 死 CSS 删除不入包④D14 补最小反馈保留交互语义。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:af20ca1fe8cf9b2205c17803": [
+      {
+        "conferenceId": "conference:af20ca1fe8cf9b2205c17803",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:aca69afdff33fbe33ab01ca0"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable；Mara 产品/范围角色] (1/2)\n提案:立 TCRN-DS-INIT-008,单 Initiative 解决 2026-07-23 生产 Storybook 内容治理审计全部发现(Owner 裁「解决所有发现的问题」)。树=5 Epic/17 Story 扁平键(EPIC-016..020/STORY-044..060)。\nEPIC-016 文案修复与边界收口:S044 封闭边界词表+三 chips 五语言重写+页眉元评论迁移;S045 清 5 句 S036/S037 假承诺+悬空引用+陈旧 description;S046 内部专名清洗(Gemini/Codex/vault 路径/端口/persona 通用化);S047 矛盾修正(README 品牌/「已入组件库」/WM 双页去重单源)。\nEPIC-017 翻译债与本地化制度:S048 英文泄漏门扩全 43 故事+豁免登记;S049 偿还 503 条存量债;S050 本地化政策成文绑门。\nEPIC-018 门体系与预算:S051 渲染文本钉迁移+Structural drawers 悬空钉+shell.noClaim 处置;S052 预算门三件套(高度约2000px/页KB/类目故事数)上线即红;S053 内部词汇 forbidden 门+豁免登记;S054 词典按页裁剪+重复载荷治理。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:af20ca1fe8cf9b2205c17803",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:ccc9055169dbbfb63306de1c"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable；Mara 产品/范围角色] (2/2)\nEPIC-019 类目页化与重分类:S055 registry 单源派生四棵手写树(杀故事税,前置);S056 19 类目页+7 有界索引页(关 21 条整页不设门洞)+路由与 AI 契约 lockstep+记录式重标定;S057 AOS 两 oracle 迁 Proof 视觉实例类目+superseded slice 退役处置。\nEPIC-020 参考页与拆分:S058 生成式组件参考页(manifest 驱动,机器 token 英文标识符面 0 翻译,入 Components 三级导航不动顶层冻结);S059 WM26/KM16/nav19 巨型故事按族拆分回检测底线内;S060 搜索索引与 panel 级锚点寻址补全。\n交付公约:沿单次收官公约——整合分支、唯一必停=收官门(owner_intent_required);每 Epic 独立 verify+记录式重标定;八裁定点按推荐默认入 ledger,Owner 可驳回。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:af20ca1fe8cf9b2205c17803",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:cd6ea59023600d7d93984179"
+        ],
+        "externalKeys": [],
+        "body": "Owner 逐字裁定(2026-07-23,聊天原文):「开新INIT,然后拆单,该INIT需要解决所有发现的问题」。\n范围授权=立项+拆单+全部审计发现入本 INIT;执行 go 未含于本句,依 INIT-006/007 先例另候 Owner。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:af20ca1fe8cf9b2205c17803",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:cd9543b92330a59ba682591e"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable；Verity 验证角色;证据源=两个 dispatched fresh-context 审计子代理全文读源报告]\n实测基底(2026-07-23,main d4cd140):①503 条可见多词串无翻译条目(components 312/patterns 108/foundations 87),根因=故事税(10 键+6 注册+3 基线)致 INIT-007 折叠避税;②5 句 S036/S037 前瞻承诺 3 句已假,全无钉;③三 chips 文本全 locale 无钉可改,fr 语法错,eyebrow 被 2 门钉;④AOS 两 oracle 占 components.html 60% 体积、86% 边界重复,persona/端口泄漏;⑤悬空钉:raw-byte 门被内嵌词典喂饱,「Structural drawers」零渲染仍绿,shell.noClaim 从未渲染;⑥视觉门稀释:>约 2000px 故事跌破 maxCell 检测底线,top-10 已全越线;⑦全站 6.29MB 中 79.2% 为 7 页重复载荷(词典 437KB/页);⑧同一棵树手写 4 处+路由字面量约 10 处=24 项约束地图。\n风险:S056/S059 涉路由与基线,须 hashRouteScript 转发验证+单次记录式重标定;S049 依赖 S046/S047 文案定稿次序;S052 预算门上线即红属预期(红名单=拆分工单)。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:bd9a1c51a4257de088beffad": [
+      {
+        "conferenceId": "conference:bd9a1c51a4257de088beffad",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:81349d8925df310480198cef"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程综合产出(非分派子代理)。\n\n分解轴取阻塞拓扑而非组件分类。理由:五条阻断彼此正交且各有不同的证明形态——消费路径是选型问题须以实验定、RSC 是编译期条件问题、水合是运行期时序问题、样式是层叠与交付问题、版本身份是可验证性问题。按组件或按功能切会让每个切片各自撞上同一堵机制墙。\n\nEPIC-024 阻塞其余全部:路径未定则 RSC 与样式的验证都没有承载体。但 024 的六条 Story 内部可并行,四条路径实测互不依赖。\n\nEPIC-026 水合修复不可推给消费方,须在 DS 侧修——这是与 EPIC-025 的关键区别。RSC 有两条候选(DS 侧加指令或消费方建转出层),水合只有一条:客户端组件在 Next 里照样 SSR,故 use client 不解此题,而 ProductShell 是外壳意味着消费方每条路由都中。\n\nEPIC-028 的 STORY-086(DS CI)受 OWNER-10 支配,裁定前不开工。须说清它的分量:DS 今日零 workflow,所有门只活在本机;若在无 CI 状态下承接第二个消费方,则任何打破 AOS 的改动都没有机构能发现。三份策略提案都承诺不打破 AOS,但都没给出发现机制。\n\n弱点自陈:本分解假定四条消费路径的实测能在开发机上真实完成。若开发机无法复现消费方的 CI 语义(单仓检出),则 STORY-069 与 STORY-072 的结论只在本地成立,须显式降级为部分证据。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:beb6788169b57516f3fc8916": [
+      {
+        "conferenceId": "conference:beb6788169b57516f3fc8916",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:09e7fd6b79f06d32da1462d2"
+        ],
+        "externalKeys": [],
+        "body": "按 handoff 与前置裁定交付,验收通过",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:beb6788169b57516f3fc8916",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:d3641419404ebbb4175eb4fe"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis] E7 交付(PR #18->main 400a579,收官)。shell-fidelity-proof 加 5 检测器守护 E1-E6,各双向验证(真门非 false):①hexColourLiteral(裸 hex 非 token 定义/注释=漂移)②fontSizeLiteralOffScale(字面 font-size 除非带 type-scale-exempt 标记)③spacingLiteralOffScale(gap/padding px 出刻度 2/4/6/8/10/12/14/16/18/20/32,clamp/calc 内豁免)④pillRadiusLiteral(裸 999px=漂移,归 radius-pill;并从 radius 允许表移除)⑤docsPackageSelectorDuplication(storybook.css∩componentCss 顶层类=平行实现,sr-only/skip-link 白名单)。双向证明:每检测器注入一次命中正确检测器名报红、还原报绿,五者全 confirmed。门已在 tokens:proof 链,pnpm verify 强制。verify 绿 fidelity 无漂移 axe 0。E7 只改 proof 无 CSS/AOS 涉。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:bf8a695b587b7cb3b61c99bc": [
+      {
+        "conferenceId": "conference:bf8a695b587b7cb3b61c99bc",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:d22942e0ad7eb529a38a30de"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程实测后写成,非分派子代理。\n\n版本语义破损已实测量化:v2.0.0 这个 tag 落后 HEAD 八十六个提交,CHANGELOG 里没有 2.0.0 条目,而三个包都声明 2.0.0。故同一个版本号至少对应八十七组不同字节。消费方不能靠版本号识别装到了什么。\n\n该破损与已记录的路径 B 陷阱叠加后是危险的:pnpm 认版本号不认内容,同版本换 tarball 内容时报 Already up to date 并静默沿用旧字节,连 --force 也不重解析。两者合起来意味着——DS 改了、tarball 换了、消费方却还在用旧字节,而所有构建与测试都会通过。\n\n故消费验证门以内容摘要而非版本号钉定,校验三件事:vendor 下每个 tarball 的实际 sha512 与 pin 清单一致、已装 dist 的内容摘要与 pin 一致、以及 pnpm-lock 记录的 integrity 与 tarball 实际摘要一致。第三条正是补 pnpm 的盲区。\n\n红证两类各自实测。变异一同名同版本换内容:门同时报出 tarball 摘要不符与 lock integrity 不符两项,而这正是 pnpm 自己会静默放过的情形。变异二篡改已装字节:门报已装字节与 pin 不符。两次还原后均转绿。\n\n门本身被自己抓到一处设计缺陷须记:初版硬编码了三个 DS 包,而消费方只声明了 ui-react 与 ui-tokens 两个,于是对正常情形误报。已改为从消费方的实际依赖声明推导包清单。教训是门的假设也要被检验,硬编码的期望集合会把正常情形判成异常。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:c0d73e45be2ba49a6e6694c2": [
+      {
+        "conferenceId": "conference:c0d73e45be2ba49a6e6694c2",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:0545132b18455d671eb9e9fd"
+        ],
+        "externalKeys": [],
+        "body": "B 档原范围（INIT-003 §5）：doc shell chrome/IA 按 A+B 重排——侧栏、顶栏、导航密度、印章语汇入 shell 身份时刻。读源审计结论：① chrome/密度/IA 已由 INIT-003 实质满足——86 装饰渐变/21 云影/6 圆角字面量已归零、kill-switch 已修、字号栈已在 12/11px 密集纪律、fold/unfold 为功能性；② 「印章入 shell 身份时刻」撞 no-overclaim 墙——DS storybook 与 AOS 同样禁止主张 release/acceptance，而 docs shell 的职责是展示内容、不产生「门关闭/裁决/发布」这类自有非-overclaim 身份时刻，故无处可正当盖章（stamp 演示已由 INIT-003 的 stamp-spec 故事覆盖）；③ 此刻再重排侧栏/顶栏无具体可用性缺口驱动，属「为改而改」——正是 DS 全程在打的 AI 设计陷阱，与「静默仪器」克制相悖。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:c0d73e45be2ba49a6e6694c2",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:5656cbb681790eb2b69c8472"
+        ],
+        "externalKeys": [],
+        "body": "判定已满足，收口（推荐）",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:c0ff3ba29dd50e20806a8154": [
+      {
+        "conferenceId": "conference:c0ff3ba29dd50e20806a8154",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:13e9198d03c4e61f533d852e"
+        ],
+        "externalKeys": [],
+        "body": "认可，但 flake 要一并修",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:c0ff3ba29dd50e20806a8154",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:47eaa026bc4367cf947addaa"
+        ],
+        "externalKeys": [],
+        "body": "补一条 Owner 关门前应知的既有缺陷（**非本次改动引入，已用对照实验证实**）：docs/verification/internal-alpha/story-coverage-manifest.json 是签入的证明基线，但它**不可复现**——同一棵树连跑三次，mobileTopbarLayering 的 topbar 与 searchInput 背景色在区间内漂移。本分支实测 rgb(53,54,57)/rgb(47,48,50)/rgb(53,54,57)；切回未改动的 main（d385428）重建后实测 rgb(47,58,75)/rgb(61,71,87)/rgb(61,71,87)——两侧都漂移，只是 v1 偏蓝、v2 偏中性灰，故属既有缺陷。成因判断：该值是在主题过渡动画在飞时取样，落点随运行时机变化。影响：这份产物无法充当基线（每次 verify 后工作树都会脏一个文件），且掩盖了真实视觉回归——它每次都在变，看的人会习惯性忽略。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:c0ff3ba29dd50e20806a8154",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:b2d75194bf57bd1400f76f05"
+        ],
+        "externalKeys": [],
+        "body": "WS4 三条 Story 均已 done，关门条件逐条对照如下。① 章节冻结：Storybook 七章构建通过，散文中残留的 v1 色彩描述（iris-blue / rose-coral 共 4 处）已换为 locale 表中既有的中性表述（五语齐全）；余下 1 处「iris blue」描述的是品牌 mark 的 SVG 拼块，属章程 §2 明列非目标（不重设计品牌 mark），资产未动故描述仍准确，刻意保留。② digest 一致：ai-consumption-contract.json 的 contractPayloadDigest 由构建重新派生，internal-alpha 浏览器证明的 aiContractDigestCheck 通过（digest 与去 digest 后的载荷哈希相等）。③ 视觉字段族：searchMotionTimeline 的时长/曲线/采样窗口、searchBorderColor/Radius、themeColor 均已更新至 v2；storybook.css 的 token 块改由 @tcrn/ui-tokens 生成，tokens:proof --check 防其再度漂移。④ 全门证据：pnpm verify 退出码 0（typecheck+build+68 测试+四道新证明+exports+pack+storybook 冒烟+readme+public-output+scan+scaffold+internal-alpha 全链）。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:c0ff3ba29dd50e20806a8154",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:e5c1f1b5158b5bf467d5e629"
+        ],
+        "externalKeys": [],
+        "body": "Owner 的附加条件已执行完毕，提交 4d1e2c6。修法：证明取样前把动画钉到确定帧（有限的 finish、无限的 skeleton/loading/progress 循环 pause 在 0），截图另加 Playwright 的 animations:\"disabled\"。结果：story-coverage-manifest.json 的 mobileTopbarLayering 现稳定在 rgb(24,25,28)——正是深色主题的 --tcrn-color-surface-panel，即它本该 settle 到的值；连跑三次与暂存区逐字节一致。pnpm verify 退出 0。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:c197b8f765ec98510a4789f6": [
+      {
+        "conferenceId": "conference:c197b8f765ec98510a4789f6",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:2ef1d1da4092c5ab3c631a35"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis] 决策底数中挖出两个悬空 token 隐性 bug:--tcrn-type-size-meta 引用 3 定义 0(WS4 引入,font-size 回落继承侥幸未察);--tcrn-radius-pill 引用 2 定义 0(渲染直角)。D3 预决(无品味争议):pill=999px 入 ui-tokens、state-chip-radius(4px)删并 control(同值)、裸 6px→surface、panel/surface(同 6px)保双名注同值。另发现刻度定义源分裂:space-1/3/5 由 componentCss 自补而非 ui-tokens——D2 一并归一。六项裁定已全部写死进 handoff §0.5+各 Epic 施工节(PR #11→main 7fdae77),执行模型无裁量残留。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:c197b8f765ec98510a4789f6",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:47f0f5fc7b6ce3f7eac4d49b"
+        ],
+        "externalKeys": [],
+        "body": "问:有没有需要提前进行决策的项目?裁定:D1 新增 type-size-meta=12px 档(15→reading/16→section/10→caption);D2 间距定义源归一 ui-tokens+扩半档 2/6/18px(奇数杂值就近归档等距向下);D4+D5 包真相 wins+AOS 随动接受、hover 文字型=色移/按钮型=theme-toggle 家族/press-scale 全按钮型;D6 exempt 每 Epic 集中呈报+逐 Epic 上生产。均按推荐。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:c2c2d1567f22a2b437849d11": [
+      {
+        "conferenceId": "conference:c2c2d1567f22a2b437849d11",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:4930837f5e5f0ec818ca37ff"
+        ],
+        "externalKeys": [],
+        "body": "章程 review 通过，拆分采用方案甲",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:c2c2d1567f22a2b437849d11",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:a63644013a9ab8ce496cbe79"
+        ],
+        "externalKeys": [],
+        "body": "荐甲案（按工作流拆 5 Epic × 各 3 Story + 2 gate）：分段验收点（底盘定稿/契约重钉/发布）与 Epic 边界重合、gate 有处可挂；乙案（按交付物 3 Epic）省约 8 条记录但验收边界模糊；丙案（不拆）单体快但中途状态链上不可见。完整对比见章程 §8。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:c4717c6c7c2a61310a2ce8e0": [
+      {
+        "conferenceId": "conference:c4717c6c7c2a61310a2ce8e0",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:87fd290a18dca74fa2d2ae26"
+        ],
+        "externalKeys": [],
+        "body": "还是有问题：图标有遮挡+使用错误，折叠状态的按钮应该为展开图标；折叠/展开动画流畅度未达基线，至少30帧过渡；按钮没有交互效果；问：当前DS对按钮是否有交互设计？",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:c4717c6c7c2a61310a2ce8e0",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:8ef45973db97c6e4e441224e"
+        ],
+        "externalKeys": [],
+        "body": "真根因（读构建产物而非 demo 源）：①头部切换钮就是 DS SideNavCollapseButton，自带双态图标（collapse `<`/expand `>`），由按钮 data-side-nav-collapsed 属性驱动显隐——React 宿主从 collapsed prop 得到该属性，静态 shell 运行时从未镜像它，故两态都显 `<`；上轮修的 .tcrn-knowledge-shell__collapse-button 是 demo 原型的类，改错了目标（rotate hack 已撤）。②动画：恢复 grid-template-columns 过渡（220ms emphasis），仅 prefers-reduced-motion 下瞬时（v2 位移语义）；帧预算双保险=运行时 data-sidebar-motion 260ms 窗口内屏外故事 content-visibility:auto（窗口外惰性，截图/锚点/搜索零波及）+纯色面撤 background-attachment:fixed（无视觉差的全量重绘成本）。实测：稳态单帧重排 3-4ms、真切换期间 0 个 >33ms 长帧→持续 ≥30fps 有余量。③交互答案：DS **有**按钮交互设计，在 tcrnComponentCss——.tcrn-button:active press-scale(0.97) 带设计注释、motion tokens 过渡、theme-toggle/locale 的 hover 家族；缺口是 side-nav-toggle 不在 hover 选择器列表（已加入，零发明）；另 storybook.css 存 v1 时代 .tcrn-button 重复块（无 hover/active），系残债待清。④slot 数学 32→38px 对齐真钮尺寸。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:d0e4d675f528b2bc092e41ea": [
+      {
+        "conferenceId": "conference:d0e4d675f528b2bc092e41ea",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:3effcccd3c2b8644c90158c9"
+        ],
+        "externalKeys": [],
+        "body": "背景：Stamp 是 v2 唯一新组件族，此前文档化但零采用（DS 提供、Storybook 讲解、无人使用）——MIN-010 列为优先级②。语义张力：印章三时刻是治理概念，而 AOS 有硬性 no-overclaim 边界（不主张真实验收/发布，连 Accepted 都降 local_only）。Owner 裁「AOS 合成门禁视图内」。实作（AOS `900e117`，本地 main）：GatesPage 顶加 gate-close 印章头 「样本门已闭合 · N」，claim 强度不超过既有 local_only Accepted 徽章，**避开 release 时刻**。在位验证：/work/gates 是 frontend-shell proof 渲染并扫描的真实路由，印章文本不在 forbiddenPositiveClaims 表内（product accepted/release ready/…），proof ok=true、1576 检查绿、findForbiddenPositiveClaimHits 全空。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:d0e4d675f528b2bc092e41ea",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:4810c6eac7b91172765875aa"
+        ],
+        "externalKeys": [],
+        "body": "AOS 合成门禁视图内（推荐）",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:d0f36371fb29dac4dc4b4213": [
+      {
+        "conferenceId": "conference:d0f36371fb29dac4dc4b4213",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:00d7dbcacdf7a4b349081940"
+        ],
+        "externalKeys": [],
+        "body": "按 handoff 与前置裁定交付,验收通过",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:d0f36371fb29dac4dc4b4213",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:bfa2633953e3e612ebbc1ed3"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis] E4 交付(PR #15->main 149731a,independent main verify 绿)。间距:componentCss 自补 space-1/3/5 上移 ui-tokens(定义源归一);刻度补全 2px 网格 2-20+32,半档 0h/1h/2h/3h/4h+6——审计发现 10px(105 次第 2 高频)/14px(30 次)非杂值,加真 token 零漂,扩 D2 的 0h/1h/4h;473 gap/padding 分量 tokenize 到最近档,奇数就近向下(3->2/5->4/7->6/9->8/11->10)+22px 品牌符号->space-5;clamp 响应上界留字面(流体最大值)。圆角:radius-pill:999px 定义(修悬空——2 引用 0 定义渲直角)、chip-radius 退入 control、裸 6px->surface、panel 保 surface 别名。docs/style-scale.md 成文。3 门重标定干净复跑 0 回归,2 smoke 断言 999px->token 更新,AOS ok。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:e22342c69f2cc65bde3ce36d": [
+      {
+        "conferenceId": "conference:e22342c69f2cc65bde3ce36d",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:861a36b8723bd7468f5afb57"
+        ],
+        "externalKeys": [],
+        "body": "（main-thread synthesis）范围框定：清查面=故事内演示 vs 两个基准——(a) 部署站 doc-shell 既定交互语言（INIT-005 单轴选中/3px 左缘条/图标轨）；(b) 包真理 tcrnComponentCss（press-scale/hover 家族、token 化）。演示若绕过包组件手搓样式=忠实性缺陷；若用包组件但包组件自身语言陈旧=包级设计债（如 KnowledgePageTree 填充高亮）。建议先全面审计再拆单；链接 A+B 改造已在途，收编为首个 Story。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:e22342c69f2cc65bde3ce36d",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:8fcf33c8cc13d84a65ae9953"
+        ],
+        "externalKeys": [],
+        "body": "Owner 指令（2026-07-24 原文）：「先开INIT，然后继续检查不符合的情况，比如我发现了第二个：本地侧栏设计storybook与实际不符的情况，我相信还有更多」。两例实证：①S058 参考索引等裸链接为 UA 默认蓝下划线（已裁 A+B 组合：正文内联现代下划线兜底+索引瓦片化）；②知识管理故事的本地侧栏演示仍用旧「青底填充高亮」语言，与真实 doc-shell 的 INIT-005 单轴选中语言（3px 左缘指示条）不符。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:ef2ab372349a02dd4b39ed8e": [
+      {
+        "conferenceId": "conference:ef2ab372349a02dd4b39ed8e",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:191af5218c1f0a73fb7dd7f7"
+        ],
+        "externalKeys": [],
+        "body": "按 handoff 与前置裁定交付,验收通过",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:ef2ab372349a02dd4b39ed8e",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:49deafef98ad69f696f95ab8"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis] E2 交付(PR #13->main cba28b9)。E1 后 shell 非-token 色字面量仅 1 处:doc-shell .tcrn-button--primary 的 color:#fff -> var(--tcrn-color-text-inverse)。storybook.css 余 82 hex 全在 :root/dark token 定义块(tokens-sync 维护,合法)。brand-mark drop-shadow 已 token 化。非-token 色字面量归零,verify 绿,零签名回归,E2 不动 componentCss 故 AOS 无涉。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:f23b4103c51bbb0d195ba463": [
+      {
+        "conferenceId": "conference:f23b4103c51bbb0d195ba463",
+        "actorId": "profile:tcrn-mneme-v1",
+        "fragmentIds": [
+          "position:0c0e82fce5be8e3af406f566"
+        ],
+        "externalKeys": [],
+        "body": "本立场记录本 CI 检测力的诚实边界,由主线程综合对抗验证写成。\n\n必须先更正我自己上一轮的两处过度乐观。\n\n其一,我说过「component-api-manifest 接进 CI 边际成本约零,直接换来一百组件的 API 面钉」。对抗验证证伪:该 manifest 把 prop 类型存为不透明字符串,实测 WorkHierarchy.nodes 存为 WorkHierarchyNode 数组这样的字面量。凡只能经具名类型到达的变更——interface 字段、数组元素形状、联合收窄——一律不可见。面钉只有一层深。\n\n其二,我说过 DS 无任何门覆盖出货 CSS 类名。该说法过强。实测:出货 CSS 中有二百六十五个不同的 tcrn 前缀类,其中八十六个即百分之三十二出现在某个测试里,一百七十九个即百分之六十八无处断言。真实缺陷不是零覆盖,而是覆盖是顺带的、部分的、且无人知道边界在哪。\n\n另有两条被对抗验证独立发现且我认为更重要。其一,DS 自身测试不构成兜底:测试与源码同步维护,验证方跑了真实作者流程——收窄一个联合成员并按常规同步改 DS 自己的测试与 story——结果全部可跑门仍绿。其二,契约夹具方案结构性失明:生成器把部分字段写成类型擦除形式,只能抓新增必填字段一类,验证方另造五类真实破坏,夹具抓到零类。\n\n结论:本 CI 不声称消费方不会被打破。它声称的是可枚举子集会被抓住,该边界已逐条写进 workflow 文件头。真正的消费方保护需要 AOS 有 remote 与自己的 CI,那超出 DS 的范围。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:f23b4103c51bbb0d195ba463",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:f0f8edc7a47286e816d3b2d4"
+        ],
+        "externalKeys": [],
+        "body": "本立场由主线程实测后写成,非分派子代理。\n\n最重要的发现是一个实测缺陷:pnpm verify 会抹掉破坏证据。\n\n链条:verify 调 internal-alpha:proof,后者调 internal-alpha:contracts,而该 script 是重生成模式无 --check。实测注入 API 破坏后,component-api-manifest --check 退出 1 见红;跑一次 contracts 退出 0 并改写 tracked manifest 十行;再跑 --check 已转绿。即跑一次 verify 就把破坏改成了新基线。\n\n故 CI 一律用 --check 且设静态门禁止重生成模式调用。该门本身取了三态红证:干净态绿、注入 internal-alpha 写模式见红、注入 component-api-manifest 裸调用见红。\n\nCI 不跑 pnpm verify 而把十二个门逐条独立成步,两个理由均为实测:其一 verify 是 && 串行,storybook:smoke 因缺 chromium 挂掉后其后六个门根本不执行,失败信号被单点掩盖;其二 verify 链含重生成模式。另补了 test:dom,它存在于 package.json 但不在 verify 链内,属既有覆盖被漏接。\n\n十二步在开发机全部实跑通过,contract job 两步亦通过。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:f2e577e855fbc3e1d1ce8c62": [
+      {
+        "conferenceId": "conference:f2e577e855fbc3e1d1ce8c62",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:e5e1335ab864039129ab643d"
+        ],
+        "externalKeys": [],
+        "body": "【本立场为 Owner 原话逐字转录,由执笔代理记录,未改写】\n\n「同意」\n\n转录说明:该同意针对代理呈报的四路证据矩阵与推荐——选定路径 B(vendored tarball)为 DS 消费路径。被否决或排除的三条:A(git submodule 加 workspace,works-with-changes,作为可接受替代未被选中)、C(私有 registry,技术可行但受 mvp-adoption-boundary 授权硬阻断)、D(file 加 overrides,blocked,CI 退出 254 且 file 协议不携带摘要致钉定无解)。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:f50c11b601b5460a53380eda": [
+      {
+        "conferenceId": "conference:f50c11b601b5460a53380eda",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:dc5aa7b21530efe32cb5c53a"
+        ],
+        "externalKeys": [],
+        "body": "【本立场为 Owner 原话逐字转录,由执笔代理记录,未改写】\n\n「同意」\n\n转录说明:该同意针对代理呈报的 OWNER-10 建议——DS 须先补 CI 再承接第二个消费方。呈报的依据为:DS 今日零 workflow、所有门只活在本机、AOS 无 remote 无 CI;而即将进行的三件事(水合修复回流、通用原语补完 INIT-011、领域家具抽出 INIT-012)都会改 DS,每件都可能打破正在消费四十一个组件面的 AOS,而当前无任何机构能发现。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:f5ed7c8fa5af36b22590d91d": [
+      {
+        "conferenceId": "conference:f5ed7c8fa5af36b22590d91d",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:4747f9908172084af8f2f8c6"
+        ],
+        "externalKeys": [],
+        "body": "按 handoff 与前置裁定交付,验收通过",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:f5ed7c8fa5af36b22590d91d",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:c00e43d7bc066d862068f9cd"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis] E3 交付(PR #14->main 86d6832)。三文件 49 处 font-size 字面量全走 --tcrn-type-size-* 刻度。ui-tokens(唯一真源,createCssVariables 喂部署页+tokens-sync 再生 tokens.css/storybook.css)加三 token:meta:12px(修悬空——componentCss 引用 3 处 0 定义,静默回落)、heading-2:22px+heading-3:16px(审计发现组件库标题刻度 h1 clamp/h2 22/h3 16 未被 UI-text token 覆盖,加标题档零漂;精化 D1 的 16->section 为 16->heading-3 免无谓 +2px)。映射仅 10->11、15->14 微移且不在捕获故事内,签名门零回归、无需重标定。改一处 smoke 断言(product-logo__line-two 12px->meta token)。verify 绿 AOS ok。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:f99ad634d4eafe3ea963f835": [
+      {
+        "conferenceId": "conference:f99ad634d4eafe3ea963f835",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:8548c27e24975f2f1017faa6"
+        ],
+        "externalKeys": [],
+        "body": "Owner 授权（2026-07-24 聊天原文：「授权」）。承认 TCRN-DS-INIT-008 全部 17 Story 已交付、pnpm verify 全绿、18 commit 于分支 feat/init-008-content-governance。授权关闭收官门并将 5 Epic 与 INIT 转 done。发布（push/PR/Vercel 部署）已被显式列为单独事项，另行确认。机器翻译已标注母语复审。",
+        "fragmentCount": 1
+      }
+    ],
     "conference:bb4a286b6a7173b0d6539086": [
       {
         "conferenceId": "conference:bb4a286b6a7173b0d6539086",
@@ -7869,6 +10608,1530 @@ export const cockpitData: CockpitData = {
         "body": "【本立场为 Owner 原话逐字转录,由执笔代理记录,未改写】\n\n「全部同意,包括新建INIT,当前TMS前端和DS完全没有关系,就是一套本地的前端。同时本地开发环境的ssh已配置在.ssh/id_tcrn_platform_dev_ed25519,你可以通过这个连接并在上面调试,避免占用过多本机资源,但是资源控制规则依旧适用,完成测试就要放掉服务。」\n\n前一轮 Owner 原话(提出通用性原则):\n「你需要给我一些建议和原因。同时我认为DS和Storybook还得改,不应该直接在Storybook或者DS里面放AOS/TMS设计,DS和Storybook应该保持通用,至于项目怎么用组件是项目需要定义的问题,你怎么看」\n\n转录说明:「全部同意」覆盖代理呈报的五项建议(通用性原则落成门 / 既有领域家具抽出而非删除 / DS 扩建范围重定义为补完通用原语 / TMS 建自己的组合层 / Storybook 只展示组件不展示产品屏)与一项对先前裁定的修正(DS 债务与 TMS 组合层须分为两类)。",
         "fragmentCount": 1
       }
+    ],
+    "conference:001812213bdeb5bd8680394b": [
+      {
+        "conferenceId": "conference:001812213bdeb5bd8680394b",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:42471ec6a491006490c6ebb7"
+        ],
+        "externalKeys": [],
+        "body": "[Owner 原文，由 scribe agent:fable 逐字转录；身份为声明而非密码学证明]\n「好的，我还发现Codex发现了README未随着版本同步更新的问题，确认是否有这个问题，如果有，再开一个新单并拆story，完成后新建一个快车sprint，将这三个init放在一起」\n[执笔说明]核验已完成且问题属实（证据见 Minerva 立场）。授权范围：创建 INIT-011 并拆 Epic/Story、创建 SPRINT-002 快车列车、将 INIT-009/010/011 入列。README 内容修复本身属执行期工作（S084-086），对外发布仍停在列车收官单一停点；MIN-042/MIN-043 既有边界不变。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:001812213bdeb5bd8680394b",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:e881abd40fd2e7f366d77368"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable·Minerva 架构角色]\n核验证据:package.json=0.5.0,CHANGELOG 含 0.2.0/0.3.0/0.3.1/0.3.2/0.4.0/0.5.0 六个后续发布,docs/releases/ 逐版本齐全;五语 README(en/fr/ja/zh-CN/ko)版本徽章均已 bump 至 0.5.0,但正文能力面停在 0.1.0——grep 计数:sprint=0、release-train=0、Incident=0、background-resource=0、work-annotate=0、gate identity=0(五语一致)。即「五版本面一并 bump」教训只覆盖了徽章数字,内容面从未纳入版本面清单,四个 minor 发布逐次累积成债。树设计:INIT-011→EPIC-027→S084(英文正文补齐 0.2.0→0.5.0 能力面+Status 节列当前发布)、S085(四语逐节对照同步,防译文声明漂移)、S086(防再犯:五 README Status 节须含 CHANGELOG 最新版本号+headline 关键词,接入 verify 面与发布 runbook)。门的诚实边界:只证「在场」不证质量,人工对照残余记入 unresolved。SPRINT-002 为快车列车,成员 INIT-009/010/011,advisory 非绑定、状态独立推进,发布合并至列车收官单一停点(MIN-036 修订公约)。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:0611d2482f4a608ffbcf0c76": [
+      {
+        "conferenceId": "conference:0611d2482f4a608ffbcf0c76",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:070e4b4c8195815385c47a75"
+        ],
+        "externalKeys": [],
+        "body": "E05 重塑目标＝Scope-on-record（Owner 裁 C 后选）。设计（读源坐实、仿 gate extensions 先例）：机制用现成 `required:false` extensions（schema 已收、零迁链/零新操作/向后兼容）。新键两枚：`advisory:scope`={required:false,value:权威范围/意图行}、`advisory:decided-by`={required:false,value:[minutes:id…]}（回链治理纪要）。新动词 `work-annotate`（mutates）：`--workspace/--expected-version/--at/--id`（work id）/`--scope`（可选串）/`--decided-by`（可选 minutes id 列表）/`--actor`；至少给一项；发 `work.updated` 把 advisory 键并入既有 extensions、升 revision/updatedAt、不动 status。回放校验仿 `gateEvidenceExtensions`：经 annotate 的 work.updated 其 mutableFields 含 extensions，且 extensions 增量须精确等于两 advisory 键（防夹带任意键）；`decided-by` 值 shape 校验（`minutes:` protocol id），解析属 advisory 不强制。**非绑定**：不参与 transitions/gates 判定、不阻 done。读面：extensions.json 已序列化、work-show 补呈。分解三 Story 到验收边界——STORY-018 核心写路径+schema 键+回放精确校验+core 测；STORY-019 CLI 面+COMMAND_CATALOG+负例+`regen:map-digests` 证明产物；STORY-020 读面+workflow-operations 成文+dogfood 回填（把 EPIC-005 真范围+`decided-by=MIN-E05-TRUE-KICKOFF` 注上，正是本会话 label≠scope 事故的端到端自证）。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:065c996ef25fb70852c93995": [
+      {
+        "conferenceId": "conference:065c996ef25fb70852c93995",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:155aac15deabe09201367f4d"
+        ],
+        "externalKeys": [],
+        "body": "The centralized container is right. OneDrive as the live root is not: a sync daemon reads and writes files mid-transaction against a lease, CAS and fsync ordering model, conflict copies inside the control tree trip fail-closed refusals, it sits outside the single-OS-user local-filesystem tested envelope, and the upward path-discovery convention stops finding the workspace from platform sessions.",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:065c996ef25fb70852c93995",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:33f24a714bddf5d5d0e0c7ce"
+        ],
+        "externalKeys": [],
+        "body": "One workspace per sub-project, placed inside that sub-project's own directory. Repositories are the wrong axis for splitting; deliverables are. A merged platform-wide chain is the shape the scale ceiling punishes.",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:065c996ef25fb70852c93995",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:6260ab62f309b1fc76c8dac6"
+        ],
+        "externalKeys": [],
+        "body": "Centralize the partitions under the platform root as .tcrn-workspace/<sub-project>/ instead. Sub-projects are separate git repositories, so an in-tree layout puts governance bytes inside each one. Place the live workspace on OneDrive for offsite durability.",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:0b98da82e5da98979772cdba": [
+      {
+        "conferenceId": "conference:0b98da82e5da98979772cdba",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:861483a9aeedd67d054c2692"
+        ],
+        "externalKeys": [],
+        "body": "spike 读源三立事实：①SessionStart 注入（通道甲）是**固定格式、scriptDigest 钉定、1024 字节预算、fail-open** 的权威摘要——改它＝激活阶梯 churn（新 digest+重绑片段）＋抢预算＋继承 fail-open（setup 信号不能 fail-open）；②首次放置本就由 First-Run 向导+独立可信 bootstrap 冷启动引导，**适配器不做首次分发**；③`verify-installed-copy` **已经**是现成的时效检查——放置副本对不上钉定摘要即 `IDENTITY_MISMATCH`。\n\n**裁定（叉倒向\"不碰甲，用现成件\"）**：分发不需要新适配器机器、不需要碰激活脚本、不需要放宽 `LIVE_LOCATION_FORBIDDEN`。正解＝\n- 适配器**现有** SessionStart 存在（\"TCRN Workflow — governed session context\"，AC-1 实测送达）即\"本宿主有受治工作流\"的通知；\n- helper skill 运营散文加一条纪律：**每个受治会话对放置副本跑 `verify-installed-copy`，不符则提议治理放置**；\n- 把我一路手工的 `cp 已验证字节 + verify` 治理化为**agent 驱动、用户批准、带回执的放置 runbook**（现成 verify 复用，禁令原样成立——工作流永不写 .claude/，agent 写合法）。\n\n**E04 因此从\"live-install 大程序\"减为\"运营纪律＋治理放置 runbook\"**，近 E03 那种消费者无关小交付。按深度教义声明下一条：`TCRN-CROSS-STORY-016`——治理放置 runbook + skill 运营纪律（含成文信任故事）。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:0d37b57252ce03c5af701ba7": [
+      {
+        "conferenceId": "conference:0d37b57252ce03c5af701ba7",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:04a6769c065ade6bb14a778e"
+        ],
+        "externalKeys": [],
+        "body": "（Owner 立场，逐字，四段按对话顺序）\n一「检查对话Design System Apple风格重设计，我发现一个INIT实现的过程中触发了多次推送，我认为这是不正常的」\n二「我对于授权后的操作没有问题，本次更偏向于工作流的优化策略，我认为一般来说正常的交付里一个INIT含有多次本地开发环境测试+部署是合理的，但是交付确认没有问题后再触发一次推送更符合正常逻辑，你的看法是什么？」\n三「也就是说在开发中依然逐步推，但是推开发分支，最后测试无误再合并到main对吗」\n四「同意，开一个INIT，然后开拆，完成后先不要开始推进」\n\n（执笔者标注）agent:fable 转录于立项会议。第三段执笔者答「对」并补两点精确化（单一整合分支；收官含 Owner go）；第四段即本 INIT 的授权与「分解后暂停执行」指令。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:0d37b57252ce03c5af701ba7",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:28764b3aef4c70fdbd1e2b13"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=fable]（2/2）\n\n5. 例外通道：确可分割且值得早上线的交付，由该 INIT 的 handoff 显式预裁定逐项发布（D6 语义仅在显式裁定下可用，不再是默认）；\n6. 敏感 INIT 可裁「纯本地开发＋仅收官推送」（连整合分支也不推）；\n7. 中断保险：整合分支远端副本＋既有 OneDrive gate-close 快照；\n8. 「合并后 main 独立 verify」的防工作树幻觉仪式，开发期以 git worktree 干净检出整合分支等价执行。\n\n理由要点：逐 Epic 合并的传统收益在本平台均不成立——单执行者串行无协作漂移；生产站无独立受众故无早反馈；DS 仓无 CI，合并零附加验证信号（PR status check 仅 Vercel）；审计粒度住在链上 conference/minutes 与 commit 序列，不住在合并事件。批量模式还原「公开历史只含验收过的状态」与干净回滚语义。\n\n约束：公约为默认约定，不改引擎字节；既有已合并历史不回溯。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:0d37b57252ce03c5af701ba7",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:2d0324cfadf55728edf77d84"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=fable]（2/2）\n\n决策清单（三车道，按「拆单收尾必产三分类清单」guide）：\nOwner-now：①执行启动 go——Owner 已明令「完成后先不要开始推进」，INIT 及全部子项停 planned，启动权在 Owner；②INIT done 前的公约文本验收（owner_intent_required 门，建于 INIT 本体）。\nConditional：①若下一 helper candidate 载荷轮先于本 INIT 执行开启，STORY-037 并入该轮，否则仅登记队列；②公约文档置平台 docs/（非 git 仓）——若 Owner 届时要求 git 治理，改置或镜像至 DS 仓 docs/，执行时呈报。\nAgent：文档措辞、文件名、知识卡 tags、模板段结构（有 CONF-026＋本公约支撑，自决并报）。\n发布面：本 INIT 全程零推送（文档落平台目录，记录落本地链）。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:0d37b57252ce03c5af701ba7",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:733c6d2f9ba86e9c6f058f65"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=fable]（1/2）\n\n（Minerva——Workflow Architect：交付节奏公约，即「反-D6 默认」）\n\n背景实测：DS INIT-006 执行期 7 个 Epic PR（#12–#18）于 107 分钟内逐个合并公开仓 main，各触发一次 Vercel 生产部署；节奏由 handoff D6「逐 Epic 合并即上生产（渐进收敛公开可见，接受）」预裁定，执行合规。但 D6 与常规停顿预算（TCRN-CROSS-CONF-026「对外发布必停」）靠豁免共存，Owner 事后直觉证明该豁免偏离本意。\n\n公约（Owner 已于对话中裁可）：\n1. 一个 INIT 一条整合分支（feat/init<N>），per-Epic 一个 commit；\n2. 每 Epic 本地 verify 绿＋落链验收后，推送到该整合分支（远端备份随做随有，分支 preview 可围观渐进收敛，生产不动）；\n3. 收官＝整合分支干净检出全量 verify → Owner 验收 → 单次合并 main → 单次生产部署 → main 独立 verify；\n4. 该次合并是 INIT 唯一对外发布事件，即停顿预算唯一必停点——规则与动作对齐，无需豁免条款；",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:0d37b57252ce03c5af701ba7",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:f93168605002608ceb3b00a3"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=fable]（1/2）\n\n（Mara——范围与树）INIT-006 为文档＋治理型小 INIT，拆 2 Epic / 4 Story，Story 即验证边界，不预挖 Subtask：\n\nTCRN-CROSS-INIT-006 交付节奏公约（planned）\n├ EPIC-011 公约固化（文档面）\n│ ├ STORY-034 公约正文落盘：平台 docs/ 新建 delivery-cadence-convention.md，含公约八条、适用范围（有 remote 的受治理仓）、与 CONF-026 停顿预算的衔接\n│ └ STORY-035 handoff 执行模型模板段：供未来 INIT handoff 直接复用的段落（整合分支／唯一必停／例外通道原文），随公约文档交付\n└ EPIC-012 公约传导（检索与教学面）\n  ├ STORY-036 知识卡：公约 distill 为 norm 卡并 promote（evidence＝本会议 minutes），入默认检索\n  └ STORY-037 helper 教学载荷登记：公约教学挂入 ride-along 队列，折入下一 candidate 载荷轮（不动 skill 本体，不触发重钉）",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:10ee4ff490cd80a21586bc47": [
+      {
+        "conferenceId": "conference:10ee4ff490cd80a21586bc47",
+        "actorId": "agent:sonnet",
+        "fragmentIds": [
+          "position:233f227817fbe0a12563ae64"
+        ],
+        "externalKeys": [],
+        "body": "（2/2）(c) 我不会隐瞒的成本：(a) 下身份检查不是链完整性不变式。若有人绕过 `gate-transition`，直接拼接一条 `gate.updated satisfied` 事件写入链，replay 会照单全收——因为 replay 根本不检查身份，只有 verb 层现场拦得住。\"身份被事后篡改\"这类风险，replay 层面永远发现不了。这是真实弱化，不是修辞。\n\n(d) 上线前必须证明（测试形态）：①无授权文件或 digest 不符时，`gate-transition` 现场拒绝，不产生任何链写入；②含无身份证据历史门的既有链，在完全没有授权文件的机器上端到端 replay 成功；③手工拼接绕过 CLI 的 satisfied 事件，replay 予以接受——用测试证明而非仅口头承认此边界；④对外文档措辞审查，确认写的是\"授权时点核验\"而非\"防篡改/审计轨迹\"。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:10ee4ff490cd80a21586bc47",
+        "actorId": "agent:sonnet",
+        "fragmentIds": [
+          "position:607e5ab2ee848924b155bbd8"
+        ],
+        "externalKeys": [],
+        "body": "（1/2）(a) 我选 (a)：仅在 `gate-transition` 这一 verb 层强制身份，replay 侧保持不变。理由：replay 的职责是让任何时刻、任何机器都能无条件重建链的状态——包括克隆、灾备恢复、多年后审计者手上的新机器。授权文件是链字节之外的外部资源；一旦 replay 依赖它，就把\"该文件此刻仍在该路径、digest 仍匹配\"变成了每一次未来 replay 的硬性前提，这是我们无法长期兑现的承诺。verb-only 把身份检查放在唯一站得住的位置——授权决策发生的那一刻，现场核验、现场裁决，这与已裁定的\"gate-v1 交付 AUTHORIZATION 而非 AUTHENTICATION\"完全一致，不多许诺一分。\n\n(b) (a) 独有防住的场景：某链上线数月后跨过 attestation 式 marker，积累了若干身份门控的 satisfied 事件。灾备恢复、新同事换机、外部审计——都发生在\"多年后的新机器\"上。此时原授权文件因正常运维（密钥轮换、人员离职、路径重组）已被合法替换或删除。在 (b) 下，replay 会重新核验 `{expectedCanonicalPath, expectedFileSha256}`，核验失败即 `WORKSPACE_EVENT_CORRUPT`，整条链——包括与身份完全无关的历史——全部不可读。这不是安全事件，是正常运维演变成自我致砖。(a) 下这次 replay 必然成功，因为 replay 从不触碰身份维度。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:10ee4ff490cd80a21586bc47",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:740f9c7d0a6da93111143475"
+        ],
+        "externalKeys": [],
+        "body": "（执笔者立场，并作闭会裁定）两方各指出一个真实 failure，但我在扇出之后读源立到一条新事实，它推翻了 (b) 的核心收益。\n\n**事实**：`canonicalSha256` 是无密钥的纯 `createHash(\"sha256\")`，全链路无 HMAC、无密钥材料。故任何拥有事件日志写权限者，都能读出当前 head、构造任意 payload、自行算出自洽的 `payloadHash`／`priorHash`／`eventHash`，在尾部追加一条重放全绿的事件。**这对今天所有事件类型已然成立**，不是 gate-v1 引入的。\n\n**推论**：opus 所举「手工伪造 `gate.updated: satisfied`」在 (b) 下**同样不被挡住**。伪造者既能追加事件，就同样能追加回放所要检查的身份条目——回放检查的每一项都由同机公开数据可导出。其立场断言「标记之后该伪造事件因缺 authority 引用直接 corrupt」，隐含前提是伪造者不知格式，那是隐晦即安全。故 (b) 的首要收益是幻觉，而 sonnet 所述致砖代价是实的：正常运维（轮换、离职、路径重组、异机恢复）会让外部文件合法缺席，(b) 下即整链不可读，连与身份无关的历史一并陪葬。\n\n**裁定：采 (a) verb-only，加一条修正。** 强制点在 `gate-transition` 现场；**另将授权决策记入 gate 事件 extensions**（执行 actor + 当时在册的 authority 文件 digest），回放**只校验该条目形状精确**（与既有 locator extensions 同一纪律），**绝不重读外部文件、绝不把文件在场当作重放前提**。审计者由此能看到「此门关闭时以哪份权威为准」，而重放永不依赖那份权威仍然存在。\n\n**成文边界须写三句而非两句**：交付 authorization 非 authentication；回放不防尾部追加伪造；且**任何非密码学的回放检查都不可能防它**——闭合它属外部锚点程序，不属 gate-v1。第三句是本次扇出挣来的，此前两句都没说到点上。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:10ee4ff490cd80a21586bc47",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:bf01fb409b1a765dec27face"
+        ],
+        "externalKeys": [],
+        "body": "（a）选 (b) 标记门控的重放强制。理由不是折中，而是只有它能让「重放即权威」这句话对新写入的字节继续为真。(c) 以砖化三条生产链换纯洁性，代价由无过错方承担，且修复路径是快照恢复——把可用性风险塞进一个身份特性，不可接受。(a) 我明确反对：它把防线放在只有守规矩的人才会经过的入口，等于承认「重放不校验身份」是永久设计，而 gate 对外宣传的是「命令与重放两道拒绝」——宣传与实现分叉，这正是我最不能签的东西。\n\n（b）(a) 挡不住的场景：任何能写文件的进程（含我们自己的 wiring 脚本、CI runner、被投毒的 agent）直接向链尾追加一条手工构造的 `gate.updated: satisfied` 事件，locator 指向真实的已闭会纪要、extensions delta 与持久条目逐字节相等——不经过 CLI，因此 verb 侧身份检查从未运行。重放全绿，链可读，gate 显示「已满足、owner intent」。没有任何机制会再发现它。标记之后，同一条伪造事件因缺少 authority 引用直接 `WORKSPACE_EVENT_CORRUPT`，整链失败关闭。\n\n（c）不隐瞒的代价：这确实制造了两类链，同样的字节在标记前后含义不同。标记前窗口永久不受保护，历史 gate 的身份维度**永远无法追认**；且未启用标记的链在重放侧身份保障为零，而使用者只会看到「gate-v1 已上线」。这必须写进 gate-v1 文档，与「本版交付授权、非认证」并列。\n\n（d）上线前须证明：①三条生产链原字节重放全绿（回归基线）；②标记后缺身份的 gate 事件触发 `WORKSPACE_EVENT_CORRUPT` 且整链失败；③绕过 CLI 的手工伪造事件同样被重放拒绝；④verb 与重放走同一解析实现的 parity 测试（防止二次分叉）；⑤authority 文件路径或 sha256 任一不符，两侧均拒；⑥重复 enable 标记被判 corrupt，标记不可删改重排。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:11d321fd4613c85e5a9cfa01": [
+      {
+        "conferenceId": "conference:11d321fd4613c85e5a9cfa01",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:28af87d14298126956c93e5f"
+        ],
+        "externalKeys": [],
+        "body": "[独立 fresh-context 子代理立场·Verity 角色·宿主 claude-code·Agent 工具·scribe agent:fable 逐字转录]\n独立核验后推荐纯观测收据:以 command 处理器挂 SubagentStart/SubagentStop,只记录、不注入不阻断,不改被评审的审议;事件当刻将每次调用逐条追加到会话外收据日志,收官仅以收据整体 sha256 入链,故有界。最小字段:头=宿主名及版本、父 session_id、hook 配置摘要、所绑会议键、调用数;每条=agent_id、agent_type、起止时刻、sha256(prompt)、sha256(last_assistant_message)、agent_transcript_path 及其当刻 sha256 与字节长度。绑定规则:立场正文须与某次调用的 last_assistant_message 字节相等;无收据一律标 synthesis-only,失败关闭。能证明:该宿主会话确曾发生 N 次独立上下文子代理调用,各立场逐字出自对应调用的收尾输出,事后改立场或转写会因摘要失配被检出。不能证明:非密码学身份,无密钥 sha256 只绑内容不认来源;不能证审议独立:子代理同模型,提示由主上下文所写,立场可被预写进提示;不能防本机用户篡改,时间戳只信本机时钟。最大风险是自伪造:收据信任根与纪要作者同权,settings、日志、转写对同一用户可写,主代理自持 Bash 足以凭空造出内部自洽的假收据;缓解是 hook 走 http/OTel 即时外发到会话无写权的收集器并即时锚链压缩伪造窗口,但那仍是归因增强而非证明,声称须止步于此。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:11d321fd4613c85e5a9cfa01",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:580eef10c9da020c723240f9"
+        ],
+        "externalKeys": [],
+        "body": "[Owner 原文，由 scribe agent:fable 逐字转录；身份为声明而非密码学证明]\n「好的，你需要将缺点修复并且评估是否有适用于Claude Code的强化，两个adapter的能力水平基线应尽量保持一致，并且关于010，是否有可以适用于claude code的方案并补全，使得两个INIT不仅是对于Codex能力的补全也是对Claude Code的提升和补全」\n[执笔说明]授权范围：修复上轮呈报缺点（INIT-010 追认回链、EPIC-020 依赖显式化）；对两 INIT 做双宿主基线对齐的范围修订与少量新 Story；不触动 MIN-042（minutes:83e4b837）既有边界——live 阻断政策、主动 Controller、对外发布仍不在本次授权内。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:11d321fd4613c85e5a9cfa01",
+        "actorId": "profile:tcrn-sable-v1",
+        "fragmentIds": [
+          "position:92324844aac86a144d666a01"
+        ],
+        "externalKeys": [],
+        "body": "[独立 fresh-context 子代理立场·Sable 角色·宿主 claude-code·Agent 工具·scribe agent:fable 逐字转录]\n反对以现状落树。一,N-2 裁定 SessionStart 为全程序唯一获批 fail-open 面;逐 Hook 扩 observe 即新增宿主执行面,fail-open 违「唯一」,fail-closed 实为 enforce 前置,均须先修宪。以「observe 不算面」重释或口头方向代裁定即静默扩权,INIT-010 仅存 prose 是前例。补救:EPIC-024 Claude 侧以修 N-2 裁定为硬前置,修订逐 hook 白名单并载失败语义,未列举默认禁。二,Codex 有逐哈希重批门,Claude 仅一次性 workspace trust,信任后 settings 与载荷可静默漂移,30+ 事件放大此面。补救:hook 一律薄垫片,入口先对载荷与 settings 注册行做逐字节 digest 对钉锚定 manifest,enforce 失配 fail-closed,observe 失配产不可抑制告警;残余须诚记——自验防漂移不防整体替换,兜底靠会话首 verify-installed-copy,禁称与 Codex 门等价。三,子代理转写是模型自述,SubagentStop 收据仅证停止这一宿主事实,二者无绑定则真收据可配伪转写或跨会话重放。补救:收据在宿主侧即时含转写文件 digest 与会话标识;转写入链标注未经宿主签名,作裁定依据须独立回执交叉钉。另封两缝:探针结果钉宿主版本、记观测非承诺;hook 禁以环境变量作信任输入,注入上下文的输出固定模板、不透传工作区内容。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:11d321fd4613c85e5a9cfa01",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:c0ba38a9d386a65e827106d8"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable·Minerva 架构角色]\n修订映射:EPIC-021 增 S081(Claude 宿主事实刷新——官方文档已列 30+ hook 事件、无逐哈希信任门、2.1.218+ 引入 workspace trust;AC-1 的 2.1.201 基线已陈旧;结果钉宿主版本、记观测非承诺)。EPIC-023 转「双宿主激活阶梯对齐」并增 S082(Claude v2 激活卸载 CLI 接线:核心已有 rollback plan 生成器与执行器、缺 CLI 动词,v2 收据卸载今日无法从 shell 达成)。EPIC-024/025 注双宿主,采 Sable 补救:Claude 扩任何 hook(含 observe)以 S072 修 N-2 为硬前置,逐 hook 白名单载失败语义、未列默认禁;hook 一律薄垫片,入口逐字节 digest 自检对钉锚定 manifest,observe 失配产不可抑制告警;自检防漂移不防整体替换,兜底=会话首 verify-installed-copy,不得声称与 Codex 逐哈希门等价;hook 禁以环境变量作信任输入、输出固定模板。EPIC-026 增 S083(Agent SDK/OTel/会话转写三路只读 Observer 等价评估);S060/S078 矩阵与能力映射双宿主化(Claude 侧 Worktree/子代理/MCP connector/浏览器/Automation 入清单)。INIT-010:Owner 追认回链入 scope;EPIC-020 依赖拆分(Codex 采集依赖 INIT-009 EPIC-021/026,Claude 采集宿主能力现成、可先行);S055 按 Verity 立场定形为子代理纯观测收据机制,并加 Sable 绑定补救:宿主侧即时记转写文件 digest+会话标识,立场正文与调用 last_assistant_message 字节相等,无收据即 synthesis-only 失败关闭,转写入链标注未经宿主签名;自伪造缓解(外发收集器)列 enforce 级前置研究,一切执行凭据声称止步于归因增强。三新 Story 均 planned;MIN-042 既裁边界(live 阻断、主动 Controller、对外发布)不变。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:19336931c444e8f4d6b244b3": [
+      {
+        "conferenceId": "conference:19336931c444e8f4d6b244b3",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:38debcfe7c927f6752d32222"
+        ],
+        "externalKeys": [],
+        "body": "(a) 取 Fork A（现在建 v2 多-skill schema）。最强理由：fail-closed 守卫与 v2 触碰的是同一代码面——builder 前缀过滤、reconstruct 遍历、allowlist。而\"禁止出现第二 skill\"的守卫本身就是一个设计决定，v2 日后必须亲手把它拆掉；Fork B 等于先砌一堵注定要推倒的墙，两次改动却读同一条信任链、付两次 ~15 分钟重钉仪式。\n\n(b) Fork B 强加、Fork A 规避的具体未来成本：想要第二 skill 的那天，它从一次 payload edit 退化成时间压力下的信任机器工程。E04 正是 adapter 分发——\"今天无消费者\"不等于\"无消费者\"，那一天很可能就是 E04。Fork A 把这份风险前置到从容期解决，并省掉第二次重钉与第二次信任链复读。\n\n(c) 我方诚实弱点：\"无消费者不建基础设施\"在本纲领被反复裁定，E02 更把实现移到有消费者的 epic。今天 skill/ 只有一个目录，v2 的 schema 形状是在没有真实消费者约束下的猜测；真消费者到场若要求不同形状，v2 反而成了需返工的错基础设施——这正是 Fork B 想躲开的赌注。\n\n(d) 若取 Fork A，我会砍掉的 Story：S-第二示例/fixture skill（无真消费者，纯装点）、S-每-skill 独立 pin 与子清单分片（超出验证边界）、S-adapter 多-skill 路由（属 E04，不在本 epic）、S-v1→v2 迁移工具（无已装 v1 多-skill 基线可迁移）。只保留核心四改：schema 升版 + builder 多子树 + reconstruct/verify 多目录 + allowlist 泛化。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:19336931c444e8f4d6b244b3",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:592025700f8097fefd49a060"
+        ],
+        "externalKeys": [],
+        "body": "（1/2）（执笔者立场，并作闭会裁定）扇出后我补了一个决定性事实核查，它使天平清晰倒向 Fork B。\n\n裁定：采 **Fork B**——现在只把 fail-open 变 fail-closed，v2 多-skill schema 连同 Opus 列出的四改一并推迟到真实第二 skill 消费者到场。\n\n三点核查，逐一回应 Fork A 的最强材料：\n\n其一，「付两次全套仪式」不成立。守卫只改 `scripts/create-skill-archive.mjs` 与其测试，二者皆不在 `skill/` 下——`EXPECTED_ARCHIVE_SHA256` 只随 `skill/` 变，故锚不动、六文档无须 republish。Fork B 的修复是**轻量 scripts-only 仪式**（源归档重钉+manifest sourceArchiveSha256+checksums+全量测试），非全套重钉。Opus 假设的边际成本比实际大。\n\n其二，「注定要推倒的墙」被 Sonnet 正确驳倒，我把不变式钉死：守卫的不变式是「archive 必须代表 `skill/` 下每一条被跟踪路径，否则构建失败」。v2 到来时**拓宽的是\"代表\"的满足条件**（从\"唯一 SKILL.md 子树\"到\"每个子树各有 SKILL.md\"），不变式本身被保留。这是单调加强，不是回退——v2 改守卫的判定，不拆守卫。\n\n其三，「很可能就是 E04」无源支撑。读 E04 实况：它是把**现有单一 helper skill** 经宿主 adapter 分发，是分发机制而非第二个 skill。E04 不是多-skill 消费者。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:19336931c444e8f4d6b244b3",
+        "actorId": "agent:sonnet",
+        "fragmentIds": [
+          "position:c3650b1a8d254b9a0c9462f7"
+        ],
+        "externalKeys": [],
+        "body": "（1/2）(a) 立场与最强理由。主张 Fork B：只做与消费者无关的部分——让 builder 对 skill/ 下无法代表的内容失败关闭（第二目录、非唯一 SKILL.md 根即报错），把今天的 fail-open 变成 fail-closed。最强理由：这是信任机器里一个已证实的真实缺口——散文被静默丢弃、archive sha256 不变、pin 照绿、CI 照绿，而这份散文从未被 pin 也从未被验证。危险的根源是\"看似可信但从未被 pin 的内容能悄悄通过验证\"，与\"schema 是否支持多技能\"是两件事；前者今天就该修，不该等后者。\n\n(b) Fork A 的具体浪费。v2 的真实形状——第二个技能如何被发现、安装、校验——现在没有事实支撑，纯属猜测。E02 刚证明：预先声明的故事形状会被真实消费者出现后的读源彻底改写。现在建的多子树 builder、多目录 reconstruct/verify、广义 allowlist 是无消费者的基础设施：每次 payload 编辑触发的 ~15 分钟全量重钉仪式（六处锚文档、78 分片测试）都要为它背书，却证明不了任何东西——因为没有第二个技能可供验证。这正是\"没有消费者不建基础设施\"原则要挡的浪费。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:19336931c444e8f4d6b244b3",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:db11091ffe18f5419fd63b77"
+        ],
+        "externalKeys": [],
+        "body": "（2/2）采纳 Opus 的 (d) 砍单作为「即便建 v2 也不含」的边界确认（fixture skill／每-skill 分片／adapter 路由属 E04／迁移工具无基线）。\n\n**EPIC-003 只声明一条 Story**（Fork B 的 B1–B4 合为一个坐定之工，不切 Subtask）：`TCRN-CROSS-STORY-014`——builder 对 `skill/` 下任何无法代表的路径（第二目录、散杂文件、缺/多 SKILL.md 根）失败关闭，红证（注入第二目录断言非零退出，而非\"排除后仍绿\"），经 scripts-only 仪式发布。v2 推迟为「待真实第二 skill 消费者」，记入纪要与记忆，非遗忘。\n\n停顿预算合规：本裁定由既有裁定支撑（深度教义＋E02「实现移到有消费者的 epic」先例）、单点可逆，故我执行而不停 Owner；Owner 可驳回。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:19336931c444e8f4d6b244b3",
+        "actorId": "agent:sonnet",
+        "fragmentIds": [
+          "position:e4c53314a2d1522b98651b4a"
+        ],
+        "externalKeys": [],
+        "body": "（2/2）(c) 诚实弱点。若第二个技能真的近期出现，Fork B 意味着两次改动而非一次，多付一次 ~15 分钟仪式的固定成本。这个弱点无法否认，只在\"第二技能不会近期出现\"这一判断本身成立时才被抵消——而这判断目前是最佳猜测，非既定事实。对\"同一代码面、付两次仪式\"的反驳：fail-closed 守卫是几行代码加一个测试，不是 v2 的一半；v2 到来时替换的是守卫的判定条件，是正常编辑，不是回退重做。\n\n(d) EPIC-003 下的 Stories（Fork B）：STORY-B1 builder 对 skill/ 下任何不属于唯一 SKILL.md 子树的路径（新增目录、散杂文件）失败关闭；STORY-B2 skill/ 下不存在唯一持有 SKILL.md 的子目录时构建报明确错误而非静默通过；STORY-B3 回归测试注入第二目录/散杂文件断言 builder 非零退出而非验证排除后仍绿；STORY-B4 closed-allowlist 测试补充失败路径覆盖，区分\"允许文件集合\"与\"探测到未预期路径即报错\"。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:1a6210403640040134ff59ba": [
+      {
+        "conferenceId": "conference:1a6210403640040134ff59ba",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:7e006fbafe1acba1a6582361"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=opus]\n\n(Verity——读源+实测三结论)\n\n**① S030 分支=清库重种(设计许可)**:store.json `disposable:true`+`authority:\"metadata-index-authority-body-separate\"`,initializeKnowledgeStore 显式注「派生索引,永非系统真相源」(WSC-1);再 init 需先物理删 `.tcrn-workflow/knowledge`(ensureNewDirectory 遇存在即 KNOWLEDGE_ALREADY_EXISTS)再 `knowledge-init --acknowledge-disposable`。遗留 60 镜像=`--distill` 出的链决定副本,链有原件,故清库零信息损失、且比 60 次 retire 更净(retire 留墓不退字节)。\n\n**② SessionStart 携知识行=排除(预算+设计双否)**:注入体在 emit 的静态 handler 内硬编码 [banner/workspace/project/profile/authority/不可信警告(+可选 persona render)],1024B 预算已近满,只读 project.json/persona-render.json、不读知识库。且设计上知识是**拉取非推送**——检索走按需 query(S029 教学),非 SessionStart 自动注入。故此项不入 INIT-005,记录延期。\n\n**③ 【前提翻转】引擎修复非激活阻断**:实测当前(index 全量含 metadata 的双计)记账下,真实策展 guide 卡片(metadata 1786B/body 834B)——8 张=27%、12 张=40%、16 张=54%,**全在 60% 验收线内**。故 S023 记账去重/S024 retire 回收是**未来余量优化,非激活前提**;连带 S028 的 W v0.3.2 发布对『激活』亦非必需(无引擎改动可发)。且『双计』计的是真实盘上文件(index 是 derived-rebuildable 的真文件),改它属『上限计逻辑内容而非物理占用』的策略选择,非 bug 修复。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:1c5e349835148eaab43c5249": [
+      {
+        "conferenceId": "conference:1c5e349835148eaab43c5249",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:5affe46b164594800acdf25e"
+        ],
+        "externalKeys": [],
+        "body": "（Owner 裁定,AskUserQuestion 选项）「内容激活 + 引擎余量 + 发 v0.3.2」。全树照做:EPIC-007 引擎余量(S023-025 把上限从~16 卡拉到 30+)一并做,v0.3.2 捆 INIT-004 Incident CLI + 引擎改动一起发,helper candidate.24 重钉。durable 路径,接受触碰安全敏感上限需红证、多一个发布周期的成本。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:1d2a266dcecb0920b5a744f7": [
+      {
+        "conferenceId": "conference:1d2a266dcecb0920b5a744f7",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:4e768ea8e5bc83d6470c9a0c"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=fable]\n\n（Verity）落 W `f365029`（已推送 main）。两处小改，皆经红证：\n\n**STORY-022**：CLI 创建白名单加 Incident（两处点，cli/index.ts）。Review/Release/Knowledge 仍闭。单测经 `invokeCli`（真 CLI 解析→白名单→引擎→materialize→validate 全路径）：Incident 挂 Story 建成、无父建成、materialize 见 kind=Incident、三闭合 kind 仍 `CLI_ARGUMENT_MALFORMED`。红证：回退白名单→该测试被抓。\n\n**STORY-021**：唯一真缺口＝未映射 kind 悬空父的回归测试（既有 else-if 守卫无覆盖）。negative/cases.json +`missing-parent-unmapped-kind`（Incident 悬空父→`REFERENTIAL_INTEGRITY`）+executor。红证：把 else-if 守卫改 `continue`（悬空父静默跳过）→该测试被抓。\n\n**过程两课**：①红证探针最初用错 build 命令（`node scripts/task.mjs build` 缺 pnpm 上下文→`RUNTIME_PNPM_VERSION`→跑旧 dist→假\"存活\"）；改 `pnpm run build` 并**先自检基线真绿**后，两红证才真抓——「先自检探针」第二次救场。②变异须能编译（首个变异令 `parent.projectId` 触 undefined 不可编译）。\n\n绿灯：verify:protocol P2_CONFORMANCE_VERIFIED／verify:rc1 RC1_CANDIDATE_READY／format／guard-check 12 杀／**verify:p1 P1_VERIFIED**／push-gate。\n\n**收口**：INIT-004 交付达成（代码完成+证明+推送）。父语义采 parent-optional（推荐，Owner 可驳；若驳则单点加 parentless 校验）。**用户可见交付随下次 W 发布列车**（Owner 门，v0.3.2 会连带 helper 重钉）——是条件不是欠账。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:1da54797863f59c5bab64daa": [
+      {
+        "conferenceId": "conference:1da54797863f59c5bab64daa",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:3851ad6b4afc7de86421a813"
+        ],
+        "externalKeys": [],
+        "body": "读源坐实 E05『链上 advisory 非绑定字段』机制与迁链顾虑，呈 Owner 定形。一、**迁链顾虑证伪**：decomp 忧『避免二次迁链』，读源证无链可迁——`WORKSPACE_STORAGE_VERSION=1` 常量钉死；WSD-1 注释（workspace.ts:212）明载新记录词汇（conference/gate）以**加式事件操作**落地、storageVersion 恒 1，只有『用到新操作的工作区』对更旧二进制不可读。二、**非绑定字段＝`required:false` extensions**：`validateExtensionMap`（protocol/index.ts:471）只对 `required:true 且未注册` 报 `UNKNOWN_REQUIRED_EXTENSION`；`required:false` 项**任意 protocol-id 键即收、免注册、免新操作、免版本升、对旧二进制向后兼容**。既有先例＝`gate-evidence`/`gate-identity:decision`（gate 的 required:false extensions）。故 E05 与 E02 或任何项**无迁链耦合**，decomp 待裁耦合问题当场消解。三、**价值张力（诚实呈报）**：触发（Deliberation/Recording Triggers）本质判断题，skill 自陈 unreliable-by-design；prose→链上非绑定字段让**声明的策略**可审计/可移植，但不使 agent 触发变可靠；唯一确定性触发（多代理扇出）已由 conference 动词覆盖。四、**呈 Owner 三选**：(A) 建最小 extensions 声明面（零迁链、低成本、记录每工作区触发策略）；(B) 暂缓——价值有限、确定性情形已覆盖，遇具体需求再启；(C) 重塑——指向价值更清的 advisory 面。方向属产品范围裁量，留 Owner；本会议留开。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:1da54797863f59c5bab64daa",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:99efacd70bf5582a01dc523d"
+        ],
+        "externalKeys": [],
+        "body": "Owner 裁定：对『(A) 建最小 extensions 声明面 / (B) 暂缓 / (C) 重塑』三选，选 **(C) 重塑**——把 E05 指向价值更清的 advisory 面（非字面搬迁 Deliberation/Recording Triggers 散文，亦非暂缓）。Owner 于本会议呈报后回复『C』；未附具体重塑目标与理由，目标定义与分解留后续设计会议。裁定所据事实（读源坐实、随此裁定生效）：迁链耦合为空——`required:false` extensions 零注册/零新操作/零 storageVersion 升/向后兼容，schema 今日即支持，唯缺 work/project 动词的写入面。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:21306b42fc5743e4b3353b65": [
+      {
+        "conferenceId": "conference:21306b42fc5743e4b3353b65",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:4f81aee560e609ac0b8c5375"
+        ],
+        "externalKeys": [],
+        "body": "（驱动方开工陈述，非争议审议）本会议的唯一目的是补 INIT-003 分解时留下的一处欠账：七 Story 的职责表当时只存在于对话预览，链上不可重构——审计者从 MIN-003 读不出 STORY-004「其余权威面分批」指什么。职责表以逐条决议入本纪要，使 E01 自描述。\n\n顺序刚性（承 MIN-003）：STORY-003 身份/actor 权威切片排最前交付，它是 E02 gate-v1 的开工信号；STORY-001 矩阵盘点是 STORY-002 信任故事设计与 STORY-004 分批实现的共同输入，故实际执行序为 001→002/003→004→005，006/007 为骑附可并行。\n\nSubtask 裁定：STORY-001 为一次坐定之工（只读源码盘点、零仓写、产出一张矩阵），不切 Subtask。深度教义——Subtask 是工具不是配额，且在工作开始时由开工者按需切，预声明只会消耗规模预算于必然返工的层。其余 Story 的 Subtask 同样留到各自开工时裁。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:247094b7b31404af98c7492e": [
+      {
+        "conferenceId": "conference:247094b7b31404af98c7492e",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:1f6278dc1ad42df2f5a0b1dc"
+        ],
+        "externalKeys": [],
+        "body": "边界证据核验：DS 已按方案 B 对 INIT-010、5 Epic、19 Story 与 INC-002 共 26 条记录追加证据纠偏，INC-002 现 done 仅表示纠偏处理完成，不宣称功能已落地。TMS PR #1 仍 OPEN 且未合并，head 76b60fb9a726ce6ca04c14a51ee193ac0ae199d0；CI 的 lint/facts、type-check、unit-tests、build、advisory 均通过，required security 因 gitleaks 命中 7 个仓库基线占位 fixture 保持红灯且未绕过；TCRN-TMS-INC-001 为 ready，INC-002 为 planned。跨仓 carry-over 保持：EPIC-025 与 S073/S074/S075 blocked、host enforce 授权数 0；INC-023 planned；可选 observe 五格按 Owner 批准跳过。结论：已批准发布与纠偏包证据充分，SPRINT-002 可关闭；关闭只结束列车，不关闭上述 carry-over。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:247094b7b31404af98c7492e",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:db560c48dc5d22c95c231900"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis)；执笔 agent:codex，署名 Verity。发布证据核验：Workflow PR #8 已 fast-forward 进 main，commit bae1c26bbcfe830d9e273d0cfdc516eda82689b3；注释 tag v0.6.0 的 tag object 185e613aa14dec0a14e09ab6182efdfeaca4899f 与远端全值一致；默认分支 CI 30189864770 成功，GitHub Release v0.6.0 六资产摘要与本地一致。Helper PR #1 已 fast-forward 进 main，commit 86bc822568f020c7e7c3428653ea22117396b72f；默认分支 CI 30190849433 成功；注释 tag v0.1.0-candidate.27 与六项预发布资产全摘要一致；bootstrap 锚为 71063beb2aefa3cd92d734b1afc2e43c45a731e5748352caae4a8344dbb856f2。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:2bab03773dda9ed2fa70ba62": [
+      {
+        "conferenceId": "conference:2bab03773dda9ed2fa70ba62",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:f22102790cfc0e361eee1747"
+        ],
+        "externalKeys": [],
+        "body": "先测后改。门三步基线：`verify:p1` 90s、`verify:p8` 7s、`guard-check` 108s，合计约 205s。\n\n**第一个假设被自己证伪**：我原以为 guard-check 的成本在「每条守卫一次全量 build」，实测 build 仅 1–2s，12 次不过 20s。真正的热点在测试运行——逐文件计时发现 **12 条守卫中 2 条吃掉 75.5s**（p4-knowledge-core 46.3s、p3-file-engine 29.2s），其余 10 条合计约 4s。\n\n**改法**：这两条各自只跑「真正抓住其变异的那个测试」。测试名是**实测得来而非猜测**——注入变异、读运行器报出的失败用例名、还原，两条分别得 1 个与 2 个抓手，后者取命名对应故障点契约者。\n\n**窄化同时也更严格**：「这套件里有测试失败」与「这个测试失败」是两个不同的主张，后者能在变异改由别处抓住时发出声音。且模式匹配不到任何测试时跑零个测试并退出 0，落在 MUTATION_SURVIVED 分支——窄化只会大声失败，不会静默通过。\n\n结果：guard-check 108s→34s，12 道守卫仍全杀；整门 205s→134s（`PUSH_GATE_VERIFIED`），已落到门内注释所述 180s 升级阈值之下。\n\n**残余热点**：`verify:p1` 90s 现为最大单项（566 测试／40 文件），未动。\n\n**另记一处隐患，不在本 Story 处置**：门的告警扫描仍是钝式 `/\\bwarning\\b|\\bWARN\\b/`——正是 H 仓 candidate.16 记下的「钝扫描即故障注入器」同一形制（在 H 曾误伤测试夹具里的字面量与 CI 下的 git 闲聊）。W 目前未被咬，但任何含该词的工具输出都会让门假失败。改门的语义应另立裁定，不由提速 Story 顺手带过。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:2c8dfcea642540f377e386c9": [
+      {
+        "conferenceId": "conference:2c8dfcea642540f377e386c9",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:3726c6a96eda27ae6c4428c7"
+        ],
+        "externalKeys": [],
+        "body": "（Owner 立场，逐字）「同意，落地优化后，推送关门」\n\n（执笔者标注，非 Owner 原话）「推送关门」即对本证据卡的验收与关门指令；其前置条件「落地优化后」已满足——停顿预算已立为常规（记忆 stop-budget-standing-rule＋`TCRN-CROSS-CONF-026`/`MIN-028`＋candidate.20 教学队列）。\n\n验收对象为证据卡所列：gate-v1 交付（owner_intent_required 门须带外名册＋具名 actor；决策入 extensions；回放只校验形状、绝不重读名册）、49/49 套件与注入红证、真链回归（两链五旧门无一被砖）、成文三句边界（授权非认证／回放不防尾部追加伪造／任何非密码学回放检查皆不能防）。\n\n据此授权：以名册 `.tcrn-workspace/release-trust/gate-identity-authority.json`（摘要 `fab89e25…`，带外常数）、actor `owner:governance` 关闭 GATE-002——gate-v1 首次为自身把关。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:2c8dfcea642540f377e386c9",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:5ace45c9807a3663522b0fb5"
+        ],
+        "externalKeys": [],
+        "body": "证据卡（呈 Owner 验收；本会议刻意留开，等你表态后逐字执笔并据此关门）。\n\n**交付**：`owner_intent_required` 的门从此关不动，除非同时具备带外名册（凭你手持的摘要核验落盘字节）与被该名册许可的具名 actor。`outcomeClass` 即逐门开关，无需链级设置，既有记录无一改变含义。授权决策落 gate extensions 供审计；回放只校验其形状与自洽，**绝不重读名册**。\n\n**证明**：套件 49／49；三处引擎不变式、两处 CLI 接线、向后兼容、边界，各经注入变异见红（其中两处变异暴露了真覆盖洞，补格后方全被抓）。真链回归实测：两条生产链共 5 个无身份条目的已满足门在新引擎下照常回放。\n\n**边界，我不越声**：交付 authorization 非 authentication；回放不防尾部追加伪造；且任何非密码学的回放检查都不可能防它——已成文入 `agent-integration-v1.md` §9，并由一个断言「回放接受伪造」的测试钉住。\n\n**关此门的方式本身即最后一项证明**：请以下述参数执行，`--identity-authority` 指向 `.tcrn-workspace/release-trust/gate-identity-authority.json`，`--identity-authority-digest` 为 `fab89e256b7a4df472ac6310ae1b5e85e6993a3655c062dcf5ba82e140ed15b7`，`--actor owner:governance`。若名册未列你、或摘要不符、或 actor 不具名，引擎会拒——那正是本 Epic 交付之物在真链上为自己把关。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:2e8b5554ec1a78549a1e1eda": [
+      {
+        "conferenceId": "conference:2e8b5554ec1a78549a1e1eda",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:cdb843cfb5fbcd18421e2f31"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable·Minerva 架构角色]\n四个设计判断成案。一,基线边界:SECURITY/CONTRIBUTING/CODE_OF_CONDUCT/PRIVACY 进五语(读者契约完整性:发五语 README 而漏洞上报指南只有英文是断裂的);LICENSE/NOTICE 不译(Apache-2.0 权威文本为英文,译本无效力且引解释漂移)、CHANGELOG 不译(逐版记录面,翻译债随版本线性增长,headline 由 README Status 节五语承载);「不做」与「做」同录规则防好心补齐。二,规则的牙齿:每译本首行『英文版为准』+『synced-to:<英文源 sha256 前缀>』钉扎行,发布门在列车收官停点校验钉扎值等于当前英文文件摘要,失配 fail-closed;不卡日常提交只卡发布,与单一停点公约同拍;门只证同步过不证译文质量。已向 Owner 交代成本:英文文档每改,同列车必须携带四译文刷新——明知采纳。三,风格规则从既有五版 README 风格提炼成文(结构骨架固定序/no-overclaim 措辞范式/排版规范含 CJK-拉丁混排与全半角标点及列表项禁 ASCII 逗号等实测教训),不发明新审美;可检子集入 verify 门,措辞美感入 CONTRIBUTING 与发布 runbook checklist——门管形不管神,分层写明即诚实。四,归属:扩 INIT-011 增 EPIC-028(S087 翻译/S088 manifest+synced-to 门/S089 风格成文/S090 分层接线),随 SPRINT-002 在列;规则本体沉淀知识卡 CARD-DOCS-LANGUAGE-BASELINE 与 CARD-DOC-STYLE(promote 以 minutes+已上线门为 evidence);工作区级宣称、分阶段采纳:W 本 INIT、helper 随下次 candidate 重钉、DS 随其下一班列车,不超前声称。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:2e8b5554ec1a78549a1e1eda",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:cfac613a38ac6a44b422bd9d"
+        ],
+        "externalKeys": [],
+        "body": "[Owner 原文，由 scribe agent:fable 逐字转录；身份为声明而非密码学证明]\n「011我认为还能再扩大，对于SECURITY、CONTRIBUTING这些放在根目录会显示给人类去查看识别的描述性文档也需要接入五语翻译，这些应该成为我们的基础规则。同时，排版的美化，README内容、结构、措辞风格我们也应该写成规则，你怎么看」\n随后对呈报方案（四文档进五语、LICENSE/NOTICE/CHANGELOG 不进、synced-to 摘要门、风格规则分层、EPIC-028/S087-090、知识卡沉淀、分阶段采纳）逐字裁可：\n「同意」\n[执笔说明]授权范围：扩 INIT-011 增 EPIC-028 及 S087-090、基础规则沉淀为知识卡；EPIC-028 随 INIT-011 已入列 SPRINT-002；翻译与门的实施属执行期，对外发布仍在列车收官单一停点；MIN-042/043/044 既有边界不变。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:31780ff37b021dfd3174964c": [
+      {
+        "conferenceId": "conference:31780ff37b021dfd3174964c",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:17188c466d53dfaefdafb34e"
+        ],
+        "externalKeys": [],
+        "body": "Restart both day-one chains under key convention v3 (platform-partition-prefixed external keys) while every work record is still planned and nothing has started: uniformity for decades of records outweighs preserving one day of pre-convention history in place; the old chains remain whole in FINAL archive snapshots",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:31780ff37b021dfd3174964c",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:c294f33a29198ea870a8d189"
+        ],
+        "externalKeys": [],
+        "body": "确认",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:3224a81fcec47f85988261ae": [
+      {
+        "conferenceId": "conference:3224a81fcec47f85988261ae",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:04ac66d8c792f396b3db8069"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable·Verity 验证角色]\n补记验证事实,不追认任何既往会议的分类。可核验者:CONF-040 的 Verity 与 Sable 立场、CONF-043 的 Sable 与 Verity 立场,均由 Agent 工具派发的独立 fresh-context 子代理产出并逐字转录,主线程未改写其正文;这一点在各立场首行已如实披露。不可核验者:上述调用未经 S055 采集,故无 host-execution receipt 绑定其 agentInvocationId、freshContext、promptDigest 与 outputDigest,亦无观测期转写摘要;缺此绑定,任何人都无法从记录本身分辨「确由独立调用产出」与「主线程照此撰写」。故其执行来源在协议意义上是 legacy-unverified,本会议不将其升格。判据既已成文:立场正文须与被绑调用的收尾输出字节相等,且须≥2 个 distinct fresh-context 调用,否则 EXECUTION_INDEPENDENCE_REQUIRED 或 EXECUTION_BINDING_MISMATCH 失败关闭。缺席即未知,不得读作已覆盖。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:3224a81fcec47f85988261ae",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:2ea4e64db6ab536baf84a5cd"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable·Minerva 架构角色]\nCONF-039 依当时规则关闭,保留原状不追加不改写;本会议为其后继 remediation,交叉引用而非重开。差异如实记录:CONF-039 的五个立场全部由单一主线程上下文撰写(main-thread synthesis),虽首行已如实披露执行形态,但当时既无 executionMode 字段亦无宿主执行凭据,故按 EPIC-019 的读法应分类为 legacy-unverified——不是 multi-agent-deliberative,也不因披露过就等价于独立审议。此后 CONF-040(双宿主对齐)与 CONF-043(N-2 修宪)两会各以两个真实独立 fresh-context 子代理产出立场,是本链首批真正的多代理审议实证;但它们同样早于 S055 采集机制,故其立场未绑宿主执行收据,按同一读法亦为 legacy-unverified 而非 multi-agent-deliberative——本会议明确不为它们追认更高分类,以免以叙述替代证据。自 S055 起,新会议可用 collectExecutionReceipt 由观测到的子代理调用产出收据,立场正文与调用收尾输出字节相等方可标 multi-agent-deliberative,无收据即 synthesis-only 失败关闭。诚实上限:收据是归因增强而非身份证明,采集器与被观测代理同权,转写未经宿主签名;S055 已把这三句钉进模块常量、返回类型与门,不由叙述承担。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:3362789bb29a31caecd78093": [
+      {
+        "conferenceId": "conference:3362789bb29a31caecd78093",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:8727433cfb725a89f67fa568"
+        ],
+        "externalKeys": [],
+        "body": "结论先行：你要的「两轨不共信任故事」不需要新发明——缝在代码里已经存在，STORY-002 的工作是把它说清并立规，而不是另造一套。\n\n判据（读源确证）。pins 轨＝`readAuthorityFile` 原语，6 个面走它：调用方须**事先**持有带外摘要，落盘文件经 TOCTOU 加固读取（禁符号链接、nlink 须为 1、前后同一文件身份、realpath 须等于传入路径），再以 `sha256(content) !== expectedFileSha256` 硬比对，并要求 canonical JSON 往返一致。**可被第三方独立复核**：任何人拿着已公布的摘要都能自证。\n\nattestations 轨＝`admit*HostInput` 品牌铸造，3 个面走它：校验字段全集、枚举、有效期窗口，以及 `hostDigest === canonicalSha256(basis)`——**但那是调用方对自己数据算的校验和**（`sealed()` 谁都能算）。`WeakSet` 品牌使其在进程内不可伪造，可构造函数接受任何自洽输入。**不可被第三方复核**：它断言，不证明。既存先例 `scripts/host-evidence.mjs` 正是此形，其源码注释自陈 hostVersionReadback「由接线者断言，宿主并不回读」。\n\n分离规则（拟立）：**hostDigest 不是 pin**。它证明断言的完整性，不证明断言者的真实性。文档、推理、命名一律不得把品牌上下文当作已钉。推论：凡安全性取决于「谁在动作」的能力，必须落 pins 轨；仅需要一份自洽宿主描述的，方可落 attestations 轨。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:3a0ddb95958cb3d356b26191": [
+      {
+        "conferenceId": "conference:3a0ddb95958cb3d356b26191",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:e1e8b2d8b1025bff057892e3"
+        ],
+        "externalKeys": [],
+        "body": "（Owner 立场，逐字）「同意建议，完成后继续推进」\n\n（执笔者标注，非 Owner 原话）本裁定应答的推荐是**分开处置**，依据是两条扫描的暴露面实测不同：\n\n**lint 的 `\\bany\\b`——已观测，修。** 量得 28 份 `.ts` 文件命中代码 0 处、注释 0 处；该零不是「无违规」，是作者被规则逼着绕开一个英文常用词（我写 gate-identity.ts 时即被迫劣化两句散文）。修法为**先剥离注释与字符串/模板字面量再扫码**，强度对代码分毫不减：隐式 any 早由 `strict` 在类型层挡住，本规则唯一的增量价值是显式标注，而显式标注只出现在代码里；`@ts-ignore` 因其本身即注释，仍读全文。\n\n**推送门的 `\\bwarning\\b`——零暴露，不动。** 三个被扫命令实测 `warn` 出现 0 次；更关键的是**这份干净是工程出来的**：仓内 `scripts/lib/scoped-strip-types.mjs` 专带 `processWarningState` 去消费 Node 的实验性告警。且照搬 H 的收紧（只匹配 Node 运行期签名）会在 W **丢掉包管理器告警**一整类，本会话亲见 `npm warn Unknown project config`。故不改，并把「不改」记在案；若将来真被咬，修法是加结构而非放松模式。\n\n**一致的尺**：有观测证据且修法不损强度者修；仅有推测且修法会丢覆盖者不修。打包成「钝式扫描一起改」是偷懒。\n\n**过程留一笔**：首轮红证十例全报 None，我无法区分「正确放行」与「lint 根本没跑」——调用形写错了。**先自检探针（已知违规须被检出）再信任任何一次通过**。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:3afdd0b5011fcc1df7a62228": [
+      {
+        "conferenceId": "conference:3afdd0b5011fcc1df7a62228",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:9908ca503a4be3d0f3abe65e"
+        ],
+        "externalKeys": [],
+        "body": "（执笔者，读源证实 Owner 架构）三事实使方向 B-经通知成立：①SessionStart 注入是通往模型的真实指令通道——把 ≤1024 字节权威摘要读进上下文，AC-1 实测送达，且适配器本就在此通道初始化每个宿主；②`LIVE_LOCATION_FORBIDDEN` 只护 `.claude`/`.codex` 路径组件，禁的是**工作流自己的变更命令**写宿主活动目录，**不禁** agent 经用户批准放置；③故分发的正解＝适配器通知、agent 执行——禁令原样成立（工作流永不写 `.claude/`），agent 写合法（用户宿主、用户批准）。\n\n**据此 E04 方向确立**：适配器发\"本宿主 helper skill 未分发\"信号 → agent 经用户批准跑治理放置（现为手工 `cp` 已验证字节，须治理化+回执）。\n\n**按深度教义只声明第一条 spike，其余待其读源立事实**（E03 刚证预分解会被证伪）：`TCRN-CROSS-STORY-015`——读源定「信号如何承载」的设计叉：扩 1024 字节 SessionStart 权威摘要 vs 另立 project.json 状态字段供 agent 读；须保 fail-open 与隐私约束；产出设计裁定，零 live 写。其余 Story（治理放置流＋回执、适配器发信号、成文信任故事）由 spike 结论切。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:3afdd0b5011fcc1df7a62228",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:b3de38ab005398a2166287a5"
+        ],
+        "externalKeys": [],
+        "body": "开工读源立三事实（皆源码证实）：①适配器 bundle 写 `.claude/tcrn-workflow/*.json`（SessionStart 激活片段），**不写 skill**；②全代码库无任何一处把 skill 放进 live skills 目录，该能力今天不存在；③bootstrap 的 install 在多点以 `LIVE_LOCATION_FORBIDDEN` 硬禁 live 位置，test-root-only——我这一路手工 `cp` 到 `.claude/skills/` 正是 bootstrap 刻意禁止自己去做的动作。\n\n**故 E04「让适配器分发 helper skill」的前提直接撞上一条刻意的信任边界**，非缺陷。据记忆，live-install／approved-clone 是 deferred 大程序（受治 CLI 权威供给，E02 gate-identity 只是其一片），OD-3 默认推迟。\n\n这不是 E03 那种「建 vs 推迟」的可逆内部裁定——它是**是否把 E04 扩进那条 deferred live-install 程序**的方向选择，触及刻意边界，属停顿预算第三类（无既有裁定支撑的方向变更）。三条路呈你裁：\n(A) **重塑 E04 为消费者无关的小交付**：把手工放置副本这一步做成一个受治、可复验的 runbook/校验（不碰 live-install 边界），如 E03 之于 v2；\n(B) **E04 纳入 live-install 程序**：适配器/ bootstrap 获治理下的 live skills 放置能力——是大 scope，要先立其信任故事（谁授权 live 写、如何回滚、与 LIVE_LOCATION_FORBIDDEN 的关系）；\n(C) **E04 整体推迟**至 live-install 程序排期时，先跳做 E05（链上 advisory，无此纠葛）。\n\n我不擅自选，本会议留开等你。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:3afdd0b5011fcc1df7a62228",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:e5cb244b7a0d39a12279db86"
+        ],
+        "externalKeys": [],
+        "body": "（Owner 立场，逐字）「B，而且不能让Adapter通知agent来做skill分发吗，adapter就是引导不同宿主agent初始化的吧」\n\n（执笔者标注，非 Owner 原话）Owner 择方向 B（E04 纳入 live-install 程序），并点出其正确形态：不让适配器自己写 `.claude/skills/`（撞 `LIVE_LOCATION_FORBIDDEN`），而让适配器在 SessionStart 通知 agent、由 agent 经用户批准执行治理放置。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:3e83e1b7ddb68f2c41e5c94d": [
+      {
+        "conferenceId": "conference:3e83e1b7ddb68f2c41e5c94d",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:e68d65bc99b2aeee4dc9fb16"
+        ],
+        "externalKeys": [],
+        "body": "供给机制不必新创：`artifact-archive-apply`／`restore` 的 `--expected-plan-digest` 已是既有受治模式——调用方在调用处显式陈述钉，核心对盘验证。把它推广到 pins 轨各面即可：路径多已是旗标，另加 `--*-authority-digest`，CLI 据以组装 {expectedCanonicalPath, expectedFileSha256} 交给 CliIo 现有入口。\n\n**回归问题因此终止在人手里**：调用方必须已从带外渠道持有该摘要，与 `shasum -a 256 trusted-bootstrap.mjs` 比对六文档公布的锚点完全同构。不需要注册表，不需要可信配置文件，也就没有「谁来钉配置」的二阶回归。\n\n**禁令**：attestations 轨的面不得上 CLI 旗标。旗标供给的 host 上下文只是调用方断言，参数校验无从核实；把它做成旗标等于给断言穿上论证过的外衣，正是 MIN-006 所禁的混轨。它们只能由嵌入方构造（`host-evidence.mjs` 即其形）。\n\n**由此第三处修正程序提法**：7 个 verb 由 pins 面把守，可诚实经 CLI 解锁；5 个由 attestations host 面把守（adapter-generate、claude-adapter-generate／install／settings-fragment／activation-fragment），**不可能诚实地经 CLI 解锁**——它们需要真正构造 host 上下文的嵌入方。「解锁全部 12 个 verb」这一提法本身做不到，除非把断言当权威。\n\n**身份面**：依 MIN-006 落 pins 轨，形制为带外权威文件（列明何种 actor 可关何种 outcome-class 的门），摘要如 bootstrap 锚点般带外公布，经同一 path+digest 旗标供给。但**它在 gate-v1 之前没有消费者**——此刻实现即写死代码。我建议契约在此定死、面的实现挪到 E02 首个 Story（消费者所在处）。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:3eaf94a3e358102a5d8a2474": [
+      {
+        "conferenceId": "conference:3eaf94a3e358102a5d8a2474",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:2e0490bb8c4da0ff4e085441"
+        ],
+        "externalKeys": [],
+        "body": "落 workflow-operations.md 新节「Keeping the placed Skill current」，经 candidate.21 发布（锚 `08add187…`，三方验证，仍钉 W v0.2.0）。内容＝spike 裁定成文：工作流永不写 live 位置（LIVE_LOCATION_FORBIDDEN 刻意），放置是 agent 经用户批准的动作，工作流只管 currency 检查；每会话 verify-installed-copy，不符提议治理放置（前后双验+回执），绝不静默覆盖；明写不让 skill 自装自更。\n\n**dogfood 端到端自证（第一次真实使用即践行新纪律）**：①对陈旧放置副本（candidate.20）以 candidate.21 钉验 → `IDENTITY_MISMATCH`（时效检查正确检出陈旧）；②治理放置——从已验证 Release 归档逐条摘要核对展开、替换；③复验 → `INSTALLED_COPY_VALIDATED`。纪律不是纸面，是跑通的。\n\n**E04 收口判断**：spike（MIN-034）裁定 E04＝运营纪律＋治理放置 runbook＋成文信任故事，三者 STORY-016 全covered 且 dogfood 证明可用。不需更多 Story，不需门（done 非争议：文档/纪律交付、spike 裁定支撑、单点可逆）。E04 done。candidate.21 另载 distill 纪律（MIN-033）。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:3f7f53d04c27c2516de695a5": [
+      {
+        "conferenceId": "conference:3f7f53d04c27c2516de695a5",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:e7cd89eaadd8a723566b7071"
+        ],
+        "externalKeys": [],
+        "body": "复核 v0.3.0 发布链路。为实项：P1_VERIFIED 20 门、tag+GitHub Release、安装克隆升级 BUILD_VERIFIED、活链 dogfood v239、advisory 穿过 done 转换仍在记录（work-show 实测）、五 Epic done 与视图一致。**纠正一项定性：MIN-E05-DONE 把 skill 侧残留写作『非阻塞』不实。** bootstrap 硬编码 IDENTITY.version='v0.2.0'（trusted-bootstrap.mjs:9），resolveWorkflowRoot 强制 tag/commit/tree 三比对（:247/:250）；对升级后克隆**实测 `ROOT_IDENTITY_MISMATCH`**。且回滚桥已烧：活链 v239 已含 work.annotated，v0.2.0 reducer 在 unknown-operation 检查 fail-closed（WSD-1 成文＋既有 unknown-op 测试类），退版＝活链不可读。故唯一前进路径＝candidate.22 重钉仪式——IDENTITY 钉 v0.3.0 的 tag/commit/tree、SKILL.md 支持版本行、workflow-operations 补 work-annotate 用法，三者可同批折入一次 re-pin；对外发布属 Owner 门。日常会话 verify-installed-copy 仍绿（skill 放置字节未动），受阻的是 trust-gate 的 resolve 步。教训：升级安装克隆＋dogfood 新操作＝烧掉回滚桥，重钉从可选变必做；正确序＝重钉与升级同批完成。另录三条低危观察（不阻塞，候选加固）：①work.updated 回放臂不查 extensions 增量，防夹带纵深与 work.annotated 不一致（MIN-014 无密钥边界下非安全回归）；②回放接受伪造的 advisory 键删除而动词产不出（parity 瑕疵）；③advisory:scope 无字节上限（对照 position 的 2048，规模预算敞口）。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:573c055d2659817fe93be17d": [
+      {
+        "conferenceId": "conference:573c055d2659817fe93be17d",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:54452f9ac1e0be0da529de92"
+        ],
+        "externalKeys": [],
+        "body": "落 `gate-identity:decision` 入 gate extensions：`{actorId, authorityFileSha256}`，成对写入／回放，与既有 `gate-evidence:conference-minutes` 同一纪律（增量须逐字节等于预期，防夹带）。\n\n**回放判据三条**：①形状精确；②**决策所名 actor 须等于事件签署 actor**——自相矛盾的记录无论谁写的都是损坏，且此校验零外部依赖；③**绝不重读名册文件**。第三条是整个设计的要害：记录的摘要是「当时校验了什么」的证据，不是「拿来再校验一次」的对象。测试实证：把名册删掉后回放照常绿。\n\n**条目永远可选**：回放无从知晓写入当时是否需要名册，故必须接受无名册关闭的门，同时拒绝畸形或自相矛盾的条目。\n\n**一处诚实交代**：attestation 未启用时 payload 不载 actor，无从矛盾，条目即处于无佐证状态。我把这句写进了代码而非掩盖。attestation 仍是独立开关——把一个不可逆设置绑在另一个不可逆设置之后，是更坏的交易。\n\n**测试抓到我实现里的真缺陷**：畸形决策原会泄漏模块码 `GATE_IDENTITY_AUTHORITY_MALFORMED`，破坏「回放拒绝一律 `WORKSPACE_EVENT_CORRUPT`」的契约；已并入 `extensionRecordOrCorrupt` 的映射，与 conference／gate 记录同待遇。\n\n**两处覆盖洞由红证暴露**：①畸形决策一格原本缺失——若无它，形状校验被整段删掉也无人发觉；②伪造事件的哈希必须**按引擎公式重算**，否则测试会因哈希失败而「通过」，那是为错误的理由通过——故拒绝原因也被断言（须点名身份矛盾）。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:5940ab6b796862a30b72146c": [
+      {
+        "conferenceId": "conference:5940ab6b796862a30b72146c",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:36fca161e9388231215d1923"
+        ],
+        "externalKeys": [],
+        "body": "【main-thread synthesis；执行身份 agent:codex；此 actor 仅表示 conference 证据评审立场，不表示主线程被 persona 绑定】审计结论：SPRINT-002 的列车卡明确成员状态独立，INIT-009 未完成的 EPIC-025 可作为 carry-over，不阻断 Release 关闭；STORY-073/074/075 的现有 scope 均明确 Owner 未授权 fail-closed、blast radius、独立 kill-switch 与真实 red proof，因此一般收官授权不得升级为 enforce 授权。INC-023 是未复现静态疑点，可带入后续。发布必须以 GitHub 权威 SHA、CI、tag、Release 资产和 snapshot-verify 全值核验；TMS 因新安全发现仅开 PR 验证，不合 main。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:5940ab6b796862a30b72146c",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:b18bab23cd33863e989f6994"
+        ],
+        "externalKeys": [],
+        "body": "【Owner 原话逐字转录】「按推荐方案执行全部收官。」【上下文绑定说明（执笔代理）】该指令批准紧接其前呈报的完整推荐包：发布 Workflow v0.6.0 并重钉 helper 新 candidate；SPRINT-002 收官；EPIC-025 及 STORY-073/074/075 继续 blocked 且 host enforce 授权数保持 0；INC-023 与可选 observe 五格不阻断本次发布；主线程不是只读线程，Core Reference persona 仅用于 conference position attribution，SessionStart 不注入 persona 也不绑定主线程；DS 采用补记证据更正的方案 B；TMS 建两条安全事项、只跑 PR 验证且不合 main。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:6426360600170922debd3bb1": [
+      {
+        "conferenceId": "conference:6426360600170922debd3bb1",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:91137f83f60443822d645aef"
+        ],
+        "externalKeys": [],
+        "body": "复核发现：E05 的范围在 decomp 立场中有明确定义，与 CONF-E05-KICKOFF 所裁对象不符。sonnet 立场原文『Epic5 链上advisory字段:guidance由prose入链,是Epic2姊妹项』；opus 立场(1/2)(a)第5条『链上 advisory 字段——记录/审议触发从散文迁至链上非绑定字段』；opus(2/2)(d)『#5 为最轻项，若链-schema 迁移成本高，可与 #2 合并排期、避免二次迁链』。故 decomp 决议 E05-chain-migration-coupling-deferred 指 E05 自身 schema 变更与 E02 的合并排期，非增量 materialize 回放改造。CONF-E05-KICKOFF/MIN-E05-KICKOFF 实际裁定的是另一问题——天花板忠告的悬空证据引用修复；其两项产出就其本身而言成立且有价值（7 处已发布引用悬空是真缺陷；样本证据落 W 已验：语义等同、四门+proof 全绿），但该工作属 decomp 已逐出 Initiative 的 README 质量轨（#6 同族），不定义 E05；STORY-017 因此挂错 epic。另：E02 已随 v0.2.0 发布且未携 advisory 字段，『避免二次迁链』的合并排期窗口已关；但 gate-identity 走 extensions 未动 storageVersion（实测仍=1）的先例表明，真 E05 或可同走 extensions 免迁链——此设计问题留真开工会议读源后裁。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:66c2f7ad4f1c297790d6a95d": [
+      {
+        "conferenceId": "conference:66c2f7ad4f1c297790d6a95d",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:a04dcba8f8fe509095d3cd13"
+        ],
+        "externalKeys": [],
+        "body": "证据卡（呈 Owner 裁定；本会议刻意留开，等你表态后逐字执笔并据此关门）。\n\n请你裁的是两句话：其一，**hostDigest 不是 pin**——pins 轨（`readAuthorityFile`，6 面）要求调用方事先持带外摘要并对落盘文件硬比对，第三方可独立复核；attestations 轨（`admit*HostInput`，3 面）只校验自洽性，其 hostDigest 是调用方对自身数据算的校验和，第三方不可复核。二者不得共用一套信任叙述，也不得在文档中互相冒充。其二，**身份类权威一律落 pins 轨**——若落 attestations 轨，接线进程可自称 `owner:governance`，gate-v1 将毫无拒绝能力。\n\n据以裁定的事实均可复核：判据来自读源（`authority-file-reader.ts` 的摘要硬比对与 TOCTOU 加固／`claude-adapter.ts:301` 的品牌铸造），先例来自 `scripts/host-evidence.mjs` 的既存注入，无静默降级由既存测试 `p6b:238` 执行级实证（拿真 host.input 手工包一层仍被拒），今日在钉定副本上 27/27 绿。\n\n一处我不掩盖的边界：pins 轨身份文件交付的是 **authorization**（何种身份被许可）而非 **authentication**（究竟谁在运行）。闭合该差需真密码学或外部锚点，而本程序既有裁定是「外部锚点而非自建签名」。故 gate-v1 能做到的是「引擎可拒绝未被许可的身份关门」，做不到「证明按键的人就是 Owner」——我建议把这条写进 gate-v1 的成文边界，不越声。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:66c2f7ad4f1c297790d6a95d",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:f13d89e22844c8b1e1f8d6e4"
+        ],
+        "externalKeys": [],
+        "body": "（Owner 立场，逐字）「同意裁定+ 授权推送然后开E02」\n\n（以下为执笔者标注，非 Owner 原话）本立场应答本会议证据卡所呈裁定包，逐条对应：\n一、hostDigest 不是 pin —— pins 轨与 attestations 轨不共信任故事，文档与推理一律不得把品牌上下文当作已钉。\n二、身份类权威一律走 pins 轨 —— 若落 attestations 轨，接线进程可自称 owner:governance，gate-v1 将无拒绝能力。\n三、authorization 非 authentication 写入 gate-v1 成文边界 —— 引擎能拒绝「未被许可的身份关门」，不能证明「按键的人就是 Owner」；此边界须成文，不越声。\n四、compatibility-plan 维持 programmatic-only —— 复核证实其为成文设计（agent-integration 文档明载留给自构 CliIo 的嵌入方，并有双向漂移守卫钉住），非历史遗留；MIN-005 中「须另改可用性」的提法以此更正，自待裁清单划除。\n\n授权事项二则：W 仓五次提交（cf4547b／5e5c63a／2d39da8／beaa071／be29372）获准推送；E02 gate-v1 获准开工。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:68c2704545db9f351e5f7d8c": [
+      {
+        "conferenceId": "conference:68c2704545db9f351e5f7d8c",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:2bc8a3281a7035e487d80be3"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable;Verity 验证角色]\n证据脊柱:①S040 检测器以 red-proof 为验收硬条件——注入伪孤儿(ppid=1 高 CPU 模式)检测必须触发,防『我自己的检测器也曾假绿』重演;②回执为 canonical JSON(排序键+单终止换行),孤儿归属须含 lsof stderr 指向(即本次事故的定位法);③S041 在真实会话 dogfood 一次并留回执摘要;④S038 公约成卡必须 promoted+fresh,candidate 默认不可见(INIT-005 教训);⑤S043 走 P1+P8 双门、五版本面一并 bump、regen 先于 tag(rc 发版三坑先例);⑥事故基线可复用为检测器的真实样本:2026-07-24 泄漏 35 孤儿 yes、7 核×约 5 小时,清理后 pgrep -x yes 为空——阳性(泄漏中)与阴性(清理后)各一份。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:68c2704545db9f351e5f7d8c",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:2e04f4f64867bdf9d3e3b3e6"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable;Minerva 架构角色]\n提案树=3 Epic/6 Story:E013 公约教学层(S038 公约裁定落链+知识卡;S039 helper 载荷教学随 candidate.25 重钉并折入 ride-along 队列的 persona 署名教学);E014 检测机制层(S040 W extensions 残留检测器=canonical 回执+red-proof;S041 spawn 登记面=transient 区文件协议、不进链不改引擎;S042 宿主接线=Claude Code SessionEnd/Stop hook+Codex 按信任门现实落地);E015 发布收官(S043 W 发布+candidate.25 重钉+安装副本升级+两链回放绿)。分层理由:公约(人读)/机制(机器验)/发布(治理面)三层各有独立验收面;host-neutral 内核全部落在 W,宿主差异只允许存在于 S042 接线端——这是『Workflow 层面适用多宿主』的结构保证。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:68c2704545db9f351e5f7d8c",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:dc9ab097e545c7d4443e0ec8"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable;Mara 产品/范围角色]\n范围裁定与三拒案:①拒 B=链原生资源动词(resource-register 上链)——进程生命周期是瞬态,写进 append-only 链污染回放确定性,且新增操作强制全部读端升级(work.annotated 先例的代价教训),登记归 transient 区;②拒 C=纯 prose 教学不建机制——本次泄漏正发生在『知道更好』的代理身上,Skill 自认 prose 触发不可靠(unreliable-by-design),无机器检测则公约不可验;③拒 D=纯宿主本地(只配 Claude Code hook 不入 W)——Owner 已裁『Workflow 层面、多宿主』,宿主本地方案不可移植、不受版本/测试/发布治理;④Codex 降级预案:hook 被信任门挡则 S042 交付含信任批准步骤的配方文档,树形不返工;⑤键法沿扁平公约(EPIC-013 起、STORY-038 起),键编码出身不编码层级。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:68f91a931940fc34f0b37020": [
+      {
+        "conferenceId": "conference:68f91a931940fc34f0b37020",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:13305a65231031480f1a1ff2"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。P8/P9 追加(源=Owner 2026-07-26 第四轮:Claude Code 一直未优先调用 CodeGraph,因其仅配置于 .codex/;提议制定「优先使用工具」与「开发前优先查找现成方案(如 GitHub 开源)」规则)。\n\nP8 仪器纪律与能力供给对等:事故根因两层,须分治——供给层(工具未接入宿主,行为规则写了也无从执行)与行为层(接入了也未必优先用)。a) 供给对等:同一仓的全体执行宿主须同工具名册;kickoff 记录本 INIT 假定的仪器名册,宿主缺仪器则开工即响,不得静默降级(现状更新:TMS codegraph 已接入 Claude Code 会话,DS/AOS 未接,DS 索引陈旧待刷、AOS 未验)。b) 仪器选择通则=「对该问题权威且最廉的仪器优先」,并知各仪器盲区:索引类工具必带新鲜度前置(status 先行;陈旧索引比 grep 更害——它自信地撒谎),与审计「度量错东西」四例同根(问权威源)。c) 落地位:各仓 CLAUDE.md/AGENTS.md(宿主中立的开发规则层,不触 helper 载荷仪式)+知识卡;按 P6 分档表述:frontier 档给原则(选权威仪器+查新鲜度),standard 档给确定步(session 起手固定跑 status,fresh 则 explore 先于一切 grep)。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:68f91a931940fc34f0b37020",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:1af1e3929fcacbc8e5608fe8"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。P5/P6 追加(源=Owner 2026-07-26 提问:AI 主导开发倾向以新逻辑替换旧逻辑而非共存;旧逻辑或有其适用条件——如仅持较弱模型访问权的订阅用户(例 Kiro/Opus 4.6)需要更严 harness;进化应否保留旧径,并在 helper 安装/后期配置提供前沿/非前沿模式选择,走不同严格度)。\n\nP5 进化公约——替换须做残余适用性分析:任何替换类变更先答「旧逻辑的成立条件是否仍对某类受支持用户/宿主/模型成立」;成立→变更形态须为条件化(profile/版本门控/enable 事件)而非删除;不成立→删除并留证。反思须双向测试,不预设旧=可保:Verity 注入对弱读者伤害更大,正确处置就是删除。引擎层已有此纪律(advisory:sprint 等版本门控增量,未用者字节不变),prose/harness 层无,是缺口。与 P4 衔接:能力补偿型约束的「退役条件」应改为「适用性谓词」(哪些模型档位仍需要)——真退役仅当无受支持档位再需要。\n\nP6 driver capability profile——支持,带三条边界:①mode 只调制能力补偿型约束;主权型(GD-1 签署/owner 门)与审计型(链/证据/attestation)对一切档位恒定,INIT-010 时间戳异常即前沿模型仍需审计的实证。②mode 由用户在安装(wizard 步骤)或 settings elicitation 声明,禁止 agent 运行期自评(自评=逃逸杠杆:身份误报/任务压力下自选宽松/注入面);宿主可报模型 id 时交叉核验;未知模型一律 fail-toward-strict。③单代码库+小型 mode-sensitive 注册表(每条带证据),不做全面 prose 分叉(四语 README 漂移已证多轨维护债);引擎常量(2048 等)不入 profile,走既有版本门控 enable 事件模式保全链回放。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:68f91a931940fc34f0b37020",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:1b0b745c7f926221c36bcc29",
+          "position:2e6bd891ca989aae2b8e136a"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,立场署名 Minerva(架构任务)。\n\n背景:针对前沿模型(Opus 5/Fable 5)的 harness 研究共识——过程微管理、高频审批、能力补偿型护栏在强模型上只剩仪式成本,并诱发 Goodhart 化(合规剧场);结果验证与授权边界不在其批评之列。2026-07-26 Owner 提问触发对 TCRN 全约束面三分类评估:能力补偿型/主权型/审计型。结论:主权型(GD-1 签署权)与审计型(INIT-010 时间戳异常为真阳性实证)不随模型升级衰减;能力补偿型该撤则撤(Verity 注入先例已裁);停点/审批已三轮放松(CONF-026 停顿预算→决策清单→MIN-036/MIN-040 收官单停点),放松的全是人机审批频率,未松任何机器验证门。\n\n问题清单(立项时点,后续讨论持续追加):\nP1 conference position 2048 字节硬上限——最像能力补偿型遗留;CJK 约 680 字符即触 CONFERENCE_BUDGET_EXCEEDED,前沿模型高质量立场被迫分片(本立场即分片实例);候选=重裁预算或公约化分片。\nP2 helper payload ceremony 重钉节奏——每次编辑 skill/ 触发全重钉(锚×6+分片测试);仪式护信任根应保留,候选=多次编辑批为一次重钉的节奏优化。\nP3 Verity persona 事件裁定无 minutes——「SessionStart 不注入 persona/主线程非只读/persona 仅用于立场署名」至今只活在 INIT-009 注解 seq 1022 prose,不可被 gate 引用;候选=按 S056 先例补 remediation conference 固化(此条为执笔者补充,Owner 可驳回)。\nP4 约束三分类框架公约化——新增约束须自标类别;能力补偿型须带退役条件,随模型能力升级定期审查。\n\n关键设计认知:standard 档≠旧严格版冷冻。弱驱动者对判断式 advisory 触发执行质量差(README Driver assumptions 已载),但更多规则同样压垮弱模型;standard 档的正确形态=更少、更简、更硬(确定性门+固定检查点清单替代判断式提议),常须重新推导而非保留旧版。\n\n风险:档位增殖(封顶两档,随模型代际复审);strict-only 约束沦为坏仪式垃圾场(每条仍须独立证据);mode-sensitive 测试面翻倍(注册表封顶)。现状无外部用户:P5 原则即刻可采(变更仪式加一问),P6 最小可行落地(wizard 一问+settings 键+Driver assumptions 分档),引擎侧延后。",
+        "fragmentCount": 2
+      },
+      {
+        "conferenceId": "conference:68f91a931940fc34f0b37020",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:4062ff289af90146c33b1784"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。P7 追加(源=Owner 2026-07-26 第三轮:取舍/双轨/多轨方向问题不限于 workflow 自身,TMS 等大型 SaaS 开发同样高频;希望第一时间先完成此类思考,再定动手计划)。\n\nP7 方向/轨道数取舍前置为规划期必答题(适用全体 INIT 含产品系统;P5 为其在 workflow 自我进化域的实例):任何含「替换 vs 共存 vs N 轨」的方向选择,须在 kickoff/分解审议中先行完成并入决策清单,不得留给执行期撞见。触发类=难逆(schema/API 契约/数据模型/平台选型)、涉外部消费者或租户、封死替代架构者;既定架构内常规重构不触发。审议产出三件套:①备选轨道数及被拒方案落链(立场记录);②每条保留轨道带适用性谓词(谁需要)+运营成本归属+日落/复审条件;③轨道间接缝方案(flag/adapter/版本门/数据迁移)。\n\n要点:a) SaaS 语境轨道成本=运营面非仅代码面(监控/补丁/安全逐轨复制),故轨道数纪律与日落条件必备——AI 有替换偏置,人类组织史上是堆积偏置(僵尸轨道不死),纪律须双向设防;b) 多轨≠不决:每轨须有具名受益者谓词,「两个都留因为难选」是囤积不是轨道;c) 思考前置≠决定全部前置:合法产出可为「先做有界实验再闭合方向会」(INIT-010 消费路径以实验定即先例)——前置的是问题显形与分道,不是强行提前拍板;d) 落地位=分解 runbook 第 1/7 步扩展+决策清单新增「方向类」条目+INIT handoff 模板必答项(发布节奏经 MIN-036 升格为 handoff 显式预裁项即同款先例);helper 载荷改动入 P2 队列随重钉节奏落。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:68f91a931940fc34f0b37020",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:442f0c45e0095b02188e631a"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。P10 追加(源=Owner 2026-07-26 第五轮:接线三步「helper 重钉→双宿主注册」在开发期产生硬 blocker——无法自主测试 Codex 侧,但开发不应停在这里)。\n\nP10 宿主耦合可测性公约——每个宿主耦合特性须按四层交付,只许最外层依赖人:\nL1 协议层=host-neutral 协议测试(脚本化 stdio 客户端直驱真 server),全自主——已存在(tests/operator-authority-mcp.test.mjs 以 Readable/Writable 直驱 runWorkflowMcpStdio,9 测试入 721 套件);\nL2 合同层=真宿主行为一次观测、产化为钉住合同的重放 fixtures,此后自主开发——已是既行实践(328501f 产化 codex-live-integration-2026-07-25.json 与 codex-0.139.0-facts.json 入 verification-map;AC-1 host-evidence 同款先例);宿主升版=合同重钉触发点,宿主版本断言须进 fixtures 防静默漂移假绿;\nL2.5 真宿主 smoke(新提议)=codex exec 一次性非交互会话+一次性 CODEX_HOME 测试根,不触 ~/.codex live 配置(同 helper tcrn-helper-test-* 哲学:live 位置禁写、一次性根用后即弃);一次 Owner 常设授权(带额度帽)后自主运行;\nL3 live 验收=真交互会话+live config,属「只有人能产出的证据」类(与 kill-switch 演练、402 五模型事件同类),清单化并批到收官单停点,禁逐迭代请求到场。\n\n接线重排:宿主对等(P8)≠同时接线,而是计划内响亮缺口——Claude 先行接线(执行者本身即 MCP 客户端,自主全链路验证)→Codex 侧按 L1/L2 持续开发→L3+config.toml 批准+helper 重钉并入同一收官停点批清。helper 重钉只阻塞受治采用,不阻塞开发(开发在工作 checkout 内走既有 verify 门,与安装副本钉无关)。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:68f91a931940fc34f0b37020",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:70b9d2f8b0d7bf5d44049bd9"
+        ],
+        "externalKeys": [],
+        "body": "P9 现成方案优先(P7 的 sourcing 维度):动手造前先答「是否已有可采方案」,查找序由内向外三环——①自有资产(本仓既有实现/链上先例/知识库;adapter 激活「其实已建成」为教训)→②已接入工具与既有依赖→③外部开源。外采(第三环)须过 vetting 门:license 相容(工作流仓 Apache-2.0)/供应链信任(pin 版本+provenance+维护活性+安全通告;防 slopsquatting——LLM 幻觉包名是真实攻击面,须验证仓库身份而非仅名称匹配)/运营轨道成本(每个依赖=一条轨道,带 CVE 跟踪与升级税,适用 P7 谓词+日落条件)。范围分层:信任核心(引擎/bootstrap)采纳门槛极高,既有 pin+frozen-lockfile+--ignore-scripts 信任架构不被本条推翻;产品外围(TMS/DS 功能面)默认复用优先。评估须有界(timebox)防搜索兔子洞。落地位=handoff 模板必答项+vetting 协议知识卡。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:68f91a931940fc34f0b37020",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:7b6899d6e6804b258ca8d9d1"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。分解形状立场(Owner 2026-07-26「按讨论结果拆单」为本批次单一授权)。轴=交付面五层:EPIC-029 公约固化(P3/P4/P5/P7/P9:三分类+进化公约文本、方向轨道 handoff 必答、sourcing+vetting、知识卡策展、Verity remediation);EPIC-030 helper candidate.27 单批次(P2 节奏公约、P6 profile 最小可行、P7/P9 runbook 落点、0.6.0 重钉重置放——四改一钉,dogfood P2 自身);EPIC-031 仪器速赢(P8:DS/AOS codegraph 接线+DS 索引刷新、四仓仪器纪律段);EPIC-032 MCP 采用+P10 可测性(Claude 先行接线、Codex 合同复核+L2.5 harness、L3 清单+pins/bundle 物化方案);EPIC-033 引擎候选(P1 预算重裁提案会议,实施 CONDITIONAL 不预建)。被拒方案=逐 P 一 Epic:过碎且 P 项共享交付物(P5/P7/P9 同落 handoff 模板,P2/P6/P7 载荷改动同走一次重钉)。SPRINT-002 已 done,STORY-099 发布停点届时按单 INIT 快车道或新 sprint 呈裁。Story 为最深规划记录,Subtask 开工时再切。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:68f91a931940fc34f0b37020",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:81c63dc30f06c6501a6ad1f3"
+        ],
+        "externalKeys": [],
+        "body": "TMS 实证:INIT-002 前端重建正卡 10 项 Owner 裁定,重建 vs 修复即典型方向题,先裁后动正是本条主张;INIT-001 两条安全发现的修复亦含消费者兼容轨道题,可作 P7 首批实战套用。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:68f91a931940fc34f0b37020",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:eedc149818a6ba6ebc931624"
+        ],
+        "externalKeys": [],
+        "body": "边界(经评估明确不入):O(n²) 链回放属 OD-15 性能债非治理哲学;verify-installed-copy、格式微规定、隐私门经评估保留不动。\n\n状态:仅立项不分解(Owner 2026-07-26 指示);本 conference 保持 open 作问题收集容器,讨论收敛后以 close 出分解裁定。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:69a85ec22e82ee4014497816": [
+      {
+        "conferenceId": "conference:69a85ec22e82ee4014497816",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:8b9c846a6e4bf1d4298bd03a"
+        ],
+        "externalKeys": [],
+        "body": "（Owner 立场，逐字）「同意，落地优化后，推送关门」\n\n（执笔者标注，非 Owner 原话）「同意」应答的是执笔者呈的停顿预算方案，其内容如下，经此立场成为平台常规：\n\n**执行期默认按推荐推进。只有三类必停：① `owner_intent_required` 门（引擎本就拒绝代理自批，是设计的到场点）；② 对外发布动作——push／tag／release（GD-1：Owner 签署）；③ 无既有裁定支撑的不可逆方向变更。**\n\n三类之外的一切（记录卫生、提法修正、范围内技术选择）先按推荐执行，产出纪要留「Owner 可驳回，单点可逆」；复查呈报把「已按推荐执行待驳回」与「真待裁」分开两栏，真待裁须过一道杠——执行方无法用既有裁定加证据自行决定；规划期不预登记 Owner 到场点，只写条件式。\n\n依据（复盘实数）：INIT-003 两天 Owner 到场约十次，仅 5 次属设计内（树确认×1、双门×2、发布×2）；对照 DS Initiative 15 Story 仅 3 次到场。实证锚点：「不需要再问」后 STORY-010..013 零打扰完成，「授权」后发版列车三段零打扰。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:6aef97922143656f58fbae13": [
+      {
+        "conferenceId": "conference:6aef97922143656f58fbae13",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:e5bfe415c0baad2afba9cbdd"
+        ],
+        "externalKeys": [],
+        "body": "Owner 授权(2026-07-24 聊天原文:「授权」),在 Fable 两栏呈报(已交付 gate 全绿 vs 待发布必停点)后作出,授权 INIT-008 对外发布批次:W v0.5.0 签名 tag+推+Release、helper candidate.26 re-pin+推+Release、安装副本升级+双链回放、S049 首列车 dogfood、收官。执行形态:main-thread synthesis by scribe agent:fable。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:6aef97922143656f58fbae13",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:f3275cd33826376be49cb716"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable;Verity 验证角色] 已上线实证:①W `v0.5.0`(commit eea9374/tagObject 225017ae)PUSH_GATE_VERIFIED(P1 20 门+P8+guard-check 17 门含 SPRINT-01/02/03),main+tag 已推+Release 带 artifacts;②helper `candidate.26` PUSH_GATE_VERIFIED(anchor 86855ec4/identity v0.5.0),main+tag 已推+prerelease;③安装副本 W 升 v0.5.0+dist,cross(v549)与 DS(v728)回放 WORKSPACE_COMMAND_COMPLETED 无损,placed copy=INSTALLED_COPY_VALIDATED@v0.5.0(archive e4a92c41);④S049 首列车 dogfood 于活链:建 SPRINT-001 Release parentless、enroll INIT-008+INIT-006、work-list --sprint 返 2 成员、work-show 出 advisory.sprint、close Release→done,成员 INIT 状态不变(非绑定实证)。S046 卡默认可检、S047 教学入载荷、E016 done。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:7a5798055cb5714c4c608ece": [
+      {
+        "conferenceId": "conference:7a5798055cb5714c4c608ece",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:6f23bd65ad33e82937f927ea"
+        ],
+        "externalKeys": [],
+        "body": "E05 收口 + INIT-003 完成（settles MIN-E05-IMPL 的两遗留项：发布、活链 dogfood）。**v0.3.0 已发布**：commit 95cfd88 上 main、annotated tag v0.3.0、GitHub Release（github.com/tpmoonchefryan/tcrn-workflow/releases/tag/v0.3.0）；全链 `verify:p1`=P1_VERIFIED（20 门含 HISTORY_CLEAN/PRIVACY_SOURCE_CLEAN）；发布三步各自单独执行（push 单独、tag 单独、Release 单独）。**安装框架克隆已升 v0.3.0**（fetch+checkout+rebuild；commands 含 work-annotate；活链回放绿）。**dogfood 端到端自证（活链）**：以升级后 CLI 注解 EPIC-005（v239）——work-show 见权威 scope＋decided-by 回链 `MIN-E05-TRUE-KICKOFF`(minutes:b00a1a64…)/`MIN-E05-DESIGN`(minutes:b017306e…)，正是本会话 label≠scope 事故的记录级修复；含 work.annotated 的活链回放 WORKSPACE_COMMAND_COMPLETED（v0.3.0 框架可读，v0.2.0 已不在用）。**STORY-018/019/020→done、EPIC-005→done、INIT-003→done**（五 Epic 全完成：E01 权威供给／E02 gate-v1／E03 多-skill 归档／E04 适配器分发／E05 链上 advisory 字段）。samples 证据文件随 0.3.0 发布，README 悬空引用现于独立克隆自足解析。**残留延后（非阻塞）**：skill 侧 workflow-operations.md 补 work-annotate 用法（helper skill 独立 re-pin 周期）；backup 快照建议在此发布点做（cadence=gate-close，本处无门故不自动触发，属建议）。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:7d96c2115040ec57a2c5e3bb": [
+      {
+        "conferenceId": "conference:7d96c2115040ec57a2c5e3bb",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:740bfb1732864776ecd24206"
+        ],
+        "externalKeys": [],
+        "body": "（2/2）(c) 只预声明 Epic 1（含骑附 Story）的 Stories，其余 epic-start 再声明。Epic 1 将重定义 actor/credential/权威基元，Epic 2、4 的 Story 形状取决于其内部裁定，现在预声明必被推翻——正应 guidance-layer 教训：未经读源证实的预分解会被证伪。#3 虽相对独立，仍随大流 epic-start 声明。\n\n(d) **#6 驱动证据探针**——逐出本 Initiative：属文档证据、与信任架构零依赖，另立并行 README 质量轨。**#7 压测 flake**——降为 Epic 1 下 W-repo 骑附 Story（与 push-gate 提速同组），且须先得 Owner 对\"改不变量还是改实现\"的裁定；本就\"非 program\"，不设 Epic。**#5** 为最轻项，若链-schema 迁移成本高，可与 #2 合并排期、避免二次迁链。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:7d96c2115040ec57a2c5e3bb",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:7c21afee9e28caea940dcc58"
+        ],
+        "externalKeys": [],
+        "body": "（合成立场，拟作闭会裁定）两方骨架一致：权威供给第一（Owner 已裁不可动）、gate-v1 第二、驱动证据探针逐出治理树、Story 只为 Epic 1 预声明。唯一实质分歧在 #1→#2 的耦合粒度：opus 主张严格串行（gate-v1 的身份约束抢跑=可伪造假修复），sonnet 主张流水线（E01 内部把\"身份信号切片\"排最前，切片一落地 E02 即并行）。\n\n裁断：采 opus 的依赖框架 + sonnet 的切片细化。依赖成立且不可倒（引擎要真拒绝不诚实闭合，靠的是可信带外供给的 actor 权威，即 E01 的 CliIo 面；owner-intent 本质是 attestation，必须建在 Owner 硬约束的 attestation 叙事侧，不能自立平行信任故事）——但被依赖的是\"身份信号切片\"（STORY-003），不是整个 E01。故 E01 内部把身份/actor 权威切片刚性排在最前交付（STORY-003），该切片一落地 E02 即可并行开工，无须等 12 verb 全解锁。\n\n采纳：#6 驱动证据探针逐出本 Initiative，另立并行 README 质量轨；#7 压测 flake 降为 E01 下 W 仓骑附 Story，须先得 Owner 对\"改不变量还是改实现\"的裁定。#5 链上 advisory 与 #2 的迁链耦合留到 E05 开工会议裁（避免二次迁链）。Story 只预声明 E01，其余 epic-start 声明——未经读源证实的预分解会被证伪（guidance-layer 教训）。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:7d96c2115040ec57a2c5e3bb",
+        "actorId": "agent:sonnet",
+        "fragmentIds": [
+          "position:bfaa0acbe8ebf818b2f23f55"
+        ],
+        "externalKeys": [],
+        "body": "(a)\nEpic1(Owner已裁定,顺位不可动)权威供给:补齐CliIo 8个权威/宿主面,解锁12动词;pins/attestations证据链分离;W推送门加速随启动交付。\nEpic2 Gate身份约束:门禁转换绑定真实身份,补上昨日实证漏洞——引擎当时无法拒绝一次不诚实关闭。\nEpic3 多技能归档v1→v2:修复builder静默丢弃第二个skill/目录的信任完整性缺陷,与Epic1的pin面协调、不共享信任故事。\nEpic4 Adapter分发技能:消费Epic1权威面,且需Epic3先修好归档格式,排两者之后。\nEpic5 链上advisory字段:guidance由prose入链,是Epic2姊妹项,待其实际经验落地后再定形。\n\n(b)\n最强依赖论证:Epic2的身份约束需要可信的\"谁在动作\"信号,这本身就是Epic1要交付的权威/宿主面之一。因此不该把Epic1当整体门槛、等12动词全解锁才启动Epic2;应把Epic1内部Story顺序设计成\"身份信号切片优先交付\",该切片一落地Epic2即可并行开工。同理,Epic4只能排在Epic1、Epic3之后,因为它消费两者产出。\n\n(c)\n只为Epic1现在预声明Story,并把\"身份信号优先交付\"这条顺序刚性写入——这是(b)成立的前提。其余Epic的Story留到各自epic-start时再声明:昨天的实证才刚开始产出教训,Epic3/4/5的形状很大程度取决于Epic1/2实际交付了什么,现在钉死等于用推测替代刚产出的证据,大概率返工。\n\n(d)\n序内降级:Epic3、Epic5相对Epic2降序,二者均未经live evidence验证,优先级让位给已实证的身份缺口。移出序列:第6项(driver-evidence probe)不该背Initiative/Epic/Gate的治理仪式,应作独立轻量研究任务并行推进,产出直接喂README。第7项已定性为\"小项、非program\",本质是等一次Owner裁定而非实现排期,不必占Epic或Story位,应作一次性Owner裁定+直接修复处理。留在序列里只会用治理仪式稀释刚开始产出真实教训的反馈循环。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:7d96c2115040ec57a2c5e3bb",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:f371cb61828ff6b16a15b011"
+        ],
+        "externalKeys": [],
+        "body": "（1/2）(a) Epic 顺序\n1. **受治 CLI 权限供给**（Owner 已钉，不可移）——补齐 CliIo 的 8 个带外权限/宿主面，解锁含全部激活在内的 12 个 verb，确立 pin↔attestation 分离的信任叙事。骑附：W-repo push-gate 提速 + 压测 flake 裁定（见 d），仅作 Story。\n2. **gate-v1**——把 gate 从只绑 EVIDENCE 扩到绑 IDENTITY，使引擎能拒绝不诚实闭合；owner-intent 落在 Epic 1 的 attestation 一侧。\n3. **多-skill 归档 schema v1→v2**——修 builder 静默丢第二目录，贯通重建/布局/installed-copy 校验/allowlist。\n4. **适配器分发 skill**——经宿主适配器分发 helper（依赖 Epic 1 的激活 verb + Epic 3 的 v2 布局）。\n5. **链上 advisory 字段**——记录/审议触发从散文迁至链上非绑定字段。\n\n(b) 最强依赖：gate-v1 的实质要求是\"引擎能拒绝不诚实闭合\"。只加自陈 actor 字段无效——造假者径写 `actor:owner`；要真拒绝，actor 权威须经可信带外面供给，而那正是 Epic 1 的 CliIo 权限面。且 owner-intent 本质是 attestation，必须建在 Owner 硬约束的 attestation 叙事侧，不能自立平行信任故事。抢先做 gate-v1 只会产出\"可伪造的假修复\"或\"日后被 Epic 1 强拆的返工\"。故 #1→#2 不可倒。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:7ebf376bfee026c57b5efa80": [
+      {
+        "conferenceId": "conference:7ebf376bfee026c57b5efa80",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:37e34106a37ce54123d07195"
+        ],
+        "externalKeys": [],
+        "body": "Owner 裁可(2026-07-24 聊天原文:「同意」;此前一轮 Owner 明确双价值:『既是批量发布减停点又有跨 INIT 的排期视野;前期无客户怎么发完全取决于我自己,未来有客户就需要按固定排期部署』)。裁可范围:①立 INIT-008 并按 B 轻引擎形状定形(Release kind+成员侧 advisory 注解+读面过滤);②修订 MIN-036——入列 sprint 的 INIT 其对外发布停点批量至 sprint close、未入列的 INIT/Incident 保持原公约按-INIT 单次收官;③拆解后全树 planned 呈报,执行点火另行。执行形态:main-thread synthesis by scribe agent:fable。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:7ebf376bfee026c57b5efa80",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:6a106e78d1d4ae4bc2389cd7"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable;Mara 产品/范围角色]\n范围裁定与拒案:①拒 A 零引擎纯公约——Owner 双价值含『跨 INIT 排期视野』,prose 成员不可读面查询不可验;②拒 C 新 Sprint kind/新操作——协议形变强制全读端升级(work.annotated 教训),Release kind 已能表达交付批次语义;③拒 parent-id 装载——结构上不可能(见 Minerva)。④快车道条款入公约:未入列 INIT/Incident 保持按-INIT 单次收官,列车是默认不是牢笼、热修不等班车;⑤不建 velocity/burndown/容量面——单 Owner+代理无观众,纯负债;⑥固定周期不入本 INIT 范围——留待有客户时一次预计零代码的公约重裁;⑦部署≠发布记录:sprint close 的 minutes+gate 是授权与清单,各仓(W tag/DS Vercel/未来产品仓)保留自己流水线。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:7ebf376bfee026c57b5efa80",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:ca6182f9642c26bd0e4bb477"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable;Verity 验证角色]\n证据脊柱:①S044 开 Release kind 带红证——白名单外 kind(Review/Knowledge)仍必须拒 CLI_ARGUMENT_MALFORMED,防白名单误扩;②S045 advisory:sprint 带回放守卫测试(work.annotated 防夹带先例)+老读端兼容证(required:false 未知扩展必须过验证)+跨分区限定引用解析正反用例;③S049 dogfood 硬验收:建真实 sprint、注入≥2 个活 INIT、走一次批量收官并留链上回执——停点合并必须实证不是宣称;④S048 发布走 P1+P8+guard-check、五版本面一并 bump、regen 先于 tag、清陈旧 dist tar(INIT-007 教训);⑤MIN-036 修订文本逐字入 minutes decisions,防日后节奏争议无据;⑥公约卡 promote 至 fresh 可检(candidate 默认不可见=INIT-005 教训)。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:7ebf376bfee026c57b5efa80",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:f06460d61802915aa027f023"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable;Minerva 架构角色]\n定形=B 轻引擎:①sprint 记录复用协议既有 Release kind(仅开 create 白名单,Incident 0.3.2 先例,零协议形变);②成员关系=成员侧 advisory:sprint 注解(required:false 扩展、骑现有 work.annotated 操作、老读端零破坏;值=限定引用 workspaceId+work id,支持跨分区成员);③读面=work-show 出 sprint+work-list(或等效读面)按 sprint 过滤;④sprint 状态复用 planned/active/done,close=批次发布时刻。结构依据:验证器钉死 Initiative 父为 null(GRAPH_PARENT_KIND_INVALID),parent-id 装载结构上不可能;时间箱与范围箱正交,成员注解是唯一不撕裂单亲树的机制。两阶段同形:现在自由批次、将来固定列车,切换=一次公约重裁,预计零代码。sprint 记录落 cross 分区(平台级事务),各仓部署流水线不动。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:86f3f42267cbea09650f7322": [
+      {
+        "conferenceId": "conference:86f3f42267cbea09650f7322",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:c6dc2d66b4a9e13874d799df"
+        ],
+        "externalKeys": [],
+        "body": "落 H `7480a05`（已推送 main）。builder 对 `skill/` 下任何非唯一 skill 子树的被跟踪路径抛 `ARCHIVE_UNREPRESENTABLE` 并点名，替代原来的静默过滤——那是信任机器里的 fail-open：第二 skill 目录使 archive 摘要与锚不动、verify-installed-copy 越过它没见过的内容、\"看着像可信 skill\"的散文照绿发布却从未被 pin。\n\n**红证两路**：守卫抽为纯函数（可脱离构建单测），module 只在入口点构建（import 无副作用）。移除守卫→真 git 集成红证抓（scratch repo 放第二 skill 目录，builder 非零退出）；纯函数摆设→单测+集成同抓。\n\n**scripts-only 仪式确认**：守卫只改 `scripts/create-skill-archive.mjs`+新测试+typecheck 行，皆不在 `skill/` 下——**skill 归档字节不变（`d53bbe61…`）、锚不动（push-gate 回显 `19513f48…`）**，只重钉源归档+manifest.sourceArchiveSha256+checksums。全套件 52+2×4+27（新增 3）绿。\n\n**一处待你的对外发布**：本 scripts-only 改动使 main 的源归档与已发布 candidate.19 漂移（同版本号、不同源字节）。收口需一次 candidate.20 tag+release——属三类必停的对外发布，我停在此。建议 candidate.20 顺带折入队列里攒的停顿预算 payload 教学（一次 release 载两笔）。锚不变故无须六文档 republish。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:89856e896afede7c6e53413a": [
+      {
+        "conferenceId": "conference:89856e896afede7c6e53413a",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:1b86e8a075963ddf61ac9074"
+        ],
+        "externalKeys": [],
+        "body": "（Owner 已批,kickoff 决策清单 OWNER-NOW#2）策展公约三缺省批准:①晋升=agent 促发、Owner 可驳;②reverify 挂 initiative-close 节律;③平台规范双库复制。stale-days 缺省授权 agent 自定起点。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:89856e896afede7c6e53413a",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:aa8b4d22920244d4b7a81c94"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=opus]\n\n(Mara——decision-ready handoffs)四缺省成文:\n\n**①准入(create)**:知识写入不是链镜像。制卡触发=陷阱证实/基线实测/规范裁定这类**日后会被查询复用**的事实;当场即逝或链纪要已足的不制卡。kind 用 guide(操作/陷阱)/fact(实测基线值)/reference(指向 handoff 文档),人写 tags,source-references 指证据或链裁定。\n\n**②晋升(promote)**:新卡生为 candidate（不被默认检索信任）。agent 判定其经得起复用即**促发晋升并呈 Owner**,Owner 可驳。晋升需 provenance 完备（assertPromotableProvenance）。\n\n**③保鲜(reverify)**:promoted 卡带 stale-days 起点缺省 guide 90d/fact 180d/reference 365d;每次 **initiative-close** 时对相关卡 reverify 续背书,过期自动 stale 掉出默认检索。\n\n**④双库复制**:平台级规范（停顿预算/决策清单/缺陷触发等）建为**同一张卡入两库**（cross 与各分区），source-references 指向 cross 的权威裁定 minutes。这是跨分区共享层(C)落地前的过渡机制。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:9304da044e4cfaa2f370fbc3": [
+      {
+        "conferenceId": "conference:9304da044e4cfaa2f370fbc3",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:df05aa7ef9023d8633fda5e9"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=fable]\n\n复查 DS 线程「处理 bug 未提示建单」的三层根因与处置，均已执行（Owner 授权「按照推荐的方案执行」）：\n\n其一，**类型在协议里、不在操作面上**：`assertWorkRecordShape` 自 v0.1.0 收 8 种 kind（含 Incident），CLI 创建白名单只放 4 种规划层（cli/index.ts:1318/:1393；scratch 工作区实测 `CLI_ARGUMENT_MALFORMED`，未触活链）。放开前须先定三缺口：depth 表未映射 Incident 的排序、无父约束语义、graph 校验对未映射 kind 跳过 referential check。**该缺口本身登记为 `TCRN-CROSS-INIT-004`（planned，未开工），并以 work-annotate 打 advisory——今天的缺陷单公约（Story/Initiative＋advisory）首次实用**。\n\n其二，**载荷从未教缺陷触发**：Recording Triggers 生成信号不含「发现缺陷而延后处理」；catalog 列旗标不列枚举值故 kind 真值只能读协议源。两条教学已登记 candidate.23 队列。\n\n其三，**candidate.21 发布说明虚报**（执笔者自报）：notes 与提交信息声称载入 distill 纪律，placed 副本与 H main 双查 step 7 均为旧文——实只载分发纪律。勘误已按 Owner 授权追加至已发布 notes（锚行完好复核 `08add187…` 前缀不变），教学移 candidate.23 补发。根类同「机器回执必须来自真实输出」：**发布声明必须对应载荷字节**，而 H 门只验身份与锚、不验语义。\n\n另：DS 链快照已补（v254，SNAPSHOT_VERIFIED，滞后 139 事件清零）。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:99ddc8037e89296a17e33a35": [
+      {
+        "conferenceId": "conference:99ddc8037e89296a17e33a35",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:4767c991247910efc79ceb1f"
+        ],
+        "externalKeys": [],
+        "body": "（Owner 立场,逐字）「决策清单全部同意并授权，开始执行」\n\n裁定:kickoff 决策清单三分类全部批准。两条 OWNER-NOW 待批项**予以授权**——①W v0.3.2 + helper candidate.24 对外发布**预授权**(门证全绿即发,无需再逐次到场);②策展公约三缺省批准:晋升=agent 促发 Owner 可驳、reverify 挂 initiative-close 节律、平台规范双库复制。CONDITIONAL 两项按预告随执行消解/升级;AGENT 项(活化门 role_decision、两假修否决)确认。执行方即刻从 S023+S026 并行开跑至 S033 关门,唯 S028/S029 发版时刻呈回执。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:9db14f7976a5f4c5e312c9a0": [
+      {
+        "conferenceId": "conference:9db14f7976a5f4c5e312c9a0",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:35854f73bfebca8a3d8c947a"
+        ],
+        "externalKeys": [],
+        "body": "candidate.22 三合一重钉执行完毕（settles MIN-E05-REVIEW 两待办之一）。**前置发现与修复**：W v0.3.0 树的 P8 钉（p8-workflow-rc.mjs 的 P8_VERSION/P8_TAG）仍是 0.2.0——0.3.0 清扫漏了 .mjs 面，故 v0.3.0 永不能产own P8 资产（Release 零资产）；改钉后的树又非 tag 树（provenance 将宣称没人跑过的构建），删已发布 tag 属禁手，**唯一诚实路径＝v0.3.1 补丁**（引擎零变更）。执行：钉+routeAdditions 双清单登记 0.3.0/0.3.1.md+全版本面→P1_VERIFIED→verify:p8 先被 P8_PRIVACY_RELEASE_ARTIFACT_SET 抓陈旧 0.2.0 tar（门再立功）→清后 **P8_WORKFLOW_RC_VERIFIED**（accepted_release、独立根复现）→commit 78f48b0→tag v0.3.1→Release 携五资产。**helper candidate.22**：IDENTITY 钉 v0.3.1（78f48b04…/b924b066…/a3f0e552…）＋provenance 字节拷贝＋EXPECTED×2 重导出＋新锚 6532ea79… 六文档齐发＋candidate-manifest canonical 重绑＋SKILL.md 支持行 v0.3.1＋workflow-operations 新增路由行与「Scope on the record」节（含 WSD-1 边界先说）；87 测全绿→PUSH_GATE_VERIFIED→push/tag/Release（七资产齐）→三方验证全✓。**治理换装**：安装态三件替换→TRUST_VALIDATED v0.3.1→放置副本 10/10 逐条 sha 核对展开替换→INSTALLED_COPY_VALIDATED v0.3.1→state 前移 24af10b0…→**resolve 由 ROOT_IDENTITY_MISMATCH 恢复 ROOT_RESOLVED**→活链 v250 回放绿。余一待办：发布点 snapshot 仍为建议待 Owner。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:9f1f0200e64943e99c9bd1bf": [
+      {
+        "conferenceId": "conference:9f1f0200e64943e99c9bd1bf",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:088dc5ee349815618fd8109b"
+        ],
+        "externalKeys": [],
+        "body": "Minerva。D6 VM 部署形态:k3s 静态站(nginx 或 node 静态服务)+traefik ingress,namespace=tcrn-aos;镜像内容=构建期投影渲染的 SSR 站,由本机推送产物。据=VM 已有 k3s v1.33.1+traefik+三个既有 namespace,沿用现成轨道零新依赖;不用 systemd 是因为该机的服务面既定在 k3s。D7 发布节奏:Owner 已临时全权,故本批次按「每目标一次收官发布」而非逐 Story 停点——DS 一次(着墨包)、AOS 一次(驾驶舱+部署)、W/helper 一次(集成 INIT)。据=MIN-036/MIN-040 发布列车公约的批量停点精神;Owner 令明确「不应因任何 owner 原因中断」。D8 分支策略:各仓在现有 feat 分支上推进并推送,DS 与 W 合入 main 后打 tag 发布;AOS 因远端只有 main 且本地分支未推,先推 feat/init001-cockpit 再合 main。据=交付节奏公约的整合分支单一必停点已由全权令覆盖。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:9f1f0200e64943e99c9bd1bf",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:0da2aaefa1b7986c97e9e945"
+        ],
+        "externalKeys": [],
+        "body": "对抗复核;执笔 agent:fable,署名 Verity。逐条尝试证伪。D3:不驳。本机服务化是唯一不必先裁 S019 的路径,且 P7 可逆(静态生成模式对预览仍成立,属加轨非拆轨)。D4:不驳,但补一条硬约束——「VM 镜像看板只读」不能只靠不给 pins,须在镜像构建产物里就没有写按钮,否则读者会点了才发现失败;要求 AOS 侧以构建期开关区分本机版与镜像版,并在镜像版明示写面在本机。D5:不驳,但驳回一个隐含假设——「domain.db 纳备份」不等于已有备份;S020 未落地前 domain.db 无备份路径。故追加约束:S003 落地同批必须实现 domain.db 的导出到本机备份目录,否则不得写入任何真实域数据。D6:质疑「零新依赖」的说法失真——k3s manifest、镜像构建、ingress 规则都是新增运维轨,只是复用了既有集群。措辞应改为「复用既有集群而非新增集群」。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:9f1f0200e64943e99c9bd1bf",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:833a58402f3a5a35d674a10a"
+        ],
+        "externalKeys": [],
+        "body": "交付面立场;执笔 agent:fable,署名 Mara。接受 Minerva 全部推荐与 Verity 全部追加。补三条执行序约束。①目标一(DS/Storybook 一致)是目标二的前置:AOS 的 S025/S027 消费 DS 着墨包与 SearchableList,故 DS 必须先发包。序=DS 着墨与 SearchableList 并行→Storybook 改消费→DS 发布→AOS 消费。②目标三(W/helper AOS 集成)依赖 AOS 已部署且形态已定,否则引导内容会描述一个不存在的部署。故序=目标一→目标二→目标三,不可并行抢跑。③S003 域库的最小可用集:本批只做负责人/标签/优先级/评论四类+12 关系型只读呈现,自由关联的写入留待后续——理由是 Owner 判据要求「完整可用」指十一模块与写面通,不是把 S003 的全部字段谱做完;把关系型写入塞进本批会挤掉部署与目标三的时间预算,且关系型的 UI 形态尚无设计稿。此为**范围裁剪的显式声明**,不做静默缩水。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:9f1f0200e64943e99c9bd1bf",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:ac19514a7f9c9673a6e2588c"
+        ],
+        "externalKeys": [],
+        "body": "Verity。D7 发布节奏:**驳回一半**。「不因 owner 原因中断」授权的是不必等 Owner 裁定,不等于取消验证门。三次收官发布各自仍须过本仓 verify 全绿+推送后向服务器复核(git ls-remote 比全 sha,非 git log --not --remotes)。另:AOS 远端只有 main 且历史曾被改写(公开脱敏),推 feat 分支前须确认本地与远端 main 有共同祖先,否则是第二次无共同祖先事故。D8:同上,加一条前置核验。**最重一条**:Owner 令说「AOS 必须完整可用」,而完整可用的判据未定义。我要求本会当场钉死可用性判据,否则收尾时会用「跑起来了」冒充「可用」。提议判据五条:①VM 上 URL 可达且返回 SSR 内容;②十一模块全部渲染真链数据非空壳;③本机写面可改 AOS 域字段并回读;④链写(状态流转)经本机服务成功且非法流转被拒;⑤镜像与本机数据版本一致或差异被如实标注。五条缺一不得宣称完成。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:9f1f0200e64943e99c9bd1bf",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:fe49dfad79b1ea94b8c41723"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合;执笔 agent:fable,署名 Minerva。六道方向题的开题立场。D3 服务化时点:AOS 写面须在本机服务化,VM 维持只读镜像。据=①数据引力已裁(链在本机、备份汇本机、VM 无链副本);②S010 安全写面已在本机活链实证;③本机服务不需鉴权前置,S003 不必等 S019。D4 供权边界:operator pins 不出本机,链写只发生在本机服务;浏览器与 VM 永不持 pins;看板拖拽=本机驾驶舱→本机服务→带 pins 的 MCP 面;VM 镜像看板只读并如实标注。据=INC-025 证 pins+bundle 脆(少一键连读面打死),复制到第二台机器即信任面乘二。D5 存储:SQLite 双库物理分离——domain.db(珍贵,纳备份)与 projection.db(可弃,永不备份);qualified ref 唯一挂链形态;走 packages/db 既有迁移。据=三环第一环自有资产(BK01/BK02 已带 proof);单写者现实;可弃与珍贵成为物理边界而非纪律。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:9f78ddd68ed76a2795267aee": [
+      {
+        "conferenceId": "conference:9f78ddd68ed76a2795267aee",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:35627e87b802f850dff2ad67"
+        ],
+        "externalKeys": [],
+        "body": "方法：读源 + 只读实测双证。生产 bin（scripts/tcrn-workflow.mjs 全 19 行）实测只供 write 与 clock 两项，8 个带外权威面一个都不供——ROOT 缺口属实。12 个触面 verb 中 10 个 mutates=false 者逐一实测拒绝码；2 个变更动词（claude-adapter-install/uninstall）严格只读源码，不做探测（承 STORY-001 事故纪律）。\n\n三处修正（均与 MIN-003 的前提相左，据此上报）：\n\n其一，无静默降级——这是好消息。八面缺失全部具名 fail-closed。尤以 assertHost 为强：它用构造品牌 hostContexts.has(host) 而非结构校验，既存测试 p6b:238 实证「拿真 host.input 手工包一层仍被拒」。伪造不能靠塑形，必须经准入构造函数。\n\n其二，「12 个被锁 verb」混了两种锁。11 个是 availability=cli 但运行期缺面而阻；compatibility-plan 是 availability=programmatic-only，根本不在 CLI 面上——补权威面也解不开它，需另改目录可用性。两种锁两种修法。\n\n其三，也是最要紧：gate-v1 所需的 actor/身份权威不在这八面之内。八面是 profile/context/adapter-host/installation/compatibility 五类，无一承载「谁在动作」。故 STORY-003 不是「切一个既有面」，而是循既有品牌模式新增一面。E02 的依赖形状因此改变，须请 Owner 复核。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:9fc2d938a1003a7d4285174d": [
+      {
+        "conferenceId": "conference:9fc2d938a1003a7d4285174d",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:5707bc3e9c3ee3f1757ba047"
+        ],
+        "externalKeys": [],
+        "body": "执笔者自纠。`TCRN-CROSS-MIN-014` 的职责表把六条 Story 写作「STORY-001…006」，那是 E02 内部的相对编号；但本分区的外部键是**平铺**的，`TCRN-CROSS-STORY-001…007` 已由 EPIC-001 占用且皆为 done。照字面读，纪要会把审计者指向七条完全无关的既有记录。\n\n纪要不可改，故以本条追加更正。**实键映射**：001→`TCRN-CROSS-STORY-008`（身份权威文件 schema 与 pins 轨读取器）；002→`STORY-009`（gate-transition 现场消费该权威）；003→`STORY-010`（授权决策入 extensions＋回放只校验形状）；004→`STORY-011`（负例证明）；005→`STORY-012`（兼容性证明）；006→`STORY-013`（边界证明与文档）。执行序照 MIN-014：008→009→010→011／012 并行→013 收口。\n\n**教训**：键是身份不是标签，分区内平铺分配（现存最大号+1）；在任何纪要里写「STORY-00N」都等于引用一条具体记录，Epic 内的相对序号必须在落笔时就换成实键，否则一份不可改的记录会长期指错地方。这条与 v3 键约定的「键即身份、写后冻结」同源，此前只在创建记录时守，未及于叙述文本。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:a0fe8dcb0416b7dfb51c5b9b": [
+      {
+        "conferenceId": "conference:a0fe8dcb0416b7dfb51c5b9b",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:f70e9fcb76c5aaa6f3b34369"
+        ],
+        "externalKeys": [],
+        "body": "E05 实现产出（work-annotate，Scope-on-record）。**已实现且验证绿**：①核心新增加式操作 `work.annotated`（非 `work.updated`）——读源发现迁移表无自环（`planned→planned` 报 INVALID_TRANSITION），故 annotate 走独立操作，storageVersion 恒 1（WSD-1），且完全不碰 transition/gate 热路径；②回放守卫 `assertWorkAnnotationExtensions`：只许两枚 advisory 键增改、至少改一枚、状态不变，非 advisory 扩展逐字不变（防夹带），仿 gate 精确比对；③CLI `work-annotate` 动词＋COMMAND_CATALOG（字母序，headSentinel）；④`work-show` 读面补 `advisory` 投影（无注解时省略，旧字节不变）。**证据**：build 绿；6 条新 core 测（round-trip/replay 一致/scope-only 合并、5 类 verb 负例、3 类回放伪造：改状态/夹带外来扩展/空增量均 WORKSPACE_EVENT_CORRUPT）全绿；catalog 金样更新（+work-annotate 于 headSentinel 名册）；全套 584 pass（6 offline 失败仅因裸跑无网络封印，`verify:offline` harness 下 OFFLINE_BOUNDARY_VERIFIED）；format/source/privacy/verification-map/proof-check 五门绿；scratch 工作区 CLI 端到端自证（init→create→annotate→show 见 advisory→status 回放绿）。**安全裁定（dogfood 延后）**：`work.annotated` 是新操作，据 WSD-1，用它的链对更旧二进制不可读——安装的 W v0.2.0 正是此类。故**在活链 EPIC-005 上注解＝会砖化活链对安装框架的可读性**，必须待发布+升级安装后才做；当前 dogfood 由 scratch e2e 代证。**发布门**：功能经 W release 抵达用户（对外发布，Owner 裁）；STORY-018/019/020 active 待发布，STORY-020 的活链回填与 skill 侧 workflow-operations 成文延后至发布后。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:a1e862af8b182b721162b108": [
+      {
+        "conferenceId": "conference:a1e862af8b182b721162b108",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:71b230f38e41c72ea682203b"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=opus]\n\n(Verity——验收)知识层激活五判据全达,实测:\n\n①两库聚合≤60%:cross 16%(21199/131072B,index 16454B 已出账,物理 37653B),DS 12%(17023B)。S023 记账去重生效(逻辑<物理)。\n②各≥8 promoted+fresh:cross 10 卡、DS 8 卡,全 promoted+active+fresh。\n③默认查询非空:cross 默认返 8/total 10,DS 返 8/total 8——首次非空(此前 0)。\n④dogfood 真实时刻检索+链上引用:收口前按停顿预算查 category=workflow kind=guide(3 卡),knowledge-body 取回 CARD-STOP-BUDGET 全文据以产两栏报告——本纪要即引用记录。\n⑤载荷教学随 candidate.24 发布+placed 验证:candidate.24 载「知识卡片目录」节,三方锚验证绿,placed 副本重构验 10c31c98。\n\n另证:search 纳 summary(S025)cross\"retire\"/DS\"dom\"命中 summary-only 卡;清库重种(S030)清 60 镜像后从 0 重种真知识。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:a3dfd6ddc7cbbc63a32e55b4": [
+      {
+        "conferenceId": "conference:a3dfd6ddc7cbbc63a32e55b4",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:0eb6f63ea181b47275ed4aeb"
+        ],
+        "externalKeys": [],
+        "body": "（Owner 立场，逐字）「同意你的建议，完成修改后继续从STORY-015 spike 往下做」\n\n（执笔者标注）Owner 采纳 distill 纪律。读源答「为何知识库有容量上限」：①**它是有界的上下文注入面，非数据库**——存在理由是被查询并注入 prompt，凡入模型上下文者必须构造上有界，否则累积治理史撑爆每次注入；同一设计律见 SessionStart≤1024 字节、查询≤8 条、CLI 输出字节稳定；事件链才是无界审计日志，知识库是策展的可注入蒸馏物。②撞的是**聚合字节上限 128 KiB**（非记录数 32/64）；聚合公式对 metadata 近乎双重计数（整 index＋每 unit 各一次），我的 body 均 135 字节而 metadata 约 2KB/条，故库被 metadata 重量填满。③**退休只释放记录数、不释放聚合字节**（scan.units.reduce 不过滤退休——刻意约束物理总量），128 KiB 是硬顶。根因＝误用：--distill 每决议造一记录，纪要每份 6–9 决议，把库变决议镜像。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:a4ddef9e6f2570bdf20c5a03": [
+      {
+        "conferenceId": "conference:a4ddef9e6f2570bdf20c5a03",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:09820c3f11d3b66739e12936",
+          "position:3f39765519044b198458fac1"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。P1 立场预算重裁——事实与实测。\n\n常量:`maximumTextBytes = 2_048`(packages/core/src/conference.ts:29),按 UTF-8 字节计,超出即 CONFERENCE_BUDGET_EXCEEDED 并附字段名。它被**同一个 text() 校验的 8 个字段共用**(request 的 title/desiredOutcome;position 的 position/risks 每项/recommendations 每项;minutes 的 summary/decisions 每项/unresolvedIssues 每项),故单条 position 的文本理论上界是 65 倍常量。assignment-gate 另有一份数值相同但完全独立的常量。\n\n它**不进规范字节**(不参与 canonicalJson 与 eventHash),改它不动既有链一个字节;但**参与回放准入**——回放期重跑同一校验,一条超限记录会让**整个工作区**对该引擎不可读,不是仅该记录不可读;并且**必改证明字节**(四份 schema 以 maxLength+x-tcrn-maxUtf8Bytes 双写钉住,其摘要进 rc1 证明清单与 verification-map)。\n\n活链实测(三分区全部段文件,232 条立场;分组口径=分区+作者+会议):长度 p50 932 / p95 1873 / 单条最大 2034 字节。带显式片号的 34 条,构成完整两片对 15 对、零落单;其中**合并后真的超过 2048 的只有 10 对**。以逻辑立场为分母 217 条,需要多于一条记录的占 6.9%,其中确属字节强迫的占 **4.6%**;**最大的逻辑立场合并后 2609 字节,仅为上限的 1.27 倍**——没有任何一条逼近两倍。\n\n选项与推荐。\n\nA 维持 2048 + 分片公约:零回放风险、零证明字节改动;代价是 4.6% 的逻辑立场须分片,且每分一片多占一个事件位(相邻预算 maxRecords=10000/链,cross 分区现为 1209)。\nB 以版本门控的 enable 事件提升:旧引擎遇未知操作有唯一诊断,优于裸抬常量(裸抬会与字节损坏同码不可分)。但耦合面比预想更宽——除 8 个共用字段外,还有段信封(每段 64 事件、段整体 1 MiB)与**跨包**的 KNOWLEDGE_LIMITS.maximumSummaryBytes=2048;后者数值相同但完全独立,只抬 conference 侧会让 summary 超 2048 的 conference-close --distill 直接失败,且**这条耦合没有任何机器检查**。\nC 按记录类型区分上限:首条超限记录的拒绝码与裸抬常量同形、无唯一诊断,安全性寄托在一条无门保护的纪律上。\n\n**推荐 A(维持现状),并把结论建立在测量而非直觉上**:我在 P1 里最初把它列为「最像能力补偿型遗留」的候选,实测把这个判断削弱了——被迫分片的比例低、最大缺口仅 1.27 倍,而 B 的耦合至少四条且有一条跨包无门。按本 INIT 自己的进化公约,残余适用性分析的结论是「旧逻辑的成立条件仍然成立」,故不删不改。若日后要动,B 是唯一可接受的形态,且须先给 KNOWLEDGE_LIMITS 耦合补一道门。\n\n**待 Owner 裁定**:①是否采纳 A;②若否,B 的目标值与四条耦合的处置顺序;③是否把该常量按公约登记为能力补偿型并附适用性谓词。实施 CONDITIONAL,本 story 不预建。",
+        "fragmentCount": 2
+      },
+      {
+        "conferenceId": "conference:a4ddef9e6f2570bdf20c5a03",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:c5230223e72a42897fa59564"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合;执笔 agent:fable,署名 Verity(证据边界)。对上述分析的对抗复核结果,如实记录其未达标处。\n\n**一处编造**:分析首版给出的 EXT-CONFERENCE fixtureDigest 为 `d6fd5627…`,实为 `1943ddf3…`。这是本次唯一的凭空数值,且恰落在「证明字节」这一最需要精确的段落——引用摘要必须现场重算,不得凭印象写出。\n\n**两处 F5 硬伤**:①分析建议的「记录级 ≤16000 字节不变式」不闭合——它漏算了事件信封,按实测信封均值 418 字节,64 事件段会溢出 1 MiB;控制点应挂在事件而非记录上,且一个 conference.closed 事件同时携带 request 与 minutes。②遗漏了跨包耦合 KNOWLEDGE_LIMITS.maximumSummaryBytes,该项已在上条立场补入。\n\n**方法论提醒**:第一轮分析还曾断言「放宽预算比新增操作型演进更糟」,理由是两者失败路径不同;实测证伪——两者同为 WORKSPACE_EVENT_CORRUPT,真差别只在于未知操作的诊断是唯一的。承重论证必须实测,不能推理。\n\n**边界**:本次全程只读,未做端到端 CLI 复现,未在真旧引擎上实测回放拒绝路径。上述数字均可由段文件重算复核。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:a8084641b4c9497aa9a72cf2": [
+      {
+        "conferenceId": "conference:a8084641b4c9497aa9a72cf2",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:2f2a9e9f66e4864ebae48682"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=opus]\n\n(Verity)retire 现删 body 为最终持久步。scan 完整性不变量改为:每 body 有对应 metadata（无孤儿）+每活记录仍有 body;retired 可缺 body。三聚合触点计回收 body 为 0,promote 显式拦 retired。**红证四性**:退后 body 文件消失且库仍 valid;删活记录 body 触 PARTIAL_STATE;退休记录留为审计条目;34/34+5 邻接测试文件全绿(e2e/context-router/workspace-ext/cli-read/cli-catalog)。W 本地 f466d35。\n\n**范围判断二**(proceed-and-report,Owner 可驳):①保全 metadata 非瘦 bare stub——body 是主字节且全退,瘦 metadata 须给 validateMetadataShape 加分支（安全敏感）换有限收益,不划算,且 full metadata 保更丰审计（含原 bodySha256）;②未做肥墓 rebase 重写路径——S030 清库重种清掉两库现有全部 tombstone,该路径无对象。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:aa194a90e9ccf5f09811b9a2": [
+      {
+        "conferenceId": "conference:aa194a90e9ccf5f09811b9a2",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:e3fb5d51b74b6383d35f41c0"
+        ],
+        "externalKeys": [],
+        "body": "六个得旗标的 verb 各自带证明，不靠类比——旗标是逐 handler 接线的，兄弟通过不能替它作证。\n\n每处钉同样三点：无供给时逐字维持原拒绝；错摘要停在摘要比对；对摘要越过权威闸口进入本职工作。**错摘要那一条才是关键**：若旗标压根忽略其参数，只做正向用例照样通过（盘上文件本来就是对的），唯有错摘要落在 `*_DIGEST` 才证明钉真的在被比对。\n\n三处刻意分开证明：`context-route` 单列，因它是唯一同时受两面把守者——只陈述其一必须仍关另一闸，且错的上下文钉不能搭正确 profile 钉的便车（实测得 `CONTEXT_AUTHORITY_DIGEST`）。Codex 与 Claude 的安装回执分开证，因二者以**各自的读取器**实现同一份文件身份契约，一个通过不带另一个。`claude-adapter-uninstall` 只证拒绝——它与规划兄弟走同一旗标，错钉须在任何文件被解链**之前**refuse。\n\n绿灯：P3／P5／P6／P6B 受治验证、format-check、`guard-check`（12 守卫变异体全杀）。提交 W `5e5c63a`（本地，未推送）。\n\n覆盖边界照实说：`compatibility-plan` 未覆盖（programmatic-only，未解锁）；五个 attestations host 面 verb 未覆盖（依 MIN-008 不给旗标）。故 E01 的证明覆盖＝6／7 pins 面 verb，不是「12 个全解锁」。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:ad0da87a483fa959782dd40e": [
+      {
+        "conferenceId": "conference:ad0da87a483fa959782dd40e",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:d5ff6031f63a197e430722d6"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=fable]\n\n（Owner 立场，逐字）「我还发现一个问题：拆完单以后不会总结或统计需要决策的事项，这样agent通常无法直接运行直至交付，需要填补这个漏洞」\n\n（Mara——decision-ready handoffs）Owner 指出停顿预算的缺失另一半：定了「何时停」，缺「拆单时把所有会停的点一次盘出」，故 agent 只能边跑边撞、无法自主跑到交付。**立决策清单公约**：拆单收尾产出清单落 kickoff 纪要，每个会 gate 交付的决策项分三类——\n\n**OWNER-NOW**（owner_intent 门／无裁定支撑的方向选择／对外发布授权）批量一次呈 Owner 前置解决；**CONDITIONAL**（悬于执行会检验的前提，写「若前提成立则…否则消解」，非硬停，确认即升级 OWNER-NOW）；**AGENT**（既有裁定支撑，proceed-and-report）。\n\n要点：决策边界拆单时即知，Owner 一坐批量解 OWNER-NOW，agent 再无中断跑到交付——更少中断非更多。与「不预登记」调和：不预登记的是硬停，清单只分类，CONDITIONAL 仍条件式。\n\n**INIT-004 回溯范例证其有效**：若拆单时产清单，父语义会列为 CONDITIONAL——「恒 parentless 的安全论据假设悬空父 fail-open 存在；执行将以读源+scratch 检验；若证伪，parentless 仅剩架构论据→呈 Owner 裁 strict-vs-optional」。Owner 拆单时即被预告它会来，就不会是执行到一半的意外反转。清单把「执行期惊现的反转」变成「拆单期已挂号的条件项」。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:b1bcf3e0a51a811f82cc9ad7": [
+      {
+        "conferenceId": "conference:b1bcf3e0a51a811f82cc9ad7",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:5852d81169d34f8e0ccb0f8a"
+        ],
+        "externalKeys": [],
+        "body": "读源核实 E05『链上 advisory』现状并定形。一、忠告正文已落地并全译：README×5 第243行陈述——低千位事件即可感知变慢、单命令约6,600事件跨1秒、读写同价、链无压缩、唯一缓解＝按项目或倡议切分工作区；遵 AC-N6按轮报数、AC-N7数字必带缓解、AC-N8不为天花板设门，及§5诚实边界（Apple M3、外推非实测、引原始样本）。二、耦合裁定＝不并入 chain-migration。OD-C2 已于2026-07-20裁为选项(1)：不阻断发布、把数字写进README，明确排除选项(2)重构增量 materialize。增量回放属独立后续纲领、非 E05 范围；此为既有裁定支撑的默认方向、无需 Owner 停顿。三、读源发现真缺口＝被引证据悬空：docs/verification/2026-07-20-event-chain-ceiling-samples.json 在 W 仓不存在、却被7处引用（README×5 第243行＋CHANGELOG:62＋docs/releases/0.1.0.md:30）。文件实存于平台 docs/verification/（62KB、schema tcrn.ceiling-measurement.v1、2000 样本、拟合 ms=34.66+0.14598n、r²0.9922、阈6613 与忠告『约6,600』自洽）。remedy＝将该证据落地 W docs/verification/ 使引用自洽、为 E05 交付物；发布传播属对外发布、留待 Owner。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:b335afc2caafabdb290b4104": [
+      {
+        "conferenceId": "conference:b335afc2caafabdb290b4104",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:fb9471211be9c634ab1c9a01"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=fable]\n\n（Verity——实证否证）执行 STORY-021 前完整读源+scratch 对照，分解纪要给两 persona 的「事实②：悬空父的 Incident 静默过回放」**被证伪**：\n\n**读源**：`validateWorkGraph`（protocol:649）在 693 行有 else-if 分支，对**未映射 kind**（含 Incident）的非空 parentId 照做 `REFERENTIAL_INTEGRITY`+cross-project+tombstone 校验；该函数经 workspace.ts:724 在回放期对全 work 集终局调用一次（注释 710 明证）。我先前裁分解时读到 685 行截断，漏看 693。\n\n**scratch 三例对照实测**（手工追加事件+materialize）：①Incident 无父→**接受**；②Incident 合法父（Initiative）→**接受**；③Incident 悬空父→**回放拒 `WORKSPACE_EVENT_CORRUPT`**。悬空父守卫已存在且有效。\n\n**由此重塑**：\n- **STORY-021（通用图加固）前提消失**——无 fail-open 可修。**唯一真缺口＝零回归测试**（全仓 grep `REFERENTIAL_INTEGRITY` 测试端 0 命中）。缩为「加悬空父回归测试，含未映射 kind Incident，红证——防未来重构悄悄删 else-if」。\n- **STORY-022**：排序全序**已金样钉死**（protocol 测 line 84 `[Review,Incident,Release,Knowledge]`+hash），删此项；真活＝CLI 白名单加 Incident＋测试。\n- **父语义再裁**：「恒 parentless」部分基于已证伪的安全论据（Sable「无字段即无可乘之隙」——但悬空已被拒，父是安全的）。**荐改 parent-optional-must-resolve**：Incident 可挂已解析的规划记录（found-in 原生），零引擎改动（②已支持），比 advisory 更自然；Minerva 的「容纳边纯度」架构顾虑由既有分泳道排序缓解（未映射 kind 已排在规划树后）。**此项反转了 Owner 已批分解的一部分，Owner 可驳回**。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:b854406ec64c401852fd544a": [
+      {
+        "conferenceId": "conference:b854406ec64c401852fd544a",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:91423365a74ca2d99c855738"
+        ],
+        "externalKeys": [],
+        "body": "（Owner 立场，逐字）「全部接纳推荐方案，完成后继续完成剩余story」\n\n（以下为执笔者标注，非 Owner 原话）本立场应答 MIN-019 点名的两项未结算，逐条对应：\n\n**一、批准「E01 诚实交付上限是 7 个 pins 面 verb 而非 12」。** 该修正非范围缩水而是原目标从来不可诚实达成：5 个 verb 由 `claudeAdapterHost`／`claudeAdapterActivationHost` 把守，二者皆 `hostContexts.add(context)` 品牌构造（复核确证），属 attestations 轨；给其上 CLI 旗标即令调用方断言冒充权威，正是裁定「hostDigest 不是 pin」所禁。故 CONF-003／MIN-003 中「解锁含全部激活在内的 12 个 verb」之提法据此更正。\n\n**二、由此确立 E04 的形状**：适配器分发 skill 必用 `claude-adapter-install`，而该 verb 同时需要上述两个品牌构造面——**E04 不可能走 CLI 路径，必须有嵌入方**（照 `scripts/host-evidence.mjs` 形制构造真 host 上下文）。此条写入链上，免得 E04 按「E01 已解锁全部 verb」错排。\n\n**三、为 EPIC-002 补一道 `owner_intent_required` 门。** 理由取其三：争议性与 E01 对等（E02 改的是引擎关门规则本身）；不阻塞（只挡 epic→done，010–013 照常，且 `gate-delete` 是成文死锁逃生口）；而最要紧者——关这道门须动用 STORY-008／009 刚造的名册机制，**这是唯一能在真链上端到端证明部署故事成立的方式**，测试只证代码。\n\n**四、部署名册并带外公布其摘要，并入 STORY-013 职责**（该 Story 本负责成文边界与面向 operator 的表述）。信任模型同 bootstrap 锚点：一个人手持的常数。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:be48a805914b6bf17420163c": [
+      {
+        "conferenceId": "conference:be48a805914b6bf17420163c",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:562f367f56c87bd031dc8964"
+        ],
+        "externalKeys": [],
+        "body": "扫查发现的记录失真，非新工作。\n\n`TCRN-CROSS-INIT-001`（接入受治工作流）与 `TCRN-CROSS-INIT-002`（0.1.0 里程碑）自归零重起当日建立后，**一直停在 `planned`**，而两者现实中早已完成：接入在跑（每会话 `verify-installed-copy`、双分区活跃、备份节奏在行），0.1.0 已发版并有 GitHub Release。链上因此显示「三个 Initiative 有两个未开工」，读起来是假的。\n\n**成因是纪律缺口而非疏忽一次**：这两条没有产出会议、没有门、也不在任何 Story 树下，于是没有任何一步流程会路过它们。**凡不挂在被例行推进的结构上的记录，就没有任何机制会回头看它**——这是与「口头登记等于没登记」同源的一课，只是层级不同。\n\n处置：按真实完成顺序补转 `planned→ready→active→done`，时间戳用补录当刻而非伪造当初（**回填时间戳等于伪造历史**，链只保证落账后不可篡改，不保证署名与时刻必真，故不可再往里掺假）。本纪要即其补录之因。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:ca0048a6a231ba9f4ef48201": [
+      {
+        "conferenceId": "conference:ca0048a6a231ba9f4ef48201",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:3b10356a272305de630bc3ac"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable·Minerva 架构角色]\n采两独立立场全部约束，裁定如下修 N-2。一、**分两次裁**：本次只修 observe，enforce 另开会议（合并裁将成 hook 空白支票）。二、**闭合枚举替代唯一条款**：N-2 由「SessionStart 是唯一 fail-open 面」改为「下列逐宿主具名 hook 事件为已获批面，各自声明失败语义并产账本收据；未列举者一律禁止；扩表须新裁定，绝非实现决定」。observe 首批仅 PostToolUse、SessionEnd、PreCompact/PostCompact、SubagentStart/SubagentStop（双宿主各自计）。三、**observe 性质**：fail-open、不阻断、有界、只读、绝不作交付门；**收据缺失不是事件缺失的证据**，不得作免责或合规证明；超时杀 hook 不杀会话。四、**逐 hook 逐宿主上线**：一次一个，各带本宿主实测收据（install→触发→抓字节→卸载）+ 既有 hook 回归证明无位移无顺序退化；家族不继承成员证据。五、**live 声称须实测**：fixture 只证「处理器对我们写的输入返回预期」，不证宿主是否以该名在该时机以该载荷调用——该缺口即声称本身。故本裁定解锁开发与 fixture 证明，**不解锁任何 live 声称**。六、**漂移防线**（Claude 无逐哈希门）：处理器 digest 钉扎、入口自检、失配即静默；不得称与 Codex 逐哈希门等价；兜底为会话首 verify-installed-copy。七、**enforce 前置**（记录待办，非本次授权）：独立裁定、爆炸半径、不依赖该 hook 可触达的 Owner 已测 kill switch、真实宿主 fail-closed 红证。八、**禁用措辞**：不得写 hooks are supported、observe hooks are safe、coverage is full、hosts are equivalent、non-blocking by construction；许可恒为逐 hook 逐宿主收据支撑。九、**如实记反对**：N-2 的力量在于计数为一，每开一例都让下一例更廉价；对价=闭合枚举+扩表须新裁+逐宿主收据。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:ca0048a6a231ba9f4ef48201",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:dfe0f536e30aafbeb096e0d2"
+        ],
+        "externalKeys": [],
+        "body": "[独立 fresh-context 子代理立场·Verity 验证角色·宿主 claude-code·Agent 工具·scribe agent:fable 逐字转录]\nAn observe hook may be declared live on a host only on a real-host receipt for that hook name on that host: install, trigger, capture bytes, uninstall. A fixture proves only that our handler, fed input we wrote, returns what we expect; it cannot prove the host invokes that hook, under that name, at that moment, with that payload, or tolerates our exit. That gap is the claim. A fail-open recorder is silent both when nothing occurred and when it broke, so silence is never coverage: each hook must emit liveness receipts at install and teardown, claims must read receipts observed for X on host H, never all tool uses recorded, and missing receipts classify unknown, not clean. Hooks land one at a time, each with its own host receipt plus a re-run of prior hooks' receipts showing no displacement or ordering regression; no family inherits one member's evidence. No enforce hook goes live without red evidence: a measured block that actually stopped the action, a measured error and timeout path, and a recorded ruling on fail-open versus fail-closed. Evidence is per host; receipts carry host identity and version and every claim names its host, so no Claude measurement is ever Codex coverage. The amendment must not say hooks are supported, observe hooks are safe, coverage is full, hosts are equivalent, or non-blocking by construction; permission must be per hook, per host, receipt-backed.",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:ca0048a6a231ba9f4ef48201",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:e168a2673ea47f2294f34bc8"
+        ],
+        "externalKeys": [],
+        "body": "[Owner 原文，由 scribe agent:fable 逐字转录；身份为声明而非密码学证明]\n「除了codex实测和发布，其它我都授权，你先完成，然后我通知codex进行自己部分的测试」\n[执笔说明]本会议依此授权召开并作出裁定。授权解释：修 N-2 以解锁 observe/enforce hook 的**开发与证明**；**不**授权任何需要真实 Codex 会话的实测（live 触发、逐哈希信任仪式），亦**不**授权对外发布。任何 hook 声称 live 均须其宿主实测收据，故本裁定只能解锁代码与 fixture 证明，不能替代 live 证据。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:ca0048a6a231ba9f4ef48201",
+        "actorId": "profile:tcrn-sable-v1",
+        "fragmentIds": [
+          "position:fb280f01b90998fd26a7dfae"
+        ],
+        "externalKeys": [],
+        "body": "[独立 fresh-context 子代理立场·Sable 安全角色·宿主 claude-code·Agent 工具·scribe agent:fable 逐字转录]\nSable position. Amend N-2 for observe only, in a ruling separate from enforce; a combined ruling will later be read as blanket hook permission, and enforce would arrive unevidenced. Replace the sole-surface clause with a closed enumeration: named hook events, per host, each declaring failure semantics and a ledger receipt. Anything not enumerated stays prohibited, and the text must say widening the list requires a new ruling, never an implementation decision. Observe hooks are fail-open, non-blocking, bounded, read-only, and must never gate delivery; the amendment must record that a missing receipt is not evidence of a missing event, so absence is never used as exculpation or proof of compliance. Each hook declares in manifest what happens on error, timeout, and absence: observe degrades to silence, and a timeout kills the hook, never the session. Before any enforce hook goes live: its own ruling, a declared blast radius, an owner-tested kill switch reachable without the hook, and fail-closed behaviour proven on a live host. Claude Code has no per-hook hash gate, so one trust approval covers a payload that can drift; require the handler to be digest-pinned, to verify itself at start, and to fall silent on mismatch, with periodic re-derivation. The strongest argument against amending at all: N-2's force is that the count is one, and every exception makes the next cheaper.",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:cbeb258cc84f99ad519b4b2a": [
+      {
+        "conferenceId": "conference:cbeb258cc84f99ad519b4b2a",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:159af80127480c131c2c1388"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:codex；Minerva 架构角色]\n定形为一个跨宿主 Host Integration Program，由六个 Epic 递进：①AC-1 真宿主事实与最小 capability/session 契约；②ROOT authority supply + 宿主中立 Workflow MCP；③Codex 惰性安装与单 SessionStart 信任阶梯；④observe hooks + 有界 receipt sidecar；⑤enforce hooks 的政策裁定与逐面激活；⑥App Server Observer 和 App 专属能力发现。Adapter 只绑定宿主事实，不铸造 authority；MCP 消费已钉扎 authority。App Server 主动 Thread/Turn/Subagent 编排不随 Observer 顺带上线，若要产品化另立后续 Initiative。Conference 只记录重要分歧，不充当运行时消息总线。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:cbeb258cc84f99ad519b4b2a",
+        "actorId": "profile:tcrn-sable-v1",
+        "fragmentIds": [
+          "position:3aa53cb673ea1fe722673ee7"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:codex；Sable 安全角色]\n权威来源必须留在 pins 轨：操作者仪式与工作区外钉扎 authority 文件提供 authorization；Workflow MCP 仅在启动或调用时验证、绑定和消费；Adapter 只能提交 session/cwd/host version/tool schema/trust observation 等宿主事实。prompt、环境变量、自算 hostDigest、模型身份和 App Server opaque attestation 均不得成为 authority root。能力分级 enforce/observe/invoke-only/unavailable 必须机器可读；未进 Hook 的 Hosted 工具只能禁用、代理或诚实标 unmanaged。PreToolUse/PermissionRequest/Stop 的 fail-open/fail-closed 与降级语义逐面裁定，不能从 Claude N-2 或 Codex 默认行为静默推导。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:cbeb258cc84f99ad519b4b2a",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:7057a50c14669cbf8c35af9f"
+        ],
+        "externalKeys": [],
+        "body": "[Owner 原文，由 scribe agent:codex 逐字转录；身份为声明而非密码学证明]\n「INIT009确认落树」\n[执笔说明]确认对象为本任务此前呈报的六 Epic、二十三 Story 完整树及决策清单。因随后另获批准的 INIT-010 已占用当时展示的 EPIC-019/020 与 STORY-050～057，依扁平键唯一性实际落链机械平移为 EPIC-021～026 与 STORY-058～080；语义、顺序、依赖及边界不变。授权覆盖整批创建及 scope/minutes 回链；不授权具体 live 阻断政策、主动 App Server Controller 或 GD-1 翻案、源码事务治理、全局 Hook、自动 Knowledge 晋升及对外发布。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:cbeb258cc84f99ad519b4b2a",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:7ead490f37e5ef5205c63781"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:codex；Mara 产品与范围角色]\n本 INIT 交付“可信接入阶梯”，不是一次性宣称完整控制 Codex。契约只先立 capability-manifest 与 session-binding；action/approval/thread 记录族等到首个消费者出现再增。receipt sidecar 必须有锚定、容量上限、修剪与恢复故事，主事件链只收摘要和高风险决定。六 Epic 的完成边界分别是可验收的宿主事实、双宿主操作者入口、单 Hook live 证据、observe 证据面、裁过政策的 enforce 面、只读 App Server Observer。Browser/Computer/Automation/Worktree 按实际表面标能力，不以最低公分母抹平；主动编排和源码事务治理明确不在本 INIT。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:cbeb258cc84f99ad519b4b2a",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:8c857bb5cbca39dd8c243d3f"
+        ],
+        "externalKeys": [],
+        "body": "[Owner 原文，由 scribe agent:codex 逐字转录；身份为声明而非密码学证明]\n「同意，开始落新INIT并拆单」\n[执笔说明]“同意”承接上一轮呈报的修订方向：双宿主同等治理保证；ROOT 与宿主中立 MCP 先行；Codex 按证据阶梯逐面扩展。当前授权涵盖创建 INIT-009、召开定形会议，并在完整树呈报确认后落子项。Codex 在本回合作记录执笔者，不据此自称恢复本程序的评审或签门角色。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:cbeb258cc84f99ad519b4b2a",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:c9073b30fb1acccb6d648275"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:codex；Verity 验证角色]\n证据纪律先于扩面。第一阶段必须在当前 Codex 真二进制上收据化：Hook 事件集合、插件装载、信任哈希粒度、定义或处理器变化后的再审批、SessionEnd 实际触发、App Server initialize/schema/最小事件往返。安装收据只证明预期定义与落盘字节；宿主证据收据另证 installed_pending_approval / activated_observed / drifted，二者不得互相冒充。observe 每次只加一个 Hook且始终 fail-open；enforce 每面先有红证、宿主版本、覆盖洞、回滚和失败策略裁定。CLI/IDE/App 兼容矩阵贯穿每个 Story，不留到末尾。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:d56eeab524c5896198a70346": [
+      {
+        "conferenceId": "conference:d56eeab524c5896198a70346",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:6b6d26548c4b4eeec0111190"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=fable]\n\n(Verity——实证与验收)立项依据全部实测:cross 聚合 127,563B/131,072B=97%(body 仅 4,320B=3%),DS 127,828B=97%(body 10,507B);两库 60 条 100% 为 CONFERENCE-DECISION-* 链镜像,100% candidate/unknown,isDefaultSelectable=0 条(knowledge-core.ts:980-984 要求 promoted+active+fresh);检索谓词只扫 subject+tags(:1287);retire 不退字节且无压缩动词(WSC-5);极端样本=DS 2 字节 body 记录背 1,465B metadata 且 index 再计一次。\n\n**验收判据(S033 关门证据)**:①新记账下两库聚合≤60%;②每库≥8 条 promoted+fresh 真知识(guide/fact/reference,人写 tags);③默认查询(不带 selection=all)首次非空,留回执;④一次真实工作时刻检索并引用卡片的链上记录;⑤helper 载荷教学随 candidate.24 发布且 placed 副本验证。\n\n**已否决的替代**:B③ candidate 层默认可见——晋升真被驱动后属为改而改;直接抬 64/128KiB——30:1 开销下抬上限只买更多开销,有界注入面是对的设计,错在税制与门。\n\n**风险**:S028 发版含 INIT-004 既有欠账,范围膨胀风险低但仪式时长实测 25-40 分钟;S031 种子选目须守 distill 纪律(问「日后会被查询复用吗」),防把新库再填成镜像馆。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:d56eeab524c5896198a70346",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:e5788c6abe40509dfe8e6f3b"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=fable] 2/2\n\n**EPIC-009 发布列车(Owner 门)**\nS028 W v0.3.2 发版仪式:捆 INIT-004 的 Incident CLI 开放+EPIC-007 全部;P1/P8 与既有门全绿;对外发布须 Owner 授权。\nS029 治理安装升级 v0.3.2 + helper candidate.24 重钉同批(教训⑰);载荷折入知识环教学:何时制卡(陷阱证实/基线实测/规范裁定)、晋升与保鲜、时刻查询(拆单查 decomposition 类、修障查 defect 类)、目录-书库模型;与 ride-along 队列既有条目(persona 署名)是否同车由该 Story 按队列状态定。\n\n**EPIC-010 内容启动与验收**\nS030 遗留 60 镜像处置(按 S026 分支:清库重种/批量 retire)。\nS031 cross 种子语料:从 agent 记忆平台相关子集+W/H 仓教训策展 guide/fact/reference,create+promote+reverify,默认查询首次非空并留证。\nS032 DS 种子语料(12 陷阱手册/视觉阈值/handoff 指针),同等证明;知识写非链事件,DS 库由本会话代操作,DS 链无需事件。\nS033 dogfood 检索时刻:一次真实拆单或修障中查目录并引用卡片,记录于链;凭 S031-033 证据关活化门。\n\n时序主链:S026→S027→S028→S029→S030→S031/S032→S033;S023-025 与 S026/S027 并行。活化门挂 INIT,outcome_class=role_decision(证据可验,Owner 可驳,不新增设计内到场点)。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:d56eeab524c5896198a70346",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:ec6a4b97920ce50b52ec89f3"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=fable] 1/2\n\n(Minerva——结构)四 Epic 按「引擎→公约→列车→内容」分层,依赖单向。\n\n**EPIC-007 引擎修复(W v0.3.2 组件)**\nS023 记账去重:聚合改 Σ(metadata+body),index 出账(它是全量 metadata 的再序列化且已逐字节校验,双计是重复计费);边界测试+红证(超额毒库必须仍被拒)。\nS024 retire 回收:retire 时 tombstone 瘦身为审计 stub(保 id/externalKey/bodySha256/retiredAt),删 body;rebase/checkpoint 提供存量肥墓重写路径;tombstone 计数预算(64)影响评估随此 Story 报告。\nS025 检索谓词扩 summary(现只扫 subject+tags,机器 subject 无人会搜)。\nS026 双 spike(读源零改动):①store.json disposable 字段+knowledge-init 再初始化语义——遗留镜像可否走「清库重种」;②SessionStart 1KB 摘要能否携知识行,还是被 adapter 激活程序阻塞。产出定 S030 分支与 SessionStart 项去留。\n\n**EPIC-008 策展公约**\nS027 公约会议落链:晋升权限(建议 agent 促发、Owner 可驳)、reverify 节律(建议挂 initiative-close)、stale-days 缺省(guide 90d/fact 180d/reference 365d 起点)、平台规范跨分区双库复制公约(同卡两库,source-references 指 cross 裁定)。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:d56eeab524c5896198a70346",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:fefb4783a339fab900879b75"
+        ],
+        "externalKeys": [],
+        "body": "（Owner 立场,逐字）「同意，所以我们需要在本次开发中完全激活这个完整的功能，所以除了你刚刚的提议，还有什么需要做的吗，新建INIT并涵盖进去，然后拆单」\n\n语境:Owner 已在同一会话确认修正后的心智模型——事件链=书库(无界、write-through、按键取)、知识库=卡片目录(有界、可检索、策展准入、保鲜逐出);并认可诊断:schema 颗粒度足够,被三重机制废掉(唯一写入路径只产链镜像、记账 30:1 课税、检索门全有全无),两库 97% 满、60 条记录 0 条默认可检索。裁定:本轮按引擎既有设计完全激活;跨分区共享层(C)属架构新增,不在「激活既有功能」范围。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:d7eae60fe01c06f65b60f8a1": [
+      {
+        "conferenceId": "conference:d7eae60fe01c06f65b60f8a1",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:d737dddf7989492bc07d69e5"
+        ],
+        "externalKeys": [],
+        "body": "实现落 W 仓 `cf4547b`（本地提交，未推送——推送是对外动作，且 W 推送门正是 STORY-006 要提速的对象）。\n\n做法即 MIN-008 所定：新增 `suppliedAuthority` 助手，六个 verb 各加可选摘要旗标（profile-resolve／profile-authorize 的 `--receipt-digest`；context-route 的 `--profile-receipt-digest` 与 `--authority-digest`；三个安装回执面的 `--installation-receipt-digest`）。旗标缺席时行为逐字不变，故向后兼容。\n\n**三点实测证明**（已写入 p5 套件为常设证明，非一次性探针）：无旗标仍 `PROFILE_ADMISSION_AUTHORITY_REQUIRED`；错摘要停在 `PROFILE_ADMISSION_AUTHORITY_DIGEST`（钉确实对盘绑定，不是绕过闸口）；对摘要越过闸口产出 effective profile。另钉两条：注入与旗标同供时报 `CLI_AUTHORITY_AMBIGUOUS` 失败关闭（不选赢家、不静默忽略），非摘要形参数报 `CLI_ARGUMENT_MALFORMED`。\n\n**一处我在代码注释里写明而非留待重新发现的性质**：旗标供给下，读取器的路径交叉校验按构造即为空转（两个字符串同出一个调用方），真正绑定的是摘要比对；这也正是两种供给模式必须互斥的原因。\n\n绿灯：typecheck、P3／P5／P6／P6B 受治验证、format-check、`guard-check`（12 道守卫变异体全杀）。\n\n**残余**：`compatibility-plan` 属 pins 轨但 `availability=programmatic-only`，补旗标无用，须先裁其可用性——不并入本 Story。五个 attestations host 面 verb 依 MIN-008 刻意不给旗标。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:df24204633b1a085d1b7e366": [
+      {
+        "conferenceId": "conference:df24204633b1a085d1b7e366",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:3d9625468f48fe9889667a11"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:opus；Minerva=Workflow Architect 角色，此条即公约的首次 dogfood] 公约规格（读源验收成立）。一、**两级署名**：事件 `--actor`＝执笔者/驱动会话（机械归属，不变）；立场 `--actor-id`＝**persona id**（角色归属）。二、**引擎零改动实证**：`assertActorId` 的 `ACTOR_PREFIXES` 含 `profile:`，直测 `profile:tcrn-minerva-v1`/`tcrn-verity-v1` ACCEPT、裸名『Minerva』REJECT。三、**8 persona 及分工**（`packages/core/src/core-reference-personas.ts`）：Arturo 编排／Ilya 实现／Janus 验收把关／Mara 产品／Minerva 工作流架构／Mneme 知识治理／Sable 安全隐私评审／Verity 验证工程。争议按 **mandate 冲突**选派（如架构 Minerva vs 实证 Verity），各自 fresh-context dispatch。四、**执行形态强制披露**：立场正文首行 `[dispatched fresh-context subagent, model=…]` 或 `[main-thread synthesis by scribe]`——正面回答『用了哪些子代理』。诚实边界：事件流证不了 model 参数，披露是声明非证明（MIN-014 actor≠authentication 不变）。五、**复核实证支撑动因**：DS 视觉链 10 会议 21 立场**零扇出**（全 agent:fable+owner，含 A/B/C 视觉三选为单头脑枚举），公约正为消除此类『单视角自陈冒充审议』。历史 append-only 不改，公约向前生效。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:df24204633b1a085d1b7e366",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:98b5435630da6f44eddf2347"
+        ],
+        "externalKeys": [],
+        "body": "Owner 裁定采纳 persona 署名公约。原话逐字：『我认为署名 agent:sonnet/agent:fable 其实也是不对的，应该是 persona 的名字才对，persona 是有具体分工的，这样我们才知道你用了哪些子代理，他们为什么需要沟通。』续裁：『同意，验收 Fable 的输出，执行落地。』——即立场 actor-id 应记**角色（persona）**而非模型权重名；理由是模型名说不出该立场代表哪种分工、为何与对面冲突。同意本裁定入链、记忆即时生效、载荷改动（SKILL.md/workflow-operations）随 candidate.23 仪式出货。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:e25e30c14d712a22306ac948": [
+      {
+        "conferenceId": "conference:e25e30c14d712a22306ac948",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:3ff495ef9f33ed4930e13b49"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Verity(证据边界)。\n\n根因(是设计缺陷,不是执行方幻觉):激活阶梯 Step-3 曾规定 SessionStart 注入「恰好一个只读 advisory persona」。设计推理只覆盖了「persona 会不会自称拥有权限」,未覆盖「读者会把 persona 当成自己的角色」。注入原文 \"This persona is read-only advisory context; it confers no authority to act\" 字面可读作「本会话只读」,执行方(Codex)据此拒绝开发并要求更换会话。伤害面不对称:越依赖字面指令的驱动者越容易误读,故该约束对弱驱动者的伤害大于强驱动者。\n\n残余适用性分析(按 P5 公约,本会议即其首次套用):问「旧逻辑的成立条件是否仍对某类受支持的用户、宿主或模型成立」。结论=不成立。该注入意在防止代理自称治理权威,但同一目的已由更硬的机制承担——gate 身份名册按 outcome class 拒绝未获许可的 actor,且立场署名字段本就是归属声明而非身份证明。注入既非必要,又在弱档位产生反效果,因此正确处置是删除并留证,而非条件化保留。此为「不预设旧逻辑总有保留价值」的实例。\n\n对未来能力档位设计的约束(前瞻,可驳回):驱动者能力档位机制(P6)不得以「弱档位需要更强提示」为由把 persona 注入带回 standard 档;弱档位要的是更少更简更硬的确定性步骤,不是更多注入式提示。\n\n证据边界自陈:本立场不主张已穷尽该注入的全部下游影响;仅主张上述单一事件的根因与处置结论。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:e25e30c14d712a22306ac948",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:90bdbc8609ead46f3c1f1106"
+        ],
+        "externalKeys": [],
+        "body": "转写记录(transcription-first);执笔 agent:fable 代为落盘,内容为链上既有裁定的逐字转写,非新表述。\n\n来源:cross 链事件 seq 1022(eventHash 16bdc3cf25981211c7693255228ba20304cf50494f537f442f88c44e3ee6fada;occurredAt 2026-07-25T16:13:00Z;operation work.annotated;落于 TCRN-CROSS-INIT-009 的 advisory:scope;执笔者 agent:codex)。\nOwner 于 2026-07-26 读过下列引文并确认保真无误(AskUserQuestion 显式选择「确认:转写方案+引文无误」),该确认即本立场的授权。\n\n逐字原文:\n「Owner 补充裁定已落实：主线程不是只读线程，可接受用户对普通仓库操作的显式授权；Core Reference persona 仅用于 conference position attribution；SessionStart 不注入 persona，也不绑定主线程。」\n\n据此固化三条(逐条不改原意,仅拆句):\n一、主线程不是只读线程;可接受用户对普通仓库操作的显式授权。\n二、Core Reference persona 仅用于 conference 立场署名(position attribution)。\n三、SessionStart 不注入 persona,也不绑定主线程。\n\n保真可机检:任何审计者可用上述 eventHash 取回原注解并与本引文逐字节比对,不必依赖任何人的记忆。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:e2d01ff99a9954e59b5b6ab4": [
+      {
+        "conferenceId": "conference:e2d01ff99a9954e59b5b6ab4",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:43645b5dd8da23840bccff1d"
+        ],
+        "externalKeys": [],
+        "body": "**设计上最要紧的一点：不需要链级开关。** `outcomeClass` 本身就是逐门的选择开关——一个门被创建为 `owner_intent_required`，就是在声明「关它需要 Owner 意图」；让引擎兑现该声明，等于把既有字段变成真控制。不想要身份强制的部署另有四个 class 可选，且选择权在建门者手里。既有记录无一改变含义。\n\n强制规则：满足 `owner_intent_required` 门须同时具备**带外名册**（经既有 pins 轨读取器、凭调用方陈述的摘要核验）与**具名 actor**，且名册须许可该 actor 关此 class。缺 actor 也拒——许可是关于「谁」的陈述，没有「谁」就无从校验。名册若被供给于任何其它 class，同样生效：要了检查却被悄悄跳过，是所有结局里最坏的一种。\n\n强制点在动词、刻意不在回放（承 MIN-014）。代价写在检查旁边而非留待推断：这是决策点控制，不是链完整性不变式。\n\n**每一处拒绝都证明了链未前进**——「对读者已关闭、只是没记录」比「从未关闭」更糟。\n\n**红证抓出一个真覆盖洞**：三处变异中「缺具名 actor 时不再拒」一度**存活**，因为该守卫只在「非 owner 类但供了名册」时才起作用，而我的用例没覆盖这一格。补格后重跑，三处全被抓。这正是「新守卫未见红即不可信」的现钞价值——若只看 44/44 全绿，这个洞会带着上线。\n\n**另一笔**：首轮两处变异 TS 拒编译（用了非法 outcome class 与恒假条件）。**变异必须能编译才证明得了东西**，UNBUILDABLE 不是 kill。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:e9576cd6f1c90ef7e3276b58": [
+      {
+        "conferenceId": "conference:e9576cd6f1c90ef7e3276b58",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:2df19648dfdc136a3ef15829"
+        ],
+        "externalKeys": [],
+        "body": "（Owner 立场，逐字）经 AskUserQuestion 明确选择「批准现文本,收官关门」——以本选择为显式授权关闭 GATE-003。背景指令:/goal「落地 INIT-006」。\n\n（执笔者标注 agent:opus，main-thread scribe）Owner 就 docs/delivery-cadence-convention.md 的交付节奏公约（八条+适用范围+停顿预算衔接，系 MIN-036 亲裁之忠实成文）给出验收批准。据此关 owner_intent_required 门 GATE-003，INIT-006 转 done。公约文本可后续 append 更正。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:eb348a4f904ab79aeeefd806": [
+      {
+        "conferenceId": "conference:eb348a4f904ab79aeeefd806",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:b4381ab7a4c58d5005d46013"
+        ],
+        "externalKeys": [],
+        "body": "落 `packages/core/src/gate-identity.ts`（新模块，不塞进纯校验的 assignment-gate.ts 以免它沾上文件系统）。名册形制：`{schemaVersion, permits:[{actorId, outcomeClasses}]}`，经共享 `readAuthorityFile` 读取，摘要绑定盘上字节。\n\n三条不变式值得单说：**其一，canonical 次序是「要求」而非「产出」**——摘要即名册身份，若允许重排，同一份许可就会有第二个身份、第二个摘要；故 permits 按 actorId、outcomeClasses 各自须已排序且无重复，违者 MALFORMED。**其二，许可答案只来自读取器产出的上下文**——手工拼一个同形对象没走过任何文件系统与 canonical 字节检查，故以 `WeakSet` 品牌拒之（品牌不是信任锚，摘要才是；品牌只防调用方跳过检查）。**其三，决策记录自足**：`{actorId, authorityFileSha256}`，供 STORY-010 入 extensions；回放只校验其形状、永不重读文件——链的可读性不得取决于外部文件仍然在场。\n\n**红证**（新守卫未见红即不可信）：注入三处破坏——去掉次序守卫／去掉品牌检查／把枚举成员校验改为强制转换——各被**命名对应的**测试抓住，无一存活。\n\n**两处仪式教训**：①`routeAdditions` 是**一次性引导口**，文件一经重生成进 `source-allowlist.json` 就已在 declared 中，继续留在 routeAdditions 会让并集多出两项、在证明产物测试的合成夹具里对不上（`allowlist must exactly admit the bounded source set`）。②`git commit --amend` 留下的悬挂对象会被 p1 的 `HISTORY_UNREACHABLE_OBJECTS` 拒绝，须 `git reflog expire --expire-unreachable=now --all && git gc --prune=now`。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:eea53314c268b0e1faf5c28b": [
+      {
+        "conferenceId": "conference:eea53314c268b0e1faf5c28b",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:1f0991e3723b1db2936da112"
+        ],
+        "externalKeys": [],
+        "body": "[dispatched fresh-context subagent, model=opus]\n\n(a) Q1：仅开 Incident——唯一有实证消费者的种类。Release 归 W 发布列车治理，另开 CLI create 即另立平行权威面；Knowledge 撞既有知识库子系统；Review 今由门事件/会议立场承载。三者皆无消费者，依\"无消费者不建基建\"先例一律不开。\n\n(b) Q2：结构上严格无父。parentId 在本引擎意为\"规划树容纳边\"且绑深度 0–3；Incident 不属此树，带父即把容纳边与引用边两义混载、污染排序与一切下游图消费者。\"发现于某 Story\"改走既有且生产验证的 work-annotate advisory 承载（事实5），无需新深度语义。故 Incident 恒 parentId==null，校验器强制之。\n\n(c) Q3：通用加固，与 Incident 解耦。悬空 parentId 必解析乃全图引用完整性不变量、非某种类特性；事实2 明言其独立于创建是否开放，且可单独红证。仅随 Incident 修，会漏掉 shape 校验器已接纳、经 replay/import 入图的其余七种，洞仍开。\n\n(d) Q4：S-B 确认原样并最先独立发车——它是承重的完整性修复，不依赖裁定。S-A 折叠为 epic 入口门：Q1–Q3 经本会议即待 Owner 裁定成事，勿另起 spike 重决已决。S-C 依 Q1/Q2 收窄：白名单只加 Incident；\"深度/排序\"非把 Incident 映入比较器，而是令排序在非规划种类在场时保持全序（另设泳道排除之）；found-in 走注解；测试+e2e 留。\n\n最强架构风险：勿把 CLI create 白名单误当信任边界。白名单（4种）非完整性执行点——shape 校验器接纳8种，事件亦经 replay/import 绕开 CLI 入图。凡把语义钉在\"经 CLI 创建的 Incident\",记录从别门进入即失守。完整性须落图校验器（通用父解析＋对全部 shape-接纳种类的显式父规则），故 Q3 必通用、S-B 承重。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:eea53314c268b0e1faf5c28b",
+        "actorId": "profile:tcrn-sable-v1",
+        "fragmentIds": [
+          "position:292f569bf9fc6295a4cd5f3a"
+        ],
+        "externalKeys": [],
+        "body": "[dispatched fresh-context subagent, model=sonnet]\n\n（1/2）(a) Q1:仅开放 Incident。Review/Release/Knowledge 各自绑定独立信任机制——Release 紧邻 Owner 闸门发布链,Knowledge 涉策展与聚合上限,Review 隐含裁决语义——CLI 直建会让书写者绕开这些记录本应经过的真实流程,伪造出\"形状合规\"的记录,而三者目前均无已证实消费者。据\"零消费者不建\"准则(事实6)与攻击面最小化原则,仅 Incident 有真实下游(work-annotate 已承载缺陷描述,事实5)成立开放理由,其余三个只放大可伪造面、无功能收益。\n\n(b) Q2:严格无 parent。事实2、3 已证:Incident 未入层级图与深度比较器,图校验对其不生效。此时给其挂 parentId——无论\"可选\"或\"必需\"——都只是添加一个无强制力字段:\"必需\"比\"可选\"更危险,因为它制造已校验的错觉,诱使下游误信完整性成立;\"可选\"次之,产生最像正常用法的伪装外形。唯有完全无该字段,才是此刻唯一诚实且可复核的选择——没有字段就没有可乘之隙。此裁定悬置至 S-B 落地。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:eea53314c268b0e1faf5c28b",
+        "actorId": "profile:tcrn-sable-v1",
+        "fragmentIds": [
+          "position:62eabcf83033569e64ed8216"
+        ],
+        "externalKeys": [],
+        "body": "[dispatched fresh-context subagent, model=sonnet]\n\n（2/2）(c) Q3:现在做通用加固,不折入 Incident 工作。事实4:哈希无密钥,回放是唯一拒绝线,此漏洞今天已对全部八种类型可利用,与 CLI 是否开放 Incident 无关。归入\"Incident 工作\"名下是把通用信任机口误判为局部范围。援引事实6先例(archive builder 静默丢弃即刻转 fail-closed、不等大改齐备),S-B 应独立、消费者无关地立即交付:任意非空 parentId 必须解析,否则回放拒绝,覆盖全八种类型。\n\n(d) Q4:S-B 先行,且是我拒绝在其之前放行任何其他故事的唯一一项。S-B 不依赖 Q1/Q2 裁定、已红证、消费者无关,理由充分立即交付。若 S-C 先于或脱离 S-B 上线,会把\"Incident+parentId\"变成表面合规的常规形状。可复现失败路径:任意日志写权限者手工追加一条 parentId 指向不存在记录的 Incident 事件——S-B 缺位时该记录静默通过回放、以未定义深度混入排序(事实2、3),下游零信号;S-B 到位后同一追加在回放时即被拒。S-A 可并行先行,因其不产生任何已发布外形。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:eea53314c268b0e1faf5c28b",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:9dbb2abc6c4a2074930c3596"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe, model=fable]\n\n（Mara——范围与排序的合成裁定）两位的四问全部收敛，无真分歧，故裁定即采收敛面并据此定树：\n\n**Q1** 仅开 Incident（Release/Knowledge/Review 各绑既有信任机制且零消费者）。**Q2** Incident 恒 parentless、由校验器强制——采 Sable 的加码：连\"可选父\"都不给，无字段即无可乘之隙；found-in 走 work-annotate advisory。**Q3** 图完整性加固通用化且与 Incident 解耦：任意非空 parentId 必解析，覆盖全部 8 个 shape-接纳 kind，动词与回放双侧 fail-closed——采 Minerva 的界定：CLI 白名单不是信任边界，完整性必须落图校验器。**Q4** 采 Minerva 折叠：不设 spike，Q1–Q3 的设计裁定即本纪要（Owner 可驳回）；树收为两张单。\n\n**树**：EPIC-006（Incident 操作面开通，含图加固）→ STORY-021（通用图加固，红证，先行且为 022 的发行前置——采 Sable\"拒绝在其之前放行\"的排序刚性）→ STORY-022（白名单仅加 Incident＋校验器强制 parentless＋非规划 kind 在场时排序保持全序＋测试＋scratch e2e）。发行随下次 W 发布列车（Owner-gated），是条件不是 Story。无门：增量式、裁定在案、发布本身已是 Owner 到场点。\n\n每张单以 work-annotate 打 advisory:scope 与 decided-by 回链本纪要——职责表活在记录上，不再活在对话里。奉 Owner 令：只拆不做，全树 planned。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:f44c3cc2e728af46aeabe3fe": [
+      {
+        "conferenceId": "conference:f44c3cc2e728af46aeabe3fe",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:ce1e3dc72a4558e420ce51d7"
+        ],
+        "externalKeys": [],
+        "body": "Owner 授权（原话「授权」，应答我呈的发版列车方案）后三段执行完毕，回执如下。\n\n**W `v0.2.0`**：版本位 16 处一次落（四 manifest、FRAMEWORK_VERSION、P8 身份对、测试断言、五语徽章、版本政策、兼容页）＋ `docs/releases/0.2.0.md` ＋ CHANGELOG。途中三次被门抓住、三次都对：`dist/release` 陈旧 0.1.0 产物（P8_PRIVACY_RELEASE_ARTIFACT_SET）、CHANGELOG 标题缺失、证明产物未重生成。`PUSH_GATE_VERIFIED version 0.2.0` → 推送 `b4846c8` → 注记标签 `v0.2.0` → GitHub Release 携五件 P8 产物。发版说明如实写明：minor 因行为变更（owner 门关闭从「任何 actor」到「须名册」）。\n\n**H candidate.19**：按 RELEASING.md 1–3——IDENTITY 换四值（commit `b4846c83…`／tree `d792b29f…`／tagObject `cdb94d2f…`）、provenance **字节拷贝** W 生成件、双 EXPECTED 重钉；payload 教学：SKILL 那段「pending gate-v1…until it ships」已过时，改为诚实拆分（关门已机检、审议时机仍不是）；workflow-operations 折入名册关门教学＋队列三课（引用指对记录／引用折进正文／unresolvedIssues 不可裸读）。锚 `19513f48…` 六文档 republish、11 处版本引用、manifest 重绑（canonical 字节＋workflow 身份四值）、78/78、三方锚验证全等、放置副本与信任根从 Release 资产传播（INSTALLED_COPY_VALIDATED @ v0.2.0）。\n\n**安装克隆**：checkout `v0.2.0`＋重建，对新 bootstrap `ROOT_RESOLVED`；升级后引擎目录含 identity 旗标；两条生产链回放全绿（cross v156／DS v215）——五个旧 owner 门无一被砖，向后兼容主张在受治运行时上实证。\n\n**GATE-002 现在真正可关**，且只能以其自身机制关。执行者纪律留档：我未以变更动词在活链上试探拒绝路径——负例已在套件证明，活链不做探针。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:f74e16195e7c15749704bea1": [
+      {
+        "conferenceId": "conference:f74e16195e7c15749704bea1",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:35ea3f4974772d416d26c9b6"
+        ],
+        "externalKeys": [],
+        "body": "三条一并交代，因它们证的是同一件事的三个面。\n\n**STORY-011（CLI 负例）**：名册经 argv 抵达 `gate-transition`，该路径与引擎分开证——接错地方或没接上的旗标，能通过历来所有引擎测试。四种拒绝逐一走 CLI 且各证链未前进：无名册、有路径无摘要、错摘要、名册未列该 actor。\n\n**STORY-012（向后兼容）**：**真链实测**——`cross-project` v137 与 `TCRN-Design-System` v215 在新引擎下 validate 全绿，二者共载 **5 个已满足的 `owner_intent_required` 门，全都不带身份条目**。该状态新动词已造不出来（正是本特性的用意），故测试把事件按原样手写上链。「回放强制要求身份条目」这一回归被**五个测试同时抓住**——它一旦发生，每个用过 owner_intent_required 的工作区都会变砖。\n\n**STORY-013（边界）**：回放接受伪造的尾部追加，现在是**测试而非句子**。事件哈希无密钥，任何有写权限者都能算出自洽事件，且回放能读的每一项都来自同一台机器。散文说这话不花钱、还可能悄悄失真；该用例断言「接受」，故边界一旦移动，这条主张随之失败。成文三句已入 `agent-integration-v1.md` §9，并点名钉住第三句的那个测试。\n\n**名册已部署**：`.tcrn-workspace/release-trust/gate-identity-authority.json`（199 字节，控制树之外——它是权威不是工作区数据），由引擎自己的 `canonicalGateIdentityAuthority` 序列化（我先用 Python 手搓的版本被读取器以 `CANONICAL_INVALID` 拒绝——格式该由定义它的工具产出）。实测：你被许可、`agent:opus` 被拒、错摘要被拒。**摘要 `fab89e256b7a4df472ac6310ae1b5e85e6993a3655c062dcf5ba82e140ed15b7` 即带外常数**，信任模型同 bootstrap 锚点。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:f90e44721fa3fd8d0cc236c3": [
+      {
+        "conferenceId": "conference:f90e44721fa3fd8d0cc236c3",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:2e7625e875a55dc411647cbc"
+        ],
+        "externalKeys": [],
+        "body": "Owner 授权(2026-07-24 聊天原文:「授权」),在 Fable 呈报两栏(已交付 gate 全绿 vs 待发布必停点)后作出,授权 INIT-007 的对外发布批次:W v0.4.0 签名 tag+推+GitHub Release、helper candidate.25 re-pin+推+Release、安装副本升级+两生产链回放。执行形态:main-thread synthesis by scribe agent:fable。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:f90e44721fa3fd8d0cc236c3",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:521d070efa1b85d7a3b6e320"
+        ],
+        "externalKeys": [],
+        "body": "[main-thread synthesis by scribe agent:fable;Verity 验证角色] 已上线实证:①W `v0.4.0`(commit 59be99e/tagObject 68b1e9fc)PUSH_GATE_VERIFIED(P1 20 门+P8+guard-check 14 门含 BR-01/BR-02 红证),main+tag 已推、GitHub Release 带 artifacts;②helper `v0.1.0-candidate.25` PUSH_GATE_VERIFIED(anchor 9b5eeb6e、identity v0.4.0),main+tag 已推、prerelease 带 anchor;③安装副本 W checkout 升 v0.4.0+dist 重建,cross(v492)与 DS(v727)两生产链 status 回放无损;④helper placed copy 换装 candidate.25,verify-installed-copy=INSTALLED_COPY_VALIDATED@v0.4.0(archive e6ad64ca)。S038 卡默认可检、S039 教学入载荷、S040/S041/S042 done。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:fbfec869a3e2f37d11e7c3bd": [
+      {
+        "conferenceId": "conference:fbfec869a3e2f37d11e7c3bd",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:4ef3428ef5e5bf4cb62d6e64"
+        ],
+        "externalKeys": [],
+        "body": "本 Story 原载「须先呈 Owner 裁：改不变量还是改实现」。**读文件后该二选一消解了**，故我按既有裁定推进而非另请裁定——理由如下，若你不认同请驳回，改动是单点可逆的。\n\n真因：`output-session-lifecycle.test.mjs` 里两个相邻测试对同一条代码路径给出**互相矛盾**的断言。1464 行的二/三并发回收测试要求「恰好一个赢家」；紧随其下的重复压测则断言「至多一个」，并附长注释论证零赢家可达且非缺陷——赢家路径先移除锁再对账，故一个回收者可以真的做完工作、却因同伴在其身下移走了认领而在自己的事后检查中让位。\n\n**仓内其实已经裁过**，压测的注释就是裁定书，且其载荷证据我已复核属实：`scripts/lib/safe-io.mjs` 的 1136 与 1144 两处生产调用点**均为裸 await，返回值被丢弃**——赢家信号在生产侧没有任何消费者。既然无人消费，「至少有一个赢家」就不是实现做出的承诺，而 1464 把它当成了承诺。CI 那次零赢家不是 flake，是断言比实现强。\n\n处置：把 1464 对齐到压测已经写明的契约（`<= 1`），并在原处写明理由，免得下一个读者重新发现一遍。\n\n**未削弱之处**：两个赢家仍是灾难方向（两个调用者各被告知自己拥有一次只有一人执行的回收），该断言在**两处都原样保留**。去掉的只有实现从未作出的「至少一个」。\n\n复验：该套件连跑三次 136/136 全绿；整门 `PUSH_GATE_VERIFIED` 133s。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:fc751f2d9746b0f892f44df4": [
+      {
+        "conferenceId": "conference:fc751f2d9746b0f892f44df4",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:7f35615843009dd64da5c733"
+        ],
+        "externalKeys": [],
+        "body": "Owner 授权后执行发布点快照。过程：snapshot-manifest 先拒 KNOWLEDGE_HIGH_WATER_MISMATCH（本会话链 v208→v253 而知识库 marker 停在 50 对齐的旧头——快照拒绝内部不一致控制树，fail-closed 正确）→ CAS 探针 0:50 取真 marker → knowledge-rebase（KNOWLEDGE_STORE_REBASED，只动 store marker 不写链）→ 重出清单 → 拷贝 OneDrive 目的地 cross-project-20260722T092430Z → 备份副本与活根双双 SNAPSHOT_VERIFIED → retention=5 轮换删最旧 cross-project-20260721T092014Z（FINAL 归档不参与轮换）。快照内容=W v0.3.1 与 candidate.22 换装后、链 v253 的完整控制树。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:fc7fe632c7e2dbd4a23e30d3": [
+      {
+        "conferenceId": "conference:fc7fe632c7e2dbd4a23e30d3",
+        "actorId": "agent:opus",
+        "fragmentIds": [
+          "position:0647dd9f0a5e98fdcbcc13bd"
+        ],
+        "externalKeys": [],
+        "body": "执笔者自纠其二，与 MIN-015 同源：**引用要指对记录**。\n\n`MIN-013` 裁定四写作「`MIN-005`「须另改可用性」提法据此更正」。查证：`MIN-005` 是 STORY-001 产出纪要，其遗留项是「STORY-003 范围变更与 E02 依赖形状待 Owner 复核」，与 compatibility-plan 无关。**真正提出该项的是 `MIN-008`**（其决议「分类 pins 面把守的 7 verb…（后者另需改 availability）」），并在 `MIN-009`／`MIN-010` 的遗留项中复述。裁定四所更正的对象应为此三处，非 MIN-005。\n\n**遗留项结算**（逐条对照后续纪要，非凭记忆）：已了结者七条——GATE-001 分离规则（MIN-013 裁定一二）、STORY-003 定轨（同）、compatibility-plan 可用性（MIN-013 裁定四）、W 推送授权（MIN-013 授权一，已推送）、门的钝式告警扫描（MIN-017 裁定二，记「不动」在案）、lint 钝式扫描（MIN-017 裁定一）、STORY-007 二选一前提（MIN-012 前提消解且 Owner 未驳回）。\n\n**仍未结算者三条**，如实点名：①**「E01 诚实交付上限是 7 个 pins 面 verb 而非 12」这一提法修正从未被明文批准**——MIN-013 的六条决议无一涵盖它，而 EPIC-001 已 done，故链上留着一个「按原提法未达标、按修正提法已达标」的含混；②`verify:p1` 90s 提速属未排期项，非待裁项；③分区不可迁移（MIN-001）是长期已知限制，非待办。\n\n**另一观察，非缺陷**：`EPIC-002` 未挂任何门。E01 有 GATE-001 把关，而 E02 改的是引擎语义（关门规则本身），其「done」的争议性不低于 E01。是否为 E02 补一道 `owner_intent_required` 门，属 Owner 裁量，我不擅自创建。",
+        "fragmentCount": 1
+      }
     ]
   },
   "minutesByConference": {
@@ -7952,6 +12215,818 @@ export const cockpitData: CockpitData = {
         "既有组件对新 Layout 的承载力待首切片逐一核实",
         "依赖治理的能力去向(是否另立轨道承接外采公约审查)待裁",
         "A 层删除的执行时点:建议随各 Story 就近清理而非单独一刀"
+      ]
+    },
+    "conference:acfbb25a07b6b93d12b76b53": {
+      "id": "minutes:3f0fcbfb8ce0c4e593e71c66",
+      "externalKey": null,
+      "summary": "立 INIT-007 单 INIT 闭合审计全缺口;5 Epic/15 Story 扁平键;收官门唯一必停;决策 ledger 三栏落定",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "立 TCRN-DS-INIT-007 单 Initiative 覆盖审计全部缺口(Owner 裁不分 INIT)",
+        "树=EPIC-011..015 与 STORY-029..043 扁平键(回归 helper 键法公约;INIT-006 层级键不再沿用)",
+        "收官验收门 TCRN-DS-GATE-INIT007-CLOSEOUT(owner_intent_required)为唯一必停点(单次收官公约先例)",
+        "决策 ledger:Owner-now=执行 go;Conditional=近重复组件废弃裁定、doc-only 豁免清单、S043 降档需 Owner 点头;Agent=其余(审计实测+既有裁定支撑)"
+      ],
+      "unresolvedIssues": [
+        "执行 go 待 Owner(立项≠开工;INIT-006 先例)",
+        "INIT-006 的 18 个 Story 链上仍 planned 而 Epic 已 done——结转补录待 Owner 同意(本会议范围外)"
+      ],
+      "effective": [
+        "INIT-006 的 18 个 Story 链上仍 planned 而 Epic 已 done——结转补录待 Owner 同意(本会议范围外)"
+      ]
+    },
+    "conference:f99ad634d4eafe3ea963f835": {
+      "id": "minutes:45f7ae98457d1f683d368700",
+      "externalKey": null,
+      "summary": "Owner 授权关闭 INIT-008 收官门；17/17 Story 交付且 pnpm verify 全绿；发布另行确认",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "关闭 TCRN-DS-GATE-INIT008-CLOSEOUT（owner_intent_required）",
+        "TCRN-DS-EPIC-016 至 EPIC-020 与 TCRN-DS-INIT-008 转 done",
+        "17/17 Story 全 done、pnpm verify 全绿、18 commit 于未推分支 feat/init-008-content-governance",
+        "发布（push/PR/Vercel 部署）作为单独事项待 Owner 另行确认",
+        "机器翻译已标注母语复审后方为终稿"
+      ],
+      "unresolvedIssues": [
+        "发布授权（push/PR/Vercel 部署）待 Owner 单独确认"
+      ],
+      "effective": [
+        "发布授权（push/PR/Vercel 部署）待 Owner 单独确认"
+      ]
+    },
+    "conference:af20ca1fe8cf9b2205c17803": {
+      "id": "minutes:4716b82433e56695d1b5f026",
+      "externalKey": null,
+      "summary": "立 INIT-008 单 INIT 解决内容治理审计全部发现;5 Epic/17 Story 扁平键;八裁定点按推荐默认;收官门唯一必停",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "立 TCRN-DS-INIT-008 单 Initiative 解决 2026-07-23 内容治理审计全部发现(Owner 裁「解决所有发现的问题」)",
+        "树=EPIC-016..020 与 STORY-044..060 扁平键;收官门 TCRN-DS-GATE-INIT008-CLOSEOUT(owner_intent_required)唯一必停(单次收官公约)",
+        "八裁定点按推荐默认:chips 改词保留页头条;AOS oracle 迁 Proof 视觉实例类目且 slice 标退役;参考页机器 token 英文标识符面 0 翻译;翻译债本 INIT 内偿还;persona 消费者面通用化;README 品牌矛盾读源定真;「已入组件库」改词;参考页入 Components 三级导航不动顶层冻结",
+        "决策 ledger:Owner-now=执行 go;Conditional=参考页语言若 Owner 驳回补翻译轮、per-story 边界块收编需同步改 AI 契约条款、slice 退役遇阻降级为标注 superseded;Agent=其余(双审计实测+既有公约支撑)"
+      ],
+      "unresolvedIssues": [
+        "执行 go 待 Owner(立项≠开工;INIT-006/007 先例)"
+      ],
+      "effective": [
+        "执行 go 待 Owner(立项≠开工;INIT-006/007 先例)"
+      ]
+    },
+    "conference:080047a28266811c28d57ede": {
+      "id": "minutes:aa7045a7440cde1219ceae9b",
+      "externalKey": null,
+      "summary": "Owner 选择方案 B。INIT-010 的 5 Epic 与 19 Story 保留历史 done 事件，但其完成声明没有当前宿主或 origin 的 landed commit/digest 支撑，统一补记为不可作为已验证完成依赖；INC-002 在更正落链后关闭。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "对 INIT-010 及其 5 Epic 和 19 Story 逐项追加证据更正",
+        "done 保留为 append-only 历史状态而非验证结论",
+        "下游不得依赖无 landed commit 或 digest 的完成声明",
+        "后续若继续实施须新建立项并以宿主真实 UTC 和落地产物重新取证",
+        "更正完成后关闭 TCRN-DS-INC-002"
+      ],
+      "unresolvedIssues": [
+        "INIT-010 原计划的产品能力仍未在 origin 上落地；是否重新立项由未来范围决策决定"
+      ],
+      "effective": [
+        "INIT-010 原计划的产品能力仍未在 origin 上落地；是否重新立项由未来范围决策决定"
+      ]
+    },
+    "conference:aee4152d8893a543f2e8b006": {
+      "id": "minutes:cc45683a6ed0f50a9010c48a",
+      "externalKey": null,
+      "summary": "14 缺陷入树：EPIC-022 包级三 Story + EPIC-023 演示级三 Story；四裁定点按推荐默认；收官门唯一必停",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "树=EPIC-022（S062 选中语言收敛 D1/D2/D3/D9/D10、S063 反馈家族 D7、S064 RelationshipChip D8）+EPIC-023（S065 知识 shell 对齐 D4/D5/D13、S066 死码与双轨迁移 D6/D11、S067 低危 D12/D14）",
+        "裁定①NavItem 选中改 3px 左缘轴",
+        "裁定②水平导航族归底线轴",
+        "裁定③NavItem 死 CSS 删除",
+        "裁定④TMS 原型补最小反馈保留语义",
+        "AOS oracle 逐字快照原则不变、包 CSS 透传像素按记录式重标定",
+        "执行序 S062→S063→S064→S066→S065→S067",
+        "收官门 owner_intent_required 唯一必停、整合分支一次呈 Owner"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:52cf53b4033d7205bc030b0d": {
+      "id": "minutes:daad8b006daa46cd281ebbd9",
+      "externalKey": null,
+      "summary": "Owner 授权关闭 INIT-009 收官门并全发布；7 Story 交付且 pnpm verify 全绿",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "关闭 TCRN-DS-GATE-INIT009-CLOSEOUT（owner_intent_required）",
+        "TCRN-DS-EPIC-021/022/023 与 TCRN-DS-INIT-009 转 done",
+        "7 Story 全 done、pnpm verify 全绿、7 commit 于 feat/init-009-fidelity-modernization",
+        "授权全发布 push/PR/合 main/Vercel 部署（同 INIT-008 流程）",
+        "审计 14 缺陷（包级 7/演示级 7）全闭合"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:e22342c69f2cc65bde3ce36d": {
+      "id": "minutes:e1df8bcdf19949489fabee7d",
+      "externalKey": null,
+      "summary": "立 TCRN-DS-INIT-009：Storybook 展示忠实性清查与交互样式现代化；先审计后拆单",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "立 TCRN-DS-INIT-009 解决 Owner 两例发现及同类问题（链接 UA 样式、本地侧栏演示与实际不符）",
+        "链接样式 A+B 组合已由 Owner 裁定、在途改造收编为 INIT-009 首个 Story",
+        "清查基准双轨：部署站 doc-shell 交互语言（INIT-005 单轴选中）与包真理 tcrnComponentCss",
+        "AOS 视觉实例 oracle 属逐字快照不按新语言改",
+        "先全面审计出缺陷清单（含 包级 vs 演示级 归属）再拆单执行"
+      ],
+      "unresolvedIssues": [
+        "拆单树待审计产出后另场裁定"
+      ],
+      "effective": [
+        "拆单树待审计产出后另场裁定"
+      ]
+    },
+    "conference:951a87834c3c7dc29c379667": {
+      "id": "minutes:f942a15ff07308585b298d13",
+      "externalKey": null,
+      "summary": "Owner 授权关收官门并合 main 部署;INIT-007 15 Story 交付验证齐备",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "关闭 TCRN-DS-GATE-INIT007-CLOSEOUT(owner_intent_required)",
+        "承认 INIT-007 交付",
+        "授权合 main+Vercel 部署"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:5ba0d8e3b09c16c7d297e51c": {
+      "id": "minutes:abf9286da90fff48bf37d314",
+      "externalKey": "TCRN-DS-MIN-001",
+      "summary": "DS 去 AI 感重设计的视觉方向裁定：三候选（A 静默仪器/B 治理纸感/C 流体材质）经样张对比与规格评估，Owner 裁定采纳 A+B 混合",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "① 采纳 A+B 混合：A 静默仪器为底盘，B 治理纸感印章语汇仅用于身份时刻（门关闭/裁决/验收）；② C 流体材质不作为整体方向，其弹簧曲线与按压反馈作为 motion token 进入基线；③ 引入素材 license 为 token v2 验收条件（emil skills MIT、Source Serif 4 与 Noto Serif CJK SC 均 OFL-1.1 可捆绑、宋体/苹方仅系统引用、SF 家族不引入）"
+      ],
+      "unresolvedIssues": [
+        "无——后续 token v2 RFC 属既定下一步工作，非本裁定遗留"
+      ],
+      "effective": [
+        "无——后续 token v2 RFC 属既定下一步工作，非本裁定遗留"
+      ]
+    },
+    "conference:c2c2d1567f22a2b437849d11": {
+      "id": "minutes:c6546091d32eff5e33fbd5b4",
+      "externalKey": "TCRN-DS-MIN-002",
+      "summary": "INIT-001（DS 视觉重设计）拆分结构裁定：甲/乙/丙三案对比后，Owner 裁定采纳甲案——按工作流拆 5 Epic、15 Story、2 gate",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "① 采纳甲案：EPIC-001=WS1 A 底盘 token v2（STORY-001 色板/STORY-002 状态件焦点海拔/STORY-003 字栈+license）；EPIC-002=WS2 B 印章件（STORY-004 语义组/STORY-005 组件变体/STORY-006 白名单）；EPIC-003=WS3 motion 基线（STORY-007 曲线族/STORY-008 reduced-motion/STORY-009 组件动效）；EPIC-004=WS4 Storybook+契约（STORY-010 样张/STORY-011 字段族/STORY-012 digest 单批重钉）；EPIC-005=WS5 下游+发布（STORY-013 AOS 迁移/STORY-014 2.0.0 发布/STORY-015 TMS 指引）；② GATE-001 契约重钉门挂 EPIC-004、GATE-002 发布门挂 EPIC-005，均 owner_intent_required；③ 乙案（3 Epic 粗粒度）与丙案（不拆）被拒，理由存 POS-003 与章程 §8"
+      ],
+      "unresolvedIssues": [
+        "无——Story 级增删由后续 work-transition/work-create 按常规纪律处理"
+      ],
+      "effective": [
+        "无——Story 级增删由后续 work-transition/work-create 按常规纪律处理"
+      ]
+    },
+    "conference:5cecdda5fb7cacfc8f0ab03f": {
+      "id": "minutes:1ffa95370ffc2106ebcd027c",
+      "externalKey": "TCRN-DS-MIN-003",
+      "summary": "探测性调用变更动词导致 TCRN-DS-STORY-001 进入终态 cancelled；以 TCRN-DS-STORY-016 补偿承接，工程产出未受影响",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "① TCRN-DS-STORY-001 保留为 cancelled（追加式更正，不修改历史）；② TCRN-DS-STORY-016 承接其范围（A 底盘色板 v2），状态 done；③ 纪律入册：变更动词（mutates=true）永不用于枚举探测，枚举一律读引擎源码；只读动词方可试探"
+      ],
+      "unresolvedIssues": [
+        "无"
+      ],
+      "effective": [
+        "无"
+      ]
+    },
+    "conference:c0ff3ba29dd50e20806a8154": {
+      "id": "minutes:f2cfeb2589fee9b79984acd9",
+      "externalKey": "TCRN-DS-MIN-004",
+      "summary": "GATE-001 契约重钉门：Owner 认可三条一致性，附加条件「flake 一并修」已执行并验证",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "① Owner 裁定：认可 POS-006 的三条一致性（章节冻结、digest 经浏览器证明校验、视觉字段族已至 v2）；② 附加条件：story-coverage-manifest.json 的取样非确定性须一并修复——已于 4d1e2c6 完成，值稳定在 rgb(24",
+        "25",
+        "28) 且连跑逐字节一致；③ 截图 sha256 的残余漂移经查不受任何门校验，另立缺陷跟踪，不阻断本门。"
+      ],
+      "unresolvedIssues": [
+        "截图 hash 是否继续记录、或改感知比对——待 Owner 另行裁定，不阻断 GATE-001"
+      ],
+      "effective": [
+        "截图 hash 是否继续记录、或改感知比对——待 Owner 另行裁定，不阻断 GATE-001"
+      ]
+    },
+    "conference:0b3bbf72a00c7b6e5b58b5e2": {
+      "id": "minutes:bcc8aa56c841c6479505e5e3",
+      "externalKey": "TCRN-DS-MIN-005",
+      "summary": "GATE-002 发布门：Owner 认可验收八条全绿，并授权推送、打标 v2.0.0、建 GitHub Release",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "① Owner 裁定：POS-007 的验收八条全绿，GATE-002 关闭；② Owner 授权发布动作：推送 feat/visual-language-v2-a-plus-b、打标 v2.0.0、建 GitHub Release；③ 发布仪式沿用 0.1.0 教训：push 单独成步、先解析 PUSH_GATE_VERIFIED，CI 不算门。"
+      ],
+      "unresolvedIssues": [
+        "无"
+      ],
+      "effective": [
+        "无"
+      ]
+    },
+    "conference:353591acf9579e0cfa315fe0": {
+      "id": "minutes:b37f49f8da1fb6c4823d1be5",
+      "externalKey": "TCRN-DS-MIN-006",
+      "summary": "视觉基线的不变量：Owner 裁定采纳解法②——以带容差的感知比对取代逐次 sha256",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "① Owner 裁定「2」，即 POS-012 的解法②：改用带容差的感知比对（SSIM/像素阈值一类），而非停止记录（解法①）；理由承 POS-012——DS 契约叙事建立在可机器校验的视觉一致性上，截图是唯一覆盖「渲染后是否真的一样」的证据面。② 由此 INIT-002 的性质确定为**证明契约变更**（新增一道真正有门作用的视觉回归检查），而非单纯修实现。③ 实现须回答一个已知约束：截图目录当前 gitignore、148 张共 69MB，故基线形态本身是设计的一部分，不能默认「把 PNG 全签进去」。"
+      ],
+      "unresolvedIssues": [
+        "基线形态（完整 PNG vs 感知指纹）与容差阈值待实现阶段确定并回报"
+      ],
+      "effective": [
+        "基线形态（完整 PNG vs 感知指纹）与容差阈值待实现阶段确定并回报"
+      ]
+    },
+    "conference:0a4147aa2254ad56a10880c7": {
+      "id": "minutes:aab33863de1f963698d553fc",
+      "externalKey": "TCRN-DS-MIN-007",
+      "summary": "INIT-003 review 通过，A 档定案，四项按执笔人建议裁定；工作树为 5 Epic / 12 Story / 2 gate",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "① 档位 A（忠实性修复）先行，B（外壳重设计）另立；② F8 品牌渐变冻结为 brand 资产，走 brand admission 独立路线；③ F3 theme-preview 改 token 驱动真双主题；④ 假门处置：可机检者变真检测，不可机检者改显式 unchecked 并撤出 ok 与契约，定性为**收紧诚实性而非放松检查**；⑤ 工作树：EPIC-006 证明诚实化（STORY-017..019）／EPIC-007 外壳去装饰化（STORY-020..022）／EPIC-008 叙事清理（STORY-023..024）／EPIC-009 印章件文档（STORY-025..026）／EPIC-010 契约收口（STORY-027..028）；GATE-003 诚实化门挂 EPIC-006、GATE-004 收口门挂 EPIC-010，均 owner_intent_required。"
+      ],
+      "unresolvedIssues": [
+        "B 档（外壳重设计）范围与时机待本 Initiative 收口后另议"
+      ],
+      "effective": [
+        "B 档（外壳重设计）范围与时机待本 Initiative 收口后另议"
+      ]
+    },
+    "conference:6cea91919d28ac74e44d3017": {
+      "id": "minutes:1643e6945e024c8e1a541fb0",
+      "externalKey": "TCRN-DS-MIN-008",
+      "summary": "GATE-003 诚实化门：Owner 认可假门处置，含「显式 unchecked 是收紧而非放松」的定性",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "① Owner 裁定关闭 GATE-003；② 定性确认：把恒为 false 的六项中三项改为真扫描、一项绑定感知签名门、三项改显式 unchecked 声明并撤出 ok 公式与 AI 契约，属**收紧诚实性**——宣称面缩小，其余各项皆经实测；不得读作放松检查；③ 三项 compositional 判断（nestedCards / genericLeftRailAdminShellCreep / incoherentOverlap）保持 unchecked 直至存在可执行的机检方案。"
+      ],
+      "unresolvedIssues": [
+        "无"
+      ],
+      "effective": [
+        "无"
+      ]
+    },
+    "conference:986181b7b72f0374a0a839aa": {
+      "id": "minutes:fd7a56a82102596d04232acf",
+      "externalKey": "TCRN-DS-MIN-009",
+      "summary": "GATE-004 收口门：Owner 认可基线重建与三面一致，INIT-003 收口；并授权开 PR 合并 main",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "① Owner 裁定关闭 GATE-004，INIT-003 收口；② 授权开 PR 将 feat/visual-language-v2-a-plus-b 合并到 main——此举修复一个结构性缺口：main 仍停在 d385428，v2 的六个提交只存在于特性分支，且 v2.0.0 标签所指的 4d1e2c6 不是 main 的祖先，克隆默认分支者拿到的仍是 v1；③ 复核确认 INIT-003 未触碰 packages/，故 2.0.0 对包本身仍准确，无需补版本号。"
+      ],
+      "unresolvedIssues": [
+        "两项已知残余，非阻断：AOS 的视觉 proof 未在 v2 下重跑（其单测与 typecheck 已过）；Stamp 已文档化但产品外壳尚未在三个身份时刻采用。B 档外壳重设计待另议。"
+      ],
+      "effective": [
+        "两项已知残余，非阻断：AOS 的视觉 proof 未在 v2 下重跑（其单测与 typecheck 已过）；Stamp 已文档化但产品外壳尚未在三个身份时刻采用。B 档外壳重设计待另议。"
+      ]
+    },
+    "conference:9167bd7c70f5efcbf1b560fc": {
+      "id": "minutes:f97dbbe64445b38abb248585",
+      "externalKey": "TCRN-DS-MIN-010",
+      "summary": "v2 已合并至 main（698ecc5），main 上独立 verify 绿；已发布标签首次从默认分支可达",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "① PR #1 合并完成，三个 Initiative（INIT-001/002/003）的产出全部到达默认分支；② main 上独立复验通过（verify exit 0、工作树干净），未沿用分支结论；③ `v2.0.0` 首次成为 main 的祖先——此前克隆默认分支者拿到的仍是 v1，该缺口已闭合；④ 合并连带发布 9 个 Owner 早前未推送的提交，属 PR 描述中声明过的知情决定。"
+      ],
+      "unresolvedIssues": [
+        "AOS 视觉 proof 复绿、Stamp 产品采用、B 档外壳重设计——三项按此优先级待议"
+      ],
+      "effective": [
+        "AOS 视觉 proof 复绿、Stamp 产品采用、B 档外壳重设计——三项按此优先级待议"
+      ]
+    },
+    "conference:8067dda75a12db05b747253e": {
+      "id": "minutes:becbeea6c49e0be02f128eb5",
+      "externalKey": "TCRN-DS-MIN-011",
+      "summary": "AOS 视觉 proof 复绿完成：发现并修复 v2 reduced-motion kill-switch 残留，三面对齐 v2 语义",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "① Owner 裁定「对齐 v2」；② 三面修复已实施并验证：(a) DS storybook 全局 kill-switch 软化——去 transition-duration 钳制、留 animation 钳制（提交 `27eef50`，DS 链外分支 fix/reduced-motion-comprehension-cue）；(b) AOS proof compareReducedDuration 拆分——transition 类改 parity（DS/AOS 一致，绝对值归 DS smoke）、animation 类保留归零上限（提交 `d0e16fa`，AOS 分支 fix/reduced-motion-parity-v2）；(c) shell-fidelity-proof 新增 reduced-motion kill-switch 检测，双向验证（注入即报、修后即绿），防复发；③ 验证：AOS proof 1576 检查全绿、reduced-motion 下 DS=AOS=160ms parity 通过；DS pnpm verify 退出 0、签名门零回归（改动只影响 reduced-motion 态，正常态截图不变）；④ 教训：忠实性检测器的覆盖面有盲区——第一版只扫静态装饰，扫不到行为型 kill-switch；下游 proof 是发现上游忠实性缺口的真实途径。"
+      ],
+      "unresolvedIssues": [
+        "两仓修复分支未推送、未开 PR（待 Owner 决定是否推送与合并）；Stamp 产品采用与 B 档外壳重设计仍待议"
+      ],
+      "effective": [
+        "两仓修复分支未推送、未开 PR（待 Owner 决定是否推送与合并）；Stamp 产品采用与 B 档外壳重设计仍待议"
+      ]
+    },
+    "conference:d0e4d675f528b2bc092e41ea": {
+      "id": "minutes:1f00d4d02549e8a334386c7f",
+      "externalKey": "TCRN-DS-MIN-012",
+      "summary": "Stamp 在 AOS 门禁视图的 gate-close 时刻采用完成，守 no-overclaim 边界，proof 绿",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "① Owner 裁「AOS 合成门禁视图内」；② AOS GatesPage 采用 gate-close 印章（`900e117` 合入本地 AOS main，纯本地仓无 remote）；③ 守 no-overclaim：印章 claim 强度=既有 local_only Accepted，避开 release 时刻，文本不在 forbiddenPositiveClaims；④ 在位验证 /work/gates 路由 proof ok=true、1576 检查绿、forbidden hits 空；⑤ 教训：Stamp 三时刻是治理概念，AOS 因 no-overclaim 只能做产品语境内演示——真实 ruling/release 采用待治理工作流有 UI。"
+      ],
+      "unresolvedIssues": [
+        "ruling/release 时刻真实采用待 tcrn-workflow 前端；B 档外壳重设计（#3）待推进"
+      ],
+      "effective": [
+        "ruling/release 时刻真实采用待 tcrn-workflow 前端；B 档外壳重设计（#3）待推进"
+      ]
+    },
+    "conference:c0d73e45be2ba49a6e6694c2": {
+      "id": "minutes:492cab1f0b6b4dccbf9a0c05",
+      "externalKey": "TCRN-DS-MIN-013",
+      "summary": "B 档外壳重设计原范围已由 INIT-003 + reduced-motion 修复实质满足；Owner 裁定收口，不造为改而改的 sprawl",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "① Owner 裁「判定已满足，收口」；② B 档原范围三项评估：chrome/密度/IA 已由 INIT-003 去 AI 化并对齐静默仪器基线；印章入 shell 身份时刻撞 no-overclaim 墙（docs shell 无非-overclaim 身份时刻，stamp 演示已由 stamp-spec 覆盖）；侧栏/顶栏重排无可用性驱动、属为改而改；③ INIT-004 以「已满足」结论 done，不实作代码改动；④ 真实外壳重设计待具体可用性目标（真实抱怨/IA 缺口）出现时另立 Initiative。"
+      ],
+      "unresolvedIssues": [
+        "无——真实重设计目标出现前不预立工作"
+      ],
+      "effective": [
+        "无——真实重设计目标出现前不预立工作"
+      ]
+    },
+    "conference:4e2411e1bb28173133fc9661": {
+      "id": "minutes:d8b4b1f7865dd525441b44dc",
+      "externalKey": "TCRN-DS-MIN-014",
+      "summary": "doc shell 侧栏折叠卡顿（layout-thrash）与折叠态按钮（图标方向+位置+飞窜）已修，PR #3 合并 main，浏览器实测确认",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "① Bug1 折叠卡顿：去 4 处布局属性过渡（grid-template-columns×2/brand 多属性/sidebar padding）→宽度瞬时；② Bug2 折叠态按钮：加图标 rotate(180deg)（`<`→`>`）、去 left/top 过渡+加 :active scale、折叠位 60→66px；③ 浏览器实测确认（icon transform=rotate180、layout 无 grid 过渡）+ pnpm verify main 独立绿；PR #3 合并 `fd711b2`；④ 这两个 bug 正是 INIT-004 收口时所指『真实可用性目标出现即处理』的第一例——缺陷驱动的 shell 工作，与『为改而改』相反，是有具体依据的修复。教训：动画卡顿的首诊是『动了什么属性』——布局属性（width/grid/left/top/padding）每帧回流，只动 transform/opacity 才走 GPU。"
+      ],
+      "unresolvedIssues": [
+        "无"
+      ],
+      "effective": [
+        "无"
+      ]
+    },
+    "conference:c4717c6c7c2a61310a2ce8e0": {
+      "id": "minutes:5ba8d5c0e5cebef2c3e27894",
+      "externalKey": "TCRN-DS-MIN-015",
+      "summary": "切换按钮按组件契约重修（运行时镜像状态属性）、动画恢复且实测≥30fps、hover 补入既有家族；PR #4 合并、Vercel 已部署",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①Owner 驳回瞬时方案，立基线「真动画≥30fps」——已达（0 长帧+3-4ms/帧实测）；②图标修复=运行时一行镜像 data-side-nav-collapsed，组件自带双图标契约生效（折叠态=`>` 展开图标）；rotate hack 与 demo 类误改撤销；③DS 按钮交互设计实证：存在于 tcrnComponentCss（press-scale/motion tokens/hover 家族），side-nav-toggle 补入 hover 列表；④帧预算手段=motion 窗口限定 content-visibility + 撤纯色 fixed-attachment；⑤基线 10 签名亚阈值刷新已披露；⑥教训：改 shell 前先读构建产物定位真控件（demo 原型类≠真按钮）；『瞬时替代动画』不是卡顿的默认正解——先还帧预算再谈取舍。"
+      ],
+      "unresolvedIssues": [
+        "storybook.css 的 v1 .tcrn-button 重复块（无交互态）为残债，待独立清理"
+      ],
+      "effective": [
+        "storybook.css 的 v1 .tcrn-button 重复块（无交互态）为残债，待独立清理"
+      ]
+    },
+    "conference:79087e89d2a6b45f4c2ba16e": {
+      "id": "minutes:e9ddad00c472dcdeb91a12d8",
+      "externalKey": "TCRN-DS-MIN-016",
+      "summary": "INIT-005 立项：Owner 三缺陷+IA 批评为证据，四工作流章程定序 WS1→WS2→WS4→WS3，逐 WS 验收",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①立 INIT-005（storybook 大改版），证据=Owner 三具体缺陷+结构批评——兑现 INIT-004「真实可用性目标出现即另立」；②四工作流：WS1 外壳几何（轨 120px/按钮定 Y 平移/消 seam）、WS2 选中语言（左缘指示条单一语言/去环去底线/去组箭头）、WS4 表格工具（TableToolbar 入包+dogfood）、WS3 IA 重构（渐进披露/去噪声列/表内搜索筛选）；③顺序 WS1→WS2→WS4→WS3，逐 WS 独立 PR+验收；④超阈值视觉漂移走记录式重标定。"
+      ],
+      "unresolvedIssues": [
+        "WS3 目录拆页 vs 同页折叠的 URL/锚点结构择案，实作时呈报"
+      ],
+      "effective": [
+        "WS3 目录拆页 vs 同页折叠的 URL/锚点结构择案，实作时呈报"
+      ]
+    },
+    "conference:132b74a06afa2da56449e861": {
+      "id": "minutes:fa237401d6164c4d2a698fd4",
+      "externalKey": "TCRN-DS-MIN-017",
+      "summary": "INIT-005 四工作流全部交付：PR #5/#6/#7/#8 合并 main、独立 verify 绿、Vercel 生产部署确认",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①四 WS 按章程顺序 WS1→WS2→WS4→WS3 各自独立 PR 交付并验收；②WS3 的 40 门签名重标定走 --update-visual-baseline+干净复跑记录式流程（有意 IA 变更，非静默刷新）；③proof 适配立一条通则：门证内容、不证披露壳——内容检查先展开，披露壳有自己的行为门；④教训：build 期 aria-label 在多语言路由泄英文（accordion 不需要 region 角色）、TS 模板字面量吃八进制转义（CSS content 用字面字符）、JSX key= 行首触发隐私扫描 env-assignment 规则；⑤TableToolbar 的 AOS work-index 采用为后续候选。"
+      ],
+      "unresolvedIssues": [
+        "TableToolbar 在 AOS work-index 的真实产品采用（候选，待 Owner 排期）；storybook.css v1 .tcrn-button 重复块残债（MIN-015 已记）"
+      ],
+      "effective": [
+        "TableToolbar 在 AOS work-index 的真实产品采用（候选，待 Owner 排期）；storybook.css v1 .tcrn-button 重复块残债（MIN-015 已记）"
+      ]
+    },
+    "conference:a0aecffd701aa70a5b4e296d": {
+      "id": "minutes:7ef3599ce17e0269b138b2fb",
+      "externalKey": "TCRN-DS-MIN-018",
+      "summary": "导航精修交付：图标轨+单轴选中+章节 chevron,PR #9 合并 Vercel 部署,先出图后落地",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①先出方案(visualize 现状vs提案)经 Owner 批准再落地——『先报告方案不落地』的显式流程;②单轴选中(3px 左缘钉 x=0",
+        "零底零圆角)+图标轨(40×40",
+        "5 图标入注册表 AOS 共享)+章节旋转 chevron;③toggle 越界的 panel 改动按 Owner 回退 chevron(净零);④教训:缩小截图会把模糊中文误读成截断——视觉回归判定用 DOM/computed 测量",
+        "不用肉眼缩图;PR #9 合并 `2ba3ec7`、main 独立 verify 绿、AOS proof ok。"
+      ],
+      "unresolvedIssues": [
+        "TableToolbar 的 AOS work-index 采用(候选);storybook.css v1 按钮残债(MIN-015)"
+      ],
+      "effective": [
+        "TableToolbar 的 AOS work-index 采用(候选);storybook.css v1 按钮残债(MIN-015)"
+      ]
+    },
+    "conference:2847e4805948403dab2e37c2": {
+      "id": "minutes:63d7d41d085f2d77a6c2285b",
+      "externalKey": "TCRN-DS-MIN-019",
+      "summary": "INIT-006 立项与七 Epic 拆分完成,交接文档就位,停在 planned 待 Owner 点火",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①立 TCRN-DS-INIT-006(Storybook 风格统一)",
+        "审计九证据齐全可复现;②七 Epic:E1 样式表分层收敛(结构性根源先行)、E2 色彩 token 化、E3 字号刻度、E4 间距圆角刻度、E5 交互态矩阵、E6 暗色奇偶校验、E7 风格门;③交接文档 docs/2026-07-22-storybook-style-unification-handoff.md 为执行权威(Opus 4.8 自包含)",
+        "含 12 条实踩陷阱手册与治理协议;④INIT-006 停在 ready=planned",
+        "任何 Epic 动工须 Owner 明确点火;⑤大面积重标定(E1/E3)已由本裁定预算",
+        "执行期不必停。"
+      ],
+      "unresolvedIssues": [
+        "待 Owner 点火;TableToolbar 的 AOS 采用与 storybook.css 外 v1 残债仍为独立候选"
+      ],
+      "effective": [
+        "待 Owner 点火;TableToolbar 的 AOS 采用与 storybook.css 外 v1 残债仍为独立候选"
+      ]
+    },
+    "conference:c197b8f765ec98510a4789f6": {
+      "id": "minutes:d43fded12d8c82a18b99f041",
+      "externalKey": "TCRN-DS-MIN-020",
+      "summary": "六项前置裁定完成并写死进 handoff(含两个悬空 token bug 的预决修复),Opus 零裁量;INIT-006 仍 planned",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①D1 type-size-meta=12px 新档(修悬空)+15/16/10 映射;②D2 间距定义源归一 ui-tokens+半档 0h/1h/4h(2/6/18px)+奇数就近等距向下;③D3 预决:radius-pill=999px(修悬空直角 bug)/chip-radius 并 control/裸 6px→surface/panel-surface 保双名;④D4 包真相 wins+AOS 随动;⑤D5 hover 文字型色移/按钮型 theme-toggle 家族/press 全按钮;⑥D6 exempt 集中呈报+逐 Epic 上生产;⑦全部写死 handoff §0.5(PR #11 `7fdae77`)",
+        "与本节冲突的施工自由度以本节为准。"
+      ],
+      "unresolvedIssues": [
+        "点火待 Owner;E3/E4 验收时以『零漂移承诺』反查映射实施忠实度"
+      ],
+      "effective": [
+        "点火待 Owner;E3/E4 验收时以『零漂移承诺』反查映射实施忠实度"
+      ]
+    },
+    "conference:23a94729234203c290284146": {
+      "id": "minutes:8433302fbcb699c3b96468dc",
+      "externalKey": "TCRN-DS-MIN-021",
+      "summary": "E1 样式表分层收敛交付:overlap->0,部署站零回归,AOS ok,PR #12 合并 main 独立 verify 绿",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①storybook.css 删 23 重复组件块 158 行",
+        "overlap->0;②关键发现:storybook.css 仅喂真 Storybook preview 非部署站",
+        "故零签名回归;③preview.ts 注 componentCss;④link-button 基样式上移 componentCss(修部署站 LinkButton 无样式);⑤PR #12->main c3db902",
+        "独立 verify 绿",
+        "AOS proof ok;⑥handoff 预设『docs 章节 v1』略偏——真相 preview v1、部署站早 v2。"
+      ],
+      "unresolvedIssues": [
+        "LinkButton 变体类无样式(候选);非-overlap 组件选择器 docs 通用面(候选);E2-E7 待做"
+      ],
+      "effective": [
+        "LinkButton 变体类无样式(候选);非-overlap 组件选择器 docs 通用面(候选);E2-E7 待做"
+      ]
+    },
+    "conference:ef2ab372349a02dd4b39ed8e": {
+      "id": "minutes:03da523a2c0698b483c93ad0",
+      "externalKey": "TCRN-DS-MIN-022",
+      "summary": "INIT-006 E2 色彩 token 化 交付验收",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①doc-shell .tcrn-button--primary color:#fff -> text-inverse;②storybook.css 82 hex 全在 token 定义块(合法);③非-token 色字面量=0",
+        "verify 绿零回归;④E2 不动 componentCss",
+        "AOS 无涉;⑤PR #13->main cba28b9。"
+      ],
+      "unresolvedIssues": [
+        "两处 rgba border 字面量+gradient wash(候选",
+        "独立 rgba pass);independent main verify 延至 E4 检查点统一做"
+      ],
+      "effective": [
+        "两处 rgba border 字面量+gradient wash(候选",
+        "独立 rgba pass);independent main verify 延至 E4 检查点统一做"
+      ]
+    },
+    "conference:f5ed7c8fa5af36b22590d91d": {
+      "id": "minutes:874cc2403cca78ffa0f664bb",
+      "externalKey": "TCRN-DS-MIN-023",
+      "summary": "INIT-006 E3 字号刻度统一 交付验收",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①三文件 49 font-size 字面量全 token 化;②ui-tokens 加 meta(修悬空)+heading-2/3(标题刻度真空);③精化 D1:16->heading-3 零漂而非 ->section +2px;④签名门零回归无需重标定;⑤改 1 smoke 断言;⑥PR #14->main 86d6832",
+        "AOS proof ok。"
+      ],
+      "unresolvedIssues": [
+        "E4/E5/E6/E7 待做;independent main verify 待 E4 检查点"
+      ],
+      "effective": [
+        "E4/E5/E6/E7 待做;independent main verify 待 E4 检查点"
+      ]
+    },
+    "conference:d0f36371fb29dac4dc4b4213": {
+      "id": "minutes:55ae601f779506a9a02da2a9",
+      "externalKey": "TCRN-DS-MIN-024",
+      "summary": "INIT-006 E4 间距与圆角刻度 交付验收",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①间距定义源归一 ui-tokens+2px 网格全档(补 10/14 半档零漂);②473 gap/padding tokenize+奇数就近向下;③radius-pill 修悬空+chip 退 control+裸 6->surface;④style-scale.md;⑤3 门记录式重标定+2 smoke 断言更新;⑥PR #15->main 149731a",
+        "main 独立 verify 绿",
+        "AOS ok。"
+      ],
+      "unresolvedIssues": [
+        "E5/E6/E7 待做"
+      ],
+      "effective": [
+        "E5/E6/E7 待做"
+      ]
+    },
+    "conference:5d858b76692e8ad45d11b05d": {
+      "id": "minutes:361555e1c6b06e721178d4b6",
+      "externalKey": "TCRN-DS-MIN-025",
+      "summary": "INIT-006 E5 交互态矩阵 交付验收",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①press-scale 缺口=非-.tcrn-button 的按钮型;②D5 四控件并入 press-scale+reduced-motion;③table-toolbar 补 focus-visible 环;④12 控件矩阵全绿契约级证明;⑤文字型不取 press-scale;⑥verify 零回归 AOS ok",
+        "PR #16->main 09be813。"
+      ],
+      "unresolvedIssues": [
+        "E6/E7 待做"
+      ],
+      "effective": [
+        "E6/E7 待做"
+      ]
+    },
+    "conference:4338a6dc83cd1eeb7377e7f1": {
+      "id": "minutes:a1a7603ae6fc365c664f7fec",
+      "externalKey": "TCRN-DS-MIN-026",
+      "summary": "INIT-006 E6 暗色奇偶校验 交付验收",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①runAxe 加暗色跑道(fresh ?theme=dark)",
+        "light+dark 同 4.5:1 门;②结论=暗色本就正确无 CSS 改;③谐调坑=主题翻转过渡致 axe 抓瞬态",
+        "禁过渡测 settle 态解决;④截图+axe 双证;⑤只改 proof 无 AOS 涉;PR #17->main 928d6a7。"
+      ],
+      "unresolvedIssues": [
+        "E7 待做"
+      ],
+      "effective": [
+        "E7 待做"
+      ]
+    },
+    "conference:beb6788169b57516f3fc8916": {
+      "id": "minutes:49c1078bbb22712c612e8cb5",
+      "externalKey": "TCRN-DS-MIN-027",
+      "summary": "INIT-006 E7 风格门(收官) 交付验收",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①5 风格门入 shell-fidelity-proof(hex/字号/间距/pill/重复选择器);②各双向验证 confirmed(注入红+还原绿);③门在 tokens:proof 链 pnpm verify 强制;④999px 从 radius 允许表移除;⑤verify 绿 fidelity 无漂移;⑥E7 只改 proof 无 AOS 涉;PR #18->main 400a579",
+        "main 独立 verify 绿。"
+      ],
+      "unresolvedIssues": [
+        "无——INIT-006 七 Epic 全部收官"
+      ],
+      "effective": [
+        "无——INIT-006 七 Epic 全部收官"
+      ]
+    },
+    "conference:7ae2fe44112119b8093b73fb": {
+      "id": "minutes:aef7a7d1f405403e42501a57",
+      "externalKey": "TCRN-DS-MIN-028",
+      "summary": "INIT-006 风格统一七 Epic 全交付并收官,PR #12-18 合并 main,Vercel 生产,4 悬空 token 修复",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "①七 Epic(E1 分层/E2 色彩/E3 字号/E4 间距圆角/E5 交互/E6 暗色/E7 门)全交付",
+        "PR #12-18 合并 main 400a579;②每 Epic 独立 verify+AOS parity+落链;③修 4 悬空 token(type-size-meta/radius-pill 引用无定义);④关键架构发现:storybook.css 仅喂真 Storybook preview 非部署站(E1);⑤E6 暗色本就正确(过渡伪影);⑥5 风格门入 tokens:proof 防回退;⑦Vercel 生产已带新 token;⑧Opus 4.8 执行",
+        "handoff 自包含验证有效。"
+      ],
+      "unresolvedIssues": [
+        "候选债:LinkButton 变体类样式、非-overlap 组件通用面、rgba border 字面量(均登记未修)"
+      ],
+      "effective": [
+        "候选债:LinkButton 变体类样式、非-overlap 组件通用面、rgba border 字面量(均登记未修)"
+      ]
+    },
+    "conference:bd9a1c51a4257de088beffad": {
+      "id": "minutes:5e2b09b3994de8a519052d8b",
+      "externalKey": "TCRN-DS-MIN-048",
+      "summary": "TCRN-DS-INIT-010 分解为五个 Epic 十九条 Story,轴取阻塞拓扑。EPIC-024 消费路径选型(实验驱动、四条候选各做真实实测)阻塞其余全部;EPIC-026 水合修复不可推给消费方须 DS 侧修;EPIC-028 的 DS CI Story 受 OWNER-10 支配裁定前不开工。决策清单按 owner-now 与 conditional 与 agent 三分类前置登记。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "分解轴取阻塞拓扑不取组件分类",
+        "EPIC-024 阻塞其余全部但其内部四条路径实测可并行",
+        "EPIC-026 水合修复须在 DS 侧完成不可推给消费方",
+        "STORY-086 的 DS CI 受 OWNER-10 支配裁定前不开工",
+        "四条消费路径以实验定选型不以描述定",
+        "OWNER-NOW 三项:OWNER-07 消费路径选型 与 OWNER-02 采纳边界处置 与 OWNER-10 DS 是否先补 CI",
+        "CONDITIONAL 两项:若开发机无法复现消费方 CI 语义则路径结论降级为部分证据 · 若 RSC 两条方案的实测代价接近则升级呈 Owner",
+        "AGENT 其余全部:水合修复与样式交付与版本身份均有既有裁定支撑可自决并报"
+      ],
+      "unresolvedIssues": [
+        "OWNER-07 消费路径未选定",
+        "OWNER-02 mvp-adoption-boundary 两条 Deferred 未处置",
+        "OWNER-10 DS 是否先补 CI 未裁",
+        "开发机能否复现消费方单仓检出的 CI 语义未测"
+      ],
+      "effective": [
+        "OWNER-07 消费路径未选定",
+        "OWNER-02 mvp-adoption-boundary 两条 Deferred 未处置",
+        "OWNER-10 DS 是否先补 CI 未裁",
+        "开发机能否复现消费方单仓检出的 CI 语义未测"
+      ]
+    },
+    "conference:2225aeeb7aa52e01e6454f23": {
+      "id": "minutes:9984e4d2538365742616e230",
+      "externalKey": "TCRN-DS-MIN-049",
+      "summary": "四路消费路径实测完成:B(vendored tarball)works 且零硬阻断为推荐主选;A(submodule 加 workspace)works-with-changes 零硬阻断为可接受替代;C(私有 registry)技术可行但受 mvp-adoption-boundary 授权硬阻断;D(file 加 overrides)blocked——CI 单仓检出退出 254 且 file 协议不携带摘要致钉定无解。两路对抗验证均判 experiments-hold,推翻的是证据卫生而非路径结论:三个不可复验的常数已作废并入册。开发机实测零进程零监听、基线未改动。",
+      "outcomeClass": "recommendation",
+      "decisions": [
+        "D 路径判定为 blocked 并排除:CI 退出 254 与钉定无 integrity 两条均已实测复现",
+        "C 路径技术可行性已证但准入未开:mvp-adoption-boundary 把公有与私有发布写在同一句",
+        "B 路径推荐为主选:CI 零改动且钉定由 pnpm 强制(ERR_PNPM_TARBALL_INTEGRITY 已独立复现)",
+        "A 路径为可接受替代:需改五个 workflow 且有静默陷阱",
+        "B 的 tarball 合计 155K 实测入 git 可接受",
+        "证据卫生三条缺陷入册:d1ff2807 常数作废、A 计时与 B 篡改数字不可复现、体积数字为 du 表观值不可用于容量规划",
+        "今后实验须区分可销毁工作区与须保留证据"
+      ],
+      "unresolvedIssues": [
+        "OWNER-07 消费路径最终选型待 Owner 裁定(推荐 B)",
+        "OWNER-02 若解禁则 C 路径需重做选型",
+        "B 的 tarball 升级流程与 DS 侧重打包机构未设计",
+        "A 的静默陷阱若选 A 则须设断言防护"
+      ],
+      "effective": [
+        "OWNER-07 消费路径最终选型待 Owner 裁定(推荐 B)",
+        "OWNER-02 若解禁则 C 路径需重做选型",
+        "A 的静默陷阱若选 A 则须设断言防护"
+      ]
+    },
+    "conference:f2e577e855fbc3e1d1ce8c62": {
+      "id": "minutes:ec27d4fbc5a7efe782ece1ad",
+      "externalKey": "TCRN-DS-MIN-050",
+      "summary": "Owner 裁定 OWNER-07:选定路径 B(vendored tarball 加 overrides)为 DS 消费路径。依据为四路真实实测的证据矩阵:B 是唯一 works 且零硬阻断者、CI 零改动、钉定由 pnpm 自身强制且篡改检测已被独立验证方复现、三个 tarball 合计 155K 入 git 可接受。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "OWNER-07 已裁:消费路径选定 B(vendored tarball 加 overrides)",
+        "A 路径记为可接受替代但未选中",
+        "C 路径因 mvp-adoption-boundary 授权阻断而排除;若 OWNER-02 解禁则需重做选型",
+        "D 路径永久排除:file 协议不携带版本与摘要、钉定无解",
+        "EPIC-024 消费路径选型收口"
+      ],
+      "unresolvedIssues": [
+        "B 的 tarball 升级流程与 DS 侧重打包机构未设计(属 EPIC-028)",
+        "OWNER-02 仍未裁定"
+      ],
+      "effective": [
+        "B 的 tarball 升级流程与 DS 侧重打包机构未设计(属 EPIC-028)",
+        "OWNER-02 仍未裁定"
+      ]
+    },
+    "conference:a18fdec3c06c7baf9e3071ed": {
+      "id": "minutes:1f424026befc29a095d3924e",
+      "externalKey": "TCRN-DS-MIN-051",
+      "summary": "在选定路径 B 上实测 RSC:失效形态与路径 A 不同且更危险——编译与 TypeScript 均通过,直到静态生成才死于 useRef 不是函数;且与组件相关,不含 hook 的组件直接导入完全正常,只有含 hook 者才炸。barrier 方案经消融实验确证因果:加一行 use client 即通过、去掉即复现失败。裁定 barrier 为必需机制并须配禁止直接 import 的门。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "路径 B 下 RSC 失效在预渲染期而非编译期、报错不指向真因",
+        "失效与组件相关:不含 hook 的组件直接导入正常、含 hook 者炸",
+        "barrier 模块(use client 加 export star)为路径 B 下的必需机制非可选卫生",
+        "须新增门禁止除 barrier 外任何文件直接 import DS 包",
+        "该门须先见红方可信任",
+        "barrier 的代价是全部 DS 组件变客户端组件、按 OWNER-08 的本地前端前提可接受"
+      ],
+      "unresolvedIssues": [
+        "一百个公开组件中哪些含 hook 未穷举、陷阱边界未知",
+        "barrier 之外是否还有其他导入路径未审",
+        "ProductShell 的 localStorage 水合问题在路径 B 下未单独验证"
+      ],
+      "effective": [
+        "一百个公开组件中哪些含 hook 未穷举、陷阱边界未知",
+        "barrier 之外是否还有其他导入路径未审",
+        "ProductShell 的 localStorage 水合问题在路径 B 下未单独验证"
+      ]
+    },
+    "conference:2d264788305a5d502b81c87b": {
+      "id": "minutes:5a5a5d88888a00c29a291f7d",
+      "externalKey": "TCRN-DS-MIN-052",
+      "summary": "水合失配以微分渲染复现(服务端 data-collapsed false 对客户端 true),并更正了先前基于构建成功得出的未触发结论。修复为初始化器取 fallback 加挂载后 useEffect 同步,验证后两次渲染一致。验证过程另挖出路径 B 的硬陷阱:同版本换内容静默失效且 --force 无效,pnpm 认版本号不认内容,唯一解是版本递增。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "水合失配已复现:服务端 fallback 对客户端 localStorage 值",
+        "先前基于构建成功的未触发结论作废:构建成功是预期行为不是证据",
+        "观测手段采微分渲染而非浏览器:证据更强且可固化为门",
+        "修复形态:初始化器取 fallback 加挂载后 useEffect 同步一次",
+        "路径 B 硬陷阱:同版本换内容静默失效、--force 无效、pnpm 认版本号不认内容",
+        "tarball 升级流程必须强制版本递增、禁止原地覆盖",
+        "须设门校验 vendor tarball 的 sha 与 lockfile integrity 一致"
+      ],
+      "unresolvedIssues": [
+        "theme 与 locale 两个同构缺陷未单独验证",
+        "挂载后同步产生的状态跳变是否可见未测",
+        "版本递增的自动化机构未设计(属 EPIC-028)",
+        "该修复尚未回流到 DS 仓的正式提交"
+      ],
+      "effective": [
+        "theme 与 locale 两个同构缺陷未单独验证",
+        "挂载后同步产生的状态跳变是否可见未测",
+        "版本递增的自动化机构未设计(属 EPIC-028)",
+        "该修复尚未回流到 DS 仓的正式提交"
+      ]
+    },
+    "conference:331511a2f8cd03b947016162": {
+      "id": "minutes:911186a573aa7d4a8ae71003",
+      "externalKey": "TCRN-DS-MIN-053",
+      "summary": "样式交付端到端验证通过:tokens.css 可直接 import、tcrnComponentCss 须消费方注入、构建产物含 DS 类名与 380 处 token 变量。主题结论两次更正:先前称接线断裂不准确、我第一版探针问了更弱的问题而报假绿;精确实况是 DS 组件写六个主题属性但无一为 data-tcrn-theme,而暗色块正以它为选择器,故属契约未接而非接线断裂——合理边界但未文档化且有误导信号。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "样式交付端到端可用:构建退出 0 且产物含 tcrn 类名与 380 处 token 变量",
+        "tokens.css 为真 CSS 可直接 import;tcrnComponentCss 为 73502 字节 JS 字符串须消费方注入",
+        "主题为契约未接而非接线断裂:DS 提供 token 与选择器、由消费方施加属性",
+        "该契约未文档化且 ProductShell 发出的 data-product-shell-theme 构成误导信号",
+        "消费方须自行设置 data-tcrn-theme 否则暗色 token 永不生效且无提示",
+        "记录一次我自己的探针假绿:第一版问了更弱的问题(集合是否有交集)而非该问的问题"
+      ],
+      "unresolvedIssues": [
+        "未在真实浏览器验证暗色 token 是否改变计算样式",
+        "DS 侧主题契约的文档化未做",
+        "消费方侧校验根元素属性的门未设"
+      ],
+      "effective": [
+        "未在真实浏览器验证暗色 token 是否改变计算样式",
+        "DS 侧主题契约的文档化未做",
+        "消费方侧校验根元素属性的门未设"
+      ]
+    },
+    "conference:bf8a695b587b7cb3b61c99bc": {
+      "id": "minutes:13601a8890d723a580174e8b",
+      "externalKey": "TCRN-DS-MIN-054",
+      "summary": "版本语义破损实测量化:v2.0.0 落后 HEAD 八十六提交且 CHANGELOG 无该条目,同一版本号至少对应八十七组字节。与 pnpm 认版本不认内容的陷阱叠加后会导致 DS 已改而消费方仍用旧字节且全绿。故建以内容摘要钉定的消费验证门,校验 tarball 摘要与已装 dist 摘要与 lock integrity 三者一致,第三条补 pnpm 盲区。两类变异红证均通过。门自身初版硬编码包清单致误报,已改为从依赖声明推导。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "版本语义破损已量化:v2.0.0 落后 HEAD 八十六提交、CHANGELOG 无 2.0.0 条目",
+        "消费方钉定一律以内容摘要为准、不得以版本号为准",
+        "消费验证门校验三项:tarball 摘要与已装 dist 摘要与 lock integrity",
+        "第三项专补 pnpm 认版本不认内容的盲区",
+        "门的包清单从消费方依赖声明推导、不得硬编码",
+        "两类变异红证通过:同版本换内容与已装字节篡改各自被抓"
+      ],
+      "unresolvedIssues": [
+        "pin 清单重生成未接进升级流程仍是人工步骤",
+        "DS 侧版本递增未自动化",
+        "门未接进消费方 CI",
+        "DS 仓的 CHANGELOG 与 tag 修复尚未回流正式提交"
+      ],
+      "effective": [
+        "pin 清单重生成未接进升级流程仍是人工步骤",
+        "DS 侧版本递增未自动化",
+        "门未接进消费方 CI",
+        "DS 仓的 CHANGELOG 与 tag 修复尚未回流正式提交"
+      ]
+    },
+    "conference:f50c11b601b5460a53380eda": {
+      "id": "minutes:ce9fb7253c69836ff798411e",
+      "externalKey": "TCRN-DS-MIN-055",
+      "summary": "Owner 裁定 OWNER-10:DS 须先补 CI 再承接第二个消费方。STORY-086 由此解除阻塞并成为 INIT-010 收口前的最后一条。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "OWNER-10 已裁:DS 先补 CI 再承接第二消费方",
+        "STORY-086 解除 OWNER-10 阻塞可开工",
+        "CI 须能发现 DS 改动打破 AOS 否则不算达成目的"
+      ],
+      "unresolvedIssues": [
+        "CI 的具体形态待勘察后设计",
+        "AOS 无 remote 意味着 CI 无法直接检出它、检测机制待定"
+      ],
+      "effective": [
+        "CI 的具体形态待勘察后设计",
+        "AOS 无 remote 意味着 CI 无法直接检出它、检测机制待定"
+      ]
+    },
+    "conference:f23b4103c51bbb0d195ba463": {
+      "id": "minutes:2f1b4cc1a8e5248390a701f0",
+      "externalKey": "TCRN-DS-MIN-056",
+      "summary": "DS 第一个 workflow 建成:verify job 十二步逐条独立(不跑 pnpm verify,因其 && 串行会掩盖信号且链内含重生成模式)加 contract job 两步。修掉一个实测缺陷:verify 会把破坏改写成新基线而抹掉证据。三态红证通过。检测力边界诚实写入文件头:API 面钉只一层深、出货类名仅三成二被顺带覆盖、DS 自身测试不构成兜底、契约夹具结构性失明。本 CI 不声称消费方不会被打破。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "DS CI 建成:verify job 十二步加 contract job 两步、开发机全部实跑通过",
+        "CI 不跑 pnpm verify:其 && 串行会掩盖信号且链内含重生成模式",
+        "实测缺陷入册:verify 经 internal-alpha:proof 调 contracts 重生成模式会把破坏洗白",
+        "CI 一律 --check 并设静态门禁止重生成模式调用、该门三态红证通过",
+        "补接 test:dom:存在于 package.json 但不在 verify 链内",
+        "更正我先前两处过度乐观:API 面钉只一层深、类名覆盖非零而是三成二且顺带",
+        "DS 自身测试不构成兜底:测试与源码同步维护、作者流程下全绿",
+        "本 CI 不声称消费方不会被打破、只声称可枚举子集会被抓住"
+      ],
+      "unresolvedIssues": [
+        "浏览器门(storybook:smoke 与 browser-proof)未接入、视觉与 a11y 面无 CI 覆盖",
+        "出货 CSS 类名契约缺失、六成八无处断言",
+        "dependency-license-summary 跨环境敏感、未接入漂移门",
+        "真正的消费方保护需 AOS 有 remote 与自己的 CI、超出 DS 范围须呈 Owner",
+        "workflow 尚未提交进 DS 仓、仍在实验床"
+      ],
+      "effective": [
+        "浏览器门(storybook:smoke 与 browser-proof)未接入、视觉与 a11y 面无 CI 覆盖",
+        "出货 CSS 类名契约缺失、六成八无处断言",
+        "dependency-license-summary 跨环境敏感、未接入漂移门",
+        "真正的消费方保护需 AOS 有 remote 与自己的 CI、超出 DS 范围须呈 Owner",
+        "workflow 尚未提交进 DS 仓、仍在实验床"
       ]
     },
     "conference:bb4a286b6a7173b0d6539086": {
@@ -8217,12 +13292,1411 @@ export const cockpitData: CockpitData = {
         "AOS 迁移到抽出后的领域家具包属 AOS 侧工作、尚未立项"
       ],
       "effective": [
-        "OWNER-02 mvp-adoption-boundary 两条 Deferred 的处置仍未裁",
         "OWNER-07 消费路径仍未选定",
         "OWNER-05 locale 契约仍未裁:zh_HANT 在 TMS 非测试源码一千五百一十六处且为数据模型级类型",
         "OWNER-06 图标契约仍未裁:DS 二十八对 TMS 生产一百零一、精确重合十三",
-        "OWNER-10 DS 是否先补 CI 再承接第二消费方仍未裁",
         "AOS 迁移到抽出后的领域家具包属 AOS 侧工作、尚未立项"
+      ]
+    },
+    "conference:a0fe8dcb0416b7dfb51c5b9b": {
+      "id": "minutes:031546d33cac5b4541d1cd0f",
+      "externalKey": null,
+      "summary": "work-annotate（Scope-on-record）实现完成并验证绿：核心加式操作 work.annotated（非 work.updated，因迁移表无自环）+ 回放守卫防夹带 + CLI 动词 + work-show advisory 读面；6 新 core 测+catalog 金样+全套 584 pass（6 offline 仅裸跑环境）+ 五门绿 + scratch CLI 端到端自证。安全裁定：work.annotated 是新操作，据 WSD-1 会使活链对更旧二进制不可读，故活链 EPIC-005 dogfood 与 skill 成文延后至发布+升级后；scratch e2e 代证。发布属对外发布留 Owner。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "implemented-work.annotated-as-additive-op-storageversion-stays-1-transition-hotpath-untouched",
+        "replay-guard-enforces-advisory-only-delta-status-unchanged-anti-smuggling-proven-by-3-forge-tests",
+        "cli-work-annotate-and-work-show-advisory-readsurface-shipped-and-e2e-proven",
+        "verification-green-584-pass-6-offline-env-only-plus-format-source-privacy-map-proof-gates",
+        "dogfood-on-live-chain-deferred-post-release-because-new-op-would-brick-installed-v0.2.0-per-WSD-1"
+      ],
+      "unresolvedIssues": [
+        "release-of-work-annotate-feature-is-owner-gated-publish",
+        "live-EPIC-005-annotation-and-skill-workflow-operations-doc-pending-post-release",
+        "STORY-017-disposition-pending-owner"
+      ],
+      "effective": [
+        "release-of-work-annotate-feature-is-owner-gated-publish",
+        "live-EPIC-005-annotation-and-skill-workflow-operations-doc-pending-post-release"
+      ]
+    },
+    "conference:1c5e349835148eaab43c5249": {
+      "id": "minutes:04f08f6d1e45c38fc96e49b2",
+      "externalKey": null,
+      "summary": "Owner 裁定选 B:内容激活+引擎余量+发 v0.3.2。EPIC-007 全做,v0.3.2 捆 INIT-004 Incident CLI+引擎,candidate.24 重钉。S026 岔路结清。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "选 B 全树:EPIC-007 引擎余量 S023-025 一并做;v0.3.2 捆 INIT-004 Incident CLI+引擎改动;helper candidate.24 重钉;接受安全上限红证与发布周期成本"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:99ddc8037e89296a17e33a35": {
+      "id": "minutes:27c15e4c560371a29e6d5022",
+      "externalKey": null,
+      "summary": "Owner 全批决策清单并授权执行。结算 kickoff 两条 OWNER-NOW:①v0.3.2+candidate.24 发布预授权已给(门绿即发)②策展公约三缺省批准。此二条自此为已裁,不再是待决。执行开跑。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "W v0.3.2+helper candidate.24 发布预授权已给(门证全绿即发",
+        "S028/S029 呈回执);策展公约三缺省(晋升 agent 促 Owner 可驳/reverify 挂 initiative-close/平台规范双库复制)批准",
+        "S027 落链细化"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:b1bcf3e0a51a811f82cc9ad7": {
+      "id": "minutes:29603053f5bcf6cb55f83492",
+      "externalKey": null,
+      "summary": "E05『链上 advisory』定形。忠告正文已落地并全译（README×5 第243行，遵 AC-N6按轮报/AC-N7带缓解/AC-N8不设门＋§5诚实边界）。耦合裁定＝不并入 chain-migration：OD-C2 已裁选项(1)只忠告不阻断不重构，增量 materialize 属独立后续纲领、非 E05 范围、既有裁定支撑无需 Owner 停。读源发现真缺口＝被引原始样本 docs/verification/2026-07-20-event-chain-ceiling-samples.json 在 W 悬空（7处引用：README×5＋CHANGELOG＋0.1.0发版记；文件仅存平台端，62KB/2000样本/拟合34.66+0.14598n/阈6613 与忠告自洽）。E05 交付物＝落地该证据入 W docs/verification 使引用自洽；发布传播属对外发布留待 Owner。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "advisory-only-confirmed-reject-chain-migration-coupling-per-OD-C2-option-1",
+        "incremental-materialize-replay-is-a-separate-future-program-outside-E05-scope",
+        "concrete-gap-cited-raw-samples-file-dangling-in-W-across-7-shipped-artifacts",
+        "deliverable-land-samples-json-into-W-docs-verification-so-citation-resolves",
+        "publish-propagation-to-W-remote-and-a-release-is-owner-gated-and-held"
+      ],
+      "unresolvedIssues": [
+        "publish-of-samples-into-W-and-release-propagation-pending-owner-decision"
+      ],
+      "effective": [
+        "publish-of-samples-into-W-and-release-propagation-pending-owner-decision"
+      ]
+    },
+    "conference:a1e862af8b182b721162b108": {
+      "id": "minutes:329a452b0397aa08f7cf2548",
+      "externalKey": null,
+      "summary": "知识层激活五判据全达:①聚合 cross16%/DS12%②各≥8 promoted+fresh③默认查询首次非空④dogfood 收口时刻查取 stop-budget⑤candidate.24 载知识环教学+placed 验证。清库重种从 0 重种真知识,S023/024/025 实证生效。活化门可关。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "知识层完全激活五判据全达",
+        "活化门 satisfied;两库各≥8 promoted+fresh",
+        "默认检索首次非空",
+        "dogfood 真实时刻检索引用",
+        "教学入 candidate.24"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:1a6210403640040134ff59ba": {
+      "id": "minutes:38297e18040e1a5737a99f46",
+      "externalKey": null,
+      "summary": "S026 三结论:①S030=清库重种(disposable 设计许可,先删目录再 --acknowledge-disposable)②SessionStart 携知识行排除(预算满+知识是拉取非推送,走 S029 按需 query 教学)③【前提翻转】实测真实卡片 8/12/16 张=27/40/54% 全在 60% 线内→引擎修复(EPIC-007)非激活阻断,降级为可选余量优化,S028/S029 与激活解耦。呈 Owner 一个引擎岔路。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "S030 采清库重种(设计许可);SessionStart 知识行排除延期;EPIC-007 引擎修复实测非激活阻断→降级可选余量;激活核心=EPIC-008 公约+EPIC-010 内容+按需查询教学",
+        "无需 W 发布"
+      ],
+      "unresolvedIssues": [
+        "引擎余量岔路呈 Owner:仅内容激活(defer EPIC-007) vs 附带引擎余量(做 S023-025 并发 v0.3.2)——后者与 INIT-004 的 Incident CLI 发布相纠缠"
+      ],
+      "effective": [
+        "引擎余量岔路呈 Owner:仅内容激活(defer EPIC-007) vs 附带引擎余量(做 S023-025 并发 v0.3.2)——后者与 INIT-004 的 Incident CLI 发布相纠缠"
+      ]
+    },
+    "conference:b335afc2caafabdb290b4104": {
+      "id": "minutes:49ae55f57d602be7502ffe76",
+      "externalKey": null,
+      "summary": "执行期实证证伪 STORY-021 前提（悬空父早被 else-if+回放拒，非 fail-open）：021 缩为回归测试；022 删已钉死的排序项只留 CLI 白名单+测试；父语义荐从恒 parentless 改 parent-optional（安全论据已证伪，found-in 原生，零引擎改动，Owner 可驳）。教训⑫：给 persona 的事实必须完整读源。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "证伪 分解纪要事实②（悬空父 Incident 静默过回放）经完整读源+scratch 三例对照证伪：else-if(protocol:693)对未映射 kind 已校验父解析，回放期 workspace:724 终局调用；悬空父实测回放拒 WORKSPACE_EVENT_CORRUPT",
+        "行为图谱实测 ①Incident 无父接受 ②Incident 合法父接受 ③Incident 悬空父回放拒",
+        "STORY-021 重塑 通用图加固前提消失（无 fail-open）；缩为加悬空父回归测试含未映射 kind Incident（全仓 REFERENTIAL_INTEGRITY 测试端 0 命中，红证防未来重构删 else-if）",
+        "STORY-022 重塑 排序全序已金样钉死（protocol 测 line 84）删此项；真活＝CLI 白名单加 Incident＋测试",
+        "父语义再裁 荐 parent-optional-must-resolve（Incident 可挂已解析规划记录，found-in 原生，零引擎改动，②已支持）——恒 parentless 的安全论据已证伪，仅剩架构纯度顾虑而分泳道排序已缓解",
+        "停顿标注 父语义反转 Owner 已批分解的一部分，Owner 可驳回；021/022 缩小后无门，发行随 W 列车",
+        "教训⑫ 分解给 persona 的事实必须完整读源——截断读源（685 止，漏 693 else-if）连累两立场；与「涉信任机制前提须读源证实」同族，执行期实测是最后防线"
+      ],
+      "unresolvedIssues": [
+        "父语义 parent-optional vs 恒 parentless 待 Owner 确认（反转已批分解的一部分）"
+      ],
+      "effective": [
+        "父语义 parent-optional vs 恒 parentless 待 Owner 确认（反转已批分解的一部分）"
+      ]
+    },
+    "conference:9304da044e4cfaa2f370fbc3": {
+      "id": "minutes:51bfdfdbdc67922b4a52e29b",
+      "externalKey": null,
+      "summary": "DS 线程复查三发现处置完毕：Incident kind 操作面缺口登记为 INIT-004（planned，advisory 公约首用）；candidate.21 notes 勘误已发（锚行完好）；DS 快照补至 v254。教学两条入 candidate.23。根类教训：发布声明必须对应载荷字节。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "登记 TCRN-CROSS-INIT-004（planned 未开工）＝Incident kind 操作面缺口：CLI 白名单放开＋三前置缺口（depth 未映射排序／无父约束语义／graph 对未映射 kind 跳过 referential check）——启动与否待 Owner 排期",
+        "公约首用 缺陷单今天的诚实路径＝规划 kind 记录＋work-annotate advisory（advisory:scope 载缺陷描述、advisory:decided-by 回链本纪要）；Incident kind 可建性即 INIT-004 的交付物",
+        "勘误已发 candidate.21 notes 追加 Erratum（Owner 授权对外动作）：distill 纪律实未载入、只载分发纪律；锚行完好复核不变；教学移 candidate.23",
+        "教学登记 candidate.23 队列новых两条：缺陷触发（发现缺陷而延后处理时提议建链上记录；当场修掉的一次坐定之工不必开单）＋kind 真相（协议 8 种/CLI 4 种/catalog 不列枚举值）",
+        "DS 快照已补 v254 SNAPSHOT_VERIFIED 滞后 139 事件清零；DS 链在 v0.3.1 引擎回放绿（向后兼容再实证）",
+        "根类教训 发布声明必须对应载荷字节——H 门只验身份与锚不验语义，此类脱钩仅靠人查；与「机器回执必须来自真实输出」同族"
+      ],
+      "unresolvedIssues": [
+        "INIT-004 启动排期待 Owner"
+      ],
+      "effective": [
+        "INIT-004 启动排期待 Owner"
+      ]
+    },
+    "conference:d56eeab524c5896198a70346": {
+      "id": "minutes:729c794de85503538c3be1d6",
+      "externalKey": null,
+      "summary": "INIT-005 定形:四 Epic(引擎修复/策展公约/发布列车/内容启动)十一 Story(S023-S033);验收五判据入 Verity 立场;决策清单三分类共 7 项——OWNER-NOW 3(1 已裁 2 待批)/CONDITIONAL 2/AGENT 2;时序 S026→S027→S028→S029→S030→S031/032→S033",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "OWNER-NOW 已裁:INIT-005 范围=按引擎既有设计完全激活知识层;跨分区共享层(C)明确出范围留后续 INIT",
+        "OWNER-NOW 待批:W v0.3.2 与 helper candidate.24 对外发布预授权(门证全绿即发)",
+        "OWNER-NOW 待批:策展公约三缺省(晋升=agent 促 Owner 可驳;reverify 挂 initiative-close;平台规范双库复制)——S027 会议落链",
+        "CONDITIONAL:遗留 60 镜像处置——若 S026 证 disposable 再初始化受设计许可则清库重种;否则批量 retire+肥墓重写;tombstone 计数预算一并报告",
+        "CONDITIONAL:SessionStart 摘要携知识行——若 S026 证其走已交付构建器则纳入 EPIC-007;若被 adapter 激活程序阻塞则记录延期不入本 INIT",
+        "AGENT 已决:活化门 outcome_class=role_decision;B③ candidate 层默认可见否决;抬容量上限否决",
+        "AGENT:聚合公式细节/stub 内容/stale-days 具体值/种子选目/DS 库代操作——proceed-and-report"
+      ],
+      "unresolvedIssues": [
+        "W v0.3.2+candidate.24 发布预授权待 Owner 一句(对外发布类必停)",
+        "策展公约三缺省待 Owner 批(S027 落链)"
+      ],
+      "effective": [
+        "W v0.3.2+candidate.24 发布预授权待 Owner 一句(对外发布类必停)",
+        "策展公约三缺省待 Owner 批(S027 落链)"
+      ]
+    },
+    "conference:eea53314c268b0e1faf5c28b": {
+      "id": "minutes:79975d0e36983467b5b5d79c",
+      "externalKey": null,
+      "summary": "INIT-004 分解裁定（两 persona 四问全收敛+Mara 合成）：仅开 Incident；恒 parentless 校验器强制；图加固通用化先行（8 kind 全覆盖、双侧 fail-closed）；树收两单 EPIC-006→STORY-021/022；发行随 W 列车；无门；奉 Owner 令只拆不做全树 planned；职责以 advisory 入记录。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "Q1 仅开 Incident：Release/Knowledge/Review 各绑既有信任机制且零消费者（Minerva/Sable 收敛）",
+        "Q2 Incident 恒 parentless 且由校验器强制——连可选父都不给，无字段即无可乘之隙；found-in 走 work-annotate advisory",
+        "Q3 图完整性加固通用化并与 Incident 解耦：任意非空 parentId 必解析、覆盖全部 8 个 shape-接纳 kind、动词与回放双侧 fail-closed——CLI 白名单不是信任边界，完整性落图校验器",
+        "Q4 不设 spike：设计裁定即本纪要（Owner 可驳回）；树收两单",
+        "树 EPIC-006（Incident 操作面开通含图加固）→ STORY-021（通用图加固，红证，先行且为 022 放行前置）→ STORY-022（白名单仅加 Incident＋校验器强制 parentless＋非规划 kind 在场排序保持全序＋测试＋scratch e2e）",
+        "发行条件 随下次 W 发布列车（Owner-gated），是条件不是 Story；无门（增量式、裁定在案、发布即 Owner 到场点）",
+        "奉 Owner 令只拆不做：INIT-004 active（已启动分解），EPIC-006 与两 Story 全 planned，零执行",
+        "职责入记录 每张单以 work-annotate 打 advisory:scope 并 decided-by 回链本纪要——职责表活在记录上不在对话里"
+      ],
+      "unresolvedIssues": [
+        "本分解 Owner 可驳回；STORY 执行待 Owner 令"
+      ],
+      "effective": [
+        "本分解 Owner 可驳回；STORY 执行待 Owner 令"
+      ]
+    },
+    "conference:89856e896afede7c6e53413a": {
+      "id": "minutes:8356ad65611190b79043cde2",
+      "externalKey": null,
+      "summary": "策展公约四缺省落链:①准入=会被查询复用才制卡（guide/fact/reference,非链镜像）②晋升=agent 促 Owner 可驳,provenance 完备③保鲜=stale-days 缺省 guide90/fact180/ref365,reverify 挂 initiative-close④双库复制=平台规范同卡入两库 source 指 cross 裁定（C 层前过渡）。供 S031-033 遵循。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "准入:会被查询复用才制卡",
+        "kind=guide/fact/reference",
+        "非链镜像;晋升:agent 促发 Owner 可驳",
+        "provenance 完备;保鲜:stale-days 缺省 guide90/fact180/ref365",
+        "reverify 挂 initiative-close;双库复制:平台规范同卡入两库",
+        "source 指 cross 裁定",
+        "C 层落地前过渡"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:ad0da87a483fa959782dd40e": {
+      "id": "minutes:8f78fb1d19f7b44806a8b8b7",
+      "externalKey": null,
+      "summary": "立决策清单公约补完停顿预算：拆单收尾产三类清单（OWNER-NOW 前置批量解／CONDITIONAL 条件式非硬停确认即升级／AGENT 自决），使决策边界拆单时即知、agent 自主跑到交付。与「不预登记」调和：只分类不建硬停。INIT-004 父语义反转回溯证其有效（本该列 CONDITIONAL）。入记忆+payload 队列。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "公约 拆单收尾必产决策清单落 kickoff 纪要：每个会 gate 交付的决策项分三类",
+        "OWNER-NOW owner_intent 门／无既有裁定支撑的方向选择／对外发布授权——批量一次呈 Owner 前置解决，此后 agent 自主跑余下全部",
+        "CONDITIONAL 决策悬于执行会检验的前提，写「若前提成立则裁定/呈 Owner，否则消解」——非硬停守「不预登记假停」原意，执行确认前提即升级 OWNER-NOW（Owner 已预告）",
+        "AGENT 既有裁定支撑可自决 proceed-and-report",
+        "要点 决策边界拆单时即知，Owner 一坐批量解 OWNER-NOW，agent 再无中断跑到交付——更少中断非更多；run-to-delivery 复盘再挂清单标归宿 resolved/dissolved/promoted",
+        "调和 与停顿预算「不预登记」不矛盾：不预登记的是硬停，清单只分类且 CONDITIONAL 仍条件式；新增的是 OWNER-NOW 前置批量盘出（原规则漏做的半，害 agent 边跑边撞）",
+        "INIT-004 回溯证有效 父语义本该列 CONDITIONAL（恒 parentless 假设悬空父 fail-open 存在；执行读源+scratch 检验；证伪则呈 Owner 裁 strict-vs-optional），清单把执行期意外反转变拆单期已挂号条件项",
+        "落地 记忆 stop-budget 补完段已写；payload 教学入 helper 队列（workflow-operations Decomposing 加决策清单步）"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:df24204633b1a085d1b7e366": {
+      "id": "minutes:9e2ae969f6f716ba2ee6f2a8",
+      "externalKey": null,
+      "summary": "persona 署名公约（Owner 裁定）。立场 actor-id 记角色（persona）非模型名。两级：事件 --actor=执笔者/驱动会话，立场 --actor-id=persona id。引擎零改动（assertActorId 的 ACTOR_PREFIXES 含 profile:，直测 profile:tcrn-minerva-v1 ACCEPT）。8 persona 分工（core-reference-personas.ts）：Arturo编排/Ilya实现/Janus验收/Mara产品/Minerva架构/Mneme知识/Sable安全/Verity验证；争议按 mandate 冲突选派 fresh-context。立场首行披露执行形态（dispatched subagent vs main-thread synthesis），诚实边界：披露是声明非证明。本会议自我 dogfood（Minerva 署名立场经引擎接受）。动因：DS 链 21 立场零扇出=单视角自陈冒充审议。历史 append-only 不改，向前生效，载荷改动随 candidate.23。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "position-actor-id-is-a-persona-id-not-a-model-weight-name",
+        "two-level-signing-event-actor-is-scribe-position-actor-id-is-persona",
+        "zero-engine-change-assertActorId-accepts-profile-prefix-verified-by-live-test",
+        "position-first-line-discloses-execution-form-subagent-or-main-thread-synthesis",
+        "contested-questions-dispatch-personas-by-mandate-conflict-each-fresh-context",
+        "eight-personas-shipped-in-core-reference-personas-are-the-role-vocabulary",
+        "convention-forward-only-history-append-only-payload-queued-candidate.23"
+      ],
+      "unresolvedIssues": [
+        "candidate.23-payload-edits-SKILL-and-workflow-operations-and-their-release-are-a-future-owner-gated-ceremony"
+      ],
+      "effective": [
+        "candidate.23-payload-edits-SKILL-and-workflow-operations-and-their-release-are-a-future-owner-gated-ceremony"
+      ]
+    },
+    "conference:1da54797863f59c5bab64daa": {
+      "id": "minutes:b00a1a64ca020da57c7246cf",
+      "externalKey": null,
+      "summary": "E05 真开工裁定：Owner 选 (C) 重塑——把 E05 指向价值更清的 advisory 面，否决 (A) 字面搬迁触发散文与 (B) 暂缓。读源坐实并随裁定生效：迁链耦合为空（`WORKSPACE_STORAGE_VERSION=1` 钉死；WSD-1 新词汇走加式事件操作不升版本；非绑定字段＝`required:false` extensions，`validateExtensionMap` 只拒 required:true 且未注册者，故任意 protocol-id 键免注册/免新操作/免版本升/向后兼容，先例 gate-evidence/gate-identity:decision），decomp 待裁的耦合问题当场消解。schema 今日即支持 required:false 广告字段，唯缺写入面——work/project 动词均无 extensions/advisory 旗标（仅 gate 经证据/身份转换特例写过 extensions）。故重塑目标落在『为 work/project 记录开一个受治的非绑定 advisory 写入面』这一有界缺口，具体目标与内容（荐：权威 scope/intent 行＋decided-by 回链治理纪要，由本会话 label≠positions 事故 dogfood）与分解留后续设计会议，Owner 从荐选中定。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "owner-ruled-C-reshape-E05-toward-a-higher-value-advisory-surface",
+        "options-A-build-literal-trigger-fields-and-B-defer-both-rejected",
+        "migration-coupling-confirmed-void-required-false-extensions-are-zero-cost-and-backward-compatible",
+        "schema-supports-advisory-extensions-today-but-no-work-or-project-verb-exposes-writing-them",
+        "reshape-target-and-decomposition-deferred-to-a-follow-up-design-conference"
+      ],
+      "unresolvedIssues": [
+        "reshape-target-selection-pending-owner-pick-among-recommended-candidates",
+        "STORY-017-disposition-pending-owner"
+      ],
+      "effective": [
+        "reshape-target-selection-pending-owner-pick-among-recommended-candidates"
+      ]
+    },
+    "conference:0611d2482f4a608ffbcf0c76": {
+      "id": "minutes:b017306eb2765f373ece667d",
+      "externalKey": null,
+      "summary": "定 work-annotate 非绑定 advisory 写入面契约（Scope-on-record）：required:false extensions 键 advisory:scope 与 advisory:decided-by，新动词 work-annotate 发 work.updated 并入 extensions，回放仿 gateEvidenceExtensions 精确比对防夹带，非绑定不阻 done。分解 STORY-018 核心写路径/STORY-019 CLI+catalog+regen/STORY-020 读面+成文+dogfood 回填。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "reshape-target-is-work-annotate-advisory-write-surface-scope-on-record",
+        "extension-keys-are-advisory-scope-and-advisory-decided-by-both-required-false",
+        "replay-validates-exact-extensions-delta-per-gate-precedent-no-arbitrary-keys",
+        "decompose-into-STORY-018-core-STORY-019-cli-STORY-020-read-docs-dogfood",
+        "advisory-fields-are-non-binding-they-never-gate-a-transition-or-block-done"
+      ],
+      "unresolvedIssues": [
+        "STORY-017-disposition-pending-owner",
+        "implementation-and-release-of-the-feature-are-a-multi-file-build-ending-in-owner-gated-publish"
+      ],
+      "effective": [
+        "implementation-and-release-of-the-feature-are-a-multi-file-build-ending-in-owner-gated-publish"
+      ]
+    },
+    "conference:6426360600170922debd3bb1": {
+      "id": "minutes:ce585e4cf935653f4f996249",
+      "externalKey": null,
+      "summary": "复核更正：E05 真义＝链上 advisory 字段（decomp 立场逐字：guidance 由 prose 入链；记录/审议触发从散文迁至链上非绑定字段），deferred 的 chain-migration coupling 指 E05 自身 schema 变更与 E02 合并排期避免二次迁链，非增量 materialize。CONF-E05-KICKOFF/MIN-E05-KICKOFF 误读范围，所裁实为 README 天花板忠告的悬空证据修复；该产出独立成立（7 处已发布引用悬空是真缺陷；已验语义等同、format/source/privacy/verification-map+proof-check 全绿）但属已逐出的 README 质量轨、不定义 E05，STORY-017 挂错 epic。合并排期窗口随 v0.2.0 发布已关；gate-identity 走 extensions 未动 storageVersion（实测仍=1）的先例示真 E05 或免迁链。全链 verify-p1 拒脏检出（P1_EXCLUSIVE_SOURCE_BASIS_REQUIRED），完整证明留 push 门产出。误挂记录处置与真开工留 Owner。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "E05-true-scope-is-on-chain-advisory-fields-per-decomp-positions-verbatim",
+        "MIN-E05-KICKOFF-misidentified-scope-its-two-rulings-stand-only-for-the-readme-evidence-track",
+        "samples-landing-work-product-kept-and-verified-publish-remains-owner-gated",
+        "coupling-window-closed-at-v0.2.0-probe-extensions-route-at-true-kickoff"
+      ],
+      "unresolvedIssues": [
+        "STORY-017-disposition-cancel-terminal-or-keep-with-corrected-narrative-pending-owner",
+        "true-E05-kickoff-scheduling-and-advisory-field-design-pending-owner-and-read-source"
+      ],
+      "effective": [
+        "STORY-017-disposition-cancel-terminal-or-keep-with-corrected-narrative-pending-owner",
+        "true-E05-kickoff-scheduling-and-advisory-field-design-pending-owner-and-read-source"
+      ]
+    },
+    "conference:5940ab6b796862a30b72146c": {
+      "id": "minutes:d7012264acee18bca954f4ea",
+      "externalKey": null,
+      "summary": "Owner 已批准完整推荐收官包。收官授权覆盖 Workflow v0.6.0 与 helper repin 的对外发布、SPRINT-002 关闭、DS 方案 B 更正、TMS 两条安全事项及仅 PR 验证。此批准不授权 EPIC-025 的任何 host enforce 面。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "发布 tcrn-workflow v0.6.0 并生成可验证 Release 资产",
+        "发布新的 helper candidate 并重钉 v0.6.0",
+        "SPRINT-002 在发布核验后关闭",
+        "EPIC-025 与 STORY-073/074/075 继续 blocked 且 host enforce 授权数为 0",
+        "TCRN-CROSS-INC-023 carry-over 且不阻断本次发布",
+        "跳过可选 observe 五格补录",
+        "主线程不是只读线程且 persona 仅用于 conference position attribution",
+        "SessionStart 不注入 persona 也不绑定主线程",
+        "DS 采用补记证据更正方案 B",
+        "TMS 建两条安全事项并仅开 PR 验证不合 main"
+      ],
+      "unresolvedIssues": [
+        "EPIC-025 的三项 enforce 面仍待未来独立 Owner 裁定",
+        "TCRN-CROSS-INC-023 仍未复现",
+        "TMS 两条安全事项尚未修复"
+      ],
+      "effective": [
+        "EPIC-025 的三项 enforce 面仍待未来独立 Owner 裁定",
+        "TCRN-CROSS-INC-023 仍未复现",
+        "TMS 两条安全事项尚未修复"
+      ]
+    },
+    "conference:fc751f2d9746b0f892f44df4": {
+      "id": "minutes:d9e558752cc6df897ed307a9",
+      "externalKey": null,
+      "summary": "结清 MIN-C22-REPIN 唯一遗留。发布点快照 cross-project-20260722T092430Z：先撞 KNOWLEDGE_HIGH_WATER_MISMATCH（链先行 v253、store marker 50）→ rebase → 清单重出 → 备份与活根双 SNAPSHOT_VERIFIED → retention=5 轮换删 20260721T092014Z（FINAL 不参与）。至此 candidate.22 仪式链上零遗留。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "release-point-snapshot-taken-and-double-verified-cross-project-20260722T092430Z",
+        "knowledge-store-rebased-50-to-chain-head-before-manifest-fail-closed-worked",
+        "rotation-deleted-oldest-non-FINAL-20260721T092014Z-retention-5-kept",
+        "MIN-C22-REPIN-unresolved-item-settled-zero-residue"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:9db14f7976a5f4c5e312c9a0": {
+      "id": "minutes:e1cd606c00134e24c2174ddd",
+      "externalKey": null,
+      "summary": "candidate.22 三合一重钉完毕，信任闭环恢复。W v0.3.1 补丁发布（0.3.0 漏钉 P8 常量致其永不能产own资产，删tag属禁手故补丁是唯一诚实路径；P1+P8 双绿、五资产、独立根复现）。helper candidate.22（IDENTITY 钉 v0.3.1、新锚 6532ea79…六文档、work-annotate 指引入载荷、87测绿、PUSH_GATE_VERIFIED、七资产、三方✓）。治理换装：TRUST_VALIDATED→放置副本逐条sha展开→INSTALLED_COPY_VALIDATED v0.3.1→state 前移→resolve 由 ROOT_IDENTITY_MISMATCH 恢复 ROOT_RESOLVED，活链 v250 绿。settles MIN-E05-REVIEW 待办一；余 snapshot 建议待 Owner。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "W-v0.3.1-patch-released-with-full-P8-assets-P1-and-P8-verified",
+        "v0.3.0-permanently-cannot-build-its-own-assets-downstream-should-pin-v0.3.1",
+        "helper-candidate.22-published-anchor-6532ea79-three-way-verified",
+        "governed-replacement-complete-INSTALLED_COPY_VALIDATED-v0.3.1-state-advanced",
+        "resolve-restored-ROOT_RESOLVED-trust-gate-whole-again",
+        "lesson-version-sweeps-must-cover-all-file-extensions-including-mjs-P8-pins"
+      ],
+      "unresolvedIssues": [
+        "release-point-snapshot-recommended-pending-owner"
+      ],
+      "effective": []
+    },
+    "conference:3f7f53d04c27c2516de695a5": {
+      "id": "minutes:eb1f5317a7e8652a3d7bd307",
+      "externalKey": null,
+      "summary": "Fable 复核 v0.3.0：发布链路各项为实（P1_VERIFIED/Release/升级/dogfood/advisory 穿 done 仍在）。更正 MIN-E05-DONE 定性：skill 侧残留非『非阻塞』——bootstrap IDENTITY 硬钉 v0.2.0，resolve 对 v0.3.0 克隆实测 ROOT_IDENTITY_MISMATCH，信任门 resolve 步现已断；回滚桥已烧（活链 v239 含 work.annotated，v0.2.0 不可读），candidate.22 重钉是唯一前进路径（IDENTITY+SKILL.md 版本行+work-annotate 用法三者同批一次 re-pin），发布属 Owner 门。日常 verify-installed-copy 仍绿。另录三低危加固候选（work.updated 不查 extensions 增量/伪造删除键回放可收/scope 无字节上限）。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "MIN-E05-DONE-nonblocking-characterization-corrected-resolve-fails-ROOT_IDENTITY_MISMATCH-now",
+        "rollback-impossible-live-chain-requires-v0.3.0-candidate.22-repin-is-the-only-forward-path",
+        "candidate.22-folds-identity-repin-skill-version-line-and-work-annotate-guidance-into-one-ceremony",
+        "daily-verify-installed-copy-unaffected-trust-gate-resolve-step-is-what-breaks",
+        "lesson-upgrade-plus-dogfood-burns-the-rollback-bridge-repin-must-ship-with-the-upgrade",
+        "three-low-severity-hardening-candidates-recorded-not-blocking"
+      ],
+      "unresolvedIssues": [
+        "candidate.22-repin-and-outward-publish-pending-owner",
+        "release-point-snapshot-recommended-pending-owner"
+      ],
+      "effective": [
+        "candidate.22-repin-and-outward-publish-pending-owner",
+        "release-point-snapshot-recommended-pending-owner"
+      ]
+    },
+    "conference:7a5798055cb5714c4c608ece": {
+      "id": "minutes:f622309ae73382406c836f39",
+      "externalKey": null,
+      "summary": "E05 收口，INIT-003 五 Epic 全完成。v0.3.0 发布（commit 95cfd88/tag v0.3.0/GitHub Release，verify:p1=P1_VERIFIED 20 门），安装框架升 v0.3.0，活链 dogfood 注解 EPIC-005（v239，work-show 见 scope+decided-by 回链，work.annotated 活链回放绿）。STORY-018/019/020+EPIC-005+INIT-003 全 done。samples 随发布使 README 引用自足。skill 侧成文与快照延后属非阻塞建议。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "v0.3.0-shipped-commit-95cfd88-tag-and-github-release-with-p1-verified",
+        "installed-framework-upgraded-to-v0.3.0-and-live-chain-replays-clean",
+        "epic-005-dogfood-annotated-on-live-chain-v239-record-carries-authoritative-scope",
+        "INIT-003-complete-all-five-epics-done",
+        "samples-evidence-shipped-readme-citation-now-self-resolving-in-a-clone"
+      ],
+      "unresolvedIssues": [
+        "skill-workflow-operations-doc-and-a-release-point-snapshot-are-non-blocking-follow-ups"
+      ],
+      "effective": [
+        "skill-workflow-operations-doc-and-a-release-point-snapshot-are-non-blocking-follow-ups"
+      ]
+    },
+    "conference:1d2a266dcecb0920b5a744f7": {
+      "id": "minutes:fbae19225d75a5600ea13df2",
+      "externalKey": null,
+      "summary": "Incident CLI 开通+守卫回归测试落地 W f365029 并双红证；全门绿（protocol/rc1/format/guard/p1/push-gate）。过程两课：红证探针先自检（错 build 命令曾致假存活）、变异须能编译。INIT-004 代码交付达成，用户可见随 v0.3.2 发布列车。父语义采 parent-optional（Owner 可驳）。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "实现 W f365029 已推送：STORY-022 CLI 白名单加 Incident（Review/Release/Knowledge 仍闭）；STORY-021 negative/cases.json +missing-parent-unmapped-kind 钉 else-if 守卫",
+        "双红证 022 回退白名单→CLI Incident 测试被抓；021 else-if 守卫改 continue→悬空父负例被抓",
+        "过程课① 红证探针最初用错 build（node scripts/task.mjs 缺 pnpm→RUNTIME_PNPM_VERSION→跑旧 dist 假存活）；改 pnpm run build+先自检基线真绿后才真抓——先自检探针第二次救场",
+        "过程课② 变异须能编译（parent.projectId on undefined 不可编译；用 continue 静默跳过才是有效变异）",
+        "绿灯 verify:protocol P2_CONFORMANCE_VERIFIED／verify:rc1 RC1_CANDIDATE_READY／format／guard-check 12 杀／verify:p1 P1_VERIFIED／push-gate",
+        "父语义 采 parent-optional（推荐，Owner 可驳；驳则单点加 parentless 校验）——恒 parentless 的安全论据已被 MIN-I4-RESHAPE 证伪",
+        "收口 INIT-004 交付达成（代码完成+证明+推送）；用户可见交付随下次 W 发布列车 v0.3.2（Owner 门，连带 helper 重钉）是条件不是欠账"
+      ],
+      "unresolvedIssues": [
+        "父语义 parent-optional 待 Owner 确认；用户可见交付待 v0.3.2 发布（Owner 门）"
+      ],
+      "effective": [
+        "父语义 parent-optional 待 Owner 确认；用户可见交付待 v0.3.2 发布（Owner 门）"
+      ]
+    },
+    "conference:247094b7b31404af98c7492e": {
+      "id": "minutes:fc81b85294e9a85a888e0f97",
+      "externalKey": null,
+      "summary": "SPRINT-002 已批准收官包的发布、纠偏、PR 与边界证据完成核验：Workflow v0.6.0 与 helper candidate.27 已发布并全摘要匹配；DS 证据方案 B 已落链；TMS PR 保持未合并且安全红灯未绕过；carry-over 状态与 host enforce=0 均保留。列车可关闭，不把 carry-over 误报为完成。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "SPRINT-002 完成条件满足并可转 done",
+        "TMS PR #1 保持 OPEN 且不得在安全证据满足前合并",
+        "EPIC-025 与 S073/S074/S075 继续 blocked 且 host enforce 授权数为 0",
+        "INC-023 与 TMS 两项安全事项按既定状态 carry-over",
+        "可选 observe 五格不补录"
+      ],
+      "unresolvedIssues": [
+        "EPIC-025 enforce 前置仍待未来 Owner 裁定",
+        "INC-023 未复现仍 planned",
+        "TMS INC-001/002 未解决且 required security gate 保持红灯"
+      ],
+      "effective": [
+        "EPIC-025 enforce 前置仍待未来 Owner 裁定",
+        "INC-023 未复现仍 planned",
+        "TMS INC-001/002 未解决且 required security gate 保持红灯"
+      ]
+    },
+    "conference:a8084641b4c9497aa9a72cf2": {
+      "id": "minutes:fca8513c7a8bad200462b29b",
+      "externalKey": null,
+      "summary": "S024 完成:retire 删 body 为最终持久步,scan 容忍 retired 无 body,活记录仍强制有 body,三聚合触点计回收为 0,promote 拦 retired。红证四性过,34/34+5 邻接文件绿。范围判断:保全 metadata（非 bare stub）+不做肥墓重写路径（S030 清库覆盖）。W f466d35。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "retire 删 body 真退字节;完整性不变量=活记录必有 body/retired 可缺;保全 metadata 非 bare stub（避碰安全敏感 shape 校验）;不做肥墓 rebase 重写（S030 清库重种覆盖）"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:065c996ef25fb70852c93995": {
+      "id": "minutes:26d0b27a4ea134840c607926",
+      "externalKey": "TCRN-CROSS-MIN-001",
+      "summary": "Centralized partitions under the platform root; the live workspace stays local and OneDrive becomes the backup destination",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "centralized-partition-container-adopted;cross-project-partition-first;live-workspace-local;onedrive-as-backup-destination-only"
+      ],
+      "unresolvedIssues": [
+        "partitions-cannot-be-migrated-while-exchange-apply-is-absent"
+      ],
+      "effective": [
+        "partitions-cannot-be-migrated-while-exchange-apply-is-absent"
+      ]
+    },
+    "conference:31780ff37b021dfd3174964c": {
+      "id": "minutes:041e949a543e965ebbf447ef",
+      "externalKey": "TCRN-CROSS-MIN-002",
+      "summary": "Day-one chains restarted under key convention v3; old chains archived whole",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "restart-adopted;old-cross-063a89bd33cd3e68f3ad5724-superseded-by-7732a51de4c38afb83bb77cf;old-ds-ab1f12eda0c52209510fe336-superseded-by-e7386bdcff8b3407e43ece51;all-new-keys-platform-partition-prefixed"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:7d96c2115040ec57a2c5e3bb": {
+      "id": "minutes:aac0952ecd46f9cd16750f8e",
+      "externalKey": "TCRN-CROSS-MIN-003",
+      "summary": "采 opus 依赖框架+sonnet 切片细化：五 Epic 顺序 E01权威供给→E02 gate-v1→E03 多-skill归档→E04 适配器分发→E05 链上advisory；被依赖者是 STORY-003 身份信号切片而非整个 E01；#6逐出治理树另立README轨；#7降为E01骑附Story待Owner裁定。Owner 确认执行。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "epic-order-E01-authority-supply→E02-gate-v1→E03-multiskill-archive→E04-adapter-distribution→E05-chain-advisory",
+        "dependency-serial-but-on-STORY-003-identity-slice-not-whole-E01",
+        "story-predeclare-E01-only-rest-at-epic-start",
+        "eject-driver-evidence-probe-to-parallel-README-track",
+        "flake-adjudication-demoted-to-E01-ridealong-story-pending-owner-invariant-vs-impl-ruling",
+        "E05-chain-migration-coupling-deferred-to-E05-kickoff-conference",
+        "owner-confirmed-execute"
+      ],
+      "unresolvedIssues": [
+        "pins-vs-attestations-trust-story-separation-pending-owner (GATE-001)"
+      ],
+      "effective": [
+        "pins-vs-attestations-trust-story-separation-pending-owner (GATE-001)"
+      ]
+    },
+    "conference:21306b42fc5743e4b3353b65": {
+      "id": "minutes:32b3b62ad7cafe921aa2f4c7",
+      "externalKey": "TCRN-CROSS-MIN-004",
+      "summary": "补录 E01 七 Story 职责表（INIT-003 分解时只存在于对话预览的欠账）并裁定 Subtask 切分：STORY-001 为一次坐定之工不切 Subtask，其余留各自开工时按需裁。执行序 001→002/003→004→005，006/007 骑附并行。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "STORY-001：读源盘点——8 个带外权威面 × 被锁 verb 的权威需求矩阵（只读源码、零仓写、决策输入）",
+        "STORY-002：信任故事设计——pins 轨与 attestations 轨分离方案；产出证据卡呈 Owner 裁定（GATE-001 的证据来源）",
+        "STORY-003：身份/actor 权威切片实现——刚性排最前；落地即 E02 gate-v1 的开工信号",
+        "STORY-004：其余权威面按 STORY-001 矩阵分批实现",
+        "STORY-005：12 个被锁 verb 解锁的端到端证明——含负例（坏权威须被拒）",
+        "STORY-006：骑附——W 仓 push-gate 提速",
+        "STORY-007：骑附——输出会话压测 flake；须先呈 Owner 裁「改不变量还是改实现」再动手",
+        "执行序：001→（002 与 003 并行）→004→005；006 与 007 骑附可并行",
+        "STORY-001 不切 Subtask（一次坐定之工）；其余 Story 的 Subtask 留各自开工时按需裁"
+      ],
+      "unresolvedIssues": [
+        "STORY-007 的「改不变量还是改实现」待 Owner 裁定"
+      ],
+      "effective": [
+        "STORY-007 的「改不变量还是改实现」待 Owner 裁定"
+      ]
+    },
+    "conference:9f78ddd68ed76a2795267aee": {
+      "id": "minutes:3613d74bebbbe471461c2e06",
+      "externalKey": "TCRN-CROSS-MIN-005",
+      "summary": "STORY-001 完成：生产 bin 实测只供 write+clock，8 权威面全缺，12 触面 verb 矩阵与拒绝码逐条确立（读源+只读实测双证）。三处修正 MIN-003 前提：无静默降级（品牌不可伪造）／「12 被锁」混了两种锁／身份权威不在八面内故 STORY-003 须重定范围。pins-attestations 的缝在代码中已存在，STORY-002 应 formalise 而非另造。",
+      "outcomeClass": "recommendation",
+      "decisions": [
+        "矩阵01 profileAdmissionAuthority → profile-resolve／profile-authorize／context-route：缺则 PROFILE_ADMISSION_AUTHORITY_REQUIRED（今日 CLI 实测 + p5-generic-profile:618/620）",
+        "矩阵02 contextRouteAuthority → context-route 第二层：经 readAuthorityFile 具名 required 拒绝（读源；今日不可达——第一面先拒）",
+        "矩阵03 codexAdapterHost → adapter-generate：缺则 ADAPTER_HOST_REQUIRED（p6-codex:219/220/258 今日执行绿）",
+        "矩阵04 codexAdapterInstallationAuthority → adapter-rollback-plan：缺则 ADAPTER_INSTALLATION_REQUIRED（今日 CLI 实测 + p6-codex:266/267）",
+        "矩阵05 claudeAdapterHost → claude-adapter-generate／claude-adapter-install［变更］／claude-adapter-settings-fragment：缺则 ADAPTER_HOST_REQUIRED（p6b:237/238/276 今日执行绿）",
+        "矩阵06 claudeAdapterActivationHost → claude-adapter-activation-fragment／claude-adapter-install［变更］：经激活片段生成器拒（读源）",
+        "矩阵07 claudeAdapterInstallationAuthority → claude-adapter-uninstall［变更］／claude-adapter-rollback-plan：缺则 ADAPTER_INSTALLATION_REQUIRED（源码显式守卫 + 今日 CLI 实测）",
+        "矩阵08 compatibilityAdmissionAuthority → compatibility-plan：CLI 层显式守卫 COMPATIBILITY_AUTHORITY_REQUIRED（今日实测）",
+        "发现甲 无静默降级：八面缺失一律具名 fail-closed；assertHost 用构造品牌而非结构校验——真 host.input 手工包一层仍被拒（p6b:238 执行级实证）",
+        "发现乙 「12 被锁 verb」混两种锁：11 个缺面而阻（补面即解）；compatibility-plan 是 programmatic-only 不在 CLI 面（补面无效，须改可用性）",
+        "发现丙 身份权威不在八面内：八面无一承载「谁在动作」——STORY-003 由「切既有面」改为「循品牌模式新增一面」；E02 依赖形状变更须 Owner 复核",
+        "发现丁 pins／attestations 的缝在代码里已存在：6 面走 readAuthorityFile 的文件身份（绝对规范路径+64位 sha256 且调用路径须等于期望路径）＝pins 形；2 个 host 面是品牌构造上下文＝attestations 形。STORY-002 应 formalise 既存缝而非另造",
+        "发现戊 context-route 需两面叠加：供第一面后将暴露当前不可达的第二层失败——排期须预留",
+        "纪律留档 10 个只读 verb 实测探针；2 个变更动词（claude-adapter-install／uninstall）严格只读源码不探测"
+      ],
+      "unresolvedIssues": [
+        "STORY-003 范围变更（新增一面而非切既有面）与 E02 依赖形状待 Owner 复核"
+      ],
+      "effective": [
+        "STORY-003 范围变更（新增一面而非切既有面）与 E02 依赖形状待 Owner 复核"
+      ]
+    },
+    "conference:3362789bb29a31caecd78093": {
+      "id": "minutes:1725d22be398cc8503805379",
+      "externalKey": "TCRN-CROSS-MIN-006",
+      "summary": "pins／attestations 的缝在代码中已存在：pins＝readAuthorityFile 的带外摘要硬比对（第三方可核）；attestations＝admit*HostInput 的自算校验和＋进程内品牌（不可核）。立规「hostDigest 不是 pin」，并据此定 STORY-003 身份权威必落 pins 轨——落 attestations 轨则接线进程可自称 owner，gate-v1 将无拒绝能力。边界：pins 身份文件给的是 authorization 非 authentication。",
+      "outcomeClass": "recommendation",
+      "decisions": [
+        "判据一 pins 轨＝readAuthorityFile（6 面）：调用方须事先持带外摘要；落盘 TOCTOU 加固读取＋sha256 硬比对＋realpath 相等＋canonical 往返；第三方可独立复核",
+        "判据二 attestations 轨＝admit*HostInput 品牌铸造（3 面）：校验字段全集／枚举／有效期窗口，及 hostDigest===canonicalSha256(basis)——系调用方对自身数据的校验和；WeakSet 品牌仅在进程内不可伪造；第三方不可复核",
+        "分离规则 hostDigest 不是 pin：它证明断言的完整性、不证明断言者的真实性；文档与推理一律不得把品牌上下文当作已钉",
+        "推论 凡安全性取决于「谁在动作」的能力必须落 pins 轨；仅需自洽宿主描述者方可落 attestations 轨",
+        "先例 scripts/host-evidence.mjs 已在生产侧向 runCli 注入两个 attestations 轨面，是受治供给的现存原型，且其自陈 hostVersionReadback 由接线者断言、宿主不回读",
+        "定轨 STORY-003 身份权威落 pins 轨（带外权威文件列明何种 actor 可关何种 outcome-class 的门，其摘要如 bootstrap 锚点般带外公布），不得落 attestations 轨",
+        "证伪 若身份权威落 attestations 轨，接线进程可自称 owner:governance，gate-v1 将毫无拒绝能力——CONF-003 中 opus 所警「可伪造的假修复」风险点由此精确定位：不在于选哪个面，而在于选哪条轨",
+        "边界留档 pins 轨身份文件交付的是 authorization（何种身份被许可）而非 authentication（究竟谁在运行）；闭合该差需真密码学或外部锚点，而本程序已裁「外部锚点而非自建签名」——gate-v1 须成文声明此边界不得越声",
+        "引擎实况 gate 证据解析只校验锚定（纪要所属会议须 link 门的 workId），并不校验 outcome-class——「纪要载 Owner 意图」是惯例而非引擎强制，此为 gate-v1 的范围输入"
+      ],
+      "unresolvedIssues": [
+        "分离规则与 STORY-003 定轨待 Owner 认可（GATE-001）"
+      ],
+      "effective": [
+        "分离规则与 STORY-003 定轨待 Owner 认可（GATE-001）"
+      ]
+    },
+    "conference:3e83e1b7ddb68f2c41e5c94d": {
+      "id": "minutes:fcd503b817e8d44c77f6db16",
+      "externalKey": "TCRN-CROSS-MIN-008",
+      "summary": "供给机制推广既有 --expected-plan-digest 模式（回归终止于人手，与 shasum 比对公布锚点同构）；attestations 面禁上旗标。第三处修正：E01 可诚实交付上限是 7 个 pins 面 verb，5 个 attestations host 面 verb 无法经 CLI 诚实解锁。身份面契约定死但实现挪 E02（此前无消费者）。另发现文件身份契约有两套实现应互钉。",
+      "outcomeClass": "recommendation",
+      "decisions": [
+        "供给机制 推广既有 --expected-plan-digest 模式：pins 面加 --*-authority-digest 旗标，CLI 组装 {expectedCanonicalPath expectedFileSha256} 交 CliIo 现有入口",
+        "回归终止 调用方须自带外渠道持有摘要，与 shasum 比对六文档公布锚点同构——无注册表、无可信配置、无二阶回归",
+        "禁令 attestations 轨的面不得上 CLI 旗标：旗标供给的 host 上下文仅是调用方断言而参数校验无从核实；只能由嵌入方构造（host-evidence.mjs 即其形）",
+        "分类 pins 面把守的 7 verb 可诚实经 CLI 解锁：profile-resolve／profile-authorize／context-route／adapter-rollback-plan／claude-adapter-uninstall／claude-adapter-rollback-plan／compatibility-plan（后者另需改 availability）",
+        "分类 attestations host 面把守的 5 verb 不可诚实经 CLI 解锁：adapter-generate／claude-adapter-generate／claude-adapter-install／claude-adapter-settings-fragment／claude-adapter-activation-fragment——需真正构造 host 上下文的嵌入方",
+        "修正三 「解锁全部 12 个 verb」的提法做不到，除非把断言当权威；E01 的可诚实交付上限是 7 个 pins 面 verb",
+        "身份面契约 带外权威文件列明何种 actor 可关何种 outcome-class 的门；摘要如 bootstrap 锚点带外公布；经同一 path+digest 旗标供给",
+        "身份面时点 gate-v1 之前无消费者，此刻实现即写死代码——契约在此定死、面的实现挪到 E02 首个 Story",
+        "一致性发现 文件身份契约存在两套实现：共享原语 readAuthorityFile（generic-profile／context-router／compatibility-modes）与 adapter 自带安装读取器（codex-adapter:412／claude-adapter），二者各做 路径+摘要+变更+链接 四检并各有平行 reason-code 族；依本程序 OD-16／F1 既有先例（两份 RFC3339 解析器互相钉死），此二实现应以共享一致性测试互钉或令 adapter 改用原语"
+      ],
+      "unresolvedIssues": [
+        "身份面实现挪 E02 与「7 而非 12」的交付上限修正待 Owner 认可"
+      ],
+      "effective": [
+        "身份面实现挪 E02 与「7 而非 12」的交付上限修正待 Owner 认可"
+      ]
+    },
+    "conference:d7eae60fe01c06f65b60f8a1": {
+      "id": "minutes:6eaa974b9321b5fc356dc026",
+      "externalKey": "TCRN-CROSS-MIN-009",
+      "summary": "pins 轨供给实现并证明：六 verb 得可选摘要旗标，三点实测＋歧义失败关闭已写入 p5 套件常设化；typecheck／P3／P5／P6／P6B／format-check／guard-check 全绿。W cf4547b 本地提交未推送。残余：compatibility-plan 须先裁可用性。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "实现 W cf4547b 本地提交未推送：新增 suppliedAuthority 助手＋六 verb 可选摘要旗标；旗标缺席时行为逐字不变",
+        "证明 三点实测已写入 p5 套件常设化：无旗标仍 REQUIRED／错摘要停在 AUTHORITY_DIGEST／对摘要越闸产出 effective profile",
+        "证明 注入与旗标同供报 CLI_AUTHORITY_AMBIGUOUS 失败关闭；非摘要形参数报 CLI_ARGUMENT_MALFORMED",
+        "性质留档 旗标供给下读取器的路径交叉校验按构造空转（两串同出一调用方）真正绑定者为摘要比对——已写入代码注释",
+        "绿灯 typecheck／P3／P5／P6／P6B／format-check／guard-check（12 守卫变异体全杀）",
+        "残余 compatibility-plan 属 pins 轨但 availability=programmatic-only 补旗标无用须先裁可用性，不并入本 Story",
+        "边界 五个 attestations host 面 verb 依 MIN-008 刻意不给旗标"
+      ],
+      "unresolvedIssues": [
+        "compatibility-plan 的 availability 裁定；W 推送待 Owner 授权"
+      ],
+      "effective": [
+        "compatibility-plan 的 availability 裁定；W 推送待 Owner 授权"
+      ]
+    },
+    "conference:aa194a90e9ccf5f09811b9a2": {
+      "id": "minutes:8dde9a0d76cd241db4ff7f15",
+      "externalKey": "TCRN-CROSS-MIN-010",
+      "summary": "六个已解锁 verb 各自带端到端证明（错摘要负例为关键钉）；context-route 双面、Codex/Claude 双读取器、uninstall 只证拒绝三处刻意分列。P3/P5/P6/P6B+format+guard-check 全绿，W 5e5c63a 本地提交未推送。覆盖＝6/7 pins 面 verb。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "证明形制 六个 verb 各自带证明不靠类比：旗标逐 handler 接线，兄弟通过不替它作证",
+        "三点钉法 无供给维持原拒绝／错摘要停在 *_DIGEST／对摘要越闸进入本职工作",
+        "关键负例 错摘要是唯一能证伪「旗标忽略其参数」的钉——只做正向用例该缺陷照样通过",
+        "context-route 单列证明：唯一双面把守者，只陈述其一仍须关另一闸，错的上下文钉不能搭正确 profile 钉便车（实测 CONTEXT_AUTHORITY_DIGEST）",
+        "Codex 与 Claude 安装回执分开证：二者以各自读取器实现同一份文件身份契约，一个通过不带另一个",
+        "claude-adapter-uninstall 只证拒绝：与规划兄弟同走一旗标，错钉须在任何文件被解链之前 refuse",
+        "绿灯 P3／P5／P6／P6B 受治验证＋format-check＋guard-check（12 守卫变异体全杀）；W 5e5c63a 本地提交未推送",
+        "覆盖边界 compatibility-plan 未覆盖（programmatic-only 未解锁）；五个 attestations host 面 verb 未覆盖（MIN-008 不给旗标）——E01 证明覆盖＝6／7 pins 面 verb 而非 12 个全解锁"
+      ],
+      "unresolvedIssues": [
+        "compatibility-plan 可用性裁定后补证；W 推送待 Owner 授权"
+      ],
+      "effective": [
+        "compatibility-plan 可用性裁定后补证；W 推送待 Owner 授权"
+      ]
+    },
+    "conference:2bab03773dda9ed2fa70ba62": {
+      "id": "minutes:9458c60c80dac90942a40bb1",
+      "externalKey": "TCRN-CROSS-MIN-011",
+      "summary": "先测后改：热点不在 build 而在两条守卫跑整套件（75.5s/85s）。改为只跑实测确认的抓手测试，窄化同时更严格且只会大声失败。guard-check 108s→34s（12 守卫全杀），整门 205s→134s 落到 180s 阈值下。残余：verify:p1 90s；另记门的钝式告警扫描隐患待另裁。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "基线实测 verify:p1 90s／verify:p8 7s／guard-check 108s 合计约 205s",
+        "假设证伪 guard-check 成本不在每条一次全量 build（实测 build 仅 1–2s）而在测试运行",
+        "热点定位 12 条守卫中 2 条吃掉 75.5s（p4-knowledge-core 46.3s／p3-file-engine 29.2s）其余 10 条合计约 4s",
+        "改法 这两条只跑真正抓住其变异的那个测试；测试名由注入变异读失败用例名实测得来而非猜测",
+        "窄化更严格 「套件里有测试失败」与「这个测试失败」是不同主张；模式匹配不到时跑零测试退出 0 落在 MUTATION_SURVIVED 分支——只会大声失败不会静默通过",
+        "结果 guard-check 108s→34s 十二守卫仍全杀；整门 205s→134s 已落到门内注释所述 180s 升级阈值之下",
+        "残余热点 verify:p1 90s（566 测试／40 文件）现为最大单项未动",
+        "隐患留档 门的告警扫描仍是钝式 \\bwarning\\b|\\bWARN\\b——与 H candidate.16 所记「钝扫描即故障注入器」同形（H 曾误伤夹具字面量与 CI git 闲聊）；W 未被咬但属潜伏，改门语义应另立裁定不由提速 Story 带过"
+      ],
+      "unresolvedIssues": [
+        "门的钝式告警扫描是否收紧待裁；verify:p1 90s 提速另议"
+      ],
+      "effective": [
+        "门的钝式告警扫描是否收紧待裁；verify:p1 90s 提速另议"
+      ]
+    },
+    "conference:fbfec869a3e2f37d11e7c3bd": {
+      "id": "minutes:7949577d1cca85fcf7a62cdf",
+      "externalKey": "TCRN-CROSS-MIN-012",
+      "summary": "二选一前提消解：仓内压测注释已裁定真实契约为「至多一个赢家」，其证据（两处生产调用点丢弃返回值）经复核属实。1464 行的「恰好一个」是断言强于实现，CI 零赢家非 flake。已对齐并写明理由；灾难方向（两个赢家）断言两处原样保留。连跑三次全绿，整门 133s 绿。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "真因 同一文件两个相邻测试对同一代码路径互相矛盾：1464 行要求恰好一个赢家，其下压测断言至多一个并附论证",
+        "前提消解 仓内已裁过——压测注释即裁定书；其载荷证据经复核属实：safe-io.mjs 1136 与 1144 两处生产调用点均裸 await 丢弃返回值，赢家信号在生产侧无消费者",
+        "定性 CI 那次零赢家不是 flake 而是断言比实现强；「至少一个赢家」不是实现作出的承诺",
+        "处置 把 1464 对齐到压测已写明的契约（<= 1）并在原处写明理由",
+        "未削弱 两个赢家仍是灾难方向，该断言在两处原样保留；去掉的只有实现从未作出的「至少一个」",
+        "复验 套件连跑三次 136/136 全绿；整门 PUSH_GATE_VERIFIED 133s",
+        "程序说明 本 Story 原载须先呈 Owner 裁，因二选一前提消解故按既有裁定推进；改动单点可逆，Owner 可驳回"
+      ],
+      "unresolvedIssues": [
+        "Owner 若不认同前提消解可驳回本对齐（单点可逆）"
+      ],
+      "effective": [
+        "Owner 若不认同前提消解可驳回本对齐（单点可逆）"
+      ]
+    },
+    "conference:66c2f7ad4f1c297790d6a95d": {
+      "id": "minutes:dbb17922bac93e286a595d78",
+      "externalKey": "TCRN-CROSS-MIN-013",
+      "summary": "Owner 裁定：认可两轨分离规则（hostDigest 不是 pin）与身份权威定 pins 轨，并令 authorization 非 authentication 写入 gate-v1 成文边界；compatibility-plan 经复核维持 programmatic-only，MIN-005 相关提法更正。同时授权 W 五提交推送与 E02 开工。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "裁定一 hostDigest 不是 pin：pins 轨与 attestations 轨不共信任故事；文档与推理不得把品牌上下文当作已钉",
+        "裁定二 身份类权威一律走 pins 轨：落 attestations 轨则接线进程可自称 owner:governance 而 gate-v1 无拒绝能力",
+        "裁定三 authorization 非 authentication 写入 gate-v1 成文边界：能拒未被许可的身份关门，不能证明按键者身份；不越声",
+        "裁定四 compatibility-plan 维持 programmatic-only：经复核为成文设计（文档明载＋双向漂移守卫）非遗留；MIN-005「须另改可用性」提法据此更正并自待裁清单划除",
+        "授权一 W 仓五次提交 cf4547b／5e5c63a／2d39da8／beaa071／be29372 获准推送",
+        "授权二 E02 gate-v1 获准开工"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:10ee4ff490cd80a21586bc47": {
+      "id": "minutes:058c7b5de0156fae79720430",
+      "externalKey": "TCRN-CROSS-MIN-014",
+      "summary": "扇出后读源立到新事实：事件哈希无密钥，尾部追加伪造对所有事件类型今天已然成立。据此证伪标记门控回放的首要收益（伪造者同样能补上回放所查条目，其反驳隐含隐晦即安全），而致砖代价属实。裁定采 verb-only，并将授权决策记入 gate extensions 供审计、回放只校验形状不重读文件。成文边界写三句。E02 六 Story 职责表随附。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "新事实 canonicalSha256 是无密钥纯 sha256（全链路无 HMAC）：任何有事件日志写权限者可读 head、构造 payload、自算自洽 hash 在尾部追加回放全绿的事件——对今天所有事件类型已然成立，非 gate-v1 引入",
+        "据此证伪 opus 所举手工伪造 gate.updated 在标记门控回放下同样不被挡住：伪造者既能追加事件亦能追加回放所查的身份条目（回放所查每项皆由同机公开数据可导出）；其立场隐含前提是伪造者不知格式，属隐晦即安全",
+        "裁定 采 (a) verb-only：强制点在 gate-transition 现场",
+        "修正 授权决策记入 gate 事件 extensions（执行 actor＋当时在册 authority 文件 digest）；回放只校验该条目形状精确（与既有 locator extensions 同一纪律），绝不重读外部文件、绝不把文件在场当作重放前提",
+        "驳回理由 (b) 首要收益是幻觉而致砖代价是实的：正常运维会让外部文件合法缺席，(b) 下整链不可读且与身份无关的历史一并陪葬",
+        "成文边界三句 交付 authorization 非 authentication／回放不防尾部追加伪造／任何非密码学的回放检查都不可能防它——闭合它属外部锚点程序不属 gate-v1",
+        "职责表 STORY-001 身份权威文件 schema 与 pins 轨读取器（复用 readAuthorityFile；含 actor→outcome-class 许可表）",
+        "职责表 STORY-002 gate-transition 消费该权威：现场核验执行 actor 是否被许可关此 outcome-class 的门",
+        "职责表 STORY-003 授权决策入 extensions 并令回放校验其形状精确（不重读文件）",
+        "职责表 STORY-004 负例证明：未被许可身份现场被拒且零链写入；无文件或 digest 不符现场被拒",
+        "职责表 STORY-005 兼容性证明：三条生产链原字节回放全绿；含身份门的链在完全无 authority 文件的机器上回放成功",
+        "职责表 STORY-006 边界证明与文档：以测试证明绕过 verb 的拼接事件回放予以接受（边界不靠口头承认）；成文三句并审查对外措辞不得写防篡改或审计轨迹",
+        "执行序 001→002→003→004／005 并行→006 收口；Subtask 各 Story 开工时按需裁"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:9fc2d938a1003a7d4285174d": {
+      "id": "minutes:14e48918969e9ea7ef96abf6",
+      "externalKey": "TCRN-CROSS-MIN-015",
+      "summary": "追加更正 MIN-014 职责表的相对编号：实键为 TCRN-CROSS-STORY-008…013，逐条映射在案。教训：纪要里的 STORY-00N 即引用具体记录，Epic 内相对序号须落笔即换实键。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "更正 MIN-014 职责表所用 STORY-001…006 是 E02 内部相对编号；本分区外部键平铺且 TCRN-CROSS-STORY-001…007 已由 EPIC-001 占用",
+        "实键映射 001→STORY-008 身份权威文件 schema 与 pins 轨读取器",
+        "实键映射 002→STORY-009 gate-transition 现场消费该权威",
+        "实键映射 003→STORY-010 授权决策入 extensions 且回放只校验形状不重读文件",
+        "实键映射 004→STORY-011 负例证明（未许可身份现场被拒且零链写入）",
+        "实键映射 005→STORY-012 兼容性证明（三链原字节回放绿；无 authority 文件的机器回放成功）",
+        "实键映射 006→STORY-013 边界证明与文档（拼接事件被回放接受须以测试证明；成文三句）",
+        "执行序不变 008→009→010→011／012 并行→013 收口",
+        "教训 键是身份不是标签：纪要里写 STORY-00N 即引用一条具体记录，Epic 内相对序号须落笔即换实键——v3 约定的「键即身份」此前只在创建记录时守，未及于叙述文本"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:eb348a4f904ab79aeeefd806": {
+      "id": "minutes:8a07dd58045bba990a546d94",
+      "externalKey": "TCRN-CROSS-MIN-016",
+      "summary": "身份权威契约落地：名册经共享 pins 轨读取器读取、摘要绑定盘上字节；canonical 次序为要求、许可答案只来自读取器产出的上下文、决策记录自足以便回放只校验形状。三处注入红证全被命名对应测试抓住。两处仪式教训（routeAdditions 一次性、amend 悬挂对象）留档。钝式 \\bany\\b lint 由潜伏升级为已观测隐患，未自行改门。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "实现 新模块 packages/core/src/gate-identity.ts（不并入纯校验的 assignment-gate.ts 以免其沾文件系统）；名册 {schemaVersion permits:[{actorId outcomeClasses}]} 经共享 readAuthorityFile 读取、摘要绑定盘上字节",
+        "不变式一 canonical 次序是要求而非产出：摘要即名册身份，允许重排等于同一许可有第二身份第二摘要；permits 与 outcomeClasses 均须已排序且无重复",
+        "不变式二 许可答案只来自读取器产出的上下文：手工同形对象未过任何文件系统与 canonical 检查，以 WeakSet 品牌拒之（品牌不是信任锚，摘要才是）",
+        "不变式三 决策记录自足 {actorId authorityFileSha256}：供 STORY-010 入 extensions；回放只校验形状永不重读文件，链的可读性不得取决于外部文件在场",
+        "红证 注入三处破坏（去次序守卫／去品牌检查／枚举成员改强制转换）各被命名对应的测试抓住无一存活——新守卫见红方可信",
+        "仪式教训一 routeAdditions 是一次性引导口：文件重生成进 source-allowlist.json 后即在 declared 中，继续留驻会使并集多项并在证明产物测试的合成夹具中报 allowlist must exactly admit the bounded source set",
+        "仪式教训二 git commit --amend 留下的悬挂对象被 p1 的 HISTORY_UNREACHABLE_OBJECTS 拒绝，须 reflog expire --expire-unreachable=now --all 加 gc --prune=now",
+        "绿灯 typecheck／format-check／verify:p1／push-gate 全绿；W 8743f70 已推送",
+        "已观测隐患升级 W 的 lint 以钝式 \\bany\\b 正则扫描整份 .ts 含注释，实测咬中本模块散文中的 any actor 与 any real roster——此前登记为潜伏，现为已观测；依既有纪律未自行改门，另候裁定"
+      ],
+      "unresolvedIssues": [
+        "钝式扫描（lint \\bany\\b 与门的 warning 扫描）是否收紧待 Owner 裁定"
+      ],
+      "effective": [
+        "钝式扫描（lint \\bany\\b 与门的 warning 扫描）是否收紧待 Owner 裁定"
+      ]
+    },
+    "conference:3a0ddb95958cb3d356b26191": {
+      "id": "minutes:87a460ec026a850d82639134",
+      "externalKey": "TCRN-CROSS-MIN-017",
+      "summary": "Owner 同意分开处置：lint 改判代码（剥离注释与字符串，强度不减，剥离器常设为 lib＋测试），推送门告警扫描不动并记在案（零暴露且该干净由 processWarningState 工程而来；照搬 H 收紧会丢包管理器告警一类）。尺子：有观测且修法不损强度者修，仅有推测且修法丢覆盖者不修。过程教训：红证前先自检探针。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "裁定一 lint 的 \\bany\\b 改为剥离注释与字符串/模板字面量后只扫代码；剥离长度守恒故报告偏移仍指真处",
+        "依据 28 份 .ts 命中代码 0 注释 0——该零是作者绕开英文词的结果而非无违规；隐式 any 早由 strict 在类型层挡住，本规则增量价值仅在显式标注而显式标注只出现在代码里",
+        "边界 @ts-ignore 因本身即注释仍读全文；LINT_EVAL 同样改判代码",
+        "裁定二 推送门的 \\bwarning\\b 不动并将不动记在案：三个被扫命令实测 warn 出现 0 次，且该干净由 scoped-strip-types.mjs 的 processWarningState 工程消费而来非侥幸",
+        "依据 照搬 H 的收紧（只匹配 Node 运行期签名）会在 W 丢掉包管理器告警一整类；本会话亲见 npm warn Unknown project config",
+        "若将来被咬 修法是加结构（Node 签名并上 ^(npm|pnpm) warn）而非放松模式",
+        "一致的尺 有观测证据且修法不损强度者修；仅有推测且修法会丢覆盖者不修——打包成「钝式扫描一起改」是偷懒",
+        "常设化 剥离器移入 scripts/lib/code-only.mjs 并配 tests/code-only.test.mjs：抓取方向单证（含 as any／Array<any>／Record<string any>／eval）＋误报方向＋长度守恒＋串内注释符＋转义引号",
+        "过程教训 首轮红证十例全报 None 因调用形写错——无法区分正确放行与根本没跑；须先自检探针（已知违规须被检出）再信任任何一次通过",
+        "ceremony 复用 STORY-008 教训：routeAdditions 为一次性引导口，重生成后即撤回"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:e2d01ff99a9954e59b5b6ab4": {
+      "id": "minutes:db6b2c21ff9d817181584f46",
+      "externalKey": "TCRN-CROSS-MIN-018",
+      "summary": "身份强制落地：outcomeClass 即逐门开关，owner_intent_required 关门须凭带外名册＋具名 actor 且名册许可；名册供于其它 class 同样生效；强制在动词不在回放。每处拒绝证链未前进。红证抓出一处真覆盖洞（缺具名 actor 不再拒曾存活），补格后三变异全被抓；并记 UNBUILDABLE 不是 kill。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "设计 outcomeClass 即逐门选择开关：建门者选 owner_intent_required 即声明关它需 Owner 意图；引擎兑现该声明故无需链级开关，其余四个 class 可选，既有记录无一改变含义",
+        "规则 满足 owner_intent_required 门须同具带外名册（pins 轨读取器＋调用方陈述摘要核验）与具名 actor 且名册许可该 actor 关此 class；缺 actor 亦拒——许可是关于谁的陈述",
+        "规则 名册供给于任何其它 class 同样生效：要了检查却被悄悄跳过是最坏结局",
+        "承 MIN-014 强制点在动词刻意不在回放；代价写在检查旁：决策点控制非链完整性不变式",
+        "证明 每一处拒绝均证链未前进——对读者已关闭而只是没记录比从未关闭更糟",
+        "红证价值 三处变异中「缺具名 actor 时不再拒」一度存活：该守卫仅在非 owner 类却供名册时起作用而用例未覆盖该格；补格后三处全被抓——只看 44/44 全绿会让此洞上线",
+        "红证方法 首轮两处变异被 TS 拒编译（非法 outcome class 与恒假条件）——变异须能编译才证明得了东西，UNBUILDABLE 不是 kill",
+        "接线 CLI 新增 --identity-authority 与 --identity-authority-digest（复用 STORY-004 的 suppliedAuthority）；名册在取锁之前读取，文件系统拒绝不应占着工作区锁",
+        "新拒绝码 WORKSPACE_GATE_IDENTITY_REQUIRED 与 WORKSPACE_GATE_IDENTITY_REFUSED",
+        "绿灯 typecheck／format-check／push-gate 全绿；W b19ddf5 已推送"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:fc7fe632c7e2dbd4a23e30d3": {
+      "id": "minutes:de60d2532b23d0ac8cff67e8",
+      "externalKey": "TCRN-CROSS-MIN-019",
+      "summary": "更正 MIN-013 裁定四的错误引用（应指 MIN-008/009/010 非 MIN-005）。逐条结算遗留项：七条已了结，三条未结算（「7 而非 12」提法修正从未明文批准且 EPIC-001 已 done／verify:p1 提速未排期／分区不可迁移为长期限制）。另观察 EPIC-002 未挂门，是否补门属 Owner 裁量。",
+      "outcomeClass": "recommendation",
+      "decisions": [
+        "更正 MIN-013 裁定四所引「MIN-005」有误：MIN-005 是 STORY-001 产出纪要其遗留项为 STORY-003 范围变更，与 compatibility-plan 无关",
+        "更正 真正提出 compatibility-plan 可用性者为 MIN-008 决议并在 MIN-009／MIN-010 遗留项复述；裁定四的更正对象应为此三处",
+        "结算 已了结七条：GATE-001 分离规则与 STORY-003 定轨（MIN-013 裁定一二）／compatibility-plan 可用性（裁定四）／W 推送授权（授权一已推送）／门的告警扫描（MIN-017 裁定二记不动在案）／lint 钝式扫描（MIN-017 裁定一）／STORY-007 二选一前提（MIN-012 消解且未被驳回）",
+        "未结算一 「E01 诚实交付上限是 7 个 pins 面 verb 而非 12」的提法修正从未明文批准：MIN-013 六条决议无一涵盖，而 EPIC-001 已 done，链上留有按原提法未达标按修正提法已达标的含混",
+        "未结算二 verify:p1 90s 提速属未排期项非待裁项",
+        "未结算三 分区不可迁移（MIN-001）为长期已知限制非待办",
+        "观察非缺陷 EPIC-002 未挂任何门；E01 有 GATE-001 把关而 E02 改的是引擎关门规则本身其 done 的争议性不低于 E01——是否补一道 owner_intent_required 门属 Owner 裁量，执笔者不擅自创建",
+        "同源教训 引用要指对记录：与 MIN-015 的相对编号错误同源，v3「键即身份」须及于叙述文本中的纪要引用"
+      ],
+      "unresolvedIssues": [
+        "「7 而非 12」交付上限提法修正待 Owner 明文批准；EPIC-002 是否补 owner_intent_required 门待 Owner 裁"
+      ],
+      "effective": [
+        "「7 而非 12」交付上限提法修正待 Owner 明文批准；EPIC-002 是否补 owner_intent_required 门待 Owner 裁"
+      ]
+    },
+    "conference:b854406ec64c401852fd544a": {
+      "id": "minutes:a84b527dc91ecfcbd5eacad3",
+      "externalKey": "TCRN-CROSS-MIN-020",
+      "summary": "Owner 全部接纳：批准「7 而非 12」交付上限修正（更正 MIN-003 提法）；确立 E04 必须走嵌入方不可能走 CLI；为 EPIC-002 补 owner_intent_required 门以令 gate-v1 首次为自身把关；名册部署与摘要带外公布并入 STORY-013。授权继续完成 010–013。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "裁定一 批准「E01 诚实交付上限是 7 个 pins 面 verb 而非 12」：5 个 verb 由 claudeAdapterHost／claudeAdapterActivationHost 把守而二者皆品牌构造属 attestations 轨，上 CLI 旗标即令断言冒充权威——为裁定「hostDigest 不是 pin」所禁",
+        "裁定一之更正对象 CONF-003／MIN-003 中「解锁含全部激活在内的 12 个 verb」之提法据此更正",
+        "裁定二 确立 E04 形状：适配器分发必用 claude-adapter-install 而该 verb 同需两个品牌构造面——E04 不可能走 CLI 路径必须有嵌入方（照 scripts/host-evidence.mjs 形制）",
+        "裁定三 为 EPIC-002 补一道 owner_intent_required 门：争议性与 E01 对等（E02 改的是引擎关门规则本身）；不阻塞（只挡 epic→done 且 gate-delete 为成文死锁逃生口）；关门须动用 STORY-008／009 的名册机制乃唯一能在真链上端到端证明部署故事成立之方式",
+        "裁定四 部署名册并带外公布其摘要并入 STORY-013 职责；信任模型同 bootstrap 锚点即一个人手持的常数",
+        "授权 完成上述后继续完成 E02 剩余 Story 010–013"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:573c055d2659817fe93be17d": {
+      "id": "minutes:feb3ff54699c2ce4ddbe9adb",
+      "externalKey": "TCRN-CROSS-MIN-021",
+      "summary": "授权决策入 extensions 并由回放只校验形状：形状精确＋决策 actor 须等于事件签署 actor＋绝不重读名册（删掉名册后回放实证照常绿）。条目永远可选。attestation 未启用时无佐证已写入代码。测试抓出畸形决策泄漏模块码的实现缺陷已修。红证暴露两处覆盖洞（畸形一格缺失、伪造哈希须按引擎公式重算否则为错误理由通过）。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "形制 gate-identity:decision 入 gate extensions 为 {actorId authorityFileSha256}，成对写入／回放，与既有 gate-evidence 同一纪律（增量须逐字节等于预期防夹带）",
+        "回放判据一 形状精确",
+        "回放判据二 决策所名 actor 须等于事件签署 actor——自相矛盾的记录无论谁写都是损坏，此校验零外部依赖",
+        "回放判据三 绝不重读名册文件：记录的摘要是当时校验了什么的证据，不是拿来再校验一次的对象；测试实证删掉名册后回放照常绿",
+        "条目永远可选 回放无从知晓写入当时是否需要名册，故须接受无名册关闭的门同时拒绝畸形或自相矛盾条目",
+        "诚实交代 attestation 未启用时 payload 不载 actor 无从矛盾，条目处于无佐证状态——已写入代码而非掩盖；attestation 仍是独立开关，把不可逆设置绑在另一不可逆设置之后是更坏的交易",
+        "实现缺陷（由测试抓出）畸形决策原泄漏模块码 GATE_IDENTITY_AUTHORITY_MALFORMED，破坏回放拒绝一律 WORKSPACE_EVENT_CORRUPT 的契约；已并入 extensionRecordOrCorrupt 映射",
+        "覆盖洞一 畸形决策一格原本缺失：若无它形状校验被整段删掉也无人发觉",
+        "覆盖洞二 伪造事件哈希须按引擎公式重算否则测试因哈希失败而通过——为错误理由通过；故拒绝原因亦被断言须点名身份矛盾",
+        "绿灯 typecheck／format-check／push-gate 全绿；W 89531a4 已推送"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:f74e16195e7c15749704bea1": {
+      "id": "minutes:71294b42d7caa067f65ac9be",
+      "externalKey": "TCRN-CROSS-MIN-022",
+      "summary": "三条 Story 完成：CLI 路径负例分开证；向后兼容以真链实测（两链五门无身份条目照常回放，砖链回归被五测试抓住）；边界以测试断言回放接受伪造尾部追加，成文三句入 §9。名册已部署于控制树之外并实测可用，摘要为带外常数。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "STORY-011 名册经 argv 抵达 gate-transition，该路径与引擎分开证——接错或没接上的旗标能通过历来所有引擎测试；四种拒绝逐一走 CLI 且各证链未前进",
+        "STORY-012 真链实测 cross-project v137 与 TCRN-Design-System v215 在新引擎下 validate 全绿，共载 5 个已满足 owner_intent_required 门且全不带身份条目",
+        "STORY-012 该状态新动词已造不出来故测试手写事件上链；「回放强制要求身份条目」的回归被五个测试同时抓住——一旦发生每个用过该 class 的工作区变砖",
+        "STORY-013 回放接受伪造尾部追加现为测试而非句子：事件哈希无密钥，任何有写权限者可算出自洽事件，回放能读的每项皆来自同一台机器；用例断言接受故边界一旦移动主张随之失败",
+        "STORY-013 成文三句入 agent-integration-v1.md §9（授权非认证／回放不防尾部追加伪造／任何非密码学回放检查亦不可能防）并点名钉住第三句的测试",
+        "名册部署 .tcrn-workspace/release-trust/gate-identity-authority.json 199 字节置于控制树之外（它是权威非工作区数据），由引擎自身 canonicalGateIdentityAuthority 序列化",
+        "名册教训 手搓的 canonical 被读取器以 CANONICAL_INVALID 拒绝——格式该由定义它的工具产出",
+        "名册实测 owner:governance 被许可／agent:opus 被拒／错摘要被拒；摘要 fab89e256b7a4df472ac6310ae1b5e85e6993a3655c062dcf5ba82e140ed15b7 即带外常数，信任模型同 bootstrap 锚点",
+        "绿灯 49/49 套件、typecheck、format-check、push-gate 全绿；W 129bbe7 已推送"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:be48a805914b6bf17420163c": {
+      "id": "minutes:58287860fa64cb461ff74e5c",
+      "externalKey": "TCRN-CROSS-MIN-024",
+      "summary": "补转 INIT-001／002 至 done 并留因：二者现实早已完成却因不挂在任何被例行推进的结构上而无人回头看。时间戳用补录当刻不回填。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "失真 INIT-001（接入受治工作流）与 INIT-002（0.1.0 里程碑）自重起当日建立后一直停在 planned，而现实早已完成——接入在跑、0.1.0 已发版并有 GitHub Release",
+        "成因 二者无产出会议、无门、不在任何 Story 树下，故无任何流程会路过它们；凡不挂在被例行推进的结构上的记录就没有机制会回头看它",
+        "同源教训 与「口头登记等于没登记」同源，只是层级不同：登记须落在会被例行走到的结构上",
+        "处置 按真实完成补转 planned→ready→active→done，时间戳用补录当刻而非回填——回填时间戳等于伪造历史；链只保证落账后不可篡改，不保证署名与时刻必真，故不可再掺假"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:f44c3cc2e728af46aeabe3fe": {
+      "id": "minutes:632f74b508074e4e54d3c721",
+      "externalKey": "TCRN-CROSS-MIN-025",
+      "summary": "Owner 授权的发版列车三段完成：W v0.2.0（tag+Release+P8 五件）、H candidate.19（IDENTITY 重钉+教学更新+三方锚验证）、安装克隆升级（ROOT_RESOLVED+两链回放绿）。GATE-002 自此真正可关。三次被门抓住三次都对。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "W v0.2.0 已发：16 版本位一次落＋release notes＋CHANGELOG；PUSH_GATE_VERIFIED version 0.2.0；推送 b4846c8；注记标签 v0.2.0；GitHub Release 携五件 P8 产物",
+        "W 途中三次被门抓住三次都对：dist/release 陈旧 0.1.0 产物（P8_PRIVACY_RELEASE_ARTIFACT_SET）／CHANGELOG 标题缺失／证明产物未重生成——同类教训第三次：任何 tracked 编辑后先 regen",
+        "发版说明如实：minor 因行为变更（owner 门关闭从任何 actor 到须名册）；0.1.0 链回放不变",
+        "H candidate.19 已发：IDENTITY 四值换 v0.2.0、provenance 字节拷贝 W 生成件、锚 19513f48… 六文档、manifest 重绑含 workflow 身份、78/78、三方锚验证全等",
+        "H 教学更新：SKILL「pending gate-v1」段落改为诚实拆分（关门已机检／审议时机仍不是）；折入名册关门教学与队列三课",
+        "安装克隆升级 v0.2.0：对新 bootstrap ROOT_RESOLVED；目录含 identity 旗标；两生产链回放全绿 cross v156／DS v215——五个旧 owner 门无一被砖",
+        "放置副本与信任根从 Release 资产传播：INSTALLED_COPY_VALIDATED @ v0.2.0（归档 d53bbe61…）",
+        "执行者纪律 未以变更动词在活链上试探拒绝路径：负例已在套件证明，活链不做探针",
+        "GATE-002 自此真正可关且只能以其自身机制关"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:69a85ec22e82ee4014497816": {
+      "id": "minutes:b974b3472c97907a298054d9",
+      "externalKey": "TCRN-CROSS-MIN-028",
+      "summary": "Owner 采纳停顿预算为平台常规：默认按推荐推进，三类必停（owner 门／对外发布／无裁定支撑的不可逆变更）；先执行后可驳回；呈报两栏分列；规划期只写条件式到场点。依据为 INIT-003 复盘与 DS 对照。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "常规一 执行期默认按推荐推进；只有三类必停：owner_intent_required 门／对外发布动作（push tag release）／无既有裁定支撑的不可逆方向变更",
+        "常规二 三类之外先按推荐执行，产出纪要留「Owner 可驳回，单点可逆」",
+        "常规三 复查呈报「已按推荐执行待驳回」与「真待裁」两栏分列；真待裁须过杠：执行方无法用既有裁定加证据自行决定",
+        "常规四 规划期不预登记 Owner 到场点，只写条件式（若执行时前提仍在则呈裁）",
+        "依据 INIT-003 复盘：到场约十次仅 5 次设计内；对照 DS Initiative 15 Story 仅 3 次；实证「不需要再问」后 010..013 零打扰、「授权」后发版列车零打扰",
+        "落地 记忆 stop-budget-standing-rule 已建并入索引；payload 教学入 candidate.20 队列（落点 SKILL.md Recording Triggers 执行面）"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:2c8dfcea642540f377e386c9": {
+      "id": "minutes:a7150455805abaf5b6a04a2e",
+      "externalKey": "TCRN-CROSS-MIN-029",
+      "summary": "Owner 验收 gate-v1 并令关门：验收覆盖交付、证明与边界；运行时（W v0.2.0/H candidate.19/克隆升级）齐备；授权以名册与 owner:governance 关闭 GATE-002。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "验收 gate-v1 经 Owner 验收：owner_intent_required 门须带外名册＋具名 actor；授权决策入 extensions；回放只校验形状与自洽、绝不重读名册",
+        "证明基础 49/49 套件＋三处引擎与两处 CLI 注入红证＋真链回归（cross v137/DS v215 五旧门无一被砖）＋边界由「回放接受伪造尾部追加」测试钉住",
+        "运行时基础 W v0.2.0 已发（tag+Release+P8 五件）；H candidate.19 已发（IDENTITY 重钉+三方锚验证）；安装克隆 ROOT_RESOLVED @ v0.2.0",
+        "授权 以名册（release-trust/gate-identity-authority.json，摘要 fab89e25…）与 actor owner:governance 关闭 GATE-002——gate-v1 首次为自身把关",
+        "前置已满足 停顿预算已落地：stop-budget-standing-rule＋CONF-026/MIN-028＋candidate.20 队列"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:19336931c444e8f4d6b244b3": {
+      "id": "minutes:868f0ae66e406ac22d8ed1ba",
+      "externalKey": "TCRN-CROSS-MIN-030",
+      "summary": "扇出裁定 Fork B：现在只把 builder fail-open 变 fail-closed，v2 多-skill schema 推迟到真实第二 skill 消费者。三核查倒向 B：scripts-only 轻仪式不动锚；守卫不变式在 v2 单调加强非回退；E04 是分发机制非第二 skill。EPIC-003 只声明 STORY-014。停顿预算合规、Owner 可驳回。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "裁定 采 Fork B：现在只把 builder 的 fail-open 变 fail-closed，v2 多-skill schema 连同四改推迟到真实第二 skill 消费者到场",
+        "核查一 付两次全套仪式不成立：守卫只改 scripts/create-skill-archive.mjs 与其测试皆不在 skill/ 下，故 EXPECTED_ARCHIVE_SHA256 与锚不动、六文档无须 republish——轻量 scripts-only 仪式",
+        "核查二 注定推倒的墙��驳倒：守卫不变式（archive 须代表 skill/ 下每条被跟踪路径否则构建失败）在 v2 被保留；v2 拓宽满足条件（唯一 SKILL.md 子树→每子树各有 SKILL.md）为单调加强非回退，v2 改判定不拆守卫",
+        "核查三 很可能就是 E04 无源支撑：E04 是把现有单一 helper skill 经宿主 adapter 分发系分发机制而非第二 skill，非多-skill 消费者",
+        "边界确认 采 Opus (d) 砍单为即便建 v2 也不含：fixture skill／每-skill 分片／adapter 路由属 E04／迁移工具无基线",
+        "Story EPIC-003 只声明 TCRN-CROSS-STORY-014（B1–B4 合为一坐定之工不切 Subtask）：builder 对 skill/ 下任何无法代表的路径失败关闭＋红证＋scripts-only 发布",
+        "v2 处置 推迟为待真实第二 skill 消费者，记入本纪要与记忆非遗忘；届时为改守卫判定条件的正常 payload 编辑",
+        "停顿预算合规 本裁定由既有裁定支撑（深度教义＋E02 实现移到有消费者 epic 先例）单点可逆，故执行不停 Owner；Owner 可驳回"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:86f3f42267cbea09650f7322": {
+      "id": "minutes:f6fb1a1e87ceca6f0fa15af0",
+      "externalKey": "TCRN-CROSS-MIN-031",
+      "summary": "STORY-014 完成：builder fail-closed 守卫落地并两路红证；scripts-only 仪式（skill 归档字节不变、锚不动），全绿已推送 H 7480a05。待你：candidate.20 tag+release 收口 main 与 candidate.19 的源归档漂移，属对外发布必停；建议顺带折入停顿预算 payload 教学。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "实现 H 7480a05 已推送：builder 对 skill/ 下任何非唯一 skill 子树的被跟踪路径抛 ARCHIVE_UNREPRESENTABLE 并点名，替代静默过滤",
+        "红证 守卫抽纯函数可脱构建单测＋module 只入口点构建；移除守卫→真 git 集成红证抓（scratch repo 第二 skill 目录 builder 非零退出）；纯函数摆设→单测+集成同抓",
+        "scripts-only 确认 只改 scripts/create-skill-archive.mjs+新测试+typecheck 行皆不在 skill/ 下——skill 归档字节不变 d53bbe61…、锚不动 19513f48…（push-gate 回显）",
+        "绿灯 verify RELEASE_ARTIFACTS_VALIDATED＋typecheck＋全套件 52+2×4+27（新增 3）＋push-gate",
+        "待发布漂移 main 源归档与已发布 candidate.19 漂移（同版本号不同源字节），收口需 candidate.20 tag+release——属三类必停的对外发布，执行方停在此待 Owner",
+        "建议 candidate.20 顺带折入停顿预算 payload 教学，一次 release 载两笔；锚不变故无须六文档 republish"
+      ],
+      "unresolvedIssues": [
+        "candidate.20 tag+release 待 Owner 授权（对外发布必停）；建议折入停顿预算 payload 教学"
+      ],
+      "effective": [
+        "candidate.20 tag+release 待 Owner 授权（对外发布必停）；建议折入停顿预算 payload 教学"
+      ]
+    },
+    "conference:3afdd0b5011fcc1df7a62228": {
+      "id": "minutes:99b312b503ca7b6373a3f31a",
+      "externalKey": "TCRN-CROSS-MIN-032",
+      "summary": "Owner 亲裁方向 B 并点出正确形态：适配器通知 agent、agent 经用户批准执行治理放置，非适配器自写 .claude/。读源三证实成立（SessionStart 是真实指令通道／LIVE_LOCATION_FORBIDDEN 只禁工作流自写不禁 agent 批准放置／分发正解＝通知+执行）。按深度教义只声明 spike STORY-015，其余待读源。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "Owner 择方向 B：E04 纳入 live-install 程序，形态为适配器通知 agent、agent 经用户批准执行治理放置（非适配器自写 .claude/skills/）",
+        "读源证实一 SessionStart 注入是通往模型的真实指令通道：≤1024 字节权威摘要读进上下文 AC-1 实测送达，适配器本就在此通道初始化每个宿主",
+        "读源证实二 LIVE_LOCATION_FORBIDDEN 只护 .claude/.codex 路径组件，禁的是工作流自己的变更命令写宿主活动目录，不禁 agent 经用户批准放置",
+        "读源证实三 分发正解＝适配器通知＋agent 执行：禁令原样成立（工作流永不写 .claude/），agent 写合法（用户宿主、用户批准）",
+        "分解纪律 按深度教义只声明第一条 spike STORY-015（读源定信号承载的设计叉：扩 1024 字节权威摘要 vs 另立 project.json 状态字段；保 fail-open 与隐私；产出裁定零 live 写），其余 Story 待 spike 结论切",
+        "停顿预算 方向 B 由 Owner 亲裁，本纪要据以确立；后续 Story 交付按连续交付，只在 owner_intent 门/对外发布/无裁定支撑的方向变更处停"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:a3dfd6ddc7cbbc63a32e55b4": {
+      "id": "minutes:6b50300fad04af301dc0c3d0",
+      "externalKey": "TCRN-CROSS-MIN-033",
+      "summary": "读源答知识库为何有上限：它是有界的上下文注入面非数据库（同律见 SessionStart 1024 字节）；撞的是 128 KiB 聚合字节（metadata 近乎双重计数，库被 metadata 重量填满）非记录数；退休不释放聚合字节（刻意约束物理总量）。根因＝把库当决议镜像误用。Owner 采纳 distill 纪律：仅蒸馏可复用知识，distill 前问是否会被查询复用。本纪要即不带 --distill 关闭（新纪律首次实践）。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "答why 知识库是有界的上下文注入面非数据库：存在理由是被查询并注入 prompt，凡入模型上下文者构造上有界；同律见 SessionStart≤1024 字节／查询≤8 条／CLI 输出字节稳定；事件链才是无界审计日志",
+        "读源真因 撞聚合字节上限 128 KiB 非记录数（32/64）；聚合公式对 metadata 近乎双重计数（整 index＋每 unit 各一次），body 均 135 字节而 metadata 约 2KB/条，库被 metadata 重量填满",
+        "机制事实 退休只释放记录数槽位不释放聚合字节（scan.units.reduce 不过滤退休，刻意约束物理总量含退休），128 KiB 硬顶退休救不了，回收需 delete 或重建",
+        "根因 误用：conference-close --distill 每决议造一记录，纪要每份 6–9 决议，把知识库变决议镜像",
+        "裁定 Owner 采纳 distill 纪律：distill 改为仅蒸馏真正可复用的知识；决议已完整在事件链纪要无须镜像；distill 前先问「这条日后会被查询复用吗」",
+        "处置 当前库不清理（没坏只是满），少 distill 即不再涨；本纪要即以新纪律不带 --distill 关闭（首次实践）",
+        "落地 记忆 stop-budget 侧已更正 16→64 旧值＋记 distill 纪律；payload 教学入 candidate.21 队列（workflow-operations Decomposing 第 7 步）"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:0b98da82e5da98979772cdba": {
+      "id": "minutes:5dbdf24ebec77a37b66f3db2",
+      "externalKey": "TCRN-CROSS-MIN-034",
+      "summary": "spike 裁定分发信号：不碰 SessionStart 注入（固定/digest 钉定/fail-open），用适配器现有存在作通知＋verify-installed-copy 现成时效检查＋治理放置 runbook。E04 从 live-install 大程序减为运营纪律＋治理放置 runbook（不放宽 LIVE_LOCATION_FORBIDDEN，工作流永不写 .claude/，agent 经批准放置）。声明 STORY-016。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "读源一 SessionStart 注入（通道甲）固定格式、scriptDigest 钉定、1024 字节预算、fail-open——改它＝激活阶梯 churn＋抢预算＋setup 信号继承 fail-open 不可靠",
+        "读源二 首次放置由 First-Run 向导+独立可信 bootstrap 冷启动引导，适配器不做首次分发",
+        "读源三 verify-installed-copy 已是现成时效检查：放置副本对不上钉定摘要即 IDENTITY_MISMATCH",
+        "裁定 分发不需新适配器机器、不碰激活脚本、不放宽 LIVE_LOCATION_FORBIDDEN；正解＝适配器现有 SessionStart 存在即通知＋skill 运营纪律（每会话 verify-installed-copy 不符则提议放置）＋治理放置 runbook（agent 驱动、用户批准、带回执，复用现成 verify，工作流永不写 .claude/）",
+        "重塑 E04 从 live-install 大程序减为运营纪律＋治理放置 runbook，近 E03 消费者无关小交付",
+        "下一条 声明 TCRN-CROSS-STORY-016：治理放置 runbook＋skill 运营纪律＋成文信任故事（工作流永不写 .claude/边界；agent 经批准放置；verify 校验；回执）"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:3eaf94a3e358102a5d8a2474": {
+      "id": "minutes:cd4e9597dae7dd1b01e6621a",
+      "externalKey": "TCRN-CROSS-MIN-035",
+      "summary": "分发纪律落地并 dogfood 端到端自证：陈旧副本验出 IDENTITY_MISMATCH→治理放置→复验 INSTALLED_COPY_VALIDATED。经 candidate.21 发布（三方验证）。E04＝运营纪律+治理放置 runbook+信任故事三者 covered 且证明可用，收口（无门，spike 裁定支撑）。余 E05 链上 advisory。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "实现 workflow-operations.md 新节 Keeping the placed Skill current，经 candidate.21 发布（锚 08add187…，三方验证，钉 W v0.2.0）；成文 spike 裁定：工作流永不写 live 位置，放置是 agent 经批准动作，工作流只管 currency 检查",
+        "纪律 每会话 verify-installed-copy，不符提议治理放置（前后双验+回执）绝不静默覆盖；明写不让 skill 自装自更（install/update 仍 test-root-only）",
+        "dogfood 端到端自证 第一次真实使用即践行：陈旧副本 candidate.20 对 candidate.21 钉验得 IDENTITY_MISMATCH（时效检查检出陈旧）→ 从已验证 Release 归档逐条摘要核对展开替换 → 复验 INSTALLED_COPY_VALIDATED",
+        "E04 收口 spike（MIN-034）裁定 E04＝运营纪律＋治理放置 runbook＋成文信任故事三者 STORY-016 全 covered 且 dogfood 证明可用；不需更多 Story 不需门（done 非争议：文档/纪律交付、spike 裁定支撑、单点可逆）",
+        "candidate.21 另载 distill 纪律（MIN-033）：知识库是策展注入面非决议镜像"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:0d37b57252ce03c5af701ba7": {
+      "id": "minutes:03fc6ce5eb584b528a6a2b6d",
+      "externalKey": "TCRN-CROSS-MIN-036",
+      "summary": "Owner裁定交付节奏公约(单次收官发布,反-D6默认)并立TCRN-CROSS-INIT-006;分解2 Epic/4 Story全planned;执行不启动,启动权在Owner;INIT挂Owner验收门",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "D1:交付节奏公约八条(整合分支/逐Epic本地验收后推分支/收官单次合并main即唯一对外发布与唯一必停/例外须handoff显式裁定/敏感INIT纯本地/OneDrive与worktree保真仪式)经Owner逐字裁可",
+        "立为常规默认",
+        "取代D6式逐Epic上生产默认",
+        "D2:立TCRN-CROSS-INIT-006并按Mara树分解:EPIC-011公约固化(STORY-034公约正文/STORY-035模板段)",
+        "EPIC-012公约传导(STORY-036知识卡/STORY-037helper队列)",
+        "全planned",
+        "D3:Owner明令分解后暂停",
+        "执行启动权保留于Owner",
+        "任何子项不得转active",
+        "D4:INIT-006本体挂owner_intent_required门:公约文本经Owner验收后方可done"
+      ],
+      "unresolvedIssues": [
+        "执行启动时间未定(Owner持有go)",
+        "公约文档git治理位置:默认平台docs/",
+        "若Owner要求git治理则改置或镜像DS仓docs/(执行时呈报)"
+      ],
+      "effective": [
+        "执行启动时间未定(Owner持有go)",
+        "公约文档git治理位置:默认平台docs/",
+        "若Owner要求git治理则改置或镜像DS仓docs/(执行时呈报)"
+      ]
+    },
+    "conference:e9576cd6f1c90ef7e3276b58": {
+      "id": "minutes:a58b7295b91c80392c3d2b87",
+      "externalKey": "TCRN-CROSS-MIN-037",
+      "summary": "Owner 经 AskUserQuestion 显式批准公约文本(docs/delivery-cadence-convention.md),授权关闭 GATE-003,INIT-006 转 done。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "GATE-003 经 Owner 显式批准关闭;INIT-006 交付节奏公约验收通过",
+        "转 done"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:68c2704545db9f351e5f7d8c": {
+      "id": "minutes:e070c05cbaad72306a1bcab8",
+      "externalKey": "TCRN-CROSS-MIN-038",
+      "summary": "INIT-007 拆解定形:3 Epic/6 Story(公约教学/检测机制/发布收官)落链;三拒案与决策台账入记;执行 go 在 Owner。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "树定形 3 Epic/6 Story:E013 公约教学(S038 公约裁定+S039 helper 教学)、E014 检测机制(S040 检测器+S041 登记面+S042 宿主接线)、E015 发布收官(S043)",
+        "三拒案入记:B 链原生资源动词(瞬态污染回放且强制读端升级)、C 纯 prose(触发不可靠且不可验)、D 纯宿主本地(违 Owner 多宿主裁定)",
+        "登记面走 transient 区文件协议;链上只落回执摘要;引擎与协议零改动",
+        "决策台账:Owner-now=无(执行 go 本属 Owner);Conditional=Codex hook 可用性(挡则 S042 降配方文档)、W 版本位阶按最终改动面在 S043 定、ride-along 队列先清则 S039 该义务消解;Agent=其余(键号/路径/回执 schema/测试形态)"
+      ],
+      "unresolvedIssues": [
+        "执行 go 在 Owner;全树 planned 待点火",
+        "Codex hook 信任门可用性待 S042 执行时实测"
+      ],
+      "effective": [
+        "执行 go 在 Owner;全树 planned 待点火",
+        "Codex hook 信任门可用性待 S042 执行时实测"
+      ]
+    },
+    "conference:f90e44721fa3fd8d0cc236c3": {
+      "id": "minutes:a5b8acfc66c5228473902ed3",
+      "externalKey": "TCRN-CROSS-MIN-039",
+      "summary": "Owner 授权对外发布,INIT-007 多宿主后台资源治理已上线(W v0.4.0+helper candidate.25,两 Release、安装副本升级、双链回放绿),收官。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "Owner 授权对外发布批次(W v0.4.0 + helper candidate.25)",
+        "已全部执行并三方验证",
+        "W v0.4.0 与 helper candidate.25 均 main+tag 已推+GitHub Release;安装副本升 v0.4.0;两生产链回放绿;placed copy INSTALLED_COPY_VALIDATED",
+        "INIT-007 收官:3 Epic/6 Story 全 done"
+      ],
+      "unresolvedIssues": [
+        "检测器自动会话结束接线两宿主 live 仍 Owner 门控(Claude Stop 签名阶梯步、Codex 信任门+session-end 事件待勘)——独立跟进项非本 INIT 遗留缺陷"
+      ],
+      "effective": [
+        "检测器自动会话结束接线两宿主 live 仍 Owner 门控(Claude Stop 签名阶梯步、Codex 信任门+session-end 事件待勘)——独立跟进项非本 INIT 遗留缺陷"
+      ]
+    },
+    "conference:7ebf376bfee026c57b5efa80": {
+      "id": "minutes:336e32a0cd87d51a45af56cc",
+      "externalKey": "TCRN-CROSS-MIN-040",
+      "summary": "INIT-008 定形(B 轻引擎:Release kind+advisory:sprint+读面过滤)+MIN-036 修订裁可(入列批量停点、未入列保持原公约);3 Epic/6 Story 全 planned;执行点火在 Owner。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "定形 B 轻引擎:开 Release kind 创建+成员侧 advisory:sprint 注解(required:false、值为限定引用 workspaceId+work id、支持跨分区)+work-show/work-list 读面过滤;sprint 状态复用 planned/active/done、close=批次发布时刻;sprint 记录落 cross 分区",
+        "MIN-036 修订(Owner 裁可逐字):入列 sprint 的 INIT 其对外发布停点批量至 sprint close;未入列的 INIT/Incident 保持原公约按-INIT 单次收官;链上 done 的 INIT 粒度收官不变",
+        "三拒案:A 零引擎纯公约(排期视野需读面、prose 不可验)、C 新 Sprint kind/新操作(协议形变全读端强制升级)、parent-id 装载(验证器钉死 Initiative 父为 null)",
+        "树定形 3 Epic/6 Story:E016 机制层(S044 开 Release kind+S045 sprint 注解与读面)、E017 公约教学层(S046 公约卡+S047 helper 教学随 candidate.26)、E018 发布 dogfood 层(S048 W 0.5.0 发布+S049 首列车 dogfood)",
+        "决策台账:Owner-now=无(执行点火另行);Conditional=固定周期公约待有客户时重裁(预计零代码)、work-list 过滤机制按现读面架构执行期定、ride-along 队列有挂项则随 candidate.26 折入;Agent=其余(键号/扩展值 schema/测试形态)"
+      ],
+      "unresolvedIssues": [
+        "执行点火在 Owner;全树 planned",
+        "固定排期公约(阶段二)待有客户时另场重裁"
+      ],
+      "effective": [
+        "执行点火在 Owner;全树 planned",
+        "固定排期公约(阶段二)待有客户时另场重裁"
+      ]
+    },
+    "conference:6aef97922143656f58fbae13": {
+      "id": "minutes:f3149e451883021785bbeba0",
+      "externalKey": "TCRN-CROSS-MIN-041",
+      "summary": "Owner 授权对外发布,INIT-008 sprint 交付批次机制已上线(W v0.5.0+helper candidate.26,两 Release、副本升级、双链回放、S049 首列车 dogfood),收官。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "Owner 授权对外发布批次(W v0.5.0 + helper candidate.26)",
+        "已全部执行并三方验证",
+        "W v0.5.0 与 helper candidate.26 均 main+tag 已推+GitHub Release;安装副本升 v0.5.0;双生产链回放绿;placed copy INSTALLED_COPY_VALIDATED@v0.5.0",
+        "S049 首列车 dogfood 于活链证 sprint 机制端到端(create Release→enroll INIT-008+INIT-006→work-list 过滤→close)",
+        "成员状态不变证 advisory:sprint 非绑定",
+        "INIT-008 收官:3 Epic/6 Story 全 done"
+      ],
+      "unresolvedIssues": [
+        "真实多-INIT 批量停点合并(入列 INIT 在执行前预排进 sprint、批次尾一次发布)待未来一个预排 sprint 实证——本轮 dogfood 证机制可用非真实批发"
+      ],
+      "effective": [
+        "真实多-INIT 批量停点合并(入列 INIT 在执行前预排进 sprint、批次尾一次发布)待未来一个预排 sprint 实证——本轮 dogfood 证机制可用非真实批发"
+      ]
+    },
+    "conference:cbeb258cc84f99ad519b4b2a": {
+      "id": "minutes:83e4b837324dd63d2c079fb7",
+      "externalKey": "TCRN-CROSS-MIN-042",
+      "summary": "Owner 确认 INIT-009 六 Epic、二十三 Story 的可信双宿主接入阶梯。共享 authority/MCP 核心先行，Codex 依实机证据由单 Hook 扩至 observe，再经显式政策裁定进入 enforce；App Server 限只读 Observer。因 INIT-010 已占原展示键位，实际键仅作机械平移，范围与依赖不变。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "定形六 Epic与二十三 Story 串行证据阶梯并将兼容矩阵置于每级验收列",
+        "因 INIT-010 已占原键位实际键机械平移为 EPIC-021至026 与 STORY-058至080且语义顺序依赖不变",
+        "authority supply 与宿主中立 Workflow MCP 属核心且 Adapter 不铸造 authority",
+        "Codex 依惰性安装与单 SessionStart 再 observe 后 enforce 逐面扩展",
+        "STORY-072 到达 live 阻断前另开失败政策会议裁 N-2 与降级语义",
+        "App Server 本 INIT 仅 Observer且 STORY-079 若支持 Controller则另立 Initiative 并复议 GD-1",
+        "主动编排源码事务治理全局 Hook自动 Knowledge 晋升均不在本 INIT",
+        "任何对外发布仍在发布点停下"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:11d321fd4613c85e5a9cfa01": {
+      "id": "minutes:489e5f863c3306a2f35d1707",
+      "externalKey": "TCRN-CROSS-MIN-043",
+      "summary": "Owner 指令双宿主基线对齐：INIT-009 六 Epic 注为双宿主并新增三个 Claude Story；INIT-010 获追认、依赖拆分、Claude 子代理收据机制定形；Claude hook 扩面以 N-2 修宪为硬前置，凭据声称止步归因增强。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "双宿主基线对齐：EPIC-023/024/025/026 与 S060/S069/S070/S071/S072/S078 注为覆盖 Codex 与 Claude Code 且治理语义一致",
+        "新增 S081 Claude 宿主事实刷新探针、S082 Claude v2 激活卸载 CLI 接线、S083 Claude 控制面只读 Observer 等价评估",
+        "Claude 扩任何 hook 含 observe 以 S072 会议修 N-2 为硬前置；逐 hook 白名单载失败语义且未列举默认禁",
+        "无逐哈希门宿主的漂移防线＝薄垫片入口 digest 自检对钉锚定 manifest＋安装收据＋S081 探针；不得声称与 Codex 逐哈希门等价；兜底为会话首 verify-installed-copy",
+        "INIT-010 获 Owner 追认并回链其 scope；EPIC-020 依赖拆分：Codex 采集依赖 INIT-009 而 Claude 采集可先行",
+        "S055 定形为子代理纯观测收据机制：宿主侧即时记转写文件 digest 与会话标识；立场正文与调用输出字节相等；无收据即 synthesis-only 失败关闭",
+        "执行凭据声称上限为归因增强而非身份证明；转写入链须标注未经宿主签名；外发收集器列为 enforce 级前置研究",
+        "本会议以两个独立 fresh-context 子代理立场实证 multi-agent-deliberative 形态；MIN-042 既有边界不变"
+      ],
+      "unresolvedIssues": [
+        "外发收集器信任根与部署形态未定",
+        "Claude N-2 修宪细则待 S072 失败政策会议"
+      ],
+      "effective": [
+        "外发收集器信任根与部署形态未定",
+        "Claude N-2 修宪细则待 S072 失败政策会议"
+      ]
+    },
+    "conference:001812213bdeb5bd8680394b": {
+      "id": "minutes:5fd796e8a242799b071f7ace",
+      "externalKey": "TCRN-CROSS-MIN-044",
+      "summary": "确认 README 内容面滞后 0.1.0 的版本同步债并立 INIT-011 清偿与防再犯；建 SPRINT-002 快车列车，入列 INIT-009/010/011，发布合并至列车收官单一停点。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "问题确认:五语 README 版本徽章已随 0.5.0 bump 但正文能力面停留 0.1.0;gate identity、work-annotate、Incident、后台资源治理、sprint 列车在五语正文均零提及",
+        "立 TCRN-CROSS-INIT-011:EPIC-027 之下 S084 英文正文补齐、S085 四语逐节对照同步、S086 README 内容纳入发布版本面门",
+        "防再犯门方向:五 README Status 节须含 CHANGELOG 最新版本号与其 headline 关键词;门只证在场不证质量",
+        "建 TCRN-CROSS-SPRINT-002 快车列车并入列 INIT-009、INIT-010、INIT-011;适用 MIN-036 修订批量停点公约",
+        "sprint advisory 非绑定;三 Initiative 状态独立推进;对外发布合并至列车收官单一停点",
+        "MIN-042 与 MIN-043 既有边界不变"
+      ],
+      "unresolvedIssues": [
+        "README 内容质量核对依赖 S084/S085 执行期人工逐节对照且无自动等价物"
+      ],
+      "effective": [
+        "README 内容质量核对依赖 S084/S085 执行期人工逐节对照且无自动等价物"
+      ]
+    },
+    "conference:2e8b5554ec1a78549a1e1eda": {
+      "id": "minutes:1a5c6f7ec7d7fd9e562aa367",
+      "externalKey": "TCRN-CROSS-MIN-045",
+      "summary": "INIT-011 扩展裁定：四份根目录文档进五语基线（LICENSE/NOTICE/CHANGELOG 明示不进），译本以 synced-to 摘要钉扎并入发布门；风格规则从既有风格提炼成文、可检子集入门；立 EPIC-028/S087-090，规则沉淀知识卡、分阶段采纳。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "五语基线范围:SECURITY/CONTRIBUTING/CODE_OF_CONDUCT/PRIVACY 进;LICENSE 与 NOTICE(法律权威文本为英文)及 CHANGELOG(逐版记录面)明示不进;不做与做同录规则",
+        "译本首行声明英文版为准并钉扎 synced-to 英文源 sha256;发布门于列车收官停点校验钉扎新鲜度且失配 fail-closed;门只证同步过不证译文质量",
+        "英文文档变更须同列车携带四译文刷新为已知成本;Owner 明知采纳",
+        "风格规则从既有五版 README 风格提炼成文(结构骨架/措辞范式/排版规范三章);可检子集接入 verify 门;措辞与美感写入 CONTRIBUTING 及发布 runbook 的 review checklist",
+        "立 EPIC-028 挂 INIT-011:S087 四文档五语翻译、S088 语言覆盖 manifest 与 synced-to 门、S089 风格规则成文、S090 风格分层接线;随 SPRINT-002 在列",
+        "基础规则沉淀为知识卡 CARD-DOCS-LANGUAGE-BASELINE 与 CARD-DOC-STYLE;promote 以 minutes 与已上线门为 evidence;工作区级宣称、分阶段采纳:W 本 INIT、helper 随下次 candidate 重钉、DS 随其下一班列车",
+        "MIN-042 与 MIN-043 与 MIN-044 既有边界不变"
+      ],
+      "unresolvedIssues": [
+        "风格规则的措辞类条款无自动核验且依赖 review checklist 执行纪律"
+      ],
+      "effective": [
+        "风格规则的措辞类条款无自动核验且依赖 review checklist 执行纪律"
+      ]
+    },
+    "conference:ca0048a6a231ba9f4ef48201": {
+      "id": "minutes:55cf686f888b70e5e9420b7a",
+      "externalKey": "TCRN-CROSS-MIN-046",
+      "summary": "N-2 由唯一 fail-open 面改为逐宿主闭合枚举：observe 六事件获批，fail-open 不阻断且收据缺失非事件缺失；逐 hook 逐宿主实测上线，fixture 不构成 live 声称；enforce 另裁并记录其前置；反对意见如实在录。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "N-2 修宪只覆盖 observe 面；enforce(PreToolUse/PermissionRequest/Stop)另开会议另裁，不得由本裁定推导",
+        "N-2 唯一条款改为逐宿主闭合枚举：具名 hook 事件为已获批面，各自声明失败语义并产账本收据；未列举一律禁止；扩表须新裁定而非实现决定",
+        "observe 首批枚举 PostToolUse、SessionEnd、PreCompact、PostCompact、SubagentStart、SubagentStop，双宿主各自计数",
+        "observe 恒为 fail-open 不阻断有界只读，绝不作交付门；收据缺失不是事件缺失的证据，不得作免责或合规证明；超时杀 hook 不杀会话",
+        "逐 hook 逐宿主上线：一次一个，各带本宿主实测收据与既有 hook 回归证明；家族不继承成员证据",
+        "fixture 证明不构成 live 声称：本裁定解锁开发与 fixture 证明，不解锁任何 live 声称，live 须真实宿主收据",
+        "漂移防线为处理器 digest 钉扎加入口自检加失配静默；不得声称与 Codex 逐哈希门等价；兜底为会话首 verify-installed-copy",
+        "禁用措辞 hooks are supported、observe hooks are safe、coverage is full、hosts are equivalent、non-blocking by construction；许可恒为逐 hook 逐宿主收据支撑",
+        "enforce 前置记录待办：独立裁定、爆炸半径、不依赖该 hook 可触达的 Owner 已测 kill switch、真实宿主 fail-closed 红证",
+        "如实记录反对意见：N-2 的力量在于计数为一，每开一例都让下一例更廉价"
+      ],
+      "unresolvedIssues": [
+        "enforce 面的 fail-open/fail-closed 逐面裁定待独立会议",
+        "Codex 侧任何 observe live 收据待 Owner 通知 codex 实测"
+      ],
+      "effective": [
+        "enforce 面的 fail-open/fail-closed 逐面裁定待独立会议",
+        "Codex 侧任何 observe live 收据待 Owner 通知 codex 实测"
+      ]
+    },
+    "conference:3224a81fcec47f85988261ae": {
+      "id": "minutes:5b26238fd23a2cba4430f429",
+      "externalKey": "TCRN-CROSS-MIN-047",
+      "summary": "CONF-039 的执行形态如实补记为 legacy-unverified 并保留原状；CONF-040/043 虽确由独立子代理产出但早于采集机制，同样不予升格。自 S055 起以观测收据为多代理审议的唯一判据，诚实上限（归因非身份、采集器同权、转写未签名）已结构化在代码而非叙述中。",
+      "outcomeClass": "recommendation",
+      "decisions": [
+        "CONF-039 保留原状不追加不改写；本会议为其后继 remediation 并交叉引用，不声称重开原会议",
+        "CONF-039 五立场均由单一主线程上下文撰写，按 EPIC-019 读法分类为 legacy-unverified，不是 multi-agent-deliberative",
+        "CONF-040 与 CONF-043 的立场确由独立 fresh-context 子代理产出并逐字转录，但早于 S055 采集机制故未绑宿主执行收据",
+        "本会议明确不为 CONF-040 与 CONF-043 追认更高分类，以免以叙述替代证据；其执行来源同为 legacy-unverified",
+        "自 S055 起新会议可由观测到的子代理调用产出收据，立场正文与调用收尾输出字节相等方可标 multi-agent-deliberative，无收据即 synthesis-only 失败关闭",
+        "诚实上限不变：收据是归因增强而非身份证明，采集器与被观测代理同权，转写未经宿主签名；三句已钉进模块常量、返回类型与门",
+        "缺席即未知不得读作已覆盖：无收据不证明调用未发生，亦不证明其发生"
+      ],
+      "unresolvedIssues": [
+        "自伪造缓解（会话无写权的外发收集器）仍列 enforce 级前置研究",
+        "尚未实现"
+      ],
+      "effective": [
+        "自伪造缓解（会话无写权的外发收集器）仍列 enforce 级前置研究",
+        "尚未实现"
+      ]
+    },
+    "conference:68f91a931940fc34f0b37020": {
+      "id": "minutes:0a8df40ebda0b7dfc966937c",
+      "externalKey": "TCRN-CROSS-MIN-048",
+      "summary": "INIT-012 分解裁定:P1-P10 按交付面分五 Epic(EPIC-029..033)十五 Story(STORY-091..105);OWNER-NOW 四项批量前置;INIT 保持 planned 不推进",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "分解轴=交付面五层(公约/载荷批次/仪器/MCP 可测性/引擎候选);被拒=逐 P 一 Epic(过碎且 P 项共享交付物)",
+        "EPIC-029 公约固化 P3/P4/P5/P7/P9 五 Story(STORY-091..095)",
+        "EPIC-030 helper candidate.27 单批次 P2/P6+载荷落点四 Story(STORY-096..099);dogfood P2",
+        "EPIC-031 仪器速赢 P8 两 Story(STORY-100..101)",
+        "EPIC-032 MCP 采用+P10 三 Story(STORY-102..104);接线序 Claude 先行",
+        "EPIC-033 引擎候选 P1 单 Story(STORY-105);实施 CONDITIONAL 不预建",
+        "决策清单=OWNER-NOW 四项(S095 逐字立场/S103 L2.5 授权额度帽/S100+S102 配置 diff 批准/S099 发布停点形态)+CONDITIONAL 三项(P1 实施待裁/S102 依赖 S099/L2.5 运行待授权)+其余 AGENT 直跑"
+      ],
+      "unresolvedIssues": [
+        "S095 Verity remediation 需 Owner 逐字立场",
+        "S103 L2.5 常设授权与额度帽待裁",
+        "S099 发布停点形态届时呈报(SPRINT-002 已 done)",
+        "S100 与 S102 宿主配置 diff 须执行时批准"
+      ],
+      "effective": [
+        "S095 Verity remediation 需 Owner 逐字立场",
+        "S103 L2.5 常设授权与额度帽待裁",
+        "S099 发布停点形态届时呈报(SPRINT-002 已 done)",
+        "S100 与 S102 宿主配置 diff 须执行时批准"
+      ]
+    },
+    "conference:e25e30c14d712a22306ac948": {
+      "id": "minutes:1f9eb4cd8da2c029e4994d77",
+      "externalKey": "TCRN-CROSS-MIN-049",
+      "summary": "Verity persona 注入事件 remediation:三条裁定由 2026-07-25 注解 prose 转写为可引用纪要;根因为 Step-3 设计缺陷;按 P5 残余适用性分析结论为删除而非条件化",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "主线程不是只读线程;可接受用户对普通仓库操作的显式授权",
+        "Core Reference persona 仅用于 conference 立场署名(position attribution)",
+        "SessionStart 不注入 persona 也不绑定主线程",
+        "三条裁定的权威文本以本纪要为准;此前仅存于 TCRN-CROSS-INIT-009 注解(链 seq 1022)的 prose 表述自此可被引证替代",
+        "根因认定=激活阶梯 Step-3 设计推理未覆盖「读者会把 persona 当成自己的角色」;属设计缺陷而非执行方幻觉",
+        "按 P5 残余适用性分析该注入无任何受支持档位仍需要;处置为删除并留证而非条件化保留",
+        "能力档位机制(STORY-097)不得以弱档位为由把 persona 注入带回 standard 档"
+      ],
+      "unresolvedIssues": [
+        "激活阶梯文档中 Step-3/OD-34 相关叙述是否需同步修订待 STORY-097 执行时按实际文本判定"
+      ],
+      "effective": [
+        "激活阶梯文档中 Step-3/OD-34 相关叙述是否需同步修订待 STORY-097 执行时按实际文本判定"
+      ]
+    },
+    "conference:a4ddef9e6f2570bdf20c5a03": {
+      "id": "minutes:31c06e3871d6948fbde20176",
+      "externalKey": "TCRN-CROSS-MIN-050",
+      "summary": "P1 重裁:活链实测显示被迫分片仅占逻辑立场的 4.6%、最大缺口 1.27 倍,而提升方案的耦合至少四条且含一条跨包无门项;推荐维持 2048 并保留分片公约,实施待 Owner 裁定",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "推荐选项 A 维持 2048 字节上限并保留分片公约;理由是实测动机强度低于预期而提升的耦合面高于预期",
+        "该常量由 8 个 conference 字段共用;单条 position 的文本理论上界为 65 倍常量",
+        "它不进规范字节故不改既有链;但参与回放准入(一条超限记录使整个工作区对该引擎不可读)并必改证明字节",
+        "活链实测 232 条立场:p50 932 字节、单条最大 2034;完整两片对 15 对中合并后真超限的仅 10 对",
+        "以 217 条逻辑立场为分母被迫分片占 4.6%;最大逻辑立场合并 2609 字节即上限的 1.27 倍",
+        "提升方案的耦合至少四条:8 个共用字段、段信封(64 事件/段且段整体 1 MiB)、跨包的知识层 summary 上限 2048、以及 assignment-gate 的同值独立常量",
+        "跨包耦合无任何机器检查;只抬 conference 侧会让 summary 超限的 conference-close --distill 失败",
+        "实施属 CONDITIONAL 不预建;若日后提升则只接受版本门控的 enable 事件形态并须先给跨包耦合补门"
+      ],
+      "unresolvedIssues": [
+        "是否采纳 A 待 Owner 裁定",
+        "若不采纳 A 则 B 的目标值与四条耦合的处置顺序待定",
+        "该常量是否按治理约束分类公约登记为能力补偿型并附适用性谓词待 Owner 裁定",
+        "分析第二轮对抗复核仍判 FAIL(一处编造的 fixtureDigest 已在立场中更正为 1943ddf3 开头;记录级不变式建议因漏算事件信封而不成立)"
+      ],
+      "effective": [
+        "是否采纳 A 待 Owner 裁定",
+        "若不采纳 A 则 B 的目标值与四条耦合的处置顺序待定",
+        "该常量是否按治理约束分类公约登记为能力补偿型并附适用性谓词待 Owner 裁定",
+        "分析第二轮对抗复核仍判 FAIL(一处编造的 fixtureDigest 已在立场中更正为 1943ddf3 开头;记录级不变式建议因漏算事件信封而不成立)"
+      ]
+    },
+    "conference:9f1f0200e64943e99c9bd1bf": {
+      "id": "minutes:31bc6b98b9d01b9d63140abe",
+      "externalKey": "TCRN-CROSS-MIN-052",
+      "summary": "Owner 离席全权批次的九道方向题全部裁定。核心:AOS 写面本机服务化、VM 只读镜像、operator pins 不出本机、SQLite 双库物理分离、复用既有 k3s 集群部署、每目标一次收官发布但验证门不免、执行序锁定目标一→二→三、AOS 完整可用以五条判据钉死、S003 本批显式裁剪为四类字段加关系型只读。Verity 的三条追加约束(镜像版构建期剔除写控件、domain.db 备份与 S003 同批、措辞更正)与可用性判据全部采纳。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "D3 服务化时点：AOS 写面在本机服务化（apps/api 由只读门面升为读写服务），VM 维持只读镜像；静态生成模式作为预览轨道 P5 保留",
+        "D4 供权边界：operator pins 只存本机，链写只发生在本机服务；浏览器与 VM 永不持 pins；看板拖拽走本机服务代理；镜像版构建期即剔除写控件并明示写面在本机",
+        "D4b 镜像受众：绑内网不暴露公网，暂不建认证层；绞线为一旦需给 Owner 设备之外的任何人则 S019 重开并按对外发布级处理",
+        "D5 存储：SQLite 双库物理分离 domain.db 与 projection.db；qualified ref 唯一挂链形态；走 packages/db 既有迁移；domain.db 导出备份必须与 S003 同批落地，否则不得写入真实域数据",
+        "D6 部署形态：复用 VM 既有 k3s 集群（非新建集群也非零新增运维轨），namespace tcrn-aos + traefik ingress + 静态站",
+        "D7 发布节奏：每目标一次收官发布共三次；免除的是 Owner 停点而非验证门，三次各自 verify 全绿且推送后向服务器复核比全 sha",
+        "D8 分支：各仓 feat 分支推送后合 main；DS 与 W 打 tag 发布；AOS 推送前先验本地与远端 main 共同祖先",
+        "D9 可用性判据五条：VM URL 可达且返 SSR 内容、十一模块渲染真链数据、本机写面可改 AOS 域字段并回读、链写经本机服务成功且非法流转被拒、镜像与本机数据版本一致或差异如实标注；缺一不得宣称完成",
+        "D10 执行序：目标一（DS 发包）→目标二（AOS 消费与部署）→目标三（W/helper 集成），不得抢跑",
+        "D11 S003 本批范围显式裁剪：只做负责人、标签、优先级、评论四类写面 + 12 关系型只读呈现；关系型写入与其余字段谱留待后续并写入 S003 注解"
+      ],
+      "unresolvedIssues": [
+        "S017 投影同步管道未建时镜像新鲜度靠手工重推，自动化留待后续",
+        "关系型写入 UI 形态无设计稿，需先出稿再开工"
+      ],
+      "effective": [
+        "S017 投影同步管道未建时镜像新鲜度靠手工重推，自动化留待后续",
+        "关系型写入 UI 形态无设计稿，需先出稿再开工"
       ]
     }
   },
@@ -8515,6 +14989,30 @@ export const cockpitData: CockpitData = {
     ],
     "work:324538e48b1732d764391ef1": [
       {
+        "id": "event:2c563694bf3eb4523ee68f30",
+        "sequence": 240,
+        "occurredAt": "2026-07-26T19:47:05Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:6b43679896c56417d87d35d6",
+        "sequence": 239,
+        "occurredAt": "2026-07-26T19:47:05Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:4068564e80e29581169e6524",
+        "sequence": 238,
+        "occurredAt": "2026-07-26T19:47:05Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
         "id": "event:7380f16049f04764e32fa401",
         "sequence": 217,
         "occurredAt": "2026-07-26T16:51:10Z",
@@ -8714,6 +15212,30 @@ export const cockpitData: CockpitData = {
       }
     ],
     "work:c2539981e4c4cfe7d803675e": [
+      {
+        "id": "event:2ce392e523975a5c00ff9f04",
+        "sequence": 243,
+        "occurredAt": "2026-07-26T19:47:06Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:3d80538dc8d8d604ab63a532",
+        "sequence": 242,
+        "occurredAt": "2026-07-26T19:47:06Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:e7752b45b9b417342fe6a208",
+        "sequence": 241,
+        "occurredAt": "2026-07-26T19:47:05Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
       {
         "id": "event:8eb683197135ce2fba24169d",
         "sequence": 224,
@@ -9823,6 +16345,30 @@ export const cockpitData: CockpitData = {
     ],
     "work:1643aa92bf19dca9922ec7dd": [
       {
+        "id": "event:c736cc71f07bf8015eda0208",
+        "sequence": 231,
+        "occurredAt": "2026-07-26T19:47:05Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:3874a0179f4733b4a56d655f",
+        "sequence": 230,
+        "occurredAt": "2026-07-26T19:47:04Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:2ccb189032ee4a6b65fab1fa",
+        "sequence": 229,
+        "occurredAt": "2026-07-26T19:47:04Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
         "id": "event:bc6e358d45d6fbbf6aa98ed6",
         "sequence": 219,
         "occurredAt": "2026-07-26T16:51:10Z",
@@ -9841,6 +16387,30 @@ export const cockpitData: CockpitData = {
     ],
     "work:f84f96d61eaf90caddf0bc8b": [
       {
+        "id": "event:7d5f61543ec2cafe7b2895b9",
+        "sequence": 234,
+        "occurredAt": "2026-07-26T19:47:05Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:3771a7166b35bfd616cbd939",
+        "sequence": 233,
+        "occurredAt": "2026-07-26T19:47:05Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:d32d1482991b50ec18cd3553",
+        "sequence": 232,
+        "occurredAt": "2026-07-26T19:47:05Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
         "id": "event:2c342334e7a6cfe3dd25a40b",
         "sequence": 221,
         "occurredAt": "2026-07-26T16:51:10Z",
@@ -9858,6 +16428,30 @@ export const cockpitData: CockpitData = {
       }
     ],
     "work:f3a608f3a5fb3cfa20ad0a05": [
+      {
+        "id": "event:4487376377f5f74cf4fda4e8",
+        "sequence": 237,
+        "occurredAt": "2026-07-26T19:47:05Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:3fe30eaf94a2ea7129dddd54",
+        "sequence": 236,
+        "occurredAt": "2026-07-26T19:47:05Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:b5b4b2ea3a28a7006403da7e",
+        "sequence": 235,
+        "occurredAt": "2026-07-26T19:47:05Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
       {
         "id": "event:417967cbbcb5c5e81ebd6e2c",
         "sequence": 223,

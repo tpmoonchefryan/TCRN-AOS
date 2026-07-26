@@ -6,7 +6,7 @@
     "urlReachableWithSsr": {
       "ok": true,
       "status": 200,
-      "bytes": 187432,
+      "bytes": 352015,
       "view": "my-work"
     },
     "everyModuleRendersChainData": {
@@ -17,14 +17,14 @@
           "route": "/my-work",
           "status": 200,
           "view": "my-work",
-          "chainKeys": 180,
+          "chainKeys": 510,
           "notReadNotices": 1
         },
         {
           "route": "/inbox",
           "status": 200,
           "view": "inbox",
-          "chainKeys": 62,
+          "chainKeys": 328,
           "notReadNotices": 1
         },
         {
@@ -45,7 +45,7 @@
           "route": "/work-items",
           "status": 200,
           "view": "work-items",
-          "chainKeys": 628,
+          "chainKeys": 778,
           "notReadNotices": 0
         },
         {
@@ -80,7 +80,7 @@
           "route": "/audit",
           "status": 200,
           "view": "audit",
-          "chainKeys": 66,
+          "chainKeys": 387,
           "notReadNotices": 1
         },
         {
@@ -94,10 +94,10 @@
     },
     "localDomainWriteRoundTrips": {
       "ok": true,
-      "wroteLabel": "acceptance-1785094882942",
+      "wroteLabel": "acceptance-1785103377336",
       "readBackLabels": [
         "cockpit",
-        "acceptance-1785094882942"
+        "acceptance-1785103377336"
       ]
     },
     "chainWriteAndRefusal": {

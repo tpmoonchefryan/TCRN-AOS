@@ -181,7 +181,7 @@ export interface PartitionProjection {
    * positions" and "this chain has no positions" produce identical data, and a
    * view has to be able to tell a reader which one it is looking at.
    */
-  readVia: "export" | "paginated";
+  readVia: "export" | "paginated" | "paginated-with-deliberations";
   work: readonly ProjectedWork[];
   gates: readonly ProjectedGate[];
   conferences: readonly ProjectedConference[];

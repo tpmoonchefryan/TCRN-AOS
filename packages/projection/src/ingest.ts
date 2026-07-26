@@ -270,10 +270,11 @@ export class ChainIngestor {
       if (records.length < pageSize) break;
     }
 
-    // Keys are recovered by verified digest match. The derivation variant is
-    // chosen by which one explains the most real ids, so no assumption is made
-    // about which record happens to be first, and a changed derivation yields
-    // unnamed records rather than wrong names.
+    // Keys are recovered by verified digest match only for engines that do not
+    // return them. Workflow v0.7.0 puts `externalKey` on the summary, so on a
+    // current engine this table is never consulted; it stays for older ones,
+    // where the alternative is a cockpit that can show a work tree and name
+    // nothing in it.
     const keyTable = resolveKeyTable(
       "work",
       rows.map((row) => row.id),
@@ -292,7 +293,7 @@ export class ChainIngestor {
       work.push({
         partitionId,
         id: row.id,
-        externalKey: keyTable.get(digestOf(row.id)) ?? null,
+        externalKey: row.externalKey ?? keyTable.get(digestOf(row.id)) ?? null,
         kind: row.kind as ChainWorkKind,
         status: row.status as ChainWorkStatus,
         parentId: row.parentId ?? null,
@@ -348,17 +349,71 @@ export class ChainIngestor {
       }
     }
 
+    // Positions and minutes have workspace-scoped paginated reads from Workflow
+    // v0.7.0. Before that they were reachable only through `export`, so on these
+    // very chains — the ones too large for `export` — a deliberation holding
+    // fifteen arguments and one holding none looked exactly alike.
+    //
+    // An older engine does not have the verbs and answers with a refusal; that
+    // is caught and reported as "not read" rather than as an empty thread,
+    // because those are opposite facts about the same blank screen.
+    const positions: ProjectedPosition[] = [];
+    const minutes: ProjectedMinutes[] = [];
+    let deliberationsReadable = true;
+    try {
+      const perConference = new Map<string, number>();
+      for await (const row of this.pages<ExportPositionRow>(
+        "tcrn_workflow_conference_position_list", source.workspacePath)) {
+        if (row.tombstone === true) continue;
+        const ordinal = (perConference.get(row.conferenceId) ?? 0) + 1;
+        perConference.set(row.conferenceId, ordinal);
+        positions.push({
+          partitionId,
+          id: row.id,
+          externalKey: row.externalKey ?? null,
+          conferenceId: row.conferenceId,
+          actorId: row.actorId ?? null,
+          body: row.position,
+          ordinal,
+          chainVersion
+        });
+      }
+      const minutesRows: ExportMinutesRow[] = [];
+      for await (const row of this.pages<ExportMinutesRow>(
+        "tcrn_workflow_conference_minutes_list", source.workspacePath)) {
+        if (row.tombstone !== true) minutesRows.push(row);
+      }
+      const minutesKeys = resolveKeyTable("minutes", minutesRows.map((row) => row.id), {
+        partitionTokens: partitionTokenCandidates(partitionId), kindTokens: ["MIN"] });
+      for (const row of minutesRows) {
+        minutes.push({
+          partitionId,
+          id: row.id,
+          externalKey: row.externalKey ?? minutesKeys.get(digestOf(row.id)) ?? null,
+          conferenceId: row.conferenceId,
+          summary: row.summary ?? null,
+          outcomeClass: row.outcomeClass as ChainOutcomeClass,
+          decisions: row.decisions ?? [],
+          unresolvedIssues: row.unresolvedIssues ?? [],
+          chainVersion
+        });
+      }
+    } catch (error) {
+      if (!(error instanceof ChainClientError)) throw error;
+      deliberationsReadable = false;
+    }
+
     return {
       partitionId,
       chainVersion,
       verifiedAt,
-      readVia: "paginated",
+      readVia: deliberationsReadable ? "paginated-with-deliberations" : "paginated",
       work,
       gates,
       conferences,
-      positions: [],
-      minutes: [],
-      // The event log has no paginated read at all, so a partition reached this
+      positions,
+      minutes,
+      // The event log still has no paginated read, so a partition reached this
       // way has no history to show. Returning empty is only safe because callers
       // are told which families a partition could not supply and render "not
       // read" for them; without that, an empty log would read as "nothing ever
@@ -366,6 +421,24 @@ export class ChainIngestor {
       events: [],
       actorAttestationFromSequence: null
     };
+  }
+
+  /**
+   * Walk a paginated list verb to exhaustion.
+   *
+   * The page size is a read-window choice, not a limit on what is returned: the
+   * caller gets every record, and the windows exist so a large chain is read in
+   * pieces rather than refused whole.
+   */
+  private async *pages<T>(tool: string, workspacePath: string): AsyncGenerator<T> {
+    const pageSize = 200;
+    for (let offset = 0; ; offset += pageSize) {
+      const page = await this.client.callTool<{ records?: readonly T[] }>(
+        tool, { workspace: workspacePath, limit: pageSize, offset });
+      const records = page.records ?? [];
+      for (const record of records) yield record;
+      if (records.length < pageSize) return;
+    }
   }
 }
 
@@ -410,6 +483,7 @@ interface ExportEventRow {
 
 interface ExportWorkRow {
   id: string;
+  /** Present from Workflow v0.7.0 on every read; absent on older engines. */
   externalKey?: string;
   kind: string;
   status: string;
