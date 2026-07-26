@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "aos.mirror-acceptance.v1",
+  "ruling": "TCRN-CROSS-MIN-052 D9",
+  "ok": true,
+  "criteria": {
+    "urlReachableWithSsr": {
+      "ok": true,
+      "status": 200,
+      "bytes": 187432,
+      "view": "my-work"
+    },
+    "everyModuleRendersChainData": {
+      "ok": true,
+      "modulesWithChainKeys": 11,
+      "modules": [
+        {
+          "route": "/my-work",
+          "status": 200,
+          "view": "my-work",
+          "chainKeys": 180,
+          "notReadNotices": 1
+        },
+        {
+          "route": "/inbox",
+          "status": 200,
+          "view": "inbox",
+          "chainKeys": 62,
+          "notReadNotices": 1
+        },
+        {
+          "route": "/dashboard",
+          "status": 200,
+          "view": "dashboard",
+          "chainKeys": 10,
+          "notReadNotices": 0
+        },
+        {
+          "route": "/projects",
+          "status": 200,
+          "view": "projects",
+          "chainKeys": 10,
+          "notReadNotices": 0
+        },
+        {
+          "route": "/work-items",
+          "status": 200,
+          "view": "work-items",
+          "chainKeys": 628,
+          "notReadNotices": 0
+        },
+        {
+          "route": "/board",
+          "status": 200,
+          "view": "board",
+          "chainKeys": 205,
+          "notReadNotices": 1
+        },
+        {
+          "route": "/release-trains",
+          "status": 200,
+          "view": "release-trains",
+          "chainKeys": 45,
+          "notReadNotices": 0
+        },
+        {
+          "route": "/knowledge",
+          "status": 200,
+          "view": "knowledge",
+          "chainKeys": 38,
+          "notReadNotices": 1
+        },
+        {
+          "route": "/deliberations",
+          "status": 200,
+          "view": "deliberations",
+          "chainKeys": 32,
+          "notReadNotices": 1
+        },
+        {
+          "route": "/audit",
+          "status": 200,
+          "view": "audit",
+          "chainKeys": 66,
+          "notReadNotices": 1
+        },
+        {
+          "route": "/snapshots",
+          "status": 200,
+          "view": "snapshots",
+          "chainKeys": 10,
+          "notReadNotices": 1
+        }
+      ]
+    },
+    "localDomainWriteRoundTrips": {
+      "ok": true,
+      "wroteLabel": "acceptance-1785094882942",
+      "readBackLabels": [
+        "cockpit",
+        "acceptance-1785094882942"
+      ]
+    },
+    "chainWriteAndRefusal": {
+      "ok": true,
+      "legalMove": {
+        "status": 409,
+        "ok": false,
+        "reasonCode": "INVALID_TRANSITION"
+      },
+      "illegalMove": {
+        "status": 409,
+        "reasonCode": "INVALID_TRANSITION"
+      }
+    },
+    "mirrorFreshnessStatedAndReadOnly": {
+      "ok": true,
+      "mirrorStatesFreshness": true,
+      "mirrorOffersNoWrite": true,
+      "mirrorChainVersions": [],
+      "localServiceChainWriteAvailable": true
+    }
+  },
+  "notClaimed": [
+    "the mirror is read-only by design; the write surface lives only on the operator's machine",
+    "mirror freshness is the projection's, and is stated rather than implied to be live"
+  ]
+}

@@ -4,14 +4,14 @@
 import type { CockpitData } from "./cockpit-types.js";
 
 export const cockpitData: CockpitData = {
-  "generatedAt": "2026-07-26T19:24:13Z",
+  "generatedAt": "2026-07-26T19:36:36Z",
   "partitions": [
     {
       "id": "cross-project",
       "label": "Platform governance",
       "labelZh": "平台治理",
       "chainVersion": 1261,
-      "verifiedAt": "2026-07-26T19:24:13Z",
+      "verifiedAt": "2026-07-26T19:36:36Z",
       "readVia": "paginated",
       "attestationFromSequence": null,
       "unavailable": [
@@ -25,7 +25,7 @@ export const cockpitData: CockpitData = {
       "label": "Design System",
       "labelZh": "设计系统",
       "chainVersion": 959,
-      "verifiedAt": "2026-07-26T19:24:13Z",
+      "verifiedAt": "2026-07-26T19:36:36Z",
       "readVia": "paginated",
       "attestationFromSequence": null,
       "unavailable": [
@@ -39,7 +39,7 @@ export const cockpitData: CockpitData = {
       "label": "TMS",
       "labelZh": "TMS",
       "chainVersion": 228,
-      "verifiedAt": "2026-07-26T19:24:13Z",
+      "verifiedAt": "2026-07-26T19:36:36Z",
       "readVia": "export",
       "attestationFromSequence": null,
       "unavailable": []
@@ -48,8 +48,8 @@ export const cockpitData: CockpitData = {
       "id": "TCRN-AOS",
       "label": "AOS",
       "labelZh": "AOS",
-      "chainVersion": 224,
-      "verifiedAt": "2026-07-26T19:24:13Z",
+      "chainVersion": 228,
+      "verifiedAt": "2026-07-26T19:36:36Z",
       "readVia": "export",
       "attestationFromSequence": 62,
       "unavailable": []
@@ -254,7 +254,7 @@ export const cockpitData: CockpitData = {
       "status": "done",
       "parentId": "work:e6a70fb7d03f607657d1f13c",
       "revision": 5,
-      "scope": "缺陷:导航承诺三个屏,实际只有两个半。**已修**(data.ts 导航模型 + app.tsx 路由分派 + 新增 cockpit-global.tsx)。现象=/inbox 渲染的是「我的工作」同一个视图(收件��在设计里是「头号功能」);/dashboard 渲染的是看板,与它自己的描述「跨项目交付与治理指标」不符;/board 根本不存在。修法=收件箱与仪表盘各成一屏,看板移入交付组并可按项目过滤,导航由十项增为十一项。**发现方式值得记**:不是读代码发现的,是把每一屏批量渲染成预览文件后,机器逐个抽 data-cockpit-view 属性做对照表时,发现两个文件名与视图名对不上——**逐屏渲染再逐屏比对,是导航与路由脱节的唯一低成本探针**,人工点击十一个入口不会注意到两个页面长得一样。",
+      "scope": "缺陷:导航承诺三个屏,实际只有两个半。**已修**(data.ts 导航模型 + app.tsx 路由分派 + 新增 cockpit-global.tsx)。现象=/inbox 渲染的是「我的工作」同一个视图(收件箱在设计里是「头号功能」);/dashboard 渲染的是看板,与它自己的描述「跨项目交付与治理指标」不符;/board 根本不存在。修法=收件箱与仪表盘各成一屏,看板移入交付组并可按项目过滤,导航由十项增为十一项。**发现方式值得记**:不是读代码发现的,是把每一屏批量渲染成预览文件后,机器逐个抽 data-cockpit-view 属性做对照表时,发现两个文件名与视图名对不上——**逐屏渲染再逐屏比对,是导航与路由脱节的唯一低成本探针**,人工点击十一个入口不会注意到两个页面长得一样。",
       "decidedBy": [],
       "sprintWorkId": null
     },
@@ -317,10 +317,10 @@ export const cockpitData: CockpitData = {
       "id": "work:ad72557d88653b6d94456b1d",
       "externalKey": "TCRN-AOS-STORY-003",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:e716f832a9f2ed1301d2f449",
-      "revision": 2,
-      "scope": "AOS 自有域 schema:负责人/优先级/标签/截止/关注者/评论/12 种关系型(DS 预置);qualified ref 挂链;独立备份故事",
+      "revision": 6,
+      "scope": "AOS 自有域 schema。**已交付(2026-07-27)**:packages/db/migrations/domain/0001_cockpit_domain.sql(三表:annotation 负责人/优先级/标签、comment、relation 12 关系型)+packages/projection/src/domain-store.ts+apps/cockpit-service 读写服务+详情页 DomainPanel。**双库物理分离**:domain.db 珍贵纳备份、projection.db 可弃永不备份;qualified ref 挂链绝不合并进链记录(projection-import-truth-ownership);悬空引用刻意允许——链记录被 tombstone 后仍显示附注并说明主语已消失,不因外键删掉别人的评论。**迁移目录单独**:放进 migrations/sqlite 会让运行时库也建这些表,即把珍贵数据放进可弃库(该错误被 BK-02 测试当场抓到)。**服务只绑 127.0.0.1**:operator pins 只在本机,故唯一可持有它的进程必须是别处够不着的;浏览器与镜像永不持有。域面写入与链写代理均在浏览器内实测(负责人、评论经 UI 落库;链流转合法成功、非法返 INVALID_TRANSITION)。**本批显式裁剪(MIN-052 D11)**:关系型为只读呈现,写入 UI 留待后续;截止日与关注者未做。收据 evidence/aos-cockpit-service-proof.json。",
       "decidedBy": [
         "minutes:5da0b8ea8b8421cb1f3a1e89"
       ],
@@ -8906,6 +8906,38 @@ export const cockpitData: CockpitData = {
       }
     ],
     "work:ad72557d88653b6d94456b1d": [
+      {
+        "id": "event:a41351498adbd5fc7bbc65cb",
+        "sequence": 228,
+        "occurredAt": "2026-07-26T19:40:00Z",
+        "operation": "work.annotated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:9c18ce4b1cd06bcb3ea5c37c",
+        "sequence": 227,
+        "occurredAt": "2026-07-26T19:36:12Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:a1293f218bc38b9e0aa565e1",
+        "sequence": 226,
+        "occurredAt": "2026-07-26T19:36:12Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
+      {
+        "id": "event:8e536ab3aa0b83b897c87f3e",
+        "sequence": 225,
+        "occurredAt": "2026-07-26T19:35:52Z",
+        "operation": "work.updated",
+        "actorId": "agent:fable",
+        "attribution": "recorded"
+      },
       {
         "id": "event:52059267df4b184b5a9e5d0c",
         "sequence": 47,

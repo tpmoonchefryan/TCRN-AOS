@@ -1,0 +1,158 @@
+# TCRN AOS — the read-only mirror on the platform dev VM.
+#
+# What this is: a static server-rendered copy of the cockpit, refreshed from the
+# Mac by rsync. What it deliberately is not: a place where anything is written.
+# Operator authority pins exist only on the Mac, so the write surface exists only
+# there; the cockpit's domain panel probes for that service, finds nothing here,
+# and says where writes actually happen rather than offering controls that would
+# fail. That is a fact this cluster cannot change by configuration.
+#
+# The content lives on a hostPath rather than in a ConfigMap because the build is
+# ~5MB and a ConfigMap caps at 1MB — and because a mirror that refreshes with
+# `rsync` is one command, where a ConfigMap refresh is a re-apply plus a pod
+# restart for content that changes several times a day.
+#
+# Reachability is LAN-only, per the ruling: this is governance data, and the
+# boundary that matters is "not on the public internet", not an auth layer for an
+# audience of one. The tripwire is written into the Initiative: the moment this
+# address needs to reach anyone beyond the Owner's own devices, the access
+# question reopens and is handled as an outward publication.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tcrn-aos
+  labels:
+    app.kubernetes.io/part-of: tcrn-platform
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aos-mirror-nginx
+  namespace: tcrn-aos
+data:
+  default.conf: |
+    server {
+      listen 8080;
+      server_name _;
+      root /usr/share/nginx/html;
+      index index.html;
+
+      # Redirects are relative. Behind an ingress, nginx's default absolute
+      # redirect rebuilds the URL from its own idea of the host, which sends a
+      # client to a name that does not resolve from where it is standing.
+      absolute_redirect off;
+
+      # Every route was server-rendered into its own directory by
+      # scripts/build-mirror.mjs, so a deep link gets the right screen on first
+      # paint instead of the "/" render corrected later by hydration.
+      #
+      # `$uri/index.html` is tried BEFORE `$uri/` on purpose: with the directory
+      # form first, "/work-items" answers 301 to "/work-items/" and only then
+      # serves, which is a wasted round trip and — behind this ingress — a
+      # redirect the client could not follow at all. The final fallback covers
+      # routes the mirror does not carry: the client re-renders from the URL,
+      # which is the honest degradation rather than a 404.
+      location / {
+        try_files $uri $uri/index.html $uri/ /index.html;
+      }
+
+      # The client bundle is content-stable per build; the HTML is not, because
+      # a refresh is the whole point of a mirror.
+      location /assets/ {
+        add_header Cache-Control "public, max-age=300";
+      }
+
+      location = /healthz {
+        access_log off;
+        return 200 "ok\n";
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aos-mirror
+  namespace: tcrn-aos
+  labels:
+    app.kubernetes.io/name: aos-mirror
+    app.kubernetes.io/part-of: tcrn-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aos-mirror
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: aos-mirror
+    spec:
+      containers:
+        - name: nginx
+          image: docker.io/nginxinc/nginx-unprivileged:1.27.3-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          # Read-only at the container level as well as by design: nothing in
+          # this pod has any reason to write, and saying so here means a
+          # compromise cannot quietly change what the mirror serves.
+          volumeMounts:
+            - name: content
+              mountPath: /usr/share/nginx/html
+              readOnly: true
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 25m
+              memory: 32Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+      volumes:
+        - name: content
+          hostPath:
+            path: /srv/tcrn/aos-mirror
+            type: DirectoryOrCreate
+        - name: nginx-conf
+          configMap:
+            name: aos-mirror-nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aos-mirror
+  namespace: tcrn-aos
+spec:
+  selector:
+    app.kubernetes.io/name: aos-mirror
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aos-mirror
+  namespace: tcrn-aos
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: aos.tcrn.lan
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: aos-mirror
+                port:
+                  name: http

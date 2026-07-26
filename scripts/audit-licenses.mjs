@@ -13,13 +13,15 @@ const expectedDevDeps = new Map([
 const allowedRuntimeDeps = new Map([
   ["@tcrn/ui-copy-state", {
     specifier: "file:../TCRN-Design-System/packages/ui-copy-state",
-    version: "1.0.0",
+    // 2.1.0 carries the ink selection grammar and SearchableList (TCRN-DS-INIT-013).
+    version: "2.1.0",
     license: "Apache-2.0",
     allowedDependencies: []
   }],
   ["@tcrn/ui-react", {
     specifier: "file:../TCRN-Design-System/packages/ui-react",
-    version: "1.0.0",
+    // 2.1.0 carries the ink selection grammar and SearchableList (TCRN-DS-INIT-013).
+    version: "2.1.0",
     license: "Apache-2.0",
     allowedDependencies: [
       "@radix-ui/react-dialog",
@@ -31,7 +33,8 @@ const allowedRuntimeDeps = new Map([
   }],
   ["@tcrn/ui-tokens", {
     specifier: "file:../TCRN-Design-System/packages/ui-tokens",
-    version: "1.0.0",
+    // 2.1.0 carries the ink selection grammar and SearchableList (TCRN-DS-INIT-013).
+    version: "2.1.0",
     license: "Apache-2.0",
     allowedDependencies: []
   }],
