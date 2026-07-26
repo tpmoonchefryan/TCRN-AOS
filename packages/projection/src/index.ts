@@ -29,3 +29,4 @@ export type {
   ProjectedWork
 } from "./types.js";
 export { resolveKeyTable, partitionTokenCandidates, digestOf, WORK_KIND_TOKENS, type KeyNamespace } from "./external-keys.js";
+export { SafeWriteSurface, WriteRefused, CEREMONIAL_WRITES, type WriteContext } from "./write-surface.js";
