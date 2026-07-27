@@ -34,14 +34,30 @@ try {
     && shell.status === 200
     && shellHtml.includes('data-aos-shell="owner-quality-product-shell"')
     && shellHtml.includes('data-owner-quality-product-shell-oracle="true"')
-    && shellHtml.includes('data-owner-quality-first-viewport="product-led"')
+    // TCRN-AOS-INC-011: `/` is the cockpit landing page and lands on My work.
+    // The owner-quality landing view it used to serve moved to /cockpit in
+    // TCRN-AOS-STORY-001/002/005/006/007 (8e76ef5); that commit updated
+    // apps/api/test/service-smoke.test.mjs and missed this second copy of the
+    // same predicate, so this line kept asking / for a marker that had moved.
+    // The marker is asserted below against the route that now carries it.
+    && shellHtml.includes('data-cockpit-view="my-work"')
+    && shellHtml.includes('data-partition-id="cross-project"')
     && shellHtml.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search"')
     && shellHtml.includes('data-package-backed-product-shell-boundary="side-nav-shell-v1"')
     && shellHtml.includes('data-product-shell-semantic-api="collapse-theme-locale"')
     && shellHtml.includes('data-product-shell-global-search="not-rendered"')
     && !shellHtml.includes('data-shell-control="product-shell-search"')
     && cockpit.status === 200
-    && cockpitHtml.includes('data-product-shell-route="cockpit"')
+    // TCRN-AOS-INC-011: this used to assert `data-product-shell-route="cockpit"`,
+    // which is the DS Navigation item id — it says the sidebar offers a route
+    // named cockpit, not that this response IS the cockpit. INIT-001 replaced
+    // the nav with eleven module ids, so no nav item is called cockpit or work
+    // any more. Translating the id would keep a predicate that never checked
+    // what its name claimed, so both now assert the content the route renders.
+    && cockpitHtml.includes('data-owner-quality-first-viewport="product-led"')
+    && cockpitHtml.includes('data-owner-quality-primary-heading="true"')
+    && cockpitHtml.includes('data-owner-quality-work-queue="true"')
+    && cockpitHtml.includes('data-owner-quality-gates="true"')
     && work.status === 200
     && workHtml.includes('data-work-management-mockup="storybook-ds-work-management-v1"')
     && workHtml.includes('data-work-management-static-fixture="true"')
@@ -63,7 +79,9 @@ try {
     && workHtml.includes('data-design-system-work-components="registered-package-components"')
     && workHtml.includes('data-product-local-work-component-clones="absent"')
     && workHtml.includes('data-work-route-acceptance-target="/work"')
-    && workHtml.includes('data-product-shell-route="work"')
+    // TCRN-AOS-INC-011, same substitution as the cockpit line above.
+    && workHtml.includes('data-work-management-page="queue"')
+    && workHtml.includes('data-owner-quality-first-viewport="work-operational"')
     && workBoard.status === 200
     && workBoardHtml.includes('data-work-management-page="board"')
     && workBoardHtml.includes('data-aos-work-module-entry="registered-ds-work-board"')
@@ -158,7 +176,16 @@ try {
       workActivityStatus: workActivity.status,
       shellMarkerPresent: shellHtml.includes('data-aos-shell="owner-quality-product-shell"'),
       ownerQualityMarkerPresent: shellHtml.includes('data-owner-quality-product-shell-oracle="true"'),
-      productLedMarkerPresent: shellHtml.includes('data-owner-quality-first-viewport="product-led"'),
+      // TCRN-AOS-INC-011: the root landing view and the owner-quality view are
+      // two different routes now, so the receipt names which route each posture
+      // was read from. `productLedMarkerPresent` kept its key and changed its
+      // subject; a reader comparing this receipt against an older one needs the
+      // route in the name to see that the subject moved rather than regressed.
+      rootCockpitLandingPresent: shellHtml.includes('data-cockpit-view="my-work"'),
+      rootPartitionPresent: shellHtml.includes('data-partition-id="cross-project"'),
+      productLedMarkerPresent: cockpitHtml.includes('data-owner-quality-first-viewport="product-led"'),
+      productLedMarkerRoute: "/cockpit",
+      workOperationalMarkerPresent: workHtml.includes('data-owner-quality-first-viewport="work-operational"'),
       productShellBoundaryPresent: shellHtml.includes('data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search"'),
       globalSearchAbsent: !shellHtml.includes('data-shell-control="product-shell-search"'),
       workModuleMarkerPresent: workHtml.includes('data-work-management-mockup="storybook-ds-work-management-v1"'),
