@@ -1,0 +1,104 @@
+{
+  "ok": true,
+  "destinationRoot": "/Users/ryanlan/OneDrive/Github/tcrn-aos-paired-backups",
+  "directory": "2026-07-27T03-14-54Z",
+  "pair": {
+    "schemaVersion": "aos.paired-backup.v1",
+    "pairedAt": "2026-07-27T03:14:54Z",
+    "partition": "TCRN-AOS",
+    "ok": true,
+    "lockstep": {
+      "ok": true,
+      "chainHeadEventHash": "914983354d5d43034a44ade1d36d68214b8de6053d78ad06928f0850d2e293d0",
+      "knowledgeHighWaterDigest": "914983354d5d43034a44ade1d36d68214b8de6053d78ad06928f0850d2e293d0",
+      "knowledgeVersion": 4,
+      "remedy": null
+    },
+    "pairing": {
+      "domainSnapshotDigest": "4691bf4b6aed8e8f1dc5fe85fe2c23fe06c55e1536ea9f18f2b73d40d8d8115c",
+      "domainExportDigest": "e76d11cdc7ff04552c9c0e4c30d116c66fa699c62e26285aa3e35cfe4d861521",
+      "chainManifestDigest": "d1cbf961841841cf54ae2e2388297009d5f8ffb36fc1f4942067cf86c7051905",
+      "chainHeadEventHash": "914983354d5d43034a44ade1d36d68214b8de6053d78ad06928f0850d2e293d0",
+      "chainVersion": 296,
+      "attestationSetDigest": "64235bba3988603928fd4d479e92bb6def754b19caae36edc8be67a6634db453",
+      "boundBy": "one instant plus mutual digests; either half alone is not a restorable pair"
+    },
+    "domain": {
+      "ok": true,
+      "createdWith": "sqlite_vacuum_into",
+      "integrityCheck": {
+        "ok": true,
+        "result": "ok"
+      },
+      "snapshotDigest": "4691bf4b6aed8e8f1dc5fe85fe2c23fe06c55e1536ea9f18f2b73d40d8d8115c",
+      "manifestDigest": "29996147c3d95a7c12ac74898bff4f77971659f0e645f6ae23e0c15e4110085f",
+      "tableRowCounts": {
+        "aos_domain_annotation": 2,
+        "aos_domain_comment": 1,
+        "aos_domain_relation": 0
+      },
+      "exportDigest": "e76d11cdc7ff04552c9c0e4c30d116c66fa699c62e26285aa3e35cfe4d861521",
+      "counts": {
+        "annotations": 2,
+        "comments": 1,
+        "relations": 0
+      },
+      "liveIntegrityCheck": {
+        "ok": true,
+        "result": "ok"
+      }
+    },
+    "chain": {
+      "ok": true,
+      "reasonCode": "SNAPSHOT_VERIFIED",
+      "verifyError": null,
+      "workspaceRoot": "/Users/ryanlan/Code/TCRN Platform/.tcrn-workspace/TCRN-AOS/workspace",
+      "headEventHash": "914983354d5d43034a44ade1d36d68214b8de6053d78ad06928f0850d2e293d0",
+      "version": 296,
+      "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+      "chainManifestDigest": "d1cbf961841841cf54ae2e2388297009d5f8ffb36fc1f4942067cf86c7051905",
+      "attestations": {
+        "directoryPresent": true,
+        "count": 133,
+        "chainEventsSeen": 296,
+        "orphanReceipts": 0,
+        "filenameMismatches": 0,
+        "strength": "advisory local-clock corroboration; unauthenticated, no engine verifier",
+        "setDigest": "64235bba3988603928fd4d479e92bb6def754b19caae36edc8be67a6634db453"
+      }
+    },
+    "restoreDrill": {
+      "ok": true,
+      "replayedInto": "fresh scratch store, deleted after the drill",
+      "counts": {
+        "annotations": {
+          "exported": 2,
+          "restored": 2
+        },
+        "comments": {
+          "exported": 1,
+          "restored": 1
+        },
+        "relations": {
+          "exported": 0,
+          "restored": 0
+        }
+      }
+    },
+    "notClaimed": [
+      "this run proves each half restores in a drill; it does not perform a restore",
+      "the projection database is deliberately absent -- it is rebuilt from the chains, never restored",
+      "a chain restore is same-path-only and operator-driven; see tcrn-workflow/docs/architecture/backup-restore-runbook.md",
+      "no VM copy is made here; the VM never holds this machine's credentials and pulls instead"
+    ]
+  },
+  "export": {
+    "fileCount": 150,
+    "totalBytes": 597728,
+    "fileSetDigest": "426b974524616281beffb51dc995fa1fee3744f240de790b053b83650c16d818"
+  },
+  "rotated": {
+    "kept": 5,
+    "deleted": []
+  }
+}
