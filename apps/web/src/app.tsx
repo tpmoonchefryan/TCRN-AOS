@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
   Badge,
@@ -29,6 +29,7 @@ import { tcrnTokenCss } from "@tcrn/ui-tokens";
 import { chainPartitions, localeCopy, shellNavGroups, shellNavItems, type ShellNavItem } from "./data.js";
 import { ShellHeaderActions } from "./shell-header-actions.js";
 import { MyWorkView, ProjectsView } from "./cockpit-views.js";
+import { CockpitEnvironmentBanner } from "./cockpit-mirror-banner.js";
 import { DashboardView, InboxView } from "./cockpit-global.js";
 import { WorkItemsView } from "./cockpit-work-items.js";
 import { WorkItemDetailView } from "./cockpit-detail.js";
@@ -102,16 +103,30 @@ interface OwnerQualityRoutePolicy {
 
 interface AosShellAppProps {
   initialShellState?: InitialShellState;
+  /** Server-render hint for the environment banner; the client still probes. */
+  initialSurface?: "local" | "mirror";
 }
 
 interface RenderAosShellHtmlOptions {
   path?: string;
   search?: string;
+  /**
+   * Which copy of the cockpit these bytes are being rendered for, when the
+   * renderer knows. The mirror build does know — it is building the mirror — and
+   * saying so at render time means a reader without scripting still sees "this
+   * is a copy" rather than only the data's age. The client still probes and
+   * still gets the last word, so a wrong stamp is corrected rather than trusted.
+   */
+  surface?: "local" | "mirror";
 }
 
 export function renderAosShellHtml(options: RenderAosShellHtmlOptions = {}): string {
   const initialShellState = readInitialShellState(options.path, options.search);
-  const appHtml = renderToStaticMarkup(<AosShellApp initialShellState={initialShellState} />);
+  const appHtml = renderToStaticMarkup(
+    <AosShellApp
+      initialShellState={initialShellState}
+      {...(options.surface ? { initialSurface: options.surface } : {})}
+    />);
 
   return `<!doctype html>
 <html lang="${initialShellState.locale}" data-tcrn-theme="${initialShellState.theme}" data-current-locale="${initialShellState.locale}" data-product-shell-html="true">
@@ -134,7 +149,7 @@ export function renderAosShellHtml(options: RenderAosShellHtmlOptions = {}): str
 </html>`;
 }
 
-export function AosShellApp({ initialShellState: initialShellStateOverride }: AosShellAppProps = {}) {
+export function AosShellApp({ initialShellState: initialShellStateOverride, initialSurface }: AosShellAppProps = {}) {
   const initialShellState = useMemo(() => initialShellStateOverride ?? readInitialShellState(), [initialShellStateOverride]);
   const [currentPath] = useState(initialShellState.currentPath);
   const [apiReadback, setApiReadback] = useState<ApiReadbackState>(initialApiReadback);
@@ -418,12 +433,14 @@ export function AosShellApp({ initialShellState: initialShellStateOverride }: Ao
           theme: controller.theme,
           collapsed: visualInstanceCollapsed
         })}
+        {...(initialSurface ? { surface: initialSurface } : {})}
       />
     </ProductShell>
   );
 }
 
 function OwnerQualityContent({
+  surface,
   apiReadback,
   copy,
   currentPath,
@@ -445,6 +462,7 @@ function OwnerQualityContent({
   variant: string;
   viewport: VisualInstanceViewportState;
   routeHref: (path: string) => string;
+  surface?: "local" | "mirror";
 }) {
   // Legacy paths are matched on the path itself and matched FIRST. The module
   // routes below are reached by nav id, and /work/* resolves to the work-items
@@ -460,50 +478,59 @@ function OwnerQualityContent({
   const modulePath = currentPath === "/" ? "/my-work" : currentPath.split("?")[0] ?? currentPath;
   const moduleId = shellNavItems.find((item) =>
     item.path === modulePath || modulePath.startsWith(`${item.path}/`))?.id;
+  // Every module view is wrapped, so the "which copy, how fresh" statement is
+  // standing rather than something a reader only meets on certain screens.
+  const framed = (view: ReactNode) => (
+    <>
+      <CockpitEnvironmentBanner locale={locale} {...(surface ? { initialSurface: surface } : {})} />
+      {view}
+    </>
+  );
+
   if (!isLegacyWorkRoute) {
     if (moduleId === "my-work") {
-      return <MyWorkView locale={locale} routeHref={routeHref} />;
+      return framed(<MyWorkView locale={locale} routeHref={routeHref} />);
     }
     if (moduleId === "inbox") {
-      return <InboxView locale={locale} routeHref={routeHref} />;
+      return framed(<InboxView locale={locale} routeHref={routeHref} />);
     }
     if (moduleId === "projects") {
-      return <ProjectsView locale={locale} routeHref={routeHref} />;
+      return framed(<ProjectsView locale={locale} routeHref={routeHref} />);
     }
     if (moduleId === "work-items") {
       // A path under the module addresses one item; the module root lists them.
       const key = modulePath.startsWith("/work-items/")
         ? decodeURIComponent(modulePath.slice("/work-items/".length))
         : null;
-      return key
+      return framed(key
         ? <WorkItemDetailView locale={locale} routeHref={routeHref} itemKey={key} />
-        : <WorkItemsView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />;
+        : <WorkItemsView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />);
     }
     if (moduleId === "deliberations") {
       const key = modulePath.startsWith("/deliberations/")
         ? decodeURIComponent(modulePath.slice("/deliberations/".length))
         : null;
-      return key
+      return framed(key
         ? <DeliberationRoomView locale={locale} routeHref={routeHref} conferenceKey={key} />
-        : <DeliberationsView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />;
+        : <DeliberationsView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />);
     }
     if (moduleId === "dashboard") {
-      return <DashboardView locale={locale} routeHref={routeHref} />;
+      return framed(<DashboardView locale={locale} routeHref={routeHref} />);
     }
     if (moduleId === "board") {
-      return <BoardView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />;
+      return framed(<BoardView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />);
     }
     if (moduleId === "release-trains") {
-      return <ReleaseTrainsView locale={locale} routeHref={routeHref} />;
+      return framed(<ReleaseTrainsView locale={locale} routeHref={routeHref} />);
     }
     if (moduleId === "audit") {
-      return <AuditView locale={locale} routeHref={routeHref} />;
+      return framed(<AuditView locale={locale} routeHref={routeHref} />);
     }
     if (moduleId === "snapshots") {
-      return <SnapshotHealthView locale={locale} routeHref={routeHref} />;
+      return framed(<SnapshotHealthView locale={locale} routeHref={routeHref} />);
     }
     if (moduleId === "knowledge-space") {
-      return <KnowledgeSpaceView locale={locale} routeHref={routeHref} />;
+      return framed(<KnowledgeSpaceView locale={locale} routeHref={routeHref} />);
     }
   }
   if (isLegacyWorkRoute) {
@@ -955,6 +982,9 @@ function escapeHtmlAttribute(value: string): string {
 function createDocumentCss(): string {
   return `
 * { box-sizing: border-box; }
+.tcrn-aos-environment {
+  margin-block-end: var(--tcrn-space-3);
+}
 .tcrn-aos-view {
   display: grid;
   gap: var(--tcrn-space-4);

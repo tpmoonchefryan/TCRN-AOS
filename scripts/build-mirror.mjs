@@ -46,7 +46,7 @@ await cp(join(buildRoot, "assets"), join(outRoot, "assets"), { recursive: true }
 
 const written = [];
 for (const route of routes) {
-  const html = renderAosShellHtml({ path: route });
+  const html = renderAosShellHtml({ path: route, surface: "mirror" });
   const target = route === "/"
     ? join(outRoot, "index.html")
     : join(outRoot, route.replace(/^\//u, ""), "index.html");
@@ -58,7 +58,7 @@ for (const route of routes) {
 // The mirror must not carry a write control. The panel decides that at runtime
 // by probing for the service, so what is checked here is that nothing in the
 // built markup claims a write surface — the assertion the deployment rests on.
-const indexHtml = renderAosShellHtml({ path: routes[5] ?? "/work-items" });
+const indexHtml = renderAosShellHtml({ path: routes[5] ?? "/work-items", surface: "mirror" });
 const claimsWrite = /data-domain-availability="writable"/.test(indexHtml);
 
 console.log(JSON.stringify({
