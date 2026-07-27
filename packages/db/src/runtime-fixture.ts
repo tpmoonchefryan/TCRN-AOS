@@ -1,4 +1,4 @@
-import { access, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { access, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
@@ -113,10 +113,20 @@ export class AosRuntimeFixture {
     this.runtimeDir = await mkdtemp(join(tmpdir(), "tcrn-aos-runtime-"));
     this.stateFile = join(this.runtimeDir, "aos-runtime-state.json");
 
-    const sql = await readFile(join(process.cwd(), "packages/db/migrations/0001_operational_spine.sql"), "utf8");
+    // Read the migrations that are actually executed at runtime. This used to
+    // read a PostgreSQL file that nothing ever applied, which meant the digest
+    // recorded below described bytes with no bearing on any database this
+    // product opens (TCRN-AOS-INC-001). What the fixture needs from the schema
+    // is unchanged — a table count and the presence of the append-only audit
+    // trigger — so both are now taken from the SQLite migrations that
+    // AosSqliteRepository applies.
+    const migrationsDir = join(process.cwd(), "packages/db/migrations/sqlite");
+    const migrationFiles = (await readdir(migrationsDir)).filter((file) => file.endsWith(".sql")).sort();
+    const sql = (await Promise.all(
+      migrationFiles.map((file) => readFile(join(migrationsDir, file), "utf8")))).join("\n");
     const seed = JSON.parse(await readFile(join(process.cwd(), "packages/db/seed/aos-seed.json"), "utf8")) as unknown;
-    const tableCount = (sql.match(/CREATE TABLE\s+aos_/gi) ?? []).length;
-    if (!/CREATE TRIGGER\s+aos_audit_events_no_update/i.test(sql)) {
+    const tableCount = (sql.match(/CREATE TABLE\s+(IF NOT EXISTS\s+)?aos_/gi) ?? []).length;
+    if (!/CREATE TRIGGER\s+(IF NOT EXISTS\s+)?aos_audit_events_no_update/i.test(sql)) {
       throw new Error("Runtime fixture requires append-only audit trigger in schema");
     }
 
