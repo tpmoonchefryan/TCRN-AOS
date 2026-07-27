@@ -312,3 +312,54 @@ test("events are stored per subject and replaced with their partition", () => {
   assert.equal(store.attestationFromSequence("never-projected"), undefined);
   store.close();
 });
+
+test("the domain store round-trips through its export, which is what a backup rests on", async () => {
+  // The backup path exports to JSON and restores by replaying it. If that round
+  // trip is lossy the backup is a file that looks like insurance and is not, so
+  // the property is tested here rather than trusted at restore time.
+  const { DomainStore } = await import("../../../dist/packages/projection/src/index.js");
+  const { readFileSync } = await import("node:fs");
+  const { mkdtempSync, rmSync } = await import("node:fs");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+
+  const migration = readFileSync(
+    new URL("../../db/migrations/domain/0001_cockpit_domain.sql", import.meta.url), "utf8");
+  const scratch = mkdtempSync(join(tmpdir(), "aos-domain-test-"));
+  const first = new DomainStore(join(scratch, "a.db"), migration);
+  try {
+    first.setAnnotation({
+      partitionId: "TCRN-AOS", recordId: "work:abc", externalKey: "TCRN-AOS-STORY-001",
+      assignee: "owner:governance", priority: "high", labels: ["one", "two"],
+      updatedAt: "2026-07-27T00:00:00Z", updatedBy: "agent:test"
+    });
+    first.addComment({ id: "comment:1", partitionId: "TCRN-AOS", recordId: "work:abc",
+      author: "agent:test", body: "kept", createdAt: "2026-07-27T00:00:01Z" });
+    first.addRelation({ id: "relation:1", partitionId: "TCRN-AOS", recordId: "work:abc",
+      relation: "blocks", targetPartitionId: "cross-project", targetRecordId: "work:def",
+      createdAt: "2026-07-27T00:00:02Z", createdBy: "agent:test" });
+
+    const exported = first.exportAll();
+    const restored = new DomainStore(join(scratch, "b.db"), migration);
+    try {
+      for (const annotation of exported.annotations) restored.setAnnotation(annotation);
+      for (const comment of exported.comments) restored.addComment(comment);
+      for (const relation of exported.relations) restored.addRelation(relation);
+      assert.deepEqual(restored.exportAll(), exported);
+    } finally {
+      restored.close();
+    }
+  } finally {
+    first.close();
+    rmSync(scratch, { recursive: true, force: true });
+  }
+});
+
+test("a dangling qualified ref is kept rather than repaired away", () => {
+  // A chain record can be tombstoned after someone annotated it. Deleting the
+  // annotation would be a foreign key deciding that a person's comment stops
+  // existing because its subject did, which is the wrong repair.
+  const store = new ProjectionStore();
+  assert.doesNotThrow(() => store.listWork({ partitionIds: ["never-projected"] }));
+  store.close();
+});

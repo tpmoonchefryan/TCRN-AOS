@@ -1,0 +1,43 @@
+{
+  "ok": true,
+  "destinationRoot": "/Users/ryanlan/OneDrive/Github/tcrn-aos-domain-backups",
+  "snapshot": {
+    "schemaVersion": "aos.domain-backup.v1",
+    "takenAt": "2026-07-27T01-11-22-087Z",
+    "source": "/Users/ryanlan/.tcrn-aos/domain.db",
+    "counts": {
+      "annotations": 1,
+      "comments": 1,
+      "relations": 0
+    },
+    "artifacts": {
+      "domain.db": {
+        "bytes": 49152,
+        "sha256": "e3c2e0fdcb489925461534e0f4c97bfba39ce5747559e4a107defa955ea2f2ae"
+      },
+      "domain-export.json": {
+        "bytes": 805,
+        "sha256": "9dc233b1dfa2c8613d89b1e53d22b56b7c974078519331a5614a5ded35a9a524"
+      }
+    },
+    "notClaimed": [
+      "this backup covers the cockpit's own store only; the governed chains have their own snapshots",
+      "the projection database is deliberately absent — it is rebuilt from the chains, never restored"
+    ]
+  },
+  "verified": {
+    "ok": true,
+    "directory": "/Users/ryanlan/OneDrive/Github/tcrn-aos-domain-backups/2026-07-27T01-11-22-087Z",
+    "digestsMatch": true,
+    "roundTrips": true,
+    "counts": {
+      "annotations": 1,
+      "comments": 1,
+      "relations": 0
+    }
+  },
+  "rotated": {
+    "kept": 1,
+    "deleted": []
+  }
+}

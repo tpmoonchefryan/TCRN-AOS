@@ -4,14 +4,14 @@
 import type { CockpitData } from "./cockpit-types.js";
 
 export const cockpitData: CockpitData = {
-  "generatedAt": "2026-07-26T21:59:10Z",
+  "generatedAt": "2026-07-26T22:04:29Z",
   "partitions": [
     {
       "id": "cross-project",
       "label": "Platform governance",
       "labelZh": "平台治理",
       "chainVersion": 1266,
-      "verifiedAt": "2026-07-26T21:59:10Z",
+      "verifiedAt": "2026-07-26T22:04:29Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -23,7 +23,7 @@ export const cockpitData: CockpitData = {
       "label": "Design System",
       "labelZh": "设计系统",
       "chainVersion": 959,
-      "verifiedAt": "2026-07-26T21:59:10Z",
+      "verifiedAt": "2026-07-26T22:04:29Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -35,7 +35,7 @@ export const cockpitData: CockpitData = {
       "label": "TMS",
       "labelZh": "TMS",
       "chainVersion": 228,
-      "verifiedAt": "2026-07-26T21:59:10Z",
+      "verifiedAt": "2026-07-26T22:04:29Z",
       "readVia": "export",
       "attestationFromSequence": null,
       "unavailable": []
@@ -45,7 +45,7 @@ export const cockpitData: CockpitData = {
       "label": "AOS",
       "labelZh": "AOS",
       "chainVersion": 243,
-      "verifiedAt": "2026-07-26T21:59:10Z",
+      "verifiedAt": "2026-07-26T22:04:29Z",
       "readVia": "export",
       "attestationFromSequence": 62,
       "unavailable": []

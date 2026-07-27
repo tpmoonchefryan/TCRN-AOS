@@ -49,6 +49,7 @@
     "cockpit:previews": "pnpm build && node scripts/render-cockpit-previews.mjs",
     "cockpit:service": "pnpm build && node scripts/cockpit-service-start.mjs",
     "cockpit:service-proof": "pnpm build && node scripts/cockpit-service-proof.mjs",
+    "domain:backup": "pnpm build && node scripts/domain-backup.mjs",
     "slice3:proof": "pnpm build && node scripts/slice-3-proof.mjs",
     "slice5:proof": "pnpm build && node scripts/slice-5-operating-loop-proof.mjs",
     "slice6:proof": "pnpm build && node scripts/slice-6-knowledge-guide-release-notes-proof.mjs",
