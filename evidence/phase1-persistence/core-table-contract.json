@@ -8,6 +8,7 @@
     "aos_evidence_links",
     "aos_gate_work_orders",
     "aos_initiatives",
+    "aos_knowledge_entries",
     "aos_projects",
     "aos_schema_migrations",
     "aos_stories",

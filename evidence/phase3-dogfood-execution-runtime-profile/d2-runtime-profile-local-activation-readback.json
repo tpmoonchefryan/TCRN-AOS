@@ -3,13 +3,13 @@
   "ok": true,
   "route": "route_tcrn_aos_phase4_d2_runtime_profile_local_activation_ilya_after_owner_decision_78d75eb_eb8f5a8_20260706",
   "command": "pnpm --dir TCRN-AOS d2:runtime-profile-activation-proof",
-  "generatedAt": "2026-07-06T14:18:10.171Z",
-  "sourceHead": "75623179298ef436b0d5687f0b77b0a851e65314",
-  "sourceContentDigest": "5d755fb6a5b25ff056b5c52fd90d33ad8a07369ce456e237dfa19619a8cd4544",
+  "generatedAt": "2026-07-27T02:31:13.213Z",
+  "sourceHead": "da2d48778ad43c1c839056be4bf968c7211825b2",
+  "sourceContentDigest": "cf34ab3a1b8760bfe2ba97d772878787f23a943034b5ad9b92ba4d9e6f5a07c0",
   "sourceFiles": [
     {
       "file": "package.json",
-      "digest": "a47150014500d83f0a771311d77f3c054087833ca46eaf3991f74358316e9649"
+      "digest": "507c69ce23fea31567f486b8a19d98fa0d4c2bf96cdca8cffda3d4c6dac36275"
     },
     {
       "file": "scripts/d2-runtime-profile-activation-proof.mjs",
@@ -17,19 +17,19 @@
     },
     {
       "file": "packages/db/src/sqlite-repository.ts",
-      "digest": "8de0d042e5cb0966f9ea8789be8eb48693760949e041ae2a0384535f172db78e"
+      "digest": "ebdbda61879518a608c1a442759982c082403a4dc7d226e98fc2dd68ef5a489b"
     },
     {
       "file": "packages/domain/src/store.ts",
-      "digest": "db1c74874a28dc0ccf1d55a911ea8d4163d4ca8be7e29c091b1c2b9d4f4eece9"
+      "digest": "98fb408080cb449a15b1e0e2b46c1c4b9ff2fc3d1a338fd3ff919ebb1bed8f09"
     },
     {
       "file": "packages/domain/src/seed.ts",
-      "digest": "5624c0e60b51d7d179ab6410e6444df7f86f973a13732b9582420cc53e904f67"
+      "digest": "f7328d78554c12308e6cbc3f1ad504e8648c66ca0d124f4ba36794ace9f9d7d6"
     },
     {
       "file": "packages/mcp-server/src/transport.ts",
-      "digest": "fa2bd7eef3031d6529993d616973332e7699ea65dd56401adeb874d09ef775b4"
+      "digest": "1585ec20c02b944a23b97c9b191b7afddd4433b7bced12faea9441e0df46e39e"
     },
     {
       "file": "packages/mcp-server/src/stdio-server.ts",
@@ -37,7 +37,7 @@
     }
   ],
   "workflowBasis": "78d75ebdab78c6b8a5488014b529cdbb730104f5",
-  "aosBasis": "75623179298ef436b0d5687f0b77b0a851e65314",
+  "aosBasis": "da2d48778ad43c1c839056be4bf968c7211825b2",
   "failures": [],
   "negativeFailures": [],
   "noOverclaimFlags": {
@@ -73,12 +73,12 @@
   },
   "activationReadback": {
     "ok": true,
-    "sourceHead": "75623179298ef436b0d5687f0b77b0a851e65314",
+    "sourceHead": "da2d48778ad43c1c839056be4bf968c7211825b2",
     "workflowBasis": "78d75ebdab78c6b8a5488014b529cdbb730104f5",
     "activationCommand": "pnpm --dir TCRN-AOS d2:runtime-profile-activation-proof",
     "profileRootClass": "os_temp_route_owned_local_activation_root",
     "profileRootDigest": "51911e9eb77f924f447573b95a68ddbe0006f10719f48c5adb84340712a085ca",
-    "databaseDigest": "77c6b82db662fa0dac5e3a6a39014ef6b63f2afb31357f2f4759b98d195cfc3a",
+    "databaseDigest": "0e76f5c24f92cb35ca3341a453e95b36c84041ffd72204e6b0871dc9e47af6ca",
     "databaseFileName": "aos-d2-local-runtime-profile.sqlite",
     "rawPathRecorded": false,
     "runtimeTransportOpened": true,
@@ -93,8 +93,8 @@
       "epicCount": 1,
       "storyCount": 1,
       "gateCount": 1,
-      "assignmentCount": 1,
-      "auditEventCount": 77
+      "assignmentCount": 5,
+      "auditEventCount": 245
     }
   },
   "persistentRuntimeOwnerMarkerReadback": {

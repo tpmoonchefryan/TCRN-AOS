@@ -1,29 +1,31 @@
 {
   "countsAfterHydrate": {
     "aos_agent_runs": 1,
-    "aos_ai_employees": 20,
+    "aos_ai_employees": 5,
     "aos_assignments": 2,
     "aos_audit_events": 14,
     "aos_epics": 1,
     "aos_evidence_links": 1,
     "aos_gate_work_orders": 1,
     "aos_initiatives": 1,
+    "aos_knowledge_entries": 0,
     "aos_projects": 2,
-    "aos_schema_migrations": 1,
+    "aos_schema_migrations": 2,
     "aos_stories": 1,
     "aos_subtasks": 1
   },
   "countsBeforeRestart": {
     "aos_agent_runs": 1,
-    "aos_ai_employees": 20,
+    "aos_ai_employees": 5,
     "aos_assignments": 2,
     "aos_audit_events": 14,
     "aos_epics": 1,
     "aos_evidence_links": 1,
     "aos_gate_work_orders": 1,
     "aos_initiatives": 1,
+    "aos_knowledge_entries": 0,
     "aos_projects": 2,
-    "aos_schema_migrations": 1,
+    "aos_schema_migrations": 2,
     "aos_stories": 1,
     "aos_subtasks": 1
   },
@@ -37,8 +39,8 @@
     "storyId": "story_4c6dfbde27750ecc",
     "subtaskId": "subtask-phase1-sqlite-proof"
   },
-  "digestAfterRestart": "30a9abc100354700dfedff47ab24b7f6d796593968c4bae91a97e1a8cbb27547",
-  "digestBeforeRestart": "30a9abc100354700dfedff47ab24b7f6d796593968c4bae91a97e1a8cbb27547",
+  "digestAfterRestart": "77c1f04707eec5fa0586b2d8356a8532ccfb49201e44a17b32dbb31501242810",
+  "digestBeforeRestart": "77c1f04707eec5fa0586b2d8356a8532ccfb49201e44a17b32dbb31501242810",
   "domainWrites": [
     "addSubTask",
     "createAssignment",

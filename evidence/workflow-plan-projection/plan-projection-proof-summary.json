@@ -3,8 +3,8 @@
   "schema": "tcrn.aos.planProjectionProofSummary.v1",
   "ok": true,
   "route": "route_tcrn_total_repair_aos_execution_ledger_and_plan_projection_20260710",
-  "sourceHead": "b62ad3e2e2b0e09f49721f9ce1c05162b9b7efdf",
-  "workflowBasis": "48992704bd21427c80dd20503e487e14e48fe678",
+  "sourceHead": "da2d48778ad43c1c839056be4bf968c7211825b2",
+  "workflowBasis": "2e6cfe3077bd6e066863dca8ab765e4b06b934c1",
   "command": "pnpm --dir TCRN-AOS plan:projection-proof",
   "receiptInventory": [
     "plan-projection-readback.json"

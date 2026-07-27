@@ -290,7 +290,14 @@ function runWorkloadCreation(root, databasePath) {
         p0P1FrictionTicketIdsInvented: false
       },
       activeHookDivergenceBoundaryReadback: {
-        parityReceiptPath: "TCRN Workflow/.context/platform/plans/evidence/2026-07-05-phase4-friction-workflow-thinning-entry/phase4-hook-runtime-parity-readback.json",
+        // This field used to name a path under a sibling `TCRN Workflow` directory as
+        // though the file were there to compare against. That directory was pushed to a
+        // private Legacy repository and deleted locally; the path has not resolved since,
+        // and nothing here ever read it — the comparison it describes was recorded, not
+        // performed. Naming a file that cannot be opened is the claim this receipt exists
+        // to avoid, so the absence is stated instead (TCRN-AOS-INC-002).
+        parityReceiptPath: "none",
+        parityReceiptDisposition: "the legacy sibling holding this receipt was retired; parity was never proven here and is not claimed",
         cmpExit: 1,
         byteIdentical: false,
         parityProven: false,

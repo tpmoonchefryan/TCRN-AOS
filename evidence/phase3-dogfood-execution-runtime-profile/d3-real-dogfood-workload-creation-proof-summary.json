@@ -3,17 +3,17 @@
   "ok": true,
   "route": "route_tcrn_aos_phase4_d3_real_dogfood_workload_creation_ilya_after_minerva_d2_status_sync_success_1419ad9_bce717a_20260706",
   "command": "pnpm --dir TCRN-AOS d3:real-dogfood-workload-proof",
-  "generatedAt": "2026-07-06T15:22:18.430Z",
-  "sourceHead": "a19c5b9fa80a65f1e88128c44cc7382808341775",
-  "sourceContentDigest": "4375fe49156b37503d709f820ce4fedd16527f8ad8971a2bc53f10527275a15c",
+  "generatedAt": "2026-07-27T02:31:19.775Z",
+  "sourceHead": "da2d48778ad43c1c839056be4bf968c7211825b2",
+  "sourceContentDigest": "338b180c8d26414921e97b3737ff98735f9a6b0a7ce687878bce3c2f17ae9853",
   "sourceFiles": [
     {
       "file": "package.json",
-      "digest": "d86bab9c84e447c9622c4f533dc73b5cc6b4f2b567e1569cfc3ec98f6c04f722"
+      "digest": "507c69ce23fea31567f486b8a19d98fa0d4c2bf96cdca8cffda3d4c6dac36275"
     },
     {
       "file": "scripts/d3-real-dogfood-workload-proof.mjs",
-      "digest": "8c2e684930228ac16bd37713d57d80788a43ce0ff9798b196e036614587be197"
+      "digest": "a068595670405b14080dcde85034a50c3ab1b442ffc0fba38882b57ca5229935"
     },
     {
       "file": "scripts/d2-runtime-profile-activation-proof.mjs",
@@ -21,15 +21,15 @@
     },
     {
       "file": "packages/db/src/sqlite-repository.ts",
-      "digest": "8de0d042e5cb0966f9ea8789be8eb48693760949e041ae2a0384535f172db78e"
+      "digest": "ebdbda61879518a608c1a442759982c082403a4dc7d226e98fc2dd68ef5a489b"
     },
     {
       "file": "packages/domain/src/store.ts",
-      "digest": "db1c74874a28dc0ccf1d55a911ea8d4163d4ca8be7e29c091b1c2b9d4f4eece9"
+      "digest": "98fb408080cb449a15b1e0e2b46c1c4b9ff2fc3d1a338fd3ff919ebb1bed8f09"
     },
     {
       "file": "packages/domain/src/seed.ts",
-      "digest": "5624c0e60b51d7d179ab6410e6444df7f86f973a13732b9582420cc53e904f67"
+      "digest": "f7328d78554c12308e6cbc3f1ad504e8648c66ca0d124f4ba36794ace9f9d7d6"
     },
     {
       "file": "packages/mcp-gateway/src/gateway.ts",
@@ -37,11 +37,11 @@
     },
     {
       "file": "packages/mcp-server/src/transport.ts",
-      "digest": "fa2bd7eef3031d6529993d616973332e7699ea65dd56401adeb874d09ef775b4"
+      "digest": "1585ec20c02b944a23b97c9b191b7afddd4433b7bced12faea9441e0df46e39e"
     }
   ],
   "workflowBasis": "1419ad9c4ef39db741729b55fe11f8fdf68519df",
-  "aosBasis": "a19c5b9fa80a65f1e88128c44cc7382808341775",
+  "aosBasis": "da2d48778ad43c1c839056be4bf968c7211825b2",
   "methodsUnderReview": [
     "aos.assignment.claim",
     "aos.assignment.update",
@@ -92,7 +92,7 @@
   "allChildReceiptsOk": true,
   "missingReceipts": [],
   "extraUnclassifiedReceipts": [],
-  "workloadReadbackReceiptDigest": "9ca85689013f8ba962de381192449b6a9bd0946f0646730ce4bb16cdffa78971",
+  "workloadReadbackReceiptDigest": "5a0453588e5e101447bb8ac4a09201b0c96206b32585548832081e60260ed8af",
   "d3RealDogfoodWorkloadCreated": true,
   "d4FrictionTicketsCreated": false
 }

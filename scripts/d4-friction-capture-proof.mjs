@@ -272,7 +272,12 @@ function runFrictionCaptureProof(root, databasePath) {
         proofFixturePromotedToProductFriction: false
       },
       activeHookDivergenceBoundaryReadback: {
-        parityReceiptPath: "TCRN Workflow/.context/platform/plans/evidence/2026-07-05-phase4-friction-workflow-thinning-entry/phase4-hook-runtime-parity-readback.json",
+        // See the same field in d3-real-dogfood-workload-proof.mjs: this named a receipt
+        // under the retired `TCRN Workflow` sibling that nothing here ever opened
+        // (TCRN-AOS-INC-002). Parity was recorded as unproven then and stays unproven now;
+        // what changes is that the receipt no longer points at a file that cannot exist.
+        parityReceiptPath: "none",
+        parityReceiptDisposition: "the legacy sibling holding this receipt was retired; parity was never proven here and is not claimed",
         cmpExit: 1,
         byteIdentical: false,
         parityProven: false,

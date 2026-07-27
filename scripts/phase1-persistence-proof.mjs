@@ -18,7 +18,22 @@ import { AosStore, createDefaultSeed } from "../dist/packages/domain/src/index.j
 import { McpGateway } from "../dist/packages/mcp-gateway/src/index.js";
 
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
-const workflowRegistryPath = new URL("../../TCRN Workflow/.context/platform/thread-registry/long-lived-threads.json", import.meta.url);
+// The thread registry this proof projected employees from lived in a sibling
+// `TCRN Workflow` directory that was archived to a private Legacy repository and
+// deleted on 2026-07-20 — deliberately, so that a second and older governance tree
+// could not be read and acted on by mistake. It is not coming back, and cloning it
+// to satisfy this script would reinstate exactly the hazard that deletion removed.
+//
+// Ten of this script's eleven receipts assert live database behaviour and need no
+// registry at all; only thread-registry-seed-proof.json did. Reading a file that
+// cannot exist killed the script at line 44 and took the other ten down with it
+// (TCRN-AOS-INC-002). So the registry projection is now conditional on a registry
+// being supplied, and its absence is recorded as an absence rather than passed off
+// as a projection that ran. Supply one with
+// TCRN_AOS_THREAD_REGISTRY=/path/to/long-lived-threads.json to exercise that path;
+// packages/db/test/phase1-sqlite-repository.test.mjs covers projectThreadRegistryEmployees
+// against a fixture regardless.
+const threadRegistryPath = process.env.TCRN_AOS_THREAD_REGISTRY;
 const migrationsDir = join(repoRoot, "packages/db/migrations/sqlite");
 const evidenceRoot = join(repoRoot, "evidence/phase1-persistence");
 const forbiddenPathPattern = /\/Users\/|\/tmp\/|\/private\/tmp\/|\/srv\/tcrn|file:\/\//;
@@ -41,10 +56,8 @@ async function runProof() {
     const repository = new AosSqliteRepository({ databasePath: dbPath, migrationsDir });
     const firstMigration = repository.applyMigrations();
     const secondMigration = repository.applyMigrations();
-    const registrySource = readFileSync(workflowRegistryPath, "utf8");
-    const registryDigest = sha256(registrySource);
     const staticSeed = repository.seedAiEmployees(createDefaultSeed().employees, "aos-static-seed");
-    const registrySeed = repository.projectThreadRegistryEmployees(JSON.parse(registrySource), registryDigest).readback;
+    const registrySeed = projectThreadRegistryIfSupplied(repository);
     seedProjects(repository);
 
     const migrationReceipt = {
@@ -275,7 +288,6 @@ async function runProof() {
       ...registrySeed,
       staticSeedRowCount: staticSeed.rowCount,
       workflowMutation: false,
-      sourceTruth: "Workflow registry read-only projection",
       rawThreadMessagesStored: false,
       rawPromptsStored: false,
       localPathStored: false
@@ -436,6 +448,35 @@ function retry(operation) {
       Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 10);
     }
   }
+}
+
+/**
+ * Project a thread registry only if one was supplied. The registry that used to feed
+ * this lived in the retired `TCRN Workflow` sibling; with no registry there is nothing
+ * to project, and the receipt says so rather than reporting a projection of zero rows
+ * as though the source had been read and found empty. Not-read and empty are different
+ * facts, and the receipt has to be able to tell them apart.
+ */
+function projectThreadRegistryIfSupplied(repository) {
+  if (!threadRegistryPath) {
+    return {
+      ok: true,
+      registryRead: false,
+      sourceTruth: "none — no thread registry supplied; the legacy sibling that held one was retired on 2026-07-20",
+      disposition: "set TCRN_AOS_THREAD_REGISTRY to a long-lived-threads.json to exercise the projection",
+      projectionPerformed: false,
+      rowCount: 0,
+      insertedCount: 0
+    };
+  }
+  const registrySource = readFileSync(threadRegistryPath, "utf8");
+  const registryDigest = sha256(registrySource);
+  return {
+    ...repository.projectThreadRegistryEmployees(JSON.parse(registrySource), registryDigest).readback,
+    registryRead: true,
+    sourceTruth: "Workflow registry read-only projection",
+    projectionPerformed: true
+  };
 }
 
 function writeReceipt(name, value) {

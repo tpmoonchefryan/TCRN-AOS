@@ -23,7 +23,13 @@ const actor = {
 
 mkdirSync(evidenceRoot, { recursive: true });
 const sourceHead = git("rev-parse", "HEAD");
-const workflowBasis = git("-C", join(platformRoot, "TCRN Workflow"), "rev-parse", "HEAD");
+// The governance engine this receipt stamps its basis from lives in `tcrn-workflow/`.
+// It used to be read from a sibling called `TCRN Workflow`, which was pushed to a
+// private Legacy repository and deleted locally to stop the two being confused; this
+// script kept asking for the deleted path and died before it proved anything
+// (TCRN-AOS-INC-002). The value is a basis stamp, not an input to the projection —
+// so it is read from the engine that exists rather than dropped.
+const workflowBasis = git("-C", join(platformRoot, "tcrn-workflow"), "rev-parse", "HEAD");
 const root = mkdtempSync(join(tmpdir(), "tcrn-aos-plan-projection-proof-"));
 const databasePath = join(root, "aos-plan-projection.sqlite");
 const ownerMarker = {

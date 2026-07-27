@@ -3,17 +3,17 @@
   "ok": true,
   "route": "route_tcrn_aos_phase4_d3_real_dogfood_workload_creation_ilya_after_minerva_d2_status_sync_success_1419ad9_bce717a_20260706",
   "command": "pnpm --dir TCRN-AOS d3:real-dogfood-workload-proof",
-  "generatedAt": "2026-07-06T15:22:18.429Z",
-  "sourceHead": "a19c5b9fa80a65f1e88128c44cc7382808341775",
-  "sourceContentDigest": "4375fe49156b37503d709f820ce4fedd16527f8ad8971a2bc53f10527275a15c",
+  "generatedAt": "2026-07-27T02:31:19.775Z",
+  "sourceHead": "da2d48778ad43c1c839056be4bf968c7211825b2",
+  "sourceContentDigest": "338b180c8d26414921e97b3737ff98735f9a6b0a7ce687878bce3c2f17ae9853",
   "sourceFiles": [
     {
       "file": "package.json",
-      "digest": "d86bab9c84e447c9622c4f533dc73b5cc6b4f2b567e1569cfc3ec98f6c04f722"
+      "digest": "507c69ce23fea31567f486b8a19d98fa0d4c2bf96cdca8cffda3d4c6dac36275"
     },
     {
       "file": "scripts/d3-real-dogfood-workload-proof.mjs",
-      "digest": "8c2e684930228ac16bd37713d57d80788a43ce0ff9798b196e036614587be197"
+      "digest": "a068595670405b14080dcde85034a50c3ab1b442ffc0fba38882b57ca5229935"
     },
     {
       "file": "scripts/d2-runtime-profile-activation-proof.mjs",
@@ -21,15 +21,15 @@
     },
     {
       "file": "packages/db/src/sqlite-repository.ts",
-      "digest": "8de0d042e5cb0966f9ea8789be8eb48693760949e041ae2a0384535f172db78e"
+      "digest": "ebdbda61879518a608c1a442759982c082403a4dc7d226e98fc2dd68ef5a489b"
     },
     {
       "file": "packages/domain/src/store.ts",
-      "digest": "db1c74874a28dc0ccf1d55a911ea8d4163d4ca8be7e29c091b1c2b9d4f4eece9"
+      "digest": "98fb408080cb449a15b1e0e2b46c1c4b9ff2fc3d1a338fd3ff919ebb1bed8f09"
     },
     {
       "file": "packages/domain/src/seed.ts",
-      "digest": "5624c0e60b51d7d179ab6410e6444df7f86f973a13732b9582420cc53e904f67"
+      "digest": "f7328d78554c12308e6cbc3f1ad504e8648c66ca0d124f4ba36794ace9f9d7d6"
     },
     {
       "file": "packages/mcp-gateway/src/gateway.ts",
@@ -37,11 +37,11 @@
     },
     {
       "file": "packages/mcp-server/src/transport.ts",
-      "digest": "fa2bd7eef3031d6529993d616973332e7699ea65dd56401adeb874d09ef775b4"
+      "digest": "1585ec20c02b944a23b97c9b191b7afddd4433b7bced12faea9441e0df46e39e"
     }
   ],
   "workflowBasis": "1419ad9c4ef39db741729b55fe11f8fdf68519df",
-  "aosBasis": "a19c5b9fa80a65f1e88128c44cc7382808341775",
+  "aosBasis": "da2d48778ad43c1c839056be4bf968c7211825b2",
   "methodsUnderReview": [
     "aos.assignment.claim",
     "aos.assignment.update",
@@ -94,15 +94,15 @@
   "d3WorkloadCreationReadback": {
     "ok": true,
     "route": "route_tcrn_aos_phase4_d3_real_dogfood_workload_creation_ilya_after_minerva_d2_status_sync_success_1419ad9_bce717a_20260706",
-    "sourceHead": "a19c5b9fa80a65f1e88128c44cc7382808341775",
+    "sourceHead": "da2d48778ad43c1c839056be4bf968c7211825b2",
     "workflowBasis": "1419ad9c4ef39db741729b55fe11f8fdf68519df",
     "command": "pnpm --dir TCRN-AOS d3:real-dogfood-workload-proof",
-    "startingAosBasis": "a19c5b9fa80a65f1e88128c44cc7382808341775",
+    "startingAosBasis": "da2d48778ad43c1c839056be4bf968c7211825b2",
     "localRuntimeProfileSource": "owner_authorized_D2_local_activation_profile",
     "profileRootClass": "os_temp_route_owned_local_activation_root",
     "rootDigest": "51911e9eb77f924f447573b95a68ddbe0006f10719f48c5adb84340712a085ca",
     "databaseFileName": "aos-d2-local-runtime-profile.sqlite",
-    "databaseDigest": "d0c44bb8e21dba185d5add6564904a675dc736d3787ac7b43b32a63c652858a5",
+    "databaseDigest": "732fe6c9b3b5d1bae4163ce4d5864116d328ab6a5521ca898df60c991d8e6220",
     "rawPathRecorded": false,
     "rawDbDumpRecorded": false,
     "beforeD3StoryCount": 4,
@@ -156,10 +156,9 @@
       "title": "AOS human readback v1",
       "status": "in_progress",
       "epicIds": [
-        "epic_2084717a6888c6f4",
-        "epic_de12d9eab23da28b"
+        "epic_2084717a6888c6f4"
       ],
-      "storyCount": 5
+      "storyCount": 1
     },
     "epic": {
       "id": "epic_de12d9eab23da28b",
@@ -177,7 +176,6 @@
           "assignment_5f7abb44ce1bdded"
         ],
         "gateIds": [
-          "gate_b5a6fa750fa04c49",
           "gate_5f2b4f2791f0f414"
         ],
         "criteriaDigest": "525bc764c4e1a50d089b3724b9c5730eff8c0e69e3b66c19cf269440ecbec202"
@@ -191,7 +189,6 @@
           "assignment_90438063b0c7081e"
         ],
         "gateIds": [
-          "gate_55ee6a110f024aae",
           "gate_46daedc0a0f3d11d"
         ],
         "criteriaDigest": "d83713cab87573c4e5092b688a8ba1ded995f4048ed698580041edb41b5756be"
@@ -205,7 +202,6 @@
           "assignment_c785cf286a476c8a"
         ],
         "gateIds": [
-          "gate_2708bd0af78e40e5",
           "gate_016a3af397b2100f"
         ],
         "criteriaDigest": "72393645030e98dc94bd2b7a6160f2cf047ae21d526b64247d12fec118f8b17d"
@@ -219,7 +215,6 @@
           "assignment_25960b6f7600a48a"
         ],
         "gateIds": [
-          "gate_780418eaffcadbb7",
           "gate_1621e1f49b7002ad"
         ],
         "criteriaDigest": "7b1bf8b39dc80978c4887d3c23014a39592ab39c5698eacf7a51b919c911668a"
@@ -389,10 +384,10 @@
       "rowGrain": "story",
       "returnedCount": 4,
       "storyIds": [
+        "story_10db64b0554c3642",
         "story_8c9e42aaea3f38b8",
         "story_0d5e15dc49f40f2d",
-        "story_ede6d4d3393283f0",
-        "story_10db64b0554c3642"
+        "story_ede6d4d3393283f0"
       ],
       "rawRowsStored": false
     },
@@ -400,8 +395,8 @@
       "ok": true,
       "method": "aos.audit.query",
       "targetId": "story_10db64b0554c3642",
-      "returnedCount": 1,
-      "hasMore": false,
+      "returnedCount": 5,
+      "hasMore": true,
       "detailsRedacted": true,
       "rawDetailsStored": false
     },
@@ -506,7 +501,8 @@
     "p0P1FrictionTicketIdsInvented": false
   },
   "activeHookDivergenceBoundaryReadback": {
-    "parityReceiptPath": "TCRN Workflow/.context/platform/plans/evidence/2026-07-05-phase4-friction-workflow-thinning-entry/phase4-hook-runtime-parity-readback.json",
+    "parityReceiptPath": "none",
+    "parityReceiptDisposition": "the legacy sibling holding this receipt was retired; parity was never proven here and is not claimed",
     "cmpExit": 1,
     "byteIdentical": false,
     "parityProven": false,

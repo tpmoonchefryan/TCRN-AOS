@@ -3,21 +3,21 @@
   "ok": true,
   "route": "route_tcrn_aos_phase4_d4_friction_capture_protocol_ilya_after_minerva_d3_status_sync_success_3379f07_4997c7b_20260706",
   "command": "pnpm --dir TCRN-AOS d4:friction-capture-proof",
-  "generatedAt": "2026-07-06T16:00:47.457Z",
-  "sourceHead": "aa588dfc6226e4257517c9f6054fb625e04f0062",
-  "sourceContentDigest": "4ec9f1df2c00a189291b8157e4b33c6686d10fae2e8347a248fb0e75c9c98c5c",
+  "generatedAt": "2026-07-27T02:31:21.950Z",
+  "sourceHead": "da2d48778ad43c1c839056be4bf968c7211825b2",
+  "sourceContentDigest": "5978544f5ef2d7563203e81419094df3f1688979d158cf349572a83d57947b5e",
   "sourceFiles": [
     {
       "file": "package.json",
-      "digest": "1761cc8b049416d6900c86b9cb7ceeb6902cf998bca07e1f3dde8d8bd422cee3"
+      "digest": "507c69ce23fea31567f486b8a19d98fa0d4c2bf96cdca8cffda3d4c6dac36275"
     },
     {
       "file": "scripts/d4-friction-capture-proof.mjs",
-      "digest": "337b7360d2fd5ef53bf9c12960c7f0b17fa3b5ee6857eb1409225d8dfce55e2b"
+      "digest": "7fc80c8491615a370635a81edfdf1b6b5bbbc53beebd0fb8f204a0edd204d001"
     },
     {
       "file": "scripts/d3-real-dogfood-workload-proof.mjs",
-      "digest": "8c2e684930228ac16bd37713d57d80788a43ce0ff9798b196e036614587be197"
+      "digest": "a068595670405b14080dcde85034a50c3ab1b442ffc0fba38882b57ca5229935"
     },
     {
       "file": "scripts/d2-runtime-profile-activation-proof.mjs",
@@ -25,15 +25,15 @@
     },
     {
       "file": "packages/db/src/sqlite-repository.ts",
-      "digest": "8de0d042e5cb0966f9ea8789be8eb48693760949e041ae2a0384535f172db78e"
+      "digest": "ebdbda61879518a608c1a442759982c082403a4dc7d226e98fc2dd68ef5a489b"
     },
     {
       "file": "packages/domain/src/store.ts",
-      "digest": "db1c74874a28dc0ccf1d55a911ea8d4163d4ca8be7e29c091b1c2b9d4f4eece9"
+      "digest": "98fb408080cb449a15b1e0e2b46c1c4b9ff2fc3d1a338fd3ff919ebb1bed8f09"
     },
     {
       "file": "packages/domain/src/seed.ts",
-      "digest": "5624c0e60b51d7d179ab6410e6444df7f86f973a13732b9582420cc53e904f67"
+      "digest": "f7328d78554c12308e6cbc3f1ad504e8648c66ca0d124f4ba36794ace9f9d7d6"
     },
     {
       "file": "packages/mcp-gateway/src/gateway.ts",
@@ -41,11 +41,11 @@
     },
     {
       "file": "packages/mcp-server/src/transport.ts",
-      "digest": "fa2bd7eef3031d6529993d616973332e7699ea65dd56401adeb874d09ef775b4"
+      "digest": "1585ec20c02b944a23b97c9b191b7afddd4433b7bced12faea9441e0df46e39e"
     }
   ],
   "workflowBasis": "3379f07d7e0425dc0a5cc3e20a1583d574e87c4b",
-  "aosBasis": "aa588dfc6226e4257517c9f6054fb625e04f0062",
+  "aosBasis": "da2d48778ad43c1c839056be4bf968c7211825b2",
   "failures": [],
   "negativeFailures": [],
   "noOverclaimFlags": {
@@ -89,7 +89,7 @@
   "allChildReceiptsOk": true,
   "missingReceipts": [],
   "extraUnclassifiedReceipts": [],
-  "frictionReadbackReceiptDigest": "c9a262294628cadd89dd0269e81914e05bc7ba0dc863e6f2fee546715d582858",
+  "frictionReadbackReceiptDigest": "3faaa064eb91afe23bc4dfedb2c168d07ba916d5b5d44f557d9f9e47afd1c0db",
   "frictionOutcome": "none",
   "capturedTicketIds": [],
   "p0P1ClassificationPerformed": false

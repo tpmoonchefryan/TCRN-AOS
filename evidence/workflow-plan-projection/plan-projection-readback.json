@@ -3,8 +3,8 @@
   "schema": "tcrn.aos.planProjectionProof.v1",
   "ok": true,
   "route": "route_tcrn_total_repair_aos_execution_ledger_and_plan_projection_20260710",
-  "sourceHead": "b62ad3e2e2b0e09f49721f9ce1c05162b9b7efdf",
-  "workflowBasis": "48992704bd21427c80dd20503e487e14e48fe678",
+  "sourceHead": "da2d48778ad43c1c839056be4bf968c7211825b2",
+  "workflowBasis": "2e6cfe3077bd6e066863dca8ab765e4b06b934c1",
   "command": "pnpm --dir TCRN-AOS plan:projection-proof",
   "sourceContract": {
     "schemaVersion": "tcrn.aos.planProjection.v1",
@@ -67,7 +67,7 @@
   },
   "persistentOwnerMarkerReadback": {
     "ok": true,
-    "rootDigest": "8930b6263ce421001cf27a30c1b23be74ad3e9106cfdbbe8894f2d58dd4a5171",
+    "rootDigest": "58f412c35f0bb683d741b5612f86ad9f37f59fcddd157de2405d065cfc28a9b5",
     "ownerMarkerDigest": "e9593f7d88392c557e221a2a7e081ab79a59592945fb7cfd8f995f8cf3abe6ee",
     "profileId": "aos-plan-projection-proof-profile-v1",
     "routeId": "route_tcrn_total_repair_aos_execution_ledger_and_plan_projection_20260710",

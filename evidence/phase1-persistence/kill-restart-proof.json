@@ -4,13 +4,13 @@
   "controlledRestart": "new AosSqliteRepository same route-owned db path",
   "controlledStop": "repository.close",
   "ok": true,
-  "postRestartDigest": "30a9abc100354700dfedff47ab24b7f6d796593968c4bae91a97e1a8cbb27547",
-  "preRestartDigest": "30a9abc100354700dfedff47ab24b7f6d796593968c4bae91a97e1a8cbb27547",
+  "postRestartDigest": "77c1f04707eec5fa0586b2d8356a8532ccfb49201e44a17b32dbb31501242810",
+  "preRestartDigest": "77c1f04707eec5fa0586b2d8356a8532ccfb49201e44a17b32dbb31501242810",
   "root": {
     "markerFile": ".tcrn-aos-phase1-root",
     "outsideGit": true,
     "rawPathRecorded": false,
-    "rootDigest": "e4ef4783785276b5df3afe5e9e9b4f67ad283438dae8b4d9ccd7504c69705d9d",
+    "rootDigest": "1af87e7472b533a626b5bb1865fb513ab0a72d4ef5a0bcf08030248f2e7300a5",
     "routeOwned": true
   }
 }

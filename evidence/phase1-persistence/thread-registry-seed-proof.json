@@ -1,26 +1,14 @@
 {
-  "allowlistedFields": [
-    "codexAgentSlug",
-    "name",
-    "jobTitle",
-    "threadId",
-    "status",
-    "lifecycle",
-    "contactWhen"
-  ],
-  "canonicalMergeCount": 2,
-  "duplicateNonNullThreadIdCount": 0,
-  "insertedCount": 17,
+  "disposition": "set TCRN_AOS_THREAD_REGISTRY to a long-lived-threads.json to exercise the projection",
+  "insertedCount": 0,
   "localPathStored": false,
   "ok": true,
+  "projectionPerformed": false,
   "rawPromptsStored": false,
   "rawThreadMessagesStored": false,
-  "registryJobTitlePreserved": true,
-  "rowCount": 20,
-  "secondSeedNoop": true,
-  "sourceDigest": "85dc48d49eb349d25fb934759d23a9c1cf509046bce6780e7ac68c248de6168b",
-  "sourceTruth": "Workflow registry read-only projection",
-  "staticAliasDisposition": "static employees sharing canonical registry thread ids are merged into the existing canonical row; non-registry fixture aliases remain separate only when their thread id is unique",
-  "staticSeedRowCount": 3,
+  "registryRead": false,
+  "rowCount": 0,
+  "sourceTruth": "none — no thread registry supplied; the legacy sibling that held one was retired on 2026-07-20",
+  "staticSeedRowCount": 5,
   "workflowMutation": false
 }
