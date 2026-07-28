@@ -19,6 +19,28 @@ mkdirSync(screenshotRoot, { recursive: true });
 const html = readFileSync(shellPath, "utf8");
 const appSource = readFileSync(new URL("../apps/web/src/app.tsx", import.meta.url), "utf8");
 const workMockupSource = readFileSync(new URL("../apps/web/src/work-management-mockups.tsx", import.meta.url), "utf8");
+
+/**
+ * Every view source, for the rules that are about the whole app rather than the shell.
+ *
+ * TCRN-AOS-INC-020 part 2. `strictRegisteredSurfaceSourceHits` and
+ * `strictRegisteredSurfaceBuiltHits` assert the same rule from two sides — no
+ * unregistered local visible surface — and for a long time the built side was red
+ * while the source side was green. The source side read `appSource` alone, and of the
+ * 227 local-class occurrences in this app, `app.tsx` holds zero: they are all in the
+ * eleven `cockpit-*` files. So the green one was green because it never looked at the
+ * bytes that were failing, which is the house rule ("a gate only protects the bytes
+ * it reads") caught contradicting its own twin.
+ *
+ * Read from disk rather than listed, so a twelfth view file is covered by existing.
+ */
+const viewSourceDir = new URL("../apps/web/src/", import.meta.url);
+const viewSourceFiles = readdirSync(viewSourceDir)
+  .filter((name) => /\.tsx?$/.test(name) && !name.endsWith(".d.ts") && !name.endsWith(".generated.ts"))
+  .sort();
+const allViewSource = viewSourceFiles
+  .map((name) => `/* ${name} */\n${readFileSync(new URL(name, viewSourceDir), "utf8")}`)
+  .join("\n");
 const requiredMarkers = [
   'data-aos-shell="owner-quality-product-shell"',
   'data-storybook-visual-instance="aos-owner-quality-product-shell"',
@@ -465,13 +487,41 @@ const strictRegisteredSurfaceSourceHits = [
   { label: "wrapper DOM delegation", regex: /document\.querySelector|document\.addEventListener\("pointerdown"/ },
   { label: "Storybook shell demo class", regex: /tcrn-(?:shell-demo|compact-shell|knowledge-shell)/ },
   { label: "Storybook-only shell demo import", regex: /TmsDenseShellDemo|KnowledgeBaseShellDemo|CompactToolShellDemo/ }
-].filter((entry) => entry.regex.test(appSource)).map((entry) => entry.label);
+  // Measured against every view source, not just `app.tsx`. See `allViewSource`: the
+  // built-side twin of this rule was red while this side was green, because the
+  // occurrences it was meant to find are all in the `cockpit-*` files this never read.
+].filter((entry) => entry.regex.test(allViewSource)).map((entry) => entry.label);
 const strictRegisteredSurfaceBuiltHits = [
   { label: "AOS class in built HTML", value: html, regex: /class="[^"]*\baos-/ },
   { label: "AOS CSS selector in built HTML", value: html, regex: /\.(?:aos-[A-Za-z0-9_-]+)/ },
   { label: "AOS shell style in built HTML", value: html, regex: /data-aos-shell-style/ },
   { label: "MetricCard in built HTML/client", value: `${html}\n${clientBundle}`, regex: /MetricCard|tcrn-compact-shell__metric/ },
-  { label: "Storybook shell demo in built HTML/client", value: `${html}\n${clientBundle}`, regex: /tcrn-(?:shell-demo|compact-shell|knowledge-shell)/ },
+  // A demo class *used as a class*, not a demo class *mentioned*. TCRN-AOS-INC-020
+  // part 3: the single hit here was `.tcrn-knowledge-shell__collapse-button` inside
+  // the Chinese body of a knowledge card — a chain record whose prose happens to
+  // recount the root cause of a DS collapse-button defect — which the projection
+  // embeds in the bundle as string data. Grepping a bare class name across the whole
+  // artifact cannot tell a rendered surface from a tenant's sentence about one, and
+  // the honest reading is that this is content, not a surface.
+  //
+  // So the class must appear where a class appears: in a `class=`/`className` value or
+  // as a CSS selector. That keeps the rule's teeth — a real demo-shell import still
+  // emits both — while a record that discusses the platform stays sayable. Same
+  // distinction the locale gate had to draw between product vocabulary and tenant
+  // content, and it will keep coming up as long as the chain is a data source.
+  {
+    label: "Storybook shell demo in built HTML/client",
+    value: `${html}\n${clientBundle}`,
+    // The selector branch needs a selector *context*, not just a leading dot: the
+    // knowledge-card sentence writes the class the way a developer would say it out
+    // loud, `.tcrn-knowledge-shell__collapse-button`, so matching a bare dot still
+    // matched the prose. A CSS rule is followed by a `{`, a comma, or another
+    // combinator; a sentence is followed by a space and more words.
+    regex: new RegExp(
+      "class(?:Name)?\\s*[=:]\\s*[\"'`][^\"'`]*tcrn-(?:shell-demo|compact-shell|knowledge-shell)" +
+      "|\\.tcrn-(?:shell-demo|compact-shell|knowledge-shell)[A-Za-z0-9_-]*\\s*(?:[{,>+~:]|\\.[a-zA-Z])"
+    )
+  },
   { label: "AOS class in client bundle", value: clientBundle, regex: /className[=:][^,\n}]*aos-|class="[^"]*\baos-/ },
   { label: "AOS CSS selector in client bundle", value: clientBundle, regex: /\.(?:aos-[A-Za-z0-9_-]+)/ }
 ].filter((entry) => entry.regex.test(entry.value)).map((entry) => entry.label);
@@ -564,8 +614,35 @@ const forbiddenWorkVisibleBrandTerms = [
   "Twenty"
 ];
 
+// TCRN-AOS-INC-021. `/conference`, `/docs` and `/settings` stood at the end of this
+// list, and this loop is part of why they lasted: it asserted shell chrome on them
+// and they carried it, because all three fell through to the cockpit. They are now
+// replaced by the eleven routes the sidebar actually points at — the same assertions
+// against surfaces that exist. Three names cannot prove the shell survives
+// non-cockpit routing when all three *are* the cockpit.
+// The eleven module routes carry the shell but not the cockpit's own content
+// markers, so each declares the view it must render. `data-cockpit-view` is emitted
+// per view, which makes it the one marker in this file a fallthrough cannot satisfy:
+// the three names removed above passed every *chrome* assertion precisely because
+// chrome is emitted by the shell on every route, implemented or not.
+const moduleRouteViews = new Map([
+  ["/my-work", "my-work"],
+  ["/inbox", "inbox"],
+  ["/dashboard", "dashboard"],
+  ["/projects", "projects"],
+  ["/work-items", "work-items"],
+  ["/board", "board"],
+  ["/release-trains", "release-trains"],
+  ["/knowledge", "knowledge"],
+  ["/deliberations", "deliberations"],
+  ["/audit", "audit"],
+  ["/snapshots", "snapshots"]
+]);
+
+const shellChromeRoutes = ["/", "/cockpit", ...staticWorkMockupRoutes, ...moduleRouteViews.keys()];
+
 try {
-  for (const route of ["/", "/cockpit", ...staticWorkMockupRoutes, "/conference", "/docs", "/settings"]) {
+  for (const route of shellChromeRoutes) {
     const response = await fetch(`${service.url}${route}`);
     const body = await response.text();
     const staticWorkMockup = {
@@ -629,6 +706,11 @@ try {
       productLedMarker: body.includes('data-owner-quality-first-viewport="product-led"')
         || body.includes('data-owner-quality-first-viewport="work-operational"'),
       workMarker: body.includes('data-aos-work-module-entry="owner-quality-work-queue"') || staticWorkMockup.present,
+      // Null on the cockpit and work routes, which assert their content above; a
+      // string on the eleven module routes, where it is the whole point.
+      moduleView: moduleRouteViews.has(route)
+        ? body.includes(`data-cockpit-view="${moduleRouteViews.get(route)}"`)
+        : null,
       staticWorkMockup,
       registeredNavigationOnly: body.includes('data-registered-navigation-only="true"'),
       registeredBrandLockup: body.includes('data-registered-brand-lockup="@tcrn/ui-react/ShellBrandLockup"'),
@@ -680,8 +762,12 @@ try {
     && entry.html
     && entry.shellMarker
     && entry.ownerQualityMarker
-    && entry.productLedMarker
-    && entry.workMarker
+    // A module route renders its own view; the cockpit and work routes carry the
+    // product-led/work content markers instead. Both branches assert content — what
+    // the retired placeholder names could offer was chrome and nothing else.
+    && (entry.moduleView === null
+      ? (entry.productLedMarker && entry.workMarker)
+      : entry.moduleView === true)
     && (!entry.route.startsWith("/work") || (
       entry.staticWorkMockup.present
       && entry.staticWorkMockup.staticFixture
@@ -855,6 +941,10 @@ async function runBrowserProof(baseUrl) {
     await desktopPage.waitForSelector('[data-aos-shell="owner-quality-product-shell"]');
     await desktopPage.waitForFunction(() => document.querySelector("[data-api-state]")?.textContent?.includes("available"));
 
+    // This context is `locale: "en"` and the route carries no locale param, so the
+    // English title is the right expectation *here* — but asserting only this one
+    // is what let the title stay English on the other four routes. The per-locale
+    // titles are proved separately below.
     assert.equal(await desktopPage.title(), "TCRN AOS Operations Cockpit", "desktop page identity is correct");
     assert.equal(await desktopPage.locator("html").getAttribute("data-tcrn-theme"), "light", "default theme is light");
     assert.equal(await desktopPage.locator("html").getAttribute("lang"), "en", "default locale is en");

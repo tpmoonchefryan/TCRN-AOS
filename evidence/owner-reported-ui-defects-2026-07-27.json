@@ -1,0 +1,172 @@
+{
+  "schema": "aos.owner-reported-defect-triage.v1",
+  "capturedAt": "2026-07-27",
+  "reporter": "owner",
+  "subject": "Six AOS cockpit defects reported after the INIT-001 first usable version, each paired with the rule-level question the Owner attached: was a rule missing, or was a rule too soft to be obeyed?",
+  "measurementPosture": "Every finding below is a runtime measurement against the real service (startAosLocalServiceProof + real routes) or a direct read of the shipped bytes. Source inference alone is marked as such.",
+
+  "findings": [
+    {
+      "id": 1,
+      "ownerWords": "i18n 接入不完整，大量固定字段只支持中英双语",
+      "confirmed": true,
+      "class": "rule exists, is machine-readable, and is not enforced on the consumer side",
+      "measurement": {
+        "method": "Fetch each route at all five locales DS declares required; count visible text runs identical to the English page.",
+        "route_/": { "totalRuns": 1313, "ja": "1311/1313 identical to en", "ko": "1311/1313 identical to en", "fr": "1311/1313 identical to en", "zh-CN": "557/1313 identical to en" },
+        "route_/cockpit": { "totalRuns": 105, "ja": "95/106 identical to en", "ko": "95/106 identical to en", "fr": "95/106 identical to en" },
+        "route_/work": { "totalRuns": 188, "ja": "186/188 identical to en", "ko": "186/188 identical to en", "fr": "186/188 identical to en" },
+        "note": "ja and ko outputs are byte-identical to each other, which is only possible if neither has a dictionary. The two runs that differ from en are the <html lang> value and the locale menu's own native-name label.",
+        "sourceShape": "461 occurrences of `isZh = locale === \"zh-CN\"` across 14 files under apps/web/src. The locale layer is a two-way boolean, not a five-key dictionary. Zero occurrences of \"ja\"/\"ko\"/\"fr\" as copy keys anywhere in apps/web/src."
+      },
+      "whyItHappened": {
+        "ruleExists": true,
+        "ruleLocation": "@tcrn/ui-copy-state exports tcrnI18nContract { supportedLocales: [zh-CN, en, ja, ko, fr], rawEnumLabelsAllowed: false, untranslatedCopyStateAllowed: false } and tcrnLocaleMetadata where all five carry copyCoverage: \"required\".",
+        "ruleIsMachineReadable": true,
+        "aosImportsIt": "apps/web/src/app.tsx:25 imports tcrnSupportedLocales and feeds tcrnLocaleMetadata to the locale menu at app.tsx:375.",
+        "theDefect": "AOS offers the user all five locales because it consumes DS's list, then answers all five with a two-way branch. The menu is the contract's; the copy is not. Offering a locale the copy layer cannot serve is worse than not offering it, because the control asserts a capability the bytes do not have.",
+        "whyTheRuleDidNotBind": "The DS-side enforcement — the per-story English-leak scan in `pnpm internal-alpha:proof` — renders DS's own Storybook routes. It never fetches an AOS route. This is the same boundary that produced TCRN-DS-INC-005 and TCRN-AOS-INC-011: a gate only protects the bytes it reads. The contract's prose obligation (`i18nDisposition`: \"All visible product UI copy must use the approved locale and copy-state contract before rendering\") names no locale set and has no executable form on the consumer side.",
+        "ruleVerdict": "Rule present and machine-readable; enforcement absent across the repository boundary. Too soft in the only sense that matters — nothing fails when it is broken.",
+        "corroborating": "Across all of AOS's 17 verify gates and its test suite, `locale=ja`, `locale=ko`, and `locale=fr` appear zero times. `locale=en` appears in 5 files, `locale=zh-CN` in 4. The gates that exist assert English and Chinese, so a two-locale implementation passes every one of them."
+      }
+    },
+    {
+      "id": 2,
+      "ownerWords": "切换 filter 时，项目范围会自动回滚到全部项目而非停留在当前选择中的项目",
+      "confirmed": true,
+      "class": "recurrence of an already-fixed defect class, in the same function, with no gate installed at the first fix",
+      "measurement": {
+        "method": "Request /work?project=TCRN-TMS and read the hrefs the page offers for its own navigation and filters.",
+        "workHrefsOnPage": 11,
+        "preserveScope": 0,
+        "dropScope": 11,
+        "verdict": "Every in-page link drops the active project scope."
+      },
+      "whyItHappened": {
+        "rootCause": "buildRouteHref (apps/web/src/app.tsx:851-862) rebuilds the query string from the caller's path and then sets exactly three keys: locale, theme, collapsed. `project` is not among them. Any link written as routeHref(\"/work-items?status=active\") therefore emits a URL with no project=, and resolveActivePartition (app.tsx:906) reads the absent param as \"all projects\".",
+        "priorArt": "TCRN-AOS-INC-006 was a defect in this same function: shell state was appended after the caller's query string, producing a double `?` so every filter returned zero results. Its own closing note reads \"空列表是缺陷最好的伪装\" — an empty list is a defect's best disguise — and prescribes clicking a filter and checking the count at acceptance.",
+        "theRuleGap": "INC-006 was fixed by correcting the merge, and no gate was added to hold the invariant. The invariant that was actually needed is broader than the bug that was fixed: not just \"shell keys must not corrupt caller keys\" but \"a link must carry forward the scope the user is currently in.\" Because that was never written as an executable predicate, the second instance of the same class shipped through the same function.",
+        "ruleVerdict": "Rule missing. A fix without a gate is a fix that protects one commit."
+      }
+    },
+    {
+      "id": 3,
+      "ownerWords": "审议模块缺少检索功能",
+      "confirmed": true,
+      "class": "plain omission; the component and the plumbing both already exist",
+      "measurement": {
+        "deliberations": "cockpit-deliberation.tsx receives a `search` prop (line 25) and uses it for exactly one thing: search?.get(\"project\") at line 32. No query parameter is read and no search control is rendered. Zero SearchInput hits in the file.",
+        "workItems": "cockpit-work-items.tsx renders DS's SearchInput at line 133 with placeholder \"检索工作项\".",
+        "board": "zero search hits",
+        "knowledge": "zero search hits"
+      },
+      "whyItHappened": {
+        "rootCause": "Not a capability gap. DS's SearchInput is already imported and working one module over, and app.tsx already passes readSearch(currentPath) into DeliberationsView. Only the control and the filter predicate are missing.",
+        "theRuleGap": "There is no rule stating which index surfaces must be searchable. The AI consumption contract has a great deal to say about how a search control must look and behave if you render one (package-backed ProductShellSearch, dismissal and focus-return proofs), and one explicit permission to omit it — a product \"may omit ProductShellSearch when it has no real global search capability.\" That permission is about the global topbar search, but nothing anywhere states that a list of 400+ records needs a local search. So the omission violated no rule.",
+        "ruleVerdict": "Rule missing. The contract governs the shape of a search control thoroughly and its required presence not at all."
+      }
+    },
+    {
+      "id": 4,
+      "ownerWords": "系统整体缺少返回/后退功能，依赖浏览器的后退按钮",
+      "confirmed": true,
+      "class": "missing affordance; DS ships a component for it that AOS uses on one surface only",
+      "measurement": {
+        "backAffordanceHits": "Across all of apps/web/src, the only back-shaped affordances are Breadcrumb at cockpit-detail.tsx:89 and one in phase3-dogfood-readback.tsx:360. Zero occurrences of history.back, goBack, or any back control. The eleven module routes and the deliberation room have none.",
+        "dsComponent": "Breadcrumb is exported from packages/ui-react/src/components/Navigation/Navigation.tsx and is already consumed by AOS on the work-item detail route, so availability is not the blocker."
+      },
+      "whyItHappened": {
+        "rootCause": "Detail routes were built one at a time and only the work-item detail got a breadcrumb. Nothing establishes that entering a detail view obliges an in-page way back out.",
+        "theRuleGap": "No navigation-reversibility rule exists in either repository. The contract enumerates required topbar controls (currentLocation, searchWrapper, themeToggle, localeTrigger) and never a return path. Depending on the browser's back button is invisible to every gate: the page renders, all assertions pass, and the omission only shows up when a person tries to leave.",
+        "boundaryNote": "Breadcrumb is one of the closed components — it shares ProductLauncherProps, which accepts {id,label,selected} and renders handler-less buttons. AOS already recorded this in the INIT-001 notes: it can show selection but cannot change it. So a Breadcrumb-based back path needs href-bearing assembly, which is a DS-side question, not only an AOS one.",
+        "ruleVerdict": "Rule missing, and partly a DS capability gap."
+      }
+    },
+    {
+      "id": 5,
+      "ownerWords": "切换页面时，如果加载过慢，可能导致页面短暂按照默认语言和日间模式加载，然后再恢复到已选语言和模式，体验不佳，是否可以使用 cookies？",
+      "confirmed": true,
+      "class": "inherited from the DS pattern; the contract explicitly declines to rule on it",
+      "measurement": {
+        "method": "Fetch a route with no locale/theme query params, which is what a bare navigation looks like.",
+        "result": "GET /cockpit renders lang=en theme=light. GET /cockpit?locale=zh-CN&theme=dark renders lang=zh-CN theme=dark.",
+        "mechanism": "Preference is stored in window.localStorage (app.tsx:955/960, via readBrowserStorage/writeBrowserStorage). The server cannot read localStorage, so server-rendered HTML always carries the defaults; the client corrects lang and data-tcrn-theme after hydration via applyRootLocale/applyRootTheme. The gap between those two moments is the flash the Owner saw.",
+        "cookieUsage": "Zero. `cookie` appears 0 times in apps/api/src/server.ts and 0 times in apps/web/src/app.tsx."
+      },
+      "whyItHappened": {
+        "rootCause": "The preference lives in a store only the client can read, while the first paint is produced by the server. The Owner's proposed fix is the correct one: a cookie is sent with the request, so the server can render the chosen locale and theme in the first byte.",
+        "theRuleGap": "This is not an AOS deviation. DS's own useProductShellController reads window.localStorage in its state initializers (Navigation.tsx:1267-1287), and the AI consumption contract at line 530 explicitly leaves this to the consumer: \"product persistence may remain DS-defined outside reviewed parity routes.\" So the contract considered preference transport and declined to rule, while shipping a localStorage reference implementation. AOS copied the reference implementation and inherited its first-paint behaviour.",
+        "relatedHistory": "The same store is the subject of the DS SSR-hydration-mismatch finding (Navigation.tsx state initializers reading localStorage), where the recorded fix shape was: initialize from the fallback so server and client first paint agree, then sync from storage in a mounted effect. That shape removes the mismatch but not the flash — it makes the flash correct-by-construction rather than absent. Only sending the preference with the request removes it.",
+        "ruleVerdict": "Rule deliberately absent (declined), and the reference implementation propagates the defect. This is the one item where the fix likely belongs in DS as much as in AOS."
+      }
+    },
+    {
+      "id": 6,
+      "ownerWords": "超链接覆盖面过低，比如工作项内的决策与证据，可以点击快速导航嘛，现在只显示一个「minutes:4fdc3f1caf4adfb2374090f7」这种，用户还得自己去找",
+      "confirmed": true,
+      "class": "split verdict — one DS capability gap and one AOS non-use of an existing capability",
+      "measurement": {
+        "aosSite": "cockpit-detail.tsx:164 renders related minutes as <MachineTokenCell token={minutesId} kind=\"generic\" copyable={false} /> inside a loop — a bare id, no link, and copyable is off, so the id cannot even be copied out.",
+        "dsCapability_MachineToken": "MachineTokenProps (DataDisplay.tsx:587-593) is { token, label, kind, copyable, density }. There is no href. MachineTokenCell wraps MachineToken in a span. So a machine token cannot be a link today — this is a DS gap, not an AOS omission.",
+        "dsCapability_RelationshipChip": "RelationshipChipProps (DataDisplay.tsx:540-546) DOES accept href. So for relationship-shaped references, the linkable component already exists and AOS is not using it."
+      },
+      "whyItHappened": {
+        "rootCause": "Two different causes wearing one symptom. Rendering an id as a machine token is correct — it is a machine token. The defect is that the token type has no navigational form in DS, so the only way to show an id is to show it inert.",
+        "theRuleGap": "No rule requires that a rendered reference to another governed record be reachable from where it is rendered. The contract requires MachineToken for \"machine-token containment\" — that ids be visually contained and not mistaken for prose — and containment is satisfied by an inert token. A rule that says \"ids must look like ids\" without \"and must be traversable\" is satisfied exactly by what the Owner is complaining about.",
+        "relatedHistory": "AOS already recorded a read-surface gap here: work-list and work-show do not return externalKey, so AOS cannot always name the target of a reference. That limits the label a link can carry; it does not prevent the link.",
+        "ruleVerdict": "Rule missing (reference traversability), plus a DS prop-surface gap on MachineToken, plus an AOS non-use of RelationshipChip's existing href."
+      }
+    }
+  ],
+
+  "crossCuttingRootCause": {
+    "statement": "Five of the six are invisible to every gate in both repositories, and for the same structural reason: AOS's gates assert that a route renders, and that named markers are present in the bytes. None of them asserts that a rendered page is usable — that a chosen scope survives a click, that a locale menu entry produces that locale, that a reference can be followed, that there is a way back.",
+    "evidence": [
+      "AOS verify chains 17 gates. Zero mention any locale other than en and zh-CN.",
+      "AOS verify has no gate that clicks anything: the frontend shell proof asserts marker presence at fixed URLs, all of which are ?locale=en.",
+      "DS's five-locale enforcement renders DS's own routes only. It cannot see a consumer.",
+      "Item 2 is the second instance of a defect class already fixed once in the same function, because the first fix added no gate."
+    ],
+    "priorInstancesOfTheSameShape": [
+      "TCRN-DS-INC-005: the gate added to stop a fifth copy of a retired selection style could not see the fifth copy, because it read attribute selectors only.",
+      "TCRN-AOS-INC-011: a predicate pinned to a marker that had moved, plus a second copy of the same predicate updated in only one place.",
+      "TCRN-AOS-INC-006: filter links returned zero results and the page rendered cleanly — 'an empty list is a defect's best disguise'."
+    ],
+    "theCommonSentence": "A gate only protects the bytes it reads. Each of these was a gate reading the wrong bytes, or no gate at all."
+  },
+
+  "ruleRepairsProposed": [
+    {
+      "for": "item 1",
+      "repair": "A consumer-side locale-coverage gate that fetches AOS's own routes at all five required locales and fails when a locale's visible copy is substantially identical to English. The threshold is measurable today: ja/ko/fr currently sit at 99.8% identical on /. Pair it with a hard rule that the locale menu may only offer locales the copy layer actually serves — deriving the menu from copy coverage rather than from the supported-locale list.",
+      "sideEffect": "This makes the DS contract's i18nDisposition executable on the consumer side for the first time."
+    },
+    {
+      "for": "item 2",
+      "repair": "Name the scope-preservation invariant and gate it: for a scoped route, every in-page link must carry the active scope forward unless it is explicitly a scope-changing control. The gate form is the measurement already written — request a scoped page, read its own hrefs, count how many preserve scope. Today that gate reports 0/11 and would be red."
+    },
+    {
+      "for": "items 3 and 6",
+      "repair": "Two presence rules the contract currently lacks: an index surface over a threshold count must offer local search, and a rendered reference to another governed record must be traversable from where it is rendered. Both are gateable by rendering the route and inspecting the DOM."
+    },
+    {
+      "for": "item 4",
+      "repair": "A navigation-reversibility rule: a detail or nested route must offer an in-page way back to its parent, not rely on the browser's back button."
+    },
+    {
+      "for": "item 5",
+      "repair": "Settle the preference-transport question the contract declined: preferences that affect first paint must travel with the request (cookie), not live only in a store the server cannot read. This one likely belongs in DS, since DS's reference implementation is the source of the pattern."
+    },
+    {
+      "for": "the cross-cutting cause",
+      "repair": "The deeper repair is a class of gate AOS does not have: one that exercises a page rather than reading it. Every one of the six is invisible to marker-presence assertions and visible to a gate that fetches a page, follows its own links, and checks that state survives."
+    }
+  ],
+
+  "boundary": {
+    "notDoneHere": "Nothing is fixed in this record. Per the standing design-domain rule, UI/UX changes need an approved proposal before implementation; this is measurement and triage only.",
+    "noCodeChanged": true,
+    "measurementScripts": "Written to /tmp (aos-locale-measure.mjs, aos-locale-overlap.mjs, aos-scope-measure.mjs). They are throwaway measurement harnesses, not gates; the gate forms are proposed above and not yet built.",
+    "oneCorrectionToMyOwnMeasurement": "My first locale run used route names that do not exist on the service (/my-work, /work-items, /deliberations, /dashboard) and returned 32-byte empty pages, which made every locale look identical for the wrong reason. The real route table is apps/web/src/data.ts frontendShellRoutes (46 routes). The reported numbers are from the corrected run."
+  }
+}
