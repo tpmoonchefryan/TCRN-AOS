@@ -1379,7 +1379,23 @@ async function runBrowserProof(baseUrl) {
     const mobileContentReadback = await inspectContentRegion(mobilePage);
     assert.deepEqual(mobileContentReadback.aosClassHits, [], "mobile content region has no AOS-local visible classes");
     assert.deepEqual(mobileContentReadback.storybookDemoClassHits, [], "mobile content region has no Storybook-only shell demo classes");
-    const mobileWorkHeadingTop = await mobilePage.locator("#work-heading").evaluate((node) => node.getBoundingClientRect().top);
+    // The fold is measured against what a reader can see, not against
+    // `#work-heading` — which is 1x1 with `clip: rect(0,0,0,0)`, so the bound
+    // this replaces was pinned to an element nobody has ever looked at. The
+    // first work row is the thing the page exists to show; a first viewport
+    // that reaches the title and no data is the same complaint one scroll later
+    // (TCRN-AOS-MIN-006).
+    const mobileFoldReadback = await mobilePage.evaluate(() => {
+      const visibleTitle = [...document.querySelectorAll("h1, h2, .tcrn-heading")]
+        .map((node) => node.getBoundingClientRect())
+        .filter((rect) => rect.width > 2 && rect.height > 2)[0];
+      const firstRow = document.querySelector(".tcrn-work-item-row");
+      return {
+        fold: window.innerHeight,
+        visibleTitleTop: visibleTitle ? Math.round(visibleTitle.top) : null,
+        firstWorkRowTop: firstRow ? Math.round(firstRow.getBoundingClientRect().top) : null
+      };
+    });
     // KNOWN REGRESSION, ON RECORD — TCRN-AOS-INC-025. The eleven-module nav
     // (2026-07-26) stacks to ~684px on the DS mobile posture, which puts this
     // heading at ~855px: one short scroll below the 760px first viewport the
@@ -1387,7 +1403,16 @@ async function runBrowserProof(baseUrl) {
     // ruling (collapse, accordion, jump link — all owner-domain UI changes), so
     // this bound is a ratchet, not an acceptance: it pins today's measured
     // debt and goes red if the fold gets any deeper while the ruling is open.
-    assert.equal(mobileWorkHeadingTop < 900, true, "mobile Work heading stays within the recorded INC-025 bound (855px measured; ruling pending)");
+    assert.equal(
+      mobileFoldReadback.firstWorkRowTop !== null && mobileFoldReadback.firstWorkRowTop < mobileFoldReadback.fold,
+      true,
+      `mobile first viewport reaches a work item (row at ${mobileFoldReadback.firstWorkRowTop}, fold ${mobileFoldReadback.fold})`
+    );
+    assert.equal(
+      mobileFoldReadback.visibleTitleTop !== null && mobileFoldReadback.visibleTitleTop < mobileFoldReadback.fold,
+      true,
+      `mobile first viewport reaches the visible page title (title at ${mobileFoldReadback.visibleTitleTop}, fold ${mobileFoldReadback.fold})`
+    );
     const mobileNoSearchReadback = await mobilePage.evaluate(() => {
       const wrapper = document.querySelector(".tcrn-product-shell-search");
       const input = document.querySelector(".tcrn-search-input");
@@ -1409,7 +1434,17 @@ async function runBrowserProof(baseUrl) {
     }, "mobile zh-CN Work renders no global search control");
     await mobilePage.screenshot({ path: `${screenshotRoot}/04-mobile-work-dark.png`, fullPage: false });
     assert.equal(await mobilePage.locator("[data-side-nav-toggle]").isVisible(), false, "mobile Work hides side-nav collapse affordance until mobile collapsed variants are admitted");
-    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-owner-quality-collapse-policy"), "mobile-hidden-collapse-affordance", "mobile Work records accepted hidden collapse policy");
+    assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-owner-quality-collapse-policy"), "mobile-hidden-width-collapse-affordance", "mobile Work records the accepted hidden WIDTH-collapse policy");
+    // The other half of that policy, which had no assertion at all and so went
+    // four weeks without anyone noticing there was no way to put the navigation
+    // away: the control exists, it is closed, and closed means the destinations
+    // are out of the tab order rather than merely out of sight.
+    assert.equal(await mobilePage.locator("[data-mobile-nav-toggle]").getAttribute("aria-expanded"), "false", "mobile Work starts with the navigation put away");
+    assert.equal(
+      await mobilePage.locator(".tcrn-side-nav").evaluate((node) => getComputedStyle(node).display),
+      "none",
+      "mobile Work navigation is display:none when closed, so its links leave the tab order"
+    );
     assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-visual-instance-variant"), "mobile-dark-zh-cn-work-queue", "mobile Work remains inside accepted owner-quality variant with hidden collapse affordance");
     assert.equal(await mobilePage.locator("[data-aos-shell]").getAttribute("data-side-nav-collapsed"), "false", "mobile owner-quality side nav remains expanded");
     const mobileOverflowReadback = await mobilePage.evaluate(() => {
@@ -1517,7 +1552,6 @@ async function runBrowserProof(baseUrl) {
         rawJsonNotPrimary: true,
         strictRegisteredSurfaceContentClasses: true,
         lightDarkThemeReadabilityChecked: true,
-        mobileNavigationCompactFirstViewport: true,
         desktopMobileOverflowChecked: true
       },
       sideNavKeyboardReadback,

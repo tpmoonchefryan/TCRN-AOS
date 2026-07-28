@@ -166,10 +166,9 @@ interface BrowserVisualState {
 }
 
 interface OwnerQualityRoutePolicy {
-  forceExpanded: boolean;
   theme?: "light" | "dark";
   locale?: TcrnLocale;
-  reason: "accepted_owner_quality_variant" | "mobile_collapse_hidden_policy" | "unclaimed_state";
+  reason: "accepted_owner_quality_variant" | "unclaimed_state";
 }
 
 interface AosShellAppProps {
@@ -431,14 +430,12 @@ export function AosShellApp({ initialShellState: initialShellStateOverride, init
   // The variant matrix speaks page identities, the nav speaks module ones;
   // /cockpit and /work belong to the former and only alias into the latter.
   const oracleRouteId = resolveOwnerQualityOracleRoute(currentPath) as AosRouteId;
-  const forceExpandedOwnerQualityState = isForceExpandedOwnerQualityState({
-    route: oracleRouteId,
-    theme: controller.theme,
-    locale: currentLocale,
-    viewport: browserVisualState.viewport,
-    reducedMotion: browserVisualState.reducedMotion
-  });
-  const visualInstanceCollapsed = forceExpandedOwnerQualityState ? false : controller.collapsed;
+  // Was `forceExpandedOwnerQualityState ? false : controller.collapsed`. The
+  // override existed only to keep the mobile rail pinned open, because the
+  // control that could have put it away was hidden and there was nothing else
+  // to hold the accepted variant in place. The navigation shows and hides on
+  // its own now, so the reader's collapse state is simply the reader's.
+  const visualInstanceCollapsed = controller.collapsed;
   const visualInstanceVariant = resolveVisualInstanceVariant({
     route: oracleRouteId,
     theme: controller.theme,
@@ -453,6 +450,13 @@ export function AosShellApp({ initialShellState: initialShellStateOverride, init
     currentTheme: controller.theme,
     currentLocale,
     localeMenuOpen: controller.localeMenuOpen,
+    // Forwarded straight through: the mobile show/hide state is the shell's own
+    // and this product has nothing to add to it. It is deliberately not a URL
+    // parameter and not a stored preference — putting the navigation away is a
+    // thing you do on one screen, not a thing you mean to still be true
+    // tomorrow, and `collapsed` (which is both) travels in every link.
+    mobileNavExpanded: controller.mobileNavExpanded,
+    onMobileNavExpandedChange: controller.setMobileNavExpanded,
     navId: "aos-primary-side-nav",
     onCollapsedChange: (collapsed: boolean) => {
       controller.setCollapsed(collapsed);
@@ -558,7 +562,13 @@ export function AosShellApp({ initialShellState: initialShellStateOverride, init
       data-tcrn-theme={controller.theme}
       data-visual-instance-locale={currentLocale}
       data-visual-instance-collapsed={visualInstanceCollapsed ? "true" : "false"}
-      data-owner-quality-collapse-policy={browserVisualState.viewport === "mobile" ? "mobile-hidden-collapse-affordance" : "desktop-actionable-collapse-toggle"}
+      // Re-scoped, not retired: below the breakpoint the *width-collapse*
+      // control is still hidden, because narrowing a rail to 92px in a
+      // full-width stacked layout is a control that does nothing. What the old
+      // value silently also claimed — that no way to put the navigation away
+      // was needed — was never ruled on, and stopped being true when the shell
+      // went from two destinations to eleven (TCRN-AOS-MIN-006).
+      data-owner-quality-collapse-policy={browserVisualState.viewport === "mobile" ? "mobile-hidden-width-collapse-affordance" : "desktop-actionable-collapse-toggle"}
       data-visual-instance-route={oracleRouteId}
       data-visual-instance-search="not-rendered"
       data-visual-instance-viewport={browserVisualState.viewport}
@@ -1124,9 +1134,7 @@ function readInitialShellState(ssrPath = "/cockpit", ssrSearch = "", cookieHeade
   const localeFromQuery = params?.get("locale");
   return {
     currentSearch: params.toString(),
-    collapsed: ownerQualityRoutePolicy.forceExpanded
-      ? false
-      : collapsedFromQuery === "true"
+    collapsed: collapsedFromQuery === "true"
         ? true
         : collapsedFromQuery === "false"
           ? false
@@ -1139,7 +1147,7 @@ function readInitialShellState(ssrPath = "/cockpit", ssrSearch = "", cookieHeade
     // Which of the three the request decided for itself. The shell is handed a storage
     // key only for the others, so a stored preference cannot outrank an explicit link.
     overriddenByRequest: {
-      collapsed: ownerQualityRoutePolicy.forceExpanded || collapsedFromQuery === "true" || collapsedFromQuery === "false",
+      collapsed: collapsedFromQuery === "true" || collapsedFromQuery === "false",
       theme: Boolean(ownerQualityRoutePolicy.theme) || themeFromQuery !== null,
       locale: Boolean(ownerQualityRoutePolicy.locale) || localeFromQuery !== null
     },
@@ -1222,43 +1230,25 @@ function resolveOwnerQualityRoutePolicy(path: string, params: URLSearchParams | 
   // policy now requires the request to say so, and silence belongs to the
   // reader's own preference.
   if (theme === null || locale === null) {
-    return { forceExpanded: false, reason: "unclaimed_state" };
+    return { reason: "unclaimed_state" };
   }
   if (route === "cockpit" && locale === tcrnDefaultLocale) {
     if (theme === "dark") {
-      return { forceExpanded: false, theme: "dark", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
+      return { theme: "dark", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
     }
     if (theme === "light") {
-      return { forceExpanded: false, theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
+      return { theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
     }
   }
   if (route === "work") {
     if (theme === "light" && locale === tcrnDefaultLocale) {
-      return { forceExpanded: false, theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
+      return { theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
     }
     if (theme === "dark" && locale === "zh-CN") {
-      return { forceExpanded: true, theme: "dark", locale: "zh-CN", reason: "mobile_collapse_hidden_policy" };
+      return { theme: "dark", locale: "zh-CN", reason: "accepted_owner_quality_variant" };
     }
   }
-  return { forceExpanded: false, reason: "unclaimed_state" };
-}
-
-function isForceExpandedOwnerQualityState({
-  route,
-  theme,
-  locale,
-  viewport,
-  reducedMotion
-}: {
-  route: AosRouteId;
-  theme: "light" | "dark";
-  locale: TcrnLocale;
-  viewport: VisualInstanceViewportState;
-  reducedMotion: boolean;
-}): boolean {
-  if (reducedMotion && viewport === "desktop" && route === "cockpit" && theme === "light" && locale === "en") return true;
-  if (viewport === "mobile" && route === "work" && theme === "dark" && locale === "zh-CN") return true;
-  return false;
+  return { reason: "unclaimed_state" };
 }
 
 /**
