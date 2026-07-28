@@ -15,6 +15,10 @@ Rejected or redacted input classes include:
 
 Owner-intent-required actions are modeled as pending gates. They are not executed automatically by the gateway or adapter.
 
+Access boundary (MIN-007 D7): the cockpit service's write face binds `127.0.0.1` and nothing else, and every off-host path onto it is an SSH tunnel. The bind is asserted by a standing tripwire test against the kernel-reported address (`apps/cockpit-service/test/service.test.mjs`), and any change that would let the write face's address leave the Owner's device is handled as an external-release-grade stop, not a configuration change — the escalation clause, detection layers, and the live red/green topology proof are in `deploy/access-boundary/README.md` and `evidence/aos-access-boundary-proof.json`. The earlier S019 "LAN trust, no auth layer yet" posture remains citable for the read-only mirror segment only; its premises do not survive the switchover segment (re-ruled by CONF-007 D7).
+
+Gate identity authority (MIN-007 D10): the authority roster has one canonical source, held read-only with the ceremony terminal in the platform workspace's `release-trust/`; hosts that resolve owner gates (the VM) hold a `0600` copy placed and verified by full-value sha256 comparison, and the engine's rulings against that copy — including refusal of a wrong digest and of an unpermitted actor — are drilled and recorded in `evidence/aos-gate-authority-placement.json` (recipe: `deploy/access-boundary/place-gate-authority.mjs`).
+
 Actor attribution is a claim, not proof of identity. The cockpit service's write surfaces (chain and domain alike) stamp every write with the actor the deployment explicitly configured (`AOS_ACTOR` / the `actor` option); there is no default value, and the service refuses to start without one (TCRN-AOS-STORY-112).
 
 The Codex adapter is dry-run only. It records intended dispatch payloads and readback models, but it does not send to live threads in this checkpoint.

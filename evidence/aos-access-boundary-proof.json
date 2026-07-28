@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "aos.access-boundary-proof.v1",
+  "ruling": "TCRN-AOS-MIN-007 D7",
+  "ok": true,
+  "startedAt": "2026-07-28T15:34:23Z",
+  "finishedAt": "2026-07-28T15:34:25Z",
+  "boundary": {
+    "statement": "the AOS write face binds 127.0.0.1 only; any path onto it from off the host is an SSH tunnel; an address leaving the Owner's device is handled at external-release grade (deploy/access-boundary/README.md)",
+    "writeFaceBindSite": "apps/cockpit-service/src/service.ts (server.listen host argument)",
+    "tripwireTest": "apps/cockpit-service/test/service.test.mjs — \"the write face binds 127.0.0.1 and nothing else — the access-boundary tripwire\""
+  },
+  "tripwireDrill": {
+    "executed": true,
+    "test": "the write face binds 127.0.0.1 and nothing else — the access-boundary tripwire",
+    "predicate": "net.Server#address().address === \"127.0.0.1\" (kernel-reported bound address)",
+    "flip": "dist bind host 127.0.0.1 -> 0.0.0.0 (in place, restored from the original bytes)",
+    "wentRed": true,
+    "redSampleLine": "AssertionError [ERR_ASSERTION]: cockpit-service must listen on loopback only. A bind an address can leave the Owner's device on is a write-face-level change: per deploy/access-boundary/README.md it is",
+    "restoredGreen": true
+  },
+  "tunnelProof": {
+    "listener": {
+      "bind": "127.0.0.1:43765",
+      "stoodUpAs": "one-shot node http server under <vm-scratch>, session leader via setsid",
+      "ssLine": "LISTEN 0 511 127.0.0.1:43765 0.0.0.0:* users:((\"MainThread\",pid=22593,fd=21))"
+    },
+    "lanDirect": {
+      "target": "192.168.51.249:43765",
+      "connected": false,
+      "curlExitCode": 7,
+      "curlError": "curl: (7) Failed to connect to 192.168.51.249 port 43765 after 1008 ms: Couldn't connect to server",
+      "listenerAliveDuringProbe": true,
+      "verdict": "red — the LAN cannot reach the loopback-bound port"
+    },
+    "tunnel": {
+      "route": "ssh -L 48316:127.0.0.1:43765 tcrn-platform-dev",
+      "answered": {
+        "ok": true,
+        "role": "write-face-sim",
+        "nonce": "55fa97dbc48a7a9c51763bd343f23764"
+      },
+      "nonceMatched": true,
+      "verdict": "green — the same port answers through the SSH tunnel with this run's nonce"
+    },
+    "reclaim": {
+      "processGroupKilled": "own group (setsid), killed by group id",
+      "processGroupEmpty": true,
+      "portClosed": true,
+      "scratchRemoved": true,
+      "localForwardClientsLeft": 0,
+      "controlMasterLeftToOwner": true
+    }
+  }
+}

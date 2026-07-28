@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "aos.gate-authority-placement.v1",
+  "ruling": "TCRN-AOS-MIN-007 D10",
+  "ok": true,
+  "startedAt": "2026-07-28T15:42:51Z",
+  "finishedAt": "2026-07-28T15:42:52Z",
+  "canonicalSource": {
+    "locator": "<platform-root>/.tcrn-workspace/release-trust/gate-identity-authority.json",
+    "heldBy": "ceremony terminal (Owner's machine); read-only for this recipe",
+    "sha256": "fab89e256b7a4df472ac6310ae1b5e85e6993a3655c062dcf5ba82e140ed15b7",
+    "bytes": 199,
+    "schemaVersion": "tcrn.gate-identity-authority.v1",
+    "roster": [
+      {
+        "actorId": "owner:governance",
+        "outcomeClasses": [
+          "blocked",
+          "discussion_only",
+          "owner_intent_required",
+          "recommendation",
+          "role_decision"
+        ]
+      }
+    ]
+  },
+  "placement": {
+    "destinationHost": "tcrn-platform-dev",
+    "path": "/srv/tcrn/governance/gate-identity-authority.json",
+    "mode": "600 root:root 199",
+    "method": "bytes over existing ssh (stdin), umask 077 + chmod 0600, idempotent",
+    "digestComparison": {
+      "canonical": "fab89e256b7a4df472ac6310ae1b5e85e6993a3655c062dcf5ba82e140ed15b7",
+      "vmCopy": "fab89e256b7a4df472ac6310ae1b5e85e6993a3655c062dcf5ba82e140ed15b7",
+      "comparedAs": "full 64-hex values",
+      "match": true
+    }
+  },
+  "predicateRedProof": {
+    "executed": true,
+    "predicate": "sha256(VM copy) === sha256(canonical source)",
+    "flip": "first byte of the VM copy overwritten in place",
+    "flippedDigest": "a7e0bfe31ff4aff4e8019c3d17032d1f04edda2e42618d80b21cdaa866373862",
+    "wentRed": true,
+    "restoredGreen": true
+  },
+  "drill": {
+    "executed": true,
+    "scratch": "<vm-scratch> (created for this run, removed below, absence verified)",
+    "workspaceId": "workspace:c5c566f80ad7fe5e800718bb",
+    "gate": {
+      "id": "gate:4dcab43379c57c958174489c",
+      "outcomeClass": "owner_intent_required"
+    },
+    "rulings": {
+      "wrongDigest": {
+        "status": "satisfied",
+        "actor": "owner:governance",
+        "digest": "64x0",
+        "reasonCode": "GATE_IDENTITY_AUTHORITY_DIGEST",
+        "verdict": "red — refused before the identity layer"
+      },
+      "unpermittedActor": {
+        "status": "satisfied",
+        "actor": "agent:fable",
+        "digest": "canonical",
+        "reasonCode": "WORKSPACE_GATE_IDENTITY_REFUSED",
+        "error": "agent:fable may not satisfy owner_intent_required gate gate:4dcab43379c57c958174489c",
+        "verdict": "red — the engine consulted the placed roster and refused by name"
+      },
+      "permittedSatisfied": {
+        "status": "satisfied",
+        "actor": "owner:governance",
+        "digest": "canonical",
+        "reasonCode": "WORKSPACE_GATE_EVIDENCE_UNRESOLVED",
+        "verdict": "identity layer passed; the engine's separate evidence-anchoring rule spoke next"
+      },
+      "permittedBlocked": {
+        "status": "blocked",
+        "actor": "owner:governance",
+        "digest": "canonical",
+        "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+        "chainVersion": 3,
+        "verdict": "green — completed write, ruled per the placed authority copy"
+      }
+    },
+    "reclaim": {
+      "scratchRemoved": true,
+      "scratchProcessesLeft": 0
+    }
+  }
+}

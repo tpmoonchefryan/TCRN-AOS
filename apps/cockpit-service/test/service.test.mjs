@@ -183,6 +183,28 @@ test("every work-graph write carries the head sentinel supplied by the surface b
     "decided-by must reach the facade as an array, not a joined string");
 });
 
+test("the write face binds 127.0.0.1 and nothing else — the access-boundary tripwire", async () => {
+  // MIN-007 D7: the write face stays loopback-only, reached from anywhere else
+  // exclusively through an SSH tunnel. This test is the tripwire that ruling
+  // asked for: it reads the address the kernel actually bound (not the source
+  // text), so hard-coding "0.0.0.0", a LAN address, or an env-driven host in
+  // service.ts turns it red. Both sides of the predicate can differ — flipping
+  // the dist bind to 0.0.0.0 makes this assertion fail with address "0.0.0.0"
+  // (proven red once; see evidence/aos-access-boundary-proof.json).
+  await withService(async ({ service }) => {
+    const address = service.server.address();
+    assert.ok(address && typeof address === "object", "bound address must be readable");
+    assert.equal(
+      address.address,
+      "127.0.0.1",
+      "cockpit-service must listen on loopback only. A bind an address can leave the Owner's "
+        + "device on is a write-face-level change: per deploy/access-boundary/README.md it is "
+        + "handled as an external-release-grade stop, never as a config tweak."
+    );
+    assert.match(service.url, /^http:\/\/127\.0\.0\.1:/u, "the advertised URL must stay loopback");
+  });
+});
+
 test("the service refuses to start without a configured actor", async () => {
   const scratch = await mkdtemp(join(tmpdir(), "aos-service-test-"));
   // If the refusal ever regresses, the service has actually started — and a
