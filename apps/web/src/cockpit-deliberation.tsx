@@ -167,7 +167,11 @@ export function DeliberationsView({
       <Surface className="tcrn-aos-filters">
         <div className="tcrn-aos-toolbar">
           <div className="tcrn-aos-searchbar">
+            {/* `fill` is the DS prop this container used to fake by styling
+                `.tcrn-search-input` from outside — a consumer reaching into the
+                component's class names, retired with the admission. */}
             <SearchInput
+              fill
               aria-label={pick(locale, deliberationCopy.searchLabel)}
               placeholder={pick(locale, deliberationCopy.searchLabel)}
               value={query}

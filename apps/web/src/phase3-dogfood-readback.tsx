@@ -933,7 +933,7 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
 
   return (
     <div
-      className="tcrn-phase3-readback"
+      className="tcrn-aos-phase3-readback"
       data-phase3-readback-surface="work-readback"
       data-readback-api-surface="work.readback"
       data-readback-api-tickets={ticketEndpoint}
@@ -992,11 +992,11 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
         ]}
       />
 
-      <Surface className="tcrn-phase3-readback__filter-band" data-phase3-readback-filter-band="true">
+      <Surface className="tcrn-aos-phase3-readback__filter-band" data-phase3-readback-filter-band="true">
         <WorkQuickFilters label={pick(locale, readbackCopy.storyStatusFilters)} filters={filters} />
-        <div className="tcrn-phase3-readback__policy">
+        <div className="tcrn-aos-phase3-readback__policy">
           <Text>{pick(locale, readbackCopy.readbackMethodsOnly)}</Text>
-          <div className="tcrn-phase3-readback__tokens">
+          <div className="tcrn-aos-phase3-readback__tokens">
             {policyMethods.map((method) => <MachineTokenCell key={method} token={method} kind="generic" copyable={false} />)}
           </div>
         </div>
@@ -1004,9 +1004,9 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
 
       {ticketError ? <ReadbackErrorPanel error={ticketError} locale={locale} endpoint={ticketEndpoint} /> : null}
 
-      <section className="tcrn-phase3-readback__layout" aria-label={pick(locale, readbackCopy.ticketReadbackAndAudit)}>
-        <Surface className="tcrn-phase3-readback__list" data-ticket-list-ui-proof="story-grain">
-          <div className="tcrn-phase3-readback__section-heading">
+      <section className="tcrn-aos-phase3-readback__layout" aria-label={pick(locale, readbackCopy.ticketReadbackAndAudit)}>
+        <Surface className="tcrn-aos-phase3-readback__list" data-ticket-list-ui-proof="story-grain">
+          <div className="tcrn-aos-phase3-readback__section-heading">
             <Heading level={2}>{pick(locale, readbackCopy.storyGrainTickets)}</Heading>
             <Text>{pick(locale, readbackCopy.safeSummaryFields)}</Text>
           </div>
@@ -1023,9 +1023,9 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
           <PaginationControls page={page} search={search} routeHref={routeHref} locale={locale} />
         </Surface>
 
-        <div className="tcrn-phase3-readback__detail" data-ticket-scoped-audit-proof="targetId-required">
-          <Surface className="tcrn-phase3-readback__story-card">
-            <div className="tcrn-phase3-readback__section-heading">
+        <div className="tcrn-aos-phase3-readback__detail" data-ticket-scoped-audit-proof="targetId-required">
+          <Surface className="tcrn-aos-phase3-readback__story-card">
+            <div className="tcrn-aos-phase3-readback__section-heading">
               <Heading level={2}>{selectedStoryTitle}</Heading>
               <Text>{pick(locale, readbackCopy.storyLevelReadbackNote)}</Text>
             </div>
@@ -1035,8 +1035,8 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
           </Surface>
 
           {auditError ? <ReadbackErrorPanel error={auditError} locale={locale} endpoint={auditEndpoint} /> : null}
-          <Surface className="tcrn-phase3-readback__audit-card">
-            <div className="tcrn-phase3-readback__section-heading">
+          <Surface className="tcrn-aos-phase3-readback__audit-card">
+            <div className="tcrn-aos-phase3-readback__section-heading">
               <Heading level={2}>{pick(locale, readbackCopy.auditTimeline)}</Heading>
               <Text>{pick(locale, readbackCopy.redactedOnly)}</Text>
             </div>
@@ -1067,25 +1067,25 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
       </section>
 
       <section
-        className="tcrn-phase3-readback__knowledge"
+        className="tcrn-aos-phase3-readback__knowledge"
         aria-label={pick(locale, readbackCopy.knowledgeSearchAndDetail)}
         data-kr03-knowledge-search-ui="true"
         data-kr03-knowledge-detail-ui="true"
         data-kr03-write-ui="absent"
         data-kr03-gateway-list-ui="absent"
       >
-        <Surface className="tcrn-phase3-readback__knowledge-search">
-          <div className="tcrn-phase3-readback__section-heading">
+        <Surface className="tcrn-aos-phase3-readback__knowledge-search">
+          <div className="tcrn-aos-phase3-readback__section-heading">
             <Heading level={2}>{pick(locale, readbackCopy.knowledgeReadback)}</Heading>
             <Text>{pick(locale, readbackCopy.knowledgeSearchIntro)}</Text>
           </div>
-          <form className="tcrn-phase3-readback__knowledge-form" method="get" action={routeHref("/work/readback")} role="search" data-kr03-search-form="read-only">
-            <label className="tcrn-phase3-readback__knowledge-label" htmlFor="knowledgeQuery">
+          <form className="tcrn-aos-phase3-readback__knowledge-form" method="get" action={routeHref("/work/readback")} role="search" data-kr03-search-form="read-only">
+            <label className="tcrn-aos-phase3-readback__knowledge-label" htmlFor="knowledgeQuery">
               {pick(locale, readbackCopy.searchKnowledge)}
             </label>
             <input
               id="knowledgeQuery"
-              className="tcrn-phase3-readback__knowledge-input"
+              className="tcrn-aos-phase3-readback__knowledge-input"
               name="knowledgeQuery"
               type="search"
               defaultValue={knowledgeQuery}
@@ -1109,8 +1109,8 @@ export function Phase3DogfoodReadback({ locale, theme, routeHref }: Phase3Dogfoo
           )}
         </Surface>
 
-        <Surface className="tcrn-phase3-readback__knowledge-detail" data-kr03-entry-detail-body="explicit-read-only-fetch">
-          <div className="tcrn-phase3-readback__section-heading">
+        <Surface className="tcrn-aos-phase3-readback__knowledge-detail" data-kr03-entry-detail-body="explicit-read-only-fetch">
+          <div className="tcrn-aos-phase3-readback__section-heading">
             <Heading level={2}>{pick(locale, readbackCopy.knowledgeDetail)}</Heading>
             <Text>{pick(locale, readbackCopy.knowledgeDetailIntro)}</Text>
           </div>
@@ -1299,7 +1299,7 @@ function readbackHref(
 
 function TicketSummary({ row, locale }: { row: TicketListRow; locale: TcrnLocale }) {
   return (
-    <div className="tcrn-phase3-readback__story-summary">
+    <div className="tcrn-aos-phase3-readback__story-summary">
       <MetadataRail
         title={pick(locale, readbackCopy.storySummary)}
         items={[
@@ -1311,9 +1311,9 @@ function TicketSummary({ row, locale }: { row: TicketListRow; locale: TcrnLocale
           { key: "gate", label: pick(locale, readbackCopy.latestGate), value: row.latestGate?.id ?? "n/a" }
         ]}
       />
-      <div className="tcrn-phase3-readback__subtasks" aria-label={pick(locale, readbackCopy.subtaskSummaries)}>
+      <div className="tcrn-aos-phase3-readback__subtasks" aria-label={pick(locale, readbackCopy.subtaskSummaries)}>
         {(row.subtaskSummaries ?? []).slice(0, 4).map((subtask) => (
-          <span key={subtask.id} className="tcrn-phase3-readback__subtask">
+          <span key={subtask.id} className="tcrn-aos-phase3-readback__subtask">
             <MachineTokenCell token={subtask.id} kind="work-item" copyable={false} />
             <span>{subtask.title}</span>
             <Badge tone="neutral">{subtask.ownerRole ?? pick(locale, readbackCopy.rolePending)}</Badge>
@@ -1416,7 +1416,7 @@ function PaginationControls({
     ? readbackHref(routeHref, new URLSearchParams(search), { cursor: page.nextCursor })
     : undefined;
   return (
-    <nav className="tcrn-phase3-readback__pagination" aria-label={pick(locale, readbackCopy.ticketPagination)} data-cursor-pagination="ticket-list">
+    <nav className="tcrn-aos-phase3-readback__pagination" aria-label={pick(locale, readbackCopy.ticketPagination)} data-cursor-pagination="ticket-list">
       {/* The zh branch had the two limits written into the sentence as literal
           digits while the en branch interpolated the constants, so changing a
           limit would have silently left one locale claiming the old numbers.
@@ -1452,22 +1452,22 @@ function KnowledgeResultList({
   locale: TcrnLocale;
 }) {
   return (
-    <div className="tcrn-phase3-readback__knowledge-results" data-kr03-result-list="snippet-grade">
+    <div className="tcrn-aos-phase3-readback__knowledge-results" data-kr03-result-list="snippet-grade">
       {items.map((item) => (
         <article
           key={item.id}
-          className="tcrn-phase3-readback__knowledge-result"
+          className="tcrn-aos-phase3-readback__knowledge-result"
           data-kr03-result-selected={selectedId === item.id ? "true" : "false"}
           data-kr03-result-body-included={item.bodyIncluded === true ? "true" : "false"}
         >
-          <div className="tcrn-phase3-readback__knowledge-result-head">
+          <div className="tcrn-aos-phase3-readback__knowledge-result-head">
             <a href={readbackHref(routeHref, new URLSearchParams(search), { knowledgeEntryId: item.id })}>
               {item.title}
             </a>
             <Badge tone={item.status === "canonical" ? "positive" : "neutral"}>{item.status ?? "unknown"}</Badge>
           </div>
           <Text>{item.snippet ?? item.summary ?? pick(locale, readbackCopy.noSummary)}</Text>
-          <div className="tcrn-phase3-readback__tokens">
+          <div className="tcrn-aos-phase3-readback__tokens">
             <MachineTokenCell token={item.id} kind="generic" copyable={false} />
             <MachineTokenCell token={item.category ?? "knowledge"} kind="generic" copyable={false} />
             {(item.tags ?? []).slice(0, 3).map((tag) => <Badge key={tag} tone="neutral">{tag}</Badge>)}
@@ -1481,7 +1481,7 @@ function KnowledgeResultList({
 function KnowledgeEntryDetailView({ readback, locale }: { readback: KnowledgeEntryReadback; locale: TcrnLocale }) {
   const entry = readback.entry;
   return (
-    <div className="tcrn-phase3-readback__knowledge-entry" data-kr03-entry-read-method={readback.method}>
+    <div className="tcrn-aos-phase3-readback__knowledge-entry" data-kr03-entry-read-method={readback.method}>
       <MetadataRail
         title={pick(locale, readbackCopy.knowledgeRecord)}
         items={[
@@ -1498,11 +1498,11 @@ function KnowledgeEntryDetailView({ readback, locale }: { readback: KnowledgeEnt
           { key: "audit", label: "auditEventId", value: readback.auditEventId ?? "n/a" }
         ]}
       />
-      <div className="tcrn-phase3-readback__knowledge-body" data-kr03-entry-body-visible={entry.bodyIncluded === true ? "true" : "false"}>
+      <div className="tcrn-aos-phase3-readback__knowledge-body" data-kr03-entry-body-visible={entry.bodyIncluded === true ? "true" : "false"}>
         <Heading level={3}>{entry.title}</Heading>
         <Text>{entry.body ?? entry.summary ?? pick(locale, readbackCopy.noBody)}</Text>
       </div>
-      <div className="tcrn-phase3-readback__tokens" data-kr03-no-edit-affordances="true">
+      <div className="tcrn-aos-phase3-readback__tokens" data-kr03-no-edit-affordances="true">
         <Badge tone="neutral">{pick(locale, readbackCopy.readOnly)}</Badge>
         <Badge tone="neutral">{pick(locale, readbackCopy.serviceProof)}</Badge>
         <Badge tone="neutral">KR-03</Badge>
@@ -1514,7 +1514,7 @@ function KnowledgeEntryDetailView({ readback, locale }: { readback: KnowledgeEnt
 function ReadbackErrorPanel({ error, locale, endpoint }: { error: ReadbackError; locale: TcrnLocale; endpoint: string }) {
   return (
     <Surface
-      className="tcrn-phase3-readback__error"
+      className="tcrn-aos-phase3-readback__error"
       data-readback-error-state={error.reason}
       data-readback-error-endpoint={endpoint}
       data-partial-row-data-shown="false"
@@ -1528,7 +1528,7 @@ function ReadbackErrorPanel({ error, locale, endpoint }: { error: ReadbackError;
 
 function StatusLine({ text, locale }: { text: string; locale: TcrnLocale }) {
   return (
-    <div className="tcrn-phase3-readback__status-line" aria-live="polite">
+    <div className="tcrn-aos-phase3-readback__status-line" aria-live="polite">
       <StatusBadge state={{ state: "local_only" }} locale={locale} />
       <Text>{text}</Text>
     </div>
@@ -1537,7 +1537,7 @@ function StatusLine({ text, locale }: { text: string; locale: TcrnLocale }) {
 
 function EmptyState({ text, locale }: { text: string; locale: TcrnLocale }) {
   return (
-    <div className="tcrn-phase3-readback__empty">
+    <div className="tcrn-aos-phase3-readback__empty">
       <StatusBadge state={{ state: "not_claimed" }} locale={locale} />
       <Text>{text}</Text>
     </div>

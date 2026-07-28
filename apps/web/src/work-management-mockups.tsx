@@ -1297,7 +1297,7 @@ function WorkRouteChrome({
 }) {
   return (
     <section data-work-route-chrome="compact-ds-public-exports" data-owner-quality-first-viewport="work-operational">
-      <Heading level={1} visualLevel={2} id="work-heading" className="tcrn-work-module-sr-only">
+      <Heading level={1} visualLevel={2} id="work-heading" className="tcrn-aos-work-module-sr-only">
         {pick(locale, page.title)}
       </Heading>
       <WorkPageHeader
@@ -1366,7 +1366,7 @@ function QueuePage({ locale, routeHref, showSplitInspector }: { locale: TcrnLoca
           />
         ) : queueList}
       </section>
-      <div className="tcrn-work-module-secondary-grid">
+      <div className="tcrn-aos-work-module-secondary-grid">
         <WorkFieldPanel
           title={pick(locale, workChromeCopy.blockerChain)}
           items={blockerChainItems(locale)}
@@ -1938,7 +1938,7 @@ function KnowledgeManagementSupportSection({ locale, routeHref }: { locale: Tcrn
     >
       <Heading level={2}>{pick(locale, knowledgePacketCopy.packetHeading)}</Heading>
       <Text>{pick(locale, knowledgePacketCopy.packetIntro)}</Text>
-      <div className="tcrn-work-module-secondary-grid">
+      <div className="tcrn-aos-work-module-secondary-grid">
         <KnowledgePageTree
           label={pick(locale, knowledgePacketCopy.pageTree)}
           items={pageTreeItems}
@@ -1953,7 +1953,7 @@ function KnowledgeManagementSupportSection({ locale, routeHref }: { locale: Tcrn
           density="compact"
         />
       </div>
-      <div className="tcrn-work-module-secondary-grid">
+      <div className="tcrn-aos-work-module-secondary-grid">
         <KnowledgeTocRail label={pick(locale, knowledgePacketCopy.onThisPage)} items={tocItems} density="compact" />
         <KnowledgeMetadataRail
           title={pick(locale, knowledgePacketCopy.metadataTitle)}
@@ -1975,11 +1975,11 @@ function KnowledgeManagementSupportSection({ locale, routeHref }: { locale: Tcrn
           density="compact"
         />
       </div>
-      <div className="tcrn-work-module-secondary-grid">
+      <div className="tcrn-aos-work-module-secondary-grid">
         <KnowledgeInlineCommentList label={pick(locale, knowledgePacketCopy.staticComments)} comments={comments} density="compact" />
         <KnowledgeVersionHistory label={pick(locale, knowledgePacketCopy.staticVersions)} versions={versions} density="compact" />
       </div>
-      <div className="tcrn-work-module-secondary-grid">
+      <div className="tcrn-aos-work-module-secondary-grid">
         <KnowledgeSearchResults label={pick(locale, knowledgePacketCopy.staticResults)} results={searchResults} density="compact" />
         <div
           data-registered-ds-knowledge-components="true"
@@ -2027,7 +2027,7 @@ function DetailPage({ locale, routeHref }: { locale: TcrnLocale; routeHref: (pat
         ? "Owner 认可：AOS 没有真实全局搜索能力，不应展示顶栏搜索框或全局搜索快捷键。"
         : "Owner-approved scope: AOS has no real global search capability, so the shell must not render topbar search or a global search shortcut."}
       state={{ state: "blocked", label: translatePhrase("PM freshness retry pending", locale) }}
-      main={<div className="tcrn-work-module-detail-stack">
+      main={<div className="tcrn-aos-work-module-detail-stack">
         <WorkFieldPanel title={pick(locale, workChromeCopy.hierarchy)} items={[
           // `Initiative`, `Epic` and `Story` are the governance model's own record
           // kinds and stay Latin here for the same reason the real modules leave

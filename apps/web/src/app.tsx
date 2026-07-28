@@ -14,6 +14,7 @@ import {
   Text,
   WorkIndex,
   getTcrnProductLogoAsset,
+  readPreferenceCookieValues,
   tcrnComponentCss,
   tcrnProductTagline,
   useProductShellController,
@@ -138,12 +139,6 @@ interface InitialShellState {
    * to write back three.
    */
   currentSearch: string;
-  /**
-   * The request's `Cookie` header, forwarded to the DS shell controller so the
-   * render that produces the first paint can read a stored preference. Absent in
-   * the browser and in the static builds, which have no request.
-   */
-  cookieHeader?: string;
   /**
    * Which preferences this request decides explicitly, and so which ones a stored
    * value must not override.
@@ -283,12 +278,19 @@ export function AosShellApp({ initialShellState: initialShellStateOverride, init
   // query says otherwise would let the standing preference win over the explicit link
   // — the precedence inverted, which is how a gate's `?theme=dark` would come back
   // light for anyone who had ever chosen light.
+  // No `requestPreferences` on purpose: this product resolves the request itself
+  // (query over cookie over default, through the DS parser in
+  // `readInitialShellState`) because it also has to land the winner on
+  // `<html lang>` and the theme attribute, outside this controller's tree. The
+  // resolved winner arrives as `initial*`; handing the controller the cookie
+  // values as well would be the same value by a second door — and for a
+  // query-overridden preference, the wrong door, since a request value outranks
+  // `initial*` and would put the standing preference back above the explicit link.
   const controller = useProductShellController({
     initialCollapsed: initialShellState.collapsed,
     initialTheme: initialShellState.theme,
     initialLocale: initialShellState.locale,
     navId: "aos-primary-side-nav",
-    requestCookieHeader: initialShellState.cookieHeader,
     ...(initialShellState.overriddenByRequest.collapsed ? {} : { collapsedStorageKey: sideNavStorageKey }),
     ...(initialShellState.overriddenByRequest.theme ? {} : { themeStorageKey }),
     ...(initialShellState.overriddenByRequest.locale ? {} : { localeStorageKey }),
@@ -426,8 +428,11 @@ export function AosShellApp({ initialShellState: initialShellStateOverride, init
   const currentLocale = resolveLocale(controller.locale);
   const currentCopy = localeCopy[currentLocale] ?? localeCopy.en;
   const currentRouteId = currentRoute.id as AosRouteId;
+  // The variant matrix speaks page identities, the nav speaks module ones;
+  // /cockpit and /work belong to the former and only alias into the latter.
+  const oracleRouteId = resolveOwnerQualityOracleRoute(currentPath) as AosRouteId;
   const forceExpandedOwnerQualityState = isForceExpandedOwnerQualityState({
-    route: currentRouteId,
+    route: oracleRouteId,
     theme: controller.theme,
     locale: currentLocale,
     viewport: browserVisualState.viewport,
@@ -435,7 +440,7 @@ export function AosShellApp({ initialShellState: initialShellStateOverride, init
   });
   const visualInstanceCollapsed = forceExpandedOwnerQualityState ? false : controller.collapsed;
   const visualInstanceVariant = resolveVisualInstanceVariant({
-    route: currentRouteId,
+    route: oracleRouteId,
     theme: controller.theme,
     locale: currentLocale,
     collapsed: visualInstanceCollapsed,
@@ -554,11 +559,11 @@ export function AosShellApp({ initialShellState: initialShellStateOverride, init
       data-visual-instance-locale={currentLocale}
       data-visual-instance-collapsed={visualInstanceCollapsed ? "true" : "false"}
       data-owner-quality-collapse-policy={browserVisualState.viewport === "mobile" ? "mobile-hidden-collapse-affordance" : "desktop-actionable-collapse-toggle"}
-      data-visual-instance-route={currentRouteId}
+      data-visual-instance-route={oracleRouteId}
       data-visual-instance-search="not-rendered"
       data-visual-instance-viewport={browserVisualState.viewport}
       data-visual-instance-reduced-motion={browserVisualState.reducedMotion ? "true" : "false"}
-      data-visual-instance-content={currentRouteId}
+      data-visual-instance-content={oracleRouteId}
       data-owner-quality-product-shell-oracle="true"
       data-design-system-source="@tcrn/ui-react @tcrn/ui-tokens @tcrn/ui-copy-state"
       data-storybook-contract-consumed="product-shell-semantic-boundary"
@@ -1102,21 +1107,32 @@ function readInitialShellState(ssrPath = "/cockpit", ssrSearch = "", cookieHeade
   const currentPath = typeof window === "undefined" ? ssrPath : window.location.pathname;
   const collapsedFromQuery = params?.get("collapsed");
   const ownerQualityRoutePolicy = resolveOwnerQualityRoutePolicy(currentPath, params);
-  const storedLocale = readStoredPreference(localeStorageKey, cookieHeader);
+  // The cookie parse is the Design System's, so the whole platform narrows the
+  // same way; this file used to carry its own copy of it. `localStorage` still
+  // outranks the cookie where it can answer — it is the store the browser cannot
+  // drop on its own — and on the server only the parsed cookie exists.
+  const cookiePreferences = readPreferenceCookieValues(
+    cookieHeader ?? readDocumentCookie(),
+    { collapsedKey: sideNavStorageKey, themeKey: themeStorageKey, localeKey: localeStorageKey }
+  );
+  const browserCollapsed = readBrowserStorage(sideNavStorageKey);
+  const browserTheme = readBrowserStorage(themeStorageKey);
+  const storedCollapsed = browserCollapsed !== null ? browserCollapsed === "true" : cookiePreferences.collapsed;
+  const storedTheme = browserTheme !== null ? resolveTheme(browserTheme) : cookiePreferences.theme;
+  const storedLocale = readBrowserStorage(localeStorageKey) ?? cookiePreferences.locale;
   const themeFromQuery = params?.get("theme");
   const localeFromQuery = params?.get("locale");
   return {
     currentSearch: params.toString(),
-    ...(cookieHeader ? { cookieHeader } : {}),
     collapsed: ownerQualityRoutePolicy.forceExpanded
       ? false
       : collapsedFromQuery === "true"
         ? true
         : collapsedFromQuery === "false"
           ? false
-          : readStoredBoolean(sideNavStorageKey, false, cookieHeader),
+          : storedCollapsed ?? false,
     theme: ownerQualityRoutePolicy.theme
-      ?? resolveTheme(themeFromQuery ?? readStoredPreference(themeStorageKey, cookieHeader)),
+      ?? (themeFromQuery !== null ? resolveTheme(themeFromQuery) : storedTheme ?? "light"),
     // `resolveLocale` rejects an unsupported value, so a stale cookie naming a locale
     // the product has dropped resolves to the default rather than rendering nothing.
     locale: ownerQualityRoutePolicy.locale ?? resolveLocale(localeFromQuery ?? storedLocale),
@@ -1174,20 +1190,50 @@ function resolveVisualInstanceVariant({
   return outsideAcceptedOwnerQualityMatrix;
 }
 
+/**
+ * The oracle's idea of where we are — a page identity, not a nav highlight.
+ *
+ * `/cockpit` and `/work` predate the module navigation. `resolveCurrentRoute`
+ * maps them onto the nearest module so the sidebar highlights something
+ * truthful, and that is exactly how they stopped matching the accepted-variant
+ * matrix: the matrix names the pages the Owner accepted, and those pages kept
+ * their own addresses while their nav identity moved. Behind the earlier red
+ * gates nothing ran to notice. The two aliases here are the two the matrix
+ * names; every other path is its nav identity.
+ */
+function resolveOwnerQualityOracleRoute(path: string): string {
+  if (path === "/cockpit" || path === "/operations-cockpit" || path.endsWith("/operations-cockpit.html")) {
+    return "cockpit";
+  }
+  if (path === "/work" || path.startsWith("/work/")) return "work";
+  return resolveCurrentRoute(path).id;
+}
+
 function resolveOwnerQualityRoutePolicy(path: string, params: URLSearchParams | undefined): OwnerQualityRoutePolicy {
-  const route = resolveCurrentRoute(path).id;
+  const route = resolveOwnerQualityOracleRoute(path);
   const theme = params?.get("theme") ?? null;
   const locale = params?.get("locale") ?? null;
-  if (route === "cockpit" && (locale === null || locale === tcrnDefaultLocale)) {
+  // Both named, or no policy. This used to fire on an absent `theme`/`locale`
+  // too, which made the accepted-variant pin outrank a stored preference on the
+  // product's own front page: a reader who chose Japanese and dark got English
+  // and light on /cockpit and nowhere else. That is the defect INC-017 was
+  // filed about, reappearing as an acceptance rule. An accepted variant is a
+  // *named* state — every row of the matrix names it in the query — so the
+  // policy now requires the request to say so, and silence belongs to the
+  // reader's own preference.
+  if (theme === null || locale === null) {
+    return { forceExpanded: false, reason: "unclaimed_state" };
+  }
+  if (route === "cockpit" && locale === tcrnDefaultLocale) {
     if (theme === "dark") {
       return { forceExpanded: false, theme: "dark", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
     }
-    if (theme === null || theme === "light") {
+    if (theme === "light") {
       return { forceExpanded: false, theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
     }
   }
   if (route === "work") {
-    if ((theme === null || theme === "light") && (locale === null || locale === tcrnDefaultLocale)) {
+    if (theme === "light" && locale === tcrnDefaultLocale) {
       return { forceExpanded: false, theme: "light", locale: tcrnDefaultLocale, reason: "accepted_owner_quality_variant" };
     }
     if (theme === "dark" && locale === "zh-CN") {
@@ -1374,63 +1420,26 @@ function resolveTheme(value: string | null | undefined): "light" | "dark" {
   return value === "dark" ? "dark" : "light";
 }
 
-function readStoredBoolean(key: string, fallback: boolean, cookieHeader?: string): boolean {
-  const storedValue = readStoredPreference(key, cookieHeader);
-  return storedValue === null ? fallback : storedValue === "true";
-}
-
-/**
- * One preference, from whichever store can answer here.
- *
- * On the server there is only the cookie header. In the browser both stores are
- * readable and `localStorage` wins, because it is the one the browser cannot drop
- * on its own — a cookie can expire or be cleared by a privacy setting while
- * `localStorage` stays, and in that case the cookie's absence is not a preference.
- */
-function readStoredPreference(key: string, cookieHeader?: string): string | null {
-  const fromBrowser = readBrowserStorage(key);
-  if (fromBrowser !== null) return fromBrowser;
-  return readCookieValue(key, cookieHeader ?? readDocumentCookie());
-}
-
 function readBrowserStorage(key: string): string | null {
   if (typeof window === "undefined") return null;
   return window.localStorage.getItem(key);
 }
 
 /**
- * Reading stays here; writing does not.
+ * Reading stays here; writing and parsing do not.
  *
- * The write half used to live alongside this — `writeStoredPreference` putting the
- * value in `localStorage` and in a cookie. The shell controller owns both stores
- * now, so keeping a second writer here left two implementations of one rule, and
- * the second one had no callers and could not be reached to be found wrong.
- *
- * The read half stays because AOS emits `<html lang>` and the theme attribute from
- * its own server, outside the ProductShell tree, and has to know the preference
- * before the controller exists.
+ * The write half used to live alongside this — a local `writeStoredPreference`
+ * putting the value in `localStorage` and in a cookie — and after it went, a
+ * local cookie parser was still here: a second implementation of the narrowing
+ * the Design System's `readPreferenceCookieValues` owns, which is how the next
+ * consumer would have inherited a third. What stays is only what this product
+ * alone can know: which header to hand the parser, because AOS emits
+ * `<html lang>` and the theme attribute from its own server, outside the
+ * ProductShell tree, before the controller exists.
  */
 function readDocumentCookie(): string {
   if (typeof document === "undefined") return "";
   return document.cookie;
-}
-
-function readCookieValue(name: string, cookieHeader: string): string | null {
-  if (!cookieHeader) return null;
-  for (const pair of cookieHeader.split(";")) {
-    const separator = pair.indexOf("=");
-    if (separator < 0) continue;
-    if (pair.slice(0, separator).trim() !== name) continue;
-    // A malformed percent-escape throws out of `decodeURIComponent`, and a cookie
-    // header is attacker-reachable input: a preference that cannot be decoded is no
-    // preference, not a 500 on every page.
-    try {
-      return decodeURIComponent(pair.slice(separator + 1).trim());
-    } catch {
-      return null;
-    }
-  }
-  return null;
 }
 
 function applyRootTheme(theme: "light" | "dark"): void {
@@ -1740,7 +1749,8 @@ function createDocumentCss(): string {
   max-inline-size: 26rem;
   min-inline-size: 0;
 }
-.tcrn-aos-searchbar .tcrn-search-input { inline-size: 100%; }
+/* The search control's width is the DS fill prop now; the rule that used to
+   size it from here was this file reaching into the component's class name. */
 /* The honesty note lives in a hover affordance rather than a sentence beside the
    field: the claim still has to be available, but it is not worth a line of the
    toolbar on every render. */
@@ -1933,22 +1943,11 @@ function createDocumentCss(): string {
 .tcrn-aos-prose {
   white-space: pre-wrap;
 }
-/* The DS split view collapses at a 760px viewport, but this page loses another
-   ~260px to the shell nav: between those widths the list column is too narrow
-   for its rows and their meta bleeds into the preview. Collapse earlier, hide
-   the pane when nothing is selected, and surface the selection first when one
-   is — row clicks below this width navigate to the full detail instead. */
-@media (max-width: 1100px) {
-  [data-cockpit-split="work-items"] .tcrn-work-split-view {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  [data-cockpit-split="work-items"][data-has-selection="false"] .tcrn-work-split-view__detail {
-    display: none;
-  }
-  [data-cockpit-split="work-items"][data-has-selection="true"] .tcrn-work-split-view__detail {
-    order: -1;
-  }
-}
+/* The split view's stacking used to be forced from here with a viewport media
+   query and three rules reaching into DS class names — a number that was only
+   right for this shell's width. The DS component owns it now: a container
+   query stacks it wherever it actually runs out of room, and the
+   detailPopulated prop carries the one bit only the consumer knows. */
 .tcrn-aos-as-of {
   display: inline-flex;
   align-items: center;
@@ -1965,19 +1964,21 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* The DS ramp, not a local stack: this file used to carry its own fallback
+     list, which is a second type ramp the moment Inter fails to load. */
+  font-family: var(--tcrn-type-family-ui);
   font-size: var(--tcrn-type-size-reading);
-  line-height: 1.45;
+  line-height: var(--tcrn-type-line-reading);
   background: var(--tcrn-color-surface-canvas);
   color: var(--tcrn-color-text-primary);
 }
 a { color: inherit; }
 button, input { font: inherit; }
 [data-work-page-eyebrow="true"] {
-  margin: 0 0 6px;
+  margin: 0 0 var(--tcrn-space-1h);
   color: var(--tcrn-color-text-secondary);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--tcrn-type-size-meta);
+  font-weight: var(--tcrn-type-weight-strong);
   text-transform: uppercase;
   letter-spacing: 0;
 }
@@ -1988,7 +1989,7 @@ button, input { font: inherit; }
   gap: 8px;
   align-items: center;
 }
-.tcrn-work-module-sr-only {
+.tcrn-aos-work-module-sr-only {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
@@ -2032,12 +2033,12 @@ button, input { font: inherit; }
   gap: var(--tcrn-space-4);
 }
 [data-work-route-chrome="compact-ds-public-exports"],
-.tcrn-work-module-detail-stack {
+.tcrn-aos-work-module-detail-stack {
   display: grid;
   gap: var(--tcrn-space-3);
   min-width: 0;
 }
-.tcrn-work-module-secondary-grid {
+.tcrn-aos-work-module-secondary-grid {
   display: grid;
   gap: var(--tcrn-space-3);
   grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
@@ -2047,68 +2048,68 @@ button, input { font: inherit; }
   align-items: start;
   grid-template-columns: minmax(0, 1fr);
 }
-.tcrn-phase3-readback {
+.tcrn-aos-phase3-readback {
   display: grid;
   gap: var(--tcrn-space-4);
   min-width: 0;
 }
-.tcrn-phase3-readback *,
-.tcrn-phase3-readback__layout,
-.tcrn-phase3-readback__detail,
-.tcrn-phase3-readback__story-summary,
-.tcrn-phase3-readback__knowledge,
-.tcrn-phase3-readback__knowledge-entry {
+.tcrn-aos-phase3-readback *,
+.tcrn-aos-phase3-readback__layout,
+.tcrn-aos-phase3-readback__detail,
+.tcrn-aos-phase3-readback__story-summary,
+.tcrn-aos-phase3-readback__knowledge,
+.tcrn-aos-phase3-readback__knowledge-entry {
   min-width: 0;
 }
-.tcrn-phase3-readback__filter-band,
-.tcrn-phase3-readback__policy,
-.tcrn-phase3-readback__section-heading,
-.tcrn-phase3-readback__story-card,
-.tcrn-phase3-readback__audit-card,
-.tcrn-phase3-readback__knowledge-search,
-.tcrn-phase3-readback__knowledge-detail,
-.tcrn-phase3-readback__knowledge-results,
-.tcrn-phase3-readback__knowledge-entry {
+.tcrn-aos-phase3-readback__filter-band,
+.tcrn-aos-phase3-readback__policy,
+.tcrn-aos-phase3-readback__section-heading,
+.tcrn-aos-phase3-readback__story-card,
+.tcrn-aos-phase3-readback__audit-card,
+.tcrn-aos-phase3-readback__knowledge-search,
+.tcrn-aos-phase3-readback__knowledge-detail,
+.tcrn-aos-phase3-readback__knowledge-results,
+.tcrn-aos-phase3-readback__knowledge-entry {
   display: grid;
   gap: var(--tcrn-space-3);
 }
-.tcrn-phase3-readback__tokens,
-.tcrn-phase3-readback__pagination,
-.tcrn-phase3-readback__status-line,
-.tcrn-phase3-readback__empty,
-.tcrn-phase3-readback__subtask,
-.tcrn-phase3-readback__knowledge-form,
-.tcrn-phase3-readback__knowledge-result-head {
+.tcrn-aos-phase3-readback__tokens,
+.tcrn-aos-phase3-readback__pagination,
+.tcrn-aos-phase3-readback__status-line,
+.tcrn-aos-phase3-readback__empty,
+.tcrn-aos-phase3-readback__subtask,
+.tcrn-aos-phase3-readback__knowledge-form,
+.tcrn-aos-phase3-readback__knowledge-result-head {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--tcrn-space-2);
 }
-.tcrn-phase3-readback__layout {
+.tcrn-aos-phase3-readback__layout {
   display: grid;
   grid-template-columns: minmax(280px, 0.95fr) minmax(320px, 1.35fr);
   gap: var(--tcrn-space-4);
   align-items: start;
 }
-.tcrn-phase3-readback__list,
-.tcrn-phase3-readback__detail {
+.tcrn-aos-phase3-readback__list,
+.tcrn-aos-phase3-readback__detail {
   display: grid;
   gap: var(--tcrn-space-3);
 }
-.tcrn-phase3-readback__story-summary {
+.tcrn-aos-phase3-readback__story-summary {
   display: grid;
   gap: var(--tcrn-space-3);
 }
-.tcrn-phase3-readback__knowledge {
+.tcrn-aos-phase3-readback__knowledge {
   display: grid;
   grid-template-columns: minmax(280px, 1fr) minmax(320px, 1fr);
   gap: var(--tcrn-space-4);
   align-items: start;
 }
-.tcrn-phase3-readback__knowledge-label {
+.tcrn-aos-phase3-readback__knowledge-label {
   font-weight: var(--tcrn-font-weight-semibold);
 }
-.tcrn-phase3-readback__knowledge-input {
+.tcrn-aos-phase3-readback__knowledge-input {
   flex: 1 1 220px;
   max-width: 34rem;
   min-height: 2.25rem;
@@ -2118,26 +2119,26 @@ button, input { font: inherit; }
   background: var(--tcrn-color-surface-panel);
   color: var(--tcrn-color-text-primary);
 }
-.tcrn-phase3-readback__knowledge-result {
+.tcrn-aos-phase3-readback__knowledge-result {
   display: grid;
   gap: var(--tcrn-space-2);
   border-block-start: 1px solid var(--tcrn-color-border-subtle);
   padding-block-start: var(--tcrn-space-3);
 }
-.tcrn-phase3-readback__knowledge-body {
+.tcrn-aos-phase3-readback__knowledge-body {
   display: grid;
   gap: var(--tcrn-space-2);
 }
-.tcrn-phase3-readback__subtasks {
+.tcrn-aos-phase3-readback__subtasks {
   display: grid;
   gap: var(--tcrn-space-2);
 }
-.tcrn-phase3-readback__error {
+.tcrn-aos-phase3-readback__error {
   border-color: var(--tcrn-color-border-warning);
 }
 @media (max-width: 820px) {
-  .tcrn-phase3-readback__layout,
-  .tcrn-phase3-readback__knowledge {
+  .tcrn-aos-phase3-readback__layout,
+  .tcrn-aos-phase3-readback__knowledge {
     grid-template-columns: minmax(0, 1fr);
   }
 }

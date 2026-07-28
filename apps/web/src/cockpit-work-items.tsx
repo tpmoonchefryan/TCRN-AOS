@@ -395,9 +395,13 @@ export function WorkItemsView({
       {rows.length === 0 ? (
         <EmptyState title={pick(locale, workCopy.noMatch)} />
       ) : (
-        <div data-cockpit-split="work-items" data-has-selection={selected ? "true" : "false"}>
+        <div data-cockpit-split="work-items">
+        {/* `detailPopulated` is the one bit only this module knows; the split
+            view now stacks by its own container width (DS admission), so the
+            local CSS that used to force this from a viewport guess is gone. */}
         <WorkSplitView
           label={pick(locale, workCopy.splitLabel)}
+          detailPopulated={Boolean(selected)}
           list={
             <section
               className="tcrn-aos-picker"
@@ -437,10 +441,13 @@ export function WorkItemsView({
                       onClick={(event) => {
                         if (event.metaKey || event.ctrlKey || event.shiftKey) return;
                         // Only hijack the click while the preview pane is on
-                        // screen; below that width the pane is hidden and the
-                        // honest behaviour is the link's own: open the detail.
-                        if (typeof window !== "undefined"
-                          && !window.matchMedia("(min-width: 1101px)").matches) return;
+                        // screen. The pane's fate is decided by the split view's
+                        // own container width now (DS container query), so the
+                        // honest check measures that same container instead of
+                        // guessing it from the viewport — the old 1101px viewport
+                        // test was only right for one shell width.
+                        const splitView = event.currentTarget.closest(".tcrn-work-split-view");
+                        if (!splitView || splitView.getBoundingClientRect().width <= 780) return;
                         event.preventDefault();
                         setSelectedId(key);
                       }}

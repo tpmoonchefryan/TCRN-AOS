@@ -128,6 +128,13 @@ explicit about retention and no-overclaim boundaries.
 - Public repository publication should use a sanitized current-tree export
   rather than legacy local history unless that history has been independently
   proven clean.
+- The cockpit stores three display preferences in cookies so the server can
+  render the first byte in the reader's own language and theme: side-nav
+  collapse (`tcrn-aos-side-nav-collapsed`), theme (`tcrn-aos-theme`), and
+  locale (`tcrn-aos-locale`). Each lives for one year, is `SameSite=Lax`,
+  carries `Secure` on HTTPS, and holds a preference value only — no identifier,
+  no credential, nothing personal. The same values are mirrored in
+  `localStorage`; clearing either store simply returns the defaults.
 
 ## Docs
 
