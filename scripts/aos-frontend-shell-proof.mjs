@@ -504,6 +504,20 @@ const strictRegisteredSurfaceSourceHits = [
   // built-side twin of this rule was red while this side was green, because the
   // occurrences it was meant to find are all in the `cockpit-*` files this never read.
 ].filter((entry) => entry.regex.test(allViewSource)).map((entry) => entry.label);
+/**
+ * The parts of the built output where a class can actually be applied: every
+ * class/className value, and every stylesheet. Anything else in the bundle is data the
+ * product renders, not a surface the product has.
+ */
+const builtSurfaceOnly = (() => {
+  const classValues = [
+    ...[...html.matchAll(/class="([^"]*)"/g)].map((match) => match[1]),
+    ...[...clientBundle.matchAll(/class(?:Name)?\s*[=:]\s*["'`]([^"'`]*)["'`]/g)].map((match) => match[1])
+  ];
+  const styleBlocks = [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((match) => match[1]);
+  return [...classValues, ...styleBlocks].join("\u000a");
+})();
+
 const strictRegisteredSurfaceBuiltHits = [
   // Same lookbehind as the source twin: `tcrn-aos-` is the ruled namespace,
   // audited structurally below; bare `aos-` is the banned pre-adoption one.
@@ -526,16 +540,23 @@ const strictRegisteredSurfaceBuiltHits = [
   // content, and it will keep coming up as long as the chain is a data source.
   {
     label: "Storybook shell demo in built HTML/client",
-    value: `${html}\n${clientBundle}`,
-    // The selector branch needs a selector *context*, not just a leading dot: the
-    // knowledge-card sentence writes the class the way a developer would say it out
-    // loud, `.tcrn-knowledge-shell__collapse-button`, so matching a bare dot still
-    // matched the prose. A CSS rule is followed by a `{`, a comma, or another
-    // combinator; a sentence is followed by a space and more words.
-    regex: new RegExp(
-      "class(?:Name)?\\s*[=:]\\s*[\"'`][^\"'`]*tcrn-(?:shell-demo|compact-shell|knowledge-shell)" +
-      "|\\.tcrn-(?:shell-demo|compact-shell|knowledge-shell)[A-Za-z0-9_-]*\\s*(?:[{,>+~:]|\\.[a-zA-Z])"
-    )
+    value: builtSurfaceOnly,
+    // Third attempt, and the first that is not a regex refinement.
+    //
+    // The first version matched the token anywhere and hit a knowledge card that
+    // discusses the platform. The second required a selector context -- a leading dot
+    // followed by a brace, a comma or a combinator -- and a governance annotation
+    // defeated it by describing that very fix: the sentence writes the class name
+    // followed by a half-width comma, and a comma is exactly what a CSS selector list
+    // uses. Prose about code can produce any pattern that means code, so no third
+    // regex would have been the last one either (TCRN-AOS-INC-032).
+    //
+    // What ends it is asking where a class can actually live. In this build every
+    // stylesheet is a style block in the document -- measured, zero .css assets -- and
+    // every applied class is a class/className value. Governance text is a string value
+    // that is neither, so the tenant payload is out of scope structurally rather than
+    // by pattern.
+    regex: /tcrn-(?:shell-demo|compact-shell|knowledge-shell)/
   },
   { label: "AOS class in client bundle", value: clientBundle, regex: /className[=:][^,\n}]*(?<!tcrn-)\baos-|class="[^"]*(?<!tcrn-)\baos-/ },
   { label: "AOS CSS selector in client bundle", value: clientBundle, regex: /\.(?:aos-[A-Za-z0-9_-]+)/ }

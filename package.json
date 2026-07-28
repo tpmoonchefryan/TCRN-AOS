@@ -1,6 +1,6 @@
 {
   "name": "tcrn-aos",
-  "version": "0.1.0-local",
+  "version": "0.1.0",
   "private": true,
   "license": "Apache-2.0",
   "type": "module",
@@ -66,7 +66,9 @@
     "verify:fast": "pnpm typecheck && pnpm validate:migrations && pnpm test",
     "reset:durable-profile": "node scripts/reset-durable-profile.mjs",
     "verify:extended": "pnpm verify && pnpm phase3:ticket-list-proof && pnpm phase3:work-loop-method-proof && pnpm phase3:runtime-profile-proof && pnpm phase3:readback-api-proof && pnpm kr01:knowledge-schema-fts-proof && pnpm p1:durable-runtime-profile-proof",
-    "verify": "pnpm typecheck && pnpm validate:migrations && pnpm audit:licenses && pnpm test && pnpm runtime:db:proof && pnpm service:smoke && pnpm usability:proof && pnpm locale:proof && pnpm aos:frontend-shell-proof && pnpm slice3:proof && pnpm slice5:proof && pnpm slice6:proof && pnpm slice7:proof && pnpm slice8:proof && pnpm slice9:proof && pnpm live-dispatch:dry-run-proof && pnpm live-dispatch:execution-readiness-proof && pnpm live-dispatch:terminal-ingestion-proof"
+    "verify": "pnpm typecheck && pnpm validate:migrations && pnpm audit:licenses && pnpm test && pnpm runtime:db:proof && pnpm service:smoke && pnpm usability:proof && pnpm locale:proof && pnpm aos:frontend-shell-proof && pnpm mirror:freshness-proof && pnpm source-export:proof && pnpm slice3:proof && pnpm slice5:proof && pnpm slice6:proof && pnpm slice7:proof && pnpm slice8:proof && pnpm slice9:proof && pnpm live-dispatch:dry-run-proof && pnpm live-dispatch:execution-readiness-proof && pnpm live-dispatch:terminal-ingestion-proof",
+    "mirror:build": "pnpm build && node scripts/build-mirror.mjs",
+    "mirror:freshness-proof": "node scripts/mirror-freshness-proof.mjs"
   },
   "dependencies": {
     "@tcrn/ui-copy-state": "file:../TCRN-Design-System/packages/ui-copy-state",

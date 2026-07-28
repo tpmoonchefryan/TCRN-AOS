@@ -4,14 +4,14 @@
 import type { CockpitData } from "./cockpit-types.js";
 
 export const cockpitData: CockpitData = {
-  "generatedAt": "2026-07-26T22:04:29Z",
+  "generatedAt": "2026-07-28T09:04:36Z",
   "partitions": [
     {
       "id": "cross-project",
       "label": "Platform governance",
       "labelZh": "平台治理",
       "chainVersion": 1266,
-      "verifiedAt": "2026-07-26T22:04:29Z",
+      "verifiedAt": "2026-07-28T09:04:36Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -22,8 +22,8 @@ export const cockpitData: CockpitData = {
       "id": "TCRN-Design-System",
       "label": "Design System",
       "labelZh": "设计系统",
-      "chainVersion": 959,
-      "verifiedAt": "2026-07-26T22:04:29Z",
+      "chainVersion": 975,
+      "verifiedAt": "2026-07-28T09:04:36Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -35,7 +35,7 @@ export const cockpitData: CockpitData = {
       "label": "TMS",
       "labelZh": "TMS",
       "chainVersion": 228,
-      "verifiedAt": "2026-07-26T22:04:29Z",
+      "verifiedAt": "2026-07-28T09:04:36Z",
       "readVia": "export",
       "attestationFromSequence": null,
       "unavailable": []
@@ -44,11 +44,13 @@ export const cockpitData: CockpitData = {
       "id": "TCRN-AOS",
       "label": "AOS",
       "labelZh": "AOS",
-      "chainVersion": 243,
-      "verifiedAt": "2026-07-26T22:04:29Z",
-      "readVia": "export",
-      "attestationFromSequence": 62,
-      "unavailable": []
+      "chainVersion": 516,
+      "verifiedAt": "2026-07-28T09:04:36Z",
+      "readVia": "paginated-with-deliberations",
+      "attestationFromSequence": null,
+      "unavailable": [
+        "events"
+      ]
     }
   ],
   "work": [
@@ -57,10 +59,10 @@ export const cockpitData: CockpitData = {
       "id": "work:e716f832a9f2ed1301d2f449",
       "externalKey": "TCRN-AOS-EPIC-001",
       "kind": "Epic",
-      "status": "active",
+      "status": "done",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "revision": 5,
-      "scope": "数据面与聚合索引。S001/S002/S003 中前两条已交付:MCP 客户端(长驻 stdio,进程组回收)、export 优先+超限降级摄取、链形状瘦投影类型、事务化整分区替换的 SQLite 投影库、FTS5、三个读层计算(分片重组/有效未决/收件箱聚合)。实测四链全通并落收据 evidence/aos-projection-live-proof.json。余 S003(AOS 自有域字段)未开工",
+      "revision": 7,
+      "scope": "数据面与聚合索引。**三条 Story 全部交付**:S001 MCP 客户端与四链摄取、S002 瘦投影类型与投影库、S003 AOS 自有域(双库物理分离+备份路径,见 INC-009)。四链全通,读面在 W v0.7.0 后不再有降级盲区(仅事件日志对超限链仍不可达,已如实标注)。",
       "decidedBy": [
         "minutes:4fdc3f1caf4adfb2374090f7"
       ],
@@ -99,10 +101,10 @@ export const cockpitData: CockpitData = {
       "id": "work:b47471768134fde402c89112",
       "externalKey": "TCRN-AOS-EPIC-004",
       "kind": "Epic",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "revision": 3,
-      "scope": "审议室与发布列车:S011 审议室首版、S012 发布列车页 已交付;余 S013 审议采用三步公约(execution:mode 声明+host-execution 收据+逐轮转写)未开工。S011 的分片重组与有效未决逐会呈现受 INC-005 阻塞(两条最大链无立场读面)",
+      "revision": 7,
+      "scope": "收口：S011 审议室、S012 发布列车页、S013 审议采用三步公约 三条全 done，本 Epic 完成。S013 交付物为 docs/deliberation-adoption-convention.md（跨仓适用）加平台 CLAUDE.md 两处接线，并在真会议 TCRN-AOS-CONF-004 / MINUTES-004 上 dogfood：声明 synthesis-only 且给出理由、立场键号带轮次 POS-MINERVA-1 与 POS-VERITY-2、第二轮首行写明「回应 POS-MINERVA-1」。\n\n更正本 Epic 自己的上一版注解。它写着「S011 的分片重组与有效未决逐会呈现受 INC-005 阻塞（两条最大链无立场读面）」——该阻塞已不成立：INC-005 已 done，由 Workflow v0.7.0 新增 conference-position-list 与 conference-minutes-list 关闭，AOS 接线后实测线程 12→128、纪要 12→128、收件箱 13→98。上一版注解写于阻塞仍在时，是当时的真话；现在如实记下它已被解除，而不是让一条陈旧的阻塞声明留在 Epic 上——事件只增不改，所以更正以追加的方式完成。收口前逐条核过该阻塞是否仍然成立，没有默认它还在。\n\nS013 落地时实捕两处 CLI 陷阱，已写进公约正文：其一，列表型旗标（--risks/--recommendations/--decisions/--unresolved-issues）全经同一个 listValue 按半角逗号切分，中文风险描述里放一个半角逗号就会被切成空片段而整条 CLI_ARGUMENT_MALFORMED 打回，且报错只说字段名不说原因，故中文行文一律用顿号或全角逗号；其二，`-` 是空列表哨兵而非字面值，--evidence-ids - 表示「本链上还没有 evidence 记录」。\n\n另一处更正：公约初稿里我引用的纪要键号 TCRN-AOS-MIN-001 / CONF-001 是错的。查链后确认本分区三场分解会议的纪要都没有派外部键（只有会议派了 CONF-001），故全文改用引擎 id 引用并加了说明。纪要不可改，写一个不存在的键会把后来的读者永久引向别处，这比引用形态不好看要严重。",
       "decidedBy": [
         "minutes:4fdc3f1caf4adfb2374090f7"
       ],
@@ -127,10 +129,10 @@ export const cockpitData: CockpitData = {
       "id": "work:4fab089cdf2aee150dbf440b",
       "externalKey": "TCRN-AOS-EPIC-006",
       "kind": "Epic",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "revision": 2,
-      "scope": "部署与镜像:按 MIN-002 四边界落地——投影同步管道/VM 服务面/访问边界/定期备份与恢复演练;权威永留本机,VM 为诚实只读镜像",
+      "revision": 7,
+      "scope": "收口：S017/S018/S019/S020 四条全 done，本 Epic 完成。上一版注解明确写了本 Epic 之所以保持未完成，是因为「S020 的链快照配对、调度兜底与 VM 拉取面尚未落地」——这三项现已全部交付（配对快照与互指摘要、--if-due 每日回退、export-manifest 拉取面），故该保留理由不再成立，按其自身设定的条件收口。\n\n本 Epic 最值得留给后来者的一条，来自 S020 而非镜像工作：AOS 分区在 2026-07-27 之前从未被快照过。OneDrive 上十个快照目录里 4 个 DS、1 个 DS-FINAL、5 个 cross-project、AOS 零个——而这恰是唯一启用了 attestation 的分区，也就是最不该缺备份的那个。根因不是没人跑备份，是 snapshot-manifest 在知识库 marker 落后链头时 fail-closed，而那是每次受治写入之后的常态；且失败形态极具误导性：status 与 validate 同时报 ok，只有 snapshot-manifest 非零退出、只打印 reason code 不给补救办法，读起来像「链健康、备份工具坏了」。所以缺口不在能力而在前置未被任何地方写出来，现已写进 docs/paired-backup-runbook.md 并由脚本自查。\n\n这与本 Epic 镜像侧的教训是同一形状：镜像那边 INC-006 的结论是「空列表是缺陷最好的伪装」——页面渲染成功、无报错、永远 0 of 402；备份这边是「无备份也不报错」——没有失败的运行可供察觉，只有一次缺失。两者都不产生错误信号，只产生一个看起来合理的空结果。判据须落在「计数与内容对不对」，不能落在「有没有报错」。\n\n不声称：本 Epic 交付的是镜像与备份的结构与证据，不含链恢复的实际执行（同路径唯一、运维驱动）；VM 拉取的传输侧刻意未接，因为凭据放置是 Owner 的决定；VM 只能按摘要证明字节完整到达，不能重跑 snapshot-verify（它无引擎无仓库检出）。",
       "decidedBy": [
         "minutes:3a0d27be789cadb0ccb353c1"
       ],
@@ -162,13 +164,28 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-AOS",
+      "id": "work:c5de2f86698379bbd3551679",
+      "externalKey": "TCRN-AOS-EPIC-030",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "revision": 7,
+      "scope": "收官（2026-07-28）。全部子项 done：六缺陷 INC-013..018、规则层 STORY-101..104/106、首帧偏好 STORY-105/107、消费者样式边界 INC-012/022、判据自洽 INC-024、提交前审查 INC-023、移动端首屏 INC-025 与 STORY-108/109、收据自相矛盾 INC-027。交付：DS 89d9716、AOS c24ae11，两仓 pnpm verify 均绿、均已推送并对服务器核实全 sha。本 Epic 结束时的状态与它开单时的问题相比，多了一件当初没人预料的东西：**它自己的两条命题被实测推翻，而两次都是「无人复核的前提」而非「无人修复的缺陷」**——第一次是 i18n 扫荡的清单漏了一个文件（该文件含裸 NUL 字节，对 grep 为 binary 而被静默跳过，26 处活的双语三元隐身）；第二次是 INC-025 的首屏目标 #work-heading 是 1x1 的 sr-only 元素，读者永远看不见，按它修可以在页面零数据时达标。两条都不是门放过了坏字节，而是量尺本身看不见该看的东西。留在链上的通则三条：一，度量工具读不到的东西不会报错，只会让结论看起来成立；二，收据字段与断言在同一文件里各说各话时，没有任何机制会发现；三，一个在没有消费方使用的规模上跑的预言机，不会以消费方失败的方式失败。余两条独立缺陷不在本 Epic 名下、已各自立单：INC-026（旋转手机 812x375 走桌面路径，整个治理组永久够不到）与 INC-028 的①③（DS 的 axe 只扫桌面；761px 处 16px 横向溢出无人断言）。",
+      "decidedBy": [
+        "minutes:de47de4a4f95e07dec79f0f7",
+        "minutes:2f09d03272da7bd59cb914d5"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
       "id": "work:006a8be9fd0cb9da261c6160",
       "externalKey": "TCRN-AOS-INC-001",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "revision": 2,
-      "scope": "假绿门:scripts/validate-migrations.mjs 只对 SQL 文本做正则匹配不连数据库,却为 535 行 PostgreSQL 迁移(33 表)开绿灯;该迁移从未执行且方言与 SQLite 运行时不符。属平台最恨的假门类型(门只保护它读过的字节)。处置候选=删除死迁移并让校验器如实报告覆盖面,或使校验器真连库",
+      "revision": 6,
+      "scope": "已修 @ AOS main da2d487。校验器改为真连库:经产品自身路径 AosSqliteRepository.applyMigrations 把迁移应用到临时库,断言五件文本扫描永远做不到的事——sqlite_master 内表与 FTS 索引在册/append-only 触发器对真实行的 UPDATE 与 DELETE 真被拒(并复核行存活与值未改)/重跑是 no-op 非重应用/日志摘要漂移的迁移被拒。变异实证:摘掉 no_update 触发器则门红,drop aos_evidence_links 则门红且点名该表,复原后门绿且迁移字节未变。同一假门的第二副本(packages/db/test/schema.test.mjs 断言 27 个表名为文本)一并改掉——只修一个会让同样的假保证换个名字活着;并加一条缺席断言,使被删的 PostgreSQL 主干无法再回来被扫。残余适用性(公约 8):该 535 行 PG 主干受益者名单为空(无 pg 依赖/无客户端/无 DATABASE_URL/唯一部署清单只发静态文件),其 22 张独有表属 MIN-003 layer A 已裁的死码族,故删除并把理由留在提交与本注解里;runtime-fixture.ts 原本为取表数与触发器正则而消化该文件,现改读它真正打开的 sqlite 迁移。必填表由 33 降为本驾驶舱真读写的 13 张。覆盖面改为明说而非默认:报告点名 domain 迁移不在本次覆盖内,并写明 PostgreSQL 覆盖为「none,因不存在 PostgreSQL」。门 EXIT=0,113/113 测试绿。注:pnpm verify 仍红于 service:smoke 的 productLedMarkerPresent,该门在本次改动之前的干净 main 上同样红(已暂存改动实测),与本单无关,另行处置",
       "decidedBy": [
         "minutes:4fdc3f1caf4adfb2374090f7"
       ],
@@ -179,10 +196,10 @@ export const cockpitData: CockpitData = {
       "id": "work:22533e81218e2772f3a63dd1",
       "externalKey": "TCRN-AOS-INC-002",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "revision": 2,
-      "scope": "腐烂:7 个 scripts/*-proof.mjs 引用已删除的 TCRN Workflow 目录而崩溃(fatal: cannot change to)。收据为历史落盘值,脚本已不可重跑,构成不可复现的证明。处置候选=修正路径或按公约记明退役理由后移除",
+      "revision": 6,
+      "scope": "已修 commit 9e41f00。对本单原始描述的更正:七个脚本并非同一种腐烂,实测依赖深度分四档,修法各不相同。① 两个(d3/d4)根本不曾被删目录打断——它们只在一个从未有人打开的记录字段里写着退役树下的 parity 收据路径;真正的失败原因是未申明的前置条件:须先跑 d2:runtime-profile-activation-proof 激活 D2 profile 根,否则 fail closed。跑了就是绿的。该字段现改为如实陈述缺失,而非指名一个打不开的文件。② 一个(plan-projection)只把引擎 HEAD 当作收据里的基准戳,已重指向现存引擎 tcrn-workflow。③ 一个(phase1-persistence)十一份收据中仅一份需要那份 thread registry,却在顶层无条件读取,连带打死另外十份;该投影现条件化于 TCRN_AOS_THREAD_REGISTRY,且收据区分「未读」与「为空」,不再把零行报成一次跑过的投影。缺失与提供 fixture 两条路径均已验证。④ 三个确实不可修,按公约 8 记明理由后退役:pilot-vault(断言钉死 files.length === 102,输入包只存在于归档树)、crew-ai-employees-seed(断言硬编码那份已消失 registry 的普查数:19 行/9 归档/5 默认班/14 停泊,故它是关于一个文件的陈述,不是关于投影的)、execution-ledger(需要唯一由那份 manifest 产出的 story id)。重新克隆归档来喂它们会把当初删除所消除的治理树混用风险原样装回,故重指向从来不是可选项。三者的被证对象均另有活覆盖:phase1-sqlite-repository.test.mjs、execution-ledger-cli.test.mjs 与 plan-project-cli.test.mjs;两个 CLI core 模块未被触碰,仍由 plan-project-cli-proof 实跑。收据留在盘上——运行确实发生过——但 ok:true 紧邻一条已不存在的命令,是同一种假保证换了地方,故三个失孤目录各加 RETIRED 说明不可复现并指向现覆盖。完整分析与前置顺序见 docs/retired-proof-scripts.md。验证:typecheck/validate:migrations/113 测试全绿,五个存活 proof 全部 exit 0。另记两条实捕陷阱:macOS 无 timeout(1),用它包裹会让五个脚本齐刷刷返回 127,极易误读为脚本失败;以及本次首个提交曾把约 95 份无关 proof 的收据一并扫入(那是我自己的验证跑重写的),其中四份带 ok:true→ok:false 翻转——已回退重做,提交范围现只含本单自有文件,该翻转另案处理。",
       "decidedBy": [
         "minutes:4fdc3f1caf4adfb2374090f7"
       ],
@@ -193,10 +210,10 @@ export const cockpitData: CockpitData = {
       "id": "work:7454fea395a2af06ede22a14",
       "externalKey": "TCRN-AOS-INC-003",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:081b1dead46cc439338ac197",
-      "revision": 3,
-      "scope": "DS 接线面缺口。**已解决(2026-07-26)**:DS 侧新增 ProductShell 可选 headerActions 槽(渲染于搜索与主题/语言之间;shell 自身工具保持最右,测试断言的是次序而非仅存在;省略该 prop 时逐字节与此前一致),DS commit 655339b,**pnpm verify 14 道门 EXIT=0**(含 262 张视觉回归截图、55 story、axe 零违规),component-api-manifest 已自动收录该 prop(37 项)。**同时发现第二处闭合面(不另立单,记此)**:SegmentedNav/ProductSwitcher/ModuleTabs/Breadcrumb 共用 ProductLauncherProps,只收 {id,label,selected} 并渲染无处理器的 button——能显示选中但无法改变选中,即 TMS 实测「56 个闭合无回调」同族。处置=项目切换器改用真支持 href 的 NavItem 组装,非迁就而是选用能接线的那个组件;若日后需要分段样式的可交互控件,再向 DS 提需求",
+      "revision": 7,
+      "scope": "DS 接线面缺口。**已解决并随 DS v2.1.0 发布**:ProductShell headerActions 槽已在包内,AOS 已消费(表头范围选择器与 as-of)。",
       "decidedBy": [
         "minutes:4fdc3f1caf4adfb2374090f7"
       ],
@@ -207,10 +224,10 @@ export const cockpitData: CockpitData = {
       "id": "work:2798f160fa3412137e481b57",
       "externalKey": "TCRN-AOS-INC-004",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:e716f832a9f2ed1301d2f449",
-      "revision": 2,
-      "scope": "读面缺口(向 Workflow 提需求):**列表与详情动词不返回 externalKey**。work-list 与 work-show 的记录含 id/kind/parentId/projectId/revision/status/tombstone,无 externalKey;而 id 是键的单向摘要不可反推。唯一含键的动词是 export,但 export **无分页且超 1 MiB 即拒**(实测:cross 与 DS 两条链均超限,TMS 357KB、AOS 190KB 可用)。后果=无法为大链的工作项命名,而不能命名工单的驾驶舱不成立。AOS 侧现行处置=按命名公约枚举候选键并以摘要精确验证(sha256(namespace+NUL+KEY)[:24],已用已知对证实派生式而非假设),不合公约者如实留空显示 id,绝不给出似是而非的错名。请求形态=①列表/详情回执带 externalKey,或②export 支持分页与选择性投影。属 W 侧立单范畴",
+      "revision": 6,
+      "scope": "读面缺口:列表动词不返回 externalKey。**已由 Workflow v0.7.0 关闭**:work-list 摘要现带 externalKey。实测 cross 链(export 仍返 INPUT_OVERSIZED)work-list 直接返真键号。AOS 侧投影已接线,暴力摘要反查降级为仅对旧引擎生效的兼容路径。",
       "decidedBy": [
         "minutes:4fdc3f1caf4adfb2374090f7"
       ],
@@ -221,10 +238,10 @@ export const cockpitData: CockpitData = {
       "id": "work:3dcf2a5ea0d0969c98de93aa",
       "externalKey": "TCRN-AOS-INC-005",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:e716f832a9f2ed1301d2f449",
-      "revision": 2,
-      "scope": "读面缺口(向 Workflow 提需求):**立场与纪要无工作区级分页读**。gate-list 与 conference-list-by-work 均按 work-id 作用域,可经逐工作项枚举恢复(已实现,cross 恢复 4 门 70 审议、DS 恢复 7 门 45 审议——此前降级路径下二者皆为 0,**收件箱会因此漏项并呈现「无待办」的假全清**,故补齐属正确性而非性能);但 conferencePositions 与 conferenceMinutes 既无工作区级分页读、也无按会议读的动词,超限链上二者仍为 0(实测 cross/DS 立场与纪要均为 0,TMS 15/9、AOS 19/3)。后果=审议室与有效未决计算在两条最大的链上不可用。现行处置=如实呈现为「该分区立场未取」而非空线程。请求形态=按会议或按工作区的分页立场/纪要读",
+      "revision": 6,
+      "scope": "读面缺口:立场与纪要无工作区级分页读。**已由 Workflow v0.7.0 关闭**:新增 conference-position-list 与 conference-minutes-list。AOS 接线后实测跃升——线程 12→128、纪要 12→128、收件箱 13→98;平台治理链 138 条立场此前从未被任何视图显示。",
       "decidedBy": [
         "minutes:4fdc3f1caf4adfb2374090f7"
       ],
@@ -268,13 +285,325 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-AOS",
+      "id": "work:afc5f847fe361a1935010e32",
+      "externalKey": "TCRN-AOS-INC-009",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:324538e48b1732d764391ef1",
+      "revision": 5,
+      "scope": "违反自己的裁定:在备份路径落地前就写入了真实域数据。**已修**(scripts/domain-backup.mjs)。MIN-052 D5 是 Verity 的追加约束,原文=「domain.db 导出备份必须与 S003 同批落地,否则不得写入真实域数据」。实际:S003 交付时只做了 /api/domain/export 这个 HTTP 端点,而端点不是备份路径——它要求服务在跑、要求有人去调。与此同时我已经通过 UI 往 ~/.tcrn-aos/domain.db 写了真实数据(EPIC-001 的负责人与一条评论),即平台上第一份不可重建的数据在无备份状态下存在了约三小时。**发现方式**:自查裁定清单而非任何门——没有门看着这件事,这正是它能发生的原因。**修法**:备份脚本产出两件(SQLite 字节副本快恢复+JSON 导出跨 schema/跨机器可读,只备二进制等于赌读方与写方完全相同,而那正是备份要防的赌);目的地按数据引力裁定落本机 OneDrive 网关;**先验证后轮转**(轮转跑在验证之后,否则可能为了给坏备份腾地方而删掉最后一份好的);验证方式是把 JSON 重放进全新库再逐字段比对,即真恢复演练而非只比摘要。新增两条防回归测试(导出往返无损、悬空引用不被外键修掉)。收据 evidence/aos-domain-backup.json,首次快照已含 1 注解 1 评论并验证通过。**教训**:裁定里的「必须与 X 同批」是一条约束,不是一句修辞;交付 X 时要回头逐条核对该裁定,因为没有任何自动门会替你核对。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:6216cc2a46d3b929bba117f9",
+      "externalKey": "TCRN-AOS-INC-010",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "revision": 7,
+      "scope": "两半都收完（AOS c1d0048 与 986f8c5 均已推）。①「方法面钉死」四处已修并实测：三个 phase3 proof 改为声明 neverAdmittedMethods 并从 dist 读 transportMvpMethods 反向断言「白名单不得收录任一被禁写面」，readback proof 由逐字等于三项改为「必含得名的三项、且所含每项都在 transport 的 read 集合内」；四个脚本现全部 exit 0。②「有状态前置未申明」按原判处置：拒脏起点的 fail-closed 保留（那行为是对的），欠的前置已写进 kr01 与 p1 的文件头，并新增 scripts/reset-durable-profile.mjs——须显式 --yes，且只改名归档不删除（该 profile 有真行与自带 backup 目录，为让门变绿而清它就是删数据换绿灯）；两态均已实测（无 --yes 得 RESET_NOT_CONFIRMED 并退 1，带 --yes 得 PROFILE_ROOT_ARCHIVED 并附还原说明）。③ cadence 已定：六个不在 verify 内的 proof 收进新的 pnpm verify:extended。本机上 kr01 与 p1 仍未跑过——本机 durable profile 有真数据，归档它是须显式发起的动作，不由我代为决定；这一条如实留下，不称已验证。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:ea42ebb5b634019be1720c54",
+      "externalKey": "TCRN-AOS-INC-011",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "revision": 6,
+      "scope": "【已修·2026-07-27】根因不是假门也不是属性被删：标记搬了家而判据没跟着走。/ 在 INIT-001 里换成了驾驶舱首页（落在 My work）；原来的 owner-quality 落地视图连同data-owner-quality-first-viewport=\"product-led\" 一起搬到了 /cockpit。实测证据：该标记在 /cockpit 上存在（1 处）、在 / 上不存在；app.tsx 里 modulePath 把 / 重写为 /my-work，故 app.tsx:566 那一支从 / 永远到不了，但从 /cockpit 到得了。决定性证据是提交 8e76ef5（STORY-001/002/005/006/007）已经为 apps/api/test/service-smoke.test.mjs 换过判据（/ 改断言 data-cockpit-view=\"my-work\"，product-led 移入 else 分支），却漏掉了 scripts/service-smoke.mjs这第二份同源拷贝——同一判据两处存在而只改了一处。把 ok 链上 73 条断言逐条独立求值（绕开 && 短路）后，共查出三条陈旧而非一条：① 第 37 行 shellHtml 问 / 要 product-led；② 第 44 行 cockpitHtml 问 data-product-shell-route=\"cockpit\"；③ 第 82 行 workHtml 问 data-product-shell-route=\"work\"。后两条被第一条的短路挡着从未显形——这是本单最值得留下的一课：长 && 链会把后面的陈旧判据藏起来，修掉第一处才会连续暴出下一处，故诊断时应逐条独立求值而不是逐次修到绿。②③ 另有一层：data-product-shell-route 是 DS Navigation 的项 id，说的是「侧栏提供某条路由」，从来不是「本响应就是该路由」。INIT-001 把侧栏换成十一个模块 id 后 cockpit 与 work 都不再是导航项。故没有把 id 翻译成新值——那样会留下一条仍然名不副实的判据；改为断言各路由真正渲染的内容标记（/cockpit 取 product-led 与 primary-heading 与 work-queue 与 gates；/work 取 page=\"queue\" 与 first-viewport=\"work-operational\"）。/ 则补上它现在该有的 data-cockpit-view=\"my-work\" 与 data-partition-id=\"cross-project\"。回执同步改造：productLedMarkerPresent 保留键名但换了主语，故另加 productLedMarkerRoute 写明读自哪条路由，使拿新旧回执对比的人看得出主语搬了家而不是能力回归了。no-overclaim：这不是「把断言改成通过」。八条替换判据全部做了变异测试——逐条删掉它所指名的标记后该条即转假，八条全为真门（证据 evidence/inc-011-service-smoke-predicate-repair.json）。service:smoke 现退出码 0。边界：修复本单期间跑通了此前从未跑到的 aos:frontend-shell-proof，发现第二个既存红门，已另立 TCRN-AOS-INC-012（链 v314）而未并入本单——那一处是真架构违规加一处门判据缺陷，与本单的判据陈旧不同类。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:e644b2f2e68bf49932658e71",
+      "externalKey": "TCRN-AOS-INC-012",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "revision": 7,
+      "scope": "与 INC-022 并案施工完毕，两条均已落（AOS 986f8c5 已推）。对本单①（真架构违规）：按 MIN-005 二分处置，纯布局类留在消费方并由新审计按判据管住，带 paint 者进封闭台账或走 DS 准入，首批 board card 已随 DS href 准入退役本地实现；本单原判「是十一模块的既成架构而非单点疏漏、修法是方向题」成立，方向已由 MIN-005 裁定，故不再是阻断项。对本单②（判据缺陷）：裁定与本单原判一致并已实现——新审计只读源码位置（createDocumentCss 模板），链上纪要正文永远进不了 CSS 模板，故「纪要被读成 demo 泄漏」这一形态在新判据下不可能复发；本单结论「删记录以过门是拿真相换绿灯」保留。同型第三例在本次施工中当场再现并已修：退役模块名的禁令原先扫全文档，而驾驶舱开始渲染真链后，一条标题以 Conference 开头的工作项（TCRN-CROSS-INIT-010）就把一条关于导航的规则触红——判据已收窄到 nav 子树。记一句通则：只要链是数据源，「这个字符串出现在文档里」就永远不等于「产品提供了这个东西」，判据必须说明它读的是哪个位置。",
+      "decidedBy": [
+        "minutes:2f09d03272da7bd59cb914d5"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:575ca8ab7af886994402b601",
+      "externalKey": "TCRN-AOS-INC-013",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "i18n 固定字段只支持中英双语:已修并经复核。原 idiom 为 isZh ? 中文 : English 共 384 处,两个字段服务不了五种语言。现全仓 isZh 仅余 6 处且全部是描述旧写法的注释(data.ts:780、cockpit-views.tsx:38、copy.ts:13、cockpit-types.ts:185 与 :338、work-management-mockups.tsx:2210),无一处是运行代码。copy.ts 的 pick/format 以 TcrnLocale 为键取代三元。护栏:usability 门检查 A 逐条断言产品外壳词表在四条路由上不得以英文渲染(zh-CN/ja/ko/fr),故新增一个只写中英的字段会在非中英语言上见红。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:dae352884dc1829aa38bcb94",
+      "externalKey": "TCRN-AOS-INC-014",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 7,
+      "scope": "切 filter 时项目范围回滚到全部项目:已修并经复核。Owner 看见的是范围一项,实况是应用读十五个 query 键、只写回三个,且只写回外壳自己拥有的那三个,故任何一次换页都在丢别的键。修法为 buildRouteHref 三层合并(弱到强:本页在效的 query、调用方指定值、外壳自身键),用继承而非列举——一张「要携带哪些键」的清单本身就是「哪些键重要」的第二份副本,某个视图开始读新键的那一刻就过期,而这正是本缺陷长到十五比三的原因;继承没有会过期的清单。空值(?q=)约定为显式丢弃,不与真实筛选冲突,因各视图本就把空串当未设。护栏:usability 门检查 B 逐键实证在四条路由上往返(project/status 等),键取自应用自身的读取点,门无法与代码脱节。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:c6093db28979484603e2f341",
+      "externalKey": "TCRN-AOS-INC-015",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "审议模块缺少检索:已修并经复核。控件为 DS 的 SearchInput(Form.tsx:152 导出,非产品自建),query 键为 q 并随 buildRouteHref 继承,故检索状态可分享可书签。匹配为逐词 AND 且大小写无关(matchesQuery:词全命中才算命中),与工作项模块同一语义——输入更多词是收窄而非放宽。可检索字段如实声明为键号、标题、类型、状态,并在界面注明立场与纪要正文不在本构建的投影内:一个不说自己搜不到什么的搜索框,会把「没搜到」读成「不存在」。护栏:usability 门检查 E 对 /deliberations 与 /knowledge 断言必须渲染检索控件。记录者自我更正:本单核实过程中我第一次用 data-tcrn-search-input 与 type=search 两个标记 grep 该文件,得零命中并据此判为未实现——那是标记名猜错,不是功能缺失;判据应取组件导入与实际过滤链,已按后者复核。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:1ef1169e101266bfe9ccc3d5",
+      "externalKey": "TCRN-AOS-INC-016",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 7,
+      "scope": "【实现与门·2026-07-28】两半均已落地并实测。DS 侧:packages/ui-react/src/components/Navigation/Navigation.tsx:835 的 Breadcrumb 已收可选 href,有 href 且非 selected 渲染 a 标签、selected 渲染带 aria-current 的 span(即 TCRN-DS-STORY-090 形状,照抄同仓 WorkPageHeaderBreadcrumb 未另发明)。AOS 侧只接线:cockpit-detail.tsx:258 详情页三层 crumb(项目经 routeHref 带 project 范围、祖先链、末项 selected 无 href)、cockpit-deliberation-room.tsx:181 审议室两层。apps/web/src 内零 Breadcrumb 自建实现(仅 dist 与 mirror 两份构建产物含函数体),Owner 裁定「返回能力落 DS、AOS 不自建」成立。\n\n【本单最重的发现:门本身连出三次假绿,全在 check C 一处】验证这一单时发现 scripts/usability-proof.mjs 的 way-back 检查从未真正测过面包屑,三层原因逐一实测并修:① 探针盲区——frontendShellRoutes 里九个「详情形状」路由全是静态样板,真正会被读者钻进去的两个路由(工作项与审议室)按记录键寻址、根本不在路由表里,于是这个检查九次全跑在无面包屑的样板页上。修法是从 recordAddressableModulePaths 派生探针并从投影取真键(未知键渲染空态、无祖先可链,拿它测等于测空态)。② 死码伪装成第二道防线——原第二析取项匹配 data-back-affordance 与 data-breadcrumb-navigable,实测这两个字符串在本仓与 DS 全源码中都不存在,是我写这门时凭空发明的标记名、从未让任何组件发它;改成读服务字节里 DS 面包屑内是否真有带 href 的 a 标签(全惰性 trail 正是 INC-016 报的装饰件)。③ 祖先集含站点根——每个壳页头部品牌标恰有一条指向 / 的链接,故 candidates 永不为空、第一析取项永远先赢,十一条探针全以「ancestor link / resolves 200」通过,连完全无面包屑的 /work/board 也过;根不是钻取路径的回路而是重新开始,已从祖先集移除。\n\n【第四层:记录页上导航栏不算回路】移除根之后仍为假绿:侧栏那条标签为 Projects 的模块链接指向 /work-items,恰好就是 /work-items/键 的父路径,且它 200 可达故解析检查也抓不住——把详情页面包屑的 href 全剥掉后门依旧全绿。模块链接去的是无筛列表,读者落在那里已丢掉进来时的范围,与「导航」不是一回事。故记录类路由只认 trail,静态样板仍走祖先形态(它们没有记录身份要保,父链是真祖先而非导轨)。\n\n【突变双向实证】剥掉 cockpit-detail 两处与 room 一处 href 后重建:两条记录路由转红,诊断文字为「a breadcrumb trail is rendered but every crumb is inert」;还原后 91/91 全绿(修前 89)。另修:门原先只输出失败项、通过项的 detail 全丢——两次假绿的证据当时都写在通过项的 detail 里(traversable-ids:/work/evidence 的 detail 是「no chain id rendered on this route」,即该检查自述什么也没测)而摘要只显示 74/74,故 checks 全量入报告。\n\n【规则判据】与原单一致且已更明确:DS 消费契约第 894 行把 WorkPageHeader 列入必须 import 清单,却对「面包屑该不该可点」「深页该不该有回路」一字未提——规则从未存在,不是规则太软。现由 way-back 不变式承接,且该不变式本身已四次修正为可伪证。typecheck 净、113/113 测试通过。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:39eac0ff16e26f9ea0727504",
+      "externalKey": "TCRN-AOS-INC-017",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 7,
+      "scope": "切页闪默认语言与日间模式:根因不是加载慢,是存储选型。偏好原存 localStorage,服务端读不到,于是每个服务端渲染页一律按默认语言与 light 主题出字节,等客户端 bundle 解析挂载后才纠正——那段间隔就是闪。cookie 是唯一随请求上行的浏览器存储,故第一个字节才有可能是对的。已实现:①新增 localeStorageKey——locale 此前根本没有存储键,菜单只写 URL,选了日语只在继续点带 ?locale=ja 的链接期间有效,书签或手输地址即回 zh-CN,那是同一缺陷把闪拉成永久;②readStoredPreference 双读(浏览器侧 localStorage 优先,因 cookie 可能被隐私设置单独清掉而 localStorage 仍在,此时 cookie 缺失不代表偏好),writeStoredPreference 双写(单写任一侧都仍是缺陷);③renderAosShellHtml 新增可选 cookie 入参,server 传 request.headers.cookie,并加 Vary: cookie——字节现按 cookie 变化,只按 URL 做键的缓存会把一位读者的语言发给另一位;④优先级 query → 存储 → 默认,query 仍最高否则分享链接失效;⑤cookie 是可达攻击面:不支持的 locale 经 resolveLocale 落默认,畸形百分号转义在 decodeURIComponent 外包 try 落 null——否则持有该 cookie 者每页 500。cookie 用 SameSite=Lax 且不加 Secure(显示偏好非凭据;加 Secure 会在本地明文 HTTP 服务上被静默丢弃,即本机与全部门所在的宿主上闪照旧)。实证按第一个响应体而非稳定后 DOM——稳定后断言在坏代码上同样通过,因为客户端确实纠正了,闪就是纠正前那段;实测 lang/theme/data-visual-instance-collapsed 三项均在首字节生效,query fr 压过 cookie ja,两种恶意 cookie 均落默认且 200。新增七道门(checksRun 82→89);变异实证:服务端不转发 cookie 时四条 stored-preference-served 见红,去掉 try 保护时畸形 cookie 直接 URIError 打死渲染。typecheck 干净,113/113 测试通过,service:smoke 通过。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:71f6356763e42310ae742268",
+      "externalKey": "TCRN-AOS-INC-018",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "超链接覆盖:六处渲染链 id 的读面全部核实、两处真缺陷已修、护栏已改到能咬住。审计面 22 条纪要 token 原为裸文本(97 条实效未决全部可解析到会议室),已经 minutesLink 变链接;收件箱 97 条未决行原本是链接但指向 /work-items?project=… 这个不含该裁定的过滤列表——「是链接」与「链接到对处」是两件事,后者才是 Owner 报的那句「用户还得自己去找」。第三个文件审议室经实测为误记:该页两个 id 都是本页自身记录(自引用无需链接)。护栏三处更正:检查 D 原探三条 /work/* 静态样板,而这三页渲染的链 id 数为零,于是走 unique.length===0 的空集分支连报三个绿——空探针集是最安静的假绿,它不像跳过,像干净结果;原判据用「id 前 400 字符内有 <a href」的邻近猜测,而 WorkItemRow 带 href 时整行包在一个锚里、自身字段把开标签推到约 600 字符外,导致 /inbox 这个每个 id 都在链接里的页面测成零,改为祖先包含判定;新增 id-links-reach-record 检查目的地而非链接性(变异实证:收件箱回退为过滤列表时报 22 条),并把 routeForId 里从不存在的 /work/deliberations 更正为 /deliberations。匹配须先剥标签:修好的引用会把 record id 写进自己的 href(117/128 会议无外部键),扫原始 HTML 会把修复读成缺陷。82/82 绿(原 74),两处变异实证各自见红,typecheck 与 113/113 测试通过。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:154063d8280f1e0f7094655a",
+      "externalKey": "TCRN-AOS-INC-019",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "【实测收口·2026-07-28】三处均已修且逐条对活服务复核。① 侧栏十一条模块路由:从 shellNavItems 派生全部十一条路径逐条 GET,现全部 200 且全部在 frontendShellRoutes 内(零 BAD)。路由表由 46 条降为 25 条——三十二个从未实现的占位名已随 INC-021 移除,故「表里有名字」不再等于「有页面」;守门的是 route-serves-own-page 检查(把与 /cockpit 字节相同的路由判红,仅两条具名别名豁免且各自写明理由)。② DS 侧 relationshipLabels:DataDisplay.tsx:531 现为 Record 五语全谱(zh-CN 阻塞 / en blocks / ja をブロック / ko 차단함 / fr bloque),RelationshipChip(:648)已收 locale 参数,五处消费点(:1022 与 :1223 与 :1317 与 :1680 等)全部透传;源码注释已把「曾在四条本地化路由上渲染英文 blocks」记为该组件的既往缺陷。③ 本单自记的两处门假绿(locale-served 的判据由剥字节改为点名十八条 chrome 词汇表、way-back 的祖先链接改为实际 fetch 须 200)在改前即已修。\n\n【本次新增的更正:way-back 那一处当时只修对了一半】INC-019 里我写「改为实际 fetch 目标须 200」——这句成立,但它没有让那道检查变得可伪证。今日为 INC-016 复核时发现同一处检查另有三层假绿(探针只跑静态样板、第二析取项匹配两个我凭空发明且全仓不存在的标记名、祖先集含站点根故品牌标那条 / 链接令十一条探针恒绿),并在移除根之后仍发现第四层(记录页上侧栏那条指向 /work-items 的模块链接恰是父路径且 200 可达,故剥掉面包屑全部 href 后门依旧全绿)。四层已全修,记录类路由现只认 DS 面包屑内带 href 的 a 标签,突变实证双向:剥 href 转红、还原 91/91 绿。教训写在这里而不是只写在 INC-016 上:「fetch 目标确认 200」修掉的是「用死链证明有路」,修不掉「用不相干的活链证明有路」——两者是不同的缺陷,前者的修法读起来像后者的修法。\n\n【规则判据】不变:十七道门当日全绿是因为断言 URL 全钉在 /cockpit 与 /work,即门从未请求用户实际会落在的十一条路由。现由 router-prefixes-declared 与 record-path-served 与 route-serves-own-page 三项承接,且探针从 shellNavItems 与 recordAddressableModulePaths 派生而非另抄一份清单。门现 91 查 0 红;typecheck 净,113/113 测试通过。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:dcf67f125fa5ec9db765249c",
+      "externalKey": "TCRN-AOS-INC-020",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "【三分处置的后两项已修·2026-07-28】② 门自身陈旧已修:scripts/aos-frontend-shell-proof.mjs 原第 20 行 appSource 只读 app.tsx,而本地类的实际落点全在另外十二个视图文件里。改为新增 allViewSource——从 apps/web/src 目录实读全部 tsx 与 ts(排除 d.ts 与 generated.ts)并拼接,故第十三个视图文件因存在即被覆盖,不必再补清单——strictRegisteredSurfaceSourceHits 改判其上。实测效果即刻:改前该断言长绿,改后转红并报出 AOS visible className,与构建侧孪生断言首次一致。逐文件实测 className 内含 aos- 的占位数共 148 处:cockpit-work-items 29、cockpit-deliberation-room 19、cockpit-global 15、cockpit-detail 14、cockpit-deliberation 12、cockpit-domain-panel 与 cockpit-governance 各 11、cockpit-board 与 cockpit-knowledge 与 cockpit-views 各 10、shell-header-actions 6、cockpit-mirror-banner 1;app.tsx 零处,与原单所述一致。\n\n③ 假阳性已修,且第一次修法不对:命中项 tcrn-knowledge-shell__collapse-button 实测在 dist/index.html 内 0 处、在 client bundle 内恰 1 处,上下文为一张知识卡片 body 的中文正文(讲 DS 折叠钮根因的记述,以转义字符串形式嵌入产物),即链上租户内容而非渲染面。第一版改法要求类名出现在 class 或 className 值内或以点号开头作选择器——实测仍然命中:那句正文正是按开发者口语写法写作 .tcrn-knowledge-shell__collapse-button,裸点号匹配到了叙述本身。故改为要求选择器上下文:点号形式后须紧跟 { 或 , 或 > 或 + 或 ~ 或 : 或另一个类,句子后面跟的是空格与更多文字。十例双向实测:链上正文带点号与句中裸提及两例保持干净,class 属性与 className 属性与压缩后 className: 与四种 CSS 规则形态(带空格、紧凑、逗号列表、后代、伪类)六例全部命中。规则的牙齿未减:真正 import demo shell 会同时产出 class 属性与 CSS 规则两种形态。\n\n【与 INC-022 的边界】第①项(79 个 tcrn-aos-* 类名、89 条 CSS 规则中 39 条带组件级属性、违反 DS consumerVisualStyleContract 的 forbiddenConsumerOverrides)不在本单处置,归 TCRN-AOS-INC-022,该单含 DS 侧方向题(消费者能否自持布局类)故保持 planned。修完②③后构建侧余两条命中 AOS class in built HTML 与 AOS class in client bundle、源码侧余一条 AOS visible className——三条全部指向同一件真事,即 INC-022。故 aos:frontend-shell-proof 现仍为红,且红因已收敛为单一归属:不做绿化。\n\n【教训】同一条规则的两侧孪生断言一绿一红时,坏的是绿的那一个——它绿的原因往往正是它没读过出问题的字节。「门只保护它读过的字节」这句在本平台第三次以这种形态出现(前两次:usability 门的空探针集、locale 门剥字节判据),故本次把探针改成从目录实读而非列清单。另记:租户内容与产品词汇的分野已在三处门上各撞一次(locale、shell-demo 类、知识卡片正文),它会在链作为数据源期间持续出现,判据须写成「这个字符串出现在什么句法位置」而非「这个字符串是否出现」。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:9d11a2a05b048672c5643378",
+      "externalKey": "TCRN-AOS-INC-021",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "更正记录（追加，不修改原记录）：INC-021 原判「处置属方向题（涉外部可见 URL 契约）」经实测不成立，三条各有度量。① 无引用：32 条占位路由名在 apps 与 packages 与 scripts 全域的非路由表引用数为 0——没有任何页面、导航、测试或文档链向它们。② 未发布：scripts/build-mirror.mjs 的 routes 只含十二条真模块路由加两条详情样本，32 条一条都不在其中；镜像是唯一对外发布面，故这些名字从未进入任何外部 URL 契约。③ 从未设计：git show c74dfc6:apps/web/src/data.ts（2026-06-29「feat: add AOS frontend shell slice」）显示它们是真 IA 存在之前的占位清单，取代它们的正是现在侧栏那十一条模块路由。既非对外可见、又无引用、又非设计物，则不是方向题；处置为可逆的本地改动，已执行：从 frontendShellRoutes 移除 32 条，保留 /operations-cockpit 与其 .html 孪生作为具名别名（四个已准入视觉变体以它命名）。表外路径现返 404。同一改动内更新三处以它们为判据的门，否则移除会打死既有门：a) apps/api/test/service-smoke.test.mjs——它原本 fetch 十三个占位 .html 名并断言 owner-quality 驾驶舱标记，而它们全部通过，因为全部回落到驾驶舱。这道测试不松，它在量错东西：外壳 chrome 由外壳在每条路由上发出，故断言 chrome 无法区分「自己渲染」与「只是解析」。现改为逐条断言十一条真模块路由的 data-cockpit-view（逐视图发出，回落无法满足），并断言十六个退役名各返 404。b) scripts/aos-frontend-shell-proof.mjs 路由循环末尾的 /conference 与 /docs 与 /settings 同属回落名，三者皆为驾驶舱，故「外壳在非驾驶舱路由上仍成立」这一命题它们证不了。现替换为十一条真模块路由，并对每条加 data-cockpit-view 判据。c) scripts/usability-proof.mjs——本门自己的两处探针也踩了同一个坑：localeProbeRoutes 与 statefulProbes 都点名 /conference，理由是「它在路由表里且答 200」。它是回落页，故四条语言探针里有一条在重复测 /cockpit。真审议模块是 /deliberations，已改。路由表只说某路径被准入，不说它渲染自己的东西。本门新增 retired-route-refused 判据：表外的退役名必须 404。移除只有在服务端拒绝时才是实质的，isFrontendShellRoute 是让它承重而非装饰的那一环。两处静默回落本体保留未改：resolveWorkMockupPageId 的 return queue 与 resolveCurrentRoute 的 defaultShellRoute 兜底。理由是残余适用性成立——前者的九条 work 路径真实存在且回落目标是它们的列表页，后者要保证外壳永远高亮得出某一项。真正的缺陷不是回落存在，而是路由表里有回落才够得着的名字；名字移除后回落只对真路由生效。门已改为 route-serves-own-page 加 retired-route-refused 两面夹住：再往表里加一个没有视图的名字会立刻转红。实测结果：usability-proof 69 项全绿（原 100 项中 31 项是对已移除占位路由的探针）；service-smoke 变异验证通过（把 /conference 加回表内，断言如实转红）；AOS typecheck 与 build 与 113/113 测试全绿。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:46f8549460df3011d454e580",
+      "externalKey": "TCRN-AOS-INC-022",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 7,
+      "scope": "已施工并交付（AOS 986f8c5、DS 104afb9，两仓均已推送并对服务器核实全 sha）。**pnpm verify 在 AOS 自 2026-07-26 以来首次全绿**，本单的红门条件解除。落法按 MIN-005：① 零行为改名，tcrn-work-module-* 与 tcrn-phase3-readback* 加 aos 中缀（DS 内定义数为 0，实为本仓自有类漏前缀）；② 真跨界三处走 DS 准入而非本地绕行——split view 的分栏改由 DS 容器查询自持并新增 detailPopulated、搜索宽度改用新 fill prop、看板卡片改用新 href；③ 新建 scripts/lib/aos-consumer-style-audit.mjs 与 aos-consumer-style-ledger.mjs 并接入 shell 门：扫描面按整段 createDocumentCss 定义而非类前缀（实测 124 条规则中 89 条带前缀、35 条不带，不带的那批恰含契约点名的字面量，按前缀建门会在最该红处假绿），判据三条——选择器须在 aos 命名空间、声明须结构性或取 token 值、带 paint 的族须逐字等于 21 条封闭台账（双向相等，多一即新增未裁 paint，少一即该退役的条目）。④ 四处裸字面量转 token。反捕到的自身缺陷两条，均已修并留证：三份同一 `\\baos-` 判据只改了两份（连字符非 word 字符，故它匹配进 tcrn-aos-，把 MIN-005 判为合法的命名空间读成了被禁的旧命名空间）；审计解析器遇语句型 at-rule（如 @layer base;）会把缓冲区并进下一条选择器并吞掉该规则的声明块——一条合法 CSS 语句就能让下一条规则对全部三项判据隐身，已修，并给 ruleCount 设了 120 的地板，因为「零发现/零规则」与「零发现/全量规则」报的是同一个绿。残余：台账的 dsTarget 与日落日期是散文，今日无人读；带 paint 的族内新增 paint 不触发红（族粒度）；两条如实记在本单不称已解。",
+      "decidedBy": [
+        "minutes:2f09d03272da7bd59cb914d5"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:becfaea3e9db763a09d199bc",
+      "externalKey": "TCRN-AOS-INC-023",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 2,
+      "scope": "提交前审查捕获三条，均在 INC-013..018 那批未提交字节里，链上当时已记为 done 且经复核。① 尺子失明（本单最重）：apps/web/src/cockpit-domain-panel.tsx 含两个裸 NUL 字节——一个正确的 join 分隔符存成了字节而非转义——使该文件对 grep 为 binary 而被静默跳过。于是 i18n 扫荡在一份看不见它的清单上作业：链上「全仓 isZh 仅余 6 处且皆注释」是真的，前提是那把尺子；实测 grep -a 得 26 处活的双语三元，该面板在 ja/ko/fr 上一直渲染英文。全仓复扫两仓 701 个受追踪文件，此类文件恰两个：AOS 这一个，与 DS 的 scripts/internal-vocabulary-scan.mjs（一道门脚本）。两处均已改为转义，运行时字节等价，文件恢复为文本。教训与既有的「门只保护它读过的字节」同族但更前一步：度量工具读不到的东西，不会报错，只会让结论看起来成立。② 范围回归（严重）：INC-014 让链接继承产生页面的状态后，shell-header-actions.tsx 的「全部项目」项仍写作裸路径 routeHref(\"/work-items\")，于是唯一能放宽范围的控件自己也把 project= 继承了下去——Owner 原来的抱怨是范围留不住，这批字节会把它换成范围出不去。app.tsx 的注释本已写明该失败形态并规定了「以空值声明减法」的写法，该控件未照做。已改为 routeHref(\"/work-items?project=\")。③ 批次不编译：requestCookieHeader 只存在于 DS 未提交工作树，AOS 的 node_modules 硬拷贝里没有，tsc 报 TS2353，故 pnpm verify 从第一步就停，两道新门一次也没跑过。根因是 pnpm file: 依赖为硬拷贝且 install 会谎称 up to date。处置：DS 先构建、删 node_modules/.pnpm-workspace-state-v1.json 后重装。三条都不是既有债：均由这批字节引入或被这批字节暴露。另修四条低危（joinNames 绕过、coversAllLocales 声称有消费方而实际无调用、AOS 侧孤儿写函数、一个已废常量）。审查形态为多代理：六个视角独立产出 29 条原始发现，逐条派怀疑者证伪，5 条存活、3 条被驳倒；被驳倒的那批同样有价值——其中一条「域面板 25 处双语三元」我用默认 grep 复核时得零命中而险些误判为不成立，正是本单第①条把它救回来。",
+      "decidedBy": [
+        "minutes:2f09d03272da7bd59cb914d5"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:c0b588364ef9b130e7a75f10",
+      "externalKey": "TCRN-AOS-INC-024",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "已修并实测转绿（AOS 986f8c5 已推）。apps/api/src/work-readback.ts 的守卫改为用仓内既有构名法在运行期拼出禁词再建正则，语义不变，字面从源码里消失；phase3-readback-api-proof 现 exit 0，privacy-no-overclaim-scan.json 与 readback-api-facade-proof-summary.json 均 ok:true、findings 为空。选这条路而非放宽扫描的理由记在此：放宽等于让扫描学会「这一行例外」，而它并没有能力分辨渲染出的值与提到它的名字，于是下一处真泄漏也会被同一条例外放过；改成源码里根本不含该字面，则「源码含此字面即泄漏」重新成为一条自洽判据。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:23153d0579ee04553f6b994b",
+      "externalKey": "TCRN-AOS-INC-025",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "已解决（DS 89d9716 与 AOS c24ae11 均已推并核实全 sha）。实测：375x760 与 390x844 两处，第一条可见工作项由 1469 降至 520，可见标题由 880 降至 224，两者均进首屏；桌面与平板未动；无页面级横向溢出。原棘轮（<900）撤销，由「第一条工作项进首屏」的真判据取代，并已取红证。**本单立单时的命题是错的，更正记录在此**：单子写「首屏够不到标题」，量的是 #work-heading，而它是 1x1、clip:rect(0,0,0,0) 的 sr-only 元素，读者永远看不见——按那个目标修，可以在页面一条数据都不显示的情况下达标。真相是 684px 的导航只占 1469px chrome 的 47%，故裁定按首屏预算三级一起做而非只修导航（MIN-006）。这条更正是本轮最有价值的产出：一个所有人都接受、无人复核的前提，撑着一张单子和一道门。残余：320x568 不在 DS 声明的地板内（其 responsive-mobile 标准写的是 390px），该宽度下三级组合为 618 不进首屏，作为具名残余留在 MIN-006 未决项；若日后裁 320 入范围，机制需改抽屉，属二次迁移。",
+      "decidedBy": [
+        "minutes:de47de4a4f95e07dec79f0f7"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:85093d9e1cb45efc2ad19c1c",
+      "externalKey": "TCRN-AOS-INC-026",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "revision": 6,
+      "scope": "已解决（DS ebc3ff9 已推并核实）。根因不是断点也不是横屏，是「一屏高的粘性栏 + 高于一屏的内容 + overflow-y:visible」——页面滚而粘性栏不滚，超出的项画在自己盒子外，任何页面滚动位置都够不到。修法是给栏自身滚动（overflow-y:auto、overscroll-behavior:contain），并把 height 由 100vh 改 100dvh（vh 忽略手机上会出现又消失的浏览器 chrome，属同族问题）。实测：横屏 812x375 下最后一项「快照健康」由 629 移到 321 且在栏内可达，栏 scrollable=true；桌面 1440x900 与平板 1024x768 栏不可滚、位置逐像素未变。**未走本单立单时列的三条候选（改断点看高度 / 另立横屏形态 / 三选一）**——那三条都把它当设计题，而实测表明它是正确性缺陷：一个够不到自己内容的滚动容器，无论断点怎么定都是坏的。故按缺陷修，不占设计域。配套建 railReachabilityCheck 并取红证（还原 overflow-y 后横屏立红、桌面仍绿）；该门刻意绑生产规模的预言机并在导航项少于 11 时直接判否，否则它会在一个两项、永远不可能滚动的栏上恒绿——本轮第一版就正是选中了那个两项 fixture，实测暴露后改掉。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:f4105fe5002a811353fc4dd9",
+      "externalKey": "TCRN-AOS-INC-027",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "已退役（AOS c24ae11 已推）。字段 mobileNavigationCompactFirstViewport 从收据中删除而非改为 false：一个没人读、也没有判据支撑的布尔留在收据里，下一个读者仍会把它当结论。取而代之的是同一脚本里两条真断言（第一条可见工作项进首屏、可见标题进首屏），它们带出实测值且已取红证。留一句本单真正的教训：这条不是被门抓到的，是在为 INC-025 找判据时读到的——收据字段不参与任何断言，故永远不会自己报错。同一文件里一个字段声称「移动端首屏紧凑」、130 行外一条断言记录着它不紧凑，两者从不相遇。与 INC-012 第②条同族但更上一层：那条是门读错了字节，这条是收据与断言各说各话，而没有任何机制比较它们。",
+      "decidedBy": [
+        "minutes:de47de4a4f95e07dec79f0f7"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:e7cb13566609fb6d87542c40",
+      "externalKey": "TCRN-AOS-INC-028",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "revision": 7,
+      "scope": "三条全解（DS ebc3ff9 已推并核实）。①axe 由 desktop-1440x900 扩到同时跑 mobile-390x844，两主题各一遍，且每条 summary 现记录来源视口（此前不记，两遍会混不清）；刻意不加平板——它渲染的是桌面形态，第三遍买不到新覆盖只多三分之一运行时。②fixture 提到生产 IA 规模已于 89d9716 完成。③761px 的 16px 横向溢出已修：根因是 work row 的三列底 96+160+192 加两个 8px 间隙需 464，而带 280px 栏的 shell 在 761 视口只给 441；改为按**自身容器**判定的容器查询（<464 单列），实测 759/761/770/800 全为 0 溢出，桌面 1440 布局逐像素未变。新建 breakpointOverflowCheck 补上执行点：契约明禁页面级横向溢出，而截图矩阵只在 1440/1024/390 断言——三个都在形态内部，无一在两形态的接缝上，而缺陷恰好只活在接缝。本单的通则由此得到最直接的实证：**扩门后第一次运行就抓到一条来自紧邻上一个提交的 serious 违规（INC-029）**——门不在的那段时间里，缺陷照常上线且无人可能发现。",
+      "decidedBy": [
+        "minutes:de47de4a4f95e07dec79f0f7"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:c5d2241bcf930ac816b7f486",
+      "externalKey": "TCRN-AOS-INC-029",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "revision": 5,
+      "scope": "可滚动区域无法用键盘滚动（axe scrollable-region-focusable，impact serious，light 与 dark 各一处）。**这是我在 STORY-108 里自己引入的**：首屏预算第三级把 WorkViewTabs 与 WorkQuickFilters 改成单行横滚，而当行内是静态文本（DS fixture 就是）时，容器既无可聚焦内容也不可聚焦，键盘用户根本滚不动它——WCAG 2.1.1 真实失败，不是 lint 洁癖。修法：两个容器加 tabIndex 0（TableShell 早就是这个模式，非新发明）；不做「仅移动端加」，因为渲染期不知道视口，而带标签分组上多一个 Tab 停靠点，代价是键盘用户按一下，缺了它代价是够不到内容。**发现路径是本单唯一重要的部分**：它是 INC-028① 刚把 axe 从 desktop-1440x900 扩到 mobile-390x844 之后的第一次运行抓到的，而缺陷来自紧邻的上一个提交（DS 104afb9→89d9716 那批）。即扩门与它抓到的东西之间隔了一次提交——这是「拥有该形态的一侧对它零断言」这类缺口代价的最直接实证：门不在的那段时间里，缺陷照常上线且无人可能发现。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:53d72dd74baf31b82afd918f",
+      "externalKey": "TCRN-AOS-INC-030",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "revision": 2,
+      "scope": "被提交进仓的镜像包 apps/web/mirror 落后源码三个提交,而它的构建器与验收门**两个文件都在、却没有任何 npm 脚本调用**。发布前核查时发现;若照现状打 tag,发出去的包里没有本次发布的全部移动端工作。\n\n**实测**:apps/web/mirror 末次改动是 34e5b97(2026-07-27 09:20);其后落在 apps/web/src 的提交有三个——c24ae11(移动栏与首屏,STORY-109/INC-025/INC-027)、fae039d(消费者样式边界,INC-012/022/STORY-107)、b8f2c1a(Owner 用出来的六个缺陷,INC-013..018)。scripts/build-mirror.mjs 与 scripts/mirror-acceptance-proof.mjs 均存在于仓中,但 package.json 的 scripts 里没有任何一条引用它们(以 /build-mirror|mirror-acceptance/ 扫全部 script 值,零命中),pnpm verify 的十八步里也没有。\n\n**这是 INIT-001 收口注解自己点名的那个形态的第四例**:「已交付但从未被验证」。前三例是 phase1 收据带红十个、六个 proof 脚本红着但不在 verify 里、AOS 分区从未被快照。四者的共同点是**都不产生错误信号**——文件在、目录在、构建过一次,只是没人再跑。判据必须落在「构建器的输出与源码在同一个提交上」,不能落在「文件存不存在」。\n\n**修法**:发布前重建镜像并提交,使其与发布提交同源;把 build-mirror 与 mirror-acceptance-proof 接进 npm 脚本与 verify,判据为「镜像的构建输入哈希等于当前源码」。若判定镜像本就该是独立产物而非仓内文件,则应从 git 移除而不是留一个会说谎的副本——两条路选一条,不留现状。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:f743fad5f8763f6ae7eb2f5c",
+      "externalKey": "TCRN-AOS-INC-031",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "revision": 3,
+      "scope": "已解决,但结论与本单开单时提的方案**相反**,过程本身是本单最该被读到的部分。\n\n我先按开单时列的 (a) 做了:把期望版本改为从 DS 工作区源码读,判据变成「装到的等于源里那份」。看着更诚实。取红证时它没红——把已安装副本强改成 2.1.0,`expected` 竟然**跟着**变成 2.1.0,审计照绿。查 inode:`TCRN-Design-System/packages/ui-react/package.json` 与 `TCRN-AOS/node_modules/@tcrn/ui-react/package.json` 是**同一个 inode(142661533)**——pnpm 对 file: 依赖用硬链接,那两个路径是同一个文件。于是我的「修复」把一个文件读了两遍再比较,**造出一道永远不可能失败的门**。\n\n**这与本轮早些时候 railReachabilityCheck 第一版误绑两项 fixture 恒绿是同一课**,而且更隐蔽:那次是选错了对象,这次是两个对象在文件系统层面本就是一个。通则:判据的两侧必须是**能够不同的字节**;「从权威源读期望值」听起来永远正确,但当权威源与被测对象是同一份字节时,它退化成同义反复。\n\n**已回退为字面量并升到 3.0.0**,理由写进了脚本头注:字面量恰恰是这里唯一一个上游动不了的字节,这才使不符具有意义——DS 发版后本审计变红不是误报,它是「上游动了、有人该来看看改了什么再接受」的唯一信号。红证已取:把常量改回 2.1.0 而已安装副本为 3.0.0,ok=false、blockers=[\"runtime dependency version mismatch: @tcrn/ui-copy-state\"]、exit 1;改回即绿。\n\n**顺带更正一条平台既有认知**:记忆里记的「pnpm file: 依赖是硬拷贝,改了 DS 源 AOS 仍编译旧 API」对 dist/ 成立(DS 重新构建会产生新 inode,链接因此断开),但对 package.json 这类自安装后未被重建的文件**不成立**——它们是硬链接,DS 侧原地改写会即时出现在 AOS 的 node_modules 里,无需重装。两种行为并存,判断「改动到没到」不能只凭一条经验。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:1bdcfa809a21ee447b354db9",
+      "externalKey": "TCRN-AOS-INC-032",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "revision": 2,
+      "scope": "发布前刷新链数据后,aos-frontend-shell-proof 的「Storybook shell demo in built HTML/client」判据变红,而产物里**没有任何**该类的实际用法。这是同一个假阳性的第三次,而它这次的触发方式值得单独记一笔。\n\n**命中的字节是 `.tcrn-knowledge-shell__collapse-button,`——结尾是一个半角逗号。** 那句话是链上一条注解的正文,内容恰恰是记录**上一次**修这个假阳性的经过:上一版把判据收窄为「点号形式后须紧跟 `{` 或 `,` 或组合符」,理由是「一句散文后面跟的是空格和更多的字」。而这条中文注解在类名后用了半角逗号,于是**它自己提供了它要找的选择器上下文**。判据被一段描述该判据上一次修复的文字打败。\n\n**结论:不能再收紧正则。** 关于代码的散文可以产生任何「意味着代码」的模式,第三版正则也不会是最后一版。改为问「一个类实际能活在哪里」:本构建的全部样式表都是文档内的 `<style>` 块(实测 .css 资源为 0),全部生效类名都在 `class`/`className` 值里;治理正文是既不在这两处的字符串值,于是**在结构上出局,而不是靠模式排除**。判据的干草堆改为「所有 class 值 + 所有 style 块」,正则退回最朴素的裸 token。\n\n双向红证:注入一处真用法(把 `tcrn-knowledge-shell` 加进 `class=\"tcrn-product-shell…\"`)→ 立红 exit 1;还原 → 绿;而带那条注解的链数据 → 绿。\n\n**这一族的通则**(与 locale 门当年划「产品词汇 vs 租户内容」是同一条,与 INC-025「量的是不可见 sr-only 元素」也同形):**当链成为数据源之后,判据必须落在「该事物实际存在的位置」,不能落在「文本里有没有出现」。** 前者是产品的形状,后者是任何人都能在一条注解里写出来的字符串。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:3cd400e7064a448ef629e062",
+      "externalKey": "TCRN-AOS-INC-033",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "revision": 2,
+      "scope": "`pnpm source-export:proof`——本仓唯一一道关于「什么可以离开这个仓库」的门——**自 2026-07-26 的隐私历史改写起就永久坏了**,而且它不在 pnpm verify 里,所以两天内无人知道。发布前按清单显式运行它才发现。\n\n**根因**:该门用 sha 钉了一个基线提交 `EXPECTED_SOURCE_HEAD = cd9abd9…`,判据是 `git merge-base --is-ancestor 基线 HEAD`。隐私改写(抹掉 93 条提交的个人邮箱与 4 个 blob 的家目录路径)给每条提交换了新 sha,于是被钉的那条落在改写前的血统上,**永远不可能再是 main 的祖先**;它每次运行都抛 `source_export_source_head_not_descended_from_expected_basis`。已重钉为改写后的孪生提交 `a160325928ec4b8d11b7a4d483375bffda7e92fd`(同主题、同作者时间 2026-06-18 05:05:56 +0800、是 main 的祖先,其树与原提交仅差改写抹掉的两个 evidence 文件)。**通则:按 sha 钉基线的判据,在任何一次历史改写后都必须一并重钉;改写的验收清单里要有这一项。**\n\n**修好基线后它立刻抓到了第二件事**:导出清单里有三个受管文件没有导出裁定——`AGENTS.md`、`CLAUDE.md`、`deploy/aos-mirror.yaml`。它们都是白名单写好之后才进仓的,而白名单是**闭合**的,所以它不放行也不静默,而是报「未决」并停下。这正是闭合白名单该有的行为。三个都已按逐个理由放行:两份是仓内文档;`deploy/` 是 LAN-only 只读镜像的 k8s 清单,含命名空间、nginx 配置、Deployment/Service/Ingress,无任何凭据。\n\n**放行 `deploy/` 时补了一道守卫,理由要留在这里**:k8s 的 Secret 就是一个普通 `.yaml`,现有分类器按路径与扩展名工作(`.pem/.key/.p12/.crt/.env/.npmrc`…),**看不见它**。把一个专门存放集群清单的目录整体放进白名单、却不防它最可能装的东西,正是这道门存在要防的那种未经审视的放宽。故新增按 `kind: Secret` 读内容的判据。该判据**按 object id 读已提交字节**,与归档取内容的方式一致——第一版读的是工作区,那是与被导出对象不同的一组字节(已提交但本地已删的密钥会对它隐形)。\n\n红证两条,均针对已提交树(该门读 HEAD 的树,`git add` 影响不到它——我第一次的红证方法因此无效,记在这里以免重蹈):①把 AGENTS.md 移出白名单 → `unresolved=AGENTS.md`,exit 1;②把守卫的 kind 指向已提交清单里确实存在的 `Namespace` → `declares_secret:deploy/aos-mirror.yaml`,exit 1。另把原本只报错误码的信息改为**指名道姓**列出未决与禁止的文件。\n\n**已接进 pnpm verify。** 这是同一形态的第五例(前四例:phase1 收据静默带红十个、六个 proof 红着但不在 verify 里、AOS 分区从未被快照、镜像构建器与验收门未接线)。五例之后这条不该再被当作偶然:**一道不在主验证链里的门,寿命等于写它那天。**",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
       "id": "work:ff2290f36de29780d18d4323",
       "externalKey": "TCRN-AOS-INIT-001",
       "kind": "Initiative",
-      "status": "active",
+      "status": "done",
       "parentId": null,
-      "revision": 8,
-      "scope": "AOS 驾驶舱:Jira 形态多项目作业系统承接 Workflow 数据。**设计一致性补齐已完成(2026-07-26,EPIC-007)**:v4 审议室对话流、v3 屏 A 四项交互(检索/保存视图/分栏/批量)、v3 屏 B 活动流全部实装并在真实浏览器实测;收件箱与仪表盘拆为各自的屏,看板移入交付组,导航十项增为十一项;预览渲染器入库(pnpm cockpit:previews,16 屏)。**补齐过程捕到两处已交付但错的**:INC-006 每个筛选链接因双 ? 永远返回零结果(空列表是缺陷最好的伪装);INC-007 导航承诺三屏实为两个半(逐屏渲染再逐屏比对是唯一低成本探针)。测试 110/110 绿。**余下三项全部依赖 STORY-003(AOS 自有域)**:12 种关系型、评论双轨、负责人与标签的过滤与编辑;看板拖拽另需写通道。EPIC-006 部署与镜像(S017-S020)未开工。**五仓均未推送**,对外发布是必停点。逐屏对账见 docs/aos-design/delivery-gap.md。",
+      "revision": 10,
+      "scope": "收口对账：八 Epic、二十七 Story 全 done。今日按推荐顺序补完的四项为 INC-001（收起态 logo 居中，属设计域，代码未提交待 Owner 方案确认）、INC-002（七个 proof 脚本引用已删目录）、S013（审议采用三步公约）、S020（备份与恢复演练余下五项）。EPIC-004 与 EPIC-006 各按其注解自设的保留条件收口，收口前逐条复核该条件是否仍成立——EPIC-004 那条「受 INC-005 阻塞」已因 W v0.7.0 新增 conference-position-list / conference-minutes-list 而不成立，已在其注解中更正。\n\n**明确不在本 Initiative 之内、随单结转的两条**：TCRN-AOS-INC-010（六个 proof 钉死知识层之前的方法面、两个有状态前置未申明；判据须由「恰等于某张名单」改为「不含被禁方法」）与 TCRN-AOS-INC-011（pnpm verify 在 service:smoke 处以 productLedMarkerPresent:false 失败，判据在 scripts/service-smoke.mjs:161，已双向确证与备份工作无关）。两单均 planned 未修。Initiative 收口不代表这两条已解决，它们是本次工作过程中发现并如实立单的既存问题；INC-011 尤其值得优先，因为它是唯一挡在 pnpm verify 主门里的红项。\n\n上一版注解写的「余下三项全部依赖 STORY-003（12 种关系型、评论双轨、负责人与标签的过滤与编辑）」与「看板拖拽另需写通道」——STORY-003 已 done，这三项的依赖已解除；它们属于功能深化而非本 Initiative 的验收项，未在本次范围内实现，如实记为后续。\n\n**发布状态：五仓均未推送，对外发布仍是必停点。** 本次 AOS 侧两个提交（9e41f00 INC-002、14dc64d S020）均在本地 main，未推。设计域的 INC-001 改动保持未提交，按 Owner 裁定「我要的是结果，并没有让你开始修，我需要确认方案」呈报为已执行待驳回。\n\n本次四项工作里最该被后来者读到的一条：三处「已交付但从未被验证」的同形失效。INC-002 里 phase1 的一个收据把另外十个一起带红、且无人在跑故无人知；INC-010 里六个脚本红着但不在 pnpm verify 里；S020 里 AOS 分区从未被快照过，而它恰是唯一启用 attestation 的分区。三者都不产生错误信号，只产生一个看起来合理的空结果或一次缺失的运行。与 EPIC-007 的 INC-006「空列表是缺陷最好的伪装」同形。判据须落在计数与内容，不能落在「有没有报错」。",
       "decidedBy": [
         "minutes:4fdc3f1caf4adfb2374090f7"
       ],
@@ -327,10 +656,10 @@ export const cockpitData: CockpitData = {
       "id": "work:63654a2506cfa4af3413707d",
       "externalKey": "TCRN-AOS-STORY-004",
       "kind": "Story",
-      "status": "active",
+      "status": "done",
       "parentId": "work:081b1dead46cc439338ac197",
-      "revision": 6,
-      "scope": "壳(纯 CSR+DS ProductShell 族+as-of 组件)。**已交付(2026-07-26,AOS commit d89bdf2,分支 feat/init001-cockpit)**:①导航按已确认 IA 扩为四组十项(全局:我的工作/收件箱/仪表盘;交付:项目/工作项/发布列车;知识:知识空间;治理:审议/审计视图/快照健康),图标全部取自 DS 已注册名册;②路由改最长前缀匹配,AosRouteId 由导航模型派生(加模块不会漏改联合类型);③**遗留 /work/* 路由条件化保留**(既有收据断言其视图,按 P5 加而不删),95/95 测试恢复全绿;④表头槽承载项目切换器(四分区,NavItem 组装)与 as-of 徽记(链版本+已验证/投影落后二态);⑤四链真值已接(cross v1254 / DS v924 / TMS v228 / AOS v100,build 期快照,待 S001/S002 改为运行期供给);⑥产品侧样式全走 token 无裸字面量。实测产物:4 组导航/10 项/headerActions 区存在/切换器与 as-of 均渲染。**残余**:全局搜索仍如实声明 not-rendered(依赖投影建成后才有检索面,未接就不去掉那句真话——本轮曾误删该声明并被既有测试当场抓回,教训入记录)",
+      "revision": 8,
+      "scope": "壳。**已交付**:四组导航(后增看板为十一项)、最长前缀路由、DS ProductShell 族接线、headerActions 槽消费。范围选择器与着墨消费见 STORY-025/027。",
       "decidedBy": [
         "minutes:4fdc3f1caf4adfb2374090f7"
       ],
@@ -453,10 +782,10 @@ export const cockpitData: CockpitData = {
       "id": "work:361ed77fb0f61d6cabe695d2",
       "externalKey": "TCRN-AOS-STORY-013",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:b47471768134fde402c89112",
-      "revision": 2,
-      "scope": "审议采用三步公约:execution:mode 默认声明+高价值攻防绑 host-execution 收据+逐轮转写公约文本(键名轮次+首行回应);公约落平台 docs 并在本 INIT 自身审议 dogfood",
+      "revision": 6,
+      "scope": "已完成。公约正文落 docs/deliberation-adoption-convention.md(跨仓适用);平台根 CLAUDE.md 加公约索引一行与治理入口一条。三步:① 默认声明执行形态(synthesis-only / multi-agent-deliberative;不声明读作未验证而非多代理;architecture 与 strategy 声明 synthesis-only 须给理由);② 高价值攻防绑 host-execution 收据,判据=独立性本身是否构成该立场说服力来源,且绑定只证一致性不证真实性、不绑定时不得暗示独立性;③ 逐轮转写(键号带轮次 POS-<AGENT>-<轮>、拆片标 1/2 且须能拼回全文、回应轮首行写明回应对象、两级署名照旧、被驳倒立场留链)。零引擎改动,理由经实测而非假定:对引擎 v0.7.0(HEAD 2e6cfe3077bd6e066863dca8ab765e4b06b934c1)复核,能力已建成(packages/core/src/conference-execution.ts 的 EXECUTION_MODES、tcrn.host-execution-receipt.v1、classifyConferenceExecution 的 fail-closed 判据含 EXECUTION_SYNTHESIS_UNMARKED 与 EXECUTION_BINDING_MISMATCH),缺的是通路:conference-open 参数表(packages/cli/src/index.ts:1858)与 conference-append-position 均无 extensions,且 packages/cli/src 内对 classifyConferenceExecution 零调用——即该判据今日从任何受治会话都到不了。故此确认 MIN-002(minutes:3a0d27be789cadb0ccb353c1)那条未决项在 v0.7.0 仍然成立,已在公约中写成对 W 侧的接线需求:两个 verb 需要能写 extensions 的受治通路;接线后第一二步迁入 extensions,文本层降为冗余而非删除。dogfood 已实做:本 Story 自身的采用会议 TCRN-AOS-CONF-004(conference:46a7640d3205407a263a6fc7,type architecture)按公约走完——声明 synthesis-only 并给出理由、两轮立场键号带轮次(POS-MINERVA-1 / POS-VERITY-2)、第二轮首行「回应 POS-MINERVA-1」、纪要 TCRN-AOS-MINUTES-004(minutes:220142661d1140f8c175980e)首句复述形态声明。两条实捕陷阱已写入公约:列表型旗标(risks/recommendations/decisions/unresolved-issues)全经 listValue 按半角逗号切分,中文列表项内一个半角逗号即被切成空片段而整条 CLI_ARGUMENT_MALFORMED,报错只说字段名不说原因,故中文一律用顿号或全角逗号(本次首次 append 即因此被拒两次);以及 - 是空列表哨兵而非字面值。一处如实更正:公约初稿把裁定来源写成 TCRN-AOS-MIN-001 / CONF-001 式键号,实查该分区在本次之前从未给纪要派外部键(链上仅 TCRN-AOS-CONF-001 一个会议键),这类不存在的键会把读者引向别处而纪要不可改,故已改为以引擎 id 引用那三份分解纪要。",
       "decidedBy": [
         "minutes:5da0b8ea8b8421cb1f3a1e89"
       ],
@@ -509,10 +838,10 @@ export const cockpitData: CockpitData = {
       "id": "work:58e32e52001849dbc63861a7",
       "externalKey": "TCRN-AOS-STORY-017",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:4fab089cdf2aee150dbf440b",
-      "revision": 2,
-      "scope": "投影导出与同步管道:本机摄取→投影库→同步至 VM;带源链版本水位;一键重建;机制候选 rsync 或引擎 export+snapshot(P9 先查自有)",
+      "revision": 6,
+      "scope": "投影导出与同步管道。**已交付(2026-07-27)**:本机摄取→投影库→scripts/build-mirror.mjs 逐路由 SSR→rsync 同步至 VM /srv/tcrn/aos-mirror。源链版本水位随镜像构建收据落盘并显示在每屏横幅(四链逐一,不用单一时间戳冒充)。一键重建=pnpm build && node scripts/build-mirror.mjs && rsync。**残余如实**:触发仍是手动,无调度器;自动化留待后续,MIN-052 未决项已记。",
       "decidedBy": [
         "minutes:3a0d27be789cadb0ccb353c1"
       ],
@@ -523,10 +852,10 @@ export const cockpitData: CockpitData = {
       "id": "work:1a1b5d505a4d63b45f500678",
       "externalKey": "TCRN-AOS-STORY-018",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:4fab089cdf2aee150dbf440b",
-      "revision": 2,
-      "scope": "VM 服务面:tcrn-aos namespace+资源限额;沿 /srv/tcrn/remote-services/manifests 惯例的声明式清单;禁手改运行态入文档;镜像 UI 全局标「镜像·数据截至 as-of」",
+      "revision": 6,
+      "scope": "VM 服务面。**已交付(2026-07-27)**:deploy/aos-mirror.yaml 声明式清单(namespace tcrn-aos + 资源限额 + traefik ingress aos.tcrn.lan + 只读挂载),复用既有 k3s 集群而非新建。禁手改运行态写进清单注释。**镜像 UI 全局标注已落**:每屏 EnvironmentBanner 报「只读镜像·数据截至·写面在本机」+四链版本,且由镜像构建在服务端渲染时打戳,无脚本亦可见。两处踩坑:nginx 绝对重定向在 ingress 后不可跟随(须 absolute_redirect off);try_files 里目录形式排在 index.html 前会把每个深链接变成一次重定向。",
       "decidedBy": [
         "minutes:3a0d27be789cadb0ccb353c1"
       ],
@@ -537,10 +866,10 @@ export const cockpitData: CockpitData = {
       "id": "work:e22cde45386d914b64838c11",
       "externalKey": "TCRN-AOS-STORY-019",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:4fab089cdf2aee150dbf440b",
-      "revision": 2,
-      "scope": "访问边界:镜像含治理数据,定受众(LAN 信任或认证层,traefik 中间件候选);确认不暴露公网;供权材料永不上 VM 的核查项",
+      "revision": 6,
+      "scope": "访问边界。**已交付(2026-07-27,裁定 MIN-052 D4/D4b)**:绑内网不暴露公网(traefik ingress 仅 LAN host);暂不建认证层——受众是 Owner 自己的设备,认证层保护的是尚不存在的观众,而「不上公网」才是治理数据真正的边界。**供权永不上 VM 已结构性保证**:pins 只在本机,cockpit-service 只绑 127.0.0.1,镜像构建期即剔除写控件(build-mirror 对携带写面的产物 fail-closed)。**绊线**:镜像地址一旦需要给 Owner 设备之外的任何人,本单重开并按对外发布级处理。",
       "decidedBy": [
         "minutes:3a0d27be789cadb0ccb353c1"
       ],
@@ -551,10 +880,10 @@ export const cockpitData: CockpitData = {
       "id": "work:823510ce4fbfbf90d091df76",
       "externalKey": "TCRN-AOS-STORY-020",
       "kind": "Story",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:4fab089cdf2aee150dbf440b",
-      "revision": 3,
-      "scope": "定期备份与恢复演练。数据引力规则=备份汇入本机(本机为 OneDrive 网关,Owner 2026-07-26 追加裁定)。镜像段:不可重建数据全在本机;域库与链快照同刻配对+每日兜底;SQLite .backup+integrity_check;attestations 目录并入分区备份;保留 5 份轮转具名删除;首次恢复演练通过方可宣告生效。切换段前置:VM 出拉取式静息导出面(本机持钥拉回;VM 永不持本机凭据;ledger portable-checkpoint 契约所指);VM /srv/tcrn/remote-services/backups 降格为暂存轮转区非目的地;切换仪式含首次 VM→本机→OneDrive 恢复演练。git 只备声明面(代码/清单/配置),运行态数据永不入公开仓;私有 git 备份通道已议已拒(单车道原则)",
+      "revision": 8,
+      "scope": "五项全交付，落在 scripts/paired-backup.mjs 与 docs/paired-backup-runbook.md。① 配对：域库与链在同一 instant 取（同一个值既是域库 createdAt 也是链 manifest 的 --at），且两半互以摘要指名（pairing.domainSnapshotDigest / chainManifestDigest / chainHeadEventHash / attestationSetDigest）。时间戳本身不足以证明配对——同一秒写下的两个文件仍不能证明属于同一对——所以恢复时读 pair-manifest 按摘要认定，而不是信目录名。② 每日回退：接引擎自有的 evaluateDailySnapshotCatchUp，做成 --if-due（不到期退 0，因为「不到期」是正确结果，若报失败调度器会在两次备份间每次运行都报警）。选 catch-up 而非定点触发的理由是这是笔记本：定点触发在每个合盖的日子静默不产出，且没有失败的运行可供察觉，只有一次缺失；问「该做了吗」把错过的窗口变成迟到的备份而不是没有的备份。读最新一对的 pairedAt 而非目录 mtime——OneDrive 同步会改写 mtime，那记的是同步时间不是备份时间。③ 域库物理拷贝改走引擎路径 createSqlitePhysicalSnapshot（VACUUM INTO + PRAGMA integrity_check），替掉 domain-backup.mjs 里的裸 copyFile：拷贝活的 SQLite 文件可能抓到一组撕裂页，而它只在日后读取时才失败，远晚于那次报成功的运行。④ 见证目录 133 文件折入（引擎要求 --attest-dir 解析到工作区根之外，故它自己的 snapshot 永远看不见）。⑤ 异地导出面：每对写 export-manifest.json（逐文件摘要 + fileSetDigest），未接线且刻意未接。\n\n实测证据（2026-07-27）：五对全部独立复验通过——digestsMatch=true、chain=SNAPSHOT_VERIFIED、域库恢复演练 ok。见证 133 份全部对应链上真实事件（读到 296 个事件），孤立 0、文件名不符 0；133 与 296 的差是预期的，attestation 是分区中途启用的。轮换以 retention=1 实证：先旧后新逐个删并把删掉的名字写进回执，且只在新的一对自证通过之后才动手。VM 拉取契约对真机 tcrn-platform-dev 实测：rsync 后 150 文件全部按摘要校验通过，探测目录已清理。每对约 583KB / 150 文件。\n\n本单最重要的产出不是脚本而是一条被找出来的根因：AOS 分区在今天之前从未被快照过，OneDrive 上十个快照目录里 4 个 DS、1 个 DS-FINAL、5 个 cross-project、AOS 零个。原因是 snapshot-manifest 在知识库 marker 的 eventHighWaterDigest 落后链头时以 KNOWLEDGE_HIGH_WATER_MISMATCH fail-closed，而这正是每次受治写入之后的常态（写入推进链头，marker 只在 knowledge-rebase 时前移）。它失败的方式格外容易误判：同一时刻 status 与 validate 都报 ok，只有 snapshot-manifest 非零退出且只打印一个 reason code、不给补救办法，运维看到的画面是「链是健康的，备份工具坏了」。引擎 fail-closed 是对的（lockstep 原则要求两者齐步恢复），错的是没有任何地方把这条前置写出来。故脚本每次运行前自查该项，不通过就以 knowledge_high_water_behind_chain_head 退出并在 lockstep.remedy 里写出补救命令，但不代做——那是受治写入。本次为打通它跑了一次 knowledge-rebase（v3→v4，offenders 0，该库 0 条记录故无可失效项）。\n\n两条我方措辞的更正，均因读源后发现原说法过度声称。其一：我原先在脚本注释里把 attestations 写成「recorded instant 被见证而非断言的证据」，这是过度声称。读 packages/cli/src/index.ts:487-505 后确认 tcrn.time-attestation.v1 是建议性且未认证的，引擎刻意要求它落在工作区根之外正是为了让它永不被误当受证物，且引擎不发布校验器；每份收据只说「在 observedAt 本机时钟读到这个值」，是顺序的旁证，不是任何瞬刻被谁见证过的证明。备份它保住旁证，不会升级旁证。改为按真实强度陈述，并加了唯一一件本地可检的事：收据 eventHash 是否对应快照中真实存在的事件（只报不拦——孤立收据不损坏链，为一份收据判整个备份失败是拿真备份换装饰性不变式）。其二：我此前说 OneDrive 上既有快照目录「只有一个 manifest」，错了；它们各自都含一份 .tcrn-workflow 树拷贝（11 到 76 文件），是我的 ls 把点开头的目录藏掉了。站得住的结论只是「AOS 分区从未被快照过」。\n\n另修一处顺手撞见的仪器问题：pnpm exec tcrn-workflow 在引擎仓自身根目录下不解析它自己的 bin，退 1 并打印 Command \"tcrn-workflow\" not found，读起来像调用写错而不像缺 self-link；改为按路径调 scripts/tcrn-workflow.mjs。\n\n⑤ 留给 Owner 的方向题（未擅自决定）：约束是「VM 拉」，本机持密钥与凭据，VM 只有 authorized_keys，今天它无法主动连回本机——这个不对称本身就是安全属性。从本机推不需要在 VM 上放新密钥，但意味着本机按计划伸手进 VM；让 VM 拉则需要 VM 持有能读本机的凭据。哪一种可接受是关于凭据放置的决定，故只做出「可拉」的面，不开路径。同时实测出far side 的天花板：VM 有 node v24 但无引擎无仓库检出，故它能证明字节完整到达，不能重跑 snapshot-verify 或域库恢复演练——字节完整性在那边，可恢复性只在有引擎的宿主上，这一条写进了每份 export-manifest 的 farSideVerification。\n\n不声称：本单不执行恢复，只证明每一半能恢复（域库半边重放导出进全新库比对，链半边由 snapshot-verify 报 SNAPSHOT_VERIFIED），那是演练不是恢复；链恢复同路径唯一且运维驱动；投影库刻意不在备份内，它从链重建。既存红门 pnpm verify / service:smoke 的 productLedMarkerPresent:false 与本单无关（把本单四处改动全 stash 后同样失败），已另立 TCRN-AOS-INC-011。",
       "decidedBy": [
         "minutes:3a0d27be789cadb0ccb353c1"
       ],
@@ -642,6 +971,122 @@ export const cockpitData: CockpitData = {
       "revision": 5,
       "scope": "着墨消费与选中样式清理(依赖 DS-S087 发包)。升级 @tcrn/ui-react/@tcrn/ui-tokens 至含着墨版本;删 AOS 侧一切自绘选中样式(picker outline 已于 3f8a9ed 删,余全查:grep 自有 CSS 中 data-selected/aria-current/outline/inset 残留);十一模块视觉走查(我的工作/收件箱/仪表盘/项目/工作项/看板/发布列车/知识空间/审议/审计/快照健康)+中宽度/暗色/reduced-motion 三态;phase3 legacy 收据页(work-management-mockups/phase3-dogfood-readback)按既有收据冻结明示不动。验收=全站选中面与 v6 样机一致,无「轴线+染色+淡底」残留。",
       "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:31acd4e7eddfb549ab7f12b5",
+      "externalKey": "TCRN-AOS-STORY-101",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "【已落地·2026-07-28】新建 scripts/locale-coverage-proof.mjs 并接入 package.json 的 locale:proof 与 verify 链(位于 usability:proof 之后、aos:frontend-shell-proof 之前),原一次性度量脚本 tmp-locale-census.mjs 已删除。三条不变式八项检查全绿:读 21 个源文件、558 条文案条目。\n\n【判据选择:源码侧而非渲染侧】原单写「取 AOS 自己的路由,在五种语言下各渲染一次」。实测后改为源码侧度量,理由是渲染侧对本条规则有结构性盲区:一个页面只渲染它这条路由需要的字符串,故渲染检查永远看不见那条只出现在无人探测屏幕上的缺项。文案条目的判据按形状匹配(对象字面量内含 en 字符串,即两个文案助手 pick 与 format 实际消费的形状)而非命名公约——叫 governanceCopy 的表、叫 roomCopy 的表、直接内联传给 pick 的字面量,风险相同,按公约找只会找到守公约的那些。生成文件 cockpit-data.generated.ts 刻意排除且这不是漏洞:那里的字符串是链上记录(工作项 scope 注解、纪要正文),属租户内容而非产品词汇,要求治理记录五语等于要求门去翻译链。\n\n【第二条不变式是真有牙的那条:菜单须由覆盖率派生】实测原状:app.tsx 把 tcrnLocaleMetadata(DS 声明的五语名册)直接传给 shell 的 locales 属性,即菜单声明的是「DS 允许消费者提供什么」,而非「本消费者的文案能答什么」。这正是缺失的规则形态:控件在,读者一点,页面渲染英文。已改为 servedLocaleMetadata——从 shell 字典的键覆盖派生。今日五语全覆盖故渲染菜单不变,价值全在覆盖率回退那天,而那天再补派生已经太晚。同时收紧 resolveLocale:原按 tcrnSupportedLocales 判定,现须同时在 servedLocaleMetadata 内,否则一个 ?locale= 指向「已声明未覆盖」的语言会渲染出一页英文却带着该语言的 lang 属性——比渲染默认语言更坏,因为它对读者与读该属性的辅助技术都声明了页面是一种它并不是的语言。第三项检查专防「派生」被写成第二份手维护清单:要求 servedLocaleMetadata 的定义式里出现 localeCopy 或 filter 或 Object.keys 而非硬编码数组。\n\n【突变双向实证】① 把 cockpit-governance.tsx 的 members 条目从五语删成两语:转红并点名「557/558 …… cockpit-governance.tsx [ja ko fr]」,文件、缺失语言、条目原文三者齐备。② 把 locales 属性改回 tcrnLocaleMetadata:8 项中 1 项转红。两次还原后全绿。\n\n【现状实测数据】558 条文案条目五语全备;shell 字典 89 键五语全备;五语中与英文逐字相同的值仅 productName 与 api(fr 另有 stories 与 initiative 与 story 与 action 四个外来词),即无假翻译。typecheck 净、113/113 测试、service:smoke 通过、usability 91/91、locale 8/8。DS 契约的 i18nDisposition 至此在消费方一侧首次具备可执行形态。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:1b9c201ce0d87507ab8fe120",
+      "externalKey": "TCRN-AOS-STORY-102",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "范围保持已按规则落门。检查 B 的探针由 4 条扩到 10 条：原先只探 /work、/work/board（两条静态样板）与 /deliberations，而 Owner 遇到这个缺陷正是在模块路由上——先筛项目、再点一下就回到全部项目——四条中有三条带项目筛选的路由根本没被探到。扩探后立刻红了两处：/work-items 的 status 与 /deliberations 的 q。诊断表明九条掉范围的链接全是改变该范围的控件本身，即本 Story 明写的例外，所以修的是门不是应用。例外的第一版按 URL 形状判定（同路由、且该键取别值或不带任何筛选），被变异测试打死：把工作项行链接改指 /work-items?project= 后门仍然全绿，因为「行链接丢了范围」与「清除控件」在字节上完全一样。改为按渲染区域判定：DS 在服务端标注 data-work-management-pattern，筛选控件落在 subnav 与 searchable-list，行落在 work-list 与 work-item-row；区域是关于读者在哪里点击的结构事实，不是对意图的猜测。区域推断本身也修了一处：最初取「最近的前一个标记」，把 /deliberations 的清除控件判成 machine-token-cell——那是个早已闭合的 span，与检查 F 记录过的「用距离代替包含」同一个错；改为跟踪标签深度取真正仍然打开的最内层区域。第四个例外标记 cockpit-clear 不是 DS 区域而是应用自己在元素上写的 data-cockpit-clear，读应用的声明比读包裹关系更准。四个标记全部对发射它们的源码做了存在性断言，跨两个仓：任一侧改名会让例外静默失配、在正常代码上报红，断言使其改为响亮失败。已知边界写进门内：本检查保证的是「筛选区域之外的链接不得丢弃读者的范围」，不保证一个筛选控件悄悄变成了清除控件——变异测试确认后者仍绿，因为设置为空的筛选片与清除控件是同一批字节，该情形由保存视图的计数与选中态承担。附带修掉一个真正的静默失明：本门文件里混进过一个字面 NUL 字节（HTML 标签剥离的分隔符写成了 NUL 而非空格），使整个文件被当作二进制，任何 grep 对它一律返回空且退出 0——两次搜索 statefulProbes 在含它两次的文件上都返回空才发现。字节已替换、原因已在原地记录。门 98 项全绿，变异三例中两例应红者红并带出区域名。全量复验：typecheck 0、migrations 0、113/113 测试、locale 8/8、service:smoke 0。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:2df29041894168313947105b",
+      "externalKey": "TCRN-AOS-STORY-103",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "两条存在性规则从「已写下」变为「可被证伪」。规则①索引面检索:原为两条路由的手记清单、两条本就已有检索、故一无所断;改为由投影记录数与页面渲染行数推导的阈值规则(阈值 40 记录、单独声明并在回执中报出),/work-items 持 422 渲染 120 首次被探测;/audit(四分区聚合)与 /my-work(全量渲染活工作、仅折叠已完成并把读者交给带检索的 /work-items)判为不欠检索,理由写在门内——门若索要设计刻意省略的控件,教出来的是死控件。规则②渲染引用可达:原八条路由中五条渲染零链 ID、以「本路由未渲染链 ID」计为通过(空探测是最静默的假绿),且遗漏 INC-018 亲口报的 /knowledge;改为全 shell 路由逐条探测、空探测发为 skip 不计绿、页面级 href 兜底收紧到所在 li。加固后门自身捕到两处真缺陷:cockpit-views.tsx 的 inboxRow 对全部 kind 硬编码 /work-items/<recordId>,把二十二条 minutes 引用送去无法显示纪要的工作项详情路由,而 cockpit-global.tsx 另有一份按 kind 解析的私有 inboxLink——一个问题两个答案、错的那个在渲染。修法为把唯一 inboxLink 提升进 cockpit-links.ts 与另三个解析器并列、删除重复实现。四道变异全红且各自点名:三条索引面各失其检索(SearchInput→input,编译得过、只掉 type=search)、/knowledge 去掉 hrefAttr 同时红 traversable-ids 与 id-links-reach-record。门 136 检查 0 红 19 skip;typecheck 0、113/113 测试、locale 8/8、service:smoke 0。两条反面教训已写进门:自写属性(data-cockpit-search)与容器标记(searchable-list)都不是控件的证据,它们恰好在能力被移除时存活。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:6305b77e426a369ad6952497",
+      "externalKey": "TCRN-AOS-STORY-104",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "导航可逆性规则已立于 DS 消费契约并配三道可证伪门。实查确认缺口在规则侧而非实现侧：INC-016 早已落地组件 href 支持（Navigation.tsx Breadcrumb 渲染 a 标签）与 AOS 两处接线，但 DS 全仓 gate 无一处提及 breadcrumb，契约亦无导航可逆性条款——即该能力今日撤回、pnpm verify 仍全绿。三处落地：①契约 productShellHardeningRules 新增 navigationReversibility 条款，明写四项判据（浏览器后退按钮不算、可点祖先加惰性当前页配对、主导航指向父列表不算因其丢弃读者到达时的范围、证明须断言 trail 内的锚而非 trail 元素存在），并入 requiredBeforeProductFrontendImplementation 与 requiredProof；②packages/ui-react Navigation.test.tsx 新增锚/惰性配对断言，含 selected 与 href 同给时 selected 优先的边界；③scripts/storybook-smoke.mjs 新增出厂页渲染断言，读 navigation-primitives-spec 故事的 trail 实际字节而非故事源码。四道变异全红且各指其门：组件撤 href（单测＋smoke 双红）、故事撤 href（仅 smoke 红，两门可区分）、契约条款软化（prose 断言红）、契约清单撤项（deepEqual 红）。AOS 侧 way-back 检查已按同一谓词度量，两条记录路由均以 trail 内锚通过。DS pnpm verify 全 14 门绿。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:e216d86a3a94390d9736880d",
+      "externalKey": "TCRN-AOS-STORY-105",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "已裁并已交付。方向裁定见 TCRN-AOS-MIN-005：影响首帧的偏好必须随请求送达，规则与机制归 DS 单一实现，AOS 只保留服务端读取与 html 属性落地（因 lang 与 theme 在 ProductShell 树外发出），AOS 侧重复的写实现删除。已落字节：DS d9af77d、AOS 609ee09，两仓均已推送并对服务器核实全 sha。附带修掉审议实测出的一处安全缺陷：DS 的 locale 此前经 readStoredString 原值直出（theme 与 collapsed 各自收敛，唯它没有），而该值成为 html lang 与字典索引且来自任何人可写的 cookie；AOS 因下游复跑 resolveLocale 而看不出，TMS 会照单继承。现于读取处与 setter 两处收敛。usability 门新增断言「首个响应体已遵从已存偏好」，DS 全门链绿。残余三项已记入 MIN-005 未决：Secure 按 protocol 条件化未做、requestCookieHeader 收窄为已解析三值的签名改造未做（属 DS 公开 prop 面变更）、Vary 边缘归一化未做。三项均不阻塞本 Story 的裁定与交付，故本单收 done 而非挂起——但接 CDN 或上非 localhost 部署之前必须先办前两项。",
+      "decidedBy": [
+        "minutes:2f09d03272da7bd59cb914d5"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:a8d5198a7d6e24c3c48c78c7",
+      "externalKey": "TCRN-AOS-STORY-106",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "执行完成：scripts/usability-proof.mjs 已落地并接入 pnpm verify（新增 usability:proof 脚本，插在 service:smoke 与 aos:frontend-shell-proof 之间）。八条不变式对活服务经 HTTP 断言：A 每个已提供语言都真被服务（判据是词典键覆盖加一张具名的 productChromeVocabulary 18 条短语表，不是比率——比率会把翻译好的 zh-CN 和一字未翻的 ja 判成同一档）；B 页面自己的链接保留产生该页面的查询态；C 下钻页提供的返回目标是被 fetch 过的（statusOf 等于 200）而非正则匹配像的；D 渲染出的链上 id 落在链接里；E 检索型模块有检索控件；F 每个渲染出的链接解析为 200，且跑全路由表——「挑路由」正是既有门只断言 /cockpit 与 /work 的由来；G recordAddressableModulePaths 覆盖 app.tsx 解析的每个前缀，且该清单是从 app.tsx 读回来的，故门不持有第三份答案；H 每条路由服务自己那一页，加新增的 retired-route-refused（表外退役名必须 404）。实测 69 项全绿。**本 Story 自身的教训值得记**：门写好了、能跑、当时报 99/100，但它没被接进 verify 链，所以整批工作期间它一次都没在收官时跑过——这与它存在要解决的那件事是同一个失败（「门只保护它读过的字节」，一道没被任何链调用的门读不到任何字节）。接入后跑全链立刻捕到第十项缺陷：aos:frontend-shell-proof 自 2026-07-26 起一直红着无人处置，已立 INC-022。也就是说这道门的第一次真实收益不是它自己的八条不变式，而是「让 verify 链的红重新可见」。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:b893342f21118b08942269ab",
+      "externalKey": "TCRN-AOS-STORY-107",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "四项全交付（DS 104afb9、AOS 986f8c5，均已推送并核实全 sha）。① Secure 已按 protocol 条件化：HTTPS 上置位、明文本机不置，撤掉「一律不设」这个假二选一——明文侧的理由只对明文成立，而改写 locale 就是改写服务端渲染分支。② requestCookieHeader 已删除，替换为 requestPreferences（已解析三值）加导出的 readPreferenceCookieValues；解析在消费方服务端跑，原始 Cookie 头不再跨包边界。收窄到 undefined 而非默认值是刻意的：不可信的 cookie 不得压过产品自己的 fallback。残余适用性分析（替换前）：该 prop 发布于数小时前的 d9af77d，消费方恰一个且同批更新，无外部消费者，故直接替换不留双轨。③ AOS 已删本地 cookie 解析改用 DS 导出，仅保留把结果落到 html 属性（该部分只有在 React 树外发 lang/theme 的产品才做得到）。④ README 已列名三个偏好 cookie 与一年期限、SameSite=Lax、HTTPS 带 Secure。审查捕到并已修的一条：DS 的 AI 消费契约与 ui-react README 仍在教消费方传整个 Cookie 头，且 smoke 有一条断言把那句话钉成绿的——即 prop 删掉了、而「文档说要这么用」这件事被门判为正确。两处文档已改指新解析器，断言已反转为按名禁止已退役的 prop。刻意不做：Vary 边缘归一化，接 CDN 前才需要，仍挂在 MIN-005 未决项上。",
+      "decidedBy": [
+        "minutes:2f09d03272da7bd59cb914d5"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:96130937712e42f0164b54dc",
+      "externalKey": "TCRN-AOS-STORY-108",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "已交付（DS 89d9716 已推并核实）。三级全部落在 DS 的 max-width:760px 块内，实测 375x760 与 390x844 两处第一条可见工作项由 1469 降到 520，首次进入首屏；桌面与平板逐像素未动。① 新增 MobileNavToggle（菜单图形、44px 触达、aria-expanded 加 aria-controls），默认收起；收起用 display:none 而非位移，实测收起态可 Tab 到的导航链接 0/11、展开与桌面均 11/11；收起是 CSS 默认值，故服务端渲染直接产出收起态，无脚本、无水合后修正。开合位为 controller 内瞬态 state，不带 storage key、不进 URL、不复用 collapsed（后者被持久化并写进每个产品链接）。侧栏在移动端 sticky，因为该控件现在是这一视口通往全部 IA 的唯一入口。② utility 行三控件同一行，130→51。③ 视图标签与快速筛选各改单行横滚。fixture 由 1 组 2 项提到 4 组 11 项的生产 IA 规模——这条是本单的根因而非装饰：一个在没有消费方使用的规模上跑的外壳预言机，不会以消费方失败的方式失败。视觉基线：仅 5 张 mobile-390x844 移动并已重拍，其中含已验收的 mobile-dark-zh-cn-work-queue，**按 MIN-006 未决项如实标注为重新验收而非基线刷新**。附带新增 css-template-integrity-proof 并接入 tokens:proof：组件样式表是模板字面量，注释里一个反引号就会把它从中间截断（本批次踩了三次，编译器只报注释行的 TS1005）；已取红证——注入一个反引号后样式表从 85975 字节截到 66766，门变红。DS pnpm verify 绿。",
+      "decidedBy": [
+        "minutes:de47de4a4f95e07dec79f0f7"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:5d82ecf62dbe8b51a0a53629",
+      "externalKey": "TCRN-AOS-STORY-109",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:c5de2f86698379bbd3551679",
+      "revision": 6,
+      "scope": "已交付（AOS c24ae11 已推并核实）。① forceExpanded 与 isForceExpandedOwnerQualityState 及 reason mobile_collapse_hidden_policy 全部删除——它们只为在折叠控件被隐藏的前提下把移动端侧栏钉开，是消费方为 DS 形态打的补丁；DS 现在自己管开合，读者的折叠状态就是读者的。② data-owner-quality-collapse-policy 取值改为 mobile-hidden-width-collapse-affordance，语义收窄为只指宽度折叠控件；对应断言同步。③ 首屏门改判据并**已取红证**：不再量 #work-heading（1x1、clip:rect(0,0,0,0)，读者不可见，故旧棘轮可以在页面什么都没显示时照绿），改为量可见标题与第一条工作项对真实视口高度，失败信息带出两个实测值；还原 DS 三级中的任意一级后，门报「first row 1125, fold 844」变红。④ 新增两条断言补上那半条从来没有判据的策略——控件存在且默认收起、且收起意味着 display:none（链接离开 Tab 序而非只是离开屏幕）；这半条无人断言，正是四周内没有任何机制发现「导航根本收不起来」的原因。⑤ 退役收据字段 mobileNavigationCompactFirstViewport（见 INC-027）。AOS pnpm verify 绿。",
+      "decidedBy": [
+        "minutes:de47de4a4f95e07dec79f0f7"
+      ],
       "sprintWorkId": null
     },
     {
@@ -1036,6 +1481,18 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-Design-System",
+      "id": "work:53fe80c9bc4cc92b800d5423",
+      "externalKey": "TCRN-DS-EPIC-030",
+      "kind": "Epic",
+      "status": "planned",
+      "parentId": "work:0070161d5e465d2ae591ab86",
+      "revision": 2,
+      "scope": "消费方实测暴露的 DS 缺口（源自 Owner 2026-07-27 使用 AOS 首个可用版本后报的六项）。本 Epic 只收「缺口在 DS 侧」的那部分，AOS 侧的接线与实现在 AOS 分区另有单。两条：① Breadcrumb 无 href 故最深的详情页无回路（STORY-090）；② 消费契约对「SSR 消费者的偏好载体」主动弃权，导致每个消费者各自发明一套而 AOS 那套在裸入口漏（STORY-091）。共同点值得记下：两者都不是「规则太软没被遵守」而是「规则从未存在」——DS 自己两个面包屑一个可点一个不可点从未被要求解释，契约第 530 行则明文弃权。故本 Epic 的产出不止组件字节，还包括把判据写成可执行形态；反面教材是同一份契约第 891 行的 i18nDisposition——它是散文，既没点名 locale 集合也没有消费侧可执行形态，结果契约成功交付了语言菜单却从未交付译文，这正是 Owner 第一项的根因。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
       "id": "work:33ef36e36a381e135ee5a3b6",
       "externalKey": "TCRN-DS-INC-001",
       "kind": "Incident",
@@ -1081,6 +1538,42 @@ export const cockpitData: CockpitData = {
       "parentId": "work:d727bb2ae2c590f8a8641fd6",
       "revision": 5,
       "scope": "发现记录:Storybook 侧栏样式复制未消费。storybook.css 的 .tcrn-bookmark-nav 选中规则逐字节手抄包内 NavItem 语法(inset 3px 0 0+brand+700),不消费包组件或类——今日视觉一致纯属巧合式同步,包侧改样式站点静默落后,即「复制漂移」。这正是平台仪器纪律反对的静默降级的样式版。处置=S089 改为消费;完成后本单关闭。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:c6f1426c62cc270e37c9a348",
+      "externalKey": "TCRN-DS-INC-005",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:d727bb2ae2c590f8a8641fd6",
+      "revision": 5,
+      "scope": "【已修·2026-07-27】STORY-087「选中即墨」的残余清扫，外加两处假绿。① 门看不见第五第六份拷贝：scripts/selection-grammar-proof.mjs 的 SELECTION_SELECTOR 只认属性选择器（data-selected / aria-current / data-doc-nav-item-active），而这两份拷贝都不是属性——一个是按下态筛选片 .tcrn-table-toolbar__chip[aria-pressed=\"true\"]、一个是修饰类 .tcrn-loading-status__chip--active，两者都仍在刷品牌色，而该门报 findings: [] 且 ok: true。实测：改动前后两侧都绿（各 21 条规则），即这道「专为拦住第五份拷贝而立」的门恰好瞎在第五份拷贝上。门自己的注释早已写明这个边界：「a gate only protects the bytes it reads」。已加宽至 aria-pressed / aria-selected / --active / --selected 修饰类，扫描规则数 21→24。变异实证：把修复前字节放回，加宽后的门退出码 1 并逐条点名三处（Navigation.tsx 的 toolbar 片 + storybook.css 与 story-demo-styles.ts 两份 loading 片），故它确为真门而非改宽了范围的装饰。边界拒绝：未把 [data-active] 纳入——alpha-styles.ts:74 的 .tcrn-doc-theme-transition-wash[data-active=\"true\"]说的是「这段淡入正在跑」而不是「这一项被选中」；纳入它会让门不再名副实，与 AOS-INC-011 里拒绝翻译 nav id 同一条理由。② 判据实质：TableToolbar 的片与 WorkQuickFilters 都是导出的筛选片、同义「此筛选被选中」，却各说一套语法。分层依据取自基规则而非观感：.tcrn-table-toolbar__chip 自带 border: 1px solid（有框→提升边为 selection-edge），而 .tcrn-work-quick-filters [data-selected] 无框（→取 selection-fill）。一套语法不等于一条声明。③ 第二处假绿：pnpm tokens:proof 里的 demo-styles-sync --check 报「in sync」，而 storybook.css 仍在刷品牌色——它比对的是构建产物 apps/storybook/dist/story-demo-styles.js（01:40）而不是被改的源文件（12:36）。构建一跑它即转红（真实退出码 1，确非假门），故此门带一条未申明的前置：其判据只在 dist 新于 src 时才成立。已 pnpm demo-styles:sync 重生成，storybook.css 第三份拷贝随之跟上。④ 我方预测被实测推翻：我曾判定六条感知基线会移动（component-family-index 与 icons-motion 各三视口，两片在首屏即为选中态：TableToolbar 的「全部」片渲染即 aria-pressed=\"true\"）。实测 regressions: 0，逐条距离 maxCell 0–1（限 8）、meanAbsolute ≤0.02（限 2），远在容差内，故未 rebase——拿 --update-visual-baseline 强推一遍正是该门当初要消灭的基线 churn。顺带记下该感知预言机的一处覆盖限度：component-family-index@desktop 读数为 0/0，1440×900 页面缩到 16×16 后这对小片完全不留痕，即容差内不等于被看见。⑤ 另发现一处既存缺陷（与本次改动无关，未并入）：docs/verification/internal-alpha/visual-baseline-manifest.json另存一份同名签名，且由 proof 无条件重写——无容差、无门。同源签名存于两文件而两套纪律：受门那份靠容差吸收环境噪声并保持稳定，manifest 那份每跑必改。实测同机两连跑字节完全一致（故非随机），但与已提交值有四条不同，即那四条是在另一个渲染环境（此机 browser 149.0.7827.55）落的。本次提交刻意不带该文件，以免把环境噪声当成果一起签进去；结构上它与 AOS-INC-011 同类——一份真值两处拷贝而只有一处受治。no-overclaim：pnpm verify 十四门全绿（退出码 0）；四文件已提交，manifest 一处未修留待另单。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:58b04cc47c49f921b09d0e50",
+      "externalKey": "TCRN-DS-INC-006",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 3,
+      "scope": "**更正本单上一条注解中我自己写错的一句。** 我写的是「全仓唯一提到 CHANGELOG 的地方是 scripts/scaffold-proof.mjs 第 10 行的文件名清单——那是存在性检查,不读一个字节的内容」。这句**不成立**,由一轮独立复核推翻并经我复现:scripts/no-private-input-scan.mjs 第 143 行 walk(\".\") 遍历整棵树(只跳过 .git/node_modules/dist 等八个目录),第 146 行对每个被扫文件 readFileSync 全文,所以 CHANGELOG.md 的字节**每次 pnpm scan 都被读**。我漏判的原因很具体:我用 `grep -rn CHANGELOG scripts/ package.json` 找引用,而这个门是**按目录遍历到达**文件的,从不提文件名——于是按名字找引用的方法对它永久失明。\n\n更正后的正确表述,也是本单真正的教训:**这个文件不是没被读,是没被核对。** 它被完整扫过,扫的是禁用措辞;没有任何判据把它对发布的陈述与发布本身相比。一份文件可以被逐字节扫描而仍然在撒谎,只要没有东西拿它和它所描述的对象对照。门的头注与 CHANGELOG 正文均已按此改写。\n\n同轮另两条更正,一并记录:(1) 我在门里写「v1.0.1–v1.0.5 发布时本仓还没有按版本分节的做法」——不成立,`git show v1.0.0:CHANGELOG.md` 与 v1.0.5 都只有 `## 1.0.0` 一节且**根本没有 `## Unreleased`**;所以本仓是切过版本节的,「只有 Unreleased」是最近两次发布才出现的做法。floor 仍取 2.0.0,但理由改为「那五个补丁版本本就没有自己的节,现在补写等于凭记忆虚构」。(2) 门原本对缺节的措辞是「a released version with nothing written down」——过头了:v2.0.0 与 v2.1.0 的 GitHub Release 各有 2622 与 971 字的说明,内容是写了的,只是没写进这个文件。措辞已收窄为「这份文件没有交代某个已发布版本」。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:331bcbed06590d39c677a021",
+      "externalKey": "TCRN-DS-INC-007",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "仓里带版本号的文档全都在漂,原因与 [[TCRN-DS-INC-006]] 同一条:**没有任何门读它们**。发布前普查时发现三族,漂的时长各不相同:\n\n1. docs/tms-adoption-guide.md:10 写「Three packages, all at 2.0.0」——漂了一个发布(v2.1.0 没改它)。全仓无任何脚本、收据或文档引用这个文件名,它不被任何哈希覆盖。\n2. packages/{ui-tokens,ui-copy-state,ui-react}/README.md 三处都写 Version `1.0.0`——**漂了两个发布**。唯一读 README 的门(readme:proof)只按子串查边界措辞,从不读版本行;也没有任何收据哈希 packages/*/README.md。\n3. scripts/scaffold-proof.mjs 把 v1.0.0 的发布事实写死在**生成器**里(第 50 行 tagName、第 55 行 releases/tag/v1.0.0、第 112 行 releaseBaselineVersion、第 169 行 markdown 模板)。这一条最阴:它落进 docs/verification/scaffold-proof.json,而改那个 JSON 是无效的——下一次 pnpm scaffold:proof 会原样覆盖回去。所以「看起来能改」的地方恰恰改不动。\n\n三族的共同点与 INC-006 完全一致:**这些字节没有被任何判据读过**,于是漂移不产生信号。通则记在这里——「门只保护它读过的字节」这句在本平台已被引用多次,而这里给出了它的第二种表现形式:不是门写错了,是根本没有门,而所有人默认「发布流程会带上它们」。发布流程是人,人两次都忘了。\n\n**修法**:三族全部改到本次版本;并加一道读文档版本行的门,判据为「凡带版本号的受管文档,其版本须等于 packages/*/package.json 的版本」,清单显式列出受管文件,新增带版本号文档时须入册。第 3 族须改生成器而非产物,并在本单里裁定 releaseBaselineVersion 究竟是「跟随当前发布」还是「钉在 1.0.0 基线」——字段名像后者,而紧邻的 githubRelease.tagName 明显是前者且已落后两个版本,两者不可能同时为真。",
       "decidedBy": [],
       "sprintWorkId": null
     },
@@ -2765,6 +3258,30 @@ export const cockpitData: CockpitData = {
       "parentId": "work:d727bb2ae2c590f8a8641fd6",
       "revision": 5,
       "scope": "Storybook 站点外壳改为消费包样式。现状:侧栏 .tcrn-bookmark-nav 的选中样式是 storybook.css 手抄包 NavItem 规则(左轴 3px+brand+700 逐字节照抄)——复制而非消费,包侧演进它静默落后(INC-004 的漂移风险)。改法:侧栏、文档检索行(.tcrn-doc-search-result)及站点全部选中面切换为包类名/包 CSS 或以包 token 组合;着墨落地后全站同语法。验收:grep storybook.css 无手抄选中规则残留;肉眼对照包与站点选中态一致;INC-004 随本 Story 关闭。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:157c3ba8a19b0f4a40fba9a9",
+      "externalKey": "TCRN-DS-STORY-090",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:53fe80c9bc4cc92b800d5423",
+      "revision": 2,
+      "scope": "Breadcrumb 补可导航能力（源自 Owner 2026-07-27 报的 AOS 第四项「全站缺返回」）。实测缺口：DS 有两个面包屑而纪律不同。① Navigation.tsx:516 的 Breadcrumb 收 ProductLauncherProps（仅 id 与 label 与 selected），渲染为 <span aria-current>——不是链接也不是按钮，纯装饰不可点；② DataDisplay.tsx:702 的 WorkPageHeaderBreadcrumb 收 id 与 label 与可选 href，有 href 即渲染 <a>。即「可导航的面包屑」在本仓已经存在，只是长在另一个组件上。消费方错位实证：AOS 唯一一处 Breadcrumb 在 cockpit-detail.tsx:89，即最深的详情页——最需要点回去的地方用了装饰那个；而可导航的 WorkPageHeader 在六个文件八处，全是顶层列表页，祖先层级最浅、href 基本无处可填。改法：给 Breadcrumb 的项加可选 href，有则渲染 <a href> 无则维持现状（向后兼容，现有调用点零改动），形状照抄同仓既有的 WorkPageHeaderBreadcrumb 而非另发明一套——本仓已有答案时不引入第二种语法。边界：ProductLauncher 与 ProductSwitcher 与 ModuleTabs 与 SectionTabs 与 SegmentedNav 共用同一个 ProductLauncherProps，故不直接改那个共享接口（会把 href 塞给五个不需要它的组件），改为给 Breadcrumb 单独一个 props 类型。规则判据（Owner 要求的「为什么会发生」）：不是规则太软没被遵守，是规则从未存在。消费契约 ai-consumption-contract.ts 第 894 行把 WorkPageHeader 列进「必须从包里 import」的清单，但对「面包屑该不该可点」「深页该不该有回路」一字未提；检索那条至少写了「无真实全局检索时应省略而非渲染惰性占位」，返回连这种程度的表态都没有。故 DS 自己两个面包屑一个可点一个不可点，从未被要求解释。对应的规则修复不在本 Story——见同批 AOS 分区 STORY-104 的可导航性条款。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "id": "work:ed1c677eb046a85d0d6f9130",
+      "externalKey": "TCRN-DS-STORY-091",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:53fe80c9bc4cc92b800d5423",
+      "revision": 2,
+      "scope": "消费契约补一条：SSR 消费者的用户偏好须有服务端可读载体（源自 Owner 2026-07-27 报的 AOS 第五项「切页闪默认语言与日间模式」）。Owner 已裁定此项落 DS 定契约、AOS 出实现。实测现状：DS 侧组件无需改动。useProductShellController（Navigation.tsx:1082）已收 initialTheme 与 initialLocale 与 initialCollapsed，且 storage 只在 useState 初始化器里读一次（1101-1103 行）没有覆盖式 effect，即 DS 不阻止消费者注入服务端解析出的偏好。真缺口是裁定缺位：契约第 530 行明说「product persistence may remain DS-defined outside reviewed parity routes」，等于对「偏好用什么载体传输」主动弃权；弃权的后果是每个消费者各自发明一套，AOS 发明的那套在裸入口上漏。本 Story 只补条款：凡 SSR 渲染的消费者，用户偏好（语言与主题与侧栏收起态）须有服务端可读的载体，localStorage 只能作为客户端镜像而不能是唯一真值；并写明优先级 query > 服务端载体 > 默认，使 owner-review 路由靠 query 强制状态的既有用法（AOS 的 resolveOwnerQualityRoutePolicy）继续成立。判据形态：条款须落成可执行判据而非散文，与 i18nDisposition 第 891 行的失败方式相反——那一条也是散文（「must use the approved locale and copy-state contract」），既没点名 locale 集合也没有消费侧可执行形态，结果是契约成功交付了语言菜单却从未交付译文。边界：本 Story 不改任何 DS 组件字节，只动契约源 ai-consumption-contract.ts 与其判据；AOS 侧的 cookie 实现属 AOS 工作（同批 INC-017），不在本 Story。",
       "decidedBy": [],
       "sprintWorkId": null
     },
@@ -5767,10 +6284,10 @@ export const cockpitData: CockpitData = {
   "conferences": [
     {
       "partitionId": "TCRN-AOS",
-      "id": "conference:db86593a43bdb91d9cabfb02",
-      "externalKey": "TCRN-AOS-CONF-001",
-      "title": "AOS 设计:承接 Workflow 数据的驾驶舱——定位、功能族与开发方式",
-      "type": "strategy",
+      "id": "conference:35e03ea2c0a281ccd0f4b9b7",
+      "externalKey": null,
+      "title": "既有实现处置:三层定向处置裁定与交付物一致性要求",
+      "type": "architecture",
       "status": "closed",
       "workIds": [
         "work:ff2290f36de29780d18d4323"
@@ -5778,8 +6295,19 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-AOS",
+      "id": "conference:46a7640d3205407a263a6fc7",
+      "externalKey": null,
+      "title": "审议采用三步公约的采用与自身 dogfood",
+      "type": "architecture",
+      "status": "closed",
+      "workIds": [
+        "work:361ed77fb0f61d6cabe695d2"
+      ]
+    },
+    {
+      "partitionId": "TCRN-AOS",
       "id": "conference:6f4c580c6ea63e21274f5fdf",
-      "externalKey": "TCRN-AOS-CONF-002",
+      "externalKey": null,
       "title": "部署与真值拓扑:镜像段边界、两段式迁移方向、VM 专机之问与定期备份方案",
       "type": "architecture",
       "status": "closed",
@@ -5789,10 +6317,35 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-AOS",
-      "id": "conference:35e03ea2c0a281ccd0f4b9b7",
-      "externalKey": "TCRN-AOS-CONF-003",
-      "title": "既有实现处置:三层定向处置裁定与交付物一致性要求",
+      "id": "conference:ae0e6ae093a8e3dbada63507",
+      "externalKey": null,
+      "title": "移动端首屏:导航形态、判据与拥有方",
       "type": "architecture",
+      "status": "closed",
+      "workIds": [
+        "work:23153d0579ee04553f6b994b"
+      ]
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "conference:b1b60e36d9b27fc41e3f5d66",
+      "externalKey": null,
+      "title": "消费者样式边界与首帧偏好归属：三道方向题",
+      "type": "architecture",
+      "status": "closed",
+      "workIds": [
+        "work:c5de2f86698379bbd3551679",
+        "work:e216d86a3a94390d9736880d",
+        "work:46f8549460df3011d454e580",
+        "work:e644b2f2e68bf49932658e71"
+      ]
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "conference:db86593a43bdb91d9cabfb02",
+      "externalKey": null,
+      "title": "AOS 设计:承接 Workflow 数据的驾驶舱——定位、功能族与开发方式",
+      "type": "strategy",
       "status": "closed",
       "workIds": [
         "work:ff2290f36de29780d18d4323"
@@ -7229,6 +7782,19 @@ export const cockpitData: CockpitData = {
     },
     {
       "kind": "unresolved",
+      "partitionId": "TCRN-AOS",
+      "recordId": "minutes:220142661d1140f8c175980e",
+      "externalKey": null,
+      "title": "execution:mode = synthesis-only(理由:议题为把已裁定三步写成文本,非多方案取舍)。三步公约采用并落 docs/deliberation-adoption-convention.md;零引擎改动,因引擎能力已建而命令面不可达(v0.7.0 复核 HEAD 2e6cfe30);绑定只证一致性不证真实性,不绑定时不得暗示独立性;本场会议自身即首个 dogfood 实例。",
+      "detail": {
+        "reason": "open-issues",
+        "open": 3,
+        "recorded": 3
+      },
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
       "partitionId": "TCRN-Design-System",
       "recordId": "minutes:3f0fcbfb8ce0c4e593e71c66",
       "externalKey": null,
@@ -7536,6 +8102,32 @@ export const cockpitData: CockpitData = {
         "reason": "open-issues",
         "open": 3,
         "recorded": 3
+      },
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-AOS",
+      "recordId": "minutes:2f09d03272da7bd59cb914d5",
+      "externalKey": "TCRN-AOS-MIN-005",
+      "title": "执行形态 multi-agent-deliberative：四立场各由彼此看不见的独立上下文产出（工作流 wf_74b1f9b9-e5b），未绑定 host-execution 收据，故形态是记录者陈述而非可独立核验之证据。三题两轮后收敛，且三方各按对方实测改判。Q1 准许消费方自持纯布局类，但门不得按 tcrn-aos- 前缀开——实测 createDocumentCss 124 规则中 89 条带该前缀、35 条不带，不带的那批恰含契约点名的 font-size 与 gap 字面量，按前缀建门会在最该红的地方假绿。Q2 不设笼统例外亦不整体准入，按 rejectCriteria 字面二分并逐类登记日落。Q3 规则与机制归 DS，但入口不是 requestCookieHeader，改为只收已解析三值。本场最有价值的产出是一次事实更正链：Verity 一轮称 23 条直改 DS 类、二轮自行重测更正为 4 条；主线程复核确认 .tcrn-work-split-view 确为 DS 定义（DS 内 7 处）而 .tcrn-work-module-* 与 .tcrn-phase3-readback* DS 内为零——即两病两药：前者须准入、后者只是漏 aos 中缀应改名。",
+      "detail": {
+        "reason": "open-issues",
+        "open": 5,
+        "recorded": 5
+      },
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-AOS",
+      "recordId": "minutes:de47de4a4f95e07dec79f0f7",
+      "externalKey": "TCRN-AOS-MIN-006",
+      "title": "执行形态 multi-agent-deliberative：五份提案与三份评审各由彼此看不见的独立上下文产出（工作流 wf_306b7fb3-e6e），未绑定 host-execution 收据，故形态是记录者陈述而非可独立核验之证据；且四条立场均为记录者压缩自远超 2048 字节的原文，非逐字，全文在该 run 的 journal。评审三比零地推翻了单子的原始命题：INC-025 写的「首屏够不到标题」量的是 #work-heading，而它是 1x1、clip:rect(0,0,0,0)、class 带 sr-only 的元素，读者看不见——真实数字是可见标题在 880、第一条工作项在 1469。据此**任何只动导航的修法都到不了数据**：抽屉把第一条工作项移到 785、就地折叠移到 991，对 760 折叠线都不够。三名评审二比一支持「首屏预算」而非「修导航」，异议者（契约视角）主张零消费方 prop 的最小机制，其理由被并入裁定而非否决。Owner 于 2026-07-28 裁：按建议方案推进。第二条方向题（320px 是否在范围）不由裁量而由事实定掉——DS 自己的 responsive-mobile 标准写明的证明视口是 390px，故 320px 不在已声明的地板内，机制随之取安全的就地折叠。实测四点：375x760 与 390x844 两处，就地折叠加三级把第一条工作项送到 618，均进首屏；抽屉组合到 412；320x568 下就地折叠组合为 618 不进，仅抽屉组合进——该差额作为具名残余记录，不作为采纳理由。",
+      "detail": {
+        "reason": "open-issues",
+        "open": 4,
+        "recorded": 4
       },
       "severity": "attention"
     },
@@ -8649,6 +9241,21 @@ export const cockpitData: CockpitData = {
       "dissolvedCount": 2
     },
     {
+      "minutesId": "minutes:220142661d1140f8c175980e",
+      "externalKey": null,
+      "surface": [
+        "extensions 受治通路待 W 侧立单与实现；在那之前文本层声明无机器校验",
+        "可信采集方(EPIC-020)未建，故真实性(而非一致性)今日无法证明",
+        "本公约尚未在 DS 与 TMS 两分区实践过，跟仓适用宣告待首次异分区使用时检验"
+      ],
+      "effective": [
+        "extensions 受治通路待 W 侧立单与实现；在那之前文本层声明无机器校验",
+        "可信采集方(EPIC-020)未建，故真实性(而非一致性)今日无法证明",
+        "本公约尚未在 DS 与 TMS 两分区实践过，跟仓适用宣告待首次异分区使用时检验"
+      ],
+      "dissolvedCount": 0
+    },
+    {
       "minutesId": "minutes:5da0b8ea8b8421cb1f3a1e89",
       "externalKey": "TCRN-AOS-MIN-001",
       "surface": [
@@ -8690,6 +9297,42 @@ export const cockpitData: CockpitData = {
         "既有组件对新 Layout 的承载力待首切片逐一核实",
         "依赖治理的能力去向(是否另立轨道承接外采公约审查)待裁",
         "A 层删除的执行时点:建议随各 Story 就近清理而非单独一刀"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:2f09d03272da7bd59cb914d5",
+      "externalKey": "TCRN-AOS-MIN-005",
+      "surface": [
+        "Secure 属性未落：Sable 主张按 protocol 条件化（非 localhost 一律置上），本场未实施，待单独处置。",
+        "requestCookieHeader 改为只收已解析三值的签名改造未实施：属 DS 公开 prop 面变更，本场只先做了 locale 收敛与类型放宽。",
+        "Vary: Cookie 以整头为键，接入 CDN 前须边缘归一化为小变体键；在此之前不得撤掉 no-store。",
+        "Q1 与 Q2 的门尚未建造，裁定今日仍无可执行谓词；在建成前本场三条裁定与 INIT-010 契约同命——可读而无处失败。",
+        "隐私声明尚未列名三个偏好 cookie 及其一年期限。"
+      ],
+      "effective": [
+        "Secure 属性未落：Sable 主张按 protocol 条件化（非 localhost 一律置上），本场未实施，待单独处置。",
+        "requestCookieHeader 改为只收已解析三值的签名改造未实施：属 DS 公开 prop 面变更，本场只先做了 locale 收敛与类型放宽。",
+        "Vary: Cookie 以整头为键，接入 CDN 前须边缘归一化为小变体键；在此之前不得撤掉 no-store。",
+        "Q1 与 Q2 的门尚未建造，裁定今日仍无可执行谓词；在建成前本场三条裁定与 INIT-010 契约同命——可读而无处失败。",
+        "隐私声明尚未列名三个偏好 cookie 及其一年期限。"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:de47de4a4f95e07dec79f0f7",
+      "externalKey": "TCRN-AOS-MIN-006",
+      "surface": [
+        "320x568 不在 DS 声明的地板内（其 responsive-mobile 标准写的是 390px），实测就地折叠组合在该宽度为 618 不进首屏。作为具名残余记录；若日后裁定 320px 入范围，机制需改抽屉，那是一次二次迁移。",
+        "旋转的手机（812x375，高于 760 断点故走桌面路径）实测整个治理组永久够不到；与本裁定无关，另立 TCRN-AOS-INC-026。",
+        "761px 处桌面形态第一像素实测 16px 横向溢出，无人断言；归入 INC-028 的 DS 门盲区。",
+        "已验收的视觉实例行 mobile-dark-zh-cn-work-queue 需重拍，属重新验收而非基线刷新，施工时须如实标出。"
+      ],
+      "effective": [
+        "320x568 不在 DS 声明的地板内（其 responsive-mobile 标准写的是 390px），实测就地折叠组合在该宽度为 618 不进首屏。作为具名残余记录；若日后裁定 320px 入范围，机制需改抽屉，那是一次二次迁移。",
+        "旋转的手机（812x375，高于 760 断点故走桌面路径）实测整个治理组永久够不到；与本裁定无关，另立 TCRN-AOS-INC-026。",
+        "761px 处桌面形态第一像素实测 16px 横向溢出，无人断言；归入 INC-028 的 DS 门盲区。",
+        "已验收的视觉实例行 mobile-dark-zh-cn-work-queue 需重拍，属重新验收而非基线刷新，施工时须如实标出。"
       ],
       "dissolvedCount": 0
     },
@@ -9723,6 +10366,216 @@ export const cockpitData: CockpitData = {
     }
   ],
   "threads": {
+    "conference:35e03ea2c0a281ccd0f4b9b7": [
+      {
+        "conferenceId": "conference:35e03ea2c0a281ccd0f4b9b7",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:5cef2f89a110b82ba720bc65"
+        ],
+        "externalKeys": [],
+        "body": "三层处置。A 层删除:资源物化族、文档发布流水线、adapter-codex、Assignment 派工单(⚠ 同结构的 AgentRun 必须留,它是 S016 执行观测的记录体,此对须拆开砍)、依赖生命周期治理(⚠ 删除须记明能力去向:它是外采公约许可证与供应链审查的实现候选,非无人认领死码)。B 层保留:脱敏机、确定性 ID 派生、SQLite 仓储与路径硬化(符号链接祖先拒绝、route-owned 根断言)、backup.ts 全套、mcp-server 传输门控、gateway 六段管线与 rejectClientAuthorityParams、work-readback 权威拒绝与响应预算信封、FTS5 知识检索层、evidence 全部与 95 个测试、execution-ledger 的确定性事件键派生规则(移作投影导入去重,其执行溯源职能让位给链)。C 层前端作起点:app.tsx 998 行 ProductShell(已避开 TMS 的 RSC 水合坑)、work-management-mockups.tsx 1822 行 45 DS 符号 9 页、phase3-dogfood-readback.tsx 913 行只读取数范式。D 层新建:链客户端、链形状瘦投影类型(**不得复用 StoryRecord**,后者要求 problem/user/expectedBehavior/acceptanceCriteria/estimate 而链上全无,强行复用即编造字段,违反 no-overclaim)、AOS 自有域字段、as-of、安全写面。\n\n对切换段的诚实修正:保全派「五件套已建一半」经复核证伪——append-only 记录流与哈希链并未建成(现有为单表触发器,非同一件事)。既有实现是起点非地基,MIN-002 的一致性矩阵与 fallback 要求不放松。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:35e03ea2c0a281ccd0f4b9b7",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:821f73905f79d23418acb2f2"
+        ],
+        "externalKeys": [],
+        "body": "Owner 裁定(逐字要点转写,2026-07-26):「同意,但是你需要给我和我们确认过的前端一致的交付物,包括 Layout」。\n\n据此确立**交付物一致性要求**:三层处置的 C 层「前端作起点」仅指复用其技术底座(ProductShell 集成、主题与多语言、URL 规范化、静态渲染、DS 接线方式、只读取数门控范式),**不得以既有 mockup 页面充当交付物**。最终交付的界面必须与已确认设计逐屏一致:v2 六屏(我的工作/项目目录/看板/详情双轨字段/发布列车/知识空间)、v3 两屏(工作项检索管理页/详情页字段全谱含祖先链面包屑与关联双轨)、v4 审议室(立场对话流/分片重组/回合分组/溯源徽记三态/纪要置顶),**含 Layout 布局本身**(全局层置顶的信息架构、侧栏分组、列表详情分栏、各项目 as-of 徽记位置)。\n\n验收判据:逐屏与设计稿比对;既有 mockup 与新设计不一致处一律以新设计为准;凡复用既有组件装配,须核对其是否真能承载新 Layout,不能则改造或替换而非迁就。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:35e03ea2c0a281ccd0f4b9b7",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:be9ec36bf61c415df4c2dbfa"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合;执笔 agent:fable,署名 Minerva。既有实现处置(源=Owner「授权移除原有,按已确认的新设计开发,如果你认为合适的话」——授权附执行方判断)。方法:四路独立分析(清点/拆除派/保全派/契合度)各经一轮对抗复核;四份初稿全部被判 OVERSTATED,本立场只采经复核幸存的事实。\n\n结论:不宜整体移除,改三层定向处置。决定性三条:①与事件链零连接——LinkRecord 的 tcrn_workflow 是死声明,唯一投影通道读手写 JSON 且硬编码只认 TCRN-DESIGN-SYSTEM 单项目,故真正缺的只有链客户端;②约三分之一确有删除依据且证据极硬——资源物化治理 279 行(占 types.ts 27%)、文档发布流水线约 180 行、adapter-codex 1797 行,其类型签名写着 materializationExecuted/liveDispatchAuthorized/docsPublished 恒 false,从未执行过一次真实动作;③另一批横切能力在新定位下价值不降反升——尤以 packages/db/src/backup.ts 723 行(物理快照+逻辑导出+往返导入+保留策略+拒绝恢复到生产)正是 MIN-002 刚裁的 S020 备份方案的现成实现,且 S014 scope 自身明写「FTS kr01 血统」,拆之即拆我方新立 Story 的依赖。\n\n最重要执行纪律:七个名字对得上(projection/conference/gate/audit/ticket.list/knowledge search/release candidate)但无一语义完全对齐。冲突比缺失危险——缺失会报错,冲突会静默地用旧语义回答新问题。故纪律=凡同名者一律先证伪再复用,默认假设语义不同,优先级高于任何复用便利。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:46a7640d3205407a263a6fc7": [
+      {
+        "conferenceId": "conference:46a7640d3205407a263a6fc7",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:27c8ed5423a90a98b304e085"
+        ],
+        "externalKeys": [],
+        "body": "回应 POS-MINERVA-1。execution:mode = synthesis-only(承本场声明)。执笔 agent:opus,主线程综合,署名 Verity。\n\n1/1 证据面复核:同意三步,但要把第二步的边界钉得比 Minerva 写的更死。引擎注释自己已经说清(conference-execution.ts 开头):未加密的 SHA-256 绑定的是说了什么,永远不是谁说的。classifyConferenceExecution 的注释更直白——它证的是一致性而非真实性,单一上下文自行编造整套收据可以通过该检查,真实性是可信采集方(EPIC-020)的职责,而那一层本平台尚未建成。\n\n因此本公约必须把「绑定」的正确读法写成不可省的一句,而不是脚注:绑定只证明这段话没有被事后编辑、且来自它所绑定的那次调用的输出——到此为止。任何把绑定说成「证明了独立性」的表述都是过度声称,而过度声称正是本平台最贵的失效模式。\n\n同理,第二步的真正约束力不在「绑定时能证什么」,而在「不绑定时不得暗示什么」:一场没有绑定的会议,记录里不能出现任何读起来像独立性证据的表述。这一条比绑定本身更常被违反,因为它不需要任何动作就能违反。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:46a7640d3205407a263a6fc7",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:733c6d2f9ba86e9c6f058f65"
+        ],
+        "externalKeys": [],
+        "body": "execution:mode = synthesis-only。理由(architecture 类声明本形态须给理由,公约第一步第 2 条):本场议题是把已裁定的三步写成可执行文本,不是在多个可辩护方案间取舍;分头产出会得到三份同构的公约稿,独立性不构成说服力来源。执笔 agent:opus,主线程综合,署名 Minerva。\n\n1/1 三步的落点与代价。第一步(声明)零例外,成本一行字。第二步(绑定)按「独立性本身是否构成该立场说服力来源」择用,并要求与绑定同时说明其语义边界。第三步(转写)零例外。\n\n关键设计判断:三步全部定义在文本层,不改引擎一个字节。原因不是保守,是实测——引擎侧能力已经建成(packages/core/src/conference-execution.ts:31 的 EXECUTION_MODES、:34 的 tcrn.host-execution-receipt.v1、classifyConferenceExecution 的 fail-closed 判据),缺的是通路:packages/cli/src/index.ts:1858 的 conference-open 参数表无 extensions,conference-append-position 同样无,且 packages/cli/src 内对 classifyConferenceExecution 零调用。也就是说这套判据今天从任何受治会话都到不了。这是「已建未用」,不是「未建」,两者的处置完全不同——前者要的是接线需求单,后者要的是实现。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:6f4c580c6ea63e21274f5fdf": [
+      {
+        "conferenceId": "conference:6f4c580c6ea63e21274f5fdf",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:4a51d78b73b4559e27ccbee9"
+        ],
+        "externalKeys": [],
+        "body": "裁定二,两段式真值拓扑(方向裁定,切换带 owner 门):镜像段(现在)=文件链为真值,AOS 只投影;切换段(AOS 通过验收后)=数据迁移与切换,AOS 库承接存储与运营面,W 退为框架层——规范形态、动词、回放语义仍归 W。迁移换容器不换语义:append-only、规范字节、哈希链、可回放、attestation 五件套原样承载,时间见证等工作区外 sidecar 随迁。切换仪式=一致性矩阵双跑证据(引擎 ledger conformance-mutual-release 所指)→owner 门→切换→文件降为导出/归档格式,并备 fallback 对账方案(ledger fallback-epoch-reconciliation);机制候选=migration-plan、exchange 族、export(执行时核验)。只裁方向,不排期;此为平台未来最大单向门,届时全套仪式。local-first 边界按 P5 条件化:「权威 local-first」保留,「服务面本机」放宽为允许镜像外置。\n\n裁定三,专机之问(Owner 采纳「镜像段不专机」):VM 上仅可重建投影,丢失代价=重跑同步;共宿 tcrn-platform-dev 的 k3s,起 tcrn-aos namespace+资源限额。复审条件=迁移切换裁定进入执行,届时专机或专卷+备份 SLA+访问收紧与迁移同门裁定。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:6f4c580c6ea63e21274f5fdf",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:518eb02aaa25124d66c5ccd6"
+        ],
+        "externalKeys": [],
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。部署与真值拓扑批次转写(源=Owner 四轮:①开发在本机、生产在 TMS 开发 VM;②「AOS 和 workflow workspace 互相冲突,workflow 只应选一种模式工作,等 AOS 通过验收就进行数据迁移和切换,workflow 负责框架,AOS 负责数据治理」;③专机之问;④补遗「AOS 的定期备份方案」)。\n\n裁定一,镜像段四边界(Owner 同意):权威不动——链、写面、供权双文件、attestation 收据永留本机,VM 只收投影,供权材料永不上 VM;命名诚实——VM 实例=镜像/服务面,UI 显式标「镜像·数据截至 as-of」;VM 实例首期零写面——安全写面仅本机实例生效,队列中继为延后轨道另裁;访问边界先定后上——镜像含纪要与立场,受众=LAN 信任或加认证层,确认 traefik 不暴露公网。附部署纪律:开发全在本机,VM 改动只经声明式清单进入(k3s apply,沿 /srv/tcrn/remote-services/manifests 惯例),禁止手改运行态;投影库自带源链版本水位与一键重建。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:6f4c580c6ea63e21274f5fdf",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:d5df9ffe7ff75db37c2aae8b"
+        ],
+        "externalKeys": [],
+        "body": "裁定四,定期备份方案(Owner 补遗,按「只备不可重建者」分层):①AOS 自有域库(评论/指派/关系/写日志,唯一不可从链重建)=与链分区快照同刻配对快照——域数据以 qualified ref 引用链记录,时点不一致则恢复后引用悬空,故成对为原则;另加每日兜底;SQLite .backup+integrity_check;方案生效前须先做一次恢复演练;保留沿 backup.retention 公约(5 份,轮转具名删除)。②attestation 收据目录在工作区根之外,现行分区快照不覆盖——即刻并入分区备份同车(快照工具已改)。③投影库与 VM 镜像=可重建导数,明确不备并留此理由。④配置与清单以 git 为备份,secrets 单独处置不入 git。⑤切换段备份升格为治理备份本体,入迁移仪式清单。\n\n执行发现一条(S013 提前 dogfood):execution:mode 骑 conference request 的 extensions 槽(引擎 EPIC-019 已建),但 conference-open 的 CLI/MCP 面未暴露 extensions 旗标——本会仍以首行披露自述执行形态;「引擎有而 CLI 不达」缺口按公约向 W 提需求,不在 AOS 侧绕。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:ae0e6ae093a8e3dbada63507": [
+      {
+        "conferenceId": "conference:ae0e6ae093a8e3dbada63507",
+        "actorId": "profile:tcrn-sable-v1",
+        "fragmentIds": [
+          "position:128a1ed06b6dbcd67084f70a"
+        ],
+        "externalKeys": [],
+        "body": "无障碍视角（提案三，就地折叠，反对抽屉）：先说清今天这个形态有一样值得先承认的优点——每个导航目的地在每一页都在场、可见、在源码顺序里，没有任何需要发现的状态。任何隐藏导航的方案都得把这一点挣回来。\n\n主张：≤760px 时用 DS 已经发布的 CollapsibleRegion 包住 SideNav 的分组，默认收起，并把同一个 sidebar header 里已经存在的 SideNavCollapseButton 取消隐藏。这是真复用而非新造：CollapsibleRegion 收起时施加 inert 加 aria-hidden 加 grid-template-rows:0fr，并在 Navigation.tsx:4588 自带 reduced-motion 分支，是 DS 里焦点安全性最完整的一件。收起时实测可 Tab 到的导航链接为 0。\n\n反对抽屉的理由是能力不是口味：DS 从未发过模态焦点收容，Dialog 与 Popover 都自陈 data-tab-containment=not-implemented；DetailDrawer/ActionDrawer 是裸 aside 加 aria-hidden，无 inert、无 scrim、无焦点陷阱、无 Escape、无焦点归还——我复现了这组语义，产出 aria-hidden-focus 违规，impact serious。\n\n两条与裁定无关、但必须独立成立的实测：一，DS 的 axe 只在 desktop-1440x900 跑，移动形态从未被 DS 自己的无障碍门扫过；二，aos-frontend-shell-proof.mjs:1520 的收据字段 mobileNavigationCompactFirstViewport:true 被同一脚本 1390 行的 <900 棘轮当场证伪，属 no-overclaim 违规，不论怎么裁都该退役。\n\n自陈：current-location 由 696 移到 91，首次成为常驻可见——这是本方案的附带收益。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:ae0e6ae093a8e3dbada63507",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:8875792b82fb90a84ce17f54"
+        ],
+        "externalKeys": [],
+        "body": "执行形态 multi-agent-deliberative：五份提案与三份评审各由彼此看不见的独立上下文产出（工作流 wf_306b7fb3-e6e，逐 agent 全文留在该 run 的 journal）。未绑定 host-execution 收据，故形态是记录者的陈述而非可独立核验的证据。**本场立场均为记录者压缩自远超 2048 字节上限的原文**，非逐字；压缩由记录者所为，全文见上述 journal。\n\n架构视角（提案一，抽屉式）：把 11 项导航移出移动端文档流，由顶栏既有的 current-location 控件升级为按钮触发，走 DS 已有的 --tcrn-z-overlay 与 --tcrn-motion-ease-drawer 两个 token（采购公约第一环在 token 层即已付清）。实测标题 855→170，文档高 3235→2560。明确拒绝 DetailDrawer/ActionDrawer 作为载体：Overlay.tsx:13-31 是裸 aside + aria-hidden，无定位、无 scrim、无焦点陷阱、无 Escape、无焦点归还，其全部 CSS 只有边框圆角背景内距——是名字相符而非能力相符。\n\n残余适用性：不退役「移动端隐藏折叠控件」这条策略，而是收窄它。其前提今日仍成立——92px 的宽度折叠在全宽堆叠布局里无意义，实测在 375px 施加 collapsed=true 只回收 51px 且留下一列无标签图标，而 DS 的响应式标准明禁「可点击的移动端空操作控件」。真正该退役的是一条从没人写下来的推论：「没有宽度折叠控件」被默认读成了「没有任何收起手段」。这是两个控件，第二个从未被裁过。属公约第 7 条条件化保留，不是第 8 条删除。\n\n自陈的关键caveat：本方案不足以让读者在首屏看到一条工作项——第一条数据行只从 1469 移到 785，仍在 760 折叠线下 25px。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:ae0e6ae093a8e3dbada63507",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:a45f6b5ab34ae39e786e5b70"
+        ],
+        "externalKeys": [],
+        "body": "交付与契约视角（提案二与四合并陈述）：主张把「collapsed」在 DS 自己的 max-width:760px 块里重新定义——侧栏离开文档流而不是收窄成轨——并在移动端默认收起。零新增消费方 prop、零 API 面变更、桌面与平板一px 不动。这是三案里唯一把新状态完全扣在 DS 内部、不交给消费方去记住的机制。\n\n拥有权的证据不是规则而是文物：commit 5daa733（2026-07-01，\"fix: rebuild owner-quality shell standards\"）同时做了两件事——加上那条 display:none，以及发布一个 1 组 2 项的 ProductShell fixture。我复核过，那个 fixture 至今没变。也就是说 DS 定下「移动端不需要收起手段」这条策略时，它自己的样例里只有 2 个目的地；AOS 今天有 11 个。策略的成立条件已经不在了，而没人回头看过。\n\n必须写进裁定的一条实现陷阱：移动端的开合位**不得复用** collapsed 布尔。它被 writeStoredBoolean 持久化（Navigation.tsx:1517），并被 buildRouteHref 写进每一个导航 href（app.tsx:1315）——移动端一开合就会改写桌面侧栏偏好并跨路由传播。移动位必须瞬态、不持久、不进 URL。\n\n成本更正两处：受强制执行的视觉基线是 166 张感知签名（56 桌面/55 移动/55 平板），不是 265——134 张精确 PNG 那套已按 retiredExactPngProofDisposition 退役且不在 pnpm verify 内；实际可能移动的移动端行只有 3 行。另：桌面收起轨是 92px 不是简报里写的 120px（Navigation.tsx:2206）。\n\n序：这一级小、可逆、今天就能让读者用上；预算的其余两级排下一列车。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:ae0e6ae093a8e3dbada63507",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:c769571fbc6ced86b463d98a"
+        ],
+        "externalKeys": [],
+        "body": "对抗视角（提案五，首屏预算）：所有人都默认「684px 的导航就是问题」，这个前提本身没人量过。量了之后它只占 47%。375x760 下第一条工作项在 1469，其上堆着 1469px 的 chrome：导航 684、utility 行 130、页头 190、视图标签 256、快速筛选 124。\n\n决定性事实：**任何只动导航的修法都到不了数据**。抽屉把第一条数据行从 1469 移到 785，仍在 760 下 25px；就地折叠移到 991。三份主张只改导航的提案全部把 #work-heading 当目标——而那是一个 1x1、clip:rect(0,0,0,0)、class 带 sr-only 的元素，读者看不见它。**单子写的验收目标是一个没有读者能看到的东西。**\n\n故主张按「首屏预算」裁而非按「修导航」裁：三级——导航离开流、utility 行不再各占整行、标签与筛选行改单行横滚——合起来把第一条工作项送到 443（抽屉）或 618（就地折叠），首次进入首屏。三级都在 DS 侧：grep 全 AOS 仓，tcrn-work-view-tabs、tcrn-work-quick-filters、tcrn-product-shell__ 命中数均为 0，AOS 不产出任何 shell 或家具类名。\n\n第二序失效：拿 20 项导航代入，就地折叠仍成立而抽屉不变；但真正的隐患在 761px——桌面形态的第一像素处实测有 16px 横向溢出，无人断言。另：DS 自己的 ProductShell fixture 至今是 1 组 2 项，即 DS 的移动基线矩阵从未在生产 IA 规模上跑过——这是本缺陷属 DS 而非 AOS 的最干净说法。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:b1b60e36d9b27fc41e3f5d66": [
+      {
+        "conferenceId": "conference:b1b60e36d9b27fc41e3f5d66",
+        "actorId": "profile:tcrn-sable-v1",
+        "fragmentIds": [
+          "position:523137dc02403089951e4aea"
+        ],
+        "externalKeys": [],
+        "body": "Q1：准许，须设零 paint 门。实测 app.tsx 内 85 条 .tcrn-aos-* 规则：42 纯布局、43 带 paint，仅 3 处非 token 字面量。纯布局无安全隐私后果；我只裁：门按 declaration 白名单机器判定，类名禁由数据拼接。\n\nQ2：走 DS 准入，不开产品私有例外。board__card、bubble、chip 确在 rejectCriteria 上。非安全题；唯一实质反对：例外把可按字节判定的门退化为看意图的门，而后者不可执行。DS 56/100 闭合是真阻力，故应准入并逐个记明 prop 缺口。\n\nQ3：规则与机制归 DS 单实现，AOS 只供已解析值，DS 签名必须改。两仓已各存一份近同实现，TMS 将继承第三份。属性硬裁：Path=/、SameSite=Lax、Max-Age=31536000 留；HttpOnly 必须不设；Secure 须条件化，非 localhost 一律置上。最重一条：DS 的 requestCookieHeader 收整个 Cookie 头——已核实只入三个 useState 初始化器、不进 DOM、不被返回，今日无泄露；但该签名让 DS 永久持有消费方全部 cookie 含未来会话令牌，须改为只收已解析三值。注入面已闭：resolveLocale 收 5 值、resolveTheme 收 dark 与 light、decode 有 try/catch，须固化为门。缓存：server.ts 已置 no-store 与 Vary: Cookie；Vary 键整头，接 CDN 将按用户碎片化，须边缘归一化为小变体键。三值约 4.3 bit 非标识符，列隐私声明即可，无需同意弹窗。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:b1b60e36d9b27fc41e3f5d66",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:6d7d1e30e6adb7c66b079ebb"
+        ],
+        "externalKeys": [],
+        "body": "回应第一轮（Minerva、Mara、Sable）。更正自己：一轮称「23 条直改 DS 类」，重测为 4 条（split-view 三、search-input 一）。\n\nQ1：改判——可许，但闸不得按 tcrn-aos- 前缀开。createDocumentCss 实测 122 规则（与 HEAD 同字节），仅 89 条带 .tcrn-aos-；另 33 条四人全漏：9 条 [data-work-*] 属性选择器，余为 .tcrn-work-module-*、.tcrn-phase3-readback*（DS 零定义）。Mara 称「gap 与 font-size 无字面量」为假：[data-work-page-eyebrow] font-size:12px、[data-work-list] gap:8px、padding-left:18px——正是契约点名的 type ramp 与 spacing。字面量 aos 内 17、外 15。谓词只保护它读过的字节。\n\nQ2：被 Minerva 与 Mara 的字节说服，改判。rejectCriteria 两限定词我一轮读漏：reusable、instead of consuming admitted exports。DS WorkBoardProps 实为 {label,lanes,density,locale}，卡片渲染 article 无 href；AOS cockpit-board.tsx:167 需 a href。无可消费导出，字面即未触该条。故不设笼统例外也不整体 admission：逐类登记（目标导出加缺失 prop 加日落），台账外多一即红。\n\nQ3：维持拆分，纳 Sable 一条。DS 源 requestCookieHeader 13 处、HEAD 0；AOS cookieHeader 14 处、HEAD 0，且 app.tsx 另有自带 document.cookie 写入——两份写实现，AOS 那份须删。整头签名须改收已解析三值。谓词：带 Cookie 的 SSR 首帧 lang 与 theme 须与客户端等字节。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:b1b60e36d9b27fc41e3f5d66",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:7dd68e182e7b57f410a202e8"
+        ],
+        "externalKeys": [],
+        "body": "Q1：准许，但闸设在「零皮肤属性」而非「页面级」。实测 app.tsx:1487-2171 的 91 条类规则：46 纯结构、45 带皮肤；164 处取值用 var(--tcrn-*)，33 处字面量全为网格轨道、发丝线、控件最小尺寸，gap/padding/font-size 无一字面量。即无自有间距体系与字号阶梯，所禁未触。闸即谓词：消费者类规则只准布局属性，间距与字号与颜色一律取 DS token。\n\nQ2：不设通用豁免，按「DS 有无对应导出」分两道。DS 的 WorkBoardProps 仅 {label,lanes,density,locale}，卡片无 href 无回调；而 AOS 的 board__card 是 a href（cockpit-board.tsx:168）。是闭合组件逼出的能力缺口。有对应导出者（board__card、chip）走 DS 准入补 href；无对应者（menu__trigger、bubble、searchbar__note）按方向公约第 4 条给限期私有轨：受益者=AOS 座舱、成本=AOS、日落=对应导出发布即删。\n\nQ3：拆分，且确认既成实现——DS 拥有机制与优先级，AOS 只拥有请求头传递。DS 工作树已为 useProductShellController 加 requestCookieHeader 与 writeCookiePreference（samesite=lax 且不加 Secure，以免本地 HTTP 丢弃）；AOS app.tsx:299 已传 cookieHeader。git log -S 证其不在 DS 历史，两侧均未提交。裁此即零成本；裁 AOS 独有则弃 DS 改动且 TMS 须重写。\n\n序：Q1/Q3 随六缺陷即刻合入，Q2 准入排下一列车，勿阻塞 Owner 复用。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:b1b60e36d9b27fc41e3f5d66",
+        "actorId": "profile:tcrn-sable-v1",
+        "fragmentIds": [
+          "position:83bdfa2a9586bd5eac755a10"
+        ],
+        "externalKeys": [],
+        "body": "回应第一轮（Minerva、Verity、Mara）。\n\nQ1：改判，门须选择器与声明两半边。上轮我的 declaration 白名单会放过 Verity 实测的直改 DS 类的规则；补选择器判据。纯布局无安全隐私后果。\n\nQ2：部分改判，接受封闭枚举加日落，拒绝笼统豁免。上轮我拒例外因意图门不可执行；逐条列名多一即红的台账不触此反对。按 harness 公约须做残余适用性分析：有 DS 导出者仍禁走准入；仅审议域（bubble、round）入台账，日落即导出发布即删。\n\nQ3：DS 拥规则与机制，AOS 只传头；但 DS 两处先修。一、locale 未收敛：readStoredTheme 钉 dark 与 light、readStoredBoolean 钉 bool，唯 readStoredString 把 cookie 原值直灌 locale state。AOS 靠自身复跑 resolveLocale 自救；TMS 不复跑即继承可控串入 lang 与字典索引。DS 须自带白名单。二、Secure：DS 以本地 HTTP 会丢为由一律不设，是假二选一；按 protocol 条件化即两全，否则明文侧可同名影子覆盖且被 TMS 继承。Verity 更正成立：两侧均未提交（DS HEAD 零处），须绑测试。整头未入 HTML（SSR 用 renderToStaticMarkup 无 hydration）；DS 签名仍应只收三值。缓存：server.ts 已 no-store 加 Vary cookie，接 CDN 前须边缘归一化。三 cookie 随每个 /api 请求发出，须与未来会话 cookie 隔离命名。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:b1b60e36d9b27fc41e3f5d66",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:a04322a1cabcc525bc164fb6"
+        ],
+        "externalKeys": [],
+        "body": "执行形态 multi-agent-deliberative：四立场各由一个彼此看不见的独立新上下文产出（工作流 wf_74b1f9b9-e5b，逐 agent 转写留在该 run 的 journal）。未绑定 host-execution 收据——可信采集方尚未建成，故该形态是记录者的陈述而非可独立核验的证据，按公约「能证到哪里就说到哪里」。\n\nQ1：允许，限属性白名单且一类只服务一个页面族。实测 42 族 79 类全内联于 app.tsx，可干净二分：21 族仅 display/grid/flex/gap 且长度全取 var(--tcrn-space-*)，17 族带 background/border/font-size。能机械二分即边界可画；可跨路由复用者才是契约所禁的「系统」。反对布局归 DS——那要求 DS 认识 conference-row、minutes-list 等 AOS 审议域概念，第三消费方到来时每张新页都成 DS 的 PR，DS 沦为各家 IA 瓶颈。\n\nQ2：拒绝整体豁免，按域归属二分。DS 已导出 WorkBoard/WorkBoardView，AOS 仍自建 tcrn-aos-board__card：但 WorkBoardCard 无 href 无回调、渲染为 article，AOS 需可导航卡片。这是 prop 面缺口不是偷懒，补 href 属加性变更，admission 可行；chip/menu/searchbar 同理。bubble/round/decisions 属 AOS 审议域，DS 无此概念，强收会让 DS 变成 AOS 的下游。整体豁免等于契约立数日即可协商，且无日落条件，按方向公约第 4 条是囤积。\n\nQ3：规则与机制归 DS，AOS 只留 key 命名与一次 header 注入。当前最坏：DS Navigation.tsx 已实现 cookie 加 localStorage 双写，AOS app.tsx 又近乎逐字复制一份。DS 注释自陈消费方的 workaround 正是缺陷在 DS 的证据。AOS 那份应删。TMS 未分解会继承；留在消费方则第三家得第三份实现，必缓慢不一致。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:b1b60e36d9b27fc41e3f5d66",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:a8d36169f62fd8aff025097f"
+        ],
+        "externalKeys": [],
+        "body": "回应第一轮（Verity、Mara、Sable）。\n\nQ1：改判为「限 aos- 命名空间加属性白名单」。我一轮「长度全取 token」为假：9 条 grid-template-columns 带裸轨道（280/320/340px、12rem），Verity 对；但裸值只在轨道下限与 @media 断点不可消除（@media 无 var()），白名单化即可。三人未计的真违规在 1969-1977：直改 DS 内部类 .tcrn-work-split-view__detail，注释自承 shell 吃 260px 使 DS 的 760px 视口断点失准——DS 该用容器查询，属 rejectCriteria 第 2 条须准入。.tcrn-phase3-readback*（30 名）DS 内没有，只是漏前缀，改名即可。两病两药。\n\nQ2：维持按域二分，驳 Sable 全准入。他称例外使字节门退化为意图门——我给的正是字节门：DS 无对应导出者方可私有，日落即该导出发布。board__card 在 rejectCriteria 上须准入（补 href）；bubble/round/decisions 属 AOS 审议域，强收等于让 DS 认识三家领域词汇，第三消费方到来时 DS 反成瓶颈。\n\nQ3：修正我一轮的接口主张：规则归 DS，入口不是 requestCookieHeader。Sable 对，该签名让 DS 永久持有消费方全部 cookie。应改为 DS 导出纯解析函数、组件只收已解析三值。这同时修掉双读：AOS 自读一遍并传 initialTheme/initialLocale，299 行又把整头交给 DS 再读，优先级隐式。AOS 那份写实现应删，TMS 直接消费 DS 导出。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:b1b60e36d9b27fc41e3f5d66",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:d1a2c05bcd05f57741c7a3e0"
+        ],
+        "externalKeys": [],
+        "body": "Q1：可许，但对象是属性白名单加登记的轨道字面量。createDocumentCss 实测 124 规则：89 条属 tcrn-aos-*，23 条直改 DS 类（如 .tcrn-work-split-view），后者才是契约字面所禁的 shell-control geometry，无人计数。前提「值皆取自 token」为假：48 条纯布局规则有 8 条带裸轨道尺寸（280px/12rem），DS 无此 token。谓词：扫该串，选择器禁匹配 .tcrn-(?!aos-)，声明须在白名单或含 var(--tcrn-。\n\nQ2：拒绝笼统私有例外，亦拒绝全部走 admission。按字面切两堆：rejectCriteria 点名 board cards、detail rails、backlog groups，tcrn-aos-board__card 在其中，不可例外；chip、menu、bubble、avatar 未点名，属 AOS 域面，可限期例外。DS 99 导出中 chip 几何锁在 TableToolbar 内，admission 非零成本。谓词：带 paint 的 aos 选择器集合须逐字等于台账，多一即红。\n\nQ3：拆，照已写未提交的字节裁：DS 拥有读取优先级与双写，消费方只拥有传输。DS 工作树 Navigation.tsx 有 requestCookieHeader 13 处，HEAD 为 0；AOS app.tsx:299 已传 cookieHeader，HEAD 亦 0——两侧已写、未提交、未验证，不得读作已完成。DS 既出参考实现又声明不裁，等于令消费方继承未言明的规则；TMS 将继承，故须是 typed prop 而非散文。谓词：DS 侧 renderToString 带 cookie 头须与客户端首帧等字节；AOS 侧带 Cookie 请求断言 SSR HTML 已含 lang/theme。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:b1b60e36d9b27fc41e3f5d66",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:e2015ce7664b73623eb7b736"
+        ],
+        "externalKeys": [],
+        "body": "回应第一轮（Minerva、Verity、Sable）。\n\nQ1：维持准许，但改闸的谓词。Verity 称 23 条直改 DS 类；实测 app.tsx 仅 5 处，全限定在 AOS 选择器或 data 属性下，三条是 1100px 响应式收拢。他数到的 30 条非 aos 类是 .tcrn-phase3-readback* 与 .tcrn-work-module-*，DS 源码出现 0 次，实为 AOS 自有类漏 aos 中缀。故按 .tcrn-aos- 建闸会漏 30 条又误报 5 条；闸须判「不在 DS 导出类台账内」，并先做一次纯改名，当列车可完。\n\nQ2：改采 Verity 的字面二分，弃我的「有无对应导出」——后者要人判断。加产品条件：board__card 既被点名又卡 DS prop 面（WorkBoardCard 无 href），「不得例外」等于看板停摆至 DS 发版。须以缺陷单载明日落锚定该 href PR，其余点名项即刻整改。\n\nQ3：我第一轮说 AOS 只传 header，错了，Minerva 与 Sable 对：app.tsx 那段是 Navigation.tsx 的近逐字复制。但不同意「删掉 AOS 那份」：html lang 与 theme 由 AOS 服务端在 ProductShell 树外发出，且 DS 对该 helper 导出数为 0。裁：DS 补 typed 导出（按 Sable 收窄为三值），AOS 改 import 只留 html 属性落地。\n\n序：Q1 改名与 Q3 导出随六缺陷同列车，Q2 准入排下一列；Owner 真正的痛（461 处二值、ja/ko/fr 1311/1313 同 en）与 Q1/Q2 无关，不得被准入阻塞。",
+        "fragmentCount": 1
+      }
+    ],
     "conference:db86593a43bdb91d9cabfb02": [
       {
         "conferenceId": "conference:db86593a43bdb91d9cabfb02",
@@ -9824,72 +10677,8 @@ export const cockpitData: CockpitData = {
           "position:f660ddd72e7218420d54871e"
         ],
         "externalKeys": [],
-        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。第四轮:Jira 形态重构与九问裁定(源=Owner 两轮反馈)。\n\nOwner 方向修正(要点转述):AOS 不能局限于单项目,参照 Jira 的多项目管理形态;目标是用惯 Jira 与 Confluence 的专业人士可无痛上手。我方九问逐一过后 Owner 裁定:Q1 单操作员先行、多用户按可演进设计(身份字段留位);Q2 重开「首阶段零写面」裁定→首期开放安全写面(建卡/状态流转/注解,CAS、时间戳、actor 自动补齐),治理写(门/审议/发布)保留显式仪式;Q3 全局层置顶(我的工作/收件箱/仪表盘/项目目录),混合 as-of 按项目分别标注;Q4 不叫 Sprint——Owner 逐字要点:「Sprint 在当前阶段可以无视日期是因为我们还没有客户,所以只用于作为 INIT 集合发布的包来用……新词也需要有类似含义,因为我们需要这样去支持」→定名沿用公约既有词「发布列车」,并锚定 Jira 用户的 Releases/fixVersion 心智(一批 issue 打包发布、日期可留空),为未来节奏演进留路(列车公约本就预留 cadence 重钉);Q5 知识空间首期只渲染+检索,编辑器为独立轨道另裁;Q6 assignee/优先级/标签/评论走 AOS 自有域(qualified ref 挂链,链管治理真值、AOS 管运营元数据;评论与立场双轨,UI 引导「要进裁定记录写成立场」);Q7 治理对象永不可编辑、运营字段可编,UI 以链标记区分;Q8 Jira 熟悉面打底+「决策与证据」页签做差异化;Q9 模块序=全局层→项目目录→看板→详情→发布列车→知识空间。\n\n底座结论不变:MCP/CLI 唯一数据通道;聚合索引由缓存升格为核心组件(四链投影一库,链版本键控,truth-ownership 边界);纯 CSR;组件全走 DS;local-first。v2 设计稿已出(docs/aos-design/v2-jira-shaped.html,六屏+术语终审表+裁定落点表+写面分界表,真链数据),已呈 Owner 终审。待办:术语表逐词终审;终审通过即收敛,close 本会议出分解裁定。",
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。第四轮:Jira 形态重构与九问裁定(源=Owner 两轮反馈)。\n\nOwner 方向修正(要点转述):AOS 不能局限于单项目,参照 Jira 的多项目管理形态;目标是用惯 Jira 与 Confluence 的专业人士可无痛上手。我方九问逐一过后 Owner 裁定:Q1 单操作员先行、多用户按可演进设计(身份字段留位);Q2 重开「首阶段零写面」裁定→首期开放安全写面(建卡/状态流转/注解,CAS、时间戳、actor 自动补齐),治理写(门/审议/发布)保留显式仪式;Q3 全局层置顶(我的工作/收件箱/仪表盘/项目目录),混合 as-of 按项目分别标注;Q4 不叫 Sprint——Owner 逐字要点:「Sprint 在当前阶段可以无视日期是因为我们还没有客户,所以只用于作为 INIT 集合发布的包来用……新词也需要有类似含义,因为我们需要这样去支持」→定名沿用公约既有词「发布列车」,并锚定 Jira 用户的 Releases/fixVersion 心智(一批 issue 打包发布、日期可留空),为未来节奏演进留路(列车公约本就预留 cadence 重钉);Q5 知识空间首期只渲染+检索,编辑器为独立轨道另裁;Q6 assignee/优先级/标签/评论走 AOS 自有域(qualified ref 挂链,链管治理真值、AOS 管运营元数据;评论与���场双轨,UI 引导「要进裁定记录写成立场」);Q7 治理对象永不可编辑、运营字段可编,UI 以链标记区分;Q8 Jira 熟悉面打底+「决策与证据」页签做差异化;Q9 模块序=全局层→项目目录→看板→详情→发布列车→知识空间。\n\n底座结论不变:MCP/CLI 唯一数据通道;聚合索引由缓存升格为核心组件(四链投影一库,链版本键控,truth-ownership 边界);纯 CSR;组件全走 DS;local-first。v2 设计稿已出(docs/aos-design/v2-jira-shaped.html,六屏+术语终审表+裁定落点表+写面分界表,真链数据),已呈 Owner 终审。待办:术语表逐词终审;终审通过即收敛,close 本会议出分解裁定。",
         "fragmentCount": 2
-      }
-    ],
-    "conference:6f4c580c6ea63e21274f5fdf": [
-      {
-        "conferenceId": "conference:6f4c580c6ea63e21274f5fdf",
-        "actorId": "profile:tcrn-minerva-v1",
-        "fragmentIds": [
-          "position:4a51d78b73b4559e27ccbee9"
-        ],
-        "externalKeys": [],
-        "body": "裁定二,两段式真值拓扑(方向裁定,切换带 owner 门):镜像段(现在)=文件链为真值,AOS 只投影;切换段(AOS 通过验收后)=数据迁移与切换,AOS 库承接存储与运营面,W 退为框架层——规范形态、动词、回放语义仍归 W。迁移换容器不换语义:append-only、规范字节、哈希链、可回放、attestation 五件套原样承载,时间见证等工作区外 sidecar 随迁。切换仪式=一致性矩阵双跑证据(引擎 ledger conformance-mutual-release 所指)→owner 门→切换→文件降为导出/归档格式,并备 fallback 对账方案(ledger fallback-epoch-reconciliation);机制候选=migration-plan、exchange 族、export(执行时核验)。只裁方向,不排期;此为平台未来最大单向门,届时全套仪式。local-first 边界按 P5 条件化:「权威 local-first」保留,「服务面本机」放宽为允许镜像外置。\n\n裁定三,专机之问(Owner 采纳「镜像段不专机」):VM 上仅可重建投影,丢失代价=重跑同步;共宿 tcrn-platform-dev 的 k3s,起 tcrn-aos namespace+资源限额。复审条件=迁移切换裁定进入执行,届时专机或专卷+备份 SLA+访问收紧与迁移同门裁定。",
-        "fragmentCount": 1
-      },
-      {
-        "conferenceId": "conference:6f4c580c6ea63e21274f5fdf",
-        "actorId": "profile:tcrn-minerva-v1",
-        "fragmentIds": [
-          "position:518eb02aaa25124d66c5ccd6"
-        ],
-        "externalKeys": [],
-        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。部署与真值拓扑批次转写(源=Owner 四轮:①开发在本机、生产在 TMS 开发 VM;②「AOS 和 workflow workspace 互相冲突,workflow 只应选一种模式工作,等 AOS 通过验收就进行数据迁移和切换,workflow 负责框架,AOS 负责数据治理」;③专机之问;④补遗「AOS 的定期备份方案」)。\n\n裁定一,镜像段四边界(Owner 同意):权威不动——链、写面、供权双文件、attestation 收据永留本机,VM 只收投影,供权材料永不上 VM;命名诚实——VM 实例=镜像/服务面,UI 显式标「镜像·数据截至 as-of」;VM 实例首期零写面——安全写面仅本机实例生效,队列中继为延后轨道另裁;访问边界先定后上——镜像含纪要与立场,受众=LAN 信任或加认证层,确认 traefik 不暴露公网。附部署纪律:开发全在本机,VM 改动只经声明式清单进入(k3s apply,沿 /srv/tcrn/remote-services/manifests 惯例),禁止手改运行态;投影库自带源链版本水位与一键重建。",
-        "fragmentCount": 1
-      },
-      {
-        "conferenceId": "conference:6f4c580c6ea63e21274f5fdf",
-        "actorId": "profile:tcrn-minerva-v1",
-        "fragmentIds": [
-          "position:d5df9ffe7ff75db37c2aae8b"
-        ],
-        "externalKeys": [],
-        "body": "裁定四,定期备份方案(Owner 补遗,按「只备不可重建者」分层):①AOS 自有域库(评论/指派/关系/写日志,唯一不可从链重建)=与链分区快照同刻配对快照——域数据以 qualified ref 引用链记录,时点不一致则恢复后引用悬空,故成对为原则;另加每日兜底;SQLite .backup+integrity_check;方案生效前须先做一次恢复演练;保留沿 backup.retention 公约(5 份,轮转具名删除)。②attestation 收据目录在工作区根之外,现行分区快照不覆盖——即刻并入分区备份同车(快照工具已改)。③投影库与 VM 镜像=可重建导数,明确不备并留此理由。④配置与清单以 git 为备份,secrets 单独处置不入 git。⑤切换段备份升格为治理备份本体,入迁移仪式清单。\n\n执行发现一条(S013 提前 dogfood):execution:mode 骑 conference request 的 extensions 槽(引擎 EPIC-019 已建),但 conference-open 的 CLI/MCP 面未暴露 extensions 旗标——本会仍以首行披露自述执行形态;「引擎有而 CLI 不达」缺口按公约向 W 提需求,不在 AOS 侧绕。",
-        "fragmentCount": 1
-      }
-    ],
-    "conference:35e03ea2c0a281ccd0f4b9b7": [
-      {
-        "conferenceId": "conference:35e03ea2c0a281ccd0f4b9b7",
-        "actorId": "profile:tcrn-minerva-v1",
-        "fragmentIds": [
-          "position:5cef2f89a110b82ba720bc65"
-        ],
-        "externalKeys": [],
-        "body": "三层处置。A 层删除:资源物化族、文档发布流水线、adapter-codex、Assignment 派工单(⚠ 同结构的 AgentRun 必须留,它是 S016 执行观测的记录体,此对须拆开砍)、依赖生命周期治理(⚠ 删除须记明能力去向:它是外采公约许可证与供应链审查的实现候选,非无人认领死码)。B 层保留:脱敏机、确定性 ID 派生、SQLite 仓储与路径硬化(符号链接祖先拒绝、route-owned 根断言)、backup.ts 全套、mcp-server 传输门控、gateway 六段管线与 rejectClientAuthorityParams、work-readback 权威拒绝与响应预算信封、FTS5 知识检索层、evidence 全部与 95 个测试、execution-ledger 的确定性事件键派生规则(移作投影导入去重,其执行溯源职能让位给链)。C 层前端作起点:app.tsx 998 行 ProductShell(已避开 TMS 的 RSC 水合坑)、work-management-mockups.tsx 1822 行 45 DS 符号 9 页、phase3-dogfood-readback.tsx 913 行只读取数范式。D 层新建:链客户端、链形状瘦投影类型(**不得复用 StoryRecord**,后者要求 problem/user/expectedBehavior/acceptanceCriteria/estimate 而链上全无,强行复用即编造字段,违反 no-overclaim)、AOS 自有域字段、as-of、安全写面。\n\n对切换段的诚实修正:保全派「五件套已建一半」经复核证伪——append-only 记录流与哈希链并未建成(现有为单表触发器,非同一件事)。既有实现是起点非地基,MIN-002 的一致性矩阵与 fallback 要求不放松。",
-        "fragmentCount": 1
-      },
-      {
-        "conferenceId": "conference:35e03ea2c0a281ccd0f4b9b7",
-        "actorId": "owner:governance",
-        "fragmentIds": [
-          "position:821f73905f79d23418acb2f2"
-        ],
-        "externalKeys": [],
-        "body": "Owner 裁定(逐字要点转写,2026-07-26):「同意,但是你需要给我和我们确认过的前端一致的交付物,包括 Layout」。\n\n据此确立**交付物一致性要求**:三层处置的 C 层「前端作起点」仅指复用其技术底座(ProductShell 集成、主题与多语言、URL 规范化、静态渲染、DS 接线方式、只读取数门控范式),**不得以既有 mockup 页面充当交付物**。最终交付的界面必须与已确认设计逐屏一致:v2 六屏(我的工作/项目目录/看板/详情双轨字段/发布列车/知识空间)、v3 两屏(工作项检索管理页/详情页字段全谱含祖先链面包屑与关联双轨)、v4 审议室(立场对话流/分片重组/回合分组/溯源徽记三态/纪要置顶),**含 Layout 布局本身**(全局层置顶的信息架构、侧栏分组、列表详情分栏、各项目 as-of 徽记位置)。\n\n验收判据:逐屏与设计稿比对;既有 mockup 与新设计不一致处一律以新设计为准;凡复用既有组件装配,须核对其是否真能承载新 Layout,不能则改造或替换而非迁就。",
-        "fragmentCount": 1
-      },
-      {
-        "conferenceId": "conference:35e03ea2c0a281ccd0f4b9b7",
-        "actorId": "profile:tcrn-minerva-v1",
-        "fragmentIds": [
-          "position:be9ec36bf61c415df4c2dbfa"
-        ],
-        "externalKeys": [],
-        "body": "主线程综合;执笔 agent:fable,署名 Minerva。既有实现处置(源=Owner「授权移除原有,按已确认的新设计开发,如果你认为合适的话」——授权附执行方判断)。方法:四路独立分析(清点/拆除派/保全派/契合度)各经一轮对抗复核;四份初稿全部被判 OVERSTATED,本立场只采经复核幸存的事实。\n\n结论:不宜整体移除,改三层定向处置。决定性三条:①与事件链零连接——LinkRecord 的 tcrn_workflow 是死声明,唯一投影通道读手写 JSON 且硬编码只认 TCRN-DESIGN-SYSTEM 单项目,故真正缺的只有链客户端;②约三分之一确有删除依据且证据极硬——资源物化治理 279 行(占 types.ts 27%)、文档发布流水线约 180 行、adapter-codex 1797 行,其类型签名写着 materializationExecuted/liveDispatchAuthorized/docsPublished 恒 false,从未执行过一次真实动作;③另一批横切能力在新定位下价值不降反升——尤以 packages/db/src/backup.ts 723 行(物理快照+逻辑导出+往返导入+保留策略+拒绝恢复到生产)正是 MIN-002 刚裁的 S020 备份方案的现成实现,且 S014 scope 自身明写「FTS kr01 血统」,拆之即拆我方新立 Story 的依赖。\n\n最重要执行纪律:七个名字对得上(projection/conference/gate/audit/ticket.list/knowledge search/release candidate)但无一语义完全对齐。冲突比缺失危险——缺失会报错,冲突会静默地用旧语义回答新问题。故纪律=凡同名者一律先证伪再复用,默认假设语义不同,优先级高于任何复用便利。",
-        "fragmentCount": 1
       }
     ],
     "conference:080047a28266811c28d57ede": [
@@ -12526,6 +13315,31 @@ export const cockpitData: CockpitData = {
     ]
   },
   "minutesByConference": {
+    "conference:46a7640d3205407a263a6fc7": {
+      "id": "minutes:220142661d1140f8c175980e",
+      "externalKey": null,
+      "summary": "execution:mode = synthesis-only(理由:议题为把已裁定三步写成文本,非多方案取舍)。三步公约采用并落 docs/deliberation-adoption-convention.md;零引擎改动,因引擎能力已建而命令面不可达(v0.7.0 复核 HEAD 2e6cfe30);绑定只证一致性不证真实性,不绑定时不得暗示独立性;本场会议自身即首个 dogfood 实例。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "三步公约采纳:① 默认声明执行形态(synthesis-only / multi-agent-deliberative；不声明读作未验证而非多代理；architecture 与 strategy 声明 synthesis-only 须给理由)",
+        "② 高价值攻防绑定 host-execution 收据；判据=独立性本身是否构成该立场说服力来源；绑定只证一致性不证真实性，且不绑定时不得暗示独立性",
+        "③ 逐轮转写:键号带轮次 POS-<AGENT>-<轮>、拆片标 1/2 且须能拼回全文、回应轮首行写明回应 POS-<…>、两级署名照旧、被驳倒立场留在链上",
+        "零引擎改动:三步定在文本层；引擎能力已建但命令面不可达(conference-open 与 append-position 无 extensions，CLI 对 classifyConferenceExecution 零调用)，故声明暂写立场首行与纪要首句、收据落 evidence/ 并在正文引用",
+        "公约文本落 docs/deliberation-adoption-convention.md(跟仓适用)；本场会议即其首个 dogfood 实例(声明 synthesis-only 并给出理由、键号带轮次、第二轮首行回应 POS-MINERVA-1)",
+        "向 W 侧提接线需求:conference-open 与 conference-append-position 需一条能写 extensions 的受治通路，使 core 内已存在的 fail-closed 判据可达；接线后第一二步迁入 extensions，文本层降为冗余而非删除",
+        "不回溯改写既有记录:历史会议按「未声明 = 未验证」读取，即 fail-closed 的正确方向"
+      ],
+      "unresolvedIssues": [
+        "extensions 受治通路待 W 侧立单与实现；在那之前文本层声明无机器校验",
+        "可信采集方(EPIC-020)未建，故真实性(而非一致性)今日无法证明",
+        "本公约尚未在 DS 与 TMS 两分区实践过，跟仓适用宣告待首次异分区使用时检验"
+      ],
+      "effective": [
+        "extensions 受治通路待 W 侧立单与实现；在那之前文本层声明无机器校验",
+        "可信采集方(EPIC-020)未建，故真实性(而非一致性)今日无法证明",
+        "本公约尚未在 DS 与 TMS 两分区实践过，跟仓适用宣告待首次异分区使用时检验"
+      ]
+    },
     "conference:db86593a43bdb91d9cabfb02": {
       "id": "minutes:5da0b8ea8b8421cb1f3a1e89",
       "externalKey": "TCRN-AOS-MIN-001",
@@ -12606,6 +13420,62 @@ export const cockpitData: CockpitData = {
         "既有组件对新 Layout 的承载力待首切片逐一核实",
         "依赖治理的能力去向(是否另立轨道承接外采公约审查)待裁",
         "A 层删除的执行时点:建议随各 Story 就近清理而非单独一刀"
+      ]
+    },
+    "conference:b1b60e36d9b27fc41e3f5d66": {
+      "id": "minutes:2f09d03272da7bd59cb914d5",
+      "externalKey": "TCRN-AOS-MIN-005",
+      "summary": "执行形态 multi-agent-deliberative：四立场各由彼此看不见的独立上下文产出（工作流 wf_74b1f9b9-e5b），未绑定 host-execution 收据，故形态是记录者陈述而非可独立核验之证据。三题两轮后收敛，且三方各按对方实测改判。Q1 准许消费方自持纯布局类，但门不得按 tcrn-aos- 前缀开——实测 createDocumentCss 124 规则中 89 条带该前缀、35 条不带，不带的那批恰含契约点名的 font-size 与 gap 字面量，按前缀建门会在最该红的地方假绿。Q2 不设笼统例外亦不整体准入，按 rejectCriteria 字面二分并逐类登记日落。Q3 规则与机制归 DS，但入口不是 requestCookieHeader，改为只收已解析三值。本场最有价值的产出是一次事实更正链：Verity 一轮称 23 条直改 DS 类、二轮自行重测更正为 4 条；主线程复核确认 .tcrn-work-split-view 确为 DS 定义（DS 内 7 处）而 .tcrn-work-module-* 与 .tcrn-phase3-readback* DS 内为零——即两病两药：前者须准入、后者只是漏 aos 中缀应改名。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "Q1 裁定：消费方可自持纯布局类（只含 display 与 grid 与 flex 与 gap 等结构属性、值取自 DS token）；共享间距体系与字号阶梯仍禁。",
+        "Q1 门形态：扫描面按整段 createDocumentCss 定义而非按 tcrn-aos- 前缀；选择器禁匹配 DS 已定义类、声明须在布局白名单内或含 var(--tcrn-；显式放行网格轨道下限与 @media 断点两处裸值。",
+        "Q1 前置：先做一次零行为改名，把 .tcrn-work-module-* 与 .tcrn-phase3-readback* 加 aos 中缀（DS 内零定义、属 AOS 自有类）。",
+        "Q2 裁定：不设笼统产品私有例外、也不整体走 DS 准入；按 rejectCriteria 字面二分逐类登记台账，每条带目标导出与缺失 prop 与日落日期，台账外多一即红。",
+        "Q2 首批：tcrn-aos-board__card 被 rejectCriteria 点名且卡 DS prop 面（WorkBoardCard 无 href 且渲染为 article），走准入并以缺陷单锁定日落；.tcrn-work-split-view 与 .tcrn-search-input 的覆盖同走准入（DS 内实有定义）。",
+        "Q3 裁定：影响首帧的偏好必须随请求送达，规则与机制归 DS 单一实现；AOS 只保留服务端读取与 html 属性落地（因 lang 与 theme 在 ProductShell 树外发出），AOS 侧重复的写实现删除。",
+        "Q3 安全硬裁：DS 的 locale 读取必须自带白名单收敛（本场实测：readStoredTheme 与 readStoredBoolean 均收敛、唯 locale 走 readStoredString 原值直出）；cookie 保留 path=/ 与 SameSite=Lax 与 Max-Age 一年 与 刻意不设 HttpOnly。"
+      ],
+      "unresolvedIssues": [
+        "Secure 属性未落：Sable 主张按 protocol 条件化（非 localhost 一律置上），本场未实施，待单独处置。",
+        "requestCookieHeader 改为只收已解析三值的签名改造未实施：属 DS 公开 prop 面变更，本场只先做了 locale 收敛与类型放宽。",
+        "Vary: Cookie 以整头为键，接入 CDN 前须边缘归一化为小变体键；在此之前不得撤掉 no-store。",
+        "Q1 与 Q2 的门尚未建造，裁定今日仍无可执行谓词；在建成前本场三条裁定与 INIT-010 契约同命——可读而无处失败。",
+        "隐私声明尚未列名三个偏好 cookie 及其一年期限。"
+      ],
+      "effective": [
+        "Secure 属性未落：Sable 主张按 protocol 条件化（非 localhost 一律置上），本场未实施，待单独处置。",
+        "requestCookieHeader 改为只收已解析三值的签名改造未实施：属 DS 公开 prop 面变更，本场只先做了 locale 收敛与类型放宽。",
+        "Vary: Cookie 以整头为键，接入 CDN 前须边缘归一化为小变体键；在此之前不得撤掉 no-store。",
+        "Q1 与 Q2 的门尚未建造，裁定今日仍无可执行谓词；在建成前本场三条裁定与 INIT-010 契约同命——可读而无处失败。",
+        "隐私声明尚未列名三个偏好 cookie 及其一年期限。"
+      ]
+    },
+    "conference:ae0e6ae093a8e3dbada63507": {
+      "id": "minutes:de47de4a4f95e07dec79f0f7",
+      "externalKey": "TCRN-AOS-MIN-006",
+      "summary": "执行形态 multi-agent-deliberative：五份提案与三份评审各由彼此看不见的独立上下文产出（工作流 wf_306b7fb3-e6e），未绑定 host-execution 收据，故形态是记录者陈述而非可独立核验之证据；且四条立场均为记录者压缩自远超 2048 字节的原文，非逐字，全文在该 run 的 journal。评审三比零地推翻了单子的原始命题：INC-025 写的「首屏够不到标题」量的是 #work-heading，而它是 1x1、clip:rect(0,0,0,0)、class 带 sr-only 的元素，读者看不见——真实数字是可见标题在 880、第一条工作项在 1469。据此**任何只动导航的修法都到不了数据**：抽屉把第一条工作项移到 785、就地折叠移到 991，对 760 折叠线都不够。三名评审二比一支持「首屏预算」而非「修导航」，异议者（契约视角）主张零消费方 prop 的最小机制，其理由被并入裁定而非否决。Owner 于 2026-07-28 裁：按建议方案推进。第二条方向题（320px 是否在范围）不由裁量而由事实定掉——DS 自己的 responsive-mobile 标准写明的证明视口是 390px，故 320px 不在已声明的地板内，机制随之取安全的就地折叠。实测四点：375x760 与 390x844 两处，就地折叠加三级把第一条工作项送到 618，均进首屏；抽屉组合到 412；320x568 下就地折叠组合为 618 不进，仅抽屉组合进——该差额作为具名残余记录，不作为采纳理由。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "验收判据改写：INC-025 以「一条可见工作项进入首屏」为准，不再以 #work-heading 为准（该元素 sr-only，读者不可见）。验证视口为 DS 已声明的 390px 与实测用的 375px。",
+        "范围按首屏预算而非修导航：三级一起——导航离开移动端文档流、utility 行不再各占整行、视图标签与快速筛选改单行横滚。三级均在 DS 侧（已复核：AOS 全仓不产出任何 shell 或家具类名）。",
+        "导航机制取就地折叠（DS 已发布的 CollapsibleRegion，自带 inert 与 aria-hidden 与 reduced-motion 分支），≤760px 默认收起；**不取抽屉**——DS 从未发过模态焦点收容（Dialog 与 Popover 均自陈 not-implemented，DetailDrawer/ActionDrawer 复现出 aria-hidden-focus serious 违规），而 DS 的 axe 只扫桌面，在盲区里上自造模态不可接受。",
+        "移动端开合位必须瞬态：不得复用 collapsed 布尔（它经 writeStoredBoolean 持久化并由 buildRouteHref 写进每个导航 href，复用会改写桌面偏好并跨路由传播）。",
+        "已验收标记 mobile-hidden-collapse-affordance 按公约第 7 条条件化保留而非删除：其前提（宽度折叠在全宽堆叠布局里无意义，实测只回收 51px 且留下一列无标签图标）今日仍成立，需退役的是从未写下的推论「无宽度折叠即无任何收起手段」。标记改写为只指宽度折叠控件。",
+        "DS 须把自己的 ProductShell fixture 提到生产 IA 规模（今日为 1 组 2 项，即 DS 的移动基线从未在真实规模上跑过），并自带移动端 axe 与首屏门；否则 TMS 会原样继承同一缺陷，而今天的门在 AOS 仓、拥有该形态的那一侧对首屏零断言。",
+        "两条子裁（原列为待裁，现随方案一并定下）：移动端触发器改用菜单语义的图形而非桌面轨的双人字形；触达尺寸在 ≤760px 抬到 44px（基础 38px 被 DS 测试钉死，故用媒体查询作用域）。"
+      ],
+      "unresolvedIssues": [
+        "320x568 不在 DS 声明的地板内（其 responsive-mobile 标准写的是 390px），实测就地折叠组合在该宽度为 618 不进首屏。作为具名残余记录；若日后裁定 320px 入范围，机制需改抽屉，那是一次二次迁移。",
+        "旋转的手机（812x375，高于 760 断点故走桌面路径）实测整个治理组永久够不到；与本裁定无关，另立 TCRN-AOS-INC-026。",
+        "761px 处桌面形态第一像素实测 16px 横向溢出，无人断言；归入 INC-028 的 DS 门盲区。",
+        "已验收的视觉实例行 mobile-dark-zh-cn-work-queue 需重拍，属重新验收而非基线刷新，施工时须如实标出。"
+      ],
+      "effective": [
+        "320x568 不在 DS 声明的地板内（其 responsive-mobile 标准写的是 390px），实测就地折叠组合在该宽度为 618 不进首屏。作为具名残余记录；若日后裁定 320px 入范围，机制需改抽屉，那是一次二次迁移。",
+        "旋转的手机（812x375，高于 760 断点故走桌面路径）实测整个治理组永久够不到；与本裁定无关，另立 TCRN-AOS-INC-026。",
+        "761px 处桌面形态第一像素实测 16px 横向溢出，无人断言；归入 INC-028 的 DS 门盲区。",
+        "已验收的视觉实例行 mobile-dark-zh-cn-work-queue 需重拍，属重新验收而非基线刷新，施工时须如实标出。"
       ]
     },
     "conference:acfbb25a07b6b93d12b76b53": {
@@ -15092,1824 +15962,6 @@ export const cockpitData: CockpitData = {
     }
   },
   "activityByWork": {
-    "work:e716f832a9f2ed1301d2f449": [
-      {
-        "id": "event:cbc2f414070502b7c6e8d90b",
-        "sequence": 126,
-        "occurredAt": "2026-07-26T14:40:38Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:d9321d25eb29a82d3f34595e",
-        "sequence": 81,
-        "occurredAt": "2026-07-26T12:45:33Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:2a083d8fde3bb4dfb79dbf09",
-        "sequence": 80,
-        "occurredAt": "2026-07-26T12:45:32Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:39743b5a44b888295f4b12dd",
-        "sequence": 40,
-        "occurredAt": "2026-07-26T12:15:55Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:a0f070eed9cad2cb5be0221c",
-        "sequence": 19,
-        "occurredAt": "2026-07-26T12:15:52Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:081b1dead46cc439338ac197": [
-      {
-        "id": "event:e2edee6c976c4d8312ec7324",
-        "sequence": 172,
-        "occurredAt": "2026-07-26T14:59:19Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:dcbeedfae8f1cc657081d211",
-        "sequence": 171,
-        "occurredAt": "2026-07-26T14:59:19Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:59e072f21ea11bcd73e7b20e",
-        "sequence": 83,
-        "occurredAt": "2026-07-26T12:45:33Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:7d703192bbad6899a76867f5",
-        "sequence": 82,
-        "occurredAt": "2026-07-26T12:45:33Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:66ced88723d6c9869256bc23",
-        "sequence": 41,
-        "occurredAt": "2026-07-26T12:15:55Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:ae1ceb28e3b26e692685832e",
-        "sequence": 20,
-        "occurredAt": "2026-07-26T12:15:52Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:cc82f8dc93eedd2b1bae0443": [
-      {
-        "id": "event:2eb94efb7b2df837f5f6dc2b",
-        "sequence": 153,
-        "occurredAt": "2026-07-26T14:54:49Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:6ae045ffb8652301b54e546f",
-        "sequence": 152,
-        "occurredAt": "2026-07-26T14:54:49Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:7fc9ea4cd7711caee2bc4737",
-        "sequence": 151,
-        "occurredAt": "2026-07-26T14:54:48Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:7b5147bf4d75c6212f2e4e18",
-        "sequence": 150,
-        "occurredAt": "2026-07-26T14:54:35Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:4db85b1b5a7f0774bbaf300c",
-        "sequence": 139,
-        "occurredAt": "2026-07-26T14:51:28Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:abe9eb5b29bc174fd8c4dc66",
-        "sequence": 42,
-        "occurredAt": "2026-07-26T12:15:55Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:a469f6c6c0d30876b3a0fafd",
-        "sequence": 21,
-        "occurredAt": "2026-07-26T12:15:53Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:b47471768134fde402c89112": [
-      {
-        "id": "event:a5ea968e5f87cd5808fb2600",
-        "sequence": 166,
-        "occurredAt": "2026-07-26T14:57:21Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:2d111edaa0292e18917867af",
-        "sequence": 43,
-        "occurredAt": "2026-07-26T12:15:55Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:cca773d7e0ad432c0f9db53e",
-        "sequence": 22,
-        "occurredAt": "2026-07-26T12:15:53Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:82c67feb8895622dda783c2f": [
-      {
-        "id": "event:d795cb10c8814325e7f51f12",
-        "sequence": 176,
-        "occurredAt": "2026-07-26T14:59:19Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:039b4fddbc30d3fe221c3025",
-        "sequence": 175,
-        "occurredAt": "2026-07-26T14:59:19Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:f55a0c04aa7ec4bd0b27bb8d",
-        "sequence": 174,
-        "occurredAt": "2026-07-26T14:59:19Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:e4fb66d0c1e800c597ae60a5",
-        "sequence": 173,
-        "occurredAt": "2026-07-26T14:59:19Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:0c0ec408af214174acf0046d",
-        "sequence": 44,
-        "occurredAt": "2026-07-26T12:15:55Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:62bd19d6d5c43fc3c625c597",
-        "sequence": 23,
-        "occurredAt": "2026-07-26T12:15:53Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:4fab089cdf2aee150dbf440b": [
-      {
-        "id": "event:ae58ae50712573d76cfd7977",
-        "sequence": 74,
-        "occurredAt": "2026-07-26T12:45:32Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:e7e3c828237a0fef8630de90",
-        "sequence": 69,
-        "occurredAt": "2026-07-26T12:45:31Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:e6a70fb7d03f607657d1f13c": [
-      {
-        "id": "event:c47c547270759a59557c4bd8",
-        "sequence": 194,
-        "occurredAt": "2026-07-26T15:43:00Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:b0fcc3237bb66dce72532911",
-        "sequence": 193,
-        "occurredAt": "2026-07-26T15:43:00Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:efb6864cafee7b007fc5c02f",
-        "sequence": 192,
-        "occurredAt": "2026-07-26T15:43:00Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:184ad8bcf7eb0f8698ce7574",
-        "sequence": 179,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:e7588e9f9fb3d2d3c234b191",
-        "sequence": 178,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:324538e48b1732d764391ef1": [
-      {
-        "id": "event:2c563694bf3eb4523ee68f30",
-        "sequence": 240,
-        "occurredAt": "2026-07-26T19:47:05Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:6b43679896c56417d87d35d6",
-        "sequence": 239,
-        "occurredAt": "2026-07-26T19:47:05Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:4068564e80e29581169e6524",
-        "sequence": 238,
-        "occurredAt": "2026-07-26T19:47:05Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:7380f16049f04764e32fa401",
-        "sequence": 217,
-        "occurredAt": "2026-07-26T16:51:10Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:06600b19bff86cc392dcb08e",
-        "sequence": 216,
-        "occurredAt": "2026-07-26T16:51:10Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:006a8be9fd0cb9da261c6160": [
-      {
-        "id": "event:31065215c8c921ac96c39207",
-        "sequence": 95,
-        "occurredAt": "2026-07-26T13:40:38Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:4b909881920ff372b51b674b",
-        "sequence": 94,
-        "occurredAt": "2026-07-26T13:40:38Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:22533e81218e2772f3a63dd1": [
-      {
-        "id": "event:2b31fc71261efb355e39bb5a",
-        "sequence": 97,
-        "occurredAt": "2026-07-26T13:40:38Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:494016a1f372b80be57a3f9c",
-        "sequence": 96,
-        "occurredAt": "2026-07-26T13:40:38Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:7454fea395a2af06ede22a14": [
-      {
-        "id": "event:f33d6fca2e5429650d61a234",
-        "sequence": 101,
-        "occurredAt": "2026-07-26T14:11:05Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:49f4b7cb72cd03961de5ebe5",
-        "sequence": 100,
-        "occurredAt": "2026-07-26T13:43:07Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:a1dbf4126fc2c2af2edfa286",
-        "sequence": 99,
-        "occurredAt": "2026-07-26T13:43:06Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:2798f160fa3412137e481b57": [
-      {
-        "id": "event:2e6351149ef29f64b421c13f",
-        "sequence": 107,
-        "occurredAt": "2026-07-26T14:29:09Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:638cb2d586db6531004cd7bb",
-        "sequence": 106,
-        "occurredAt": "2026-07-26T14:29:09Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:3dcf2a5ea0d0969c98de93aa": [
-      {
-        "id": "event:d7aeb105bdebdc57fa7ac057",
-        "sequence": 109,
-        "occurredAt": "2026-07-26T14:29:10Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:dff6bdc1ae94dd7207a8f924",
-        "sequence": 108,
-        "occurredAt": "2026-07-26T14:29:09Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:2d7ab5df74f2eaac34b40821": [
-      {
-        "id": "event:de6b92befbd8638c74ce787a",
-        "sequence": 209,
-        "occurredAt": "2026-07-26T15:43:01Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:01b861a5befe1e1549433726",
-        "sequence": 208,
-        "occurredAt": "2026-07-26T15:43:01Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:1edf38f797e2775f1dbd146d",
-        "sequence": 207,
-        "occurredAt": "2026-07-26T15:43:01Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:71c467612e1a7247fda4162f",
-        "sequence": 189,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:8a7c1e9f20acbf575d0042cf",
-        "sequence": 188,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:156cf302e91dc05e59d0675e": [
-      {
-        "id": "event:1464518e67163f85cb1d05d3",
-        "sequence": 212,
-        "occurredAt": "2026-07-26T15:43:01Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:8c4733a1c38ccc6b99741ce2",
-        "sequence": 211,
-        "occurredAt": "2026-07-26T15:43:01Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:d2d526cda038d30e5e15f731",
-        "sequence": 210,
-        "occurredAt": "2026-07-26T15:43:01Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:ee0b3cdebaff98bcd7e23abc",
-        "sequence": 191,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:6c4c65e473eee3555ac94b5b",
-        "sequence": 190,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:c2539981e4c4cfe7d803675e": [
-      {
-        "id": "event:2ce392e523975a5c00ff9f04",
-        "sequence": 243,
-        "occurredAt": "2026-07-26T19:47:06Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:3d80538dc8d8d604ab63a532",
-        "sequence": 242,
-        "occurredAt": "2026-07-26T19:47:06Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:e7752b45b9b417342fe6a208",
-        "sequence": 241,
-        "occurredAt": "2026-07-26T19:47:05Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:8eb683197135ce2fba24169d",
-        "sequence": 224,
-        "occurredAt": "2026-07-26T16:51:10Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:553e9d68d43db05dc252eb4b",
-        "sequence": 215,
-        "occurredAt": "2026-07-26T15:58:00Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:001bb5aa09383f1dbecd2aae",
-        "sequence": 214,
-        "occurredAt": "2026-07-26T15:58:00Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:ff2290f36de29780d18d4323": [
-      {
-        "id": "event:b663f7ea1f78a3f68c6eb55b",
-        "sequence": 213,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:07d473aacc6924970960f57c",
-        "sequence": 177,
-        "occurredAt": "2026-07-26T14:59:19Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:622a1cab30dfcb9d3b596207",
-        "sequence": 103,
-        "occurredAt": "2026-07-26T14:14:05Z",
-        "operation": "work.annotated",
-        "actorId": "owner:governance",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:2270ba20b48a0dbae15b639f",
-        "sequence": 79,
-        "occurredAt": "2026-07-26T12:45:32Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:94c1bc4a3fe6bd602fda463a",
-        "sequence": 63,
-        "occurredAt": "2026-07-26T12:27:01Z",
-        "operation": "work.updated",
-        "actorId": "owner:governance",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:8fbb2620b156a48f67c57c1d",
-        "sequence": 61,
-        "occurredAt": "2026-07-26T12:15:58Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:035a3bf0edaac57c8b192046",
-        "sequence": 8,
-        "occurredAt": "2026-07-26T10:59:32Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:e7c026f0d676eccbff100d29",
-        "sequence": 2,
-        "occurredAt": "2026-07-26T10:59:13Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:8194cd2628f9a02db73014ba": [
-      {
-        "id": "event:103ad2472c4e53c171ac821c",
-        "sequence": 122,
-        "occurredAt": "2026-07-26T14:40:38Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:ef6a7e2594aa0e2c2c33bf78",
-        "sequence": 104,
-        "occurredAt": "2026-07-26T14:29:09Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:5a2f731d6453bc6cb3d9453e",
-        "sequence": 85,
-        "occurredAt": "2026-07-26T12:45:33Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:aadd06b698022f82cf224049",
-        "sequence": 84,
-        "occurredAt": "2026-07-26T12:45:33Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:7b557c5c5b30058a8791e0e6",
-        "sequence": 45,
-        "occurredAt": "2026-07-26T12:15:56Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:1078dd91db78f3fab69c3aa2",
-        "sequence": 24,
-        "occurredAt": "2026-07-26T12:15:53Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:929d33faaf759527a970c56e": [
-      {
-        "id": "event:42280268b00a134d44da8474",
-        "sequence": 125,
-        "occurredAt": "2026-07-26T14:40:38Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:023924f3843cee20209e985d",
-        "sequence": 124,
-        "occurredAt": "2026-07-26T14:40:38Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:9b8297e396c15b86280bdc02",
-        "sequence": 123,
-        "occurredAt": "2026-07-26T14:40:38Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:a03f248994667f5dabe59a95",
-        "sequence": 105,
-        "occurredAt": "2026-07-26T14:29:09Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:176c9fdec22136971f34f206",
-        "sequence": 46,
-        "occurredAt": "2026-07-26T12:15:56Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:7f562e80442faa2c7f7fcb73",
-        "sequence": 25,
-        "occurredAt": "2026-07-26T12:15:53Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:ad72557d88653b6d94456b1d": [
-      {
-        "id": "event:a41351498adbd5fc7bbc65cb",
-        "sequence": 228,
-        "occurredAt": "2026-07-26T19:40:00Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:9c18ce4b1cd06bcb3ea5c37c",
-        "sequence": 227,
-        "occurredAt": "2026-07-26T19:36:12Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:a1293f218bc38b9e0aa565e1",
-        "sequence": 226,
-        "occurredAt": "2026-07-26T19:36:12Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:8e536ab3aa0b83b897c87f3e",
-        "sequence": 225,
-        "occurredAt": "2026-07-26T19:35:52Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:52059267df4b184b5a9e5d0c",
-        "sequence": 47,
-        "occurredAt": "2026-07-26T12:15:56Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:60b460ab202df528f368a7c6",
-        "sequence": 26,
-        "occurredAt": "2026-07-26T12:15:53Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:63654a2506cfa4af3413707d": [
-      {
-        "id": "event:6d7d5da8d9c338905550d08a",
-        "sequence": 102,
-        "occurredAt": "2026-07-26T14:11:05Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:1e2ece5bf02b6768eacf2653",
-        "sequence": 98,
-        "occurredAt": "2026-07-26T13:43:06Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:8dcf5225d23a1be7e5bfd487",
-        "sequence": 87,
-        "occurredAt": "2026-07-26T12:45:33Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:2277072b3f86bbd4f69d6f44",
-        "sequence": 86,
-        "occurredAt": "2026-07-26T12:45:33Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:40254714f931b002f4519bd9",
-        "sequence": 48,
-        "occurredAt": "2026-07-26T12:15:56Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:909eec36ed90748c2224e564",
-        "sequence": 27,
-        "occurredAt": "2026-07-26T12:15:53Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:50384512aec2f79c42096d5e": [
-      {
-        "id": "event:6b70e0135c5a1916a3936b0d",
-        "sequence": 113,
-        "occurredAt": "2026-07-26T14:40:37Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:17e55d6a8acf776714aa6f81",
-        "sequence": 112,
-        "occurredAt": "2026-07-26T14:40:36Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:9ce14f7a6ece5f3a62a003b4",
-        "sequence": 111,
-        "occurredAt": "2026-07-26T14:40:36Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:fc0c0bcc4fa32bfc1ff1f093",
-        "sequence": 110,
-        "occurredAt": "2026-07-26T14:40:36Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:684d8b472cab8e8455714c8e",
-        "sequence": 49,
-        "occurredAt": "2026-07-26T12:15:56Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:b2f17038b7e5232cf6172894",
-        "sequence": 28,
-        "occurredAt": "2026-07-26T12:15:53Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:d79178645918caa013a6d5e8": [
-      {
-        "id": "event:fd302e09377ff34d09c5a253",
-        "sequence": 117,
-        "occurredAt": "2026-07-26T14:40:37Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:327dc72c62fbc0b92b523706",
-        "sequence": 116,
-        "occurredAt": "2026-07-26T14:40:37Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:caa4c0651bbf5a50e46d4afb",
-        "sequence": 115,
-        "occurredAt": "2026-07-26T14:40:37Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:03b330b54bfe726c33544867",
-        "sequence": 114,
-        "occurredAt": "2026-07-26T14:40:37Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:2a2d741501cbc5c1b550bd9f",
-        "sequence": 50,
-        "occurredAt": "2026-07-26T12:15:56Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:a192ade3e51be6eba342c3ae",
-        "sequence": 29,
-        "occurredAt": "2026-07-26T12:15:54Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:16064e534381996738611aed": [
-      {
-        "id": "event:c7d07dff61096ec60623266a",
-        "sequence": 121,
-        "occurredAt": "2026-07-26T14:40:38Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:1ae4f9dc3ee89f9be56e8b2d",
-        "sequence": 120,
-        "occurredAt": "2026-07-26T14:40:37Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:6ce7d0784516cd36df621cc2",
-        "sequence": 119,
-        "occurredAt": "2026-07-26T14:40:37Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:3f7d00e0eab126d6161f3259",
-        "sequence": 118,
-        "occurredAt": "2026-07-26T14:40:37Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:339d3d13d9a04d1ab3abd9a2",
-        "sequence": 51,
-        "occurredAt": "2026-07-26T12:15:56Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:bf42b78895788a5adf57a50f",
-        "sequence": 30,
-        "occurredAt": "2026-07-26T12:15:54Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:ee2995a41a5ef6d04a5de77c": [
-      {
-        "id": "event:65c0f7273ca7294aa13bc40f",
-        "sequence": 130,
-        "occurredAt": "2026-07-26T14:51:27Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:a9777d1c07716b992fa993d4",
-        "sequence": 129,
-        "occurredAt": "2026-07-26T14:51:27Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:60505b99bdcdb0ae943394b4",
-        "sequence": 128,
-        "occurredAt": "2026-07-26T14:51:27Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:420cc19ac793501c63877818",
-        "sequence": 127,
-        "occurredAt": "2026-07-26T14:51:27Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:1bc8350541c88b5d6215760d",
-        "sequence": 52,
-        "occurredAt": "2026-07-26T12:15:56Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:bc3e32d5f9c329048c999ac7",
-        "sequence": 31,
-        "occurredAt": "2026-07-26T12:15:54Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:2ebc3421dfafcf898a33b03b": [
-      {
-        "id": "event:a107554e292a32f5b5d89215",
-        "sequence": 134,
-        "occurredAt": "2026-07-26T14:51:28Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:5d6b6d59ed752fbb31733525",
-        "sequence": 133,
-        "occurredAt": "2026-07-26T14:51:27Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:3c03cd858eb39b68747fd44e",
-        "sequence": 132,
-        "occurredAt": "2026-07-26T14:51:27Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:8f208e91dc7a26a50079ee84",
-        "sequence": 131,
-        "occurredAt": "2026-07-26T14:51:27Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:eee23fb1b87ef8eec5077694",
-        "sequence": 53,
-        "occurredAt": "2026-07-26T12:15:57Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:92355c05833d29870142f64c",
-        "sequence": 32,
-        "occurredAt": "2026-07-26T12:15:54Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:b2a3e693119857c18ba023fa": [
-      {
-        "id": "event:4506596ccbb21f247a35ac6e",
-        "sequence": 149,
-        "occurredAt": "2026-07-26T14:54:35Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:e9ebe097a4cd15acc473f2d0",
-        "sequence": 148,
-        "occurredAt": "2026-07-26T14:54:34Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:c6b21d9e7a251e76dfe3c183",
-        "sequence": 147,
-        "occurredAt": "2026-07-26T14:54:34Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:fa67c9b9799f1cbb4ebd5f77",
-        "sequence": 146,
-        "occurredAt": "2026-07-26T14:54:34Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:238f6d8b491081a3408e77b8",
-        "sequence": 54,
-        "occurredAt": "2026-07-26T12:15:57Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:afc89deae183515ef7f46a53",
-        "sequence": 33,
-        "occurredAt": "2026-07-26T12:15:54Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:46d67962e987427f4e712b56": [
-      {
-        "id": "event:d7947cac59ed77bc216cf3d3",
-        "sequence": 138,
-        "occurredAt": "2026-07-26T14:51:28Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:1362a3ccfb9f4968cd280dbb",
-        "sequence": 137,
-        "occurredAt": "2026-07-26T14:51:28Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:d41af3170a56152509f4aca9",
-        "sequence": 136,
-        "occurredAt": "2026-07-26T14:51:28Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:d85595bc26b84319b5933d93",
-        "sequence": 135,
-        "occurredAt": "2026-07-26T14:51:28Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:a698aee8721619c2b45c3e70",
-        "sequence": 55,
-        "occurredAt": "2026-07-26T12:15:57Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:46cff54de871c8a8e9be1416",
-        "sequence": 34,
-        "occurredAt": "2026-07-26T12:15:54Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:a8195ef3d5d5a870bbbd8b70": [
-      {
-        "id": "event:2b6e47fb3d8f044fc4fe076e",
-        "sequence": 157,
-        "occurredAt": "2026-07-26T14:57:19Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:9ad32f5e0685d41d63f947c2",
-        "sequence": 156,
-        "occurredAt": "2026-07-26T14:57:19Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:ea9bce33c3d5fbc073ec2d72",
-        "sequence": 155,
-        "occurredAt": "2026-07-26T14:57:19Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:da85061a5a707504251c75d6",
-        "sequence": 154,
-        "occurredAt": "2026-07-26T14:57:19Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:ef961abaf68cf74bc50c3c33",
-        "sequence": 56,
-        "occurredAt": "2026-07-26T12:15:57Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:fa76b73ae43a96936cee0de0",
-        "sequence": 35,
-        "occurredAt": "2026-07-26T12:15:54Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:361ed77fb0f61d6cabe695d2": [
-      {
-        "id": "event:61fe8713b5c7dcc7d41b40dc",
-        "sequence": 57,
-        "occurredAt": "2026-07-26T12:15:57Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:fb71dc8cb88c3f8ebb06fdc0",
-        "sequence": 36,
-        "occurredAt": "2026-07-26T12:15:54Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:8e28b5713b859b8433061986": [
-      {
-        "id": "event:3fbe48b0d6a6b38e1a7e0826",
-        "sequence": 170,
-        "occurredAt": "2026-07-26T14:59:19Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:ef414c63db8b3ce0e8fdede3",
-        "sequence": 169,
-        "occurredAt": "2026-07-26T14:59:18Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:35674acba8864b5a4c2c6f3a",
-        "sequence": 168,
-        "occurredAt": "2026-07-26T14:59:18Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:5b1148e4dfa62f9a0a870b7a",
-        "sequence": 167,
-        "occurredAt": "2026-07-26T14:59:18Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:84784a107a93649641f77e11",
-        "sequence": 58,
-        "occurredAt": "2026-07-26T12:15:57Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:2d0a8177f11ab03c8c02d14c",
-        "sequence": 37,
-        "occurredAt": "2026-07-26T12:15:55Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:6ff90303d7135e2d88f031bb": [
-      {
-        "id": "event:49df9671d490905f6de73536",
-        "sequence": 161,
-        "occurredAt": "2026-07-26T14:57:20Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:243a2019d16def47f90cb6b1",
-        "sequence": 160,
-        "occurredAt": "2026-07-26T14:57:20Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:b905176b28192885a34b76d0",
-        "sequence": 159,
-        "occurredAt": "2026-07-26T14:57:20Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:27faa923f1ca74b99c6e6a43",
-        "sequence": 158,
-        "occurredAt": "2026-07-26T14:57:20Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:6efa8d89d2f42b1860aa8bc4",
-        "sequence": 59,
-        "occurredAt": "2026-07-26T12:15:57Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:099e87a9a1ead55c67e22705",
-        "sequence": 38,
-        "occurredAt": "2026-07-26T12:15:55Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:0067159642aa7871a6b31873": [
-      {
-        "id": "event:ced2586a441fee7800272b72",
-        "sequence": 165,
-        "occurredAt": "2026-07-26T14:57:21Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:742ffe6b32976661b4f114b5",
-        "sequence": 164,
-        "occurredAt": "2026-07-26T14:57:21Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:63fe895aa98e9abe64d4a1bf",
-        "sequence": 163,
-        "occurredAt": "2026-07-26T14:57:20Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:73fc21c0d611642d1c803285",
-        "sequence": 162,
-        "occurredAt": "2026-07-26T14:57:20Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:daa1927986d0aecc83369366",
-        "sequence": 60,
-        "occurredAt": "2026-07-26T12:15:57Z",
-        "operation": "work.annotated",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      },
-      {
-        "id": "event:788a1aaafff1defb17070ad3",
-        "sequence": 39,
-        "occurredAt": "2026-07-26T12:15:55Z",
-        "operation": "work.created",
-        "actorId": null,
-        "attribution": "predates-attestation"
-      }
-    ],
-    "work:58e32e52001849dbc63861a7": [
-      {
-        "id": "event:3c1f2da03f70672744fdb13d",
-        "sequence": 75,
-        "occurredAt": "2026-07-26T12:45:32Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:5c4fac4b51915aeef55acf2e",
-        "sequence": 70,
-        "occurredAt": "2026-07-26T12:45:31Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:1a1b5d505a4d63b45f500678": [
-      {
-        "id": "event:428cad690964f20552602ad9",
-        "sequence": 76,
-        "occurredAt": "2026-07-26T12:45:32Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:59a2db9c4afb9b463d5728ca",
-        "sequence": 71,
-        "occurredAt": "2026-07-26T12:45:31Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:e22cde45386d914b64838c11": [
-      {
-        "id": "event:83fd78069355f29370ad17b3",
-        "sequence": 77,
-        "occurredAt": "2026-07-26T12:45:32Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:ec71efa783be5f3bd7224680",
-        "sequence": 72,
-        "occurredAt": "2026-07-26T12:45:31Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:823510ce4fbfbf90d091df76": [
-      {
-        "id": "event:e3855fa5b765bfdfe3fd60a2",
-        "sequence": 88,
-        "occurredAt": "2026-07-26T12:54:14Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:db12dd7c3fba7e33adfffb7e",
-        "sequence": 78,
-        "occurredAt": "2026-07-26T12:45:32Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:8c5864296fc296089fb2d32e",
-        "sequence": 73,
-        "occurredAt": "2026-07-26T12:45:31Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:5c41722d9f448b7f7ead3810": [
-      {
-        "id": "event:5af719841d752b04375f819f",
-        "sequence": 197,
-        "occurredAt": "2026-07-26T15:43:00Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:9cd4794156583e0ffc802708",
-        "sequence": 196,
-        "occurredAt": "2026-07-26T15:43:00Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:c8db66deccd6a6b40a2236de",
-        "sequence": 195,
-        "occurredAt": "2026-07-26T15:43:00Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:6fd21cfeb2532f0862c8b035",
-        "sequence": 181,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:da1a744855553536a071150b",
-        "sequence": 180,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:4dbd6a546e3bf2d1b0df9de7": [
-      {
-        "id": "event:bf6c59b3c315617c177f805b",
-        "sequence": 200,
-        "occurredAt": "2026-07-26T15:43:00Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:36cf83b2ccbc9b0109fdf1a7",
-        "sequence": 199,
-        "occurredAt": "2026-07-26T15:43:00Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:8d4cb87aa6c3e67ccbdcc6d9",
-        "sequence": 198,
-        "occurredAt": "2026-07-26T15:43:00Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:6568691f35bb8b95ef7ad077",
-        "sequence": 183,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:94d234e68a86102950471222",
-        "sequence": 182,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:003168aa62ef03681a9f106c": [
-      {
-        "id": "event:de8a46898b13f130f632b302",
-        "sequence": 203,
-        "occurredAt": "2026-07-26T15:43:01Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:79bc7cee4724e5dc1331f5e0",
-        "sequence": 202,
-        "occurredAt": "2026-07-26T15:43:00Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:44f4bb9cafe0c08c4ae125bd",
-        "sequence": 201,
-        "occurredAt": "2026-07-26T15:43:00Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:1b67c7ff6736b2d1eccbd2dd",
-        "sequence": 185,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:a70ca6329e339662ad9e1abc",
-        "sequence": 184,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:03344dfa2db4c8ed729a9063": [
-      {
-        "id": "event:ffbd1638841a58fa879845be",
-        "sequence": 206,
-        "occurredAt": "2026-07-26T15:43:01Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:78dd0a14e8c73c41ad2dabf1",
-        "sequence": 205,
-        "occurredAt": "2026-07-26T15:43:01Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:c6c12b33cc4e5b8ad9b345c2",
-        "sequence": 204,
-        "occurredAt": "2026-07-26T15:43:01Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:5b1f7ea63f56f2f0ee47fb62",
-        "sequence": 187,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:b41e004909e8db614e49ce99",
-        "sequence": 186,
-        "occurredAt": "2026-07-26T15:39:18Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:1643aa92bf19dca9922ec7dd": [
-      {
-        "id": "event:c736cc71f07bf8015eda0208",
-        "sequence": 231,
-        "occurredAt": "2026-07-26T19:47:05Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:3874a0179f4733b4a56d655f",
-        "sequence": 230,
-        "occurredAt": "2026-07-26T19:47:04Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:2ccb189032ee4a6b65fab1fa",
-        "sequence": 229,
-        "occurredAt": "2026-07-26T19:47:04Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:bc6e358d45d6fbbf6aa98ed6",
-        "sequence": 219,
-        "occurredAt": "2026-07-26T16:51:10Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:b04676bbe35a6ebfff874791",
-        "sequence": 218,
-        "occurredAt": "2026-07-26T16:51:10Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:f84f96d61eaf90caddf0bc8b": [
-      {
-        "id": "event:7d5f61543ec2cafe7b2895b9",
-        "sequence": 234,
-        "occurredAt": "2026-07-26T19:47:05Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:3771a7166b35bfd616cbd939",
-        "sequence": 233,
-        "occurredAt": "2026-07-26T19:47:05Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:d32d1482991b50ec18cd3553",
-        "sequence": 232,
-        "occurredAt": "2026-07-26T19:47:05Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:2c342334e7a6cfe3dd25a40b",
-        "sequence": 221,
-        "occurredAt": "2026-07-26T16:51:10Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:ce89d702139fd52187e0e17c",
-        "sequence": 220,
-        "occurredAt": "2026-07-26T16:51:10Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:f3a608f3a5fb3cfa20ad0a05": [
-      {
-        "id": "event:4487376377f5f74cf4fda4e8",
-        "sequence": 237,
-        "occurredAt": "2026-07-26T19:47:05Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:3fe30eaf94a2ea7129dddd54",
-        "sequence": 236,
-        "occurredAt": "2026-07-26T19:47:05Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:b5b4b2ea3a28a7006403da7e",
-        "sequence": 235,
-        "occurredAt": "2026-07-26T19:47:05Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:417967cbbcb5c5e81ebd6e2c",
-        "sequence": 223,
-        "occurredAt": "2026-07-26T16:51:10Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:d1c48d2bde694a1d81480d26",
-        "sequence": 222,
-        "occurredAt": "2026-07-26T16:51:10Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
-    "work:d0ec852a3c48d6e165389548": [
-      {
-        "id": "event:dbbd0d0d2a4b238c3f608036",
-        "sequence": 145,
-        "occurredAt": "2026-07-26T14:53:20Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:64c221df5108bb9a71940bca",
-        "sequence": 144,
-        "occurredAt": "2026-07-26T14:53:19Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:2dda110dfd2fcebcd4ad6487",
-        "sequence": 143,
-        "occurredAt": "2026-07-26T14:53:19Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:b593ec1a34adb7612edeac60",
-        "sequence": 142,
-        "occurredAt": "2026-07-26T14:53:19Z",
-        "operation": "work.updated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:703383b4c0f64613f33a3968",
-        "sequence": 141,
-        "occurredAt": "2026-07-26T14:53:19Z",
-        "operation": "work.annotated",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      },
-      {
-        "id": "event:75d3e2e55597562d38405b56",
-        "sequence": 140,
-        "occurredAt": "2026-07-26T14:53:19Z",
-        "operation": "work.created",
-        "actorId": "agent:fable",
-        "attribution": "recorded"
-      }
-    ],
     "work:a1f8ee7b3b4bac70f638b6b0": [
       {
         "id": "event:98e8a587292782b356abd415",

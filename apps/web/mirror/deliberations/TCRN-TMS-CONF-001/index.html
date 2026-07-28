@@ -385,6 +385,19 @@
   padding: 0;
   color: var(--tcrn-color-brand-primary);
 }
+/*
+ * Mobile-only, and hidden by default rather than shown by default: above the
+ * breakpoint the navigation is always on screen, so a show/hide control there
+ * would be the no-op the responsive standard forbids — the same reason its
+ * width-collapse sibling is hidden below the breakpoint. Each control exists
+ * exactly where it does something.
+ */
+.tcrn-shell-mobile-nav-toggle {
+  display: none;
+  place-items: center;
+  padding: 0;
+  color: var(--tcrn-color-brand-primary);
+}
 .tcrn-shell-side-nav-toggle__icon {
   display: inline-grid;
   inline-size: 20px;
@@ -564,7 +577,7 @@
 .tcrn-product-shell__sidebar {
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   gap: var(--tcrn-space-5);
@@ -572,6 +585,18 @@
   padding: var(--tcrn-space-4);
   border-right: 1px solid var(--tcrn-color-border-subtle);
   background: var(--tcrn-color-surface-panel);
+  /*
+   * The rail is exactly one viewport tall and sticky, so navigation taller than
+   * the viewport used to paint outside its own box with nothing to scroll: the
+   * page scrolled, the sticky rail did not, and the items past the fold were
+   * unreachable at any scroll position. Measured on a rotated 375x760 phone —
+   * 812x375 is above the mobile breakpoint, so it takes this path — where the
+   * last three destinations could not be reached at all (TCRN-AOS-INC-026).
+   * dvh for the same family of reason: vh ignores the browser chrome that
+   * appears and disappears on a phone.
+   */
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .tcrn-product-shell__sidebar-header {
   display: grid;
@@ -833,12 +858,13 @@
 .tcrn-nav-item__content {
   min-width: 0;
 }
-/* TCRN-DS-STORY-062: selection speaks ONE axis. The selected item carries the 3px left-edge
-   brand rail + brand text — no fill, no outline, and zero radius so the rail pins flush to
-   x=0 — matching the doc-shell single-axis selection language the shell standardized on. */
-/* Same grammar, vertical. The item keeps its own radius rather than squaring off
-   for an axis that no longer exists, and weight is safe here because a sidebar
-   item sits in a fixed-width column where a bolder label cannot reflow the row. */
+/* TCRN-DS-STORY-062 → STORY-087: selection used to speak one axis — a 3px left-edge brand
+   rail, brand text, zero radius. It now speaks ink. The rail is gone; this sentence is kept
+   only to say so, because the original wording survived the change that deleted the rule it
+   described and read as truth for three commits.
+   The item keeps its own radius rather than squaring off for an axis that no
+   longer exists, and weight is safe here because a sidebar item sits in a
+   fixed-width column where a bolder label cannot reflow the row. */
 .tcrn-nav-item[data-selected="true"],
 .tcrn-nav-item[aria-current="page"] {
   color: var(--tcrn-color-text-primary);
@@ -870,6 +896,10 @@
   border: 1px solid var(--tcrn-color-border-control);
   border-radius: var(--tcrn-radius-control);
   background: var(--tcrn-color-surface-panel);
+}
+/* The fill prop: the wrapper takes its container's full inline size. */
+.tcrn-search-input--fill {
+  inline-size: 100%;
 }
 .tcrn-search-input__icon {
   display: inline-flex;
@@ -1060,10 +1090,17 @@ html[data-tcrn-theme="dark"] [data-theme-icon="dark"],
   outline: 2px solid var(--tcrn-color-focus-ring);
   outline-offset: 2px;
 }
+/* TCRN-DS-STORY-087 — "selection is ink", applied to a chip that carries a frame.
+   This chip and WorkQuickFilters are both exported filter chips with the same
+   "this filter is chosen" meaning, and they carried two different grammars until
+   now: this one painted brand, that one inked. One grammar does not mean one
+   declaration — ink takes over whatever structural layer the control already
+   has. The quick filter sits in a frameless track and so takes fill; this chip
+   owns a visible border and so takes the edge. Nothing is added on top in
+   either case, and brand colour stays with actionability. */
 .tcrn-table-toolbar__chip[aria-pressed="true"] {
-  border-color: var(--tcrn-color-brand-primary);
-  color: var(--tcrn-color-brand-primary);
-  background: color-mix(in srgb, var(--tcrn-color-brand-primary-bg) 42%, transparent);
+  border-color: var(--tcrn-selection-edge);
+  color: var(--tcrn-color-text-primary);
 }
 .tcrn-table-toolbar__count {
   margin-inline-start: auto;
@@ -1425,6 +1462,27 @@ a.tcrn-relationship-chip:focus-visible {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
+/* A traversable machine token (MachineToken href). Same inline-record-link ink as
+   the Knowledge result anchor: brand colour with a quiet underline that answers
+   hover, so a token that leads somewhere is distinguishable from one that does
+   not without changing the monospace shape of the value itself. */
+.tcrn-machine-token__link {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--tcrn-color-brand-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, var(--tcrn-color-brand-primary) 35%, transparent);
+}
+.tcrn-machine-token__link:hover {
+  text-decoration-color: var(--tcrn-color-brand-primary);
+}
+.tcrn-machine-token__link .tcrn-machine-token__value {
+  color: inherit;
+}
 .tcrn-machine-token__copy {
   min-height: 28px;
   padding: var(--tcrn-space-0h) var(--tcrn-space-2);
@@ -1620,6 +1678,19 @@ a.tcrn-relationship-chip:focus-visible {
   background: transparent;
   white-space: nowrap;
 }
+/*
+ * A wrapping row lays chips out by line-breaking, so letting a chip shrink
+ * below its own no-wrap text does not save the line — it just lets the text
+ * bleed past the chip and drag a horizontal scroll into whatever column holds
+ * the row, which is how a four-chip filter bar overflowed a 375px viewport.
+ * Natural width plus the wrap the row already has; max-width caps the one
+ * pathological label longer than the column itself.
+ */
+.tcrn-work-quick-filters > a,
+.tcrn-work-quick-filters > span {
+  flex-shrink: 0;
+  max-width: 100%;
+}
 /* TCRN-DS-STORY-087 — "selection is ink".
    One rule for every surface-bearing item in the system: the item's own surface
    takes ink, and nothing is added on top of it. This replaced two competing
@@ -1729,6 +1800,32 @@ a.tcrn-relationship-chip:focus-visible {
   gap: var(--tcrn-space-2);
   padding: var(--tcrn-space-2) var(--tcrn-space-3);
 }
+/*
+ * A row stacks when ITS OWN container cannot hold its columns, not when the
+ * viewport crosses a number.
+ *
+ * The three floors plus their gaps need 464px. The mobile block stacks the row
+ * below a 760px viewport, which sounds like the same thing and is not: on a
+ * shell with a 280px rail, a 761px viewport leaves the row 441px — 23px short
+ * of its own floor, and the row overflowed the page by exactly that. Measured
+ * 16px at 761 and 7px at 770, gone at 780; the responsive standard forbids
+ * page-level horizontal overflow and nothing was asserting it (TCRN-AOS-INC-028).
+ *
+ * A viewport query cannot see the rail, so it cannot answer this question for a
+ * consumer whose rail is a different width — and a second consumer arrives with
+ * a different shell. The container can answer it for all of them.
+ */
+.tcrn-work-list,
+[data-work-list] {
+  container: tcrn-work-row / inline-size;
+}
+@container tcrn-work-row (max-width: 464px) {
+  .tcrn-work-item-row,
+  .tcrn-work-item-row--compact,
+  .tcrn-work-item-row--dense {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 .tcrn-work-item-row--dense {
   grid-template-columns: minmax(92px, 0.14fr) minmax(180px, 1fr) minmax(172px, 0.62fr);
   padding: var(--tcrn-space-1) var(--tcrn-space-2);
@@ -1793,6 +1890,30 @@ a.tcrn-relationship-chip:focus-visible {
   display: grid;
   gap: var(--tcrn-work-density-gap);
 }
+/*
+ * The frame is the size container; the section is the grid. An element cannot
+ * answer a container query about itself, and it is the section's own columns
+ * that must change when space runs out — so the component wraps itself and the
+ * breakpoint becomes true wherever the split view is mounted. The first
+ * consumer approximated this with a viewport media query that was only correct
+ * for its own shell width; a second consumer with a different shell would have
+ * needed a different number.
+ */
+.tcrn-work-split-view-frame {
+  container: tcrn-work-split-view / inline-size;
+  min-width: 0;
+  /*
+   * inline-size containment means this box contributes no intrinsic width, so
+   * a parent that sizes to its content would measure it at zero and the whole
+   * split view would vanish silently. width 100% gives it back a definite size
+   * wherever the parent has one to give — block flow, a grid track, a flex
+   * item. A parent that is itself shrink-to-fit (inline-block, float, an auto
+   * track) has no width to resolve against, and the component's own
+   * documentation states that requirement rather than leaving it to be
+   * discovered as a blank region.
+   */
+  width: 100%;
+}
 .tcrn-work-split-view {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.6fr);
@@ -1802,6 +1923,24 @@ a.tcrn-relationship-chip:focus-visible {
 .tcrn-work-split-view__list,
 .tcrn-work-split-view__detail {
   min-width: 0;
+}
+/* 780px of actual container: below it the 280px detail column starves the list. */
+@container tcrn-work-split-view (max-width: 780px) {
+  .tcrn-work-split-view {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /*
+   * Stacked, the one bit the consumer supplies decides the detail region's
+   * fate: absent a selection it is an empty box pushing the list down, and
+   * with one it is what the reader chose, so it leads. Without the attribute
+   * both regions render in source order, which is the pre-admission layout.
+   */
+  .tcrn-work-split-view[data-detail-populated="false"] .tcrn-work-split-view__detail {
+    display: none;
+  }
+  .tcrn-work-split-view[data-detail-populated="true"] .tcrn-work-split-view__detail {
+    order: -1;
+  }
 }
 .tcrn-work-backlog-group,
 .tcrn-work-field-panel,
@@ -1886,6 +2025,51 @@ a.tcrn-relationship-chip:focus-visible {
   border: 1px solid var(--tcrn-color-border-subtle);
   border-radius: var(--tcrn-radius-panel);
   background: var(--tcrn-color-surface-muted);
+  /* The stretched card link below positions against the card itself. */
+  position: relative;
+}
+/*
+ * A card with an href is one click target, delivered as a stretched link rather
+ * than an <a> around the card: the card can also carry relationship chips, and
+ * an anchor inside an anchor is not a document. The chips row raises itself
+ * above the stretched surface so both stay clickable.
+ */
+.tcrn-work-board__card-link {
+  color: inherit;
+  text-decoration: none;
+}
+.tcrn-work-board__card-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--tcrn-radius-panel);
+}
+.tcrn-work-board__card:has(.tcrn-work-board__card-link):hover {
+  border-color: var(--tcrn-color-border-strong);
+}
+.tcrn-work-board__card-link:hover,
+.tcrn-work-board__card-link:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+.tcrn-work-board__card-link:focus-visible::after {
+  outline: 2px solid var(--tcrn-color-focus-ring);
+  outline-offset: 2px;
+}
+/*
+ * Everything the card's own API lets a consumer fill sits above the stretched
+ * link. Relations render chips that are links in their own right, and meta and
+ * fields are public ReactNode slots — a consumer may put a button, a link, or
+ * selectable text in either, and a stretched surface over the whole card would
+ * swallow all three without any diagnostic. The card stays one click target
+ * everywhere the consumer put nothing of its own.
+ */
+.tcrn-work-board__relations,
+.tcrn-work-board__card-meta,
+.tcrn-work-board__card-fields {
+  position: relative;
+  z-index: 1;
 }
 .tcrn-work-board__card > strong {
   min-width: 0;
@@ -2175,16 +2359,23 @@ a.tcrn-relationship-chip:focus-visible {
     grid-template-columns: 1fr;
     align-items: stretch;
   }
+  /*
+   * Lever 2 of the mobile fold budget. Each of these used to take a full row of
+   * its own, which spent 130px of a 760px screen on three controls before the
+   * page said anything. They sit on one line and wrap only when they must.
+   */
   .tcrn-product-shell__utility-row {
-    justify-content: stretch;
-    align-items: stretch;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--tcrn-space-2);
   }
   .tcrn-product-shell__current-location,
   .tcrn-shell-locale-menu {
-    flex: 1 1 100%;
+    flex: 0 1 auto;
     margin-right: 0;
     max-width: none;
-    width: 100%;
+    width: auto;
   }
   .tcrn-product-shell-search,
   .tcrn-product-shell-search[data-search-expanded="true"] {
@@ -2194,8 +2385,45 @@ a.tcrn-relationship-chip:focus-visible {
     width: 320px;
     max-width: 320px;
   }
+  /*
+   * The width-collapse control stays hidden here, and that ruling has not
+   * changed: narrowing a rail to 92px means nothing in a full-width stacked
+   * layout, and a control that does nothing is what the responsive standard
+   * forbids. What was never ruled on — because the shell had two destinations
+   * when this rule was written and has eleven now — is whether the navigation
+   * can be put away at all. That is the control below, and it is a different one.
+   */
   .tcrn-product-shell__sidebar-header .tcrn-shell-side-nav-toggle {
     display: none;
+  }
+  .tcrn-shell-mobile-nav-toggle {
+    display: inline-flex;
+    /* Sole route to the whole IA on the one viewport where it is touched. */
+    min-width: 44px;
+    min-height: 44px;
+  }
+  /*
+   * Lever 1. display:none rather than a transform: it takes the eleven links
+   * out of the tab order and out of the accessibility tree, which a translated
+   * or merely invisible panel does not. Closed is the CSS default, so a server
+   * render emits the closed nav with no script and no correction after
+   * hydration — the attribute only ever turns it on.
+   */
+  .tcrn-product-shell__sidebar .tcrn-side-nav {
+    display: none;
+  }
+  .tcrn-product-shell[data-mobile-nav-expanded="true"] .tcrn-product-shell__sidebar .tcrn-side-nav {
+    display: grid;
+  }
+  /*
+   * The header carries the only navigation control on this viewport, so it has
+   * to survive the scroll that the shorter page now invites. Without this it
+   * leaves after 79px and the reader has no way back to the navigation at all.
+   */
+  .tcrn-product-shell__sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
   }
   .tcrn-work-board,
   .tcrn-work-hierarchy__levels,
@@ -2218,7 +2446,27 @@ a.tcrn-relationship-chip:focus-visible {
   .tcrn-work-view-tabs > span,
   .tcrn-work-quick-filters > a,
   .tcrn-work-quick-filters > span {
-    flex: 1 1 160px;
+    /*
+     * Lever 3. These wrapped into four and three rows, spending 380px of the
+     * fold on chrome before the first work item. One scrolling row each: the
+     * chips keep their own width (a CJK filter name with a count needs 213px
+     * and shrinking it bled the text out of the chip), and the overflow is the
+     * row's, not the page's.
+     *
+     * Supersedes the wrap-based sizing that fixed that bleed — same property,
+     * different mechanism, and the no-page-overflow property it was protecting
+     * still holds because the scroll is contained here.
+     */
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+  .tcrn-work-view-tabs,
+  .tcrn-work-quick-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    /* Momentum on touch, and the row keeps its own scrollbar off the page. */
+    -webkit-overflow-scrolling: touch;
   }
   .tcrn-shell-locale-menu__trigger {
     width: 100%;
@@ -2624,6 +2872,21 @@ a.tcrn-relationship-chip:focus-visible {
 .tcrn-breadcrumb [aria-current="page"] {
   color: var(--tcrn-color-text-primary);
   font-weight: 700;
+}
+
+/* An ancestor crumb is now a link (it previously rendered as an inert span, so
+   there was nothing to style). Quiet by default and underlined on hover: the
+   trail is chrome, and a row of permanently underlined links competes with the
+   page title it sits above. */
+.tcrn-breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+}
+.tcrn-breadcrumb a:hover {
+  color: var(--tcrn-color-brand-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
 }
 
 /* Pagination container. Pagination renders an empty nav today; this readies the
@@ -3063,7 +3326,8 @@ a.tcrn-relationship-chip:focus-visible {
   max-inline-size: 26rem;
   min-inline-size: 0;
 }
-.tcrn-aos-searchbar .tcrn-search-input { inline-size: 100%; }
+/* The search control's width is the DS fill prop now; the rule that used to
+   size it from here was this file reaching into the component's class name. */
 /* The honesty note lives in a hover affordance rather than a sentence beside the
    field: the claim still has to be available, but it is not worth a line of the
    toolbar on every render. */
@@ -3256,22 +3520,11 @@ a.tcrn-relationship-chip:focus-visible {
 .tcrn-aos-prose {
   white-space: pre-wrap;
 }
-/* The DS split view collapses at a 760px viewport, but this page loses another
-   ~260px to the shell nav: between those widths the list column is too narrow
-   for its rows and their meta bleeds into the preview. Collapse earlier, hide
-   the pane when nothing is selected, and surface the selection first when one
-   is — row clicks below this width navigate to the full detail instead. */
-@media (max-width: 1100px) {
-  [data-cockpit-split="work-items"] .tcrn-work-split-view {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  [data-cockpit-split="work-items"][data-has-selection="false"] .tcrn-work-split-view__detail {
-    display: none;
-  }
-  [data-cockpit-split="work-items"][data-has-selection="true"] .tcrn-work-split-view__detail {
-    order: -1;
-  }
-}
+/* The split view's stacking used to be forced from here with a viewport media
+   query and three rules reaching into DS class names — a number that was only
+   right for this shell's width. The DS component owns it now: a container
+   query stacks it wherever it actually runs out of room, and the
+   detailPopulated prop carries the one bit only the consumer knows. */
 .tcrn-aos-as-of {
   display: inline-flex;
   align-items: center;
@@ -3288,19 +3541,21 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* The DS ramp, not a local stack: this file used to carry its own fallback
+     list, which is a second type ramp the moment Inter fails to load. */
+  font-family: var(--tcrn-type-family-ui);
   font-size: var(--tcrn-type-size-reading);
-  line-height: 1.45;
+  line-height: var(--tcrn-type-line-reading);
   background: var(--tcrn-color-surface-canvas);
   color: var(--tcrn-color-text-primary);
 }
 a { color: inherit; }
 button, input { font: inherit; }
 [data-work-page-eyebrow="true"] {
-  margin: 0 0 6px;
+  margin: 0 0 var(--tcrn-space-1h);
   color: var(--tcrn-color-text-secondary);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--tcrn-type-size-meta);
+  font-weight: var(--tcrn-type-weight-strong);
   text-transform: uppercase;
   letter-spacing: 0;
 }
@@ -3311,7 +3566,7 @@ button, input { font: inherit; }
   gap: 8px;
   align-items: center;
 }
-.tcrn-work-module-sr-only {
+.tcrn-aos-work-module-sr-only {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
@@ -3355,12 +3610,12 @@ button, input { font: inherit; }
   gap: var(--tcrn-space-4);
 }
 [data-work-route-chrome="compact-ds-public-exports"],
-.tcrn-work-module-detail-stack {
+.tcrn-aos-work-module-detail-stack {
   display: grid;
   gap: var(--tcrn-space-3);
   min-width: 0;
 }
-.tcrn-work-module-secondary-grid {
+.tcrn-aos-work-module-secondary-grid {
   display: grid;
   gap: var(--tcrn-space-3);
   grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
@@ -3370,68 +3625,68 @@ button, input { font: inherit; }
   align-items: start;
   grid-template-columns: minmax(0, 1fr);
 }
-.tcrn-phase3-readback {
+.tcrn-aos-phase3-readback {
   display: grid;
   gap: var(--tcrn-space-4);
   min-width: 0;
 }
-.tcrn-phase3-readback *,
-.tcrn-phase3-readback__layout,
-.tcrn-phase3-readback__detail,
-.tcrn-phase3-readback__story-summary,
-.tcrn-phase3-readback__knowledge,
-.tcrn-phase3-readback__knowledge-entry {
+.tcrn-aos-phase3-readback *,
+.tcrn-aos-phase3-readback__layout,
+.tcrn-aos-phase3-readback__detail,
+.tcrn-aos-phase3-readback__story-summary,
+.tcrn-aos-phase3-readback__knowledge,
+.tcrn-aos-phase3-readback__knowledge-entry {
   min-width: 0;
 }
-.tcrn-phase3-readback__filter-band,
-.tcrn-phase3-readback__policy,
-.tcrn-phase3-readback__section-heading,
-.tcrn-phase3-readback__story-card,
-.tcrn-phase3-readback__audit-card,
-.tcrn-phase3-readback__knowledge-search,
-.tcrn-phase3-readback__knowledge-detail,
-.tcrn-phase3-readback__knowledge-results,
-.tcrn-phase3-readback__knowledge-entry {
+.tcrn-aos-phase3-readback__filter-band,
+.tcrn-aos-phase3-readback__policy,
+.tcrn-aos-phase3-readback__section-heading,
+.tcrn-aos-phase3-readback__story-card,
+.tcrn-aos-phase3-readback__audit-card,
+.tcrn-aos-phase3-readback__knowledge-search,
+.tcrn-aos-phase3-readback__knowledge-detail,
+.tcrn-aos-phase3-readback__knowledge-results,
+.tcrn-aos-phase3-readback__knowledge-entry {
   display: grid;
   gap: var(--tcrn-space-3);
 }
-.tcrn-phase3-readback__tokens,
-.tcrn-phase3-readback__pagination,
-.tcrn-phase3-readback__status-line,
-.tcrn-phase3-readback__empty,
-.tcrn-phase3-readback__subtask,
-.tcrn-phase3-readback__knowledge-form,
-.tcrn-phase3-readback__knowledge-result-head {
+.tcrn-aos-phase3-readback__tokens,
+.tcrn-aos-phase3-readback__pagination,
+.tcrn-aos-phase3-readback__status-line,
+.tcrn-aos-phase3-readback__empty,
+.tcrn-aos-phase3-readback__subtask,
+.tcrn-aos-phase3-readback__knowledge-form,
+.tcrn-aos-phase3-readback__knowledge-result-head {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--tcrn-space-2);
 }
-.tcrn-phase3-readback__layout {
+.tcrn-aos-phase3-readback__layout {
   display: grid;
   grid-template-columns: minmax(280px, 0.95fr) minmax(320px, 1.35fr);
   gap: var(--tcrn-space-4);
   align-items: start;
 }
-.tcrn-phase3-readback__list,
-.tcrn-phase3-readback__detail {
+.tcrn-aos-phase3-readback__list,
+.tcrn-aos-phase3-readback__detail {
   display: grid;
   gap: var(--tcrn-space-3);
 }
-.tcrn-phase3-readback__story-summary {
+.tcrn-aos-phase3-readback__story-summary {
   display: grid;
   gap: var(--tcrn-space-3);
 }
-.tcrn-phase3-readback__knowledge {
+.tcrn-aos-phase3-readback__knowledge {
   display: grid;
   grid-template-columns: minmax(280px, 1fr) minmax(320px, 1fr);
   gap: var(--tcrn-space-4);
   align-items: start;
 }
-.tcrn-phase3-readback__knowledge-label {
+.tcrn-aos-phase3-readback__knowledge-label {
   font-weight: var(--tcrn-font-weight-semibold);
 }
-.tcrn-phase3-readback__knowledge-input {
+.tcrn-aos-phase3-readback__knowledge-input {
   flex: 1 1 220px;
   max-width: 34rem;
   min-height: 2.25rem;
@@ -3441,71 +3696,61 @@ button, input { font: inherit; }
   background: var(--tcrn-color-surface-panel);
   color: var(--tcrn-color-text-primary);
 }
-.tcrn-phase3-readback__knowledge-result {
+.tcrn-aos-phase3-readback__knowledge-result {
   display: grid;
   gap: var(--tcrn-space-2);
   border-block-start: 1px solid var(--tcrn-color-border-subtle);
   padding-block-start: var(--tcrn-space-3);
 }
-.tcrn-phase3-readback__knowledge-body {
+.tcrn-aos-phase3-readback__knowledge-body {
   display: grid;
   gap: var(--tcrn-space-2);
 }
-.tcrn-phase3-readback__subtasks {
+.tcrn-aos-phase3-readback__subtasks {
   display: grid;
   gap: var(--tcrn-space-2);
 }
-.tcrn-phase3-readback__error {
+.tcrn-aos-phase3-readback__error {
   border-color: var(--tcrn-color-border-warning);
 }
 @media (max-width: 820px) {
-  .tcrn-phase3-readback__layout,
-  .tcrn-phase3-readback__knowledge {
+  .tcrn-aos-phase3-readback__layout,
+  .tcrn-aos-phase3-readback__knowledge {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 </style>
   </head>
   <body data-product-shell-body="owner-quality-product-shell" data-product-acceptance="not-claimed" data-release-readiness="not-claimed" data-live-dispatch="not-enabled">
-    <div id="aos-root" data-ssr-path="/deliberations/TCRN-AOS-CONF-001"><link rel="preload" as="image" href="/assets/tcrn-brand-mark.svg"/><div data-aos-shell="owner-quality-product-shell" data-storybook-visual-instance="aos-owner-quality-product-shell" data-visual-instance-name="AosOwnerQualityProductShell" data-visual-instance-disposition="ds_oracle_review_required_before_owner_admission" data-visual-instance-style-source="@tcrn/ui-react/tcrnComponentCss" data-visual-instance-owner-quality="product-first" data-visual-instance-slots="registered-product-logo side-nav topbar theme-locale operations-cockpit work-queue gates-evidence owner-actions service-health secondary-disclosure" data-visual-instance-primary-ia="operations-cockpit-work-queue" data-visual-instance-negative-criteria="no-proof-scaffold-hero no-dummy-cockpit no-raw-primary no-owner-readiness" data-visual-instance-product-logo="tcrn-aos-two-line" data-product-logo-asset-id="tcrn-aos-two-line" data-product-logo-line-one="TCRN AOS" data-product-logo-line-two="AI Operation System" data-visual-instance-mobile-collapse-policy="hidden-affordance" data-visual-instance-variant="aos-route-state-outside-owner-quality-oracle" data-visual-instance-theme="light" data-tcrn-theme="light" data-visual-instance-locale="en" data-visual-instance-collapsed="false" data-owner-quality-collapse-policy="desktop-actionable-collapse-toggle" data-visual-instance-route="deliberations" data-visual-instance-search="not-rendered" data-visual-instance-viewport="desktop" data-visual-instance-reduced-motion="false" data-visual-instance-content="deliberations" data-owner-quality-product-shell-oracle="true" data-design-system-source="@tcrn/ui-react @tcrn/ui-tokens @tcrn/ui-copy-state" data-storybook-contract-consumed="product-shell-semantic-boundary" data-storybook-visual-instance-consumed="aos-owner-quality-product-shell" data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search" data-product-shell-global-search="not-rendered" data-product-shell-search-capability="absent" data-product-shell-header-actions-consumed="workspace-switcher as-of" data-product-shell-locale-persistence="url-canonical" data-local-wrapper-event-delegation="absent" data-local-shell-effect-clones="removed" data-cockpit-aggregation="deferred" data-aos-registered-module-boundary="cockpit-work-only" data-current-path="/deliberations/TCRN-AOS-CONF-001" class="tcrn-product-shell" data-package-backed-product-shell-boundary="side-nav-shell-v1" data-product-shell-pattern="attached-side-nav" data-product-shell-collapsed="false" data-side-nav-collapsed="false" data-product-shell-theme="light" data-product-shell-responsive="desktop-attached-mobile-stacked" data-product-shell-effect-boundary="ds-owned-tokens-motion-focus" data-product-shell-consumer-scope="ia-data-route-labels-content-callbacks" data-product-shell-semantic-api="collapse-theme-locale" data-product-shell-header-actions="present"><a href="#content" class="tcrn-skip-link">Skip to operations content</a><aside class="tcrn-product-shell__sidebar" data-product-shell-region="side-navigation"><div class="tcrn-product-shell__sidebar-header"><a class="tcrn-product-shell__brand" href="/" aria-label="TCRN AOS home" data-registered-brand-lockup="@tcrn/ui-react/ShellBrandLockup" data-registered-product-logo="@tcrn/ui-react/ProductLogo"><div data-visible-registered-brand-lockup="true" class="tcrn-product-logo tcrn-shell-brand-lockup" aria-label="TCRN AOS AI Operation System" data-component-source="@tcrn/ui-react" data-registered-product-logo="@tcrn/ui-react/ProductLogo" data-product-id="aos" data-product-logo-asset-id="tcrn-aos-two-line"><img class="tcrn-brand-mark" src="/assets/tcrn-brand-mark.svg" alt="TCRN AOS AI Operation System" aria-label="TCRN AOS AI Operation System" data-component-source="@tcrn/ui-react" data-brand-asset="tcrn-brand-mark" data-tcrn-brand-mark="registered" data-brand-asset-registration="design-system"/><span class="tcrn-product-logo__copy" aria-hidden="true"><span class="tcrn-product-logo__line-one" aria-label="TCRN AOS"><span class="tcrn-product-logo__line-one-base">TCRN</span><span class="tcrn-product-logo__line-one-suffix tcrn-brand-wordmark__suffix--aos">AOS</span></span><span class="tcrn-product-logo__line-two">AI Operation System</span></span></div></a><button title="Collapse side navigation" aria-controls="aos-primary-side-nav" aria-expanded="true" data-shell-control="side-nav-collapse" data-package-backed-shell-control="side-nav-collapse" data-side-nav-toggle="true" data-side-nav-collapsed="false" data-side-nav-action="toggle" data-side-nav-keyboard-activation="enter-space" data-side-nav-persisted-key="tcrn-aos-side-nav-collapsed" data-side-nav-semantic-api="onCollapsedChange" aria-label="Collapse side navigation" class="tcrn-button tcrn-button--secondary tcrn-button--md tcrn-icon-button tcrn-shell-side-nav-toggle"><span class="tcrn-shell-side-nav-toggle__icon" data-side-nav-icon="collapse"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left tcrn-icon" aria-hidden="true" data-icon-name="chevron-left" focusable="false"><path d="m15 18-6-6 6-6"></path></svg></span><span class="tcrn-shell-side-nav-toggle__icon" data-side-nav-icon="expand"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tcrn-icon" aria-hidden="true" data-icon-name="chevron-right" focusable="false"><path d="m9 18 6-6-6-6"></path></svg></span></button></div><nav id="aos-primary-side-nav" data-registered-navigation-only="true" aria-label="AOS operations navigation" class="tcrn-side-nav" data-navigation-primitive="side-nav"><div data-storybook-category-id="global" data-storybook-category-label="Global" data-storybook-section-label="Global" class="tcrn-nav-group" data-navigation-primitive="nav-group"><div class="tcrn-nav-group__label">Global</div><div class="tcrn-nav-group__items"><a data-product-shell-route="my-work" href="/my-work?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house tcrn-icon" aria-hidden="true" data-icon-name="home" focusable="false"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">My work</span></span></a><a data-product-shell-route="inbox" href="/inbox?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check tcrn-icon" aria-hidden="true" data-icon-name="check" focusable="false"><path d="M20 6 9 17l-5-5"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Inbox</span></span></a><a data-product-shell-route="dashboard" href="/dashboard?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers tcrn-icon" aria-hidden="true" data-icon-name="layers" focusable="false"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Dashboard</span></span></a></div></div><div data-storybook-category-id="delivery" data-storybook-category-label="Delivery" data-storybook-section-label="Delivery" class="tcrn-nav-group" data-navigation-primitive="nav-group"><div class="tcrn-nav-group__label">Delivery</div><div class="tcrn-nav-group__items"><a data-product-shell-route="projects" href="/projects?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers tcrn-icon" aria-hidden="true" data-icon-name="layers" focusable="false"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Projects</span></span></a><a data-product-shell-route="work-items" href="/work-items?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database tcrn-icon" aria-hidden="true" data-icon-name="database" focusable="false"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Work items</span></span></a><a data-product-shell-route="board" href="/board?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-grid tcrn-icon" aria-hidden="true" data-icon-name="layout-grid" focusable="false"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Board</span></span></a><a data-product-shell-route="release-trains" href="/release-trains?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package tcrn-icon" aria-hidden="true" data-icon-name="package" focusable="false"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Release trains</span></span></a></div></div><div data-storybook-category-id="knowledge" data-storybook-category-label="Knowledge" data-storybook-section-label="Knowledge" class="tcrn-nav-group" data-navigation-primitive="nav-group"><div class="tcrn-nav-group__label">Knowledge</div><div class="tcrn-nav-group__items"><a data-product-shell-route="knowledge-space" href="/knowledge?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open tcrn-icon" aria-hidden="true" data-icon-name="book-open" focusable="false"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Knowledge space</span></span></a></div></div><div data-storybook-category-id="governance" data-storybook-category-label="Governance" data-storybook-section-label="Governance" class="tcrn-nav-group" data-selected="true" data-navigation-primitive="nav-group"><div class="tcrn-nav-group__label">Governance</div><div class="tcrn-nav-group__items"><a data-product-shell-route="deliberations" href="/deliberations?locale=en&amp;theme=light&amp;collapsed=false" aria-current="page" data-selected="true" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-history tcrn-icon" aria-hidden="true" data-icon-name="history" focusable="false"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Deliberations</span></span></a><a data-product-shell-route="audit" href="/audit?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check tcrn-icon" aria-hidden="true" data-icon-name="shield-check" focusable="false"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Audit</span></span></a><a data-product-shell-route="snapshots" href="/snapshots?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings tcrn-icon" aria-hidden="true" data-icon-name="settings" focusable="false"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Snapshot health</span></span></a></div></div></nav></aside><div class="tcrn-product-shell__workspace"><header class="tcrn-top-bar" aria-label="Operations Cockpit shell controls" data-product-shell-region="topbar"><div class="tcrn-product-shell__utility-row" data-product-shell-region="utility-row"><div class="tcrn-product-shell__current-location"><span>Current location</span><strong>Deliberations</strong></div><div class="tcrn-product-shell__header-actions" data-product-shell-region="header-actions"><div class="tcrn-aos-scope" data-product-control="scope"><button type="button" class="tcrn-aos-scope__trigger" aria-expanded="false" aria-haspopup="true" data-scope-id="__all__"><span class="tcrn-aos-scope__key">Scope</span><strong>All projects</strong><span class="tcrn-aos-scope__caret" aria-hidden="true">▾</span></button><span class="tcrn-aos-as-of" data-product-control="as-of" data-chain-count="4" data-projection-stale="false" title="Platform governance v1266 · Design System v959 · TMS v228 · AOS v243"><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="4 chains" title="4 chains" aria-label="4 chains"><code class="tcrn-machine-token__value">4 chains</code></span></span><span class="tcrn-badge tcrn-badge--neutral">Verified</span></span></div></div><button title="Switch to dark mode" data-shell-control="theme-toggle" data-package-backed-shell-control="theme-toggle" data-theme-toggle="true" data-current-theme="light" data-theme-next="dark" data-theme-transition-contract="whole-page-view-transition-or-token-wash" aria-label="Switch to dark mode" class="tcrn-button tcrn-button--secondary tcrn-button--md tcrn-icon-button tcrn-shell-theme-toggle"><span class="tcrn-shell-theme-toggle__icon" data-theme-icon="light"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun tcrn-icon" aria-hidden="true" data-icon-name="sun" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg></span><span class="tcrn-shell-theme-toggle__icon" data-theme-icon="dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon tcrn-icon" aria-hidden="true" data-icon-name="moon" focusable="false"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg></span></button><div class="tcrn-shell-locale-menu" data-shell-control="locale-menu" data-package-backed-shell-control="locale-menu" data-locale-control="native-name-menu" data-locale-menu-open="false" data-locale-dismissal-contract="selection-outside-pointer-escape-focus-return" data-locale-semantic-api="onOpenChange-onLocaleChange"><button class="tcrn-shell-locale-menu__trigger" type="button" data-locale-menu-toggle="true" aria-haspopup="listbox" aria-expanded="false" aria-controls="«R2n»" aria-label="Language" title="Language"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-earth tcrn-icon" aria-hidden="true" data-icon-name="globe-2" focusable="false"><path d="M21.54 15H17a2 2 0 0 0-2 2v4.54"></path><path d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"></path><path d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"></path><circle cx="12" cy="12" r="10"></circle></svg><span class="tcrn-shell-locale-menu__current" data-locale-current="true" data-locale-current-name="true">English</span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down tcrn-icon tcrn-shell-locale-menu__chevron" aria-hidden="true" data-icon-name="chevron-down" focusable="false"><path d="m6 9 6 6 6-6"></path></svg></button><div id="«R2n»" class="tcrn-shell-locale-menu__panel" role="listbox" data-locale-menu="true" hidden=""><button class="tcrn-shell-locale-menu__option" type="button" role="option" data-locale="zh-CN" data-locale-name="简体中文" data-locale-option="zh-CN" data-locale-menu-option="true" aria-selected="false"><span class="tcrn-shell-locale-menu__name">简体中文</span></button><button class="tcrn-shell-locale-menu__option" type="button" role="option" data-locale="en" data-locale-name="English" data-locale-option="en" data-locale-menu-option="true" aria-current="true" aria-selected="true"><span class="tcrn-shell-locale-menu__name">English</span></button><button class="tcrn-shell-locale-menu__option" type="button" role="option" data-locale="ja" data-locale-name="日本語" data-locale-option="ja" data-locale-menu-option="true" aria-selected="false"><span class="tcrn-shell-locale-menu__name">日本語</span></button><button class="tcrn-shell-locale-menu__option" type="button" role="option" data-locale="ko" data-locale-name="한국어" data-locale-option="ko" data-locale-menu-option="true" aria-selected="false"><span class="tcrn-shell-locale-menu__name">한국어</span></button><button class="tcrn-shell-locale-menu__option" type="button" role="option" data-locale="fr" data-locale-name="Français" data-locale-option="fr" data-locale-menu-option="true" aria-selected="false"><span class="tcrn-shell-locale-menu__name">Français</span></button></div></div></div></header><main id="content" class="tcrn-product-shell__main" data-product-shell-region="content" aria-label="AOS operations workspace"><div class="tcrn-aos-environment" data-cockpit-surface="mirror"><div class="tcrn-environment-banner" data-state="local_only"><strong>Read-only mirror — data as of 2026-07-26T22:04:29Z; writes happen on the operator&#x27;s machine · cross-project v1266 · TCRN-Design-System v959 · TCRN-TMS v228 · TCRN-AOS v243</strong><span>Local proof only</span></div></div><div class="tcrn-aos-view" data-cockpit-view="deliberation-room" data-conference-key="TCRN-AOS-CONF-001"><section class="tcrn-surface tcrn-aos-band"><div class="tcrn-aos-detail-head__meta"><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="TCRN-AOS-CONF-001" title="TCRN-AOS-CONF-001" aria-label="TCRN-AOS-CONF-001"><code class="tcrn-machine-token__value">TCRN-AOS-CONF-001</code></span></span><span class="tcrn-badge tcrn-badge--neutral">strategy</span><span class="tcrn-badge tcrn-badge--neutral">closed</span><span data-provenance="legacy-unverified" class="tcrn-badge tcrn-badge--neutral">execution mode undeclared</span><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="v243" title="v243" aria-label="v243"><code class="tcrn-machine-token__value">v243</code></span></span></div><h1 class="tcrn-heading tcrn-heading--2">AOS 设计:承接 Workflow 数据的驾驶舱——定位、功能族与开发方式</h1></section><div class="tcrn-aos-room"><div class="tcrn-aos-room__thread"><section class="tcrn-aos-round" data-round="1"><div class="tcrn-aos-round__label"><p class="tcrn-text">Round 1</p></div><article class="tcrn-aos-bubble" data-persona="minerva" data-adversarial="false" data-fragments="2"><div class="tcrn-aos-bubble__avatar" aria-hidden="true">M</div><div class="tcrn-aos-bubble__body"><div class="tcrn-aos-bubble__who"><strong>Minerva</strong><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="profile:tcrn-minerva-v1" title="profile:tcrn-minerva-v1" aria-label="profile:tcrn-minerva-v1"><code class="tcrn-machine-token__value">profile:tcrn-minerva-v1</code></span></span><span class="tcrn-badge tcrn-badge--neutral">2 fragments rejoined</span></div><p class="tcrn-aos-bubble__text">主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。次轮立场:开发方式(源=Owner 提议「先一个个模块来做,先前端设计再后端开发」,我方赞同并加三护栏)。
+    <div id="aos-root" data-ssr-path="/deliberations/TCRN-TMS-CONF-001"><link rel="preload" as="image" href="/assets/tcrn-brand-mark.svg"/><div data-aos-shell="owner-quality-product-shell" data-storybook-visual-instance="aos-owner-quality-product-shell" data-visual-instance-name="AosOwnerQualityProductShell" data-visual-instance-disposition="ds_oracle_review_required_before_owner_admission" data-visual-instance-style-source="@tcrn/ui-react/tcrnComponentCss" data-visual-instance-owner-quality="product-first" data-visual-instance-slots="registered-product-logo side-nav topbar theme-locale operations-cockpit work-queue gates-evidence owner-actions service-health secondary-disclosure" data-visual-instance-primary-ia="operations-cockpit-work-queue" data-visual-instance-negative-criteria="no-proof-scaffold-hero no-dummy-cockpit no-raw-primary no-owner-readiness" data-visual-instance-product-logo="tcrn-aos-two-line" data-product-logo-asset-id="tcrn-aos-two-line" data-product-logo-line-one="TCRN AOS" data-product-logo-line-two="AI Operation System" data-visual-instance-mobile-collapse-policy="hidden-affordance" data-visual-instance-variant="aos-route-state-outside-owner-quality-oracle" data-visual-instance-theme="light" data-tcrn-theme="light" data-visual-instance-locale="en" data-visual-instance-collapsed="false" data-owner-quality-collapse-policy="desktop-actionable-collapse-toggle" data-visual-instance-route="deliberations" data-visual-instance-search="not-rendered" data-visual-instance-viewport="desktop" data-visual-instance-reduced-motion="false" data-visual-instance-content="deliberations" data-owner-quality-product-shell-oracle="true" data-design-system-source="@tcrn/ui-react @tcrn/ui-tokens @tcrn/ui-copy-state" data-storybook-contract-consumed="product-shell-semantic-boundary" data-storybook-visual-instance-consumed="aos-owner-quality-product-shell" data-ds-product-shell-boundary-consumed="ProductShell useProductShellController no-global-search" data-product-shell-global-search="not-rendered" data-product-shell-search-capability="absent" data-product-shell-header-actions-consumed="workspace-switcher as-of" data-product-shell-locale-persistence="url-canonical" data-local-wrapper-event-delegation="absent" data-local-shell-effect-clones="removed" data-cockpit-aggregation="deferred" data-aos-registered-module-boundary="cockpit-work-only" data-current-path="/deliberations/TCRN-TMS-CONF-001" class="tcrn-product-shell" data-package-backed-product-shell-boundary="side-nav-shell-v1" data-product-shell-pattern="attached-side-nav" data-product-shell-collapsed="false" data-side-nav-collapsed="false" data-product-shell-theme="light" data-product-shell-responsive="desktop-attached-mobile-stacked" data-product-shell-effect-boundary="ds-owned-tokens-motion-focus" data-product-shell-consumer-scope="ia-data-route-labels-content-callbacks" data-product-shell-semantic-api="collapse-theme-locale" data-product-shell-header-actions="present" data-mobile-nav-expanded="false"><a href="#content" class="tcrn-skip-link">Skip to operations content</a><aside class="tcrn-product-shell__sidebar" data-product-shell-region="side-navigation"><div class="tcrn-product-shell__sidebar-header"><a class="tcrn-product-shell__brand" href="/?locale=en&amp;theme=light&amp;collapsed=false" aria-label="TCRN AOS home" data-registered-brand-lockup="@tcrn/ui-react/ShellBrandLockup" data-registered-product-logo="@tcrn/ui-react/ProductLogo"><div data-visible-registered-brand-lockup="true" class="tcrn-product-logo tcrn-shell-brand-lockup" aria-label="TCRN AOS AI Operation System" data-component-source="@tcrn/ui-react" data-registered-product-logo="@tcrn/ui-react/ProductLogo" data-product-id="aos" data-product-logo-asset-id="tcrn-aos-two-line"><img class="tcrn-brand-mark" src="/assets/tcrn-brand-mark.svg" alt="TCRN AOS AI Operation System" aria-label="TCRN AOS AI Operation System" data-component-source="@tcrn/ui-react" data-brand-asset="tcrn-brand-mark" data-tcrn-brand-mark="registered" data-brand-asset-registration="design-system"/><span class="tcrn-product-logo__copy" aria-hidden="true"><span class="tcrn-product-logo__line-one" aria-label="TCRN AOS"><span class="tcrn-product-logo__line-one-base">TCRN</span><span class="tcrn-product-logo__line-one-suffix tcrn-brand-wordmark__suffix--aos">AOS</span></span><span class="tcrn-product-logo__line-two">AI Operation System</span></span></div></a><button title="Collapse side navigation" aria-controls="aos-primary-side-nav" aria-expanded="true" data-shell-control="side-nav-collapse" data-package-backed-shell-control="side-nav-collapse" data-side-nav-toggle="true" data-side-nav-collapsed="false" data-side-nav-action="toggle" data-side-nav-keyboard-activation="enter-space" data-side-nav-persisted-key="tcrn-aos-side-nav-collapsed" data-side-nav-semantic-api="onCollapsedChange" aria-label="Collapse side navigation" class="tcrn-button tcrn-button--secondary tcrn-button--md tcrn-icon-button tcrn-shell-side-nav-toggle"><span class="tcrn-shell-side-nav-toggle__icon" data-side-nav-icon="collapse"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left tcrn-icon" aria-hidden="true" data-icon-name="chevron-left" focusable="false"><path d="m15 18-6-6 6-6"></path></svg></span><span class="tcrn-shell-side-nav-toggle__icon" data-side-nav-icon="expand"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tcrn-icon" aria-hidden="true" data-icon-name="chevron-right" focusable="false"><path d="m9 18 6-6-6-6"></path></svg></span></button><button title="Show navigation" aria-controls="aos-primary-side-nav" aria-expanded="false" data-shell-control="mobile-nav-toggle" data-package-backed-shell-control="mobile-nav-toggle" data-mobile-nav-toggle="true" data-mobile-nav-expanded="false" data-mobile-nav-semantic-api="onExpandedChange" aria-label="Show navigation" class="tcrn-button tcrn-button--secondary tcrn-button--md tcrn-icon-button tcrn-shell-mobile-nav-toggle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu tcrn-icon" aria-hidden="true" data-icon-name="menu" focusable="false"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg></button></div><nav id="aos-primary-side-nav" data-registered-navigation-only="true" aria-label="AOS operations navigation" class="tcrn-side-nav" data-navigation-primitive="side-nav"><div data-storybook-category-id="global" data-storybook-category-label="Global" data-storybook-section-label="Global" class="tcrn-nav-group" data-navigation-primitive="nav-group"><div class="tcrn-nav-group__label">Global</div><div class="tcrn-nav-group__items"><a data-product-shell-route="my-work" href="/my-work?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house tcrn-icon" aria-hidden="true" data-icon-name="home" focusable="false"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">My work</span></span></a><a data-product-shell-route="inbox" href="/inbox?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check tcrn-icon" aria-hidden="true" data-icon-name="check" focusable="false"><path d="M20 6 9 17l-5-5"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Inbox</span></span></a><a data-product-shell-route="dashboard" href="/dashboard?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers tcrn-icon" aria-hidden="true" data-icon-name="layers" focusable="false"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Dashboard</span></span></a></div></div><div data-storybook-category-id="delivery" data-storybook-category-label="Delivery" data-storybook-section-label="Delivery" class="tcrn-nav-group" data-navigation-primitive="nav-group"><div class="tcrn-nav-group__label">Delivery</div><div class="tcrn-nav-group__items"><a data-product-shell-route="projects" href="/projects?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers tcrn-icon" aria-hidden="true" data-icon-name="layers" focusable="false"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Projects</span></span></a><a data-product-shell-route="work-items" href="/work-items?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database tcrn-icon" aria-hidden="true" data-icon-name="database" focusable="false"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Work items</span></span></a><a data-product-shell-route="board" href="/board?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-grid tcrn-icon" aria-hidden="true" data-icon-name="layout-grid" focusable="false"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Board</span></span></a><a data-product-shell-route="release-trains" href="/release-trains?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package tcrn-icon" aria-hidden="true" data-icon-name="package" focusable="false"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Release trains</span></span></a></div></div><div data-storybook-category-id="knowledge" data-storybook-category-label="Knowledge" data-storybook-section-label="Knowledge" class="tcrn-nav-group" data-navigation-primitive="nav-group"><div class="tcrn-nav-group__label">Knowledge</div><div class="tcrn-nav-group__items"><a data-product-shell-route="knowledge-space" href="/knowledge?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open tcrn-icon" aria-hidden="true" data-icon-name="book-open" focusable="false"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Knowledge space</span></span></a></div></div><div data-storybook-category-id="governance" data-storybook-category-label="Governance" data-storybook-section-label="Governance" class="tcrn-nav-group" data-selected="true" data-navigation-primitive="nav-group"><div class="tcrn-nav-group__label">Governance</div><div class="tcrn-nav-group__items"><a data-product-shell-route="deliberations" href="/deliberations?locale=en&amp;theme=light&amp;collapsed=false" aria-current="page" data-selected="true" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-history tcrn-icon" aria-hidden="true" data-icon-name="history" focusable="false"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Deliberations</span></span></a><a data-product-shell-route="audit" href="/audit?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check tcrn-icon" aria-hidden="true" data-icon-name="shield-check" focusable="false"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Audit</span></span></a><a data-product-shell-route="snapshots" href="/snapshots?locale=en&amp;theme=light&amp;collapsed=false" class="tcrn-nav-item" data-navigation-primitive="nav-item" data-nav-item-has-icon="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings tcrn-icon" aria-hidden="true" data-icon-name="settings" focusable="false"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg><span class="tcrn-nav-item__content"><span class="tcrn-nav-item__label">Snapshot health</span></span></a></div></div></nav></aside><div class="tcrn-product-shell__workspace"><header class="tcrn-top-bar" aria-label="Operations Cockpit shell controls" data-product-shell-region="topbar"><div class="tcrn-product-shell__utility-row" data-product-shell-region="utility-row"><div class="tcrn-product-shell__current-location"><span>Current location</span><strong>Deliberations</strong></div><div class="tcrn-product-shell__header-actions" data-product-shell-region="header-actions"><div class="tcrn-aos-scope" data-product-control="scope"><button type="button" class="tcrn-aos-scope__trigger" aria-expanded="false" aria-haspopup="true" data-scope-id="__all__"><span class="tcrn-aos-scope__key">Scope</span><strong>All projects</strong><span class="tcrn-aos-scope__caret" aria-hidden="true">▾</span></button><span class="tcrn-aos-as-of" data-product-control="as-of" data-chain-count="4" data-projection-stale="false" title="Platform governance v1266 · Design System v975 · TMS v228 · AOS v516"><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="4 chains" title="4 chains" aria-label="4 chains"><code class="tcrn-machine-token__value">4 chains</code></span></span><span class="tcrn-badge tcrn-badge--neutral">Verified</span></span></div></div><button title="Switch to dark mode" data-shell-control="theme-toggle" data-package-backed-shell-control="theme-toggle" data-theme-toggle="true" data-current-theme="light" data-theme-next="dark" data-theme-transition-contract="whole-page-view-transition-or-token-wash" aria-label="Switch to dark mode" class="tcrn-button tcrn-button--secondary tcrn-button--md tcrn-icon-button tcrn-shell-theme-toggle"><span class="tcrn-shell-theme-toggle__icon" data-theme-icon="light"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun tcrn-icon" aria-hidden="true" data-icon-name="sun" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg></span><span class="tcrn-shell-theme-toggle__icon" data-theme-icon="dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon tcrn-icon" aria-hidden="true" data-icon-name="moon" focusable="false"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg></span></button><div class="tcrn-shell-locale-menu" data-shell-control="locale-menu" data-package-backed-shell-control="locale-menu" data-locale-control="native-name-menu" data-locale-menu-open="false" data-locale-dismissal-contract="selection-outside-pointer-escape-focus-return" data-locale-semantic-api="onOpenChange-onLocaleChange"><button class="tcrn-shell-locale-menu__trigger" type="button" data-locale-menu-toggle="true" aria-haspopup="listbox" aria-expanded="false" aria-controls="«R2n»" aria-label="Language" title="Language"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-earth tcrn-icon" aria-hidden="true" data-icon-name="globe-2" focusable="false"><path d="M21.54 15H17a2 2 0 0 0-2 2v4.54"></path><path d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"></path><path d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"></path><circle cx="12" cy="12" r="10"></circle></svg><span class="tcrn-shell-locale-menu__current" data-locale-current="true" data-locale-current-name="true">English</span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down tcrn-icon tcrn-shell-locale-menu__chevron" aria-hidden="true" data-icon-name="chevron-down" focusable="false"><path d="m6 9 6 6 6-6"></path></svg></button><div id="«R2n»" class="tcrn-shell-locale-menu__panel" role="listbox" data-locale-menu="true" hidden=""><button class="tcrn-shell-locale-menu__option" type="button" role="option" data-locale="zh-CN" data-locale-name="简体中文" data-locale-option="zh-CN" data-locale-menu-option="true" aria-selected="false"><span class="tcrn-shell-locale-menu__name">简体中文</span></button><button class="tcrn-shell-locale-menu__option" type="button" role="option" data-locale="en" data-locale-name="English" data-locale-option="en" data-locale-menu-option="true" aria-current="true" aria-selected="true"><span class="tcrn-shell-locale-menu__name">English</span></button><button class="tcrn-shell-locale-menu__option" type="button" role="option" data-locale="ja" data-locale-name="日本語" data-locale-option="ja" data-locale-menu-option="true" aria-selected="false"><span class="tcrn-shell-locale-menu__name">日本語</span></button><button class="tcrn-shell-locale-menu__option" type="button" role="option" data-locale="ko" data-locale-name="한국어" data-locale-option="ko" data-locale-menu-option="true" aria-selected="false"><span class="tcrn-shell-locale-menu__name">한국어</span></button><button class="tcrn-shell-locale-menu__option" type="button" role="option" data-locale="fr" data-locale-name="Français" data-locale-option="fr" data-locale-menu-option="true" aria-selected="false"><span class="tcrn-shell-locale-menu__name">Français</span></button></div></div></div></header><main id="content" class="tcrn-product-shell__main" data-product-shell-region="content" aria-label="AOS operations workspace"><div class="tcrn-aos-environment" data-cockpit-surface="mirror"><div class="tcrn-environment-banner" data-state="local_only"><strong>Read-only mirror — data as of 2026-07-28T09:04:36Z; writes happen on the operator&#x27;s machine · cross-project v1266 · TCRN-Design-System v975 · TCRN-TMS v228 · TCRN-AOS v516</strong><span>Local proof only</span></div></div><div class="tcrn-aos-view" data-cockpit-view="deliberation-room" data-conference-key="TCRN-TMS-CONF-001"><nav class="tcrn-breadcrumb" aria-label="Breadcrumb"><span class="tcrn-breadcrumb__item"><a href="/deliberations?project=TCRN-TMS&amp;locale=en&amp;theme=light&amp;collapsed=false">Deliberations</a></span><span class="tcrn-breadcrumb__item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right tcrn-icon tcrn-breadcrumb__separator" aria-hidden="true" data-icon-name="chevron-right" focusable="false"><path d="m9 18 6-6-6-6"></path></svg><span aria-current="page">TCRN-TMS-CONF-001</span></span></nav><section class="tcrn-surface tcrn-aos-band"><div class="tcrn-aos-detail-head__meta"><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="TCRN-TMS-CONF-001" title="TCRN-TMS-CONF-001" aria-label="TCRN-TMS-CONF-001"><code class="tcrn-machine-token__value">TCRN-TMS-CONF-001</code></span></span><span class="tcrn-badge tcrn-badge--neutral">architecture</span><span class="tcrn-badge tcrn-badge--neutral">closed</span><span data-provenance="legacy-unverified" class="tcrn-badge tcrn-badge--neutral">execution mode undeclared</span><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="v228" title="v228" aria-label="v228"><code class="tcrn-machine-token__value">v228</code></span></span></div><h1 class="tcrn-heading tcrn-heading--2">TCRN-TMS-INIT-001 事实基线重建:分解形态审议</h1></section><div class="tcrn-aos-room"><div class="tcrn-aos-room__thread"><section class="tcrn-aos-round" data-round="1"><div class="tcrn-aos-round__label"><p class="tcrn-text">Round 1 · 3 voices</p></div><article class="tcrn-aos-bubble" data-persona="minerva" data-adversarial="false" data-fragments="1"><div class="tcrn-aos-bubble__avatar" aria-hidden="true">M</div><div class="tcrn-aos-bubble__body"><div class="tcrn-aos-bubble__who"><strong>Minerva</strong><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="profile:tcrn-minerva-v1" title="profile:tcrn-minerva-v1" aria-label="profile:tcrn-minerva-v1"><code class="tcrn-machine-token__value">profile:tcrn-minerva-v1</code></span></span></div><p class="tcrn-aos-bubble__text">本立场由分派子代理独立产出。
 
-成立理由:此场景后端大头已存在且被钉住——数据面即 MCP/CLI 读面(93 工具、目录派生 schema、预算读窗,2026-07-26 已在双宿主接线并验证),剩余后端仅读层计算+缓存。读驾驶舱的前端设计即产品设计;Owner 为第一用户,设计稿是最廉纠偏点。
+Epic 切分轴不是产品域,而是事实的证明方式。web 有 28 域、api 38 模块,按域切会得到 28 个门完全相同的 Epic;而派生事实(路由、OpenAPI、schema、能力矩阵)与断言事实(指南里的行为声称)的证据形态与门根本不同。
 
-三护栏:①垂直切片而非两大阶段——首模块打穿 设计→DS 组件→MCP→真数据渲染→验证 全深度,此后设计领先开发一个模块(设计 N+1 时开发 N),既保跨模块信息架构一致又不积压未验证假设;②设计用真链数据、禁 lorem ipsum——活链 1250+ 事件即设计素材,用真数据画出的界面其每个字段都被证明取得到(设计即验证读路径;规避「handoff 预设偏离代码现实」的既有教训);③选件时验证 DS 组件接线面(TMS 实测 100 组件中 56 个闭合无回调,看着完整接不上线;AOS 由此成为 DS 消费契约的首个试炼场),壳先裁定渲染架构且倾向纯 CSR(TMS ProductShell 的 RSC 水合失配为前车之鉴;AOS local-first、无 SEO 诉求、读为主)。
+权威悬空是真的,但比预设轻:全仓无任何代码读 ai-governance,它不是坏构建,是坏权威。危害在失效方向——`ai-governance/README.md:15` 称「若冲突,先更新控制源,或在解决前视其为权威」,而控制源 `vault/…` 已不存在,冲突永不可解,ai-governance 遂成唯一可读源,与同文件第 25 行「不得在此存正式规格」自相矛盾。悬空引用四处:该 README 三处、injection-manifest 六条、module README 六条,外加 `apps/web/scripts/verify-module-capability-browser-proof.ts:56` 的 evidenceDir 默认值。
 
-模块序:0 壳(IA、分区切换、as-of 新鲜度、渲染架构裁定)→1 工作图(数据最简,以最小风险打穿全链路)→2 Owner 收件箱(价值最高,骑已证明的管道)→3 审议阅读器(两个读层修复)→4+ 门证据链、知识仪表、审计视图、快照健康。收件箱低保真稿提前进壳的 IA 讨论——设计序不必与开发序同构。数据面方向题与模块 0/1 并行跑有界实验(真链实测预算化读延迟),接线开始前闭合。
+故我把「裁权威序」与「修指针」拆开:裁定是阻塞前置,不裁就无规则说事实落哪;改文件不是,可与派生 Epic 并行。
 
-AOS 审议室设计已出(docs/aos-design/v4-conference-room.html,素材=CONF-047 真实攻防):立场对话流(persona 头像+攻方红边标记+曾判 FAIL 徽记)、四个读层增值(分片重组/回合分组/溯源徽记三态+立场级收据绑定态/有效未决净值)、纪要置顶(决策编号+outcomeClass+未决净值)、legacy 一律如实显示未验证不升格。</p></div></article></section><section class="tcrn-aos-round" data-round="2"><div class="tcrn-aos-round__label"><p class="tcrn-text">Round 2</p></div><article class="tcrn-aos-bubble" data-persona="minerva" data-adversarial="false" data-fragments="1"><div class="tcrn-aos-bubble__avatar" aria-hidden="true">M</div><div class="tcrn-aos-bubble__body"><div class="tcrn-aos-bubble__who"><strong>Minerva</strong><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="profile:tcrn-minerva-v1" title="profile:tcrn-minerva-v1" aria-label="profile:tcrn-minerva-v1"><code class="tcrn-machine-token__value">profile:tcrn-minerva-v1</code></span></span></div><p class="tcrn-aos-bubble__text">四条硬边界:①数据面只走 MCP/CLI,绝不自建链 parser(复刻回放语义必漂移;db 包只做以链版本为键的衍生缓存,版本变即失效);②读面先行,写面后置且过供权(带 --actor 的受治 verb+operator bundle;授权≠认证——能读 pins 字节即 operator,故写面须单独立项裁定);③local-first 为架构约束(链与收据在本机;hosted 意味着工作区数据离机,须显式批准);④每视图带 as-of(链版本+视图滞后提示,AOS 不能成为自信撒谎的仪器)。
+漂移可测:文档基线 2026-06-10,其后仅 13 次提交、apps/web 仅 24 文件,审计可穷尽。已捕真缺陷:`docs/user-guide/platform-admin/README.md:11` 称 AC 控制台暴露 Interface/Webhook management,但 `e04063b5` 已令两 AC page 渲染 AcBusinessRouteUnavailableScreen 并从 AcShell 删导航;而 `integrations/README.md:9-10` 的「可见管理面」未限定 scope——tenant 侧真、AC 侧假。
 
-四道方向题(按 P7 记录,均为倾向待裁):前端续建 vs 重推导(倾向续建 apps/web,组件全走 DS);数据面 MCP/CLI vs 自建(倾向 MCP+CLI 唯一);写面范围(倾向首阶段零写面,写面为带日落条件的独立轨道);W 契约对齐(从 requirements ledger 出发,缺的向 W 侧提需求而非 AOS 侧绕)。</p></div></article></section><section class="tcrn-aos-round" data-round="3"><div class="tcrn-aos-round__label"><p class="tcrn-text">Round 3</p></div><article class="tcrn-aos-bubble" data-persona="minerva" data-adversarial="false" data-fragments="1"><div class="tcrn-aos-bubble__avatar" aria-hidden="true">M</div><div class="tcrn-aos-bubble__body"><div class="tcrn-aos-bubble__who"><strong>Minerva</strong><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="profile:tcrn-minerva-v1" title="profile:tcrn-minerva-v1" aria-label="profile:tcrn-minerva-v1"><code class="tcrn-machine-token__value">profile:tcrn-minerva-v1</code></span></span></div><p class="tcrn-aos-bubble__text">被拒方案(按 P7 留档):后端先行——数据面已存在,先行无对象;两大阶段式全部设计先行——大爆炸,一个数据面意外作废全部设计。</p></div></article></section><section class="tcrn-aos-round" data-round="4"><div class="tcrn-aos-round__label"><p class="tcrn-text">Round 4</p></div><article class="tcrn-aos-bubble" data-persona="minerva" data-adversarial="false" data-fragments="1"><div class="tcrn-aos-bubble__avatar" aria-hidden="true">M</div><div class="tcrn-aos-bubble__body"><div class="tcrn-aos-bubble__who"><strong>Minerva</strong><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="profile:tcrn-minerva-v1" title="profile:tcrn-minerva-v1" aria-label="profile:tcrn-minerva-v1"><code class="tcrn-machine-token__value">profile:tcrn-minerva-v1</code></span></span></div><p class="tcrn-aos-bubble__text">主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。分解形状立场(Owner「close CONF-001 拆单」为本批次单一授权)。
+故派生 Epic 须先于断言 Epic:没有机器产出的「路由×scope×可见性」矩阵,就没有尺子判这类声称,上述缺陷正是靠源码而非读文档发现的。
 
-轴=交付面五层:EPIC-001 数据面与聚合索引(MCP 摄取/投影库+FTS/AOS 自有域+备份);EPIC-002 壳与全局层(壳 CSR/我的工作+收件箱/项目目录);EPIC-003 工作项管理(检索管理页/看板/详情全谱/安全写面);EPIC-004 审议室与发布列车(审议室阅读器/列车页/审议采用三步公约);EPIC-005 知识空间与治理视图(知识空间/审计视图/快照健康+执行观测)。共 16 Story。被拒方案=按八功能族逐族一 Epic:族与交付面交叉,共享的数据面与组件核验会逐族重复。
+三层落点:`docs/facts/` 放可被源码证伪的正文,随代码同 PR 变;链只放裁定、批次验收与声称 status 变迁;知识卡只放跨 Initiative 会再检索的结论,应是个位数。链与卡不得承载正文。
 
-开发方式重申:垂直切片,设计领先开发一个模块;首切片=壳+最小摄取打穿 设计→DS→MCP→真数据→验证 全深度。延后轨道五条各带复审条件:多用户/托管(复审=出现第二真实用户或托管需求)、知识编辑器(复审=真实编辑需求出现)、查询语言(复审=结构化过滤不敷用)、立场 reply-to 引擎字段(复审=逐轮转写公约用出真需求)、W 深度集成含幂等与 checkpoint(复审=驾驶舱稳定后)。决策清单:OWNER-NOW 一项(AOS 分区 actor attestation 单向门启用与否,启动时裁);CONDITIONAL 两项(发布停点形态届时呈报;DS 接线面逐模块核验若发现闭合无回调组件则向 DS 提需求单);其余 AGENT 直跑。</p></div></article></section><section class="tcrn-aos-round" data-round="5"><div class="tcrn-aos-round__label"><p class="tcrn-text">Round 5</p></div><article class="tcrn-aos-bubble" data-persona="minerva" data-adversarial="false" data-fragments="1"><div class="tcrn-aos-bubble__avatar" aria-hidden="true">M</div><div class="tcrn-aos-bubble__body"><div class="tcrn-aos-bubble__who"><strong>Minerva</strong><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="profile:tcrn-minerva-v1" title="profile:tcrn-minerva-v1" aria-label="profile:tcrn-minerva-v1"><code class="tcrn-machine-token__value">profile:tcrn-minerva-v1</code></span></span></div><p class="tcrn-aos-bubble__text">另一设计决定:AOS 域 blocks 关系为备忘性质不驱动链上 blocked 状态,UI 在用户加 blocks 时提示「治理级阻塞请走状态流转」,防关系图与状态机各说各话。字段全谱映射表(Jira 逐字段→链原生/AOS 域/后置/不做)已入 v3 文档(docs/aos-design/v3-tickets.html,屏 A 检索页+屏 B 详情页,真实记录 STORY-105 演示含祖先链面包屑)。</p></div></article></section><section class="tcrn-aos-round" data-round="6"><div class="tcrn-aos-round__label"><p class="tcrn-text">Round 6</p></div><article class="tcrn-aos-bubble" data-persona="minerva" data-adversarial="false" data-fragments="1"><div class="tcrn-aos-bubble__avatar" aria-hidden="true">M</div><div class="tcrn-aos-bubble__body"><div class="tcrn-aos-bubble__who"><strong>Minerva</strong><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="profile:tcrn-minerva-v1" title="profile:tcrn-minerva-v1" aria-label="profile:tcrn-minerva-v1"><code class="tcrn-machine-token__value">profile:tcrn-minerva-v1</code></span></span></div><p class="tcrn-aos-bubble__text">主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。第五轮:一切皆 Ticket 与字段全谱(源=Owner 反馈:术语表通过;缺专门的 Ticket 检索管理页;详情页字段与 Jira 差距大;Jira 中 Initiative/Epic/Story/Subtask 都是 ticket 只是类型不同,Story 须体现所属 Epic 与关联)。
+重建开工判据不是 facts 无缺口(不可达),而是三门已关且缺口已登记。</p></div></article><article class="tcrn-aos-bubble" data-persona="verity" data-adversarial="true" data-fragments="1"><div class="tcrn-aos-bubble__avatar" aria-hidden="true">V</div><div class="tcrn-aos-bubble__body"><div class="tcrn-aos-bubble__who"><strong>Verity</strong><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="profile:tcrn-verity-v1" title="profile:tcrn-verity-v1" aria-label="profile:tcrn-verity-v1"><code class="tcrn-machine-token__value">profile:tcrn-verity-v1</code></span></span><span class="tcrn-badge tcrn-badge--warning">adversarial review</span></div><p class="tcrn-aos-bubble__text">本立场由分派子代理独立产出。我保留按证据类别切分的倾向,但据实地勘察修正为按提取器切:一个 Epic = 一个提取器 + 一份入仓工件 + 一道会红的门。改判依据是我当场抓到假分母。codegraph 的 436 route 中仅 398 出自 *.controller.ts,33 出自 apps/api/scripts 的字符串字面量,3 出自 spec,2 出自 bootstrap。以 436 立分母,覆盖率从第一天起就是假的。真分母已三方互钉:我跑通 apps/api/scripts/write-api-registry-controller-inventory.mjs,产 449KB 工件,controllerCount 60 / handlerCount 398 / 带权限 302 / 去重资源动作对 95,与 codegraph 的 controller 子集及我的 grep 独立吻合;归一化后与 OpenAPI 基线并集 396 操作对账 394 命中,差额可全解释。该工件一份即同时承载路由、权限、swagger 元数据三类事实,故这三者不该拆成三个 Epic。仓内已有 106 个证据脚本,零个接入 package.json、turbo 或 CI;ci.yml 只门 lint、typecheck、unit、build。这与六个假门同形:机器在,从不跑。INIT-001 主体是复活并红证化它,不是补写文档。bruno 仅 3 个 health 请求,不可作分母;docs 合计 940 行且是对冲层,我抽验一条即假(/studio/editor 不存在)。证据绑定:fact = 断言 + 提取器路径 + 工件 sha256 + 分母 id + 会红的门。算数=入仓工件字节加已实测出红的门;不算数=文档散文、continue-on-error 步骤、单跑 codegraph query。不可机械化的残余(页面意图、OKL-G19 限制接受、vault 悬空指针所指旧裁定)单列 judgment 类,显式标注无机械证明,限额并由 Owner 裁定,禁止计入覆盖率分子。红证:每道门须先注入变异见红方可信;现成红区已有 62 个 handler 既无权限也非 public、139 个缺 ApiResponse。</p></div></article><article class="tcrn-aos-bubble" data-persona="mara" data-adversarial="false" data-fragments="1"><div class="tcrn-aos-bubble__avatar" aria-hidden="true">M</div><div class="tcrn-aos-bubble__body"><div class="tcrn-aos-bubble__who"><strong>Mara</strong><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="profile:tcrn-mara-v1" title="profile:tcrn-mara-v1" aria-label="profile:tcrn-mara-v1"><code class="tcrn-machine-token__value">profile:tcrn-mara-v1</code></span></span></div><p class="tcrn-aos-bubble__text">本立场由分派子代理独立产出。
 
-我方结论:「一切皆 Ticket」恰是链的原生形态——全部工作记录共用同一 record shape,kind 只是字段,parentId 承载层级(work-show 实证:id/kind/parentId/projectId/revision/status/tombstone)。v2 的缺陷在呈现层(Initiative 树中心),v3 改为 Ticket 中心:新增工作项检索管理页(过滤面=项目/类型/状态/列车/负责人/标签+全文 FTS;保存视图;列表详情分栏;批量操作走安全写面;JQL 等价查询语言列后置轨道),详情页字段全谱化。
+主张:按产品域切 Epic,但必须先立一个「事实骨架」Epic,否则每个域各自重造同一批路由/权限/契约事实并互相漂移。
 
-三个实查事实定了设计:①引擎无关联类 verb(work-* 仅六个)→自由关联按 Q6 走 AOS 自有域,采用 DS 预置的 12 种 workRelationshipTypes(含 verifies/caused_by/supersedes 等治理语义,比 Jira 默认集富);治理关联(审议锚定/裁定源/门绑定/证据)链上已有,详情页独立区块只读展示,与自由关联双轨。②链上无 title 字段(记录的意义活在审议里)→设计决定:建卡标题写入 advisory:scope(意图上链,改标题=追加注解),AOS 域可存显示别名。③parentId 是严格树且引擎按 kind 校验 expectedParent→Story 必有父 Epic,无 Jira 式自由 Story;建卡 UI 自动建议父级,此差异如实标注不抹平。</p></div></article></section><section class="tcrn-aos-round" data-round="7"><div class="tcrn-aos-round__label"><p class="tcrn-text">Round 7</p></div><article class="tcrn-aos-bubble" data-persona="minerva" data-adversarial="false" data-fragments="1"><div class="tcrn-aos-bubble__avatar" aria-hidden="true">M</div><div class="tcrn-aos-bubble__body"><div class="tcrn-aos-bubble__who"><strong>Minerva</strong><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="profile:tcrn-minerva-v1" title="profile:tcrn-minerva-v1" aria-label="profile:tcrn-minerva-v1"><code class="tcrn-machine-token__value">profile:tcrn-minerva-v1</code></span></span></div><p class="tcrn-aos-bubble__text">主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。第六轮:审议攻防现状与审议室设计(源=Owner 问「多子代理在一个 conference 里互相攻防是否已实现;AOS 应显示对话记录与纪要」)。
+证据推翻了 docs 的 11 域轴。docs/user-guide 与 wiki-draft 共 24 文件 940 行,却要覆盖 68 个 page.tsx、398 个控制器路由装饰器、46 个 RBAC 资源;且它写的是「证明状态」不是事实(通篇 G19、proof slice、尚未接受)。consent、membership、blocklist、translation 在 24 个文档中 0 次提及,而四者都有 Prisma 模型与 UI 组件。最刺眼的反例:apps/web/src/domains/config-dictionary-settings 共 18,937 行 21 文件,是前端最大域,docs 只给它 4 行。
 
-现状三层如实回答:①记录容器已实战——立场逐字上链、persona 署名、首行披露执行形态、分片公约,CONF-033/045/046/047 均为活例;②执行溯源引擎已建但活链未用——v0.6.0 EPIC-019 交付 execution:mode(multi-agent-deliberative vs synthesis-only,骑 conference request extensions 增量落地)与 host-execution 收据(以内容摘要把立场绑定到真实调用输出,防事后改写;自陈绑内容非身份;未声明的旧审议 fail-closed 归类 legacy-unverified,读取路径不向多代理升格);③攻防编排真实发生但在 workflow 子代理层——本平台的对抗复核(如 CONF-047 两轮:抓到编造 fixtureDigest 与两处 F5 硬伤)是真跑的,但链上落的是收敛后立场,中间轮次未逐轮上链。
+真权威域轴在代码里:apps/web/src/domains/ 有 28 个域目录,结构高度规整(39 个 Screen.tsx、21 个 copy.ts、28 个 api.ts),正是前端重建消费的单位。28 个 Epic 太碎(最大 18,937 行对最小 15 行),归并为 7 个域 Epic。
 
-增补路线(零引擎改动三步+一项远期):①新审议默认声明 execution:mode;②高价值攻防绑定 host-execution 收据;③新公约「高价值裁定逐轮转写」——每轮攻防即时落立场,键名带轮次(如 POS-C0XX-VERITY-R2)、首行注明「回应 POS-…」,默认仍综合转写以省事件预算(每片占 maxRecords=10000 之一);远期:回合 reply-to 结构化字段按 AOS ledger 模式向 W 提需求,真实需求验证后再提,不预造引擎特性。</p></div></article></section><section class="tcrn-aos-round" data-round="8"><div class="tcrn-aos-round__label"><p class="tcrn-text">Round 8</p></div><article class="tcrn-aos-bubble" data-persona="minerva" data-adversarial="false" data-fragments="2"><div class="tcrn-aos-bubble__avatar" aria-hidden="true">M</div><div class="tcrn-aos-bubble__body"><div class="tcrn-aos-bubble__who"><strong>Minerva</strong><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="profile:tcrn-minerva-v1" title="profile:tcrn-minerva-v1" aria-label="profile:tcrn-minerva-v1"><code class="tcrn-machine-token__value">profile:tcrn-minerva-v1</code></span></span><span class="tcrn-badge tcrn-badge--neutral">2 fragments rejoined</span></div><p class="tcrn-aos-bubble__text">主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。首轮立场:AOS 定位与承接面(源=Owner 2026-07-26「AOS 应有哪些功能承接 Workflow 生成数据」)。
+否决按层级(AC/租户/艺人/公开)切:user-management、interface-management、observability、webhook-management、profile 等在 /ac 与 /tenant 下各有一套页面,层级轴要重复记两遍;域轴只记一次,把层级差异当事实属性。
 
-定位:Workflow 自陈 between queries it is silent by design——引擎刻意不编排、不主动、无 UI;AOS 就是那只声音:W 负责记录得对,AOS 负责看得见、找得到、该你了。AOS 自述 local-first operations spine for agent-assisted work, proof, review, and bounded readback 与此吻合。设计不从零开始:W 引擎自带 public AOS requirements ledger(封闭、通用、确定性、只读、no-overclaim readback,带 digest),第一步是通读该契约对表;AOS 自有遗产(知识检索层的 schema-fts 与 bounded readback 证明)为 P9 第一环资产。
+API 事实不必手写:apps/api/openapi-baseline 三份基线并集 396 个 operation,对 398 个装饰器近乎全覆盖,且已有 run-openapi-diff 门。骨架 Epic 只需重生成并接上漂移门。
 
-承接 Workflow 数据的八个功能族:①工作图与列车看板(work 树、状态、Incident、sprint 跨分区成员表);②Owner 收件箱——头号功能(owner_intent_required 门+纪要 OWNER-NOW 项+发布停点,「批量一次坐下清完」的产品化);③审议阅读器含两个读层修复:分片重组(2048 字节预算下活链已有 15 对 1/2+2/2 分片,按同作者连续拼回原文——预算只约束存储不约束阅读)与有效未决计算(unresolvedIssues 不可变、消解靠后续纪要,审计实测 12 条表面未决仅 2 条真);④门证据链解析(minutes-locator→纪要→立场原文→evidence→收据一路点穿,附名册展示);⑤知识卡目录+新鲜度倒计时(卡片过 stale-days 静默跌出默认检索,AOS 使之可见);⑥审计视图(时间戳形状检查常态化——前沿模型自述需外部证据锚定,AOS 即常驻读者);⑦执行观测摄取(codex-execution-observe、App Server 观测、L2.5 收据);⑧快照健康(每分区最后 SNAPSHOT_VERIFIED 与 cadence 达标)。
+一条 fact 须带代码锚点、观测方式、作用域与权限绑定、置信等级;域「完成」判据是双向闭包:该域 route 节点被 fact 全覆盖,且每条 fact 锚点可解析。
 
-设计发现(护栏三首次套用,重大):DS 已有整族 work-management 与 knowledge-management 模式组件及注册表——WorkHierarchy/WorkItemRow/WorkDetailLayout/WorkActivityFeed/GatePipeline/GateReadinessPanel/EvidenceStrip/Stamp/ReadbackPanel/MachineToken/ProductShell/ProductSwitcher/Knowledge 全族——与八功能族几乎一一对应。AOS 基本不需要新造组件,需要的是核验并打通接线面(Navigation 族回调已核实存在:onCollapsedChange/onThemeChange/onQueryChange/onResultActivate;Work*/Gate* 族待逐个核,防撞 TMS 实测的 56/100 闭合无回调名单)。
-
-模块 0+1 设计稿已出(docs/aos-design/module-0-1-mockup.html,真链数据):壳=TopBar(品牌+分区切换+as-of 链版本指示)+SideNav 八功能族;工作图第一屏=INIT 树+状态+进度+列车徽记,行点开为 WorkDetailLayout;收件箱低保真=真实三项(TMS 前端重建准入门 pending 为全平台唯一 owner 门+AOS CONF-001 open+MIN-050 待采纳),含「表面未决 12→有效未决 3」净值演示。渲染架构按裁定纯 CSR;写面零,按钮仅指引。</p></div></article></section><section class="tcrn-aos-round" data-round="9"><div class="tcrn-aos-round__label"><p class="tcrn-text">Round 9</p></div><article class="tcrn-aos-bubble" data-persona="minerva" data-adversarial="false" data-fragments="1"><div class="tcrn-aos-bubble__avatar" aria-hidden="true">M</div><div class="tcrn-aos-bubble__body"><div class="tcrn-aos-bubble__who"><strong>Minerva</strong><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="profile:tcrn-minerva-v1" title="profile:tcrn-minerva-v1" aria-label="profile:tcrn-minerva-v1"><code class="tcrn-machine-token__value">profile:tcrn-minerva-v1</code></span></span></div><p class="tcrn-aos-bubble__text">主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。第三轮:功课与实验结果(Owner「按你的建议推进」授权本轮)。
-
-功课一,W 侧 requirements ledger 已通读(8 条:1 accepted+7 candidate,mode=offline_reference):其主体是双向深度集成契约——conformance matrix 先于互相发布、幂等修订栅栏、fallback epoch 对账、知识兼容元数据、可移植 checkpoint、投影导入不得替换运营真值、发布清单回读、信任角色-actor 绑定。要点:projection-import-truth-ownership 即「db 只做衍生缓存、链为真值」边界的引擎侧背书;深度集成项(幂等/checkpoint/角色绑定)属驾驶舱之后的阶段,不入本 INIT 首期。功课二,kr01/kr02 遗产收据全绿(schema-fts 迁移与 MCP method surface 均有 proof-summary+readback)。
-
-实验(方向题二,已可闭合):最大活链(cross,约 1250 事件)实测——冷启动 CLI 每请求 spawn 181-193ms;长驻 MCP 单进程连续调用 121-139ms(status/work-list 50 条/work-show 三种读形态一致)。两路均远低于本地驾驶舱交互阈值,结论=MCP/CLI 为唯一数据面、不自建 parser。诚实注记:回放 O(n),链至 maxRecords=10000 上限时约八倍≈1s,届时版本键控缓存由锦上添花转为必需——此为缓存启用判据,一并落档。</p></div></article></section><section class="tcrn-aos-round" data-round="10"><div class="tcrn-aos-round__label"><p class="tcrn-text">Round 10</p></div><article class="tcrn-aos-bubble" data-persona="minerva" data-adversarial="false" data-fragments="2"><div class="tcrn-aos-bubble__avatar" aria-hidden="true">M</div><div class="tcrn-aos-bubble__body"><div class="tcrn-aos-bubble__who"><strong>Minerva</strong><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="profile:tcrn-minerva-v1" title="profile:tcrn-minerva-v1" aria-label="profile:tcrn-minerva-v1"><code class="tcrn-machine-token__value">profile:tcrn-minerva-v1</code></span></span><span class="tcrn-badge tcrn-badge--neutral">2 fragments rejoined</span></div><p class="tcrn-aos-bubble__text">主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。第四轮:Jira 形态重构与九问裁定(源=Owner 两轮反馈)。
-
-Owner 方向修正(要点转述):AOS 不能局限于单项目,参照 Jira 的多项目管理形态;目标是用惯 Jira 与 Confluence 的专业人士可无痛上手。我方九问逐一过后 Owner 裁定:Q1 单操作员先行、多用户按可演进设计(身份字段留位);Q2 重开「首阶段零写面」裁定→首期开放安全写面(建卡/状态流转/注解,CAS、时间戳、actor 自动补齐),治理写(门/审议/发布)保留显式仪式;Q3 全局层置顶(我的工作/收件箱/仪表盘/项目目录),混合 as-of 按项目分别标注;Q4 不叫 Sprint——Owner 逐字要点:「Sprint 在当前阶段可以无视日期是因为我们还没有客户,所以只用于作为 INIT 集合发布的包来用……新词也需要有类似含义,因为我们需要这样去支持」→定名沿用公约既有词「发布列车」,并锚定 Jira 用户的 Releases/fixVersion 心智(一批 issue 打包发布、日期可留空),为未来节奏演进留路(列车公约本就预留 cadence 重钉);Q5 知识空间首期只渲染+检索,编辑器为独立轨道另裁;Q6 assignee/优先级/标签/评论走 AOS 自有域(qualified ref 挂链,链管治理真值、AOS 管运营元数据;评论与立场双轨,UI 引导「要进裁定记录写成立场」);Q7 治理对象永不可编辑、运营字段可编,UI 以链标记区分;Q8 Jira 熟悉面打底+「决策与证据」页签做差异化;Q9 模块序=全局层→项目目录→看板→详情→发布列车→知识空间。
-
-底座结论不变:MCP/CLI 唯一数据通道;聚合索引由缓存升格为核心组件(四链投影一库,链版本键控,truth-ownership 边界);纯 CSR;组件全走 DS;local-first。v2 设计稿已出(docs/aos-design/v2-jira-shaped.html,六屏+术语终审表+裁定落点表+写面分界表,真链数据),已呈 Owner 终审。待办:术语表逐词终审;终审通过即收敛,close 本会议出分解裁定。</p></div></article></section></div><aside class="tcrn-aos-room__minutes"><section data-minutes-key="TCRN-AOS-MIN-001" class="tcrn-surface tcrn-aos-band"><div class="tcrn-aos-detail-head__meta"><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="TCRN-AOS-MIN-001" title="TCRN-AOS-MIN-001" aria-label="TCRN-AOS-MIN-001"><code class="tcrn-machine-token__value">TCRN-AOS-MIN-001</code></span></span><span class="tcrn-badge tcrn-badge--neutral">role_decision</span></div><h2 class="tcrn-heading tcrn-heading--3">Minutes</h2><p class="tcrn-text">AOS 驾驶舱分解裁定:六轮收集闭合(定位与八功能族/开发方式三护栏/Jira 形态九问/一切皆 Ticket 字段全谱/审议室与溯源采用);按交付面分五 Epic 十六 Story;方向四题全裁;延后轨道五条带复审条件;INIT 保持 planned 待启动令</p><h3 class="tcrn-heading tcrn-heading--3">Decisions (11)</h3><ol class="tcrn-aos-decisions"><li>分解轴=交付面五层;被拒=按八功能族逐族一 Epic(交叉重复)</li><li>EPIC-001 数据面与聚合索引三 Story(MCP 摄取/投影库+FTS/AOS 自有域+备份)</li><li>EPIC-002 壳与全局层三 Story(壳 CSR/我的工作+收件箱/项目目录)</li><li>EPIC-003 工作项管理四 Story(检索页/看板/详情全谱/安全写面)</li><li>EPIC-004 审议室与发布列车三 Story(审议室/列车页/审议采用三步公约)</li><li>EPIC-005 知识空间与治理视图三 Story(知识空间/审计视图/快照健康+执行观测)</li><li>开发方式=垂直切片且设计领先一模块;首切片打穿全深度</li><li>数据面=MCP/CLI 唯一+链版本键控投影库(实测闭合:冷 190ms 驻 130ms;缓存必需判据=链近万级)</li><li>写面=首期安全写面(建卡/流转/注解/入列/AOS 域字段);治理写显式仪式</li><li>延后轨道五条各带复审条件(多用户/知识编辑器/查询语言/reply-to 字段/W 深度集成)</li><li>决策清单=OWNER-NOW 一项(attestation 启动时裁)+CONDITIONAL 两项(发布停点届时呈报;DS 闭合组件转需求单)+其余 AGENT</li></ol><h3 class="tcrn-heading tcrn-heading--3">Open · 3 recorded → 3 effective</h3><p class="tcrn-text">Open issues are immutable and settled by later minutes, so reading the field raw overstates what is still open.</p><ul class="tcrn-aos-decisions"><li>AOS 分区 actor attestation 为单向门;启用与否待 Owner 启动令时裁</li><li>发布停点形态(单 INIT 快车道或入列车)届时呈报</li><li>DS 组件接线面逐模块核验;发现闭合无回调即向 DS 提需求单</li></ul></section></aside></div></div></main></div></div></div>
+悬空 vault 指针是小事,仅 4 文件 17 处引用,归骨架 Epic 一条 Story,处置是改指仓内可验证锚点,而非找回 vault。排序:骨架先行,次做身份与访问(权限词汇是其余全域事实的引用基底),再按代码行数乘文档缺口降序。</p></div></article></section></div><aside class="tcrn-aos-room__minutes"><section data-minutes-key="TCRN-TMS-MIN-001" class="tcrn-surface tcrn-aos-band"><div class="tcrn-aos-detail-head__meta"><span class="tcrn-machine-token-cell" data-work-management-pattern="machine-token-cell"><span class="tcrn-machine-token tcrn-machine-token--compact" data-density="compact" data-machine-token-kind="generic" data-full-token="TCRN-TMS-MIN-001" title="TCRN-TMS-MIN-001" aria-label="TCRN-TMS-MIN-001"><code class="tcrn-machine-token__value">TCRN-TMS-MIN-001</code></span></span><span class="tcrn-badge tcrn-badge--neutral">role decision</span></div><h2 class="tcrn-heading tcrn-heading--3">Minutes</h2><p class="tcrn-text">三方独立立场(Mara 产品域轴 / Verity 提取器轴 / Minerva 权威拓扑轴)就 TCRN-TMS-INIT-001 分解形态审议。三方一致否决 docs 的 11 域轴:940 行文档是证明状态与对冲语言、不是事实。决定性证据是 Verity 与主线程独立同时捕获的假分母——codegraph 436 route 仅 398 出自 controller。以 436 立分母则全部覆盖率自第一天起为假。398 已由三条独立路径互钉(codegraph 过滤、grep 装饰器、inventory 脚本工件)。裁定采 Verity 提取器轴为主,吸纳 Minerva 的排序原则与三层落点、Mara 的域轴作前端内部维度。另捕获两条真忠实缺陷:platform-admin/README.md:11 称 AC 暴露 Interface/Webhook 管理而两页实渲 AcBusinessRouteUnavailableScreen;public-presence/README.md:10 所称 studio/editor 页零命中。</p><h3 class="tcrn-heading tcrn-heading--3">Decisions (13)</h3><ol class="tcrn-aos-decisions"><li>分解轴裁定为提取器轴(Verity):一个 Epic = 一个提取器 + 一份入仓工件 + 一道已见红的门</li><li>否决产品域轴(Mara)与证明方式二分(Minerva)作为顶层轴:前者致 28 域共用同一道门、后者粒度不足以绑定工件</li><li>Mara 域轴保留于两处:E5 前端事实的内部组织维度、以及 docs/facts/ 的归档维度</li><li>Minerva 证明方式序保留为排序原则:全部派生事实 Epic 先于断言审计 Epic</li><li>覆盖门分母裁定为 398(controller 子集)而非 codegraph 原始 436;436 含 33 脚本字面量、3 spec、2 bootstrap 属污染数、已由三方独立互钉</li><li>codegraph route kind 不含前端路由(436 条全在 apps/api);前端分母另取 66 个 page.tsx、两集合不可互换</li><li>权威序就地裁定、不另设阻塞 Epic:runtime &gt; schema &gt; api-contract &gt; source &gt; doc;doc 级证据不得单独支撑 proven</li><li>facts 三层落点:docs/facts/ 承载正文、治理链只放裁定与验收、知识卡限个位数且只放跨 Initiative 会再检索的结论</li><li>门设三道:GATE-001 分母红证门、GATE-002 派生再生成确定性门、GATE-003 断言忠实门;E4 新鲜度机制不设门(其产物本身即检查器)</li><li>重建准入门不挂 INIT-001:记为条件项、未来重建 Initiative 开工时须开 owner_intent_required 准入门并引本 INIT 收官 minutes 作证据</li><li>交付按整合分支 feat/tms-init001、per-Epic commit;合并 main 为本 INIT 唯一必停点(实测 cd.yml 仅 main 与 v* tag 触发部署、feature 分支不部署)</li><li>106 个证据脚本零接线(实测 apps/api/scripts 106 文件、被 package.json/turbo/workflows 引用者 0)裁定为 INIT-001 最大现成资产:主体工作是复活并红证化、不是补写文档</li><li>docs/user-guide 与 wiki-draft 共 940 行整体降级为历史参考、不作 fact 输入源;其忠实性缺陷单列 E6 审计</li></ol><h3 class="tcrn-heading tcrn-heading--3">Open · 5 recorded → 5 effective</h3><p class="tcrn-text">Open issues are immutable and settled by later minutes, so reading the field raw overstates what is still open.</p><ul class="tcrn-aos-decisions"><li>OKL-G19-* 孤儿限制 ID 的支撑证据随旧 vault 删除、可复原性未知</li><li>openapi-baseline 三份停在 2026-06-13 而末次提交 2026-07-08、实际漂移量未测</li><li>retired-browser-tests 六套的可复活性未裁</li><li>judgment 类(不可机械验证)事实的限额未定</li><li>106 个证据脚本中可实际跑通的比例未测(仅抽样 1 个跑通)</li></ul></section></aside></div></div></main></div></div></div>
     <script type="module" src="/assets/aos-client.js" data-product-shell-client="ds-product-shell-semantic-boundary"></script>
   </body>
 </html>

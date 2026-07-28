@@ -22,7 +22,11 @@ import { resolve, join } from "node:path";
 const { renderAosShellHtml } = await import(resolve(process.cwd(), "dist/apps/web/src/app.js"));
 const { cockpitData } = await import(resolve(process.cwd(), "dist/apps/web/src/cockpit-data.generated.js"));
 
-const outRoot = resolve(process.cwd(), "apps/web/mirror");
+// AOS_MIRROR_OUT lets the freshness gate build a throwaway copy somewhere else and
+// diff it against the committed one, rather than overwriting the thing it is checking.
+const outRoot = process.env.AOS_MIRROR_OUT
+  ? resolve(process.env.AOS_MIRROR_OUT)
+  : resolve(process.cwd(), "apps/web/mirror");
 const buildRoot = resolve(process.cwd(), "apps/web/dist");
 
 // Samples chosen by property, not by hard-coded key: a mirror rebuilt after the
@@ -30,8 +34,15 @@ const buildRoot = resolve(process.cwd(), "apps/web/dist");
 // that has a thread, rather than silently shipping an empty screen.
 const detailSample = cockpitData.work.find((row) =>
   row.externalKey && (cockpitData.activityByWork[row.id]?.length ?? 0) >= 3);
-const roomSample = cockpitData.conferences.find((row) =>
-  (cockpitData.threads[row.id]?.length ?? 0) >= 3);
+// Prefer a room that also has an external key. Only 8 of 131 conferences carry one,
+// and the first thread-bearing room does not, so the fallback to a raw record id was
+// what actually shipped -- putting a colon in a mirror URL path and replacing a
+// readable route with an opaque one. The fallback stays, because a room with a thread
+// and no key is still better than no room at all (TCRN-AOS-INC-030).
+const roomHasThread = (row) => (cockpitData.threads[row.id]?.length ?? 0) >= 3;
+const roomSample =
+  cockpitData.conferences.find((row) => roomHasThread(row) && row.externalKey) ??
+  cockpitData.conferences.find(roomHasThread);
 
 const routes = [
   "/", "/my-work", "/inbox", "/dashboard", "/projects", "/work-items",

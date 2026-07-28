@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { chmod, lstat, mkdir, mkdtemp, readdir, realpath, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
@@ -8,7 +9,19 @@ import { fileURLToPath } from "node:url";
 
 const execFileAsync = promisify(execFile);
 const ROUTE_ID = "route_59ad_source_export_prerequisite_review_repair";
-const EXPECTED_SOURCE_HEAD = "cd9abd9def734fb290d539d8fd2d193fbb5504c8";
+// Re-pinned after the 2026-07-26 history rewrite (TCRN-AOS-INC-033).
+//
+// The basis is the commit that established this prerequisite, and it was pinned by sha.
+// The privacy rewrite that scrubbed personal email addresses and home-directory paths
+// gave every commit a new sha, so the pinned one stopped being an ancestor of main and
+// this proof threw source_export_source_head_not_descended_from_expected_basis on every
+// run from that day on. Nobody saw it, because this script was not reachable from
+// `pnpm verify` — it is now.
+//
+// a1603259 is the rewritten twin of cd9abd9: same subject, same author date
+// (2026-06-18 05:05:56 +0800), an ancestor of main, and its tree differs from the
+// original only in the two evidence files the rewrite scrubbed.
+const EXPECTED_SOURCE_HEAD = "a160325928ec4b8d11b7a4d483375bffda7e92fd";
 const ROUTE_REQUIRES_RAW_SOURCE_BLOCKED = true;
 
 const ROOT_FILES_ALLOWED = new Set([
@@ -22,9 +35,25 @@ const ROOT_FILES_ALLOWED = new Set([
   "package.json",
   "pnpm-lock.yaml",
   "pnpm-workspace.yaml",
-  "tsconfig.json"
+  "tsconfig.json",
+  // Added at the 0.1.0 release. Both are repository documentation and both postdate
+  // this allowlist, which is why they had no export decision until now: a closed
+  // allowlist does not fail open, it reports the file as unresolved and stops
+  // (TCRN-AOS-INC-033).
+  "AGENTS.md",
+  "CLAUDE.md"
 ]);
-const ALLOWED_PREFIXES = ["apps/", "docs/", "packages/", "scripts/"];
+// `deploy/` carries the Kubernetes manifest for the LAN-only read-only mirror. It holds
+// a namespace, an nginx config, a Deployment, a Service and an Ingress for
+// `aos.tcrn.lan`, and no credential of any kind — its own comments state the
+// reachability ruling it implements. It is included on that basis.
+//
+// A directory of cluster manifests is, however, exactly where a Secret would one day be
+// written, and a Secret is an ordinary `.yaml` — the path-and-extension classifier below
+// cannot see it. So the prefix is admitted together with a content check that can
+// (see `secretManifestsIncluded`). Widening the allowlist without it would be the kind
+// of unexamined widening this proof exists to prevent.
+const ALLOWED_PREFIXES = ["apps/", "deploy/", "docs/", "packages/", "scripts/"];
 const EVIDENCE_PREFIX = "evidence/";
 const FORBIDDEN_PATH_PARTS = new Set([
   ".git",
@@ -92,6 +121,21 @@ const forbiddenNegativeRows = buildForbiddenNegativeRows();
 const reviewedAllowedRows = buildReviewedAllowedRows();
 const exportPlan = buildExportPlan(treeEntries);
 const exportIncludedForbidden = exportPlan.included.map((entry) => entry.path).filter(isForbiddenTransferPath);
+/**
+ * A Kubernetes Secret is a plain `.yaml`, so nothing about its name or extension marks
+ * it. This reads the declared `kind` of every YAML the export would carry.
+ *
+ * Read by object id, the same way materializeCandidate reads what it archives. The
+ * first version read the working tree instead, which is a different set of bytes than
+ * the one being exported: a secret committed and then deleted locally would have been
+ * invisible to it.
+ */
+const secretManifestsIncluded = [];
+for (const entry of exportPlan.included) {
+  if (!/\.ya?ml$/i.test(entry.path) || entry.type !== "blob") continue;
+  const body = (await gitBlob(entry.oid)).toString("utf8");
+  if (/^kind:\s*Secret\s*$/m.test(body)) secretManifestsIncluded.push(entry.path);
+}
 const manifestDigest = createManifestDigest(exportPlan.included);
 const proofRoot = await mkdtemp(join(await realpath(tmpdir()), "tcrn-aos-59ad-clean-export-"));
 const stagingRoot = join(proofRoot, "candidate");
@@ -105,7 +149,12 @@ try {
     throw new Error("source_export_raw_source_blocker_not_observed");
   }
   if (exportIncludedForbidden.length > 0 || exportPlan.unresolved.length > 0) {
-    throw new Error("source_export_manifest_has_unresolved_or_forbidden_tracked_files");
+    throw new Error(
+      `source_export_manifest_has_unresolved_or_forbidden_tracked_files: unresolved=${exportPlan.unresolved.join(",") || "-"} forbidden=${exportIncludedForbidden.join(",") || "-"}`
+    );
+  }
+  if (secretManifestsIncluded.length > 0) {
+    throw new Error(`source_export_manifest_declares_secret:${secretManifestsIncluded.join(",")}`);
   }
   if (!forbiddenNegativeRows.every((row) => row.rejected) || reviewedAllowedRows.some((row) => row.rejected)) {
     throw new Error("source_export_forbidden_matcher_self_test_failed");

@@ -10,18 +10,33 @@ const expectedDevDeps = new Map([
   ["esbuild", { version: "0.28.1", license: "MIT" }],
   ["typescript", { version: "5.8.3", license: "Apache-2.0" }]
 ]);
+// The expected version of each Design System package is a literal ON PURPOSE.
+//
+// It was first "fixed" here by deriving it from the Design System's own package.json,
+// which looked like the honest question to ask of a `file:` dependency — is the installed
+// copy the copy this workspace's source describes? It is not a question that can be
+// asked this way: pnpm hardlinks `file:` dependency files, so
+// node_modules/@tcrn/ui-react/package.json and the Design System's own manifest are the
+// same inode. Reading both and comparing them is reading one file twice, and the check
+// could not fail. Measured: forcing the installed copy to 2.1.0 moved the expected value
+// to 2.1.0 with it, and the audit stayed green (TCRN-AOS-INC-031).
+//
+// So the literal is the point. It is the one byte here that upstream cannot move, which
+// is what makes a mismatch mean something: this audit going red after a Design System
+// release is not a false alarm, it is the only signal that upstream moved and that
+// somebody should look at what changed before accepting it.
 const allowedRuntimeDeps = new Map([
   ["@tcrn/ui-copy-state", {
     specifier: "file:../TCRN-Design-System/packages/ui-copy-state",
-    // 2.1.0 carries the ink selection grammar and SearchableList (TCRN-DS-INIT-013).
-    version: "2.1.0",
+    // Bumped deliberately when the Design System releases; see the note above.
+    version: "3.0.0",
     license: "Apache-2.0",
     allowedDependencies: []
   }],
   ["@tcrn/ui-react", {
     specifier: "file:../TCRN-Design-System/packages/ui-react",
-    // 2.1.0 carries the ink selection grammar and SearchableList (TCRN-DS-INIT-013).
-    version: "2.1.0",
+    // Bumped deliberately when the Design System releases; see the note above.
+    version: "3.0.0",
     license: "Apache-2.0",
     allowedDependencies: [
       "@radix-ui/react-dialog",
@@ -33,8 +48,8 @@ const allowedRuntimeDeps = new Map([
   }],
   ["@tcrn/ui-tokens", {
     specifier: "file:../TCRN-Design-System/packages/ui-tokens",
-    // 2.1.0 carries the ink selection grammar and SearchableList (TCRN-DS-INIT-013).
-    version: "2.1.0",
+    // Bumped deliberately when the Design System releases; see the note above.
+    version: "3.0.0",
     license: "Apache-2.0",
     allowedDependencies: []
   }],
