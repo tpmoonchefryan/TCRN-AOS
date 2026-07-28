@@ -114,61 +114,162 @@ receipt.criteria.localDomainWriteRoundTrips = {
 // is only a guess: each is tried in turn and the engine's answer decides. Nothing here
 // mirrors the state machine, because a second opinion can disagree with the authority.
 //
-// When nothing is legally movable — every record terminal — the write half cannot be
-// performed, and this says so and fails. An unperformable check is not a passing one.
-// Making it performable on a fully-closed chain needs either a probe record the proof
-// may create or a chain-write surface that is not a status transition; both are
-// governance decisions, not something this script should quietly assume.
-const FORWARD = { planned: "ready", ready: "active", active: "done" };
-const BACKWARD = { ready: "planned", active: "ready", done: "active" };
+// When nothing is legally movable, the criterion does not go unperformable: it
+// falls back to an annotate pair against the INC-034 stamp record, the
+// non-migration chain write the ruling admitted exactly for this case
+// (TCRN-AOS-MIN-007, route B). "Nothing movable" is decided by the engine, not
+// the projection: no candidates in the snapshot is one way there, and every
+// candidate refused by the engine is the other — the engine's per-record
+// refusals are the authoritative testimony that the chain holds no movable
+// record, however fresh the snapshot looked. Which leg(s) ran is recorded.
+const { selectMigrationCandidates, BACKWARD } = await import("./lib/migration-candidates.mjs");
 
 const { cockpitData: projection } = await import(
   new URL("../dist/apps/web/src/cockpit-data.generated.js", import.meta.url).href);
-const candidates = (projection.work ?? [])
-  .filter((row) => row.partitionId === "TCRN-AOS" && FORWARD[row.status])
-  .map((row) => ({ recordId: row.id, externalKey: row.externalKey, from: row.status, to: FORWARD[row.status] }));
+const candidates = selectMigrationCandidates(projection.work, "TCRN-AOS");
 
-const attempts = [];
-let performed = null;
-for (const candidate of candidates) {
-  const response = await fetch(`${LOCAL}/api/chain/transition`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ partitionId: "TCRN-AOS", recordId: candidate.recordId, status: candidate.to })
+const chainWriteNote =
+  "the migration pair permanently advances one real record; the chain is append-only and this move is not undone";
+
+/**
+ * Annotate-pair leg. The stamp record is TCRN-AOS-INC-034 — the incident that
+ * exists because this criterion once could not run on a fully-closed chain.
+ *
+ * Reads go to the engine CLI (read-only verbs only: work-show, export), because
+ * the projection is a snapshot and the pair must speak about the chain's head.
+ * The write and its replay go through the local service's annotate route, which
+ * is the surface under acceptance.
+ */
+async function annotatePairLeg() {
+  const { homedir } = await import("node:os");
+  const { resolve: resolvePath } = await import("node:path");
+  const { stripStampLines, stampedScope, judgeAnnotatePair, SCOPE_CODE_POINT_LIMIT, scopeCodePointLength } =
+    await import("./lib/annotate-pair.mjs");
+
+  const ENGINE = process.env.AOS_ENGINE_CLI
+    ?? resolvePath(homedir(), ".tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow.mjs");
+  const WORKSPACE = process.env.AOS_CHAIN_WORKSPACE
+    ?? resolvePath(process.cwd(), "../.tcrn-workspace/TCRN-AOS/workspace");
+  const engineRead = async (verb, args) => {
+    const { stdout } = await run(process.execPath, [ENGINE, verb, "--workspace", WORKSPACE, ...args],
+      { maxBuffer: 64 * 1024 * 1024 });
+    return JSON.parse(stdout);
+  };
+
+  const stampRecord = { recordId: "work:36d23eb50d9d3ec986301109", externalKey: "TCRN-AOS-INC-034" };
+  const before = await engineRead("work-show", ["--id", stampRecord.recordId]);
+  const eventsBefore = (await engineRead("export", [])).events;
+
+  // Scope is replaced whole (the engine has no append), so the half sent here is
+  // the record's entire narrative plus exactly one fresh stamp line; stripping
+  // earlier stamps first keeps repeated runs bounded under the engine's
+  // 8192-code-point ceiling.
+  const narrative = stripStampLines(before.advisory?.scope ?? "");
+  const newScope = stampedScope(narrative, new Date().toISOString().replace(/\.\d+Z$/u, "Z"));
+  const annotateBody = JSON.stringify(
+    { partitionId: "TCRN-AOS", recordId: stampRecord.recordId, scope: newScope });
+
+  const write = await fetch(`${LOCAL}/api/chain/annotate`, {
+    method: "POST", headers: { "content-type": "application/json" }, body: annotateBody
   });
-  const body = await response.json();
-  attempts.push({ externalKey: candidate.externalKey, move: `${candidate.from}->${candidate.to}`, status: response.status, reasonCode: body.reasonCode ?? null });
-  if (response.ok && body.ok === true) { performed = { ...candidate, body }; break; }
+  await write.json();
+  const afterWrite = await engineRead("work-show", ["--id", stampRecord.recordId]);
+  const eventsAfter = (await engineRead("export", [])).events;
+  const lastEvent = eventsAfter[eventsAfter.length - 1] ?? {};
+
+  // The refusal half replays the same annotation byte for byte.
+  const replay = await fetch(`${LOCAL}/api/chain/annotate`, {
+    method: "POST", headers: { "content-type": "application/json" }, body: annotateBody
+  });
+  const replayBody = await replay.json();
+  const afterReplay = await engineRead("work-show", ["--id", stampRecord.recordId]);
+
+  const judged = judgeAnnotatePair({
+    recordId: stampRecord.recordId,
+    write: { status: write.status },
+    before: { revision: before.record.revision },
+    afterWrite: { revision: afterWrite.record.revision },
+    events: {
+      delta: eventsAfter.length - eventsBefore.length,
+      lastOperation: lastEvent.payload?.operation ?? null,
+      lastRecordId: lastEvent.payload?.record?.id ?? null
+    },
+    replay: { status: replay.status, message: replayBody.error ?? null, revisionAfter: afterReplay.record.revision }
+  });
+
+  return {
+    ok: judged.ok && scopeCodePointLength(newScope) <= SCOPE_CODE_POINT_LIMIT,
+    leg: "annotate-pair",
+    stampRecord: stampRecord.externalKey,
+    scopeCodePoints: scopeCodePointLength(newScope),
+    checks: judged.checks
+  };
 }
 
-// The refusal half runs against the record the write half moved, so both halves speak
-// about the same record; with no move performed it falls back to a terminal record,
-// where a move backwards is illegal from any state it could be in.
-const refusalTarget = performed
-  ? { recordId: performed.recordId, status: BACKWARD[performed.to] ?? "planned", externalKey: performed.externalKey }
-  : { recordId: "work:ad72557d88653b6d94456b1d", status: "planned", externalKey: "TCRN-AOS-STORY-003" };
-const illegal = await fetch(`${LOCAL}/api/chain/transition`, {
-  method: "POST",
-  headers: { "content-type": "application/json" },
-  body: JSON.stringify({ partitionId: "TCRN-AOS", recordId: refusalTarget.recordId, status: refusalTarget.status })
-});
-const illegalBody = await illegal.json();
-const refusalHeld = illegal.status === 409 && illegalBody.reasonCode === "INVALID_TRANSITION";
+const stampPermanenceNote = "the stamp annotation permanently appends one work.annotated event to the chain";
 
-receipt.criteria.chainWriteAndRefusal = {
-  ok: performed !== null && refusalHeld,
-  writeHalf: performed
-    ? { performed: true, record: performed.externalKey, move: `${performed.from}->${performed.to}` }
-    : {
-        performed: false,
-        unperformable: candidates.length === 0,
-        why: candidates.length === 0
-          ? "no TCRN-AOS record is in a state with a legal forward transition, so a successful write cannot be demonstrated without creating one"
-          : "every candidate was refused by the engine; the projection this drew them from is a snapshot and may be behind the chain",
-        candidatesTried: attempts
-      },
-  refusalHalf: { record: refusalTarget.externalKey, requested: refusalTarget.status, status: illegal.status, reasonCode: illegalBody.reasonCode ?? null, held: refusalHeld }
-};
+if (candidates.length > 0) {
+  const attempts = [];
+  let performed = null;
+  for (const candidate of candidates) {
+    const response = await fetch(`${LOCAL}/api/chain/transition`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ partitionId: "TCRN-AOS", recordId: candidate.recordId, status: candidate.to })
+    });
+    const body = await response.json();
+    attempts.push({ externalKey: candidate.externalKey, move: `${candidate.from}->${candidate.to}`, status: response.status, reasonCode: body.reasonCode ?? null });
+    if (response.ok && body.ok === true) { performed = { ...candidate, body }; break; }
+  }
+
+  if (performed) {
+    // The refusal half runs against the record the write half moved, so both
+    // halves speak about the same record; the backward move is illegal from the
+    // state the write half just put it in.
+    const refusalTarget = { recordId: performed.recordId, status: BACKWARD[performed.to] ?? "planned", externalKey: performed.externalKey };
+    const illegal = await fetch(`${LOCAL}/api/chain/transition`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ partitionId: "TCRN-AOS", recordId: refusalTarget.recordId, status: refusalTarget.status })
+    });
+    const illegalBody = await illegal.json();
+    const refusalHeld = illegal.status === 409 && illegalBody.reasonCode === "INVALID_TRANSITION";
+
+    receipt.criteria.chainWriteAndRefusal = {
+      ok: refusalHeld,
+      leg: "transition-pair",
+      note: chainWriteNote,
+      writeHalf: { performed: true, record: performed.externalKey, move: `${performed.from}->${performed.to}` },
+      refusalHalf: { record: refusalTarget.externalKey, requested: refusalTarget.status, status: illegal.status, reasonCode: illegalBody.reasonCode ?? null, held: refusalHeld }
+    };
+  } else {
+    // Every candidate was refused. The candidates came from a snapshot; the
+    // refusals came from the engine, and the engine's word is the one that
+    // counts: the chain holds no movable record, so the criterion falls back to
+    // the ruling's annotate route rather than reporting itself unperformable —
+    // and rather than judging "no move performed" green, which is the exact
+    // shape of the failure INC-034 records. Both legs' attempts are on the
+    // receipt.
+    const pair = await annotatePairLeg();
+    receipt.criteria.chainWriteAndRefusal = {
+      ...pair,
+      legs: ["transition-attempted", "annotate-pair"],
+      note: "the engine refused every projected transition candidate — its per-record refusals are the "
+        + "authoritative testimony that no record was movable, whatever the snapshot said — so the pair "
+        + `fell back to the ruling's annotate route; ${stampPermanenceNote}`,
+      transitionAttempts: attempts
+    };
+  }
+} else {
+  const pair = await annotatePairLeg();
+  receipt.criteria.chainWriteAndRefusal = {
+    ...pair,
+    // The absence of candidates is the projection snapshot's testimony, not an
+    // engine readout — stated as such rather than as a claim about the chain.
+    note: "the projection snapshot offered no movable non-Initiative candidate (snapshot testimony, not an "
+      + `engine readout), so the pair used the ruling's annotate route; ${stampPermanenceNote}`
+  };
+}
 
 // 5 — the mirror either matches the local projection's versions or says how far
 //     behind it is. It cannot know the live chain, so what it owes is a truthful

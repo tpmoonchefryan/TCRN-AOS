@@ -31,6 +31,19 @@ const authorityPins = process.env.AOS_AUTHORITY_PINS
 const authorityPinsDigest = process.env.TCRN_AUTHORITY_PINS_DIGEST
   ?? "d25ebfc1cb47310d27bdeba4749fe5728b089188a7338d6a89cfe86f1c5d5ce9";
 
+// No default actor: attribution is a claim about who is acting, and a fallback
+// would record that claim on every write without anyone having made it
+// (TCRN-AOS-STORY-112). The deployment states it or the service does not start.
+const actor = process.env.AOS_ACTOR;
+if (!actor || actor.trim().length === 0) {
+  console.error(JSON.stringify({
+    ok: false,
+    error: "AOS_ACTOR is not set. Every cockpit write is attributed to the configured actor; "
+      + "start the service with AOS_ACTOR=<who-is-acting> (for example AOS_ACTOR=agent:fable)."
+  }));
+  process.exit(1);
+}
+
 const service = await startCockpitService({
   port: Number.parseInt(process.env.AOS_PORT ?? "4318", 10),
   staticRoot: resolve(process.cwd(), "apps/web/dist"),
@@ -43,7 +56,7 @@ const service = await startCockpitService({
   },
   authorityPins,
   authorityPinsDigest,
-  actor: process.env.AOS_ACTOR ?? "agent:fable"
+  actor
 });
 
 console.log(JSON.stringify({
@@ -52,6 +65,7 @@ console.log(JSON.stringify({
   url: service.url,
   boundTo: "127.0.0.1",
   domainDatabasePath,
+  actor,
   chainWriteAvailable: true,
   notClaimed: [
     "this service is reachable only from this machine by design; the VM mirror is read-only",

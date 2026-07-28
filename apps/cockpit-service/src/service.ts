@@ -40,7 +40,13 @@ export interface CockpitServiceOptions {
   /** Omit to run read-only: without pins the engine refuses writes anyway. */
   authorityPins?: string;
   authorityPinsDigest?: string;
-  actor?: string;
+  /**
+   * Attribution for every write this service performs, on the chain and in the
+   * domain store alike. There is no default: an actor is a claim about who acted,
+   * and a fallback value would let deployments record that claim without anyone
+   * having made it (TCRN-AOS-STORY-112).
+   */
+  actor: string;
 }
 
 export interface StartedCockpitService {
@@ -59,7 +65,25 @@ const MIME: Record<string, string> = {
   ".woff2": "font/woff2"
 };
 
+/**
+ * The complete chain-write surface, by route segment under `/api/chain/`.
+ *
+ * This list is the routing table, not documentation of it: dispatch reads it, so
+ * a verb absent here is a 404 and a verb added here must be handled. Everything
+ * else the engine can do — conference, gate, knowledge, delete — stays off the
+ * HTTP surface on purpose; see CEREMONIAL_WRITES in the projection package.
+ */
+export const CHAIN_WRITE_ROUTES = ["transition", "annotate", "work", "enrol"] as const;
+type ChainWriteRoute = (typeof CHAIN_WRITE_ROUTES)[number];
+
 export async function startCockpitService(options: CockpitServiceOptions): Promise<StartedCockpitService> {
+  if (typeof options.actor !== "string" || options.actor.trim().length === 0) {
+    throw new Error(
+      "cockpit service refused to start: no actor configured. " +
+      "Every write is attributed, so the deployment must say who is acting " +
+      "(set AOS_ACTOR, or pass `actor` explicitly)."
+    );
+  }
   const migration = readFileSync(
     resolve(process.cwd(), "packages/db/migrations/domain/0001_cockpit_domain.sql"), "utf8");
   const domain = new DomainStore(options.domainDatabasePath, migration);
@@ -69,7 +93,7 @@ export async function startCockpitService(options: CockpitServiceOptions): Promi
   // deployment without pins should fail at the write rather than at boot.
   let chain: ChainClient | null = null;
   let surfaces = new Map<string, SafeWriteSurface>();
-  const actor = options.actor ?? "agent:fable";
+  const actor = options.actor;
 
   async function surfaceFor(partitionId: string): Promise<SafeWriteSurface> {
     const workspacePath = options.workspaces[partitionId];
@@ -152,14 +176,15 @@ async function handle(request: IncomingMessage, response: ServerResponse, contex
     return;
   }
 
-  if (path === "/api/chain/transition" && request.method === "POST") {
-    const body = await readJson(request);
-    const partitionId = requireString(body, "partitionId");
-    const surface = await context.surfaceFor(partitionId);
-    // The engine's state machine judges the move. Mirroring its rules here would
-    // create a second opinion that can disagree with the authority.
-    await surface.transition({ id: requireString(body, "recordId"), status: requireString(body, "status") });
-    sendJson(response, 200, { ok: true, recordId: body.recordId, status: body.status });
+  if (path.startsWith("/api/chain/") && request.method === "POST") {
+    const verb = path.slice("/api/chain/".length);
+    if ((CHAIN_WRITE_ROUTES as readonly string[]).includes(verb)) {
+      await handleChainWrite(request, response, context, verb as ChainWriteRoute);
+      return;
+    }
+    // Anything else — the ceremonial verbs above all — is not a missing feature,
+    // it is a boundary: those writes keep their explicit ceremony off HTTP.
+    sendJson(response, 404, { ok: false, error: "not_found" });
     return;
   }
 
@@ -169,6 +194,102 @@ async function handle(request: IncomingMessage, response: ServerResponse, contex
   }
 
   sendJson(response, 404, { ok: false, error: "not_found" });
+}
+
+async function handleChainWrite(
+  request: IncomingMessage,
+  response: ServerResponse,
+  context: Context,
+  verb: ChainWriteRoute
+): Promise<void> {
+  const body = await readJson(request);
+  // The whole input is validated before the surface (and with it the engine
+  // process) is resolved: a malformed request is the caller's mistake and should
+  // be named field-by-field, not converted into whatever the surface says first.
+  const partitionId = requireString(body, "partitionId");
+
+  switch (verb) {
+    case "transition": {
+      const input = { id: requireString(body, "recordId"), status: requireString(body, "status") };
+      // The engine's state machine judges the move. Mirroring its rules here would
+      // create a second opinion that can disagree with the authority.
+      await (await context.surfaceFor(partitionId)).transition(input);
+      sendJson(response, 200, { ok: true, recordId: input.id, status: input.status });
+      return;
+    }
+    case "annotate": {
+      // Scope is a full-value replacement in the engine; the caller sends the
+      // entire text it wants on the record, not a delta (TCRN-AOS-INC-034).
+      //
+      // A field that is present but of the wrong type is refused by name here,
+      // never silently dropped: an earlier shape of this route ignored a
+      // non-string scope and a non-array decidedBy, which turned a caller's
+      // type mistake into "annotation must set something" — or worse, into a
+      // write that recorded less than the caller said.
+      const id = requireString(body, "recordId");
+      if (body.scope !== undefined && typeof body.scope !== "string") {
+        throw new WriteRefused("scope must be a string when present", "FIELD_INVALID");
+      }
+      if (body.decidedBy !== undefined
+        && (!Array.isArray(body.decidedBy) || body.decidedBy.some((entry: unknown) => typeof entry !== "string"))) {
+        throw new WriteRefused("decidedBy must be an array of strings when present", "FIELD_INVALID");
+      }
+      if (body.scope === undefined && body.decidedBy === undefined) {
+        // Refused at the route: an annotation that sets nothing is a malformed
+        // request, and naming that here costs no engine spawn.
+        throw new WriteRefused("annotate requires scope or decidedBy", "FIELD_REQUIRED");
+      }
+      const input = {
+        id,
+        ...(body.scope !== undefined ? { scope: body.scope as string } : {}),
+        ...(body.decidedBy !== undefined ? { decidedBy: body.decidedBy as string[] } : {})
+      };
+      await (await context.surfaceFor(partitionId)).annotate(input);
+      sendJson(response, 200, { ok: true, recordId: input.id });
+      return;
+    }
+    case "work": {
+      // parentId admits exactly three shapes: absent, null, or a non-empty
+      // string. Anything else is the caller's mistake and is refused by name —
+      // quietly reading a wrong-typed parent as "parentless" would create a
+      // root-level record nobody asked for.
+      if (body.parentId !== undefined && body.parentId !== null
+        && (typeof body.parentId !== "string" || body.parentId.length === 0)) {
+        throw new WriteRefused("parentId must be a non-empty string or null", "FIELD_INVALID");
+      }
+      const input = {
+        projectId: requireString(body, "projectId"),
+        externalKey: requireString(body, "externalKey"),
+        kind: requireString(body, "kind"),
+        parentId: typeof body.parentId === "string" ? body.parentId : null,
+        title: requireString(body, "title")
+      };
+      const created = await (await context.surfaceFor(partitionId)).createWork(input);
+      sendJson(response, 200, { ok: true, id: created.id, externalKey: input.externalKey });
+      return;
+    }
+    case "enrol": {
+      const input = {
+        id: requireString(body, "recordId"),
+        workspaceId: requireString(body, "workspaceId"),
+        trainWorkId: requireString(body, "trainWorkId")
+      };
+      await (await context.surfaceFor(partitionId)).enrolInTrain(input);
+      sendJson(response, 200, { ok: true, recordId: input.id, trainWorkId: input.trainWorkId });
+      return;
+    }
+    default:
+      // Exhaustiveness, enforced at compile time: adding a verb to
+      // CHAIN_WRITE_ROUTES without a case above makes `verb` non-never here and
+      // the build fails. At runtime the throw becomes a 500 through the shared
+      // handler — a misconfigured route answers, it never leaves the request
+      // hanging with no response at all.
+      return unreachableRoute(verb);
+  }
+}
+
+function unreachableRoute(verb: never): never {
+  throw new Error(`unhandled chain write route: ${String(verb)}`);
 }
 
 async function handleDomain(

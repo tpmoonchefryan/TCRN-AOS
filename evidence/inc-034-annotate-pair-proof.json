@@ -1,0 +1,223 @@
+{
+  "schemaVersion": "aos.inc-034-annotate-pair.v1",
+  "ok": true,
+  "subject": "scripts/lib/annotate-pair.mjs — the judge shared with scripts/mirror-acceptance-proof.mjs criterion 4",
+  "criteria": [
+    {
+      "name": "green-pair-judged-green",
+      "ok": true,
+      "detail": {
+        "failedChecks": []
+      }
+    },
+    {
+      "name": "mutated-replay-turns-the-judge-red-on-replay-refused",
+      "ok": true,
+      "detail": {
+        "judgeOk": false,
+        "failedChecks": [
+          "replay-refused",
+          "refusal-names-the-noop",
+          "revision-held-on-replay"
+        ]
+      }
+    },
+    {
+      "name": "wrong-id-refusal-is-not-counted-as-the-noop-refusal",
+      "ok": true,
+      "detail": {
+        "judgeOk": false,
+        "failedChecks": [
+          "refusal-names-the-noop"
+        ],
+        "expectedNoopMessage": "annotation does not change any advisory field"
+      }
+    },
+    {
+      "name": "decided-by-array-accepted-through-the-real-mcp-facade",
+      "ok": true,
+      "detail": {
+        "viaRealFacade": true,
+        "sent": [
+          "minutes:0000000000000000000000aa",
+          "minutes:0000000000000000000000bb"
+        ],
+        "recorded": [
+          "minutes:0000000000000000000000aa",
+          "minutes:0000000000000000000000bb"
+        ],
+        "accepted": true,
+        "emptyListJudgedByEngine": true,
+        "emptyRefusal": {
+          "reasonCode": "WORKSPACE_INPUT_INVALID",
+          "message": "tcrn_workflow_work_annotate: WORKSPACE_INPUT_INVALID advisory decided-by must be a non-empty list of minutes ids"
+        }
+      }
+    }
+  ],
+  "observations": {
+    "green": {
+      "ok": true,
+      "checks": [
+        {
+          "name": "write-accepted",
+          "ok": true,
+          "observed": {
+            "status": 200
+          }
+        },
+        {
+          "name": "revision-advanced-by-one",
+          "ok": true,
+          "observed": {
+            "before": 1,
+            "afterWrite": 2
+          }
+        },
+        {
+          "name": "exactly-one-work-annotated-event",
+          "ok": true,
+          "observed": {
+            "delta": 1,
+            "lastOperation": "work.annotated",
+            "lastRecordId": "work:b43eeb6b8287f4c082cb6190"
+          }
+        },
+        {
+          "name": "replay-refused",
+          "ok": true,
+          "observed": {
+            "status": 409
+          }
+        },
+        {
+          "name": "refusal-names-the-noop",
+          "ok": true,
+          "observed": {
+            "message": "annotation does not change any advisory field"
+          }
+        },
+        {
+          "name": "revision-held-on-replay",
+          "ok": true,
+          "observed": {
+            "afterWrite": 2,
+            "afterReplay": 2
+          }
+        }
+      ]
+    },
+    "red1": {
+      "ok": false,
+      "checks": [
+        {
+          "name": "write-accepted",
+          "ok": true,
+          "observed": {
+            "status": 200
+          }
+        },
+        {
+          "name": "revision-advanced-by-one",
+          "ok": true,
+          "observed": {
+            "before": 2,
+            "afterWrite": 3
+          }
+        },
+        {
+          "name": "exactly-one-work-annotated-event",
+          "ok": true,
+          "observed": {
+            "delta": 1,
+            "lastOperation": "work.annotated",
+            "lastRecordId": "work:b43eeb6b8287f4c082cb6190"
+          }
+        },
+        {
+          "name": "replay-refused",
+          "ok": false,
+          "observed": {
+            "status": 200
+          }
+        },
+        {
+          "name": "refusal-names-the-noop",
+          "ok": false,
+          "observed": {
+            "message": null
+          }
+        },
+        {
+          "name": "revision-held-on-replay",
+          "ok": false,
+          "observed": {
+            "afterWrite": 3,
+            "afterReplay": 4
+          }
+        }
+      ]
+    },
+    "red2": {
+      "ok": false,
+      "checks": [
+        {
+          "name": "write-accepted",
+          "ok": true,
+          "observed": {
+            "status": 200
+          }
+        },
+        {
+          "name": "revision-advanced-by-one",
+          "ok": true,
+          "observed": {
+            "before": 4,
+            "afterWrite": 5
+          }
+        },
+        {
+          "name": "exactly-one-work-annotated-event",
+          "ok": true,
+          "observed": {
+            "delta": 1,
+            "lastOperation": "work.annotated",
+            "lastRecordId": "work:b43eeb6b8287f4c082cb6190"
+          }
+        },
+        {
+          "name": "replay-refused",
+          "ok": true,
+          "observed": {
+            "status": 409
+          }
+        },
+        {
+          "name": "refusal-names-the-noop",
+          "ok": false,
+          "observed": {
+            "message": "work work:000000000000000000000000 is unavailable"
+          }
+        },
+        {
+          "name": "revision-held-on-replay",
+          "ok": true,
+          "observed": {
+            "afterWrite": 5,
+            "afterReplay": 5
+          }
+        }
+      ]
+    }
+  },
+  "engineAnchor": {
+    "workspaceId": "workspace:569ee64456e96bc6b2782b8d",
+    "headEventHash": "36e6a899b151ac4b15640043aec58ea44e2d5b70680aef7ea61b80342aa26514",
+    "version": 7
+  },
+  "notClaimed": [
+    "the scratch chain is disposable and session-local; nothing here touched a live partition",
+    "this proves the judge and the surface-to-facade wire format, not the HTTP route; the annotate route is exercised by service tests and by the acceptance proof's live leg",
+    "the operator authority pins gate which commands the facade may run; supplying them here authorises writes to the scratch workspace only, and no live-workspace argument appears in this proof"
+  ]
+}

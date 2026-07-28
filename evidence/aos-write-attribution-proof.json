@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "aos.write-attribution-proof.v1",
+  "ok": true,
+  "criteria": [
+    {
+      "name": "unconfigured-start-refused",
+      "ok": true,
+      "refusal": "cockpit service refused to start: no actor configured. Every write is attributed, so the deployment must say who is acting (set AOS_ACTOR, or pass `actor` explicitly)."
+    },
+    {
+      "name": "health-states-configured-actor",
+      "ok": true,
+      "reported": "agent:attribution-proof"
+    },
+    {
+      "name": "domain-write-attributed-to-configured-actor",
+      "ok": true,
+      "updatedBy": "agent:attribution-proof"
+    },
+    {
+      "name": "chain-write-surface-sends-configured-actor",
+      "ok": true,
+      "actorsSent": [
+        "agent:attribution-proof",
+        "agent:attribution-proof"
+      ]
+    }
+  ],
+  "notClaimed": [
+    "the actor is an attribution claim the engine records, not proof of identity",
+    "no live chain was written; the chain-write half is observed through a recording client"
+  ]
+}

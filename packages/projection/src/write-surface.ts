@@ -115,7 +115,14 @@ export class SafeWriteSurface {
     const args: Record<string, unknown> = { ...this.base(), id: input.id };
     if (input.scope !== undefined) args.scope = input.scope;
     if (input.decidedBy !== undefined) {
-      args["decided-by"] = input.decidedBy.length > 0 ? input.decidedBy.join(",") : "-";
+      // The MCP facade's `list` value kind takes a real array — it refuses a
+      // pre-joined comma string or a "-" sentinel with MCP_ARGUMENT_INVALID, and
+      // performs the CLI wire conversion (including [] -> "-") itself. This
+      // surface once sent the CLI wire format here and every decided-by write
+      // was refused; the array passes through untouched so the engine, not this
+      // layer, judges the value (an empty list draws the engine's own
+      // "non-empty list of minutes ids" refusal).
+      args["decided-by"] = [...input.decidedBy];
     }
     await this.call("tcrn_workflow_work_annotate", args);
   }
@@ -125,7 +132,9 @@ export class SafeWriteSurface {
     await this.call("tcrn_workflow_work_annotate", {
       ...this.base(),
       id: input.id,
-      sprint: `${input.workspaceId},${input.trainWorkId}`
+      // The engine's wire format for the sprint advisory. A comma stood here
+      // until the first engine-proven call refused it (TCRN-AOS-STORY-111).
+      sprint: `${input.workspaceId}#${input.trainWorkId}`
     });
   }
 
