@@ -1,0 +1,243 @@
+{
+  "schemaVersion": "aos.engine-host-deploy.v1",
+  "ruling": "TCRN-AOS-MIN-007",
+  "ok": true,
+  "startedAt": "2026-07-28T14:48:58Z",
+  "finishedAt": "2026-07-28T14:49:00Z",
+  "source": {
+    "locator": "<local-governed-copy>",
+    "version": "0.7.0",
+    "tag": "v0.7.0",
+    "commit": "2e6cfe3077bd6e066863dca8ab765e4b06b934c1",
+    "workingTreeClean": true,
+    "distCoveredByTag": false
+  },
+  "transfer": {
+    "method": "rsync --archive --delete over ssh",
+    "excludes": [
+      "node_modules",
+      ".git"
+    ],
+    "destinationHost": "tcrn-platform-dev",
+    "enginePath": "/srv/tcrn/engine/tcrn-workflow",
+    "fileCount": 403,
+    "totalBytes": 8859267,
+    "fileSetDigest": {
+      "local": "bd07c565e0ec552952fb092d3e18a322afe0e64f77d5214b505391573994bbb3",
+      "remote": "bd07c565e0ec552952fb092d3e18a322afe0e64f77d5214b505391573994bbb3",
+      "match": true
+    },
+    "perFile": {
+      "compared": 403,
+      "mismatched": 0,
+      "missingOnVm": 0,
+      "extraOnVm": 0
+    }
+  },
+  "verification": {
+    "catalogReasonCode": "CLI_CATALOG_READY",
+    "cliVerbs": 95,
+    "fixtureOnlyVerbs": 2,
+    "totalVerbs": 97,
+    "remotePackageVersion": "0.7.0",
+    "runsWithoutNodeModules": true
+  },
+  "trust": {
+    "statement": "the VM copy is byte-identical to the local governed copy (v0.7.0 tag anchor for tracked source, digest ledger for the whole shipped set including dist); no claim stronger than that comparison is made",
+    "pinsTransferred": false,
+    "authorityMaterialDeferredTo": "EPIC-034-S120"
+  },
+  "predicateRedProofs": {
+    "digestLedger": {
+      "executed": true,
+      "predicate": "per-file sha256 comparison",
+      "flippedFile": "README.md",
+      "wentRed": true,
+      "restoredGreen": true
+    },
+    "filesystemGate": {
+      "executed": true,
+      "mountpoint": "/sys/fs/pstore",
+      "fsName": "pstore",
+      "magic": "0x6165676c",
+      "reasonCode": "WORKSPACE_FILESYSTEM_UNSUPPORTED",
+      "error": "filesystem type 1634035564 is not in the pinned local-filesystem set"
+    }
+  },
+  "statfs": {
+    "scratchParent": {
+      "path": "/srv/tcrn",
+      "dfLine": "/dev/mapper/ubuntu--vg-ubuntu--lv ext4 102626232 28330756  69036212  30% /",
+      "magic": "0xef53",
+      "inPinnedSet": true
+    },
+    "scratchInit": {
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "workspaceId": "workspace:d3adf1bca3c3515654b858fd",
+      "cleaned": true
+    },
+    "mounts": {
+      "scanned": 105,
+      "outsidePinnedSet": [
+        {
+          "mountpoint": "/dev/pts",
+          "fsName": "devpts",
+          "magic": "0x1cd1"
+        },
+        {
+          "mountpoint": "/sys",
+          "fsName": "sysfs",
+          "magic": "0x62656572"
+        },
+        {
+          "mountpoint": "/sys/kernel/security",
+          "fsName": "securityfs",
+          "magic": "0x73636673"
+        },
+        {
+          "mountpoint": "/sys/fs/cgroup",
+          "fsName": "cgroup2",
+          "magic": "0x63677270"
+        },
+        {
+          "mountpoint": "/sys/fs/pstore",
+          "fsName": "pstore",
+          "magic": "0x6165676c"
+        },
+        {
+          "mountpoint": "/sys/fs/bpf",
+          "fsName": "bpf",
+          "magic": "0xcafe4a11"
+        },
+        {
+          "mountpoint": "/sys/kernel/config",
+          "fsName": "configfs",
+          "magic": "0x62656570"
+        },
+        {
+          "mountpoint": "/proc",
+          "fsName": "proc",
+          "magic": "0x9fa0"
+        },
+        {
+          "mountpoint": "/proc/sys/fs/binfmt_misc",
+          "fsName": "autofs",
+          "magic": "0x42494e4d"
+        },
+        {
+          "mountpoint": "/dev/mqueue",
+          "fsName": "mqueue",
+          "magic": "0x19800202"
+        },
+        {
+          "mountpoint": "/sys/kernel/debug",
+          "fsName": "debugfs",
+          "magic": "0x64626720"
+        },
+        {
+          "mountpoint": "/dev/hugepages",
+          "fsName": "hugetlbfs",
+          "magic": "0x958458f6"
+        },
+        {
+          "mountpoint": "/sys/kernel/tracing",
+          "fsName": "tracefs",
+          "magic": "0x74726163"
+        },
+        {
+          "mountpoint": "/sys/fs/fuse/connections",
+          "fsName": "fusectl",
+          "magic": "0x65735543"
+        },
+        {
+          "mountpoint": "/run/netns/cni-e13862de-771e-1aaf-8272-14c62e693be5",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-2ed5327d-5f77-c944-0264-1809adb242b1",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-9eedb1e0-94f1-9185-79c0-1b54b8ade5d0",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-5ba49ac8-b7b8-38f3-743a-7e5d0abc2515",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-f778aafa-db4e-d37d-fd07-16fbd197440c",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-f49782c7-ee41-62aa-07be-b753cbb00d67",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-0ee6c2d8-70b2-e3b9-f2da-5351c2409268",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-80d31bad-98d5-5000-d44b-ae33e7d321fd",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-10265b13-e4b0-8d1a-b495-79204e0fe181",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-46331f02-da6e-648d-892b-d62880be333d",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-04e14019-75ef-8965-fdce-233a3aec9641",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-53f68434-a09d-b6b8-ac19-bbdeb9fcca60",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-cb3917a8-7f89-fe9d-194a-444e0788c6c9",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-da4ac034-ec86-0771-4fbf-46fc130625eb",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-cf0762e3-9ddb-3f37-f330-b375517172be",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        }
+      ]
+    },
+    "redProof": {
+      "executed": true,
+      "mountpoint": "/sys/fs/pstore",
+      "fsName": "pstore",
+      "magic": "0x6165676c",
+      "reasonCode": "WORKSPACE_FILESYSTEM_UNSUPPORTED",
+      "error": "filesystem type 1634035564 is not in the pinned local-filesystem set"
+    }
+  },
+  "reclaim": {
+    "remoteEngineProcesses": 0,
+    "localSshProcesses": 0,
+    "controlMasterClosed": true
+  }
+}
