@@ -332,14 +332,16 @@ test("the domain store round-trips through its export, which is what a backup re
   // The backup path exports to JSON and restores by replaying it. If that round
   // trip is lossy the backup is a file that looks like insurance and is not, so
   // the property is tested here rather than trusted at restore time.
-  const { DomainStore } = await import("../../../dist/packages/projection/src/index.js");
-  const { readFileSync } = await import("node:fs");
+  const { DomainStore, loadDomainMigrationSql } = await import("../../../dist/packages/projection/src/index.js");
+  const { fileURLToPath } = await import("node:url");
   const { mkdtempSync, rmSync } = await import("node:fs");
   const { tmpdir } = await import("node:os");
   const { join } = await import("node:path");
 
-  const migration = readFileSync(
-    new URL("../../db/migrations/domain/0001_cockpit_domain.sql", import.meta.url), "utf8");
+  // The full migration directory, exactly as the service and both backup
+  // scripts now load it — a schema file this loader missed would fail here too.
+  const migration = loadDomainMigrationSql(
+    fileURLToPath(new URL("../../db/migrations/domain", import.meta.url)));
   const scratch = mkdtempSync(join(tmpdir(), "aos-domain-test-"));
   const first = new DomainStore(join(scratch, "a.db"), migration);
   try {
@@ -353,13 +355,41 @@ test("the domain store round-trips through its export, which is what a backup re
     first.addRelation({ id: "relation:1", partitionId: "TCRN-AOS", recordId: "work:abc",
       relation: "blocks", targetPartitionId: "cross-project", targetRecordId: "work:def",
       createdAt: "2026-07-27T00:00:02Z", createdBy: "agent:test" });
+    first.appendChainWrite({ partitionId: "TCRN-AOS", verb: "tcrn_workflow_work_transition",
+      argsJson: JSON.stringify({ id: "work:abc", status: "ready" }), recordId: "work:abc",
+      chainVersion: 7, headEventHash: "a".repeat(64), at: "2026-07-27T00:00:03Z", switchAnchor: null });
 
+    // Before the round trip, the export is judged against this test's OWN
+    // record of what it wrote. The deepEqual below compares exportAll to
+    // exportAll — two readings of the same code path, which agree with each
+    // other even when both are wrong (an exportAll whose chainWriteLog went
+    // silently empty would round-trip an empty log perfectly). These literals
+    // are the independent side of the predicate: they cannot drift with the
+    // implementation because they never call it.
     const exported = first.exportAll();
+    assert.equal(exported.annotations.length, 1);
+    assert.equal(exported.comments.length, 1);
+    assert.equal(exported.relations.length, 1);
+    assert.deepEqual(exported.chainWriteLog, [{
+      seq: 1,
+      partitionId: "TCRN-AOS",
+      verb: "tcrn_workflow_work_transition",
+      argsJson: JSON.stringify({ id: "work:abc", status: "ready" }),
+      recordId: "work:abc",
+      chainVersion: 7,
+      headEventHash: "a".repeat(64),
+      at: "2026-07-27T00:00:03Z",
+      switchAnchor: null
+    }]);
+
     const restored = new DomainStore(join(scratch, "b.db"), migration);
     try {
       for (const annotation of exported.annotations) restored.setAnnotation(annotation);
       for (const comment of exported.comments) restored.addComment(comment);
       for (const relation of exported.relations) restored.addRelation(relation);
+      // The restore path keeps the original seq — replayed history is the same
+      // history, not a renumbered one.
+      for (const entry of exported.chainWriteLog) restored.restoreChainWrite(entry);
       assert.deepEqual(restored.exportAll(), exported);
     } finally {
       restored.close();
@@ -367,6 +397,77 @@ test("the domain store round-trips through its export, which is what a backup re
   } finally {
     first.close();
     rmSync(scratch, { recursive: true, force: true });
+  }
+});
+
+test("every domain table is exported or excluded by name — a new precious table cannot silently miss the logical backup", async () => {
+  // The failure mode this guards against is not "export breaks" but "export
+  // stays green while a newly added table quietly holds data no backup ever
+  // sees". So the schema itself is enumerated (sqlite_master, the authority on
+  // what tables exist) and every table must be claimed by exactly one of two
+  // lists: the export surface, or a deliberate exclusion recorded here with
+  // its reason. Adding a migration without touching either list goes red.
+  const { DomainStore, loadDomainMigrationSql } = await import("../../../dist/packages/projection/src/index.js");
+  const { fileURLToPath } = await import("node:url");
+  const { mkdtempSync, rmSync } = await import("node:fs");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const { DatabaseSync } = await import("node:sqlite");
+
+  // Table -> the exportAll() family that carries its rows.
+  const exportSurface = {
+    aos_domain_annotation: "annotations",
+    aos_domain_comment: "comments",
+    aos_domain_relation: "relations",
+    aos_chain_write_log: "chainWriteLog"
+  };
+  // Deliberate exclusions, each with the reason it is allowed to stay out of
+  // the logical export. Currently empty on purpose: everything the domain
+  // database holds is precious, so everything is exported.
+  const excludedByName = new Map([]);
+
+  const migration = loadDomainMigrationSql(
+    fileURLToPath(new URL("../../db/migrations/domain", import.meta.url)));
+  const scratch = mkdtempSync(join(tmpdir(), "aos-domain-tables-test-"));
+  const path = join(scratch, "tables.db");
+  const store = new DomainStore(path, migration);
+  let exported;
+  try {
+    exported = store.exportAll();
+  } finally {
+    store.close();
+  }
+  const db = new DatabaseSync(path);
+  let tables;
+  try {
+    tables = db.prepare(
+      "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name"
+    ).all().map((row) => String(row.name));
+  } finally {
+    db.close();
+    rmSync(scratch, { recursive: true, force: true });
+  }
+
+  assert.ok(tables.length > 0, "the schema must actually contain tables to enumerate");
+  for (const table of tables) {
+    const family = exportSurface[table];
+    if (family !== undefined) {
+      assert.ok(Array.isArray(exported[family]),
+        `export surface maps ${table} to '${family}' but exportAll() has no such array`);
+      continue;
+    }
+    assert.ok(excludedByName.has(table),
+      `table ${table} is neither in the export surface nor excluded by name — `
+      + "a precious table outside the logical backup. Add it to exportAll() "
+      + "(and both backup scripts' counts), or record its exclusion with a reason.");
+  }
+  // The predicate's other side must also be able to differ: neither list may
+  // name a table the schema no longer has, or the lists rot into folklore.
+  for (const table of Object.keys(exportSurface)) {
+    assert.ok(tables.includes(table), `export surface names ${table} but the schema has no such table`);
+  }
+  for (const table of excludedByName.keys()) {
+    assert.ok(tables.includes(table), `exclusion list names ${table} but the schema has no such table`);
   }
 });
 

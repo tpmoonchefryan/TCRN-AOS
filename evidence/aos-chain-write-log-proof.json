@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "aos.chain-write-log-proof.v1",
+  "ok": true,
+  "story": "TCRN-AOS-STORY-113",
+  "ruling": "MIN-007 T6 (minutes:a296b0542ddd66fcd0679d34): the replayable write log is a precondition at the same rank as the consistency matrix",
+  "shape": {
+    "table": "aos_chain_write_log",
+    "migration": "packages/db/migrations/domain/0002_chain_write_log.sql",
+    "database": "domain store (precious file), so BK01 physical snapshot and BK02 logical export cover it by placement",
+    "unit": "one row per engine-acknowledged facade call; work-with-title is two rows (create + scope annotation), matching what a replay would re-issue",
+    "columns": ["seq (AUTOINCREMENT, strictly monotonic)", "partition_id", "verb", "args_json (wire bytes, serialized once)", "record_id", "chain_version", "head_event_hash", "at", "switch_anchor (NULL until a switchover ceremony mints an anchor; epoch-scoped at insert, never backfilled by UPDATE — the append-only triggers make that impossible by design)"]
+  },
+  "byteFidelity": "args_json is the one JSON.stringify of the argument object, taken before the client frames the RPC envelope around the same untouched object; no second canonicalization exists in this repository — the engine stays the only judge of canonical form",
+  "backupCoverage": {
+    "logicalExport": "DomainStore.exportAll now returns chainWriteLog (schema aos.domain.v2, additive over v1); both backup scripts count it and the restore drills replay it with original seq via restoreChainWrite",
+    "physicalSnapshot": "createSqlitePhysicalSnapshot tableRowCounts covers the new table without changes",
+    "loaders": "service and both backup scripts now load the whole migrations/domain directory via loadDomainMigrationSql, so a schema addition cannot be silently absent from any of them"
+  },
+  "tests": {
+    "file": "apps/cockpit-service/test/chain-write-log.test.mjs",
+    "count": 5,
+    "cover": [
+      "every chain-write route leaves rows in strictly monotonic seq (5 rows across 4 routes)",
+      "logged bytes equal the wire serialization the client received, compared as Buffers",
+      "a refused write leaves no row",
+      "UPDATE and DELETE both rejected by triggers against a real row, row unchanged after",
+      "seq continues across a service restart"
+    ]
+  },
+  "redEvidence": [
+    {
+      "mutation": "argsJson serialized with sorted keys (a second canonicalization)",
+      "result": "byte-identity test failed: 1 failing, 4 passing",
+      "reverted": true
+    },
+    {
+      "mutation": "append-only triggers removed from 0002_chain_write_log.sql",
+      "result": "append-only test failed: 1 failing, 4 passing",
+      "reverted": true
+    }
+  ],
+  "notClaimed": [
+    "these tests substitute a recording client at the process boundary; engine acceptance of these writes is proven by the existing live write proof, not here",
+    "refused writes are not logged; the log holds what moved the chain, and refusals already travel to the caller with the engine's reason code",
+    "the crash window between engine acknowledgement and the log append is not closed: a process that dies inside it leaves a chain event with no log row and no error anyone saw; a log failure the process survives is typed (CHAIN_ACCEPTED_LOG_FAILED, HTTP 502 with the engine receipt) so callers reconcile rather than retry, and full reconciliation is a lineage comparison of the event mirror's held events against the log's head_event_hash column — consistency-matrix story, not this one"
+  ]
+}

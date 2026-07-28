@@ -1,4 +1,6 @@
 import { DatabaseSync } from "node:sqlite";
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 
 /**
  * The cockpit's own store — the first data on this platform that cannot be
@@ -53,6 +55,39 @@ export const DOMAIN_RELATION_TYPES = [
 ] as const;
 
 export type DomainRelationType = (typeof DOMAIN_RELATION_TYPES)[number];
+
+/**
+ * One replayable chain write, as recorded by the write path (STORY-113).
+ *
+ * `argsJson` holds the wire arguments exactly as serialized at the moment of
+ * sending — one serialization, stored byte-for-byte, never re-canonicalized.
+ */
+export interface ChainWriteLogEntry {
+  seq: number;
+  partitionId: string;
+  verb: string;
+  argsJson: string;
+  recordId: string | null;
+  chainVersion: number | null;
+  headEventHash: string | null;
+  at: string;
+  /** Switchover anchor of the epoch the write belonged to; NULL before any anchor exists. */
+  switchAnchor: string | null;
+}
+
+/**
+ * Read every domain migration, in filename order, as one SQL script.
+ *
+ * The domain schema grew a second file (0002_chain_write_log.sql), and every
+ * DomainStore construction site was loading 0001 by name — a shape where adding
+ * a migration silently applies to none of them. This is the single loader they
+ * all share instead.
+ */
+export function loadDomainMigrationSql(migrationsDir: string): string {
+  const files = readdirSync(migrationsDir).filter((name) => name.endsWith(".sql")).sort();
+  if (files.length === 0) throw new Error(`no domain migrations found in ${migrationsDir}`);
+  return files.map((name) => readFileSync(join(migrationsDir, name), "utf8")).join("\n");
+}
 
 export interface DomainRelation {
   id: string;
@@ -214,6 +249,45 @@ export class DomainStore {
   }
 
   /**
+   * Append one chain write to the replayable log (STORY-113).
+   *
+   * The sequence is assigned here, by the database, so monotonicity is a fact
+   * about the table rather than a promise by callers. The row is append-only:
+   * the migration's triggers reject UPDATE and DELETE outright.
+   */
+  appendChainWrite(entry: Omit<ChainWriteLogEntry, "seq">): ChainWriteLogEntry {
+    const result = this.db.prepare(`INSERT INTO aos_chain_write_log
+      (partition_id, verb, args_json, record_id, chain_version, head_event_hash, at, switch_anchor)
+      VALUES (?,?,?,?,?,?,?,?)`)
+      .run(entry.partitionId, entry.verb, entry.argsJson, entry.recordId,
+        entry.chainVersion, entry.headEventHash, entry.at, entry.switchAnchor);
+    return { ...entry, seq: Number(result.lastInsertRowid) };
+  }
+
+  /** The write log in sequence order, optionally narrowed to one partition. */
+  listChainWrites(filter: { partitionId?: string } = {}): ChainWriteLogEntry[] {
+    const clause = filter.partitionId ? " WHERE partition_id = ?" : "";
+    return (this.db.prepare(`SELECT * FROM aos_chain_write_log${clause} ORDER BY seq`)
+      .all(...(filter.partitionId ? [filter.partitionId] : [])) as Array<Record<string, unknown>>)
+      .map(toChainWrite);
+  }
+
+  /**
+   * Restore path only: re-insert an exported log row with its original seq.
+   *
+   * The live write path never names a seq — this exists so the backup drill can
+   * replay an export into a fresh store without renumbering history, which
+   * would silently break every cross-reference into the log.
+   */
+  restoreChainWrite(entry: ChainWriteLogEntry): void {
+    this.db.prepare(`INSERT INTO aos_chain_write_log
+      (seq, partition_id, verb, args_json, record_id, chain_version, head_event_hash, at, switch_anchor)
+      VALUES (?,?,?,?,?,?,?,?,?)`)
+      .run(entry.seq, entry.partitionId, entry.verb, entry.argsJson, entry.recordId,
+        entry.chainVersion, entry.headEventHash, entry.at, entry.switchAnchor);
+  }
+
+  /**
    * A portable snapshot of everything in here.
    *
    * This exists because the store is precious and its backup obligation was a
@@ -226,6 +300,7 @@ export class DomainStore {
     annotations: DomainAnnotation[];
     comments: DomainComment[];
     relations: DomainRelation[];
+    chainWriteLog: ChainWriteLogEntry[];
   } {
     const comments = (this.db.prepare("SELECT * FROM aos_domain_comment ORDER BY created_at, id")
       .all() as Array<Record<string, unknown>>).map((row) => ({
@@ -238,10 +313,13 @@ export class DomainStore {
         editedAt: (row.edited_at as string) ?? null
       }));
     return {
-      schemaVersion: "aos.domain.v1",
+      // v2 = v1 plus chainWriteLog (STORY-113). Additive only: a v1 reader that
+      // takes the three original families still reads a v2 export correctly.
+      schemaVersion: "aos.domain.v2",
       annotations: this.listAnnotations(),
       comments,
-      relations: this.listAllRelations()
+      relations: this.listAllRelations(),
+      chainWriteLog: this.listChainWrites()
     };
   }
 
@@ -260,6 +338,20 @@ function toAnnotation(row: Record<string, unknown>): DomainAnnotation {
     labels: JSON.parse(String(row.labels)) as string[],
     updatedAt: String(row.updated_at),
     updatedBy: String(row.updated_by)
+  };
+}
+
+function toChainWrite(row: Record<string, unknown>): ChainWriteLogEntry {
+  return {
+    seq: Number(row.seq),
+    partitionId: String(row.partition_id),
+    verb: String(row.verb),
+    argsJson: String(row.args_json),
+    recordId: (row.record_id as string) ?? null,
+    chainVersion: typeof row.chain_version === "number" ? row.chain_version : null,
+    headEventHash: (row.head_event_hash as string) ?? null,
+    at: String(row.at),
+    switchAnchor: (row.switch_anchor as string) ?? null
   };
 }
 

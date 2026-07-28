@@ -82,9 +82,11 @@ async function engine(...args) {
 }
 
 async function loadDomainStore(path) {
-  const { DomainStore } = await import(resolve(process.cwd(), "dist/packages/projection/src/index.js"));
-  const migration = await readFile(
-    resolve(process.cwd(), "packages/db/migrations/domain/0001_cockpit_domain.sql"), "utf8");
+  const { DomainStore, loadDomainMigrationSql } = await import(
+    resolve(process.cwd(), "dist/packages/projection/src/index.js"));
+  // The whole domain migrations directory, so a schema addition (0002 chain
+  // write log) is covered here the day it lands.
+  const migration = loadDomainMigrationSql(resolve(process.cwd(), "packages/db/migrations/domain"));
   return new DomainStore(path, migration);
 }
 
@@ -134,7 +136,8 @@ async function snapshotDomain(directory, instant) {
     counts: {
       annotations: exported.annotations.length,
       comments: exported.comments.length,
-      relations: exported.relations.length
+      relations: exported.relations.length,
+      chainWriteLog: exported.chainWriteLog.length
     },
     liveIntegrityCheck: sqliteIntegrityCheck(domainDatabasePath)
   };
@@ -253,18 +256,22 @@ async function drillDomainRestore(directory) {
     }
     for (const comment of exported.comments) store.addComment(comment);
     for (const relation of exported.relations) store.addRelation(relation);
+    // Restore keeps the original seq (the log is ordered by it); pre-v2
+    // exports have no chainWriteLog field and restore an empty log, honestly.
+    for (const entry of exported.chainWriteLog ?? []) store.restoreChainWrite(entry);
     restored = store.exportAll();
   } finally {
     store.close();
     for (const suffix of ["", "-wal", "-shm"]) await rm(`${scratch}${suffix}`, { force: true });
   }
-  const sameShape = ["annotations", "comments", "relations"]
-    .every((key) => restored[key].length === exported[key].length);
+  const families = ["annotations", "comments", "relations", "chainWriteLog"];
+  const sameShape = families
+    .every((key) => restored[key].length === (exported[key] ?? []).length);
   return {
     ok: sameShape,
     replayedInto: "fresh scratch store, deleted after the drill",
-    counts: Object.fromEntries(["annotations", "comments", "relations"]
-      .map((key) => [key, { exported: exported[key].length, restored: restored[key].length }]))
+    counts: Object.fromEntries(families
+      .map((key) => [key, { exported: (exported[key] ?? []).length, restored: restored[key].length }]))
   };
 }
 
@@ -348,6 +355,7 @@ async function takePair() {
     notClaimed: [
       "this run proves each half restores in a drill; it does not perform a restore",
       "the projection database is deliberately absent -- it is rebuilt from the chains, never restored",
+      "the O3 event mirror is deliberately absent (MIN-007: 明确不备) -- a derived instrument, never a second restorable copy of chain history",
       "a chain restore is same-path-only and operator-driven; see tcrn-workflow/docs/architecture/backup-restore-runbook.md",
       "no VM copy is made here; the VM never holds this machine's credentials and pulls instead"
     ]

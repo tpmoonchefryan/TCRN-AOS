@@ -36,6 +36,8 @@ export { resolveKeyTable, partitionTokenCandidates, digestOf, WORK_KIND_TOKENS, 
 export {
   DomainStore,
   DOMAIN_RELATION_TYPES,
+  loadDomainMigrationSql,
+  type ChainWriteLogEntry,
   type DomainAnnotation,
   type DomainComment,
   type DomainPriority,
@@ -43,4 +45,13 @@ export {
   type DomainRelationType,
   type QualifiedRef
 } from "./domain-store.js";
-export { SafeWriteSurface, WriteRefused, CEREMONIAL_WRITES, type WriteContext } from "./write-surface.js";
+export { SafeWriteSurface, WriteRefused, ChainWriteLogFailed, CEREMONIAL_WRITES, type WriteContext } from "./write-surface.js";
+export {
+  EventMirrorStore,
+  EventMirrorError,
+  loadEngineProtocol,
+  type ChainEvent,
+  type EngineProtocol,
+  type LoadedEngineProtocol,
+  type MirroredEventRow
+} from "./event-mirror.js";

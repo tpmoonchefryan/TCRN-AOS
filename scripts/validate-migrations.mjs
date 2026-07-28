@@ -26,18 +26,18 @@
 // is not a journal that detects drift.
 //
 // Coverage is stated rather than implied. The domain schema
-// (migrations/domain/0001_cockpit_domain.sql) is applied by DomainStore and is
+// (everything under migrations/domain/) is applied by DomainStore and is
 // covered by that package's own tests; this script says so below instead of
 // leaving the reader to assume "migrations" means all of them.
 
-import { mkdtemp, rm, readFile } from "node:fs/promises";
+import { mkdtemp, rm, readFile, readdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
 const repositoryRoot = resolve(import.meta.dirname, "..");
 const sqliteMigrationsDir = join(repositoryRoot, "packages/db/migrations/sqlite");
-const domainMigrationPath = join(repositoryRoot, "packages/db/migrations/domain/0001_cockpit_domain.sql");
+const domainMigrationsDir = join(repositoryRoot, "packages/db/migrations/domain");
 
 // The runtime tables this cockpit actually reads and writes. Shorter than the
 // list the old checker carried because the 22 tables it also demanded belonged
@@ -115,8 +115,14 @@ try {
 
   // 6. State what this run did not cover, so the reader is not left inferring
   //    that "migrations validated" means every migration in the tree.
-  const domainSql = await readFile(domainMigrationPath, "utf8");
-  const domainTableCount = (domainSql.match(/CREATE TABLE/gi) ?? []).length;
+  // Every file in the directory, so the statement below stays true when the
+  // domain schema grows (it did: 0002_chain_write_log.sql, STORY-113).
+  const domainFiles = (await readdir(domainMigrationsDir)).filter((name) => name.endsWith(".sql")).sort();
+  let domainTableCount = 0;
+  for (const name of domainFiles) {
+    const domainSql = await readFile(join(domainMigrationsDir, name), "utf8");
+    domainTableCount += (domainSql.match(/CREATE TABLE/gi) ?? []).length;
+  }
 
   const ok = missingTables.length === 0
     && hasKnowledgeFts
@@ -150,8 +156,8 @@ try {
       actionUnchanged
     },
     notCovered: {
-      "packages/db/migrations/domain/0001_cockpit_domain.sql":
-        `applied by DomainStore, ${domainTableCount} tables; covered by packages/domain and packages/projection tests, not by this script`,
+      "packages/db/migrations/domain/":
+        `${domainFiles.join(", ")} applied by DomainStore, ${domainTableCount} tables; covered by packages/domain and packages/projection tests, not by this script`,
       postgresql:
         "none. The 535-line PostgreSQL spine this checker used to scan was deleted under TCRN-AOS-INC-001 — no pg dependency, client, or connection string exists in this repository"
     }

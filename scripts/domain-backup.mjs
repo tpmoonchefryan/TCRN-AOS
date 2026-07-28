@@ -33,6 +33,7 @@
 
 import { copyFile, mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
+import { DatabaseSync } from "node:sqlite";
 import { createHash } from "node:crypto";
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
@@ -49,10 +50,12 @@ const retention = Number.parseInt(process.env.AOS_BACKUP_RETENTION ?? "5", 10);
 const sha256 = (buffer) => createHash("sha256").update(buffer).digest("hex");
 
 async function loadStore(path) {
-  const { DomainStore } = await import(
+  const { DomainStore, loadDomainMigrationSql } = await import(
     resolve(process.cwd(), "dist/packages/projection/src/index.js"));
-  const migration = await readFile(
-    resolve(process.cwd(), "packages/db/migrations/domain/0001_cockpit_domain.sql"), "utf8");
+  // The whole domain migrations directory, so a schema addition (0002 chain
+  // write log) is backed up the day it lands rather than when someone
+  // remembers to update this loader.
+  const migration = loadDomainMigrationSql(resolve(process.cwd(), "packages/db/migrations/domain"));
   return new DomainStore(path, migration);
 }
 
@@ -84,7 +87,8 @@ async function snapshot(stamp) {
     counts: {
       annotations: exported.annotations.length,
       comments: exported.comments.length,
-      relations: exported.relations.length
+      relations: exported.relations.length,
+      chainWriteLog: exported.chainWriteLog.length
     },
     artifacts: {
       "domain.db": { bytes: databaseBytes.length, sha256: sha256(databaseBytes) },
@@ -92,7 +96,8 @@ async function snapshot(stamp) {
     },
     notClaimed: [
       "this backup covers the cockpit's own store only; the governed chains have their own snapshots",
-      "the projection database is deliberately absent — it is rebuilt from the chains, never restored"
+      "the projection database is deliberately absent — it is rebuilt from the chains, never restored",
+      "the O3 event mirror is deliberately absent (MIN-007: 明确不备) — it is a derived instrument, and a second restorable copy of chain history would be a divergence nobody could adjudicate"
     ]
   };
   await writeFile(join(directory, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
@@ -135,9 +140,37 @@ async function verifySnapshot(directory) {
     }
     for (const comment of exported.comments) store.addComment(comment);
     for (const relation of exported.relations) store.addRelation(relation);
+    // Restore keeps the original seq (the log is ordered by it); pre-v2
+    // exports have no chainWriteLog and restore an empty log, honestly.
+    for (const entry of exported.chainWriteLog ?? []) store.restoreChainWrite(entry);
     restored = store.exportAll();
   } finally {
     store.close();
+  }
+
+  // A second, independent judge of the restore: raw SQL row counts on the
+  // probe database, compared against the export's counts. The exportAll
+  // comparison above is one code path reading itself — if exportAll silently
+  // dropped a family, both of its readings would agree and the round trip
+  // would stay green. A COUNT(*) issued directly against the table cannot
+  // share that blind spot: the two sides of this predicate can actually
+  // differ.
+  let sqlCounts;
+  try {
+    const probe = new DatabaseSync(scratch);
+    try {
+      const countOf = (table) =>
+        Number(probe.prepare(`SELECT COUNT(*) AS n FROM ${table}`).get().n);
+      sqlCounts = {
+        annotations: countOf("aos_domain_annotation"),
+        comments: countOf("aos_domain_comment"),
+        relations: countOf("aos_domain_relation"),
+        chainWriteLog: countOf("aos_chain_write_log")
+      };
+    } finally {
+      probe.close();
+    }
+  } finally {
     await rm(scratch, { force: true });
     await rm(`${scratch}-wal`, { force: true });
     await rm(`${scratch}-shm`, { force: true });
@@ -146,13 +179,19 @@ async function verifySnapshot(directory) {
   const roundTrips =
     restored.annotations.length === exported.annotations.length
     && restored.comments.length === exported.comments.length
-    && restored.relations.length === exported.relations.length;
+    && restored.relations.length === exported.relations.length
+    && restored.chainWriteLog.length === (exported.chainWriteLog ?? []).length
+    && sqlCounts.annotations === exported.annotations.length
+    && sqlCounts.comments === exported.comments.length
+    && sqlCounts.relations === exported.relations.length
+    && sqlCounts.chainWriteLog === (exported.chainWriteLog ?? []).length;
 
   return {
     ok: digestsMatch && roundTrips,
     directory,
     digestsMatch,
     roundTrips,
+    sqlCounts,
     counts: manifest.counts
   };
 }

@@ -1,15 +1,17 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { once } from "node:events";
 import { readFile } from "node:fs/promises";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { extname, join, normalize, resolve } from "node:path";
 import { homedir } from "node:os";
 import { randomUUID } from "node:crypto";
 import {
   ChainClient,
+  ChainWriteLogFailed,
   DomainStore,
   SafeWriteSurface,
   WriteRefused,
+  loadDomainMigrationSql,
   type DomainPriority,
   type DomainRelationType
 } from "../../../packages/projection/src/index.js";
@@ -47,6 +49,17 @@ export interface CockpitServiceOptions {
    * having made it (TCRN-AOS-STORY-112).
    */
   actor: string;
+  /**
+   * A pre-built chain client, instead of spawning the governed MCP facade.
+   * Tests use this to put a recording client behind the real routes; a live
+   * deployment omits it and gets the lazy facade spawn below.
+   */
+  chainClient?: ChainClientLike;
+}
+
+/** The one method the write surface needs; ChainClient satisfies it. */
+export interface ChainClientLike {
+  callTool<T = unknown>(name: string, args: Record<string, unknown>): Promise<T>;
 }
 
 export interface StartedCockpitService {
@@ -84,14 +97,15 @@ export async function startCockpitService(options: CockpitServiceOptions): Promi
       "(set AOS_ACTOR, or pass `actor` explicitly)."
     );
   }
-  const migration = readFileSync(
-    resolve(process.cwd(), "packages/db/migrations/domain/0001_cockpit_domain.sql"), "utf8");
+  const migration = loadDomainMigrationSql(
+    resolve(process.cwd(), "packages/db/migrations/domain"));
   const domain = new DomainStore(options.domainDatabasePath, migration);
 
   // The chain client is created lazily and only when a write is actually
   // attempted: a read-only session should not spawn an engine process, and a
   // deployment without pins should fail at the write rather than at boot.
-  let chain: ChainClient | null = null;
+  let chain: ChainClientLike | null = options.chainClient ?? null;
+  let spawned: ChainClient | null = null;
   let surfaces = new Map<string, SafeWriteSurface>();
   const actor = options.actor;
 
@@ -99,16 +113,36 @@ export async function startCockpitService(options: CockpitServiceOptions): Promi
     const workspacePath = options.workspaces[partitionId];
     if (!workspacePath) throw new WriteRefused(`unknown partition ${partitionId}`, "UNKNOWN_PARTITION");
     if (!chain) {
-      chain = new ChainClient({
+      spawned = new ChainClient({
         serverPath: resolve(homedir(), ".tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs"),
         ...(options.authorityPins ? { authorityPins: options.authorityPins } : {}),
         ...(options.authorityPinsDigest ? { authorityPinsDigest: options.authorityPinsDigest } : {})
       });
-      await chain.start();
+      await spawned.start();
+      chain = spawned;
     }
     let surface = surfaces.get(partitionId);
     if (!surface) {
-      surface = new SafeWriteSurface(chain, { workspacePath, actor });
+      surface = new SafeWriteSurface(chain, {
+        workspacePath,
+        actor,
+        // The replayable write log (STORY-113): one row per engine-acknowledged
+        // write, appended to the precious domain store so BK01/BK02 cover it.
+        // The switchover anchor is null until a switchover ceremony mints one;
+        // see 0002_chain_write_log.sql for the epoch semantics.
+        onWrite: (entry) => {
+          domain.appendChainWrite({
+            partitionId,
+            verb: entry.verb,
+            argsJson: entry.argsJson,
+            recordId: entry.recordId,
+            chainVersion: entry.chainVersion,
+            headEventHash: entry.headEventHash,
+            at: instant(),
+            switchAnchor: null
+          });
+        }
+      });
       surfaces.set(partitionId, surface);
     }
     return surface;
@@ -119,6 +153,20 @@ export async function startCockpitService(options: CockpitServiceOptions): Promi
       // Reason codes travel to the client unchanged. A refusal from the engine is
       // information the operator needs — "INVALID_TRANSITION" tells them the move
       // was wrong, where a flattened 500 would only say something broke.
+      if (error instanceof ChainWriteLogFailed) {
+        // The chain accepted the write and the replay log did not record it.
+        // 502 with the reason code by name, never a bare 500: the one thing the
+        // caller must know is that the chain has MOVED, so a blind retry would
+        // mutate twice. The engine receipt rides along so they can see what the
+        // chain now holds and reconcile instead.
+        sendJson(response, 502, {
+          ok: false,
+          reasonCode: error.reasonCode,
+          error: error.message,
+          receipt: error.receipt
+        });
+        return;
+      }
       const refused = error instanceof WriteRefused;
       sendJson(response, refused ? 409 : 500, {
         ok: false,
@@ -140,7 +188,9 @@ export async function startCockpitService(options: CockpitServiceOptions): Promi
     url: `http://127.0.0.1:${address.port}`,
     close: async () => {
       await new Promise<void>((done, fail) => server.close((error) => error ? fail(error) : done()));
-      if (chain) await chain.stop();
+      // Only a facade this service spawned is this service's to reclaim; an
+      // injected client's lifecycle belongs to whoever built it.
+      if (spawned) await spawned.stop();
       surfaces = new Map();
       domain.close();
     }

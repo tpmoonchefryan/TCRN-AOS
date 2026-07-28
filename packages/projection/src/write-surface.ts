@@ -26,12 +26,63 @@ export interface WriteContext {
   actor: string;
   /** Where time-attestation receipts land, outside the workspace root. */
   attestDir?: string;
+  /**
+   * Called once per engine-acknowledged write, with the wire verb, the exact
+   * serialized argument bytes, and the receipt essentials (STORY-113). The
+   * surface serializes the arguments exactly once — the string given here is
+   * the same bytes `JSON.stringify` produces inside the RPC envelope, because
+   * the argument object is never touched between the two. An error thrown here
+   * propagates as ChainWriteLogFailed (CHAIN_ACCEPTED_LOG_FAILED), carrying
+   * the engine receipt: the chain HAS moved by the time this hook runs, so the
+   * failure must not read as a refusal a caller could blindly retry.
+   *
+   * Known limitation, stated rather than papered over: there is a crash window
+   * between the engine's acknowledgement and this hook appending the log row.
+   * A process that dies inside it leaves a chain event with no log row, and no
+   * error anyone saw. Reconciliation is by lineage comparison — the mirror's
+   * held events (event-mirror.ts) against the log's head_event_hash column —
+   * which belongs to the consistency-matrix story; this hook does not claim to
+   * close the window, only to make every SURVIVED failure loud and typed.
+   */
+  onWrite?: (entry: {
+    verb: string;
+    argsJson: string;
+    recordId: string | null;
+    chainVersion: number | null;
+    headEventHash: string | null;
+  }) => void;
 }
 
 export class WriteRefused extends Error {
   constructor(message: string, readonly reasonCode: string) {
     super(message);
     this.name = "WriteRefused";
+  }
+}
+
+/**
+ * The chain accepted a write, and then the replay log failed to record it.
+ *
+ * Deliberately NOT a WriteRefused: a refusal means the chain did not move and
+ * a retry is safe; this means the chain DID move and a blind retry would
+ * perform the mutation twice. The engine receipt travels with the error so the
+ * caller can see exactly what the chain now holds and reconcile from there.
+ */
+export class ChainWriteLogFailed extends Error {
+  readonly reasonCode = "CHAIN_ACCEPTED_LOG_FAILED";
+  constructor(
+    message: string,
+    /** The engine receipt for the write that the log failed to capture. */
+    readonly receipt: {
+      verb: string;
+      recordId: string | null;
+      chainVersion: number | null;
+      headEventHash: string | null;
+    },
+    options?: { cause?: unknown }
+  ) {
+    super(message, options);
+    this.name = "ChainWriteLogFailed";
   }
 }
 
@@ -47,7 +98,13 @@ function instant(): string {
 }
 
 export class SafeWriteSurface {
-  constructor(private readonly client: ChainClient, private readonly context: WriteContext) {}
+  // Only `callTool` is required of the client: the existing tests already hand
+  // this surface a recording stand-in, and the type now says that is legal
+  // instead of relying on the looseness of an .mjs call site.
+  constructor(
+    private readonly client: Pick<ChainClient, "callTool">,
+    private readonly context: WriteContext
+  ) {}
 
   private base(): Record<string, unknown> {
     return {
@@ -139,8 +196,13 @@ export class SafeWriteSurface {
   }
 
   private async call<T>(tool: string, args: Record<string, unknown>): Promise<T> {
+    // Serialized once, here, before the client serializes the RPC envelope
+    // around the same untouched object. The engine is the only canonical-form
+    // judge; this surface stores what it sent, not a re-normalization of it.
+    const argsJson = JSON.stringify(args);
+    let result: T;
     try {
-      return await this.client.callTool<T>(tool, args);
+      result = await this.client.callTool<T>(tool, args);
     } catch (error) {
       const reasonCode = (error as { reasonCode?: string }).reasonCode ?? "WRITE_SURFACE_REFUSED";
       // Refusals pass through with the engine's own reason code. A cockpit that
@@ -148,6 +210,32 @@ export class SafeWriteSurface {
       // of information that tells a person what to do next.
       throw new WriteRefused((error as Error).message, reasonCode);
     }
+    if (this.context.onWrite) {
+      // Only engine-acknowledged writes are logged: a refusal did not move the
+      // chain, so replaying it would replay nothing. Receipt fields are taken
+      // as the receipt stated them, absent ones recorded as null rather than
+      // invented.
+      const receipt = result as { record?: { id?: unknown }; version?: unknown; headEventHash?: unknown };
+      const essentials = {
+        verb: tool,
+        recordId: typeof receipt.record?.id === "string" ? receipt.record.id : null,
+        chainVersion: typeof receipt.version === "number" ? receipt.version : null,
+        headEventHash: typeof receipt.headEventHash === "string" ? receipt.headEventHash : null
+      };
+      try {
+        this.context.onWrite({ ...essentials, argsJson });
+      } catch (error) {
+        // The chain moved; the log did not. Typed, with the receipt attached,
+        // so the caller knows this is "reconcile", never "retry".
+        throw new ChainWriteLogFailed(
+          `chain accepted ${tool} but the write log failed: ` +
+          (error instanceof Error ? error.message : String(error)),
+          essentials,
+          { cause: error }
+        );
+      }
+    }
+    return result;
   }
 }
 
