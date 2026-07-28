@@ -728,7 +728,6 @@ function proveNegativeMethods(transport) {
     ["aos.documentation.entry.propose", "transport_method_outside_mvp_allowlist"],
     ["aos.release_candidate.link", "transport_method_outside_mvp_allowlist"],
     ["aos.dependency.record", "transport_method_outside_mvp_allowlist"],
-    ["aos.knowledge.entry.propose", "transport_method_outside_mvp_allowlist"],
     ["aos.gateway.dump", "transport_method_unknown"]
   ];
   return cases.map(([method, expectedReason]) => {

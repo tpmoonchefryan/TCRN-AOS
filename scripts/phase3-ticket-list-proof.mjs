@@ -419,12 +419,32 @@ async function startClientSession(dbPath, sessionActor, overrides = {}) {
   };
 }
 
+/**
+ * Methods that must stay unreachable, whatever the allowlist grows to.
+ *
+ * This was written the other way round until 2026-07-28 — a list of methods
+ * asserted to be *outside* the MVP allowlist — and that form fails for the right
+ * reason while reading like the wrong one. When `aos.knowledge.entry.propose`
+ * was admitted on purpose by the knowledge-retrieval layer, four proofs went red
+ * reporting that a rejection had stopped working, when what had happened was a
+ * decided expansion. An allowlist is meant to grow. A denylist of write surfaces
+ * that must never be reachable is not, so the assertion belongs on the denylist,
+ * and the allowlist is read from the shipped source rather than restated here.
+ */
 async function proveNegativeMethods(server) {
+  // Declared inside: `runProof` is invoked from the top level above, so a module
+  // scoped `const` down here is still in its temporal dead zone when this runs.
+  const neverAdmittedMethods = [
+    "aos.work_index.drill_through.read",
+    "aos.work_index.any",
+    "aos.resource.record.propose"
+  ];
+  const wronglyAdmitted = neverAdmittedMethods.filter((method) => transportMvpMethods.includes(method));
+  assert.deepEqual(wronglyAdmitted, [],
+    `transport allowlist admits a method that must stay unreachable: ${wronglyAdmitted.join(" ")}`);
+
   const cases = [
-    ["aos.work_index.drill_through.read", "transport_method_outside_mvp_allowlist"],
-    ["aos.work_index.any", "transport_method_outside_mvp_allowlist"],
-    ["aos.resource.record.propose", "transport_method_outside_mvp_allowlist"],
-    ["aos.knowledge.entry.propose", "transport_method_outside_mvp_allowlist"],
+    ...neverAdmittedMethods.map((method) => [method, "transport_method_outside_mvp_allowlist"]),
     ["aos.ticket.archive", "transport_method_unknown"],
     ["aos.unsupported.method", "transport_method_unknown"]
   ];

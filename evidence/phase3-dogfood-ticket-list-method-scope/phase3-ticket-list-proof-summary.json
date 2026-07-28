@@ -2,9 +2,9 @@
   "ok": true,
   "route": "route_tcrn_aos_phase3_dogfood_ilya_implementation_aos_ticket_list_after_mara_pm_scope_success_fa594d6_5b09469_20260705",
   "command": "pnpm --dir TCRN-AOS phase3:ticket-list-proof",
-  "generatedAt": "2026-07-05T21:15:53.678Z",
-  "sourceHead": "da372040cdc5ac0aa383bc35b270367c2b7dd48d",
-  "sourceContentDigest": "275d6d9400c11c1841c8a5c392ac6150056fc3a2a338f63959ec5100b2fa3b22",
+  "generatedAt": "2026-07-28T00:46:55.718Z",
+  "sourceHead": "609ee09d39ce8c0d474406f87b56be80eef9afb0",
+  "sourceContentDigest": "aafba4c1ee1156b0c109cc6afe8f63236eaa5cfb9c37aa92f5efd52b092dd885",
   "receiptInventory": [
     "schema-row-grain-proof.json",
     "cursor-filter-limit-proof.json",

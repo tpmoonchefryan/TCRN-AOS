@@ -3,21 +3,21 @@
   "ok": true,
   "route": "route_tcrn_aos_phase3_dogfood_ilya_missing_work_loop_methods_implementation_after_minerva_handoff_64e613b_c8c61f5_20260705",
   "command": "pnpm --dir TCRN-AOS phase3:work-loop-method-proof",
-  "generatedAt": "2026-07-06T01:19:26.583Z",
-  "sourceHead": "14e04923ad4c4d862a9eeea3797a650c26c6e318",
-  "sourceContentDigest": "3be050a91890158c8110f64b40ee8d442c2c14475180d7971cbebf3e0e11c180",
+  "generatedAt": "2026-07-28T00:47:06.900Z",
+  "sourceHead": "609ee09d39ce8c0d474406f87b56be80eef9afb0",
+  "sourceContentDigest": "9ee018a98b9fd3440b2fedaf149bf00db3c93f07ba5ee70f624fd1900261ecc3",
   "sourceFiles": [
     {
       "file": "package.json",
-      "digest": "c40c8908d684845086dce09feb51d1874c71b1f4ae0148112f5564dcdf061ecb"
+      "digest": "27fa6be61ceb4465c3f4788850f15faef3aa5404ad41d46bbda8f840ea7fbf31"
     },
     {
       "file": "packages/domain/src/store.ts",
-      "digest": "db1c74874a28dc0ccf1d55a911ea8d4163d4ca8be7e29c091b1c2b9d4f4eece9"
+      "digest": "98fb408080cb449a15b1e0e2b46c1c4b9ff2fc3d1a338fd3ff919ebb1bed8f09"
     },
     {
       "file": "packages/domain/src/types.ts",
-      "digest": "f8ea1aa90103c272a6d86c31e0c7b9aff0d496b7e22628406934474de2986413"
+      "digest": "34f8d5e1b2e53671312699d1de20e2ea20a564786f82a0124c02521b1f7e7065"
     },
     {
       "file": "packages/mcp-gateway/src/gateway.ts",
@@ -25,19 +25,19 @@
     },
     {
       "file": "packages/mcp-server/src/transport.ts",
-      "digest": "35109e1b3bcf30870021d29dad2dafe09a40834094848b144c9ba822ce8e0753"
+      "digest": "1585ec20c02b944a23b97c9b191b7afddd4433b7bced12faea9441e0df46e39e"
     },
     {
       "file": "packages/mcp-server/test/stdio-transport.test.mjs",
-      "digest": "08c32e697596ea3932348adc00930f14813d0c990daf1f7dcde3f70ae3eaa1bd"
+      "digest": "090c3b06454998d933523a834a06b962ef8c805f301ca0b9c314bd0b83ecef00"
     },
     {
       "file": "scripts/phase3-work-loop-method-proof.mjs",
-      "digest": "163f1b5a4cf30db60440203a4535bf5d4cd2a6ead0d8093e79f5c12bed3f5f48"
+      "digest": "1d95600de59dcb096c04a260d2558b0f5b0d8edc7d50ba21a0e0c32028d95b19"
     }
   ],
   "workflowBasis": "64e613bec2c64659879257f4163811ea60ad3710",
-  "aosBasis": "14e04923ad4c4d862a9eeea3797a650c26c6e318",
+  "aosBasis": "609ee09d39ce8c0d474406f87b56be80eef9afb0",
   "methodsUnderReview": [
     "aos.assignment.claim",
     "aos.assignment.update",
@@ -45,7 +45,7 @@
   ],
   "routeOwnedDbRoot": {
     "class": "os_temp_route_owned_redacted",
-    "rootDigest": "56c61c46194ea55ac0ff35421640690649e93bdf6288ec2db0ffaf5994c21c05",
+    "rootDigest": "a20f976721228e489a6db81f15a0ada095464db08b647a4c84f261637226bb09",
     "rawPathRecorded": false
   },
   "actorProof": {
@@ -74,6 +74,6 @@
     "methodAcceptanceClaimed": false,
     "phase3CloseoutClaimed": false
   },
-  "sourceGitStatusDigestOnly": "c78b75d8815ac68d91780e97ca68015b6eebafbe36ee263a74f2015c7dabbfd1",
+  "sourceGitStatusDigestOnly": "36e4c916ff6b5efac2e470d80a8927e077834325813db1b31f5367ab63598093",
   "sourceGitStatusStoredRaw": false
 }

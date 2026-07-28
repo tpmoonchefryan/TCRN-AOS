@@ -8,6 +8,7 @@ import { AosStore, createDefaultSeed } from "../dist/packages/domain/src/index.j
 import { McpGateway } from "../dist/packages/mcp-gateway/src/index.js";
 import { startAosLocalServiceProof } from "../dist/apps/api/src/server.js";
 import { createWorkReadbackApiResponse } from "../dist/apps/api/src/work-readback.js";
+import { transportReadMethods } from "../dist/packages/mcp-server/src/transport.js";
 
 const route = "route_tcrn_aos_phase3_dogfood_ilya_readback_api_facade_implementation_after_calder_success_4643e4c_ecc289d_20260705";
 const workflowBasis = "4643e4c27aafdf294e1960cb2a64588f5091d53d";
@@ -214,7 +215,15 @@ async function runProof() {
         policy.body.method === "aos.policy.read" &&
         policy.body.surface === "work.readback" &&
         policy.body.fullGatewayMethodListExposed === false &&
-        JSON.stringify(policy.body.readbackMethods) === JSON.stringify(["aos.ticket.list", "aos.audit.query", "aos.backup.list"]) &&
+        // Not an exact-list comparison. This asserted equality with three
+        // methods, so admitting a fourth read method — knowledge.search and
+        // knowledge.entry.read, both decided — reported as a regression. The
+        // property that matters on a readback surface is that it exposes no
+        // write method and still exposes the three it is named for; the set is
+        // allowed to grow in the read direction.
+        ["aos.ticket.list", "aos.audit.query", "aos.backup.list"]
+          .every((method) => policy.body.readbackMethods.includes(method)) &&
+        policy.body.readbackMethods.every((method) => transportReadMethods.includes(method)) &&
         !JSON.stringify(policy.body).includes("aos.work_index"),
       endpoint: "/api/work/readback/policy",
       optionalPolicyRead: true,

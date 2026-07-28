@@ -3,29 +3,29 @@
   "ok": true,
   "route": "route_tcrn_aos_phase3_dogfood_ilya_readback_api_facade_implementation_after_calder_success_4643e4c_ecc289d_20260705",
   "command": "pnpm --dir TCRN-AOS phase3:readback-api-proof",
-  "generatedAt": "2026-07-06T06:25:38.920Z",
-  "sourceHead": "96ea618fb27bf0218460bc736967fd2cb009a03a",
-  "sourceContentDigest": "65dbc128b98fb1fec8f106aebe3fc87f5f16a71e8dbe63b49e95dc2901b54cdd",
+  "generatedAt": "2026-07-28T00:45:14.722Z",
+  "sourceHead": "609ee09d39ce8c0d474406f87b56be80eef9afb0",
+  "sourceContentDigest": "d58091b0cff565d812b1814d145db5c9b2c8dd40a39b2199d26cb42fdc59de03",
   "sourceFiles": [
     {
       "file": "package.json",
-      "digest": "40f71072ca5258b70df4470387278248ea609185d34b423f336379f0bac0fe3d"
+      "digest": "27fa6be61ceb4465c3f4788850f15faef3aa5404ad41d46bbda8f840ea7fbf31"
     },
     {
       "file": "apps/api/src/server.ts",
-      "digest": "468073c835fabeff87d9239816c3c5db78a6c96eed828377ee22e4a21f92d8db"
+      "digest": "6b00ba96ba22dbd77fedba0a460d7c01cf4586aff10a3eb1eb3cab9ab7e3fcef"
     },
     {
       "file": "apps/api/src/work-readback.ts",
-      "digest": "17621419b6f182fade294a7a6d0b60516cd2e565a9011d32a0704a1a51c66b04"
+      "digest": "8f8a71e5652247fd790bd06e3abdaac388d8bee6ded5cba7a8c25d45816053c1"
     },
     {
       "file": "apps/api/test/readback-facade.test.mjs",
-      "digest": "0dacdfc5447d6810abe03fb85742357a03170818baf6c561baaeccbffc307683"
+      "digest": "0fd07b13d2ac65960013f4b07cc68170c2ae90a4b57b4364ea1735b8bae72df0"
     },
     {
       "file": "scripts/phase3-readback-api-proof.mjs",
-      "digest": "ff887d3b182108e04e24b9e846077d12bca0dbf1b3f79deb6055fda0c4e4dd04"
+      "digest": "13e0f473c9e99d375102ddb107f169b58dd0bd7af18749e9d9a66adcfb6816e8"
     }
   ],
   "workflowBasis": "4643e4c27aafdf294e1960cb2a64588f5091d53d",
@@ -60,7 +60,10 @@
   "optionalPolicyRead": true,
   "readbackMethods": [
     "aos.ticket.list",
-    "aos.audit.query"
+    "aos.audit.query",
+    "aos.backup.list",
+    "aos.knowledge.search",
+    "aos.knowledge.entry.read"
   ],
   "fullGatewayMethodListExposed": false,
   "localOnlyReadbackProjection": true,
