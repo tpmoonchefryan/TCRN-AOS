@@ -1,15 +1,15 @@
 {
   "receiptName": "privacy-no-overclaim-scan.json",
-  "ok": false,
+  "ok": true,
   "route": "route_tcrn_aos_phase3_dogfood_ilya_readback_api_facade_implementation_after_calder_success_4643e4c_ecc289d_20260705",
   "command": "pnpm --dir TCRN-AOS phase3:readback-api-proof",
-  "generatedAt": "2026-07-28T00:45:14.723Z",
-  "sourceHead": "609ee09d39ce8c0d474406f87b56be80eef9afb0",
-  "sourceContentDigest": "d58091b0cff565d812b1814d145db5c9b2c8dd40a39b2199d26cb42fdc59de03",
+  "generatedAt": "2026-07-28T03:35:30.099Z",
+  "sourceHead": "c1d004879612a040e99ebe82ca5d77f0434a1304",
+  "sourceContentDigest": "713f79b28ad88e5450970c4b1c94c46021896d72eaa3839018f7353ab11e82c7",
   "sourceFiles": [
     {
       "file": "package.json",
-      "digest": "27fa6be61ceb4465c3f4788850f15faef3aa5404ad41d46bbda8f840ea7fbf31"
+      "digest": "946f56f790c2e45a02a6edb12835f80cbab4fbb01cfe7d58003bef32e7682d93"
     },
     {
       "file": "apps/api/src/server.ts",
@@ -17,7 +17,7 @@
     },
     {
       "file": "apps/api/src/work-readback.ts",
-      "digest": "8f8a71e5652247fd790bd06e3abdaac388d8bee6ded5cba7a8c25d45816053c1"
+      "digest": "327d34b4d514ffc331ff57635842396380822b9a5cbf512fffce654914d23ef0"
     },
     {
       "file": "apps/api/test/readback-facade.test.mjs",
@@ -71,13 +71,7 @@
     "acceptance_overclaim",
     "live_dispatch_claim"
   ],
-  "findings": [
-    {
-      "surface": "source",
-      "file": "apps/api/src/work-readback.ts",
-      "kind": "raw_db_row"
-    }
-  ],
+  "findings": [],
   "rawLocalPathsRecorded": false,
   "rawDbDumpRecorded": false,
   "rawClientEnvStored": false,

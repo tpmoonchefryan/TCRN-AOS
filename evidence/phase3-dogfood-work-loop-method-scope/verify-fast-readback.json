@@ -3,13 +3,13 @@
   "ok": true,
   "route": "route_tcrn_aos_phase3_dogfood_ilya_missing_work_loop_methods_implementation_after_minerva_handoff_64e613b_c8c61f5_20260705",
   "command": "pnpm --dir TCRN-AOS verify:fast",
-  "generatedAt": "2026-07-28T00:47:13.828Z",
-  "sourceHead": "609ee09d39ce8c0d474406f87b56be80eef9afb0",
-  "sourceContentDigest": "9ee018a98b9fd3440b2fedaf149bf00db3c93f07ba5ee70f624fd1900261ecc3",
+  "generatedAt": "2026-07-28T03:35:21.980Z",
+  "sourceHead": "c1d004879612a040e99ebe82ca5d77f0434a1304",
+  "sourceContentDigest": "f76813dfeaa370b2a717b889e851424c463e04b8eff8985898e00dddcf17f6af",
   "sourceFiles": [
     {
       "file": "package.json",
-      "digest": "27fa6be61ceb4465c3f4788850f15faef3aa5404ad41d46bbda8f840ea7fbf31"
+      "digest": "946f56f790c2e45a02a6edb12835f80cbab4fbb01cfe7d58003bef32e7682d93"
     },
     {
       "file": "packages/domain/src/store.ts",
@@ -37,7 +37,7 @@
     }
   ],
   "workflowBasis": "64e613bec2c64659879257f4163811ea60ad3710",
-  "aosBasis": "609ee09d39ce8c0d474406f87b56be80eef9afb0",
+  "aosBasis": "c1d004879612a040e99ebe82ca5d77f0434a1304",
   "methodsUnderReview": [
     "aos.assignment.claim",
     "aos.assignment.update",
@@ -45,7 +45,7 @@
   ],
   "routeOwnedDbRoot": {
     "class": "os_temp_route_owned_redacted",
-    "rootDigest": "a20f976721228e489a6db81f15a0ada095464db08b647a4c84f261637226bb09",
+    "rootDigest": "8d2c7cf8dbb14f1bff5ecd2fa24614bd9dc4d546210b6d2c2fb6581749c6cc99",
     "rawPathRecorded": false
   },
   "actorProof": {
@@ -75,7 +75,7 @@
     "phase3CloseoutClaimed": false
   },
   "exitCode": 0,
-  "stdoutDigest": "2c702e759d97a1bd8bd54838063306e991e727572e4659a39f30bd7332c1c172",
+  "stdoutDigest": "acb9de3bf3463feff7965bda67734ab2d6fcbcab481d380baf2f654d16ef6803",
   "stderrDigest": "2bb279d2b95ed04b7875af589b64e2cdd04e9c056cf921de1818b9b8f6290af0",
   "outputStored": "digest_only",
   "typecheckIncluded": true,

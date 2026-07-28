@@ -3,13 +3,13 @@
   "ok": true,
   "route": "route_tcrn_aos_phase3_dogfood_ilya_implementation_aos_ticket_list_after_mara_pm_scope_success_fa594d6_5b09469_20260705",
   "command": "pnpm --dir TCRN-AOS phase3:ticket-list-proof",
-  "generatedAt": "2026-07-28T00:46:48.828Z",
-  "sourceHead": "609ee09d39ce8c0d474406f87b56be80eef9afb0",
-  "sourceContentDigest": "aafba4c1ee1156b0c109cc6afe8f63236eaa5cfb9c37aa92f5efd52b092dd885",
+  "generatedAt": "2026-07-28T03:35:06.605Z",
+  "sourceHead": "c1d004879612a040e99ebe82ca5d77f0434a1304",
+  "sourceContentDigest": "f683477dcf979f327343ba3044381dbb62c0d38e9a9f6688cc71b5bce08d4f54",
   "sourceFiles": [
     {
       "file": "package.json",
-      "digest": "27fa6be61ceb4465c3f4788850f15faef3aa5404ad41d46bbda8f840ea7fbf31"
+      "digest": "946f56f790c2e45a02a6edb12835f80cbab4fbb01cfe7d58003bef32e7682d93"
     },
     {
       "file": "packages/domain/src/types.ts",
@@ -42,7 +42,7 @@
   ],
   "routeOwnedDbRoot": {
     "class": "os_temp_route_owned_redacted",
-    "rootDigest": "d96115f0ea09e232c9e93ea049387233c79bcde6bad80445c5dbf5456f9df6ce",
+    "rootDigest": "a8d86cf128fcd8c16d96b764a3453b77c7a44eb1cf0ff7fd7283feda6e5a0b94",
     "rawPathRecorded": false
   },
   "actorProof": {
@@ -101,7 +101,7 @@
     "storyId": "story_8ba2430bce2441c0",
     "storyTitle": "Phase 3 story 3 ",
     "storyStatus": "in_progress",
-    "updatedAt": "2026-07-28T00:46:48.779Z",
+    "updatedAt": "2026-07-28T03:35:06.553Z",
     "subtaskSummaries": [
       {
         "id": "subtask-phase3-ticket-list-3",
@@ -128,20 +128,20 @@
       "id": "gate_0f89ae0ff26e7d87",
       "type": "evidence_proof",
       "status": "pending_role",
-      "auditTimestamp": "2026-07-28T00:46:48.779Z"
+      "auditTimestamp": "2026-07-28T03:35:06.553Z"
     },
     "latestEvidence": {
       "id": "evidence_935c0592ce4f7ace",
       "type": "artifact_id",
       "redactionState": "metadata_only",
       "digest": "sha256:phase3-ticket-list-3",
-      "timestamp": "2026-07-28T00:46:48.779Z"
+      "timestamp": "2026-07-28T03:35:06.553Z"
     },
     "latestAudit": {
-      "id": "audit_08f00e2918076103",
+      "id": "audit_6705759da3d6543a",
       "action": "gate.request",
       "outcome": "accepted",
-      "timestamp": "2026-07-28T00:46:48.779Z"
+      "timestamp": "2026-07-28T03:35:06.553Z"
     },
     "auditCount": 5
   },

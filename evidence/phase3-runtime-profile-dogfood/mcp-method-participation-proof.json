@@ -3,21 +3,21 @@
   "ok": true,
   "route": "route_tcrn_aos_phase3_dogfood_ilya_runtime_profile_implementation_proof_after_minerva_status_sync_f5dc8b1_6deeb08_20260705",
   "command": "pnpm --dir TCRN-AOS phase3:runtime-profile-proof",
-  "generatedAt": "2026-07-06T04:32:08.236Z",
-  "sourceHead": "8a950f408f9c734449c66a5a729a07da6e4a7204",
-  "sourceContentDigest": "7d299eadef1c558a8538ccc01a41c11edcdc33243ae4f70bcfd985d43f62a9cd",
+  "generatedAt": "2026-07-28T03:35:22.788Z",
+  "sourceHead": "c1d004879612a040e99ebe82ca5d77f0434a1304",
+  "sourceContentDigest": "fa59248c7347899ae17dc767680cea3d6091970c7255c58d66fe349a4bea760f",
   "sourceFiles": [
     {
       "file": "package.json",
-      "digest": "a7c32b8a0c1019f423a5a867cb283a3cc045490c7444967b43772f54cb2947fe"
+      "digest": "946f56f790c2e45a02a6edb12835f80cbab4fbb01cfe7d58003bef32e7682d93"
     },
     {
       "file": "packages/domain/src/store.ts",
-      "digest": "db1c74874a28dc0ccf1d55a911ea8d4163d4ca8be7e29c091b1c2b9d4f4eece9"
+      "digest": "98fb408080cb449a15b1e0e2b46c1c4b9ff2fc3d1a338fd3ff919ebb1bed8f09"
     },
     {
       "file": "packages/db/src/sqlite-repository.ts",
-      "digest": "8de0d042e5cb0966f9ea8789be8eb48693760949e041ae2a0384535f172db78e"
+      "digest": "ebdbda61879518a608c1a442759982c082403a4dc7d226e98fc2dd68ef5a489b"
     },
     {
       "file": "packages/mcp-gateway/src/gateway.ts",
@@ -25,7 +25,7 @@
     },
     {
       "file": "packages/mcp-server/src/transport.ts",
-      "digest": "fa2bd7eef3031d6529993d616973332e7699ea65dd56401adeb874d09ef775b4"
+      "digest": "1585ec20c02b944a23b97c9b191b7afddd4433b7bced12faea9441e0df46e39e"
     },
     {
       "file": "packages/mcp-server/src/stdio-server.ts",
@@ -33,15 +33,15 @@
     },
     {
       "file": "packages/mcp-server/test/stdio-transport.test.mjs",
-      "digest": "f2bf31d63a537bb102e09f77b894a73241ca7fee8f8cadc3665d0b5c769a557c"
+      "digest": "090c3b06454998d933523a834a06b962ef8c805f301ca0b9c314bd0b83ecef00"
     },
     {
       "file": "scripts/phase3-runtime-profile-proof.mjs",
-      "digest": "934d928fd4d8bf61ae9b392a6b6627aee9c031fb7ace160642c4e185ff6d460e"
+      "digest": "616127b26de38934cb3c7aad882a7f2d37234012425fa0a7b0bd93fc819268c1"
     }
   ],
   "workflowBasis": "f5dc8b1c57ea07ea89d40043be420cd349e90d22",
-  "aosBasis": "8a950f408f9c734449c66a5a729a07da6e4a7204",
+  "aosBasis": "c1d004879612a040e99ebe82ca5d77f0434a1304",
   "methodsUnderReview": [
     "aos.assignment.claim",
     "aos.assignment.update",
@@ -51,7 +51,7 @@
   ],
   "routeOwnedProfileRoot": {
     "class": "os_temp_route_owned_redacted",
-    "rootDigest": "adef4ac18ef0f04ad3f4f5bd5bb3f743ba25ad17e2e670a65d051fd1d121e78d",
+    "rootDigest": "46a13c80cad151b3acc09208556997a554b4298804425cb922fb7d3454c88e8d",
     "rawPathRecorded": false
   },
   "actorProof": {
@@ -98,6 +98,8 @@
   "updateStatus": "in_progress",
   "gateDecisionStatus": "accepted",
   "staleGateRaceReason": "gate_decision_terminal_status_denied",
+  "persistedAgentRunMethodUsed": true,
+  "runReplayStatus": "deduped",
   "liveDispatchAuthorized": false,
   "ownerIntentExecutionAuthorized": false,
   "runtimeActivationClaimed": false

@@ -1,10 +1,10 @@
 {
-  "ok": false,
+  "ok": true,
   "route": "route_tcrn_aos_phase3_dogfood_ilya_readback_api_facade_implementation_after_calder_success_4643e4c_ecc289d_20260705",
   "command": "pnpm --dir TCRN-AOS phase3:readback-api-proof",
-  "generatedAt": "2026-07-28T00:45:21.748Z",
-  "sourceHead": "609ee09d39ce8c0d474406f87b56be80eef9afb0",
-  "sourceContentDigest": "d58091b0cff565d812b1814d145db5c9b2c8dd40a39b2199d26cb42fdc59de03",
+  "generatedAt": "2026-07-28T03:35:37.394Z",
+  "sourceHead": "c1d004879612a040e99ebe82ca5d77f0434a1304",
+  "sourceContentDigest": "713f79b28ad88e5450970c4b1c94c46021896d72eaa3839018f7353ab11e82c7",
   "workflowBasis": "4643e4c27aafdf294e1960cb2a64588f5091d53d",
   "receiptInventory": [
     "source-provenance.json",
@@ -17,7 +17,7 @@
     "verify-fast-readback.json"
   ],
   "receiptCount": 8,
-  "allChildReceiptsOk": false,
+  "allChildReceiptsOk": true,
   "missingReceipts": [],
   "extraReceiptsUnclassified": [],
   "serviceCleanup": {

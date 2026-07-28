@@ -17,6 +17,13 @@ import {
 import { AosStore, createDefaultSeed } from "../dist/packages/domain/src/index.js";
 import { transportMvpMethods } from "../dist/packages/mcp-server/src/index.js";
 
+/**
+ * PRECONDITION (declared per TCRN-AOS-INC-010): the durable-profile section of
+ * this proof reads migration state from the durable runtime profile root, so it
+ * shares p1's clean-start requirement and fails on residue for the same reason.
+ * Archive a dirty root aside explicitly with `pnpm reset:durable-profile -- --yes`
+ * (renames, never deletes) before running on a machine that carries one.
+ */
 const route = "route_tcrn_aos_knowledge_retrieval_layer_kr01_schema_fts_migration_after_kr00_gate_green_1d6076_8dce81_20260708";
 const workflowBasis = "1d60763f3c0c3eae0fb5465fb50189c4951c48df";
 const ownerDecisionWorkflowBasis = "8dce81d2e9a6408d1d139e4d84486497c6caf288";

@@ -12,6 +12,14 @@ import {
 } from "../dist/packages/db/src/index.js";
 import { createRuntimeTransport } from "../dist/packages/mcp-server/src/index.js";
 
+/**
+ * PRECONDITION (declared per TCRN-AOS-INC-010): this proof requires a clean
+ * durable profile root and REFUSES a dirty one
+ * (`p1_clean_start_refuses_nonempty_durable_profile`). The refusal is the
+ * feature — the root holds real rows and its own backups. To run against a
+ * machine that has one, archive it aside first, explicitly:
+ * `pnpm reset:durable-profile -- --yes` (renames, never deletes).
+ */
 const route = "route_tcrn_conditional_dogfood_start_p1_durable_runtime_profile_root_migration_ilya_after_owner_decision_949a58_8aa904_20260707";
 const workflowBasis = "949a58a556715a5f2e72d2934cb735da3845e869";
 const incomingAosBasis = "8aa904814cde840b09844eb0a9ad066647a3af18";
