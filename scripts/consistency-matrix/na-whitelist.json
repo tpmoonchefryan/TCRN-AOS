@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "aos.consistency-matrix-na-whitelist.v1",
+  "frozen": true,
+  "closure": "本白名单封闭于结构性缺席,且结构性缺席须证于源(F)侧:每条须指名结构事实并绑定可执行谓词;不得存在以 A 侧自身缺席为谓词的条目(受测对象缺席不能自我授权豁免——F 有 sidecar 而 A 无迁移副本判 ATTESTATION_SIDECAR_NOT_MIGRATED 红,不判 n/a)。白名单外的执行期 not-applicable 由驱动器判为 mismatch(NA_OUT_OF_WHITELIST)。R1/R3 的 A 侧格是 MIN-003 指名的验收门,任何条目不得覆盖(闭包检查强制)。",
+  "authorization": "本文件不含授权:进入白名单只免除逐格比较义务,不构成任何切换、发布或迁移许可。",
+  "entries": [
+    {
+      "id": "NA-R4C1-MIRROR-NO-VIEWS",
+      "cells": ["R4C1"],
+      "predicateId": "mirror-holds-no-views-documents",
+      "structuralAbsence": "事件行镜像(EventMirrorStore)按 MIN-007 O3 裁定只存事件行,不存 views 文档;views 是文件容器的引擎生成工件",
+      "executablePredicate": "A 容器经驱动器对实际打开的库只读派生(sqlite_master 全表清单)为 event-row-mirror(aos_event_mirror 单表,无其他表/视图)即成立",
+      "coveredBy": "R4C2(回放终点规范形投影)与 R4C3(核心回放等价格)"
+    },
+    {
+      "id": "NA-R5-SIDECAR-SOURCE-DIR-ABSENT",
+      "cells": ["R5C1", "R5C4"],
+      "predicateId": "attest-dir-sidecar-absent",
+      "structuralAbsence": "分区旁无 attestations/ 见证目录(实测 2026-07-28:仅 TCRN-AOS 有;cross-project 与 TCRN-Design-System 启用 attestation 但未采用 attest-dir)",
+      "executablePredicate": "分区根下 attestations/ 目录不存在,或驱动器未收到 --f-attest-dir 输入"
+    },
+    {
+      "id": "NA-R5-ROW-ATTESTATION-NEVER-ENABLED",
+      "cells": ["R5C1", "R5C2", "R5C3", "R5C4"],
+      "predicateId": "attestation-never-enabled-on-chain",
+      "structuralAbsence": "链上从未出现 attestation.actor.enabled 事件(TCRN-TMS 实测四个事件段 0 命中),R5 行无受测对象",
+      "executablePredicate": "遍历 events/*.json 全部事件,payload.operation === \"attestation.actor.enabled\" 命中数为 0"
+    }
+  ]
+}

@@ -1,0 +1,935 @@
+{
+  "schemaVersion": "aos.consistency-matrix-proof.v1",
+  "epic": "TCRN-AOS-EPIC-033",
+  "stories": [
+    "STORY-115 matrix driver",
+    "STORY-116 red suite",
+    "STORY-117 partition instantiation"
+  ],
+  "generatedAt": "2026-07-28T16:40:40Z",
+  "engineVersion": "0.7.0",
+  "authorization": "本证物不含授权:矩阵全绿+红证齐备+分区表齐备,合起来也只是 conformance-mutual-release 证据链的一环;任何切换、迁移或发布须另过 Owner 门(MIN-002 切换仪式),本文件不构成也不暗示该授权。",
+  "scratchDoubleRun": {
+    "schemaVersion": "aos.consistency-matrix-run.v1",
+    "engineVersion": "0.7.0",
+    "authorization": "本证物不含授权:矩阵结论只是 conformance-mutual-release 证据链之一环;切换须另过 Owner 门(MIN-002 切换仪式),本运行不含任何切换、发布或迁移授权。",
+    "rows": [
+      {
+        "id": "R1",
+        "piece": "append-only 记录流"
+      },
+      {
+        "id": "R2",
+        "piece": "规范字节"
+      },
+      {
+        "id": "R3",
+        "piece": "哈希链"
+      },
+      {
+        "id": "R4",
+        "piece": "可回放"
+      },
+      {
+        "id": "R5",
+        "piece": "attestation"
+      }
+    ],
+    "cols": [
+      {
+        "id": "C1",
+        "criterion": "字节等"
+      },
+      {
+        "id": "C2",
+        "criterion": "规范形等"
+      },
+      {
+        "id": "C3",
+        "criterion": "回放等价"
+      },
+      {
+        "id": "C4",
+        "criterion": "摘要互指"
+      }
+    ],
+    "labels": {
+      "f": "scratch-file-container",
+      "a": "scratch-event-row-mirror"
+    },
+    "ok": true,
+    "lockstep": {
+      "applicable": true,
+      "ok": true,
+      "knowledgeHighWaterDigest": "fed5fd937706d2c97f54534db9db369b29cf9dcb4da63577987126064518d885",
+      "chainHeadEventHash": "fed5fd937706d2c97f54534db9db369b29cf9dcb4da63577987126064518d885"
+    },
+    "anchor": {
+      "instant": "2026-07-28T16:40:31Z",
+      "headEventHash": "fed5fd937706d2c97f54534db9db369b29cf9dcb4da63577987126064518d885",
+      "version": 5,
+      "workspaceId": "workspace:94310a9942fae3c621fdcd46",
+      "snapshotManifestDigest": "da8a487ca4bc1642a75f5d0e599e5b702971355fc179df2c64df9fd2aaa78250",
+      "manifestAgreesWithStatus": true
+    },
+    "aContainer": {
+      "kind": "event-row-mirror",
+      "tables": [
+        "aos_event_mirror"
+      ]
+    },
+    "inodeProof": {
+      "checked": [
+        {
+          "pair": "mirror-db vs f-side segment files",
+          "mirrorDbDevIno": "16777234:151079362",
+          "mirrorDbInsideFWorkspace": false,
+          "segmentFilesCompared": 1,
+          "segmentInodeCollisions": []
+        },
+        {
+          "pair": "f-attest-dir members vs a-attest-dir members",
+          "fMembers": 4,
+          "aMembers": 4,
+          "pairsCompared": 16,
+          "memberInodeCollisions": []
+        }
+      ],
+      "distinct": true
+    },
+    "anchorStability": {
+      "stable": true,
+      "rereadHeadEventHash": "fed5fd937706d2c97f54534db9db369b29cf9dcb4da63577987126064518d885",
+      "rereadVersion": 5,
+      "rereadMirrorRows": 5
+    },
+    "mutualReference": {
+      "boundBy": "one anchor plus mutual digests; either side alone is not a comparison",
+      "anchorInstant": "2026-07-28T16:40:31Z",
+      "chainHeadEventHash": {
+        "f": "fed5fd937706d2c97f54534db9db369b29cf9dcb4da63577987126064518d885",
+        "a": "fed5fd937706d2c97f54534db9db369b29cf9dcb4da63577987126064518d885"
+      },
+      "eventsSetDigest": {
+        "f": "fd1d86b9de97d84fd2dc30450156dcc5326a2572b367bc01d9e1dd669ebad17b",
+        "a": "fd1d86b9de97d84fd2dc30450156dcc5326a2572b367bc01d9e1dd669ebad17b"
+      },
+      "stateProjectionDigest": {
+        "f": "c1bf61c4e358f27e79446c3e6fafa951680927f3c93b4e923193c83f0643ce01",
+        "fMode": "whole-document",
+        "a": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d"
+      },
+      "attestationSetDigest": {
+        "f": "a99e654029b6595edbcf3589a3c328d757c7b49d905140da3697eebd7517794f",
+        "a": "a99e654029b6595edbcf3589a3c328d757c7b49d905140da3697eebd7517794f"
+      }
+    },
+    "sides": {
+      "f": {
+        "label": "scratch-file-container",
+        "segments": 1,
+        "events": 5,
+        "validateReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+        "projectionMode": "whole-document",
+        "attestDir": {
+          "present": true,
+          "receipts": 4
+        }
+      },
+      "a": {
+        "label": "scratch-event-row-mirror",
+        "present": true,
+        "declaredAbsent": null,
+        "rows": 5,
+        "verifyOk": true,
+        "attestDir": {
+          "present": true,
+          "receipts": 4
+        }
+      }
+    },
+    "whitelist": {
+      "digest": "3a2801ef86a516dc5751a16f792524470894315e350224b4456b77b7c130abf9",
+      "entries": [
+        "NA-R4C1-MIRROR-NO-VIEWS",
+        "NA-R5-SIDECAR-SOURCE-DIR-ABSENT",
+        "NA-R5-ROW-ATTESTATION-NEVER-ENABLED"
+      ]
+    },
+    "cells": [
+      {
+        "cell": "R1C1",
+        "verdict": "equal",
+        "fDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "aDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "note": "逐事件规范字节 sha256 序列,序号键控"
+      },
+      {
+        "cell": "R1C2",
+        "verdict": "equal",
+        "fDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "aDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "note": "每记录 assertCanonicalJson(引擎判)且重规范化不变"
+      },
+      {
+        "cell": "R1C3",
+        "verdict": "equal",
+        "fDigest": "0c6e88199bc4b4e749fb083757d061e7bd610115bcef4c0f3c53ab5b06806245",
+        "aDigest": "0c6e88199bc4b4e749fb083757d061e7bd610115bcef4c0f3c53ab5b06806245",
+        "note": "双侧过引擎 validateEventChain;A 侧 UPDATE/DELETE 触发器拒绝的红证在 red-suite R1 专项"
+      },
+      {
+        "cell": "R1C4",
+        "verdict": "equal",
+        "fDigest": "fd1d86b9de97d84fd2dc30450156dcc5326a2572b367bc01d9e1dd669ebad17b",
+        "aDigest": "fd1d86b9de97d84fd2dc30450156dcc5326a2572b367bc01d9e1dd669ebad17b",
+        "note": "events 集合摘要,写入互指块"
+      },
+      {
+        "cell": "R2C1",
+        "verdict": "equal",
+        "fDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "aDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "note": "F 侧段文件原始字节即规范形(assertCanonicalJson 判),A 侧存储行同判;跨侧比规范事件流"
+      },
+      {
+        "cell": "R2C2",
+        "verdict": "equal",
+        "fDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "aDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "note": "canonicalJson∘parse 幂等,判据唯一来源=受治引擎 protocol"
+      },
+      {
+        "cell": "R2C3",
+        "verdict": "equal",
+        "fDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "aDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "note": "回放输出再规范化不渗入非规范字节;F 侧 export 文档规范性=true;projectionMode=whole-document"
+      },
+      {
+        "cell": "R2C4",
+        "verdict": "equal",
+        "fDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "aDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "note": "契约摘要互指:F=export 文档(或分段退化为规范事件流),A=规范事件流;录入互指块并由锚稳定性复读复核;判法=整文档路径:从 export 文档字节独立重派生逐事件规范摘要流与 A 侧比对;export contentSha256=c1bf61c4e358f27e79446c3e6fafa951680927f3c93b4e923193c83f0643ce01 录入互指块",
+        "mutual": true
+      },
+      {
+        "cell": "R3C1",
+        "verdict": "equal",
+        "fDigest": "104457535f2584f70a765ee6288dfb18a0392283246df339796bab784cdbc17e",
+        "aDigest": "104457535f2584f70a765ee6288dfb18a0392283246df339796bab784cdbc17e",
+        "note": "逐事件 priorHash/payloadHash/eventHash 三字段全值比对"
+      },
+      {
+        "cell": "R3C2",
+        "verdict": "equal",
+        "fDigest": "104457535f2584f70a765ee6288dfb18a0392283246df339796bab784cdbc17e",
+        "aDigest": "104457535f2584f70a765ee6288dfb18a0392283246df339796bab784cdbc17e",
+        "note": "重算判=引擎 validateEventChain 内建重算(createEvent 同一哈希构造)"
+      },
+      {
+        "cell": "R3C3",
+        "verdict": "equal",
+        "fDigest": "92e9dac2b0e4d6e957d9c49407ad4cdc81ee466aa1bbabbc191d0c2e4c31b2d4",
+        "aDigest": "92e9dac2b0e4d6e957d9c49407ad4cdc81ee466aa1bbabbc191d0c2e4c31b2d4",
+        "note": "validateEventChain 双侧通过且 headEventHash 同锚;无密钥哈希挡不住尾部追加伪造——盲区由 C4 补位,红证成对见 red-suite C3(b)/C4"
+      },
+      {
+        "cell": "R3C4",
+        "verdict": "equal",
+        "fDigest": "fed5fd937706d2c97f54534db9db369b29cf9dcb4da63577987126064518d885",
+        "aDigest": "fed5fd937706d2c97f54534db9db369b29cf9dcb4da63577987126064518d885",
+        "note": "chainHeadEventHash 互指(pair-manifest 先例)"
+      },
+      {
+        "cell": "R4C1",
+        "verdict": "not-applicable-declared",
+        "naReason": "事件行镜像(EventMirrorStore)按 MIN-007 O3 裁定只存事件行,不存 views 文档;views 是文件容器的引擎生成工件",
+        "naAuthority": "na-whitelist:NA-R4C1-MIRROR-NO-VIEWS",
+        "fDigest": null,
+        "aDigest": null,
+        "note": "covered by R4C2(回放终点规范形投影)与 R4C3(核心回放等价格)"
+      },
+      {
+        "cell": "R4C2",
+        "verdict": "equal",
+        "fDigest": "0f35b593b607957ceffd9512bfb2e631ee73cc6cc4c366db1bb95f017f5fc634",
+        "aDigest": "0f35b593b607957ceffd9512bfb2e631ee73cc6cc4c366db1bb95f017f5fc634",
+        "note": "回放终点的规范形投影(headEventHash/事件数/版本)经引擎 canonicalJson 双侧相等"
+      },
+      {
+        "cell": "R4C3",
+        "verdict": "equal",
+        "fDigest": "fc6996efa1d44ca249ae6d35d7645c6a5f4fcd3f9220bd2361ff14a8a1c8149f",
+        "aDigest": "fc6996efa1d44ca249ae6d35d7645c6a5f4fcd3f9220bd2361ff14a8a1c8149f",
+        "note": "核心格:F 侧引擎全量回放(validate:回放态与 views 逐字节一致)vs A 侧引擎 validateEventChain 自洽回放(EventMirrorStore.verify);两侧同一引擎裁判;A 容器的独立状态归约器属切换段验收范围(MIN-003 谱系),本格按两容器当前可回放强度如实判"
+      },
+      {
+        "cell": "R4C4",
+        "verdict": "equal",
+        "fDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "aDigest": "a48461cf618efaf212fcdafea85e10d2c5fd5c6bb4646ad3fffbaab7b3a9e01d",
+        "note": "回放结果摘要互指(F=回放态 export 文档,A=镜像回放流);由锚稳定性复读复核;判法=整文档路径:从 export 文档字节独立重派生逐事件规范摘要流与 A 侧比对;export contentSha256=c1bf61c4e358f27e79446c3e6fafa951680927f3c93b4e923193c83f0643ce01 录入互指块",
+        "mutual": true
+      },
+      {
+        "cell": "R5C1",
+        "verdict": "equal",
+        "fDigest": "a99e654029b6595edbcf3589a3c328d757c7b49d905140da3697eebd7517794f",
+        "aDigest": "a99e654029b6595edbcf3589a3c328d757c7b49d905140da3697eebd7517794f",
+        "note": "sidecar 文件集逐文件 sha256 与 setDigest 相等(paired-backup 同构);F 有 A 无=未迁移,判红不判 n/a"
+      },
+      {
+        "cell": "R5C2",
+        "verdict": "equal",
+        "fDigest": "7da45c98de09a451ca69d1b9fbeaa6a4e59692ae66cd2eee46bb909664c79040",
+        "aDigest": "7da45c98de09a451ca69d1b9fbeaa6a4e59692ae66cd2eee46bb909664c79040",
+        "note": "enable 起点后每事件 payload.actor 过引擎 assertActorId,双侧一致"
+      },
+      {
+        "cell": "R5C3",
+        "verdict": "equal",
+        "fDigest": "b82f12e74895ee14bd22cd6e1ce2b1994be2e6be39d364c0fca0f1e80ad76c21",
+        "aDigest": "b82f12e74895ee14bd22cd6e1ce2b1994be2e6be39d364c0fca0f1e80ad76c21",
+        "note": "同起点后全事件带 actor 的谓词双侧同判,摘要折入受测事件基数(空集不再恒真);F 侧回放门由 validate 强制(剥 actor 红证见 red-suite R5);A 侧拒无 actor 写入由镜像 ingest 经同一 validateEventChain 承接"
+      },
+      {
+        "cell": "R5C4",
+        "verdict": "equal",
+        "fDigest": "a99e654029b6595edbcf3589a3c328d757c7b49d905140da3697eebd7517794f",
+        "aDigest": "a99e654029b6595edbcf3589a3c328d757c7b49d905140da3697eebd7517794f",
+        "note": "attestationSetDigest 互指(pair-manifest 先例);F 有 A 无=未迁移,判红不判 n/a"
+      }
+    ],
+    "summary": {
+      "cells": 20,
+      "equal": 19,
+      "mismatch": 0,
+      "notApplicableDeclared": 1,
+      "recordedNotCompared": 0,
+      "acceptanceGatePending": 0
+    },
+    "aIngest": {
+      "appended": 5,
+      "chainVersion": 5
+    }
+  },
+  "redSuite": {
+    "schemaVersion": "aos.consistency-matrix-red-suite.v1",
+    "principle": "判据两侧必须能够不同:每列在一次性 scratch 副本上故意扰动并预言红码;预期≠实收即为发现",
+    "hygiene": [
+      "全程不触活链:扰动对象只有本套件自建的 scratch 链与其副本",
+      "红证与绿跑同一份判据代码、同一受治引擎副本,防「测试专用判据」分叉",
+      "scratch 用后即弃并验证删净"
+    ],
+    "cases": [
+      {
+        "column": "C1",
+        "perturbation": "对快照副本的事件段文件尾部追加一个空格(副本与原件经 stat 证非同 inode)",
+        "expectedCode": "SNAPSHOT_MISMATCH",
+        "actualCode": "SNAPSHOT_MISMATCH",
+        "copyDistinctInode": true,
+        "matched": true
+      },
+      {
+        "column": "C2",
+        "perturbation": "事件段 JSON 重排版(加缩进,语义不变、字节非规范形)后原位写回",
+        "expectedCode": "WORKSPACE_EVENT_CORRUPT",
+        "actualCode": "WORKSPACE_EVENT_CORRUPT",
+        "matched": true
+      },
+      {
+        "column": "C3(a)",
+        "perturbation": "篡改首事件 payload 一处字符,哈希字段原样保留,段文件按规范形写回",
+        "expectedCode": "EVENT_CHAIN_CORRUPT",
+        "actualCode": "EVENT_CHAIN_CORRUPT",
+        "cliValidateCode": "WORKSPACE_EVENT_CORRUPT",
+        "matched": true
+      },
+      {
+        "column": "C3(b)",
+        "perturbation": "用引擎 createEvent 正规重算,尾部追加一条哈希自洽的伪造事件并灌入 A 镜像",
+        "expectedCode": null,
+        "actualCode": null,
+        "expectation": "C3 判据(validateEventChain)预期仍绿——无密钥哈希的已知盲区",
+        "c3StillGreen": true,
+        "aSideVerifyStillGreen": true,
+        "matched": true
+      },
+      {
+        "column": "C4(paired-with-C3b, driver格判)",
+        "perturbation": "同一伪造下由驱动器裁 R3C4(chainHeadEventHash 互指格)",
+        "expectedCode": "CHAIN_HEAD_MUTUAL_REFERENCE_DIVERGENT",
+        "actualCode": "CHAIN_HEAD_MUTUAL_REFERENCE_DIVERGENT",
+        "driverOverall": "MATRIX_HAS_RED_OR_UNSTABLE_CELLS",
+        "pairProves": "C3 的盲区真实存在(逐侧 validateEventChain 均绿),且 C4 不是冗余列而是其补位——红码取自驱动器自己的格,非套内重实现",
+        "matched": true
+      },
+      {
+        "column": "C1(driver格判)",
+        "perturbation": "A 镜像少灌最后一事件,驱动器裁 R1C1(逐事件规范字节流格)",
+        "expectedCode": "EVENT_STREAM_BYTES_DIVERGENT",
+        "actualCode": "EVENT_STREAM_BYTES_DIVERGENT",
+        "matched": true
+      },
+      {
+        "column": "C4(driver格判·契约互指)",
+        "perturbation": "同一短缺镜像,驱动器裁 R2C4(export 文档派生事件流 vs A 侧规范事件流)",
+        "expectedCode": "MUTUAL_REFERENCE_DIGEST_DIVERGENT",
+        "actualCode": "MUTUAL_REFERENCE_DIGEST_DIVERGENT",
+        "matched": true
+      },
+      {
+        "column": "C4(driver格判·回放互指)",
+        "perturbation": "同一短缺镜像,驱动器裁 R4C4",
+        "expectedCode": "MUTUAL_REFERENCE_DIGEST_DIVERGENT",
+        "actualCode": "MUTUAL_REFERENCE_DIGEST_DIVERGENT",
+        "matched": true
+      },
+      {
+        "column": "C4(driver格判·sidecar)",
+        "perturbation": "迁移副本删去一个 sidecar 文件(4→3),驱动器裁 R5C4",
+        "expectedCode": "ATTESTATION_SET_DIGEST_DIVERGENT",
+        "actualCode": "ATTESTATION_SET_DIGEST_DIVERGENT",
+        "driverOverall": "MATRIX_HAS_RED_OR_UNSTABLE_CELLS",
+        "matched": true
+      },
+      {
+        "column": "R5",
+        "perturbation": "剥掉 enable 起点后一事件的 actor 字段,用引擎 createEvent 向后重算全部哈希使链自洽",
+        "expectedCode": "WORKSPACE_ACTOR_REQUIRED",
+        "actualCode": "WORKSPACE_ACTOR_REQUIRED",
+        "hashChainStillSelfConsistent": true,
+        "proves": "attestation 判据独立于哈希判据成立,而非搭其便车",
+        "matched": true
+      },
+      {
+        "column": "R1(A侧)",
+        "perturbation": "对 A 容器 scratch 库的已有事件行执行 UPDATE",
+        "expectedCode": "aos_event_mirror_append_only_update_denied",
+        "actualCode": "aos_event_mirror_append_only_update_denied",
+        "min003": "此格即 MIN-003 所指「单表触发器是否挡住意外 UPDATE/DELETE」的试金石(非防篡改全称命题)",
+        "limits": "如实限界:触发器挡意外写,不挡持句柄先 DROP TRIGGER 再改写的蓄意者;防篡改由 verify 的触发器存在性自检与跨容器矩阵比对承担(DROP 后改写的红证见下一例)",
+        "matched": true
+      },
+      {
+        "column": "R1(A侧)",
+        "perturbation": "对 A 容器 scratch 库的已有事件行执行 DELETE",
+        "expectedCode": "aos_event_mirror_append_only_delete_denied",
+        "actualCode": "aos_event_mirror_append_only_delete_denied",
+        "limits": "如实限界:触发器挡意外写,不挡持句柄先 DROP TRIGGER 再改写的蓄意者;防篡改由 verify 的触发器存在性自检与跨容器矩阵比对承担(DROP 后改写的红证见下一例)",
+        "matched": true
+      },
+      {
+        "column": "R1(A侧·DROP后改写)",
+        "perturbation": "持句柄 DROP 两触发器后 UPDATE 改写一行 canonical_json,再经 EventMirrorStore.verify 自检(改写后首次重开)",
+        "expectedCode": "EVENT_MIRROR_TRIGGERS_MISSING",
+        "actualCode": "EVENT_MIRROR_TRIGGERS_MISSING",
+        "limits": "触发器挡意外写、不挡持句柄的蓄意 DROP;防篡改由 verify 自检与跨容器矩阵比对承担——本例即其红证",
+        "matched": true
+      },
+      {
+        "column": "R1(A侧·DROP后改写→矩阵)",
+        "perturbation": "同一 DROP 后改写库跑完整矩阵:跨容器比对必须抓到改写",
+        "expectedCode": "MATRIX_HAS_RED_OR_UNSTABLE_CELLS",
+        "actualCode": "MATRIX_HAS_RED_OR_UNSTABLE_CELLS",
+        "redCells": [
+          "R1C1",
+          "R1C2",
+          "R1C3",
+          "R1C4",
+          "R2C1",
+          "R2C2",
+          "R2C3",
+          "R2C4",
+          "R3C1",
+          "R3C2",
+          "R3C3",
+          "R3C4",
+          "R4C2",
+          "R4C3",
+          "R4C4",
+          "R5C2",
+          "R5C3"
+        ],
+        "proves": "矩阵能抓 DROP 后改写——触发器限界的补位是实证而非声称",
+        "matched": true
+      },
+      {
+        "column": "driver(NA 出白名单)",
+        "perturbation": "镜像库添加 aos_views_snapshot 表,使派生的 aContainer 不再是 event-row-mirror,R4C1 的 n/a 失去白名单授权",
+        "expectedCode": "NA_OUT_OF_WHITELIST",
+        "actualCode": "NA_OUT_OF_WHITELIST",
+        "derivedAContainer": "sqlite:aos_event_mirror,aos_views_snapshot",
+        "driverOverall": "MATRIX_HAS_RED_OR_UNSTABLE_CELLS",
+        "matched": true
+      },
+      {
+        "column": "driver(lockstep 先于取锚)",
+        "perturbation": "链在 knowledge-init 后前进一事件,镜像未跟进,直接跑驱动器",
+        "expectedCode": "KNOWLEDGE_HIGH_WATER_MISMATCH",
+        "actualCode": "KNOWLEDGE_HIGH_WATER_MISMATCH",
+        "stage": "lockstep-before-anchor",
+        "anchorNeverTaken": true,
+        "matched": true
+      },
+      {
+        "column": "driver(整体红)",
+        "perturbation": "同一滞后镜像,lockstep 经受治 knowledge-rebase 修复后复跑驱动器",
+        "expectedCode": "MATRIX_HAS_RED_OR_UNSTABLE_CELLS",
+        "actualCode": "MATRIX_HAS_RED_OR_UNSTABLE_CELLS",
+        "redCells": [
+          "R1C1",
+          "R1C2",
+          "R1C3",
+          "R1C4",
+          "R2C1",
+          "R2C2",
+          "R2C3",
+          "R2C4",
+          "R3C1",
+          "R3C2",
+          "R3C3",
+          "R3C4",
+          "R4C2",
+          "R4C3",
+          "R4C4",
+          "R5C1",
+          "R5C2",
+          "R5C3",
+          "R5C4"
+        ],
+        "proves": "滞后的 A 侧在驱动器里是逐格 mismatch,不是静默通过",
+        "matched": true
+      }
+    ],
+    "findings": [],
+    "ok": true
+  },
+  "partitionProfile": {
+    "schemaVersion": "aos.consistency-matrix-partition-profile.v1",
+    "engineVersion": "0.7.0",
+    "readOnly": "本表全程只读:status 为唯一引擎调用(mutates:false),其余为文件读取;无任何写入或租约持有",
+    "whitelistEntries": [
+      "NA-R4C1-MIRROR-NO-VIEWS",
+      "NA-R5-SIDECAR-SOURCE-DIR-ABSENT",
+      "NA-R5-ROW-ATTESTATION-NEVER-ENABLED"
+    ],
+    "partitions": [
+      {
+        "partition": "cross-project",
+        "chain": {
+          "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+          "headEventHash": "44e5690b284216c8ad1624dd758ed4441b3ae8399b6a2a403c645f2ce5ffa60f",
+          "version": 1270,
+          "events": 1270,
+          "segments": 20
+        },
+        "attestation": {
+          "enabled": true,
+          "enabledAtSequence": 1,
+          "executablePredicate": "遍历全部 1270 事件,payload.operation === \"attestation.actor.enabled\" 命中 1 次",
+          "hits": 1
+        },
+        "attestDirSidecar": {
+          "present": false,
+          "receipts": 0
+        },
+        "domainStore": {
+          "present": false,
+          "anchorForm": "chain-only(headEventHash/version)"
+        },
+        "exportBudget": {
+          "eventsBytes": 1818908,
+          "limitBytes": 1048576,
+          "overLimit": true,
+          "relation": "events 字节已越 1MiB 上限(1818908 > 1048576):整文档 export 必拒 INPUT_OVERSIZED,矩阵 C3/C4 走逐事件规范摘要序列+分段路径(硬前置,非备选)"
+        },
+        "knowledgeLockstep": {
+          "applicable": true,
+          "inLockstep": false,
+          "knowledgeHighWaterDigest": "3ff581dcecfb896225dde0e2933e0a4dc9bf91bae6ddc39a885b60b250f5d240",
+          "chainHeadEventHash": "44e5690b284216c8ad1624dd758ed4441b3ae8399b6a2a403c645f2ce5ffa60f",
+          "consequence": "snapshot-manifest 将拒 KNOWLEDGE_HIGH_WATER_MISMATCH;矩阵双跑须先经受治 knowledge-rebase(本表只读,不执行)"
+        },
+        "matrixInstantiation": {
+          "naCells": [
+            {
+              "cell": "R4C1",
+              "entryId": "NA-R4C1-MIRROR-NO-VIEWS",
+              "structuralAbsence": "事件行镜像(EventMirrorStore)按 MIN-007 O3 裁定只存事件行,不存 views 文档;views 是文件容器的引擎生成工件"
+            },
+            {
+              "cell": "R5C1",
+              "entryId": "NA-R5-SIDECAR-SOURCE-DIR-ABSENT",
+              "structuralAbsence": "分区旁无 attestations/ 见证目录(实测 2026-07-28:仅 TCRN-AOS 有;cross-project 与 TCRN-Design-System 启用 attestation 但未采用 attest-dir)"
+            },
+            {
+              "cell": "R5C4",
+              "entryId": "NA-R5-SIDECAR-SOURCE-DIR-ABSENT",
+              "structuralAbsence": "分区旁无 attestations/ 见证目录(实测 2026-07-28:仅 TCRN-AOS 有;cross-project 与 TCRN-Design-System 启用 attestation 但未采用 attest-dir)"
+            }
+          ],
+          "naCellCount": 3,
+          "r5Row": "适用(启用点起判);sidecar 格按 NA-R5-SIDECAR-SOURCE-DIR-ABSENT 结构性 n/a",
+          "acceptanceGates": [
+            {
+              "cell": "R1C1",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R1C2",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R1C3",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R1C4",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C1",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C2",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C3",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C4",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            }
+          ]
+        }
+      },
+      {
+        "partition": "TCRN-Design-System",
+        "chain": {
+          "workspaceId": "workspace:e7386bdcff8b3407e43ece51",
+          "headEventHash": "e079e10de28b0fe0a8abbbda973f463224e51178f3e35fd6cc6b42bef0be292a",
+          "version": 983,
+          "events": 983,
+          "segments": 16
+        },
+        "attestation": {
+          "enabled": true,
+          "enabledAtSequence": 1,
+          "executablePredicate": "遍历全部 983 事件,payload.operation === \"attestation.actor.enabled\" 命中 1 次",
+          "hits": 1
+        },
+        "attestDirSidecar": {
+          "present": false,
+          "receipts": 0
+        },
+        "domainStore": {
+          "present": false,
+          "anchorForm": "chain-only(headEventHash/version)"
+        },
+        "exportBudget": {
+          "eventsBytes": 1134152,
+          "limitBytes": 1048576,
+          "overLimit": true,
+          "relation": "events 字节已越 1MiB 上限(1134152 > 1048576):整文档 export 必拒 INPUT_OVERSIZED,矩阵 C3/C4 走逐事件规范摘要序列+分段路径(硬前置,非备选)"
+        },
+        "knowledgeLockstep": {
+          "applicable": true,
+          "inLockstep": false,
+          "knowledgeHighWaterDigest": "d60123dbd6ba63e5dab52618ca540e4723465d1ecb8985608fe5d1a6a91ee004",
+          "chainHeadEventHash": "e079e10de28b0fe0a8abbbda973f463224e51178f3e35fd6cc6b42bef0be292a",
+          "consequence": "snapshot-manifest 将拒 KNOWLEDGE_HIGH_WATER_MISMATCH;矩阵双跑须先经受治 knowledge-rebase(本表只读,不执行)"
+        },
+        "matrixInstantiation": {
+          "naCells": [
+            {
+              "cell": "R4C1",
+              "entryId": "NA-R4C1-MIRROR-NO-VIEWS",
+              "structuralAbsence": "事件行镜像(EventMirrorStore)按 MIN-007 O3 裁定只存事件行,不存 views 文档;views 是文件容器的引擎生成工件"
+            },
+            {
+              "cell": "R5C1",
+              "entryId": "NA-R5-SIDECAR-SOURCE-DIR-ABSENT",
+              "structuralAbsence": "分区旁无 attestations/ 见证目录(实测 2026-07-28:仅 TCRN-AOS 有;cross-project 与 TCRN-Design-System 启用 attestation 但未采用 attest-dir)"
+            },
+            {
+              "cell": "R5C4",
+              "entryId": "NA-R5-SIDECAR-SOURCE-DIR-ABSENT",
+              "structuralAbsence": "分区旁无 attestations/ 见证目录(实测 2026-07-28:仅 TCRN-AOS 有;cross-project 与 TCRN-Design-System 启用 attestation 但未采用 attest-dir)"
+            }
+          ],
+          "naCellCount": 3,
+          "r5Row": "适用(启用点起判);sidecar 格按 NA-R5-SIDECAR-SOURCE-DIR-ABSENT 结构性 n/a",
+          "acceptanceGates": [
+            {
+              "cell": "R1C1",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R1C2",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R1C3",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R1C4",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C1",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C2",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C3",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C4",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            }
+          ]
+        }
+      },
+      {
+        "partition": "TCRN-TMS",
+        "chain": {
+          "workspaceId": "workspace:f15c5abb6cd777c44453c2c9",
+          "headEventHash": "3a738061564981887a2f011b06f4615aec541abc0adeaf4884d2b272381b6f34",
+          "version": 228,
+          "events": 228,
+          "segments": 4
+        },
+        "attestation": {
+          "enabled": false,
+          "enabledAtSequence": null,
+          "executablePredicate": "遍历全部 228 事件,payload.operation === \"attestation.actor.enabled\" 命中 0 次",
+          "hits": 0
+        },
+        "attestDirSidecar": {
+          "present": false,
+          "receipts": 0
+        },
+        "domainStore": {
+          "present": false,
+          "anchorForm": "chain-only(headEventHash/version)"
+        },
+        "exportBudget": {
+          "eventsBytes": 273557,
+          "limitBytes": 1048576,
+          "overLimit": false,
+          "relation": "events 字节在 1MiB 上限内(273557 <= 1048576);整文档 export 仍可能因状态集合逼近上限,驱动器自带分段退化路径"
+        },
+        "knowledgeLockstep": {
+          "applicable": true,
+          "inLockstep": true,
+          "knowledgeHighWaterDigest": "3a738061564981887a2f011b06f4615aec541abc0adeaf4884d2b272381b6f34",
+          "chainHeadEventHash": "3a738061564981887a2f011b06f4615aec541abc0adeaf4884d2b272381b6f34",
+          "consequence": "snapshot-manifest 可直接取锚"
+        },
+        "matrixInstantiation": {
+          "naCells": [
+            {
+              "cell": "R4C1",
+              "entryId": "NA-R4C1-MIRROR-NO-VIEWS",
+              "structuralAbsence": "事件行镜像(EventMirrorStore)按 MIN-007 O3 裁定只存事件行,不存 views 文档;views 是文件容器的引擎生成工件"
+            },
+            {
+              "cell": "R5C1",
+              "entryId": "NA-R5-SIDECAR-SOURCE-DIR-ABSENT",
+              "structuralAbsence": "分区旁无 attestations/ 见证目录(实测 2026-07-28:仅 TCRN-AOS 有;cross-project 与 TCRN-Design-System 启用 attestation 但未采用 attest-dir)"
+            },
+            {
+              "cell": "R5C2",
+              "entryId": "NA-R5-ROW-ATTESTATION-NEVER-ENABLED",
+              "structuralAbsence": "链上从未出现 attestation.actor.enabled 事件(TCRN-TMS 实测四个事件段 0 命中),R5 行无受测对象"
+            },
+            {
+              "cell": "R5C3",
+              "entryId": "NA-R5-ROW-ATTESTATION-NEVER-ENABLED",
+              "structuralAbsence": "链上从未出现 attestation.actor.enabled 事件(TCRN-TMS 实测四个事件段 0 命中),R5 行无受测对象"
+            },
+            {
+              "cell": "R5C4",
+              "entryId": "NA-R5-SIDECAR-SOURCE-DIR-ABSENT",
+              "structuralAbsence": "分区旁无 attestations/ 见证目录(实测 2026-07-28:仅 TCRN-AOS 有;cross-project 与 TCRN-Design-System 启用 attestation 但未采用 attest-dir)"
+            }
+          ],
+          "naCellCount": 5,
+          "r5Row": "n/a(NA-R5-ROW-ATTESTATION-NEVER-ENABLED,谓词已执行:enable 事件 0 命中)",
+          "acceptanceGates": [
+            {
+              "cell": "R1C1",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R1C2",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R1C3",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R1C4",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C1",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C2",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C3",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C4",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            }
+          ]
+        }
+      },
+      {
+        "partition": "TCRN-AOS",
+        "chain": {
+          "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+          "headEventHash": "fc92fbc4630da7a79e9646739aa73072ced900f05f85033de52eedfb30e39e66",
+          "version": 662,
+          "events": 662,
+          "segments": 11
+        },
+        "attestation": {
+          "enabled": true,
+          "enabledAtSequence": 62,
+          "executablePredicate": "遍历全部 662 事件,payload.operation === \"attestation.actor.enabled\" 命中 1 次",
+          "hits": 1
+        },
+        "attestDirSidecar": {
+          "present": true,
+          "receipts": 457
+        },
+        "domainStore": {
+          "present": true,
+          "anchorForm": "paired(domainSnapshotDigest+chainManifestDigest+chainHeadEventHash)"
+        },
+        "exportBudget": {
+          "eventsBytes": 1133840,
+          "limitBytes": 1048576,
+          "overLimit": true,
+          "relation": "events 字节已越 1MiB 上限(1133840 > 1048576):整文档 export 必拒 INPUT_OVERSIZED,矩阵 C3/C4 走逐事件规范摘要序列+分段路径(硬前置,非备选)"
+        },
+        "knowledgeLockstep": {
+          "applicable": true,
+          "inLockstep": false,
+          "knowledgeHighWaterDigest": "557b5032648ede9157d68b4c9ccec7b4216f700576ff7c39cbf781e6bfac1088",
+          "chainHeadEventHash": "fc92fbc4630da7a79e9646739aa73072ced900f05f85033de52eedfb30e39e66",
+          "consequence": "snapshot-manifest 将拒 KNOWLEDGE_HIGH_WATER_MISMATCH;矩阵双跑须先经受治 knowledge-rebase(本表只读,不执行)"
+        },
+        "matrixInstantiation": {
+          "naCells": [
+            {
+              "cell": "R4C1",
+              "entryId": "NA-R4C1-MIRROR-NO-VIEWS",
+              "structuralAbsence": "事件行镜像(EventMirrorStore)按 MIN-007 O3 裁定只存事件行,不存 views 文档;views 是文件容器的引擎生成工件"
+            }
+          ],
+          "naCellCount": 1,
+          "r5Row": "适用(启用点起判);sidecar 格待迁移副本供入",
+          "acceptanceGates": [
+            {
+              "cell": "R1C1",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R1C2",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R1C3",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R1C4",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C1",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C2",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C3",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            },
+            {
+              "cell": "R3C4",
+              "status": "acceptance-gate-pending",
+              "basis": "MIN-003:append-only 记录流与哈希链在 A 侧的建成以此格变绿为准,不得以 n/a 免除"
+            }
+          ]
+        }
+      }
+    ],
+    "ok": true
+  },
+  "scratchCleanup": {
+    "removed": true,
+    "verified": true
+  },
+  "ok": true,
+  "notClaimed": [
+    "scratch 双跑证明驱动器与判据在两容器上工作;它不是对任何活链 A 侧的比对结论(活分区尚无生产 A 容器)",
+    "红证证明每列判据能变红;它不证明所有可能的篡改形态都被覆盖(无密钥哈希的尾部追加盲区由 C4 补位,亦仅在互指锚定后有效)",
+    "A 镜像的 append-only 触发器挡意外写、不挡持句柄先 DROP 再改写的蓄意者;该形态的防线是 verify 的触发器存在性自检(EVENT_MIRROR_TRIGGERS_MISSING)与跨容器矩阵比对,红套的 DROP 后改写例即其实证",
+    "分区表是 2026-07 实测快照,链会前进;复跑脚本即可重measure,不应引用陈旧数值",
+    "本运行对活链只执行了只读动词(status);未持有任何租约,未写入任何分区"
+  ]
+}

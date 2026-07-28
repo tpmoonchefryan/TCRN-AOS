@@ -143,12 +143,27 @@ export async function loadEngineProtocol(installRoot?: string): Promise<LoadedEn
  * give it its own database file, never the precious domain one, and never a
  * path a backup manifest covers.
  */
+const APPEND_ONLY_TRIGGERS = ["aos_event_mirror_no_update", "aos_event_mirror_no_delete"] as const;
+
 export class EventMirrorStore {
   private readonly db: DatabaseSync;
+  /**
+   * True when the database already carried the mirror table at open time but
+   * was missing one or both append-only triggers — the signature of a handle
+   * that DROPped them to rewrite rows. The constructor's `IF NOT EXISTS` DDL
+   * restores the triggers going forward, so this pre-DDL observation is the
+   * only place the tampering signature survives; `verify` turns it red.
+   */
+  private readonly triggersMissingOnOpen: boolean;
 
   constructor(databasePath = ":memory:") {
     this.db = new DatabaseSync(databasePath);
     this.db.exec("PRAGMA journal_mode = WAL");
+    const preExisting = this.db.prepare(`SELECT
+        (SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = 'aos_event_mirror') AS tables,
+        (SELECT COUNT(*) FROM sqlite_master WHERE type = 'trigger' AND name IN ('${APPEND_ONLY_TRIGGERS.join("','")}')) AS triggers
+      `).get() as { tables: number; triggers: number };
+    this.triggersMissingOnOpen = preExisting.tables > 0 && preExisting.triggers < APPEND_ONLY_TRIGGERS.length;
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS aos_event_mirror (
         partition_id TEXT NOT NULL,
@@ -175,6 +190,11 @@ export class EventMirrorStore {
     `);
     // Append-only, same shape as the aos_audit_events / aos_chain_write_log
     // precedents: an instrument whose rows can be edited measures nothing.
+    // Honest limit: these triggers stop ACCIDENTAL writes; they do not stop a
+    // deliberate handle-holder who DROPs them first. Tamper-evidence for that
+    // case is carried by `verify` (trigger-presence self-check plus the
+    // engine's whole-chain re-validation) and by the cross-container
+    // consistency matrix, never by the trigger itself.
     this.db.exec(`
       CREATE TRIGGER IF NOT EXISTS aos_event_mirror_no_update
       BEFORE UPDATE ON aos_event_mirror
@@ -281,6 +301,21 @@ export class EventMirrorStore {
    * own reason codes, not this module's opinion.
    */
   verify(partitionId: string, protocol: EngineProtocol): { ok: true; events: number } {
+    // Trigger-presence self-check first: a mirror that arrived without its
+    // append-only triggers (or lost them under this handle) has had its one
+    // write protection removed, and that alone is a red — regardless of
+    // whether the rows still validate.
+    const triggersNow = this.db.prepare(
+      `SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'trigger' AND name IN ('${APPEND_ONLY_TRIGGERS.join("','")}')`
+    ).get() as { n: number };
+    if (this.triggersMissingOnOpen || triggersNow.n < APPEND_ONLY_TRIGGERS.length) {
+      throw new EventMirrorError(
+        "append-only triggers were missing (dropped before this open, or under a live handle) — " +
+        "triggers stop accidental writes only, not a deliberate DROP-then-rewrite; " +
+        "tamper-evidence for that case rests on this check and the cross-container matrix comparison",
+        "EVENT_MIRROR_TRIGGERS_MISSING"
+      );
+    }
     const rows = this.listRows(partitionId);
     const events = rows.map((row) => JSON.parse(row.canonicalJson) as unknown);
     const ordered = protocol.validateEventChain(events);
