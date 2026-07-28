@@ -6,7 +6,7 @@
     "urlReachableWithSsr": {
       "ok": true,
       "status": 200,
-      "bytes": 352441,
+      "bytes": 369164,
       "view": "my-work"
     },
     "everyModuleRendersChainData": {
@@ -17,99 +17,102 @@
           "route": "/my-work",
           "status": 200,
           "view": "my-work",
-          "chainKeys": 510,
+          "chainKeys": 439,
           "notReadNotices": 1
         },
         {
           "route": "/inbox",
           "status": 200,
           "view": "inbox",
-          "chainKeys": 328,
+          "chainKeys": 347,
           "notReadNotices": 1
         },
         {
           "route": "/dashboard",
           "status": 200,
           "view": "dashboard",
-          "chainKeys": 10,
+          "chainKeys": 13,
           "notReadNotices": 0
         },
         {
           "route": "/projects",
           "status": 200,
           "view": "projects",
-          "chainKeys": 10,
+          "chainKeys": 13,
           "notReadNotices": 0
         },
         {
           "route": "/work-items",
           "status": 200,
           "view": "work-items",
-          "chainKeys": 778,
+          "chainKeys": 765,
           "notReadNotices": 0
         },
         {
           "route": "/board",
           "status": 200,
           "view": "board",
-          "chainKeys": 205,
+          "chainKeys": 208,
           "notReadNotices": 1
         },
         {
           "route": "/release-trains",
           "status": 200,
           "view": "release-trains",
-          "chainKeys": 45,
+          "chainKeys": 48,
           "notReadNotices": 0
         },
         {
           "route": "/knowledge",
           "status": 200,
           "view": "knowledge",
-          "chainKeys": 38,
+          "chainKeys": 55,
           "notReadNotices": 1
         },
         {
           "route": "/deliberations",
           "status": 200,
           "view": "deliberations",
-          "chainKeys": 32,
+          "chainKeys": 16,
           "notReadNotices": 1
         },
         {
           "route": "/audit",
           "status": 200,
           "view": "audit",
-          "chainKeys": 387,
+          "chainKeys": 486,
           "notReadNotices": 1
         },
         {
           "route": "/snapshots",
           "status": 200,
           "view": "snapshots",
-          "chainKeys": 10,
+          "chainKeys": 13,
           "notReadNotices": 1
         }
       ]
     },
     "localDomainWriteRoundTrips": {
       "ok": true,
-      "wroteLabel": "acceptance-1785115241845",
+      "wroteLabel": "acceptance-1785237998711",
       "readBackLabels": [
         "cockpit",
-        "acceptance-1785115241845"
+        "acceptance-1785237998711"
       ]
     },
     "chainWriteAndRefusal": {
       "ok": true,
-      "legalMove": {
-        "status": 409,
-        "ok": false,
-        "reasonCode": "INVALID_TRANSITION"
+      "writeHalf": {
+        "performed": true,
+        "record": "TCRN-AOS-INC-034",
+        "move": "planned->ready"
       },
-      "illegalMove": {
+      "refusalHalf": {
+        "record": "TCRN-AOS-INC-034",
+        "requested": "planned",
         "status": 409,
-        "reasonCode": "INVALID_TRANSITION"
+        "reasonCode": "INVALID_TRANSITION",
+        "held": true
       }
     },
     "mirrorFreshnessStatedAndReadOnly": {

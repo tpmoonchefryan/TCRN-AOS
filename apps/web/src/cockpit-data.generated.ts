@@ -4,14 +4,14 @@
 import type { CockpitData } from "./cockpit-types.js";
 
 export const cockpitData: CockpitData = {
-  "generatedAt": "2026-07-28T09:04:36Z",
+  "generatedAt": "2026-07-28T11:28:03Z",
   "partitions": [
     {
       "id": "cross-project",
       "label": "Platform governance",
       "labelZh": "平台治理",
       "chainVersion": 1266,
-      "verifiedAt": "2026-07-28T09:04:36Z",
+      "verifiedAt": "2026-07-28T11:28:03Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -22,8 +22,8 @@ export const cockpitData: CockpitData = {
       "id": "TCRN-Design-System",
       "label": "Design System",
       "labelZh": "设计系统",
-      "chainVersion": 975,
-      "verifiedAt": "2026-07-28T09:04:36Z",
+      "chainVersion": 983,
+      "verifiedAt": "2026-07-28T11:28:03Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -35,7 +35,7 @@ export const cockpitData: CockpitData = {
       "label": "TMS",
       "labelZh": "TMS",
       "chainVersion": 228,
-      "verifiedAt": "2026-07-28T09:04:36Z",
+      "verifiedAt": "2026-07-28T11:28:03Z",
       "readVia": "export",
       "attestationFromSequence": null,
       "unavailable": []
@@ -44,8 +44,8 @@ export const cockpitData: CockpitData = {
       "id": "TCRN-AOS",
       "label": "AOS",
       "labelZh": "AOS",
-      "chainVersion": 516,
-      "verifiedAt": "2026-07-28T09:04:36Z",
+      "chainVersion": 535,
+      "verifiedAt": "2026-07-28T11:28:03Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -552,9 +552,9 @@ export const cockpitData: CockpitData = {
       "id": "work:53d72dd74baf31b82afd918f",
       "externalKey": "TCRN-AOS-INC-030",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "revision": 2,
+      "revision": 5,
       "scope": "被提交进仓的镜像包 apps/web/mirror 落后源码三个提交,而它的构建器与验收门**两个文件都在、却没有任何 npm 脚本调用**。发布前核查时发现;若照现状打 tag,发出去的包里没有本次发布的全部移动端工作。\n\n**实测**:apps/web/mirror 末次改动是 34e5b97(2026-07-27 09:20);其后落在 apps/web/src 的提交有三个——c24ae11(移动栏与首屏,STORY-109/INC-025/INC-027)、fae039d(消费者样式边界,INC-012/022/STORY-107)、b8f2c1a(Owner 用出来的六个缺陷,INC-013..018)。scripts/build-mirror.mjs 与 scripts/mirror-acceptance-proof.mjs 均存在于仓中,但 package.json 的 scripts 里没有任何一条引用它们(以 /build-mirror|mirror-acceptance/ 扫全部 script 值,零命中),pnpm verify 的十八步里也没有。\n\n**这是 INIT-001 收口注解自己点名的那个形态的第四例**:「已交付但从未被验证」。前三例是 phase1 收据带红十个、六个 proof 脚本红着但不在 verify 里、AOS 分区从未被快照。四者的共同点是**都不产生错误信号**——文件在、目录在、构建过一次,只是没人再跑。判据必须落在「构建器的输出与源码在同一个提交上」,不能落在「文件存不存在」。\n\n**修法**:发布前重建镜像并提交,使其与发布提交同源;把 build-mirror 与 mirror-acceptance-proof 接进 npm 脚本与 verify,判据为「镜像的构建输入哈希等于当前源码」。若判定镜像本就该是独立产物而非仓内文件,则应从 git 移除而不是留一个会说谎的副本——两条路选一条,不留现状。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -564,9 +564,9 @@ export const cockpitData: CockpitData = {
       "id": "work:f743fad5f8763f6ae7eb2f5c",
       "externalKey": "TCRN-AOS-INC-031",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "revision": 3,
+      "revision": 6,
       "scope": "已解决,但结论与本单开单时提的方案**相反**,过程本身是本单最该被读到的部分。\n\n我先按开单时列的 (a) 做了:把期望版本改为从 DS 工作区源码读,判据变成「装到的等于源里那份」。看着更诚实。取红证时它没红——把已安装副本强改成 2.1.0,`expected` 竟然**跟着**变成 2.1.0,审计照绿。查 inode:`TCRN-Design-System/packages/ui-react/package.json` 与 `TCRN-AOS/node_modules/@tcrn/ui-react/package.json` 是**同一个 inode(142661533)**——pnpm 对 file: 依赖用硬链接,那两个路径是同一个文件。于是我的「修复」把一个文件读了两遍再比较,**造出一道永远不可能失败的门**。\n\n**这与本轮早些时候 railReachabilityCheck 第一版误绑两项 fixture 恒绿是同一课**,而且更隐蔽:那次是选错了对象,这次是两个对象在文件系统层面本就是一个。通则:判据的两侧必须是**能够不同的字节**;「从权威源读期望值」听起来永远正确,但当权威源与被测对象是同一份字节时,它退化成同义反复。\n\n**已回退为字面量并升到 3.0.0**,理由写进了脚本头注:字面量恰恰是这里唯一一个上游动不了的字节,这才使不符具有意义——DS 发版后本审计变红不是误报,它是「上游动了、有人该来看看改了什么再接受」的唯一信号。红证已取:把常量改回 2.1.0 而已安装副本为 3.0.0,ok=false、blockers=[\"runtime dependency version mismatch: @tcrn/ui-copy-state\"]、exit 1;改回即绿。\n\n**顺带更正一条平台既有认知**:记忆里记的「pnpm file: 依赖是硬拷贝,改了 DS 源 AOS 仍编译旧 API」对 dist/ 成立(DS 重新构建会产生新 inode,链接因此断开),但对 package.json 这类自安装后未被重建的文件**不成立**——它们是硬链接,DS 侧原地改写会即时出现在 AOS 的 node_modules 里,无需重装。两种行为并存,判断「改动到没到」不能只凭一条经验。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -576,9 +576,9 @@ export const cockpitData: CockpitData = {
       "id": "work:1bdcfa809a21ee447b354db9",
       "externalKey": "TCRN-AOS-INC-032",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "revision": 2,
+      "revision": 5,
       "scope": "发布前刷新链数据后,aos-frontend-shell-proof 的「Storybook shell demo in built HTML/client」判据变红,而产物里**没有任何**该类的实际用法。这是同一个假阳性的第三次,而它这次的触发方式值得单独记一笔。\n\n**命中的字节是 `.tcrn-knowledge-shell__collapse-button,`——结尾是一个半角逗号。** 那句话是链上一条注解的正文,内容恰恰是记录**上一次**修这个假阳性的经过:上一版把判据收窄为「点号形式后须紧跟 `{` 或 `,` 或组合符」,理由是「一句散文后面跟的是空格和更多的字」。而这条中文注解在类名后用了半角逗号,于是**它自己提供了它要找的选择器上下文**。判据被一段描述该判据上一次修复的文字打败。\n\n**结论:不能再收紧正则。** 关于代码的散文可以产生任何「意味着代码」的模式,第三版正则也不会是最后一版。改为问「一个类实际能活在哪里」:本构建的全部样式表都是文档内的 `<style>` 块(实测 .css 资源为 0),全部生效类名都在 `class`/`className` 值里;治理正文是既不在这两处的字符串值,于是**在结构上出局,而不是靠模式排除**。判据的干草堆改为「所有 class 值 + 所有 style 块」,正则退回最朴素的裸 token。\n\n双向红证:注入一处真用法(把 `tcrn-knowledge-shell` 加进 `class=\"tcrn-product-shell…\"`)→ 立红 exit 1;还原 → 绿;而带那条注解的链数据 → 绿。\n\n**这一族的通则**(与 locale 门当年划「产品词汇 vs 租户内容」是同一条,与 INC-025「量的是不可见 sr-only 元素」也同形):**当链成为数据源之后,判据必须落在「该事物实际存在的位置」,不能落在「文本里有没有出现」。** 前者是产品的形状,后者是任何人都能在一条注解里写出来的字符串。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -588,10 +588,22 @@ export const cockpitData: CockpitData = {
       "id": "work:3cd400e7064a448ef629e062",
       "externalKey": "TCRN-AOS-INC-033",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:ff2290f36de29780d18d4323",
-      "revision": 2,
+      "revision": 5,
       "scope": "`pnpm source-export:proof`——本仓唯一一道关于「什么可以离开这个仓库」的门——**自 2026-07-26 的隐私历史改写起就永久坏了**,而且它不在 pnpm verify 里,所以两天内无人知道。发布前按清单显式运行它才发现。\n\n**根因**:该门用 sha 钉了一个基线提交 `EXPECTED_SOURCE_HEAD = cd9abd9…`,判据是 `git merge-base --is-ancestor 基线 HEAD`。隐私改写(抹掉 93 条提交的个人邮箱与 4 个 blob 的家目录路径)给每条提交换了新 sha,于是被钉的那条落在改写前的血统上,**永远不可能再是 main 的祖先**;它每次运行都抛 `source_export_source_head_not_descended_from_expected_basis`。已重钉为改写后的孪生提交 `a160325928ec4b8d11b7a4d483375bffda7e92fd`(同主题、同作者时间 2026-06-18 05:05:56 +0800、是 main 的祖先,其树与原提交仅差改写抹掉的两个 evidence 文件)。**通则:按 sha 钉基线的判据,在任何一次历史改写后都必须一并重钉;改写的验收清单里要有这一项。**\n\n**修好基线后它立刻抓到了第二件事**:导出清单里有三个受管文件没有导出裁定——`AGENTS.md`、`CLAUDE.md`、`deploy/aos-mirror.yaml`。它们都是白名单写好之后才进仓的,而白名单是**闭合**的,所以它不放行也不静默,而是报「未决」并停下。这正是闭合白名单该有的行为。三个都已按逐个理由放行:两份是仓内文档;`deploy/` 是 LAN-only 只读镜像的 k8s 清单,含命名空间、nginx 配置、Deployment/Service/Ingress,无任何凭据。\n\n**放行 `deploy/` 时补了一道守卫,理由要留在这里**:k8s 的 Secret 就是一个普通 `.yaml`,现有分类器按路径与扩展名工作(`.pem/.key/.p12/.crt/.env/.npmrc`…),**看不见它**。把一个专门存放集群清单的目录整体放进白名单、却不防它最可能装的东西,正是这道门存在要防的那种未经审视的放宽。故新增按 `kind: Secret` 读内容的判据。该判据**按 object id 读已提交字节**,与归档取内容的方式一致——第一版读的是工作区,那是与被导出对象不同的一组字节(已提交但本地已删的密钥会对它隐形)。\n\n红证两条,均针对已提交树(该门读 HEAD 的树,`git add` 影响不到它——我第一次的红证方法因此无效,记在这里以免重蹈):①把 AGENTS.md 移出白名单 → `unresolved=AGENTS.md`,exit 1;②把守卫的 kind 指向已提交清单里确实存在的 `Namespace` → `declares_secret:deploy/aos-mirror.yaml`,exit 1。另把原本只报错误码的信息改为**指名道姓**列出未决与禁止的文件。\n\n**已接进 pnpm verify。** 这是同一形态的第五例(前四例:phase1 收据静默带红十个、六个 proof 红着但不在 verify 里、AOS 分区从未被快照、镜像构建器与验收门未接线)。五例之后这条不该再被当作偶然:**一道不在主验证链里的门,寿命等于写它那天。**",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:36d23eb50d9d3ec986301109",
+      "externalKey": "TCRN-AOS-INC-034",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:ff2290f36de29780d18d4323",
+      "revision": 6,
+      "scope": "已解决。判据 4 重写为**两半都判**,合法移动**推导而非假设**,无法执行时如实报红。\n\n修法三点:①`ok` 改为 `performed !== null && refusalHeld`,写入那一半必须真的成功;②候选从投影里取(状态在 planned/ready/active 的 AOS 记录),逐个尝试其前向移动,**由引擎裁决**——投影是快照、可能落后于链,所以候选只是猜测,脚本内不复制状态机,以免产生一个能与权威源相左的第二意见;③拒绝那一半改为打**同一条**刚被移动的记录(请求退回上一状态),两半因此谈论同一个对象;没有任何记录可移动时,报 `unperformable` 并判否。\n\n**红绿双向都取到了,而且红那次是自然发生的**:投影停在 v512、其中四条 planned 已被我收成 done,于是四个候选全被引擎以 INVALID_TRANSITION 拒绝,判据报 `ok:false` 并逐条列出候选、移动方向、状态码与拒绝原因,同时说明「投影是快照、可能落后」。刷新投影后重跑转绿:`writeHalf {performed:true, record:\"TCRN-AOS-INC-034\", move:\"planned->ready\"}`、`refusalHalf {requested:\"planned\", status:409, reasonCode:\"INVALID_TRANSITION\", held:true}`。\n\n**本单被自己的验收门推动了一格**:那次成功的合法写入,移动的正是本记录(planned→ready)——收据里指名记录。这是刻意接受的:该服务唯一的链写面就是 `/api/chain/transition`,证明「写得进去」只能靠一次真实迁移,而本单当时确实正在被处理,这一步是它本就需要的生命周期。\n\n**留下的设计缺口,如实记录**:链上全部记录终态时,这条判据**无法执行**,因而会红。要让它在闭合链上仍可执行,只有两条路——允许该门自建探针记录,或增加一个非状态迁移的链写面(如 annotate)。两者都是治理裁定,不是脚本可以悄悄假设的,故留作具名残余。\n\n另:清理了判据 3 在 EPIC-001 域字段上留下的测试标签,已由 `[\"cockpit\",\"acceptance-<ts>\"]` 复原为 `[\"cockpit\"]`。该判据每次运行都会盖一个新时间戳标签,是其机制本身,不是缺陷。",
       "decidedBy": [],
       "sprintWorkId": null
     },
@@ -602,8 +614,8 @@ export const cockpitData: CockpitData = {
       "kind": "Initiative",
       "status": "done",
       "parentId": null,
-      "revision": 10,
-      "scope": "收口对账：八 Epic、二十七 Story 全 done。今日按推荐顺序补完的四项为 INC-001（收起态 logo 居中，属设计域，代码未提交待 Owner 方案确认）、INC-002（七个 proof 脚本引用已删目录）、S013（审议采用三步公约）、S020（备份与恢复演练余下五项）。EPIC-004 与 EPIC-006 各按其注解自设的保留条件收口，收口前逐条复核该条件是否仍成立——EPIC-004 那条「受 INC-005 阻塞」已因 W v0.7.0 新增 conference-position-list / conference-minutes-list 而不成立，已在其注解中更正。\n\n**明确不在本 Initiative 之内、随单结转的两条**：TCRN-AOS-INC-010（六个 proof 钉死知识层之前的方法面、两个有状态前置未申明；判据须由「恰等于某张名单」改为「不含被禁方法」）与 TCRN-AOS-INC-011（pnpm verify 在 service:smoke 处以 productLedMarkerPresent:false 失败，判据在 scripts/service-smoke.mjs:161，已双向确证与备份工作无关）。两单均 planned 未修。Initiative 收口不代表这两条已解决，它们是本次工作过程中发现并如实立单的既存问题；INC-011 尤其值得优先，因为它是唯一挡在 pnpm verify 主门里的红项。\n\n上一版注解写的「余下三项全部依赖 STORY-003（12 种关系型、评论双轨、负责人与标签的过滤与编辑）」与「看板拖拽另需写通道」——STORY-003 已 done，这三项的依赖已解除；它们属于功能深化而非本 Initiative 的验收项，未在本次范围内实现，如实记为后续。\n\n**发布状态：五仓均未推送，对外发布仍是必停点。** 本次 AOS 侧两个提交（9e41f00 INC-002、14dc64d S020）均在本地 main，未推。设计域的 INC-001 改动保持未提交，按 Owner 裁定「我要的是结果，并没有让你开始修，我需要确认方案」呈报为已执行待驳回。\n\n本次四项工作里最该被后来者读到的一条：三处「已交付但从未被验证」的同形失效。INC-002 里 phase1 的一个收据把另外十个一起带红、且无人在跑故无人知；INC-010 里六个脚本红着但不在 pnpm verify 里；S020 里 AOS 分区从未被快照过，而它恰是唯一启用 attestation 的分区。三者都不产生错误信号，只产生一个看起来合理的空结果或一次缺失的运行。与 EPIC-007 的 INC-006「空列表是缺陷最好的伪装」同形。判据须落在计数与内容，不能落在「有没有报错」。",
+      "revision": 11,
+      "scope": "**已发布。** Owner 于 2026-07-28 明示「同意发布」,解除本 Initiative 唯一剩下的必停点(对外发布)。本注解为发布记录,并更正本单上一版注解里那句「五仓均未推送,对外发布仍是必停点」——该句写于本轮之前,现已不成立。\n\n发出的两件:\n- **TCRN-AOS v0.1.0** — commit 54b2aa4432a1e612606345f015473cedefad5813,annotated tag 于服务器 97cfd114e0cd4279c4cfda5aad148f9a960e2ac3,GitHub Release 非草稿非预发布。本历史上的首个版本 tag;`public-export-2026-07` 不是它的祖先(那条 tag 指向隐私改写前的血统),发布说明里已写明,不得读作续接。仓库仍为 private,不向任何 registry 发布。package.json 由 `0.1.0-local` 升 `0.1.0`(`-local` 是 prerelease 标识,排序低于正式版,故此为前进而非改名)。\n- **TCRN-Design-System v3.0.0** — commit 771bddeac8339e4514149d7f8769ac6dfe262cb3,tag 于服务器 3a4b6758de481a48bcfa8b118c8fd10ddaeebc53,Release 同上。仓库为 public。\n\n**版本号取 major 的依据,记录以备后查**:API 面**没有**破坏——barrel 导出与 v2.1.0 逐字节相同,新增 prop 全部可选。取 major 是因为**渲染契约变了**:移动断点下侧栏默认收起、utility 行与两个横向行改版、带 280px 栏的 shell 在约 760–780px 区间由三列改为堆叠。本仓自身的先例(v2.0.0 tag 说明)就是把渲染面当契约面,且本轮确有五张移动端视觉基线移动。消费者可用 `mobileNavExpanded` 恢复常开栏。\n\n**发布前核查抓到七件事,全部按单推进,无一放过**:DS 侧 INC-006(CHANGELOG 两次未滚动标题,已补 2.0.0/2.1.0 两节并建门)、INC-007(三族版本面漂移,最久的漂了两个发布,已建闭合登记门);AOS 侧 INC-030(镜像包落后三个提交,构建器与验收门均未接线)、INC-031(许可证审计硬钉上游版本;**第一版修法因 pnpm 硬链接而造出恒绿门,由红证捕获后回退**)、INC-032(demo 类判据被一条描述其上次修复的注解击败,已改为按「类实际能活在哪里」判定)、INC-033(导出前置门自历史改写起永久失效 + 三个文件无导出裁定 + 为 deploy/ 补 Secret 内容守卫)。另有两条我自己写进链上的错话由独立复核推翻并已追加更正(见 TCRN-DS-INC-006 第三条注解)。\n\n**本轮最该留下的一条**:INC-030/033 使「已交付但从未被验证」在本仓累计到**第五例**。五例之后不该再当偶然——**一道不在主验证链里的门,寿命等于写它那天。** 三道新门(mirror:freshness-proof、source-export:proof、changelog/version-surface)均已接入各自仓库的 verify,pnpm verify 由 18 步增至 21 步。",
       "decidedBy": [
         "minutes:4fdc3f1caf4adfb2374090f7"
       ],
@@ -1558,10 +1570,10 @@ export const cockpitData: CockpitData = {
       "id": "work:58b04cc47c49f921b09d0e50",
       "externalKey": "TCRN-DS-INC-006",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": null,
-      "revision": 3,
-      "scope": "**更正本单上一条注解中我自己写错的一句。** 我写的是「全仓唯一提到 CHANGELOG 的地方是 scripts/scaffold-proof.mjs 第 10 行的文件名清单——那是存在性检查,不读一个字节的内容」。这句**不成立**,由一轮独立复核推翻并经我复现:scripts/no-private-input-scan.mjs 第 143 行 walk(\".\") 遍历整棵树(只跳过 .git/node_modules/dist 等八个目录),第 146 行对每个被扫文件 readFileSync 全文,所以 CHANGELOG.md 的字节**每次 pnpm scan 都被读**。我漏判的原因很具体:我用 `grep -rn CHANGELOG scripts/ package.json` 找引用,而这个门是**按目录遍历到达**文件的,从不提文件名——于是按名字找引用的方法对它永久失明。\n\n更正后的正确表述,也是本单真正的教训:**这个文件不是没被读,是没被核对。** 它被完整扫过,扫的是禁用措辞;没有任何判据把它对发布的陈述与发布本身相比。一份文件可以被逐字节扫描而仍然在撒谎,只要没有东西拿它和它所描述的对象对照。门的头注与 CHANGELOG 正文均已按此改写。\n\n同轮另两条更正,一并记录:(1) 我在门里写「v1.0.1–v1.0.5 发布时本仓还没有按版本分节的做法」——不成立,`git show v1.0.0:CHANGELOG.md` 与 v1.0.5 都只有 `## 1.0.0` 一节且**根本没有 `## Unreleased`**;所以本仓是切过版本节的,「只有 Unreleased」是最近两次发布才出现的做法。floor 仍取 2.0.0,但理由改为「那五个补丁版本本就没有自己的节,现在补写等于凭记忆虚构」。(2) 门原本对缺节的措辞是「a released version with nothing written down」——过头了:v2.0.0 与 v2.1.0 的 GitHub Release 各有 2622 与 971 字的说明,内容是写了的,只是没写进这个文件。措辞已收窄为「这份文件没有交代某个已发布版本」。",
+      "revision": 7,
+      "scope": "已解决,随 v3.0.0 发布(commit 771bdde,tag 于服务器 3a4b6758…)。CHANGELOG 现有 `## 3.0.0` / `## 2.1.0` / `## 2.0.0` / `## 1.0.0` / `## 0.0.0-private` 五节;归属由 `git tag --contains` 逐条判定,非人工回忆:「Selection is one grammar」与「SearchableList」由 cd9abd9… 即 v2.1.0 自身的发布提交引入,故归 2.1.0;「Storybook fidelity — A-tier repair」由 3c8ffb94 引入,只被 v2.1.0 包含(v2.0.0 是在 PR #1 合并前于分支尖端所打,时间上早 3.5 小时),故**不**按其 07-21 的日期归入 2.0.0;「Visual language v2」由 ff6febfe 引入且被 v2.0.0 包含,归 2.0.0;其后两段无 `###` 标题的散条(07-01/07-02)随 2.0.0 标题一并落位。\n\n**这次补的是已公开的历史,不是为本次 tag 做准备**——v2.0.0 与 v2.1.0 的 GitHub Release 说明一直是有的(2622 与 971 字),缺的是这份文件里的交代;门的措辞已按此收窄,不说「无处可查」。\n\n新门 `scripts/changelog-release-sections-proof.mjs` 已接入 `pnpm scaffold:proof`,三条判据全部**问 git 而非问文档**:①Unreleased 之下不得存在「已被某个 tag 包含的提交所引入」的条目;②2.0.0 起的每个 tag 须有同名小节;③HEAD 领先最新 tag 时,该工作须写在某处(已填的 Unreleased 或某个尚无 tag 的版本节)。floor 取 2.0.0 并在脚本里写明理由:v1.0.0 与 v1.0.5 的 CHANGELOG 都只有 `## 1.0.0` 一节且无 Unreleased,即那五个补丁版本本就没有自己的节,现在补写等于虚构。**红证是缺陷本身给的**——门写完在未修的树上直接报出六条,逐条点名文件行号与包含它的 tag。",
       "decidedBy": [],
       "sprintWorkId": null
     },
@@ -1570,10 +1582,10 @@ export const cockpitData: CockpitData = {
       "id": "work:331bcbed06590d39c677a021",
       "externalKey": "TCRN-DS-INC-007",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": null,
-      "revision": 2,
-      "scope": "仓里带版本号的文档全都在漂,原因与 [[TCRN-DS-INC-006]] 同一条:**没有任何门读它们**。发布前普查时发现三族,漂的时长各不相同:\n\n1. docs/tms-adoption-guide.md:10 写「Three packages, all at 2.0.0」——漂了一个发布(v2.1.0 没改它)。全仓无任何脚本、收据或文档引用这个文件名,它不被任何哈希覆盖。\n2. packages/{ui-tokens,ui-copy-state,ui-react}/README.md 三处都写 Version `1.0.0`——**漂了两个发布**。唯一读 README 的门(readme:proof)只按子串查边界措辞,从不读版本行;也没有任何收据哈希 packages/*/README.md。\n3. scripts/scaffold-proof.mjs 把 v1.0.0 的发布事实写死在**生成器**里(第 50 行 tagName、第 55 行 releases/tag/v1.0.0、第 112 行 releaseBaselineVersion、第 169 行 markdown 模板)。这一条最阴:它落进 docs/verification/scaffold-proof.json,而改那个 JSON 是无效的——下一次 pnpm scaffold:proof 会原样覆盖回去。所以「看起来能改」的地方恰恰改不动。\n\n三族的共同点与 INC-006 完全一致:**这些字节没有被任何判据读过**,于是漂移不产生信号。通则记在这里——「门只保护它读过的字节」这句在本平台已被引用多次,而这里给出了它的第二种表现形式:不是门写错了,是根本没有门,而所有人默认「发布流程会带上它们」。发布流程是人,人两次都忘了。\n\n**修法**:三族全部改到本次版本;并加一道读文档版本行的门,判据为「凡带版本号的受管文档,其版本须等于 packages/*/package.json 的版本」,清单显式列出受管文件,新增带版本号文档时须入册。第 3 族须改生成器而非产物,并在本单里裁定 releaseBaselineVersion 究竟是「跟随当前发布」还是「钉在 1.0.0 基线」——字段名像后者,而紧邻的 githubRelease.tagName 明显是前者且已落后两个版本,两者不可能同时为真。",
+      "revision": 6,
+      "scope": "已解决,随 v3.0.0 发布。三族处置如下,第三族的裁定与开单时的猜测**相反**:\n\n1. docs/tms-adoption-guide.md、三个 packages/*/README.md、三个 packages/*/package.json 全部改到 3.0.0。\n2. **scripts/scaffold-proof.mjs 的 1.0.0 常量刻意不动。** 开单时我把它列为「要改到本次版本」,读源后判定不成立:`publicReleaseState` 的每个字段都带 `readbackSource`,还带 `targetCommitish` 钉死提交,字段名就叫 release **baseline**——它是一份**被冻结的观测记录**,不是对仓库当前状态的描述。把它指向新版本等于伪造该记录,而产生它的那次 readback 无法追溯重跑。真问题是它读起来不像冻结的:markdown 渲染出 `- GitHub Release: v1.0.0`,没有任何标记说明这是过去的观测,于是两次发布之后,这份收据看上去在用现在时说本仓的 Release 是 v1.0.0。已改为按标签说明所描述的时刻(「observed at baseline」「frozen at the 1.0.0 baseline observation; current versions live in CHANGELOG.md」),常量原样保留。\n3. 新门 `scripts/version-surface-proof.mjs` 已接入 `pnpm scaffold:proof`。真值取 packages/ui-react/package.json,登记册**闭合**共 7 项;未登记的带版本号文档会让门变红,从而**逼出「谁来维护它」这个决定**,而不是把它留到两个发布之后被人发现。另断言 scaffold-proof 的冻结标签措辞仍在——若有人「好心」把那些常量改成当前版本,标签正是唯一阻止收据变成现在时断言的东西,所以被断言的是标签。红证:把 ui-tokens/README.md 改回 1.0.0 → 指名报「states version 1.0.0, but packages/ui-react/package.json says 3.0.0」,exit 1。\n\n**通则**(与 [[TCRN-DS-INC-006]] 同一条,此处是它的第二种表现):不是判据写错了,是**根本没有判据**,而所有人默认「发布流程会带上它们」。发布流程是人,人两次都忘了同样的几项——恰好是没有门读的那几项。",
       "decidedBy": [],
       "sprintWorkId": null
     },

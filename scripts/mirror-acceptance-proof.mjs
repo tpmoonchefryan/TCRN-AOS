@@ -97,24 +97,77 @@ receipt.criteria.localDomainWriteRoundTrips = {
 // 4 — a chain write succeeds through the local proxy AND an illegal one is
 //     refused by the engine. Both halves matter: a surface that only ever
 //     succeeds has been shown to be a database, not a governed surface.
-const legal = await fetch(`${LOCAL}/api/chain/transition`, {
-  method: "POST",
-  headers: { "content-type": "application/json" },
-  // Already done; done→done is the engine's business to judge, so this asks for
-  // a move that is legal from the record's real state instead of assuming one.
-  body: JSON.stringify({ partitionId: "TCRN-AOS", recordId: "work:ad72557d88653b6d94456b1d", status: "done" })
-});
-const legalBody = await legal.json();
+//
+// The first version of this asserted only the refusal half — `ok` read
+// `illegal.status === 409` and nothing else — while recording the legal move's
+// result in the receipt without ever judging it. On its first real run both moves
+// were refused and the criterion reported green, which is the exact failure its own
+// comment warns about, inverted: it would also pass for a write surface that can
+// never write at all (TCRN-AOS-INC-034).
+//
+// It also assumed its legal move. It asked a `done` record to move to `done`,
+// commented as "legal from the record's real state" — the engine calls that
+// INVALID_TRANSITION, so the assumption was simply wrong.
+//
+// Now the move is derived and the engine is the only judge. Candidates come from the
+// built projection, but the projection is a snapshot and may be stale, so a candidate
+// is only a guess: each is tried in turn and the engine's answer decides. Nothing here
+// mirrors the state machine, because a second opinion can disagree with the authority.
+//
+// When nothing is legally movable — every record terminal — the write half cannot be
+// performed, and this says so and fails. An unperformable check is not a passing one.
+// Making it performable on a fully-closed chain needs either a probe record the proof
+// may create or a chain-write surface that is not a status transition; both are
+// governance decisions, not something this script should quietly assume.
+const FORWARD = { planned: "ready", ready: "active", active: "done" };
+const BACKWARD = { ready: "planned", active: "ready", done: "active" };
+
+const { cockpitData: projection } = await import(
+  new URL("../dist/apps/web/src/cockpit-data.generated.js", import.meta.url).href);
+const candidates = (projection.work ?? [])
+  .filter((row) => row.partitionId === "TCRN-AOS" && FORWARD[row.status])
+  .map((row) => ({ recordId: row.id, externalKey: row.externalKey, from: row.status, to: FORWARD[row.status] }));
+
+const attempts = [];
+let performed = null;
+for (const candidate of candidates) {
+  const response = await fetch(`${LOCAL}/api/chain/transition`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ partitionId: "TCRN-AOS", recordId: candidate.recordId, status: candidate.to })
+  });
+  const body = await response.json();
+  attempts.push({ externalKey: candidate.externalKey, move: `${candidate.from}->${candidate.to}`, status: response.status, reasonCode: body.reasonCode ?? null });
+  if (response.ok && body.ok === true) { performed = { ...candidate, body }; break; }
+}
+
+// The refusal half runs against the record the write half moved, so both halves speak
+// about the same record; with no move performed it falls back to a terminal record,
+// where a move backwards is illegal from any state it could be in.
+const refusalTarget = performed
+  ? { recordId: performed.recordId, status: BACKWARD[performed.to] ?? "planned", externalKey: performed.externalKey }
+  : { recordId: "work:ad72557d88653b6d94456b1d", status: "planned", externalKey: "TCRN-AOS-STORY-003" };
 const illegal = await fetch(`${LOCAL}/api/chain/transition`, {
   method: "POST",
   headers: { "content-type": "application/json" },
-  body: JSON.stringify({ partitionId: "TCRN-AOS", recordId: "work:ad72557d88653b6d94456b1d", status: "planned" })
+  body: JSON.stringify({ partitionId: "TCRN-AOS", recordId: refusalTarget.recordId, status: refusalTarget.status })
 });
 const illegalBody = await illegal.json();
+const refusalHeld = illegal.status === 409 && illegalBody.reasonCode === "INVALID_TRANSITION";
+
 receipt.criteria.chainWriteAndRefusal = {
-  ok: illegal.status === 409 && illegalBody.reasonCode === "INVALID_TRANSITION",
-  legalMove: { status: legal.status, ok: legalBody.ok, reasonCode: legalBody.reasonCode ?? null },
-  illegalMove: { status: illegal.status, reasonCode: illegalBody.reasonCode }
+  ok: performed !== null && refusalHeld,
+  writeHalf: performed
+    ? { performed: true, record: performed.externalKey, move: `${performed.from}->${performed.to}` }
+    : {
+        performed: false,
+        unperformable: candidates.length === 0,
+        why: candidates.length === 0
+          ? "no TCRN-AOS record is in a state with a legal forward transition, so a successful write cannot be demonstrated without creating one"
+          : "every candidate was refused by the engine; the projection this drew them from is a snapshot and may be behind the chain",
+        candidatesTried: attempts
+      },
+  refusalHalf: { record: refusalTarget.externalKey, requested: refusalTarget.status, status: illegal.status, reasonCode: illegalBody.reasonCode ?? null, held: refusalHeld }
 };
 
 // 5 — the mirror either matches the local projection's versions or says how far
