@@ -224,6 +224,21 @@ test("inbox merges gates, open deliberations, and live open issues with owner in
   assert.ok(items.every((item) => item.recordId !== "gate:2"));
   assert.ok(items.every((item) => item.recordId !== "conference:2"));
   assert.ok(items.every((item) => item.recordId !== "minutes:2"));
+
+  // `detail` carries facts, not a sentence. This layer has no reader's locale in
+  // scope, so anything it phrased here could only ever be English — a row that
+  // arrives at a view already worded cannot be said in the reader's language.
+  // Asserting the shape is what keeps a convenient template from coming back.
+  assert.deepEqual(items[0].detail, { reason: "gate-outcome", outcomeClass: "owner_intent_required" });
+  assert.deepEqual(
+    items.find((item) => item.kind === "conference").detail,
+    { reason: "collecting-positions" }
+  );
+  assert.deepEqual(
+    items.find((item) => item.kind === "unresolved").detail,
+    { reason: "open-issues", open: 1, recorded: 2 }
+  );
+  assert.ok(items.every((item) => typeof item.detail !== "string"));
 });
 
 

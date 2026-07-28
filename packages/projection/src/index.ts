@@ -12,6 +12,7 @@ export {
   reassemblePositions,
   type ActivityEntry,
   type EffectiveUnresolved,
+  type InboxDetail,
   type InboxItem,
   type ReassembledPosition
 } from "./read-layers.js";

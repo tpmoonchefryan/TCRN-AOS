@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { Badge, MachineTokenCell, SearchableList } from "@tcrn/ui-react";
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
 
+import { partitionDisplayName } from "./cockpit-types.js";
+import { format, pick, type CopyEntry } from "./copy.js";
+
 /**
  * A governed partition as the cockpit sees it: one chain, one version, one
  * freshness moment.
@@ -10,17 +13,66 @@ import type { TcrnLocale } from "@tcrn/ui-copy-state";
  * independent chains. A single global freshness number would be a claim none of
  * them makes — the Mac may have read one partition a second ago and another an
  * hour ago, and the reader has to be able to tell.
+ *
+ * `label` is the fallback name only. The display name comes from
+ * `partitionDisplayName`, which holds all five locales; the `labelZh` that used to
+ * sit beside `label` here could hold exactly two, so this control — the one piece
+ * of chrome on every single route — showed "All projects" and "Design System" to
+ * ja, ko and fr readers.
  */
 export interface ChainPartition {
   id: string;
   label: string;
-  labelZh: string;
   chainVersion: number;
   /** When the projection last verified this chain, not when the chain last moved. */
   verifiedAt: string;
   /** True while the projection is known to trail the chain it mirrors. */
   stale?: boolean;
 }
+
+const scopeCopy = {
+  allProjects: { "zh-CN": "全部项目", en: "All projects", ja: "すべてのプロジェクト", ko: "모든 프로젝트", fr: "Tous les projets" },
+  scope: { "zh-CN": "范围", en: "Scope", ja: "範囲", ko: "범위", fr: "Portée" },
+  chooseProject: {
+    "zh-CN": "选择项目",
+    en: "Choose a project",
+    ja: "プロジェクトを選択",
+    ko: "프로젝트 선택",
+    fr: "Choisir un projet"
+  },
+  singleProjectOnly: {
+    "zh-CN": "此页面按单个项目呈现,没有跨项目形态",
+    en: "This page renders one project at a time and has no cross-project form",
+    ja: "このページは 1 つのプロジェクト単位で表示され、プロジェクト横断の形態はありません",
+    ko: "이 페이지는 프로젝트를 하나씩 표시하며 프로젝트 간 형태가 없습니다",
+    fr: "Cette page affiche un projet à la fois et n'a pas de forme inter-projets"
+  },
+  projectionBehind: {
+    "zh-CN": "投影落后",
+    en: "Projection behind",
+    ja: "投影が遅延",
+    ko: "투영 지연",
+    fr: "Projection en retard"
+  },
+  verified: { "zh-CN": "已验证", en: "Verified", ja: "検証済み", ko: "검증됨", fr: "Vérifié" }
+} satisfies Record<string, CopyEntry>;
+
+const chainCount = {
+  "zh-CN": "{0} 条链",
+  en: "{0} chains",
+  ja: "{0} 本のチェーン",
+  ko: "체인 {0}개",
+  fr: "{0} chaînes"
+} satisfies CopyEntry;
+
+const chainVersionTitle = {
+  "zh-CN": "链版本 {0} · 投影于 {1} 验证",
+  en: "Chain version {0}, projection verified {1}",
+  ja: "チェーンバージョン {0}・投影は {1} に検証",
+  ko: "체인 버전 {0} · 투영은 {1}에 검증",
+  fr: "Version de chaîne {0}, projection vérifiée le {1}"
+} satisfies CopyEntry;
+
 
 export interface ShellHeaderActionsProps {
   locale: TcrnLocale;
@@ -59,7 +111,6 @@ export function ShellHeaderActions({
   routeHref,
   requiresSingleProject = false
 }: ShellHeaderActionsProps) {
-  const isZh = locale === "zh-CN";
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const active = activePartitionId
@@ -85,8 +136,8 @@ export function ShellHeaderActions({
   }, [open]);
 
   const scopeLabel = active
-    ? (isZh ? active.labelZh : active.label)
-    : (isZh ? "全部项目" : "All projects");
+    ? partitionDisplayName(active, locale)
+    : pick(locale, scopeCopy.allProjects);
 
   return (
     <div className="tcrn-aos-scope" ref={wrapperRef} data-product-control="scope">
@@ -99,7 +150,7 @@ export function ShellHeaderActions({
         data-scope-id={activePartitionId ?? ALL}
         onClick={() => setOpen(!open)}
       >
-        <span className="tcrn-aos-scope__key">{isZh ? "范围" : "Scope"}</span>
+        <span className="tcrn-aos-scope__key">{pick(locale, scopeCopy.scope)}</span>
         <strong>{scopeLabel}</strong>
         <span className="tcrn-aos-scope__caret" aria-hidden="true">▾</span>
       </button>
@@ -107,7 +158,7 @@ export function ShellHeaderActions({
       {open ? (
         <div className="tcrn-aos-scope__panel">
           <SearchableList
-            label={isZh ? "选择项目" : "Choose a project"}
+            label={pick(locale, scopeCopy.chooseProject)}
             locale={locale}
             selectedId={activePartitionId ?? ALL}
             // A threshold rather than an always-on field: a search box over four
@@ -116,18 +167,20 @@ export function ShellHeaderActions({
             items={[
               {
                 id: ALL,
-                label: isZh ? "全部项目" : "All projects",
-                meta: isZh ? `${partitions.length} 条链` : `${partitions.length} chains`,
-                ...(requiresSingleProject ? {} : { href: routeHref("/work-items") }),
+                label: pick(locale, scopeCopy.allProjects),
+                meta: format(locale, chainCount, partitions.length),
+                // `project=` with no value, not a bare path: this is the one
+                // control whose job is to leave the current scope, and under
+                // inheritance a bare path would carry the scope it is offering
+                // to drop. Subtraction has to be stated.
+                ...(requiresSingleProject ? {} : { href: routeHref("/work-items?project=") }),
                 pinned: true,
                 disabled: requiresSingleProject,
-                disabledReason: isZh
-                  ? "此页面按单个项目呈现,没有跨项目形态"
-                  : "This page renders one project at a time and has no cross-project form"
+                disabledReason: pick(locale, scopeCopy.singleProjectOnly)
               },
               ...partitions.map((partition) => ({
                 id: partition.id,
-                label: isZh ? partition.labelZh : partition.label,
+                label: partitionDisplayName(partition, locale),
                 // The chain version travels with the choice: picking a scope and
                 // learning how fresh it is are one question, not two.
                 meta: `v${partition.chainVersion}${partition.stale ? " ⚠" : " ✓"}`,
@@ -162,19 +215,16 @@ export function AsOfIndicator({
   partition?: ChainPartition;
   partitions: readonly ChainPartition[];
 }) {
-  const isZh = locale === "zh-CN";
   const behind = partitions.filter((entry) => entry.stale);
   const stale = partition ? Boolean(partition.stale) : behind.length > 0;
 
   const token = partition
     ? `v${partition.chainVersion}`
-    : (isZh ? `${partitions.length} 条链` : `${partitions.length} chains`);
+    : format(locale, chainCount, partitions.length);
   const title = partition
-    ? (isZh
-      ? `链版本 ${partition.chainVersion} · 投影于 ${partition.verifiedAt} 验证`
-      : `Chain version ${partition.chainVersion}, projection verified ${partition.verifiedAt}`)
+    ? format(locale, chainVersionTitle, partition.chainVersion, partition.verifiedAt)
     : partitions
-      .map((entry) => `${isZh ? entry.labelZh : entry.label} v${entry.chainVersion}`)
+      .map((entry) => `${partitionDisplayName(entry, locale)} v${entry.chainVersion}`)
       .join(" · ");
 
   return (
@@ -188,9 +238,7 @@ export function AsOfIndicator({
     >
       <MachineTokenCell token={token} kind="generic" copyable={false} />
       <Badge tone={stale ? "warning" : "neutral"}>
-        {stale
-          ? (isZh ? "投影落后" : "Projection behind")
-          : (isZh ? "已验证" : "Verified")}
+        {pick(locale, stale ? scopeCopy.projectionBehind : scopeCopy.verified)}
       </Badge>
     </span>
   );

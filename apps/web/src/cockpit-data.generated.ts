@@ -7208,7 +7208,10 @@ export const cockpitData: CockpitData = {
       "recordId": "gate:a31f2b5332a41096be029d9b",
       "externalKey": null,
       "title": "前端重建准入门:十项 Owner 裁定未清前 TCRN-TMS-INIT-002 不得 done。其中 OWNER-01 前端生产路径、OWNER-02 采纳边界、OWNER-03 约束可执行定义、OWNER-07 消费路径 四项阻塞一切代码工作。",
-      "detail": "owner_intent_required",
+      "detail": {
+        "reason": "gate-outcome",
+        "outcomeClass": "owner_intent_required"
+      },
       "severity": "owner-intent"
     },
     {
@@ -7217,7 +7220,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:591d95e3737fb08a61b759bf",
       "externalKey": null,
       "title": "Owner 批准把两条安全发现立项：subsidiaries API 授权缺口优先处置；前端路由授权缺口纳入 INIT-002 上线前架构。feat/tms-init001 只开 PR 跑验证，在安全项与服务支撑证据未完成前不合 main。",
-      "detail": "2 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7226,7 +7233,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:3f0fcbfb8ce0c4e593e71c66",
       "externalKey": null,
       "title": "立 INIT-007 单 INIT 闭合审计全缺口;5 Epic/15 Story 扁平键;收官门唯一必停;决策 ledger 三栏落定",
-      "detail": "1 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7235,7 +7246,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:45f7ae98457d1f683d368700",
       "externalKey": null,
       "title": "Owner 授权关闭 INIT-008 收官门；17/17 Story 交付且 pnpm verify 全绿；发布另行确认",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7244,7 +7259,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:4716b82433e56695d1b5f026",
       "externalKey": null,
       "title": "立 INIT-008 单 INIT 解决内容治理审计全部发现;5 Epic/17 Story 扁平键;八裁定点按推荐默认;收官门唯一必停",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7253,7 +7272,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:aa7045a7440cde1219ceae9b",
       "externalKey": null,
       "title": "Owner 选择方案 B。INIT-010 的 5 Epic 与 19 Story 保留历史 done 事件，但其完成声明没有当前宿主或 origin 的 landed commit/digest 支撑，统一补记为不可作为已验证完成依赖；INC-002 在更正落链后关闭。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7262,7 +7285,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:e1df8bcdf19949489fabee7d",
       "externalKey": null,
       "title": "立 TCRN-DS-INIT-009：Storybook 展示忠实性清查与交互样式现代化；先审计后拆单",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7271,7 +7298,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:031546d33cac5b4541d1cd0f",
       "externalKey": null,
       "title": "work-annotate（Scope-on-record）实现完成并验证绿：核心加式操作 work.annotated（非 work.updated，因迁移表无自环）+ 回放守卫防夹带 + CLI 动词 + work-show advisory 读面；6 新 core 测+catalog 金样+全套 584 pass（6 offline 仅裸跑环境）+ 五门绿 + scratch CLI 端到端自证。安全裁定：work.annotated 是新操作，据 WSD-1 会使活链对更旧二进制不可读，故活链 EPIC-005 dogfood 与 skill 成文延后至发布+升级后；scratch e2e 代证。发布属对外发布留 Owner。",
-      "detail": "2 open of 3 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 3
+      },
       "severity": "attention"
     },
     {
@@ -7280,7 +7311,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:29603053f5bcf6cb55f83492",
       "externalKey": null,
       "title": "E05『链上 advisory』定形。忠告正文已落地并全译（README×5 第243行，遵 AC-N6按轮报/AC-N7带缓解/AC-N8不设门＋§5诚实边界）。耦合裁定＝不并入 chain-migration：OD-C2 已裁选项(1)只忠告不阻断不重构，增量 materialize 属独立后续纲领、非 E05 范围、既有裁定支撑无需 Owner 停。读源发现真缺口＝被引原始样本 docs/verification/2026-07-20-event-chain-ceiling-samples.json 在 W 悬空（7处引用：README×5＋CHANGELOG＋0.1.0发版记；文件仅存平台端，62KB/2000样本/拟合34.66+0.14598n/阈6613 与忠告自洽）。E05 交付物＝落地该证据入 W docs/verification 使引用自洽；发布传播属对外发布留待 Owner。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7289,7 +7324,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:38297e18040e1a5737a99f46",
       "externalKey": null,
       "title": "S026 三结论:①S030=清库重种(disposable 设计许可,先删目录再 --acknowledge-disposable)②SessionStart 携知识行排除(预算满+知识是拉取非推送,走 S029 按需 query 教学)③【前提翻转】实测真实卡片 8/12/16 张=27/40/54% 全在 60% 线内→引擎修复(EPIC-007)非激活阻断,降级为可选余量优化,S028/S029 与激活解耦。呈 Owner 一个引擎岔路。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7298,7 +7337,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:49ae55f57d602be7502ffe76",
       "externalKey": null,
       "title": "执行期实证证伪 STORY-021 前提（悬空父早被 else-if+回放拒，非 fail-open）：021 缩为回归测试；022 删已钉死的排序项只留 CLI 白名单+测试；父语义荐从恒 parentless 改 parent-optional（安全论据已证伪，found-in 原生，零引擎改动，Owner 可驳）。教训⑫：给 persona 的事实必须完整读源。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7307,7 +7350,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:51bfdfdbdc67922b4a52e29b",
       "externalKey": null,
       "title": "DS 线程复查三发现处置完毕：Incident kind 操作面缺口登记为 INIT-004（planned，advisory 公约首用）；candidate.21 notes 勘误已发（锚行完好）；DS 快照补至 v254。教学两条入 candidate.23。根类教训：发布声明必须对应载荷字节。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7316,7 +7363,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:729c794de85503538c3be1d6",
       "externalKey": null,
       "title": "INIT-005 定形:四 Epic(引擎修复/策展公约/发布列车/内容启动)十一 Story(S023-S033);验收五判据入 Verity 立场;决策清单三分类共 7 项——OWNER-NOW 3(1 已裁 2 待批)/CONDITIONAL 2/AGENT 2;时序 S026→S027→S028→S029→S030→S031/032→S033",
-      "detail": "2 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7325,7 +7376,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:79975d0e36983467b5b5d79c",
       "externalKey": null,
       "title": "INIT-004 分解裁定（两 persona 四问全收敛+Mara 合成）：仅开 Incident；恒 parentless 校验器强制；图加固通用化先行（8 kind 全覆盖、双侧 fail-closed）；树收两单 EPIC-006→STORY-021/022；发行随 W 列车；无门；奉 Owner 令只拆不做全树 planned；职责以 advisory 入记录。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7334,7 +7389,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:9e2ae969f6f716ba2ee6f2a8",
       "externalKey": null,
       "title": "persona 署名公约（Owner 裁定）。立场 actor-id 记角色（persona）非模型名。两级：事件 --actor=执笔者/驱动会话，立场 --actor-id=persona id。引擎零改动（assertActorId 的 ACTOR_PREFIXES 含 profile:，直测 profile:tcrn-minerva-v1 ACCEPT）。8 persona 分工（core-reference-personas.ts）：Arturo编排/Ilya实现/Janus验收/Mara产品/Minerva架构/Mneme知识/Sable安全/Verity验证；争议按 mandate 冲突选派 fresh-context。立场首行披露执行形态（dispatched subagent vs main-thread synthesis），诚实边界：披露是声明非证明。本会议自我 dogfood（Minerva 署名立场经引擎接受）。动因：DS 链 21 立场零扇出=单视角自陈冒充审议。历史 append-only 不改，向前生效，载荷改动随 candidate.23。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7343,7 +7402,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:b00a1a64ca020da57c7246cf",
       "externalKey": null,
       "title": "E05 真开工裁定：Owner 选 (C) 重塑——把 E05 指向价值更清的 advisory 面，否决 (A) 字面搬迁触发散文与 (B) 暂缓。读源坐实并随裁定生效：迁链耦合为空（`WORKSPACE_STORAGE_VERSION=1` 钉死；WSD-1 新词汇走加式事件操作不升版本；非绑定字段＝`required:false` extensions，`validateExtensionMap` 只拒 required:true 且未注册者，故任意 protocol-id 键免注册/免新操作/免版本升/向后兼容，先例 gate-evidence/gate-identity:decision），decomp 待裁的耦合问题当场消解。schema 今日即支持 required:false 广告字段，唯缺写入面——work/project 动词均无 extensions/advisory 旗标（仅 gate 经证据/身份转换特例写过 extensions）。故重塑目标落在『为 work/project 记录开一个受治的非绑定 advisory 写入面』这一有界缺口，具体目标与内容（荐：权威 scope/intent 行＋decided-by 回链治理纪要，由本会话 label≠positions 事故 dogfood）与分解留后续设计会议，Owner 从荐选中定。",
-      "detail": "1 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7352,7 +7415,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:b017306eb2765f373ece667d",
       "externalKey": null,
       "title": "定 work-annotate 非绑定 advisory 写入面契约（Scope-on-record）：required:false extensions 键 advisory:scope 与 advisory:decided-by，新动词 work-annotate 发 work.updated 并入 extensions，回放仿 gateEvidenceExtensions 精确比对防夹带，非绑定不阻 done。分解 STORY-018 核心写路径/STORY-019 CLI+catalog+regen/STORY-020 读面+成文+dogfood 回填。",
-      "detail": "1 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7361,7 +7428,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:ce585e4cf935653f4f996249",
       "externalKey": null,
       "title": "复核更正：E05 真义＝链上 advisory 字段（decomp 立场逐字：guidance 由 prose 入链；记录/审议触发从散文迁至链上非绑定字段），deferred 的 chain-migration coupling 指 E05 自身 schema 变更与 E02 合并排期避免二次迁链，非增量 materialize。CONF-E05-KICKOFF/MIN-E05-KICKOFF 误读范围，所裁实为 README 天花板忠告的悬空证据修复；该产出独立成立（7 处已发布引用悬空是真缺陷；已验语义等同、format/source/privacy/verification-map+proof-check 全绿）但属已逐出的 README 质量轨、不定义 E05，STORY-017 挂错 epic。合并排期窗口随 v0.2.0 发布已关；gate-identity 走 extensions 未动 storageVersion（实测仍=1）的先例示真 E05 或免迁链。全链 verify-p1 拒脏检出（P1_EXCLUSIVE_SOURCE_BASIS_REQUIRED），完整证明留 push 门产出。误挂记录处置与真开工留 Owner。",
-      "detail": "2 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7370,7 +7441,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:d7012264acee18bca954f4ea",
       "externalKey": null,
       "title": "Owner 已批准完整推荐收官包。收官授权覆盖 Workflow v0.6.0 与 helper repin 的对外发布、SPRINT-002 关闭、DS 方案 B 更正、TMS 两条安全事项及仅 PR 验证。此批准不授权 EPIC-025 的任何 host enforce 面。",
-      "detail": "3 open of 3 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 3,
+        "recorded": 3
+      },
       "severity": "attention"
     },
     {
@@ -7379,7 +7454,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:eb1f5317a7e8652a3d7bd307",
       "externalKey": null,
       "title": "Fable 复核 v0.3.0：发布链路各项为实（P1_VERIFIED/Release/升级/dogfood/advisory 穿 done 仍在）。更正 MIN-E05-DONE 定性：skill 侧残留非『非阻塞』——bootstrap IDENTITY 硬钉 v0.2.0，resolve 对 v0.3.0 克隆实测 ROOT_IDENTITY_MISMATCH，信任门 resolve 步现已断；回滚桥已烧（活链 v239 含 work.annotated，v0.2.0 不可读），candidate.22 重钉是唯一前进路径（IDENTITY+SKILL.md 版本行+work-annotate 用法三者同批一次 re-pin），发布属 Owner 门。日常 verify-installed-copy 仍绿。另录三低危加固候选（work.updated 不查 extensions 增量/伪造删除键回放可收/scope 无字节上限）。",
-      "detail": "2 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7388,7 +7467,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:f622309ae73382406c836f39",
       "externalKey": null,
       "title": "E05 收口，INIT-003 五 Epic 全完成。v0.3.0 发布（commit 95cfd88/tag v0.3.0/GitHub Release，verify:p1=P1_VERIFIED 20 门），安装框架升 v0.3.0，活链 dogfood 注解 EPIC-005（v239，work-show 见 scope+decided-by 回链，work.annotated 活链回放绿）。STORY-018/019/020+EPIC-005+INIT-003 全 done。samples 随发布使 README 引用自足。skill 侧成文与快照延后属非阻塞建议。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7397,7 +7480,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:fbae19225d75a5600ea13df2",
       "externalKey": null,
       "title": "Incident CLI 开通+守卫回归测试落地 W f365029 并双红证；全门绿（protocol/rc1/format/guard/p1/push-gate）。过程两课：红证探针先自检（错 build 命令曾致假存活）、变异须能编译。INIT-004 代码交付达成，用户可见随 v0.3.2 发布列车。父语义采 parent-optional（Owner 可驳）。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7406,7 +7493,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:fc81b85294e9a85a888e0f97",
       "externalKey": null,
       "title": "SPRINT-002 已批准收官包的发布、纠偏、PR 与边界证据完成核验：Workflow v0.6.0 与 helper candidate.27 已发布并全摘要匹配；DS 证据方案 B 已落链；TMS PR 保持未合并且安全红灯未绕过；carry-over 状态与 host enforce=0 均保留。列车可关闭，不把 carry-over 误报为完成。",
-      "detail": "3 open of 3 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 3,
+        "recorded": 3
+      },
       "severity": "attention"
     },
     {
@@ -7415,7 +7506,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:5da0b8ea8b8421cb1f3a1e89",
       "externalKey": "TCRN-AOS-MIN-001",
       "title": "AOS 驾驶舱分解裁定:六轮收集闭合(定位与八功能族/开发方式三护栏/Jira 形态九问/一切皆 Ticket 字段全谱/审议室与溯源采用);按交付面分五 Epic 十六 Story;方向四题全裁;延后轨道五条带复审条件;INIT 保持 planned 待启动令",
-      "detail": "3 open of 3 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 3,
+        "recorded": 3
+      },
       "severity": "attention"
     },
     {
@@ -7424,7 +7519,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:3a0d27be789cadb0ccb353c1",
       "externalKey": "TCRN-AOS-MIN-002",
       "title": "部署与真值拓扑裁定:镜像段四边界+部署纪律;两段式迁移方向(切换带 owner 门与一致性矩阵);镜像段不专机(复审=迁移执行);备份方案分层(域库配对快照/attestations 并入/投影不备);增补 EPIC-006 四 Story",
-      "detail": "3 open of 3 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 3,
+        "recorded": 3
+      },
       "severity": "attention"
     },
     {
@@ -7433,7 +7532,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:4fdc3f1caf4adfb2374090f7",
       "externalKey": "TCRN-AOS-MIN-003",
       "title": "既有实现处置:不整体移除,行三层定向处置(A 删除约三分之一从未执行的死码/B 保留模型无关横切能力/C 前端仅作技术底座起点/D 新建链客户端与瘦投影类型);确立交付物必须与已确认前端设计逐屏一致含 Layout;立两缺陷单",
-      "detail": "3 open of 3 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 3,
+        "recorded": 3
+      },
       "severity": "attention"
     },
     {
@@ -7442,7 +7545,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:26d0b27a4ea134840c607926",
       "externalKey": "TCRN-CROSS-MIN-001",
       "title": "Centralized partitions under the platform root; the live workspace stays local and OneDrive becomes the backup destination",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7451,7 +7558,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:aac0952ecd46f9cd16750f8e",
       "externalKey": "TCRN-CROSS-MIN-003",
       "title": "采 opus 依赖框架+sonnet 切片细化：五 Epic 顺序 E01权威供给→E02 gate-v1→E03 多-skill归档→E04 适配器分发→E05 链上advisory；被依赖者是 STORY-003 身份信号切片而非整个 E01；#6逐出治理树另立README轨；#7降为E01骑附Story待Owner裁定。Owner 确认执行。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7460,7 +7571,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:32b3b62ad7cafe921aa2f4c7",
       "externalKey": "TCRN-CROSS-MIN-004",
       "title": "补录 E01 七 Story 职责表（INIT-003 分解时只存在于对话预览的欠账）并裁定 Subtask 切分：STORY-001 为一次坐定之工不切 Subtask，其余留各自开工时按需裁。执行序 001→002/003→004→005，006/007 骑附并行。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7469,7 +7584,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:3613d74bebbbe471461c2e06",
       "externalKey": "TCRN-CROSS-MIN-005",
       "title": "STORY-001 完成：生产 bin 实测只供 write+clock，8 权威面全缺，12 触面 verb 矩阵与拒绝码逐条确立（读源+只读实测双证）。三处修正 MIN-003 前提：无静默降级（品牌不可伪造）／「12 被锁」混了两种锁／身份权威不在八面内故 STORY-003 须重定范围。pins-attestations 的缝在代码中已存在，STORY-002 应 formalise 而非另造。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7478,7 +7597,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:1725d22be398cc8503805379",
       "externalKey": "TCRN-CROSS-MIN-006",
       "title": "pins／attestations 的缝在代码中已存在：pins＝readAuthorityFile 的带外摘要硬比对（第三方可核）；attestations＝admit*HostInput 的自算校验和＋进程内品牌（不可核）。立规「hostDigest 不是 pin」，并据此定 STORY-003 身份权威必落 pins 轨——落 attestations 轨则接线进程可自称 owner，gate-v1 将无拒绝能力。边界：pins 身份文件给的是 authorization 非 authentication。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7487,7 +7610,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:fcd503b817e8d44c77f6db16",
       "externalKey": "TCRN-CROSS-MIN-008",
       "title": "供给机制推广既有 --expected-plan-digest 模式（回归终止于人手，与 shasum 比对公布锚点同构）；attestations 面禁上旗标。第三处修正：E01 可诚实交付上限是 7 个 pins 面 verb，5 个 attestations host 面 verb 无法经 CLI 诚实解锁。身份面契约定死但实现挪 E02（此前无消费者）。另发现文件身份契约有两套实现应互钉。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7496,7 +7623,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:6eaa974b9321b5fc356dc026",
       "externalKey": "TCRN-CROSS-MIN-009",
       "title": "pins 轨供给实现并证明：六 verb 得可选摘要旗标，三点实测＋歧义失败关闭已写入 p5 套件常设化；typecheck／P3／P5／P6／P6B／format-check／guard-check 全绿。W cf4547b 本地提交未推送。残余：compatibility-plan 须先裁可用性。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7505,7 +7636,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:8dde9a0d76cd241db4ff7f15",
       "externalKey": "TCRN-CROSS-MIN-010",
       "title": "六个已解锁 verb 各自带端到端证明（错摘要负例为关键钉）；context-route 双面、Codex/Claude 双读取器、uninstall 只证拒绝三处刻意分列。P3/P5/P6/P6B+format+guard-check 全绿，W 5e5c63a 本地提交未推送。覆盖＝6/7 pins 面 verb。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7514,7 +7649,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:9458c60c80dac90942a40bb1",
       "externalKey": "TCRN-CROSS-MIN-011",
       "title": "先测后改：热点不在 build 而在两条守卫跑整套件（75.5s/85s）。改为只跑实测确认的抓手测试，窄化同时更严格且只会大声失败。guard-check 108s→34s（12 守卫全杀），整门 205s→134s 落到 180s 阈值下。残余：verify:p1 90s；另记门的钝式告警扫描隐患待另裁。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7523,7 +7662,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:7949577d1cca85fcf7a62cdf",
       "externalKey": "TCRN-CROSS-MIN-012",
       "title": "二选一前提消解：仓内压测注释已裁定真实契约为「至多一个赢家」，其证据（两处生产调用点丢弃返回值）经复核属实。1464 行的「恰好一个」是断言强于实现，CI 零赢家非 flake。已对齐并写明理由；灾难方向（两个赢家）断言两处原样保留。连跑三次全绿，整门 133s 绿。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7532,7 +7675,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:8a07dd58045bba990a546d94",
       "externalKey": "TCRN-CROSS-MIN-016",
       "title": "身份权威契约落地：名册经共享 pins 轨读取器读取、摘要绑定盘上字节；canonical 次序为要求、许可答案只来自读取器产出的上下文、决策记录自足以便回放只校验形状。三处注入红证全被命名对应测试抓住。两处仪式教训（routeAdditions 一次性、amend 悬挂对象）留档。钝式 \\bany\\b lint 由潜伏升级为已观测隐患，未自行改门。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7541,7 +7688,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:de60d2532b23d0ac8cff67e8",
       "externalKey": "TCRN-CROSS-MIN-019",
       "title": "更正 MIN-013 裁定四的错误引用（应指 MIN-008/009/010 非 MIN-005）。逐条结算遗留项：七条已了结，三条未结算（「7 而非 12」提法修正从未明文批准且 EPIC-001 已 done／verify:p1 提速未排期／分区不可迁移为长期限制）。另观察 EPIC-002 未挂门，是否补门属 Owner 裁量。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7550,7 +7701,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:f6fb1a1e87ceca6f0fa15af0",
       "externalKey": "TCRN-CROSS-MIN-031",
       "title": "STORY-014 完成：builder fail-closed 守卫落地并两路红证；scripts-only 仪式（skill 归档字节不变、锚不动），全绿已推送 H 7480a05。待你：candidate.20 tag+release 收口 main 与 candidate.19 的源归档漂移，属对外发布必停；建议顺带折入停顿预算 payload 教学。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7559,7 +7714,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:03fc6ce5eb584b528a6a2b6d",
       "externalKey": "TCRN-CROSS-MIN-036",
       "title": "Owner裁定交付节奏公约(单次收官发布,反-D6默认)并立TCRN-CROSS-INIT-006;分解2 Epic/4 Story全planned;执行不启动,启动权在Owner;INIT挂Owner验收门",
-      "detail": "3 open of 3 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 3,
+        "recorded": 3
+      },
       "severity": "attention"
     },
     {
@@ -7568,7 +7727,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:e070c05cbaad72306a1bcab8",
       "externalKey": "TCRN-CROSS-MIN-038",
       "title": "INIT-007 拆解定形:3 Epic/6 Story(公约教学/检测机制/发布收官)落链;三拒案与决策台账入记;执行 go 在 Owner。",
-      "detail": "2 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7577,7 +7740,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:a5b8acfc66c5228473902ed3",
       "externalKey": "TCRN-CROSS-MIN-039",
       "title": "Owner 授权对外发布,INIT-007 多宿主后台资源治理已上线(W v0.4.0+helper candidate.25,两 Release、安装副本升级、双链回放绿),收官。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7586,7 +7753,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:336e32a0cd87d51a45af56cc",
       "externalKey": "TCRN-CROSS-MIN-040",
       "title": "INIT-008 定形(B 轻引擎:Release kind+advisory:sprint+读面过滤)+MIN-036 修订裁可(入列批量停点、未入列保持原公约);3 Epic/6 Story 全 planned;执行点火在 Owner。",
-      "detail": "2 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7595,7 +7766,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:f3149e451883021785bbeba0",
       "externalKey": "TCRN-CROSS-MIN-041",
       "title": "Owner 授权对外发布,INIT-008 sprint 交付批次机制已上线(W v0.5.0+helper candidate.26,两 Release、副本升级、双链回放、S049 首列车 dogfood),收官。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7604,7 +7779,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:489e5f863c3306a2f35d1707",
       "externalKey": "TCRN-CROSS-MIN-043",
       "title": "Owner 指令双宿主基线对齐：INIT-009 六 Epic 注为双宿主并新增三个 Claude Story；INIT-010 获追认、依赖拆分、Claude 子代理收据机制定形；Claude hook 扩面以 N-2 修宪为硬前置，凭据声称止步归因增强。",
-      "detail": "2 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7613,7 +7792,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:5fd796e8a242799b071f7ace",
       "externalKey": "TCRN-CROSS-MIN-044",
       "title": "确认 README 内容面滞后 0.1.0 的版本同步债并立 INIT-011 清偿与防再犯；建 SPRINT-002 快车列车，入列 INIT-009/010/011，发布合并至列车收官单一停点。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7622,7 +7805,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:1a5c6f7ec7d7fd9e562aa367",
       "externalKey": "TCRN-CROSS-MIN-045",
       "title": "INIT-011 扩展裁定：四份根目录文档进五语基线（LICENSE/NOTICE/CHANGELOG 明示不进），译本以 synced-to 摘要钉扎并入发布门；风格规则从既有风格提炼成文、可检子集入门；立 EPIC-028/S087-090，规则沉淀知识卡、分阶段采纳。",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7631,7 +7818,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:55cf686f888b70e5e9420b7a",
       "externalKey": "TCRN-CROSS-MIN-046",
       "title": "N-2 由唯一 fail-open 面改为逐宿主闭合枚举：observe 六事件获批，fail-open 不阻断且收据缺失非事件缺失；逐 hook 逐宿主实测上线，fixture 不构成 live 声称；enforce 另裁并记录其前置；反对意见如实在录。",
-      "detail": "2 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7640,7 +7831,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:5b26238fd23a2cba4430f429",
       "externalKey": "TCRN-CROSS-MIN-047",
       "title": "CONF-039 的执行形态如实补记为 legacy-unverified 并保留原状；CONF-040/043 虽确由独立子代理产出但早于采集机制，同样不予升格。自 S055 起以观测收据为多代理审议的唯一判据，诚实上限（归因非身份、采集器同权、转写未签名）已结构化在代码而非叙述中。",
-      "detail": "2 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7649,7 +7844,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:0a8df40ebda0b7dfc966937c",
       "externalKey": "TCRN-CROSS-MIN-048",
       "title": "INIT-012 分解裁定:P1-P10 按交付面分五 Epic(EPIC-029..033)十五 Story(STORY-091..105);OWNER-NOW 四项批量前置;INIT 保持 planned 不推进",
-      "detail": "4 open of 4 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 4,
+        "recorded": 4
+      },
       "severity": "attention"
     },
     {
@@ -7658,7 +7857,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:1f9eb4cd8da2c029e4994d77",
       "externalKey": "TCRN-CROSS-MIN-049",
       "title": "Verity persona 注入事件 remediation:三条裁定由 2026-07-25 注解 prose 转写为可引用纪要;根因为 Step-3 设计缺陷;按 P5 残余适用性分析结论为删除而非条件化",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7667,7 +7870,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:31c06e3871d6948fbde20176",
       "externalKey": "TCRN-CROSS-MIN-050",
       "title": "P1 重裁:活链实测显示被迫分片仅占逻辑立场的 4.6%、最大缺口 1.27 倍,而提升方案的耦合至少四条且含一条跨包无门项;推荐维持 2048 并保留分片公约,实施待 Owner 裁定",
-      "detail": "4 open of 4 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 4,
+        "recorded": 4
+      },
       "severity": "attention"
     },
     {
@@ -7676,7 +7883,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:31bc6b98b9d01b9d63140abe",
       "externalKey": "TCRN-CROSS-MIN-052",
       "title": "Owner 离席全权批次的九道方向题全部裁定。核心:AOS 写面本机服务化、VM 只读镜像、operator pins 不出本机、SQLite 双库物理分离、复用既有 k3s 集群部署、每目标一次收官发布但验证门不免、执行序锁定目标一→二→三、AOS 完整可用以五条判据钉死、S003 本批显式裁剪为四类字段加关系型只读。Verity 的三条追加约束(镜像版构建期剔除写控件、domain.db 备份与 S003 同批、措辞更正)与可用性判据全部采纳。",
-      "detail": "2 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7685,7 +7896,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:abf9286da90fff48bf37d314",
       "externalKey": "TCRN-DS-MIN-001",
       "title": "DS 去 AI 感重设计的视觉方向裁定：三候选（A 静默仪器/B 治理纸感/C 流体材质）经样张对比与规格评估，Owner 裁定采纳 A+B 混合",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7694,7 +7909,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:c6546091d32eff5e33fbd5b4",
       "externalKey": "TCRN-DS-MIN-002",
       "title": "INIT-001（DS 视觉重设计）拆分结构裁定：甲/乙/丙三案对比后，Owner 裁定采纳甲案——按工作流拆 5 Epic、15 Story、2 gate",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7703,7 +7922,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:1ffa95370ffc2106ebcd027c",
       "externalKey": "TCRN-DS-MIN-003",
       "title": "探测性调用变更动词导致 TCRN-DS-STORY-001 进入终态 cancelled；以 TCRN-DS-STORY-016 补偿承接，工程产出未受影响",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7712,7 +7935,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:f2cfeb2589fee9b79984acd9",
       "externalKey": "TCRN-DS-MIN-004",
       "title": "GATE-001 契约重钉门：Owner 认可三条一致性，附加条件「flake 一并修」已执行并验证",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7721,7 +7948,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:bcc8aa56c841c6479505e5e3",
       "externalKey": "TCRN-DS-MIN-005",
       "title": "GATE-002 发布门：Owner 认可验收八条全绿，并授权推送、打标 v2.0.0、建 GitHub Release",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7730,7 +7961,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:b37f49f8da1fb6c4823d1be5",
       "externalKey": "TCRN-DS-MIN-006",
       "title": "视觉基线的不变量：Owner 裁定采纳解法②——以带容差的感知比对取代逐次 sha256",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7739,7 +7974,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:aab33863de1f963698d553fc",
       "externalKey": "TCRN-DS-MIN-007",
       "title": "INIT-003 review 通过，A 档定案，四项按执笔人建议裁定；工作树为 5 Epic / 12 Story / 2 gate",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7748,7 +7987,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:1643e6945e024c8e1a541fb0",
       "externalKey": "TCRN-DS-MIN-008",
       "title": "GATE-003 诚实化门：Owner 认可假门处置，含「显式 unchecked 是收紧而非放松」的定性",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7757,7 +8000,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:fd7a56a82102596d04232acf",
       "externalKey": "TCRN-DS-MIN-009",
       "title": "GATE-004 收口门：Owner 认可基线重建与三面一致，INIT-003 收口；并授权开 PR 合并 main",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7766,7 +8013,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:f97dbbe64445b38abb248585",
       "externalKey": "TCRN-DS-MIN-010",
       "title": "v2 已合并至 main（698ecc5），main 上独立 verify 绿；已发布标签首次从默认分支可达",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7775,7 +8026,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:becbeea6c49e0be02f128eb5",
       "externalKey": "TCRN-DS-MIN-011",
       "title": "AOS 视觉 proof 复绿完成：发现并修复 v2 reduced-motion kill-switch 残留，三面对齐 v2 语义",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7784,7 +8039,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:1f00d4d02549e8a334386c7f",
       "externalKey": "TCRN-DS-MIN-012",
       "title": "Stamp 在 AOS 门禁视图的 gate-close 时刻采用完成，守 no-overclaim 边界，proof 绿",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7793,7 +8052,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:492cab1f0b6b4dccbf9a0c05",
       "externalKey": "TCRN-DS-MIN-013",
       "title": "B 档外壳重设计原范围已由 INIT-003 + reduced-motion 修复实质满足；Owner 裁定收口，不造为改而改的 sprawl",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7802,7 +8065,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:d8b4b1f7865dd525441b44dc",
       "externalKey": "TCRN-DS-MIN-014",
       "title": "doc shell 侧栏折叠卡顿（layout-thrash）与折叠态按钮（图标方向+位置+飞窜）已修，PR #3 合并 main，浏览器实测确认",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7811,7 +8078,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:5ba8d5c0e5cebef2c3e27894",
       "externalKey": "TCRN-DS-MIN-015",
       "title": "切换按钮按组件契约重修（运行时镜像状态属性）、动画恢复且实测≥30fps、hover 补入既有家族；PR #4 合并、Vercel 已部署",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7820,7 +8091,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:e9ddad00c472dcdeb91a12d8",
       "externalKey": "TCRN-DS-MIN-016",
       "title": "INIT-005 立项：Owner 三缺陷+IA 批评为证据，四工作流章程定序 WS1→WS2→WS4→WS3，逐 WS 验收",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7829,7 +8104,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:fa237401d6164c4d2a698fd4",
       "externalKey": "TCRN-DS-MIN-017",
       "title": "INIT-005 四工作流全部交付：PR #5/#6/#7/#8 合并 main、独立 verify 绿、Vercel 生产部署确认",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7838,7 +8117,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:7ef3599ce17e0269b138b2fb",
       "externalKey": "TCRN-DS-MIN-018",
       "title": "导航精修交付：图标轨+单轴选中+章节 chevron,PR #9 合并 Vercel 部署,先出图后落地",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7847,7 +8130,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:63d7d41d085f2d77a6c2285b",
       "externalKey": "TCRN-DS-MIN-019",
       "title": "INIT-006 立项与七 Epic 拆分完成,交接文档就位,停在 planned 待 Owner 点火",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7856,7 +8143,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:d43fded12d8c82a18b99f041",
       "externalKey": "TCRN-DS-MIN-020",
       "title": "六项前置裁定完成并写死进 handoff(含两个悬空 token bug 的预决修复),Opus 零裁量;INIT-006 仍 planned",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7865,7 +8156,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:8433302fbcb699c3b96468dc",
       "externalKey": "TCRN-DS-MIN-021",
       "title": "E1 样式表分层收敛交付:overlap->0,部署站零回归,AOS ok,PR #12 合并 main 独立 verify 绿",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7874,7 +8169,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:03da523a2c0698b483c93ad0",
       "externalKey": "TCRN-DS-MIN-022",
       "title": "INIT-006 E2 色彩 token 化 交付验收",
-      "detail": "2 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7883,7 +8182,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:874cc2403cca78ffa0f664bb",
       "externalKey": "TCRN-DS-MIN-023",
       "title": "INIT-006 E3 字号刻度统一 交付验收",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7892,7 +8195,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:55ae601f779506a9a02da2a9",
       "externalKey": "TCRN-DS-MIN-024",
       "title": "INIT-006 E4 间距与圆角刻度 交付验收",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7901,7 +8208,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:361555e1c6b06e721178d4b6",
       "externalKey": "TCRN-DS-MIN-025",
       "title": "INIT-006 E5 交互态矩阵 交付验收",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7910,7 +8221,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:a1a7603ae6fc365c664f7fec",
       "externalKey": "TCRN-DS-MIN-026",
       "title": "INIT-006 E6 暗色奇偶校验 交付验收",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7919,7 +8234,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:49c1078bbb22712c612e8cb5",
       "externalKey": "TCRN-DS-MIN-027",
       "title": "INIT-006 E7 风格门(收官) 交付验收",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7928,7 +8247,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:aef7a7d1f405403e42501a57",
       "externalKey": "TCRN-DS-MIN-028",
       "title": "INIT-006 风格统一七 Epic 全交付并收官,PR #12-18 合并 main,Vercel 生产,4 悬空 token 修复",
-      "detail": "1 open of 1 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
       "severity": "attention"
     },
     {
@@ -7937,7 +8260,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:5e2b09b3994de8a519052d8b",
       "externalKey": "TCRN-DS-MIN-048",
       "title": "TCRN-DS-INIT-010 分解为五个 Epic 十九条 Story,轴取阻塞拓扑。EPIC-024 消费路径选型(实验驱动、四条候选各做真实实测)阻塞其余全部;EPIC-026 水合修复不可推给消费方须 DS 侧修;EPIC-028 的 DS CI Story 受 OWNER-10 支配裁定前不开工。决策清单按 owner-now 与 conditional 与 agent 三分类前置登记。",
-      "detail": "4 open of 4 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 4,
+        "recorded": 4
+      },
       "severity": "attention"
     },
     {
@@ -7946,7 +8273,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:9984e4d2538365742616e230",
       "externalKey": "TCRN-DS-MIN-049",
       "title": "四路消费路径实测完成:B(vendored tarball)works 且零硬阻断为推荐主选;A(submodule 加 workspace)works-with-changes 零硬阻断为可接受替代;C(私有 registry)技术可行但受 mvp-adoption-boundary 授权硬阻断;D(file 加 overrides)blocked——CI 单仓检出退出 254 且 file 协议不携带摘要致钉定无解。两路对抗验证均判 experiments-hold,推翻的是证据卫生而非路径结论:三个不可复验的常数已作废并入册。开发机实测零进程零监听、基线未改动。",
-      "detail": "3 open of 4 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 3,
+        "recorded": 4
+      },
       "severity": "attention"
     },
     {
@@ -7955,7 +8286,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:ec27d4fbc5a7efe782ece1ad",
       "externalKey": "TCRN-DS-MIN-050",
       "title": "Owner 裁定 OWNER-07:选定路径 B(vendored tarball 加 overrides)为 DS 消费路径。依据为四路真实实测的证据矩阵:B 是唯一 works 且零硬阻断者、CI 零改动、钉定由 pnpm 自身强制且篡改检测已被独立验证方复现、三个 tarball 合计 155K 入 git 可接受。",
-      "detail": "2 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -7964,7 +8299,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:1f424026befc29a095d3924e",
       "externalKey": "TCRN-DS-MIN-051",
       "title": "在选定路径 B 上实测 RSC:失效形态与路径 A 不同且更危险——编译与 TypeScript 均通过,直到静态生成才死于 useRef 不是函数;且与组件相关,不含 hook 的组件直接导入完全正常,只有含 hook 者才炸。barrier 方案经消融实验确证因果:加一行 use client 即通过、去掉即复现失败。裁定 barrier 为必需机制并须配禁止直接 import 的门。",
-      "detail": "3 open of 3 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 3,
+        "recorded": 3
+      },
       "severity": "attention"
     },
     {
@@ -7973,7 +8312,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:5a5a5d88888a00c29a291f7d",
       "externalKey": "TCRN-DS-MIN-052",
       "title": "水合失配以微分渲染复现(服务端 data-collapsed false 对客户端 true),并更正了先前基于构建成功得出的未触发结论。修复为初始化器取 fallback 加挂载后 useEffect 同步,验证后两次渲染一致。验证过程另挖出路径 B 的硬陷阱:同版本换内容静默失效且 --force 无效,pnpm 认版本号不认内容,唯一解是版本递增。",
-      "detail": "4 open of 4 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 4,
+        "recorded": 4
+      },
       "severity": "attention"
     },
     {
@@ -7982,7 +8325,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:911186a573aa7d4a8ae71003",
       "externalKey": "TCRN-DS-MIN-053",
       "title": "样式交付端到端验证通过:tokens.css 可直接 import、tcrnComponentCss 须消费方注入、构建产物含 DS 类名与 380 处 token 变量。主题结论两次更正:先前称接线断裂不准确、我第一版探针问了更弱的问题而报假绿;精确实况是 DS 组件写六个主题属性但无一为 data-tcrn-theme,而暗色块正以它为选择器,故属契约未接而非接线断裂——合理边界但未文档化且有误导信号。",
-      "detail": "3 open of 3 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 3,
+        "recorded": 3
+      },
       "severity": "attention"
     },
     {
@@ -7991,7 +8338,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:13601a8890d723a580174e8b",
       "externalKey": "TCRN-DS-MIN-054",
       "title": "版本语义破损实测量化:v2.0.0 落后 HEAD 八十六提交且 CHANGELOG 无该条目,同一版本号至少对应八十七组字节。与 pnpm 认版本不认内容的陷阱叠加后会导致 DS 已改而消费方仍用旧字节且全绿。故建以内容摘要钉定的消费验证门,校验 tarball 摘要与已装 dist 摘要与 lock integrity 三者一致,第三条补 pnpm 盲区。两类变异红证均通过。门自身初版硬编码包清单致误报,已改为从依赖声明推导。",
-      "detail": "4 open of 4 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 4,
+        "recorded": 4
+      },
       "severity": "attention"
     },
     {
@@ -8000,7 +8351,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:ce9fb7253c69836ff798411e",
       "externalKey": "TCRN-DS-MIN-055",
       "title": "Owner 裁定 OWNER-10:DS 须先补 CI 再承接第二个消费方。STORY-086 由此解除阻塞并成为 INIT-010 收口前的最后一条。",
-      "detail": "2 open of 2 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 2,
+        "recorded": 2
+      },
       "severity": "attention"
     },
     {
@@ -8009,7 +8364,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:2f1b4cc1a8e5248390a701f0",
       "externalKey": "TCRN-DS-MIN-056",
       "title": "DS 第一个 workflow 建成:verify job 十二步逐条独立(不跑 pnpm verify,因其 && 串行会掩盖信号且链内含重生成模式)加 contract job 两步。修掉一个实测缺陷:verify 会把破坏改写成新基线而抹掉证据。三态红证通过。检测力边界诚实写入文件头:API 面钉只一层深、出货类名仅三成二被顺带覆盖、DS 自身测试不构成兜底、契约夹具结构性失明。本 CI 不声称消费方不会被打破。",
-      "detail": "5 open of 5 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 5,
+        "recorded": 5
+      },
       "severity": "attention"
     },
     {
@@ -8018,7 +8377,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:bf894e715f287d777b92ef0b",
       "externalKey": "TCRN-TMS-MIN-001",
       "title": "三方独立立场(Mara 产品域轴 / Verity 提取器轴 / Minerva 权威拓扑轴)就 TCRN-TMS-INIT-001 分解形态审议。三方一致否决 docs 的 11 域轴:940 行文档是证明状态与对冲语言、不是事实。决定性证据是 Verity 与主线程独立同时捕获的假分母——codegraph 436 route 仅 398 出自 controller。以 436 立分母则全部覆盖率自第一天起为假。398 已由三条独立路径互钉(codegraph 过滤、grep 装饰器、inventory 脚本工件)。裁定采 Verity 提取器轴为主,吸纳 Minerva 的排序原则与三层落点、Mara 的域轴作前端内部维度。另捕获两条真忠实缺陷:platform-admin/README.md:11 称 AC 暴露 Interface/Webhook 管理而两页实渲 AcBusinessRouteUnavailableScreen;public-presence/README.md:10 所称 studio/editor 页零命中。",
-      "detail": "5 open of 5 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 5,
+        "recorded": 5
+      },
       "severity": "attention"
     },
     {
@@ -8027,7 +8390,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:1b3de5e0abee5495fb41d1dc",
       "externalKey": "TCRN-TMS-MIN-002",
       "title": "EPIC-001 五条 Story 全部完成并入仓。裁定 GATE-001 置 satisfied、但其绿只覆盖 API handler 一个分母(398、双源逐条互钉、提取器已见红)。前端路由 66、Prisma model 88、RBAC 资源 46 三个分母已登记但仍单源且未见红、不得支撑覆盖率声称。两条红证教训写入门设计:分母门比内容哈希不比计数;以 codegraph 为源须把 sync 纳入门流程。",
-      "detail": "4 open of 4 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 4,
+        "recorded": 4
+      },
       "severity": "attention"
     },
     {
@@ -8036,7 +8403,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:56f597652647ed6f0875b39f",
       "externalKey": "TCRN-TMS-MIN-003",
       "title": "EPIC-002 四条 Story 完成。GATE-002 置 satisfied、绿覆盖 API handler 一条派生链:生成器确定性经两次 --check 与重新生成字节比对实证、门的检出能力经变异实证。记录一次自捕假阴性(变异未生效致门假绿不可区分)与一条被读源码证伪的分解建议(openapi diff 已是必需门)。",
-      "detail": "4 open of 4 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 4,
+        "recorded": 4
+      },
       "severity": "attention"
     },
     {
@@ -8045,7 +8416,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:2cdb8e95f2eeaa62757e2e50",
       "externalKey": "TCRN-TMS-MIN-004",
       "title": "EPIC-006 完成。GATE-003 置 satisfied,同时修订其判据:原判据要求 163 条逐条带 status,但清册的核心发现是 43% 的声称可证伪性未定,对其强行标 status 会产出假绿。改为按已完成范围收口并显式登记残余。已捕两条系统性缺陷(批 A 证伪项与批 B 整表缺陷同根于缺 scope 限定)与一条判断修正(OKL 是有主张无证据、不是无定义孤儿)。",
-      "detail": "4 open of 4 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 4,
+        "recorded": 4
+      },
       "severity": "attention"
     },
     {
@@ -8054,7 +8429,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:be9fa4d049de839c22d0a7d8",
       "externalKey": "TCRN-TMS-MIN-005",
       "title": "TCRN-TMS-INIT-001 收官:7 Epic 28 Story 全完、三门全 satisfied、18 提交在整合分支。产出为带证据绑定的事实基线与三道已接 CI 的门。自捕并修复五处自身缺陷。两条产品级发现(subsidiary 零授权、前端仅 1 条 RBAC 门)转 Owner。唯一必停点=合并 main 触发部署,待 Owner 授权。",
-      "detail": "6 open of 6 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 6,
+        "recorded": 6
+      },
       "severity": "attention"
     },
     {
@@ -8063,7 +8442,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:b0456cb6b3312f1760ff9e8a",
       "externalKey": "TCRN-TMS-MIN-006",
       "title": "Owner 裁定 TCRN-TMS-INIT-002 落 TMS 分区而非 cross-project,依据是把 DS 扩建单独成 Initiative 后每个 Initiative 真的只涉及一个子项目。缺口政策裁定为选项二:重建撞上 DS 未提供的承重组件时,允许建 TMS 本地实现但强制登记为 DS 债务并受机器可判定的门看守,由后续 DS 扩建 Initiative 回收;否决了停工等待与逐个升级两案。代理呈报并被采纳的修正:消费契约不能延后,故拆为三 Initiative 顺序(DS 消费契约 → TMS 重建 → DS 扩建),各自单项目。",
-      "detail": "5 open of 5 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 5,
+        "recorded": 5
+      },
       "severity": "attention"
     },
     {
@@ -8072,7 +8455,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:372e3bd67b82f3dbd876eb21",
       "externalKey": "TCRN-TMS-MIN-007",
       "title": "十三代理四阶段勘察结论:DS 导出一百个公开组件(先前呈报的十三为错报、已更正),但五十六个闭合无回调且恰覆盖 TMS 最吃重的面;三条实测阻断为 RSC、ProductShell 的 SSR 水合失配、以及 TMS 前端根本没有生产路径(Caddyfile 显式 404 且写明仓内 web 运行时已移除)。三份策略提案一致认为「所有组件来自并符合 DS」当前不可满足,须 Owner 修订其可执行定义。两名评审独立指出三份共同漏掉 git submodule 路径。本次不产生分解树,分解形态待 Owner 裁定后再定。",
-      "detail": "10 open of 10 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 10,
+        "recorded": 10
+      },
       "severity": "attention"
     },
     {
@@ -8081,7 +8468,11 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:b290715aa181ebe395ec30a4",
       "externalKey": "TCRN-TMS-MIN-008",
       "title": "Owner 答复 OWNER-01:TMS 前端与 DS 完全无关、就是一套本地前端 —— 该事实消解了两名评审共同指出的最大缺陷(重建产物无处可去)并下调 OWNER-04 与 OWNER-08 的门槛。Owner 裁定 DS 与 Storybook 须保持通用、产品设计不得放入、项目如何使用组件由项目自定义。五项建议与一项修正全部获批。实证支撑:污染已发生于 AOS、DS 内四十个领域家具为 AOS 所建。开发机已验证可用并解锁集成测试面。",
-      "detail": "4 open of 6 recorded",
+      "detail": {
+        "reason": "open-issues",
+        "open": 4,
+        "recorded": 6
+      },
       "severity": "attention"
     }
   ],

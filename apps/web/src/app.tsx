@@ -15,6 +15,7 @@ import {
   WorkIndex,
   getTcrnProductLogoAsset,
   tcrnComponentCss,
+  tcrnProductTagline,
   useProductShellController,
   type ProductShellNavGroup,
   type WorkIndexRow
@@ -27,6 +28,7 @@ import {
 } from "@tcrn/ui-copy-state";
 import { tcrnTokenCss } from "@tcrn/ui-tokens";
 import { chainPartitions, localeCopy, shellNavGroups, shellNavItems, type ShellNavItem } from "./data.js";
+import { pick, type CopyEntry } from "./copy.js";
 import { ShellHeaderActions } from "./shell-header-actions.js";
 import { MyWorkView, ProjectsView } from "./cockpit-views.js";
 import { CockpitEnvironmentBanner } from "./cockpit-mirror-banner.js";
@@ -41,8 +43,49 @@ import { DeliberationRoomView } from "./cockpit-deliberation-room.js";
 import { Phase3DogfoodReadback } from "./phase3-dogfood-readback.js";
 import { WorkManagementMockups, getWorkMockupPageTitle } from "./work-management-mockups.js";
 
+/**
+ * The languages this product actually offers, which is not the same list as the
+ * languages the Design System declares.
+ *
+ * `tcrnLocaleMetadata` is DS's roster — the five locales a consumer *may* offer. It
+ * says nothing about whether this consumer's copy can answer in them, and it used to
+ * be passed to the shell unchanged. That is how a menu comes to offer a language the
+ * product does not speak: the control is present, the reader picks it, and the page
+ * renders English. A missing translation should shorten the menu, not turn one of its
+ * entries into a lie.
+ *
+ * So the offered set is derived from coverage. All five are covered today and the
+ * rendered menu is unchanged by this — the point is what happens on the day one is
+ * not, and that day is too late to add the derivation.
+ *
+ * Coverage is read from the shell dictionary because that is the copy every route
+ * renders, whatever else it renders: a locale that cannot name the navigation cannot
+ * usefully be offered. The per-view copy tables are the other half and they are held
+ * at the source by `scripts/locale-coverage-proof.mjs`, which can see the entry on
+ * the one screen no probe visits.
+ */
+const servedLocaleMetadata = tcrnLocaleMetadata.filter((entry) => {
+  const dictionary = localeCopy[entry.locale as TcrnLocale];
+  if (!dictionary) return false;
+  return Object.keys(localeCopy.en).every((key) => key in dictionary);
+});
+
+/**
+ * Preference storage keys, used as both `localStorage` keys and cookie names.
+ *
+ * One name per preference across both stores, deliberately: the cookie is what the
+ * server reads and `localStorage` is what survives a cookie being cleared, and two
+ * different names for the same preference is how they would drift apart.
+ *
+ * `locale` is new here. It had no storage key at all — the locale menu wrote the URL
+ * and nothing else, so a reader who chose Japanese got Japanese for exactly as long
+ * as they kept clicking links that carried `?locale=ja`, and a bookmark or a typed
+ * address took them back to zh-CN. That is the same defect as the theme flash with
+ * the flash lasting forever.
+ */
 const sideNavStorageKey = "tcrn-aos-side-nav-collapsed";
 const themeStorageKey = "tcrn-aos-theme";
+const localeStorageKey = "tcrn-aos-locale";
 const defaultShellRoute = shellNavItems[0] as ShellNavItem;
 const defaultOwnerQualityVariant = "desktop-light-operations-cockpit";
 const outsideAcceptedOwnerQualityMatrix = "aos-route-state-outside-owner-quality-oracle";
@@ -83,6 +126,39 @@ interface InitialShellState {
   theme: "light" | "dark";
   locale: TcrnLocale;
   currentPath: string;
+  /**
+   * The query the page was requested with, kept so links out of the page can
+   * carry it (TCRN-AOS-INC-014).
+   *
+   * `currentPath` is a pathname; the query used to be dropped here and re-read
+   * from `window.location.search` further down, which works in the browser and
+   * returns nothing during SSR. So every server-rendered link lost every filter,
+   * and the Owner's report — "changing a filter resets the project scope" — was
+   * the visible half of a wider defect: the app reads fifteen query keys and used
+   * to write back three.
+   */
+  currentSearch: string;
+  /**
+   * The request's `Cookie` header, forwarded to the DS shell controller so the
+   * render that produces the first paint can read a stored preference. Absent in
+   * the browser and in the static builds, which have no request.
+   */
+  cookieHeader?: string;
+  /**
+   * Which preferences this request decides explicitly, and so which ones a stored
+   * value must not override.
+   *
+   * A query parameter outranks a standing preference — that is what makes a shared
+   * link land on what the sender saw, and what makes a gate's `?theme=dark&locale=ja`
+   * mean it. The owner-quality route policy is the same kind of claim made by the
+   * route rather than the query. Recorded per preference rather than as one flag
+   * because `?theme=dark` says nothing about the reader's language.
+   */
+  overriddenByRequest: {
+    collapsed: boolean;
+    theme: boolean;
+    locale: boolean;
+  };
 }
 
 // Route ids come from the nav model so adding a module cannot forget this union.
@@ -111,6 +187,21 @@ interface RenderAosShellHtmlOptions {
   path?: string;
   search?: string;
   /**
+   * The request's `Cookie` header, when there is a request.
+   *
+   * The Owner's report: switching pages briefly shows the default language and the
+   * light theme before snapping back. That flash is not slowness, it is a storage
+   * choice — preferences lived in `localStorage`, which the server cannot read, so
+   * every server-rendered page was `zh-CN`/light no matter what the reader had
+   * chosen, and the correction only arrived once the client bundle had parsed and
+   * mounted. Cookies are the only browser storage that travels with the request,
+   * which is what makes the first byte able to be right.
+   *
+   * Optional, and the renderer works without it: `build.ts` and the mirror build
+   * have no request at all, and the static outputs stay at the default.
+   */
+  cookie?: string;
+  /**
    * Which copy of the cockpit these bytes are being rendered for, when the
    * renderer knows. The mirror build does know — it is building the mirror — and
    * saying so at render time means a reader without scripting still sees "this
@@ -120,8 +211,22 @@ interface RenderAosShellHtmlOptions {
   surface?: "local" | "mirror";
 }
 
+/**
+ * The document's own name, in the reader's language.
+ *
+ * `TCRN AOS` is the product's wordmark and stays Latin in every locale — a
+ * translated name is a different product. `moduleName` is descriptive copy and
+ * is already carried in all five locales by `localeCopy`; the title composed it
+ * from neither, which made the browser tab and the first thing a screen reader
+ * announces the one part of a localized page that never translated.
+ */
+function documentTitle(locale: TcrnLocale): string {
+  const copy = localeCopy[locale] ?? localeCopy.en;
+  return `${copyText(copy, "productName", "TCRN AOS")} ${copyText(copy, "moduleName", "Operations Cockpit")}`;
+}
+
 export function renderAosShellHtml(options: RenderAosShellHtmlOptions = {}): string {
-  const initialShellState = readInitialShellState(options.path, options.search);
+  const initialShellState = readInitialShellState(options.path, options.search, options.cookie);
   const appHtml = renderToStaticMarkup(
     <AosShellApp
       initialShellState={initialShellState}
@@ -133,7 +238,7 @@ export function renderAosShellHtml(options: RenderAosShellHtmlOptions = {}): str
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>TCRN AOS Operations Cockpit</title>
+    <title>${escapeHtmlAttribute(documentTitle(initialShellState.locale))}</title>
     <meta name="tcrn-aOS-owner-quality-oracle" content="aos-owner-quality-product-shell" />
     <meta name="tcrn-design-system-source" content="@tcrn/ui-react @tcrn/ui-tokens @tcrn/ui-copy-state" />
     <meta name="tcrn-aOS-brand-source" content="@tcrn/ui-react ProductShell/ShellBrandLockup/ProductLogo with registered tcrnProductLogoRegistry aos asset" />
@@ -152,25 +257,50 @@ export function renderAosShellHtml(options: RenderAosShellHtmlOptions = {}): str
 export function AosShellApp({ initialShellState: initialShellStateOverride, initialSurface }: AosShellAppProps = {}) {
   const initialShellState = useMemo(() => initialShellStateOverride ?? readInitialShellState(), [initialShellStateOverride]);
   const [currentPath] = useState(initialShellState.currentPath);
+  // The query the page was requested with. Held in state for the same reason as
+  // the path: it is the request's own value, and re-reading it from the browser
+  // would give SSR nothing and the client something different.
+  const [currentSearch] = useState(initialShellState.currentSearch);
   const [apiReadback, setApiReadback] = useState<ApiReadbackState>(initialApiReadback);
   const [browserVisualState, setBrowserVisualState] = useState<BrowserVisualState>(() => readBrowserVisualState());
 
   const currentRoute = resolveCurrentRoute(currentPath);
-  const activePartitionId = resolveActivePartition(currentPath);
+  const activePartitionId = resolveActivePartition(currentPath, initialShellState.currentSearch);
+  // Persistence is the shell's, not ours.
+  //
+  // This used to pass storage keys nowhere and hand-roll both halves here: a local
+  // cookie reader threaded through `initial*`, and `writeStoredPreference` writing
+  // both stores on every change. That was a workaround for a DS controller that read
+  // only `localStorage` — and the workaround was itself the evidence the defect lived
+  // in DS, because the next product to consume the shell would have had to write it
+  // again. The controller now reads and writes both stores itself, so what is left
+  // here is the part only this product can know: which query parameters it honours,
+  // and what each preference change means for the document outside React's tree.
+  //
+  // `initialShellState` still resolves query-over-stored-over-default, and a storage
+  // key is withheld for exactly the preference a query is overriding. The controller's
+  // stored read outranks the `initial*` value it is given, so passing the key while a
+  // query says otherwise would let the standing preference win over the explicit link
+  // — the precedence inverted, which is how a gate's `?theme=dark` would come back
+  // light for anyone who had ever chosen light.
   const controller = useProductShellController({
     initialCollapsed: initialShellState.collapsed,
     initialTheme: initialShellState.theme,
     initialLocale: initialShellState.locale,
     navId: "aos-primary-side-nav",
-    onCollapsedChange: (collapsed) => {
-      writeBrowserStorage(sideNavStorageKey, String(collapsed));
-    },
+    requestCookieHeader: initialShellState.cookieHeader,
+    ...(initialShellState.overriddenByRequest.collapsed ? {} : { collapsedStorageKey: sideNavStorageKey }),
+    ...(initialShellState.overriddenByRequest.theme ? {} : { themeStorageKey }),
+    ...(initialShellState.overriddenByRequest.locale ? {} : { localeStorageKey }),
     onThemeChange: (theme) => {
-      writeBrowserStorage(themeStorageKey, theme);
       applyRootTheme(theme);
     },
     onLocaleChange: (locale) => {
       const resolvedLocale = resolveLocale(locale);
+      // The locale was the one preference that was never stored — it went to the URL
+      // and nowhere else. The shell stores it now; what stays here is the URL, which
+      // is this product's own vocabulary, and the document attributes outside the
+      // React tree.
       updateUrlLocale(resolvedLocale);
       applyRootLocale(resolvedLocale);
     }
@@ -327,22 +457,31 @@ export function AosShellApp({ initialShellState: initialShellStateOverride, init
     onLocaleChange: controller.setLocale
   };
   const currentRouteLabel = currentPath === "/work/readback"
-    ? copyText(currentCopy, "workReadbackLabel", currentLocale === "zh-CN" ? "工作读回" : "Work readback")
+    // The fallback here was a bilingual ternary, which was dead code twice over:
+    // `workReadbackLabel` is present in all five locales in `data.ts`, and
+    // `copyText` already falls back through the English table before reaching the
+    // literal. A two-branch fallback would only ever fire if the key vanished
+    // from every locale at once, and then it would answer in the wrong language
+    // on three routes out of five.
+    ? copyText(currentCopy, "workReadbackLabel", "Work readback")
     : currentPath.startsWith("/work/")
       ? getWorkMockupPageTitle(currentPath, currentLocale)
-      : currentLocale === "zh-CN" ? currentRoute.labelZh : currentRoute.label;
+      : pick(currentLocale, currentRoute.label);
   const navGroups: ProductShellNavGroup[] = shellNavGroups.map((group) => ({
     id: group.id,
-    label: currentLocale === "zh-CN" ? group.labelZh : group.label,
-    sectionLabel: currentLocale === "zh-CN" ? group.labelZh : group.label,
+    // `pick` where three ternaries used to be: the nav is on every screen, so a
+    // two-branch label here was the app's most-rendered English leak.
+    label: pick(currentLocale, group.label),
+    sectionLabel: pick(currentLocale, group.label),
     selected: group.items.some((item) => item.id === currentRouteId),
     items: group.items.map((item) => ({
       id: item.id,
-      label: currentLocale === "zh-CN" ? item.labelZh : item.label,
+      label: pick(currentLocale, item.label),
       href: buildRouteHref(item.path, {
         locale: currentLocale,
         theme: controller.theme,
-        collapsed: visualInstanceCollapsed
+        collapsed: visualInstanceCollapsed,
+        inheritedSearch: currentSearch
       }),
       iconName: item.icon,
       selected: item.id === currentRouteId
@@ -355,6 +494,16 @@ export function AosShellApp({ initialShellState: initialShellStateOverride, init
       moduleName={copyText(currentCopy, "moduleName", "Operations Cockpit")}
       brandProductId="aos"
       brandMarkSrc="/assets/tcrn-brand-mark.svg"
+      // DS defaults brandHref to a bare "/", which was the one link on every page
+      // that dropped the user's scope (TCRN-AOS-INC-014). The route table's own
+      // root entry, carried through routeHref, keeps the home link in step with
+      // every other link the shell draws.
+      brandHref={buildRouteHref("/", {
+        locale: currentLocale,
+        theme: controller.theme,
+        collapsed: visualInstanceCollapsed,
+        inheritedSearch: currentSearch
+      })}
       currentRouteLabel={currentRouteLabel}
       currentLocationLabel={copyText(currentCopy, "currentLocation", "Current location")}
       navLabel={copyText(currentCopy, "navLabel", "AOS operations navigation")}
@@ -368,11 +517,12 @@ export function AosShellApp({ initialShellState: initialShellStateOverride, init
           routeHref={(path) => buildRouteHref(path, {
             locale: currentLocale,
             theme: controller.theme,
-            collapsed: visualInstanceCollapsed
+            collapsed: visualInstanceCollapsed,
+            inheritedSearch: currentSearch
           })}
         />
       }
-      locales={tcrnLocaleMetadata}
+      locales={servedLocaleMetadata}
       collapsedStorageKey={sideNavStorageKey}
       contentId="content"
       contentRole="main"
@@ -390,7 +540,13 @@ export function AosShellApp({ initialShellState: initialShellStateOverride, init
       data-visual-instance-product-logo={aosProductLogoAsset.assetId}
       data-product-logo-asset-id={aosProductLogoAsset.assetId}
       data-product-logo-line-one={aosProductLogoAsset.lineOne}
-      data-product-logo-line-two={aosProductLogoAsset.lineTwo}
+      // `lineTwo` became a per-locale record when the tagline was localized, and this
+      // attribute was still handed the whole record, so the marker read
+      // `[object Object]` on every page in every locale. A `data-*` attribute takes
+      // any value and stringifies it, which is why this typechecked and built; the
+      // gate that requires the marker's exact text was the only thing that could
+      // catch it. DS exports the resolver for exactly this.
+      data-product-logo-line-two={tcrnProductTagline("aos", currentLocale)}
       data-visual-instance-mobile-collapse-policy="hidden-affordance"
       data-visual-instance-variant={visualInstanceVariant}
       data-visual-instance-theme={controller.theme}
@@ -422,6 +578,7 @@ export function AosShellApp({ initialShellState: initialShellStateOverride, init
         apiReadback={apiReadback}
         copy={currentCopy}
         currentPath={currentPath}
+        search={currentSearch}
         collapsed={visualInstanceCollapsed}
         theme={controller.theme}
         locale={currentLocale}
@@ -431,7 +588,8 @@ export function AosShellApp({ initialShellState: initialShellStateOverride, init
         routeHref={(path) => buildRouteHref(path, {
           locale: currentLocale,
           theme: controller.theme,
-          collapsed: visualInstanceCollapsed
+          collapsed: visualInstanceCollapsed,
+          inheritedSearch: currentSearch
         })}
         {...(initialSurface ? { surface: initialSurface } : {})}
       />
@@ -444,6 +602,7 @@ function OwnerQualityContent({
   apiReadback,
   copy,
   currentPath,
+  search,
   collapsed,
   theme,
   locale,
@@ -455,6 +614,8 @@ function OwnerQualityContent({
   apiReadback: ApiReadbackState;
   copy: Record<string, string>;
   currentPath: string;
+  /** The query the page was requested with; see readSearch. */
+  search: string;
   collapsed: boolean;
   theme: "light" | "dark";
   locale: TcrnLocale;
@@ -504,7 +665,7 @@ function OwnerQualityContent({
         : null;
       return framed(key
         ? <WorkItemDetailView locale={locale} routeHref={routeHref} itemKey={key} />
-        : <WorkItemsView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />);
+        : <WorkItemsView locale={locale} routeHref={routeHref} search={readSearch(currentPath, search)} />);
     }
     if (moduleId === "deliberations") {
       const key = modulePath.startsWith("/deliberations/")
@@ -512,13 +673,13 @@ function OwnerQualityContent({
         : null;
       return framed(key
         ? <DeliberationRoomView locale={locale} routeHref={routeHref} conferenceKey={key} />
-        : <DeliberationsView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />);
+        : <DeliberationsView locale={locale} routeHref={routeHref} search={readSearch(currentPath, search)} />);
     }
     if (moduleId === "dashboard") {
       return framed(<DashboardView locale={locale} routeHref={routeHref} />);
     }
     if (moduleId === "board") {
-      return framed(<BoardView locale={locale} routeHref={routeHref} search={readSearch(currentPath)} />);
+      return framed(<BoardView locale={locale} routeHref={routeHref} search={readSearch(currentPath, search)} />);
     }
     if (moduleId === "release-trains") {
       return framed(<ReleaseTrainsView locale={locale} routeHref={routeHref} />);
@@ -530,7 +691,7 @@ function OwnerQualityContent({
       return framed(<SnapshotHealthView locale={locale} routeHref={routeHref} />);
     }
     if (moduleId === "knowledge-space") {
-      return framed(<KnowledgeSpaceView locale={locale} routeHref={routeHref} />);
+      return framed(<KnowledgeSpaceView locale={locale} routeHref={routeHref} search={readSearch(currentPath, search)} />);
     }
   }
   if (isLegacyWorkRoute) {
@@ -651,24 +812,188 @@ function DeveloperDisclosure({ apiReadback, copy }: { apiReadback: ApiReadbackSt
   );
 }
 
+/**
+ * Owner-quality fixture copy in all five locales.
+ *
+ * These four tables are the visual-proof fixture: fixed prose, deliberately not
+ * read from the chain, so that a screenshot of this route means the same thing
+ * from one build to the next. Fixed does not mean English — it is still prose a
+ * reader reads, and it was bilingual, so the ja, ko and fr instances of the
+ * proof were three tables of English inside a translated shell. Every string a
+ * reader sees goes through `pick`, fixture or not; what makes this copy special
+ * is that it does not move, not that it does not need translating.
+ */
+const ownerQualityCopy = {
+  oracleTitle: {
+    "zh-CN": "定义 owner 质量视觉基准",
+    en: "Define owner-quality visual baseline",
+    ja: "owner 品質の視覚基準を定義する",
+    ko: "owner 품질 시각 기준 정의",
+    fr: "Définir la référence visuelle de qualité owner"
+  },
+  remediationTitle: {
+    "zh-CN": "将 AOS 首页映射到新基准",
+    en: "Map AOS first viewport to new baseline",
+    ja: "AOS の初期表示を新基準に対応させる",
+    ko: "AOS 첫 화면을 새 기준에 대응",
+    fr: "Aligner le premier écran AOS sur la nouvelle référence"
+  },
+  qaEvidenceTitle: {
+    "zh-CN": "专业 QA 证据包",
+    en: "Professional QA evidence packet",
+    ja: "専門 QA の証跡パッケージ",
+    ko: "전문 QA 증거 패킷",
+    fr: "Dossier de preuves QA professionnel"
+  },
+  gateVisualBaseline: {
+    "zh-CN": "DS 视觉基准",
+    en: "DS visual baseline",
+    ja: "DS の視覚基準",
+    ko: "DS 시각 기준",
+    fr: "Référence visuelle DS"
+  },
+  gateVisualEvidence: {
+    "zh-CN": "Storybook owner 质量实例",
+    en: "Storybook owner-quality instance",
+    ja: "Storybook の owner 品質インスタンス",
+    ko: "Storybook owner 품질 인스턴스",
+    fr: "Instance de qualité owner dans Storybook"
+  },
+  gateVisualDecision: {
+    "zh-CN": "等待 review",
+    en: "Awaiting review",
+    ja: "レビュー待ち",
+    ko: "검토 대기",
+    fr: "En attente de revue"
+  },
+  gateFreshness: {
+    "zh-CN": "运行时新鲜度",
+    en: "Runtime freshness",
+    ja: "実行時の鮮度",
+    ko: "런타임 신선도",
+    fr: "Fraîcheur d'exécution"
+  },
+  gateFreshnessEvidence: {
+    "zh-CN": "4317 同端口刷新",
+    en: "4317 same-port refresh",
+    ja: "4317 同一ポートでの再読み込み",
+    ko: "4317 동일 포트 새로 고침",
+    fr: "Rechargement sur le même port 4317"
+  },
+  gateFreshnessDecision: {
+    "zh-CN": "实现后路由",
+    en: "Route after implementation",
+    ja: "実装後に経路を通す",
+    ko: "구현 후 라우팅",
+    fr: "Router après l'implémentation"
+  },
+  gateInspection: {
+    "zh-CN": "Owner 检查",
+    en: "Owner inspection",
+    ja: "Owner による検査",
+    ko: "Owner 점검",
+    fr: "Inspection par l'owner"
+  },
+  gateInspectionEvidence: {
+    "zh-CN": "QA 与 PM 通过后",
+    en: "After QA and PM pass",
+    ja: "QA と PM の通過後",
+    ko: "QA와 PM 통과 후",
+    fr: "Après validation QA et PM"
+  },
+  gateInspectionDecision: {
+    "zh-CN": "未准备",
+    en: "Not ready",
+    ja: "未準備",
+    ko: "준비되지 않음",
+    fr: "Pas prêt"
+  },
+  actionApprove: {
+    "zh-CN": "批准 owner 可见预览",
+    en: "Approve owner-visible preview",
+    ja: "owner が見るプレビューを承認する",
+    ko: "owner 가시 미리보기 승인",
+    fr: "Approuver l'aperçu visible par l'owner"
+  },
+  actionApproveReason: {
+    "zh-CN": "等待 DS review、QA 与 PM",
+    en: "Waiting on DS review, QA, and PM",
+    ja: "DS レビュー・QA・PM を待っています",
+    ko: "DS 검토, QA, PM 대기 중",
+    fr: "En attente de la revue DS, du QA et du PM"
+  },
+  actionDispatch: {
+    "zh-CN": "打开实时派发",
+    en: "Enable live dispatch",
+    ja: "実時間ディスパッチを有効にする",
+    ko: "실시간 디스패치 활성화",
+    fr: "Activer la répartition en direct"
+  },
+  actionDispatchReason: {
+    "zh-CN": "不在此切片范围",
+    en: "Out of scope for this slice",
+    ja: "このスライスの範囲外です",
+    ko: "이 슬라이스의 범위 밖입니다",
+    fr: "Hors périmètre de cette tranche"
+  },
+  disabled: { "zh-CN": "已禁用", en: "Disabled", ja: "無効", ko: "사용 중지", fr: "Désactivé" },
+  unavailable: { "zh-CN": "不可用", en: "Unavailable", ja: "利用不可", ko: "사용 불가", fr: "Indisponible" },
+  externalQueue: {
+    "zh-CN": "外部队列",
+    en: "External queue",
+    ja: "外部キュー",
+    ko: "외부 큐",
+    fr: "File externe"
+  },
+  liveDispatch: {
+    "zh-CN": "实时派发",
+    en: "Live dispatch",
+    ja: "実時間ディスパッチ",
+    ko: "실시간 디스패치",
+    fr: "Répartition en direct"
+  },
+  nextGate: { "zh-CN": "下一门禁", en: "Next gate", ja: "次のゲート", ko: "다음 게이트", fr: "Porte suivante" },
+  readOnlySummary: {
+    "zh-CN": "本地只读摘要",
+    en: "Read-only local summary",
+    ja: "ローカルの読み取り専用サマリ",
+    ko: "로컬 읽기 전용 요약",
+    fr: "Résumé local en lecture seule"
+  },
+  none: { "zh-CN": "无", en: "None", ja: "なし", ko: "없음", fr: "Aucune" },
+  notEnabled: {
+    "zh-CN": "未启用",
+    en: "Not enabled",
+    ja: "有効化されていません",
+    ko: "활성화되지 않음",
+    fr: "Non activé"
+  },
+  renderedReview: {
+    "zh-CN": "Elara 渲染评审",
+    en: "Elara rendered review",
+    ja: "Elara による描画レビュー",
+    ko: "Elara 렌더링 검토",
+    fr: "Revue de rendu par Elara"
+  }
+} satisfies Record<string, CopyEntry>;
+
 function ownerQualityQueueRows(locale: TcrnLocale): WorkIndexRow[] {
-  const isZh = locale === "zh-CN";
   return [
     {
       id: "owner-quality-oracle",
-      title: isZh ? "定义 owner 质量视觉基准" : "Define owner-quality visual baseline",
+      title: pick(locale, ownerQualityCopy.oracleTitle),
       state: { state: "review_required" },
       owner: "Elara"
     },
     {
       id: "aos-remediation",
-      title: isZh ? "将 AOS 首页映射到新基准" : "Map AOS first viewport to new baseline",
+      title: pick(locale, ownerQualityCopy.remediationTitle),
       state: { state: "blocked" },
       owner: "Ilya"
     },
     {
       id: "qa-evidence",
-      title: isZh ? "专业 QA 证据包" : "Professional QA evidence packet",
+      title: pick(locale, ownerQualityCopy.qaEvidenceTitle),
       state: { state: "not_configured" },
       owner: "Rowan"
     }
@@ -676,26 +1001,25 @@ function ownerQualityQueueRows(locale: TcrnLocale): WorkIndexRow[] {
 }
 
 function ownerQualityGateRows(locale: TcrnLocale) {
-  const isZh = locale === "zh-CN";
   return [
     {
-      gate: isZh ? "DS 视觉基准" : "DS visual baseline",
-      evidence: isZh ? "Storybook owner 质量实例" : "Storybook owner-quality instance",
-      decision: isZh ? "等待 review" : "Awaiting review",
+      gate: pick(locale, ownerQualityCopy.gateVisualBaseline),
+      evidence: pick(locale, ownerQualityCopy.gateVisualEvidence),
+      decision: pick(locale, ownerQualityCopy.gateVisualDecision),
       owner: "Elara",
       state: <StatusBadge state={{ state: "review_required" }} locale={locale} />
     },
     {
-      gate: isZh ? "运行时新鲜度" : "Runtime freshness",
-      evidence: isZh ? "4317 同端口刷新" : "4317 same-port refresh",
-      decision: isZh ? "实现后路由" : "Route after implementation",
+      gate: pick(locale, ownerQualityCopy.gateFreshness),
+      evidence: pick(locale, ownerQualityCopy.gateFreshnessEvidence),
+      decision: pick(locale, ownerQualityCopy.gateFreshnessDecision),
       owner: "Atlas",
       state: <StatusBadge state={{ state: "blocked" }} locale={locale} />
     },
     {
-      gate: isZh ? "Owner 检查" : "Owner inspection",
-      evidence: isZh ? "QA 与 PM 通过后" : "After QA and PM pass",
-      decision: isZh ? "未准备" : "Not ready",
+      gate: pick(locale, ownerQualityCopy.gateInspection),
+      evidence: pick(locale, ownerQualityCopy.gateInspectionEvidence),
+      decision: pick(locale, ownerQualityCopy.gateInspectionDecision),
       owner: "Mara",
       state: <StatusBadge state={{ state: "not_claimed" }} locale={locale} />
     }
@@ -703,28 +1027,54 @@ function ownerQualityGateRows(locale: TcrnLocale) {
 }
 
 function ownerQualityActionRows(locale: TcrnLocale) {
-  const isZh = locale === "zh-CN";
   return [
     {
-      action: isZh ? "批准 owner 可见预览" : "Approve owner-visible preview",
-      reason: isZh ? "等待 DS review、QA 与 PM" : "Waiting on DS review, QA, and PM",
-      state: <Badge tone="warning">{isZh ? "已禁用" : "Disabled"}</Badge>
+      action: pick(locale, ownerQualityCopy.actionApprove),
+      reason: pick(locale, ownerQualityCopy.actionApproveReason),
+      state: <Badge tone="warning">{pick(locale, ownerQualityCopy.disabled)}</Badge>
     },
     {
-      action: isZh ? "打开实时派发" : "Enable live dispatch",
-      reason: isZh ? "不在此切片范围" : "Out of scope for this slice",
-      state: <Badge tone="neutral">{isZh ? "不可用" : "Unavailable"}</Badge>
+      action: pick(locale, ownerQualityCopy.actionDispatch),
+      reason: pick(locale, ownerQualityCopy.actionDispatchReason),
+      state: <Badge tone="neutral">{pick(locale, ownerQualityCopy.unavailable)}</Badge>
     }
   ];
 }
 
 function ownerQualityServiceItems(locale: TcrnLocale, apiReadback: ApiReadbackState) {
-  const isZh = locale === "zh-CN";
   return [
-    { key: "api", label: isZh ? "API" : "API", value: <span data-metric-value="runtime">{apiReadback.runtime === "pending" ? (isZh ? "本地只读摘要" : "Read-only local summary") : apiReadback.runtime}</span> },
-    { key: "queue", label: isZh ? "外部队列" : "External queue", value: <span data-metric-value="queue">{apiReadback.queue === "pending" ? (isZh ? "无" : "None") : apiReadback.queue}</span> },
-    { key: "dispatch", label: isZh ? "实时派发" : "Live dispatch", value: isZh ? "未启用" : "Not enabled" },
-    { key: "nextGate", label: isZh ? "下一门禁" : "Next gate", value: isZh ? "Elara 渲染评审" : "Elara rendered review" }
+    {
+      key: "api",
+      // "API" is the same three letters in all five locales, so it is written once
+      // rather than as a five-way entry that would only ever pick the same string.
+      label: "API",
+      value: (
+        <span data-metric-value="runtime">
+          {apiReadback.runtime === "pending"
+            ? pick(locale, ownerQualityCopy.readOnlySummary)
+            : apiReadback.runtime}
+        </span>
+      )
+    },
+    {
+      key: "queue",
+      label: pick(locale, ownerQualityCopy.externalQueue),
+      value: (
+        <span data-metric-value="queue">
+          {apiReadback.queue === "pending" ? pick(locale, ownerQualityCopy.none) : apiReadback.queue}
+        </span>
+      )
+    },
+    {
+      key: "dispatch",
+      label: pick(locale, ownerQualityCopy.liveDispatch),
+      value: pick(locale, ownerQualityCopy.notEnabled)
+    },
+    {
+      key: "nextGate",
+      label: pick(locale, ownerQualityCopy.nextGate),
+      value: pick(locale, ownerQualityCopy.renderedReview)
+    }
   ];
 }
 
@@ -732,23 +1082,51 @@ function copyText(copy: Record<string, string>, key: string, fallback: string): 
   return copy[key] ?? localeCopy.en[key] ?? fallback;
 }
 
-function readInitialShellState(ssrPath = "/cockpit", ssrSearch = ""): InitialShellState {
+/**
+ * The state the first byte is rendered with.
+ *
+ * Precedence is query → stored preference → default, and the order is the whole
+ * point. The query is an explicit instruction about *this* request — a shared link,
+ * a gate's `?locale=ja&theme=dark`, an accepted visual variant — so it outranks a
+ * standing preference. The stored preference outranks the default, which is what
+ * removes the flash. The default is what a first-time reader gets.
+ *
+ * `locale` used to skip the middle term entirely: it read the query and fell
+ * straight to `tcrnDefaultLocale`, so a chosen language survived only as long as
+ * links kept carrying it.
+ */
+function readInitialShellState(ssrPath = "/cockpit", ssrSearch = "", cookieHeader?: string): InitialShellState {
   const params = typeof window === "undefined"
     ? new URLSearchParams(ssrSearch.replace(/^\?/, ""))
     : new URLSearchParams(window.location.search);
   const currentPath = typeof window === "undefined" ? ssrPath : window.location.pathname;
   const collapsedFromQuery = params?.get("collapsed");
   const ownerQualityRoutePolicy = resolveOwnerQualityRoutePolicy(currentPath, params);
+  const storedLocale = readStoredPreference(localeStorageKey, cookieHeader);
+  const themeFromQuery = params?.get("theme");
+  const localeFromQuery = params?.get("locale");
   return {
+    currentSearch: params.toString(),
+    ...(cookieHeader ? { cookieHeader } : {}),
     collapsed: ownerQualityRoutePolicy.forceExpanded
       ? false
       : collapsedFromQuery === "true"
         ? true
         : collapsedFromQuery === "false"
           ? false
-          : readStoredBoolean(sideNavStorageKey, false),
-    theme: ownerQualityRoutePolicy.theme ?? resolveTheme(params?.get("theme") ?? readBrowserStorage(themeStorageKey)),
-    locale: ownerQualityRoutePolicy.locale ?? resolveLocale(params?.get("locale")),
+          : readStoredBoolean(sideNavStorageKey, false, cookieHeader),
+    theme: ownerQualityRoutePolicy.theme
+      ?? resolveTheme(themeFromQuery ?? readStoredPreference(themeStorageKey, cookieHeader)),
+    // `resolveLocale` rejects an unsupported value, so a stale cookie naming a locale
+    // the product has dropped resolves to the default rather than rendering nothing.
+    locale: ownerQualityRoutePolicy.locale ?? resolveLocale(localeFromQuery ?? storedLocale),
+    // Which of the three the request decided for itself. The shell is handed a storage
+    // key only for the others, so a stored preference cannot outrank an explicit link.
+    overriddenByRequest: {
+      collapsed: ownerQualityRoutePolicy.forceExpanded || collapsedFromQuery === "true" || collapsedFromQuery === "false",
+      theme: Boolean(ownerQualityRoutePolicy.theme) || themeFromQuery !== null,
+      locale: Boolean(ownerQualityRoutePolicy.locale) || localeFromQuery !== null
+    },
     currentPath
   };
 }
@@ -847,14 +1225,45 @@ function isForceExpandedOwnerQualityState({
  * the project literally named "TCRN-TMS?locale=en", and every facet on the work
  * items page returned nothing. Shell keys are set last so a caller cannot
  * accidentally send the shell somewhere the user did not ask to go.
+ *
+ * An empty value **removes** a key. Inheritance alone can only ever add, and a
+ * cockpit full of filters needs links that take something away: "clear search",
+ * "reset view", "all deliberations". Before this rule those links were written
+ * the only way the helper allowed — as a bare route with no query — and under
+ * inheritance a link that names no keys keeps every one of them, so each of them
+ * led back to the state it was offering to leave. Absence cannot mean "drop
+ * this", because absence is also what every unrelated link says about every key
+ * it does not care about; subtraction has to be stated.
  */
 function buildRouteHref(
   path: string,
-  state: { locale: TcrnLocale; theme: "light" | "dark"; collapsed: boolean }
+  state: {
+    locale: TcrnLocale;
+    theme: "light" | "dark";
+    collapsed: boolean;
+    /** The query in force on the page this link is rendered on. */
+    inheritedSearch?: string;
+  }
 ): string {
   const mark = path.indexOf("?");
   const pathname = mark >= 0 ? path.slice(0, mark) : path;
-  const params = new URLSearchParams(mark >= 0 ? path.slice(mark + 1) : "");
+  // Three layers, weakest first: the query in force on this page, then whatever
+  // the caller asked for, then the shell's own keys.
+  //
+  // Inheriting rather than listing is deliberate. A list of keys to carry would
+  // be a second copy of "which keys matter", and it would drift the moment a view
+  // read a new one — which is how this defect got its size: fifteen keys read,
+  // three carried, and only the three the shell happened to own. Inheritance has
+  // no list to fall out of date.
+  const params = new URLSearchParams(state.inheritedSearch ?? "");
+  for (const [key, value] of new URLSearchParams(mark >= 0 ? path.slice(mark + 1) : "")) {
+    // `?q=` — the key present with an empty value — is how a caller says "drop
+    // this one". It cannot collide with a real filter: every view treats an
+    // empty string as unset already, so a key that survived here with no value
+    // would filter on nothing and only make the URL longer.
+    if (value === "") params.delete(key);
+    else params.set(key, value);
+  }
   params.set("locale", state.locale);
   params.set("theme", state.theme);
   params.set("collapsed", state.collapsed ? "true" : "false");
@@ -883,12 +1292,20 @@ function removeUnsupportedSearchParam(): void {
  * in the path; everywhere else the cockpit is cross-project and shows the
  * platform governance chain, whose version is the one a global view is read at.
  */
-/** Query string for a route, tolerant of both SSR paths and browser URLs. */
-function readSearch(path: string): URLSearchParams {
+/**
+ * The query in force for a route.
+ *
+ * `search` is the request's own query, threaded down from the shell state. It is
+ * a parameter rather than something read from `window` because reading the
+ * browser was the defect (TCRN-AOS-INC-014): during SSR there is no `window`, so
+ * every server-rendered page filtered on an empty query and every link it drew
+ * carried nothing. The path is still accepted with a query on it for callers that
+ * hold a full URL, and wins when present.
+ */
+function readSearch(path: string, search = ""): URLSearchParams {
   const mark = path.indexOf("?");
   if (mark >= 0) return new URLSearchParams(path.slice(mark + 1));
-  if (typeof window !== "undefined") return new URLSearchParams(window.location.search);
-  return new URLSearchParams();
+  return new URLSearchParams(search);
 }
 
 /**
@@ -900,10 +1317,10 @@ function readSearch(path: string): URLSearchParams {
  * everything, and the header used to claim one partition while the list showed
  * four, which is a scope statement the page did not honour.
  */
-function resolveActivePartition(path: string): string | null {
+function resolveActivePartition(path: string, search = ""): string | null {
   const scoped = chainPartitions.find((partition) => path.startsWith(`/projects/${partition.id}`));
   if (scoped) return scoped.id;
-  const requested = readSearch(path).get("project");
+  const requested = readSearch(path, search).get("project");
   return chainPartitions.some((partition) => partition.id === requested) ? requested : null;
 }
 
@@ -937,17 +1354,43 @@ function resolveCurrentRoute(path: string): ShellNavItem {
   return shellNavItems.find((item) => path.endsWith(`${item.path}.html`)) ?? defaultShellRoute;
 }
 
+/**
+ * A requested locale, or the default.
+ *
+ * Checked against what this product serves rather than what DS supports, for the same
+ * reason the menu is: a `?locale=` naming a declared-but-uncovered language would
+ * otherwise render a page of English under a Japanese `lang` attribute, which is worse
+ * than rendering the default — it tells the reader, and any assistive technology
+ * reading the attribute, that the page is in a language it is not.
+ */
 function resolveLocale(value: string | null | undefined): TcrnLocale {
-  return tcrnSupportedLocales.includes(value as TcrnLocale) ? value as TcrnLocale : tcrnDefaultLocale;
+  const served = servedLocaleMetadata.some((entry) => entry.locale === value);
+  return served && tcrnSupportedLocales.includes(value as TcrnLocale)
+    ? value as TcrnLocale
+    : tcrnDefaultLocale;
 }
 
 function resolveTheme(value: string | null | undefined): "light" | "dark" {
   return value === "dark" ? "dark" : "light";
 }
 
-function readStoredBoolean(key: string, fallback: boolean): boolean {
-  const storedValue = readBrowserStorage(key);
+function readStoredBoolean(key: string, fallback: boolean, cookieHeader?: string): boolean {
+  const storedValue = readStoredPreference(key, cookieHeader);
   return storedValue === null ? fallback : storedValue === "true";
+}
+
+/**
+ * One preference, from whichever store can answer here.
+ *
+ * On the server there is only the cookie header. In the browser both stores are
+ * readable and `localStorage` wins, because it is the one the browser cannot drop
+ * on its own — a cookie can expire or be cleared by a privacy setting while
+ * `localStorage` stays, and in that case the cookie's absence is not a preference.
+ */
+function readStoredPreference(key: string, cookieHeader?: string): string | null {
+  const fromBrowser = readBrowserStorage(key);
+  if (fromBrowser !== null) return fromBrowser;
+  return readCookieValue(key, cookieHeader ?? readDocumentCookie());
 }
 
 function readBrowserStorage(key: string): string | null {
@@ -955,9 +1398,39 @@ function readBrowserStorage(key: string): string | null {
   return window.localStorage.getItem(key);
 }
 
-function writeBrowserStorage(key: string, value: string): void {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem(key, value);
+/**
+ * Reading stays here; writing does not.
+ *
+ * The write half used to live alongside this — `writeStoredPreference` putting the
+ * value in `localStorage` and in a cookie. The shell controller owns both stores
+ * now, so keeping a second writer here left two implementations of one rule, and
+ * the second one had no callers and could not be reached to be found wrong.
+ *
+ * The read half stays because AOS emits `<html lang>` and the theme attribute from
+ * its own server, outside the ProductShell tree, and has to know the preference
+ * before the controller exists.
+ */
+function readDocumentCookie(): string {
+  if (typeof document === "undefined") return "";
+  return document.cookie;
+}
+
+function readCookieValue(name: string, cookieHeader: string): string | null {
+  if (!cookieHeader) return null;
+  for (const pair of cookieHeader.split(";")) {
+    const separator = pair.indexOf("=");
+    if (separator < 0) continue;
+    if (pair.slice(0, separator).trim() !== name) continue;
+    // A malformed percent-escape throws out of `decodeURIComponent`, and a cookie
+    // header is attacker-reachable input: a preference that cannot be decoded is no
+    // preference, not a 500 on every page.
+    try {
+      return decodeURIComponent(pair.slice(separator + 1).trim());
+    } catch {
+      return null;
+    }
+  }
+  return null;
 }
 
 function applyRootTheme(theme: "light" | "dark"): void {
@@ -969,6 +1442,10 @@ function applyRootLocale(locale: TcrnLocale): void {
   if (typeof document === "undefined") return;
   document.documentElement.lang = locale;
   document.documentElement.dataset.currentLocale = locale;
+  // The title lives in `<head>`, outside the tree React re-renders, so switching
+  // locale in the browser would leave the tab and the document's accessible name
+  // saying the language the page was first served in.
+  document.title = documentTitle(locale);
 }
 
 function escapeHtmlAttribute(value: string): string {

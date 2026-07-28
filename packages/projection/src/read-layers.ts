@@ -166,13 +166,37 @@ function isDissolved(issue: string, laterText: string): boolean {
  * written so these get cleared in one sitting rather than one interruption at a
  * time.
  */
+/**
+ * The facts behind an inbox row's detail cell — not the sentence.
+ *
+ * `detail` used to be a string this function assembled: `collecting positions`
+ * for an open deliberation, `` `${open} open of ${recorded} recorded` `` for a
+ * minutes entry. Both read well and both could only ever be English, because
+ * this is the projection layer and no reader's locale is in scope here. A
+ * dictionary in the view could not have repaired it either — by the time a view
+ * saw the row the sentence was already built, so the only thing left to translate
+ * was English prose. So the decision moves rather than the words: the projection
+ * carries the numbers and the chain's own token, and the view says it in the
+ * reader's language.
+ *
+ * This is the same defect shape as the readback panel's error message, which was
+ * resolved at fetch time for the same reason and fixed the same way.
+ */
+export type InboxDetail =
+  /** A gate, named by the chain's own outcome class. */
+  | { reason: "gate-outcome"; outcomeClass: string }
+  /** A deliberation still open, with no minutes yet. */
+  | { reason: "collecting-positions" }
+  /** A minutes entry: how many of its recorded issues nothing has since settled. */
+  | { reason: "open-issues"; open: number; recorded: number };
+
 export interface InboxItem {
   kind: "gate" | "conference" | "unresolved";
   partitionId: string;
   recordId: string;
   externalKey: string | null;
   title: string;
-  detail: string;
+  detail: InboxDetail;
   /** Owner-intent gates outrank everything: the engine is blocked until they clear. */
   severity: "owner-intent" | "attention";
 }
@@ -193,7 +217,7 @@ export function buildInbox(input: {
       recordId: gate.id,
       externalKey: gate.externalKey,
       title: gate.title ?? gate.externalKey ?? gate.id,
-      detail: gate.outcomeClass,
+      detail: { reason: "gate-outcome", outcomeClass: gate.outcomeClass },
       severity: gate.outcomeClass === "owner_intent_required" ? "owner-intent" : "attention"
     });
   }
@@ -206,7 +230,7 @@ export function buildInbox(input: {
       recordId: conference.id,
       externalKey: conference.externalKey,
       title: conference.title ?? conference.externalKey ?? conference.id,
-      detail: "collecting positions",
+      detail: { reason: "collecting-positions" },
       severity: "attention"
     });
   }
@@ -221,7 +245,7 @@ export function buildInbox(input: {
       recordId: entry.minutesId,
       externalKey: entry.externalKey ?? minutes.externalKey,
       title: minutes.summary ?? entry.externalKey ?? entry.minutesId,
-      detail: `${entry.effective.length} open of ${entry.surface.length} recorded`,
+      detail: { reason: "open-issues", open: entry.effective.length, recorded: entry.surface.length },
       severity: "attention"
     });
   }

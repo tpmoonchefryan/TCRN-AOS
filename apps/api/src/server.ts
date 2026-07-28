@@ -8,7 +8,7 @@ import { createAppliedRuntimeFixture, AosSqliteRepository, type AosRuntimeFixtur
 import { createDefaultSeed, type ActorIdentity } from "../../../packages/domain/src/index.js";
 import { createRuntimeTransport, type RuntimeTransport } from "../../../packages/mcp-server/src/index.js";
 import { renderAosShellHtml } from "../../web/src/app.js";
-import { frontendShellRoutes } from "../../web/src/data.js";
+import { isFrontendShellRoute } from "../../web/src/data.js";
 import { apiHealthReadback, createAosApiApp } from "./index.js";
 import { createWorkReadbackApiResponse, type KnowledgeReadbackProvider } from "./work-readback.js";
 
@@ -63,7 +63,7 @@ function handleRequest(
     sendStaticAsset(request, response, path);
     return;
   }
-  if (frontendShellRouteSet.has(path)) {
+  if (isFrontendShellRoute(path)) {
     sendShellHtml(request, response, url);
     return;
   }
@@ -110,8 +110,6 @@ function handleRequest(
   sendJson(response, 404, { ok: false, error: "not_found" });
 }
 
-const frontendShellRouteSet = new Set<string>(frontendShellRoutes);
-
 function createCockpitApiDeferredPayload(path: string) {
   return {
     ok: false,
@@ -140,8 +138,23 @@ function sendShellHtml(request: IncomingMessage, response: ServerResponse, url: 
   }
   response.statusCode = 200;
   response.setHeader("content-type", "text/html; charset=utf-8");
+  // `no-store` is what makes the cookie safe to render from. These bytes now vary by
+  // the reader's stored locale and theme, so a shared cache keyed on URL alone would
+  // hand one reader another's language. `Vary: Cookie` is stated as well, for any
+  // intermediary that ignores `no-store`.
   response.setHeader("cache-control", "no-store");
-  response.end(request.method === "HEAD" ? undefined : renderAosShellHtml({ path: url.pathname, search: url.search }));
+  response.setHeader("vary", "cookie");
+  response.end(request.method === "HEAD"
+    ? undefined
+    : renderAosShellHtml({
+      path: url.pathname,
+      search: url.search,
+      // The preference transport: `localStorage` is invisible to the server, so a
+      // page rendered from it is always rendered at the default and corrected after
+      // the client mounts — the flash the Owner reported. The cookie is the only
+      // browser store that arrives with the request.
+      ...(typeof request.headers.cookie === "string" ? { cookie: request.headers.cookie } : {})
+    }));
 }
 
 function sendStaticAsset(request: IncomingMessage, response: ServerResponse, path: string): void {

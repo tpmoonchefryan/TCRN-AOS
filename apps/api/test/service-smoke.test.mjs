@@ -14,19 +14,56 @@ const shellTargets = [
   "/work/codex-activity",
   "/work/views/owner-feedback",
   "/work/initiatives/work-management-mvp",
-  "/operations-cockpit.html",
+  "/operations-cockpit.html"
+];
+
+/**
+ * The eleven routes the sidebar points at, each asserted to serve *its own* view.
+ *
+ * Thirteen placeholder `.html` names stood here until TCRN-AOS-INC-021, and this
+ * test is the reason they survived so long: it fetched every one of them and
+ * asserted the owner-quality cockpit markers, which they all carried — because
+ * every one of them fell through to the cockpit. The test was not lax. It was
+ * measuring the wrong thing: shell chrome is emitted by the shell on every route,
+ * so asserting shell chrome cannot tell a route that renders from one that only
+ * resolves. `data-cockpit-view` is the marker that distinguishes them, and it is
+ * per-view, so this table now fails if a module route starts answering with a
+ * neighbour's page.
+ */
+const moduleTargets = [
+  { route: "/my-work", view: "my-work" },
+  { route: "/inbox", view: "inbox" },
+  { route: "/dashboard", view: "dashboard" },
+  { route: "/projects", view: "projects" },
+  { route: "/work-items", view: "work-items" },
+  { route: "/board", view: "board" },
+  { route: "/release-trains", view: "release-trains" },
+  { route: "/knowledge", view: "knowledge" },
+  { route: "/deliberations", view: "deliberations" },
+  { route: "/audit", view: "audit" },
+  { route: "/snapshots", view: "snapshots" }
+];
+
+/**
+ * Names that were routes and are not surfaces. Each 404s, and 404 is the assertion:
+ * a name nobody implemented must not answer 200 with somebody else's page.
+ */
+const retiredPlaceholderTargets = [
+  "/conference",
+  "/conference.html",
+  "/docs",
   "/docs-search-release-readiness.html",
-  "/aos-wide-product-design.html",
+  "/settings",
+  "/admin-access.html",
   "/project-workspace.html",
   "/initiative-detail.html",
   "/ai-employee.html",
   "/gate-queue.html",
-  "/conference.html",
   "/gateway-adapter.html",
   "/dependency-console.html",
   "/resource-library.html",
   "/knowledge-modules.html",
-  "/admin-access.html",
+  "/aos-wide-product-design.html",
   "/github-release-linkage.html"
 ];
 
@@ -185,6 +222,42 @@ test("local service serves the AOS shell while backend readbacks stay available"
         assert.doesNotMatch(html, /Owner inspection package remains blocked until PM freshness accepts the repaired retained basis\./);
         assert.doesNotMatch(html, /Owner inspection package is blocked until gates pass/);
       }
+    }
+
+    for (const { route, view } of moduleTargets) {
+      const response = await fetch(`${service.url}${route}`);
+      const html = await response.text();
+      assert.equal(response.status, 200, `${route} is served on a direct request`);
+      assert.match(html, /data-aos-shell="owner-quality-product-shell"/, `${route} renders inside the shell`);
+      assert.match(
+        html,
+        new RegExp(`data-cockpit-view="${view}"`),
+        `${route} renders its own view rather than resolving to a neighbour`
+      );
+    }
+
+    for (const retired of retiredPlaceholderTargets) {
+      const response = await fetch(`${service.url}${retired}`);
+      assert.equal(response.status, 404, `${retired} does not answer 200 with another page's bytes`);
+    }
+
+    // The document's own name, per locale. This was a hard-coded English string in
+    // `<head>` — outside the tree React renders and outside any locale scope — so
+    // the browser tab and the first thing a screen reader announces stayed English
+    // on all five routes while the page under them translated. `TCRN AOS` is the
+    // wordmark and is Latin on purpose; only the module name translates.
+    const expectedDocumentTitles = {
+      "zh-CN": "TCRN AOS 运营驾驶舱",
+      en: "TCRN AOS Operations Cockpit",
+      ja: "TCRN AOS 運用コックピット",
+      ko: "TCRN AOS 운영 콕핏",
+      fr: "TCRN AOS Cockpit opérations"
+    };
+    for (const [locale, expectedTitle] of Object.entries(expectedDocumentTitles)) {
+      const localizedHtml = await fetch(`${service.url}/cockpit?locale=${encodeURIComponent(locale)}`)
+        .then((response) => response.text());
+      const renderedTitle = /<title>([^<]*)<\/title>/u.exec(localizedHtml)?.[1] ?? null;
+      assert.equal(renderedTitle, expectedTitle, `${locale} document title is said in the reader's language`);
     }
 
     const brandMark = await fetch(`${service.url}/assets/tcrn-brand-mark.svg`);

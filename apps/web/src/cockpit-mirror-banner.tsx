@@ -3,6 +3,39 @@ import { EnvironmentBanner } from "@tcrn/ui-react";
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
 
 import { cockpitData } from "./cockpit-data.generated.js";
+import { format, type CopyEntry } from "./copy.js";
+
+/**
+ * The banner's three statements, in all five locales.
+ *
+ * This band renders above every route, so an English string here was the first
+ * thing a ja, ko or fr reader saw on every screen — and what it says is the frame
+ * the rest of the page is read inside ("this is a copy, taken then"). A reader who
+ * cannot read it reads every number on the page as current.
+ */
+const bannerCopy = {
+  local: {
+    "zh-CN": "本机驾驶舱 · 数据截至 {0} · {1}",
+    en: "Local cockpit — data as of {0} · {1}",
+    ja: "ローカル・コックピット・データ基準 {0}・{1}",
+    ko: "로컬 코크핏 · 데이터 기준 {0} · {1}",
+    fr: "Cockpit local — données au {0} · {1}"
+  },
+  mirror: {
+    "zh-CN": "只读镜像 · 数据截至 {0} · 写面在本机 · {1}",
+    en: "Read-only mirror — data as of {0}; writes happen on the operator's machine · {1}",
+    ja: "読み取り専用ミラー・データ基準 {0}・書き込みは操作者のマシンで行われます・{1}",
+    ko: "읽기 전용 미러 · 데이터 기준 {0} · 쓰기는 운영자 머신에서 수행됩니다 · {1}",
+    fr: "Miroir en lecture seule — données au {0} ; les écritures ont lieu sur la machine de l'opérateur · {1}"
+  },
+  unknown: {
+    "zh-CN": "数据截至 {0} · {1}",
+    en: "Data as of {0} · {1}",
+    ja: "データ基準 {0}・{1}",
+    ko: "데이터 기준 {0} · {1}",
+    fr: "Données au {0} · {1}"
+  }
+} satisfies Record<string, CopyEntry>;
 
 /**
  * A standing statement, on every screen, of which copy of the cockpit this is
@@ -32,7 +65,6 @@ export function CockpitEnvironmentBanner({
    */
   initialSurface?: "local" | "mirror";
 }) {
-  const isZh = locale === "zh-CN";
   const [surface, setSurface] = useState<"unknown" | "local" | "mirror">(initialSurface ?? "unknown");
 
   useEffect(() => {
@@ -56,19 +88,14 @@ export function CockpitEnvironmentBanner({
     .map((partition) => `${partition.id} v${partition.chainVersion}`)
     .join(" · ");
 
-  const label = surface === "local"
-    ? (isZh
-      ? `本机驾驶舱 · 数据截至 ${cockpitData.generatedAt} · ${asOf}`
-      : `Local cockpit — data as of ${cockpitData.generatedAt} · ${asOf}`)
-    : surface === "mirror"
-      ? (isZh
-        ? `只读镜像 · 数据截至 ${cockpitData.generatedAt} · 写面在本机 · ${asOf}`
-        : `Read-only mirror — data as of ${cockpitData.generatedAt}; writes happen on the operator's machine · ${asOf}`)
-      // Before the probe answers, the honest statement is the one that does not
-      // depend on it: the data's own age, with no claim about which copy this is.
-      : (isZh
-        ? `数据截至 ${cockpitData.generatedAt} · ${asOf}`
-        : `Data as of ${cockpitData.generatedAt} · ${asOf}`);
+  const label = format(
+    locale,
+    // Before the probe answers, the honest statement is the one that does not
+    // depend on it: the data's own age, with no claim about which copy this is.
+    surface === "local" ? bannerCopy.local : surface === "mirror" ? bannerCopy.mirror : bannerCopy.unknown,
+    cockpitData.generatedAt,
+    asOf
+  );
 
   return (
     <div className="tcrn-aos-environment" data-cockpit-surface={surface}>

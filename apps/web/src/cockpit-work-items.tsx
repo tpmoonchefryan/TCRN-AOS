@@ -18,7 +18,151 @@ import {
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
 
 import { cockpitData } from "./cockpit-data.generated.js";
-import { chainStatusBadge, workTitle, type CockpitPartition, type CockpitWork } from "./cockpit-types.js";
+import {
+  chainStatusBadge,
+  chainStatusLabel,
+  partitionDisplayName,
+  workTitle,
+  type CockpitWork
+} from "./cockpit-types.js";
+import { conferenceLink, hrefAttr, workItemLink } from "./cockpit-links.js";
+import { format, pick, type CopyEntry } from "./copy.js";
+
+/**
+ * Work-items copy in all five locales.
+ *
+ * This is the largest single dictionary in the cockpit because it was the largest
+ * single concentration of the defect: fifty-three bilingual ternaries on the one
+ * page that indexes all 402 records. Three of them carry more than a label.
+ *
+ * The search field's "literal" note tells a reader that what runs here is a
+ * substring match and not the projection's FTS5 index — without it, a query that
+ * returns nothing reads as "no such work item". `bulkBlocked` is the reason a
+ * visible action is disabled, which is the only thing standing between a reader
+ * and the conclusion that the button is broken. And `noScope` states that the
+ * chain genuinely holds no title for a record, rather than that the page failed
+ * to read one. All three were English-only, so on the ja, ko and fr routes the
+ * screen showed the control without the sentence that makes it honest.
+ */
+const workCopy = {
+  workItems: { "zh-CN": "工作项", en: "Work items", ja: "作業項目", ko: "작업 항목", fr: "Éléments de travail" },
+  search: { "zh-CN": "检索", en: "Search", ja: "検索", ko: "검색", fr: "Recherche" },
+  kind: { "zh-CN": "类型", en: "Kind", ja: "種別", ko: "종류", fr: "Type" },
+  status: { "zh-CN": "状态", en: "Status", ja: "ステータス", ko: "상태", fr: "Statut" },
+  project: { "zh-CN": "项目", en: "Project", ja: "プロジェクト", ko: "프로젝트", fr: "Projet" },
+  view: { "zh-CN": "视图", en: "View", ja: "ビュー", ko: "보기", fr: "Vue" },
+  savedViews: { "zh-CN": "保存视图", en: "Saved views", ja: "保存ビュー", ko: "저장된 보기", fr: "Vues enregistrées" },
+  searchWorkItems: {
+    "zh-CN": "检索工作项",
+    en: "Search work items",
+    ja: "作業項目を検索",
+    ko: "작업 항목 검색",
+    fr: "Rechercher des éléments"
+  },
+  literal: { "zh-CN": "逐字", en: "literal", ja: "逐語", ko: "문자 그대로", fr: "littéral" },
+  literalNote: {
+    "zh-CN": "逐字匹配:多个词须全部命中。投影层的 FTS5 索引在摄取进程之后,此构建没有 API 通道,故不称全文搜索。",
+    en: "Literal match; every term must hit. The projection's FTS5 index sits behind the ingestion process with no API to reach it, so this is not called full-text search.",
+    ja: "逐語一致：複数の語はすべて命中する必要があります。投影層の FTS5 索引は取り込みプロセスの背後にあり、このビルドには到達する API がないため、全文検索とは呼びません。",
+    ko: "문자 그대로 일치: 여러 단어는 모두 적중해야 합니다. 투영 계층의 FTS5 색인은 수집 프로세스 뒤에 있고 이 빌드에는 접근할 API가 없으므로 전문 검색이라고 부르지 않습니다.",
+    fr: "Correspondance littérale ; chaque terme doit être trouvé. L'index FTS5 de la projection se trouve derrière le processus d'ingestion, sans API pour l'atteindre ; ce n'est donc pas une recherche plein texte."
+  },
+  allKinds: { "zh-CN": "全部类型", en: "All kinds", ja: "すべての種別", ko: "모든 종류", fr: "Tous les types" },
+  allStatuses: { "zh-CN": "全部状态", en: "All statuses", ja: "すべてのステータス", ko: "모든 상태", fr: "Tous les statuts" },
+  selectMultiple: { "zh-CN": "批量选择", en: "Select multiple", ja: "複数選択", ko: "여러 개 선택", fr: "Sélection multiple" },
+  applied: { "zh-CN": "已应用", en: "Applied", ja: "適用中", ko: "적용됨", fr: "Appliqué" },
+  remove: { "zh-CN": "移除", en: "Remove", ja: "解除", ko: "제거", fr: "Retirer" },
+  resetView: { "zh-CN": "重置视图", en: "Reset view", ja: "ビューを初期化", ko: "보기 초기화", fr: "Réinitialiser la vue" },
+  noMatch: {
+    "zh-CN": "当前筛选与检索没有匹配的工作项。",
+    en: "No work item matches the current filters and search.",
+    ja: "現在の絞り込みと検索に一致する作業項目はありません。",
+    ko: "현재 필터와 검색에 일치하는 작업 항목이 없습니다.",
+    fr: "Aucun élément de travail ne correspond aux filtres et à la recherche actuels."
+  },
+  splitLabel: {
+    "zh-CN": "工作项列表与详情",
+    en: "Work items list and preview",
+    ja: "作業項目一覧とプレビュー",
+    ko: "작업 항목 목록과 미리보기",
+    fr: "Liste des éléments et aperçu"
+  },
+  pickRow: {
+    "zh-CN": "选择左侧任一条以在此预览。",
+    en: "Pick a row on the left to preview it here.",
+    ja: "左側の行を選ぶと、ここにプレビューが表示されます。",
+    ko: "왼쪽에서 행을 선택하면 여기에 미리보기가 표시됩니다.",
+    fr: "Sélectionnez une ligne à gauche pour l'aperçu ici."
+  },
+  noScope: {
+    "zh-CN": "该记录没有范围注解——链上确实没有标题。",
+    en: "No scope annotation; the chain genuinely holds no title for this record.",
+    ja: "スコープ注記がありません。チェーンはこの記録の標題を実際に保持していません。",
+    ko: "범위 주석이 없습니다. 체인은 이 기록의 제목을 실제로 보유하지 않습니다.",
+    fr: "Aucune annotation de portée ; la chaîne ne détient réellement aucun titre pour cet enregistrement."
+  },
+  openDetail: {
+    "zh-CN": "打开完整详情 →",
+    en: "Open full detail →",
+    ja: "詳細を開く →",
+    ko: "전체 상세 열기 →",
+    fr: "Ouvrir le détail complet →"
+  },
+  openRoom: {
+    "zh-CN": "进入审议室 →",
+    en: "Open deliberation room →",
+    ja: "審議室を開く →",
+    ko: "심의실 열기 →",
+    fr: "Ouvrir la salle de délibération →"
+  },
+  selectAllShown: { "zh-CN": "全选本页", en: "Select all shown", ja: "表示分をすべて選択", ko: "표시된 항목 모두 선택", fr: "Tout sélectionner" },
+  clearSelection: { "zh-CN": "清空选择", en: "Clear selection", ja: "選択を解除", ko: "선택 해제", fr: "Effacer la sélection" },
+  nothingSelected: {
+    "zh-CN": "尚未选中任何条目",
+    en: "Nothing is selected",
+    ja: "何も選択されていません",
+    ko: "선택된 항목이 없습니다",
+    fr: "Rien n'est sélectionné"
+  },
+  copyKeys: { "zh-CN": "复制键号", en: "Copy keys", ja: "キーをコピー", ko: "키 복사", fr: "Copier les clés" },
+  exportJson: { "zh-CN": "导出 JSON", en: "Export JSON", ja: "JSON を書き出す", ko: "JSON 내보내기", fr: "Exporter en JSON" },
+  bulkTransition: { "zh-CN": "批量流转状态", en: "Bulk transition", ja: "一括で状態遷移", ko: "일괄 상태 전이", fr: "Transition groupée" },
+  bulkBlocked: {
+    "zh-CN": "链写入须经安全写面:operator 供权 + 对链头的 expected-version 比对。此构建为静态投影,没有写通道。",
+    en: "Chain writes go through the safe write surface: operator authority plus a compare-and-swap against the chain head. This build is a static projection with no write channel.",
+    ja: "チェーンへの書き込みは安全な書き込み面を通ります：operator 権限と、チェーン先頭に対する expected-version の比較です。このビルドは静的投影であり、書き込み経路はありません。",
+    ko: "체인 쓰기는 안전한 쓰기 표면을 거칩니다. operator 권한과 체인 헤드에 대한 expected-version 비교가 필요합니다. 이 빌드는 정적 투영이며 쓰기 경로가 없습니다.",
+    fr: "Les écritures dans la chaîne passent par la surface d'écriture sûre : autorité opérateur et comparaison de version avec la tête de chaîne. Cette version est une projection statique, sans canal d'écriture."
+  },
+  viewAll: { "zh-CN": "全部", en: "All", ja: "すべて", ko: "전체", fr: "Tout" },
+  viewOwnerIntent: { "zh-CN": "等你决定", en: "Awaiting you", ja: "承認待ち", ko: "결정 대기", fr: "En attente de vous" },
+  viewActive: { "zh-CN": "进行中", en: "In progress", ja: "進行中", ko: "진행 중", fr: "En cours" },
+  viewBlocked: { "zh-CN": "阻塞", en: "Blocked", ja: "ブロック中", ko: "차단됨", fr: "Bloqué" },
+  viewEnrolled: { "zh-CN": "已入列车", en: "On a train", ja: "列車に登録済み", ko: "열차에 등록됨", fr: "Sur un train" },
+  viewUntitled: { "zh-CN": "无范围注解", en: "No scope text", ja: "スコープ注記なし", ko: "범위 주석 없음", fr: "Sans texte de portée" }
+} satisfies Record<string, CopyEntry>;
+
+const workCounted = {
+  description: {
+    "zh-CN": "{0} / {1} 条 · 类型只是字段,不是另一个系统",
+    en: "{0} of {1}; kind is a field, not a separate system.",
+    ja: "{1} 件のうち {0} 件。種別はフィールドであり、別のシステムではありません。",
+    ko: "{1}건 중 {0}건. 종류는 필드이며 별도의 시스템이 아닙니다.",
+    fr: "{0} sur {1} ; le type est un champ, pas un système distinct."
+  },
+  selectKey: { "zh-CN": "选择 {0}", en: "Select {0}", ja: "{0} を選択", ko: "{0} 선택", fr: "Sélectionner {0}" },
+  showingFirst: {
+    "zh-CN": "显示前 {0} 条,共 {1} 条,请继续收窄筛选。",
+    en: "Showing the first {0} of {1}; narrow the filters to see the rest.",
+    ja: "全 {1} 件のうち先頭 {0} 件を表示しています。残りを見るには絞り込んでください。",
+    ko: "총 {1}건 중 처음 {0}건을 표시합니다. 나머지를 보려면 필터를 좁히세요.",
+    fr: "Affichage des {0} premiers sur {1} ; affinez les filtres pour voir le reste."
+  },
+  children: { "zh-CN": "子项 {0}", en: "{0} children", ja: "子項目 {0}", ko: "하위 {0}개", fr: "{0} enfants" },
+  gates: { "zh-CN": "门 {0}", en: "{0} gates", ja: "ゲート {0}", ko: "게이트 {0}개", fr: "{0} portes" },
+  deliberations: { "zh-CN": "审议 {0}", en: "{0} deliberations", ja: "審議 {0}", ko: "심의 {0}건", fr: "{0} délibérations" },
+  selectedCount: { "zh-CN": "已选 {0} 条", en: "{0} selected", ja: "{0} 件を選択中", ko: "{0}건 선택됨", fr: "{0} sélectionnés" }
+} satisfies Record<string, CopyEntry>;
 
 /**
  * Work items — one searchable, filterable, selectable index over every ticket
@@ -43,7 +187,6 @@ export function WorkItemsView({
   routeHref: (path: string) => string;
   search?: URLSearchParams;
 }) {
-  const isZh = locale === "zh-CN";
   const projectFilter = search?.get("project") ?? undefined;
   const kindFilter = search?.get("kind") ?? undefined;
   const statusFilter = search?.get("status") ?? undefined;
@@ -66,6 +209,16 @@ export function WorkItemsView({
   const selected = rows.find((row) => (row.externalKey ?? row.id) === selectedId)
     ?? cockpitData.work.find((row) => (row.externalKey ?? row.id) === selectedId);
 
+  // Every facet link states the whole filter state, project included.
+  //
+  // Naming `project` here is the fix for the Owner's report that changing a
+  // filter resets the project scope. The INC-014 repair made `routeHref` inherit
+  // the query in force, which carries scope through any link that does not speak
+  // about it — but this builder does speak about it: it enumerates the keys and
+  // hands the result to a helper that drops empty values, so before this line
+  // `project` was the one facet no link mentioned, and every kind, status and
+  // view chip rebuilt the URL without it. Inheritance could not save it, because
+  // an explicitly-written key wins over the inherited one.
   const facetHref = (name: string, value: string | undefined) =>
     routeHref(`/work-items${buildQuery({
       project: projectFilter, kind: kindFilter, status: statusFilter, view: viewFilter,
@@ -74,28 +227,34 @@ export function WorkItemsView({
   // What is currently narrowing the list, each removable on its own. The screen
   // previously offered only a global reset, so taking one condition off meant
   // rebuilding the rest by hand.
+  //
+  // `clearHref` rather than a bare `/work-items`: under query inheritance a link
+  // that names no keys keeps every key, so the plain route reset nothing — see
+  // `clearHref` below.
   const applied = [
     query ? {
       id: "q",
-      label: isZh ? "检索" : "Search",
+      label: pick(locale, workCopy.search),
       value: `“${query}”`,
       removeHref: facetHref("q", undefined)
     } : null,
     kindFilter ? {
       id: "kind",
-      label: isZh ? "类型" : "Kind",
+      label: pick(locale, workCopy.kind),
       value: kindFilter,
       removeHref: facetHref("kind", undefined)
     } : null,
     statusFilter ? {
       id: "status",
-      label: isZh ? "状态" : "Status",
-      value: statusFilter,
+      label: pick(locale, workCopy.status),
+      // The chain's word in the reader's language, matching the menu it came
+      // from. `kind` stays verbatim above: a record kind is a name, not prose.
+      value: chainStatusLabel(statusFilter, locale),
       removeHref: facetHref("status", undefined)
     } : null,
     viewFilter ? {
       id: "view",
-      label: isZh ? "视图" : "View",
+      label: pick(locale, workCopy.view),
       value: viewFilter,
       removeHref: facetHref("view", undefined)
     } : null
@@ -103,16 +262,21 @@ export function WorkItemsView({
     // filter, and stating it here would say the same thing in two places.
   ].filter((entry): entry is NonNullable<typeof entry> => entry !== null);
 
+  // Reset clears this page's filters and keeps the scope the reader is working
+  // in. `routeHref("/work-items")` cannot do that: query inheritance means a
+  // link naming no keys keeps all of them, so the reset chip led back to the
+  // page it was resetting — the same INC-014 mechanism as the facet links, in
+  // the opposite direction. Subtraction has to be stated to happen.
+  const clearHref = routeHref(`/work-items${buildQuery({ project: projectFilter })}`);
+
   const shown = rows.slice(0, 120);
   const checkedRows = rows.filter((row) => checked.has(row.id));
 
   return (
     <div className="tcrn-aos-view" data-cockpit-view="work-items">
       <WorkPageHeader
-        title={isZh ? "工作项" : "Work items"}
-        description={isZh
-          ? `${rows.length} / ${cockpitData.work.length} 条 · 类型只是字段,不是另一个系统`
-          : `${rows.length} of ${cockpitData.work.length}; kind is a field, not a separate system.`}
+        title={pick(locale, workCopy.workItems)}
+        description={format(locale, workCounted.description, rows.length, cockpitData.work.length)}
       />
 
       {/* Three layers, in the order a person uses them: which named view, then
@@ -124,15 +288,15 @@ export function WorkItemsView({
           shell's scope control, and one idea gets one control. */}
       <Surface className="tcrn-aos-filters">
         <WorkManagementSubnav
-          label={isZh ? "保存视图" : "Saved views"}
-          items={savedViews(locale, routeHref, viewFilter, statusFilter)}
+          label={pick(locale, workCopy.savedViews)}
+          items={savedViews(locale, routeHref, viewFilter, statusFilter, projectFilter)}
         />
 
         <div className="tcrn-aos-toolbar">
           <div className="tcrn-aos-searchbar">
             <SearchInput
-              aria-label={isZh ? "检索工作项" : "Search work items"}
-              placeholder={isZh ? "检索工作项" : "Search work items"}
+              aria-label={pick(locale, workCopy.searchWorkItems)}
+              placeholder={pick(locale, workCopy.searchWorkItems)}
               value={query}
               onChange={(event) => setQuery(event.currentTarget.value)}
               data-cockpit-search="work-items"
@@ -142,19 +306,14 @@ export function WorkItemsView({
                 process and this build has no API to reach it, so what runs here
                 is a literal match over the projected text. Calling it "full-text
                 search" would promise a query language it does not implement. */}
-            <span
-              className="tcrn-aos-searchbar__note"
-              title={isZh
-                ? "逐字匹配:多个词须全部命中。投影层的 FTS5 索引在摄取进程之后,此构建没有 API 通道,故不称全文搜索。"
-                : "Literal match; every term must hit. The projection's FTS5 index sits behind the ingestion process with no API to reach it, so this is not called full-text search."}
-            >
-              {isZh ? "逐字" : "literal"}
+            <span className="tcrn-aos-searchbar__note" title={pick(locale, workCopy.literalNote)}>
+              {pick(locale, workCopy.literal)}
             </span>
           </div>
 
           <FilterMenu
-            label={isZh ? "类型" : "Kind"}
-            allLabel={isZh ? "全部类型" : "All kinds"}
+            label={pick(locale, workCopy.kind)}
+            allLabel={pick(locale, workCopy.allKinds)}
             value={kindFilter}
             options={["Initiative", "Epic", "Story", "Subtask", "Incident", "Release"]
               .map((kind) => ({
@@ -166,12 +325,16 @@ export function WorkItemsView({
             locale={locale}
           />
           <FilterMenu
-            label={isZh ? "状态" : "Status"}
-            allLabel={isZh ? "全部状态" : "All statuses"}
+            label={pick(locale, workCopy.status)}
+            allLabel={pick(locale, workCopy.allStatuses)}
             value={statusFilter}
+            // Status options say the chain's word in the reader's language; the
+            // id stays the chain's own token because that is what the URL and
+            // the filter compare on. `kind` above is deliberately not translated:
+            // Initiative, Epic and Story are the chain's record kinds, not prose.
             options={["planned", "ready", "active", "blocked", "done"].map((status) => ({
               id: status,
-              label: status,
+              label: chainStatusLabel(status, locale),
               count: faceted.filter((row) => row.status === status).length
             }))}
             hrefFor={(value) => facetHref("status", value)}
@@ -195,7 +358,7 @@ export function WorkItemsView({
             }}
             data-cockpit-batch-toggle="true"
           >
-            {isZh ? "批量选择" : "Select multiple"}
+            {pick(locale, workCopy.selectMultiple)}
           </Button>
         </div>
 
@@ -204,17 +367,17 @@ export function WorkItemsView({
             ignore the row it sits in. */}
         {applied.length > 0 ? (
           <div className="tcrn-aos-applied" data-cockpit-applied="true">
-            <span className="tcrn-aos-applied__label">{isZh ? "已应用" : "Applied"}</span>
+            <span className="tcrn-aos-applied__label">{pick(locale, workCopy.applied)}</span>
             {applied.map((entry) => (
               <a key={entry.id} className="tcrn-aos-chip" href={entry.removeHref}
                 data-applied-filter={entry.id}>
                 {entry.label} <b>{entry.value}</b>
                 <span className="tcrn-aos-chip__x" aria-hidden="true">✕</span>
-                <span className="tcrn-sr-only">{isZh ? "移除" : "Remove"}</span>
+                <span className="tcrn-sr-only">{pick(locale, workCopy.remove)}</span>
               </a>
             ))}
-            <a className="tcrn-aos-reset" href={routeHref("/work-items")}>
-              {isZh ? "重置视图" : "Reset view"}
+            <a className="tcrn-aos-reset" href={clearHref}>
+              {pick(locale, workCopy.resetView)}
             </a>
           </div>
         ) : null}
@@ -230,19 +393,15 @@ export function WorkItemsView({
       ) : null}
 
       {rows.length === 0 ? (
-        <EmptyState
-          title={isZh
-            ? "当前筛选与检索没有匹配的工作项。"
-            : "No work item matches the current filters and search."}
-        />
+        <EmptyState title={pick(locale, workCopy.noMatch)} />
       ) : (
         <div data-cockpit-split="work-items" data-has-selection={selected ? "true" : "false"}>
         <WorkSplitView
-          label={isZh ? "工作项列表与详情" : "Work items list and preview"}
+          label={pick(locale, workCopy.splitLabel)}
           list={
             <section
               className="tcrn-aos-picker"
-              aria-label={isZh ? "工作项" : "Work items"}
+              aria-label={pick(locale, workCopy.workItems)}
               data-work-management-pattern="work-list"
             >
               {shown.map((row) => {
@@ -256,7 +415,7 @@ export function WorkItemsView({
                   >
                     {batchMode ? (
                       <Checkbox
-                        aria-label={isZh ? `选择 ${key}` : `Select ${key}`}
+                        aria-label={format(locale, workCounted.selectKey, key)}
                         checked={checked.has(row.id)}
                         onChange={(event) => {
                           const next = new Set(checked);
@@ -289,15 +448,19 @@ export function WorkItemsView({
                       <WorkItemRow
                         id={key}
                         title={workTitle(row) ?? key}
-                        state={chainStatusBadge(row.status) as never}
+                        state={chainStatusBadge(row.status, locale) as never}
                         owner={row.kind}
                         selected={key === selectedId}
                         fields={[
-                          { key: "status", label: isZh ? "状态" : "Status", value: row.status },
+                          {
+                            key: "status",
+                            label: pick(locale, workCopy.status),
+                            value: chainStatusLabel(row.status, locale)
+                          },
                           {
                             key: "project",
-                            label: isZh ? "项目" : "Project",
-                            value: partitionLabel(findPartition(row.partitionId), locale)
+                            label: pick(locale, workCopy.project),
+                            value: partitionDisplayName(findPartition(row.partitionId), locale)
                           }
                         ]}
                       />
@@ -306,11 +469,7 @@ export function WorkItemsView({
                 );
               })}
               {rows.length > shown.length ? (
-                <Text>
-                  {isZh
-                    ? `显示前 ${shown.length} 条,共 ${rows.length} 条,请继续收窄筛选。`
-                    : `Showing the first ${shown.length} of ${rows.length}; narrow the filters to see the rest.`}
-                </Text>
+                <Text>{format(locale, workCounted.showingFirst, shown.length, rows.length)}</Text>
               ) : null}
             </section>
           }
@@ -338,13 +497,8 @@ function PreviewPane({
   locale: TcrnLocale;
   routeHref: (path: string) => string;
 }) {
-  const isZh = locale === "zh-CN";
   if (!item) {
-    return (
-      <EmptyState
-        title={isZh ? "选择左侧任一条以在此预览。" : "Pick a row on the left to preview it here."}
-      />
-    );
+    return <EmptyState title={pick(locale, workCopy.pickRow)} />;
   }
   const key = item.externalKey ?? item.id;
   const partition = findPartition(item.partitionId);
@@ -355,13 +509,24 @@ function PreviewPane({
   const conferences = cockpitData.conferences.filter(
     (conference) => conference.partitionId === item.partitionId
       && conference.workIds.includes(item.id));
+  const firstConference = conferences[0];
 
   return (
     <div className="tcrn-aos-preview" data-preview-key={key}>
       <div className="tcrn-aos-detail-head__meta">
-        <MachineTokenCell token={key} kind="work-item" copyable={false} />
+        {/* The key is the reference to the item's own page, so it is the link to
+            it — the same INC-018 rule the detail page follows: an identifier that
+            has a page is a link, and one that does not stays text. */}
+        <MachineTokenCell
+          token={key}
+          kind="work-item"
+          copyable={false}
+          {...hrefAttr(workItemLink(item, routeHref))}
+        />
         <Badge tone="neutral">{item.kind}</Badge>
-        <Badge tone={item.status === "blocked" ? "warning" : "neutral"}>{item.status}</Badge>
+        <Badge tone={item.status === "blocked" ? "warning" : "neutral"}>
+          {chainStatusLabel(item.status, locale)}
+        </Badge>
         {partition ? (
           <MachineTokenCell token={`v${partition.chainVersion}`} kind="generic" copyable={false} />
         ) : null}
@@ -369,32 +534,23 @@ function PreviewPane({
       <Heading level={2} visualLevel={3}>{workTitle(item) ?? key}</Heading>
       {item.scope
         ? <Text className="tcrn-aos-prose">{item.scope.length > 700 ? `${item.scope.slice(0, 700)}…` : item.scope}</Text>
-        : (
-          <Text>
-            {isZh
-              ? "该记录没有范围注解——链上确实没有标题。"
-              : "No scope annotation; the chain genuinely holds no title for this record."}
-          </Text>
-        )}
+        : <Text>{pick(locale, workCopy.noScope)}</Text>}
       <div className="tcrn-aos-preview__counts">
-        <Badge tone="neutral">{isZh ? `子项 ${children.length}` : `${children.length} children`}</Badge>
+        <Badge tone="neutral">{format(locale, workCounted.children, children.length)}</Badge>
         <Badge tone={gates.some((gate) => gate.status === "pending") ? "warning" : "neutral"}>
-          {isZh ? `门 ${gates.length}` : `${gates.length} gates`}
+          {format(locale, workCounted.gates, gates.length)}
         </Badge>
         <Badge tone="neutral">
-          {isZh ? `审议 ${conferences.length}` : `${conferences.length} deliberations`}
+          {format(locale, workCounted.deliberations, conferences.length)}
         </Badge>
       </div>
       <div className="tcrn-aos-preview__actions">
-        <a className="tcrn-aos-preview__open" href={routeHref(`/work-items/${key}`)}>
-          {isZh ? "打开完整详情 →" : "Open full detail →"}
+        <a className="tcrn-aos-preview__open" href={workItemLink(item, routeHref).href}>
+          {pick(locale, workCopy.openDetail)}
         </a>
-        {conferences.length > 0 ? (
-          <a
-            className="tcrn-aos-preview__open"
-            href={routeHref(`/deliberations/${conferences[0]?.externalKey ?? conferences[0]?.id}`)}
-          >
-            {isZh ? "进入审议室 →" : "Open deliberation room →"}
+        {firstConference ? (
+          <a className="tcrn-aos-preview__open" href={conferenceLink(firstConference, routeHref).href}>
+            {pick(locale, workCopy.openRoom)}
           </a>
         ) : null}
       </div>
@@ -423,49 +579,47 @@ function BatchBar({
   onClear: () => void;
   onSelectAllShown: () => void;
 }) {
-  const isZh = locale === "zh-CN";
   const keys = rows.map((row) => row.externalKey ?? row.id);
+  const nothingSelected = pick(locale, workCopy.nothingSelected);
 
   return (
     <Surface className="tcrn-aos-batchbar" data-cockpit-batch-bar="true">
-      <Text>{isZh ? `已选 ${rows.length} 条` : `${rows.length} selected`}</Text>
+      <Text>{format(locale, workCounted.selectedCount, rows.length)}</Text>
       <Button type="button" variant="quiet" size="sm" onClick={onSelectAllShown}>
-        {isZh ? "全选本页" : "Select all shown"}
+        {pick(locale, workCopy.selectAllShown)}
       </Button>
       <Button type="button" variant="quiet" size="sm" onClick={onClear} disabled={rows.length === 0}
-        disabledReason={isZh ? "尚未选中任何条目" : "Nothing is selected"}>
-        {isZh ? "清空选择" : "Clear selection"}
+        disabledReason={nothingSelected}>
+        {pick(locale, workCopy.clearSelection)}
       </Button>
       <Button
         type="button"
         variant="secondary"
         size="sm"
         disabled={rows.length === 0}
-        disabledReason={isZh ? "尚未选中任何条目" : "Nothing is selected"}
+        disabledReason={nothingSelected}
         onClick={() => { void copyToClipboard(keys.join("\n")); }}
       >
-        {isZh ? "复制键号" : "Copy keys"}
+        {pick(locale, workCopy.copyKeys)}
       </Button>
       <Button
         type="button"
         variant="secondary"
         size="sm"
         disabled={rows.length === 0}
-        disabledReason={isZh ? "尚未选中任何条目" : "Nothing is selected"}
+        disabledReason={nothingSelected}
         onClick={() => downloadJson(rows)}
       >
-        {isZh ? "导出 JSON" : "Export JSON"}
+        {pick(locale, workCopy.exportJson)}
       </Button>
       <Button
         type="button"
         variant="primary"
         size="sm"
         disabled
-        disabledReason={isZh
-          ? "链写入须经安全写面:operator 供权 + 对链头的 expected-version 比对。此构建为静态投影,没有写通道。"
-          : "Chain writes go through the safe write surface: operator authority plus a compare-and-swap against the chain head. This build is a static projection with no write channel."}
+        disabledReason={pick(locale, workCopy.bulkBlocked)}
       >
-        {isZh ? "批量流转状态" : "Bulk transition"}
+        {pick(locale, workCopy.bulkTransition)}
       </Button>
     </Surface>
   );
@@ -507,51 +661,63 @@ function savedViews(
   locale: TcrnLocale,
   routeHref: (path: string) => string,
   viewFilter: string | undefined,
-  statusFilter: string | undefined
+  statusFilter: string | undefined,
+  projectFilter: string | undefined
 ) {
-  const isZh = locale === "zh-CN";
   const count = (predicate: (row: CockpitWork) => boolean) =>
     cockpitData.work.filter(predicate).length;
+  // Each view is a complete statement of the two keys it owns, so switching views
+  // replaces the previous one instead of stacking on it — picking "In progress"
+  // after "Awaiting you" must not leave `view=owner-intent` in the URL. Project
+  // rides along because it is the reader's scope, not one of this page's facets:
+  // a saved view narrows what kind of work is listed, never which chain.
+  //
+  // The counts are deliberately unscoped. They answer "how much of this exists on
+  // the platform", which is the question a saved view's badge is asked, and
+  // scoping them would make the same view report different numbers depending on
+  // where the reader happened to be standing.
+  const viewHref = (view: string | undefined, status: string | undefined) =>
+    routeHref(`/work-items${buildQuery({ project: projectFilter, view, status })}`);
   return [
     {
       id: "all",
-      label: isZh ? "全部" : "All",
-      href: routeHref("/work-items"),
+      label: pick(locale, workCopy.viewAll),
+      href: viewHref(undefined, undefined),
       current: !viewFilter && !statusFilter,
       count: cockpitData.work.length
     },
     {
       id: "owner-intent",
-      label: isZh ? "等你决定" : "Awaiting you",
-      href: routeHref("/work-items?view=owner-intent"),
+      label: pick(locale, workCopy.viewOwnerIntent),
+      href: viewHref("owner-intent", undefined),
       current: viewFilter === "owner-intent",
       count: count((row) => matchesView(row, "owner-intent"))
     },
     {
       id: "active",
-      label: isZh ? "进行中" : "In progress",
-      href: routeHref("/work-items?status=active"),
+      label: pick(locale, workCopy.viewActive),
+      href: viewHref(undefined, "active"),
       current: statusFilter === "active",
       count: count((row) => row.status === "active")
     },
     {
       id: "blocked",
-      label: isZh ? "阻塞" : "Blocked",
-      href: routeHref("/work-items?status=blocked"),
+      label: pick(locale, workCopy.viewBlocked),
+      href: viewHref(undefined, "blocked"),
       current: statusFilter === "blocked",
       count: count((row) => row.status === "blocked")
     },
     {
       id: "enrolled",
-      label: isZh ? "已入列车" : "On a train",
-      href: routeHref("/work-items?view=enrolled"),
+      label: pick(locale, workCopy.viewEnrolled),
+      href: viewHref("enrolled", undefined),
       current: viewFilter === "enrolled",
       count: count((row) => matchesView(row, "enrolled"))
     },
     {
       id: "untitled",
-      label: isZh ? "无范围注解" : "No scope text",
-      href: routeHref("/work-items?view=untitled"),
+      label: pick(locale, workCopy.viewUntitled),
+      href: viewHref("untitled", undefined),
       current: viewFilter === "untitled",
       count: count((row) => matchesView(row, "untitled"))
     }
@@ -595,19 +761,26 @@ function matchesQuery(row: CockpitWork, query: string): boolean {
   return terms.every((term) => haystack.includes(term));
 }
 
-function findPartition(id: string): CockpitPartition | undefined {
+function findPartition(id: string) {
   return cockpitData.partitions.find((entry) => entry.id === id);
 }
 
-function partitionLabel(partition: CockpitPartition | undefined, locale: TcrnLocale): string {
-  if (!partition) return "—";
-  return locale === "zh-CN" ? partition.labelZh : partition.label;
-}
-
+/**
+ * A full statement of this page's filter state, including what is *not* set.
+ *
+ * Every key named in `params` appears in the result: with its value when it has
+ * one, and empty when it does not. The empty form is what `buildRouteHref` reads
+ * as "remove this key", and saying it explicitly is the whole point — this
+ * builder's output is merged over the query in force, where an omitted key means
+ * "keep whatever is there". Dropping the empties, as this function used to,
+ * turned every "clear one facet" link into a link that changed nothing, and left
+ * `project` — the one key the enumeration below never sets — as the only facet
+ * that survived, which is the asymmetry the Owner saw from the other side.
+ */
 function buildQuery(params: Record<string, string | undefined>): string {
   const search = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
-    if (value) search.set(key, value);
+    search.set(key, value ?? "");
   }
   const text = search.toString();
   return text ? `?${text}` : "";
