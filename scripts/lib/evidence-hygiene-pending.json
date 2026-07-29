@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "aos.evidence-hygiene-pending.v1",
+  "whatThisIs": "Paths under evidence/ that carry host paths and are NOT redacted, each with the reason. An entry is not a pardon: the gate re-checks every condition below on every run, and an entry that stops being true turns the gate red.",
+  "closure": [
+    "the path must exist",
+    "nothing under it may be tracked by git — the moment it is `git add`ed the exception fails, because the hygiene obligation is about what enters history",
+    "at least one file under it must still carry a host path — a stale exception is red, so the list cannot outlive its reason",
+    "the reason must be non-empty"
+  ],
+  "entries": [
+    {
+      "path": "evidence/conf-007-recon",
+      "reason": "CONF-007 的侦察与验证子代理原始输出,未入库的在途工作材料而非已归档证物。它们是「代理当时说了什么」的记录,改写其字节等于改写记录本身,而它们没有 git 基线可供回滚;因此不脱敏、也不入库。若要归档,先脱敏再 git add——add 的那一刻本条例外即失效转红。"
+    }
+  ]
+}

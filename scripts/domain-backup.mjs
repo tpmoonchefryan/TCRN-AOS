@@ -37,6 +37,7 @@ import { DatabaseSync } from "node:sqlite";
 import { createHash } from "node:crypto";
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
+import { scrubHostPaths } from "./lib/evidence-hygiene.mjs";
 
 const domainDatabasePath = process.env.AOS_DOMAIN_DB
   ?? resolve(homedir(), ".tcrn-aos/domain.db");
@@ -233,7 +234,13 @@ if (verifyFlag >= 0) {
   const rotated = verified.ok ? await rotate(retention) : { kept: null, deleted: [], skipped: "verification_failed" };
   const receipt = { ok: verified.ok, destinationRoot, snapshot: taken.manifest, verified, rotated };
   await mkdir("evidence", { recursive: true });
-  await writeFile("evidence/aos-domain-backup.json", `${JSON.stringify(receipt, null, 2)}\n`);
+  // The archived receipt is redacted; the one printed to the terminal is not.
+  // The operator is standing at this machine and needs the real destination —
+  // the committed artifact travels, and a path that names one laptop's home
+  // directory is drift the repository already paid to remove once
+  // (TCRN-AOS-INC-037). Only path strings change; every digest, count and
+  // verdict is byte-identical in both.
+  await writeFile("evidence/aos-domain-backup.json", `${JSON.stringify(scrubHostPaths(receipt), null, 2)}\n`);
   console.log(JSON.stringify(receipt, null, 2));
   if (!verified.ok) process.exitCode = 1;
 }

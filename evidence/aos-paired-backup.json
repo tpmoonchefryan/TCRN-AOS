@@ -1,26 +1,26 @@
 {
   "ok": true,
-  "destinationRoot": "/Users/ryanlan/OneDrive/Github/tcrn-aos-paired-backups",
-  "directory": "2026-07-27T03-24-08Z",
+  "destinationRoot": "<local-home>/OneDrive/Github/tcrn-aos-paired-backups",
+  "directory": "2026-07-28T13-29-29Z",
   "pair": {
     "schemaVersion": "aos.paired-backup.v1",
-    "pairedAt": "2026-07-27T03:24:08Z",
+    "pairedAt": "2026-07-28T13:29:29Z",
     "partition": "TCRN-AOS",
     "ok": true,
     "lockstep": {
       "ok": true,
-      "chainHeadEventHash": "8ee5ad8256d9a3be3228e294b21cfaa49608705679c5d7d50588bf570a21d4f3",
-      "knowledgeHighWaterDigest": "8ee5ad8256d9a3be3228e294b21cfaa49608705679c5d7d50588bf570a21d4f3",
-      "knowledgeVersion": 5,
+      "chainHeadEventHash": "557b5032648ede9157d68b4c9ccec7b4216f700576ff7c39cbf781e6bfac1088",
+      "knowledgeHighWaterDigest": "557b5032648ede9157d68b4c9ccec7b4216f700576ff7c39cbf781e6bfac1088",
+      "knowledgeVersion": 6,
       "remedy": null
     },
     "pairing": {
-      "domainSnapshotDigest": "4691bf4b6aed8e8f1dc5fe85fe2c23fe06c55e1536ea9f18f2b73d40d8d8115c",
-      "domainExportDigest": "e76d11cdc7ff04552c9c0e4c30d116c66fa699c62e26285aa3e35cfe4d861521",
-      "chainManifestDigest": "c645cf5f234cfa9986419a04df29f914f27a63b70f545557114421106e10dbb3",
-      "chainHeadEventHash": "8ee5ad8256d9a3be3228e294b21cfaa49608705679c5d7d50588bf570a21d4f3",
-      "chainVersion": 312,
-      "attestationSetDigest": "26d8078be664dfd7da248966a3e4a2accb1d10513db94b762149b0bde2c83e10",
+      "domainSnapshotDigest": "8b16e1f5b7c21f2ab111ace3c29c56435ed0c44c1fa50d5e1ee1171a6dda8d6d",
+      "domainExportDigest": "a470e8009eee4e149b85e668b764021b7d9ffb59530af83746c62733ac2f23bf",
+      "chainManifestDigest": "ea7f97982eca3c5bb186f25dbb1b83cb7b41e95729160a133760ff23608ba00c",
+      "chainHeadEventHash": "557b5032648ede9157d68b4c9ccec7b4216f700576ff7c39cbf781e6bfac1088",
+      "chainVersion": 549,
+      "attestationSetDigest": "e819f037d59722f4a5db4929a85199cdad0a39eca084943224fdce876b2e0b77",
       "boundBy": "one instant plus mutual digests; either half alone is not a restorable pair"
     },
     "domain": {
@@ -30,14 +30,14 @@
         "ok": true,
         "result": "ok"
       },
-      "snapshotDigest": "4691bf4b6aed8e8f1dc5fe85fe2c23fe06c55e1536ea9f18f2b73d40d8d8115c",
-      "manifestDigest": "666581879cf102ed459329b37a152f5b93d4de1068b25106795ae39c08a1ee60",
+      "snapshotDigest": "8b16e1f5b7c21f2ab111ace3c29c56435ed0c44c1fa50d5e1ee1171a6dda8d6d",
+      "manifestDigest": "b13a9052e338e01ab95a172214866bc8d7ee4b412d6ab2f00707ab542168fa8a",
       "tableRowCounts": {
         "aos_domain_annotation": 2,
         "aos_domain_comment": 1,
         "aos_domain_relation": 0
       },
-      "exportDigest": "e76d11cdc7ff04552c9c0e4c30d116c66fa699c62e26285aa3e35cfe4d861521",
+      "exportDigest": "a470e8009eee4e149b85e668b764021b7d9ffb59530af83746c62733ac2f23bf",
       "counts": {
         "annotations": 2,
         "comments": 1,
@@ -52,19 +52,19 @@
       "ok": true,
       "reasonCode": "SNAPSHOT_VERIFIED",
       "verifyError": null,
-      "workspaceRoot": "/Users/ryanlan/Code/TCRN Platform/.tcrn-workspace/TCRN-AOS/workspace",
-      "headEventHash": "8ee5ad8256d9a3be3228e294b21cfaa49608705679c5d7d50588bf570a21d4f3",
-      "version": 312,
+      "workspaceRoot": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace",
+      "headEventHash": "557b5032648ede9157d68b4c9ccec7b4216f700576ff7c39cbf781e6bfac1088",
+      "version": 549,
       "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
-      "chainManifestDigest": "c645cf5f234cfa9986419a04df29f914f27a63b70f545557114421106e10dbb3",
+      "chainManifestDigest": "ea7f97982eca3c5bb186f25dbb1b83cb7b41e95729160a133760ff23608ba00c",
       "attestations": {
         "directoryPresent": true,
-        "count": 149,
-        "chainEventsSeen": 312,
+        "count": 344,
+        "chainEventsSeen": 549,
         "orphanReceipts": 0,
         "filenameMismatches": 0,
         "strength": "advisory local-clock corroboration; unauthenticated, no engine verifier",
-        "setDigest": "26d8078be664dfd7da248966a3e4a2accb1d10513db94b762149b0bde2c83e10"
+        "setDigest": "e819f037d59722f4a5db4929a85199cdad0a39eca084943224fdce876b2e0b77"
       }
     },
     "restoreDrill": {
@@ -93,14 +93,14 @@
     ]
   },
   "export": {
-    "fileCount": 166,
-    "totalBytes": 656414,
-    "fileSetDigest": "56d7879584af7924f5ff13d1ce1efa7cf8e6f336026e4f45371b64c14a5ff261"
+    "fileCount": 365,
+    "totalBytes": 1393759,
+    "fileSetDigest": "f73d568f1c9050af2b8cd955097f52789d195f8bb06bcb2a5290e5e455700d07"
   },
   "rotated": {
     "kept": 5,
     "deleted": [
-      "2026-07-27T03-10-40Z"
+      "2026-07-27T03-10-50Z"
     ]
   }
 }

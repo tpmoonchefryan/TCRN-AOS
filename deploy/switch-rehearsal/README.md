@@ -20,6 +20,22 @@ Acts 3 and 4 are a **pair**: act 3 drifts the scratch chain and leaves the
 service up, act 4 freezes it and rolls it back. Act 3 resets the VM scratch
 chain to the anchor on entry, so the pair can be re-run.
 
+## The predicates run without any of this
+
+`rehearsal-predicates.mjs` holds the three judgements the acts actually turn on
+— per-route expected view, the replay classifier, and the export-ceiling
+fallback — as pure functions with no VM, tunnel, engine or network behind them.
+The acts **import** them; `rehearsal-predicates.test.mjs` is in `pnpm test` and
+exercises every red state on synthetic input.
+
+This split exists because everything else here runs by hand a few times a
+quarter, and a predicate that only ever runs by hand has the lifespan of the day
+it was written: nothing notices when it quietly stops meaning what it meant
+(TCRN-AOS-INC-038). Keep them imported. A second copy drifts from the first the
+moment somebody fixes one of them, and the rehearsal would then be running a
+predicate the test suite has never seen — the test asserts the import for
+exactly that reason.
+
 ## Running it
 
 ```sh

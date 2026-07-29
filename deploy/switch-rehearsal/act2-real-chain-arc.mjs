@@ -32,6 +32,10 @@ import {
   compareLedgers, engineLocal, engineVm, instant, loadState, localLedger,
   placeLocally, placeOnVm, remoteLedger, rsyncToVm, saveState, sha256Text, ssh
 } from "./rehearsal-lib.mjs";
+// The export-ceiling fallback judgement lives in the automated test roster, not
+// here: this act runs by hand against the live chain, and a predicate that only
+// ever runs by hand rots between runs (TCRN-AOS-INC-038).
+import { judgeExportFallback } from "./rehearsal-predicates.mjs";
 
 const act1 = loadState("act1");
 const vmRealRoot = `${act1.vmRoot}/real-chain`;
@@ -151,6 +155,23 @@ step("matrix-honest-shape", {
   honestReading: "R1/R3 的 A 侧格是 MIN-003 验收门;A 容器缺席时它们如实记 pending 而非授权 n/a,整跑不通过——这就是 INC-035 落地前活分区的真实形状"
 });
 receipt.matrixHonestShape = { summary: matrix.summary, reasonCode: matrix.reasonCode, lockstep: matrix.lockstep, anchor: matrix.anchor };
+
+// ---- 5b. the export → per-event paging fallback, asserted -----------------
+// The live partition is past the engine's 1MiB canonical ceiling, so the
+// whole-document `export` is refused and the matrix degrades to reading the
+// event segments one at a time. That degradation used to leave nothing behind
+// but the engine's refusal on stderr — the run looked identical whether the
+// fallback had worked or had silently produced nothing, because no step
+// judged it (TCRN-AOS-INC-038).
+//
+// The judgement itself is judgeExportFallback in rehearsal-predicates.mjs,
+// where the automated roster exercises every one of its red states on
+// synthetic input; what stays here is the live matrix result it judges.
+step("export-ceiling-fallback-to-paging", {
+  ...judgeExportFallback({ matrix, authorityHeadEventHash: liveHeadBefore.headEventHash }),
+  meaning: "整文档 export 越 1MiB 上限被拒 → 驱动器改走逐事件分段读;分段读装配出的末条事件哈希与权威 status 全值相等,证明退化路径产出的是这条链而不是「某些东西」",
+  ifThisTurnsRed: "若 reasonCode=EXPORT_FALLBACK_DID_NOT_OCCUR,说明该分区已回到 1MiB 以内、整文档路径重新可用——那是链的形状变了,须有人重新裁定本步的预期,而不是把断言删掉"
+});
 
 // ---- 6. transfer to VM, far-side verify, replayability proof --------------
 const localFiles = localLedger(localRoot);

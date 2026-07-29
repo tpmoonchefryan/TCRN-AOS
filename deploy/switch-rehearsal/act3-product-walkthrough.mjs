@@ -31,6 +31,10 @@ import {
   reclaimLocalTunnel, reclaimVmService, remoteLedger, rsyncToVm, saveState,
   sha256, sha256Text, ssh, sshNode, startVmService, vmProcessResidue
 } from "./rehearsal-lib.mjs";
+// The per-route view judgement lives in the automated test roster, not here:
+// this act runs by hand against a VM, and a predicate that only ever runs by
+// hand rots between runs (TCRN-AOS-INC-038).
+import { judgeRouteView, rendersPartition, viewOf } from "./rehearsal-predicates.mjs";
 
 const act1 = loadState("act1");
 const vmRoot = act1.vmRoot;
@@ -316,9 +320,8 @@ try {
   // predicate separates "rendered the rehearsal projection" from "rendered
   // whatever was baked in at build time" — the red control below performs that
   // separation rather than asserting it.
-  const rendersScratchChain = (body) =>
-    body.includes(PARTITION_ID) && body.includes("Switch rehearsal");
-  const viewOf = (body) => (body.match(/data-cockpit-view="([a-z-]+)"/u) ?? [])[1] ?? null;
+  const CHAIN_IDENTITY = { partitionId: PARTITION_ID, label: "Switch rehearsal" };
+  const rendersScratchChain = (body) => rendersPartition(body, CHAIN_IDENTITY);
   const SR_KEY = /SR-[A-Z]+-\d+|work:[0-9a-f]{24}/gu;
 
   const rootPage = await fetch(`${BASE}/`);
@@ -339,15 +342,17 @@ try {
     const ssr = await fetch(`${BASE}${route}/index.html`);
     const ssrBody = await ssr.text();
     const expectedView = MODULE_VIEWS.get(route);
+    const judged = judgeRouteView({ route, html: ssrBody, expectedView, ...CHAIN_IDENTITY });
     modules.push({
       route,
       expectedView,
       serviceStatus: shell.status,
       serviceCarriesScratchChain: rendersScratchChain(shellBody),
       ssrStatus: ssr.status,
-      ssrView: viewOf(ssrBody),
-      ssrViewIsItsOwn: viewOf(ssrBody) === expectedView,
-      ssrRendersScratchChain: rendersScratchChain(ssrBody),
+      ssrView: judged.view,
+      ssrViewIsItsOwn: judged.viewIsItsOwn,
+      ssrRendersScratchChain: judged.rendersPartition,
+      ssrVerdict: judged.reasonCode,
       ssrScratchChainKeys: (ssrBody.match(SR_KEY) ?? []).length,
       ssrNotices: (ssrBody.match(/data-cockpit-notice="[a-z-]+"/gu) ?? []).length
     });
@@ -357,11 +362,16 @@ try {
   // predicate is measuring the renderer rather than the data it was given.
   const committed = await import(pathToFileURL(resolve(REPO_ROOT, "dist/apps/web/src/app.js")).href);
   const committedBody = committed.renderAosShellHtml({ path: "/work-items" });
+  const committedJudged = judgeRouteView({
+    route: "/work-items", html: committedBody,
+    expectedView: MODULE_VIEWS.get("/work-items"), ...CHAIN_IDENTITY
+  });
   const redControl = {
     route: "/work-items",
     renderer: "same renderer, committed cockpit data instead of the rehearsal projection",
-    viewStillRendered: viewOf(committedBody),
-    rendersScratchChain: rendersScratchChain(committedBody)
+    viewStillRendered: committedJudged.view,
+    rendersScratchChain: committedJudged.rendersPartition,
+    verdict: committedJudged.reasonCode
   };
   receipt.criteria.everyModuleRendersChainData = {
     ok: modules.every((entry) => entry.serviceStatus === 200 && entry.ssrStatus === 200

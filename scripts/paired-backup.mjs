@@ -36,6 +36,7 @@ import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
 import { homedir } from "node:os";
 import { basename, join, resolve } from "node:path";
+import { scrubHostPaths } from "./lib/evidence-hygiene.mjs";
 import { promisify } from "node:util";
 
 const run = promisify(execFile);
@@ -845,7 +846,9 @@ if (process.argv.includes("--push-vm")) {
     rotated
   };
   await mkdir("evidence", { recursive: true });
-  await writeFile("evidence/aos-paired-backup.json", `${JSON.stringify(receipt, null, 2)}\n`);
+  // Redacted on the way into the repository, verbatim on the way to the
+  // terminal: see the same note in domain-backup.mjs (TCRN-AOS-INC-037).
+  await writeFile("evidence/aos-paired-backup.json", `${JSON.stringify(scrubHostPaths(receipt), null, 2)}\n`);
   console.log(JSON.stringify(receipt, null, 2));
   if (!taken.ok) process.exitCode = 1;
 }

@@ -34,6 +34,10 @@ import {
   engineVm, instant, loadState, placeOnVm, reclaimVmService, saveState,
   sha256Text, ssh, sshNode, vmProcessResidue
 } from "./rehearsal-lib.mjs";
+// The replay classifier lives in the automated test roster, not here: this act
+// runs by hand against a VM, and a predicate that only ever runs by hand rots
+// between runs (TCRN-AOS-INC-038).
+import { classifyReplayRow, rosterIndex } from "./rehearsal-predicates.mjs";
 
 const act1 = loadState("act1");
 const act3 = loadState("act3");
@@ -190,8 +194,7 @@ try {
   // live — not a list transcribed into this file, which would answer today's
   // question from whatever the roster looked like the day it was typed.
   const roster = (await engineVm("commands", [])).json.commands;
-  const byName = new Map(roster.map((command) => [command.name, command]));
-  const FACADE_PREFIX = "tcrn_workflow_";
+  const byName = rosterIndex(roster);
   const forged = [
     {
       seq: 9001, partitionId: PARTITION_ID,
@@ -224,31 +227,19 @@ try {
     // spanned two epochs would still enumerate one.
     const afterAnchor = row.chainVersion === null || row.chainVersion > act1.anchor.version;
     if (!afterAnchor) continue;
-    if (!row.verb.startsWith(FACADE_PREFIX)) {
-      nonReplayable.push({ ...row, reasonCode: "REPLAY_VERB_NOT_A_FACADE_TOOL" });
-      continue;
-    }
-    const cliVerb = row.verb.slice(FACADE_PREFIX.length).replaceAll("_", "-");
-    const command = RED === "accept-forged" ? (byName.get(cliVerb) ?? { mutates: true, flags: [] }) : byName.get(cliVerb);
-    if (!command) {
-      nonReplayable.push({ ...row, derivedVerb: cliVerb, reasonCode: "REPLAY_VERB_UNKNOWN_TO_ENGINE" });
-      continue;
-    }
-    if (command.mutates !== true) {
-      nonReplayable.push({ ...row, derivedVerb: cliVerb, reasonCode: "REPLAY_VERB_NOT_A_MUTATION" });
-      continue;
-    }
-    const args = JSON.parse(row.argsJson);
-    const declared = new Set(command.flags.map((flag) => flag.name));
-    const undeclared = Object.keys(args).filter((key) => !declared.has(key));
-    if (undeclared.length > 0 && RED !== "accept-forged") {
+    // The judgement itself is rehearsal-predicates.mjs; what stays here is the
+    // live roster it judges against and the ledger the verdicts go into.
+    const verdict = classifyReplayRow(row, byName, { acceptForged: RED === "accept-forged" });
+    if (!verdict.replayable) {
       nonReplayable.push({
-        ...row, derivedVerb: cliVerb, undeclaredFlags: undeclared,
-        reasonCode: "REPLAY_ARG_NOT_A_DECLARED_FLAG"
+        ...row,
+        derivedVerb: verdict.derivedVerb,
+        ...(verdict.undeclaredFlags ? { undeclaredFlags: verdict.undeclaredFlags } : {}),
+        reasonCode: verdict.reasonCode
       });
       continue;
     }
-    replayable.push({ ...row, derivedVerb: cliVerb, args });
+    replayable.push({ ...row, derivedVerb: verdict.derivedVerb, args: verdict.args });
   }
   const forgedSeqs = new Set(forged.map((row) => row.seq));
   const forgedOutcome = nonReplayable.filter((row) => forgedSeqs.has(row.seq));

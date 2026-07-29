@@ -89,6 +89,27 @@ const MIME: Record<string, string> = {
 export const CHAIN_WRITE_ROUTES = ["transition", "annotate", "work", "enrol"] as const;
 type ChainWriteRoute = (typeof CHAIN_WRITE_ROUTES)[number];
 
+/**
+ * Single-segment paths under `/api/domain/` that name an OPERATION.
+ *
+ * Everything else under that prefix is `<partition>/<recordId>`, a record read.
+ * The two shapes are indistinguishable by segment count alone — `export` looks
+ * exactly like a partition id with no record — so the operation names are
+ * declared here and dispatch consults the list. An earlier shape dispatched on
+ * method alone: the first branch of handleDomain was an unconditional
+ * `request.method === "GET"`, which swallowed `GET /api/domain/export` into the
+ * record path (partition "export", empty record) and answered with the
+ * un-scoped annotation listing. The export branch further down was reachable by
+ * no request at all — dead code that a caller could not tell from a working
+ * endpoint, because both returned 200 (TCRN-AOS-INC-036).
+ */
+export const DOMAIN_OPERATION_ROUTES = ["export", "annotation", "comment", "relation"] as const;
+
+/** True when `rest` names an operation rather than a `<partition>/<recordId>` pair. */
+function isDomainOperationPath(rest: string): boolean {
+  return (DOMAIN_OPERATION_ROUTES as readonly string[]).includes(rest);
+}
+
 export async function startCockpitService(options: CockpitServiceOptions): Promise<StartedCockpitService> {
   if (typeof options.actor !== "string" || options.actor.trim().length === 0) {
     throw new Error(
@@ -351,29 +372,15 @@ async function handleDomain(
 ): Promise<void> {
   const { domain } = context;
 
-  if (request.method === "GET") {
-    // /api/domain/<partition>/<recordId> — everything the cockpit knows about
-    // one chain record that the chain itself does not hold.
-    const [partitionId, ...recordParts] = rest.split("/");
-    const recordId = decodeURIComponent(recordParts.join("/"));
-    if (!partitionId || !recordId) {
-      // The un-scoped listing, used by list views to decorate many rows at once.
-      sendJson(response, 200, {
-        ok: true,
-        annotations: domain.listAnnotations(
-          url.searchParams.get("partition")
-            ? { partitionId: url.searchParams.get("partition") as string }
-            : {})
-      });
-      return;
-    }
-    const ref = { partitionId, recordId };
-    sendJson(response, 200, {
-      ok: true,
-      annotation: domain.getAnnotation(ref) ?? null,
-      comments: domain.listComments(ref),
-      relations: domain.listRelations(ref)
-    });
+  // Operations are matched by their exact path, before the record read below —
+  // that one is a catch-all over `<partition>/<recordId>`, so anything reached
+  // by name has to be decided first or it is unreachable (TCRN-AOS-INC-036).
+
+  if (request.method === "GET" && rest === "export") {
+    // The whole store, every family of it: this is the read side of the backup
+    // obligation, so a family missing here is a family that silently leaves the
+    // backup. `exportAll` names them, this route adds nothing of its own.
+    sendJson(response, 200, { ok: true, ...domain.exportAll() });
     return;
   }
 
@@ -423,8 +430,29 @@ async function handleDomain(
     return;
   }
 
-  if (request.method === "GET" && rest === "export") {
-    sendJson(response, 200, { ok: true, ...domain.exportAll() });
+  if (request.method === "GET" && !isDomainOperationPath(rest)) {
+    // /api/domain/<partition>/<recordId> — everything the cockpit knows about
+    // one chain record that the chain itself does not hold.
+    const [partitionId, ...recordParts] = rest.split("/");
+    const recordId = decodeURIComponent(recordParts.join("/"));
+    if (!partitionId || !recordId) {
+      // The un-scoped listing, used by list views to decorate many rows at once.
+      sendJson(response, 200, {
+        ok: true,
+        annotations: domain.listAnnotations(
+          url.searchParams.get("partition")
+            ? { partitionId: url.searchParams.get("partition") as string }
+            : {})
+      });
+      return;
+    }
+    const ref = { partitionId, recordId };
+    sendJson(response, 200, {
+      ok: true,
+      annotation: domain.getAnnotation(ref) ?? null,
+      comments: domain.listComments(ref),
+      relations: domain.listRelations(ref)
+    });
     return;
   }
 

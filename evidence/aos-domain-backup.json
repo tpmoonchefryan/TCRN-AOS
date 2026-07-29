@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "destinationRoot": "/Users/ryanlan/OneDrive/Github/tcrn-aos-domain-backups",
+  "destinationRoot": "<local-home>/OneDrive/Github/tcrn-aos-domain-backups",
   "snapshot": {
     "schemaVersion": "aos.domain-backup.v1",
     "takenAt": "2026-07-27T01-11-22-087Z",
-    "source": "/Users/ryanlan/.tcrn-aos/domain.db",
+    "source": "<local-home>/.tcrn-aos/domain.db",
     "counts": {
       "annotations": 1,
       "comments": 1,
@@ -27,7 +27,7 @@
   },
   "verified": {
     "ok": true,
-    "directory": "/Users/ryanlan/OneDrive/Github/tcrn-aos-domain-backups/2026-07-27T01-11-22-087Z",
+    "directory": "<local-home>/OneDrive/Github/tcrn-aos-domain-backups/2026-07-27T01-11-22-087Z",
     "digestsMatch": true,
     "roundTrips": true,
     "counts": {

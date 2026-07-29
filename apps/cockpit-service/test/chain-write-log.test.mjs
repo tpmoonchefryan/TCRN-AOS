@@ -57,7 +57,19 @@ async function withLoggingService(run, { client = recordingClient(), scratch } =
       });
       return { status: response.status, json: await response.json() };
     };
-    await run({ service, post, client, scratch: ownScratch });
+    const get = async (path) => {
+      const response = await fetch(`${service.url}${path}`);
+      return { status: response.status, json: await response.json() };
+    };
+    const put = async (path, body) => {
+      const response = await fetch(`${service.url}${path}`, {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      return { status: response.status, json: await response.json() };
+    };
+    await run({ service, post, get, put, client, scratch: ownScratch });
   } finally {
     await service.close();
     if (!scratch) await rm(ownScratch, { recursive: true, force: true });
@@ -211,6 +223,105 @@ test("the log is append-only: UPDATE and DELETE are rejected by the triggers", a
     } finally {
       db.close();
     }
+  });
+});
+
+test("GET /api/domain/export answers with the export document, write log included", async () => {
+  // TCRN-AOS-INC-036: the log had no HTTP read face. The export branch existed
+  // but nothing could reach it — dispatch's first branch was an unconditional
+  // `method === "GET"` that read "export" as a partition id and answered with
+  // the un-scoped annotation listing, 200 and all. Backup and rollback both had
+  // to bypass the service and open domain.db directly.
+  await withLoggingService(async ({ post, get, put, client }) => {
+    // Domain-side content first, so every family in the document has something
+    // in it: a family that is empty in every case cannot tell "exported" from
+    // "absent".
+    await put("/api/domain/annotation",
+      { partitionId: "TCRN-AOS", recordId: "work:x", labels: ["exported"] });
+    await post("/api/domain/comment",
+      { partitionId: "TCRN-AOS", recordId: "work:x", body: "a comment to export" });
+    await post("/api/domain/relation",
+      { partitionId: "TCRN-AOS", recordId: "work:x", relation: "relates_to",
+        targetPartitionId: "TCRN-AOS", targetRecordId: "work:y" });
+
+    // Chain writes, counted the way the caller counts them: transition 1,
+    // annotate 1, work-with-a-title 2 (create + scope), enrol 1 — five engine
+    // calls. That number is stated here from the request list, not read back
+    // from the store the export reads, so the two sides of the comparison do
+    // not share a source.
+    await post("/api/chain/transition", { partitionId: "TCRN-AOS", recordId: "work:x", status: "ready" });
+    await post("/api/chain/annotate", { partitionId: "TCRN-AOS", recordId: "work:x", scope: "s" });
+    await post("/api/chain/work", { partitionId: "TCRN-AOS", projectId: "project:p",
+      externalKey: "K-1", kind: "Story", parentId: null, title: "titled" });
+    await post("/api/chain/enrol", { partitionId: "TCRN-AOS", recordId: "work:x",
+      workspaceId: "workspace:w", trainWorkId: "work:t" });
+    const expectedChainWrites = 5;
+
+    const exported = await get("/api/domain/export");
+    assert.equal(exported.status, 200);
+    // The key set, asserted as a set: the export is the read side of the backup
+    // obligation, so a family quietly missing from the document is a family
+    // quietly missing from the backup.
+    assert.deepEqual(
+      Object.keys(exported.json).sort(),
+      ["annotations", "chainWriteLog", "comments", "ok", "relations", "schemaVersion"],
+      "the export document must carry every family, chainWriteLog among them"
+    );
+    assert.equal(exported.json.schemaVersion, "aos.domain.v2");
+    assert.equal(exported.json.annotations.length, 1);
+    assert.equal(exported.json.comments.length, 1);
+    assert.equal(exported.json.relations.length, 1);
+
+    // Row count against the independently-stated expectation, and again against
+    // the recording client's own tally — neither of which is the domain store.
+    assert.equal(exported.json.chainWriteLog.length, expectedChainWrites);
+    assert.equal(exported.json.chainWriteLog.length, client.calls.length);
+    assert.deepEqual(exported.json.chainWriteLog.map((row) => row.verb), [
+      "tcrn_workflow_work_transition",
+      "tcrn_workflow_work_annotate",
+      "tcrn_workflow_work_create",
+      "tcrn_workflow_work_annotate",
+      "tcrn_workflow_work_annotate"
+    ]);
+    // And the bytes, per row, against what the client received.
+    for (const [index, row] of exported.json.chainWriteLog.entries()) {
+      assert.equal(row.argsJson, client.calls[index].argsJson,
+        `exported row ${row.seq} must carry the wire bytes for ${row.verb}`);
+    }
+  });
+});
+
+test("the record read and the un-scoped listing keep their meaning beside the export route", async () => {
+  // The other side of the INC-036 repair: `<partition>/<recordId>` is still the
+  // catch-all it always was, and the listing still answers at the bare prefix.
+  await withLoggingService(async ({ post, get, put }) => {
+    await put("/api/domain/annotation",
+      { partitionId: "TCRN-AOS", recordId: "work:x", assignee: "owner:governance", labels: ["kept"] });
+    await post("/api/domain/comment",
+      { partitionId: "TCRN-AOS", recordId: "work:x", body: "still readable" });
+    await put("/api/domain/annotation",
+      { partitionId: "TCRN-TMS", recordId: "work:z", labels: ["other-partition"] });
+
+    const record = await get("/api/domain/TCRN-AOS/work%3Ax");
+    assert.equal(record.status, 200);
+    assert.equal(record.json.annotation.assignee, "owner:governance");
+    assert.deepEqual(record.json.annotation.labels, ["kept"]);
+    assert.equal(record.json.comments.length, 1);
+    assert.deepEqual(record.json.relations, []);
+    // A record read must never answer with the export document's shape.
+    assert.equal(record.json.chainWriteLog, undefined);
+
+    const listing = await get("/api/domain/");
+    assert.equal(listing.status, 200);
+    assert.equal(listing.json.annotations.length, 2, "the un-scoped listing spans partitions");
+    const scoped = await get("/api/domain/?partition=TCRN-TMS");
+    assert.equal(scoped.json.annotations.length, 1);
+    assert.equal(scoped.json.annotations[0].partitionId, "TCRN-TMS");
+
+    // An operation name is not a partition: GET on one is 404, not the listing
+    // wearing a record read's clothes.
+    const notARecord = await get("/api/domain/annotation");
+    assert.equal(notARecord.status, 404);
   });
 });
 
