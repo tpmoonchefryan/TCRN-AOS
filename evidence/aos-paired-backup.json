@@ -1,26 +1,26 @@
 {
   "ok": true,
   "destinationRoot": "<local-home>/OneDrive/Github/tcrn-aos-paired-backups",
-  "directory": "2026-07-28T13-29-29Z",
+  "directory": "2026-07-29T05-10-33Z",
   "pair": {
     "schemaVersion": "aos.paired-backup.v1",
-    "pairedAt": "2026-07-28T13:29:29Z",
+    "pairedAt": "2026-07-29T05:10:33Z",
     "partition": "TCRN-AOS",
     "ok": true,
     "lockstep": {
       "ok": true,
-      "chainHeadEventHash": "557b5032648ede9157d68b4c9ccec7b4216f700576ff7c39cbf781e6bfac1088",
-      "knowledgeHighWaterDigest": "557b5032648ede9157d68b4c9ccec7b4216f700576ff7c39cbf781e6bfac1088",
-      "knowledgeVersion": 6,
+      "chainHeadEventHash": "d155c0850f18536a8f6c06eb36ba4f3c20ab1bb9613386654e84550067aa775c",
+      "knowledgeHighWaterDigest": "d155c0850f18536a8f6c06eb36ba4f3c20ab1bb9613386654e84550067aa775c",
+      "knowledgeVersion": 12,
       "remedy": null
     },
     "pairing": {
-      "domainSnapshotDigest": "8b16e1f5b7c21f2ab111ace3c29c56435ed0c44c1fa50d5e1ee1171a6dda8d6d",
-      "domainExportDigest": "a470e8009eee4e149b85e668b764021b7d9ffb59530af83746c62733ac2f23bf",
-      "chainManifestDigest": "ea7f97982eca3c5bb186f25dbb1b83cb7b41e95729160a133760ff23608ba00c",
-      "chainHeadEventHash": "557b5032648ede9157d68b4c9ccec7b4216f700576ff7c39cbf781e6bfac1088",
-      "chainVersion": 549,
-      "attestationSetDigest": "e819f037d59722f4a5db4929a85199cdad0a39eca084943224fdce876b2e0b77",
+      "domainSnapshotDigest": "4d276b91f2d8890af54c4b104e61a953933ee3526bcd12e335587ca80829cee0",
+      "domainExportDigest": "08ac87e6f39d3eba83b1a95389054a05d17b71d89039c53aa5ca6614d15e652b",
+      "chainManifestDigest": "0186c91a80cd6b65ba075b80b1bf7a6a200729828cb2cf7d3c510a5677623a54",
+      "chainHeadEventHash": "d155c0850f18536a8f6c06eb36ba4f3c20ab1bb9613386654e84550067aa775c",
+      "chainVersion": 759,
+      "attestationSetDigest": "ec71ac2361318f657d4152e2ab0fe1f4229fe62ad6409576559d0c35e6d0fc04",
       "boundBy": "one instant plus mutual digests; either half alone is not a restorable pair"
     },
     "domain": {
@@ -30,18 +30,20 @@
         "ok": true,
         "result": "ok"
       },
-      "snapshotDigest": "8b16e1f5b7c21f2ab111ace3c29c56435ed0c44c1fa50d5e1ee1171a6dda8d6d",
-      "manifestDigest": "b13a9052e338e01ab95a172214866bc8d7ee4b412d6ab2f00707ab542168fa8a",
+      "snapshotDigest": "4d276b91f2d8890af54c4b104e61a953933ee3526bcd12e335587ca80829cee0",
+      "manifestDigest": "bca9b7851ab782e9ff02d2287d89baca46faf25067985cb3d3b928929b4730fb",
       "tableRowCounts": {
+        "aos_chain_write_log": 0,
         "aos_domain_annotation": 2,
         "aos_domain_comment": 1,
         "aos_domain_relation": 0
       },
-      "exportDigest": "a470e8009eee4e149b85e668b764021b7d9ffb59530af83746c62733ac2f23bf",
+      "exportDigest": "08ac87e6f39d3eba83b1a95389054a05d17b71d89039c53aa5ca6614d15e652b",
       "counts": {
         "annotations": 2,
         "comments": 1,
-        "relations": 0
+        "relations": 0,
+        "chainWriteLog": 0
       },
       "liveIntegrityCheck": {
         "ok": true,
@@ -53,18 +55,18 @@
       "reasonCode": "SNAPSHOT_VERIFIED",
       "verifyError": null,
       "workspaceRoot": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace",
-      "headEventHash": "557b5032648ede9157d68b4c9ccec7b4216f700576ff7c39cbf781e6bfac1088",
-      "version": 549,
+      "headEventHash": "d155c0850f18536a8f6c06eb36ba4f3c20ab1bb9613386654e84550067aa775c",
+      "version": 759,
       "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
-      "chainManifestDigest": "ea7f97982eca3c5bb186f25dbb1b83cb7b41e95729160a133760ff23608ba00c",
+      "chainManifestDigest": "0186c91a80cd6b65ba075b80b1bf7a6a200729828cb2cf7d3c510a5677623a54",
       "attestations": {
         "directoryPresent": true,
-        "count": 344,
-        "chainEventsSeen": 549,
+        "count": 554,
+        "chainEventsSeen": 759,
         "orphanReceipts": 0,
         "filenameMismatches": 0,
         "strength": "advisory local-clock corroboration; unauthenticated, no engine verifier",
-        "setDigest": "e819f037d59722f4a5db4929a85199cdad0a39eca084943224fdce876b2e0b77"
+        "setDigest": "ec71ac2361318f657d4152e2ab0fe1f4229fe62ad6409576559d0c35e6d0fc04"
       }
     },
     "restoreDrill": {
@@ -82,25 +84,30 @@
         "relations": {
           "exported": 0,
           "restored": 0
+        },
+        "chainWriteLog": {
+          "exported": 0,
+          "restored": 0
         }
       }
     },
     "notClaimed": [
       "this run proves each half restores in a drill; it does not perform a restore",
       "the projection database is deliberately absent -- it is rebuilt from the chains, never restored",
+      "the O3 event mirror is deliberately absent (MIN-007: 明确不备) -- a derived instrument, never a second restorable copy of chain history",
       "a chain restore is same-path-only and operator-driven; see tcrn-workflow/docs/architecture/backup-restore-runbook.md",
       "no VM copy is made here; the VM never holds this machine's credentials and pulls instead"
     ]
   },
   "export": {
-    "fileCount": 365,
-    "totalBytes": 1393759,
-    "fileSetDigest": "f73d568f1c9050af2b8cd955097f52789d195f8bb06bcb2a5290e5e455700d07"
+    "fileCount": 578,
+    "totalBytes": 1769797,
+    "fileSetDigest": "215b947c53dc25f18a9dac00f8068f6caddf81ce68c724a5cc1a3814c2979b23"
   },
   "rotated": {
     "kept": 5,
     "deleted": [
-      "2026-07-27T03-10-50Z"
+      "2026-07-27T03-14-54Z"
     ]
   }
 }

@@ -6,7 +6,7 @@
     "urlReachableWithSsr": {
       "ok": true,
       "status": 200,
-      "bytes": 369164,
+      "bytes": 380234,
       "view": "my-work"
     },
     "everyModuleRendersChainData": {
@@ -17,14 +17,14 @@
           "route": "/my-work",
           "status": 200,
           "view": "my-work",
-          "chainKeys": 439,
+          "chainKeys": 468,
           "notReadNotices": 1
         },
         {
           "route": "/inbox",
           "status": 200,
           "view": "inbox",
-          "chainKeys": 347,
+          "chainKeys": 359,
           "notReadNotices": 1
         },
         {
@@ -45,14 +45,14 @@
           "route": "/work-items",
           "status": 200,
           "view": "work-items",
-          "chainKeys": 765,
+          "chainKeys": 745,
           "notReadNotices": 0
         },
         {
           "route": "/board",
           "status": 200,
           "view": "board",
-          "chainKeys": 208,
+          "chainKeys": 226,
           "notReadNotices": 1
         },
         {
@@ -80,7 +80,7 @@
           "route": "/audit",
           "status": 200,
           "view": "audit",
-          "chainKeys": 486,
+          "chainKeys": 506,
           "notReadNotices": 1
         },
         {
@@ -94,26 +94,90 @@
     },
     "localDomainWriteRoundTrips": {
       "ok": true,
-      "wroteLabel": "acceptance-1785237998711",
+      "wroteLabel": "acceptance-1785304609199",
       "readBackLabels": [
         "cockpit",
-        "acceptance-1785237998711"
+        "acceptance-1785304609199"
       ]
     },
     "chainWriteAndRefusal": {
       "ok": true,
-      "writeHalf": {
-        "performed": true,
-        "record": "TCRN-AOS-INC-034",
-        "move": "planned->ready"
-      },
-      "refusalHalf": {
-        "record": "TCRN-AOS-INC-034",
-        "requested": "planned",
-        "status": 409,
-        "reasonCode": "INVALID_TRANSITION",
-        "held": true
-      }
+      "leg": "annotate-pair",
+      "stampRecord": "TCRN-AOS-INC-034",
+      "scopeCodePoints": 1082,
+      "checks": [
+        {
+          "name": "write-accepted",
+          "ok": true,
+          "observed": {
+            "status": 200
+          }
+        },
+        {
+          "name": "revision-advanced-by-one",
+          "ok": true,
+          "observed": {
+            "before": 6,
+            "afterWrite": 7
+          }
+        },
+        {
+          "name": "exactly-one-work-annotated-event",
+          "ok": true,
+          "observed": {
+            "delta": 1,
+            "lastOperation": "work.annotated",
+            "lastRecordId": "work:36d23eb50d9d3ec986301109"
+          }
+        },
+        {
+          "name": "replay-refused",
+          "ok": true,
+          "observed": {
+            "status": 409
+          }
+        },
+        {
+          "name": "refusal-names-the-noop",
+          "ok": true,
+          "observed": {
+            "message": "tcrn_workflow_work_annotate: WORKSPACE_INPUT_INVALID annotation does not change any advisory field"
+          }
+        },
+        {
+          "name": "revision-held-on-replay",
+          "ok": true,
+          "observed": {
+            "afterWrite": 7,
+            "afterReplay": 7
+          }
+        }
+      ],
+      "legs": [
+        "transition-attempted",
+        "annotate-pair"
+      ],
+      "note": "the engine refused every projected transition candidate — its per-record refusals are the authoritative testimony that no record was movable, whatever the snapshot said — so the pair fell back to the ruling's annotate route; the stamp annotation permanently appends one work.annotated event to the chain",
+      "transitionAttempts": [
+        {
+          "externalKey": "TCRN-AOS-INC-039",
+          "move": "planned->ready",
+          "status": 409,
+          "reasonCode": "INVALID_TRANSITION"
+        },
+        {
+          "externalKey": "TCRN-AOS-INC-040",
+          "move": "planned->ready",
+          "status": 409,
+          "reasonCode": "INVALID_TRANSITION"
+        },
+        {
+          "externalKey": "TCRN-AOS-STORY-128",
+          "move": "planned->ready",
+          "status": 409,
+          "reasonCode": "INVALID_TRANSITION"
+        }
+      ]
     },
     "mirrorFreshnessStatedAndReadOnly": {
       "ok": true,

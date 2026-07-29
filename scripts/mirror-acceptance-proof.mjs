@@ -135,8 +135,9 @@ const chainWriteNote =
  * Annotate-pair leg. The stamp record is TCRN-AOS-INC-034 — the incident that
  * exists because this criterion once could not run on a fully-closed chain.
  *
- * Reads go to the engine CLI (read-only verbs only: work-show, export), because
- * the projection is a snapshot and the pair must speak about the chain's head.
+ * Reads go to the engine CLI (read-only verbs only: work-show, event-list),
+ * because the projection is a snapshot and the pair must speak about the
+ * chain's head.
  * The write and its replay go through the local service's annotate route, which
  * is the surface under acceptance.
  */
@@ -156,9 +157,43 @@ async function annotatePairLeg() {
     return JSON.parse(stdout);
   };
 
+  // How this leg reads the event stream, and why it is not `export`.
+  //
+  // `export` renders the whole chain as one canonical document, and the live
+  // AOS partition has outgrown the engine's one-MiB ceiling: the verb now
+  // answers INPUT_OVERSIZED and nothing else. That did not make this leg
+  // report red — it made it throw, which took the whole D9 acceptance down
+  // with it, because a proof that cannot run is not a proof that failed
+  // (TCRN-AOS-INC-043). This is the same wall STORY-114 hit building the live
+  // consistency matrix, and `event-list` — the engine's paged reader — is the
+  // same way through.
+  //
+  // This leg wants exactly two facts about the stream: how many events it
+  // holds, and what the last one is. Both come from the engine's own answer
+  // rather than from a stream this script assembles: `total` is the engine's
+  // count, and the tail record's `eventHash` is compared against the
+  // `headEventHash` reported in the SAME answer, so a page served from a chain
+  // that moved is refused instead of quietly averaged in. Reading two facts is
+  // also why the full paged assembly (`readAllEvents`) is not used here: its
+  // job is to prove a complete stream, and this leg does not need one.
+  const readEventTail = async () => {
+    const head = await engineRead("event-list", ["--limit", "1", "--offset", "0"]);
+    if (head.total === 0) return { total: 0, last: null };
+    const tail = await engineRead("event-list", ["--limit", "1", "--offset", String(head.total - 1)]);
+    const last = tail.records?.[0];
+    if (!last) {
+      throw new Error(`event-list returned no record at the tail offset ${head.total - 1}`);
+    }
+    if (last.eventHash !== tail.headEventHash) {
+      throw new Error(
+        `the record at the tail offset is not the chain head: ${last.eventHash} !== ${tail.headEventHash}`);
+    }
+    return { total: tail.total, last };
+  };
+
   const stampRecord = { recordId: "work:36d23eb50d9d3ec986301109", externalKey: "TCRN-AOS-INC-034" };
   const before = await engineRead("work-show", ["--id", stampRecord.recordId]);
-  const eventsBefore = (await engineRead("export", [])).events;
+  const streamBefore = await readEventTail();
 
   // Scope is replaced whole (the engine has no append), so the half sent here is
   // the record's entire narrative plus exactly one fresh stamp line; stripping
@@ -174,8 +209,8 @@ async function annotatePairLeg() {
   });
   await write.json();
   const afterWrite = await engineRead("work-show", ["--id", stampRecord.recordId]);
-  const eventsAfter = (await engineRead("export", [])).events;
-  const lastEvent = eventsAfter[eventsAfter.length - 1] ?? {};
+  const streamAfter = await readEventTail();
+  const lastEvent = streamAfter.last ?? {};
 
   // The refusal half replays the same annotation byte for byte.
   const replay = await fetch(`${LOCAL}/api/chain/annotate`, {
@@ -190,7 +225,7 @@ async function annotatePairLeg() {
     before: { revision: before.record.revision },
     afterWrite: { revision: afterWrite.record.revision },
     events: {
-      delta: eventsAfter.length - eventsBefore.length,
+      delta: streamAfter.total - streamBefore.total,
       lastOperation: lastEvent.payload?.operation ?? null,
       lastRecordId: lastEvent.payload?.record?.id ?? null
     },

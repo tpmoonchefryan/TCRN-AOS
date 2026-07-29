@@ -1,5 +1,23 @@
 # Switch rehearsal (STORY-122 / STORY-125 / STORY-123)
 
+> **Direction D (`TCRN-AOS-MIN-011`): the switch these acts rehearsed is retired.**
+> Truth stays local-first on the Owner's machine permanently; AOS carries the
+> operating and read faces, not the store; the mirror is no longer a transitional
+> stage but the standing form. **There is no switchover to rehearse any more.**
+>
+> These acts are kept, and they are not kept as history. What they exercise —
+> freeze, restore from a base that answers `snapshot-verify` **and** `validate`,
+> enumerate the delta, replay through the engine's own verbs, reconcile, re-anchor
+> — is the **recovery drill** for the local-first chain, which is now the only copy
+> that matters. Act 2's read-only arc and act 4's rollback are the two that carry
+> that load; act 1 and act 3 keep them runnable by standing up the scratch chain
+> and the service they act on. Read every "switch" below as "restore": the ceremony
+> the acts walk is the one that runs when the truth needs rebuilding, not the one
+> that was going to move it.
+>
+> Nothing here was deleted, and nothing here grants anything — that was true when
+> the destination was a switchover and it is true now.
+
 A four-act walk of the switchover ceremony's verification shape, ruled by
 `TCRN-AOS-MIN-007` (矩阵双跑 → owner 门 → 切换 → 降级归档, with a semantic-drift
 red path as a standing rehearsal obligation).
