@@ -4,14 +4,14 @@
 import type { CockpitData } from "./cockpit-types.js";
 
 export const cockpitData: CockpitData = {
-  "generatedAt": "2026-07-28T11:28:03Z",
+  "generatedAt": "2026-07-29T05:12:49Z",
   "partitions": [
     {
       "id": "cross-project",
       "label": "Platform governance",
       "labelZh": "平台治理",
-      "chainVersion": 1266,
-      "verifiedAt": "2026-07-28T11:28:03Z",
+      "chainVersion": 1278,
+      "verifiedAt": "2026-07-29T05:12:49Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -23,7 +23,7 @@ export const cockpitData: CockpitData = {
       "label": "Design System",
       "labelZh": "设计系统",
       "chainVersion": 983,
-      "verifiedAt": "2026-07-28T11:28:03Z",
+      "verifiedAt": "2026-07-29T05:12:49Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -35,7 +35,7 @@ export const cockpitData: CockpitData = {
       "label": "TMS",
       "labelZh": "TMS",
       "chainVersion": 228,
-      "verifiedAt": "2026-07-28T11:28:03Z",
+      "verifiedAt": "2026-07-29T05:12:49Z",
       "readVia": "export",
       "attestationFromSequence": null,
       "unavailable": []
@@ -44,8 +44,8 @@ export const cockpitData: CockpitData = {
       "id": "TCRN-AOS",
       "label": "AOS",
       "labelZh": "AOS",
-      "chainVersion": 535,
-      "verifiedAt": "2026-07-28T11:28:03Z",
+      "chainVersion": 759,
+      "verifiedAt": "2026-07-29T05:12:49Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -174,6 +174,91 @@ export const cockpitData: CockpitData = {
       "decidedBy": [
         "minutes:de47de4a4f95e07dec79f0f7",
         "minutes:2f09d03272da7bd59cb914d5"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:175e693189336900c4793f9a",
+      "externalKey": "TCRN-AOS-EPIC-031",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:c6d15729358b958caf868c7f",
+      "revision": 6,
+      "scope": "已交付(commit 0aee5f2,feat/init002):安全写面接线债清偿(恰四路由)+归因显式化+INC-034 路 B 修复。两轮对抗复审十发现全修;两个无钉判据补测后经变异复验真实翻红;136/136 绿(+23 新测试)。注意:mirror-acceptance-proof 活链首跑留待下次验收时机——迁移对会推进一条真实非 Initiative 记录,回执已如实声明该语义。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:5bf2078285b66cc0efdb5cf7",
+      "externalKey": "TCRN-AOS-EPIC-032",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:c6d15729358b958caf868c7f",
+      "revision": 10,
+      "scope": "两 story 全 done(S113 commit 1534edb、S114 commit 8500646)。S114 的活链接线阻塞经 W 引擎 v0.8.0 的 event-list 解除(TCRN-CROSS-INC-027/TCRN-AOS-INC-035),行镜像现持活链全部 711 事件并经引擎复验;一致性矩阵 R1/R3 的 A 侧八格由 acceptance-gate-pending 转为真判据 equal。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34",
+        "minutes:21b2f1b9a78f701706770714"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:22cdb88e538c96f7987d6318",
+      "externalKey": "TCRN-AOS-EPIC-033",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:c6d15729358b958caf868c7f",
+      "revision": 6,
+      "scope": "三 story 全 done:矩阵驱动器+红证套件+分区实例化表,165/165 绿、红套 17/17。两轮对抗(首轮 worktree 失败重派)捕 9 发现全修——最重的两条是互指格恒真门与 sidecar 未迁移照绿,均为切换会真实踩中的失败形态。活链首跑前置: 各分区先受治 knowledge-rebase(lockstep);R1/R3 A 侧格待 INC-035(W 分页事件动词)解除后方可非 pending。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:8d17c2a6bfab212d5c5668f3",
+      "externalKey": "TCRN-AOS-EPIC-034",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:c6d15729358b958caf868c7f",
+      "revision": 6,
+      "scope": "四 story 全 done:VM 引擎部署验证(S118)+访问边界与绊线(S119)+最小 bundle 铸造(S120)+gate 权威落点与 owner 门演练(S121)。收据经独立复核代理逐项确认;VM 终态=引擎树+权威副本+镜像,零 scratch 残留、零供权材料、零游离进程。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:dd1336f59885432997b94b9d",
+      "externalKey": "TCRN-AOS-EPIC-035",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:c6d15729358b958caf868c7f",
+      "revision": 6,
+      "scope": "四 story 全 done(commit 2dcc014)。本 Epic 最贵的产出不是绿而是三个发现:①中断遗留的 VM 服务泄漏已根因(远端启动命令把自身输出带回、ssh 会话通道不关、调用挂死至被杀,且失败路径无回收)并修(ssh -n+pidfile+每条失败路径回收);②收尾时发现第二处从未被察觉的泄漏——本机 ssh -L 转发被 ControlMaster 持有,而旧回收判据「无 ssh -N -L 进程存活」从第一秒起就恒绿,是本平台第四例恒真门,已改判监听套接字并留同刻双读红证;③真实产品缺陷:GET /api/domain/export 被 handleDomain 的无条件 GET 分支遮蔽、写日志无 HTTP 读面(已立 INC-036)。演练均在 scratch 环境完成,不声称真值环境;MIN-008 后是否需以真值 A 侧重跑,随行镜像接活链后判定。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:c4632c4da5f7da59483962fa",
+      "externalKey": "TCRN-AOS-EPIC-036",
+      "kind": "Epic",
+      "status": "blocked",
+      "parentId": "work:c6d15729358b958caf868c7f",
+      "revision": 5,
+      "scope": "切换执行(owner 门后):切换 owner 门(gate)、真值迁移与切换、文件降导出归档+新锚、收官(local-first 退役记录/镜像处置/宿主对等核验)。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
       ],
       "sprintWorkId": null
     },
@@ -609,6 +694,118 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-AOS",
+      "id": "work:ee540c5cb8cd4b85673989c4",
+      "externalKey": "TCRN-AOS-INC-035",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:5bf2078285b66cc0efdb5cf7",
+      "revision": 6,
+      "scope": "W 侧已交付并发布: 引擎 v0.8.0 新增只读分页动词 event-list(tag v0.8.0=44def4f、GitHub Release 已建、受治副本已升级并重建 dist)。消费侧已接线(commit 8500646): 行镜像持活链 711 事件、矩阵 R1/R3 的 A 侧八格得真判据 equal。三条关闭判据全部满足。",
+      "decidedBy": [
+        "minutes:21b2f1b9a78f701706770714"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:aa3e4e1e60839fe5be8b5285",
+      "externalKey": "TCRN-AOS-INC-036",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:175e693189336900c4793f9a",
+      "revision": 6,
+      "scope": "已修(commit 0bca077):新增 DOMAIN_OPERATION_ROUTES 名册,operation 路由按精确 method+path 先于 <partition>/<recordId> catch-all 匹配、catch-all 由 !isDomainOperationPath 守卫;GET /api/domain/export 现返回含 chainWriteLog 家族的导出文档。红证: 把修复退回无条件 GET catch-all → 两条新测试红(键集断言与操作名 404),六条既有测试保持绿。附一条历史实据: evidence/aos-cockpit-service-proof.json 里 domain-export 步骤记的是 annotations:1 而 comments/relations 未定义——那正是列表形状而非导出文档,缺陷早已被证物记下但无人读出。缺陷之所以长期未被发现,是因为它以 200 回答错误内容。",
+      "decidedBy": [
+        "minutes:21b2f1b9a78f701706770714"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:5eee27ddd1088293f3051932",
+      "externalKey": "TCRN-AOS-INC-037",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:dd1336f59885432997b94b9d",
+      "revision": 6,
+      "scope": "已修(commit 0bca077):两份旧证物 7 处本机路径脱敏(摘要、计数、版本、判定逐字节不变,修前摘要作为固定字面量写进测试);新增 scripts/lib/evidence-hygiene.test.mjs 全树扫描门(走文件系统而非 git ls-files——索引派生的清单恰好看不见刚写下尚未 add 的那个文件),命中即点名文件、规则与行号。并堵住漂移源头: domain-backup 与 paired-backup 现在在写入 evidence/ 的路上脱敏(给运维的 stdout 保持逐字)——否则这道门会在下一次正常备份时自己变红,那是地雷不是门。红证: 在第三份未点名的证物里植入一条绝对路径 → 门红并点名 evidence/aos-cockpit-service-proof.json home-directory @ line 56;复原后 sha256 前后一致。",
+      "decidedBy": [
+        "minutes:21b2f1b9a78f701706770714"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:c8d034d16439c82e8a30823a",
+      "externalKey": "TCRN-AOS-INC-038",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:dd1336f59885432997b94b9d",
+      "revision": 6,
+      "scope": "已修(commit 0bca077):三条承重判据抽为无 VM、无隧道、无网络的纯函数(judgeRouteView/classifyReplayRow/judgeExportFallback)入 rehearsal-predicates.mjs,三幕 import 复用且有测试断言「不存在第二份实现」;新增 16 条测试进 pnpm test 名册。act2 的 export→分页回退由「打印」改为「判定」: 三条可分离主张(回退确已发生且与投影摘要不自相矛盾、分页确有产出、产出的正是这条链——头哈希与权威 status 全值相等),各有具名红码。红证三例(逐一变异后复原): 去掉分区身份检查→异地分区用例红;去掉未声明旗标检查→两条相关用例红(第二条正确地随之失效,因为开关两态变得不可区分);去掉分页头与权威头比对→他链用例红。",
+      "decidedBy": [
+        "minutes:21b2f1b9a78f701706770714"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:a65425f4e72364234cef5a33",
+      "externalKey": "TCRN-AOS-INC-039",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": "work:5bf2078285b66cc0efdb5cf7",
+      "revision": 2,
+      "scope": "已提交的产品数据含替换字符: apps/web/src/cockpit-data.generated.ts 有 2 处 U+FFFD(第 10692、15528 行;如「评论与??场双轨」应为「立场」、「注定推倒的墙??驳倒」应为「墙被驳倒」),系在 chain-client 的 UTF-8 分块解码缺陷修复之前经同一客户端生成。缺陷本体已修(commit 8500646、StringDecoder+回归测试),既有生成物未重新生成——那是产品数据、diff 面大,不并入接线单。修复判据: 以修复后的客户端重新生成 cockpit-data.generated.ts、文件内 U+FFFD 计数为 0、并加一道门使替换字符不能再随生成物进仓。",
+      "decidedBy": [
+        "minutes:21b2f1b9a78f701706770714"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:2ad004ae6b4d3296b8e797b2",
+      "externalKey": "TCRN-AOS-INC-040",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": "work:c4632c4da5f7da59483962fa",
+      "revision": 2,
+      "scope": "切换阻断: 引擎按设计把工作区绑定到 workspace.json 的五个绝对根路径(framework/workspace/transient/evidence-locator/release-trust)、resolveWorkspace 要求逐项存在且 realpath 自等;逐字节副本在异机被 WORKSPACE_SCHEMA_INVALID 全数拒读(实测三个只读动词)。引擎无受治重绑通路(migration-plan 是存储版本迁移且只读、init 只能新建、exchange 不读链)。后果: MIN-007 D3 所裁的 O1「部署位面切换」建立在「换容器不换语义、逐字节搬运即可」的前提上、该前提今日被证伪。三出路 A(改写根、违 D3)/B(VM 复刻本机绝对路径、不可撤回)/C(引擎建受治重绑动词、保全部裁定)。**待 Owner 裁方向**;演练早已具名点出「真正的切换仪式需要一个受治的 placement 步骤或动词」而它至今不存在。",
+      "decidedBy": [
+        "minutes:f8ba478634e2eb93094a6120"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:5c2ad9003f5502c5979506c0",
+      "externalKey": "TCRN-AOS-INC-041",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c4632c4da5f7da59483962fa",
+      "revision": 6,
+      "scope": "已修(commit 0d1551d):deploy/aos-engine-host 清单升 0.8.0 并新增 requiredVerbs=[\"event-list\"] 由 apply.mjs 强制(且要求 availability=cli——光比动词数量,任何 96 个动词都能满足,而这次升级要的是那一个能力);VM 引擎已按该配方重部署至 0.8.0。独立复核(非收据自述):VM 上 package.json 0.8.0、CLI_CATALOG_READY 96 cli 动词含 event-list、404 文件双向逐文件 sha256 零不符、fileSetDigest 由 VM 自己的 node 重算与本机全值相同(63ea205c…)、零 node_modules 零 .git、零供权材料上机。**残留待裁**: helper 文案 v0.7.0 的追平属 TCRN-CROSS-INC-028(须走 helper 载荷仪式);链上 seq 739-742 由信任链未背书的 0.8.0 副本写下、属事实上的越锚写入、如何记待裁。",
+      "decidedBy": [
+        "minutes:f8ba478634e2eb93094a6120"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:7bcb94eaa97f4bb64a490f27",
+      "externalKey": "TCRN-AOS-INC-042",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:c4632c4da5f7da59483962fa",
+      "revision": 6,
+      "scope": "已修(commit 0d1551d):判据改为守脱敏本身——把脱敏反着跑(占位符还原成真实主机路径)再正向脱敏、断言逐值重现已提交收据;另加不动点检查、占位符与主机路径双向存在性检查(防空转)、具名摘要清点(≥2 否则不能因「无物可守」而通过)、以及规则反漂移测试(防止放宽模式把往返变成对从来不是主机路径的字符串的同义反复)。**反向对照最关键**: 同一次合法重跑(7 个摘要全变、chainVersion 549→612)下,新判据绿而**旧判据实测变红**——假红是演示出来的、不是声称的。三次变异中两次按预期红(脱敏顺手改写摘要、规则放宽吞掉真实路径段)。另: var-folders 规则无法还原(其模式吞掉无界尾部),故 rehydrate 对它显式抛错而非错误往返——fail-closed 而非猜。",
+      "decidedBy": [
+        "minutes:f8ba478634e2eb93094a6120"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
       "id": "work:ff2290f36de29780d18d4323",
       "externalKey": "TCRN-AOS-INIT-001",
       "kind": "Initiative",
@@ -618,6 +815,21 @@ export const cockpitData: CockpitData = {
       "scope": "**已发布。** Owner 于 2026-07-28 明示「同意发布」,解除本 Initiative 唯一剩下的必停点(对外发布)。本注解为发布记录,并更正本单上一版注解里那句「五仓均未推送,对外发布仍是必停点」——该句写于本轮之前,现已不成立。\n\n发出的两件:\n- **TCRN-AOS v0.1.0** — commit 54b2aa4432a1e612606345f015473cedefad5813,annotated tag 于服务器 97cfd114e0cd4279c4cfda5aad148f9a960e2ac3,GitHub Release 非草稿非预发布。本历史上的首个版本 tag;`public-export-2026-07` 不是它的祖先(那条 tag 指向隐私改写前的血统),发布说明里已写明,不得读作续接。仓库仍为 private,不向任何 registry 发布。package.json 由 `0.1.0-local` 升 `0.1.0`(`-local` 是 prerelease 标识,排序低于正式版,故此为前进而非改名)。\n- **TCRN-Design-System v3.0.0** — commit 771bddeac8339e4514149d7f8769ac6dfe262cb3,tag 于服务器 3a4b6758de481a48bcfa8b118c8fd10ddaeebc53,Release 同上。仓库为 public。\n\n**版本号取 major 的依据,记录以备后查**:API 面**没有**破坏——barrel 导出与 v2.1.0 逐字节相同,新增 prop 全部可选。取 major 是因为**渲染契约变了**:移动断点下侧栏默认收起、utility 行与两个横向行改版、带 280px 栏的 shell 在约 760–780px 区间由三列改为堆叠。本仓自身的先例(v2.0.0 tag 说明)就是把渲染面当契约面,且本轮确有五张移动端视觉基线移动。消费者可用 `mobileNavExpanded` 恢复常开栏。\n\n**发布前核查抓到七件事,全部按单推进,无一放过**:DS 侧 INC-006(CHANGELOG 两次未滚动标题,已补 2.0.0/2.1.0 两节并建门)、INC-007(三族版本面漂移,最久的漂了两个发布,已建闭合登记门);AOS 侧 INC-030(镜像包落后三个提交,构建器与验收门均未接线)、INC-031(许可证审计硬钉上游版本;**第一版修法因 pnpm 硬链接而造出恒绿门,由红证捕获后回退**)、INC-032(demo 类判据被一条描述其上次修复的注解击败,已改为按「类实际能活在哪里」判定)、INC-033(导出前置门自历史改写起永久失效 + 三个文件无导出裁定 + 为 deploy/ 补 Secret 内容守卫)。另有两条我自己写进链上的错话由独立复核推翻并已追加更正(见 TCRN-DS-INC-006 第三条注解)。\n\n**本轮最该留下的一条**:INC-030/033 使「已交付但从未被验证」在本仓累计到**第五例**。五例之后不该再当偶然——**一道不在主验证链里的门,寿命等于写它那天。** 三道新门(mirror:freshness-proof、source-export:proof、changelog/version-surface)均已接入各自仓库的 verify,pnpm verify 由 18 步增至 21 步。",
       "decidedBy": [
         "minutes:4fdc3f1caf4adfb2374090f7"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:c6d15729358b958caf868c7f",
+      "externalKey": "TCRN-AOS-INIT-002",
+      "kind": "Initiative",
+      "status": "active",
+      "parentId": null,
+      "revision": 6,
+      "scope": "承载 AOS 分区切换段执行(cross 总承载=TCRN-CROSS-INIT-014)。分解=仪式步序轴六 Epic 十九 Story(MIN-007 D13);EPIC-031 已收官(commit 0aee5f2)。裁定全文: TCRN-AOS/evidence/conf-007-package.md 与 TCRN-AOS-MIN-007。警示更新: 候选排除已落地(Initiative 不再入选),但 mirror-acceptance-proof 的迁移对仍会推进一条真实非 Initiative 记录(如 planned 的 Story)——验收运行须在预期该推进语义下进行。",
+      "decidedBy": [
+        "minutes:3a0d27be789cadb0ccb353c1",
+        "minutes:a296b0542ddd66fcd0679d34"
       ],
       "sprintWorkId": null
     },
@@ -880,8 +1092,8 @@ export const cockpitData: CockpitData = {
       "kind": "Story",
       "status": "done",
       "parentId": "work:4fab089cdf2aee150dbf440b",
-      "revision": 6,
-      "scope": "访问边界。**已交付(2026-07-27,裁定 MIN-052 D4/D4b)**:绑内网不暴露公网(traefik ingress 仅 LAN host);暂不建认证层——受众是 Owner 自己的设备,认证层保护的是尚不存在的观众,而「不上公网」才是治理数据真正的边界。**供权永不上 VM 已结构性保证**:pins 只在本机,cockpit-service 只绑 127.0.0.1,镜像构建期即剔除写控件(build-mirror 对携带写面的产物 fail-closed)。**绊线**:镜像地址一旦需要给 Owner 设备之外的任何人,本单重开并按对外发布级处理。",
+      "revision": 7,
+      "scope": "访问边界。**已交付(2026-07-27,裁定 MIN-052 D4/D4b)**:绑内网不暴露公网(traefik ingress 仅 LAN host);暂不建认证层——受众是 Owner 自己的设备,认证层保护的是尚不存在的观众,而「不上公网」才是治理数据真正的边界。**供权永不上 VM 已结构性保证**:pins 只在本机,cockpit-service 只绑 127.0.0.1,镜像构建期即剔除写控件(build-mirror 对携带写面的产物 fail-closed)。**绊线**:镜像地址一旦需要给 Owner 设备之外的任何人,本单重开并按对外发布级处理。\n\n更正(EPIC-034-S119、依 CONF-007 裁定、2026-07-28): 本单三项前提(受众限 Owner 设备、认证层保护的是尚不存在的观众、供权永不上 VM 已获结构性保证)在切换段全部失效、该题已按 MIN-007 D7 重裁为「写面保持 127.0.0.1 仅经 SSH 隧道、绊线升格为写面级并按对外发布级停点处理」(实证 evidence/aos-access-boundary-proof.json);本单结论对其原范围(镜像段只读面)仍然成立、此后仅可作镜像段先例引用。",
       "decidedBy": [
         "minutes:3a0d27be789cadb0ccb353c1"
       ],
@@ -1098,6 +1310,274 @@ export const cockpitData: CockpitData = {
       "scope": "已交付（AOS c24ae11 已推并核实）。① forceExpanded 与 isForceExpandedOwnerQualityState 及 reason mobile_collapse_hidden_policy 全部删除——它们只为在折叠控件被隐藏的前提下把移动端侧栏钉开，是消费方为 DS 形态打的补丁；DS 现在自己管开合，读者的折叠状态就是读者的。② data-owner-quality-collapse-policy 取值改为 mobile-hidden-width-collapse-affordance，语义收窄为只指宽度折叠控件；对应断言同步。③ 首屏门改判据并**已取红证**：不再量 #work-heading（1x1、clip:rect(0,0,0,0)，读者不可见，故旧棘轮可以在页面什么都没显示时照绿），改为量可见标题与第一条工作项对真实视口高度，失败信息带出两个实测值；还原 DS 三级中的任意一级后，门报「first row 1125, fold 844」变红。④ 新增两条断言补上那半条从来没有判据的策略——控件存在且默认收起、且收起意味着 display:none（链接离开 Tab 序而非只是离开屏幕）；这半条无人断言，正是四周内没有任何机制发现「导航根本收不起来」的原因。⑤ 退役收据字段 mobileNavigationCompactFirstViewport（见 INC-027）。AOS pnpm verify 绿。",
       "decidedBy": [
         "minutes:de47de4a4f95e07dec79f0f7"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:170b4394dee8643bd3873e3e",
+      "externalKey": "TCRN-AOS-STORY-110",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:175e693189336900c4793f9a",
+      "revision": 6,
+      "scope": "已交付(commit 0aee5f2):/api/chain/annotate 路由(拒绝透传);判据4=迁移对为主(候选排除 Initiative、抽 lib 经 6 单测钉住)、引擎全拒或零候选时回退注解对(盖章=INC-034、剥印记保叙事、单印记行整值替换、码点度量对齐引擎 8192);拒绝半边绑逐字消息+revision 不变+事件增量恰一;scratch 红证三例+decidedBy 经真 MCP 门面绿证。复审两轮修十发现(含 decidedBy 线格式 major、分腿判据读快照 major);变异复验判据由绿翻红。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:79d158904ce9895af5f5e1ba",
+      "externalKey": "TCRN-AOS-STORY-111",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:175e693189336900c4793f9a",
+      "revision": 6,
+      "scope": "已交付(commit 0aee5f2):/api/chain/work 与 /api/chain/enrol 路由;写面恰四路由经名册+行为双判据钉住(仪式动词 404 且 CEREMONIAL_WRITES 仍声明);switch 穷尽性使漏配成编译错;类型错字段点名拒绝不静默丢。顺手真缺陷:enrol sprint 线格式逗号→#(旧形态从未真正工作、引擎实证、测试钉住且变异翻红)。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:1a37d9bbf5b77745b9b87f59",
+      "externalKey": "TCRN-AOS-STORY-112",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:175e693189336900c4793f9a",
+      "revision": 6,
+      "scope": "已交付(commit 0aee5f2):写面 actor 由 AOS_ACTOR 显式供给、无默认、缺失拒启(红路径 finally 回收不悬挂);健康面自陈 actor;docs/security-boundaries.md 记「归因是声明非身份证明」;红绿证 evidence/aos-write-attribution-proof.json。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:179f57ee6d3230d5e81250f3",
+      "externalKey": "TCRN-AOS-STORY-113",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:5bf2078285b66cc0efdb5cf7",
+      "revision": 6,
+      "scope": "已交付(commit 1534edb):aos_chain_write_log 入珍贵域库(BK01/BK02 即覆盖、恢复演练含之);单调 seq+wire args 一次序列化逐字节保真(变异翻红)+引擎回执要点+append-only 触发器(变异翻红);锚列 NULL=epoch 语义;onWrite 失败=类型化 CHAIN_ACCEPTED_LOG_FAILED→502 携引擎回执(链已动勿盲重试);ack-落日志崩溃窗如实入 notClaimed、对账指路镜像谱系比对;round-trip 判据改独立期望(修「两侧同源」恒绿);151/151 绿。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:744b66567d7569378cde45c4",
+      "externalKey": "TCRN-AOS-STORY-114",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:5bf2078285b66cc0efdb5cf7",
+      "revision": 10,
+      "scope": "阻塞已解除、已交付(commit 8500646):经受治 MCP 面 event-list 分页读通路(assembleEventPages 纯函数+readAllEvents)把活链 711 事件全量灌入行镜像;四条拼接判据皆「可验非可信」(每页与锚一致、拼接数==链版本、序号连续、尾哈希==链头全值),超限窗口具名拒绝后折半重试同一 offset(真引擎对 1024 窗真拒、折半至 512 完成);红证六例(活链丢页/丢页被重复页掩盖 + 合成四例)全部预期码=实收码。**真链矩阵已跑通: 20 格 19 equal、1 白名单 n/a、0 mismatch、0 acceptance-gate-pending;R1 与 R3 的 A 侧八格全部为真判据 equal** —— TCRN-AOS-MIN-008 的开门条件由此满足。证物 evidence/aos-live-matrix-proof.json。过程捕获真缺陷并修: chain-client 逐块 utf8 解码,Node 在 64 KiB 管道边界不看字符边界切分,跨界的多字节汉字解成两个 U+FFFD,首次灌注被引擎 validateEventChain 以 EVENT_CHAIN_CORRUPT 拒收;已用 StringDecoder 修复并加回归测试(附控制断言证 fixture 真的跨界)。如实记录: 我方四条拼接判据在被污染的流上全部通过——是引擎的 validateEventChain 抓到的。拼接判据回答「这是不是完整的流」,只有引擎回答「这是不是有效的链」。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34",
+        "minutes:21b2f1b9a78f701706770714"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:c8cb470b4027f25a7ccdd045",
+      "externalKey": "TCRN-AOS-STORY-115",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:22cdb88e538c96f7987d6318",
+      "revision": 6,
+      "scope": "已交付:run-matrix 驱动器(lockstep 先于取锚/双跑 5×4/锚稳定复读/成员文件粒度 inode 前证/结构化错误路径/oversize 分段退化);scratch 双跑绿。对抗复审九发现全修——含互指格恒真门(现真比较、确无可比改判 recorded-not-compared 且不计通过)与 --a-side-absent 对 R1/R3 八格改记 acceptance-gate-pending。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:53478e8bd247be0b13abf36c",
+      "externalKey": "TCRN-AOS-STORY-116",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:22cdb88e538c96f7987d6318",
+      "revision": 6,
+      "scope": "已交付:红证套件 17 例全部经驱动器自己的格裁决取码(套内摘要重实现已删——「套红门绿」防线);含 C3b 盲区配对证、DROP 触发器双红、NA_OUT_OF_WHITELIST 驱动器级红、linkSync 成员硬链接拒跑;红证自带「篡改必须真的改字节」自检(首轮曾被 no-op 骗过,已修)。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:c0ca49024d7e105023b4b64b",
+      "externalKey": "TCRN-AOS-STORY-117",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:22cdb88e538c96f7987d6318",
+      "revision": 6,
+      "scope": "已交付:四分区实例化表(TMS 无 attestation 经可执行谓词实证/三链 events 全超或近 1MiB——AOS 实测 1,121,375B 已越线/锚形态逐分区);n/a 白名单冻结且闭包受测,R5 sidecar 自我授权条目经复审删除(F 有 A 无=具名红 ATTESTATION_SIDECAR_NOT_MIGRATED——结构缺席须证于源侧)。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:4c2a89e137d970fe6b4f3261",
+      "externalKey": "TCRN-AOS-STORY-118",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:8d17c2a6bfab212d5c5668f3",
+      "revision": 6,
+      "scope": "已交付(commit 440989f):deploy/aos-engine-host 声明式配方将受治引擎 v0.7.0(tag 锚 2e6cfe3)落 VM /srv/tcrn/engine;403/403 文件双向 sha256 对账、fileSetDigest 双侧同值(独立复核代理重算相符);VM 上 CLI_CATALOG_READY 95 动词、零 node_modules 自足;statfs 双向红绿证(ext4 过、pstore 拒于任何写之前);零供权材料上机(全树 grep 复核)、scratch 零残留。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:0b07e3b764ce911db16a4415",
+      "externalKey": "TCRN-AOS-STORY-119",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:8d17c2a6bfab212d5c5668f3",
+      "revision": 6,
+      "scope": "已交付:隧道通路红绿实证(LAN 直连拒/ssh -L 带 nonce 通、进程组删净验证);绊线测试断言内核实报绑定地址恒 127.0.0.1(dist 翻 0.0.0.0 造红复原);升格条款与双层检测记 deploy/access-boundary/README.md;独立复核代理确认判据为行为谓词非文本 grep。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:90a13282c4d0bbb637e5a0e7",
+      "externalKey": "TCRN-AOS-STORY-120",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:8d17c2a6bfab212d5c5668f3",
+      "revision": 6,
+      "scope": "已交付:VM 最小 bundle 独立代线 generation 1(writeCommands 恰安全写面三动词、authorityOutputCommands 空、规范字节经引擎自产)铸于本机 authority/vm/(0600、不上 VM——部署属切换仪式且 pins 须按 VM 路径重签,条款已记 docs/vm-operator-bundle.md 连同续期仪式);真门面三绿一拒(OPERATOR_AUTHORITY_COMMAND_NOT_GRANTED)+吊销红(OPERATOR_AUTHORITY_REVOKED)+两处铸造期篡改红;邻居三文件未动(live pins 仍 d25ebfc1);独立复核重跑只读目录调用证 bundle 对 v0.7.0 结构有效(INC-025 判据)。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:6ce862fbf69741c3e1e40bb0",
+      "externalKey": "TCRN-AOS-STORY-121",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:8d17c2a6bfab212d5c5668f3",
+      "revision": 6,
+      "scope": "已交付:gate 权威规范源(容器根、sha fab89e25…)只读、副本 0600 落 VM /srv/tcrn/governance/、双侧全值摘要一致(独立复核两侧重算相符)+字节翻转红证;VM scratch 受治工作区 owner 门演练四裁决(错 digest 拒/非名册 actor 拒证引擎真读副本名册/身份层过后纪要锚定另判/blocked 完成写);配方幂等入 deploy/access-boundary/。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:a8f9446f10822b6ba6638e20",
+      "externalKey": "TCRN-AOS-STORY-122",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:dd1336f59885432997b94b9d",
+      "revision": 6,
+      "scope": "已交付(commit 2dcc014):迁移演练两幕——幕一 scratch 全绿弧(本机建链+行镜像+矩阵双跑+锚+传 VM 逐文件对账+VM 引擎复验),幕二真链 F 侧只读弧(非同 inode 副本、矩阵以 A 侧缺席跑出诚实形状、VM 引擎回放证、副本删净)。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:7347e79d0ab3cedcb7a80e4d",
+      "externalKey": "TCRN-AOS-STORY-123",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:dd1336f59885432997b94b9d",
+      "revision": 6,
+      "scope": "已交付(commit 2dcc014):回退演练六步全绿+运行中发现的第七步。语义漂移红路径实证:注入两条伪造日志行(引擎无此动词/真动词带未声明旗标),各以自己的 reason code 单列呈报、未静默丢弃、未中断全程,且分类器权威取自 VM 引擎实时 commands 名册(97)而非脚本内抄本。第七步为运行发现:重放后 snapshot-manifest 以 KNOWLEDGE_HIGH_WATER_MISMATCH 拒锚,须 knowledge-rebase 恢复 lockstep(事件流头不变)——重放后取锚是两步不是一步。两条红证(放行伪造行→枚举步红;扣一条重放行→对账步红)证判据非同义反复。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:598e33ccf3e4803137bfb439",
+      "externalKey": "TCRN-AOS-STORY-124",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:dd1336f59885432997b94b9d",
+      "revision": 6,
+      "scope": "已交付(commit 2dcc014):push 腿(最新一对 rsync 至 VM /srv/tcrn/backups 并以 export-manifest 无引擎逐文件校验)、到期告警(读 pairedAt 非目录 mtime、--if-due 语义、造红双向)、拉回验签(--verify-remote 抽样比对)、静态加密与密钥归属两案成文待 Owner 择(未实施)。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:b32f3e5878c80f467bcc0e20",
+      "externalKey": "TCRN-AOS-STORY-125",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:dd1336f59885432997b94b9d",
+      "revision": 6,
+      "scope": "已交付(commit 2dcc014):VM 上真值版产品面走查全绿——十一路由读面 SSR 200 且各渲染自己的视图并带 scratch 分区标识(附以既有提交数据渲染的红对照,证绿来自数据而非渲染器)、安全写面四路由全链路(链 v6→v11)、写日志行同步出现且末行 head/version 与链权威同刻全值相等、INVALID_TRANSITION 拒绝证据、仪式动词 404 证据;访问形态恰为 CONF-007 D7(VM 上绑 127.0.0.1、经 ssh -L 抵达)。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:49bf0ae87d94ab1f9468c01e",
+      "externalKey": "TCRN-AOS-STORY-126",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:c4632c4da5f7da59483962fa",
+      "revision": 7,
+      "scope": "TCRN-AOS-GATE-001 已 satisfied(链 v738)。关门前取两道红证且皆真红: 未获许可 actor→WORKSPACE_GATE_IDENTITY_REFUSED;权威文件摘要错误→GATE_IDENTITY_AUTHORITY_DIGEST。授权由 owner:governance 关闭、锚定纪要 conference-minutes:f8ba478634e2eb93094a6120(TCRN-AOS-MIN-010)。两处我方操作失误已如实落链: CONF-009 链错工作项(须链门所挂的 STORY-126 而非 INIT-002)、首次 locator 误写 minutes: 命名空间(引擎要 conference-minutes:);两者皆被引擎 fail-closed 挡下、未致错误状态。",
+      "decidedBy": [
+        "minutes:93cb785aa1503e56440d9360",
+        "minutes:f8ba478634e2eb93094a6120"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:308a39819acf888103c4c58a",
+      "externalKey": "TCRN-AOS-STORY-127",
+      "kind": "Story",
+      "status": "blocked",
+      "parentId": "work:c4632c4da5f7da59483962fa",
+      "revision": 6,
+      "scope": "**停在第 3 步、未切换、本机仍是唯一真值**(validate 绿、head 837aa60d…、v742;VM 零 AOS 链、探针已删净)。步 1 冻结绿、步 2 终锚 SNAPSHOT_VERIFIED 绿(chainManifestDigest f3576b3e…、domainSnapshot 4d276b91…、attestationSet 03711e90…/537 收据、pairedAt 2026-07-29T04:43:05Z)。步 3 红且为实测红证: 把与本机逐字节相同的控制树放上 VM 后、VM 引擎的 status/validate/snapshot-manifest 三个只读动词全数 WORKSPACE_SCHEMA_INVALID(「/Users/…/.tcrn-workflow/tcrn-workflow does not resolve to a directory」)。根因: 引擎把工作区绑定到 workspace.json 内的五个**绝对根路径**(含引擎自身的 framework 根)、且 resolveWorkspace 要求每个根在活文件系统上真实存在;而 workspace.json 正是「五件套原样」要求逐字节保留的那个文件。引擎的恢复手册第一条教义即「同路径唯一」。**已复核确认引擎无受治的重绑通路**: migration-plan 只读且是存储版本迁移、非根路径;init 只能新建;exchange 三动词是调用方自供 chunk 的打包校验面。三条出路: (A) 改写 workspace.json 的根——与 MIN-007 D3「不改一个字节」冲突且是对控制树的非引擎写入;(B) 在 VM 复刻本机绝对路径布局——保字节且技术可行、但把本机 home 布局永久烙进真值根且 V1 无撤回通路;(C) 在引擎侧建受治的重绑动词——保全部裁定、但属 W 侧新方向。**因 O1 这一方向本身建立在「逐字节副本可在别处运行」这一今日被证伪的前提上、故属常设停顿预算第三类(无既有裁定支撑的不可逆方向变更)、已呈 Owner、不代裁。**",
+      "decidedBy": [
+        "minutes:f8ba478634e2eb93094a6120"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:2176df9dcd4a4e7ef2fef186",
+      "externalKey": "TCRN-AOS-STORY-128",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:c4632c4da5f7da59483962fa",
+      "revision": 2,
+      "scope": "收官:local-first 条款显式退役记录(MIN-007 D2);镜像处置执行(D11);宿主对等核验(每宿主至少一次受治读通路实证);切换事实落链。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
       ],
       "sprintWorkId": null
     },
@@ -4586,6 +5066,44 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "cross-project",
+      "id": "work:13f196313a0e41dbfe4282bf",
+      "externalKey": "TCRN-CROSS-INC-026",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": "work:15404191b1b63e28774a0706",
+      "revision": 2,
+      "scope": "W 需求: conference-open 与 conference-append-position 需要一条能写 extensions 的受治通路、使 core 已建成的 fail-closed 执行溯源判据(conference-execution.ts: executionMode、host-execution-receipt、classifyConferenceExecution)可达。依据: TCRN-AOS-MIN-002 未决项明令「向 W 提需求」;deliberation-adoption-convention.md 对 v0.7.0(HEAD 2e6cfe3)复核缺口仍成立(CLI 两动词无 extensions 旗标、core 判据 CLI 零调用)。可关闭验收判据: 两动词可写 extensions 且 conference-execution 判据在真链跑绿一次。提报会议: TCRN-AOS-CONF-007。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:ca79febcf93b8c9da7c95059",
+      "externalKey": "TCRN-CROSS-INC-027",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": "work:15404191b1b63e28774a0706",
+      "revision": 6,
+      "scope": "已交付并发布: event-list(--workspace --limit --offset、只读、回执 WORKSPACE_LIST_READY、每事件含三哈希与规范载荷);单页超限具名拒 CLI_EVENT_PAGE_OVERSIZED 不静默截断;0.7.0→0.8.0;main=537e502、tag v0.8.0=44def4f、Release 已建、push-gate PUSH_GATE_VERIFIED(20 子门+725 测试+30 guard)。发布面顺带清两笔旧账: 五语 README 徽章自 0.6.0 起漂移(证明 0.7.0 那次未跑推送门)、dist/release 残留 0.7.0 源码包致 P8 产物集不等。验收三判据全绿: 动词可用、AOS 行镜像对超限活链接线成功(711 事件)、矩阵 R1/R3 在真链实判。",
+      "decidedBy": [
+        "minutes:21b2f1b9a78f701706770714"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:fa96575ed7a2bcc617537bef",
+      "externalKey": "TCRN-CROSS-INC-028",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": "work:15404191b1b63e28774a0706",
+      "revision": 2,
+      "scope": "helper 文案版本漂移: .claude/skills/tcrn-workflow-helper/SKILL.md 自称「Supports TCRN Workflow v0.7.0」,而受治引擎副本将随 INC-027 升至 v0.8.0。不阻断信任链(已查证 verify-installed-copy 只校验 skill 归档 sha256、不读引擎版本;state.json 仅 schemaVersion 与 verifiedArchiveSha256 两键),亦不使 helper 指引失效(0.8.0 为纯增量、只加一个只读动词)。属诚实性缺口而非功能缺口。修复须走 helper 载荷仪式(编辑 skill/ 触发全重钉链: 锚重派、分片测试、candidate 递进与发布),故单独立单排期,不并入引擎发布。修复判据: helper 文案与受治副本引擎版本一致、candidate 递进并经三方验证。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
       "id": "work:a9f610a2e09324269b8fd9bb",
       "externalKey": "TCRN-CROSS-INIT-001",
       "kind": "Initiative",
@@ -4752,6 +5270,20 @@ export const cockpitData: CockpitData = {
       "revision": 5,
       "scope": "W 与 helper 的 AOS 集成。**已交付并发布(2026-07-27)**。授权=Owner 离席全权令目标三,方向裁定见 MIN-052。**W v0.7.0**(tag db336c65…,main 2e6cfe30…):补齐 AOS 提的两条读面缺口——work-list 摘要带 externalKey(此前只有 export 带键而 export 拒超 1MiB,平台四链中两条已超,消费方被迫用暴力摘要匹配反查键号,401 条中 25 条永久无名);新增 conference-position-list 与 conference-minutes-list 两个工作区级分页读(此前立场与纪要只能经 export 取,超限链上「十五条立场的审议」与「零立场的审议」渲染完全相同)。实测:cross 链 export 仍返 INPUT_OVERSIZED,而 position-list 返 140 条可分页、work-list 返真键号。**helper candidate.29**(锚 43f6d441…):重钉 v0.7.0 + 新增 references/aos-integration.md 一份载荷,答两个安装期必现问题(已部署 AOS→用回环健康探测而非提问,因为多数人没有 AOS 而提问会暗示不存在的依赖;纯本地转 AOS→链不搬家,那是心理上的迁移不是事实上的迁移,真正的变化是多出一份不可重建的珍贵存储)。三道门各自抓到一次:git ls-files 与目录遍历不一致致 IDENTITY_MISMATCH、闭合载荷清单拒未登记文件、源归档须最后建。",
       "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:e4c26a03430407fd8a164cbd",
+      "externalKey": "TCRN-CROSS-INIT-014",
+      "kind": "Initiative",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "两段式真值拓扑全分区切换总承载(MIN-007 D1:全分区一体为终态方向、分段切换且 AOS 先行作实证段)。AOS 段执行分册=TCRN-AOS-INIT-002;cross/DS/TMS 三段待 AOS 段验收后按其证据拆册。议题与裁定全文: TCRN-AOS/evidence/conf-007-package.md。",
+      "decidedBy": [
+        "minutes:a296b0542ddd66fcd0679d34"
+      ],
       "sprintWorkId": null
     },
     {
@@ -6158,6 +6690,15 @@ export const cockpitData: CockpitData = {
   ],
   "gates": [
     {
+      "partitionId": "TCRN-AOS",
+      "id": "gate:e3ebeb998e9b0a73733ad979",
+      "externalKey": null,
+      "title": "切换 owner 门:本地模式→AOS 治理模式的真值迁移授权",
+      "status": "satisfied",
+      "outcomeClass": "owner_intent_required",
+      "workId": "work:49bf0ae87d94ab1f9468c01e"
+    },
+    {
       "partitionId": "TCRN-Design-System",
       "id": "gate:0001f53a3a330e39d656eb8f",
       "externalKey": null,
@@ -6329,6 +6870,39 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "TCRN-AOS",
+      "id": "conference:72a3ed83fddf49aa03dbd98a",
+      "externalKey": null,
+      "title": "迁移裁定会:切换段参数全集——范围、容器、写面、矩阵、访问边界、回退、备份、sidecar、镜像处置与专机复审",
+      "type": "architecture",
+      "status": "closed",
+      "workIds": [
+        "work:c6d15729358b958caf868c7f"
+      ]
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "conference:86f799212cfa0a1b1db860ec",
+      "externalKey": null,
+      "title": "开门条件裁定:验证强度未满不得开切换门;其余自主推进",
+      "type": "architecture",
+      "status": "closed",
+      "workIds": [
+        "work:c6d15729358b958caf868c7f"
+      ]
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "conference:9aa5d6ce7556048173726607",
+      "externalKey": null,
+      "title": "切换授权:Owner 开门与三项留至此刻的勾选",
+      "type": "release",
+      "status": "closed",
+      "workIds": [
+        "work:c6d15729358b958caf868c7f"
+      ]
+    },
+    {
+      "partitionId": "TCRN-AOS",
       "id": "conference:ae0e6ae093a8e3dbada63507",
       "externalKey": null,
       "title": "移动端首屏:导航形态、判据与拥有方",
@@ -6361,6 +6935,18 @@ export const cockpitData: CockpitData = {
       "status": "closed",
       "workIds": [
         "work:ff2290f36de29780d18d4323"
+      ]
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "conference:e790faba5612e693acb229f7",
+      "externalKey": null,
+      "title": "切换授权(锚定会议):承 CONF-009、链至门所挂工作项以满足引擎锚定判据",
+      "type": "release",
+      "status": "closed",
+      "workIds": [
+        "work:49bf0ae87d94ab1f9468c01e",
+        "work:c6d15729358b958caf868c7f"
       ]
     },
     {
@@ -8145,6 +8731,45 @@ export const cockpitData: CockpitData = {
     },
     {
       "kind": "unresolved",
+      "partitionId": "TCRN-AOS",
+      "recordId": "minutes:a296b0542ddd66fcd0679d34",
+      "externalKey": "TCRN-AOS-MIN-007",
+      "title": "执行形态 multi-agent-deliberative(POS-C007-MINERVA/VERITY/SABLE/MARA-1 及续片由互不可见独立子代理产出、绑定收据 evidence/conf-007-execution-receipts.json sha256=5f1ceaab579c7db4e7d38c87a3ca42ae63412f0eea67c27cf4e7a2de6ac88d53;开场与 Owner 立场为主线程转写)。迁移裁定会收官:Owner 整块接受十二议题与轻量件默认推荐含四席位修正;写入方式定为文件载荷批驱动仪式+MCP-over-SSH 只读与安全写面+ControlMaster、W 网络门面留延后轨;分解令下达(仪式步序轴、接线 Epic 先行、首 story=INC-034 修复、快车道不入列)。",
+      "detail": {
+        "reason": "open-issues",
+        "open": 5,
+        "recorded": 5
+      },
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-AOS",
+      "recordId": "minutes:21b2f1b9a78f701706770714",
+      "externalKey": "TCRN-AOS-MIN-008",
+      "title": "Owner 裁定:验证强度未满不得开切换门——矩阵 R1、R3 的 A 侧八格须在真链实判;INC-035 升为关键路径必修项;其余修复免逐项授权;开门仍须 Owner 亲自执行。",
+      "detail": {
+        "reason": "open-issues",
+        "open": 3,
+        "recorded": 3
+      },
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "TCRN-AOS",
+      "recordId": "minutes:f8ba478634e2eb93094a6120",
+      "externalKey": "TCRN-AOS-MIN-010",
+      "title": "切换授权的锚定纪要(承 CONF-009 同义重录):授权关闭 GATE-001、准予执行切换段;三项勾选按 MIN-007 默认裁定;并记下两处经引擎 fail-closed 挡下的我方操作失误。",
+      "detail": {
+        "reason": "open-issues",
+        "open": 3,
+        "recorded": 3
+      },
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
       "partitionId": "cross-project",
       "recordId": "minutes:26d0b27a4ea134840c607926",
       "externalKey": "TCRN-CROSS-MIN-001",
@@ -9349,6 +9974,55 @@ export const cockpitData: CockpitData = {
       "dissolvedCount": 0
     },
     {
+      "minutesId": "minutes:a296b0542ddd66fcd0679d34",
+      "externalKey": "TCRN-AOS-MIN-007",
+      "surface": [
+        "延后轨阈值为建议值(每周三次/单场返工)、正式化随切换后首月复盘",
+        "专机与镜像终局的正式勾选留在切换 owner 门",
+        "cross 总承载 INIT 的编号与立单随分解办理",
+        "S019 重开与绊线升格的落单形态随分解办理",
+        "INC-034 修复落地前 mirror-acceptance-proof 不得运行(INIT-002 会被当迁移对候选流转)"
+      ],
+      "effective": [
+        "延后轨阈值为建议值(每周三次/单场返工)、正式化随切换后首月复盘",
+        "专机与镜像终局的正式勾选留在切换 owner 门",
+        "cross 总承载 INIT 的编号与立单随分解办理",
+        "S019 重开与绊线升格的落单形态随分解办理",
+        "INC-034 修复落地前 mirror-acceptance-proof 不得运行(INIT-002 会被当迁移对候选流转)"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:21b2f1b9a78f701706770714",
+      "externalKey": "TCRN-AOS-MIN-008",
+      "surface": [
+        "W 引擎发布形态(是否需 tag 与 Release 方能进受治副本)待实施时按既有发布机构确定",
+        "行镜像接活链后是否需重跑迁移与回退演练以覆盖真值 A 侧待实施时判定",
+        "MIN-007 U2 的专机与镜像终局勾选仍留至开门当次"
+      ],
+      "effective": [
+        "W 引擎发布形态(是否需 tag 与 Release 方能进受治副本)待实施时按既有发布机构确定",
+        "行镜像接活链后是否需重跑迁移与回退演练以覆盖真值 A 侧待实施时判定",
+        "MIN-007 U2 的专机与镜像终局勾选仍留至开门当次"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:f8ba478634e2eb93094a6120",
+      "externalKey": "TCRN-AOS-MIN-010",
+      "surface": [
+        "切换段备份发起端与调度落谁待发起端迁移时定",
+        "cross、DS、TMS 三段的切换待 AOS 段验收后按其证据拆册",
+        "TCRN-AOS-INC-039 与 TCRN-CROSS-INC-028 仍 open、不阻断切换"
+      ],
+      "effective": [
+        "切换段备份发起端与调度落谁待发起端迁移时定",
+        "cross、DS、TMS 三段的切换待 AOS 段验收后按其证据拆册",
+        "TCRN-AOS-INC-039 与 TCRN-CROSS-INC-028 仍 open、不阻断切换"
+      ],
+      "dissolvedCount": 0
+    },
+    {
       "minutesId": "minutes:3f0fcbfb8ce0c4e593e71c66",
       "externalKey": null,
       "surface": [
@@ -10464,6 +11138,123 @@ export const cockpitData: CockpitData = {
         "fragmentCount": 1
       }
     ],
+    "conference:72a3ed83fddf49aa03dbd98a": [
+      {
+        "conferenceId": "conference:72a3ed83fddf49aa03dbd98a",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:0d7758fb7c782100f08524bc"
+        ],
+        "externalKeys": [],
+        "body": "主线程转写 Owner 会话裁定(执笔 agent:fable、署名 owner:governance);不在绑定集。回应 POS-C007-ARTURO-1 与四席位立场。\n一、整块接受 T1-T12 与轻量件的默认推荐,含四席位修正案(Minerva:分段切换 AOS 先行、gate 权威按摘要放副本;Verity:n/a 白名单封闭、新仪器先自红证、INC-034 单印记行整值替换;Sable:VM 最小 bundle 分代分撤销、写面回环+SSH 隧道、绊线升格;Mara:接线 Epic 先行、镜像冻结、快车道)。\n二、写入方式子裁定(T2 本机角色与 T5 并卷):①文件载荷批驱动为仪式主路(本机组稿核预算→scp→单连接执行→回执归档);②MCP 门面经 SSH stdio 为读面与安全写面通道(VM 最小 bundle 在传输层锁死仪式动词——此为特性非缺陷);ControlMaster 复用;③裸 SSH 逐条命令仅应急;④W 侧受治网络门面留延后轨道,复审条件=切换后首月远程仪式频次或传输返工成为实际摩擦(建议阈值:每周超过三次或单场因传输返工;正式化随首月复盘)。\n三、分解令按 T12 轴下达:轴=仪式步序;接线 Epic 先行启动且首 story=INC-034 路 B 修复四细则;快车道不入列;宿主对等入分解清单;切换验收含真值版产品面走查。\n依据实测:引擎单笔写 125-240ms、SSH 热连接 225ms、ControlMaster 后 10-30ms——线路开销为噪声级,写入效率上限即引擎本身。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:72a3ed83fddf49aa03dbd98a",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:152a49da13f8f7dadae0246c"
+        ],
+        "externalKeys": [],
+        "body": "独立子代理产出;回应 POS-C007-ARTURO-1。\nT1:认可全分区一体为终态方向——单一权威拓扑排除双模式并存。修正:终态裁定与执行时序须分离，四链各有独立锚且矩阵逐分区实例化，应按分区分段切换(AOS 先行、证据再推其余三分区)，不做四链一次性原子切换。cross/DS 越 1MiB 的逐事件摘要与分块通路是其段硬前置。承载认可 cross INIT 总承载+INIT-002 收敛为 AOS 执行分册。local-first:成立条件随切换终结，但回退窗内文件容器须可重升为权威，保留至回退演练证毕再显式退役并记理由。\nT2:认可 O1 切换、O3 仅作矩阵仪器、O2 延后。已核实引擎无存储接缝(appendEvent 全内联)，O2 复审条件须钉死为 W 引擎经自己的 Initiative 开出存储端口，AOS 单方面实现即第二裁判。pins 落点:「只住操作者本机」成立条件随切换失效，形状应在新宿主重实例化——pins 驻 VM、写面仅绑回环、仅经 SSH 隧道可达，属条件化保留非删除。本机角色建议 SSH 受治会话执行仪式，远拨等于把持 pins 进程上网。VM 链目录须落引擎钉死的八魔数本地文件系统集合并仪式内实测 statfs;VM 引擎信任经 verify-installed-copy 等价物先行验证。\nT3:认可全表与双轨登记。修正:①adapter-operator 行复审条件不应读作 pins 上 VM 后可进写面——该族是信任引导机构，复审的正确产物是换一条理由继续「不进」，纪要预记;②归因裁定(默认 actor 固定 agent:fable)与 head 哨兵只许 work 图写，应升格为写面扩容验收判据。fixture-only 两动词不计可达写面。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:72a3ed83fddf49aa03dbd98a",
+        "actorId": "profile:tcrn-arturo-v1",
+        "fragmentIds": [
+          "position:163591e576c7d1f23369c08c"
+        ],
+        "externalKeys": [],
+        "body": "执行形态 multi-agent-deliberative——仅覆盖 POS-C007-MINERVA-1、POS-C007-VERITY-1、POS-C007-SABLE-1、POS-C007-MARA-1(及各自 -1-2 续片;四 persona 立场由互不可见的独立子代理上下文分头产出;绑定收据 evidence/conf-007-execution-receipts.json,sha256=5f1ceaab579c7db4e7d38c87a3ca42ae63412f0eea67c27cf4e7a2de6ac88d53);本立场为主线程综合执笔(执笔 agent:fable,署名 arturo),不在绑定集。绑定证一致性非真实性,可信采集方未建成。\n议题十二件+轻量一件,依 MIN-002「切换段全部参数待迁移裁定时另会」与 CONF-002 裁定三「专机或专卷、备份 SLA、访问收紧与迁移同门裁定」而设:T1 范围与承载(逐分区参数表、local-first 残余适用性);T2 容器形态(推荐 O1 部署位面切换、O3 行镜像仪器、O2 延后;pins 落点与本机角色两硬前置、「库承接」读法披露);T3 写面分工表(39 动词四类处置、复审条件、归因前置);T4 一致性矩阵(五件套×四判据、逐列红证义务、逐分区实例化);T5 访问边界与写面认证(S019 三前提俱失、须重裁);T6 fallback 对账(写日志前置、回退六步、演练义务);T7 切换段备份拓扑与 SLA(期中附 S020⑤ 推拉勾选);T8 sidecar 清单与 gate 身份权威落点;T9 镜像段资产处置;T10 专机复审三出口+告警义务;T11 W 侧立单 INC-026 呈报;T12 分解令、入列与宿主对等;轻量件=INC-034 路 B 四细则。议题全文与证据见 TCRN-AOS/evidence/conf-007-package.md(INIT-002 注解同指)。\n本会不于本会话 close:全部议题属 owner_intent_required,待 Owner 逐题裁定后由裁定会话收会。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:72a3ed83fddf49aa03dbd98a",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:3a6d3d9ee8619c9dbbeb6456"
+        ],
+        "externalKeys": [],
+        "body": "T8:实测更正:gate-identity-authority.json 在 .tcrn-workspace/release-trust/ 容器根，是四分区共享单一权威而非 AOS 分区件，「随迁/留本机」是伪题——整体随迁会打断未迁分区门过渡。正解以摘要为身份:gate-transition 本就绑摘要旗标，可按宿主放副本、指定唯一规范源、逐次门过渡落摘要;规范源随仪式终端裁定。清单补三项:pins 供权 bundle(随 T2 裁)、受治引擎副本及信任态、链注解所引 evidence 仓路径切换后解析约定。attestations/ 随链迁且 attest-dir 在 VM 重建于 workspace 根外;transient/ 不迁。\n外加 T6:回放日志规范化载荷须只读复用 protocol 纯函数，第二套 canonicalJson 会令回退重放遭 fail-closed 拒读。\n本席硬条件:①pins 落点经 Owner 裁定并留残余适用性记录;②VM statfs 实测在集合内;③INSTALLED_COPY_VALIDATED 先于 VM 首笔写;④owner 门执行地演练证 gate 权威可解析且摘要相符;⑤判据与回退日志规范化唯一来源为受治引擎禁双实现。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:72a3ed83fddf49aa03dbd98a",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:3f77a76d8d55f7997ebe096a",
+          "position:7a0e60099b61bbebac7b997c"
+        ],
+        "externalKeys": [],
+        "body": "独立子代理产出;回应 POS-C007-ARTURO-1。\n【总评】已只读核实关键引文:annotateWork 拒绝消息逐字在引擎源中;scope 为整值替换;写半边 revision+1、拒绝抛在 reducer 内不落事件;snapshot-verify 自陈只证字节。会议包引擎侧前提成立。\n【T4 认可+四修正】矩阵轴、逐格三态、逐列红证、全值摘要、非同 inode 前证、判据唯一来源为受治引擎——认可;C3(b)与C4(a)成对红证同证盲区与补位列非冗余、尤佳。修正一:not-applicable 只许结构性缺席(如 TMS R5)——R1/R3 的 A 侧格是 MIN-003 指明的建成验收门、不得以「未建成」声明 n/a、否则矩阵空洞通过;拆单时冻结 n/a 白名单、名单外的 n/a 判为 mismatch。修正二:n/a 声明须带可执行谓词(如实查 TMS 链无 attestation 启用事件)。修正三:冻结写面须可验——双跑毕重读 headEventHash 与锚相等方计有效。修正四:越 1MiB 后的逐事件摘要与分段投影是新仪器、须先自证红证(删段或换序必红)方可入矩阵;矩阵证物记受治引擎锚、使唯一裁判可复核。\n【边界语言认可】建议落为双向约束:矩阵证物自带一行「本证物不含授权」;切换 owner 门记录引用矩阵证物摘要——授权引用证据、证据不隐含授权。\n【T6 认可+两修正】写日志与矩阵同级、六步程序、不可对账类预命名、演练先于 owner 门——认可。修正一:演练须含红路径——向 scratch 日志注入一条映射不到引擎动词的记录、演练须产出语义漂移单列呈报而非静默丢弃。修正二:记录内容摘要的排除字段清单(at、事件哈希等)须预声明并双向红证:含内字段差异必红、仅排除字段差异必绿。演练证物记引擎摘要、锚摘要、逐步 reason 码。\n\n【INC-034 认可+一修正一发现】路 B 与四细则认可;路 A 三项拒绝理由经引文核实。发现:细则②逐次前挂时间戳使 scope 单调增长、而引擎强制字符串 8192 字符上限——印记累积令写半边有限次后必然出错、门自带寿命终点。修正:改为保留原叙事全文+单一印记行整值替换、变更判据仍成立且增长有界。细则③补:写半边另断言事件增量恰一条 work.annotated。顺序硬约束:细则①修复须先于 mirror-acceptance-proof 任何一次运行、否则 INIT-002 被推出 planned。\n【额外一题:T2 仪式内环境判据】VM statfs 实测与 verify-installed-copy 等价物须产出可归档证物并各带红证(对被拒文件系统实跑必须拒)——不留证物的前置只是口头前置。\n【本席位硬条件】切换 owner 门开启前:①全部适用格 equal 且每列红证实跑变红并归档实收码;②n/a 白名单冻结、R1/R3 A 侧格不得 n/a;③回退演练含语义漂移红路径并完成;④INC-034 细则①先于该门任何运行落地;⑤证物含引擎锚、非同 inode 证明与锚稳定性复读。",
+        "fragmentCount": 2
+      },
+      {
+        "conferenceId": "conference:72a3ed83fddf49aa03dbd98a",
+        "actorId": "profile:tcrn-sable-v1",
+        "fragmentIds": [
+          "position:7de8d1f1c11d62721e4e4970"
+        ],
+        "externalKeys": [],
+        "body": "【T8 完整性重于机密性】已核实 release-trust/gate-identity-authority.json(0600、无密钥材料、仅许 owner:governance)——风险不在泄露而在替换、真锚是「谁能在链宿主执行仪式」。落点与 owner 门执行地绑定裁:留本机则仪式经 SSH 达 VM、切换前须实证该通路一次、否则切换自身的 owner 门开不了;随迁则 VM 只读收紧+本机留规范副本对照。归「永不上 VM」类不可行——链在哪 gate-transition 就在哪读它。\n【T10 修正·出口(a)加第五条件】TMS api(持 JWT 与库凭据、有零授权端点前科)与治理真值同内核同盘同 IP、容器逃逸即达真值、pins 驻 VM 则并达写权。四条件外加:网络策略禁 TMS 命名空间达 AOS 写面+真值不落与 TMS 共享的 hostPath。四项告警+回传通路是硬前置——「交付一次再无人验证」已四例。\n【指派外一件】pins 只绑 bundle 摘要不绑引擎版本:VM 引擎副本须经受信 bootstrap 等价物按锚验证并落记录、否则权威在未验证引擎上执行——列入迁移仪式。\n【本席硬条件】①VM 最小 bundle 另铸+吊销红证;②写面经 SSH 隧道或经裁认证层+绊线升格;③VM 无常驻外达凭据(例外须 Owner 记理由);④gate 权威通路实证;⑤网络及盘隔离+四项告警接通。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:72a3ed83fddf49aa03dbd98a",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:86d8aff02ea414182158db2d"
+        ],
+        "externalKeys": [],
+        "body": "【D 节就绪度】真待裁约二十五道子题、超载风险实在。T2/T3/T4/T6/T10 有推荐有后果、合格;缺陷两处——T9 无推荐(上文已补)、T1 的 local-first 处置两案并列无推荐(我补:条件化保留绑定 fallback 场景、切换验收后随 owner 门退役并记理由)。合并两处:T2 本机写通路与 T5 访问边界同题应并卷同裁;T7 期中 push/pull 属镜像段残期事务、以推荐 push 作默认勾选或降为运维轻量单。呈报按块给默认推荐、Owner 整块接受只点名例外。\n【额外议题】矩阵证字节与回放等同、但矩阵通过不等于产品可用。切换验收须补产品面走查:真值宿主上十模块读面加安全写面一次全链路实证(镜像验收 D9 判据的真值版)、置于 owner 门之前。\n【本席硬条件】①呈 Owner 的每道题须有推荐与后果、T9 与 local-first 补齐后方可开卷;②切换验收含真值版产品面走查;③INC-026 带可关闭判据;④分解令显式裁接线 Epic 启动粒度且首 story 为 INC-034 修复;⑤切换窗口内镜像冻结标 as-of 且禁手动刷新。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:72a3ed83fddf49aa03dbd98a",
+        "actorId": "profile:tcrn-sable-v1",
+        "fragmentIds": [
+          "position:8b3d5d0044ceddf5f2345c1c"
+        ],
+        "externalKeys": [],
+        "body": "独立子代理产出;回应 POS-C007-ARTURO-1。\n【T2 pins·有条件认可】已核实 service.ts:24-29:回环绑定是裁定形态、pins 不旅行。切换段 AOS 常驻写面、pins 事实上必须驻 VM——零凭据到持权是质变、须显式裁定。修正:①现行 bundle 含 37 写命令(含 conference、gate、knowledge 仪式动词)、整包上 VM 则攻破即得治理仪式写权;须为 VM 另铸仅含安全写面动词的最小 bundle、与本机全权 bundle 分代分撤销。②切换前实证吊销红证一次。③bundle 有效期 2026-08-24 止、续期仪式须先定义。\n【T5 认可·取最紧选项】S019 三前提俱失、仅可作镜像段先例。①主张写面仍绑 127.0.0.1、仅经 SSH 隧道达——唯一让「持 pins 进程不可自网络达」逐字存续的选项;选 LAN 认证层须先给可复现的认证与撤销方案。②绊线升格认可:写面一出边界即按对外发布级停点。③S019 重开认可。另:默认 actor 固定 agent:fable(service.ts:72)、扩面前须裁逐请求归因、否则归因塌缩为一名。\n【T7 修正·不对称按原方向重建】真值移 VM 后若备份外推、VM 将常驻能达本机或云的凭据——今天刻意不存在之物。优选=本机经既有 SSH 拉取(零新凭据)、代价是依赖本机在线、须配备份到期告警。manifest 不认证来源、应加本机验签;备份为治理链全文且已落 OneDrive、异地副本静态加密与密钥归属应同门裁定。",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:72a3ed83fddf49aa03dbd98a",
+        "actorId": "profile:tcrn-mara-v1",
+        "fragmentIds": [
+          "position:f43a7763e0c715a15faed49a"
+        ],
+        "externalKeys": [],
+        "body": "独立子代理产出;回应 POS-C007-ARTURO-1。\n【T9 修正】会议包对镜像三选一只列选项无推荐。修正案:本会只裁方向不裁终局——自切换仪式起镜像冻结并显式标 as-of、手动 rsync 刷新不得带入切换窗口(实测刷新无任何调度接线);真值读面通过验收后镜像默认退役、终局形态随切换 owner 门一并勾选。cockpit-data.generated 推荐投影直读替代手动检入。S018「零写面」命名在真值写面同宿主出现后失效、须改述为「本读面不提供写控件」并留更正注解。\n【T11 认可带修正】INC-026 要件核实成立:kind 循 INIT-004 公约、父挂 EPIC-032 有 INC-025 同面先例且引擎放行、键号经派生核查空闲、cross 写纪律与侦察一致、呈报可驳回形态诚实。修正:scope 须补可关闭验收判据——以 conference 两动词可写 extensions 且 conference-execution.ts 判据在真链跑绿一次为界、否则非决策就绪交接。\n【T12 认可带两点修正】分解轴按仪式步序认可、每步有可验出口;接线 Epic 先行强烈认可——不依赖 T1-T10 结论且 CONF-001 已裁。修正①:分解令须显式裁「接线 Epic 先行启动」——INIT-002 循先例保持 planned 待启动令、不裁启动粒度则已裁接线债继续闲置;其首个 story 应定为 INC-034 路 B 修复、否则 INIT-002 自己的 planned 记录会先把验收门打红(A.1 已警示)。修正②:入列默认快车道——切换自带 owner 门与对外发布类硬停点不可批并、入列标记 advisory 事后可补(S049 实证非绑定)。宿主对等入清单认可、切换验收应含每宿主至少一次受治读通路实证、不对等按 P8 记入 kickoff 名册。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:86f799212cfa0a1b1db860ec": [
+      {
+        "conferenceId": "conference:86f799212cfa0a1b1db860ec",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:3ae7296c622e4c68d88e9d8f"
+        ],
+        "externalKeys": [],
+        "body": "主线程转写 Owner 会话裁定(执笔 agent:fable、署名 owner:governance);执行形态=主线程转写、无分头产出、不在任何绑定集。\n一、不得在验证强度未满的情况下开切换门。CONF-007 呈报包第三节第一条所述状态(行镜像接不上活链、矩阵 R1、R3 的 A 侧八格只能记 acceptance-gate-pending、MIN-003 指名的 append-only 记录流与哈希链在真链上无 A 侧受测对象)不构成可开门的验证强度。开门条件因此收紧为:该八格须在真链上得到实判。\n二、达成该条件所需的一切修复工作,自本裁定起不再逐项请求授权。遇到的新问题一律按缺陷单公约开单、修复、验证,直至开门条件满足。\n三、本裁定不放宽任何既有判据,亦不改变 MIN-007 的其余十四条决议;它只把「开门与否」这一道从 Owner 待裁项变为条件式:条件不满足即不得开,条件满足后仍须 Owner 亲自开门(引擎按名册拒绝任何非 owner:governance 的关闭,已于 S121 实证)。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:9aa5d6ce7556048173726607": [
+      {
+        "conferenceId": "conference:9aa5d6ce7556048173726607",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:140504828640a3827694b402"
+        ],
+        "externalKeys": [],
+        "body": "主线程转写 Owner 会话裁定(执笔 agent:fable、署名 owner:governance);执行形态=主线程转写、无分头产出、不在任何绑定集。\n一、授权关闭 TCRN-AOS-GATE-001,准予执行两段式真值拓扑的切换段。授权依据是 MIN-008 所定开门条件已被满足并留有可复核证据:真链一致性矩阵 20 格为 19 equal、1 白名单 n/a、0 mismatch、0 acceptance-gate-pending,其中 R1 与 R3 的 A 侧八格全部为真判据。\n二、三项留至此刻的勾选,按 MIN-007 已载默认裁定:①专机取出口(a)不专机,以 ns 隔离、资源配额、真值独立 PV、网络策略禁 TMS 命名空间达 AOS 写面、四项告警加回传通路五项为条件;②镜像终局为退役,切换窗口内先冻结并显式标 as-of,真值读面通过真值版产品面走查后退役;③备份静态加密与密钥归属维持未实施,不阻断切换,复审条件为切换段备份发起端迁至 VM 之时。\n三、本授权只覆盖切换执行本身。切换后若出现无既有裁定支撑的不可逆方向变更,仍须另行呈报。",
+        "fragmentCount": 1
+      }
+    ],
     "conference:ae0e6ae093a8e3dbada63507": [
       {
         "conferenceId": "conference:ae0e6ae093a8e3dbada63507",
@@ -10689,8 +11480,20 @@ export const cockpitData: CockpitData = {
           "position:f660ddd72e7218420d54871e"
         ],
         "externalKeys": [],
-        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。第四轮:Jira 形态重构与九问裁定(源=Owner 两轮反馈)。\n\nOwner 方向修正(要点转述):AOS 不能局限于单项目,参照 Jira 的多项目管理形态;目标是用惯 Jira 与 Confluence 的专业人士可无痛上手。我方九问逐一过后 Owner 裁定:Q1 单操作员先行、多用户按可演进设计(身份字段留位);Q2 重开「首阶段零写面」裁定→首期开放安全写面(建卡/状态流转/注解,CAS、时间戳、actor 自动补齐),治理写(门/审议/发布)保留显式仪式;Q3 全局层置顶(我的工作/收件箱/仪表盘/项目目录),混合 as-of 按项目分别标注;Q4 不叫 Sprint——Owner 逐字要点:「Sprint 在当前阶段可以无视日期是因为我们还没有客户,所以只用于作为 INIT 集合发布的包来用……新词也需要有类似含义,因为我们需要这样去支持」→定名沿用公约既有词「发布列车」,并锚定 Jira 用户的 Releases/fixVersion 心智(一批 issue 打包发布、日期可留空),为未来节奏演进留路(列车公约本就预留 cadence 重钉);Q5 知识空间首期只渲染+检索,编辑器为独立轨道另裁;Q6 assignee/优先级/标签/评论走 AOS 自有域(qualified ref 挂链,链管治理真值、AOS 管运营元数据;评论与���场双轨,UI 引导「要进裁定记录写成立场」);Q7 治理对象永不可编辑、运营字段可编,UI 以链标记区分;Q8 Jira 熟悉面打底+「决策与证据」页签做差异化;Q9 模块序=全局层→项目目录→看板→详情→发布列车→知识空间。\n\n底座结论不变:MCP/CLI 唯一数据通道;聚合索引由缓存升格为核心组件(四链投影一库,链版本键控,truth-ownership 边界);纯 CSR;组件全走 DS;local-first。v2 设计稿已出(docs/aos-design/v2-jira-shaped.html,六屏+术语终审表+裁定落点表+写面分界表,真链数据),已呈 Owner 终审。待办:术语表逐词终审;终审通过即收敛,close 本会议出分解裁定。",
+        "body": "主线程综合(main-thread synthesis);执笔 agent:fable,署名 Minerva。第四轮:Jira 形态重构与九问裁定(源=Owner 两轮反馈)。\n\nOwner 方向修正(要点转述):AOS 不能局限于单项目,参照 Jira 的多项目管理形态;目标是用惯 Jira 与 Confluence 的专业人士可无痛上手。我方九问逐一过后 Owner 裁定:Q1 单操作员先行、多用户按可演进设计(身份字段留位);Q2 重开「首阶段零写面」裁定→首期开放安全写面(建卡/状态流转/注解,CAS、时间戳、actor 自动补齐),治理写(门/审议/发布)保留显式仪式;Q3 全局层置顶(我的工作/收件箱/仪表盘/项目目录),混合 as-of 按项目分别标注;Q4 不叫 Sprint——Owner 逐字要点:「Sprint 在当前阶段可以无视日期是因为我们还没有客户,所以只用于作为 INIT 集合发布的包来用……新词也需要有类似含义,因为我们需要这样去支持」→定名沿用公约既有词「发布列车」,并锚定 Jira 用户的 Releases/fixVersion 心智(一批 issue 打包发布、日期可留空),为未来节奏演进留路(列车公约本就预留 cadence 重钉);Q5 知识空间首期只渲染+检索,编辑器为独立轨道另裁;Q6 assignee/优先级/标签/评论走 AOS 自有域(qualified ref 挂链,链管治理真值、AOS 管运营元数据;评论与立场双轨,UI 引导「要进裁定记录写成立场」);Q7 治理对象永不可编辑、运营字段可编,UI 以链标记区分;Q8 Jira 熟悉面打底+「决策与证据」页签做差异化;Q9 模块序=全局层→项目目录→看板→详情→发布列车→知识空间。\n\n底座结论不变:MCP/CLI 唯一数据通道;聚合索引由缓存升格为核心组件(四链投影一库,链版本键控,truth-ownership 边界);纯 CSR;组件全走 DS;local-first。v2 设计稿已出(docs/aos-design/v2-jira-shaped.html,六屏+术语终审表+裁定落点表+写面分界表,真链数据),已呈 Owner 终审。待办:术语表逐词终审;终审通过即收敛,close 本会议出分解裁定。",
         "fragmentCount": 2
+      }
+    ],
+    "conference:e790faba5612e693acb229f7": [
+      {
+        "conferenceId": "conference:e790faba5612e693acb229f7",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:2ad6f4e76f680e9b508ab7ee"
+        ],
+        "externalKeys": [],
+        "body": "主线程转写 Owner 会话裁定(执笔 agent:fable、署名 owner:governance);执行形态=主线程转写、无分头产出、不在任何绑定集。\n本立场与 POS-C009-OWNER-1 是同一份授权的同义转写、重录只为满足引擎的锚定判据(会议须链至门所挂的工作项);不是第二次授权、亦不改变其内容。\n一、授权关闭 TCRN-AOS-GATE-001、准予执行两段式真值拓扑的切换段。依据: MIN-008 所定开门条件已满足并留有可复核证据——真链一致性矩阵 20 格为 19 equal、1 白名单 n/a、0 mismatch、0 acceptance-gate-pending、其中 R1 与 R3 的 A 侧八格全部为真判据。\n二、三项留至开门当次的勾选、按 MIN-007 已载默认裁定: ①专机取出口(a)不专机、条件五项为 ns 隔离、资源配额、真值独立 PV、网络策略禁 TMS 命名空间达 AOS 写面、四项告警加回传通路;②镜像终局为退役、切换窗口内先冻结并显式标 as-of、真值读面通过走查后退役;③备份静态加密与密钥归属维持未实施、不阻断切换、复审条件为切换段备份发起端迁至 VM 之时。\n三、本授权只覆盖切换执行本身;切换后若出现无既有裁定支撑的不可逆方向变更、仍须另行呈报。\n四、记录我方两处操作失误以备后来者: 建 CONF-009 时链错工作项;首次关门时把 locator 写成 minutes: 而引擎要求 conference-minutes: 命名空间。两者皆由引擎 fail-closed 挡下、未造成错误状态。",
+        "fragmentCount": 1
       }
     ],
     "conference:080047a28266811c28d57ede": [
@@ -13490,6 +14293,108 @@ export const cockpitData: CockpitData = {
         "已验收的视觉实例行 mobile-dark-zh-cn-work-queue 需重拍，属重新验收而非基线刷新，施工时须如实标出。"
       ]
     },
+    "conference:72a3ed83fddf49aa03dbd98a": {
+      "id": "minutes:a296b0542ddd66fcd0679d34",
+      "externalKey": "TCRN-AOS-MIN-007",
+      "summary": "执行形态 multi-agent-deliberative(POS-C007-MINERVA/VERITY/SABLE/MARA-1 及续片由互不可见独立子代理产出、绑定收据 evidence/conf-007-execution-receipts.json sha256=5f1ceaab579c7db4e7d38c87a3ca42ae63412f0eea67c27cf4e7a2de6ac88d53;开场与 Owner 立场为主线程转写)。迁移裁定会收官:Owner 整块接受十二议题与轻量件默认推荐含四席位修正;写入方式定为文件载荷批驱动仪式+MCP-over-SSH 只读与安全写面+ControlMaster、W 网络门面留延后轨;分解令下达(仪式步序轴、接线 Epic 先行、首 story=INC-034 修复、快车道不入列)。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "T1 范围=全分区一体为终态方向;分段切换且 AOS 先行作实证段;跨分区总承载另立 cross INIT、INIT-002 收敛为 AOS 执行分册",
+        "T1 local-first 条款=条件化保留绑定 fallback 回退场景;切换验收后随 owner 门显式退役并记理由",
+        "T2 容器=O1 部署位面切换;O3 行镜像为矩阵仪器(明确不备);O2 延后、复审条件=W 引擎经自己的 Initiative 开出存储端口",
+        "T2 pins=形状在 VM 重实例化(驻 VM、写面仅绑回环、仅经 SSH 隧道可达);VM 另铸仅含安全写面动词的最小 bundle 与本机全权 bundle 分代分撤销;切换前实证吊销红证一次;bundle 续期仪式先定义",
+        "T3 写面分工表照案通过;归因来源裁定与 head 哨兵限定升格为写面扩容验收判据;「不进」各行按公约登记为主权型+审计型约束并带复审条件",
+        "T4 矩阵照案通过+Verity 四修正(n/a 白名单封闭于结构性缺席且 R1/R3 A 侧格不得 n/a;判据带可执行谓词;锚稳定性复读;新仪器先自红证)",
+        "T5 访问边界=写面保持 127.0.0.1 仅经 SSH 隧道;S019 绊线升格为写面级(地址一出 Owner 设备按对外发布级处理);S019 单按前提失效重开",
+        "T6 回退=写日志前置与矩阵同级;回退六步照案;演练义务含语义漂移红路径、先于切换 owner 门",
+        "T7 切换段备份=异地方向为本机经既有 SSH 拉取(零新凭据)+到期告警+本机验签;发起端与调度待 VM 持引擎后复议;静态加密与密钥归属同门裁定;期中 S020⑤ 默认勾选 push",
+        "T8 sidecar=gate 身份权威以摘要为身份按宿主放副本、唯一规范源随仪式终端裁定;attestations 随链迁且 attest-dir 在 VM 重建于 workspace 根外;transient 不迁",
+        "T9 镜像=切换窗口冻结并显式标 as-of、禁手动刷新入窗;真值读面过产品面走查后默认退役;终局随切换 owner 门勾选;S018「零写面」表述改「本读面不提供写控件」并留更正注解",
+        "T10 专机=出口(a)不专机、条件五项(ns 隔离;资源配额;真值独立 PV 且不落与 TMS 共享 hostPath;网络策略禁 TMS 命名空间达 AOS 写面;四项告警+回传通路);正式裁定留至切换 owner 门",
+        "T11=INC-026 呈报接受(带可关闭验收判据);T12=分解令下达(仪式步序轴;接线 Epic 先行启动;首 story=INC-034 路 B 修复;快车道不入列;宿主对等入分解清单;切换验收含真值版产品面走查)",
+        "写入方式=文件载荷批驱动为仪式主路;MCP 门面经 SSH stdio 限只读+安全写面;ControlMaster 复用;裸 SSH 应急;W 受治网络门面延后轨(复审条件=首月远程仪式频次或传输返工成为实际摩擦)"
+      ],
+      "unresolvedIssues": [
+        "延后轨阈值为建议值(每周三次/单场返工)、正式化随切换后首月复盘",
+        "专机与镜像终局的正式勾选留在切换 owner 门",
+        "cross 总承载 INIT 的编号与立单随分解办理",
+        "S019 重开与绊线升格的落单形态随分解办理",
+        "INC-034 修复落地前 mirror-acceptance-proof 不得运行(INIT-002 会被当迁移对候选流转)"
+      ],
+      "effective": [
+        "延后轨阈值为建议值(每周三次/单场返工)、正式化随切换后首月复盘",
+        "专机与镜像终局的正式勾选留在切换 owner 门",
+        "cross 总承载 INIT 的编号与立单随分解办理",
+        "S019 重开与绊线升格的落单形态随分解办理",
+        "INC-034 修复落地前 mirror-acceptance-proof 不得运行(INIT-002 会被当迁移对候选流转)"
+      ]
+    },
+    "conference:86f799212cfa0a1b1db860ec": {
+      "id": "minutes:21b2f1b9a78f701706770714",
+      "externalKey": "TCRN-AOS-MIN-008",
+      "summary": "Owner 裁定:验证强度未满不得开切换门——矩阵 R1、R3 的 A 侧八格须在真链实判;INC-035 升为关键路径必修项;其余修复免逐项授权;开门仍须 Owner 亲自执行。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "开门条件收紧: 矩阵 R1、R3 的 A 侧八格须在真链上得到实判(非 acceptance-gate-pending)方可开切换 owner 门",
+        "TCRN-AOS-INC-035(W 分页事件读动词缺口)由待提需求升为开门关键路径的必修项;修复在 W 引擎侧实施",
+        "达成开门条件所需的一切修复自本裁定起免逐项授权: 按缺陷单公约开单、修复、验证、落链",
+        "MIN-007 其余十四条决议不变;本裁定不放宽任何既有判据",
+        "开门本身仍须 Owner 亲自执行(引擎按 gate 身份名册拒绝任何非 owner:governance 的关闭)"
+      ],
+      "unresolvedIssues": [
+        "W 引擎发布形态(是否需 tag 与 Release 方能进受治副本)待实施时按既有发布机构确定",
+        "行镜像接活链后是否需重跑迁移与回退演练以覆盖真值 A 侧待实施时判定",
+        "MIN-007 U2 的专机与镜像终局勾选仍留至开门当次"
+      ],
+      "effective": [
+        "W 引擎发布形态(是否需 tag 与 Release 方能进受治副本)待实施时按既有发布机构确定",
+        "行镜像接活链后是否需重跑迁移与回退演练以覆盖真值 A 侧待实施时判定",
+        "MIN-007 U2 的专机与镜像终局勾选仍留至开门当次"
+      ]
+    },
+    "conference:9aa5d6ce7556048173726607": {
+      "id": "minutes:93cb785aa1503e56440d9360",
+      "externalKey": "TCRN-AOS-MIN-009",
+      "summary": "Owner 授权关闭 GATE-001 并准予执行切换段;三项留至开门当次的勾选按 MIN-007 默认裁定(不专机加五条件、镜像退役、备份加密维持未实施带复审条件)。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "授权关闭 TCRN-AOS-GATE-001、准予执行切换段;依据=MIN-008 开门条件已满足且证据可复核(真链矩阵 19 equal、0 mismatch、0 pending;R1 与 R3 的 A 侧八格全实判)",
+        "专机勾选=出口(a) 不专机;条件五项: ns 隔离、资源配额、真值独立 PV、网络策略禁 TMS 命名空间达 AOS 写面、四项告警与回传通路",
+        "镜像终局=退役;切换窗口内先冻结并显式标 as-of;真值读面通过真值版产品面走查后执行退役",
+        "备份静态加密与密钥归属=维持未实施、不阻断切换;复审条件=切换段备份发起端迁至 VM 之时",
+        "本授权只覆盖切换执行本身;切换后无既有裁定支撑的不可逆方向变更仍须另行呈报"
+      ],
+      "unresolvedIssues": [
+        "切换段备份发起端与调度落谁待发起端迁移时定(MIN-007 D9 原留)",
+        "cross、DS、TMS 三段的切换待 AOS 段验收后按其证据拆册(MIN-007 D1 分段方向)",
+        "TCRN-AOS-INC-039 与 TCRN-CROSS-INC-028 仍 open、不阻断切换"
+      ],
+      "effective": []
+    },
+    "conference:e790faba5612e693acb229f7": {
+      "id": "minutes:f8ba478634e2eb93094a6120",
+      "externalKey": "TCRN-AOS-MIN-010",
+      "summary": "切换授权的锚定纪要(承 CONF-009 同义重录):授权关闭 GATE-001、准予执行切换段;三项勾选按 MIN-007 默认裁定;并记下两处经引擎 fail-closed 挡下的我方操作失误。",
+      "outcomeClass": "owner_intent_required",
+      "decisions": [
+        "授权关闭 TCRN-AOS-GATE-001、准予执行切换段(与 CONF-009/MIN-009 同义;重录只为满足引擎锚定判据)",
+        "专机勾选=出口(a) 不专机;条件五项: ns 隔离、资源配额、真值独立 PV、网络策略禁 TMS 命名空间达 AOS 写面、四项告警与回传通路",
+        "镜像终局=退役;切换窗口内先冻结并显式标 as-of;真值读面通过真值版产品面走查后执行退役",
+        "备份静态加密与密钥归属=维持未实施、不阻断切换;复审条件=切换段备份发起端迁至 VM 之时",
+        "本授权只覆盖切换执行本身;切换后无既有裁定支撑的不可逆方向变更仍须另行呈报",
+        "记录两处我方操作失误(会议链错工作项、locator 命名空间写错)均由引擎 fail-closed 挡下且未致错误状态"
+      ],
+      "unresolvedIssues": [
+        "切换段备份发起端与调度落谁待发起端迁移时定",
+        "cross、DS、TMS 三段的切换待 AOS 段验收后按其证据拆册",
+        "TCRN-AOS-INC-039 与 TCRN-CROSS-INC-028 仍 open、不阻断切换"
+      ],
+      "effective": [
+        "切换段备份发起端与调度落谁待发起端迁移时定",
+        "cross、DS、TMS 三段的切换待 AOS 段验收后按其证据拆册",
+        "TCRN-AOS-INC-039 与 TCRN-CROSS-INC-028 仍 open、不阻断切换"
+      ]
+    },
     "conference:acfbb25a07b6b93d12b76b53": {
       "id": "minutes:3f0fcbfb8ce0c4e593e71c66",
       "externalKey": null,
@@ -15525,7 +16430,7 @@ export const cockpitData: CockpitData = {
       "decisions": [
         "裁定 采 Fork B：现在只把 builder 的 fail-open 变 fail-closed，v2 多-skill schema 连同四改推迟到真实第二 skill 消费者到场",
         "核查一 付两次全套仪式不成立：守卫只改 scripts/create-skill-archive.mjs 与其测试皆不在 skill/ 下，故 EXPECTED_ARCHIVE_SHA256 与锚不动、六文档无须 republish——轻量 scripts-only 仪式",
-        "核查二 注定推倒的墙��驳倒：守卫不变式（archive 须代表 skill/ 下每条被跟踪路径否则构建失败）在 v2 被保留；v2 拓宽满足条件（唯一 SKILL.md 子树→每子树各有 SKILL.md）为单调加强非回退，v2 改判定不拆守卫",
+        "核查二 注定推倒的墙被驳倒：守卫不变式（archive 须代表 skill/ 下每条被跟踪路径否则构建失败）在 v2 被保留；v2 拓宽满足条件（唯一 SKILL.md 子树→每子树各有 SKILL.md）为单调加强非回退，v2 改判定不拆守卫",
         "核查三 很可能就是 E04 无源支撑：E04 是把现有单一 helper skill 经宿主 adapter 分发系分发机制而非第二 skill，非多-skill 消费者",
         "边界确认 采 Opus (d) 砍单为即便建 v2 也不含：fixture skill／每-skill 分片／adapter 路由属 E04／迁移工具无基线",
         "Story EPIC-003 只声明 TCRN-CROSS-STORY-014（B1–B4 合为一坐定之工不切 Subtask）：builder 对 skill/ 下任何无法代表的路径失败关闭＋红证＋scripts-only 发布",
