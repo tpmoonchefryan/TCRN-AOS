@@ -1,0 +1,430 @@
+{
+  "schemaVersion": "aos.switch-rehearsal-arc.v1",
+  "ruling": "TCRN-AOS-MIN-007 切换仪式演练义务(矩阵双跑 → owner 门 → 切换 → 降级归档);产品面走查判据取 TCRN-CROSS-MIN-052 D9 的真值版;访问形态取 CONF-007 D7",
+  "generatedAt": "2026-07-29T02:39:35Z",
+  "run": {
+    "vmScratchRootName": "scratch-rehearsal-2026-07-29T02-38-09Z",
+    "vmScratchRoot": "<vm-scratch>",
+    "engineOnVm": "/srv/tcrn/engine/tcrn-workflow",
+    "partitionId": "SCRATCH-REHEARSAL",
+    "chain": {
+      "workspaceId": "workspace:a4164a5e8480ce5ae117b28b",
+      "headEventHash": "75736709dab3aabb564f17ca3561f51822035a076b4ef5a70f23fdadb78d8604",
+      "version": 6,
+      "records": {
+        "project": "project:c89d8a2ed7b94c9e2187bc73",
+        "initiative": "work:c86c53ac2105801acc5d1dc2",
+        "train": "work:70c8117d1d5a104ea307cc53"
+      }
+    }
+  },
+  "acts": [
+    {
+      "act": 1,
+      "story": "STORY-122",
+      "script": "deploy/switch-rehearsal/act1-scratch-arc.mjs",
+      "what": "scratch 全绿弧:本机建受治链(启用 attestation + attest-dir 旁车)→ 镜像 A 侧摄入 → 5×4 一致性矩阵双容器全绿 → 链侧锚(manifest + 基线字节归档 + snapshot-verify)→ 五件套传 VM 双向全值对账 → VM 自身引擎复验",
+      "ok": true,
+      "steps": [
+        {
+          "step": "build-scratch-chain",
+          "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+          "ok": true
+        },
+        {
+          "step": "mirror-ingest",
+          "reasonCode": "EVENT_MIRROR_INGESTED",
+          "ok": true
+        },
+        {
+          "step": "matrix-double-run",
+          "reasonCode": "MATRIX_ALL_APPLICABLE_EQUAL",
+          "ok": true
+        },
+        {
+          "step": "anchor",
+          "reasonCode": "SNAPSHOT_VERIFIED",
+          "ok": true
+        },
+        {
+          "step": "transfer-reconciliation",
+          "reasonCode": "TRANSFER_LEDGERS_EQUAL",
+          "ok": true
+        },
+        {
+          "step": "vm-snapshot-verify",
+          "reasonCode": "SNAPSHOT_VERIFIED",
+          "ok": true
+        },
+        {
+          "step": "vm-placement",
+          "reasonCode": "WORKSPACE_ROOTS_REPLACED_CANONICAL",
+          "ok": true
+        },
+        {
+          "step": "vm-validate",
+          "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+          "ok": true
+        }
+      ],
+      "matrixSummary": {
+        "cells": 20,
+        "equal": 19,
+        "mismatch": 0,
+        "notApplicableDeclared": 1,
+        "recordedNotCompared": 0,
+        "acceptanceGatePending": 0
+      },
+      "transfer": {
+        "files": 21,
+        "bytes": 44751,
+        "fileSetDigest": {
+          "local": "9465bfa939b6eca03a4556f8f7d81dc2b5c6b127e77633e674b4c03f7ae9692d",
+          "remote": "9465bfa939b6eca03a4556f8f7d81dc2b5c6b127e77633e674b4c03f7ae9692d"
+        }
+      }
+    },
+    {
+      "act": 2,
+      "story": "STORY-122",
+      "script": "deploy/switch-rehearsal/act2-real-chain-arc.mjs",
+      "what": "真链 F 侧弧:活链只读,字节副本证不共 inode;副本 validate + snapshot 绿;矩阵在 A 容器缺席下取诚实形状(R1/R3 的 A 侧格记 acceptance-gate-pending,整跑不通过);副本传 VM 由 VM 引擎全量回放后删净;权威前后 head 全值不变",
+      "ok": true,
+      "steps": [
+        {
+          "step": "read-only-copy-distinct-inode",
+          "reasonCode": "COPY_SHARES_NO_INODE_WITH_AUTHORITY",
+          "ok": true
+        },
+        {
+          "step": "copy-placement-validate",
+          "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+          "ok": true
+        },
+        {
+          "step": "copy-knowledge-rebase",
+          "reasonCode": "KNOWLEDGE_STORE_REBASED",
+          "ok": true
+        },
+        {
+          "step": "copy-snapshot-manifest-verify",
+          "reasonCode": "SNAPSHOT_VERIFIED",
+          "ok": true
+        },
+        {
+          "step": "matrix-honest-shape",
+          "reasonCode": "A_SIDE_ABSENT_DECLARED",
+          "ok": true
+        },
+        {
+          "step": "real-copy-transfer-reconciliation",
+          "reasonCode": "TRANSFER_LEDGERS_EQUAL",
+          "ok": true
+        },
+        {
+          "step": "vm-real-copy-snapshot-verify",
+          "reasonCode": "SNAPSHOT_VERIFIED",
+          "ok": true
+        },
+        {
+          "step": "vm-real-chain-replays",
+          "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+          "ok": true
+        },
+        {
+          "step": "vm-real-copy-deleted",
+          "reasonCode": "VM_TRUTH_COPY_REMOVED_VERIFIED",
+          "ok": true
+        },
+        {
+          "step": "local-real-copy-deleted",
+          "reasonCode": "LOCAL_TRUTH_COPY_REMOVED_VERIFIED",
+          "ok": true
+        },
+        {
+          "step": "authority-untouched",
+          "reasonCode": "AUTHORITY_READ_ONLY_HELD",
+          "ok": true
+        }
+      ],
+      "liveChain": {
+        "headEventHash": "0b084906ff414ecac68c88935bdf504cf46c64ae6eae7b4c26e4a3d6f51a06d3",
+        "version": 683
+      },
+      "matrixHonestShape": {
+        "cells": 20,
+        "equal": 0,
+        "mismatch": 0,
+        "notApplicableDeclared": 12,
+        "recordedNotCompared": 0,
+        "acceptanceGatePending": 8
+      }
+    },
+    {
+      "act": 3,
+      "story": "STORY-125",
+      "script": "deploy/switch-rehearsal/act3-product-walkthrough.mjs",
+      "what": "真值版产品面走查:驾驶舱服务跑在 VM 上(AOS_ACTOR 显式、绑 127.0.0.1),经 ssh -L 走查;十一条模块读面逐一 200 且渲染 scratch 链投影(带红对照);安全写面四路由各一次全链路;INVALID_TRANSITION 拒绝;仪式动词 404;写入落链的同时 S113 写日志行同步出现",
+      "ok": true,
+      "steps": [
+        {
+          "step": "reset-vm-scratch-chain-to-anchor",
+          "reasonCode": "VM_SCRATCH_CHAIN_RESET_TO_ANCHOR",
+          "ok": true
+        },
+        {
+          "step": "scratch-projection-data",
+          "reasonCode": "SCRATCH_PROJECTION_BAKED",
+          "ok": true
+        },
+        {
+          "step": "rehearsal-web-built",
+          "reasonCode": "WEB_SSR_AND_BUNDLE_BUILT",
+          "ok": true
+        },
+        {
+          "step": "vm-pins-resigned",
+          "reasonCode": "OPERATOR_PINS_RESIGNED_FOR_VM_PATH",
+          "ok": true
+        },
+        {
+          "step": "runtime-transfer-reconciliation",
+          "reasonCode": "TRANSFER_LEDGERS_EQUAL",
+          "ok": true
+        },
+        {
+          "step": "vm-residue-before-start",
+          "reasonCode": "VM_PROCESS_GROUP_EMPTY_BEFORE_START",
+          "ok": true
+        },
+        {
+          "step": "vm-service-started",
+          "reasonCode": "REHEARSAL_SERVICE_UP_LOOPBACK",
+          "ok": true
+        },
+        {
+          "step": "tunnel-up",
+          "reasonCode": "SSH_TUNNEL_PATH_LIVE",
+          "ok": true
+        },
+        {
+          "step": "criterion-url-ssr",
+          "reasonCode": "URL_REACHABLE_WITH_SSR",
+          "ok": true
+        },
+        {
+          "step": "criterion-modules",
+          "reasonCode": "MODULE_READ_FACE_GREEN_WITH_RED_CONTROL",
+          "ok": true
+        },
+        {
+          "step": "criterion-domain-roundtrip",
+          "reasonCode": "DOMAIN_WRITE_ROUND_TRIPS",
+          "ok": true
+        },
+        {
+          "step": "criterion-write-log-http-shadowed",
+          "reasonCode": "DOMAIN_EXPORT_ROUTE_SHADOWED_BY_GET_CATCHALL",
+          "ok": true
+        },
+        {
+          "step": "criterion-four-writes",
+          "reasonCode": "FOUR_WRITE_ROUTES_FULL_PATH_WITH_LIVE_WRITE_LOG",
+          "ok": true
+        },
+        {
+          "step": "criterion-refusal-and-ceremony-404",
+          "reasonCode": "INVALID_TRANSITION_HELD_AND_CEREMONY_404",
+          "ok": true
+        },
+        {
+          "step": "tunnel-reclaimed",
+          "reasonCode": "TUNNEL_RECLAIMED_PORT_HAS_NO_LISTENER",
+          "ok": true
+        }
+      ],
+      "criteria": {
+        "urlReachableWithSsr": true,
+        "everyModuleRendersChainData": true,
+        "localDomainWriteRoundTrips": true,
+        "writeLogHttpReadFaceShadowed": true,
+        "chainWriteFourRoutesFullPath": true,
+        "chainWriteAndRefusal": true,
+        "ceremonialWritesStayOffHttp": true
+      },
+      "detail": "evidence/aos-s125-product-walkthrough.json"
+    },
+    {
+      "act": 4,
+      "story": "STORY-123",
+      "script": "deploy/switch-rehearsal/act4-rollback-arc.mjs",
+      "what": "回退演练六步:冻结(前答后拒的两侧证 + 进程组空)→ 复原基座(snapshot-verify 与 validate 双绿)→ 枚举增量(注入两条伪造行,语义漂移红路径逐条单列)→ 受治重放(逐笔经 VM 引擎动词)→ 对账(逐记录内容摘要 + 终检计数两侧相等)→ 新锚(先 knowledge-rebase 恢复锁步,再 manifest + 归档 + verify)",
+      "ok": true,
+      "steps": [
+        {
+          "step": "freeze-write-face",
+          "reasonCode": "WRITE_FACE_FROZEN_AND_PROCESS_GROUP_EMPTY",
+          "ok": true
+        },
+        {
+          "step": "restore-base-double-green",
+          "reasonCode": "BASE_RESTORED_SNAPSHOT_AND_VALIDATE_BOTH_GREEN",
+          "ok": true
+        },
+        {
+          "step": "enumerate-delta",
+          "reasonCode": "DELTA_ENUMERATED_WITH_SEMANTIC_DRIFT_SINGLED_OUT",
+          "ok": true
+        },
+        {
+          "step": "governed-replay",
+          "reasonCode": "DELTA_REPLAYED_THROUGH_ENGINE_VERBS",
+          "ok": true
+        },
+        {
+          "step": "reconcile",
+          "reasonCode": "ROLLBACK_RECONCILED_CONTENT_EQUAL_AND_COUNTS_EQUAL",
+          "ok": true
+        },
+        {
+          "step": "knowledge-lockstep-restored",
+          "reasonCode": "KNOWLEDGE_LOCKSTEP_RESTORED_EVENT_STREAM_UNTOUCHED",
+          "ok": true
+        },
+        {
+          "step": "new-anchor",
+          "reasonCode": "NEW_ANCHOR_MINTED_AND_VERIFIED",
+          "ok": true
+        }
+      ],
+      "replayed": 5,
+      "singledOut": [
+        "REPLAY_VERB_UNKNOWN_TO_ENGINE",
+        "REPLAY_ARG_NOT_A_DECLARED_FLAG"
+      ],
+      "newAnchor": {
+        "at": "2026-07-29T02:38:56Z",
+        "headEventHash": "c43cd34432a34341692006f3b61fbdeb1b49cded76f9179a3f80734604cebc6c",
+        "version": 11,
+        "manifestDigest": "e251c1be2dc5c3cb0aa1d3db02b20695c768a5b9c4e39ab70737957838a4ed64",
+        "replayLedgerDigest": "98b11030e14dd51e5cf7859729be0da5419405601344ae619929fba75995b236"
+      },
+      "detail": "evidence/aos-s123-rollback-rehearsal.json"
+    }
+  ],
+  "crossActInvariants": {
+    "anchorIsTheSameAnchorAcrossActs": {
+      "ok": true,
+      "act1AnchorHeadEventHash": "75736709dab3aabb564f17ca3561f51822035a076b4ef5a70f23fdadb78d8604",
+      "act4AnchorHeadEventHash": "75736709dab3aabb564f17ca3561f51822035a076b4ef5a70f23fdadb78d8604",
+      "comparedAt": "full value"
+    },
+    "restoredBaseEqualsAnchor": {
+      "ok": true,
+      "restoredHeadEventHash": "75736709dab3aabb564f17ca3561f51822035a076b4ef5a70f23fdadb78d8604",
+      "restoredVersion": 6
+    },
+    "writeLogIsALiveInstrument": {
+      "ok": true,
+      "lastLogHeadEventHash": "c43cd34432a34341692006f3b61fbdeb1b49cded76f9179a3f80734604cebc6c",
+      "chainHeadEventHash": "c43cd34432a34341692006f3b61fbdeb1b49cded76f9179a3f80734604cebc6c"
+    },
+    "everyWalkthroughWriteWasEnumerated": {
+      "ok": true,
+      "writeLogRowsAtFreeze": 5,
+      "rowsEnumeratedAsReplayable": 5
+    },
+    "rollbackRestoredContentNotVersion": {
+      "ok": true,
+      "counts": {
+        "drifted": 3,
+        "rolledBack": 3
+      },
+      "versions": {
+        "drifted": 11,
+        "rolledBack": 11
+      },
+      "perRecordAllEqual": true
+    },
+    "liveAuthorityOnlyRead": {
+      "ok": true,
+      "liveHeadEventHash": "0b084906ff414ecac68c88935bdf504cf46c64ae6eae7b4c26e4a3d6f51a06d3",
+      "liveVersion": 683
+    }
+  },
+  "redProofs": [
+    {
+      "mode": "accept-forged",
+      "receipt": "evidence/aos-s123-rollback-rehearsal.json#redProofs",
+      "turnedRedAt": "enumerate-delta",
+      "expectedRedAt": "enumerate-delta",
+      "ok": true
+    },
+    {
+      "mode": "drop-one-replay-row",
+      "receipt": "evidence/aos-s123-rollback-rehearsal.json#redProofs",
+      "turnedRedAt": "reconcile",
+      "expectedRedAt": "reconcile",
+      "ok": true
+    }
+  ],
+  "reclaimFindings": [
+    {
+      "what": "被中断的走查在 VM 上留下 cockpit-service 与其引擎门面(端口 14318),存活约 8.5 小时",
+      "cause": "远端启动命令自己把输出带回来,ssh 会话通道因而不关闭,调用挂起;宿主随后杀掉整跑,而当时没有失败路径上的回收",
+      "fixed": "启动改为 pid 落文件 + 第二次普通调用读取,ssh 加 -n;任何失败路径都先按进程组回收再抛,并以独立残留计数复核",
+      "predicateNow": "reclaimVmService: 进程组杀净后 pgrep(带括号防自匹配)与监听端口两项皆为零"
+    },
+    {
+      "what": "本机 ssh -L 转发在客户端进程死后仍被 ControlMaster 持有,收尾时才在 14319 上发现监听者",
+      "cause": "本主机配置 ControlMaster auto + ControlPersist,客户端把转发交给 master 后立刻退出,故「没有 ssh -N -L 进程」这条判据自始至终为真——是一道恒绿门,不是一次疏漏",
+      "fixed": "回收改为向 master 取消转发(ssh -O cancel -L),判据改为「端口上有没有监听者」由 socket 自己回答",
+      "redProof": "evidence/aos-tunnel-reclaim-red-proof.json(同一时刻旧判据绿、新判据红)"
+    }
+  ],
+  "productDefectFound": {
+    "where": "apps/cockpit-service/src/service.ts — handleDomain",
+    "what": "GET /api/domain/export 永不可达:GET 首分支无条件返回,把 `export` 解成一个无 recordId 的分区名并回未限定的 annotation 列表;下方 rest === \"export\" 分支对 GET 是死代码",
+    "consequence": "S113 写日志没有任何 HTTP 读面(备份与回退都得绕开它直读 domain.db)",
+    "foundBy": "S125 走查(本弧),证据见 evidence/aos-s125-product-walkthrough.json 的 writeLogHttpReadFaceShadowed",
+    "status": "如实记录待立单;本弧未改产品代码"
+  },
+  "ceremonyFindings": [
+    "重放之后取新锚是两步:先 knowledge-rebase 恢复锁步(元数据写,事件流不动),再 snapshot-manifest;直接取锚会被 KNOWLEDGE_HIGH_WATER_MISMATCH 拒绝",
+    "引擎的三个安全写动词没有自由文本 provenance 字段(判据取自实时 commands 名册),唯一自由文本 scope 正是对账要比的内容;故逐笔出处绑在规范化重放账本上,链上保留原始 at 与 actor",
+    "被搬迁的工作区在 validate 之前必须先做 placement(引擎把工作区绑在五个绝对根路径上且无搬迁动词)——snapshot-verify 要在 placement 之前跑,validate 要在之后"
+  ],
+  "vmEndState": {
+    "srvTcrnEntries": [
+      "aos-mirror",
+      "artifacts",
+      "backups",
+      "cache",
+      "engine",
+      "evidence",
+      "experiments",
+      "governance",
+      "previews",
+      "proof",
+      "remote-services",
+      "runtime",
+      "tmp",
+      "workspaces"
+    ],
+    "rehearsalScratchRoot": "ABSENT",
+    "anyRehearsalScratchRemaining": [],
+    "processResidue": {
+      "runners": 0,
+      "facades": 0,
+      "total": 0
+    },
+    "expected": "引擎 + 权威副本 + backups + 镜像保留;scratch-rehearsal-* 全删;游离进程为零"
+  },
+  "notClaimed": [
+    "四幕全绿不是切换授权,也不是发布授权:MIN-007 的 owner 门另行,本弧只交付它所要求的证据形状",
+    "矩阵在活分区的真实结论仍是 A_SIDE_ABSENT_DECLARED(不通过),这是 A 容器尚未实例化的如实读数,不是演练失败",
+    "演练期的 VM 写面与供权是一次性的:authority 仅授三个安全写动词,随 scratch 目录一并删净",
+    "语义漂移的两条伪造日志行由本演练注入并逐行标注来源,它们从未进入任何链",
+    "重放后的链版本高于漂移侧是设计使然:事件只增不改,回退还原的是内容而非版本号"
+  ]
+}

@@ -27,6 +27,8 @@
 // Usage:
 //   node scripts/paired-backup.mjs                    # take a paired snapshot
 //   node scripts/paired-backup.mjs --verify <pairDir>  # re-prove an existing pair
+//   node scripts/paired-backup.mjs --push-vm           # push the newest pair to the VM (MIN-007 D9)
+//   node scripts/paired-backup.mjs --verify-remote     # compare the VM copy against local records
 
 import { copyFile, cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
@@ -472,6 +474,261 @@ async function writeExportManifest(directory, pairManifest) {
   return { fileCount: manifest.fileCount, totalBytes: manifest.totalBytes, fileSetDigest: manifest.fileSetDigest };
 }
 
+// ————————————————————————————————————————————————————————————————————————————
+// The switch-leg off-site copy (MIN-007 D9). The ruling settled the credential
+// question the `notClaimed` above deliberately left open: for the mirror-segment
+// interim, the direction is PUSH from this machine over the SSH channel that
+// already exists — the VM still holds no credential for this machine, and this
+// leg adds no new secret anywhere. The pull direction stays not wired.
+// ————————————————————————————————————————————————————————————————————————————
+
+const vmHost = process.env.AOS_VM_HOST ?? "tcrn-platform-dev";
+const vmBackupRoot = process.env.AOS_VM_BACKUP_ROOT ?? "/srv/tcrn/backups";
+
+/** Receipts may travel as evidence; local absolute paths do not. */
+const maskHome = (text) => String(text).split(homedir()).join("~");
+
+/** Newest directory under the destination that actually carries a pair manifest. */
+async function newestPairDirectory() {
+  if (!existsSync(destinationRoot)) return null;
+  const names = (await readdir(destinationRoot, { withFileTypes: true }))
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort()
+    .reverse();
+  for (const name of names) {
+    if (existsSync(join(destinationRoot, name, "pair-manifest.json"))) {
+      return join(destinationRoot, name);
+    }
+  }
+  return null;
+}
+
+// The far-side check, verbatim to the pullContract already recorded in every
+// export-manifest.json: "fetch every path in `files` and compare sha256 …
+// needs nothing but python3/sha256 — no engine, no repository checkout". This
+// executes that predicate where the bytes landed. It checks the copy against
+// the manifest THAT TRAVELLED WITH IT, so it detects corruption and truncation
+// in transit; substitution relative to the local record is `--verify-remote`'s
+// job, which keeps its baseline on this machine.
+const REMOTE_CHECK_PY = `
+import hashlib, json, os, sys
+root = sys.argv[1]
+manifest = json.load(open(os.path.join(root, "export-manifest.json")))
+mismatches, missing, lines, checked = [], [], [], 0
+for f in manifest["files"]:
+    p = os.path.join(root, f["path"])
+    if not os.path.isfile(p):
+        missing.append(f["path"])
+        continue
+    with open(p, "rb") as handle:
+        digest = hashlib.sha256(handle.read()).hexdigest()
+    checked += 1
+    if digest != f["sha256"]:
+        mismatches.append({"path": f["path"], "expected": f["sha256"], "actual": digest})
+    lines.append(f["path"] + " " + digest)
+fsd = hashlib.sha256("\\n".join(lines).encode()).hexdigest()
+print(json.dumps({
+    "ok": not mismatches and not missing and fsd == manifest["fileSetDigest"],
+    "checkedFiles": checked,
+    "expectedFiles": manifest["fileCount"],
+    "missing": missing,
+    "mismatches": mismatches,
+    "fileSetDigestMatch": fsd == manifest["fileSetDigest"]
+}))
+`.trim();
+
+async function remoteShaCheck(remoteDirectory) {
+  const script = Buffer.from(REMOTE_CHECK_PY, "utf8").toString("base64");
+  try {
+    const { stdout } = await run("ssh",
+      [vmHost, `echo ${script} | base64 -d | python3 - '${remoteDirectory}'`],
+      { maxBuffer: 32 * 1024 * 1024 });
+    return JSON.parse(stdout);
+  } catch (error) {
+    return {
+      ok: false,
+      error: maskHome(error.stderr ?? error.message ?? error).trim().slice(0, 400)
+    };
+  }
+}
+
+/**
+ * Push ONE pair to the VM — and only a pair that just proved itself. The order is
+ * the point: self-verify first (a pair that cannot re-prove locally is not worth
+ * copying anywhere), then rsync, then the engineless far-side sha256 check.
+ *
+ * A failure is never masked: any red step makes the receipt red and the exit code
+ * non-zero, and none of it touches the local pair — the local copy is exactly as
+ * restorable after a failed push as before it.
+ *
+ * The receipt is a SIDECAR (`vm-push-receipt.json` beside the pair), deliberately
+ * not merged into `pair-manifest.json`: the export manifest sealed that file's
+ * bytes by digest when the pair was taken, so folding a later receipt into it
+ * would silently invalidate the very record the far side verifies against. The
+ * sidecar is likewise excluded from the transfer, so the VM holds exactly the
+ * manifest-sealed set.
+ */
+async function pushPairToVm(directory) {
+  const pairId = basename(directory);
+  const receipt = {
+    schemaVersion: "aos.paired-backup-push.v1",
+    ruling: "MIN-007 D9 (mirror-segment interim: push over existing SSH)",
+    pairId,
+    vmHost,
+    vmPath: `${vmBackupRoot}/${pairId}`,
+    pushedAt: new Date().toISOString().replace(/\.\d{3}Z$/u, "Z"),
+    ok: false,
+    localSelfVerify: null,
+    transfer: null,
+    remoteCheck: null,
+    notClaimed: [
+      "the far-side check proves arrival intact against the manifest that travelled with the bytes; it does not authenticate the source and is not a restore",
+      "the VM has no engine and no repository checkout: byte-integrity is provable there, restorability only where the engine lives",
+      "a failed push leaves the local pair untouched and exactly as restorable as before"
+    ]
+  };
+
+  if (!/^[0-9A-Za-z][0-9A-Za-z.:TZ_-]*$/u.test(pairId)) {
+    receipt.reason = "unsafe_pair_id";
+    return receipt;
+  }
+
+  const verify = await verifyPair(directory);
+  receipt.localSelfVerify = {
+    ok: verify.ok,
+    digestsMatch: verify.digestsMatch,
+    chainReasonCode: verify.chainReasonCode,
+    restoreDrillOk: verify.restoreDrill?.ok ?? false,
+    pairedAt: verify.pairedAt
+  };
+  if (!verify.ok) {
+    receipt.reason = "local_self_verify_failed_nothing_was_pushed";
+    return receipt;
+  }
+
+  try {
+    await run("ssh", [vmHost, `mkdir -p '${vmBackupRoot}/${pairId}'`]);
+    await run("rsync",
+      ["-a", "--delete", "--exclude=vm-push-receipt.json", `${directory}/`,
+        `${vmHost}:${vmBackupRoot}/${pairId}/`],
+      { maxBuffer: 8 * 1024 * 1024 });
+    receipt.transfer = { ok: true, tool: "rsync -a --delete over existing ssh; push receipt sidecar excluded" };
+  } catch (error) {
+    receipt.transfer = {
+      ok: false,
+      error: maskHome(error.stderr ?? error.message ?? error).trim().slice(0, 400)
+    };
+    receipt.reason = "transfer_failed";
+    return receipt;
+  }
+
+  receipt.remoteCheck = await remoteShaCheck(`${vmBackupRoot}/${pairId}`);
+  receipt.ok = receipt.remoteCheck.ok === true;
+  if (!receipt.ok) receipt.reason = "remote_check_failed";
+  return receipt;
+}
+
+/**
+ * The local-side re-verification of the VM copy (MIN-007 D9 「本机验签」).
+ *
+ * The baseline is THIS machine's records, never the VM's: the remote export
+ * manifest must byte-match the local one, and every sampled file's digest as
+ * computed ON the VM must match what the LOCAL manifest recorded. A substituted
+ * file on the VM — even one substituted together with a self-consistent forged
+ * manifest — therefore reads red here, because the forged set cannot match a
+ * record it never saw.
+ *
+ * The already-recorded limit stands unchanged: the manifest does not
+ * authenticate its source. An actor who can both rewrite the VM copy and answer
+ * this ssh session can still forge agreement; this check detects substitution
+ * of the VM bytes relative to the local record, nothing stronger.
+ */
+async function verifyRemote(directory) {
+  const pairId = basename(directory);
+  const remoteDirectory = `${vmBackupRoot}/${pairId}`;
+  const localManifestBytes = await readFile(join(directory, "export-manifest.json"));
+  const localManifest = JSON.parse(localManifestBytes.toString("utf8"));
+  const receipt = {
+    schemaVersion: "aos.paired-backup-remote-verify.v1",
+    ruling: "MIN-007 D9 (local-side verification of the off-site copy)",
+    pairId,
+    vmHost,
+    vmPath: remoteDirectory,
+    verifiedAt: new Date().toISOString().replace(/\.\d{3}Z$/u, "Z"),
+    ok: false,
+    manifestMatch: null,
+    sampled: [],
+    limits: [
+      "the export manifest does not authenticate its source (already recorded in pullContract): an actor able to rewrite the VM copy AND answer this ssh session can forge agreement",
+      "this check detects substitution of the VM bytes relative to the LOCAL record; it proves nothing about restorability on the VM"
+    ]
+  };
+  if (!/^[0-9A-Za-z][0-9A-Za-z.:TZ_-]*$/u.test(pairId)) {
+    receipt.reason = "unsafe_pair_id";
+    return receipt;
+  }
+
+  let remoteManifestBytes;
+  try {
+    const { stdout } = await run("ssh", [vmHost, `cat '${remoteDirectory}/export-manifest.json'`],
+      { maxBuffer: 32 * 1024 * 1024 });
+    remoteManifestBytes = Buffer.from(stdout, "utf8");
+  } catch (error) {
+    receipt.reason = "remote_manifest_unreadable";
+    receipt.error = maskHome(error.stderr ?? error.message ?? error).trim().slice(0, 400);
+    return receipt;
+  }
+  receipt.manifestMatch = sha256(remoteManifestBytes) === sha256(localManifestBytes);
+
+  // The sample: the four load-bearing files always, plus up to eight drawn at
+  // random each run — so a tamperer cannot know in advance which of the ~360
+  // event/attestation files this run will look at. The draw is recorded.
+  const digestByPath = new Map(localManifest.files.map((file) => [file.path, file.sha256]));
+  const critical = ["pair-manifest.json", "chain-snapshot-manifest.json",
+    "domain/domain.db", "domain/domain-export.json"].filter((path) => digestByPath.has(path));
+  const rest = localManifest.files.map((file) => file.path)
+    .filter((path) => !critical.includes(path));
+  const randomPick = [];
+  while (randomPick.length < Math.min(8, rest.length)) {
+    const candidate = rest[Math.floor(Math.random() * rest.length)];
+    if (!randomPick.includes(candidate)) randomPick.push(candidate);
+  }
+  const sample = [...critical, ...randomPick];
+
+  const remoteSums = new Map();
+  let sumError = null;
+  try {
+    const quoted = sample.map((path) => `'${remoteDirectory}/${path}'`).join(" ");
+    const { stdout } = await run("ssh", [vmHost, `sha256sum ${quoted}`],
+      { maxBuffer: 8 * 1024 * 1024 });
+    for (const line of stdout.trim().split("\n")) {
+      const match = line.match(/^([0-9a-f]{64})\s+(.+)$/u);
+      if (match) remoteSums.set(match[2].slice(remoteDirectory.length + 1), match[1]);
+    }
+  } catch (error) {
+    // sha256sum exits non-zero when any sampled file is missing, but still
+    // prints digests for the ones it read; a missing file must read as a red
+    // sample row, not as an aborted check.
+    for (const line of String(error.stdout ?? "").trim().split("\n")) {
+      const match = line.match(/^([0-9a-f]{64})\s+(.+)$/u);
+      if (match) remoteSums.set(match[2].slice(remoteDirectory.length + 1), match[1]);
+    }
+    sumError = maskHome(error.stderr ?? error.message ?? error).trim().slice(0, 200);
+  }
+
+  receipt.sampled = sample.map((path) => ({
+    path,
+    localSha256: digestByPath.get(path),
+    remoteSha256: remoteSums.get(path) ?? null,
+    match: remoteSums.get(path) === digestByPath.get(path)
+  }));
+  if (sumError) receipt.remoteDigestError = sumError;
+  receipt.ok = receipt.manifestMatch === true && receipt.sampled.every((entry) => entry.match);
+  if (!receipt.ok) receipt.reason = "substitution_or_divergence_detected";
+  return receipt;
+}
+
 /** Oldest-first, only after the new pair verified, and it names what it deleted. */
 async function rotate(keep) {
   const entries = (await readdir(destinationRoot, { withFileTypes: true }))
@@ -528,7 +785,27 @@ async function takePairIfDue(intervalHours) {
 }
 
 const verifyFlag = process.argv.indexOf("--verify");
-if (verifyFlag >= 0) {
+if (process.argv.includes("--push-vm")) {
+  const directory = await newestPairDirectory();
+  if (!directory) {
+    console.error(JSON.stringify({ ok: false, error: "no pair with a readable pair-manifest.json to push" }));
+    process.exit(1);
+  }
+  const receipt = await pushPairToVm(directory);
+  // Written red or green: a failed push is a fact worth keeping, not one to hide.
+  await writeFile(join(directory, "vm-push-receipt.json"), `${JSON.stringify(receipt, null, 2)}\n`);
+  console.log(JSON.stringify(receipt, null, 2));
+  if (!receipt.ok) process.exitCode = 1;
+} else if (process.argv.includes("--verify-remote")) {
+  const directory = await newestPairDirectory();
+  if (!directory) {
+    console.error(JSON.stringify({ ok: false, error: "no local pair to verify the remote copy against" }));
+    process.exit(1);
+  }
+  const receipt = await verifyRemote(directory);
+  console.log(JSON.stringify(receipt, null, 2));
+  if (!receipt.ok) process.exitCode = 1;
+} else if (verifyFlag >= 0) {
   const target = process.argv[verifyFlag + 1];
   if (!target) {
     console.error(JSON.stringify({ ok: false, error: "--verify needs a pair directory" }));

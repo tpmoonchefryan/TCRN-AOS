@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "aos.tunnel-reclaim-red-proof.v1",
+  "story": "TCRN-AOS-STORY-125 (演练收尾发现)",
+  "at": "2026-07-29T02:37:49Z",
+  "ok": true,
+  "sshConfig": "Host tcrn-platform-dev: ControlMaster auto, ControlPersist 10m",
+  "stages": [
+    {
+      "stage": "forward-open",
+      "listenersOnPort": 2,
+      "clientProcesses": 0
+    },
+    {
+      "stage": "client-killed-only",
+      "listenersOnPort": 2,
+      "clientProcesses": 0,
+      "oldPredicate": {
+        "name": "no `ssh -N -L` process remains",
+        "verdict": "GREEN"
+      },
+      "newPredicate": {
+        "name": "nothing is listening on the tunnel port",
+        "verdict": "RED"
+      }
+    },
+    {
+      "stage": "master-forward-cancelled",
+      "ok": true,
+      "masterForwardCancel": "cancelled",
+      "listenersOnPort": 0,
+      "clientProcesses": 0,
+      "predicate": "端口上还有没有监听者(socket 自己回答),不是「有没有 ssh -N -L 进程」——后者在 ControlMaster 下会在转发仍在时读到零"
+    }
+  ],
+  "divergenceObserved": true,
+  "reading": "旧判据在转发仍然开着的时候读到绿(进程为零),新判据同一时刻读到红(端口仍有监听者)——两者不等价,旧判据量错了东西",
+  "notClaimed": [
+    "本证只谈本机 ssh 转发的回收判据,与链、工作区、VM 状态无关",
+    "ControlMaster 本身不是泄漏(它是配置登记在册的常驻连接);泄漏的是它替一个已死客户端继续持有的那个端口转发"
+  ]
+}
