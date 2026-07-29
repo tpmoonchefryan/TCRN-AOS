@@ -4,8 +4,8 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   HOST_PATH_RULES, REPO_ROOT,
-  findHostPaths, listEvidenceFiles, scanEvidenceTree, scrubHostPaths, scrubHostPathsInText,
-  trackedEvidencePaths
+  findHostPaths, findPlaceholders, listEvidenceFiles, rehydrateHostPaths, scanEvidenceTree,
+  scrubHostPaths, scrubHostPathsInText, trackedEvidencePaths
 } from "./evidence-hygiene.mjs";
 
 /**
@@ -37,30 +37,99 @@ test("no evidence artifact carries a path off this machine", () => {
   );
 });
 
-test("the two INC-037 receipts are redacted and still say what they said", () => {
+const DIGEST = /^[0-9a-f]{64}$/u;
+
+/** Every scalar leaf of a JSON value, keyed by its JSON-pointer-ish path. */
+function leafMap(value, pointer = "", out = new Map()) {
+  if (value && typeof value === "object") {
+    for (const [key, entry] of Object.entries(value)) leafMap(entry, `${pointer}/${key}`, out);
+  } else {
+    out.set(pointer, value);
+  }
+  return out;
+}
+
+test("redaction changes where a receipt was made, never what it claims", () => {
   // Named explicitly, not left to the sweep above: these two are the reason the
   // gate exists, and "the sweep found nothing" would also be true if they were
   // deleted.
+  //
+  // What is guarded here is the redaction PROPERTY, not one run's values.
+  // TCRN-AOS-INC-042: this test used to pin the paired receipt's
+  // chainHeadEventHash, domainSnapshotDigest and chainVersion as literals. The
+  // intent was right — a scrub must never rewrite a digest — but the predicate
+  // was wrong: those receipts are re-runnable artifacts, so it actually held
+  // "this receipt is frozen at one particular run", and the first legitimate
+  // re-backup turned it red for a reason that had nothing to do with hygiene
+  // (S127's final anchor did exactly that). A value that legitimately moves
+  // cannot be the thing a gate holds still.
+  //
+  // The property, instead: redaction is a pure path substitution. Rehydrate a
+  // committed receipt back into what it looked like before redaction, scrub
+  // that, and the committed receipt must come back exactly. Whatever this run's
+  // digests, counts and versions happen to be, they are then proven untouched
+  // by construction.
   for (const path of ["evidence/aos-domain-backup.json", "evidence/aos-paired-backup.json"]) {
     const text = readFileSync(join(REPO_ROOT, path), "utf8");
     assert.deepEqual(findHostPaths(text), [], `${path} must carry no host path`);
-    const receipt = JSON.parse(text);
-    assert.equal(receipt.ok, true, `${path} must still parse and still hold its verdict`);
-    assert.match(receipt.destinationRoot, /^<local-[a-z-]+>\//u,
+    const redacted = JSON.parse(text);
+    assert.equal(redacted.ok, true, `${path} must still parse and still hold its verdict`);
+    assert.match(redacted.destinationRoot, /^<local-[a-z-]+>\//u,
       `${path} must name its destination as a placeholder, not as a directory on one laptop`);
+
+    // Committed bytes must already be a fixed point: scrubbing them again moves
+    // nothing. A receipt that still moved here shipped half-redacted.
+    assert.deepEqual(scrubHostPaths(redacted), redacted,
+      `${path} is not fully redacted — scrubbing it a second time still changes it`);
+
+    // The round trip has to have something to work on, or it proves nothing.
+    assert.ok(findPlaceholders(text).length > 0,
+      `${path} carries no placeholder, so redaction cannot be exercised against it`);
+    const rehydrated = rehydrateHostPaths(redacted);
+    assert.ok(findHostPaths(JSON.stringify(rehydrated)).length > 0,
+      `the rehydrated ${path} must really carry host paths, or the scrub below removes nothing`);
+
+    // The predicate: forward redaction of the pre-redaction shape reproduces the
+    // committed receipt, value for value.
+    assert.deepEqual(scrubHostPaths(rehydrated), redacted,
+      `redacting ${path} must reproduce the committed receipt exactly`);
+
+    // Said again leaf by leaf, so a failure names the offending field instead of
+    // dumping two whole receipts.
+    const before = leafMap(rehydrated);
+    const after = leafMap(scrubHostPaths(rehydrated));
+    assert.deepEqual([...after.keys()], [...before.keys()],
+      `redacting ${path} must not add, drop or rename a field`);
+    const rewrittenWithoutCause = [...before.keys()].filter((at) =>
+      before.get(at) !== after.get(at)
+      && (typeof before.get(at) !== "string" || findHostPaths(before.get(at)).length === 0));
+    assert.deepEqual(rewrittenWithoutCause, [],
+      `redacting ${path} rewrote a leaf that carried no host path`);
+
+    // And the digests by name — counted first, so this can never pass by there
+    // being nothing to protect.
+    const digests = [...before.keys()].filter((at) => DIGEST.test(String(before.get(at))));
+    assert.ok(digests.length >= 2, `${path} should carry digests to protect (saw ${digests.length})`);
+    assert.deepEqual(digests.filter((at) => after.get(at) !== before.get(at)), [],
+      `redacting ${path} rewrote a digest`);
   }
-  // The digests are the part a redaction must never touch. These are the values
-  // that were in the receipts before redaction, transcribed here from the
-  // pre-redaction bytes — if a future scrub ever rewrites a digest, this fails.
-  const paired = JSON.parse(readFileSync(join(REPO_ROOT, "evidence/aos-paired-backup.json"), "utf8"));
-  assert.equal(paired.pair.pairing.chainHeadEventHash,
-    "557b5032648ede9157d68b4c9ccec7b4216f700576ff7c39cbf781e6bfac1088");
-  assert.equal(paired.pair.pairing.domainSnapshotDigest,
-    "8b16e1f5b7c21f2ab111ace3c29c56435ed0c44c1fa50d5e1ee1171a6dda8d6d");
-  assert.equal(paired.pair.pairing.chainVersion, 549);
-  const domain = JSON.parse(readFileSync(join(REPO_ROOT, "evidence/aos-domain-backup.json"), "utf8"));
-  assert.equal(domain.snapshot.artifacts["domain.db"].sha256,
-    "e3c2e0fdcb489925461534e0f4c97bfba39ce5747559e4a107defa955ea2f2ae");
+});
+
+test("every rehydration example scrubs back to exactly the placeholder it stands for", () => {
+  // The backwards direction above is only honest while each rule's example is
+  // genuinely a path of that rule's shape. Checked here rather than assumed, so
+  // a rule whose pattern is edited without its example cannot quietly turn the
+  // round trip into a tautology over strings that were never host paths.
+  const rehydratable = HOST_PATH_RULES.filter((rule) => rule.rehydratesTo);
+  assert.ok(rehydratable.length >= 3, "the rehydratable rule set must not silently empty out");
+  for (const rule of rehydratable) {
+    assert.ok(findHostPaths(rule.rehydratesTo).some((hit) => hit.rule === rule.id),
+      `${rule.id}'s example must be detected as ${rule.id}`);
+    assert.equal(scrubHostPathsInText(rule.rehydratesTo), rule.placeholder,
+      `${rule.id}'s example must scrub to exactly ${rule.placeholder}`);
+  }
+  // A placeholder no rule can reconstruct must refuse, not round-trip wrongly.
+  assert.throws(() => rehydrateHostPaths({ at: "<local-var-folders>/x" }), /no rule can rehydrate/u);
 });
 
 test("every host-path shape is detected, and every rewritable one round-trips to a placeholder", () => {

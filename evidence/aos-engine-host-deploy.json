@@ -2,13 +2,13 @@
   "schemaVersion": "aos.engine-host-deploy.v1",
   "ruling": "TCRN-AOS-MIN-007",
   "ok": true,
-  "startedAt": "2026-07-28T14:48:58Z",
-  "finishedAt": "2026-07-28T14:49:00Z",
+  "startedAt": "2026-07-29T05:03:40Z",
+  "finishedAt": "2026-07-29T05:03:41Z",
   "source": {
     "locator": "<local-governed-copy>",
-    "version": "0.7.0",
-    "tag": "v0.7.0",
-    "commit": "2e6cfe3077bd6e066863dca8ab765e4b06b934c1",
+    "version": "0.8.0",
+    "tag": "v0.8.0",
+    "commit": "537e502d2c7ec218adac5eb2c66250129fe93284",
     "workingTreeClean": true,
     "distCoveredByTag": false
   },
@@ -20,15 +20,15 @@
     ],
     "destinationHost": "tcrn-platform-dev",
     "enginePath": "/srv/tcrn/engine/tcrn-workflow",
-    "fileCount": 403,
-    "totalBytes": 8859267,
+    "fileCount": 404,
+    "totalBytes": 8897285,
     "fileSetDigest": {
-      "local": "bd07c565e0ec552952fb092d3e18a322afe0e64f77d5214b505391573994bbb3",
-      "remote": "bd07c565e0ec552952fb092d3e18a322afe0e64f77d5214b505391573994bbb3",
+      "local": "63ea205ce056d45a8aacd2850bd648695bd6d3e9549a0d33b00db5fc59452595",
+      "remote": "63ea205ce056d45a8aacd2850bd648695bd6d3e9549a0d33b00db5fc59452595",
       "match": true
     },
     "perFile": {
-      "compared": 403,
+      "compared": 404,
       "mismatched": 0,
       "missingOnVm": 0,
       "extraOnVm": 0
@@ -36,14 +36,17 @@
   },
   "verification": {
     "catalogReasonCode": "CLI_CATALOG_READY",
-    "cliVerbs": 95,
+    "cliVerbs": 96,
     "fixtureOnlyVerbs": 2,
-    "totalVerbs": 97,
-    "remotePackageVersion": "0.7.0",
+    "totalVerbs": 98,
+    "requiredVerbsPresent": [
+      "event-list"
+    ],
+    "remotePackageVersion": "0.8.0",
     "runsWithoutNodeModules": true
   },
   "trust": {
-    "statement": "the VM copy is byte-identical to the local governed copy (v0.7.0 tag anchor for tracked source, digest ledger for the whole shipped set including dist); no claim stronger than that comparison is made",
+    "statement": "the VM copy is byte-identical to the local governed copy (v0.8.0 tag anchor for tracked source, digest ledger for the whole shipped set including dist); no claim stronger than that comparison is made",
     "pinsTransferred": false,
     "authorityMaterialDeferredTo": "EPIC-034-S120"
   },
@@ -67,7 +70,7 @@
   "statfs": {
     "scratchParent": {
       "path": "/srv/tcrn",
-      "dfLine": "/dev/mapper/ubuntu--vg-ubuntu--lv ext4 102626232 28330756  69036212  30% /",
+      "dfLine": "/dev/mapper/ubuntu--vg-ubuntu--lv ext4 102626232 28346168  69020800  30% /",
       "magic": "0xef53",
       "inPinnedSet": true
     },

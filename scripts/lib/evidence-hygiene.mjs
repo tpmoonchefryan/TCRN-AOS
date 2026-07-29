@@ -35,22 +35,38 @@ export const SCANNED_EXTENSIONS = Object.freeze([".json", ".md"]);
  * `detectOnly` entries have no rewrite: they catch a host shape this scrubber
  * cannot safely rewrite (a platform root reached through some other mount, say).
  * The gate goes red and a person decides — never a silent pass.
+ *
+ * `rehydratesTo` is a concrete host path of this shape that scrubs back to
+ * exactly this rule's placeholder and nothing else. It exists so the gate can
+ * run redaction *backwards* — turn a committed receipt into the receipt as it
+ * would have looked before redaction — and then assert that scrubbing it
+ * forwards reproduces the committed bytes. That is how "redaction may change a
+ * path and nothing else" is checked against the real receipts without pinning
+ * any of their values (TCRN-AOS-INC-042). It lives here rather than in the test
+ * for the same reason the scanner does: the shape scrubbed INTO must never
+ * drift from the shape rehydrated FROM. A rule whose pattern consumes an
+ * unbounded tail (var-folders) has no `rehydratesTo`, because its placeholder
+ * does not carry enough information to reconstruct one; such a placeholder is
+ * refused rather than round-tripped wrongly.
  */
 export const HOST_PATH_RULES = Object.freeze([
   {
     id: "platform-root",
     pattern: /\/Users\/[^/"'\s\\]+\/Code\/TCRN Platform/gu,
-    placeholder: "<local-platform-root>"
+    placeholder: "<local-platform-root>",
+    rehydratesTo: "/Users/someone/Code/TCRN Platform"
   },
   {
     id: "home-directory",
     pattern: /\/Users\/[^/"'\s\\]+/gu,
-    placeholder: "<local-home>"
+    placeholder: "<local-home>",
+    rehydratesTo: "/Users/someone"
   },
   {
     id: "private-tmp",
     pattern: /\/private\/tmp/gu,
-    placeholder: "<local-private-tmp>"
+    placeholder: "<local-private-tmp>",
+    rehydratesTo: "/private/tmp"
   },
   {
     id: "var-folders",
@@ -63,6 +79,39 @@ export const HOST_PATH_RULES = Object.freeze([
     detectOnly: true
   }
 ]);
+
+/** Every `<local-…>` placeholder occurring in `text`, de-duplicated and sorted. */
+export function findPlaceholders(text) {
+  return [...new Set(text.match(/<local-[a-z-]+>/gu) ?? [])].sort();
+}
+
+/**
+ * Redaction run backwards: every placeholder replaced by a concrete host path
+ * of the shape it stands for. Used only to test the forward direction — no
+ * artifact is ever written from this.
+ *
+ * Throws on a placeholder no rule can reconstruct, so an un-round-trippable
+ * shape fails loudly instead of silently weakening the check built on it.
+ */
+export function rehydrateHostPathsInText(text) {
+  for (const placeholder of findPlaceholders(text)) {
+    const rule = HOST_PATH_RULES.find((entry) => entry.placeholder === placeholder && entry.rehydratesTo);
+    if (!rule) throw new Error(`no rule can rehydrate ${placeholder}`);
+    text = text.split(placeholder).join(rule.rehydratesTo);
+  }
+  return text;
+}
+
+/** `rehydrateHostPathsInText` over a JSON-shaped value, mirroring `scrubHostPaths`. */
+export function rehydrateHostPaths(value) {
+  if (typeof value === "string") return rehydrateHostPathsInText(value);
+  if (Array.isArray(value)) return value.map(rehydrateHostPaths);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [rehydrateHostPathsInText(key), rehydrateHostPaths(entry)]));
+  }
+  return value;
+}
 
 /** Every host-path hit in `text`, with the line it sits on. */
 export function findHostPaths(text) {

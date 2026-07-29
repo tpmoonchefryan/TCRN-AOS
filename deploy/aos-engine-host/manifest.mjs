@@ -1,7 +1,7 @@
 // TCRN AOS — declarative manifest for the engine copy on the platform dev VM.
 //
 // What this is: the single statement of what /srv/tcrn/engine/tcrn-workflow on
-// tcrn-platform-dev must contain — the local governed engine copy at v0.7.0,
+// tcrn-platform-dev must contain — the local governed engine copy at v0.8.0,
 // minus node_modules and .git. What it deliberately is not: an authority supply.
 // No pins, no operator bundle, no supply material of any kind travels with this
 // manifest; the VM copy can read and answer `commands`, and it can host scratch
@@ -14,7 +14,7 @@
 // of dev-time dependencies would only widen the surface without adding a single
 // capability. .git is excluded because the deployment is the working-tree bytes;
 // the object database proves nothing on the VM and carries history the VM has
-// no reason to hold. dist IS shipped although the v0.7.0 tag does not cover it
+// no reason to hold. dist IS shipped although the v0.8.0 tag does not cover it
 // (it is gitignored): it is the build product of that tagged source, and the
 // per-file digest ledger — not the tag — is what vouches for its bytes on the
 // far side. The receipt states exactly that and no more.
@@ -43,9 +43,9 @@ export const manifest = {
     locator: "<local-governed-copy>",
     // The anchor is the release tag, checked three ways before a single byte
     // moves: package.json says this version, HEAD carries this tag, and the
-    // working tree is clean. A dirty tree would make "v0.7.0 tag anchor" a lie.
-    requiredVersion: "0.7.0",
-    requiredTag: "v0.7.0",
+    // working tree is clean. A dirty tree would make "v0.8.0 tag anchor" a lie.
+    requiredVersion: "0.8.0",
+    requiredTag: "v0.8.0",
   },
 
   transfer: {
@@ -65,13 +65,18 @@ export const manifest = {
   },
 
   verification: {
-    // What the far copy must answer to count as the same engine. 95 is the
-    // cli-availability verb count of v0.7.0 (the catalog also carries 2
+    // What the far copy must answer to count as the same engine. 96 is the
+    // cli-availability verb count of v0.8.0 (the catalog also carries 2
     // fixture-only entries, recorded but not part of the operator surface).
     // These are real predicates: a different engine version red-flags here.
     catalogReasonCode: "CLI_CATALOG_READY",
-    cliVerbCount: 95,
-    remoteVersion: "0.7.0",
+    cliVerbCount: 96,
+    remoteVersion: "0.8.0",
+    // Named verbs the far catalog must actually carry. A count alone would be
+    // satisfied by any 96 verbs; event-list is the capability this upgrade from
+    // v0.7.0 exists to put on the VM, so it is checked by name rather than
+    // inferred from the total moving by one.
+    requiredVerbs: ["event-list"],
     // Digest ledger serialization follows the paired-backup/export-manifest
     // precedent: sha256 over "path sha256" lines joined by newline.
     fileSetDigestForm: "sha256(lines of `<path> <sha256>` joined by \\n)",
@@ -83,7 +88,7 @@ export const manifest = {
   // not authority, not independence of the two copies.
   trust: {
     statement:
-      "the VM copy is byte-identical to the local governed copy (v0.7.0 tag anchor for "
+      "the VM copy is byte-identical to the local governed copy (v0.8.0 tag anchor for "
       + "tracked source, digest ledger for the whole shipped set including dist); no claim "
       + "stronger than that comparison is made",
     pinsTransferred: false,

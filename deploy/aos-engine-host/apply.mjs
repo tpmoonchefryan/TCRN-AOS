@@ -5,8 +5,10 @@
 // proves it got there:
 //
 //   1. preflight  — the local governed copy really is the anchor the receipt
-//                   will claim (version 0.7.0, HEAD carries tag v0.7.0, clean
-//                   working tree); nothing moves until that holds;
+//                   will claim (the manifest's version, HEAD carries the
+//                   manifest's tag, clean working tree); nothing moves until
+//                   that holds. The version lives in the manifest, not here, so
+//                   an engine upgrade is a one-file change;
 //   2. converge   — rsync --archive --delete, so a re-run is idempotent and a
 //                   hand-edited VM tree is overwritten, not accommodated;
 //   3. verify     — full per-file sha256 ledger on both sides, compared
@@ -15,10 +17,11 @@
 //   4. red drill  — (--red-drill) flip one byte on the VM, watch step 3 fail on
 //                   exactly that file, re-converge, watch it pass. A comparison
 //                   that has never been seen red is not evidence of anything;
-//   5. trust      — the VM copy answers `commands` with CLI_CATALOG_READY and
-//                   the v0.7.0 catalog (95 cli verbs), and its package.json
-//                   says 0.7.0. Because the VM has no node_modules, this same
-//                   step is the proof that dist is self-sufficient;
+//   5. trust      — the VM copy answers `commands` with CLI_CATALOG_READY, the
+//                   manifest's cli verb count, every verb the manifest names by
+//                   name, and a package.json at the manifest's version. Because
+//                   the VM has no node_modules, this same step is the proof
+//                   that dist is self-sufficient;
 //   6. statfs     — a disposable scratch workspace inits under /srv/tcrn
 //                   (proving that filesystem is in the engine's pinned set),
 //                   every mount on the VM is classified against the set, and a
@@ -240,6 +243,15 @@ async function trustCheck() {
   if (cliVerbs !== manifest.verification.cliVerbCount) {
     throw new Error(`remote catalog has ${cliVerbs} cli verbs, manifest requires ${manifest.verification.cliVerbCount}`);
   }
+  // A count is satisfied by any set of that size. The verbs the manifest names
+  // are checked by name, and their availability with them: a verb present in
+  // the catalog as fixture-only is not a verb the VM can run.
+  const requiredVerbs = manifest.verification.requiredVerbs ?? [];
+  const missingVerbs = requiredVerbs.filter((name) =>
+    !catalog.commands.some((command) => command.name === name && command.availability === "cli"));
+  if (missingVerbs.length > 0) {
+    throw new Error(`remote catalog lacks required cli verb(s): ${missingVerbs.join(", ")}`);
+  }
   const remotePkg = JSON.parse(await sshNode(`process.stdout.write(require(${JSON.stringify(`${enginePath}/package.json`)}).version)`)
     .then((version) => JSON.stringify({ version })));
   if (remotePkg.version !== manifest.verification.remoteVersion) {
@@ -250,6 +262,7 @@ async function trustCheck() {
     cliVerbs,
     fixtureOnlyVerbs,
     totalVerbs: catalog.commands.length,
+    requiredVerbsPresent: requiredVerbs,
     remotePackageVersion: remotePkg.version,
     // The VM tree has no node_modules, so this green catalog answer doubles as
     // the standing proof that dist needs nothing beyond node: builtins.
