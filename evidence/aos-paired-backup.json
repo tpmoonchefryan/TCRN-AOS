@@ -1,26 +1,26 @@
 {
   "ok": true,
   "destinationRoot": "<local-home>/OneDrive/Github/tcrn-aos-paired-backups",
-  "directory": "2026-07-29T05-10-33Z",
+  "directory": "2026-07-29T06-10-26Z",
   "pair": {
     "schemaVersion": "aos.paired-backup.v1",
-    "pairedAt": "2026-07-29T05:10:33Z",
+    "pairedAt": "2026-07-29T06:10:26Z",
     "partition": "TCRN-AOS",
     "ok": true,
     "lockstep": {
       "ok": true,
-      "chainHeadEventHash": "d155c0850f18536a8f6c06eb36ba4f3c20ab1bb9613386654e84550067aa775c",
-      "knowledgeHighWaterDigest": "d155c0850f18536a8f6c06eb36ba4f3c20ab1bb9613386654e84550067aa775c",
-      "knowledgeVersion": 12,
+      "chainHeadEventHash": "2627921f7c2d6afd9ec4b1dd9b39c1d36591e28e0095fd537f7df9b74903b510",
+      "knowledgeHighWaterDigest": "2627921f7c2d6afd9ec4b1dd9b39c1d36591e28e0095fd537f7df9b74903b510",
+      "knowledgeVersion": 13,
       "remedy": null
     },
     "pairing": {
-      "domainSnapshotDigest": "4d276b91f2d8890af54c4b104e61a953933ee3526bcd12e335587ca80829cee0",
-      "domainExportDigest": "08ac87e6f39d3eba83b1a95389054a05d17b71d89039c53aa5ca6614d15e652b",
-      "chainManifestDigest": "0186c91a80cd6b65ba075b80b1bf7a6a200729828cb2cf7d3c510a5677623a54",
-      "chainHeadEventHash": "d155c0850f18536a8f6c06eb36ba4f3c20ab1bb9613386654e84550067aa775c",
-      "chainVersion": 759,
-      "attestationSetDigest": "ec71ac2361318f657d4152e2ab0fe1f4229fe62ad6409576559d0c35e6d0fc04",
+      "domainSnapshotDigest": "d49644bac02059308f92960c1c29077c1a2134f6169e70def095163a7fcd6496",
+      "domainExportDigest": "5a03cf7a7def0a02acce91bb770688bf4a156a7c7f038b78405e86416b31e16a",
+      "chainManifestDigest": "f1baca3f7a2907f1fbaeb5dac5bdc083c393c3fb9a913f126380a4e899e6b013",
+      "chainHeadEventHash": "2627921f7c2d6afd9ec4b1dd9b39c1d36591e28e0095fd537f7df9b74903b510",
+      "chainVersion": 781,
+      "attestationSetDigest": "c267208fce70231285dc73090ff2e87bb15de1264b5c654665ee56928b986359",
       "boundBy": "one instant plus mutual digests; either half alone is not a restorable pair"
     },
     "domain": {
@@ -30,20 +30,20 @@
         "ok": true,
         "result": "ok"
       },
-      "snapshotDigest": "4d276b91f2d8890af54c4b104e61a953933ee3526bcd12e335587ca80829cee0",
-      "manifestDigest": "bca9b7851ab782e9ff02d2287d89baca46faf25067985cb3d3b928929b4730fb",
+      "snapshotDigest": "d49644bac02059308f92960c1c29077c1a2134f6169e70def095163a7fcd6496",
+      "manifestDigest": "11ce6c94ea7526c81de4e57dc2c55b45f7af1cebe20b2aa6ad3650ed1a5f6d40",
       "tableRowCounts": {
-        "aos_chain_write_log": 0,
+        "aos_chain_write_log": 1,
         "aos_domain_annotation": 2,
         "aos_domain_comment": 1,
         "aos_domain_relation": 0
       },
-      "exportDigest": "08ac87e6f39d3eba83b1a95389054a05d17b71d89039c53aa5ca6614d15e652b",
+      "exportDigest": "5a03cf7a7def0a02acce91bb770688bf4a156a7c7f038b78405e86416b31e16a",
       "counts": {
         "annotations": 2,
         "comments": 1,
         "relations": 0,
-        "chainWriteLog": 0
+        "chainWriteLog": 1
       },
       "liveIntegrityCheck": {
         "ok": true,
@@ -55,18 +55,18 @@
       "reasonCode": "SNAPSHOT_VERIFIED",
       "verifyError": null,
       "workspaceRoot": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace",
-      "headEventHash": "d155c0850f18536a8f6c06eb36ba4f3c20ab1bb9613386654e84550067aa775c",
-      "version": 759,
+      "headEventHash": "2627921f7c2d6afd9ec4b1dd9b39c1d36591e28e0095fd537f7df9b74903b510",
+      "version": 781,
       "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
-      "chainManifestDigest": "0186c91a80cd6b65ba075b80b1bf7a6a200729828cb2cf7d3c510a5677623a54",
+      "chainManifestDigest": "f1baca3f7a2907f1fbaeb5dac5bdc083c393c3fb9a913f126380a4e899e6b013",
       "attestations": {
         "directoryPresent": true,
-        "count": 554,
-        "chainEventsSeen": 759,
+        "count": 575,
+        "chainEventsSeen": 781,
         "orphanReceipts": 0,
         "filenameMismatches": 0,
         "strength": "advisory local-clock corroboration; unauthenticated, no engine verifier",
-        "setDigest": "ec71ac2361318f657d4152e2ab0fe1f4229fe62ad6409576559d0c35e6d0fc04"
+        "setDigest": "c267208fce70231285dc73090ff2e87bb15de1264b5c654665ee56928b986359"
       }
     },
     "restoreDrill": {
@@ -86,8 +86,8 @@
           "restored": 0
         },
         "chainWriteLog": {
-          "exported": 0,
-          "restored": 0
+          "exported": 1,
+          "restored": 1
         }
       }
     },
@@ -100,14 +100,14 @@
     ]
   },
   "export": {
-    "fileCount": 578,
-    "totalBytes": 1769797,
-    "fileSetDigest": "215b947c53dc25f18a9dac00f8068f6caddf81ce68c724a5cc1a3814c2979b23"
+    "fileCount": 600,
+    "totalBytes": 1827005,
+    "fileSetDigest": "228bf5cd26610a290e3df639434055addadd01731c28ce1616f82555ab543493"
   },
   "rotated": {
     "kept": 5,
     "deleted": [
-      "2026-07-27T03-14-54Z"
+      "2026-07-27T03-24-08Z"
     ]
   }
 }
