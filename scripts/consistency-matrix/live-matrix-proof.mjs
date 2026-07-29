@@ -39,28 +39,31 @@ const LOCKSTEP_TRANSCRIPT = {
   why: "矩阵取锚前要求知识高水位 == 链头;不满足时 snapshot-manifest 会在半途 fail-closed(KNOWLEDGE_HIGH_WATER_MISMATCH)",
   whyItCannotMoveTheChain:
     "rebaseKnowledgeStore(engine v0.8.0 knowledge-core.ts)只写 knowledge/ 下的 store.json、index 与 metadata,并把 marker 的 eventHighWaterDigest 置为 workspace.headEventHash;它不调用任何 append 路径。源读为据,下面的前后哈希为证。",
+  // Pinned to one run on purpose: the third conjunct below ties this transcript
+  // to the chain as it stands now, so a stale transcript reddens rather than
+  // vouching for a state it never saw. Refresh it whenever a new rebase runs.
   before: {
-    knowledgeMarkerVersion: 6,
-    knowledgeEventHighWaterDigest: "557b5032648ede9157d68b4c9ccec7b4216f700576ff7c39cbf781e6bfac1088",
-    statusHeadEventHash: "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
-    statusVersion: 711,
-    eventSegmentSetDigest: "90cdacd962f407c21b5b98e1b66156ffc000bddba633e3eeb18caf5f9e66147c",
+    knowledgeMarkerVersion: 8,
+    knowledgeEventHighWaterDigest: "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+    statusHeadEventHash: "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+    statusVersion: 725,
+    eventSegmentSetDigest: "9b428d3ba41be645ef92bcc9f6ad80e26c3666281159ce3ca04a2bbc3ba542cc",
     eventSegments: 12
   },
   receipt: {
     reasonCode: "KNOWLEDGE_STORE_REBASED",
-    version: 7,
+    version: 9,
     retired: 0,
     offenders: [],
-    eventHighWaterDigest: "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630"
+    eventHighWaterDigest: "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539"
   },
   after: {
-    knowledgeMarkerVersion: 7,
-    knowledgeEventHighWaterDigest: "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
-    statusHeadEventHash: "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
-    statusVersion: 711,
+    knowledgeMarkerVersion: 9,
+    knowledgeEventHighWaterDigest: "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+    statusHeadEventHash: "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+    statusVersion: 725,
     validateReasonCode: "WORKSPACE_COMMAND_COMPLETED",
-    eventSegmentSetDigest: "90cdacd962f407c21b5b98e1b66156ffc000bddba633e3eeb18caf5f9e66147c",
+    eventSegmentSetDigest: "9b428d3ba41be645ef92bcc9f6ad80e26c3666281159ce3ca04a2bbc3ba542cc",
     eventSegments: 12
   }
 };

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "aos.live-consistency-matrix-proof.v1",
   "story": "TCRN-AOS-STORY-114",
-  "generatedAt": "2026-07-29T03:39:30Z",
+  "generatedAt": "2026-07-29T03:48:27Z",
   "engineVersion": "0.8.0",
   "authorization": "本证物不含授权:活链矩阵结论只是 conformance-mutual-release 证据链之一环。任何切换、迁移或发布须另过 Owner 门(MIN-002 切换仪式),本文件不构成也不暗示该授权。文中记录的 knowledge-rebase 是一次已获点名授权的例外写入,该授权只覆盖那一个动词那一次运行。",
   "partition": "TCRN-AOS",
@@ -12,32 +12,32 @@
     "why": "矩阵取锚前要求知识高水位 == 链头;不满足时 snapshot-manifest 会在半途 fail-closed(KNOWLEDGE_HIGH_WATER_MISMATCH)",
     "whyItCannotMoveTheChain": "rebaseKnowledgeStore(engine v0.8.0 knowledge-core.ts)只写 knowledge/ 下的 store.json、index 与 metadata,并把 marker 的 eventHighWaterDigest 置为 workspace.headEventHash;它不调用任何 append 路径。源读为据,下面的前后哈希为证。",
     "before": {
-      "knowledgeMarkerVersion": 6,
-      "knowledgeEventHighWaterDigest": "557b5032648ede9157d68b4c9ccec7b4216f700576ff7c39cbf781e6bfac1088",
-      "statusHeadEventHash": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
-      "statusVersion": 711,
-      "eventSegmentSetDigest": "90cdacd962f407c21b5b98e1b66156ffc000bddba633e3eeb18caf5f9e66147c",
+      "knowledgeMarkerVersion": 8,
+      "knowledgeEventHighWaterDigest": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+      "statusHeadEventHash": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+      "statusVersion": 725,
+      "eventSegmentSetDigest": "9b428d3ba41be645ef92bcc9f6ad80e26c3666281159ce3ca04a2bbc3ba542cc",
       "eventSegments": 12
     },
     "receipt": {
       "reasonCode": "KNOWLEDGE_STORE_REBASED",
-      "version": 7,
+      "version": 9,
       "retired": 0,
       "offenders": [],
-      "eventHighWaterDigest": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630"
+      "eventHighWaterDigest": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539"
     },
     "after": {
-      "knowledgeMarkerVersion": 7,
-      "knowledgeEventHighWaterDigest": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
-      "statusHeadEventHash": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
-      "statusVersion": 711,
+      "knowledgeMarkerVersion": 9,
+      "knowledgeEventHighWaterDigest": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+      "statusHeadEventHash": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+      "statusVersion": 725,
       "validateReasonCode": "WORKSPACE_COMMAND_COMPLETED",
-      "eventSegmentSetDigest": "90cdacd962f407c21b5b98e1b66156ffc000bddba633e3eeb18caf5f9e66147c",
+      "eventSegmentSetDigest": "9b428d3ba41be645ef92bcc9f6ad80e26c3666281159ce3ca04a2bbc3ba542cc",
       "eventSegments": 12
     },
     "verifiedNow": {
-      "knowledgeHighWaterDigest": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
-      "chainHeadEventHash": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
+      "knowledgeHighWaterDigest": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+      "chainHeadEventHash": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
       "inLockstep": true,
       "eventStreamUnmovedAcrossRebase": true
     }
@@ -48,21 +48,21 @@
     "engineVersion": "0.8.0",
     "anchor": {
       "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
-      "version": 711,
-      "headEventHash": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630"
+      "version": 725,
+      "headEventHash": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539"
     },
     "anchorAfterRead": {
-      "version": 711,
-      "headEventHash": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
+      "version": 725,
+      "headEventHash": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
       "unchanged": true
     },
     "paging": {
       "anchor": {
         "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
-        "version": 711,
-        "headEventHash": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630"
+        "version": 725,
+        "headEventHash": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539"
       },
-      "events": 711,
+      "events": 725,
       "windowSteps": [
         {
           "limit": 64,
@@ -134,7 +134,7 @@
           "limit": 64,
           "offset": 704,
           "outcome": "page",
-          "records": 7
+          "records": 21
         }
       ],
       "windowsUsed": [
@@ -150,8 +150,8 @@
           "ok": true,
           "detail": {
             "pages": 12,
-            "version": 711,
-            "headEventHash": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
+            "version": 725,
+            "headEventHash": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
             "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85"
           }
         },
@@ -159,9 +159,9 @@
           "name": "assembled-count-equals-chain-version",
           "ok": true,
           "detail": {
-            "assembled": 711,
-            "version": 711,
-            "total": 711
+            "assembled": 725,
+            "version": 725,
+            "total": 725
           }
         },
         {
@@ -169,16 +169,16 @@
           "ok": true,
           "detail": {
             "first": 1,
-            "last": 711,
-            "count": 711
+            "last": 725,
+            "count": 725
           }
         },
         {
           "name": "tail-eventHash-equals-chain-head",
           "ok": true,
           "detail": {
-            "tailEventHash": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
-            "headEventHash": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
+            "tailEventHash": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+            "headEventHash": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
             "comparedChars": 64
           }
         }
@@ -188,7 +188,7 @@
           "limit": 64,
           "offset": 0,
           "records": 64,
-          "ms": 90
+          "ms": 91
         },
         {
           "limit": 64,
@@ -206,7 +206,7 @@
           "limit": 64,
           "offset": 192,
           "records": 64,
-          "ms": 89
+          "ms": 90
         },
         {
           "limit": 64,
@@ -218,13 +218,13 @@
           "limit": 64,
           "offset": 320,
           "records": 64,
-          "ms": 92
+          "ms": 94
         },
         {
           "limit": 64,
           "offset": 384,
           "records": 64,
-          "ms": 89
+          "ms": 92
         },
         {
           "limit": 64,
@@ -236,38 +236,38 @@
           "limit": 64,
           "offset": 512,
           "records": 64,
-          "ms": 89
+          "ms": 88
         },
         {
           "limit": 64,
           "offset": 576,
           "records": 64,
-          "ms": 85
+          "ms": 88
         },
         {
           "limit": 64,
           "offset": 640,
           "records": 64,
-          "ms": 85
+          "ms": 87
         },
         {
           "limit": 64,
           "offset": 704,
-          "records": 7,
-          "ms": 86
+          "records": 21,
+          "ms": 85
         }
       ],
-      "elapsedMs": 1400
+      "elapsedMs": 1404
     },
     "mirror": {
       "partitionId": "TCRN-AOS",
-      "appended": 711,
-      "rows": 711,
+      "appended": 725,
+      "rows": 725,
       "verifyOk": true,
-      "verifiedEvents": 711,
+      "verifiedEvents": 725,
       "headRow": {
-        "sequence": 711,
-        "eventHash": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630"
+        "sequence": 725,
+        "eventHash": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539"
       },
       "headMatchesChain": true
     }
@@ -296,10 +296,10 @@
         "limit": 512,
         "offset": 512,
         "outcome": "page",
-        "records": 199
+        "records": 213
       }
     ],
-    "rows": 711,
+    "rows": 725,
     "verifyOk": true,
     "meaning": "同一条链、同一条通路,窗口 1024 被引擎按 CLI_EVENT_PAGE_OVERSIZED 拒绝,降到 512 后走通并装配出同一条 711 事件流"
   },
@@ -308,7 +308,7 @@
       "mutation": "none (control)",
       "expectedReasonCode": null,
       "receivedReasonCode": null,
-      "events": 711,
+      "events": 725,
       "ok": true
     },
     {
@@ -316,9 +316,9 @@
       "expectedReasonCode": "EVENT_PAGING_COUNT_MISMATCH",
       "receivedReasonCode": "EVENT_PAGING_COUNT_MISMATCH",
       "detail": {
-        "assembled": 647,
-        "version": 711,
-        "total": 711
+        "assembled": 661,
+        "version": 725,
+        "total": 725
       },
       "ok": true
     },
@@ -337,12 +337,12 @@
   ],
   "attestationSidecar": {
     "f": {
-      "files": 506,
-      "setDigest": "64f862ee579c55a91937aa033cffccee537b4728e875038ccb20ee1ad89a9b7a"
+      "files": 520,
+      "setDigest": "767d9198936b49d51837bc6deb57dd0843f48afc38999055224be4683eee7e30"
     },
     "a": {
-      "files": 506,
-      "setDigest": "64f862ee579c55a91937aa033cffccee537b4728e875038ccb20ee1ad89a9b7a"
+      "files": 520,
+      "setDigest": "767d9198936b49d51837bc6deb57dd0843f48afc38999055224be4683eee7e30"
     },
     "sampleInodes": {
       "sameDevIno": false
@@ -400,15 +400,15 @@
     "lockstep": {
       "applicable": true,
       "ok": true,
-      "knowledgeHighWaterDigest": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
-      "chainHeadEventHash": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630"
+      "knowledgeHighWaterDigest": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+      "chainHeadEventHash": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539"
     },
     "anchor": {
-      "instant": "2026-07-29T03:39:29Z",
-      "headEventHash": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
-      "version": 711,
+      "instant": "2026-07-29T03:48:26Z",
+      "headEventHash": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+      "version": 725,
       "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
-      "snapshotManifestDigest": "c59720ccc829893289f8a0201dcb79170e888ced5acfef627bac60c05055a7a3",
+      "snapshotManifestDigest": "e0ed0ba82450c751da64985ff6b24968b85a5f3662aee4366de500a95f8dce3b",
       "manifestAgreesWithStatus": true
     },
     "aContainer": {
@@ -421,16 +421,16 @@
       "checked": [
         {
           "pair": "mirror-db vs f-side segment files",
-          "mirrorDbDevIno": "16777234:151735811",
+          "mirrorDbDevIno": "16777234:151740048",
           "mirrorDbInsideFWorkspace": false,
           "segmentFilesCompared": 12,
           "segmentInodeCollisions": []
         },
         {
           "pair": "f-attest-dir members vs a-attest-dir members",
-          "fMembers": 506,
-          "aMembers": 506,
-          "pairsCompared": 256036,
+          "fMembers": 520,
+          "aMembers": 520,
+          "pairsCompared": 270400,
           "memberInodeCollisions": []
         }
       ],
@@ -438,52 +438,52 @@
     },
     "anchorStability": {
       "stable": true,
-      "rereadHeadEventHash": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
-      "rereadVersion": 711,
-      "rereadMirrorRows": 711
+      "rereadHeadEventHash": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+      "rereadVersion": 725,
+      "rereadMirrorRows": 725
     },
     "mutualReference": {
       "boundBy": "one anchor plus mutual digests; either side alone is not a comparison",
-      "anchorInstant": "2026-07-29T03:39:29Z",
+      "anchorInstant": "2026-07-29T03:48:26Z",
       "chainHeadEventHash": {
-        "f": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
-        "a": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630"
+        "f": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+        "a": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539"
       },
       "eventsSetDigest": {
-        "f": "36d9502cc86e1091a1f95d6fb74c23f38037b2fd7088fda8aa7f28dda1a0d004",
-        "a": "36d9502cc86e1091a1f95d6fb74c23f38037b2fd7088fda8aa7f28dda1a0d004"
+        "f": "4bdf4d391b7be8b4edef20cf554f21f8e825830053b35773d8a25f9daa400307",
+        "a": "4bdf4d391b7be8b4edef20cf554f21f8e825830053b35773d8a25f9daa400307"
       },
       "stateProjectionDigest": {
         "f": null,
         "fMode": "per-event-segmented (whole-document export refused: {\"ok\":false,\"reasonCode\":\"INPUT_OVERSIZED\",\"error\":\"Canonical input exceeds one MiB\"}\n)",
-        "a": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af"
+        "a": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035"
       },
       "attestationSetDigest": {
-        "f": "64f862ee579c55a91937aa033cffccee537b4728e875038ccb20ee1ad89a9b7a",
-        "a": "64f862ee579c55a91937aa033cffccee537b4728e875038ccb20ee1ad89a9b7a"
+        "f": "767d9198936b49d51837bc6deb57dd0843f48afc38999055224be4683eee7e30",
+        "a": "767d9198936b49d51837bc6deb57dd0843f48afc38999055224be4683eee7e30"
       }
     },
     "sides": {
       "f": {
         "label": "live-chain-file-container",
         "segments": 12,
-        "events": 711,
+        "events": 725,
         "validateReasonCode": "WORKSPACE_COMMAND_COMPLETED",
         "projectionMode": "per-event-segmented (whole-document export refused: {\"ok\":false,\"reasonCode\":\"INPUT_OVERSIZED\",\"error\":\"Canonical input exceeds one MiB\"}\n)",
         "attestDir": {
           "present": true,
-          "receipts": 506
+          "receipts": 520
         }
       },
       "a": {
         "label": "live-event-row-mirror",
         "present": true,
         "declaredAbsent": null,
-        "rows": 711,
+        "rows": 725,
         "verifyOk": true,
         "attestDir": {
           "present": true,
-          "receipts": 506
+          "receipts": 520
         }
       }
     },
@@ -499,86 +499,86 @@
       {
         "cell": "R1C1",
         "verdict": "equal",
-        "fDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
-        "aDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
+        "fDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
+        "aDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
         "note": "逐事件规范字节 sha256 序列,序号键控"
       },
       {
         "cell": "R1C2",
         "verdict": "equal",
-        "fDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
-        "aDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
+        "fDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
+        "aDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
         "note": "每记录 assertCanonicalJson(引擎判)且重规范化不变"
       },
       {
         "cell": "R1C3",
         "verdict": "equal",
-        "fDigest": "2e0431b8e7cda4684b3120f67caa1d5906485c04664cab64b1b277763ae8703e",
-        "aDigest": "2e0431b8e7cda4684b3120f67caa1d5906485c04664cab64b1b277763ae8703e",
+        "fDigest": "b87a3ba5073bffb4eacd9e9003724f9ab56974b2dce5676cef3ca12c0affb9ca",
+        "aDigest": "b87a3ba5073bffb4eacd9e9003724f9ab56974b2dce5676cef3ca12c0affb9ca",
         "note": "双侧过引擎 validateEventChain;A 侧 UPDATE/DELETE 触发器拒绝的红证在 red-suite R1 专项"
       },
       {
         "cell": "R1C4",
         "verdict": "equal",
-        "fDigest": "36d9502cc86e1091a1f95d6fb74c23f38037b2fd7088fda8aa7f28dda1a0d004",
-        "aDigest": "36d9502cc86e1091a1f95d6fb74c23f38037b2fd7088fda8aa7f28dda1a0d004",
+        "fDigest": "4bdf4d391b7be8b4edef20cf554f21f8e825830053b35773d8a25f9daa400307",
+        "aDigest": "4bdf4d391b7be8b4edef20cf554f21f8e825830053b35773d8a25f9daa400307",
         "note": "events 集合摘要,写入互指块"
       },
       {
         "cell": "R2C1",
         "verdict": "equal",
-        "fDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
-        "aDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
+        "fDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
+        "aDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
         "note": "F 侧段文件原始字节即规范形(assertCanonicalJson 判),A 侧存储行同判;跨侧比规范事件流"
       },
       {
         "cell": "R2C2",
         "verdict": "equal",
-        "fDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
-        "aDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
+        "fDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
+        "aDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
         "note": "canonicalJson∘parse 幂等,判据唯一来源=受治引擎 protocol"
       },
       {
         "cell": "R2C3",
         "verdict": "equal",
-        "fDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
-        "aDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
+        "fDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
+        "aDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
         "note": "回放输出再规范化不渗入非规范字节;F 侧 export 文档规范性=segmented-path(1MiB);projectionMode=per-event-segmented (whole-document export refused: {\"ok\":false,\"reasonCode\":\"INPUT_OVERSIZED\",\"error\":\"Canonical input exceeds one MiB\"}\n)"
       },
       {
         "cell": "R2C4",
         "verdict": "equal",
-        "fDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
-        "aDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
+        "fDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
+        "aDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
         "note": "契约摘要互指:F=export 文档(或分段退化为规范事件流),A=规范事件流;录入互指块并由锚稳定性复读复核;判法=分段路径(1MiB):两侧同为逐事件规范摘要流 streamDigest,直接比较",
         "mutual": true
       },
       {
         "cell": "R3C1",
         "verdict": "equal",
-        "fDigest": "7f5b5fd97831a4539066b50c8c5b57756ddd21da5b67cfc0e1fdc305fa2004e8",
-        "aDigest": "7f5b5fd97831a4539066b50c8c5b57756ddd21da5b67cfc0e1fdc305fa2004e8",
+        "fDigest": "26be33c10ce362685d183ca1449075b4f28afd0ec77a0cfb5d088e3adf64679f",
+        "aDigest": "26be33c10ce362685d183ca1449075b4f28afd0ec77a0cfb5d088e3adf64679f",
         "note": "逐事件 priorHash/payloadHash/eventHash 三字段全值比对"
       },
       {
         "cell": "R3C2",
         "verdict": "equal",
-        "fDigest": "7f5b5fd97831a4539066b50c8c5b57756ddd21da5b67cfc0e1fdc305fa2004e8",
-        "aDigest": "7f5b5fd97831a4539066b50c8c5b57756ddd21da5b67cfc0e1fdc305fa2004e8",
+        "fDigest": "26be33c10ce362685d183ca1449075b4f28afd0ec77a0cfb5d088e3adf64679f",
+        "aDigest": "26be33c10ce362685d183ca1449075b4f28afd0ec77a0cfb5d088e3adf64679f",
         "note": "重算判=引擎 validateEventChain 内建重算(createEvent 同一哈希构造)"
       },
       {
         "cell": "R3C3",
         "verdict": "equal",
-        "fDigest": "907dec21a322b5ea55d5eac01a1b52703b46add460acd81ce2fe1afa0726313e",
-        "aDigest": "907dec21a322b5ea55d5eac01a1b52703b46add460acd81ce2fe1afa0726313e",
+        "fDigest": "9903b6ab38cb0ea6978e3854ada938c95ef5f7e48e456aee063f64ec2314e7fc",
+        "aDigest": "9903b6ab38cb0ea6978e3854ada938c95ef5f7e48e456aee063f64ec2314e7fc",
         "note": "validateEventChain 双侧通过且 headEventHash 同锚;无密钥哈希挡不住尾部追加伪造——盲区由 C4 补位,红证成对见 red-suite C3(b)/C4"
       },
       {
         "cell": "R3C4",
         "verdict": "equal",
-        "fDigest": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
-        "aDigest": "cda703b1a417442663a1c6c26e0fc569ae01ae249ee7a128faaf502238541630",
+        "fDigest": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
+        "aDigest": "81d757b430cfd63d11d1481d810fa501d08474f555a31f8461d05cdfdbca3539",
         "note": "chainHeadEventHash 互指(pair-manifest 先例)"
       },
       {
@@ -593,51 +593,51 @@
       {
         "cell": "R4C2",
         "verdict": "equal",
-        "fDigest": "b8cab435e2d2b005af07e5eda2e8e03bedd53b8309fd8baa55e15c55f2505a94",
-        "aDigest": "b8cab435e2d2b005af07e5eda2e8e03bedd53b8309fd8baa55e15c55f2505a94",
+        "fDigest": "2d9b468b66ea80b3c919f32689e381fb608bc202210e7246d48e5f9d2cb22a43",
+        "aDigest": "2d9b468b66ea80b3c919f32689e381fb608bc202210e7246d48e5f9d2cb22a43",
         "note": "回放终点的规范形投影(headEventHash/事件数/版本)经引擎 canonicalJson 双侧相等"
       },
       {
         "cell": "R4C3",
         "verdict": "equal",
-        "fDigest": "d8b0ad656d9e776e32d1ebecb3c1719777b701dae9fe944afd97e3e23aed79db",
-        "aDigest": "d8b0ad656d9e776e32d1ebecb3c1719777b701dae9fe944afd97e3e23aed79db",
+        "fDigest": "c61c68099a7ff41ec39e7e535ee3cc097efa77dbf28d38de9acc7c48b543040e",
+        "aDigest": "c61c68099a7ff41ec39e7e535ee3cc097efa77dbf28d38de9acc7c48b543040e",
         "note": "核心格:F 侧引擎全量回放(validate:回放态与 views 逐字节一致)vs A 侧引擎 validateEventChain 自洽回放(EventMirrorStore.verify);两侧同一引擎裁判;A 容器的独立状态归约器属切换段验收范围(MIN-003 谱系),本格按两容器当前可回放强度如实判"
       },
       {
         "cell": "R4C4",
         "verdict": "equal",
-        "fDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
-        "aDigest": "6faea91cb28b131b9d2f1bbd8d53f64a16faadad23805dfc2ec8af132e86d8af",
+        "fDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
+        "aDigest": "5e6d8c415279666614cfe755e0557cae7c4de573bbab4fd3a8355028acc00035",
         "note": "回放结果摘要互指(F=回放态 export 文档,A=镜像回放流);由锚稳定性复读复核;判法=分段路径(1MiB):两侧同为逐事件规范摘要流 streamDigest,直接比较",
         "mutual": true
       },
       {
         "cell": "R5C1",
         "verdict": "equal",
-        "fDigest": "64f862ee579c55a91937aa033cffccee537b4728e875038ccb20ee1ad89a9b7a",
-        "aDigest": "64f862ee579c55a91937aa033cffccee537b4728e875038ccb20ee1ad89a9b7a",
+        "fDigest": "767d9198936b49d51837bc6deb57dd0843f48afc38999055224be4683eee7e30",
+        "aDigest": "767d9198936b49d51837bc6deb57dd0843f48afc38999055224be4683eee7e30",
         "note": "sidecar 文件集逐文件 sha256 与 setDigest 相等(paired-backup 同构);F 有 A 无=未迁移,判红不判 n/a"
       },
       {
         "cell": "R5C2",
         "verdict": "equal",
-        "fDigest": "aeb283787ab14c0ac5abc09c606e540b619851e7491896610f94c04edb66700d",
-        "aDigest": "aeb283787ab14c0ac5abc09c606e540b619851e7491896610f94c04edb66700d",
+        "fDigest": "c748dfa47d20818659a76939d1475a17fcc308c43f124ce5052f4503e8fd3f53",
+        "aDigest": "c748dfa47d20818659a76939d1475a17fcc308c43f124ce5052f4503e8fd3f53",
         "note": "enable 起点后每事件 payload.actor 过引擎 assertActorId,双侧一致"
       },
       {
         "cell": "R5C3",
         "verdict": "equal",
-        "fDigest": "8ce9fe1359bc01be755dd023a9e2653e3c8e3466147eecc8af664e43b7dd287e",
-        "aDigest": "8ce9fe1359bc01be755dd023a9e2653e3c8e3466147eecc8af664e43b7dd287e",
+        "fDigest": "55bbdc8c89f8d2b6ec8bb63943805eb686b389e412a0828730c550ea3b4aabbf",
+        "aDigest": "55bbdc8c89f8d2b6ec8bb63943805eb686b389e412a0828730c550ea3b4aabbf",
         "note": "同起点后全事件带 actor 的谓词双侧同判,摘要折入受测事件基数(空集不再恒真);F 侧回放门由 validate 强制(剥 actor 红证见 red-suite R5);A 侧拒无 actor 写入由镜像 ingest 经同一 validateEventChain 承接"
       },
       {
         "cell": "R5C4",
         "verdict": "equal",
-        "fDigest": "64f862ee579c55a91937aa033cffccee537b4728e875038ccb20ee1ad89a9b7a",
-        "aDigest": "64f862ee579c55a91937aa033cffccee537b4728e875038ccb20ee1ad89a9b7a",
+        "fDigest": "767d9198936b49d51837bc6deb57dd0843f48afc38999055224be4683eee7e30",
+        "aDigest": "767d9198936b49d51837bc6deb57dd0843f48afc38999055224be4683eee7e30",
         "note": "attestationSetDigest 互指(pair-manifest 先例);F 有 A 无=未迁移,判红不判 n/a"
       }
     ],
