@@ -1,32 +1,34 @@
-# AOS engine host (EPIC-034 / STORY-118)
+# AOS engine host (EPIC-034 / STORY-118, engine upgraded under STORY-129)
 
-> **Direction D (`TCRN-AOS-MIN-011`): this recipe outlived the switch it was built for.**
-> Truth stays local-first on the Owner's machine permanently; AOS carries the
-> operating and read faces, not the store; the mirror is the standing form rather
-> than a transitional stage. The engine copy this manifest places on the VM was
-> originally the far side of a two-stage truth topology — the host that would have
-> received the chain. **That stage is retired; nothing will be switched to it.**
+> **Superseded direction, kept because the reasoning is still load-bearing.**
+> Under `TCRN-AOS-MIN-011` (direction D) truth stayed local-first on the Owner's
+> machine permanently and this host was **not** going to receive the chain; the
+> engine copy earned its keep by making the off-site paired backup self-attesting
+> at the far end — a pushed pair answered by `snapshot-verify` / `validate` /
+> `event-list` on a machine that never saw the chain being written, which is
+> remote recoverability demonstrated rather than assumed. That is why not one
+> script here was removed, and it is still true of the copy today.
 >
-> The copy is kept, and it is kept for a live purpose: it is what makes the
-> off-site paired backup **self-attesting at the far end**. A backup that can only
-> be checked by the machine that wrote it proves the machine agrees with itself.
-> With a governed engine already standing on the VM, a pushed pair can be answered
-> there — `snapshot-verify`, `validate`, `event-list` — by something that never
-> saw the chain being written. That is remote recoverability demonstrated rather
-> than assumed, and it is the reason not one script here was removed.
+> **`TCRN-AOS-MIN-012` reopens the address.** The engine and the chains relocate
+> to this VM; the Mac becomes a pure client. The manifest is therefore pinned at
+> **v0.9.0** rather than v0.8.0 — that release carries the governed relocation
+> verb family (`relocation-plan` / `-vacate` / `-adopt` / `-abort` / `-inspect`),
+> and `relocation-adopt` is the receiving verb a move would run *here*.
+> Siting for the chains themselves is a separate recipe:
+> [`deploy/aos-truth-root-siting`](../aos-truth-root-siting/README.md).
 >
-> The manifest's original boundary is unchanged and now permanent rather than
-> pending: **no authority material travels with this deployment.** `pinsTransferred`
-> is `false`, the VM holds no operator bundle, and under direction D there is no
-> longer a later step that would supply one — the governance ceremony stays on the
-> Owner's machine for good. The minimum VM bundle that was forged for the switch
-> remains on the Mac, undeployed, as a contingency asset.
+> One boundary survives both directions unchanged: **no authority material
+> travels with this deployment.** `pinsTransferred` is `false` and the VM holds
+> no operator bundle. Under MIN-012 that is a *preparation* boundary rather than
+> a permanent one — a host that is to write the chain will eventually need to be
+> supplied — but supplying it is a separately-ruled step, and nothing in this
+> directory does it.
 
 ## What is here
 
 | File | What it is |
 | --- | --- |
-| `manifest.mjs` | The single declarative statement of what `/srv/tcrn/engine/tcrn-workflow` on `tcrn-platform-dev` must contain: the local governed engine copy at the `v0.8.0` tag anchor, minus `node_modules` and `.git`, plus the built `dist`. Also the verification contract — catalog reason code, cli verb count, verbs required by name, digest ledger form — and the honest ceiling of what the deployment claims. |
+| `manifest.mjs` | The single declarative statement of what `/srv/tcrn/engine/tcrn-workflow` on `tcrn-platform-dev` must contain: the local governed engine copy at the `v0.9.0` tag anchor, minus `node_modules` and `.git`, plus the built `dist`. Also the verification contract — catalog reason code, cli verb count (101 at v0.9.0, up from 96 at v0.8.0), verbs required by name (`event-list`, `relocation-adopt`, `relocation-inspect`), digest ledger form — and the honest ceiling of what the deployment claims. |
 | `apply.mjs` | The controlled application of that manifest in seven steps: preflight the local anchor, converge with `rsync --archive --delete`, verify with a full per-file sha256 ledger compared both directions, optionally prove the comparison can go red, confirm the far copy answers `commands`, classify the VM's mounts against the engine's pinned filesystem set, and reclaim. |
 
 ## Running it
@@ -48,5 +50,6 @@ to emit a receipt in which a home-directory path survived.
 - **The claim never rises above the comparison.** What is proven is byte-identity
   with the local governed copy. Not provenance beyond that copy, not authority,
   not independence of the two copies.
-- **No supply material, permanently.** Under direction D this stops being a
-  deferral and becomes the settled shape.
+- **No supply material.** Not under direction D (where it was permanent), and
+  not under MIN-012 (where it is a preparation boundary). Either way, not from
+  this directory.

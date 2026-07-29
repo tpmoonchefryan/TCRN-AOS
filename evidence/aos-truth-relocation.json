@@ -1,0 +1,742 @@
+{
+  "schemaVersion": "aos.truth-relocation.v1",
+  "story": "TCRN-AOS-STORY-131",
+  "ruling": "TCRN-AOS-MIN-012 (direction D: AOS carries the operating surface; AOS goes first as the proving segment)",
+  "authorization": "本证物不含授权:它记录一次已裁定方向下的迁置执行,不构成任何后续分区迁置、发布或切换许可。",
+  "emittedAt": "2026-07-29T18:28:38Z",
+  "summary": "The real TCRN-AOS governance chain was relocated to the VM through the governed relocation ceremony and is now live at its new address. workspace:fbc32e3ff874fbbd637a1b85 at version 817, head bac1be07…5107, moved from this machine to /srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace under relocation:bba03004faf175867349495b. Head, version, workspaceId, work count and project count are all full-value identical on the far side: the relocation moved the chain without transforming a single event. Twelve source faces went dead under one code, six destination faces refused under a different one, 20 control files and 613 attestation receipts reconciled per-file in both directions with both sides computing their own digests, the consistency matrix ran on the destination at 19 equal / 0 mismatch / 0 acceptance-gate-pending, and the two-sided close-out reports vacated at the source and adopted at the target under one shared relocationId. The other three partitions were never named by any verb.",
+  "engineIdentity": {
+    "localGovernedCopy": {
+      "version": "0.9.0",
+      "tag": "v0.9.0",
+      "commit": "729cd045f8614ae984c2ad6f592341fbae49019c",
+      "workingTreeClean": true
+    },
+    "vmEngine": {
+      "path": "/srv/tcrn/engine/tcrn-workflow",
+      "version": "0.9.0"
+    },
+    "bothHostsReported": "0.9.0",
+    "honestGap": "the trusted bootstrap's verify-installed-copy was NOT obtained. See honestNotes."
+  },
+  "terminalAnchor": {
+    "takenBefore": "any relocation verb ran",
+    "tool": "TCRN-AOS scripts/paired-backup.mjs (the real paired cadence, while both halves were still on this machine)",
+    "pairedAt": "2026-07-29T18:16:36Z",
+    "ok": true,
+    "chain": {
+      "reasonCode": "SNAPSHOT_VERIFIED",
+      "headEventHash": "bac1be0758ab439beffc848f8300fa04a3e853c59b66ac137a77467093bd5107",
+      "version": 817,
+      "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85"
+    },
+    "chainManifestDigest": "cd2812a6da5cc758df5affa059eb45bbcf3812ac1d015d01dc9f7968b5737783",
+    "attestationSetDigest": "9499b5bf5e3bcaf3ff1bb6e4e4495f41f7ee26a165e6f4b99be6f4699770ff4f",
+    "attestations": {
+      "count": 611,
+      "orphanReceipts": 0,
+      "filenameMismatches": 0
+    },
+    "domainHalf": {
+      "ok": true,
+      "integrityCheck": "ok",
+      "counts": {
+        "annotations": 2,
+        "comments": 1,
+        "relations": 0,
+        "chainWriteLog": 1
+      }
+    },
+    "crossCheckWorthNaming": "the anchor's chainManifestDigest cd2812a6… is byte-equal to the relocation basis controlManifestSha256 produced independently by relocation-plan. Two different code paths described the same bytes.",
+    "lockstepRemediation": {
+      "required": true,
+      "observed": "KNOWLEDGE_HIGH_WATER_MISMATCH — snapshot-manifest and therefore relocation-plan both fail closed in that state",
+      "verbRun": "knowledge-rebase (the ONE mutating verb this task licensed outside the ceremony)",
+      "firstAttemptRefused": {
+        "reasonCode": "KNOWLEDGE_CAS_MISMATCH",
+        "detail": "817:13",
+        "cause": "--expected-version on knowledge-rebase is the KNOWLEDGE STORE's version, not the chain's; passing the chain version 817 against store version 13 was refused, and the chain head did not move"
+      },
+      "accepted": {
+        "reasonCode": "KNOWLEDGE_STORE_REBASED",
+        "knowledgeVersion": "13 -> 14",
+        "retired": 0,
+        "offenders": []
+      },
+      "eventStreamUnmovedAcrossRebase": {
+        "headBefore": "bac1be0758ab439beffc848f8300fa04a3e853c59b66ac137a77467093bd5107",
+        "headAfter": "bac1be0758ab439beffc848f8300fa04a3e853c59b66ac137a77467093bd5107",
+        "versionBefore": 817,
+        "versionAfter": 817,
+        "equal": true,
+        "thirteenEventSegmentsByteIdenticalAfterTheWholeCeremony": true
+      }
+    }
+  },
+  "relocationId": "relocation:bba03004faf175867349495b",
+  "plan": {
+    "reasonCode": "WORKSPACE_RELOCATION_PLANNED",
+    "sequence": 1,
+    "basis": {
+      "controlManifestSha256": "cd2812a6da5cc758df5affa059eb45bbcf3812ac1d015d01dc9f7968b5737783",
+      "headEventHash": "bac1be0758ab439beffc848f8300fa04a3e853c59b66ac137a77467093bd5107",
+      "version": 817
+    },
+    "permitStages": [
+      "abort",
+      "adopt",
+      "vacate"
+    ],
+    "hopsRemaining": 8,
+    "ledgerEntriesRemaining": 16,
+    "controlManifestRecomputedLocallyEqualsBasis": true,
+    "destinationRootsRealpathedByTheDestination": {
+      "reasonCode": "DESTINATION_ROOTS_CANONICAL",
+      "declaredEqualsResolved": true,
+      "roots": {
+        "framework": "/srv/tcrn/engine/tcrn-workflow",
+        "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+        "transient": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/transient",
+        "evidenceLocator": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/evidence-locator",
+        "releaseTrust": "/srv/tcrn/governance/tcrn-workspace/release-trust"
+      },
+      "attestDirSibling": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+      "why": "the source engine cannot measure another host; the destination realpathed its own five roots and the two lists were compared full-value"
+    },
+    "authorities": {
+      "vacate": {
+        "sha256": "b4623ffffb593b13f1d20f2eadfb04de68abff8979adaddc9fcf36eb061e0eb9",
+        "bytes": 414,
+        "mintedBy": "local governed engine canonicalRelocationAuthority",
+        "sixPermitTerms": true
+      },
+      "adopt": {
+        "sha256": "5d48898858648722d6a25ed0c4e41c46a086be8177512bf3554d3dd3dbfcf821",
+        "bytes": 413,
+        "mintedBy": "VM engine canonicalRelocationAuthority (ON the destination)",
+        "sixPermitTerms": true,
+        "differsFromVacate": true
+      },
+      "mintedBeforeTheVacateOnPurpose": "a mint failure after the vacate would leave the chain with no live address",
+      "removedFromTheVm": "deleted immediately after the adopt; only the digest remains as the record"
+    }
+  },
+  "vacate": {
+    "reasonCode": "WORKSPACE_RELOCATION_VACATE_COMPLETED",
+    "stage": "vacated",
+    "vacateCommitmentSha256": "5a986e33255d422d748720456a64d66f61e0c4e26dbaca8972b926aac5e80c23",
+    "controlManifestSha256": "cd2812a6da5cc758df5affa059eb45bbcf3812ac1d015d01dc9f7968b5737783",
+    "planAndVacateAgree": true,
+    "freezeEnforcement": "a sole-writer claim is a promise; --expected-version 817 is the enforcement. Any concurrent append between plan and vacate would have failed it closed.",
+    "sourceDeadOnEveryFace": {
+      "facesProbed": 12,
+      "allRefused": true,
+      "distinctReasonCodes": [
+        "WORKSPACE_RELOCATION_VACATED"
+      ],
+      "readFaces": [
+        {
+          "face": "read/status",
+          "verb": "status",
+          "accepted": false,
+          "reasonCode": "WORKSPACE_RELOCATION_VACATED"
+        },
+        {
+          "face": "read/validate",
+          "verb": "validate",
+          "accepted": false,
+          "reasonCode": "WORKSPACE_RELOCATION_VACATED"
+        },
+        {
+          "face": "read/export",
+          "verb": "export",
+          "accepted": false,
+          "reasonCode": "WORKSPACE_RELOCATION_VACATED"
+        },
+        {
+          "face": "read/work-list",
+          "verb": "work-list",
+          "accepted": false,
+          "reasonCode": "WORKSPACE_RELOCATION_VACATED"
+        },
+        {
+          "face": "read/snapshot-manifest",
+          "verb": "snapshot-manifest",
+          "accepted": false,
+          "reasonCode": "WORKSPACE_RELOCATION_VACATED"
+        },
+        {
+          "face": "read/conference-minutes-list",
+          "verb": "conference-minutes-list",
+          "accepted": false,
+          "reasonCode": "WORKSPACE_RELOCATION_VACATED"
+        },
+        {
+          "face": "read/event-list",
+          "verb": "event-list",
+          "accepted": false,
+          "reasonCode": "WORKSPACE_RELOCATION_VACATED"
+        }
+      ],
+      "writeFaces": [
+        {
+          "face": "write/work-create",
+          "verb": "work-create",
+          "accepted": false,
+          "reasonCode": "WORKSPACE_RELOCATION_VACATED"
+        },
+        {
+          "face": "write/work-annotate",
+          "verb": "work-annotate",
+          "accepted": false,
+          "reasonCode": "WORKSPACE_RELOCATION_VACATED"
+        },
+        {
+          "face": "write/knowledge-checkpoint",
+          "verb": "knowledge-checkpoint",
+          "accepted": false,
+          "reasonCode": "WORKSPACE_RELOCATION_VACATED"
+        },
+        {
+          "face": "write/gate-create",
+          "verb": "gate-create",
+          "accepted": false,
+          "reasonCode": "WORKSPACE_RELOCATION_VACATED"
+        },
+        {
+          "face": "write/knowledge-rebase",
+          "verb": "knowledge-rebase",
+          "accepted": false,
+          "reasonCode": "WORKSPACE_RELOCATION_VACATED"
+        }
+      ],
+      "correctionMade": "the first write-face pass sent flags these verbs do not define (--title to work-create, --note to work-annotate, --expected-version to knowledge-checkpoint) and got CLI_ARGUMENT_UNKNOWN. A refusal for an unrelated reason measures nothing about whether the write face is dead, so the probes were rebuilt from the engine's own commands catalogue and re-run. Both readings are kept."
+    },
+    "carveOutsStillAnswer": {
+      "relocationInspect": "WORKSPACE_RELOCATION_INSPECTED",
+      "state": "vacated",
+      "inspectRestatesVacateCommitment": true
+    }
+  },
+  "transferReconciliation": {
+    "reasonCode": "TRANSFER_LEDGERS_EQUAL",
+    "method": "rsync --archive --delete over ssh, transport-residue names excluded",
+    "controlTree": {
+      "comparedLocal": 20,
+      "comparedRemote": 20,
+      "mismatched": 0,
+      "missingOnVm": 0,
+      "extraOnVm": 0,
+      "fileSetDigest": {
+        "local": "7f40164f87e2da5c21901737eeb71b98453e4b06fb222084f8bad9e0d4d9ca15",
+        "remote": "7f40164f87e2da5c21901737eeb71b98453e4b06fb222084f8bad9e0d4d9ca15"
+      }
+    },
+    "attestationSidecar": {
+      "comparedLocal": 612,
+      "comparedRemote": 612,
+      "mismatched": 0,
+      "missingOnVm": 0,
+      "extraOnVm": 0,
+      "fileSetDigest": {
+        "local": "ce991f36e37362717068388da2dd48236cb795edbde415332b1f988ac23b234e",
+        "remote": "ce991f36e37362717068388da2dd48236cb795edbde415332b1f988ac23b234e"
+      },
+      "countNote": "611 receipts at the start of the session; the vacate wrote one and the adopt another, so the sidecar reconciled at 612 during transfer and stands at 613 now"
+    },
+    "bothSidesComputedTheirOwnDigests": "each host walked its own tree with its own node; the comparison is full-value and runs in BOTH directions (missing-on-vm and extra-on-vm), never a count check",
+    "snapshotVerifyAgainstTheVacateManifest": {
+      "cli": {
+        "reasonCode": "SNAPSHOT_MISMATCH",
+        "namesExactlyOneFile": "workspace.json"
+      },
+      "engineExcludingWorkspaceJson": "SNAPSHOT_VERIFIED",
+      "finding": "a plain snapshot-verify against a vacate-time control manifest can NEVER be green: the manifest is computed under the lease before the ledger entry is appended, and appending it rewrites workspace.json — the vacate is the last writer of the one file its own manifest describes. The CLI naming EXACTLY workspace.json IS the transport proof, because it says nothing else moved."
+    },
+    "destinationRefusedUntilAdopted": {
+      "facesProbed": 6,
+      "allRefused": true,
+      "reasonCode": "WORKSPACE_RELOCATION_ADOPTION_REQUIRED",
+      "note": "a DIFFERENT code from the vacated source, so between the two stages zero addresses were live"
+    }
+  },
+  "vmVerification": {
+    "adopt": {
+      "reasonCode": "WORKSPACE_RELOCATION_ADOPT_COMPLETED",
+      "stage": "adopted",
+      "sharesRelocationIdWithVacate": true
+    },
+    "idempotence": {
+      "reasonCode": "WORKSPACE_RELOCATION_ALREADY_ADOPTED",
+      "note": "the retry an operator actually performs returns the idempotent code rather than half-applying"
+    },
+    "validate": "WORKSPACE_COMMAND_COMPLETED",
+    "fullValueEqualityWithThePreVacateSource": {
+      "headEventHash": {
+        "before": "bac1be0758ab439beffc848f8300fa04a3e853c59b66ac137a77467093bd5107",
+        "after": "bac1be0758ab439beffc848f8300fa04a3e853c59b66ac137a77467093bd5107",
+        "equal": true
+      },
+      "version": {
+        "before": 817,
+        "after": 817,
+        "equal": true
+      },
+      "workspaceId": {
+        "before": "workspace:fbc32e3ff874fbbd637a1b85",
+        "after": "workspace:fbc32e3ff874fbbd637a1b85",
+        "equal": true
+      },
+      "work": {
+        "before": 127,
+        "after": 127,
+        "equal": true
+      },
+      "projects": {
+        "before": 1,
+        "after": 1,
+        "equal": true
+      }
+    },
+    "postAdoptSnapshot": {
+      "cli": "SNAPSHOT_MISMATCH",
+      "engineExcludingWorkspaceJson": "SNAPSHOT_VERIFIED",
+      "note": "workspace.json now carries the adopt ledger entry; every other control byte still matches what the source signed for at the vacate. The adopt is a binding change, not a chain change."
+    },
+    "lockstepAtTheNewAddress": {
+      "knowledgeHighWaterDigest": "bac1be0758ab439beffc848f8300fa04a3e853c59b66ac137a77467093bd5107",
+      "equalsChainHead": true
+    }
+  },
+  "matrixResult": {
+    "where": "both containers on the DESTINATION host, judged by the VM engine 0.9.0",
+    "reasonCode": "MATRIX_ALL_APPLICABLE_EQUAL",
+    "ok": true,
+    "engineVersion": "0.9.0",
+    "summary": {
+      "cells": 20,
+      "equal": 19,
+      "mismatch": 0,
+      "notApplicableDeclared": 1,
+      "recordedNotCompared": 0,
+      "acceptanceGatePending": 0
+    },
+    "sides": {
+      "f": {
+        "label": "relocated-live-chain-file-container-on-vm",
+        "segments": 13,
+        "events": 817,
+        "validateReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+        "projectionMode": "per-event-segmented (whole-document export refused: {\"ok\":false,\"reasonCode\":\"INPUT_OVERSIZED\",\"error\":\"Canonical input exceeds one MiB\"}\n)",
+        "attestDir": {
+          "present": true,
+          "receipts": 613
+        }
+      },
+      "a": {
+        "label": "live-event-row-mirror-rebuilt-on-vm",
+        "present": true,
+        "declaredAbsent": null,
+        "rows": 817,
+        "verifyOk": true,
+        "attestDir": {
+          "present": true,
+          "receipts": 613
+        }
+      }
+    },
+    "anchorStability": {
+      "stable": true,
+      "rereadHeadEventHash": "bac1be0758ab439beffc848f8300fa04a3e853c59b66ac137a77467093bd5107",
+      "rereadVersion": 817,
+      "rereadMirrorRows": 817
+    },
+    "mutualReference": {
+      "boundBy": "one anchor plus mutual digests; either side alone is not a comparison",
+      "anchorInstant": "2026-07-29T18:23:05Z",
+      "chainHeadEventHash": {
+        "f": "bac1be0758ab439beffc848f8300fa04a3e853c59b66ac137a77467093bd5107",
+        "a": "bac1be0758ab439beffc848f8300fa04a3e853c59b66ac137a77467093bd5107"
+      },
+      "eventsSetDigest": {
+        "f": "2f8ad909c9d3da7f8247847b0acb268a31fb9d3854dc23b922d5fdbbd2035c87",
+        "a": "2f8ad909c9d3da7f8247847b0acb268a31fb9d3854dc23b922d5fdbbd2035c87"
+      },
+      "stateProjectionDigest": {
+        "f": null,
+        "fMode": "per-event-segmented (whole-document export refused: {\"ok\":false,\"reasonCode\":\"INPUT_OVERSIZED\",\"error\":\"Canonical input exceeds one MiB\"}\n)",
+        "a": "22d6294ff4fed7f9a8a1067cce1c7f98e76c4e8d3d49685a33c9df03f13f2010"
+      },
+      "attestationSetDigest": {
+        "f": "1f145a6da230dba72a583e080e84f4ef858133c15dfc3f2241620b3cb6efd371",
+        "a": "1f145a6da230dba72a583e080e84f4ef858133c15dfc3f2241620b3cb6efd371"
+      }
+    },
+    "acceptanceGateCells": {
+      "R1C1": "equal",
+      "R1C2": "equal",
+      "R1C3": "equal",
+      "R1C4": "equal",
+      "R3C1": "equal",
+      "R3C2": "equal",
+      "R3C3": "equal",
+      "R3C4": "equal"
+    },
+    "theSingleNotApplicable": "R4C1, declared through the frozen na-whitelist because the A container holds no views documents. It is NOT an R1/R3 acceptance-gate cell, which the whitelist closure forbids whitelisting.",
+    "aSideBuiltThroughThePagedGovernedRead": {
+      "surface": "governed-workflow-mcp-facade (tcrn_workflow_status + tcrn_workflow_event_list, no authority pins)",
+      "why": "the rehearsal's ingest called `export` for the whole document, which cannot work on this partition — it passed the engine's one-MiB canonical ceiling long ago. The real chain has to be read a page at a time through event-list; using the rehearsal's shortcut would have produced INPUT_OVERSIZED and looked like a relocation failure.",
+      "anchor": {
+        "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+        "version": 817,
+        "headEventHash": "bac1be0758ab439beffc848f8300fa04a3e853c59b66ac137a77467093bd5107"
+      },
+      "pages": 13,
+      "elapsedMs": 3087
+    },
+    "aSideSidecarIsACopyNotAnAlias": {
+      "fFiles": 613,
+      "aFiles": 613,
+      "digestsEqual": true,
+      "sameDevIno": false,
+      "why": "equal digest over the SAME inode would be a gate that cannot go red"
+    },
+    "strengthComparison": "identical in shape and count to the pre-switch live-chain matrix (19 equal / 0 mismatch / 0 pending) with all eight R1 and R3 acceptance-gate cells really judged rather than declared absent",
+    "ceiling": "the A side is a mirror rebuilt from the F side's own paged read, so R1/R3 measure that the mirror faithfully carries what the chain holds. They are NOT an independent second witness of the chain, and this run claims nothing more than the pre-switch matrix did."
+  },
+  "twoSidedCloseout": {
+    "reasonCode": "WORKSPACE_RELOCATION_INSPECTED",
+    "observedAt": "2026-07-29T18:23:33Z",
+    "source": {
+      "host": "this machine",
+      "state": "vacated",
+      "stage": "vacated",
+      "relocationId": "relocation:bba03004faf175867349495b",
+      "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+      "relocations": 1,
+      "ledgerEntriesRemaining": 15,
+      "activeWorkspaceRootIsSource": true,
+      "unmovedRoots": [],
+      "nearMissDestination": false
+    },
+    "target": {
+      "host": "tcrn-platform-dev",
+      "address": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+      "state": "live",
+      "stage": "adopted",
+      "relocationId": "relocation:bba03004faf175867349495b",
+      "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+      "relocations": 2,
+      "ledgerEntriesRemaining": 14,
+      "activeWorkspaceRoot": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+      "unmovedRoots": [],
+      "nearMissDestination": false
+    },
+    "sharedRelocationId": "relocation:bba03004faf175867349495b",
+    "sameWorkspaceId": true,
+    "ok": true,
+    "termsCompared": [
+      "source.state=vacated",
+      "source.stage=vacated",
+      "target.state=live",
+      "target.stage=adopted",
+      "relocationId full-value equal",
+      "workspaceId full-value equal"
+    ],
+    "termsDeliberatelyNotCompared": {
+      "ledgerLengths": "the source reports relocations=1 and the target 2 BY CONSTRUCTION — the adopt entry is written into the copy and never travels back. A close-out predicate that compared them would be permanently red.",
+      "sourceRelocations": 1,
+      "targetRelocations": 2
+    },
+    "ceiling": "ADR 0003 ceiling 4. This green reads as: THESE TWO ADDRESSES, on the two hosts where the inspect ran, are not both live — the source is vacated and the target is adopted. It does NOT read as a statement about this relocationId globally. One adopt permit presented at the same destination path on N hosts yields N live authorities, and this same comparison would be green at every one of them. Nothing here rules out a fork that was never presented to either of these two addresses.",
+    "bothOutputsArchived": [
+      "control/closeout-source-inspection.json",
+      "control/closeout-target-inspection.json",
+      "and verbatim in this evidence file under twoSidedCloseout.sourceRaw / .targetRaw"
+    ],
+    "sourceRaw": {
+      "activeWorkspaceRoot": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace",
+      "address": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace",
+      "at": "2026-07-29T18:19:00Z",
+      "basis": {
+        "controlManifestSha256": "cd2812a6da5cc758df5affa059eb45bbcf3812ac1d015d01dc9f7968b5737783",
+        "headEventHash": "bac1be0758ab439beffc848f8300fa04a3e853c59b66ac137a77467093bd5107",
+        "version": 817
+      },
+      "from": [
+        {
+          "canonicalPath": "<local-home>/.tcrn-workflow/tcrn-workflow",
+          "kind": "framework"
+        },
+        {
+          "canonicalPath": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace",
+          "kind": "workspace"
+        },
+        {
+          "canonicalPath": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/transient",
+          "kind": "transient"
+        },
+        {
+          "canonicalPath": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/evidence-locator",
+          "kind": "evidence-locator"
+        },
+        {
+          "canonicalPath": "<local-platform-root>/.tcrn-workspace/release-trust",
+          "kind": "release-trust"
+        }
+      ],
+      "ledgerEntriesRemaining": 15,
+      "nearMissDestination": false,
+      "observedAt": "2026-07-29T18:23:33Z",
+      "reasonCode": "WORKSPACE_RELOCATION_INSPECTED",
+      "relocationId": "relocation:bba03004faf175867349495b",
+      "relocations": 1,
+      "schemaVersion": "tcrn.workspace-relocation-inspection.v1",
+      "stage": "vacated",
+      "state": "vacated",
+      "to": [
+        {
+          "canonicalPath": "/srv/tcrn/engine/tcrn-workflow",
+          "kind": "framework"
+        },
+        {
+          "canonicalPath": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+          "kind": "workspace"
+        },
+        {
+          "canonicalPath": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/transient",
+          "kind": "transient"
+        },
+        {
+          "canonicalPath": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/evidence-locator",
+          "kind": "evidence-locator"
+        },
+        {
+          "canonicalPath": "/srv/tcrn/governance/tcrn-workspace/release-trust",
+          "kind": "release-trust"
+        }
+      ],
+      "unmovedRoots": [],
+      "vacateCommitmentSha256": "5a986e33255d422d748720456a64d66f61e0c4e26dbaca8972b926aac5e80c23",
+      "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85"
+    },
+    "targetRaw": {
+      "activeWorkspaceRoot": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+      "address": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+      "at": "2026-07-29T18:20:53Z",
+      "basis": {
+        "controlManifestSha256": "cd2812a6da5cc758df5affa059eb45bbcf3812ac1d015d01dc9f7968b5737783",
+        "headEventHash": "bac1be0758ab439beffc848f8300fa04a3e853c59b66ac137a77467093bd5107",
+        "version": 817
+      },
+      "from": [
+        {
+          "canonicalPath": "<local-home>/.tcrn-workflow/tcrn-workflow",
+          "kind": "framework"
+        },
+        {
+          "canonicalPath": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace",
+          "kind": "workspace"
+        },
+        {
+          "canonicalPath": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/transient",
+          "kind": "transient"
+        },
+        {
+          "canonicalPath": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/evidence-locator",
+          "kind": "evidence-locator"
+        },
+        {
+          "canonicalPath": "<local-platform-root>/.tcrn-workspace/release-trust",
+          "kind": "release-trust"
+        }
+      ],
+      "ledgerEntriesRemaining": 14,
+      "nearMissDestination": false,
+      "observedAt": "2026-07-29T18:23:33Z",
+      "reasonCode": "WORKSPACE_RELOCATION_INSPECTED",
+      "relocationId": "relocation:bba03004faf175867349495b",
+      "relocations": 2,
+      "schemaVersion": "tcrn.workspace-relocation-inspection.v1",
+      "stage": "adopted",
+      "state": "live",
+      "to": [
+        {
+          "canonicalPath": "/srv/tcrn/engine/tcrn-workflow",
+          "kind": "framework"
+        },
+        {
+          "canonicalPath": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+          "kind": "workspace"
+        },
+        {
+          "canonicalPath": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/transient",
+          "kind": "transient"
+        },
+        {
+          "canonicalPath": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/evidence-locator",
+          "kind": "evidence-locator"
+        },
+        {
+          "canonicalPath": "/srv/tcrn/governance/tcrn-workspace/release-trust",
+          "kind": "release-trust"
+        }
+      ],
+      "unmovedRoots": [],
+      "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85"
+    }
+  },
+  "newAnchor": {
+    "reasonCode": "SNAPSHOT_VERIFIED",
+    "takenAt": "the new address, by the VM engine",
+    "manifestFiles": 20,
+    "snapshotVerify": {
+      "vmByteCopy": "SNAPSHOT_VERIFIED",
+      "vmLiveTree": "SNAPSHOT_VERIFIED",
+      "offHostPulledCopyVerifiedByThisMachine": "SNAPSHOT_VERIFIED"
+    },
+    "correctionMade": "the first pass pointed --root at <root>/.tcrn-workflow and got SNAPSHOT_MISMATCH naming '.tcrn-workflow'. That flag takes the WORKSPACE root; it was a wrong invocation level, not a byte difference — the same run reconciled 20 control files and 613 receipts in both directions with 0 mismatched and equal fileSetDigests. Both readings kept.",
+    "farEndDirection": "VM -> this machine, INVERTED from the pre-relocation cadence. After the hop a pair whose only copy sits on the host that wrote the bytes proves the machine agrees with itself, which is exactly the failure the arrangement exists to avoid, pointing the other way.",
+    "offHostReconciliation": {
+      "chain": {
+        "compared": 20,
+        "mismatched": 0,
+        "fileSetDigest": {
+          "local": "33338687715d079cb7c32ba6cc9de06dac7c10eba13399ebab0900182b354197",
+          "remote": "33338687715d079cb7c32ba6cc9de06dac7c10eba13399ebab0900182b354197"
+        }
+      },
+      "attestations": {
+        "compared": 613,
+        "mismatched": 0,
+        "fileSetDigest": {
+          "local": "1f145a6da230dba72a583e080e84f4ef858133c15dfc3f2241620b3cb6efd371",
+          "remote": "1f145a6da230dba72a583e080e84f4ef858133c15dfc3f2241620b3cb6efd371"
+        }
+      }
+    },
+    "persistedOffHost": "copied out of the session scratchpad into a durable location BESIDE the paired-backup destination (not inside it, so the retention rotation cannot age it out)",
+    "fastRestorePathOnTheVm": "/srv/tcrn/relocation-staging-story131/anchor-<stamp> — deliberately NOT the proof, because it lives on the host that wrote it",
+    "whatThisIsNot": {
+      "reasonCode": "PAIRED_BACKUP_NOT_TAKEN",
+      "why": "scripts/paired-backup.mjs resolves the platform root, partition root, engine root and domain store from THIS machine's filesystem, and its only remote modes assume the chain is here and the VM is the far end — the direction this relocation inverts",
+      "theHalfGenuinelyMissing": "the DOMAIN half. The domain store did NOT relocate; only the chain did. Domain annotations are keyed by chain record ids and the paired ruling exists because the two are only useful together — they now sit on DIFFERENT HOSTS, so no run of that script can currently pair them at one instant. This needs a ruling before the paired cadence resumes."
+    }
+  },
+  "localState": {
+    "state": "vacated",
+    "stage": "vacated",
+    "relocationId": "relocation:bba03004faf175867349495b",
+    "notDeleted": true,
+    "disposition": "MIN-012 demotes this tree to an export archive; S133 handles ARCHIVED.md and the rest. This run confirmed it and removed nothing.",
+    "controlFiles": 20,
+    "eventSegments": 13,
+    "eventSegmentsChanged": 0,
+    "filesChangedAcrossTheWholeSession": [
+      ".tcrn-workflow/knowledge/store.json",
+      ".tcrn-workflow/knowledge/views/index.json",
+      ".tcrn-workflow/workspace.json"
+    ],
+    "whyEachChanged": {
+      "workspace.json": "the vacate appended its relocation ledger entry",
+      "knowledge/store.json": "knowledge-rebase moved the high-water mark to the chain head",
+      "knowledge/views/index.json": "the same rebase re-emitted the knowledge view index"
+    },
+    "integrity": "all 13 event segments are byte-identical to the reading taken before any verb ran"
+  },
+  "scope": {
+    "partitionsMoved": [
+      "TCRN-AOS"
+    ],
+    "partitionsUntouched": [
+      "cross-project",
+      "TCRN-Design-System",
+      "TCRN-TMS"
+    ],
+    "enforcement": "the driver carries an allow-list predicate naming exactly the AOS source and destination workspace paths; a mutating verb aimed at any other path is refused before the engine sees it",
+    "sharedRootsNotPhysicallyMoved": "the framework root and release-trust root on this machine were NOT moved — the other three partitions still point at them and still work. AOS's relocation declared DIFFERENT destination paths for its own copies of those roots.",
+    "ledgerBudget": {
+      "entriesRemainingAtSource": 15,
+      "entriesRemainingAtTarget": 14,
+      "spentByThisHop": 1,
+      "note": "the cap is spent by ATTEMPTS and there is no compaction verb"
+    }
+  },
+  "reclaim": {
+    "vmStagingRemoved": [
+      "tools",
+      "mirror",
+      "control",
+      "authority"
+    ],
+    "vmStagingRetained": "the anchor byte copy only",
+    "authorityMaterialOnTheVm": "none — the adopt authority was deleted immediately after the adopt",
+    "vmEngineProcesses": 0,
+    "localSshResidue": 0,
+    "localTcrnWorkflowMcpProcess": "one, PID owned by the platform's registered MCP server in .mcp.json — a tool-registered daemon with an owner, not this ceremony's leak",
+    "worktreesCreated": 0
+  },
+  "risks": [
+    {
+      "id": "R1",
+      "severity": "high",
+      "title": "release-trust travelled EMPTY and gate-transition is not operable at the new address",
+      "detail": "The shared release-trust root holds exactly one file, gate-identity-authority.json. The standing boundary for this VM is that no authority material travels, and whether that file counts has never been ruled. I created the destination release-trust directory EMPTY rather than resolve an unruled question by default. Consequence, stated plainly: the relocated chain is fully operable for reads and ordinary writes, but gate-transition at the new address has no identity authority to verify against. Someone must rule on placing that file before the first gate is transitioned on the VM."
+    },
+    {
+      "id": "R2",
+      "severity": "high",
+      "title": "the domain store and the chain now live on different hosts",
+      "detail": "Only the chain relocated. The domain store stayed on this machine, and its annotations are keyed by chain record ids. The paired-backup ruling exists precisely because the two halves are only useful together; there is currently no path that snapshots them at one instant, so the paired cadence is broken until the domain store's home is ruled."
+    },
+    {
+      "id": "R3",
+      "severity": "high",
+      "title": "the engine deploy recipe still points the wrong way",
+      "detail": "deploy/aos-engine-host/apply.mjs converges the VM's engine tree with rsync --delete FROM this machine's governed copy. That was correct while this machine held the truth. It no longer is: a downgrade or a dirty tree here would now silently reshape the host that owns the chain, and --delete would remove anything the VM side had that this side lacks. Carried over from the STORY-129 prep as R2 and still not re-ruled."
+    },
+    {
+      "id": "R4",
+      "severity": "medium",
+      "title": "root login is the real access boundary",
+      "detail": "The destination roots are 0700, but the operator reaches this host as root over ssh, so the mode narrows the surface against co-resident services and not against the login performing the work. I created the roots root:root 0700 — tighter than the prep's planned ryanlan:staff against other workloads — and deliberately did NOT apply the ownership plan, because ownership is the second question MIN-012 has not been asked."
+    },
+    {
+      "id": "R5",
+      "severity": "medium",
+      "title": "the truth root shares the root filesystem with every other VM workload",
+      "detail": "/srv/tcrn is not its own mount; it is the root ext4 LV that k3s and its container storage also occupy. There is no quota and no isolation between a runaway workload filling the disk and the chain's ability to append. Admissible is not durable."
+    },
+    {
+      "id": "R6",
+      "severity": "medium",
+      "title": "the off-host anchor is a byte copy, not a governed pair",
+      "detail": "It reconciles per-file in both directions and this machine's own engine answers SNAPSHOT_VERIFIED against a manifest it did not produce, which is a real far-end check. It is still not what the paired-backup ruling asks for, and should not be described as one."
+    },
+    {
+      "id": "R7",
+      "severity": "low",
+      "title": "the close-out proves no double-live for TWO ADDRESSES, not for the relocationId",
+      "detail": "ADR 0003 ceiling 4. One adopt permit presented at the same destination path on N hosts yields N live authorities, and this same comparison would be green at every one of them. The evidence wording is held to that."
+    },
+    {
+      "id": "R8",
+      "severity": "low",
+      "title": "three partitions still hold the old shape",
+      "detail": "cross-project, TCRN-Design-System and TCRN-TMS were untouched by design. Until they move or are ruled to stay, the platform runs a split arrangement whose operating rules are not written down anywhere."
+    }
+  ],
+  "honestNotes": [
+    "I did not obtain INSTALLED_COPY_VALIDATED. The trusted bootstrap's verify-installed-copy was run four ways and never succeeded: with = separators it returns INVOCATION_INVALID (the parser takes space-separated pairs), with the engine directory as --installed-dir it returns INPUT_TOO_LARGE (it reconstructs an archive from the directory and the tree carries 28M of node_modules), and with the live/ directory it returns IDENTITY_MISMATCH. I could not locate the installed skill copy the verb actually wants within a sane search budget. What I have instead is weaker and I am not dressing it up: the engine I drove is at tag v0.9.0, commit 729cd045…, clean working tree, and both hosts report 0.9.0. That is a version check, not the identity validation the convention asks for. The rehearsal recorded the same gap, so this is now two consecutive sessions on the real chain without it.",
+    "Two of my own steps went red for reasons that had nothing to do with the chain, and both would have been easy to wave through. The write-face probes sent flags those verbs do not define and came back CLI_ARGUMENT_UNKNOWN — which proves nothing about whether a vacated workspace accepts writes. The anchor's snapshot-verify pointed --root one level too deep and came back SNAPSHOT_MISMATCH naming '.tcrn-workflow'. I rebuilt both against the engine's own contracts and re-ran rather than reinterpreting the red, and both readings are kept in this file.",
+    "I nearly shipped a meaningless digest. An early attempt to fingerprint the event segments piped find into xargs shasum; the partition path contains a space, every file was split into two nonexistent arguments, and the pipeline happily digested a wall of error messages into a clean-looking 64-hex value. Every ledger in this run is computed in node instead.",
+    "The rehearsal's matrix ingest would have failed on the real chain and that is worth naming rather than quietly routing around: it calls `export` for the whole document, and this partition exceeded the engine's one-MiB canonical ceiling long before today. The pre-switch live proof records that refusal verbatim. I used live-mirror-ingest.mjs and the paged event-list surface instead. A runbook written from the rehearsal alone would send an operator into INPUT_OVERSIZED and it would look like the relocation broke something.",
+    "The sole-writer freeze is not something I could enforce by declaration — other actors can write this chain and I have no lock over them. What actually held is --expected-version 817 on the vacate: had anything appended between the plan and the vacate, it would have failed closed. I am recording the mechanism rather than the promise, and the chain did in fact sit at 817 throughout.",
+    "release-trust arriving empty is a decision I made, not a step that happened to me. The alternative was to copy gate-identity-authority.json to a host whose standing boundary says no authority material travels, resolving an explicitly unruled question by default and in the more permissive direction. Empty is reversible in one command; a copied authority file is not un-copied.",
+    "The consistency matrix's A side is rebuilt from the F side's own paged read. R1 and R3 therefore measure that the mirror faithfully carries what the chain holds — they are not a second independent witness of the chain. That is the same shape as the pre-switch live matrix, so the strength comparison is apples to apples, but neither should be read as two independent derivations of the truth.",
+    "The two-sided close-out is green and its ceiling is narrow. It says these two addresses are not both live. It does not say this relocationId has no fork anywhere, and the wording in twoSidedCloseout.ceiling is deliberate rather than decorative.",
+    "The --at instants I passed are this machine's wall clock. The engine takes them as caller declarations and never measures them; the close-out deliberately used one shared instant so the two documents are comparable.",
+    "This hop permanently consumed one of sixteen ledger entries. The source now reports 15 remaining and the target 14 — that asymmetry is by construction, because the adopt entry is written into the copy and never travels back. Ledger lengths are the one term the close-out must NOT compare.",
+    "Nothing was committed. The evidence file is written but left uncommitted as instructed, and no worktree was created in any repository."
+  ]
+}

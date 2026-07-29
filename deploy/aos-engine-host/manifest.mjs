@@ -1,12 +1,19 @@
 // TCRN AOS — declarative manifest for the engine copy on the platform dev VM.
 //
 // What this is: the single statement of what /srv/tcrn/engine/tcrn-workflow on
-// tcrn-platform-dev must contain — the local governed engine copy at v0.8.0,
+// tcrn-platform-dev must contain — the local governed engine copy at v0.9.0,
 // minus node_modules and .git. What it deliberately is not: an authority supply.
 // No pins, no operator bundle, no supply material of any kind travels with this
 // manifest; the VM copy can read and answer `commands`, and it can host scratch
 // workspaces, but it holds nothing that would let it act with the Mac copy's
 // authority. Supplying that is a separate, separately-ruled step (EPIC-034-S120).
+//
+// v0.9.0 (TCRN-AOS-MIN-012 preparation, STORY-129): the engine gains the governed
+// relocation verb family — relocation-plan / -vacate / -adopt / -abort / -inspect.
+// Those verbs are what a future move of the chain onto this host would run on the
+// receiving side, so the version this manifest names is now chosen for capability,
+// not only for parity. Naming two of them in requiredVerbs makes "the VM can host
+// the receiving half" a checked predicate rather than an inference from a count.
 //
 // node_modules is excluded because the built dist imports nothing but node:
 // builtins (verified before this manifest was written: the catalog answers
@@ -44,8 +51,8 @@ export const manifest = {
     // The anchor is the release tag, checked three ways before a single byte
     // moves: package.json says this version, HEAD carries this tag, and the
     // working tree is clean. A dirty tree would make "v0.8.0 tag anchor" a lie.
-    requiredVersion: "0.8.0",
-    requiredTag: "v0.8.0",
+    requiredVersion: "0.9.0",
+    requiredTag: "v0.9.0",
   },
 
   transfer: {
@@ -65,18 +72,21 @@ export const manifest = {
   },
 
   verification: {
-    // What the far copy must answer to count as the same engine. 96 is the
-    // cli-availability verb count of v0.8.0 (the catalog also carries 2
+    // What the far copy must answer to count as the same engine. 101 is the
+    // cli-availability verb count of v0.9.0 (the catalog also carries 2
     // fixture-only entries, recorded but not part of the operator surface).
+    // v0.8.0 answered 96; the five added entries are the relocation family.
     // These are real predicates: a different engine version red-flags here.
     catalogReasonCode: "CLI_CATALOG_READY",
-    cliVerbCount: 96,
-    remoteVersion: "0.8.0",
+    cliVerbCount: 101,
+    remoteVersion: "0.9.0",
     // Named verbs the far catalog must actually carry. A count alone would be
-    // satisfied by any 96 verbs; event-list is the capability this upgrade from
-    // v0.7.0 exists to put on the VM, so it is checked by name rather than
-    // inferred from the total moving by one.
-    requiredVerbs: ["event-list"],
+    // satisfied by any 101 verbs. event-list is why v0.7.0 → v0.8.0 happened;
+    // relocation-adopt and relocation-inspect are why v0.8.0 → v0.9.0 happens —
+    // adopt is the receiving verb a move would run here, inspect is how this host
+    // would be interrogated about a relocation in flight. Checked by name, and by
+    // availability with it: a fixture-only entry is not a verb the VM can run.
+    requiredVerbs: ["event-list", "relocation-adopt", "relocation-inspect"],
     // Digest ledger serialization follows the paired-backup/export-manifest
     // precedent: sha256 over "path sha256" lines joined by newline.
     fileSetDigestForm: "sha256(lines of `<path> <sha256>` joined by \\n)",
@@ -88,7 +98,7 @@ export const manifest = {
   // not authority, not independence of the two copies.
   trust: {
     statement:
-      "the VM copy is byte-identical to the local governed copy (v0.8.0 tag anchor for "
+      "the VM copy is byte-identical to the local governed copy (v0.9.0 tag anchor for "
       + "tracked source, digest ledger for the whole shipped set including dist); no claim "
       + "stronger than that comparison is made",
     pinsTransferred: false,
