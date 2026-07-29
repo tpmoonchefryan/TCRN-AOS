@@ -47,6 +47,20 @@ export {
 } from "./domain-store.js";
 export { SafeWriteSurface, WriteRefused, ChainWriteLogFailed, CEREMONIAL_WRITES, type WriteContext } from "./write-surface.js";
 export {
+  assembleEventPages,
+  readAllEvents,
+  EventPagingError,
+  EVENT_PAGE_OVERSIZED,
+  type AssemblyAssertion,
+  type ChainAnchor,
+  type EventPageReceipt,
+  type EventPageRecord,
+  type PagedReadProof,
+  type PageReader,
+  type ReadAllEventsOptions,
+  type WindowStep
+} from "./event-paging.js";
+export {
   EventMirrorStore,
   EventMirrorError,
   loadEngineProtocol,

@@ -1,4 +1,5 @@
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
+import { StringDecoder } from "node:string_decoder";
 
 /**
  * A read-only client for the governed Workflow MCP facade.
@@ -41,6 +42,23 @@ interface PendingCall {
 export class ChainClient {
   private child: ChildProcessWithoutNullStreams | undefined;
   private buffer = "";
+  /**
+   * Stateful UTF-8 decode across stdout chunks (TCRN-AOS, STORY-114).
+   *
+   * `chunk.toString("utf8")` decodes each chunk in isolation. Node splits a
+   * pipe read at 64 KiB regardless of character boundaries, so any multi-byte
+   * character straddling that boundary was decoded as two truncated halves and
+   * came out as U+FFFD — silently, in the middle of an otherwise valid JSON
+   * reply. Caught on the live AOS chain: a `event-list` page of 64 events
+   * turned one 的 into a replacement character, which the engine's own
+   * `validateEventChain` then refused as EVENT_CHAIN_CORRUPT because the
+   * payload no longer hashed to its recorded payloadHash. Small replies never
+   * exceeded one chunk, which is why every earlier read looked clean.
+   *
+   * `StringDecoder` holds an incomplete trailing sequence back until the bytes
+   * that finish it arrive. It is the fix for the class, not for the one page.
+   */
+  private readonly decoder = new StringDecoder("utf8");
   private nextId = 1;
   private readonly pending = new Map<number, PendingCall>();
   private readonly timeoutMs: number;
@@ -156,7 +174,7 @@ export class ChainClient {
   }
 
   private consume(chunk: Buffer): void {
-    this.buffer += chunk.toString("utf8");
+    this.buffer += this.decoder.write(chunk);
     let newline = this.buffer.indexOf("\n");
     while (newline >= 0) {
       const line = this.buffer.slice(0, newline).trim();
