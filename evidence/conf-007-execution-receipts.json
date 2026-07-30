@@ -1,0 +1,55 @@
+{
+ "schemaVersion": "aos.conference-execution-receipts.v1",
+ "conferenceKey": "TCRN-AOS-CONF-007",
+ "mode": "multi-agent-deliberative",
+ "collector": "orchestrator-self-recorded (agent:fable); no trusted collector exists (engine EPIC-020 pending) — binding proves consistency, never authenticity",
+ "workflowRunId": "wf_bd07ba15-0f1",
+ "capturedAt": "2026-07-28T12:45:57Z",
+ "reconstruction": "positions >2048B are recorded as sequential chain positions POS-C007-<AGENT>-1 and POS-C007-<AGENT>-1-2; each part body starts with a marker line \"n/N\"; strip the marker line of every part and join the remainders with a single \n to reconstruct the full text whose sha256 is outputDigest",
+ "receipts": [
+  {
+   "positionKeys": [
+    "POS-C007-MINERVA-1",
+    "POS-C007-MINERVA-1-2"
+   ],
+   "actorId": "profile:tcrn-minerva-v1",
+   "subagentLabel": "seat:minerva",
+   "freshContext": true,
+   "outputDigest": "79ddfa3b51a9637a17c6384245b15474b2cde4d880f4a6f6940831dbd21ae591",
+   "outputBytes": 2772
+  },
+  {
+   "positionKeys": [
+    "POS-C007-VERITY-1",
+    "POS-C007-VERITY-1-2"
+   ],
+   "actorId": "profile:tcrn-verity-v1",
+   "subagentLabel": "seat:verity",
+   "freshContext": true,
+   "outputDigest": "26bdc7926013310cf66173ea8f8e34149c095988720e9fc6b75ecc2a09274d26",
+   "outputBytes": 2991
+  },
+  {
+   "positionKeys": [
+    "POS-C007-SABLE-1",
+    "POS-C007-SABLE-1-2"
+   ],
+   "actorId": "profile:tcrn-sable-v1",
+   "subagentLabel": "seat:sable",
+   "freshContext": true,
+   "outputDigest": "1000176d422c52acd791297b38fae583931842b6d7a4d18b2489b347188fd1a3",
+   "outputBytes": 2844
+  },
+  {
+   "positionKeys": [
+    "POS-C007-MARA-1",
+    "POS-C007-MARA-1-2"
+   ],
+   "actorId": "profile:tcrn-mara-v1",
+   "subagentLabel": "seat:mara",
+   "freshContext": true,
+   "outputDigest": "af7689e7698547f54b20b2fa31a94bb7e8a845c8f4da00761884e86c6e2cc638",
+   "outputBytes": 2880
+  }
+ ]
+}
