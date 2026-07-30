@@ -118,7 +118,7 @@
     "awayHost": "tcrn-platform-dev",
     "awayWorkspaceFromManifest": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
   },
-  "observedAt": "2026-07-30T03:28:40Z",
+  "observedAt": "2026-07-30T03:34:30Z",
   "probeVm": true,
   "observations": {
     "TCRN-AOS": {

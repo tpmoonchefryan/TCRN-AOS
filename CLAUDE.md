@@ -21,8 +21,10 @@ sentence:
 <!-- TOPOLOGY-CLAIMS:END -->
 
 `home` is `vm`, meaning host `tcrn-platform-dev`. The chain's sidecars sit beside it:
-`attestations/` is the workspace root's **sibling** (the engine refuses an attest-dir
-inside the workspace), and `release-trust/` is one level above the partition. The engine
+`attestations/` is the workspace root's **sibling** inside the partition directory (the
+engine refuses an attest-dir inside the workspace itself), and `release-trust/` is a
+sibling of the **partition** directory, one level further out — verified 2026-07-30 by
+listing the container, which holds exactly those two entries. The engine
 serving that chain is at `/srv/tcrn/engine/tcrn-workflow` — **`v0.9.0` as measured
 2026-07-30**, and that number is a staleness hint for this file, not an authority; ask
 its own `commands` catalogue.
