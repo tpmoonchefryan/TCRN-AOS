@@ -1,0 +1,353 @@
+{
+  "schemaVersion": "aos.paired-backup-new-topology.v1",
+  "incident": "TCRN-AOS-INC-045",
+  "ok": true,
+  "startedAt": "2026-07-30T00:31:57Z",
+  "topology": {
+    "chain": {
+      "host": "tcrn-platform-dev",
+      "path": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+    },
+    "attestations": {
+      "host": "tcrn-platform-dev",
+      "path": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+      "relation": "sibling of the workspace root, never inside it"
+    },
+    "domainStore": {
+      "host": "tcrn-platform-dev",
+      "path": "/srv/tcrn/aos-cockpit/data/domain.db"
+    },
+    "engine": {
+      "host": "tcrn-platform-dev",
+      "path": "/srv/tcrn/engine/tcrn-workflow"
+    },
+    "primaryPairs": {
+      "host": "tcrn-platform-dev",
+      "path": "/srv/tcrn/backups/pairs"
+    },
+    "offsitePairs": {
+      "host": "operator-machine",
+      "hostDigest": "5b46ee132b91d73ed3429b5a0a85814a8bb1de11bc025a21a9da4f7e0ba3d78b",
+      "path": "<local-home>/OneDrive/Github/tcrn-aos-paired-backups"
+    }
+  },
+  "steps": [
+    {
+      "name": "local-judging-surface-present",
+      "ok": true,
+      "reasonCode": "OFFSITE_HOST_CAN_JUDGE",
+      "engine": "<local-platform-root>/tcrn-workflow",
+      "remedy": "pnpm build (the off-site re-proof needs this repository's compiled DomainStore)"
+    },
+    {
+      "name": "the-retired-local-take-refuses",
+      "ok": true,
+      "reasonCode": "topology_relocated_this_mode_is_retired",
+      "exitCode": 1,
+      "chainEngineReasonCode": "WORKSPACE_RELOCATION_VACATED",
+      "domainArchiveSentinelPresent": true,
+      "remedyItNames": "node deploy/aos-resident-cockpit/paired-backup.mjs",
+      "why": "本机两半都还在原地(链已 vacated、库有归档哨兵),所以旧路径若不拒绝,就会产出一对每个文件都完好、两半都已死的「配对」"
+    },
+    {
+      "name": "pair-taken-on-the-host-holding-both-halves",
+      "ok": true,
+      "reasonCode": "PAIR_TAKEN_ON_ONE_HOST",
+      "host": "tcrn-platform-dev",
+      "pairedAt": "2026-07-30T00:31:58Z",
+      "pairDirectory": "/srv/tcrn/backups/pairs/2026-07-30T00-31-58Z",
+      "programSha256": "dc0fc87eeb6695b034b7c8513d94c84f8eb1e97f63b4ed22b4f6a5ba37f1b7fa",
+      "programRanAs": "bytes streamed over ssh stdin; no deployed copy exists to drift from the committed file",
+      "lockstep": {
+        "ok": true,
+        "chainHeadEventHash": "5200f632156f05efdeaf9df6b2c5c234cd427b2de8b17c8184223101a8c1b0fa",
+        "knowledgeHighWaterDigest": "5200f632156f05efdeaf9df6b2c5c234cd427b2de8b17c8184223101a8c1b0fa",
+        "knowledgeVersion": 15,
+        "remedy": null
+      },
+      "halves": {
+        "chain": {
+          "host": "tcrn-platform-dev",
+          "path": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+          "live": true,
+          "engineReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+          "headEventHash": "5200f632156f05efdeaf9df6b2c5c234cd427b2de8b17c8184223101a8c1b0fa",
+          "version": 838,
+          "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+          "askedOf": "the engine, on the host holding the chain — a vacated address answers WORKSPACE_RELOCATION_VACATED"
+        },
+        "domain": {
+          "host": "tcrn-platform-dev",
+          "path": "/srv/tcrn/aos-cockpit/data/domain.db",
+          "live": true,
+          "present": true,
+          "archiveSentinelPresent": false,
+          "askedOf": "the archive sentinel beside the file — its presence means this store is an archive, not the store the cockpit writes"
+        }
+      },
+      "chainReasonCode": "SNAPSHOT_VERIFIED",
+      "domainIntegrityCheck": {
+        "ok": true,
+        "result": "ok"
+      },
+      "liveStoreIntegrityCheck": {
+        "ok": true,
+        "result": "ok"
+      },
+      "liveStoreBytes": {
+        "sha256Before": "40ac6bcae6a9531b155395abe20dbc1246d0afe9d9c98c4ebd27870f9c515660",
+        "sha256After": "40ac6bcae6a9531b155395abe20dbc1246d0afe9d9c98c4ebd27870f9c515660",
+        "unchangedAcrossThisRun": true,
+        "enforced": false,
+        "note": "备份不该改动它所拷贝的东西;但座舱是活的,同期一笔真实写入看起来一样,故只报不拦"
+      },
+      "counts": {
+        "annotations": 3,
+        "comments": 1,
+        "relations": 0,
+        "chainWriteLog": 10
+      },
+      "restoreDrill": {
+        "ok": true,
+        "replayedInto": "a fresh store in the system temp directory, removed after the drill",
+        "judges": [
+          "the store's own exportAll re-read",
+          "raw COUNT(*) per table on the rebuilt file"
+        ],
+        "counts": {
+          "annotations": {
+            "exported": 3,
+            "restored": 3,
+            "restoredSqlCount": 3
+          },
+          "comments": {
+            "exported": 1,
+            "restored": 1,
+            "restoredSqlCount": 1
+          },
+          "relations": {
+            "exported": 0,
+            "restored": 0,
+            "restoredSqlCount": 0
+          },
+          "chainWriteLog": {
+            "exported": 10,
+            "restored": 10,
+            "restoredSqlCount": 10
+          }
+        },
+        "notClaimed": "this proves the export REBUILDS a store; it does not perform a restore of the live one"
+      }
+    },
+    {
+      "name": "primary-pair-judged-on-the-vm",
+      "ok": true,
+      "reasonCode": "PAIR_BOUND_AND_BOTH_HALVES_PROVEN",
+      "checks": {
+        "chainHalfLive": true,
+        "domainHalfLive": true,
+        "oneHost": true,
+        "coInstant": true,
+        "domainSnapshotDigest": true,
+        "domainExportDigest": true,
+        "chainManifestDigest": true,
+        "crossReference": true,
+        "attestationSetDigest": true,
+        "chainVerified": true,
+        "restoreDrilled": true
+      },
+      "hosts": {
+        "chain": "tcrn-platform-dev",
+        "domain": "tcrn-platform-dev"
+      },
+      "pairedAt": "2026-07-30T00:31:58Z",
+      "binding": "同刻 + 互指摘要;时间戳不是绑定——同一秒写下的两个文件仍不证明它们属于同一对",
+      "readTwice": "the take wrote the digests; this step recomputed them from the bytes on disk and re-ran snapshot-verify",
+      "chainVerifyReasonCode": "SNAPSHOT_VERIFIED"
+    },
+    {
+      "name": "offsite-copy-arrived-whole",
+      "ok": true,
+      "reasonCode": "OFFSITE_FILE_SET_EQUAL",
+      "compared": 661,
+      "fileSetDigest": {
+        "primary": "3a264b97b87febb8e4466e2523ddb192462dfa711c67221285488a412168dc45",
+        "offsite": "3a264b97b87febb8e4466e2523ddb192462dfa711c67221285488a412168dc45"
+      },
+      "missingFromOffsite": [],
+      "extraOnOffsite": [],
+      "mismatched": [],
+      "predicate": "两侧各用自己的工具对自己的字节算摘要,逐路径全值双向比对;不是「传输命令退出 0」"
+    },
+    {
+      "name": "offsite-pair-reproven-by-a-second-engine",
+      "ok": true,
+      "reasonCode": "PAIR_BOUND_AND_BOTH_HALVES_PROVEN",
+      "checks": {
+        "chainHalfLive": true,
+        "domainHalfLive": true,
+        "oneHost": true,
+        "coInstant": true,
+        "domainSnapshotDigest": true,
+        "domainExportDigest": true,
+        "chainManifestDigest": true,
+        "crossReference": true,
+        "attestationSetDigest": true,
+        "chainVerified": true,
+        "restoreDrilled": true
+      },
+      "hosts": {
+        "chain": "tcrn-platform-dev",
+        "domain": "tcrn-platform-dev"
+      },
+      "pairedAt": "2026-07-30T00:31:58Z",
+      "binding": "同刻 + 互指摘要;时间戳不是绑定——同一秒写下的两个文件仍不证明它们属于同一对",
+      "localDrill": {
+        "ok": true,
+        "counts": {
+          "annotations": {
+            "exported": 3,
+            "restored": 3,
+            "restoredSqlCount": 3
+          },
+          "comments": {
+            "exported": 1,
+            "restored": 1,
+            "restoredSqlCount": 1
+          },
+          "relations": {
+            "exported": 0,
+            "restored": 0,
+            "restoredSqlCount": 0
+          },
+          "chainWriteLog": {
+            "exported": 10,
+            "restored": 10,
+            "restoredSqlCount": 10
+          }
+        },
+        "judges": [
+          "this repository's DomainStore re-read",
+          "raw COUNT(*) per table on the rebuilt file"
+        ]
+      },
+      "chainVerifyReasonCode": "SNAPSHOT_VERIFIED",
+      "why": "远端说它成对是一次读数;本机用自己的引擎与自己的 DomainStore 在自己那份字节上重新判一次,才是第二次"
+    },
+    {
+      "name": "the-unchanged-verifier-still-passes-on-the-pulled-copy",
+      "ok": true,
+      "reasonCode": "LEGACY_VERIFY_STILL_APPLICABLE",
+      "digestsMatch": true,
+      "chainReasonCode": "SNAPSHOT_VERIFIED",
+      "restoreDrillOk": true,
+      "residualApplicability": "scripts/paired-backup.mjs --verify 读的是一个配对目录,与两半住在哪台机器无关——故逐字保留"
+    },
+    {
+      "name": "offsite-leg-judged",
+      "ok": true,
+      "reasonCode": "OFFSITE_COPY_ARRIVED_AND_WAS_REPROVEN",
+      "differentHost": true,
+      "primaryHost": "tcrn-platform-dev",
+      "offsiteHost": "operator-machine",
+      "fileSetDigest": {
+        "local": "3a264b97b87febb8e4466e2523ddb192462dfa711c67221285488a412168dc45",
+        "remote": "3a264b97b87febb8e4466e2523ddb192462dfa711c67221285488a412168dc45"
+      },
+      "discrepancies": {
+        "missing": [],
+        "extra": [],
+        "mismatched": []
+      },
+      "offsiteReasonCode": "PAIR_BOUND_AND_BOTH_HALVES_PROVEN",
+      "direction": "pull, initiated by the machine that holds the credential",
+      "credentialAsymmetry": "unchanged: the VM holds authorized_keys and nothing that can reach this machine"
+    },
+    {
+      "name": "pairing-predicate-driven-red",
+      "scratch": "/srv/tcrn/scratch-inc045-red-25531",
+      "cases": [
+        {
+          "name": "one byte of the domain snapshot flipped",
+          "expectedRed": "PAIR_DOMAIN_DIGEST_MISMATCH",
+          "reasonCode": "PAIR_DOMAIN_DIGEST_MISMATCH",
+          "wentRed": true
+        },
+        {
+          "name": "the manifest says the two halves were read on two different hosts (the INC-045 condition)",
+          "expectedRed": "PAIR_HALVES_ON_DIFFERENT_HOSTS",
+          "reasonCode": "PAIR_HALVES_ON_DIFFERENT_HOSTS",
+          "wentRed": true
+        }
+      ],
+      "reclaimed": true,
+      "ok": true,
+      "reasonCode": "PREDICATE_CAN_FAIL",
+      "why": "没人见过它红过的判据等于没测过的判据;两类红各一次,收尾以路径是否还存在验证回收"
+    },
+    {
+      "name": "unpaired-marking-discipline-released",
+      "ok": true,
+      "retired": true,
+      "reasonCode": "UNPAIRED_DISCIPLINE_MAY_BE_LIFTED",
+      "conditions": {
+        "domainStoreRelocatedBesideTheChain": true,
+        "pairedBackupRewiredAndProven": true,
+        "coInstantPairingDemonstrated": true,
+        "restoreDrilled": true,
+        "offsiteCopyLandedOffTheTruthHost": true
+      },
+      "unmet": [],
+      "discipline": "在配对前提恢复之前,每次备份须如实标注「非配对」(TCRN-AOS-INC-045)",
+      "derivedFrom": "本次运行自己的判词,不是一句声明——上游任一处红,纪律继续生效",
+      "imposedBy": "TCRN-AOS-INC-045 scope: 「在此之前每次备份须如实标注「非配对」」",
+      "criterionText": "域库随 S132 的 VM 常驻座舱迁至 VM、配对备份在新拓扑下重新接线并实证一次同刻配对与恢复演练",
+      "soFrom": "2026-07-30T00:31:58Z",
+      "effect": "此后取的每一对都是真配对,不再需要标注;INC-045 之前取的那些标注保持原样——它们当时是对的"
+    },
+    {
+      "name": "rotated-after-verification",
+      "ok": true,
+      "reasonCode": "ROTATED_OLDEST_FIRST",
+      "primary": {
+        "kept": 5,
+        "deleted": [
+          "2026-07-30T00-19-33Z"
+        ]
+      },
+      "offsite": {
+        "kept": 5,
+        "deleted": [
+          "2026-07-30T00-19-33Z"
+        ]
+      },
+      "rule": "坏备份永远不会成为好备份被删的理由——轮换只在新的一对自证之后跑,且只删它指名的那些"
+    }
+  ],
+  "finishedAt": "2026-07-30T00:32:01Z",
+  "pair": {
+    "pairId": "2026-07-30T00-31-58Z",
+    "pairedAt": "2026-07-30T00:31:58Z",
+    "primary": {
+      "host": "tcrn-platform-dev",
+      "path": "/srv/tcrn/backups/pairs/2026-07-30T00-31-58Z"
+    },
+    "offsite": {
+      "host": "operator-machine",
+      "hostDigest": "5b46ee132b91d73ed3429b5a0a85814a8bb1de11bc025a21a9da4f7e0ba3d78b",
+      "path": "<local-home>/OneDrive/Github/tcrn-aos-paired-backups/2026-07-30T00-31-58Z"
+    },
+    "pairing": {
+      "domainSnapshotDigest": "c10c6e9f13d882129ce1a416db7c7c5466f61fb7550ebbeb26e937406ff3e0c0",
+      "domainExportDigest": "94b21a98bdfe8fb12452c3618a5b444fa3444ecd0fe65146d84150f55b77ac23",
+      "chainManifestDigest": "47ae971587b5accd2aa4bda53c0621341dc9fd2ced52d5e82fe7a82885da60e5",
+      "chainHeadEventHash": "5200f632156f05efdeaf9df6b2c5c234cd427b2de8b17c8184223101a8c1b0fa",
+      "chainVersion": 838,
+      "attestationSetDigest": "73eba1a0219463054c95b368d1ce531ee720a948c8e9ad2138ccbf852d28a13b",
+      "boundBy": "one instant read on one host, plus mutual digests; either half alone is not a restorable pair"
+    },
+    "fileCount": 660,
+    "totalBytes": 1966002,
+    "fileSetDigest": "69816a13972fdba4d385f79326ab3a44d863b8301868bd5efb4cf9fe7c927ec0"
+  }
+}

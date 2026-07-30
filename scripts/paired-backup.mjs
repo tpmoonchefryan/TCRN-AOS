@@ -24,18 +24,31 @@
 // The restore procedure stays operator-driven and same-path-only, per the engine's own
 // runbook (`tcrn-workflow/docs/architecture/backup-restore-runbook.md`).
 //
+// TOPOLOGY, AS OF TCRN-AOS-INC-045 (2026-07-30). Both halves have left this
+// machine: STORY-131 relocated the chain to the VM and STORY-132 moved the domain
+// store after it. Three of the four modes below therefore describe a machine this
+// one no longer is, and they are gated rather than deleted — see
+// `assertModeStillApplies` for the residual-applicability analysis of each.
+//
+// `--verify <pairDir>` is the one mode whose premise never mentioned where the
+// halves live: it re-proves a pair DIRECTORY from its own bytes. It is unchanged,
+// ungated, and it is what the off-site host runs on every pulled copy.
+//
 // Usage:
-//   node scripts/paired-backup.mjs                    # take a paired snapshot
-//   node scripts/paired-backup.mjs --verify <pairDir>  # re-prove an existing pair
-//   node scripts/paired-backup.mjs --push-vm           # push the newest pair to the VM (MIN-007 D9)
-//   node scripts/paired-backup.mjs --verify-remote     # compare the VM copy against local records
+//   node scripts/paired-backup.mjs --verify <pairDir>  # re-prove an existing pair (still current)
+//   node deploy/aos-resident-cockpit/paired-backup.mjs  # take a pair (new topology)
+//
+// Retired, and refused with their reasons:
+//   node scripts/paired-backup.mjs                     # took both halves from THIS machine
+//   node scripts/paired-backup.mjs --push-vm            # pushed the local pair to the VM
+//   node scripts/paired-backup.mjs --verify-remote      # local record as the baseline for the VM copy
 
 import { copyFile, cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
 import { homedir } from "node:os";
-import { basename, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { scrubHostPaths } from "./lib/evidence-hygiene.mjs";
 import { promisify } from "node:util";
 
@@ -785,8 +798,99 @@ async function takePairIfDue(intervalHours) {
   return { skipped: false, due, latestPairedAt: latest };
 }
 
+// ————————————————————————————————————————————————————————————————————————————
+// The topology gate (TCRN-AOS-INC-045)
+// ————————————————————————————————————————————————————————————————————————————
+
+/**
+ * Where the halves this script was written for actually are, asked of the
+ * authority in each case rather than by looking for files.
+ *
+ * The distinction matters because both halves still EXIST here. The vacated
+ * workspace is intact on disk — the relocation deliberately did not delete it —
+ * and so is the archived store beside its sentinel. A guard written as "is there a
+ * control tree here and a database there" would answer yes to both and this script
+ * would go on producing beautifully green pairs of two dead halves, then rotate the
+ * last live one away to make room.
+ *
+ * So the chain is asked of the ENGINE (a relocated address answers
+ * WORKSPACE_RELOCATION_VACATED, which is the relocation working) and the store is
+ * asked of its archive SENTINEL.
+ */
+async function localTopology() {
+  let chainReasonCode = null;
+  let chainLive = false;
+  try {
+    const status = JSON.parse(await engine("status", "--workspace", workspaceRoot));
+    chainReasonCode = status.reasonCode ?? null;
+    chainLive = status.ok !== false;
+  } catch (error) {
+    // Whichever stream carried the answer, not whichever is defined: a refused
+    // governed command exits non-zero with an EMPTY stdout and its reason code on
+    // stderr, and `??` treats the empty string as an answer. Reading it that way
+    // reported ENGINE_UNREACHABLE for an engine that had answered perfectly
+    // clearly — a diagnosis pointing at the network instead of at the relocation.
+    const emitted = [error.stdout, error.stderr]
+      .map((stream) => String(stream ?? "").trim())
+      .find((text) => text.length > 0) ?? "";
+    try {
+      chainReasonCode = JSON.parse(emitted).reasonCode ?? null;
+    } catch {
+      chainReasonCode = emitted.slice(0, 200) || "ENGINE_UNREACHABLE";
+    }
+  }
+  const sentinelPath = join(dirname(domainDatabasePath), "RELOCATED-TO-VM.json");
+  const sentinel = existsSync(sentinelPath)
+    ? JSON.parse(await readFile(sentinelPath, "utf8"))
+    : null;
+  return {
+    chain: { path: workspaceRoot, live: chainLive, engineReasonCode: chainReasonCode },
+    domain: {
+      path: domainDatabasePath,
+      live: existsSync(domainDatabasePath) && sentinel === null,
+      archiveSentinelPresent: sentinel !== null,
+      liveStore: sentinel?.liveStore ?? null
+    }
+  };
+}
+
+/**
+ * Refuse a mode whose premise this machine no longer satisfies — by name, with the
+ * command that replaces it.
+ *
+ * Deleted would have been the wrong disposition and the convention says why: ask
+ * first whether the old path still holds for some supported host. It does not hold
+ * for AOS, whose two halves are both on the VM now, and there is no second consumer
+ * — this script is AOS-specific (its partition default, its domain store, its
+ * destination are all AOS). But a silent removal would leave the next operator
+ * reading a runbook that names a command which no longer exists, so the modes stay
+ * and answer for themselves. The one mode that is still fully applicable
+ * (`--verify`) is not gated at all.
+ */
+async function assertModeStillApplies(mode) {
+  const topology = await localTopology();
+  if (topology.chain.live && topology.domain.live) return topology;
+  const refusal = {
+    ok: false,
+    reason: "topology_relocated_this_mode_is_retired",
+    mode,
+    incident: "TCRN-AOS-INC-045",
+    topology,
+    why: mode === "take"
+      ? "本机两半都已不在:链于 STORY-131 迁至 VM(此地址已 vacated),域库于 STORY-132 随常驻座舱迁走(归档哨兵在侧)。"
+        + "在这里取「配对」会得到一对都死了的半边,且每个文件都完好——正是 INC-045 要防的那种绿"
+      : "这条腿的前提是「真值在本机、VM 是异地」。真值已在 VM,方向反转为本机拉取;"
+        + "凭据不对称未变(持有凭据的一方发起),故 push/本机为基线的验签都不再适用",
+    remedy: "node deploy/aos-resident-cockpit/paired-backup.mjs",
+    stillApplicable: "node scripts/paired-backup.mjs --verify <pairDir> —— 它读的是一个配对目录,与两半住在哪台机器无关"
+  };
+  console.log(JSON.stringify(refusal, null, 2));
+  process.exit(1);
+}
+
 const verifyFlag = process.argv.indexOf("--verify");
 if (process.argv.includes("--push-vm")) {
+  await assertModeStillApplies("push-vm");
   const directory = await newestPairDirectory();
   if (!directory) {
     console.error(JSON.stringify({ ok: false, error: "no pair with a readable pair-manifest.json to push" }));
@@ -798,6 +902,7 @@ if (process.argv.includes("--push-vm")) {
   console.log(JSON.stringify(receipt, null, 2));
   if (!receipt.ok) process.exitCode = 1;
 } else if (process.argv.includes("--verify-remote")) {
+  await assertModeStillApplies("verify-remote");
   const directory = await newestPairDirectory();
   if (!directory) {
     console.error(JSON.stringify({ ok: false, error: "no local pair to verify the remote copy against" }));
@@ -816,6 +921,7 @@ if (process.argv.includes("--push-vm")) {
   console.log(JSON.stringify(result, null, 2));
   if (!result.ok) process.exitCode = 1;
 } else {
+  await assertModeStillApplies("take");
   const ifDue = process.argv.includes("--if-due");
   if (ifDue) {
     const interval = Number.parseInt(process.env.AOS_BACKUP_INTERVAL_HOURS ?? "24", 10);

@@ -43,6 +43,20 @@ export interface CockpitServiceOptions {
   authorityPins?: string;
   authorityPinsDigest?: string;
   /**
+   * Where the engine writes its time-attestation receipts, outside the workspace
+   * root (the engine refuses an `--attest-dir` that resolves inside it).
+   *
+   * Omitted means the writes this service performs produce no receipt. That was
+   * the shape of every earlier deployment, and it is a gap rather than a
+   * decision: the platform adopted attest-dir time witnessing for AOS chain
+   * writes (INIT-001), the CLI-driven proofs have always supplied it, and this
+   * service — the one process that writes the chain on an operator's behalf —
+   * never did. Stated as an option so a deployment that has an attestation
+   * sidecar can hand it over, and so a deployment without one still starts
+   * rather than pretending the receipts exist.
+   */
+  attestDir?: string;
+  /**
    * Attribution for every write this service performs, on the chain and in the
    * domain store alike. There is no default: an actor is a claim about who acted,
    * and a fallback value would let deployments record that claim without anyone
@@ -147,6 +161,7 @@ export async function startCockpitService(options: CockpitServiceOptions): Promi
       surface = new SafeWriteSurface(chain, {
         workspacePath,
         actor,
+        ...(options.attestDir ? { attestDir: options.attestDir } : {}),
         // The replayable write log (STORY-113): one row per engine-acknowledged
         // write, appended to the precious domain store so BK01/BK02 cover it.
         // The switchover anchor is null until a switchover ceremony mints one;
@@ -236,6 +251,10 @@ async function handle(request: IncomingMessage, response: ServerResponse, contex
       // Whether this instance can write to the chain at all, stated rather than
       // discovered at the first click.
       chainWriteAvailable: Boolean(context.options.authorityPins),
+      // Whether the chain writes this instance performs leave a time-attestation
+      // receipt. A boolean, not the path: health is a public-facing document and
+      // the filesystem layout of the attestation sidecar is not its business.
+      attestationReceiptsEnabled: Boolean(context.options.attestDir),
       partitions: Object.keys(context.options.workspaces),
       actor: context.actor
     });

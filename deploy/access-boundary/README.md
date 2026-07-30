@@ -52,33 +52,75 @@ topology running a wrong build).
 The canonical `gate-identity-authority.json` lives with the ceremony terminal
 (the Owner's machine, under the platform workspace's `release-trust/`) and is
 **read-only from this repository's point of view** — no script here writes it.
-Hosts that need to resolve owner gates locally (the VM) hold a *copy*, placed
-and verified by full-value sha256 comparison against the canonical source, with
-`0600` permissions at `/srv/tcrn/governance/gate-identity-authority.json`.
+A host that has to resolve owner gates holds a *copy*, placed and verified by
+full-value sha256 comparison against the canonical source, `0600`, **at the
+governed workspace's own bound `release-trust` root** — and nowhere else on that
+host.
 
-To place (or re-place, idempotently) the copy and prove it:
+### The same file, removed and placed on the same host — both correct
+
+Read this before you conclude one of the two acts was a mistake.
+
+D10's rule has never changed: one canonical source on the ceremony terminal,
+copies by digest, **and only where a consumer exists**. What moved is the
+consumer.
+
+| When | Truth root / ceremony | Correct disposition on the VM |
+| --- | --- | --- |
+| MIN-007 D10 | ceremony on the Owner's machine, two-stage topology still live | copy **placed** at `/srv/tcrn/governance/gate-identity-authority.json` |
+| MIN-011 (direction D) | truth root stays on the Owner's machine; the VM copy has no remaining consumer | copy **removed** — recorded in `evidence/aos-direction-d-disposition.json` → `gateAuthorityRemoval` |
+| TCRN-AOS-INC-044 (now) | AOS truth root relocated to the VM (relocation `adopted`, sequence 2); the ceremony follows the chain | copy **placed** at the workspace's bound release-trust root, `/srv/tcrn/governance/tcrn-workspace/release-trust/` |
+
+The defect INC-044 fixed is precise: the release-trust root relocated to the VM
+**empty**, so `gate-transition` had no authority document at the address the
+workspace itself declares, and the owner-gate ceremony could not be performed at
+the new address at all.
+
+Do **not** read the current placement as reverting the MIN-011 removal, and do
+not recreate the retired path — the recipe asserts that path is still absent
+before it places anything, precisely so the host never holds two authority
+documents.
+
+### Running it
 
 ```
-node deploy/access-boundary/place-gate-authority.mjs           # place + verify
-node deploy/access-boundary/place-gate-authority.mjs --drill   # + owner-gate drill on a VM scratch workspace
+node deploy/access-boundary/place-gate-authority.mjs             # place, verify, red-drill, owner-gate drill
+node deploy/access-boundary/place-gate-authority.mjs --no-drill  # placement and red drill only
 ```
 
 The script:
 
 1. reads the canonical source (read-only) and takes its sha256;
-2. writes the copy on the VM with `umask 077` and `chmod 0600`, then compares
-   the VM's own sha256 of the copy against the canonical digest, full value,
-   and proves the comparison can go red (one flipped remote byte, mismatch
-   observed, copy restored, match re-observed);
-3. with `--drill`, stands up a disposable governed workspace under
-   `/srv/tcrn/scratch-*`, creates an `owner_intent_required` gate, and shows
-   the engine ruling **per the placed copy**: a permitted actor with the
-   correct digest advances past the identity layer; a wrong digest is refused
-   `GATE_IDENTITY_AUTHORITY_DIGEST`; an unpermitted actor is refused
-   `WORKSPACE_GATE_IDENTITY_REFUSED`. The scratch tree is removed and its
-   absence verified.
+2. **derives the destination from the chain's own control record** — the adopted
+   relocation's `release-trust` root in the VM workspace's `workspace.json` —
+   then checks it against a reviewed constant, so a relocation to an unreviewed
+   address fails closed instead of quietly planting an authority somewhere new.
+   It also asserts the MIN-011-removed path is still absent;
+3. writes the copy on the VM with `umask 077` and `chmod 0600`, then compares
+   the VM's own sha256 of the copy against the canonical digest, full value;
+4. proves that comparison can go red at **two** layers — one flipped remote byte
+   makes `sha256sum` disagree, and (in the drill) the same flip makes the VM
+   *engine* refuse a `gate-transition` with `GATE_IDENTITY_AUTHORITY_DIGEST`.
+   The filesystem layer alone only proves `sha256sum` works; the engine layer is
+   the predicate the ceremony actually runs through. The copy is restored and
+   re-verified after each flip;
+5. stands up a disposable governed workspace under `/srv/tcrn/scratch-*`,
+   creates an `owner_intent_required` gate, and shows the engine ruling **per the
+   placed copy at the new address** across four states: wrong digest refused
+   `GATE_IDENTITY_AUTHORITY_DIGEST`; unpermitted actor refused
+   `WORKSPACE_GATE_IDENTITY_REFUSED`; permitted actor + correct digest passing
+   the identity layer (`satisfied` then meets the engine's separate
+   evidence-anchoring rule, `WORKSPACE_GATE_EVIDENCE_UNRESOLVED`); and a
+   `blocked` transition completing as a real write. The scratch tree is removed
+   and its absence verified.
 
-Receipt: `evidence/aos-gate-authority-placement.json`.
+**The live AOS chain is never a target of a mutating verb.** The only verb this
+recipe runs against it is read-only `status`, recorded in the receipt so the
+chain version and head hash before and after are checkable.
 
-If the canonical roster ever changes, re-run the placement script; a stale VM
-copy fails the digest comparison and the receipt refuses to claim placement.
+Receipt: `evidence/aos-gate-authority-at-new-address.json`. The older
+`evidence/aos-gate-authority-placement.json` is kept as history of the
+MIN-007-era placement at the now-retired path; it is not a live claim.
+
+If the canonical roster ever changes, re-run the recipe; a stale VM copy fails
+the digest comparison and the receipt refuses to claim placement.

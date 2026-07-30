@@ -3,41 +3,52 @@
   "destinationRoot": "<local-home>/OneDrive/Github/tcrn-aos-domain-backups",
   "snapshot": {
     "schemaVersion": "aos.domain-backup.v1",
-    "takenAt": "2026-07-27T01-11-22-087Z",
+    "takenAt": "2026-07-29T23-53-09-235Z",
     "source": "<local-home>/.tcrn-aos/domain.db",
     "counts": {
-      "annotations": 1,
+      "annotations": 2,
       "comments": 1,
-      "relations": 0
+      "relations": 0,
+      "chainWriteLog": 1
     },
     "artifacts": {
       "domain.db": {
-        "bytes": 49152,
-        "sha256": "e3c2e0fdcb489925461534e0f4c97bfba39ce5747559e4a107defa955ea2f2ae"
+        "bytes": 69632,
+        "sha256": "ecb716f2afdc9855bd06e1d4382136919a138b17616ba4cb63036716df98b899"
       },
       "domain-export.json": {
-        "bytes": 805,
-        "sha256": "9dc233b1dfa2c8613d89b1e53d22b56b7c974078519331a5614a5ded35a9a524"
+        "bytes": 3974,
+        "sha256": "5a03cf7a7def0a02acce91bb770688bf4a156a7c7f038b78405e86416b31e16a"
       }
     },
     "notClaimed": [
       "this backup covers the cockpit's own store only; the governed chains have their own snapshots",
-      "the projection database is deliberately absent — it is rebuilt from the chains, never restored"
+      "the projection database is deliberately absent — it is rebuilt from the chains, never restored",
+      "the O3 event mirror is deliberately absent (MIN-007: 明确不备) — it is a derived instrument, and a second restorable copy of chain history would be a divergence nobody could adjudicate"
     ]
   },
   "verified": {
     "ok": true,
-    "directory": "<local-home>/OneDrive/Github/tcrn-aos-domain-backups/2026-07-27T01-11-22-087Z",
+    "directory": "<local-home>/OneDrive/Github/tcrn-aos-domain-backups/2026-07-29T23-53-09-235Z",
     "digestsMatch": true,
     "roundTrips": true,
-    "counts": {
-      "annotations": 1,
+    "sqlCounts": {
+      "annotations": 2,
       "comments": 1,
-      "relations": 0
+      "relations": 0,
+      "chainWriteLog": 1
+    },
+    "counts": {
+      "annotations": 2,
+      "comments": 1,
+      "relations": 0,
+      "chainWriteLog": 1
     }
   },
   "rotated": {
-    "kept": 1,
-    "deleted": []
+    "kept": 5,
+    "deleted": [
+      "2026-07-29T23-06-04-162Z"
+    ]
   }
 }

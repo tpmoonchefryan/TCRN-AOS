@@ -1,0 +1,33 @@
+[Unit]
+Description=TCRN AOS operations cockpit (resident write face, loopback only)
+Documentation=file:///srv/tcrn/aos-cockpit/DEPLOYMENT.md
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/tcrn/aos-cockpit/runtime
+ExecStart=/usr/local/bin/node /srv/tcrn/aos-cockpit/runtime/vm-resident-runner.mjs
+User=root
+Environment=AOS_ACTOR=agent:fable
+Environment=AOS_PORT=4318
+Environment=AOS_STATIC_ROOT=/srv/tcrn/aos-cockpit/runtime/web
+Environment=AOS_DOMAIN_DB=/srv/tcrn/aos-cockpit/data/domain.db
+Environment=AOS_WORKSPACE=/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace
+Environment=AOS_ATTEST_DIR=/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations
+Environment=AOS_ENGINE_MCP=/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs
+Environment=AOS_AUTHORITY_PINS=/srv/tcrn/aos-cockpit/authority/operator-authority-pins.json
+Environment=AOS_AUTHORITY_PINS_DIGEST=8126b6c2924fc41474f868236194a1725caf8e11e711b1202eacd686ae289e8d
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+ProtectSystem=full
+ReadWritePaths=/srv/tcrn
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=tcrn-aos-cockpit
+
+[Install]
+WantedBy=multi-user.target

@@ -9,8 +9,9 @@
 // rather than a static build plus a separate API to remember.
 
 import { mkdir } from "node:fs/promises";
+import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { dirname, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 
 const { startCockpitService } = await import(
   resolve(process.cwd(), "dist/apps/cockpit-service/src/service.js"));
@@ -24,6 +25,34 @@ const workspaceFor = (partition) =>
 // store on this platform that cannot be rebuilt.
 const domainDatabasePath = process.env.AOS_DOMAIN_DB
   ?? resolve(homedir(), ".tcrn-aos/domain.db");
+
+// The store this default points at may have been migrated to the VM
+// (TCRN-AOS-STORY-132). The migration leaves the original in place as an archive
+// — deliberately, because it is the one store here that cannot be rebuilt — and
+// drops a sentinel beside it. Starting on the archive would not fail: it would
+// succeed, accept writes, and produce a second lineage of assignees and comments
+// that nothing reads and nobody would notice diverging. So the default is
+// refused while the sentinel is there. An explicit AOS_DOMAIN_DB still works:
+// this is a guard against the default, not a lock on the file.
+if (process.env.AOS_DOMAIN_DB === undefined) {
+  const sentinel = join(dirname(domainDatabasePath), "RELOCATED-TO-VM.json");
+  if (existsSync(sentinel)) {
+    let live = null;
+    try { live = JSON.parse(readFileSync(sentinel, "utf8")).liveStore ?? null; } catch { live = null; }
+    console.error(JSON.stringify({
+      ok: false,
+      error: "the local domain store is an archive: it was migrated to the resident VM cockpit "
+        + "and writing to it here would fork the one store on this platform that cannot be rebuilt.",
+      sentinel,
+      liveStore: live,
+      remedies: [
+        "use the resident cockpit (systemctl status tcrn-aos-cockpit on the VM, reached through ssh -L)",
+        "or state AOS_DOMAIN_DB explicitly to run against some other store on purpose"
+      ]
+    }));
+    process.exit(1);
+  }
+}
 await mkdir(dirname(domainDatabasePath), { recursive: true });
 
 const authorityPins = process.env.AOS_AUTHORITY_PINS

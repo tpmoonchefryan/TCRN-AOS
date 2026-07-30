@@ -183,6 +183,48 @@ test("every work-graph write carries the head sentinel supplied by the surface b
     "decided-by must reach the facade as an array, not a joined string");
 });
 
+test("a configured attestation directory reaches the engine on every chain write, and its absence is visible", async () => {
+  // The two sides of this predicate are the same routes with and without
+  // `attestDir`, observed at the bytes the engine would receive. A service that
+  // ignored the option would make both readings identical — which is exactly the
+  // failure this asserts against, since an ignored attest-dir produces chain
+  // events with no time-attestation receipt and no error anyone sees.
+  const observe = async (options) => {
+    const calls = [];
+    const recorder = {
+      callTool: async (tool, args) => { calls.push({ tool, args }); return { record: { id: "work:x" }, version: 1 }; }
+    };
+    await withService(async ({ service, post }) => {
+      const health = await (await fetch(`${service.url}/api/health`)).json();
+      const created = await post("/api/chain/work", {
+        partitionId: "TCRN-AOS", projectId: "project:p", externalKey: "K-1",
+        kind: "Story", parentId: "work:p", title: "t"
+      });
+      assert.equal(created.status, 200, "the recording client must accept the write");
+      await post("/api/chain/transition", { partitionId: "TCRN-AOS", recordId: "work:x", status: "ready" });
+      await post("/api/chain/enrol",
+        { partitionId: "TCRN-AOS", recordId: "work:x", workspaceId: "workspace:w", trainWorkId: "work:t" });
+      calls.health = health;
+    }, { workspaces: { "TCRN-AOS": "/nowhere" }, chainClient: recorder, ...options });
+    return calls;
+  };
+
+  const withAttest = await observe({ attestDir: "/srv/attestations" });
+  assert.equal(withAttest.health.attestationReceiptsEnabled, true);
+  assert.ok(withAttest.length >= 4, "create + title annotate + transition + enrol");
+  for (const call of withAttest) {
+    assert.equal(call.args["attest-dir"], "/srv/attestations", `${call.tool} must carry the attestation directory`);
+  }
+
+  const withoutAttest = await observe({});
+  assert.equal(withoutAttest.health.attestationReceiptsEnabled, false);
+  assert.equal(withoutAttest.length, withAttest.length, "the same routes were exercised on both sides");
+  for (const call of withoutAttest) {
+    assert.equal(call.args["attest-dir"], undefined,
+      `${call.tool} must not invent an attestation directory the deployment did not state`);
+  }
+});
+
 test("the write face binds 127.0.0.1 and nothing else — the access-boundary tripwire", async () => {
   // MIN-007 D7: the write face stays loopback-only, reached from anywhere else
   // exclusively through an SSH tunnel. This test is the tripwire that ruling
