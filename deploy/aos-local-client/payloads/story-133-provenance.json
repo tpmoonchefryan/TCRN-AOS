@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-STORY-133",
+  "intent": "Record this story's own provenance on the relocated chain from the client machine, and read it back full-value through the host engine.",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:87b63ed4ed40bc9137f7d61a",
+        "scope": "本机退为纯客户端(S133)。交付四件: ①.tcrn-workspace/TCRN-AOS/ 按 MIN-012 只读留存并写 ARCHIVED.md,写明真值地址 workspace:fbc32e3ff874fbbd637a1b85 与 relocation:bba03004faf175867349495b、留存理由、以及回退形状——目的地已 adopt(VM 侧台账 sequence 2 / stage=adopted / 2026-07-29T18:20:53Z),故回退不是 relocation-abort(那是 vacate 未被采纳时的恢复路;此处用它只会造出两个同 workspaceId 的活权威),而是反向一跳 VM→本机;两侧 ledgerEntriesRemaining 不等(14 对 15)是构造使然,故收口判据绝不可比较台账长度。②本机侧治理仪式配方化: deploy/aos-local-client/ 从一处拓扑读出 VM 主机/引擎/工作区/attest-dir/actor(VM 半边自常驻座舱 manifest 导入而非复制),按主机引擎自己的 commands 名录校验载荷,拒绝需一次性供权文件的动词与三个保留旗标;本条注解即经该配方自本机写入,写前现读 --expected-version 作哨兵,写后经 work-show 逐字段全值回读。③零权威生成物判据按分区判定而非笼统扫 .tcrn-workflow: AOS 的活树为红、cross/DS/TMS 本轮合法在本机为绿;纯函数判据 local-purity-predicates.mjs 已入 pnpm test 名册,实机扫描与判决在 local-purity-proof.mjs 已入 pnpm verify。④红证两向皆真跑: 在 scratch 副本上按 ADR 0003 ceiling 2 复活 vacated 的 AOS 树(删 relocations 并由引擎自己的 canonicalJson 重钉五根),引擎在该地址上真的答话(status 接受、version 817),判据转红 AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST 而同一次扫描的三个合法分区全绿;真归档整棵控制树的集摘要前后一致;另有名册收紧红与未归属活树红两道纯数据红。证物 evidence/aos-local-pure-client.json。收紧路径: 三分区迁走后把名册 home 改为 vm,同一判据即读作「本机零活工作区」。"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:87b63ed4ed40bc9137f7d61a" },
+      "recordFields": ["externalKey", "kind", "status", "revision", "scope", "decidedBy"],
+      "expect": {
+        "externalKey": "TCRN-AOS-STORY-133",
+        "kind": "Story"
+      },
+      "expectSameAs": [
+        { "field": "scope", "step": 0, "flag": "scope" }
+      ]
+    }
+  ]
+}

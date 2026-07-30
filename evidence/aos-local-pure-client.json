@@ -1,0 +1,534 @@
+{
+  "schemaVersion": "aos.local-pure-client-proof.v1",
+  "story": "TCRN-AOS-STORY-133",
+  "ruling": "TCRN-AOS-MIN-012 direction D — AOS carries the operating face, not the store",
+  "ok": true,
+  "reasonCode": "LOCAL_HOST_IS_A_PURE_CLIENT",
+  "unmetExpectations": [],
+  "expectations": [
+    {
+      "id": "GREEN_ON_THIS_MACHINE",
+      "met": true,
+      "expected": "LOCAL_HOST_HOLDS_NO_AWAY_PARTITION_ARTEFACT",
+      "observed": "LOCAL_HOST_HOLDS_NO_AWAY_PARTITION_ARTEFACT"
+    },
+    {
+      "id": "SCOPE_ESTABLISHED",
+      "met": true,
+      "expected": "SCAN_SCOPE_ESTABLISHED",
+      "observed": "SCAN_SCOPE_ESTABLISHED"
+    },
+    {
+      "id": "ARCHIVE_DEAD_ON_BOTH_FACES",
+      "met": true,
+      "expected": "ARCHIVE_RETAINED_AND_DEAD",
+      "observed": "ARCHIVE_RETAINED_AND_DEAD"
+    },
+    {
+      "id": "THREE_PERMITTED_PARTITIONS_LIVE",
+      "met": true,
+      "expected": 3,
+      "observed": 3
+    },
+    {
+      "id": "RED_WHEN_ROSTER_TIGHTENED",
+      "met": true,
+      "expected": "AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST",
+      "observed": "AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST"
+    },
+    {
+      "id": "TIGHTENING_NAMES_THE_THREE",
+      "met": true,
+      "expected": [
+        "TCRN-Design-System",
+        "TCRN-TMS",
+        "cross-project"
+      ],
+      "observed": [
+        "TCRN-Design-System",
+        "TCRN-TMS",
+        "cross-project"
+      ]
+    },
+    {
+      "id": "RED_ON_AN_UNROSTERED_LIVE_TREE",
+      "met": true,
+      "expected": "UNATTRIBUTED_TREE_IS_LIVE",
+      "observed": "UNATTRIBUTED_TREE_IS_LIVE"
+    },
+    {
+      "id": "RED_WHEN_THE_ARCHIVE_IS_REVIVED",
+      "met": true,
+      "expected": "AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST",
+      "observed": "AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST"
+    },
+    {
+      "id": "PERMITTED_PARTITIONS_UNAFFECTED_BY_THE_RED",
+      "met": true,
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "REAL_ARCHIVE_UNTOUCHED_BYTE_FOR_BYTE",
+      "met": true,
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "REVIVAL_REMOVED",
+      "met": true,
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "CEREMONY_WROTE_AND_READ_BACK",
+      "met": true,
+      "expected": "CEREMONY_COMPLETED_AND_READ_BACK",
+      "observed": "CEREMONY_COMPLETED_AND_READ_BACK"
+    },
+    {
+      "id": "CEREMONY_WAS_NOT_A_DRY_RUN",
+      "met": true,
+      "expected": false,
+      "observed": false
+    },
+    {
+      "id": "CEREMONY_ADVANCED_THE_REAL_CHAIN",
+      "met": true,
+      "expected": "> 0",
+      "observed": 1
+    }
+  ],
+  "claim": {
+    "predicate": "本机不得留有任何「真值已迁走」分区的活控制树;仍以本机为家的分区其活树是资产,不是缺陷。",
+    "judgedPerPartition": true,
+    "awayPartitions": [
+      "TCRN-AOS"
+    ],
+    "permittedLocalPartitions": [
+      "cross-project",
+      "TCRN-Design-System",
+      "TCRN-TMS"
+    ],
+    "whereTheJudgementLives": "deploy/aos-local-client/local-purity-predicates.mjs (in the pnpm test roster)",
+    "whereTheObservationLives": "deploy/aos-local-client/scan-local.mjs (needs a disk and the engine)"
+  },
+  "observation": {
+    "observedAt": "2026-07-30T03:01:09Z",
+    "engineRoot": "<local-home>/.tcrn-workflow/tcrn-workflow",
+    "workspaceContainer": "<local-platform-root>/.tcrn-workspace",
+    "containerExists": true,
+    "rootsWalked": [
+      {
+        "id": "platform-root",
+        "depth": 8,
+        "reachable": true,
+        "candidates": 4,
+        "why": "the five repositories and the workspace container. Catches both the archived partition and an `init` somebody ran inside a checkout by accident."
+      },
+      {
+        "id": "home-shallow",
+        "depth": 3,
+        "reachable": true,
+        "candidates": 1,
+        "why": "the home directory's own top levels, where the framework root and the domain archive live. Shallow on purpose: deep home trees are other people's projects."
+      }
+    ],
+    "controlTreesFound": 4,
+    "nonWorkspaceCandidates": [
+      {
+        "controlTree": "<local-home>/.tcrn-workflow",
+        "address": "<local-home>",
+        "isWorkspace": false,
+        "reason": "NO_WORKSPACE_JSON"
+      }
+    ],
+    "trees": [
+      {
+        "controlTree": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow",
+        "address": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace",
+        "isWorkspace": true,
+        "reason": null,
+        "workspaceJsonSha256": "94eff19fcdbc66db5ba45bfabc7005f238c823f9247f0f0c339d02dd8dca41b8",
+        "workspaceJsonBytes": 4552,
+        "externalKey": "TCRN-AOS-WORKSPACE",
+        "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+        "storageVersion": 1,
+        "relocationCount": 1,
+        "lastStage": "vacated",
+        "lastRelocationId": "relocation:bba03004faf175867349495b",
+        "activeWorkspaceRoot": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace",
+        "engineState": "vacated",
+        "metadataAdmitted": true,
+        "metadataReasonCode": null,
+        "readFaceAccepted": false,
+        "readFaceReasonCode": "WORKSPACE_RELOCATION_VACATED",
+        "readFaceVersion": null
+      },
+      {
+        "controlTree": "<local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow",
+        "address": "<local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace",
+        "isWorkspace": true,
+        "reason": null,
+        "workspaceJsonSha256": "9e6b50e48d265869878da32262032f15ed275cadd2c45c194ee2817fcb105e77",
+        "workspaceJsonBytes": 1674,
+        "externalKey": "TCRN-DS-WORKSPACE",
+        "workspaceId": "workspace:e7386bdcff8b3407e43ece51",
+        "storageVersion": 1,
+        "relocationCount": 0,
+        "lastStage": null,
+        "lastRelocationId": null,
+        "activeWorkspaceRoot": "<local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace",
+        "engineState": "live",
+        "metadataAdmitted": true,
+        "metadataReasonCode": null,
+        "readFaceAccepted": true,
+        "readFaceReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+        "readFaceVersion": 983
+      },
+      {
+        "controlTree": "<local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow",
+        "address": "<local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace",
+        "isWorkspace": true,
+        "reason": null,
+        "workspaceJsonSha256": "d40d63348b0cef68d3a42b78d9abef58c25864a394b55456ef4f709944cc04fa",
+        "workspaceJsonBytes": 1585,
+        "externalKey": "TCRN-TMS-WORKSPACE",
+        "workspaceId": "workspace:f15c5abb6cd777c44453c2c9",
+        "storageVersion": 1,
+        "relocationCount": 0,
+        "lastStage": null,
+        "lastRelocationId": null,
+        "activeWorkspaceRoot": "<local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace",
+        "engineState": "live",
+        "metadataAdmitted": true,
+        "metadataReasonCode": null,
+        "readFaceAccepted": true,
+        "readFaceReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+        "readFaceVersion": 228
+      },
+      {
+        "controlTree": "<local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow",
+        "address": "<local-platform-root>/.tcrn-workspace/cross-project/workspace",
+        "isWorkspace": true,
+        "reason": null,
+        "workspaceJsonSha256": "abadfe515fa02ec7c9d2c3399c423d3912b3e34fe8869128a0184f780cd03fe0",
+        "workspaceJsonBytes": 1632,
+        "externalKey": "TCRN-CROSS-WORKSPACE",
+        "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+        "storageVersion": 1,
+        "relocationCount": 0,
+        "lastStage": null,
+        "lastRelocationId": null,
+        "activeWorkspaceRoot": "<local-platform-root>/.tcrn-workspace/cross-project/workspace",
+        "engineState": "live",
+        "metadataAdmitted": true,
+        "metadataReasonCode": null,
+        "readFaceAccepted": true,
+        "readFaceReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+        "readFaceVersion": 1338
+      }
+    ],
+    "ceiling": {
+      "notAWholeDiskWalk": "roots and depths are declared above; a control tree outside them is not seen",
+      "archivesAreOutOfScope": "a tar/zip snapshot of a control tree is not a bindable workspace and is not looked for. It is still revival material — ADR 0003 ceiling 2 — so 'zero live trees' is not 'zero ways back'",
+      "timeOfCheck": "the answer is about the instant the walk ran. Nothing here prevents a tree from being created a second later; the predicate is a measurement, not a lock"
+    }
+  },
+  "green": {
+    "scope": {
+      "ok": true,
+      "reasonCode": "SCAN_SCOPE_ESTABLISHED",
+      "containerExists": true,
+      "expectedLocalPartitions": [
+        "TCRN-Design-System",
+        "TCRN-TMS",
+        "cross-project"
+      ],
+      "partitionsFoundLive": [
+        "TCRN-Design-System",
+        "TCRN-TMS",
+        "cross-project"
+      ],
+      "missing": [],
+      "rootsWalked": [
+        {
+          "id": "platform-root",
+          "reachable": true
+        },
+        {
+          "id": "home-shallow",
+          "reachable": true
+        }
+      ],
+      "predicate": "「没找到活的 AOS 树」与「什么都没找到」不得共用一个绿:名册说在家的分区必须真的被找到活的,否则本次扫描没有建立可判的范围"
+    },
+    "verdict": {
+      "ok": true,
+      "reasonCode": "LOCAL_HOST_HOLDS_NO_AWAY_PARTITION_ARTEFACT",
+      "awayPartitions": [
+        "TCRN-AOS"
+      ],
+      "permittedLocalPartitions": [
+        "TCRN-Design-System",
+        "TCRN-TMS",
+        "cross-project"
+      ],
+      "counts": {
+        "treesFound": 4,
+        "retainedArchives": 1,
+        "permittedLiveTrees": 3,
+        "liveAwayTrees": 0,
+        "offending": 0
+      },
+      "duplicatedLivePartitions": [],
+      "verdicts": [
+        {
+          "ok": true,
+          "reasonCode": "ARCHIVE_RETAINED_AND_DEAD",
+          "expectedRelocationId": "relocation:bba03004faf175867349495b",
+          "observedRelocationId": "relocation:bba03004faf175867349495b",
+          "address": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace",
+          "engineState": "vacated",
+          "readFaceAccepted": false,
+          "readFaceReasonCode": "WORKSPACE_RELOCATION_VACATED",
+          "partitionId": "TCRN-AOS",
+          "home": "vm",
+          "attribution": "IDENTITY_PAIR_MATCHED"
+        },
+        {
+          "ok": true,
+          "reasonCode": "LIVE_TREE_OF_A_PERMITTED_PARTITION",
+          "address": "<local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace",
+          "engineState": "live",
+          "readFaceAccepted": true,
+          "readFaceReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+          "partitionId": "TCRN-Design-System",
+          "home": "local",
+          "attribution": "IDENTITY_PAIR_MATCHED"
+        },
+        {
+          "ok": true,
+          "reasonCode": "LIVE_TREE_OF_A_PERMITTED_PARTITION",
+          "address": "<local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace",
+          "engineState": "live",
+          "readFaceAccepted": true,
+          "readFaceReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+          "partitionId": "TCRN-TMS",
+          "home": "local",
+          "attribution": "IDENTITY_PAIR_MATCHED"
+        },
+        {
+          "ok": true,
+          "reasonCode": "LIVE_TREE_OF_A_PERMITTED_PARTITION",
+          "address": "<local-platform-root>/.tcrn-workspace/cross-project/workspace",
+          "engineState": "live",
+          "readFaceAccepted": true,
+          "readFaceReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+          "partitionId": "cross-project",
+          "home": "local",
+          "attribution": "IDENTITY_PAIR_MATCHED"
+        }
+      ],
+      "offending": [],
+      "scope": {
+        "ok": true,
+        "reasonCode": "SCAN_SCOPE_ESTABLISHED",
+        "containerExists": true,
+        "expectedLocalPartitions": [
+          "TCRN-Design-System",
+          "TCRN-TMS",
+          "cross-project"
+        ],
+        "partitionsFoundLive": [
+          "TCRN-Design-System",
+          "TCRN-TMS",
+          "cross-project"
+        ],
+        "missing": [],
+        "rootsWalked": [
+          {
+            "id": "platform-root",
+            "reachable": true
+          },
+          {
+            "id": "home-shallow",
+            "reachable": true
+          }
+        ],
+        "predicate": "「没找到活的 AOS 树」与「什么都没找到」不得共用一个绿:名册说在家的分区必须真的被找到活的,否则本次扫描没有建立可判的范围"
+      },
+      "tightening": "未收紧:名册仍允许 TCRN-Design-System/TCRN-TMS/cross-project 在本机为活;三分区迁走后把它们的 home 改为 vm,本判据即读作「本机零活工作区」",
+      "ceiling": "判据测的是「引擎在该地址上给出的状态」,不是「磁盘上有没有这些字节」。vacated 的树仍是复活材料(ADR 0003 ceiling 2:workspace.json 不在事件哈希链覆盖范围内),归档 tarball 更不在扫描范围内——绿不等于没有回去的路"
+    }
+  },
+  "tighteningRed": {
+    "rosterUsed": "every partition home=vm (the state after all four relocate)",
+    "reasonCode": "AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST",
+    "wentRed": true,
+    "namedLivePartitions": [
+      "TCRN-Design-System",
+      "TCRN-TMS",
+      "cross-project"
+    ],
+    "tightening": "已收紧:名册无在家分区,本判据此刻读作「本机零活工作区」",
+    "filesystemTouched": false,
+    "whatWasProven": "同一函数、同一次观测,只把名册的 home 全改为 vm:判据立刻转红并逐一点出三个仍在本机为活的分区。「将来能收紧」由此是一次测量而不是一句注释。"
+  },
+  "unattributedRed": {
+    "reasonCode": "UNATTRIBUTED_TREE_IS_LIVE",
+    "wentRed": true,
+    "whatWasProven": "名册之外的活工作区自己就是红:删掉一行名册不会让它名下的树消失,只会让它变成未归属的红。"
+  },
+  "revivalRed": {
+    "ran": true,
+    "reasonCode": "AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST",
+    "wentRed": true,
+    "placement": {
+      "byteAuthority": "engine canonicalJson + assertDistinctRoots",
+      "ledgerEntriesRemoved": 1,
+      "workspaceJsonChanged": true
+    },
+    "revivedTree": {
+      "addressShape": "<scratch>/story133-red-proof/workspace",
+      "engineState": "live",
+      "externalKey": "TCRN-AOS-WORKSPACE",
+      "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+      "relocationCount": 0,
+      "readFace": {
+        "accepted": true,
+        "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+        "version": 817
+      }
+    },
+    "revivedVerdictRow": {
+      "ok": false,
+      "reasonCode": "AWAY_PARTITION_TREE_IS_LIVE",
+      "address": "<scratch>/story133-red-proof/workspace",
+      "engineState": "live",
+      "readFaceAccepted": true,
+      "readFaceReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "partitionId": "TCRN-AOS",
+      "home": "vm",
+      "attribution": "IDENTITY_PAIR_MATCHED"
+    },
+    "containment": {
+      "prefixNamedByTheCaller": true,
+      "revivalWasInsideIt": true,
+      "addressesAreReportedAsShapes": "the operator's scratch path is replaced by <scratch> before it reaches an artifact; a Claude Code session scratchpad encodes the home directory with its separators turned into dashes, and the evidence-hygiene rules for the slash-separated form do not match that (rule home-directory-dash-encoded now detects it)"
+    },
+    "permittedPartitionsStayedGreen": true,
+    "permittedPartitionRows": [
+      {
+        "partitionId": "TCRN-Design-System",
+        "reasonCode": "LIVE_TREE_OF_A_PERMITTED_PARTITION",
+        "ok": true
+      },
+      {
+        "partitionId": "TCRN-TMS",
+        "reasonCode": "LIVE_TREE_OF_A_PERMITTED_PARTITION",
+        "ok": true
+      },
+      {
+        "partitionId": "cross-project",
+        "reasonCode": "LIVE_TREE_OF_A_PERMITTED_PARTITION",
+        "ok": true
+      }
+    ],
+    "realArchiveUntouched": {
+      "workspaceJsonSha256Before": "94eff19fcdbc66db5ba45bfabc7005f238c823f9247f0f0c339d02dd8dca41b8",
+      "workspaceJsonSha256After": "94eff19fcdbc66db5ba45bfabc7005f238c823f9247f0f0c339d02dd8dca41b8",
+      "controlTreeFiles": 20,
+      "controlTreeSetDigestBefore": "81ece3dae77362c53a5ac18fcf2e7f0030703afebbce8336aff0910d661f9eac",
+      "controlTreeSetDigestAfter": "81ece3dae77362c53a5ac18fcf2e7f0030703afebbce8336aff0910d661f9eac",
+      "equal": true
+    },
+    "scratchRemoved": true,
+    "whatWasProven": "把 vacated 的 AOS 树在 scratch 上按 ADR 0003 ceiling 2 的方式复活(删掉 relocations 并重钉五根,字节由引擎自己的 canonicalJson 产生),判据转红为 AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST;同一次扫描里三个仍在本机的合法分区全部保持绿。真的那份归档逐字节未变。"
+  },
+  "ceremonyWrite": {
+    "folded": true,
+    "ok": true,
+    "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+    "dryRun": false,
+    "receiptSha256": "07a377b04820c13c805fb39419c0271ca27788eb65d25a4eaa16787b25e32f83",
+    "host": "tcrn-platform-dev",
+    "topology": {
+      "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+      "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+      "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+      "actor": "agent:fable",
+      "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs)"
+    },
+    "hostEngineCatalogue": {
+      "verbs": 103
+    },
+    "chainBefore": {
+      "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+      "version": 851,
+      "headEventHash": "19dc705a4eaf59ecff1c0249f66a085e9a7a2702ce1c83a229cd773ae0ba2192",
+      "work": 131
+    },
+    "chainAfter": {
+      "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+      "version": 852,
+      "headEventHash": "bbb4759ba650518351039c481ced979d63d58b50589c6fe3694166362276921e",
+      "work": 131
+    },
+    "eventsAppended": 1,
+    "write": {
+      "verb": "work-annotate",
+      "mutates": true,
+      "executed": true,
+      "accepted": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "headAtPlanning": 851,
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "scope"
+      ]
+    },
+    "readback": {
+      "verb": "work-show",
+      "accepted": true,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "unequal": [],
+        "compared": [
+          {
+            "field": "externalKey",
+            "equal": true,
+            "expectedSha256": "0c8b67bc163d966bd6e942fc26c11e04cb72e8ac60e8c949f0a99ae09aace966",
+            "observedSha256": "0c8b67bc163d966bd6e942fc26c11e04cb72e8ac60e8c949f0a99ae09aace966",
+            "characters": 18
+          },
+          {
+            "field": "kind",
+            "equal": true,
+            "expectedSha256": "e9e509dcd358f8eb150d15470ce48970d0b05c4cf9207c6d90ef063152d718fc",
+            "observedSha256": "e9e509dcd358f8eb150d15470ce48970d0b05c4cf9207c6d90ef063152d718fc",
+            "characters": 5
+          },
+          {
+            "field": "scope",
+            "equal": true,
+            "expectedSha256": "50882d968d655d09791131faaf740dd324417a6d3f62af003022006398520155",
+            "observedSha256": "50882d968d655d09791131faaf740dd324417a6d3f62af003022006398520155",
+            "characters": 1092
+          }
+        ]
+      }
+    },
+    "whatWasProven": "本机作为纯客户端仍能对已迁走的真链做受治写:仪式从一处拓扑取五值、按主机引擎自己的 commands 名录校验载荷、以写前现读的 --expected-version 作哨兵,写入后经 work-show 逐字段全值回读。写面在 VM,发起在本机。"
+  },
+  "tightening": "未收紧:名册仍允许 TCRN-Design-System/TCRN-TMS/cross-project 在本机为活;三分区迁走后把它们的 home 改为 vm,本判据即读作「本机零活工作区」"
+}

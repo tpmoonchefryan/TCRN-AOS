@@ -3,13 +3,23 @@ import assert from "node:assert/strict";
 import { selectMigrationCandidates, FORWARD, BACKWARD } from "./migration-candidates.mjs";
 
 /**
- * The mirror acceptance proof's candidate selection, judged as a unit.
+ * The migration candidate selection policy, judged as a unit.
  *
  * This policy used to live inline in scripts/mirror-acceptance-proof.mjs, where
  * no test could reach it: an adversarial review inverted the kind exclusion
  * (`!== "Initiative"` to `===`) and the whole suite stayed green. These tests
  * exist so that exact mutation — and its neighbours on the partition and status
  * predicates — go red.
+ *
+ * ORPHANED CALLER, stated rather than left to be discovered. That acceptance
+ * proof was retired with the mirror segment (TCRN-AOS-STORY-134) and it was the
+ * policy's only caller, so `selectMigrationCandidates` is now a tested library
+ * nothing invokes. It is kept rather than deleted because the question it answers
+ * — which chain records are legally movable forward, without mirroring the
+ * engine's state machine — is the question any future write-surface acceptance
+ * will ask, and the paid-for lesson in these cases is not cheap to re-derive. It
+ * is a candidate for deletion the moment somebody decides that future is not
+ * coming; leaving it undeclared is the part that would not be acceptable.
  */
 
 const row = (overrides) => ({

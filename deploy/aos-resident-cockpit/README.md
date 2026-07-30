@@ -7,6 +7,13 @@ and `journalctl` says why when it does not.
 
 Owner ruling behind that: **the cockpit is resident**. That UI is what mode A is.
 
+It is also the ONLY AOS read face now. The static LAN mirror that used to stand in
+for one — `aos.tcrn.lan`, an nginx pod serving a pre-rendered copy — was retired
+under `TCRN-AOS-MIN-012` decision 7 once this unit existed, and its route was
+removed rather than repointed here: a LAN ingress in front of a loopback-bound write
+face would be the CONF-007 D7 overturn, not a redeployment. Details and evidence:
+`deploy/aos-mirror-retirement/`.
+
 ## What is where
 
 | Thing | Path on the VM |

@@ -49,6 +49,13 @@ final acceptance state is complete.
   live-dispatch lane is implemented and accepted.
 - Workflow governance, thread registry truth, release authority, and owner
   intent gates remain outside this repository.
+- **Nothing is published on the LAN.** The operations cockpit runs as a resident
+  service on the truth host bound to `127.0.0.1`, reachable only through an SSH
+  tunnel (CONF-007 D7). The one LAN surface this platform ever had — a read-only
+  static mirror at `aos.tcrn.lan` — was retired under `TCRN-AOS-STORY-134` once
+  that resident cockpit existed, and its route was removed rather than repointed:
+  a LAN ingress in front of a loopback-bound write face is an access-boundary
+  decision, not a redeployment. See `deploy/aos-mirror-retirement/`.
 
 ## Architecture
 
@@ -144,6 +151,11 @@ explicit about retention and no-overclaim boundaries.
 - [Source export prerequisite](docs/source-export-prerequisite.md)
 - [Gateway adapter proof](docs/gateway-adapter-proof.md)
 - [Runtime proof](docs/runtime-proof.md)
+- [Retired proof scripts](docs/retired-proof-scripts.md) — what was removed, why, and
+  where each property it guarded is guarded now
+- [The resident cockpit](deploy/aos-resident-cockpit/README.md) — how and where the
+  product actually runs
+- [Retiring the mirror segment](deploy/aos-mirror-retirement/README.md)
 
 ## License
 

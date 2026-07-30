@@ -16,6 +16,7 @@ import { cockpitData } from "./cockpit-data.generated.js";
 import { hrefAttr, inboxLink } from "./cockpit-links.js";
 import {
   chainStatusLabel,
+  deliberationContentRead,
   inboxDetailText,
   inboxSeverityBadge,
   partitionDisplayName,
@@ -228,7 +229,12 @@ export function InboxView({ locale, routeHref }: ViewProps) {
   const conferences = cockpitData.inbox.filter((item) => item.kind === "conference");
   const unresolved = cockpitData.inbox.filter((item) => item.kind === "unresolved");
   const ownerIntent = gates.filter((item) => item.severity === "owner-intent");
-  const unread = cockpitData.partitions.filter((entry) => entry.unavailable.length > 0);
+  // Unresolved inbox items come from minutes, so the caveat below is about minutes
+  // and asks about minutes. Asked as "is anything missing", it went on warning that
+  // three chains' open issues could not appear here while 94 of them were on the
+  // screen underneath it — the caveat undermining the one thing this view is for
+  // (TCRN-AOS-STORY-134).
+  const unread = cockpitData.partitions.filter((entry) => !deliberationContentRead(entry));
 
   return (
     <div className="tcrn-aos-view" data-cockpit-view="inbox">
@@ -243,10 +249,11 @@ export function InboxView({ locale, routeHref }: ViewProps) {
       />
 
       {unread.length > 0 ? (
-        // Two of the four chains cannot supply minutes through the fallback read
-        // path, so their open issues cannot appear here. An inbox that looks
-        // complete but is not is worse than one that says where it stops: the
-        // whole value of this screen is being able to trust "nothing left".
+        // A chain whose minutes were not read cannot contribute open issues here.
+        // An inbox that looks complete but is not is worse than one that says
+        // where it stops: the whole value of this screen is being able to trust
+        // "nothing left" — which is also why the caveat must not appear when the
+        // minutes WERE read, because then it removes that trust for nothing.
         <InlineAlert tone="warning" data-cockpit-notice="inbox-coverage">
           {format(
             locale,

@@ -1,3 +1,60 @@
+# ┌───────────────────────────────────────────────────────────────────────────┐
+# │ RETIRED — 2026-07-30, TCRN-AOS-STORY-134. NOT APPLIED ANYWHERE.           │
+# └───────────────────────────────────────────────────────────────────────────┘
+#
+# This manifest is kept as the record of a segment that no longer runs. It was
+# applied to the k3s cluster on `tcrn-platform-dev` from 2026-07-26T19:29:30Z and
+# removed on 2026-07-30 — by feeding these very bytes to `kubectl delete -f -`,
+# so what was removed is exactly what had been declared.
+#
+# WHY IT WAS RETIRED (TCRN-AOS-MIN-012, decision 7): the truth host now carries a
+# RESIDENT cockpit — a systemd unit, `tcrn-aos-cockpit`, reading and writing the
+# governance chain that relocated to that same host. A static snapshot stand-in
+# existed because there was no service on that side to read; there is one now, and
+# it is the real thing rather than a copy of it.
+#
+# WHY THE ROUTE WAS NOT REPOINTED at that resident cockpit, which is the obvious
+# thought and the wrong one: the cockpit binds `127.0.0.1` and the only path onto
+# it from anywhere else is an SSH tunnel (CONF-007 D7). A LAN ingress in front of
+# it would be the overturn of that ruling wearing the costume of a configuration
+# change. The mirror's one residual use — a browser on the LAN with no ssh — is
+# precisely the case D7 prohibits. So the residual is foreclosed by the ruling,
+# not waived for convenience, and `aos.tcrn.lan` was removed outright.
+#
+# WHAT TO KNOW BEFORE REVIVING IT. Not "re-apply and it works":
+#
+#  1. `kubectl apply -f` this file re-creates the namespace, the nginx deployment,
+#     the service and the ingress — and the ingress re-publishes `aos.tcrn.lan` on
+#     the LAN. That is an ACCESS-BOUNDARY change, not a deployment: under CONF-007
+#     D7 it needs an Owner ruling first, and reviving it to serve the resident
+#     cockpit would need D7 re-ruled outright.
+#  2. The content is gone. `hostPath: /srv/tcrn/aos-mirror` was removed on the VM,
+#     and `apps/web/mirror` — whose bytes were verified byte-for-byte identical to
+#     the deployed copy at retirement — was removed from this repository. Both are
+#     recoverable from git history: both were tracked at `0e0ca0876a04`, the commit this
+#     retirement was performed from. Nothing here is committed — the removals are
+#     working-tree changes awaiting the Owner's review — so `0e0ca0876a04` is the
+#     recovery point, not a later one.
+#  3. The producers are gone with them: `scripts/build-mirror.mjs` and
+#     `pnpm mirror:build` were retired in the same story, as was
+#     `mirror:freshness-proof` (its subject no longer exists) and
+#     `scripts/mirror-acceptance-proof.mjs` (three of its five criteria address
+#     this LAN URL). A revival must restore a builder, not just this manifest —
+#     the mirror was never a container that renders, only nginx over pre-rendered
+#     files somebody had to produce.
+#  4. The freshness ceiling was always `apps/web/src/cockpit-data.generated.ts`,
+#     a deliberately hand-refreshed snapshot, plus a manual rsync with no
+#     scheduler anywhere. A revived mirror inherits that, so "it is up" and "it is
+#     current" remain separate claims.
+#  5. Retirement evidence, including the pre-retirement inventory, the pod, the
+#     route, the per-file bundle ledger and the observed before/after of the LAN
+#     probe: `evidence/aos-mirror-retirement.json`. The recipe that did it:
+#     `deploy/aos-mirror-retirement/`.
+#
+# Everything below this line is the manifest as it ran, unchanged.
+#
+# ── original header ─────────────────────────────────────────────────────────
+#
 # TCRN AOS — the read-only mirror on the platform dev VM.
 #
 # What this is: a static server-rendered copy of the cockpit, refreshed from the

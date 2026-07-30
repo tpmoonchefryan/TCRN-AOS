@@ -18,6 +18,7 @@ import {
   chainStatusBadge,
   chainStatusLabel,
   inboxDetailText,
+  deliberationContentRead,
   inboxSeverityBadge,
   partitionDisplayName,
   workTitle,
@@ -151,12 +152,22 @@ const countedCopy = {
     ko: "{0}에 검증",
     fr: "vérifié le {0}"
   },
+  /**
+   * Names the fact, not a cause it cannot observe.
+   *
+   * It used to end "those chains exceed the read surface ceiling". Chain size was
+   * never the operative cause — it was the absence of a paged read for positions,
+   * and when Workflow v0.7.0 supplied one nothing about the chains' size changed
+   * and the gap closed. Stating a cause the view cannot see is also what let this
+   * sentence go unchallenged for four days after it became false: nobody reopens a
+   * question whose stated answer is a law of nature (TCRN-AOS-STORY-134).
+   */
   unreadPartitions: {
-    "zh-CN": "以下项目的立场与纪要未读取（链体量超出读面上限）：{0}。此处显示为未取，而非为空。",
-    en: "Positions and minutes were not read for {0} — those chains exceed the read surface ceiling. Shown as not read, not as empty.",
-    ja: "次のプロジェクトの立場と議事録は読み取られていません（チェーンが読み取り面の上限を超過）：{0}。空ではなく未取得として表示しています。",
-    ko: "다음 프로젝트의 입장과 회의록은 읽지 못했습니다(체인이 읽기 표면 상한을 초과). {0}. 비어 있음이 아니라 미조회로 표시합니다.",
-    fr: "Les positions et les comptes rendus n'ont pas été lus pour {0} — ces chaînes dépassent le plafond de la surface de lecture. Affiché comme non lu, non comme vide."
+    "zh-CN": "以下项目的立场与纪要未读取（投影的读取尝试被拒）：{0}。此处显示为未取，而非为空。",
+    en: "Positions and minutes were not read for {0} — the projection's read of them was refused. Shown as not read, not as empty.",
+    ja: "次のプロジェクトの立場と議事録は読み取られていません（投影による読み取りが拒否されました）：{0}。空ではなく未取得として表示しています。",
+    ko: "다음 프로젝트의 입장과 회의록은 읽지 못했습니다(투영의 읽기 시도가 거부되었습니다). {0}. 비어 있음이 아니라 미조회로 표시합니다.",
+    fr: "Les positions et les comptes rendus n'ont pas été lus pour {0} — la lecture par la projection a été refusée. Affiché comme non lu, non comme vide."
   }
 } satisfies Record<string, CopyEntry>;
 
@@ -184,14 +195,21 @@ function AsOfChip({ partitionId, locale }: { partitionId: string; locale: TcrnLo
 
 
 /**
- * Sections a partition could not supply, stated plainly.
+ * Partitions whose deliberation content this page could not read, stated plainly.
  *
- * Two chains exceed the read surface's export ceiling, so their deliberation
- * threads are not read at all. Saying so is the whole point: an unread section
- * and an empty one render identically unless the view refuses to conflate them.
+ * Saying so is the whole point: an unread section and an empty one render
+ * identically unless the view refuses to conflate them.
+ *
+ * The filter asks for the families this sentence NAMES. It used to ask whether
+ * the partition was missing anything at all, and that is a different question:
+ * once positions and minutes became readable and only the event log stayed out
+ * of reach, this alert went on telling the Owner that positions and minutes were
+ * not read on chains that held 138, 85 and 42 of them (TCRN-AOS-STORY-134). The
+ * event-log gap is stated where it is true — the work item's activity panel —
+ * rather than under a sentence about something else.
  */
 function UnavailableNotice({ locale }: { locale: TcrnLocale }) {
-  const affected = cockpitData.partitions.filter((entry) => entry.unavailable.length > 0);
+  const affected = cockpitData.partitions.filter((entry) => !deliberationContentRead(entry));
   if (affected.length === 0) return null;
   const names = joinNames(affected.map((entry) => partitionDisplayName(entry, locale)), locale);
   return (

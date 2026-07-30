@@ -20,10 +20,17 @@ export interface CockpitPartition {
   /**
    * Record families this partition could not supply, named rather than omitted.
    *
-   * Two of the four chains exceed the read surface's one-MiB export ceiling and
-   * fall back to a paginated path that cannot reach positions or minutes. A view
-   * over such a partition must say "not read here" — an empty deliberation and
-   * an unread one look identical, and only one of them is true.
+   * A view over such a partition must say "not read here" for the families named
+   * — an empty deliberation and an unread one look identical, and only one of
+   * them is true.
+   *
+   * READ IT PER FAMILY, never as `unavailable.length > 0`. That shortcut is how
+   * four screens came to tell the Owner that positions and minutes were not read
+   * on three chains that held 138, 85 and 42 of them: the list had narrowed to
+   * `["events"]` when Workflow v0.7.0 gave positions and minutes their own paged
+   * reads, and a length test cannot tell which family it is standing for
+   * (TCRN-AOS-STORY-134). The helpers below exist so the question is asked by
+   * name.
    */
   unavailable: readonly string[];
   /**
@@ -382,6 +389,35 @@ export function partitionDisplayName(
 ): string {
   if (!partition) return "—";
   return partitionDisplayNames[partition.id]?.[locale] ?? partition.label;
+}
+
+/**
+ * Whether this partition's deliberation content — positions and minutes — was read.
+ *
+ * The two travel together by construction: the projection reads them in one
+ * attempt and marks both unavailable if that attempt is refused, so one flag is
+ * the honest granularity and a second one would only be able to lie.
+ *
+ * Every sentence that names positions or minutes must gate on THIS, not on
+ * whether the partition is missing something. The distinction is the whole
+ * lesson of STORY-134: the notice that said "positions and minutes were not
+ * read" outlived the gap it described by four days because it fired on
+ * `unavailable.length > 0`, which stayed true for a different family.
+ */
+export function deliberationContentRead(partition: CockpitPartition | undefined): boolean {
+  return partition ? !partition.unavailable.includes("positions") : false;
+}
+
+/**
+ * Whether this partition's event log — the activity history — was read.
+ *
+ * Still false for the three paginated chains: Workflow has a paged event reader
+ * from v0.8.0 and this projection does not use it yet, which is a gap in this
+ * repository rather than a ceiling in the engine. The distinction matters to
+ * anyone reading the notice: it names something fixable here.
+ */
+export function activityLogRead(partition: CockpitPartition | undefined): boolean {
+  return partition ? !partition.unavailable.includes("events") : false;
 }
 
 /**

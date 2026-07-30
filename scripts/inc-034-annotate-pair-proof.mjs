@@ -1,11 +1,17 @@
 #!/usr/bin/env node
 // Red-prove the annotate-pair criterion (TCRN-AOS-INC-034 route B, TCRN-AOS-MIN-007).
 //
-// The mirror acceptance proof's fallback leg claims: an annotate pair is judged
-// green only when the write was accepted AND its byte-identical replay was
-// refused as a no-op. A criterion is only worth trusting if it can go red, so
-// this script runs the same judge (scripts/lib/annotate-pair.mjs — shared code,
-// not a re-implementation) against three real pairs on a scratch governed chain:
+// The claim under test: an annotate pair is judged green only when the write was
+// accepted AND its byte-identical replay was refused as a no-op. A criterion is
+// only worth trusting if it can go red, so this script runs the real judge
+// (scripts/lib/annotate-pair.mjs — shared code, not a re-implementation) against
+// three real pairs on a scratch governed chain:
+//
+// The judge was originally shared with the mirror acceptance proof's fallback leg.
+// That proof was retired with the mirror segment (TCRN-AOS-STORY-134), so this is
+// now the judge's only caller — which is precisely why this red-proof matters
+// more than it did: it is the last thing standing between that policy and nobody
+// exercising it.
 //
 //   green — a faithful pair: judge must pass;
 //   red 1 — the replay has one byte changed, so the engine ACCEPTS it: the
@@ -264,7 +270,9 @@ const criteria = [
 const receipt = {
   schemaVersion: "aos.inc-034-annotate-pair.v1",
   ok: criteria.every((criterion) => criterion.ok),
-  subject: "scripts/lib/annotate-pair.mjs — the judge shared with scripts/mirror-acceptance-proof.mjs criterion 4",
+  subject: "scripts/lib/annotate-pair.mjs — the annotate-pair judge; originally shared with the "
+    + "mirror acceptance proof's criterion 4, and its only caller since that proof was retired "
+    + "with the mirror segment (TCRN-AOS-STORY-134)",
   criteria,
   observations: { green, red1, red2 },
   engineAnchor: {

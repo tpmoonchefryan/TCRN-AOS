@@ -16,8 +16,10 @@ import type { TcrnLocale } from "@tcrn/ui-copy-state";
 
 import { cockpitData } from "./cockpit-data.generated.js";
 import {
+  activityLogRead,
   chainStatusBadge,
   chainStatusLabel,
+  deliberationContentRead,
   outcomeClassLabel,
   partitionDisplayName,
   workTitle,
@@ -112,12 +114,24 @@ const detailCopy = {
     ko: "이 체인은 actor attestation을 활성화한 적이 없으므로 어떤 이벤트도 실행자를 기록하지 않습니다. 이는 체인의 사실이며 읽기 누락이 아닙니다.",
     fr: "Cette chaîne n'a jamais activé l'attestation d'actor, aucun de ses événements n'enregistre donc qui a agi. C'est la réponse de la chaîne, pas une lacune de lecture."
   },
+  /**
+   * Why the log is missing — and the reason is this product's, not the engine's.
+   *
+   * This sentence used to end "the fallback read surface has no event verb",
+   * which was true when it was written and stopped being true when Workflow
+   * v0.8.0 shipped `event-list`, its paged event reader. The chain still exceeds
+   * the `export` ceiling; what is missing is that this projection does not use
+   * the paged reader yet. Naming the engine as the limit made a fixable gap in
+   * this repository look like someone else's ceiling — the same way the
+   * positions-and-minutes notice outlived its own gap by blaming chain size
+   * (TCRN-AOS-STORY-134).
+   */
   logNotRead: {
-    "zh-CN": "该项目的事件日志未读取（链体量超出 export 上限,降级读面没有事件读法）。此处为未取,不是无活动。",
-    en: "This project's event log was not read: the chain exceeds the export ceiling and the fallback read surface has no event verb. Not read, not inactive.",
-    ja: "このプロジェクトのイベントログは読み取られていません（チェーンが export の上限を超え、縮退読み取り面にイベント用の verb がありません）。無活動ではなく未取得です。",
-    ko: "이 프로젝트의 이벤트 로그를 읽지 못했습니다(체인이 export 상한을 초과하고 축소 읽기 표면에 이벤트 verb가 없습니다). 활동이 없는 것이 아니라 미조회입니다.",
-    fr: "Le journal d'événements de ce projet n'a pas été lu : la chaîne dépasse le plafond d'export et la surface de repli n'a pas de verbe d'événement. Non lu, pas inactif."
+    "zh-CN": "该项目的事件日志未读取：链体量超出 export 上限,而本产品的投影尚未接引擎的分页事件读面（v0.8.0 起可用）。此处为未取,不是无活动。",
+    en: "This project's event log was not read: the chain exceeds the export ceiling, and this product's projection does not yet use the engine's paged event reader (available since v0.8.0). Not read, not inactive.",
+    ja: "このプロジェクトのイベントログは読み取られていません：チェーンが export の上限を超えており、本製品の投影はエンジンのページ分割イベント読み取り面（v0.8.0 以降で利用可能）をまだ使っていません。無活動ではなく未取得です。",
+    ko: "이 프로젝트의 이벤트 로그를 읽지 못했습니다: 체인이 export 상한을 초과하며, 이 제품의 투영이 아직 엔진의 페이지 이벤트 읽기 면(v0.8.0부터 사용 가능)을 쓰지 않습니다. 활동이 없는 것이 아니라 미조회입니다.",
+    fr: "Le journal d'événements de ce projet n'a pas été lu : la chaîne dépasse le plafond d'export et la projection de ce produit n'utilise pas encore le lecteur d'événements paginé du moteur (disponible depuis la v0.8.0). Non lu, pas inactif."
   },
   noEvents: {
     "zh-CN": "该记录尚无事件。",
@@ -396,7 +410,11 @@ export function WorkItemDetailView({
             )}
           </Surface>
 
-          {partition && partition.unavailable.length > 0 ? (
+          {/* The sentence names positions and minutes, so it asks about positions
+              and minutes. Gated on "missing anything", it claimed the decision
+              detail was incomplete on every record of three fully-read chains
+              (TCRN-AOS-STORY-134). */}
+          {partition && !deliberationContentRead(partition) ? (
             <InlineAlert tone="warning" data-cockpit-notice="partial-projection">
               {pick(locale, detailCopy.partialDecisionDetail)}
             </InlineAlert>
@@ -421,7 +439,7 @@ export function WorkItemDetailView({
 function ActivityPanel({ item, locale }: { item: CockpitWork; locale: TcrnLocale }) {
   const partition = cockpitData.partitions.find((entry) => entry.id === item.partitionId);
   const entries = cockpitData.activityByWork[item.id] ?? [];
-  const logUnavailable = partition?.unavailable.includes("events") ?? false;
+  const logUnavailable = !activityLogRead(partition);
 
   const attributionNote = partition?.attestationFromSequence === null
     ? pick(locale, detailCopy.attestationNeverEnabled)

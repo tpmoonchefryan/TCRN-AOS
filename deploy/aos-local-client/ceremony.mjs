@@ -1,0 +1,252 @@
+#!/usr/bin/env node
+// The local-side remote governance ceremony, as a recipe (TCRN-AOS-STORY-133).
+//
+//   node deploy/aos-local-client/ceremony.mjs --payload <file.json> [--receipt <file.json>] [--dry-run]
+//
+// WHY THIS EXISTS. The AOS chain's truth is on tcrn-platform-dev. A governance write
+// from this laptop is therefore five values (host, engine CLI, workspace root,
+// attest-dir, actor), a head sentinel read moments before, an RFC3339 instant, and a
+// remote shell that re-parses every argument. The first such write was performed by
+// hand-assembling that ssh command line. It worked; it is also the shape where an
+// operator attests into the wrong sidecar, drives the wrong chain, or sends a flag the
+// verb does not define — and STORY-131 did send three such flags and had to re-run.
+//
+// So the write is now a RECIPE with a FILE PAYLOAD (CONF-007 ruling ①: 文件载荷批驱动
+// 仪式). The operator writes what they want recorded; this reads where and how from
+// one place (topology.mjs) and refuses anything the host engine's own catalogue does
+// not define.
+//
+// WHAT IT WILL NOT DO, and both refusals are derived rather than remembered:
+//   - it will not drive a verb that requires a per-invocation authority file. Those are
+//     the relocation and gate-identity families; the test is the catalogue's own shape,
+//     the same derivation ADR 0003 uses for the MCP facade;
+//   - it will not accept a payload that names --workspace, --attest-dir or
+//     --expected-version. The first two belong to the topology and the third must come
+//     from a live read or it enforces nothing.
+//
+// The remote quoting is not this file's invention either: `shellQuote` comes from the
+// switch rehearsal's library, where it was written because ssh re-joins the remote argv
+// with spaces and hands the result to a login shell, so a `--scope` carrying
+// parentheses became a remote syntax error. Imported, not copied.
+
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { dirname, relative, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+import { shellQuote, ssh } from "../aos-resident-cockpit/resident-lib.mjs";
+import {
+  ACTOR, REPO_ROOT, VM_ATTEST_DIR, VM_ENGINE_CLI, VM_HOST, VM_WORKSPACE
+} from "./topology.mjs";
+import {
+  assertPayload, catalogueIndex, judgeReadback, planStep, resolveExpectations
+} from "./ceremony-plan.mjs";
+
+const sha256Text = (text) => createHash("sha256").update(Buffer.from(text, "utf8")).digest("hex");
+const instant = () => new Date().toISOString().replace(/\.\d+Z$/u, "Z");
+
+/**
+ * A payload path stated relative to this checkout when it is inside it.
+ *
+ * A payload from outside the repository is reported as `<outside-repository>` rather
+ * than as a `../../..` walk back out: the relative form would leak the same host
+ * structure the absolute form does, one segment at a time.
+ */
+function relativeToRepo(path) {
+  const rel = relative(REPO_ROOT, resolve(path));
+  return rel.startsWith("..") ? "<outside-repository>" : rel;
+}
+
+/** One engine verb on the host that owns the chain. A refusal is data, not a throw. */
+export async function remoteEngine(argv) {
+  const remote = ["node", VM_ENGINE_CLI, ...argv].map(shellQuote).join(" ");
+  const result = await ssh([remote], { allowFailure: true });
+  const emitted = result.code === 0 ? result.stdout : (result.stderr.trim() || result.stdout.trim());
+  let json = null;
+  try { json = JSON.parse(emitted); } catch { json = null; }
+  return {
+    accepted: result.code === 0 && json !== null,
+    exitCode: result.code,
+    reasonCode: json?.reasonCode ?? json?.error ?? (json === null ? "NON_JSON_OUTPUT" : null),
+    json,
+    raw: json === null ? emitted.slice(0, 400) : undefined
+  };
+}
+
+/** The live head, read immediately before each mutating step. */
+export async function readChainHead() {
+  const status = await remoteEngine(["status", "--workspace", VM_WORKSPACE]);
+  if (!status.accepted) {
+    throw new Error(`the host engine refused to report status: ${status.reasonCode ?? status.exitCode}`);
+  }
+  return {
+    workspaceId: status.json.workspaceId,
+    version: status.json.version,
+    headEventHash: status.json.headEventHash,
+    work: status.json.work
+  };
+}
+
+export async function runCeremony({ payloadPath, dryRun = false }) {
+  const payloadText = readFileSync(payloadPath, "utf8");
+  const payload = JSON.parse(payloadText);
+  const admission = assertPayload(payload);
+  if (!admission.ok) {
+    return { ok: false, reasonCode: admission.reasonCode, problems: admission.problems };
+  }
+
+  const catalogueResult = await remoteEngine(["commands"]);
+  if (!catalogueResult.accepted) {
+    return { ok: false, reasonCode: "HOST_CATALOGUE_UNAVAILABLE", detail: catalogueResult.reasonCode };
+  }
+  const commands = catalogueResult.json.commands ?? catalogueResult.json.result?.commands ?? [];
+  const catalogue = catalogueIndex(commands);
+
+  const supply = { workspace: VM_WORKSPACE, attestDir: VM_ATTEST_DIR, actor: payload.actor ?? ACTOR };
+  const receipt = {
+    schemaVersion: "aos.local-client-ceremony-receipt.v1",
+    story: payload.story,
+    intent: payload.intent,
+    startedAt: instant(),
+    dryRun,
+    host: VM_HOST,
+    topology: {
+      engineCli: VM_ENGINE_CLI,
+      workspace: VM_WORKSPACE,
+      attestDir: VM_ATTEST_DIR,
+      actor: supply.actor,
+      configuredIn: "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs)"
+    },
+    // Repo-relative when the payload lives in this checkout, so a receipt can be
+    // committed as evidence without carrying this laptop's home directory into it
+    // (TCRN-AOS-INC-037: two receipts shipped exactly that, and making this repository
+    // public then cost a 93-commit history rewrite). The digest is what identifies the
+    // payload anyway; the path is a courtesy for a reader.
+    payload: {
+      path: relativeToRepo(payloadPath),
+      sha256: sha256Text(payloadText),
+      bytes: Buffer.byteLength(payloadText, "utf8")
+    },
+    hostEngineCatalogue: { verbs: commands.length },
+    chainBefore: await readChainHead(),
+    steps: [],
+    readback: [],
+    chainAfter: null
+  };
+
+  for (const step of payload.steps) {
+    // Re-read the head before EVERY mutating step. A batch advances the chain as it
+    // runs, so one sentinel captured at the start would be stale by step two — and a
+    // stale sentinel does not fail safe silently, it fails the step with a CAS
+    // mismatch, which reads like a defect in the payload.
+    const head = step.readHeadFirst === false ? receipt.chainBefore : await readChainHead();
+    const plan = planStep({ step, catalogue, supply, chainVersion: head.version, at: instant() });
+    if (!plan.ok) {
+      receipt.steps.push({ ...plan, headAtPlanning: head.version });
+      receipt.ok = false;
+      receipt.reasonCode = plan.reasonCode;
+      return receipt;
+    }
+    if (dryRun) {
+      receipt.steps.push({
+        ...plan, headAtPlanning: head.version, executed: false,
+        // The values are shown; nothing is sent. A dry run that also sent the command
+        // would be a dry run in name only.
+        wouldSend: `node ${VM_ENGINE_CLI} ${plan.argv.map(shellQuote).join(" ")}`
+      });
+      continue;
+    }
+    const result = await remoteEngine(plan.argv);
+    receipt.steps.push({
+      ...plan,
+      headAtPlanning: head.version,
+      executed: true,
+      accepted: result.accepted,
+      reasonCode: result.reasonCode,
+      recordId: result.json?.record?.id ?? result.json?.id ?? null,
+      version: result.json?.version ?? null,
+      raw: result.raw
+    });
+    if (!result.accepted) {
+      receipt.ok = false;
+      receipt.reasonCode = "STEP_REFUSED_BY_HOST_ENGINE";
+      receipt.chainAfter = await readChainHead();
+      return receipt;
+    }
+  }
+
+  for (const step of payload.readback) {
+    const plan = planStep({ step, catalogue, supply, chainVersion: null, at: instant() });
+    if (!plan.ok) {
+      receipt.readback.push(plan);
+      receipt.ok = false;
+      receipt.reasonCode = plan.reasonCode;
+      return receipt;
+    }
+    if (dryRun) {
+      receipt.readback.push({ ...plan, executed: false });
+      continue;
+    }
+    const result = await remoteEngine(plan.argv);
+    // `work-show` answers with the immutable `record` and the mutable `advisory` as
+    // SIBLINGS, so a read-back comparison written against `record` alone can never see
+    // a scope, a sprint or a decided-by — the very fields an annotate sets. Both are
+    // flattened into one view to compare against, with `record` last so an immutable
+    // field can never be shadowed by an advisory one of the same name.
+    const record = result.json === null ? null : { ...result.json.advisory, ...result.json.record };
+    const { expected, problems } = resolveExpectations({ step, steps: payload.steps });
+    if (problems.length > 0) {
+      receipt.readback.push({ ...plan, executed: true, reasonCode: "EXPECTATION_UNRESOLVABLE", problems });
+      receipt.ok = false;
+      receipt.reasonCode = "EXPECTATION_UNRESOLVABLE";
+      return receipt;
+    }
+    const verdict = judgeReadback({ expected, observed: record });
+    receipt.readback.push({
+      ...plan,
+      executed: true,
+      accepted: result.accepted,
+      reasonCode: result.reasonCode,
+      verdict,
+      record: step.recordFields
+        ? Object.fromEntries(step.recordFields.map((field) => [field, record?.[field] ?? null]))
+        : undefined
+    });
+    if (!result.accepted || verdict.ok === false) {
+      receipt.ok = false;
+      receipt.reasonCode = !result.accepted ? "READBACK_REFUSED" : "READBACK_DIVERGENT";
+      receipt.chainAfter = await readChainHead();
+      return receipt;
+    }
+  }
+
+  receipt.chainAfter = await readChainHead();
+  receipt.eventsAppended = receipt.chainAfter.version - receipt.chainBefore.version;
+  receipt.ok = true;
+  receipt.reasonCode = dryRun ? "CEREMONY_PLANNED_ONLY" : "CEREMONY_COMPLETED_AND_READ_BACK";
+  receipt.finishedAt = instant();
+  return receipt;
+}
+
+function argument(name) {
+  const index = process.argv.indexOf(`--${name}`);
+  return index >= 0 ? process.argv[index + 1] : undefined;
+}
+
+if (import.meta.url === pathToFileURL(resolve(process.argv[1] ?? "")).href) {
+  const payloadPath = argument("payload");
+  if (!payloadPath) {
+    process.stderr.write("usage: ceremony.mjs --payload <file.json> [--receipt <file.json>] [--dry-run]\n");
+    process.exit(2);
+  }
+  const receipt = await runCeremony({
+    payloadPath: resolve(payloadPath),
+    dryRun: process.argv.includes("--dry-run")
+  });
+  const receiptPath = argument("receipt");
+  if (receiptPath) {
+    mkdirSync(dirname(resolve(receiptPath)), { recursive: true });
+    writeFileSync(resolve(receiptPath), `${JSON.stringify(receipt, null, 2)}\n`);
+  }
+  process.stdout.write(`${JSON.stringify(receipt, null, 2)}\n`);
+  if (receipt.ok !== true) process.exitCode = 1;
+}

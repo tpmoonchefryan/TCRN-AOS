@@ -77,6 +77,28 @@ export const HOST_PATH_RULES = Object.freeze([
     id: "platform-root-foreign-mount",
     pattern: /\/Code\/TCRN Platform/gu,
     detectOnly: true
+  },
+  {
+    /**
+     * The home directory with its separators replaced by dashes.
+     *
+     * Found by TCRN-AOS-STORY-133, which emitted a receipt naming a scratch address
+     * under a Claude Code session directory: those are named after the project path
+     * with `/` rewritten to `-`, so the operator's home directory arrives as
+     * `-Users-<name>-Code-TCRN-Platform`. Every rule above looks for a `/Users/`
+     * shape, so the whole file passed the gate while carrying the account name. The
+     * lesson is not the dash — it is that this gate only ever caught the ONE encoding
+     * it was written against, and the scrubber's green said nothing about the others.
+     *
+     * `detectOnly`, because there is no safe rewrite: the dashes are ambiguous (a
+     * directory may legitimately contain one), so this cannot be un-mangled back into
+     * a path and the placeholder would be a guess. A person decides — which for an
+     * emitter means reporting the shape rather than the address, the way
+     * deploy/aos-local-client/red-proof.mjs reports `<scratch>/…`.
+     */
+    id: "home-directory-dash-encoded",
+    pattern: /-Users-[A-Za-z0-9_.]+/gu,
+    detectOnly: true
   }
 ]);
 

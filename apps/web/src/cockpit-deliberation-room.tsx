@@ -11,7 +11,9 @@ import {
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
 
 import { cockpitData } from "./cockpit-data.generated.js";
-import { chainStatusLabel, outcomeClassLabel, type CockpitPosition } from "./cockpit-types.js";
+import {
+  chainStatusLabel, deliberationContentRead, outcomeClassLabel, type CockpitPosition
+} from "./cockpit-types.js";
 import { format, pick, type CopyEntry } from "./copy.js";
 
 /**
@@ -33,11 +35,11 @@ const roomCopy = {
     fr: "mode d'exécution non déclaré"
   },
   threadNotRead: {
-    "zh-CN": "该项目的立场未读取（链体量超出读面上限），此处只有标题与状态,不是这场审议没有立场。",
-    en: "This project's positions were not read (its chain exceeds the read surface ceiling). Only title and status are shown; that is not the same as the deliberation having no positions.",
-    ja: "このプロジェクトの立場は読み取られていません（チェーンが読み取り面の上限を超過）。ここには標題とステータスのみが表示されます。この審議に立場がないことと同じではありません。",
-    ko: "이 프로젝트의 입장을 읽지 못했습니다(체인이 읽기 표면 상한을 초과). 여기에는 제목과 상태만 표시됩니다. 이 심의에 입장이 없다는 뜻이 아닙니다.",
-    fr: "Les positions de ce projet n'ont pas été lues (sa chaîne dépasse le plafond de la surface de lecture). Seuls le titre et le statut sont affichés ; ce n'est pas la même chose que l'absence de positions."
+    "zh-CN": "该项目的立场未读取（投影的读取尝试被拒），此处只有标题与状态,不是这场审议没有立场。",
+    en: "This project's positions were not read (the projection's read of them was refused). Only title and status are shown; that is not the same as the deliberation having no positions.",
+    ja: "このプロジェクトの立場は読み取られていません（投影による読み取りが拒否されました）。ここには標題とステータスのみが表示されます。この審議に立場がないことと同じではありません。",
+    ko: "이 프로젝트의 입장을 읽지 못했습니다(투영의 읽기 시도가 거부되었습니다). 여기에는 제목과 상태만 표시됩니다. 이 심의에 입장이 없다는 뜻이 아닙니다.",
+    fr: "Les positions de ce projet n'ont pas été lues (la lecture par la projection a été refusée). Seuls le titre et le statut sont affichés ; ce n'est pas la même chose que l'absence de positions."
   },
   positionsNotRead: {
     "zh-CN": "立场未取。",
@@ -166,7 +168,7 @@ export function DeliberationRoomView({
   const thread = cockpitData.threads[conference.id] ?? [];
   const minutes = cockpitData.minutesByConference[conference.id];
   const rounds = groupIntoRounds(thread);
-  const threadUnread = Boolean(partition?.unavailable.includes("positions"));
+  const threadUnread = !deliberationContentRead(partition);
 
   return (
     <div

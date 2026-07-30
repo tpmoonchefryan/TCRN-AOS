@@ -12,7 +12,9 @@ import {
 import type { TcrnLocale } from "@tcrn/ui-copy-state";
 
 import { cockpitData } from "./cockpit-data.generated.js";
-import { chainStatusLabel, partitionDisplayName, type CockpitConference } from "./cockpit-types.js";
+import {
+  chainStatusLabel, deliberationContentRead, partitionDisplayName, type CockpitConference
+} from "./cockpit-types.js";
 import { format, joinNames, pick, type CopyEntry } from "./copy.js";
 
 /**
@@ -144,7 +146,10 @@ export function DeliberationsView({
   const open = conferences.filter((entry) => entry.status === "open");
   const closed = conferences.filter((entry) => entry.status !== "open");
 
-  const unread = cockpitData.partitions.filter((entry) => entry.unavailable.length > 0);
+  // Named family, not "missing anything": this banner speaks about positions and
+  // minutes, and asking the wider question kept it on screen after both became
+  // readable (TCRN-AOS-STORY-134).
+  const unread = cockpitData.partitions.filter((entry) => !deliberationContentRead(entry));
 
   const clearSearchQuery = new URLSearchParams({
     q: "",
@@ -269,7 +274,7 @@ function ConferenceBand({
         <ol className="tcrn-aos-conference-list">
           {conferences.map((conference) => {
             const partition = cockpitData.partitions.find((entry) => entry.id === conference.partitionId);
-            const threadRead = partition ? !partition.unavailable.includes("positions") : false;
+            const threadRead = deliberationContentRead(partition);
             return (
               <li key={conference.id}>
                 <a

@@ -5,6 +5,13 @@
 > operating and read faces, not the store; the mirror is no longer a transitional
 > stage but the standing form. **There is no switchover to rehearse any more.**
 >
+> **Superseded in one clause (`TCRN-AOS-MIN-012` decision 7, STORY-134): the mirror
+> is not the standing form either — it is gone.** The truth host acquired a
+> RESIDENT cockpit, which is the real read face rather than a static copy of one,
+> so the nginx mirror and its `aos.tcrn.lan` ingress were removed and this platform
+> publishes nothing on the LAN for AOS. Read the sentence above as the ruling it was
+> when it was written; the rest of this note stands.
+>
 > These acts are kept, and they are not kept as history. What they exercise —
 > freeze, restore from a base that answers `snapshot-verify` **and** `validate`,
 > enumerate the delta, replay through the engine's own verbs, reconcile, re-anchor

@@ -156,6 +156,21 @@ test("every host-path shape is detected, and every rewritable one round-trips to
   const foreign = "/Volumes/backup/Code/TCRN Platform/evidence";
   assert.ok(findHostPaths(foreign).some((hit) => hit.rule === "platform-root-foreign-mount"));
   assert.ok(HOST_PATH_RULES.find((rule) => rule.id === "platform-root-foreign-mount").detectOnly);
+
+  // The home directory with its separators mangled to dashes — a Claude Code session
+  // directory (TCRN-AOS-STORY-133 emitted one and this gate passed it, because every
+  // other rule looks for a `/Users/` shape). Both sides asserted: the dash-encoded
+  // form must be found, and the same session id WITHOUT the account name must not be,
+  // so the rule is keyed on the leak rather than on "this looks like a session dir".
+  const dashEncoded = "<local-private-tmp>/claude-501/-Users-someone-Code-TCRN-Platform/abc/scratchpad";
+  const hits = findHostPaths(dashEncoded);
+  assert.ok(hits.some((hit) => hit.rule === "home-directory-dash-encoded"),
+    `the dash-encoded home must be detected, saw ${hits.map((hit) => hit.rule).join(",")}`);
+  assert.ok(HOST_PATH_RULES.find((rule) => rule.id === "home-directory-dash-encoded").detectOnly,
+    "there is no safe rewrite for a dash-mangled path; it must fail closed for a person");
+  assert.deepEqual(
+    findHostPaths("<local-private-tmp>/claude-501/abc-def/scratchpad/story133-red-proof"), [],
+    "a scratch path carrying no account name must not be flagged");
 });
 
 test("scrubbing rewrites paths and nothing else", () => {
