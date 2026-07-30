@@ -1,0 +1,474 @@
+{
+  "schemaVersion": "aos.topology-doc-sync-proof.v1",
+  "story": "TCRN-AOS-STORY-136",
+  "ruling": "TCRN-AOS-MIN-012 direction D — 本机是纯客户端;文档必须能被机器核对",
+  "ok": true,
+  "reasonCode": "DOC_TOPOLOGY_IN_SYNC",
+  "unmetExpectations": [],
+  "expectations": [
+    {
+      "id": "GREEN_ON_THIS_PLATFORM",
+      "met": true,
+      "expected": "DOC_TOPOLOGY_CLAIMS_MATCH_MEASUREMENT",
+      "observed": "DOC_TOPOLOGY_CLAIMS_MATCH_MEASUREMENT"
+    },
+    {
+      "id": "EVERY_REGISTERED_DOCUMENT_PRESENT",
+      "met": true,
+      "expected": 13,
+      "observed": 13
+    },
+    {
+      "id": "EVERY_REQUIRED_BLOCK_CARRIES_ITS_PARTITIONS",
+      "met": true,
+      "expected": "each required document declares exactly its registered partition set",
+      "observed": [
+        "CLAUDE.md=TCRN-AOS+TCRN-Design-System+TCRN-TMS+cross-project",
+        "docs/delivery-cadence-convention.md=TCRN-AOS+TCRN-Design-System+TCRN-TMS+cross-project",
+        "TCRN-AOS/CLAUDE.md=TCRN-AOS",
+        "TCRN-Design-System/CLAUDE.md=TCRN-Design-System",
+        "TCRN-TMS/CLAUDE.md=TCRN-TMS"
+      ]
+    },
+    {
+      "id": "MEASUREMENT_RAN",
+      "met": true,
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "RED_HOME_FLIPPED_IN_A_REAL_DOCUMENT",
+      "met": true,
+      "expected": "CLAIMED_HOME_CONTRADICTS_ROSTER",
+      "observed": [
+        "CLAIMED_HOME_CONTRADICTS_ROSTER"
+      ]
+    },
+    {
+      "id": "RED_ADDRESS_ALTERED_BY_ONE_SEGMENT",
+      "met": true,
+      "expected": "CLAIMED_ADDRESS_CONTRADICTS_ROSTER",
+      "observed": [
+        "CLAIMED_ADDRESS_CONTRADICTS_ROSTER",
+        "RECHECK_COMMAND_DOES_NOT_NAME_THE_CLAIMED_ADDRESS"
+      ]
+    },
+    {
+      "id": "RED_REQUIRED_BLOCK_DELETED",
+      "met": true,
+      "expected": "REQUIRED_CLAIM_BLOCK_ABSENT",
+      "observed": [
+        "REQUIRED_CLAIM_BLOCK_ABSENT"
+      ]
+    },
+    {
+      "id": "RED_STALE_SENTENCE_BESIDE_A_CORRECT_TABLE",
+      "met": true,
+      "expected": "ADDRESS_STATED_OUTSIDE_A_CLAIM_BLOCK",
+      "observed": [
+        "ADDRESS_STATED_OUTSIDE_A_CLAIM_BLOCK"
+      ]
+    },
+    {
+      "id": "RED_MEASUREMENT_CONTRADICTS_A_CONSISTENT_ROSTER",
+      "met": true,
+      "expected": "ROSTER_SAYS_LOCAL_BUT_ENGINE_DOES_NOT_ANSWER_HERE",
+      "observed": "DOC_TOPOLOGY_CLAIM_DRIFTED"
+    },
+    {
+      "id": "ON_DISK_RED_WAS_PERFORMED",
+      "met": true,
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "ON_DISK_RED_WENT_GREEN_RED_GREEN",
+      "met": true,
+      "expected": "green→red→green",
+      "observed": "green→red→green"
+    },
+    {
+      "id": "ON_DISK_RED_NAMED_THE_ROW_IT_BROKE",
+      "met": true,
+      "expected": "CLAIMED_HOME_CONTRADICTS_ROSTER at CLAUDE.md",
+      "observed": true
+    },
+    {
+      "id": "ON_DISK_RED_RESTORED_THE_DOCUMENT",
+      "met": true,
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "AWAY_HOST_ANSWERED_FOR_ITSELF",
+      "met": true,
+      "expected": "workspace:fbc32e3ff874fbbd637a1b85",
+      "observed": "workspace:fbc32e3ff874fbbd637a1b85"
+    }
+  ],
+  "claim": {
+    "predicate": "平台内任何登记文档若声称某分区的真值位置,该声明须写在声明块内、与名册一致,且名册须与引擎在该地址上的实测答复一致。具体地址出现在块外即为缺陷。",
+    "threeTerms": [
+      "文档声明",
+      "名册(topology.mjs)",
+      "引擎实测(权威)"
+    ],
+    "whereTheJudgementLives": "deploy/aos-local-client/doc-topology-predicates.mjs (in the pnpm test roster)",
+    "whereTheRegistryLives": "deploy/aos-local-client/doc-topology-registry.mjs",
+    "awayHost": "tcrn-platform-dev",
+    "awayWorkspaceFromManifest": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+  },
+  "observedAt": "2026-07-30T03:28:40Z",
+  "probeVm": true,
+  "observations": {
+    "TCRN-AOS": {
+      "partitionId": "TCRN-AOS",
+      "home": "vm",
+      "localAddressRelative": ".tcrn-workspace/TCRN-AOS/workspace",
+      "localAccepted": false,
+      "localReasonCode": "WORKSPACE_RELOCATION_VACATED",
+      "localVersion": null,
+      "localWorkspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+      "vmProbed": true,
+      "vmAddress": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+      "vmAccepted": true,
+      "vmReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "vmWorkspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+      "vmVersion": 864,
+      "vmHeadEventHash": "f69582bc63198996a14fc1bb584f2bd6217dbab72087bb071971bc252a1008d5"
+    },
+    "cross-project": {
+      "partitionId": "cross-project",
+      "home": "local",
+      "localAddressRelative": ".tcrn-workspace/cross-project/workspace",
+      "localAccepted": true,
+      "localReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "localVersion": 1338,
+      "localWorkspaceId": "workspace:7732a51de4c38afb83bb77cf",
+      "vmProbed": false
+    },
+    "TCRN-Design-System": {
+      "partitionId": "TCRN-Design-System",
+      "home": "local",
+      "localAddressRelative": ".tcrn-workspace/TCRN-Design-System/workspace",
+      "localAccepted": true,
+      "localReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "localVersion": 983,
+      "localWorkspaceId": "workspace:e7386bdcff8b3407e43ece51",
+      "vmProbed": false
+    },
+    "TCRN-TMS": {
+      "partitionId": "TCRN-TMS",
+      "home": "local",
+      "localAddressRelative": ".tcrn-workspace/TCRN-TMS/workspace",
+      "localAccepted": true,
+      "localReasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "localVersion": 228,
+      "localWorkspaceId": "workspace:f15c5abb6cd777c44453c2c9",
+      "vmProbed": false
+    }
+  },
+  "green": {
+    "ok": true,
+    "reasonCode": "DOC_TOPOLOGY_CLAIMS_MATCH_MEASUREMENT",
+    "measured": true,
+    "findings": [],
+    "findingCodes": [],
+    "perDocument": [
+      {
+        "path": "CLAUDE.md",
+        "exists": true,
+        "mustCarryClaims": true,
+        "blocks": 1,
+        "claims": 4,
+        "partitions": [
+          "TCRN-AOS",
+          "TCRN-Design-System",
+          "TCRN-TMS",
+          "cross-project"
+        ]
+      },
+      {
+        "path": "docs/delivery-cadence-convention.md",
+        "exists": true,
+        "mustCarryClaims": true,
+        "blocks": 1,
+        "claims": 4,
+        "partitions": [
+          "TCRN-AOS",
+          "TCRN-Design-System",
+          "TCRN-TMS",
+          "cross-project"
+        ]
+      },
+      {
+        "path": "TCRN-AOS/CLAUDE.md",
+        "exists": true,
+        "mustCarryClaims": true,
+        "blocks": 1,
+        "claims": 1,
+        "partitions": [
+          "TCRN-AOS"
+        ]
+      },
+      {
+        "path": "TCRN-Design-System/CLAUDE.md",
+        "exists": true,
+        "mustCarryClaims": true,
+        "blocks": 1,
+        "claims": 1,
+        "partitions": [
+          "TCRN-Design-System"
+        ]
+      },
+      {
+        "path": "TCRN-TMS/CLAUDE.md",
+        "exists": true,
+        "mustCarryClaims": true,
+        "blocks": 1,
+        "claims": 1,
+        "partitions": [
+          "TCRN-TMS"
+        ]
+      },
+      {
+        "path": "AGENTS.md",
+        "exists": true,
+        "mustCarryClaims": false,
+        "blocks": 0,
+        "claims": 0,
+        "partitions": []
+      },
+      {
+        "path": "tcrn-workflow/CLAUDE.md",
+        "exists": true,
+        "mustCarryClaims": false,
+        "blocks": 0,
+        "claims": 0,
+        "partitions": []
+      },
+      {
+        "path": "tcrn-workflow/AGENTS.md",
+        "exists": true,
+        "mustCarryClaims": false,
+        "blocks": 0,
+        "claims": 0,
+        "partitions": []
+      },
+      {
+        "path": "TCRN-AOS/AGENTS.md",
+        "exists": true,
+        "mustCarryClaims": false,
+        "blocks": 0,
+        "claims": 0,
+        "partitions": []
+      },
+      {
+        "path": "TCRN-Design-System/AGENTS.md",
+        "exists": true,
+        "mustCarryClaims": false,
+        "blocks": 0,
+        "claims": 0,
+        "partitions": []
+      },
+      {
+        "path": "TCRN-TMS/AGENTS.md",
+        "exists": true,
+        "mustCarryClaims": false,
+        "blocks": 0,
+        "claims": 0,
+        "partitions": []
+      },
+      {
+        "path": "docs/direction-and-tracks-convention.md",
+        "exists": true,
+        "mustCarryClaims": false,
+        "blocks": 0,
+        "claims": 0,
+        "partitions": []
+      },
+      {
+        "path": "docs/harness-constraint-convention.md",
+        "exists": true,
+        "mustCarryClaims": false,
+        "blocks": 0,
+        "claims": 0,
+        "partitions": []
+      }
+    ],
+    "counts": {
+      "documents": 13,
+      "documentsCarryingClaims": 5,
+      "claims": 11
+    }
+  },
+  "reds": [
+    {
+      "id": "HOME_FLIPPED_IN_A_REAL_DOCUMENT",
+      "why": "CLAUDE.md 把 cross-project 的 home 从 local 改写成 vm——即「这个分区的真值已经搬走了」这句假话。",
+      "wentRed": true,
+      "reasonCode": "DOC_TOPOLOGY_CLAIM_DRIFTED",
+      "expectedCode": "CLAIMED_HOME_CONTRADICTS_ROSTER",
+      "raisedExpectedCode": true,
+      "named": [
+        {
+          "path": "CLAUDE.md",
+          "partitionId": "cross-project",
+          "line": null,
+          "expected": "local",
+          "observed": "vm"
+        }
+      ],
+      "namesWhatItShould": true,
+      "findingCodes": [
+        "CLAIMED_HOME_CONTRADICTS_ROSTER"
+      ]
+    },
+    {
+      "id": "ADDRESS_ALTERED_BY_ONE_SEGMENT",
+      "why": "CLAUDE.md 把 TCRN-AOS 的真值地址改掉一段路径——地址错一段与错整条同样致命,因为读者会照着它跑命令。",
+      "wentRed": true,
+      "reasonCode": "DOC_TOPOLOGY_CLAIM_DRIFTED",
+      "expectedCode": "CLAIMED_ADDRESS_CONTRADICTS_ROSTER",
+      "raisedExpectedCode": true,
+      "named": [
+        {
+          "path": "CLAUDE.md",
+          "partitionId": "TCRN-AOS",
+          "line": null,
+          "expected": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+          "observed": "/srv/tcrn/governance-old/tcrn-workspace/TCRN-AOS/workspace"
+        }
+      ],
+      "namesWhatItShould": true,
+      "findingCodes": [
+        "CLAIMED_ADDRESS_CONTRADICTS_ROSTER",
+        "RECHECK_COMMAND_DOES_NOT_NAME_THE_CLAIMED_ADDRESS"
+      ]
+    },
+    {
+      "id": "REQUIRED_BLOCK_DELETED",
+      "why": "整块声明被删掉。若删块能让上面两条红消失,这道门就只是一条建议。",
+      "wentRed": true,
+      "reasonCode": "DOC_TOPOLOGY_CLAIM_DRIFTED",
+      "expectedCode": "REQUIRED_CLAIM_BLOCK_ABSENT",
+      "raisedExpectedCode": true,
+      "named": [
+        {
+          "path": "CLAUDE.md",
+          "partitionId": null,
+          "line": null,
+          "expected": [
+            "TCRN-AOS",
+            "cross-project",
+            "TCRN-Design-System",
+            "TCRN-TMS"
+          ],
+          "observed": null
+        }
+      ],
+      "namesWhatItShould": true,
+      "findingCodes": [
+        "REQUIRED_CLAIM_BLOCK_ABSENT"
+      ]
+    },
+    {
+      "id": "STALE_SENTENCE_BESIDE_A_CORRECT_TABLE",
+      "why": "声明块保持正确,却在正文里另写一句带具体地址的话——这正是本会话栽过的那个形状:一处更新了,另一处没有,而两处都在同一份文档里。",
+      "wentRed": true,
+      "reasonCode": "DOC_TOPOLOGY_CLAIM_DRIFTED",
+      "expectedCode": "ADDRESS_STATED_OUTSIDE_A_CLAIM_BLOCK",
+      "raisedExpectedCode": true,
+      "named": [
+        {
+          "path": "CLAUDE.md",
+          "partitionId": null,
+          "line": 170,
+          "expected": null,
+          "observed": null
+        },
+        {
+          "path": "CLAUDE.md",
+          "partitionId": null,
+          "line": 170,
+          "expected": null,
+          "observed": null
+        }
+      ],
+      "namesWhatItShould": true,
+      "findingCodes": [
+        "ADDRESS_STATED_OUTSIDE_A_CLAIM_BLOCK"
+      ]
+    },
+    {
+      "id": "MEASUREMENT_CONTRADICTS_A_CONSISTENT_ROSTER",
+      "why": "名册与全部文档一致,但引擎在那个地址上不再答活。此时错的是名册与文档,不是机器——这一格存在的意义就是:让「两份陈述互相自洽」不足以让本判据变绿。",
+      "wentRed": true,
+      "reasonCode": "DOC_TOPOLOGY_CLAIM_DRIFTED",
+      "expectedCode": "ROSTER_SAYS_LOCAL_BUT_ENGINE_DOES_NOT_ANSWER_HERE",
+      "raisedExpectedCode": true,
+      "namesWhatItShould": true,
+      "named": [
+        {
+          "partitionId": "cross-project",
+          "observed": "WORKSPACE_RELOCATION_VACATED"
+        }
+      ]
+    }
+  ],
+  "onDiskRed": {
+    "ran": true,
+    "transcriptPath": "deploy/aos-local-client/on-disk-red-2026-07-30.json",
+    "performedAt": "2026-07-30",
+    "target": {
+      "document": "CLAUDE.md",
+      "mutation": "把声明块里 `TCRN-TMS` 那一行的 home 由 `local` 改成 `vm`",
+      "whyThisMutation": "它是一句语法完好、读起来完全可信的假话——正是本会话两次翻车的形状:文档说真值搬走了,而机器上它还在。改的是一个 home 值,不是格式,所以任何「只检查块存不存在」的判据都会照绿。"
+    },
+    "arcStates": "green→red→green",
+    "arcIsGreenRedGreen": true,
+    "redNamedTheRow": true,
+    "restoredByteIdentical": true,
+    "arc": [
+      {
+        "step": 1,
+        "state": "green",
+        "exitCode": 0,
+        "reasonCode": "DOC_TOPOLOGY_IN_SYNC",
+        "ok": true
+      },
+      {
+        "step": 2,
+        "state": "red",
+        "exitCode": 1,
+        "reasonCode": "DOC_TOPOLOGY_PROOF_INCOMPLETE",
+        "ok": false,
+        "unmetExpectations": [
+          "GREEN_ON_THIS_PLATFORM"
+        ],
+        "findings": [
+          {
+            "code": "CLAIMED_HOME_CONTRADICTS_ROSTER",
+            "path": "CLAUDE.md",
+            "partitionId": "TCRN-TMS",
+            "expected": "local",
+            "observed": "vm"
+          }
+        ]
+      },
+      {
+        "step": 3,
+        "state": "green",
+        "exitCode": 0,
+        "reasonCode": "DOC_TOPOLOGY_IN_SYNC",
+        "ok": true
+      }
+    ]
+  },
+  "ceiling": {
+    "registryIsClosed": "只核对名册里这些文档。名册外的一份文档写错了地址,本判据看不见——所以新增会声称真值位置的入口文档时,同一次改动要把它登记进来。",
+    "containmentIsSyntactic": "收容规则判的是「具体地址是否只出现在声明块内」,它不判块外那句话的真假。块外出现即红,由人把它搬进块里,由块的真值检查接手。",
+    "awayHomeWithoutProbe": "不带 --probe-vm 时,home=vm 的证据是「本机这个地址不再答活」——它证明真值不在本机,不证明真值在那台机器上。带 --probe-vm 才问了对方本身(仪器纪律第 4 条)。",
+    "recheckCommandNotExecuted": "复核命令列只被检查「是否包含所声明的地址」,并未被执行。它保证地址变了命令必须跟着变,不保证那条命令今天能跑通。"
+  }
+}

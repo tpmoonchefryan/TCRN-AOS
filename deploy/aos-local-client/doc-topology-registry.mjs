@@ -1,0 +1,165 @@
+// TCRN-AOS-STORY-136 — which documents on this platform are allowed to state where a
+// partition's truth lives, and what each of them must state.
+//
+// WHY A REGISTRY AND NOT A GREP. The lesson this file mechanises is "举例即断言": a
+// convention that names an instance has, by naming it, asserted something about that
+// instance's present state — and nothing maintains that assertion. It has now cost this
+// platform the same mistake twice (a repository described as remote-less after it had a
+// remote; a LAN mirror address quoted after it was retired). A scan that merely looked
+// for suspicious sentences would be the third instance of a failure mode already in the
+// knowledge base: a predicate that measures whether some prose mentions a thing rather
+// than whether the thing is where the prose says.
+//
+// So the shape is inverted. A location claim must be written in ONE machine-readable
+// form (the claim block below), the block is checked against a real measurement, and any
+// concrete address appearing OUTSIDE a block is itself a finding. The first half makes
+// claims checkable; the second half stops a writer from routing around the check by
+// phrasing the claim as prose.
+//
+// `expectedPartitions` is the part that cannot be deleted quietly. Without it, removing a
+// row — or removing the whole block — would make a finding disappear, which is exactly
+// the hole `local-purity-predicates.mjs` had to close for the partition roster. With it,
+// a registry entry states the claims the document is REQUIRED to carry, so deletion reds.
+
+import { join } from "node:path";
+import { PARTITION_ROSTER, PLATFORM_ROOT } from "./topology.mjs";
+
+// Re-exported, not re-declared: the markers belong to the parser that consumes them.
+export { CLAIM_BLOCK_BEGIN, CLAIM_BLOCK_END } from "./doc-topology-predicates.mjs";
+
+const ALL_PARTITIONS = Object.freeze(PARTITION_ROSTER.map((entry) => entry.partitionId));
+
+/**
+ * The registry.
+ *
+ * `mustCarryClaims: false` does not mean "unchecked". Those documents are still subject
+ * to the containment rule, which is the half that catches a NEW claim written into a
+ * document that was never supposed to make one. A document that is in neither list is
+ * genuinely unchecked, and that is the declared ceiling of this gate — see CEILING.
+ */
+export const DOC_REGISTRY = Object.freeze([
+  Object.freeze({
+    path: "CLAUDE.md",
+    what: "平台级代理入口。四个分区现在不在同一台机器上,这件事必须在这里说全。",
+    mustCarryClaims: true,
+    expectedPartitions: ALL_PARTITIONS
+  }),
+  Object.freeze({
+    path: "docs/delivery-cadence-convention.md",
+    what: "交付节奏公约。它的第 7 条(中断保险)直接依赖真值在哪台机器上,所以它必须自己带一份声明,"
+      + "而不是引别处的散文。",
+    mustCarryClaims: true,
+    expectedPartitions: ALL_PARTITIONS
+  }),
+  Object.freeze({
+    path: "TCRN-AOS/CLAUDE.md",
+    what: "AOS 仓入口。本仓的链已不在本机,进仓的人第一件要知道的事就是这个。",
+    mustCarryClaims: true,
+    expectedPartitions: Object.freeze(["TCRN-AOS"])
+  }),
+  Object.freeze({
+    path: "TCRN-Design-System/CLAUDE.md",
+    what: "DS 仓入口。本仓分区本轮仍在本机——但这句话现在需要被核对,不能再默认。",
+    mustCarryClaims: true,
+    expectedPartitions: Object.freeze(["TCRN-Design-System"])
+  }),
+  Object.freeze({
+    path: "TCRN-TMS/CLAUDE.md",
+    what: "TMS 仓入口。同上。",
+    mustCarryClaims: true,
+    expectedPartitions: Object.freeze(["TCRN-TMS"])
+  }),
+  Object.freeze({
+    path: "AGENTS.md",
+    what: "平台级 Codex 入口。刻意是指针而非副本,故不带声明块;受收容规则约束。",
+    mustCarryClaims: false
+  }),
+  Object.freeze({
+    path: "tcrn-workflow/CLAUDE.md",
+    what: "引擎仓入口。它讲的是动词与副本,不是地址;受收容规则约束。",
+    mustCarryClaims: false
+  }),
+  Object.freeze({
+    path: "tcrn-workflow/AGENTS.md",
+    what: "引擎仓 Codex 入口;受收容规则约束。",
+    mustCarryClaims: false
+  }),
+  Object.freeze({
+    path: "TCRN-AOS/AGENTS.md",
+    what: "AOS 仓 Codex 入口;受收容规则约束。",
+    mustCarryClaims: false
+  }),
+  Object.freeze({
+    path: "TCRN-Design-System/AGENTS.md",
+    what: "DS 仓 Codex 入口;受收容规则约束。",
+    mustCarryClaims: false
+  }),
+  Object.freeze({
+    path: "TCRN-TMS/AGENTS.md",
+    what: "TMS 仓 Codex 入口;受收容规则约束。",
+    mustCarryClaims: false
+  }),
+  Object.freeze({
+    path: "docs/direction-and-tracks-convention.md",
+    what: "方向与轨道公约。它谈的是「真值宿主是一道方向题」,不落具体地址;受收容规则约束。",
+    mustCarryClaims: false
+  }),
+  Object.freeze({
+    path: "docs/harness-constraint-convention.md",
+    what: "约束进化公约。它谈的是「约束在哪台机器上被执行」,不落具体地址;受收容规则约束。",
+    mustCarryClaims: false
+  })
+]);
+
+export const registryPaths = () => DOC_REGISTRY.map((entry) => entry.path);
+export const absoluteDocPath = (relative) => join(PLATFORM_ROOT, relative);
+
+/**
+ * The concrete address strings that may appear only inside a claim block.
+ *
+ * Derived from the roster rather than typed, so a relocation that edits the roster also
+ * moves what the containment rule looks for. Two families per partition:
+ *
+ *   - the local siting convention `.tcrn-workspace/<partition>/workspace`, which is a
+ *     specific address because it names a specific partition. The generic form
+ *     `.tcrn-workspace/<分区>/` with a placeholder is deliberately NOT matched — that is
+ *     prose about the convention, not a claim about one chain;
+ *   - the away partition's `liveAddress`, plus the governance container above it. The
+ *     container is included because "the AOS chain is under /srv/tcrn/governance" is the
+ *     same claim one directory shallower, and a rule that only matched the leaf would be
+ *     trivially side-stepped.
+ */
+export function forbiddenOutsideClaimBlocks(roster = PARTITION_ROSTER) {
+  const literals = new Set();
+  for (const entry of roster) {
+    literals.add(`.tcrn-workspace/${entry.partitionId}/workspace`);
+    if (typeof entry.liveAddress === "string" && entry.liveAddress.length > 0) {
+      literals.add(entry.liveAddress);
+      const container = entry.liveAddress.split("/").slice(0, -2).join("/");
+      if (container.length > 0) literals.add(container);
+    }
+  }
+  return Object.freeze([...literals].sort());
+}
+
+/**
+ * What this gate cannot see, stated where it is configured.
+ *
+ * The third one is the honest limit of the cheap run: refusal at the local address proves
+ * the truth is not HERE, which is not the same claim as "it is on that host". Only
+ * `--probe-vm` asks the host itself, and the artifact records which of the two ran.
+ */
+export const CEILING = Object.freeze({
+  registryIsClosed:
+    "只核对名册里这些文档。名册外的一份文档写错了地址,本判据看不见——"
+    + "所以新增会声称真值位置的入口文档时,同一次改动要把它登记进来。",
+  containmentIsSyntactic:
+    "收容规则判的是「具体地址是否只出现在声明块内」,它不判块外那句话的真假。"
+    + "块外出现即红,由人把它搬进块里,由块的真值检查接手。",
+  awayHomeWithoutProbe:
+    "不带 --probe-vm 时,home=vm 的证据是「本机这个地址不再答活」——它证明真值不在本机,"
+    + "不证明真值在那台机器上。带 --probe-vm 才问了对方本身(仪器纪律第 4 条)。",
+  recheckCommandNotExecuted:
+    "复核命令列只被检查「是否包含所声明的地址」,并未被执行。它保证地址变了命令必须跟着变,"
+    + "不保证那条命令今天能跑通。"
+});
