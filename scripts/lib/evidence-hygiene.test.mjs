@@ -5,7 +5,7 @@ import { join } from "node:path";
 import {
   HOST_PATH_RULES, REPO_ROOT,
   findHostPaths, findPlaceholders, listEvidenceFiles, rehydrateHostPaths, scanEvidenceTree,
-  scrubHostPaths, scrubHostPathsInText, trackedEvidencePaths
+  pendingClosureViolations, scrubHostPaths, scrubHostPathsInText, trackedEvidencePaths
 } from "./evidence-hygiene.mjs";
 
 /**
@@ -198,23 +198,70 @@ test("scrubbing rewrites paths and nothing else", () => {
   assert.equal(receipt.destinationRoot, "/Users/someone/OneDrive/backups");
 });
 
-test("the pending-exception list is closed on every side", () => {
+/** The probes the closure conditions are really about, read from this checkout. */
+function liveProbes() {
   const tracked = trackedEvidencePaths();
   const findings = scanEvidenceTree();
-  for (const entry of PENDING.entries) {
-    assert.ok(typeof entry.reason === "string" && entry.reason.trim().length > 0,
-      `${entry.path} needs a reason`);
-    assert.ok(existsSync(join(REPO_ROOT, entry.path)),
-      `${entry.path} is listed as pending but does not exist — remove the stale entry`);
-    // The exception holds only while the path stays out of history. Adding it
-    // to the index is the moment the hygiene obligation attaches, and the gate
-    // must turn red then rather than keep excusing it.
-    const trackedUnder = [...tracked].filter((path) => path === entry.path || path.startsWith(`${entry.path}/`));
-    assert.deepEqual(trackedUnder, [],
-      `${entry.path} is tracked by git — redact it instead of listing it as pending`);
-    // And an exception whose reason has evaporated (nothing under it carries a
-    // host path any more) must be deleted, not left standing as a hole.
-    assert.ok(findings.some((finding) => isPending(finding.path) && finding.path.startsWith(entry.path)),
-      `${entry.path} no longer carries any host path — delete the exception`);
-  }
+  return {
+    exists: (path) => existsSync(join(REPO_ROOT, path)),
+    trackedUnder: (path) => [...tracked].filter((entry) => entry === path || entry.startsWith(`${path}/`)),
+    carriesHostPath: (path) => findings.some((finding) => finding.path === path || finding.path.startsWith(`${path}/`)),
+  };
+}
+
+test("the pending-exception list is closed on every side", () => {
+  const violations = pendingClosureViolations(PENDING.entries, liveProbes());
+  assert.deepEqual(
+    violations.map((entry) => `${entry.path} [${entry.condition}] ${entry.detail}`),
+    [],
+    "see the closure list in scripts/lib/evidence-hygiene-pending.json"
+  );
+});
+
+test("every closure condition can actually fail", () => {
+  // Each world below is one the real list must survive, and none of them is
+  // reachable from this working copy — which is precisely why v1's conditions
+  // were jointly unsatisfiable on a fresh checkout without anybody noticing.
+  const clean = { exists: () => true, trackedUnder: () => [], carriesHostPath: () => true };
+  const entry = { path: "evidence/x", reason: "because", presence: "machine-local" };
+  const conditionsFor = (entries, probes) =>
+    pendingClosureViolations(entries, probes).map((violation) => violation.condition);
+
+  assert.deepEqual(conditionsFor([entry], clean), [], "the clean world must be clean, or nothing below means anything");
+  assert.deepEqual(conditionsFor([{ ...entry, reason: "   " }], clean), ["reason"]);
+  assert.deepEqual(conditionsFor([{ ...entry, presence: "whenever" }], clean), ["presence"]);
+  assert.deepEqual(
+    conditionsFor([entry], { ...clean, trackedUnder: () => ["evidence/x/a.json"] }), ["untracked"],
+    "trackedness is not exempted by any presence mode"
+  );
+  assert.deepEqual(
+    conditionsFor([entry], { ...clean, carriesHostPath: () => false }), ["still-needed"],
+    "an exception whose reason evaporated is red even when it is machine-local"
+  );
+
+  // The fresh-checkout world: absent material. machine-local survives it, the
+  // default does not — and the default surviving would mean the strict rule was
+  // quietly dropped for everyone rather than exempted for one declared case.
+  const absent = { ...clean, exists: () => false };
+  assert.deepEqual(conditionsFor([entry], absent), [], "machine-local material may be absent");
+  assert.deepEqual(conditionsFor([{ path: "evidence/x", reason: "because" }], absent), ["exists"],
+    "an entry that declares nothing is still held to the strict existence rule");
+
+  // And absence must not become a way to smuggle a tracked path past the gate.
+  assert.deepEqual(
+    conditionsFor([entry], { ...absent, trackedUnder: () => ["evidence/x/a.json"] }), ["untracked"],
+    "a tracked-but-absent path is still a failure"
+  );
+});
+
+test("the real entry is machine-local for a stated reason, and the schema says why", () => {
+  // A marker nobody has to justify is a marker that spreads. Both halves are
+  // asserted against the file itself rather than assumed from the code above.
+  assert.equal(PENDING.schemaVersion, "aos.evidence-hygiene-pending.v2");
+  assert.ok(PENDING.whyPresenceExists?.length > 200, "the exemption must carry its own history");
+  assert.deepEqual(
+    PENDING.entries.filter((entry) => (entry.presence ?? "expected") === "machine-local").map((entry) => entry.path),
+    ["evidence/conf-007-recon"],
+    "every machine-local entry is a hole in the existence check, so the set of them is asserted explicitly"
+  );
 });

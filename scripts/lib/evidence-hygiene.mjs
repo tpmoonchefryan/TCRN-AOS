@@ -213,3 +213,63 @@ export function scanEvidenceTree(root = join(REPO_ROOT, "evidence")) {
     .map((path) => ({ path, hits: findHostPaths(readFileSync(join(REPO_ROOT, path), "utf8")) }))
     .filter((entry) => entry.hits.length > 0);
 }
+
+/** How a pending entry declares whether its material should be found here. */
+export const PRESENCE_MODES = Object.freeze(["expected", "machine-local"]);
+
+/**
+ * Every way a pending exception can fail its closure conditions.
+ *
+ * Pure, and driven by injected probes, because the conditions have to hold in
+ * worlds this working copy is not in. The defect that forced the split was
+ * exactly that: two of the conditions — "the path must exist" and "nothing under
+ * it may be tracked" — are jointly unsatisfiable in a fresh checkout, since an
+ * untracked path is by definition absent there. So while any entry was listed,
+ * the clean-checkout run that the delivery-cadence convention makes the closing
+ * gate could never go green, and the only reason nobody hit it is that the gate
+ * had only ever been run in a working tree that had the material.
+ *
+ * `presence: "machine-local"` is the narrow, declared exemption: material that
+ * is by design never committed and so is absent everywhere else. It exempts the
+ * existence condition and nothing else. `"expected"` stays the default, so an
+ * entry that says nothing is still held to the strict rule.
+ *
+ * Note which condition survives unconditionally: trackedness. `git ls-files`
+ * answers from the index, not the filesystem, so "has this entered history"
+ * remains checkable on a checkout that does not have the file — and that is the
+ * condition the whole exception turns on.
+ */
+export function pendingClosureViolations(entries, probes) {
+  const { exists, trackedUnder, carriesHostPath } = probes;
+  const violations = [];
+  const fail = (path, condition, detail) => violations.push({ path, condition, detail });
+  for (const entry of entries) {
+    const { path, reason } = entry;
+    const presence = entry.presence ?? "expected";
+    if (typeof reason !== "string" || reason.trim().length === 0) {
+      fail(path, "reason", "needs a non-empty reason");
+    }
+    if (!PRESENCE_MODES.includes(presence)) {
+      fail(path, "presence", `unknown presence ${JSON.stringify(presence)}; expected one of ${PRESENCE_MODES.join(", ")}`);
+    }
+    const tracked = trackedUnder(path);
+    if (tracked.length > 0) {
+      fail(path, "untracked", `tracked by git (${tracked.join(", ")}) — redact it instead of listing it as pending`);
+    }
+    const present = exists(path);
+    if (!present) {
+      if (presence === "expected") {
+        fail(path, "exists", "listed as pending but does not exist — remove the stale entry, or declare presence: \"machine-local\"");
+      }
+      continue;
+    }
+    // Present here, so the live conditions are answerable and both apply
+    // regardless of presence mode. This is the branch that catches an exception
+    // whose reason has evaporated, and it can only ever run on the machine that
+    // holds the material — which is the honest scope for that check.
+    if (!carriesHostPath(path)) {
+      fail(path, "still-needed", "no longer carries any host path — delete the exception");
+    }
+  }
+  return violations;
+}
