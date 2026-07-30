@@ -2,7 +2,7 @@
   "schemaVersion": "aos.paired-backup-new-topology.v1",
   "incident": "TCRN-AOS-INC-045",
   "ok": true,
-  "startedAt": "2026-07-30T00:31:57Z",
+  "startedAt": "2026-07-30T04:24:24Z",
   "topology": {
     "chain": {
       "host": "tcrn-platform-dev",
@@ -54,15 +54,15 @@
       "ok": true,
       "reasonCode": "PAIR_TAKEN_ON_ONE_HOST",
       "host": "tcrn-platform-dev",
-      "pairedAt": "2026-07-30T00:31:58Z",
-      "pairDirectory": "/srv/tcrn/backups/pairs/2026-07-30T00-31-58Z",
+      "pairedAt": "2026-07-30T04:24:24Z",
+      "pairDirectory": "/srv/tcrn/backups/pairs/2026-07-30T04-24-24Z",
       "programSha256": "dc0fc87eeb6695b034b7c8513d94c84f8eb1e97f63b4ed22b4f6a5ba37f1b7fa",
       "programRanAs": "bytes streamed over ssh stdin; no deployed copy exists to drift from the committed file",
       "lockstep": {
         "ok": true,
-        "chainHeadEventHash": "5200f632156f05efdeaf9df6b2c5c234cd427b2de8b17c8184223101a8c1b0fa",
-        "knowledgeHighWaterDigest": "5200f632156f05efdeaf9df6b2c5c234cd427b2de8b17c8184223101a8c1b0fa",
-        "knowledgeVersion": 15,
+        "chainHeadEventHash": "03cf1053ecf5bfd680c2ef131c2060fbf24af1e24fe368a540d246ef91d9e9c2",
+        "knowledgeHighWaterDigest": "03cf1053ecf5bfd680c2ef131c2060fbf24af1e24fe368a540d246ef91d9e9c2",
+        "knowledgeVersion": 16,
         "remedy": null
       },
       "halves": {
@@ -71,8 +71,8 @@
           "path": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
           "live": true,
           "engineReasonCode": "WORKSPACE_COMMAND_COMPLETED",
-          "headEventHash": "5200f632156f05efdeaf9df6b2c5c234cd427b2de8b17c8184223101a8c1b0fa",
-          "version": 838,
+          "headEventHash": "03cf1053ecf5bfd680c2ef131c2060fbf24af1e24fe368a540d246ef91d9e9c2",
+          "version": 886,
           "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
           "askedOf": "the engine, on the host holding the chain — a vacated address answers WORKSPACE_RELOCATION_VACATED"
         },
@@ -160,7 +160,7 @@
         "chain": "tcrn-platform-dev",
         "domain": "tcrn-platform-dev"
       },
-      "pairedAt": "2026-07-30T00:31:58Z",
+      "pairedAt": "2026-07-30T04:24:24Z",
       "binding": "同刻 + 互指摘要;时间戳不是绑定——同一秒写下的两个文件仍不证明它们属于同一对",
       "readTwice": "the take wrote the digests; this step recomputed them from the bytes on disk and re-ran snapshot-verify",
       "chainVerifyReasonCode": "SNAPSHOT_VERIFIED"
@@ -169,10 +169,10 @@
       "name": "offsite-copy-arrived-whole",
       "ok": true,
       "reasonCode": "OFFSITE_FILE_SET_EQUAL",
-      "compared": 661,
+      "compared": 709,
       "fileSetDigest": {
-        "primary": "3a264b97b87febb8e4466e2523ddb192462dfa711c67221285488a412168dc45",
-        "offsite": "3a264b97b87febb8e4466e2523ddb192462dfa711c67221285488a412168dc45"
+        "primary": "b32f80ed3515d77a01adb2787a447fc1f61ad725c8b7eb31fed248b24f9809a8",
+        "offsite": "b32f80ed3515d77a01adb2787a447fc1f61ad725c8b7eb31fed248b24f9809a8"
       },
       "missingFromOffsite": [],
       "extraOnOffsite": [],
@@ -200,7 +200,7 @@
         "chain": "tcrn-platform-dev",
         "domain": "tcrn-platform-dev"
       },
-      "pairedAt": "2026-07-30T00:31:58Z",
+      "pairedAt": "2026-07-30T04:24:24Z",
       "binding": "同刻 + 互指摘要;时间戳不是绑定——同一秒写下的两个文件仍不证明它们属于同一对",
       "localDrill": {
         "ok": true,
@@ -251,8 +251,8 @@
       "primaryHost": "tcrn-platform-dev",
       "offsiteHost": "operator-machine",
       "fileSetDigest": {
-        "local": "3a264b97b87febb8e4466e2523ddb192462dfa711c67221285488a412168dc45",
-        "remote": "3a264b97b87febb8e4466e2523ddb192462dfa711c67221285488a412168dc45"
+        "local": "b32f80ed3515d77a01adb2787a447fc1f61ad725c8b7eb31fed248b24f9809a8",
+        "remote": "b32f80ed3515d77a01adb2787a447fc1f61ad725c8b7eb31fed248b24f9809a8"
       },
       "discrepancies": {
         "missing": [],
@@ -265,7 +265,7 @@
     },
     {
       "name": "pairing-predicate-driven-red",
-      "scratch": "/srv/tcrn/scratch-inc045-red-25531",
+      "scratch": "/srv/tcrn/scratch-inc045-red-66470",
       "cases": [
         {
           "name": "one byte of the domain snapshot flipped",
@@ -302,7 +302,7 @@
       "derivedFrom": "本次运行自己的判词,不是一句声明——上游任一处红,纪律继续生效",
       "imposedBy": "TCRN-AOS-INC-045 scope: 「在此之前每次备份须如实标注「非配对」」",
       "criterionText": "域库随 S132 的 VM 常驻座舱迁至 VM、配对备份在新拓扑下重新接线并实证一次同刻配对与恢复演练",
-      "soFrom": "2026-07-30T00:31:58Z",
+      "soFrom": "2026-07-30T04:24:24Z",
       "effect": "此后取的每一对都是真配对,不再需要标注;INC-045 之前取的那些标注保持原样——它们当时是对的"
     },
     {
@@ -312,42 +312,42 @@
       "primary": {
         "kept": 5,
         "deleted": [
-          "2026-07-30T00-19-33Z"
+          "2026-07-30T00-20-36Z"
         ]
       },
       "offsite": {
         "kept": 5,
         "deleted": [
-          "2026-07-30T00-19-33Z"
+          "2026-07-30T00-20-36Z"
         ]
       },
       "rule": "坏备份永远不会成为好备份被删的理由——轮换只在新的一对自证之后跑,且只删它指名的那些"
     }
   ],
-  "finishedAt": "2026-07-30T00:32:01Z",
+  "finishedAt": "2026-07-30T04:24:29Z",
   "pair": {
-    "pairId": "2026-07-30T00-31-58Z",
-    "pairedAt": "2026-07-30T00:31:58Z",
+    "pairId": "2026-07-30T04-24-24Z",
+    "pairedAt": "2026-07-30T04:24:24Z",
     "primary": {
       "host": "tcrn-platform-dev",
-      "path": "/srv/tcrn/backups/pairs/2026-07-30T00-31-58Z"
+      "path": "/srv/tcrn/backups/pairs/2026-07-30T04-24-24Z"
     },
     "offsite": {
       "host": "operator-machine",
       "hostDigest": "5b46ee132b91d73ed3429b5a0a85814a8bb1de11bc025a21a9da4f7e0ba3d78b",
-      "path": "<local-home>/OneDrive/Github/tcrn-aos-paired-backups/2026-07-30T00-31-58Z"
+      "path": "<local-home>/OneDrive/Github/tcrn-aos-paired-backups/2026-07-30T04-24-24Z"
     },
     "pairing": {
       "domainSnapshotDigest": "c10c6e9f13d882129ce1a416db7c7c5466f61fb7550ebbeb26e937406ff3e0c0",
       "domainExportDigest": "94b21a98bdfe8fb12452c3618a5b444fa3444ecd0fe65146d84150f55b77ac23",
-      "chainManifestDigest": "47ae971587b5accd2aa4bda53c0621341dc9fd2ced52d5e82fe7a82885da60e5",
-      "chainHeadEventHash": "5200f632156f05efdeaf9df6b2c5c234cd427b2de8b17c8184223101a8c1b0fa",
-      "chainVersion": 838,
-      "attestationSetDigest": "73eba1a0219463054c95b368d1ce531ee720a948c8e9ad2138ccbf852d28a13b",
+      "chainManifestDigest": "be04a5af085dc9eb16f33cea9bf9fd20174f02d6f151357d677cd60796ecaa9b",
+      "chainHeadEventHash": "03cf1053ecf5bfd680c2ef131c2060fbf24af1e24fe368a540d246ef91d9e9c2",
+      "chainVersion": 886,
+      "attestationSetDigest": "a0878b1ca141d2b51215ec9ce40a5d029834225d39b13f9ffd2b8c858e91054c",
       "boundBy": "one instant read on one host, plus mutual digests; either half alone is not a restorable pair"
     },
-    "fileCount": 660,
-    "totalBytes": 1966002,
-    "fileSetDigest": "69816a13972fdba4d385f79326ab3a44d863b8301868bd5efb4cf9fe7c927ec0"
+    "fileCount": 708,
+    "totalBytes": 2073391,
+    "fileSetDigest": "987cda9a0c395835808fc78c72fbc235e7a91af205ddb8862c42dd53332cd802"
   }
 }
