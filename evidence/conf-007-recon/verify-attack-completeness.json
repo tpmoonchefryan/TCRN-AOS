@@ -1,0 +1,120 @@
+{
+ "findings": [
+  {
+   "severity": "blocker",
+   "kind": "缺题+错误陈述",
+   "claim": "T9(md:74):「另: S019 已定的访问边界形态须在分解时按其 Story 结论沿用(完整性核对项)」",
+   "defect": "S019 没有定死「认证层 or LAN 信任」这道题的切换段答案。链上 S019 终稿(work:e22cde45386d914b64838c11,seq 259-262)裁的是「暂不建认证层」,且其全部三条理由都以镜像段前提为条件:①受众=Owner 自己的设备;②「认证层保护的是尚不存在的观众」;③「供权永不上 VM 已结构性保证(pins 只在本机,cockpit-service 只绑 127.0.0.1,镜像构建期剔除写控件)」。而本会议包 T1①自己承认切换段「必然在 AOS 宿主出现写面与供权驻留」——即 S019 结论的成立前提被本次切换亲手拆掉。更硬的一条:CONF-002 裁定三原文明令「届时专机或专卷+备份 SLA+**访问收紧与迁移同门裁定**」(position:4a51d78b73b4559e27ccbee9,seq 66)——访问收紧本就是这场会必裁的参数。T9 把它降格为「完整性核对项」并声称「沿用」,等于把一道 owner_intent_required 的真待裁题从议题清单里划掉了。",
+   "evidence": "AOS 链 seq 259 (events/000005.json) work:e22cde45386d914b64838c11 advisory:scope 原文;position:4a51d78b73b4559e27ccbee9 seq 66「访问收紧与迁移同门裁定」;switch-conference-package.md:24(T1① 承认写面与供权将驻留 AOS 宿主)与 :74",
+   "fix": "删除 T9 末句;新立议题 T1-子题或独立 T:「切换段访问边界与写面认证形态」。",
+   "suggestedAgendaText": "切换段访问边界(依 CONF-002 裁定三「访问收紧与迁移同门裁定」,本会必裁): S019 的「LAN 信任+暂不建认证层」以镜像零写面与「供权永不上 VM」为前提,切换段两前提俱失。须裁: ①VM 上链写面(cockpit-service 或其无头变体)对谁开放——仍绑 127.0.0.1 仅本机经 SSH 隧道可达,or LAN 内认证层(traefik 中间件候选,S019 原単曾列),or mTLS/等价;②S019 的绊线条款(「地址一旦出 Owner 设备即重开并按对外发布级处理」)在切换段是否升格为写面级绊线;③S019 单是否按其自身前提失效而重开。"
+  },
+  {
+   "severity": "major",
+   "kind": "缺题+反向完备性",
+   "claim": "T5(md:58):「切换段备份: 配对备份发起端移上 VM,凭据不对称整个翻转,T7 的答案届时要重问」;T7 整节裁的是镜像段期中 push/pull",
+   "defect": "MIN-002 裁定三原文把「备份 SLA」列为与迁移同门必裁项(「届时专机或专卷+备份 SLA+访问收紧与迁移同门裁定」),且裁定四明令「⑤切换段备份升格为治理备份本体,入迁移仪式清单」。本会议包却把切换段备份拓扑一句话推迟(「届时要重问」),而把议题槽位花在其答案将被本次切换直接翻转的镜像段期中题(T7)上——受命必裁的推迟了,不属本会的反而占席。切换后 OneDrive 落点(现 ~/OneDrive/…,本机挂载)、gate-close 快照节律归谁执行、VM→何处的异地方向、RPO/保留份数 SLA,全部无议题。",
+   "evidence": "position:4a51d78b73b4559e27ccbee9 seq 66(裁定三);minutes:3a0d27be789cadb0ccb353c1 seq 68 decisions[6]「切换段备份入迁移仪式」;recon/ops-fallback-vm.json vmReviewInputs.switchSegmentAddsToVM ③;switch-conference-package.md:58,64-67",
+   "fix": "T7 改题为「切换段备份拓扑与 SLA」(必裁),镜像段期中 push/pull 降为附件或另走轻量裁定。",
+   "suggestedAgendaText": "切换段备份拓扑与 SLA(MIN-002 裁定三/四明令与迁移同门): 真值移 VM 后,①配对备份发起端与调度落谁(VM 常开=调度天然归 VM,但 VM 须引擎+检出方能自证可恢复性);②异地方向与凭据(VM→本机 or VM→云;OneDrive 为本机挂载,VM 直写需新凭据——凭据放置题整体重问);③节律与 SLA(gate-close 快照公约在切换后由谁触发;RPO;保留份数沿 backup.retention);④恢复演练前置照裁定四先例在切换段重做一次。"
+  },
+  {
+   "severity": "major",
+   "kind": "缺题",
+   "topic": "全分区一体迁移下的逐分区参数化: attestation 状态差异+矩阵/锚仪器在另三链上未定义",
+   "why": "T1 推荐「全分区一体迁移」,但 T3/T5 的全部仪器都是 AOS 单链形状。实测四链状态互不相同: TMS 分区 attestation 从未启用(四个事件段 grep attestation.actor.enabled 均 0 命中)→矩阵 R5 行对 TMS 无受测对象,须预声明 not-applicable 否则按 T3 通过标准「执行期临时改判即视为 mismatch」自爆;cross/DS 启用 attestation 但无 attestations/ sidecar(仅 AOS 有,330 收据)→R5 C1/C4 的 sidecar 格在三链上空转;T5 切换锚的三摘要互指含 domainSnapshotDigest,而域库只存在于 AOS——另三链的锚形态未定义;T3 引「AOS events/ 972,593B 贴线」,实测 cross=1,814,703B、DS=1,134,152B——两链整文档 export 已越 1MiB 上限而非贴线,分块/逐事件路径对它们是硬前置非备选;paired-backup 的 lockstep 前置(知识高水位==链头)依赖分区知识库,各分区状态未盘点。",
+   "evidence": ".tcrn-workspace 实测: TCRN-TMS/workspace/.tcrn-workflow/events/*.json 零 attestation.actor.enabled;仅 TCRN-AOS/attestations 存在;四链 events 字节 cross=1814703/DS=1134152/TMS=273557/AOS=972017;switch-conference-package.md:22,42-46,55;recon/five-pieces-matrix.json gaps[0]",
+   "suggestedAgendaText": "范围裁定的参数化附表(若裁全分区一体): 逐分区列 {attestation 启用与否, attest-dir 采纳与否, 域库有无(锚形态: 配对锚 or 纯链锚), events 字节与 1MiB export 关系, 知识库 lockstep 适用性},矩阵 R5 与 T5 锚按此表逐链实例化;TMS 的 R5 行预声明 not-applicable 并留理由。"
+  },
+  {
+   "severity": "major",
+   "kind": "缺题",
+   "topic": "工作区外 sidecar 全清单与落点——特别是 release-trust/gate-identity-authority.json",
+   "why": "五件套权威立场原文是「时间见证**等**工作区外 sidecar 随迁」(position:4a51d78b)——「等」要求一份清单,会议包只处理了时间见证一件(T3 挂 R5)。实测 .tcrn-workspace 容器层还有: release-trust/gate-identity-authority.json(gate-transition 必带 --identity-authority+digest 的身份权威文件,GATE-002 即以它关闭)、各分区 evidence-locator/、transient/。其中 gate 身份权威最要害: T9 仪式步序自己就含「owner 门」,切换后 gate 仪式在哪执行、该权威文件落哪、是否属于「供权材料永不上 VM」类——无一有议题。若链在 VM 而身份权威在本机,切换自己的 owner 门都开不了。",
+   "evidence": "ls .tcrn-workspace → release-trust/gate-identity-authority.json 存在;recon/write-face.json mutatingVerbFamilies gate 族 notes(gate-transition 带 identity-authority 旗标);position:4a51d78b seq 66「时间见证等工作区外 sidecar 随迁」;switch-conference-package.md:42(仅时间见证)",
+   "suggestedAgendaText": "工作区外 sidecar 清单与逐项落点: attestations/(仅 AOS)、release-trust/gate-identity-authority.json(gate 仪式身份权威——随迁上 VM、留本机经 SSH 仪式引用、还是归入「供权材料永不上 VM」类,须裁)、evidence-locator/、transient/;逐项裁随迁/留守/退役,并把 gate 权威落点与「切换 owner 门在哪执行」绑定裁。"
+  },
+  {
+   "severity": "major",
+   "kind": "缺题",
+   "topic": "aos-mirror 镜像在切换后的去留与 cockpit-data.generated 手动刷新的替代",
+   "why": "T1 本机角色子题说 Mac 降为「镜像消费端」,预设了切换后仍有镜像,但镜像的整条生产链(本机构建 build-mirror → 手动 rsync → VM hostPath nginx)在真值移 VM 后语义全变: 镜像还镜谁?在哪构建?aos.tcrn.lan 与真值服务面是否同宿主并存?recon 明示镜像新鲜度上限=cockpit-data.generated 手动检入快照+手动 rsync、零调度接线——切换后这条手动链是保留、自动化、还是随镜像退役,无议题。S018 的「镜像自陈 as-of/零写面」命名诚实边界在同宿主出现真值写面后如何维持,也无议题。",
+   "evidence": "recon/ops-fallback-vm.json mirrorState(刷新手动 rsync 零调度;cockpit-data.generated 手动刷新;mirror-freshness-proof 刻意不查 VM 副本);switch-conference-package.md:25(仅「镜像消费端」四字)",
+   "suggestedAgendaText": "镜像段资产处置: 切换后 aos-mirror 保留(改为真值同宿主的只读投影面,构建移 VM)/退役(真值服务面直接承担读)/降级为本机快照,三选一;cockpit-data.generated 手动刷新链的替代(投影直读 or 调度化)与 S018 命名诚实边界(as-of 标识)在新拓扑下的等价物一并裁。"
+  },
+  {
+   "severity": "major",
+   "kind": "缺题",
+   "topic": "监控与告警义务(「真值在谁那里,告警义务就在谁那里」)",
+   "why": "侦察证据把它列为切换段新增负担第④项且原话点名,会议包一字未收: T6 的 (a) 出口条件清单只有「ns 隔离+资源配额+独立 PV」,无告警;T7 只在 pull 选项下顺带提告警回传。真值上 VM 后,磁盘打满/链写失败/备份未发生/lockstep 失守都发生在无人看的宿主上——本仓已有四例「交付一次再无人验证」同形状失败先例(mirror-freshness-proof 头注),这正是该失败模式的再生产条件。",
+   "evidence": "recon/ops-fallback-vm.json vmReviewInputs.switchSegmentAddsToVM ④原文「运营告警面——真值在谁那里,告警义务就在谁那里」;同文件 optionB opsCost「同形状失败已四例」;switch-conference-package.md:60-62(T6 条件清单无告警项)",
+   "suggestedAgendaText": "VM 真值的监控告警义务: 最小告警集(链写面错误/磁盘水位/备份到期未跑/lockstep 失守)与回传通路(到 Owner 眼前的路径,无答案则等同不可运维);并入 T6 (a) 出口的条件清单成为第四条件。"
+  },
+  {
+   "severity": "minor",
+   "kind": "缺题",
+   "topic": "「权威 local-first 保留」(MIN-002 决议五/P5 条件化)的残余适用性处置",
+   "why": "切换把真值移离本机,直接终结 MIN-002 决议五「local-first 按 P5 条件化:权威 local-first 保留」的成立状态。按 harness-constraint 公约与 CLAUDE.md 明文「替换须先做残余适用性分析…并把理由留在记录里」,该条款须在本会被显式退役或再条件化,不能靠隐含推翻。",
+   "evidence": "minutes:3a0d27be789cadb0ccb353c1 seq 68 decisions[4];CLAUDE.md 公约索引第 1 条;switch-conference-package.md 全文无 local-first 处置",
+   "suggestedAgendaText": "T1 增补子题: 「权威 local-first」条款的残余适用性——切换后该前提对哪类场景仍成立(如 fallback 回退期)?成立则条件化保留,不成立则随 CONF-007 纪要显式退役并记理由。"
+  },
+  {
+   "severity": "minor",
+   "kind": "缺题",
+   "topic": "Codex 宿主在切换后的对等接入",
+   "why": "CLAUDE.md 仪器纪律第 1 条: 同仓两执行宿主须持相同名册,「发现缺口开工即响」。今天两宿主都指向本机 MCP 门面同一 pins 摘要(recon 已验证 d25ebfc1… 双侧一致);切换后写通路整体改道(SSH 受治会话 or 远拨),Codex 侧如何跟进无议题——已知缺口清单里 Codex 本就落后(DS/AOS codegraph、workflow-mcp 面),再添一层静默降级风险。",
+   "evidence": "CLAUDE.md 仪器纪律 1 与「当前已知缺口」段;recon/ceremony-recon.json mcpWriteValidity.pinsChain(两宿主同指本机脚本);switch-conference-package.md 全文无 Codex",
+   "suggestedAgendaText": "宿主对等: 切换后 Claude Code 与 Codex 的链写/链读通路各自形态,列入分解决策清单;不对等期间按仪器纪律在 kickoff 名册里如实记缺口。"
+  },
+  {
+   "severity": "minor",
+   "kind": "缺题",
+   "topic": "INIT-002 是否入 sprint 发布列车(MIN-040/041 语义)",
+   "why": "平台现行节律是 sprint 入列批量停点/未入列快车道(MIN-036 经 INIT-008/MIN-040 修订)。T9 只请分解令,不问入列——而 INIT-002 恰是停点密集型(矩阵门/owner 门/切换门),入列与否直接改变其停顿预算的计算方式。",
+   "evidence": "switch-conference-package.md:72-73(T9 无 sprint 字样);MEMORY sprint-release-train-init008(MIN-036 修订: 入列批量停点/未入列快车道)",
+   "suggestedAgendaText": "T9 增一勾选: INIT-002 入列 SPRINT-00X 还是走快车道;入列则切换段各停点按列车语义批并。"
+  },
+  {
+   "severity": "minor",
+   "kind": "缺题",
+   "topic": "fallback 回退程序自身的演练要求",
+   "why": "T9 仪式步序含「迁移演练」,但 T5 的六步回退程序没有任何演练要求。MIN-002 裁定四先例明文「方案生效前须先做一次恢复演练」,且平台格言「A backup nobody restored is a hypothesis」——未演练的回退程序同理是假设。回退恰是切换失败时唯一的生路,不该是全仪式里唯一没跑过红的路径。",
+   "evidence": "switch-conference-package.md:53-58(T5 无演练);:73(迁移演练未明示含回退);position:d5df9ffe seq 67 裁定四「方案生效前须先做一次恢复演练」;recon/ops-fallback-vm.json backupState 引文",
+   "suggestedAgendaText": "T5 增: 回退程序在切换 owner 门之前须在 scratch 副本上完整演练一次(含步 3 增量枚举与步 4 受治重放的至少一笔真载荷),演练证物随矩阵证物归档。"
+  },
+  {
+   "severity": "minor",
+   "kind": "反向完备性(该移出的题)",
+   "claim": "T4 INC-034 残余处置整节(md:48-51)",
+   "defect": "这是镜像段验收门(mirror-acceptance-proof 判据 4)的修复题,不是切换段参数。MIN-002 给本会的授权是「切换段全部参数待迁移裁定时另会」;T4 的方向支撑(CONF-001 首期安全写面已裁注解)已存在,剩余仅「指定盖章记录」一个小裁定,且 T9 自己说写面接线 Epic「同时解 T4」。放在平台最大单向门的裁定会里,稀释议程也混淆决策清单(D 栏把 T4 与真正的切换参数并列)。",
+   "evidence": "minutes:3a0d27be789cadb0ccb353c1 unresolvedIssues[2];recon/inc034-residual.json pathB.rulingSupport(「路 B 不需要新方向裁定」);switch-conference-package.md:48-51,73,94",
+   "fix": "T4 移出议题清单,降为 T2 写面接线 Epic 拆单时的附带裁定项(一行: 盖章记录=TCRN-AOS-INC-034,判据 4 回退注解对),在 D 栏单列为轻量待裁而非会议议题。"
+  },
+  {
+   "severity": "minor",
+   "kind": "证据缺引",
+   "claim": "T1(md:22):「MIN-002 未明示范围——须裁。推荐: 全分区一体迁移」",
+   "defect": "「未明示范围」对纪要成立,但 CONF-002 立场原文里有 Owner 自己最接近范围表态的原话未被引用: 「workflow 只应选一种模式工作」(position:518eb02a 转写 Owner 第②轮)——这正是全分区一体(拒绝双权威并存)推荐的最强链上支撑,Owner 复裁时应看到自己的原话。另外立场原文写「AOS **库**承接存储与运营面」而纪要写「AOS 承接存储与运营」——O1(文件原样迁,库不承载字节)与立场原文的「库」字有字面张力,T1 声称 O1「被字面满足」未向 Owner 披露这层读法选择(O2 才是「库承接」的字面读法,recon 已论证 O2 应延后,但读法取舍应呈报而非静默)。",
+   "evidence": "position:518eb02aaa25124d66c5ccd6 seq 65 原文;position:4a51d78b seq 66「AOS 库承接存储与运营面」;minutes seq 68 decisions[2];switch-conference-package.md:22-23;recon/storage-form.json options[0].min002Fit",
+   "fix": "T1 范围子题补引 Owner 原话为推荐据;容器子题加一行披露: 立场原文「AOS 库承接存储」在 O1 下读作「AOS 管辖宿主承接存储」,该读法取舍随推荐一并呈 Owner 认可。"
+  },
+  {
+   "severity": "minor",
+   "kind": "公约违反",
+   "claim": "A.2(md:13-14): 追加顺序 POS-ARTURO-1 → POS-MINERVA-2 → POS-VERITY-3 → POS-SABLE-4 → POS-MARA-5",
+   "defect": "审议采用公约第三步第 1 条: 「键号带轮次: POS-<AGENT>-<轮>」——数字是轮次不是落链顺序(公约 dogfood 先例 POS-MINERVA-1/POS-VERITY-2 即两轮)。CONF-007 的四个 persona 立场是互不可见的平行首轮,按公约应各为 <轮>=1(POS-MINERVA-1、POS-VERITY-1…);现方案把顺序号写进轮位,后来读者会把 POS-MARA-5 读成第五轮,且拆片尾缀「-2」(如 POS-MINERVA-2-2)与轮次语义二次撞车。",
+   "evidence": "docs/deliberation-adoption-convention.md:61(键号带轮次)与 :5(dogfood 先例);switch-conference-package.md:14",
+   "fix": "改为 POS-ARTURO-1 / POS-MINERVA-1 / POS-VERITY-1 / POS-SABLE-1 / POS-MARA-1(agent 名已保证键不撞);拆片尾缀改用非数字段(如 -P2)或在正文 1/2、2/2 标注即可不动键。"
+  },
+  {
+   "severity": "minor",
+   "kind": "记录卫生",
+   "claim": "A.2(md:11-13): participants 为 owner:governance+四 persona,但开场立场作者是 profile:tcrn-arturo-v1",
+   "defect": "引擎不校验立场作者∈参会名册(appendConferencePositionInWorkspace,workspace.ts:2591-2632 无 participant 检查),所以能落链——但落成的是一份永久记录: 一个不在参会名册上的 persona 写了开场立场。链上既有先例中立场作者均见于 participantIds。",
+   "evidence": "/Users/ryanlan/.tcrn-workflow/tcrn-workflow/packages/core/src/workspace.ts:2591-2632;recon/ceremony-recon.json actorLiterals(AOS participantIds 与作者集吻合);switch-conference-package.md:11-13",
+   "fix": "conference-open 的 --participant-ids 加入 profile:tcrn-arturo-v1(六方)。"
+  }
+ ],
+ "s019Verdict": "S019 没有把「认证层 or LAN 信任」定成切换段可沿用的终局。链上终稿(work:e22cde45386d914b64838c11,seq 259,decided-by MIN-052 D4/D4b)裁的是:绑内网不暴露公网+「暂不建认证层」——「暂不」而非「不」,且三条成立前提全部是镜像段专属:受众限 Owner 自己的设备、「认证层保护的是尚不存在的观众」、以及「供权永不上 VM 已结构性保证」(pins 只在本机/cockpit-service 只绑 127.0.0.1/镜像构建剔除写控件)。会议包 T1① 自己承认切换段将在 AOS 宿主出现写面与供权驻留,即 S019 的结构性保证被本次切换拆除;同时 CONF-002 裁定三原文明令「访问收紧与迁移同门裁定」。结论:T9「按其 Story 结论沿用」是缺题——切换段写面的认证形态必须作为独立议题上会,S019 只可作为镜像段先例引用,并须评估其是否按自身前提失效而重开(其绊线条款也应同步升格)。",
+ "scopeEvidence": "CONF-002 立场原文关于范围与随迁的全部已说过的话:(1) position:518eb02aaa25124d66c5ccd6(seq 65)转写 Owner 原话:「AOS 和 workflow workspace 互相冲突,workflow 只应选一种模式工作,等 AOS 通过验收就进行数据迁移和切换,workflow 负责框架,AOS 负责数据治理」——「只应选一种模式」是链上最接近范围表态的文字,支持而非冲突于 T1 的「全分区一体迁移」推荐(拒绝双权威并存),但会议包未引用它;(2) position:4a51d78b73b4559e27ccbee9(seq 66)裁定二:「切换段…AOS 库承接存储与运营面,W 退为框架层」「迁移换容器不换语义:…五件套原样承载,时间见证等工作区外 sidecar 随迁」——未提任何分区名,纪要(minutes:3a0d27be789cadb0ccb353c1)同样只写「切换段 AOS 承接存储与运营」,故 T1「MIN-002 未明示范围——须裁」成立;注意立场原文的「库」字与「换容器」在 O1 读法下均须再解释(见 findings);(3) 同 position 裁定三:「复审条件=迁移切换裁定进入执行,届时专机或专卷+备份 SLA+访问收紧与迁移同门裁定」——把专机(T6 已覆盖)、备份 SLA(缺)、访问收紧(缺)三题钉给本会。「随迁」字样全链仅此一处(五件套 sidecar 句),范围维度无其他已说过的话。"
+}

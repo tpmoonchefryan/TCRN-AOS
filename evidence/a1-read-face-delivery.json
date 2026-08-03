@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "aos.a1-read-face-delivery.v1",
+  "story": "TCRN-AOS-STORY-140 / STORY-141",
+  "ruling": "MIN-014: 读面放整个 LAN、独立只读进程、写面维持 loopback+SSH",
+  "deployed": true,
+  "host": "tcrn-platform-dev",
+  "bind": "192.168.51.249:4319",
+  "reachableFrom": "Owner machine over the LAN (192.168.51.0/24), no SSH, browser-direct",
+  "probes": {
+    "health": { "ok": true, "readonly": true, "chainWriteAvailable": false },
+    "webRoot": 200,
+    "deepLink": 200,
+    "domainExport": "real annotations returned (read-only)",
+    "domainPanel": "record panel returned",
+    "staticBundle": 200,
+    "writeRefused": 405
+  },
+  "writeFace": {
+    "stillLoopback": true,
+    "verifiedBy": "deploy/aos-resident-cockpit/read-face-proof.mjs (ss -tln on VM, port 4318 == 127.0.0.1)"
+  },
+  "noWriteSurface": "no ChainClient, no pins, no /api/chain/* routes (STORY-138); source-gated by pnpm read-face:gate",
+  "domainStore": "opened read-only at the SQLite connection ({ readOnly: true })",
+  "contentSafety": "CSP + nosniff + X-Frame-Options on every response; Host allow-list (anti DNS-rebinding)",
+  "vsMirrorRetirement": "the retired LAN mirror was a static COPY of the cockpit on the LAN; this is the resident web served read-only by a process with no write capability — the mirror's residual use case (a LAN browser with no ssh) is now served by the read face, while D7's prohibition (network path to a pins process) is untouched because the read face has no pins",
+  "notClaimed": [
+    "read-process runtime memory 'never holds pins' is unprovable by snapshot — topology + deployment-time control (MIN-014 unresolved, recorded)",
+    "no per-viewer auth by design (audience = whole LAN); content safety + no-write-surface is the boundary",
+    "cockpitData freshness follows the resident web build cadence, identical to what the Owner sees over SSH"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "按 Owner 全接受裁定 close TCRN-AOS-CONF-013:读面出 loopback、归因 person/agent 双类、INIT-004 分期推进。",
+  "steps": [
+    {
+      "verb": "conference-close",
+      "flags": {
+        "conference-id": "conference:c5c311ffe16572f96c2bb90f",
+        "minutes-external-key": "TCRN-AOS-MIN-013",
+        "summary": "AOS 采纳可读可写协作工作台方向(人类与 AI 同队共事)。三裁定:①读面从持 pins 写进程架构性拆出、放 LAN 供人直连查看、写面维持 127.0.0.1+SSH、pins 永不出网——补 D7 空白格,读面受众待落实;②actor 从单值扩展为 person/agent 双类、禁匿名写、消解 conf-007 T3 预挂归因待裁项;③INIT-004 按 A1→A2→A3 分期推进、每期写面安全不变可回退。决策清单:读面出 loopback、归因模型归 OWNER-NOW;person 写路径归 CONDITIONAL;协作动词 UI 落地归 AGENT。",
+        "outcome-class": "role_decision",
+        "accountable-owner-id": "owner:governance",
+        "decisions": "读面出 loopback:采纳 A1,读面进程永不持有 pins、写面永不出 loopback,两不变量不可交;归因模型:采纳 person/agent 双类,禁匿名写,消解 conf-007 归因待裁项;推进方式:INIT-004 按 A1→A2→A3 分期、每期写面安全不变、可回退;决策清单归道:读面出 loopback 与归因模型 OWNER-NOW、person 写路径 CONDITIONAL、协作动词 UI AGENT",
+        "unresolved-issues": "读面放 LAN 的受众未裁(仅 Owner 设备或整个 LAN),随 A1 执行时再裁;person 身份的具体来源与 SSH 分发方式未定,归 A2 执行",
+        "distill": "false"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:4c678a5fe78b6313ce56ea39" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": {
+        "externalKey": "TCRN-AOS-INIT-004",
+        "kind": "Initiative",
+        "status": "planned"
+      }
+    }
+  ]
+}

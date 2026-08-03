@@ -17,6 +17,18 @@ import type { TcrnLocale } from "@tcrn/ui-copy-state";
 import { format, pick, type CopyEntry } from "./copy.js";
 
 /**
+ * Mirrors the design system's work relationship types (and the projection's
+ * DOMAIN_RELATION_TYPES), in the same order. Kept here rather than imported:
+ * the projection module drags in node:sqlite, which the browser bundle cannot
+ * resolve. A copy drifts, so the projection's list is the authority and this
+ * literal is pinned by the type comment's own claim.
+ */
+const DOMAIN_RELATION_TYPES = [
+  "blocks", "blocked_by", "depends_on", "relates_to", "duplicates", "supersedes",
+  "split_from", "caused_by", "implements", "verifies", "reviews", "refreshes"
+] as const;
+
+/**
  * The cockpit's own fields for one chain record: who is carrying it, how urgent
  * it is, what it is labelled, what people said, and what it relates to outside
  * the chain's strict tree.
@@ -146,6 +158,21 @@ const domainCopy = {
     "zh-CN": "尚无自由关联。", en: "No free relation yet.", ja: "自由関連はまだありません。",
     ko: "아직 자유 관계가 없습니다.", fr: "Aucune relation libre pour l'instant."
   },
+  relationType: {
+    "zh-CN": "关联类型", en: "Relation type", ja: "関連タイプ", ko: "관계 유형", fr: "Type de relation"
+  },
+  relationTarget: {
+    "zh-CN": "目标记录", en: "Target record", ja: "対象レコード", ko: "대상 레코드", fr: "Enregistrement cible"
+  },
+  relationTargetPlaceholder: {
+    "zh-CN": "work:<id>", en: "work:<id>", ja: "work:<id>", ko: "work:<id>", fr: "work:<id>"
+  },
+  relationEmpty: {
+    "zh-CN": "选择关联类型", en: "Choose a relation type", ja: "関連タイプを選択", ko: "관계 유형 선택", fr: "Choisissez un type de relation"
+  },
+  addRelation: {
+    "zh-CN": "添加关联", en: "Add relation", ja: "関連を追加", ko: "관계 추가", fr: "Ajouter une relation"
+  },
   comments: {
     "zh-CN": "评论（{0}）", en: "Comments ({0})", ja: "コメント（{0}）",
     ko: "댓글({0})", fr: "Commentaires ({0})"
@@ -160,6 +187,12 @@ const domainCopy = {
   noComment: {
     "zh-CN": "尚无评论。", en: "No comment yet.", ja: "コメントはまだありません。",
     ko: "아직 댓글이 없습니다.", fr: "Aucun commentaire pour l'instant."
+  },
+  personBadge: {
+    "zh-CN": "人", en: "person", ja: "人", ko: "사람", fr: "personne"
+  },
+  agentBadge: {
+    "zh-CN": "AI", en: "AI", ja: "AI", ko: "AI", fr: "IA"
   },
   newComment: {
     "zh-CN": "新评论", en: "New comment", ja: "新しいコメント", ko: "새 댓글", fr: "Nouveau commentaire"
@@ -192,6 +225,8 @@ export function DomainPanel({
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState<string | null>(null);
+  const [relationType, setRelationType] = useState("");
+  const [relationTarget, setRelationTarget] = useState("");
 
   const load = useCallback(async () => {
     const response = await fetch(`/api/domain/${partitionId}/${encodeURIComponent(recordId)}`);
@@ -378,6 +413,49 @@ export function DomainPanel({
         <EmptyState title={pick(locale, domainCopy.noRelation)} />
       )}
 
+      {availability === "writable" ? (
+        <div className="tcrn-aos-domain-edit tcrn-aos-relation-edit">
+          <Select
+            aria-label={pick(locale, domainCopy.relationType)}
+            value={relationType}
+            onChange={(event) => setRelationType(event.currentTarget.value)}
+            options={[
+              { value: "", label: pick(locale, domainCopy.relationType) },
+              ...DOMAIN_RELATION_TYPES.map((relation) => ({ value: relation, label: relation }))
+            ]}
+          />
+          <Textarea
+            aria-label={pick(locale, domainCopy.relationTarget)}
+            value={relationTarget}
+            rows={1}
+            data-domain-field="relation-target"
+            placeholder={pick(locale, domainCopy.relationTargetPlaceholder)}
+            onChange={(event) => setRelationTarget(event.currentTarget.value)}
+          />
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            disabled={busy || relationType === "" || relationTarget.trim().length === 0}
+            disabledReason={relationType === ""
+              ? pick(locale, domainCopy.relationEmpty)
+              : pick(locale, domainCopy.writeInFlight)}
+            onClick={() => {
+              void send("/api/domain/relation", "POST", {
+                relation: relationType,
+                targetPartitionId: partitionId,
+                targetRecordId: relationTarget.trim()
+              }).then(() => {
+                setRelationType("");
+                setRelationTarget("");
+              });
+            }}
+          >
+            {pick(locale, domainCopy.addRelation)}
+          </Button>
+        </div>
+      ) : null}
+
       <Heading level={3} visualLevel={3}>
         {format(locale, domainCopy.comments, data?.comments.length ?? 0)}
       </Heading>
@@ -390,6 +468,11 @@ export function DomainPanel({
             <li key={comment.id}>
               <div className="tcrn-aos-comments__head">
                 <MachineTokenCell token={comment.author} kind="generic" copyable={false} />
+                {comment.author.startsWith("person:") ? (
+                  <Badge tone="neutral">{pick(locale, domainCopy.personBadge)}</Badge>
+                ) : comment.author.startsWith("agent:") ? (
+                  <Badge tone="warning">{pick(locale, domainCopy.agentBadge)}</Badge>
+                ) : null}
                 <Text>{comment.createdAt}</Text>
               </div>
               <p className="tcrn-aos-prose">{comment.body}</p>

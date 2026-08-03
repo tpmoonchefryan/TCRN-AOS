@@ -1,6 +1,7 @@
 import { DatabaseSync } from "node:sqlite";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { requireDomainActor } from "./domain-actor.js";
 
 /**
  * The cockpit's own store — the first data on this platform that cannot be
@@ -103,11 +104,23 @@ export interface DomainRelation {
 export class DomainStore {
   private readonly db: DatabaseSync;
 
-  constructor(databasePath: string, migrationSql: string) {
-    this.db = new DatabaseSync(databasePath);
-    this.db.exec("PRAGMA journal_mode = WAL");
-    this.db.exec("PRAGMA foreign_keys = ON");
-    this.db.exec(migrationSql);
+  /**
+   * `readOnly` opens the precious store without write capability (STORY-138).
+   * The read face must not be able to mutate the domain store any more than it
+   * can write the chain; SQLite enforces it at the connection, so a code path
+   * that never intended to write still cannot. In read-only mode the WAL pragma
+   * and migrations are skipped: WAL is a write-time concern and the schema is
+   * already applied by the writer.
+   */
+  constructor(databasePath: string, migrationSql: string, options: { readOnly?: boolean } = {}) {
+    this.db = options.readOnly === true
+      ? new DatabaseSync(databasePath, { readOnly: true })
+      : new DatabaseSync(databasePath);
+    if (options.readOnly !== true) {
+      this.db.exec("PRAGMA journal_mode = WAL");
+      this.db.exec("PRAGMA foreign_keys = ON");
+      this.db.exec(migrationSql);
+    }
   }
 
   /**
@@ -129,6 +142,7 @@ export class DomainStore {
     updatedAt: string;
     updatedBy: string;
   }): DomainAnnotation {
+    requireDomainActor(input.updatedBy, "updatedBy");
     const existing = this.getAnnotation(input);
     const next: DomainAnnotation = {
       partitionId: input.partitionId,
@@ -186,6 +200,7 @@ export class DomainStore {
     body: string;
     createdAt: string;
   }): DomainComment {
+    requireDomainActor(input.author, "author");
     this.db.prepare(`INSERT INTO aos_domain_comment
       (id, partition_id, record_id, author, body, created_at, edited_at)
       VALUES (?,?,?,?,?,?,NULL)`)
@@ -216,6 +231,7 @@ export class DomainStore {
    * They live here, and stay visibly the cockpit's claim rather than the chain's.
    */
   addRelation(input: Omit<DomainRelation, "createdAt"> & { createdAt: string }): DomainRelation {
+    requireDomainActor(input.createdBy, "createdBy");
     this.db.prepare(`INSERT OR IGNORE INTO aos_domain_relation
       (id, partition_id, record_id, relation, target_partition_id, target_record_id, created_at, created_by)
       VALUES (?,?,?,?,?,?,?,?)`)

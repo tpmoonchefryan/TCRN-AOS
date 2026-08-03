@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "multi-agent 审议:open CONF-014(读面 LAN 边界),待拿到 id 后追加五立场(开场+三独立)。",
+  "startedAt": "2026-08-02T18:34:59Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs)"
+  },
+  "payload": {
+    "path": "deploy/aos-local-client/payloads/direction-aos-workbench-f1.json",
+    "sha256": "666417c868d799a375d0b97811bea5cd6f373dedb47170532e4c2587234530c4",
+    "bytes": 1116
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 916,
+    "headEventHash": "e5a16cfbc9286ed61b7fd680c564e8fb27d89e814b4b4c3ba042a95537c0c0fa",
+    "work": 142
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "conference-open",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-open",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T18:35:00Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--desired-outcome",
+        "裁定读面放整个 LAN 的安全边界设计:渲染处理/进程隔离/认证审计/网络绑定,供 STORY-137 执行",
+        "--expected-version",
+        "916",
+        "--external-key",
+        "TCRN-AOS-CONF-014",
+        "--participant-ids",
+        "owner:governance,profile:tcrn-minerva-v1,profile:tcrn-verity-v1,profile:tcrn-sable-v1",
+        "--project-id",
+        "project:899d30df2e67bc6e98a4f50e",
+        "--title",
+        "读面 LAN 可达边界设计审议(multi-agent)",
+        "--type",
+        "architecture",
+        "--work-ids",
+        "work:f5fabbc39a87482c60dcf2b5",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "desired-outcome",
+        "external-key",
+        "participant-ids",
+        "project-id",
+        "title",
+        "type",
+        "work-ids"
+      ],
+      "headAtPlanning": 916,
+      "executed": true,
+      "accepted": true,
+      "recordId": null,
+      "version": 917
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:f5fabbc39a87482c60dcf2b5",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-AOS-STORY-137",
+            "observed": "TCRN-AOS-STORY-137",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-AOS-STORY-137",
+        "kind": "Story",
+        "status": "planned"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 917,
+    "headEventHash": "7d877d3fe29876008298c0b3011c269c5c8c56808e8e43ef40f3ffd4cc1020b2",
+    "work": 142
+  },
+  "eventsAppended": 1,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-02T18:35:01Z"
+}

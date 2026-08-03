@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "拆 EPIC-042(协作动词 UI):建 STORY-147..151,parent=EPIC-042。",
+  "steps": [
+    { "verb": "work-create", "flags": { "project-id": "project:899d30df2e67bc6e98a4f50e", "external-key": "TCRN-AOS-STORY-147", "kind": "Story", "parent-id": "work:0dcf539f336bb36bb056d69a", "status": "planned" } },
+    { "verb": "work-create", "flags": { "project-id": "project:899d30df2e67bc6e98a4f50e", "external-key": "TCRN-AOS-STORY-148", "kind": "Story", "parent-id": "work:0dcf539f336bb36bb056d69a", "status": "planned" } },
+    { "verb": "work-create", "flags": { "project-id": "project:899d30df2e67bc6e98a4f50e", "external-key": "TCRN-AOS-STORY-149", "kind": "Story", "parent-id": "work:0dcf539f336bb36bb056d69a", "status": "planned" } },
+    { "verb": "work-create", "flags": { "project-id": "project:899d30df2e67bc6e98a4f50e", "external-key": "TCRN-AOS-STORY-150", "kind": "Story", "parent-id": "work:0dcf539f336bb36bb056d69a", "status": "planned" } },
+    { "verb": "work-create", "flags": { "project-id": "project:899d30df2e67bc6e98a4f50e", "external-key": "TCRN-AOS-STORY-151", "kind": "Story", "parent-id": "work:0dcf539f336bb36bb056d69a", "status": "planned" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:0dcf539f336bb36bb056d69a" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-AOS-EPIC-042", "kind": "Epic", "status": "planned" }
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+ "findings": [
+  {
+   "severity": "major",
+   "claim": "A. 落链对象(计划,全部可撤销,已执行待驳回类)",
+   "defect": "「全部可撤销」为假。三个对象全是 append-only 链写:事件永不消失,work-delete 只置 tombstone,且 create 查重不排墓碑,外部键 TCRN-AOS-INIT-002 / TCRN-AOS-CONF-007 / TCRN-CROSS-INC-026 一经写入即永久烧毁——这正是包自己在 T4 用来否决路 A 的论据(「墓碑永占 id(create 查重不排墓碑 workspace.ts:2410)」)。同一份文件里,同一事实在 T4 是不可逆性论据、在 A 节却被写成「全部可撤销」来支撑「已执行待驳回」的呈报形态。停顿预算的免停前提之一恰是可更正性,呈报语言不得高估它。",
+   "evidence": "包 switch-conference-package.md:5 与 :50(自相矛盾两处);引擎 /Users/ryanlan/.tcrn-workflow/tcrn-workflow/packages/core/src/workspace.ts createWork 内 `state.work.some((record) => record.id === id)` 无 !tombstone(本次复读证实);deleteWork 仅置 tombstone:true",
+   "fix": "A 节首句改为「可更正不可抹除:纠错=追加更正记录或 tombstone,键号永久消耗」;D 节「已执行待驳回」旁注明驳回的实际形态(tombstone+更正注解,非撤销)。免停结论不变(三对象各有裁定支撑),但依据须如实。"
+  },
+  {
+   "severity": "major",
+   "claim": "C.1-2 先创建 TCRN-AOS-INIT-002(AOS 分区,scope=「本 INIT 承载迁移裁定会 CONF-007 与其后经裁定的切换执行」),再以 --work-ids 链接 CONF-007",
+   "defect": "替 Owner 预决了承载分区。T1 第一子题自认「切换覆盖哪些分区?MIN-002 未明示范围——须裁」,且推荐案是全分区(cross/DS/TMS/AOS 四链)一体迁移;而命令序在该裁定落地之前就把承载 Initiative 永久落在 AOS 分区,并注解其承载「其后经裁定的切换执行」。若 Owner 裁全分区,一个跨分区级方向将由 AOS 分区 INIT 承载,与平台惯例(跨仓事项入 cross-project:INIT-005/006/007/012 皆然)相逆,且链上无法改址(键已烧、事件永留)。此预决并非必要:conference-open 的 --work-ids 接受 '-' 空哨兵,CONF-007 完全可以不依赖 INIT-002 先行开会。",
+   "evidence": "包 switch-conference-package.md:7-9,22,79-81;recon/ceremony-recon.json invocations.conference-open(\"--work-ids list REQUIRED ('-' allowed for empty)\");docs/direction-and-tracks-convention.md 公约1(方向未答之前不得在该方向下执行不可逆动作)",
+   "fix": "二选一:(a) CONF-007 以 --work-ids - 开会,INIT 创建挪到范围裁定之后,按裁定选分区;(b) 保留 C.1 但把 scope 注解收窄为「承载 AOS 分区切换段;若范围裁定超出 AOS,跨分区承载另立 cross INIT,本 INIT 收敛为 AOS 侧执行分册」,并把「承载分区」作为 T1 范围子题的显式待裁项列入 D 节真待裁。"
+  },
+  {
+   "severity": "major",
+   "claim": "T4 判据 4 改「迁移对为主,链全终态时回退注解对」+「链今天已全终态——门今天就是红的」",
+   "defect": "与 C.1 直接互斥且有实害。mirror-acceptance-proof.mjs 判据 4 的候选选择是「任何 TCRN-AOS 分区 FORWARD 可推进状态的记录」并真实执行 planned→ready 等前向流转;C.1 落链后,AOS 链上唯一非终态记录恰是 TCRN-AOS-INIT-002(planned)。按 T4 推荐的「有合法候选时迁移对不变」,此后每次验收门运行都会把 INIT-002 推出 planned——而 T9 与 CONF-001 先例(「INIT 保持 planned 待启动令」)都要求 INIT-002 停在 planned 等 Owner 分解令。即包的第一条命令亲手制造了会被自己推荐的判据当探针流转的治理记录。同时「链今天已全终态」这一论据在 C.1 执行的瞬间即失效,裁定草案不应建立在会被本包首条命令证伪的时态陈述上。",
+   "evidence": "TCRN-AOS/scripts/mirror-acceptance-proof.mjs:122-141(candidates=全部 FORWARD 可推进记录,逐个真实 POST /api/chain/transition,成功即停);包 switch-conference-package.md:44,49,79;CONF-001 纪要 minutes:5da0b8ea8b8421cb1f3a1e89 summary「INIT 保持 planned 待启动令」(AOS events/000001.json seq 18)",
+   "fix": "T4 裁定草案增一条:迁移对候选集排除治理骨架记录(至少排除 Initiative kind,或改为只对裁定指定的探针记录执行迁移对);措辞把「链今天已全终态」改为「链在每次收官闭合后进入全终态(本包 C.1 执行后暂不满足)」。"
+  },
+  {
+   "severity": "major",
+   "claim": "T2 adapter-operator×11 永不进(据:pins 不旅行)/ snapshot-recovery×5、init/attestation-enable 永不进;T1 硬前置① pins 落点须 Owner 裁",
+   "defect": "两处公约缺口叠加一处内在矛盾。(1) 内在矛盾:T2 给 adapter-operator「永不进」的论据是 pins 只住本机、写面仅回环(service.ts:24-30)与 MIN-002「VM 首期零写面」,而 T1 硬前置①同时请 Owner 在切换段推翻这两个前提(pins 与写面驻留 AOS 宿主)——若 T1 按推荐裁过,T2 该行的论据即失效,结论未必错但据已空。(2) direction-and-tracks 公约缺口:写面分工是双轨方向题(AOS 安全写面轨 vs CLI/MCP 仪式轨),公约第 4 条要求每条保留轨道带适用性谓词/运营成本归属/日落或复审条件三件套,第 3 条要求被拒方案落链;T2 表全部缺失,「永不」恰是公约明文拒绝的无复审条件的永久答案形态。(3) harness-constraint 公约缺口:「永不进」是拟新增的治理约束,公约 1/5 要求自标类别(此处应为主权型/审计型)并双落点登记,包内无登记段草案。",
+   "evidence": "包 switch-conference-package.md:24,35(自相矛盾两端);docs/direction-and-tracks-convention.md:44-51(公约3/4/6:被拒方案落链、三件套、「永久保留不是答案」);docs/harness-constraint-convention.md:65,77(公约1/5);TCRN-AOS/apps/cockpit-service/src/service.ts 文首注释与 listen 127.0.0.1(本次复读证实)",
+   "fix": "T2 每行「永不进」改带复审条件(至少 adapter-operator 与 snapshot-recovery 行标「T1 pins 落点裁定后复审」);为两条保留轨道补 Q3 三件套表;为拟新增约束预拟登记段(类别+保护对象)供闭会纪要按公约 5 双落点收录;把「把 conference/gate 写面也开进 AOS」等被拒形状按公约 3 一句理由显式列为被拒方案。"
+  },
+  {
+   "severity": "major",
+   "claim": "T1 推荐 O1 部署位面切换(链文件逐字节迁 VM 本地盘,权威随迁)——「依据 MIN-002」",
+   "defect": "MIN-002 八条裁定里的第 5 条「local-first 按 P5 条件化:权威 local-first 保留;服务面允许镜像外置」在包内一字未引。O1 把权威链与引擎迁至 VM,直接触碰「权威 local-first 保留」这条既有裁定(LAN VM 是否仍算 local、该条是否随切换段被有条件推翻,均属须 Owner 明知而裁的问题);按 harness-constraint 公约 6-8,替换旧逻辑须先答旧逻辑成立条件是否残余成立并把理由留档,包内无此分析段。一份自称「依据 MIN-002」的裁定包漏引其中与容器落点直接相干的一条,会让 Owner 在不见旧裁定的情况下作出可能与链上记录相抵触的新裁定。",
+   "evidence": "MIN-002 decisions[4](AOS events/000002.json seq 68,原文「local-first 按 P5 条件化:权威 local-first 保留;服务面允许镜像外置」);包 switch-conference-package.md:22-26 全文无 local-first;docs/harness-constraint-convention.md:81-91 公约6-9 与附录 B(替换类变更提案必填)",
+   "fix": "T1 增一小节:全文引 MIN-002 第 5 条,附残余适用性分析段(旧逻辑=权威驻操作者本机;成立条件=操作者在键盘前+pins 不旅行;VM 迁移下该条是被条件化还是被推翻),把「O1 是否满足『权威 local-first』或须显式修订该裁定」列入 D 节真待裁。"
+  },
+  {
+   "severity": "minor",
+   "claim": "A.2 participants: owner:governance、minerva、verity、sable、mara;开场立场 POS-ARTURO-1 署名 profile:tcrn-arturo-v1",
+   "defect": "开场立场作者 arturo 不在参会者名册。引擎不校验 position actorId∈participantIds(appendConferencePosition 只查 conferenceId/projectId 绑定),故不会报错而是静默落链为一条非参会者立场,永久留在记录上,与包内其余处处对齐名册的纪律不符。",
+   "evidence": "包 switch-conference-package.md:11-13,81,83;引擎 packages/core/src/conference.ts:227-232(本次复读证实仅 CONFERENCE_POSITION_UNBOUND 一项绑定检查,无参会者检查)",
+   "fix": "C.3 的 --participant-ids 增补 profile:tcrn-arturo-v1(Thread Orchestrator 作为开场与转写角色列席)。"
+  },
+  {
+   "severity": "minor",
+   "claim": "执行形态: multi-agent-deliberative;绑定收据由开场立场统一引用以避免自指",
+   "defect": "两处偏离公约字面且有过度声称风险。(1) 声明作用域未落到链面:POS-ARTURO-1 本身是主线程综合执笔且不在绑定集,若首行只写 multi-agent-deliberative,后来的链读者会把它读进「互不可见的独立上下文」集合——公约明令「不绑定时不得暗示独立性」。(2) 公约要求「在立场文本内引用其路径与摘要值」;按包的设计,四条被绑定立场自身零收据引用,单读任一被绑定立场无法发现绑定的存在(摘要值因自指不可入被绑定立场,但路径可以)。另注意执行顺序约束包内未写明:四子代理产出与收据文件须在 conference-open 之前完成,否则开场立场无法内含收据文件摘要。",
+   "evidence": "包 switch-conference-package.md:12-14;docs/deliberation-adoption-convention.md:50(「并在立场文本内引用其路径与摘要值」)、:84(「不绑定时不得暗示独立性」)、:44-48(边界语言,包已正确引用)",
+   "fix": "POS-ARTURO-1 首行模板定死为:「执行形态 multi-agent-deliberative——仅覆盖 POS-2..5(四 persona 立场,绑定收据 evidence/conf-007-execution-receipts.json sha256=<v>);本立场(POS-ARTURO-1)为主线程综合执笔(执笔 agent:fable,署名 arturo),不在绑定集。绑定证一致性非真实性,可信采集方未建成。」四条被绑定立场末行各加一句收据文件路径引用(不含摘要,注明因自指省略);C 节命令序前加一步「先跑四子代理并落收据文件,再 conference-open」。"
+  },
+  {
+   "severity": "minor",
+   "claim": "T2 写面分工表(引擎 39 mutating 动词,fixture-only 2 个不计)",
+   "defect": "表头与表体自相矛盾:表体行数合计恰为 39(snapshot-recovery×5 含 artifact-archive-apply/restore 两个 fixture-only),即两者实际被计入了;「不计」若成立该行应为 ×3 或总数应为 37。已对受治副本活目录复核:mutates:true 共 39,fixture-only 恰为该两动词。",
+   "evidence": "包 switch-conference-package.md:28,34(4+4+3+7+3+5+11+2=39);受治副本 CLI catalog 实测(node scripts/tcrn-workflow.mjs commands:mutating=39,fixture-only=artifact-archive-apply,artifact-archive-restore);recon/write-face.json risks 末条",
+   "fix": "表头改为「39 个 mutating 动词(其中 2 个 fixture-only,列于 snapshot-recovery×5 行内,不构成可达写面)」。"
+  },
+  {
+   "severity": "minor",
+   "claim": "T6 专机复审(MIN-002 复审条件=迁移切换裁定进入执行,即本会)",
+   "defect": "「即本会」把复审条件读提前了。原文(MIN-002 decision 6 与 position:4a51d78b)是「复审条件=迁移切换裁定进入执行,届时专机或专卷+备份 SLA+访问收紧与迁移同门裁定」——条件是裁定进入执行,专机题与迁移同门(即切换仪式的 owner 门)裁;CONF-007 是产生裁定的会,尚非裁定进入执行。提前到本会呈报三出口本身无害且有「同门裁定」支撑,但引文断章会让纪要读者以为复审条件已在此满足。",
+   "evidence": "position:4a51d78b73b4559e27ccbee9 全文(AOS events/000002.json seq 66,本次逐字复读)与 MIN-002 decisions[5](seq 68);包 switch-conference-package.md:60",
+   "fix": "括注改为「MIN-002 复审条件=迁移切换裁定进入执行;因原裁定同句要求『与迁移同门裁定』,本会将三出口提前呈报,正式裁定仍可留至切换 owner 门」。"
+  }
+ ]
+}

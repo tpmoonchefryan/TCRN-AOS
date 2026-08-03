@@ -1,0 +1,470 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "A1 推进:STORY-137 边界设计完成(transition done+annotate),EPIC-040/INIT-004 转 active,close CONF-014 落边界裁定。",
+  "startedAt": "2026-08-02T19:08:30Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs)"
+  },
+  "payload": {
+    "path": "deploy/aos-local-client/payloads/direction-aos-a1-d1.json",
+    "sha256": "63069903261047add5d918b5f74fe4d5ff6d0cde2fd1f668dca56b7207eff375",
+    "bytes": 3024
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 931,
+    "headEventHash": "e78efde4f441008d751eee731926d80076c8d8c14f57971026610e9d9e9292e6",
+    "work": 143
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:08:30Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "931",
+        "--id",
+        "work:f5fabbc39a87482c60dcf2b5",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 931,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:f5fabbc39a87482c60dcf2b5",
+      "version": 932
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:08:31Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "932",
+        "--id",
+        "work:f5fabbc39a87482c60dcf2b5",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 932,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:f5fabbc39a87482c60dcf2b5",
+      "version": 933
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:08:32Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "933",
+        "--id",
+        "work:f5fabbc39a87482c60dcf2b5",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 933,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:f5fabbc39a87482c60dcf2b5",
+      "version": 934
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:08:33Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "934",
+        "--id",
+        "work:f5fabbc39a87482c60dcf2b5",
+        "--scope",
+        "读面 LAN 可达边界设计定案(依据 CONF-014 三视角立场)。交付:docs/read-face-boundary-design.md。要点:独立只读进程 apps/cockpit-read、受众=整个 LAN、内容净化与无回路隔离为硬性、认证审计为配套、默认无 per-viewer 应用层认证升级杠杆为网络分段、两不变量落机器门(写面 loopback 在 VM 断言实际套接字/读面无 pins 静态面可证+运行期残余声明)。威胁模型:最坏情形非被改链而是全链可读+渲染不安全成跳板。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 934,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:f5fabbc39a87482c60dcf2b5",
+      "version": 935
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:08:33Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "935",
+        "--id",
+        "work:ceeee6ab4f2ab24904c9ad38",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 935,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:ceeee6ab4f2ab24904c9ad38",
+      "version": 936
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:08:34Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "936",
+        "--id",
+        "work:ceeee6ab4f2ab24904c9ad38",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 936,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:ceeee6ab4f2ab24904c9ad38",
+      "version": 937
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:08:35Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "937",
+        "--id",
+        "work:4c678a5fe78b6313ce56ea39",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 937,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:4c678a5fe78b6313ce56ea39",
+      "version": 938
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:08:36Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "938",
+        "--id",
+        "work:4c678a5fe78b6313ce56ea39",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 938,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:4c678a5fe78b6313ce56ea39",
+      "version": 939
+    },
+    {
+      "ok": true,
+      "verb": "conference-close",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-close",
+        "--accountable-owner-id",
+        "owner:governance",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:08:36Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--conference-id",
+        "conference:a1216d10e539943d4e136ae8",
+        "--decisions",
+        "读面边界设计已定(依据 CONF-014 三视角立场):内容净化与无回路隔离为硬性;认证审计为配套;受众=整个 LAN;形态=独立只读进程;两不变量落机器门:写面 loopback 在 VM 断言实际套接字、读面无 pins 静态面可证加运行期残余声明",
+        "--distill",
+        "false",
+        "--expected-version",
+        "939",
+        "--minutes-external-key",
+        "TCRN-AOS-MIN-014",
+        "--outcome-class",
+        "role_decision",
+        "--summary",
+        "读面 LAN 可达边界设计定案(STORY-137):独立只读进程放整个 LAN,内容净化与无回路隔离为硬性,认证审计为配套,两条不变量落机器门",
+        "--unresolved-issues",
+        "LAN 身份不可证故读面不依赖 per-viewer 认证;读进程运行期内存永不持 pins 不可机证靠拓扑与部署期控制",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "accountable-owner-id",
+        "conference-id",
+        "decisions",
+        "distill",
+        "minutes-external-key",
+        "outcome-class",
+        "summary",
+        "unresolved-issues"
+      ],
+      "headAtPlanning": 939,
+      "executed": true,
+      "accepted": true,
+      "recordId": null,
+      "version": 940
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:f5fabbc39a87482c60dcf2b5",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-AOS-STORY-137",
+            "observed": "TCRN-AOS-STORY-137",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "读面 LAN 可达边界设计定案(依据 CONF-014 三视角立场)。交付:docs/read-face-boundary-design.md。要点:独立只读进程 apps/cockpit-read、受众=整个 LAN、内容净化与无回路隔离为硬性、认证审计为配套、默认无 per-viewer 应用层认证升级杠杆为网络分段、两不变量落机器门(写面 loopback 在 VM 断言实际套接字/读面无 pins 静态面可证+运行期残余声明)。威胁模型:最坏情形非被改链而是全链可读+渲染不安全成跳板。",
+            "observed": "读面 LAN 可达边界设计定案(依据 CONF-014 三视角立场)。交付:docs/read-face-boundary-design.md。要点:独立只读进程 apps/cockpit-read、受众=整个 LAN、内容净化与无回路隔离为硬性、认证审计为配套、默认无 per-viewer 应用层认证升级杠杆为网络分段、两不变量落机器门(写面 loopback 在 VM 断言实际套接字/读面无 pins 静态面可证+运行期残余声明)。威胁模型:最坏情形非被改链而是全链可读+渲染不安全成跳板。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-AOS-STORY-137",
+        "kind": "Story",
+        "status": "done",
+        "scope": "读面 LAN 可达边界设计定案(依据 CONF-014 三视角立场)。交付:docs/read-face-boundary-design.md。要点:独立只读进程 apps/cockpit-read、受众=整个 LAN、内容净化与无回路隔离为硬性、认证审计为配套、默认无 per-viewer 应用层认证升级杠杆为网络分段、两不变量落机器门(写面 loopback 在 VM 断言实际套接字/读面无 pins 静态面可证+运行期残余声明)。威胁模型:最坏情形非被改链而是全链可读+渲染不安全成跳板。"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 940,
+    "headEventHash": "b76e0302ac4af3afddcafe8a91e3e2ac50cf58a7f7716434d65d53d60a70d33b",
+    "work": 143
+  },
+  "eventsAppended": 9,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-02T19:08:38Z"
+}

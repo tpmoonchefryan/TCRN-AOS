@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "分解 INIT-004:建立三期 Epic 骨架(读面拆出/归因扩展/协作动词),挂到 INIT-004 下。",
+  "steps": [
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:899d30df2e67bc6e98a4f50e",
+        "external-key": "TCRN-AOS-EPIC-040",
+        "kind": "Epic",
+        "parent-id": "work:4c678a5fe78b6313ce56ea39",
+        "status": "planned"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:899d30df2e67bc6e98a4f50e",
+        "external-key": "TCRN-AOS-EPIC-041",
+        "kind": "Epic",
+        "parent-id": "work:4c678a5fe78b6313ce56ea39",
+        "status": "planned"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:899d30df2e67bc6e98a4f50e",
+        "external-key": "TCRN-AOS-EPIC-042",
+        "kind": "Epic",
+        "parent-id": "work:4c678a5fe78b6313ce56ea39",
+        "status": "planned"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:4c678a5fe78b6313ce56ea39" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": {
+        "externalKey": "TCRN-AOS-INIT-004",
+        "kind": "Initiative",
+        "status": "planned"
+      }
+    }
+  ]
+}

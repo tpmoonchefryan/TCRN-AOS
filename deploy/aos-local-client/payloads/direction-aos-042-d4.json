@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "收口 STORY-150(AI 提议/人定夺回路,Owner 裁 B 轻量)与 EPIC-042 done。",
+  "steps": [
+    { "verb": "work-transition", "flags": { "id": "work:1830121fe17bbdd757aa8b73", "status": "ready" } },
+    { "verb": "work-transition", "flags": { "id": "work:1830121fe17bbdd757aa8b73", "status": "active" } },
+    { "verb": "work-transition", "flags": { "id": "work:1830121fe17bbdd757aa8b73", "status": "done" } },
+    { "verb": "work-annotate", "flags": { "id": "work:1830121fe17bbdd757aa8b73", "scope": "AI 提议/人定夺回路:Owner 裁 B 轻量(2026-08-03)——不加结构化 type/接受打回按钮,维持 AI 写为主;人定夺发生在对话层,AOS 是记录面。147 的 person/agent 徽标已使 AI 提案与人裁决在评论线程可区分。283/283 全绿。" } },
+    { "verb": "work-transition", "flags": { "id": "work:0dcf539f336bb36bb056d69a", "status": "done" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:0dcf539f336bb36bb056d69a" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-AOS-EPIC-042", "kind": "Epic", "status": "done" }
+    }
+  ]
+}

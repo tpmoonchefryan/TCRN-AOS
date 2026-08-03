@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "annotate EPIC-042 下五个 Story 的 scope。",
+  "steps": [
+    { "verb": "work-annotate", "flags": { "id": "work:d121927a89a7ea44bd8e2677", "scope": "comment 落地(042-A):POST /api/domain/comment 已有,接进工作项详情页写路径;讨论线程按 CommentType(human_intent/agent_observation/agent_proposal/agent_decision...)着色;依赖 041 归因(author 为 person/agent 双类)。验收:详情页可发评论,线程人/AI 立场一眼可分。" } },
+    { "verb": "work-annotate", "flags": { "id": "work:5ddbc6a0ba35661c0022cfd7", "scope": "relation 落地(042-B):blocks/depends_on/reviews/verifies 等 relation 写路径接进 board/详情;读面已能读 relation(A1),本期补写。依赖 041 归因(createdBy)。验收:board 上真连线,relation 可建可看。" } },
+    { "verb": "work-annotate", "flags": { "id": "work:ab6e7a415b7fafe9f1e16966", "scope": "annotate 落地(042-C):assignee/priority/labels 域写路由已有,接进详情页可改;依赖 041 归因(updatedBy)。验收:详情页可改 assignee/priority/labels,变更落 updatedBy。" } },
+    { "verb": "work-annotate", "flags": { "id": "work:1830121fe17bbdd757aa8b73", "scope": "AI 提议/人定夺回路(042-D):agent_proposal 出、人回 human_intent 或打回;owner_intent_required 门+决策台账变常规协作回路;依赖 041(提案与裁决归因不同)。验收:一条讨论线程能看到 AI 提案、人裁决完整往返且归因清楚。" } },
+    { "verb": "work-annotate", "flags": { "id": "work:e676d0a5664c832cec0a5560", "scope": "归因视图(042-E):每条记录一个'谁在何时说了什么'视图——comment/annotate/relation 均显示 actor(person/agent)、时间、内容;读面展示。依赖 041。验收:工作项详情页可见完整归因历史。" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:d121927a89a7ea44bd8e2677" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-AOS-STORY-147", "kind": "Story", "status": "planned" }
+    }
+  ]
+}

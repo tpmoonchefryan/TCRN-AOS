@@ -1,0 +1,289 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "annotate EPIC-042 下五个 Story 的 scope。",
+  "startedAt": "2026-08-03T03:44:14Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs)"
+  },
+  "payload": {
+    "path": "deploy/aos-local-client/payloads/direction-aos-042-d2.json",
+    "sha256": "12df290f236d8224c8be20926f9a0ac1f9812592e8748da9c166031cc9770347",
+    "bytes": 2143
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 972,
+    "headEventHash": "a8b4fef6f629a17b4359aa19f9badab53c07bb35c044766342d446916bca80e3",
+    "work": 152
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-03T03:44:15Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "972",
+        "--id",
+        "work:d121927a89a7ea44bd8e2677",
+        "--scope",
+        "comment 落地(042-A):POST /api/domain/comment 已有,接进工作项详情页写路径;讨论线程按 CommentType(human_intent/agent_observation/agent_proposal/agent_decision...)着色;依赖 041 归因(author 为 person/agent 双类)。验收:详情页可发评论,线程人/AI 立场一眼可分。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 972,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:d121927a89a7ea44bd8e2677",
+      "version": 973
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-03T03:44:16Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "973",
+        "--id",
+        "work:5ddbc6a0ba35661c0022cfd7",
+        "--scope",
+        "relation 落地(042-B):blocks/depends_on/reviews/verifies 等 relation 写路径接进 board/详情;读面已能读 relation(A1),本期补写。依赖 041 归因(createdBy)。验收:board 上真连线,relation 可建可看。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 973,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:5ddbc6a0ba35661c0022cfd7",
+      "version": 974
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-03T03:44:16Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "974",
+        "--id",
+        "work:ab6e7a415b7fafe9f1e16966",
+        "--scope",
+        "annotate 落地(042-C):assignee/priority/labels 域写路由已有,接进详情页可改;依赖 041 归因(updatedBy)。验收:详情页可改 assignee/priority/labels,变更落 updatedBy。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 974,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:ab6e7a415b7fafe9f1e16966",
+      "version": 975
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-03T03:44:17Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "975",
+        "--id",
+        "work:1830121fe17bbdd757aa8b73",
+        "--scope",
+        "AI 提议/人定夺回路(042-D):agent_proposal 出、人回 human_intent 或打回;owner_intent_required 门+决策台账变常规协作回路;依赖 041(提案与裁决归因不同)。验收:一条讨论线程能看到 AI 提案、人裁决完整往返且归因清楚。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 975,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:1830121fe17bbdd757aa8b73",
+      "version": 976
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-03T03:44:18Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "976",
+        "--id",
+        "work:e676d0a5664c832cec0a5560",
+        "--scope",
+        "归因视图(042-E):每条记录一个'谁在何时说了什么'视图——comment/annotate/relation 均显示 actor(person/agent)、时间、内容;读面展示。依赖 041。验收:工作项详情页可见完整归因历史。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 976,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:e676d0a5664c832cec0a5560",
+      "version": 977
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:d121927a89a7ea44bd8e2677",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-AOS-STORY-147",
+            "observed": "TCRN-AOS-STORY-147",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-AOS-STORY-147",
+        "kind": "Story",
+        "status": "planned"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 977,
+    "headEventHash": "d46c6c0e846b162e6301b65286e929e6c6d129be85714ec28497dc87a7317683",
+    "work": 152
+  },
+  "eventsAppended": 5,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-03T03:44:19Z"
+}

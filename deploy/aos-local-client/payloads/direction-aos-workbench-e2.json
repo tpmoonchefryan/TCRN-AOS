@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "分解 A1:在 EPIC-040(读面拆出)下建立五个 Story(STORY-137..141)。",
+  "steps": [
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:899d30df2e67bc6e98a4f50e",
+        "external-key": "TCRN-AOS-STORY-137",
+        "kind": "Story",
+        "parent-id": "work:ceeee6ab4f2ab24904c9ad38",
+        "status": "planned"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:899d30df2e67bc6e98a4f50e",
+        "external-key": "TCRN-AOS-STORY-138",
+        "kind": "Story",
+        "parent-id": "work:ceeee6ab4f2ab24904c9ad38",
+        "status": "planned"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:899d30df2e67bc6e98a4f50e",
+        "external-key": "TCRN-AOS-STORY-139",
+        "kind": "Story",
+        "parent-id": "work:ceeee6ab4f2ab24904c9ad38",
+        "status": "planned"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:899d30df2e67bc6e98a4f50e",
+        "external-key": "TCRN-AOS-STORY-140",
+        "kind": "Story",
+        "parent-id": "work:ceeee6ab4f2ab24904c9ad38",
+        "status": "planned"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:899d30df2e67bc6e98a4f50e",
+        "external-key": "TCRN-AOS-STORY-141",
+        "kind": "Story",
+        "parent-id": "work:ceeee6ab4f2ab24904c9ad38",
+        "status": "planned"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:ceeee6ab4f2ab24904c9ad38" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": {
+        "externalKey": "TCRN-AOS-EPIC-040",
+        "kind": "Epic",
+        "status": "planned"
+      }
+    }
+  ]
+}

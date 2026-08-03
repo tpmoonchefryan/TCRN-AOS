@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "立 EPIC-043 记录 multi-agent 审议工具链补缺,挂 INIT-004(STORY 不能直接挂 Initiative,故用 Epic 承载)。",
+  "steps": [
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:899d30df2e67bc6e98a4f50e",
+        "external-key": "TCRN-AOS-EPIC-043",
+        "kind": "Epic",
+        "parent-id": "work:4c678a5fe78b6313ce56ea39",
+        "status": "planned"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:4c678a5fe78b6313ce56ea39" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": {
+        "externalKey": "TCRN-AOS-INIT-004",
+        "kind": "Initiative",
+        "status": "planned"
+      }
+    }
+  ]
+}

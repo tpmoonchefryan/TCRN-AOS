@@ -1,0 +1,364 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "multi-agent 审议:CONF-014 追加开场+三独立立场(绑定收据)",
+  "startedAt": "2026-08-02T18:35:26Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs)"
+  },
+  "payload": {
+    "path": "deploy/aos-local-client/payloads/direction-aos-workbench-f2.json",
+    "sha256": "e6b83b09392aabdbee3f2df0ab708799a25a94aaf163dc75021c13a34ca79672",
+    "bytes": 8778
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 917,
+    "headEventHash": "7d877d3fe29876008298c0b3011c269c5c8c56808e8e43ef40f3ffd4cc1020b2",
+    "work": 142
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "conference-append-position",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-append-position",
+        "--actor",
+        "agent:fable",
+        "--actor-id",
+        "profile:tcrn-arturo-v1",
+        "--at",
+        "2026-08-02T18:35:26Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--conference-id",
+        "conference:a1216d10e539943d4e136ae8",
+        "--evidence-ids",
+        "-",
+        "--expected-version",
+        "917",
+        "--external-key",
+        "POS-CONF-014-ARTURO-1",
+        "--position",
+        "执行形态 multi-agent-deliberative——POS-CONF-014-MINERVA-1/VERITY-1/SABLE-1 三立场由互不可见的独立子代理上下文分头产出;绑定收据 evidence/conference-conf-014-execution-receipts.json,sha256=76cf8a970040e2895d3bdabc139a644cbcb4ebc9bbe6e82bef6c47f76a1bb0eb.本立场为主线程综合执笔(执笔 agent:fable,署名 arturo),不在绑定集。绑定证一致性非真实性,可信采集方未建成。议题:读面放整个 LAN 的安全边界设计(STORY-137),各视角独立给出渲染/隔离/认证/网络的取舍;请 Owner 在 close 时裁定读面边界设计方向。",
+        "--recommendations",
+        "按各视角立场裁读面边界",
+        "--risks",
+        "读面放 LAN 使治理记录对局域网可读",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor-id",
+        "conference-id",
+        "evidence-ids",
+        "external-key",
+        "position",
+        "recommendations",
+        "risks"
+      ],
+      "headAtPlanning": 917,
+      "executed": true,
+      "accepted": true,
+      "recordId": null,
+      "version": 918
+    },
+    {
+      "ok": true,
+      "verb": "conference-append-position",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-append-position",
+        "--actor",
+        "agent:fable",
+        "--actor-id",
+        "profile:tcrn-minerva-v1",
+        "--at",
+        "2026-08-02T18:35:27Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--conference-id",
+        "conference:a1216d10e539943d4e136ae8",
+        "--evidence-ids",
+        "-",
+        "--expected-version",
+        "918",
+        "--external-key",
+        "POS-CONF-014-MINERVA-1",
+        "--position",
+        "LAN 可读的真实成本不是多一个端口，而是信任语义的改变：LAN 不是信任边界。它含携毒笔记本、访客网段、被 VPN 扩大的名义局域网。放 LAN 等于把审议立场、纪要、注解的机密性从「隧道内」降为「局域网内」。但收益也真实：现隧道每查看者需 SSH 凭据，移动端与随手查看皆不可用；放开 LAN 是协作方向的实际解绑。第一步做数据分级：链上无密钥、无 pins，机密性低，高价值属性是完整性，且已由两条硬不变量守护。分级成立则开放只读可接受，但要白纸黑字写明这是主动取舍，不是疏忽。\n\n隔离的可操作性：拆进程易，拆数据通路难。读面若经写面 loopback API 中继读数据，被攻破即成写面代理，是新增写路径，违反 fail-safe。正确形态是读面以独立低权 OS 用户、只读挂载直读链存储，不持有、不经过写面任何接口；逐条验证读面无写 fd。\n\n边界形态：独立只读 HTTP 进程，显式绑定 LAN 接口地址（非 0.0.0.0、非 WAN 接口），严格校验 Host 头拦 DNS rebinding；无状态、无 cookie、仅纯 GET 读端点，其余一律 404/405 默认拒绝。运维面最小化：单进程、读文件、无 DB，配监控与重启策略。\n\n认证取舍：默认不做应用层认证。受众裁定即「整个 LAN」；为只读查看器配 per-viewer 认证，运维成本高而防护增益趋零，对既定威胁无益。URL token 会经日志、历史、截图泄漏，属安全剧场。若日后机密性分级升高，便宜杠杆是网络分段（VLAN/防火墙限源），而非应用层认证。fail-safe：任何歧义即拒绝，读面永不成写面跳板。\n\n\n绑定收据: evidence/conference-conf-014-execution-receipts.json(摘要值因自指省略,见开场立场)",
+        "--recommendations",
+        "按本立场裁读面边界",
+        "--risks",
+        "读面放 LAN 的治理记录机密性暴露与注入升级风险",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor-id",
+        "conference-id",
+        "evidence-ids",
+        "external-key",
+        "position",
+        "recommendations",
+        "risks"
+      ],
+      "headAtPlanning": 918,
+      "executed": true,
+      "accepted": true,
+      "recordId": null,
+      "version": 919
+    },
+    {
+      "ok": true,
+      "verb": "conference-append-position",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-append-position",
+        "--actor",
+        "agent:fable",
+        "--actor-id",
+        "profile:tcrn-verity-v1",
+        "--at",
+        "2026-08-02T18:35:28Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--conference-id",
+        "conference:a1216d10e539943d4e136ae8",
+        "--evidence-ids",
+        "-",
+        "--expected-version",
+        "919",
+        "--external-key",
+        "POS-CONF-014-VERITY-1",
+        "--position",
+        "两条硬不变量的可证性不对称，须分而治之。\n\n一、「写面永不出 loopback」是机器门。判据设在实际监听套接字而非配置文本：在 VM 上对写进程端口断言监听地址恰为 127.0.0.1/::1。门必须读活态、跑在 VM 与写进程同宿主，否则就是陈旧索引陷阱。红证：把 bind 改成 0.0.0.0 或加 iptables 放行规则，门必须红。loopback 语义保证外部主机不可达该套接字，故这是可证的真不变量，不是拓扑估计。\n\n二、「读面永不持 pins」只可证一半。静态面可证：读进程部署清单授予的文件系统范围不含 pin 库路径、bundle 无出站凭据通道；红证：给读进程一个含 pin 的 bundle 或一条能拉到 pin 的路径，门必须红。运行期内存不可证：任何快照都证否不了「永不」，这只能靠拓扑。补救是把「持 pin」从运行期可能压缩成部署期可控——读进程纯静态、无回写、无出站通道，并把这残余假设写成声明进记录，不得标为已验证。\n\n三、读面放 LAN 的新面是 HTTP 服务。可证性聚焦一处：读面只答只读动词——从 LAN 测试客户端发任何写变更请求预期拒答，这是机器门。「LAN 上是谁」不可证，故边界设计不得依赖 LAN 身份。若不加认证，记录须声明：立场/纪要的来源性由链哈希承载，是内容级声明，非传输层认证。\n\n四、判据须在求值世界可满足。写面宿主是 VM，写面门必须跑在 VM 上对活套接字断言；本机侧任何「已证」都只是搬运，不算数。两门在验收前各真做一次红证演练再谈绿。\n\n\n绑定收据: evidence/conference-conf-014-execution-receipts.json(摘要值因自指省略,见开场立场)",
+        "--recommendations",
+        "按本立场裁读面边界",
+        "--risks",
+        "读面放 LAN 的治理记录机密性暴露与注入升级风险",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor-id",
+        "conference-id",
+        "evidence-ids",
+        "external-key",
+        "position",
+        "recommendations",
+        "risks"
+      ],
+      "headAtPlanning": 919,
+      "executed": true,
+      "accepted": true,
+      "recordId": null,
+      "version": 920
+    },
+    {
+      "ok": true,
+      "verb": "conference-append-position",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-append-position",
+        "--actor",
+        "agent:fable",
+        "--actor-id",
+        "profile:tcrn-sable-v1",
+        "--at",
+        "2026-08-02T18:35:29Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--conference-id",
+        "conference:a1216d10e539943d4e136ae8",
+        "--evidence-ids",
+        "-",
+        "--expected-version",
+        "920",
+        "--external-key",
+        "POS-CONF-014-SABLE-1",
+        "--position",
+        "1/2\n读面放整个 LAN，本质是把链上治理记录的整体机密性从「仅持 pin 主机」扩展到「LAN 内一切设备」。先定最坏情形，再画边界。\n\n最坏情形两级。一级机密性：立场、纪要、注解、决策与责任人归属全链可读——决策理由、责任归属、待决事项与运作姿态尽数暴露，攻击者可低成本对责任人社工、定向影响进行中的审议。二级升级：链上字段是自由文本，若渲染时执行其中 HTML/JS，「只读」即失效，存储型注入在查看者浏览器执行，成社工与凭证窃取载体；读面与写面同机，被攻破的读进程是通向 loopback 写面的跳板。两条硬不变量只止血不防升级：pin 永不离机不等于攻击者到不了持 pin 进程。\n\n故边界不是「无 pin」即成立，画四道：",
+        "--recommendations",
+        "按本立场裁读面边界",
+        "--risks",
+        "读面放 LAN 的治理记录机密性暴露与注入升级风险",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor-id",
+        "conference-id",
+        "evidence-ids",
+        "external-key",
+        "position",
+        "recommendations",
+        "risks"
+      ],
+      "headAtPlanning": 920,
+      "executed": true,
+      "accepted": true,
+      "recordId": null,
+      "version": 921
+    },
+    {
+      "ok": true,
+      "verb": "conference-append-position",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-append-position",
+        "--actor",
+        "agent:fable",
+        "--actor-id",
+        "profile:tcrn-sable-v1",
+        "--at",
+        "2026-08-02T18:35:29Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--conference-id",
+        "conference:a1216d10e539943d4e136ae8",
+        "--evidence-ids",
+        "-",
+        "--expected-version",
+        "921",
+        "--external-key",
+        "POS-CONF-014-SABLE-1-2",
+        "--position",
+        "2/2\n一、内容一律按不可信渲染。任何记录字段只当纯文本输出，禁 HTML/JS，强制 CSP 与 nosniff。把「只读」从声明变成属性。\n\n二、进程隔离加无回路。读进程独立非特权用户、独立进程组，与写面零共享，网络策略禁止其连接写面 loopback 端口。判据「不持 pin」必要不充分，须补「无通往写面路径」。\n\n三、最小认证与审计。受众「整个 LAN」不等于零认证。部署可吊销的共享只读凭据，读取落审计日志。链含决策与责任人信息，未认证裸奔不可接受。\n\n四、网络与可用性。绑定专用接口禁 0.0.0.0，LAN 按不可信域处理、绝不暴露公网；读取限速，防读进程耗尽与写面同机资源。\n\n总结：最坏情形不是「被改链」（invariant 挡住），而是「全链可读+渲染不安全则成跳板」。内容净化与无回路隔离为硬性，认证审计与网络加固为配套。缺内容净化，LAN 读面即自带漏洞的公开服务；缺无回路，「只读进程」仍是通往写面的第一腿。\n\n\n绑定收据: evidence/conference-conf-014-execution-receipts.json(摘要值因自指省略,见开场立场)",
+        "--recommendations",
+        "按本立场裁读面边界",
+        "--risks",
+        "读面放 LAN 的治理记录机密性暴露与注入升级风险",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor-id",
+        "conference-id",
+        "evidence-ids",
+        "external-key",
+        "position",
+        "recommendations",
+        "risks"
+      ],
+      "headAtPlanning": 921,
+      "executed": true,
+      "accepted": true,
+      "recordId": null,
+      "version": 922
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:f5fabbc39a87482c60dcf2b5",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-AOS-STORY-137",
+            "observed": "TCRN-AOS-STORY-137",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-AOS-STORY-137",
+        "kind": "Story",
+        "status": "planned"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 922,
+    "headEventHash": "4791e0bf584dadcdae49f0124f7c457a966528ba56f65c9e418a606fd9f44a4b",
+    "work": 142
+  },
+  "eventsAppended": 5,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-02T18:35:30Z"
+}

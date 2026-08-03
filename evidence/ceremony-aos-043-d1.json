@@ -1,0 +1,250 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "收口 EPIC-043(工具链补缺,实现已完成):planned→done,使 INIT-004 全部子项终态(引擎新约束 WSA-3 上线前置)。",
+  "startedAt": "2026-08-03T04:23:19Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs)"
+  },
+  "payload": {
+    "path": "deploy/aos-local-client/payloads/direction-aos-043-d1.json",
+    "sha256": "9df0e3feb6c57d2074a8642aa5ce5ac53868360053097b443bc39e153b61367c",
+    "bytes": 1191
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 1019,
+    "headEventHash": "cb2627ec9d1f33ab9493d94b21d871ebd3046c1bb4f334044bb4bef50ecf76aa",
+    "work": 152
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-03T04:23:19Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "1019",
+        "--id",
+        "work:27a57740f12ec8bfd005903e",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1019,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:27a57740f12ec8bfd005903e",
+      "version": 1020
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-03T04:23:20Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "1020",
+        "--id",
+        "work:27a57740f12ec8bfd005903e",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1020,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:27a57740f12ec8bfd005903e",
+      "version": 1021
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-03T04:23:21Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "1021",
+        "--id",
+        "work:27a57740f12ec8bfd005903e",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1021,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:27a57740f12ec8bfd005903e",
+      "version": 1022
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-03T04:23:22Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "1022",
+        "--id",
+        "work:27a57740f12ec8bfd005903e",
+        "--scope",
+        "multi-agent 工具链补缺完成:deliberation-multi-agent.mjs(spec→收据+载荷+拆片+participant 无 seat 即 refuse)已实现并被 CONF-014/015 真实使用;specs/conf-014-spec.json 在仓;引擎可信采集方 EPIC-020 残余记录在案。收口。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1022,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:27a57740f12ec8bfd005903e",
+      "version": 1023
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:27a57740f12ec8bfd005903e",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-AOS-EPIC-043",
+            "observed": "TCRN-AOS-EPIC-043",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Epic",
+            "observed": "Epic",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-AOS-EPIC-043",
+        "kind": "Epic",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 1023,
+    "headEventHash": "954d570aaa6c107f6acc451e2bef58d91f3728f859bfa795961e5ae66b41d204",
+    "work": 152
+  },
+  "eventsAppended": 4,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-03T04:23:23Z"
+}

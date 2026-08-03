@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "multi-agent 审议:open CONF-014(读面 LAN 边界),待拿到 id 后追加五立场(开场+三独立)。",
+  "steps": [
+    {
+      "verb": "conference-open",
+      "flags": {
+        "external-key": "TCRN-AOS-CONF-014",
+        "project-id": "project:899d30df2e67bc6e98a4f50e",
+        "type": "architecture",
+        "title": "读面 LAN 可达边界设计审议(multi-agent)",
+        "work-ids": "work:f5fabbc39a87482c60dcf2b5",
+        "desired-outcome": "裁定读面放整个 LAN 的安全边界设计:渲染处理/进程隔离/认证审计/网络绑定,供 STORY-137 执行",
+        "participant-ids": "owner:governance,profile:tcrn-minerva-v1,profile:tcrn-verity-v1,profile:tcrn-sable-v1"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:f5fabbc39a87482c60dcf2b5" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": {
+        "externalKey": "TCRN-AOS-STORY-137",
+        "kind": "Story",
+        "status": "planned"
+      }
+    }
+  ]
+}

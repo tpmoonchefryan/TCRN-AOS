@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "gate": "aos-write-face-loopback-vm",
+  "schemaVersion": "aos.read-face-boundary.v1",
+  "host": "tcrn-platform-dev",
+  "port": 4318,
+  "boundAddresses": [
+    "127.0.0.1"
+  ],
+  "invariants": [
+    "the write face's port is LISTENing on the VM",
+    "the write face binds loopback only (127.0.0.1/::1)",
+    "the write face is not wildcard-bound"
+  ],
+  "findings": [],
+  "generatedAt": "2026-08-02T19:28:26.940Z"
+}

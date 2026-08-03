@@ -12,6 +12,7 @@ import {
   SafeWriteSurface,
   WriteRefused,
   loadDomainMigrationSql,
+  requireDomainActor,
   type DomainPriority,
   type DomainRelationType
 } from "../../../packages/projection/src/index.js";
@@ -132,6 +133,10 @@ export async function startCockpitService(options: CockpitServiceOptions): Promi
       "(set AOS_ACTOR, or pass `actor` explicitly)."
     );
   }
+  // EPIC-041: the actor must be a legal domain actor (agent:<model> or
+  // person:<id>). A bare name or an empty string would record an anonymous
+  // claim on every write; refusing here keeps attribution structural.
+  requireDomainActor(options.actor, "actor");
   const migration = loadDomainMigrationSql(
     resolve(process.cwd(), "packages/db/migrations/domain"));
   const domain = new DomainStore(options.domainDatabasePath, migration);

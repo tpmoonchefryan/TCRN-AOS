@@ -2,13 +2,13 @@
   "schemaVersion": "aos.engine-host-deploy.v1",
   "ruling": "TCRN-AOS-MIN-007",
   "ok": true,
-  "startedAt": "2026-07-29T17:35:41Z",
-  "finishedAt": "2026-07-29T17:35:42Z",
+  "startedAt": "2026-08-03T05:37:17Z",
+  "finishedAt": "2026-08-03T05:37:18Z",
   "source": {
     "locator": "<local-governed-copy>",
-    "version": "0.9.0",
-    "tag": "v0.9.0",
-    "commit": "729cd045f8614ae984c2ad6f592341fbae49019c",
+    "version": "0.10.1",
+    "tag": "v0.10.1",
+    "commit": "3c99044fc2ed4bbf4b53a8ea34c29a5ed95ee570",
     "workingTreeClean": true,
     "distCoveredByTag": false
   },
@@ -20,15 +20,15 @@
     ],
     "destinationHost": "tcrn-platform-dev",
     "enginePath": "/srv/tcrn/engine/tcrn-workflow",
-    "fileCount": 409,
-    "totalBytes": 9281354,
+    "fileCount": 411,
+    "totalBytes": 10620290,
     "fileSetDigest": {
-      "local": "685e1c6e3bba3c26ef8186f1c452d6e53cbae2a788a6bfad1dbf8fe1e4fb0163",
-      "remote": "685e1c6e3bba3c26ef8186f1c452d6e53cbae2a788a6bfad1dbf8fe1e4fb0163",
+      "local": "7f5cc858747ba188d3a60b1c773885a75e6b5e4fc5d0c933cae5e3731e5f1c2a",
+      "remote": "7f5cc858747ba188d3a60b1c773885a75e6b5e4fc5d0c933cae5e3731e5f1c2a",
       "match": true
     },
     "perFile": {
-      "compared": 409,
+      "compared": 411,
       "mismatched": 0,
       "missingOnVm": 0,
       "extraOnVm": 0
@@ -44,7 +44,7 @@
       "relocation-adopt",
       "relocation-inspect"
     ],
-    "remotePackageVersion": "0.9.0",
+    "remotePackageVersion": "0.10.1",
     "runsWithoutNodeModules": true
   },
   "trust": {
@@ -54,11 +54,8 @@
   },
   "predicateRedProofs": {
     "digestLedger": {
-      "executed": true,
-      "predicate": "per-file sha256 comparison",
-      "flippedFile": "README.md",
-      "wentRed": true,
-      "restoredGreen": true
+      "executed": false,
+      "reason": "run with --red-drill to exercise the predicate"
     },
     "filesystemGate": {
       "executed": true,
@@ -72,7 +69,7 @@
   "statfs": {
     "scratchParent": {
       "path": "/srv/tcrn",
-      "dfLine": "/dev/mapper/ubuntu--vg-ubuntu--lv ext4 102626232 28353456  69013512  30% /",
+      "dfLine": "/dev/mapper/ubuntu--vg-ubuntu--lv ext4 102626232 29425704  67941264  31% /",
       "magic": "0xef53",
       "inPinnedSet": true
     },
@@ -82,7 +79,7 @@
       "cleaned": true
     },
     "mounts": {
-      "scanned": 106,
+      "scanned": 112,
       "outsidePinnedSet": [
         {
           "mountpoint": "/dev/pts",
@@ -215,11 +212,6 @@
           "magic": "0x6e736673"
         },
         {
-          "mountpoint": "/run/netns/cni-cb3917a8-7f89-fe9d-194a-444e0788c6c9",
-          "fsName": "nsfs",
-          "magic": "0x6e736673"
-        },
-        {
           "mountpoint": "/run/netns/cni-da4ac034-ec86-0771-4fbf-46fc130625eb",
           "fsName": "nsfs",
           "magic": "0x6e736673"
@@ -233,6 +225,21 @@
           "mountpoint": "/sys/kernel/debug/tracing",
           "fsName": "tracefs",
           "magic": "0x74726163"
+        },
+        {
+          "mountpoint": "/run/netns/cni-8d54c4ef-e777-250f-d5fb-98a9278ae167",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-134c5efd-b904-109d-41fd-7c0b22da0f93",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
+        },
+        {
+          "mountpoint": "/run/netns/cni-6f53a7a2-d2e3-98a4-8482-da1ee697beb1",
+          "fsName": "nsfs",
+          "magic": "0x6e736673"
         }
       ]
     },
@@ -246,7 +253,7 @@
     }
   },
   "reclaim": {
-    "remoteEngineProcesses": 0,
+    "remoteEngineProcesses": 1,
     "localSshProcesses": 0,
     "controlMasterClosed": true
   }

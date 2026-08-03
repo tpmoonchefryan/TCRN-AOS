@@ -1,0 +1,151 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "按 Owner 全接受裁定 close TCRN-AOS-CONF-013:读面出 loopback、归因 person/agent 双类、INIT-004 分期推进。",
+  "startedAt": "2026-08-02T18:18:21Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs)"
+  },
+  "payload": {
+    "path": "deploy/aos-local-client/payloads/direction-aos-workbench-d.json",
+    "sha256": "647d52f87620915d5e7bf440521ea629a6de42e9982d43af057cd1954e54803d",
+    "bytes": 2047
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 899,
+    "headEventHash": "1d423f14b32918100e631eb7df4ebb7ad54061f2a6d7d7b1f1945c133b8a916d",
+    "work": 134
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "conference-close",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-close",
+        "--accountable-owner-id",
+        "owner:governance",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T18:18:22Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--conference-id",
+        "conference:c5c311ffe16572f96c2bb90f",
+        "--decisions",
+        "读面出 loopback:采纳 A1,读面进程永不持有 pins、写面永不出 loopback,两不变量不可交;归因模型:采纳 person/agent 双类,禁匿名写,消解 conf-007 归因待裁项;推进方式:INIT-004 按 A1→A2→A3 分期、每期写面安全不变、可回退;决策清单归道:读面出 loopback 与归因模型 OWNER-NOW、person 写路径 CONDITIONAL、协作动词 UI AGENT",
+        "--distill",
+        "false",
+        "--expected-version",
+        "899",
+        "--minutes-external-key",
+        "TCRN-AOS-MIN-013",
+        "--outcome-class",
+        "role_decision",
+        "--summary",
+        "AOS 采纳可读可写协作工作台方向(人类与 AI 同队共事)。三裁定:①读面从持 pins 写进程架构性拆出、放 LAN 供人直连查看、写面维持 127.0.0.1+SSH、pins 永不出网——补 D7 空白格,读面受众待落实;②actor 从单值扩展为 person/agent 双类、禁匿名写、消解 conf-007 T3 预挂归因待裁项;③INIT-004 按 A1→A2→A3 分期推进、每期写面安全不变可回退。决策清单:读面出 loopback、归因模型归 OWNER-NOW;person 写路径归 CONDITIONAL;协作动词 UI 落地归 AGENT。",
+        "--unresolved-issues",
+        "读面放 LAN 的受众未裁(仅 Owner 设备或整个 LAN),随 A1 执行时再裁;person 身份的具体来源与 SSH 分发方式未定,归 A2 执行",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "accountable-owner-id",
+        "conference-id",
+        "decisions",
+        "distill",
+        "minutes-external-key",
+        "outcome-class",
+        "summary",
+        "unresolved-issues"
+      ],
+      "headAtPlanning": 899,
+      "executed": true,
+      "accepted": true,
+      "recordId": null,
+      "version": 900
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:4c678a5fe78b6313ce56ea39",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-AOS-INIT-004",
+            "observed": "TCRN-AOS-INIT-004",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Initiative",
+            "observed": "Initiative",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-AOS-INIT-004",
+        "kind": "Initiative",
+        "status": "planned"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 900,
+    "headEventHash": "59b60a43a7011cd973fe8499cc09f90732658bcf9d0a7b5d1d8442478588778d",
+    "work": 134
+  },
+  "eventsAppended": 1,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-02T18:18:23Z"
+}

@@ -1,0 +1,43 @@
+{
+ "engineCoupling": {
+  "hasStorageAbstraction": false,
+  "verdict": "引擎没有可换后端的存储抽象——如实回答:没有。事件容器语义(哈希链)与事件容器载体(文件)在代码里是分层的,但载体侧没有任何接缝:packages/core/src/workspace.ts 直接 import node:fs/promises(受治副本 workspace.ts:5-15),核心 14 个源文件直接依赖 node:fs;全库唯一叫 Store 的接口是知识/工件扫描标记(knowledge-core.ts:219、artifact-lifecycle.ts:196),与事件存储无关。",
+  "canonicalBytes": "段文件即 canonicalJson([...events]) 的逐字字节(workspace.ts:2297),读侧要求 assertCanonicalJson 字节精确(workspace.ts:571-576),任何再序列化(编辑器/格式化器)都令链 fail-closed。commit 后还有 durability readback 逐字节比对(workspace.ts:2305-2308)。",
+  "eventSegments": "events/NNNNNN.json,段号由 sequence 与 segmentEventLimit 推得(workspace.ts:2292-2293);读侧强制 ^\\d{6}\\.json$ 命名无缝隙(readSegmentEvents,workspace.ts:554-568)、非末段必须satisfy段长(577-579)、sequence 连续且绑定 workspaceStreamId(586-596),最后走 protocol validateEventChain 全量重建每条事件哈希(protocol/src/index.ts:796-830)。",
+  "atomicWrite": "私有函数 atomicWrite(workspace.ts:396-444):O_EXCL|O_NOFOLLOW 建临时文件→writeFile→fsync→stat 验 nlink==1→rename→再 lstat 验 dev/ino/nlink 与写入描述符一致→父目录 fsync。boundFile(345-377)/boundDirectory(324-343)全程做 inode 恒等与反符号链接检查。整个 TOCTOU 防御模型是 POSIX inode 原生的,在数据库后端里无对应物,须另行发明等价机制。",
+  "lockLease": "全部基于文件系统原子性:lease/owner.json 校验(assertLease,workspace.ts:1360-1375)、lease/mutation.claim 经 O_EXCL 独占创建实现单写者提交边界(createMutationClaim,1595-1641,EEXIST→WORKSPACE_CAS_MISMATCH)、恢复走 rename-verify-remove(1454-1556)。是单机文件锁,不是分布式锁。",
+  "filesystemPinning": "assertSupportedWorkspaceFilesystem(workspace.ts:310-316)以 statfs().type 对照 8 个钉死的本地文件系统魔数(198-207:APFS/HFS+/ext4/XFS/tmpfs/overlayfs/btrfs/F2FS),网络文件系统直接 WORKSPACE_FILESYSTEM_UNSUPPORTED——这对 O1 是硬约束:VM 上链目录必须落本地盘(ext4/xfs 可,NFS/virtiofs 不在集合内会被拒)。",
+  "portableParts": "可移植的部分:哈希链语义是 protocol 包的纯函数——createEvent 以 canonicalSha256 计算含 priorHash 的 eventHash(protocol/src/index.ts:768-794),validateEventChain 逐条重建校验(796+)。写路径 appendEvent(workspace.ts:2239-2327)把 CAS 校验、actor 注入、段路径推导、atomicWrite、readback、视图写全部内联在一个函数里——若未来要做 O2,引擎侧须先开出存储端口,这是 tcrn-workflow 的方向级改动,不是 AOS 能单方面做的。"
+ },
+ "transitionImpl": "不是 shell 到 CLI。今天的写链路是:浏览器 → POST /api/chain/transition → cockpit-service(apps/cockpit-service/src/service.ts:155-164),该服务只绑 127.0.0.1 回环(service.ts:109),文首注释明言这是裁定形态而非加固默认——operator authority pins 只住本机、绝不上网(service.ts:24-30)。写入时 surfaceFor 惰性创建 ChainClient(service.ts:74-91),spawn 受治副本的 MCP 门面 `~/.tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs`(service.ts:79),经 stdio JSON-RPC 传 --authority-pins/--authority-pins-digest(packages/projection/src/chain-client.ts:69-75,detached spawn 供进程组回收,100-106)。SafeWriteSurface.transition 调 MCP 工具 tcrn_workflow_work_transition,自动供给 expected-version:\"head\"、严格秒级 instant、actor(packages/projection/src/write-surface.ts:52-64、99-105);引擎状态机独裁移动合法性,拒绝码(如 INVALID_TRANSITION)原样透传(service.ts:95-103)。治理性 verb(conference/gate/attestation/delete)刻意不在写面上,保留显式仪式(write-surface.ts:151-158)。因此「换容器」的现实含义:AOS 已经把引擎当唯一写者、经进程边界(MCP stdio)调用——容器就是引擎进程拿到的 workspace 路径所在的文件系统;换容器=换引擎进程运行在谁的管辖宿主上、workspace 路径指向哪块盘,AOS 的 API 形状与调用协议不需要变。",
+ "options": [
+  {
+   "id": "O1",
+   "name": "部署位面切换:链文件原样迁至 AOS 管辖宿主,引擎随迁,AOS 服务端调引擎",
+   "description": "五件套目录逐字节迁至 VM 本地盘(如 /srv,须 ext4/xfs——引擎钉死本地文件系统魔数集,workspace.ts:198-207、310-316,NFS/virtiofs 会被拒);受治引擎副本部署到该宿主,cockpit-service(或其无头变体)在宿主上以既有 ChainClient→MCP 门面模式调引擎;AOS 承接存储(盘、备份节律、S020 配对快照)与运营(supervision、声明式清单,deploy/aos-mirror.yaml 的 hostPath 模式已有先例)。",
+   "min002Fit": "最高。「换容器不换语义(五件套原样)」被字面满足——同字节、同引擎、同格式;「W 退为框架」=W 仍是唯一写者与回放者,但运行与存储进入 AOS 管辖;「权威不动」在切换仪式内一次性移交,符合 MIN-002 的切换段定义。MIN-003 不放松:不需在 AOS 重建任何链机制,既有实现原样即权威。",
+   "effort": "小(1-2 周量级):声明式部署清单 + 目录迁移 + workspaces 路径改指 + 引擎副本落宿主验证(verify-installed-copy)。但有一个裁定级前置:现行裁定是 pins 只住操作者本机、写面回环(service.ts:24-30、107-109),而切换段必然在 AOS 宿主上出现写面与 pins 驻留——这触碰 MIN-002「VM 实例首期零写面」的镜像段边界,属 owner_intent_required,须在切换仪式里由 Owner 裁定 pins 落点与访问边界,不是工程问题。",
+   "matrixProvability": "最高。一致性矩阵=迁移前后 snapshot manifest 数字逐字节对账(工具已建成:workspace-snapshot.ts、tcrn_workflow_snapshot_verify、S020 scripts/paired-backup.mjs 配对快照已实证)+ 双侧引擎各自 materialize 后 view 摘要比对。同一实现读同一批字节,矩阵不需要证语义等价,只需要证字节到达。",
+   "fallback": "最易。目录拷回原宿主即回滚——文件在切换前后都是真值形态,fallback 对账=两侧 snapshot digest 比对;不存在格式转换损耗。"
+  },
+  {
+   "id": "O2",
+   "name": "AOS SQLite 承载规范字节(event-per-row append-only+哈希链),W 引擎经适配层读写",
+   "description": "在 AOS SQLite 建事件表:(stream_id, sequence) 唯一、prior_hash/payload 规范字节/payload_hash/event_hash 列、no_update/no_delete 触发器,引擎经新开的存储端口读写行而非段文件。",
+   "min002Fit": "紧张。「换容器不换语义」只有在每条事件的规范字节逐字保存且引擎仍为唯一裁判时才勉强成立——但侦察结论(第 1 项)是引擎没有存储端口:appendEvent 把路径推导、atomicWrite、inode 校验、mutation claim 全部内联(workspace.ts:2239-2327),开端口是 tcrn-workflow 的方向级手术,须按 direction-and-tracks 公约在 W 侧立项裁定,AOS 无法单方面做。inode/O_EXCL/statfs 那套信任原语在 SQLite 里没有对应物,须以 WAL+BEGIN IMMEDIATE+唯一约束+触发器重新论证等价性。MIN-003 恰好警告了这一点:append-only 记录流与哈希链在 AOS 并未建成——O2 等于在权威边界上现建它。",
+   "effort": "大(数月量级,且大头在 W 侧):机械部分小——AOS db 已有全部构件:node:sqlite+WAL+BEGIN IMMEDIATE 嵌套事务(sqlite-repository.ts:335-353、786-791)、摘要校验迁移器+迁移前快照钩子(245-295)、append-only 触发器模式已实证(migrations/sqlite/0001_phase1_core.sql:126-138 的 aos_audit_events no_update/no_delete + 篡改拒绝探针 sqlite-repository.ts:760-775)、BK01/BK02 备份清单(backup.ts:8-9),event 表本身 1-2 周可成。难的 80% 是语义对等:规范 JSON 准入、回放 reducer 全对等(work graph/conference/gate/attestation 边界/tombstone/advisory 合并)、拒绝码对等——这正是 projection 层拒绝成为的「会漂移的第二实现」(chain-client.ts:11-16 注释原文)。",
+   "matrixProvability": "中。因规范字节定义良好,可做文件容器↔行容器的双向导出+逐字节比对;但矩阵规模翻倍:除字节对账外须逐 verb 证行为等价,且每次引擎升版都要重跑。",
+   "fallback": "中。行导出回段文件在字节保真前提下可行,但必须演练实证;若准入语义在两容器间有任何分歧,回退产物可能被引擎拒读(fail-closed 是双刃)。"
+  },
+  {
+   "id": "O3",
+   "name": "过渡形态:文件仍为权威,AOS SQLite 做经哈希验证的事件行镜像(非真双写)",
+   "description": "诚实定名:不做双权威双写(违背 MIN-002「权威不动」的单一真值精神),而是 O1 之上加一条已验证的行级投影——ingest 尾随链事件入 SQLite 行(含全部哈希列),入库时用 protocol 的 validateEventChain 纯函数复验(只读 import,不碰引擎写面);这正是 CONF-001 分解裁定的「链版本键控投影库」的加厚版,packages/projection 的 ingest.ts/read-layers.ts 底座已在。",
+   "min002Fit": "高。权威始终是文件+引擎;行镜像明确「不备」级的衍生物(MIN-002:投影与镜像明确不备),命名诚实;同时为将来若真要走 O2 攒下行容器的实测证据,而不预先封死任何方向。",
+   "effort": "小-中(2-4 周):扩展 ingest 存全事件行+哈希复验+链版本键控;复用 aos_audit_events 的 append-only 触发器模式。",
+   "matrixProvability": "高,且它本身就是矩阵仪器:每个对账周期跑「行镜像回放摘要 vs 引擎 view 摘要」,给切换仪式提供持续绿的证据流。",
+   "fallback": "最易。删行镜像即退出,权威侧零影响。"
+  }
+ ],
+ "recommendation": "推荐 O1 为切换段的容器形态,O3 作为随行的一致性矩阵仪器,O2 明确延后、且只有在 W 引擎经自己的 Initiative 开出存储端口之后才重新上桌。理由:(a) MIN-002 说「换容器不换语义(五件套原样)」与「W 退为框架」而非退场——O1 是唯一让「换容器」严格等于裁定字面的选项:换管辖与写入位面,不换一个字节的格式,引擎继续做唯一写者;(b) MIN-003 说 append-only 记录流与哈希链在 AOS 并未建成、既有实现是起点非地基——O2 等于在权威边界上、在切换压力下现建最难的那一层,还因引擎无存储端口(workspace.ts:2239-2327 全内联,零接缝)而必然演化为「会漂移的第二实现」,这是 AOS 自己的 projection 层注释里点名拒绝过的架构(chain-client.ts:11-16);(c) 一致性矩阵与 fallback 在 O1 下工具已基本建成(snapshot-verify、S020 配对备份),矩阵双跑→owner 门→切换→文件降为导出归档的仪式可以按 MIN-002 原文直接排演。两条必须向 Owner 呈报的前置:其一,pins 落点——现行裁定 pins 只住操作者本机、写面仅回环(service.ts:24-30),切换段在 AOS 宿主上开写面必然触碰它,属 owner_intent_required 停点;其二,VM 链目录必须落引擎钉死集合内的本地文件系统(workspace.ts:198-207,ext4/xfs 可,NFS/virtiofs 会被 WORKSPACE_FILESYSTEM_UNSUPPORTED 拒绝),迁移仪式里须实测 statfs 而非假设。"
+}

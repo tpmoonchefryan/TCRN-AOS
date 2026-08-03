@@ -51,8 +51,8 @@ export const manifest = {
     // The anchor is the release tag, checked three ways before a single byte
     // moves: package.json says this version, HEAD carries this tag, and the
     // working tree is clean. A dirty tree would make "v0.8.0 tag anchor" a lie.
-    requiredVersion: "0.9.0",
-    requiredTag: "v0.9.0",
+    requiredVersion: "0.10.1",
+    requiredTag: "v0.10.1",
   },
 
   transfer: {
@@ -73,13 +73,14 @@ export const manifest = {
 
   verification: {
     // What the far copy must answer to count as the same engine. 101 is the
-    // cli-availability verb count of v0.9.0 (the catalog also carries 2
-    // fixture-only entries, recorded but not part of the operator surface).
-    // v0.8.0 answered 96; the five added entries are the relocation family.
-    // These are real predicates: a different engine version red-flags here.
+    // cli-availability verb count (the catalog also carries 2 fixture-only
+    // entries, recorded but not part of the operator surface). v0.8.0 answered
+    // 96; v0.9.0 added the five relocation verbs; v0.10.0 adds a graph-validation
+    // rule, no verb, so the cli count holds at 101. These are real predicates:
+    // a different engine version red-flags here.
     catalogReasonCode: "CLI_CATALOG_READY",
     cliVerbCount: 101,
-    remoteVersion: "0.9.0",
+    remoteVersion: "0.10.1",
     // Named verbs the far catalog must actually carry. A count alone would be
     // satisfied by any 101 verbs. event-list is why v0.7.0 → v0.8.0 happened;
     // relocation-adopt and relocation-inspect are why v0.8.0 → v0.9.0 happens —

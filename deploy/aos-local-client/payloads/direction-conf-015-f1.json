@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-EPIC-043",
+  "intent": "multi-agent 审议:open CONF-015(执行形态方向)",
+  "steps": [
+    {
+      "verb": "conference-open",
+      "flags": {
+        "external-key": "TCRN-AOS-CONF-015",
+        "project-id": "project:899d30df2e67bc6e98a4f50e",
+        "type": "architecture",
+        "title": "Agent 执行形态框架审议:主线程编排+子代理执行(multi-agent)",
+        "work-ids": "work:27a57740f12ec8bfd005903e",
+        "desired-outcome": "裁定执行形态框架方向:任务粒度、验证责任、最小上下文注入定义、注入知识新鲜度、成本模型、与执行形态声明衔接",
+        "participant-ids": "owner:governance,profile:tcrn-minerva-v1,profile:tcrn-verity-v1,profile:tcrn-sable-v1"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:27a57740f12ec8bfd005903e"
+      },
+      "recordFields": [
+        "externalKey",
+        "kind",
+        "status"
+      ],
+      "expect": {
+        "externalKey": "TCRN-AOS-EPIC-043",
+        "kind": "Epic",
+        "status": "planned"
+      }
+    }
+  ]
+}

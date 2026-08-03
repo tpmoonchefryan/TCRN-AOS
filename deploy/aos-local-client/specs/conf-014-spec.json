@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "aos.multi-agent-deliberation-spec.v1",
+  "conferenceKey": "TCRN-AOS-CONF-014",
+  "mode": "multi-agent-deliberative",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "multi-agent 审议:读面 LAN 可达边界设计(STORY-137),三独立立场绑定收据落链",
+  "projectId": "project:899d30df2e67bc6e98a4f50e",
+  "type": "architecture",
+  "title": "读面 LAN 可达边界设计审议(multi-agent)",
+  "desiredOutcome": "裁定读面放整个 LAN 的安全边界设计:渲染处理/进程隔离/认证审计/网络绑定,供 STORY-137 执行",
+  "workIds": [
+    "work:f5fabbc39a87482c60dcf2b5"
+  ],
+  "participantIds": [
+    "owner:governance",
+    "profile:tcrn-minerva-v1",
+    "profile:tcrn-verity-v1",
+    "profile:tcrn-sable-v1"
+  ],
+  "opening": {
+    "externalKey": "POS-CONF-014-ARTURO-1",
+    "actorId": "profile:tcrn-arturo-v1",
+    "text": "执行形态 multi-agent-deliberative——POS-CONF-014-MINERVA-1/VERITY-1/SABLE-1 三立场由互不可见的独立子代理上下文分头产出;绑定收据 evidence/conference-conf-014-execution-receipts.json,sha256=76cf8a970040e2895d3bdabc139a644cbcb4ebc9bbe6e82bef6c47f76a1bb0eb.本立场为主线程综合执笔(执笔 agent:fable,署名 arturo),不在绑定集。绑定证一致性非真实性,可信采集方未建成。议题:读面放整个 LAN 的安全边界设计(STORY-137),各视角独立给出渲染/隔离/认证/网络的取舍;请 Owner 在 close 时裁定读面边界设计方向。"
+  },
+  "seats": [
+    {
+      "seat": "minerva",
+      "actorId": "profile:tcrn-minerva-v1",
+      "file": "evidence/conf-014-seat-minerva.txt"
+    },
+    {
+      "seat": "verity",
+      "actorId": "profile:tcrn-verity-v1",
+      "file": "evidence/conf-014-seat-verity.txt"
+    },
+    {
+      "seat": "sable",
+      "actorId": "profile:tcrn-sable-v1",
+      "file": "evidence/conf-014-seat-sable.txt"
+    }
+  ],
+  "receiptsOut": "evidence/conference-conf-014-execution-receipts.json",
+  "payloadOut": "deploy/aos-local-client/payloads/direction-conf-014-generated.json",
+  "conferenceIdPlaceholder": "<CONFERENCE_ID>",
+  "collector": "orchestrator-self-recorded (agent:fable); no trusted collector exists (engine EPIC-020 pending) - binding proves consistency, never authenticity",
+  "workflowRunId": "orchestrator-session (no workflow run)",
+  "reconstruction": "positions >2048B are split into sequential chain positions POS-CONF-014-<AGENT>-1 and POS-CONF-014-<AGENT>-1-2; each part body starts with a marker line n/N; the LAST part carries a trailing binding-reference line. To verify outputDigest: strip each leading marker line, strip the trailing binding-reference line from the last part, join the remainders with a single newline - the result must equal the seat .txt original whose sha256 is outputDigest.",
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:f5fabbc39a87482c60dcf2b5"
+      },
+      "recordFields": [
+        "externalKey",
+        "kind",
+        "status"
+      ],
+      "expect": {
+        "externalKey": "TCRN-AOS-STORY-137",
+        "kind": "Story",
+        "status": "planned"
+      }
+    }
+  ],
+  "capturedAt": "2026-08-02T18:38:32Z"
+}

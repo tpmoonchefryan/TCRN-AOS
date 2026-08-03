@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "向 TCRN-AOS-CONF-013 追加开场综合立场(人类与 AI 同队共事的协作工作台方向主张),并回读验证。",
+  "startedAt": "2026-08-02T18:11:45Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs)"
+  },
+  "payload": {
+    "path": "deploy/aos-local-client/payloads/direction-aos-workbench-c.json",
+    "sha256": "3e0684a3ce7bdcf0e9858e05d2a59b7fdea64e33106c567fb9b2f7a887924721",
+    "bytes": 2512
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 898,
+    "headEventHash": "2a0ed8691203d9394f187c75397b51aa2fd4aa95c74a413a8feca5df34de5e58",
+    "work": 134
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "conference-append-position",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-append-position",
+        "--actor",
+        "agent:fable",
+        "--actor-id",
+        "profile:tcrn-minerva-v1",
+        "--at",
+        "2026-08-02T18:11:46Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--conference-id",
+        "conference:c5c311ffe16572f96c2bb90f",
+        "--evidence-ids",
+        "-",
+        "--expected-version",
+        "898",
+        "--external-key",
+        "POS-CONF-013-MINERVA-1",
+        "--position",
+        "执行形态 synthesis-only——方向差异不在信息而在 Owner 的价值判断(AOS 服务谁),材料由主线程综合,分头产出会得到同构答案。AOS 的域模型从建成起就为人类与 AI 同队共事设计:StructuredComment 的 human_intent / agent_proposal / agent_decision、多身份 ActorIdentity、owner_intent_required 决策门、Jira/Confluence 式工作台。但运行时把这一切压成了单写者:唯一 actor=agent:fable、读面与持 pins 的写面同进程锁进 127.0.0.1、LAN 无可达面、人连查看当前工作都需 SSH 隧道。方向主张:AOS 是可读可写的协作工作台,人类与 AI 作为同队共事;链是唯一真值,每次写归属到 person 或 agent。实现路径:①读面从持 pins 的写进程架构性拆出,读面放 LAN 供人直连查看,写面维持 127.0.0.1+SSH,pins 永不出网;②actor 从单值扩展为 person/agent 双类,禁匿名写,消解 conf-007 预挂的归因待裁项;③person 身份经各自 SSH 进入写面,人获得写路径;④协作动词(comment/relation/annotate)在 UI 落地,AI 提议、人定夺。建议分期推进,每期写面安全不变。请 Owner 裁:读面可否出 loopback、归因模型是否采纳、承载 INIT-004 的推进方式。",
+        "--recommendations",
+        "先裁读面可否出 loopback 与归因模型是否采纳、按 A1→A2→A3 分期推进且每期写面安全不变、会议 close 时落决策清单归道 OWNER-NOW",
+        "--risks",
+        "读面放 LAN 使链上治理记录对局域网可读、需配套裁读面受众(仅 Owner 设备或整个 LAN)、多写者推进过快有弱化写面安全风险、故分期须每期验证写面不变量",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor-id",
+        "conference-id",
+        "evidence-ids",
+        "external-key",
+        "position",
+        "recommendations",
+        "risks"
+      ],
+      "headAtPlanning": 898,
+      "executed": true,
+      "accepted": true,
+      "recordId": null,
+      "version": 899
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:4c678a5fe78b6313ce56ea39",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-AOS-INIT-004",
+            "observed": "TCRN-AOS-INIT-004",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Initiative",
+            "observed": "Initiative",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-AOS-INIT-004",
+        "kind": "Initiative",
+        "status": "planned"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 899,
+    "headEventHash": "1d423f14b32918100e631eb7df4ebb7ad54061f2a6d7d7b1f1945c133b8a916d",
+    "work": 134
+  },
+  "eventsAppended": 1,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-02T18:11:47Z"
+}

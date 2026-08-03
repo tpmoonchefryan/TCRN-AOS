@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "为方向承载开会 TCRN-AOS-CONF-013(人类与 AI 同队共事的协作工作台方向),并 annotate INIT-004 记方向主张,回读全值验证。",
+  "steps": [
+    {
+      "verb": "conference-open",
+      "flags": {
+        "external-key": "TCRN-AOS-CONF-013",
+        "project-id": "project:899d30df2e67bc6e98a4f50e",
+        "type": "strategy",
+        "title": "方向裁定:人类与 AI 同队共事的 AOS 协作工作台",
+        "work-ids": "work:4c678a5fe78b6313ce56ea39",
+        "desired-outcome": "裁定 AOS 是否采纳可读可写协作工作台方向、读面可否出 loopback、归因模型是否扩展为 person/agent 双类、以及承载 INIT-004 的推进方式",
+        "participant-ids": "owner:governance,profile:tcrn-minerva-v1,profile:tcrn-verity-v1"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:4c678a5fe78b6313ce56ea39",
+        "scope": "方向承载 Initiative(TCRN-AOS-CONF-013):AOS 从单人工作区转向人类与 AI 同队共事的可读可写协作工作台。Owner 2026-08-03 主张:当前唯一写源+无 LAN 读面偏离工作台初衷(前端即 Jira/Confluence-like)。域模型自建成即为人机协作设计(human_intent/agent_* comment 类型、多身份 ActorIdentity、owner_intent_required 决策门),运行时却压成单写者(唯一 actor=agent:fable、读面与持 pins 写面同进程锁 loopback、LAN 无可达面)。方向主张:AOS 可读可写,链是唯一真值,每次写归属到 person 或 agent。实现路径四期:①读面从持 pins 写进程架构性拆出、放 LAN 供人直连查看、写面维持 127.0.0.1+SSH、pins 永不出网;②actor 扩展为 person/agent 双类、禁匿名写、消解 conf-007 T3 预挂归因待裁项;③person 身份经各自 SSH 进入写面、人获得写路径;④协作动词(comment/relation/annotate)在 UI 落地、AI 提议人定夺。每期写面安全不变、可回退。材料:docs/direction-aos-collaborative-workbench.md。会议保持 open 待 Owner 裁 close。"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:4c678a5fe78b6313ce56ea39" },
+      "recordFields": ["externalKey", "kind", "status", "scope"],
+      "expect": {
+        "externalKey": "TCRN-AOS-INIT-004",
+        "kind": "Initiative",
+        "status": "planned"
+      },
+      "expectSameAs": [
+        { "field": "scope", "step": 1, "flag": "scope" }
+      ]
+    }
+  ]
+}

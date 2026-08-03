@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "建 INC-048 记录引擎 v0.10.1 更新,先创建拿 id。",
+  "steps": [
+    { "verb": "work-create", "flags": { "project-id": "project:899d30df2e67bc6e98a4f50e", "external-key": "TCRN-AOS-INC-048", "kind": "Incident", "status": "planned" } }
+  ],
+  "readback": [
+    { "verb": "work-show", "flags": { "id": "work:4c678a5fe78b6313ce56ea39" }, "recordFields": ["externalKey", "kind", "status"], "expect": { "externalKey": "TCRN-AOS-INIT-004", "kind": "Initiative", "status": "done" } }
+  ]
+}

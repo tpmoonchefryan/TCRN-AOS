@@ -45,6 +45,26 @@ const sha256Text = (text) => createHash("sha256").update(Buffer.from(text, "utf8
 const instant = () => new Date().toISOString().replace(/\.\d+Z$/u, "Z");
 
 /**
+ * EPIC-041: the ceremony actor must be a legal attributed actor. The chain
+ * accepts any string, but an unattributed ceremony would record a write no one
+ * can say who performed. `agent:<model>` for an AI, `person:<id>` for a human
+ * (the Owner writing over SSH is `person:owner:governance`). Refused here,
+ * before the network, so a typo'd actor is the operator's mistake named
+ * locally rather than a remote refusal.
+ */
+function assertAttributedActor(actor) {
+  const ok = typeof actor === "string"
+    && (/^agent:[A-Za-z0-9._:-]+$/u.test(actor) || /^person:[A-Za-z0-9._:-]+$/u.test(actor));
+  if (!ok) {
+    throw new Error(
+      `actor must be an attributed actor (agent:<model> or person:<id>); got ${JSON.stringify(actor)}. `
+      + "The Owner writing over SSH is person:owner:governance; an AI is agent:fable."
+    );
+  }
+  return actor;
+}
+
+/**
  * A payload path stated relative to this checkout when it is inside it.
  *
  * A payload from outside the repository is reported as `<outside-repository>` rather
@@ -101,7 +121,7 @@ export async function runCeremony({ payloadPath, dryRun = false }) {
   const commands = catalogueResult.json.commands ?? catalogueResult.json.result?.commands ?? [];
   const catalogue = catalogueIndex(commands);
 
-  const supply = { workspace: VM_WORKSPACE, attestDir: VM_ATTEST_DIR, actor: payload.actor ?? ACTOR };
+  const supply = { workspace: VM_WORKSPACE, attestDir: VM_ATTEST_DIR, actor: assertAttributedActor(payload.actor ?? ACTOR) };
   const receipt = {
     schemaVersion: "aos.local-client-ceremony-receipt.v1",
     story: payload.story,

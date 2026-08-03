@@ -1,0 +1,413 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "A1 推进:STORY-138(独立只读进程)与 STORY-139(隔离验证门)实现完成,transition done+annotate。",
+  "startedAt": "2026-08-02T19:20:39Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs)"
+  },
+  "payload": {
+    "path": "deploy/aos-local-client/payloads/direction-aos-a1-d2.json",
+    "sha256": "74a38411303dcdde2c4de455242f1a9b9f644cbade2d45aed7facff43ba7326c",
+    "bytes": 2574
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 940,
+    "headEventHash": "b76e0302ac4af3afddcafe8a91e3e2ac50cf58a7f7716434d65d53d60a70d33b",
+    "work": 143
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:20:39Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "940",
+        "--id",
+        "work:c3488cefc50e4fe6b8ae454c",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 940,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:c3488cefc50e4fe6b8ae454c",
+      "version": 941
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:20:40Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "941",
+        "--id",
+        "work:c3488cefc50e4fe6b8ae454c",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 941,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:c3488cefc50e4fe6b8ae454c",
+      "version": 942
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:20:41Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "942",
+        "--id",
+        "work:c3488cefc50e4fe6b8ae454c",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 942,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:c3488cefc50e4fe6b8ae454c",
+      "version": 943
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:20:42Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "943",
+        "--id",
+        "work:c3488cefc50e4fe6b8ae454c",
+        "--scope",
+        "独立只读进程 apps/cockpit-read 实现完成:startCockpitReadService 不构造 ChainClient、无 pins、只答只读路由(静态 web + /api/health + /api/domain/* GET)、写方法全局 405、/api/chain/* 结构缺席 404、拒绝通配绑定(0.0.0.0/::)、Host 白名单校验(防 DNS rebinding)、安全头(CSP/nosniff/X-Frame-Options)、域库 SQLite 只读打开({ readOnly:true },写被连接层拒绝)。DomainStore 新增只读模式(向后兼容)。7/7 测试绿,已接 pnpm test。收据:a1-d1 后链推进。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 943,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:c3488cefc50e4fe6b8ae454c",
+      "version": 944
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:20:42Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "944",
+        "--id",
+        "work:b12c831e4c70ec0f83dc2d2c",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 944,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:b12c831e4c70ec0f83dc2d2c",
+      "version": 945
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:20:43Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "945",
+        "--id",
+        "work:b12c831e4c70ec0f83dc2d2c",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 945,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:b12c831e4c70ec0f83dc2d2c",
+      "version": 946
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:20:44Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "946",
+        "--id",
+        "work:b12c831e4c70ec0f83dc2d2c",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 946,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:b12c831e4c70ec0f83dc2d2c",
+      "version": 947
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-02T19:20:44Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "947",
+        "--id",
+        "work:b12c831e4c70ec0f83dc2d2c",
+        "--scope",
+        "两不变量机器门:①读面永不持 pins——scripts/read-face-gate.mjs(源级门:读服务源码不命名 ChainClient/pins/callTool、options 无 pins 字段、写方法拒绝、测试断言 chain 路由缺席),已接 pnpm verify 作 pnpm read-face:gate;②写面永不出 loopback——deploy/aos-resident-cockpit/read-face-proof.mjs 在 VM 上 ss -tln 断言写面端口只绑 127.0.0.1(判据设在实际监听套接字、跑在写面宿主,verity 立场)。两门现绿;红证:tripwire 测试 flip bind 已证、读面测试移除 WRITE_METHODS 即红。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 947,
+      "executed": true,
+      "accepted": true,
+      "recordId": "work:b12c831e4c70ec0f83dc2d2c",
+      "version": 948
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:c3488cefc50e4fe6b8ae454c",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-AOS-STORY-138",
+            "observed": "TCRN-AOS-STORY-138",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "独立只读进程 apps/cockpit-read 实现完成:startCockpitReadService 不构造 ChainClient、无 pins、只答只读路由(静态 web + /api/health + /api/domain/* GET)、写方法全局 405、/api/chain/* 结构缺席 404、拒绝通配绑定(0.0.0.0/::)、Host 白名单校验(防 DNS rebinding)、安全头(CSP/nosniff/X-Frame-Options)、域库 SQLite 只读打开({ readOnly:true },写被连接层拒绝)。DomainStore 新增只读模式(向后兼容)。7/7 测试绿,已接 pnpm test。收据:a1-d1 后链推进。",
+            "observed": "独立只读进程 apps/cockpit-read 实现完成:startCockpitReadService 不构造 ChainClient、无 pins、只答只读路由(静态 web + /api/health + /api/domain/* GET)、写方法全局 405、/api/chain/* 结构缺席 404、拒绝通配绑定(0.0.0.0/::)、Host 白名单校验(防 DNS rebinding)、安全头(CSP/nosniff/X-Frame-Options)、域库 SQLite 只读打开({ readOnly:true },写被连接层拒绝)。DomainStore 新增只读模式(向后兼容)。7/7 测试绿,已接 pnpm test。收据:a1-d1 后链推进。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-AOS-STORY-138",
+        "kind": "Story",
+        "status": "done",
+        "scope": "独立只读进程 apps/cockpit-read 实现完成:startCockpitReadService 不构造 ChainClient、无 pins、只答只读路由(静态 web + /api/health + /api/domain/* GET)、写方法全局 405、/api/chain/* 结构缺席 404、拒绝通配绑定(0.0.0.0/::)、Host 白名单校验(防 DNS rebinding)、安全头(CSP/nosniff/X-Frame-Options)、域库 SQLite 只读打开({ readOnly:true },写被连接层拒绝)。DomainStore 新增只读模式(向后兼容)。7/7 测试绿,已接 pnpm test。收据:a1-d1 后链推进。"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 948,
+    "headEventHash": "31395de0b2afac3476e19deba6eeb030e2a398e870e64183419c44cb4c6251dd",
+    "work": 143
+  },
+  "eventsAppended": 8,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-02T19:20:45Z"
+}

@@ -1,0 +1,174 @@
+{
+ "invocations": {
+  "catalogSource": "node /Users/ryanlan/.tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow.mjs commands (reasonCode CLI_CATALOG_READY); declarative table at /Users/ryanlan/.tcrn-workflow/tcrn-workflow/packages/cli/src/index.ts:561-663",
+  "listFlagSemantics": "listValue at packages/cli/src/index.ts:350-355: split on ASCII comma ','; value '-' or empty string => empty list; any empty element => CLI_ARGUMENT_MALFORMED 'list'. Items must not contain ASCII commas (use 、 or ；inside item text — AOS chain records a position being rejected twice for this).",
+  "expectedVersionSentinel": "valueKind integer with headSentinel; literal 'head' resolves to current version under the held lease (resolveExpectedVersion, packages/cli/src/index.ts:331-336)",
+  "work-create": {
+   "flags": [
+    "--workspace string REQUIRED",
+    "--expected-version integer REQUIRED (accepts 'head')",
+    "--at instant(RFC3339) REQUIRED",
+    "--project-id string REQUIRED",
+    "--external-key string REQUIRED (canonicalized to UPPERCASE; must match ^[A-Z][A-Z0-9]*(-[A-Z0-9]+)*$, <=128 chars — protocol/src/index.ts:302-311)",
+    "--kind string REQUIRED, enum Initiative|Epic|Story|Subtask|Incident|Release (cli/src/index.ts:1731)",
+    "--parent-id string OPTIONAL, null sentinel '-' (deprecated alias 'null'); tree rules protocol/src/index.ts:668-679: Initiative & Release must be parentless, Epic->Initiative, Story->Epic (strict), Subtask->Story, Incident creatable with or without any parent",
+    "--status string OPTIONAL, enum planned|ready|active|blocked|done|cancelled (cli/src/index.ts:1732)",
+    "--actor string OPTIONAL flag but MANDATORY once attestation enabled (see attestation)",
+    "--attest-dir string OPTIONAL"
+   ],
+   "receipt": "NESTED: {reasonCode:WORKSPACE_COMMAND_COMPLETED, workspaceId, version, headEventHash, projects, work, record:{id, externalKey, kind, status, projectId, parentId, revision, tombstone}} — new id at record.id (writeState cli/src/index.ts:533-543, handler 1726-1749, workSummary 429-440). id = work:sha256('work\\0'+KEY.upper())[:24]"
+  },
+  "work-annotate": {
+   "flags": [
+    "--workspace string REQUIRED",
+    "--expected-version integer REQUIRED (accepts 'head')",
+    "--at instant REQUIRED",
+    "--id string REQUIRED (work:<24hex>)",
+    "--scope string OPTIONAL",
+    "--decided-by list OPTIONAL",
+    "--sprint string OPTIONAL, format workspace:<24hex>#work:<id> (cli/src/index.ts:361-369)",
+    "--actor OPTIONAL-but-mandatory-under-attestation",
+    "--attest-dir OPTIONAL"
+   ],
+   "constraint": "at least one of --scope / --decided-by / --sprint required, else CLI_ARGUMENT_MALFORMED 'scope-or-decided-by-or-sprint' (cli/src/index.ts:1769)",
+   "receipt": "NESTED record.id like work-create"
+  },
+  "conference-open": {
+   "flags": [
+    "--workspace string REQUIRED",
+    "--expected-version integer REQUIRED (accepts 'head')",
+    "--at instant REQUIRED",
+    "--external-key string REQUIRED (conference id derives from it)",
+    "--project-id string REQUIRED",
+    "--type string REQUIRED, enum strategy|architecture|risk|verification|release|incident|retrospective (core/src/conference.ts:10)",
+    "--title string REQUIRED (<=2048 utf8 bytes else CONFERENCE_BUDGET_EXCEEDED, conference.ts:29,65)",
+    "--work-ids list REQUIRED ('-' allowed for empty)",
+    "--desired-outcome string REQUIRED (<=2048 bytes)",
+    "--participant-ids list REQUIRED",
+    "--actor OPTIONAL-but-mandatory-under-attestation",
+    "--attest-dir OPTIONAL"
+   ],
+   "receipt": "FLAT: {reasonCode:WORKSPACE_COMMAND_COMPLETED, workspaceId, version, headEventHash, recordId} — id at top-level recordId, NOT record.id (writeExtensionState cli/src/index.ts:551-559, emitted at 1875). recordId = conference:sha256('conference\\0'+KEY.upper())[:24]. Note: the stored conference record itself carries NO externalKey field — the key lives only in the id derivation (verified on chain: all 6 AOS conference records lack externalKey)."
+  },
+  "conference-append-position": {
+   "flags": [
+    "--workspace string REQUIRED",
+    "--expected-version integer REQUIRED (accepts 'head')",
+    "--at instant REQUIRED",
+    "--conference-id string REQUIRED (conference:<24hex>)",
+    "--external-key string REQUIRED (position's own key; position id derives from it)",
+    "--actor-id string REQUIRED = position AUTHOR recorded on the position record (persona profile id per signing convention)",
+    "--position string REQUIRED (<=2048 utf8 bytes)",
+    "--risks list REQUIRED ('-' for empty)",
+    "--recommendations list REQUIRED ('-' for empty)",
+    "--evidence-ids list REQUIRED ('-' = no evidence records on chain yet)",
+    "--actor string OPTIONAL = attestation acting identity; when omitted the --actor-id value stands in as attestation actor (cli/src/index.ts:1878-1899)",
+    "--attest-dir OPTIONAL"
+   ],
+   "receipt": "FLAT recordId = position:<derived from external-key> (cli/src/index.ts:1902)"
+  }
+ },
+ "attestation": {
+  "aosEnabled": "yes — attestation.actor.enabled event in AOS chain segment events/000001.json (one-way gate; duplicate enable => WORKSPACE_EVENT_CORRUPT, core/src/workspace.ts:1036-1049). Cross chain ALSO enabled (cross events/000001.json).",
+  "missingActorConsequence": "Fail closed, nothing written: any mutating append without a valid --actor after enable => WORKSPACE_ACTOR_REQUIRED 'a valid actor is mandatory once attestation is enabled' (core/src/workspace.ts:2267-2271; replay path 616-619). Valid actor = protocol stableId with prefix owner|profile|agent (core/src/actor-attestation.ts:14, 39-53); anything else => ACTOR_ID_INVALID.",
+  "attestDirSemantics": "Advisory time witness, per-invocation opt-in (WSE-4, cli/src/index.ts:508-531). OMITTED => engine no-op: the event still commits with no receipt (adoption is a partition convention, not engine-enforced — the AOS partition convention is to always pass it; 330 receipts on disk). PASSED => fails closed if it resolves INSIDE the workspace root (CLI_ARGUMENT_MALFORMED '--attest-dir must resolve outside the workspace root', index.ts:520-522) or if no clock injected (CLI_ARGUMENT_MISSING, index.ts:519 — scripts/tcrn-workflow.mjs injects the real clock at line 13, so the governed entrypoint is safe). Receipt <headEventHash>.json written AFTER the committed mutation; a receipt write failure loses only the receipt, never workspace state (index.ts:513-515).",
+  "attestDirPath": "/Users/ryanlan/Code/TCRN Platform/.tcrn-workspace/TCRN-AOS/attestations — partition-level sibling of workspace/ (hence outside workspace root), files named <sha256>.json, 330 present",
+  "sampleWorkCreate": "node \"/Users/ryanlan/.tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow.mjs\" work-create --workspace \"/Users/ryanlan/Code/TCRN Platform/.tcrn-workspace/TCRN-AOS/workspace\" --expected-version head --at \"<RFC3339>\" --project-id \"project:899d30df2e67bc6e98a4f50e\" --external-key \"TCRN-AOS-INIT-002\" --kind Initiative --parent-id - --status planned --actor \"agent:opus5\" --attest-dir \"/Users/ryanlan/Code/TCRN Platform/.tcrn-workspace/TCRN-AOS/attestations\"",
+  "sampleNotes": "project:899d30df2e67bc6e98a4f50e confirmed as the AOS project on the CONF-001 record. '--expected-version head' resolves under the lease. Initiative must use --parent-id - (parentless). Receipt id at record.id."
+ },
+ "nextKeys": {
+  "premiseCorrection": "The task premise 'CONF-004 之后没有更高序号' is FALSE. All 6 AOS conferences were reverse-derived (id = conference:sha256('conference\\0'+KEY)[:24], protocol/src/index.ts:313-318): CONF-001=db86593a(AOS 设计, strategy), CONF-002=6f4c580c(部署与真值拓扑→MIN-002), CONF-003=35e03ea2(既有实现处置→MIN-003), CONF-004=46a7640d(审议采用公约), CONF-005=b1b60e36(消费者样式边界与首帧偏好归属→minutes referenced as MIN-005), CONF-006=ae0e6ae0(移动端首屏→MIN-006). CONF-005/006 records carry no externalKey field but their ids ARE the derivations of those keys, so the keys are burned.",
+  "aosNextConf": "TCRN-AOS-CONF-007 (derivation conference:72a3ed83fddf49aa03dbd98a is unclaimed)",
+  "aosNextInit": "TCRN-AOS-INIT-002 (only TCRN-AOS-INIT-001 on chain, verified across every work.created externalKey)",
+  "aosNextMin": "TCRN-AOS-MIN-007 (used: MIN-001, MIN-002, MIN-003, irregular MINUTES-004, MIN-005, MIN-006 — all derivation-verified against the 6 minutes ids; note conference #4's minutes used the irregular key TCRN-AOS-MINUTES-004)",
+  "aosOtherBands": "EPIC used 001-008 and 030; STORY used 001-027 and 101-109; INC used 001-034; SUBTASK-319. AOS chain at version 535, 81 work items, workspace:fbc32e3ff874fbbd637a1b85, head a60b1045...",
+  "crossNextInc": "TCRN-CROSS-INC-026 (INC-001..025 exactly used — enumerated every work.created externalKey on the cross chain; nothing above 025)"
+ },
+ "personaRoster": [
+  {
+   "profileId": "profile:tcrn-arturo-v1",
+   "name": "Arturo",
+   "jobTitle": "Thread Orchestrator",
+   "mandate": "Coordinate bounded work routes, preserve objective continuity, consume downstream returns; may route and monitor work but may not implement product scope, fabricate acceptance, or expand Owner authority"
+  },
+  {
+   "profileId": "profile:tcrn-ilya-v1",
+   "name": "Ilya",
+   "jobTitle": "Full-Stack Implementer",
+   "mandate": "Implement the exact routed product slice with clean immutable proof basis; may write only route-owned paths; cannot expand scope, mutate remote state, or accept own work"
+  },
+  {
+   "profileId": "profile:tcrn-janus-v1",
+   "name": "Janus",
+   "jobTitle": "Acceptance Gatekeeper",
+   "mandate": "Adjudicate compact gate readiness and acceptance entry on one bounded evidence card; may admit or block a checkpoint; cannot replace required domain voters or implement changes"
+  },
+  {
+   "profileId": "profile:tcrn-mara-v1",
+   "name": "Mara",
+   "jobTitle": "Product Manager",
+   "mandate": "Translate Owner intent into bounded product scope, acceptance criteria, sequencing, decision-ready handoffs; cannot replace implementation, verification, security, or Owner decisions"
+  },
+  {
+   "profileId": "profile:tcrn-minerva-v1",
+   "name": "Minerva",
+   "jobTitle": "Workflow Architect",
+   "mandate": "Design and govern Workflow architecture, authority boundaries, protocols, plans, proof topology; cannot impersonate implementation owners or fabricate domain acceptance"
+  },
+  {
+   "profileId": "profile:tcrn-mneme-v1",
+   "name": "Mneme",
+   "jobTitle": "Knowledge Steward",
+   "mandate": "Govern durable knowledge quality, provenance, freshness, promotion, retrieval, privacy boundaries; cannot implement product code, admit private history, or replace proof/security gates"
+  },
+  {
+   "profileId": "profile:tcrn-sable-v1",
+   "name": "Sable",
+   "jobTitle": "Security & Privacy Reviewer",
+   "mandate": "Review trust, filesystem, privacy, supply-chain, authority boundaries against reproducible attack paths; owns scoped security/privacy verdicts; cannot claim broad scans or authorize Owner/release decisions"
+  },
+  {
+   "profileId": "profile:tcrn-verity-v1",
+   "name": "Verity",
+   "jobTitle": "Verification Engineer",
+   "mandate": "Determine whether an exact immutable basis provides executable, reproducible proof for every claimed contract; reviews read-only; cannot mutate the reviewed basis or substitute for security/Owner acceptance"
+  },
+  {
+   "source": "authoritative roster = engine source /Users/ryanlan/.tcrn-workflow/tcrn-workflow/packages/core/src/core-reference-personas.ts:52-60 (semanticProfiles; bundle validator enforces exactly 8 at line 122). Helper reference /Users/ryanlan/Code/TCRN Platform/.claude/skills/tcrn-workflow-helper/references/workflow-operations.md:110-114 gives the signing rule: sign each position's --actor-id with profile:tcrn-<role>-v1 and disclose execution shape (subagent vs main-thread synthesis) in the first line"
+  }
+ ],
+ "crossFiling": {
+  "targetWork": "work:3391a3319dd1a64c0dc4680c = TCRN-CROSS-EPIC-023, kind Epic, status done, revision 9 — 'Codex 对等激活阶梯' (Codex parity activation ladder: lazy install + byte receipts, fail-open SessionStart hook, bounded persona/capability summary). Parent work:0254c638d7c45d106861504e = TCRN-CROSS-INIT-009 (Initiative, active, 可信双宿主执行接入 Program). Project project:e7da35c5aade8dd42c91cb0f; cross workspace workspace:7732a51de4c38afb83bb77cf, chain version 1266 at recon time.",
+  "incConvention": "INIT-004 缺陷单公约 (TCRN-CROSS-INIT-004, done): defect tickets are kind=Incident opened via CLI; parent-optional semantics were explicitly adopted ('parent-optional adopted per recommendation'). Engine enforces this: Incident is deliberately absent from the expectedParent map, creatable with or without a parent (protocol/src/index.ts:676-677), while Story STRICTLY requires an Epic parent (GRAPH_PARENT_KIND_INVALID otherwise, protocol/src/index.ts:671,693-694). Practice on chain: all 25 INCs carry an Epic parent — the Epic whose surface the defect concerns (INC-001..005/009-011/014-015/022-023 → EPIC-023; INC-025 → work:15404191b1b63e28774a0706 = TCRN-CROSS-EPIC-032 'workflow MCP 采用', done).",
+  "recommendation": "kind=Incident. Rationale: (a) this is a capability-gap/requirement raised TO the W engine, the exact INC precedent class — AOS INC-004/005 are read-face gaps 待提 W, cross INC-025 was the operator-bundle gap; (b) Story would force an Epic parent under the strict tree and no open Epic covers the W conference-extensions surface; (c) INIT-004 ruled Incident parent-optional, so no parent contortion needed. Recommended parent: work:15404191b1b63e28774a0706 (TCRN-CROSS-EPIC-032, the workflow-MCP/facade surface, precedent INC-025) — or parentless '-' if hanging on a done Epic is unwanted. Next key: TCRN-CROSS-INC-026.",
+  "crossWriteRequirements": "cross chain has attestation enabled (events/000001.json) => --actor mandatory. Cross partition has NO attestations/ dir (only evidence-locator/, transient/, workspace/) — attest-dir time witness is NOT adopted there; do not pass --attest-dir for cross writes unless the main thread decides to adopt it (it would need a new outside-workspace dir). Cross actor literals on chain: agent:fable(706), agent:opus(332), agent:codex(207), owner:governance(14), profile:tcrn-verity-v1(4), profile:tcrn-minerva-v1(2), profile:tcrn-mara-v1(1). Note agent:opus5 has never been used on the cross chain."
+ },
+ "mcpWriteValidity": {
+  "v070FieldSet": "fileAuthorities exact set in governed v0.7.0 copy (packages/core/src/operator-authority.ts:372-379): [profileAdmission, contextRoute, codexAdapterInstallation, codexHostActivationObservation, claudeAdapterInstallation, compatibilityAdmission]; hostInputs exact [codexAdapter, codexAdapterActivation, claudeAdapter, claudeAdapterActivation] (:381-386); mcp exact [writeCommands, authorityOutputCommands] (:388).",
+  "v060Comparison": "IDENTICAL. git show v0.6.0:packages/core/src/operator-authority.ts vs v0.7.0 tag: byte-identical (empty diff); governed installed copy also byte-identical to the v0.7.0 tag. Same exact() lists, same schemaVersions (tcrn.operator-authority-bundle.v1 / tcrn.operator-authority-pins.v1).",
+  "liveBundleCheck": "/Users/ryanlan/.tcrn-workflow/live/tcrn-platform/authority/operator-authority.json: generation 4, status active, validity 2026-07-24T19:00:00Z → 2026-08-24T19:00:00Z (today 2026-07-28 is in-window), fileAuthorities keys exactly match the v0.7.0 exact set, mcp keys match, 37 writeCommands INCLUDING work-create, work-annotate, work-transition, conference-open, conference-append-position, conference-close, gate verbs, knowledge verbs; authorityOutputCommands = [] (so the sole authority-bearing verb adapter-activation-record stays denied — irrelevant to the planned writes).",
+  "pinsChain": "operator-authority-pins.json: minimumGeneration 4, authorityFileSha256 ef6d3d30a423284faf06275eb26e7066169daefef320519f3ae48fbfe02c982d == actual sha256 of operator-authority.json (verified). Pins FILE sha256 = d25ebfc1cb47310d27bdeba4749fe5728b089188a7338d6a89cfe86f1c5d5ce9 == the --authority-pins-digest passed by BOTH hosts: platform .mcp.json lines 6-10 (Claude Code) and ~/.codex/config.toml:232 (Codex) — both point at the same v0.7.0 script /Users/ryanlan/.tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs. Pins bind only {authorityPath, authorityFileSha256, minimumGeneration, revokedDigests} (operator-authority.ts:104-112), never an engine version.",
+  "conclusion": "Generation-4 bundle (pins digest d25ebfc1…) REMAINS FULLY VALID for v0.7.0. No INC-025-class break: the validator bytes did not change between v0.6.0 and v0.7.0, the live bundle's field sets match the exact() lists, digests chain end-to-end, and the validity window is open. MCP writes through either host are viable for all four planned verbs."
+ },
+ "actorLiterals": [
+  "AOS chain event actors (count): agent:fable(215), agent:opus5(139), agent:opus(59), profile:tcrn-minerva-v1(58), owner:governance(3)",
+  "AOS most recent events v530-535 (2026-07-28): agent:opus5 on five of six, agent:fable on one (v532) — both are live current literals",
+  "AOS position AUTHORS (--actor-id on positions): profile:tcrn-minerva-v1(22), profile:tcrn-verity-v1(4), profile:tcrn-mara-v1(3), profile:tcrn-sable-v1(3), owner:governance(1)",
+  "AOS conference participantIds seen: owner:governance, profile:tcrn-minerva-v1, profile:tcrn-verity-v1, profile:tcrn-mara-v1",
+  "cross chain event actors (count): agent:fable(706), agent:opus(332), agent:codex(207), owner:governance(14), profile:tcrn-verity-v1(4), profile:tcrn-minerva-v1(2), profile:tcrn-mara-v1(1); agent:opus5 absent from cross"
+ ],
+ "evidencePrecedent": "INIT-001 evidence lives in the AOS repo at /Users/ryanlan/Code/TCRN Platform/TCRN-AOS/evidence/ (175 files). The chain-referenced precedent (paths appearing in AOS chain annotations) is FLAT single-file JSON directly under evidence/, referenced by repo-relative path: evidence/aos-projection-live-proof.json, evidence/aos-write-surface-live-proof.json, evidence/aos-mirror-acceptance.json, evidence/aos-domain-backup.json, evidence/inc-011-service-smoke-predicate-repair.json, evidence/owner-reported-ui-defects-2026-07-27.json. File shape: JSON with a schemaVersion header 'aos.<topic>.v1', an ok boolean, then per-criterion structures (aos-mirror-acceptance.json additionally names the ruling 'TCRN-CROSS-MIN-052 D9'). Multi-file proof bundles sit in per-slice subdirectories (phase1-persistence/, aos-knowledge-retrieval-layer-kr01..06/, phase3-*/) each holding <topic>-proof.json / <topic>-readback.json files, but chain annotations cite the flat files. The partition-level evidence-locator/ dirs (both AOS and cross) are empty; the chain has NO evidence records yet — conference positions pass --evidence-ids - and one AOS annotation explicitly states '- 表示「本链上还没有 evidence 记录」'.",
+ "traps": [
+  "PREMISE CORRECTION: AOS CONF-005 and CONF-006 are already burned (derivation-verified) even though grep finds no such literals — conference records store no externalKey; the key lives only in the id derivation. Next CONF is 007, not 005.",
+  "Receipt asymmetry: work verbs return nested record.id; conference-open/append-position return FLAT top-level recordId (writeExtensionState, cli/src/index.ts:551-559). Parsing record.id from a conference receipt yields undefined.",
+  "List flags split on ASCII comma only; '-' is the empty-list sentinel, not a literal; an ASCII comma inside a Chinese sentence in --risks/--recommendations silently splits the item and can fail CLI_ARGUMENT_MALFORMED — use 、 (AOS chain records this exact double rejection).",
+  "conference-append-position: --actor-id is the position author (persona profile), --actor is the attestation identity; omitting --actor makes the author stand in as attestation actor (cli/src/index.ts:1878-1899). Under the persona signing convention pass BOTH: --actor-id profile:tcrn-<role>-v1 and --actor agent:opus5.",
+  "--attest-dir must resolve OUTSIDE the workspace root (use the partition attestations/ sibling, never a path under workspace/), else CLI_ARGUMENT_MALFORMED before anything else runs.",
+  "Missing --actor after attestation enable fails the whole mutation closed (WORKSPACE_ACTOR_REQUIRED); missing --attest-dir does NOT fail — the event commits without a time receipt, silently breaking the partition witness convention.",
+  "--position/--title/--desired-outcome have a 2048 utf8-byte budget (CONFERENCE_BUDGET_EXCEEDED, conference.ts:29,65) — Chinese text hits it at ~680 characters.",
+  "external keys are canonicalized to UPPERCASE and must match ^[A-Z][A-Z0-9]*(-[A-Z0-9]+)*$ — lowercase input works but derives the same id as its uppercase form.",
+  "Story strictly requires an Epic parent and Initiative/Release must be parentless (GRAPH_PARENT_KIND_INVALID); Incident alone is parent-optional — decisive for the cross filing kind choice.",
+  "Minutes key band is inconsistent on AOS: conference #4's minutes used TCRN-AOS-MINUTES-004 while the others use TCRN-AOS-MIN-<n>; stick to MIN- going forward (next: MIN-007).",
+  "'--expected-version head' resolves under the lease and avoids stale-version CAS rejections; a hardcoded integer races any concurrent writer."
+ ]
+}

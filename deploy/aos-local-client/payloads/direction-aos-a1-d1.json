@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "A1 推进:STORY-137 边界设计完成(transition done+annotate),EPIC-040/INIT-004 转 active,close CONF-014 落边界裁定。",
+  "steps": [
+    { "verb": "work-transition", "flags": { "id": "work:f5fabbc39a87482c60dcf2b5", "status": "ready" } },
+    { "verb": "work-transition", "flags": { "id": "work:f5fabbc39a87482c60dcf2b5", "status": "active" } },
+    { "verb": "work-transition", "flags": { "id": "work:f5fabbc39a87482c60dcf2b5", "status": "done" } },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:f5fabbc39a87482c60dcf2b5",
+        "scope": "读面 LAN 可达边界设计定案(依据 CONF-014 三视角立场)。交付:docs/read-face-boundary-design.md。要点:独立只读进程 apps/cockpit-read、受众=整个 LAN、内容净化与无回路隔离为硬性、认证审计为配套、默认无 per-viewer 应用层认证升级杠杆为网络分段、两不变量落机器门(写面 loopback 在 VM 断言实际套接字/读面无 pins 静态面可证+运行期残余声明)。威胁模型:最坏情形非被改链而是全链可读+渲染不安全成跳板。"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:ceeee6ab4f2ab24904c9ad38", "status": "ready" } },
+    { "verb": "work-transition", "flags": { "id": "work:ceeee6ab4f2ab24904c9ad38", "status": "active" } },
+    { "verb": "work-transition", "flags": { "id": "work:4c678a5fe78b6313ce56ea39", "status": "ready" } },
+    { "verb": "work-transition", "flags": { "id": "work:4c678a5fe78b6313ce56ea39", "status": "active" } },
+    {
+      "verb": "conference-close",
+      "flags": {
+        "conference-id": "conference:a1216d10e539943d4e136ae8",
+        "minutes-external-key": "TCRN-AOS-MIN-014",
+        "summary": "读面 LAN 可达边界设计定案(STORY-137):独立只读进程放整个 LAN,内容净化与无回路隔离为硬性,认证审计为配套,两条不变量落机器门",
+        "outcome-class": "role_decision",
+        "accountable-owner-id": "owner:governance",
+        "decisions": "读面边界设计已定(依据 CONF-014 三视角立场):内容净化与无回路隔离为硬性;认证审计为配套;受众=整个 LAN;形态=独立只读进程;两不变量落机器门:写面 loopback 在 VM 断言实际套接字、读面无 pins 静态面可证加运行期残余声明",
+        "unresolved-issues": "LAN 身份不可证故读面不依赖 per-viewer 认证;读进程运行期内存永不持 pins 不可机证靠拓扑与部署期控制",
+        "distill": "false"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:f5fabbc39a87482c60dcf2b5" },
+      "recordFields": ["externalKey", "kind", "status", "scope"],
+      "expect": {
+        "externalKey": "TCRN-AOS-STORY-137",
+        "kind": "Story",
+        "status": "done"
+      },
+      "expectSameAs": [
+        { "field": "scope", "step": 3, "flag": "scope" }
+      ]
+    }
+  ]
+}

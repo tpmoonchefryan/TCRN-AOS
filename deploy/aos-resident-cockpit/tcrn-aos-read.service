@@ -1,0 +1,31 @@
+[Unit]
+Description=TCRN AOS read-only LAN face (STORY-140; no pins, read routes only)
+Documentation=file:///srv/tcrn/aos-read/DEPLOYMENT.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/tcrn/aos-read/runtime
+ExecStart=/usr/local/bin/node /srv/tcrn/aos-read/runtime/read-face-runner.mjs
+# DynamicUser gives a low-privilege, ephemeral, isolated process (MIN-014: the
+# LAN-exposed process must not be a privileged one). It needs only read access,
+# and the web + domain store are world-readable.
+User=aosread
+DynamicUser=yes
+Environment=AOS_READ_HOST=192.168.51.249
+Environment=AOS_READ_PORT=4319
+Environment=AOS_STATIC_ROOT=/srv/tcrn/aos-cockpit/runtime/web
+Environment=AOS_DOMAIN_DB=/srv/tcrn/aos-cockpit/data/domain.db
+Environment=AOS_ALLOWED_HOSTS=192.168.51.249
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+ProtectSystem=full
+ProtectHome=yes
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=tcrn-aos-read
+
+[Install]
+WantedBy=multi-user.target

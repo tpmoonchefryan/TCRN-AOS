@@ -1,0 +1,689 @@
+{
+ "write-face": {
+  "mutatingVerbFamilies": [
+   {
+    "family": "work 图",
+    "verbs": [
+     "work-create",
+     "work-transition",
+     "work-annotate",
+     "work-delete"
+    ],
+    "count": 4,
+    "notes": "全部 CLI 可用。work-annotate 承载 scope/decided-by 与 --sprint(入列 advisory:sprint)。证据:受治副本 commands 目录(node ~/.tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow.mjs commands,schemaVersion tcrn.cli-catalog.v1)中 mutates:true 条目。"
+   },
+   {
+    "family": "conference",
+    "verbs": [
+     "conference-open",
+     "conference-append-position",
+     "conference-close",
+     "conference-cancel"
+    ],
+    "count": 4,
+    "notes": "conference-append-position 立场硬上限 2048 字节;close 产 minutes 供后续工作引用为裁定。"
+   },
+   {
+    "family": "gate",
+    "verbs": [
+     "gate-create",
+     "gate-transition",
+     "gate-delete"
+    ],
+    "count": 3,
+    "notes": "gate-transition 带 identity-authority / identity-authority-digest 旗标(catalog 内可见),即门过渡须身份权威文件;create/delete 定义与移除停点本身。"
+   },
+   {
+    "family": "knowledge",
+    "verbs": [
+     "knowledge-init",
+     "knowledge-create",
+     "knowledge-promote",
+     "knowledge-retire",
+     "knowledge-reverify",
+     "knowledge-rebase",
+     "knowledge-checkpoint"
+    ],
+    "count": 7,
+    "notes": "promote/retire/reverify 带 expected-revision 双 CAS;init 是知识库引导(要 --acknowledge-disposable);checkpoint/rebase 是整库操作。"
+   },
+   {
+    "family": "project",
+    "verbs": [
+     "project-create",
+     "project-update",
+     "project-delete"
+    ],
+    "count": 3,
+    "notes": "分区内项目结构面;低频治理形状写。"
+   },
+   {
+    "family": "snapshot-recovery(运维修复)",
+    "verbs": [
+     "recover",
+     "lease-break",
+     "lease-recovery-break",
+     "artifact-archive-apply",
+     "artifact-archive-restore"
+    ],
+    "count": 5,
+    "notes": "artifact-archive-apply / artifact-archive-restore 在 catalog 中 availability:fixture-only(CLI 不可达);lease-break 需 owner-token,lease-recovery-break 需 claim-token——都是操作员在键盘前的修复动词。"
+   },
+   {
+    "family": "adapter-operator(宿主生命周期)",
+    "verbs": [
+     "adapter-activate",
+     "adapter-deactivate",
+     "adapter-install",
+     "adapter-uninstall",
+     "claude-adapter-install",
+     "claude-adapter-uninstall",
+     "claude-adapter-activation-merge",
+     "claude-adapter-activation-remove",
+     "claude-adapter-activation-uninstall",
+     "claude-adapter-settings-merge",
+     "claude-adapter-settings-remove"
+    ],
+    "count": 11,
+    "notes": "这批 mutates:true 改的是宿主安装树与 Claude settings 文件(installation-root/receipt/digest/settings/fragment 旗标),不是事件链;它们是信任引导机构本身。"
+   },
+   {
+    "family": "其他(工作区生命周期)",
+    "verbs": [
+     "init",
+     "attestation-enable"
+    ],
+    "count": 2,
+    "notes": "init 创建整个受治工作区;attestation-enable 是已裁的单向门(启用后不可关)。全目录 mutates:true 共 39 个动词,以上八族覆盖全部。"
+   }
+  ],
+  "aosChainWriteImpl": "AOS 唯一的链写路由是 POST /api/chain/transition,实现在 apps/cockpit-service(不在 apps/api——apps/api/src/server.ts:55-56 对非 GET/HEAD 一律 405,是纯读回门面)。实现形态:三选项都不是——既非 shell 到引擎 CLI,亦非进程内 import 引擎库,更没有自行重实现状态机;它 spawn 受治副本的 MCP 门面为 detached 子进程,经 stdio JSON-RPC 调引擎的 mutating MCP 工具。证据链:(1) 路由 apps/cockpit-service/src/service.ts:155-163,取 partitionId 后调 surface.transition,并有原文注释「The engine's state machine judges the move. Mirroring its rules here would create a second opinion that can disagree with the authority」(service.ts:159-160);(2) ChainClient 构造 service.ts:78-83,serverPath = resolve(homedir(), \".tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs\"),即受治安装副本的 MCP 门面,并注入 authorityPins/authorityPinsDigest(两者必须成对,chain-client.ts:50-55);(3) 进程模型 packages/projection/src/chain-client.ts:75 spawn(process.execPath, [serverPath, \"--authority-pins\", ..., \"--authority-pins-digest\", ...], { detached: true }),chain-client.ts:91-97 完成 MCP initialize 握手,chain-client.ts:116-140 callTool 走 tools/call 且引擎 reasonCode(如 INVALID_TRANSITION、OPERATOR_AUTHORITY_COMMAND_NOT_GRANTED)原样透传;(4) 实际动词映射 packages/projection/src/write-surface.ts:100-105 transition→tcrn_workflow_work_transition,:82 createWork→tcrn_workflow_work_create,:120/125 annotate、enrolInTrain→tcrn_workflow_work_annotate;仪式面 base() 统一供 workspace/expected-version:\"head\"/at/actor(write-surface.ts:52-64)。边界裁定内嵌于代码:服务只绑 127.0.0.1(service.ts:107-109),注释明言 pins 不旅行、持 pins 进程不得上网络(service.ts:24-29)。注意:SafeWriteSurface 已实现建卡/注解/入列三方法且有测试,但 HTTP 层今天只接了 transition 一条路由——CONF-001 安全写面的其余三项是接线债不是设计债。",
+  "aosDomainWrites": [
+   {
+    "surface": "cockpit-service /api/domain/*(写 AOS 自有 SQLite DomainStore,不写链)",
+    "writes": [
+     "PUT /api/domain/annotation — assignee/priority(urgent|high|normal|low)/labels/externalKey,apps/cockpit-service/src/service.ts:209-223 → DomainStore.setAnnotation(packages/projection/src/domain-store.ts:87)",
+     "POST /api/domain/comment — 评论,service.ts:225-237 → DomainStore.addComment(domain-store.ts:146)",
+     "POST /api/domain/relation — 12 种关系型(blocks/blocked_by/depends_on/relates_to/duplicates/supersedes/split_from/caused_by/implements/verifies/reviews/refreshes,镜像 DS workRelationshipTypes),service.ts:239-253 → DomainStore.addRelation(domain-store.ts:183;类型清单 domain-store.ts:50-53)"
+    ],
+    "notes": "域行以 qualified ref(partitionId+recordId)指向链记录且允许悬挂(链记录 tombstone 后注释保留);domain-store.ts:1-21 头注明确「不可从链重建的第一份数据」,备份分层由此而来(MIN-002 配对快照)。GET /api/domain/export(service.ts:255-258)是配对备份读面。"
+   },
+   {
+    "surface": "packages/mcp-gateway McpGateway(写 AosStore 域库,dry-run 治理姿态)",
+    "writes": [
+     "全名册 42 方法在 gateway.ts:40-83;读方法仅 10 个(aos.policy.read/aos.ticket.list/aos.stage_map.read/aos.work_index.drill_through.read/aos.documentation.index.read/aos.release_candidate.linkage.read/aos.dependency.governance.read/aos.resource.governance.read/aos.resource.materialization_control.read/aos.audit.query,gateway.ts:570-572),其余 32 个全是写",
+     "票据/工作族:aos.ticket.propose、aos.ticket.comment、aos.assignment.claim、aos.assignment.update、aos.run.summary.create",
+     "治理记录族(注意:是 AOS 域记录不是链写):aos.gate.request、aos.gate.decision.record、aos.evidence.link、aos.conference.request、aos.conference.position.record、aos.conference.minutes.record",
+     "文档/知识族:aos.knowledge.entry.propose、aos.guide.page.draft、aos.release_note.item.draft、aos.docs.readiness.record、aos.docs.search.index",
+     "发布联动族:aos.github.metadata.record、aos.pr_ci.story_readiness.record、aos.release_candidate.linkage.record",
+     "依赖/资源族:aos.dependency.record.propose、aos.dependency.detection.record、aos.resource.record.propose、aos.resource.materialization.request、aos.resource.manifest.record、aos.resource.audit_finding.record、aos.resource.materialization_history.record、aos.resource.update.request、aos.resource.replacement.request、aos.resource.rollback.request、aos.resource.rollback_plan.record、aos.resource.retirement.record、aos.resource.cleanup_readback.record"
+    ],
+    "notes": "写前置四道:canWrite 身份授权(gateway.ts:125)、方法白名单(gateway.ts:552-556)、restricted-content 扫描(gateway.ts:558-564)、幂等键去重(gateway.ts:110);docs/security-boundaries.md:16 明言 owner-intent-required 动作只建 pending gate 绝不自动执行,:22 gateway/adapter 写须身份+角色绑定+项目域+写权限+幂等+载荷安全且保持 dry-run。"
+   }
+  ],
+  "splitProposal": [
+   {
+    "family": "work 图(work-create / work-transition / work-annotate 含 --sprint 入列)",
+    "recommendation": "进 AOS 安全写面",
+    "reason": "这正是 CONF-001 已逐字裁定的首期安全写面(建卡/流转/注解/入列),且 SafeWriteSurface 四方法已实现(write-surface.ts:75-130)、流转已在 HTTP 活链实证(INVALID_TRANSITION 拒绝证据在案)——剩余工作是把 createWork/annotate/enrolInTrain 三方法接到路由,属接线不属方向。"
+   },
+   {
+    "family": "work-delete(work 图内例外)",
+    "recommendation": "永不进 AOS",
+    "reason": "AOS 自己已把它写进 CEREMONIAL_WRITES 排除清单(write-surface.ts:157「removal is terminal; correction is an appended record」)——事件只增不改的公约下,删除不是一次点击该有的重量。"
+   },
+   {
+    "family": "conference(open / append-position / close / cancel)",
+    "recommendation": "留 CLI/MCP 显式仪式",
+    "reason": "CONF-001 已裁「治理写显式仪式」,且四动词中三个已由 AOS 自己列入 CEREMONIAL_WRITES 并给出理由(write-surface.ts:152-154:开启将绑定决策的审议/逐字永久记录立场/产出被后续工作引用为裁定的纪要);cancel 同族同重量,不单独开口。"
+   },
+   {
+    "family": "gate(create / transition / delete)",
+    "recommendation": "留 CLI/MCP 显式仪式",
+    "reason": "gate-transition 需证据与被许可身份(identity-authority-digest 旗标+CEREMONIAL_WRITES write-surface.ts:155),而 create/delete 定义与移除停点本身——能自建自删门的写面等于能稀释 owner_intent_required 停顿预算,这在 MIN-002 边界下不可下放。"
+   },
+   {
+    "family": "knowledge(init / create / promote / retire / reverify / rebase / checkpoint)",
+    "recommendation": "留 CLI/MCP 显式仪式",
+    "reason": "知识库是策展目录,promote 需证据且 security-boundaries.md:28 明言 canonical knowledge promotion 无单独路由的 Owner Intent 包即被阻断;checkpoint/rebase 是整库操作,自动化会静默改写策展新鲜度状态。"
+   },
+   {
+    "family": "project(create / update / delete)",
+    "recommendation": "留 CLI/MCP 显式仪式",
+    "reason": "分区结构面低频且不在 CONF-001 裁定的安全写面清单内,project-delete 又是终态操作——没有把它做成按钮的需求,先按仪式留,若未来 AOS 要自助开项目再单独提裁。"
+   },
+   {
+    "family": "snapshot-recovery(recover / lease-break / lease-recovery-break / artifact-archive-apply / artifact-archive-restore)",
+    "recommendation": "永不进 AOS",
+    "reason": "这是操作员对着坏掉或被占用的工作区做的修复动词(owner-token/claim-token 门控,两个 archive 动词还是 fixture-only 根本不可经 CLI 达),把它们给服务等于把 fail-closed 设计改造成会自我修复、从而能掩盖损坏的服务。"
+   },
+   {
+    "family": "adapter-operator(11 个 adapter-* / claude-adapter-* 写动词)",
+    "recommendation": "永不进 AOS",
+    "reason": "它们改的是宿主安装树与 settings 文件而非链,本身就是供权/信任引导机构;持 pins 进程只许在 loopback 的裁定(service.ts:24-29)与 MIN-002「VM 首期零写面/权威不动」都指向同一结论:座舱永远不该持有宿主生命周期权限。"
+   },
+   {
+    "family": "其他(init / attestation-enable)",
+    "recommendation": "永不进 AOS",
+    "reason": "init 创建整个受治工作区(治理引导+键号分配),attestation-enable 是已实证启用的单向门(CEREMONIAL_WRITES write-surface.ts:156「a one-way door that cannot be closed again」)——两者都是一次性的奠基仪式,不是运营写面。"
+   }
+  ],
+  "risks": [
+   "接线债易被误读为已完成:CONF-001 安全写面四项里 HTTP 层今天只活了流转一条(service.ts:155 唯一链写路由,链上注解亦自述「该服务唯一的链写面就是 /api/chain/transition」);建卡/注解/入列在 write-surface.ts 已实现但未路由——拆单须按「接线+测试」立项,不要重新设计。",
+   "actor 归因塌缩:cockpit-service 默认 actor 固定为 agent:fable(service.ts:72),写面扩到建卡/注解后若不把真实操作者身份逐请求带入,链上归因全部塌成一个代理名;write-surface.ts:22-25 明言 actor 是归因声明非身份证明,扩面前须定归因来源。",
+   "expected-version 用 head 哨兵(write-surface.ts:59)对 work 图写是正确的让位并发,但对任何仪式类动词都是错的(仪式写手须有意识地绑定版本)——这是 conference/gate/knowledge 留在 CLI 仪式面的又一条技术理由,拆单时不要把 SafeWriteSurface.base() 复用到仪式动词上。",
+   "命名撞车陷阱:mcp-gateway 的 aos.gate.* / aos.conference.* / aos.knowledge.* 写的是 AosStore 域记录且保持 dry-run(security-boundaries.md:16,22),与引擎同名动词族毫无关系——分工方案若把它们误读作「治理写已有 AOS 面」会直接违反已裁的显式仪式边界。",
+   "部署边界:链写面扩容全部只能落在本机 loopback 的 cockpit-service 上;镜像段(deploy/aos-mirror.yaml,只读+as-of)与 VM 按 MIN-002 零写面,pins 不旅行(service.ts:107-109),任何把写面挪上 VM 的拆法都需先回 Owner 重裁。",
+   "fixture-only 动词(artifact-archive-apply/restore)在 mutates:true 名册里但 CLI 不可达——清点写面覆盖率时若按 39 个全算会虚报两个永远走不到的口。"
+  ]
+ },
+ "inc034-residual": {
+  "gateScriptPath": "/Users/ryanlan/Code/TCRN Platform/TCRN-AOS/scripts/mirror-acceptance-proof.mjs",
+  "pathA": {
+   "name": "路 A:门自建探针记录",
+   "engineVerb": "work-create(MCP: tcrn_workflow_work_create;核心 createWork 在 ~/.tcrn-workflow/tcrn-workflow/packages/core/src/workspace.ts:2399-2429)。注意 SafeWriteSurface.createWork 已建成(TCRN-AOS/packages/projection/src/write-surface.ts:75-96)且「建卡」也在 CONF-001 首期安全写面清单内——路 A 的问题不在写面,在探针记录本身的治理。",
+   "keyPollution": "id = deriveStableId('work', externalKey)(workspace.ts:2406-2407);重复 id 被拒 WORKSPACE_INPUT_INVALID 'work ... already exists'(2410-2412),且该存在性检查不排除墓碑(2410 行无 !record.tombstone)——固定探针键号一生只能建一次。故逐次运行的探针必须每次取新 externalKey,即无界消耗 TCRN-AOS-<KIND>-<序号> 键号空间,每个探针连同其 create/transition/delete 事件永留链上并进入全部投影(镜像的 chainKeys 计数会数到它,mirror-acceptance-proof.mjs:67)。",
+   "tombstoneSemantics": "deleteWork 只置 tombstone:true 并追加一条 work.deleted 事件(workspace.ts:2491-2500);记录与全部事件永不消失,'清理'不缩链——每次门运行净增 >=2-3 条永久事件。链回放成本超线性,逐次探针使验证成本永续增长。",
+   "idempotency": "两种变体均不干净:(a) 每次新键号——按构造非幂等,逐次增殖;(b) 单个常驻探针走 ready<->blocked 合法环(protocol/src/index.ts:753-756)——只耗一个键号,但留下永久非终态记录,链从此不可能再全终态闭合(本次发布自己用过的『两分区零 planned』收官判据被永久打破),且该假记录渲染进每个模块与镜像。另有严格树约束:Story 必有父(validateWorkGraph;第五轮裁定),可 parentless 的 kind 只有 Initiative/Release,作假记录语义都很响。",
+   "precedentEcho": "「验收门每次运行盖时间戳标签是机制」的先例是判据 3(mirror-acceptance-proof.mjs:83-95):acceptance-${Date.now()} 标签 PUT 进 AOS 域库——可覆写(labels 整组替换,有界)、非受治、零链事件。路 A 把印记搬到只增不改的受治面,每个印记永久、耗键号、进全部投影:先例的精神(门为证明可写而写)可承接,先例成立的有界性条件(可覆写+非受治)一条都不满足。",
+   "rulingSupport": "无。MIN-002/MIN-003/CONF-001 均无一字授权合成受治记录;MIN-003 方向是收紧而非放松链完整性期待。采纳路 A 需要一条全新裁定,且要同时裁键号命名空间、探针 kind/父子位置、闭合语义三件事。"
+  },
+  "pathB": {
+   "name": "路 B:增非状态迁移链写面 /api/chain/annotate",
+   "rulingSupport": "已有:CONF-001 分解裁定逐字「写面=首期安全写面(建卡/流转/注解/入列/AOS 域字段)」——注解本就是已裁写面,只是尚未建成 HTTP 路由。路 B 不需要新方向裁定,只需要一件小事:指定盖章目标记录(见 caveat)。",
+   "implementationSize": "极小,注解腿已建成:SafeWriteSurface.annotate() 已实现并在生产路径被使用(TCRN-AOS/packages/projection/src/write-surface.ts:114-121,经 tcrn_workflow_work_annotate;createWork 写标题即走它,113 行注释明言注解 supersede 而不抹除)。服务侧只缺一个路由:在 apps/cockpit-service/src/service.ts 照 transition 路由(155-164)加 ~10 行 handler;WriteRefused->409+引擎原 reasonCode 的透传已是通用机制(service.ts:94-104)。其余就是 proof 脚本判据改写。",
+   "predicateRewrite": "保留现有迁移对为主判据(有合法候选时不变);链全终态时回退为注解对:writeHalf = POST /api/chain/annotate {partitionId, recordId=裁定指定的盖章记录, scope: 'acceptance-<时间戳>'} -> 200(引擎追加 work.annotated);refusalHalf = 立即逐字节重放同一注解 -> 409 WORKSPACE_INPUT_INVALID('annotation does not change any advisory field',workspace.ts:2482-2484)。两半仍说同一条记录(延续现判据 144-149 行的纪律),引擎仍是唯一裁判,且在全终态链上可执行——annotateWork 只查墓碑不查状态(workspace.ts:2461-2464),对 done 记录照常可注解;设计注释 2448-2453 明言注解永不改状态不触门,故盖章不可能意外推进或解锁任何工作。",
+   "refusalCodes": "work-annotate 全部拒绝面(核心 annotateWork,workspace.ts:2454-2489,引擎侧一律 WORKSPACE_INPUT_INVALID):墓碑记录(2462-2464)/三字段全缺(2465-2467;CLI 层则 CLI_ARGUMENT_MALFORMED 'scope-or-decided-by-or-sprint',packages/cli/src/index.ts:1769)/空 scope(2468-2470)/decided-by 非合法 minutes id 列表(2471-2473)/sprint 非限定引用(2474-2476)/无变更注解(2482-2484)。唯有『无变更注解』是依当前链状态做 canonical 字节比较的状态依赖引擎裁决,与 INVALID_TRANSITION 同一认识论等级;其余是参数校验,作红证证明力弱(不触及链状态也能触发)。",
+   "chainCost": "被拒的注解零链增长(fail 在 appendEvent 的 reducer 内抛出,事件未落);写半边每次门运行恰 1 条事件;零键号消耗、零墓碑、闭合性无损(注解不改状态,全闭合链保持全闭合)。恰是判据 3 时间戳印记机制的链面孪生,且有界性被恢复。",
+   "caveat": "scope 承载记录标题(write-surface.ts:69-73;第五轮裁定『标题走 scope 注解』),印记不得覆写活记录的标题——盖章目标须是裁定指定的记录(自然候选:INC-034 事件记录本身,已终态但非墓碑;其原 scope 因注解 supersede-不抹除语义永留链上可查)。这一指定是路 B 仅剩的治理动作。"
+  },
+  "recommendation": "推荐路 B,且证据显示这不是理论题:实测当前 AOS 链(v535)planned/ready/active/blocked 四态记录数全为 0——链今天就是全终态,判据 4 的写半边今天就不可执行,门今天就会红。路 B 胜出的四条理由:(1) 治理成本——CONF-001 已裁「注解」入首期安全写面,路 B 只补建已裁之物,唯一新治理动作是指定盖章记录;路 A 无任何裁定支撑,还要同时新裁键号、探针形态、闭合语义三题,且与 MIN-003 收紧方向相逆。(2) 实现成本——注解腿在 SafeWriteSurface 已建成并被生产路径使用,服务侧仅差一个 ~10 行路由,拒绝透传机制现成。(3) 证明力——『无变更注解』拒绝(WORKSPACE_INPUT_INVALID,workspace.ts:2482-2484)是依链状态的引擎裁决,与 INVALID_TRANSITION 同级,两半说同一记录的纪律得以保留。(4) 链卫生——路 B 每次运行 1 条事件、零键号、闭合性无损;路 A 要么每次烧一个键号且墓碑永占 id(create 查重不排墓碑,workspace.ts:2410),要么以永久非终态探针使链永不可再闭合。判据结构建议:迁移对为主,链全终态时回退注解对,receipt 如实记录走了哪条腿。",
+  "rulingDraft": "采纳路 B:依 CONF-001 首期安全写面既有裁定补建 /api/chain/annotate(SafeWriteSurface.annotate 已建成,仅缺路由),验收判据 4 在链全终态时回退为注解对——对本裁定指定的盖章记录(建议即 TCRN-AOS-INC-034 记录)写入带时间戳的 scope 注解为写半边,随即逐字节重放同一注解、由引擎以 WORKSPACE_INPUT_INVALID「注解未改变任何 advisory 字段」拒绝为拒绝半边,两半仍说同一条记录、引擎仍是唯一裁判。不采纳路 A:探针记录要么每次运行消耗一个键号且墓碑永占其 id,要么以永久非终态记录使链不可再闭合,均无既有裁定支撑。"
+ },
+ "five-pieces-matrix": {
+  "fivePieces": {
+   "status": "权威列举(非推断)",
+   "enumeration": [
+    "append-only(只追加的记录流)",
+    "规范字节(canonical bytes)",
+    "哈希链(hash chain)",
+    "可回放(replay)",
+    "attestation(actor 见证)"
+   ],
+   "sourceQuote": "迁移换容器不换语义:append-only、规范字节、哈希链、可回放、attestation 五件套原样承载,时间见证等工作区外 sidecar 随迁",
+   "provenance": {
+    "conferenceId": "conference:6f4c580c6ea63e21274f5fdf (CONF-002)",
+    "positionId": "position:4a51d78b73b4559e27ccbee9",
+    "eventId": "event:3e04ed7031fa5cb384fa3745 (sequence 67, occurredAt 2026-07-26T12:45:31Z)",
+    "actorId": "profile:tcrn-minerva-v1",
+    "file": "/Users/ryanlan/Code/TCRN Platform/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000002.json"
+   },
+   "explicitExclusions": "时间见证(attest-dir)明确不在五件套内——立场原文称其为「工作区外 sidecar 随迁」;矩阵中它挂在 attestation 行的摘要互指格(pair-manifest 已有 attestationSetDigest 先例),不单列一行",
+   "engineAnchors": {
+    "append-only": "事件段只增:段序/序号连续性校验 packages/core/src/workspace.ts:566-590(段缺口 fail WORKSPACE_EVENT_CORRUPT);recover 只删 .tmp- 残留、绝不动事件 workspace.ts:2827-2839;事件只增不改是链公理",
+    "规范字节": "canonicalJson/assertCanonicalJson packages/protocol/src/index.ts:274-289(排序键+单终 LF+安全整数+1MiB 上限)",
+    "哈希链": "createEvent 重算 payloadHash/eventHash packages/protocol/src/index.ts:782-793;validateEventChain 全链重算+priorHash 链接校验 index.ts:796-844",
+    "可回放": "materialize 归约器 packages/core/src/workspace.ts:1013;materializeWorkspace workspace.ts:2198-2201(readSegmentEvents→validateEventChain→materialize)",
+    "attestation": "assertActorId packages/core/src/actor-attestation.ts:39;回放侧强制:payloadRecord 自 attestation.actor.enabled 事件起要求 actor 字段并校验 workspace.ts:611-629(WORKSPACE_ACTOR_REQUIRED / WORKSPACE_ACTOR_INVALID)"
+   },
+   "min003Correction": "MIN-003(minutes:4fdc3f1caf4adfb2374090f7)裁定:五件套中 append-only 记录流与哈希链在 AOS 侧并未建成(现有为单表触发器,非同一件事);矩阵第 1、3 行的 AOS 侧格当前无受测对象——矩阵即这两件的建成验收标准"
+  },
+  "instruments": [
+   {
+    "name": "snapshot-manifest",
+    "wiring": "CLI verb packages/cli/src/index.ts:653(handler 1396-1404)→ createSnapshotManifest packages/core/src/workspace-snapshot.ts:243-265",
+    "provesTo": "字节层清单+链有效前置:须持锁(assertHeldLease workspace-snapshot.ts:222-237),先跑 validateWorkspace(:249)与知识库校验(:252-254),再对控制树确定性走查(walkControlTree :166-204,排除 lease 子树与 .tmp- 前缀,拒符号链接/多链接文件),产出按 canonical 序排序的逐文件 {path,sha256,bytes} 清单;无 Date.now 无随机,确定性",
+    "blindSpot": "清单只覆盖它走查到的字节;lease 子树与 .tmp- 被排除(SDC-9),这是刻意的"
+   },
+   {
+    "name": "snapshot-verify(SNAPSHOT_VERIFIED 语义)",
+    "wiring": "CLI verb packages/cli/src/index.ts:654(handler 1408-1414)→ verifySnapshotManifest packages/core/src/workspace-snapshot.ts:311-359",
+    "provesTo": "仅字节等:对副本重新走查并逐条比 path+sha256+bytes(:341-353),全等返回 reasonCode SNAPSHOT_VERIFIED(:356);首个不等路径 fail SNAPSHOT_MISMATCH(:350-352)",
+    "blindSpot": "源码注释自陈「Read-only: no lease, no validate — the target is a copy」(:308-310)——SNAPSHOT_VERIFIED 不含对副本的链语义/回放校验,矩阵不得把它当回放级证据用"
+   },
+   {
+    "name": "validate",
+    "wiring": "CLI verb packages/cli/src/index.ts:656(handler 1339-1342)→ validateWorkspace packages/core/src/workspace.ts:2203-2220",
+    "provesTo": "规范形+哈希链+回放+视图一致:materializeWorkspace 全量回放(readSegmentEvents workspace.ts:566-605 → assertCanonicalJson :573 → validateEventChain :598,后者对每事件重算 payloadHash/eventHash 并校验 priorHash 链接 protocol/src/index.ts:819-841);随后 views 与回放态逐字节比对(workspace.ts:2205-2218,失配 fail WORKSPACE_VIEW_STALE)",
+    "blindSpot": "无密钥哈希:尾部追加、哈希自洽的伪造事件可通过(平台既有裁定「事件哈希无密钥故回放挡不住尾部追加伪造」)——须由摘要互指列补"
+   },
+   {
+    "name": "recover",
+    "wiring": "CLI verb packages/cli/src/index.ts:652(handler 1387-1392)→ recoverWorkspace packages/core/src/workspace.ts:2824-2841",
+    "provesTo": "崩溃后可归约:仅删 events/ 与 views/ 下 nlink==1 的 .tmp- 残留(:2827-2839),然后 rebuildWorkspaceViews(:2816-2822)= 全量回放+重写视图;其成功隐含视图的回放等价",
+    "blindSpot": "修复动词而非比较动词;不产出可比对证物"
+   },
+   {
+    "name": "export(1MiB 拒绝)",
+    "wiring": "CLI verb packages/cli/src/index.ts:618(handler 1372-1375)→ exportWorkspace packages/core/src/workspace.ts:2843-2867;归档封装 createWorkspaceArchive :2869-2877(带 contentSha256)",
+    "provesTo": "规范形单文档投影:回放后把 {schemaVersion:tcrn.workspace-export.v1, workspaceId, version, headEventHash, projects, work, [conference/gate 集合按需], events} 经 canonicalJson 序列化,字节稳定(WSD-1 注释 :2845-2848)——天然的跨容器中立比较格式",
+    "blindSpot": "1MiB 拒绝:canonicalJson 超 PROTOCOL_LIMITS.maxCanonicalBytes=1_048_576 即 fail INPUT_OVERSIZED「Canonical input exceeds one MiB」(packages/protocol/src/index.ts:17-18 与 :276-278);另 MCP stdio 门面对输入行同样 1MiB 拒绝(packages/cli/src/mcp.ts:405-407,MCP_INPUT_OVERSIZED)。实测 AOS 分区 events/ 已达 972,593 字节,整文档 export 已贴/越线——见 gaps"
+   },
+   {
+    "name": "replay(回放,非独立动词)",
+    "wiring": "materialize 归约器 packages/core/src/workspace.ts:1013;经 materializeWorkspace :2198-2201 内嵌于 validate/export/status;回放中逐事件重跑记录校验器(payloadRecord :607-629 含 attestation 起点后 actor 强制;validateWorkspace 级 validateWorkClosure :716-737)",
+    "provesTo": "语义可归约:事件流确定性地归约为唯一状态(projects/work/conferences/gates/views),回放路径与活写路径共用同一批校验器(WSE-2 注释 :611-614)",
+    "blindSpot": "无 replay 独立 CLI 动词——矩阵以 validate+export 为回放判据的取证口"
+   },
+   {
+    "name": "paired-backup 的 pair-manifest 摘要互指",
+    "wiring": "/Users/ryanlan/Code/TCRN Platform/TCRN-AOS/scripts/paired-backup.mjs:snapshotDomain :97-133(物理快照 snapshotDigest+逻辑 exportDigest)、snapshotChain :149-227(snapshot-manifest→拷贝→snapshot-verify 须 SNAPSHOT_VERIFIED :162,attestation sidecar setDigest :200,:227)、单一 instant 纪律 :316-319、pairing 互指块 :328-344(domainSnapshotDigest/domainExportDigest/chainManifestDigest/chainHeadEventHash/attestationSetDigest)、drillDomainRestore :233-260(把 domain export 回灌新库再比)、verifyPair :363-392(digestsMatch :377-379 + SNAPSHOT_VERIFIED :380 + drill 复跑)",
+    "provesTo": "跨库同刻配对:两半各以摘要指名对方并绑同一 instant;域半可恢复性经演练证明(「A backup nobody restored is a hypothesis」:232)——矩阵摘要互指列的现成模板",
+    "blindSpot": "配对证明「同刻取自同两库」,不证明两库语义等价——那是矩阵其余三列的事"
+   }
+  ],
+  "matrixDesign": {
+   "axes": {
+    "rows": [
+     "R1 append-only 记录流",
+     "R2 规范字节",
+     "R3 哈希链",
+     "R4 可回放",
+     "R5 attestation"
+    ],
+    "columns": [
+     "C1 字节等",
+     "C2 规范形等",
+     "C3 回放等价",
+     "C4 摘要互指"
+    ]
+   },
+   "doubleRunProcedure": [
+    "锚定:取单一 instant(paired-backup 的 one-instant 纪律,paired-backup.mjs:316-319)并冻结写面;文件侧持锁 snapshot-manifest 记 headEventHash/version 为配对锚",
+    "跑 F(文件容器):在快照副本上跑 validate(全回放)→ 逐事件取 canonicalJson(record) 的 sha256 序列 → 取状态投影的规范形摘要(export 或分段等价物,见 gaps)→ 走查 attestation sidecar 取 setDigest",
+    "跑 A(AOS 容器):对同一 headEventHash 锚,AOS 存储导出同 schema(tcrn.event.v1 记录/tcrn.workspace-export.v1 状态)文档,喂入受治引擎同一 canonicalJson/validateEventChain/materialize 作唯一裁判——判据函数不得两套实现,否则比较的是两个实现而非两份数据",
+    "逐格比对:每格产出 {row, col, verdict: equal|mismatch|not-applicable-declared, evidence(全 64 位摘要,平台教训:比全值), reasonCodeOnRed}",
+    "写入 pair-manifest 式互指记录(沿 aos.paired-backup.v1 的 pairing 块形制)并归档矩阵运行证物"
+   ],
+   "cells": {
+    "R1 append-only": {
+     "C1": "逐事件规范字节 sha256 序列(F 侧自 events/*.json 段;A 侧自其存储导出)逐位相等,长度相等",
+     "C2": "双侧每记录过 assertCanonicalJson 且 canonicalJson 重序列化字节不变",
+     "C3": "双侧各自回放后 state.version 与事件计数相等;A 侧另须红证「对已有事件行 UPDATE/DELETE 被拒」——MIN-003 指明此件 AOS 侧未建成,本格即其验收门",
+     "C4": "events 集合摘要写入互指记录"
+    },
+    "R2 规范字节": {
+     "C1": "状态投影文档(export 或分段)双侧 sha256 相等",
+     "C2": "canonicalJson∘assertCanonicalJson 幂等且双侧一致(protocol/src/index.ts:274-289 为唯一裁判)",
+     "C3": "回放输出再规范化后与回放前规范形一致(无非规范字节渗入)",
+     "C4": "contentSha256(createWorkspaceArchive 语义,workspace.ts:2869-2877)互指"
+    },
+    "R3 哈希链": {
+     "C1": "每事件 payloadHash/eventHash/priorHash 三字段逐值相等",
+     "C2": "双侧用 createEvent(protocol/src/index.ts:782-793)重算,重算值等于存储值",
+     "C3": "validateEventChain(index.ts:796-844)双侧均通过且 headEventHash 相等;A 侧此件未建成(MIN-003),本格即验收门",
+     "C4": "chainHeadEventHash 互指(pair-manifest 先例 paired-backup.mjs:340)"
+    },
+    "R4 可回放": {
+     "C1": "回放产物 views 文档字节等(弱格,可声明由 C2 覆盖)",
+     "C2": "canonicalJson(viewDocuments(state)) 双侧相等",
+     "C3": "核心格:F 侧 materializeWorkspace 状态 vs A 侧回放器状态,以规范形 export 全集(projects/work/conferences/gates/events 头)逐字节比",
+     "C4": "回放结果摘要(状态投影 sha256)互指"
+    },
+    "R5 attestation": {
+     "C1": "attestation sidecar 文件集逐文件 sha256 相等(setDigest 相等,paired-backup.mjs:200,:227)",
+     "C2": "每事件 payload.actor 过 assertActorId(actor-attestation.ts:39)双侧一致",
+     "C3": "attestation.actor.enabled 起点后所有事件带合法 actor 的谓词双侧同判(workspace.ts:611-629);A 侧须证同起点后拒无 actor 写入",
+     "C4": "attestationSetDigest 互指(pair-manifest 先例 :342)"
+    }
+   },
+   "passStandard": [
+    "每格三态:equal / not-applicable-declared / mismatch;not-applicable 须在拆单时预声明并记理由,执行期临时改判即视为 mismatch",
+    "矩阵通过 = 全部适用格 equal,且每列的红证(见 redProof)在本轮 scratch 上实跑过一次变红——未跑红证的列不计为通过(平台教训:不在 verify 里的门寿命=写它那天)",
+    "任何 mismatch → 矩阵不通过,走 fallback 对账(ledger fallback-epoch-reconciliation),不得局部放行",
+    "比较一律全值(64 位完整 sha256);双侧受测根须先证非同 inode(pnpm 硬链接恒绿教训)",
+    "矩阵通过后仍只是 conformance-mutual-release 所指证据之一环:后接 owner 门(MIN-002 切换仪式),矩阵自身不含切换授权"
+   ]
+  },
+  "redProof": {
+   "principle": "遵「判据两侧必须能够不同」:每类判据在一次性 scratch 副本上故意扰动一侧,预言并实收特定红码;造不出红证的格是恒绿门,须重设计。全程不触真链——扰动对象只能是 cp 出的副本,且开跑前 stat 断言副本与真链非同 inode、非同 dev:ino",
+   "perColumn": {
+    "C1 字节等": "对 scratch 副本控制树内任一文件尾部加一空格(manifest 取样之后),跑 snapshot-verify → 必得 SNAPSHOT_MISMATCH 且点名该路径(workspace-snapshot.ts:350-352);若仍 SNAPSHOT_VERIFIED,判据恒绿,查两侧是否同 inode",
+    "C2 规范形等": "把 scratch 中一个事件段的 JSON 重排键序/加缩进(语义不变、字节变)→ assertCanonicalJson 必拒 CANONICALIZATION_MISMATCH,validate 必得 WORKSPACE_EVENT_CORRUPT(workspace.ts:573-576)——证明该列能区分「语义等但非规范形」,这正是 C2 相对 C1 的存在理由",
+    "C3 回放等价": "两式:(a) 篡改 scratch 中某事件 payload 一个字符、不改哈希 → validateEventChain 必得 EVENT_CHAIN_CORRUPT(protocol/src/index.ts:838-840,payloadHash 重算不合);(b) 尾部追加一条哈希自洽的伪造事件(用 createEvent 正规重算)→ C3 预期仍绿(无密钥哈希的已知盲区,平台既有裁定),但同一扰动下 C4 必红——此双式红证同时证明 C3 的盲区真实存在、且 C4 不是冗余列",
+    "C4 摘要互指": "两式:(a) 改 scratch 的 pair-manifest 中 chainHeadEventHash 为另一形似合法的 64 位十六进制 → verifyPair 必得 digestsMatch=false(paired-backup.mjs:377-380);(b) 从 scratch 的 attestation sidecar 删去一个文件 → attestationSetDigest 必不等(setDigest 构造 :200,:227)",
+    "R5 attestation 专项": "在 scratch 上剥掉一条 enable 起点后事件的 actor 字段并用 createEvent 向后重算全部哈希使链自洽 → 回放必得 WORKSPACE_ACTOR_REQUIRED(workspace.ts:616-620)——证明 attestation 判据独立于哈希判据成立,而非搭其便车;此红证同时是 A 侧「同起点后拒无 actor 写入」格的对照样板",
+    "R1 append-only 专项(A 侧)": "对 A 容器的 scratch 库直接 UPDATE 一行已有事件 → 必被拒;若能改成功且矩阵仍绿,即 MIN-003 所指「单表触发器非同一件事」的复现,本格红证就是切换段该件建成与否的试金石"
+   },
+   "hygiene": [
+    "每格红证跑完记 {扰动描述, 预期红码, 实收红码, scratch 路径},随矩阵证物归档;预期≠实收即为发现",
+    "scratch 用后即弃,置于会话 scratchpad,不入任何仓;扰动脚本与比对脚本分离,防止扰动器顺手「修复」被测物",
+    "红证与绿跑同一份判据代码、同一引擎二进制(受治副本 /Users/ryanlan/.tcrn-workflow/tcrn-workflow),防「测试专用判据」分叉"
+   ]
+  },
+  "gaps": [
+   "export 1MiB 上限已被现链贴线:AOS 分区 events/ 实测 972,593 字节,整文档 export(还要再包 projects/work/conferences/gates)几乎必超 maxCanonicalBytes=1_048_576(protocol/src/index.ts:17-18,:276-278 INPUT_OVERSIZED)——矩阵 C3 的「整文档比对」须改为逐事件规范摘要序列+状态投影分段比对,或走 canonical-exchange 分块通道(core/src/canonical-exchange.ts:34 maximumChunkBytes 同为 1MiB/块);此为矩阵设计里已内建的替代路径,但拆单时应显式立项",
+   "SNAPSHOT_VERIFIED 只证字节不证语义:verifySnapshotManifest 自陈对副本 no validate(workspace-snapshot.ts:308-310)——任何把 SNAPSHOT_VERIFIED 当回放级证据的表述都是过度声明",
+   "无密钥哈希挡不住尾部追加伪造(平台既有裁定)——C3 单列不闭合,C4 摘要互指是刻意的补位列,红证 C3(b)/C4(a) 成对存在即为此",
+   "MIN-003:append-only 与哈希链在 AOS 侧未建成,矩阵 R1/R3 的 A 侧格当前无受测对象——矩阵在此处的身份是验收标准而非现状比对;排期属切换段,MIN-002 已裁只裁方向不排期",
+   "replay 无独立 CLI 动词,矩阵以 validate+export 为回放取证口;若未来需要对 A 侧单独跑回放判据,须经受治引擎同一 materialize,不得另写归约器",
+   "MCP 门面输入行 1MiB 拒绝(cli/src/mcp.ts:405-407)——矩阵双跑取证走 CLI 而非 MCP,防大证物被门面截断",
+   "知识库 lockstep 前置:snapshot-manifest 在知识高水位落后链头时拒绝 KNOWLEDGE_HIGH_WATER_MISMATCH(knowledge-core.ts:820;paired-backup.mjs:287 checkLockstep 先查)——矩阵锚定步骤须把 lockstep 检查排在取 instant 之前,否则双跑会在中途死于此码"
+  ]
+ },
+ "storage-form": {
+  "engineCoupling": {
+   "hasStorageAbstraction": false,
+   "verdict": "引擎没有可换后端的存储抽象——如实回答:没有。事件容器语义(哈希链)与事件容器载体(文件)在代码里是分层的,但载体侧没有任何接缝:packages/core/src/workspace.ts 直接 import node:fs/promises(受治副本 workspace.ts:5-15),核心 14 个源文件直接依赖 node:fs;全库唯一叫 Store 的接口是知识/工件扫描标记(knowledge-core.ts:219、artifact-lifecycle.ts:196),与事件存储无关。",
+   "canonicalBytes": "段文件即 canonicalJson([...events]) 的逐字字节(workspace.ts:2297),读侧要求 assertCanonicalJson 字节精确(workspace.ts:571-576),任何再序列化(编辑器/格式化器)都令链 fail-closed。commit 后还有 durability readback 逐字节比对(workspace.ts:2305-2308)。",
+   "eventSegments": "events/NNNNNN.json,段号由 sequence 与 segmentEventLimit 推得(workspace.ts:2292-2293);读侧强制 ^\\d{6}\\.json$ 命名无缝隙(readSegmentEvents,workspace.ts:554-568)、非末段必须satisfy段长(577-579)、sequence 连续且绑定 workspaceStreamId(586-596),最后走 protocol validateEventChain 全量重建每条事件哈希(protocol/src/index.ts:796-830)。",
+   "atomicWrite": "私有函数 atomicWrite(workspace.ts:396-444):O_EXCL|O_NOFOLLOW 建临时文件→writeFile→fsync→stat 验 nlink==1→rename→再 lstat 验 dev/ino/nlink 与写入描述符一致→父目录 fsync。boundFile(345-377)/boundDirectory(324-343)全程做 inode 恒等与反符号链接检查。整个 TOCTOU 防御模型是 POSIX inode 原生的,在数据库后端里无对应物,须另行发明等价机制。",
+   "lockLease": "全部基于文件系统原子性:lease/owner.json 校验(assertLease,workspace.ts:1360-1375)、lease/mutation.claim 经 O_EXCL 独占创建实现单写者提交边界(createMutationClaim,1595-1641,EEXIST→WORKSPACE_CAS_MISMATCH)、恢复走 rename-verify-remove(1454-1556)。是单机文件锁,不是分布式锁。",
+   "filesystemPinning": "assertSupportedWorkspaceFilesystem(workspace.ts:310-316)以 statfs().type 对照 8 个钉死的本地文件系统魔数(198-207:APFS/HFS+/ext4/XFS/tmpfs/overlayfs/btrfs/F2FS),网络文件系统直接 WORKSPACE_FILESYSTEM_UNSUPPORTED——这对 O1 是硬约束:VM 上链目录必须落本地盘(ext4/xfs 可,NFS/virtiofs 不在集合内会被拒)。",
+   "portableParts": "可移植的部分:哈希链语义是 protocol 包的纯函数——createEvent 以 canonicalSha256 计算含 priorHash 的 eventHash(protocol/src/index.ts:768-794),validateEventChain 逐条重建校验(796+)。写路径 appendEvent(workspace.ts:2239-2327)把 CAS 校验、actor 注入、段路径推导、atomicWrite、readback、视图写全部内联在一个函数里——若未来要做 O2,引擎侧须先开出存储端口,这是 tcrn-workflow 的方向级改动,不是 AOS 能单方面做的。"
+  },
+  "transitionImpl": "不是 shell 到 CLI。今天的写链路是:浏览器 → POST /api/chain/transition → cockpit-service(apps/cockpit-service/src/service.ts:155-164),该服务只绑 127.0.0.1 回环(service.ts:109),文首注释明言这是裁定形态而非加固默认——operator authority pins 只住本机、绝不上网(service.ts:24-30)。写入时 surfaceFor 惰性创建 ChainClient(service.ts:74-91),spawn 受治副本的 MCP 门面 `~/.tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs`(service.ts:79),经 stdio JSON-RPC 传 --authority-pins/--authority-pins-digest(packages/projection/src/chain-client.ts:69-75,detached spawn 供进程组回收,100-106)。SafeWriteSurface.transition 调 MCP 工具 tcrn_workflow_work_transition,自动供给 expected-version:\"head\"、严格秒级 instant、actor(packages/projection/src/write-surface.ts:52-64、99-105);引擎状态机独裁移动合法性,拒绝码(如 INVALID_TRANSITION)原样透传(service.ts:95-103)。治理性 verb(conference/gate/attestation/delete)刻意不在写面上,保留显式仪式(write-surface.ts:151-158)。因此「换容器」的现实含义:AOS 已经把引擎当唯一写者、经进程边界(MCP stdio)调用——容器就是引擎进程拿到的 workspace 路径所在的文件系统;换容器=换引擎进程运行在谁的管辖宿主上、workspace 路径指向哪块盘,AOS 的 API 形状与调用协议不需要变。",
+  "options": [
+   {
+    "id": "O1",
+    "name": "部署位面切换:链文件原样迁至 AOS 管辖宿主,引擎随迁,AOS 服务端调引擎",
+    "description": "五件套目录逐字节迁至 VM 本地盘(如 /srv,须 ext4/xfs——引擎钉死本地文件系统魔数集,workspace.ts:198-207、310-316,NFS/virtiofs 会被拒);受治引擎副本部署到该宿主,cockpit-service(或其无头变体)在宿主上以既有 ChainClient→MCP 门面模式调引擎;AOS 承接存储(盘、备份节律、S020 配对快照)与运营(supervision、声明式清单,deploy/aos-mirror.yaml 的 hostPath 模式已有先例)。",
+    "min002Fit": "最高。「换容器不换语义(五件套原样)」被字面满足——同字节、同引擎、同格式;「W 退为框架」=W 仍是唯一写者与回放者,但运行与存储进入 AOS 管辖;「权威不动」在切换仪式内一次性移交,符合 MIN-002 的切换段定义。MIN-003 不放松:不需在 AOS 重建任何链机制,既有实现原样即权威。",
+    "effort": "小(1-2 周量级):声明式部署清单 + 目录迁移 + workspaces 路径改指 + 引擎副本落宿主验证(verify-installed-copy)。但有一个裁定级前置:现行裁定是 pins 只住操作者本机、写面回环(service.ts:24-30、107-109),而切换段必然在 AOS 宿主上出现写面与 pins 驻留——这触碰 MIN-002「VM 实例首期零写面」的镜像段边界,属 owner_intent_required,须在切换仪式里由 Owner 裁定 pins 落点与访问边界,不是工程问题。",
+    "matrixProvability": "最高。一致性矩阵=迁移前后 snapshot manifest 数字逐字节对账(工具已建成:workspace-snapshot.ts、tcrn_workflow_snapshot_verify、S020 scripts/paired-backup.mjs 配对快照已实证)+ 双侧引擎各自 materialize 后 view 摘要比对。同一实现读同一批字节,矩阵不需要证语义等价,只需要证字节到达。",
+    "fallback": "最易。目录拷回原宿主即回滚——文件在切换前后都是真值形态,fallback 对账=两侧 snapshot digest 比对;不存在格式转换损耗。"
+   },
+   {
+    "id": "O2",
+    "name": "AOS SQLite 承载规范字节(event-per-row append-only+哈希链),W 引擎经适配层读写",
+    "description": "在 AOS SQLite 建事件表:(stream_id, sequence) 唯一、prior_hash/payload 规范字节/payload_hash/event_hash 列、no_update/no_delete 触发器,引擎经新开的存储端口读写行而非段文件。",
+    "min002Fit": "紧张。「换容器不换语义」只有在每条事件的规范字节逐字保存且引擎仍为唯一裁判时才勉强成立——但侦察结论(第 1 项)是引擎没有存储端口:appendEvent 把路径推导、atomicWrite、inode 校验、mutation claim 全部内联(workspace.ts:2239-2327),开端口是 tcrn-workflow 的方向级手术,须按 direction-and-tracks 公约在 W 侧立项裁定,AOS 无法单方面做。inode/O_EXCL/statfs 那套信任原语在 SQLite 里没有对应物,须以 WAL+BEGIN IMMEDIATE+唯一约束+触发器重新论证等价性。MIN-003 恰好警告了这一点:append-only 记录流与哈希链在 AOS 并未建成——O2 等于在权威边界上现建它。",
+    "effort": "大(数月量级,且大头在 W 侧):机械部分小——AOS db 已有全部构件:node:sqlite+WAL+BEGIN IMMEDIATE 嵌套事务(sqlite-repository.ts:335-353、786-791)、摘要校验迁移器+迁移前快照钩子(245-295)、append-only 触发器模式已实证(migrations/sqlite/0001_phase1_core.sql:126-138 的 aos_audit_events no_update/no_delete + 篡改拒绝探针 sqlite-repository.ts:760-775)、BK01/BK02 备份清单(backup.ts:8-9),event 表本身 1-2 周可成。难的 80% 是语义对等:规范 JSON 准入、回放 reducer 全对等(work graph/conference/gate/attestation 边界/tombstone/advisory 合并)、拒绝码对等——这正是 projection 层拒绝成为的「会漂移的第二实现」(chain-client.ts:11-16 注释原文)。",
+    "matrixProvability": "中。因规范字节定义良好,可做文件容器↔行容器的双向导出+逐字节比对;但矩阵规模翻倍:除字节对账外须逐 verb 证行为等价,且每次引擎升版都要重跑。",
+    "fallback": "中。行导出回段文件在字节保真前提下可行,但必须演练实证;若准入语义在两容器间有任何分歧,回退产物可能被引擎拒读(fail-closed 是双刃)。"
+   },
+   {
+    "id": "O3",
+    "name": "过渡形态:文件仍为权威,AOS SQLite 做经哈希验证的事件行镜像(非真双写)",
+    "description": "诚实定名:不做双权威双写(违背 MIN-002「权威不动」的单一真值精神),而是 O1 之上加一条已验证的行级投影——ingest 尾随链事件入 SQLite 行(含全部哈希列),入库时用 protocol 的 validateEventChain 纯函数复验(只读 import,不碰引擎写面);这正是 CONF-001 分解裁定的「链版本键控投影库」的加厚版,packages/projection 的 ingest.ts/read-layers.ts 底座已在。",
+    "min002Fit": "高。权威始终是文件+引擎;行镜像明确「不备」级的衍生物(MIN-002:投影与镜像明确不备),命名诚实;同时为将来若真要走 O2 攒下行容器的实测证据,而不预先封死任何方向。",
+    "effort": "小-中(2-4 周):扩展 ingest 存全事件行+哈希复验+链版本键控;复用 aos_audit_events 的 append-only 触发器模式。",
+    "matrixProvability": "高,且它本身就是矩阵仪器:每个对账周期跑「行镜像回放摘要 vs 引擎 view 摘要」,给切换仪式提供持续绿的证据流。",
+    "fallback": "最易。删行镜像即退出,权威侧零影响。"
+   }
+  ],
+  "recommendation": "推荐 O1 为切换段的容器形态,O3 作为随行的一致性矩阵仪器,O2 明确延后、且只有在 W 引擎经自己的 Initiative 开出存储端口之后才重新上桌。理由:(a) MIN-002 说「换容器不换语义(五件套原样)」与「W 退为框架」而非退场——O1 是唯一让「换容器」严格等于裁定字面的选项:换管辖与写入位面,不换一个字节的格式,引擎继续做唯一写者;(b) MIN-003 说 append-only 记录流与哈希链在 AOS 并未建成、既有实现是起点非地基——O2 等于在权威边界上、在切换压力下现建最难的那一层,还因引擎无存储端口(workspace.ts:2239-2327 全内联,零接缝)而必然演化为「会漂移的第二实现」,这是 AOS 自己的 projection 层注释里点名拒绝过的架构(chain-client.ts:11-16);(c) 一致性矩阵与 fallback 在 O1 下工具已基本建成(snapshot-verify、S020 配对备份),矩阵双跑→owner 门→切换→文件降为导出归档的仪式可以按 MIN-002 原文直接排演。两条必须向 Owner 呈报的前置:其一,pins 落点——现行裁定 pins 只住操作者本机、写面仅回环(service.ts:24-30),切换段在 AOS 宿主上开写面必然触碰它,属 owner_intent_required 停点;其二,VM 链目录必须落引擎钉死集合内的本地文件系统(workspace.ts:198-207,ext4/xfs 可,NFS/virtiofs 会被 WORKSPACE_FILESYSTEM_UNSUPPORTED 拒绝),迁移仪式里须实测 statfs 而非假设。"
+ },
+ "ops-fallback-vm": {
+  "mirrorState": "镜像段现状(S018,已实证但刷新无自动路径):\n【已实证】1) 部署清单 /Users/ryanlan/Code/TCRN Platform/TCRN-AOS/deploy/aos-mirror.yaml——ns tcrn-aos(第 20-25 行),nginx-unprivileged:1.27.3-alpine 单副本(第 91 行),内容经 hostPath /srv/tcrn/aos-mirror 只读挂载(第 99-105、120-123 行,容器级 readOnly 双保险),traefik ingress aos.tcrn.lan(第 147-149 行),LAN-only 边界+外泄 tripwire 写在注释里(第 15-19 行),资源 25m/32Mi 请求、250m/128Mi 上限(第 112-118 行),healthz 探针(第 65-68 行),absolute_redirect off + 逐路由 SSR try_files 顺序刻意(第 43-56 行)。2) 验收证据 /Users/ryanlan/Code/TCRN Platform/TCRN-AOS/evidence/aos-mirror-acceptance.json——ok:true,依据 TCRN-CROSS-MIN-052 D9:URL 可达 SSR 200/369KB(第 6-11 行),11 个模块全部渲染链数据(第 12-94 行,chainKeys 13~765),镜像自陈新鲜度且不提供写控件(第 118-124 行);注意链写+拒绝证据(INC-034,409 INVALID_TRANSITION,第 104-117 行)是在**本机服务**上取的,不是镜像——镜像零写面正是设计(notClaimed 第 126-129 行)。3) 构建器 scripts/build-mirror.mjs:逐路由服务端渲染+样本按性质选(第 35-52 行),构建后断言产物不声称写面(第 69-73、91 行),新鲜度是投影的、自陈非活链(第 83-89 行)。\n【只做了面、未开路径】a) 刷新是手动 rsync 一条命令(aos-mirror.yaml 第 10-13 行),仓内与本机均无调度接线(crontab 空、LaunchAgents 无匹配);b) mirror-freshness-proof.mjs 只把「已提交 bundle 是否等于源码重建」设门(INC-030 背景,该文件头注释第 3-28 行),**刻意不查** VM 上部署的副本是否等于已提交副本——那个问题归 mirror-acceptance-proof.mjs,须对真 VM 跑;c) cockpit-data.generated 是刻意手动刷新的检入快照(pnpm cockpit:data),镜像新鲜度上限就是它。",
+  "backupState": "备份现状(S020,配对快照已实证、异地拉取只证到契约):\n【已实证,2026-07-27 真跑回执 /Users/ryanlan/Code/TCRN Platform/TCRN-AOS/evidence/aos-paired-backup.json】1) 配对本体:域库快照与链快照同瞬刻取、互带对方摘要(pairing.domainSnapshotDigest/chainManifestDigest/chainHeadEventHash,回执第 17-25 行;原理见 docs/paired-backup-runbook.md 第 15-24 行「单独一半不是可恢复的备份」)。链头 8ee5ad82…@v312,域库经 VACUUM INTO+integrity_check(回执第 26-49 行,明确不是 copyFile,runbook 第 74 行防撕裂页),链半边 SNAPSHOT_VERIFIED(第 51-59 行)。2) lockstep 前置自查:知识库高水位==链头才动手(回执第 10-16 行;runbook 第 46-67 行记了这正是 2026-07-27 之前从未成功快照的原因,失败画面像「备份工具坏了」)。3) 恢复演练:域导出重放进全新库、计数逐项相等(回执第 70-87 行)——**是演练不是恢复**,恢复同路径唯一、运维驱动(runbook 第 97-104 行;引擎手册 /Users/ryanlan/.tcrn-workflow/tcrn-workflow/docs/architecture/backup-restore-runbook.md 第 74-102 行同路径铁律+第 129-137 行失败码表)。4) 见证目录:149 收据全部对上链内 312 事件,孤立 0,强度如实标注 advisory 未认证(回执第 60-68 行;runbook 第 81-95 行「只报不拦」)。5) 轮换先旧后新且只在新对自证后(回执第 100-105 行;runbook 第 123-125 行)。6) 落盘 ~/OneDrive/Github/tcrn-aos-paired-backups,每对 166 文件/656KB(回执第 3、96-99 行)。\n【只做了面、未开路径】a) 异地(VM)拉取:export-manifest.json 逐文件摘要+fileSetDigest+pullContract 已对真 VM tcrn-platform-dev 实测(150 文件全过,runbook 第 118 行),但**无任何传输接线,且刻意不接**(paired-backup.mjs 第 394-409 行:「stops at making a pull possible and does not open a path」;notClaimed 第 457-461 行);b) farSideVerification 天花板已写死进每份 manifest(paired-backup.mjs 第 445-456 行):VM 有 node v24 无引擎无仓库检出→只能证字节到达,不能重跑 snapshot-verify 或域库演练;c) 调度:paired:backup-if-due 存在(package.json 第 51 行,不到期退出 0 是给调度器设计的)但本机 crontab 为空、LaunchAgents 无条目——24h 间隔目前靠人跑;d) manifest 不认证来源:检得出损坏截断,检不出替换(paired-backup.mjs 第 443 行)。",
+  "pushVsPull": {
+   "question": "异地备份落到 VM,由本机推(push)还是 VM 拉(pull)?本质是一个关于凭据放置的 Owner 决定,不是技术优劣题(paired-backup.mjs 第 397-404 行原文:哪一种可接受是 Owner call about credential placement)。",
+   "asymmetryToday": {
+    "facts": [
+     "本机持签名密钥与全部凭据;VM 只有 authorized_keys,别无其他(paired-backup.mjs 第 397-398 行)",
+     "VM 今天无法主动连回本机——这个不对称是安全属性,不是待绕开的障碍(第 399-400 行)",
+     "VM 有 node v24 但无引擎、无仓库检出:能证字节完整,不能证可恢复性(第 445-456 行 farSideVerification)",
+     "拉取契约已对真 VM 实测通过(150 文件按摘要全校验,runbook 第 118 行),即两个选项的验证面是现成的,差的只是传输与凭据"
+    ]
+   },
+   "optionA_push_本机推": {
+    "mechanism": "本机在每次配对备份自证通过后,经既有 SSH(本机→VM 方向已存在,镜像 rsync 就是这条路)把配对目录推到 VM,再在 VM 上用 export-manifest.json 做无引擎 sha256 校验。",
+    "securityCost": [
+     "VM 上不增加任何新凭据——现有不对称完整保留(本机可进 VM,VM 不能进本机)",
+     "新增的暴露面:本机按计划定时伸手进 VM(paired-backup.mjs 第 400-401 行如实记了这一点);若本机被攻破,攻击者本就拥有一切,推送通道不新增质变风险",
+     "VM 被攻破时:攻击者可篡改/删除 VM 上的备份副本,但摘要在本机与 OneDrive 各有一份,替换可被事后检出(manifest 检不出替换是指仅凭 VM 本地那份)"
+    ],
+    "opsCost": [
+     "调度落在本机(launchd/cron)——本机休眠/关机则该次异地不发生,与 OneDrive 同步同属「本机在线才有异地」",
+     "失败可观测性好:推送失败在本机日志里,与备份回执同处一地",
+     "实现量最小:rsync + 远端 sha256 脚本,零新凭据、零新服务"
+    ]
+   },
+   "optionB_pull_VM拉": {
+    "mechanism": "在 VM 上放一个能读本机备份目录的凭据(反向 SSH 授权、或本机开只读服务面),VM 定时拉取并按 export-manifest.json 校验。",
+    "securityCost": [
+     "必须打破现有不对称:VM 将持有能读本机的凭据(第 401-402 行)——这正是今天刻意不存在的东西",
+     "凭据可最小化(仅限备份目录的只读、forced-command SSH key),但『VM 被攻破→可读本机某目录』从零变为非零",
+     "备份目录内容本身是链+域库全量,含治理事件全文——该凭据的可读面不是低敏数据"
+    ],
+    "opsCost": [
+     "调度落在 VM(常开机器)——异地时点不再依赖本机在线,RPO 更稳",
+     "失败可观测性分裂:拉取失败在 VM 侧,须另建告警回传路径,否则重演『交付一次、再无人验证』的本仓已知模式(mirror-freshness-proof.mjs 头注释:同形状失败已四例)",
+     "实现量更大:VM 侧调度+凭据管理+forced-command 收窄+告警"
+    ]
+   },
+   "invariantEitherWay": [
+    "无论谁动手,VM 侧验证天花板不变:只有字节完整性,可恢复性只在有引擎的宿主上(farSideVerification,paired-backup.mjs 第 449-456 行)——除非把引擎+仓库检出也放上 VM,那是另一个更大的题(与切换段专机复审合并考虑)",
+    "export-manifest 不认证来源,两个方向都检不出替换,来源认证若要,须另加签名,两案同价",
+    "恢复永远同路径、运维驱动,异地副本只是字节仓库(引擎手册第 78-84 行)"
+   ],
+   "ownerDecisionChecklist": [
+    "□ 我是否接受 VM 持有任何形态的『能读本机』凭据?(否→只剩 push)",
+    "□ 我是否接受异地备份的发生时点依赖本机在线?(否→pull,或 push+告警)",
+    "□ 备份内容(治理链全文)在 VM 上落盘,我是否要求静态加密?(两案同题,今天镜像内容已在同一台 VM 的 hostPath 上)",
+    "□ 若选 push:调度用 launchd 还是手动节律(现状 24h --if-due 无调度器)?",
+    "□ 若选 pull:VM 侧失败如何回到我眼前?(无答案则该选项事实上不可运维)",
+    "□ 是否把『VM 装引擎+检出以获得远端可恢复性证明』并入本题,还是留给切换段复审?"
+   ],
+   "notDecidedHere": "本框架不代裁。现状(刻意)是两个方向都未接线;脚本只把『可拉』做出来(pullContract+export-manifest 已实证),等 Owner 勾选后接线量都在一天以内。"
+  },
+  "fallbackDesign": {
+   "scope": "MIN-002 切换仪式要求『备 fallback 对账』:切换段 AOS 承接存储与运营后,若须回退到文件容器,AOS 容器内自切换时刻起的增量如何对账回文件容器。",
+   "hardPrerequisite_必须先说的缺口": "MIN-003 已修正:五件套中 append-only 记录流与哈希链在 AOS 侧**并未建成**,既有实现是起点非地基。fallback 对账的前提是『增量可枚举、可按序重放』——没有 AOS 侧的有序写日志(至少:每笔写带单调序号+切换锚引用+规范化载荷),对账就无从谈起。因此本设计的第 0 步是把『AOS 写路径必须产出可重放日志』写进切换段验收,与 MIN-002 一致性矩阵同级,不放松。",
+   "switchAnchor_切换锚(既有仪器,零新造)": {
+    "what": "切换仪式的最后一笔文件侧动作 = 取一对配对快照作为锚:pair-manifest 里的 chainHeadEventHash(Hs)+ chainVersion(Vs)+ domainSnapshotDigest(Ds)三摘要互指(paired-backup.mjs 既有 pairing 结构,回执第 17-25 行),文件容器随即降为导出归档,并对锚回执跑 snapshot-verify 得 SNAPSHOT_VERIFIED。",
+    "why": "锚定义了『增量』的起点:AOS 容器内序号 > Vs / 事件在 Hs 之后的一切,就是回退时要对账的全部。锚本身两半互指,杜绝『拿一小时前的链配今天的域库』(runbook 第 16-19 行的病理)。"
+   },
+   "procedure_回退程序草案": [
+    "1. 冻结:AOS 容器停写(quiesce),等价于引擎恢复手册第 76-77 行『never restore over a live workspace』的对偶。取 AOS 侧终态快照(域库 VACUUM INTO + 写日志导出),记终态摘要。",
+    "2. 复原基座:把降级归档拷回**原路径**,对切换锚回执跑 snapshot-verify → SNAPSHot_VERIFIED,再 validate + knowledge-validate 双绿(引擎手册第 87-102 行)。此刻文件容器 == 切换瞬刻,一字节不多。",
+    "3. 枚举增量:从 AOS 写日志取出全部序号 > Vs 的记录。因『换容器不换语义』(MIN-002),每笔记录应能映射回一个引擎动词(work-create/transition/annotate/conference-*/gate-*)。映射不到的记录 = 切换段引入了语义漂移,单独列表呈 Owner,不静默丢弃。",
+    "4. 受治重放:逐笔经引擎 CLI/MCP 动词写回文件容器——**绝不**向 .tcrn-workflow/ 直写字节(只有引擎可以写控制树)。每笔带 provenance 注解:原始瞬刻、AOS 侧序号、AOS 终态摘要。事件只增不改,重放即追加,原理与『纠错=追加更正记录』同构。",
+    "5. 对账矩阵(MIN-002 一致性矩阵反向复用):逐笔比对 AOS 记录规范化载荷摘要 vs 重放后链上记录载荷摘要;域库半边用既有恢复演练仪器(domain-export 重放进新库+逐表计数,paired-backup.mjs restoreDrill 模式,回执第 70-87 行);终检 work-list/状态计数两侧相等。任何一行不等→停,呈 Owner,不强行收敛。",
+    "6. 收尾:对回退后的文件容器立即取新的一对配对快照(新锚),AOS 侧终态快照连同写日志整体归档(它现在是历史证物,不是真值),回退事实经 conference/gate 落链。"
+   ],
+   "nonReconcilable_预先命名的不可对账类(避免把预期差异误读成损坏)": [
+    "事件哈希:重放后的链字节必然不同于 AOS 容器内的流,对账层级是『记录内容摘要』不是『事件哈希』——这也是为什么 AOS 侧哈希链未建成(MIN-003)不阻塞内容级对账,但阻塞防篡改级对账",
+    "瞬刻:事件的 at 是重放时刻,原始时刻只活在 provenance 注解里——与见证目录同理,是旁证不是证明",
+    "切换段的时间见证收据:留在 AOS 归档里作旁证,不重放(未认证收据本就『只报不拦』,runbook 第 81-95 行)"
+   ],
+   "instrumentsReused": "pair-manifest 互指摘要(锚)/ snapshot-manifest+snapshot-verify(基座复原证明)/ validate+knowledge-validate(双店齐步)/ 域库导出-重放演练(域半边对账)/ 引擎动词(唯一合法写路径)/ 一致性矩阵(反向)。全部既有,新造的只有:AOS 侧写日志(前提缺口)+ 逐笔载荷摘要比对脚本。"
+  },
+  "vmReviewInputs": {
+   "caveat": "以下均自 deploy 清单与仓内文档读出(本会话未探活集群);清单是部署面,VM 上实际 apply 了哪些须以 kubectl 对活集群复核为准。",
+   "currentK3sLoads_清单可见": {
+    "TMS_ns_tcrn(基线=单节点 k3s,infra/k8s/README.md 第 45-56 行)": [
+     "api ×1:请求 200m/384Mi,上限 1cpu/1Gi(deployments/api.yaml 第 51-57 行),镜像 ghcr.io/tpmoonchefryan/tcrn-tms/api",
+     "worker ×1:请求 100m/256Mi,上限 750m/768Mi(deployments/worker.yaml 第 48-54 行)",
+     "redis ×1:PVC 5Gi,50m/128Mi–250m/256Mi(dependencies/redis.yaml 第 14-16、66-72 行)",
+     "minio ×1:PVC 20Gi,100m/256Mi–500m/512Mi(dependencies/minio.yaml 第 14-16、69-75 行)",
+     "nats ×1:PVC 5Gi,50m/96Mi–250m/256Mi(dependencies/nats.yaml 第 14-16、90-96 行)",
+     "PostgreSQL 在 k3s 外同宿主(README.md 第 50 行);公网 ingress 只暴露 /api(ingress/public.yaml 第 25 行;README 第 109-113 行),不路由任何浏览器界面"
+    ],
+    "AOS_ns_tcrn-aos": [
+     "aos-mirror nginx ×1:25m/32Mi–250m/128Mi,hostPath /srv/tcrn/aos-mirror 只读,traefik aos.tcrn.lan(deploy/aos-mirror.yaml 第 112-123、147-149 行)——整个命名空间零写面、零凭据、零状态,是当前 VM 上唯一的 AOS 负载"
+    ],
+    "合计清单请求量": "CPU 请求 ~525m、内存请求 ~1.15Gi、PVC 30Gi + hostPath 镜像 ~5MB——今天的 VM 角色是『无凭据的只读镜面 + TMS 开发基线』"
+   },
+   "switchSegmentAddsToVM_切换段将新增": [
+    "① 写路径:AOS 服务带真实写面上 VM——今天写面只在本机、operator authority pins 只在本机(aos-mirror.yaml 第 4-8 行明言这是集群改不了的事实)。切换即把某种形态的写授权/凭据放上 VM,这是从『零凭据』到『持权』的质变,不是量变",
+    "② 存储:域库 + 五件套记录流成为 VM 上的真值(目标根 /srv/tcrn/runtime/TCRN-AOS 现仅为 profile 元数据,docs/persistent-runtime-storage-prerequisite.md 第 13 行明言未写);持久卷、文件系统耐久性、断电语义全部从『可随时重建的镜像』升格为『唯一真值』",
+    "③ 备份锚点:配对备份的发起端移上 VM,凭据不对称整个翻转——异地方向变成 VM→本机或 VM→云,今天 push/pull 题的答案到那天要重问一遍;VM 还需引擎+仓库检出才能自证可恢复性(今天做不到,farSideVerification 天花板)",
+    "④ 附随:投影重建计算、见证目录落盘、以及运营告警面——真值在谁那里,告警义务就在谁那里"
+   ],
+   "factsFor_不专机_复审": [
+    "复审触发条件已到界:MIN-002 原文『镜像段不为 AOS 专开 VM;复审条件=迁移切换裁定进入执行』——本次复审正是那个条件",
+    "共置事实:单节点 k3s 上,TMS api/worker(可被开发流量与压测驱动)与将成为治理真值的 AOS 存储共享同一内核、同一磁盘、同一 IP;TMS 侧任何资源事故(磁盘打满、OOM)波及的将不再是一个可 rsync 重建的镜像,而是真值本体",
+    "安全边界事实:今天 VM 的安全故事=『零写面+零凭据+LAN-only』三条腿;切换段砍掉前两条。同机还跑着持 JWT/数据库凭据的 TMS api(runtime secret 契约见 infra/k8s/README.md 第 71-102 行),两套凭据同宿主",
+    "资源事实:清单口径 VM 尚有余量(AOS 服务本机实测冷 190ms/驻 130ms,负载很轻)——『不专机』在容量上仍站得住,压力全在故障域与凭据共置,不在算力",
+    "备份耐久性事实:今天所有配对备份落在本机 OneDrive;切换后若 VM 是真值而备份仍只回流本机,本机就从『真值持有者』变成『唯一异地』,单点从未消失只是换了位置",
+    "可勾选的复审出口:(a) 维持不专机,以 ns 级隔离+资源配额+独立 PV 为条件;(b) 不专机但 AOS 真值盘独立(单独磁盘/卷,故障域切开);(c) 专机,原 VM 保留为 TMS 开发+AOS 只读镜像。三者都不必今天裁,但 (a) 的条件清单应在切换裁定进入执行前落纸"
+   ]
+  }
+ },
+ "ceremony-recon": {
+  "invocations": {
+   "catalogSource": "node /Users/ryanlan/.tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow.mjs commands (reasonCode CLI_CATALOG_READY); declarative table at /Users/ryanlan/.tcrn-workflow/tcrn-workflow/packages/cli/src/index.ts:561-663",
+   "listFlagSemantics": "listValue at packages/cli/src/index.ts:350-355: split on ASCII comma ','; value '-' or empty string => empty list; any empty element => CLI_ARGUMENT_MALFORMED 'list'. Items must not contain ASCII commas (use 、 or ；inside item text — AOS chain records a position being rejected twice for this).",
+   "expectedVersionSentinel": "valueKind integer with headSentinel; literal 'head' resolves to current version under the held lease (resolveExpectedVersion, packages/cli/src/index.ts:331-336)",
+   "work-create": {
+    "flags": [
+     "--workspace string REQUIRED",
+     "--expected-version integer REQUIRED (accepts 'head')",
+     "--at instant(RFC3339) REQUIRED",
+     "--project-id string REQUIRED",
+     "--external-key string REQUIRED (canonicalized to UPPERCASE; must match ^[A-Z][A-Z0-9]*(-[A-Z0-9]+)*$, <=128 chars — protocol/src/index.ts:302-311)",
+     "--kind string REQUIRED, enum Initiative|Epic|Story|Subtask|Incident|Release (cli/src/index.ts:1731)",
+     "--parent-id string OPTIONAL, null sentinel '-' (deprecated alias 'null'); tree rules protocol/src/index.ts:668-679: Initiative & Release must be parentless, Epic->Initiative, Story->Epic (strict), Subtask->Story, Incident creatable with or without any parent",
+     "--status string OPTIONAL, enum planned|ready|active|blocked|done|cancelled (cli/src/index.ts:1732)",
+     "--actor string OPTIONAL flag but MANDATORY once attestation enabled (see attestation)",
+     "--attest-dir string OPTIONAL"
+    ],
+    "receipt": "NESTED: {reasonCode:WORKSPACE_COMMAND_COMPLETED, workspaceId, version, headEventHash, projects, work, record:{id, externalKey, kind, status, projectId, parentId, revision, tombstone}} — new id at record.id (writeState cli/src/index.ts:533-543, handler 1726-1749, workSummary 429-440). id = work:sha256('work\\0'+KEY.upper())[:24]"
+   },
+   "work-annotate": {
+    "flags": [
+     "--workspace string REQUIRED",
+     "--expected-version integer REQUIRED (accepts 'head')",
+     "--at instant REQUIRED",
+     "--id string REQUIRED (work:<24hex>)",
+     "--scope string OPTIONAL",
+     "--decided-by list OPTIONAL",
+     "--sprint string OPTIONAL, format workspace:<24hex>#work:<id> (cli/src/index.ts:361-369)",
+     "--actor OPTIONAL-but-mandatory-under-attestation",
+     "--attest-dir OPTIONAL"
+    ],
+    "constraint": "at least one of --scope / --decided-by / --sprint required, else CLI_ARGUMENT_MALFORMED 'scope-or-decided-by-or-sprint' (cli/src/index.ts:1769)",
+    "receipt": "NESTED record.id like work-create"
+   },
+   "conference-open": {
+    "flags": [
+     "--workspace string REQUIRED",
+     "--expected-version integer REQUIRED (accepts 'head')",
+     "--at instant REQUIRED",
+     "--external-key string REQUIRED (conference id derives from it)",
+     "--project-id string REQUIRED",
+     "--type string REQUIRED, enum strategy|architecture|risk|verification|release|incident|retrospective (core/src/conference.ts:10)",
+     "--title string REQUIRED (<=2048 utf8 bytes else CONFERENCE_BUDGET_EXCEEDED, conference.ts:29,65)",
+     "--work-ids list REQUIRED ('-' allowed for empty)",
+     "--desired-outcome string REQUIRED (<=2048 bytes)",
+     "--participant-ids list REQUIRED",
+     "--actor OPTIONAL-but-mandatory-under-attestation",
+     "--attest-dir OPTIONAL"
+    ],
+    "receipt": "FLAT: {reasonCode:WORKSPACE_COMMAND_COMPLETED, workspaceId, version, headEventHash, recordId} — id at top-level recordId, NOT record.id (writeExtensionState cli/src/index.ts:551-559, emitted at 1875). recordId = conference:sha256('conference\\0'+KEY.upper())[:24]. Note: the stored conference record itself carries NO externalKey field — the key lives only in the id derivation (verified on chain: all 6 AOS conference records lack externalKey)."
+   },
+   "conference-append-position": {
+    "flags": [
+     "--workspace string REQUIRED",
+     "--expected-version integer REQUIRED (accepts 'head')",
+     "--at instant REQUIRED",
+     "--conference-id string REQUIRED (conference:<24hex>)",
+     "--external-key string REQUIRED (position's own key; position id derives from it)",
+     "--actor-id string REQUIRED = position AUTHOR recorded on the position record (persona profile id per signing convention)",
+     "--position string REQUIRED (<=2048 utf8 bytes)",
+     "--risks list REQUIRED ('-' for empty)",
+     "--recommendations list REQUIRED ('-' for empty)",
+     "--evidence-ids list REQUIRED ('-' = no evidence records on chain yet)",
+     "--actor string OPTIONAL = attestation acting identity; when omitted the --actor-id value stands in as attestation actor (cli/src/index.ts:1878-1899)",
+     "--attest-dir OPTIONAL"
+    ],
+    "receipt": "FLAT recordId = position:<derived from external-key> (cli/src/index.ts:1902)"
+   }
+  },
+  "attestation": {
+   "aosEnabled": "yes — attestation.actor.enabled event in AOS chain segment events/000001.json (one-way gate; duplicate enable => WORKSPACE_EVENT_CORRUPT, core/src/workspace.ts:1036-1049). Cross chain ALSO enabled (cross events/000001.json).",
+   "missingActorConsequence": "Fail closed, nothing written: any mutating append without a valid --actor after enable => WORKSPACE_ACTOR_REQUIRED 'a valid actor is mandatory once attestation is enabled' (core/src/workspace.ts:2267-2271; replay path 616-619). Valid actor = protocol stableId with prefix owner|profile|agent (core/src/actor-attestation.ts:14, 39-53); anything else => ACTOR_ID_INVALID.",
+   "attestDirSemantics": "Advisory time witness, per-invocation opt-in (WSE-4, cli/src/index.ts:508-531). OMITTED => engine no-op: the event still commits with no receipt (adoption is a partition convention, not engine-enforced — the AOS partition convention is to always pass it; 330 receipts on disk). PASSED => fails closed if it resolves INSIDE the workspace root (CLI_ARGUMENT_MALFORMED '--attest-dir must resolve outside the workspace root', index.ts:520-522) or if no clock injected (CLI_ARGUMENT_MISSING, index.ts:519 — scripts/tcrn-workflow.mjs injects the real clock at line 13, so the governed entrypoint is safe). Receipt <headEventHash>.json written AFTER the committed mutation; a receipt write failure loses only the receipt, never workspace state (index.ts:513-515).",
+   "attestDirPath": "/Users/ryanlan/Code/TCRN Platform/.tcrn-workspace/TCRN-AOS/attestations — partition-level sibling of workspace/ (hence outside workspace root), files named <sha256>.json, 330 present",
+   "sampleWorkCreate": "node \"/Users/ryanlan/.tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow.mjs\" work-create --workspace \"/Users/ryanlan/Code/TCRN Platform/.tcrn-workspace/TCRN-AOS/workspace\" --expected-version head --at \"<RFC3339>\" --project-id \"project:899d30df2e67bc6e98a4f50e\" --external-key \"TCRN-AOS-INIT-002\" --kind Initiative --parent-id - --status planned --actor \"agent:opus5\" --attest-dir \"/Users/ryanlan/Code/TCRN Platform/.tcrn-workspace/TCRN-AOS/attestations\"",
+   "sampleNotes": "project:899d30df2e67bc6e98a4f50e confirmed as the AOS project on the CONF-001 record. '--expected-version head' resolves under the lease. Initiative must use --parent-id - (parentless). Receipt id at record.id."
+  },
+  "nextKeys": {
+   "premiseCorrection": "The task premise 'CONF-004 之后没有更高序号' is FALSE. All 6 AOS conferences were reverse-derived (id = conference:sha256('conference\\0'+KEY)[:24], protocol/src/index.ts:313-318): CONF-001=db86593a(AOS 设计, strategy), CONF-002=6f4c580c(部署与真值拓扑→MIN-002), CONF-003=35e03ea2(既有实现处置→MIN-003), CONF-004=46a7640d(审议采用公约), CONF-005=b1b60e36(消费者样式边界与首帧偏好归属→minutes referenced as MIN-005), CONF-006=ae0e6ae0(移动端首屏→MIN-006). CONF-005/006 records carry no externalKey field but their ids ARE the derivations of those keys, so the keys are burned.",
+   "aosNextConf": "TCRN-AOS-CONF-007 (derivation conference:72a3ed83fddf49aa03dbd98a is unclaimed)",
+   "aosNextInit": "TCRN-AOS-INIT-002 (only TCRN-AOS-INIT-001 on chain, verified across every work.created externalKey)",
+   "aosNextMin": "TCRN-AOS-MIN-007 (used: MIN-001, MIN-002, MIN-003, irregular MINUTES-004, MIN-005, MIN-006 — all derivation-verified against the 6 minutes ids; note conference #4's minutes used the irregular key TCRN-AOS-MINUTES-004)",
+   "aosOtherBands": "EPIC used 001-008 and 030; STORY used 001-027 and 101-109; INC used 001-034; SUBTASK-319. AOS chain at version 535, 81 work items, workspace:fbc32e3ff874fbbd637a1b85, head a60b1045...",
+   "crossNextInc": "TCRN-CROSS-INC-026 (INC-001..025 exactly used — enumerated every work.created externalKey on the cross chain; nothing above 025)"
+  },
+  "personaRoster": [
+   {
+    "profileId": "profile:tcrn-arturo-v1",
+    "name": "Arturo",
+    "jobTitle": "Thread Orchestrator",
+    "mandate": "Coordinate bounded work routes, preserve objective continuity, consume downstream returns; may route and monitor work but may not implement product scope, fabricate acceptance, or expand Owner authority"
+   },
+   {
+    "profileId": "profile:tcrn-ilya-v1",
+    "name": "Ilya",
+    "jobTitle": "Full-Stack Implementer",
+    "mandate": "Implement the exact routed product slice with clean immutable proof basis; may write only route-owned paths; cannot expand scope, mutate remote state, or accept own work"
+   },
+   {
+    "profileId": "profile:tcrn-janus-v1",
+    "name": "Janus",
+    "jobTitle": "Acceptance Gatekeeper",
+    "mandate": "Adjudicate compact gate readiness and acceptance entry on one bounded evidence card; may admit or block a checkpoint; cannot replace required domain voters or implement changes"
+   },
+   {
+    "profileId": "profile:tcrn-mara-v1",
+    "name": "Mara",
+    "jobTitle": "Product Manager",
+    "mandate": "Translate Owner intent into bounded product scope, acceptance criteria, sequencing, decision-ready handoffs; cannot replace implementation, verification, security, or Owner decisions"
+   },
+   {
+    "profileId": "profile:tcrn-minerva-v1",
+    "name": "Minerva",
+    "jobTitle": "Workflow Architect",
+    "mandate": "Design and govern Workflow architecture, authority boundaries, protocols, plans, proof topology; cannot impersonate implementation owners or fabricate domain acceptance"
+   },
+   {
+    "profileId": "profile:tcrn-mneme-v1",
+    "name": "Mneme",
+    "jobTitle": "Knowledge Steward",
+    "mandate": "Govern durable knowledge quality, provenance, freshness, promotion, retrieval, privacy boundaries; cannot implement product code, admit private history, or replace proof/security gates"
+   },
+   {
+    "profileId": "profile:tcrn-sable-v1",
+    "name": "Sable",
+    "jobTitle": "Security & Privacy Reviewer",
+    "mandate": "Review trust, filesystem, privacy, supply-chain, authority boundaries against reproducible attack paths; owns scoped security/privacy verdicts; cannot claim broad scans or authorize Owner/release decisions"
+   },
+   {
+    "profileId": "profile:tcrn-verity-v1",
+    "name": "Verity",
+    "jobTitle": "Verification Engineer",
+    "mandate": "Determine whether an exact immutable basis provides executable, reproducible proof for every claimed contract; reviews read-only; cannot mutate the reviewed basis or substitute for security/Owner acceptance"
+   },
+   {
+    "source": "authoritative roster = engine source /Users/ryanlan/.tcrn-workflow/tcrn-workflow/packages/core/src/core-reference-personas.ts:52-60 (semanticProfiles; bundle validator enforces exactly 8 at line 122). Helper reference /Users/ryanlan/Code/TCRN Platform/.claude/skills/tcrn-workflow-helper/references/workflow-operations.md:110-114 gives the signing rule: sign each position's --actor-id with profile:tcrn-<role>-v1 and disclose execution shape (subagent vs main-thread synthesis) in the first line"
+   }
+  ],
+  "crossFiling": {
+   "targetWork": "work:3391a3319dd1a64c0dc4680c = TCRN-CROSS-EPIC-023, kind Epic, status done, revision 9 — 'Codex 对等激活阶梯' (Codex parity activation ladder: lazy install + byte receipts, fail-open SessionStart hook, bounded persona/capability summary). Parent work:0254c638d7c45d106861504e = TCRN-CROSS-INIT-009 (Initiative, active, 可信双宿主执行接入 Program). Project project:e7da35c5aade8dd42c91cb0f; cross workspace workspace:7732a51de4c38afb83bb77cf, chain version 1266 at recon time.",
+   "incConvention": "INIT-004 缺陷单公约 (TCRN-CROSS-INIT-004, done): defect tickets are kind=Incident opened via CLI; parent-optional semantics were explicitly adopted ('parent-optional adopted per recommendation'). Engine enforces this: Incident is deliberately absent from the expectedParent map, creatable with or without a parent (protocol/src/index.ts:676-677), while Story STRICTLY requires an Epic parent (GRAPH_PARENT_KIND_INVALID otherwise, protocol/src/index.ts:671,693-694). Practice on chain: all 25 INCs carry an Epic parent — the Epic whose surface the defect concerns (INC-001..005/009-011/014-015/022-023 → EPIC-023; INC-025 → work:15404191b1b63e28774a0706 = TCRN-CROSS-EPIC-032 'workflow MCP 采用', done).",
+   "recommendation": "kind=Incident. Rationale: (a) this is a capability-gap/requirement raised TO the W engine, the exact INC precedent class — AOS INC-004/005 are read-face gaps 待提 W, cross INC-025 was the operator-bundle gap; (b) Story would force an Epic parent under the strict tree and no open Epic covers the W conference-extensions surface; (c) INIT-004 ruled Incident parent-optional, so no parent contortion needed. Recommended parent: work:15404191b1b63e28774a0706 (TCRN-CROSS-EPIC-032, the workflow-MCP/facade surface, precedent INC-025) — or parentless '-' if hanging on a done Epic is unwanted. Next key: TCRN-CROSS-INC-026.",
+   "crossWriteRequirements": "cross chain has attestation enabled (events/000001.json) => --actor mandatory. Cross partition has NO attestations/ dir (only evidence-locator/, transient/, workspace/) — attest-dir time witness is NOT adopted there; do not pass --attest-dir for cross writes unless the main thread decides to adopt it (it would need a new outside-workspace dir). Cross actor literals on chain: agent:fable(706), agent:opus(332), agent:codex(207), owner:governance(14), profile:tcrn-verity-v1(4), profile:tcrn-minerva-v1(2), profile:tcrn-mara-v1(1). Note agent:opus5 has never been used on the cross chain."
+  },
+  "mcpWriteValidity": {
+   "v070FieldSet": "fileAuthorities exact set in governed v0.7.0 copy (packages/core/src/operator-authority.ts:372-379): [profileAdmission, contextRoute, codexAdapterInstallation, codexHostActivationObservation, claudeAdapterInstallation, compatibilityAdmission]; hostInputs exact [codexAdapter, codexAdapterActivation, claudeAdapter, claudeAdapterActivation] (:381-386); mcp exact [writeCommands, authorityOutputCommands] (:388).",
+   "v060Comparison": "IDENTICAL. git show v0.6.0:packages/core/src/operator-authority.ts vs v0.7.0 tag: byte-identical (empty diff); governed installed copy also byte-identical to the v0.7.0 tag. Same exact() lists, same schemaVersions (tcrn.operator-authority-bundle.v1 / tcrn.operator-authority-pins.v1).",
+   "liveBundleCheck": "/Users/ryanlan/.tcrn-workflow/live/tcrn-platform/authority/operator-authority.json: generation 4, status active, validity 2026-07-24T19:00:00Z → 2026-08-24T19:00:00Z (today 2026-07-28 is in-window), fileAuthorities keys exactly match the v0.7.0 exact set, mcp keys match, 37 writeCommands INCLUDING work-create, work-annotate, work-transition, conference-open, conference-append-position, conference-close, gate verbs, knowledge verbs; authorityOutputCommands = [] (so the sole authority-bearing verb adapter-activation-record stays denied — irrelevant to the planned writes).",
+   "pinsChain": "operator-authority-pins.json: minimumGeneration 4, authorityFileSha256 ef6d3d30a423284faf06275eb26e7066169daefef320519f3ae48fbfe02c982d == actual sha256 of operator-authority.json (verified). Pins FILE sha256 = d25ebfc1cb47310d27bdeba4749fe5728b089188a7338d6a89cfe86f1c5d5ce9 == the --authority-pins-digest passed by BOTH hosts: platform .mcp.json lines 6-10 (Claude Code) and ~/.codex/config.toml:232 (Codex) — both point at the same v0.7.0 script /Users/ryanlan/.tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs. Pins bind only {authorityPath, authorityFileSha256, minimumGeneration, revokedDigests} (operator-authority.ts:104-112), never an engine version.",
+   "conclusion": "Generation-4 bundle (pins digest d25ebfc1…) REMAINS FULLY VALID for v0.7.0. No INC-025-class break: the validator bytes did not change between v0.6.0 and v0.7.0, the live bundle's field sets match the exact() lists, digests chain end-to-end, and the validity window is open. MCP writes through either host are viable for all four planned verbs."
+  },
+  "actorLiterals": [
+   "AOS chain event actors (count): agent:fable(215), agent:opus5(139), agent:opus(59), profile:tcrn-minerva-v1(58), owner:governance(3)",
+   "AOS most recent events v530-535 (2026-07-28): agent:opus5 on five of six, agent:fable on one (v532) — both are live current literals",
+   "AOS position AUTHORS (--actor-id on positions): profile:tcrn-minerva-v1(22), profile:tcrn-verity-v1(4), profile:tcrn-mara-v1(3), profile:tcrn-sable-v1(3), owner:governance(1)",
+   "AOS conference participantIds seen: owner:governance, profile:tcrn-minerva-v1, profile:tcrn-verity-v1, profile:tcrn-mara-v1",
+   "cross chain event actors (count): agent:fable(706), agent:opus(332), agent:codex(207), owner:governance(14), profile:tcrn-verity-v1(4), profile:tcrn-minerva-v1(2), profile:tcrn-mara-v1(1); agent:opus5 absent from cross"
+  ],
+  "evidencePrecedent": "INIT-001 evidence lives in the AOS repo at /Users/ryanlan/Code/TCRN Platform/TCRN-AOS/evidence/ (175 files). The chain-referenced precedent (paths appearing in AOS chain annotations) is FLAT single-file JSON directly under evidence/, referenced by repo-relative path: evidence/aos-projection-live-proof.json, evidence/aos-write-surface-live-proof.json, evidence/aos-mirror-acceptance.json, evidence/aos-domain-backup.json, evidence/inc-011-service-smoke-predicate-repair.json, evidence/owner-reported-ui-defects-2026-07-27.json. File shape: JSON with a schemaVersion header 'aos.<topic>.v1', an ok boolean, then per-criterion structures (aos-mirror-acceptance.json additionally names the ruling 'TCRN-CROSS-MIN-052 D9'). Multi-file proof bundles sit in per-slice subdirectories (phase1-persistence/, aos-knowledge-retrieval-layer-kr01..06/, phase3-*/) each holding <topic>-proof.json / <topic>-readback.json files, but chain annotations cite the flat files. The partition-level evidence-locator/ dirs (both AOS and cross) are empty; the chain has NO evidence records yet — conference positions pass --evidence-ids - and one AOS annotation explicitly states '- 表示「本链上还没有 evidence 记录」'.",
+  "traps": [
+   "PREMISE CORRECTION: AOS CONF-005 and CONF-006 are already burned (derivation-verified) even though grep finds no such literals — conference records store no externalKey; the key lives only in the id derivation. Next CONF is 007, not 005.",
+   "Receipt asymmetry: work verbs return nested record.id; conference-open/append-position return FLAT top-level recordId (writeExtensionState, cli/src/index.ts:551-559). Parsing record.id from a conference receipt yields undefined.",
+   "List flags split on ASCII comma only; '-' is the empty-list sentinel, not a literal; an ASCII comma inside a Chinese sentence in --risks/--recommendations silently splits the item and can fail CLI_ARGUMENT_MALFORMED — use 、 (AOS chain records this exact double rejection).",
+   "conference-append-position: --actor-id is the position author (persona profile), --actor is the attestation identity; omitting --actor makes the author stand in as attestation actor (cli/src/index.ts:1878-1899). Under the persona signing convention pass BOTH: --actor-id profile:tcrn-<role>-v1 and --actor agent:opus5.",
+   "--attest-dir must resolve OUTSIDE the workspace root (use the partition attestations/ sibling, never a path under workspace/), else CLI_ARGUMENT_MALFORMED before anything else runs.",
+   "Missing --actor after attestation enable fails the whole mutation closed (WORKSPACE_ACTOR_REQUIRED); missing --attest-dir does NOT fail — the event commits without a time receipt, silently breaking the partition witness convention.",
+   "--position/--title/--desired-outcome have a 2048 utf8-byte budget (CONFERENCE_BUDGET_EXCEEDED, conference.ts:29,65) — Chinese text hits it at ~680 characters.",
+   "external keys are canonicalized to UPPERCASE and must match ^[A-Z][A-Z0-9]*(-[A-Z0-9]+)*$ — lowercase input works but derives the same id as its uppercase form.",
+   "Story strictly requires an Epic parent and Initiative/Release must be parentless (GRAPH_PARENT_KIND_INVALID); Incident alone is parent-optional — decisive for the cross filing kind choice.",
+   "Minutes key band is inconsistent on AOS: conference #4's minutes used TCRN-AOS-MINUTES-004 while the others use TCRN-AOS-MIN-<n>; stick to MIN- going forward (next: MIN-007).",
+   "'--expected-version head' resolves under the lease and avoids stale-version CAS rejections; a hardcoded integer races any concurrent writer."
+  ]
+ }
+}

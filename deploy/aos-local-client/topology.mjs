@@ -109,6 +109,15 @@ export const PARTITION_ROSTER = Object.freeze([
     externalKey: "TCRN-TMS-WORKSPACE",
     workspaceId: "workspace:f15c5abb6cd777c44453c2c9",
     home: "local"
+  }),
+  Object.freeze({
+    // Born 2026-07-31 (JOI-BUTTON-INIT-001 kickoff): a personal, non-TCRN project whose
+    // chain is nevertheless governed on this machine — registered here because the purity
+    // scan classifies every live control tree it can see, not only TCRN ones.
+    partitionId: "Joi-Button",
+    externalKey: "JOI-BUTTON-WORKSPACE",
+    workspaceId: "workspace:f4edc54804be7e499804e3f0",
+    home: "local"
   })
 ]);
 

@@ -1,0 +1,42 @@
+{
+ "schemaVersion": "aos.conference-execution-receipts.v1",
+ "conferenceKey": "TCRN-AOS-CONF-014",
+ "mode": "multi-agent-deliberative",
+ "collector": "orchestrator-self-recorded (agent:fable); no trusted collector exists (engine EPIC-020 pending) - binding proves consistency, never authenticity",
+ "workflowRunId": "orchestrator-session (no workflow run)",
+ "capturedAt": "2026-08-02T18:38:32Z",
+ "reconstruction": "positions >2048B are split into sequential chain positions POS-CONF-014-<AGENT>-1 and POS-CONF-014-<AGENT>-1-2; each part body starts with a marker line n/N; the LAST part carries a trailing binding-reference line. To verify outputDigest: strip each leading marker line, strip the trailing binding-reference line from the last part, join the remainders with a single newline - the result must equal the seat .txt original whose sha256 is outputDigest.",
+ "receipts": [
+  {
+   "positionKeys": [
+    "POS-CONF-014-MINERVA-1"
+   ],
+   "actorId": "profile:tcrn-minerva-v1",
+   "subagentLabel": "seat:minerva",
+   "freshContext": true,
+   "outputDigest": "b4e9864a194f99c876f1662796ad39cab9ce2c109e43b25a7006f892e393116e",
+   "outputBytes": 1742
+  },
+  {
+   "positionKeys": [
+    "POS-CONF-014-VERITY-1"
+   ],
+   "actorId": "profile:tcrn-verity-v1",
+   "subagentLabel": "seat:verity",
+   "freshContext": true,
+   "outputDigest": "77de58b68fa87aa1086568fcc068e800de020c46638ae62d55b4879096029227",
+   "outputBytes": 1676
+  },
+  {
+   "positionKeys": [
+    "POS-CONF-014-SABLE-1",
+    "POS-CONF-014-SABLE-1-2"
+   ],
+   "actorId": "profile:tcrn-sable-v1",
+   "subagentLabel": "seat:sable",
+   "freshContext": true,
+   "outputDigest": "84b07f96be9be0d5f43136db648d5a47ed08add6a5bf5eb86921fe6123eff4b1",
+   "outputBytes": 1943
+  }
+ ]
+}

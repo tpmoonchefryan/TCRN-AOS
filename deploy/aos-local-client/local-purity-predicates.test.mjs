@@ -242,7 +242,7 @@ test("「什么都没找到」不得与「没找到活的 AOS 树」共用一个
   });
   assert.equal(partial.ok, false);
   assert.equal(partial.reasonCode, "SCAN_SCOPE_NOT_ESTABLISHED");
-  assert.deepEqual(partial.missing, ["TCRN-Design-System", "TCRN-TMS"]);
+  assert.deepEqual(partial.missing, ["Joi-Button", "TCRN-Design-System", "TCRN-TMS"]);
 
   const unreachable = judgeScanScope({
     containerExists: true,
@@ -271,9 +271,9 @@ test("today's real shape is green: the AOS archive plus three permitted live tre
   assert.equal(verdict.reasonCode, "LOCAL_HOST_HOLDS_NO_AWAY_PARTITION_ARTEFACT");
   assert.deepEqual(verdict.awayPartitions, ["TCRN-AOS"]);
   assert.deepEqual(verdict.permittedLocalPartitions,
-    ["TCRN-Design-System", "TCRN-TMS", "cross-project"]);
+    ["Joi-Button", "TCRN-Design-System", "TCRN-TMS", "cross-project"]);
   assert.equal(verdict.counts.retainedArchives, 1);
-  assert.equal(verdict.counts.permittedLiveTrees, 3);
+  assert.equal(verdict.counts.permittedLiveTrees, 4);
   assert.equal(verdict.counts.liveAwayTrees, 0);
   assert.match(verdict.tightening, /^未收紧/u);
 });
@@ -350,7 +350,7 @@ test("TIGHTENING is a measurement, not a comment: home=vm for all four names the
   assert.deepEqual(verdict.offending
     .filter((row) => row.reasonCode === "AWAY_PARTITION_TREE_IS_LIVE")
     .map((row) => row.partitionId).sort(),
-  ["TCRN-Design-System", "TCRN-TMS", "cross-project"]);
+  ["Joi-Button", "TCRN-Design-System", "TCRN-TMS", "cross-project"]);
   assert.deepEqual(verdict.permittedLocalPartitions, []);
   assert.match(verdict.tightening, /^已收紧/u);
 
@@ -374,7 +374,7 @@ test("the roster this repository ships is the one the archive notice names", () 
   // The roster is data the predicate is parameterised by, so a wrong row would
   // make every judgement above test a machine that does not exist.
   assert.deepEqual(PARTITION_ROSTER.map((entry) => entry.partitionId),
-    ["TCRN-AOS", "cross-project", "TCRN-Design-System", "TCRN-TMS"]);
+    ["TCRN-AOS", "cross-project", "TCRN-Design-System", "TCRN-TMS", "Joi-Button"]);
   assert.equal(AOS.home, "vm");
   assert.equal(AOS.workspaceId, "workspace:fbc32e3ff874fbbd637a1b85");
   assert.equal(AOS.relocationId, "relocation:bba03004faf175867349495b");

@@ -1,5 +1,6 @@
 export { ChainClient, ChainClientError, type ChainClientOptions } from "./chain-client.js";
 export { ChainIngestor, type PartitionSource } from "./ingest.js";
+export { isDomainActor, isAgentActor, isPersonActor, requireDomainActor, type DomainActor } from "./domain-actor.js";
 export {
   ProjectionStore,
   type SearchHit,

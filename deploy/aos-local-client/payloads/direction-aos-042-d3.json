@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-AOS-INIT-004",
+  "intent": "推进 EPIC-042:STORY-147/148/149/151 done(STORY-150 AI 提议回路待形态确认,暂留),EPIC-042 转 active。",
+  "steps": [
+    { "verb": "work-transition", "flags": { "id": "work:d121927a89a7ea44bd8e2677", "status": "ready" } },
+    { "verb": "work-transition", "flags": { "id": "work:d121927a89a7ea44bd8e2677", "status": "active" } },
+    { "verb": "work-transition", "flags": { "id": "work:d121927a89a7ea44bd8e2677", "status": "done" } },
+    { "verb": "work-annotate", "flags": { "id": "work:d121927a89a7ea44bd8e2677", "scope": "comment 落地完成:写路由已有(POST /api/domain/comment,041 归因 author),详情页 domain-panel 加 person/agent 徽标(人/AI badge),评论线程人 AI 立场一眼可分。283/283 全绿。" } },
+    { "verb": "work-transition", "flags": { "id": "work:5ddbc6a0ba35661c0022cfd7", "status": "ready" } },
+    { "verb": "work-transition", "flags": { "id": "work:5ddbc6a0ba35661c0022cfd7", "status": "active" } },
+    { "verb": "work-transition", "flags": { "id": "work:5ddbc6a0ba35661c0022cfd7", "status": "done" } },
+    { "verb": "work-annotate", "flags": { "id": "work:5ddbc6a0ba35661c0022cfd7", "scope": "relation 落地完成:写路由已有(POST /api/domain/relation,041 归因 createdBy),详情页加 relation 写表单(类型 Select + 目标 work:<id> 输入 + 添加按钮,走 send)。board 读面已能显示;详情页可建可看。283/283 全绿。" } },
+    { "verb": "work-transition", "flags": { "id": "work:ab6e7a415b7fafe9f1e16966", "status": "ready" } },
+    { "verb": "work-transition", "flags": { "id": "work:ab6e7a415b7fafe9f1e16966", "status": "active" } },
+    { "verb": "work-transition", "flags": { "id": "work:ab6e7a415b7fafe9f1e16966", "status": "done" } },
+    { "verb": "work-annotate", "flags": { "id": "work:ab6e7a415b7fafe9f1e16966", "scope": "annotate 落地完成:domain-panel 已有 assignee/priority/labels 可编辑表单(PUT /api/domain/annotation,041 归因 updatedBy),变更实时落库。283/283 全绿。" } },
+    { "verb": "work-transition", "flags": { "id": "work:e676d0a5664c832cec0a5560", "status": "ready" } },
+    { "verb": "work-transition", "flags": { "id": "work:e676d0a5664c832cec0a5560", "status": "active" } },
+    { "verb": "work-transition", "flags": { "id": "work:e676d0a5664c832cec0a5560", "status": "done" } },
+    { "verb": "work-annotate", "flags": { "id": "work:e676d0a5664c832cec0a5560", "scope": "归因视图完成:domain-panel 每条 comment 显示 author(person/agent 徽标)+createdAt,annotation 显示 updatedBy;comment/annotation/relation 均带 041 双类归因。283/283 全绿。" } },
+    { "verb": "work-transition", "flags": { "id": "work:0dcf539f336bb36bb056d69a", "status": "ready" } },
+    { "verb": "work-transition", "flags": { "id": "work:0dcf539f336bb36bb056d69a", "status": "active" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:d121927a89a7ea44bd8e2677" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-AOS-STORY-147", "kind": "Story", "status": "done" }
+    }
+  ]
+}
