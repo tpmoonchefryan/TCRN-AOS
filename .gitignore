@@ -5,3 +5,4 @@ coverage/
 .cache/
 .DS_Store
 *.log
+evidence/conf-007-recon/
