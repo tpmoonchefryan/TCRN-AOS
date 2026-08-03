@@ -50,25 +50,28 @@ const { ChainClient, ChainIngestor, ProjectionStore } = library;
  * there; the local engine is never pointed at its path, because that path is a
  * vacated address on this machine and answering it would be a lie either way.
  */
+import { aosPartition } from "../deploy/aos-local-client/aos-partitions.mjs";
+
 const partitions = [
-  { partitionId: "cross-project", label: "Platform governance", labelZh: "平台治理", on: "local" },
-  { partitionId: "TCRN-Design-System", label: "Design System", labelZh: "设计系统", on: "local" },
-  { partitionId: "TCRN-TMS", label: "TMS", labelZh: "TMS", on: "local" },
-  {
-    partitionId: "TCRN-AOS",
-    label: "AOS",
-    labelZh: "AOS",
+  { partitionId: "cross-project", label: "Platform governance", labelZh: "平台治理" },
+  { partitionId: "TCRN-Design-System", label: "Design System", labelZh: "设计系统" },
+  { partitionId: "TCRN-TMS", label: "TMS", labelZh: "TMS" },
+  { partitionId: "TCRN-AOS", label: "AOS", labelZh: "AOS" },
+  { partitionId: "Joi-Button", label: "Joi Button", labelZh: "Joi Button" }
+].map((entry) => {
+  // Single authority (TCRN-CROSS-INIT-017): every partition chain lives on the
+  // AOS host; the local machine is a pure client. The VM target comes from
+  // aos-partitions, never hand-typed.
+  const target = aosPartition(entry.partitionId);
+  return {
+    ...entry,
     on: "vm",
     host: "tcrn-platform-dev",
     runtimeRoot: "/srv/tcrn/aos-cockpit/runtime",
     engineMcp: "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs",
-    workspacePath: "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
-  }
-].map((entry) => ({
-  ...entry,
-  workspacePath: entry.workspacePath
-    ?? resolve(platform, ".tcrn-workspace", entry.partitionId, "workspace")
-}));
+    workspacePath: target.workspace
+  };
+});
 
 const client = new ChainClient({ serverPath });
 const store = new ProjectionStore();

@@ -57,6 +57,22 @@ const permittedLiveRows = PARTITION_ROSTER.filter((entry) => entry.home === "loc
     workspaceId: entry.workspaceId
   }));
 
+/**
+ * Archived rows for every partition whose chain moved to the AOS host. Since
+ * 2026-08-03 (TCRN-CROSS-INIT-017) that is all of them, so this is the shape a
+ * green local host actually presents: five vacated archives, zero live trees.
+ */
+const archivedRows = PARTITION_ROSTER.map((entry) => ({
+  address: `/srv/tcrn/governance/tcrn-workspace/${entry.partitionId}/workspace`,
+  externalKey: entry.externalKey,
+  workspaceId: entry.workspaceId,
+  engineState: "vacated",
+  readFaceAccepted: false,
+  readFaceReasonCode: "WORKSPACE_RELOCATION_VACATED",
+  relocationCount: 1,
+  lastRelocationId: entry.relocationId
+}));
+
 const establishedScope = () => judgeScanScope({
   containerExists: true,
   rootsWalked: [{ id: "platform-root", reachable: true }, { id: "home-shallow", reachable: true }],
@@ -147,22 +163,23 @@ test("an archive carrying a different hop is not accepted as the archive the ros
   assert.equal(otherHop.observedRelocationId, "relocation:ffffffffffffffffffffffff");
 });
 
-test("a live tree of a partition that still lives here is an asset, not a finding", () => {
-  const permitted = judgeControlTree({ tree: liveCrossRow, roster: PARTITION_ROSTER });
-  assert.equal(permitted.ok, true);
-  assert.equal(permitted.reasonCode, "LIVE_TREE_OF_A_PERMITTED_PARTITION");
-  assert.equal(permitted.home, "local");
-
-  // This is the assertion that stops the predicate from degenerating into "is there
-  // a .tcrn-workflow here". The same bytes, the same shape, the same engine state —
-  // and the verdict differs only because the roster says this partition's truth is
-  // supposed to be on this host.
-  const away = judgeControlTree({
-    tree: { ...liveCrossRow, externalKey: AOS.externalKey, workspaceId: AOS.workspaceId },
-    roster: PARTITION_ROSTER
-  });
+test("since every partition moved to the AOS host, any live tree here is an away tree (red)", () => {
+  // TCRN-CROSS-INIT-017: all five partitions now live on the VM. There is no
+  // "partition that still lives here" any more — every live tree on this host is
+  // an away-partition artefact, and the predicate must read it red.
+  const away = judgeControlTree({ tree: liveCrossRow, roster: PARTITION_ROSTER });
   assert.equal(away.ok, false);
   assert.equal(away.reasonCode, "AWAY_PARTITION_TREE_IS_LIVE");
+
+  // The same bytes, inert at a foreign address, stay inert — a stray copy is not
+  // a finding.
+  const stray = judgeControlTree({
+    tree: { ...liveCrossRow, engineState: "foreign-address", readFaceAccepted: false,
+      readFaceReasonCode: "WORKSPACE_ROOT_IDENTITY_MISMATCH" },
+    roster: PARTITION_ROSTER
+  });
+  assert.equal(stray.ok, true);
+  assert.equal(stray.reasonCode, "INERT_COPY");
 });
 
 test("a stray copy of a permitted partition is inert, not a red", () => {
@@ -234,15 +251,16 @@ test("「什么都没找到」不得与「没找到活的 AOS 树」共用一个
   assert.equal(nowhere.ok, false);
   assert.equal(nowhere.reasonCode, "SCAN_SCOPE_NOT_ESTABLISHED");
 
-  // The container is there but a partition the roster says is at home was not
-  // found live — the walk did not cover what it claims to cover.
+  // Since every partition is now on the VM (TCRN-CROSS-INIT-017), the expected
+  // local set is empty, so the scope establishes regardless of what was found —
+  // a "found" live tree is then judged by the tree-level predicate, not by scope.
   const partial = judgeScanScope({
     containerExists: true, rootsWalked: [{ id: "platform-root", reachable: true }],
     partitionsFoundLive: ["cross-project"], roster: PARTITION_ROSTER
   });
-  assert.equal(partial.ok, false);
-  assert.equal(partial.reasonCode, "SCAN_SCOPE_NOT_ESTABLISHED");
-  assert.deepEqual(partial.missing, ["Joi-Button", "TCRN-Design-System", "TCRN-TMS"]);
+  assert.equal(partial.ok, true);
+  assert.equal(partial.reasonCode, "SCAN_SCOPE_ESTABLISHED");
+  assert.deepEqual(partial.missing, []);
 
   const unreachable = judgeScanScope({
     containerExists: true,
@@ -261,21 +279,24 @@ test("「什么都没找到」不得与「没找到活的 AOS 树」共用一个
   }).reasonCode, "SCAN_ROOT_UNREACHABLE");
 });
 
-test("today's real shape is green: the AOS archive plus three permitted live trees", () => {
+test("today's real shape is green: all five chains archived, the local host is a pure client", () => {
+  // Since 2026-08-03 (TCRN-CROSS-INIT-017) every partition's chain lives on the
+  // AOS host; the local machine holds only archives. The predicate must read
+  // "zero live trees here" as the healthy, tightened state.
   const verdict = judgeLocalPurity({
-    trees: [archivedAosRow, ...permittedLiveRows],
+    trees: archivedRows,
     roster: PARTITION_ROSTER,
     scope: establishedScope()
   });
   assert.equal(verdict.ok, true);
   assert.equal(verdict.reasonCode, "LOCAL_HOST_HOLDS_NO_AWAY_PARTITION_ARTEFACT");
-  assert.deepEqual(verdict.awayPartitions, ["TCRN-AOS"]);
-  assert.deepEqual(verdict.permittedLocalPartitions,
-    ["Joi-Button", "TCRN-Design-System", "TCRN-TMS", "cross-project"]);
-  assert.equal(verdict.counts.retainedArchives, 1);
-  assert.equal(verdict.counts.permittedLiveTrees, 4);
+  assert.deepEqual(verdict.awayPartitions,
+    ["TCRN-AOS", "cross-project", "TCRN-Design-System", "TCRN-TMS", "Joi-Button"]);
+  assert.deepEqual(verdict.permittedLocalPartitions, []);
+  assert.equal(verdict.counts.retainedArchives, 5);
+  assert.equal(verdict.counts.permittedLiveTrees, 0);
   assert.equal(verdict.counts.liveAwayTrees, 0);
-  assert.match(verdict.tightening, /^未收紧/u);
+  assert.match(verdict.tightening, /^已收紧/u);
 });
 
 test("one revived AOS tree beside the three permitted ones turns the whole verdict red", () => {
@@ -315,59 +336,57 @@ test("a scope that was never established cannot be overridden by clean rows", ()
     "SCAN_SCOPE_NOT_ESTABLISHED");
 });
 
-test("two live trees for one partition on one host is a fork nothing upstream reports", () => {
+test("under the all-vm roster, two live trees for one partition report away first (fork is absorbed)", () => {
+  // Every partition is away now, so two live trees are each an away artefact,
+  // and the away red (AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST) outranks the
+  // fork term — the fork term protects against a locally-permitted partition
+  // having two live trees, which no longer exists as a case. The predicate must
+  // still red, naming away.
   const twin = { ...liveCrossRow, address: "/local/elsewhere/workspace" };
   const verdict = judgeLocalPurity({
-    trees: [archivedAosRow, ...permittedLiveRows, twin],
+    trees: [liveCrossRow, twin],
     roster: PARTITION_ROSTER,
     scope: establishedScope()
   });
   assert.equal(verdict.ok, false);
-  assert.equal(verdict.reasonCode, "TWO_LIVE_TREES_FOR_ONE_PARTITION");
-  assert.deepEqual(verdict.duplicatedLivePartitions, ["cross-project"]);
-  // Each row is individually legitimate — that is why this needs its own term.
-  assert.equal(verdict.verdicts.filter((row) => row.ok === false).length, 0);
+  assert.equal(verdict.reasonCode, "AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST");
 });
 
-test("TIGHTENING is a measurement, not a comment: home=vm for all four names the three still here", () => {
-  // The future state this predicate is designed to grow into. Same function, same
-  // rows, one data edit — and it must be RED today, naming the three partitions
-  // whose truth has not moved yet. Without this the tightening claim in
-  // topology.mjs and ARCHIVED.md would be prose.
+test("TIGHTENING has arrived: the all-vm roster is the real shape, so only archives are green", () => {
+  // TCRN-CROSS-INIT-017 moved every partition to the AOS host. The roster is
+  // already fully "vm" — the tightening that used to be a future state is now
+  // the real shape. A machine holding only archives is green; any live tree is
+  // an away-partition artefact and red.
   const tightened = PARTITION_ROSTER.map((entry) => ({ ...entry, home: "vm" }));
-  const verdict = judgeLocalPurity({
-    trees: [archivedAosRow, ...permittedLiveRows],
-    roster: tightened,
-    scope: judgeScanScope({
-      containerExists: true,
-      rootsWalked: [{ id: "platform-root", reachable: true }],
-      partitionsFoundLive: [], // nothing is expected at home once the roster is tightened
-      roster: tightened
-    })
+  const scope = judgeScanScope({
+    containerExists: true,
+    rootsWalked: [{ id: "platform-root", reachable: true }],
+    partitionsFoundLive: [],
+    roster: tightened
   });
-  assert.equal(verdict.ok, false);
-  assert.equal(verdict.reasonCode, "AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST");
-  assert.deepEqual(verdict.offending
-    .filter((row) => row.reasonCode === "AWAY_PARTITION_TREE_IS_LIVE")
-    .map((row) => row.partitionId).sort(),
-  ["Joi-Button", "TCRN-Design-System", "TCRN-TMS", "cross-project"]);
-  assert.deepEqual(verdict.permittedLocalPartitions, []);
-  assert.match(verdict.tightening, /^已收紧/u);
 
-  // And the day the three trees are actually gone, the SAME tightened roster is
-  // green over a machine that holds only the archive. That is the sentence
-  // "本机零活工作区", asserted rather than promised.
-  const future = judgeLocalPurity({
-    trees: [archivedAosRow],
+  const archiveOnly = judgeLocalPurity({
+    trees: archivedRows,
+    roster: tightened,
+    scope
+  });
+  assert.equal(archiveOnly.ok, true);
+  assert.equal(archiveOnly.reasonCode, "LOCAL_HOST_HOLDS_NO_AWAY_PARTITION_ARTEFACT");
+  assert.deepEqual(archiveOnly.permittedLocalPartitions, []);
+  assert.equal(archiveOnly.counts.permittedLiveTrees, 0);
+  assert.match(archiveOnly.tightening, /^已收紧/u);
+
+  // A single live tree anywhere on the host is red under the all-vm roster.
+  const withLive = judgeLocalPurity({
+    trees: [...archivedRows, liveCrossRow],
     roster: tightened,
     scope: judgeScanScope({
       containerExists: true, rootsWalked: [{ id: "platform-root", reachable: true }],
       partitionsFoundLive: [], roster: tightened
     })
   });
-  assert.equal(future.ok, true);
-  assert.equal(future.reasonCode, "LOCAL_HOST_HOLDS_NO_AWAY_PARTITION_ARTEFACT");
-  assert.equal(future.counts.permittedLiveTrees, 0);
+  assert.equal(withLive.ok, false);
+  assert.equal(withLive.reasonCode, "AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST");
 });
 
 test("the roster this repository ships is the one the archive notice names", () => {

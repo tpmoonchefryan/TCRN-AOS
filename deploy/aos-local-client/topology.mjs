@@ -96,19 +96,25 @@ export const PARTITION_ROSTER = Object.freeze([
     partitionId: "cross-project",
     externalKey: "TCRN-CROSS-WORKSPACE",
     workspaceId: "workspace:7732a51de4c38afb83bb77cf",
-    home: "local"
+    home: "vm",
+    relocationId: "relocation:6549cb2da7c72db2236f805e",
+    liveAddress: "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
   }),
   Object.freeze({
     partitionId: "TCRN-Design-System",
     externalKey: "TCRN-DS-WORKSPACE",
     workspaceId: "workspace:e7386bdcff8b3407e43ece51",
-    home: "local"
+    home: "vm",
+    relocationId: "relocation:8a3ca7ecb2550a2ff30e2642",
+    liveAddress: "/srv/tcrn/governance/tcrn-workspace/TCRN-Design-System/workspace"
   }),
   Object.freeze({
     partitionId: "TCRN-TMS",
     externalKey: "TCRN-TMS-WORKSPACE",
     workspaceId: "workspace:f15c5abb6cd777c44453c2c9",
-    home: "local"
+    home: "vm",
+    relocationId: "relocation:984c5bf637f4967b984ae4cd",
+    liveAddress: "/srv/tcrn/governance/tcrn-workspace/TCRN-TMS/workspace"
   }),
   Object.freeze({
     // Born 2026-07-31 (JOI-BUTTON-INIT-001 kickoff): a personal, non-TCRN project whose
@@ -117,7 +123,9 @@ export const PARTITION_ROSTER = Object.freeze([
     partitionId: "Joi-Button",
     externalKey: "JOI-BUTTON-WORKSPACE",
     workspaceId: "workspace:f4edc54804be7e499804e3f0",
-    home: "local"
+    home: "vm",
+    relocationId: "relocation:65814dd2b21b5fb9be809d50",
+    liveAddress: "/srv/tcrn/governance/tcrn-workspace/Joi-Button/workspace"
   })
 ]);
 

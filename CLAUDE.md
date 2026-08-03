@@ -69,7 +69,8 @@ at different machines with nothing going red.
 
 Two gates in `pnpm verify` hold this down, and both assert **both directions**:
 `pnpm local-purity:proof` (no live control tree here for a partition whose truth moved
-away; three partitions that legitimately remain must stay green) and
+away; since 2026-08-03 every partition has moved, so the local host is a pure client
+holding zero live trees) and
 `pnpm doc-topology:proof` (every registered platform document's location claim matches the
 roster and the engine's real answer).
 

@@ -30,14 +30,22 @@ import { spawn } from "node:child_process";
 function sshNode(host, script) {
   return new Promise((done, fail) => {
     const child = spawn("ssh", [host, "node", "-"], { stdio: ["pipe", "pipe", "pipe"] });
-    let stdout = "";
-    let stderr = "";
-    child.stdout.on("data", (chunk) => { stdout += chunk; });
-    child.stderr.on("data", (chunk) => { stderr += chunk; });
+    // Collect raw BUFFERS and decode once at the end. SSH returns a byte stream;
+    // decoding per-chunk as strings can split a multibyte UTF-8 sequence across
+    // a chunk boundary and produce U+FFFD in the projected Chinese text. Collecting
+    // buffers and Buffer.concat at close decodes the whole stream in one pass.
+    const stdoutChunks = [];
+    const stderrChunks = [];
+    child.stdout.on("data", (chunk) => { stdoutChunks.push(Buffer.from(chunk)); });
+    child.stderr.on("data", (chunk) => { stderrChunks.push(Buffer.from(chunk)); });
     child.on("error", fail);
-    child.on("close", (code) => code === 0
-      ? done(stdout)
-      : fail(new Error(`remote projection exited ${String(code)}: ${stderr.slice(0, 2000)}`)));
+    child.on("close", (code) => {
+      const stdout = Buffer.concat(stdoutChunks).toString("utf8");
+      const stderr = Buffer.concat(stderrChunks).toString("utf8");
+      code === 0
+        ? done(stdout)
+        : fail(new Error(`remote projection exited ${String(code)}: ${stderr.slice(0, 2000)}`));
+    });
     child.stdin.end(script);
   });
 }
@@ -58,7 +66,10 @@ export async function projectPartitionOnHost({
     (async () => {
       const { ChainClient, ChainIngestor } = await import(
         pathToFileURL(path.join(${JSON.stringify(runtimeRoot)}, "dist/packages/projection/src/index.js")).href);
-      const client = new ChainClient({ serverPath: ${JSON.stringify(engineMcp)} });
+      // Projection of a large chain is O(work) MCP calls, each of which can
+      // legitimately take longer than the 30s interactive default. The cockpit
+      // build is not interactive, so use a generous per-call ceiling.
+      const client = new ChainClient({ serverPath: ${JSON.stringify(engineMcp)}, timeoutMs: 120000 });
       await client.start();
       try {
         const ingestor = new ChainIngestor(client);

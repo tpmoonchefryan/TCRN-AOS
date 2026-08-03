@@ -37,6 +37,7 @@ import { shellQuote, ssh } from "../aos-resident-cockpit/resident-lib.mjs";
 import {
   ACTOR, REPO_ROOT, VM_ATTEST_DIR, VM_ENGINE_CLI, VM_HOST, VM_WORKSPACE
 } from "./topology.mjs";
+import { aosPartition } from "./aos-partitions.mjs";
 import {
   assertPayload, catalogueIndex, judgeReadback, planStep, resolveExpectations
 } from "./ceremony-plan.mjs";
@@ -93,8 +94,8 @@ export async function remoteEngine(argv) {
 }
 
 /** The live head, read immediately before each mutating step. */
-export async function readChainHead() {
-  const status = await remoteEngine(["status", "--workspace", VM_WORKSPACE]);
+export async function readChainHead(workspace = VM_WORKSPACE) {
+  const status = await remoteEngine(["status", "--workspace", workspace]);
   if (!status.accepted) {
     throw new Error(`the host engine refused to report status: ${status.reasonCode ?? status.exitCode}`);
   }
@@ -106,13 +107,20 @@ export async function readChainHead() {
   };
 }
 
-export async function runCeremony({ payloadPath, dryRun = false }) {
+export async function runCeremony({ payloadPath, dryRun = false, partition = "TCRN-AOS" }) {
   const payloadText = readFileSync(payloadPath, "utf8");
   const payload = JSON.parse(payloadText);
   const admission = assertPayload(payload);
   if (!admission.ok) {
     return { ok: false, reasonCode: admission.reasonCode, problems: admission.problems };
   }
+
+  // TCRN-CROSS-INIT-017: the ceremony can target any partition whose chain lives
+  // on the AOS host. Default is the AOS partition itself; the fallback replay
+  // drives other partitions by naming them.
+  const target = partition === "TCRN-AOS"
+    ? { workspace: VM_WORKSPACE, attestDir: VM_ATTEST_DIR }
+    : aosPartition(partition);
 
   const catalogueResult = await remoteEngine(["commands"]);
   if (!catalogueResult.accepted) {
@@ -121,7 +129,7 @@ export async function runCeremony({ payloadPath, dryRun = false }) {
   const commands = catalogueResult.json.commands ?? catalogueResult.json.result?.commands ?? [];
   const catalogue = catalogueIndex(commands);
 
-  const supply = { workspace: VM_WORKSPACE, attestDir: VM_ATTEST_DIR, actor: assertAttributedActor(payload.actor ?? ACTOR) };
+  const supply = { workspace: target.workspace, attestDir: target.attestDir, actor: assertAttributedActor(payload.actor ?? ACTOR) };
   const receipt = {
     schemaVersion: "aos.local-client-ceremony-receipt.v1",
     story: payload.story,
@@ -129,12 +137,13 @@ export async function runCeremony({ payloadPath, dryRun = false }) {
     startedAt: instant(),
     dryRun,
     host: VM_HOST,
+    partition,
     topology: {
       engineCli: VM_ENGINE_CLI,
-      workspace: VM_WORKSPACE,
-      attestDir: VM_ATTEST_DIR,
+      workspace: target.workspace,
+      attestDir: target.attestDir,
       actor: supply.actor,
-      configuredIn: "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs)"
+      configuredIn: "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
     },
     // Repo-relative when the payload lives in this checkout, so a receipt can be
     // committed as evidence without carrying this laptop's home directory into it
@@ -147,7 +156,7 @@ export async function runCeremony({ payloadPath, dryRun = false }) {
       bytes: Buffer.byteLength(payloadText, "utf8")
     },
     hostEngineCatalogue: { verbs: commands.length },
-    chainBefore: await readChainHead(),
+    chainBefore: await readChainHead(target.workspace),
     steps: [],
     readback: [],
     chainAfter: null
@@ -158,7 +167,7 @@ export async function runCeremony({ payloadPath, dryRun = false }) {
     // runs, so one sentinel captured at the start would be stale by step two — and a
     // stale sentinel does not fail safe silently, it fails the step with a CAS
     // mismatch, which reads like a defect in the payload.
-    const head = step.readHeadFirst === false ? receipt.chainBefore : await readChainHead();
+    const head = step.readHeadFirst === false ? receipt.chainBefore : await readChainHead(target.workspace);
     const plan = planStep({ step, catalogue, supply, chainVersion: head.version, at: instant() });
     if (!plan.ok) {
       receipt.steps.push({ ...plan, headAtPlanning: head.version });
@@ -189,7 +198,7 @@ export async function runCeremony({ payloadPath, dryRun = false }) {
     if (!result.accepted) {
       receipt.ok = false;
       receipt.reasonCode = "STEP_REFUSED_BY_HOST_ENGINE";
-      receipt.chainAfter = await readChainHead();
+      receipt.chainAfter = await readChainHead(target.workspace);
       return receipt;
     }
   }
@@ -234,12 +243,12 @@ export async function runCeremony({ payloadPath, dryRun = false }) {
     if (!result.accepted || verdict.ok === false) {
       receipt.ok = false;
       receipt.reasonCode = !result.accepted ? "READBACK_REFUSED" : "READBACK_DIVERGENT";
-      receipt.chainAfter = await readChainHead();
+      receipt.chainAfter = await readChainHead(target.workspace);
       return receipt;
     }
   }
 
-  receipt.chainAfter = await readChainHead();
+  receipt.chainAfter = await readChainHead(target.workspace);
   receipt.eventsAppended = receipt.chainAfter.version - receipt.chainBefore.version;
   receipt.ok = true;
   receipt.reasonCode = dryRun ? "CEREMONY_PLANNED_ONLY" : "CEREMONY_COMPLETED_AND_READ_BACK";
@@ -255,12 +264,13 @@ function argument(name) {
 if (import.meta.url === pathToFileURL(resolve(process.argv[1] ?? "")).href) {
   const payloadPath = argument("payload");
   if (!payloadPath) {
-    process.stderr.write("usage: ceremony.mjs --payload <file.json> [--receipt <file.json>] [--dry-run]\n");
+    process.stderr.write("usage: ceremony.mjs --payload <file.json> [--receipt <file.json>] [--dry-run] [--partition <id>]\n");
     process.exit(2);
   }
   const receipt = await runCeremony({
     payloadPath: resolve(payloadPath),
-    dryRun: process.argv.includes("--dry-run")
+    dryRun: process.argv.includes("--dry-run"),
+    partition: argument("partition") ?? "TCRN-AOS"
   });
   const receiptPath = argument("receipt");
   if (receiptPath) {
