@@ -2,13 +2,13 @@
   "schemaVersion": "aos.engine-host-deploy.v1",
   "ruling": "TCRN-AOS-MIN-007",
   "ok": true,
-  "startedAt": "2026-08-03T05:37:17Z",
-  "finishedAt": "2026-08-03T05:37:18Z",
+  "startedAt": "2026-08-04T08:23:25Z",
+  "finishedAt": "2026-08-04T08:23:26Z",
   "source": {
     "locator": "<local-governed-copy>",
-    "version": "0.10.1",
-    "tag": "v0.10.1",
-    "commit": "3c99044fc2ed4bbf4b53a8ea34c29a5ed95ee570",
+    "version": "0.10.2",
+    "tag": "v0.10.2",
+    "commit": "3d8e5be10453f2821e92a6beb244b07e19ad1524",
     "workingTreeClean": true,
     "distCoveredByTag": false
   },
@@ -20,15 +20,15 @@
     ],
     "destinationHost": "tcrn-platform-dev",
     "enginePath": "/srv/tcrn/engine/tcrn-workflow",
-    "fileCount": 411,
-    "totalBytes": 10620290,
+    "fileCount": 397,
+    "totalBytes": 5722237,
     "fileSetDigest": {
-      "local": "7f5cc858747ba188d3a60b1c773885a75e6b5e4fc5d0c933cae5e3731e5f1c2a",
-      "remote": "7f5cc858747ba188d3a60b1c773885a75e6b5e4fc5d0c933cae5e3731e5f1c2a",
+      "local": "4ea1f75017d31d3ed42c5a1d2d8e037ebd3741f6d6f0021df1c90306edd44b2b",
+      "remote": "4ea1f75017d31d3ed42c5a1d2d8e037ebd3741f6d6f0021df1c90306edd44b2b",
       "match": true
     },
     "perFile": {
-      "compared": 411,
+      "compared": 397,
       "mismatched": 0,
       "missingOnVm": 0,
       "extraOnVm": 0
@@ -44,7 +44,7 @@
       "relocation-adopt",
       "relocation-inspect"
     ],
-    "remotePackageVersion": "0.10.1",
+    "remotePackageVersion": "0.10.2",
     "runsWithoutNodeModules": true
   },
   "trust": {
@@ -54,8 +54,11 @@
   },
   "predicateRedProofs": {
     "digestLedger": {
-      "executed": false,
-      "reason": "run with --red-drill to exercise the predicate"
+      "executed": true,
+      "predicate": "per-file sha256 comparison",
+      "flippedFile": "README.md",
+      "wentRed": true,
+      "restoredGreen": true
     },
     "filesystemGate": {
       "executed": true,
@@ -69,7 +72,7 @@
   "statfs": {
     "scratchParent": {
       "path": "/srv/tcrn",
-      "dfLine": "/dev/mapper/ubuntu--vg-ubuntu--lv ext4 102626232 29425704  67941264  31% /",
+      "dfLine": "/dev/mapper/ubuntu--vg-ubuntu--lv ext4 102626232 29456596  67910372  31% /",
       "magic": "0xef53",
       "inPinnedSet": true
     },
@@ -253,7 +256,7 @@
     }
   },
   "reclaim": {
-    "remoteEngineProcesses": 1,
+    "remoteEngineProcesses": 0,
     "localSshProcesses": 0,
     "controlMasterClosed": true
   }

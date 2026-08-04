@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Paired backup, on a schedule (TCRN-CROSS-STORY-128).
+
+  WHY A TEMPLATE AND NOT A LOADED AGENT. This file is committed; loading it is a
+  separate act on one operator's machine. The path below is that machine's, so a
+  reader on another one must edit it before `launchctl load`. Keeping the template
+  in the repository and the loading out of it is deliberate: a persistent local
+  configuration is the operator's to install, and a repository that silently
+  scheduled work on whoever checked it out would be doing something nobody asked
+  for.
+
+  WHY --if-due AND NOT A PLAIN BACKUP. The flow judges each chain separately and
+  skips the ones whose off-site copy is still fresh. "Not due" is the scheduler's
+  normal answer, not a failure — see the runbook. It also means this agent can run
+  often and back up rarely, which is what makes a laptop schedule workable: the
+  machine is not always awake at any fixed hour, so the question has to be "is it
+  due" rather than "is it 03:00".
+
+  WHY 6 HOURS. The interval it enforces is 24h (AOS_BACKUP_INTERVAL_HOURS) with a
+  6h grace before the due alert fires. Waking four times a day means a laptop that
+  missed one window still backs up inside the grace, instead of the alert going
+  red because the machine happened to be asleep at the appointed minute.
+
+  RunAtLoad is false on purpose: loading an agent should not start a network
+  transfer at the moment the operator is setting it up.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.tcrn.aos.paired-backup</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>-lc</string>
+    <string>cd "$HOME/Code/TCRN Platform/TCRN-AOS" &amp;&amp; pnpm paired:backup-if-due</string>
+  </array>
+
+  <key>StartInterval</key>
+  <integer>21600</integer>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/tcrn-aos-paired-backup.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/tcrn-aos-paired-backup.err</string>
+</dict>
+</plist>

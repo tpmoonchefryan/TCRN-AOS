@@ -4,14 +4,14 @@
 import type { CockpitData } from "./cockpit-types.js";
 
 export const cockpitData: CockpitData = {
-  "generatedAt": "2026-08-03T08:27:17Z",
+  "generatedAt": "2026-08-04T08:25:33Z",
   "partitions": [
     {
       "id": "cross-project",
       "label": "Platform governance",
       "labelZh": "平台治理",
-      "chainVersion": 1424,
-      "verifiedAt": "2026-08-03T08:27:17Z",
+      "chainVersion": 1473,
+      "verifiedAt": "2026-08-04T08:25:33Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -23,7 +23,7 @@ export const cockpitData: CockpitData = {
       "label": "Design System",
       "labelZh": "设计系统",
       "chainVersion": 983,
-      "verifiedAt": "2026-08-03T08:27:17Z",
+      "verifiedAt": "2026-08-04T08:25:33Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -35,7 +35,7 @@ export const cockpitData: CockpitData = {
       "label": "TMS",
       "labelZh": "TMS",
       "chainVersion": 228,
-      "verifiedAt": "2026-08-03T08:27:17Z",
+      "verifiedAt": "2026-08-04T08:25:33Z",
       "readVia": "export",
       "attestationFromSequence": null,
       "unavailable": []
@@ -44,8 +44,8 @@ export const cockpitData: CockpitData = {
       "id": "TCRN-AOS",
       "label": "AOS",
       "labelZh": "AOS",
-      "chainVersion": 1028,
-      "verifiedAt": "2026-08-03T08:27:17Z",
+      "chainVersion": 1040,
+      "verifiedAt": "2026-08-04T08:25:33Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -57,7 +57,7 @@ export const cockpitData: CockpitData = {
       "label": "Joi Button",
       "labelZh": "Joi Button",
       "chainVersion": 568,
-      "verifiedAt": "2026-08-03T08:27:17Z",
+      "verifiedAt": "2026-08-04T08:25:33Z",
       "readVia": "export",
       "attestationFromSequence": 1,
       "unavailable": []
@@ -2117,6 +2117,30 @@ export const cockpitData: CockpitData = {
       "parentId": null,
       "revision": 5,
       "scope": "引擎 v0.10.1 更新(WSA-3 写路径修复)完成,2026-08-03。背景:为强制'INIT done 禁活子项',引擎 0.10.0 把 WSA-3 放进 validateWorkGraph——但它是 replay 级校验,对历史上'先关 INIT 后收口子项'的合法序列逐事件重放时触发 WORKSPACE_EVENT_CORRUPT,致 AOS 活链(version 1023)整体不可读。修复:WSA-3 移到 transitionWork 写路径准入——仅在把 INIT 置 done 且子树有活非终态项时拒(WORKSPACE_INPUT_INVALID),replay 不拦,历史链恢复可读。验证:链 status/validate 均 WORKSPACE_COMMAND_COMPLETED(version 1023, work 152);p3-file-engine WSA-3 写路径测试绿。版本 0.10.0(缺陷)→0.10.1(修复),VM 引擎经 apply 同步,trust 门绿。教训:新校验若进 validateWorkGraph 即 replay 级,会对存量历史链 fail-closed;replay 级约束须评估存量链的合法历史序列。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:8510287c7f5c4d577e6b6c87",
+      "externalKey": "TCRN-AOS-INC-049",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 5,
+      "scope": "Owner 授权(2026-08-04):刷新机制按推荐两步走——短期先落明文运行手册(每次受治写收尾后重建 cockpit 数据并 apply 到两面共享的静态根 /srv/tcrn/aos-cockpit/runtime/web),中期把数据构建迁上 VM 并挂 systemd timer 定时重建(需先把 build-cockpit-data 及投影脚本部署上 VM)。本单无开放决策点;仍 planned 不开工,交付时 Owner 复核。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "TCRN-AOS",
+      "id": "work:6784ca53a11e6ae01bc490ed",
+      "externalKey": "TCRN-AOS-INC-050",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 7,
+      "scope": "实现完成(2026-08-04,Owner 裁定方案①『给 gate 真目的地』)。落点比原提案更准:提案说链到 dashboard 锚点,实读源后改为链到**持有该门的工作项详情页**——`apps/web/src/cockpit-detail.tsx` 已按 `gate.partitionId===item.partitionId && gate.workId===item.id` 渲染该项的全部门(含 outcomeClass 与并列的审议),故那是唯一真正显示这道门的页面,是下钻而非平移;dashboard 只显示每分区 pending 计数,链过去仍看不到门本身。改动(apps/web/src/cockpit-links.ts):①新增两个模块级索引 `workIdByGate`(门→其 workId)与 `workKeyById`(工作项 id→externalKey??id),与既有 conferenceByMinutes/minutesKeyById 同一惯例;②inboxLink 增 kind==='gate' 分支,解析到 `/work-items/<externalKey>`;③**兜底改为返回无 href**(调用方渲染成非链接),与本模块头部自陈的规则一致——『the honest state for an identifier with no page is a non-link, not a link that 404s』;原兜底 `/work-items?project=<行分区>` 看着像目的地、实为一次作用域切换,正是判据所报。数据实证:17 道门全部带 workId 且全部可解析到工作项详情页(0 例外);inbox 现有 2 条门行(Joi-Button 与 TCRN-TMS),此前**只有 Joi 一条报红是巧合**——TMS 那条的 project= 恰好等于探针所选 project,缺陷被掩盖,第二个分区的门到达才暴露,而不是它被写下时。验证:`pnpm usability:proof` exit 0、137/137、`state-preserved:/inbox:project` 由 124/125 变 125/125;反注入原 href 立即回到 2/137 红、复原即绿(两侧俱验);`pnpm typecheck` exit 0;`pnpm verify` exit 0(全量)。残余:本修复不给门发外部键(17 道门 externalKey 全 null 是投影现状),门仍无自己的页面——这是刻意保留的既有事实,不是本单遗留。",
       "decidedBy": [],
       "sprintWorkId": null
     },
@@ -6493,6 +6517,18 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "cross-project",
+      "id": "work:883ad134c2afc82104c80658",
+      "externalKey": "TCRN-CROSS-EPIC-040",
+      "kind": "Epic",
+      "status": "planned",
+      "parentId": "work:ac4fa8c6de8eb8bba5146114",
+      "revision": 2,
+      "scope": "迁移收尾——2026-08-04 部署质量复核立单。INIT-017 五链迁 VM 主体已完成(五链 status/validate 全绿;本机五地址全 WORKSPACE_RELOCATION_VACATED),但独立复核发现四项尾款未收,由本 Epic 承载:STORY-127 fallback replay 修复入库、STORY-128 备份扩五链恢复运转、STORY-129 容器垃圾清理与 local-purity 盲区、STORY-130 INIT-017 执行补录与收口。全部 Story 终态后按 WSA-3 写路径关闭 INIT-017。复核方式:对话导出(TCRN-Workflow-AOS-collaboration-readiness-export-2026-08-03.md)对照 2026-08-04 实测。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
       "id": "work:155db2ca30db81e6574cc547",
       "externalKey": "TCRN-CROSS-INC-001",
       "kind": "Incident",
@@ -6835,6 +6871,30 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "cross-project",
+      "id": "work:7e67555a65d2c22fda0e56fd",
+      "externalKey": "TCRN-CROSS-INC-029",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 7,
+      "scope": "实现完成(2026-08-04,Owner 裁定 B=重装)。**先更正本单原始症状描述**:原注记称『verify-installed-copy 返回 ARCHIVE_LIMIT_EXCEEDED』——那是**探针错**,不是信任面坏:该动词的 --installed-dir 指的是**已安装的 skill 副本**(它 reconstructArchiveFromDirectory 重建 skill 归档比 EXPECTED_ARCHIVE_SHA256),我把它指向了引擎树(44MB)故超限;真正的 skill 副本在**平台根 .claude/skills/tcrn-workflow-helper/**。但本单的底层发现为真且已修:0.10.x 曾直接开发于受信副本内、pin 停 v0.9.0、引擎与 helper 失配。实施(五环,缺一不可,各环均实测报错后修):①引擎发 v0.10.2 并打 **annotated** tag(v0.10.0/v0.10.1 均为 lightweight,IDENTITY 要 pin tag 对象,故此前根本无法重钉);②helper 按 RELEASING.md 重钉并推送,新 anchor a1e0f2c4…;③换掉已安装 bootstrap 运行时(否则 resolve 报 ROOT_IDENTITY_MISMATCH),换前以六文档 anchor 三方校验字节;④引擎干净重装 `git clone --branch v0.10.2`(helper 的 install/update/reinstall 是 test-root-only、非真装法)→ resolve 得 ROOT_RESOLVED → pnpm install --frozen-lockfile --ignore-scripts → pnpm build(CLI 从 dist/build 导入);⑤更新 skill 副本+provenance+state,依次报 IDENTITY_MISMATCH→PROVENANCE_INVALID→STATE_INVALID 并逐个修。**STATE_INVALID 两因**:文件模式须保持 0600(校验带 privateFile:true)、内容须 canonicalJson 字节形态含结尾换行(JSON.stringify 少一字节即红)——受管状态不该手写,须写则用 bootstrap 自己的 canonicalJson。终态:`INSTALLED_COPY_VALIDATED` / v0.10.2,marker 已刷新;本机引擎=干净 checkout at v0.10.2;dev 仓已追平远端。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:181c8130a88c5db683deafc8",
+      "externalKey": "TCRN-CROSS-INC-030",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 7,
+      "scope": "实现完成(2026-08-04,Owner 裁定=按漏洞堵住)。引擎 createWork 增写路径准入:parent 为 done 且非 tombstone 的 Initiative、且新记录非终态时,拒 WORKSPACE_INPUT_INVALID(`cannot add live work under Initiative <id>: it is already done`)。**放置点经实证选定**:落在 appendEvent 的 reducer(buildDelta)内——已读源确认该回调**只在写路径跑一次**(注释自陈『WSA-1: the single full replay per mutation. Input validation runs against this claim-fresh state (via buildDelta)』),replay 不经它;**未**放 validateWorkGraph,那正是 0.10.0 让存量链 fail-closed 的位置(TCRN-AOS-INC-048)。负例测试两侧俱验:同一个 create 在 done Initiative 下被拒、在活 Initiative 下被接受,故判据依父状态区分而非一概拒绝;撤守卫后该测试立即红(`Missing expected rejection`),复原即绿。发布:v0.10.2(引擎 57 个测试文件全绿;**verify:p8 首次通过**——0.10.0/0.10.1 因四 manifest 版本不一致从未跑过该门)。VM 引擎经**受治部署** `deploy/aos-engine-host/apply.mjs --red-drill` 收敛(rsync --archive --delete + 双向逐文件 sha256 账本 + 远端 commands 应答),远端实测 CLI_CATALOG_READY/101 cli 动词/103 总数/0.10.2/无 node_modules 可运行;账本红演练翻一字节即红、复原即绿。五链在新引擎下 validate 全过(全量重放不 fail-closed,INC-048 教训成立)。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
       "id": "work:a9f610a2e09324269b8fd9bb",
       "externalKey": "TCRN-CROSS-INIT-001",
       "kind": "Initiative",
@@ -7052,8 +7112,8 @@ export const cockpitData: CockpitData = {
       "kind": "Initiative",
       "status": "planned",
       "parentId": null,
-      "revision": 2,
-      "scope": "全平台单一权威+fallback 方向(2026-08-03,Owner 裁)。设计:五条链(cross/DS/TMS/Joi/AOS)物理迁到 AOS VM,各自保持独立链身份;所有读写经 AOS(ceremony 走 VM);本地为影子链缓存(独立 workspace,非迁置,可写);AOS 不可达时 agent 探测后写影子,AOS 恢复后影子事件重放回 AOS 权威链(AOS 为准,本地补积压);无常驻监控,agent 写前探测+恢复后同步。CLAUDE.md 留各仓根目录作 Agent 导航(不随链走)。Joi-Button 非 TCRN 也走。实现顺序:方向裁定→Joi 试点迁置+影子+重放→批量迁另三链→读面聚合5分区。",
+      "revision": 3,
+      "scope": "INIT-017 执行补录(2026-08-04,agent:fable 经 aos-local-client/ceremony.mjs 自本机远程写 VM cross-project 链)。本 Initiative 承载『全平台单一权威+fallback』方向的执行;链上此前 0 子项、状态 planned,执行细节仅存于会话导出与持久记忆。现补录如下:①五链迁置——cross-project、TCRN-Design-System、TCRN-TMS、Joi-Button、TCRN-AOS 各自经 relocation 五动词族物理迁到 VM 主机 tcrn-platform-dev(源侧 relocation-plan 后 relocation-vacate、目的侧 relocation-adopt;relocation-inspect 为读、relocation-abort 为『adopt 后即分叉』的非回滚动词);迁后本机五地址三读动词与全写动词均以 WORKSPACE_RELOCATION_VACATED 应答(设计如此,非损坏)。②knowledge 层随迁重建。③引擎 0.10.0→0.10.1 发布,修复 WSA-3 写路径准入缺陷,交叉引用 TCRN-AOS-INC-048:work-graph 校验属 replay 级、会对存量合法链 fail-closed,故新准入须落 transitionWork/createWork 写路径而非 validateWorkGraph。④本机建立四座影子链(fallback 缓存,独立可写 workspace;AOS 不可达时 agent 探测后写影子、AOS 恢复后影子事件重放回 VM 权威链,以 AOS 为准)。⑤读面聚合与 VM 座舱部署(tcrn-aos-cockpit systemd 常驻,绑 127.0.0.1:4318,仅经 SSH 隧道可达);LAN 静态镜像退役、路由移除。真值命令见平台根 CLAUDE.md 第三节第 0 小节的机核声明表。实测参照(2026-08-04,非判据):VM 引擎 0.10.1;cross-project 链 version 1461。迁移过程叙述见会话导出 TCRN-Workflow-AOS-collaboration-readiness-export-2026-08-03.md(受治归档位置待 STORY-134 定,现居 ~/Documents)。收口序列见 STORY-130 与 EPIC-040:INIT-017→done 须待全部 EPIC-040 子 Story 与 INC-029/INC-030 终态后方可执行(WSA-3)。",
       "decidedBy": [],
       "sprintWorkId": null
     },
@@ -8673,6 +8733,126 @@ export const cockpitData: CockpitData = {
       "scope": "分档配置:enforce(拒停)/observe(只通知不拒)按模型模式配置;Fable 默认档按 D2 裁定(推荐 observe 起步,收两周数据再议是否 enforce);observe 命中记日志,为后续裁定留观测数据——约束前先观测,不预设任何模型有罪。",
       "decidedBy": [],
       "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:6b238e87bd486fba8db0c3b5",
+      "externalKey": "TCRN-CROSS-STORY-127",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:883ad134c2afc82104c80658",
+      "revision": 2,
+      "scope": "修复 fallback replay 并入库。实测缺陷(2026-08-04):TCRN-AOS/deploy/aos-local-client/fallback-cli.mjs 的 replay 回读锚点对非 AOS 分区硬编码 Joi-Button 记录 id(work:170682d8fbf860d6e9c293de),cross/DS/TMS 三链无此记录,回读永不过、退出码 1、队列永不清——三分区的 fallback 恢复路径失效。修复项:①锚点按 --partition 取各链自有稳定记录(如各链首个 Initiative);②fallback-cli.mjs 与 payloads/cross-init016-a.json 提交入库(现均 untracked,机制仅存单机工作区);③队列写原子化(临时文件+rename),损坏时报错——现 readQueue 的 catch{return []} 会静默丢弃全部积压,违背『写不丢』承诺;④注释与实现对齐:『影子链是受治工作区承接 fallback 写』『重跑只补余量』两处名不副实(实现是裸 JSON 队列+全量清空);⑤补 TCRN-AOS 分区自身 AOS 不可达时 shadowWorkspace=null 的 dirname 崩溃路径。验收:cross/DS/TMS 各做一次断网入队→恢复 replay→回读通过的实测。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:b03528876fc665cf848c4926",
+      "externalKey": "TCRN-CROSS-STORY-128",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:883ad134c2afc82104c80658",
+      "revision": 3,
+      "scope": "Owner 授权(2026-08-04):调度形态按推荐——本机定时(launchd 挂 paired:backup-if-due,PULL 方向不变),辅以运行手册写明手动触发路径。本单无开放决策点;仍 planned 不开工,交付时 Owner 复核。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:8e016c9c253809a6f9585595",
+      "externalKey": "TCRN-CROSS-STORY-129",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:883ad134c2afc82104c80658",
+      "revision": 2,
+      "scope": "清理工作区容器垃圾并补 local-purity 盲区。现状(2026-08-04 实测):.tcrn-workspace/ 下存在三个引号事故目录——『cross-project-shadow cross-project SHADOW cross-project』『TCRN-Design-System-shadow TCRN-Design-System SHADOW-DS TCRN-Design-System』『TCRN-TMS-shadow TCRN-TMS SHADOW-TMS TCRN-TMS』(目录名含空格,系迁移会话某次带引号丢失的命令把整串参数当目录名),各含 workspace/transient/evidence-locator 局部树,无链(引擎答 WORKSPACE_PATH_INVALID: ENOENT)。local-purity 门未抓到,因其只核对名册内五地址、不扫容器全量——垃圾目录在绿灯下存活即盲区实证。修复项:①删三个垃圾目录;②local-purity 增容器扫描判据:名册(五分区+四影子)之外的任何 workspace 形目录即红;③新判据须先真做一次『什么会让它变红』(判据两侧可不同)。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:d4057de3b0203524d7179fbf",
+      "externalKey": "TCRN-CROSS-STORY-130",
+      "kind": "Story",
+      "status": "active",
+      "parentId": "work:883ad134c2afc82104c80658",
+      "revision": 5,
+      "scope": "STORY-130 交付进行中(2026-08-04)。①已 work-annotate 补录 INIT-017 迁移执行摘要(五链 relocation 五动词、knowledge 重建、引擎 0.10.0→0.10.1 交叉引用 TCRN-AOS-INC-048、四座影子链、读面与座舱部署)——完成。③stop-pact 悬空复盘:契约(2026-08-03T08:03:29Z 起、scope=补齐迁移剩余、boundSession=null)在旗舰 run 上运行至近自然过期(2026-08-04T08:03Z)未经 complete——平台自建停止纪律在旗舰会话未被宿主层强制(旗舰判据 observe 只通知不拦)、属 stop-pact 采纳缺口又一实证(参 TCRN-CROSS-INIT-016);本次已以 CLI 显式 complete(PACT_COMPLETED)作纠正性状态迁移——完成。②INIT-017 收口尚未执行、且不由本次代替:INIT-017→ready→active→done 须待全部 EPIC-040 子 Story(127/128/129/131/132/134/135/136;133 已 done)与 EPIC-040 本身终态、且人工核实顶层 Incident INC-029/INC-030(parentId=null、不在 INIT-017 子树、WSA-3 不据其阻断)亦终态后方可执行。故本 Story 保持 active、作该收口仪式的登记责任单、不提前置 done——提前 done 会使 INIT-017 收口失去 tracked owner、亦违背本批正在强化的 WSA-3『子项未终态不得关父』精神。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:b3cb3a51bc631f0975b9a287",
+      "externalKey": "TCRN-CROSS-STORY-131",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:883ad134c2afc82104c80658",
+      "revision": 2,
+      "scope": "helper 补 AOS 模式支持。Owner 裁定(2026-08-04):平台双模式并存——纯本地模式与 AOS 模式;本地模式的 helper 机构(pin/install/verify-installed-copy)原样保留,不删,缺的是 AOS 模式一侧。实测缺口(2026-08-04):VM 引擎 /srv/tcrn/engine/tcrn-workflow 为裸同步树,目录内无 provenance/state/receipt 任何信任文件,身份仅凭 package.json 自述 0.10.1;helper CLI 全部动词只收本地目录参数(installed-dir 等),无 vm home 概念;『每会话验证已安装副本』纪律对实际驱动 VM 引擎的会话无从执行。修复项:①helper 增 vm 目标——经 SSH 对 VM 引擎做 pinned 发布摘要验证,给出 INSTALLED_COPY_VALIDATED 等价的可机验答复;②受治的 VM 引擎安装/更新路径(前置=0.10.1 的 helper 发布件与 pin,衔接 TCRN-CROSS-INC-029,两票共享该前置);③会话纪律扩展:验证你实际驱动的那份引擎——本地写验本地副本,AOS 写验 VM 副本;④验收:篡改 VM 引擎任一字节该验证能红,恢复后能绿(判据两侧可不同)。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:326c05e7a8618e403849d185",
+      "externalKey": "TCRN-CROSS-STORY-132",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:883ad134c2afc82104c80658",
+      "revision": 3,
+      "scope": "Owner 授权(2026-08-04):实现形态按推荐取候选 A——本机 MCP 增远程分区目标(读经 SSH 转 VM 引擎执行),不起 VM 侧常驻 MCP 面。候选 B 落选理由:多一个需维护与审计的常驻表面。硬约束不变:写路径 pinned grant 与 ceremony 回读纪律不得因远程化放松。本单无开放决策点;仍 planned 不开工,交付时 Owner 复核。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:800086a2dfa6543493aebf9c",
+      "externalKey": "TCRN-CROSS-STORY-133",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:883ad134c2afc82104c80658",
+      "revision": 6,
+      "scope": "实现完成(2026-08-04)。改 docs/delivery-cadence-convention.md:①声明块四行(cross-project/TCRN-Design-System/TCRN-TMS/Joi-Button)由 home=local+.tcrn-workspace 地址改为 home=vm+/srv/tcrn/governance 地址+ssh 复核命令,与平台 CLAUDE.md 表同构;②第53行陈述由『截至 2026-07-31 五条…对 TCRN-AOS 前提已不成立』更新为『截至 2026-08-03 INIT-017 五链全迁 VM,对五个分区前提全不成立』。验证:pnpm --dir TCRN-AOS doc-topology:proof 整体 EXIT=0、ok=true、reasonCode=DOC_TOPOLOGY_IN_SYNC、findings=0(修前 EXIT=1、8 findings)。无需推送:docs/ 在平台根、非 git 仓。迁移教训入册(STORY-130 复盘):改 roster 的变更必须全量重跑 doc-topology 并读整体 exit code——本单起因即迁移只改各仓 CLAUDE.md、漏了这份同在名册的公约文档;另 08-04 早间曾以 |tail 只看演练步 DOC_TOPOLOGY_IN_SYNC 误判整体绿(判决只认顶层 exit/ok)。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:4130309c34ba00f0fe8a8930",
+      "externalKey": "TCRN-CROSS-STORY-134",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:883ad134c2afc82104c80658",
+      "revision": 2,
+      "scope": "治理相关会话导出与仪式收据的归档地。现象与证据(2026-08-04):对话导出 TCRN-Workflow-AOS-collaboration-readiness-export-2026-08-03.md(2.9MB,现居 ~/Documents)是 INIT-017 迁移的唯一过程叙述,却无治理归属、无索引、链上零引用、未过主机路径与替换字符卫生;08-04 拆单与 CONF-050 立约批次的 14 份 ceremony receipts 落在会话 scratchpad,会话结束即消失。修复项:①定归档地(受治 evidence 类目录)与命名规则;②归档卫生:留本机副本可含主机路径,任何出机副本须过 scrubHostPaths 与替换字符 sweep(先例 evidence-hygiene 与 INC-037);③链上引用:STORY-130 补录 INIT-017 时 annotate 引用导出的归档位置;④首批归档实例=该导出+本批 receipts;⑤导出自动化工具列为执行期可选项,不作必做。验收:归档规则成文;首批两类实例落位;链上至少一条注记引用归档路径。决策点:归档地具体位置属执行期选择,无 Owner 级决策。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:896735427eeb41c137195a8d",
+      "externalKey": "TCRN-CROSS-STORY-135",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:883ad134c2afc82104c80658",
+      "revision": 2,
+      "scope": "ceremony receipt 保留引擎报错明细。现象与证据(2026-08-04 实测):CONF-050 闭会首次尝试撞键(MIN-052 已占),receipt 的失败步仅含 reasonCode=WORKSPACE_INPUT_INVALID 与 argv,引擎报错原文『conference minutes … already exist』被丢弃,诊断被迫在本地临时工作区复现才获得。受治写的审计记录应能自答『为什么失败』。修复项:①TCRN-AOS/deploy/aos-local-client/ceremony.mjs 步骤执行捕获引擎输出的 error 字段,失败步全文入 receipt(成功步可截断);②与证据卫生兼容:报错文本入档前过 scrubHostPaths。验收:人为构造一次必败步(如重复键)其 receipt 含引擎 error 原文;既有绿路径回归不变。决策点:无。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:529a15b3bbb7df42cf39347b",
+      "externalKey": "TCRN-CROSS-STORY-136",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:883ad134c2afc82104c80658",
+      "revision": 2,
+      "scope": "键号占用只读反查工具。现象与证据:conference/minutes/position/gate 的外部键不作为字段入库,唯一性由 deriveStableId(namespace 加 NUL 分隔加大写键的 sha256 前 24 hex,packages/protocol/src/index.ts)派生 id 撞库强制——键号高水位无法文本检索。同一陷阱已三踩:2026-07-23 记档、07-26 复踩(CONF-040)、08-04 再踩(信文档地板 MIN-051 取 052 撞键;实测 MIN-045..052 全占)。本轮已验证只读反查流程:本地批量派生候选 id、conference-minutes-list 全量 id 交集、取首空闲,零试错。修复项:固化为命令——候选 A=本地只读 CLI(next-free-key/key-taken,置 aos-local-client 或引擎 tools/);候选 B=引擎 list 投影以 additive 方式补 externalKey 字段(须守 storageVersion 与 additive 纪律,参 rc5-compatibility)。形态属执行期选择。验收:对 cross 链当日返回 MIN 下一空闲=054、CONF=051;对 TCRN-CROSS-MIN-052 判已占;对一个未用键判空闲。决策点:实现形态执行期定,无 Owner 级决策。",
+      "decidedBy": [],
+      "sprintWorkId": null
     }
   ],
   "gates": [
@@ -9912,6 +10092,17 @@ export const cockpitData: CockpitData = {
       "status": "closed",
       "workIds": [
         "work:877d59524a910d627134f473"
+      ]
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "conference:52581fc31af5fb17ffc828f4",
+      "externalKey": null,
+      "title": "单据颗粒度与派工就绪公约:两层制与要素清单的采纳裁定",
+      "type": "architecture",
+      "status": "closed",
+      "workIds": [
+        "work:883ad134c2afc82104c80658"
       ]
     },
     {
@@ -15652,6 +15843,18 @@ export const cockpitData: CockpitData = {
         "fragmentCount": 1
       }
     ],
+    "conference:52581fc31af5fb17ffc828f4": [
+      {
+        "conferenceId": "conference:52581fc31af5fb17ffc828f4",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:2185aca7eba63e7dc3912f14"
+        ],
+        "externalKeys": [],
+        "body": "执行形态:synthesis-only。理由:问题面窄且方案要点已由 Owner 于 2026-08-04 对话逐项确认,分头产出将得到同构答案。主张采纳《单据颗粒度与派工就绪公约》:①两层制——链上单据保持记录级颗粒度,必含四要素:现象与证据(含复核命令)、修复项、可红可绿的验收判据、决策点及其裁定状态;链是给未来读者的,不塞执行细节以免随实现漂移过时。②派工时由派工方生成执行简报(不落链的派工载荷),补四要素:红线边界(如控制树只许引擎写、写链必经 ceremony、测试调起方式)、文件指针、验证命令、完成时的链上收口动作。③缺要素不派工。④约束登记:能力补偿型;适用性谓词=不能从平台文档可靠重建红线与文件指针的执行档位、以及可能欠规格交接的派工方;执行宿主=本机散文清单(派工方主线程执行),现无机器门,如实登记;机器化落点=派工工具对缺要素单据 refuse(先例 deliberation-multi-agent.mjs 的 participant 无 seat 即拒)。⑤本公约为加法,不替换旧逻辑,不触发残余适用性分析,不改引擎字节。文档落点 docs/dispatch-readiness-convention.md 含附录 A 登记段;首批适用对象为 EPIC-040 下六单与 INC-029/030/049。",
+        "fragmentCount": 1
+      }
+    ],
     "conference:573c055d2659817fe93be17d": [
       {
         "conferenceId": "conference:573c055d2659817fe93be17d",
@@ -19613,6 +19816,20 @@ export const cockpitData: CockpitData = {
         "S017 投影同步管道未建时镜像新鲜度靠手工重推，自动化留待后续",
         "关系型写入 UI 形态无设计稿，需先出稿再开工"
       ]
+    },
+    "conference:52581fc31af5fb17ffc828f4": {
+      "id": "minutes:ff33f3598f6ed51dbd33b0ee",
+      "externalKey": "TCRN-CROSS-MIN-053",
+      "summary": "执行形态:synthesis-only(单上下文综合;Owner 已于 2026-08-04 对话逐项确认方案,分头产出将同构)。裁定:采纳《单据颗粒度与派工就绪公约》——链上单据记录级四要素(现象与证据含复核命令、修复项、可红可绿的验收判据、决策点及裁定状态)+派工执行简报四要素(红线边界、文件指针、验证命令、链上收口动作),缺要素不派工。约束登记:能力补偿型;执行宿主现为本机散文清单、无机器门如实登记;机器化落点=派工工具拒绝缺要素单据。文档落点 docs/dispatch-readiness-convention.md(公约 5 双落点之文档侧,本纪要为链侧)。首批适用:EPIC-040 六单与 INC-029/030/049。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "采纳两层颗粒度制:链上单据保持记录级四要素(现象与证据含复核命令、修复项、可红可绿的验收判据、决策点及裁定状态)",
+        "派工时由派工方生成执行简报补齐红线边界、文件指针、验证命令、链上收口动作四要素;缺任一要素不得派工",
+        "公约按《治理约束分类与进化公约》登记为能力补偿型;谓词=不能可靠重建平台红线与文件指针的执行档位及可能欠规格交接的派工方;执行宿主=本机散文清单且现无机器门(如实登记);机器化落点为派工工具对缺要素单据拒绝派出",
+        "本公约为加法不触发残余适用性分析;不改引擎字节;文档落点 docs/dispatch-readiness-convention.md;Owner 2026-08-04 对话明示同意采纳"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
     }
   },
   "activityByWork": {

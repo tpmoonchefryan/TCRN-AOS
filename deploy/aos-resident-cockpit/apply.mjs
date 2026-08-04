@@ -51,7 +51,7 @@ import { scrubHostPaths } from "../../scripts/lib/evidence-hygiene.mjs";
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const COMMITTED_UNIT = join(REPO_ROOT, "deploy/aos-resident-cockpit", UNIT_NAME);
 const STAGE = join(STATE_DIR, "stage");
-const EXPECTED_ENGINE_VERSION = "0.10.1";
+const EXPECTED_ENGINE_VERSION = "0.10.2";
 
 const receipt = {
   schemaVersion: "aos.resident-cockpit-apply.v1",

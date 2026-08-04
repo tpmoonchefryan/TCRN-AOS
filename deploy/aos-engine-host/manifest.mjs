@@ -51,8 +51,8 @@ export const manifest = {
     // The anchor is the release tag, checked three ways before a single byte
     // moves: package.json says this version, HEAD carries this tag, and the
     // working tree is clean. A dirty tree would make "v0.8.0 tag anchor" a lie.
-    requiredVersion: "0.10.1",
-    requiredTag: "v0.10.1",
+    requiredVersion: "0.10.2",
+    requiredTag: "v0.10.2",
   },
 
   transfer: {
@@ -80,7 +80,7 @@ export const manifest = {
     // a different engine version red-flags here.
     catalogReasonCode: "CLI_CATALOG_READY",
     cliVerbCount: 101,
-    remoteVersion: "0.10.1",
+    remoteVersion: "0.10.2",
     // Named verbs the far catalog must actually carry. A count alone would be
     // satisfied by any 101 verbs. event-list is why v0.7.0 → v0.8.0 happened;
     // relocation-adopt and relocation-inspect are why v0.8.0 → v0.9.0 happens —

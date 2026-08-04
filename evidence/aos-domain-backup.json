@@ -3,7 +3,7 @@
   "destinationRoot": "<local-home>/OneDrive/Github/tcrn-aos-domain-backups",
   "snapshot": {
     "schemaVersion": "aos.domain-backup.v1",
-    "takenAt": "2026-08-03T08-48-22-323Z",
+    "takenAt": "2026-08-04T08-32-26-881Z",
     "source": "<local-home>/.tcrn-aos/domain.db",
     "counts": {
       "annotations": 2,
@@ -29,7 +29,7 @@
   },
   "verified": {
     "ok": true,
-    "directory": "<local-home>/OneDrive/Github/tcrn-aos-domain-backups/2026-08-03T08-48-22-323Z",
+    "directory": "<local-home>/OneDrive/Github/tcrn-aos-domain-backups/2026-08-04T08-32-26-881Z",
     "digestsMatch": true,
     "roundTrips": true,
     "sqlCounts": {
@@ -48,7 +48,7 @@
   "rotated": {
     "kept": 5,
     "deleted": [
-      "2026-07-29T23-28-03-057Z"
+      "2026-07-29T23-42-36-839Z"
     ]
   }
 }

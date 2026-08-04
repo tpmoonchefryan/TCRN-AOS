@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Read-face data refresh, on a schedule (TCRN-AOS-INC-049, Owner ruling of
+  2026-08-04: the refresh runs from this machine rather than the VM).
+
+  WHAT PROBLEM THIS SOLVES. The LAN read face serves a BUILD-TIME snapshot. The
+  chains move on; the page does not, and nothing about a stale page looks stale —
+  it renders perfectly, with last week's answer. That is how a page built on
+  2026-08-03 was still being served while a day of governed work sat on the
+  chains, invisible to the only surface a human reads without an SSH tunnel.
+
+  WHY THIS MACHINE AND NOT THE VM. Ruled 2026-08-04. Building the data needs the
+  web toolchain; the VM has an engine and no node_modules by design, and shipping
+  a build toolchain there to serve one page is a larger change than the problem
+  warrants. The trade is honest and worth stating: while this laptop is off, the
+  read face goes stale, and only the freshness gate says so. That gate is the
+  compensating control — `pnpm read-face:freshness` asks the SERVICE what it is
+  serving, so nobody has to trust this schedule ran.
+
+  WHY 4 HOURS. Slower than the work arrives, faster than a working day. The data
+  build projects five chains serially and takes minutes; running it every few
+  minutes would spend the machine on a page nobody is watching at 3am.
+
+  RunAtLoad is false: installing a schedule should not kick off a VM deployment
+  at that moment.
+
+  TEMPLATE, NOT A LOADED AGENT — same rule as the paired-backup plist beside it.
+  The path is one machine's; loading is the operator's act, not the repository's.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.tcrn.aos.read-face-refresh</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>-lc</string>
+    <string>cd "$HOME/Code/TCRN Platform/TCRN-AOS" &amp;&amp; pnpm cockpit:data &amp;&amp; node deploy/aos-resident-cockpit/apply-read-face.mjs &amp;&amp; pnpm read-face:freshness</string>
+  </array>
+
+  <key>StartInterval</key>
+  <integer>14400</integer>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/tcrn-aos-read-face-refresh.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/tcrn-aos-read-face-refresh.err</string>
+</dict>
+</plist>
