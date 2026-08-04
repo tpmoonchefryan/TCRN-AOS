@@ -2,8 +2,8 @@
   "schemaVersion": "aos.engine-host-deploy.v1",
   "ruling": "TCRN-AOS-MIN-007",
   "ok": true,
-  "startedAt": "2026-08-04T08:23:25Z",
-  "finishedAt": "2026-08-04T08:23:26Z",
+  "startedAt": "2026-08-04T08:44:50Z",
+  "finishedAt": "2026-08-04T08:44:51Z",
   "source": {
     "locator": "<local-governed-copy>",
     "version": "0.10.2",
@@ -48,17 +48,14 @@
     "runsWithoutNodeModules": true
   },
   "trust": {
-    "statement": "the VM copy is byte-identical to the local governed copy (v0.9.0 tag anchor for tracked source, digest ledger for the whole shipped set including dist); no claim stronger than that comparison is made",
+    "statement": "the VM copy is byte-identical to the local governed copy (v0.10.2 tag anchor for tracked source, digest ledger for the whole shipped set including dist); no claim stronger than that comparison is made",
     "pinsTransferred": false,
     "authorityMaterialDeferredTo": "EPIC-034-S120"
   },
   "predicateRedProofs": {
     "digestLedger": {
-      "executed": true,
-      "predicate": "per-file sha256 comparison",
-      "flippedFile": "README.md",
-      "wentRed": true,
-      "restoredGreen": true
+      "executed": false,
+      "reason": "run with --red-drill to exercise the predicate"
     },
     "filesystemGate": {
       "executed": true,
@@ -72,7 +69,7 @@
   "statfs": {
     "scratchParent": {
       "path": "/srv/tcrn",
-      "dfLine": "/dev/mapper/ubuntu--vg-ubuntu--lv ext4 102626232 29456596  67910372  31% /",
+      "dfLine": "/dev/mapper/ubuntu--vg-ubuntu--lv ext4 102626232 29458124  67908844  31% /",
       "magic": "0xef53",
       "inPinnedSet": true
     },

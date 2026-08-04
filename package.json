@@ -79,6 +79,7 @@
     "doc-topology:proof-probe": "node deploy/aos-local-client/doc-topology-proof.mjs --probe-vm",
     "read-face:gate": "node scripts/read-face-gate.mjs",
     "read-face:freshness": "node scripts/read-face-freshness.mjs",
+    "engine-host:verify": "node deploy/aos-engine-host/verify.mjs",
     "key:occupancy": "node deploy/aos-local-client/key-occupancy.mjs"
   },
   "dependencies": {

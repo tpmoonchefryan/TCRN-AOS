@@ -37,6 +37,9 @@
 import { homedir } from "node:os";
 import { join } from "node:path";
 
+/** The one place the release tag is written; every claim about it derives from here. */
+const SOURCE_TAG = "v0.10.2";
+
 export const manifest = {
   schemaVersion: "aos.engine-host-deploy-manifest.v1",
   ruling: "TCRN-AOS-MIN-007",
@@ -52,7 +55,7 @@ export const manifest = {
     // moves: package.json says this version, HEAD carries this tag, and the
     // working tree is clean. A dirty tree would make "v0.8.0 tag anchor" a lie.
     requiredVersion: "0.10.2",
-    requiredTag: "v0.10.2",
+    requiredTag: SOURCE_TAG,
   },
 
   transfer: {
@@ -98,8 +101,12 @@ export const manifest = {
   // proven by full-value digest comparison. Not provenance beyond that copy,
   // not authority, not independence of the two copies.
   trust: {
+    // Derived from the pinned tag rather than spelled out: this sentence said
+    // "v0.9.0 tag anchor" while the deployment ran at v0.10.2, so a committed
+    // receipt asserted a version the run did not use. A literal beside the value
+    // it describes is the drift this platform keeps paying for.
     statement:
-      "the VM copy is byte-identical to the local governed copy (v0.9.0 tag anchor for "
+      `the VM copy is byte-identical to the local governed copy (${SOURCE_TAG} tag anchor for `
       + "tracked source, digest ledger for the whole shipped set including dist); no claim "
       + "stronger than that comparison is made",
     pinsTransferred: false,
