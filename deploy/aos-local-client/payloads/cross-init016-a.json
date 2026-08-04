@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-016",
+  "intent": "建 cross-project INIT-016 承载全平台单一权威+fallback 方向。",
+  "steps": [
+    { "verb": "work-create", "flags": { "project-id": "project:e7da35c5aade8dd42c91cb0f", "external-key": "TCRN-CROSS-INIT-016", "kind": "Initiative", "status": "planned" } }
+  ],
+  "readback": [
+    { "verb": "work-show", "flags": { "id": "work:15404191b1b63e28774a0706" }, "recordFields": ["externalKey", "kind", "status"], "expect": { "externalKey": "TCRN-CROSS-EPIC-032", "kind": "Epic", "status": "done" } }
+  ]
+}

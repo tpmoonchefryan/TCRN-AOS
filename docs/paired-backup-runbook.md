@@ -7,6 +7,13 @@
 > 哪里。STORY-131 把链迁到 VM，STORY-132 把域库随常驻座舱迁了过去，本文按迁完之后的样子
 > 重写，并在末尾逐条记下旧腿的残余适用性分析。
 >
+> **2026-08-04 扩到全部五条受治链（`TCRN-CROSS-STORY-128`）。** 2026-08-03 全迁之后，
+> 平台的真实处境是「一条链有备份、四条链什么都没有，且没有任何一次运行说出这件事」。本轮
+> 把链侧改为按**分区名册**驱动。本文随之逐条改正：落盘位置不再是一个目录而是**一条规则**，
+> 保留份数按链计，拒绝存档按链与模式命名，并新增 `--partition`。**本文里凡点名一个具体
+> 地址的地方，都是在对那个地址的当下状态下判断**（平台公约：文档里的举例就是断言），所以
+> 下面尽量写规则、并在必须点名时注明实测日期。
+>
 > 脚本：`deploy/aos-resident-cockpit/paired-backup.mjs`（仪式）+
 > `deploy/aos-resident-cockpit/vm-take-pair.mjs`（在 VM 上取那一对）。
 > 引擎侧的链恢复手册在 `tcrn-workflow/docs/architecture/backup-restore-runbook.md`，
@@ -15,18 +22,50 @@
 ## 一句话
 
 域库与受治链只有成对才有用，所以它们**在同一台机器上、同一瞬刻**一起取，且两半互相以摘要
-指名；单独一半不是可恢复的备份。异地副本由**本机拉取**落到 VM 之外。
+指名；单独一半不是可恢复的备份。异地副本由**本机拉取**落到 VM 之外。**五条受治链各取各的
+一对**，链侧按分区名册驱动，一条链拒绝不影响其余四条。
 
-## 拓扑（2026-07-30，已成事实）
+## 拓扑（2026-08-04）
 
-| 东西 | 在哪 |
-| --- | --- |
-| 受治链（真值根） | `tcrn-platform-dev:/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace` |
-| 见证目录（工作区根的**兄弟**，绝不在其内） | `…/TCRN-AOS/attestations` |
-| 域库（`domain.db`，不可重建） | `tcrn-platform-dev:/srv/tcrn/aos-cockpit/data/domain.db` |
-| 引擎 | `tcrn-platform-dev:/srv/tcrn/engine/tcrn-workflow`（v0.9.0） |
-| **主**配对目录 | `tcrn-platform-dev:/srv/tcrn/backups/pairs/<instant>/` |
-| **异地**配对目录 | 本机 `~/OneDrive/Github/tcrn-aos-paired-backups/<instant>/` |
+链侧**按分区**，共享侧只有一份。分区名册的真值是
+`deploy/aos-local-client/aos-partitions.mjs`（本文不复制它的内容，只说形状）；`<partition>`
+取自该名册，2026-08-04 实测为 `TCRN-AOS` / `Joi-Button` / `cross-project` /
+`TCRN-Design-System` / `TCRN-TMS` 五条。
+
+| 东西 | 在哪 | 按分区？ |
+| --- | --- | --- |
+| 受治链（真值根） | `tcrn-platform-dev:/srv/tcrn/governance/tcrn-workspace/<partition>/workspace` | 是 |
+| 见证目录（工作区根的**兄弟**，绝不在其内） | `…/<partition>/attestations` | 是 |
+| 域库（`domain.db`，不可重建） | `tcrn-platform-dev:/srv/tcrn/aos-cockpit/data/domain.db` | **否**：一份库服务全部分区，行上带 `partitionId` |
+| 引擎 | `tcrn-platform-dev:/srv/tcrn/engine/tcrn-workflow` | 否 |
+
+### 配对目录的形状（一条规则，不是一个目录）
+
+两侧同一条规则，**主侧与异地侧对称**：
+
+| 分区 | 主（VM） | 异地（本机） |
+| --- | --- | --- |
+| `manifest.mjs` 的 `PARTITION_ID`（实测 = `TCRN-AOS`） | `<VM_PAIR_ROOT>/<instant>/` | `<OFFSITE_ROOT>/<instant>/` |
+| 其余每一条链 | `<VM_PAIR_ROOT>/<partition>/<instant>/` | `<OFFSITE_ROOT>/<partition>/<instant>/` |
+
+`VM_PAIR_ROOT` 由 `deploy/aos-resident-cockpit/manifest.mjs` 述明（2026-08-04 实测
+`/srv/tcrn/backups/pairs`）；`OFFSITE_ROOT` 默认 `~/OneDrive/Github/tcrn-aos-paired-backups`，
+`AOS_PAIRED_BACKUP_DEST` 可改。
+
+**这个不对称是刻意的，理由是既有字节而不是口味**：两个平根下已经躺着的那些配对就是
+`PARTITION_ID` 那条链的配对。把它改成带命名空间的子目录，会让那些既有配对落到轮换之外
+（永远保留，没人做过这个决定），而它按新路径的第一跑从外面看又像是「旧备份丢了」。
+
+混合列目录是安全的，因为两侧轮换都先过同一道筛子：**一个目录只有含 `pair-manifest.json`
+才算一对**，而分区子目录不含。所以轮换够不着另一条链的子树，一个 ISO 瞬刻也不会和一个分区
+id 认混。
+
+> ⚠ **代价，如实记下：到期告警（`scripts/backup-due-alert.mjs`）今天只测量一条链。**
+> 它读的是异地平根下**直属**的 `pair-manifest.json`，而其余四条链的配对深一层，它看不见，
+> 分区子目录本身没有 manifest 又被它的 try/catch 跳过。于是那四条链可以任意陈旧、甚至从未
+> 备份过，`node scripts/backup-due-alert.mjs` 仍答 `state:"fresh"`、退出码 0。
+> **在告警改为按名册逐链判之前，它的「fresh」只是关于一条链的陈述，不是关于这个平台的。**
+> 每次运行的回执把这条写进 `notClaimed`，避免它只活在这份手册里。
 
 本机 `.tcrn-workspace/TCRN-AOS/workspace` 已 vacated（完好、保留、不删），本机
 `~/.tcrn-aos/domain.db` 是归档（旁有 `RELOCATED-TO-VM.json` 哨兵）。**两者都还在原地**，
@@ -57,17 +96,38 @@
 ## 命令
 
 ```bash
-pnpm paired:backup                 # 取一对、拉到异地、两侧各判一次、轮换
-pnpm paired:backup-if-due          # 调度器用:异地那份过期才动手
-pnpm paired:backup-verify-offsite  # 只重证最新那份异地副本
-pnpm paired:backup-verify ~/OneDrive/Github/tcrn-aos-paired-backups/<pairDir>
-node scripts/backup-due-alert.mjs  # 到期告警(零依赖,无须 build)
+pnpm paired:backup                 # 五条链各取一对、拉到异地、两侧各判一次、轮换
+pnpm paired:backup-if-due          # 调度器用:逐链判,异地那份过期的才动手
+pnpm paired:backup-verify-offsite  # 五条链各重证自己最新那份异地副本
+node scripts/backup-due-alert.mjs  # 到期告警(零依赖,无须 build;⚠ 只覆盖一条链,见上)
+
+# 单对重证:路径按上面那条形状规则拼,不同分区不同
+pnpm paired:backup-verify ~/OneDrive/Github/tcrn-aos-paired-backups/<instant>              # PARTITION_ID 那条链
+pnpm paired:backup-verify ~/OneDrive/Github/tcrn-aos-paired-backups/<partition>/<instant>  # 其余四条链
+
+# 只重取一条链(可重复;两种写法都认)
+node deploy/aos-resident-cockpit/paired-backup.mjs --partition TCRN-TMS
+node deploy/aos-resident-cockpit/paired-backup.mjs --partition=TCRN-TMS --partition=Joi-Button
 ```
 
-`--if-due` 判的是**异地那份**的年龄——VM 整台丢了要靠它恢复，所以那才是要紧的数。
-**不到期时退出码 0**：「不到期」是正确结果，不是失败；否则调度器会在两次备份之间的每一次
-运行都报警。间隔默认 24 小时（`AOS_BACKUP_INTERVAL_HOURS`），保留默认 5 份
-（`AOS_BACKUP_RETENTION`，主与异地各保留 5）。
+`--if-due` 判的是**异地那份**的年龄——VM 整台丢了要靠它恢复，所以那才是要紧的数。**按链
+各判各的**：各条链的写入速率不同，一条链的副本新鲜说明不了另一条。**不到期时退出码 0**：
+「不到期」是正确结果，不是失败；否则调度器会在两次备份之间的每一次运行都报警。间隔默认
+24 小时（`AOS_BACKUP_INTERVAL_HOURS`）。
+
+保留份数 `AOS_BACKUP_RETENTION` 默认 5，**按链计**：轮换只在一条链自己的配对根下跑，所以
+主侧与异地侧**各保留 5×链数**（五条链即每侧 25 份），不是每侧 5 份。
+
+### `--partition <id>`（缩窄，为重试而设，不为节奏）
+
+- **可重复**，`--partition A --partition B` 取两条；`--partition=A` 与 `--partition A` 等价。
+- 存在的理由是**重试**：一条链因知识库高水位落后于链头而 fail-closed 是常态，为了重试它而
+  把另外四对重取一遍，是花五次快照修一次。
+- 不在名册上的 id **当场大声拒绝**，不静默跳过——悄悄什么都没备份，正是本轮要终结的失败；
+  任何长得像这个旗标却解析不出名册 id 的 token（`--partition=TCRN-Typo`、`--partitions=…`、
+  光秃秃一个 `--partition`）一律同样拒绝。
+- 它产出的是一次**部分名册运行**：回执里 `coverage.completeRoster:false`，并且**不会**替换
+  已提交的那份全名册回执（见下节）。
 
 ## 谁发起，为什么（两个问题，两个答案）
 
@@ -101,13 +161,19 @@ sha256。
 引擎 fail-closed 是对的：手册的 lockstep 原则要求两者一起恢复，跨越不匹配的一对去描述
 快照，等于描述一份没人能恢复的东西。
 
-补救是**一次受治写入，仪式不会代做**（它把这条命令原文写进 `lockstep.remedy`）：
+补救是**一次受治写入，仪式不会代做**（它把这条命令原文写进 `lockstep.remedy`）。**照抄
+`lockstep.remedy` 里那一条，不要照抄下面这个示例**：`--workspace` 必须是**出问题那条链
+自己的**工作区，五条链各不相同，而回执里那条是引擎按该链算出来的。
 
 ```bash
+# 形状（<partition> 取自出问题那条链；地址真值在 aos-partitions.mjs）
 ssh -n tcrn-platform-dev "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs \
-  knowledge-rebase --workspace /srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace \
+  knowledge-rebase --workspace /srv/tcrn/governance/tcrn-workspace/<partition>/workspace \
   --expected-version <marker.version> --at <instant>"
 ```
+
+**一条链撞上这一条不会拖住其余四条**：该链记红、存档拒绝、循环继续。这是本轮的要点——
+「一条链 fail-closed 是每次受治写入之后的常态」不能成为另外四条链无备份的理由。
 
 **2026-07-30 实测**：新拓扑首跑即撞上这一条——marker 停在 `bac1be07…`（version 14，上一
 次本机配对时的链头），链头已是 `5200f632…`（version 838）。仪式以
@@ -115,9 +181,27 @@ ssh -n tcrn-platform-dev "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workf
 `knowledge-rebase --expected-version 14` 返回 `KNOWLEDGE_STORE_REBASED`（version 15，
 高水位追平且**链头未前移**），随后取对一次成。
 
-仪式会把它产出的**最近一次 fail-closed 拒绝**单独存档（`paired-backup-last-refusal`），
-成功的运行**不清除它**——否则满足了前置条件的那一跑，会顺手删掉唯一记着「它确实拒绝过」
-的东西。
+仪式会把它产出的**最近一次 fail-closed 拒绝**单独存档，成功的运行**不清除它**——否则满足
+了前置条件的那一跑，会顺手删掉唯一记着「它确实拒绝过」的东西。
+
+存档路径**按链、也按模式**命名（状态目录见 `resident-lib.mjs` 的 `STATE_DIR`，不是证据）：
+
+```
+paired-backup-last-refusal-take-<partition>.json     # pnpm paired:backup / --if-due
+paired-backup-last-refusal-verify-<partition>.json   # pnpm paired:backup-verify-offsite
+paired-backup-last-refusal-run-<take|verify>.json    # 非按链的那几步
+```
+
+**两个维度都必须有，理由相同**：五条链共用一个文件，第五条链的结果会盖掉第一条链的拒绝；
+而 take 与 verify 共用一个文件，情况更糟——`--verify-offsite` 是运维反复跑的**廉价**命令，
+它最常见的红（`NO_OFFSITE_PAIR`）几乎不含信息，而 take 的拒绝
+（`knowledge_high_water_behind_chain_head`，连同运维真正需要的那条 `knowledge-rebase` 命令）
+是**昂贵且带信息**的那一种。共用一个路径就等于让廉价模式例行销毁昂贵模式的记录。
+回执里两种模式**都读出来**（`lastRefusalThisFlowProduced.take` /
+`.verifyOffsite`），否则文件还在、读者仍然看不见。
+
+（改名前的 `paired-backup-last-refusal[-<partition>].json` 成为孤儿：那是 tmpdir 下的状态，
+不是证据，留在原地即可。）
 
 ## 每一半到底证到了什么
 
@@ -204,7 +288,9 @@ this manifest does not itself authenticate the source: it detects corruption and
 
 ## 造红（判据写完必须真的去红一次）
 
-仪式**每次运行**都做这几件事，不是一次性检查：
+仪式**每次运行**都做这几件事，不是一次性检查（造红**每次运行做一次**，不是每条链一次：
+`judgePairing` 是一个纯函数、判的是全部五对，驱红一次就把它建立了；而它若驱不红，本次运行
+里任何一条链的绿都没有意义，所以后续每条链**继承**这个红而不是悄悄通过）：
 
 | 红 | 怎么造 | 期望 |
 | --- | --- | --- |
@@ -212,8 +298,9 @@ this manifest does not itself authenticate the source: it detects corruption and
 | 摘要对不上字节 | VM 上一份**一次性副本**里翻转 `domain/domain.db` 的一个字节（长度不变，是替换不是截断） | `PAIR_DOMAIN_DIGEST_MISMATCH` |
 | **INC-045 本身的条件** | 一次性副本里把 `pair-manifest.json` 的 `halves.domain.host` 改成另一台机器，其余文件全部完好 | `PAIR_HALVES_ON_DIFFERENT_HOSTS` |
 
-一次性副本落在 `/srv/tcrn/scratch-inc045-red-<pid>`，回收写在同一个函数里，并以**路径是否
-还存在**（而不是「删除命令退出 0」）验证。远端改动一律经 `node -`，不经 shell——ssh 的
+一次性副本落在 `/srv/tcrn/scratch-inc045-red-<pid>-<partition>`（带分区名，因为一次运行里
+可能有多条链走到这一步，两个探针共用一个路径就是一次演练在读另一次的字节），回收写在同一个
+函数里，并以**路径是否还存在**（而不是「删除命令退出 0」）验证。远端改动一律经 `node -`，不经 shell——ssh 的
 远端 argv 会被远端 shell 重新解析，一个被引号规则悄悄改错的造红步骤，会把绿判据报成红、
 或者更糟，把红判据报成绿。
 
@@ -230,14 +317,42 @@ this manifest does not itself authenticate the source: it detects corruption and
 链的恢复是**同路径唯一**且由运维驱动的，按引擎手册走。两条铁律：同路径恢复；工作区日志
 与知识库必须齐步——单独恢复日志会得到 `KNOWLEDGE_HIGH_WATER_MISMATCH`。
 
+### ⚠ 全平台恢复：五对里有**五份互不一致**的域库半边，必须只选一份
+
+域库不是按分区的，一份 `domain.db` 服务全部分区。而 `vm-take-pair.mjs` 的 `snapshotDomain`
+**每条腿各跑一次**，所以一次五链运行取的是**五份**共享库快照，分别取自五个不同瞬刻、取自
+一个常驻座舱正在写的活库（`liveStoreBytes.unchangedAcrossThisRun` 正是为此**只报不拦**）。
+它们**彼此不一致**——不是同一份快照的五个副本。
+
+**选择规则（恢复时照此办理）**：
+
+1. **域库半边只取一份**：五对之中 `pairedAt` **最新**的那一对的 `domain/`。
+2. **链半边各取各的**：每条链用它自己那一对的 `chain/` 与 `attestations/`。
+3. 于是每条链与域库的配对**只有最新那一条是同刻的**，其余链的注解相对域库偏**新**：域库里
+   可能带着那些链在其快照之后才产生的记录 id 的注解，那些注解**悬空**，与「恢复单独一对时
+   其余四链的注解悬空」是同一类，方向相反。悬空注解不损坏链，按引擎手册恢复完链之后照常
+   工作；反过来若选了**最旧**的域库半边，则是较新的链记录**丢注解**——不可逆的丢失，所以
+   规则选新不选旧。
+4. 要拿到五条链**同刻**的一份域库，只有一条路：在一次运行里对五条链取对之后不要分别使用
+   五份域库快照——本仪式今天**不提供**跨链同刻的单一域库半边，这条如实记在回执 `notClaimed`
+   里，不要从「它们看起来一样」推断它们一样。
+
 投影库**刻意不在备份里**：它从链重建，从不恢复。O3 事件镜像同样刻意不备（MIN-007）——
 它是派生仪器，第二份可恢复的链历史副本会造成没人能裁的分叉。
 
 ## 轮换
 
 只在新的一对自证通过之后才轮换，先旧后新，并把删掉的目录名字写进回执。**坏备份永远不会
-成为好备份被删的理由。** 主侧轮换只作用于 `/srv/tcrn/backups/pairs/`，因此碰不到
-`/srv/tcrn/backups/2026-07-28T13-29-29Z`——那是旧方向下从本机推上来的那一份，作为历史保留。
+成为好备份被删的理由。**
+
+轮换的作用域是**一条链自己的配对根**（按上文那条形状规则解出来的那一个），两侧各自轮换，
+保留数各为 `AOS_BACKUP_RETENTION`（默认 5）。因此：
+
+- 一条链的轮换够不着另一条链的子目录——分区子目录不含 `pair-manifest.json`，连候选都不是；
+- 主侧轮换只作用于 `VM_PAIR_ROOT` 子树，因此碰不到 `/srv/tcrn/backups/` 下那份
+  `2026-07-28T13-29-29Z`（2026-08-04 实测仍在）——那是旧方向下从本机推上来的那一份，作为
+  历史保留；
+- 全平台合计每侧约 5×链数 份，不是 5 份。
 
 ## 旧腿的残余适用性分析（`docs/harness-constraint-convention.md`）
 
@@ -246,21 +361,47 @@ this manifest does not itself authenticate the source: it detects corruption and
 | 旧模式 | 成立条件 | 现状 | 处置 |
 | --- | --- | --- | --- |
 | `scripts/paired-backup.mjs --verify <pairDir>` | 只需要一个配对目录，从未提及两半住哪 | **仍完全成立** | **逐字保留、不设门**，且它就是异地侧每次用来重证的那个命令（仪式每跑一次都调它一次，`LEGACY_VERIFY_STILL_APPLICABLE`） |
-| `scripts/backup-due-alert.mjs` | 读最新一对 `pair-manifest.json` 的 `pairedAt`（**从不读目录 mtime**：OneDrive 同步会改写 mtime） | **仍完全成立**——它看的正是拉回来的异地副本 | 未改动；2026-07-30 实测对新拉的一对答 `fresh` / 退出码 0 |
+| `scripts/backup-due-alert.mjs` | ①读最新一对 `pair-manifest.json` 的 `pairedAt`（**从不读目录 mtime**：OneDrive 同步会改写 mtime）；②异地平根下**直属**的目录就是全部配对 | ①**仍完全成立**；②**已不成立**——STORY-128 之后只有一条链平铺，其余四条深一层 | **未改动，缺口如实记录**：它今天只测量一条链，对其余四条恒答 `fresh`。这是一次**沉默的假绿**，与它自己要防的「缺失备份只产生缺席、不产生失败运行」同型。**待办（不在本轮范围）**：改为遍历分区名册、逐链解出配对根、报 `partitions[]` 并在**任一**链过期或无配对时退出 1 |
 | `scripts/paired-backup.mjs`（默认取对） | 两半都在本机 | 两半都已迁走，且**都还在原地**故不会自然报错 | **条件化拒绝**（不是删除）：`topology_relocated_this_mode_is_retired`，指名新命令 |
 | `--push-vm` / `--verify-remote` | 真值在本机、VM 是异地、以本机记录为基线 | 前提反转 | **条件化拒绝**；其**判据**（传前先自证、无引擎的远端 sha256 校验、抽样对照另一侧记录、旁车回执红绿都写）被新的拉取腿逐条复用 |
 
-没有删除任何一段：AOS 之外没有第二个消费者（这两个脚本的分区默认、域库、落盘位置都是
-AOS 专属），但静默移除会让下一个运维读到一份指名着已不存在命令的手册，所以这些模式留在
+没有删除任何一段：静默移除会让下一个运维读到一份指名着已不存在命令的手册，所以这些模式留在
 原地、自己回答自己。
+
+**这两个旧脚本的「AOS 专属」在 STORY-128 之后要分开说**：`--verify <pairDir>` 收一个目录做
+参数，与分区无关，故对五条链一样成立（仪式每条链跑一次）；而 `backup-due-alert.mjs` 的
+落盘位置假设**确实**还是 AOS 专属的，这正是上表第二行记的那道缺口。
 
 ## 落盘位置
 
-- 主配对目录：`tcrn-platform-dev:/srv/tcrn/backups/pairs/<instant>/`（交付物，保留）
-- 异地配对目录：`~/OneDrive/Github/tcrn-aos-paired-backups/<instant>/`
-  （`AOS_PAIRED_BACKUP_DEST` 可改）
+- 配对目录：**按上文那条形状规则**（主侧 VM、异地侧本机，两侧对称；
+  `PARTITION_ID` 那条链平铺，其余四条带 `<partition>/` 一层）。
 - 回执：`evidence/aos-paired-backup-new-topology.json`
-- 每对约 1.9 MB / 660 文件（2026-07-30 实测；见证目录随链增长）
+- 每对约 1.9 MB / 660 文件（2026-07-30 于 `TCRN-AOS` 实测；见证目录随链增长，各链不同）
+
+### 哪一次运行可以**替换**那份已提交回执
+
+回执沿用 v1 的路径（本手册指名它，同一次运行写两份证据等于把一件事说两遍），但**不是每次
+运行都写它**。判据是一句话：**证得更少的运行，不得覆盖证得更多的那一份。**
+
+只有**同时**满足三条的运行才替换它：覆盖全名册、没有任何一条链被跳过、且确实取到过至少
+一对。反过来，下面这些**不写**（stdout 上的 `evidenceWritten.reason` 会说是哪一条）：
+
+| 情形 | `reason` |
+| --- | --- |
+| `--verify-offsite` | `VERIFY_ONLY_RUN_PROVES_NO_NEW_PAIR` |
+| `--partition …`（部分名册） | `PARTIAL_ROSTER_RUN_MUST_NOT_REPLACE_A_WHOLE_ROSTER_RECEIPT` |
+| `--if-due` 有链未到期（**调度器的常态**） | `SOME_CHAINS_WERE_NOT_DUE_SO_THIS_RUN_PROVES_LESS_THAN_THE_LAST` |
+| 五条链的 take 全部拒绝 | `NO_PAIR_WAS_TAKEN_THIS_RUN` |
+| 回执里仍带 scrubber 改写不了的宿主路径 | `REFUSED_RECEIPT_STILL_CARRIED_A_HOST_PATH`（退出码非零） |
+
+**「未到期」与「拒绝」是两回事，判据也不同**：一次拒绝是信息（有 reason code、有补救），
+理应留在记录里，所以一次全名册运行里有链拒绝、仍然写；而「未到期」是**没有干活**，它对那
+条链什么也没证明，写下去等于用五个 `steps:0, took:false` 换掉五份真配对的证明。
+
+不写的那一跑并不静默：完整回执照常落在 `STATE_DIR` 下（`paired-backup.json` /
+`paired-backup-verify-offsite.json`），stdout 的 `evidenceWritten.fullReceiptKeptAt` 指向它。
+**要刷新已提交的那份证据，跑 `pnpm paired:backup`（全量取）。**
 
 快照目标不得落在任何 git 工作树内，引擎会拒绝——已提交的备份字节是一次事后删除无法挽回的
 隐私泄漏。仪式把治理树、引擎与部署运行时也一并交给引擎的这道判据，所以一对配对目录也

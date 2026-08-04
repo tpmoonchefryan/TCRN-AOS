@@ -49,6 +49,25 @@ const minutesKeyById = new Map<string, string | null>(
 );
 
 /**
+ * gate id → the work record it is attached to.
+ *
+ * A gate has no page of its own, which is why this module's header lists gates among
+ * the references it cannot route. That is true of the gate as a RECORD and false of
+ * the gate as something a reader can look at: the work-item detail view renders every
+ * gate whose `workId` is that item, with its outcome class and the deliberations beside
+ * it. So the destination exists — it is the item the gate is holding.
+ *
+ * Built at module scope for the same reason as the two maps above.
+ */
+const workIdByGate = new Map<string, string | null>(
+  cockpitData.gates.map((gate) => [gate.id, gate.workId])
+);
+
+const workKeyById = new Map<string, string>(
+  cockpitData.work.map((work) => [work.id, work.externalKey ?? work.id])
+);
+
+/**
  * A minutes reference as a name and a route.
  *
  * Falls back through three levels of knowledge rather than one: the minutes key
@@ -111,9 +130,25 @@ export function inboxLink(
     const link = minutesLink(item.recordId, routeHref);
     if (link.href) return link;
   }
-  // No page can show this record, so the honest destination is the list it belongs to
-  // rather than a detail route that would render an empty state.
-  return { label, href: routeHref(`/work-items?project=${item.partitionId}`) };
+  // A gate goes to the work item it is holding, which is the one page that renders it.
+  // It used to fall through to the list below, and that had two costs. The reader cost:
+  // the most important row on this screen — an owner_intent_required gate — landed on a
+  // generic list that does not show the gate at all. The correctness cost: the list href
+  // carries `project=<the gate's partition>`, which OVERWRITES the reader's current
+  // project rather than preserving it, so a cross-partition gate silently moved them to
+  // another project's scope. That is what `state-preserved:/inbox:project` reported, and
+  // it went unnoticed while the only gate on the page belonged to the selected project —
+  // the failure appeared when a second partition's gate arrived, not when it was written.
+  if (item.kind === "gate") {
+    const workId = workIdByGate.get(item.recordId);
+    const key = workId === null || workId === undefined ? undefined : workKeyById.get(workId);
+    if (key !== undefined) return { label, href: routeHref(`/work-items/${key}`) };
+  }
+  // Nothing in this projection can show this record. Per the rule in this module's
+  // header, the honest answer is no href — the caller renders a non-link — rather than a
+  // route that shows something else. The list fallback that used to live here looked
+  // like a destination and was actually a scope change.
+  return { label };
 }
 
 /**

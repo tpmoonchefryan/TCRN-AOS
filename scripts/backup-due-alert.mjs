@@ -31,6 +31,8 @@ import { readdir, readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
+import { AOS_PARTITIONS } from "../deploy/aos-local-client/aos-partitions.mjs";
+import { PARTITION_ID } from "../deploy/aos-resident-cockpit/manifest.mjs";
 
 const destinationRoot = process.env.AOS_PAIRED_BACKUP_DEST
   ?? resolve(homedir(), "OneDrive/Github/tcrn-aos-paired-backups");
@@ -41,52 +43,86 @@ const remedy = "cd <TCRN-AOS repo> && pnpm paired:backup   (or: pnpm build && no
 /** Receipts may travel as evidence; local absolute paths do not. */
 const maskHome = (text) => String(text).split(homedir()).join("~");
 
-const now = new Date();
-let latestPairedAt = null;
-let latestPairId = null;
-if (existsSync(destinationRoot)) {
-  const names = (await readdir(destinationRoot, { withFileTypes: true }))
+/**
+ * Where a partition's off-site pairs live. This MIRRORS `offsiteRootFor` in
+ * paired-backup.mjs — the historical partition keeps the flat root it already
+ * filled, every later chain is namespaced — and the roster is imported rather
+ * than typed, so a sixth chain cannot be backed up while this alert stays quiet
+ * about it.
+ */
+const offsiteRootFor = (partitionId) =>
+  (partitionId === PARTITION_ID ? destinationRoot : join(destinationRoot, partitionId));
+
+/**
+ * The newest real pair under a root, dated by its own recorded instant.
+ *
+ * A directory counts only if it holds a readable `pair-manifest.json`, which is
+ * also what keeps a partition subdirectory from being mistaken for a pair inside
+ * the flat root the two layouts share.
+ */
+async function newestPair(root) {
+  if (!existsSync(root)) return { pairedAt: null, pairId: null };
+  const names = (await readdir(root, { withFileTypes: true }))
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
     .sort()
     .reverse();
   for (const name of names) {
     try {
-      const manifest = JSON.parse(await readFile(
-        join(destinationRoot, name, "pair-manifest.json"), "utf8"));
-      if (typeof manifest.pairedAt === "string") {
-        latestPairedAt = manifest.pairedAt;
-        latestPairId = name;
-        break;
-      }
+      const manifest = JSON.parse(await readFile(join(root, name, "pair-manifest.json"), "utf8"));
+      if (typeof manifest.pairedAt === "string") return { pairedAt: manifest.pairedAt, pairId: name };
     } catch {
       // A directory without a readable pair manifest is not a pair; keep looking back.
     }
   }
+  return { pairedAt: null, pairId: null };
 }
 
-const ageHours = latestPairedAt === null
-  ? null
-  : (now.getTime() - new Date(latestPairedAt).getTime()) / 3_600_000;
+const now = new Date();
 const thresholdHours = intervalHours + graceHours;
-const state = latestPairedAt === null
-  ? "no_pair"
-  : (ageHours > thresholdHours ? "overdue" : "fresh");
 
+// Every governed chain is measured, not just the one that used to be the only
+// relocated partition. An alert that reads one root out of five reports a green
+// it has no evidence for — the failure the backup cadence itself already had
+// once, when a local-only sweep kept succeeding after the chain it swept moved
+// away. The verdict is the WORST chain: one stale chain is an overdue backup set.
+const partitions = [];
+for (const partitionId of Object.keys(AOS_PARTITIONS).sort()) {
+  const root = offsiteRootFor(partitionId);
+  const { pairedAt, pairId } = await newestPair(root);
+  const ageHours = pairedAt === null
+    ? null
+    : (now.getTime() - new Date(pairedAt).getTime()) / 3_600_000;
+  const state = pairedAt === null ? "no_pair" : (ageHours > thresholdHours ? "overdue" : "fresh");
+  partitions.push({
+    partition: partitionId,
+    root: maskHome(root),
+    latestPairId: pairId,
+    latestPairedAt: pairedAt,
+    ageHours: ageHours === null ? null : Math.round(ageHours * 100) / 100,
+    state,
+    ok: state === "fresh"
+  });
+}
+
+const failing = partitions.filter((entry) => !entry.ok);
 const receipt = {
-  schemaVersion: "aos.backup-due-alert.v1",
-  ruling: "MIN-007 D9 (due alert on the paired-backup cadence)",
+  schemaVersion: "aos.backup-due-alert.v2",
+  ruling: "MIN-007 D9 (due alert on the paired-backup cadence); roster widened to five chains by TCRN-CROSS-STORY-128",
   checkedAt: now.toISOString().replace(/\.\d{3}Z$/u, "Z"),
   destinationRoot: maskHome(destinationRoot),
-  latestPairId,
-  latestPairedAt,
-  ageHours: ageHours === null ? null : Math.round(ageHours * 100) / 100,
   intervalHours,
   graceHours,
   thresholdHours,
   freshnessBasis: "pairedAt from pair-manifest.json; directory mtime is never consulted (OneDrive rewrites it on sync)",
-  state,
-  ok: state === "fresh"
+  rosterSource: "deploy/aos-local-client/aos-partitions.mjs (imported, never typed here)",
+  partitions,
+  partitionsChecked: partitions.length,
+  failingPartitions: failing.map((entry) => entry.partition),
+  state: failing.length === 0
+    ? "fresh"
+    : (failing.every((entry) => entry.state === "no_pair") ? "no_pair" : "overdue"),
+  ok: failing.length === 0
 };
 
 console.log(JSON.stringify(receipt, null, 2));

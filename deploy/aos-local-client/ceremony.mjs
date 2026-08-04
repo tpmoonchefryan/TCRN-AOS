@@ -41,6 +41,7 @@ import { aosPartition } from "./aos-partitions.mjs";
 import {
   assertPayload, catalogueIndex, judgeReadback, planStep, resolveExpectations
 } from "./ceremony-plan.mjs";
+import { scrubHostPathsInText } from "../../scripts/lib/evidence-hygiene.mjs";
 
 const sha256Text = (text) => createHash("sha256").update(Buffer.from(text, "utf8")).digest("hex");
 const instant = () => new Date().toISOString().replace(/\.\d+Z$/u, "Z");
@@ -185,12 +186,27 @@ export async function runCeremony({ payloadPath, dryRun = false, partition = "TC
       continue;
     }
     const result = await remoteEngine(plan.argv);
+    // TCRN-CROSS-STORY-135: keep the engine's own error text on a refusal, so the
+    // receipt answers "why did this fail" on its own instead of forcing a local
+    // reproduction (CONF-050's close-conference collision was diagnosed only after
+    // re-running it in a temp workspace, because the receipt held reasonCode + argv
+    // and nothing else). Scrubbed before it lands: a ceremony receipt is committed
+    // as evidence and an engine message can quote a path (TCRN-AOS-INC-037). Full on
+    // a refusal; a success carries no error field, and anything that ever appears on
+    // one is scrubbed then truncated rather than kept whole.
+    const engineErrorText = typeof result.json?.error === "string" ? result.json.error : null;
+    const engineError = engineErrorText === null
+      ? null
+      : result.accepted
+        ? scrubHostPathsInText(engineErrorText).slice(0, 200)
+        : scrubHostPathsInText(engineErrorText);
     receipt.steps.push({
       ...plan,
       headAtPlanning: head.version,
       executed: true,
       accepted: result.accepted,
       reasonCode: result.reasonCode,
+      error: engineError,
       recordId: result.json?.record?.id ?? result.json?.id ?? null,
       version: result.json?.version ?? null,
       raw: result.raw

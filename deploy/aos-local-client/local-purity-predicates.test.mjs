@@ -2,7 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
-  RELOCATION_STATES, attributeTree, judgeControlTree, judgeLocalPurity, judgeScanScope
+  CONTAINER_SCAN_CEILING, RELOCATION_STATES, attributeTree, containerWorkspaceRoster,
+  judgeContainerRoster, judgeControlTree, judgeLocalPurity, judgeScanScope
 } from "./local-purity-predicates.mjs";
 import { PARTITION_ROSTER } from "./topology.mjs";
 
@@ -387,6 +388,269 @@ test("TIGHTENING has arrived: the all-vm roster is the real shape, so only archi
   });
   assert.equal(withLive.ok, false);
   assert.equal(withLive.reasonCode, "AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST");
+});
+
+// --- the container roster (TCRN-CROSS-STORY-129) ---------------------------------
+//
+// The complement of everything above: those rows are trees the walk found BY IDENTITY,
+// these are directories the container holds BY NAME AND SHAPE. The three literals below
+// are the real quote-accident directories that sat inside the governed container while
+// every identity-based check reported green — they carry no `.tcrn-workflow`, so there
+// was nothing for `judgeControlTree` to attribute and nothing for it to report.
+
+const QUOTE_ACCIDENT_STRAYS = Object.freeze([
+  "cross-project-shadow cross-project SHADOW cross-project",
+  "TCRN-TMS-shadow TCRN-TMS SHADOW-TMS TCRN-TMS",
+  "TCRN-Design-System-shadow TCRN-Design-System SHADOW-DS TCRN-Design-System"
+]);
+
+const CONTAINER_ROSTER = containerWorkspaceRoster(PARTITION_ROSTER);
+
+/** What the caller declares as the container's known non-workspace siblings. */
+const KNOWN_SIBLINGS = ["release-trust"];
+
+/** The container as a healthy machine presents it: the archives plus the sidecar. */
+const healthyContainer = () => [
+  ...CONTAINER_ROSTER.map((name) => ({ name, workspaceShaped: true })),
+  { name: "release-trust", workspaceShaped: false }
+];
+
+const judgeContainer = (entries, overrides = {}) => judgeContainerRoster({
+  containerExists: true,
+  listed: true,
+  entries,
+  roster: CONTAINER_ROSTER,
+  nonWorkspaceEntries: KNOWN_SIBLINGS,
+  ...overrides
+});
+
+test("容器名册:名册上的受治目录是绿,多出一个名册之外的工作区形目录(只差这一个)就是红", () => {
+  const green = judgeContainer(healthyContainer());
+  assert.equal(green.ok, true);
+  assert.equal(green.reasonCode, "CONTAINER_HOLDS_ONLY_ROSTERED_WORKSPACES");
+  assert.deepEqual(green.strays, []);
+  assert.equal(green.rostered.length, CONTAINER_ROSTER.length);
+  assert.deepEqual(green.missingRostered, []);
+  assert.deepEqual(green.knownSiblings, ["release-trust"]);
+
+  // ONE field: the same listing plus a single workspace-shaped directory the roster
+  // does not name. This is the state the machine was actually in.
+  const red = judgeContainer([
+    ...healthyContainer(),
+    { name: QUOTE_ACCIDENT_STRAYS[0], workspaceShaped: true }
+  ]);
+  assert.equal(red.ok, false);
+  assert.equal(red.reasonCode, "CONTAINER_HOLDS_UNROSTERED_WORKSPACE");
+  assert.deepEqual(red.strays, [QUOTE_ACCIDENT_STRAYS[0]]);
+  // The legitimate ones are unaffected — otherwise the predicate would be measuring
+  // "is anything here" rather than "is anything here unrostered".
+  assert.equal(red.rostered.length, CONTAINER_ROSTER.length);
+});
+
+test("今天真实的三个引号事故目录被逐一点名,而不是只报一个计数", () => {
+  const red = judgeContainer([
+    ...healthyContainer(),
+    ...QUOTE_ACCIDENT_STRAYS.map((name) => ({ name, workspaceShaped: true }))
+  ]);
+  assert.equal(red.ok, false);
+  assert.deepEqual(red.strays, [...QUOTE_ACCIDENT_STRAYS].sort());
+  assert.equal(red.workspaceShaped, CONTAINER_ROSTER.length + QUOTE_ACCIDENT_STRAYS.length);
+});
+
+test("「容器里没有野目录」不得与「没看容器」「读不出来」或「什么也没读到」共用一个绿", () => {
+  // No container: nothing was listed, nothing was judged. Green here would be the
+  // same hole `judgeScanScope` exists to close.
+  const missing = judgeContainer([], { containerExists: false });
+  assert.equal(missing.ok, false);
+  assert.equal(missing.reasonCode, "CONTAINER_NOT_FOUND");
+  // Nothing was observed, so every rostered name is missing — not "all present".
+  assert.deepEqual(missing.missingRostered, [...CONTAINER_ROSTER].sort());
+
+  // Present but unreadable is its own answer, not "it held nothing".
+  const unreadable = judgeContainer([], { listed: false });
+  assert.equal(unreadable.ok, false);
+  assert.equal(unreadable.reasonCode, "CONTAINER_NOT_LISTED");
+
+  // A missing `listed` term must fail closed, not default to "we read it".
+  assert.equal(judgeContainerRoster({
+    containerExists: true, entries: [], roster: CONTAINER_ROSTER
+  }).reasonCode, "CONTAINER_NOT_LISTED");
+
+  // And a missing `entries` term must fail closed for exactly the same reason. This is
+  // the one that was fail-OPEN: `listed: true` with no entries at all read as "we read
+  // the container and it was clean", which is the shape a half-finished call site
+  // leaves behind.
+  const noEntriesTerm = judgeContainerRoster({
+    containerExists: true, listed: true, roster: CONTAINER_ROSTER
+  });
+  assert.equal(noEntriesTerm.ok, false);
+  assert.equal(noEntriesTerm.reasonCode, "CONTAINER_NOT_LISTED");
+  assert.equal(judgeContainerRoster({
+    containerExists: true, listed: true, entries: "not an array", roster: CONTAINER_ROSTER
+  }).reasonCode, "CONTAINER_NOT_LISTED");
+
+  // A listing that genuinely returned nothing is NOT green either: "I read the
+  // container and saw nothing" and "the container holds no stray" are different
+  // answers. Without this term, any regression that empties the listing makes this
+  // gate permanently green with nothing able to go red.
+  const emptied = judgeContainer([]);
+  assert.equal(emptied.ok, false);
+  assert.equal(emptied.reasonCode, "CONTAINER_LISTING_ESTABLISHED_NO_SCOPE");
+  assert.equal(emptied.entriesSeen, 0);
+
+  // The empty-roster trap, the same one `judgeScanScope` needs its length term for: a
+  // roster of zero names makes "every rostered name was found" vacuously true, so the
+  // zero-entries term has to stand on its own rather than fall out of the name check.
+  assert.equal(judgeContainerRoster({
+    containerExists: true, listed: true, entries: [], roster: []
+  }).reasonCode, "CONTAINER_LISTING_ESTABLISHED_NO_SCOPE");
+
+  // And a listing that came back holding SOMETHING, but not the partitions the roster
+  // names, has not established a scope this judgement can green either.
+  const halfRead = judgeContainer([
+    { name: "release-trust", workspaceShaped: false },
+    { name: CONTAINER_ROSTER[0], workspaceShaped: true }
+  ]);
+  assert.equal(halfRead.ok, false);
+  assert.equal(halfRead.reasonCode, "CONTAINER_SCOPE_NOT_ESTABLISHED");
+  assert.deepEqual(halfRead.missingRostered, [...CONTAINER_ROSTER].slice(1).sort());
+
+  // A stray is still NAMED when the scope fails — the scope out-ranks it in the
+  // headline, it does not hide it.
+  const both = judgeContainer([
+    { name: CONTAINER_ROSTER[0], workspaceShaped: true },
+    { name: QUOTE_ACCIDENT_STRAYS[0], workspaceShaped: true }
+  ]);
+  assert.equal(both.reasonCode, "CONTAINER_SCOPE_NOT_ESTABLISHED");
+  assert.deepEqual(both.strays, [QUOTE_ACCIDENT_STRAYS[0]]);
+});
+
+test("SHAPE 是判据,不是名字本身:同一个陌生名字没有 workspace/ 就只被记录、不算发现", () => {
+  // One field from the red above: workspaceShaped false. A gate that reds on any
+  // unexpected directory would light up for every scratch folder and be switched off.
+  const verdict = judgeContainer([
+    ...healthyContainer(),
+    { name: QUOTE_ACCIDENT_STRAYS[0], workspaceShaped: false }
+  ]);
+  assert.equal(verdict.ok, true);
+  assert.equal(verdict.reasonCode, "CONTAINER_HOLDS_ONLY_ROSTERED_WORKSPACES");
+  assert.deepEqual(verdict.unshapedStrangers, [QUOTE_ACCIDENT_STRAYS[0]]);
+  assert.deepEqual(verdict.knownSiblings, ["release-trust"]);
+
+  // A rostered partition whose archive lost its workspace child is reported in its own
+  // bucket rather than silently dropped, and it is not a finding either. It is also NOT
+  // a scope failure: the name was there to be seen, which is what the floor asks.
+  const pruned = judgeContainer(healthyContainer()
+    .map((entry) => (entry.name === "TCRN-TMS" ? { ...entry, workspaceShaped: false } : entry)));
+  assert.equal(pruned.ok, true);
+  assert.deepEqual(pruned.rosteredWithoutWorkspace, ["TCRN-TMS"]);
+  assert.deepEqual(pruned.missingRostered, []);
+
+  // Every observed entry lands in exactly one bucket: a classification with a hole is
+  // how an entry vanishes from the receipt while still sitting on the disk.
+  const entries = [
+    ...healthyContainer(),
+    { name: QUOTE_ACCIDENT_STRAYS[0], workspaceShaped: true },
+    { name: "some-scratch-dir", workspaceShaped: false }
+  ];
+  const total = judgeContainer(entries);
+  assert.equal(total.entriesSeen, entries.length);
+  assert.equal(
+    total.strays.length + total.rostered.length + total.rosteredWithoutWorkspace.length
+      + total.knownSiblings.length + total.unshapedStrangers.length,
+    entries.length);
+});
+
+test("已知旁邻由调用方声明,不是判据自己写死的一份拓扑", () => {
+  // The same listing, two declarations. The entry moves bucket and neither reading is
+  // a finding — which is why this list cannot be used to suppress one. What it must
+  // NOT be is a literal inside the predicate: "release-trust sits beside the partition
+  // directories" is a claim about a machine's layout, and topology is stated in exactly
+  // one place in this repository.
+  const listing = healthyContainer();
+  const declared = judgeContainer(listing);
+  assert.deepEqual(declared.knownSiblings, ["release-trust"]);
+  assert.deepEqual(declared.unshapedStrangers, []);
+
+  const undeclared = judgeContainer(listing, { nonWorkspaceEntries: [] });
+  assert.equal(undeclared.ok, true);
+  assert.deepEqual(undeclared.knownSiblings, []);
+  assert.deepEqual(undeclared.unshapedStrangers, ["release-trust"]);
+
+  // Omitting the term entirely is the same as declaring nothing, and still green: the
+  // default widens the reporting, it never narrows a finding.
+  const omitted = judgeContainerRoster({
+    containerExists: true, listed: true, entries: listing, roster: CONTAINER_ROSTER
+  });
+  assert.deepEqual(omitted.unshapedStrangers, ["release-trust"]);
+  assert.equal(omitted.ok, true);
+});
+
+test("容器名册由分区名册派生;影子目录须由调用方声明,且绝不接受一个 TCRN-AOS-shadow", () => {
+  // Derived, not restated: a partition added to the roster must appear here without
+  // anyone remembering to edit a second list.
+  assert.deepEqual([...CONTAINER_ROSTER].sort(),
+    [...PARTITION_ROSTER.map((entry) => entry.partitionId)].sort());
+  for (const entry of PARTITION_ROSTER) {
+    assert.ok(CONTAINER_ROSTER.includes(entry.partitionId), `${entry.partitionId} missing`);
+  }
+
+  // The shadow half is NOT derived from the partition roster, and the default is EMPTY.
+  // Two reasons, and both matter: deriving `${id}-shadow` for all five would admit a
+  // `TCRN-AOS-shadow` (AOS is the fallback HOST, so a shadow of itself must never
+  // exist, and a roster that admits it cannot detect it); and "which partitions have a
+  // local shadow directory" is topology, which this file does not get to state.
+  assert.equal(CONTAINER_ROSTER.includes("TCRN-AOS-shadow"), false);
+  assert.equal(containerWorkspaceRoster(PARTITION_ROSTER).some((name) => name.endsWith("-shadow")),
+    false);
+
+  // Declared by a caller, the shadow names are admitted — and AOS still is not, because
+  // the caller declares partition ids and AOS is not among them.
+  const declared = containerWorkspaceRoster(PARTITION_ROSTER, ["cross-project", "TCRN-TMS"]);
+  assert.ok(declared.includes("cross-project-shadow"));
+  assert.ok(declared.includes("TCRN-TMS-shadow"));
+  assert.equal(declared.includes("TCRN-AOS-shadow"), false);
+  // The two sources may name the same directory — the day a shadow chain is promoted to
+  // a rostered partition of its own, the name arrives from both. One name, one
+  // allowance, or "how many names are allowed" stops matching "how many directories are
+  // allowed".
+  const promoted = containerWorkspaceRoster(
+    [...PARTITION_ROSTER, { partitionId: "cross-project-shadow" }], ["cross-project"]);
+  assert.equal(promoted.filter((name) => name === "cross-project-shadow").length, 1);
+  assert.equal(new Set(promoted).size, promoted.length);
+  assert.equal(new Set(declared).size, declared.length);
+
+  // An UNDECLARED shadow directory is a stray, on the same axis and in the same run as
+  // the identity scan's `UNATTRIBUTED_TREE_IS_LIVE` for the live chain inside it. That
+  // agreement is the point: a whitelist here while the identity axis reds would be one
+  // artifact asserting two things about one directory.
+  const shadowed = judgeContainer([
+    ...healthyContainer(), { name: "cross-project-shadow", workspaceShaped: true }
+  ]);
+  assert.equal(shadowed.ok, false);
+  assert.deepEqual(shadowed.strays, ["cross-project-shadow"]);
+
+  const aosShadow = judgeContainer([
+    ...healthyContainer(), { name: "TCRN-AOS-shadow", workspaceShaped: true }
+  ]);
+  assert.equal(aosShadow.ok, false);
+  assert.deepEqual(aosShadow.strays, ["TCRN-AOS-shadow"]);
+});
+
+test("天花板说的是本判据真的看不见什么,而不是一句「分工不重叠」", () => {
+  // A ceiling is what a reader uses to decide what a green means, so it may not
+  // over-claim coverage. A workspace-shaped directory with no chain, one level below
+  // the container's direct children, is seen by NEITHER scan: the identity walk only
+  // ever collects `.tcrn-workflow` directories, and this predicate only looks at the
+  // top level. That is a blind spot, and the ceiling has to say so.
+  assert.deepEqual(Object.keys(CONTAINER_SCAN_CEILING).sort(),
+    ["childrenNotJudgedAsDirectories", "onlyDirectChildren", "shapeNotIdentity",
+      "unshapedIsNotAFinding"]);
+  assert.match(CONTAINER_SCAN_CEILING.onlyDirectChildren, /盲区/u);
+  assert.match(CONTAINER_SCAN_CEILING.onlyDirectChildren, /两道扫描都看不见/u);
+  assert.equal(/分工不重叠/u.test(CONTAINER_SCAN_CEILING.onlyDirectChildren), false);
+  // And the symlink/non-directory drop is named rather than left to be discovered.
+  assert.match(CONTAINER_SCAN_CEILING.childrenNotJudgedAsDirectories, /符号链接/u);
 });
 
 test("the roster this repository ships is the one the archive notice names", () => {

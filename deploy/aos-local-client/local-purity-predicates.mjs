@@ -210,6 +210,187 @@ export function judgeScanScope({ containerExists, rootsWalked, partitionsFoundLi
 }
 
 /**
+ * The closed set of basenames the container may hold WORKSPACE-SHAPED: one per
+ * rostered partition, plus one per local shadow the CALLER declares.
+ *
+ * Derived from the partition roster that is handed in rather than restated as a
+ * literal, so adding a partition cannot leave this list behind — the failure mode
+ * would be a new partition's own archive reported as a stray, which is the kind of
+ * false red that gets a gate muted rather than fixed.
+ *
+ * `shadows` defaults to EMPTY and is never derived as `${partitionId}-shadow` over the
+ * partition roster, for two separate reasons:
+ *   - deriving would admit a `TCRN-AOS-shadow`. AOS is the fallback HOST, so a shadow
+ *     of itself is a directory that must never exist, and a roster generous enough to
+ *     accept it is a roster that cannot be used to detect it;
+ *   - "which partitions have a local shadow directory" is a fact about a machine's
+ *     layout, i.e. topology. Topology is stated in exactly one place in this repository
+ *     (deploy/aos-local-client/topology.mjs) and handed in; a second copy typed into
+ *     this file is the drift this platform has already paid for twice.
+ *
+ * The default is empty rather than populated because this is the WHITELIST side of a
+ * detection gate — the side that suppresses findings. An absent declaration must
+ * therefore widen the finding, never narrow it: an undeclared shadow directory reds as
+ * a stray until somebody declares it, which is the direction that gets looked at.
+ *
+ * De-duplicated because the two sources legitimately overlap: the day a shadow chain
+ * is promoted to a rostered partition of its own, its directory name arrives from both
+ * lists, and a roster carrying it twice would make "how many names are allowed" stop
+ * matching "how many directories are allowed".
+ */
+export function containerWorkspaceRoster(roster, shadows = []) {
+  return [...new Set([
+    ...roster.map((entry) => entry.partitionId),
+    ...shadows.map((partitionId) => `${partitionId}-shadow`)
+  ])];
+}
+
+/**
+ * What the container scan cannot see, stated beside the judgement rather than in a
+ * footnote of a receipt nobody re-reads.
+ */
+export const CONTAINER_SCAN_CEILING = Object.freeze({
+  onlyDirectChildren:
+    "只判容器的直接子目录。更深一层的「无链但有 workspace/ 形状」的目录两道扫描都看不见——"
+    + "按身份走的扫描对无链树结构性失明(见 shapeNotIdentity),本判据只看顶层。"
+    + "这是一个已知盲区,不是分工",
+  shapeNotIdentity:
+    "判据看的是「有没有 workspace/ 子目录」而不是「有没有链」。引号事故留下的正是无链的那一种,"
+    + "judgeControlTree 对它结构性失明——那是本判据存在的全部理由",
+  unshapedIsNotAFinding:
+    "没有 workspace/ 子目录的陌生条目只被记录、不算发现。否则容器里任何一个临时目录都会把门刷红,"
+    + "门会被关掉而不是被读",
+  childrenNotJudgedAsDirectories:
+    "只有目录与符号链接的子项进入本判据(形状探测跟随软链,所以一个指向别处工作区的软链子项读作野目录"
+    + "而不是「不存在」);普通文件等其余子项由观测侧单列记录、不进桶也不计入 entriesSeen"
+});
+
+/**
+ * Does the workspace CONTAINER hold a workspace-shaped directory the roster does not
+ * name?
+ *
+ * The complement of `judgeControlTree`, and the reason it is needed: that judgement
+ * attributes a tree by the tree's OWN declared identity, so a directory carrying the
+ * workspace SHAPE but no `.tcrn-workflow` has no identity to judge and is invisible to
+ * it. Three such directories — partial trees left by a shell quoting accident, names
+ * like "cross-project-shadow cross-project SHADOW cross-project" — sat under a green
+ * light for exactly that reason (TCRN-CROSS-STORY-129).
+ *
+ * WHY THIS ONE IS ALLOWED TO BE NAME-BASED, given this file opens by rejecting a
+ * name-based predicate. The rejected one ("does a directory called X exist") could not
+ * go green on a correct machine at all. This one greens on every name the roster carries
+ * and reds only on the complement, so a container holding nothing but rostered
+ * directories passes; the container is a CLOSED set with a single owner, which is what
+ * makes the complement of a roster meaningful here and nowhere else on the disk.
+ *
+ * The price of that is stated rather than hidden: a directory nobody put in the roster
+ * is a finding whether or not somebody thinks it is legitimate. The fix for a
+ * legitimate one is to register it where the roster comes from, not to add a name to a
+ * whitelist beside this judgement — a whitelist here can only ever make a finding
+ * disappear, and it is how one axis of a gate ends up contradicting the other.
+ *
+ * `containerExists`, `listed` and the SCOPE FLOOR are separate gates for the reason
+ * `judgeScanScope` exists: "the container holds no stray", "the container is not
+ * there", "the listing could not be read" and "the listing came back holding nothing I
+ * expected" must not share a green. The floor mirrors `judgeScanScope` term for term —
+ * a listing that does not contain every rostered name did not establish a scope this
+ * judgement can green, because an emptied or half-read container would otherwise turn
+ * "no stray was found" into a permanent green with nothing able to go red.
+ *
+ * `nonWorkspaceEntries` is the caller's declaration of which unshaped basenames are
+ * known sidecars (the release-trust directory sits beside the partition directories,
+ * one level out from any workspace root). It is a PARAMETER and not a constant here for
+ * the same reason `roster` is: it is a claim about a machine's layout, and this file
+ * judges data rather than stating topology. It cannot suppress a finding either way —
+ * an entry with no `workspace/` child is never a finding (see `CONTAINER_SCAN_CEILING`)
+ * — so the empty default only moves an unclassified entry from `knownSiblings` to
+ * `unshapedStrangers`, both of which are data.
+ *
+ *   CONTAINER_HOLDS_ONLY_ROSTERED_WORKSPACES  every shaped entry is rostered. Wanted.
+ *   CONTAINER_HOLDS_UNROSTERED_WORKSPACE      a workspace-shaped stranger. RED.
+ *   CONTAINER_NOT_FOUND                       nothing was looked at. RED.
+ *   CONTAINER_NOT_LISTED                      the container refused to be read, or no
+ *                                             `entries` term arrived at all. RED.
+ *   CONTAINER_LISTING_ESTABLISHED_NO_SCOPE    read, and it held nothing. RED.
+ *   CONTAINER_SCOPE_NOT_ESTABLISHED           a rostered name was not found. RED.
+ */
+export function judgeContainerRoster({
+  containerExists, listed, entries, roster, nonWorkspaceEntries = []
+}) {
+  const declaredRoster = [...(roster ?? [])].sort();
+  const siblings = new Set(nonWorkspaceEntries ?? []);
+  const empty = {
+    roster: declaredRoster,
+    strays: [],
+    rostered: [],
+    rosteredWithoutWorkspace: [],
+    // Nothing was observed, so every rostered name is missing. Stated rather than left
+    // empty: an empty `missingRostered` beside `entriesSeen: 0` would read as "all
+    // present", which is the confusion this whole floor exists to refuse. Its own copy,
+    // not the same array as `roster` — two fields sharing one object is how a receipt's
+    // two sides stop being able to differ.
+    missingRostered: [...declaredRoster],
+    knownSiblings: [],
+    unshapedStrangers: [],
+    entriesSeen: 0,
+    workspaceShaped: 0,
+    ceiling: CONTAINER_SCAN_CEILING,
+    predicate: "受治工作区容器里的每一个「工作区形」目录都必须是名册点名的那几个之一;"
+      + "名册之外的一个就是发现,哪怕它没有链。"
+      + "并且名册上的每一个都必须真的在列表里出现过,否则本次列举没有建立可判的范围"
+  };
+  if (containerExists !== true) return { ok: false, reasonCode: "CONTAINER_NOT_FOUND", ...empty };
+  // A missing or non-array `entries` fails CLOSED beside the missing `listed` term. The
+  // two must be treated alike: `listed: true` with no entries term at all is exactly
+  // what a refactor or a partial call site leaves behind, and reading that as "we read
+  // the container and it was clean" is the fail-OPEN direction.
+  if (listed !== true || !Array.isArray(entries)) {
+    return { ok: false, reasonCode: "CONTAINER_NOT_LISTED", ...empty };
+  }
+
+  // Every observed entry lands in exactly one bucket. A classification with a hole in
+  // it is how an entry disappears from a receipt while still sitting on the disk.
+  const allowed = new Set(declaredRoster);
+  const observed = entries;
+  const seen = new Set(observed.map((entry) => entry.name));
+  const named = (rows) => rows.map((entry) => entry.name).sort();
+  const shaped = observed.filter((entry) => entry.workspaceShaped === true);
+  const unshaped = observed.filter((entry) => entry.workspaceShaped !== true);
+  const strays = named(shaped.filter((entry) => !allowed.has(entry.name)));
+  // Present by NAME, whatever its shape: a rostered partition whose archive was pruned
+  // of its `workspace/` child is still evidence that the listing reached the container
+  // this roster describes. Only a name that is not there at all fails the floor.
+  const missingRostered = declaredRoster.filter((name) => !seen.has(name));
+
+  // Ordered as `judgeScanScope` orders its own terms: scope before findings. Both are
+  // reported in full either way — the buckets below are populated whichever code wins,
+  // so a stray is never hidden by a scope failure, only out-ranked in the headline.
+  const reasonCode = observed.length === 0 ? "CONTAINER_LISTING_ESTABLISHED_NO_SCOPE"
+    : missingRostered.length > 0 ? "CONTAINER_SCOPE_NOT_ESTABLISHED"
+      : strays.length > 0 ? "CONTAINER_HOLDS_UNROSTERED_WORKSPACE"
+        : "CONTAINER_HOLDS_ONLY_ROSTERED_WORKSPACES";
+
+  return {
+    ok: reasonCode === "CONTAINER_HOLDS_ONLY_ROSTERED_WORKSPACES",
+    reasonCode,
+    ...empty,
+    strays,
+    rostered: named(shaped.filter((entry) => allowed.has(entry.name))),
+    // A rostered partition whose archive no longer carries a `workspace/` child. Data,
+    // not a finding: pruning an archive is a decision somebody may legitimately take,
+    // and whether a chain is still readable is judged by the control-tree scan.
+    rosteredWithoutWorkspace: named(unshaped.filter((entry) => allowed.has(entry.name))),
+    missingRostered,
+    knownSiblings: named(unshaped.filter((entry) =>
+      !allowed.has(entry.name) && siblings.has(entry.name))),
+    unshapedStrangers: named(unshaped.filter((entry) =>
+      !allowed.has(entry.name) && !siblings.has(entry.name))),
+    entriesSeen: observed.length,
+    workspaceShaped: shaped.length
+  };
+}
+
+/**
  * The story's core judgement: does this machine still hold a live control tree of
  * any partition whose truth has moved away?
  *

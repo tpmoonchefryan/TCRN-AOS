@@ -129,6 +129,71 @@ export const PARTITION_ROSTER = Object.freeze([
   })
 ]);
 
+/**
+ * The four fallback SHADOW workspaces (`TCRN-CROSS-INIT-017`), declared 2026-08-04.
+ *
+ * SEPARATE FROM `PARTITION_ROSTER` ON PURPOSE, and the separation is load-bearing.
+ * Two consumers read a roster and they are asking different questions:
+ *
+ *   - the purity scan asks "which live control trees on this machine are legitimate",
+ *     and a shadow is one — unregistered, it reads as a roster violation, and the only
+ *     way to hold the gate green would be to stop scanning, which is how a gate gets
+ *     switched off instead of answered;
+ *   - `doc-topology` asks "which partitions must every platform document declare the
+ *     truth location of", and a shadow is NOT one. Putting these four in
+ *     `PARTITION_ROSTER` was tried first and it demanded a `cross-project-shadow` row in
+ *     the platform's declaration blocks — a document asserting that a buffer is a
+ *     partition with a local truth, which is false and would mislead every later reader.
+ *
+ * A shadow is a distinct workspace with its own id and external key. It buffers governed
+ * writes while the AOS host is unreachable and is replayed onto the authority afterwards,
+ * so `cross-project`'s truth is on the VM while `cross-project-shadow`'s own truth is
+ * here: two workspaces, two homes, and no ambiguity about which one a write is
+ * authoritative on.
+ *
+ * There is deliberately no `TCRN-AOS-shadow` — AOS is the fallback HOST, so a shadow of
+ * it would buffer against the machine it is buffering for. The set is DECLARED, never
+ * derived as `${partitionId}-shadow`, so a shadow present on disk but absent here reds
+ * rather than being admitted by a naming rule.
+ */
+export const SHADOW_ROSTER = Object.freeze([
+  Object.freeze({
+    partitionId: "cross-project-shadow",
+    shadowFor: "cross-project",
+    externalKey: "CROSS-PROJECT-SHADOW-WORKSPACE",
+    workspaceId: "workspace:b3d8cabe00063c9e9734258a",
+    home: "local",
+    liveAddress: ".tcrn-workspace/cross-project-shadow/workspace"
+  }),
+  Object.freeze({
+    partitionId: "TCRN-Design-System-shadow",
+    shadowFor: "TCRN-Design-System",
+    externalKey: "TCRN-DS-SHADOW-WORKSPACE",
+    workspaceId: "workspace:3b55e56a4d57c4095c7c20b6",
+    home: "local",
+    liveAddress: ".tcrn-workspace/TCRN-Design-System-shadow/workspace"
+  }),
+  Object.freeze({
+    partitionId: "TCRN-TMS-shadow",
+    shadowFor: "TCRN-TMS",
+    externalKey: "TCRN-TMS-SHADOW-WORKSPACE",
+    workspaceId: "workspace:aa522f0d9c41d63873294b4b",
+    home: "local",
+    liveAddress: ".tcrn-workspace/TCRN-TMS-shadow/workspace"
+  }),
+  Object.freeze({
+    partitionId: "Joi-Button-shadow",
+    shadowFor: "Joi-Button",
+    externalKey: "JOI-BUTTON-SHADOW-WORKSPACE",
+    workspaceId: "workspace:317832b6fadd1ab8d8b8212e",
+    home: "local",
+    liveAddress: ".tcrn-workspace/Joi-Button-shadow/workspace"
+  })
+]);
+
+/** The partitions that have a local shadow, for `containerWorkspaceRoster`'s second argument. */
+export const SHADOWED_PARTITIONS = Object.freeze(SHADOW_ROSTER.map((entry) => entry.shadowFor));
+
 export const RELOCATED_PARTITIONS = Object.freeze(
   PARTITION_ROSTER.filter((entry) => entry.home === "vm").map((entry) => entry.partitionId));
 export const LOCAL_LIVE_PARTITIONS = Object.freeze(

@@ -24,7 +24,7 @@ import { join, resolve } from "node:path";
 import { homedir } from "node:os";
 import { pathToFileURL } from "node:url";
 import {
-  PARTITION_ROSTER, SCAN_CEILING, SCAN_PRUNE, SCAN_ROOTS, WORKSPACE_CONTAINER
+  PARTITION_ROSTER, SCAN_CEILING, SCAN_PRUNE, SCAN_ROOTS, SHADOW_ROSTER, WORKSPACE_CONTAINER
 } from "./topology.mjs";
 
 const CONTROL_DIRECTORY = ".tcrn-workflow";
@@ -229,7 +229,11 @@ export async function observeLocalHost({ roots = SCAN_ROOTS, judges } = {}) {
   const partitionsFoundLive = [];
   for (const tree of trees) {
     if (tree.engineState !== "live" || tree.readFaceAccepted !== true) continue;
-    const partition = PARTITION_ROSTER.find((entry) =>
+    // Shadows are matched too: the walk SEES them, so an observation that could not name
+    // them would report `partitionsFoundLive: []` while four live trees sat on the disk —
+    // and the scope predicate would then be unsatisfiable for anything declaring a local
+    // home. Identity is still the pair (externalKey, workspaceId); no naming rule.
+    const partition = [...PARTITION_ROSTER, ...SHADOW_ROSTER].find((entry) =>
       entry.externalKey === tree.externalKey && entry.workspaceId === tree.workspaceId);
     if (partition) partitionsFoundLive.push(partition.partitionId);
   }
