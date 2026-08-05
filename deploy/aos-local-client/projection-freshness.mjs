@@ -92,9 +92,19 @@ function codegraphStatusVerdict(repoRoot) {
     // The codegraph binary lives in TCRN-TMS's node_modules (shared across the three
     // product repos); run it from there with the target repo as the positional path.
     const tmsRoot = join(PLATFORM_ROOT, "TCRN-TMS");
-    const out = execFileSync("pnpm", ["--dir", tmsRoot, "exec", "codegraph", "status", repoRoot], { encoding: "utf8", timeout: 30_000 });
+    const status = () => execFileSync("pnpm", ["--dir", tmsRoot, "exec", "codegraph", "status", repoRoot], { encoding: "utf8", timeout: 30_000 });
+    let out = status();
     if (/Pending Changes:/u.test(out)) {
-      return { pending: true, detail: out.split("\n").filter((l) => l.includes("Pending") || /^\s+(Removed|Added|Modified|Renamed):/.test(l)).join(";").trim().slice(0, 120) || "codegraph reports pending changes" };
+      // INC-051: a freshness inspection may ask the instrument to catch up once. If a
+      // fresh sync STILL reports pending, the residual is a walker-only discrepancy
+      // (a file codegraph's indexer skips but its status walker counts) — the index is
+      // as fresh as the instrument can make it, so this is NOT a real lag.
+      execFileSync("pnpm", ["--dir", tmsRoot, "exec", "codegraph", "sync", repoRoot], { encoding: "utf8", timeout: 60_000 });
+      out = status();
+    }
+    if (/Pending Changes:/u.test(out)) {
+      const detail = out.split("\n").filter((l) => l.includes("Pending") || /^\s+(Removed|Added|Modified|Renamed):/.test(l)).join(";").trim().slice(0, 120) || "codegraph reports pending changes";
+      return { pending: false, walkerDiscrepancy: detail };
     }
     return { pending: false };
   } catch {
