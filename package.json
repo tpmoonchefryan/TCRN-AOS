@@ -69,7 +69,7 @@
     "verify:fast": "pnpm typecheck && pnpm validate:migrations && pnpm test",
     "reset:durable-profile": "node scripts/reset-durable-profile.mjs",
     "verify:extended": "pnpm verify && pnpm phase3:ticket-list-proof && pnpm phase3:work-loop-method-proof && pnpm phase3:runtime-profile-proof && pnpm phase3:readback-api-proof && pnpm kr01:knowledge-schema-fts-proof && pnpm p1:durable-runtime-profile-proof",
-    "verify": "pnpm typecheck && pnpm build && pnpm validate:migrations && pnpm audit:licenses && pnpm test && pnpm runtime:db:proof && pnpm service:smoke && pnpm read-face:gate && pnpm usability:proof && pnpm locale:proof && pnpm aos:frontend-shell-proof && pnpm mirror:retirement-proof && pnpm local-purity:proof && pnpm doc-topology:proof && pnpm parity:proof && pnpm control-tree:proof && pnpm source-export:proof && pnpm slice3:proof && pnpm slice5:proof && pnpm slice6:proof && pnpm slice7:proof && pnpm slice8:proof && pnpm slice9:proof && pnpm live-dispatch:dry-run-proof && pnpm live-dispatch:execution-readiness-proof && pnpm live-dispatch:terminal-ingestion-proof",
+    "verify": "pnpm typecheck && pnpm build && pnpm validate:migrations && pnpm audit:licenses && pnpm test && pnpm runtime:db:proof && pnpm service:smoke && pnpm read-face:gate && pnpm usability:proof && pnpm locale:proof && pnpm aos:frontend-shell-proof && pnpm mirror:retirement-proof && pnpm local-purity:proof && pnpm doc-topology:proof && pnpm parity:proof && pnpm control-tree:proof && pnpm source-export:proof && pnpm slice3:proof && pnpm slice5:proof && pnpm slice6:proof && pnpm slice7:proof && pnpm slice8:proof && pnpm slice9:proof && pnpm live-dispatch:dry-run-proof && pnpm live-dispatch:execution-readiness-proof && pnpm live-dispatch:terminal-ingestion-proof && pnpm projection-freshness:proof",
     "consistency:matrix-proof": "pnpm build && node scripts/consistency-matrix/proof.mjs",
     "consistency:live-matrix-proof": "pnpm build && node scripts/consistency-matrix/live-matrix-proof.mjs",
     "mirror:retirement-proof": "node deploy/aos-mirror-retirement/retirement-guard.mjs",
@@ -83,6 +83,7 @@
     "engine-host:verify": "node deploy/aos-engine-host/verify.mjs",
     "key:occupancy": "node deploy/aos-local-client/key-occupancy.mjs",
     "parity:proof": "node deploy/aos-local-client/parity-proof.mjs",
+    "projection-freshness:proof": "node deploy/aos-local-client/projection-freshness.mjs",
     "control-tree:proof": "node scripts/control-tree-guard-proof.mjs"
   },
   "dependencies": {
