@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-019",
+  "intent": "close STORY-167 (owner queue rendered from chain), dispatch STORY-168 to active (unified runner)",
+  "steps": [
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:23b5106dead9c12817d5da20",
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:c4a2fecde3bd18c961a33f60",
+        "status": "ready"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:c4a2fecde3bd18c961a33f60",
+        "status": "active"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:23b5106dead9c12817d5da20"
+      },
+      "expect": {
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:c4a2fecde3bd18c961a33f60"
+      },
+      "expect": {
+        "status": "active"
+      }
+    }
+  ]
+}

@@ -1,0 +1,239 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-019",
+  "intent": "close STORY-168 (unified runner live via launchd), dispatch STORY-169 to active (five-element dispatch template)",
+  "startedAt": "2026-08-05T15:27:14Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "evidence/mcp-ceremony-write/payloads/2026-08-05T15-27-14-452Z-1de631-cross-project.json",
+    "sha256": "ac56829c369ed7165d13e3785d4efe60f6690b8bd68da35926cea388e3eb3706",
+    "bytes": 1013
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1809,
+    "headEventHash": "872d5555440e27781aa97ec092ac5597df503a6cba91ca4da2b2f25faf8f213a",
+    "work": 280
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T15:27:15Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1809",
+        "--id",
+        "work:c4a2fecde3bd18c961a33f60",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1809,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:c4a2fecde3bd18c961a33f60",
+      "version": 1810
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T15:27:16Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1810",
+        "--id",
+        "work:50fec19eee42dff488b973af",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1810,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:50fec19eee42dff488b973af",
+      "version": 1811
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T15:27:17Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1811",
+        "--id",
+        "work:50fec19eee42dff488b973af",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1811,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:50fec19eee42dff488b973af",
+      "version": 1812
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:c4a2fecde3bd18c961a33f60",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:50fec19eee42dff488b973af",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "status",
+            "expected": "active",
+            "observed": "active",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1812,
+    "headEventHash": "621186f46961e91a1e1620399c49d4259ac028de4a3a5ff7034c198b82a89dec",
+    "work": 280
+  },
+  "knowledgeRebase": {
+    "verb": "knowledge-rebase",
+    "markerVersionBefore": 53,
+    "accepted": true,
+    "reasonCode": "KNOWLEDGE_STORE_REBASED",
+    "version": 54
+  },
+  "eventsAppended": 3,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-05T15:27:21Z"
+}

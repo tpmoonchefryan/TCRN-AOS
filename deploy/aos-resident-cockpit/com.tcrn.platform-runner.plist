@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Unified platform runner (TCRN-CROSS-INIT-019 STORY-168).
+
+  One timer runs the platform's scheduled machine gates — projection freshness,
+  the owner queue reminder, and the injection channel liveness — replacing the
+  scattered per-job schedules. Each job's exit code is written to the unified log
+  under <platform>/var/tcrn-observe/platform-runner.log; a non-zero (unexpected)
+  exit is visible there, never silent (INC-032).
+
+  PATH is stated explicitly: under launchd a login sh does not source ~/.zshrc,
+  which is what puts the nvm-managed node on PATH (INC-032's exit-127 lesson).
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.tcrn.platform-runner</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/ryanlan/.nvm/versions/node/v24.16.0/bin/node</string>
+    <string>/Users/ryanlan/Code/TCRN Platform/TCRN-AOS/deploy/aos-resident-cockpit/platform-runner.mjs</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/Users/ryanlan/.nvm/versions/node/v24.16.0/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+  <key>StartInterval</key>
+  <integer>3600</integer>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/Users/ryanlan/Code/TCRN Platform/var/tcrn-observe/platform-runner.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/ryanlan/Code/TCRN Platform/var/tcrn-observe/platform-runner.err.log</string>
+</dict>
+</plist>
