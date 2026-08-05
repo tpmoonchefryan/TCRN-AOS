@@ -385,12 +385,13 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
     reds.push(redProof({
       id: "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED",
       why: "STORY-157.3:复核命令列教人 SSH 直驱引擎——访问形态错,不管地址对不对。"
-        + "一条没进 break-glass 白名单的 ssh 直驱命令必须红并点名文件与行号。",
+        + "一条没进 break-glass 白名单的 ssh 直驱命令必须红并点名文件与行号。"
+        + "(用写动词 work-transition,避免命中 mcp-unreachable-fallback 的 status 条目。)",
       documents, base,
       mutate: editDocument("CLAUDE.md",
         "## 三、治理入口",
         `## 三、治理入口\n\n复核走 \`ssh tcrn-platform-dev "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs `
-        + `status --workspace ${awayEntry.liveAddress}"\`。\n`),
+        + `work-transition --id work:x --status done --workspace ${awayEntry.liveAddress}"\`。\n`),
       expectCode: "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED",
       names: (hits) => hits.some((finding) => finding.path === "CLAUDE.md")
     }));

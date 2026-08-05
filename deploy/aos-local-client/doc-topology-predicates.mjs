@@ -133,8 +133,14 @@ export const SSH_ENGINE_PATTERN = /ssh\s+[A-Za-z0-9._-]+\s+['"]node\s+\S*tcrn-wo
 export function findSshDirectEngineCommands({ text, path }) {
   const findings = [];
   for (const match of text.matchAll(SSH_ENGINE_PATTERN)) {
+    const lineStart = text.lastIndexOf("\n", match.index) + 1;
+    const lineEnd = text.indexOf("\n", match.index);
+    const line = text.slice(lineStart, lineEnd === -1 ? text.length : lineEnd).trim();
     const lineNumber = text.slice(0, match.index).split("\n").length;
-    findings.push({ path, line: lineNumber, command: match[0].slice(0, 160) });
+    // INC-051: the FULL command line is what the allowlist matches against — the
+    // observer already matches the full command, so a break-glass entry must get the
+    // same string from both consumers or one of them silently disagrees.
+    findings.push({ path, line: lineNumber, command: line.slice(0, 400) });
   }
   return findings;
 }

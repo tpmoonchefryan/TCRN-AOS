@@ -12,11 +12,14 @@
 
 import { strict as assert } from "node:assert";
 import test from "node:test";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import {
   CLAIM_BLOCK_BEGIN, CLAIM_BLOCK_END, findUncontainedMentions, judgeDocTopology,
   judgeMeasurement, parseClaimBlocks, findSshDirectEngineCommands, sshCommandAllowlisted,
   SSH_ENGINE_PATTERN
 } from "./doc-topology-predicates.mjs";
+import { REPO_ROOT } from "./topology.mjs";
 
 const AWAY_ADDRESS = "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace";
 
@@ -415,4 +418,36 @@ test("sshCommandAllowlisted matches by regex pattern and ignores a malformed one
   assert.equal(sshCommandAllowlisted(SSH_DIRECT, [{ pattern: "tcrn-workflow\\.mjs", reason: "x", since: "2026-08-05" }]), true);
   assert.equal(sshCommandAllowlisted(SSH_DIRECT, [{ pattern: "(unclosed", reason: "x", since: "2026-08-05" }]), false);
   assert.equal(sshCommandAllowlisted(SSH_DIRECT, [{ reason: "no pattern" }]), false);
+});
+
+// ── INC-051: break-glass allowlist schema + two-consumer agreement ───────────
+
+test("every break-glass allowlist entry carries class, pattern, reason and since, and the pattern compiles (INC-051)", () => {
+  const allowlist = JSON.parse(readFileSync(resolve(REPO_ROOT, "deploy/aos-local-client/ssh-breakglass-allowlist.json"), "utf8"));
+  assert.ok(Array.isArray(allowlist.entries) && allowlist.entries.length >= 2, "the two decided classes must have real entries (enforce precondition)");
+  for (const entry of allowlist.entries) {
+    assert.ok(typeof entry.class === "string" && entry.class.length > 0, "entry needs a class");
+    assert.ok(typeof entry.pattern === "string" && entry.pattern.length > 0, "entry needs a pattern");
+    assert.match(entry.since, /^\d{4}-\d{2}-\d{2}$/u, "entry needs a since date");
+    assert.ok(typeof entry.reason === "string" && entry.reason.length > 0, "entry needs a reason");
+    assert.doesNotThrow(() => new RegExp(entry.pattern, "u"), `pattern must compile: ${entry.pattern}`);
+  }
+});
+
+test("a documented break-glass command matching an entry is allowlisted (both consumers agree on the full line)", () => {
+  const allowlist = JSON.parse(readFileSync(resolve(REPO_ROOT, "deploy/aos-local-client/ssh-breakglass-allowlist.json"), "utf8")).entries;
+  const statusCmd = `ssh tcrn-platform-dev "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs status --workspace /srv/tcrn/governance/x"`;
+  const proseCmd = `break-glass: ${statusCmd}`;
+  const evilCmd = `ssh tcrn-platform-dev "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs work-transition --id work:x --status done"`;
+  assert.equal(sshCommandAllowlisted(statusCmd, allowlist), true, "the bare break-glass command must be allowed");
+  assert.equal(sshCommandAllowlisted(proseCmd, allowlist), true, "the same command inside prose must be allowed too (doc-topology matches the full line)");
+  assert.equal(sshCommandAllowlisted(evilCmd, allowlist), false, "a write via ssh must NOT be allowlisted");
+});
+
+test("findSshDirectEngineCommands reports the FULL command line, not a truncated fragment (INC-051)", () => {
+  const text = `line before\nbreak-glass: ssh tcrn-platform-dev "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs status --workspace /srv/tcrn/governance/x"\nafter`;
+  const found = findSshDirectEngineCommands({ text, path: "d.md" });
+  assert.equal(found.length, 1);
+  assert.ok(found[0].command.includes("--workspace"), "the full command (with verb flags) must be what the allowlist matches");
+  assert.equal(found[0].line, 2);
 });
