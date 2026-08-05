@@ -101,11 +101,15 @@ test("a payload naming attest-dir is refused, not silently merged", () => {
 
 function makeDispatcher({ perform } = {}) {
   const root = mkdtempSync(join(tmpdir(), "aos-mcp-write-test-"));
+  // The injected perform CAPTURES the args it receives, so the dryRun / partition
+  // pass-through is testable (INC-047): a mutation that turns a dry-run into a real
+  // write or aims at the wrong chain must be caught by the test.
+  const received = [];
   const dispatcher = new CeremonyDispatcher(
-    perform ?? (async () => ({ ok: true, reasonCode: "CEREMONY_PLANNED_ONLY", chainBefore: { version: 1 }, chainAfter: { version: 2 } })),
+    perform ?? (async (args) => { received.push(args); return { ok: true, reasonCode: "CEREMONY_PLANNED_ONLY", chainBefore: { version: 1 }, chainAfter: { version: 2 } }; }),
     { writeRoot: root }
   );
-  return { dispatcher, root };
+  return { dispatcher, root, received };
 }
 
 async function initDispatcher(dispatcher) {
@@ -170,13 +174,48 @@ test("a refused ceremony is surfaced as an isError tool result with its reason c
 });
 
 test("a dry-run success is a non-error result carrying CEREMONY_PLANNED_ONLY", async () => {
-  const { dispatcher, root } = makeDispatcher();
+  const { dispatcher, root, received } = makeDispatcher();
   const result = await callTool(dispatcher, { payload: VALID_PAYLOAD, dryRun: true });
   assert.equal(result.isError, false);
   assert.equal(result.structuredContent.ok, true);
   assert.equal(result.structuredContent.reasonCode, "CEREMONY_PLANNED_ONLY");
   assert.equal(result.structuredContent.dryRun, true);
   assert.equal(result.structuredContent.partition, "TCRN-AOS");
+  // INC-047: the perform must have RECEIVED dryRun:true and the requested partition —
+  // a mutation that turns a dry run into a real write would be caught here.
+  assert.equal(received.length, 1);
+  assert.equal(received[0].dryRun, true);
+  assert.equal(received[0].partition, "TCRN-AOS");
+  assert.ok(typeof received[0].payloadPath === "string");
+  rmSync(root, { recursive: true, force: true });
+});
+
+test("dryRun defaults to false and partition passes through — the two arguments that decide does-this-mutate and which-chain are falsifiable (INC-047)", async () => {
+  const { dispatcher, root, received } = makeDispatcher();
+  const result = await callTool(dispatcher, { payload: VALID_PAYLOAD, partition: "TCRN-TMS" });
+  assert.equal(result.isError, false);
+  assert.equal(received[0].dryRun, false, "a caller that omitted dryRun must reach the perform as a REAL write");
+  assert.equal(received[0].partition, "TCRN-TMS", "the requested partition must reach the perform, not a default");
+  rmSync(root, { recursive: true, force: true });
+});
+
+test("a ceremony that THROWS still materialises a failure receipt (INC-047)", async () => {
+  const { dispatcher, root } = makeDispatcher({
+    perform: async () => { throw new Error("the host engine refused to report status: 255"); }
+  });
+  const result = await callTool(dispatcher, { payload: VALID_PAYLOAD });
+  assert.equal(result.isError, true);
+  const sc = result.structuredContent;
+  assert.equal(sc.ok, false);
+  assert.equal(sc.reasonCode, "CEREMONY_THREW_BEFORE_RECEIPT");
+  assert.ok(typeof sc.receiptPath === "string", "a thrown ceremony must still yield a receipt path");
+  assert.match(sc.receipt.error ?? "", /host engine refused/u);
+  const { readFileSync, readdirSync } = await import("node:fs");
+  const receiptFiles = readdirSync(join(root, "receipts")).filter((name) => name.endsWith(".json"));
+  assert.equal(receiptFiles.length, 1, "a thrown ceremony must write exactly one failure receipt");
+  const receipt = JSON.parse(readFileSync(join(root, "receipts", receiptFiles[0]), "utf8"));
+  assert.equal(receipt.thrownBeforeReceipt, true);
+  assert.equal(receipt.reasonCode, "CEREMONY_THREW_BEFORE_RECEIPT");
   rmSync(root, { recursive: true, force: true });
 });
 

@@ -228,7 +228,30 @@ export class CeremonyDispatcher {
     mkdirSync(dirname(payloadPath), { recursive: true });
     writeFileSync(payloadPath, `${JSON.stringify(payload, null, 2)}\n`);
 
-    const receipt = await this.#perform({ payloadPath, dryRun, partition });
+    let receipt;
+    try {
+      receipt = await this.#perform({ payloadPath, dryRun, partition });
+    } catch (error) {
+      // INC-047: a ceremony that THROWS must still leave a receipt — otherwise an
+      // orphan payload sits in evidence/ and the caller cannot tell how many steps of
+      // a batch landed. The failure receipt names the error and that the chain
+      // position is unknown.
+      receipt = {
+        schemaVersion: "aos.local-client-ceremony.v1",
+        story: typeof payload?.story === "string" ? payload.story : "<unknown>",
+        intent: typeof payload?.intent === "string" ? payload.intent : "<unknown>",
+        ok: false,
+        reasonCode: "CEREMONY_THREW_BEFORE_RECEIPT",
+        error: scrubHostPathsInText(String(error?.message ?? error)).slice(0, 500),
+        partition,
+        dryRun,
+        thrownBeforeReceipt: true,
+        chainBefore: null,
+        chainAfter: null,
+        steps: [],
+        readback: []
+      };
+    }
 
     const receiptPath = resolve(this.#writeRoot, "receipts", `${stamp()}-${partition}.json`);
     mkdirSync(dirname(receiptPath), { recursive: true });
