@@ -22,6 +22,15 @@
   missed one window still backs up inside the grace, instead of the alert going
   red because the machine happened to be asleep at the appointed minute.
 
+  PATH (TCRN-CROSS-INC-032). This ran `/bin/sh -lc … pnpm …` and every fire since it
+  was loaded died at exit 127: under launchd a login `sh` does NOT source ~/.zshrc,
+  which is what puts the nvm-managed pnpm on PATH. Reproduce the root cause with
+  `env -i /bin/sh -lc 'command -v pnpm'` — it prints nothing. PATH is therefore stated
+  explicitly below, and the nvm entry is version-pinned to match package.json's
+  engines.node (24.16.0); if that pin moves, this moves. `pnpm scheduler:health` now
+  reads the last exit status of every com.tcrn.* agent, because nothing did — which is
+  how a 127 ran unseen for a day on three agents at once.
+
   RunAtLoad is false on purpose: loading an agent should not start a network
   transfer at the moment the operator is setting it up.
 -->
@@ -33,8 +42,8 @@
   <key>ProgramArguments</key>
   <array>
     <string>/bin/sh</string>
-    <string>-lc</string>
-    <string>cd "$HOME/Code/TCRN Platform/TCRN-AOS" &amp;&amp; pnpm paired:backup-if-due</string>
+    <string>-c</string>
+    <string>export PATH="$HOME/.nvm/versions/node/v24.16.0/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"; cd "$HOME/Code/TCRN Platform/TCRN-AOS" &amp;&amp; pnpm paired:backup-if-due</string>
   </array>
 
   <key>StartInterval</key>

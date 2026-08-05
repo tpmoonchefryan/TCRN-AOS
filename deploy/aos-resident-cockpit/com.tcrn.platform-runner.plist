@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Unified platform runner (TCRN-CROSS-INIT-019 STORY-168).
+  Unified platform runner (TCRN-CROSS-INIT-019 STORY-168; INC-046).
 
   One timer runs the platform's scheduled machine gates — projection freshness,
   the owner queue reminder, and the injection channel liveness — replacing the
@@ -8,8 +8,10 @@
   under <platform>/var/tcrn-observe/platform-runner.log; a non-zero (unexpected)
   exit is visible there, never silent (INC-032).
 
-  PATH is stated explicitly: under launchd a login sh does not source ~/.zshrc,
-  which is what puts the nvm-managed node on PATH (INC-032's exit-127 lesson).
+  INC-046: no /Users/<account> literal may appear in a committed artifact. The
+  node binary and the platform root are therefore expressed through $HOME, which
+  launchd sets for user agents. PATH is pinned inside the shell command (login sh
+  does not source ~/.zshrc — INC-032's exit-127 lesson) and built from $HOME.
 -->
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -18,21 +20,13 @@
   <string>com.tcrn.platform-runner</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/ryanlan/.nvm/versions/node/v24.16.0/bin/node</string>
-    <string>/Users/ryanlan/Code/TCRN Platform/TCRN-AOS/deploy/aos-resident-cockpit/platform-runner.mjs</string>
+    <string>/bin/sh</string>
+    <string>-lc</string>
+    <string>export PATH="$HOME/.nvm/versions/node/v24.16.0/bin:/usr/bin:/bin:/usr/sbin:/sbin"; exec "$HOME/.nvm/versions/node/v24.16.0/bin/node" "$HOME/Code/TCRN Platform/TCRN-AOS/deploy/aos-resident-cockpit/platform-runner.mjs"</string>
   </array>
-  <key>EnvironmentVariables</key>
-  <dict>
-    <key>PATH</key>
-    <string>/Users/ryanlan/.nvm/versions/node/v24.16.0/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-  </dict>
   <key>StartInterval</key>
   <integer>3600</integer>
   <key>RunAtLoad</key>
   <true/>
-  <key>StandardOutPath</key>
-  <string>/Users/ryanlan/Code/TCRN Platform/var/tcrn-observe/platform-runner.out.log</string>
-  <key>StandardErrorPath</key>
-  <string>/Users/ryanlan/Code/TCRN Platform/var/tcrn-observe/platform-runner.err.log</string>
 </dict>
 </plist>

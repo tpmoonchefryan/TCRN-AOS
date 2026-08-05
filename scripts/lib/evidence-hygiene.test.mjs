@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
-  HOST_PATH_RULES, REPO_ROOT,
+  FIXTURE_EXCLUDED_FILES, HOST_PATH_RULES, REPO_ROOT,
   findHostPaths, findPlaceholders, isScannablePath, listEvidenceFiles, listGuardedFiles,
   rehydrateHostPaths, scanGuardedFiles,
   pendingClosureViolations, scrubHostPaths, scrubHostPathsInText, trackedPaths
@@ -73,10 +73,22 @@ test("the scope follows the evidence, including to docs/reports/", () => {
   });
 
   // Against reality, the containment that makes the above more than a unit test:
-  // everything git tracks and the gate can read is in the real scan set.
+  // everything git tracks and the gate can read is in the real scan set, except the
+  // declared by-name exclusions (INC-046: parity source fixtures + machine-local
+  // launchd plists) — those are still scannable by kind, just declared out.
   const scope = listGuardedFiles();
-  const missing = trackedPaths().filter(isScannablePath).filter((path) => !scope.includes(path));
+  const missing = trackedPaths().filter(isScannablePath)
+    .filter((path) => !FIXTURE_EXCLUDED_FILES.includes(path))
+    .filter((path) => !scope.includes(path));
   assert.deepEqual(missing, [], "every tracked scannable file must be in scope");
+  for (const excluded of FIXTURE_EXCLUDED_FILES) {
+    if (!excluded.endsWith(".mjs")) {
+      // launchd plists are a scannable kind excluded by name — a NEW plist (or a
+      // change to a non-excluded one) carrying a /Users/<account> literal is caught.
+      assert.ok(isScannablePath(excluded), `${excluded} must be a scannable kind — the exclusion is by name, not by softening the detector`);
+    }
+    assert.ok(!scope.includes(excluded), `${excluded} is declared out of scope`);
+  }
 });
 
 test("a real host path inside the new scope turns the gate red and names the file", () => {

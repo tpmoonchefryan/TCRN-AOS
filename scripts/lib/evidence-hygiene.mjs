@@ -33,7 +33,31 @@ import { fileURLToPath } from "node:url";
 export const REPO_ROOT = resolve(fileURLToPath(new URL(".", import.meta.url)), "../..");
 
 /** File kinds the gate reads. Anything else in evidence/ is bytes, not prose. */
-export const SCANNED_EXTENSIONS = Object.freeze([".json", ".md"]);
+export const SCANNED_EXTENSIONS = Object.freeze([".json", ".md", ".plist"]);
+
+/**
+ * Files the gate reads by kind but excludes by NAME (INC-046).
+ *
+ * - The parity corpus (`.mjs`): source files that deliberately carry host-path
+ *   EXAMPLES (`/Users/<you>`, `/Users/$USER`, `/Users/someone`). The detector still
+ *   flags their contents (asserted in the test) — the exclusion is scope, never a
+ *   softened detector. `.mjs` is NOT a scanned kind today: measured widening flags
+ *   20+ source files that legitimately reference the platform root (`/Code/TCRN
+ *   Platform`) or `/private/tmp`, so source stays out of the evidence gate and the
+ *   concrete `.mjs` leaks are handled by scrub (INC-046 scrubbed emit-switchover
+ *   and rehearsal-lib).
+ * - The launchd plists: machine-local configuration that necessarily names this
+ *   machine's platform root via `$HOME/Code/TCRN Platform`. They are excluded by
+ *   name so the gate stays satisfiable; a NEW plist (or a change to a non-excluded
+ *   one) carrying a `/Users/<account>` literal is caught.
+ */
+export const FIXTURE_EXCLUDED_FILES = Object.freeze([
+  "deploy/aos-local-client/parity-proof.mjs",
+  "deploy/aos-local-client/parity-proof.test.mjs",
+  "deploy/aos-resident-cockpit/com.tcrn.platform-runner.plist",
+  "deploy/aos-resident-cockpit/com.tcrn.aos.paired-backup.plist",
+  "deploy/aos-resident-cockpit/com.tcrn.aos.read-face-refresh.plist"
+]);
 
 /**
  * What a path off this machine looks like.
@@ -273,6 +297,11 @@ export function listGuardedFiles({
 } = {}) {
   const indexed = tracked ?? trackedPaths(repoRoot);
   const files = new Set(indexed.filter(isScannablePath));
+  // INC-046: source files that deliberately carry host-path EXAMPLES (the parity
+  // detection corpus) are excluded BY NAME, not by softening the detector — the
+  // detector still flags their contents (asserted in the test). Every OTHER source
+  // file is now in scope, so a real host path in a .mjs/.plist is caught.
+  for (const path of FIXTURE_EXCLUDED_FILES) files.delete(path);
   for (const path of listEvidenceFiles(evidenceRoot, repoRoot)) files.add(path);
   return [...files].sort();
 }

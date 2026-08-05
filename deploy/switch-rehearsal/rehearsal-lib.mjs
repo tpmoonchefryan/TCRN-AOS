@@ -18,7 +18,7 @@ import { createHash } from "node:crypto";
 import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
 import { mkdirSync, readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
-import { homedir } from "node:os";
+import { homedir, tmpdir } from "node:os";
 import { join, relative, resolve, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -32,7 +32,7 @@ export const PLATFORM_ROOT = resolve(REPO_ROOT, "..");
 export const LOCAL_ENGINE = process.env.TCRN_AOS_ENGINE_ROOT
   ?? resolve(homedir(), ".tcrn-workflow/tcrn-workflow");
 export const SCRATCHPAD = process.env.TCRN_AOS_REHEARSAL_SCRATCH
-  ?? "/private/tmp/claude-501/-Users-ryanlan-Code-TCRN-Platform/f97f8267-7c7f-4936-b1b5-7ad9e00cb90a/scratchpad";
+  ?? join(tmpdir(), "tcrn-switch-rehearsal");
 export const STATE_DIR = join(SCRATCHPAD, "switch-rehearsal-state");
 export const PARTITION_ID = "SCRATCH-REHEARSAL";
 export const ACTOR = "profile:tcrn-minerva-v1";

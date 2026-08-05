@@ -158,7 +158,7 @@ const receipt = {
         verbsTried: ["status", "validate", "snapshot-manifest"],
         allRefusedWith: "WORKSPACE_SCHEMA_INVALID",
         engineMessage:
-          "/Users/ryanlan/.tcrn-workflow/tcrn-workflow does not resolve to a directory",
+          "~/.tcrn-workflow/tcrn-workflow does not resolve to a directory",
         meaning:
           "逐字节迁移产出的不是「一条还没接线的链」,而是一条 VM 引擎连读都读不了的链。"
           + "三个只读动词全数拒绝。",
