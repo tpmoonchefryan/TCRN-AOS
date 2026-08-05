@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-019",
+  "intent": "close STORY-170 (INC-041 four backfill tickets), dispatch STORY-165 to active (enforce promotion, criteria first)",
+  "steps": [
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:ea2716bb763e6b2be214078a",
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:9a8457936b92b35bb1884db7",
+        "status": "ready"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:9a8457936b92b35bb1884db7",
+        "status": "active"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:ea2716bb763e6b2be214078a"
+      },
+      "expect": {
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:9a8457936b92b35bb1884db7"
+      },
+      "expect": {
+        "status": "active"
+      }
+    }
+  ]
+}
