@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-019",
+  "intent": "close STORY-161 (20 cards curated and promoted), dispatch STORY-162 to active (injection trigger)",
+  "steps": [
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:a5228dfd680ba0d2040c27da",
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:1212bf1ab6df24db916e54ce",
+        "status": "ready"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:1212bf1ab6df24db916e54ce",
+        "status": "active"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:a5228dfd680ba0d2040c27da"
+      },
+      "expect": {
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:1212bf1ab6df24db916e54ce"
+      },
+      "expect": {
+        "status": "active"
+      }
+    }
+  ]
+}
