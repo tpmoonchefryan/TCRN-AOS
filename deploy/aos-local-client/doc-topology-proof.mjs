@@ -319,24 +319,26 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
   // claims — so all five reds are aimed at the file a reader is most likely to trust.
   const platform = documents.find((document) => document.path === "CLAUDE.md") ?? null;
   const awayEntry = PARTITION_ROSTER.find((entry) => entry.home === "vm") ?? null;
-  const localEntry = PARTITION_ROSTER.find((entry) => entry.home === "local") ?? null;
+  // INC-045: after 2026-08-03 every partition is home:vm; all reds are away-partition
+  // based and MUST run (awayEntry is always present). The old guard on a local partition
+  // silently skipped every in-memory red — the gate had only a green half.
   const platformParsed = platform === null
     ? { spans: [] }
     : parseClaimBlocks(platform.text, { path: "CLAUDE.md" });
 
   const reds = [];
-  if (platform !== null && awayEntry !== null && localEntry !== null) {
+  if (platform !== null && awayEntry !== null) {
     reds.push(redProof({
       id: "HOME_FLIPPED_IN_A_REAL_DOCUMENT",
-      why: `CLAUDE.md 把 ${localEntry.partitionId} 的 home 从 local 改写成 vm——`
-        + "即「这个分区的真值已经搬走了」这句假话。",
+      why: `CLAUDE.md 把 ${awayEntry.partitionId} 的 home 从 vm 改写成 local——`
+        + "即「这个分区的真值还在本机」这句假话。全 VM 名册下以 away 分区的声明为目标。",
       documents, base,
       mutate: editDocument("CLAUDE.md",
-        `| \`${localEntry.partitionId}\` | \`local\` |`,
-        `| \`${localEntry.partitionId}\` | \`vm\` |`),
+        `| \`${awayEntry.partitionId}\` | \`vm\` |`,
+        `| \`${awayEntry.partitionId}\` | \`local\` |`),
       expectCode: "CLAIMED_HOME_CONTRADICTS_ROSTER",
       names: (hits) => hits.some((finding) =>
-        finding.path === "CLAUDE.md" && finding.partitionId === localEntry.partitionId)
+        finding.path === "CLAUDE.md" && finding.partitionId === awayEntry.partitionId)
     }));
 
     reds.push(redProof({
@@ -395,28 +397,31 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
   }
 
   // The fifth red is on the OBSERVATION, and it is the one no document edit can produce:
-  // documents and roster in perfect agreement, both wrong about the machine.
-  const contradicted = localEntry === null ? null : {
+  // documents and roster in perfect agreement, both wrong about the machine. Under an
+  // all-VM roster this is: a home:vm partition whose LOCAL address answers as a live tree
+  // (the resurrection STORY-133 exists to catch). That is a genuine contradiction the
+  // judge must red on (INC-045: previously gated on localEntry and skipped).
+  const contradicted = awayEntry === null ? null : {
     ...observations,
-    [localEntry.partitionId]: {
-      ...observations[localEntry.partitionId],
-      localAccepted: false,
-      localReasonCode: "WORKSPACE_RELOCATION_VACATED"
+    [awayEntry.partitionId]: {
+      ...observations[awayEntry.partitionId],
+      localAccepted: true,
+      localReasonCode: "WORKSPACE_COMMAND_COMPLETED"
     }
   };
   const measurementRed = contradicted === null ? null : (() => {
     const verdict = judgeDocTopology({ ...base, documents, observations: contradicted });
-    const code = "ROSTER_SAYS_LOCAL_BUT_ENGINE_DOES_NOT_ANSWER_HERE";
+    const code = "ROSTER_SAYS_AWAY_BUT_A_LIVE_TREE_ANSWERS_LOCALLY";
     const hits = verdict.findings.filter((finding) => finding.code === code);
     return {
       id: "MEASUREMENT_CONTRADICTS_A_CONSISTENT_ROSTER",
-      why: "名册与全部文档一致,但引擎在那个地址上不再答活。此时错的是名册与文档,不是机器——"
-        + "这一格存在的意义就是:让「两份陈述互相自洽」不足以让本判据变绿。",
+      why: "名册与全部文档一致,但 home:vm 分区的本机地址答活——要么树复活了,要么观测错了。"
+        + "此时错的是名册/文档与机器三者之一,单靠两份陈述自洽不足为证。",
       wentRed: verdict.ok === false,
       reasonCode: verdict.reasonCode,
       expectedCode: code,
       raisedExpectedCode: hits.length > 0,
-      namesWhatItShould: hits.some((finding) => finding.partitionId === localEntry.partitionId),
+      namesWhatItShould: hits.some((finding) => finding.partitionId === awayEntry.partitionId),
       named: hits.map((finding) => ({ partitionId: finding.partitionId, observed: finding.observed }))
     };
   })();

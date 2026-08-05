@@ -23,8 +23,8 @@
       "met": true,
       "expected": "each required document declares exactly its registered partition set",
       "observed": [
-        "CLAUDE.md=TCRN-AOS+TCRN-Design-System+TCRN-TMS+cross-project",
-        "docs/delivery-cadence-convention.md=TCRN-AOS+TCRN-Design-System+TCRN-TMS+cross-project",
+        "CLAUDE.md=Joi-Button+TCRN-AOS+TCRN-Design-System+TCRN-TMS+cross-project",
+        "docs/delivery-cadence-convention.md=Joi-Button+TCRN-AOS+TCRN-Design-System+TCRN-TMS+cross-project",
         "TCRN-AOS/CLAUDE.md=TCRN-AOS",
         "TCRN-Design-System/CLAUDE.md=TCRN-Design-System",
         "TCRN-TMS/CLAUDE.md=TCRN-TMS"
@@ -35,6 +35,18 @@
       "met": true,
       "expected": true,
       "observed": true
+    },
+    {
+      "id": "NO_NON_ALLOWLISTED_SSH_DIRECT_COMMANDS",
+      "met": true,
+      "expected": "registered documents carry no SSH-direct-engine command outside the break-glass allowlist",
+      "observed": []
+    },
+    {
+      "id": "SSH_BREAKGLASS_ALLOWLIST_PRESENT",
+      "met": true,
+      "expected": "ssh-breakglass-allowlist.json with the two residual classes",
+      "observed": "<local-platform-root>/TCRN-AOS/deploy/aos-local-client/ssh-breakglass-allowlist.json (2 classes, 0 entries)"
     },
     {
       "id": "RED_HOME_FLIPPED_IN_A_REAL_DOCUMENT",
@@ -70,10 +82,31 @@
       ]
     },
     {
+      "id": "RED_SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED",
+      "met": true,
+      "expected": "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED",
+      "observed": [
+        "ADDRESS_STATED_OUTSIDE_A_CLAIM_BLOCK",
+        "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED"
+      ]
+    },
+    {
       "id": "RED_MEASUREMENT_CONTRADICTS_A_CONSISTENT_ROSTER",
       "met": true,
-      "expected": "ROSTER_SAYS_LOCAL_BUT_ENGINE_DOES_NOT_ANSWER_HERE",
+      "expected": "ROSTER_SAYS_AWAY_BUT_A_LIVE_TREE_ANSWERS_LOCALLY",
       "observed": "DOC_TOPOLOGY_CLAIM_DRIFTED"
+    },
+    {
+      "id": "COMMITTED_CLAIMS_MATCH_THE_TREE",
+      "met": true,
+      "expected": "COMMITTED_CLAIMS_MATCH_THE_TREE",
+      "observed": "COMMITTED_CLAIMS_MATCH_THE_TREE"
+    },
+    {
+      "id": "COMMITTED_CLAIM_DIVERGENCE_NAMES_ITS_DOCUMENT",
+      "met": true,
+      "expected": "a divergence names the document it is in",
+      "observed": []
     },
     {
       "id": "ON_DISK_RED_WAS_PERFORMED",
@@ -98,12 +131,6 @@
       "met": true,
       "expected": true,
       "observed": true
-    },
-    {
-      "id": "AWAY_HOST_ANSWERED_FOR_ITSELF",
-      "met": true,
-      "expected": "workspace:fbc32e3ff874fbbd637a1b85",
-      "observed": "workspace:fbc32e3ff874fbbd637a1b85"
     }
   ],
   "claim": {
@@ -118,8 +145,8 @@
     "awayHost": "tcrn-platform-dev",
     "awayWorkspaceFromManifest": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
   },
-  "observedAt": "2026-07-30T03:34:30Z",
-  "probeVm": true,
+  "observedAt": "2026-08-05T22:24:03Z",
+  "probeVm": false,
   "observations": {
     "TCRN-AOS": {
       "partitionId": "TCRN-AOS",
@@ -129,42 +156,46 @@
       "localReasonCode": "WORKSPACE_RELOCATION_VACATED",
       "localVersion": null,
       "localWorkspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
-      "vmProbed": true,
-      "vmAddress": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
-      "vmAccepted": true,
-      "vmReasonCode": "WORKSPACE_COMMAND_COMPLETED",
-      "vmWorkspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
-      "vmVersion": 864,
-      "vmHeadEventHash": "f69582bc63198996a14fc1bb584f2bd6217dbab72087bb071971bc252a1008d5"
+      "vmProbed": false
     },
     "cross-project": {
       "partitionId": "cross-project",
-      "home": "local",
+      "home": "vm",
       "localAddressRelative": ".tcrn-workspace/cross-project/workspace",
-      "localAccepted": true,
-      "localReasonCode": "WORKSPACE_COMMAND_COMPLETED",
-      "localVersion": 1338,
+      "localAccepted": false,
+      "localReasonCode": "WORKSPACE_RELOCATION_VACATED",
+      "localVersion": null,
       "localWorkspaceId": "workspace:7732a51de4c38afb83bb77cf",
       "vmProbed": false
     },
     "TCRN-Design-System": {
       "partitionId": "TCRN-Design-System",
-      "home": "local",
+      "home": "vm",
       "localAddressRelative": ".tcrn-workspace/TCRN-Design-System/workspace",
-      "localAccepted": true,
-      "localReasonCode": "WORKSPACE_COMMAND_COMPLETED",
-      "localVersion": 983,
+      "localAccepted": false,
+      "localReasonCode": "WORKSPACE_RELOCATION_VACATED",
+      "localVersion": null,
       "localWorkspaceId": "workspace:e7386bdcff8b3407e43ece51",
       "vmProbed": false
     },
     "TCRN-TMS": {
       "partitionId": "TCRN-TMS",
-      "home": "local",
+      "home": "vm",
       "localAddressRelative": ".tcrn-workspace/TCRN-TMS/workspace",
-      "localAccepted": true,
-      "localReasonCode": "WORKSPACE_COMMAND_COMPLETED",
-      "localVersion": 228,
+      "localAccepted": false,
+      "localReasonCode": "WORKSPACE_RELOCATION_VACATED",
+      "localVersion": null,
       "localWorkspaceId": "workspace:f15c5abb6cd777c44453c2c9",
+      "vmProbed": false
+    },
+    "Joi-Button": {
+      "partitionId": "Joi-Button",
+      "home": "vm",
+      "localAddressRelative": ".tcrn-workspace/Joi-Button/workspace",
+      "localAccepted": false,
+      "localReasonCode": "WORKSPACE_RELOCATION_VACATED",
+      "localVersion": null,
+      "localWorkspaceId": "workspace:f4edc54804be7e499804e3f0",
       "vmProbed": false
     }
   },
@@ -180,8 +211,9 @@
         "exists": true,
         "mustCarryClaims": true,
         "blocks": 1,
-        "claims": 4,
+        "claims": 5,
         "partitions": [
+          "Joi-Button",
           "TCRN-AOS",
           "TCRN-Design-System",
           "TCRN-TMS",
@@ -193,8 +225,9 @@
         "exists": true,
         "mustCarryClaims": true,
         "blocks": 1,
-        "claims": 4,
+        "claims": 5,
         "partitions": [
+          "Joi-Button",
           "TCRN-AOS",
           "TCRN-Design-System",
           "TCRN-TMS",
@@ -299,13 +332,13 @@
     "counts": {
       "documents": 13,
       "documentsCarryingClaims": 5,
-      "claims": 11
+      "claims": 13
     }
   },
   "reds": [
     {
       "id": "HOME_FLIPPED_IN_A_REAL_DOCUMENT",
-      "why": "CLAUDE.md 把 cross-project 的 home 从 local 改写成 vm——即「这个分区的真值已经搬走了」这句假话。",
+      "why": "CLAUDE.md 把 TCRN-AOS 的 home 从 vm 改写成 local——即「这个分区的真值还在本机」这句假话。全 VM 名册下以 away 分区的声明为目标。",
       "wentRed": true,
       "reasonCode": "DOC_TOPOLOGY_CLAIM_DRIFTED",
       "expectedCode": "CLAIMED_HOME_CONTRADICTS_ROSTER",
@@ -313,10 +346,10 @@
       "named": [
         {
           "path": "CLAUDE.md",
-          "partitionId": "cross-project",
+          "partitionId": "TCRN-AOS",
           "line": null,
-          "expected": "local",
-          "observed": "vm"
+          "expected": "vm",
+          "observed": "local"
         }
       ],
       "namesWhatItShould": true,
@@ -362,7 +395,8 @@
             "TCRN-AOS",
             "cross-project",
             "TCRN-Design-System",
-            "TCRN-TMS"
+            "TCRN-TMS",
+            "Joi-Button"
           ],
           "observed": null
         }
@@ -383,14 +417,14 @@
         {
           "path": "CLAUDE.md",
           "partitionId": null,
-          "line": 170,
+          "line": 198,
           "expected": null,
           "observed": null
         },
         {
           "path": "CLAUDE.md",
           "partitionId": null,
-          "line": 170,
+          "line": 198,
           "expected": null,
           "observed": null
         }
@@ -401,17 +435,39 @@
       ]
     },
     {
-      "id": "MEASUREMENT_CONTRADICTS_A_CONSISTENT_ROSTER",
-      "why": "名册与全部文档一致,但引擎在那个地址上不再答活。此时错的是名册与文档,不是机器——这一格存在的意义就是:让「两份陈述互相自洽」不足以让本判据变绿。",
+      "id": "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED",
+      "why": "STORY-157.3:复核命令列教人 SSH 直驱引擎——访问形态错,不管地址对不对。一条没进 break-glass 白名单的 ssh 直驱命令必须红并点名文件与行号。",
       "wentRed": true,
       "reasonCode": "DOC_TOPOLOGY_CLAIM_DRIFTED",
-      "expectedCode": "ROSTER_SAYS_LOCAL_BUT_ENGINE_DOES_NOT_ANSWER_HERE",
+      "expectedCode": "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED",
+      "raisedExpectedCode": true,
+      "named": [
+        {
+          "path": "CLAUDE.md",
+          "partitionId": null,
+          "line": 107,
+          "expected": null,
+          "observed": null
+        }
+      ],
+      "namesWhatItShould": true,
+      "findingCodes": [
+        "ADDRESS_STATED_OUTSIDE_A_CLAIM_BLOCK",
+        "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED"
+      ]
+    },
+    {
+      "id": "MEASUREMENT_CONTRADICTS_A_CONSISTENT_ROSTER",
+      "why": "名册与全部文档一致,但 home:vm 分区的本机地址答活——要么树复活了,要么观测错了。此时错的是名册/文档与机器三者之一,单靠两份陈述自洽不足为证。",
+      "wentRed": true,
+      "reasonCode": "DOC_TOPOLOGY_CLAIM_DRIFTED",
+      "expectedCode": "ROSTER_SAYS_AWAY_BUT_A_LIVE_TREE_ANSWERS_LOCALLY",
       "raisedExpectedCode": true,
       "namesWhatItShould": true,
       "named": [
         {
-          "partitionId": "cross-project",
-          "observed": "WORKSPACE_RELOCATION_VACATED"
+          "partitionId": "TCRN-AOS",
+          "observed": "WORKSPACE_COMMAND_COMPLETED"
         }
       ]
     }
@@ -469,6 +525,6 @@
     "registryIsClosed": "只核对名册里这些文档。名册外的一份文档写错了地址,本判据看不见——所以新增会声称真值位置的入口文档时,同一次改动要把它登记进来。",
     "containmentIsSyntactic": "收容规则判的是「具体地址是否只出现在声明块内」,它不判块外那句话的真假。块外出现即红,由人把它搬进块里,由块的真值检查接手。",
     "awayHomeWithoutProbe": "不带 --probe-vm 时,home=vm 的证据是「本机这个地址不再答活」——它证明真值不在本机,不证明真值在那台机器上。带 --probe-vm 才问了对方本身(仪器纪律第 4 条)。",
-    "recheckCommandNotExecuted": "复核命令列只被检查「是否包含所声明的地址」,并未被执行。它保证地址变了命令必须跟着变,不保证那条命令今天能跑通。"
+    "recheckCommandNotExecuted": "复核命令列被检查「包含所声明的地址」且「不含白名单外的 SSH 直驱引擎命令」,但并未被执行。它保证地址变了命令必须跟着变、且命令教的访问形态合规,不保证那条命令今天能跑通。(STORY-157.3:访问形态判据已并入;复核要走 MCP 只读面,SSH 直驱只允许白名单内两类 break-glass。)"
   }
 }
