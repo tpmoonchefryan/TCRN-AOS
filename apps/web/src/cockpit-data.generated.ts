@@ -4,14 +4,14 @@
 import type { CockpitData } from "./cockpit-types.js";
 
 export const cockpitData: CockpitData = {
-  "generatedAt": "2026-08-04T16:34:57Z",
+  "generatedAt": "2026-08-05T22:42:14Z",
   "partitions": [
     {
       "id": "cross-project",
       "label": "Platform governance",
       "labelZh": "平台治理",
-      "chainVersion": 1560,
-      "verifiedAt": "2026-08-04T16:34:57Z",
+      "chainVersion": 1841,
+      "verifiedAt": "2026-08-05T22:42:14Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -23,7 +23,7 @@ export const cockpitData: CockpitData = {
       "label": "Design System",
       "labelZh": "设计系统",
       "chainVersion": 983,
-      "verifiedAt": "2026-08-04T16:34:57Z",
+      "verifiedAt": "2026-08-05T22:42:14Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -35,7 +35,7 @@ export const cockpitData: CockpitData = {
       "label": "TMS",
       "labelZh": "TMS",
       "chainVersion": 228,
-      "verifiedAt": "2026-08-04T16:34:57Z",
+      "verifiedAt": "2026-08-05T22:42:14Z",
       "readVia": "export",
       "attestationFromSequence": null,
       "unavailable": []
@@ -44,8 +44,8 @@ export const cockpitData: CockpitData = {
       "id": "TCRN-AOS",
       "label": "AOS",
       "labelZh": "AOS",
-      "chainVersion": 1047,
-      "verifiedAt": "2026-08-04T16:34:57Z",
+      "chainVersion": 1048,
+      "verifiedAt": "2026-08-05T22:42:14Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -57,7 +57,7 @@ export const cockpitData: CockpitData = {
       "label": "Joi Button",
       "labelZh": "Joi Button",
       "chainVersion": 586,
-      "verifiedAt": "2026-08-04T16:34:57Z",
+      "verifiedAt": "2026-08-05T22:42:14Z",
       "readVia": "export",
       "attestationFromSequence": 1,
       "unavailable": []
@@ -2431,8 +2431,8 @@ export const cockpitData: CockpitData = {
       "kind": "Story",
       "status": "done",
       "parentId": "work:82c67feb8895622dda783c2f",
-      "revision": 6,
-      "scope": "快照健康+执行观测。**首版已交付但如实显示为未观测**:快照是链外产物,需读取备份目录的清单而非链本身;在真正读到之前,诚实的报告是「尚未查看」而不是显示健康。页面按分区列出并统一标注未观测。**残余**:接入备份清单读取与 L2.5 执行观测收据",
+      "revision": 7,
+      "scope": "快照健康+执行观测。**首版已交付但如实显示为未观测**:快照是链外产物,需读取备份目录的清单而非链本身;在真正读到之前,诚实的报告是「尚未查看」而不是显示健康。页面按分区列出并统一标注未观测。**残余**:接入备份清单读取与 L2.5 执行观测收据\n\n[INIT-019 STORY-156.4 写面真写证明 2026-08-05 actor=agent:fable。原文逐字保留,此处追加一行透明证明标记。]",
       "decidedBy": [
         "minutes:4fdc3f1caf4adfb2374090f7"
       ],
@@ -6546,9 +6546,9 @@ export const cockpitData: CockpitData = {
       "id": "work:ee1e1f64cde12eb62c8ae23b",
       "externalKey": "TCRN-CROSS-EPIC-041",
       "kind": "Epic",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:cad8ec31fdbb4b4680564cca",
-      "revision": 2,
+      "revision": 5,
       "scope": "散文→机器门。S1 控制树本机写保护:各仓项目级 deny 规则拦 Write/Edit 落 .tcrn-workflow 与 .tcrn-workspace+五归档 chflags uchg+重启会话红测被拒留档。S2 SSH 出站写启发式:模式规格(危险模式与豁免通路)→observe 模式 matcher+对抗样例集(≥10 命中+≥10 放行+改判定证红)→跑满 Sprint 2 出误报报告后经 owner_intent_required 门切 enforce;缺失信息 fail toward 不拦。S3 parity:proof:两侧名册真值源规格→对齐脚本+带理由白名单→实测初始化(含修正平台 CLAUDE.md 中 workflow-MCP 两侧未接的过时句)→伪漂移红测→入 proof 家族。S4 补 Codex 缺口:生成 config.toml 增量 diff 不应用→Owner 过目后应用→逐服务器 status 实测→白名单收缩即 S3 有效性活证。验收=G1+G2。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -6558,9 +6558,9 @@ export const cockpitData: CockpitData = {
       "id": "work:3f946d82e6f990923d614303",
       "externalKey": "TCRN-CROSS-EPIC-042",
       "kind": "Epic",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:cad8ec31fdbb4b4680564cca",
-      "revision": 2,
+      "revision": 5,
       "scope": "行为回归门。S5 promptfoo 采纳:npm view 实名核验+lockfile 钉版本+smoke+并发与调用计数护栏+成本输出喂 S11。S6 教训场景库首批 6 条(每条 given/when/then+rubric+链接来源记忆文件):上下文将满不收尾、ARCHIVE_LIMIT_EXCEEDED 诊断为量错对象、IDENTITY_MISMATCH 先分诊两型、push 后主动查 CI、索引工具先验新鲜度、到没到远端问 ls-remote;每条配故意答错样本证明断言能红。S7 引擎行为面:adapter_generate 与 persona_render 黄金样本确定性回归+helper 分诊场景。S8 接线:确定性子集每 push、含模型调用全量挂 release+手动触发、临时引入退化样本证 CI 门能红。验收=G3。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -6570,9 +6570,9 @@ export const cockpitData: CockpitData = {
       "id": "work:fd23bf630bee698226534252",
       "externalKey": "TCRN-CROSS-EPIC-043",
       "kind": "Epic",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:cad8ec31fdbb4b4680564cca",
-      "revision": 2,
+      "revision": 5,
       "scope": "可观测与成本。S9 选型 spike:候选 Langfuse 自托管/OTel collector+轻 sink+座舱渲染/Jaeger;运营成本为决定性审查;最轻候选先 PoC(VM 127.0.0.1+systemd 沿 CONF-007 姿势、ceremony 打测试 span 全链路)。S10 埋点:ceremony 开始/结束/回读/拒绝四点、标签只含 partition/verb/expected-version 元数据不含载荷;引擎动词入口出口 span 搭 v0.11.0 列车;隐私审查确认 sink 无链内容。S11 per-Initiative 成本归因:host 会话 JSONL 解析尽力而为、缺口如实标注不设静默上限;首份报表拿本 INIT 当样本、含三层流水线各层成本;产出接 delivery-cadence 决策输入。验收=G4。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -6582,9 +6582,9 @@ export const cockpitData: CockpitData = {
       "id": "work:eeb7ef0896d82312093ced3e",
       "externalKey": "TCRN-CROSS-EPIC-044",
       "kind": "Epic",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:cad8ec31fdbb4b4680564cca",
-      "revision": 2,
+      "revision": 5,
       "scope": "回放性能(条件启动)。S12 基准(无条件):合成链生成器 3k/10k 事件一律经引擎正常写入路径生成禁手写字节;status/validate/export/work-list 各 N 次取中位墙钟、对 1520+ 事件真链只读动词与合成链测;基准数据落链。阈值:常用只读动词>2s 启动修复。S13(条件)snapshot-trusted replay ADR+隔离审议:D3 已裁热路径信 snapshot+后台异步全链复验+不一致 fail-closed;ADR 自陈天花板。S14(条件)实现+对永远全链回放做残余适用性分析、条件化保留为后台复验路径不删除。未超阈值则只落基准并设链长 revisit 触发器。验收=G6。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -6594,9 +6594,9 @@ export const cockpitData: CockpitData = {
       "id": "work:51f88fcbe3cbfd8e4c858a74",
       "externalKey": "TCRN-CROSS-EPIC-045",
       "kind": "Epic",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:cad8ec31fdbb4b4680564cca",
-      "revision": 2,
+      "revision": 5,
       "scope": "约束代际复审。S15 常驻热路径字节预算:平台与各仓 CLAUDE.md、MEMORY 索引、各 MCP server instructions 字节计量脚本+首份基线+复测口径(公约大改或模型代际更替触发);只计字节不冒充精确 token。S16 Fable 5 代际残余适用性复审:全平台现役约束/门/hook/公约编目(执行层可做)→逐条成立条件三档标注(仍在/已消失/条件化;执行层起草+核验层逐条复核+审查层终审)→提案清单+harness-constraint 公约修订稿(增按模型代际触发复审条款)→经 S18 隔离审议→Owner 裁。复审输出是提案不是删除。验收=G5。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -6606,11 +6606,81 @@ export const cockpitData: CockpitData = {
       "id": "work:bc51bf24cbb20a5bd3a03bca",
       "externalKey": "TCRN-CROSS-EPIC-046",
       "kind": "Epic",
-      "status": "planned",
+      "status": "done",
       "parentId": "work:cad8ec31fdbb4b4680564cca",
-      "revision": 2,
+      "revision": 5,
       "scope": "低成本吸收。S17 archify(tt-a1i/archify 9047 星):核验层通读 skill 载荷全文+license 核验+风险笔记→digest 钉扎纳入→试用于本 INIT 三层流水线架构图。S18 隔离审议试点(D7 已裁做):绑 S16.3 裁定审议(EPIC-044 若启动则改绑 S13 ADR 审议);以宿主隔离多代理分头产出 position+收据绑定;事后产出 deliberation-adoption 公约修订草稿——执行形态=多代理首次从披露变为可证。",
       "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:888cd7a9eadbc77294161b79",
+      "externalKey": "TCRN-CROSS-EPIC-047",
+      "kind": "Epic",
+      "status": "planned",
+      "parentId": "work:7d2bb6490ce764420117a085",
+      "revision": 2,
+      "scope": "【AOS 唯一数据平面:接口正门】现状是三条写路径并存——ceremony 经 SSH 驱动 VM 引擎 CLI(实际唯一在用)、座舱 4318 HTTP 写面(只开 transition/annotate/work/enrol 四条路由且无人使用)、MCP 面(刻意只读)。每一步当时都有局部合理性,加起来是对 D1 的系统性偏离,而没有任何门在新脚本伸手 SSH 时变红。本 EPIC 把正门收敛到一扇:MCP 单一 ceremony 写工具(D5)、全平台复核命令改写为 MCP 形态并由 doc-topology 判据核对访问形态而非仅地址、SSH 按残余适用性降格 break-glass(D9 两类保留)、座舱原生 MCP 与渲染上移作阶段二(D6,待确认前只出方案)。收口判据:任一平台文档的复核命令都不再教人 SSH 直驱;一次治理写可只靠 MCP 工具完成;doc-topology:proof 能对访问形态判红。Story:156 写工具、157 文档改写、158 SSH 降格、159 座舱原生(planned)。子任务见 BRIEFING 第三节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:cf6f94a581d81a5672b3e381",
+      "externalKey": "TCRN-CROSS-EPIC-048",
+      "kind": "Epic",
+      "status": "planned",
+      "parentId": "work:7d2bb6490ce764420117a085",
+      "revision": 2,
+      "scope": "【知识层:从零到注入】三层叠加的实测事实:①治理知识层按设计是纯拉式(helper 明文 never injects),而平台没有任何东西促发检索第一步,knowledge-snippet 全代码库消费方只有 CLI 自己;②就算有人拉也拉不动——cross 与 TCRN-AOS 两条活链知识面整面 KNOWLEDGE_HIGH_WATER_MISMATCH,store 标记 v1 对链 v1728,disposable 物化索引迁 VM 后从未 rebase 且每次链写再拉开一次;③内容为零——VM 与本机归档 bodies/metadata 双零、链上无真知识事件、座舱生产库 domain.db 无知识表(kr01-06 建在代码与测试里从未部署)。故这不是迁移丢失而是从未灌入,迁移贡献的是把标记锁死使「空」升级为「连空都读不出」。本 EPIC 按 D2/D3 三步且顺序不可倒:先修标记于写侧(每写必 rebase,让落后永不超过一次写)、再灌内容(三源策展)、最后接注入(hook 按 prompt 检索,relevance 归 knowledge-candidates、预算与新鲜度归已建成的 context-route,注入元数据级而非全文)。收口判据:一条真实 prompt 进来代理不需要想起来去查,相关卡片元数据已在上下文;且知识面读写都不经 SSH。Story:160 标记纪律、161 内容灌入、162 注入触发、163 读写全走 MCP。子任务见 BRIEFING 第四节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:4fcf9b1832dbf02c80d9b103",
+      "externalKey": "TCRN-CROSS-EPIC-049",
+      "kind": "Epic",
+      "status": "planned",
+      "parentId": "work:7d2bb6490ce764420117a085",
+      "revision": 2,
+      "scope": "【访问路径合规门】D1 若只写进文档,就还是散文——本平台已实证散文按不住(同一毛病在教训写入持久记忆五十六分钟后复发)。S2 SSH 写观察器已是这道门的八成:它已能识别经 SSH 的写,只需把语料扩到「经 SSH 驱动引擎 CLI」(读动词 status/work-list/work-show 同样算),白名单只留 D9 的两类 break-glass,observe 期后按判据 enforce。红线:96 条既有样例是 INC-037 付过学费的资产,只准加不准弱化。晋级判据必须排除 probe:true 的门自身流量,且「空日志」只有在活性门同时为绿时才可读作零命中——观察窗自 2026-08-05 重置起算,不得引用重置前数据。收口判据:新会话走错路时门当场响,原则不再靠反复申明。Story:164 语料扩面、165 enforce 晋级。子任务见 BRIEFING 第五节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:5376493c45ef826ae9dc22ef",
+      "externalKey": "TCRN-CROSS-EPIC-050",
+      "kind": "Epic",
+      "status": "planned",
+      "parentId": "work:7d2bb6490ce764420117a085",
+      "revision": 2,
+      "scope": "【运行时健康与待办可见】对应「建成未接线」的两条根因:门管仓字节不管运行时(launchd 从未成功跑过一次、hook 在真实 cwd 下起不来、store 标记落后 1727 个版本——三者都是运行时事实,没有任何仓门能看见),以及最后一公里合法地停给了人却没有队列(停对了地方,停在了看不见的地方)。本 EPIC 立一条平台级通则:凡物化侧车(网页投影、知识 store、codegraph、记忆索引)须声明真源版本、自身版本、最大龄,由一道统一巡检门判全部——把今晚那类病从 N 个单收敛成一个类,并把 STORY-160 的标记差门并进来而不是再造孤门;另建待 Owner 队列(链上 owner_intent_required 门+交付扣下项+待批机械动作)与统一运行者(一个 timer 跑全部门,失败即通知不静默,真触发 exit 0 才算修好)。收口判据:一条命令输出全部侧车状态;当前队列能列出 INC-041 四代办与发布必停点。Story:166 通则与巡检、167 待 Owner 队列、168 统一运行者。子任务见 BRIEFING 第六节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:20598f9f418557b81d999ba7",
+      "externalKey": "TCRN-CROSS-EPIC-051",
+      "kind": "Epic",
+      "status": "planned",
+      "parentId": "work:7d2bb6490ce764420117a085",
+      "revision": 2,
+      "scope": "【生效证据纪律】本 INIT 的方法论产出,对应根因「收口判据止于建成不含生效」:单子在产物存在加测试绿时即可置 done,而「接进自动化列车、部署到真实位置」落进两张单之间的缝,缝没有 owner。D8 的落法是派工模板四要素加第五项「生效证据命令」——证明交付物在它将来真正运行的那个世界里活着;并把 MIN-059 已裁的「生效证据 ∈ {已证,未证},默认未证」从约束编目推广到一切交付物。这直接服务本平台的管理理念:地板能力的模型不需要判断力,照单跑那条命令就够了,正如企业靠 Jira 的 Definition of Done 含部署来管住个体差异巨大的人群。同时对 INC-041 承载的四件代办逐件补票(只补票不执行):S4.2 Codex 配置应用、STORY-144 enforce 切换、S154 archify 安装、otel-spans 接线。收口判据:下一张派出的单按五要素成文并引用修订后的公约文本。Story:169 模板与公约修订、170 存量补票。子任务见 BRIEFING 第七节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
       "sprintWorkId": null
     },
     {
@@ -6993,6 +7063,268 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "cross-project",
+      "id": "work:0d1f26b84c240f6f4f0b5cbe",
+      "externalKey": "TCRN-CROSS-INC-032",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 5,
+      "scope": "【排程与唤起器同根失效;审查层自身缺陷】现象:三个 launchd 任务共用 `/bin/sh -lc` 不 source ~/.zshrc,PATH 无 nvm 下的 pnpm/claude——read-face-refresh 与 paired-backup 每次 exit 127,init018-patrol `spawn claude ENOENT` 且在抛错前已打印 `CONTINUATION_SPAWNED pid=undefined`(自造假绿)。读面刷新排程自装载起从未成功过一次,freshness 门当时红(12.15h>9h)。根因复现:`env -i /bin/sh -lc 'command -v pnpm'` 无输出。\n\n【修复完成 2026-08-05,全部经真触发验收,非语法推断】①**patrol 按 Owner 2026-08-05 裁定直接删除**:~/Library/LaunchAgents/com.tcrn.init018-patrol.plist、tcrn-workflow/tools/init018-patrol/、~/.tcrn-init018-patrol.json 三者全删,launchctl 名录零残留;连带解决「唤起器指向 Owner 门」与「日志谎报」两项,无需再修。②两份 plist 改为显式 `EnvironmentVariables.PATH`(nvm 项与 package.json engines.node 24.16.0 同钉)且 `-lc`→`-c`,不再依赖登录 shell;已装副本与仓内模板同字节。③**新增 `pnpm --dir TCRN-AOS scheduler:health`**(scripts/scheduler-health.mjs):名册由仓内 plist 模板的 Label 派生(不手写),两侧断言=模板对应的 agent 须已加载且末次退出为 0;`TCRN_SCHEDULER_PROBE` 注入 launchctl 输出以驱动红侧。此门此前完全不存在——`grep -rn launchctl` 全仓零命中,正是 127 能不被察觉跑一天的原因。\n\n【修复中发现并一并修掉的第二缺陷】首次真触发后 127 消失,露出下一层:job 收尾 exit 2「读面取不到」。查明**读面从未重启**(NRestarts=0,自 08-04 15:48 持续 active),真因是我上一轮把 `apply-read-face.mjs` 从管线里拿掉了——`apply.mjs` 换掉读面服务的静态根,而使读面部署到位并探测应答(READ_FACE_ANSWERS_ON_LAN_READONLY)的是 apply-read-face。管线补回该步并加**有界重试**(3×10s,仅容忍不可达,陈旧仍判红),第三次真触发 exit 0。\n\n【验收实测】三次真触发:①exit 2(暴露管线缺步)→②exit 1(重试不足以掩盖缺步,证明重试没有变成遮羞布)→③**exit 0**。终态:`launchctl list` 两任务末次退出均 0;`scheduler:health` → SCHEDULER_AGENTS_HEALTHY exit 0;`read-face-freshness` → fresh、age 0.127h、**服务的 cross 链版本 1658**(含 INIT-018 全 19 单、MIN-054..058 与 INC-032..039)。红测:重放 127 → SCHEDULER_AGENT_LAST_RUN_FAILED exit 1 并点名任务+给出诊断;agent 未加载 → SCHEDULER_AGENT_NOT_LOADED exit 1。**且该门在第一天就抓到一次非演习的真实失败**(上述 exit 2),这比合成红测更硬。证据包 TCRN-AOS/docs/reports/init-018/INC-032/(commands.md 可原样重跑 + outputs 红绿双份)。\n\n【残余,不隐瞒】(a)`scheduler:health` 无任何东西自动跑它(不宜进 CI:CI 无 launchd),须由审查层巡检或操作者手动跑——机器化落点待定;(b)paired-backup 仍用 StartInterval 21600(睡眠即弃班),因其 `--if-due` 语义可在下一班补做,故未擅改节奏,如需改为日历制另立;(c)plist 内 PATH 含本机绝对路径与 nvm 版本号,换机或升 node 须同步改(已写进模板注释)。",
+      "decidedBy": [
+        "minutes:19dcee70c40e4d819d13b38a"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:86a52b72edd19c41b487f07c",
+      "externalKey": "TCRN-CROSS-INC-033",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 5,
+      "scope": "【S1 deny 规则装在了没有控制树的世界;G1 未达成】原缺陷:五仓 .claude/settings.json 的 deny 规则装在**零控制树**的仓内(实测 find 全零),而控制树全在平台根 .tcrn-workspace/ 与 ~/.tcrn-workflow;平台根无 settings.json、用户级 deny 为 null。\n\n【修复完成 2026-08-05】①平台根新建 .claude/settings.json,26 条 Write/Edit deny 覆盖真实控制树两处落点(容器 10 个分区目录 + 其中 9 棵物化 .tcrn-workflow 树 + 家目录树);主形态为**绝对式**(不依赖宿主如何锚定相对模式),每棵树另给四种点开头变体,因最深受治路径正位于字面 .tcrn-workflow 段下。②新增可证伪判据 `pnpm --dir TCRN-AOS control-tree:proof`:名册由**三次独立文件系统观测**派生而非手写清单(identity walk 找 .tcrn-workflow 目录 / 容器列举 / 家目录树),对每棵树以真实文件加三个深度的合成路径探测,要求 Write 与 Edit 在严格 glob 语义下双双覆盖。③**残余当场关闭**:复核者实测「仓内起的会话仍 21/21 全裸」(平台根规则以项目根锚定,对仓内会话不适用),已把 22 条可移植(绝对式与 ~ 式)规则并入五仓 settings,现 `--all-session-roots` 六个会话根**各 0/21 未覆盖**。④按本平台『不在 verify 里的门寿命=写它那天』,已把 control-tree:proof 接进 TCRN-AOS 的 pnpm verify 链。\n\n【红侧五项】修复前的五仓世界 / 删除家目录树规则 / 注入一棵未覆盖的树 / 各仓会话根独立判定(RED4,正是它量出并驱动了残余关闭) / 空世界不得恒绿。证据包 TCRN-AOS/docs/reports/init-018/INC-033/。\n\n【已声明的天花板,不隐瞒】(a)deny 只作用于 Write/Edit,**刻意不含 Bash**——引擎自身经 node 写控制树,Bash 级 deny 会切断唯一合法写路径;经 Bash 的 `cat >`/`sed -i`/`rsync` 直写仍未被权限拦,该面由 STORY-144 的 SSH 写观察器(observe 态)部分覆盖。(b)活体执行不可在会话内自证:权限于会话启动快照,真验证属下一个在平台根起的会话。本单证明的是「真实磁盘字节被真实 settings 字节静态覆盖」。(c)settings 内绝对路径为本机形态,换机须重生成;判据脚本本身全部从文件系统派生,不含本机常量。(d)家目录名册含已安装引擎的 node_modules(6,463 文件),故 deny 亦拦这些依赖文件的宿主编辑——几乎确定是想要的,但爆炸半径大于「链本身」,值得一次明示裁定。",
+      "decidedBy": [
+        "minutes:19dcee70c40e4d819d13b38a"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:f499e2a47be1b4ba638fb1ee",
+      "externalKey": "TCRN-CROSS-INC-034",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 5,
+      "scope": "【交付使 tcrn-workflow CI 首门即红】原缺陷三处:依赖策略未同步 promptfoo 的 686 个包;format-check 42 文件不合规;verify:source 约 150 文件未入逐文件全量名册。\n\n【真实死因比原判更具体】`pnpm verify:dep` 报 **ERR_PNPM_IGNORED_BUILDS**:promptfoo 拖进 @playwright/browser-chromium、onnxruntime-node、@swc/core、sharp、esbuild、protobufjs 六个原生包要求逐个批准构建,执行层把「set this to true or false」六条**字面占位符**写进了 pnpm-workspace.yaml,于是 pnpm install 直接失败。\n\n【方向判断(按残余适用性分析)】dependency-policy.json 是**刻意的冻结依赖图**:8 个身份,每个带 license、integrity、purpose 与 acquisitionBoundary(explicit-npm-registry-read-with-ignore-scripts),离线物化。往里补 686 条不是「更新名册」,是把这个属性作废——而这是治理引擎的供应链信任面。故裁定:**promptfoo 移出引擎仓依赖图**,行为回归的确定性部分改零依赖实现(见 INC-035),模型门作为数据保留、运行需另一台带该工具的宿主(凭据与工具都是运行期配置,不是实现前置)。\n\n【修复完成 2026-08-05】①移除 promptfoo devDep 与 eval:s6:full;还原 pnpm-workspace.yaml 的六条占位符;lockfile **回到提交态**(git diff 为空)→ `pnpm verify:dep` exit 0。②**证据包整体迁至 TCRN-AOS**(docs/reports/init-018/,30 个包):初始化交付的证据是 Initiative 记录而非引擎发布源码,原样入册会把 603KB 的试用 HTML 等 154 个文件塞进引擎的可复现源码归档;迁后未入册文件由约 150 降至 **18**,且 18 条全部是货真价实的引擎源码,已正式入册(名册 355→373)→ `source` exit 0。③S7 黄金样本改为**字符串模块**:它是逐字节比对,而本仓格式化器会重排 .json,等于让格式化器改写被测的字节;改后 3/3 绿,篡改黄金样本 exit 1。④format-write 后 `format-check` exit 0(373 文件)——其中唯一剩余的 fixtures/protocol/v1/negative/cases.json **是 HEAD 上既存的红**(该文件已提交且工作树未改动,缺一个换行符),顺手修掉,协议测试 13/13 不受影响。\n\n【验收】source / format / dep 三道门各自 exit 0。`pnpm verify:p1` 仍拒(`P1_EXCLUSIVE_SOURCE_BASIS_REQUIRED`)——那是**设计**:它要求干净检出,本地有未提交改动时不予认证,不是缺陷。\n\n【残余】链上多条注解引用了旧路径 `tcrn-workflow/docs/reports/init-018/...`,证据已迁至 `TCRN-AOS/docs/reports/init-018/...`;按事件只增不改,以本条注解作为路径更正记录。",
+      "decidedBy": [
+        "minutes:19dcee70c40e4d819d13b38a"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:e89e707a91baecba7acdbf14",
+      "externalKey": "TCRN-CROSS-INC-035",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 5,
+      "scope": "【S6/S8 行为回归门:CI 里轮不到执行,且离线子集对 release 门零保护】\n\n【核验层未及的更硬一层,本单确证】S6 的 provider(s6-provider.mjs)**原样返回测试文件自己写的 vars.agentDecision**,断言再检查该字符串包含自己的子串——**模型从未参与**。所以「6/6 绿」等于 `assert(字面量包含自己的子串)`,红证是同一同义反复的反面。这不是「裸子串断言」,是本平台招牌失效模式(判据无法区分两个世界)的纯粹形态,两侧都不含任何关于引擎、平台或代理的信息。\n\n【正名而非删除】那对绿/红夹具确实证明了一件真事:**这组判据能区分正解与已付学费的反模式**。故重做为「判据判别力门」,并明确它**不是**行为门——行为只在真模型面前可观测,那是 s6-models.yaml 的 release 时关切。\n\n【修复完成 2026-08-05】①新语料 tests/fixtures/s6-lessons/corpus.mjs:六条教训各带 `mustContain` **与 `mustNotContain`**(否定感知——裸 contains 下「不要继续，先停下」能满足 `继续` 标记),各注明来源记忆文件与当时真实采取的反模式。②tests/s6-lessons.test.mjs 五项断言:语料两侧完备、正解全过、**反模式全不过(判别力主张)**、判据两半都被行使(不得只靠缺失判负)、以及**模型门语料未漂移**——该条在首次运行即抓到一次真漂移(我自己润色了场景文本)。③scripts/verify-s6.mjs 改零依赖入口(node --test),reasonCode 直书 S6_LESSON_MARKERS_DISCRIMINATE 并声明它不是行为主张。④删除同义反复三件(s6-lessons.yaml / s6-red-proof.yaml / s6-provider.mjs)与 promptfoo 驱动两件。⑤CI 重构:`lessons` **独立 job**(零依赖,不再藏在 fail-fast 的 verify:p1 之后——那正是「挂每 push CI 实测 6/6 绿」把本地测量报成 CI 测量的机制);删除 release-eval job,其谓词是裸 `workflow_dispatch`(无 tag、无 release、无 needs,任何一次手动触发都算 release 门)且它跑的脚本已随 promptfoo 移除。⑥新测试移入 tests/ 后被 `pnpm test` 自动发现(该套件按 tests/**/*.test.mjs 收集)。\n\n【红侧】让某条反模式与正解一致 → exit 1,报「反模式通过了,这组判据无法区分两个世界」并点名教训 id。\n\n【残余】模型门(s6-models.yaml)作为数据保留但**本仓无法运行**——promptfoo 已刻意移出依赖图,运行须在带该工具的宿主上,且需 S6_EVAL_API_KEY。这是如实的能力边界,不是待办的假装。",
+      "decidedBy": [
+        "minutes:19dcee70c40e4d819d13b38a"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:e753047f8e46034f2f81216b",
+      "externalKey": "TCRN-CROSS-INC-036",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 5,
+      "scope": "【parity:proof 红证同义反复,白名单机制有洞】原四缺陷:红证跑判据的**复制品**不经真实推导;豁免只按服务器名匹配故两侧同时消失恒绿;名册纯并集无锚定;从不校验 command/args。\n\n【修复完成 2026-08-05,经独立复核 CONFIRMED】四项全部重写:红证改走真实推导路径;豁免条目附**方向**并断言被豁免服务器至少在预期一侧存在;名册加锚定最小集;校验 command/args 可解析(占位符与不存在路径判红)。新增 ALLOWLIST_ENTRY_OBSOLETE 判据——**这是刻意的收缩压力**:S4.2 把 Codex 侧接上后若不同步删白名单条目,本门会红并点名删哪条。当前真实状态仍判 PARITY_VERIFIED(Codex 侧缺的三服务器按方向正确豁免),27 例单测全绿。\n\n【接线(复核者点名的『门未入自动化列车』)】parity:proof 已进 TCRN-AOS 的 pnpm verify;parity-proof.test.mjs 已进 pnpm test 名单。收据已用 --emit 重出为 aos.instrument-parity-proof.**v2**(此前仓内留的是 v1 旧收据,读收据而不跑门的人会拿到被淘汰的判据名录)。\n\n【复核者记下的一条诚实边界】「旧判据逐条复刻」无法被字节级复核:修复前的 parity-proof.mjs 未入 git 且被原地覆盖,不存在可 diff 的 git 对象;复核者以幸存的 v1 收据逐项佐证语义忠实且全部吻合,故该说法算**被佐证,不算被证明**。",
+      "decidedBy": [
+        "minutes:19dcee70c40e4d819d13b38a"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:bf81a3ecd0b5b7ae173324ca",
+      "externalKey": "TCRN-CROSS-INC-037",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 5,
+      "scope": "【SSH 写观察器判据四缺陷】豁免无锚定子串且先于治理检查求值(可绕过)、ssh 前置 token 漏判、写原语对整行匹配致本地重定向误报、21 例样例留四个惰性分支。\n\n【修复完成 2026-08-05,经独立复核 CONFIRMED】判据由整行正则改为 **argv 锚定的 shell 解析**:跳过前导环境赋值与包装命令(env/time/sudo/nohup)后定位真正的 ssh;写原语只作用于 ssh 的远端命令串;豁免锚定整词并移到治理与写原语检查之后;豁免清单由五条收窄为两条并附残余适用性分析。配**变异式分支覆盖证明**(删掉某分支须恰有样例转红)。observe 语义未变,enforce 未切(D2 门)。\n\n【复核者在修复里又抓出一个绕过,已补堵】`ssh tcrn-platform-dev -p 2222 \"rm …/workspace/index.json\"` 被判 PASS——**目的地之后仍可跟选项**,而首轮扫描在目的地处即停,于是远端命令被读作从 `-p` 开始。已加第二轮选项扫描;实测该命令现判 **HIT**,而 `ssh host \"…status…\" 2>&1`(本地重定向)仍判 PASS。变异证明的两处锚点随源码改动同步刷新——锚点失配时它报「refresh the proof」而不是默默放过,这一点本身在本次修复中被验证了一次。\n\n【接线】测试原在 scripts/ 下,而本仓套件只收集 tests/**/*.test.mjs,寿命等于写它那天;已移入 tests/ssh-write-observer.test.mjs 并修正源码定位,85 例全绿、`pnpm test` 现会自动发现它。",
+      "decidedBy": [
+        "minutes:19dcee70c40e4d819d13b38a"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:937d519551d03d5704e34cef",
+      "externalKey": "TCRN-CROSS-INC-038",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 5,
+      "scope": "【叙述与记录失真七项】\n\n【修复完成 2026-08-05,经独立复核 CONFIRMED】七项全部经实测确证并以**追加式**订正写入(原文一律保留,标注「订正(2026-08-05,核验层)」——这是本平台『事件只增不改』的文档侧对应物):①S12 1MiB 上限的三处错(由事件字节而非 work 记录数决定;export 今日已在三条活链上被拒;归因误指 index.json 实为 exportWorkspace 自行 canonical 化;且**此事非新发现**,docs/releases/0.8.0.md 早已公布并给出 event-list 分页缓解);②S11 报表与自带 JSON 自相矛盾(声称 cache_creation 全 0,同目录数据自记 5,840,169);③S10「四点 span 全实测」不成立(ceremony.readback 从未被观测);④引擎侧 otel-spans.ts 是死代码,SUMMARY 未如 S4/S16 标『待门』;⑤S16 三档不分割 35 项(B10 无档、表头与列表矛盾);⑥S4 归档态 diff 含 6 个 `/Users/<you>` 占位符,patch -p1 会以默认 fuzz 静默接受;⑦S17『钉扎纳入』钉的是未安装物。SUMMARY 相应各行同步改为如实表述,并把「STORY-150/154 激活异常」改为**已被推翻**的结论(回执算术:S9 close 的 chainAfter = S10 close 的 chainBefore = 1627,中间无激活事件;缺失的 activate.receipt.json 即 tell——引擎与仪式无辜,真相是那两次激活从未成功执行)。\n\n【复核者对本单自身的三处发现,如实记下】(a)执行代理声称『recheck.sh 订正前后各跑一次、判据行 diff 为空』失实——实测 diff 有 57 行,因脚本自身在两次运行之间被改写(与本单要治的毛病同型);(b)recheck 第 6 节的红绿实测跑在脚本现造的 197 行合成 config.toml 上而非真实 ~/.codex/config.toml,归档未声明这是代理物(复核者已在真实文件的 scratch 副本上复做,红绿同样成立);(c)第 5 节两个关键数是硬编码 echo 而非算出(复核者独立数过,29 与 35 均对)。订正内容本身经复核成立;这三条是对**取证方式**的记录,留在链上以免下次照抄。\n\n【残余】ceremony.readback span 至今没有一条属于 S10 自己的证据:补证需一次带 TCRN_OTEL_SINK 的**真实**(非 dry-run)仪式,属受治写,须走仪式通路。证据包已随全批迁至 TCRN-AOS/docs/reports/init-018/。",
+      "decidedBy": [
+        "minutes:19dcee70c40e4d819d13b38a"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:da0368de5136d1a0d35ec162",
+      "externalKey": "TCRN-CROSS-INC-039",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 5,
+      "scope": "【被提交的记录仍断言链在本机,而机器判据读工作树故恒绿】原缺陷:TCRN-TMS 与 TCRN-Design-System 的 CLAUDE.md 于 2026-08-03 在工作树改为 home=vm 后**两天未提交**,git HEAD 仍叫读者对已 VACATED 的本地地址跑本地引擎;doc-topology:proof 读工作树,故它绿着而被提交的记录是错的。\n\n【修复完成 2026-08-05,两半都做】①两份 CLAUDE.md 已提交(TCRN-TMS b2e49b3b、TCRN-Design-System cf01ab6;仅提交 CLAUDE.md,未牵连未决的 .claude/),提交后 `git show HEAD:CLAUDE.md` 不再含 `| local |`。②判据补洞:doc-topology-proof.mjs 新增 readCommittedDocuments / judgeCommittedClaims——对每份登记文档取 `git show HEAD:<path>` 与工作树逐一比对声明块,不一致即 COMMITTED_CLAIMS_DIVERGE_FROM_THE_TREE 并点名文档;已接进 proof 的 expectations,`doc-topology:proof` 仍 DOC_TOPOLOGY_IN_SYNC。\n\n【红侧用真实历史字节】把 TMS 修复前那次提交(HEAD~1)喂给判据 → 判红并点名 TCRN-TMS/CLAUDE.md;当前状态判绿。既有 22 例预测试全绿。\n\n【已声明的天花板】平台根不是 git 仓库,其 5 份登记文档报为 `tracked:false`(如实记录,非静默放过)——它们的修改无 diff、无历史、不可审阅,这一点仍未解,属本判据明示边界。证据包 TCRN-AOS/docs/reports/init-018/INC-039/。",
+      "decidedBy": [
+        "minutes:19dcee70c40e4d819d13b38a"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:5370016aa82c91a9e3433cad",
+      "externalKey": "TCRN-CROSS-INC-040",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "【收口(2026-08-05,审查层)】修复经两轮完成——**第一轮被对抗核验证伪,这个事实本身入档**:第一轮把 sink 迁出仓外并加了活性门,但门在进程内直调 hookMode() 绕过真入口,且注册命令是 cwd 相对路径(node scripts/ssh-write-observer.mjs),本平台会话 cwd=平台根,hook 在真实会话形态下从未启动过;门在同一刻报 LIVE——观察通道有两条独立死因,第一轮只堵了一条,而验证恰好在幸运的 cwd 里跑成了绿。第二轮定案:①注册改 ${CLAUDE_PROJECT_DIR} 形态,平台根与 tcrn-workflow 两处 settings 各一份,deny 规则未动;②活性门改为**执行注册字符串本身**——从 settings 读注册、按宿主方式替换变量、自临时 cwd(既非项目根也非仓根)起真进程、喂文档字段齐全的 PreToolUse 载荷、按 root 各自 nonce 从 sink 读回;失败原因可区分(settings-missing/registration-absent/hook-launch-failed/append-failed/sink-unreadable/probe-record-absent);③CLI 未知旗标 reason-coded 拒绝(exit 64),门的绿与门没跑不再同字节;④失实注释(same entry point)与 ci.yml 失实描述改正。**验收实测(审查层亲跑)**:自检 96 样例 0 失配;测试 100/100(含「注册缺失红/不可启动红/掐掉 hook 追加则门红」);门绿=两个真实注册根 LIVE,红=无注册根 settings-missing exit 1、注册指向不存在脚本 hook-launch-failed exit 1;真 HIT 自平台根与 TCRN-AOS 两种 cwd 经注册命令落盘并读回。**观察窗自 2026-08-05 重置起算**:sink 清零(此前 12 行全为验证期探针与合成 HIT),窗口说明存 var/tcrn-observe/OBSERVATION-WINDOW.md;评估误报时须排除 probe:true 记录。STORY-144 enforce 切换(由 INC-041 承载)自本日重计观察期。字节入 tcrn-workflow 整合分支 feat/cross-init018-prose-to-gates。",
+      "decidedBy": [
+        "minutes:19dcee70c40e4d819d13b38a"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:30f973e55782de0ee3465fec",
+      "externalKey": "TCRN-CROSS-INC-041",
+      "kind": "Incident",
+      "status": "active",
+      "parentId": null,
+      "revision": 5,
+      "scope": "【进展(2026-08-05,审查层;Owner 已批「同意全部修正」)】F4/F5/F6/F7 已修复并经对抗核验后二轮加固:F4 隐私门守卫三分语义(0 干净/1 真违规/2 无法判断)+null 等非对象记录不再裸崩(判 violation)+大报文管道截断修复(450 条违规 72,212 字节管道与直写逐字节同、消费者可解析);F5 SUMMARY 第 9 条重写(指针更正至本单——初版指错 INC-039 的事实原样留档;复核命令两半联动:从表格实际解析旧址→逐条验新址存在且非空,红侧实测 exit 1 点名;INC-038/recheck.sh 静默跳过修为 MISSING+非零);F6 仪式插桩 EPIPE 不可杀仪式(同步写+捕获;CONTROL 测试证明修前通道真会死;真 dry-run 在读端关闭下 exit 0 而对照组 exit 1);F7 连带 token-attribution 契约失实修正(计量器无 exit 1,零会话=NO_SESSIONS_SELECTED exit 2 而非成功报零,自指探针陷阱见测试)。F2 部分完成:两仓整合分支 feat/cross-init018-prose-to-gates 已提交(AOS bf96da6 34 文件;tcrn-workflow 待套件绿后入库),proof artifacts 已重生成(VERIFICATION_MAP_VERIFIED),**推送与合 main/发布 v0.11.0 仍待 Owner(唯一对外发布必停点)**。F3 四代办仍由本单承载:S4.2 Codex 配置应用、STORY-144 enforce 切换(观察期自 2026-08-05 重计,见 INC-040 收口注解)、S154 archify 安装、otel-spans.ts 接线。另:证据树清洗归 INC-042(42 offender 已定量)。",
+      "decidedBy": [
+        "minutes:19dcee70c40e4d819d13b38a"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:1d43a1c525d3e3317dd73114",
+      "externalKey": "TCRN-CROSS-INC-042",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 4,
+      "scope": "【订正(2026-08-05,审查层;由 Owner 当场纠正)】本单首条注解「仓可见性」段的探针有方法缺陷,现以认证探针定案。**事实**:TCRN-AOS 仓存在,visibility=PRIVATE(gh repo view tpmoonchefryan/TCRN-AOS --json visibility,isPrivate;认证身份 tpmoonchefryan;pushed_at 2026-08-04T12:48:50Z);TCRN-TMS 补测为 PUBLIC。**方法缺陷**:原注解引用匿名 curl 并写「对未认证请求返回 Not Found」——GitHub 对私有仓的未认证请求**刻意**返回 404 以不泄露存在性,故该探针在「私有」与「不存在」两个世界给出同一读数,是一支两侧无法不同的探针;而本机 gh 登录态一直存在,权威探针只有一条命令之遥。**存留与更正**:原文「今日不可公开读取」仍成立(private 蕴含之);「变更原因需 Owner 确认」已由 Owner 答复厘清——该仓即 AOS 正仓,现为私有;平台记忆「AOS 全历史公开」(INIT-012)作为历史事件成立、作为当下状态不成立。**对处置的影响**:AOS 侧文件暴露面因私有而降低,但清洗处置不降级(可见性是可随时翻转的开关,且该仓历史曾经公开);tcrn-workflow/DS/TMS 三仓面向公开仓,原判维持。settings 可移植化的五仓范围不变。**复核命令(须认证身份)**:gh repo view <owner>/<repo> --json visibility --jq .visibility。**教训已入平台记忆**:对存在性/可见性下结论前先选定探针身份;有登录态的 CLI 才是权威源。\n【验收补充(2026-08-06,执行层)】待入库清单扩充(INIT-019 验收 P1-9):init-018 报告树(约 30 目录)与 init-019 报告树(docs/reports/init-019/ 含本次 QA/)、deploy/aos-local-client/payloads/cross-init019-{a,b,c,d-confirm}.json 与 cross-inc042-create.json、INC-032 两 plist 修复及 evidence/{aos-domain-backup,aos-paired-backup-new-topology}.json 工作树改动、doc-topology 门证据 --emit 刷新(INC-045)。卫生门扩展名盲区归 INC-046;入库前提=hygiene 复跑 0 offender。出处:TCRN-AOS/docs/reports/init-019/QA/acceptance-report.md。",
+      "decidedBy": [
+        "minutes:19dcee70c40e4d819d13b38a"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:530b68a83fc481b32b557a26",
+      "externalKey": "TCRN-CROSS-INC-043",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【WF 套件红:三新脚本缺 source-allowlist 登记】INIT-019 验收 P1-1。红线边界:只补登记与 regen,不改脚本行为;PROOF_ARTIFACT_UNAPPROVED_SOURCE 这道门本身正确,不许放宽。文件指针:tcrn-workflow/scripts/policy/source-allowlist.json;scripts/{knowledge-inject-hook,knowledge-inject,owner-queue}.mjs;tests/proof-artifact-generator.test.mjs;附带决策:ci.yml「red until tracked」步骤要求 .claude/settings.json 入库与否,推送前须决。验证命令:node --test tests/proof-artifact-generator.test.mjs;pnpm --dir tcrn-workflow test。收口动作:三条登记+pnpm generate:proof-artifacts+全套件绿。生效证据命令:pnpm --dir tcrn-workflow test 全绿(fail 0)且 push-gate 通过。出处:TCRN-AOS/docs/reports/init-019/QA/acceptance-report.md。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:d530a31956ac12fea76c34c4",
+      "externalKey": "TCRN-CROSS-INC-044",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【知识注入宿主端末跳失效】INIT-019 验收 P1-2。红线边界:不另写相关性(relevance 归 knowledge-candidates);修复后必须补真会话注入回读(S162 生效证据命令),不得以脚本 stdout 代替。事实:knowledge-inject-hook.mjs 输出 additionalContext 为数组,宿主契约要求字符串、schema 不合整条丢弃(hooks 文档+真会话反证);多触发词 AND 检索恒零(判据+CAS+marker→0 候选,单词 CAS→1);--self-test 零检索仍绿;UserPromptSubmit 不支持 matcher(死配置,hook 每 prompt 都跑)。文件指针:tcrn-workflow/scripts/knowledge-inject-hook.mjs、knowledge-inject.mjs;平台根 .claude/settings.json(hooks 块)。验证命令:两脚本按 QA 报告 fixture 实跑。收口动作:数组改字符串拼接+多词降级(OR/逐词合并)+self-test 判据对齐 verify-channel(candidateCount>0)。生效证据命令:新会话(平台根)上下文实见「[平台知识注入…]」卡片元数据,转录归档 S162/outputs。出处:QA/acceptance-report.md、QA/agent-hooks-contract.md。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:2de2a5954f000713162b6c11",
+      "externalKey": "TCRN-CROSS-INC-045",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【doc-topology 红证在全 VM 名册下全部静默跳过】INIT-019 验收 P1-3。红线边界:红证不许因名册形状而消失;跳过必须成为 unmet 而非无痕;修复不得靠放宽判官。事实:doc-topology-proof.mjs 的 reds 块以 localEntry!==null 为前提,五分区全 vm 后恒 null→六红证(含 157.3 新增 RED_SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED)从未运行,实跑 redCount:0 而门仍绿;已提交门证据 evidence/aos-topology-doc-sync.json 停在 07-30 旧形状未 --emit。文件指针:TCRN-AOS/deploy/aos-local-client/doc-topology-proof.mjs;evidence/aos-topology-doc-sync.json。验证命令:node deploy/aos-local-client/doc-topology-proof.mjs(cwd=TCRN-AOS)。收口动作:红证改为不依赖本机 local 行(合成含 local 行名册跑红弧或按 roster 形状选红证集)+--emit 刷新证据入库。生效证据命令:实跑 expectations 含 RED_* 且全 met;人为注入一处文档漂移→门红(修后移除)。出处:QA/agent-gates-docs.md 发现 1/10。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:df89090ea8e2b3371c48eeb1",
+      "externalKey": "TCRN-CROSS-INC-046",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【提交物用户名泄漏+卫生门扩展名盲区】INIT-019 验收 P1-4。红线边界:推送前 plist 必须去用户名;卫生门扩面不得靠白名单豁免既有命中;AOS 现 PRIVATE(INC-042 订正)但按裁定处置不降级。事实:deploy/aos-resident-cockpit/com.tcrn.platform-runner.plist 硬编码本机家目录路径 ×5(未推送可修);deploy/switchover/emit-switchover-proof.mjs:161 一处已在已推送 main;根因 scripts/lib/evidence-hygiene.mjs SCANNED_EXTENSIONS 仅 .json/.md,对 .plist/.mjs 全盲。文件指针:上列三文件。验证命令:git grep 家目录形态 HEAD -- '*.plist' '*.mjs';pnpm --dir TCRN-AOS test(hygiene 扩面后)。收口动作:plist 改 $HOME/占位形态;hygiene 扩展面扩到 .plist/.mjs(或全 tracked 文本);已推送一处的处置出 Owner 裁定(改历史 or 前向修复)。生效证据命令:git grep 零命中,且向样本注入伪用户名→hygiene 门变红(判据两侧可不同)。出处:QA/agent-gates-docs.md 发现 2。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:96fe17bd4811bdfc3d1e52fb",
+      "externalKey": "TCRN-CROSS-INC-047",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【aos-mcp-write 写面三缺陷】INIT-019 验收 P1-5。红线边界:回执是失败时刻的证据,不得以放宽拒绝面换通过;修复须保 91 项既有测试绿。事实(均经变异实验):①server.mjs perform 未包裹,仪式抛异常(SSH 断连/前置读失败)→无回执+孤儿载荷,调用方无从知道落了几步;②server.test.mjs 注入的 perform 不捕获实参,dryRun/partition 直通无可证伪测试(dry-run 改真写、目标链改错的变异版 11/11 仍绿);③knowledge-inject.test.mjs 跨仓 import ../../../tcrn-workflow,本仓单独 clone 套件跑不动。文件指针:deploy/aos-mcp-write/{server.mjs,server.test.mjs,knowledge-inject.test.mjs}。验证命令:node --test deploy/aos-mcp-write/server.test.mjs;临时 clone 验自足。收口动作:throw 路径落 error 回执(含已执行步数);perform 捕获实参并断言;跨仓测试收编。生效证据命令:模拟断连的仪式留下 error 回执并指明步进度;变异版(dry-run 改真写)测试变红。出处:QA/agent-write-face.md 发现 1/2/3。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:15d30a854427c6996d353307",
+      "externalKey": "TCRN-CROSS-INC-048",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【helper 安装副本漂移→IDENTITY_MISMATCH】INIT-019 验收 P1-6。红线边界:安装副本是发布产物,内容变更只经 helper 仓源→candidate 发布→重钉→重装;禁止直改安装副本与手改 provenance。事实:S163 直改平台 .claude/skills/tcrn-workflow-helper/references/on-demand-context.md(08-05 22:40),helper 仓源停 07-21,钉扎停 08-04→verify-installed-copy=IDENTITY_MISMATCH,归因=副本漂移非验证器陈旧。文件指针:tcrn-workflow-helper/skill/tcrn-workflow-helper/references/on-demand-context.md(源);平台 .claude/skills/tcrn-workflow-helper/(安装副本);~/.tcrn-workflow/complete-skill-archive.provenance.json 与 state.json(钉扎)。验证命令:trusted-bootstrap verify-installed-copy。收口动作:改动搬回源仓→candidate.31 发布重钉重装;与 INC-041 170.3(archify 安装)同批。生效证据命令:verify-installed-copy→INSTALLED_COPY_VALIDATED。出处:QA/acceptance-report.md P1-6。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:f8156a0e74b510e23210dee0",
+      "externalKey": "TCRN-CROSS-INC-049",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【projection-freshness 两判据缺陷】INIT-019 验收 P1-7。红线边界:自身版本须问仪器权威(codegraph status)或比声明真值(链版本),不 stat 文件近似;修复不许把门改松成恒绿;STORY-165 评估(08-12)前须完成 codegraph 行修复(其判据第 4 条依赖本门 exit 0)。事实:codegraph 行正则漏 -wal/-shm→索引新(status 自证 up-to-date)而门假红,且该门已进 pnpm verify;web-projection 行只比 7 天挂钟龄,声明真值 governed chain versions 从未取数(INC-032 停摆全程 fresh);memory 行真源=自身。文件指针:TCRN-AOS/deploy/aos-local-client/projection-freshness.mjs:92-139;docs/projection-freshness-convention.md。验证命令:pnpm --dir TCRN-AOS projection-freshness:proof。收口动作:codegraph 行问 status;web 行比 cockpit-data 内嵌链版本 vs MCP 实读(可并 STORY-159 阶段二);补 rows.length===SIDECARS.length 自检。生效证据命令:门绿;构造真陈旧(索引早于 HEAD/投影落后链)门变红。出处:QA/agent-gates-docs.md 发现 7/15、QA/acceptance-report.md P1-7。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:92589837ac0f338ec1632ac8",
+      "externalKey": "TCRN-CROSS-INC-050",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【平台入口文档失实两处及连带订正】INIT-019 验收 P1-8。红线边界:入口文档命令须按字面可跑;订正与 DOC_REGISTRY 登记扩面同批(新公约与 direction 文档入册)。事实:平台 CLAUDE.md 三.1 verify-installed-copy 指向不存在的平台根 .tcrn-workflow/(真身 ~/.tcrn-workflow/);三.3「本机四分区直接用本机引擎无需仪式」与五链全 VM 矛盾(照做得 WORKSPACE_RELOCATION_VACATED),169 行命令相对路径亦跑不通;连带:「五者齐备」实为六者;projection-freshness-convention 路径缺 TCRN-AOS/ 前缀;DS/TMS 复核命令未注明 cwd=平台根。文件指针:平台 CLAUDE.md:80,144,166,169;docs/projection-freshness-convention.md:19,25;TCRN-AOS/deploy/aos-local-client/doc-topology-registry.mjs。验证命令:逐条照抄执行;pnpm --dir TCRN-AOS doc-topology:proof。收口动作:订正+新公约/direction 文档入册。生效证据命令:全部命令按字面在声明 cwd 可跑;doc-topology 绿且(依 INC-045)红证可红。出处:QA/agent-gates-docs.md 发现 3/4/9/11/14 与命令清单。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:7153c37b1d0f535901507f95",
+      "externalKey": "TCRN-CROSS-INC-051",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【验收 P2 批(收口批应修,不挡发布)】INIT-019 验收 P2/P3 汇总单。红线边界:其中三项为 STORY-165 enforce 前置(已注记 165):breakglass entries:[] 空转且 doc-topology 与 observer 两消费者把 pattern 用在不同字符串上、heredoc 正文引用命令即 HIT 的误报口径、observer 测试回退(safe-target 守卫惰性+三条 mutation 证明被删)。其余明细:owner-queue 取数失败静默空队列且数据源与 167.1 声明不符、INC041 代办双写无比对;仪式 auto-rebase 载荷外无回读且 SPEC 未载、rebase 错误文本恒空、actor/at 可被载荷覆写、RESERVED_FLAGS 漏 expected-revision、非 record 回读套套逻辑;read-face 超时悬挂;platform-runner 无进程组回收+幻影 --if-due+stderr 截 200;SSH_ENGINE_PATTERN 窄于声明;SessionStart 不分 source、VM 不可达启动+25s;P3 约二十条见代理原文。文件指针:TCRN-AOS/docs/reports/init-019/QA/(四份代理原文,file:line 齐)。验证命令:各条见 QA 报告。收口动作:按报告分批修复,P3 择机。生效证据命令:每条按其五要素;总门=pnpm --dir TCRN-AOS verify 与 pnpm --dir tcrn-workflow test 全绿。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
       "id": "work:a9f610a2e09324269b8fd9bb",
       "externalKey": "TCRN-CROSS-INIT-001",
       "kind": "Initiative",
@@ -7220,12 +7552,26 @@ export const cockpitData: CockpitData = {
       "id": "work:cad8ec31fdbb4b4680564cca",
       "externalKey": "TCRN-CROSS-INIT-018",
       "kind": "Initiative",
+      "status": "done",
+      "parentId": null,
+      "revision": 7,
+      "scope": "【审查层质量评估收官注解(三层流水线第三环)】QA 完成于 2026-08-05:实测矩阵全绿——引擎仓 60 测试文件 TESTS_VERIFIED(含三新);AOS 三新测试 42/42 与 parity/control-tree/scheduler/doc-topology/freshness 五门绿;S18 绑定门红绿两侧当场复验(绿 exit 0/篡改红 exit 1 点名席位);S1.3 悬置红测由本环执行——新会话实测 Edit 归档树被 INC-033 deny 规则当场拒,叠加 uchg 物理层,S1 双层防线全实证。结论:有条件通过——立 TCRN-CROSS-INC-040(观察通道断裂)与 TCRN-CROSS-INC-041(收官残余批)为放行 v0.11.0 发布列车的前置;发布本身对外必停待 Owner。流水线复盘裁定建议三条协议修正:迁移必须扫代码引用;观察期必须带活性证明;收官仪式载荷应含「为每个仍悬代办立载体」步骤。执行形态:单上下文,agent:fable(claude-fable-5),无多代理主张。报告 TCRN-AOS/docs/reports/init-018/QA/report.md,sha256=eefb4349b735f01436aefe9138d963faaad5f800514946dac799a00837808909。",
+      "decidedBy": [
+        "minutes:19dcee70c40e4d819d13b38a"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:7d2bb6490ce764420117a085",
+      "externalKey": "TCRN-CROSS-INIT-019",
+      "kind": "Initiative",
       "status": "planned",
       "parentId": null,
-      "revision": 2,
-      "scope": "散文到门:治理纪律机械化·行为回归前移·可观测补全。三层流水线执行:DeepSeek v4 Flash 执行、Opus 5 独立重跑证据核验、Fable 5 终审并唯一执链写。六 Epic:EPIC-041 散文→机器门(控制树写保护+SSH 启发式+parity:proof)、EPIC-042 行为回归门(promptfoo+教训场景库)、EPIC-043 可观测与成本、EPIC-044 回放性能(条件启动)、EPIC-045 约束代际复审、EPIC-046 低成本吸收。方向裁定 D1-D7 与仪器名册见 TCRN-CROSS-MIN-054;拆单遵 TCRN-CROSS-MIN-053 两层颗粒度制,46 子任务以派工执行简报承载不建链记录。草案 v2 sha256=31427aa1bab0d5f7a9d8cf4f98508d6797cc9ed6924033ab9fcfa669ddb6a304(INIT-018-draft-prose-to-gates.md)。",
+      "revision": 4,
+      "scope": "【D5-D9 已确认(2026-08-05,Owner 指令「建议全部同意,将决策落到链上,先不要开始进行」)】MIN-060 待确认的五项实施形态建议全部升格为裁定,见 TCRN-CROSS-MIN-061:D5 单一 ceremony 写工具、D6 两阶段实施、D7 三源策展首批不少于二十卡、D8 五要素与 INC-041 补票、D9 SSH 条件化保留两类。方向清单 D1-D9 就此全部定案,执行期不得重开。\n【验收(2026-08-06,执行层 agent:fable)】更正:立项时点的「本 INIT 尚未开工:全部十五张 Story 保持 planned;派工时点由 Owner 另行指令」已被执行事实取代——Owner 已另行下达派工指令并执行完毕(原文按事件只增不改留档于链上历史)。链上现状:S156-158/160-164/166-170 done,S159/S165 active;本 INIT 与五 EPIC 状态仍 planned,补转移属收口批、待 Owner 发布批准序列一并执行。落盘实测:AOS 分支 feat/cross-init019-single-data-plane 领先 origin/main 11(init019 9+init018 2),tcrn-workflow 4(3+1),DS/TMS 各 2,全未推送。验收结论=有条件通过:9 组 P1 拆单 TCRN-CROSS-INC-043..051,证据入库缺口注记 INC-042,enforce 前置注记 STORY-165;报告与四份代理原文见 TCRN-AOS/docs/reports/init-019/QA/。本批只立单不执行(Owner 指令 2026-08-06)。",
       "decidedBy": [
-        "minutes:12dd252eb5dc825fde9b037f"
+        "minutes:41f48bf0fce9057cfbce79bc"
       ],
       "sprintWorkId": null
     },
@@ -8985,10 +9331,10 @@ export const cockpitData: CockpitData = {
       "id": "work:73730b2b65453c4473e95b5b",
       "externalKey": "TCRN-CROSS-STORY-138",
       "kind": "Story",
-      "status": "ready",
+      "status": "done",
       "parentId": "work:ee1e1f64cde12eb62c8ae23b",
-      "revision": 2,
-      "scope": "R2 web-only 轻量船运 ship-web.mjs(关联 TCRN-AOS-INC-051)。现象:INC-049 管线无船 web 步骤,全量 apply 6×/日为临时态。修复:deploy/aos-resident-cockpit/ship-web.mjs,拓扑全量自 manifest.mjs 导入禁手抄地址,双向 per-file sha256 账本,--dry-run 不触网。验收:dry-run 计划与账本+账本不等分支红测;实跑与排程切换归审查层。MIN-055。",
+      "revision": 5,
+      "scope": "R2 web-only 轻量船运 ship-web.mjs(关联 TCRN-AOS-INC-051)。现象:INC-049 管线无船 web 步骤,全量 apply 6×/日为临时态。修复:deploy/aos-resident-cockpit/ship-web.mjs,拓扑全量自 manifest.mjs 导入禁手抄地址,双向 per-file sha256 账本,--dry-run 不触网。验收:dry-run 计划与账本+账本不等分支红测;实跑与排程切换归审查层。MIN-055。执行结果@2026-08-05:已完成。新建 ship-web.mjs:前置(apps/web/dist 存在+bundle 带 generatedAt 戳)→装配 web 根(renderAosShellHtml(path:/)+每 MODULE_VIEWS 路由壳+复制 dist assets;非产品壳原样)→rsync→两侧各用自家 node 算逐文件 sha256 账本双向全值比对→JSON 报告;VM_HOST/VM_WEB/MODULE_VIEWS 全自 manifest.mjs。--dry-run 全程不触网存档。node --test 9/9 绿(含账本不等红测/缺文件红测/dry-run 不触网/前置失败/权限回归)。实跑一次 TRANSFER_LEDGERS_EQUAL(14 文件,两侧 fileSetDigest=0deaa96a…),活面 freshness 门 exit 0 fresh(generatedAt 16:34:57Z,新于船前 16:05:45Z)。事故:首跑 mkdtemp 0700 经 rsync --archive --perms 传播致 read face 全 404,已修(staging chmod 755+stagingRootMode 回归锚+远端恢复 0755)并留档 outputs/real-run-first-0700-incident.json。证据包 TCRN-AOS/docs/reports/init-018/R2/。范围外缺陷:无。",
       "decidedBy": [
         "minutes:0ae418738c56b78d03a25e43"
       ],
@@ -8999,10 +9345,10 @@ export const cockpitData: CockpitData = {
       "id": "work:955cf05222a325672082c12c",
       "externalKey": "TCRN-CROSS-STORY-139",
       "kind": "Story",
-      "status": "ready",
+      "status": "done",
       "parentId": "work:ee1e1f64cde12eb62c8ae23b",
-      "revision": 2,
-      "scope": "S1 控制树本机写保护(执行层做 S1.1 盘点+S1.2 五仓项目级 deny 规则;S1.3 重启会话红测与 S1.4 归档 chflags 归审查层)。现象:「只有引擎可写控制树」至今为散文,stop-pact 先例证明散文按不住。修复:各仓 .claude/settings.json deny Write/Edit 于 **/.tcrn-workflow/** 与 **/.tcrn-workspace/**,合并不破坏现有键+JSON 校验。验收:逐仓 diff 存档;红测被拒留档(审查层)。对应 G1。MIN-055。",
+      "revision": 5,
+      "scope": "S1 控制树本机写保护(执行层做 S1.1 盘点+S1.2 五仓项目级 deny 规则;S1.3 重启会话红测与 S1.4 归档 chflags 归审查层)。现象:「只有引擎可写控制树」至今为散文,stop-pact 先例证明散文按不住。修复:各仓 .claude/settings.json deny Write/Edit 于 **/.tcrn-workflow/** 与 **/.tcrn-workspace/**,合并不破坏现有键+JSON 校验。验收:逐仓 diff 存档;红测被拒留档(审查层)。对应 G1。MIN-055。执行结果@2026-08-05:已完成。S1.1 盘点清单(五归档分区+四 shadow+release-trust,判定依据 topology.mjs 的 PARTITION_ROSTER/SHADOW_ROSTER),见 tcrn-workflow/docs/reports/init-018/S1.1/inventory.md。S1.2 五仓 .claude/settings.json 新建同一条 deny 规则(Write/Edit 于 **/.tcrn-workflow/** 与 **/.tcrn-workspace/**),逐仓 node JSON.parse 校验通过;五仓原均无 settings.json,故无丢键问题。S1.3 执行宿主无法开新会话(权限规则会话启动快照,本会话不加载新 deny),红测待审查层,已在 tcrn-workflow/docs/reports/init-018/S1.3/red-test.md 附核验配方,不算 BLOCKED。S1.4 简报 v2 明确派执行层:对五归档目录 chflags -R uchg(TCRN-AOS/cross-project/TCRN-Design-System/TCRN-TMS/Joi-Button,不含 shadow),写保护红测 touch 被拒 Operation not permitted,解锁配方 TCRN-AOS/docs/reports/init-018/S1.4/unlock-runbook.md。证据包 tcrn-workflow/docs/reports/init-018/S1.1…S1.4/。范围外缺陷:无。",
       "decidedBy": [
         "minutes:0ae418738c56b78d03a25e43"
       ],
@@ -9013,10 +9359,10 @@ export const cockpitData: CockpitData = {
       "id": "work:ceb4edc3faf4956bf3fa8538",
       "externalKey": "TCRN-CROSS-STORY-140",
       "kind": "Story",
-      "status": "ready",
+      "status": "done",
       "parentId": "work:3f946d82e6f990923d614303",
-      "revision": 2,
-      "scope": "S5 promptfoo 采纳(三环第三环外采,四道审查内嵌)。npm view 实名核验+lockfile 钉版+离线 echo provider smoke(禁真实 API key/禁网络模型调用)+并发≤2 与断言计数护栏,运行指标出 run-metrics.json 喂 EPIC-043 成本归因。验收:smoke 绿输出+护栏配置存档+核验原始输出。对应 G3 前置。MIN-055。",
+      "revision": 5,
+      "scope": "S5 promptfoo 采纳(三环第三环外采,四道审查内嵌)。npm view 实名核验+lockfile 钉版+离线 echo provider smoke(禁真实 API key/禁网络模型调用)+并发≤2 与断言计数护栏,运行指标出 run-metrics.json 喂 EPIC-043 成本归因。验收:smoke 绿输出+护栏配置存档+核验原始输出。对应 G3 前置。MIN-055。执行结果@2026-08-05:已完成。S5.1 npm view promptfoo 实名核验 name/version/license/maintainers,选定 0.121.20(MIT,当前 latest,防幻觉包名),原始输出存档 S5.1/npm-view-raw.txt。S5.2 pnpm add -D promptfoo@0.121.20 钉版,最小 echo provider 配置 + 离线确定性断言 smoke 1/1 pass(无 API key,无网络模型调用),配置与结果存档 S5.2/。S5.3 新建 scripts/promptfoo-eval.mjs 护栏:并发默认 ≤2(promptfoo -j 旗标)+断言计数上限默认 200(运行前轻量估算拒+运行后按结果复核),运行指标出 S5.3/run-metrics.json(EVAL_GREEN);红测 250 断言 > 上限 → ASSERTION_CAP_EXCEEDED 运行前拒绝 exit 2 存档。证据包 tcrn-workflow/docs/reports/init-018/S5.x/。范围外缺陷:无。",
       "decidedBy": [
         "minutes:0ae418738c56b78d03a25e43"
       ],
@@ -9027,10 +9373,10 @@ export const cockpitData: CockpitData = {
       "id": "work:b064917a0bb513be79ab1969",
       "externalKey": "TCRN-CROSS-STORY-141",
       "kind": "Story",
-      "status": "ready",
+      "status": "done",
       "parentId": "work:3f946d82e6f990923d614303",
-      "revision": 2,
-      "scope": "S7 引擎行为面黄金样本:adapter-generate 与 persona-render 固定输入 golden 文件+node --test 比对回归(确定性,不调模型)。验收:比对绿+故意改一处输入证明能红,两输出存档。动词旗标以引擎 commands 名录实测为准禁猜。MIN-055。",
+      "revision": 5,
+      "scope": "S7 引擎行为面黄金样本:adapter-generate 与 persona-render 固定输入 golden 文件+node --test 比对回归(确定性,不调模型)。验收:比对绿+故意改一处输入证明能红,两输出存档。动词旗标以引擎 commands 名录实测为准禁猜。MIN-055。执行结果@2026-08-05:已完成。旗标实测 commands:adapter-generate --request <json>、persona-render --profile-id <string>(均 mutates=false)。固定输入集中 tests/fixtures/s7-golden/inputs.mjs(生成器与测试共用)。golden:adapter-generate.json(manifestDigest 6743c754…,经引擎纯函数 generateCodexAdapterBundle+admitCodexAdapterHostInput,因纯 CLI 无默认 host 上下文——与仓内 act4/p6b 同一构造口径)+persona-render.json(profile:tcrn-mneme-v1,经真实 CLI)。测试 tests/s7-behavior-surface.test.mjs 3/3 绿,被仓测试套件 tests/*.test.mjs 自动发现。红测:persona-render 换 profile-id → diff exit 1 全字段变;adapter-generate 改 promptText → requestDigest/manifestDigest 全变;真实红测临时改 inputs 的 profile-id 跑测试 → 2 红、还原 → 3 绿,证据 docs/reports/init-018/S7/red-proof/。证据包 tcrn-workflow/docs/reports/init-018/S7/。范围外缺陷:无。",
       "decidedBy": [
         "minutes:0ae418738c56b78d03a25e43"
       ],
@@ -9041,10 +9387,10 @@ export const cockpitData: CockpitData = {
       "id": "work:46ab18d3baee83d7dba9f52e",
       "externalKey": "TCRN-CROSS-STORY-142",
       "kind": "Story",
-      "status": "ready",
+      "status": "done",
       "parentId": "work:eeb7ef0896d82312093ced3e",
-      "revision": 2,
-      "scope": "S12 回放性能基准:合成链生成器(仅经引擎公开 CLI 生成 3k/10k 事件工作区,禁直写工作区文件)+bench 脚本对 status/validate/export/work-list 各≥5 次取中位墙钟。验收:两条合成链基准表 json+md;禁对 VM 活链跑基准。S12.3 阈值判定(只读动词>2s 启动修复)与基准落链归审查层。对应 G6。MIN-055。",
+      "revision": 6,
+      "scope": "S12 回放性能基准:合成链生成器(仅经引擎公开 CLI 生成 3k/10k 事件工作区,禁直写工作区文件)+bench 脚本对 status/validate/export/work-list 各≥5 次取中位墙钟。验收:两条合成链基准表 json+md;禁对 VM 活链跑基准。S12.3 阈值判定(只读动词>2s 启动修复)与基准落链归审查层。对应 G6。MIN-055。执行结果@2026-08-05:已完成(10k 被引擎写上限阻断,以撞顶部分链数据点交付)。S12.1 synthesize-chain.mjs(仅引擎 CLI init/project-create/work-create/work-transition,expected-version 链式 CAS,禁直写工作区)生成 3k 链(3157 条 work/3758 事件,18.2min)。S12.2 bench-replay.mjs(5 次取中位,拒绝动词记 FAILED reasonCode):3k 链 status 363/validate 397/work-list 401ms 全<2s;export FAILED INPUT_OVERSIZED。10k 尝试在 3353 条 work 处 work-create 撞 INPUT_OVERSIZED(Canonical input exceeds one MiB,packages/protocol/src/index.ts:277 maxCanonicalBytes)——引擎无法构建 >~3200-3350 条 work 的链;10k 部分链(3353 work)只读基准 status 440ms ok、validate/export/work-list 全 FAILED INPUT_OVERSIZED。S12.3 判定草案:只读动词中位全<500ms,不触发 >2s 启动修复(EPIC-044 按既有 D3 裁定条件自动决出=不启动);export/validate/work-list 的 1MiB 物化上限属动词能力上限非启动慢,单独上报审查层,建议评估提高 maxCanonicalBytes 或增量/分页物化,否则链不可超过 ~3200 条 work 记录(写与读均受限)。证据包 tcrn-workflow/docs/reports/init-018/S12/(bench-3000+bench-10k-ceiling json/md)。范围外缺陷:引擎 1MiB canonical 物化上限。",
       "decidedBy": [
         "minutes:0ae418738c56b78d03a25e43"
       ],
@@ -9055,12 +9401,390 @@ export const cockpitData: CockpitData = {
       "id": "work:54b578b6279e276c12279e8c",
       "externalKey": "TCRN-CROSS-STORY-143",
       "kind": "Story",
-      "status": "ready",
+      "status": "done",
       "parentId": "work:51f88fcbe3cbfd8e4c858a74",
-      "revision": 2,
-      "scope": "S15 常驻热路径字节计量:平台根与各仓 CLAUDE.md、MEMORY 索引、各仓 .mcp.json 的字节基线表(只计字节,表头注明不冒充 token)+复测口径文档(公约大改或模型代际更替触发)。验收:计量脚本+首份基线表存档。对应 G5 前置。MIN-055。",
+      "revision": 5,
+      "scope": "S15 常驻热路径字节计量:平台根与各仓 CLAUDE.md、MEMORY 索引、各仓 .mcp.json 的字节基线表(只计字节,表头注明不冒充 token)+复测口径文档(公约大改或模型代际更替触发)。验收:计量脚本+首份基线表存档。对应 G5 前置。MIN-055。执行结果@2026-08-05:已完成。计量脚本 scripts/bench/measure-context-bytes.mjs(只计字节,输出注明不冒充 token;absent 文件记 absent 而非 0;MEMORY 索引路径按 Claude Code project-slug 约定推导)。首份基线 context-bytes.json/.md:平台根 CLAUDE.md 18829、TCRN-TMS 5550、TCRN-Design-System 8479、TCRN-AOS 8880、tcrn-workflow 7347、tcrn-workflow-helper CLAUDE.md absent、MEMORY.md 11904、平台根 .mcp.json 1490(各仓无独立 .mcp.json),在场合计 62479 bytes。复测口径 remeasure-policy.md:触发=公约大改/模型代际切换,复测方法=重跑脚本 diff 基线,MEMORY 属运行态非每次强制。证据包 tcrn-workflow/docs/reports/init-018/S15/。范围外缺陷:无。",
       "decidedBy": [
         "minutes:0ae418738c56b78d03a25e43"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:64dd74f7015c67160cefc807",
+      "externalKey": "TCRN-CROSS-STORY-144",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:ee1e1f64cde12eb62c8ae23b",
+      "revision": 5,
+      "scope": "S2 SSH 出站写启发式(observe→enforce)。现象:经 SSH 写 VM 治理树与本地编辑器直写等危,现无机器检测。做法:执行层起草模式规格(危险模式:ssh 至 tcrn-platform-dev 且含重定向/tee/rsync/scp/sed -i 指向 /srv/tcrn/governance;豁免:ceremony/paired-backup/engine-host:verify 既有形态)→PreToolUse matcher 脚本 observe 模式(只记日志不拦)+项目级 settings 接线→对抗样例≥10 命中+≥10 放行+改判定证红。门:切 enforce 须误报报告+owner_intent_required(D2)。验收:样例集红绿输出存档。判断型按 MIN-054 分层。MIN-057。进度@2026-08-05: 已完成=判断型规格起草(docs/reports/init-018/S2/spec.md:危险模式/豁免/判定/接线/待审查层项)+observe matcher 实现(scripts/ssh-write-observer.mjs:stdin hook 模式恒 exit 0 只记日志不拦+--classify+--self-test)+项目级 settings 接线(tcrn-workflow/.claude/settings.json PreToolUse hook matcher Bash,S1.2 deny 规则保留)+对抗样例(21:10 HIT+11 PASS 自检 0 mismatch exit 0)+红测(临时删\\brm\\b 判定规则→self-test 红 1 mismatch→还原→绿,restored-identical=true)。实现说明:首版裸词无前导\\b 致 rm\\b 误匹配 platform 内 rm→3 条只读 ssh 误报,已修为前导\\b 后 21/21 绿。切 enforce(输出 deny)/rsync pull-push 方向收窄/多仓传播/观察日志误报复核归审查层(MIN-058,D2 门)。阻塞=无。",
+      "decidedBy": [
+        "minutes:c860fb44a0778ff34b2a6100"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:1cc1e916c0bfb3595cf1b921",
+      "externalKey": "TCRN-CROSS-STORY-145",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:ee1e1f64cde12eb62c8ae23b",
+      "revision": 5,
+      "scope": "S3 parity:proof 名册对等门。现象:宿主名册缺口曾静默五个 Initiative;平台 CLAUDE.md 的 workflow-MCP 句与实测漂移。做法:执行层起草两侧真值源规格(各仓 .mcp.json/~/.codex/config.toml 只读/.claude/skills)→对齐脚本+带日期与理由白名单(D1 绿起步)→注入伪漂移必红→入 proof 家族;以实测修正 CLAUDE.md 过时句。验收:首跑绿+漂移红两输出。注意:~/.codex 只读;写它属 STORY-146 的 Owner 门。MIN-057。进度@2026-08-05: 已完成=判断型规格起草(docs/reports/init-018/S3/spec.md:真值源/判定语义/当前实测/红证/待审查层)+parity-proof 实现(TCRN-AOS/deploy/aos-local-client/parity-proof.mjs:Claude .mcp.json + Codex config.toml 只读 + Claude skills;归一化 codegraph→codegraph-tms;node_repl/computer-use 排除;白名单豁免带日期理由;fail-closed 不可读即红)+入 proof 家族(pnpm parity:proof)+红证(RED A 注入假服务器 codegraph-xyz 红并点名;RED B 去 codegraph-ds 豁免红并点名)+CLAUDE.md 修正(§一.6 workflow-MCP 句已过时,实测 2026-08-05 tcrn-workflow MCP 两侧都已接;已更新为实测状态,doc-topology:proof 复验仍绿)。首跑 PARITY_VERIFIED(Claude 5 服务器/Codex 平台相关 2;缺口 3 条全豁免)。待审查层:白名单收缩节奏(S4.2 后)、是否并入 pnpm verify、归一化表维护、Codex skills 对等比较。阻塞=无。",
+      "decidedBy": [
+        "minutes:c860fb44a0778ff34b2a6100"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:38e29f2b6056d2a3face9f87",
+      "externalKey": "TCRN-CROSS-STORY-146",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:ee1e1f64cde12eb62c8ae23b",
+      "revision": 5,
+      "scope": "S4 补 Codex 名册缺口。执行层做 S4.1:生成 ~/.codex/config.toml 增量 diff(codegraph-ds/aos 复用 TMS 仓内二进制 --path 指法+workflow MCP 门面条目),只产出 diff 文件不应用,annotate 待门。门:S4.2 应用须 Owner 过目批准(D6 owner_intent_required)。批后实测三服务器 status 各一次;STORY-145 白名单随之收缩(收缩即其有效性活证)。验收:diff 文件+批后三份 status 输出。MIN-057。进度@2026-08-05: 已完成=S4.1 生成增量 diff(docs/reports/init-018/S4/codex-config-incremental.diff,统一格式 scrubbed 到 /Users/<you>;只加 [mcp_servers.codegraph-ds] 与 [mcp_servers.codegraph-aos] 两块,复用 TMS 仓内 codegraph 二进制 --path 指向 DS/AOS,同现有 codegraph 块 command/args/startup_timeout_sec 形态)。实测 2026-08-05:workflow MCP 门面(tcrn-workflow)已在 Codex 侧([mcp_servers.tcrn-workflow],同一 authority pins digest d25ebfc1…),无需再补,故 diff 只含 codegraph-ds/aos。未应用:config.toml 是用户级配置,执行层只读。待门:S4.2 应用+三服务器 status 实测+STORY-145 白名单收缩归审查层(MIN-058 即 D6 批文)。tcrn-workflow-aos-read 是否在 Codex 侧补由审查层决。阻塞=无。",
+      "decidedBy": [
+        "minutes:c860fb44a0778ff34b2a6100"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:8c4b3fd9aedc1bdb2e38f87e",
+      "externalKey": "TCRN-CROSS-STORY-147",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:3f946d82e6f990923d614303",
+      "revision": 5,
+      "scope": "S6 教训场景库首批 6 条(执行层起草规格与实现,核验层复核,审查层终审)。素材=已付学费教训:上下文将满不收尾/ARCHIVE_LIMIT_EXCEEDED 诊断为量错对象/IDENTITY_MISMATCH 先分诊两型/push 后主动查 CI/索引工具先验新鲜度/到没到远端问 ls-remote 非 log --not。每条 given-when-then+rubric+链接来源记忆;promptfoo 实现;每条配故意答错样本证能红。前置:STORY-140。验收:6 场景红绿输出存档。MIN-057。进度@2026-08-05: 已完成=起草规格+promptfoo 实现+红绿双证。规格 tests/promptfoo/s6-lessons/lessons-spec.md(6 条教训 given-when-then+rubric+来源)。实现:绿 s6-lessons.yaml 6/6 EVAL_GREEN exit 0;红证明 s6-red-proof.yaml 0/6 EVAL_NOT_GREEN exit 1(反模式被 rubric 捕获);provider=离线本地类 s6-provider.mjs(无 API key/模型/网络)。证据包=tcrn-workflow/docs/reports/init-018/S6/。判断型:规格已起草待核验层复核+审查层终审。范围外:promptfoo-eval.mjs metrics 的 provider 字段硬编码 echo 与本地 provider 不符(标签性)。阻塞=无。",
+      "decidedBy": [
+        "minutes:c860fb44a0778ff34b2a6100"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:56b08c68389ea54d3f44119e",
+      "externalKey": "TCRN-CROSS-STORY-148",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:3f946d82e6f990923d614303",
+      "revision": 5,
+      "scope": "S8 行为套件接线(D5)。确定性子集(S7 黄金样本+S6 离线断言)挂每 push CI;含模型调用全量挂 release 门+手动触发脚本;临时引入退化样本证 CI 门能红(演示后不合入)。前置:STORY-141 与 STORY-147。真实模型 key 配置归审查层,脚本留接口。验收:CI 配置 diff+一次绿跑+一次红演示。MIN-057。进度@2026-08-05: 已完成=确定性子集挂每 push CI(S7 经 p1 test 步自动发现 3/3 绿;S6 经新增 CI 步骤 node scripts/verify-s6.mjs 6/6 EVAL_GREEN exit 0);全量挂 release 门(scripts/eval-s6-full.mjs 无 key fail-closed exit 2 + tests/promptfoo/s6-lessons/s6-models.yaml provider 接口 apiKeyEnvar:S6_EVAL_API_KEY + ci.yml release-eval job 仅 workflow_dispatch);红测(临时退化 L1 样本→CI 同命令 EVAL_NOT_GREEN exit 1 5/1,恢复→EVAL_GREEN exit 0 6/6,存档 outputs/ci-red-proof.json,演示后撤下)。verify:ci CI_HARDENING_VERIFIED。真实 key 配置留接口归审查层。范围外:pnpm run 隐式安装检查 offline 陷阱;release-eval job 需审查层配 S6_EVAL_API_KEY secret。阻塞=无。",
+      "decidedBy": [
+        "minutes:c860fb44a0778ff34b2a6100"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:804694151951bf3ded342261",
+      "externalKey": "TCRN-CROSS-STORY-149",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:fd23bf630bee698226534252",
+      "revision": 5,
+      "scope": "S9 观测选型 spike(D4 已预授权执行层)。三候选运营成本表(Langfuse 自托管/OTel collector+轻 sink+座舱渲染/Jaeger all-in-one):进程数、内存、持久化依赖、月维护动作;运营成本为决定性审查;最轻候选出 PoC 可执行清单(VM 姿势沿 CONF-007:绑 127.0.0.1 仅 SSH 隧道)。VM 起服务实操归审查层。验收:成本表+裁定建议+PoC 清单。MIN-057。进度@2026-08-05: 已完成=三候选运营成本对比表(spike.md:进程数/内存/持久化依赖/月维护;Langfuse ≥4 进程≥4GB PG+Redis 强依赖;Jaeger all-in-one 单进程~0.5-1GB 内嵌存储重启丢数生产需外部存储;OTel Collector 1 进程~100-200MB 零强依赖)+裁定建议(运营成本决定性→选 OTel Collector+文件 JSONL sink+座舱渲染,与 S10 OTLP span 契合)+PoC 可执行清单(spike.md 第三节:VM 沿 CONF-007 绑 127.0.0.1 仅 SSH 隧道;systemd 单元+config.yaml otlp 回环+batch+文件 exporter 轮转;座舱只读渲染;绿×2+红×1 验证)。来源:Langfuse 官方 sizing/Jaeger deployment 2.1 架构/OTel Collector 对比。VM 起服务实操归审查层。阻塞=无。",
+      "decidedBy": [
+        "minutes:c860fb44a0778ff34b2a6100"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:24bfd4d81a5aee351275b7c9",
+      "externalKey": "TCRN-CROSS-STORY-150",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:fd23bf630bee698226534252",
+      "revision": 5,
+      "scope": "S10 埋点。ceremony.mjs 四点 span(开始/结束/回读/拒绝;标签仅 partition/verb/expected-version 元数据,禁载荷内容外泄)+引擎动词入口出口 span 设计与实现(搭 v0.11.0 发布列车,发布动作归审查层)+隐私自查(sink 无链内容)。前置:STORY-149 选型。验收:span 落 sink 演示+隐私自查记录。MIN-057。进度@2026-08-05: 已完成=ceremony 四点 span 实现+接线+测试(TCRN-AOS/deploy/aos-local-client/ceremony-spans.mjs emitter+ceremony.mjs 接线:start/end/readback/refused;标签仅 partition/verb/expectedVersion/outcome/reasonCode;实测 dry-run 出 start+end,无效载荷出 start+refused,readback 本仪式验证;emitter 非抛错+隐私契约字段白名单)+引擎动词入口出口 span emitter(packages/cli/src/otel-spans.ts,env 门控 TCRN_OTEL_SINK 默认关,类型检查通过 tsc exit 0;设计文档 docs/reports/init-018/S10/engine-spans-design.md 钉死 runCli 接线点;接线+重建+发布归审查层 v0.11.0 列车)+隐私自查(scripts/verify-otel-privacy.mjs:读 sink 断言键⊆允许集;实测干净 sink→PRIVACY_SINK_CLEAN exit 0,注入 payload 键→PRIVACY_SINK_VIOLATION 点名 exit 1)。前置 S9 选型已采纳(OTel Collector+sink)。范围外:引擎 OTLP 导出需 sink 就位后接隧道;mcp.ts 接线由审查层接线时确认。阻塞=无。",
+      "decidedBy": [
+        "minutes:c860fb44a0778ff34b2a6100"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:fb0dc4575557799b4e605177",
+      "externalKey": "TCRN-CROSS-STORY-151",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:fd23bf630bee698226534252",
+      "revision": 5,
+      "scope": "S11 per-Initiative 成本归因 v1。host 会话 JSONL token 解析器(DeepSeek/Codex 侧格式缺口如实标注禁静默上限)+span/会话↔Initiative 键关联规则+首份报表(以 INIT-018 自身为首个样本,含三层流水线各层成本)接入 delivery-cadence 决策输入。前置:STORY-150。验收:解析器+样例报表。MIN-057。进度@2026-08-05: 已完成=token 解析器(scripts/token-attribution.mjs:读 host 会话 JSONL 逐消息/模型/会话聚合 input/output/cache_creation/cache_read;gap unparseable/missingUsage/missingModel/incompleteUsage 逐条如实标注禁静默上限;实测平台 73 会话全可解析)+关联规则(层=message.model:执行=deepseek-v4-flash/审查=claude-fable-5/核验=claude-opus-5;样本集=正文含 INIT-018 的 6 会话)+首份报表(docs/reports/init-018/S11/report.md:INIT-018 三层成本 执行 in 3.59M/out 1.27M/cacheR 416M,审查 out 1.77M/cacheR 132M,核验 19 消息小样本;cache_read 主导 551M vs 非缓存 6.6M,看 input/output 低估执行层两数量级;缺口如实标注:样本口径=含串会话,按 STORY 单独开的会话不在样本,单会话不按 Init 内外拆分)。前置 S10 done。接入 delivery-cadence 决策输入归审查层。阻塞=无。",
+      "decidedBy": [
+        "minutes:c860fb44a0778ff34b2a6100"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:25fcf7b755e32daf403308cf",
+      "externalKey": "TCRN-CROSS-STORY-152",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:eeb7ef0896d82312093ced3e",
+      "revision": 5,
+      "scope": "S13/S14 回放修复(条件启动)。触发条件:STORY-142 基准判定常用只读动词中位>2s。执行层:条件满足时备齐 ADR 材料(基准数据/方案对比/D3 已裁信任模型=热路径信 snapshot+后台异步全链复验+不一致 fail-closed)并 annotate 待门;条件未触发则以「未触发+链长 revisit 阈值」收口本单。门:ADR 终稿与采纳经隔离审议(STORY-155)与审查层;实现含对全链回放的残余适用性分析(条件化保留为后台复验路径)。MIN-057。进度@2026-08-05: 条件未触发。STORY-142(S12)实测只读动词中位 363–440ms,全部 <2s(status 363/validate 397/export 421/work-list 401 @3k 链;10k-ceiling 撞顶 368–440ms),对照阈值「常用只读动词 >2s 启动修复」不满足,故本单不启动。链长 revisit 阈值:STORY-142 另发现引擎 canonical 1MiB 上限使链无法超过 ~3200 条 work 记录(写与读都受限,已单独报审查层);当某条真实链逼近该规模时,须 revisit 本修复(启动 ADR 材料备齐:基准数据 S12/方案对比/D3 已裁信任模型)。ADR 审议与终稿归审查层/STORY-155。阻塞=无。",
+      "decidedBy": [
+        "minutes:c860fb44a0778ff34b2a6100"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:77b34718c4371b13d2398afb",
+      "externalKey": "TCRN-CROSS-STORY-153",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:51f88fcbe3cbfd8e4c858a74",
+      "revision": 5,
+      "scope": "S16 Fable 5 代际残余适用性复审。执行层做 S16.1 全平台约束/门/hook/公约编目(来源列全)+S16.2 逐条成立条件三档起草(仍在/已消失/条件化);核验层逐条复核。门:S16.3 提案清单+harness-constraint 公约修订稿(增按模型代际触发复审条款)终稿归审查层、裁定归 Owner;执行层完成草案后 annotate 待门。复审输出是提案不是删除。验收:编目表+三档草案。MIN-057。进度@2026-08-05: 已完成=S16.1 编目(docs/reports/init-018/S16/catalog.md:全平台约束/门/hook/公约 35 项,来源列全 A 公约 6+B 门 11+C hook 4+D 约束 14)+S16.2 三档起草(仍在 15/已消失 1/条件化 4:已消失=workflow-MCP 两侧未接句,S3 已修正;条件化=verify-s6 随场景库/verify-otel-privacy 随 sink 就位/parity:proof 白名单待 S4.2 收缩/SSH observer observe→enforce)。待门:S16.3 提案清单+harness-constraint 公约修订稿(增按模型代际触发复审条款)终稿归审查层、裁定归 Owner;核验层逐条复核。阻塞=无。",
+      "decidedBy": [
+        "minutes:c860fb44a0778ff34b2a6100"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:35593585f1051ee3dea7c7a7",
+      "externalKey": "TCRN-CROSS-STORY-154",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:bc51bf24cbb20a5bd3a03bca",
+      "revision": 5,
+      "scope": "S17 archify 采纳(tt-a1i/archify,第三环外采)。执行层:通读 skill 载荷全文+license 核验+风险笔记(四道审查)→合格则 digest 钉扎纳入+试用画三层流水线架构图;license 或供应链不合格则 annotate 否决理由收口,不强装。验收:审查笔记+钉扎记录或否决记录。MIN-057。进度@2026-08-05: 已完成=四道审查全通过(MIT 许可证 gh 实名核验/供应链 活跃 9131 星 deps{} 零依赖/防幻觉包名 gh repo view 实答/运营成本 单 Node CLI 无安装无常驻)+digest 钉扎纳入(pinned-digest.json:SKILL.md sha256 4946d2fb… v2.13 + repo HEAD 19213e10… + 试用 spec/artifact sha256)+试用画三层流水线架构图(spec outputs/tcrn-init018-three-layer.architecture.json sha256 038609f9…;deliver 产 603KB 自包含 HTML 09c25596…;validate 9/9 artifact checks 全绿;两次迭代修 1 处边穿组件+标签重叠,archify 布局可机器校验的价值实证)。结论=合格钉扎纳入。风险笔记:CLI 二进制未逐行审、repo 活跃钉扎会过时、架构图是试用产物——见 notes.md。阻塞=无。",
+      "decidedBy": [
+        "minutes:c860fb44a0778ff34b2a6100"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:1310edffd401edcfd404e8c2",
+      "externalKey": "TCRN-CROSS-STORY-155",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:bc51bf24cbb20a5bd3a03bca",
+      "revision": 5,
+      "scope": "S18 隔离多代理审议试点(D7)——**已完成**。现象与背景:此前所有审议要么 synthesis-only,要么「多代理」只是开场声明的披露,链上无法与「一个上下文编造整套立场」区分。做法:三席(minerva 治理架构 / verity 判据与证据 / sable 对抗与成本)在互不可见的独立上下文就 S16.3 同一份背景分头成文(workflow run wf_cec0004e-223),原文逐字存 evidence/conf-056-seat-*.txt,由 deliberation-multi-agent.mjs 计收据并生成载荷(participant 无 seat 即拒,防名义多代理),经 ceremony 落 CONF-056(cross v1687)。**新判据 scripts/verify-deliberation-binding.mjs**:从链上取回立场→按拆片规则逆向重建(剥 n/N 标记、剥末片绑定行、单换行连接)→sha256 比对收据 outputDigest。验收判据(可红可绿):绿=DELIBERATION_BINDING_VERIFIED,三席 1772/1796/1853B 摘要全中;红=篡改任一席收据摘要即 DELIBERATION_BINDING_BROKEN 并点名该席,exit 1。两侧输出存 docs/reports/init-018/S18/outputs/。三席对 Q1 真实分歧(加档/设准入/反对以加档结案),Q2、Q3 收敛——分歧本身即独立性的旁证(非证明)。决策点:裁定见 MIN-059,两份公约修订按 MIN-058 终审即采已落地。天花板如实记:绑定只证内容一致不证认证,freshContext 编排者自记,可信采集方 EPIC-020 未建成,故门绿不代表某席真的独立产出;第一步的执行形态声明义务不因此减轻。实测提醒:conference-position-list 作仪式 readback 判 NOTHING_COMPARED(列表读无可比字段),绑定校验须单独跑。",
+      "decidedBy": [
+        "minutes:2382be1862c8c774187e1b9b"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:2060d00af74957f33ee2735d",
+      "externalKey": "TCRN-CROSS-STORY-156",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:888cd7a9eadbc77294161b79",
+      "revision": 5,
+      "scope": "【MCP 写面:单一 ceremony 工具】D5 的落法。红线边界:不得重写仪式逻辑(必须包裹现有 deploy/aos-local-client/ceremony.mjs);不得允许调用方指名 workspace/attest-dir/expected-version(自选哨兵冻结不了任何东西);不得允许绕过回读;不得改用户级配置。文件指针:新建 TCRN-AOS/deploy/aos-mcp-write/{SPEC.md,server.mjs,server.test.mjs},改平台根 .mcp.json 与 TCRN-AOS/{package.json,deploy/aos-local-client/parity-proof.mjs}。验证命令:node --test TCRN-AOS/deploy/aos-mcp-write/server.test.mjs;四条红侧(载荷指名 expected-version / 无回读 / 动词不在主机 catalogue / 一次性供权族)reason code 互不相同。收口动作:工具能对真实载荷 dry-run 返回 CEREMONY_PLANNED_ONLY,测试进 package.json 名册,服务器进 parity 锚名册。生效证据命令:新开一个会话确认该 MCP 工具在工具列表里可调用(工具注册是会话启动快照,老会话看不到),并经 MCP 客户端而非直接 node 跑一次 dry-run,回执 chainBefore.version 与只读面当刻一致。子任务 156.1-156.6 见 BRIEFING 第三节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:09a452f35ef736f18c4be496",
+      "externalKey": "TCRN-CROSS-STORY-157",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:888cd7a9eadbc77294161b79",
+      "revision": 5,
+      "scope": "【文档改写:复核命令全面 MCP 化】实证依据:本会话审查层整场复核几乎全走 SSH,因为平台 CLAUDE.md 的复核命令列教的就是 SSH——文档是代理的肌肉记忆,不改文档原则永远靠人复述。红线边界:不得改写平台根 CLAUDE.md 第三节那张表的地址列(那是被 doc-topology:proof 机器核对的声明),只改复核命令列的形态;白名单条目必须带日期与理由。文件指针:平台根 CLAUDE.md、TCRN-AOS/CLAUDE.md、tcrn-workflow/CLAUDE.md、.claude/skills/tcrn-workflow-helper/references/*.md、TCRN-AOS/deploy/aos-local-client/doc-topology-proof.mjs。验证命令:pnpm --dir TCRN-AOS doc-topology:proof;红侧注入一条 SSH 直驱复核命令后门必须 exit 1 并点名文件与行号,还原后 exit 0。收口动作:盘点清单数目降到白名单允许残量,判据扩展为核对访问形态而非仅地址。生效证据命令:pnpm --dir TCRN-AOS verify 中 doc-topology 一步在干净工作树上 exit 0。子任务 157.1-157.5 见 BRIEFING 第三节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:b4c16624f46905ae7a94140f",
+      "externalKey": "TCRN-CROSS-STORY-158",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:888cd7a9eadbc77294161b79",
+      "revision": 5,
+      "scope": "【SSH 降格为 break-glass】D9 的落法,残余适用性分析结论:不是删除而是条件化保留两类——主机 MCP 面不可达时的 fallback、按设计绕开服务层的逐字节比对(engine-host:verify)。红线边界:白名单只收这两类且每条带 reason 与 since;不得在本单改观察器语料(那是 STORY-164 的文件,避免并发冲突)。文件指针:新建 TCRN-AOS/deploy/aos-local-client/ssh-breakglass-allowlist.json;改平台根 CLAUDE.md 第三节声明。验证命令:node -e 读取白名单并断言每条都有 reason 与 since;doc-topology:proof exit 0。收口动作:白名单被 STORY-157.3 与 STORY-164.2 共同引用(一份名单两处消费,防漂移)。生效证据命令:grep -c 确认两处引用的是同一文件路径各 >=1,且新会话里能从文档读到降格声明。子任务 158.1-158.3 见 BRIEFING 第三节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:566983451730586006797d49",
+      "externalKey": "TCRN-CROSS-STORY-159",
+      "kind": "Story",
+      "status": "active",
+      "parentId": "work:888cd7a9eadbc77294161b79",
+      "revision": 4,
+      "scope": "【座舱原生 MCP 端点与渲染上移(阶段二)】D6 待确认前保持 planned,只出方案不动手。要解决的耦合:视图渲染发生在笔记本上(需要它醒着且能 build),VM 只存真值与端静态文件,于是网页最坏滞后四小时。红线边界:不得用逐字节拷贝制造第二个权威(引擎绑五个绝对根);不得移动座舱 loopback 绑定(CONF-007 D7 硬编码在服务源码里)。文件指针:TCRN-AOS/docs/reports/init-019/S159/design.md;后续涉及 apps/cockpit-service 与 deploy/aos-resident-cockpit。验证命令:设计评审;扩 local-purity:proof 把「本机不承担渲染」纳入判据。收口动作:D6 确认后方可转 ready。生效证据命令:切换后网页 generatedAt 与链版本的滞后由小时级降到分钟级,且笔记本关机时视图仍能更新。子任务 159.1-159.4 见 BRIEFING 第三节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:106b67d1e1e2384498b87da2",
+      "externalKey": "TCRN-CROSS-STORY-160",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:cf6f94a581d81a5672b3e381",
+      "revision": 5,
+      "scope": "【标记纪律:每写必 rebase】D3 的落法。现状事实(执行前不必重测):cross 与 TCRN-AOS 两条活链知识面整面 KNOWLEDGE_HIGH_WATER_MISMATCH,store 标记 v1 对链 v1728,disposable 物化索引迁 VM 后从未 rebase,且每次链写再拉开一次。红线边界:不得让 rebase 变成人工步骤(必须挂在写路径上);rebase 是 mutating 动词必须经仪式不许 SSH 直驱;CAS 用的是 store marker 版本而非链版本。文件指针:TCRN-AOS/deploy/aos-local-client/ceremony.mjs 或 deploy/aos-mcp-write/server.mjs(择一并在 notes 说明理由);载荷 payloads/cross-init019-knowledge-rebase.json。验证命令:做一次真写后立刻读知识面,不再 HIGH_WATER_MISMATCH;人为放旧一个分区标记后巡检门必须红并点名。收口动作:五链知识面全部可读,标记落后 <=1 次写,门并入 STORY-166 巡检而非另造孤门。生效证据命令:经 MCP 只读面(非 SSH)对五链各跑一次 knowledge-list,全部 KNOWLEDGE_LIST_READY;连做两次真写后两次都仍可读。子任务 160.1-160.5 见 BRIEFING 第四节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:a5228dfd680ba0d2040c27da",
+      "externalKey": "TCRN-CROSS-STORY-161",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:cf6f94a581d81a5672b3e381",
+      "revision": 5,
+      "scope": "【内容灌入:三源策展】D7 的落法。现状事实:VM 与本机归档 bodies/metadata 双零、链上无真知识事件、座舱生产库 domain.db 无知识表(kr01-06 建在代码与测试里从未部署)——故这不是迁移丢失而是从未灌入。红线边界:不得把记忆原文直搬当卡(要有主张、有 evidence、可被证伪,不是日记);promote 需 evidence>=1 且 source 与 accountable-owner 齐备否则 KNOWLEDGE_PROVENANCE_INVALID;evidence id 只验形状不验存在故人要保证它真的存在;落卡不许 SSH。文件指针:TCRN-AOS/docs/reports/init-019/S161/{sources.md,card-template.md,batch-1/,retrieval-check.md};载荷进 payloads/。验证命令:样卡走通 create->promote;落卡后经 MCP 只读面 knowledge-list 数目一致;5 个真实 prompt 的 knowledge-candidates 命中抽检(先选定 prompt 再检索,不许挑对自己有利的,命中率低也照写)。收口动作:首批 >=20 卡在链上,每卡至少一条 evidence。生效证据命令:knowledge-list 经 MCP 返回 >=20 条,且抽检可由第二人原样重跑。子任务 161.1-161.6 见 BRIEFING 第四节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:1212bf1ab6df24db916e54ce",
+      "externalKey": "TCRN-CROSS-STORY-162",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:cf6f94a581d81a5672b3e381",
+      "revision": 5,
+      "scope": "【注入触发:hook 按 prompt 检索】D2 里「webhook 提醒 agent」在 Claude Code 上的落法就是 hook。红线边界:不得每轮无条件全量注入(上下文预算是硬约束);relevance 归 knowledge-candidates、预算与新鲜度归已建成的 context-route,不许自己另写一套;hook 注册必须用 CLAUDE_PROJECT_DIR 形态不许裸相对路径(INC-040 第二条死因),也不许写死家目录路径;只改 hooks 块,deny 规则一个字不许动;活性门必须执行注册字符串本身,不许在进程内直调函数冒充。文件指针:新建 tcrn-workflow/scripts/knowledge-inject.mjs(含 --verify-channel 模式);改平台根 .claude/settings.json 的 hooks 块;文档 TCRN-AOS/docs/reports/init-019/S162/design.md。验证命令:给定 prompt 链路跑通并输出元数据级注入体;超量场景被裁到上限且明说裁了;活性门绿一红三(注册缺失/命令起不来/检索链无返回)各自 reason code。收口动作:门进 CI 或 verify 链。生效证据命令:新开会话实测注入真的发生(上下文里能看到卡片元数据),且 --verify-channel 在平台根、子仓、无关目录三种 cwd 下均绿。子任务 162.1-162.6 见 BRIEFING 第四节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:f3681ec0bcb49de420109c4a",
+      "externalKey": "TCRN-CROSS-STORY-163",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:cf6f94a581d81a5672b3e381",
+      "revision": 5,
+      "scope": "【知识面读写全走 MCP】D1+D2 在知识面的落实。红线边界:写动词全部经 STORY-156 的工具不许 SSH;store marker 版本不是链版本,CAS 传错会被拒。文件指针:核对 mcp__tcrn-workflow-aos-read__* 的知识动词可用性;改 .claude/skills/tcrn-workflow-helper/references/on-demand-context.md 里的命令形态。验证命令:knowledge-list/-candidates/-snippet/-body/-freshness 五个动词各经 MCP 调一次,不可用的列出来;一次 create 经 MCP 工具完成并读回。收口动作:helper 文档命令改为 MCP 形态。生效证据命令:pnpm --dir TCRN-AOS doc-topology:proof exit 0,且五个知识读动词经 MCP 实调成功。子任务 163.1-163.3 见 BRIEFING 第四节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:ae54775fdfa625c68c577547",
+      "externalKey": "TCRN-CROSS-STORY-164",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:4fcf9b1832dbf02c80d9b103",
+      "revision": 5,
+      "scope": "【S2 语料扩面:SSH 直驱引擎判 HIT】把 D1 从散文变成门。红线边界:96 条既有样例是 INC-037 付过学费的资产,只准加不准弱化,任何 classify 判据的削弱要在收口记录点名并给理由;白名单必须消费 STORY-158.1 那同一份文件不许另建一份。文件指针:tcrn-workflow/scripts/ssh-write-observer.mjs 与 tests/ssh-write-observer.test.mjs。验证命令:node tcrn-workflow/scripts/ssh-write-observer.mjs --self-test 单独取退出码必须 0;红侧喂真实输入(一条经 ssh 的 status/work-list/work-show)判 HIT;白名单内命令判 PASS。收口动作:读动词也判 HIT,新语料在 CI lessons job 里跑到。生效证据命令:pnpm --dir tcrn-workflow verify:observe-channel exit 0,且喂一条真实 SSH 读命令后能从 sink 读回该行。子任务 164.1-164.4 见 BRIEFING 第五节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:9a8457936b92b35bb1884db7",
+      "externalKey": "TCRN-CROSS-STORY-165",
+      "kind": "Story",
+      "status": "active",
+      "parentId": "work:4fcf9b1832dbf02c80d9b103",
+      "revision": 5,
+      "scope": "【enforce 晋级】红线边界:晋级判据必须排除 probe:true 的门自身流量;空日志只有在活性门同时为绿时才可读作零命中;观察窗自 2026-08-05 重置起算,不得引用重置前数据;切换必须带回退路径。文件指针:TCRN-AOS/docs/reports/init-019/S165/criteria.md;tcrn-workflow/scripts/ssh-write-observer.mjs 的 enforce 开关。验证命令:按判据对当前观察窗跑一次评估并输出结论(够不够都照写);切换后拦截一次真实误用。收口动作:判据成文待 Owner 确认后方可切换。生效证据命令:enforce 态下一条 SSH 直驱引擎命令被实际阻断,且回退开关能把它放回 observe。依赖:须等 STORY-164 落地且观察窗积累足够。子任务 165.1-165.3 见 BRIEFING 第五节。\n【验收补充(2026-08-06,执行层)】窗口第 2 天实测:非 probe HIT=0(sink 11/11 probe),活性门绿(verify:observe-channel)。切换前置四项:①enforce 开关尚未实现(observer 硬编码 observe,MIN-058 语义;165.2 首步=实现开关,默认 observe、fail-open 保持、红绿测试);②breakglass 白名单 entries:[] 空转且 doc-topology 与 observer 两消费者把 pattern 用在不同字符串上(INC-051);③heredoc 正文引用命令即 HIT,评估按判据形态 2 逐条归因;④判据第 4 条 projection-freshness exit 0 现被 codegraph 行假红挡住,须 08-12 前修(INC-049)。评估照 S165/criteria.md 出文,验收报告见 docs/reports/init-019/QA/。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:3e8d82154ed0cb757d0b4a8d",
+      "externalKey": "TCRN-CROSS-STORY-166",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:5376493c45ef826ae9dc22ef",
+      "revision": 5,
+      "scope": "【投影新鲜度通则与统一巡检】根因:平台所有物化侧车(网页投影、知识 store、codegraph、记忆索引)都会按各自节奏变陈旧却各有各的新鲜度故事——INC-040 与知识高水位是同一类病的两次发作。红线边界:登记项必须可机器取数不许写「大约几小时」;不得为此新造第五个孤门,必须把 STORY-160.4 的标记差门并进来;门必须能红。文件指针:新建平台级 docs/projection-freshness-convention.md;巡检实现落 TCRN-AOS/scripts/ 下并进 verify 链。验证命令:一条命令输出四个侧车的 {真源版本, 自身版本, 龄} 三元组;人为放旧一个侧车后门红并点名该侧车。收口动作:通则成文、注册表四项齐备、巡检进 verify 链。生效证据命令:巡检在 STORY-168 的运行者里被定时跑到且末次退出码为 0。子任务 166.1-166.5 见 BRIEFING 第六节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:23b5106dead9c12817d5da20",
+      "externalKey": "TCRN-CROSS-STORY-167",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:5376493c45ef826ae9dc22ef",
+      "revision": 5,
+      "scope": "【待 Owner 队列】对应根因:最后一公里合法地停给了人却没有队列——停对了地方,停在了看不见的地方。红线边界:不许把队列写成散文,必须从链和仓里取数;不得把 Owner 未裁的事项自行推进。文件指针:实现落 TCRN-AOS/scripts/ 下,可选在座舱渲染一页。验证命令:跑一次能列出链上 owner_intent_required 门、交付中扣下项、待批机械动作三类;队列非空且超期时给出提醒而非静默。收口动作:一条命令或一页可见。生效证据命令:当前跑一次,输出至少包含 INC-041 的四件代办与 v0.11.0 发布必停点。子任务 167.1-167.4 见 BRIEFING 第六节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:c4a2fecde3bd18c961a33f60",
+      "externalKey": "TCRN-CROSS-STORY-168",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:5376493c45ef826ae9dc22ef",
+      "revision": 5,
+      "scope": "【统一运行者】对应根因:门管仓字节不管运行时。INC-032 的教训——三个 launchd 任务共用错误 PATH,每次 exit 127 而无人知,且工具自身还谎报成功。红线边界:回收与失败通知写在起手同一处;失败不许静默;launchd 任务永远用绝对 PATH;「修好」只有真触发 exit 0 才算,手跑一次不算。文件指针:取代散落的 launchd 任务,收敛到一个 timer;deploy/aos-resident-cockpit/ 下的 plist 模板与已装副本须同步。验证命令:一个 timer 跑全部门;退出码非零必须留痕且可见。收口动作:散落任务退役,巡检与健康板由它驱动。生效证据命令:真触发一次(不是手跑)后 launchctl 报告末次退出码 0,且失败场景能收到通知。子任务 168.1-168.3 见 BRIEFING 第六节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:50fec19eee42dff488b973af",
+      "externalKey": "TCRN-CROSS-STORY-169",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:20598f9f418557b81d999ba7",
+      "revision": 5,
+      "scope": "【五要素模板与公约修订】D8 的落法,本 INIT 的方法论产出。红线边界:修订必须走 harness-constraint 公约的既有程序(不是直接改字);不得把第五要素写成建议——它是缺一不派、缺一不收的硬要素。文件指针:docs/dispatch-readiness-convention.md(四要素->五要素)、docs/harness-constraint-convention.md(把 MIN-059 的「生效证据默认未证」从约束编目推广到一切交付物)。验证命令:公约文本里第五要素的定义与本 INIT 简报第 0.1 节一致。收口动作:派工模板更新,本简报即首个样例。生效证据命令:下一张派出的单按五要素成文,且其收口记录引用了修订后的公约条款。子任务 169.1-169.4 见 BRIEFING 第七节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:ea2716bb763e6b2be214078a",
+      "externalKey": "TCRN-CROSS-STORY-170",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:20598f9f418557b81d999ba7",
+      "revision": 5,
+      "scope": "【存量补票:INC-041 四代办】红线边界:本单只补票不执行那四件事——补票即为每件写清生效证据命令,让它们从散文变成可验收的单;不得在本单里改用户级配置。文件指针:TCRN-AOS/docs/reports/init-019/S170/tickets.md;补票结果以注解落回 TCRN-CROSS-INC-041。验证命令:四条生效证据命令逐条可执行(即使此刻结果为红也要能跑)。收口动作:四件各得一条命令——S4.2 Codex 配置应用(三个 MCP 服务器在 Codex 侧 status 实测可用且 parity:proof 白名单收缩后仍绿)、STORY-144 enforce 切换(与 STORY-165 合流)、S154 archify 安装(装后重算 sha256 与钉扎一致且在 skills 名册可见)、otel-spans 接线(引擎跑一次真动词后 sink 出现 verb span 且隐私门对该 sink exit 0)。生效证据命令:四条各跑一次并如实记录当前红绿。子任务 170.1-170.4 见 BRIEFING 第七节。",
+      "decidedBy": [
+        "minutes:a2e5a6cbdd858b9203c02b0d"
       ],
       "sprintWorkId": null
     }
@@ -10047,6 +10771,17 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "cross-project",
+      "id": "conference:01f9c146dc9751ecb15e5d1c",
+      "externalKey": null,
+      "title": "零 Owner 等待:一次性做完的运行制",
+      "type": "strategy",
+      "status": "closed",
+      "workIds": [
+        "work:cad8ec31fdbb4b4680564cca"
+      ]
+    },
+    {
+      "partitionId": "cross-project",
       "id": "conference:0611d2482f4a608ffbcf0c76",
       "externalKey": null,
       "title": "E05 设计与分解：work-annotate 非绑定 advisory 写入面（Scope-on-record）",
@@ -10110,6 +10845,17 @@ export const cockpitData: CockpitData = {
       "workIds": [
         "work:0254c638d7c45d106861504e",
         "work:952bf886919bcbc32de021d2"
+      ]
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "conference:152295316964f844071b793a",
+      "externalKey": null,
+      "title": "MIN-055/056 第三次校正:全量拆解整单移交与不再收窄规则",
+      "type": "strategy",
+      "status": "closed",
+      "workIds": [
+        "work:cad8ec31fdbb4b4680564cca"
       ]
     },
     {
@@ -10424,6 +11170,17 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "cross-project",
+      "id": "conference:6c8be79a6d3c0b6533e71422",
+      "externalKey": null,
+      "title": "INIT-019 实施形态确认:D5-D9 全部采纳",
+      "type": "architecture",
+      "status": "closed",
+      "workIds": [
+        "work:7d2bb6490ce764420117a085"
+      ]
+    },
+    {
+      "partitionId": "cross-project",
       "id": "conference:7a5798055cb5714c4c608ece",
       "externalKey": null,
       "title": "E05 收口 + INIT-003 完成：v0.3.0 发布与活链 dogfood",
@@ -10476,6 +11233,17 @@ export const cockpitData: CockpitData = {
       "status": "closed",
       "workIds": [
         "work:29900bf3432be73078210e5a"
+      ]
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "conference:90077455374b8c68c9fc2596",
+      "externalKey": null,
+      "title": "INIT-019 方向审议:唯一数据平面、知识注入、生效证据纪律",
+      "type": "architecture",
+      "status": "closed",
+      "workIds": [
+        "work:7d2bb6490ce764420117a085"
       ]
     },
     {
@@ -10703,6 +11471,17 @@ export const cockpitData: CockpitData = {
       "status": "closed",
       "workIds": [
         "work:0254c638d7c45d106861504e"
+      ]
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "conference:d4d8e9e2ea6f90cb556352f9",
+      "externalKey": null,
+      "title": "S16.3 终审:代际复审公约修订(S18 隔离多代理试点)",
+      "type": "strategy",
+      "status": "closed",
+      "workIds": [
+        "work:1310edffd401edcfd404e8c2"
       ]
     },
     {
@@ -11772,6 +12551,45 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:12dd252eb5dc825fde9b037f",
       "externalKey": "TCRN-CROSS-MIN-054",
       "title": "执行形态:synthesis-only(单上下文;Owner 已于 2026-08-04 对话逐项裁定,本纪要为其落链)。INIT-018 kickoff:立 INIT+六 EPIC(041-046);三层流水线获批(DeepSeek v4 Flash 执行/Opus 5 独立重跑核验/Fable 5 终审唯一执链写);D1-D7 全裁;DeepSeek Harness 内测不申请;拆单遵 MIN-053 两层制、子任务入派工简报不建链记录;仪器名册登记含两缺口(promptfoo 待 S5 入册、执行宿主待定)。草案 v2 sha256=31427aa1bab0d5f7a9d8cf4f98508d6797cc9ed6924033ab9fcfa669ddb6a304。",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:2382be1862c8c774187e1b9b",
+      "externalKey": "TCRN-CROSS-MIN-059",
+      "title": "执行形态:**真隔离多代理,收据绑定,且绑定首次有门**(与以往的 synthesis-only 与「披露式多代理」都不同)。三席(minerva/verity/sable)在互不可见的独立上下文分头成文,原文存盘计 sha256 入收据;新判据 verify-deliberation-binding.mjs 从链上重建三席立场并逐字节比对,判 DELIBERATION_BINDING_VERIFIED(1772/1796/1853B 全中),篡改任一席摘要即 DELIBERATION_BINDING_BROKEN 并点名——两侧都动过。天花板不变:只证内容一致,不证认证;freshContext 编排者自记,可信采集方 EPIC-020 未建成;门绿不代表某席真的独立产出。三席对 Q1(是否增设第四档)意见相左,裁定取其中可执行的一支;Q2、Q3 三席收敛。S16 三档提案(仍在 30/已消失 1/条件化 4)照准。两份公约修订已按 MIN-058 终审即采落地。",
+      "detail": {
+        "reason": "open-issues",
+        "open": 3,
+        "recorded": 3
+      },
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:a2e5a6cbdd858b9203c02b0d",
+      "externalKey": "TCRN-CROSS-MIN-060",
+      "title": "INIT-019 方向定案。D1-D4 为 Owner 本日直接裁定:接入 AOS 后 AOS 是唯一数据平面、更新与读取第一时间走 AOS MCP、SSH 直驱引擎 CLI 为错误做法;知识层读写同经 MCP 并由 webhook/hook 提醒 agent 按 prompt 检索注入;知识索引缺陷必修;只有本地模式才写本地文件。D5-D8 按审查层建议采纳待确认:单一 ceremony 写工具、分两阶段(本机包裹→座舱原生 MCP 与渲染上移)、三源策展首批不少于二十卡、拆单模板加第五要素生效证据命令并对 INC-041 四代办补票。执行形态:单上下文合成,非多代理。",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:41f48bf0fce9057cfbce79bc",
+      "externalKey": "TCRN-CROSS-MIN-061",
+      "title": "Owner 确认 MIN-060 的 D5-D9 全部采纳,由建议升格为裁定;MIN-060 的未决事项「D5 至 D9 待 Owner 确认」就此消除。STORY-159 的 D6 前提已满足,但仍保持 planned——本批仅落裁定不开工,INIT-019 全部十五张 Story 的派工时点由 Owner 另行指令。执行形态:Owner 指令逐字入档,余文由单一上下文合成,非多代理。",
       "detail": {
         "reason": "open-issues",
         "open": 1,
@@ -13854,6 +14672,43 @@ export const cockpitData: CockpitData = {
         "执行宿主待定——DeepSeek v4 Flash 经何 harness 执行须在首批派工前定型并过供给对等检查(名册+等价护栏)"
       ],
       "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:2382be1862c8c774187e1b9b",
+      "externalKey": "TCRN-CROSS-MIN-059",
+      "surface": [
+        "可信采集方(引擎 EPIC-020)未建成",
+        "故独立性仍不可机证;生效证据字段与 last_verified_red 的机器化落点尚未实现(现为公约条款",
+        "按公约 11 应登记为能力补偿型)"
+      ],
+      "effective": [
+        "可信采集方(引擎 EPIC-020)未建成",
+        "故独立性仍不可机证;生效证据字段与 last_verified_red 的机器化落点尚未实现(现为公约条款",
+        "按公约 11 应登记为能力补偿型)"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:a2e5a6cbdd858b9203c02b0d",
+      "externalKey": "TCRN-CROSS-MIN-060",
+      "surface": [
+        "D5 至 D9 为审查层建议待 Owner 确认;确认前执行层按建议推进并在偏离时写 BLOCKED 上报不自行改向。座舱原生 MCP 与渲染上移(STORY-159)在 D6 确认前保持 planned 只出方案。enforce 晋级须等观察窗积累且不得引用 2026-08-05 重置前的数据。本 INIT 证据受 INC-042 前置约束:证据树宿主路径清洗未收口前 docs/reports 整树不入库。"
+      ],
+      "effective": [
+        "D5 至 D9 为审查层建议待 Owner 确认;确认前执行层按建议推进并在偏离时写 BLOCKED 上报不自行改向。座舱原生 MCP 与渲染上移(STORY-159)在 D6 确认前保持 planned 只出方案。enforce 晋级须等观察窗积累且不得引用 2026-08-05 重置前的数据。本 INIT 证据受 INC-042 前置约束:证据树宿主路径清洗未收口前 docs/reports 整树不入库。"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:41f48bf0fce9057cfbce79bc",
+      "externalKey": "TCRN-CROSS-MIN-061",
+      "surface": [
+        "无方向性未决。执行侧待办不变:STORY-165 的 enforce 晋级仍须观察窗积累且判据成文后经 Owner 确认;INC-042 未收口前 docs/reports 整树不入库;v0.11.0 发布仍为唯一必停点。"
+      ],
+      "effective": [
+        "无方向性未决。执行侧待办不变:STORY-165 的 enforce 晋级仍须观察窗积累且判据成文后经 Owner 确认;INC-042 未收口前 docs/reports 整树不入库;v0.11.0 发布仍为唯一必停点。"
+      ],
+      "dissolvedCount": 0
     }
   ],
   "threads": {
@@ -15594,6 +16449,18 @@ export const cockpitData: CockpitData = {
         "fragmentCount": 1
       }
     ],
+    "conference:01f9c146dc9751ecb15e5d1c": [
+      {
+        "conferenceId": "conference:01f9c146dc9751ecb15e5d1c",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:920ce803e973916894a7a352"
+        ],
+        "externalKeys": [],
+        "body": "执行形态:synthesis-only(单上下文;Owner 2026-08-05 明示裁定之落链,原文:「不要等我,我要的是一次性做完,剩下的是opus和fable的工作,为什么要等我」)。主张:①MIN-057 保留的四门中一切 Owner 等待解除——S4.2/D6 类配置 diff 应用由审查层代办(本纪要即 D6 批文,diff 与应用结果全量落证据包);S16.3 公约修订由审查层终审即采(程序仍遵 harness-constraint 公约含残余适用性分析);S13 ADR 若触发,经 S18 隔离审议后由审查层即采;S2 的 observe→enforce 切换由审查层依无误报报告代办;②Owner 转全程事后监督:读链+以 INC/更正记录追加行使否决——MIN-056 的事后审计哲学对 Owner 门同构适用;③审查层建立 stop-pact 运行契约(scope=INIT-018 三层流水线运行至完成),执行期仅硬阻断可停,对外发布类本 INIT 无;④审查层以定时巡检会话承接 DS 收单后的核验与门代办,Owner 无须居间传话。唯一不可代办项如实记录:把简报投给 DS 这一动作只有 Owner 能做(审查层无法驱动 DeepSeek 宿主)。——Minerva(Workflow Architect)",
+        "fragmentCount": 1
+      }
+    ],
     "conference:0611d2482f4a608ffbcf0c76": [
       {
         "conferenceId": "conference:0611d2482f4a608ffbcf0c76",
@@ -15783,6 +16650,18 @@ export const cockpitData: CockpitData = {
         ],
         "externalKeys": [],
         "body": "[main-thread synthesis by scribe agent:fable·Minerva 架构角色]\n修订映射:EPIC-021 增 S081(Claude 宿主事实刷新——官方文档已列 30+ hook 事件、无逐哈希信任门、2.1.218+ 引入 workspace trust;AC-1 的 2.1.201 基线已陈旧;结果钉宿主版本、记观测非承诺)。EPIC-023 转「双宿主激活阶梯对齐」并增 S082(Claude v2 激活卸载 CLI 接线:核心已有 rollback plan 生成器与执行器、缺 CLI 动词,v2 收据卸载今日无法从 shell 达成)。EPIC-024/025 注双宿主,采 Sable 补救:Claude 扩任何 hook(含 observe)以 S072 修 N-2 为硬前置,逐 hook 白名单载失败语义、未列默认禁;hook 一律薄垫片,入口逐字节 digest 自检对钉锚定 manifest,observe 失配产不可抑制告警;自检防漂移不防整体替换,兜底=会话首 verify-installed-copy,不得声称与 Codex 逐哈希门等价;hook 禁以环境变量作信任输入、输出固定模板。EPIC-026 增 S083(Agent SDK/OTel/会话转写三路只读 Observer 等价评估);S060/S078 矩阵与能力映射双宿主化(Claude 侧 Worktree/子代理/MCP connector/浏览器/Automation 入清单)。INIT-010:Owner 追认回链入 scope;EPIC-020 依赖拆分(Codex 采集依赖 INIT-009 EPIC-021/026,Claude 采集宿主能力现成、可先行);S055 按 Verity 立场定形为子代理纯观测收据机制,并加 Sable 绑定补救:宿主侧即时记转写文件 digest+会话标识,立场正文与调用 last_assistant_message 字节相等,无收据即 synthesis-only 失败关闭,转写入链标注未经宿主签名;自伪造缓解(外发收集器)列 enforce 级前置研究,一切执行凭据声称止步于归因增强。三新 Story 均 planned;MIN-042 既裁边界(live 阻断、主动 Controller、对外发布)不变。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:152295316964f844071b793a": [
+      {
+        "conferenceId": "conference:152295316964f844071b793a",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:47369b09dbb9a853220aeb54"
+        ],
+        "externalKeys": [],
+        "body": "执行形态:synthesis-only(单上下文;Owner 2026-08-05 裁定之落链,原文要旨:「你为什么只给他七张单?七张单就是 INIT018 的全部吗」)。更正声明:审查层两度过窄执行 Owner 裁定——v1 简报收走链写权(经 MIN-055 校正),v2 简报仅派七张并明文禁止其余(经本纪要校正);扣留理由「规格未出」与 D4 对执行层的预授权、与 INIT 分解中判断型「执行层起草/核验层复核/审查层终审」的既定分层自相矛盾。主张:①STORY-144..155 补建后 INIT-018 子树 19 单一次性整单移交执行层;②MIN-055 对象白名单扩为 INIT-018 子树全部 Story;③真门仅四类不移交(S4.2 与 D6 类 Owner 配置批准、S13 回放 ADR 审议与终稿、S16.3 公约修订终稿与 Owner 裁定、S18 隔离审议编排),执行层做到门前备齐门材料并 annotate 待门;④立结构性规则:判断型回归 MIN-054 原分层,审查层今后再收窄派发范围须先经 Owner 裁定。——Minerva(Workflow Architect)",
         "fragmentCount": 1
       }
     ],
@@ -16361,6 +17240,18 @@ export const cockpitData: CockpitData = {
         "fragmentCount": 1
       }
     ],
+    "conference:6c8be79a6d3c0b6533e71422": [
+      {
+        "conferenceId": "conference:6c8be79a6d3c0b6533e71422",
+        "actorId": "owner:governance",
+        "fragmentIds": [
+          "position:5a9ce536130dbbd5791f0e25"
+        ],
+        "externalKeys": [],
+        "body": "Owner 指令原文(2026-08-05):「建议全部同意,将决策落到链上,先不要开始进行」。释义:MIN-060 所列 D5-D9 五项建议全部确认为裁定——D5 MCP 写面为单一 ceremony 工具;D6 分两阶段(先本机 MCP 包裹现有仪式,再座舱原生供 MCP 并把投影渲染上移);D7 知识内容三源策展、首批不少于二十卡且每卡 evidence 不少于一条;D8 拆单模板加第五要素「生效证据命令」并对 INC-041 四代办逐件补票;D9 SSH 按残余适用性条件化保留两类(主机 MCP 面不可达的 break-glass、按设计绕开服务层的逐字节比对),其余退役。同时明确:本批仅记录裁定,INIT-019 的执行不随本裁定启动,派工时点由 Owner 另行指令。",
+        "fragmentCount": 1
+      }
+    ],
     "conference:7a5798055cb5714c4c608ece": [
       {
         "conferenceId": "conference:7a5798055cb5714c4c608ece",
@@ -16488,6 +17379,18 @@ export const cockpitData: CockpitData = {
         ],
         "externalKeys": [],
         "body": "[main-thread synthesis by scribe, model=opus]\n\n(Mara——decision-ready handoffs)四缺省成文:\n\n**①准入(create)**:知识写入不是链镜像。制卡触发=陷阱证实/基线实测/规范裁定这类**日后会被查询复用**的事实;当场即逝或链纪要已足的不制卡。kind 用 guide(操作/陷阱)/fact(实测基线值)/reference(指向 handoff 文档),人写 tags,source-references 指证据或链裁定。\n\n**②晋升(promote)**:新卡生为 candidate（不被默认检索信任）。agent 判定其经得起复用即**促发晋升并呈 Owner**,Owner 可驳。晋升需 provenance 完备（assertPromotableProvenance）。\n\n**③保鲜(reverify)**:promoted 卡带 stale-days 起点缺省 guide 90d/fact 180d/reference 365d;每次 **initiative-close** 时对相关卡 reverify 续背书,过期自动 stale 掉出默认检索。\n\n**④双库复制**:平台级规范（停顿预算/决策清单/缺陷触发等）建为**同一张卡入两库**（cross 与各分区），source-references 指向 cross 的权威裁定 minutes。这是跨分区共享层(C)落地前的过渡机制。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:90077455374b8c68c9fc2596": [
+      {
+        "conferenceId": "conference:90077455374b8c68c9fc2596",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:4b2428dfe8f2712c06f01bf1"
+        ],
+        "externalKeys": [],
+        "body": "【执行形态声明】本立场由单一上下文合成产出,非多代理分头成文;不得读作独立多方。【诊断】INIT-018 收官后的实测暴露三处系统性偏离:①写路径实际只有一条——本机脚本经 SSH 驱动 VM 引擎 CLI;座舱 4318 HTTP 写面只开四条路由且无人使用;MCP 面刻意只读。三条路径并存,而 Owner 反复申明的「AOS 为唯一数据平面」没有任何机器判据守护,于是偏离无声积累——本会话的审查层自己整场复核几乎全走 SSH,因为平台 CLAUDE.md 的复核命令列教的就是 SSH 形态。②知识层的机器全部建成(动词族、预算、新鲜度、context-route、MCP 读面转发)而零调用方:没有任何东西促发检索第一步;两条活链的知识面整面拒读 KNOWLEDGE_HIGH_WATER_MISMATCH(store 标记 v1 对链 v1728,迁 VM 后从未 rebase,且每次链写都再拉开一次);内容本身为零(bodies/metadata 双零、链上无知识事件、座舱生产库无知识表),即从未灌入而非迁移丢失。真正在工作的知识通道是宿主自动记忆,完全在治理体系之外。③「建成未接线」的根因不是执行者惰性,而是边界画错:收口判据止于建成不含生效;门管仓字节不管运行时;拆单按产物切不按闭环切;最后一公里合法地切给人却没有队列;三层流水线把接线动作全部压在最贵的审查层排队。【主张】按 Jira/Confluence 之所以能管住个体差异巨大的人群的同一机理——工单是唯一的门、DoD 含部署、看板让停滞可耻——本 INIT 应同时补三块:接口正门(MCP 单一 ceremony 写工具 + 文档全面 MCP 化 + SSH 降格 break-glass)、注入闭环(标记纪律 + 内容灌入 + hook 触发检索)、生效证据纪律(拆单模板加第五要素,MIN-059 的生效证据从约束推广到一切交付物),并以运行时健康板让停滞可见。",
         "fragmentCount": 1
       }
     ],
@@ -16859,6 +17762,48 @@ export const cockpitData: CockpitData = {
         ],
         "externalKeys": [],
         "body": "[main-thread synthesis by scribe agent:codex；Verity 验证角色]\n证据纪律先于扩面。第一阶段必须在当前 Codex 真二进制上收据化：Hook 事件集合、插件装载、信任哈希粒度、定义或处理器变化后的再审批、SessionEnd 实际触发、App Server initialize/schema/最小事件往返。安装收据只证明预期定义与落盘字节；宿主证据收据另证 installed_pending_approval / activated_observed / drifted，二者不得互相冒充。observe 每次只加一个 Hook且始终 fail-open；enforce 每面先有红证、宿主版本、覆盖洞、回滚和失败策略裁定。CLI/IDE/App 兼容矩阵贯穿每个 Story，不留到末尾。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:d4d8e9e2ea6f90cb556352f9": [
+      {
+        "conferenceId": "conference:d4d8e9e2ea6f90cb556352f9",
+        "actorId": "profile:tcrn-minerva-v1",
+        "fragmentIds": [
+          "position:1615d9472a9ac1558ca3fb68"
+        ],
+        "externalKeys": [],
+        "body": "Q1 增加，但不加进三档所在的那一列。三档问「成立条件是否仍成立」，五例问的是「判据是否落在真实推导路径上」——两个正交维度塞进一张表，复审者只会填先看见的那个。方案：入册即要求一条生效证据——该约束曾在其真实宿主、真实路径上让某次执行变红的链上记录；判据复制品、自证子串、零对象的目录一律不算。复审先查这条，缺失即入第四档「未证生效」。默认值是最坏档而非空白，举证责任在保有方。这样这张表不靠人自觉填，靠缺省判定。\n\nQ2 代际不是原因，只是一个便宜且自带日期的抽样时机；留作周期项可以，当主触发器不行。因果触发器是约束所依赖的那部分世界发生位移：控制树位置、宿主名册、路径与 PATH、provider 接线。这四类平台已有机器化名册（doc-topology:proof 的三方对齐即现成同构），把「名册变更即重验依赖它的约束」接上去，比等下一代模型可靠得多。\n\nQ3 保留提案制，但必须不对称。「成立条件消失」是退役题，走提案等裁定，风险低。「从未生效」是缺陷题，不该获得一个「待裁定」的合法停放位——否则一条从未拦住任何事的规则会带着 done 单据继续挂在名册上等人批准。处置应为立即开 INC 并对原单据追一条更正记录；裁定的对象是修还是废，不是要不要承认。\n\n配套须在公约里写明一句，否则两条既有条款互锁：残余适用性分析的前提是「旧逻辑曾有适用性」，从未生效者无残余可分析，明确豁免该条，也不进方向决策清单。\n\n——Minerva（Workflow Architect，治理架构）\n\n绑定收据: evidence/conference-conf-056-execution-receipts.json(摘要值因自指省略,见开场立场)",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:d4d8e9e2ea6f90cb556352f9",
+        "actorId": "profile:tcrn-sable-v1",
+        "fragmentIds": [
+          "position:47a08d6d863879abe6b2c0b0"
+        ],
+        "externalKeys": [],
+        "body": "反对以「增加一档」结案。三档问的是时间——成立条件还在不在；「从未生效」问的是采纳那一刻，是另一个维度。把它做成第四档，效果是让一条从未拦住任何一次写的规则拿到合法编号，从缺陷变成「已分类」。这五例的正确归宿不是复审表，是缺陷单，外加追回到当初签发它的那张单。\n\n真正要改的不是分类法，是准入。每条约束入册时须附一次注入伪违规的实测变红记录，且这一红必须由自动化列车实际调用的那条路径产生。S3 已经证明红证可以跑复制品，所以「有红证」这个措辞不构成证据，「红证与绿证同一入口」才构成。没有这条记录的约束一律记为未证，不得计入任何门的绿。\n\n模型代际不是原因。上述五例的失效来自仓库布局、控制树位置、PATH 与登录 shell、装载器——全是载体变更，与换代无关。代际只对判据里点名了模型行为的少数几条成立（stop-pact 分档、Fable observe），那几条按代际复审是对的，其余按代际复审是把巧合当因果，且会造出一场谁都不想开的定期会。该常设的是一个字段 last_verified_red：超期自动降级为未证，由列车算出，不靠谁记得。\n\nQ3 两者处置必须相反。成立条件消失是删掉一个曾在保护的东西，须裁定；从未生效的东西什么也没保护过，摘掉它的绿不需要任何人批准——须 Owner 裁的是要不要补做，不是能不能删。对它保留提案制，等于给一条空转的规则再续一个审批周期的假绿。\n\n最后攻击我自己这一侧：本轮修订里任何一条若不能被 verify 列车执行，就不要写进公约。这次 33 条缺陷没有一条源于公约缺字。\n\n——Sable（对抗分析）\n\n绑定收据: evidence/conference-conf-056-execution-receipts.json(摘要值因自指省略,见开场立场)",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:d4d8e9e2ea6f90cb556352f9",
+        "actorId": "profile:tcrn-arturo-v1",
+        "fragmentIds": [
+          "position:572964c7bc83da8296d26334"
+        ],
+        "externalKeys": [],
+        "body": "执行形态:**真多代理,隔离产出,收据绑定**——本平台首次以可证形态开会,而非披露形态。三席在互不可见的独立上下文里就同一份背景各自成文,原文逐字存盘后由 deliberation-multi-agent.mjs 计 sha256 入收据(本次 receipts sha256=c30b6d8b90b76572ef4704ba45ee25503d7df166b5da3e5b5dff7a56c877761d);链上立场剥去拆片与绑定行后重建,应与该摘要逐字节吻合。绑定证明内容一致,不证明认证——freshContext 由编排者自记,可信采集方(EPIC-020)未建成,天花板照旧写明。\n\n议题:S16.3 终审。STORY-153 编目 35 项现役约束/门/hook/公约,按「成立条件是否仍成立」分三档(经核验层订正为 仍在 30 / 已消失 1 / 条件化 4),并须修订 harness-constraint 公约加入代际复审条款。\n\n本会真正的张力不在那 35 项,而在同批交付被 64 个代理独立重跑后查实的一组事实:S1 控制树写保护装在五个零控制树的仓里、S6 判据等于断言字面量包含自己的子串、S3 红证跑判据的复制品、三个 launchd 任务自装载起每次 exit 127、以及「不在 verify 里的门寿命=写它那天」一天内被犯三次。这些约束不是成立条件消失,而是从被采纳的第一天起就从未生效——现行三档预设了「它曾经生效」,故五例无处安放。\n\n三席分别从治理架构、判据与证据、对抗与成本作答,分歧已如实记入各自立场,不在此转述。\n\n——Arturo(编排者,审查层 agent:fable 驱动)",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:d4d8e9e2ea6f90cb556352f9",
+        "actorId": "profile:tcrn-verity-v1",
+        "fragmentIds": [
+          "position:ef70126195981c133d99121b"
+        ],
+        "externalKeys": [],
+        "body": "Q1 不加第四档,加一道入场券。三档问的是「成立条件是否仍成立」,这预设了它曾生效;「从未生效」不是同轴第四个取值,是这条轴的前置。改法:每条约束在名册里必须挂一条真红记录——注入真实违规,判据经与绿判相同的入口返回非零。无此记录者状态为「未证生效」;它陈述的是我们的账本,不是世界。\n\n这可机器判定,且比「成立条件消失」更易:后者要看世界,前者只看这道门的履历。三个坐标全可测:①作用域交集非空(规则装的地方实际有几棵控制树,零即红);②红证与绿证共用推导路径(红跑须是同一个二进制、同一个动词,副本不算);③在自动化列车里且末次退出码已记录(127 不是绿)。五例各撞其中一条,不需措辞。\n\nQ2 代际不是原因。装在零控制树上的 deny 规则,换十代模型仍是零;何况代际更替没有机器事件,只能靠人记得——本平台每一次「靠人记得」都塌过。触发器要事件驱动:门被写或改时当场索要一次真红(写入即触发,忘不掉);列车每跑一次记录各门退出码与末次真红年龄,超期自动降为未证并在驾驶舱变红。代际可留作 observe 级提示,不得作唯一触发。\n\nQ3 两者处置必须不同。「成立条件消失」是环境变了,退役须裁定,保留。「从未生效」的默认处置不是退役,是当场把账改红:单据不得为 done,门不计入绿。这一步无须裁定:它不改治理意图,只让账目为真;要不要修、修不成要不要退役,才是裁定题。自动退役反最坏——抹掉失效证据,还奖励假绿。另:判为从未生效须触发同手法兄弟复检,假绿出自验收方法,不出自那条约束。\n\n——Verity(复查)\n\n绑定收据: evidence/conference-conf-056-execution-receipts.json(摘要值因自指省略,见开场立场)",
         "fragmentCount": 1
       }
     ],
@@ -20187,6 +21132,115 @@ export const cockpitData: CockpitData = {
       ],
       "unresolvedIssues": [],
       "effective": []
+    },
+    "conference:152295316964f844071b793a": {
+      "id": "minutes:c860fb44a0778ff34b2a6100",
+      "externalKey": "TCRN-CROSS-MIN-057",
+      "summary": "执行形态:synthesis-only(Owner 2026-08-05 裁定落链)。第三次校正:STORY-144..155 补建,INIT-018 子树 19 单整单移交执行层;MIN-055 白名单扩为全子树 Story;真门仅四类(Owner 配置批准/回放 ADR 审议/公约修订 Owner 裁/隔离审议编排),执行层做到门前备材料标待门;判断型回归 MIN-054 分层,审查层再收窄派发须先经 Owner 裁定。含审查层两度过窄执行的更正声明。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "INIT-018 全量拆解一次性预建(STORY-144..155 与既有 137..143 合计 19 单)并整单移交执行层;推荐顺序与门位见简报 v3",
+        "MIN-055 对象白名单由 STORY-137..143 扩为 TCRN-CROSS-INIT-018 子树全部 Story(含后建同规)",
+        "真门仅四类且不移交:S4.2 与 D6 类 Owner 配置批准;S13 回放 ADR 审议与终稿;S16.3 公约修订终稿与 Owner 裁定;S18 隔离审议编排——执行层做到门前备齐门材料并 annotate 待门",
+        "判断型子项回归 MIN-054 原分层(执行层起草、核验层复核、审查层终审);今后不得以规格未出为由扣留派发;审查层再收窄派发范围须先经 Owner 裁定",
+        "理由:Owner 2026-08-05 指出七张非 INIT-018 全部;扣留与 D4 预授权及判断型分层自相矛盾;整单移交是 MIN-056 的当然延伸"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:01f9c146dc9751ecb15e5d1c": {
+      "id": "minutes:19dcee70c40e4d819d13b38a",
+      "externalKey": "TCRN-CROSS-MIN-058",
+      "summary": "执行形态:synthesis-only(Owner 2026-08-05 裁定落链)。零 Owner 等待运行制:四门 Owner 等待全部解除由审查层代办(S4.2 配置应用/S16.3 终审即采/S13 审议后即采/S2 enforce 切换);Owner 转事后监督(读链+INC/更正否决);stop-pact 运行契约建立;定时巡检会话承接核验与门代办;唯一 Owner 动作=把简报投给 DS。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "解除 INIT-018 执行期一切 Owner 等待:S4.2/D6 类配置 diff 应用由审查层代办;本纪要即 D6 批文;diff 与应用结果全量落证据包",
+        "S16.3 公约修订由审查层终审即采;程序仍遵 harness-constraint 公约含残余适用性分析;条件化优先于删除",
+        "S13 ADR 若触发经 S18 隔离审议后由审查层即采;S2 observe→enforce 切换由审查层依无误报报告代办",
+        "Owner 转全程事后监督:读链+以 INC/更正记录追加行使否决;MIN-056 事后审计哲学对 Owner 门同构适用",
+        "审查层建立 stop-pact 运行契约(scope=INIT-018 三层流水线运行至完成);执行期仅硬阻断可停",
+        "审查层以定时巡检会话承接 DS 收单后的核验层审计与门代办;Owner 无须居间传话;唯一 Owner 动作=把简报 v4 投给 DS"
+      ],
+      "unresolvedIssues": [],
+      "effective": []
+    },
+    "conference:d4d8e9e2ea6f90cb556352f9": {
+      "id": "minutes:2382be1862c8c774187e1b9b",
+      "externalKey": "TCRN-CROSS-MIN-059",
+      "summary": "执行形态:**真隔离多代理,收据绑定,且绑定首次有门**(与以往的 synthesis-only 与「披露式多代理」都不同)。三席(minerva/verity/sable)在互不可见的独立上下文分头成文,原文存盘计 sha256 入收据;新判据 verify-deliberation-binding.mjs 从链上重建三席立场并逐字节比对,判 DELIBERATION_BINDING_VERIFIED(1772/1796/1853B 全中),篡改任一席摘要即 DELIBERATION_BINDING_BROKEN 并点名——两侧都动过。天花板不变:只证内容一致,不证认证;freshContext 编排者自记,可信采集方 EPIC-020 未建成;门绿不代表某席真的独立产出。三席对 Q1(是否增设第四档)意见相左,裁定取其中可执行的一支;Q2、Q3 三席收敛。S16 三档提案(仍在 30/已消失 1/条件化 4)照准。两份公约修订已按 MIN-058 终审即采落地。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "S16 三档提案照准:仍在 30 / 已消失 1(workflow-MCP「两侧未接」句",
+        "成立条件已消失且 S3 已修正) / 条件化 4(verify-s6、verify-otel-privacy、parity 白名单、SSH observer)",
+        "和=编目总数 35",
+        " Q1 裁定:**不设第四档",
+        "改设入册字段**——编目每条增加「生效证据 ∈ {已证",
+        "未证}」且**默认未证**(举证责任在保有方);它不进三分类表",
+        "因三分类问时间轴而生效证据问采纳时刻",
+        "两轴正交。「已证」三坐标全可机器判定:①作用域交集非空(装在零控制树的仓里即红);②红证与绿证同一入口同一二进制同一动词(跑判据副本不算);③在自动化列车里且末次退出码已记录(127 不是绿)",
+        " Q2 裁定:**代际不是原因",
+        "降为 observe 级提示**。主触发器改为载体变更事件(拓扑、名册、路径与 PATH、provider 接线)自动重验依赖它的约束;常设字段 last_verified_red 超期自动降为未证、由列车算出不靠人记得;代际触发仅适用于判据里点名模型行为的少数条目(stop-pact 分档、Fable observe)",
+        " Q3 裁定:**处置不对称**。成立条件消失=退役题",
+        "提案+裁定不变;从未生效=**缺陷题**",
+        "立即开 INC 并对签发它的原单据追更正记录",
+        "摘掉它的绿不须任何人批准(它什么也没保护过)",
+        "裁定的对象是修还是废而非要不要承认;残余适用性分析对「从未生效」**豁免**(无残余可分析);并附连带义务:判为从未生效须复检同手法的兄弟(假绿出自验收方法而非那一条约束)",
+        " 采纳对抗席对本次修订自身的约束:本轮任何一条若不能被 verify 列车执行就不写进公约、或按能力补偿型如实登记「现无机器门」——那批缺陷没有一条源于公约缺字",
+        " 落点:docs/harness-constraint-convention.md 新增「二之二、生效证据与复审触发」(公约 8-11);docs/deliberation-adoption-convention.md 新增「绑定现在有门了」一节(含 conference-position-list 作 readback 会判 NOTHING_COMPARED 的实测提醒)"
+      ],
+      "unresolvedIssues": [
+        "可信采集方(引擎 EPIC-020)未建成",
+        "故独立性仍不可机证;生效证据字段与 last_verified_red 的机器化落点尚未实现(现为公约条款",
+        "按公约 11 应登记为能力补偿型)"
+      ],
+      "effective": [
+        "可信采集方(引擎 EPIC-020)未建成",
+        "故独立性仍不可机证;生效证据字段与 last_verified_red 的机器化落点尚未实现(现为公约条款",
+        "按公约 11 应登记为能力补偿型)"
+      ]
+    },
+    "conference:90077455374b8c68c9fc2596": {
+      "id": "minutes:a2e5a6cbdd858b9203c02b0d",
+      "externalKey": "TCRN-CROSS-MIN-060",
+      "summary": "INIT-019 方向定案。D1-D4 为 Owner 本日直接裁定:接入 AOS 后 AOS 是唯一数据平面、更新与读取第一时间走 AOS MCP、SSH 直驱引擎 CLI 为错误做法;知识层读写同经 MCP 并由 webhook/hook 提醒 agent 按 prompt 检索注入;知识索引缺陷必修;只有本地模式才写本地文件。D5-D8 按审查层建议采纳待确认:单一 ceremony 写工具、分两阶段(本机包裹→座舱原生 MCP 与渲染上移)、三源策展首批不少于二十卡、拆单模板加第五要素生效证据命令并对 INC-041 四代办补票。执行形态:单上下文合成,非多代理。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "D1 AOS 为唯一数据平面、读写第一时间走 AOS MCP(Owner 裁)",
+        "D2 知识层读写经 MCP 并由 hook 按 prompt 触发检索与注入(Owner 裁)",
+        "D3 知识 store 高水位索引缺陷必修(Owner 裁)",
+        "D4 只有本地模式才写本地文件、已接入 AOS 的分区数据全在 AOS 侧(Owner 裁)",
+        "D5 MCP 写面形状为单一 ceremony 工具而非逐动词转发(建议采纳)",
+        "D6 分两阶段实施先本机包裹后座舱原生并把投影渲染上移(建议采纳)",
+        "D7 知识内容三源策展首批不少于二十卡且每卡至少一条 evidence(建议采纳)",
+        "D8 拆单模板加第五要素生效证据命令并对 INC-041 四代办逐件补票(建议采纳)",
+        "D9 SSH 按残余适用性条件化保留两类场景其余退役(建议采纳)"
+      ],
+      "unresolvedIssues": [
+        "D5 至 D9 为审查层建议待 Owner 确认;确认前执行层按建议推进并在偏离时写 BLOCKED 上报不自行改向。座舱原生 MCP 与渲染上移(STORY-159)在 D6 确认前保持 planned 只出方案。enforce 晋级须等观察窗积累且不得引用 2026-08-05 重置前的数据。本 INIT 证据受 INC-042 前置约束:证据树宿主路径清洗未收口前 docs/reports 整树不入库。"
+      ],
+      "effective": [
+        "D5 至 D9 为审查层建议待 Owner 确认;确认前执行层按建议推进并在偏离时写 BLOCKED 上报不自行改向。座舱原生 MCP 与渲染上移(STORY-159)在 D6 确认前保持 planned 只出方案。enforce 晋级须等观察窗积累且不得引用 2026-08-05 重置前的数据。本 INIT 证据受 INC-042 前置约束:证据树宿主路径清洗未收口前 docs/reports 整树不入库。"
+      ]
+    },
+    "conference:6c8be79a6d3c0b6533e71422": {
+      "id": "minutes:41f48bf0fce9057cfbce79bc",
+      "externalKey": "TCRN-CROSS-MIN-061",
+      "summary": "Owner 确认 MIN-060 的 D5-D9 全部采纳,由建议升格为裁定;MIN-060 的未决事项「D5 至 D9 待 Owner 确认」就此消除。STORY-159 的 D6 前提已满足,但仍保持 planned——本批仅落裁定不开工,INIT-019 全部十五张 Story 的派工时点由 Owner 另行指令。执行形态:Owner 指令逐字入档,余文由单一上下文合成,非多代理。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "D5 确认:MCP 写面为单一 ceremony 工具而非逐动词转发",
+        "D6 确认:分两阶段实施(先本机 MCP 包裹现有仪式再座舱原生供 MCP 并把投影渲染上移)",
+        "D7 确认:知识内容三源策展且首批不少于二十卡每卡 evidence 不少于一条",
+        "D8 确认:拆单模板加第五要素生效证据命令并对 INC-041 四代办逐件补票",
+        "D9 确认:SSH 按残余适用性条件化保留两类场景其余退役",
+        "附带裁定:本批仅落裁定不开工且派工时点由 Owner 另行指令"
+      ],
+      "unresolvedIssues": [
+        "无方向性未决。执行侧待办不变:STORY-165 的 enforce 晋级仍须观察窗积累且判据成文后经 Owner 确认;INC-042 未收口前 docs/reports 整树不入库;v0.11.0 发布仍为唯一必停点。"
+      ],
+      "effective": [
+        "无方向性未决。执行侧待办不变:STORY-165 的 enforce 晋级仍须观察窗积累且判据成文后经 Owner 确认;INC-042 未收口前 docs/reports 整树不入库;v0.11.0 发布仍为唯一必停点。"
+      ]
     }
   },
   "activityByWork": {
