@@ -42,7 +42,21 @@ import { judgeDocTopology, parseClaimBlocks } from "./doc-topology-predicates.mj
 import { scrubHostPaths } from "../../scripts/lib/evidence-hygiene.mjs";
 
 export const EVIDENCE_PATH = join(REPO_ROOT, "evidence/aos-topology-doc-sync.json");
+export const SSH_BREAKGLASS_ALLOWLIST_PATH = join(
+  REPO_ROOT, "deploy/aos-local-client/ssh-breakglass-allowlist.json");
 const runFile = promisify(execFile);
+
+/** The SSH break-glass allowlist (STORY-158.1), read once, consumed by the access-form guard. */
+export function readSshBreakglassAllowlist(path = SSH_BREAKGLASS_ALLOWLIST_PATH) {
+  if (!existsSync(path)) return { path: "MISSING", classes: [], entries: [] };
+  let parsed = null;
+  try { parsed = JSON.parse(readFileSync(path, "utf8")); } catch { parsed = null; }
+  return {
+    path,
+    classes: Array.isArray(parsed?.classes) ? parsed.classes : [],
+    entries: Array.isArray(parsed?.entries) ? parsed.entries : []
+  };
+}
 
 /** The local siting convention, as the claims write it: relative to the platform root. */
 export const localAddressOf = (partitionId) => `.tcrn-workspace/${partitionId}/workspace`;
@@ -294,8 +308,10 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
   const literals = forbiddenOutsideClaimBlocks(PARTITION_ROSTER);
   const documents = readRegisteredDocuments();
   const observations = await observeDocTopology({ probeVm });
+  const sshBreakglass = readSshBreakglassAllowlist();
   const base = {
-    registry: DOC_REGISTRY, roster: PARTITION_ROSTER, literals, observations, localAddressOf
+    registry: DOC_REGISTRY, roster: PARTITION_ROSTER, literals, observations, localAddressOf,
+    sshAllowlist: sshBreakglass.entries
   };
   const green = judgeDocTopology({ ...base, documents });
 
@@ -363,6 +379,19 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
       names: (hits) => hits.some((finding) =>
         finding.path === "CLAUDE.md" && finding.literal === awayEntry.liveAddress)
     }));
+
+    reds.push(redProof({
+      id: "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED",
+      why: "STORY-157.3:复核命令列教人 SSH 直驱引擎——访问形态错,不管地址对不对。"
+        + "一条没进 break-glass 白名单的 ssh 直驱命令必须红并点名文件与行号。",
+      documents, base,
+      mutate: editDocument("CLAUDE.md",
+        "## 三、治理入口",
+        `## 三、治理入口\n\n复核走 \`ssh tcrn-platform-dev "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs `
+        + `status --workspace ${awayEntry.liveAddress}"\`。\n`),
+      expectCode: "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED",
+      names: (hits) => hits.some((finding) => finding.path === "CLAUDE.md")
+    }));
   }
 
   // The fifth red is on the OBSERVATION, and it is the one no document edit can produce:
@@ -415,6 +444,15 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
       observed: green.perDocument.filter((row) => row.mustCarryClaims)
         .map((row) => `${row.path}=${row.partitions.join("+")}`) },
     { id: "MEASUREMENT_RAN", met: green.measured === true, expected: true, observed: green.measured },
+    { id: "NO_NON_ALLOWLISTED_SSH_DIRECT_COMMANDS",
+      met: green.findings.filter((finding) => finding.code === "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED").length === 0,
+      expected: "registered documents carry no SSH-direct-engine command outside the break-glass allowlist",
+      observed: green.findings.filter((finding) => finding.code === "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED")
+        .map((finding) => `${finding.path}:${finding.line}`) },
+    { id: "SSH_BREAKGLASS_ALLOWLIST_PRESENT",
+      met: sshBreakglass.path !== "MISSING" && sshBreakglass.classes.length === 2,
+      expected: "ssh-breakglass-allowlist.json with the two residual classes",
+      observed: `${sshBreakglass.path} (${sshBreakglass.classes.length} classes, ${sshBreakglass.entries.length} entries)` },
     ...allReds.map((red) => ({
       id: `RED_${red.id}`,
       met: red.wentRed === true && red.raisedExpectedCode === true

@@ -9,14 +9,14 @@ Since 2026-07-29 (`TCRN-AOS-STORY-131`, ruling `TCRN-AOS-MIN-012` direction D) *
 laptop is a CLIENT of the AOS governance chain, not its host.** The verdict recorded by
 the gate that measures it is `LOCAL_HOST_IS_A_PURE_CLIENT`.
 
-The row below is a checked declaration, not prose — run the command, do not trust the
-sentence:
+The row below is a checked declaration, not prose — run the recheck command (via the MCP read face),
+do not trust the sentence:
 
 <!-- TOPOLOGY-CLAIMS:BEGIN -->
 
 | 分区 | home | 真值地址 | 复核命令 |
 | --- | --- | --- | --- |
-| `TCRN-AOS` | `vm` | `/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace` | `ssh tcrn-platform-dev "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs status --workspace /srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"` |
+| `TCRN-AOS` | `vm` | `/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace` | `读走 MCP 只读面: tcrn_remote_read_status(partition=TCRN-AOS) · 真值地址 /srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace` |
 
 <!-- TOPOLOGY-CLAIMS:END -->
 

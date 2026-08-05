@@ -14,7 +14,8 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 import {
   CLAIM_BLOCK_BEGIN, CLAIM_BLOCK_END, findUncontainedMentions, judgeDocTopology,
-  judgeMeasurement, parseClaimBlocks
+  judgeMeasurement, parseClaimBlocks, findSshDirectEngineCommands, sshCommandAllowlisted,
+  SSH_ENGINE_PATTERN
 } from "./doc-topology-predicates.mjs";
 
 const AWAY_ADDRESS = "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace";
@@ -349,4 +350,69 @@ test("the generic placeholder form is NOT a location claim", () => {
   const text = "chains are sited under `.tcrn-workspace/<分区>/` on whichever host owns them";
   const found = findUncontainedMentions({ text, path: "d.md", spans: [], literals: LITERALS });
   assert.deepEqual(found, []);
+});
+
+// ── STORY-157.3 access-form guard ───────────────────────────────────────────
+
+const SSH_DIRECT = `ssh tcrn-platform-dev "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs status --workspace ${AWAY_ADDRESS}"`;
+
+test("findSshDirectEngineCommands spots an ssh-direct-engine command and names its line", () => {
+  const text = `header\n\n${SSH_DIRECT}\n`;
+  const found = findSshDirectEngineCommands({ text, path: "d.md" });
+  assert.equal(found.length, 1);
+  assert.equal(found[0].path, "d.md");
+  assert.equal(found[0].line, 3);
+});
+
+test("ssh for something other than the engine is not an ssh-direct-engine command", () => {
+  const text = `ssh tcrn-platform-dev "ls -ld /srv/tcrn/aos-cockpit"`;
+  assert.equal(findSshDirectEngineCommands({ text, path: "d.md" }).length, 0);
+  assert.equal(SSH_ENGINE_PATTERN.test(text), false);
+});
+
+test("a document teaching an unallowlisted ssh-direct command is red and names file + line", () => {
+  const verdict = judge({
+    documents: [
+      { path: "CLAUDE.md", exists: true, text: `# entry\n\n${CORRECT_BLOCK}\n\n复核走 ${SSH_DIRECT}\n` },
+      { path: "AGENTS.md", exists: true, text: "# pointer\n" }
+    ]
+  });
+  assert.equal(verdict.ok, false);
+  assert.ok(codes(verdict).includes("SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED"));
+  const finding = verdict.findings.find((row) => row.code === "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED");
+  assert.equal(finding.path, "CLAUDE.md");
+  assert.ok(typeof finding.line === "number");
+});
+
+test("an ssh-direct command matching the break-glass allowlist is not red", () => {
+  // The command sits INSIDE the claim block so the containment rule (tested elsewhere)
+  // does not fire; this isolates the access-form guard, which is what the allowlist gates.
+  const insideBlock = [
+    CLAIM_BLOCK_BEGIN, "",
+    "| 分区 | home | 真值地址 | 复核命令 |",
+    "| --- | --- | --- | --- |",
+    claimRow("TCRN-AOS", "vm", AWAY_ADDRESS),
+    claimRow("cross-project", "local", ".tcrn-workspace/cross-project/workspace"),
+    "",
+    `fallback: ${SSH_DIRECT}`,
+    "",
+    CLAIM_BLOCK_END
+  ].join("\n");
+  const allowlist = [
+    { pattern: `ssh\\s+\\S+\\s+["']node\\s+/srv/tcrn/engine/.*`, reason: "host MCP face unreachable fallback", since: "2026-08-05" }
+  ];
+  const verdict = judge({
+    sshAllowlist: allowlist,
+    documents: [
+      { path: "CLAUDE.md", exists: true, text: `# entry\n\n${insideBlock}\n` },
+      { path: "AGENTS.md", exists: true, text: "# pointer\n" }
+    ]
+  });
+  assert.equal(verdict.ok, true, JSON.stringify(verdict.findings));
+});
+
+test("sshCommandAllowlisted matches by regex pattern and ignores a malformed one", () => {
+  assert.equal(sshCommandAllowlisted(SSH_DIRECT, [{ pattern: "tcrn-workflow\\.mjs", reason: "x", since: "2026-08-05" }]), true);
+  assert.equal(sshCommandAllowlisted(SSH_DIRECT, [{ pattern: "(unclosed", reason: "x", since: "2026-08-05" }]), false);
+  assert.equal(sshCommandAllowlisted(SSH_DIRECT, [{ reason: "no pattern" }]), false);
 });

@@ -119,6 +119,36 @@ export function findUncontainedMentions({ text, path, spans, literals }) {
 }
 
 /**
+ * The access-form guard (TCRN-CROSS-INIT-019 STORY-157.3, D1/D9).
+ *
+ * A registered document may not teach SSH-direct-engine CLI invocation unless that exact
+ * command is allowlisted. Reads go through the MCP read face, writes through the ceremony;
+ * SSH direct is break-glass only, and the two residual classes live in
+ * `deploy/aos-local-client/ssh-breakglass-allowlist.json`. The allowlist is passed in as
+ * data so this judge stays pure; an entry matches when its `pattern` (a regex string)
+ * matches the command text.
+ */
+export const SSH_ENGINE_PATTERN = /ssh\s+[A-Za-z0-9._-]+\s+['"]node\s+\S*tcrn-workflow\.mjs/gu;
+
+export function findSshDirectEngineCommands({ text, path }) {
+  const findings = [];
+  for (const match of text.matchAll(SSH_ENGINE_PATTERN)) {
+    const lineNumber = text.slice(0, match.index).split("\n").length;
+    findings.push({ path, line: lineNumber, command: match[0].slice(0, 160) });
+  }
+  return findings;
+}
+
+export function sshCommandAllowlisted(command, allowlist) {
+  return (allowlist ?? []).some((entry) => {
+    if (typeof entry?.pattern !== "string") return false;
+    let re;
+    try { re = new RegExp(entry.pattern, "u"); } catch { return false; }
+    return re.test(command);
+  });
+}
+
+/**
  * The measurement, turned into a verdict about one partition's home.
  *
  * `observation` is what `observeDocTopology` produced for this partition:
@@ -196,7 +226,7 @@ export function judgeMeasurement({ entry, observation }) {
  * @param localAddressOf (partitionId) => the local siting address, as written in claims
  */
 export function judgeDocTopology({
-  documents, registry, roster, literals, observations = {}, localAddressOf
+  documents, registry, roster, literals, observations = {}, localAddressOf, sshAllowlist = []
 }) {
   const findings = [];
   const perDocument = [];
@@ -284,6 +314,12 @@ export function judgeDocTopology({
       text: document.text, path: rule.path, spans: parsed.spans, literals
     })) {
       findings.push({ code: "ADDRESS_STATED_OUTSIDE_A_CLAIM_BLOCK", ...mention });
+    }
+
+    for (const hit of findSshDirectEngineCommands({ text: document.text, path: rule.path })) {
+      if (!sshCommandAllowlisted(hit.command, sshAllowlist)) {
+        findings.push({ code: "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED", ...hit });
+      }
     }
 
     perDocument.push({
