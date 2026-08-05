@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-019-STORY-163",
+  "intent": "promote the v2 write-face proof card so it is default-selectable, then read it back",
+  "startedAt": "2026-08-05T14:39:54Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "TCRN-AOS",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-39-54-386Z-7682c6-TCRN-AOS.json",
+    "sha256": "ecc5cf5923e3585b0afb70d3365a40e0f8684010fefedb4e98cf388f45a1427a",
+    "bytes": 601
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 1048,
+    "headEventHash": "eea6d9adf02ce66081e5268b06f45011d4fb24a15dabed687420dcfbeb19f44f",
+    "work": 156
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "knowledge-promote",
+      "mutates": true,
+      "reasonCode": "KNOWLEDGE_PROMOTION_UPDATED",
+      "argv": [
+        "knowledge-promote",
+        "--at",
+        "2026-08-05T14:39:54Z",
+        "--expected-revision",
+        "1",
+        "--expected-version",
+        "26",
+        "--id",
+        "knowledge:a13b39c88f3ff50025e22557",
+        "--state",
+        "promoted",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "expected-revision",
+        "id",
+        "state"
+      ],
+      "headAtPlanning": 26,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "knowledge:a13b39c88f3ff50025e22557",
+      "version": 27
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "knowledge-list",
+      "mutates": false,
+      "reasonCode": "KNOWLEDGE_LIST_READY",
+      "argv": [
+        "knowledge-list",
+        "--at",
+        "2026-08-05T14:39:55Z",
+        "--search",
+        "writefaceproof-v2",
+        "--selection",
+        "all",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "workspace"
+      ],
+      "fromPayload": [
+        "search",
+        "selection"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": false,
+        "reasonCode": "READBACK_DIVERGENT",
+        "compared": [
+          {
+            "field": "total",
+            "expected": 1,
+            "observed": 0,
+            "equal": false
+          }
+        ],
+        "unequal": [
+          "total"
+        ]
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 1048,
+    "headEventHash": "eea6d9adf02ce66081e5268b06f45011d4fb24a15dabed687420dcfbeb19f44f",
+    "work": 156
+  },
+  "ok": false,
+  "reasonCode": "READBACK_DIVERGENT"
+}
