@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-019-STORY-156",
+  "intent": "red case 3: step verb absent from the host engine's own catalogue",
+  "startedAt": "2026-08-05T14:06:00Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "TCRN-AOS",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-00-423Z-f9560b-TCRN-AOS.json",
+    "sha256": "bdbc88636041be8664c86d79e6cd0ca72e59c9399614592a851729ec2c542936",
+    "bytes": 489
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 1047,
+    "headEventHash": "84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0",
+    "work": 156
+  },
+  "steps": [
+    {
+      "ok": false,
+      "verb": "no-such-verb",
+      "reasonCode": "VERB_NOT_IN_CATALOGUE",
+      "detail": "the host engine's own commands output does not define it",
+      "headAtPlanning": 1047
+    }
+  ],
+  "readback": [],
+  "chainAfter": null,
+  "ok": false,
+  "reasonCode": "VERB_NOT_IN_CATALOGUE"
+}

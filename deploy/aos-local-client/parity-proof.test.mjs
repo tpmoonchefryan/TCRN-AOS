@@ -151,17 +151,17 @@ test("an anchor absent from its declared side is a defect even with no gap", () 
 
 test("the shipped anchor roster names every server the platform .mcp.json declares", () => {
   assert.deepEqual(ANCHOR_ROSTER.map((entry) => entry.server).sort(),
-    ["codegraph-aos", "codegraph-ds", "codegraph-tms", "tcrn-workflow", "tcrn-workflow-aos-read"]);
+    ["aos-mcp-write", "codegraph-aos", "codegraph-ds", "codegraph-tms", "tcrn-workflow", "tcrn-workflow-aos-read"]);
   for (const anchor of ANCHOR_ROSTER) {
     assert.ok(anchor.sides.includes("claude"), `${anchor.server} 必须锚在 Claude 侧`);
     assert.match(anchor.since, /^\d{4}-\d{2}-\d{2}$/u);
   }
 });
 
-test("the shipped allowlist keeps its three pre-INC-036 reasons and dates", () => {
+test("the shipped allowlist keeps its four pre-INC-036 reasons and dates", () => {
   // The restructure added `missingFrom`; it may not lose why a gap was excused.
   assert.deepEqual(ALLOWLIST.map((entry) => entry.server),
-    ["codegraph-ds", "codegraph-aos", "tcrn-workflow-aos-read"]);
+    ["codegraph-ds", "codegraph-aos", "tcrn-workflow-aos-read", "aos-mcp-write"]);
   for (const entry of ALLOWLIST) {
     assert.equal(entry.since, "2026-08-05");
     assert.equal(entry.missingFrom, "codex");
@@ -169,6 +169,7 @@ test("the shipped allowlist keeps its three pre-INC-036 reasons and dates", () =
   }
   assert.ok(ALLOWLIST[0].reason.includes("STORY-146 S4.1"));
   assert.ok(ALLOWLIST[2].reason.includes("AOS 只读面"));
+  assert.ok(ALLOWLIST[3].reason.includes("AOS MCP 写面"));
 });
 
 // ── launch specs (INC-036 defect 4) ────────────────────────────────────────

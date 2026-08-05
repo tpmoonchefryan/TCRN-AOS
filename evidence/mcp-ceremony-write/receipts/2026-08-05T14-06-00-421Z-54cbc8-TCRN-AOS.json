@@ -1,0 +1,7 @@
+{
+  "ok": false,
+  "reasonCode": "PAYLOAD_INVALID",
+  "problems": [
+    "readback must contain at least one read; a write nobody read back is not proven"
+  ]
+}

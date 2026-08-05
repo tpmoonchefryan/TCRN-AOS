@@ -115,6 +115,10 @@ export const ANCHOR_ROSTER = Object.freeze([
   Object.freeze({
     server: "tcrn-workflow-aos-read", sides: Object.freeze(["claude"]), since: "2026-08-05",
     why: "AOS 只读面；Claude 侧必须在——Codex 侧无对等服务器，由白名单具名豁免"
+  }),
+  Object.freeze({
+    server: "aos-mcp-write", sides: Object.freeze(["claude"]), since: "2026-08-05",
+    why: "AOS MCP 写面（单一 ceremony 工具）；Claude 侧必须在——Codex 侧无对等服务器，由白名单具名豁免"
   })
 ]);
 
@@ -147,6 +151,10 @@ export const ALLOWLIST = Object.freeze([
   Object.freeze({
     server: "tcrn-workflow-aos-read", missingFrom: "codex", since: "2026-08-05",
     reason: "AOS 只读面仅 Claude 侧接入；Codex 侧无对等服务器"
+  }),
+  Object.freeze({
+    server: "aos-mcp-write", missingFrom: "codex", since: "2026-08-05",
+    reason: "AOS MCP 写面仅 Claude 侧接入；Codex 侧写路径走 ceremony.mjs，无 MCP 对等服务器"
   })
 ]);
 

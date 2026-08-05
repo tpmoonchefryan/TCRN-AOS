@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-019-STORY-156",
+  "intent": "red case 4: verb requires a per-invocation authority file, never driven from a batch wrapper",
+  "startedAt": "2026-08-05T14:06:01Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "TCRN-AOS",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-01-257Z-470805-TCRN-AOS.json",
+    "sha256": "41a16933cd96cc12197a8bc2884aebdfcd53f53116a1fda5841721b89f728857",
+    "bytes": 521
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 1047,
+    "headEventHash": "84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0",
+    "work": 156
+  },
+  "steps": [
+    {
+      "ok": false,
+      "verb": "relocation-vacate",
+      "reasonCode": "VERB_REQUIRES_OUT_OF_BAND_AUTHORITY",
+      "detail": "this verb takes a per-invocation authority file; it is performed as its own ceremony, never from a batch wrapper",
+      "headAtPlanning": 1047
+    }
+  ],
+  "readback": [],
+  "chainAfter": null,
+  "ok": false,
+  "reasonCode": "VERB_REQUIRES_OUT_OF_BAND_AUTHORITY"
+}

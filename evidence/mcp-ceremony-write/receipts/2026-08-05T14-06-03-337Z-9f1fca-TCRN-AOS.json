@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-019-STORY-156",
+  "intent": "dry-run proof: a planned-only ceremony against the anchor work item",
+  "startedAt": "2026-08-05T14:06:02Z",
+  "dryRun": true,
+  "host": "tcrn-platform-dev",
+  "partition": "TCRN-AOS",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-02-179Z-aa23fd-TCRN-AOS.json",
+    "sha256": "feebe53ec7b03f68270ec7811b7befa242cd770475d8c3586e50957c9066db2f",
+    "bytes": 615
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 1047,
+    "headEventHash": "84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0",
+    "work": 156
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "STEP_PLANNED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T14:06:02Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+        "--expected-version",
+        "1047",
+        "--id",
+        "work:4c678a5fe78b6313ce56ea39",
+        "--scope",
+        "init-019-dry-run-proof",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1047,
+      "executed": false,
+      "wouldSend": "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs 'work-annotate' '--actor' 'agent:fable' '--at' '2026-08-05T14:06:02Z' '--attest-dir' '/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations' '--expected-version' '1047' '--id' 'work:4c678a5fe78b6313ce56ea39' '--scope' 'init-019-dry-run-proof' '--workspace' '/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace'"
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "STEP_PLANNED",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:4c678a5fe78b6313ce56ea39",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": false
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 1047,
+    "headEventHash": "84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0",
+    "work": 156
+  },
+  "eventsAppended": 0,
+  "ok": true,
+  "reasonCode": "CEREMONY_PLANNED_ONLY",
+  "finishedAt": "2026-08-05T14:06:03Z"
+}

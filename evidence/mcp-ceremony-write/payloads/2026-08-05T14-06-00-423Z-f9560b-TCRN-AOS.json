@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-019-STORY-156",
+  "intent": "red case 3: step verb absent from the host engine's own catalogue",
+  "steps": [
+    {
+      "verb": "no-such-verb",
+      "flags": {
+        "id": "work:4c678a5fe78b6313ce56ea39"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:4c678a5fe78b6313ce56ea39"
+      },
+      "expect": {
+        "scope": "x"
+      }
+    }
+  ]
+}

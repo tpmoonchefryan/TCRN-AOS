@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-019-STORY-156",
+  "intent": "real-write proof: harmless additive sprint annotation on a done story, read back by value",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:003168aa62ef03681a9f106c",
+        "sprint": "init-019-writeface-proof"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:003168aa62ef03681a9f106c"
+      },
+      "expectSameAs": [
+        {
+          "field": "sprint",
+          "step": 0,
+          "flag": "sprint"
+        }
+      ]
+    }
+  ]
+}

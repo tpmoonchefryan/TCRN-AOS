@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-019-STORY-156",
+  "intent": "real-write proof: harmless additive decided-by annotation on a done story, read back by value",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:1643aa92bf19dca9922ec7dd",
+        "decided-by": [
+          "agent:fable"
+        ]
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:1643aa92bf19dca9922ec7dd"
+      },
+      "expectSameAs": [
+        {
+          "field": "decided-by",
+          "step": 0,
+          "flag": "decided-by"
+        }
+      ]
+    }
+  ]
+}

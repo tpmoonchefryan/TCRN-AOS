@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-019-STORY-156",
+  "intent": "red case 1: payload names the reserved expected-version flag",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:4c678a5fe78b6313ce56ea39",
+        "expected-version": 1047
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:4c678a5fe78b6313ce56ea39"
+      },
+      "expect": {
+        "scope": "x"
+      }
+    }
+  ]
+}
