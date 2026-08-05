@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "aos.multi-agent-deliberation-spec.v1",
+  "conferenceKey": "TCRN-CROSS-CONF-056",
+  "projectId": "project:e7da35c5aade8dd42c91cb0f",
+  "type": "strategy",
+  "title": "S16.3 终审:代际复审公约修订(S18 隔离多代理试点)",
+  "desiredOutcome": "对 STORY-153 三档提案下终审,并裁定 harness-constraint 公约的复审触发器与「从未生效」类约束的处置;同时以真隔离多代理+收据绑定的形态,把执行形态=多代理从披露变为可证",
+  "participantIds": [
+    "owner:governance",
+    "profile:tcrn-minerva-v1",
+    "profile:tcrn-verity-v1",
+    "profile:tcrn-sable-v1"
+  ],
+  "workIds": "work:1310edffd401edcfd404e8c2",
+  "conferenceIdPlaceholder": "conference:d4d8e9e2ea6f90cb556352f9",
+  "positionPrefix": "POS-C056-<SEAT>-1",
+  "story": "TCRN-CROSS-STORY-155",
+  "intent": "S18 隔离多代理审议试点:CONF-056 开会+开场立场+三席隔离立场(收据绑定)",
+  "seatRisks": "立场由隔离子代理产出,编排者自记 freshContext;绑定证明内容一致而非认证(可信采集方 EPIC-020 未建成)",
+  "seatRecommendations": "按本立场裁 S16.3 与 harness-constraint 修订方向",
+  "openingRisks": "隔离性由编排者自陈,不可机证;三席同源模型,视角差异来自角色提示而非独立训练",
+  "openingRecommendations": "按三席分歧点逐条裁定,不取多数决而取可执行者",
+  "opening": {
+    "actorId": "profile:tcrn-arturo-v1",
+    "externalKey": "POS-C056-ARTURO-1",
+    "text": "执行形态:**真多代理,隔离产出,收据绑定**——本平台首次以可证形态开会,而非披露形态。三席在互不可见的独立上下文里就同一份背景各自成文,原文逐字存盘后由 deliberation-multi-agent.mjs 计 sha256 入收据(本次 receipts sha256={receiptsSha256});链上立场剥去拆片与绑定行后重建,应与该摘要逐字节吻合。绑定证明内容一致,不证明认证——freshContext 由编排者自记,可信采集方(EPIC-020)未建成,天花板照旧写明。\n\n议题:S16.3 终审。STORY-153 编目 35 项现役约束/门/hook/公约,按「成立条件是否仍成立」分三档(经核验层订正为 仍在 30 / 已消失 1 / 条件化 4),并须修订 harness-constraint 公约加入代际复审条款。\n\n本会真正的张力不在那 35 项,而在同批交付被 64 个代理独立重跑后查实的一组事实:S1 控制树写保护装在五个零控制树的仓里、S6 判据等于断言字面量包含自己的子串、S3 红证跑判据的复制品、三个 launchd 任务自装载起每次 exit 127、以及「不在 verify 里的门寿命=写它那天」一天内被犯三次。这些约束不是成立条件消失,而是从被采纳的第一天起就从未生效——现行三档预设了「它曾经生效」,故五例无处安放。\n\n三席分别从治理架构、判据与证据、对抗与成本作答,分歧已如实记入各自立场,不在此转述。\n\n——Arturo(编排者,审查层 agent:fable 驱动)"
+  },
+  "seats": [
+    {
+      "seat": "minerva",
+      "actorId": "profile:tcrn-minerva-v1",
+      "file": "evidence/conf-056-seat-minerva.txt"
+    },
+    {
+      "seat": "verity",
+      "actorId": "profile:tcrn-verity-v1",
+      "file": "evidence/conf-056-seat-verity.txt"
+    },
+    {
+      "seat": "sable",
+      "actorId": "profile:tcrn-sable-v1",
+      "file": "evidence/conf-056-seat-sable.txt"
+    }
+  ],
+  "workflowRunId": "wf_cec0004e-223",
+  "capturedAt": "2026-08-05",
+  "receiptsOut": "evidence/conference-conf-056-execution-receipts.json",
+  "payloadOut": "deploy/aos-local-client/payloads/cross-conf-056-generated.json",
+  "readback": [
+    {
+      "verb": "conference-position-list",
+      "flags": {
+        "conference-id": "conference:d4d8e9e2ea6f90cb556352f9"
+      }
+    }
+  ]
+}

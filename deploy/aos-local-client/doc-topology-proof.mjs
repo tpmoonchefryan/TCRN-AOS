@@ -28,9 +28,9 @@
 // under `onDiskRed`.
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { execFile } from "node:child_process";
+import { execFile, execFileSync } from "node:child_process";
 import { promisify } from "node:util";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 import { PARTITION_ROSTER, PLATFORM_ROOT, REPO_ROOT, VM_HOST, VM_WORKSPACE, WORKSPACE_CONTAINER }
   from "./topology.mjs";
@@ -54,6 +54,74 @@ export function readRegisteredDocuments(registry = DOC_REGISTRY) {
     if (!existsSync(absolute)) return { path: rule.path, exists: false, text: "" };
     return { path: rule.path, exists: true, text: readFileSync(absolute, "utf8") };
   });
+}
+
+/**
+ * The SAME documents as the reader of the repository sees them — i.e. at HEAD.
+ *
+ * WHY THIS EXISTS (TCRN-CROSS-INC-039). Everything above reads the working tree, and
+ * for two days that was enough to keep this gate green while the committed record was
+ * wrong: TCRN-TMS and TCRN-Design-System had their claim blocks corrected in the tree
+ * on 2026-08-03 and left uncommitted, so `git show HEAD:CLAUDE.md` went on telling
+ * every reader that those partitions were `home = local` and inviting them to run a
+ * local engine against an address that now answers WORKSPACE_RELOCATION_VACATED. A gate
+ * that reads only the tree cannot see that, and this one was cited as evidence that the
+ * documents were in order.
+ *
+ * The predicate is deliberately plain: for a registered document that lives inside a git
+ * repository, the committed claim block must equal the working-tree claim block. An
+ * uncommitted claim edit therefore REDS — which is correct rather than inconvenient: a
+ * topology claim that is right only on the author's disk is a claim no reader can act on.
+ *
+ * A document outside any git repository (the platform root is not a repository) has no
+ * committed form to compare. That is reported as `tracked: false` and is a stated
+ * ceiling of this check, not a silent pass — see CEILING.gitCoverage.
+ */
+export function readCommittedDocuments(registry = DOC_REGISTRY) {
+  return registry.map((rule) => {
+    const absolute = absoluteDocPath(rule.path);
+    // The repository a document belongs to is the nearest ancestor that git owns.
+    let repoRoot = null;
+    try {
+      repoRoot = execFileSync("git", ["-C", dirname(absolute), "rev-parse", "--show-toplevel"],
+        { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+    } catch { repoRoot = null; }
+    if (repoRoot === null) return { path: rule.path, tracked: false, text: null };
+    const relativeToRepo = relative(repoRoot, absolute).split(sep).join("/");
+    try {
+      const text = execFileSync("git", ["-C", repoRoot, "show", `HEAD:${relativeToRepo}`],
+        { encoding: "utf8", maxBuffer: 8 * 1024 * 1024, stdio: ["ignore", "pipe", "ignore"] });
+      return { path: rule.path, tracked: true, repoRoot, text };
+    } catch {
+      // Present in the tree, absent from HEAD: a new document nobody has committed.
+      return { path: rule.path, tracked: true, repoRoot, text: null };
+    }
+  });
+}
+
+/** Do the committed claim blocks say what the working tree's do? */
+export function judgeCommittedClaims({ worktree = readRegisteredDocuments(), committed = readCommittedDocuments() } = {}) {
+  const rows = worktree.map((doc) => {
+    const head = committed.find((candidate) => candidate.path === doc.path);
+    if (head === undefined || head.tracked !== true) {
+      return { path: doc.path, tracked: false, agrees: null, note: "outside any git repository" };
+    }
+    if (head.text === null) {
+      return { path: doc.path, tracked: true, agrees: false, note: "present in the tree, absent from HEAD" };
+    }
+    const inTree = JSON.stringify(parseClaimBlocks(doc.text));
+    const atHead = JSON.stringify(parseClaimBlocks(head.text));
+    return { path: doc.path, tracked: true, agrees: inTree === atHead,
+      note: inTree === atHead ? null : "the committed claim block differs from the working tree's" };
+  });
+  const divergent = rows.filter((row) => row.agrees === false).map((row) => row.path);
+  return {
+    ok: divergent.length === 0,
+    reasonCode: divergent.length === 0 ? "COMMITTED_CLAIMS_MATCH_THE_TREE" : "COMMITTED_CLAIMS_DIVERGE_FROM_THE_TREE",
+    divergent,
+    untracked: rows.filter((row) => row.tracked === false).map((row) => row.path),
+    rows
+  };
 }
 
 /**
@@ -355,6 +423,16 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
       observed: red.wentRed ? red.findingCodes ?? red.reasonCode : "STAYED_GREEN"
     }))
   ];
+
+  // TCRN-CROSS-INC-039: the tree being right is not the same as the record being right.
+  const committedClaims = judgeCommittedClaims();
+  expectations.push(
+    { id: "COMMITTED_CLAIMS_MATCH_THE_TREE", met: committedClaims.ok === true,
+      expected: "COMMITTED_CLAIMS_MATCH_THE_TREE", observed: committedClaims.reasonCode },
+    { id: "COMMITTED_CLAIM_DIVERGENCE_NAMES_ITS_DOCUMENT",
+      met: committedClaims.ok === true || committedClaims.divergent.length > 0,
+      expected: "a divergence names the document it is in",
+      observed: committedClaims.divergent });
 
   const onDiskRed = foldOnDiskRed();
   expectations.push(

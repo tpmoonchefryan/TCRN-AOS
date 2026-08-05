@@ -638,10 +638,12 @@ async function replay(partition) {
       // The generated payload NEVER lands in the tracked tree. It is queued engine
       // argv verbatim, which can carry absolute local paths, and it cannot be
       // scrubbed the way a receipt is (scrubbing it would change the bytes that get
-      // written to the chain). scripts/lib/evidence-hygiene.mjs only walks evidence/,
-      // so a host path written into deploy/aos-local-client/payloads/ would be seen
-      // by no gate and committed by the next `git add -A` — TCRN-AOS-INC-037's leak
-      // shape, one directory over. A temp directory, removed in a finally, has no
+      // written to the chain). Since TCRN-CROSS-INC-042 the hygiene gate reads every
+      // tracked .json/.md repo-wide, so a payload that reached the index would at
+      // least be caught there — but it only fires once the file is staged, and a
+      // generated payload has no business being staged at all. A temp directory,
+      // removed in a finally, keeps it out of the tracked tree entirely — TCRN-AOS-
+      // INC-037's leak shape, one directory over, closed at the source. It has no
       // such reach; ceremony.mjs already reports an out-of-repository payload path as
       // `<outside-repository>` rather than relativising it back out.
       const scratch = mkdtempSync(join(tmpdir(), "shadow-replay-"));

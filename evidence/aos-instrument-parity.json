@@ -1,0 +1,632 @@
+{
+  "schemaVersion": "aos.instrument-parity-proof.v2",
+  "story": "TCRN-CROSS-STORY-145",
+  "incident": "TCRN-AOS-INC-036",
+  "ok": true,
+  "reasonCode": "PARITY_VERIFIED",
+  "fixtureMode": false,
+  "unmetExpectations": [],
+  "expectations": [
+    {
+      "id": "TRUTH_SOURCES_ARE_CANONICAL",
+      "met": true,
+      "expected": "读的是平台 .mcp.json 与 ~/.codex/config.toml 本身",
+      "observed": {
+        "claudeMcpPath": "<local-platform-root>/.mcp.json",
+        "codexConfigPath": "<local-home>/.codex/config.toml"
+      }
+    },
+    {
+      "id": "CODEX_SIDE_SERVERS_READ",
+      "met": true,
+      "expected": "≥1 server in [mcp_servers]",
+      "observed": [
+        "codegraph",
+        "computer-use",
+        "node_repl",
+        "tcrn-workflow"
+      ]
+    },
+    {
+      "id": "ANCHOR_ROSTER_SATISFIED",
+      "met": true,
+      "expected": [
+        "tcrn-workflow@claude+codex",
+        "codegraph-tms@claude+codex",
+        "codegraph-ds@claude",
+        "codegraph-aos@claude",
+        "tcrn-workflow-aos-read@claude"
+      ],
+      "observed": []
+    },
+    {
+      "id": "EVERY_SPEC_LAUNCHABLE",
+      "met": true,
+      "expected": "命令非空、args 可解析、无占位符、--path/--dir 指向真实目录",
+      "observed": []
+    },
+    {
+      "id": "EVERY_ALLOWLIST_ENTRY_DIRECTED_AND_DATED",
+      "met": true,
+      "expected": [
+        "codegraph-ds@2026-08-05(missingFrom=codex)",
+        "codegraph-aos@2026-08-05(missingFrom=codex)",
+        "tcrn-workflow-aos-read@2026-08-05(missingFrom=codex)"
+      ],
+      "observed": []
+    },
+    {
+      "id": "CLAUDE_SIDE_HAS_PLATFORM_SKILL",
+      "met": true,
+      "expected": "tcrn-workflow-helper in platform .claude/skills/",
+      "observed": [
+        "animation-vocabulary",
+        "apple-design",
+        "emil-design-eng",
+        "find-animation-opportunities",
+        "improve-animations",
+        "review-animations",
+        "tcrn-workflow-helper"
+      ]
+    },
+    {
+      "id": "GREEN_ON_THIS_PLATFORM",
+      "met": true,
+      "expected": "PARITY_VERIFIED",
+      "observed": []
+    },
+    {
+      "id": "HARNESS_MIRRORS_LIVE_VERDICT",
+      "met": true,
+      "expected": {
+        "wentRed": false,
+        "defectCodes": []
+      },
+      "observed": {
+        "wentRed": false,
+        "defectCodes": []
+      }
+    },
+    {
+      "id": "RED_UNALLOWLISTED_DRIFT_MUST_RED",
+      "met": true,
+      "expected": {
+        "defectCodes": [
+          "UNALLOWLISTED_GAP"
+        ],
+        "server": "codegraph-xyz"
+      },
+      "observed": {
+        "wentRed": true,
+        "defectCodes": [
+          "UNALLOWLISTED_GAP"
+        ],
+        "named": [
+          "codegraph-xyz"
+        ]
+      }
+    },
+    {
+      "id": "RED_ALLOWLIST_ENTRY_DROPPED_MUST_RED",
+      "met": true,
+      "expected": {
+        "defectCodes": [
+          "UNALLOWLISTED_GAP"
+        ],
+        "server": "codegraph-ds"
+      },
+      "observed": {
+        "wentRed": true,
+        "defectCodes": [
+          "UNALLOWLISTED_GAP"
+        ],
+        "named": [
+          "codegraph-ds"
+        ]
+      }
+    },
+    {
+      "id": "RED_ALLOWLISTED_SERVER_VANISHED_BOTH_SIDES_MUST_RED",
+      "met": true,
+      "expected": {
+        "defectCodes": [
+          "ALLOWLIST_ENTRY_VANISHED",
+          "ANCHOR_SERVER_MISSING"
+        ],
+        "server": "codegraph-ds"
+      },
+      "observed": {
+        "wentRed": true,
+        "defectCodes": [
+          "ALLOWLIST_ENTRY_VANISHED",
+          "ANCHOR_SERVER_MISSING"
+        ],
+        "named": [
+          "codegraph-ds"
+        ]
+      }
+    },
+    {
+      "id": "RED_ALLOWLIST_DIRECTION_FLIPPED_MUST_RED",
+      "met": true,
+      "expected": {
+        "defectCodes": [
+          "ALLOWLIST_DIRECTION_MISMATCH",
+          "ALLOWLIST_ENTRY_VANISHED"
+        ],
+        "server": "codegraph-ds"
+      },
+      "observed": {
+        "wentRed": true,
+        "defectCodes": [
+          "ALLOWLIST_DIRECTION_MISMATCH",
+          "ALLOWLIST_ENTRY_VANISHED",
+          "ANCHOR_SERVER_MISSING"
+        ],
+        "named": [
+          "codegraph-ds"
+        ]
+      }
+    },
+    {
+      "id": "RED_PLACEHOLDER_IN_SPEC_MUST_RED",
+      "met": true,
+      "expected": {
+        "defectCodes": [
+          "SPEC_PLACEHOLDER"
+        ],
+        "server": "codegraph-aos"
+      },
+      "observed": {
+        "wentRed": true,
+        "defectCodes": [
+          "SPEC_PLACEHOLDER"
+        ],
+        "named": [
+          "codegraph-aos"
+        ]
+      }
+    },
+    {
+      "id": "RED_DANGLING_PATH_IN_SPEC_MUST_RED",
+      "met": true,
+      "expected": {
+        "defectCodes": [
+          "SPEC_PATH_NOT_A_DIRECTORY"
+        ],
+        "server": "codegraph-aos"
+      },
+      "observed": {
+        "wentRed": true,
+        "defectCodes": [
+          "SPEC_PATH_NOT_A_DIRECTORY"
+        ],
+        "named": [
+          "codegraph-aos"
+        ]
+      }
+    },
+    {
+      "id": "RED_CODEX_SIDE_SPEC_EMPTY_MUST_RED",
+      "met": true,
+      "expected": {
+        "defectCodes": [
+          "SPEC_COMMAND_EMPTY"
+        ],
+        "server": "codegraph-tms"
+      },
+      "observed": {
+        "wentRed": true,
+        "defectCodes": [
+          "SPEC_COMMAND_EMPTY"
+        ],
+        "named": [
+          "codegraph-tms"
+        ]
+      }
+    }
+  ],
+  "claim": {
+    "predicate": "平台仪器名册(平台相关 MCP 服务器)须由 Claude Code 与 Codex 两侧同持;单侧缺口须有带方向、带日期理由的白名单豁免,且该豁免同时断言服务器仍在另一侧存在;名册不得只由观测并集派生,须覆盖锚定最小集;每个服务器的 command/args 须可解析且指向真实路径。",
+    "truthSources": [
+      "platform/.mcp.json (Claude Code)",
+      "~/.codex/config.toml [mcp_servers] (Codex, 只读)"
+    ],
+    "whereTheJudgementLives": "deploy/aos-local-client/parity-proof.mjs → judgeParity() (pnpm parity:proof)",
+    "howRedIsProven": "红侧一律构造输入后调用同一个 judgeParity();本文件中没有第二份判据副本。"
+  },
+  "judgeId": "aos.instrument-parity.judgeParity.v2",
+  "observation": {
+    "judgeId": "aos.instrument-parity.judgeParity.v2",
+    "claude": [
+      "codegraph-aos",
+      "codegraph-ds",
+      "codegraph-tms",
+      "tcrn-workflow",
+      "tcrn-workflow-aos-read"
+    ],
+    "codexPlatform": [
+      "codegraph-tms",
+      "tcrn-workflow"
+    ],
+    "roster": [
+      "codegraph-aos",
+      "codegraph-ds",
+      "codegraph-tms",
+      "tcrn-workflow",
+      "tcrn-workflow-aos-read"
+    ],
+    "rows": [
+      {
+        "server": "codegraph-aos",
+        "claudeSide": true,
+        "codexSide": false,
+        "gap": true,
+        "anchored": true,
+        "anchorSides": [
+          "claude"
+        ],
+        "allowlisted": true,
+        "allowlistDirection": "codex",
+        "exempt": true,
+        "since": "2026-08-05",
+        "reason": "Codex 侧未接 codegraph-aos；STORY-146 S4.1 生成 diff，S4.2 由审查层应用"
+      },
+      {
+        "server": "codegraph-ds",
+        "claudeSide": true,
+        "codexSide": false,
+        "gap": true,
+        "anchored": true,
+        "anchorSides": [
+          "claude"
+        ],
+        "allowlisted": true,
+        "allowlistDirection": "codex",
+        "exempt": true,
+        "since": "2026-08-05",
+        "reason": "Codex 侧未接 codegraph-ds；STORY-146 S4.1 生成 diff，S4.2 由审查层应用"
+      },
+      {
+        "server": "codegraph-tms",
+        "claudeSide": true,
+        "codexSide": true,
+        "gap": false,
+        "anchored": true,
+        "anchorSides": [
+          "claude",
+          "codex"
+        ],
+        "allowlisted": false,
+        "allowlistDirection": null,
+        "exempt": false,
+        "since": null,
+        "reason": null
+      },
+      {
+        "server": "tcrn-workflow",
+        "claudeSide": true,
+        "codexSide": true,
+        "gap": false,
+        "anchored": true,
+        "anchorSides": [
+          "claude",
+          "codex"
+        ],
+        "allowlisted": false,
+        "allowlistDirection": null,
+        "exempt": false,
+        "since": null,
+        "reason": null
+      },
+      {
+        "server": "tcrn-workflow-aos-read",
+        "claudeSide": true,
+        "codexSide": false,
+        "gap": true,
+        "anchored": true,
+        "anchorSides": [
+          "claude"
+        ],
+        "allowlisted": true,
+        "allowlistDirection": "codex",
+        "exempt": true,
+        "since": "2026-08-05",
+        "reason": "AOS 只读面仅 Claude 侧接入；Codex 侧无对等服务器"
+      }
+    ],
+    "defects": [],
+    "defectCodes": [],
+    "ok": true,
+    "reasonCode": "PARITY_VERIFIED",
+    "sources": {
+      "claudeMcpPath": "<local-platform-root>/.mcp.json",
+      "codexConfigPath": "<local-home>/.codex/config.toml"
+    },
+    "claudeSpecs": {
+      "codegraph-aos": {
+        "command": "pnpm",
+        "args": [
+          "--dir",
+          "<local-platform-root>/TCRN-TMS",
+          "exec",
+          "codegraph",
+          "serve",
+          "--mcp",
+          "--no-watch",
+          "--path",
+          "<local-platform-root>/TCRN-AOS"
+        ]
+      },
+      "codegraph-ds": {
+        "command": "pnpm",
+        "args": [
+          "--dir",
+          "<local-platform-root>/TCRN-TMS",
+          "exec",
+          "codegraph",
+          "serve",
+          "--mcp",
+          "--no-watch",
+          "--path",
+          "<local-platform-root>/TCRN-Design-System"
+        ]
+      },
+      "codegraph-tms": {
+        "command": "pnpm",
+        "args": [
+          "--dir",
+          "<local-platform-root>/TCRN-TMS",
+          "exec",
+          "codegraph",
+          "serve",
+          "--mcp",
+          "--no-watch"
+        ]
+      },
+      "tcrn-workflow": {
+        "command": "node",
+        "args": [
+          "<local-home>/.tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs",
+          "--authority-pins",
+          "<local-home>/.tcrn-workflow/live/tcrn-platform/authority/operator-authority-pins.json",
+          "--authority-pins-digest",
+          "d25ebfc1cb47310d27bdeba4749fe5728b089188a7338d6a89cfe86f1c5d5ce9"
+        ]
+      },
+      "tcrn-workflow-aos-read": {
+        "command": "node",
+        "args": [
+          "<local-platform-root>/TCRN-AOS/deploy/aos-local-client/remote-read-mcp.mjs"
+        ]
+      }
+    },
+    "codexSpecs": {
+      "codegraph": {
+        "command": "<local-home>/.nvm/versions/node/v24.16.0/bin/pnpm",
+        "args": [
+          "--dir",
+          "<local-platform-root>/TCRN-TMS",
+          "exec",
+          "codegraph",
+          "serve",
+          "--mcp",
+          "--no-watch"
+        ]
+      },
+      "computer-use": {
+        "command": "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient",
+        "args": [
+          "mcp"
+        ]
+      },
+      "node_repl": {
+        "command": "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl",
+        "args": []
+      },
+      "tcrn-workflow": {
+        "command": "node",
+        "args": [
+          "<local-home>/.tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs",
+          "--authority-pins",
+          "<local-home>/.tcrn-workflow/live/tcrn-platform/authority/operator-authority-pins.json",
+          "--authority-pins-digest",
+          "d25ebfc1cb47310d27bdeba4749fe5728b089188a7338d6a89cfe86f1c5d5ce9"
+        ]
+      }
+    },
+    "codex": [
+      "codegraph",
+      "computer-use",
+      "node_repl",
+      "tcrn-workflow"
+    ],
+    "claudeSkills": [
+      "animation-vocabulary",
+      "apple-design",
+      "emil-design-eng",
+      "find-animation-opportunities",
+      "improve-animations",
+      "review-animations",
+      "tcrn-workflow-helper"
+    ]
+  },
+  "identityControl": {
+    "id": "IDENTITY_MUTATION",
+    "why": "不改任何输入时，红侧机构必须复现活判定——这是「判据两侧能够不同」的那一侧。",
+    "judgeId": "aos.instrument-parity.judgeParity.v2",
+    "wentRed": false,
+    "reasonCode": "PARITY_VERIFIED",
+    "defectCodes": [],
+    "named": [],
+    "defectCount": 0,
+    "raisedExpectedCodes": true,
+    "namedExpectedServer": true,
+    "expected": {
+      "defectCodes": [],
+      "server": null
+    }
+  },
+  "reds": [
+    {
+      "id": "UNALLOWLISTED_DRIFT_MUST_RED",
+      "why": "一侧新增一个另一侧没有、也无豁免的平台服务器：真实漂移，必须红并点名它。",
+      "judgeId": "aos.instrument-parity.judgeParity.v2",
+      "wentRed": true,
+      "reasonCode": "PARITY_DRIFT_DETECTED",
+      "defectCodes": [
+        "UNALLOWLISTED_GAP"
+      ],
+      "named": [
+        "codegraph-xyz"
+      ],
+      "defectCount": 1,
+      "raisedExpectedCodes": true,
+      "namedExpectedServer": true,
+      "expected": {
+        "defectCodes": [
+          "UNALLOWLISTED_GAP"
+        ],
+        "server": "codegraph-xyz"
+      }
+    },
+    {
+      "id": "ALLOWLIST_ENTRY_DROPPED_MUST_RED",
+      "why": "白名单少记一条(codegraph-ds 的缺口不再被豁免)：缺口立刻现形，说明绿不是白名单撑出来的。",
+      "judgeId": "aos.instrument-parity.judgeParity.v2",
+      "wentRed": true,
+      "reasonCode": "PARITY_DRIFT_DETECTED",
+      "defectCodes": [
+        "UNALLOWLISTED_GAP"
+      ],
+      "named": [
+        "codegraph-ds"
+      ],
+      "defectCount": 1,
+      "raisedExpectedCodes": true,
+      "namedExpectedServer": true,
+      "expected": {
+        "defectCodes": [
+          "UNALLOWLISTED_GAP"
+        ],
+        "server": "codegraph-ds"
+      }
+    },
+    {
+      "id": "ALLOWLISTED_SERVER_VANISHED_BOTH_SIDES_MUST_RED",
+      "why": "INC-036 缺陷 2 的回归：把被豁免的 codegraph-ds 从 Claude 侧也删掉。旧判据下对称缺口消失、门恒绿；现在豁免本身断言它必须在 Claude 侧存在。",
+      "judgeId": "aos.instrument-parity.judgeParity.v2",
+      "wentRed": true,
+      "reasonCode": "PARITY_DRIFT_DETECTED",
+      "defectCodes": [
+        "ALLOWLIST_ENTRY_VANISHED",
+        "ANCHOR_SERVER_MISSING"
+      ],
+      "named": [
+        "codegraph-ds"
+      ],
+      "defectCount": 2,
+      "raisedExpectedCodes": true,
+      "namedExpectedServer": true,
+      "expected": {
+        "defectCodes": [
+          "ALLOWLIST_ENTRY_VANISHED",
+          "ANCHOR_SERVER_MISSING"
+        ],
+        "server": "codegraph-ds"
+      }
+    },
+    {
+      "id": "ALLOWLIST_DIRECTION_FLIPPED_MUST_RED",
+      "why": "被豁免的服务器改成只在 Codex 侧存在：名字仍匹配，但方向反了，旧的按名豁免会放行。",
+      "judgeId": "aos.instrument-parity.judgeParity.v2",
+      "wentRed": true,
+      "reasonCode": "PARITY_DRIFT_DETECTED",
+      "defectCodes": [
+        "ALLOWLIST_DIRECTION_MISMATCH",
+        "ALLOWLIST_ENTRY_VANISHED",
+        "ANCHOR_SERVER_MISSING"
+      ],
+      "named": [
+        "codegraph-ds"
+      ],
+      "defectCount": 3,
+      "raisedExpectedCodes": true,
+      "namedExpectedServer": true,
+      "expected": {
+        "defectCodes": [
+          "ALLOWLIST_DIRECTION_MISMATCH",
+          "ALLOWLIST_ENTRY_VANISHED"
+        ],
+        "server": "codegraph-ds"
+      }
+    },
+    {
+      "id": "PLACEHOLDER_IN_SPEC_MUST_RED",
+      "why": "INC-036 缺陷 4：把 codegraph-aos 的 --path 换成 <local-home>/… 这类没填写的占位符。",
+      "judgeId": "aos.instrument-parity.judgeParity.v2",
+      "wentRed": true,
+      "reasonCode": "PARITY_DRIFT_DETECTED",
+      "defectCodes": [
+        "SPEC_PLACEHOLDER"
+      ],
+      "named": [
+        "codegraph-aos"
+      ],
+      "defectCount": 1,
+      "raisedExpectedCodes": true,
+      "namedExpectedServer": true,
+      "expected": {
+        "defectCodes": [
+          "SPEC_PLACEHOLDER"
+        ],
+        "server": "codegraph-aos"
+      }
+    },
+    {
+      "id": "DANGLING_PATH_IN_SPEC_MUST_RED",
+      "why": "INC-036 缺陷 4：--path 指向一个不存在的目录——服务器名齐全，但它根本起不来。",
+      "judgeId": "aos.instrument-parity.judgeParity.v2",
+      "wentRed": true,
+      "reasonCode": "PARITY_DRIFT_DETECTED",
+      "defectCodes": [
+        "SPEC_PATH_NOT_A_DIRECTORY"
+      ],
+      "named": [
+        "codegraph-aos"
+      ],
+      "defectCount": 1,
+      "raisedExpectedCodes": true,
+      "namedExpectedServer": true,
+      "expected": {
+        "defectCodes": [
+          "SPEC_PATH_NOT_A_DIRECTORY"
+        ],
+        "server": "codegraph-aos"
+      }
+    },
+    {
+      "id": "CODEX_SIDE_SPEC_EMPTY_MUST_RED",
+      "why": "Codex 侧的规格同样被读：清空 codegraph 的 command，归一后以 codegraph-tms 之名判红。",
+      "judgeId": "aos.instrument-parity.judgeParity.v2",
+      "wentRed": true,
+      "reasonCode": "PARITY_DRIFT_DETECTED",
+      "defectCodes": [
+        "SPEC_COMMAND_EMPTY"
+      ],
+      "named": [
+        "codegraph-tms"
+      ],
+      "defectCount": 1,
+      "raisedExpectedCodes": true,
+      "namedExpectedServer": true,
+      "expected": {
+        "defectCodes": [
+          "SPEC_COMMAND_EMPTY"
+        ],
+        "server": "codegraph-tms"
+      }
+    }
+  ],
+  "observedAt": "2026-08-05T08:48:21Z"
+}

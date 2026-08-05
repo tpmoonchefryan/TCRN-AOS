@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INC-042",
+  "intent": "追加订正 INC-042 首条注解的「仓可见性」段:Owner 指出匿名探针的知识漏洞,认证探针(gh)定案 TCRN-AOS 存在且 PRIVATE;原「Not Found/不可公开读取」的表述以本条如实更正,原注解按事件只增不改原样保留。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:1d43a1c525d3e3317dd73114",
+        "scope": "【订正(2026-08-05,审查层;由 Owner 当场纠正)】本单首条注解「仓可见性」段的探针有方法缺陷,现以认证探针定案。**事实**:TCRN-AOS 仓存在,visibility=PRIVATE(gh repo view tpmoonchefryan/TCRN-AOS --json visibility,isPrivate;认证身份 tpmoonchefryan;pushed_at 2026-08-04T12:48:50Z);TCRN-TMS 补测为 PUBLIC。**方法缺陷**:原注解引用匿名 curl 并写「对未认证请求返回 Not Found」——GitHub 对私有仓的未认证请求**刻意**返回 404 以不泄露存在性,故该探针在「私有」与「不存在」两个世界给出同一读数,是一支两侧无法不同的探针;而本机 gh 登录态一直存在,权威探针只有一条命令之遥。**存留与更正**:原文「今日不可公开读取」仍成立(private 蕴含之);「变更原因需 Owner 确认」已由 Owner 答复厘清——该仓即 AOS 正仓,现为私有;平台记忆「AOS 全历史公开」(INIT-012)作为历史事件成立、作为当下状态不成立。**对处置的影响**:AOS 侧文件暴露面因私有而降低,但清洗处置不降级(可见性是可随时翻转的开关,且该仓历史曾经公开);tcrn-workflow/DS/TMS 三仓面向公开仓,原判维持。settings 可移植化的五仓范围不变。**复核命令(须认证身份)**:gh repo view <owner>/<repo> --json visibility --jq .visibility。**教训已入平台记忆**:对存在性/可见性下结论前先选定探针身份;有登录态的 CLI 才是权威源。",
+        "decided-by": "minutes:19dcee70c40e4d819d13b38a",
+        "actor": "agent:fable"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:1d43a1c525d3e3317dd73114" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-INC-042", "kind": "Incident", "status": "planned" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

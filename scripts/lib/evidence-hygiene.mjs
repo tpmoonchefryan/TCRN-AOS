@@ -1,4 +1,5 @@
-// Evidence hygiene: no artifact in evidence/ may carry a path off this machine.
+// Evidence hygiene: no artifact this repository publishes may carry a path off
+// this machine.
 //
 // TCRN-AOS-INC-037. Two receipts (evidence/aos-domain-backup.json and
 // evidence/aos-paired-backup.json) shipped this laptop's home directory and the
@@ -10,12 +11,21 @@
 // This module is BOTH sides of that:
 //   - `scrubHostPaths` is what the emitters call before writing a receipt, so
 //     new evidence is born clean;
-//   - `scanEvidenceTree` is what the test gate calls, so evidence that got in
+//   - `scanGuardedFiles` is what the test gate calls, so evidence that got in
 //     some other way is caught.
 // One file, so the shape a path is scrubbed INTO can never drift from the shape
 // the scanner looks FOR.
+//
+// The scanner's SCOPE is the second thing that can drift, and it did.
+// TCRN-CROSS-INC-034 moved INIT-018's 154 evidence files out of evidence/ and
+// into docs/reports/init-018/. The gate's scope was the hardcoded string
+// "evidence", so it kept reading an emptier and emptier tree while ~40 files
+// carrying host paths sat one directory over, unignored and one `git add` away
+// from a public repository — and the suite stayed green throughout. A gate keyed
+// to a directory NAME loses to `mv`. `listGuardedFiles` below is therefore keyed
+// to where guarded bytes can actually be, not to where they were in July.
 
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -178,16 +188,19 @@ export function scrubHostPaths(value) {
   return value;
 }
 
+/** Whether the gate reads this path at all. A question about kind, not place. */
+export function isScannablePath(path) {
+  return SCANNED_EXTENSIONS.some((extension) => path.endsWith(extension));
+}
+
 /** Every scannable file under `root`, repo-relative, sorted. */
-export function listEvidenceFiles(root = join(REPO_ROOT, "evidence")) {
+export function listEvidenceFiles(root = join(REPO_ROOT, "evidence"), repoRoot = REPO_ROOT) {
   const found = [];
   const walk = (directory) => {
     for (const name of readdirSync(directory).sort()) {
       const full = join(directory, name);
       if (statSync(full).isDirectory()) { walk(full); continue; }
-      if (SCANNED_EXTENSIONS.some((extension) => name.endsWith(extension))) {
-        found.push(relative(REPO_ROOT, full));
-      }
+      if (isScannablePath(name)) found.push(relative(repoRoot, full));
     }
   };
   walk(root);
@@ -195,22 +208,89 @@ export function listEvidenceFiles(root = join(REPO_ROOT, "evidence")) {
 }
 
 /**
- * Which evidence paths git tracks.
+ * Every path git has in its index, repo-relative and sorted.
  *
  * Read from git rather than from the filesystem because "tracked" is the whole
- * question an exception below turns on, and only git can answer it. A failure
- * to ask is fatal on purpose: an exception that cannot be checked is an
- * exception that does not hold.
+ * question both the scope below and the pending exceptions turn on, and only git
+ * can answer it. A failure to ask is fatal on purpose: a condition that cannot
+ * be checked is a condition that does not hold.
+ *
+ * The pathspec is the whole repository. It used to be `evidence`, which quietly
+ * made the trackedness condition unfalsifiable for any path outside that
+ * directory: `trackedUnder("docs/reports/x")` returned empty however thoroughly
+ * git tracked it. `--full-name` so the answer does not depend on the directory
+ * the call was made from.
  */
-export function trackedEvidencePaths(cwd = REPO_ROOT) {
-  const raw = execFileSync("git", ["ls-files", "-z", "--", "evidence"], { cwd, encoding: "utf8" });
-  return new Set(raw.split("\0").filter((entry) => entry.length > 0));
+export function trackedPaths(cwd = REPO_ROOT) {
+  const raw = execFileSync("git", ["ls-files", "-z", "--full-name", "--", "."], { cwd, encoding: "utf8" });
+  return raw.split("\0").filter((entry) => entry.length > 0).sort();
 }
 
-/** Per-file findings over the whole evidence tree. */
-export function scanEvidenceTree(root = join(REPO_ROOT, "evidence")) {
-  return listEvidenceFiles(root)
-    .map((path) => ({ path, hits: findHostPaths(readFileSync(join(REPO_ROOT, path), "utf8")) }))
+/**
+ * Every file the gate reads — the union of the two places guarded bytes live,
+ * each read the way that place can honestly be read.
+ *
+ *   1. The working tree under evidence/, tracked or not. An artifact written
+ *      into evidence/ and not yet added is exactly the file this gate must see,
+ *      and an index-derived list is blind to it by construction.
+ *
+ *   2. Every git-tracked scannable file, ANYWHERE in the repository. This is the
+ *      half that survives a move: it does not name docs/reports/, it names
+ *      "whatever this repository is about to publish", so the next INC-034 does
+ *      not walk out from under it.
+ *
+ * Why (2) is index-derived when (1) is not — this is the load-bearing choice.
+ * Reading (2) from the working tree instead would be strictly stronger and it
+ * was measured: it is RED TODAY, 42 files and 488 hits under docs/reports/
+ * init-018/ alone. A gate that is red on the day it is written does not get
+ * obeyed, it gets switched off, and the platform has the scar tissue to prove it
+ * ("a gate's predicate must be satisfiable in every world it will be evaluated
+ * in" — the pending list below exists because v1 of it was not). Tracked-only is
+ * green today and turns red the instant somebody `git add`s such a file, which
+ * is the last moment before the bytes can reach history — and history is what
+ * the hygiene obligation was always about. `git ls-files` answers from the
+ * index, so a staged-but-uncommitted file is already listed (verified against a
+ * throwaway repository, TCRN-CROSS-INC-034 follow-up); the gate fires between
+ * `add` and `commit`, not after.
+ *
+ * The redaction backlog under docs/reports/ is a separate ticket. This function
+ * is the thing that will notice if anyone tries to commit it unredacted.
+ *
+ * Note what scope is doing here that the detector cannot. `/Users/<you>/…`,
+ * `/Users/$USER/…` and `/Users/someone/…` are deliberate test fixtures — the
+ * corpus deploy/aos-local-client/parity-proof.mjs checks itself against — and
+ * `findHostPaths` flags all three, as it must: `/Users/someone` is the
+ * home-directory rule's own `rehydratesTo` example, which a test requires to be
+ * detected. So the fixtures are kept out of the gate by not being IN SCOPE
+ * (`.mjs` is not a scanned kind), never by teaching the detector to look away.
+ * Widening SCANNED_EXTENSIONS is therefore not a free improvement; it must be
+ * measured against that corpus first.
+ */
+export function listGuardedFiles({
+  repoRoot = REPO_ROOT,
+  evidenceRoot = join(repoRoot, "evidence"),
+  tracked
+} = {}) {
+  const indexed = tracked ?? trackedPaths(repoRoot);
+  const files = new Set(indexed.filter(isScannablePath));
+  for (const path of listEvidenceFiles(evidenceRoot, repoRoot)) files.add(path);
+  return [...files].sort();
+}
+
+/**
+ * Per-file findings over every guarded file.
+ *
+ * A tracked path with no file behind it (deleted in the working tree, deletion
+ * not staged) is skipped rather than fatal: there are no bytes here to inspect.
+ * The residue is that a leak living only in a staged blob whose working-tree
+ * copy was deleted goes unseen — narrow, and named here rather than left to be
+ * discovered.
+ */
+export function scanGuardedFiles(options = {}) {
+  const repoRoot = options.repoRoot ?? REPO_ROOT;
+  return listGuardedFiles({ ...options, repoRoot })
+    .filter((path) => existsSync(join(repoRoot, path)))
+    .map((path) => ({ path, hits: findHostPaths(readFileSync(join(repoRoot, path), "utf8")) }))
     .filter((entry) => entry.hits.length > 0);
 }
 

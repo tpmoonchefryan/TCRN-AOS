@@ -42,6 +42,7 @@ import {
   assertPayload, catalogueIndex, judgeReadback, planStep, resolveExpectations
 } from "./ceremony-plan.mjs";
 import { scrubHostPathsInText } from "../../scripts/lib/evidence-hygiene.mjs";
+import { emitCeremonySpan } from "./ceremony-spans.mjs";
 
 const sha256Text = (text) => createHash("sha256").update(Buffer.from(text, "utf8")).digest("hex");
 const instant = () => new Date().toISOString().replace(/\.\d+Z$/u, "Z");
@@ -111,8 +112,10 @@ export async function readChainHead(workspace = VM_WORKSPACE) {
 export async function runCeremony({ payloadPath, dryRun = false, partition = "TCRN-AOS" }) {
   const payloadText = readFileSync(payloadPath, "utf8");
   const payload = JSON.parse(payloadText);
+  emitCeremonySpan({ span: "ceremony.start", partition, outcome: "started" });
   const admission = assertPayload(payload);
   if (!admission.ok) {
+    emitCeremonySpan({ span: "ceremony.refused", partition, outcome: "refused", reasonCode: admission.reasonCode });
     return { ok: false, reasonCode: admission.reasonCode, problems: admission.problems };
   }
 
@@ -125,6 +128,7 @@ export async function runCeremony({ payloadPath, dryRun = false, partition = "TC
 
   const catalogueResult = await remoteEngine(["commands"]);
   if (!catalogueResult.accepted) {
+    emitCeremonySpan({ span: "ceremony.refused", partition, outcome: "refused", reasonCode: "HOST_CATALOGUE_UNAVAILABLE" });
     return { ok: false, reasonCode: "HOST_CATALOGUE_UNAVAILABLE", detail: catalogueResult.reasonCode };
   }
   const commands = catalogueResult.json.commands ?? catalogueResult.json.result?.commands ?? [];
@@ -171,6 +175,7 @@ export async function runCeremony({ payloadPath, dryRun = false, partition = "TC
     const head = step.readHeadFirst === false ? receipt.chainBefore : await readChainHead(target.workspace);
     const plan = planStep({ step, catalogue, supply, chainVersion: head.version, at: instant() });
     if (!plan.ok) {
+      emitCeremonySpan({ span: "ceremony.refused", partition, verb: plan.verb ?? null, expectedVersion: head.version, outcome: "refused", reasonCode: plan.reasonCode });
       receipt.steps.push({ ...plan, headAtPlanning: head.version });
       receipt.ok = false;
       receipt.reasonCode = plan.reasonCode;
@@ -212,6 +217,7 @@ export async function runCeremony({ payloadPath, dryRun = false, partition = "TC
       raw: result.raw
     });
     if (!result.accepted) {
+      emitCeremonySpan({ span: "ceremony.refused", partition, verb: step.verb, expectedVersion: head.version, outcome: "refused", reasonCode: "STEP_REFUSED_BY_HOST_ENGINE" });
       receipt.ok = false;
       receipt.reasonCode = "STEP_REFUSED_BY_HOST_ENGINE";
       receipt.chainAfter = await readChainHead(target.workspace);
@@ -222,6 +228,7 @@ export async function runCeremony({ payloadPath, dryRun = false, partition = "TC
   for (const step of payload.readback) {
     const plan = planStep({ step, catalogue, supply, chainVersion: null, at: instant() });
     if (!plan.ok) {
+      emitCeremonySpan({ span: "ceremony.refused", partition, verb: step.verb, outcome: "refused", reasonCode: plan.reasonCode });
       receipt.readback.push(plan);
       receipt.ok = false;
       receipt.reasonCode = plan.reasonCode;
@@ -240,6 +247,7 @@ export async function runCeremony({ payloadPath, dryRun = false, partition = "TC
     const record = result.json === null ? null : { ...result.json.advisory, ...result.json.record };
     const { expected, problems } = resolveExpectations({ step, steps: payload.steps });
     if (problems.length > 0) {
+      emitCeremonySpan({ span: "ceremony.refused", partition, verb: step.verb, outcome: "refused", reasonCode: "EXPECTATION_UNRESOLVABLE" });
       receipt.readback.push({ ...plan, executed: true, reasonCode: "EXPECTATION_UNRESOLVABLE", problems });
       receipt.ok = false;
       receipt.reasonCode = "EXPECTATION_UNRESOLVABLE";
@@ -257,11 +265,13 @@ export async function runCeremony({ payloadPath, dryRun = false, partition = "TC
         : undefined
     });
     if (!result.accepted || verdict.ok === false) {
+      emitCeremonySpan({ span: "ceremony.refused", partition, verb: step.verb, outcome: "refused", reasonCode: !result.accepted ? "READBACK_REFUSED" : "READBACK_DIVERGENT" });
       receipt.ok = false;
       receipt.reasonCode = !result.accepted ? "READBACK_REFUSED" : "READBACK_DIVERGENT";
       receipt.chainAfter = await readChainHead(target.workspace);
       return receipt;
     }
+    emitCeremonySpan({ span: "ceremony.readback", partition, verb: step.verb, outcome: "ok" });
   }
 
   receipt.chainAfter = await readChainHead(target.workspace);
@@ -269,6 +279,7 @@ export async function runCeremony({ payloadPath, dryRun = false, partition = "TC
   receipt.ok = true;
   receipt.reasonCode = dryRun ? "CEREMONY_PLANNED_ONLY" : "CEREMONY_COMPLETED_AND_READ_BACK";
   receipt.finishedAt = instant();
+  emitCeremonySpan({ span: "ceremony.end", partition, outcome: "ok", reasonCode: receipt.reasonCode });
   return receipt;
 }
 

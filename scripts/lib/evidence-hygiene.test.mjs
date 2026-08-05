@@ -1,40 +1,133 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
   HOST_PATH_RULES, REPO_ROOT,
-  findHostPaths, findPlaceholders, listEvidenceFiles, rehydrateHostPaths, scanEvidenceTree,
-  pendingClosureViolations, scrubHostPaths, scrubHostPathsInText, trackedEvidencePaths
+  findHostPaths, findPlaceholders, isScannablePath, listEvidenceFiles, listGuardedFiles,
+  rehydrateHostPaths, scanGuardedFiles,
+  pendingClosureViolations, scrubHostPaths, scrubHostPathsInText, trackedPaths
 } from "./evidence-hygiene.mjs";
 
 /**
  * The evidence-hygiene gate (TCRN-AOS-INC-037).
  *
- * Nothing in evidence/ may carry a path off this machine. The drift it exists
- * for was real and unwatched: two backup receipts shipped this laptop's home
- * directory and the platform root, and the only reason anybody noticed was a
+ * Nothing this repository publishes may carry a path off this machine. The drift
+ * it exists for was real and unwatched: two backup receipts shipped this laptop's
+ * home directory and the platform root, and the only reason anybody noticed was a
  * hand review. A gate that nobody wrote is a gate that lives exactly as long as
  * the day it was needed.
+ *
+ * And a gate whose SCOPE nobody re-checks lives exactly as long as the directory
+ * layout it was written against — see the scope tests below (TCRN-CROSS-INC-034).
  */
 
 const PENDING = JSON.parse(readFileSync(join(REPO_ROOT, "scripts/lib/evidence-hygiene-pending.json"), "utf8"));
 const pendingPaths = PENDING.entries.map((entry) => entry.path);
 const isPending = (path) => pendingPaths.some((prefix) => path === prefix || path.startsWith(`${prefix}/`));
 
-test("no evidence artifact carries a path off this machine", () => {
-  const files = listEvidenceFiles();
-  // The scan set is read from the filesystem, not from `git ls-files`: a file
-  // written into evidence/ and not yet added is exactly the file this gate must
-  // see, and an index-derived list is blind to it by construction.
-  assert.ok(files.length > 40, `the scan must actually cover the tree (saw ${files.length} files)`);
+/** A throwaway repo-shaped directory. Never the real repository, never `git add`. */
+function withScratchRoot(body) {
+  const root = mkdtempSync(join(tmpdir(), "aos-evidence-hygiene-"));
+  mkdirSync(join(root, "evidence"), { recursive: true });
+  try { return body(root); } finally { rmSync(root, { recursive: true, force: true }); }
+}
 
-  const offenders = scanEvidenceTree().filter((entry) => !isPending(entry.path));
+test("no published artifact carries a path off this machine", () => {
+  // Two scan sources, each read the way its half can honestly be read: the
+  // working tree under evidence/ (a file written there and not yet added is
+  // exactly what this gate must see, and an index-derived list is blind to it),
+  // plus every tracked scannable file repository-wide (the half that survives a
+  // move). Both floors asserted, so neither half can silently empty out.
+  const evidence = listEvidenceFiles();
+  assert.ok(evidence.length > 40, `the evidence walk must actually cover the tree (saw ${evidence.length} files)`);
+  const guarded = listGuardedFiles();
+  assert.ok(guarded.length >= evidence.length, "the guarded set must contain the evidence tree");
+  assert.ok(guarded.some((path) => !path.startsWith("evidence/")),
+    "the scope must reach outside evidence/ — that hardcoded prefix is the whole defect");
+
+  const offenders = scanGuardedFiles().filter((entry) => !isPending(entry.path));
   assert.deepEqual(
     offenders.map((entry) => `${entry.path}: ${entry.hits[0].rule} @ line ${entry.hits[0].line} (${entry.hits[0].sample})`),
     [],
-    "evidence artifacts must be redacted before they are committed — see scripts/lib/evidence-hygiene.mjs"
+    "artifacts must be redacted before they are committed — see scripts/lib/evidence-hygiene.mjs"
   );
+});
+
+test("the scope follows the evidence, including to docs/reports/", () => {
+  // TCRN-CROSS-INC-034 moved INIT-018's evidence to docs/reports/init-018/ and
+  // the gate did not follow, because its scope was the literal string
+  // "evidence". Asserted here as a property of the scope rather than against
+  // today's tree: docs/reports/ carries no tracked file yet, so a membership
+  // check against reality would be vacuous today and would start passing for the
+  // wrong reason tomorrow.
+  const moved = "docs/reports/init-018/S2/notes.md";
+  assert.ok(isScannablePath(moved), "a report under docs/reports/ is a kind the gate reads");
+  withScratchRoot((root) => {
+    assert.ok(listGuardedFiles({ repoRoot: root, tracked: [moved] }).includes(moved),
+      "a tracked file under docs/reports/ must be in scope");
+    assert.ok(listGuardedFiles({ repoRoot: root, tracked: ["deploy/aos-local-client/payloads/x.json"] })
+      .includes("deploy/aos-local-client/payloads/x.json"),
+      "the scope is not a list of two directories either — it is every tracked scannable file");
+  });
+
+  // Against reality, the containment that makes the above more than a unit test:
+  // everything git tracks and the gate can read is in the real scan set.
+  const scope = listGuardedFiles();
+  const missing = trackedPaths().filter(isScannablePath).filter((path) => !scope.includes(path));
+  assert.deepEqual(missing, [], "every tracked scannable file must be in scope");
+});
+
+test("a real host path inside the new scope turns the gate red and names the file", () => {
+  // Fed real input, not a removed predicate: the same bytes on disk are red under
+  // the new scope and invisible under the old one, and the ONLY difference
+  // between the two runs is the scope.
+  withScratchRoot((root) => {
+    const leaked = "docs/reports/init-018/S9/notes.md";
+    mkdirSync(join(root, "docs/reports/init-018/S9"), { recursive: true });
+    // A foreign home, not this machine's: the fixture must match the platform-root
+    // rule without writing a real username into a public repository. Measured
+    // equivalent — same rule, same line — and .mjs is outside SCANNED_EXTENSIONS,
+    // so the gate itself could not have caught the real one here.
+    writeFileSync(join(root, leaked),
+      "line one\nran from /Users/someone/Code/TCRN Platform/TCRN-AOS and it worked\n", "utf8");
+
+    // `tracked` is injected rather than produced by `git add`: it stands in for
+    // exactly what `git ls-files` returns once the file is staged, which was
+    // verified separately against a throwaway repository.
+    const red = scanGuardedFiles({ repoRoot: root, tracked: [leaked] });
+    assert.deepEqual(red.map((entry) => entry.path), [leaked], "the offending file must be named");
+    assert.equal(red[0].hits[0].rule, "platform-root");
+    assert.equal(red[0].hits[0].line, 2, "the offending line must be named");
+
+    // The pre-fix scope, same bytes: nothing. This is what shipped green.
+    assert.deepEqual(scanGuardedFiles({ repoRoot: root, tracked: [] }), [],
+      "the old evidence/-only scope saw none of this — that is the defect being fixed");
+  });
+});
+
+test("the placeholder corpus is kept safe by scope, never by a softened detector", () => {
+  // `/Users/<you>/…`, `/Users/$USER/…` and `/Users/someone/…` are deliberate
+  // fixtures — INC-036 defect 4's detection corpus in
+  // deploy/aos-local-client/parity-proof.mjs. They must never be reported as a
+  // leak, and the detector is NOT the thing that spares them: it flags all three,
+  // as it must, since `/Users/someone` is the home-directory rule's own
+  // rehydration example that another test requires to be detected. What spares
+  // them is that `.mjs` is not a kind the gate reads. Both halves asserted, so a
+  // future widening of SCANNED_EXTENSIONS cannot quietly turn the corpus red.
+  for (const fixture of ["/Users/<you>/Code/TCRN Platform/x", "/Users/$USER/x", "/Users/someone/x"]) {
+    assert.ok(findHostPaths(fixture).length > 0,
+      `${fixture} must still be detected — sparing it in the detector would blind the gate to real leaks`);
+  }
+  const corpus = ["deploy/aos-local-client/parity-proof.mjs", "deploy/aos-local-client/parity-proof.test.mjs"];
+  for (const path of corpus) assert.equal(isScannablePath(path), false, `${path} must not be a scanned kind`);
+  withScratchRoot((root) => {
+    assert.deepEqual(listGuardedFiles({ repoRoot: root, tracked: corpus }), [],
+      "the corpus must be out of scope even when git tracks it");
+  });
+  assert.deepEqual(listGuardedFiles().filter((path) => path.endsWith(".mjs")), [],
+    "no source file is in scope in the real repository either");
 });
 
 const DIGEST = /^[0-9a-f]{64}$/u;
@@ -200,8 +293,11 @@ test("scrubbing rewrites paths and nothing else", () => {
 
 /** The probes the closure conditions are really about, read from this checkout. */
 function liveProbes() {
-  const tracked = trackedEvidencePaths();
-  const findings = scanEvidenceTree();
+  // Repository-wide, not `git ls-files -- evidence`: the trackedness condition
+  // was previously unfalsifiable for any pending path outside evidence/, which
+  // is the same scope defect one function over.
+  const tracked = trackedPaths();
+  const findings = scanGuardedFiles();
   return {
     exists: (path) => existsSync(join(REPO_ROOT, path)),
     trackedUnder: (path) => [...tracked].filter((entry) => entry === path || entry.startsWith(`${path}/`)),

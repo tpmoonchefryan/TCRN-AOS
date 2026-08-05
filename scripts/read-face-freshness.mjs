@@ -72,7 +72,13 @@
 // TCRN-AOS-INC-049 part C is what schedules the call.
 //
 // Usage:
-//   node scripts/read-face-freshness.mjs [--out <path>]
+//   node scripts/read-face-freshness.mjs [--out <path>] [--max-age-hours <n>]
+//
+// Flags:
+//   --max-age-hours <n>                override the freshness window (default 9).
+//                                      Highest precedence: a value given on the
+//                                      command line beats AOS_READ_FACE_MAX_DATA_AGE_HOURS,
+//                                      which beats the built-in default.
 //
 // Environment:
 //   AOS_READ_FACE_URL                  base URL of the read face; defaults to the
@@ -81,7 +87,8 @@
 //                                      Empty or blank is treated as unset, and any
 //                                      trailing slashes are trimmed.
 //   AOS_READ_FACE_MAX_DATA_AGE_HOURS   override the freshness window (testing, and
-//                                      the red proof).
+//                                      the red proof). Lower precedence than the
+//                                      --max-age-hours flag.
 //
 // Exit codes — 0 fresh · 1 RED · 2 could not judge, never a silent pass:
 //   0  the data asset and the shell were both served, both carry the stamp, they
@@ -100,13 +107,17 @@ import { HOST_PATH_RULES, scrubHostPaths, scrubHostPathsInText } from "./lib/evi
 /**
  * How old the served snapshot may be before this gate is red.
  *
- * 48 hours = two full days. Long enough that one skipped refresh over a weekend is
- * not an alert; short enough that no reader is ever handed last week's board as if
- * it were the platform's state. It is a POLICY number and a ruling may move it —
- * what this gate fixes is the mechanism, that staleness is measured on served bytes
- * at all.
+ * 9 hours = two refresh shifts plus an hour. The refresh scheduler runs a 4-hourly
+ * shift, so a 48-hour window let eleven missed shifts pass the gate while the read
+ * face silently showed a week-old board (TCRN-AOS-INC-051, measured 7.23h of
+ * staleness judged fresh with zero findings). 9h is short enough that a missed
+ * overnight shift is caught by the next run, and still leaves headroom for a single
+ * deliberately-skipped shift over a weekend without alerting. It is a POLICY number
+ * and a ruling may move it — `--max-age-hours <n>` and
+ * AOS_READ_FACE_MAX_DATA_AGE_HOURS exist precisely so the gate can be run at a
+ * window the operator chose, and so its red can be proven.
  */
-const DEFAULT_MAX_DATA_AGE_HOURS = 48;
+const DEFAULT_MAX_DATA_AGE_HOURS = 9;
 
 /**
  * How far into the future a stamp may sit before it is a finding.
@@ -231,6 +242,7 @@ function redactForEmission(text) {
 
 function parseArguments(argv) {
   let out = null;
+  let maxAgeHours = null;
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     if (argument === "--out") {
@@ -244,30 +256,52 @@ function parseArguments(argv) {
       if (!out) throw new Error("--out= needs a path");
       continue;
     }
-    throw new Error(`unknown argument ${JSON.stringify(argument)}; usage: read-face-freshness.mjs [--out <path>]`);
+    if (argument === "--max-age-hours") {
+      maxAgeHours = argv[index + 1];
+      index += 1;
+      if (maxAgeHours === undefined) throw new Error("--max-age-hours needs a number");
+      continue;
+    }
+    if (argument.startsWith("--max-age-hours=")) {
+      maxAgeHours = argument.slice("--max-age-hours=".length);
+      if (maxAgeHours === "") throw new Error("--max-age-hours= needs a number");
+      continue;
+    }
+    throw new Error(`unknown argument ${JSON.stringify(argument)}; usage: read-face-freshness.mjs [--out <path>] [--max-age-hours <n>]`);
   }
-  return { out };
+  return { out, maxAgeHours };
 }
 
 /**
  * The freshness window, and where it came from.
  *
- * A malformed override throws rather than falling back to the default: a gate whose
- * threshold silently reverts cannot be trusted to have run at the threshold you
- * asked for, and the whole point of the override is to run it at a threshold you
+ * Precedence is command line, then environment, then the built-in default — a
+ * flag the operator typed on this invocation is the most specific thing to say,
+ * and it must beat a value the environment carried in. A malformed override
+ * throws rather than falling back to the default: a gate whose threshold
+ * silently reverts cannot be trusted to have run at the threshold you asked
+ * for, and the whole point of the override is to run it at a threshold you
  * chose (that is how this gate's red is proven).
  */
-function resolveMaxAgeHours(environment) {
-  const raw = environment.AOS_READ_FACE_MAX_DATA_AGE_HOURS;
-  if (raw === undefined || raw === "") {
-    return { maxAgeHours: DEFAULT_MAX_DATA_AGE_HOURS, maxAgeSource: "default" };
-  }
+function parsePositiveHours(raw, source) {
+  if (raw === null || raw === undefined || raw === "") return null;
   const parsed = Number(raw);
   if (!Number.isFinite(parsed) || parsed <= 0) {
-    throw new Error(
-      `AOS_READ_FACE_MAX_DATA_AGE_HOURS=${JSON.stringify(raw)} is not a positive number of hours`);
+    throw new Error(`${source}=${JSON.stringify(raw)} is not a positive number of hours`);
   }
-  return { maxAgeHours: parsed, maxAgeSource: "env:AOS_READ_FACE_MAX_DATA_AGE_HOURS" };
+  return parsed;
+}
+
+function resolveMaxAgeHours(environment, cliOverride) {
+  const cliValue = parsePositiveHours(cliOverride, "--max-age-hours");
+  if (cliValue !== null) {
+    return { maxAgeHours: cliValue, maxAgeSource: "flag:--max-age-hours" };
+  }
+  const envValue = parsePositiveHours(environment.AOS_READ_FACE_MAX_DATA_AGE_HOURS, "AOS_READ_FACE_MAX_DATA_AGE_HOURS");
+  if (envValue !== null) {
+    return { maxAgeHours: envValue, maxAgeSource: "env:AOS_READ_FACE_MAX_DATA_AGE_HOURS" };
+  }
+  return { maxAgeHours: DEFAULT_MAX_DATA_AGE_HOURS, maxAgeSource: "default" };
 }
 
 /* ---- the probe ---------------------------------------------------------- */
@@ -625,7 +659,7 @@ let options;
 let threshold;
 try {
   options = parseArguments(process.argv.slice(2));
-  threshold = resolveMaxAgeHours(process.env);
+  threshold = resolveMaxAgeHours(process.env, options.maxAgeHours);
 } catch (error) {
   process.stderr.write(`${redactForEmission(String(error?.message ?? error))}\n`);
   // Could not judge — same class as an unreachable face, and never a pass.
