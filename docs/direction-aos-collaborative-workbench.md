@@ -6,7 +6,7 @@
 >
 > **事实截至**：2026-08-03 实测。AOS 链 version 895（head `3747c2f1…`，自 2026-07-30 无新活动）；project `project:899d30df2e67bc6e98a4f50e`（TCRN-AOS-PRODUCT）；链上现有受治会议 12 场（CONF-001..012，全部 `closed`）；现有 Initiative 三条（INIT-001/002/003，全部 `done`）。
 >
-> **复核命令**：AOS 链状态经 MCP 只读面 `tcrn_remote_read_status(partition=TCRN-AOS)`（真值地址 `/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace`）。
+> **复核命令**：AOS 链状态经 MCP 只读面 `tcrn_remote_read_status(partition=TCRN-AOS)`（真值位置见平台根 `CLAUDE.md` 第 0 小节机器核对表）。
 
 ## 0. 定位：为什么这是一份方向材料
 
@@ -18,7 +18,7 @@ Owner 于 2026-08-03 提出主张：**AOS 未来的发展方向是可读可写�
 
 | 维度 | 当前实现 | 证据 |
 | --- | --- | --- |
-| 真值 | 链在 VM `/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace`，version 895 | `status` 实测 |
+| 真值 | 链在 VM（真值位置见平台根 `CLAUDE.md` 第 0 小节机器核对表），version 895 | `status` 实测 |
 | 写面 | 座舱绑 `127.0.0.1:4318`，仅 SSH 隧道可达，无环境变量可移 | `apps/cockpit-service/src/service.ts`，`CONF-007 D7` |
 | 权威 | authority pins 在 VM 永不离机；actor 唯一（`agent:fable`，无默认值，缺失拒启 `STORY-112`） | `deploy/aos-resident-cockpit/manifest.mjs` |
 | 读面 | LAN 上无任何可达面；`aos.tcrn.lan` 已退役无人认领，Traefik 回 404 | `deploy/aos-mirror-retirement/`，`MIN-012` 裁定 7 |

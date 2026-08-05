@@ -108,6 +108,31 @@ export const DOC_REGISTRY = Object.freeze([
     path: "docs/harness-constraint-convention.md",
     what: "约束进化公约。它谈的是「约束在哪台机器上被执行」,不落具体地址;受收容规则约束。",
     mustCarryClaims: false
+  }),
+  Object.freeze({
+    path: "docs/projection-freshness-convention.md",
+    what: "投影新鲜度公约(INIT-019 新增)。它声明「凡物化侧车须声明三数」,不落具体地址;受收容规则约束。",
+    mustCarryClaims: false
+  }),
+  Object.freeze({
+    path: "docs/dispatch-readiness-convention.md",
+    what: "派工就绪公约。它谈的是单据要素,不落具体地址;受收容规则约束。",
+    mustCarryClaims: false
+  }),
+  Object.freeze({
+    path: "docs/deliberation-adoption-convention.md",
+    what: "审议采用公约。它谈的是审议执行形态,不落具体地址;受收容规则约束。",
+    mustCarryClaims: false
+  }),
+  Object.freeze({
+    path: "docs/sourcing-and-vetting-convention.md",
+    what: "外采与准入公约。它谈的是引入外部依赖的审查,不落具体地址;受收容规则约束。",
+    mustCarryClaims: false
+  }),
+  Object.freeze({
+    path: "TCRN-AOS/docs/direction-aos-collaborative-workbench.md",
+    what: "AOS 协作工作台方向材料。它的复核命令句会声称 AOS 真值位置,须受收容规则约束(INC-050:登记到名册,不留在暗面)。",
+    mustCarryClaims: false
   })
 ]);
 
