@@ -1,0 +1,2 @@
+binding_green_exit=0
+binding_red_exit=1

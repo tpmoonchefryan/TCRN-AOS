@@ -1,0 +1,444 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INC-040",
+  "intent": "INC-040 收口(观察通道修复经两轮对抗核验后验收)+ INC-041 转 active 附逐项进展注解。依据 Owner 2026-08-05「同意全部修正」与 MIN-058 续办授权。",
+  "startedAt": "2026-08-05T12:10:57Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "deploy/aos-local-client/payloads/cross-inc040-close.json",
+    "sha256": "b0d3c71cf780a953672e72d8fd4c21b4c99783c15db744297c9fb26a9d805ae7",
+    "bytes": 5382
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1721,
+    "headEventHash": "b5339ecb10f592ef51e600916db670cb8076e7b5177897c08fb51de8cc52854a",
+    "work": 259
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T12:10:58Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:19dcee70c40e4d819d13b38a",
+        "--expected-version",
+        "1721",
+        "--id",
+        "work:5370016aa82c91a9e3433cad",
+        "--scope",
+        "【收口(2026-08-05,审查层)】修复经两轮完成——**第一轮被对抗核验证伪,这个事实本身入档**:第一轮把 sink 迁出仓外并加了活性门,但门在进程内直调 hookMode() 绕过真入口,且注册命令是 cwd 相对路径(node scripts/ssh-write-observer.mjs),本平台会话 cwd=平台根,hook 在真实会话形态下从未启动过;门在同一刻报 LIVE——观察通道有两条独立死因,第一轮只堵了一条,而验证恰好在幸运的 cwd 里跑成了绿。第二轮定案:①注册改 ${CLAUDE_PROJECT_DIR} 形态,平台根与 tcrn-workflow 两处 settings 各一份,deny 规则未动;②活性门改为**执行注册字符串本身**——从 settings 读注册、按宿主方式替换变量、自临时 cwd(既非项目根也非仓根)起真进程、喂文档字段齐全的 PreToolUse 载荷、按 root 各自 nonce 从 sink 读回;失败原因可区分(settings-missing/registration-absent/hook-launch-failed/append-failed/sink-unreadable/probe-record-absent);③CLI 未知旗标 reason-coded 拒绝(exit 64),门的绿与门没跑不再同字节;④失实注释(same entry point)与 ci.yml 失实描述改正。**验收实测(审查层亲跑)**:自检 96 样例 0 失配;测试 100/100(含「注册缺失红/不可启动红/掐掉 hook 追加则门红」);门绿=两个真实注册根 LIVE,红=无注册根 settings-missing exit 1、注册指向不存在脚本 hook-launch-failed exit 1;真 HIT 自平台根与 TCRN-AOS 两种 cwd 经注册命令落盘并读回。**观察窗自 2026-08-05 重置起算**:sink 清零(此前 12 行全为验证期探针与合成 HIT),窗口说明存 var/tcrn-observe/OBSERVATION-WINDOW.md;评估误报时须排除 probe:true 记录。STORY-144 enforce 切换(由 INC-041 承载)自本日重计观察期。字节入 tcrn-workflow 整合分支 feat/cross-init018-prose-to-gates。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1721,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:5370016aa82c91a9e3433cad",
+      "version": 1722
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T12:10:59Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1722",
+        "--id",
+        "work:5370016aa82c91a9e3433cad",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1722,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:5370016aa82c91a9e3433cad",
+      "version": 1723
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T12:11:00Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1723",
+        "--id",
+        "work:5370016aa82c91a9e3433cad",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1723,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:5370016aa82c91a9e3433cad",
+      "version": 1724
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T12:11:01Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1724",
+        "--id",
+        "work:5370016aa82c91a9e3433cad",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1724,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:5370016aa82c91a9e3433cad",
+      "version": 1725
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T12:11:02Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:19dcee70c40e4d819d13b38a",
+        "--expected-version",
+        "1725",
+        "--id",
+        "work:30f973e55782de0ee3465fec",
+        "--scope",
+        "【进展(2026-08-05,审查层;Owner 已批「同意全部修正」)】F4/F5/F6/F7 已修复并经对抗核验后二轮加固:F4 隐私门守卫三分语义(0 干净/1 真违规/2 无法判断)+null 等非对象记录不再裸崩(判 violation)+大报文管道截断修复(450 条违规 72,212 字节管道与直写逐字节同、消费者可解析);F5 SUMMARY 第 9 条重写(指针更正至本单——初版指错 INC-039 的事实原样留档;复核命令两半联动:从表格实际解析旧址→逐条验新址存在且非空,红侧实测 exit 1 点名;INC-038/recheck.sh 静默跳过修为 MISSING+非零);F6 仪式插桩 EPIPE 不可杀仪式(同步写+捕获;CONTROL 测试证明修前通道真会死;真 dry-run 在读端关闭下 exit 0 而对照组 exit 1);F7 连带 token-attribution 契约失实修正(计量器无 exit 1,零会话=NO_SESSIONS_SELECTED exit 2 而非成功报零,自指探针陷阱见测试)。F2 部分完成:两仓整合分支 feat/cross-init018-prose-to-gates 已提交(AOS bf96da6 34 文件;tcrn-workflow 待套件绿后入库),proof artifacts 已重生成(VERIFICATION_MAP_VERIFIED),**推送与合 main/发布 v0.11.0 仍待 Owner(唯一对外发布必停点)**。F3 四代办仍由本单承载:S4.2 Codex 配置应用、STORY-144 enforce 切换(观察期自 2026-08-05 重计,见 INC-040 收口注解)、S154 archify 安装、otel-spans.ts 接线。另:证据树清洗归 INC-042(42 offender 已定量)。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1725,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:30f973e55782de0ee3465fec",
+      "version": 1726
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T12:11:03Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1726",
+        "--id",
+        "work:30f973e55782de0ee3465fec",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1726,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:30f973e55782de0ee3465fec",
+      "version": 1727
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T12:11:04Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1727",
+        "--id",
+        "work:30f973e55782de0ee3465fec",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1727,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:30f973e55782de0ee3465fec",
+      "version": 1728
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:5370016aa82c91a9e3433cad",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-040",
+            "observed": "TCRN-CROSS-INC-040",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Incident",
+            "observed": "Incident",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【收口(2026-08-05,审查层)】修复经两轮完成——**第一轮被对抗核验证伪,这个事实本身入档**:第一轮把 sink 迁出仓外并加了活性门,但门在进程内直调 hookMode() 绕过真入口,且注册命令是 cwd 相对路径(node scripts/ssh-write-observer.mjs),本平台会话 cwd=平台根,hook 在真实会话形态下从未启动过;门在同一刻报 LIVE——观察通道有两条独立死因,第一轮只堵了一条,而验证恰好在幸运的 cwd 里跑成了绿。第二轮定案:①注册改 ${CLAUDE_PROJECT_DIR} 形态,平台根与 tcrn-workflow 两处 settings 各一份,deny 规则未动;②活性门改为**执行注册字符串本身**——从 settings 读注册、按宿主方式替换变量、自临时 cwd(既非项目根也非仓根)起真进程、喂文档字段齐全的 PreToolUse 载荷、按 root 各自 nonce 从 sink 读回;失败原因可区分(settings-missing/registration-absent/hook-launch-failed/append-failed/sink-unreadable/probe-record-absent);③CLI 未知旗标 reason-coded 拒绝(exit 64),门的绿与门没跑不再同字节;④失实注释(same entry point)与 ci.yml 失实描述改正。**验收实测(审查层亲跑)**:自检 96 样例 0 失配;测试 100/100(含「注册缺失红/不可启动红/掐掉 hook 追加则门红」);门绿=两个真实注册根 LIVE,红=无注册根 settings-missing exit 1、注册指向不存在脚本 hook-launch-failed exit 1;真 HIT 自平台根与 TCRN-AOS 两种 cwd 经注册命令落盘并读回。**观察窗自 2026-08-05 重置起算**:sink 清零(此前 12 行全为验证期探针与合成 HIT),窗口说明存 var/tcrn-observe/OBSERVATION-WINDOW.md;评估误报时须排除 probe:true 记录。STORY-144 enforce 切换(由 INC-041 承载)自本日重计观察期。字节入 tcrn-workflow 整合分支 feat/cross-init018-prose-to-gates。",
+            "observed": "【收口(2026-08-05,审查层)】修复经两轮完成——**第一轮被对抗核验证伪,这个事实本身入档**:第一轮把 sink 迁出仓外并加了活性门,但门在进程内直调 hookMode() 绕过真入口,且注册命令是 cwd 相对路径(node scripts/ssh-write-observer.mjs),本平台会话 cwd=平台根,hook 在真实会话形态下从未启动过;门在同一刻报 LIVE——观察通道有两条独立死因,第一轮只堵了一条,而验证恰好在幸运的 cwd 里跑成了绿。第二轮定案:①注册改 ${CLAUDE_PROJECT_DIR} 形态,平台根与 tcrn-workflow 两处 settings 各一份,deny 规则未动;②活性门改为**执行注册字符串本身**——从 settings 读注册、按宿主方式替换变量、自临时 cwd(既非项目根也非仓根)起真进程、喂文档字段齐全的 PreToolUse 载荷、按 root 各自 nonce 从 sink 读回;失败原因可区分(settings-missing/registration-absent/hook-launch-failed/append-failed/sink-unreadable/probe-record-absent);③CLI 未知旗标 reason-coded 拒绝(exit 64),门的绿与门没跑不再同字节;④失实注释(same entry point)与 ci.yml 失实描述改正。**验收实测(审查层亲跑)**:自检 96 样例 0 失配;测试 100/100(含「注册缺失红/不可启动红/掐掉 hook 追加则门红」);门绿=两个真实注册根 LIVE,红=无注册根 settings-missing exit 1、注册指向不存在脚本 hook-launch-failed exit 1;真 HIT 自平台根与 TCRN-AOS 两种 cwd 经注册命令落盘并读回。**观察窗自 2026-08-05 重置起算**:sink 清零(此前 12 行全为验证期探针与合成 HIT),窗口说明存 var/tcrn-observe/OBSERVATION-WINDOW.md;评估误报时须排除 probe:true 记录。STORY-144 enforce 切换(由 INC-041 承载)自本日重计观察期。字节入 tcrn-workflow 整合分支 feat/cross-init018-prose-to-gates。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-040",
+        "kind": "Incident",
+        "status": "done"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:30f973e55782de0ee3465fec",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-041",
+            "observed": "TCRN-CROSS-INC-041",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Incident",
+            "observed": "Incident",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "active",
+            "observed": "active",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【进展(2026-08-05,审查层;Owner 已批「同意全部修正」)】F4/F5/F6/F7 已修复并经对抗核验后二轮加固:F4 隐私门守卫三分语义(0 干净/1 真违规/2 无法判断)+null 等非对象记录不再裸崩(判 violation)+大报文管道截断修复(450 条违规 72,212 字节管道与直写逐字节同、消费者可解析);F5 SUMMARY 第 9 条重写(指针更正至本单——初版指错 INC-039 的事实原样留档;复核命令两半联动:从表格实际解析旧址→逐条验新址存在且非空,红侧实测 exit 1 点名;INC-038/recheck.sh 静默跳过修为 MISSING+非零);F6 仪式插桩 EPIPE 不可杀仪式(同步写+捕获;CONTROL 测试证明修前通道真会死;真 dry-run 在读端关闭下 exit 0 而对照组 exit 1);F7 连带 token-attribution 契约失实修正(计量器无 exit 1,零会话=NO_SESSIONS_SELECTED exit 2 而非成功报零,自指探针陷阱见测试)。F2 部分完成:两仓整合分支 feat/cross-init018-prose-to-gates 已提交(AOS bf96da6 34 文件;tcrn-workflow 待套件绿后入库),proof artifacts 已重生成(VERIFICATION_MAP_VERIFIED),**推送与合 main/发布 v0.11.0 仍待 Owner(唯一对外发布必停点)**。F3 四代办仍由本单承载:S4.2 Codex 配置应用、STORY-144 enforce 切换(观察期自 2026-08-05 重计,见 INC-040 收口注解)、S154 archify 安装、otel-spans.ts 接线。另:证据树清洗归 INC-042(42 offender 已定量)。",
+            "observed": "【进展(2026-08-05,审查层;Owner 已批「同意全部修正」)】F4/F5/F6/F7 已修复并经对抗核验后二轮加固:F4 隐私门守卫三分语义(0 干净/1 真违规/2 无法判断)+null 等非对象记录不再裸崩(判 violation)+大报文管道截断修复(450 条违规 72,212 字节管道与直写逐字节同、消费者可解析);F5 SUMMARY 第 9 条重写(指针更正至本单——初版指错 INC-039 的事实原样留档;复核命令两半联动:从表格实际解析旧址→逐条验新址存在且非空,红侧实测 exit 1 点名;INC-038/recheck.sh 静默跳过修为 MISSING+非零);F6 仪式插桩 EPIPE 不可杀仪式(同步写+捕获;CONTROL 测试证明修前通道真会死;真 dry-run 在读端关闭下 exit 0 而对照组 exit 1);F7 连带 token-attribution 契约失实修正(计量器无 exit 1,零会话=NO_SESSIONS_SELECTED exit 2 而非成功报零,自指探针陷阱见测试)。F2 部分完成:两仓整合分支 feat/cross-init018-prose-to-gates 已提交(AOS bf96da6 34 文件;tcrn-workflow 待套件绿后入库),proof artifacts 已重生成(VERIFICATION_MAP_VERIFIED),**推送与合 main/发布 v0.11.0 仍待 Owner(唯一对外发布必停点)**。F3 四代办仍由本单承载:S4.2 Codex 配置应用、STORY-144 enforce 切换(观察期自 2026-08-05 重计,见 INC-040 收口注解)、S154 archify 安装、otel-spans.ts 接线。另:证据树清洗归 INC-042(42 offender 已定量)。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-041",
+        "kind": "Incident",
+        "status": "active"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1728,
+    "headEventHash": "7b9f869c07fb363279ce2ffa0e556c4dbbe1bd1c7a7064686b5358e41472630c",
+    "work": 259
+  },
+  "eventsAppended": 7,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-05T12:11:06Z"
+}

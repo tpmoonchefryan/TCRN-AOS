@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INC-040",
+  "intent": "INC-040 收口(观察通道修复经两轮对抗核验后验收)+ INC-041 转 active 附逐项进展注解。依据 Owner 2026-08-05「同意全部修正」与 MIN-058 续办授权。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:5370016aa82c91a9e3433cad",
+        "scope": "【收口(2026-08-05,审查层)】修复经两轮完成——**第一轮被对抗核验证伪,这个事实本身入档**:第一轮把 sink 迁出仓外并加了活性门,但门在进程内直调 hookMode() 绕过真入口,且注册命令是 cwd 相对路径(node scripts/ssh-write-observer.mjs),本平台会话 cwd=平台根,hook 在真实会话形态下从未启动过;门在同一刻报 LIVE——观察通道有两条独立死因,第一轮只堵了一条,而验证恰好在幸运的 cwd 里跑成了绿。第二轮定案:①注册改 ${CLAUDE_PROJECT_DIR} 形态,平台根与 tcrn-workflow 两处 settings 各一份,deny 规则未动;②活性门改为**执行注册字符串本身**——从 settings 读注册、按宿主方式替换变量、自临时 cwd(既非项目根也非仓根)起真进程、喂文档字段齐全的 PreToolUse 载荷、按 root 各自 nonce 从 sink 读回;失败原因可区分(settings-missing/registration-absent/hook-launch-failed/append-failed/sink-unreadable/probe-record-absent);③CLI 未知旗标 reason-coded 拒绝(exit 64),门的绿与门没跑不再同字节;④失实注释(same entry point)与 ci.yml 失实描述改正。**验收实测(审查层亲跑)**:自检 96 样例 0 失配;测试 100/100(含「注册缺失红/不可启动红/掐掉 hook 追加则门红」);门绿=两个真实注册根 LIVE,红=无注册根 settings-missing exit 1、注册指向不存在脚本 hook-launch-failed exit 1;真 HIT 自平台根与 TCRN-AOS 两种 cwd 经注册命令落盘并读回。**观察窗自 2026-08-05 重置起算**:sink 清零(此前 12 行全为验证期探针与合成 HIT),窗口说明存 var/tcrn-observe/OBSERVATION-WINDOW.md;评估误报时须排除 probe:true 记录。STORY-144 enforce 切换(由 INC-041 承载)自本日重计观察期。字节入 tcrn-workflow 整合分支 feat/cross-init018-prose-to-gates。",
+        "decided-by": "minutes:19dcee70c40e4d819d13b38a",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:5370016aa82c91a9e3433cad", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:5370016aa82c91a9e3433cad", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:5370016aa82c91a9e3433cad", "status": "done", "actor": "agent:fable" } },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:30f973e55782de0ee3465fec",
+        "scope": "【进展(2026-08-05,审查层;Owner 已批「同意全部修正」)】F4/F5/F6/F7 已修复并经对抗核验后二轮加固:F4 隐私门守卫三分语义(0 干净/1 真违规/2 无法判断)+null 等非对象记录不再裸崩(判 violation)+大报文管道截断修复(450 条违规 72,212 字节管道与直写逐字节同、消费者可解析);F5 SUMMARY 第 9 条重写(指针更正至本单——初版指错 INC-039 的事实原样留档;复核命令两半联动:从表格实际解析旧址→逐条验新址存在且非空,红侧实测 exit 1 点名;INC-038/recheck.sh 静默跳过修为 MISSING+非零);F6 仪式插桩 EPIPE 不可杀仪式(同步写+捕获;CONTROL 测试证明修前通道真会死;真 dry-run 在读端关闭下 exit 0 而对照组 exit 1);F7 连带 token-attribution 契约失实修正(计量器无 exit 1,零会话=NO_SESSIONS_SELECTED exit 2 而非成功报零,自指探针陷阱见测试)。F2 部分完成:两仓整合分支 feat/cross-init018-prose-to-gates 已提交(AOS bf96da6 34 文件;tcrn-workflow 待套件绿后入库),proof artifacts 已重生成(VERIFICATION_MAP_VERIFIED),**推送与合 main/发布 v0.11.0 仍待 Owner(唯一对外发布必停点)**。F3 四代办仍由本单承载:S4.2 Codex 配置应用、STORY-144 enforce 切换(观察期自 2026-08-05 重计,见 INC-040 收口注解)、S154 archify 安装、otel-spans.ts 接线。另:证据树清洗归 INC-042(42 offender 已定量)。",
+        "decided-by": "minutes:19dcee70c40e4d819d13b38a",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:30f973e55782de0ee3465fec", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:30f973e55782de0ee3465fec", "status": "active", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:5370016aa82c91a9e3433cad" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-INC-040", "kind": "Incident", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    },
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:30f973e55782de0ee3465fec" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-INC-041", "kind": "Incident", "status": "active" },
+      "expectSameAs": [{ "field": "scope", "step": 4, "flag": "scope" }]
+    }
+  ]
+}
