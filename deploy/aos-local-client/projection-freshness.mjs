@@ -71,49 +71,84 @@ function checkCodegraph() {
   const stale = [];
   for (const repo of roots) {
     const root = join(PLATFORM_ROOT, repo);
-    const headTime = headCommitTime(root);
-    const indexTime = codegraphIndexTime(root);
-    if (headTime === null) { stale.push({ repo, why: "HEAD commit time unreadable" }); continue; }
-    if (indexTime === null) { stale.push({ repo, why: "no .codegraph index found (unproven)" }); continue; }
-    if (indexTime < headTime) stale.push({ repo, headTime, indexTime, why: "index older than last commit" });
+    const verdict = codegraphStatusVerdict(root);
+    if (verdict === null) { stale.push({ repo, why: "codegraph status unreadable or no index (unproven)" }); continue; }
+    if (verdict.pending) stale.push({ repo, why: verdict.detail ?? "codegraph reports pending changes (needs sync)" });
   }
-  if (stale.length > 0) return { status: "stale", self: stale.map((s) => `${s.repo}:${s.why}`).join("; "), reason: "codegraph index behind repo HEAD" };
-  return { status: "fresh", self: "all indexed repos have index >= HEAD", reason: null };
+  if (stale.length > 0) return { status: "stale", self: stale.map((s) => `${s.repo}:${s.why}`).join("; "), reason: "codegraph index behind repo source" };
+  return { status: "fresh", self: "all indexed repos report an up-to-date index", reason: null };
 }
 
-function headCommitTime(repoRoot) {
+/**
+ * The codegraph index's own verdict on freshness — ASK THE INSTRUMENT, don't stat files
+ * (INC-049). The index uses SQLite with full WAL, so the main .db file's mtime lags the
+ * real index data and `-wal`/`-shm` carry it; a file-mtime comparison false-reds on a
+ * healthy index. `codegraph status` reports pending changes explicitly ("Run codegraph
+ * sync to update the index") when the index is behind its source, and stays quiet when
+ * up to date.
+ */
+function codegraphStatusVerdict(repoRoot) {
   try {
-    const out = execFileSync("git", ["-C", repoRoot, "log", "-1", "--format=%ct"], { encoding: "utf8" });
-    const secs = Number(out.trim());
-    return Number.isFinite(secs) ? secs * 1000 : null;
-  } catch { return null; }
-}
-
-function codegraphIndexTime(repoRoot) {
-  const cg = join(repoRoot, ".codegraph");
-  if (!existsSync(cg)) return null;
-  const entries = readdirSync(cg).filter((name) => /\.(db|sqlite|json|bin)$/u.test(name));
-  if (entries.length === 0) return null;
-  const times = entries.map((name) => statSync(join(cg, name)).mtimeMs);
-  return Math.max(...times);
-}
-
-function checkWebProjection() {
-  // The cockpit data stamp is produced by scripts/build-cockpit-data.mjs. When the
-  // built module is present locally, its generatedAt is the self version.
-  const candidate = join(REPO_ROOT, "dist/apps/web/src/cockpit-data.generated.js");
-  if (!existsSync(candidate)) {
-    return { status: "unproven", self: null, reason: "no local cockpit-data.generated.js; run pnpm cockpit:data" };
+    // The codegraph binary lives in TCRN-TMS's node_modules (shared across the three
+    // product repos); run it from there with the target repo as the positional path.
+    const tmsRoot = join(PLATFORM_ROOT, "TCRN-TMS");
+    const out = execFileSync("pnpm", ["--dir", tmsRoot, "exec", "codegraph", "status", repoRoot], { encoding: "utf8", timeout: 30_000 });
+    if (/Pending Changes:/u.test(out)) {
+      return { pending: true, detail: out.split("\n").filter((l) => l.includes("Pending") || /^\s+(Removed|Added|Modified|Renamed):/.test(l)).join(";").trim().slice(0, 120) || "codegraph reports pending changes" };
+    }
+    return { pending: false };
+  } catch {
+    return null;
   }
-  const text = readFileSync(candidate, "utf8");
+}
+
+async function checkWebProjection() {
+  // The cockpit data is produced by scripts/build-cockpit-data.mjs into
+  // apps/web/src/cockpit-data.generated.ts (the direct output; the dist bundle is one
+  // `pnpm build` behind). It embeds both the build time (generatedAt) and the chain
+  // version it was projected from, per partition. Freshness must compare against the
+  // TRUTH it claims to show — the current chain version — not just the wall-clock age
+  // of the build (INC-049: a day-long outage was reported fresh because generatedAt
+  // was young).
+  const candidates = [
+    join(REPO_ROOT, "apps/web/src/cockpit-data.generated.ts"),
+    join(REPO_ROOT, "dist/apps/web/src/cockpit-data.generated.js")
+  ];
+  const path = candidates.find((p) => existsSync(p));
+  if (path === undefined) {
+    return { status: "unproven", self: null, reason: "no cockpit-data.generated.ts; run pnpm cockpit:data" };
+  }
+  const text = readFileSync(path, "utf8");
   const stamp = text.match(/generatedAt["']?\s*[:=]\s*["']([^"']+)["']/u)?.[1] ?? null;
-  if (stamp === null) return { status: "unproven", self: null, reason: "generatedAt stamp not found" };
+  const projectedVersion = text.match(/["']id["']\s*:\s*["']cross-project["'][\s\S]{0,400}?chainVersion["']?\s*:\s*(\d+)/u)?.[1] ?? null;
+  if (stamp === null || projectedVersion === null) {
+    return { status: "unproven", self: stamp ?? null, reason: "generatedAt or cross-project chainVersion stamp not found" };
+  }
   const ageDays = (Date.now() - Date.parse(stamp)) / 86_400_000;
-  return {
-    status: ageDays <= 7 ? "fresh" : "stale",
-    self: stamp,
-    reason: ageDays <= 7 ? null : `projection stamp ${ageDays.toFixed(1)} days old (max 7)`
-  };
+  if (ageDays > 7) {
+    return { status: "stale", self: stamp, reason: `projection stamp ${ageDays.toFixed(1)} days old (max 7)` };
+  }
+  // The projection is only as fresh as the chain it claims to show. Compare its stamped
+  // cross-project chain version against the LIVE chain (the truth); a view built before
+  // the chain moved is stale even if it was built recently.
+  const live = await liveChainVersion("cross-project");
+  if (live !== null && Number(projectedVersion) < live) {
+    return { status: "stale", self: `v${projectedVersion} (built ${stamp})`, reason: `projection shows cross-project v${projectedVersion}; chain is v${live}` };
+  }
+  return { status: "fresh", self: `${stamp} · cross-project v${projectedVersion}`, reason: null };
+}
+
+/** The live chain version of a partition, from the engine's own answer; null when unreadable. */
+async function liveChainVersion(partition) {
+  try {
+    const entry = aosPartition(partition);
+    const result = await remoteEngine(["status", "--workspace", entry.workspace]);
+    if (!result.accepted) return null;
+    const version = result.json?.version;
+    return Number.isSafeInteger(version) ? version : null;
+  } catch {
+    return null;
+  }
 }
 
 function checkMemoryIndex() {
@@ -140,7 +175,7 @@ function checkMemoryIndex() {
 
 export async function runProjectionFreshness() {
   const knowledge = await checkKnowledge();
-  const web = checkWebProjection();
+  const web = await checkWebProjection();
   const codegraph = checkCodegraph();
   const memory = checkMemoryIndex();
   const rows = [
