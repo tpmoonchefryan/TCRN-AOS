@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-019",
+  "intent": "real write #2: dispatch STORY-164 to active; ceremony auto-rebase keeps the knowledge face readable",
+  "steps": [
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:ae54775fdfa625c68c577547",
+        "status": "ready"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:ae54775fdfa625c68c577547",
+        "status": "active"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:ae54775fdfa625c68c577547"
+      },
+      "expect": {
+        "status": "active"
+      }
+    }
+  ]
+}

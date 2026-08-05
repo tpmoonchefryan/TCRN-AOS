@@ -39,7 +39,8 @@ import {
 } from "./topology.mjs";
 import { aosPartition } from "./aos-partitions.mjs";
 import {
-  assertPayload, catalogueIndex, judgeReadback, planStep, resolveExpectations
+  assertPayload, catalogueIndex, judgeReadback, planStep, resolveExpectations,
+  KNOWLEDGE_STORE_CAS_VERBS
 } from "./ceremony-plan.mjs";
 import { scrubHostPathsInText } from "../../scripts/lib/evidence-hygiene.mjs";
 import { emitCeremonySpan } from "./ceremony-spans.mjs";
@@ -109,6 +110,35 @@ export async function readChainHead(workspace = VM_WORKSPACE) {
   };
 }
 
+/**
+ * The knowledge store marker (`<workspace>/.tcrn-workflow/knowledge/store.json`).
+ *
+ * The knowledge-* mutating verbs CAS on `store.json`'s OWN `version`, which is unrelated
+ * to the chain version (STORY-160: the store is a disposable materialised index). The
+ * store marker is not exposed by any read verb — the face refuses with
+ * KNOWLEDGE_HIGH_WATER_MISMATCH while the store is stale — so the ceremony reads the
+ * marker file directly. That is a READ of a control-tree file on the host, which the
+ * platform permits ("看可以,存不行"); only writes to the tree are reserved to the engine.
+ */
+export async function readKnowledgeMarker(workspace = VM_WORKSPACE) {
+  const remote = ["node", "-e",
+    `process.stdout.write(JSON.stringify(JSON.parse(require("node:fs").readFileSync(${JSON.stringify(`${workspace}/.tcrn-workflow/knowledge/store.json`)}, "utf8"))))`]
+    .map(shellQuote).join(" ");
+  const result = await ssh([remote], { allowFailure: true });
+  const json = parseJsonLoose(result.stdout);
+  if (result.code !== 0 || json === null || !Number.isSafeInteger(json.version)) {
+    throw new Error(`the host engine's knowledge store marker could not be read: ${result.stderr?.trim() ?? result.stdout?.slice(0, 200) ?? result.code}`);
+  }
+  return { version: json.version, workspaceId: json.workspaceId ?? null, eventHighWaterDigest: json.eventHighWaterDigest ?? null };
+}
+
+function parseJsonLoose(text) {
+  try { return JSON.parse(text); } catch { return null; }
+}
+
+/** Which sentinel a step CAS's on: the knowledge store marker, or the chain head. */
+const casSource = (verb) => (KNOWLEDGE_STORE_CAS_VERBS.includes(verb) ? "marker" : "chain");
+
 export async function runCeremony({ payloadPath, dryRun = false, partition = "TCRN-AOS" }) {
   const payloadText = readFileSync(payloadPath, "utf8");
   const payload = JSON.parse(payloadText);
@@ -172,7 +202,13 @@ export async function runCeremony({ payloadPath, dryRun = false, partition = "TC
     // runs, so one sentinel captured at the start would be stale by step two — and a
     // stale sentinel does not fail safe silently, it fails the step with a CAS
     // mismatch, which reads like a defect in the payload.
-    const head = step.readHeadFirst === false ? receipt.chainBefore : await readChainHead(target.workspace);
+    // STORY-160: which head a step CAS's on depends on the verb — the chain head for
+    // chain verbs, the knowledge store MARKER for the knowledge-* family.
+    const head = step.readHeadFirst === false
+      ? receipt.chainBefore
+      : casSource(step.verb) === "marker"
+        ? await readKnowledgeMarker(target.workspace)
+        : await readChainHead(target.workspace);
     const plan = planStep({ step, catalogue, supply, chainVersion: head.version, at: instant() });
     if (!plan.ok) {
       emitCeremonySpan({ span: "ceremony.refused", partition, verb: plan.verb ?? null, expectedVersion: head.version, outcome: "refused", reasonCode: plan.reasonCode });
@@ -244,7 +280,15 @@ export async function runCeremony({ payloadPath, dryRun = false, partition = "TC
     // a scope, a sprint or a decided-by — the very fields an annotate sets. Both are
     // flattened into one view to compare against, with `record` last so an immutable
     // field can never be shadowed by an advisory one of the same name.
-    const record = result.json === null ? null : { ...result.json.advisory, ...result.json.record };
+    // STORY-160: verbs that do NOT answer in the record/advisory shape (knowledge-list,
+    // knowledge-freshness) are compared against their top-level result instead — the
+    // whole response IS the observed record for them.
+    const hasRecordShape = result.json !== null
+      && (Object.hasOwn(result.json, "record") || Object.hasOwn(result.json, "advisory"));
+    const record = result.json === null ? null
+      : hasRecordShape
+        ? { ...result.json.advisory, ...result.json.record }
+        : result.json;
     const { expected, problems } = resolveExpectations({ step, steps: payload.steps });
     if (problems.length > 0) {
       emitCeremonySpan({ span: "ceremony.refused", partition, verb: step.verb, outcome: "refused", reasonCode: "EXPECTATION_UNRESOLVABLE" });
@@ -272,6 +316,44 @@ export async function runCeremony({ payloadPath, dryRun = false, partition = "TC
       return receipt;
     }
     emitCeremonySpan({ span: "ceremony.readback", partition, verb: step.verb, outcome: "ok" });
+  }
+
+  // STORY-160: every real ceremony rebases the knowledge store ON the write path, so the
+  // knowledge face does not go stale on the next read. Best-effort but RECORDED in the
+  // receipt: a failed rebase leaves the store stale, and the marker-freshness gate
+  // (STORY-160.4) independently reds on that residue. Not run for a dry run, and not run
+  // twice: a payload that already performs a knowledge-rebase leaves the store fresh.
+  const batchAlreadyRebased = payload.steps.some((step) => step.verb === "knowledge-rebase");
+  if (!dryRun && !batchAlreadyRebased) {
+    try {
+      const marker = await readKnowledgeMarker(target.workspace);
+      const rebasePlan = planStep({
+        step: { verb: "knowledge-rebase", flags: {} }, catalogue, supply,
+        chainVersion: marker.version, at: instant()
+      });
+      if (rebasePlan.ok) {
+        const result = await remoteEngine(rebasePlan.argv);
+        receipt.knowledgeRebase = {
+          verb: "knowledge-rebase",
+          markerVersionBefore: marker.version,
+          accepted: result.accepted,
+          reasonCode: result.reasonCode,
+          version: result.json?.version ?? null,
+          error: result.accepted ? undefined
+            : scrubHostPathsInText(result.stderr?.trim() ?? result.stdout?.trim() ?? "").slice(0, 200)
+        };
+        if (!result.accepted) {
+          emitCeremonySpan({ span: "ceremony.refused", partition, verb: "knowledge-rebase", outcome: "refused", reasonCode: result.reasonCode ?? "AUTO_REBASE_REFUSED" });
+        }
+      } else {
+        receipt.knowledgeRebase = { verb: "knowledge-rebase", accepted: false, reasonCode: rebasePlan.reasonCode };
+      }
+    } catch (error) {
+      receipt.knowledgeRebase = {
+        verb: "knowledge-rebase", accepted: false, reasonCode: "MARKER_UNREADABLE",
+        error: scrubHostPathsInText(String(error?.message ?? error)).slice(0, 200)
+      };
+    }
   }
 
   receipt.chainAfter = await readChainHead(target.workspace);

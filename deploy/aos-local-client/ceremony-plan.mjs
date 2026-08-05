@@ -34,6 +34,29 @@ export const PAYLOAD_SCHEMA = "aos.local-client-ceremony.v1";
 export const RESERVED_FLAGS = Object.freeze(["workspace", "attest-dir", "expected-version"]);
 
 /**
+ * Verbs whose `--expected-version` CAS is the KNOWLEDGE STORE MARKER, not the chain version.
+ *
+ * The knowledge store is a disposable materialised index (`store.json` carries
+ * `version` + `eventHighWaterDigest`). Every knowledge-* mutating verb CAS's on
+ * `store.json`'s `version` — verified against the engine (TCRN-CROSS-INIT-019
+ * STORY-160/163): knowledge-core rejects a chain version with KNOWLEDGE_CAS_MISMATCH,
+ * because the marker version and the chain version are unrelated counters. The ceremony
+ * therefore reads the marker (readKnowledgeMarker) for this family and supplies IT as
+ * `--expected-version`, not the chain head.
+ *
+ * This list is DECLARED, and its failure mode is loud: a knowledge verb added later that
+ * is absent here would be planned with the chain version and the engine would answer
+ * KNOWLEDGE_CAS_MISMATCH — a visible red, not a silent wrong write.
+ */
+export const KNOWLEDGE_STORE_CAS_VERBS = Object.freeze([
+  "knowledge-create",
+  "knowledge-promote",
+  "knowledge-retire",
+  "knowledge-rebase",
+  "knowledge-reverify"
+]);
+
+/**
  * Verbs this wrapper will never drive, DERIVED rather than listed.
  *
  * The relocation and gate-identity families take a per-invocation authority file plus

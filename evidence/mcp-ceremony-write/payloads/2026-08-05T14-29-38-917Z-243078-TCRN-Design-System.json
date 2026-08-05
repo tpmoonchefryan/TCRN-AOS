@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-019-STORY-160",
+  "intent": "one-time knowledge-rebase on TCRN-Design-System (already consistent; bump only)",
+  "steps": [
+    {
+      "verb": "knowledge-rebase",
+      "flags": {}
+    }
+  ],
+  "readback": [
+    {
+      "verb": "knowledge-list",
+      "flags": {},
+      "expect": {
+        "total": 0
+      }
+    }
+  ]
+}
