@@ -1,0 +1,279 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INC-043..051",
+  "intent": "close all nine QA review incidents (INC-043..051) — fixes landed with evidence commands executed",
+  "steps": [
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:530b68a83fc481b32b557a26",
+        "status": "ready"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:530b68a83fc481b32b557a26",
+        "status": "active"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:530b68a83fc481b32b557a26",
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:d530a31956ac12fea76c34c4",
+        "status": "ready"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:d530a31956ac12fea76c34c4",
+        "status": "active"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:d530a31956ac12fea76c34c4",
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:2de2a5954f000713162b6c11",
+        "status": "ready"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:2de2a5954f000713162b6c11",
+        "status": "active"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:2de2a5954f000713162b6c11",
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:df89090ea8e2b3371c48eeb1",
+        "status": "ready"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:df89090ea8e2b3371c48eeb1",
+        "status": "active"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:df89090ea8e2b3371c48eeb1",
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:96fe17bd4811bdfc3d1e52fb",
+        "status": "ready"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:96fe17bd4811bdfc3d1e52fb",
+        "status": "active"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:96fe17bd4811bdfc3d1e52fb",
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:15d30a854427c6996d353307",
+        "status": "ready"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:15d30a854427c6996d353307",
+        "status": "active"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:15d30a854427c6996d353307",
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:f8156a0e74b510e23210dee0",
+        "status": "ready"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:f8156a0e74b510e23210dee0",
+        "status": "active"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:f8156a0e74b510e23210dee0",
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:92589837ac0f338ec1632ac8",
+        "status": "ready"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:92589837ac0f338ec1632ac8",
+        "status": "active"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:92589837ac0f338ec1632ac8",
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:7153c37b1d0f535901507f95",
+        "status": "ready"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:7153c37b1d0f535901507f95",
+        "status": "active"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:7153c37b1d0f535901507f95",
+        "status": "done"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:530b68a83fc481b32b557a26"
+      },
+      "expect": {
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:d530a31956ac12fea76c34c4"
+      },
+      "expect": {
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:2de2a5954f000713162b6c11"
+      },
+      "expect": {
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:df89090ea8e2b3371c48eeb1"
+      },
+      "expect": {
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:96fe17bd4811bdfc3d1e52fb"
+      },
+      "expect": {
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:15d30a854427c6996d353307"
+      },
+      "expect": {
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:f8156a0e74b510e23210dee0"
+      },
+      "expect": {
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:92589837ac0f338ec1632ac8"
+      },
+      "expect": {
+        "status": "done"
+      }
+    },
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:7153c37b1d0f535901507f95"
+      },
+      "expect": {
+        "status": "done"
+      }
+    }
+  ]
+}
