@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-189",
+  "intent": "STORY-189 切换窗重跑(v0.11.2 部署后,段限修复生效):五链 file→pg 全部迁移成功,verify 全绿。数据平面完成,继续执行归档/退役/客户端切换步骤。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:8797455f66197645465abb73",
+        "scope": "【切换窗重跑·2026-08-06(v0.11.2 部署后,段限修复生效)】五链 file→pg 全部迁移成功,每链 execute+verify+validate 绿:①Joi-Button v586→chain_joi(VERIFIED,validate 绿);②TCRN-TMS v229→chain_tms(VERIFIED,validate 绿);③TCRN-Design-System v983→chain_ds(execute 成功 983 events,verify WORKSPACE_MIGRATION_VERIFIED,validate 绿——此前 v0.11.1 因 PG 1024 硬限单段 canonical 超 1MiB 被 WORKSPACE_MIGRATION_FUTURE 阻断,已按链回滚;v0.11.2 修 PG 尊重 workspace segmentEventLimit=64 后重跑绿);④TCRN-AOS v1048→chain_aos(VERIFIED,含 knowledge 店 2 metadata/1 body,validate 绿);⑤cross-project v2105→chain_cross(VERIFIED,含 knowledge 店 20/20,validate 绿)。五链 PG 副本事件数全等 file 链版本,headEventHash 全同。file 仍为权威(归档/退役步骤前),PG 副本为已验证镜像。v0.11.2 引擎(v0.11.1+段限修复)经 aos-engine-host apply.mjs 部署,ledger 双向全匹配,104 cli verbs,migration 动词齐备。窗口数据平面完成,继续 189.3 归档+189.4 SSH 读转发退役+189.5 客户端/判据切换。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:8797455f66197645465abb73",
+        "status": "active",
+        "actor": "agent:fable"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:8797455f66197645465abb73" }
+    }
+  ]
+}

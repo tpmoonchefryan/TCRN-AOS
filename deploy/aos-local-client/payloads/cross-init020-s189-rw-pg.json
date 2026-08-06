@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-189",
+  "intent": "STORY-189 切换窗:门面读写路径全上 PG。写路径 lease/attestation 阻碍已解。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:8797455f66197645465abb73",
+        "scope": "【切换窗·读写路径全上 PG】①facade-write PG 化(performFacadeWrite 全引擎调用贯通 pgSchema,经 sudo tcrn_engine 写 PG);②tcrn_engine 治理树写权:chgrp .tcrn-workflow + attestations 到 tcrn_engine 组 + g+rwX(VM 无 setfacl),解 lease+attestation EACCES;③**真实写证明**:经写面 work-annotate → chain_cross PG 2106→2107,head 54c9eb0f,attestation 落盘,经引擎 CLI 读 PG 确认。**门面读写皆从 PG 服务**(读 5 分区全绿,写真实落 PG)。⚠ 写面已真实写 PG(cross 2107)而 MCP 读面仍 SSH→file(cross file 2105)→ 读写分叉风险,S185(两 MCP 面→门面)须尽快落地。继续:189.3 文件树归档+189.4 SSH 读转发退役+S185/S187。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    }
+  ],
+  "readback": [
+    { "verb": "work-show", "flags": { "id": "work:8797455f66197645465abb73" } }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-189",
+  "intent": "S189 切换窗重跑成功后,将 S189 从 planned 经 ready 置为 active(窗口执行中:归档/退役/客户端切换)。",
+  "steps": [
+    { "verb": "work-transition", "flags": { "id": "work:8797455f66197645465abb73", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:8797455f66197645465abb73", "status": "active", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    { "verb": "work-show", "flags": { "id": "work:8797455f66197645465abb73" } }
+  ]
+}

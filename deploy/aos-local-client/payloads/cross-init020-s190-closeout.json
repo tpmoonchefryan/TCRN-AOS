@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-190",
+  "intent": "STORY-190 收口:closeout-verify 通过,INC-061..071 核销清单已对账。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:f01d514e0ebf8e3d3328dcce",
+        "scope": "【收口(2026-08-06)】closeout-verify.mjs --manifest closeout-verify-manifest.json → CLOSEOUT_ITEMS_RECONCILED(11 项 INC-061..071 处置全对账)。窗口技术切投全完成(迁移+门面读写 PG+S185+归档)。剩余:tip 复量协议、逐单挂生效证据、发布材料备齐后停(唯一必停点)。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:f01d514e0ebf8e3d3328dcce", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:f01d514e0ebf8e3d3328dcce", "status": "active", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    { "verb": "work-show", "flags": { "id": "work:f01d514e0ebf8e3d3328dcce" } }
+  ]
+}
