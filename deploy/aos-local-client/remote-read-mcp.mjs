@@ -76,7 +76,7 @@ import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { shellQuote } from "../aos-resident-cockpit/resident-lib.mjs";
 import { LOCAL_ENGINE } from "../switch-rehearsal/rehearsal-lib.mjs";
-import { VM_ENGINE_CLI, VM_HOST } from "./topology.mjs";
+import { VM_ENGINE_CLI, VM_HOST, FACADE_PORT } from "./topology.mjs";
 import { AOS_PARTITIONS, aosPartition } from "./aos-partitions.mjs";
 import { scrubHostPathsInText } from "../../scripts/lib/evidence-hygiene.mjs";
 
@@ -499,7 +499,12 @@ export function remoteArgv(entry, input) {
     if (value === undefined) continue;
     argv.push(`--${flag.name}`, cliFlagValue(flag, value));
   }
-  return { argv, partition, workspace: target?.workspace ?? null };
+  // The facade request body carries the caller's verb arguments (minus the
+  // topology-owned partition selector, which the facade resolves itself) and the
+  // partition; the argv form above is kept for the SSH transport's tool surface.
+  const arguments_ = Object.fromEntries(
+    Object.entries(given).filter(([name]) => name !== PARTITION_ARGUMENT));
+  return { argv, partition, workspace: target?.workspace ?? null, arguments: arguments_ };
 }
 
 /**
@@ -554,6 +559,77 @@ async function sshRead(argv) {
       json: parseJson(emitted)
     };
   }
+}
+
+/**
+ * STORY-185: the facade read transport. POSTs the verb to the facade read
+ * service (127.0.0.1:FACADE_PORT through the SSH tunnel), which serves the
+ * PG-backed chain. Tool names, argument shapes, reason codes and the refusal
+ * surface are unchanged — the bottom channel moves from SSH+CLI to the facade,
+ * and the facade answers with the engine's own bytes.
+ */
+async function facadeRead(verb, partition, arguments_, { tunnelPort } = {}) {
+  const port = tunnelPort ?? FACADE_PORT;
+  const body = JSON.stringify({ partition, arguments: arguments_ });
+  try {
+    const { stdout } = await runFile("curl", [
+      "-s", "-m", "60", "-X", "POST", "-H", "content-type: application/json",
+      "-d", body, `http://127.0.0.1:${port}/api/engine/${verb}`,
+    ], { timeout: SSH_TIMEOUT_MS, maxBuffer: SSH_MAX_BUFFER });
+    return { ok: true, code: 0, text: stdout, json: parseJson(stdout) };
+  } catch (error) {
+    if (error?.code === "ERR_CHILD_PROCESS_STDIO_MAXBUFFER") {
+      fail("MCP_REMOTE_READ_OVERSIZED",
+        `${verb} answered with more than ${SSH_MAX_BUFFER} bytes through the facade; narrow the read`);
+    }
+    const emitted = sshFailureText(error);
+    return {
+      ok: false,
+      code: typeof error?.code === "number" ? error.code : null,
+      text: emitted,
+      json: parseJson(emitted)
+    };
+  }
+}
+
+/**
+ * STORY-185: the facade binds loopback on the VM, so a local client reaches it
+ * through an `ssh -N -L` tunnel. The MCP server establishes one tunnel for the
+ * session and reclaims it on exit; a spare local port is chosen and the tunnel
+ * is ready when the port answers.
+ */
+let facadeTunnel = null;
+export async function establishFacadeTunnel() {
+  if (facadeTunnel !== null) return facadeTunnel;
+  const spawn = (await import("node:child_process")).spawn;
+  const port = FACADE_PORT; // the facade port is loopback-unique; reuse it locally
+  const child = spawn("ssh", ["-N", "-L", `${port}:127.0.0.1:${port}`, VM_HOST],
+    { stdio: "ignore", detached: true });
+  child.unref();
+  // Wait until the local port answers (the tunnel is up), bounded.
+  const net = await import("node:net");
+  for (let attempt = 0; attempt < 40; attempt += 1) {
+    await new Promise((done) => setTimeout(done, 250));
+    try {
+      const ok = await new Promise((resolve) => {
+        const socket = net.connect(port, "127.0.0.1", () => { socket.destroy(); resolve(true); });
+        socket.on("error", () => resolve(false));
+      });
+      if (ok) {
+        facadeTunnel = { port, pid: child.pid, processGroup: child.pid };
+        return facadeTunnel;
+      }
+    } catch { /* retry */ }
+  }
+  child.kill("SIGTERM");
+  fail("MCP_REMOTE_TUNNEL_UNAVAILABLE", `the facade tunnel to ${VM_HOST}:${port} did not come up`);
+}
+
+export async function reclaimFacadeTunnel() {
+  if (facadeTunnel === null) return;
+  try { process.kill(-facadeTunnel.pid, "SIGTERM"); } catch { /* group already gone */ }
+  try { process.kill(facadeTunnel.pid, "SIGTERM"); } catch { /* already gone */ }
+  facadeTunnel = null;
 }
 
 function parseJson(text) {
@@ -754,7 +830,11 @@ export class RemoteReadDispatcher {
     const plan = remoteArgv(entry, input);
     assertHostAgrees(entry, (await hostCatalog()).get(entry.name));
 
-    const result = await sshRead(plan.argv);
+    // STORY-185: the bottom channel is the facade, reached through the SSH
+    // tunnel. A verb that is not partition-scoped still carries a null partition
+    // and the facade resolves the workspace from its own record.
+    const tunnel = await establishFacadeTunnel();
+    const result = await facadeRead(entry.name, plan.partition, plan.arguments, { tunnelPort: tunnel.port });
     if (!result.ok) {
       const refused = {
         ok: false,
@@ -955,6 +1035,8 @@ export async function runRemoteReadMcpStdio(input, output, catalog,
       error: { code: -32700, message: "unterminated JSON-RPC line" }
     });
   }
+  // STORY-185: the facade tunnel lives for this session; reclaim it on exit.
+  await reclaimFacadeTunnel();
 }
 
 if (import.meta.url === pathToFileURL(resolve(process.argv[1] ?? "")).href) {

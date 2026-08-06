@@ -32,6 +32,23 @@ export {
 
 import { VM_ENGINE } from "../aos-resident-cockpit/manifest.mjs";
 
+// STORY-186 — the facade read/write services (STORY-181/182) are the platform's sole
+// read/write face. Their addresses belong to the single topology source too, so a
+// ceremony, a tunnel, or a future client imports them instead of hand-typing a loopback
+// port. Both are VM-half facts and both are IMPORTED from their own resident manifests
+// (never copied), the same rule manifest.mjs already holds for the engine and the chains.
+import {
+  FACADE_HOST, FACADE_PORT, FACADE_UNIT_NAME, FACADE_ALLOWED_HOSTS
+} from "../aos-resident-cockpit/facade-read-manifest.mjs";
+import {
+  FACADE_WRITE_HOST, FACADE_WRITE_PORT, FACADE_WRITE_UNIT_NAME, FACADE_WRITE_ALLOWED_HOSTS
+} from "../aos-resident-cockpit/facade-write-manifest.mjs";
+
+export {
+  FACADE_HOST, FACADE_PORT, FACADE_UNIT_NAME, FACADE_ALLOWED_HOSTS,
+  FACADE_WRITE_HOST, FACADE_WRITE_PORT, FACADE_WRITE_UNIT_NAME, FACADE_WRITE_ALLOWED_HOSTS
+};
+
 /** The governed engine CLI on the host that now owns the chain. */
 export const VM_ENGINE_CLI = `${VM_ENGINE}/scripts/tcrn-workflow.mjs`;
 
