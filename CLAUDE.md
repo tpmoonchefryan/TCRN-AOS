@@ -20,6 +20,8 @@ do not trust the sentence:
 
 <!-- TOPOLOGY-CLAIMS:END -->
 
+**STORY-189 切换窗(2026-08-06):五链数据平面已迁至 Postgres,经门面服务。** 引擎 v0.11.2/v0.11.3 后,五条受治链 file→pg 迁移完成并 verify 绿;`facade-read-service`(127.0.0.1:4320,经 SSH 隧道)与 `facade-write-service`(127.0.0.1:4321)服务 PG 链;本机两 MCP 面(`tcrn-workflow-aos-read`/`aos-mcp-write`)底层通道已改指门面(S185)。文件树已转只读归档(仅 `.tcrn-workflow` 因 lease/attestation 保留 tcrn_engine 组写)。复核命令列不变(仍走 MCP 只读面,现经门面答 PG)。
+
 `home` is `vm`, meaning host `tcrn-platform-dev`. The chain's sidecars sit beside it:
 `attestations/` is the workspace root's **sibling** inside the partition directory (the
 engine refuses an attest-dir inside the workspace itself), and `release-trust/` is a
