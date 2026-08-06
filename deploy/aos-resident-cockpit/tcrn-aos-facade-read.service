@@ -1,0 +1,41 @@
+[Unit]
+Description=TCRN AOS facade read service (STORY-181; engine read verbs, loopback only, no pins)
+Documentation=file:///srv/tcrn/aos-facade-read/DEPLOYMENT.md
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/tcrn/aos-facade-read/runtime
+ExecStart=/usr/local/bin/node /srv/tcrn/aos-facade-read/runtime/deploy/aos-resident-cockpit/facade-read-runner.mjs
+# DynamicUser gives a low-privilege, ephemeral, isolated process. The facade reads
+# the governance tree, which the relocation ceremony keeps at 0700 root:root — so
+# like the write face, this process must run as root to traverse to the chains it
+# reads. It still holds no pins and forwards no mutating verb (the source gate
+# asserts both at the bytes).
+User=root
+# After the switch window the facade serves the chains from Postgres: each read
+# verb runs the engine CLI as the tcrn_engine role via sudo -u tcrn_engine
+# (PG socket peer auth). That is a privilege DECREASE from root, so the
+# NoNewPrivileges guard is lifted for this one downward hop — the facade never
+# gains a privilege it did not already hold.
+NoNewPrivileges=no
+Environment=FACADE_HOST=127.0.0.1
+Environment=FACADE_PORT=4320
+Environment=FACADE_ENGINE=/srv/tcrn/engine/tcrn-workflow
+Environment=FACADE_WORKSPACES={"TCRN-AOS":"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace","Joi-Button":"/srv/tcrn/governance/tcrn-workspace/Joi-Button/workspace","cross-project":"/srv/tcrn/governance/tcrn-workspace/cross-project/workspace","TCRN-Design-System":"/srv/tcrn/governance/tcrn-workspace/TCRN-Design-System/workspace","TCRN-TMS":"/srv/tcrn/governance/tcrn-workspace/TCRN-TMS/workspace"}
+Environment=FACADE_ALLOWED_HOSTS=127.0.0.1,localhost
+Environment=FACADE_PG_SCHEMAS={"TCRN-AOS":"chain_aos","Joi-Button":"chain_joi","cross-project":"chain_cross","TCRN-Design-System":"chain_ds","TCRN-TMS":"chain_tms"}
+Environment=FACADE_PG_CONNECTION=postgresql:///tcrn_governance?host=/var/run/postgresql
+Restart=on-failure
+RestartSec=5
+ProtectSystem=full
+ReadWritePaths=/srv/tcrn
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=tcrn-aos-facade-read
+
+[Install]
+WantedBy=multi-user.target

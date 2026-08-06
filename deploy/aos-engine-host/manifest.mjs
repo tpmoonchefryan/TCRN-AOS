@@ -38,7 +38,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 
 /** The one place the release tag is written; every claim about it derives from here. */
-const SOURCE_TAG = "v0.10.2";
+const SOURCE_TAG = "v0.11.3";
 
 export const manifest = {
   schemaVersion: "aos.engine-host-deploy-manifest.v1",
@@ -54,7 +54,7 @@ export const manifest = {
     // The anchor is the release tag, checked three ways before a single byte
     // moves: package.json says this version, HEAD carries this tag, and the
     // working tree is clean. A dirty tree would make "v0.8.0 tag anchor" a lie.
-    requiredVersion: "0.10.2",
+    requiredVersion: "0.11.3",
     requiredTag: SOURCE_TAG,
   },
 
@@ -82,15 +82,24 @@ export const manifest = {
     // rule, no verb, so the cli count holds at 101. These are real predicates:
     // a different engine version red-flags here.
     catalogReasonCode: "CLI_CATALOG_READY",
-    cliVerbCount: 101,
-    remoteVersion: "0.10.2",
+    cliVerbCount: 104,
+    remoteVersion: "0.11.3",
     // Named verbs the far catalog must actually carry. A count alone would be
-    // satisfied by any 101 verbs. event-list is why v0.7.0 → v0.8.0 happened;
+    // satisfied by any 104 verbs. event-list is why v0.7.0 → v0.8.0 happened;
     // relocation-adopt and relocation-inspect are why v0.8.0 → v0.9.0 happens —
     // adopt is the receiving verb a move would run here, inspect is how this host
-    // would be interrogated about a relocation in flight. Checked by name, and by
-    // availability with it: a fixture-only entry is not a verb the VM can run.
-    requiredVerbs: ["event-list", "relocation-adopt", "relocation-inspect"],
+    // would be interrogated about a relocation in flight. v0.11.0 (INIT-020)
+    // adds the migration verb family — the recovery path for INC-072 that lets
+    // the STORY-189 switch window move a chain to Postgres. Checked by name, and
+    // by availability with it: a fixture-only entry is not a verb the VM can run.
+    requiredVerbs: [
+      "event-list",
+      "relocation-adopt",
+      "relocation-inspect",
+      "migration-execute",
+      "migration-verify",
+      "migration-rollback",
+    ],
     // Digest ledger serialization follows the paired-backup/export-manifest
     // precedent: sha256 over "path sha256" lines joined by newline.
     fileSetDigestForm: "sha256(lines of `<path> <sha256>` joined by \\n)",
