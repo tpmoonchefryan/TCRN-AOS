@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "tcrn.closeout-evidence.v1",
+  "why": "INC-052: 收口绑定生效证据——对 INC-043..051 修复批的生效证据命令集,在最终 HEAD 上重放产表。红腿自证:当前 HEAD 上 A1(hygiene)/A2(proof-artifacts)/A3(projection) 三红应复现,修后转绿。",
+  "incidents": [
+    {
+      "id": "INC-043",
+      "evidence": [
+        { "cmd": "node scripts/generate-proof-artifacts.mjs", "dir": "tcrn-workflow", "expectedExit": 0, "timeoutMs": 120000 }
+      ]
+    },
+    {
+      "id": "INC-044",
+      "evidence": [
+        { "cmd": "node tcrn-workflow/scripts/knowledge-inject.mjs --self-test", "expectedExit": 0, "timeoutMs": 60000 }
+      ]
+    },
+    {
+      "id": "INC-045",
+      "evidence": [
+        { "cmd": "node deploy/aos-local-client/doc-topology-proof.mjs", "dir": "TCRN-AOS", "expectedExit": 0, "timeoutMs": 120000 }
+      ]
+    },
+    {
+      "id": "INC-046",
+      "evidence": [
+        { "cmd": "node --test scripts/lib/evidence-hygiene.test.mjs", "dir": "TCRN-AOS", "expectedExit": 0, "timeoutMs": 120000 }
+      ]
+    },
+    {
+      "id": "INC-047",
+      "evidence": [
+        { "cmd": "node --test deploy/aos-mcp-write/server.test.mjs", "dir": "TCRN-AOS", "expectedExit": 0, "timeoutMs": 60000 }
+      ]
+    },
+    {
+      "id": "INC-048",
+      "evidence": [
+        { "cmd": "node scripts/verify-release.mjs --checksums artifacts/checksums.txt --license LICENSE --sbom artifacts/sbom.json --source artifacts/source-archive.json", "dir": "tcrn-workflow-helper", "expectedExit": 0, "timeoutMs": 120000 }
+      ]
+    },
+    {
+      "id": "INC-049",
+      "evidence": [
+        { "cmd": "node deploy/aos-local-client/projection-freshness.mjs", "dir": "TCRN-AOS", "expectedExit": 0, "timeoutMs": 120000 }
+      ]
+    },
+    {
+      "id": "INC-050",
+      "evidence": [
+        { "cmd": "node deploy/aos-local-client/doc-topology-proof.mjs", "dir": "TCRN-AOS", "expectedExit": 0, "timeoutMs": 120000 }
+      ]
+    },
+    {
+      "id": "INC-051",
+      "evidence": [
+        { "cmd": "node scripts/ssh-write-observer.mjs --self-test", "dir": "tcrn-workflow", "expectedExit": 0, "timeoutMs": 60000 }
+      ]
+    }
+  ]
+}
