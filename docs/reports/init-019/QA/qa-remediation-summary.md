@@ -11,7 +11,7 @@
 | **INC-043** WF 套件红 | 三个新脚本登记 source-allowlist + `.claude/settings.json` 入库 | `pnpm test` → `TESTS_VERIFIED`,generate:proof-artifacts 通过 |
 | **INC-044** 注入宿主末跳 | additionalContext 数组→字符串;多词 OR 检索;self-test 判据对齐;去死 matcher | hook 输出 str(1126B);`判据+CAS+marker`→5 候选(原 0);self-test 零检索必红 |
 | **INC-045** doc-topology 红证跳过 | 六红证改 away 名册目标、恒跑;门证据 `--emit` 刷新 | `red count: 6` 全 wentRed;observedAt 刷新;DOC_TOPOLOGY_IN_SYNC |
-| **INC-046** 用户名泄漏 | 5 文件 scrub;卫生门 `.plist` 入册 + `.mjs` 量测后 source 留档 | 全仓 tracked `.mjs/.plist` 零 `/Users/ryanlan`;hygiene 11/11;非 pending 0 命中 |
+| **INC-046** 用户名泄漏 | 5 文件 scrub;卫生门 `.plist` 入册 + `.mjs` 量测后 source 留档 | 全仓 tracked `.mjs/.plist` 零 `<local-home>` 形态用户名路径;hygiene 11/11;非 pending 0 命中 |
 | **INC-047** 写面三缺陷 | throw 落回执;dryRun/partition 证伪测试;跨仓测试迁仓 | 13/13 server 测试;throw→`CEREMONY_THREW_BEFORE_RECEIPT` 回执落盘;WF `tests/knowledge-inject` 6/6 |
 | **INC-048** helper 漂移 | 改动搬回源;candidate.31 重钉/重锚/再生;安装副本重装 | `verify-installed-copy` → `INSTALLED_COPY_VALIDATED`;RELEASE_ARTIFACTS_VALIDATED;套件绿 |
 | **INC-049** freshness 两判据 | codegraph 问 status(非 stat 文件);web 比链版本 | `projection-freshness:proof` 全绿;web 对链移动判红(v1841→链 v1868) |

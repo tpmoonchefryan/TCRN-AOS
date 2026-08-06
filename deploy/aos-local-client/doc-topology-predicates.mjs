@@ -130,6 +130,15 @@ export function findUncontainedMentions({ text, path, spans, literals }) {
  */
 export const SSH_ENGINE_PATTERN = /ssh\s+[A-Za-z0-9._-]+\s+['"]node\s+\S*tcrn-workflow\.mjs/gu;
 
+/**
+ * INC-057 (B4): the break-glass allowlist never excuses a governance-tree WRITE — the
+ * same write-guard the observer has. A documented command that invokes the engine AND
+ * writes under /srv/tcrn/governance is red regardless of any allowlist entry, so both
+ * consumers judge "status + rm …" the same way.
+ */
+export const SSH_ENGINE_GOVERNANCE_WRITE_PATTERN =
+  /\b(?:rm|mv|cp|dd|tee|touch|install)\s+\S*\/srv\/tcrn\/governance|(?:>>?|>|>|tee)\s+\S*\/srv\/tcrn\/governance/u;
+
 export function findSshDirectEngineCommands({ text, path }) {
   const findings = [];
   for (const match of text.matchAll(SSH_ENGINE_PATTERN)) {
@@ -323,8 +332,14 @@ export function judgeDocTopology({
     }
 
     for (const hit of findSshDirectEngineCommands({ text: document.text, path: rule.path })) {
-      if (!sshCommandAllowlisted(hit.command, sshAllowlist)) {
-        findings.push({ code: "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED", ...hit });
+      // INC-057 (B4): the write-guard runs FIRST, so an allowlisted entry never excuses a
+      // governance-tree write on the doc side either — matching the observer's decision.
+      const writesGovernance = SSH_ENGINE_GOVERNANCE_WRITE_PATTERN.test(hit.command);
+      if (writesGovernance || !sshCommandAllowlisted(hit.command, sshAllowlist)) {
+        findings.push({
+          code: writesGovernance ? "SSH_DIRECT_ENGINE_WRITE_NOT_ALLOWLISTED" : "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED",
+          ...hit
+        });
       }
     }
 

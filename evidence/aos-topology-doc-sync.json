@@ -15,8 +15,8 @@
     {
       "id": "EVERY_REGISTERED_DOCUMENT_PRESENT",
       "met": true,
-      "expected": 13,
-      "observed": 13
+      "expected": 18,
+      "observed": 18
     },
     {
       "id": "EVERY_REQUIRED_BLOCK_CARRIES_ITS_PARTITIONS",
@@ -46,7 +46,7 @@
       "id": "SSH_BREAKGLASS_ALLOWLIST_PRESENT",
       "met": true,
       "expected": "ssh-breakglass-allowlist.json with the two residual classes",
-      "observed": "<local-platform-root>/TCRN-AOS/deploy/aos-local-client/ssh-breakglass-allowlist.json (2 classes, 0 entries)"
+      "observed": "<local-platform-root>/TCRN-AOS/deploy/aos-local-client/ssh-breakglass-allowlist.json (2 classes, 2 entries)"
     },
     {
       "id": "RED_HOME_FLIPPED_IN_A_REAL_DOCUMENT",
@@ -145,7 +145,7 @@
     "awayHost": "tcrn-platform-dev",
     "awayWorkspaceFromManifest": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
   },
-  "observedAt": "2026-08-05T22:24:03Z",
+  "observedAt": "2026-08-06T01:33:18Z",
   "probeVm": false,
   "observations": {
     "TCRN-AOS": {
@@ -327,10 +327,50 @@
         "blocks": 0,
         "claims": 0,
         "partitions": []
+      },
+      {
+        "path": "docs/projection-freshness-convention.md",
+        "exists": true,
+        "mustCarryClaims": false,
+        "blocks": 0,
+        "claims": 0,
+        "partitions": []
+      },
+      {
+        "path": "docs/dispatch-readiness-convention.md",
+        "exists": true,
+        "mustCarryClaims": false,
+        "blocks": 0,
+        "claims": 0,
+        "partitions": []
+      },
+      {
+        "path": "docs/deliberation-adoption-convention.md",
+        "exists": true,
+        "mustCarryClaims": false,
+        "blocks": 0,
+        "claims": 0,
+        "partitions": []
+      },
+      {
+        "path": "docs/sourcing-and-vetting-convention.md",
+        "exists": true,
+        "mustCarryClaims": false,
+        "blocks": 0,
+        "claims": 0,
+        "partitions": []
+      },
+      {
+        "path": "TCRN-AOS/docs/direction-aos-collaborative-workbench.md",
+        "exists": true,
+        "mustCarryClaims": false,
+        "blocks": 0,
+        "claims": 0,
+        "partitions": []
       }
     ],
     "counts": {
-      "documents": 13,
+      "documents": 18,
       "documentsCarryingClaims": 5,
       "claims": 13
     }
@@ -417,14 +457,14 @@
         {
           "path": "CLAUDE.md",
           "partitionId": null,
-          "line": 198,
+          "line": 200,
           "expected": null,
           "observed": null
         },
         {
           "path": "CLAUDE.md",
           "partitionId": null,
-          "line": 198,
+          "line": 200,
           "expected": null,
           "observed": null
         }
@@ -436,7 +476,7 @@
     },
     {
       "id": "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED",
-      "why": "STORY-157.3:复核命令列教人 SSH 直驱引擎——访问形态错,不管地址对不对。一条没进 break-glass 白名单的 ssh 直驱命令必须红并点名文件与行号。",
+      "why": "STORY-157.3:复核命令列教人 SSH 直驱引擎——访问形态错,不管地址对不对。一条没进 break-glass 白名单的 ssh 直驱命令必须红并点名文件与行号。(用写动词 work-transition,避免命中 mcp-unreachable-fallback 的 status 条目。)",
       "wentRed": true,
       "reasonCode": "DOC_TOPOLOGY_CLAIM_DRIFTED",
       "expectedCode": "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED",

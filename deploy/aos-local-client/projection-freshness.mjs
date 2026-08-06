@@ -43,9 +43,10 @@ export const SIDECARS = Object.freeze([
   }),
   Object.freeze({
     id: "memory-index",
-    maxAge: "30 days",
-    truth: "agent memory files under <local-home>/.claude/projects/…/memory",
-    self: "newest memory file mtime"
+    maxAge: "n/a — activity notice only, not a freshness criterion (INC-058)",
+    truth: "no independent truth (the memory files ARE the datum)",
+    self: "newest memory file mtime",
+    activityOnly: true
   })
 ]);
 
@@ -69,46 +70,59 @@ async function checkKnowledge() {
 function checkCodegraph() {
   const roots = ["TCRN-AOS", "TCRN-Design-System", "TCRN-TMS"];
   const stale = [];
+  const notes = [];
   for (const repo of roots) {
     const root = join(PLATFORM_ROOT, repo);
     const verdict = codegraphStatusVerdict(root);
     if (verdict === null) { stale.push({ repo, why: "codegraph status unreadable or no index (unproven)" }); continue; }
-    if (verdict.pending) stale.push({ repo, why: verdict.detail ?? "codegraph reports pending changes (needs sync)" });
+    if (verdict.pending) {
+      stale.push({ repo, why: verdict.detail ?? "codegraph reports pending changes against tracked source" });
+      continue;
+    }
+    if (verdict.walkerDiscrepancy !== null) {
+      notes.push(`${repo}: ${verdict.walkerDiscrepancy} — walker residual, not real lag`);
+    }
   }
-  if (stale.length > 0) return { status: "stale", self: stale.map((s) => `${s.repo}:${s.why}`).join("; "), reason: "codegraph index behind repo source" };
-  return { status: "fresh", self: "all indexed repos report an up-to-date index", reason: null };
+  if (stale.length > 0) return { status: "stale", self: stale.map((s) => `${s.repo}:${s.why}`).join("; "), reason: "codegraph index behind tracked repo source" };
+  return { status: "fresh", self: notes.length > 0 ? `all indexed repos up to date${notes.length ? ` (note: ${notes.join("; ")})` : ""}` : "all indexed repos report an up-to-date index", reason: null };
 }
 
 /**
  * The codegraph index's own verdict on freshness — ASK THE INSTRUMENT, don't stat files
- * (INC-049). The index uses SQLite with full WAL, so the main .db file's mtime lags the
- * real index data and `-wal`/`-shm` carry it; a file-mtime comparison false-reds on a
- * healthy index. `codegraph status` reports pending changes explicitly ("Run codegraph
- * sync to update the index") when the index is behind its source, and stays quiet when
- * up to date.
+ * (INC-049/058). `codegraph status` reports pending changes when its index differs from
+ * the source. A freshness inspection does NOT sync (INC-058: verify must stay read-only;
+ * asking the instrument to write its own sidecar while measuring it is the apply.mjs
+ * mistake). Instead, a pending report is graded by whether the working tree carries
+ * TRACKED source changes: tracked changes = real staleness (red); only untracked/
+ * ignored residue (a walker-counted file the indexer skips) = walker residual (note,
+ * green). That keeps "stale" falsifiable without re-introducing INC-049's false red.
  */
 function codegraphStatusVerdict(repoRoot) {
   try {
-    // The codegraph binary lives in TCRN-TMS's node_modules (shared across the three
-    // product repos); run it from there with the target repo as the positional path.
     const tmsRoot = join(PLATFORM_ROOT, "TCRN-TMS");
-    const status = () => execFileSync("pnpm", ["--dir", tmsRoot, "exec", "codegraph", "status", repoRoot], { encoding: "utf8", timeout: 30_000 });
-    let out = status();
-    if (/Pending Changes:/u.test(out)) {
-      // INC-051: a freshness inspection may ask the instrument to catch up once. If a
-      // fresh sync STILL reports pending, the residual is a walker-only discrepancy
-      // (a file codegraph's indexer skips but its status walker counts) — the index is
-      // as fresh as the instrument can make it, so this is NOT a real lag.
-      execFileSync("pnpm", ["--dir", tmsRoot, "exec", "codegraph", "sync", repoRoot], { encoding: "utf8", timeout: 60_000 });
-      out = status();
+    const out = execFileSync("pnpm", ["--dir", tmsRoot, "exec", "codegraph", "status", repoRoot], { encoding: "utf8", timeout: 30_000 });
+    if (!/Pending Changes:/u.test(out)) {
+      return { pending: false, walkerDiscrepancy: null };
     }
-    if (/Pending Changes:/u.test(out)) {
-      const detail = out.split("\n").filter((l) => l.includes("Pending") || /^\s+(Removed|Added|Modified|Renamed):/.test(l)).join(";").trim().slice(0, 120) || "codegraph reports pending changes";
-      return { pending: false, walkerDiscrepancy: detail };
+    const detail = out.split("\n").filter((l) => l.includes("Pending") || /^\s+(Removed|Added|Modified|Renamed):/.test(l)).join(";").trim().slice(0, 160);
+    const trackedChanges = trackedSourceChanges(repoRoot);
+    if (trackedChanges.length === 0) {
+      // Only untracked/ignored residue — a walker-counted file the indexer skips.
+      return { pending: false, walkerDiscrepancy: detail, why: "no tracked source changes — walker residual, not real lag" };
     }
-    return { pending: false };
+    return { pending: true, detail, why: `tracked source changes: ${trackedChanges.join(", ")}` };
   } catch {
     return null;
+  }
+}
+
+/** Tracked files with local changes (modified/added/deleted), excluding untracked residue. */
+export function trackedSourceChanges(repoRoot) {
+  try {
+    const out = execFileSync("git", ["-C", repoRoot, "status", "--porcelain"], { encoding: "utf8", timeout: 15_000 });
+    return out.split("\n").filter((l) => l.length > 0 && !l.startsWith("??")).map((l) => l.slice(3));
+  } catch {
+    return ["git status unreadable"];
   }
 }
 
@@ -140,9 +154,14 @@ async function checkWebProjection() {
   }
   // The projection is only as fresh as the chain it claims to show. Compare its stamped
   // cross-project chain version against the LIVE chain (the truth); a view built before
-  // the chain moved is stale even if it was built recently.
+  // the chain moved is stale even if it was built recently. If the truth is unreadable,
+  // this row is UNPROVEN, never fresh (INC-058: a silent wall-clock pass in a
+  // half-reachable world is the false-fresh class this gate exists to kill).
   const live = await liveChainVersion("cross-project");
-  if (live !== null && Number(projectedVersion) < live) {
+  if (live === null) {
+    return { status: "unproven", self: `v${projectedVersion} (built ${stamp})`, reason: "live chain version unreadable — cannot verify the projection against the truth" };
+  }
+  if (Number(projectedVersion) < live) {
     return { status: "stale", self: `v${projectedVersion} (built ${stamp})`, reason: `projection shows cross-project v${projectedVersion}; chain is v${live}` };
   }
   return { status: "fresh", self: `${stamp} · cross-project v${projectedVersion}`, reason: null };
@@ -161,9 +180,13 @@ async function liveChainVersion(partition) {
   }
 }
 
-function checkMemoryIndex() {
+export function checkMemoryIndex() {
+  // INC-058: the memory files' own mtime is truth and self at once — this row cannot
+  // measure "index behind truth", only "the user has not worked lately". It is an
+  // ACTIVITY notice, not a freshness criterion, so it never reds the gate. Declared
+  // as such in SIDECARS.
   const memoryRoot = join(process.env.HOME ?? "/", ".claude/projects");
-  if (!existsSync(memoryRoot)) return { status: "unproven", self: null, reason: "no ~/.claude/projects" };
+  if (!existsSync(memoryRoot)) return { status: "activity", self: null, reason: "no ~/.claude/projects (activity unmeasured)", activityOnly: true };
   const memDirs = readdirSync(memoryRoot).filter((name) => name.includes("-Users-"));
   let newest = null;
   for (const dir of memDirs) {
@@ -174,12 +197,13 @@ function checkMemoryIndex() {
       if (newest === null || m > newest) newest = m;
     }
   }
-  if (newest === null) return { status: "unproven", self: null, reason: "no memory files found" };
+  if (newest === null) return { status: "activity", self: null, reason: "no memory files found (activity unmeasured)", activityOnly: true };
   const ageDays = (Date.now() - newest) / 86_400_000;
   return {
-    status: ageDays <= 30 ? "fresh" : "stale",
+    status: "activity",
+    activityOnly: true,
     self: new Date(newest).toISOString().slice(0, 10),
-    reason: ageDays <= 30 ? null : `memory index untouched ${ageDays.toFixed(1)} days`
+    reason: ageDays > 30 ? `memory files untouched ${ageDays.toFixed(1)} days (activity notice, not freshness)` : null
   };
 }
 
@@ -194,11 +218,19 @@ export async function runProjectionFreshness() {
     { sidecar: "codegraph", maxAge: SIDECARS[2].maxAge, ...codegraph },
     { sidecar: "memory-index", maxAge: SIDECARS[3].maxAge, ...memory }
   ];
-  const bad = rows.filter((row) => row.status !== "fresh");
+  // INC-058: the declared registry and the executed rows must agree — a sidecar added to
+  // SIDECARS but not wired into the checks (or vice versa) is a silently unguarded slot.
+  const registryMismatch = rows.length !== SIDECARS.length
+    ? [`SIDECARS declares ${SIDECARS.length} sidecars but ${rows.length} rows were checked`]
+    : [];
+  const bad = rows.filter((row) => row.status !== "fresh" && row.status !== "activity");
   return {
     schemaVersion: "tcrn.projection-freshness.v1",
-    ok: bad.length === 0,
-    reasonCode: bad.length === 0 ? "PROJECTION_FRESHNESS_OK" : "PROJECTION_FRESHNESS_STALE",
+    ok: bad.length === 0 && registryMismatch.length === 0,
+    reasonCode: bad.length === 0 && registryMismatch.length === 0 ? "PROJECTION_FRESHNESS_OK"
+      : registryMismatch.length > 0 ? "PROJECTION_FRESHNESS_REGISTRY_MISMATCH"
+        : "PROJECTION_FRESHNESS_STALE",
+    registryMismatch,
     rows,
     stale: bad.map((row) => `${row.sidecar}:${row.status} (${row.reason ?? row.self ?? "?"})`)
   };
