@@ -25,9 +25,9 @@ NoNewPrivileges=no
 Environment=FACADE_HOST=127.0.0.1
 Environment=FACADE_PORT=4320
 Environment=FACADE_ENGINE=/srv/tcrn/engine/tcrn-workflow
-Environment=FACADE_WORKSPACES={"TCRN-AOS":"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace","Joi-Button":"/srv/tcrn/governance/tcrn-workspace/Joi-Button/workspace","cross-project":"/srv/tcrn/governance/tcrn-workspace/cross-project/workspace","TCRN-Design-System":"/srv/tcrn/governance/tcrn-workspace/TCRN-Design-System/workspace","TCRN-TMS":"/srv/tcrn/governance/tcrn-workspace/TCRN-TMS/workspace"}
+Environment="FACADE_WORKSPACES={"TCRN-AOS":"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace","Joi-Button":"/srv/tcrn/governance/tcrn-workspace/Joi-Button/workspace","cross-project":"/srv/tcrn/governance/tcrn-workspace/cross-project/workspace","TCRN-Design-System":"/srv/tcrn/governance/tcrn-workspace/TCRN-Design-System/workspace","TCRN-TMS":"/srv/tcrn/governance/tcrn-workspace/TCRN-TMS/workspace"}"
 Environment=FACADE_ALLOWED_HOSTS=127.0.0.1,localhost
-Environment=FACADE_PG_SCHEMAS={"TCRN-AOS":"chain_aos","Joi-Button":"chain_joi","cross-project":"chain_cross","TCRN-Design-System":"chain_ds","TCRN-TMS":"chain_tms"}
+Environment="FACADE_PG_SCHEMAS={"TCRN-AOS":"chain_aos","Joi-Button":"chain_joi","cross-project":"chain_cross","TCRN-Design-System":"chain_ds","TCRN-TMS":"chain_tms"}"
 Environment=FACADE_PG_CONNECTION=postgresql:///tcrn_governance?host=/var/run/postgresql
 Restart=on-failure
 RestartSec=5
