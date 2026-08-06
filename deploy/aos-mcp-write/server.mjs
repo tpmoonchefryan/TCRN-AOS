@@ -34,7 +34,7 @@
 // CONTRACT: deploy/aos-mcp-write/SPEC.md (STORY-156.1). THE SPEC IS THE CONTRACT.
 
 import { spawn } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { randomBytes } from "node:crypto";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -116,7 +116,65 @@ function ceremonyToolDescriptor() {
 
 /** The default ceremony executor: the existing recipe, unmodified. */
 export async function performCeremony({ payloadPath, dryRun, partition }) {
-  return runCeremony({ payloadPath, dryRun, partition });
+  // STORY-185: the write MCP face drives the facade write service (the ceremony
+  // endpoint on 127.0.0.1:FACADE_WRITE_PORT through the SSH tunnel), which
+  // performs the batch against the PG-backed chain. The facade's request takes
+  // the payload object and the partition; the payload file written by the
+  // dispatcher is read here and forwarded.
+  const payload = JSON.parse(readFileSync(payloadPath, "utf8"));
+  const tunnel = await establishWriteTunnel();
+  const body = JSON.stringify({ partition, dryRun, payload });
+  try {
+    const { execFileSync } = await import("node:child_process");
+    const stdout = execFileSync("curl", [
+      "-s", "-m", "120", "-X", "POST", "-H", "content-type: application/json",
+      "-d", body, `http://127.0.0.1:${tunnel.port}/api/ceremony`,
+    ], { maxBuffer: 64 * 1024 * 1024, encoding: "utf8" });
+    const receipt = JSON.parse(stdout);
+    // The facade-write receipt shape is the ceremony receipt shape; the
+    // dispatcher reads specific fields (ok, reasonCode, steps, readback).
+    return {
+      ...receipt,
+      ok: receipt.ok === true,
+      reasonCode: receipt.reasonCode ?? (receipt.ok === true ? "CEREMONY_COMPLETED" : "CEREMONY_REFUSED"),
+    };
+  } catch (error) {
+    const text = String(error?.stdout ?? error?.stderr ?? error?.message ?? error).trim();
+    throw new Error(`facade write ceremony failed: ${text.slice(0, 500)}`);
+  }
+}
+
+// STORY-185: the facade write service binds loopback on the VM; the local MCP
+// server reaches it through an ssh -N -L tunnel, established per session.
+let writeTunnel = null;
+async function establishWriteTunnel() {
+  if (writeTunnel !== null) return writeTunnel;
+  const { spawn } = await import("node:child_process");
+  const { FACADE_WRITE_PORT, VM_HOST } = await import("../aos-local-client/topology.mjs");
+  const port = FACADE_WRITE_PORT;
+  const child = spawn("ssh", ["-N", "-L", `${port}:127.0.0.1:${port}`, VM_HOST],
+    { stdio: "ignore", detached: true });
+  child.unref();
+  const net = await import("node:net");
+  for (let attempt = 0; attempt < 40; attempt += 1) {
+    await new Promise((done) => setTimeout(done, 250));
+    try {
+      const ok = await new Promise((resolve) => {
+        const socket = net.connect(port, "127.0.0.1", () => { socket.destroy(); resolve(true); });
+        socket.on("error", () => resolve(false));
+      });
+      if (ok) { writeTunnel = { port, pid: child.pid }; return writeTunnel; }
+    } catch { /* retry */ }
+  }
+  child.kill("SIGTERM");
+  throw new Error("the facade write tunnel did not come up");
+}
+
+export async function reclaimWriteTunnel() {
+  if (writeTunnel === null) return;
+  try { process.kill(-writeTunnel.pid, "SIGTERM"); } catch { /* gone */ }
+  try { process.kill(writeTunnel.pid, "SIGTERM"); } catch { /* gone */ }
+  writeTunnel = null;
 }
 
 export class CeremonyDispatcher {
@@ -226,7 +284,11 @@ export class CeremonyDispatcher {
     // home directory.
     const payloadPath = resolve(this.#writeRoot, "payloads", `${stamp()}-${partition}.json`);
     mkdirSync(dirname(payloadPath), { recursive: true });
-    writeFileSync(payloadPath, `${JSON.stringify(payload, null, 2)}\n`);
+    // INC-037 discipline: a materialised payload is committable evidence, so it is
+    // scrubbed of host paths before it lands — the same hygiene the receipt gets.
+    // A payload can carry a host path (an init step names its framework root), and
+    // an unscrupped payload in evidence/ is how the gate below was reddened once.
+    writeFileSync(payloadPath, `${JSON.stringify(scrubHostPaths(payload), null, 2)}\n`);
 
     let receipt;
     try {
@@ -373,6 +435,8 @@ if (import.meta.url === pathToFileURL(resolve(process.argv[1] ?? "")).href) {
         error: scrubHostPathsInText(String(error?.message ?? error))
       })}\n`);
       process.exitCode = 1;
+    } finally {
+      await reclaimWriteTunnel();
     }
   }
 }
