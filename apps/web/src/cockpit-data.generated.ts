@@ -4,14 +4,14 @@
 import type { CockpitData } from "./cockpit-types.js";
 
 export const cockpitData: CockpitData = {
-  "generatedAt": "2026-08-06T01:31:10Z",
+  "generatedAt": "2026-08-06T01:49:32Z",
   "partitions": [
     {
       "id": "cross-project",
       "label": "Platform governance",
       "labelZh": "平台治理",
-      "chainVersion": 1888,
-      "verifiedAt": "2026-08-06T01:31:10Z",
+      "chainVersion": 1917,
+      "verifiedAt": "2026-08-06T01:49:32Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -23,7 +23,7 @@ export const cockpitData: CockpitData = {
       "label": "Design System",
       "labelZh": "设计系统",
       "chainVersion": 983,
-      "verifiedAt": "2026-08-06T01:31:10Z",
+      "verifiedAt": "2026-08-06T01:49:32Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -35,7 +35,7 @@ export const cockpitData: CockpitData = {
       "label": "TMS",
       "labelZh": "TMS",
       "chainVersion": 228,
-      "verifiedAt": "2026-08-06T01:31:10Z",
+      "verifiedAt": "2026-08-06T01:49:32Z",
       "readVia": "export",
       "attestationFromSequence": null,
       "unavailable": []
@@ -45,7 +45,7 @@ export const cockpitData: CockpitData = {
       "label": "AOS",
       "labelZh": "AOS",
       "chainVersion": 1048,
-      "verifiedAt": "2026-08-06T01:31:10Z",
+      "verifiedAt": "2026-08-06T01:49:32Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -57,7 +57,7 @@ export const cockpitData: CockpitData = {
       "label": "Joi Button",
       "labelZh": "Joi Button",
       "chainVersion": 586,
-      "verifiedAt": "2026-08-06T01:31:10Z",
+      "verifiedAt": "2026-08-06T01:49:32Z",
       "readVia": "export",
       "attestationFromSequence": 1,
       "unavailable": []
@@ -7328,10 +7328,10 @@ export const cockpitData: CockpitData = {
       "id": "work:a3feac4c1d165c50c51edfd7",
       "externalKey": "TCRN-CROSS-INC-052",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": null,
-      "revision": 2,
-      "scope": "【强化:收口绑定生效证据(tip 复量协议)】二次 QA 根因 1。红线边界:公约修订按 harness-constraint-convention 呈 Owner;closeout 门自身必须有红腿(对含蓄意 tip 红的试验批必须拒绝);本单先于 INC-056..060 执行。事实:修复批三处 tip 红(收口文档泄漏/搬迁测试漏登记/投影落后回执)同根=最后一次门运行早于最后一次提交;INC-049 工单的生效证据命令(构造真陈旧→门变红)若在收口时实跑会当场抓住 sync-once 恒绿化;九单收口 27 步全 transition 无 annotate,done 与证据零绑定——五要素立在派工端,收口端无对偶(INIT-019 缘起根因③在工单生命周期上的残留)。文件指针:docs/dispatch-readiness-convention.md(补收口协议)、docs/delivery-cadence-convention.md;新 closeout runner(重放批内生效证据命令集对 HEAD 产表,结果表由命令产出非手抄)。验证命令:closeout runner 对 INC-043..051 批重放→应复现三红(红腿自证)。收口动作:公约修订呈 Owner+runner 落地+done 流程须附生效证据注记。生效证据命令:对蓄意 tip 红试验批拒收口,修后放行。出处:TCRN-AOS/docs/reports/init-019/QA/re-acceptance-report.md 根因 1、A 类。",
+      "revision": 6,
+      "scope": "【强化:收口绑定生效证据(tip 复量协议)】二次 QA 根因 1。红线边界:公约修订按 harness-constraint-convention 呈 Owner;closeout 门自身必须有红腿(对含蓄意 tip 红的试验批必须拒绝);本单先于 INC-056..060 执行。事实:修复批三处 tip 红(收口文档泄漏/搬迁测试漏登记/投影落后回执)同根=最后一次门运行早于最后一次提交;INC-049 工单的生效证据命令(构造真陈旧→门变红)若在收口时实跑会当场抓住 sync-once 恒绿化;九单收口 27 步全 transition 无 annotate,done 与证据零绑定——五要素立在派工端,收口端无对偶(INIT-019 缘起根因③在工单生命周期上的残留)。文件指针:docs/dispatch-readiness-convention.md(补收口协议)、docs/delivery-cadence-convention.md;新 closeout runner(重放批内生效证据命令集对 HEAD 产表,结果表由命令产出非手抄)。验证命令:closeout runner 对 INC-043..051 批重放→应复现三红(红腿自证)。收口动作:公约修订呈 Owner+runner 落地+done 流程须附生效证据注记。生效证据命令:对蓄意 tip 红试验批拒收口,修后放行。出处:TCRN-AOS/docs/reports/init-019/QA/re-acceptance-report.md 根因 1、A 类。\n\n[INIT-019 二次 QA 收口注记 2026-08-06] 强化单 INC-052..055 与修复单 INC-056..060 全部 done。生效证据:closeout-evidence-runner 对 INC-043..051 批 CLOSEOUT_EVIDENCE_GREEN(三红转绿);closeout-verify INC-060 CLOSEOUT_ITEMS_RECONCILED(9 项零无归属);doc-topology RED_PROOF_COUNT_FLOOR 绿 + DOC_TOPOLOGY_IN_SYNC;projection-freshness OK;parity PARITY_VERIFIED;hygiene 11/11;observer self-test 117/117;offline-boundary 单跑 6/6。详情:docs/reports/init-019/QA/re-acceptance-report.md 与 QA/closeout-batch.json、QA/inc060-reconciliation.json。",
       "decidedBy": [],
       "sprintWorkId": null
     },
@@ -7340,9 +7340,9 @@ export const cockpitData: CockpitData = {
       "id": "work:62e07e221f98a95ec0cd8420",
       "externalKey": "TCRN-CROSS-INC-053",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": null,
-      "revision": 2,
+      "revision": 5,
       "scope": "【强化:豁免面/门改动的对抗义务】二次 QA 根因 2。红线边界:义务落公约条文与评审模板;对抗样本必须进语料/测试而非散文;本单先于 INC-057/058。事实:break-glass 白名单激活开三绕行(跨段/子串/跨仓)——写守卫配了 mutation 证人所以同段搭车被拦住,但新 PASS 路径无绕行构造义务,两 HIGH 缺口存活到复验才被构造出来;INC-049 修假红时把门改松(sync-once 恒绿化+web 真值不可读静默 fresh),「修复不许把门改松」只是工单散文无机器判据。文件指针:docs/harness-constraint-convention.md(或新 gate-change 附则);tcrn-workflow observer 语料机制(对抗样本载体)。验证命令:对本批白名单与 freshness 两类改动回放义务清单→应各自产出缺失项(B1/B2/C1/C2)。收口动作:公约条文+义务检查表(新增/修改 pass-path 必附:绕行构造试验、pass-path mutation 证人、反问「什么会让它错误地绿」;修门必跑该门红腿)+评审 prompt 模板点名。生效证据命令:下一次 pass-path/门改动的提交内可见绕行构造与红腿输出。出处:QA/re-acceptance-report.md 根因 2、B/C 类。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -7352,9 +7352,9 @@ export const cockpitData: CockpitData = {
       "id": "work:9ea533c94b12c850d12cbbb5",
       "externalKey": "TCRN-CROSS-INC-054",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": null,
-      "revision": 2,
+      "revision": 5,
       "scope": "【强化:批单逐项核销】二次 QA 根因 3。红线边界:核销表机器可 diff(原单条目集 vs fixed/retained/deferred 处置集);retained 必须指名链上活单;本单先于 INC-060。事实:INC-051 批单收口漏掉 gate_list 数据源与 INC041 双写比对两半(既不在已修也不在保留,无声掉落);memory 行同样掉缝;保留九项只活在 INC-051/notes.md,链上无活单承载。文件指针:docs/dispatch-readiness-convention.md(批单收口节);TCRN-AOS/docs/reports/init-019/INC-051/notes.md(对账样本)。验证命令:对 INC-051 回放核销 diff→应报 3 项无归属。收口动作:公约条文+核销模板;现存无归属保留项定链上归属。生效证据命令:核销工具对故意漏一项的试验批变红(判据两侧可不同)。出处:QA/re-acceptance-report.md 根因 3、D2/D3。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -7364,9 +7364,9 @@ export const cockpitData: CockpitData = {
       "id": "work:318f50725e6730892c4533d4",
       "externalKey": "TCRN-CROSS-INC-055",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": null,
-      "revision": 2,
+      "revision": 5,
       "scope": "【强化:跨仓运行时依赖守卫(每世界可满足机器化)】二次 QA 根因 4。红线边界:含一个方向题,派工时先决且执行期不得重开:observer 白名单缺席世界的语义=corpus 按世界降级期望 vs WF 内嵌条目副本+一致性门(二选一);孤立世界试验进 verify 不得依赖平台布局;本单先于 INC-057。事实:INC-051 使 WF observer 默认白名单路径指向兄弟仓 TCRN-AOS 文件(scripts/ssh-write-observer.mjs:523),孤立 clone --self-test 8 mismatches(A15/D01/D06/D07/D12/F12/F15/G05 全落 HIT)→WF CI 推送即红;知识卡「门的判据须在每个会被评估的世界可满足」已在库未机器化;同批 INC-047 刚修完反方向同类耦合。文件指针:tcrn-workflow/scripts/ssh-write-observer.mjs:523;tests/ssh-write-observer.test.mjs:34;WF task.mjs verify 序列。验证命令:scratchpad 孤立布局 --self-test(现 8 mismatches)。收口动作:决方向+孤立试验进 WF verify+新增跨仓运行时依赖须申报。生效证据命令:孤立 clone pnpm test 按裁定语义绿。出处:QA/re-acceptance-report.md 根因 4、B3。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -7376,10 +7376,10 @@ export const cockpitData: CockpitData = {
       "id": "work:5d7d4023327275b3e9bfb20e",
       "externalKey": "TCRN-CROSS-INC-056",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": null,
-      "revision": 2,
-      "scope": "【修复:tip 三红一次收】红线边界:依赖 INC-052 先行(本单收口即用新收口协议自量);不得白名单豁免既有命中。事实:①docs/reports/init-019/QA/qa-remediation-summary.md:14 把成功判据写成字面本机用户名路径→hygiene 门红(AOS 套件 469/470,门无豁免通路——门是好门);②tcrn-workflow/tests/knowledge-inject.test.mjs(84c61b5 搬入)未登 source-allowlist 且在 ec7d05c regen 之后→PROOF_ARTIFACT_UNAPPROVED_SOURCE(WF 套件 966/967);③apps/web/src/cockpit-data.generated.ts 提交版停 cross v1841 而同批已提交回执 chainAfter=1868→干净 clone 被 INC-049 自己的新判据判红(本机绿靠工作树未提交重建掩盖,「树对≠记录对」重演);连带 evidence/aos-topology-doc-sync.json 已提交版停 13 文档旧形状(现 18)。文件指针:上列四文件+tcrn-workflow/scripts/policy/source-allowlist.json。验证命令:两套件对 HEAD 无管道跑;git show HEAD 提取投影版本对回执 chainAfter。收口动作:占位符化+登记+regen+提交 v1868 投影+--emit 18 形状。生效证据命令:pnpm --dir TCRN-AOS test 与 pnpm --dir tcrn-workflow test 对 HEAD 全绿(offline-boundary 环境项归 INC-059)。出处:QA/re-acceptance-report.md A 类。",
+      "revision": 6,
+      "scope": "【修复:tip 三红一次收】红线边界:依赖 INC-052 先行(本单收口即用新收口协议自量);不得白名单豁免既有命中。事实:①docs/reports/init-019/QA/qa-remediation-summary.md:14 把成功判据写成字面本机用户名路径→hygiene 门红(AOS 套件 469/470,门无豁免通路——门是好门);②tcrn-workflow/tests/knowledge-inject.test.mjs(84c61b5 搬入)未登 source-allowlist 且在 ec7d05c regen 之后→PROOF_ARTIFACT_UNAPPROVED_SOURCE(WF 套件 966/967);③apps/web/src/cockpit-data.generated.ts 提交版停 cross v1841 而同批已提交回执 chainAfter=1868→干净 clone 被 INC-049 自己的新判据判红(本机绿靠工作树未提交重建掩盖,「树对≠记录对」重演);连带 evidence/aos-topology-doc-sync.json 已提交版停 13 文档旧形状(现 18)。文件指针:上列四文件+tcrn-workflow/scripts/policy/source-allowlist.json。验证命令:两套件对 HEAD 无管道跑;git show HEAD 提取投影版本对回执 chainAfter。收口动作:占位符化+登记+regen+提交 v1868 投影+--emit 18 形状。生效证据命令:pnpm --dir TCRN-AOS test 与 pnpm --dir tcrn-workflow test 对 HEAD 全绿(offline-boundary 环境项归 INC-059)。出处:QA/re-acceptance-report.md A 类。\n\n[INIT-019 二次 QA 收口注记 2026-08-06] A1:qa-remediation-summary.md:14 已占位符化(<local-home>),hygiene 11/11;A2:knowledge-inject.test.mjs 已登记 + regen 绿;A3:cockpit-data.generated.ts 提交 v1888 + doc-sync --emit 18 文档;closeout-evidence-runner 对 INC-043..051 批 CLOSEOUT_EVIDENCE_GREEN;inc060-reconciliation 零无归属。",
       "decidedBy": [],
       "sprintWorkId": null
     },
@@ -7388,9 +7388,9 @@ export const cockpitData: CockpitData = {
       "id": "work:93247aae228497820523b644",
       "externalKey": "TCRN-CROSS-INC-057",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": null,
-      "revision": 2,
+      "revision": 5,
       "scope": "【修复:break-glass 三绕行闭合(enforce 前置)】红线边界:依赖 INC-053(对抗义务)与 INC-055(跨仓语义方向)先行;写守卫先于白名单的次序不动;每处修复带绕行语料+pass-path mutation 证人;WF/AOS 判决函数统一;白名单两条目合法用途必须仍 PASS。事实(--classify 实证,主审独立复证):①跨段绕行——首段命中白名单即整条 PASS:status 段+rm 治理树段构造 PASS/breakglass-allowlist,单独 rm 段对照 HIT/ssh-write;②全行子串走私——echo 白名单样式字符串+非白名单动词(work-list)构造 PASS,work-list 单独 HIT/ssh-engine-direct;③AOS doc-topology 侧无写守卫——同一「status+写」整行 observer 判 HIT、doc 门判 allowlisted,白名单文件自述「同一条目两处判决一致」失实。observe 模式下后果=漏记不拦;enforce 切换前必须闭合。文件指针:tcrn-workflow/scripts/ssh-write-observer.mjs:535-587;TCRN-AOS/deploy/aos-local-client/doc-topology-predicates.mjs:148;ssh-breakglass-allowlist.json。验证命令:三条构造命令 --classify/predicates 复放。收口动作:engine 分支按段匹配白名单(或 PASS 改 continue 记 rank);白名单匹配锚定段内命令位置;doc 侧加写守卫或复用同一判决函数。生效证据命令:三构造全红、两条目合法用途仍 PASS、绕行语料+mutation 证人入册。出处:QA/re-acceptance-report.md B1/B2/B4、agent-remediation-wf.md F1/F2。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -7400,9 +7400,9 @@ export const cockpitData: CockpitData = {
       "id": "work:6767d6926f2c6ad474306d0b",
       "externalKey": "TCRN-CROSS-INC-058",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": null,
-      "revision": 2,
+      "revision": 5,
       "scope": "【修复:freshness 门语义回正(enforce 判据第 4 条前置)】红线边界:依赖 INC-053 先行;方向=恢复可证伪而非删门;门写侧车的行为须声明或移出 verify 只读性;修后 STORY-165 判据第 4 条在真陈旧构造下可红。事实:codegraph 行 sync-once 后对「陈旧本身」不可证伪(post-sync pending 无条件改 fresh;walkerDiscrepancy 死字段仅赋值无读取;commit 承诺的 note 不存在;verify 因此写 .codegraph 侧车——「提问的动作抹掉你想知道的事」重现);web 行 liveChainVersion 取不到→静默按 7 天挂钟 fresh(违自文件头「fetch 不到永不 fresh」与公约,半可达世界无人兜底);memory 行(真源=自身)未修未记;SIDECARS 三数声明与实现脱节、承诺的 rows.length===SIDECARS.length 自检未兑现。web 行真值比较本体为真(比链版本、严格<、曾实抓 1841→1868 漂移),保留勿动。文件指针:TCRN-AOS/deploy/aos-local-client/projection-freshness.mjs:38-43,97-108,144-148,164-184。验证命令:构造 sync-无效类陈旧/半可达世界→门须红;pnpm --dir TCRN-AOS projection-freshness:proof。收口动作:pending 改判限具名文件清单+note 真上浮;truth 不可读→unproven;memory 行修或裁定保留;声明对齐+自检落地+红腿测试入套件。生效证据命令:构造陈旧红、恢复绿。出处:QA/re-acceptance-report.md C 类、agent-remediation-aos.md F4/F5/F9。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -7412,9 +7412,9 @@ export const cockpitData: CockpitData = {
       "id": "work:37b218e5a3da081d93d300e8",
       "externalKey": "TCRN-CROSS-INC-059",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": null,
-      "revision": 2,
+      "revision": 5,
       "scope": "【修复:offline-boundary 环境敏感判据(非阻塞)】红线边界:按「门的判据须在每个会被评估的世界可满足」处置;不许 skip 了事(skip=看不见)。事实:6 测试期望网络封印下连接被静默丢弃,本机对 127.0.0.1:9 即时 ECONNREFUSED;全量套件内绿、单跑 0/6 红(错误形态=测试结束后异步 ECONNREFUSED→uncaughtException,时序敏感);文件本批未触碰(git log 空),预存在;沙箱 shell 下整套件亦可复现红(修复批自述)。文件指针:tcrn-workflow/tests/offline-boundary.test.mjs:59,113。验证命令:单跑 node --test tests/offline-boundary.test.mjs(现 0/6)vs 套件内(绿)对照。收口动作:fixture 化连接目标(不依赖真实网络栈的丢弃语义)或按世界分级判据。生效证据命令:单跑/套件内/沙箱三世界同绿。出处:QA/re-acceptance-report.md 门矩阵与 D4。",
       "decidedBy": [],
       "sprintWorkId": null
@@ -7424,9 +7424,9 @@ export const cockpitData: CockpitData = {
       "id": "work:aeda907e1f8a3761d6eeade7",
       "externalKey": "TCRN-CROSS-INC-060",
       "kind": "Incident",
-      "status": "planned",
+      "status": "done",
       "parentId": null,
-      "revision": 2,
+      "revision": 5,
       "scope": "【修复:复验 P3 尾单(逐项核销首战)】红线边界:依赖 INC-054 先行,本单收口即用核销模板逐项 fixed/retained/deferred 对账。明细:①runner 吞层——owner-queue chain-read-failed 首类行已落地但 platform-runner expectNonZero 把该 job 一切结局读作 expected reminder,判层永不红(细分退出码或解析首类行);②gate_list 数据源+INC041 双写比对(原 P2-6 两半,无声掉落项);③doc-topology 红证数量下限期望(全 local 名册会镜像重演静默跳过);④hygiene 三 plist 按名出圈残余留名;⑤knowledge-inject-hook.mjs:11 头注「empty array」残留+WF .claude/settings.json 重复 deny+observer:542「empty today」注释过时;⑥S162 注入活证归档(2026-08-06 会话 SessionStart+UserPromptSubmit 双注入转录入 S162/outputs);⑦INC-043..051 收口注记补注(annotate 指向 QA/ 报告与生效证据);⑧throw 回执步数语义(thrownBeforeReceipt=诚实未知)留档或实现。文件指针:TCRN-AOS/docs/reports/init-019/QA/re-acceptance-report.md D 类逐条(file:line 齐)。验证命令:各条按其五要素。收口动作:分批修复+核销表。生效证据命令:总门=两套件+四 proof 对 HEAD 绿+核销 diff 零无归属项。",
       "decidedBy": [],
       "sprintWorkId": null
