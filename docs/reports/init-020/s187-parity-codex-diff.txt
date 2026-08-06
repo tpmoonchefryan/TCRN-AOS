@@ -1,0 +1,30 @@
+# S187.3 parity incremental diff (Codex side) — 2026-08-07
+#
+# 生成:STORY-187.3 parity diff 生成器,依据平台 .mcp.json 与 parity-proof 的
+# missingFrom=codex 豁免清单(4 个服务器)。应用归审查层(编辑 ~/.codex/config.toml,
+# 用户级配置文件,须 Owner 批准)。STORY-146 S4.2 由审查层应用。
+#
+# 缺失服务器:codegraph-ds, codegraph-aos, tcrn-workflow-aos-read, aos-mcp-write
+# 依据:pnpm --dir TCRN-AOS parity:proof (PARITY_VERIFIED, 豁免注明)
+
+# --- 追加到 ~/.codex/config.toml [mcp_servers.*] ---
+
+[mcp_servers.codegraph-ds]
+command = "<workspace-dependency-runtime>/pnpm"
+args = ["--dir", "TCRN-Design-System", "exec", "codegraph", "serve", "--mcp", "--no-watch"]
+startup_timeout_sec = 120.0
+
+[mcp_servers.codegraph-aos]
+command = "<workspace-dependency-runtime>/pnpm"
+args = ["--dir", "TCRN-AOS", "exec", "codegraph", "serve", "--mcp", "--no-watch"]
+startup_timeout_sec = 120.0
+
+[mcp_servers.tcrn-workflow-aos-read]
+command = "node"
+args = ["TCRN-AOS/deploy/aos-local-client/remote-read-mcp.mjs"]
+startup_timeout_sec = 120.0
+
+[mcp_servers.aos-mcp-write]
+command = "node"
+args = ["TCRN-AOS/deploy/aos-mcp-write/server.mjs"]
+startup_timeout_sec = 120.0
