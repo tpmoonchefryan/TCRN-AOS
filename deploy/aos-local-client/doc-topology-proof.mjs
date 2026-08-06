@@ -459,6 +459,13 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
       met: sshBreakglass.path !== "MISSING" && sshBreakglass.classes.length === 2,
       expected: "ssh-breakglass-allowlist.json with the two residual classes",
       observed: `${sshBreakglass.path} (${sshBreakglass.classes.length} classes, ${sshBreakglass.entries.length} entries)` },
+    // INC-060 item 3: a lower bound on the red-proof count, so an all-local roster (or
+    // any future guard change) that silently stops running the in-memory reds is a red
+    // expectation, not a vanished one. INC-045's silent-skip class must not recur.
+    { id: "RED_PROOF_COUNT_FLOOR",
+      met: allReds.length >= 5,
+      expected: "≥5 in-memory red proofs actually ran",
+      observed: allReds.length },
     ...allReds.map((red) => ({
       id: `RED_${red.id}`,
       met: red.wentRed === true && red.raisedExpectedCode === true

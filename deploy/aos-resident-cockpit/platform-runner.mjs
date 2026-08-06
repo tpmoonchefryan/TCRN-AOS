@@ -25,9 +25,9 @@ export const JOB_TIMEOUT_MS = 120_000;
 
 const JOBS = Object.freeze([
   Object.freeze({ id: "projection-freshness", dir: resolve(PLATFORM_ROOT, "TCRN-AOS"), cmd: "pnpm", args: ["--dir", resolve(PLATFORM_ROOT, "TCRN-AOS"), "projection-freshness:proof"] }),
-  // owner-queue exits 1 when the queue is non-empty — that IS the reminder (167.3).
-  // Expected for the runner: logged, but not a runner failure.
-  Object.freeze({ id: "owner-queue", dir: PLATFORM_ROOT, cmd: "node", args: [resolve(PLATFORM_ROOT, "tcrn-workflow/scripts/owner-queue.mjs")], expectNonZero: true }),
+  // owner-queue exit 0 = empty, 1 = reminder (both healthy), 2 = chain-read failed
+  // (data source unreadable, the queue is untrustworthy — a RUNNER failure, INC-060).
+  Object.freeze({ id: "owner-queue", dir: PLATFORM_ROOT, cmd: "node", args: [resolve(PLATFORM_ROOT, "tcrn-workflow/scripts/owner-queue.mjs")], expectExitIn: [0, 1] }),
   Object.freeze({ id: "inject-channel", dir: PLATFORM_ROOT, cmd: "node", args: [resolve(PLATFORM_ROOT, "tcrn-workflow/scripts/knowledge-inject.mjs"), "--verify-channel"] })
 ]);
 
@@ -35,16 +35,16 @@ function runJob(job) {
   const at = new Date().toISOString().replace(/\.\d+Z$/u, "Z");
   const result = spawnSync(job.cmd, job.args, { cwd: job.dir, encoding: "utf8", timeout: JOB_TIMEOUT_MS });
   const code = result.status ?? (result.error ? result.error.code ?? "ERR" : "TIMEOUT");
-  const expected = job.expectNonZero === true && code !== 0;
-  const line = `${at} ${job.id} exit=${code}${expected ? " (expected non-zero: reminder)" : ""}${result.stderr ? ` stderr=${result.stderr.trim().slice(0, 200)}` : ""}`;
+  const expected = job.expectExitIn !== undefined ? job.expectExitIn.includes(code) : code === 0;
+  const line = `${at} ${job.id} exit=${code}${expected ? " (expected)" : ""}${result.stderr ? ` stderr=${result.stderr.trim().slice(0, 200)}` : ""}`;
   mkdirSync(dirname(LOG_PATH), { recursive: true });
   appendFileSync(LOG_PATH, `${line}\n`);
-  return { id: job.id, exit: code, expectedNonZero: expected, line };
+  return { id: job.id, exit: code, expected, line };
 }
 
 export function runAll() {
   const results = JOBS.map(runJob);
-  const failed = results.filter((r) => r.exit !== 0 && !r.expectedNonZero);
+  const failed = results.filter((r) => !r.expected);
   return {
     schemaVersion: "tcrn.platform-runner.v1",
     ranAt: new Date().toISOString().replace(/\.\d+Z$/u, "Z"),

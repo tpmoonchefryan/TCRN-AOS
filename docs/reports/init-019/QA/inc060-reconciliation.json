@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "tcrn.closeout-verify.v1",
+  "incident": "INC-060",
+  "items": [
+    "runner-layer-swallowing",
+    "gate_list-data-source",
+    "inc041-double-write-check",
+    "red-proof-count-floor",
+    "hygiene-plist-out-of-scope-note",
+    "minor-comments-and-duplicates",
+    "s162-injection-live-proof-archive",
+    "inc043-051-closeout-annotations",
+    "throw-receipt-step-semantics"
+  ],
+  "dispositions": {
+    "runner-layer-swallowing": { "kind": "fixed", "detail": "owner-queue now exits 2 on chain-read failed; runner expectExitIn [0,1] treats 2 as a failure" },
+    "gate_list-data-source": { "kind": "deferred", "reason": "owner-queue reads work-list status=blocked; gate_list as the authoritative owner_intent source needs engine gate_list surface wiring — deferred to the enforce rollout, carried on INC-165" },
+    "inc041-double-write-check": { "kind": "deferred", "reason": "INC041_TODOS in owner-queue mirrors BRIEFING §7 by hand; a machine diff needs a single declarative source — deferred with gate_list work" },
+    "red-proof-count-floor": { "kind": "fixed", "detail": "doc-topology gains RED_PROOF_COUNT_FLOOR (>=5 in-memory red proofs must run)" },
+    "hygiene-plist-out-of-scope-note": { "kind": "retained", "ticket": "work:df89090ea8e2b3371c48eeb1", "detail": "INC-046 already declared the three machine-local plists out of scope by name; residual risk named in evidence-hygiene.mjs FIXTURE_EXCLUDED_FILES comment" },
+    "minor-comments-and-duplicates": { "kind": "fixed", "detail": "knowledge-inject-hook 'empty array' comment, WF settings deny dedupe, observer 'empty today' comment" },
+    "s162-injection-live-proof-archive": { "kind": "fixed", "detail": "session live proof archived at S162/outputs/injection-live-proof.md" },
+    "inc043-051-closeout-annotations": { "kind": "fixed", "detail": "chain annotate on INC-043..051 pointing at QA reports and evidence commands (see transition batch)" },
+    "throw-receipt-step-semantics": { "kind": "retained", "ticket": "work:96fe17bd4811bdfc3d1e52fb", "detail": "INC-047's thrownBeforeReceipt=true means 'honest unknown' — the receipt cannot say how many steps landed; documented, not fabricated" }
+  }
+}
