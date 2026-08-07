@@ -5,8 +5,8 @@
   "result": {
     "ok": true,
     "reasonCode": "CLOSEOUT_ITEMS_RECONCILED",
-    "itemCount": 16,
-    "dispositionCount": 16,
+    "itemCount": 18,
+    "dispositionCount": 18,
     "problems": []
   },
   "scope": [
@@ -25,7 +25,9 @@
     "INC-086",
     "INC-087",
     "INC-088",
-    "INC-089"
+    "INC-089",
+    "STORY-191",
+    "STORY-192"
   ],
   "redLeg": {
     "schemaVersion": "tcrn.closeout-red-leg.v1",

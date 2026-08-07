@@ -18,7 +18,9 @@
     "INC-086",
     "INC-087",
     "INC-088",
-    "INC-089"
+    "INC-089",
+    "STORY-191",
+    "STORY-192"
   ],
   "dispositions": {
     "INC-074": { "kind": "fixed", "scope": "storage-home admission and PG seal/status" },
@@ -36,7 +38,9 @@
     "INC-086": { "kind": "fixed", "scope": "PG test isolation, codegraph freshness and marker rebase" },
     "INC-087": { "kind": "fixed", "scope": "real receipts and second-round evidence correction" },
     "INC-088": { "kind": "fixed", "scope": "PG workspace path decoupled from sealed archive" },
-    "INC-089": { "kind": "fixed", "scope": "content-based privacy hygiene and push-gate disclosure" }
+    "INC-089": { "kind": "fixed", "scope": "content-based privacy hygiene and push-gate disclosure" },
+    "STORY-191": { "kind": "fixed", "scope": "adapter family equivalence matrix and red-leg test" },
+    "STORY-192": { "kind": "fixed", "scope": "Codex MCP roster parity and zero-exemption proof" }
   },
   "redLeg": {
     "schemaVersion": "tcrn.closeout-red-leg.v1",
