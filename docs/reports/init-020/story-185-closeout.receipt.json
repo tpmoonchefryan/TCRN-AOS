@@ -1,22 +1,42 @@
 {
-  "schemaVersion": "aos.local-client-ceremony.v1",
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
   "story": "TCRN-CROSS-STORY-185",
-  "intent": "STORY-185 收口:两 MCP 面改指门面完成,传输端到端验证通过。",
+  "intent": "STORY-185 收口:两 MCP 面改指门面完成。原收口载荷误存为 .receipt.json(INC-080 抓出);INC-081 按语义重录 S185 至 done,本回执为真实回执形态。",
+  "startedAt": "2026-08-06T18:07:49Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable"
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2133,
+    "headEventHash": "4cc9b4ff5cc635b0f6ee45291b52a2bd270277328c5a9f1ffd7c2abf7ad7d749"
+  },
   "steps": [
-    {
-      "verb": "work-annotate",
-      "flags": {
-        "id": "work:48970e7a57787d63bd4709fd",
-        "scope": "【收口(2026-08-06)】两 MCP 面底层通道 SSH+CLI→门面客户端完成。交付物:①读面 remote-read-mcp.mjs:#callTool 改 POST 门面读(127.0.0.1:FACADE_PORT 经 ssh -N -L 隧道,会话级建立+退出回收),工具名/参数/reason code/拒绝面零变化;端到端验证经本地隧道返回 PG head(cross v2107/54c9eb0f)。②写面 aos-mcp-write/server.mjs:performCeremony 改 POST 门面写(/api/ceremony,经写隧道),dry-run 经门面返回 CEREMONY_PLANNED_ONLY(计划走 PG)。③fallback 判据:门面不可达→fail-closed+break-glass 指引(未静默转 SSH)。验收两侧:正腿=既有调用方零改动跑通(读/写 dry-run 均经门面);红腿=门面不可达 fail-closed。前置 S181/S182 已 done。",
-        "decided-by": "minutes:6b3a226012700f4322fd28ee",
-        "actor": "agent:fable"
-      }
-    },
-    { "verb": "work-transition", "flags": { "id": "work:48970e7a57787d63bd4709fd", "status": "ready", "actor": "agent:fable" } },
-    { "verb": "work-transition", "flags": { "id": "work:48970e7a57787d63bd4709fd", "status": "active", "actor": "agent:fable" } },
-    { "verb": "work-transition", "flags": { "id": "work:48970e7a57787d63bd4709fd", "status": "done", "actor": "agent:fable" } }
+    { "ok": true, "verb": "work-annotate", "reasonCode": "WORKSPACE_COMMAND_COMPLETED", "executed": true, "recordId": "work:48970e7a57787d63bd4709fd", "version": 2137 },
+    { "ok": true, "verb": "work-transition", "reasonCode": "WORKSPACE_COMMAND_COMPLETED", "executed": true, "recordId": "work:48970e7a57787d63bd4709fd", "version": 2138 },
+    { "ok": true, "verb": "work-transition", "reasonCode": "WORKSPACE_COMMAND_COMPLETED", "executed": true, "recordId": "work:48970e7a57787d63bd4709fd", "version": 2139 },
+    { "ok": true, "verb": "work-transition", "reasonCode": "WORKSPACE_COMMAND_COMPLETED", "executed": true, "recordId": "work:48970e7a57787d63bd4709fd", "version": 2140 }
   ],
   "readback": [
-    { "verb": "work-show", "flags": { "id": "work:48970e7a57787d63bd4709fd" } }
-  ]
+    {
+      "ok": true,
+      "verb": "work-show",
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "executed": true,
+      "verdict": { "ok": true, "reasonCode": "READBACK_MATCHES_FULL_VALUE", "compared": [{ "field": "status", "expected": "done", "observed": "done", "equal": true }], "unequal": [] }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2140,
+    "headEventHash": "69c8418675ab9414123b0c5df7fc211be7bacca144830ae6940c12fd3c4e145a"
+  },
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-06T18:08:20Z"
 }

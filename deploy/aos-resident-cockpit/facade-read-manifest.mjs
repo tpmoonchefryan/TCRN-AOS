@@ -90,9 +90,9 @@ NoNewPrivileges=no
 Environment=FACADE_HOST=${FACADE_HOST}
 Environment=FACADE_PORT=${FACADE_PORT}
 Environment=FACADE_ENGINE=${FACADE_ENGINE}
-Environment="FACADE_WORKSPACES=${JSON.stringify(FACADE_WORKSPACES)}"
+Environment=FACADE_WORKSPACES_B64=${Buffer.from(JSON.stringify(FACADE_WORKSPACES), "utf8").toString("base64")}
 Environment=FACADE_ALLOWED_HOSTS=${FACADE_ALLOWED_HOSTS.join(",")}
-Environment="FACADE_PG_SCHEMAS=${JSON.stringify(FACADE_PG_SCHEMAS)}"
+Environment=FACADE_PG_SCHEMAS_B64=${Buffer.from(JSON.stringify(FACADE_PG_SCHEMAS), "utf8").toString("base64")}
 Environment=FACADE_PG_CONNECTION=${FACADE_PG_CONNECTION}
 Restart=on-failure
 RestartSec=5

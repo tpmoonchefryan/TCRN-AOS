@@ -263,3 +263,36 @@ export const SCAN_CEILING = Object.freeze({
     "the answer is about the instant the walk ran. Nothing here prevents a tree from being "
     + "created a second later; the predicate is a measurement, not a lock"
 });
+
+/**
+ * TCRN-CROSS-INIT-020 INC-076 — the engine pathway registry. Every way this
+ * repository can reach a governed engine is declared here with its data surface.
+ * A switch story (S185 etc.) changes these entries, and `pathway-registry-proof`
+ * scans the repo: an engine-invoking file that is not registered reds — the
+ * "switch scope decided by a roster, not by memory" machine.
+ *
+ * surface: "facade-read" | "facade-write" | "ssh-file" | "ssh-rsync".
+ * status: "live" (the pathway in use) | "fallback" (kept for break-glass).
+ */
+export const ENGINE_PATHWAYS = Object.freeze([
+  Object.freeze({ id: "read-mcp-face", files: ["deploy/aos-local-client/remote-read-mcp.mjs"], surface: "facade-read", status: "live" }),
+  Object.freeze({ id: "write-mcp-face", files: ["deploy/aos-mcp-write/server.mjs"], surface: "facade-write", status: "live" }),
+  Object.freeze({ id: "ceremony-cli", files: ["deploy/aos-local-client/ceremony.mjs"], surface: "facade-read+facade-write", status: "live" }),
+  Object.freeze({ id: "projection-freshness", files: ["deploy/aos-local-client/projection-freshness.mjs"], surface: "facade-read", status: "live" }),
+  Object.freeze({ id: "fallback-cli", files: ["deploy/aos-local-client/fallback-cli.mjs"], surface: "ssh-probe+ssh-file", status: "fallback" }),
+  Object.freeze({ id: "engine-host-apply", files: ["deploy/aos-engine-host/apply.mjs"], surface: "ssh-rsync", status: "fallback" }),
+  Object.freeze({ id: "emit-evidence", files: ["deploy/aos-resident-cockpit/emit-evidence.mjs", "deploy/switch-rehearsal/emit-evidence.mjs", "deploy/relocation-rehearsal/emit-evidence.mjs"], surface: "ssh-file", status: "fallback" }),
+  Object.freeze({ id: "facade-read-service", files: ["deploy/aos-resident-cockpit/facade-read-service.mjs"], surface: "facade-read", status: "live" }),
+  Object.freeze({ id: "facade-write-service", files: ["deploy/aos-resident-cockpit/facade-write-service.mjs"], surface: "facade-write", status: "live" }),
+  Object.freeze({ id: "tip-gate", files: ["deploy/aos-local-client/tip-gate.mjs"], surface: "facade-read+ssh-file", status: "live" }),
+
+  Object.freeze({ id: "doc-topology-proof", files: ["deploy/aos-local-client/doc-topology-proof.mjs", "deploy/aos-local-client/scan-local.mjs", "deploy/aos-local-client/key-occupancy.mjs", "deploy/aos-local-client/aos-partitions.mjs"], surface: "ssh-file", status: "live" }),
+  Object.freeze({ id: "access-boundary", files: ["deploy/access-boundary/place-gate-authority.mjs"], surface: "ssh-file", status: "fallback" }),
+  Object.freeze({ id: "facade-deploy", files: ["deploy/aos-resident-cockpit/apply-facade-read.mjs", "deploy/aos-resident-cockpit/apply-facade-write.mjs", "deploy/aos-resident-cockpit/apply.mjs", "deploy/aos-resident-cockpit/facade-write-manifest.mjs"], surface: "ssh-rsync", status: "fallback" }),
+  Object.freeze({ id: "facade-runners", files: ["deploy/aos-resident-cockpit/facade-read-runner.mjs", "deploy/aos-resident-cockpit/facade-write-runner.mjs", "deploy/aos-resident-cockpit/facade-write-rejection-corpus.mjs", "deploy/aos-resident-cockpit/facade-downtime-drill.mjs"], surface: "facade-write+ssh-file", status: "live" }),
+  Object.freeze({ id: "paired-backup", files: ["deploy/aos-resident-cockpit/paired-backup.mjs", "deploy/aos-resident-cockpit/vm-take-pair.mjs"], surface: "ssh-file", status: "live" }),
+  Object.freeze({ id: "walkthrough", files: ["deploy/aos-resident-cockpit/walkthrough.mjs"], surface: "ssh-file", status: "fallback" }),
+  Object.freeze({ id: "truth-root-siting", files: ["deploy/aos-truth-root-siting/probe.mjs"], surface: "ssh-file", status: "fallback" }),
+  Object.freeze({ id: "relocation-rehearsal", files: ["deploy/relocation-rehearsal/arc.mjs", "deploy/relocation-rehearsal/relocation-lib.mjs"], surface: "ssh-file", status: "fallback" }),
+  Object.freeze({ id: "switch-rehearsal", files: ["deploy/switch-rehearsal/act1-scratch-arc.mjs", "deploy/switch-rehearsal/act2-real-chain-arc.mjs", "deploy/switch-rehearsal/act4-rollback-arc.mjs", "deploy/switch-rehearsal/rehearsal-lib.mjs"], surface: "ssh-file", status: "fallback" }),
+]);

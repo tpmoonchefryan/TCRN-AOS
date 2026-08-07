@@ -1,7 +1,7 @@
 // TCRN AOS — declarative manifest for the engine copy on the platform dev VM.
 //
 // What this is: the single statement of what /srv/tcrn/engine/tcrn-workflow on
-// tcrn-platform-dev must contain — the local governed engine copy at v0.9.0,
+// tcrn-platform-dev must contain — the local governed engine copy at v0.11.7,
 // minus node_modules and .git. What it deliberately is not: an authority supply.
 // No pins, no operator bundle, no supply material of any kind travels with this
 // manifest; the VM copy can read and answer `commands`, and it can host scratch
@@ -38,7 +38,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 
 /** The one place the release tag is written; every claim about it derives from here. */
-const SOURCE_TAG = "v0.11.3";
+const SOURCE_TAG = "v0.11.7";
 
 export const manifest = {
   schemaVersion: "aos.engine-host-deploy-manifest.v1",
@@ -54,7 +54,7 @@ export const manifest = {
     // The anchor is the release tag, checked three ways before a single byte
     // moves: package.json says this version, HEAD carries this tag, and the
     // working tree is clean. A dirty tree would make "v0.8.0 tag anchor" a lie.
-    requiredVersion: "0.11.3",
+    requiredVersion: "0.11.7",
     requiredTag: SOURCE_TAG,
   },
 
@@ -75,22 +75,25 @@ export const manifest = {
   },
 
   verification: {
-    // What the far copy must answer to count as the same engine. 101 is the
+    // What the far copy must answer to count as the same engine. 106 is the
     // cli-availability verb count (the catalog also carries 2 fixture-only
     // entries, recorded but not part of the operator surface). v0.8.0 answered
     // 96; v0.9.0 added the five relocation verbs; v0.10.0 adds a graph-validation
-    // rule, no verb, so the cli count holds at 101. These are real predicates:
+    // rule, no verb, so the cli count held at 101 before the storage-home
+    // seal/status pair. These are real predicates:
     // a different engine version red-flags here.
     catalogReasonCode: "CLI_CATALOG_READY",
-    cliVerbCount: 104,
-    remoteVersion: "0.11.3",
+    cliVerbCount: 106,
+    remoteVersion: "0.11.7",
     // Named verbs the far catalog must actually carry. A count alone would be
-    // satisfied by any 104 verbs. event-list is why v0.7.0 → v0.8.0 happened;
+    // satisfied by any 106 verbs. event-list is why v0.7.0 → v0.8.0 happened;
     // relocation-adopt and relocation-inspect are why v0.8.0 → v0.9.0 happens —
     // adopt is the receiving verb a move would run here, inspect is how this host
     // would be interrogated about a relocation in flight. v0.11.0 (INIT-020)
     // adds the migration verb family — the recovery path for INC-072 that lets
-    // the STORY-189 switch window move a chain to Postgres. Checked by name, and
+    // the STORY-189 switch window move a chain to Postgres. v0.11.7 adds the
+    // storage-home seal/status recovery path for a retained divergent archive.
+    // Checked by name, and
     // by availability with it: a fixture-only entry is not a verb the VM can run.
     requiredVerbs: [
       "event-list",
@@ -99,6 +102,8 @@ export const manifest = {
       "migration-execute",
       "migration-verify",
       "migration-rollback",
+      "storage-home-seal",
+      "storage-home-status",
     ],
     // Digest ledger serialization follows the paired-backup/export-manifest
     // precedent: sha256 over "path sha256" lines joined by newline.

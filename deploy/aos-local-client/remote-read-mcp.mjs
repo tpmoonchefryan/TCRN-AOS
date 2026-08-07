@@ -310,8 +310,12 @@ export function toolDescriptor(entry) {
   }
   return {
     name: toolName(entry.name),
-    description: `Read-only Workflow command ${entry.name}, forwarded to the engine on ${VM_HOST} `
-      + "over SSH. Stable CLI reason codes are preserved. This face performs no governed write.",
+    // INC-086: since STORY-185 the read face serves through the facade read
+    // service (127.0.0.1:4320 via SSH tunnel), which answers Postgres. The
+    // description no longer claims a raw SSH+CLI round trip.
+    description: `Read-only Workflow command ${entry.name}, served by the facade read service on ${VM_HOST} `
+      + "over an SSH tunnel (Postgres-backed since STORY-189). Stable CLI reason codes are preserved. "
+      + "This face performs no governed write.",
     inputSchema: {
       type: "object",
       properties,
@@ -570,7 +574,12 @@ async function sshRead(argv) {
  */
 async function facadeRead(verb, partition, arguments_, { tunnelPort } = {}) {
   const port = tunnelPort ?? FACADE_PORT;
-  const body = JSON.stringify({ partition, arguments: arguments_ });
+  // INC-086: a null partition must be OMITTED, not sent as `partition: null` — the
+  // facade rejects a null partition with MCP_ARGUMENT_UNKNOWN even for a
+  // partition-less verb like `commands` (which has no workspace flag).
+  const body = JSON.stringify(partition === null || partition === undefined
+    ? { arguments: arguments_ }
+    : { partition, arguments: arguments_ });
   try {
     const { stdout } = await runFile("curl", [
       "-s", "-m", "60", "-X", "POST", "-H", "content-type: application/json",

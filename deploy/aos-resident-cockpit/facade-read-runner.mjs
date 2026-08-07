@@ -24,7 +24,7 @@ const REQUIRED = [
   ["FACADE_ENGINE", "the installed engine copy whose commands catalogue drives the tool table"],
   ["FACADE_HOST", "the address to bind (a concrete address, never a wildcard)"],
   ["FACADE_PORT", "the port to answer on"],
-  ["FACADE_WORKSPACES", "JSON object of partitionId -> workspace path (CockpitServiceOptions.workspaces seam)"],
+  ["FACADE_WORKSPACES_B64", "base64 of a JSON object of partitionId -> workspace path (CockpitServiceOptions.workspaces seam)"],
   ["FACADE_ALLOWED_HOSTS", "comma-separated Host allow-list (anti-DNS-rebinding)"]
 ];
 
@@ -43,16 +43,25 @@ if (missing.length > 0) {
 
 const env = Object.fromEntries(REQUIRED.map(([key]) => [key, process.env[key]]));
 
+// systemd's Environment= cannot carry a JSON value (it strips quotes), so the
+// unit ships the workspaces and PG schema maps base64-encoded and the runner
+// decodes them. One place, decoded once, at start.
+const decodeJson = (key) => {
+  const raw = process.env[key];
+  if (typeof raw !== "string" || raw.trim().length === 0) return undefined;
+  return JSON.parse(Buffer.from(raw, "base64").toString("utf8"));
+};
+
 let workspaces;
 try {
-  workspaces = JSON.parse(env.FACADE_WORKSPACES);
+  workspaces = decodeJson("FACADE_WORKSPACES_B64");
 } catch {
-  console.error(JSON.stringify({ ok: false, error: "FACADE_WORKSPACES is not valid JSON" }));
+  console.error(JSON.stringify({ ok: false, error: "FACADE_WORKSPACES_B64 does not decode to JSON" }));
   process.exit(1);
 }
 if (typeof workspaces !== "object" || workspaces === null || Array.isArray(workspaces)
   || Object.keys(workspaces).length === 0) {
-  console.error(JSON.stringify({ ok: false, error: "FACADE_WORKSPACES must be a non-empty JSON object of partitionId -> workspace path" }));
+  console.error(JSON.stringify({ ok: false, error: "FACADE_WORKSPACES_B64 must decode to a non-empty JSON object of partitionId -> workspace path" }));
   process.exit(1);
 }
 
@@ -72,18 +81,15 @@ const { startFacadeReadService } = await import(pathToFileURL(serviceEntry).href
 // runs the engine CLI as the PG peer-auth role with TCRN_PG_SCHEMA set). When
 // absent, the facade serves the file tree exactly as before the switch.
 let pgSchemas;
-const rawSchemas = process.env.FACADE_PG_SCHEMAS;
-if (typeof rawSchemas === "string" && rawSchemas.trim().length > 0) {
-  try {
-    pgSchemas = JSON.parse(rawSchemas);
-  } catch {
-    console.error(JSON.stringify({ ok: false, error: "FACADE_PG_SCHEMAS is not valid JSON" }));
-    process.exit(1);
-  }
-  if (typeof pgSchemas !== "object" || pgSchemas === null || Array.isArray(pgSchemas)) {
-    console.error(JSON.stringify({ ok: false, error: "FACADE_PG_SCHEMAS must be a JSON object of partitionId -> chain schema" }));
-    process.exit(1);
-  }
+try {
+  pgSchemas = decodeJson("FACADE_PG_SCHEMAS_B64");
+} catch {
+  console.error(JSON.stringify({ ok: false, error: "FACADE_PG_SCHEMAS_B64 does not decode to JSON" }));
+  process.exit(1);
+}
+if (pgSchemas !== undefined && (typeof pgSchemas !== "object" || pgSchemas === null || Array.isArray(pgSchemas))) {
+  console.error(JSON.stringify({ ok: false, error: "FACADE_PG_SCHEMAS_B64 must decode to a JSON object of partitionId -> chain schema" }));
+  process.exit(1);
 }
 
 const service = await startFacadeReadService({

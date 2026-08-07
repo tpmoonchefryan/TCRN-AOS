@@ -90,10 +90,8 @@ export const CODEX_NAME_TO_PLATFORM = { codegraph: "codegraph-tms" };
  * file is a difference between two independent statements rather than a change to
  * the only statement there is.
  *
- * `sides` is where the server MUST be found. Two of them are anchored on both
- * hosts because both hosts carry them today; the other three are anchored on the
- * Claude side only, and their Codex-side absence is what the ALLOWLIST below
- * exempts — the two mechanisms cover disjoint claims on purpose.
+ * `sides` is where the server MUST be found. Every platform server is now
+ * anchored on both hosts; the former Codex-side gap is closed by STORY-192.
  */
 export const ANCHOR_ROSTER = Object.freeze([
   Object.freeze({
@@ -105,20 +103,20 @@ export const ANCHOR_ROSTER = Object.freeze([
     why: "TMS 代码图谱；两侧同持（Codex 侧名为 codegraph，归一后同名）"
   }),
   Object.freeze({
-    server: "codegraph-ds", sides: Object.freeze(["claude"]), since: "2026-08-05",
-    why: "DS 代码图谱；Claude 侧必须在——它在 Codex 侧的缺失由白名单具名豁免"
+    server: "codegraph-ds", sides: Object.freeze(["claude", "codex"]), since: "2026-08-07",
+    why: "DS 代码图谱；STORY-192 已接入 Codex 侧"
   }),
   Object.freeze({
-    server: "codegraph-aos", sides: Object.freeze(["claude"]), since: "2026-08-05",
-    why: "AOS 代码图谱；Claude 侧必须在——它在 Codex 侧的缺失由白名单具名豁免"
+    server: "codegraph-aos", sides: Object.freeze(["claude", "codex"]), since: "2026-08-07",
+    why: "AOS 代码图谱；STORY-192 已接入 Codex 侧"
   }),
   Object.freeze({
-    server: "tcrn-workflow-aos-read", sides: Object.freeze(["claude"]), since: "2026-08-05",
-    why: "AOS 只读面；Claude 侧必须在——Codex 侧无对等服务器，由白名单具名豁免"
+    server: "tcrn-workflow-aos-read", sides: Object.freeze(["claude", "codex"]), since: "2026-08-07",
+    why: "AOS 只读面；STORY-192 已接入 Codex 侧"
   }),
   Object.freeze({
-    server: "aos-mcp-write", sides: Object.freeze(["claude"]), since: "2026-08-05",
-    why: "AOS MCP 写面（单一 ceremony 工具）；Claude 侧必须在——Codex 侧无对等服务器，由白名单具名豁免"
+    server: "aos-mcp-write", sides: Object.freeze(["claude", "codex"]), since: "2026-08-07",
+    why: "AOS MCP 写面（单一 ceremony 工具）；STORY-192 已接入 Codex 侧"
   })
 ]);
 
@@ -139,22 +137,15 @@ export const SIDES = Object.freeze(["claude", "codex"]);
  *
  * The reasons and dates below are carried verbatim from the pre-INC-036 list.
  */
-export const ALLOWLIST = Object.freeze([
+export const ALLOWLIST = Object.freeze([]);
+
+// Red-side regression fixtures retain one historical directed exemption so the
+// harness continues to prove that an allowlist is directional and cannot hide a
+// vanished or reversed server. It is never part of the live verdict after STORY-192.
+const ALLOWLIST_RED_FIXTURE = Object.freeze([
   Object.freeze({
     server: "codegraph-ds", missingFrom: "codex", since: "2026-08-05",
-    reason: "Codex 侧未接 codegraph-ds；STORY-146 S4.1 生成 diff，S4.2 由审查层应用"
-  }),
-  Object.freeze({
-    server: "codegraph-aos", missingFrom: "codex", since: "2026-08-05",
-    reason: "Codex 侧未接 codegraph-aos；STORY-146 S4.1 生成 diff，S4.2 由审查层应用"
-  }),
-  Object.freeze({
-    server: "tcrn-workflow-aos-read", missingFrom: "codex", since: "2026-08-05",
-    reason: "AOS 只读面仅 Claude 侧接入；Codex 侧无对等服务器"
-  }),
-  Object.freeze({
-    server: "aos-mcp-write", missingFrom: "codex", since: "2026-08-05",
-    reason: "AOS MCP 写面仅 Claude 侧接入；Codex 侧写路径走 ceremony.mjs，无 MCP 对等服务器"
+    reason: "red-fixture: directed exemption must name its missing side"
   })
 ]);
 
@@ -626,11 +617,12 @@ const VALID_SPEC = Object.freeze({ command: "node", args: Object.freeze([]) });
 export const NOWHERE_DIR = join(PLATFORM_ROOT, "TCRN-Nowhere-INC-036");
 
 export function redCases(baseline) {
+  const allowlistBaseline = { ...baseline, allowlist: ALLOWLIST_RED_FIXTURE };
   return [
     redProof({
       id: "UNALLOWLISTED_DRIFT_MUST_RED",
       why: "一侧新增一个另一侧没有、也无豁免的平台服务器：真实漂移，必须红并点名它。",
-      baseline,
+      baseline: allowlistBaseline,
       mutate: (inputs) => {
         inputs.claudeSpecs["codegraph-xyz"] = { ...VALID_SPEC, args: [] };
         return inputs;
@@ -641,8 +633,9 @@ export function redCases(baseline) {
     redProof({
       id: "ALLOWLIST_ENTRY_DROPPED_MUST_RED",
       why: "白名单少记一条(codegraph-ds 的缺口不再被豁免)：缺口立刻现形，说明绿不是白名单撑出来的。",
-      baseline,
+      baseline: allowlistBaseline,
       mutate: (inputs) => {
+        delete inputs.codexSpecs["codegraph-ds"];
         inputs.allowlist = inputs.allowlist.filter((entry) => entry.server !== "codegraph-ds");
         return inputs;
       },
@@ -653,7 +646,7 @@ export function redCases(baseline) {
       id: "ALLOWLISTED_SERVER_VANISHED_BOTH_SIDES_MUST_RED",
       why: "INC-036 缺陷 2 的回归：把被豁免的 codegraph-ds 从 Claude 侧也删掉。"
         + "旧判据下对称缺口消失、门恒绿；现在豁免本身断言它必须在 Claude 侧存在。",
-      baseline,
+      baseline: allowlistBaseline,
       mutate: (inputs) => {
         delete inputs.claudeSpecs["codegraph-ds"];
         return inputs;
@@ -664,7 +657,7 @@ export function redCases(baseline) {
     redProof({
       id: "ALLOWLIST_DIRECTION_FLIPPED_MUST_RED",
       why: "被豁免的服务器改成只在 Codex 侧存在：名字仍匹配，但方向反了，旧的按名豁免会放行。",
-      baseline,
+      baseline: allowlistBaseline,
       mutate: (inputs) => {
         delete inputs.claudeSpecs["codegraph-ds"];
         inputs.codexSpecs["codegraph-ds"] = { ...VALID_SPEC, args: [] };

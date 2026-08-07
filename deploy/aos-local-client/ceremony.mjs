@@ -31,16 +31,17 @@
 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { dirname, relative, resolve } from "node:path";
+import { spawn } from "node:child_process";
+import { connect as netConnect } from "node:net";
+import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { shellQuote, ssh } from "../aos-resident-cockpit/resident-lib.mjs";
-import {
-  ACTOR, REPO_ROOT, VM_ATTEST_DIR, VM_ENGINE_CLI, VM_HOST, VM_WORKSPACE
-} from "./topology.mjs";
+import { FACADE_PORT } from "../aos-resident-cockpit/facade-read-manifest.mjs";
+import { FACADE_WRITE_PORT } from "../aos-resident-cockpit/facade-write-manifest.mjs";
+import { VM_ENGINE_CLI, VM_HOST, VM_WORKSPACE } from "./topology.mjs";
 import { aosPartition } from "./aos-partitions.mjs";
 import {
-  assertPayload, catalogueIndex, judgeReadback, planStep, resolveExpectations,
-  KNOWLEDGE_STORE_CAS_VERBS
+  assertPayload
 } from "./ceremony-plan.mjs";
 import { scrubHostPathsInText } from "../../scripts/lib/evidence-hygiene.mjs";
 import { emitCeremonySpan } from "./ceremony-spans.mjs";
@@ -48,39 +49,81 @@ import { emitCeremonySpan } from "./ceremony-spans.mjs";
 const sha256Text = (text) => createHash("sha256").update(Buffer.from(text, "utf8")).digest("hex");
 const instant = () => new Date().toISOString().replace(/\.\d+Z$/u, "Z");
 
-/**
- * EPIC-041: the ceremony actor must be a legal attributed actor. The chain
- * accepts any string, but an unattributed ceremony would record a write no one
- * can say who performed. `agent:<model>` for an AI, `person:<id>` for a human
- * (the Owner writing over SSH is `person:owner:governance`). Refused here,
- * before the network, so a typo'd actor is the operator's mistake named
- * locally rather than a remote refusal.
- */
-function assertAttributedActor(actor) {
-  const ok = typeof actor === "string"
-    && (/^agent:[A-Za-z0-9._:-]+$/u.test(actor) || /^person:[A-Za-z0-9._:-]+$/u.test(actor));
-  if (!ok) {
-    throw new Error(
-      `actor must be an attributed actor (agent:<model> or person:<id>); got ${JSON.stringify(actor)}. `
-      + "The Owner writing over SSH is person:owner:governance; an AI is agent:fable."
-    );
+// ── INC-082 write-path unification ──────────────────────────────────────────
+// STORY-185 moved the write MCP face onto the facade write service, but the
+// ceremony CLI recipe still drove the engine over SSH with no TCRN_PG_* env — so
+// its writes landed in the file track while the facade answered Postgres. That is
+// the direct mechanism of the INIT-020 cross fork. These transports route the
+// ceremony's reads and writes through the facades (PG). A facade outage is a named
+// stop; the governed ceremony never falls back to an SSH/file-track write.
+let readTunnel = null;
+let writeTunnel = null;
+
+async function establishTunnel(port) {
+  const child = spawn("ssh", ["-N", "-L", `${port}:127.0.0.1:${port}`, VM_HOST],
+    { stdio: "ignore", detached: true });
+  child.unref();
+  for (let attempt = 0; attempt < 40; attempt += 1) {
+    await new Promise((done) => setTimeout(done, 250));
+    try {
+      const ok = await new Promise((resolved) => {
+        const socket = netConnect(port, "127.0.0.1", () => { socket.destroy(); resolved(true); });
+        socket.on("error", () => resolved(false));
+      });
+      if (ok) return { port, pid: child.pid };
+    } catch { /* retry */ }
   }
-  return actor;
+  child.kill("SIGTERM");
+  throw new Error(`facade tunnel to :${port} did not come up`);
+}
+
+async function readTunnelFor() {
+  if (readTunnel === null) readTunnel = await establishTunnel(FACADE_PORT);
+  return readTunnel;
+}
+
+async function writeTunnelFor() {
+  if (writeTunnel === null) writeTunnel = await establishTunnel(FACADE_WRITE_PORT);
+  return writeTunnel;
+}
+
+export async function reclaimFacadeTunnels() {
+  for (const tunnel of [readTunnel, writeTunnel]) {
+    if (tunnel === null) continue;
+    try { process.kill(-tunnel.pid, "SIGTERM"); } catch { /* gone */ }
+    try { process.kill(tunnel.pid, "SIGTERM"); } catch { /* gone */ }
+  }
+  readTunnel = null;
+  writeTunnel = null;
+}
+
+/** POST a verb to the facade read service (PG-backed) and parse the engine answer. */
+export async function facadeReadEngine(verb, partition, arguments_) {
+  const tunnel = await readTunnelFor();
+  const { execFileSync } = await import("node:child_process");
+  const stdout = execFileSync("curl", [
+    "-s", "-m", "60", "-X", "POST", "-H", "content-type: application/json",
+    "-d", JSON.stringify({ partition, arguments: arguments_ }),
+    `http://127.0.0.1:${tunnel.port}/api/engine/${verb}`,
+  ], { maxBuffer: 64 * 1024 * 1024, encoding: "utf8" });
+  const json = JSON.parse(stdout);
+  const inner = json?.result ?? json;
+  return {
+    accepted: json?.ok === true,
+    exitCode: json?.ok === true ? 0 : 1,
+    reasonCode: inner?.reasonCode ?? json?.reasonCode ?? "FACADE_READ_REFUSED",
+    json: inner,
+    raw: undefined,
+  };
 }
 
 /**
- * A payload path stated relative to this checkout when it is inside it.
+ * One engine verb on the host that owns the chain. A refusal is data, not a throw.
  *
- * A payload from outside the repository is reported as `<outside-repository>` rather
- * than as a `../../..` walk back out: the relative form would leak the same host
- * structure the absolute form does, one segment at a time.
+ * This is an explicit break-glass read primitive for the fallback queue and
+ * projection proofs. The governed ceremony path below never calls it: after
+ * STORY-192, a facade outage is a named stop, never an implicit file-track write.
  */
-function relativeToRepo(path) {
-  const rel = relative(REPO_ROOT, resolve(path));
-  return rel.startsWith("..") ? "<outside-repository>" : rel;
-}
-
-/** One engine verb on the host that owns the chain. A refusal is data, not a throw. */
 export async function remoteEngine(argv) {
   const remote = ["node", VM_ENGINE_CLI, ...argv].map(shellQuote).join(" ");
   const result = await ssh([remote], { allowFailure: true });
@@ -98,48 +141,90 @@ export async function remoteEngine(argv) {
 
 /** The live head, read immediately before each mutating step. */
 export async function readChainHead(workspace = VM_WORKSPACE) {
-  const status = await remoteEngine(["status", "--workspace", workspace]);
-  if (!status.accepted) {
-    throw new Error(`the host engine refused to report status: ${status.reasonCode ?? status.exitCode}`);
+  // INC-082: the authoritative head is Postgres via the facade read service.
+  // Reading it through the facade makes the ceremony's chainBefore equal the MCP
+  // read face's status — the single-truth tip gate (INC-075) checks exactly this.
+  const partition = partitionForWorkspace(workspace);
+  try {
+    const status = await facadeReadEngine("status", partition, {});
+    if (!status.accepted) {
+      const error = new Error(`the facade refused to report status for ${partition}: ${status.reasonCode ?? status.exitCode}`);
+      error.reasonCode = status.reasonCode ?? "FACADE_READ_REFUSED";
+      throw error;
+    }
+    return {
+      workspaceId: status.json.workspaceId,
+      version: status.json.version,
+      headEventHash: status.json.headEventHash,
+      work: status.json.work
+    };
+  } catch (error) {
+    if (typeof error?.reasonCode === "string") throw error;
+    const refused = new Error(`the facade read service was unavailable for ${partition}: ${String(error?.message ?? error)}`);
+    refused.reasonCode = "FACADE_READ_UNREACHABLE";
+    throw refused;
   }
-  return {
-    workspaceId: status.json.workspaceId,
-    version: status.json.version,
-    headEventHash: status.json.headEventHash,
-    work: status.json.work
-  };
+}
+
+function partitionForWorkspace(workspace) {
+  if (workspace === VM_WORKSPACE) return "TCRN-AOS";
+  for (const id of ["TCRN-AOS", "cross-project", "TCRN-Design-System", "TCRN-TMS", "Joi-Button"]) {
+    try {
+      if (aosPartition(id).workspace === workspace) return id;
+    } catch { /* not a known partition */ }
+  }
+  throw new Error(`workspace is not registered to a governed partition: ${workspace}`);
 }
 
 /**
- * The knowledge store marker (`<workspace>/.tcrn-workflow/knowledge/store.json`).
- *
- * The knowledge-* mutating verbs CAS on `store.json`'s OWN `version`, which is unrelated
- * to the chain version (STORY-160: the store is a disposable materialised index). The
- * store marker is not exposed by any read verb — the face refuses with
- * KNOWLEDGE_HIGH_WATER_MISMATCH while the store is stale — so the ceremony reads the
- * marker file directly. That is a READ of a control-tree file on the host, which the
- * platform permits ("看可以,存不行"); only writes to the tree are reserved to the engine.
+ * The knowledge-store marker is intentionally not read by this local client. After
+ * the PG switch it is an authority-owned value and the facade write service is the
+ * only authenticated read seam for it.
  */
 export async function readKnowledgeMarker(workspace = VM_WORKSPACE) {
-  const remote = ["node", "-e",
-    `process.stdout.write(JSON.stringify(JSON.parse(require("node:fs").readFileSync(${JSON.stringify(`${workspace}/.tcrn-workflow/knowledge/store.json`)}, "utf8"))))`]
-    .map(shellQuote).join(" ");
-  const result = await ssh([remote], { allowFailure: true });
-  const json = parseJsonLoose(result.stdout);
-  if (result.code !== 0 || json === null || !Number.isSafeInteger(json.version)) {
-    throw new Error(`the host engine's knowledge store marker could not be read: ${result.stderr?.trim() ?? result.stdout?.slice(0, 200) ?? result.code}`);
-  }
-  return { version: json.version, workspaceId: json.workspaceId ?? null, eventHighWaterDigest: json.eventHighWaterDigest ?? null };
+  // INC-082: the marker is PG data after the switch window. This legacy helper
+  // has no authenticated PG read seam, so refusing is safer than reading the
+  // sealed file archive and supplying a stale CAS value to a write.
+  const error = new Error(`knowledge marker for ${workspace} must be read through the PG facade`);
+  error.reasonCode = "FACADE_KNOWLEDGE_MARKER_UNAVAILABLE";
+  throw error;
 }
 
-function parseJsonLoose(text) {
-  try { return JSON.parse(text); } catch { return null; }
+/** POST the whole ceremony to the facade write service (PG-backed), the same
+ * recipe the write MCP face uses. The facade performs the batch, read-backs, CAS
+ * and receipt; the ceremony client adapts the facade receipt to its own shape. */
+async function facadeCeremony({ payload, dryRun, partition }) {
+  const tunnel = await writeTunnelFor();
+  const { execFileSync } = await import("node:child_process");
+  const request = { partition, dryRun, payload };
+  if (!dryRun) request.idempotencyKey = sha256Text(JSON.stringify({ partition, payload }));
+  const stdout = execFileSync("curl", [
+    "-s", "-m", "120", "-X", "POST", "-H", "content-type: application/json",
+    "-d", JSON.stringify(request),
+    `http://127.0.0.1:${tunnel.port}/api/ceremony`,
+  ], { maxBuffer: 64 * 1024 * 1024, encoding: "utf8" });
+  const response = JSON.parse(stdout);
+  const receipt = response?.receipt ?? response;
+  return {
+    schemaVersion: "aos.local-client-ceremony-receipt.v1",
+    ok: response?.ok === true,
+    reasonCode: receipt?.reasonCode ?? (response?.ok === true ? "CEREMONY_COMPLETED_AND_READ_BACK" : "CEREMONY_REFUSED"),
+    dryRun,
+    host: VM_HOST,
+    partition,
+    facade: true,
+    chainBefore: receipt?.chainBefore ?? null,
+    chainAfter: receipt?.chainAfter ?? null,
+    steps: receipt?.steps ?? [],
+    readback: receipt?.readback ?? [],
+    eventsAppended: receipt?.chainAfter?.version != null && receipt?.chainBefore?.version != null
+      ? receipt.chainAfter.version - receipt.chainBefore.version
+      : null,
+    finishedAt: instant(),
+  };
 }
 
-/** Which sentinel a step CAS's on: the knowledge store marker, or the chain head. */
-const casSource = (verb) => (KNOWLEDGE_STORE_CAS_VERBS.includes(verb) ? "marker" : "chain");
-
-export async function runCeremony({ payloadPath, dryRun = false, partition = "TCRN-AOS" }) {
+async function runCeremonyOnce({ payloadPath, dryRun = false, partition = "TCRN-AOS" }) {
   const payloadText = readFileSync(payloadPath, "utf8");
   const payload = JSON.parse(payloadText);
   emitCeremonySpan({ span: "ceremony.start", partition, outcome: "started" });
@@ -149,220 +234,45 @@ export async function runCeremony({ payloadPath, dryRun = false, partition = "TC
     return { ok: false, reasonCode: admission.reasonCode, problems: admission.problems };
   }
 
-  // TCRN-CROSS-INIT-017: the ceremony can target any partition whose chain lives
-  // on the AOS host. Default is the AOS partition itself; the fallback replay
-  // drives other partitions by naming them.
-  const target = partition === "TCRN-AOS"
-    ? { workspace: VM_WORKSPACE, attestDir: VM_ATTEST_DIR }
-    : aosPartition(partition);
-
-  const catalogueResult = await remoteEngine(["commands"]);
-  if (!catalogueResult.accepted) {
-    emitCeremonySpan({ span: "ceremony.refused", partition, outcome: "refused", reasonCode: "HOST_CATALOGUE_UNAVAILABLE" });
-    return { ok: false, reasonCode: "HOST_CATALOGUE_UNAVAILABLE", detail: catalogueResult.reasonCode };
+  // INC-082: facade-only after the switch window. A facade outage is a named
+  // stop; it must never fall through to a file-backend SSH write.
+  try {
+    const facadeResult = await facadeCeremony({ payload, dryRun, partition });
+    emitCeremonySpan({ span: "ceremony.end", partition, outcome: facadeResult.ok ? "ok" : "refused", reasonCode: facadeResult.reasonCode });
+    return facadeResult;
+  } catch (error) {
+    const refusal = {
+      schemaVersion: "aos.local-client-ceremony-receipt.v1",
+      story: payload.story,
+      intent: payload.intent,
+      startedAt: instant(),
+      finishedAt: instant(),
+      dryRun,
+      host: VM_HOST,
+      partition,
+      facade: true,
+      ok: false,
+      reasonCode: "FACADE_WRITE_UNREACHABLE",
+      error: scrubHostPathsInText(String(error?.message ?? error)).slice(0, 500),
+      chainBefore: null,
+      chainAfter: null,
+      steps: [],
+      readback: []
+    };
+    emitCeremonySpan({ span: "ceremony.refused", partition, outcome: "refused", reasonCode: refusal.reasonCode });
+    return refusal;
   }
-  const commands = catalogueResult.json.commands ?? catalogueResult.json.result?.commands ?? [];
-  const catalogue = catalogueIndex(commands);
+}
 
-  const supply = { workspace: target.workspace, attestDir: target.attestDir, actor: assertAttributedActor(payload.actor ?? ACTOR) };
-  const receipt = {
-    schemaVersion: "aos.local-client-ceremony-receipt.v1",
-    story: payload.story,
-    intent: payload.intent,
-    startedAt: instant(),
-    dryRun,
-    host: VM_HOST,
-    partition,
-    topology: {
-      engineCli: VM_ENGINE_CLI,
-      workspace: target.workspace,
-      attestDir: target.attestDir,
-      actor: supply.actor,
-      configuredIn: "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
-    },
-    // Repo-relative when the payload lives in this checkout, so a receipt can be
-    // committed as evidence without carrying this laptop's home directory into it
-    // (TCRN-AOS-INC-037: two receipts shipped exactly that, and making this repository
-    // public then cost a 93-commit history rewrite). The digest is what identifies the
-    // payload anyway; the path is a courtesy for a reader.
-    payload: {
-      path: relativeToRepo(payloadPath),
-      sha256: sha256Text(payloadText),
-      bytes: Buffer.byteLength(payloadText, "utf8")
-    },
-    hostEngineCatalogue: { verbs: commands.length },
-    chainBefore: await readChainHead(target.workspace),
-    steps: [],
-    readback: [],
-    chainAfter: null
-  };
 
-  for (const step of payload.steps) {
-    // Re-read the head before EVERY mutating step. A batch advances the chain as it
-    // runs, so one sentinel captured at the start would be stale by step two — and a
-    // stale sentinel does not fail safe silently, it fails the step with a CAS
-    // mismatch, which reads like a defect in the payload.
-    // STORY-160: which head a step CAS's on depends on the verb — the chain head for
-    // chain verbs, the knowledge store MARKER for the knowledge-* family.
-    const head = step.readHeadFirst === false
-      ? receipt.chainBefore
-      : casSource(step.verb) === "marker"
-        ? await readKnowledgeMarker(target.workspace)
-        : await readChainHead(target.workspace);
-    const plan = planStep({ step, catalogue, supply, chainVersion: head.version, at: instant() });
-    if (!plan.ok) {
-      emitCeremonySpan({ span: "ceremony.refused", partition, verb: plan.verb ?? null, expectedVersion: head.version, outcome: "refused", reasonCode: plan.reasonCode });
-      receipt.steps.push({ ...plan, headAtPlanning: head.version });
-      receipt.ok = false;
-      receipt.reasonCode = plan.reasonCode;
-      return receipt;
-    }
-    if (dryRun) {
-      receipt.steps.push({
-        ...plan, headAtPlanning: head.version, executed: false,
-        // The values are shown; nothing is sent. A dry run that also sent the command
-        // would be a dry run in name only.
-        wouldSend: `node ${VM_ENGINE_CLI} ${plan.argv.map(shellQuote).join(" ")}`
-      });
-      continue;
-    }
-    const result = await remoteEngine(plan.argv);
-    // TCRN-CROSS-STORY-135: keep the engine's own error text on a refusal, so the
-    // receipt answers "why did this fail" on its own instead of forcing a local
-    // reproduction (CONF-050's close-conference collision was diagnosed only after
-    // re-running it in a temp workspace, because the receipt held reasonCode + argv
-    // and nothing else). Scrubbed before it lands: a ceremony receipt is committed
-    // as evidence and an engine message can quote a path (TCRN-AOS-INC-037). Full on
-    // a refusal; a success carries no error field, and anything that ever appears on
-    // one is scrubbed then truncated rather than kept whole.
-    const engineErrorText = typeof result.json?.error === "string" ? result.json.error : null;
-    const engineError = engineErrorText === null
-      ? null
-      : result.accepted
-        ? scrubHostPathsInText(engineErrorText).slice(0, 200)
-        : scrubHostPathsInText(engineErrorText);
-    receipt.steps.push({
-      ...plan,
-      headAtPlanning: head.version,
-      executed: true,
-      accepted: result.accepted,
-      reasonCode: result.reasonCode,
-      error: engineError,
-      recordId: result.json?.record?.id ?? result.json?.id ?? null,
-      version: result.json?.version ?? null,
-      raw: result.raw
-    });
-    if (!result.accepted) {
-      emitCeremonySpan({ span: "ceremony.refused", partition, verb: step.verb, expectedVersion: head.version, outcome: "refused", reasonCode: "STEP_REFUSED_BY_HOST_ENGINE" });
-      receipt.ok = false;
-      receipt.reasonCode = "STEP_REFUSED_BY_HOST_ENGINE";
-      receipt.chainAfter = await readChainHead(target.workspace);
-      return receipt;
-    }
+export async function runCeremony(args) {
+  try {
+    return await runCeremonyOnce(args);
+  } finally {
+    // A ceremony owns every tunnel it opens. Reclaim on validation failures,
+    // facade refusals and transport errors as well as success.
+    await reclaimFacadeTunnels();
   }
-
-  for (const step of payload.readback) {
-    const plan = planStep({ step, catalogue, supply, chainVersion: null, at: instant() });
-    if (!plan.ok) {
-      emitCeremonySpan({ span: "ceremony.refused", partition, verb: step.verb, outcome: "refused", reasonCode: plan.reasonCode });
-      receipt.readback.push(plan);
-      receipt.ok = false;
-      receipt.reasonCode = plan.reasonCode;
-      return receipt;
-    }
-    if (dryRun) {
-      receipt.readback.push({ ...plan, executed: false });
-      continue;
-    }
-    const result = await remoteEngine(plan.argv);
-    // `work-show` answers with the immutable `record` and the mutable `advisory` as
-    // SIBLINGS, so a read-back comparison written against `record` alone can never see
-    // a scope, a sprint or a decided-by — the very fields an annotate sets. Both are
-    // flattened into one view to compare against, with `record` last so an immutable
-    // field can never be shadowed by an advisory one of the same name.
-    // STORY-160: verbs that do NOT answer in the record/advisory shape (knowledge-list,
-    // knowledge-freshness) are compared against their top-level result instead — the
-    // whole response IS the observed record for them.
-    const hasRecordShape = result.json !== null
-      && (Object.hasOwn(result.json, "record") || Object.hasOwn(result.json, "advisory"));
-    const record = result.json === null ? null
-      : hasRecordShape
-        ? { ...result.json.advisory, ...result.json.record }
-        : result.json;
-    const { expected, problems } = resolveExpectations({ step, steps: payload.steps });
-    if (problems.length > 0) {
-      emitCeremonySpan({ span: "ceremony.refused", partition, verb: step.verb, outcome: "refused", reasonCode: "EXPECTATION_UNRESOLVABLE" });
-      receipt.readback.push({ ...plan, executed: true, reasonCode: "EXPECTATION_UNRESOLVABLE", problems });
-      receipt.ok = false;
-      receipt.reasonCode = "EXPECTATION_UNRESOLVABLE";
-      return receipt;
-    }
-    const verdict = judgeReadback({ expected, observed: record });
-    receipt.readback.push({
-      ...plan,
-      executed: true,
-      accepted: result.accepted,
-      reasonCode: result.reasonCode,
-      verdict,
-      record: step.recordFields
-        ? Object.fromEntries(step.recordFields.map((field) => [field, record?.[field] ?? null]))
-        : undefined
-    });
-    if (!result.accepted || verdict.ok === false) {
-      emitCeremonySpan({ span: "ceremony.refused", partition, verb: step.verb, outcome: "refused", reasonCode: !result.accepted ? "READBACK_REFUSED" : "READBACK_DIVERGENT" });
-      receipt.ok = false;
-      receipt.reasonCode = !result.accepted ? "READBACK_REFUSED" : "READBACK_DIVERGENT";
-      receipt.chainAfter = await readChainHead(target.workspace);
-      return receipt;
-    }
-    emitCeremonySpan({ span: "ceremony.readback", partition, verb: step.verb, outcome: "ok" });
-  }
-
-  // STORY-160: every real ceremony rebases the knowledge store ON the write path, so the
-  // knowledge face does not go stale on the next read. Best-effort but RECORDED in the
-  // receipt: a failed rebase leaves the store stale, and the marker-freshness gate
-  // (STORY-160.4) independently reds on that residue. Not run for a dry run, and not run
-  // twice: a payload that already performs a knowledge-rebase leaves the store fresh.
-  const batchAlreadyRebased = payload.steps.some((step) => step.verb === "knowledge-rebase");
-  if (!dryRun && !batchAlreadyRebased) {
-    try {
-      const marker = await readKnowledgeMarker(target.workspace);
-      const rebasePlan = planStep({
-        step: { verb: "knowledge-rebase", flags: {} }, catalogue, supply,
-        chainVersion: marker.version, at: instant()
-      });
-      if (rebasePlan.ok) {
-        const result = await remoteEngine(rebasePlan.argv);
-        receipt.knowledgeRebase = {
-          verb: "knowledge-rebase",
-          markerVersionBefore: marker.version,
-          accepted: result.accepted,
-          reasonCode: result.reasonCode,
-          version: result.json?.version ?? null,
-          error: result.accepted ? undefined
-            : scrubHostPathsInText(result.stderr?.trim() ?? result.stdout?.trim() ?? "").slice(0, 200)
-        };
-        if (!result.accepted) {
-          emitCeremonySpan({ span: "ceremony.refused", partition, verb: "knowledge-rebase", outcome: "refused", reasonCode: result.reasonCode ?? "AUTO_REBASE_REFUSED" });
-        }
-      } else {
-        receipt.knowledgeRebase = { verb: "knowledge-rebase", accepted: false, reasonCode: rebasePlan.reasonCode };
-      }
-    } catch (error) {
-      receipt.knowledgeRebase = {
-        verb: "knowledge-rebase", accepted: false, reasonCode: "MARKER_UNREADABLE",
-        error: scrubHostPathsInText(String(error?.message ?? error)).slice(0, 200)
-      };
-    }
-  }
-
-  receipt.chainAfter = await readChainHead(target.workspace);
-  receipt.eventsAppended = receipt.chainAfter.version - receipt.chainBefore.version;
-  receipt.ok = true;
-  receipt.reasonCode = dryRun ? "CEREMONY_PLANNED_ONLY" : "CEREMONY_COMPLETED_AND_READ_BACK";
-  receipt.finishedAt = instant();
-  emitCeremonySpan({ span: "ceremony.end", partition, outcome: "ok", reasonCode: receipt.reasonCode });
-  return receipt;
 }
 
 function argument(name) {

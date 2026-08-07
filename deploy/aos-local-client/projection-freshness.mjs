@@ -17,7 +17,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
-import { remoteEngine } from "./ceremony.mjs";
+import { facadeReadEngine, readChainHead, reclaimFacadeTunnels } from "./ceremony.mjs";
 import { PLATFORM_ROOT, REPO_ROOT } from "./topology.mjs";
 import { aosPartition } from "./aos-partitions.mjs";
 
@@ -55,7 +55,7 @@ const now = () => new Date().toISOString().replace(/\.\d+Z$/u, "Z");
 async function checkKnowledge() {
   const partition = "cross-project";
   const entry = aosPartition(partition);
-  const result = await remoteEngine(["knowledge-freshness", "--workspace", entry.workspace, "--at", now()]);
+  const result = await facadeReadEngine("knowledge-freshness", partition, { at: now() });
   if (!result.accepted) {
     const refused = result.reasonCode;
     if (refused === "KNOWLEDGE_HIGH_WATER_MISMATCH") {
@@ -171,10 +171,8 @@ async function checkWebProjection() {
 async function liveChainVersion(partition) {
   try {
     const entry = aosPartition(partition);
-    const result = await remoteEngine(["status", "--workspace", entry.workspace]);
-    if (!result.accepted) return null;
-    const version = result.json?.version;
-    return Number.isSafeInteger(version) ? version : null;
+    const result = await readChainHead(entry.workspace);
+    return Number.isSafeInteger(result.version) ? result.version : null;
   } catch {
     return null;
   }
@@ -237,10 +235,14 @@ export async function runProjectionFreshness() {
 }
 
 if (import.meta.url === new URL(`file://${process.argv[1]}`).href || process.argv[1]?.endsWith("projection-freshness.mjs")) {
-  const result = await runProjectionFreshness();
-  process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
-  for (const row of result.rows) {
-    process.stderr.write(`${row.sidecar}: ${row.status}${row.self ? ` (${row.self})` : ""}${row.reason ? ` — ${row.reason}` : ""}\n`);
+  try {
+    const result = await runProjectionFreshness();
+    process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+    for (const row of result.rows) {
+      process.stderr.write(`${row.sidecar}: ${row.status}${row.self ? ` (${row.self})` : ""}${row.reason ? ` — ${row.reason}` : ""}\n`);
+    }
+    if (!result.ok) process.exitCode = 1;
+  } finally {
+    await reclaimFacadeTunnels();
   }
-  if (!result.ok) process.exitCode = 1;
 }

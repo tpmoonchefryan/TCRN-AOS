@@ -27,9 +27,19 @@ import { spawn } from "node:child_process";
  * executed nothing, exited 0, and the caller reported
  * "Unexpected end of JSON input" from a completely empty stdout.
  */
-function sshNode(host, script) {
+function sshNode(host, script, { pgSchema, pgConnection } = {}) {
   return new Promise((done, fail) => {
-    const child = spawn("ssh", [host, "node", "-"], { stdio: ["pipe", "pipe", "pipe"] });
+    // The VM chain is PG-homed after STORY-189. A projection must ask the
+    // engine for that authority, under the same peer-auth role as the facades;
+    // running the MCP server as the login user would silently project the
+    // sealed file archive (the exact stale-cross failure this helper exists to
+    // prevent).
+    const command = typeof pgSchema === "string" && pgSchema.length > 0
+      && typeof pgConnection === "string" && pgConnection.length > 0
+      ? ["ssh", host, "sudo", "-n", "-u", "tcrn_engine", "env",
+        "TCRN_PG_CONNECTION=" + pgConnection, "TCRN_PG_SCHEMA=" + pgSchema, "node", "-"]
+      : ["ssh", host, "node", "-"];
+    const child = spawn(command[0], command.slice(1), { stdio: ["pipe", "pipe", "pipe"] });
     // Collect raw BUFFERS and decode once at the end. SSH returns a byte stream;
     // decoding per-chunk as strings can split a multibyte UTF-8 sequence across
     // a chunk boundary and produce U+FFFD in the projected Chinese text. Collecting
@@ -58,7 +68,7 @@ function sshNode(host, script) {
  * cannot disagree about what a projection is.
  */
 export async function projectPartitionOnHost({
-  host, runtimeRoot, engineMcp, partitionId, workspacePath, verifiedAt
+  host, runtimeRoot, engineMcp, partitionId, workspacePath, verifiedAt, pgSchema, pgConnection
 }) {
   const raw = await sshNode(host, `
     const path = require("path");
@@ -85,7 +95,7 @@ export async function projectPartitionOnHost({
       process.stderr.write(String((error && error.stack) || error));
       process.exit(1);
     });
-  `);
+  `, { pgSchema, pgConnection });
   const result = JSON.parse(raw);
   if (!result.projection) {
     throw new Error(`remote host produced no projection for ${partitionId}`);

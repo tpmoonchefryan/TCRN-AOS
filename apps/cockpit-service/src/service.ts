@@ -3,7 +3,6 @@ import { once } from "node:events";
 import { readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { extname, join, normalize, resolve } from "node:path";
-import { homedir } from "node:os";
 import { randomUUID } from "node:crypto";
 import {
   ChainClient,
@@ -70,6 +69,17 @@ export interface CockpitServiceOptions {
    * deployment omits it and gets the lazy facade spawn below.
    */
   chainClient?: ChainClientLike;
+  /**
+   * The governed engine's MCP facade path, for the lazy spawn of the chain client.
+   *
+   * STORY-186: stated by the deployment, never defaulted here. A hard-coded engine
+   * path in this service was a second copy of a topology fact — on the VM it would
+   * resolve to a path that does not exist, and anywhere it would drift the first time
+   * the truth root moved. The resident runner imports the manifest's `VM_ENGINE_MCP`
+   * and hands it over; a chain write that needs the lazy spawn with no path configured
+   * is refused by name rather than aimed at a stale address.
+   */
+  engineMcpPath?: string;
 }
 
 /** The one method the write surface needs; ChainClient satisfies it. */
@@ -153,8 +163,15 @@ export async function startCockpitService(options: CockpitServiceOptions): Promi
     const workspacePath = options.workspaces[partitionId];
     if (!workspacePath) throw new WriteRefused(`unknown partition ${partitionId}`, "UNKNOWN_PARTITION");
     if (!chain) {
+      if (typeof options.engineMcpPath !== "string" || options.engineMcpPath.length === 0) {
+        throw new WriteRefused(
+          "no engine facade path configured: a chain write needs the engine's MCP facade, "
+          + "and this service no longer hard-codes one (STORY-186). The deployment must state "
+          + "engineMcpPath (or inject a chainClient).",
+          "ENGINE_MCP_PATH_REQUIRED");
+      }
       spawned = new ChainClient({
-        serverPath: resolve(homedir(), ".tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs"),
+        serverPath: options.engineMcpPath,
         ...(options.authorityPins ? { authorityPins: options.authorityPins } : {}),
         ...(options.authorityPinsDigest ? { authorityPinsDigest: options.authorityPinsDigest } : {})
       });

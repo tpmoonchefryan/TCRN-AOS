@@ -69,10 +69,12 @@
 
 import { createServer } from "node:http";
 import { createHash, randomBytes } from "node:crypto";
+import { execFile } from "node:child_process";
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { once } from "node:events";
 import { dirname, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { promisify } from "node:util";
 
 import { runEngineCli, CATALOG_TTL_MS, RESPONSE_MAX_BYTES } from "./facade-read-service.mjs";
 import {
@@ -89,6 +91,7 @@ export const CATALOG_SCHEMA = "aos.facade-write-catalog.v1";
 
 const sha256Text = (text) => createHash("sha256").update(Buffer.from(text, "utf8")).digest("hex");
 const instant = () => new Date().toISOString().replace(/\.\d+Z$/u, "Z");
+const execFileAsync = promisify(execFile);
 
 function fail(reasonCode, message) {
   const error = new Error(message);
@@ -274,16 +277,67 @@ export async function readChainHead(workspace, engineRoot, { engineCli, pgSchema
 }
 
 /**
- * The knowledge store marker (`<workspace>/.tcrn-workflow/knowledge/store.json`).
+ * The knowledge store marker.
  *
  * The knowledge-* mutating verbs CAS on the store's OWN `version`, which is unrelated
- * to the chain version (STORY-160). The facade reads the marker file directly — a
- * READ of a control-tree file on the host this process already runs as, which the
- * platform permits ("看可以,存不行"); only writes to the tree are reserved to the
- * engine. A missing or malformed marker is a thrown error (the INC-047 receipt path
- * catches it and says the chain position is unknown).
+ * to the chain version (STORY-160). Since STORY-189 the marker lives in Postgres
+ * (the `knowledge_marker` table of the chain schema), NOT in the file tree — the
+ * file tree is a sealed archive. INC-085/INC-086: reading the file-tree marker
+ * after migration returns a FROZEN version, which is why a knowledge-rebase that
+ * read it reported KNOWLEDGE_CAS_MISMATCH (92:93). When a PG connection is in
+ * hand, the marker is read from PG; the file tree is the pre-migration fallback.
  */
-export function readKnowledgeMarker(workspace) {
+export async function readKnowledgeMarker(workspace, { pgSchema, pgConnection, engineRoot } = {}) {
+  if (typeof pgSchema === "string" && pgSchema.length > 0
+    && typeof pgConnection === "string" && pgConnection.length > 0) {
+    try {
+      // The deployed facade runtime is intentionally lean and does not carry a
+      // second copy of the PG driver.  The governed engine owns the dependency;
+      // resolve it from that installation when the service supplies engineRoot.
+      const pgSpecifier = typeof engineRoot === "string" && engineRoot.length > 0
+        ? pathToFileURL(resolve(engineRoot, "node_modules/pg/lib/index.js")).href
+        : "pg";
+      // The service runs as root for the sealed workspace paths, while the
+      // governance database uses socket peer auth for the engine role.  The
+      // same sudo boundary as runEngineCli is therefore required for this
+      // read; passing `user` to pg does not change the OS peer identity.
+      const markerReader = [
+        "const pg = await import(process.argv[1]);",
+        "const Client = pg.default?.Client ?? pg.Client;",
+        "const schema = process.env.TCRN_PG_SCHEMA;",
+        "if (!/^[a-z][a-z0-9_]*$/u.test(schema ?? \"\")) throw new Error(\"invalid PG schema\");",
+        "const client = new Client({ connectionString: process.env.TCRN_PG_CONNECTION });",
+        "await client.connect();",
+        "try {",
+        "  const { rows } = await client.query(`select bytes from ${schema}.knowledge_marker`);",
+        "  if (!rows[0]?.bytes) throw new Error(\"knowledge marker row is empty\");",
+        "  process.stdout.write(JSON.stringify({ bytes: Buffer.from(rows[0].bytes).toString(\"base64\") }));",
+        "} finally { await client.end().catch(() => {}); }"
+      ].join("\n");
+      const { stdout } = await execFileAsync("sudo", [
+        "-n", "-u", "tcrn_engine", "env",
+        `TCRN_PG_CONNECTION=${pgConnection}`,
+        `TCRN_PG_SCHEMA=${pgSchema}`,
+        process.execPath, "--input-type=module", "-e", markerReader, pgSpecifier
+      ], { timeout: 15000, maxBuffer: 1024 * 1024 });
+      const markerResult = parseJson(stdout.trim());
+      const json = markerResult?.bytes
+        ? parseJson(Buffer.from(markerResult.bytes, "base64").toString("utf8"))
+        : null;
+      if (json !== null && Number.isSafeInteger(json.version)) {
+        return {
+          version: json.version,
+          workspaceId: json.workspaceId ?? null,
+          eventHighWaterDigest: json.eventHighWaterDigest ?? null
+        };
+      }
+      throw new Error("knowledge marker is not a valid PG record");
+    } catch (error) {
+      throw Object.assign(
+        new Error(`the PG knowledge store marker could not be read: ${String(error?.message ?? error)}`),
+        { reasonCode: "FACADE_WRITE_KNOWLEDGE_MARKER_UNREADABLE" });
+    }
+  }
   let raw;
   try {
     raw = readFileSync(resolve(workspace, ".tcrn-workflow/knowledge/store.json"), "utf8");
@@ -425,9 +479,11 @@ export async function performFacadeWrite({
   };
 
   const chainHead = () => readChainHead(target.workspace, engineRoot, engineCall);
-  const headFor = (verb, preferFresh) => {
+  const headFor = async (verb, preferFresh) => {
     if (preferFresh === false) return receipt.chainBefore;
-    return casSource(verb) === "marker" ? readKnowledgeMarker(target.workspace) : chainHead();
+    return casSource(verb) === "marker"
+      ? readKnowledgeMarker(target.workspace, { pgSchema, pgConnection, engineRoot })
+      : chainHead();
   };
 
   receipt.chainBefore = await chainHead();
@@ -551,7 +607,7 @@ export async function performFacadeWrite({
   const batchAlreadyRebased = (payload.steps ?? []).some((step) => step.verb === "knowledge-rebase");
   if (!dryRun && !batchAlreadyRebased) {
     try {
-      const marker = readKnowledgeMarker(target.workspace);
+      const marker = await readKnowledgeMarker(target.workspace, { pgSchema, pgConnection, engineRoot });
       const rebasePlan = planStep({
         step: { verb: "knowledge-rebase", flags: {} }, catalogue, supply,
         chainVersion: marker.version, at: instant()
@@ -684,8 +740,12 @@ export async function startFacadeWriteService(options) {
   if (typeof options.host !== "string" || options.host.trim().length === 0) {
     throw new Error("facade write refused to start: no bind host stated");
   }
-  if (["0.0.0.0", "::", "*"].includes(options.host)) {
-    throw new Error(`facade write refused to bind ${options.host}: wildcard binds are not allowed`);
+  // INC-084: the bind is hardcoded loopback per CONF-007. A deny-list misses
+  // alternate spellings (::0, the all-zero IPv6 long form) and routable
+  // addresses; the positive rule "must be loopback" has no holes.
+  if (options.host !== "127.0.0.1" && options.host !== "::1") {
+    throw new Error(`facade write refused to bind ${options.host}: CONF-007 requires a loopback bind; `
+      + "the service is reachable only through an SSH tunnel");
   }
   if (!options.workspaces || Object.keys(options.workspaces).length === 0) {
     throw new Error("facade write refused to start: no workspaces stated. The service must know each "
@@ -699,12 +759,36 @@ export async function startFacadeWriteService(options) {
         + "must not silently skip it.");
     }
   }
+  // INC-084: pgSchemas must cover EVERY workspace, else refuse to start. The
+  // INIT-020 fork's silent mechanism was `pgSchemas?.[partition] ?? undefined`
+  // falling back to the file track; a service that cannot state a PG schema for
+  // a partition must not start serving it from the file tree by accident.
+  if (!options.pgSchemas || Object.keys(options.pgSchemas).length === 0) {
+    throw new Error("facade write refused to start: no pgSchemas stated. After the file→pg migration "
+      + "every partition's chain lives in Postgres, and a service that cannot name each schema must "
+      + "not silently serve the stale file track.");
+  }
+  for (const id of Object.keys(options.workspaces)) {
+    if (typeof options.pgSchemas[id] !== "string" || options.pgSchemas[id].length === 0) {
+      throw new Error(`facade write refused to start: partition ${id} has no PG schema. A write ceremony `
+        + "must name the schema the chain migrated to (INC-074 storage-home); a missing schema means the "
+        + "caller would be writing the stale file track.");
+    }
+  }
+  // INC-084: actor whitelist. When stated, the attributed actor (payload override
+  // or default) must be on it; an unlisted actor is refused server-side instead of
+  // a self-reported payload actor being trusted.
   if (typeof options.writeRoot !== "string" || options.writeRoot.trim().length === 0) {
     throw new Error("facade write refused to start: no writeRoot stated. Receipts are materialised there.");
   }
   if (typeof options.actor !== "string" || options.actor.length === 0) {
     throw new Error("facade write refused to start: no default actor stated (EPIC-041 requires an "
       + "attributed actor: agent:<model> or person:<id>).");
+  }
+  const allowedActors = options.allowedActors ?? [options.actor];
+  if (!Array.isArray(allowedActors) || allowedActors.length === 0
+    || allowedActors.some((candidate) => typeof candidate !== "string" || !/^agent:[A-Za-z0-9._:-]+$/u.test(candidate) && !/^person:[A-Za-z0-9._:-]+$/u.test(candidate))) {
+    throw new Error("facade write refused to start: allowedActors must be a non-empty attributed-actor allow-list");
   }
 
   const workspaces = { ...options.workspaces };
@@ -738,6 +822,7 @@ export async function startFacadeWriteService(options) {
 
   const allowedHosts = options.allowedHosts ?? [];
   const engineRoot = options.engineRoot;
+  const idempotency = new Map();
 
   const server = createServer((request, response) => {
     void handle(request, response, {
@@ -750,6 +835,8 @@ export async function startFacadeWriteService(options) {
       engineCli: options.engineCli,
       pgSchemas: options.pgSchemas,
       pgConnection: options.pgConnection,
+      allowedActors,
+      idempotency,
       ttlMs,
       writeRoot,
       hostLabel,
@@ -792,12 +879,18 @@ async function handle(request, response, context) {
 
   if (request.method === "GET" && path === "/api/health") {
     const catalog = await context.currentCatalog();
+    // INC-084: report the per-partition backend, so a deployment that silently
+    // fell back to the file track (the INIT-020 fork mechanism) is visible in
+    // health instead of only at write time.
+    const pgServing = typeof context.pgConnection === "string" && context.pgConnection.length > 0;
+    const backends = Object.fromEntries(context.partitionIds.map((id) => [id, pgServing && context.pgSchemas?.[id] ? "pg" : "file"]));
     sendJson(response, 200, {
       ok: true,
       service: FACADE_WRITE_SERVER_NAME,
       readonly: false,
       chainWriteAvailable: true,
       partitions: context.partitionIds,
+      backends,
       engineVerbs: { forwardable: catalog.forwardable.length, withheld: catalog.withheld.length },
       noPins: true,
       freshWithinMs: context.ttlMs ?? CATALOG_TTL_MS
@@ -850,8 +943,9 @@ async function handleCeremony(request, response, context) {
   let partition;
   let dryRun;
   let payload;
+  let idempotencyKey;
   try {
-    const allowed = ["payload", "dryRun", "partition"];
+    const allowed = ["payload", "dryRun", "partition", "idempotencyKey"];
     const unknown = Object.keys(body).filter((key) => !allowed.includes(key));
     if (unknown.length > 0) fail("MCP_ARGUMENT_UNKNOWN", unknown.sort().join(","));
 
@@ -861,6 +955,13 @@ async function handleCeremony(request, response, context) {
     }
     dryRun = body.dryRun ?? false;
     if (typeof dryRun !== "boolean") fail("MCP_ARGUMENT_INVALID", "dryRun");
+
+    // INC-084: idempotency key. A ceremony that times out after a successful write
+    // must not be re-run into a double write; a replayed key is refused.
+    idempotencyKey = body.idempotencyKey;
+    if (idempotencyKey !== undefined && typeof idempotencyKey !== "string") {
+      fail("MCP_ARGUMENT_INVALID", "idempotencyKey");
+    }
 
     payload = body.payload;
     if (typeof payload === "string") {
@@ -887,6 +988,45 @@ async function handleCeremony(request, response, context) {
     attestDir: context.attestDirs[partition]
   };
 
+  // INC-084: a stated actor must be on the server-side whitelist. A self-reported
+  // payload actor is no longer trusted on its own.
+  const actor = typeof payload.actor === "string" ? payload.actor : context.defaultActor;
+  const attributed = typeof actor === "string"
+    && (/^agent:[A-Za-z0-9._:-]+$/u.test(actor) || /^person:[A-Za-z0-9._:-]+$/u.test(actor));
+  if (attributed && context.allowedActors !== null && context.allowedActors !== undefined && !context.allowedActors.includes(actor)) {
+    sendJson(response, 403, {
+      ok: false,
+      reasonCode: "ACTOR_NOT_ALLOWED",
+      error: `actor ${actor} is not on this facade's whitelist`
+    });
+    return;
+  }
+
+  // INC-084: every real ceremony has a stable key. Clients may state one, but
+  // the payload digest is the fail-safe default for older callers; a retry after
+  // a timeout therefore cannot silently append the same batch twice.
+  const requestDigest = sha256Text(JSON.stringify({ partition, payload }));
+  const effectiveIdempotencyKey = dryRun ? null : idempotencyKey ?? requestDigest;
+  if (effectiveIdempotencyKey !== null) {
+    const previousDigest = context.idempotency.get(effectiveIdempotencyKey);
+    if (previousDigest !== undefined) {
+      if (previousDigest !== requestDigest) {
+        sendJson(response, 409, {
+          ok: false,
+          reasonCode: "IDEMPOTENCY_KEY_REUSED",
+          error: `idempotencyKey ${effectiveIdempotencyKey} was already bound to another payload`
+        });
+        return;
+      }
+      sendJson(response, 409, {
+        ok: false,
+        reasonCode: "IDEMPOTENCY_REPLAY",
+        error: `idempotencyKey ${effectiveIdempotencyKey} was already applied`
+      });
+      return;
+    }
+  }
+
   // Materialisation paths are THIS service's decision: the caller names neither the
   // payload nor the receipt path. Both land under the tool-owned root, scrubbed, so
   // they are committable evidence that does not leak the host's directory structure.
@@ -902,7 +1042,7 @@ async function handleCeremony(request, response, context) {
       dryRun,
       partition,
       target,
-      actor: typeof payload.actor === "string" ? payload.actor : context.defaultActor,
+      actor,
       currentCatalog: context.currentCatalog,
       engineRoot: context.engineRoot,
       engineCli: context.engineCli,
@@ -916,10 +1056,30 @@ async function handleCeremony(request, response, context) {
     // landed, or whether any did.
     receipt = thrownReceipt({ payload, dryRun, partition, host: context.hostLabel, error, startedAt: instant() });
   }
+  // Reserve only after the engine reports a completed, read-back-verified
+  // ceremony. A refusal must remain retryable; reserving before execution made
+  // a failed first attempt look like a successful replay.
+  if (receipt.ok === true && effectiveIdempotencyKey !== null) {
+    context.idempotency.set(effectiveIdempotencyKey, requestDigest);
+  }
 
-  const receiptPath = resolve(context.writeRoot, "receipts", `${nonce}-${partition}.json`);
-  mkdirSync(dirname(receiptPath), { recursive: true });
-  writeFileSync(receiptPath, `${JSON.stringify(scrubHostPaths(receipt), null, 2)}\n`);
+  // INC-084: receipt materialisation is inside the ceremony's error surface. A
+  // receipt that cannot be written must produce a named error receipt (409), not
+  // a bare 500 with no evidence — the INC-047 shape, applied to the receipt itself.
+  let receiptPath;
+  try {
+    receiptPath = resolve(context.writeRoot, "receipts", `${nonce}-${partition}.json`);
+    mkdirSync(dirname(receiptPath), { recursive: true });
+    writeFileSync(receiptPath, `${JSON.stringify(scrubHostPaths(receipt), null, 2)}\n`);
+  } catch (error) {
+    sendJson(response, 409, {
+      ok: false,
+      reasonCode: "RECEIPT_MATERIALISATION_FAILED",
+      error: scrubHostPathsInText(String(error?.message ?? error)),
+      receipt: scrubHostPaths(receipt)
+    });
+    return;
+  }
 
   const result = {
     ok: receipt.ok === true,

@@ -86,6 +86,10 @@ const service = await startCockpitService({
   port: Number.parseInt(env.AOS_PORT, 10),
   staticRoot: resolve(env.AOS_STATIC_ROOT),
   domainDatabasePath: resolve(env.AOS_DOMAIN_DB),
+  // Stated so the service's lazy spawn (if it ever runs) points at the manifest's
+  // engine MCP, never at a hard-coded path (STORY-186). The injected client below
+  // already carries the same value; this is the option form of the same fact.
+  engineMcpPath: env.AOS_ENGINE_MCP,
   // One partition, stated honestly. The other three chains live on the operator's
   // machine and this host cannot reach them, so declaring them would produce a
   // write face that answers and then fails at the engine. A write aimed at them

@@ -32,7 +32,8 @@ const REQUIRED = [
   ["FACADE_WRITE_WORKSPACES", "JSON object of partitionId -> workspace path (CockpitServiceOptions.workspaces seam)"],
   ["FACADE_WRITE_ATTEST_DIRS", "JSON object of partitionId -> attestation sidecar path (never inside the workspace)"],
   ["FACADE_WRITE_ALLOWED_HOSTS", "comma-separated Host allow-list (anti-DNS-rebinding)"],
-  ["FACADE_WRITE_ACTOR", "default attributed ceremony actor (EPIC-041: agent:<model> or person:<id>)"]
+  ["FACADE_WRITE_ACTOR", "default attributed ceremony actor (EPIC-041: agent:<model> or person:<id>)"],
+  ["FACADE_WRITE_ALLOWED_ACTORS", "server-side attributed-actor allow-list"],
 ];
 
 const missing = REQUIRED.filter(([key]) => {
@@ -102,6 +103,11 @@ for (const [what, path] of [["facade service", serviceEntry], ["engine CLI", eng
 }
 
 const { startFacadeWriteService } = await import(pathToFileURL(serviceEntry).href);
+const allowedActors = env.FACADE_WRITE_ALLOWED_ACTORS.split(",").map((actor) => actor.trim()).filter(Boolean);
+if (allowedActors.length === 0) {
+  console.error(JSON.stringify({ ok: false, error: "FACADE_WRITE_ALLOWED_ACTORS must be non-empty" }));
+  process.exit(1);
+}
 
 const service = await startFacadeWriteService({
   port: Number.parseInt(env.FACADE_WRITE_PORT, 10),
@@ -112,6 +118,7 @@ const service = await startFacadeWriteService({
   writeRoot: resolve(env.FACADE_WRITE_EVIDENCE),
   allowedHosts: env.FACADE_WRITE_ALLOWED_HOSTS.split(",").map((entry) => entry.trim()).filter(Boolean),
   actor: env.FACADE_WRITE_ACTOR,
+  allowedActors,
   pgSchemas,
   pgConnection: process.env.FACADE_PG_CONNECTION,
 });

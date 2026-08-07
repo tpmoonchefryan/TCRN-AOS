@@ -207,6 +207,15 @@ async function converge() {
   const rsyncArgs = ["--archive", "--delete"];
   for (const name of excludes) rsyncArgs.push("--exclude", name);
   await run("rsync", [...rsyncArgs, `${sourceRoot}/`, `${host}:${enginePath}/`], { maxBuffer: 16 * 1024 * 1024 });
+  // rsync preserves the operator checkout's mode bits and, when the remote
+  // destination is not owned by the operator, cannot preserve ownership. The
+  // resident facade deliberately drops to tcrn_engine for PG peer auth, so a
+  // byte-identical tree that is only readable by ryanlan is not a usable
+  // deployment. Converge the runtime to a root-owned, world-readable tree;
+  // the engine itself has no reason to mutate its release bytes.
+  await ssh(["chown", "-R", "root:root", enginePath]);
+  await ssh(["find", enginePath, "-type", "d", "-exec", "chmod", "755", "{}", "+"]);
+  await ssh(["find", enginePath, "-type", "f", "-exec", "chmod", "644", "{}", "+"]);
 }
 
 /**
@@ -459,6 +468,12 @@ const receipt = {
       mismatched: comparison.mismatched.length,
       missingOnVm: comparison.missingOnVm.length,
       extraOnVm: comparison.extraOnVm.length,
+    },
+    permissions: {
+      owner: "root:root",
+      directories: "0755",
+      files: "0644",
+      readableBy: "tcrn_engine",
     },
   },
   verification,

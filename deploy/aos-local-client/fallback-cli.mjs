@@ -49,6 +49,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { aosPartition } from "./aos-partitions.mjs";
 import { VM_HOST } from "./topology.mjs";
+import { FACADE_WRITE_PORT } from "../aos-resident-cockpit/facade-write-manifest.mjs";
 import { RESERVED_FLAGS, catalogueIndex } from "./ceremony-plan.mjs";
 import { remoteEngine } from "./ceremony.mjs";
 
@@ -61,7 +62,8 @@ const WORKSPACE_CONTAINER = join(PLATFORM_ROOT, ".tcrn-workspace");
 // the systemd unit that serves the chain. A literal here would let this probe and
 // the ceremony that performs the write point at different machines the first time
 // somebody moved the truth root, with nothing going red.
-const AOS_PROBE = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=3", VM_HOST, "echo ok"];
+const AOS_PROBE = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=3", VM_HOST,
+  `curl -fsS --max-time 3 http://127.0.0.1:${FACADE_WRITE_PORT}/api/health`];
 
 /**
  * Partitions under single-authority. A partition is usable when its chain has
@@ -102,10 +104,18 @@ function sh(args, { allowFailure = false } = {}) {
   }
 }
 
-/** AOS reachable? Exit code 0 = yes. */
+/** The actual facade write face is healthy and PG-backed? Exit code 0 = yes. */
 function probe() {
-  const result = sh(AOS_PROBE, { allowFailure: true });
-  return result.code === 0;
+ const result = sh(AOS_PROBE, { allowFailure: true });
+  if (result.code !== 0) return false;
+  try {
+    const health = JSON.parse(result.stdout);
+    return health.ok === true && health.chainWriteAvailable === true
+      && Object.values(health.backends ?? {}).length > 0
+      && Object.values(health.backends).every((backend) => backend === "pg");
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -432,7 +442,7 @@ function writeAction(partition, args, actor) {
  * non-flag token, a value-taking flag at the end of the argv — throws naming the
  * entry, because re-issuing a guess is the failure this whole file exists to prevent.
  */
-function flagsFromQueuedArgv(args, command, where) {
+export function flagsFromQueuedArgv(args, command, where) {
   const flags = {};
   for (let index = 1; index < args.length; index += 1) {
     const token = args[index];

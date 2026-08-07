@@ -294,7 +294,7 @@ function knowledgePayload(overrides = {}) {
     knowledgeKind: "runbook_fact",
     status: "draft",
     lastVerified: "2026-07-08",
-    stalenessPolicy: "review_after_30_days",
+    stalenessPolicy: "never",
     sourceRef: "workflow-plan-digest-reference",
     sourceDigest: "sha256:kr02-fixture-source",
     tags: ["kr02", "mcp", "knowledge"],

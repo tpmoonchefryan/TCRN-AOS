@@ -158,18 +158,8 @@ test("the shipped anchor roster names every server the platform .mcp.json declar
   }
 });
 
-test("the shipped allowlist keeps its four pre-INC-036 reasons and dates", () => {
-  // The restructure added `missingFrom`; it may not lose why a gap was excused.
-  assert.deepEqual(ALLOWLIST.map((entry) => entry.server),
-    ["codegraph-ds", "codegraph-aos", "tcrn-workflow-aos-read", "aos-mcp-write"]);
-  for (const entry of ALLOWLIST) {
-    assert.equal(entry.since, "2026-08-05");
-    assert.equal(entry.missingFrom, "codex");
-    assert.ok(entry.reason.includes("Codex 侧"), entry.reason);
-  }
-  assert.ok(ALLOWLIST[0].reason.includes("STORY-146 S4.1"));
-  assert.ok(ALLOWLIST[2].reason.includes("AOS 只读面"));
-  assert.ok(ALLOWLIST[3].reason.includes("AOS MCP 写面"));
+test("the shipped allowlist is empty after STORY-192 closes the four gaps", () => {
+  assert.deepEqual(ALLOWLIST, []);
 });
 
 // ── launch specs (INC-036 defect 4) ────────────────────────────────────────

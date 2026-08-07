@@ -76,6 +76,46 @@ record(
     : "read-service test does not assert chain-route absence"
 );
 
+// ── 5. the facade read service (STORY-181) carries no pins either ────────────
+// The facade is a second read process: it fronts the engine's read verbs, so the
+// same MIN-014 invariant applies to its bytes — no chain-write machinery, no pins
+// option. It is gated here, under the same gate name, because a future edit that
+// slips pins into the facade must make THIS gate go red.
+const facadeSource = readFileSync(resolve(root, "deploy/aos-resident-cockpit/facade-read-service.mjs"), "utf8");
+const facadeRunnerSource = readFileSync(resolve(root, "deploy/aos-resident-cockpit/facade-read-runner.mjs"), "utf8");
+
+record(
+  "facade-read-source-names-no-write-machinery",
+  !writeMachinery.some((token) => facadeSource.includes(token) || facadeRunnerSource.includes(token)),
+  (() => {
+    const present = writeMachinery.filter((token) =>
+      facadeSource.includes(token) || facadeRunnerSource.includes(token));
+    return present.length === 0
+      ? "facade read service and runner name no chain-write machinery"
+      : `facade read source names chain-write machinery: ${present.join(", ")}`;
+  })()
+);
+
+record(
+  "facade-read-source-carry-no-pins-option",
+  !/authorityPins|authority-pins/u.test(facadeSource) && !/authorityPins|authority-pins/u.test(facadeRunnerSource),
+  /authorityPins|authority-pins/u.test(facadeSource) || /authorityPins|authority-pins/u.test(facadeRunnerSource)
+    ? "facade read source exposes a pins field"
+    : "facade read source exposes no pins field"
+);
+
+// ── 6. the facade's read-only assertion is two-sourced (STORY-181) ───────────
+// The safety property is a derivation from TWO independent sources — the engine
+// catalogue's mutates flag and the engine's own workflowMcpTools() descriptors —
+// so "lost one side" is itself a red here, not a refactor that looks like a win.
+record(
+  "facade-read-source-asserts-both-derivation-sources",
+  facadeSource.includes("withheldGround") && facadeSource.includes("assertNoWriteExposed"),
+  facadeSource.includes("withheldGround") && facadeSource.includes("assertNoWriteExposed")
+    ? "facade read source asserts both derivation sources (catalog mutates flag + engine descriptors)"
+    : "facade read source is missing one of the two derivation sources"
+);
+
 const result = {
   ok: findings.length === 0,
   gate: "aos-read-face-source-gate",
@@ -83,7 +123,9 @@ const result = {
     "the read face never names chain-write machinery (pins / ChainClient / callTool)",
     "the read face refuses write methods at the source",
     "the read face options carry no pins field",
-    "the behavioural suite asserts the no-write-route invariant"
+    "the behavioural suite asserts the no-write-route invariant",
+    "the facade read service source names no chain-write machinery and no pins field",
+    "the facade read service's read-only assertion is two-sourced (catalog mutates flag + engine descriptors)"
   ],
   findings
 };

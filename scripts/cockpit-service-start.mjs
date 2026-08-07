@@ -73,6 +73,11 @@ if (!actor || actor.trim().length === 0) {
   process.exit(1);
 }
 
+// The governed engine's MCP facade this service lazily spawns for a chain write.
+// Stated here (the local install path), never defaulted inside the service — the
+// service refuses rather than aim at a hard-coded path (STORY-186).
+const engineMcpPath = resolve(homedir(), ".tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs");
+
 const service = await startCockpitService({
   port: Number.parseInt(process.env.AOS_PORT ?? "4318", 10),
   staticRoot: resolve(process.cwd(), "apps/web/dist"),
@@ -83,6 +88,7 @@ const service = await startCockpitService({
     "TCRN-TMS": workspaceFor("TCRN-TMS"),
     "TCRN-AOS": workspaceFor("TCRN-AOS")
   },
+  engineMcpPath,
   authorityPins,
   authorityPinsDigest,
   actor

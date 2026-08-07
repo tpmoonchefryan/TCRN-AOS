@@ -127,7 +127,14 @@ function fail(reasonCode, message) {
  */
 export async function runEngineCli(engineRoot, argv, { engineCli, pgSchema, pgConnection, pgUser } = {}) {
   const entry = engineCli ?? resolve(engineRoot, "scripts/tcrn-workflow.mjs");
-  const command = pgSchema
+  // INC-084: the PG path is taken only when BOTH a schema AND a connection are
+  // present. A schema without a connection string is a half-stated config that
+  // would silently reach for the file backend through the sudo path's empty env;
+  // gating on both makes the half-state either refuse (file backend + INC-074
+  // sentinel on a sealed tree) or visibly serve file (health reports the backend).
+  const usePg = typeof pgSchema === "string" && pgSchema.length > 0
+    && typeof pgConnection === "string" && pgConnection.length > 0;
+  const command = usePg
     ? ["sudo", "-n", "-u", pgUser ?? "tcrn_engine", "env",
       `TCRN_PG_CONNECTION=${pgConnection ?? ""}`,
       `TCRN_PG_SCHEMA=${pgSchema}`,
@@ -417,12 +424,28 @@ export async function startFacadeReadService(options) {
   if (typeof options.host !== "string" || options.host.trim().length === 0) {
     throw new Error("facade read refused to start: no bind host stated");
   }
-  if (["0.0.0.0", "::", "*"].includes(options.host)) {
-    throw new Error(`facade read refused to bind ${options.host}: wildcard binds are not allowed`);
+  // INC-084: the bind is hardcoded loopback per CONF-007 (the same positive rule
+  // as the write face). A deny-list misses alternate spellings and routable
+  // addresses; "must be loopback" has no holes.
+  if (options.host !== "127.0.0.1" && options.host !== "::1") {
+    throw new Error(`facade read refused to bind ${options.host}: CONF-007 requires a loopback bind; `
+      + "the service is reachable only through an SSH tunnel");
   }
   if (!options.workspaces || Object.keys(options.workspaces).length === 0) {
     throw new Error("facade read refused to start: no workspaces stated. The service must know "
       + "each partition's workspace path (CockpitServiceOptions.workspaces seam).");
+  }
+  // INC-084: pgSchemas must cover every workspace. A missing schema means the
+  // read would silently answer the stale file track (the INIT-020 fork's read
+  // half); the service must not start into that state.
+  if (!options.pgSchemas || Object.keys(options.pgSchemas).length === 0) {
+    throw new Error("facade read refused to start: no pgSchemas stated. After the file→pg migration "
+      + "every partition's chain lives in Postgres.");
+  }
+  for (const id of Object.keys(options.workspaces)) {
+    if (typeof options.pgSchemas[id] !== "string" || options.pgSchemas[id].length === 0) {
+      throw new Error(`facade read refused to start: partition ${id} has no PG schema.`);
+    }
   }
   const workspaces = { ...options.workspaces };
   const partitionIds = Object.keys(workspaces);
@@ -502,12 +525,17 @@ async function handle(request, response, context) {
 
   if (request.method === "GET" && path === "/api/health") {
     const catalog = await context.currentCatalog();
+    // INC-084: report the per-partition backend, so a read silently serving the
+    // stale file track is visible in health.
+    const pgServing = typeof context.pgConnection === "string" && context.pgConnection.length > 0;
+    const backends = Object.fromEntries(context.partitionIds.map((id) => [id, pgServing && context.pgSchemas?.[id] ? "pg" : "file"]));
     sendJson(response, 200, {
       ok: true,
       service: FACADE_SERVER_NAME,
       readonly: true,
       chainWriteAvailable: false,
       partitions: context.partitionIds,
+      backends,
       engineVerbs: { forwardable: catalog.forwardable.length, withheld: catalog.withheld.length },
       noPins: true,
       freshWithinMs: context.ttlMs ?? CATALOG_TTL_MS

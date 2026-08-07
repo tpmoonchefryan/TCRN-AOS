@@ -51,6 +51,9 @@ const { ChainClient, ChainIngestor, ProjectionStore } = library;
  * vacated address on this machine and answering it would be a lie either way.
  */
 import { aosPartition } from "../deploy/aos-local-client/aos-partitions.mjs";
+import {
+  FACADE_PG_CONNECTION, FACADE_PG_SCHEMAS
+} from "../deploy/aos-resident-cockpit/facade-read-manifest.mjs";
 
 const partitions = [
   { partitionId: "cross-project", label: "Platform governance", labelZh: "平台治理" },
@@ -84,7 +87,12 @@ try {
   const projected = [];
   for (const source of partitions) {
     const { projection } = source.on === "vm"
-      ? await projectPartitionOnHost({ ...source, verifiedAt })
+      ? await projectPartitionOnHost({
+        ...source,
+        verifiedAt,
+        pgSchema: FACADE_PG_SCHEMAS[source.partitionId],
+        pgConnection: FACADE_PG_CONNECTION
+      })
       : await ingestor.projectIfMoved(source, undefined, verifiedAt);
     if (projection) store.replacePartition(projection);
     projected.push({

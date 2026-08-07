@@ -128,7 +128,7 @@ function knowledgeEntry(overrides = {}) {
     knowledgeKind: "runbook_fact",
     status: "canonical",
     lastVerified: "2026-07-08",
-    stalenessPolicy: "review_after_30_days",
+    stalenessPolicy: "never",
     sourceRef: "workflow-plan-digest-reference",
     sourceDigest: "sha256:kr01-fixture-source",
     tags: ["kr01", "sqlite", "fts"],

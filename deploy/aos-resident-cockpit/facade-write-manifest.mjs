@@ -36,6 +36,7 @@ export const FACADE_WRITE_ENGINE = VM_ENGINE;
 
 /** EPIC-041: the ceremony actor must be an attributed actor; agent:fable is the standing AI one. */
 export const FACADE_WRITE_ACTOR = "agent:fable";
+export const FACADE_WRITE_ALLOWED_ACTORS = Object.freeze([FACADE_WRITE_ACTOR]);
 
 /**
  * Five partitions, one seam. A partition id maps to its workspace path AND its
@@ -101,6 +102,7 @@ Environment=FACADE_WRITE_WORKSPACES=${systemdJsonEnv(FACADE_WRITE_WORKSPACES)}
 Environment=FACADE_WRITE_ATTEST_DIRS=${systemdJsonEnv(FACADE_WRITE_ATTEST_DIRS)}
 Environment=FACADE_WRITE_ALLOWED_HOSTS=${FACADE_WRITE_ALLOWED_HOSTS.join(",")}
 Environment=FACADE_WRITE_ACTOR=${FACADE_WRITE_ACTOR}
+Environment=FACADE_WRITE_ALLOWED_ACTORS=${FACADE_WRITE_ALLOWED_ACTORS.join(",")}
 Environment=FACADE_PG_SCHEMAS=${systemdJsonEnv(FACADE_PG_SCHEMAS)}
 Environment=FACADE_PG_CONNECTION=${FACADE_PG_CONNECTION}
 Restart=on-failure

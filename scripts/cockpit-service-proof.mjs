@@ -40,6 +40,10 @@ const step = (name, detail) => {
   process.stderr.write(`  ${name}: ${JSON.stringify(detail).slice(0, 140)}\n`);
 };
 
+// The governed engine's MCP facade this service lazily spawns for a chain write.
+// Stated here (the local install path), never defaulted inside the service (STORY-186).
+const engineMcpPath = resolve(homedir(), ".tcrn-workflow/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs");
+
 const service = await startCockpitService({
   port: 0,
   domainDatabasePath,
@@ -49,6 +53,7 @@ const service = await startCockpitService({
     "TCRN-TMS": workspaceFor("TCRN-TMS"),
     "TCRN-AOS": workspaceFor("TCRN-AOS")
   },
+  engineMcpPath,
   authorityPins: resolve(homedir(), ".tcrn-workflow/live/tcrn-platform/authority/operator-authority-pins.json"),
   authorityPinsDigest: process.env.TCRN_AUTHORITY_PINS_DIGEST
     ?? "d25ebfc1cb47310d27bdeba4749fe5728b089188a7338d6a89cfe86f1c5d5ce9",

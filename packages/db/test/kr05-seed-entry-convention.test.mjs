@@ -35,7 +35,7 @@ test("KR-05 preserves none-initial seed boundary while storing only the fact-car
     assert.equal(conventionReadback.canonicalSeedEntryCount, 0);
     assert.equal(conventionReadback.nonEnumeratedCanonicalSeedEntryAccepted, false);
 
-    const storedConvention = repository.createKnowledgeRetrievalEntry(toKnowledgeRetrievalEntryInput(convention));
+    const storedConvention = repository.createKnowledgeRetrievalEntry(toKnowledgeRetrievalEntryInput({ ...convention, stalenessPolicy: "never" }));
     assert.equal(storedConvention.id, kr05FactCardConventionEntryId);
     assert.equal(storedConvention.status, "canonical");
     const conventionSearch = repository.searchKnowledgeRetrievalEntries({
@@ -69,7 +69,7 @@ test("KR-05 preserves none-initial seed boundary while storing only the fact-car
     assert.equal(draftReadback.ok, true);
     assert.equal(draftReadback.acceptedCount, 1);
     assert.equal(draftReadback.draftOrFixtureCount, 1);
-    repository.createKnowledgeRetrievalEntry(toKnowledgeRetrievalEntryInput(draftFixture));
+    repository.createKnowledgeRetrievalEntry(toKnowledgeRetrievalEntryInput({ ...draftFixture, stalenessPolicy: "never" }));
     assert.deepEqual(repository.searchKnowledgeRetrievalEntries({
       query: "draft proof fixture",
       roleScope: "implementation",

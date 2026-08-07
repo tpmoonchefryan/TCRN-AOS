@@ -1,4 +1,15 @@
 {
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-019",
+  "intent": "Reject a ceremony without a readback before it can reach the chain.",
+  "startedAt": "2026-08-05T14:06:00Z",
+  "finishedAt": "2026-08-05T14:06:00Z",
+  "host": "tcrn-platform-dev",
+  "partition": "TCRN-AOS",
+  "chainBefore": null,
+  "chainAfter": null,
+  "steps": [],
+  "readback": [],
   "ok": false,
   "reasonCode": "PAYLOAD_INVALID",
   "problems": [

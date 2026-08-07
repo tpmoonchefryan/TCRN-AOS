@@ -4,14 +4,14 @@
 import type { CockpitData } from "./cockpit-types.js";
 
 export const cockpitData: CockpitData = {
-  "generatedAt": "2026-08-06T01:49:32Z",
+  "generatedAt": "2026-08-07T05:58:17Z",
   "partitions": [
     {
       "id": "cross-project",
       "label": "Platform governance",
       "labelZh": "平台治理",
-      "chainVersion": 1917,
-      "verifiedAt": "2026-08-06T01:49:32Z",
+      "chainVersion": 2237,
+      "verifiedAt": "2026-08-07T05:58:17Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -23,7 +23,7 @@ export const cockpitData: CockpitData = {
       "label": "Design System",
       "labelZh": "设计系统",
       "chainVersion": 983,
-      "verifiedAt": "2026-08-06T01:49:32Z",
+      "verifiedAt": "2026-08-07T05:58:17Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -34,8 +34,8 @@ export const cockpitData: CockpitData = {
       "id": "TCRN-TMS",
       "label": "TMS",
       "labelZh": "TMS",
-      "chainVersion": 228,
-      "verifiedAt": "2026-08-06T01:49:32Z",
+      "chainVersion": 229,
+      "verifiedAt": "2026-08-07T05:58:17Z",
       "readVia": "export",
       "attestationFromSequence": null,
       "unavailable": []
@@ -45,7 +45,7 @@ export const cockpitData: CockpitData = {
       "label": "AOS",
       "labelZh": "AOS",
       "chainVersion": 1048,
-      "verifiedAt": "2026-08-06T01:49:32Z",
+      "verifiedAt": "2026-08-07T05:58:17Z",
       "readVia": "paginated-with-deliberations",
       "attestationFromSequence": null,
       "unavailable": [
@@ -57,7 +57,7 @@ export const cockpitData: CockpitData = {
       "label": "Joi Button",
       "labelZh": "Joi Button",
       "chainVersion": 586,
-      "verifiedAt": "2026-08-06T01:49:32Z",
+      "verifiedAt": "2026-08-07T05:58:17Z",
       "readVia": "export",
       "attestationFromSequence": 1,
       "unavailable": []
@@ -5585,8 +5585,8 @@ export const cockpitData: CockpitData = {
       "kind": "Incident",
       "status": "planned",
       "parentId": null,
-      "revision": 2,
-      "scope": "【中·上线前前端授权架构；关联 INIT-002】docs/facts/frontend-routes.md 的源码级事实：66 个 page 路由中只有 1 条带真正 RBAC 门；两条 /studio 资产 IDE 路由页面无前端门；/tenant/{t}/talent/{id}/homepage/editor 重定向到 /studio 后，钉死 ^/tenant/ 的 public_presence.homepage 能力门不再生效。当前 TMS 前端是本地且无生产路径，本单不声称现网事故。处置：INIT-002 设计 deny-by-default 路由壳，逐路由绑定 RBAC/能力语义，并以直接 URL、隐藏导航、未授权身份浏览器负证在任何生产采纳前收口。裁定见 TCRN-TMS-MIN-SECURITY-CARRYOVER-20260726。",
+      "revision": 3,
+      "scope": "【中·上线前前端授权架构；关联 INIT-002】docs/facts/frontend-routes.md 的源码级事实：66 个 page 路由中只有 1 条带真正 RBAC 门；两条 /studio 资产 IDE 路由页面无前端门；/tenant/{t}/talent/{id}/homepage/editor 重定向到 /studio 后，钉死 ^/tenant/ 的 public_presence.homepage 能力门不再生效。当前 TMS 前端是本地且无生产路径，本单不声称现网事故。处置：INIT-002 设计 deny-by-default 路由壳，逐路由绑定 RBAC/能力语义，并以直接 URL、隐藏导航、未授权身份浏览器负证在任何生产采纳前收口。裁定见 TCRN-TMS-MIN-SECURITY-CARRYOVER-20260726。\n\n【TCRN-CROSS-STORY-184 门面真实写生效证据 2026-08-06】经门面写面(本机经 SSH 隧道调 VM tcrn-aos-facade-write POST /api/ceremony,驱动 VM 引擎 CLI)对 TCRN-TMS 链做最小非破坏性治理写:work-annotate 本单 scope 注记;回执 CEREMONY_COMPLETED_AND_READ_BACK(全值回读、链版本 228→229);红腿=同批注入白名单外动词整批被具名拒绝、链版本不动。actor=agent:fable。",
       "decidedBy": [
         "minutes:591d95e3737fb08a61b759bf"
       ],
@@ -6685,6 +6685,90 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "cross-project",
+      "id": "work:a3b94d6d202005f5fe229f0c",
+      "externalKey": "TCRN-CROSS-EPIC-052",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:4d0ecd9c1e6ea5292ef08330",
+      "revision": 7,
+      "scope": "【收口(2026-08-06)】EPIC-052 替换残余分析与 ADR(PG 版)完成。三子单全部 done:STORY-171=ADR 0004 定稿(九节齐备:实例拓扑 PG18/schema 布局/角色 GRANT+触发器/事件表 DDL/租约 advisory lock+claims/六依赖面/迁移台账额度/轨道表/等价判据,每条判据写明红腿,决策点本 EPIC 裁毕,对抗评审 9 项修订落地);STORY-172=INC-061..071 核销清单(closeout-verify 机器核形态,引入 superseded 处置 kind+红腿测试,11 单每单恰一处置,正腿绿+漏一单红实证);STORY-173=四条等价判据红腿实证(scratch 改一字节即红,4/4 绿)。EPIC-052 scope 所载双交付(ADR+核销清单)均达成。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:ca7ba689328314c776bc29b8",
+      "externalKey": "TCRN-CROSS-EPIC-053",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:4d0ecd9c1e6ea5292ef08330",
+      "revision": 7,
+      "scope": "【收口(2026-08-06)】存储抽象层与双后端等价完成,四子单全部 done。STORY-174=StorageBackend 抽象+FileBackend 收敛(workspace 数据平面 7 调用点经抽象,零行为变化,红腿注入一字节偏差链读红);STORY-175=Postgres 链后端(DDL+GRANT+append-only 触发器在真实 PG 实测、PgBackend、pg 驱动四审+依赖登记、依赖图解析器增强支持 peer-context);STORY-176=双后端等价门+PG 测试基建(窗前硬件①,文件/PG 同序列字节等价+mutation 证人红腿);STORY-177=knowledge/artifact 两店 PG 化(StoreBackend 抽象+FileStoreBackend+PgStoreBackend,两店数据平面路由到后端,字节等价实证)。EPIC-053 所载:抽象层落地(文件后端原样收敛为迁移期读源+等价基准)、PG 后端为唯一生产后端、等价门带 mutation 证人防恒真门、本地与 CI 以临时 PG 实例起测(本机 Docker PG)。生效证据两侧:正腿=scratch 双后端同批动词 diff 为空(等价门绿);红腿=注入单字节差异门判红(mutation 证人绿)。全套件绿(TESTS_VERIFIED)。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:4a1304a35351ac46ff4c3a04",
+      "externalKey": "TCRN-CROSS-EPIC-054",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:4d0ecd9c1e6ea5292ef08330",
+      "revision": 7,
+      "scope": "【收口(2026-08-06)】迁移动词族(双向)+备份重基+往返实证完成,三子单全部 done。STORY-178=workspace-migration.ts 四动词(plan/execute/verify/rollback,file↔pg 双向同判据,正腿往返/红腿篡改/旁路拒三测试);STORY-179=备份重基(AOS 侧 pg-backup-take/verify/chain-verify/paired-backup 四脚本,pg_dump 定制格式+摘要,offsite verify 判据更新,engine-host:verify DB 等价物,正腿真备份+异地验证/红腿篡改一字节 verify 红);STORY-180=scratch 往返迁移实证(窗前硬件②,file→pg→file 往返 diff 空+版本连续+marker 保持,中途注入被 verify 拦截,证据归档 evidence/aos-s180-roundtrip-migration.json 无宿主路径)。EPIC-054 所载:迁移动词族双向、备份 pg_dump 重基(PULL 不变)、snapshot/export 被绑对象按 ADR、往返实证。生效证据两侧:正腿=往返 diff 空+备份异地验证过;红腿=篡改一字节 verify 必红+旁路拷贝必拒。全套件绿。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:77801d322706b5241a45c79c",
+      "externalKey": "TCRN-CROSS-EPIC-055",
+      "kind": "Epic",
+      "status": "done",
+      "parentId": "work:4d0ecd9c1e6ea5292ef08330",
+      "revision": 7,
+      "scope": "【收口(2026-08-06)】AOS 门面服务(读写)完成,四子单全部 done。STORY-181=门面读面全集(facade-read-service,五分区读动词全集经门面供给+reason code 保真+变异/供权动词拒+读进程不持 pins);STORY-182=门面写面仪式语义服务端化(facade-write-service,批+全值回读+expected-version 服务端现读+动词白名单派生+供权族/reserved flags 拒绝+收据物化+throw 亦留收据);STORY-183=拒绝面语料+宕机演练(19 条语料承接 INC-047/069+mutation 证人+break-glass 只读+影子队列 replay);STORY-184=门面真实链写生效证据(窗前硬件③,经门面对 TCRN-TMS 真实链最小非破坏性治理写+全值回读,红腿整批拒且链版本不动,收据归档)。EPIC-055 所载:读面全集与部署形态、写面仪式语义服务端化、拒绝面语料与宕机演练、门面真实写。生效证据两侧:正腿=真实写回执 CEREMONY_COMPLETED_AND_READ_BACK+全值回读;红腿=白名单外动词整批拒且链版本不动。门全绿(facade-write 19/19、rejection 3/3、read 12/12、downtime 1/1、read-face gate 0 findings、doc-topology/local-purity)。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:65cf5f278a2ca1f50e7ba6d4",
+      "externalKey": "TCRN-CROSS-EPIC-056",
+      "kind": "Epic",
+      "status": "planned",
+      "parentId": "work:4d0ecd9c1e6ea5292ef08330",
+      "revision": 3,
+      "scope": "【客户端与名册收敛(切换同窗)】按 MIN-064 D5:不挂 INIT-019 前置,与五链切换同窗执行。本机两 MCP 面(tcrn-workflow-aos-read、aos-mcp-write)改为门面服务的客户端;SSH 直驱白名单随 SSH 读转发面退役而收缩:mcp-unreachable-fallback 类改指门面不可达、service-layer-byte-compare 类保留(engine-host:verify 族按设计绕服务层);topology.mjs 保持唯一拓扑源(附带清欠:cockpit-service 内一处手写引擎路径回归 manifest 导入,2026-08-06 勘察实见)。判据扩面:doc-topology:proof 核访问形态、parity:proof 覆盖 Codex 侧增量、local-purity:proof 语义在 PG 后端下重述。验收两侧:正腿=全平台入口文档复核命令列在白名单外零 SSH 直驱、Codex 侧名册 diff 生成(应用编辑用户级配置须 Owner 批准);红腿=对两 proof 门注入伪漂移必判红。前置(工程依赖):EPIC-055 门面可用。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:2b6a166e82ea80e6337cb669",
+      "externalKey": "TCRN-CROSS-EPIC-057",
+      "kind": "Epic",
+      "status": "planned",
+      "parentId": "work:4d0ecd9c1e6ea5292ef08330",
+      "revision": 3,
+      "scope": "【五链切换窗与收口】按 MIN-064 D4 一个计划迁移窗内完成:逐链 file→pg 迁移+verify(小链先行,窗内连续执行不设窗间停顿)、客户端收敛(EPIC-056)同窗、文件树当场转只读归档、SSH 读转发面退役。窗前四硬件(工程依赖非治理门):EPIC-053 等价门绿、EPIC-054 往返迁移实证、EPIC-055 门面真实写通过、切换前末次文件形态配对备份已取并异地验证。收口按 INC-052 tip 复量协议(最后一次全量门晚于最后一次提交、结果表由 closeout runner 产出)+INC-054 逐项核销(含 INC-061..071 处置清单的核销)。发布(引擎版本发布+helper candidate 重钉)为唯一必停点;未推送提交按 MIN-062 Q5 分批推送产生证据。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
       "id": "work:155db2ca30db81e6574cc547",
       "externalKey": "TCRN-CROSS-INC-001",
       "kind": "Incident",
@@ -7056,9 +7140,11 @@ export const cockpitData: CockpitData = {
       "kind": "Incident",
       "status": "planned",
       "parentId": null,
-      "revision": 2,
-      "scope": "ceremony 无法承载 knowledge 动词族,该族因此整体落在『批式+回读』纪律之外。现象与证据(2026-08-04 实测):`deploy/aos-local-client/ceremony-plan.mjs:150-155` 对任何声明 `expected-version` 旗标的动词一律供给**链版本**(`supplied[\"expected-version\"] = String(chainVersion)`),而 knowledge-create/checkpoint/promote/retire/rebase 吃的是**知识库 store marker 版本**(与链版本不同源:本次 TCRN-AOS 链版本 1044、marker 版本 17)。故经 ceremony 发 knowledge-rebase 必然 CAS 失配;`expected-version` 又在 RESERVED_FLAGS 内、载荷不得自行指名(这条本身是对的——自选的哨兵什么也没冻结)。后果:运行手册为知识库 lockstep 开出的补救命令是**直连引擎的 SSH 调用**(合法——是引擎在自己主机上写,不是经 SSH 改控制树文件),但它没有 ceremony 的批式回读与收据,该动词族的每一次写都因此不留仪式证据。触发实例:五链首次配对备份时三条链以 `knowledge_high_water_behind_chain_head` 拒绝(每次受治写入后的常态),补救须逐链 knowledge-rebase,三次写全部走了 ceremony 之外。修复候选:①ceremony 识别 knowledge 族并改为供给 marker 版本(须先有只读取 marker 版本的途径——回执 `lockstep.knowledgeVersion` 已有,但那是备份工具算的、不是仪式自己读的);②knowledge 族专用的窄仪式(读 marker→写→回读高水位),与主仪式并列;③明文裁定该族豁免批式纪律并写下理由(**不推荐**:它是写,且写完没有收据)。验收:经选定路径发一次 knowledge-rebase 并产出带回读的收据;反例——供错版本必须红且报出真值(引擎的 CAS 失配消息直报 `<yours>:<actual>`,可作判据)。决策点:三个候选属方向选择,归 Owner。",
-      "decidedBy": [],
+      "revision": 3,
+      "scope": "【CONF-059/MIN-062 裁定】追认候选①:仪式按 store marker 供给 knowledge 族 CAS(ceremony-plan.mjs:51 的 KNOWLEDGE_STORE_CAS_VERBS 与 ceremony.mjs:140 的 casSource 已实现、提交 4e45c8c/STORY-160)。本单据此可收口。**但 auto-rebase 剥离另裁**:写后自动 knowledge-rebase 在载荷外、无回读、SPEC 未载、属本单自标「不推荐」的候选③形态、与「没人读回来的写不算已证」冲突;三席中 Verity 判其为「未声明的③」、Minerva 判须另裁、Mara 未反对。收口动作:追认①并把被拒形状补落;auto-rebase 另立单。",
+      "decidedBy": [
+        "minutes:14d808ae0b0a5826c3850c25"
+      ],
       "sprintWorkId": null
     },
     {
@@ -7433,6 +7519,390 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "cross-project",
+      "id": "work:f8640edaa3fff1ac94d62e6d",
+      "externalKey": "TCRN-CROSS-INC-061",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【强化:仪式层收口闸门(done 须带证据 + 一单一收口)】三轮 QA 结构建议 1。红线边界:落点在仪式载荷判据(ceremony-plan),不改引擎;拒绝面 reason-coded 且有红腿;不得放宽既有拒绝面。事实:九单收口 27 步全 transition、annotate=0;新公约「done 须附生效证据注记」7/9 缺失、2/9 事后批级;批量转移让聚合绿掩盖逐单缺证。写面是唯一绕不过去的咽点。文件指针:TCRN-AOS/deploy/aos-local-client/ceremony-plan.mjs;deploy/aos-mcp-write/{server.mjs,SPEC.md,server.test.mjs}。验证命令:node --test deploy/aos-mcp-write/server.test.mjs。收口动作:载荷含 work-transition --status done 而同载荷无同 id 的 work-annotate → 拒绝;同载荷多单 done → 拒绝。生效证据命令(两侧):绿=带 annotate 的单单收口载荷通过并落回执;红=无 annotate 载荷与多单 done 载荷各被拒且 reason code 互不相同。出处:QA/batch2-acceptance-report.md。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:dc81862e6acc3c5b05313308",
+      "externalKey": "TCRN-CROSS-INC-062",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【强化:收口规格从链上推导,不由收口者申报】结构建议 2。红线边界:批单证据集与核销条目集均由 work-show scope 派生,不得手挑/自报;推导失败须红,不得回退到手写;retained 必须真查链上状态(planned/active 才算活单)。事实:closeout-batch.json 证据命令手挑,五单只重放绿半边——其中丢掉的正是 INC-049 声明的「构造真陈旧→门变红」,于是 INC-058 把 codegraph 行改成对干净树仓不可红而无人发现;INC-048 换成另一动词量另一对象;inc060 两条 retained 挂在已 done 单(INC-046/047),closeout-verify 只校字符串形状且全文无链访问;items 自报故「两边同删」仍绿。文件指针:tcrn-workflow/scripts/{closeout-evidence-runner,closeout-verify}.mjs。验证命令:对 INC-043..051 与 INC-060 重放。生效证据命令(两侧):绿=派生的批单/条目集与链上 scope 逐条一致且通过;红=手写批单漏掉工单声明的红侧命令→拒绝,且 retained 指向已 done 单→红。出处:QA/batch2-acceptance-report.md 四条新规则自违表。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:2612cbe7115a1f089e8a2f38",
+      "externalKey": "TCRN-CROSS-INC-063",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【强化:门名册与可达性(升为第四处结构性)】结构建议 4。红线边界:名册与实际可达性机器 diff,不允许只登记不校验;未接线的门可以存在,但必须按公约 11 如实登记「现无机器门」。事实(INIT-019 立项根因在它自己的工具上复发):本批四把新工具无一把在自动通路上——closeout-evidence-runner/closeout-verify 无 npm script、无测试、task.mjs 无引用;verify:observe-channel 与 verify:breakglass-consistency 有脚本但 task.mjs 不调用,CI 直调脚本绕过 npm script;platform-runner 三 job 也不含它们。只有人手敲才会跑。文件指针:tcrn-workflow/scripts/task.mjs、.github/workflows/ci.yml、TCRN-AOS/deploy/aos-resident-cockpit/platform-runner.mjs。验证命令:名册门对全仓门脚本跑一次。生效证据命令(两侧):绿=每个门脚本要么可从自动通路到达要么已登记无机器门;红=新增一个未登记且不可达的门脚本→名册门变红并点名。出处:QA/agent-batch2-{aos,wf}.md F11/F4。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:d39c4aafb988f6d2c27cc5f0",
+      "externalKey": "TCRN-CROSS-INC-064",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【强化:PASS 返回点证人覆盖 + 语料/证人计数只增】结构建议 3(精化版)。红线边界:不用「diff 触了就必须加语料」这种噪声大可绕的判据;用返回点覆盖形态。事实:INC-057 改了代码零语料零证人——完全回退其两处改动,117 条语料一条不红(代理五变体实证);观察器文件 diff 中 id 增删皆为 0、测试文件 diff 为空。直接违反同批新立公约 12 第 1/2 条。文件指针:tcrn-workflow/scripts/ssh-write-observer.mjs(判决函数 PASS 返回点与语料)、tests/ssh-write-observer.test.mjs(MUTATIONS)。验证命令:覆盖门对当前判决函数跑一次。收口动作:枚举判决函数全部 PASS 返回点,要求每个被 MUTATIONS 至少一条证人点名;语料与证人计数只增不减。生效证据命令(两侧):绿=全部 PASS 返回点有具名证人;红=新增一个无证人的 PASS 返回点或删一条语料→门变红并点名该返回点。出处:QA/agent-batch2-wf.md F2。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:9b871c1a9a3ba7ee768dbc89",
+      "externalKey": "TCRN-CROSS-INC-065",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【强化:结果表与证据侧车机器化(复用现成机器)】高杠杆补缺。红线边界:不造新机器——摘要结果块复用 DS 侧 digest 绑定生成块先例,证据侧车复用 INC-039 的 committed-vs-tree 判据。事实:「enforce 四前置全达成」「hygiene 11/11」「117/117」三轮里每次都是「某一刻为真、在 tip 为假」;公约已写「结果表由命令产出不手抄」但无机器按住。doc-sync 证据两批之内过期两次(先 13 文档旧形状,修后又停在 01:33 而代码是 01:45),根因是 --emit 是人手一步。文件指针:TCRN-AOS/evidence/aos-topology-doc-sync.json、docs/reports 下 summary 类文档。验证命令:证据新鲜度门 + 摘要 digest 校验。生效证据命令(两侧):绿=已提交证据与一次新鲜运行一致、摘要 digest 匹配;红=改一行代码不重跑→证据门红;手改摘要表一个数→digest 门红。出处:QA/agent-batch2-aos.md F9。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:eebc1e156c898985c20a4a8f",
+      "externalKey": "TCRN-CROSS-INC-066",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【强化:判据卫生——三态退出约定 + 声明与实现同源】高杠杆补缺。红线边界:「不能测量」必须读作红,永不得读作绿;声明不得与实现分开编辑。事实 A:closeout runner 的 nonzero 分支把 ENOENT/ETIMEDOUT 这类字符串当成「如期失败」——门根本没被问被记成门说了不;同仓 observer 自己用 EXIT_USAGE=64 区分过这两件事,同批未抄。事实 B:projection-freshness 的 SIDECARS 声明 codegraph 行真源=repo HEAD commit time、maxAge=0,实现却是 status pending + git porcelain;承诺的自检只比行数。文件指针:tcrn-workflow/scripts/closeout-evidence-runner.mjs:38-42;TCRN-AOS/deploy/aos-local-client/projection-freshness.mjs:38-43,105-113,223-225。生效证据命令(两侧):绿=三态约定全仓一致且声明与探针绑定有测试;红=声明一个不存在的二进制为红侧证据→runner 判红(而非绿);把某行声明改掉而实现不改→同源门红。出处:QA/agent-batch2-wf.md F3、aos.md F3/F13。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:4eccbc5dd4900e03225a5b30",
+      "externalKey": "TCRN-CROSS-INC-067",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【强化:干净树测量与树污源消除】环境补缺。红线边界:先消除树污再谈干净树检查——树若长期脏,任何干净树判据都会被绕过或关掉;测量复用现有 isolated-proof 的临时克隆形态,不另写。事实:closeout runner 全文无一次 git 调用,量的是活工作树而自称对 HEAD 测量;本次验收两次全量套件也跑在含两个 modified evidence json 的树上(launchd 备份产物,非漏提交);更坏的是 codegraph 行现在把 git 工作树状态当判据,无关的调度器输出成了新鲜度的输入。文件指针:tcrn-workflow/scripts/{isolated-proof,closeout-evidence-runner}.mjs;TCRN-AOS/evidence/{aos-domain-backup,aos-paired-backup-new-topology}.json 与写它们的 launchd 作业。生效证据命令(两侧):绿=调度产物不再脏化工作树且 closeout 在临时克隆上跑出同结果;红=树脏时 closeout 拒绝测量(而非默默量脏树)。出处:QA/agent-batch2-aos.md F5、横切节。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:72c8d1712ccbde3d6bd0e822",
+      "externalKey": "TCRN-CROSS-INC-068",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【强化:对抗式独立复核入环 + 复发教训升格】流程补缺。**本单含公约修订,需 Owner 裁定**。红线边界:复核者的任务是造出一个绕行而非确认没问题;不得是作者会话的延续(同上下文=同盲区);复核 prompt 从工单红线派生,不手写(否则复核也犯「量具由被量者提供」)。事实:三轮记录——独立复核抓住全部三轮,自查一轮都没抓住;且「本地全绿≠CI 绿」「树对≠记录对」两张知识卡各已咬人≥两次仍只是上下文不是门。文件指针:docs/deliberation-adoption-convention.md、docs/delivery-cadence-convention.md;知识卡元数据(复发计数)。收口动作:公约补两条——收口前须经对抗式独立复核;同一教训复发≥2 次必须给机器判据或如实登记「现无机器门」并记复发计数。生效证据命令(两侧):绿=下一批收口带独立复核产出且复核 prompt 可溯到工单红线;红=无复核产出的收口批被拒。出处:QA/batch2-acceptance-report.md 根因节。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:2878f8378b0ecbbcbfec350f",
+      "externalKey": "TCRN-CROSS-INC-069",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【修复:break-glass 段内走私闭合 + 两侧判决函数统一(enforce 阻断)】三轮 QA X1/X2。**可检查前置(非散文依赖)**:本单收口时 INC-064 的证人覆盖门必须已在自动通路上(INC-063 名册可达)且对本单改动实跑。红线边界:写守卫先于白名单的次序不动(它挡住了全部写入压力测试);两侧必须 import 同一判决函数而非各写正则;白名单两条目合法用途必须仍 PASS。事实(主审与代理各自 --classify 实证):段内追加读动词判 PASS 而同动词单独判 HIT(语料 A16 已断言)——自然写法非攻击构造,根因=白名单对整条远端命令无锚点匹配;AOS doc 侧写守卫只闭合工单字面例,九种写法六种绕行(rm -rf/cp -a/sed -i/重定向无空格/dd/clobber);白名单自述「两处判决一致」仍是假(带端口或用户名的 ssh 两侧相反)。文件指针:tcrn-workflow/scripts/ssh-write-observer.mjs:535-596;TCRN-AOS/deploy/aos-local-client/doc-topology-predicates.mjs:131-140,337。收口动作:子段切分+两端锚定;两消费者共享判决函数;加跨消费者差分测试(同一语料两侧 verdict 逐条相同)。生效证据命令(两侧):绿=两条合法用途仍 PASS 且差分测试全一致;红=段内追加与六种写法全部变 HIT/红,且回退任一处改动→新增语料样本必红(INC-064 证人)。出处:QA/batch2-acceptance-report.md X1/X2。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:a0643e1b9fd1bf65907823a4",
+      "externalKey": "TCRN-CROSS-INC-070",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【修复:freshness codegraph 行判据回正(STORY-165 判据第 4 条前置)】三轮 QA C 类。**可检查前置**:本单收口时 INC-066 的声明-实现同源门必须已对本文件实跑。红线边界:方向=恢复可证伪而非删门;不得以「去 sync 是只读」为理由保留恒绿判据。事实:当前判据是「status 报 pending 且 git 工作树有未提交 tracked 改动」——对干净树仓(DS/TMS 现均为干净树)任何幅度的索引陈旧都不能让它变红;SIDECARS 仍声明 truth=repo HEAD commit time、maxAge=0,与实现矛盾;INC-049 自己声明的红腿「索引早于 HEAD → 门红」已死。附带:无关调度器输出成了新鲜度输入(归 INC-067)。文件指针:TCRN-AOS/deploy/aos-local-client/projection-freshness.mjs:38-43,97-113。验证命令:pnpm --dir TCRN-AOS projection-freshness:proof。生效证据命令(两侧):绿=门绿且 SIDECARS 声明与实现同源;红=在干净树仓上构造索引早于 HEAD → 门必须变红(即 INC-049 原声明的那条红腿复活)。出处:QA/agent-batch2-aos.md F3。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:0ad46b327f15756d49069c63",
+      "externalKey": "TCRN-CROSS-INC-071",
+      "kind": "Incident",
+      "status": "planned",
+      "parentId": null,
+      "revision": 2,
+      "scope": "【修复:三轮验收 P2/P3 批(条目集已列明,供核销派生)】**可检查前置**:本单收口必须用 INC-062 派生的核销(条目集从本 scope 推导非自报,retained 真查链)。条目集(十二条,逐条必须有处置):(1)closeout runner 量 HEAD 而非工作树并记 commit;(2)closeout-verify 对 null 处置裸崩且 exit1 与未核销同码;(3)红证数量下限阈值宽一格(实际 6 而阈值 5),容忍静默丢一条;(4)inc060 核销表假 fixed(inc043-051-closeout-annotations 被链证伪,九单 revision 均 5)需追加更正;(5)INC-043..051 收口注记补齐;(6)doc-sync 证据再次 emit(含新增期望);(7)INC-055 权威文件被删静默判 isolated 转绿——世界判据应取目录/marker 而非被检文件;(8)owner-queue exit 0 结构不可达(三态实为两态);(9)deferred 无时机字段且 reason 引用不存在的键号(应为 STORY-165);(10)memory 行应移出 rows 单列 notices;(11)hygiene 三 plist 按名出圈残余留名;(12)offline-boundary 注释归因写反(靠 live binding 非 import 顺序)。文件指针:QA/batch2-acceptance-report.md 与 agent-batch2-{aos,wf}.md 逐条 file:line。生效证据命令(两侧):绿=十二条各按其五要素 + 核销 diff 零无归属;红=故意漏一条处置→核销门红并点名。",
+      "decidedBy": [],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:a5d3607e14d5f2a50bd0695e",
+      "externalKey": "TCRN-CROSS-INC-072",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "【INC-081 重录·弃轨语义】INC-072 补注记闭单:阻断已解除,补注记并核销 done。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:c1fc09e48ba190c894c1c9ca",
+      "externalKey": "TCRN-CROSS-INC-073",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 5,
+      "scope": "【INC-081 重录·弃轨语义】INC-073 补正核销 done:空壳单(内容注记原落在 S189 上),此处补正注记并核销。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:cfa0e3552121eefe297561f9",
+      "externalKey": "TCRN-CROSS-INC-074",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: v0.11.7 storage-home-seal and storage-home-status are deployed; the engine-host apply red-drill and verify are green; all five storage-home-status reads are STORAGE_HOME_READY; file-backend sentinel and migration-lease red tests are green. Red leg: a sealed archive opened without the PG admission is refused with a named storage-home reason.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:f2bd59385ddbd8a92db33050",
+      "externalKey": "TCRN-CROSS-INC-075",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: tip:proof reports TIP_SINGLE_TRUTH_VERIFIED for all five partitions with no divergent rows; validate through the facade is green for all five; the retained cross archive is sealed at its recorded file head. The fixture mutation red leg remains exercised by tip-gate tests.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:2f0a303740354849b6fb18cd",
+      "externalKey": "TCRN-CROSS-INC-076",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: the pathway registry proves all 35 registered engine surfaces and no unregistered surface; ceremony, projection-freshness, fallback, apply, and evidence paths are either facade-routed or explicitly break-glass; the pathway registry red leg covers an injected unregistered call.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:cfe916f9ae3e0e23c75a431f",
+      "externalKey": "TCRN-CROSS-INC-077",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: the harness convention records the mandatory freeze/archive/migration red leg; closeout-verify requires the redLeg schema; the archive window report and migration-verify FUTURE refusal record the old-pathway evidence. The closeout mutation red test remains green.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:68e5a9e617b56c7edd2088bb",
+      "externalKey": "TCRN-CROSS-INC-078",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: verify:map reverse-audits ADR-0004 section 9.1 through 9.4 and reports 78 claims with 77 implemented and one candidate; PG equivalence, refusal-code, and same-head view byte tests are wired and green. Deleting an ADR mapping witness remains a red leg.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:51e597defdadba8c59703779",
+      "externalKey": "TCRN-CROSS-INC-079",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: WF test-wiring proves 74 enumerated tests with no orphan and the AOS test-wiring proof covers 69 of 69; CI runs isolated chain_test PostgreSQL tests; the full workflow suite and pg:test execute with PG cases present. Removing a test from a pipeline is a witnessed red leg.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:0526586955397955ccad21c1",
+      "externalKey": "TCRN-CROSS-INC-080",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: receipt-hygiene:proof scans 162 init-020 receipts with no problems; receipts carry the local ceremony schema, payload hash and bytes, authority chain, read-backs, and no orphan scope. The red corpus rejects a payload-shaped receipt and an unpaired payload.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:0883d3a3d0a8deb25b3b1a15",
+      "externalKey": "TCRN-CROSS-INC-081",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: the cross fork is disposed semantically on PG after the five storage-home seals, tip proof, archive-window evidence for events 2106..2122, and the explicit migration-verify FUTURE red leg. The retained file tail is evidence only; PG is the sole current authority and no divergent target was overwritten.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:308076d6ccb8c88260f7c74c",
+      "externalKey": "TCRN-CROSS-INC-082",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: ceremony uses the facade write service; projection-freshness, fallback and evidence paths use the facade read surface or named break-glass boundaries; tunnel processes are reclaimed; read-face:gate is green. The old SSH/file-track fallback is a named refusal, not an implicit route.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:5f61edc8a573bf92f38e64d7",
+      "externalKey": "TCRN-CROSS-INC-083",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: VM ownership for the repaired event and view artifacts is verified; the five archive storage-home sentinels are sealed; the 2106..2122 archive window is exported through the facade; migration-verify now reaches the target and returns the designed WORKSPACE_MIGRATION_FUTURE refusal rather than EACCES. The file-backend write red leg remains named.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:86906fb23b895574d4cd58ac",
+      "externalKey": "TCRN-CROSS-INC-084",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: both facades require complete PG schema coverage, report per-partition PG backends, enforce loopback binding, whitelist actor identity, apply idempotency, and materialize refusal receipts; deployed read and write health are green with all five partitions on PG. Missing schema, bad bind, actor, and replay red tests are green.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:448e8d740f8431720ef225ed",
+      "externalKey": "TCRN-CROSS-INC-085",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: workflow v0.11.7 pg:test passes 18/18, including StorageError preservation, view equivalence and prefix-resume coverage; full workflow tests, typecheck, format, source and wiring gates are green; AOS and Joi/Design-System/TMS migrations verify green, while cross is explicitly recorded as the designed FUTURE red leg. Knowledge marker reads from PG and a real cross knowledge-rebase is read back fresh with zero chain events appended.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:102ca7701ff4ad32349a551a",
+      "externalKey": "TCRN-CROSS-INC-086",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: isolated chain_test PostgreSQL schema provisioning and serial PG tests are green; AOS and Design-System codegraph indexes were force-rebuilt after the final changes; command descriptions and facade documentation are current; the deployed facade now reads the PG knowledge marker through the engine-role peer boundary and the real rebase receipt proves marker version 93 to 94 with chain version unchanged.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:3691978d0d15166b2b8704e3",
+      "externalKey": "TCRN-CROSS-INC-087",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: real facade receipts and payloads are present for the migration, seal, knowledge-rebase and validation work; receipt-hygiene:proof is green with no init-020 orphan; INC-081 archive-window and migration red-leg evidence are named. The historical hand-written closeout receipt remains classified as a red witness rather than asserted as a real receipt.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:77adddf2447eb8fb417fd7f7",
+      "externalKey": "TCRN-CROSS-INC-088",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: the PG workspace path is decoupled from the sealed file event tree; the INC-088 discriminating test, full workflow suite and pg:test are green; PG-backed status, validate and migration behavior no longer require the archive events directory to be present.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:295c1da1ef145e6ab45fc2b5",
+      "externalKey": "TCRN-CROSS-INC-089",
+      "kind": "Incident",
+      "status": "done",
+      "parentId": null,
+      "revision": 6,
+      "scope": "QA2 complete: receipt hygiene scans content rather than a narrow extension list; the .txt host-path red fixture is covered; the parity diff and untracked report tree were inspected; remaining release privacy blockers are explicitly named and the push gate remains closed.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
       "id": "work:a9f610a2e09324269b8fd9bb",
       "externalKey": "TCRN-CROSS-INIT-001",
       "kind": "Initiative",
@@ -7676,10 +8146,24 @@ export const cockpitData: CockpitData = {
       "kind": "Initiative",
       "status": "planned",
       "parentId": null,
-      "revision": 5,
-      "scope": "【D5-D9 已确认(2026-08-05,Owner 指令「建议全部同意,将决策落到链上,先不要开始进行」)】MIN-060 待确认的五项实施形态建议全部升格为裁定,见 TCRN-CROSS-MIN-061:D5 单一 ceremony 写工具、D6 两阶段实施、D7 三源策展首批不少于二十卡、D8 五要素与 INC-041 补票、D9 SSH 条件化保留两类。方向清单 D1-D9 就此全部定案,执行期不得重开。\n【验收(2026-08-06,执行层 agent:fable)】更正:立项时点的「本 INIT 尚未开工:全部十五张 Story 保持 planned;派工时点由 Owner 另行指令」已被执行事实取代——Owner 已另行下达派工指令并执行完毕(原文按事件只增不改留档于链上历史)。链上现状:S156-158/160-164/166-170 done,S159/S165 active;本 INIT 与五 EPIC 状态仍 planned,补转移属收口批、待 Owner 发布批准序列一并执行。落盘实测:AOS 分支 feat/cross-init019-single-data-plane 领先 origin/main 11(init019 9+init018 2),tcrn-workflow 4(3+1),DS/TMS 各 2,全未推送。验收结论=有条件通过:9 组 P1 拆单 TCRN-CROSS-INC-043..051,证据入库缺口注记 INC-042,enforce 前置注记 STORY-165;报告与四份代理原文见 TCRN-AOS/docs/reports/init-019/QA/。本批只立单不执行(Owner 指令 2026-08-06)。\n【复验(2026-08-06 二次 QA,执行层 agent:fable)】九单 done(1841→1868)复验结论=机制基本修对、收口翻车:044/045/047/048/050 修复即证明;043/046/049/051 部分。tip 三红(收口文档字面用户名/搬迁测试漏登 allowlist/投影提交停 v1841 而回执 v1868)+break-glass 三绕行(跨段/子串/doc 侧写守卫)+freshness 门两处修松。根因=四个规则漏洞:收口无生效证据绑定、豁免面无对抗义务、批单无逐项核销、跨仓运行时依赖无守卫。拆单:强化 INC-052..055 **先行**,修复 INC-056..060 各声明依赖强化单;报告与代理原文 QA/re-acceptance-report.md、agent-remediation-{aos,wf}.md。注入链已在真会话活证(本会话双 hook 注入)。本批只立单不执行(Owner 指令 2026-08-06,先强化再修复)。",
+      "revision": 7,
+      "scope": "【CONF-059/MIN-062 会议结论】受治审议已开(执行形态 multi-agent-deliberative、三席独立、绑定 BINDING_VERIFIED)。采纳集:最小必要前置=INC-061 062 063 064 066 五单(三席交集四单、061 二比一采纳、依据是它是唯一把「依赖」做成写面拒绝的咽点);065 降级不砍(只留「摘要须带命令与运行时刻、禁无出处总结式断言」一条);067/068 非前置。发布序列:WF 整合分支先推以取 INC-055 跨仓一致性门首次红腿、AOS 紧随、干净检出对将推的那个 commit 重跑全门;落在 main 上的七条(helper 1/DS 3/TMS 3)推即发布须 Owner 批准。仍待 Owner:对外发布、七条 main 提交推送、S073 单面失败政策(含亲测 kill switch)、INC-068 公约修订、auto-rebase 方向、Q6 传输形态。主审补证:tracked 的 QA/remediation-batch-2-summary.md 仍写「四前置全达成」而实为假、08-12 照读即盲签、须随 INC-071 更正。",
       "decidedBy": [
-        "minutes:41f48bf0fce9057cfbce79bc"
+        "minutes:14d808ae0b0a5826c3850c25"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:4d0ecd9c1e6ea5292ef08330",
+      "externalKey": "TCRN-CROSS-INIT-020",
+      "kind": "Initiative",
+      "status": "planned",
+      "parentId": null,
+      "revision": 6,
+      "scope": "【二轮验收(2026-08-07)不通过·更正·交接 Codex】二轮验收结论:修复批 INC-074..086 链上 0/13 核销;唯一实证修复=INC-082 写路径统一(ceremony dry-run 与 MCP 读面同答 2153/d1f2ba94 全值,分叉通路闭合);引擎侧修复未构建未发版未部署(受治副本与 VM 均 0.11.3,五链哨兵零落地,validate 仍 4/5 红,cross 迁移核验仍 EACCES);tip 门诚实红(file 弃轨 2122/ad2a7c9b 仍活)。**更正(事件只增,原记录留档,以本条为准)**:本单 v2153 注记所称「本仪式全值回执比对通过(INC-080 回执卫生门)」不成立——INC-080 当时 planned,该门当时不存在;正确表述=该重录仪式经 MCP 写面完成、步骤回读匹配,引擎产真回执在 TCRN-AOS evidence/mcp-ceremony-write/receipts/ 2026-08-06T18:07-08Z 批次。新立五单:INC-087 记录与回执补正/INC-088 引擎 PG 服务路径与文件树解耦/INC-089 主机路径卫生门扩面/STORY-191 引擎 adapter 双家族同步/STORY-192 Codex 宿主 MCP 读写面接入(均 EPIC-056 下)。**交接**:Owner 指令(2026-08-07 逐字要点)「这些工作我打算交给GPT完成并同时完成codex adapter和claude code adapter的功能同步及测试」「除了原生不支持的功能,codex应与claude code有同样的能力」——余量执行移交 Codex 宿主;交接文档 TCRN-AOS/docs/reports/init-020/HANDOVER-2026-08-07-qa2-codex.md(取代 HANDOVER.md 现状快照段,其通道纪律与键号速查仍有效);推送(对外发布)维持唯一必停点,现裁定暂缓,达推条件见交接文档。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
       ],
       "sprintWorkId": null
     },
@@ -9819,10 +10303,10 @@ export const cockpitData: CockpitData = {
       "kind": "Story",
       "status": "active",
       "parentId": "work:4fcf9b1832dbf02c80d9b103",
-      "revision": 6,
-      "scope": "【enforce 晋级】红线边界:晋级判据必须排除 probe:true 的门自身流量;空日志只有在活性门同时为绿时才可读作零命中;观察窗自 2026-08-05 重置起算,不得引用重置前数据;切换必须带回退路径。文件指针:TCRN-AOS/docs/reports/init-019/S165/criteria.md;tcrn-workflow/scripts/ssh-write-observer.mjs 的 enforce 开关。验证命令:按判据对当前观察窗跑一次评估并输出结论(够不够都照写);切换后拦截一次真实误用。收口动作:判据成文待 Owner 确认后方可切换。生效证据命令:enforce 态下一条 SSH 直驱引擎命令被实际阻断,且回退开关能把它放回 observe。依赖:须等 STORY-164 落地且观察窗积累足够。子任务 165.1-165.3 见 BRIEFING 第五节。\n【验收补充(2026-08-06,执行层)】窗口第 2 天实测:非 probe HIT=0(sink 11/11 probe),活性门绿(verify:observe-channel)。切换前置四项:①enforce 开关尚未实现(observer 硬编码 observe,MIN-058 语义;165.2 首步=实现开关,默认 observe、fail-open 保持、红绿测试);②breakglass 白名单 entries:[] 空转且 doc-topology 与 observer 两消费者把 pattern 用在不同字符串上(INC-051);③heredoc 正文引用命令即 HIT,评估按判据形态 2 逐条归因;④判据第 4 条 projection-freshness exit 0 现被 codegraph 行假红挡住,须 08-12 前修(INC-049)。评估照 S165/criteria.md 出文,验收报告见 docs/reports/init-019/QA/。\n【复验补充(2026-08-06 二次 QA,执行层)】INC-051 已 done,前置承载更新:②breakglass 缺口扩为三绕行(跨段/子串/doc 侧写守卫,--classify 实证)现由 INC-057 承载;④判据第 4 条现由 INC-058 承载(codegraph 行 sync-once 恒绿化须回正,web 行真值不可读静默 fresh 同修);①enforce 开关未实现、③heredoc 归因口径不变。修复顺序按「先强化后修复」:INC-053(对抗义务)/INC-055(跨仓语义)先行。观察器写守卫与语料纪律经复审确认(117/117,mutation 证人在);窗口至今非 probe HIT=0、活性门绿。",
+      "revision": 8,
+      "scope": "【CONF-059/MIN-062 裁定】enforce 归属定案:受 TCRN-CROSS-EPIC-025「每个阻断面」管辖——治理归属不等于树形归属(本单父级为 EPIC-049)。依据:tcrn-workflow/docs/activation/enforce-failure-policy-agenda-v1.md 第 39 行有「S073: PreToolUse gate」一节、头部载 Governing boundary MIN-046(CONF-043)与 Required outcome class owner_intent_required、文末载 EPIC-025 与 S073-075 保持 blocked 且 host enforce 授权数为零;observer 切 enforce 即一个 PreToolUse 阻断面(注册在项目级 settings、matcher 为全量 Bash)。**但不必等 EPIC-025 整体解封**:按该议程 S073 节单面裁失败政策即可。裁定时须明示 ssh-write-observer.mjs:632 的 catch 已硬编码 fail-open(parse-error→PASS)、即失败语义已被代码替 Owner 预选一半。08-12 评估照出、但切换须先有该单面裁定。",
       "decidedBy": [
-        "minutes:a2e5a6cbdd858b9203c02b0d"
+        "minutes:14d808ae0b0a5826c3850c25"
       ],
       "sprintWorkId": null
     },
@@ -9893,6 +10377,314 @@ export const cockpitData: CockpitData = {
       "scope": "【存量补票:INC-041 四代办】红线边界:本单只补票不执行那四件事——补票即为每件写清生效证据命令,让它们从散文变成可验收的单;不得在本单里改用户级配置。文件指针:TCRN-AOS/docs/reports/init-019/S170/tickets.md;补票结果以注解落回 TCRN-CROSS-INC-041。验证命令:四条生效证据命令逐条可执行(即使此刻结果为红也要能跑)。收口动作:四件各得一条命令——S4.2 Codex 配置应用(三个 MCP 服务器在 Codex 侧 status 实测可用且 parity:proof 白名单收缩后仍绿)、STORY-144 enforce 切换(与 STORY-165 合流)、S154 archify 安装(装后重算 sha256 与钉扎一致且在 skills 名册可见)、otel-spans 接线(引擎跑一次真动词后 sink 出现 verb span 且隐私门对该 sink exit 0)。生效证据命令:四条各跑一次并如实记录当前红绿。子任务 170.1-170.4 见 BRIEFING 第七节。",
       "decidedBy": [
         "minutes:a2e5a6cbdd858b9203c02b0d"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:491be6f960ecc1f73d5aabc2",
+      "externalKey": "TCRN-CROSS-STORY-171",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:a3b94d6d202005f5fe229f0c",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】ADR 0004《PostgreSQL storage backend for governed workspaces》定稿于 tcrn-workflow/docs/adr/0004-postgres-storage-backend.md。九节齐备:①实例拓扑与版本(PG 18,Ubuntu 26.04 LTS apt 候选 18+290ubuntu1 实测,绑 127.0.0.1 经 SSH 隧道,systemd 单元,年度升级评估);②schema 布局(五 chain schema+domain+collab);③角色与权限(tcrn_engine/tcrn_domain/tcrn_collab 三角色、GRANT 矩阵、append-only 触发器、四条 GRANT 红腿测试);④事件表 DDL(EventRecord 全 9 字段为列含 schema_version,payload bytea 规范字节,视图非权威);⑤租约与单写者(advisory xact lock 双参 int4+claims 表+挂起写者回收路径 pg_terminate_backend,并发 PK 冲突映射 WORKSPACE_CAS_MISMATCH);⑥六依赖面逐面结论(含两店不同 marker 形态、knowledge CAS 用 store 版本非链版本、快照覆盖控制表全集);⑦迁移台账额度(64/64 双后端一致,16 为历史遗留,台账表 append-only 触发器);⑧轨道表与辖域澄清;⑨等价判据四条各带红腿。每条判据写明「什么会让它变红」。决策点本单裁毕:PG 版本 18、schema 细部、口粒度、租约形态。对抗评审(独立代理)9 项发现(2 严重+4 中等+3 轻微)全数修订落地。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:6767241b2a45cb5a81aecef8",
+      "externalKey": "TCRN-CROSS-STORY-172",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:a3b94d6d202005f5fe229f0c",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】INC-061..071 核销清单定稿,三件交付物:①TCRN-AOS/docs/reports/init-020/closeout-verify.md(处置表,逐单以链上 scope 原文重判);②closeout-verify-manifest.json(closeout-verify 机器核形态:tcrn.closeout-verify.v1,11 单全名单+每单恰一处置);③closeout-verify.mjs 新增 superseded 处置 kind(carriedBy 指名承接链上 work id)+红腿测试 tests/closeout-verify-dispositions.test.mjs(6 用例)。处置概览:superseded×4(INC-061→STORY-182、INC-063→STORY-187、INC-064→STORY-183、INC-069→STORY-182+183)、retained×5(062/065/066/067/071,随 STORY-190 引用,保留单标注窗前/窗后时机)、deferred×1(INC-068 含公约修订需 Owner 裁定,独立立项)、fixed×1(INC-070 codegraph 判据回正)。机器核实证:正腿=closeout-verify 对 manifest 绿 CLOSEOUT_ITEMS_RECONCILED(11/11);红腿=蓄意从 dispositions 删除 INC-070 必红 CLOSEOUT_ITEMS_UNRECONCILED 且点名「INC-070 has no disposition」。测试 6/6 绿。红线遵守:对 INC 各单的链上处置注记未动(均仍 planned)。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:d1f2a24bb7ebd51b93bd071d",
+      "externalKey": "TCRN-CROSS-STORY-173",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:a3b94d6d202005f5fe229f0c",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】等价性判据集定义于 ADR 0004 §9(四条:①逐事件字节等价;②reason code 等价;③head 哈希等价;④视图与两店 marker 等价),每条判据写明红腿。注入式红腿实证落于 tests/story-173-equivalence-redleg.test.mjs(scratch workspace 改一字节即红):criterion1=payload 单字节翻转→materialize 红 WORKSPACE_EVENT_CORRUPT;criterion2=过期 expectedVersion→update 红 WORKSPACE_CAS_MISMATCH(reason-code 等价面);criterion3=复用 prior_hash 造分叉头→materialize 红 WORKSPACE_EVENT_CORRUPT;criterion4=改脏引擎派生视图 STATUS.md→validateWorkspace 红 WORKSPACE_VIEW_STALE。实测 4/4 绿(scratch 预演记录),每条判据各有一次真实红腿。ADR 0004 依判据定稿;EPIC-052 三单完成状态:STORY-171 done、STORY-172 done、本单 done。测试经 pnpm 调起,format-check/lint 全绿。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:0d2a6d6f5ba7f61f8376b710",
+      "externalKey": "TCRN-CROSS-STORY-174",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:ca7ba689328314c776bc29b8",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】存储抽象层与文件后端收敛完成。交付物:①packages/core/src/storage-backend.ts——StorageBackend 接口(readMetadataBytes/writeMetadataBytes/listSegmentNames/readSegment/writeSegment/readView/writeView/ensureControlDirectory)+FileBackend 实现(四私有 IO 助手 boundDirectory/boundFile/ensureDirectory/atomicWrite 原样后移,含 dev/ino 身份校验、fsync+rename+identity-verify 原子写、crash-point 注入);②workspace.ts 数据平面调用点改经抽象接口(readMetadata/readSegmentEvents/appendEvent 段写+读回/writeViews/validateWorkspace 视图读/initializeWorkspace 元数据写/writeWorkspaceMetadataAt),段形状/gap 校验留在引擎层(后端无关);③租约/claim 机制保留文件助手并注明刻意重复 IO 豁免(174.3,PG 租约归 STORY-175)。验收两侧:正腿=既有全套件绿(66 测试文件,含 p3-file-engine 57 negative cases+64 排列字节决定性、backup-snapshot、protocol-v1)经 pnpm test;红腿=tests/story-174-storage-redleg.test.mjs 抽象层注入一字节偏差→链读红 WORKSPACE_EVENT_CORRUPT(2 用例绿)。format-check/lint/proof-artifacts 全绿。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:033acb8e4af4020cdadf8761",
+      "externalKey": "TCRN-CROSS-STORY-175",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:ca7ba689328314c776bc29b8",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】Postgres 链后端实现完成。交付物:①packages/pg-backend/schema/chain-ddl.sql——ADR §2-4 DDL(五 chain schema+domain+collab、三角色 tcrn_engine/tcrn_domain/tcrn_collab、events 表九字段含 schema_version 列+sequence 主键+continuity 触发器、metadata/views 表、GRANT 矩阵、REVOKE TRUNCATE,幂等);②packages/pg-backend/src/index.ts——PgBackend 实现 StorageBackend 接口(metadata/segment/view 读写、writeSegment 事务内追加、PG 错误映射 fail-closed 到引擎 reason code:unique_violation→WORKSPACE_CAS_MISMATCH、permission denied→WORKSPACE_PATH_INVALID、触发器 raise→EVENT_CORRUPT/CAS_MISMATCH、连接失败→MIGRATION_APPLY_UNAVAILABLE);③GRANT 面红腿 5 项在真实 PG(本机 Docker PG 16)实测:非引擎角色写 chain schema 拒(permission denied)、引擎角色正常写、UPDATE/DELETE 拒(append-only)、伪造 prior_hash 拒(连续性);④PG 驱动选型四审采纳 pg@8.22.0(MIT/成熟/纯 JS)落独立包,15 个 pg 族包+@types/pg 完整登记进 dependency-policy(license/integrity/purpose/acquisitionBoundary);⑤依赖图解析器增强支持 pnpm peer-context 键(pg-pool@3.14.0(pg@8.22.0))与 workspace-importer/optionalDependencies——解析原不支持,现 sbom/dependency 门全绿;⑥PgBackend 冒烟测试 4/4 绿(metadata/segment/view 往返+重复 sequence→CAS_MISMATCH)。验收两侧:正腿=全套件绿(TESTS_VERIFIED 66 文件)+sbom/dependency/lint/format/proof-artifacts 全绿;红腿=GRANT 面五红腿(见③)实测记录于 docs/reports/init-020/story-175-grant-redleg.md。双后端字节等价由 STORY-176 门判。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:4b1af6c1f07a74ece0c475db",
+      "externalKey": "TCRN-CROSS-STORY-176",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:ca7ba689328314c776bc29b8",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】双后端等价门与 PG 测试基建完成。交付物:①packages/pg-backend/test/equivalence.test.mjs——等价门(窗前硬件①):同一命令序列(createProject→updateProject→createWork→transitionWork)分别跑文件后端与 PG 后端,断言 export 字节/版本/head hash 完全一致(ADR §9 判据 1+3);②mutation 证人(红腿):PgBackend 注入一字节偏差(读段首字节 {→|)→链读红 WORKSPACE_EVENT_CORRUPT,门判红(零证人即违公约 12);③后端工厂注入机制:workspace.ts 新增 withStorageBackendFactory(AsyncLocalStorage 包私有,scope 单操作,生产不触发),让同一套引擎动词可切换后端;④PG 段序列化修正:PgBackend.readSegment 用 canonicalJson(非 JSON.stringify)保证与文件后端段字节一致,writeSegment 用 ON CONFLICT DO UPDATE 支持段重写语义,append-only 触发器支持 no-op re-presentation(段重写)并拒字节分歧(伪造/分叉);⑤PgBackend 冒烟 4/4 绿(metadata/segment/view 往返+字节分歧拒绝)。验收两侧:正腿=等价门绿(两后端 export 字节一致)+全套件绿(TESTS_VERIFIED);红腿=mutation 证人绿(注入一字节偏差门红 EVENT_CORRUPT)。CI 内 PG 供给方式按实测定(本机 Docker PG),单点可回退不设门。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:49b369e168bf854f58e88835",
+      "externalKey": "TCRN-CROSS-STORY-177",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:ca7ba689328314c776bc29b8",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】knowledge/artifact 两店 PG 化完成。交付物:①packages/core/src/store-backend.ts——StoreBackend 接口(knowledge marker/metadata/body/view + artifact marker/record 读写与枚举)+FileStoreBackend(文件实现,封装两店原 readBoundRegularFile/writeExclusiveFile/replaceRegularFile 语义)+withStoreBackendFactory(AsyncLocalStorage 注入,与 workspace 的 withStorageBackendFactory 同构)+StoreBackendError;②knowledge-core.ts/artifact-lifecycle.ts 数据平面 IO 路由到 StoreBackend(marker/record 读写+枚举),claim/quarantine 协议(mutation.claim/restore.claim)保留文件实现(与 STORY-174 对 workspace 租约的处理一致,PG 对应物按 ADR 重述);③packages/pg-backend/src/store.ts——PgStoreBackend 实现 StoreBackend 走 PG 表(knowledge_marker/knowledge_metadata/knowledge_bodies/knowledge_views/artifact_marker/artifact_records,枚举返回文件名形态与文件后端一致);④chain-ddl.sql 增两店六表;⑤正腿=tests/store-equivalence.test.mjs 两店数据平面字节等价(marker/metadata/body/record 文件与 PG 下字节完全一致+枚举一致);⑥全套件绿(TESTS_VERIFIED 67 文件)+p4(knowledge 47 negative/artifact 42 negative,64 排列字节决定性)+lint/format/sbom/proof-artifacts。CAS(marker 版本)与高水位绑定(knowledge 用 store marker 版本非链版本)语义原样。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:e2e038dddfe4b0d5f64b11fc",
+      "externalKey": "TCRN-CROSS-STORY-178",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:4a1304a35351ac46ff4c3a04",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】迁移动词族(双向)完成。交付物:①packages/core/src/workspace-migration.ts——planMigration(只读盘点源后端,产计划书 schema tcrn.workspace-migration-plan.v1)/executeMigration(源后端逐段读事件+metadata+两店 → 目标后端字节不变写回,file 目标确保控制树骨架)/verifyMigration(目标侧重读,与源比对:逐事件段字节+metadata+版本连续 1..N+head hash+两店 marker/record)/rollbackMigration(pg→file 反向同判据)。后端选择:file 侧用 FileBackend/FileStoreBackend,pg 侧经 options 注入 PgBackend/PgStoreBackend;PG 不可达 WORKSPACE_MIGRATION_APPLY_UNAVAILABLE。旁路拷贝拒:execute/verify 对目标非空且 workspaceId/版本/head 与源不符 → WORKSPACE_MIGRATION_FUTURE,相同重跑幂等允许。②packages/pg-backend/test/migration.test.mjs 三测试:正腿=file 链+knowledge+artifact → execute 到 pg → verify 绿 → 幂等重跑 → rollback 回 file → verify 绿;红腿=篡改 pg payload_hash → verify ok:false;旁路=pg 目标持不同链 → execute/verify 均拒 WORKSPACE_MIGRATION_FUTURE。③全套件绿(TESTS_VERIFIED)+lint/format/sbom/verify:source/proof-artifacts。判据与 STORY-176 等价门一致(逐事件字节等价+版本连续+head+两店 marker)。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:c38be8ca18a8d0f6dbea2e5e",
+      "externalKey": "TCRN-CROSS-STORY-179",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:4a1304a35351ac46ff4c3a04",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】备份/快照/核对机构重基完成。交付物(TCRN-AOS/deploy/aos-resident-cockpit/):①pg-backup-take.mjs——PG 取备份程序(只读 SELECT 取活链状态:events 数/head event_hash/全链 payload_hash 摘要/metadata+两店 marker sha256/连续性,pg_dump -F c 定制格式归档+sha256 sidecar,pg_restore --list 结构校验,产物带 partition/schema);②pg-backup-verify.mjs——异地 verify(摘要比对 dump 重算 sha256 vs sidecar+manifest+结构校验,不再逐文件树);③pg-chain-verify.mjs——engine-host:verify 的 DB 等价物(只读,事件行数+head+两店 marker digest 与预期比对,CHAIN_MATCHES_EXPECTED/DIFFERS);④pg-paired-backup.mjs——配套编排(复用 resident-lib stepper/state/transport+保留策略,PULL 方向不变,take→rsync PULL→异地 verify→红腿→轮换);⑤package.json 加 paired:backup-pg/paired:backup-pg-verify/pg:chain-verify。验收两侧(本机 Docker PG 实证,生产 VM PG 18 同机制留 STORY-188 窗前重跑):正腿=整条编排 ok=true(4 事件,PG_PAIR_TAKEN/PULLED/PG_BACKUP_VERIFIED),--verify-offsite 绿,dump sha256 三方一致;红腿=dump 第 100 字节翻转→verify DUMP_DIGEST_MISMATCH,注入漂移 knowledge_marker→pg-chain-verify CHAIN_DIFFERS_FROM_EXPECTED(两红均已复位)。文件备份路径 paired-backup.mjs/verify.mjs 零改动(git diff 空)。ADR §6 face 6 备份重定义达成。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:41cd58d7aec961fc483eb97d",
+      "externalKey": "TCRN-CROSS-STORY-180",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:4a1304a35351ac46ff4c3a04",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】scratch 链往返迁移实证完成(窗前硬件②)。交付物:①packages/pg-backend/test/evidence-roundtrip.mjs——往返实证脚本(file 链+knowledge 店+artifact 店,plan/execute file→pg→verify→tamper 红腿→re-execute→rollback→verify,逐步取证);②evidence/aos-s180-roundtrip-migration.json——实证归档(INC-042 约束:无宿主路径,已校验 grep /Users/ 0 命中)。验收两侧:正腿=roundTripEmpty true(export/version/head/checkpoint 四维 diff 全空,往返后文件侧与 baseline 完全一致);红腿=中途 disable trigger 篡改 PG 事件 payload_hash → verifyMigration 红 WORKSPACE_MIGRATION_VERIFY_MISMATCH,复位后 re-execute 绿。8 步证据链:baseline→plan-file-to-pg→execute-file-to-pg→verify-pg→red-leg-tamper→re-execute-pg→rollback-pg-to-file→roundtrip-diff-empty。判据与 STORY-176 等价门一致(逐事件字节等价+版本连续+head+两店 marker)。此单为窗前四硬件之一(往返迁移实证)的产出处。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:5184834e16fb1f541afbdabd",
+      "externalKey": "TCRN-CROSS-STORY-181",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:77801d322706b5241a45c79c",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】门面服务读面全集与部署形态完成。交付物(TCRN-AOS/deploy/aos-resident-cockpit/):①facade-read-service.mjs——门面读面核心服务:引擎读动词全集经门面供给,工具表从引擎活的 commands CLI 输出派生(源 A:mutates/authorityBearing/fixture-only 形状),再对引擎 workflowMcpTools() 的 readOnlyHint/destructiveHint 描述符做 assertNoWriteExposed(源 B)——两侧互补过滤同一名录,任一源拒即拒答 MCP_REMOTE_EXPOSURE_INVARIANT;两侧断言直接 import remote-read-mcp.mjs 的已测谓词;工具表 60s TTL 复核,每转发前对当前名录 withtherGround 复核;reason code 原样穿透(仅诊断 scrub);②facade-read-runner.mjs(systemd 进程,零默认值)、facade-read-manifest.mjs(VM 部署形态,从 aos-partitions.mjs 单一名册导入五分区)、apply-facade-read.mjs(部署脚本,per-file sha256 ledger)、tcrn-aos-facade-read.service;③五分区扩面沿用 CockpitServiceOptions.workspaces 的 partitionId→workspacePath 接缝,VM 绑 127.0.0.1:4320 经 SSH 隧道(CONF-007 D7),单点可回退;④scripts/read-face-gate.mjs 扩到门面源码(不持 pins+两侧派生断言)。验收两侧(本机,文件后端):正腿=12/12 测试绿(catalog 暴露 60 只读动词,status/work-list/work-show/export/validate/knowledge-list/commands 经门面可达且 reason code 保真,含引擎自身 KNOLWEDGE_PATH_INVALID 原样穿透);红腿=work-transition→MCP_REMOTE_WRITE_REFUSED、adapter-activation-record→MCP_REMOTE_AUTHORITY_OUTPUT_REFUSED,红后链上读仍绿。不变式:读进程不持 pins(read-face-gate 6 不变式全绿,0 findings)。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:f259c5066ba7d9af72198e6b",
+      "externalKey": "TCRN-CROSS-STORY-182",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:77801d322706b5241a45c79c",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】门面写面仪式语义服务端化完成。交付物:①deploy/aos-resident-cockpit/facade-write-service.mjs——写面服务端(GET /api/health、GET /api/engine/catalog、POST /api/ceremony 单一写面):规划/拒绝逻辑整面复用 ceremony-plan.mjs(assertPayload/planStep/judgeReadback/resolveExpectations/KNOWLEDGE_STORE_CAS_VERBS/requiresOutOfBandAuthority),发送半为进程内 runEngineCli(import 自 facade-read);动词白名单从引擎实时 commands 派生(mutates:true、非 authorityBearing、非一次性供权族、非 fixture-only)并与引擎 workflowMcpTools() 双源互证(实测 37 可写/66 拒绝);每次调用物化 payload+receipt 到 writeRoot,宿主路径清洗,throw 亦留收据(INC-047);②facade-write-service.test.mjs 19 测例(正腿+红腿+单元+源码门);③deploy/aos-mcp-write/server.mjs 物化载荷也过 scrubHostPaths(根因修复一处既有卫生漏)。验收两侧:正腿=一次 work-annotate 治理写只靠门面完成,回执含全值回读 READBACK_MATCHES_FULL_VALUE(4 字段),链 +1,独立 engine work-show 复核 scope 落地;红腿=PAYLOAD_INVALID/RESERVED_FLAG_IN_PAYLOAD×2/VERB_NOT_IN_CATALOGUE/VERB_REQUIRES_OUT_OF_BAND_AUTHORITY/FACADE_WRITE_VERB_NOT_MUTATING/READBACK_DIVERGENT/READBACK_NOTHING_COMPARED(NOTHING_COMPARED 不算比对)/MCP_PARTITION_UNKNOWN/CEREMONY_THREW_BEFORE_RECEIPT 全数具名拒绝。expected-version 语义:链动词写前现读链 head 自供,knowledge-* 五动词按 store marker 版本(直读 store.json,与链版本无关),载荷指名即 RESERVED_FLAG_IN_PAYLOAD;casSource 与 marker 读取均有单元证。门面自身不写链(源码门 0 findings)。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:d8470bce54832e7e2e29f813",
+      "externalKey": "TCRN-CROSS-STORY-183",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:77801d322706b5241a45c79c",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】拒绝面语料集与门面宕机演练完成。交付物:①deploy/aos-resident-cockpit/facade-write-rejection-corpus.mjs——拒绝语料数据 19 条+镜像/变异机制+scratch fixture;②facade-write-rejection-corpus.test.mjs(正腿+mutation 证人+两侧判决统一);③facade-downtime-drill.mjs 与 facade-downtime-drill.test.mjs(宕机演练:UP→DOWN 停门面→break-glass 白名单 SSH status 只读(使用记录带理由、allowlisted 判真)→影子队列缓冲治理写→恢复→经门面 /api/ceremony replay 落地+回读+裁剪);④fallback-cli.mjs 仅 export flagsFromQueuedArgv(供演练复用)。语料覆盖:INC-047(缺 actor→CEREMONY_THREW_BEFORE_RECEIPT、缺回读→PAYLOAD_INVALID)、INC-069(段内走私 reserved flag/读动词/authority-output/一次性供权族/fixture-only/未声明 flag/缺必填 flag/未知动词/不可解析回读→各自具名 reason code 整批拒)、INC-064(dryRun 直通 CEREMONY_PLANNED_ONLY 不推链、partition 路由、未知分区 MCP_PARTITION_UNKNOWN)。验收两侧:正腿=语料全绿(全拒);红腿=mutation 证人——移除任一拒绝规则,对应语料必转 PASS(19 条全翻转,无 mutation 纯净镜像 0 翻转,证人有牙);两侧同码(facade 写面与本地 ceremony 同判)。宕机演练:break-glass 使用记录带理由、fallback replay 经正门重放。门全绿:pnpm test 505/505、read-face:gate、local-purity:proof、doc-topology:proof、control-tree:proof。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:6c7e52202d170a935a6a670f",
+      "externalKey": "TCRN-CROSS-STORY-184",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:77801d322706b5241a45c79c",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】门面真实链写生效证据完成(窗前硬件③)。交付物:①deploy/aos-resident-cockpit/facade-write-manifest.mjs(声明 5 分区 workspace/attestDir,port 4321,engineRoot=/srv/tcrn/engine/tcrn-workflow)、facade-write-runner.mjs、tcrn-aos-facade-write.service(systemd unit,三向核对 rendered==committed==installed)、apply-facade-write.mjs——门面写面 VM 部署形态(镜像 apply-facade-read 先例,已 rsync 到 VM 逐文件 sha256 双向对账、install+enable+start 并证明 health readonly:false/chainWriteAvailable:true/noPins:true、dry-run CEREMONY_PLANNED_ONLY 链 228 不动);②真实写:本机经 SSH 隧道调 VM 门面 POST /api/ceremony,partition=TCRN-TMS,work-annotate work:fc0e6a3439ce4b29de8204c7(TCRN-TMS-INC-002)scope 注记(保留原文本+追加 STORY-184 证据标记,status/kind 不变),链 228→229,eventsAppended=1;③回执 CEREMONY_COMPLETED_AND_READ_BACK:step0 accepted headAtPlanning=228、readback 4 字段全值匹配(READBACK_MATCHES_FULL_VALUE 含 expectSameAs scope)、expected-version 服务端现读、knowledge-rebase KNOWLEDGE_STORE_REBASED(不增链事件);④红腿:同批注入白名单外读动词 work-show 为首步→整批 409 具名拒 FACADE_WRITE_VERB_NOT_MUTATING,annotate 未执行,链版本不动(229);⑤收据归档 deploy/aos-resident-cockpit/evidence/story-184/(payloads+receipts 4 组,无本机宿主路径,未入库 INC-042);⑥MCP 只读面独立复核:status 229、scope 落地、attestation 落侧车。写路径=POST /api/ceremony,零 SSH 直驱引擎写链(break-glass 纪律)。门:facade-write 19/19、rejection 3/3、read 12/12、downtime 1/1、read-face gate 0 findings、doc-topology/local-purity 绿。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:48970e7a57787d63bd4709fd",
+      "externalKey": "TCRN-CROSS-STORY-185",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:65cf5f278a2ca1f50e7ba6d4",
+      "revision": 6,
+      "scope": "【INC-081 重录·弃轨语义】S185 收口:两 MCP 面底层通道 SSH+CLI→门面完成;读面 remote-read-mcp.mjs 改 POST 门面读、写面 aos-mcp-write performCeremony 改 POST 门面写;验收两侧正腿/红腿。原收口注记在弃轨尾,此处重录并核销 done。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:960e88fa51ea3a5c4e9d0e7f",
+      "externalKey": "TCRN-CROSS-STORY-186",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:65cf5f278a2ca1f50e7ba6d4",
+      "revision": 6,
+      "scope": "【收口(2026-08-06)】break-glass 白名单收缩与拓扑清欠完成。交付物:①deploy/aos-local-client/ssh-breakglass-allowlist.json——mcp-unreachable-fallback 类名/理由/条目理由改指「门面(facade-read/write)不可达」(不再 MCP 面不可达),service-layer-byte-compare 保留,两条目补 reviewedAt 2026-08-06,pattern 未改;②topology.mjs 从 facade-read/write-manifest.mjs 导入并再导出 FACADE_HOST/PORT/UNIT_NAME/ALLOWED_HOSTS 与 FACADE_WRITE_*(VM 半仍导入不拷贝,无循环依赖);③apps/cockpit-service/src/service.ts 清欠——移除手写 ~/.tcrn-workflow/... 引擎路径,改为 engineMcpPath 选项,缺失时 ENGINE_MCP_PATH_REQUIRED fail-closed;vm-resident-runner.mjs/本地 starter 供给引擎路径;④平台入口文档第 0 小节残余场景触发条件同步。验收两侧(一份名单两处消费):正腿=observer --self-test 117/117、allowlisted status→PASS/breakglass-allowlist、doc-topology-predicates 双消费一致性测试绿、doc-topology:proof=DOC_TOPOLOGY_IN_SYNC;红腿=白名单外 SSH 直驱 work-transition→HIT/ssh-engine-direct、治理树写→HIT/ssh-write、doc-topology 红证 SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED 触发并点名。门:typecheck/build/local-purity:proof/read-face:gate/parity:proof 全绿,touched 测试套件 256 例全过。留待:引擎仓镜像白名单(scripts/policy/ssh-breakglass-allowlist.json)与 AOS 权威文案漂移(pattern 未变),breakglass-consistency-check 将红,由 STORY-185 引擎侧刷新闭合。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:f805208e3c9bd147f95cbc1c",
+      "externalKey": "TCRN-CROSS-STORY-187",
+      "kind": "Story",
+      "status": "planned",
+      "parentId": "work:65cf5f278a2ca1f50e7ba6d4",
+      "revision": 2,
+      "scope": "【判据扩面与入口文档改写】交付:doc-topology:proof 核访问形态(门面形态合法、白名单外 SSH 直驱必红,含 committed 文本判定);local-purity:proof 语义在 PG 后端下重述(本机零活链树的判定对象更新,影子链豁免语义保持);parity:proof 覆盖 Codex 侧增量并生成 diff(应用编辑用户级配置须 Owner 批准);平台入口文档(平台 CLAUDE.md、TCRN-AOS CLAUDE.md、helper 引导文本)复核命令列改写为门面形态。验收两侧:正腿=pnpm verify 七门全绿且入口文档白名单外零 SSH 直驱;红腿=注入伪漂移与伪 SSH 样例对应门必红。决策点:helper 引导文本改写随 candidate 重钉走发布必停点,本单只备文本不发布。前置:STORY-185、STORY-186;执行时点=切换窗内。subtask 见 PLAN.md §STORY-187。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:ba1b7255d0622a5d24eabe07",
+      "externalKey": "TCRN-CROSS-STORY-188",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:2b6a166e82ea80e6337cb669",
+      "revision": 7,
+      "scope": "【收口(2026-08-06)】切换窗前就绪完成(窗门)。交付物:①VM 生产 PG 18.4 开通(tcrn-platform-dev,apt postgresql-18):listen_addresses=127.0.0.1;pg_hba 仅 local peer(postgres 管理员+tcrn_engine 角色,无 host 行);建 tcrn_governance 库应用 chain-ddl.sql(三角色 tcrn_engine/tcrn_domain/tcrn_collab+五 chain schema+domain/collab+events/metadata/views/两店表+append-only 触发器+GRANT 矩阵);GRANT 红腿 6/6 过;systemd postgresql@18-main 常驻+开机自启;备份接线(/srv/tcrn/backups/pg-pairs+pg_dump/pg_restore);②末次文件形态配对备份:五链 2026-08-06T11:19Z 全取,拉回本机异地+--verify-offsite 全过,永久留存标记 FINAL-FILE-TRUTH-RETENTION(最后文件真值);③窗前四硬件机器核对全绿(window-readiness-check.mjs):等价门(STORY-176,2/2)/往返迁移实证(STORY-180,roundTripEmpty=true)/门面真实写(STORY-184,CEREMONY_COMPLETED_AND_READ_BACK)/末次备份(异地五对全在),联合可满足性自证,红腿 --mask 任一项清单必红(exit 1)窗不得开;④窗时点提请 Owner 排定(报备型,非 owner_intent_required 门)。AOS 全门 505/505 绿,证据 evidence/aos-story-188-window-readiness.json。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:8797455f66197645465abb73",
+      "externalKey": "TCRN-CROSS-STORY-189",
+      "kind": "Story",
+      "status": "active",
+      "parentId": "work:2b6a166e82ea80e6337cb669",
+      "revision": 9,
+      "scope": "【INC-081 重录·弃轨语义】S189 切换窗成功注记:五链 file→pg 迁移完成并经 migration-verify 绿;门面读写服务接 PG。原注记落在弃轨文件尾(v2106..2122),此处按语义重录于权威 PG 链。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:f01d514e0ebf8e3d3328dcce",
+      "externalKey": "TCRN-CROSS-STORY-190",
+      "kind": "Story",
+      "status": "active",
+      "parentId": "work:2b6a166e82ea80e6337cb669",
+      "revision": 5,
+      "scope": "【INC-081 重录·弃轨语义】S190 转 active:tip 复量协议推进中,链头以 INC-075 tip 门复量。",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:82c32ba447fc4062301b05b5",
+      "externalKey": "TCRN-CROSS-STORY-191",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:65cf5f278a2ca1f50e7ba6d4",
+      "revision": 6,
+      "scope": "QA2 complete: the adapter equivalence matrix and the targeted adapter tests are green (3/3); the matrix records capability, criterion and reason-code symmetry plus justified native differences; the red witness remains that an injected behavior divergence fails the test.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
+      ],
+      "sprintWorkId": null
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "work:648fb910ab2b0ee8d6be7ed8",
+      "externalKey": "TCRN-CROSS-STORY-192",
+      "kind": "Story",
+      "status": "done",
+      "parentId": "work:65cf5f278a2ca1f50e7ba6d4",
+      "revision": 7,
+      "scope": "QA2 complete: the four requested Codex MCP entries are applied to config.toml; Claude/Codex live roster parity is proven with zero exemptions; AOS and Design-System codegraph indexes are current; the parity red fixtures remain exercised. A fresh Codex session is required before newly configured MCP servers can be invoked directly.",
+      "decidedBy": [
+        "minutes:6b3a226012700f4322fd28ee"
       ],
       "sprintWorkId": null
     }
@@ -10923,6 +11715,21 @@ export const cockpitData: CockpitData = {
     },
     {
       "partitionId": "cross-project",
+      "id": "conference:0bd036805b95d2a778091fc1",
+      "externalKey": null,
+      "title": "INIT-019 三轮 QA 后的待裁事项统一审议",
+      "type": "strategy",
+      "status": "closed",
+      "workIds": [
+        "work:7d2bb6490ce764420117a085",
+        "work:0c26ae6aff6c1d1f9af07239",
+        "work:9a8457936b92b35bb1884db7",
+        "work:566983451730586006797d49",
+        "work:1d43a1c525d3e3317dd73114"
+      ]
+    },
+    {
+      "partitionId": "cross-project",
       "id": "conference:0d37b57252ce03c5af701ba7",
       "externalKey": null,
       "title": "INIT-006 立项+分解:交付节奏公约(单次收官发布)",
@@ -11045,6 +11852,17 @@ export const cockpitData: CockpitData = {
         "work:952bf886919bcbc32de021d2",
         "work:5c526a69692049553f531a65",
         "work:dc887f9d34acfd853d930152"
+      ]
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "conference:286d1f74d37698c011b3b0e3",
+      "externalKey": null,
+      "title": "INIT-020 方向审议:AOS 读写门面与引擎数据库后端",
+      "type": "architecture",
+      "status": "closed",
+      "workIds": [
+        "work:4d0ecd9c1e6ea5292ef08330"
       ]
     },
     {
@@ -11297,6 +12115,17 @@ export const cockpitData: CockpitData = {
       "workIds": [
         "work:e2d74c41c1fc651984121c8d",
         "work:877d59524a910d627134f473"
+      ]
+    },
+    {
+      "partitionId": "cross-project",
+      "id": "conference:7d587c97dc491d3077ce0c1d",
+      "externalKey": null,
+      "title": "INIT-020 方向确认:Postgres、单轨完整迁移、取消顺序门",
+      "type": "architecture",
+      "status": "closed",
+      "workIds": [
+        "work:4d0ecd9c1e6ea5292ef08330"
       ]
     },
     {
@@ -12698,6 +13527,45 @@ export const cockpitData: CockpitData = {
       "recordId": "minutes:41f48bf0fce9057cfbce79bc",
       "externalKey": "TCRN-CROSS-MIN-061",
       "title": "Owner 确认 MIN-060 的 D5-D9 全部采纳,由建议升格为裁定;MIN-060 的未决事项「D5 至 D9 待 Owner 确认」就此消除。STORY-159 的 D6 前提已满足,但仍保持 planned——本批仅落裁定不开工,INIT-019 全部十五张 Story 的派工时点由 Owner 另行指令。执行形态:Owner 指令逐字入档,余文由单一上下文合成,非多代理。",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:14d808ae0b0a5826c3850c25",
+      "externalKey": "TCRN-CROSS-MIN-062",
+      "title": "执行形态 multi-agent-deliberative:三席(Verity 对抗席、Mara 交付席、Minerva 治理席)由彼此看不见的独立上下文产出、各自另行核实链与仓;绑定收据 7b97f4a00a0d09 已单独校验 BINDING_VERIFIED(探针少一换行时确报 DIVERGENT 故非恒真)、天花板照记为一致性已证独立性未证。六题裁定:Q1 追认 store marker 候选并把 auto-rebase 剥离另裁、Q2 归 EPIC-025 阻断面管辖但单面裁失败政策不等整体解封、Q3 前向修复、Q4 最小前置五单(061 062 063 064 066)、Q5 分批推整合分支且 WF 先于 AOS 以取 INC-055 首次红腿、Q6 不采纳留 159 派工时决。三席交集为 Q3 与 Q4 四单与 Q5 分批;分歧为 Q4 是否含 061(二比一采纳)与 Q6(一比一未采纳)。主审补一条三席未见的反证:tracked 的 remediation-batch-2-summary 仍写四前置全达成而实为假、故 INC-065 降级不砍。",
+      "detail": {
+        "reason": "open-issues",
+        "open": 6,
+        "recorded": 6
+      },
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:f72e665a445e64950ab0488d",
+      "externalKey": "TCRN-CROSS-MIN-063",
+      "title": "执行形态:单上下文合成(synthesis-only),非多代理,理由已在开场立场首行声明。INIT-020 方向定案:D1(AOS 成为引擎前的唯一读写门面)与 D2(引擎存储后端改为数据库)为 Owner 2026-08-06 逐字直裁;D3(SQLite 选型)、D4(双轨接缝与日落)、D5(对 INIT-019 的承接顺序)为审查层建议采纳待确认。六 EPIC(052-057)按此拆单;发布为唯一必停点;Owner 指令原文、前提核实与被拒方案见 POS-C060-FABLE-1/2。",
+      "detail": {
+        "reason": "open-issues",
+        "open": 1,
+        "recorded": 1
+      },
+      "severity": "attention"
+    },
+    {
+      "kind": "unresolved",
+      "partitionId": "cross-project",
+      "recordId": "minutes:6b3a226012700f4322fd28ee",
+      "externalKey": "TCRN-CROSS-MIN-064",
+      "title": "执行形态:单上下文合成(synthesis-only),非多代理,理由在开场立场首行。INIT-020 方向确认定案:D1/D2 维持 MIN-063 原裁;D3 改裁 Postgres(为未来协作功能写入打地基,SQLite 转被拒);D4 改裁单轨完整迁移(五链一窗全切、回滚=反向迁移、文件后端降格为仪器);D5 改裁取消 INIT-019 顺序门(立即开工,INC-061..071 逐单核销)。三项改裁均为 Owner 2026-08-06 逐字裁定,原文见 POS-C061-FABLE-1。本纪要在 D3-D5 上取代 MIN-063 对应条目;MIN-063 原文留链为历史。",
       "detail": {
         "reason": "open-issues",
         "open": 1,
@@ -14817,6 +15685,49 @@ export const cockpitData: CockpitData = {
         "无方向性未决。执行侧待办不变:STORY-165 的 enforce 晋级仍须观察窗积累且判据成文后经 Owner 确认;INC-042 未收口前 docs/reports 整树不入库;v0.11.0 发布仍为唯一必停点。"
       ],
       "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:14d808ae0b0a5826c3850c25",
+      "externalKey": "TCRN-CROSS-MIN-062",
+      "surface": [
+        "对外发布与合并 main 与发 v0.11.0 仍是唯一必停点须 Owner go",
+        "落在 main 上的七条提交的推送须 Owner 批准",
+        "S073 单面失败政策裁定含 Owner 在钩子路径外亲测 kill switch",
+        "INC-068 的公约修订须 Owner 裁定",
+        "auto-rebase 的方向须另立单裁定",
+        "Q6 传输形态待 STORY-159 派工时决"
+      ],
+      "effective": [
+        "对外发布与合并 main 与发 v0.11.0 仍是唯一必停点须 Owner go",
+        "落在 main 上的七条提交的推送须 Owner 批准",
+        "S073 单面失败政策裁定含 Owner 在钩子路径外亲测 kill switch",
+        "INC-068 的公约修订须 Owner 裁定",
+        "auto-rebase 的方向须另立单裁定",
+        "Q6 传输形态待 STORY-159 派工时决"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:f72e665a445e64950ab0488d",
+      "externalKey": "TCRN-CROSS-MIN-063",
+      "surface": [
+        "D3 至 D5 为建议采纳待 Owner 确认;确认前执行层按建议推进、偏离即 BLOCKED 上报不自行改向。DB schema 细部与等价性判据由 EPIC-052 ADR 固化后 EPIC-053 方可开工。切换类动作(EPIC-056/057)在 INIT-019 最小前置五单 done 前不得执行。对外发布(引擎版本发布与 helper 重钉)是本 INIT 唯一必停点。EPIC-025 blocked 之下 enforce 相关接缝按 MIN-062 Q2 单面裁流程走、不等其整体解封。"
+      ],
+      "effective": [
+        "D3 至 D5 为建议采纳待 Owner 确认;确认前执行层按建议推进、偏离即 BLOCKED 上报不自行改向。DB schema 细部与等价性判据由 EPIC-052 ADR 固化后 EPIC-053 方可开工。切换类动作(EPIC-056/057)在 INIT-019 最小前置五单 done 前不得执行。对外发布(引擎版本发布与 helper 重钉)是本 INIT 唯一必停点。EPIC-025 blocked 之下 enforce 相关接缝按 MIN-062 Q2 单面裁流程走、不等其整体解封。"
+      ],
+      "dissolvedCount": 0
+    },
+    {
+      "minutesId": "minutes:6b3a226012700f4322fd28ee",
+      "externalKey": "TCRN-CROSS-MIN-064",
+      "surface": [
+        "无待 Owner 确认的方向项。执行期决策点:PG 大版本钉定与 schema 细部归 EPIC-052 ADR;切换窗时点在窗前四硬件(等价门绿、往返迁移实证、门面真实写通过、末次文件备份异地验证)齐备后排定。对外发布(引擎版本发布与 helper 重钉)仍为本 INIT 唯一必停点。"
+      ],
+      "effective": [
+        "无待 Owner 确认的方向项。执行期决策点:PG 大版本钉定与 schema 细部归 EPIC-052 ADR;切换窗时点在窗前四硬件(等价门绿、往返迁移实证、门面真实写通过、末次文件备份异地验证)齐备后排定。对外发布(引擎版本发布与 helper 重钉)仍为本 INIT 唯一必停点。"
+      ],
+      "dissolvedCount": 0
     }
   ],
   "threads": {
@@ -16625,6 +17536,48 @@ export const cockpitData: CockpitData = {
         "fragmentCount": 1
       }
     ],
+    "conference:0bd036805b95d2a778091fc1": [
+      {
+        "conferenceId": "conference:0bd036805b95d2a778091fc1",
+        "actorId": "agent:verity",
+        "fragmentIds": [
+          "position:08c5fc9716a069cd97b5b69a"
+        ],
+        "externalKeys": [],
+        "body": "Verity（对抗席）· 独立上下文\n\nQ1 伪题：现状既非①也非②、是**未声明的③**——仪式在载荷外自动跑 knowledge-rebase 且无回读，自破「没人读回来的写不算已证」。留①须先把它收进载荷判据或写成明文例外。\nQ2 在阶梯内：它正是 S073 点名的 PreToolUse 面；matcher 是全量 Bash、炸面即全平台 shell；classify 已硬编码 fail-open（parse-error→PASS）——失败语义被代码替 Owner 选了。\nQ3 前向修复：该行是被引用的报错文本；历史曾公开，改写买不回已扩散副本却废掉已钉 sha。真缺陷是卫生门量不到 origin/main。\nQ4 无须八单全先。最小集＝061·062·063·064·066；砍 065·067·068。\nQ5 必须：干净树对**将推的那个 commit** 重跑全门、X1/X2 或闭合或写明仍红、「推私有仓」≠「发布 v0.11.0」。漏第一项即对没人量过的树签字。\nQ6 streamable-HTTP 复用 CONF-007 硬编码的 127.0.0.1:4318 隧道；stdio 逼本机自 spawn，等于在 systemd 常驻实例外再开一份。\n\n反对一「四前置全达成」为假（已复现）：--classify 'ssh … \"…mjs status … ; …mjs event-list …\"' → PASS/breakglass-allowlist，同一 event-list 单独 → HIT。remediation-batch-2-summary.md:42 仍写全达成，08-12 照读即盲签。\n反对二 顺序不保护：上轮 INC-057 声明依赖 INC-053 仍违反，因 053 是无机器执行体的散文。只有 061 落在写面这唯一咽点；后置它，069/070/071 的「可检查前置」只是散文换新衣。\n\n若我错了，最可能错在 Q2：把一个回退成本极低的门冻在一场从未召开的会议后面。\n\n\n绑定收据: /Users/ryanlan/Code/TCRN Platform/TCRN-AOS/docs/reports/init-019/QA/conf059-execution-receipts.json(摘要值因自指省略,见开场立场)",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:0bd036805b95d2a778091fc1",
+        "actorId": "agent:mara",
+        "fragmentIds": [
+          "position:58650f8055224bc60279d967"
+        ],
+        "externalKeys": [],
+        "body": "Mara（交付席）· 独立上下文\nQ1 追认①：实现已在 ceremony.mjs:140、②是再造第二仪式面、③写无收据。\nQ2 受阶梯约束但不等 EPIC-025 解封：单面裁失败政策即可、真前置是 069/070。\nQ3 前向修复：main 仅一处在错误串内、HEAD 已无；改写收不回已公开字节且要重排 26 条。\nQ4 最小前置集四单：062、063、064、066。Q5 见下。\nQ6 stdio：同既有读写面形态、不开监听口、不碰 CONF-007 loopback。\n理由：069 自陈需 064+063、070 需 066、071 需 062；后置四单无一承担证人职责，失守只让记录难看、不让代码免于被量。上轮死因即判决函数零证人、064 已在集内；067 被 070/071 消掉、068 须裁定故前置即添停点。\n分批判据：①DS3+TMS3 现推：doc-topology:proof 与 CI 双绿。②helper1：verify-installed-copy 绿（048 证据量错对象）。③WF17 待 069/070：全量套件、语料只增、两侧差分一致、064 门实跑。④紧随 AOS26：干净树全量、doc-topology 红证、sha 同。⑤enforce＝唯一必停点。\n更省不更险：③④即依赖方向，且 WF 已推 AOS 未推时一致性门应变红——INC-055 首次自证不恒绿、一次推看不到。三项 Owner 裁定并一次会议。\n最不值得做 INC-065：它防的模式三轮未放过坏代码、皆被重跑抓住，却新增两道须随文档重跑的门——「须手动重跑」正是它要治的病。降级为加出处声明。\n不做必再犯 INC-064：三轮换三形状的同一根因，残渣即「PASS 出口无证人」；INC-057 已实证全回退后 117 条不红。只要还能无证人加 PASS 出口就必再犯。\n\n\n绑定收据: /Users/ryanlan/Code/TCRN Platform/TCRN-AOS/docs/reports/init-019/QA/conf059-execution-receipts.json(摘要值因自指省略,见开场立场)",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:0bd036805b95d2a778091fc1",
+        "actorId": "agent:minerva",
+        "fragmentIds": [
+          "position:760c11a76cceefeeac04e3c6"
+        ],
+        "externalKeys": [],
+        "body": "Minerva（治理席）· 独立上下文\nQ1 未裁先做、非重开: 031 自陈候选归 Owner 而 4e45c8c 已落 1。它可逆、故追认并补落被拒形状; auto-rebase 无回读、属 031 自标不推荐的 3、须另裁。\nQ2 归 EPIC-025 阶梯: observer enforce 即一阻断面。MIN-046 定授权数=0 且 S073-075 blocked、须先过失败政策会议; 165 自陈前置已证伪。\nQ3 前向修复并落更正、不改写公开历史: INC-042 订正点名处置为 settings 可移植化、不降级指不得因私有免做; 改写已推送 main 属第三类必停。\nQ4 最小前置=062、063、064、066(069<-064+063、070<-066、071<-062)加 061: 公约 12 要 PASS 证人与红腿、规则 3 逐单注记仅 061 机器化。065、067、068 非前置。\nQ5 50 提交非 50 次发布(第 2 条)。序列: AOS 26 与 W 17 先推整合分支 > 干净检出 verify > Owner go > 单次合并 main。分批推分支不违反; 但 TMS 与 DS 的 3+3 现 ahead 于 main、推即发布。\nQ6 是方向题但不晚: 159 已按第 2、8 条保持 planned 只出方案、不可逆动作为零。\n附1 字面每单: 规则 3 系于 done 前该单、1 与 2 才批级; 061 判 7/9 缺失即此口径。\n附2 是公约缺失: 公约 8 无一条禁止证据集由被判者自报、INC-062 补此缺应升格。\n矛盾一: 追认 1 而放过 auto-rebase、则无回读不算已证与 MIN-059 须与生产中的例外靠沉默共存、即 MIN-036 废掉的 D6 豁免。\n矛盾二: 165 到期即切、则 MIN-046 零授权与一个已授权阻断面并存; 同批 159 守住未裁不动手、165 未守。\n入 decisions: 收口规格由链上 scope 派生而非收口者申报、派生失败读作红。\n\n\n绑定收据: /Users/ryanlan/Code/TCRN Platform/TCRN-AOS/docs/reports/init-019/QA/conf059-execution-receipts.json(摘要值因自指省略,见开场立场)",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:0bd036805b95d2a778091fc1",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:c83a071872fa25ec1d62d127"
+        ],
+        "externalKeys": [],
+        "body": "执行形态: multi-agent-deliberative。三席由彼此看不见的独立上下文产出、各自另行核实链与仓、未读对方立场。绑定收据: 7b97f4a00a0d0903a202e0239a9abae9a0cf00dfdc33bca541a5294f3aedaf45。天花板照抄公约: 无密钥 sha256 只证明这段话未被事后改动、永不证明谁说的; 采集方为编排者自记、可信采集方(引擎 EPIC-020)未建成、故绑定证一致性不证独立性。\n\n为何不走 synthesis-only: 三轮 QA 的根因链是「门跑早了→门量错对象→量具由被量者提供」。若本场立场仍由单一上下文综合、正是第三种形状的复演。独立性本身即本场说服力来源、按公约第二步绑定收据。\n\n议程六题: Q1 INC-031 的 knowledge 族 CAS 方向(候选①已被 STORY-160 实现事实采用、单子仍 planned 且自陈归 Owner); Q2 STORY-165 的 enforce 是否落在 EPIC-025 阻断面阶梯之内; Q3 已推送 origin/main 上一处家目录路径的处置(改写历史 vs 前向修复); Q4 强化八单与修复三单的最小必要前置集; Q5 五仓未推送提交的发布序列; Q6 STORY-159 阶段二 MCP 传输形态。\n\n主审提交三席证伪的待验事实: 未推送共五十条、其中七条坐在 main 上(helper 1、DS 3、TMS 3)、推它们本身即发布动作; 其余四十三条在整合分支(AOS 26、tcrn-workflow 17)。\n\n主审不预设结论、只给两条约束: 对外发布无论讨论结果如何仍是必停点; 任何采纳须能指出它在哪台机器上可被复核。",
+        "fragmentCount": 1
+      }
+    ],
     "conference:0d37b57252ce03c5af701ba7": [
       {
         "conferenceId": "conference:0d37b57252ce03c5af701ba7",
@@ -16914,6 +17867,28 @@ export const cockpitData: CockpitData = {
         ],
         "externalKeys": [],
         "body": "主线程综合(main-thread synthesis)；执笔 agent:codex，署名 Verity。发布证据核验：Workflow PR #8 已 fast-forward 进 main，commit bae1c26bbcfe830d9e273d0cfdc516eda82689b3；注释 tag v0.6.0 的 tag object 185e613aa14dec0a14e09ab6182efdfeaca4899f 与远端全值一致；默认分支 CI 30189864770 成功，GitHub Release v0.6.0 六资产摘要与本地一致。Helper PR #1 已 fast-forward 进 main，commit 86bc822568f020c7e7c3428653ea22117396b72f；默认分支 CI 30190849433 成功；注释 tag v0.1.0-candidate.27 与六项预发布资产全摘要一致；bootstrap 锚为 71063beb2aefa3cd92d734b1afc2e43c45a731e5748352caae4a8344dbb856f2。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:286d1f74d37698c011b3b0e3": [
+      {
+        "conferenceId": "conference:286d1f74d37698c011b3b0e3",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:7530d68786396eef264380f8"
+        ],
+        "externalKeys": [],
+        "body": "【D2 形状】存储后端由规范字节文件树替换为数据库,经存储抽象层落地。独立实证动机:引擎每写全链重放、总体 O(n²)(实测 280-416ms@2500-4000 事件);更近的天花板是规范序列化 1MiB 视图上限(2000-4000 工作记录间触发 INPUT_OVERSIZED),cross 链已 309 工作项/1950 事件。替换残余适用性(六依赖面):①规范字节+哈希链——存续:事件是哈希单元(payloadHash/eventHash/priorHash),入库原样;②attestation——存续:actor attestation 绑事件载荷、time attestation 绑 headEventHash,均不绑文件;③fail-closed 读——存续:重放校验不过拒读;④snapshot/export——迁移:manifest 现绑原始文件字节,须重定义被绑对象;⑤relocation/ADR-0003——迁移:台账绑 controlManifestSha256,四条天花板照录重述;⑥paired backup 与本机只读归档——迁移/存续:PULL 方向不变、归档不迁不删。【D3 选型建议】默认 SQLite:每分区一库、与引擎单写者模型同构、可整文件备份与逐字节比对、零常驻依赖;被拒 Postgres:引入常驻服务与凭据面,超出单写者需要;抽象层使选型可逆。【D4 双轨接缝】切换开关落拓扑单点;逐分区迁移+双向 verify+可回退;旧文件轨日落条件=五链迁毕+门面 GA+新后端连续两次真备份成功,届时文件轨降只读归档、SSH 转发面退役(break-glass 白名单除外)。【D5 承接】INIT-019 及 INC-061..071 不作废;最小前置 061/062/063/064/066(MIN-062 Q4)done 前不执行切换类动作;门面写面继承仪式全部纪律,INC-069 段内走私语料对新门面同样适用。(2/2)",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:286d1f74d37698c011b3b0e3",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:fc8cce933bf28f5b737c271e"
+        ],
+        "externalKeys": [],
+        "body": "【执行形态声明】synthesis-only:本立场由单一上下文合成,非多代理;architecture 类会议按公约给出理由——方向已由 Owner 逐字直裁,分头产出只会得到同构复述,本会职责是定形轨道与残余分析。【Owner 指令逐字(2026-08-06)】「我发现AOS现在没有承接任何workspace的功能,本次会话你不得以任何原因拒绝我的AOS完整部署决策,你需要给我一个INIT,该INIT需要(a) AOS 成为引擎前面的读写门面;(b) 引擎存储后端改成数据库」。【前提核实】成立(截至 2026-08-06 实测):座舱写面仅四动词且只接 TCRN-AOS 单分区、绑 127.0.0.1、expected-version=head 弱于仪式 CAS、无消费方;UI 数据是构建期投影快照,随部署才刷新;其余四链读写全在 deploy 侧脚本与本机 MCP 面(SSH 转发+本机仪式),不在产品面——承接名不副实。【D1 形状】AOS 门面服务与链同机常驻(VM),供引擎读动词全集与仪式语义写面;本机两 MCP 面降为其客户端;「只有引擎写存储」不变,门面调用引擎不旁路。被拒①维持 SSH 转发常驻:转发不是承接;被拒②门面建在本机:真值在 VM,本机门面只是又一层转发。(1/2)",
         "fragmentCount": 1
       }
     ],
@@ -17369,6 +18344,28 @@ export const cockpitData: CockpitData = {
         ],
         "externalKeys": [],
         "body": "E05 收口 + INIT-003 完成（settles MIN-E05-IMPL 的两遗留项：发布、活链 dogfood）。**v0.3.0 已发布**：commit 95cfd88 上 main、annotated tag v0.3.0、GitHub Release（github.com/tpmoonchefryan/tcrn-workflow/releases/tag/v0.3.0）；全链 `verify:p1`=P1_VERIFIED（20 门含 HISTORY_CLEAN/PRIVACY_SOURCE_CLEAN）；发布三步各自单独执行（push 单独、tag 单独、Release 单独）。**安装框架克隆已升 v0.3.0**（fetch+checkout+rebuild；commands 含 work-annotate；活链回放绿）。**dogfood 端到端自证（活链）**：以升级后 CLI 注解 EPIC-005（v239）——work-show 见权威 scope＋decided-by 回链 `MIN-E05-TRUE-KICKOFF`(minutes:b00a1a64…)/`MIN-E05-DESIGN`(minutes:b017306e…)，正是本会话 label≠scope 事故的记录级修复；含 work.annotated 的活链回放 WORKSPACE_COMMAND_COMPLETED（v0.3.0 框架可读，v0.2.0 已不在用）。**STORY-018/019/020→done、EPIC-005→done、INIT-003→done**（五 Epic 全完成：E01 权威供给／E02 gate-v1／E03 多-skill 归档／E04 适配器分发／E05 链上 advisory 字段）。samples 证据文件随 0.3.0 发布，README 悬空引用现于独立克隆自足解析。**残留延后（非阻塞）**：skill 侧 workflow-operations.md 补 work-annotate 用法（helper skill 独立 re-pin 周期）；backup 快照建议在此发布点做（cadence=gate-close，本处无门故不自动触发，属建议）。",
+        "fragmentCount": 1
+      }
+    ],
+    "conference:7d587c97dc491d3077ce0c1d": [
+      {
+        "conferenceId": "conference:7d587c97dc491d3077ce0c1d",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:22dbddc535d8045403bbccd2"
+        ],
+        "externalKeys": [],
+        "body": "【D4 改裁形状】拒绝双轨过渡,单轨完整迁移(Owner 裁):不设长期共存、不设日落条件表——五链在一个计划迁移窗内全部切到 PG,文件树当场转只读归档(沿 2026-08-03 五链迁 VM 的 vacate 先例形态),SSH 读转发面同窗退役。回滚路径不靠保留活文件轨,而靠迁移动词族双向化:pg→file 反向迁移即回滚,与 file→pg 同一判据(逐事件字节等价+链版本连续);切换前末次文件形态配对备份永久留存为最后文件真值。文件后端代码降格为「迁移与验证仪器」,不再是生产轨道。按方向公约 Q4 单轨替换三答:迁移路径=EPIC-054 动词族;回滚路径=反向迁移;旧轨移除时点=五链迁毕验证绿后当场。【D5 改裁形状】拒绝顺序门(Owner 裁):INIT-020 立即开工,不等 INIT-019 最小前置五单(061/062/063/064/066)。INC-061..071 十一单不静默作废,在 INIT-020 内逐单核销(INC-054 规则):保护目标已被门面或迁移承接者记 superseded 并指名承接处(如 069 段内走私语料转入 EPIC-055 写面拒绝判据、063 门名册可达性转入门面统一通路),与传输无关的纪律单(收口证据、对抗复核类)记 retained 继续独立执行;核销清单为 EPIC-052 交付物之一,清单本身按 closeout-verify 机器核。EPIC-056 与五链切换同窗执行。(2/2)",
+        "fragmentCount": 1
+      },
+      {
+        "conferenceId": "conference:7d587c97dc491d3077ce0c1d",
+        "actorId": "agent:fable",
+        "fragmentIds": [
+          "position:c8b6a3273314b9e6fb5f73f9"
+        ],
+        "externalKeys": [],
+        "body": "【执行形态声明】synthesis-only,单上下文合成,非多代理;理由:本会仅转写 Owner 已下的裁定并按裁定重塑方案形状,无分歧可产。【Owner 裁定逐字(2026-08-06)】「D1 D2同意,D3 采用Postgres,为未来协作功能写入打地基;D4 拒绝,完整迁移;D5 拒绝,完整迁移」。【D3 改裁形状】DB 选型 Postgres(推翻 MIN-063 D3 的 SQLite 建议;SQLite 转为被拒方案,被拒理由=Owner 判其不承载未来协作功能写入)。落法:VM 单实例、绑 127.0.0.1 经 SSH 隧道(沿 CONF-007 D7,公开暴露另需裁定);库内按关切分 schema——五条链各一 chain schema、域库 domain schema(现 domain.db 迁入)、未来协作功能另立 schema;「只有引擎写链」由角色权限机械化:chain schema 仅引擎角色可写、append-only 以 GRANT+触发器强制(禁 UPDATE/DELETE),协作角色永不获链写——这条约束由公约升级为数据库层强制。引擎在 PG 不可达时 fail-closed 拒绝操作,绝不静默回退文件轨。PG 大版本钉定与升级路径归 EPIC-052 ADR。(1/2)",
         "fragmentCount": 1
       }
     ],
@@ -21348,6 +22345,79 @@ export const cockpitData: CockpitData = {
       ],
       "effective": [
         "无方向性未决。执行侧待办不变:STORY-165 的 enforce 晋级仍须观察窗积累且判据成文后经 Owner 确认;INC-042 未收口前 docs/reports 整树不入库;v0.11.0 发布仍为唯一必停点。"
+      ]
+    },
+    "conference:0bd036805b95d2a778091fc1": {
+      "id": "minutes:14d808ae0b0a5826c3850c25",
+      "externalKey": "TCRN-CROSS-MIN-062",
+      "summary": "执行形态 multi-agent-deliberative:三席(Verity 对抗席、Mara 交付席、Minerva 治理席)由彼此看不见的独立上下文产出、各自另行核实链与仓;绑定收据 7b97f4a00a0d09 已单独校验 BINDING_VERIFIED(探针少一换行时确报 DIVERGENT 故非恒真)、天花板照记为一致性已证独立性未证。六题裁定:Q1 追认 store marker 候选并把 auto-rebase 剥离另裁、Q2 归 EPIC-025 阻断面管辖但单面裁失败政策不等整体解封、Q3 前向修复、Q4 最小前置五单(061 062 063 064 066)、Q5 分批推整合分支且 WF 先于 AOS 以取 INC-055 首次红腿、Q6 不采纳留 159 派工时决。三席交集为 Q3 与 Q4 四单与 Q5 分批;分歧为 Q4 是否含 061(二比一采纳)与 Q6(一比一未采纳)。主审补一条三席未见的反证:tracked 的 remediation-batch-2-summary 仍写四前置全达成而实为假、故 INC-065 降级不砍。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "Q1 追认候选一(仪式按 store marker 供给 knowledge 族 CAS 已在 ceremony.mjs:140)并据此收口 INC-031",
+        "Q1 附 auto-rebase 属载荷外无回读之写、与没人读回来的写不算已证冲突、另立单裁定不随本次追认",
+        "Q2 STORY-165 的 enforce 受 EPIC-025 每个阻断面管辖(治理归属不等于树形归属、165 父级为 EPIC-049)但不必等 EPIC-025 整体解封",
+        "Q2 按 enforce-failure-policy-agenda-v1.md 的 S073 节单面裁失败政策、须明示 classify 已硬编码 fail-open 属既成预选",
+        "Q3 前向修复不改写已推送历史、并把卫生门量不到 origin-main 列为真缺陷补进 INC-071 条目集",
+        "Q4 最小必要前置集为 INC-061 与 062 与 063 与 064 与 066 五单、065 与 067 与 068 非前置",
+        "Q4 附 INC-065 降级不砍:只保留摘要须带命令与运行时刻且禁止无出处的总结式断言这一条最小判据",
+        "Q5 发布序列 WF 整合分支先推以取 INC-055 跨仓一致性门的首次红腿、AOS 整合分支紧随、干净检出对将推的那个 commit 重跑全门",
+        "Q5 落在 main 上的七条(helper 一 DS 三 TMS 三)推即发布动作须 Owner 批准、推整合分支不等于发布",
+        "Q6 传输形态不在本次采纳、留 STORY-159 派工时决、两席理由原样留档",
+        "收口注记口径为每单且在 done 之前(规则三系于该单、规则一与二才是批级)",
+        "收口规格须由链上 scope 派生而非收口者申报、派生失败读作红"
+      ],
+      "unresolvedIssues": [
+        "对外发布与合并 main 与发 v0.11.0 仍是唯一必停点须 Owner go",
+        "落在 main 上的七条提交的推送须 Owner 批准",
+        "S073 单面失败政策裁定含 Owner 在钩子路径外亲测 kill switch",
+        "INC-068 的公约修订须 Owner 裁定",
+        "auto-rebase 的方向须另立单裁定",
+        "Q6 传输形态待 STORY-159 派工时决"
+      ],
+      "effective": [
+        "对外发布与合并 main 与发 v0.11.0 仍是唯一必停点须 Owner go",
+        "落在 main 上的七条提交的推送须 Owner 批准",
+        "S073 单面失败政策裁定含 Owner 在钩子路径外亲测 kill switch",
+        "INC-068 的公约修订须 Owner 裁定",
+        "auto-rebase 的方向须另立单裁定",
+        "Q6 传输形态待 STORY-159 派工时决"
+      ]
+    },
+    "conference:286d1f74d37698c011b3b0e3": {
+      "id": "minutes:f72e665a445e64950ab0488d",
+      "externalKey": "TCRN-CROSS-MIN-063",
+      "summary": "执行形态:单上下文合成(synthesis-only),非多代理,理由已在开场立场首行声明。INIT-020 方向定案:D1(AOS 成为引擎前的唯一读写门面)与 D2(引擎存储后端改为数据库)为 Owner 2026-08-06 逐字直裁;D3(SQLite 选型)、D4(双轨接缝与日落)、D5(对 INIT-019 的承接顺序)为审查层建议采纳待确认。六 EPIC(052-057)按此拆单;发布为唯一必停点;Owner 指令原文、前提核实与被拒方案见 POS-C060-FABLE-1/2。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "D1 AOS 成为引擎前的唯一读写门面——与链同机的常驻服务供引擎读动词全集与仪式语义写面、本机 MCP 两面降为其客户端、只有引擎写存储不变(Owner 裁)",
+        "D2 引擎存储后端由规范字节文件树替换为数据库——经存储抽象层落地、六依赖面残余适用性结论随 EPIC-052 ADR 固化(Owner 裁)",
+        "D3 DB 选型默认 SQLite 每分区一库——Postgres 被拒因引入常驻服务与凭据面超出单写者需要、抽象层保留可逆性(建议采纳)",
+        "D4 双轨过渡——切换开关落拓扑单点、逐分区迁移双向 verify 可回退、旧文件轨日落条件=五链迁毕+门面 GA+新后端连续两次真备份成功(建议采纳)",
+        "D5 承接 INIT-019——INC-061..071 不作废、最小前置 061/062/063/064/066 done 前不执行切换类动作、门面写面继承仪式全部纪律(建议采纳)"
+      ],
+      "unresolvedIssues": [
+        "D3 至 D5 为建议采纳待 Owner 确认;确认前执行层按建议推进、偏离即 BLOCKED 上报不自行改向。DB schema 细部与等价性判据由 EPIC-052 ADR 固化后 EPIC-053 方可开工。切换类动作(EPIC-056/057)在 INIT-019 最小前置五单 done 前不得执行。对外发布(引擎版本发布与 helper 重钉)是本 INIT 唯一必停点。EPIC-025 blocked 之下 enforce 相关接缝按 MIN-062 Q2 单面裁流程走、不等其整体解封。"
+      ],
+      "effective": [
+        "D3 至 D5 为建议采纳待 Owner 确认;确认前执行层按建议推进、偏离即 BLOCKED 上报不自行改向。DB schema 细部与等价性判据由 EPIC-052 ADR 固化后 EPIC-053 方可开工。切换类动作(EPIC-056/057)在 INIT-019 最小前置五单 done 前不得执行。对外发布(引擎版本发布与 helper 重钉)是本 INIT 唯一必停点。EPIC-025 blocked 之下 enforce 相关接缝按 MIN-062 Q2 单面裁流程走、不等其整体解封。"
+      ]
+    },
+    "conference:7d587c97dc491d3077ce0c1d": {
+      "id": "minutes:6b3a226012700f4322fd28ee",
+      "externalKey": "TCRN-CROSS-MIN-064",
+      "summary": "执行形态:单上下文合成(synthesis-only),非多代理,理由在开场立场首行。INIT-020 方向确认定案:D1/D2 维持 MIN-063 原裁;D3 改裁 Postgres(为未来协作功能写入打地基,SQLite 转被拒);D4 改裁单轨完整迁移(五链一窗全切、回滚=反向迁移、文件后端降格为仪器);D5 改裁取消 INIT-019 顺序门(立即开工,INC-061..071 逐单核销)。三项改裁均为 Owner 2026-08-06 逐字裁定,原文见 POS-C061-FABLE-1。本纪要在 D3-D5 上取代 MIN-063 对应条目;MIN-063 原文留链为历史。",
+      "outcomeClass": "role_decision",
+      "decisions": [
+        "D3 改裁 DB 选型 Postgres——VM 单实例绑回环经 SSH 隧道、库内五链各一 chain schema 加 domain 加未来协作 schema、chain schema 仅引擎角色可写且 append-only 由 GRANT 加触发器机械化、协作角色永不获链写、PG 不可达时引擎 fail-closed 不回退文件轨、SQLite 转被拒方案理由为不承载未来协作写入(Owner 裁)",
+        "D4 改裁 单轨完整迁移——五链一个计划迁移窗全切、文件树当场转只读归档、SSH 读转发面同窗退役、回滚路径=迁移动词族反向迁移同判据、切换前末次文件形态配对备份永久留存、文件后端代码降格为迁移与验证仪器(Owner 裁)",
+        "D5 改裁 取消 INIT-019 顺序门——INIT-020 立即开工、INC-061..071 在 INIT-020 内逐单核销 superseded 指名承接处或 retained 独立执行、核销清单随 EPIC-052 出并按 closeout-verify 机器核(Owner 裁)",
+        "D1 与 D2 维持 MIN-063 原裁不变(Owner 确认)"
+      ],
+      "unresolvedIssues": [
+        "无待 Owner 确认的方向项。执行期决策点:PG 大版本钉定与 schema 细部归 EPIC-052 ADR;切换窗时点在窗前四硬件(等价门绿、往返迁移实证、门面真实写通过、末次文件备份异地验证)齐备后排定。对外发布(引擎版本发布与 helper 重钉)仍为本 INIT 唯一必停点。"
+      ],
+      "effective": [
+        "无待 Owner 确认的方向项。执行期决策点:PG 大版本钉定与 schema 细部归 EPIC-052 ADR;切换窗时点在窗前四硬件(等价门绿、往返迁移实证、门面真实写通过、末次文件备份异地验证)齐备后排定。对外发布(引擎版本发布与 helper 重钉)仍为本 INIT 唯一必停点。"
       ]
     }
   },
@@ -26481,6 +27551,14 @@ export const cockpitData: CockpitData = {
       }
     ],
     "work:fc0e6a3439ce4b29de8204c7": [
+      {
+        "id": "event:5358c8b3edceb572c6c948cd",
+        "sequence": 229,
+        "occurredAt": "2026-08-06T10:49:59Z",
+        "operation": "work.annotated",
+        "actorId": null,
+        "attribution": "not-enabled"
+      },
       {
         "id": "event:389da44aad7e3686015da97a",
         "sequence": 227,
