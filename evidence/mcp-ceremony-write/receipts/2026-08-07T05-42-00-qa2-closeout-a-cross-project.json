@@ -1,0 +1,1317 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "facade": true,
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2165,
+    "headEventHash": "036540ddc7e431326ea87015b8ffb0a69a843ff06e303be6eafcbceae8d78da5",
+    "work": 356
+  },
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2189,
+    "headEventHash": "fef05ae7891ecc54035be4d2d0c65ac5a8eca3d7e7fe1dc414bbccf828d77576",
+    "work": 356
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:30Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2165",
+        "--id",
+        "work:cfa0e3552121eefe297561f9",
+        "--scope",
+        "QA2 complete: v0.11.7 storage-home-seal and storage-home-status are deployed; the engine-host apply red-drill and verify are green; all five storage-home-status reads are STORAGE_HOME_READY; file-backend sentinel and migration-lease red tests are green. Red leg: a sealed archive opened without the PG admission is refused with a named storage-home reason.",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2165,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:cfa0e3552121eefe297561f9",
+      "version": 2166
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:32Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2166",
+        "--id",
+        "work:cfa0e3552121eefe297561f9",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2166,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:cfa0e3552121eefe297561f9",
+      "version": 2167
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:33Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2167",
+        "--id",
+        "work:cfa0e3552121eefe297561f9",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2167,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:cfa0e3552121eefe297561f9",
+      "version": 2168
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:35Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2168",
+        "--id",
+        "work:cfa0e3552121eefe297561f9",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2168,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:cfa0e3552121eefe297561f9",
+      "version": 2169
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:37Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2169",
+        "--id",
+        "work:f2bd59385ddbd8a92db33050",
+        "--scope",
+        "QA2 complete: tip:proof reports TIP_SINGLE_TRUTH_VERIFIED for all five partitions with no divergent rows; validate through the facade is green for all five; the retained cross archive is sealed at its recorded file head. The fixture mutation red leg remains exercised by tip-gate tests.",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2169,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:f2bd59385ddbd8a92db33050",
+      "version": 2170
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:38Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2170",
+        "--id",
+        "work:f2bd59385ddbd8a92db33050",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2170,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:f2bd59385ddbd8a92db33050",
+      "version": 2171
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:40Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2171",
+        "--id",
+        "work:f2bd59385ddbd8a92db33050",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2171,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:f2bd59385ddbd8a92db33050",
+      "version": 2172
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:41Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2172",
+        "--id",
+        "work:f2bd59385ddbd8a92db33050",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2172,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:f2bd59385ddbd8a92db33050",
+      "version": 2173
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:43Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2173",
+        "--id",
+        "work:2f0a303740354849b6fb18cd",
+        "--scope",
+        "QA2 complete: the pathway registry proves all 35 registered engine surfaces and no unregistered surface; ceremony, projection-freshness, fallback, apply, and evidence paths are either facade-routed or explicitly break-glass; the pathway registry red leg covers an injected unregistered call.",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2173,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:2f0a303740354849b6fb18cd",
+      "version": 2174
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:45Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2174",
+        "--id",
+        "work:2f0a303740354849b6fb18cd",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2174,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:2f0a303740354849b6fb18cd",
+      "version": 2175
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:46Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2175",
+        "--id",
+        "work:2f0a303740354849b6fb18cd",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2175,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:2f0a303740354849b6fb18cd",
+      "version": 2176
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:48Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2176",
+        "--id",
+        "work:2f0a303740354849b6fb18cd",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2176,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:2f0a303740354849b6fb18cd",
+      "version": 2177
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:50Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2177",
+        "--id",
+        "work:cfe916f9ae3e0e23c75a431f",
+        "--scope",
+        "QA2 complete: the harness convention records the mandatory freeze/archive/migration red leg; closeout-verify requires the redLeg schema; the archive window report and migration-verify FUTURE refusal record the old-pathway evidence. The closeout mutation red test remains green.",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2177,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:cfe916f9ae3e0e23c75a431f",
+      "version": 2178
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:51Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2178",
+        "--id",
+        "work:cfe916f9ae3e0e23c75a431f",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2178,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:cfe916f9ae3e0e23c75a431f",
+      "version": 2179
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:53Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2179",
+        "--id",
+        "work:cfe916f9ae3e0e23c75a431f",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2179,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:cfe916f9ae3e0e23c75a431f",
+      "version": 2180
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:54Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2180",
+        "--id",
+        "work:cfe916f9ae3e0e23c75a431f",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2180,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:cfe916f9ae3e0e23c75a431f",
+      "version": 2181
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:56Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2181",
+        "--id",
+        "work:68e5a9e617b56c7edd2088bb",
+        "--scope",
+        "QA2 complete: verify:map reverse-audits ADR-0004 section 9.1 through 9.4 and reports 78 claims with 77 implemented and one candidate; PG equivalence, refusal-code, and same-head view byte tests are wired and green. Deleting an ADR mapping witness remains a red leg.",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2181,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:68e5a9e617b56c7edd2088bb",
+      "version": 2182
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:41:58Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2182",
+        "--id",
+        "work:68e5a9e617b56c7edd2088bb",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2182,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:68e5a9e617b56c7edd2088bb",
+      "version": 2183
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:42:00Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2183",
+        "--id",
+        "work:68e5a9e617b56c7edd2088bb",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2183,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:68e5a9e617b56c7edd2088bb",
+      "version": 2184
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:42:01Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2184",
+        "--id",
+        "work:68e5a9e617b56c7edd2088bb",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2184,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:68e5a9e617b56c7edd2088bb",
+      "version": 2185
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:42:03Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2185",
+        "--id",
+        "work:51e597defdadba8c59703779",
+        "--scope",
+        "QA2 complete: WF test-wiring proves 74 enumerated tests with no orphan and the AOS test-wiring proof covers 69 of 69; CI runs isolated chain_test PostgreSQL tests; the full workflow suite and pg:test execute with PG cases present. Removing a test from a pipeline is a witnessed red leg.",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2185,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:51e597defdadba8c59703779",
+      "version": 2186
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:42:05Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2186",
+        "--id",
+        "work:51e597defdadba8c59703779",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2186,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:51e597defdadba8c59703779",
+      "version": 2187
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:42:06Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2187",
+        "--id",
+        "work:51e597defdadba8c59703779",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2187,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:51e597defdadba8c59703779",
+      "version": 2188
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T05:42:08Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2188",
+        "--id",
+        "work:51e597defdadba8c59703779",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2188,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:51e597defdadba8c59703779",
+      "version": 2189
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:cfa0e3552121eefe297561f9",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-074",
+            "observed": "TCRN-CROSS-INC-074",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "QA2 complete: v0.11.7 storage-home-seal and storage-home-status are deployed; the engine-host apply red-drill and verify are green; all five storage-home-status reads are STORAGE_HOME_READY; file-backend sentinel and migration-lease red tests are green. Red leg: a sealed archive opened without the PG admission is refused with a named storage-home reason.",
+            "observed": "QA2 complete: v0.11.7 storage-home-seal and storage-home-status are deployed; the engine-host apply red-drill and verify are green; all five storage-home-status reads are STORAGE_HOME_READY; file-backend sentinel and migration-lease red tests are green. Red leg: a sealed archive opened without the PG admission is refused with a named storage-home reason.",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-074",
+        "status": "done",
+        "scope": "QA2 complete: v0.11.7 storage-home-seal and storage-home-status are deployed; the engine-host apply red-drill and verify are green; all five storage-home-status reads are STORAGE_HOME_READY; file-backend sentinel and migration-lease red tests are green. Red leg: a sealed archive opened without the PG admission is refused with a named storage-home reason.",
+        "revision": 6
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:f2bd59385ddbd8a92db33050",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-075",
+            "observed": "TCRN-CROSS-INC-075",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "QA2 complete: tip:proof reports TIP_SINGLE_TRUTH_VERIFIED for all five partitions with no divergent rows; validate through the facade is green for all five; the retained cross archive is sealed at its recorded file head. The fixture mutation red leg remains exercised by tip-gate tests.",
+            "observed": "QA2 complete: tip:proof reports TIP_SINGLE_TRUTH_VERIFIED for all five partitions with no divergent rows; validate through the facade is green for all five; the retained cross archive is sealed at its recorded file head. The fixture mutation red leg remains exercised by tip-gate tests.",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-075",
+        "status": "done",
+        "scope": "QA2 complete: tip:proof reports TIP_SINGLE_TRUTH_VERIFIED for all five partitions with no divergent rows; validate through the facade is green for all five; the retained cross archive is sealed at its recorded file head. The fixture mutation red leg remains exercised by tip-gate tests.",
+        "revision": 6
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:2f0a303740354849b6fb18cd",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-076",
+            "observed": "TCRN-CROSS-INC-076",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "QA2 complete: the pathway registry proves all 35 registered engine surfaces and no unregistered surface; ceremony, projection-freshness, fallback, apply, and evidence paths are either facade-routed or explicitly break-glass; the pathway registry red leg covers an injected unregistered call.",
+            "observed": "QA2 complete: the pathway registry proves all 35 registered engine surfaces and no unregistered surface; ceremony, projection-freshness, fallback, apply, and evidence paths are either facade-routed or explicitly break-glass; the pathway registry red leg covers an injected unregistered call.",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-076",
+        "status": "done",
+        "scope": "QA2 complete: the pathway registry proves all 35 registered engine surfaces and no unregistered surface; ceremony, projection-freshness, fallback, apply, and evidence paths are either facade-routed or explicitly break-glass; the pathway registry red leg covers an injected unregistered call.",
+        "revision": 6
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:cfe916f9ae3e0e23c75a431f",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-077",
+            "observed": "TCRN-CROSS-INC-077",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "QA2 complete: the harness convention records the mandatory freeze/archive/migration red leg; closeout-verify requires the redLeg schema; the archive window report and migration-verify FUTURE refusal record the old-pathway evidence. The closeout mutation red test remains green.",
+            "observed": "QA2 complete: the harness convention records the mandatory freeze/archive/migration red leg; closeout-verify requires the redLeg schema; the archive window report and migration-verify FUTURE refusal record the old-pathway evidence. The closeout mutation red test remains green.",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-077",
+        "status": "done",
+        "scope": "QA2 complete: the harness convention records the mandatory freeze/archive/migration red leg; closeout-verify requires the redLeg schema; the archive window report and migration-verify FUTURE refusal record the old-pathway evidence. The closeout mutation red test remains green.",
+        "revision": 6
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:68e5a9e617b56c7edd2088bb",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-078",
+            "observed": "TCRN-CROSS-INC-078",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "QA2 complete: verify:map reverse-audits ADR-0004 section 9.1 through 9.4 and reports 78 claims with 77 implemented and one candidate; PG equivalence, refusal-code, and same-head view byte tests are wired and green. Deleting an ADR mapping witness remains a red leg.",
+            "observed": "QA2 complete: verify:map reverse-audits ADR-0004 section 9.1 through 9.4 and reports 78 claims with 77 implemented and one candidate; PG equivalence, refusal-code, and same-head view byte tests are wired and green. Deleting an ADR mapping witness remains a red leg.",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-078",
+        "status": "done",
+        "scope": "QA2 complete: verify:map reverse-audits ADR-0004 section 9.1 through 9.4 and reports 78 claims with 77 implemented and one candidate; PG equivalence, refusal-code, and same-head view byte tests are wired and green. Deleting an ADR mapping witness remains a red leg.",
+        "revision": 6
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:51e597defdadba8c59703779",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-079",
+            "observed": "TCRN-CROSS-INC-079",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "QA2 complete: WF test-wiring proves 74 enumerated tests with no orphan and the AOS test-wiring proof covers 69 of 69; CI runs isolated chain_test PostgreSQL tests; the full workflow suite and pg:test execute with PG cases present. Removing a test from a pipeline is a witnessed red leg.",
+            "observed": "QA2 complete: WF test-wiring proves 74 enumerated tests with no orphan and the AOS test-wiring proof covers 69 of 69; CI runs isolated chain_test PostgreSQL tests; the full workflow suite and pg:test execute with PG cases present. Removing a test from a pipeline is a witnessed red leg.",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-079",
+        "status": "done",
+        "scope": "QA2 complete: WF test-wiring proves 74 enumerated tests with no orphan and the AOS test-wiring proof covers 69 of 69; CI runs isolated chain_test PostgreSQL tests; the full workflow suite and pg:test execute with PG cases present. Removing a test from a pipeline is a witnessed red leg.",
+        "revision": 6
+      }
+    }
+  ],
+  "eventsAppended": 24,
+  "finishedAt": "2026-08-07T05:42:17Z"
+}

@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "tcrn.closeout-verify.v1",
+  "incident": "TCRN-CROSS-INIT-020",
+  "windowed": true,
+  "items": [
+    "INC-074",
+    "INC-075",
+    "INC-076",
+    "INC-077",
+    "INC-078",
+    "INC-079",
+    "INC-080",
+    "INC-081",
+    "INC-082",
+    "INC-083",
+    "INC-084",
+    "INC-085",
+    "INC-086",
+    "INC-087",
+    "INC-088",
+    "INC-089"
+  ],
+  "dispositions": {
+    "INC-074": { "kind": "fixed", "scope": "storage-home admission and PG seal/status" },
+    "INC-075": { "kind": "fixed", "scope": "single-truth tip gate and five-partition validation" },
+    "INC-076": { "kind": "fixed", "scope": "pathway registry and unregistered-call red leg" },
+    "INC-077": { "kind": "fixed", "scope": "windowed closeout red-leg obligation and archive evidence" },
+    "INC-078": { "kind": "fixed", "scope": "ADR-0004 section 9 reverse audit and equivalence gates" },
+    "INC-079": { "kind": "fixed", "scope": "test wiring and isolated PostgreSQL execution" },
+    "INC-080": { "kind": "fixed", "scope": "receipt hygiene and authority/readback evidence" },
+    "INC-081": { "kind": "fixed", "scope": "cross fork semantic disposition on PG" },
+    "INC-082": { "kind": "fixed", "scope": "facade-only read/write and tunnel reclaim" },
+    "INC-083": { "kind": "fixed", "scope": "archive ownership, sentinel seal and retained-window export" },
+    "INC-084": { "kind": "fixed", "scope": "facade PG coverage, identity and idempotency" },
+    "INC-085": { "kind": "fixed", "scope": "migration/view/error/knowledge-marker behavior" },
+    "INC-086": { "kind": "fixed", "scope": "PG test isolation, codegraph freshness and marker rebase" },
+    "INC-087": { "kind": "fixed", "scope": "real receipts and second-round evidence correction" },
+    "INC-088": { "kind": "fixed", "scope": "PG workspace path decoupled from sealed archive" },
+    "INC-089": { "kind": "fixed", "scope": "content-based privacy hygiene and push-gate disclosure" }
+  },
+  "redLeg": {
+    "schemaVersion": "tcrn.closeout-red-leg.v1",
+    "target": "INIT-020 five-partition storage/archive/migration window",
+    "oldPathway": "retained file-backend migration/write path against the sealed cross archive",
+    "refusalReasonCode": "WORKSPACE_MIGRATION_FUTURE",
+    "evidence": "docs/reports/init-020/inc083-migration-verify-red-leg.json"
+  }
+}

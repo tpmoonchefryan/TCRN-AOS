@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "aos.inc083.archive-window-export.v1",
+  "purpose": "INC-083 read-only, per-event export of the retained cross-project archive window",
+  "source": {
+    "pathway": "tcrn-workflow-aos-read facade",
+    "partition": "cross-project",
+    "verb": "event-list",
+    "arguments": { "offset": 2105, "limit": 17 },
+    "authorityAnchor": {
+      "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+      "version": 2165,
+      "headEventHash": "036540ddc7e431326ea87015b8ffb0a69a843ff06e303be6eafcbceae8d78da5",
+      "total": 2165
+    }
+  },
+  "retainedArchiveWitness": {
+    "track": "file archive",
+    "version": 2122,
+    "headHashObservedByTipGate": "ad2a7c9ba7fc38f0e51a3800c8dbd6535f3c52fd6d351cea9de235077200154e",
+    "interpretation": "sealed archive witness; it is not compared with the PG authority after storage-home sealing"
+  },
+  "events": [
+    {"sequence":2106,"id":"event:3a6791fbc6482f951e29b7f1","eventHash":"37eb2a55fd096ddc11472b68f94273f92a2ce19bbd63b9e50f0426371f5bc8ae","payloadHash":"cffd2831e0498bc07d6e0c2b223a32004250f02934bfb8da6a01919d71d214db","priorHash":"5227a542525c363f82d85ce46d794397244368c80e86e2859121d18f96103046","occurredAt":"2026-08-06T15:44:42Z","operation":"work.annotated","actor":"agent:fable","externalKey":"TCRN-CROSS-STORY-189","recordId":"work:8797455f66197645465abb73","revision":5},
+    {"sequence":2107,"id":"event:667b82215f290a13f6158e04","eventHash":"54c9eb0fad614f351a201295eabd060cec20c51fa56e951d1c666809a55338f8","payloadHash":"1bf8a02de699d78722965abc44f2d651522b116b01d0e0d71944952ca57b24bb","priorHash":"37eb2a55fd096ddc11472b68f94273f92a2ce19bbd63b9e50f0426371f5bc8ae","occurredAt":"2026-08-06T15:45:22Z","operation":"work.annotated","actor":"agent:fable","externalKey":"TCRN-CROSS-STORY-189","recordId":"work:8797455f66197645465abb73","revision":6},
+    {"sequence":2108,"id":"event:1c523d2c40381a16c0764a37","eventHash":"de79e3ea474284c0fbf5f720957a19c847bfea5be738081b061cb989d80f8c96","payloadHash":"824a8faebbec250016233d7e0435601cc4489e00f5997e123109126d98d33c33","priorHash":"54c9eb0fad614f351a201295eabd060cec20c51fa56e951d1c666809a55338f8","occurredAt":"2026-08-06T16:47:04Z","operation":"work.created","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-074","recordId":"work:cfa0e3552121eefe297561f9","revision":1},
+    {"sequence":2109,"id":"event:fa8d4e83fc7f2f47d1567000","eventHash":"fa108ff5eedaeddc0053ba3bd316326696488b11243db77310719f5c5ad4dc44","payloadHash":"601d76f2c7b7d6c2cb3dea523b7462390a9657d5cf1a060bfa7402691b881405","priorHash":"de79e3ea474284c0fbf5f720957a19c847bfea5be738081b061cb989d80f8c96","occurredAt":"2026-08-06T16:47:06Z","operation":"work.created","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-075","recordId":"work:f2bd59385ddbd8a92db33050","revision":1},
+    {"sequence":2110,"id":"event:5890972f40805691e3a773b5","eventHash":"ecfffc323498dab55a3d1f1b2db849d658fc2fd8fc040c8f915210d29b170078","payloadHash":"45d530fcc26ad433507a5b2fe160cb7b7e0397de44365df78a832d335a33edf9","priorHash":"fa108ff5eedaeddc0053ba3bd316326696488b11243db77310719f5c5ad4dc44","occurredAt":"2026-08-06T16:47:07Z","operation":"work.created","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-076","recordId":"work:2f0a303740354849b6fb18cd","revision":1},
+    {"sequence":2111,"id":"event:df91acdbb485c15de0050af4","eventHash":"4e423e1edfbacd55a4d198bed2082b5cb89aecf18f19be49005c68a3cd2f7d63","payloadHash":"ee00bad50c7a4368fe8fbd7b0bf287ae3242d74267e1e0306ed23b0b6530ea0a","priorHash":"ecfffc323498dab55a3d1f1b2db849d658fc2fd8fc040c8f915210d29b170078","occurredAt":"2026-08-06T16:47:09Z","operation":"work.created","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-077","recordId":"work:cfe916f9ae3e0e23c75a431f","revision":1},
+    {"sequence":2112,"id":"event:c5d38497bd6582637e7e716f","eventHash":"5c29f2ab264c81181b4a93d1ddb638601a4458a980a64c60278e5bb15caee147","payloadHash":"5354199d9deb0d2f13e5133e76c122c096149b6376f33f66f31efff6d338b0b5","priorHash":"4e423e1edfbacd55a4d198bed2082b5cb89aecf18f19be49005c68a3cd2f7d63","occurredAt":"2026-08-06T16:47:10Z","operation":"work.created","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-078","recordId":"work:68e5a9e617b56c7edd2088bb","revision":1},
+    {"sequence":2113,"id":"event:fc756c233307004b730619b1","eventHash":"d9a46a3ced52e61d65912a734bede4c66c6411a42436a78a79818cc670ac8bfb","payloadHash":"587829273b3b1dc64d38f065851523dbffa5b5a455ad6429b6d8c444a67161d3","priorHash":"5c29f2ab264c81181b4a93d1ddb638601a4458a980a64c60278e5bb15caee147","occurredAt":"2026-08-06T16:47:12Z","operation":"work.created","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-079","recordId":"work:51e597defdadba8c59703779","revision":1},
+    {"sequence":2114,"id":"event:c42e13f6493667ffe012d48c","eventHash":"453fc7da6259cf2f20bbf4bbe28851d33766ee9b9f8ba6973a8ee06cf02188e2","payloadHash":"be2d4aea03e60416222af631078b3537196783b81b4cdc54cce377b3567450b1","priorHash":"d9a46a3ced52e61d65912a734bede4c66c6411a42436a78a79818cc670ac8bfb","occurredAt":"2026-08-06T16:47:13Z","operation":"work.created","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-080","recordId":"work:0526586955397955ccad21c1","revision":1},
+    {"sequence":2115,"id":"event:79413589778e3d4f8f0cd873","eventHash":"24512c994fde0c670936936326337b2510cf5641db4ee7f5f810f778fc4a362a","payloadHash":"a0324f4386b7883ea8632cf221d7c98205121ce33ae2edd8affac280d42f1167","priorHash":"453fc7da6259cf2f20bbf4bbe28851d33766ee9b9f8ba6973a8ee06cf02188e2","occurredAt":"2026-08-06T16:49:12Z","operation":"work.annotated","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-074","recordId":"work:cfa0e3552121eefe297561f9","revision":2},
+    {"sequence":2116,"id":"event:d89594c2039ced0b9289cca6","eventHash":"a15a55a28fe31e246001b974bc7ede0825a6ea32ab07deaecb5aee7e065f08ef","payloadHash":"6c49f50778bd97e4872b9d1d847e98d8ab13dbce2eba2c36e383faaa580fad53","priorHash":"24512c994fde0c670936936326337b2510cf5641db4ee7f5f810f778fc4a362a","occurredAt":"2026-08-06T16:49:13Z","operation":"work.annotated","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-075","recordId":"work:f2bd59385ddbd8a92db33050","revision":2},
+    {"sequence":2117,"id":"event:d210b32bccc8a1406372377b","eventHash":"5d8ef42f04d0f1f716ffe1565d710208c44250c1f70eb82c55f7e0ef7569c37b","payloadHash":"3da5dae8031649632b6b2b4e053e1d35edef013eb0a09b97d8fe5edbe404623c","priorHash":"a15a55a28fe31e246001b974bc7ede0825a6ea32ab07deaecb5aee7e065f08ef","occurredAt":"2026-08-06T16:49:14Z","operation":"work.annotated","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-076","recordId":"work:2f0a303740354849b6fb18cd","revision":2},
+    {"sequence":2118,"id":"event:d86e6e1a0e85279a6ad94eae","eventHash":"5efa98c5221edd8df41b6c37a5365871e59535776bc1e6192d402d90e034b930","payloadHash":"823a71fa049bc965c1643aa860f0c05d4c8418ad951eafc38a705611f9726c76","priorHash":"5d8ef42f04d0f1f716ffe1565d710208c44250c1f70eb82c55f7e0ef7569c37b","occurredAt":"2026-08-06T16:49:16Z","operation":"work.annotated","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-077","recordId":"work:cfe916f9ae3e0e23c75a431f","revision":2},
+    {"sequence":2119,"id":"event:84d03228765f7cc8f0ed8eda","eventHash":"4ba1f6b2cc8638a6771da44cdcb93bf2dcb2a38e9e2c6097d0ad16ec4912eced","payloadHash":"2fc1bf746ac53f164210a1a0a6f4d8232392033c94061b6eb79149816e76613f","priorHash":"5efa98c5221edd8df41b6c37a5365871e59535776bc1e6192d402d90e034b930","occurredAt":"2026-08-06T16:49:17Z","operation":"work.annotated","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-078","recordId":"work:68e5a9e617b56c7edd2088bb","revision":2},
+    {"sequence":2120,"id":"event:1fe994d9e19656741769b134","eventHash":"8c916e5f596baf107c67fd98acbfb04b0ab65411f0e060e4a9eb28ac1b4afea3","payloadHash":"5640fc00f05a14162c89d8c5c97f18017b7a77a2e45965b57a06b1bd309e7f38","priorHash":"4ba1f6b2cc8638a6771da44cdcb93bf2dcb2a38e9e2c6097d0ad16ec4912eced","occurredAt":"2026-08-06T16:49:19Z","operation":"work.annotated","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-079","recordId":"work:51e597defdadba8c59703779","revision":2},
+    {"sequence":2121,"id":"event:fb9cab5500023efc5b903aeb","eventHash":"19caba826e88c99d53be5fca4ab6231d2ce95c7760cc013cd53a039190170d3f","payloadHash":"6250a52f01caa84b12375f4383efab576791f816b1619b243e5b6ebcb325d09c","priorHash":"8c916e5f596baf107c67fd98acbfb04b0ab65411f0e060e4a9eb28ac1b4afea3","occurredAt":"2026-08-06T16:49:20Z","operation":"work.annotated","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-080","recordId":"work:0526586955397955ccad21c1","revision":2},
+    {"sequence":2122,"id":"event:ed22201042b23c197337a560","eventHash":"386b3d2be0dd6db15fab003fbddf26a5780b7da25ae66407c27b984c8b4a6ac7","payloadHash":"1390186e44a4f079e4d2e97dc6f9875f67f9ff337d7c9f171fa98600094d6d27","priorHash":"19caba826e88c99d53be5fca4ab6231d2ce95c7760cc013cd53a039190170d3f","occurredAt":"2026-08-06T16:50:04Z","operation":"work.created","actor":"agent:fable","externalKey":"TCRN-CROSS-INC-081","recordId":"work:0883d3a3d0a8deb25b3b1a15","revision":1}
+  ],
+  "integrity": {
+    "eventCount": 17,
+    "sequencesContiguous": true,
+    "hashFieldsAreFullSha256": true,
+    "interpretation": "The facade returned these records from the live PG authority; the retained file track is a sealed, divergent archive and was not used as a write source."
+  }
+}

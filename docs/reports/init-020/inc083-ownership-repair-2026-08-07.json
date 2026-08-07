@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "aos.inc083.ownership-repair.v1",
+  "partition": "cross-project",
+  "authority": "VM control-tree read-only verification",
+  "repaired": [
+    { "relativePath": "workspace/.tcrn-workflow/events/000033.json", "owner": "ryanlan", "group": "tcrn_engine", "mode": "0644" },
+    { "relativePath": "workspace/.tcrn-workflow/events/000034.json", "owner": "root", "group": "tcrn_engine", "mode": "0464" },
+    { "relativePath": "workspace/.tcrn-workflow/views/extensions.json", "owner": "root", "group": "tcrn_engine", "mode": "0464" },
+    { "relativePath": "workspace/.tcrn-workflow/views/index.json", "owner": "root", "group": "tcrn_engine", "mode": "0464" },
+    { "relativePath": "workspace/.tcrn-workflow/views/readback.json", "owner": "root", "group": "tcrn_engine", "mode": "0464" },
+    { "relativePath": "workspace/.tcrn-workflow/views/STATUS.md", "owner": "root", "group": "tcrn_engine", "mode": "0464" }
+  ],
+  "verification": {
+    "command": "read-only VM stat and migration-verify through the facade",
+    "result": "000033 is readable by tcrn_engine; root-owned archive/view artifacts are group-readable by tcrn_engine; migration-verify reaches the target and returns WORKSPACE_MIGRATION_FUTURE rather than EACCES",
+    "redLeg": "a file-backend write against the sealed archive is refused and is not used to overwrite PG"
+  }
+}

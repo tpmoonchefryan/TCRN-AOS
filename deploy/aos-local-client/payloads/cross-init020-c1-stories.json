@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-020",
+  "intent": "INIT-020 拆单 C1 批:在 EPIC-052/053/054 下立 STORY-171..180 共十张并逐一注解(四要素)。遵 MIN-053 两层制:链上到 Story 级为止,subtask 由本地计划文本 TCRN-AOS/docs/reports/init-020/PLAN.md 承载。只立单不执行。键号经 work-list 反查:既有 Story 最高 170。",
+  "steps": [
+    { "verb": "work-create", "flags": { "project-id": "project:e7da35c5aade8dd42c91cb0f", "external-key": "TCRN-CROSS-STORY-171", "kind": "Story", "parent-id": "work:a3b94d6d202005f5fe229f0c", "status": "planned", "actor": "agent:fable" } },
+    { "verb": "work-annotate", "flags": { "id": "work:491be6f960ecc1f73d5aabc2", "scope": "【ADR 主文:PG 存储后端与实例拓扑】依据 MIN-064 D3/D4。交付 tcrn-workflow/docs/adr/0004(暂号)一份,必含:VM 单实例拓扑(绑 127.0.0.1 经 SSH 隧道,PG 大版本钉定与升级路径);schema 布局(五链各一 chain schema+domain+未来协作 schema);角色模型(chain schema 仅引擎角色可写、append-only=GRANT+触发器、协作角色永不获链写);事件表 DDL(规范字节+payload_hash/event_hash/prior_hash+序号,逐事件哈希语义原样);租约与单写者语义重述(advisory lock 或 claim 表);PG 不可达=fail-closed 不回退文件轨;迁移台账额度语义(现 16 条按尝试消耗,沿用与否);存储抽象口粒度;轨道表与辖域澄清(受治五链无文件轨;本地模式/影子链/迁移仪器保留文件后端,MIN-060 D4 未被触动)。验收:ADR 过评审、每条判据写明「什么会让它变红」。决策点:PG 版本、schema 细部、口粒度、租约形态在本单裁毕不留执行期。subtask 见 PLAN.md §STORY-171。", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-create", "flags": { "project-id": "project:e7da35c5aade8dd42c91cb0f", "external-key": "TCRN-CROSS-STORY-172", "kind": "Story", "parent-id": "work:a3b94d6d202005f5fe229f0c", "status": "planned", "actor": "agent:fable" } },
+    { "verb": "work-annotate", "flags": { "id": "work:6767241b2a45cb5a81aecef8", "scope": "【INC-061..071 核销清单】依据 MIN-064 D5:取消顺序门的对价是逐单核销防蒸发(INC-051 批次掉缝的教训)。交付:十一单逐单处置清单——superseded 须指名承接处(先例指向:069 段内走私语料→STORY-183 拒绝面、063 门名册可达性→门面统一通路、061 收口闸门→门面写面收口闸门;逐单以其 scope 原文为准重判),retained(与传输无关的纪律单:收口证据、对抗复核类)注明继续执行的时机与归属;清单按 closeout-verify 机器核形态成文。验收两侧:正腿=closeout-verify 对清单绿(每条目恰一处置);红腿=蓄意漏一单必红。红线:本单只出清单文本与红腿实证,对 INC 各单的链上处置注记留待执行期(不动手)。决策点:retained 单的时机(窗前/窗后)在清单内逐单标注。", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-create", "flags": { "project-id": "project:e7da35c5aade8dd42c91cb0f", "external-key": "TCRN-CROSS-STORY-173", "kind": "Story", "parent-id": "work:a3b94d6d202005f5fe229f0c", "status": "planned", "actor": "agent:fable" } },
+    { "verb": "work-annotate", "flags": { "id": "work:d1f2a24bb7ebd51b93bd071d", "scope": "【等价性判据定义与红腿实证】依据「判据两侧必须能够不同」纪律(恒真门是平台三度付学费的缺陷形态)。交付:等价性判据集(逐事件字节等价/reason code 等价/head 哈希等价/视图与两店 marker 等价)、每条判据的注入式红腿脚本(在 scratch 上改一字节即红的预演记录);ADR 依判据定稿并记录 EPIC-052 内三单完成状态。验收两侧:正腿=判据集齐且每条有绿例;红腿=每条判据各有一次真实红腿记录。决策点:无(判据的门实现归 STORY-176)。", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-create", "flags": { "project-id": "project:e7da35c5aade8dd42c91cb0f", "external-key": "TCRN-CROSS-STORY-174", "kind": "Story", "parent-id": "work:ca7ba689328314c776bc29b8", "status": "planned", "actor": "agent:fable" } },
+    { "verb": "work-annotate", "flags": { "id": "work:0d2a6d6f5ba7f61f8376b710", "scope": "【存储抽象口抽取与文件后端收敛】现状(2026-08-06 勘察):链树唯一写者 packages/core/src/workspace.ts(boundDirectory/boundFile/ensureDirectory/atomicWrite 四私有助手),workspace-snapshot 刻意重复 IO 纪律,knowledge-core/artifact-lifecycle 旁路自写。交付:按 ADR 口粒度抽出存储抽象层,文件后端原样收敛其后,行为零变化。验收两侧:正腿=既有全套件绿(p3-file-engine、backup-snapshot、protocol-v1 等,经 pnpm test 红线)+64 排列字节决定性测试不变;红腿=抽象层注入一处字节偏差,既有套件必红。决策点:无(粒度承 STORY-171 ADR)。前置:STORY-171。subtask 见 PLAN.md §STORY-174。", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-create", "flags": { "project-id": "project:e7da35c5aade8dd42c91cb0f", "external-key": "TCRN-CROSS-STORY-175", "kind": "Story", "parent-id": "work:ca7ba689328314c776bc29b8", "status": "planned", "actor": "agent:fable" } },
+    { "verb": "work-annotate", "flags": { "id": "work:033acb8e4af4020cdadf8761", "scope": "【Postgres 链后端实现】交付:chain schema DDL(事件表=规范字节+三哈希列+序号连续约束)、workspace 元数据与视图的 PG 对应物、按 ADR 的租约/mutation claim 对应物、append-only 强制(GRANT+触发器)、fail-closed(连接不可达或链校验不过=拒绝操作,零文件回退)。验收两侧:正腿=引擎全动词在 PG 后端跑通且 reason code 与文件后端一致(由 STORY-176 门判);红腿=GRANT 面红腿——以非引擎角色写 chain schema 必拒、UPDATE/DELETE 必被触发器拒、伪造 prior_hash 的行必被读路径拒读。决策点:无(全承 STORY-171 ADR)。前置:STORY-171、STORY-174。subtask 见 PLAN.md §STORY-175。", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-create", "flags": { "project-id": "project:e7da35c5aade8dd42c91cb0f", "external-key": "TCRN-CROSS-STORY-176", "kind": "Story", "parent-id": "work:ca7ba689328314c776bc29b8", "status": "planned", "actor": "agent:fable" } },
+    { "verb": "work-annotate", "flags": { "id": "work:4b1af6c1f07a74ece0c475db", "scope": "【双后端等价门与 PG 测试基建】交付:等价性门(同一命令序列两后端逐事件字节/reason code/head 哈希相同,判据承 STORY-173)、mutation 证人(任一字节偏差即红)、临时 PG 实例测试基建(本地与 CI 同批跑,引擎测试经 pnpm test 红线)。验收两侧:正腿=scratch 双后端同批动词 diff 为空;红腿=注入单字节差异门判红(证人自证,零证人即违公约 12)。此门是窗前四硬件之一。决策点:CI 内 PG 供给方式(容器/本机)按实测定,单点可回退不设门。前置:STORY-174、STORY-175。", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-create", "flags": { "project-id": "project:e7da35c5aade8dd42c91cb0f", "external-key": "TCRN-CROSS-STORY-177", "kind": "Story", "parent-id": "work:ca7ba689328314c776bc29b8", "status": "planned", "actor": "agent:fable" } },
+    { "verb": "work-annotate", "flags": { "id": "work:49b369e168bf854f58e88835", "scope": "【knowledge 与 artifact 两店的 PG 后端】现状:两店旁路链树抽象(knowledge-core 与 artifact-lifecycle 各有 claim/quarantine 协议),store marker 以 eventHighWaterDigest 绑链头,knowledge 写动词 CAS 用 store marker 版本非链版本(既有实证)。交付:两店入 PG,marker/CAS 语义原样,claim 协议按 ADR 重述。验收两侧:正腿=两店全动词双后端等价(并入 STORY-176 门);红腿=marker 与链头失配时 KNOWLEDGE_HIGH_WATER_MISMATCH 照旧拒读、ARTIFACT 同理。决策点:两店与链同 schema 或分 schema,承 STORY-171 ADR。前置:STORY-175。subtask 见 PLAN.md §STORY-177。", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-create", "flags": { "project-id": "project:e7da35c5aade8dd42c91cb0f", "external-key": "TCRN-CROSS-STORY-178", "kind": "Story", "parent-id": "work:4a1304a35351ac46ff4c3a04", "status": "planned", "actor": "agent:fable" } },
+    { "verb": "work-annotate", "flags": { "id": "work:e2e038dddfe4b0d5f64b11fc", "scope": "【迁移动词族(双向)】依据 MIN-064 D4:回滚=反向迁移,不保留活文件轨。交付:migration-plan/execute/verify/rollback 四动词,file→pg 与 pg→file 同一判据(逐事件字节等价+链版本连续+两店 marker 一致);台账语义按 ADR;旁路拷贝的库/树被读动词具名拒绝(绑定不随字节走,ADR-0003 精神)。验收两侧:正腿=动词族在 scratch 链全流程可走;红腿=verify 对目标侧被篡改一字节必红、旁路拷贝必拒。决策点:无(承 STORY-171 ADR)。前置:STORY-176。subtask 见 PLAN.md §STORY-178。", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-create", "flags": { "project-id": "project:e7da35c5aade8dd42c91cb0f", "external-key": "TCRN-CROSS-STORY-179", "kind": "Story", "parent-id": "work:4a1304a35351ac46ff4c3a04", "status": "planned", "actor": "agent:fable" } },
+    { "verb": "work-annotate", "flags": { "id": "work:c38be8ca18a8d0f6dbea2e5e", "scope": "【备份/快照/核对机构重基】现状:paired backup 取文件树+域库两半、PULL 到本机;snapshot manifest 绑原始文件字节;engine-host:verify 逐文件 sha256 双向比。交付:paired backup 重基(VM 侧 pg_dump 定制格式+摘要,PULL 与保留策略不变,offsite verify 判据更新);snapshot-manifest/verify 与 export 的 DB 等价物(被绑对象按 ADR ⑦ 重定义);engine-host:verify 的 DB 侧等价物。验收两侧:正腿=新后端真备份一次+异地验证过;红腿=备份产物注入一字节 verify 必红。决策点:无(被绑对象承 STORY-171 ADR)。前置:STORY-175。", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-create", "flags": { "project-id": "project:e7da35c5aade8dd42c91cb0f", "external-key": "TCRN-CROSS-STORY-180", "kind": "Story", "parent-id": "work:4a1304a35351ac46ff4c3a04", "status": "planned", "actor": "agent:fable" } },
+    { "verb": "work-annotate", "flags": { "id": "work:41cd58d7aec961fc483eb97d", "scope": "【scratch 链往返迁移实证】交付:一条 scratch 链 file→pg→file 完整往返的实证记录——逐事件字节等价、链版本连续、两店 marker 语义保持;实证产物归档(受 INC-042 证据约束)。验收两侧:正腿=往返 diff 为空;红腿=往返中途注入差异被 verify 拦截。此单是窗前四硬件之一(往返迁移实证)的产出处。决策点:无。前置:STORY-178、STORY-179。", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:491be6f960ecc1f73d5aabc2" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-171", "kind": "Story", "status": "planned" },
+      "expectSameAs": [{ "field": "scope", "step": 1, "flag": "scope" }]
+    },
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:41cd58d7aec961fc483eb97d" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-180", "kind": "Story", "status": "planned" },
+      "expectSameAs": [{ "field": "scope", "step": 19, "flag": "scope" }]
+    }
+  ]
+}

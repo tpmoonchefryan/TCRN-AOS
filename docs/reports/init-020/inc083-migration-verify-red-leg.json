@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "aos.inc083.migration-verify-red-leg.v1",
+  "story": "TCRN-CROSS-INIT-020 INC-083",
+  "pathway": "tcrn-workflow-aos-read facade",
+  "command": "migration-verify --to pg --schema chain_cross",
+  "partition": "cross-project",
+  "accepted": false,
+  "reasonCode": "WORKSPACE_MIGRATION_FUTURE",
+  "interpretation": "The retained file archive and the live PG target diverge after the known fork. The engine refuses a non-prefix target rather than copying over it; the earlier EACCES on events/000033.json is no longer observed.",
+  "redLeg": {
+    "oldPathway": "migration-verify from the retained file archive into the live PG target",
+    "expectedRefusal": "WORKSPACE_MIGRATION_FUTURE",
+    "observedRefusal": "WORKSPACE_MIGRATION_FUTURE"
+  }
+}

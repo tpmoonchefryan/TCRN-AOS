@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "TCRN-AOS",
+  "facade": true,
+  "chainBefore": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 1048,
+    "headEventHash": "eea6d9adf02ce66081e5268b06f45011d4fb24a15dabed687420dcfbeb19f44f",
+    "work": 156
+  },
+  "chainAfter": {
+    "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+    "version": 1048,
+    "headEventHash": "eea6d9adf02ce66081e5268b06f45011d4fb24a15dabed687420dcfbeb19f44f",
+    "work": 156
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "migration-execute",
+      "mutates": true,
+      "reasonCode": null,
+      "argv": [
+        "migration-execute",
+        "--schema",
+        "chain_aos",
+        "--to",
+        "pg",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "schema",
+        "to"
+      ],
+      "headAtPlanning": 1048,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": null,
+      "version": 1048
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "migration-verify",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_MIGRATION_VERIFIED",
+      "argv": [
+        "migration-verify",
+        "--schema",
+        "chain_aos",
+        "--to",
+        "pg",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "schema",
+        "to"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "ok",
+            "expected": true,
+            "observed": true,
+            "equal": true
+          },
+          {
+            "field": "reasonCode",
+            "expected": "WORKSPACE_MIGRATION_VERIFIED",
+            "observed": "WORKSPACE_MIGRATION_VERIFIED",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "ok": true,
+        "reasonCode": "WORKSPACE_MIGRATION_VERIFIED",
+        "eventCount": 1048,
+        "headEventHash": "eea6d9adf02ce66081e5268b06f45011d4fb24a15dabed687420dcfbeb19f44f"
+      }
+    }
+  ],
+  "eventsAppended": 0,
+  "finishedAt": "2026-08-07T04:28:03Z"
+}

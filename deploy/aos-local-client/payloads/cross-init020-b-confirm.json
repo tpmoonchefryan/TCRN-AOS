@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-020",
+  "intent": "INIT-020 确认批:Owner 对 MIN-063 三项待确认方向逐字改裁(D3 Postgres、D4 拒双轨改单轨完整迁移、D5 拒顺序门立即开工),开 CONF-061 锚于主单转写并闭会出 MIN-064,随后按改裁重写主单与六个 EPIC 的注记(原注记留链上历史)。执行形态:单上下文合成,非多代理。",
+  "steps": [
+    {
+      "verb": "conference-open",
+      "flags": {
+        "external-key": "TCRN-CROSS-CONF-061",
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "type": "architecture",
+        "title": "INIT-020 方向确认:Postgres、单轨完整迁移、取消顺序门",
+        "work-ids": "work:4d0ecd9c1e6ea5292ef08330",
+        "desired-outcome": "把 Owner 对 MIN-063 三项待确认方向的逐字裁定(D3 采用 Postgres 为未来协作功能写入打地基;D4 拒绝双轨改完整迁移;D5 拒绝顺序门改完整迁移)转写为改裁 D3-D5,并按改裁重塑受影响的 EPIC 注记,供执行期直接依据。",
+        "participant-ids": "owner:governance,agent:fable",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "conference-append-position",
+      "flags": {
+        "conference-id": "conference:7d587c97dc491d3077ce0c1d",
+        "external-key": "POS-C061-FABLE-1",
+        "actor-id": "agent:fable",
+        "position": "【执行形态声明】synthesis-only,单上下文合成,非多代理;理由:本会仅转写 Owner 已下的裁定并按裁定重塑方案形状,无分歧可产。【Owner 裁定逐字(2026-08-06)】「D1 D2同意,D3 采用Postgres,为未来协作功能写入打地基;D4 拒绝,完整迁移;D5 拒绝,完整迁移」。【D3 改裁形状】DB 选型 Postgres(推翻 MIN-063 D3 的 SQLite 建议;SQLite 转为被拒方案,被拒理由=Owner 判其不承载未来协作功能写入)。落法:VM 单实例、绑 127.0.0.1 经 SSH 隧道(沿 CONF-007 D7,公开暴露另需裁定);库内按关切分 schema——五条链各一 chain schema、域库 domain schema(现 domain.db 迁入)、未来协作功能另立 schema;「只有引擎写链」由角色权限机械化:chain schema 仅引擎角色可写、append-only 以 GRANT+触发器强制(禁 UPDATE/DELETE),协作角色永不获链写——这条约束由公约升级为数据库层强制。引擎在 PG 不可达时 fail-closed 拒绝操作,绝不静默回退文件轨。PG 大版本钉定与升级路径归 EPIC-052 ADR。(1/2)",
+        "risks": "①PG 是信任链首个常驻有状态依赖:实例宕机=五链全部不可写、须以 fail-closed+备份纪律压住而非双轨兜底;②单实例承载五链+域库、备份与恢复演练必须先于切换窗;③协作功能与链同库、若角色边界失守会把「只有引擎写链」打穿、故 GRANT 面须有红腿测试;④单窗全切放大迁移缺陷爆炸半径、故窗前往返迁移实证与末次文件备份是硬前提;⑤取消顺序门后 INIT-019 未清单若无逐单核销会静默蒸发、核销清单是 D5 改裁的对价",
+        "recommendations": "执行序 052 ADR→053 等价门(055 门面并行)→054 双向迁移→一个切换窗内 056+057 全落;窗前四硬件:等价门绿、往返迁移实证、门面真实写通过、末次文件形态配对备份异地验证;INC-061..071 核销清单随 EPIC-052 一并出",
+        "evidence-ids": "-",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "conference-append-position",
+      "flags": {
+        "conference-id": "conference:7d587c97dc491d3077ce0c1d",
+        "external-key": "POS-C061-FABLE-2",
+        "actor-id": "agent:fable",
+        "position": "【D4 改裁形状】拒绝双轨过渡,单轨完整迁移(Owner 裁):不设长期共存、不设日落条件表——五链在一个计划迁移窗内全部切到 PG,文件树当场转只读归档(沿 2026-08-03 五链迁 VM 的 vacate 先例形态),SSH 读转发面同窗退役。回滚路径不靠保留活文件轨,而靠迁移动词族双向化:pg→file 反向迁移即回滚,与 file→pg 同一判据(逐事件字节等价+链版本连续);切换前末次文件形态配对备份永久留存为最后文件真值。文件后端代码降格为「迁移与验证仪器」,不再是生产轨道。按方向公约 Q4 单轨替换三答:迁移路径=EPIC-054 动词族;回滚路径=反向迁移;旧轨移除时点=五链迁毕验证绿后当场。【D5 改裁形状】拒绝顺序门(Owner 裁):INIT-020 立即开工,不等 INIT-019 最小前置五单(061/062/063/064/066)。INC-061..071 十一单不静默作废,在 INIT-020 内逐单核销(INC-054 规则):保护目标已被门面或迁移承接者记 superseded 并指名承接处(如 069 段内走私语料转入 EPIC-055 写面拒绝判据、063 门名册可达性转入门面统一通路),与传输无关的纪律单(收口证据、对抗复核类)记 retained 继续独立执行;核销清单为 EPIC-052 交付物之一,清单本身按 closeout-verify 机器核。EPIC-056 与五链切换同窗执行。(2/2)",
+        "risks": "-",
+        "recommendations": "-",
+        "evidence-ids": "-",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "conference-close",
+      "flags": {
+        "conference-id": "conference:7d587c97dc491d3077ce0c1d",
+        "minutes-external-key": "TCRN-CROSS-MIN-064",
+        "summary": "执行形态:单上下文合成(synthesis-only),非多代理,理由在开场立场首行。INIT-020 方向确认定案:D1/D2 维持 MIN-063 原裁;D3 改裁 Postgres(为未来协作功能写入打地基,SQLite 转被拒);D4 改裁单轨完整迁移(五链一窗全切、回滚=反向迁移、文件后端降格为仪器);D5 改裁取消 INIT-019 顺序门(立即开工,INC-061..071 逐单核销)。三项改裁均为 Owner 2026-08-06 逐字裁定,原文见 POS-C061-FABLE-1。本纪要在 D3-D5 上取代 MIN-063 对应条目;MIN-063 原文留链为历史。",
+        "outcome-class": "role_decision",
+        "decisions": "D3 改裁 DB 选型 Postgres——VM 单实例绑回环经 SSH 隧道、库内五链各一 chain schema 加 domain 加未来协作 schema、chain schema 仅引擎角色可写且 append-only 由 GRANT 加触发器机械化、协作角色永不获链写、PG 不可达时引擎 fail-closed 不回退文件轨、SQLite 转被拒方案理由为不承载未来协作写入(Owner 裁),D4 改裁 单轨完整迁移——五链一个计划迁移窗全切、文件树当场转只读归档、SSH 读转发面同窗退役、回滚路径=迁移动词族反向迁移同判据、切换前末次文件形态配对备份永久留存、文件后端代码降格为迁移与验证仪器(Owner 裁),D5 改裁 取消 INIT-019 顺序门——INIT-020 立即开工、INC-061..071 在 INIT-020 内逐单核销 superseded 指名承接处或 retained 独立执行、核销清单随 EPIC-052 出并按 closeout-verify 机器核(Owner 裁),D1 与 D2 维持 MIN-063 原裁不变(Owner 确认)",
+        "unresolved-issues": "无待 Owner 确认的方向项。执行期决策点:PG 大版本钉定与 schema 细部归 EPIC-052 ADR;切换窗时点在窗前四硬件(等价门绿、往返迁移实证、门面真实写通过、末次文件备份异地验证)齐备后排定。对外发布(引擎版本发布与 helper 重钉)仍为本 INIT 唯一必停点。",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:4d0ecd9c1e6ea5292ef08330",
+        "scope": "【AOS 数据平面完备化:读写门面与数据库后端】方向全定:D1/D2(MIN-063,Owner 直裁)+D3-D5 改裁(MIN-064,Owner 2026-08-06 逐字:D3 Postgres 为未来协作写入打地基、D4 拒双轨改单轨完整迁移、D5 拒顺序门立即开工)。形状:VM 单实例 PG 绑回环,五链 chain schema 仅引擎角色可写(append-only 由 GRANT+触发器机械化),domain+未来协作 schema 角色隔离;五链一个迁移窗全切,文件树当场转只读归档,回滚=迁移动词族反向迁移,文件后端代码降格为迁移与验证仪器;PG 不可达引擎 fail-closed 不回退;INC-061..071 在本 INIT 内逐单核销(superseded 指名承接处/retained 独立执行)。六 EPIC:052 ADR(PG 版)+核销清单;053 抽象层与双后端等价(仪器化);054 双向迁移动词族与备份重基;055 门面服务(PG 底座);056 客户端与名册收敛(切换同窗);057 五链切换窗与收口。执行序:052→053(055 并行)→054→切换窗(056+057)→发布必停。窗前四硬件:等价门绿、往返迁移实证、门面真实写通过、末次文件形态配对备份异地验证。仪器名册与拆单纪律沿 v1950 立项注记(MIN-053 两层制、生效证据写两侧)。",
+        "decided-by": "minutes:f72e665a445e64950ab0488d,minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:a3b94d6d202005f5fe229f0c",
+        "scope": "【替换残余分析与 ADR(PG 版)】六依赖面残余结论维持 MIN-063 框架,选型按 MIN-064 改 Postgres。ADR 必含:①实例拓扑——VM 单实例绑 127.0.0.1 经 SSH 隧道(沿 CONF-007 D7),PG 大版本钉定与升级路径;②schema 布局——五链各一 chain schema+domain(现 domain.db 迁入)+未来协作 schema;③角色模型——chain schema 仅引擎角色可写、append-only 由 GRANT+触发器强制(禁 UPDATE/DELETE),协作角色永不获链写,GRANT 面带红腿测试;④事件表=规范字节+payload_hash/event_hash/prior_hash+序号,逐事件哈希语义原样;⑤租约与单写者语义重述(advisory lock 或 claim 表,在此裁);⑥PG 不可达=引擎 fail-closed,不回退文件轨;⑦备份形态(pg_dump 定制格式+摘要,PULL 方向不变)与 engine-host:verify 的 DB 等价物;⑧迁移台账额度语义(现 16 条按尝试消耗,沿用与否在此裁);⑨等价性判据定义(每条写明什么会让它变红,注入实证)。另一交付(MIN-064 D5):INC-061..071 十一单核销清单——superseded 指名承接处/retained 独立执行,按 closeout-verify 机器核。决策点:schema 细部与 PG 版本本 EPIC 裁毕,不留执行期。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:ca7ba689328314c776bc29b8",
+        "scope": "【存储抽象层与双后端等价(仪器化)】按 MIN-064 D4:文件后端不再是生产轨道,双后端只作迁移与验证仪器存在。仍需抽象层:文件后端原样收敛其后(迁移期读源+等价性基准),Postgres 后端为唯一生产后端。等价性门:同一命令序列两后端逐事件字节相同、reason code 相同、head 哈希相同;门带 mutation 证人(改任一字节即红),防恒真门。测试基建:本地与 CI 以临时 PG 实例起测,与文件后端同批跑;引擎测试经 pnpm test 调起(红线)。现状勘察(2026-08-06 只读):链树唯一写者 workspace.ts(boundDirectory/boundFile/ensureDirectory/atomicWrite 四私有助手),knowledge/artifact 旁路各写;抽象口粒度按 EPIC-052 ADR 裁定执行。生效证据两侧:正腿=scratch 双后端同批动词 diff 为空;红腿=注入单字节差异门判红。前置(工程依赖):EPIC-052 ADR 定稿。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:4a1304a35351ac46ff4c3a04",
+        "scope": "【迁移动词族(双向)与备份重基】按 MIN-064 D4:迁移动词族双向化——file→pg 与 pg→file 同一判据(逐事件字节等价+链版本连续),反向迁移即回滚路径,不保留活文件轨(ADR-0003 精神照旧:搬字节≠搬绑定,旁路拷贝造不出活权威)。交付:migration-plan/execute/verify/rollback 动词族;五链一个计划迁移窗内全切(窗内逐链 verify,小链先行);切换前末次文件形态配对备份永久留存为最后文件真值;paired backup 重基为 VM 侧 pg_dump+摘要、PULL 到本机不变;snapshot/export 与 engine-host:verify 的 DB 等价物落地。验收两侧:正腿=scratch 链 file→pg→file 往返逐事件等价且版本连续、新后端真备份一次并异地验证通过;红腿=旁路拷贝的库/树被读动词具名拒绝。前置(工程依赖):EPIC-053 等价门绿。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:77801d322706b5241a45c79c",
+        "scope": "【AOS 门面服务(读写,PG 底座)】把「AOS 唯一数据平面」从政策做成机械:VM 与链同机常驻,读=引擎读动词全集,写=仪式语义服务端化(批+至少一条回读、expected-version 服务端现读自供、动词白名单从引擎 commands 目录派生、一次性供权族拒绝、审计日志)。底座为 PG 单实例:门面经引擎访问 chain schema;未来协作功能写 domain/协作 schema,与链 schema 角色隔离(MIN-064 D3)——门面自身不写链,只有引擎写。现成资产先用(2026-08-06 勘察):引擎自带 MCP 面(COMMAND_CATALOG 派生+operator authority 门)、座舱 ChainClient 通道、CockpitServiceOptions.workspaces 多分区接缝——扩面优先于新造。不变式保持且有门:读进程不持 pins;写面不出回环(绑 127.0.0.1 经 SSH 隧道,公开暴露另需裁定)。验收两侧:正腿=一次治理写只靠门面完成且回执含回读;红腿=写面拒绝面语料全数具名拒绝(承接 INC-047/069 保护目标,随核销清单指名)、门面宕机时 break-glass 白名单路径仍可用(带理由记录)。生效证据:从本机经门面完成一次真实链写并回读(非 scratch)。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:65cf5f278a2ca1f50e7ba6d4",
+        "scope": "【客户端与名册收敛(切换同窗)】按 MIN-064 D5:不挂 INIT-019 前置,与五链切换同窗执行。本机两 MCP 面(tcrn-workflow-aos-read、aos-mcp-write)改为门面服务的客户端;SSH 直驱白名单随 SSH 读转发面退役而收缩:mcp-unreachable-fallback 类改指门面不可达、service-layer-byte-compare 类保留(engine-host:verify 族按设计绕服务层);topology.mjs 保持唯一拓扑源(附带清欠:cockpit-service 内一处手写引擎路径回归 manifest 导入,2026-08-06 勘察实见)。判据扩面:doc-topology:proof 核访问形态、parity:proof 覆盖 Codex 侧增量、local-purity:proof 语义在 PG 后端下重述。验收两侧:正腿=全平台入口文档复核命令列在白名单外零 SSH 直驱、Codex 侧名册 diff 生成(应用编辑用户级配置须 Owner 批准);红腿=对两 proof 门注入伪漂移必判红。前置(工程依赖):EPIC-055 门面可用。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:2b6a166e82ea80e6337cb669",
+        "scope": "【五链切换窗与收口】按 MIN-064 D4 一个计划迁移窗内完成:逐链 file→pg 迁移+verify(小链先行,窗内连续执行不设窗间停顿)、客户端收敛(EPIC-056)同窗、文件树当场转只读归档、SSH 读转发面退役。窗前四硬件(工程依赖非治理门):EPIC-053 等价门绿、EPIC-054 往返迁移实证、EPIC-055 门面真实写通过、切换前末次文件形态配对备份已取并异地验证。收口按 INC-052 tip 复量协议(最后一次全量门晚于最后一次提交、结果表由 closeout runner 产出)+INC-054 逐项核销(含 INC-061..071 处置清单的核销)。发布(引擎版本发布+helper candidate 重钉)为唯一必停点;未推送提交按 MIN-062 Q5 分批推送产生证据。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:4d0ecd9c1e6ea5292ef08330" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-INIT-020", "kind": "Initiative", "status": "planned" },
+      "expectSameAs": [{ "field": "scope", "step": 4, "flag": "scope" }]
+    },
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:4a1304a35351ac46ff4c3a04" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-EPIC-054", "kind": "Epic", "status": "planned" },
+      "expectSameAs": [{ "field": "scope", "step": 7, "flag": "scope" }]
+    },
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:2b6a166e82ea80e6337cb669" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-EPIC-057", "kind": "Epic", "status": "planned" },
+      "expectSameAs": [{ "field": "scope", "step": 10, "flag": "scope" }]
+    }
+  ]
+}

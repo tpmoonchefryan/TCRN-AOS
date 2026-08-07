@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-020 QA2 closeout B",
+  "intent": "Record the completed implementation and evidence for INC-080 through INC-085 on the authoritative cross-project PG chain, with a full work-show read-back for every item.",
+  "steps": [
+    { "verb": "work-annotate", "flags": { "id": "work:0526586955397955ccad21c1", "scope": "QA2 complete: receipt-hygiene:proof scans 162 init-020 receipts with no problems; receipts carry the local ceremony schema, payload hash and bytes, authority chain, read-backs, and no orphan scope. The red corpus rejects a payload-shaped receipt and an unpaired payload.", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:0526586955397955ccad21c1", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:0526586955397955ccad21c1", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:0526586955397955ccad21c1", "status": "done", "actor": "agent:fable" } },
+
+    { "verb": "work-annotate", "flags": { "id": "work:0883d3a3d0a8deb25b3b1a15", "scope": "QA2 complete: the cross fork is disposed semantically on PG after the five storage-home seals, tip proof, archive-window evidence for events 2106..2122, and the explicit migration-verify FUTURE red leg. The retained file tail is evidence only; PG is the sole current authority and no divergent target was overwritten.", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:0883d3a3d0a8deb25b3b1a15", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:0883d3a3d0a8deb25b3b1a15", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:0883d3a3d0a8deb25b3b1a15", "status": "done", "actor": "agent:fable" } },
+
+    { "verb": "work-annotate", "flags": { "id": "work:308076d6ccb8c88260f7c74c", "scope": "QA2 complete: ceremony uses the facade write service; projection-freshness, fallback and evidence paths use the facade read surface or named break-glass boundaries; tunnel processes are reclaimed; read-face:gate is green. The old SSH/file-track fallback is a named refusal, not an implicit route.", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:308076d6ccb8c88260f7c74c", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:308076d6ccb8c88260f7c74c", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:308076d6ccb8c88260f7c74c", "status": "done", "actor": "agent:fable" } },
+
+    { "verb": "work-annotate", "flags": { "id": "work:5f61edc8a573bf92f38e64d7", "scope": "QA2 complete: VM ownership for the repaired event and view artifacts is verified; the five archive storage-home sentinels are sealed; the 2106..2122 archive window is exported through the facade; migration-verify now reaches the target and returns the designed WORKSPACE_MIGRATION_FUTURE refusal rather than EACCES. The file-backend write red leg remains named.", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:5f61edc8a573bf92f38e64d7", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:5f61edc8a573bf92f38e64d7", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:5f61edc8a573bf92f38e64d7", "status": "done", "actor": "agent:fable" } },
+
+    { "verb": "work-annotate", "flags": { "id": "work:86906fb23b895574d4cd58ac", "scope": "QA2 complete: both facades require complete PG schema coverage, report per-partition PG backends, enforce loopback binding, whitelist actor identity, apply idempotency, and materialize refusal receipts; deployed read and write health are green with all five partitions on PG. Missing schema, bad bind, actor, and replay red tests are green.", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:86906fb23b895574d4cd58ac", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:86906fb23b895574d4cd58ac", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:86906fb23b895574d4cd58ac", "status": "done", "actor": "agent:fable" } },
+
+    { "verb": "work-annotate", "flags": { "id": "work:448e8d740f8431720ef225ed", "scope": "QA2 complete: workflow v0.11.7 pg:test passes 18/18, including StorageError preservation, view equivalence and prefix-resume coverage; full workflow tests, typecheck, format, source and wiring gates are green; AOS and Joi/Design-System/TMS migrations verify green, while cross is explicitly recorded as the designed FUTURE red leg. Knowledge marker reads from PG and a real cross knowledge-rebase is read back fresh with zero chain events appended.", "decided-by": "minutes:6b3a226012700f4322fd28ee", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:448e8d740f8431720ef225ed", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:448e8d740f8431720ef225ed", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:448e8d740f8431720ef225ed", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    { "verb": "work-show", "flags": { "id": "work:0526586955397955ccad21c1" }, "expect": { "externalKey": "TCRN-CROSS-INC-080", "status": "done" }, "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }], "recordFields": ["externalKey", "status", "scope", "revision"] },
+    { "verb": "work-show", "flags": { "id": "work:0883d3a3d0a8deb25b3b1a15" }, "expect": { "externalKey": "TCRN-CROSS-INC-081", "status": "done" }, "expectSameAs": [{ "field": "scope", "step": 4, "flag": "scope" }], "recordFields": ["externalKey", "status", "scope", "revision"] },
+    { "verb": "work-show", "flags": { "id": "work:308076d6ccb8c88260f7c74c" }, "expect": { "externalKey": "TCRN-CROSS-INC-082", "status": "done" }, "expectSameAs": [{ "field": "scope", "step": 8, "flag": "scope" }], "recordFields": ["externalKey", "status", "scope", "revision"] },
+    { "verb": "work-show", "flags": { "id": "work:5f61edc8a573bf92f38e64d7" }, "expect": { "externalKey": "TCRN-CROSS-INC-083", "status": "done" }, "expectSameAs": [{ "field": "scope", "step": 12, "flag": "scope" }], "recordFields": ["externalKey", "status", "scope", "revision"] },
+    { "verb": "work-show", "flags": { "id": "work:86906fb23b895574d4cd58ac" }, "expect": { "externalKey": "TCRN-CROSS-INC-084", "status": "done" }, "expectSameAs": [{ "field": "scope", "step": 16, "flag": "scope" }], "recordFields": ["externalKey", "status", "scope", "revision"] },
+    { "verb": "work-show", "flags": { "id": "work:448e8d740f8431720ef225ed" }, "expect": { "externalKey": "TCRN-CROSS-INC-085", "status": "done" }, "expectSameAs": [{ "field": "scope", "step": 20, "flag": "scope" }], "recordFields": ["externalKey", "status", "scope", "revision"] }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "ok": false,
+  "reasonCode": "STEP_REFUSED_BY_HOST_ENGINE",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "facade": true,
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2165,
+    "headEventHash": "036540ddc7e431326ea87015b8ffb0a69a843ff06e303be6eafcbceae8d78da5",
+    "work": 356
+  },
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2165,
+    "headEventHash": "036540ddc7e431326ea87015b8ffb0a69a843ff06e303be6eafcbceae8d78da5",
+    "work": 356
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "migration-rollback",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_MIGRATION_FUTURE",
+      "argv": [
+        "migration-rollback",
+        "--schema",
+        "chain_cross",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "schema"
+      ],
+      "headAtPlanning": 2165,
+      "executed": true,
+      "accepted": false,
+      "error": "target already holds a workspace that does not match the source; bypass copy refused",
+      "recordId": null,
+      "version": null
+    }
+  ],
+  "readback": [],
+  "eventsAppended": 0,
+  "finishedAt": "2026-08-07T04:29:06Z"
+}

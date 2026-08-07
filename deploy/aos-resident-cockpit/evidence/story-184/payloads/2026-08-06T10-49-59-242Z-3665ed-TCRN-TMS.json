@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-184",
+  "intent": "STORY-184 窗前硬件③:经门面对 TCRN-TMS 真实链一次最小非破坏性治理写(work-annotate scope 注记)+全值回读",
+  "actor": "agent:fable",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:fc0e6a3439ce4b29de8204c7",
+        "scope": "【中·上线前前端授权架构；关联 INIT-002】docs/facts/frontend-routes.md 的源码级事实：66 个 page 路由中只有 1 条带真正 RBAC 门；两条 /studio 资产 IDE 路由页面无前端门；/tenant/{t}/talent/{id}/homepage/editor 重定向到 /studio 后，钉死 ^/tenant/ 的 public_presence.homepage 能力门不再生效。当前 TMS 前端是本地且无生产路径，本单不声称现网事故。处置：INIT-002 设计 deny-by-default 路由壳，逐路由绑定 RBAC/能力语义，并以直接 URL、隐藏导航、未授权身份浏览器负证在任何生产采纳前收口。裁定见 TCRN-TMS-MIN-SECURITY-CARRYOVER-20260726。\n\n【TCRN-CROSS-STORY-184 门面真实写生效证据 2026-08-06】经门面写面(本机经 SSH 隧道调 VM tcrn-aos-facade-write POST /api/ceremony,驱动 VM 引擎 CLI)对 TCRN-TMS 链做最小非破坏性治理写:work-annotate 本单 scope 注记;回执 CEREMONY_COMPLETED_AND_READ_BACK(全值回读、链版本 228→229);红腿=同批注入白名单外动词整批被具名拒绝、链版本不动。actor=agent:fable。"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:fc0e6a3439ce4b29de8204c7"
+      },
+      "recordFields": [
+        "externalKey",
+        "kind",
+        "status",
+        "scope"
+      ],
+      "expect": {
+        "externalKey": "TCRN-TMS-INC-002",
+        "kind": "Incident",
+        "status": "planned"
+      },
+      "expectSameAs": [
+        {
+          "field": "scope",
+          "step": 0,
+          "flag": "scope"
+        }
+      ]
+    }
+  ]
+}
