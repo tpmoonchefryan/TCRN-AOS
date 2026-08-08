@@ -3,11 +3,11 @@
 TCRN AOS. This file is a signpost for agents working in this repository; the real
 reference is `README.md` and the docs under `docs/`.
 
-## Read this first: this repository's governance chain is not on this machine
+## Read this first: this repository's governance chain is local again
 
-Since 2026-07-29 (`TCRN-AOS-STORY-131`, ruling `TCRN-AOS-MIN-012` direction D) **this
-laptop is a CLIENT of the AOS governance chain, not its host.** The verdict recorded by
-the gate that measures it is `LOCAL_HOST_IS_A_PURE_CLIENT`.
+Since 2026-08-08 (`INIT-020 S199`) **this laptop is the live file host of the AOS
+governance chain.** The former VM address is a vacated archive; the local purity gate
+now measures all five local live trees plus the declared fallback shadows.
 
 The row below is a checked declaration, not prose — run the recheck command (via the MCP read face),
 do not trust the sentence:
@@ -16,13 +16,16 @@ do not trust the sentence:
 
 | 分区 | home | 真值地址 | 复核命令 |
 | --- | --- | --- | --- |
-| `TCRN-AOS` | `vm` | `/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace` | `读走 MCP 只读面: tcrn_remote_read_status(partition=TCRN-AOS) · 真值地址 /srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace` |
+| `TCRN-AOS` | `local` | `.tcrn-workspace/TCRN-AOS/workspace` | `本机引擎只读: status --workspace .tcrn-workspace/TCRN-AOS/workspace · 真值地址 .tcrn-workspace/TCRN-AOS/workspace` |
 
 <!-- TOPOLOGY-CLAIMS:END -->
 
-**STORY-189 切换窗(2026-08-06):五链数据平面已迁至 Postgres,经门面服务。** 引擎 v0.11.2/v0.11.3 后,五条受治链 file→pg 迁移完成并 verify 绿;`facade-read-service`(127.0.0.1:4320,经 SSH 隧道)与 `facade-write-service`(127.0.0.1:4321)服务 PG 链;本机两 MCP 面(`tcrn-workflow-aos-read`/`aos-mcp-write`)底层通道已改指门面(S185)。文件树已转只读归档(仅 `.tcrn-workflow` 因 lease/attestation 保留 tcrn_engine 组写)。复核命令列不变(仍走 MCP 只读面,现经门面答 PG)。
+**INIT-020 S199 (2026-08-08):五链数据平面已回迁本机 file 后端。** 回迁前完成
+逐事件、头哈希与知识库 marker 核对；VM 旧地址均已由引擎标记为
+`WORKSPACE_RELOCATION_VACATED`。普通治理读写应使用本机已安装引擎；Owner 收口前
+仍不得作发布或推送。
 
-`home` is `vm`, meaning host `tcrn-platform-dev`. The chain's sidecars sit beside it:
+`home` is `local`, meaning this laptop. The chain's sidecars sit beside the local tree:
 `attestations/` is the workspace root's **sibling** inside the partition directory (the
 engine refuses an attest-dir inside the workspace itself), and `release-trust/` is a
 sibling of the **partition** directory, one level further out — verified 2026-07-30 by
@@ -33,23 +36,12 @@ its own `commands` catalogue.
 
 Four consequences, all of which have already bitten:
 
-1. **The copy under `.tcrn-workspace/TCRN-AOS/` on this machine is a read-only archive.**
-   All three read verbs and every write verb refuse there with
-   `WORKSPACE_RELOCATION_VACATED`. **That is the design, not a breakage.** Do not try to
-   revive it, do not `init` a replacement, and do not treat a byte-identical copy
-   elsewhere as a second live authority — the engine binds five absolute roots and refuses
-   a copy at any other path. Read `.tcrn-workspace/TCRN-AOS/ARCHIVED.md` before touching
-   anything in there; it also documents why the archive is retained (forensics: only the
-   source side can prove what the source said) and what a rollback would actually look
-   like (a new hop, not `relocation-abort`).
-2. **A governance write from here is a remote ceremony.** Use
-   `deploy/aos-local-client/ceremony.mjs` with a payload of steps plus **at least one
-   read-back** — a write nobody read back is not proven. The ceremony supplies
-   `--workspace` / `--attest-dir` / `--actor` / `--at` / `--expected-version` from one
-   place (`deploy/aos-local-client/topology.mjs`); a payload may not name the first two or
-   the `--expected-version`, because a sentinel you chose yourself froze nothing. Verbs
-   absent from the host engine's own `commands` catalogue, and verbs needing a one-shot
-   authority file, are refused by derivation rather than by a hard-coded list.
+1. **The five local trees are the live authorities.** The VM copies are retained as
+   vacated archives and all four read faces there return `WORKSPACE_RELOCATION_VACATED`.
+2. **A governance write from here uses the local engine.** Read the live head immediately
+   before a mutation, use the engine's CAS, and retain the readback receipt. The VM
+   ceremony is reserved for archive/host operations and is not the ordinary local write
+   path.
 3. **The cockpit is a resident systemd unit on the VM**, `tcrn-aos-cockpit`, bound to
    `127.0.0.1:4318` and **reachable only through an SSH tunnel** (`CONF-007` D7 — the bind
    is hard-coded in `apps/cockpit-service/src/service.ts` and no environment variable moves
