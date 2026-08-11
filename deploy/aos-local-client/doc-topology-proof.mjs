@@ -61,7 +61,7 @@ export function readSshBreakglassAllowlist(path = SSH_BREAKGLASS_ALLOWLIST_PATH)
 }
 
 /** The local siting convention, as the claims write it: relative to the platform root. */
-export const localAddressOf = (partitionId) => `.tcrn-workspace/${partitionId}/workspace`;
+export const localAddressOf = (partitionId) => `../.tcrn-workspace/${partitionId}/workspace`;
 
 /** Registered documents, read as bytes. A missing one is a row, not an exception. */
 export function readRegisteredDocuments(registry = DOC_REGISTRY) {

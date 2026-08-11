@@ -174,7 +174,16 @@ export const absoluteDocPath = (relative) => join(PLATFORM_ROOT, relative);
 export function forbiddenOutsideClaimBlocks(roster = PARTITION_ROSTER) {
   const literals = new Set();
   for (const entry of roster) {
+    // Both forms, and the declared one comes from the roster rather than a second
+    // hand-typed copy. INIT-024 moved the container beside the platform root, so the
+    // declared address gained a `../` prefix; a literal set that only knew the older
+    // bare form still fired (it is a substring) but reported the wrong literal, which
+    // is how a red proof can go red for the wrong reason and still look satisfied.
+    // The bare form stays forbidden so a document that drops the prefix is still red.
     literals.add(`.tcrn-workspace/${entry.partitionId}/workspace`);
+    if (typeof entry.liveAddress === "string" && entry.liveAddress.length > 0) {
+      literals.add(entry.liveAddress);
+    }
     if (entry.home === "vm" && typeof entry.liveAddress === "string" && entry.liveAddress.length > 0) {
       literals.add(entry.liveAddress);
       const container = entry.liveAddress.split("/").slice(0, -2).join("/");
