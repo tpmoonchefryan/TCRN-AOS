@@ -32,13 +32,15 @@ import { execFile, execFileSync } from "node:child_process";
 import { promisify } from "node:util";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
-import { PARTITION_ROSTER, PLATFORM_ROOT, REPO_ROOT, VM_HOST, VM_WORKSPACE, WORKSPACE_CONTAINER }
+import { PARTITION_ROSTER, PLATFORM_ROOT, REPO_ROOT, VM_HOST, WORKSPACE_CONTAINER }
   from "./topology.mjs";
 import { probeReadFace } from "./scan-local.mjs";
 import {
   CEILING, DOC_REGISTRY, absoluteDocPath, forbiddenOutsideClaimBlocks
 } from "./doc-topology-registry.mjs";
-import { judgeDocTopology, parseClaimBlocks } from "./doc-topology-predicates.mjs";
+import {
+  CLAIM_BLOCK_BEGIN, CLAIM_BLOCK_END, judgeDocTopology, parseClaimBlocks
+} from "./doc-topology-predicates.mjs";
 import { scrubHostPaths } from "../../scripts/lib/evidence-hygiene.mjs";
 
 export const EVIDENCE_PATH = join(REPO_ROOT, "evidence/aos-topology-doc-sync.json");
@@ -274,7 +276,7 @@ export function foldOnDiskRed() {
     return {
       ran: false,
       why: "转录文件不在:deploy/aos-local-client/on-disk-red-2026-07-30.json",
-      howToRun: "改 CLAUDE.md 声明块里任一行的 home 或 address → 跑本脚本 → 期望红 → 改回 → 期望绿"
+      howToRun: "改 AGENTS.md 声明块里任一行的 home 或 address → 跑本脚本 → 期望红 → 改回 → 期望绿"
     };
   }
   const transcript = JSON.parse(readFileSync(ON_DISK_RED_PATH, "utf8"));
@@ -290,9 +292,12 @@ export function foldOnDiskRed() {
     // never restored proves the gate fires and leaves the tree broken, and a lone red
     // proves nothing about whether green was ever reachable.
     arcIsGreenRedGreen: states === "green→red→green",
+    // This transcript predates the S217 canonical-document flip. Keep its historical
+    // target intact: the artifact itself records that the red named CLAUDE.md's row.
     redNamedTheRow: arc.some((step) => step.state === "red"
       && (step.findings ?? []).some((finding) =>
-        finding.code === "CLAIMED_HOME_CONTRADICTS_ROSTER" && finding.path === "CLAUDE.md")),
+        finding.code === "CLAIMED_HOME_CONTRADICTS_ROSTER"
+        && finding.path === transcript.target?.document)),
     restoredByteIdentical: transcript.restoredByteIdentical === true,
     arc
   };
@@ -315,50 +320,61 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
   };
   const green = judgeDocTopology({ ...base, documents });
 
-  // The mutations target the platform entry document, which is required to carry all four
-  // claims — so all five reds are aimed at the file a reader is most likely to trust.
-  const platform = documents.find((document) => document.path === "CLAUDE.md") ?? null;
+  // The mutations target the platform AGENTS.md, which is required to carry every
+  // primary claim — so the red legs exercise the canonical file a reader is meant to trust.
+  const platform = documents.find((document) => document.path === "AGENTS.md") ?? null;
   const awayEntry = PARTITION_ROSTER.find((entry) => entry.home === "vm") ?? null;
-  // INC-045: after 2026-08-03 every partition is home:vm; all reds are away-partition
-  // based and MUST run (awayEntry is always present). The old guard on a local partition
-  // silently skipped every in-memory red — the gate had only a green half.
+  const targetEntry = PARTITION_ROSTER[0] ?? null;
+  // INC-045: the red suite must run under both topology directions. Previously it was
+  // guarded by an away-only row, so returning every partition to local silently removed
+  // the in-memory reds. Pick the first registered primary as the mutation target and use
+  // the actual home direction for the observation contradiction.
   const platformParsed = platform === null
     ? { spans: [] }
-    : parseClaimBlocks(platform.text, { path: "CLAUDE.md" });
+    : parseClaimBlocks(platform.text, { path: "AGENTS.md" });
 
   const reds = [];
-  if (platform !== null && awayEntry !== null) {
+  if (platform !== null && targetEntry !== null) {
+    const expectedAddress = targetEntry.home === "vm"
+      ? targetEntry.liveAddress : localAddressOf(targetEntry.partitionId);
+    const flippedHome = targetEntry.home === "vm" ? "local" : "vm";
+    const alteredAddress = expectedAddress.includes("/governance/")
+      ? expectedAddress.replace("/governance/", "/governance-old/")
+      : expectedAddress.replace(/\/workspace$/u, "/workspace-old");
+    const canonicalClaimBlock = `${CLAIM_BLOCK_BEGIN}\n\n| 分区 | home | 真值地址 | 复核命令 |\n| --- | --- | --- | --- |\n`
+      + `| \`${targetEntry.partitionId}\` | \`${targetEntry.home}\` | \`${expectedAddress}\` | status --workspace ${expectedAddress} |\n\n`
+      + `${CLAIM_BLOCK_END}`;
     reds.push(redProof({
       id: "HOME_FLIPPED_IN_A_REAL_DOCUMENT",
-      why: `CLAUDE.md 把 ${awayEntry.partitionId} 的 home 从 vm 改写成 local——`
-        + "即「这个分区的真值还在本机」这句假话。全 VM 名册下以 away 分区的声明为目标。",
+      why: `AGENTS.md 把 ${targetEntry.partitionId} 的 home 改写成 ${flippedHome}——`
+        + "即把当前拓扑的真值位置写成相反方向。",
       documents, base,
-      mutate: editDocument("CLAUDE.md",
-        `| \`${awayEntry.partitionId}\` | \`vm\` |`,
-        `| \`${awayEntry.partitionId}\` | \`local\` |`),
+      mutate: editDocument("AGENTS.md",
+        `| \`${targetEntry.partitionId}\` | \`${targetEntry.home}\` |`,
+        `| \`${targetEntry.partitionId}\` | \`${flippedHome}\` |`),
       expectCode: "CLAIMED_HOME_CONTRADICTS_ROSTER",
       names: (hits) => hits.some((finding) =>
-        finding.path === "CLAUDE.md" && finding.partitionId === awayEntry.partitionId)
+        finding.path === "AGENTS.md" && finding.partitionId === targetEntry.partitionId)
     }));
 
     reds.push(redProof({
       id: "ADDRESS_ALTERED_BY_ONE_SEGMENT",
-      why: `CLAUDE.md 把 ${awayEntry.partitionId} 的真值地址改掉一段路径——`
+      why: `AGENTS.md 把 ${targetEntry.partitionId} 的真值地址改掉一段路径——`
         + "地址错一段与错整条同样致命,因为读者会照着它跑命令。",
       documents, base,
-      mutate: editDocument("CLAUDE.md",
-        awayEntry.liveAddress,
-        awayEntry.liveAddress.replace("/governance/", "/governance-old/")),
+      mutate: editDocument("AGENTS.md",
+        expectedAddress,
+        alteredAddress),
       expectCode: "CLAIMED_ADDRESS_CONTRADICTS_ROSTER",
       names: (hits) => hits.some((finding) =>
-        finding.path === "CLAUDE.md" && finding.partitionId === awayEntry.partitionId)
+        finding.path === "AGENTS.md" && finding.partitionId === targetEntry.partitionId)
     }));
 
     reds.push(redProof({
       id: "REQUIRED_BLOCK_DELETED",
       why: "整块声明被删掉。若删块能让上面两条红消失,这道门就只是一条建议。",
       documents, base,
-      mutate: (all) => all.map((document) => document.path !== "CLAUDE.md"
+      mutate: (all) => all.map((document) => document.path !== "AGENTS.md"
         ? document
         : {
           ...document,
@@ -366,6 +382,17 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
             + document.text.slice(platformParsed.spans[0]?.end ?? 0)
         }),
       expectCode: "REQUIRED_CLAIM_BLOCK_ABSENT",
+      names: (hits) => hits.some((finding) => finding.path === "AGENTS.md")
+    }));
+
+    reds.push(redProof({
+      id: "CLAUDE_CLAIM_BLOCK_RESIDUAL",
+      why: "把声明块塞回 CLAUDE.md 会重新制造第二正本,必须红而不能靠 @AGENTS.md import 的表面相似蒙混过去。",
+      documents, base,
+      mutate: (all) => all.map((document) => document.path !== "CLAUDE.md"
+        ? document
+        : { ...document, text: `${document.text}\n${canonicalClaimBlock}\n` }),
+      expectCode: "CLAIM_BLOCK_IN_NON_CANONICAL_DOCUMENT",
       names: (hits) => hits.some((finding) => finding.path === "CLAUDE.md")
     }));
 
@@ -374,12 +401,12 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
       why: "声明块保持正确,却在正文里另写一句带具体地址的话——这正是本会话栽过的那个形状:"
         + "一处更新了,另一处没有,而两处都在同一份文档里。",
       documents, base,
-      mutate: (all) => all.map((document) => document.path !== "CLAUDE.md"
+      mutate: (all) => all.map((document) => document.path !== "AGENTS.md"
         ? document
-        : { ...document, text: `${document.text}\n事件链在 ${awayEntry.liveAddress} 下。\n` }),
+        : { ...document, text: `${document.text}\n事件链在 ${expectedAddress} 下。\n` }),
       expectCode: "ADDRESS_STATED_OUTSIDE_A_CLAIM_BLOCK",
       names: (hits) => hits.some((finding) =>
-        finding.path === "CLAUDE.md" && finding.literal === awayEntry.liveAddress)
+        finding.path === "AGENTS.md" && finding.literal === expectedAddress)
     }));
 
     reds.push(redProof({
@@ -388,41 +415,52 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
         + "一条没进 break-glass 白名单的 ssh 直驱命令必须红并点名文件与行号。"
         + "(用写动词 work-transition,避免命中 mcp-unreachable-fallback 的 status 条目。)",
       documents, base,
-      mutate: editDocument("CLAUDE.md",
+      mutate: editDocument("AGENTS.md",
         "## 三、治理入口",
         `## 三、治理入口\n\n复核走 \`ssh tcrn-platform-dev "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs `
-        + `work-transition --id work:x --status done --workspace ${awayEntry.liveAddress}"\`。\n`),
+        + `work-transition --id work:x --status done --workspace ${expectedAddress}"\`。\n`),
       expectCode: "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED",
-      names: (hits) => hits.some((finding) => finding.path === "CLAUDE.md")
+      names: (hits) => hits.some((finding) => finding.path === "AGENTS.md")
     }));
   }
 
   // The fifth red is on the OBSERVATION, and it is the one no document edit can produce:
-  // documents and roster in perfect agreement, both wrong about the machine. Under an
-  // all-VM roster this is: a home:vm partition whose LOCAL address answers as a live tree
-  // (the resurrection STORY-133 exists to catch). That is a genuine contradiction the
-  // judge must red on (INC-045: previously gated on localEntry and skipped).
-  const contradicted = awayEntry === null ? null : {
+  // documents and roster in perfect agreement, both wrong about the machine. For a local
+  // row, make the local engine stop answering; for an away row, make the local address
+  // answer. Both are genuine contradictions the judge must red on.
+  const contradicted = targetEntry === null ? null : {
     ...observations,
-    [awayEntry.partitionId]: {
-      ...observations[awayEntry.partitionId],
-      localAccepted: true,
-      localReasonCode: "WORKSPACE_COMMAND_COMPLETED"
-    }
+    [targetEntry.partitionId]: targetEntry.home === "local"
+      ? {
+        ...observations[targetEntry.partitionId],
+        localAccepted: false,
+        localReasonCode: "WORKSPACE_RELOCATION_VACATED",
+        localWorkspaceId: null
+      }
+      : {
+        ...observations[targetEntry.partitionId],
+        localAccepted: true,
+        localReasonCode: "WORKSPACE_COMMAND_COMPLETED"
+      }
   };
   const measurementRed = contradicted === null ? null : (() => {
     const verdict = judgeDocTopology({ ...base, documents, observations: contradicted });
-    const code = "ROSTER_SAYS_AWAY_BUT_A_LIVE_TREE_ANSWERS_LOCALLY";
+    const code = targetEntry.home === "local"
+      ? "ROSTER_SAYS_LOCAL_BUT_ENGINE_DOES_NOT_ANSWER_HERE"
+      : "ROSTER_SAYS_AWAY_BUT_A_LIVE_TREE_ANSWERS_LOCALLY";
     const hits = verdict.findings.filter((finding) => finding.code === code);
     return {
       id: "MEASUREMENT_CONTRADICTS_A_CONSISTENT_ROSTER",
-      why: "名册与全部文档一致,但 home:vm 分区的本机地址答活——要么树复活了,要么观测错了。"
-        + "此时错的是名册/文档与机器三者之一,单靠两份陈述自洽不足为证。",
+      why: targetEntry.home === "local"
+        ? "名册与全部文档一致,但本应在家的分区本机地址拒答——要么树消失了,要么观测错了。"
+          + "此时错的是名册/文档与机器三者之一,单靠两份陈述自洽不足为证。"
+        : "名册与全部文档一致,但 home:vm 分区的本机地址答活——要么树复活了,要么观测错了。"
+          + "此时错的是名册/文档与机器三者之一,单靠两份陈述自洽不足为证。",
       wentRed: verdict.ok === false,
       reasonCode: verdict.reasonCode,
       expectedCode: code,
       raisedExpectedCode: hits.length > 0,
-      namesWhatItShould: hits.some((finding) => finding.partitionId === awayEntry.partitionId),
+      namesWhatItShould: hits.some((finding) => finding.partitionId === targetEntry.partitionId),
       named: hits.map((finding) => ({ partitionId: finding.partitionId, observed: finding.observed }))
     };
   })();
@@ -511,7 +549,7 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
   return {
     schemaVersion: "aos.topology-doc-sync-proof.v1",
     story: "TCRN-AOS-STORY-136",
-    ruling: "TCRN-AOS-MIN-012 direction D — 本机是纯客户端;文档必须能被机器核对",
+    ruling: "TCRN-AOS-MIN-012 direction D — 本机持有本地 file 真值;文档必须能被机器核对",
     ok: unmet.length === 0,
     reasonCode: unmet.length === 0 ? "DOC_TOPOLOGY_IN_SYNC" : "DOC_TOPOLOGY_PROOF_INCOMPLETE",
     unmetExpectations: unmet,
@@ -523,7 +561,7 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
       whereTheJudgementLives: "deploy/aos-local-client/doc-topology-predicates.mjs (in the pnpm test roster)",
       whereTheRegistryLives: "deploy/aos-local-client/doc-topology-registry.mjs",
       awayHost: VM_HOST,
-      awayWorkspaceFromManifest: VM_WORKSPACE
+      awayWorkspaceFromManifest: awayEntry?.liveAddress ?? null
     },
     observedAt: new Date().toISOString().replace(/\.\d+Z$/u, "Z"),
     probeVm,

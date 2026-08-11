@@ -57,9 +57,10 @@ const CORRECT_BLOCK = block(
   claimRow("cross-project", "local", ".tcrn-workspace/cross-project/workspace"));
 
 const REGISTRY = Object.freeze([
-  { path: "CLAUDE.md", mustCarryClaims: true,
+  { path: "AGENTS.md", mustCarryClaims: true,
     expectedPartitions: ["TCRN-AOS", "cross-project"] },
-  { path: "AGENTS.md", mustCarryClaims: false }
+  { path: "CLAUDE.md", mustCarryClaims: false, expectedImport: "@AGENTS.md",
+    forbidClaimBlock: true }
 ]);
 
 const OBSERVATIONS = Object.freeze({
@@ -77,8 +78,8 @@ const OBSERVATIONS = Object.freeze({
 
 const judge = (overrides = {}) => judgeDocTopology({
   documents: [
-    { path: "CLAUDE.md", exists: true, text: `# entry\n\n${CORRECT_BLOCK}\n` },
-    { path: "AGENTS.md", exists: true, text: "# pointer\n\nsee CLAUDE.md\n" }
+    { path: "AGENTS.md", exists: true, text: `# entry\n\n${CORRECT_BLOCK}\n` },
+    { path: "CLAUDE.md", exists: true, text: "@AGENTS.md" }
   ],
   registry: REGISTRY,
   roster: ROSTER,
@@ -110,10 +111,10 @@ test("an unmeasured run is green under a DIFFERENT reason code", () => {
 test("a claimed home that contradicts the roster is red and names the partition", () => {
   const verdict = judge({
     documents: [
-      { path: "CLAUDE.md", exists: true, text: block(
+      { path: "AGENTS.md", exists: true, text: block(
         claimRow("TCRN-AOS", "vm", AWAY_ADDRESS),
         claimRow("cross-project", "vm", ".tcrn-workspace/cross-project/workspace")) },
-      { path: "AGENTS.md", exists: true, text: "pointer" }
+      { path: "CLAUDE.md", exists: true, text: "@AGENTS.md" }
     ]
   });
   assert.equal(verdict.ok, false);
@@ -127,10 +128,10 @@ test("a claimed home that contradicts the roster is red and names the partition"
 test("a claimed address off by one path segment is red", () => {
   const verdict = judge({
     documents: [
-      { path: "CLAUDE.md", exists: true, text: block(
+      { path: "AGENTS.md", exists: true, text: block(
         claimRow("TCRN-AOS", "vm", AWAY_ADDRESS.replace("/governance/", "/gov/")),
         claimRow("cross-project", "local", ".tcrn-workspace/cross-project/workspace")) },
-      { path: "AGENTS.md", exists: true, text: "pointer" }
+      { path: "CLAUDE.md", exists: true, text: "@AGENTS.md" }
     ]
   });
   assert.equal(verdict.ok, false);
@@ -140,8 +141,8 @@ test("a claimed address off by one path segment is red", () => {
 test("deleting a required block is red — deletion must not be the way out", () => {
   const verdict = judge({
     documents: [
-      { path: "CLAUDE.md", exists: true, text: "# entry with no claims\n" },
-      { path: "AGENTS.md", exists: true, text: "pointer" }
+      { path: "AGENTS.md", exists: true, text: "# entry with no claims\n" },
+      { path: "CLAUDE.md", exists: true, text: "@AGENTS.md" }
     ]
   });
   assert.equal(verdict.ok, false);
@@ -151,8 +152,8 @@ test("deleting a required block is red — deletion must not be the way out", ()
 test("dropping one row from a required block is red", () => {
   const verdict = judge({
     documents: [
-      { path: "CLAUDE.md", exists: true, text: block(claimRow("TCRN-AOS", "vm", AWAY_ADDRESS)) },
-      { path: "AGENTS.md", exists: true, text: "pointer" }
+      { path: "AGENTS.md", exists: true, text: block(claimRow("TCRN-AOS", "vm", AWAY_ADDRESS)) },
+      { path: "CLAUDE.md", exists: true, text: "@AGENTS.md" }
     ]
   });
   assert.equal(verdict.ok, false);
@@ -163,16 +164,16 @@ test("a correct block plus a stale sentence in the same document is red", () => 
   // The shape that cost this platform twice: one place updated, another not, both in one file.
   const verdict = judge({
     documents: [
-      { path: "CLAUDE.md", exists: true,
+      { path: "AGENTS.md", exists: true,
         text: `${CORRECT_BLOCK}\n\nThe chain lives under ${AWAY_ADDRESS} on this laptop.\n` },
-      { path: "AGENTS.md", exists: true, text: "pointer" }
+      { path: "CLAUDE.md", exists: true, text: "@AGENTS.md" }
     ]
   });
   assert.equal(verdict.ok, false);
   assert.ok(codes(verdict).includes("ADDRESS_STATED_OUTSIDE_A_CLAIM_BLOCK"));
   const finding = verdict.findings.find(
     (row) => row.code === "ADDRESS_STATED_OUTSIDE_A_CLAIM_BLOCK" && row.literal === AWAY_ADDRESS);
-  assert.equal(finding.path, "CLAUDE.md");
+  assert.equal(finding.path, "AGENTS.md");
   assert.ok(finding.line > 1);
 });
 
@@ -181,23 +182,36 @@ test("a document not required to carry claims may still not carry a WRONG one", 
   // in the registry would be the cheapest way to silence this gate.
   const verdict = judge({
     documents: [
-      { path: "CLAUDE.md", exists: true, text: CORRECT_BLOCK },
-      { path: "AGENTS.md", exists: true,
+      { path: "AGENTS.md", exists: true, text: CORRECT_BLOCK },
+      { path: "CLAUDE.md", exists: true,
         text: block(claimRow("cross-project", "vm", ".tcrn-workspace/cross-project/workspace")) }
     ]
   });
   assert.equal(verdict.ok, false);
-  const finding = verdict.findings.find((row) => row.code === "CLAIMED_HOME_CONTRADICTS_ROSTER");
-  assert.equal(finding.path, "AGENTS.md");
+  const finding = verdict.findings.find((row) => row.code === "CLAIM_BLOCK_IN_NON_CANONICAL_DOCUMENT");
+  assert.equal(finding.path, "CLAUDE.md");
+});
+
+test("a CLAUDE.md claim block is a second canonical source and is red", () => {
+  const verdict = judge({
+    documents: [
+      { path: "AGENTS.md", exists: true, text: CORRECT_BLOCK },
+      { path: "CLAUDE.md", exists: true, text: `@AGENTS.md\\n\\n${CORRECT_BLOCK}\\n` }
+    ]
+  });
+  assert.equal(verdict.ok, false);
+  assert.ok(codes(verdict).includes("CLAIM_BLOCK_IN_NON_CANONICAL_DOCUMENT"));
+  const finding = verdict.findings.find((row) => row.code === "CLAIM_BLOCK_IN_NON_CANONICAL_DOCUMENT");
+  assert.equal(finding.path, "CLAUDE.md");
 });
 
 test("a recheck command that does not name the claimed address is red", () => {
   const verdict = judge({
     documents: [
-      { path: "CLAUDE.md", exists: true, text: block(
+      { path: "AGENTS.md", exists: true, text: block(
         claimRow("TCRN-AOS", "vm", AWAY_ADDRESS, "status --workspace /somewhere/else"),
         claimRow("cross-project", "local", ".tcrn-workspace/cross-project/workspace")) },
-      { path: "AGENTS.md", exists: true, text: "pointer" }
+      { path: "CLAUDE.md", exists: true, text: "@AGENTS.md" }
     ]
   });
   assert.equal(verdict.ok, false);
@@ -207,8 +221,8 @@ test("a recheck command that does not name the claimed address is red", () => {
 test("a missing registered document is red, not skipped", () => {
   const verdict = judge({
     documents: [
-      { path: "CLAUDE.md", exists: true, text: CORRECT_BLOCK },
-      { path: "AGENTS.md", exists: false, text: "" }
+      { path: "AGENTS.md", exists: true, text: CORRECT_BLOCK },
+      { path: "CLAUDE.md", exists: false, text: "" }
     ]
   });
   assert.equal(verdict.ok, false);
@@ -218,11 +232,11 @@ test("a missing registered document is red, not skipped", () => {
 test("an unknown partition in a claim is red", () => {
   const verdict = judge({
     documents: [
-      { path: "CLAUDE.md", exists: true, text: block(
+      { path: "AGENTS.md", exists: true, text: block(
         claimRow("TCRN-AOS", "vm", AWAY_ADDRESS),
         claimRow("cross-project", "local", ".tcrn-workspace/cross-project/workspace"),
         claimRow("TCRN-GHOST", "local", ".tcrn-workspace/TCRN-GHOST/workspace")) },
-      { path: "AGENTS.md", exists: true, text: "pointer" }
+      { path: "CLAUDE.md", exists: true, text: "@AGENTS.md" }
     ]
   });
   assert.equal(verdict.ok, false);
@@ -233,10 +247,10 @@ test("an unknown partition in a claim is red", () => {
 test("an illegal home value is red on its own terms, not silently non-matching", () => {
   const verdict = judge({
     documents: [
-      { path: "CLAUDE.md", exists: true, text: block(
+      { path: "AGENTS.md", exists: true, text: block(
         claimRow("TCRN-AOS", "cloud", AWAY_ADDRESS),
         claimRow("cross-project", "local", ".tcrn-workspace/cross-project/workspace")) },
-      { path: "AGENTS.md", exists: true, text: "pointer" }
+      { path: "CLAUDE.md", exists: true, text: "@AGENTS.md" }
     ]
   });
   assert.equal(verdict.ok, false);
@@ -376,14 +390,14 @@ test("ssh for something other than the engine is not an ssh-direct-engine comman
 test("a document teaching an unallowlisted ssh-direct command is red and names file + line", () => {
   const verdict = judge({
     documents: [
-      { path: "CLAUDE.md", exists: true, text: `# entry\n\n${CORRECT_BLOCK}\n\n复核走 ${SSH_DIRECT}\n` },
-      { path: "AGENTS.md", exists: true, text: "# pointer\n" }
+      { path: "AGENTS.md", exists: true, text: `# entry\n\n${CORRECT_BLOCK}\n\n复核走 ${SSH_DIRECT}\n` },
+      { path: "CLAUDE.md", exists: true, text: "@AGENTS.md" }
     ]
   });
   assert.equal(verdict.ok, false);
   assert.ok(codes(verdict).includes("SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED"));
   const finding = verdict.findings.find((row) => row.code === "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED");
-  assert.equal(finding.path, "CLAUDE.md");
+  assert.equal(finding.path, "AGENTS.md");
   assert.ok(typeof finding.line === "number");
 });
 
@@ -407,8 +421,8 @@ test("an ssh-direct command matching the break-glass allowlist is not red", () =
   const verdict = judge({
     sshAllowlist: allowlist,
     documents: [
-      { path: "CLAUDE.md", exists: true, text: `# entry\n\n${insideBlock}\n` },
-      { path: "AGENTS.md", exists: true, text: "# pointer\n" }
+      { path: "AGENTS.md", exists: true, text: `# entry\n\n${insideBlock}\n` },
+      { path: "CLAUDE.md", exists: true, text: "@AGENTS.md" }
     ]
   });
   assert.equal(verdict.ok, true, JSON.stringify(verdict.findings));

@@ -39,8 +39,8 @@ const ALL_PARTITIONS = Object.freeze(PARTITION_ROSTER.map((entry) => entry.parti
  */
 export const DOC_REGISTRY = Object.freeze([
   Object.freeze({
-    path: "CLAUDE.md",
-    what: "平台级代理入口。四个分区现在不在同一台机器上,这件事必须在这里说全。",
+    path: "AGENTS.md",
+    what: "平台级代理正本。五个分区的活真值现在都在这里说全。",
     mustCarryClaims: true,
     expectedPartitions: ALL_PARTITIONS
   }),
@@ -52,52 +52,62 @@ export const DOC_REGISTRY = Object.freeze([
     expectedPartitions: ALL_PARTITIONS
   }),
   Object.freeze({
-    path: "TCRN-AOS/CLAUDE.md",
-    what: "AOS 仓入口。本仓的链已不在本机,进仓的人第一件要知道的事就是这个。",
+    path: "TCRN-AOS/AGENTS.md",
+    what: "AOS 仓代理正本。本仓的链已回到本机,进仓的人第一件要知道的事就是这个。",
     mustCarryClaims: true,
     expectedPartitions: Object.freeze(["TCRN-AOS"])
   }),
   Object.freeze({
-    path: "TCRN-Design-System/CLAUDE.md",
-    what: "DS 仓入口。本仓分区本轮仍在本机——但这句话现在需要被核对,不能再默认。",
+    path: "TCRN-Design-System/AGENTS.md",
+    what: "DS 仓代理正本。本仓分区本轮仍在本机——但这句话现在需要被核对,不能再默认。",
     mustCarryClaims: true,
     expectedPartitions: Object.freeze(["TCRN-Design-System"])
   }),
   Object.freeze({
-    path: "TCRN-TMS/CLAUDE.md",
-    what: "TMS 仓入口。同上。",
+    path: "TCRN-TMS/AGENTS.md",
+    what: "TMS 仓代理正本。同上。",
     mustCarryClaims: true,
     expectedPartitions: Object.freeze(["TCRN-TMS"])
   }),
   Object.freeze({
-    path: "AGENTS.md",
-    what: "平台级 Codex 入口。刻意是指针而非副本,故不带声明块;受收容规则约束。",
-    mustCarryClaims: false
+    path: "CLAUDE.md",
+    what: "平台级 Claude 入口。只允许保留宿主官方的 @AGENTS.md import,不得成为第二正本。",
+    mustCarryClaims: false,
+    expectedImport: "@AGENTS.md",
+    forbidClaimBlock: true
   }),
   Object.freeze({
     path: "tcrn-workflow/CLAUDE.md",
-    what: "引擎仓入口。它讲的是动词与副本,不是地址;受收容规则约束。",
-    mustCarryClaims: false
+    what: "引擎仓 Claude 入口。只允许保留宿主官方的 @AGENTS.md import,不得成为第二正本。",
+    mustCarryClaims: false,
+    expectedImport: "@AGENTS.md",
+    forbidClaimBlock: true
   }),
   Object.freeze({
     path: "tcrn-workflow/AGENTS.md",
-    what: "引擎仓 Codex 入口;受收容规则约束。",
+    what: "引擎仓代理正本;受收容规则约束。",
     mustCarryClaims: false
   }),
   Object.freeze({
-    path: "TCRN-AOS/AGENTS.md",
-    what: "AOS 仓 Codex 入口;受收容规则约束。",
-    mustCarryClaims: false
+    path: "TCRN-AOS/CLAUDE.md",
+    what: "AOS 仓 Claude 入口。只允许保留宿主官方的 @AGENTS.md import,不得成为第二正本。",
+    mustCarryClaims: false,
+    expectedImport: "@AGENTS.md",
+    forbidClaimBlock: true
   }),
   Object.freeze({
-    path: "TCRN-Design-System/AGENTS.md",
-    what: "DS 仓 Codex 入口;受收容规则约束。",
-    mustCarryClaims: false
+    path: "TCRN-Design-System/CLAUDE.md",
+    what: "DS 仓 Claude 入口。只允许保留宿主官方的 @AGENTS.md import,不得成为第二正本。",
+    mustCarryClaims: false,
+    expectedImport: "@AGENTS.md",
+    forbidClaimBlock: true
   }),
   Object.freeze({
-    path: "TCRN-TMS/AGENTS.md",
-    what: "TMS 仓 Codex 入口;受收容规则约束。",
-    mustCarryClaims: false
+    path: "TCRN-TMS/CLAUDE.md",
+    what: "TMS 仓 Claude 入口。只允许保留宿主官方的 @AGENTS.md import,不得成为第二正本。",
+    mustCarryClaims: false,
+    expectedImport: "@AGENTS.md",
+    forbidClaimBlock: true
   }),
   Object.freeze({
     path: "docs/direction-and-tracks-convention.md",
@@ -117,6 +127,11 @@ export const DOC_REGISTRY = Object.freeze([
   Object.freeze({
     path: "docs/dispatch-readiness-convention.md",
     what: "派工就绪公约。它谈的是单据要素,不落具体地址;受收容规则约束。",
+    mustCarryClaims: false
+  }),
+  Object.freeze({
+    path: "TCRN-AOS/docs/dispatch-readiness-convention.md",
+    what: "派工就绪公约的 AOS 兼容入口;不是第二正本,只指向平台根正本并受收容规则约束。",
     mustCarryClaims: false
   }),
   Object.freeze({
@@ -152,13 +167,15 @@ export const absoluteDocPath = (relative) => join(PLATFORM_ROOT, relative);
  *   - the away partition's `liveAddress`, plus the governance container above it. The
  *     container is included because "the AOS chain is under /srv/tcrn/governance" is the
  *     same claim one directory shallower, and a rule that only matched the leaf would be
- *     trivially side-stepped.
+ *     trivially side-stepped. A local row contributes only its concrete per-partition
+ *     address: the generic `.tcrn-workspace/` container is a documented siting convention,
+ *     not a claim that all five chains have one particular home.
  */
 export function forbiddenOutsideClaimBlocks(roster = PARTITION_ROSTER) {
   const literals = new Set();
   for (const entry of roster) {
     literals.add(`.tcrn-workspace/${entry.partitionId}/workspace`);
-    if (typeof entry.liveAddress === "string" && entry.liveAddress.length > 0) {
+    if (entry.home === "vm" && typeof entry.liveAddress === "string" && entry.liveAddress.length > 0) {
       literals.add(entry.liveAddress);
       const container = entry.liveAddress.split("/").slice(0, -2).join("/");
       if (container.length > 0) literals.add(container);

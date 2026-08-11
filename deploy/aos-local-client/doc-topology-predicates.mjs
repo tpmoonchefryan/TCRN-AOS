@@ -261,6 +261,24 @@ export function judgeDocTopology({
       findings.push({ code: "CLAIM_BLOCK_MALFORMED", path: rule.path, why: bad.why, line: bad.line });
     }
 
+    if (typeof rule.expectedImport === "string" && document.text.trim() !== rule.expectedImport) {
+      findings.push({
+        code: "AGENT_IMPORT_INVALID",
+        path: rule.path,
+        expected: rule.expectedImport,
+        observed: document.text.trim()
+      });
+    }
+
+    if (rule.forbidClaimBlock === true && parsed.present === true) {
+      findings.push({
+        code: "CLAIM_BLOCK_IN_NON_CANONICAL_DOCUMENT",
+        path: rule.path,
+        expected: "claims only in the registered AGENTS.md canonical document",
+        observed: parsed.blocks
+      });
+    }
+
     if (rule.mustCarryClaims === true && parsed.present !== true) {
       findings.push({
         code: "REQUIRED_CLAIM_BLOCK_ABSENT",
@@ -347,6 +365,7 @@ export function judgeDocTopology({
       path: rule.path,
       exists: true,
       mustCarryClaims: rule.mustCarryClaims === true,
+      expectedImport: rule.expectedImport ?? null,
       blocks: parsed.blocks,
       claims: parsed.claims.length,
       partitions: [...new Set(parsed.claims.map((claim) => claim.partitionId))].sort()
