@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INC-042",
+  "intent": "立 INC-042:证据树与配置文件携带宿主家目录路径,而守卫它的卫生门作用域硬编码在 evidence/,看不到证据实际所在的 docs/reports/。发现于 INIT-018 QA 修复批(审查层),含已落地的门作用域修复与实测可行的 deny 规则修法。",
+  "steps": [
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-042",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:1d43a1c525d3e3317dd73114",
+        "scope": "【缺陷】卫生门的作用域没有覆盖被守护对象实际所在的位置。TCRN-AOS/scripts/lib/evidence-hygiene.mjs 一个文件同时承载清洗器与扫描器(设计上防止「清洗成的形状」与「扫描找的形状」漂移),但扫描面硬编码为 `git ls-files -- evidence`;而 TCRN-CROSS-INC-034 把 INIT-018 的证据包整体迁到了 `docs/reports/init-018/`——门看不到的地方。同一缺陷的第二例在门自己文件里:`trackedEvidencePaths` 用 pathspec `evidence`,使 pending 名单「此路径下不得有 tracked 文件」这一闭合条件对 evidence/ 之外的条目**恒不可证伪**。\n\n【实测规模,截至 2026-08-05】一次 `git add docs/reports` 会带进 225 个文件,其中 **42 个被门判为 offender**:28 个含真实宿主身份(442 处 `/Users/<用户名>`),14 个仅在散文里写了 `/Users/<you>` 占位符(46 处,修法不同——应改写为 `<local-home>`)。最重的单个文件是 `INC-033/outputs/green.json`(279 处),因为 deny 规则本身就是绝对宿主路径。\n\n【仓可见性,2026-08-05 实测,复核命令 `curl -s https://api.github.com/repos/<owner>/<repo> | grep private`】`tcrn-workflow` 与 `TCRN-Design-System` 为**公开仓**(private=false);`TCRN-AOS` 对未认证请求返回 Not Found,**今日不可公开读取**。这与平台记忆里「AOS 全历史公开」(INIT-012,2026-07-26)已不一致,变更原因需 Owner 确认——但无论如何,AOS 历史曾为剥离家目录路径重写 93 个提交与 4 个 blob,写进历史即永久。另:`deploy/switchover/emit-switchover-proof.mjs` 的 1 处宿主路径**已在 origin/main 上**,属既存暴露而非本批引入。\n\n【已落地(本批,不在本单待办里)】①门的作用域扩为「evidence/ 工作树遍历 ∪ 全仓 tracked 的 .json/.md」,今日绿(扫描面 334 文件、0 offender),且模拟 `git add` 证据树后立刻红并点名 42 个文件——判据两侧实测可区分;`git ls-files` 列出 staged-未-commit 的文件,故门在 `git add` 与 `commit` 之间触发,正好落在泄漏能够落地之前。②扩面时顺手修掉第二例(pathspec 改全仓)。③三处本批新引入的泄漏已就地修掉:门自己新测试的夹具(改用 `/Users/someone`,实测同规则同行等效)、`measure-context-bytes.mjs` 的注释举例、QA 证据里一条 node 栈轨迹(用模块自身清洗器,`<local-home>` 形态)。\n\n【本单待办】①**清洗 28 个含真实身份的证据文件**(442 处),用 `scrubHostPaths` 以保证形状不漂移;14 个占位符文件改写散文措辞。注意 `docs/reports/init-018/QA/report.md` 的 sha256 已钉在链上、字节冻结,所幸它不在 42 个 offender 内。②**扩展扫描的文件种类**:`SCANNED_EXTENSIONS` 仅 `.json/.md`,故 `.txt/.diff/.sh/.mjs` 里的宿主路径门读不到——13 个此类文件带 `/Users/`。实测把 `.txt/.log` 纳入今日仍全绿,是一行改动;`.mjs/.sh` 须先对 INC-036 的占位符语料重测(那批 `/Users/<you>` 是刻意的检测夹具,不可误伤)。③**仓内 `.claude/settings.json` 的可移植化**:五个仓各 26 条 deny 规则,其中 20 条含真实宿主路径,均未被 gitignore。**朴素的「改成 `**/` 相对形式」会丢覆盖**——实测判据点名 `.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/*.json` 未被覆盖(`**` 不跨点目录段),`CONTROL_TREE_DENY_COVERAGE_FAILED`。**可行修法已实测**:仅把家目录前缀换成 `~/`、其余路径段保持不变,判据 `CONTROL_TREE_DENY_COVERAGE_COMPLETE` exit 0 且零真实宿主路径(复核:`CONTROL_TREE_GUARD_SETTINGS=<候选文件> node TCRN-AOS/scripts/control-tree-guard-proof.mjs`)。平台根那份 settings 不在任何 git 仓内,不是泄漏面。④`emit-switchover-proof.mjs` 那处既存暴露的处置(改写历史 vs 就地修正后不追溯),属方向题,需 Owner 裁定。\n\n【通则】本单与 INC-040 同根:**门只保护它读过的字节;证据或配置搬了家,门必须跟着搬**。QA 报告已据此提出协议修正「迁移必须扫代码引用」,本单补上第二半:**迁移必须同时扫门的作用域**。",
+        "decided-by": "minutes:19dcee70c40e4d819d13b38a",
+        "actor": "agent:fable"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:1d43a1c525d3e3317dd73114" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-INC-042", "kind": "Incident", "status": "planned" },
+      "expectSameAs": [{ "field": "scope", "step": 1, "flag": "scope" }]
+    }
+  ]
+}

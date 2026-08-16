@@ -8,18 +8,17 @@
 //
 // WHY THIS IS NOT "does a .tcrn-workflow exist here".
 //
-// That predicate would be red today for a correct machine and it would stay red
-// forever: cross-project, TCRN-Design-System and TCRN-TMS still keep their truth on
-// this laptop, by design, this round. A gate that cannot go green on a correct
-// machine gets disabled, and a gate that goes green by scanning nothing measures
-// nothing. So the question is asked per PARTITION:
+// The shipped S199 topology has all five primary chains on this laptop. A gate that
+// cannot go green on that correct machine gets disabled, and a gate that goes green
+// by scanning nothing measures nothing. So the question is asked per PARTITION:
 //
 //   for every control tree found on this host, which partition does it belong to
 //   (by the tree's own declared identity, not by its directory name), and is that
 //   partition's truth supposed to live on this host?
 //
-// The AOS answer is "no", so a LIVE AOS tree here is a defect. The other three
-// answer "yes", so their live trees are assets. Same predicate, different rows.
+// The current five rows answer "yes", so their live trees are assets. A synthetic
+// or future row whose home is "vm" answers "no", so a live tree for it is a defect.
+// Same predicate, different rows.
 
 /**
  * The engine's own address-state vocabulary
@@ -449,7 +448,7 @@ export function judgeLocalPurity({ trees, roster, scope }) {
     tightening: permittedLocalPartitions.length === 0
       ? "已收紧:名册无在家分区,本判据此刻读作「本机零活工作区」"
       : "未收紧:名册仍允许 " + permittedLocalPartitions.join("/")
-        + " 在本机为活;三分区迁走后把它们的 home 改为 vm,本判据即读作「本机零活工作区」",
+        + " 在本机为活;将这些分区的 home 改为 vm 后,本判据即读作「本机零活工作区」",
     ceiling: "判据测的是「引擎在该地址上给出的状态」,不是「磁盘上有没有这些字节」。"
       + "vacated 的树仍是复活材料(ADR 0003 ceiling 2:workspace.json 不在事件哈希链覆盖范围内),"
       + "归档 tarball 更不在扫描范围内——绿不等于没有回去的路"

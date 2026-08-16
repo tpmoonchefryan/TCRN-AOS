@@ -17,9 +17,8 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
-import { facadeReadEngine, readChainHead, reclaimFacadeTunnels } from "./ceremony.mjs";
+import { localChainHead, localEngine } from "./local-engine-read.mjs";
 import { PLATFORM_ROOT, REPO_ROOT } from "./topology.mjs";
-import { aosPartition } from "./aos-partitions.mjs";
 
 export const SIDECARS = Object.freeze([
   Object.freeze({
@@ -50,12 +49,29 @@ export const SIDECARS = Object.freeze([
   })
 ]);
 
+// CodeGraph intentionally omits the cockpit's generated projection. That file is
+// checked by the web-projection row above, so counting its tracked regeneration as
+// source lag would make this aggregate gate red immediately after a valid refresh.
+// Keep the exemption exact and local; every other tracked path remains a real lag.
+const GENERATED_PROJECTION_PATH = "apps/web/src/cockpit-data.generated.ts";
+
+// INC-104 / STORY-193 correction: this is the predicate actually used by the
+// production freshness row.  It is deliberately versioned and emitted with the
+// report so a changed CodeGraph criterion cannot hide behind a stale test or an
+// undisclosed interpretation change.
+export const CODEGRAPH_PREDICATE_DISCLOSURE = Object.freeze({
+  schemaVersion: "aos.codegraph-freshness-predicate.v2",
+  changedFrom: "trackedSourceChanges-v1",
+  changedAt: "2026-08-07",
+  criterion: "modified, removed, renamed, and tracked added source are red; untracked additions and the generated projection are walker residuals",
+  reason: "the generated projection has its own freshness row, while untracked additions are not indexed source"
+});
+
 const now = () => new Date().toISOString().replace(/\.\d+Z$/u, "Z");
 
 async function checkKnowledge() {
   const partition = "cross-project";
-  const entry = aosPartition(partition);
-  const result = await facadeReadEngine("knowledge-freshness", partition, { at: now() });
+  const result = await localEngine("knowledge-freshness", partition, { at: now() });
   if (!result.accepted) {
     const refused = result.reasonCode;
     if (refused === "KNOWLEDGE_HIGH_WATER_MISMATCH") {
@@ -89,38 +105,77 @@ function checkCodegraph() {
 
 /**
  * The codegraph index's own verdict on freshness — ASK THE INSTRUMENT, don't stat files
- * (INC-049/058). `codegraph status` reports pending changes when its index differs from
- * the source. A freshness inspection does NOT sync (INC-058: verify must stay read-only;
- * asking the instrument to write its own sidecar while measuring it is the apply.mjs
- * mistake). Instead, a pending report is graded by whether the working tree carries
- * TRACKED source changes: tracked changes = real staleness (red); only untracked/
- * ignored residue (a walker-counted file the indexer skips) = walker residual (note,
- * green). That keeps "stale" falsifiable without re-introducing INC-049's false red.
+ * (INC-049/058). `codegraph status --json` reports the actual pending classes when its
+ * index differs from the source. A freshness inspection does NOT sync (INC-058: verify
+ * must stay read-only; asking the instrument to write its own sidecar while measuring it
+ * is the apply.mjs mistake). Modified/removed indexed source is real staleness (red).
+ * An added file is graded against the tracked additions only: untracked residue and
+ * the generated cockpit projection, which CodeGraph intentionally skips, are walker
+ * residuals (note, green). This avoids both stale-index false green and INC-049's
+ * generated-file false red.
  */
 function codegraphStatusVerdict(repoRoot) {
   try {
     const tmsRoot = join(PLATFORM_ROOT, "TCRN-TMS");
-    const out = execFileSync("pnpm", ["--dir", tmsRoot, "exec", "codegraph", "status", repoRoot], { encoding: "utf8", timeout: 30_000 });
-    if (!/Pending Changes:/u.test(out)) {
-      return { pending: false, walkerDiscrepancy: null };
-    }
-    const detail = out.split("\n").filter((l) => l.includes("Pending") || /^\s+(Removed|Added|Modified|Renamed):/.test(l)).join(";").trim().slice(0, 160);
-    const trackedChanges = trackedSourceChanges(repoRoot);
-    if (trackedChanges.length === 0) {
-      // Only untracked/ignored residue — a walker-counted file the indexer skips.
-      return { pending: false, walkerDiscrepancy: detail, why: "no tracked source changes — walker residual, not real lag" };
-    }
-    return { pending: true, detail, why: `tracked source changes: ${trackedChanges.join(", ")}` };
+    const out = execFileSync("pnpm", ["--dir", tmsRoot, "exec", "codegraph", "status", "--json", repoRoot], { encoding: "utf8", timeout: 30_000 });
+    const report = JSON.parse(out);
+    const pending = report?.pendingChanges;
+    if (pending === null || typeof pending !== "object") return null;
+    return codegraphPendingVerdict(pending, trackedAddedSourceChanges(repoRoot));
   } catch {
     return null;
   }
+}
+
+/**
+ * Production CodeGraph pending-change predicate, kept pure for the red-leg tests.
+ * The CLI's `pendingChanges` object is the instrument result; the tracked-add
+ * list is the only filesystem corroboration needed to distinguish an indexed
+ * source add from an untracked/generated walker residual.
+ */
+export function codegraphPendingVerdict(pending, trackedAdds = []) {
+  if (pending === null || typeof pending !== "object") return null;
+  const added = Number(pending.added ?? 0);
+  const modified = Number(pending.modified ?? 0);
+  const removed = Number(pending.removed ?? 0);
+  const renamed = Number(pending.renamed ?? 0);
+  const detail = `pending changes: added ${added}, modified ${modified}, removed ${removed}${renamed > 0 ? `, renamed ${renamed}` : ""}`;
+  if (modified > 0 || removed > 0 || renamed > 0) {
+    return { pending: true, detail, why: "codegraph reports indexed source changes" };
+  }
+  if (added > 0) {
+    const tracked = Array.isArray(trackedAdds) ? trackedAdds : [];
+    if (tracked.length > 0) {
+      return { pending: true, detail: `${detail}; tracked additions: ${tracked.join(", ")}`, why: "codegraph reports tracked source additions" };
+    }
+    // Only untracked/ignored residue or the generated projection — files the
+    // indexer skips — remain. Keep this visible as a non-red walker residual.
+    return { pending: false, walkerDiscrepancy: detail, why: "no tracked source additions — walker residual, not real lag" };
+  }
+  return { pending: false, walkerDiscrepancy: null };
 }
 
 /** Tracked files with local changes (modified/added/deleted), excluding untracked residue. */
 export function trackedSourceChanges(repoRoot) {
   try {
     const out = execFileSync("git", ["-C", repoRoot, "status", "--porcelain"], { encoding: "utf8", timeout: 15_000 });
-    return out.split("\n").filter((l) => l.length > 0 && !l.startsWith("??")).map((l) => l.slice(3));
+    return out.split("\n")
+      .filter((l) => l.length > 0 && !l.startsWith("??"))
+      .map((l) => l.slice(3))
+      .filter((path) => path !== GENERATED_PROJECTION_PATH);
+  } catch {
+    return ["git status unreadable"];
+  }
+}
+
+/** Tracked additions only, used to grade CodeGraph's pending-added count. */
+function trackedAddedSourceChanges(repoRoot) {
+  try {
+    const out = execFileSync("git", ["-C", repoRoot, "status", "--porcelain"], { encoding: "utf8", timeout: 15_000 });
+    return out.split("\n")
+      .filter((l) => l.length > 0 && !l.startsWith("??") && (l[0] === "A" || l[1] === "A" || l[0] === "R" || l[1] === "R"))
+      .map((l) => l.slice(3))
+      .filter((path) => path !== GENERATED_PROJECTION_PATH);
   } catch {
     return ["git status unreadable"];
   }
@@ -170,8 +225,7 @@ async function checkWebProjection() {
 /** The live chain version of a partition, from the engine's own answer; null when unreadable. */
 async function liveChainVersion(partition) {
   try {
-    const entry = aosPartition(partition);
-    const result = await readChainHead(entry.workspace);
+    const result = await localChainHead(partition);
     return Number.isSafeInteger(result.version) ? result.version : null;
   } catch {
     return null;
@@ -224,6 +278,7 @@ export async function runProjectionFreshness() {
   const bad = rows.filter((row) => row.status !== "fresh" && row.status !== "activity");
   return {
     schemaVersion: "tcrn.projection-freshness.v1",
+    predicateDisclosure: CODEGRAPH_PREDICATE_DISCLOSURE,
     ok: bad.length === 0 && registryMismatch.length === 0,
     reasonCode: bad.length === 0 && registryMismatch.length === 0 ? "PROJECTION_FRESHNESS_OK"
       : registryMismatch.length > 0 ? "PROJECTION_FRESHNESS_REGISTRY_MISMATCH"
@@ -235,14 +290,10 @@ export async function runProjectionFreshness() {
 }
 
 if (import.meta.url === new URL(`file://${process.argv[1]}`).href || process.argv[1]?.endsWith("projection-freshness.mjs")) {
-  try {
-    const result = await runProjectionFreshness();
-    process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
-    for (const row of result.rows) {
-      process.stderr.write(`${row.sidecar}: ${row.status}${row.self ? ` (${row.self})` : ""}${row.reason ? ` — ${row.reason}` : ""}\n`);
-    }
-    if (!result.ok) process.exitCode = 1;
-  } finally {
-    await reclaimFacadeTunnels();
+  const result = await runProjectionFreshness();
+  process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+  for (const row of result.rows) {
+    process.stderr.write(`${row.sidecar}: ${row.status}${row.self ? ` (${row.self})` : ""}${row.reason ? ` — ${row.reason}` : ""}\n`);
   }
+  if (!result.ok) process.exitCode = 1;
 }

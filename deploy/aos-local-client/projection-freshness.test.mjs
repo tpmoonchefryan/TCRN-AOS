@@ -9,7 +9,18 @@ import assert from "node:assert/strict";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { SIDECARS, checkMemoryIndex, trackedSourceChanges } from "./projection-freshness.mjs";
+import { CODEGRAPH_PREDICATE_DISCLOSURE, SIDECARS, checkMemoryIndex, codegraphPendingVerdict, trackedSourceChanges } from "./projection-freshness.mjs";
+
+test("the production CodeGraph predicate is explicitly disclosed and has the INC-104 red legs", () => {
+  assert.equal(CODEGRAPH_PREDICATE_DISCLOSURE.schemaVersion, "aos.codegraph-freshness-predicate.v2");
+  assert.equal(CODEGRAPH_PREDICATE_DISCLOSURE.changedFrom, "trackedSourceChanges-v1");
+  assert.match(CODEGRAPH_PREDICATE_DISCLOSURE.criterion, /tracked added source/u);
+  assert.equal(codegraphPendingVerdict({ added: 0, modified: 1, removed: 0 }, [] ).pending, true);
+  assert.equal(codegraphPendingVerdict({ added: 0, modified: 0, removed: 1 }, [] ).pending, true);
+  assert.equal(codegraphPendingVerdict({ added: 1, modified: 0, removed: 0 }, []).pending, false);
+  assert.equal(codegraphPendingVerdict({ added: 1, modified: 0, removed: 0 }, ["src/real.mjs"]).pending, true);
+  assert.equal(codegraphPendingVerdict({ added: 0, modified: 0, removed: 0 }, []).pending, false);
+});
 
 test("SIDECARS declares each sidecar with truth/self/maxAge, matching the four checked rows (INC-058)", () => {
   assert.equal(SIDECARS.length, 4, "four materialised sidecars are declared");
@@ -62,5 +73,26 @@ test("codegraph pending is graded by TRACKED source changes, not untracked resid
   const changes = trackedSourceChanges(repo);
   assert.equal(changes.length, 1, "a tracked modification IS a tracked source change");
   assert.match(changes[0], /tracked\.mjs/u);
+  rmSync(repo, { recursive: true, force: true });
+});
+
+test("the generated cockpit projection is not codegraph source lag", async () => {
+  const repo = mkdtempSync(join(tmpdir(), "pf-generated-"));
+  const { execFileSync } = await import("node:child_process");
+  const generated = join(repo, "apps/web/src/cockpit-data.generated.ts");
+  mkdirSync(join(repo, "apps/web/src"), { recursive: true });
+  execFileSync("git", ["-C", repo, "init", "-q"]);
+  execFileSync("git", ["-C", repo, "config", "user.email", "t@t"]);
+  execFileSync("git", ["-C", repo, "config", "user.name", "t"]);
+  writeFileSync(generated, "export const generatedAt = 'old';\n");
+  execFileSync("git", ["-C", repo, "add", "."]);
+  execFileSync("git", ["-C", repo, "commit", "-q", "-m", "init"]);
+  writeFileSync(generated, "export const generatedAt = 'new';\n");
+  assert.deepEqual(trackedSourceChanges(repo), [], "generated projection regeneration is checked by its own sidecar row");
+  writeFileSync(join(repo, "source.mjs"), "x\n");
+  execFileSync("git", ["-C", repo, "add", "source.mjs"]);
+  writeFileSync(join(repo, "source.mjs"), "y\n");
+  const changes = trackedSourceChanges(repo);
+  assert.deepEqual(changes, ["source.mjs"], "a non-generated tracked source change still reds codegraph freshness");
   rmSync(repo, { recursive: true, force: true });
 });

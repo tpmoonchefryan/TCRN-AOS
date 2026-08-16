@@ -110,6 +110,7 @@ export async function judgePathwayRegistry({ repoRoot = REPO_ROOT, extraScanFile
     }).join("\n");
     const surfaces = String(pathway.surface).split("+");
     const checks = {
+      "local-engine": /localEngine|localChainHead/u.test(source),
       "facade-read": /facadeRead|\/api\/engine\/|FACADE_PORT|runEngineCli/u.test(source),
       "facade-write": /facadeCeremony|\/api\/ceremony|performFacadeWrite|FACADE_WRITE_PORT/u.test(source),
       "ssh-probe": /\/api\/health/u.test(source),

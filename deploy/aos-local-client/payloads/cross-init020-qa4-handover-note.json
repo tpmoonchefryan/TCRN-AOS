@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-020",
+  "intent": "QA4 交接书登记注记(交接文档须在链上可寻)。执行形态:单上下文,宿主:Claude Code,persona:agent:fable。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:4d0ecd9c1e6ea5292ef08330",
+        "scope": "【QA4 交接书登记(2026-08-07)】交接文档 TCRN-AOS/docs/reports/init-020/HANDOVER-2026-08-07-qa4-codex.md 已出,取代 HANDOVER-2026-08-07-qa3-codex.md 的单子名册与执行序段(qa3 版的通道纪律、署名与回执纪律仍有效,本轮实测证明有用,故不重复照抄)。内容:①先列执行方上一轮做对的七点(二三轮核心病全未复发、回执为物化件、署名与执行形态正确、历史重写未丢内容、C 档停止点守住、见证分类诚实、verify:privacy 被加强),并载明验收方自己被对抗核验推翻的五条初判;②P0 全文与双向注入证据,含公道记录(方向本对=已走 env,错在默认回退值仍为编码后真值);③其余确认问题逐条带 file:line;④**本轮新增七条执行纪律**:编码≠占位化、门与被量对象不得同次提交一起改(判据独立性)、判据变更必须披露、报绿须指明哪棵树、不得把红移出扫描面、写失败先读回执再决定重试(验收方本轮自身实测教训)、声称测试通过前在真仓跑一遍;⑤八单名册(INC-099..104 + STORY-193/194)带 id 与可检查前置;⑥建议执行序 099→101→102→103→100→104→193→194;⑦Owner 政策题现状(D1/D2/D3 已裁毕不需重问,仅 C 档推送待裁,改用户级配置仍须出 diff 过目);⑧第五轮验收八条判据;⑨陷阱速查增补版。钩子面现状已写入交接书,免执行方重新考古(撤下时间、留档位置、hooks.state 六条指向不存在文件、EPIC-024 候选未晋级、Claude/Codex 治理钩子对比)。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:4d0ecd9c1e6ea5292ef08330" },
+      "recordFields": ["externalKey"],
+      "expect": { "externalKey": "TCRN-CROSS-INIT-020" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

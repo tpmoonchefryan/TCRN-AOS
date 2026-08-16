@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-020-S199",
+  "intent": "reverse the cross-project PG storage home to the VM file track and verify byte-equivalent migration",
+  "actor": "agent:gpt-5-codex",
+  "executionForm": "single-context-synthesis-only",
+  "steps": [{ "verb": "migration-rollback", "flags": { "schema": "chain_cross" } }],
+  "readback": [{
+    "verb": "migration-verify",
+    "flags": { "to": "pg", "schema": "chain_cross" },
+    "expect": { "ok": true, "reasonCode": "WORKSPACE_MIGRATION_VERIFIED" },
+    "recordFields": ["ok", "reasonCode", "eventCount", "headEventHash"]
+  }]
+}

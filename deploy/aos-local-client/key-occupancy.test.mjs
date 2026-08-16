@@ -206,8 +206,16 @@ const rosterEntry = (over = {}) => ({
 
 const partitionOfFixture = (workspace) => () => ({ workspace });
 
-test("resolveChain reads the real topology for a known alias", () => {
-  const resolved = resolveChain("cross");
+test("resolveChain refuses the stale VM projection instead of reading the wrong chain", () => {
+  const error = thrown(() => resolveChain("cross"));
+  assert.match(error.message, /topology disagreement for cross-project/u);
+});
+
+test("resolveChain reads an explicitly injected VM topology for its legacy path", () => {
+  const resolved = resolveChain("cross", {
+    roster: [rosterEntry()],
+    partitionOf: partitionOfFixture(rosterEntry().liveAddress)
+  });
   assert.equal(resolved.partitionId, "cross-project");
   assert.equal(resolved.keyPrefix, "TCRN-CROSS");
   // The address is not asserted as a literal here: this file states no topology of its

@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-020",
+  "intent": "回退裁示落链批 D(补遗):INC-090/091/104 各注替代承接后撤销(rev5 登记册漏收,本批补全),INIT-020 注记升 rev6(登记册 43 张)。执行形态:单上下文,persona:agent:fable。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:298fa0e55765409d570e794c",
+        "scope": "【撤销注记】核销门量链化之义务由 INC-108(收口门真量链化)全量替代承接(QA5 立单时已指名)。本单撤销;scope 原文留事件史。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:298fa0e55765409d570e794c",
+        "status": "cancelled",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:5b5fe954dedcb1a5d685b677",
+        "scope": "【撤销注记】回执权威锚定之义务由 INC-100(见证判据与在线锚定接线)替代承接(QA4 立单时已指名)。本单撤销;scope 原文留事件史。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:5b5fe954dedcb1a5d685b677",
+        "status": "cancelled",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:2995134d14937f8caa836f5a",
+        "scope": "【撤销注记】门落地欠账四项分项承接:INC-090 落地→INC-108;在线锚定→INC-100;story-185 衍生件处置→INC-111;helper 重钉→INC-113(rev2);codegraph 判据披露已完成留档(QA5 确认真做)。本单撤销;scope 原文留事件史。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": {
+        "id": "work:2995134d14937f8caa836f5a",
+        "status": "cancelled",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:4d0ecd9c1e6ea5292ef08330",
+        "scope": "【投产收口批·rev6(2026-08-08):回退本地模式,终局清单定稿;rev6=撤销登记册补全 090/091/104(rev5 漏收)】Owner 裁示三(逐字):「我认为现在需要fallback回到本地模式,AOS完成后再重新回到AOS协作模式;写面鉴权机制标记为deferred,目前不需要鉴权,通过mcp服务即可读写;不再需要备份通路,已由宿主定时快照服务器方案替代。同时你需要查看Workflow、helper、AOS三仓所有未完成/已排期的单子,cancel掉过期/与新单冲突/不再需要的内容,本次实施为投产之前的最后项目,必须保证这些任务完成后就可以开始运行。没有问题了就开始落单。」方向记录:本地模式=现行轨道(五链回迁本机 file 后端,日常读写=本地 MCP 面+CLI,零例行 SSH);AOS 协作模式=封存轨道,重返谓词=「AOS 完成」,重返时以 rev5 撤销登记册全量重估;STORY-198 的 SSH 禁令并入 STORY-197 存续;写面鉴权=deferred(Owner 裁,重返时再议);备份通路=撤销(宿主定时快照替代;196 不设备份子探针)。裁示二(08-08 早间「禁用一切ssh隧道…」)的实现路径由外链化改为模式回退,目标不变。**终局 P0(全 done 即投产,以链上状态为准)**:EPIC-058(S199 回迁/S200 收敛封存/S201 文档门翻转)+INC-092/093/094/097/100/101/103(rev2)/105(rev2)/108/109(rev2)/110(rev2)/111/113(rev2)+STORY-196(rev2)/197(rev2)+S189/S190 收尾;INIT-009 已 SHIPPED 而链上滞后,由 S190 清扫补录 done。**执行序**:108/109(量具先行)→S199→S200→S201→105/110→100/111/092/094→103→097(经 093 门,A 档已授)→113(重钉,Owner 批后)→101→196 红腿演练→197→S189/S190。**Owner 必停点**:helper 重钉执行批准、任何 push(C 档,发布轨已封存,重启另裁)、INIT-020 收口验收。**撤销登记册(43 张,批 B+批 D 执行;凡标「轨道封存」者内容非否定,scope 留链上历史,重启该轨道或运行复盘时按当时状态重估重立)**:INC-023/026(审计尾单,过期)、031(仪式 knowledge CAS,AOS 模式特有)、041(生效证据补票,纪律已由公约与 108 承接)、042(证据卫生,由 100 与 governance-archive 承接)、061(写面收口闸门)与 062(收口规格链上推导)由 INC-108 承接、063(门名册可达性)由 STORY-196 承接、064/069(观察语料与段内走私)随 SSH 观察轨道封存、065/066/067(结果表/判据卫生/干净树)原则已入公约与纪律,单撤、068(对抗复核入环)由 STORY-197 复盘机制承接、070(codegraph 判据)归 AOS 产品轨道、071(P2P3 尾单)撤、095(087→100/111 承接;088 随 PG 轨道;089→103)、096(弃轨导出已完成留档,余随轨道)、098/099/102(发布轨三单,封存;C 档必停不变)、106/107/112(Codex 宿主轨封存)、114(本地模式无隧道)、115(VM 存活告警随 AOS 轨道封存——对 Owner 早间「存活告警需要」指令的后继处置,依据=更晚的回退裁示;本地健康由 196 周检承担)、116(LAN 读面重建——MIN-013 A1 成立条件随链回本地消解,读=本地直读;4319 停用随 S200)、STORY-159/165(enforce 切换评估,随观察轨道)、187(门面时代文档,由 S201 承接)、193/194/195(宿主钩子对等轨,Claude 侧接线半边已并入 105 rev2)、198(由 EPIC-058 承接)、INC-090(由 INC-108 替代承接)、INC-091(由 INC-100 替代承接)、INC-104(分项承接:090 落地→108、锚定→100、story-185 件→111、helper 重钉→113;codegraph 披露已做留档)、INIT-019+EPIC-047/048/049/050/051(存活内容已由 INIT-020 QA 谱系与上述承接消化,整树撤)。执行形态:单上下文,宿主 Claude Code,persona agent:fable;本批只立单、改注与记录裁定,不执行修复;仪式经现行通路落链(回迁前唯一写通路,属 Owner 裁示授权)。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:2995134d14937f8caa836f5a"
+      },
+      "recordFields": [
+        "externalKey",
+        "status"
+      ],
+      "expect": {
+        "externalKey": "TCRN-CROSS-INC-104",
+        "status": "cancelled"
+      }
+    },
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:4d0ecd9c1e6ea5292ef08330"
+      },
+      "recordFields": [
+        "externalKey"
+      ],
+      "expect": {
+        "externalKey": "TCRN-CROSS-INIT-020"
+      },
+      "expectSameAs": [
+        {
+          "field": "scope",
+          "step": 6,
+          "flag": "scope"
+        }
+      ]
+    }
+  ]
+}

@@ -19,10 +19,10 @@
 // measured whether some prose mentioned an address). A green reading on its own is
 // not evidence that a green means anything. So one invocation records:
 //
-//   GREEN   the machine as it stands — the AOS archive dead on both faces, three
-//           permitted partitions live — must satisfy the predicate;
-//   RED 1   the roster tightened to home=vm for all four, judged over the SAME
-//           observation, must fail and must name the three partitions still here;
+//   GREEN   the machine as it stands — all five returned partitions and the declared
+//           fallback shadows live here — must satisfy the predicate;
+//   RED 1   the roster tightened to home=vm for every returned partition, judged over
+//           the SAME observation, must fail and must name every live tree still here;
 //   RED 2   a live workspace belonging to no rostered partition must fail on its own,
 //           so that deleting a roster row cannot make a finding disappear;
 //   RED 3   a workspace-shaped directory the container roster does not name must fail
@@ -70,7 +70,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
-  ARCHIVED_WORKSPACE, LOCAL_LIVE_PARTITIONS, PARTITION_ROSTER, RELOCATED_PARTITIONS,
+  LOCAL_LIVE_PARTITIONS, PARTITION_ROSTER, RELOCATED_PARTITIONS,
   SHADOWED_PARTITIONS, SHADOW_ROSTER,
   REPO_ROOT, SCAN_CEILING, WORKSPACE_CONTAINER
 } from "./topology.mjs";
@@ -452,24 +452,17 @@ export async function runLocalPurityProof({ scratchpad = null, ceremonyReceiptPa
     ? { folded: false, why: "no --ceremony-receipt was named" }
     : foldCeremonyReceipt(ceremonyReceiptPath);
 
-  // The archive is named in the artifact by its own identity terms and by the engine's
-  // verdict on it, never by "we left it alone". The point of retaining it is that it is
-  // still readable as the source side of the hop (ARCHIVED.md §三), and a receipt that
-  // only says "absent/present" cannot show that.
-  const archiveRow = green.verdicts.find((verdict) =>
-    verdict.partitionId === "TCRN-AOS" && verdict.address === resolve(ARCHIVED_WORKSPACE)) ?? null;
-
   const expectations = [
     { id: "GREEN_ON_THIS_MACHINE", met: green.ok === true,
       expected: "LOCAL_HOST_HOLDS_NO_AWAY_PARTITION_ARTEFACT", observed: green.reasonCode },
     { id: "SCOPE_ESTABLISHED", met: scope.ok === true,
       expected: "SCAN_SCOPE_ESTABLISHED", observed: scope.reasonCode },
-    { id: "ARCHIVE_DEAD_ON_BOTH_FACES", met: archiveRow?.reasonCode === "ARCHIVE_RETAINED_AND_DEAD",
-      expected: "ARCHIVE_RETAINED_AND_DEAD", observed: archiveRow?.reasonCode ?? "ARCHIVE_ROW_NOT_FOUND" },
-    // Counted over the SCANNED roster: every partition is home=vm now, so the trees this
-    // machine may legitimately hold live are exactly the declared shadows. Comparing against
-    // LOCAL_LIVE_PARTITIONS alone asserted zero and would red on the shadows being present —
-    // i.e. it would demand the machine hold nothing it is in fact designed to hold.
+    { id: "NO_RETAINED_AWAY_ARCHIVE_IN_LOCAL_LIVE_ROSTER",
+      met: green.counts.retainedArchives === 0,
+      expected: 0, observed: green.counts.retainedArchives },
+    // Counted over the SCANNED roster: all five partitions and the declared shadows are
+    // intentionally live on this machine after S199. Comparing against the primary roster
+    // alone would make the shadow buffer look like an unaccounted tree.
     { id: "PERMITTED_LIVE_TREES_MATCH_THE_ROSTER",
       met: green.counts.permittedLiveTrees === PERMITTED_LOCAL_LIVE.length,
       expected: PERMITTED_LOCAL_LIVE.length, observed: green.counts.permittedLiveTrees },
@@ -569,7 +562,7 @@ export async function runLocalPurityProof({ scratchpad = null, ceremonyReceiptPa
   return {
     schemaVersion: "aos.local-pure-client-proof.v1",
     story: "TCRN-AOS-STORY-133",
-    ruling: "TCRN-AOS-MIN-012 direction D — AOS carries the operating face, not the store",
+    ruling: "TCRN-AOS-MIN-012 direction D — S199 后本机持有 file store; AOS operating face 封存",
     ok: unmet.length === 0,
     reasonCode: unmet.length === 0 ? "LOCAL_HOST_IS_A_PURE_CLIENT" : "LOCAL_PURITY_PROOF_INCOMPLETE",
     unmetExpectations: unmet,
@@ -698,11 +691,11 @@ export function foldCeremonyReceipt(path) {
       }
     },
     // Named here because it is the one thing the receipt proves that nothing else in
-    // this artifact can: the write was performed FROM this laptop, against the chain
-    // on the host that now owns it, and the value was read back full-value afterwards.
+    // this artifact can: under the legacy ceremony path the write was performed FROM
+    // this laptop, against the VM chain that then owned it, and the value was read back.
     whatWasProven:
-      "本机作为纯客户端仍能对已迁走的真链做受治写:仪式从一处拓扑取五值、按主机引擎自己的 commands 名录校验载荷、"
-      + "以写前现读的 --expected-version 作哨兵,写入后经 work-show 逐字段全值回读。写面在 VM,发起在本机。"
+      "旧 S199 仪式路径证明本机可对迁移窗口内的真链做受治写:仪式从一处拓扑取五值、按主机引擎自己的 commands 名录校验载荷、"
+      + "以写前现读的 --expected-version 作哨兵,写入后经 work-show 逐字段全值回读;S200 后普通写改由本机引擎/MCP 承担。"
   };
 }
 

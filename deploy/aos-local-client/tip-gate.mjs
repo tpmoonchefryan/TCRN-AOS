@@ -1,206 +1,139 @@
 #!/usr/bin/env node
 // TCRN-CROSS-INIT-020 INC-075 — single-truth tip gate. The machine form of the
-// S190 tip-remeasure protocol: every registered pathway that serves a partition
-// must answer the SAME chain head (version + headEventHash, full 64-hex), or the
-// gate reds naming each pathway's reading.
+// S190 tip-remeasure protocol: every registered local chain must answer a
+// complete head (version + 64-hex headEventHash), and its event-list tail must
+// identify the same head.
 //
-// WHY IT EXISTS. During the INIT-020 window the cross chain forked for 15 versions
-// with no machine noticing: the ceremony write path (engine CLI via SSH, no PG env)
-// answered the file track while the facade answered Postgres, and nothing compared
-// the two. "Verify something reached elsewhere by asking that elsewhere itself"
-// had no standing instrument.
-//
-// PATHWAYS. For each partition:
-//   A. the authoritative PG head, served by the facade read service (127.0.0.1:4320
-//      through an SSH tunnel) — the same bytes the read MCP face answers;
-//   B. the ceremony head-read pathway, now routed through that same facade read
-//      service — a second client call, not a second backend;
-//   C. the retained file tree, which is compared only while it is unsealed. Once
-//      INC-074 seals it, its old head is an archive witness and must not compete
-//      with the PG authority.
-//
-// RED LEG (the acceptance): fixture mode (`--fixture <file>`) injects a fabricated
-// divergence and expects red. The live gate becomes green only after all five file
-// tracks are sealed or provably equal to the PG head; a stale unsealed track still
-// names the fork instead of being silently treated as an archive.
+// The VM facade and SSH ceremony were retired by S199/S200. Live proof therefore
+// uses the local engine CLI only. Fixture mode remains a hermetic three-path
+// harness for the historical fork red leg; it never makes a live claim.
 
-import { spawn } from "node:child_process";
 import { readFileSync } from "node:fs";
-import { connect as netConnect } from "node:net";
 import { resolve } from "node:path";
 
-import { FACADE_PORT } from "../aos-resident-cockpit/facade-read-manifest.mjs";
-import { shellQuote, ssh } from "../aos-resident-cockpit/resident-lib.mjs";
-import { VM_ENGINE_CLI, VM_HOST, VM_WORKSPACE } from "./topology.mjs";
-import { aosPartition } from "./aos-partitions.mjs";
-import { readChainHead } from "./ceremony.mjs";
+import { localEngine } from "./local-engine-read.mjs";
+import { PARTITION_ROSTER } from "./topology.mjs";
 
-const PARTITIONS = ["TCRN-AOS", "cross-project", "TCRN-Design-System", "TCRN-TMS", "Joi-Button"];
+const PARTITIONS = PARTITION_ROSTER.map((entry) => entry.partitionId);
+const EVENT_PAGE_SIZE = 200;
+const EVENT_MAX_PAGES = 100;
+const HEAD_HASH = /^[a-f0-9]{64}$/u;
 
-/**
- * The file-track head (engine CLI status via SSH, file backend) plus whether the
- * tree carries the INC-074 storage-home sentinel. A sealed tree's stale head is
- * EXPECTED — the sentinel declares the tree is no longer the home, so its head
- * is not compared. An UNSEALED tree whose head disagrees with the authority is
- * the fork this gate exists to catch.
- */
-async function readFileTrackHead(workspace) {
-  const sentinelProbe = await ssh(
-    [`test -f ${shellQuote(`${workspace}/.tcrn-workflow/storage-home.json`)} && echo SENTINEL_PRESENT || echo SENTINEL_ABSENT`],
-    { allowFailure: true },
-  );
-  const sentinelText = sentinelProbe.stdout ?? "";
-  const sealed = sentinelProbe.code === 0 && sentinelText.includes("SENTINEL_PRESENT")
-    ? true
-    : sentinelProbe.code === 0 && sentinelText.includes("SENTINEL_ABSENT")
-      ? false
-      : null;
-  const remote = ["node", VM_ENGINE_CLI, "status", "--workspace", workspace].map(shellQuote).join(" ");
-  const result = await ssh([remote], { allowFailure: true });
-  let json = null;
-  try { json = JSON.parse(result.code === 0 ? result.stdout : (result.stderr.trim() || result.stdout.trim())); } catch { json = null; }
-  return {
-    sealed,
-    head: json?.version !== undefined ? { version: json.version, headEventHash: json.headEventHash, workspaceId: json.workspaceId } : null,
-    error: sealed === null
-      ? (sentinelProbe.stderr?.trim() || sentinelText.trim() || `sentinel probe exit ${sentinelProbe.code}`).slice(0, 200)
-      : json === null ? (result.stderr?.trim() || result.stdout?.trim() || `exit ${result.code}`).slice(0, 200) : null,
- };
-}
-
-async function curlJson(url, body) {
-  const { execFileSync } = await import("node:child_process");
-  const stdout = execFileSync("curl", [
-    "-s", "-m", "60", "-X", "POST", "-H", "content-type: application/json",
-    "-d", JSON.stringify(body), url,
-  ], { maxBuffer: 64 * 1024 * 1024, encoding: "utf8" });
-  return JSON.parse(stdout);
-}
-
-async function establishReadTunnel() {
-  const child = spawn("ssh", ["-N", "-L", `${FACADE_PORT}:127.0.0.1:${FACADE_PORT}`, VM_HOST],
-    { stdio: "ignore", detached: true });
-  child.unref();
-  for (let attempt = 0; attempt < 40; attempt += 1) {
-    await new Promise((done) => setTimeout(done, 250));
-    try {
-      const ok = await new Promise((resolved) => {
-        const socket = netConnect(FACADE_PORT, "127.0.0.1", () => { socket.destroy(); resolved(true); });
-        socket.on("error", () => resolved(false));
-      });
-      if (ok) return { port: FACADE_PORT, pid: child.pid };
-    } catch { /* retry */ }
+async function readLocalEventTail(partition) {
+  const first = await localEngine("event-list", partition);
+  if (!first.accepted) return { error: first.reasonCode ?? first.exitCode };
+  const firstBody = first.json ?? {};
+  if (!Array.isArray(firstBody.records)) return { error: "event-list returned no records array" };
+  const records = [...firstBody.records];
+  const total = Number.isInteger(firstBody.total) ? firstBody.total : records.length;
+  for (let page = 1; firstBody.truncated === true && records.length < total && page <= EVENT_MAX_PAGES; page += 1) {
+    const offset = records.length;
+    const next = await localEngine("event-list", partition, { limit: EVENT_PAGE_SIZE, offset });
+    if (!next.accepted) return { error: next.reasonCode ?? next.exitCode };
+    const body = next.json ?? {};
+    if (!Array.isArray(body.records) || body.records.length === 0) return { error: `empty event-list page at offset ${offset}` };
+    records.push(...body.records);
   }
-  child.kill("SIGTERM");
-  throw new Error("facade read tunnel did not come up");
-}
-
-async function reclaimTunnel(tunnel) {
-  if (tunnel === null) return;
-  try { process.kill(-tunnel.pid, "SIGTERM"); } catch { /* gone */ }
-  try { process.kill(tunnel.pid, "SIGTERM"); } catch { /* gone */ }
+  if (records.length !== total) return { error: `event-list returned ${records.length} of ${total} events` };
+  const tail = records.reduce((current, event) => (
+    current === null || event.sequence > current.sequence ? event : current
+  ), null);
+  return tail === null
+    ? { error: "event-list returned no events" }
+    : { head: { version: tail.sequence, headEventHash: tail.eventHash }, records: records.length };
 }
 
 function headReading(label, head) {
-  return { pathway: label, version: head?.version ?? null, headEventHash: head?.headEventHash ?? null };
+  return {
+    pathway: label,
+    version: head?.version ?? null,
+    headEventHash: head?.headEventHash ?? null,
+  };
 }
 
-export async function judgeTip({ fixturePath = null, tunnelPort = null, live = true } = {}) {
+function validHead(head) {
+  return head !== null
+    && Number.isSafeInteger(head.version)
+    && HEAD_HASH.test(head.headEventHash ?? "");
+}
+
+function headsAgree(left, right) {
+  return validHead(left) && validHead(right)
+    && left.version === right.version
+    && left.headEventHash === right.headEventHash;
+}
+
+function judgeFixturePartition(partition, fixtureRow) {
+  const facadeHead = fixtureRow.version === undefined
+    ? null
+    : { version: fixtureRow.version, headEventHash: fixtureRow.headEventHash, workspaceId: "fixture" };
+  const ceremonyHead = fixtureRow.ceremonyVersion === undefined
+    ? null
+    : { version: fixtureRow.ceremonyVersion, headEventHash: fixtureRow.ceremonyHeadEventHash, workspaceId: "fixture-b" };
+  const fileTrack = fixtureRow.fileVersion === undefined ? null : {
+    sealed: fixtureRow.fileSealed ?? false,
+    head: { version: fixtureRow.fileVersion, headEventHash: fixtureRow.fileHeadEventHash, workspaceId: "fixture-c" },
+  };
+  const readingA = facadeHead === null
+    ? { pathway: "facade-read(pg)", error: "no answer" }
+    : headReading("facade-read(pg)", facadeHead);
+  const readingB = ceremonyHead === null
+    ? { pathway: "ceremony-read(pg)", error: "no answer" }
+    : headReading("ceremony-read(pg)", ceremonyHead);
+  const readingC = fileTrack?.head === null || fileTrack?.head === undefined
+    ? { pathway: "file-track(ssh)", error: "no answer" }
+    : headReading(`file-track(ssh)${fileTrack.sealed ? ",sealed" : ",unsealed"}`, fileTrack.head);
+  const agreeFile = !headsAgree(facadeHead, ceremonyHead)
+    ? false
+    : fileTrack?.sealed === true
+      ? true
+      : fileTrack?.sealed === false && headsAgree(fileTrack.head, facadeHead);
+  return {
+    row: { partition, facade: readingA, ceremony: readingB, fileTrack: readingC },
+    divergent: !headsAgree(facadeHead, ceremonyHead) || !agreeFile
+      ? { partition, readingA, readingB, readingC, sealed: fileTrack?.sealed ?? false }
+      : null,
+  };
+}
+
+export async function judgeTip({ fixturePath = null, live = true } = {}) {
   let fixture = null;
   if (fixturePath !== null) {
     fixture = JSON.parse(readFileSync(fixturePath, "utf8"));
-    // Fixture mode is hermetic: both pathways come from the fixture, so the red
-    // leg is constructible without the VM (parity-proof's red-harness pattern —
-    // fixture mode never emits a live claim). `live` is forced off.
     live = false;
   }
-  const tunnel = live ? (tunnelPort === null ? await establishReadTunnel() : { port: tunnelPort, pid: null }) : null;
   const rows = [];
   const divergent = [];
-  try {
-    for (const partition of PARTITIONS) {
-      const workspace = partition === "TCRN-AOS" ? VM_WORKSPACE : aosPartition(partition).workspace;
-      // Pathway A: the authoritative PG head via the facade read service.
-      let facadeHead = null;
-      let facadeError = null;
-      if (live) {
-        try {
-          const response = await curlJson(`http://127.0.0.1:${tunnel.port}/api/engine/status`, { partition, arguments: {} });
-          const inner = response?.result ?? response;
-          facadeHead = { version: inner?.version, headEventHash: inner?.headEventHash, workspaceId: inner?.workspaceId };
-        } catch (error) {
-          facadeError = String(error?.message ?? error).slice(0, 200);
-        }
-      }
-      if (fixture !== null && fixture[partition]?.version !== undefined) {
-        facadeHead = { version: fixture[partition].version, headEventHash: fixture[partition].headEventHash, workspaceId: "fixture" };
-      }
-      // Pathway B: the ceremony head-read pathway (now the facade read, PG).
-      let ceremonyHead = null;
-      let ceremonyError = null;
-      if (live) {
-        try {
-          ceremonyHead = await readChainHead(workspace ?? undefined);
-        } catch (error) {
-          ceremonyError = String(error?.message ?? error).slice(0, 200);
-        }
-      }
-      if (fixture !== null && fixture[partition]?.ceremonyVersion !== undefined) {
-        ceremonyHead = { version: fixture[partition].ceremonyVersion, headEventHash: fixture[partition].ceremonyHeadEventHash, workspaceId: "fixture-b" };
-      }
-      // Pathway C: the file-track head (SSH, file backend) + sentinel state. A
-      // SEALED tree's stale head is expected and not compared; an UNSEALED tree
-      // whose head disagrees is the fork (the INIT-020 cross defect).
-      let fileTrack = null;
-      let fileTrackError = null;
-      if (live) {
-        try {
-          fileTrack = await readFileTrackHead(workspace);
-        } catch (error) {
-          fileTrackError = String(error?.message ?? error).slice(0, 200);
-        }
-      } else if (fixture !== null && fixture[partition]?.fileVersion !== undefined) {
-        fileTrack = {
-          sealed: fixture[partition].fileSealed ?? false,
-          head: { version: fixture[partition].fileVersion, headEventHash: fixture[partition].fileHeadEventHash, workspaceId: "fixture-c" },
-          error: null,
-        };
-      }
-      const readingA = facadeHead === null
-        ? { pathway: "facade-read(pg)", error: facadeError ?? "no answer" }
-        : headReading("facade-read(pg)", facadeHead);
-      const readingB = ceremonyHead === null
-        ? { pathway: "ceremony-read(pg)", error: ceremonyError ?? "no answer" }
-        : headReading("ceremony-read(pg)", ceremonyHead);
-      const readingC = fileTrack?.head === null || fileTrack?.head === undefined
-        ? { pathway: "file-track(ssh)", error: fileTrack?.error ?? fileTrackError ?? "no answer" }
-        : headReading(`file-track(ssh)${fileTrack?.sealed ? ",sealed" : ",unsealed"}`, fileTrack.head);
-      rows.push({ partition, facade: readingA, ceremony: readingB, fileTrack: readingC });
-      const aVersion = facadeHead?.version;
-      const bVersion = ceremonyHead?.version;
-      const agreeLive = facadeHead !== null && ceremonyHead !== null
-        && aVersion === bVersion
-        && facadeHead.headEventHash === ceremonyHead.headEventHash;
-      // The file track participates ONLY when it is unsealed — a sealed archive's
-      // stale head is expected, not a divergence.
-      const agreeFile = !agreeLive
-        ? false
-        : fileTrack?.sealed === true
-          ? true
-          : fileTrack?.sealed === false && fileTrack.head !== null && facadeHead !== null
-            && fileTrack.head.version === facadeHead.version
-            && fileTrack.head.headEventHash === facadeHead.headEventHash;
-      if (!agreeFile || !agreeLive) {
-        divergent.push({ partition, readingA, readingB, readingC, sealed: fileTrack?.sealed ?? false });
-      }
+  for (const partition of PARTITIONS) {
+    if (!live) {
+      const judged = judgeFixturePartition(partition, fixture?.[partition] ?? {});
+      rows.push(judged.row);
+      if (judged.divergent !== null) divergent.push(judged.divergent);
+      continue;
     }
-  } finally {
-    if (tunnel !== null && tunnelPort === null) await reclaimTunnel(tunnel);
+
+    const status = await localEngine("status", partition);
+    const statusHead = status.accepted
+      ? { version: status.json?.version, headEventHash: status.json?.headEventHash, workspaceId: status.json?.workspaceId }
+      : null;
+    const tail = await readLocalEventTail(partition);
+    const eventHead = tail.head === undefined ? null : { ...tail.head, workspaceId: statusHead?.workspaceId };
+    const readingA = validHead(statusHead)
+      ? headReading("local-engine(status)", statusHead)
+      : { pathway: "local-engine(status)", error: status.reasonCode ?? status.exitCode ?? "invalid head" };
+    const readingB = validHead(eventHead)
+      ? headReading("local-engine(event-list-tail)", eventHead)
+      : { pathway: "local-engine(event-list-tail)", error: tail.error ?? "invalid event tail" };
+    rows.push({ partition, localEngine: readingA, eventTail: { ...readingB, records: tail.records ?? null } });
+    if (!headsAgree(statusHead, eventHead)) divergent.push({ partition, readingA, readingB });
   }
   return {
     ok: divergent.length === 0,
     reasonCode: divergent.length === 0 ? "TIP_SINGLE_TRUTH_VERIFIED" : "TIP_TRUTH_DIVERGED",
     partitions: PARTITIONS.length,
+    pathways: live
+      ? ["local-engine(status)", "local-engine(event-list-tail)"]
+      : ["facade-read(pg)", "ceremony-read(pg)", "file-track(ssh)"],
     rows,
     divergent,
   };

@@ -218,12 +218,12 @@ export async function loadDerivation(protocolBuild = PROTOCOL_BUILD) {
  * rather than trusted separately. A tool that silently picked one of two disagreeing
  * addresses would answer confidently about the wrong chain.
  *
- * `deps` exists so those refusals can be PROVEN. Today every rostered partition has
- * `home: "vm"` and the two files agree, so the disagreement and non-vm branches are
- * unreachable from production input, and a branch nothing can reach is a branch nothing
- * proves. The defaults are the imported topology and stay the only production source —
- * a caller passing a hand-written address here would be re-introducing exactly the
- * hand-typed topology this file refuses to carry, so the override is for fixtures only.
+ * `deps` exists so those refusals can be PROVEN. After S199 the production roster is
+ * local while this module remains a VM-only fallback, so the imported VM projection
+ * must disagree and fail closed rather than answer about a stale address. The defaults
+ * stay the only production source — a caller passing a hand-written address here would
+ * re-introduce exactly the hand-typed topology this file refuses to carry, so the
+ * override is for fixtures only.
  */
 export function resolveChain(alias, deps = {}) {
   const roster = deps.roster ?? PARTITION_ROSTER;
