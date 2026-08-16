@@ -32,8 +32,12 @@ import { fileURLToPath } from "node:url";
 
 export const REPO_ROOT = resolve(fileURLToPath(new URL(".", import.meta.url)), "../..");
 
-/** File kinds the gate reads. Anything else in evidence/ is bytes, not prose. */
-export const SCANNED_EXTENSIONS = Object.freeze([".json", ".md", ".plist"]);
+/**
+ * File kinds the gate reads. Generated typed projections are published bytes
+ * too: the cockpit projection carried the exact host-path leak that the old
+ * evidence-only suffix set could not see.
+ */
+export const SCANNED_EXTENSIONS = Object.freeze([".json", ".md", ".plist", ".ts"]);
 
 /**
  * Files the gate reads by kind but excludes by NAME (INC-046).

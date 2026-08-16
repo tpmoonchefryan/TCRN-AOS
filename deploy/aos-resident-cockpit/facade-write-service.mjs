@@ -418,7 +418,7 @@ function assertAttributedActor(actor) {
  * @param {string} opts.host Label carried in the receipt.
  */
 export async function performFacadeWrite({
-  payload, dryRun, partition, target, actor, currentCatalog, engineRoot, engineCli, host, pgSchemas, pgConnection
+  payload, dryRun, partition, target, actor, channelHost, currentCatalog, engineRoot, engineCli, host, pgSchemas, pgConnection
 }) {
   // STORY-189 switch window: after migration, the engine CLI reads/writes a
   // PG-backed chain when TCRN_PG_SCHEMA is set alongside TCRN_PG_CONNECTION, run
@@ -436,6 +436,9 @@ export async function performFacadeWrite({
       dryRun,
       host,
       partition,
+      channelHost: channelHost ?? "unknown",
+      payloadActor: typeof payload?.actor === "string" ? payload.actor : actor ?? null,
+      executionForm: typeof payload?.executionForm === "string" ? payload.executionForm : null,
       ok: false,
       reasonCode: admission.reasonCode,
       problems: admission.problems,
@@ -461,6 +464,13 @@ export async function performFacadeWrite({
     dryRun,
     host,
     partition,
+    // INC-092: the transport channel and the attributed payload actor are
+    // parallel receipt fields. The channel is supplied by the local MCP face;
+    // the actor is the server-side-whitelisted identity actually handed to the
+    // engine, never an inferred name in a report.
+    channelHost: channelHost ?? "unknown",
+    payloadActor: typeof payload.actor === "string" ? payload.actor : attributedActor,
+    executionForm: typeof payload.executionForm === "string" ? payload.executionForm : null,
     topology: {
       workspace: target.workspace,
       attestDir: target.attestDir,
@@ -694,7 +704,7 @@ function stamp() {
 }
 
 /** The INC-047 failure receipt: a ceremony that THREW must still leave a receipt. */
-function thrownReceipt({ payload, dryRun, partition, host, error, startedAt }) {
+function thrownReceipt({ payload, dryRun, partition, host, channelHost, error, startedAt }) {
   return {
     schemaVersion: RECEIPT_SCHEMA,
     story: typeof payload?.story === "string" ? payload.story : "<unknown>",
@@ -704,6 +714,9 @@ function thrownReceipt({ payload, dryRun, partition, host, error, startedAt }) {
     dryRun,
     host,
     partition,
+    channelHost: channelHost ?? "unknown",
+    payloadActor: typeof payload?.actor === "string" ? payload.actor : null,
+    executionForm: typeof payload?.executionForm === "string" ? payload.executionForm : null,
     ok: false,
     reasonCode: "CEREMONY_THREW_BEFORE_RECEIPT",
     error: scrubHostPathsInText(String(error?.message ?? error)).slice(0, 500),
@@ -840,6 +853,7 @@ export async function startFacadeWriteService(options) {
       ttlMs,
       writeRoot,
       hostLabel,
+      defaultChannelHost: options.channelHost ?? "unknown",
       defaultActor: options.actor
     }).catch((error) => {
       sendJson(response, 500, {
@@ -944,8 +958,9 @@ async function handleCeremony(request, response, context) {
   let dryRun;
   let payload;
   let idempotencyKey;
+  let channelHost;
   try {
-    const allowed = ["payload", "dryRun", "partition", "idempotencyKey"];
+    const allowed = ["payload", "dryRun", "partition", "idempotencyKey", "channelHost"];
     const unknown = Object.keys(body).filter((key) => !allowed.includes(key));
     if (unknown.length > 0) fail("MCP_ARGUMENT_UNKNOWN", unknown.sort().join(","));
 
@@ -955,6 +970,14 @@ async function handleCeremony(request, response, context) {
     }
     dryRun = body.dryRun ?? false;
     if (typeof dryRun !== "boolean") fail("MCP_ARGUMENT_INVALID", "dryRun");
+
+    // INC-092: the channel is a declared transport fact, not a prose hint in
+    // the intent. Keep it small and structured so the receipt can say which
+    // client face carried the payload without accepting a path or credential.
+    channelHost = body.channelHost ?? context.defaultChannelHost ?? "unknown";
+    if (typeof channelHost !== "string" || !/^[A-Za-z][A-Za-z0-9._:-]{0,63}$/u.test(channelHost)) {
+      fail("MCP_ARGUMENT_INVALID", "channelHost must be a short declared channel identifier");
+    }
 
     // INC-084: idempotency key. A ceremony that times out after a successful write
     // must not be re-run into a double write; a replayed key is refused.
@@ -1033,7 +1056,19 @@ async function handleCeremony(request, response, context) {
   const nonce = stamp();
   const payloadPath = resolve(context.writeRoot, "payloads", `${nonce}-${partition}.json`);
   mkdirSync(dirname(payloadPath), { recursive: true });
-  writeFileSync(payloadPath, `${JSON.stringify(scrubHostPaths(payload), null, 2)}\n`);
+  const materializedPayloadText = `${JSON.stringify(scrubHostPaths(payload), null, 2)}\n`;
+  writeFileSync(payloadPath, materializedPayloadText);
+  const materializedPayload = {
+    path: relative(context.writeRoot, payloadPath),
+    sha256: sha256Text(materializedPayloadText),
+    bytes: Buffer.byteLength(materializedPayloadText, "utf8"),
+    materialization: {
+      schemaVersion: "aos.receipt-materialization.v1",
+      mode: "full",
+      cropped: false,
+      cropFingerprint: null
+    }
+  };
 
   let receipt;
   try {
@@ -1043,6 +1078,7 @@ async function handleCeremony(request, response, context) {
       partition,
       target,
       actor,
+      channelHost,
       currentCatalog: context.currentCatalog,
       engineRoot: context.engineRoot,
       engineCli: context.engineCli,
@@ -1054,8 +1090,12 @@ async function handleCeremony(request, response, context) {
     // INC-047: a ceremony that THROWS must still leave a receipt — otherwise an orphan
     // payload sits in evidence/ and the caller cannot tell how many steps of a batch
     // landed, or whether any did.
-    receipt = thrownReceipt({ payload, dryRun, partition, host: context.hostLabel, error, startedAt: instant() });
+    receipt = thrownReceipt({ payload, dryRun, partition, host: context.hostLabel, channelHost, error, startedAt: instant() });
   }
+  // Hash the bytes this service actually materialised, not a second
+  // re-serialization of the request. A full-byte declaration makes a cropped or
+  // hand-rebuilt receipt fail closed at the evidence gate.
+  receipt.payload = materializedPayload;
   // Reserve only after the engine reports a completed, read-back-verified
   // ceremony. A refusal must remain retryable; reserving before execution made
   // a failed first attempt look like a successful replay.
@@ -1087,6 +1127,8 @@ async function handleCeremony(request, response, context) {
     host: context.hostLabel,
     partition,
     dryRun,
+    channelHost,
+    payloadActor: receipt.payloadActor ?? (typeof payload.actor === "string" ? payload.actor : null),
     receipt: scrubHostPaths(receipt),
     receiptPath: relative(context.writeRoot, receiptPath),
     payloadPath: relative(context.writeRoot, payloadPath)

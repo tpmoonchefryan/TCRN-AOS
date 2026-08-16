@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Project the four live chains into the data file the cockpit renders from.
+// Project the five live chains into the data file the cockpit renders from.
 //
 // This replaced the hand-written seed that carried the shell through its first
 // build: what the cockpit shows comes from the chains by way of the projection
@@ -10,13 +10,9 @@
 // directly, this script becomes the thing that stops running rather than a thing
 // that has to be unwound.
 //
-// THE FOUR CHAINS ARE NO LONGER ON ONE MACHINE (TCRN-AOS-STORY-131). The AOS
-// truth root relocated to the VM, and the engine reads its own bytes on its own
-// host — there is no remote read. So the AOS partition is projected ON the VM, by
-// that host's engine and its deployed copy of this same projection code, and only
-// the finished projection travels. Pointing this script at the vacated local path
-// would not degrade quietly: every read face there answers
-// WORKSPACE_RELOCATION_VACATED, which is the relocation working.
+// S199/S200 returned all five chains to this machine. Projection is therefore a
+// local read-only engine/MCP operation for every partition; the retired VM facade
+// is not a fallback and is never contacted by this source-side build.
 //
 // Environment:
 //   AOS_COCKPIT_DATA_OUT   absolute output path. `.ts` emits the repository's
@@ -31,7 +27,6 @@ import { dirname, resolve } from "node:path";
 import {
   aggregateCockpitData, renderCockpitDataModule, unavailableFamilies
 } from "./lib/cockpit-data-aggregate.mjs";
-import { projectPartitionOnHost } from "./lib/remote-partition-projection.mjs";
 
 const engine = resolve(homedir(), ".tcrn-workflow/tcrn-workflow");
 const serverPath = resolve(engine, "scripts/tcrn-workflow-mcp.mjs");
@@ -44,16 +39,10 @@ const library = await import("../dist/packages/projection/src/index.js");
 const { ChainClient, ChainIngestor, ProjectionStore } = library;
 
 /**
- * Where each chain is, and who reads it.
- *
- * `on` is the host that holds the chain. A partition marked `vm` is projected
- * there; the local engine is never pointed at its path, because that path is a
- * vacated address on this machine and answering it would be a lie either way.
+ * Where each chain is, and who reads it. The roster is the topology authority;
+ * no VM path or facade connection is reconstructed here.
  */
-import { aosPartition } from "../deploy/aos-local-client/aos-partitions.mjs";
-import {
-  FACADE_PG_CONNECTION, FACADE_PG_SCHEMAS
-} from "../deploy/aos-resident-cockpit/facade-read-manifest.mjs";
+import { PARTITION_ROSTER } from "../deploy/aos-local-client/topology.mjs";
 
 const partitions = [
   { partitionId: "cross-project", label: "Platform governance", labelZh: "平台治理" },
@@ -62,17 +51,15 @@ const partitions = [
   { partitionId: "TCRN-AOS", label: "AOS", labelZh: "AOS" },
   { partitionId: "Joi-Button", label: "Joi Button", labelZh: "Joi Button" }
 ].map((entry) => {
-  // Single authority (TCRN-CROSS-INIT-017): every partition chain lives on the
-  // AOS host; the local machine is a pure client. The VM target comes from
-  // aos-partitions, never hand-typed.
-  const target = aosPartition(entry.partitionId);
+  const target = PARTITION_ROSTER.find((candidate) => candidate.partitionId === entry.partitionId);
+  if (!target || target.home !== "local") {
+    throw new Error(`projection partition ${entry.partitionId} is not rostered as local`);
+  }
   return {
     ...entry,
-    on: "vm",
-    host: "tcrn-platform-dev",
-    runtimeRoot: "/srv/tcrn/aos-cockpit/runtime",
-    engineMcp: "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow-mcp.mjs",
-    workspacePath: target.workspace
+    on: "local",
+    host: "local",
+    workspacePath: resolve(platform, target.liveAddress)
   };
 });
 
@@ -86,14 +73,7 @@ try {
 
   const projected = [];
   for (const source of partitions) {
-    const { projection } = source.on === "vm"
-      ? await projectPartitionOnHost({
-        ...source,
-        verifiedAt,
-        pgSchema: FACADE_PG_SCHEMAS[source.partitionId],
-        pgConnection: FACADE_PG_CONNECTION
-      })
-      : await ingestor.projectIfMoved(source, undefined, verifiedAt);
+    const { projection } = await ingestor.projectIfMoved(source, undefined, verifiedAt);
     if (projection) store.replacePartition(projection);
     projected.push({
       id: source.partitionId,
@@ -114,8 +94,8 @@ try {
   const module = renderCockpitDataModule(data, {
     flavour,
     generator: "scripts/build-cockpit-data.mjs",
-    note: "Projected from the four governed chains at the versions recorded below; "
-      + "TCRN-AOS is read on the VM that now holds it."
+    note: "Projected from the five governed chains at the versions recorded below; "
+      + "all five chains are read by the local engine."
   });
 
   await mkdir(dirname(outPath), { recursive: true });

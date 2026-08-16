@@ -32,7 +32,7 @@ Environment=FACADE_WRITE_WORKSPACES="{\"TCRN-AOS\":\"/srv/tcrn/governance/tcrn-w
 Environment=FACADE_WRITE_ATTEST_DIRS="{\"TCRN-AOS\":\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations\",\"Joi-Button\":\"/srv/tcrn/governance/tcrn-workspace/Joi-Button/attestations\",\"cross-project\":\"/srv/tcrn/governance/tcrn-workspace/cross-project/attestations\",\"TCRN-Design-System\":\"/srv/tcrn/governance/tcrn-workspace/TCRN-Design-System/attestations\",\"TCRN-TMS\":\"/srv/tcrn/governance/tcrn-workspace/TCRN-TMS/attestations\"}"
 Environment=FACADE_WRITE_ALLOWED_HOSTS=127.0.0.1,localhost
 Environment=FACADE_WRITE_ACTOR=agent:fable
-Environment=FACADE_WRITE_ALLOWED_ACTORS=agent:fable
+Environment=FACADE_WRITE_ALLOWED_ACTORS=agent:fable,agent:gpt-5-codex
 Environment=FACADE_PG_SCHEMAS="{\"TCRN-AOS\":\"chain_aos\",\"Joi-Button\":\"chain_joi\",\"cross-project\":\"chain_cross\",\"TCRN-Design-System\":\"chain_ds\",\"TCRN-TMS\":\"chain_tms\"}"
 Environment=FACADE_PG_CONNECTION=postgresql:///tcrn_governance?host=/var/run/postgresql
 Restart=on-failure

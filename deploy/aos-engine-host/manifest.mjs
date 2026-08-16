@@ -1,7 +1,7 @@
 // TCRN AOS — declarative manifest for the engine copy on the platform dev VM.
 //
 // What this is: the single statement of what /srv/tcrn/engine/tcrn-workflow on
-// tcrn-platform-dev must contain — the local governed engine copy at v0.11.7,
+// tcrn-platform-dev must contain — the local governed engine copy at v0.11.8,
 // minus node_modules and .git. What it deliberately is not: an authority supply.
 // No pins, no operator bundle, no supply material of any kind travels with this
 // manifest; the VM copy can read and answer `commands`, and it can host scratch
@@ -38,7 +38,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 
 /** The one place the release tag is written; every claim about it derives from here. */
-const SOURCE_TAG = "v0.11.7";
+const SOURCE_TAG = "v0.11.8";
 
 export const manifest = {
   schemaVersion: "aos.engine-host-deploy-manifest.v1",
@@ -54,7 +54,7 @@ export const manifest = {
     // The anchor is the release tag, checked three ways before a single byte
     // moves: package.json says this version, HEAD carries this tag, and the
     // working tree is clean. A dirty tree would make "v0.8.0 tag anchor" a lie.
-    requiredVersion: "0.11.7",
+    requiredVersion: "0.11.8",
     requiredTag: SOURCE_TAG,
   },
 
@@ -84,7 +84,7 @@ export const manifest = {
     // a different engine version red-flags here.
     catalogReasonCode: "CLI_CATALOG_READY",
     cliVerbCount: 106,
-    remoteVersion: "0.11.7",
+    remoteVersion: "0.11.8",
     // Named verbs the far catalog must actually carry. A count alone would be
     // satisfied by any 106 verbs. event-list is why v0.7.0 → v0.8.0 happened;
     // relocation-adopt and relocation-inspect are why v0.8.0 → v0.9.0 happens —

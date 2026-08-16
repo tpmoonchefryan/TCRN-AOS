@@ -35,7 +35,7 @@
 
 import { spawn } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { randomBytes } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { runRemoteReadMcpStdio, PROTOCOL_VERSIONS } from "../aos-local-client/remote-read-mcp.mjs";
@@ -50,6 +50,12 @@ export const TOOL_NAME = "tcrn_ceremony";
 export const SELF_TEST_FLAG = "--self-test";
 /** Where this server materialises payloads and receipts. Tool-owned; a caller cannot name a path. */
 export const WRITE_ROOT = resolve(REPO_ROOT, "evidence", "mcp-ceremony-write");
+/** Transport identity is configured by the MCP face, never inferred from prose. */
+export const MCP_CHANNEL_HOST = process.env.TCRN_MCP_CHANNEL_HOST
+  ?? process.env.TCRN_CLIENT_HOST
+  ?? "codex";
+const MCP_RECEIPT_SCHEMA = "aos.facade-write-receipt.v1";
+const sha256Text = (text) => createHash("sha256").update(Buffer.from(text, "utf8")).digest("hex");
 
 function fail(reasonCode, message) {
   const error = new Error(message);
@@ -115,7 +121,7 @@ function ceremonyToolDescriptor() {
 }
 
 /** The default ceremony executor: the existing recipe, unmodified. */
-export async function performCeremony({ payloadPath, dryRun, partition }) {
+export async function performCeremony({ payloadPath, dryRun, partition, channelHost = MCP_CHANNEL_HOST }) {
   // STORY-185: the write MCP face drives the facade write service (the ceremony
   // endpoint on 127.0.0.1:FACADE_WRITE_PORT through the SSH tunnel), which
   // performs the batch against the PG-backed chain. The facade's request takes
@@ -123,7 +129,7 @@ export async function performCeremony({ payloadPath, dryRun, partition }) {
   // dispatcher is read here and forwarded.
   const payload = JSON.parse(readFileSync(payloadPath, "utf8"));
   const tunnel = await establishWriteTunnel();
-  const body = JSON.stringify({ partition, dryRun, payload });
+  const body = JSON.stringify({ partition, dryRun, payload, channelHost });
   try {
     const { execFileSync } = await import("node:child_process");
     const stdout = execFileSync("curl", [
@@ -181,10 +187,12 @@ export class CeremonyDispatcher {
   #initialized = false;
   #perform;
   #writeRoot;
+  #channelHost;
 
-  constructor(perform = performCeremony, { writeRoot = WRITE_ROOT } = {}) {
+  constructor(perform = performCeremony, { writeRoot = WRITE_ROOT, channelHost = MCP_CHANNEL_HOST } = {}) {
     this.#perform = perform;
     this.#writeRoot = writeRoot;
+    this.#channelHost = channelHost;
   }
 
   async dispatch(value) {
@@ -288,18 +296,19 @@ export class CeremonyDispatcher {
     // scrubbed of host paths before it lands — the same hygiene the receipt gets.
     // A payload can carry a host path (an init step names its framework root), and
     // an unscrupped payload in evidence/ is how the gate below was reddened once.
-    writeFileSync(payloadPath, `${JSON.stringify(scrubHostPaths(payload), null, 2)}\n`);
+    const materializedPayloadText = `${JSON.stringify(scrubHostPaths(payload), null, 2)}\n`;
+    writeFileSync(payloadPath, materializedPayloadText);
 
     let receipt;
     try {
-      receipt = await this.#perform({ payloadPath, dryRun, partition });
+      receipt = await this.#perform({ payloadPath, dryRun, partition, channelHost: this.#channelHost });
     } catch (error) {
       // INC-047: a ceremony that THROWS must still leave a receipt — otherwise an
       // orphan payload sits in evidence/ and the caller cannot tell how many steps of
       // a batch landed. The failure receipt names the error and that the chain
       // position is unknown.
       receipt = {
-        schemaVersion: "aos.local-client-ceremony.v1",
+        schemaVersion: MCP_RECEIPT_SCHEMA,
         story: typeof payload?.story === "string" ? payload.story : "<unknown>",
         intent: typeof payload?.intent === "string" ? payload.intent : "<unknown>",
         ok: false,
@@ -307,6 +316,9 @@ export class CeremonyDispatcher {
         error: scrubHostPathsInText(String(error?.message ?? error)).slice(0, 500),
         partition,
         dryRun,
+        channelHost: this.#channelHost,
+        payloadActor: typeof payload?.actor === "string" ? payload.actor : null,
+        executionForm: typeof payload?.executionForm === "string" ? payload.executionForm : null,
         thrownBeforeReceipt: true,
         chainBefore: null,
         chainAfter: null,
@@ -314,6 +326,25 @@ export class CeremonyDispatcher {
         readback: []
       };
     }
+
+    // The local dispatcher owns the bytes it wrote. Keep a returned receipt's
+    // materialisation declaration aligned with those bytes even when an
+    // injected test executor returns only a minimal receipt.
+    receipt.channelHost ??= this.#channelHost;
+    receipt.payloadActor ??= typeof payload?.actor === "string" ? payload.actor : null;
+    receipt.executionForm ??= typeof payload?.executionForm === "string" ? payload.executionForm : null;
+    receipt.payload = {
+      ...(receipt.payload ?? {}),
+      path: relative(this.#writeRoot, payloadPath),
+      sha256: sha256Text(materializedPayloadText),
+      bytes: Buffer.byteLength(materializedPayloadText, "utf8"),
+      materialization: {
+        schemaVersion: "aos.receipt-materialization.v1",
+        mode: "full",
+        cropped: false,
+        cropFingerprint: null
+      }
+    };
 
     const receiptPath = resolve(this.#writeRoot, "receipts", `${stamp()}-${partition}.json`);
     mkdirSync(dirname(receiptPath), { recursive: true });
@@ -325,6 +356,8 @@ export class CeremonyDispatcher {
       host: VM_HOST,
       partition,
       dryRun,
+      channelHost: this.#channelHost,
+      payloadActor: receipt.payloadActor,
       receipt: scrubHostPaths(receipt),
       receiptPath: relative(REPO_ROOT, receiptPath),
       payloadPath: relative(REPO_ROOT, payloadPath)

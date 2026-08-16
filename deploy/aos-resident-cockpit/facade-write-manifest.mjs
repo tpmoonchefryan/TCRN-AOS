@@ -34,9 +34,9 @@ export const FACADE_WRITE_UNIT_PATH = `/etc/systemd/system/${FACADE_WRITE_UNIT_N
 /** The engine whose catalogue drives the write whitelist and whose CLI performs every write. */
 export const FACADE_WRITE_ENGINE = VM_ENGINE;
 
-/** EPIC-041: the ceremony actor must be an attributed actor; agent:fable is the standing AI one. */
+/** EPIC-041 / INC-092: each write must carry an attributed actor of its own. */
 export const FACADE_WRITE_ACTOR = "agent:fable";
-export const FACADE_WRITE_ALLOWED_ACTORS = Object.freeze([FACADE_WRITE_ACTOR]);
+export const FACADE_WRITE_ALLOWED_ACTORS = Object.freeze([FACADE_WRITE_ACTOR, "agent:gpt-5-codex"]);
 
 /**
  * Five partitions, one seam. A partition id maps to its workspace path AND its
