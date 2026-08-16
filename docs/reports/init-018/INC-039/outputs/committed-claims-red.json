@@ -1,0 +1,94 @@
+{
+  "ok": false,
+  "reasonCode": "COMMITTED_CLAIMS_DIVERGE_FROM_THE_TREE",
+  "divergent": [
+    "TCRN-TMS/CLAUDE.md"
+  ],
+  "untracked": [
+    "CLAUDE.md",
+    "docs/delivery-cadence-convention.md",
+    "AGENTS.md",
+    "docs/direction-and-tracks-convention.md",
+    "docs/harness-constraint-convention.md"
+  ],
+  "rows": [
+    {
+      "path": "CLAUDE.md",
+      "tracked": false,
+      "agrees": null,
+      "note": "outside any git repository"
+    },
+    {
+      "path": "docs/delivery-cadence-convention.md",
+      "tracked": false,
+      "agrees": null,
+      "note": "outside any git repository"
+    },
+    {
+      "path": "TCRN-AOS/CLAUDE.md",
+      "tracked": true,
+      "agrees": true,
+      "note": null
+    },
+    {
+      "path": "TCRN-Design-System/CLAUDE.md",
+      "tracked": true,
+      "agrees": true,
+      "note": null
+    },
+    {
+      "path": "TCRN-TMS/CLAUDE.md",
+      "tracked": true,
+      "agrees": false,
+      "note": "the committed claim block differs from the working tree's"
+    },
+    {
+      "path": "AGENTS.md",
+      "tracked": false,
+      "agrees": null,
+      "note": "outside any git repository"
+    },
+    {
+      "path": "tcrn-workflow/CLAUDE.md",
+      "tracked": true,
+      "agrees": true,
+      "note": null
+    },
+    {
+      "path": "tcrn-workflow/AGENTS.md",
+      "tracked": true,
+      "agrees": true,
+      "note": null
+    },
+    {
+      "path": "TCRN-AOS/AGENTS.md",
+      "tracked": true,
+      "agrees": true,
+      "note": null
+    },
+    {
+      "path": "TCRN-Design-System/AGENTS.md",
+      "tracked": true,
+      "agrees": true,
+      "note": null
+    },
+    {
+      "path": "TCRN-TMS/AGENTS.md",
+      "tracked": true,
+      "agrees": true,
+      "note": null
+    },
+    {
+      "path": "docs/direction-and-tracks-convention.md",
+      "tracked": false,
+      "agrees": null,
+      "note": "outside any git repository"
+    },
+    {
+      "path": "docs/harness-constraint-convention.md",
+      "tracked": false,
+      "agrees": null,
+      "note": "outside any git repository"
+    }
+  ]
+}

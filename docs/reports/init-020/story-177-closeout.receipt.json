@@ -1,0 +1,271 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-177",
+  "intent": "STORY-177 收口:knowledge/artifact 两店 PG 化完成。StoreBackend 抽象+文件/PG 双后端实现,两店数据平面路由到后端,字节等价实证,全套件绿。",
+  "startedAt": "2026-08-06T08:14:11Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "docs/reports/init-020/story-177-closeout.json",
+    "sha256": "3148f7a7e4d7bdfa39e42bc31a3738adacba20927497b0ae7738fd5c1db0aa61",
+    "bytes": 2631
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2047,
+    "headEventHash": "8ebaf01c5a839181ce3f77941c9ceb5510ae04025b815f2afcaf69b5b63f67cd",
+    "work": 336
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T08:14:12Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2047",
+        "--id",
+        "work:49b369e168bf854f58e88835",
+        "--scope",
+        "【收口(2026-08-06)】knowledge/artifact 两店 PG 化完成。交付物:①packages/core/src/store-backend.ts——StoreBackend 接口(knowledge marker/metadata/body/view + artifact marker/record 读写与枚举)+FileStoreBackend(文件实现,封装两店原 readBoundRegularFile/writeExclusiveFile/replaceRegularFile 语义)+withStoreBackendFactory(AsyncLocalStorage 注入,与 workspace 的 withStorageBackendFactory 同构)+StoreBackendError;②knowledge-core.ts/artifact-lifecycle.ts 数据平面 IO 路由到 StoreBackend(marker/record 读写+枚举),claim/quarantine 协议(mutation.claim/restore.claim)保留文件实现(与 STORY-174 对 workspace 租约的处理一致,PG 对应物按 ADR 重述);③packages/pg-backend/src/store.ts——PgStoreBackend 实现 StoreBackend 走 PG 表(knowledge_marker/knowledge_metadata/knowledge_bodies/knowledge_views/artifact_marker/artifact_records,枚举返回文件名形态与文件后端一致);④chain-ddl.sql 增两店六表;⑤正腿=tests/store-equivalence.test.mjs 两店数据平面字节等价(marker/metadata/body/record 文件与 PG 下字节完全一致+枚举一致);⑥全套件绿(TESTS_VERIFIED 67 文件)+p4(knowledge 47 negative/artifact 42 negative,64 排列字节决定性)+lint/format/sbom/proof-artifacts。CAS(marker 版本)与高水位绑定(knowledge 用 store marker 版本非链版本)语义原样。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2047,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:49b369e168bf854f58e88835",
+      "version": 2048
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T08:14:14Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2048",
+        "--id",
+        "work:49b369e168bf854f58e88835",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2048,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:49b369e168bf854f58e88835",
+      "version": 2049
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T08:14:15Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2049",
+        "--id",
+        "work:49b369e168bf854f58e88835",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2049,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:49b369e168bf854f58e88835",
+      "version": 2050
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T08:14:16Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2050",
+        "--id",
+        "work:49b369e168bf854f58e88835",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2050,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:49b369e168bf854f58e88835",
+      "version": 2051
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:49b369e168bf854f58e88835",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-177",
+            "observed": "TCRN-CROSS-STORY-177",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【收口(2026-08-06)】knowledge/artifact 两店 PG 化完成。交付物:①packages/core/src/store-backend.ts——StoreBackend 接口(knowledge marker/metadata/body/view + artifact marker/record 读写与枚举)+FileStoreBackend(文件实现,封装两店原 readBoundRegularFile/writeExclusiveFile/replaceRegularFile 语义)+withStoreBackendFactory(AsyncLocalStorage 注入,与 workspace 的 withStorageBackendFactory 同构)+StoreBackendError;②knowledge-core.ts/artifact-lifecycle.ts 数据平面 IO 路由到 StoreBackend(marker/record 读写+枚举),claim/quarantine 协议(mutation.claim/restore.claim)保留文件实现(与 STORY-174 对 workspace 租约的处理一致,PG 对应物按 ADR 重述);③packages/pg-backend/src/store.ts——PgStoreBackend 实现 StoreBackend 走 PG 表(knowledge_marker/knowledge_metadata/knowledge_bodies/knowledge_views/artifact_marker/artifact_records,枚举返回文件名形态与文件后端一致);④chain-ddl.sql 增两店六表;⑤正腿=tests/store-equivalence.test.mjs 两店数据平面字节等价(marker/metadata/body/record 文件与 PG 下字节完全一致+枚举一致);⑥全套件绿(TESTS_VERIFIED 67 文件)+p4(knowledge 47 negative/artifact 42 negative,64 排列字节决定性)+lint/format/sbom/proof-artifacts。CAS(marker 版本)与高水位绑定(knowledge 用 store marker 版本非链版本)语义原样。",
+            "observed": "【收口(2026-08-06)】knowledge/artifact 两店 PG 化完成。交付物:①packages/core/src/store-backend.ts——StoreBackend 接口(knowledge marker/metadata/body/view + artifact marker/record 读写与枚举)+FileStoreBackend(文件实现,封装两店原 readBoundRegularFile/writeExclusiveFile/replaceRegularFile 语义)+withStoreBackendFactory(AsyncLocalStorage 注入,与 workspace 的 withStorageBackendFactory 同构)+StoreBackendError;②knowledge-core.ts/artifact-lifecycle.ts 数据平面 IO 路由到 StoreBackend(marker/record 读写+枚举),claim/quarantine 协议(mutation.claim/restore.claim)保留文件实现(与 STORY-174 对 workspace 租约的处理一致,PG 对应物按 ADR 重述);③packages/pg-backend/src/store.ts——PgStoreBackend 实现 StoreBackend 走 PG 表(knowledge_marker/knowledge_metadata/knowledge_bodies/knowledge_views/artifact_marker/artifact_records,枚举返回文件名形态与文件后端一致);④chain-ddl.sql 增两店六表;⑤正腿=tests/store-equivalence.test.mjs 两店数据平面字节等价(marker/metadata/body/record 文件与 PG 下字节完全一致+枚举一致);⑥全套件绿(TESTS_VERIFIED 67 文件)+p4(knowledge 47 negative/artifact 42 negative,64 排列字节决定性)+lint/format/sbom/proof-artifacts。CAS(marker 版本)与高水位绑定(knowledge 用 store marker 版本非链版本)语义原样。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-177",
+        "kind": "Story",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2051,
+    "headEventHash": "f65a77e9c6e4ce659e7b870d0bdb0e367e463e95a4ad6d33c223efb776a546f6",
+    "work": 336
+  },
+  "knowledgeRebase": {
+    "verb": "knowledge-rebase",
+    "markerVersionBefore": 76,
+    "accepted": true,
+    "reasonCode": "KNOWLEDGE_STORE_REBASED",
+    "version": 77
+  },
+  "eventsAppended": 4,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-06T08:14:20Z"
+}

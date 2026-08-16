@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-151",
+  "intent": "收口:终版 scope + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:fb0dc4575557799b4e605177",
+        "scope": "S11 per-Initiative 成本归因 v1。host 会话 JSONL token 解析器(DeepSeek/Codex 侧格式缺口如实标注禁静默上限)+span/会话↔Initiative 键关联规则+首份报表(以 INIT-018 自身为首个样本,含三层流水线各层成本)接入 delivery-cadence 决策输入。前置:STORY-150。验收:解析器+样例报表。MIN-057。进度@2026-08-05: 已完成=token 解析器(scripts/token-attribution.mjs:读 host 会话 JSONL 逐消息/模型/会话聚合 input/output/cache_creation/cache_read;gap unparseable/missingUsage/missingModel/incompleteUsage 逐条如实标注禁静默上限;实测平台 73 会话全可解析)+关联规则(层=message.model:执行=deepseek-v4-flash/审查=claude-fable-5/核验=claude-opus-5;样本集=正文含 INIT-018 的 6 会话)+首份报表(docs/reports/init-018/S11/report.md:INIT-018 三层成本 执行 in 3.59M/out 1.27M/cacheR 416M,审查 out 1.77M/cacheR 132M,核验 19 消息小样本;cache_read 主导 551M vs 非缓存 6.6M,看 input/output 低估执行层两数量级;缺口如实标注:样本口径=含串会话,按 STORY 单独开的会话不在样本,单会话不按 Init 内外拆分)。前置 S10 done。接入 delivery-cadence 决策输入归审查层。阻塞=无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:fb0dc4575557799b4e605177", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:fb0dc4575557799b4e605177" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-151", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

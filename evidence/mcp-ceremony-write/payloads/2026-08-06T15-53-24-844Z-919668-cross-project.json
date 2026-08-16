@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-189",
+  "intent": "写面 facade 传输 dry-run 证明",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:8797455f66197645465abb73",
+        "scope": "facade transport dry-run",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:8797455f66197645465abb73"
+      }
+    }
+  ]
+}

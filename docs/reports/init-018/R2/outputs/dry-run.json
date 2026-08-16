@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "aos.ship-web.v1",
+  "story": "TCRN-CROSS-STORY-138",
+  "ok": true,
+  "reasonCode": "DRY_RUN_NO_NETWORK",
+  "dryRun": true,
+  "startedAt": "2026-08-04T16:44:29Z",
+  "finishedAt": "2026-08-04T16:44:29Z",
+  "source": {
+    "host": "tcrn-platform-dev",
+    "remoteWebRoot": "/srv/tcrn/aos-cockpit/runtime/web",
+    "localWebRoot": "<local-platform-root>/TCRN-AOS/apps/web/dist",
+    "addressesFrom": "deploy/aos-resident-cockpit/manifest.mjs (VM_HOST, VM_WEB, MODULE_VIEWS)",
+    "assembledFrom": [
+      "renderAosShellHtml({ path: '/' }) + one SSR shell per MODULE_VIEWS route",
+      "apps/web/dist/assets/aos-client.js (the built client bundle)",
+      "apps/web/dist/assets/tcrn-brand-mark.svg"
+    ]
+  },
+  "precondition": {
+    "ok": true,
+    "problems": [],
+    "bundleStamp": "2026-08-04T16:34:57Z"
+  },
+  "stagingRootMode": "755",
+  "wouldSync": {
+    "files": 14,
+    "bytes": 7683293,
+    "to": "/srv/tcrn/aos-cockpit/runtime/web"
+  },
+  "localLedger": [
+    {
+      "path": "assets/aos-client.js",
+      "bytes": 4768117,
+      "sha256": "a0c40cb8648717af4fb1b64c8f911ef82dc1f041c9a9072a8df6e4de517ea312"
+    },
+    {
+      "path": "assets/tcrn-brand-mark.svg",
+      "bytes": 64989,
+      "sha256": "5f28f17c599c63a05a51c81be03f9ef7845299af1940ebe6aef61f7af47fc25b"
+    },
+    {
+      "path": "audit/index.html",
+      "bytes": 238961,
+      "sha256": "a5a54fc3f0dfa161c392812e86946c44d7b3278ef6b052bdce4fe521c69fa4b3"
+    },
+    {
+      "path": "board/index.html",
+      "bytes": 179425,
+      "sha256": "7f72b6056f59ed1e449f7e22e24643dcb9b4792d6b15af74ba78dca8a87c1fdf"
+    },
+    {
+      "path": "dashboard/index.html",
+      "bytes": 146310,
+      "sha256": "cda781dfe7ff92c76af90c57d4e62730f2f8cdbfd8c60ce0b1532059194c76bf"
+    },
+    {
+      "path": "deliberations/index.html",
+      "bytes": 171773,
+      "sha256": "6540c47ce23a45c30145f20267be7bf7e7b8ed0132db5913444398dfb1a3e284"
+    },
+    {
+      "path": "inbox/index.html",
+      "bytes": 345311,
+      "sha256": "96fff1c0b69fb18d2c5edf1fead153ab5df2c0adb4f63719334f60990c61c5ea"
+    },
+    {
+      "path": "index.html",
+      "bytes": 437944,
+      "sha256": "e859ec51ffab24a2fb58a67d5252a5c74e8ac2e36d6fcb60d851cd75cd5a6275"
+    },
+    {
+      "path": "knowledge/index.html",
+      "bytes": 146860,
+      "sha256": "1b8532724f1126c1334a19c19a799ebcc77371da4674c08db0779607cfe2762a"
+    },
+    {
+      "path": "my-work/index.html",
+      "bytes": 437958,
+      "sha256": "006f1356adf1a948510bee4e6a8ac9bd58ceb5488e1ff198684b91ee40bd48e9"
+    },
+    {
+      "path": "projects/index.html",
+      "bytes": 144700,
+      "sha256": "4a80d60a3d8721644af840fd5427367b6ec48e192c03b98d2632f19f5a4624a6"
+    },
+    {
+      "path": "release-trains/index.html",
+      "bytes": 149563,
+      "sha256": "11561b58711cae93e1b787d9e16ea006aaf0204b8a839efe0b0cedf882843ffe"
+    },
+    {
+      "path": "snapshots/index.html",
+      "bytes": 140040,
+      "sha256": "412a9cf524df6ab7992bbf0a5f4a2e54e38673b0cdfd64e3a1531b2817b24ab4"
+    },
+    {
+      "path": "work-items/index.html",
+      "bytes": 311342,
+      "sha256": "961113c032b84bc7723da3bb9af7296d0dfcf3f43c6beb579db2ce07854ba09a"
+    }
+  ]
+}

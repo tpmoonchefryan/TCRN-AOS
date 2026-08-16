@@ -1,0 +1,174 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-148",
+  "intent": "收口:终版 scope + 置 done",
+  "startedAt": "2026-08-04T21:21:10Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "<outside-repository>",
+    "sha256": "77757d5faeb345d51a061eeaa9e377652e058f0bd34e2127c0913e99deaf3f71",
+    "bytes": 1901
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1613,
+    "headEventHash": "4f778a7ee7cb2bfa9b2f26f5468d8b5685e03c4dcf329d0c69af66594e062eb4",
+    "work": 248
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:deepseek-v4-flash",
+        "--at",
+        "2026-08-04T21:21:11Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1613",
+        "--id",
+        "work:56b08c68389ea54d3f44119e",
+        "--scope",
+        "S8 行为套件接线(D5)。确定性子集(S7 黄金样本+S6 离线断言)挂每 push CI;含模型调用全量挂 release 门+手动触发脚本;临时引入退化样本证 CI 门能红(演示后不合入)。前置:STORY-141 与 STORY-147。真实模型 key 配置归审查层,脚本留接口。验收:CI 配置 diff+一次绿跑+一次红演示。MIN-057。进度@2026-08-05: 已完成=确定性子集挂每 push CI(S7 经 p1 test 步自动发现 3/3 绿;S6 经新增 CI 步骤 node scripts/verify-s6.mjs 6/6 EVAL_GREEN exit 0);全量挂 release 门(scripts/eval-s6-full.mjs 无 key fail-closed exit 2 + tests/promptfoo/s6-lessons/s6-models.yaml provider 接口 apiKeyEnvar:S6_EVAL_API_KEY + ci.yml release-eval job 仅 workflow_dispatch);红测(临时退化 L1 样本→CI 同命令 EVAL_NOT_GREEN exit 1 5/1,恢复→EVAL_GREEN exit 0 6/6,存档 outputs/ci-red-proof.json,演示后撤下)。verify:ci CI_HARDENING_VERIFIED。真实 key 配置留接口归审查层。范围外:pnpm run 隐式安装检查 offline 陷阱;release-eval job 需审查层配 S6_EVAL_API_KEY secret。阻塞=无。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1613,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:56b08c68389ea54d3f44119e",
+      "version": 1614
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:deepseek-v4-flash",
+        "--at",
+        "2026-08-04T21:21:12Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1614",
+        "--id",
+        "work:56b08c68389ea54d3f44119e",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1614,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:56b08c68389ea54d3f44119e",
+      "version": 1615
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:56b08c68389ea54d3f44119e",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-148",
+            "observed": "TCRN-CROSS-STORY-148",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "S8 行为套件接线(D5)。确定性子集(S7 黄金样本+S6 离线断言)挂每 push CI;含模型调用全量挂 release 门+手动触发脚本;临时引入退化样本证 CI 门能红(演示后不合入)。前置:STORY-141 与 STORY-147。真实模型 key 配置归审查层,脚本留接口。验收:CI 配置 diff+一次绿跑+一次红演示。MIN-057。进度@2026-08-05: 已完成=确定性子集挂每 push CI(S7 经 p1 test 步自动发现 3/3 绿;S6 经新增 CI 步骤 node scripts/verify-s6.mjs 6/6 EVAL_GREEN exit 0);全量挂 release 门(scripts/eval-s6-full.mjs 无 key fail-closed exit 2 + tests/promptfoo/s6-lessons/s6-models.yaml provider 接口 apiKeyEnvar:S6_EVAL_API_KEY + ci.yml release-eval job 仅 workflow_dispatch);红测(临时退化 L1 样本→CI 同命令 EVAL_NOT_GREEN exit 1 5/1,恢复→EVAL_GREEN exit 0 6/6,存档 outputs/ci-red-proof.json,演示后撤下)。verify:ci CI_HARDENING_VERIFIED。真实 key 配置留接口归审查层。范围外:pnpm run 隐式安装检查 offline 陷阱;release-eval job 需审查层配 S6_EVAL_API_KEY secret。阻塞=无。",
+            "observed": "S8 行为套件接线(D5)。确定性子集(S7 黄金样本+S6 离线断言)挂每 push CI;含模型调用全量挂 release 门+手动触发脚本;临时引入退化样本证 CI 门能红(演示后不合入)。前置:STORY-141 与 STORY-147。真实模型 key 配置归审查层,脚本留接口。验收:CI 配置 diff+一次绿跑+一次红演示。MIN-057。进度@2026-08-05: 已完成=确定性子集挂每 push CI(S7 经 p1 test 步自动发现 3/3 绿;S6 经新增 CI 步骤 node scripts/verify-s6.mjs 6/6 EVAL_GREEN exit 0);全量挂 release 门(scripts/eval-s6-full.mjs 无 key fail-closed exit 2 + tests/promptfoo/s6-lessons/s6-models.yaml provider 接口 apiKeyEnvar:S6_EVAL_API_KEY + ci.yml release-eval job 仅 workflow_dispatch);红测(临时退化 L1 样本→CI 同命令 EVAL_NOT_GREEN exit 1 5/1,恢复→EVAL_GREEN exit 0 6/6,存档 outputs/ci-red-proof.json,演示后撤下)。verify:ci CI_HARDENING_VERIFIED。真实 key 配置留接口归审查层。范围外:pnpm run 隐式安装检查 offline 陷阱;release-eval job 需审查层配 S6_EVAL_API_KEY secret。阻塞=无。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-148",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1615,
+    "headEventHash": "cfab696b99f57f8bce7d77db88187c1d6775fc4f553fec1eb338691c95e34e2a",
+    "work": 248
+  },
+  "eventsAppended": 2,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-04T21:21:14Z"
+}

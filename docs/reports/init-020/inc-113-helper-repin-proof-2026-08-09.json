@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "tcrn.init-020.inc-113-proof.v1",
+  "observedAt": "2026-08-08T19:11:20Z",
+  "actor": "agent:gpt-5-codex",
+  "authorization": "AUTHORIZATION-2026-08-09-owner-prod.md",
+  "candidateVersion": "0.11.8",
+  "engineVersion": "0.11.8",
+  "provenanceVersion": "0.11.8",
+  "provenanceTag": "v0.11.8",
+  "installedCopies": {
+    "claude": "v0.11.8",
+    "codex": "v0.11.8"
+  },
+  "skillArchiveSha256": "7c3ccaa38fbeedc5960a80c96af8f4c8157021a682f5b9f7dd71d699b58d2b28",
+  "sourceArchiveSha256": "043eb913f708106f9d0d69fdae0ac7c16adb3f5c90806d1a2b7c3574bdbe9b41",
+  "provenanceSha256": "f97c9fb6d68925ce055796e1b6d875a9ade3e8e1a76c7a7bf7ab8463a50e9227",
+  "bootstrapSha256": "56f17f3765735e4950c60d53125224ce98d7d20d51ba8086bdfc58d71043df82",
+  "checks": {
+    "claude": "INSTALLED_COPY_VALIDATED",
+    "codex": "INSTALLED_COPY_VALIDATED",
+    "plan": "HELPER_REPIN_VERIFIED",
+    "productionProbe": "HELPER_ENGINE_PIN_VERIFIED"
+  },
+  "reasonCode": "INC_113_HELPER_REPIN_VERIFIED"
+}

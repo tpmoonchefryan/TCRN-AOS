@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-142",
+  "intent": "进度记录",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:46ab18d3baee83d7dba9f52e",
+        "scope": "S12 回放性能基准:合成链生成器(仅经引擎公开 CLI 生成 3k/10k 事件工作区,禁直写工作区文件)+bench 脚本对 status/validate/export/work-list 各≥5 次取中位墙钟。验收:两条合成链基准表 json+md;禁对 VM 活链跑基准。S12.3 阈值判定(只读动词>2s 启动修复)与基准落链归审查层。对应 G6。MIN-055。进度@2026-08-05:已完成=S12.1 合成器 scripts/bench/synthesize-chain.mjs(仅引擎公开 CLI init/project-create/work-create/work-transition,expected-version 链式 CAS,禁直写工作区)+3k 链生成成功(3758 事件,18.2min);S12.2 bench-replay.mjs(5 次取中位,拒绝动词记 FAILED reasonCode)+3k 基准实测 status 363ms/validate 397ms/work-list 401ms 均<2s 阈值;export FAILED INPUT_OVERSIZED——协议 1MiB canonical 上限,>3k 事件链不可导出,已列主要 finding 待审查层评估。10k 链合成后台进行中(长杆约 2h),bench-10000 待补。证据包=tcrn-workflow/docs/reports/init-018/S12/(bench-3000.json/.md+commands+notes 已就绪)。下一步=10k 完成后跑 bench 补齐,写定 S12.3 判定草案(当前数据不触发启动修复;export 上限另报)并收口。阻塞=无(等 10k)。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:46ab18d3baee83d7dba9f52e" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-142", "status": "active" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

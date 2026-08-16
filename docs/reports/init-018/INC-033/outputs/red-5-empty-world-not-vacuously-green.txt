@@ -1,0 +1,8 @@
+matcher self-test: 24 samples, 0 failure(s)
+platform root:     /tmp/nonexistent-platform
+session roots:     /tmp/nonexistent-platform
+settings sources:  0
+file deny rules:   0
+control trees:     0
+--- session root: /tmp/nonexistent-platform --- 0 uncovered of 0
+verdict: CONTROL_TREE_DENY_COVERAGE_FAILED (NO_CONTROL_TREES_FOUND, NO_SETTINGS_SOURCES, NO_FILE_DENY_RULES_FOUND)

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "aos.instrument-parity-proof.v2",
+  "story": "TCRN-CROSS-STORY-145",
+  "incident": "TCRN-AOS-INC-036",
+  "ok": false,
+  "reasonCode": "PARITY_PROOF_SOURCE_UNREADABLE",
+  "detail": "平台 .mcp.json 不存在: <local-var-folders>",
+  "expectations": [
+    {
+      "id": "TRUTH_SOURCES_READABLE",
+      "met": false,
+      "expected": true,
+      "observed": "平台 .mcp.json 不存在: <local-var-folders>"
+    }
+  ]
+}

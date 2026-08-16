@@ -1,0 +1,710 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "facade": true,
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2303,
+    "headEventHash": "9b01709588d1074fed8f1994c7b9e95005e69232108601ae801ee511c90d5374",
+    "work": 382
+  },
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2312,
+    "headEventHash": "e07913cd1cecbd2ff80f8078954e98e465e7123298ca2a5f342efb2e5745ac66",
+    "work": 386
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-08T07:10:51Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2303",
+        "--external-key",
+        "TCRN-CROSS-STORY-196",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:2b6a166e82ea80e6337cb669",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 2303,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ecfba950a6fa5233d4b1f414",
+      "version": 2304
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-08T07:10:53Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2304",
+        "--id",
+        "work:ecfba950a6fa5233d4b1f414",
+        "--scope",
+        "【补强|生产就绪聚合门(收口硬件⑤·运行期常备健康探针)】来源:Owner 2026-08-08 投产指令。单命令(建议 pnpm --dir TCRN-AOS prod:ready)聚合以下子探针,输出 PRODUCTION_READY/NOT_READY 与逐项明细,任一子项红即整门红:①五链 status+validate 经 MCP 读面全绿;②tip 单一真值门绿(INC-075);③新收口门(INC-108)对 INIT-020 全部收口必需单读链核对绿;④仪器在岗——ssh-write-observer 对真实治理主机的正例(INC-109/110)+stop-pact 在岗自检(INC-105);⑤engine-host:verify 绿且 helper 钉定版本==VM 部署版本(INC-113);⑥配对备份新鲜(默认≤7天,Owner 可调)且 paired:backup-verify-offsite 绿;⑦五分区 knowledge-freshness 无 stale;⑧MCP 面隧道健康(INC-114)。纪律:门代码与其所量对象不得同次提交由同一方共改(QA4 纪律②);子探针全部复用既有门,不自造判据。定位:INIT-020 收口在窗前四硬件之外新增的硬件⑤;投产后建议周检并把结果以注记落链。判据两侧:正腿=全部子项绿时报 PRODUCTION_READY;红腿=逐子项人为致红演练一次(如临时挪走一件备份),整门必红。可检查前置:INC-105/108/109/110/113/114。归属:TCRN-AOS。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2304,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ecfba950a6fa5233d4b1f414",
+      "version": 2305
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-08T07:10:54Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2305",
+        "--external-key",
+        "TCRN-CROSS-STORY-197",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:2b6a166e82ea80e6337cb669",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 2305,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:1377292f9925417bc80001ed",
+      "version": 2306
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-08T07:10:56Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2306",
+        "--id",
+        "work:1377292f9925417bc80001ed",
+        "--scope",
+        "【补强|运行期协议:非紧急开发冻结与数据驱动的再开发触发器】来源:Owner 2026-08-08 指令(完成本 INIT 后正式投产,处理过足够多任务后才反过来通过大量工作记录分析是否需要进一步开发)。协议内容(收口日起生效):①引擎/门面/helper 进入非紧急开发冻结;可破冻仅三类,每次立 INC 且当批验收——fail-closed 事故(任一链不可读或不可写)、数据完整性或备份失效、安全事件。②运行期常规通路=仪式与两 MCP 面;引擎字节改动一律须新 Initiative(enforce 类承 MIN-046 先裁后改)。③再开发触发器(先到者触发;阈值为默认值,Owner 可改):任一分区自投产累积≥100 新工作项;或五分区合计≥300;或运行满 12 周;或 failure-pattern register 任一模式达晋升阈值(两次独立复发)。触发后开「运行复盘 Initiative」,输入=链上工作记录+knowledge candidates+失败模式计数+STORY-196 周检注记,产出=是否需要进一步开发的证据化裁定,而非直接动手。④本协议写入平台 CLAUDE.md 与 AOS HANDOVER(带日期与复核命令,承 doc-topology 纪律)。判据两侧:正腿=协议落链+两处文档注册+STORY-196 周检首跑注记;红腿=冻结期内非紧急引擎提交应被拦——如实登记:此腿现无机器门,由 Owner 人工执行(承 dispatch-readiness 不称有门先例);若运行期首月即发生破冻,复盘提前触发。可检查前置:STORY-196。归属:cross-project 治理面。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2306,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:1377292f9925417bc80001ed",
+      "version": 2307
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-08T07:10:57Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2307",
+        "--external-key",
+        "TCRN-CROSS-INC-113",
+        "--kind",
+        "Incident",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 2307,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:e2c8187429fd5343347bade0",
+      "version": 2308
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-08T07:10:59Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2308",
+        "--id",
+        "work:e2c8187429fd5343347bade0",
+        "--scope",
+        "【补强|发版 DoD 与信任面对齐】来源:2026-08-08 投产收口评估(本机实测)。三缺口:①engine-host:verify 当前红 AOS_HOST_ENGINE_DRIFTED——两侧版本同为 0.11.8、0 字节不匹配,但 VM 缺 dist/evidence/p1/history.json 与 dist/evidence/p1/privacy.json 两件(本机重跑校验再生的证据物未随部署走);②helper 信任面钉 v0.10.2,落后现役引擎 0.11.8 整条小版本线(helper 仓内无任何 0.11.x 字符串;SKILL.md 仍称七命令操作面而现役名录 106 动词),重钉计划已具(HELPER_REPIN_OWNER_APPROVAL_REQUIRED),执行待 Owner 批;③helper HEAD 曾在 candidate.30 发布提交之后重钉 EXPECTED_ARCHIVE_SHA256 而未升 candidate 号;且其文档把 IDENTITY_MISMATCH 只解释为「置放字节陈旧/被改/不全」,缺「验证器自身陈旧」半边(workflow-operations.md:493)。修法:①两证据物纳入部署集或按裁定从比对集排除(二选一并记理由),engine-host:verify 绿纳入发版 DoD;②helper 重钉至与 VM 部署版本一致(经 INC-104 计划执行,SKILL.md 与引用文档随钉更新);③立规则「skill 载荷字节改动必升 candidate 号」并入 helper 发版门;④IDENTITY_MISMATCH 文档补两义判别程序(先分清副本漂移还是验证器陈旧,两者修法相反)。判据两侧:正腿=verify-installed-copy 所钉版本==VM commands 名录自报版本,且 engine-host:verify 绿;红腿=故意留一件 dist 不同步必红;载荷改动不升 candidate 号必被 helper 门拒。可检查前置:INC-104(重钉计划)、INC-097(0.11.8 经 INC-093 门铸 tag)。归属:tcrn-workflow-helper + TCRN-AOS/deploy。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2308,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:e2c8187429fd5343347bade0",
+      "version": 2309
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-08T07:11:01Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2309",
+        "--external-key",
+        "TCRN-CROSS-INC-114",
+        "--kind",
+        "Incident",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 2309,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:6ba8889345f8f3d176dc4fbd",
+      "version": 2310
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-08T07:11:02Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2310",
+        "--id",
+        "work:6ba8889345f8f3d176dc4fbd",
+        "--scope",
+        "【补强|MCP 两面会话隧道自愈与失联具名】来源:QA3(2026-08-07)与本会话(2026-08-08)两次实证——MCP 读面的会话级 ssh -N -L 隧道死亡后不自愈,后续调用报 MCP_REMOTE_NON_JSON_OUTPUT/curl exit 7(QA3 同场写面症状为 CEREMONY_THREW_BEFORE_RECEIPT 全 null),而 VM 与门面读服务本身可达(本会话自建隧道走同一门面 4320 端点全部成功,未动引擎 CLI)。这对运行期是主读面的可用性缺陷:失效形态是裸 curl 错误而非具名报障,易被误读为链坏,且一天内两会话复现。修法:①两 MCP 面内建连接探活与隧道重建(或改为每调用短连,权衡取舍并记理由);②失联时返回具名 reason code(如 FACADE_TUNNEL_DOWN)并附重试指引,禁止裸 NON_JSON 透出;③保持 QA3 已实证的「失败写零落链」性质在重建逻辑下不变。判据两侧:正腿=人为杀掉隧道后,下一次调用自动重建成功或返回具名报障;红腿=杀隧道后调用返回裸 NON_JSON 即红。可检查前置:无(独立可做)。归属:TCRN-AOS/deploy/aos-local-client(remote-read-mcp.mjs 与 aos-mcp-write/server.mjs)。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2310,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:6ba8889345f8f3d176dc4fbd",
+      "version": 2311
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-08T07:11:04Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2311",
+        "--id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--scope",
+        "【投产收口批(2026-08-08)·Owner 指令与终局清单】Owner 指令逐字:「给我一套最后需要修复、补强的任务清单并落到INIT-020中,使得我完成该INIT后,这套系统就可以正式让我开始投入生产且在我处理过足够多的任务后才需要反过来通过大量工作记录来分析是否需要进一步开发」。收口定义更新:INIT-020 完成=投产就绪;判据=STORY-196 聚合门绿(窗前四硬件之外新增硬件⑤)+收口必需单全 done+S190 材料齐。收口必需(P0,以链上状态为准,已 done 者不重开):INC-092/093/094/095/096/097/099/100/101/102/103/104/105/106/107/108/109/110/111/112/113/114 + STORY-187/193/196/197 + S189/S190 收尾;INC-061..071 十一单按 MIN-064 D5′ 经新收口门(INC-108)完成真核销(superseded 指名承接处/retained 独立执行);INC-090 由 INC-108 替代承接、INC-091 由 INC-100 替代承接,核销时记 superseded 而非静默。转运行期首批(不阻收口,承 Owner D3 先例):STORY-194/195。执行序:INC-108/109 最先(收口机构与仪器在岗是其余一切验收的量具)→110/105/193(106/107 随行)→100/111/092→113/114→099/102/103/104→097 经 INC-093 门铸 tag(A 档已授,门绿即行)→094/095/096/101→061..071 真核销→187→196 红腿演练→197→S189/S190 收尾。Owner 必停点:任何 push(C 档:WF 待 verify:privacy 0+p8 绿+CI 绿再裁,AOS 私有先请裁)、helper 重钉执行批准(HELPER_REPIN_OWNER_APPROVAL_REQUIRED)、INIT-020 收口验收本身;A 档既授事项按 AUTHORIZATION-2026-08-07-qa4-owner.md 执行不再另停。运行期:收口后按 STORY-197 协议进入非紧急冻结,再开发由数据触发(阈值默认 100/300/12周/模式晋升,Owner 可改)。链外历史悬单(INIT-009/019、EPIC-047..051、STORY-159/165/189 外的 159/165、INC-023/026/031/041/042)不属本 INIT 范围,留待各自轨道,不因本批改状态。执行形态:单上下文,宿主 Claude Code,persona agent:fable;本批只立单与定收口判据,不执行修复。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2311,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:4d0ecd9c1e6ea5292ef08330",
+      "version": 2312
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:ecfba950a6fa5233d4b1f414",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-196",
+            "observed": "TCRN-CROSS-STORY-196",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "parentId",
+            "expected": "work:2b6a166e82ea80e6337cb669",
+            "observed": "work:2b6a166e82ea80e6337cb669",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【补强|生产就绪聚合门(收口硬件⑤·运行期常备健康探针)】来源:Owner 2026-08-08 投产指令。单命令(建议 pnpm --dir TCRN-AOS prod:ready)聚合以下子探针,输出 PRODUCTION_READY/NOT_READY 与逐项明细,任一子项红即整门红:①五链 status+validate 经 MCP 读面全绿;②tip 单一真值门绿(INC-075);③新收口门(INC-108)对 INIT-020 全部收口必需单读链核对绿;④仪器在岗——ssh-write-observer 对真实治理主机的正例(INC-109/110)+stop-pact 在岗自检(INC-105);⑤engine-host:verify 绿且 helper 钉定版本==VM 部署版本(INC-113);⑥配对备份新鲜(默认≤7天,Owner 可调)且 paired:backup-verify-offsite 绿;⑦五分区 knowledge-freshness 无 stale;⑧MCP 面隧道健康(INC-114)。纪律:门代码与其所量对象不得同次提交由同一方共改(QA4 纪律②);子探针全部复用既有门,不自造判据。定位:INIT-020 收口在窗前四硬件之外新增的硬件⑤;投产后建议周检并把结果以注记落链。判据两侧:正腿=全部子项绿时报 PRODUCTION_READY;红腿=逐子项人为致红演练一次(如临时挪走一件备份),整门必红。可检查前置:INC-105/108/109/110/113/114。归属:TCRN-AOS。",
+            "observed": "【补强|生产就绪聚合门(收口硬件⑤·运行期常备健康探针)】来源:Owner 2026-08-08 投产指令。单命令(建议 pnpm --dir TCRN-AOS prod:ready)聚合以下子探针,输出 PRODUCTION_READY/NOT_READY 与逐项明细,任一子项红即整门红:①五链 status+validate 经 MCP 读面全绿;②tip 单一真值门绿(INC-075);③新收口门(INC-108)对 INIT-020 全部收口必需单读链核对绿;④仪器在岗——ssh-write-observer 对真实治理主机的正例(INC-109/110)+stop-pact 在岗自检(INC-105);⑤engine-host:verify 绿且 helper 钉定版本==VM 部署版本(INC-113);⑥配对备份新鲜(默认≤7天,Owner 可调)且 paired:backup-verify-offsite 绿;⑦五分区 knowledge-freshness 无 stale;⑧MCP 面隧道健康(INC-114)。纪律:门代码与其所量对象不得同次提交由同一方共改(QA4 纪律②);子探针全部复用既有门,不自造判据。定位:INIT-020 收口在窗前四硬件之外新增的硬件⑤;投产后建议周检并把结果以注记落链。判据两侧:正腿=全部子项绿时报 PRODUCTION_READY;红腿=逐子项人为致红演练一次(如临时挪走一件备份),整门必红。可检查前置:INC-105/108/109/110/113/114。归属:TCRN-AOS。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-196",
+        "kind": "Story",
+        "status": "planned",
+        "parentId": "work:2b6a166e82ea80e6337cb669"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:1377292f9925417bc80001ed",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-197",
+            "observed": "TCRN-CROSS-STORY-197",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【补强|运行期协议:非紧急开发冻结与数据驱动的再开发触发器】来源:Owner 2026-08-08 指令(完成本 INIT 后正式投产,处理过足够多任务后才反过来通过大量工作记录分析是否需要进一步开发)。协议内容(收口日起生效):①引擎/门面/helper 进入非紧急开发冻结;可破冻仅三类,每次立 INC 且当批验收——fail-closed 事故(任一链不可读或不可写)、数据完整性或备份失效、安全事件。②运行期常规通路=仪式与两 MCP 面;引擎字节改动一律须新 Initiative(enforce 类承 MIN-046 先裁后改)。③再开发触发器(先到者触发;阈值为默认值,Owner 可改):任一分区自投产累积≥100 新工作项;或五分区合计≥300;或运行满 12 周;或 failure-pattern register 任一模式达晋升阈值(两次独立复发)。触发后开「运行复盘 Initiative」,输入=链上工作记录+knowledge candidates+失败模式计数+STORY-196 周检注记,产出=是否需要进一步开发的证据化裁定,而非直接动手。④本协议写入平台 CLAUDE.md 与 AOS HANDOVER(带日期与复核命令,承 doc-topology 纪律)。判据两侧:正腿=协议落链+两处文档注册+STORY-196 周检首跑注记;红腿=冻结期内非紧急引擎提交应被拦——如实登记:此腿现无机器门,由 Owner 人工执行(承 dispatch-readiness 不称有门先例);若运行期首月即发生破冻,复盘提前触发。可检查前置:STORY-196。归属:cross-project 治理面。",
+            "observed": "【补强|运行期协议:非紧急开发冻结与数据驱动的再开发触发器】来源:Owner 2026-08-08 指令(完成本 INIT 后正式投产,处理过足够多任务后才反过来通过大量工作记录分析是否需要进一步开发)。协议内容(收口日起生效):①引擎/门面/helper 进入非紧急开发冻结;可破冻仅三类,每次立 INC 且当批验收——fail-closed 事故(任一链不可读或不可写)、数据完整性或备份失效、安全事件。②运行期常规通路=仪式与两 MCP 面;引擎字节改动一律须新 Initiative(enforce 类承 MIN-046 先裁后改)。③再开发触发器(先到者触发;阈值为默认值,Owner 可改):任一分区自投产累积≥100 新工作项;或五分区合计≥300;或运行满 12 周;或 failure-pattern register 任一模式达晋升阈值(两次独立复发)。触发后开「运行复盘 Initiative」,输入=链上工作记录+knowledge candidates+失败模式计数+STORY-196 周检注记,产出=是否需要进一步开发的证据化裁定,而非直接动手。④本协议写入平台 CLAUDE.md 与 AOS HANDOVER(带日期与复核命令,承 doc-topology 纪律)。判据两侧:正腿=协议落链+两处文档注册+STORY-196 周检首跑注记;红腿=冻结期内非紧急引擎提交应被拦——如实登记:此腿现无机器门,由 Owner 人工执行(承 dispatch-readiness 不称有门先例);若运行期首月即发生破冻,复盘提前触发。可检查前置:STORY-196。归属:cross-project 治理面。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-197",
+        "kind": "Story",
+        "status": "planned"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:e2c8187429fd5343347bade0",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-113",
+            "observed": "TCRN-CROSS-INC-113",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Incident",
+            "observed": "Incident",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【补强|发版 DoD 与信任面对齐】来源:2026-08-08 投产收口评估(本机实测)。三缺口:①engine-host:verify 当前红 AOS_HOST_ENGINE_DRIFTED——两侧版本同为 0.11.8、0 字节不匹配,但 VM 缺 dist/evidence/p1/history.json 与 dist/evidence/p1/privacy.json 两件(本机重跑校验再生的证据物未随部署走);②helper 信任面钉 v0.10.2,落后现役引擎 0.11.8 整条小版本线(helper 仓内无任何 0.11.x 字符串;SKILL.md 仍称七命令操作面而现役名录 106 动词),重钉计划已具(HELPER_REPIN_OWNER_APPROVAL_REQUIRED),执行待 Owner 批;③helper HEAD 曾在 candidate.30 发布提交之后重钉 EXPECTED_ARCHIVE_SHA256 而未升 candidate 号;且其文档把 IDENTITY_MISMATCH 只解释为「置放字节陈旧/被改/不全」,缺「验证器自身陈旧」半边(workflow-operations.md:493)。修法:①两证据物纳入部署集或按裁定从比对集排除(二选一并记理由),engine-host:verify 绿纳入发版 DoD;②helper 重钉至与 VM 部署版本一致(经 INC-104 计划执行,SKILL.md 与引用文档随钉更新);③立规则「skill 载荷字节改动必升 candidate 号」并入 helper 发版门;④IDENTITY_MISMATCH 文档补两义判别程序(先分清副本漂移还是验证器陈旧,两者修法相反)。判据两侧:正腿=verify-installed-copy 所钉版本==VM commands 名录自报版本,且 engine-host:verify 绿;红腿=故意留一件 dist 不同步必红;载荷改动不升 candidate 号必被 helper 门拒。可检查前置:INC-104(重钉计划)、INC-097(0.11.8 经 INC-093 门铸 tag)。归属:tcrn-workflow-helper + TCRN-AOS/deploy。",
+            "observed": "【补强|发版 DoD 与信任面对齐】来源:2026-08-08 投产收口评估(本机实测)。三缺口:①engine-host:verify 当前红 AOS_HOST_ENGINE_DRIFTED——两侧版本同为 0.11.8、0 字节不匹配,但 VM 缺 dist/evidence/p1/history.json 与 dist/evidence/p1/privacy.json 两件(本机重跑校验再生的证据物未随部署走);②helper 信任面钉 v0.10.2,落后现役引擎 0.11.8 整条小版本线(helper 仓内无任何 0.11.x 字符串;SKILL.md 仍称七命令操作面而现役名录 106 动词),重钉计划已具(HELPER_REPIN_OWNER_APPROVAL_REQUIRED),执行待 Owner 批;③helper HEAD 曾在 candidate.30 发布提交之后重钉 EXPECTED_ARCHIVE_SHA256 而未升 candidate 号;且其文档把 IDENTITY_MISMATCH 只解释为「置放字节陈旧/被改/不全」,缺「验证器自身陈旧」半边(workflow-operations.md:493)。修法:①两证据物纳入部署集或按裁定从比对集排除(二选一并记理由),engine-host:verify 绿纳入发版 DoD;②helper 重钉至与 VM 部署版本一致(经 INC-104 计划执行,SKILL.md 与引用文档随钉更新);③立规则「skill 载荷字节改动必升 candidate 号」并入 helper 发版门;④IDENTITY_MISMATCH 文档补两义判别程序(先分清副本漂移还是验证器陈旧,两者修法相反)。判据两侧:正腿=verify-installed-copy 所钉版本==VM commands 名录自报版本,且 engine-host:verify 绿;红腿=故意留一件 dist 不同步必红;载荷改动不升 candidate 号必被 helper 门拒。可检查前置:INC-104(重钉计划)、INC-097(0.11.8 经 INC-093 门铸 tag)。归属:tcrn-workflow-helper + TCRN-AOS/deploy。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-113",
+        "kind": "Incident",
+        "status": "planned"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:6ba8889345f8f3d176dc4fbd",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-114",
+            "observed": "TCRN-CROSS-INC-114",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Incident",
+            "observed": "Incident",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【补强|MCP 两面会话隧道自愈与失联具名】来源:QA3(2026-08-07)与本会话(2026-08-08)两次实证——MCP 读面的会话级 ssh -N -L 隧道死亡后不自愈,后续调用报 MCP_REMOTE_NON_JSON_OUTPUT/curl exit 7(QA3 同场写面症状为 CEREMONY_THREW_BEFORE_RECEIPT 全 null),而 VM 与门面读服务本身可达(本会话自建隧道走同一门面 4320 端点全部成功,未动引擎 CLI)。这对运行期是主读面的可用性缺陷:失效形态是裸 curl 错误而非具名报障,易被误读为链坏,且一天内两会话复现。修法:①两 MCP 面内建连接探活与隧道重建(或改为每调用短连,权衡取舍并记理由);②失联时返回具名 reason code(如 FACADE_TUNNEL_DOWN)并附重试指引,禁止裸 NON_JSON 透出;③保持 QA3 已实证的「失败写零落链」性质在重建逻辑下不变。判据两侧:正腿=人为杀掉隧道后,下一次调用自动重建成功或返回具名报障;红腿=杀隧道后调用返回裸 NON_JSON 即红。可检查前置:无(独立可做)。归属:TCRN-AOS/deploy/aos-local-client(remote-read-mcp.mjs 与 aos-mcp-write/server.mjs)。",
+            "observed": "【补强|MCP 两面会话隧道自愈与失联具名】来源:QA3(2026-08-07)与本会话(2026-08-08)两次实证——MCP 读面的会话级 ssh -N -L 隧道死亡后不自愈,后续调用报 MCP_REMOTE_NON_JSON_OUTPUT/curl exit 7(QA3 同场写面症状为 CEREMONY_THREW_BEFORE_RECEIPT 全 null),而 VM 与门面读服务本身可达(本会话自建隧道走同一门面 4320 端点全部成功,未动引擎 CLI)。这对运行期是主读面的可用性缺陷:失效形态是裸 curl 错误而非具名报障,易被误读为链坏,且一天内两会话复现。修法:①两 MCP 面内建连接探活与隧道重建(或改为每调用短连,权衡取舍并记理由);②失联时返回具名 reason code(如 FACADE_TUNNEL_DOWN)并附重试指引,禁止裸 NON_JSON 透出;③保持 QA3 已实证的「失败写零落链」性质在重建逻辑下不变。判据两侧:正腿=人为杀掉隧道后,下一次调用自动重建成功或返回具名报障;红腿=杀隧道后调用返回裸 NON_JSON 即红。可检查前置:无(独立可做)。归属:TCRN-AOS/deploy/aos-local-client(remote-read-mcp.mjs 与 aos-mcp-write/server.mjs)。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-114",
+        "kind": "Incident",
+        "status": "planned"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INIT-020",
+            "observed": "TCRN-CROSS-INIT-020",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【投产收口批(2026-08-08)·Owner 指令与终局清单】Owner 指令逐字:「给我一套最后需要修复、补强的任务清单并落到INIT-020中,使得我完成该INIT后,这套系统就可以正式让我开始投入生产且在我处理过足够多的任务后才需要反过来通过大量工作记录来分析是否需要进一步开发」。收口定义更新:INIT-020 完成=投产就绪;判据=STORY-196 聚合门绿(窗前四硬件之外新增硬件⑤)+收口必需单全 done+S190 材料齐。收口必需(P0,以链上状态为准,已 done 者不重开):INC-092/093/094/095/096/097/099/100/101/102/103/104/105/106/107/108/109/110/111/112/113/114 + STORY-187/193/196/197 + S189/S190 收尾;INC-061..071 十一单按 MIN-064 D5′ 经新收口门(INC-108)完成真核销(superseded 指名承接处/retained 独立执行);INC-090 由 INC-108 替代承接、INC-091 由 INC-100 替代承接,核销时记 superseded 而非静默。转运行期首批(不阻收口,承 Owner D3 先例):STORY-194/195。执行序:INC-108/109 最先(收口机构与仪器在岗是其余一切验收的量具)→110/105/193(106/107 随行)→100/111/092→113/114→099/102/103/104→097 经 INC-093 门铸 tag(A 档已授,门绿即行)→094/095/096/101→061..071 真核销→187→196 红腿演练→197→S189/S190 收尾。Owner 必停点:任何 push(C 档:WF 待 verify:privacy 0+p8 绿+CI 绿再裁,AOS 私有先请裁)、helper 重钉执行批准(HELPER_REPIN_OWNER_APPROVAL_REQUIRED)、INIT-020 收口验收本身;A 档既授事项按 AUTHORIZATION-2026-08-07-qa4-owner.md 执行不再另停。运行期:收口后按 STORY-197 协议进入非紧急冻结,再开发由数据触发(阈值默认 100/300/12周/模式晋升,Owner 可改)。链外历史悬单(INIT-009/019、EPIC-047..051、STORY-159/165/189 外的 159/165、INC-023/026/031/041/042)不属本 INIT 范围,留待各自轨道,不因本批改状态。执行形态:单上下文,宿主 Claude Code,persona agent:fable;本批只立单与定收口判据,不执行修复。",
+            "observed": "【投产收口批(2026-08-08)·Owner 指令与终局清单】Owner 指令逐字:「给我一套最后需要修复、补强的任务清单并落到INIT-020中,使得我完成该INIT后,这套系统就可以正式让我开始投入生产且在我处理过足够多的任务后才需要反过来通过大量工作记录来分析是否需要进一步开发」。收口定义更新:INIT-020 完成=投产就绪;判据=STORY-196 聚合门绿(窗前四硬件之外新增硬件⑤)+收口必需单全 done+S190 材料齐。收口必需(P0,以链上状态为准,已 done 者不重开):INC-092/093/094/095/096/097/099/100/101/102/103/104/105/106/107/108/109/110/111/112/113/114 + STORY-187/193/196/197 + S189/S190 收尾;INC-061..071 十一单按 MIN-064 D5′ 经新收口门(INC-108)完成真核销(superseded 指名承接处/retained 独立执行);INC-090 由 INC-108 替代承接、INC-091 由 INC-100 替代承接,核销时记 superseded 而非静默。转运行期首批(不阻收口,承 Owner D3 先例):STORY-194/195。执行序:INC-108/109 最先(收口机构与仪器在岗是其余一切验收的量具)→110/105/193(106/107 随行)→100/111/092→113/114→099/102/103/104→097 经 INC-093 门铸 tag(A 档已授,门绿即行)→094/095/096/101→061..071 真核销→187→196 红腿演练→197→S189/S190 收尾。Owner 必停点:任何 push(C 档:WF 待 verify:privacy 0+p8 绿+CI 绿再裁,AOS 私有先请裁)、helper 重钉执行批准(HELPER_REPIN_OWNER_APPROVAL_REQUIRED)、INIT-020 收口验收本身;A 档既授事项按 AUTHORIZATION-2026-08-07-qa4-owner.md 执行不再另停。运行期:收口后按 STORY-197 协议进入非紧急冻结,再开发由数据触发(阈值默认 100/300/12周/模式晋升,Owner 可改)。链外历史悬单(INIT-009/019、EPIC-047..051、STORY-159/165/189 外的 159/165、INC-023/026/031/041/042)不属本 INIT 范围,留待各自轨道,不因本批改状态。执行形态:单上下文,宿主 Claude Code,persona agent:fable;本批只立单与定收口判据,不执行修复。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INIT-020"
+      }
+    }
+  ],
+  "eventsAppended": 9,
+  "finishedAt": "2026-08-08T07:11:16Z"
+}

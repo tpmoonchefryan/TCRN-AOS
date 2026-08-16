@@ -1,0 +1,370 @@
+{
+  "corpus": 96,
+  "wrongOnPreFix": 45,
+  "byDirection": {
+    "missedWrites": 23,
+    "falseAlarms": 22
+  },
+  "rows": [
+    {
+      "id": "B01",
+      "defect": 1,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "exemption",
+      "command": "ssh tcrn-platform-dev \"cp /tmp/ceremony.mjs /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "B02",
+      "defect": 1,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "exemption",
+      "command": "ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace/index.json # replaces paired-backup.mjs\""
+    },
+    {
+      "id": "B03",
+      "defect": 1,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "exemption",
+      "command": "ssh tcrn-platform-dev \"sed -i 's/a/b/' /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/ship-web.mjs.json\""
+    },
+    {
+      "id": "B04",
+      "defect": 1,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "exemption",
+      "command": "ssh tcrn-platform-dev \"mv /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json /tmp/engine-host:verify\""
+    },
+    {
+      "id": "C01",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "env TCRN_DEBUG=1 ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C02",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "time ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C03",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "sudo -u root ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C04",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "nohup ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C05",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "command ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C06",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "TCRN_DEBUG=1 ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C07",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "timeout 30 ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C08",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "nice -n 10 ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C09",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "ionice -c 3 ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C10",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "stdbuf -oL ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C11",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "exec ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C12",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "setsid ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C13",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "doas ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C14",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "env TCRN_DEBUG=1 sudo -u root nohup ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "C15",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "out=$(ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\")"
+    },
+    {
+      "id": "C16",
+      "defect": 2,
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "env X=1 ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs export --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace | tee /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/leak.json\""
+    },
+    {
+      "id": "D01",
+      "defect": 3,
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs status --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace\" 2>&1"
+    },
+    {
+      "id": "D02",
+      "defect": 3,
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs export --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace\" > /tmp/export.json"
+    },
+    {
+      "id": "D03",
+      "defect": 3,
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs work-list --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace\" | tee /tmp/work.log"
+    },
+    {
+      "id": "D04",
+      "defect": 3,
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "rm -rf /tmp/scratch && ssh tcrn-platform-dev \"ls /srv/tcrn/governance/tcrn-workspace/cross-project/workspace\""
+    },
+    {
+      "id": "D05",
+      "defect": 3,
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"ls /srv/tcrn/governance/tcrn-workspace/cross-project/workspace\" && rm -rf /tmp/scratch"
+    },
+    {
+      "id": "D06",
+      "defect": 3,
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "cp /tmp/a /tmp/b; ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs status --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace\""
+    },
+    {
+      "id": "D07",
+      "defect": 3,
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs status --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace 2>&1\""
+    },
+    {
+      "id": "D08",
+      "defect": 3,
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "rsync",
+      "command": "rsync -av ./tcrn-platform-dev-mirror/srv/tcrn/governance ./backup"
+    },
+    {
+      "id": "D09",
+      "defect": 3,
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "scp",
+      "command": "scp /tmp/a /tmp/b # tcrn-platform-dev:/srv/tcrn/governance/tcrn-workspace/cross-project/workspace/x"
+    },
+    {
+      "id": "D11",
+      "defect": 3,
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs work-list --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace\" > ./docs/reports/init-018/INC-037/outputs/work-list.json"
+    },
+    {
+      "id": "E02",
+      "defect": "other",
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev-staging \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "E04",
+      "defect": "other",
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"rm /srv/tcrn/governance-mirror/x\""
+    },
+    {
+      "id": "E16",
+      "defect": "other",
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs export --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace &> /srv/tcrn/aos-cockpit/web/export.json\""
+    },
+    {
+      "id": "E18",
+      "defect": "other",
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "/usr/bin/ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""
+    },
+    {
+      "id": "E21",
+      "defect": "other",
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "(ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\")"
+    },
+    {
+      "id": "E22",
+      "defect": "other",
+      "expected": "HIT",
+      "preFixVerdict": "PASS",
+      "preFixReason": "no-write-primitive",
+      "command": "out=`ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\"`"
+    },
+    {
+      "id": "F01",
+      "defect": "other",
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs export --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace > /tmp/export.json\""
+    },
+    {
+      "id": "F02",
+      "defect": "other",
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs export --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace > /srv/tcrn/aos-cockpit/web/export.json\""
+    },
+    {
+      "id": "F04",
+      "defect": "other",
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"touch /tmp/tcrn-lock && node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs status --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace\""
+    },
+    {
+      "id": "F05",
+      "defect": "other",
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs event-list --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace | tee /tmp/events.log\""
+    },
+    {
+      "id": "F10",
+      "defect": "other",
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs export --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace > /srv/tcrn/aos-cockpit/web/export.json\""
+    },
+    {
+      "id": "F11",
+      "defect": "other",
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"touch /var/tmp/tcrn-lock && node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs status --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace\""
+    },
+    {
+      "id": "F12",
+      "defect": "other",
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs status --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace | tee /dev/null\""
+    },
+    {
+      "id": "F14",
+      "defect": "other",
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"touch /run/tcrn.lock && node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs status --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace\""
+    },
+    {
+      "id": "F15",
+      "defect": "other",
+      "expected": "PASS",
+      "preFixVerdict": "HIT",
+      "preFixReason": "ssh-write",
+      "command": "ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs status --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace | tee /tmp/out.log 2> /tmp/err.log\""
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "facade": true,
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2281,
+    "headEventHash": "5e15f0e92a8a43345665af6ee90b09f1780aa88f7bed60555988d89bc0a72134",
+    "work": 373
+  },
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2282,
+    "headEventHash": "52520d6e309f97ff30a9a04964bbcdc67f759d2098a38e3b26545e90e72a8afc",
+    "work": 373
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T15:52:56Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2281",
+        "--id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--scope",
+        "【QA4 交接书登记(2026-08-07)】交接文档 TCRN-AOS/docs/reports/init-020/HANDOVER-2026-08-07-qa4-codex.md 已出,取代 HANDOVER-2026-08-07-qa3-codex.md 的单子名册与执行序段(qa3 版的通道纪律、署名与回执纪律仍有效,本轮实测证明有用,故不重复照抄)。内容:①先列执行方上一轮做对的七点(二三轮核心病全未复发、回执为物化件、署名与执行形态正确、历史重写未丢内容、C 档停止点守住、见证分类诚实、verify:privacy 被加强),并载明验收方自己被对抗核验推翻的五条初判;②P0 全文与双向注入证据,含公道记录(方向本对=已走 env,错在默认回退值仍为编码后真值);③其余确认问题逐条带 file:line;④**本轮新增七条执行纪律**:编码≠占位化、门与被量对象不得同次提交一起改(判据独立性)、判据变更必须披露、报绿须指明哪棵树、不得把红移出扫描面、写失败先读回执再决定重试(验收方本轮自身实测教训)、声称测试通过前在真仓跑一遍;⑤八单名册(INC-099..104 + STORY-193/194)带 id 与可检查前置;⑥建议执行序 099→101→102→103→100→104→193→194;⑦Owner 政策题现状(D1/D2/D3 已裁毕不需重问,仅 C 档推送待裁,改用户级配置仍须出 diff 过目);⑧第五轮验收八条判据;⑨陷阱速查增补版。钩子面现状已写入交接书,免执行方重新考古(撤下时间、留档位置、hooks.state 六条指向不存在文件、EPIC-024 候选未晋级、Claude/Codex 治理钩子对比)。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2281,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:4d0ecd9c1e6ea5292ef08330",
+      "version": 2282
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INIT-020",
+            "observed": "TCRN-CROSS-INIT-020",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【QA4 交接书登记(2026-08-07)】交接文档 TCRN-AOS/docs/reports/init-020/HANDOVER-2026-08-07-qa4-codex.md 已出,取代 HANDOVER-2026-08-07-qa3-codex.md 的单子名册与执行序段(qa3 版的通道纪律、署名与回执纪律仍有效,本轮实测证明有用,故不重复照抄)。内容:①先列执行方上一轮做对的七点(二三轮核心病全未复发、回执为物化件、署名与执行形态正确、历史重写未丢内容、C 档停止点守住、见证分类诚实、verify:privacy 被加强),并载明验收方自己被对抗核验推翻的五条初判;②P0 全文与双向注入证据,含公道记录(方向本对=已走 env,错在默认回退值仍为编码后真值);③其余确认问题逐条带 file:line;④**本轮新增七条执行纪律**:编码≠占位化、门与被量对象不得同次提交一起改(判据独立性)、判据变更必须披露、报绿须指明哪棵树、不得把红移出扫描面、写失败先读回执再决定重试(验收方本轮自身实测教训)、声称测试通过前在真仓跑一遍;⑤八单名册(INC-099..104 + STORY-193/194)带 id 与可检查前置;⑥建议执行序 099→101→102→103→100→104→193→194;⑦Owner 政策题现状(D1/D2/D3 已裁毕不需重问,仅 C 档推送待裁,改用户级配置仍须出 diff 过目);⑧第五轮验收八条判据;⑨陷阱速查增补版。钩子面现状已写入交接书,免执行方重新考古(撤下时间、留档位置、hooks.state 六条指向不存在文件、EPIC-024 候选未晋级、Claude/Codex 治理钩子对比)。",
+            "observed": "【QA4 交接书登记(2026-08-07)】交接文档 TCRN-AOS/docs/reports/init-020/HANDOVER-2026-08-07-qa4-codex.md 已出,取代 HANDOVER-2026-08-07-qa3-codex.md 的单子名册与执行序段(qa3 版的通道纪律、署名与回执纪律仍有效,本轮实测证明有用,故不重复照抄)。内容:①先列执行方上一轮做对的七点(二三轮核心病全未复发、回执为物化件、署名与执行形态正确、历史重写未丢内容、C 档停止点守住、见证分类诚实、verify:privacy 被加强),并载明验收方自己被对抗核验推翻的五条初判;②P0 全文与双向注入证据,含公道记录(方向本对=已走 env,错在默认回退值仍为编码后真值);③其余确认问题逐条带 file:line;④**本轮新增七条执行纪律**:编码≠占位化、门与被量对象不得同次提交一起改(判据独立性)、判据变更必须披露、报绿须指明哪棵树、不得把红移出扫描面、写失败先读回执再决定重试(验收方本轮自身实测教训)、声称测试通过前在真仓跑一遍;⑤八单名册(INC-099..104 + STORY-193/194)带 id 与可检查前置;⑥建议执行序 099→101→102→103→100→104→193→194;⑦Owner 政策题现状(D1/D2/D3 已裁毕不需重问,仅 C 档推送待裁,改用户级配置仍须出 diff 过目);⑧第五轮验收八条判据;⑨陷阱速查增补版。钩子面现状已写入交接书,免执行方重新考古(撤下时间、留档位置、hooks.state 六条指向不存在文件、EPIC-024 候选未晋级、Claude/Codex 治理钩子对比)。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INIT-020"
+      }
+    }
+  ],
+  "eventsAppended": 1,
+  "finishedAt": "2026-08-07T15:53:02Z"
+}

@@ -1,0 +1,271 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-171",
+  "intent": "STORY-171 收口:ADR 0004 主文完成(九节齐备、每条判据写明红腿、决策点本单裁毕),经对抗评审 9 项发现全数修订后定稿。按红线第 8 条 subtask 不建链记录,本单直接收口。",
+  "startedAt": "2026-08-06T05:06:25Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "docs/reports/init-020/story-171-closeout.json",
+    "sha256": "d0c40f94c36c3c3608ff33347c810854badc3b66392e7350ef3ae84e5e704871",
+    "bytes": 2569
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2019,
+    "headEventHash": "000c99ea92e94d63ddfc081454fe26f7d1260457501ceadc523d30210a2827db",
+    "work": 336
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T05:06:26Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2019",
+        "--id",
+        "work:491be6f960ecc1f73d5aabc2",
+        "--scope",
+        "【收口(2026-08-06)】ADR 0004《PostgreSQL storage backend for governed workspaces》定稿于 tcrn-workflow/docs/adr/0004-postgres-storage-backend.md。九节齐备:①实例拓扑与版本(PG 18,Ubuntu 26.04 LTS apt 候选 18+290ubuntu1 实测,绑 127.0.0.1 经 SSH 隧道,systemd 单元,年度升级评估);②schema 布局(五 chain schema+domain+collab);③角色与权限(tcrn_engine/tcrn_domain/tcrn_collab 三角色、GRANT 矩阵、append-only 触发器、四条 GRANT 红腿测试);④事件表 DDL(EventRecord 全 9 字段为列含 schema_version,payload bytea 规范字节,视图非权威);⑤租约与单写者(advisory xact lock 双参 int4+claims 表+挂起写者回收路径 pg_terminate_backend,并发 PK 冲突映射 WORKSPACE_CAS_MISMATCH);⑥六依赖面逐面结论(含两店不同 marker 形态、knowledge CAS 用 store 版本非链版本、快照覆盖控制表全集);⑦迁移台账额度(64/64 双后端一致,16 为历史遗留,台账表 append-only 触发器);⑧轨道表与辖域澄清;⑨等价判据四条各带红腿。每条判据写明「什么会让它变红」。决策点本单裁毕:PG 版本 18、schema 细部、口粒度、租约形态。对抗评审(独立代理)9 项发现(2 严重+4 中等+3 轻微)全数修订落地。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2019,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:491be6f960ecc1f73d5aabc2",
+      "version": 2020
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T05:06:27Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2020",
+        "--id",
+        "work:491be6f960ecc1f73d5aabc2",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2020,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:491be6f960ecc1f73d5aabc2",
+      "version": 2021
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T05:06:29Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2021",
+        "--id",
+        "work:491be6f960ecc1f73d5aabc2",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2021,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:491be6f960ecc1f73d5aabc2",
+      "version": 2022
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T05:06:30Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2022",
+        "--id",
+        "work:491be6f960ecc1f73d5aabc2",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2022,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:491be6f960ecc1f73d5aabc2",
+      "version": 2023
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:491be6f960ecc1f73d5aabc2",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-171",
+            "observed": "TCRN-CROSS-STORY-171",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【收口(2026-08-06)】ADR 0004《PostgreSQL storage backend for governed workspaces》定稿于 tcrn-workflow/docs/adr/0004-postgres-storage-backend.md。九节齐备:①实例拓扑与版本(PG 18,Ubuntu 26.04 LTS apt 候选 18+290ubuntu1 实测,绑 127.0.0.1 经 SSH 隧道,systemd 单元,年度升级评估);②schema 布局(五 chain schema+domain+collab);③角色与权限(tcrn_engine/tcrn_domain/tcrn_collab 三角色、GRANT 矩阵、append-only 触发器、四条 GRANT 红腿测试);④事件表 DDL(EventRecord 全 9 字段为列含 schema_version,payload bytea 规范字节,视图非权威);⑤租约与单写者(advisory xact lock 双参 int4+claims 表+挂起写者回收路径 pg_terminate_backend,并发 PK 冲突映射 WORKSPACE_CAS_MISMATCH);⑥六依赖面逐面结论(含两店不同 marker 形态、knowledge CAS 用 store 版本非链版本、快照覆盖控制表全集);⑦迁移台账额度(64/64 双后端一致,16 为历史遗留,台账表 append-only 触发器);⑧轨道表与辖域澄清;⑨等价判据四条各带红腿。每条判据写明「什么会让它变红」。决策点本单裁毕:PG 版本 18、schema 细部、口粒度、租约形态。对抗评审(独立代理)9 项发现(2 严重+4 中等+3 轻微)全数修订落地。",
+            "observed": "【收口(2026-08-06)】ADR 0004《PostgreSQL storage backend for governed workspaces》定稿于 tcrn-workflow/docs/adr/0004-postgres-storage-backend.md。九节齐备:①实例拓扑与版本(PG 18,Ubuntu 26.04 LTS apt 候选 18+290ubuntu1 实测,绑 127.0.0.1 经 SSH 隧道,systemd 单元,年度升级评估);②schema 布局(五 chain schema+domain+collab);③角色与权限(tcrn_engine/tcrn_domain/tcrn_collab 三角色、GRANT 矩阵、append-only 触发器、四条 GRANT 红腿测试);④事件表 DDL(EventRecord 全 9 字段为列含 schema_version,payload bytea 规范字节,视图非权威);⑤租约与单写者(advisory xact lock 双参 int4+claims 表+挂起写者回收路径 pg_terminate_backend,并发 PK 冲突映射 WORKSPACE_CAS_MISMATCH);⑥六依赖面逐面结论(含两店不同 marker 形态、knowledge CAS 用 store 版本非链版本、快照覆盖控制表全集);⑦迁移台账额度(64/64 双后端一致,16 为历史遗留,台账表 append-only 触发器);⑧轨道表与辖域澄清;⑨等价判据四条各带红腿。每条判据写明「什么会让它变红」。决策点本单裁毕:PG 版本 18、schema 细部、口粒度、租约形态。对抗评审(独立代理)9 项发现(2 严重+4 中等+3 轻微)全数修订落地。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-171",
+        "kind": "Story",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2023,
+    "headEventHash": "ae7933631567fbb2ae4d2ff333a4145929b5b0b5f653a78313c0e23150660f87",
+    "work": 336
+  },
+  "knowledgeRebase": {
+    "verb": "knowledge-rebase",
+    "markerVersionBefore": 69,
+    "accepted": true,
+    "reasonCode": "KNOWLEDGE_STORE_REBASED",
+    "version": 70
+  },
+  "eventsAppended": 4,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-06T05:06:34Z"
+}

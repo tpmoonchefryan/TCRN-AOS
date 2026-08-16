@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-145",
+  "intent": "开工:置 active",
+  "steps": [
+    { "verb": "work-transition", "flags": { "id": "work:1cc1e916c0bfb3595cf1b921", "status": "active", "actor": "agent:deepseek-v4-flash" } }
+  ],
+  "readback": [
+    { "verb": "work-show", "flags": { "id": "work:1cc1e916c0bfb3595cf1b921" }, "recordFields": ["externalKey", "status"], "expect": { "externalKey": "TCRN-CROSS-STORY-145", "status": "active" } }
+  ]
+}

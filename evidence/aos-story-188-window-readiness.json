@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "aos.window-readiness-check.v1",
+  "story": "TCRN-CROSS-STORY-188",
+  "generatedAt": "2026-08-06T11:24:36Z",
+  "masked": null,
+  "jointSatisfiabilitySelfProof": "联合可满足性自证:四个硬件判据互不排斥——①本地测试进程,②本地测试进程,③VM 门面服务+本机回执,④本机异地目录——在同一台机器、同一时刻可同时为绿;本清单四行即该并集的一次实例化。",
+  "items": [
+    {
+      "item": 1,
+      "name": "等价门 (STORY-176)",
+      "ok": true,
+      "evidence": "equivalence.test.mjs 2/2 pass (file/PG byte-identical export+head; mutation witness red)"
+    },
+    {
+      "item": 2,
+      "name": "往返迁移实证 (STORY-180)",
+      "ok": true,
+      "evidence": "roundtrip evidence ok roundTripEmpty=true"
+    },
+    {
+      "item": 3,
+      "name": "门面真实写 (STORY-184)",
+      "ok": true,
+      "evidence": "facade-write active; real write receipt 2026-08-06T10-49-59-242Z-3665ed-TCRN-TMS.json (CEREMONY_COMPLETED_AND_READ_BACK via 127.0.0.1)"
+    },
+    {
+      "item": 4,
+      "name": "末次文件配对备份+异地验证 (STORY-188)",
+      "ok": true,
+      "evidence": "off-site pairs ok=true (per-partition Joi-Button:true cross-project:true TCRN-Design-System:true TCRN-TMS:true; TCRN-AOS flat-root ok=true)"
+    }
+  ],
+  "overall": "GREEN",
+  "verdict": "四硬件在同一世界全绿 —— 切换窗具备开启条件,可报备 Owner 排定窗时点。"
+}

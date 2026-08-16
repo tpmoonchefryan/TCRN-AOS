@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-019",
+  "intent": "Reject a malformed ceremony payload before it can reach the chain.",
+  "startedAt": "2026-08-06T03:59:54Z",
+  "finishedAt": "2026-08-06T03:59:54Z",
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "chainBefore": null,
+  "chainAfter": null,
+  "steps": [],
+  "readback": [],
+  "ok": false,
+  "reasonCode": "PAYLOAD_INVALID",
+  "problems": [
+    "schemaVersion must be aos.local-client-ceremony.v1",
+    "story must name the work item this ceremony is performed for",
+    "intent must say in one sentence what this ceremony does",
+    "steps must be an array",
+    "readback must be an array"
+  ]
+}

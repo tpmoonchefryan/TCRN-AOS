@@ -1,0 +1,13 @@
+{
+  "title": "S8 CI 能红证明（本地重跑 CI 步骤命令 node scripts/verify-s6.mjs）",
+  "degradedSample": "s6-lessons.yaml 的 L1 agentDecision 临时替换为反模式（窗口将满→停下汇报）",
+  "red": {
+    "exit": 1,
+    "stdout": "{\"ok\":false,\"reasonCode\":\"EVAL_NOT_GREEN\",\"passed\":5,\"failed\":1}"
+  },
+  "restored": {
+    "exit": 0,
+    "stdout": "{\"ok\":true,\"reasonCode\":\"EVAL_GREEN\",\"passed\":6,\"failed\":0}"
+  },
+  "note": "退化样本已撤下，s6-lessons.yaml 与仓内一致（restored-identical=true）。禁 push（红线4），故以本地重跑 CI 同一条命令演示能红。"
+}

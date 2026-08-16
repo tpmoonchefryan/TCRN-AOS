@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-189",
+  "intent": "五链切换窗(STORY-189)开工复核发现硬阻断,窗口未执行任何迁移。记录 INC-072 供 Owner 处置。",
+  "steps": [
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-072",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:a5d3607e14d5f2a50bd0695e",
+        "actor": "agent:fable",
+        "scope": "【窗执行前硬阻断(2026-08-06,STORY-189 开工复核)】五链切换窗未执行,任何链未迁移。复核结论:迁移动词族在引擎无可调用形态。证据:①VM 引擎(tcrn-platform-dev)commands 目录仅 migration-plan(P3 dry-run 拒真迁移),无 migration-execute/verify/rollback;②STORY-178 交付物=库函数(tcrn-workflow packages/core/src/workspace-migration.ts planMigration/executeMigration/verifyMigration/rollbackMigration + packages/pg-backend),仅测试调用,未发布未部署(本地与 VM 安装副本均 0.10.2 无该代码),且工作树未提交(git status 显示 pg-backend 与 workspace-migration 为未跟踪);③AOS 仓 deploy/、scripts/ 无任何 executeMigration 生产驱动;④ceremony 写面按宿主目录派生必拒这些动词;⑤SSH break-glass 白名单仅 status 只读+引擎路径 sha256,无迁移条目。约束「迁移经引擎 CLI」前提不成立。窗前四硬件仍全绿(等价门/往返/门面真实写/末次备份 2026-08-06T11:19Z FINAL-FILE-TRUTH-RETENTION 异地已验)。处置建议:先发布/部署迁移动词族至 VM 引擎并提供受治调用路径,再开窗。"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:a5d3607e14d5f2a50bd0695e"
+      },
+      "recordFields": [
+        "externalKey",
+        "kind",
+        "status"
+      ],
+      "expect": {
+        "externalKey": "TCRN-CROSS-INC-072",
+        "kind": "Incident",
+        "status": "planned"
+      },
+      "expectSameAs": [
+        {
+          "field": "scope",
+          "step": 1,
+          "flag": "scope"
+        }
+      ]
+    }
+  ]
+}

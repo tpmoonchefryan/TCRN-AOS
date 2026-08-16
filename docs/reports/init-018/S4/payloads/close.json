@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-146",
+  "intent": "收口:终版 scope + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:38e29f2b6056d2a3face9f87",
+        "scope": "S4 补 Codex 名册缺口。执行层做 S4.1:生成 ~/.codex/config.toml 增量 diff(codegraph-ds/aos 复用 TMS 仓内二进制 --path 指法+workflow MCP 门面条目),只产出 diff 文件不应用,annotate 待门。门:S4.2 应用须 Owner 过目批准(D6 owner_intent_required)。批后实测三服务器 status 各一次;STORY-145 白名单随之收缩(收缩即其有效性活证)。验收:diff 文件+批后三份 status 输出。MIN-057。进度@2026-08-05: 已完成=S4.1 生成增量 diff(docs/reports/init-018/S4/codex-config-incremental.diff,统一格式 scrubbed 到 <local-home> [mcp_servers.codegraph-ds] 与 [mcp_servers.codegraph-aos] 两块,复用 TMS 仓内 codegraph 二进制 --path 指向 DS/AOS,同现有 codegraph 块 command/args/startup_timeout_sec 形态)。实测 2026-08-05:workflow MCP 门面(tcrn-workflow)已在 Codex 侧([mcp_servers.tcrn-workflow],同一 authority pins digest d25ebfc1…),无需再补,故 diff 只含 codegraph-ds/aos。未应用:config.toml 是用户级配置,执行层只读。待门:S4.2 应用+三服务器 status 实测+STORY-145 白名单收缩归审查层(MIN-058 即 D6 批文)。tcrn-workflow-aos-read 是否在 Codex 侧补由审查层决。阻塞=无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:38e29f2b6056d2a3face9f87", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:38e29f2b6056d2a3face9f87" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-146", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

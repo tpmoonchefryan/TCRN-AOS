@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "tcrn.s15-context-bytes.v1",
+  "note": "BYTES ONLY — byte counts, not tokens. Token counts depend on model and tokenizer; re-measure after convention rewrites or model-generation changes.",
+  "measuredAt": "2026-08-04T17:10:18.253Z",
+  "totalBytes": 62479,
+  "entries": [
+    {
+      "scope": "platform root CLAUDE.md",
+      "bytes": 18829
+    },
+    {
+      "scope": "repo CLAUDE.md (TCRN-TMS)",
+      "bytes": 5550
+    },
+    {
+      "scope": "repo CLAUDE.md (TCRN-Design-System)",
+      "bytes": 8479
+    },
+    {
+      "scope": "repo CLAUDE.md (TCRN-AOS)",
+      "bytes": 8880
+    },
+    {
+      "scope": "repo CLAUDE.md (tcrn-workflow)",
+      "bytes": 7347
+    },
+    {
+      "scope": "repo CLAUDE.md (tcrn-workflow-helper)",
+      "bytes": "absent"
+    },
+    {
+      "scope": "auto-memory index (MEMORY.md)",
+      "bytes": 11904
+    },
+    {
+      "scope": "platform .mcp.json",
+      "bytes": 1490
+    }
+  ]
+}

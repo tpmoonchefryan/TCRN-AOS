@@ -1,0 +1,268 @@
+
+========== 0. 复核时点（与挂钟无关的参照一并打印） ==========
+recheck at (UTC): 2026-08-05T07:55:32Z
+2026-08-05T06:03:04+0800  <local-platform-root>/tcrn-workflow/docs/reports/init-018/S10/notes.md
+2026-08-05T05:51:30+0800  <local-platform-root>/tcrn-workflow/docs/reports/init-018/S11/init018-attribution.json
+2026-08-05T05:51:48+0800  <local-platform-root>/tcrn-workflow/docs/reports/init-018/S11/report.md
+2026-08-05T02:03:58+0800  <local-platform-root>/tcrn-workflow/docs/reports/init-018/S12/notes.md
+2026-08-05T06:02:18+0800  <local-platform-root>/tcrn-workflow/docs/reports/init-018/SUMMARY.md
+2026-08-05T13:10:13+0800  <local-platform-root>/var/tcrn-otel/ceremony-spans.jsonl
+
+========== 1a. export 的 canonical 由事件字节决定（源码，不是记忆） ==========
+3272:export async function exportWorkspace(workspaceRoot: string): Promise<string> {
+export async function exportWorkspace(workspaceRoot: string): Promise<string> {
+  const state = await materializeWorkspace(workspaceRoot);
+  // WSD-1: extension collections are exported ONLY when present so the export
+  // bytes (and the archive digest) stay identical for every workspace without
+  // conference/gate events. canonicalJson sorts keys, so conditional inclusion
+  // is byte-stable.
+  const extensionCollections = state.conferences.length + state.gates.length > 0
+    ? {
+      conferences: state.conferences,
+      conferencePositions: state.conferencePositions,
+      conferenceMinutes: state.conferenceMinutes,
+      gates: state.gates,
+    }
+    : {};
+  return canonicalJson({
+    schemaVersion: "tcrn.workspace-export.v1",
+    workspaceId: state.metadata.workspaceId,
+    version: state.version,
+    headEventHash: state.headEventHash,
+    projects: state.projects,
+    work: state.work,
+    ...extensionCollections,
+    events: state.events,
+  });
+}
+--- 对照：validate/work-list 走的物化视图 index.json（workspace.ts:1643）---
+  const views: Record<string, string> = {
+    "STATUS.md": status,
+    "index.json": canonicalJson({ schemaVersion: "tcrn.workspace-index.v1", projects: activeProjects, work: activeWork }),
+    "readback.json": canonicalJson(readback),
+--- 上限常量与判据 ---
+18:  maxCanonicalBytes: 1_048_576,
+276:  if (Buffer.byteLength(canonical, "utf8") > PROTOCOL_LIMITS.maxCanonicalBytes) {
+568:    if (entry.size > PROTOCOL_LIMITS.maxCanonicalBytes || canonicalStringLength(entry.mediaType) > 128) {
+export function canonicalJson(value: unknown): string {
+  const canonical = `${canonicalValue(value, 0)}\n`;
+  if (Buffer.byteLength(canonical, "utf8") > PROTOCOL_LIMITS.maxCanonicalBytes) {
+    fail("INPUT_OVERSIZED", "Canonical input exceeds one MiB");
+  }
+  return canonical;
+}
+
+========== 1b. S12 notes 自相矛盾（notes:19/40 vs bench-3000.json） ==========
+| export | 421 | **FAILED INPUT_OVERSIZED** |
+- 边界实测：3157 条 work（3k 链）validate/export/work-list 通过；3353 条 work（10k 部分链）三者全 FAILED。
+--- bench-3000.json 的 export 记录 ---
+allOk=false  reasonCode=INPUT_OVERSIZED  medianMs=421
+
+========== 1c. 此事非新发现：0.8.0 早已实测公布（含 event-list 缓解） ==========
+`0.7.0` made a large chain nameable and its deliberations readable. It left the
+events themselves reachable only through `export`, which is all-or-nothing and
+refuses any workspace whose canonical form exceeds one MiB.
+Measured on the day this was filed, three of the four chains on the platform that
+filed it are already over that line:
+
+| chain | events | canonical event bytes | `export` |
+| --- | --- | --- | --- |
+| `cross-project` | 1,274 | 1,825,251 | `INPUT_OVERSIZED` |
+| `TCRN-AOS` | 683 | 1,160,601 | `INPUT_OVERSIZED` |
+| `TCRN-Design-System` | 983 | 1,134,120 | `INPUT_OVERSIZED` |
+| `TCRN-TMS` | 228 | 273,549 | reads |
+36:### `event-list`
+42:tcrn-workflow event-list --workspace <ws>                        # first 64 events
+43:tcrn-workflow event-list --workspace <ws> --limit 32 --offset 64
+
+========== 2. S11 cache_creation：byLayer 丢了字段，逐模型行没丢 ==========
+--- byLayer 各层携带的键（无 cacheCreation）---
+execution: cacheRead,input,msgs,output,sessions
+review: cacheRead,input,msgs,output,sessions
+verification: cacheRead,input,msgs,output,sessions
+--- 同一份文件的逐会话/逐模型 cacheCreation ---
+8444e193	claude-opus-5	cacheCreation=105391
+05ff5dd7	claude-fable-5	cacheCreation=1123275
+0643ea49	deepseek-v4-flash	cacheCreation=0
+67c2afb5	deepseek-v4-flash	cacheCreation=0
+f176a613	claude-fable-5	cacheCreation=4608020
+f176a613	<synthetic>	cacheCreation=0
+f176a613	claude-opus-5	cacheCreation=3483
+--- 合计与分层合计 ---
+TOTAL cacheCreation = 5840169
+  <synthetic> total=0
+  deepseek-v4-flash total=0
+  claude-opus-5 total=108874
+  claude-fable-5 total=5731295
+--- 解析器本身并未丢（scripts/token-attribution.mjs）---
+17:const TOKEN_FIELDS = ["input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"];
+33:    tokens: { input: 0, output: 0, cacheCreation: 0, cacheRead: 0 },
+69:    let cacheCreation = 0;
+79:      else if (field === "cache_creation_input_tokens") cacheCreation = value;
+85:    session.tokens.cacheCreation += cacheCreation;
+88:      const row = session.byModel[model] ?? { input: 0, output: 0, cacheCreation: 0, cacheRead: 0, messages: 0 };
+91:      row.cacheCreation += cacheCreation;
+137:const totals = { input: 0, output: 0, cacheCreation: 0, cacheRead: 0, messages: 0, sessions: sessions.length, gaps: {} };
+142:  totals.cacheCreation += session.tokens.cacheCreation;
+150:    const agg = byModel[model] ?? { input: 0, output: 0, cacheCreation: 0, cacheRead: 0, messages: 0 };
+153:    agg.cacheCreation += row.cacheCreation;
+--- 解析器不产出 byLayer（byLayer 是报表侧手工汇总）---
+0
+
+========== 3. S10 readback span：dry-run 在 emit 之前 continue ==========
+184:    if (dryRun) {
+237:    if (dryRun) {
+  for (const step of payload.readback) {
+    const plan = planStep({ step, catalogue, supply, chainVersion: null, at: instant() });
+    if (!plan.ok) {
+      emitCeremonySpan({ span: "ceremony.refused", partition, verb: step.verb, outcome: "refused", reasonCode: plan.reasonCode });
+      receipt.readback.push(plan);
+      receipt.ok = false;
+      receipt.reasonCode = plan.reasonCode;
+      return receipt;
+    }
+    if (dryRun) {
+      receipt.readback.push({ ...plan, executed: false });
+      continue;
+    }
+      return receipt;
+    }
+    emitCeremonySpan({ span: "ceremony.readback", partition, verb: step.verb, outcome: "ok" });
+  }
+
+--- S10 自己的重跑配方（commands.md:19）只有 dry-run ---
+```bash
+cd "<local-platform-root>/TCRN-AOS"
+rm -f /tmp/s10-spans.jsonl
+TCRN_OTEL_SINK=/tmp/s10-spans.jsonl node deploy/aos-local-client/ceremony.mjs --payload <任意载荷> --partition cross-project --dry-run
+cat /tmp/s10-spans.jsonl   # 期望 ceremony.start + ceremony.end（或 ceremony.refused）
+```
+
+- 实现：`deploy/aos-local-client/ceremony-spans.mjs`（emitter）+ `ceremony.mjs` 四处接线（start 入口 / end 收口 / readback 每次回读 / refused 各拒绝点）。
+- 实测：dry-run 出 start+end（CEREMONY_PLANNED_ONLY）；无效载荷出 start+refused（PAYLOAD_INVALID）；字段仅 partition/verb/expectedVersion/outcome/reasonCode。
+--- 默认 sink 现况：按 span 类型计数 ---
+   5 ceremony.end
+   3 ceremony.readback
+   5 ceremony.start
+--- readback 记录的时点（判断它们是否晚于 S10 收口）---
+2026-08-05T04:31:09.970Z  work-show
+2026-08-05T04:31:10.482Z  work-show
+2026-08-05T05:10:12.872Z  work-show
+
+========== 4. 引擎侧 otel-spans.ts 是死代码（对照：ceremony-spans.mjs 有调用方） ==========
+--- RED 侧：otel-spans / emitVerbSpan 的调用方（应为空）---
+(以上为空 = 无调用方 = 未接线)
+--- GREEN 侧：ceremony-spans.mjs 确有调用方 ---
+<local-platform-root>/TCRN-AOS/deploy/aos-local-client/ceremony.mjs:45:import { emitCeremonySpan } from "./ceremony-spans.mjs";
+
+========== 5. S16 三档不分割 35 项 ==========
+--- 编目总数（A+B+C+D 行数）---
+A=6 B=11 C=4 D=14 TOTAL=35
+--- 「仍在」那行自己列了哪些（数一遍）---
+A1–A6、B1–B4、B7、B8、B11、C1、C3、C4、D1–D12、D14——成立条件均仍满足。其中 D7（SSH 不是豁免）尤其仍活：正是 S2 的依据。
+  A1-A6=6  B1-B4=4  B7,B8,B11=3  C1,C3,C4=3  D1-D12=12  D14=1  -> 29（表头写 15）
+--- B10 是否出现在三档任一处？---
+  B10 未出现在 S16.2 三档中（编目 B10 存在于 catalog.md:31）
+31:| B10 | S7 黄金样本 + S6 lessons（CI 确定性子集） | `tests/s7-behavior-surface.test.mjs` + `tests/promptfoo/s6-lessons/`（S7/S6 新） | 每 push CI |
+
+========== 6. S4 归档态 diff 不可直接应用 ==========
+--- 占位符计数 ---
+  ADDED(+) 行内 <local-home> 个数 = 6
+  上下文行内 <local-home> 个数 = 2
+--- 两条 pnpm 路径字面量是否存在 ---
+2
+  MISSING: <local-home>/.nvm/versions/node/v24.16.0/bin/pnpm
+   真实路径: lrwxr-xr-x@ 1 ryanlan  staff  41 May 25 14:02 <local-home>/.nvm/versions/node/v24.16.0/bin/pnpm -> ../lib/node_modules/corepack/dist/pnpm.js
+--- 红/绿两侧：默认 fuzz vs -F0 ---
+  [A] patch -p1 （默认 fuzz）:
+    patching file '.codex/config.toml'
+    exit=0
+  [A] 落盘结果（注意 <local-home> 原样进了配置）:
+    202:[mcp_servers.codegraph-ds]
+    203-command = "<local-home>/.nvm/versions/node/v24.16.0/bin/pnpm"
+    204-args = ["--dir", "<local-platform-root>/TCRN-TMS", "exec", "codegraph", "serve", "--mcp", "--no-watch", "--path", "<local-platform-root>/TCRN-Design-System"]
+  [B] patch -p1 -F0 （关闭 fuzz）:
+    patching file '.codex/config.toml'
+    1 out of 1 hunks failed--saving rejects to '.codex/config.toml.rej'
+    exit=1
+
+========== 7. S17 archify 未安装 ==========
+--- 平台/用户 skills 目录名册 ---
+  platform: EMIL-SKILLS-LICENSE.txt
+  platform: EMIL-SKILLS-PROVENANCE.txt
+  platform: animation-vocabulary
+  platform: apple-design
+  platform: emil-design-eng
+  platform: find-animation-opportunities
+  platform: improve-animations
+  platform: review-animations
+  platform: tcrn-workflow-helper
+  user:     code-quality-review
+  user:     owasp-security
+--- 全平台搜 archify（排除 node_modules）---
+  （以上为空 = 平台内无 archify）
+--- 它实际在哪 ---
+  <local-private-tmp>/archify-trial
+  /tmp/archify-trial
+  /tmp/archify-trial/archify/SKILL.md
+--- 对照（GREEN 侧）：真安装物长这样 ---
+  <local-platform-root>/.claude/skills/tcrn-workflow-helper
+
+========== 8. SUMMARY 的「激活异常」：回执算术推翻它 ==========
+--- 哪些故事缺 activate.receipt.json ---
+  S1.2     activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json 
+  S2       activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json 
+  S3       activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json 
+  S4       activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json 
+  S5.1     activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json 
+  S6       activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json 
+  S7       activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json 
+  S8       activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json 
+  S9       activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json 
+  S10      activate.receipt=NO   files: activate.json close.json close.receipt.json close2.json close2.receipt.json 
+  S11      activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json 
+  S12      activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json progress.json progress.receipt.json 
+  S13-14   activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json 
+  S15      activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json 
+  S16      activate.receipt=YES  files: activate.json activate.receipt.json close.json close.receipt.json 
+  S17      activate.receipt=NO   files: activate.json close.json close.receipt.json close2.json close2.receipt.json 
+--- 全部回执按时间排序的链版本账（before/after 应处处相接）---
+  startedAt              receipt                                  ok     reasonCode                       before  after
+  2026-08-04T16:48:58Z   S1.2/payloads/activate.receipt.json      true   CEREMONY_COMPLETED_AND_READ_BACK   1563   1564
+  2026-08-04T16:49:02Z   S1.2/payloads/close.receipt.json         true   CEREMONY_COMPLETED_AND_READ_BACK   1564   1566
+  2026-08-04T16:58:31Z   S5.1/payloads/activate.receipt.json      true   CEREMONY_COMPLETED_AND_READ_BACK   1566   1567
+  2026-08-04T16:58:35Z   S5.1/payloads/close.receipt.json         true   CEREMONY_COMPLETED_AND_READ_BACK   1567   1569
+  2026-08-04T17:05:03Z   S7/payloads/activate.receipt.json        true   CEREMONY_COMPLETED_AND_READ_BACK   1569   1570
+  2026-08-04T17:05:07Z   S7/payloads/close.receipt.json           true   CEREMONY_COMPLETED_AND_READ_BACK   1570   1572
+  2026-08-04T17:10:53Z   S15/payloads/activate.receipt.json       true   CEREMONY_COMPLETED_AND_READ_BACK   1572   1573
+  2026-08-04T17:10:57Z   S15/payloads/close.receipt.json          true   CEREMONY_COMPLETED_AND_READ_BACK   1573   1575
+  2026-08-04T17:11:58Z   S12/payloads/activate.receipt.json       true   CEREMONY_COMPLETED_AND_READ_BACK   1575   1576
+  2026-08-04T17:47:25Z   S12/payloads/progress.receipt.json       true   CEREMONY_COMPLETED_AND_READ_BACK   1576   1577
+  2026-08-04T18:04:27Z   S12/payloads/close.receipt.json          true   CEREMONY_COMPLETED_AND_READ_BACK   1577   1579
+  2026-08-04T21:08:00Z   S6/payloads/activate.receipt.json        true   CEREMONY_COMPLETED_AND_READ_BACK   1609   1610
+  2026-08-04T21:12:00Z   S6/payloads/close.receipt.json           true   CEREMONY_COMPLETED_AND_READ_BACK   1610   1612
+  2026-08-04T21:20:20Z   S8/payloads/activate.receipt.json        true   CEREMONY_COMPLETED_AND_READ_BACK   1612   1613
+  2026-08-04T21:21:10Z   S8/payloads/close.receipt.json           true   CEREMONY_COMPLETED_AND_READ_BACK   1613   1615
+  2026-08-04T21:22:50Z   S2/payloads/activate.receipt.json        true   CEREMONY_COMPLETED_AND_READ_BACK   1615   1616
+  2026-08-04T21:25:50Z   S2/payloads/close.receipt.json           true   CEREMONY_COMPLETED_AND_READ_BACK   1616   1618
+  2026-08-04T21:27:41Z   S3/payloads/activate.receipt.json        true   CEREMONY_COMPLETED_AND_READ_BACK   1618   1619
+  2026-08-04T21:31:48Z   S3/payloads/close.receipt.json           true   CEREMONY_COMPLETED_AND_READ_BACK   1619   1621
+  2026-08-04T21:32:37Z   S4/payloads/activate.receipt.json        true   CEREMONY_COMPLETED_AND_READ_BACK   1621   1622
+  2026-08-04T21:33:57Z   S4/payloads/close.receipt.json           true   CEREMONY_COMPLETED_AND_READ_BACK   1622   1624
+  2026-08-04T21:34:32Z   S9/payloads/activate.receipt.json        true   CEREMONY_COMPLETED_AND_READ_BACK   1624   1625
+  2026-08-04T21:40:50Z   S9/payloads/close.receipt.json           true   CEREMONY_COMPLETED_AND_READ_BACK   1625   1627
+  2026-08-04T21:46:39Z   S10/payloads/close.receipt.json          false  STEP_REFUSED_BY_HOST_ENGINE        1627   1628
+  2026-08-04T21:49:27Z   S10/payloads/close2.receipt.json         true   CEREMONY_COMPLETED_AND_READ_BACK   1628   1630
+  2026-08-04T21:50:46Z   S11/payloads/activate.receipt.json       true   CEREMONY_COMPLETED_AND_READ_BACK   1630   1631
+  2026-08-04T21:52:20Z   S11/payloads/close.receipt.json          true   CEREMONY_COMPLETED_AND_READ_BACK   1631   1633
+  2026-08-04T21:52:41Z   S13-14/payloads/activate.receipt.json    true   CEREMONY_COMPLETED_AND_READ_BACK   1633   1634
+  2026-08-04T21:53:07Z   S13-14/payloads/close.receipt.json       true   CEREMONY_COMPLETED_AND_READ_BACK   1634   1636
+  2026-08-04T21:53:35Z   S16/payloads/activate.receipt.json       true   CEREMONY_COMPLETED_AND_READ_BACK   1636   1637
+  2026-08-04T21:54:35Z   S16/payloads/close.receipt.json          true   CEREMONY_COMPLETED_AND_READ_BACK   1637   1639
+  2026-08-04T21:59:49Z   S17/payloads/close.receipt.json          false  STEP_REFUSED_BY_HOST_ENGINE        1639   1640
+  2026-08-04T22:01:29Z   S17/payloads/close2.receipt.json         true   CEREMONY_COMPLETED_AND_READ_BACK   1640   1642
+
+  判据：S9 close.after=1627 == S10 close.before=1627  -> 其间零事件 -> STORY-150 激活从未执行
+        S16 close.after=1639 == S17 close.before=1639 -> 其间零事件 -> STORY-154 激活从未执行
+
+========== 完 ==========

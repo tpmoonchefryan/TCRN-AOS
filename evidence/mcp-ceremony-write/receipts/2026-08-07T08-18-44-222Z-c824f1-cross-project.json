@@ -1,0 +1,108 @@
+{
+  "ok": true,
+  "reasonCode": "CEREMONY_PLANNED_ONLY",
+  "host": "127.0.0.1",
+  "partition": "cross-project",
+  "dryRun": true,
+  "receipt": {
+    "schemaVersion": "aos.facade-write-receipt.v1",
+    "story": "TCRN-CROSS-INIT-020",
+    "intent": "S192正腿②能力自证；dry-run only；execution form=single context；host=Codex；actor=agent:gpt-5-codex；不落链。",
+    "startedAt": "2026-08-07T08:18:42Z",
+    "dryRun": true,
+    "host": "127.0.0.1",
+    "partition": "cross-project",
+    "topology": {
+      "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+      "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+      "actor": "agent:fable",
+      "seam": "workspaces / attestDirs records stated by the deployment, never by the payload"
+    },
+    "payload": {
+      "sha256": "e971e2db47bea885098d0a6fee7d7cb47d8a3774b262ac55980b28da1f08a734",
+      "bytes": 546
+    },
+    "hostEngineCatalogue": {
+      "verbs": 108
+    },
+    "chainBefore": {
+      "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+      "version": 2257,
+      "headEventHash": "6558874b38157ea202c6f18e7d04591c124c6fed882d43df5e188bcbd46a2779",
+      "work": 365
+    },
+    "steps": [
+      {
+        "ok": true,
+        "verb": "work-annotate",
+        "mutates": true,
+        "reasonCode": "STEP_PLANNED",
+        "argv": [
+          "work-annotate",
+          "--actor",
+          "agent:fable",
+          "--at",
+          "2026-08-07T08:18:43Z",
+          "--attest-dir",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+          "--expected-version",
+          "2257",
+          "--id",
+          "work:4d0ecd9c1e6ea5292ef08330",
+          "--scope",
+          "S192正腿② dry-run only；不落链；execution form=single context；host=Codex；actor=agent:gpt-5-codex",
+          "--workspace",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+        ],
+        "autoSupplied": [
+          "actor",
+          "at",
+          "attest-dir",
+          "expected-version",
+          "workspace"
+        ],
+        "fromPayload": [
+          "id",
+          "scope"
+        ],
+        "headAtPlanning": 2257,
+        "executed": false,
+        "wouldSend": "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs work-annotate --actor agent:fable --at 2026-08-07T08:18:43Z --attest-dir /srv/tcrn/governance/tcrn-workspace/cross-project/attestations --expected-version 2257 --id work:4d0ecd9c1e6ea5292ef08330 --scope S192正腿② dry-run only；不落链；execution form=single context；host=Codex；actor=agent:gpt-5-codex --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      }
+    ],
+    "readback": [
+      {
+        "ok": true,
+        "verb": "work-show",
+        "mutates": false,
+        "reasonCode": "STEP_PLANNED",
+        "argv": [
+          "work-show",
+          "--id",
+          "work:4d0ecd9c1e6ea5292ef08330",
+          "--workspace",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+        ],
+        "autoSupplied": [
+          "workspace"
+        ],
+        "fromPayload": [
+          "id"
+        ],
+        "executed": false
+      }
+    ],
+    "chainAfter": {
+      "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+      "version": 2257,
+      "headEventHash": "6558874b38157ea202c6f18e7d04591c124c6fed882d43df5e188bcbd46a2779",
+      "work": 365
+    },
+    "eventsAppended": 0,
+    "ok": true,
+    "reasonCode": "CEREMONY_PLANNED_ONLY",
+    "finishedAt": "2026-08-07T08:18:44Z"
+  },
+  "receiptPath": "receipts/2026-08-07T08-18-42-306Z-73d99a-cross-project.json",
+  "payloadPath": "payloads/2026-08-07T08-18-42-306Z-73d99a-cross-project.json"
+}

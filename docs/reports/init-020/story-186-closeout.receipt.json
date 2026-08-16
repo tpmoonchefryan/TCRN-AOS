@@ -1,0 +1,271 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-186",
+  "intent": "STORY-186 收口:break-glass 白名单收缩与拓扑清欠完成。mcp-unreachable-fallback 类改指门面不可达、service-layer-byte-compare 保留、拓扑承载门面地址、清欠 cockpit-service 手写引擎路径,正腿/红腿实证。",
+  "startedAt": "2026-08-06T11:10:45Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "docs/reports/init-020/story-186-closeout.json",
+    "sha256": "fbfafae776e06cf914987229dff08903a548574ea0ac8f84317b66b4bbe7dd2f",
+    "bytes": 2858
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2091,
+    "headEventHash": "4b3c2023f02e3baeb28cd9d9aa67ea666ed8173ce39471819f5b338ab2e924f2",
+    "work": 336
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T11:10:46Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2091",
+        "--id",
+        "work:960e88fa51ea3a5c4e9d0e7f",
+        "--scope",
+        "【收口(2026-08-06)】break-glass 白名单收缩与拓扑清欠完成。交付物:①deploy/aos-local-client/ssh-breakglass-allowlist.json——mcp-unreachable-fallback 类名/理由/条目理由改指「门面(facade-read/write)不可达」(不再 MCP 面不可达),service-layer-byte-compare 保留,两条目补 reviewedAt 2026-08-06,pattern 未改;②topology.mjs 从 facade-read/write-manifest.mjs 导入并再导出 FACADE_HOST/PORT/UNIT_NAME/ALLOWED_HOSTS 与 FACADE_WRITE_*(VM 半仍导入不拷贝,无循环依赖);③apps/cockpit-service/src/service.ts 清欠——移除手写 ~/.tcrn-workflow/... 引擎路径,改为 engineMcpPath 选项,缺失时 ENGINE_MCP_PATH_REQUIRED fail-closed;vm-resident-runner.mjs/本地 starter 供给引擎路径;④平台入口文档第 0 小节残余场景触发条件同步。验收两侧(一份名单两处消费):正腿=observer --self-test 117/117、allowlisted status→PASS/breakglass-allowlist、doc-topology-predicates 双消费一致性测试绿、doc-topology:proof=DOC_TOPOLOGY_IN_SYNC;红腿=白名单外 SSH 直驱 work-transition→HIT/ssh-engine-direct、治理树写→HIT/ssh-write、doc-topology 红证 SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED 触发并点名。门:typecheck/build/local-purity:proof/read-face:gate/parity:proof 全绿,touched 测试套件 256 例全过。留待:引擎仓镜像白名单(scripts/policy/ssh-breakglass-allowlist.json)与 AOS 权威文案漂移(pattern 未变),breakglass-consistency-check 将红,由 STORY-185 引擎侧刷新闭合。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2091,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:960e88fa51ea3a5c4e9d0e7f",
+      "version": 2092
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T11:10:47Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2092",
+        "--id",
+        "work:960e88fa51ea3a5c4e9d0e7f",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2092,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:960e88fa51ea3a5c4e9d0e7f",
+      "version": 2093
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T11:10:48Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2093",
+        "--id",
+        "work:960e88fa51ea3a5c4e9d0e7f",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2093,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:960e88fa51ea3a5c4e9d0e7f",
+      "version": 2094
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T11:10:50Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2094",
+        "--id",
+        "work:960e88fa51ea3a5c4e9d0e7f",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2094,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:960e88fa51ea3a5c4e9d0e7f",
+      "version": 2095
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:960e88fa51ea3a5c4e9d0e7f",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-186",
+            "observed": "TCRN-CROSS-STORY-186",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【收口(2026-08-06)】break-glass 白名单收缩与拓扑清欠完成。交付物:①deploy/aos-local-client/ssh-breakglass-allowlist.json——mcp-unreachable-fallback 类名/理由/条目理由改指「门面(facade-read/write)不可达」(不再 MCP 面不可达),service-layer-byte-compare 保留,两条目补 reviewedAt 2026-08-06,pattern 未改;②topology.mjs 从 facade-read/write-manifest.mjs 导入并再导出 FACADE_HOST/PORT/UNIT_NAME/ALLOWED_HOSTS 与 FACADE_WRITE_*(VM 半仍导入不拷贝,无循环依赖);③apps/cockpit-service/src/service.ts 清欠——移除手写 ~/.tcrn-workflow/... 引擎路径,改为 engineMcpPath 选项,缺失时 ENGINE_MCP_PATH_REQUIRED fail-closed;vm-resident-runner.mjs/本地 starter 供给引擎路径;④平台入口文档第 0 小节残余场景触发条件同步。验收两侧(一份名单两处消费):正腿=observer --self-test 117/117、allowlisted status→PASS/breakglass-allowlist、doc-topology-predicates 双消费一致性测试绿、doc-topology:proof=DOC_TOPOLOGY_IN_SYNC;红腿=白名单外 SSH 直驱 work-transition→HIT/ssh-engine-direct、治理树写→HIT/ssh-write、doc-topology 红证 SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED 触发并点名。门:typecheck/build/local-purity:proof/read-face:gate/parity:proof 全绿,touched 测试套件 256 例全过。留待:引擎仓镜像白名单(scripts/policy/ssh-breakglass-allowlist.json)与 AOS 权威文案漂移(pattern 未变),breakglass-consistency-check 将红,由 STORY-185 引擎侧刷新闭合。",
+            "observed": "【收口(2026-08-06)】break-glass 白名单收缩与拓扑清欠完成。交付物:①deploy/aos-local-client/ssh-breakglass-allowlist.json——mcp-unreachable-fallback 类名/理由/条目理由改指「门面(facade-read/write)不可达」(不再 MCP 面不可达),service-layer-byte-compare 保留,两条目补 reviewedAt 2026-08-06,pattern 未改;②topology.mjs 从 facade-read/write-manifest.mjs 导入并再导出 FACADE_HOST/PORT/UNIT_NAME/ALLOWED_HOSTS 与 FACADE_WRITE_*(VM 半仍导入不拷贝,无循环依赖);③apps/cockpit-service/src/service.ts 清欠——移除手写 ~/.tcrn-workflow/... 引擎路径,改为 engineMcpPath 选项,缺失时 ENGINE_MCP_PATH_REQUIRED fail-closed;vm-resident-runner.mjs/本地 starter 供给引擎路径;④平台入口文档第 0 小节残余场景触发条件同步。验收两侧(一份名单两处消费):正腿=observer --self-test 117/117、allowlisted status→PASS/breakglass-allowlist、doc-topology-predicates 双消费一致性测试绿、doc-topology:proof=DOC_TOPOLOGY_IN_SYNC;红腿=白名单外 SSH 直驱 work-transition→HIT/ssh-engine-direct、治理树写→HIT/ssh-write、doc-topology 红证 SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED 触发并点名。门:typecheck/build/local-purity:proof/read-face:gate/parity:proof 全绿,touched 测试套件 256 例全过。留待:引擎仓镜像白名单(scripts/policy/ssh-breakglass-allowlist.json)与 AOS 权威文案漂移(pattern 未变),breakglass-consistency-check 将红,由 STORY-185 引擎侧刷新闭合。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-186",
+        "kind": "Story",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2095,
+    "headEventHash": "393efce0ac0253491ec27ee6d27d6f006acde4d2b1d913d8e20852b4ff18db50",
+    "work": 336
+  },
+  "knowledgeRebase": {
+    "verb": "knowledge-rebase",
+    "markerVersionBefore": 87,
+    "accepted": true,
+    "reasonCode": "KNOWLEDGE_STORE_REBASED",
+    "version": 88
+  },
+  "eventsAppended": 4,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-06T11:10:54Z"
+}

@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "aos.local-engine-write-receipt.v1",
+  "intent": "INIT-021 发布整备立项",
+  "steps": [
+    {
+      "label": "create TCRN-CROSS-INIT-021",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2518
+    },
+    {
+      "label": "annotate TCRN-CROSS-INIT-021",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2519
+    },
+    {
+      "label": "create TCRN-CROSS-INC-118",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2520
+    },
+    {
+      "label": "annotate TCRN-CROSS-INC-118",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2521
+    },
+    {
+      "label": "create TCRN-CROSS-INC-119",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2522
+    },
+    {
+      "label": "annotate TCRN-CROSS-INC-119",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2523
+    },
+    {
+      "label": "create TCRN-CROSS-INC-120",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2524
+    },
+    {
+      "label": "annotate TCRN-CROSS-INC-120",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2525
+    },
+    {
+      "label": "TCRN-CROSS-INIT-021->ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2526
+    },
+    {
+      "label": "TCRN-CROSS-INIT-021->active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2527
+    },
+    {
+      "label": "TCRN-CROSS-INC-118->ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2528
+    },
+    {
+      "label": "TCRN-CROSS-INC-118->active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2529
+    },
+    {
+      "label": "TCRN-CROSS-INC-119->ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2530
+    },
+    {
+      "label": "TCRN-CROSS-INC-119->active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2531
+    },
+    {
+      "label": "TCRN-CROSS-INC-120->ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2532
+    },
+    {
+      "label": "TCRN-CROSS-INC-120->active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2533
+    }
+  ],
+  "readback": {
+    "key": "TCRN-CROSS-INIT-021",
+    "status": "active",
+    "scopeMatches": true
+  },
+  "chainAfter": {
+    "headEventHash": "63cf31d312e7e9f93f5f471212b94cb391fc022b2fde9cd582fd73e40e72c81e",
+    "projects": 1,
+    "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+    "storageHome": null,
+    "version": 2533,
+    "work": 398,
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf"
+  }
+}

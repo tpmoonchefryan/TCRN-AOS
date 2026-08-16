@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "tcrn.off-repo-artifact-registry.v1",
+  "initiative": "TCRN-CROSS-INIT-020",
+  "workItem": "INC-101",
+  "entries": [
+    {
+      "id": "qa4-inc098-workflow-candidate",
+      "path": "<local-home>/.tcrn-workflow/candidates/qa4-inc098-O0SToT",
+      "purpose": "isolated QA4 INC-098 release-candidate artifact; not an accepted helper install and not a governed workspace",
+      "originBeforeRemoval": "https://github.com/tpmoonchefryan/tcrn-workflow.git",
+      "originAfterRemediation": "absent",
+      "expectedHead": "732d94b4bd87f172b95acb9c84e24f3ae603adc8",
+      "lifecycle": "candidate -> rewritten-private-history -> fifth-acceptance-input -> owner-release-decision",
+      "migration": {
+        "target": "registered tcrn-workflow repository/candidate lane only",
+        "rule": "do not install into ~/.agents or ~/.tcrn-workflow until helper repin and Owner release approval",
+        "procedure": "docs/reports/init-020/inc-101-off-repo-artifact-migration.md"
+      },
+      "historyRewrite": {
+        "status": "complete",
+        "scope": "all refs reachable from the candidate checkout",
+        "proof": "deploy/aos-local-client/off-repo-artifact-proof.mjs scans the two QA4 topology files in every reachable commit",
+        "commitsObserved": 284
+      }
+    }
+  ]
+}

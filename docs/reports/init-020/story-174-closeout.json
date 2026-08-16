@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-174",
+  "intent": "STORY-174 收口:存储抽象口抽取与文件后端收敛完成,行为零变化(全套件绿)。按 subtask 174.1-174.6 全部落地。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:0d2a6d6f5ba7f61f8376b710",
+        "scope": "【收口(2026-08-06)】存储抽象层与文件后端收敛完成。交付物:①packages/core/src/storage-backend.ts——StorageBackend 接口(readMetadataBytes/writeMetadataBytes/listSegmentNames/readSegment/writeSegment/readView/writeView/ensureControlDirectory)+FileBackend 实现(四私有 IO 助手 boundDirectory/boundFile/ensureDirectory/atomicWrite 原样后移,含 dev/ino 身份校验、fsync+rename+identity-verify 原子写、crash-point 注入);②workspace.ts 数据平面调用点改经抽象接口(readMetadata/readSegmentEvents/appendEvent 段写+读回/writeViews/validateWorkspace 视图读/initializeWorkspace 元数据写/writeWorkspaceMetadataAt),段形状/gap 校验留在引擎层(后端无关);③租约/claim 机制保留文件助手并注明刻意重复 IO 豁免(174.3,PG 租约归 STORY-175)。验收两侧:正腿=既有全套件绿(66 测试文件,含 p3-file-engine 57 negative cases+64 排列字节决定性、backup-snapshot、protocol-v1)经 pnpm test;红腿=tests/story-174-storage-redleg.test.mjs 抽象层注入一字节偏差→链读红 WORKSPACE_EVENT_CORRUPT(2 用例绿)。format-check/lint/proof-artifacts 全绿。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:0d2a6d6f5ba7f61f8376b710", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:0d2a6d6f5ba7f61f8376b710", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:0d2a6d6f5ba7f61f8376b710", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:0d2a6d6f5ba7f61f8376b710" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-174", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

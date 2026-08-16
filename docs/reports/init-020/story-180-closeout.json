@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-180",
+  "intent": "STORY-180 收口:scratch 链往返迁移实证完成,窗前硬件②。file→pg→file 完整往返 diff 为空+版本连续+marker 保持,中途注入差异被 verify 拦截,证据归档。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:41cd58d7aec961fc483eb97d",
+        "scope": "【收口(2026-08-06)】scratch 链往返迁移实证完成(窗前硬件②)。交付物:①packages/pg-backend/test/evidence-roundtrip.mjs——往返实证脚本(file 链+knowledge 店+artifact 店,plan/execute file→pg→verify→tamper 红腿→re-execute→rollback→verify,逐步取证);②evidence/aos-s180-roundtrip-migration.json——实证归档(INC-042 约束:无宿主路径,已校验 grep /Users/ 0 命中)。验收两侧:正腿=roundTripEmpty true(export/version/head/checkpoint 四维 diff 全空,往返后文件侧与 baseline 完全一致);红腿=中途 disable trigger 篡改 PG 事件 payload_hash → verifyMigration 红 WORKSPACE_MIGRATION_VERIFY_MISMATCH,复位后 re-execute 绿。8 步证据链:baseline→plan-file-to-pg→execute-file-to-pg→verify-pg→red-leg-tamper→re-execute-pg→rollback-pg-to-file→roundtrip-diff-empty。判据与 STORY-176 等价门一致(逐事件字节等价+版本连续+head+两店 marker)。此单为窗前四硬件之一(往返迁移实证)的产出处。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:41cd58d7aec961fc483eb97d", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:41cd58d7aec961fc483eb97d", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:41cd58d7aec961fc483eb97d", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:41cd58d7aec961fc483eb97d" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-180", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

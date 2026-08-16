@@ -1,0 +1,743 @@
+{
+  "verdict": "CONTROL_TREE_DENY_COVERAGE_COMPLETE",
+  "reasons": [],
+  "platformRoot": "<local-platform-root>",
+  "home": "<local-home>",
+  "sessionRootsJudged": [
+    "<local-platform-root>"
+  ],
+  "probeEntries": {
+    "CONTROL_TREE_GUARD_SETTINGS": null,
+    "CONTROL_TREE_GUARD_EXTRA_TREES": null,
+    "CONTROL_TREE_GUARD_PLATFORM_ROOT": null,
+    "CONTROL_TREE_GUARD_HOME": null,
+    "allSessionRoots": false
+  },
+  "matcherSelfTest": {
+    "samples": 24,
+    "failures": []
+  },
+  "settingsSources": [
+    {
+      "path": "<local-home>/.claude/settings.json",
+      "scope": "user",
+      "denyEntries": 0,
+      "fileRules": 0,
+      "error": null
+    },
+    {
+      "path": "<local-platform-root>/.claude/settings.json",
+      "scope": "project",
+      "denyEntries": 26,
+      "fileRules": 26,
+      "error": null
+    },
+    {
+      "path": "<local-platform-root>/.claude/settings.local.json",
+      "scope": "project",
+      "denyEntries": 0,
+      "fileRules": 0,
+      "error": null
+    },
+    {
+      "path": "<local-platform-root>/TCRN-AOS/.claude/settings.json",
+      "scope": "project",
+      "denyEntries": 4,
+      "fileRules": 4,
+      "error": null
+    },
+    {
+      "path": "<local-platform-root>/TCRN-Design-System/.claude/settings.json",
+      "scope": "project",
+      "denyEntries": 4,
+      "fileRules": 4,
+      "error": null
+    },
+    {
+      "path": "<local-platform-root>/TCRN-TMS/.claude/settings.json",
+      "scope": "project",
+      "denyEntries": 4,
+      "fileRules": 4,
+      "error": null
+    },
+    {
+      "path": "<local-platform-root>/tcrn-workflow/.claude/settings.json",
+      "scope": "project",
+      "denyEntries": 4,
+      "fileRules": 4,
+      "error": null
+    },
+    {
+      "path": "<local-platform-root>/tcrn-workflow-helper/.claude/settings.json",
+      "scope": "project",
+      "denyEntries": 4,
+      "fileRules": 4,
+      "error": null
+    }
+  ],
+  "fileDenyRuleCount": 46,
+  "controlTreeCount": 21,
+  "uncoveredControlTrees": [],
+  "worlds": [
+    {
+      "sessionRoot": "<local-platform-root>",
+      "trees": [
+        {
+          "path": "<local-platform-root>/.tcrn-workspace",
+          "origin": "container-root",
+          "probeCount": 11,
+          "realFileCount": 740,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**)",
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**)",
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/cross-project",
+          "origin": "container-child",
+          "probeCount": 9,
+          "realFileCount": 31,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**)",
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**)",
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/cross-project-shadow",
+          "origin": "container-child",
+          "probeCount": 7,
+          "realFileCount": 4,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**)",
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**)",
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/Joi-Button",
+          "origin": "container-child",
+          "probeCount": 9,
+          "realFileCount": 17,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**)",
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**)",
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/Joi-Button-shadow",
+          "origin": "container-child",
+          "probeCount": 9,
+          "realFileCount": 6,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**)",
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**)",
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/release-trust",
+          "origin": "container-child",
+          "probeCount": 4,
+          "realFileCount": 1,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/TCRN-AOS",
+          "origin": "container-child",
+          "probeCount": 11,
+          "realFileCount": 633,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**)",
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**)",
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/TCRN-Design-System",
+          "origin": "container-child",
+          "probeCount": 9,
+          "realFileCount": 24,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**)",
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**)",
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow",
+          "origin": "container-child",
+          "probeCount": 7,
+          "realFileCount": 4,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**)",
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**)",
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/TCRN-TMS",
+          "origin": "container-child",
+          "probeCount": 9,
+          "realFileCount": 16,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**)",
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**)",
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow",
+          "origin": "container-child",
+          "probeCount": 7,
+          "realFileCount": 4,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**)",
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**)",
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow",
+          "origin": "identity-walk",
+          "probeCount": 8,
+          "realFileCount": 5,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow",
+          "origin": "identity-walk",
+          "probeCount": 9,
+          "realFileCount": 16,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow",
+          "origin": "identity-walk",
+          "probeCount": 9,
+          "realFileCount": 20,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow",
+          "origin": "identity-walk",
+          "probeCount": 7,
+          "realFileCount": 4,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow",
+          "origin": "identity-walk",
+          "probeCount": 9,
+          "realFileCount": 23,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow",
+          "origin": "identity-walk",
+          "probeCount": 7,
+          "realFileCount": 4,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow",
+          "origin": "identity-walk",
+          "probeCount": 9,
+          "realFileCount": 15,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow",
+          "origin": "identity-walk",
+          "probeCount": 7,
+          "realFileCount": 4,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow",
+          "origin": "identity-walk",
+          "probeCount": 9,
+          "realFileCount": 30,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-platform-root>/.tcrn-workspace/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        },
+        {
+          "path": "<local-home>/.tcrn-workflow",
+          "origin": "home",
+          "probeCount": 11,
+          "realFileCount": 6463,
+          "walkTruncated": false,
+          "tools": {
+            "Write": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Write(/<local-home>/.tcrn-workflow/**)",
+                "Write(/<local-home>/.tcrn-workflow/**/.*)",
+                "Write(/<local-home>/.tcrn-workflow/**/.*/**)"
+              ]
+            },
+            "Edit": {
+              "coveredStrict": true,
+              "coveredPermissive": true,
+              "uncoveredStrict": [],
+              "uncoveredStrictCount": 0,
+              "uncoveredPermissiveCount": 0,
+              "matchedBy": [
+                "Edit(/<local-home>/.tcrn-workflow/**)",
+                "Edit(/<local-home>/.tcrn-workflow/**/.*)",
+                "Edit(/<local-home>/.tcrn-workflow/**/.*/**)"
+              ]
+            }
+          },
+          "covered": true
+        }
+      ],
+      "uncovered": []
+    }
+  ]
+}

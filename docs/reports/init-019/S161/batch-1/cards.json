@@ -1,0 +1,238 @@
+{
+  "schemaVersion": "tcrn.init019.s161.batch1.v1",
+  "partition": "cross-project",
+  "projectId": "project:e7da35c5aade8dd42c91cb0f",
+  "accountableOwner": "owner:init019",
+  "common": {
+    "scope": "role",
+    "role-scopes": ["implementation"],
+    "lifecycle": "active",
+    "retrieval": "default",
+    "freshness": "fresh",
+    "last-verified": "2026-08-05T00:00:00Z",
+    "stale-days": 180,
+    "export": "metadata-only"
+  },
+  "cards": [
+    {
+      "external-key": "tcrn-init019-c01",
+      "category": "workflow", "kind": "guide",
+      "tags": ["lesson", "probe"],
+      "subject": "报缺陷前先怀疑自己的探针",
+      "summary": "平台累计十二次误报的共同根因是探针只看一侧或探针本身有误;报缺陷前先用已知好的输入校准探针。",
+      "snippet": "probe-before-defect:先校准探针,再报缺陷。",
+      "source-references": ["docs/reports/init-018/SUMMARY.md"],
+      "evidence-ids": ["evidence:init018-qa"],
+      "body": "主张:报缺陷前先怀疑自己的探针——共因是探针判据只看一侧、异步先问「等的是终态吗」、shell 分词与截断是量具、探针身份是量具(匿名 404≠不存在)。修正:先用「已知好的输入」校准探针,再下结论。此条不再成立当:探针已用已知好输入校准且仍报出缺陷,此时缺陷为真。"
+    },
+    {
+      "external-key": "tcrn-init019-c02",
+      "category": "decision", "kind": "decision",
+      "tags": ["lesson", "gate"],
+      "subject": "判据两侧必须能够不同",
+      "summary": "恒真门是平台三度付学费的缺陷形态;写完门先真做一次「什么会让它变红」。",
+      "snippet": "predicate-both-sides:写完门先问什么会让它红,并真做一次。",
+      "source-references": ["docs/reports/init-018/R2/"],
+      "evidence-ids": ["evidence:init018-r2"],
+      "body": "主张:任何判据两侧必须能够不同——恒真门(判据复制自身、白名单删掉即绿等)是真实缺陷。写完门先问「什么会让它变红」并真做一次。此条不再成立当:一个判据被证明在其评估的所有世界内都不会出现两侧同值,此时恒真可接受。"
+    },
+    {
+      "external-key": "tcrn-init019-c03",
+      "category": "workflow", "kind": "guide",
+      "tags": ["lesson", "gate"],
+      "subject": "门的判据须在每个会被评估的世界可满足",
+      "summary": "联合不可满足的门永不绿;合并后那次 verify 不冗余。",
+      "snippet": "gate-must-be-satisfiable-everywhere:判据在每个评估世界都须可满足。",
+      "source-references": ["docs/reports/init-018/INC-040/"],
+      "evidence-ids": ["evidence:init018-inc040"],
+      "body": "主张:一个门若在某个会被评估的世界(如干净 checkout)里联合不可满足,它永不绿、等于被关闭。判据须在每个评估世界可满足。此条不再成立当:门只在单工作树运行、不存在其它评估世界。"
+    },
+    {
+      "external-key": "tcrn-init019-c04",
+      "category": "testing", "kind": "guide",
+      "tags": ["lesson", "ci"],
+      "subject": "本地全绿不等于 CI 绿",
+      "summary": "本地 455/0 全绿后 CI 仍连红两次(计数式覆盖门与探针名册未同步);push 后须 gh run watch,评审 prompt 点名 CI 脚本。",
+      "snippet": "local-green-not-ci-green:push 后看 CI,不只信本地。",
+      "source-references": ["docs/reports/init-018/R1/"],
+      "evidence-ids": ["evidence:init018-r1"],
+      "body": "主张:本地全绿 ≠ CI 绿——CI 的探针/名册/构建可能与本地不同步(镜像 smoke 计数门、nginx location 未同步探针名册)。push 后必须 gh run watch。此条不再成立当:本地与 CI 使用同一份名册与探针且已证明同步。"
+    },
+    {
+      "external-key": "tcrn-init019-c05",
+      "category": "standards", "kind": "guide",
+      "tags": ["lesson", "documentation"],
+      "subject": "文档里的举例就是断言",
+      "summary": "公约点名一个实例等于对它的当下状态下了无人维护的判断;举例用类别,点名实例须写「截至某日实测」并给复核命令。",
+      "snippet": "example-in-convention-is-an-assertion:举例用类别,点名实例带日期与复核命令。",
+      "source-references": ["docs/delivery-cadence-convention.md"],
+      "evidence-ids": ["evidence:delivery-cadence"],
+      "body": "主张:文档点名一个实例(仓/主机/地址)即断言其当下状态,且无人维护。举例用类别;确需点名时写「截至某日实测」并给复核命令。此条不再成立当:文档里所有实例名都已被机器判据覆盖(如 doc-topology 的三方对齐)。"
+    },
+    {
+      "external-key": "tcrn-init019-c06",
+      "category": "workflow", "kind": "guide",
+      "tags": ["lesson", "delivery"],
+      "subject": "凭据不是实现的前置",
+      "summary": "凭据是运行期配置;需凭据的步骤单列,其余本地可完成可测,不让凭据阻塞实现。",
+      "snippet": "credentials-not-implementation-blocker:凭据单列,其余本地可完成。",
+      "source-references": ["docs/reports/init-018/SUMMARY.md"],
+      "evidence-ids": ["evidence:init018-summary"],
+      "body": "主张:凭据是运行期配置,不是实现的前置;需凭据步骤单列,其余本地可完成可测。此条不再成立当:某步骤在无凭据世界无法被任何形式验证。"
+    },
+    {
+      "external-key": "tcrn-init019-c07",
+      "category": "workflow", "kind": "guide",
+      "tags": ["lesson", "run"],
+      "subject": "上下文将满不是收尾的理由",
+      "summary": "压缩自动发生;停下的正当理由只有实质阻塞(owner_intent_required/对外发布/硬阻断),不是资源余量。",
+      "snippet": "context-limit-is-not-a-reason-to-stop:停只因实质阻塞。",
+      "source-references": ["docs/delivery-cadence-convention.md"],
+      "evidence-ids": ["evidence:stop-budget"],
+      "body": "主张:上下文接近上限自动压缩,不是停下的理由;停下只因三类必停。此条不再成立当:引擎停止压缩且上下文耗尽导致状态丢失。"
+    },
+    {
+      "external-key": "tcrn-init019-c08",
+      "category": "decision", "kind": "guide",
+      "tags": ["lesson", "stop-budget"],
+      "subject": "停顿预算只三类:owner_intent_required/对外发布/无裁定不可逆",
+      "summary": "执行期必停只有三类;其余继续。",
+      "snippet": "stop-budget-three-classes:只三类必停。",
+      "source-references": ["docs/delivery-cadence-convention.md"],
+      "evidence-ids": ["evidence:stop-budget"],
+      "body": "主张:停顿预算只有三类(owner_intent_required 门、对外发布、无既有裁定支撑的不可逆方向变更)。此条不再成立当:Owner 明示扩大必停类别。"
+    },
+    {
+      "external-key": "tcrn-init019-c09",
+      "category": "testing", "kind": "guide",
+      "tags": ["lesson", "multi-agent"],
+      "subject": "多代理并发时每个都对,文件最后是错的",
+      "summary": "并发代理各自局部正确,顺序写文件会互相覆盖;验证须重跑注释里的 MEASURED 连前提。",
+      "snippet": "agents-right-in-sequence-file-wrong:并发验证须重跑全部前提。",
+      "source-references": ["docs/reports/init-018/SUMMARY.md"],
+      "evidence-ids": ["evidence:init018-multiagent"],
+      "body": "主张:多代理并发,每个代理局部正确但顺序写同一文件会互相覆盖;验证必须重跑全部前置(含注释里的 MEASURED 值)。此条不再成立当:写操作已互斥或按拓扑串行。"
+    },
+    {
+      "external-key": "tcrn-init019-c10",
+      "category": "workflow", "kind": "guide",
+      "tags": ["lesson", "index"],
+      "subject": "陈旧索引比 grep 更害:索引必带新鲜度前置",
+      "summary": "索引类工具用前先跑 status 确认晚于末次提交;陈旧索引快且自信地撒谎。",
+      "snippet": "index-freshness:用索引前先验新鲜度。",
+      "source-references": ["CLAUDE.md"],
+      "evidence-ids": ["evidence:instrument-discipline"],
+      "body": "主张:任何索引类工具(codegraph/知识 store)用前先跑 status 确认索引晚于末次提交;陈旧索引快且自信地撒谎。此条不再成立当:索引与源同步、无滞后窗口。"
+    },
+    {
+      "external-key": "tcrn-init019-c11",
+      "category": "standards", "kind": "decision",
+      "tags": ["lesson", "mcp", "ssh"],
+      "subject": "复核命令走 MCP 读面,不 SSH 直驱引擎",
+      "summary": "D1/D9:接入 AOS 后 AOS 是唯一数据平面,读走 MCP 只读面,写走仪式;SSH 直驱是 break-glass。文档复核命令列已全面 MCP 化(INIT-019 157/158)。",
+      "snippet": "recheck-via-mcp:复核走 MCP 读面,SSH 仅 break-glass。",
+      "source-references": ["CLAUDE.md", "docs/reports/init-019/BRIEFING.md"],
+      "evidence-ids": ["evidence:init019-d1"],
+      "body": "主张:接入 AOS 后,更新与读取第一时间走 AOS MCP;SSH 直驱引擎 CLI 是错误做法,仅两类 break-glass 保留。此条不再成立当:MCP 面结构性不可用且无替代(白名单机制接管)。"
+    },
+    {
+      "external-key": "tcrn-init019-c12",
+      "category": "workflow", "kind": "fact",
+      "tags": ["lesson", "knowledge"],
+      "subject": "knowledge 写动词的 CAS 用 store marker 版本,不是链版本",
+      "summary": "引擎 knowledge-create/promote/retire/rebase/reverify 全部以 store.json 的 version 做 CAS;仪式按链版本供给会 KNOWLEDGE_CAS_MISMATCH。",
+      "snippet": "knowledge-marker-cas:knowledge 写动词 CAS 用 marker。",
+      "source-references": ["docs/reports/init-019/S160/notes.md"],
+      "evidence-ids": ["evidence:init019-s160"],
+      "body": "主张:knowledge-* 写动词的 --expected-version 是知识 store 标记版本,与链版本无关;用错即 CAS 失配。此条不再成立当:引擎把 knowledge 写动词的 CAS 改为链版本。"
+    },
+    {
+      "external-key": "tcrn-init019-c13",
+      "category": "workflow", "kind": "guide",
+      "tags": ["lesson", "hook"],
+      "subject": "hook 注册必须用 ${CLAUDE_PROJECT_DIR} 形态,禁止裸相对路径",
+      "summary": "INC-040 死因:注册用裸相对路径致 hook 从未启动;活性门须执行注册字符串本身,不起进程冒充。",
+      "snippet": "hook-cwd-trap:注册用 ${CLAUDE_PROJECT_DIR},活性门执行注册字符串。",
+      "source-references": ["docs/reports/init-018/INC-040/notes.md"],
+      "evidence-ids": ["evidence:init018-inc040"],
+      "body": "主张:hook 注册命令必须用 ${CLAUDE_PROJECT_DIR} 形态(不写死家目录),否则从非预期 cwd 起不来;活性门须执行注册字符串本身(读 settings、替换变量、起真进程),不许进程内直调冒充。此条不再成立当:宿主 hooks 不再受 cwd 影响启动。"
+    },
+    {
+      "external-key": "tcrn-init019-c14",
+      "category": "workflow", "kind": "guide",
+      "tags": ["lesson", "ceremony"],
+      "subject": "没人读回来的写不算已证",
+      "summary": "仪式载荷必须至少一条回读,且回读按全值比较,不是「读成功」。",
+      "snippet": "ceremony-readback:写必带回读,按全值比较。",
+      "source-references": ["docs/reports/init-019/S156/notes.md"],
+      "evidence-ids": ["evidence:init019-s156"],
+      "body": "主张:治理写必须经仪式且至少一条回读;回读判据是全值比较(非「读成功」)。此条不再成立当:写路径自带不可绕过的事后核验。"
+    },
+    {
+      "external-key": "tcrn-init019-c15",
+      "category": "standards", "kind": "guide",
+      "tags": ["lesson", "hygiene"],
+      "subject": "证据不得携带宿主路径(INC-037/042)",
+      "summary": "仓内证据含本机 home 路径会让公开仓付出 93 提交改写代价;证据落盘必须 scrub,门扫 tracked+evidence 树。",
+      "snippet": "evidence-hygiene:证据 scrub 宿主路径,门扫 tracked+evidence。",
+      "source-references": ["docs/reports/init-018/INC-037/notes.md"],
+      "evidence-ids": ["evidence:init018-inc037"],
+      "body": "主张:任何发布/提交的证据不得携带宿主 home 路径;宿主路径一律占位符化。此条不再成立当:仓不再公开且无宿主路径泄露风险。"
+    },
+    {
+      "external-key": "tcrn-init019-c16",
+      "category": "workflow", "kind": "fact",
+      "tags": ["lesson", "gate"],
+      "subject": "树里对不代表记录对(INC-039)",
+      "summary": "声明块在工作树对、未提交,HEAD 仍错;committed-claims 判据要求已提交声明块与工作树一致。",
+      "snippet": "committed-claims:声明块须已提交,不只在工作树。",
+      "source-references": ["docs/reports/init-018/SUMMARY.md"],
+      "evidence-ids": ["evidence:init018-inc039"],
+      "body": "主张:拓扑/声明类文档的已提交形态必须与工作树一致;只在作者磁盘对不算对。此条不再成立当:文档不在任何 git 仓(平台根文档,已声明为判据天花板)。"
+    },
+    {
+      "external-key": "tcrn-init019-c17",
+      "category": "workflow", "kind": "guide",
+      "tags": ["lesson", "probe"],
+      "subject": "探针身份也是量具:匿名 404≠不存在",
+      "summary": "对存在性/可见性下结论前先问「我用什么身份在问」;有登录态先问认证面。",
+      "snippet": "probe-identity:先问自己用什么身份在问。",
+      "source-references": ["docs/reports/init-018/SUMMARY.md"],
+      "evidence-ids": ["evidence:init018-probe"],
+      "body": "主张:探针的身份(匿名/登录态/宿主)改变结论;匿名 404 不证不存在。此条不再成立当:被探测对象对任何身份同答。"
+    },
+    {
+      "external-key": "tcrn-init019-c18",
+      "category": "workflow", "kind": "guide",
+      "tags": ["lesson", "ssh"],
+      "subject": "远程 argv 经 ssh 重新拼接,必须 shellQuote",
+      "summary": "ssh 把远程 argv 以空格重拼并交给登录 shell,含空格/括号的值会成为远程语法错误;一律 shellQuote。",
+      "snippet": "ssh-shellquote:远程参数一律引号包裹。",
+      "source-references": ["docs/reports/init-019/S156/notes.md"],
+      "evidence-ids": ["evidence:init019-s156"],
+      "body": "主张:任何经 ssh 传递的参数必须 shellQuote(单引号包裹+转义),否则远程 shell 重解析破坏值。此条不再成立当:改用不经 shell 的传输(如 MCP 面)。"
+    },
+    {
+      "external-key": "tcrn-init019-c19",
+      "category": "decision", "kind": "reference",
+      "tags": ["lesson", "ssh", "breakglass"],
+      "subject": "SSH 直驱只两类 break-glass:主机 MCP 不可达 fallback 与按设计绕开服务层的逐字节比对",
+      "summary": "D1/D9 白名单:两类残余适用场景,每条带日期理由;白名单被 doc-topology 与 ssh-write-observer 共同消费。",
+      "snippet": "ssh-breakglass-two-classes:只两类白名单。",
+      "source-references": ["docs/reports/init-019/S158/notes.md"],
+      "evidence-ids": ["evidence:init019-s158"],
+      "body": "主张:SSH 直驱引擎仅两类残余适用(①主机 MCP 面不可达的只读 fallback,须说明理由;②按设计绕开服务层的逐字节比对)。此条不再成立当:SSH 通路整体退役。"
+    },
+    {
+      "external-key": "tcrn-init019-c20",
+      "category": "workflow", "kind": "fact",
+      "tags": ["lesson", "knowledge", "marker"],
+      "subject": "每次链写都拉开知识 store 标记差距,写路径必须自动 rebase",
+      "summary": "知识 store 是 disposable 物化索引,每次链写使 eventHighWaterDigest 落后;仪式真写后自动 rebase 保持读面可用。",
+      "snippet": "marker-rebase-discipline:每写必 rebase。",
+      "source-references": ["docs/reports/init-019/S160/notes.md"],
+      "evidence-ids": ["evidence:init019-s160"],
+      "body": "主张:知识 store 的 eventHighWaterDigest 与链 head 不同即整面拒读;写路径必须自动 rebase(落后量 ≤1 次写)。此条不再成立当:知识 store 改为实时物化或不再拒读陈旧。"
+    }
+  ]
+}

@@ -1,0 +1,802 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-019",
+  "intent": "INIT-019 kickoff B 批:立 STORY-156..162(EPIC-047 全部四张 + EPIC-048 前三张),每张带记录级四要素加第五要素生效证据命令,subtask 由 BRIEFING 承载不建链记录。",
+  "startedAt": "2026-08-05T13:43:28Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "deploy/aos-local-client/payloads/cross-init019-b.json",
+    "sha256": "8bc88160aa2c4ab43f385d23d8d83e672d3ac3ba69fb70aa517aec7a366082f5",
+    "bytes": 12364
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1743,
+    "headEventHash": "6d041fe495833bc630c26f7c6956d78c38c25061a9934280d48e48201bda03f5",
+    "work": 265
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:29Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1743",
+        "--external-key",
+        "TCRN-CROSS-STORY-156",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:888cd7a9eadbc77294161b79",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1743,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:2060d00af74957f33ee2735d",
+      "version": 1744
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:30Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1744",
+        "--id",
+        "work:2060d00af74957f33ee2735d",
+        "--scope",
+        "【MCP 写面:单一 ceremony 工具】D5 的落法。红线边界:不得重写仪式逻辑(必须包裹现有 deploy/aos-local-client/ceremony.mjs);不得允许调用方指名 workspace/attest-dir/expected-version(自选哨兵冻结不了任何东西);不得允许绕过回读;不得改用户级配置。文件指针:新建 TCRN-AOS/deploy/aos-mcp-write/{SPEC.md,server.mjs,server.test.mjs},改平台根 .mcp.json 与 TCRN-AOS/{package.json,deploy/aos-local-client/parity-proof.mjs}。验证命令:node --test TCRN-AOS/deploy/aos-mcp-write/server.test.mjs;四条红侧(载荷指名 expected-version / 无回读 / 动词不在主机 catalogue / 一次性供权族)reason code 互不相同。收口动作:工具能对真实载荷 dry-run 返回 CEREMONY_PLANNED_ONLY,测试进 package.json 名册,服务器进 parity 锚名册。生效证据命令:新开一个会话确认该 MCP 工具在工具列表里可调用(工具注册是会话启动快照,老会话看不到),并经 MCP 客户端而非直接 node 跑一次 dry-run,回执 chainBefore.version 与只读面当刻一致。子任务 156.1-156.6 见 BRIEFING 第三节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1744,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:2060d00af74957f33ee2735d",
+      "version": 1745
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:31Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1745",
+        "--external-key",
+        "TCRN-CROSS-STORY-157",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:888cd7a9eadbc77294161b79",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1745,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:09a452f35ef736f18c4be496",
+      "version": 1746
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:32Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1746",
+        "--id",
+        "work:09a452f35ef736f18c4be496",
+        "--scope",
+        "【文档改写:复核命令全面 MCP 化】实证依据:本会话审查层整场复核几乎全走 SSH,因为平台 CLAUDE.md 的复核命令列教的就是 SSH——文档是代理的肌肉记忆,不改文档原则永远靠人复述。红线边界:不得改写平台根 CLAUDE.md 第三节那张表的地址列(那是被 doc-topology:proof 机器核对的声明),只改复核命令列的形态;白名单条目必须带日期与理由。文件指针:平台根 CLAUDE.md、TCRN-AOS/CLAUDE.md、tcrn-workflow/CLAUDE.md、.claude/skills/tcrn-workflow-helper/references/*.md、TCRN-AOS/deploy/aos-local-client/doc-topology-proof.mjs。验证命令:pnpm --dir TCRN-AOS doc-topology:proof;红侧注入一条 SSH 直驱复核命令后门必须 exit 1 并点名文件与行号,还原后 exit 0。收口动作:盘点清单数目降到白名单允许残量,判据扩展为核对访问形态而非仅地址。生效证据命令:pnpm --dir TCRN-AOS verify 中 doc-topology 一步在干净工作树上 exit 0。子任务 157.1-157.5 见 BRIEFING 第三节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1746,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:09a452f35ef736f18c4be496",
+      "version": 1747
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:33Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1747",
+        "--external-key",
+        "TCRN-CROSS-STORY-158",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:888cd7a9eadbc77294161b79",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1747,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:b4c16624f46905ae7a94140f",
+      "version": 1748
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:34Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1748",
+        "--id",
+        "work:b4c16624f46905ae7a94140f",
+        "--scope",
+        "【SSH 降格为 break-glass】D9 的落法,残余适用性分析结论:不是删除而是条件化保留两类——主机 MCP 面不可达时的 fallback、按设计绕开服务层的逐字节比对(engine-host:verify)。红线边界:白名单只收这两类且每条带 reason 与 since;不得在本单改观察器语料(那是 STORY-164 的文件,避免并发冲突)。文件指针:新建 TCRN-AOS/deploy/aos-local-client/ssh-breakglass-allowlist.json;改平台根 CLAUDE.md 第三节声明。验证命令:node -e 读取白名单并断言每条都有 reason 与 since;doc-topology:proof exit 0。收口动作:白名单被 STORY-157.3 与 STORY-164.2 共同引用(一份名单两处消费,防漂移)。生效证据命令:grep -c 确认两处引用的是同一文件路径各 >=1,且新会话里能从文档读到降格声明。子任务 158.1-158.3 见 BRIEFING 第三节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1748,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:b4c16624f46905ae7a94140f",
+      "version": 1749
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:35Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1749",
+        "--external-key",
+        "TCRN-CROSS-STORY-159",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:888cd7a9eadbc77294161b79",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1749,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:566983451730586006797d49",
+      "version": 1750
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:36Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1750",
+        "--id",
+        "work:566983451730586006797d49",
+        "--scope",
+        "【座舱原生 MCP 端点与渲染上移(阶段二)】D6 待确认前保持 planned,只出方案不动手。要解决的耦合:视图渲染发生在笔记本上(需要它醒着且能 build),VM 只存真值与端静态文件,于是网页最坏滞后四小时。红线边界:不得用逐字节拷贝制造第二个权威(引擎绑五个绝对根);不得移动座舱 loopback 绑定(CONF-007 D7 硬编码在服务源码里)。文件指针:TCRN-AOS/docs/reports/init-019/S159/design.md;后续涉及 apps/cockpit-service 与 deploy/aos-resident-cockpit。验证命令:设计评审;扩 local-purity:proof 把「本机不承担渲染」纳入判据。收口动作:D6 确认后方可转 ready。生效证据命令:切换后网页 generatedAt 与链版本的滞后由小时级降到分钟级,且笔记本关机时视图仍能更新。子任务 159.1-159.4 见 BRIEFING 第三节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1750,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:566983451730586006797d49",
+      "version": 1751
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:37Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1751",
+        "--external-key",
+        "TCRN-CROSS-STORY-160",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:cf6f94a581d81a5672b3e381",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1751,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:106b67d1e1e2384498b87da2",
+      "version": 1752
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:38Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1752",
+        "--id",
+        "work:106b67d1e1e2384498b87da2",
+        "--scope",
+        "【标记纪律:每写必 rebase】D3 的落法。现状事实(执行前不必重测):cross 与 TCRN-AOS 两条活链知识面整面 KNOWLEDGE_HIGH_WATER_MISMATCH,store 标记 v1 对链 v1728,disposable 物化索引迁 VM 后从未 rebase,且每次链写再拉开一次。红线边界:不得让 rebase 变成人工步骤(必须挂在写路径上);rebase 是 mutating 动词必须经仪式不许 SSH 直驱;CAS 用的是 store marker 版本而非链版本。文件指针:TCRN-AOS/deploy/aos-local-client/ceremony.mjs 或 deploy/aos-mcp-write/server.mjs(择一并在 notes 说明理由);载荷 payloads/cross-init019-knowledge-rebase.json。验证命令:做一次真写后立刻读知识面,不再 HIGH_WATER_MISMATCH;人为放旧一个分区标记后巡检门必须红并点名。收口动作:五链知识面全部可读,标记落后 <=1 次写,门并入 STORY-166 巡检而非另造孤门。生效证据命令:经 MCP 只读面(非 SSH)对五链各跑一次 knowledge-list,全部 KNOWLEDGE_LIST_READY;连做两次真写后两次都仍可读。子任务 160.1-160.5 见 BRIEFING 第四节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1752,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:106b67d1e1e2384498b87da2",
+      "version": 1753
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:39Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1753",
+        "--external-key",
+        "TCRN-CROSS-STORY-161",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:cf6f94a581d81a5672b3e381",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1753,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:a5228dfd680ba0d2040c27da",
+      "version": 1754
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:40Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1754",
+        "--id",
+        "work:a5228dfd680ba0d2040c27da",
+        "--scope",
+        "【内容灌入:三源策展】D7 的落法。现状事实:VM 与本机归档 bodies/metadata 双零、链上无真知识事件、座舱生产库 domain.db 无知识表(kr01-06 建在代码与测试里从未部署)——故这不是迁移丢失而是从未灌入。红线边界:不得把记忆原文直搬当卡(要有主张、有 evidence、可被证伪,不是日记);promote 需 evidence>=1 且 source 与 accountable-owner 齐备否则 KNOWLEDGE_PROVENANCE_INVALID;evidence id 只验形状不验存在故人要保证它真的存在;落卡不许 SSH。文件指针:TCRN-AOS/docs/reports/init-019/S161/{sources.md,card-template.md,batch-1/,retrieval-check.md};载荷进 payloads/。验证命令:样卡走通 create->promote;落卡后经 MCP 只读面 knowledge-list 数目一致;5 个真实 prompt 的 knowledge-candidates 命中抽检(先选定 prompt 再检索,不许挑对自己有利的,命中率低也照写)。收口动作:首批 >=20 卡在链上,每卡至少一条 evidence。生效证据命令:knowledge-list 经 MCP 返回 >=20 条,且抽检可由第二人原样重跑。子任务 161.1-161.6 见 BRIEFING 第四节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1754,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:a5228dfd680ba0d2040c27da",
+      "version": 1755
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:41Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1755",
+        "--external-key",
+        "TCRN-CROSS-STORY-162",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:cf6f94a581d81a5672b3e381",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1755,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:1212bf1ab6df24db916e54ce",
+      "version": 1756
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:42Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1756",
+        "--id",
+        "work:1212bf1ab6df24db916e54ce",
+        "--scope",
+        "【注入触发:hook 按 prompt 检索】D2 里「webhook 提醒 agent」在 Claude Code 上的落法就是 hook。红线边界:不得每轮无条件全量注入(上下文预算是硬约束);relevance 归 knowledge-candidates、预算与新鲜度归已建成的 context-route,不许自己另写一套;hook 注册必须用 CLAUDE_PROJECT_DIR 形态不许裸相对路径(INC-040 第二条死因),也不许写死家目录路径;只改 hooks 块,deny 规则一个字不许动;活性门必须执行注册字符串本身,不许在进程内直调函数冒充。文件指针:新建 tcrn-workflow/scripts/knowledge-inject.mjs(含 --verify-channel 模式);改平台根 .claude/settings.json 的 hooks 块;文档 TCRN-AOS/docs/reports/init-019/S162/design.md。验证命令:给定 prompt 链路跑通并输出元数据级注入体;超量场景被裁到上限且明说裁了;活性门绿一红三(注册缺失/命令起不来/检索链无返回)各自 reason code。收口动作:门进 CI 或 verify 链。生效证据命令:新开会话实测注入真的发生(上下文里能看到卡片元数据),且 --verify-channel 在平台根、子仓、无关目录三种 cwd 下均绿。子任务 162.1-162.6 见 BRIEFING 第四节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1756,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:1212bf1ab6df24db916e54ce",
+      "version": 1757
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:2060d00af74957f33ee2735d",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-156",
+            "observed": "TCRN-CROSS-STORY-156",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【MCP 写面:单一 ceremony 工具】D5 的落法。红线边界:不得重写仪式逻辑(必须包裹现有 deploy/aos-local-client/ceremony.mjs);不得允许调用方指名 workspace/attest-dir/expected-version(自选哨兵冻结不了任何东西);不得允许绕过回读;不得改用户级配置。文件指针:新建 TCRN-AOS/deploy/aos-mcp-write/{SPEC.md,server.mjs,server.test.mjs},改平台根 .mcp.json 与 TCRN-AOS/{package.json,deploy/aos-local-client/parity-proof.mjs}。验证命令:node --test TCRN-AOS/deploy/aos-mcp-write/server.test.mjs;四条红侧(载荷指名 expected-version / 无回读 / 动词不在主机 catalogue / 一次性供权族)reason code 互不相同。收口动作:工具能对真实载荷 dry-run 返回 CEREMONY_PLANNED_ONLY,测试进 package.json 名册,服务器进 parity 锚名册。生效证据命令:新开一个会话确认该 MCP 工具在工具列表里可调用(工具注册是会话启动快照,老会话看不到),并经 MCP 客户端而非直接 node 跑一次 dry-run,回执 chainBefore.version 与只读面当刻一致。子任务 156.1-156.6 见 BRIEFING 第三节。",
+            "observed": "【MCP 写面:单一 ceremony 工具】D5 的落法。红线边界:不得重写仪式逻辑(必须包裹现有 deploy/aos-local-client/ceremony.mjs);不得允许调用方指名 workspace/attest-dir/expected-version(自选哨兵冻结不了任何东西);不得允许绕过回读;不得改用户级配置。文件指针:新建 TCRN-AOS/deploy/aos-mcp-write/{SPEC.md,server.mjs,server.test.mjs},改平台根 .mcp.json 与 TCRN-AOS/{package.json,deploy/aos-local-client/parity-proof.mjs}。验证命令:node --test TCRN-AOS/deploy/aos-mcp-write/server.test.mjs;四条红侧(载荷指名 expected-version / 无回读 / 动词不在主机 catalogue / 一次性供权族)reason code 互不相同。收口动作:工具能对真实载荷 dry-run 返回 CEREMONY_PLANNED_ONLY,测试进 package.json 名册,服务器进 parity 锚名册。生效证据命令:新开一个会话确认该 MCP 工具在工具列表里可调用(工具注册是会话启动快照,老会话看不到),并经 MCP 客户端而非直接 node 跑一次 dry-run,回执 chainBefore.version 与只读面当刻一致。子任务 156.1-156.6 见 BRIEFING 第三节。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-156",
+        "kind": "Story",
+        "status": "planned"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:1212bf1ab6df24db916e54ce",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-162",
+            "observed": "TCRN-CROSS-STORY-162",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【注入触发:hook 按 prompt 检索】D2 里「webhook 提醒 agent」在 Claude Code 上的落法就是 hook。红线边界:不得每轮无条件全量注入(上下文预算是硬约束);relevance 归 knowledge-candidates、预算与新鲜度归已建成的 context-route,不许自己另写一套;hook 注册必须用 CLAUDE_PROJECT_DIR 形态不许裸相对路径(INC-040 第二条死因),也不许写死家目录路径;只改 hooks 块,deny 规则一个字不许动;活性门必须执行注册字符串本身,不许在进程内直调函数冒充。文件指针:新建 tcrn-workflow/scripts/knowledge-inject.mjs(含 --verify-channel 模式);改平台根 .claude/settings.json 的 hooks 块;文档 TCRN-AOS/docs/reports/init-019/S162/design.md。验证命令:给定 prompt 链路跑通并输出元数据级注入体;超量场景被裁到上限且明说裁了;活性门绿一红三(注册缺失/命令起不来/检索链无返回)各自 reason code。收口动作:门进 CI 或 verify 链。生效证据命令:新开会话实测注入真的发生(上下文里能看到卡片元数据),且 --verify-channel 在平台根、子仓、无关目录三种 cwd 下均绿。子任务 162.1-162.6 见 BRIEFING 第四节。",
+            "observed": "【注入触发:hook 按 prompt 检索】D2 里「webhook 提醒 agent」在 Claude Code 上的落法就是 hook。红线边界:不得每轮无条件全量注入(上下文预算是硬约束);relevance 归 knowledge-candidates、预算与新鲜度归已建成的 context-route,不许自己另写一套;hook 注册必须用 CLAUDE_PROJECT_DIR 形态不许裸相对路径(INC-040 第二条死因),也不许写死家目录路径;只改 hooks 块,deny 规则一个字不许动;活性门必须执行注册字符串本身,不许在进程内直调函数冒充。文件指针:新建 tcrn-workflow/scripts/knowledge-inject.mjs(含 --verify-channel 模式);改平台根 .claude/settings.json 的 hooks 块;文档 TCRN-AOS/docs/reports/init-019/S162/design.md。验证命令:给定 prompt 链路跑通并输出元数据级注入体;超量场景被裁到上限且明说裁了;活性门绿一红三(注册缺失/命令起不来/检索链无返回)各自 reason code。收口动作:门进 CI 或 verify 链。生效证据命令:新开会话实测注入真的发生(上下文里能看到卡片元数据),且 --verify-channel 在平台根、子仓、无关目录三种 cwd 下均绿。子任务 162.1-162.6 见 BRIEFING 第四节。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-162",
+        "kind": "Story",
+        "status": "planned"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1757,
+    "headEventHash": "73419252afbb5c136cfba50f415b683005f081f879f0948ea72c9afe786c9821",
+    "work": 272
+  },
+  "eventsAppended": 14,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-05T13:43:44Z"
+}

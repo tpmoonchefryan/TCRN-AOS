@@ -1,0 +1,1009 @@
+{
+  "destination": "<local-var-folders>",
+  "corpusEntriesRemoved": 75
+}
+✔ corpus is green against the unmutated observer (2.7205ms)
+✔ control mutation leaves the corpus green (the harness is not red for everyone) (4.841584ms)
+✔ every corpus id is unique (0.100292ms)
+✖ branch 'tok-comment' is covered: removing it turns D09 red (1.763708ms)
+✖ branch 'tok-pipe-split' is covered: removing it turns C16 red (2.591917ms)
+✖ branch 'tok-amp-split' is covered: removing it turns F04 red (1.966667ms)
+✖ branch 'tok-amp-redirect' is covered: removing it turns E16 red (1.423292ms)
+✖ branch 'tok-subshell' is covered: removing it turns E21 red (1.466709ms)
+✖ branch 'tok-subshell-substitution' is covered: removing it turns C15 red (1.578958ms)
+✔ branch 'tok-redirect-parse' is covered: removing it turns A01 red (1.4765ms)
+✖ branch 'tok-fd-prefix' is covered: removing it turns F15 red (1.430625ms)
+✖ branch 'dup-is-not-a-write' is covered: removing it turns D07 red (1.673042ms)
+✖ branch 'wrapper-env' is covered: removing it turns C01 red (1.504334ms)
+✖ branch 'wrapper-time' is covered: removing it turns C02 red (1.349792ms)
+✖ branch 'wrapper-sudo' is covered: removing it turns C03 red (1.757875ms)
+✖ branch 'wrapper-doas' is covered: removing it turns C13 red (1.439709ms)
+✖ branch 'wrapper-nohup' is covered: removing it turns C04 red (1.47975ms)
+✖ branch 'wrapper-command' is covered: removing it turns C05 red (1.408625ms)
+✖ branch 'wrapper-exec' is covered: removing it turns C11 red (1.7175ms)
+✖ branch 'wrapper-nice' is covered: removing it turns C08 red (1.3405ms)
+✖ branch 'wrapper-ionice' is covered: removing it turns C09 red (1.298ms)
+✖ branch 'wrapper-stdbuf' is covered: removing it turns C10 red (1.261834ms)
+✖ branch 'wrapper-setsid' is covered: removing it turns C12 red (1.312917ms)
+✖ branch 'wrapper-timeout' is covered: removing it turns C07 red (1.419666ms)
+✖ branch 'leading-assignments' is covered: removing it turns C06 red (1.642875ms)
+✖ branch 'wrapper-chain' is covered: removing it turns C14 red (1.815208ms)
+✖ branch 'wrapper-inline-assignment' is covered: removing it turns C01 red (1.428916ms)
+✖ branch 'wrapper-flag-argument' is covered: removing it turns C03 red (1.2245ms)
+✖ branch 'wrapper-leading-operand' is covered: removing it turns C07 red (1.222ms)
+✖ branch 'ssh-option-skip' is covered: removing it turns E06 red (1.171625ms)
+✖ branch 'ssh-option-argument' is covered: removing it turns E05 red (1.407666ms)
+✖ branch 'ssh-user-prefix' is covered: removing it turns E06 red (1.813ms)
+✔ branch 'ssh-remote-join' is covered: removing it turns A08 red (1.110458ms)
+✖ branch 'program-basename' is covered: removing it turns E18 red (1.199792ms)
+✔ branch 'transport-ssh' is covered: removing it turns A08 red (1.490417ms)
+✔ branch 'transport-rsync' is covered: removing it turns A09 red (2.567083ms)
+✔ branch 'transport-scp' is covered: removing it turns A10 red (1.25575ms)
+✖ branch 'transfer-spec-anchor' is covered: removing it turns D08 red (1.590666ms)
+✖ branch 'transfer-host-check' is covered: removing it turns E23 red (1.548916ms)
+✔ branch 'redirect-op-gt' is covered: removing it turns A01 red (1.30925ms)
+✔ branch 'redirect-op-gtgt' is covered: removing it turns A03 red (1.323542ms)
+✖ branch 'redirect-op-gtbar' is covered: removing it turns E19 red (1.24475ms)
+✖ branch 'redirect-op-ampgt' is covered: removing it turns E16 red (1.248042ms)
+✖ branch 'redirect-op-ampgtgt' is covered: removing it turns E20 red (1.335208ms)
+✔ branch 'write-cmd-cp' is covered: removing it turns A06 red (1.167ms)
+✔ branch 'write-cmd-mv' is covered: removing it turns A07 red (1.286834ms)
+✔ branch 'write-cmd-rm' is covered: removing it turns A08 red (1.294375ms)
+✖ branch 'write-cmd-dd' is covered: removing it turns E13 red (1.471667ms)
+✖ branch 'write-cmd-install' is covered: removing it turns E14 red (1.2885ms)
+✖ branch 'write-cmd-touch' is covered: removing it turns E15 red (1.702625ms)
+✔ branch 'write-cmd-tee' is covered: removing it turns A04 red (1.40875ms)
+✔ branch 'write-sed-in-place' is covered: removing it turns A05 red (1.208375ms)
+✖ branch 'remote-shell-c' is covered: removing it turns G01 red (1.329458ms)
+✖ branch 'remote-shell-set' is covered: removing it turns G01 red (1.926542ms)
+✖ branch 'remote-shell-flag' is covered: removing it turns G03 red (1.35675ms)
+✖ branch 'remote-wrapper-strip' is covered: removing it turns G02 red (1.265541ms)
+✖ branch 'exemption-stage' is covered: removing it turns F02 red (1.210583ms)
+✖ branch 'exemption-empty-targets' is covered: removing it turns E17 red (1.452959ms)
+✖ branch 'exemption-target-guard' is covered: removing it turns F03 red (1.375375ms)
+✖ branch 'exemption-every-unit' is covered: removing it turns F06 red (1.275667ms)
+✖ branch 'exemption-entry-host-engine' is covered: removing it turns F02 red (1.215292ms)
+✖ branch 'exemption-entry-scratch' is covered: removing it turns F04 red (1.539208ms)
+✖ branch 'exemption-runner-unwrap' is covered: removing it turns F02 red (1.333041ms)
+✖ branch 'exemption-direct-exec' is covered: removing it turns F10 red (1.231042ms)
+✖ branch 'host-engine-anchor' is covered: removing it turns F09 red (1.1815ms)
+✖ branch 'safe-target-absolute' is covered: removing it turns F13 red (2.004583ms)
+✖ branch 'safe-target-governance' is covered: removing it turns F03 red (1.320083ms)
+✖ branch 'scratch-root-tmp' is covered: removing it turns F04 red (1.194375ms)
+✖ branch 'scratch-root-var-tmp' is covered: removing it turns F11 red (1.34075ms)
+✖ branch 'scratch-root-run' is covered: removing it turns F14 red (1.2895ms)
+✖ branch 'scratch-root-dev-null' is covered: removing it turns F12 red (1.206625ms)
+✖ branch 'scratch-prefix-match' is covered: removing it turns F04 red (1.162583ms)
+✖ branch 'host-check' is covered: removing it turns E01 red (1.179542ms)
+✖ branch 'host-anchor' is covered: removing it turns E02 red (1.609833ms)
+✖ branch 'governance-check' is covered: removing it turns E03 red (1.411167ms)
+✖ branch 'governance-anchor' is covered: removing it turns E04 red (1.189583ms)
+✖ branch 'remote-command-scope' is covered: removing it turns D11 red (1.13975ms)
+✔ branch 'write-primitive-required' is covered: removing it turns A15 red (1.212125ms)
+✖ branch 'transfer-spec-required' is covered: removing it turns D08 red (1.760959ms)
+✖ branch 'transfer-governance-check' is covered: removing it turns E10 red (1.236708ms)
+✖ branch 'reason-rank' is covered: removing it turns D12 red (1.343458ms)
+✔ a parser fault fails toward PASS, never toward a blocked session (0.724333ms)
+✔ the CLI actually runs when the invocation path traverses a symlink (56.508083ms)
+✔ hook mode holds its input contract: always exit 0, log only on HIT (134.802959ms)
+✔ observe semantics: classify never emits a blocking decision (0.2605ms)
+ℹ tests 85
+ℹ suites 0
+ℹ pass 20
+ℹ fail 65
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 355.746167
+
+✖ failing tests:
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'tok-comment' is covered: removing it turns D09 red (1.763708ms)
+  AssertionError [ERR_ASSERTION]: removing 'tok-comment' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'tok-pipe-split' is covered: removing it turns C16 red (2.591917ms)
+  AssertionError [ERR_ASSERTION]: removing 'tok-pipe-split' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'tok-amp-split' is covered: removing it turns F04 red (1.966667ms)
+  AssertionError [ERR_ASSERTION]: removing 'tok-amp-split' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'tok-amp-redirect' is covered: removing it turns E16 red (1.423292ms)
+  AssertionError [ERR_ASSERTION]: removing 'tok-amp-redirect' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'tok-subshell' is covered: removing it turns E21 red (1.466709ms)
+  AssertionError [ERR_ASSERTION]: removing 'tok-subshell' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'tok-subshell-substitution' is covered: removing it turns C15 red (1.578958ms)
+  AssertionError [ERR_ASSERTION]: removing 'tok-subshell-substitution' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'tok-fd-prefix' is covered: removing it turns F15 red (1.430625ms)
+  AssertionError [ERR_ASSERTION]: removing 'tok-fd-prefix' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'dup-is-not-a-write' is covered: removing it turns D07 red (1.673042ms)
+  AssertionError [ERR_ASSERTION]: removing 'dup-is-not-a-write' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-env' is covered: removing it turns C01 red (1.504334ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-env' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-time' is covered: removing it turns C02 red (1.349792ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-time' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-sudo' is covered: removing it turns C03 red (1.757875ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-sudo' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-doas' is covered: removing it turns C13 red (1.439709ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-doas' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-nohup' is covered: removing it turns C04 red (1.47975ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-nohup' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-command' is covered: removing it turns C05 red (1.408625ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-command' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-exec' is covered: removing it turns C11 red (1.7175ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-exec' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-nice' is covered: removing it turns C08 red (1.3405ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-nice' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-ionice' is covered: removing it turns C09 red (1.298ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-ionice' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-stdbuf' is covered: removing it turns C10 red (1.261834ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-stdbuf' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-setsid' is covered: removing it turns C12 red (1.312917ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-setsid' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-timeout' is covered: removing it turns C07 red (1.419666ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-timeout' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'leading-assignments' is covered: removing it turns C06 red (1.642875ms)
+  AssertionError [ERR_ASSERTION]: removing 'leading-assignments' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-chain' is covered: removing it turns C14 red (1.815208ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-chain' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-inline-assignment' is covered: removing it turns C01 red (1.428916ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-inline-assignment' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-flag-argument' is covered: removing it turns C03 red (1.2245ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-flag-argument' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'wrapper-leading-operand' is covered: removing it turns C07 red (1.222ms)
+  AssertionError [ERR_ASSERTION]: removing 'wrapper-leading-operand' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'ssh-option-skip' is covered: removing it turns E06 red (1.171625ms)
+  AssertionError [ERR_ASSERTION]: removing 'ssh-option-skip' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'ssh-option-argument' is covered: removing it turns E05 red (1.407666ms)
+  AssertionError [ERR_ASSERTION]: removing 'ssh-option-argument' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'ssh-user-prefix' is covered: removing it turns E06 red (1.813ms)
+  AssertionError [ERR_ASSERTION]: removing 'ssh-user-prefix' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'program-basename' is covered: removing it turns E18 red (1.199792ms)
+  AssertionError [ERR_ASSERTION]: removing 'program-basename' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'transfer-spec-anchor' is covered: removing it turns D08 red (1.590666ms)
+  AssertionError [ERR_ASSERTION]: removing 'transfer-spec-anchor' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'transfer-host-check' is covered: removing it turns E23 red (1.548916ms)
+  AssertionError [ERR_ASSERTION]: removing 'transfer-host-check' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'redirect-op-gtbar' is covered: removing it turns E19 red (1.24475ms)
+  AssertionError [ERR_ASSERTION]: removing 'redirect-op-gtbar' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'redirect-op-ampgt' is covered: removing it turns E16 red (1.248042ms)
+  AssertionError [ERR_ASSERTION]: removing 'redirect-op-ampgt' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'redirect-op-ampgtgt' is covered: removing it turns E20 red (1.335208ms)
+  AssertionError [ERR_ASSERTION]: removing 'redirect-op-ampgtgt' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'write-cmd-dd' is covered: removing it turns E13 red (1.471667ms)
+  AssertionError [ERR_ASSERTION]: removing 'write-cmd-dd' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'write-cmd-install' is covered: removing it turns E14 red (1.2885ms)
+  AssertionError [ERR_ASSERTION]: removing 'write-cmd-install' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'write-cmd-touch' is covered: removing it turns E15 red (1.702625ms)
+  AssertionError [ERR_ASSERTION]: removing 'write-cmd-touch' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'remote-shell-c' is covered: removing it turns G01 red (1.329458ms)
+  AssertionError [ERR_ASSERTION]: removing 'remote-shell-c' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'remote-shell-set' is covered: removing it turns G01 red (1.926542ms)
+  AssertionError [ERR_ASSERTION]: removing 'remote-shell-set' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'remote-shell-flag' is covered: removing it turns G03 red (1.35675ms)
+  AssertionError [ERR_ASSERTION]: removing 'remote-shell-flag' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'remote-wrapper-strip' is covered: removing it turns G02 red (1.265541ms)
+  AssertionError [ERR_ASSERTION]: removing 'remote-wrapper-strip' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'exemption-stage' is covered: removing it turns F02 red (1.210583ms)
+  AssertionError [ERR_ASSERTION]: removing 'exemption-stage' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'exemption-empty-targets' is covered: removing it turns E17 red (1.452959ms)
+  AssertionError [ERR_ASSERTION]: removing 'exemption-empty-targets' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'exemption-target-guard' is covered: removing it turns F03 red (1.375375ms)
+  AssertionError [ERR_ASSERTION]: removing 'exemption-target-guard' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'exemption-every-unit' is covered: removing it turns F06 red (1.275667ms)
+  AssertionError [ERR_ASSERTION]: removing 'exemption-every-unit' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'exemption-entry-host-engine' is covered: removing it turns F02 red (1.215292ms)
+  AssertionError [ERR_ASSERTION]: removing 'exemption-entry-host-engine' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'exemption-entry-scratch' is covered: removing it turns F04 red (1.539208ms)
+  AssertionError [ERR_ASSERTION]: removing 'exemption-entry-scratch' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'exemption-runner-unwrap' is covered: removing it turns F02 red (1.333041ms)
+  AssertionError [ERR_ASSERTION]: removing 'exemption-runner-unwrap' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'exemption-direct-exec' is covered: removing it turns F10 red (1.231042ms)
+  AssertionError [ERR_ASSERTION]: removing 'exemption-direct-exec' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'host-engine-anchor' is covered: removing it turns F09 red (1.1815ms)
+  AssertionError [ERR_ASSERTION]: removing 'host-engine-anchor' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'safe-target-absolute' is covered: removing it turns F13 red (2.004583ms)
+  AssertionError [ERR_ASSERTION]: removing 'safe-target-absolute' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'safe-target-governance' is covered: removing it turns F03 red (1.320083ms)
+  AssertionError [ERR_ASSERTION]: removing 'safe-target-governance' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'scratch-root-tmp' is covered: removing it turns F04 red (1.194375ms)
+  AssertionError [ERR_ASSERTION]: removing 'scratch-root-tmp' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'scratch-root-var-tmp' is covered: removing it turns F11 red (1.34075ms)
+  AssertionError [ERR_ASSERTION]: removing 'scratch-root-var-tmp' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'scratch-root-run' is covered: removing it turns F14 red (1.2895ms)
+  AssertionError [ERR_ASSERTION]: removing 'scratch-root-run' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'scratch-root-dev-null' is covered: removing it turns F12 red (1.206625ms)
+  AssertionError [ERR_ASSERTION]: removing 'scratch-root-dev-null' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'scratch-prefix-match' is covered: removing it turns F04 red (1.162583ms)
+  AssertionError [ERR_ASSERTION]: removing 'scratch-prefix-match' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'host-check' is covered: removing it turns E01 red (1.179542ms)
+  AssertionError [ERR_ASSERTION]: removing 'host-check' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'host-anchor' is covered: removing it turns E02 red (1.609833ms)
+  AssertionError [ERR_ASSERTION]: removing 'host-anchor' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'governance-check' is covered: removing it turns E03 red (1.411167ms)
+  AssertionError [ERR_ASSERTION]: removing 'governance-check' did not turn E03 red (red instead: A18)
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:301:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'governance-anchor' is covered: removing it turns E04 red (1.189583ms)
+  AssertionError [ERR_ASSERTION]: removing 'governance-anchor' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'remote-command-scope' is covered: removing it turns D11 red (1.13975ms)
+  AssertionError [ERR_ASSERTION]: removing 'remote-command-scope' did not turn D11 red (red instead: A01,A02,A03,A04,A05,A06,A07,A08)
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:301:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'transfer-spec-required' is covered: removing it turns D08 red (1.760959ms)
+  AssertionError [ERR_ASSERTION]: removing 'transfer-spec-required' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'transfer-governance-check' is covered: removing it turns E10 red (1.236708ms)
+  AssertionError [ERR_ASSERTION]: removing 'transfer-governance-check' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/ssh-write-observer.test.mjs:294:3
+✖ branch 'reason-rank' is covered: removing it turns D12 red (1.343458ms)
+  AssertionError [ERR_ASSERTION]: removing 'reason-rank' changed no verdict or reason — the branch is inert
+      at TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/ssh-write-observer.test.mjs:299:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "TCRN INIT-018 三层流水线",
+    "subtitle": "执行层 / 核验层 / 审查层 — governed by tcrn-workflow",
+    "output": "tcrn-init018-three-layer-pipeline.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    { "id": "owner", "type": "external", "label": "Owner", "sublabel": "派工 / 裁定", "pos": [40, 280], "size": [120, 60] },
+    { "id": "review", "type": "backend", "label": "审查层", "sublabel": "Fable 5 · agent:fable", "pos": [280, 180], "size": [150, 64], "tag": "签发简报 / 守门 / 立单" },
+    { "id": "verification", "type": "backend", "label": "核验层", "sublabel": "Opus 5", "pos": [540, 180], "size": [150, 64], "tag": "事后审计独立重跑" },
+    { "id": "execution", "type": "backend", "label": "执行层", "sublabel": "DeepSeek v4 Flash", "pos": [280, 380], "size": [150, 64], "tag": "执行 19 张 Story" },
+    { "id": "chain", "type": "database", "label": "治理事件链", "sublabel": "cross-project @ VM", "pos": [540, 380], "size": [150, 60] }
+  ],
+  "connections": [
+    { "id": "owner-review", "from": "owner", "to": "review", "label": "派工", "labelAt": [120, 252] },
+    { "id": "review-execution", "from": "review", "to": "execution", "label": "签发派工简报 / 白名单", "labelAt": [355, 258] },
+    { "id": "execution-chain", "from": "execution", "to": "chain", "label": "经 ceremony.mjs 受治写", "labelAt": [454, 458] },
+    { "id": "chain-verification", "from": "chain", "to": "verification", "label": "事后审计读" },
+    { "id": "verification-review", "from": "verification", "to": "review", "label": "核验结果 / INC" },
+    { "id": "review-owner", "from": "review", "to": "owner", "label": "终审 / 缺陷立单", "labelAt": [205, 195] }
+  ]
+}

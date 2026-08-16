@@ -1,0 +1,1080 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-020",
+  "intent": "INIT-020 立项批:先立主单,开 CONF-060 锚于主单记方向立场(两片)并闭会出 MIN-063(D1-D5),注解主单,再立六个 EPIC(052-057)并逐一注解。执行形态:单上下文合成,非多代理。Owner 方向指令(2026-08-06 会话)逐字入立场;键号全部经 deriveStableId 对纪要引用集反查空闲(MIN-055..062 实占);引擎存储与 AOS 承接面现状由两路只读勘察实测后写入各 scope。",
+  "startedAt": "2026-08-06T04:00:40Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "<outside-repository>",
+    "sha256": "70ee69c841b34a1c7c27565555816642f1acaa733809fb7bf1974956edd50ea3",
+    "bytes": 19986
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1950,
+    "headEventHash": "571500c0823ba80ada67354f06ac74df89bfe768b2573b9ff797e745f58dbd2b",
+    "work": 309
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:41Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1950",
+        "--external-key",
+        "TCRN-CROSS-INIT-020",
+        "--kind",
+        "Initiative",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1950,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:4d0ecd9c1e6ea5292ef08330",
+      "version": 1951
+    },
+    {
+      "ok": true,
+      "verb": "conference-open",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-open",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:42Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--desired-outcome",
+        "把 Owner 已逐字直裁的两条方向——(a) AOS 成为引擎前面的读写门面;(b) 引擎存储后端改成数据库——定形为方向裁定 D1-D5:门面形状、存储替换的六依赖面残余适用性、DB 选型、双轨接缝与日落、与 INIT-019 的承接顺序,供 INIT-020 执行期直接依据。",
+        "--expected-version",
+        "1951",
+        "--external-key",
+        "TCRN-CROSS-CONF-060",
+        "--participant-ids",
+        "owner:governance,agent:fable",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--title",
+        "INIT-020 方向审议:AOS 读写门面与引擎数据库后端",
+        "--type",
+        "architecture",
+        "--work-ids",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "desired-outcome",
+        "external-key",
+        "participant-ids",
+        "project-id",
+        "title",
+        "type",
+        "work-ids"
+      ],
+      "headAtPlanning": 1951,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": null,
+      "version": 1952
+    },
+    {
+      "ok": true,
+      "verb": "conference-append-position",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-append-position",
+        "--actor",
+        "agent:fable",
+        "--actor-id",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:43Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--conference-id",
+        "conference:286d1f74d37698c011b3b0e3",
+        "--evidence-ids",
+        "-",
+        "--expected-version",
+        "1952",
+        "--external-key",
+        "POS-C060-FABLE-1",
+        "--position",
+        "【执行形态声明】synthesis-only:本立场由单一上下文合成,非多代理;architecture 类会议按公约给出理由——方向已由 Owner 逐字直裁,分头产出只会得到同构复述,本会职责是定形轨道与残余分析。【Owner 指令逐字(2026-08-06)】「我发现AOS现在没有承接任何workspace的功能,本次会话你不得以任何原因拒绝我的AOS完整部署决策,你需要给我一个INIT,该INIT需要(a) AOS 成为引擎前面的读写门面;(b) 引擎存储后端改成数据库」。【前提核实】成立(截至 2026-08-06 实测):座舱写面仅四动词且只接 TCRN-AOS 单分区、绑 127.0.0.1、expected-version=head 弱于仪式 CAS、无消费方;UI 数据是构建期投影快照,随部署才刷新;其余四链读写全在 deploy 侧脚本与本机 MCP 面(SSH 转发+本机仪式),不在产品面——承接名不副实。【D1 形状】AOS 门面服务与链同机常驻(VM),供引擎读动词全集与仪式语义写面;本机两 MCP 面降为其客户端;「只有引擎写存储」不变,门面调用引擎不旁路。被拒①维持 SSH 转发常驻:转发不是承接;被拒②门面建在本机:真值在 VM,本机门面只是又一层转发。(1/2)",
+        "--recommendations",
+        "按 D1-D5 分六 EPIC 推进;EPIC-052 ADR 先行且含六依赖面逐面结论;等价性门以逐事件字节比对为判据并留 mutation 证人;首链切换取 Joi-Button(最小链);发布保持唯一必停;D3 选型按建议推进、Owner 未确认前偏离即 BLOCKED 上报",
+        "--risks",
+        "①存储替换触及信任面:规范字节与链哈希若在 DB 侧丢失一处校验、fail-closed 会静默变 fail-open;②迁移期两轨并存是方向公约点名的最坏形态、须靠日落条件与接缝单点压住;③门面若把仪式纪律任一项漏出给调用方、等于重开已封的口;④等价性门若只比 reason code 不比字节、会成恒真门(平台三度付过学费);⑤SQLite 单写者假设若被门面并发写破坏会出现锁争用、须由引擎层单写者语义压住;⑥本 INIT 与 INIT-019 未清强化单并行、切换类动作抢跑会把两批门的红腿一起作废",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "actor-id",
+        "conference-id",
+        "evidence-ids",
+        "external-key",
+        "position",
+        "recommendations",
+        "risks"
+      ],
+      "headAtPlanning": 1952,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": null,
+      "version": 1953
+    },
+    {
+      "ok": true,
+      "verb": "conference-append-position",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-append-position",
+        "--actor",
+        "agent:fable",
+        "--actor-id",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:44Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--conference-id",
+        "conference:286d1f74d37698c011b3b0e3",
+        "--evidence-ids",
+        "-",
+        "--expected-version",
+        "1953",
+        "--external-key",
+        "POS-C060-FABLE-2",
+        "--position",
+        "【D2 形状】存储后端由规范字节文件树替换为数据库,经存储抽象层落地。独立实证动机:引擎每写全链重放、总体 O(n²)(实测 280-416ms@2500-4000 事件);更近的天花板是规范序列化 1MiB 视图上限(2000-4000 工作记录间触发 INPUT_OVERSIZED),cross 链已 309 工作项/1950 事件。替换残余适用性(六依赖面):①规范字节+哈希链——存续:事件是哈希单元(payloadHash/eventHash/priorHash),入库原样;②attestation——存续:actor attestation 绑事件载荷、time attestation 绑 headEventHash,均不绑文件;③fail-closed 读——存续:重放校验不过拒读;④snapshot/export——迁移:manifest 现绑原始文件字节,须重定义被绑对象;⑤relocation/ADR-0003——迁移:台账绑 controlManifestSha256,四条天花板照录重述;⑥paired backup 与本机只读归档——迁移/存续:PULL 方向不变、归档不迁不删。【D3 选型建议】默认 SQLite:每分区一库、与引擎单写者模型同构、可整文件备份与逐字节比对、零常驻依赖;被拒 Postgres:引入常驻服务与凭据面,超出单写者需要;抽象层使选型可逆。【D4 双轨接缝】切换开关落拓扑单点;逐分区迁移+双向 verify+可回退;旧文件轨日落条件=五链迁毕+门面 GA+新后端连续两次真备份成功,届时文件轨降只读归档、SSH 转发面退役(break-glass 白名单除外)。【D5 承接】INIT-019 及 INC-061..071 不作废;最小前置 061/062/063/064/066(MIN-062 Q4)done 前不执行切换类动作;门面写面继承仪式全部纪律,INC-069 段内走私语料对新门面同样适用。(2/2)",
+        "--recommendations",
+        "-",
+        "--risks",
+        "-",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "actor-id",
+        "conference-id",
+        "evidence-ids",
+        "external-key",
+        "position",
+        "recommendations",
+        "risks"
+      ],
+      "headAtPlanning": 1953,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": null,
+      "version": 1954
+    },
+    {
+      "ok": true,
+      "verb": "conference-close",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-close",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:45Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--conference-id",
+        "conference:286d1f74d37698c011b3b0e3",
+        "--decisions",
+        "D1 AOS 成为引擎前的唯一读写门面——与链同机的常驻服务供引擎读动词全集与仪式语义写面、本机 MCP 两面降为其客户端、只有引擎写存储不变(Owner 裁),D2 引擎存储后端由规范字节文件树替换为数据库——经存储抽象层落地、六依赖面残余适用性结论随 EPIC-052 ADR 固化(Owner 裁),D3 DB 选型默认 SQLite 每分区一库——Postgres 被拒因引入常驻服务与凭据面超出单写者需要、抽象层保留可逆性(建议采纳),D4 双轨过渡——切换开关落拓扑单点、逐分区迁移双向 verify 可回退、旧文件轨日落条件=五链迁毕+门面 GA+新后端连续两次真备份成功(建议采纳),D5 承接 INIT-019——INC-061..071 不作废、最小前置 061/062/063/064/066 done 前不执行切换类动作、门面写面继承仪式全部纪律(建议采纳)",
+        "--expected-version",
+        "1954",
+        "--minutes-external-key",
+        "TCRN-CROSS-MIN-063",
+        "--outcome-class",
+        "role_decision",
+        "--summary",
+        "执行形态:单上下文合成(synthesis-only),非多代理,理由已在开场立场首行声明。INIT-020 方向定案:D1(AOS 成为引擎前的唯一读写门面)与 D2(引擎存储后端改为数据库)为 Owner 2026-08-06 逐字直裁;D3(SQLite 选型)、D4(双轨接缝与日落)、D5(对 INIT-019 的承接顺序)为审查层建议采纳待确认。六 EPIC(052-057)按此拆单;发布为唯一必停点;Owner 指令原文、前提核实与被拒方案见 POS-C060-FABLE-1/2。",
+        "--unresolved-issues",
+        "D3 至 D5 为建议采纳待 Owner 确认;确认前执行层按建议推进、偏离即 BLOCKED 上报不自行改向。DB schema 细部与等价性判据由 EPIC-052 ADR 固化后 EPIC-053 方可开工。切换类动作(EPIC-056/057)在 INIT-019 最小前置五单 done 前不得执行。对外发布(引擎版本发布与 helper 重钉)是本 INIT 唯一必停点。EPIC-025 blocked 之下 enforce 相关接缝按 MIN-062 Q2 单面裁流程走、不等其整体解封。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "conference-id",
+        "decisions",
+        "minutes-external-key",
+        "outcome-class",
+        "summary",
+        "unresolved-issues"
+      ],
+      "headAtPlanning": 1954,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": null,
+      "version": 1955
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:46Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:f72e665a445e64950ab0488d",
+        "--expected-version",
+        "1955",
+        "--id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--scope",
+        "【AOS 数据平面完备化:读写门面与数据库后端】Owner 判定并直裁(2026-08-06,指令逐字见 POS-C060-FABLE-1):AOS 至今没有真正承接 workspace 功能——座舱写面四动词单分区绑回环且无消费方、UI 是构建期快照、其余四链读写全在 deploy 侧(实测见 POS-C060-FABLE-1)——据此裁定 (a) AOS 成为引擎前面的读写门面、(b) 引擎存储后端改成数据库。(b) 另有独立实证动机:引擎每写全链重放 O(n²),更近天花板是规范序列化 1MiB 视图上限(见 tcrn-workflow/docs/2026-07-17-p3-compaction-deferral-decision.md),cross 链已 309 工作项/1950 事件。方向裁定 D1-D5 见 TCRN-CROSS-MIN-063。六个 EPIC:052 替换残余分析与 ADR;053 存储抽象层与双后端等价;054 迁移动词族与备份重基;055 AOS 门面服务(读写);056 客户端与名册收敛;057 五链切换与收口。与 INIT-019 的关系:承接不替换——把「AOS 唯一数据平面」从政策唯一做成机械唯一;INC-061..071 不作废,最小前置(061/062/063/064/066)done 前不执行切换类动作(EPIC-056/057),非切换类(ADR、抽象层、门面脚手架)可并行。仪器名册:codegraph-aos(2026-08-06 实测陈旧于 HEAD,勘察改走直读,开工前须 sync)、tcrn-workflow 命令目录与测试套件、MCP 读面、ceremony 写面、engine-host:verify、doc-topology/parity/local-purity 三 proof。停顿预算:对外发布(引擎版本发布+helper 重钉)是唯一必停点。拆单遵 MIN-053 两层制:链上到 Story 级,派工简报五要素随派工走、生效证据命令写两侧。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1955,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:4d0ecd9c1e6ea5292ef08330",
+      "version": 1956
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:47Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1956",
+        "--external-key",
+        "TCRN-CROSS-EPIC-052",
+        "--kind",
+        "Epic",
+        "--parent-id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1956,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:a3b94d6d202005f5fe229f0c",
+      "version": 1957
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:48Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:f72e665a445e64950ab0488d",
+        "--expected-version",
+        "1957",
+        "--id",
+        "work:a3b94d6d202005f5fe229f0c",
+        "--scope",
+        "【替换残余分析与 ADR】D2 是方向公约触发类替换(数据模型+会封死替代架构),动手前义务:六依赖面逐面给出存续/迁移结论——①规范字节+哈希链:存续,事件是哈希单元,入库原样;②attestation:存续,actor 绑事件载荷、time 绑 headEventHash,均不绑文件;③fail-closed 读:存续,重放校验不过拒读;④snapshot/export:迁移,manifest 现绑原始文件字节,须重定义被绑对象;⑤relocation/ADR-0003:迁移,台账绑 controlManifestSha256,四条天花板照录重述;⑥paired backup 与只读归档:迁移/存续。交付:tcrn-workflow/docs/adr/ 新 ADR,含 DB schema(事件表=规范字节+链哈希+索引、域库关系)、租约与单写者语义在 DB 后端的重述、迁移台账额度语义(现 16 条按尝试消耗,沿用与否在此裁)、存储抽象口粒度(事件流/快照/域库分口还是单口)、等价性判据定义。验收判据可红可绿:ADR 每条判据写明「什么会让它变红」,判据两侧可不同须注入实证。决策点:DB 选型按 MIN-063 D3 默认 SQLite 待 Owner 确认;schema 细部本 EPIC 裁毕,不留给执行期撞见。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1957,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:a3b94d6d202005f5fe229f0c",
+      "version": 1958
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:50Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1958",
+        "--external-key",
+        "TCRN-CROSS-EPIC-053",
+        "--kind",
+        "Epic",
+        "--parent-id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1958,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ca7ba689328314c776bc29b8",
+      "version": 1959
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:51Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:f72e665a445e64950ab0488d",
+        "--expected-version",
+        "1959",
+        "--id",
+        "work:ca7ba689328314c776bc29b8",
+        "--scope",
+        "【存储抽象层与双后端等价】现状(2026-08-06 只读勘察):链树唯一写者是 packages/core/src/workspace.ts(boundDirectory/boundFile/ensureDirectory/atomicWrite 四私有助手为咽点),knowledge-core 与 artifact-lifecycle 刻意旁路并各自重复同类 IO 纪律,无公共存储接口。本 EPIC 在引擎内抽出存储抽象层:文件后端原样收敛其后(行为零变化),再实现 SQLite 后端(每分区一库);事件仍以规范字节为哈希单元,eventHash/priorHash 链原样;租约+mutation claim 单写者语义按 EPIC-052 ADR 重述。验收=等价性门:同一命令序列两后端逐事件字节相同、reason code 相同、head 哈希相同;门带 mutation 证人(改任一字节即红),防恒真门(平台三度付学费的缺陷形态)。既有测试资产为地基:p3-file-engine、backup-snapshot(WSR-1 T1-T25)、protocol-v1 冻结向量;引擎测试经 pnpm test 调起(红线)。生效证据两侧:正腿=scratch 双后端同批动词 diff 为空;红腿=注入单字节差异门判红。前置:EPIC-052 ADR 定稿。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1959,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ca7ba689328314c776bc29b8",
+      "version": 1960
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:52Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1960",
+        "--external-key",
+        "TCRN-CROSS-EPIC-054",
+        "--kind",
+        "Epic",
+        "--parent-id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1960,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:4a1304a35351ac46ff4c3a04",
+      "version": 1961
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:53Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:f72e665a445e64950ab0488d",
+        "--expected-version",
+        "1961",
+        "--id",
+        "work:4a1304a35351ac46ff4c3a04",
+        "--scope",
+        "【迁移动词族与备份重基】文件树→DB 的搬运只准走引擎动词族(ADR-0003 精神:搬字节≠搬绑定,旁路拷贝造不出第二个活权威,只造出被只读动词拒读的树)。交付:migration-plan/execute/verify/rollback 动词族(或经 EPIC-052 ADR 裁定扩展 relocation 族),逐分区执行、双向逐事件校验、可回退;paired backup(PULL 方向不变)、snapshot-manifest/verify、export、engine-host:verify 对 DB 后端重基。验收两侧:正腿=对一条 scratch 链完成往返迁移(文件→DB→回退)、两侧逐事件等价且链版本连续、新后端真备份一次并异地验证通过;红腿=旁路拷贝的库文件被读动词具名拒绝。前置:EPIC-053 等价门绿。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1961,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:4a1304a35351ac46ff4c3a04",
+      "version": 1962
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:54Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1962",
+        "--external-key",
+        "TCRN-CROSS-EPIC-055",
+        "--kind",
+        "Epic",
+        "--parent-id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1962,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:77801d322706b5241a45c79c",
+      "version": 1963
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:55Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:f72e665a445e64950ab0488d",
+        "--expected-version",
+        "1963",
+        "--id",
+        "work:77801d322706b5241a45c79c",
+        "--scope",
+        "【AOS 门面服务(读写)】把「AOS 唯一数据平面」从政策做成机械:VM 上与链同机常驻,读=引擎读动词全集,写=仪式语义服务端化(批+至少一条回读、expected-version 服务端现读自供、动词白名单从引擎 commands 目录派生、一次性供权族拒绝、审计日志)。现成资产先用(外采公约三环之一,2026-08-06 勘察):引擎自带 MCP 面(packages/cli/src/mcp.ts,工具由 COMMAND_CATALOG 派生、变异经 operator authority 门);座舱已有 ChainClient 经该面写链的通道;CockpitServiceOptions.workspaces 本就是多分区接缝,现被 VM runner 收窄到单分区——扩面优先于新造。两条既有不变式保持且有门:读进程不持 pins;写面不出回环(绑 127.0.0.1 经 SSH 隧道,沿 CONF-007 D7,公开暴露另需裁定)。门面自身不写存储——只有引擎写。验收两侧:正腿=一次治理写只靠门面完成且回执含回读;红腿=写面拒绝面沿 INC-047/069 语料全数具名拒绝、门面宕机时 break-glass 白名单路径仍可用(带理由记录)。生效证据:从本机经门面完成一次真实链写并回读(非 scratch)。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1963,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:77801d322706b5241a45c79c",
+      "version": 1964
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:56Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1964",
+        "--external-key",
+        "TCRN-CROSS-EPIC-056",
+        "--kind",
+        "Epic",
+        "--parent-id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1964,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:65cf5f278a2ca1f50e7ba6d4",
+      "version": 1965
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:57Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:f72e665a445e64950ab0488d",
+        "--expected-version",
+        "1965",
+        "--id",
+        "work:65cf5f278a2ca1f50e7ba6d4",
+        "--scope",
+        "【客户端与名册收敛】本机两 MCP 面(tcrn-workflow-aos-read 读转发、aos-mcp-write 仪式包裹)改为门面服务的客户端;SSH 直驱收窄到 break-glass 白名单(现两类两条,带日期理由,复审日期须补);topology.mjs 保持唯一拓扑源,切换开关落此单点(附带清欠:cockpit-service 内一处手写引擎路径应回归 manifest 导入,2026-08-06 勘察实见)。判据扩面:doc-topology:proof 核访问形态、parity:proof 覆盖 Codex 侧增量、local-purity:proof 语义在 DB 后端下重述。验收两侧:正腿=全平台入口文档复核命令列在白名单外不再出现 SSH 直驱形态、Codex 侧名册 diff 生成(应用归审查层,编辑用户级配置须 Owner 批准);红腿=对两 proof 门注入伪漂移必判红。前置:EPIC-055 门面 GA;INIT-019 最小前置五单(061/062/063/064/066)done。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1965,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:65cf5f278a2ca1f50e7ba6d4",
+      "version": 1966
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:00:58Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1966",
+        "--external-key",
+        "TCRN-CROSS-EPIC-057",
+        "--kind",
+        "Epic",
+        "--parent-id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1966,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:2b6a166e82ea80e6337cb669",
+      "version": 1967
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T04:01:00Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:f72e665a445e64950ab0488d",
+        "--expected-version",
+        "1967",
+        "--id",
+        "work:2b6a166e82ea80e6337cb669",
+        "--scope",
+        "【五链切换与收口】逐分区经 EPIC-054 动词把存储迁到 DB 后端:首链 Joi-Button(最小),每链迁后 validate+snapshot verify 绿+首次真备份成功方进下一链,余链顺序派工时按当链活跃度定。五链完成后收口按 INC-052 tip 复量协议:最后一次全量门晚于最后一次提交、结果表由 closeout runner 产出不手抄、done 前 work-annotate 挂生效证据;批内条目逐项核销(closeout-verify,INC-054 规则)。发布(引擎版本发布+helper candidate 重钉)为唯一必停点;发布前未推送提交按 MIN-062 Q5 分批推送产生证据。前置:EPIC-053 等价门绿、EPIC-054 往返迁移实证、EPIC-055/056 完成。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1967,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:2b6a166e82ea80e6337cb669",
+      "version": 1968
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INIT-020",
+            "observed": "TCRN-CROSS-INIT-020",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Initiative",
+            "observed": "Initiative",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【AOS 数据平面完备化:读写门面与数据库后端】Owner 判定并直裁(2026-08-06,指令逐字见 POS-C060-FABLE-1):AOS 至今没有真正承接 workspace 功能——座舱写面四动词单分区绑回环且无消费方、UI 是构建期快照、其余四链读写全在 deploy 侧(实测见 POS-C060-FABLE-1)——据此裁定 (a) AOS 成为引擎前面的读写门面、(b) 引擎存储后端改成数据库。(b) 另有独立实证动机:引擎每写全链重放 O(n²),更近天花板是规范序列化 1MiB 视图上限(见 tcrn-workflow/docs/2026-07-17-p3-compaction-deferral-decision.md),cross 链已 309 工作项/1950 事件。方向裁定 D1-D5 见 TCRN-CROSS-MIN-063。六个 EPIC:052 替换残余分析与 ADR;053 存储抽象层与双后端等价;054 迁移动词族与备份重基;055 AOS 门面服务(读写);056 客户端与名册收敛;057 五链切换与收口。与 INIT-019 的关系:承接不替换——把「AOS 唯一数据平面」从政策唯一做成机械唯一;INC-061..071 不作废,最小前置(061/062/063/064/066)done 前不执行切换类动作(EPIC-056/057),非切换类(ADR、抽象层、门面脚手架)可并行。仪器名册:codegraph-aos(2026-08-06 实测陈旧于 HEAD,勘察改走直读,开工前须 sync)、tcrn-workflow 命令目录与测试套件、MCP 读面、ceremony 写面、engine-host:verify、doc-topology/parity/local-purity 三 proof。停顿预算:对外发布(引擎版本发布+helper 重钉)是唯一必停点。拆单遵 MIN-053 两层制:链上到 Story 级,派工简报五要素随派工走、生效证据命令写两侧。",
+            "observed": "【AOS 数据平面完备化:读写门面与数据库后端】Owner 判定并直裁(2026-08-06,指令逐字见 POS-C060-FABLE-1):AOS 至今没有真正承接 workspace 功能——座舱写面四动词单分区绑回环且无消费方、UI 是构建期快照、其余四链读写全在 deploy 侧(实测见 POS-C060-FABLE-1)——据此裁定 (a) AOS 成为引擎前面的读写门面、(b) 引擎存储后端改成数据库。(b) 另有独立实证动机:引擎每写全链重放 O(n²),更近天花板是规范序列化 1MiB 视图上限(见 tcrn-workflow/docs/2026-07-17-p3-compaction-deferral-decision.md),cross 链已 309 工作项/1950 事件。方向裁定 D1-D5 见 TCRN-CROSS-MIN-063。六个 EPIC:052 替换残余分析与 ADR;053 存储抽象层与双后端等价;054 迁移动词族与备份重基;055 AOS 门面服务(读写);056 客户端与名册收敛;057 五链切换与收口。与 INIT-019 的关系:承接不替换——把「AOS 唯一数据平面」从政策唯一做成机械唯一;INC-061..071 不作废,最小前置(061/062/063/064/066)done 前不执行切换类动作(EPIC-056/057),非切换类(ADR、抽象层、门面脚手架)可并行。仪器名册:codegraph-aos(2026-08-06 实测陈旧于 HEAD,勘察改走直读,开工前须 sync)、tcrn-workflow 命令目录与测试套件、MCP 读面、ceremony 写面、engine-host:verify、doc-topology/parity/local-purity 三 proof。停顿预算:对外发布(引擎版本发布+helper 重钉)是唯一必停点。拆单遵 MIN-053 两层制:链上到 Story 级,派工简报五要素随派工走、生效证据命令写两侧。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INIT-020",
+        "kind": "Initiative",
+        "status": "planned"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:a3b94d6d202005f5fe229f0c",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-EPIC-052",
+            "observed": "TCRN-CROSS-EPIC-052",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Epic",
+            "observed": "Epic",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【替换残余分析与 ADR】D2 是方向公约触发类替换(数据模型+会封死替代架构),动手前义务:六依赖面逐面给出存续/迁移结论——①规范字节+哈希链:存续,事件是哈希单元,入库原样;②attestation:存续,actor 绑事件载荷、time 绑 headEventHash,均不绑文件;③fail-closed 读:存续,重放校验不过拒读;④snapshot/export:迁移,manifest 现绑原始文件字节,须重定义被绑对象;⑤relocation/ADR-0003:迁移,台账绑 controlManifestSha256,四条天花板照录重述;⑥paired backup 与只读归档:迁移/存续。交付:tcrn-workflow/docs/adr/ 新 ADR,含 DB schema(事件表=规范字节+链哈希+索引、域库关系)、租约与单写者语义在 DB 后端的重述、迁移台账额度语义(现 16 条按尝试消耗,沿用与否在此裁)、存储抽象口粒度(事件流/快照/域库分口还是单口)、等价性判据定义。验收判据可红可绿:ADR 每条判据写明「什么会让它变红」,判据两侧可不同须注入实证。决策点:DB 选型按 MIN-063 D3 默认 SQLite 待 Owner 确认;schema 细部本 EPIC 裁毕,不留给执行期撞见。",
+            "observed": "【替换残余分析与 ADR】D2 是方向公约触发类替换(数据模型+会封死替代架构),动手前义务:六依赖面逐面给出存续/迁移结论——①规范字节+哈希链:存续,事件是哈希单元,入库原样;②attestation:存续,actor 绑事件载荷、time 绑 headEventHash,均不绑文件;③fail-closed 读:存续,重放校验不过拒读;④snapshot/export:迁移,manifest 现绑原始文件字节,须重定义被绑对象;⑤relocation/ADR-0003:迁移,台账绑 controlManifestSha256,四条天花板照录重述;⑥paired backup 与只读归档:迁移/存续。交付:tcrn-workflow/docs/adr/ 新 ADR,含 DB schema(事件表=规范字节+链哈希+索引、域库关系)、租约与单写者语义在 DB 后端的重述、迁移台账额度语义(现 16 条按尝试消耗,沿用与否在此裁)、存储抽象口粒度(事件流/快照/域库分口还是单口)、等价性判据定义。验收判据可红可绿:ADR 每条判据写明「什么会让它变红」,判据两侧可不同须注入实证。决策点:DB 选型按 MIN-063 D3 默认 SQLite 待 Owner 确认;schema 细部本 EPIC 裁毕,不留给执行期撞见。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-EPIC-052",
+        "kind": "Epic",
+        "status": "planned"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:2b6a166e82ea80e6337cb669",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-EPIC-057",
+            "observed": "TCRN-CROSS-EPIC-057",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Epic",
+            "observed": "Epic",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【五链切换与收口】逐分区经 EPIC-054 动词把存储迁到 DB 后端:首链 Joi-Button(最小),每链迁后 validate+snapshot verify 绿+首次真备份成功方进下一链,余链顺序派工时按当链活跃度定。五链完成后收口按 INC-052 tip 复量协议:最后一次全量门晚于最后一次提交、结果表由 closeout runner 产出不手抄、done 前 work-annotate 挂生效证据;批内条目逐项核销(closeout-verify,INC-054 规则)。发布(引擎版本发布+helper candidate 重钉)为唯一必停点;发布前未推送提交按 MIN-062 Q5 分批推送产生证据。前置:EPIC-053 等价门绿、EPIC-054 往返迁移实证、EPIC-055/056 完成。",
+            "observed": "【五链切换与收口】逐分区经 EPIC-054 动词把存储迁到 DB 后端:首链 Joi-Button(最小),每链迁后 validate+snapshot verify 绿+首次真备份成功方进下一链,余链顺序派工时按当链活跃度定。五链完成后收口按 INC-052 tip 复量协议:最后一次全量门晚于最后一次提交、结果表由 closeout runner 产出不手抄、done 前 work-annotate 挂生效证据;批内条目逐项核销(closeout-verify,INC-054 规则)。发布(引擎版本发布+helper candidate 重钉)为唯一必停点;发布前未推送提交按 MIN-062 Q5 分批推送产生证据。前置:EPIC-053 等价门绿、EPIC-054 往返迁移实证、EPIC-055/056 完成。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-EPIC-057",
+        "kind": "Epic",
+        "status": "planned"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1968,
+    "headEventHash": "c773ce48aa79346665c017595faa482668fbd17e77ba2ef04977b4faaca6bff2",
+    "work": 316
+  },
+  "knowledgeRebase": {
+    "verb": "knowledge-rebase",
+    "markerVersionBefore": 65,
+    "accepted": true,
+    "reasonCode": "KNOWLEDGE_STORE_REBASED",
+    "version": 66
+  },
+  "eventsAppended": 18,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-06T04:01:04Z"
+}

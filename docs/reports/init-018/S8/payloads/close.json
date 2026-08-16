@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-148",
+  "intent": "收口:终版 scope + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:56b08c68389ea54d3f44119e",
+        "scope": "S8 行为套件接线(D5)。确定性子集(S7 黄金样本+S6 离线断言)挂每 push CI;含模型调用全量挂 release 门+手动触发脚本;临时引入退化样本证 CI 门能红(演示后不合入)。前置:STORY-141 与 STORY-147。真实模型 key 配置归审查层,脚本留接口。验收:CI 配置 diff+一次绿跑+一次红演示。MIN-057。进度@2026-08-05: 已完成=确定性子集挂每 push CI(S7 经 p1 test 步自动发现 3/3 绿;S6 经新增 CI 步骤 node scripts/verify-s6.mjs 6/6 EVAL_GREEN exit 0);全量挂 release 门(scripts/eval-s6-full.mjs 无 key fail-closed exit 2 + tests/promptfoo/s6-lessons/s6-models.yaml provider 接口 apiKeyEnvar:S6_EVAL_API_KEY + ci.yml release-eval job 仅 workflow_dispatch);红测(临时退化 L1 样本→CI 同命令 EVAL_NOT_GREEN exit 1 5/1,恢复→EVAL_GREEN exit 0 6/6,存档 outputs/ci-red-proof.json,演示后撤下)。verify:ci CI_HARDENING_VERIFIED。真实 key 配置留接口归审查层。范围外:pnpm run 隐式安装检查 offline 陷阱;release-eval job 需审查层配 S6_EVAL_API_KEY secret。阻塞=无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:56b08c68389ea54d3f44119e", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:56b08c68389ea54d3f44119e" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-148", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

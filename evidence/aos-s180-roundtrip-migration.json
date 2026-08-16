@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "tcrn.s180-roundtrip.v1",
+  "ok": true,
+  "steps": [
+    {
+      "name": "baseline",
+      "version": 1,
+      "head": "ff7cc07e8a1c8ad0",
+      "exportSha": "501b9bdfbb553cdd",
+      "checkpointSha": "f6b6d1303ad79a8e"
+    },
+    {
+      "name": "plan-file-to-pg",
+      "eventCount": 1,
+      "version": 1
+    },
+    {
+      "name": "execute-file-to-pg",
+      "eventCount": 1
+    },
+    {
+      "name": "verify-pg",
+      "ok": true,
+      "eventCount": 1,
+      "head": "ff7cc07e8a1c8ad0"
+    },
+    {
+      "name": "red-leg-tamper",
+      "reasonCode": "WORKSPACE_MIGRATION_VERIFY_MISMATCH"
+    },
+    {
+      "name": "re-execute-pg",
+      "ok": true
+    },
+    {
+      "name": "rollback-pg-to-file",
+      "direction": "file",
+      "source": "pg"
+    },
+    {
+      "name": "roundtrip-diff-empty",
+      "exportShaEqual": true,
+      "versionEqual": true,
+      "headEqual": true,
+      "checkpointEqual": true
+    }
+  ],
+  "roundTripEmpty": true,
+  "story": "TCRN-CROSS-STORY-180",
+  "windowHardware": "\u2461",
+  "ruling": "MIN-064 D4: single-window full migration, rollback = reverse migration (same criteria)",
+  "conclusion": "scratch chain file\u2192pg\u2192file round trip is byte-empty on every STORY-176 criterion; mid-flight tamper is caught by verify"
+}

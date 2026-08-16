@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-150",
+  "intent": "收口:终版 scope + 置 done",
+  "startedAt": "2026-08-04T21:46:39Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "<outside-repository>",
+    "sha256": "5f8df54160f60665c4613bce6d89c25511bb77233ccad528c6ac6cedf277d24a",
+    "bytes": 2146
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1627,
+    "headEventHash": "c0e4b5b052df6966fd33de113f750c20aaae21c23d8ce3f5f325f2c15d43e1b1",
+    "work": 248
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:deepseek-v4-flash",
+        "--at",
+        "2026-08-04T21:46:40Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1627",
+        "--id",
+        "work:24bfd4d81a5aee351275b7c9",
+        "--scope",
+        "S10 埋点。ceremony.mjs 四点 span(开始/结束/回读/拒绝;标签仅 partition/verb/expected-version 元数据,禁载荷内容外泄)+引擎动词入口出口 span 设计与实现(搭 v0.11.0 发布列车,发布动作归审查层)+隐私自查(sink 无链内容)。前置:STORY-149 选型。验收:span 落 sink 演示+隐私自查记录。MIN-057。进度@2026-08-05: 已完成=ceremony 四点 span 实现+接线+测试(TCRN-AOS/deploy/aos-local-client/ceremony-spans.mjs emitter+ceremony.mjs 接线:start/end/readback/refused;标签仅 partition/verb/expectedVersion/outcome/reasonCode;实测 dry-run 出 start+end,无效载荷出 start+refused,readback 本仪式验证;emitter 非抛错+隐私契约字段白名单)+引擎动词入口出口 span emitter(packages/cli/src/otel-spans.ts,env 门控 TCRN_OTEL_SINK 默认关,类型检查通过 tsc exit 0;设计文档 docs/reports/init-018/S10/engine-spans-design.md 钉死 runCli 接线点;接线+重建+发布归审查层 v0.11.0 列车)+隐私自查(scripts/verify-otel-privacy.mjs:读 sink 断言键⊆允许集;实测干净 sink→PRIVACY_SINK_CLEAN exit 0,注入 payload 键→PRIVACY_SINK_VIOLATION 点名 exit 1)。前置 S9 选型已采纳(OTel Collector+sink)。范围外:引擎 OTLP 导出需 sink 就位后接隧道;mcp.ts 接线由审查层接线时确认。阻塞=无。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1627,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:24bfd4d81a5aee351275b7c9",
+      "version": 1628
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "INVALID_TRANSITION",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:deepseek-v4-flash",
+        "--at",
+        "2026-08-04T21:46:41Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1628",
+        "--id",
+        "work:24bfd4d81a5aee351275b7c9",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1628,
+      "executed": true,
+      "accepted": false,
+      "error": "ready:done",
+      "recordId": null,
+      "version": null
+    }
+  ],
+  "readback": [],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1628,
+    "headEventHash": "e1290fae878075f0db273c1549182182ed425031267147daddd78cb61c11c4a1",
+    "work": 248
+  },
+  "ok": false,
+  "reasonCode": "STEP_REFUSED_BY_HOST_ENGINE"
+}

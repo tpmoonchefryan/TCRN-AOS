@@ -1,0 +1,54 @@
+[
+  {
+    "label": "cross-knowledge-rebase",
+    "arguments": {
+      "partition": "cross-project",
+      "payload": {
+        "schemaVersion": "aos.local-client-ceremony.v1",
+        "story": "TCRN-CROSS-INIT-019-STORY-160",
+        "intent": "one-time knowledge-rebase on cross-project (marker CAS supplied by the ceremony)",
+        "steps": [ { "verb": "knowledge-rebase", "flags": {} } ],
+        "readback": [ { "verb": "knowledge-list", "flags": {}, "expect": { "total": 0 } } ]
+      }
+    }
+  },
+  {
+    "label": "joi-knowledge-rebase",
+    "arguments": {
+      "partition": "Joi-Button",
+      "payload": {
+        "schemaVersion": "aos.local-client-ceremony.v1",
+        "story": "TCRN-CROSS-INIT-019-STORY-160",
+        "intent": "one-time knowledge-rebase on Joi-Button (marker CAS supplied by the ceremony)",
+        "steps": [ { "verb": "knowledge-rebase", "flags": {} } ],
+        "readback": [ { "verb": "knowledge-list", "flags": {}, "expect": { "total": 0 } } ]
+      }
+    }
+  },
+  {
+    "label": "ds-knowledge-rebase",
+    "arguments": {
+      "partition": "TCRN-Design-System",
+      "payload": {
+        "schemaVersion": "aos.local-client-ceremony.v1",
+        "story": "TCRN-CROSS-INIT-019-STORY-160",
+        "intent": "one-time knowledge-rebase on TCRN-Design-System (already consistent; bump only)",
+        "steps": [ { "verb": "knowledge-rebase", "flags": {} } ],
+        "readback": [ { "verb": "knowledge-list", "flags": {}, "expect": { "total": 0 } } ]
+      }
+    }
+  },
+  {
+    "label": "tms-knowledge-rebase",
+    "arguments": {
+      "partition": "TCRN-TMS",
+      "payload": {
+        "schemaVersion": "aos.local-client-ceremony.v1",
+        "story": "TCRN-CROSS-INIT-019-STORY-160",
+        "intent": "one-time knowledge-rebase on TCRN-TMS (default knowledge-list selection is empty)",
+        "steps": [ { "verb": "knowledge-rebase", "flags": {} } ],
+        "readback": [ { "verb": "knowledge-list", "flags": {}, "expect": { "total": 0 } } ]
+      }
+    }
+  }
+]

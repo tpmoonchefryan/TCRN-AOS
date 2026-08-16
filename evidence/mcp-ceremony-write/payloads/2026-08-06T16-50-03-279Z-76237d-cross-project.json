@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-020",
+  "intent": "INIT-020 QA 修复批立单(第一段:先创建,注解随第二段):INC-081..086 六张修复单,强化批 INC-074..080 已先行落链(v2108..2121)。遵 Owner 指令强化先行修复在后;只立单不执行。",
+  "steps": [
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-081",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-082",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-083",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-084",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-085",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-086",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:cfa0e3552121eefe297561f9"
+      },
+      "recordFields": [
+        "externalKey",
+        "kind",
+        "status"
+      ],
+      "expect": {
+        "externalKey": "TCRN-CROSS-INC-074",
+        "kind": "Incident",
+        "status": "planned"
+      }
+    }
+  ]
+}

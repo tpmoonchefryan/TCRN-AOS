@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "aos.instrument-parity.old-vs-new.v1",
+  "incident": "TCRN-AOS-INC-036",
+  "claim": "每个缺陷世界里，修复前的判据判绿、修复后的判据判红；两个对照组两侧一致。",
+  "ok": true,
+  "rows": [
+    {
+      "world": "unmutated-control",
+      "defect": "对照组",
+      "old": "green",
+      "new": "green",
+      "expected": "green/green",
+      "asExpected": true,
+      "newDefectCodes": [],
+      "newNamed": [],
+      "oldNamed": []
+    },
+    {
+      "world": "real-drift",
+      "defect": "对照组：旧判据本来就抓得住的漂移，修复后不得丢失",
+      "old": "red",
+      "new": "red",
+      "expected": "red/red",
+      "asExpected": true,
+      "newDefectCodes": [
+        "UNALLOWLISTED_GAP"
+      ],
+      "newNamed": [
+        "codegraph-xyz"
+      ],
+      "oldNamed": [
+        "codegraph-xyz"
+      ]
+    },
+    {
+      "world": "allowlisted-vanished-both-sides",
+      "defect": "缺陷 2：白名单只按服务器名匹配，两侧同时消失即恒绿",
+      "old": "green",
+      "new": "red",
+      "expected": "green/red",
+      "asExpected": true,
+      "newDefectCodes": [
+        "ALLOWLIST_ENTRY_VANISHED",
+        "ANCHOR_SERVER_MISSING"
+      ],
+      "newNamed": [
+        "codegraph-ds"
+      ],
+      "oldNamed": []
+    },
+    {
+      "world": "allowlist-direction-flipped",
+      "defect": "缺陷 2：豁免无方向，缺口反向仍被放行",
+      "old": "green",
+      "new": "red",
+      "expected": "green/red",
+      "asExpected": true,
+      "newDefectCodes": [
+        "ALLOWLIST_DIRECTION_MISMATCH",
+        "ALLOWLIST_ENTRY_VANISHED",
+        "ANCHOR_SERVER_MISSING"
+      ],
+      "newNamed": [
+        "codegraph-ds"
+      ],
+      "oldNamed": []
+    },
+    {
+      "world": "anchor-lost-from-both-sides",
+      "defect": "缺陷 3：名册由观测并集派生，没有锚定最小集",
+      "old": "green",
+      "new": "red",
+      "expected": "green/red",
+      "asExpected": true,
+      "newDefectCodes": [
+        "ANCHOR_SERVER_MISSING"
+      ],
+      "newNamed": [
+        "tcrn-workflow"
+      ],
+      "oldNamed": []
+    },
+    {
+      "world": "placeholder-in-path",
+      "defect": "缺陷 4：从不校验 command/args，占位符判绿",
+      "old": "green",
+      "new": "red",
+      "expected": "green/red",
+      "asExpected": true,
+      "newDefectCodes": [
+        "SPEC_PLACEHOLDER"
+      ],
+      "newNamed": [
+        "codegraph-aos"
+      ],
+      "oldNamed": []
+    },
+    {
+      "world": "dangling-path",
+      "defect": "缺陷 4：--path 指向不存在的目录，判绿",
+      "old": "green",
+      "new": "red",
+      "expected": "green/red",
+      "asExpected": true,
+      "newDefectCodes": [
+        "SPEC_PATH_NOT_A_DIRECTORY"
+      ],
+      "newNamed": [
+        "codegraph-aos"
+      ],
+      "oldNamed": []
+    }
+  ]
+}

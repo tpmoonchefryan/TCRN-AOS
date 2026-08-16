@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-147",
+  "intent": "收口:终版 scope + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:8c4b3fd9aedc1bdb2e38f87e",
+        "scope": "S6 教训场景库首批 6 条(执行层起草规格与实现,核验层复核,审查层终审)。素材=已付学费教训:上下文将满不收尾/ARCHIVE_LIMIT_EXCEEDED 诊断为量错对象/IDENTITY_MISMATCH 先分诊两型/push 后主动查 CI/索引工具先验新鲜度/到没到远端问 ls-remote 非 log --not。每条 given-when-then+rubric+链接来源记忆;promptfoo 实现;每条配故意答错样本证能红。前置:STORY-140。验收:6 场景红绿输出存档。MIN-057。进度@2026-08-05: 已完成=起草规格+promptfoo 实现+红绿双证。规格 tests/promptfoo/s6-lessons/lessons-spec.md(6 条教训 given-when-then+rubric+来源)。实现:绿 s6-lessons.yaml 6/6 EVAL_GREEN exit 0;红证明 s6-red-proof.yaml 0/6 EVAL_NOT_GREEN exit 1(反模式被 rubric 捕获);provider=离线本地类 s6-provider.mjs(无 API key/模型/网络)。证据包=tcrn-workflow/docs/reports/init-018/S6/。判断型:规格已起草待核验层复核+审查层终审。范围外:promptfoo-eval.mjs metrics 的 provider 字段硬编码 echo 与本地 provider 不符(标签性)。阻塞=无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:8c4b3fd9aedc1bdb2e38f87e", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:8c4b3fd9aedc1bdb2e38f87e" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-147", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

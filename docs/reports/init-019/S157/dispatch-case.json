@@ -1,0 +1,20 @@
+[
+  {
+    "label": "story-157-dispatch-active",
+    "arguments": {
+      "partition": "cross-project",
+      "payload": {
+        "schemaVersion": "aos.local-client-ceremony.v1",
+        "story": "TCRN-CROSS-INIT-019",
+        "intent": "STORY-157 dispatch: planned -> ready -> active (documentation MCP-isation starts)",
+        "steps": [
+          { "verb": "work-transition", "flags": { "id": "work:09a452f35ef736f18c4be496", "status": "ready" } },
+          { "verb": "work-transition", "flags": { "id": "work:09a452f35ef736f18c4be496", "status": "active" } }
+        ],
+        "readback": [
+          { "verb": "work-show", "flags": { "id": "work:09a452f35ef736f18c4be496" }, "expect": { "status": "active" } }
+        ]
+      }
+    }
+  }
+]

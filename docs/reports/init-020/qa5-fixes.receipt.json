@@ -1,0 +1,494 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "facade": true,
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2296,
+    "headEventHash": "2d87f5417cd1affa46711dbfffe919958aa455b49950798315b7dd7919ac9f8b",
+    "work": 379
+  },
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2303,
+    "headEventHash": "9b01709588d1074fed8f1994c7b9e95005e69232108601ae801ee511c90d5374",
+    "work": 382
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T22:22:58Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2296",
+        "--external-key",
+        "TCRN-CROSS-INC-110",
+        "--kind",
+        "Incident",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 2296,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:7a7fdcef43759814f47a175d",
+      "version": 2297
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T22:23:00Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2297",
+        "--id",
+        "work:7a7fdcef43759814f47a175d",
+        "--scope",
+        "【修复|观察仪器失明修复与模型判据表补齐】来源:2026-08-08 五轮验收 P1-2。缺陷(主线程亲验):见 INC-109 全文——现役 ssh-write-observer 对真实治理主机 SSH 写 0 条记录、对占位主机 1 条,注册处不供 env,privateRuntimeConfig() 的 configured 旗标在两棵树里从未被读。修法:①按 INC-102 立单原文「二者择一**并记理由**」补齐——或由注册处(平台 .claude/settings.json 与 Codex 侧对等注册)供给 TCRN_SSH_* env 并把该供给纳入门,或改缺 env 即 fail-closed 具名拒绝;**理由必须落记录**(现全平台无任何 Codex 署名报告记下该选择的理由与随之必需的部署步骤,亦无待批准的 env 供给 diff,且该项不在执行方自陈的六条保留内);②自测语料与生产判据解耦(见 INC-109 机制②),恢复至少一条对真实目标的正例;③**附带修复**:tcrn-workflow/tools/stop-pact/mode.mjs:22-24 的 observe 模式表只有 /fable/iu,而本会话 transcript 出现 40 次 \"model\":\"claude-opus-5\",resolveMode(\"claude-opus-5\") 返回 **enforce**——与 MIN-051「Fable observe、模型不可识别时 observe、绝不拦一个可能是旗舰的会话」的裁定相悖;须把旗舰族(opus/fable 及后继)全部纳入 observe,并把「新模型名默认 observe」做成判据而非名单。判据两侧:正腿=现役形态下对真机写必落记录 + resolveMode 对旗舰族全返 observe;红腿=①摘 env 供给必红(而非静默失明)②给 resolveMode 喂一个未知模型名必返 observe(不得 enforce)。可检查前置:**INC-109**(在岗性与自检独立性门先落,本单正腿由它出具)。归属:tcrn-workflow + 注册处。⚠本单未完成前,平台对「绕仪式 SSH 写治理树」处于**无观测**状态,应视为在岗风险而非纸面问题。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2297,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:7a7fdcef43759814f47a175d",
+      "version": 2298
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T22:23:02Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2298",
+        "--external-key",
+        "TCRN-CROSS-INC-111",
+        "--kind",
+        "Incident",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 2298,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:9ab09144d1039018d0f510e5",
+      "version": 2299
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T22:23:03Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2299",
+        "--id",
+        "work:9ab09144d1039018d0f510e5",
+        "--scope",
+        "【修复|story-185 件的重新定性与处置(加重:非裁剪而是反转结论的拼接)】来源:2026-08-08 五轮验收 P1-5。**定性升级(此前三轮四轮均记为「手工裁剪衍生件」,实测应更正为更重)**:docs/reports/init-020/story-185-closeout.receipt.json 不只是把 19 步裁成 4 步——它**反转了结论**。同一仪式的引擎权威回执 evidence/mcp-ceremony-write/receipts/2026-08-06T18-08-20-589Z-dfa8a6-cross-project.json(19 步,chainAfter v2152)记的是 **ok:false / READBACK_NOTHING_COMPARED / verdict.compared:[]**;而 docs 里那份手工件写的是 **ok:true / CEREMONY_COMPLETED_AND_READ_BACK / READBACK_MATCHES_FULL_VALUE**,其 finishedAt 取自失败的那一次,readback 结论取自另一次更晚的仪式(18:08:39,链 2152→2153)。即:**把一次失败的仪式拼装成成功的回执**。缺陷现状:被 INC-100 失效清单③与 INC-104③ 两次点名要求处置,至今**原地未动**(git status 该路径空输出,见证清单 8 条不含它);且它**能通过强化后的门**——防裁剪判据 RECEIPT_CROPPED/MATERIALIZED_BYTES_MISMATCH 只在 payload.materialization!==undefined 时触发(receipt-hygiene-proof.mjs:165/:174),而该文件根本没有 payload 块,**逃避判据的方式是把可疑字段整个删掉**;在供给真实权威流的世界里它得零问题并被锚定为绿。**结构性障碍**:见证判据要求 sourcePath 位于 evidence/mcp-ceremony-write/receipts 之下,故「移入 witnesses/ 降类」对一个住在 docs/reports/ 的文件**走不通**——这条路必须先打通。修法:①以引擎物化真件替换,或建立 docs/reports 侧的降类路径并把该件标为**反转拼接红证人**(保留字节留档,不删除);②防裁剪/防拼接判据改为**默认适用**而非 opt-in(缺 payload 块不得等于免检),并增「同一 story 的多份回执结论互斥」检测;③在链上追加一条更正记录,把三轮四轮对该件「裁剪」的定性更正为「反转拼接」。可检查前置:**INC-100**(见证判据已落地)。判据两侧:正腿=该件被处置且门对其给出正确判定;红腿=①造一份删掉 payload 块的拼接件必红②造两份结论互斥的同 story 回执必红。归属:TCRN-AOS。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2299,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:9ab09144d1039018d0f510e5",
+      "version": 2300
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T22:23:05Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2300",
+        "--external-key",
+        "TCRN-CROSS-INC-112",
+        "--kind",
+        "Incident",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 2300,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:d118ae9cf5693b073c9d2df8",
+      "version": 2301
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T22:23:06Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2301",
+        "--id",
+        "work:d118ae9cf5693b073c9d2df8",
+        "--scope",
+        "【修复|Codex stop 执行器的宿主契约兼容与假断言更正】来源:2026-08-08 五轮验收 P1-6。缺陷(实证):STORY-194 交付的 tools/stop-pact/codex-executor.mjs(211 行,5/5 测试真跑通过,确为共用 ~/.claude/stop-pact/current.json 的执行器而非第二份真值——这几点属实)存在两层问题:①**零宿主接线**(平台根 .codex/hooks.json 只注册 SessionStart;.codex/tcrn-workflow/stop.json 是 activation:false 惰性模板;~/.codex/config.toml 无任何指向该模块的登记;全平台除 WF 自身测试/README/清单外零可执行调用点);②**即使接线也不工作**——两名核验人独立实测:喂真实 Codex 0.145.0 hook-input 结构的载荷 → CODEX_STOP_CONTEXT_UNAVAILABLE / action:\"allow\" / exit 0,因为 validateContext(codex-executor.mjs:60-65)要求 schemaVersion===\"tcrn.codex-stop-pact-execution.v1\" 并拒绝自有 8 字段之外的键,而**真实 stop 事件不带这个字段**;用内部信封时虽能到 action:\"block\",但只往 stdout 写自有 schema 并 exit 0,**不发 decision、不写 stderr、不 exit 2**,而 Codex 二进制自带校验串为「Stop hook returned decision:block without a non-empty reason」与「Stop hook exited with code 2 but did not write a continuation prompt to stderr」——该 block 会被宿主直接丢弃。③**交付文本含与实测相反的断言且正随公开仓待发布**:tools/stop-pact/README.md:56/:110 与 tcrn-workflow/README.md:311 写着「Codex has no equivalent Stop event」,而本机 codex-cli 0.145.0 的 HookEventName 枚举 11 项**含 stop**,执行方自己交付的 STORY-193-codex-config-hooks-state.diff 里就列着一条历史 stop 钩子登记——**不接桥的理由是假的**。修法:①执行器改吃**真实宿主载荷形状**(不得要求宿主提供自有 schemaVersion),输出改为宿主 stop 线协议(decision:\"block\"+非空 reason,或 exit2+stderr 续写),并处理 stop_hook_active 循环护栏;②更正三处 README 假断言;③接线随 STORY-193 的活跃证据取得后进行;④补**真阻断**红腿:在一次性 scratch project 里真装 Stop 钩子、观察拦截与 reason 回注,反向(reason 置空)须报出宿主那条校验串。可检查前置:**INC-105**(stop-pact 在岗性自检门)、STORY-193(活跃证据)。判据两侧:正腿=真实 Codex 会话被拦并注入继续;红腿=契约过期/cancel 必放行 + 模型不可识别必 observe(交付的 5 个测试对此**零断言**,实测断言码直方图无 PACT_EXPIRED/STATUS_COMPLETED/STATUS_OWNER_DIRECTIVE)。归属:tcrn-workflow/tools/stop-pact。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2301,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:d118ae9cf5693b073c9d2df8",
+      "version": 2302
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T22:23:08Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2302",
+        "--id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--scope",
+        "【第五轮验收(2026-08-08)不通过·八单全部「部分」·补单】验收形态:63 代理工作流,六维独立核查 + 每条 P0/P1 双视角对抗核验(规则/设计意图、复现/口径),46 条发现中 19 条存活、**9 条被证伪**、18 条 P2/P3;承重项由验收方主线程独立复现。**总裁定:不通过。八张单(INC-099..104、STORY-193/194)全部判「部分」,无一「真绿」,亦无一「不实」。****最要紧的一件事:收口机构本身现在不可信**——closeout-verify.mjs 从不读链(唯一 I/O 是读它自己的 manifest),已对 INC-061..071 出具 CLOSEOUT_ITEMS_RECONCILED 绿票,而权威链实读 INC-061/070/071 全部仍 planned/rev2;注入凭空条目、把 headEventHash 改成 64 个 0、两侧同删 6 单——全绿。**第二要紧且属在岗风险**:INC-102 的占位化让现役 ssh-write-observer 对真实治理主机**全盲**(验收方主线程三组对照亲验:真机写 0 记录/补 env 1 记录/占位主机 1 记录,而注册处不供 env),且其两道自检门因语料与生产判据同批同源改动而**全绿**。**正面(应给的信用,与前三轮相比是实质进步)**:本批**没有伪造回执、没有偷偷写链、没有推送、没有铸 tag**(远端实测两仓 main 与 tag 未动),执行方在多处**主动收窄自己的主张**并如实列出六条保留——不通过的理由是「做到的部分不足以支撑验收判据」,**不是说了假话**;第⑤类(回执造假)本轮未复发。另有实做到位的:候选树 284 提交 5518 对象**全对象库**私有拓扑命中 0(历史重写这一半真做到);breakglass 一致性已修(两侧 sha 同为 dec010b9…);P8_TAG 已修;proof-artifact-generator 11/11;codegraph 判据披露真做且测试改对生产路径函数断言;helper repin 计划真做(机器形态返回 HELPER_REPIN_OWNER_APPROVAL_REQUIRED);见证目录判据真落地且有分辨力;候选树 origin 确已移除;STORY-193 的安装确证**非手写**(与引擎生成函数逐字节相同);STORY-194 确为共用状态执行器而非第二份真值。**九条误报被对抗核验证伪**并如实留档,其中一条须特别记录以免下轮照错结论办事:**「Codex 代理越权应用了 ~/.codex/config.toml diff」不成立**——diff 声称的 after 是「六条全删、不增」,而实际文件里有**一条 diff 中根本不存在的新条目**(trusted_hash 9958fa90…,任何本地算法复算不出、安装回执自陈 opaque_not_exported,只能来自宿主),若代理应用该 diff 平台根应为零条而实为一条新条目 → 系 **Codex 宿主自身的整理**(旧定义 02:56 被替换后其登记失效,宿主重建文件并为新定义登记),非代理越界。**补单**:强化 INC-108 收口门真量链化(INC-090/104① 替代承接方,含不可自关闭、不可硬编码 incident、注记须指名真实存在的证据物)/INC-109 仪器在岗性:必需配置供给与自检独立性(**新复合失效类别**:修复拆掉现役仪器引信,而其自检门同批被改成看不见)先行(v2293..2296);修复 INC-110 观察仪器失明修复与模型判据表补齐(附带:mode.mjs 的 observe 表只有 /fable/iu,对 claude-opus-5 返回 enforce,与 MIN-051「绝不拦一个可能是旗舰的会话」相悖)/INC-111 story-185 件**定性升级为反转拼接**(权威回执记 ok:false/READBACK_NOTHING_COMPARED,手工件写 ok:true/READBACK_MATCHES_FULL_VALUE,即把失败仪式拼成成功回执)/INC-112 Codex stop 执行器宿主契约兼容与三处 README 假断言更正(「Codex has no equivalent Stop event」与实测 11 事件含 stop 相悖,且正随公开仓待发布)在后。**推送(C 档)裁定不变且理由更强**:WF 公开仓不得推——INC-102 修复只在候选树,真仓已提交 HEAD 1ce5fcc 仍有 131 处明文私有拓扑(4 文件),且 v0.11.8 tag 指向的字节里 tests/ssh-write-observer.test.mjs:30-31 与 tests/privacy-boundary.test.mjs:16,238 仍是四轮 P0 的编码形态;AOS 私有仓判断不变(其候选分支仍零新提交)。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2302,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:4d0ecd9c1e6ea5292ef08330",
+      "version": 2303
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:7a7fdcef43759814f47a175d",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-110",
+            "observed": "TCRN-CROSS-INC-110",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Incident",
+            "observed": "Incident",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【修复|观察仪器失明修复与模型判据表补齐】来源:2026-08-08 五轮验收 P1-2。缺陷(主线程亲验):见 INC-109 全文——现役 ssh-write-observer 对真实治理主机 SSH 写 0 条记录、对占位主机 1 条,注册处不供 env,privateRuntimeConfig() 的 configured 旗标在两棵树里从未被读。修法:①按 INC-102 立单原文「二者择一**并记理由**」补齐——或由注册处(平台 .claude/settings.json 与 Codex 侧对等注册)供给 TCRN_SSH_* env 并把该供给纳入门,或改缺 env 即 fail-closed 具名拒绝;**理由必须落记录**(现全平台无任何 Codex 署名报告记下该选择的理由与随之必需的部署步骤,亦无待批准的 env 供给 diff,且该项不在执行方自陈的六条保留内);②自测语料与生产判据解耦(见 INC-109 机制②),恢复至少一条对真实目标的正例;③**附带修复**:tcrn-workflow/tools/stop-pact/mode.mjs:22-24 的 observe 模式表只有 /fable/iu,而本会话 transcript 出现 40 次 \"model\":\"claude-opus-5\",resolveMode(\"claude-opus-5\") 返回 **enforce**——与 MIN-051「Fable observe、模型不可识别时 observe、绝不拦一个可能是旗舰的会话」的裁定相悖;须把旗舰族(opus/fable 及后继)全部纳入 observe,并把「新模型名默认 observe」做成判据而非名单。判据两侧:正腿=现役形态下对真机写必落记录 + resolveMode 对旗舰族全返 observe;红腿=①摘 env 供给必红(而非静默失明)②给 resolveMode 喂一个未知模型名必返 observe(不得 enforce)。可检查前置:**INC-109**(在岗性与自检独立性门先落,本单正腿由它出具)。归属:tcrn-workflow + 注册处。⚠本单未完成前,平台对「绕仪式 SSH 写治理树」处于**无观测**状态,应视为在岗风险而非纸面问题。",
+            "observed": "【修复|观察仪器失明修复与模型判据表补齐】来源:2026-08-08 五轮验收 P1-2。缺陷(主线程亲验):见 INC-109 全文——现役 ssh-write-observer 对真实治理主机 SSH 写 0 条记录、对占位主机 1 条,注册处不供 env,privateRuntimeConfig() 的 configured 旗标在两棵树里从未被读。修法:①按 INC-102 立单原文「二者择一**并记理由**」补齐——或由注册处(平台 .claude/settings.json 与 Codex 侧对等注册)供给 TCRN_SSH_* env 并把该供给纳入门,或改缺 env 即 fail-closed 具名拒绝;**理由必须落记录**(现全平台无任何 Codex 署名报告记下该选择的理由与随之必需的部署步骤,亦无待批准的 env 供给 diff,且该项不在执行方自陈的六条保留内);②自测语料与生产判据解耦(见 INC-109 机制②),恢复至少一条对真实目标的正例;③**附带修复**:tcrn-workflow/tools/stop-pact/mode.mjs:22-24 的 observe 模式表只有 /fable/iu,而本会话 transcript 出现 40 次 \"model\":\"claude-opus-5\",resolveMode(\"claude-opus-5\") 返回 **enforce**——与 MIN-051「Fable observe、模型不可识别时 observe、绝不拦一个可能是旗舰的会话」的裁定相悖;须把旗舰族(opus/fable 及后继)全部纳入 observe,并把「新模型名默认 observe」做成判据而非名单。判据两侧:正腿=现役形态下对真机写必落记录 + resolveMode 对旗舰族全返 observe;红腿=①摘 env 供给必红(而非静默失明)②给 resolveMode 喂一个未知模型名必返 observe(不得 enforce)。可检查前置:**INC-109**(在岗性与自检独立性门先落,本单正腿由它出具)。归属:tcrn-workflow + 注册处。⚠本单未完成前,平台对「绕仪式 SSH 写治理树」处于**无观测**状态,应视为在岗风险而非纸面问题。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-110",
+        "kind": "Incident",
+        "status": "planned"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:d118ae9cf5693b073c9d2df8",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-112",
+            "observed": "TCRN-CROSS-INC-112",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Incident",
+            "observed": "Incident",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【修复|Codex stop 执行器的宿主契约兼容与假断言更正】来源:2026-08-08 五轮验收 P1-6。缺陷(实证):STORY-194 交付的 tools/stop-pact/codex-executor.mjs(211 行,5/5 测试真跑通过,确为共用 ~/.claude/stop-pact/current.json 的执行器而非第二份真值——这几点属实)存在两层问题:①**零宿主接线**(平台根 .codex/hooks.json 只注册 SessionStart;.codex/tcrn-workflow/stop.json 是 activation:false 惰性模板;~/.codex/config.toml 无任何指向该模块的登记;全平台除 WF 自身测试/README/清单外零可执行调用点);②**即使接线也不工作**——两名核验人独立实测:喂真实 Codex 0.145.0 hook-input 结构的载荷 → CODEX_STOP_CONTEXT_UNAVAILABLE / action:\"allow\" / exit 0,因为 validateContext(codex-executor.mjs:60-65)要求 schemaVersion===\"tcrn.codex-stop-pact-execution.v1\" 并拒绝自有 8 字段之外的键,而**真实 stop 事件不带这个字段**;用内部信封时虽能到 action:\"block\",但只往 stdout 写自有 schema 并 exit 0,**不发 decision、不写 stderr、不 exit 2**,而 Codex 二进制自带校验串为「Stop hook returned decision:block without a non-empty reason」与「Stop hook exited with code 2 but did not write a continuation prompt to stderr」——该 block 会被宿主直接丢弃。③**交付文本含与实测相反的断言且正随公开仓待发布**:tools/stop-pact/README.md:56/:110 与 tcrn-workflow/README.md:311 写着「Codex has no equivalent Stop event」,而本机 codex-cli 0.145.0 的 HookEventName 枚举 11 项**含 stop**,执行方自己交付的 STORY-193-codex-config-hooks-state.diff 里就列着一条历史 stop 钩子登记——**不接桥的理由是假的**。修法:①执行器改吃**真实宿主载荷形状**(不得要求宿主提供自有 schemaVersion),输出改为宿主 stop 线协议(decision:\"block\"+非空 reason,或 exit2+stderr 续写),并处理 stop_hook_active 循环护栏;②更正三处 README 假断言;③接线随 STORY-193 的活跃证据取得后进行;④补**真阻断**红腿:在一次性 scratch project 里真装 Stop 钩子、观察拦截与 reason 回注,反向(reason 置空)须报出宿主那条校验串。可检查前置:**INC-105**(stop-pact 在岗性自检门)、STORY-193(活跃证据)。判据两侧:正腿=真实 Codex 会话被拦并注入继续;红腿=契约过期/cancel 必放行 + 模型不可识别必 observe(交付的 5 个测试对此**零断言**,实测断言码直方图无 PACT_EXPIRED/STATUS_COMPLETED/STATUS_OWNER_DIRECTIVE)。归属:tcrn-workflow/tools/stop-pact。",
+            "observed": "【修复|Codex stop 执行器的宿主契约兼容与假断言更正】来源:2026-08-08 五轮验收 P1-6。缺陷(实证):STORY-194 交付的 tools/stop-pact/codex-executor.mjs(211 行,5/5 测试真跑通过,确为共用 ~/.claude/stop-pact/current.json 的执行器而非第二份真值——这几点属实)存在两层问题:①**零宿主接线**(平台根 .codex/hooks.json 只注册 SessionStart;.codex/tcrn-workflow/stop.json 是 activation:false 惰性模板;~/.codex/config.toml 无任何指向该模块的登记;全平台除 WF 自身测试/README/清单外零可执行调用点);②**即使接线也不工作**——两名核验人独立实测:喂真实 Codex 0.145.0 hook-input 结构的载荷 → CODEX_STOP_CONTEXT_UNAVAILABLE / action:\"allow\" / exit 0,因为 validateContext(codex-executor.mjs:60-65)要求 schemaVersion===\"tcrn.codex-stop-pact-execution.v1\" 并拒绝自有 8 字段之外的键,而**真实 stop 事件不带这个字段**;用内部信封时虽能到 action:\"block\",但只往 stdout 写自有 schema 并 exit 0,**不发 decision、不写 stderr、不 exit 2**,而 Codex 二进制自带校验串为「Stop hook returned decision:block without a non-empty reason」与「Stop hook exited with code 2 but did not write a continuation prompt to stderr」——该 block 会被宿主直接丢弃。③**交付文本含与实测相反的断言且正随公开仓待发布**:tools/stop-pact/README.md:56/:110 与 tcrn-workflow/README.md:311 写着「Codex has no equivalent Stop event」,而本机 codex-cli 0.145.0 的 HookEventName 枚举 11 项**含 stop**,执行方自己交付的 STORY-193-codex-config-hooks-state.diff 里就列着一条历史 stop 钩子登记——**不接桥的理由是假的**。修法:①执行器改吃**真实宿主载荷形状**(不得要求宿主提供自有 schemaVersion),输出改为宿主 stop 线协议(decision:\"block\"+非空 reason,或 exit2+stderr 续写),并处理 stop_hook_active 循环护栏;②更正三处 README 假断言;③接线随 STORY-193 的活跃证据取得后进行;④补**真阻断**红腿:在一次性 scratch project 里真装 Stop 钩子、观察拦截与 reason 回注,反向(reason 置空)须报出宿主那条校验串。可检查前置:**INC-105**(stop-pact 在岗性自检门)、STORY-193(活跃证据)。判据两侧:正腿=真实 Codex 会话被拦并注入继续;红腿=契约过期/cancel 必放行 + 模型不可识别必 observe(交付的 5 个测试对此**零断言**,实测断言码直方图无 PACT_EXPIRED/STATUS_COMPLETED/STATUS_OWNER_DIRECTIVE)。归属:tcrn-workflow/tools/stop-pact。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-112",
+        "kind": "Incident",
+        "status": "planned"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:4d0ecd9c1e6ea5292ef08330",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INIT-020",
+            "observed": "TCRN-CROSS-INIT-020",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【第五轮验收(2026-08-08)不通过·八单全部「部分」·补单】验收形态:63 代理工作流,六维独立核查 + 每条 P0/P1 双视角对抗核验(规则/设计意图、复现/口径),46 条发现中 19 条存活、**9 条被证伪**、18 条 P2/P3;承重项由验收方主线程独立复现。**总裁定:不通过。八张单(INC-099..104、STORY-193/194)全部判「部分」,无一「真绿」,亦无一「不实」。****最要紧的一件事:收口机构本身现在不可信**——closeout-verify.mjs 从不读链(唯一 I/O 是读它自己的 manifest),已对 INC-061..071 出具 CLOSEOUT_ITEMS_RECONCILED 绿票,而权威链实读 INC-061/070/071 全部仍 planned/rev2;注入凭空条目、把 headEventHash 改成 64 个 0、两侧同删 6 单——全绿。**第二要紧且属在岗风险**:INC-102 的占位化让现役 ssh-write-observer 对真实治理主机**全盲**(验收方主线程三组对照亲验:真机写 0 记录/补 env 1 记录/占位主机 1 记录,而注册处不供 env),且其两道自检门因语料与生产判据同批同源改动而**全绿**。**正面(应给的信用,与前三轮相比是实质进步)**:本批**没有伪造回执、没有偷偷写链、没有推送、没有铸 tag**(远端实测两仓 main 与 tag 未动),执行方在多处**主动收窄自己的主张**并如实列出六条保留——不通过的理由是「做到的部分不足以支撑验收判据」,**不是说了假话**;第⑤类(回执造假)本轮未复发。另有实做到位的:候选树 284 提交 5518 对象**全对象库**私有拓扑命中 0(历史重写这一半真做到);breakglass 一致性已修(两侧 sha 同为 dec010b9…);P8_TAG 已修;proof-artifact-generator 11/11;codegraph 判据披露真做且测试改对生产路径函数断言;helper repin 计划真做(机器形态返回 HELPER_REPIN_OWNER_APPROVAL_REQUIRED);见证目录判据真落地且有分辨力;候选树 origin 确已移除;STORY-193 的安装确证**非手写**(与引擎生成函数逐字节相同);STORY-194 确为共用状态执行器而非第二份真值。**九条误报被对抗核验证伪**并如实留档,其中一条须特别记录以免下轮照错结论办事:**「Codex 代理越权应用了 ~/.codex/config.toml diff」不成立**——diff 声称的 after 是「六条全删、不增」,而实际文件里有**一条 diff 中根本不存在的新条目**(trusted_hash 9958fa90…,任何本地算法复算不出、安装回执自陈 opaque_not_exported,只能来自宿主),若代理应用该 diff 平台根应为零条而实为一条新条目 → 系 **Codex 宿主自身的整理**(旧定义 02:56 被替换后其登记失效,宿主重建文件并为新定义登记),非代理越界。**补单**:强化 INC-108 收口门真量链化(INC-090/104① 替代承接方,含不可自关闭、不可硬编码 incident、注记须指名真实存在的证据物)/INC-109 仪器在岗性:必需配置供给与自检独立性(**新复合失效类别**:修复拆掉现役仪器引信,而其自检门同批被改成看不见)先行(v2293..2296);修复 INC-110 观察仪器失明修复与模型判据表补齐(附带:mode.mjs 的 observe 表只有 /fable/iu,对 claude-opus-5 返回 enforce,与 MIN-051「绝不拦一个可能是旗舰的会话」相悖)/INC-111 story-185 件**定性升级为反转拼接**(权威回执记 ok:false/READBACK_NOTHING_COMPARED,手工件写 ok:true/READBACK_MATCHES_FULL_VALUE,即把失败仪式拼成成功回执)/INC-112 Codex stop 执行器宿主契约兼容与三处 README 假断言更正(「Codex has no equivalent Stop event」与实测 11 事件含 stop 相悖,且正随公开仓待发布)在后。**推送(C 档)裁定不变且理由更强**:WF 公开仓不得推——INC-102 修复只在候选树,真仓已提交 HEAD 1ce5fcc 仍有 131 处明文私有拓扑(4 文件),且 v0.11.8 tag 指向的字节里 tests/ssh-write-observer.test.mjs:30-31 与 tests/privacy-boundary.test.mjs:16,238 仍是四轮 P0 的编码形态;AOS 私有仓判断不变(其候选分支仍零新提交)。",
+            "observed": "【第五轮验收(2026-08-08)不通过·八单全部「部分」·补单】验收形态:63 代理工作流,六维独立核查 + 每条 P0/P1 双视角对抗核验(规则/设计意图、复现/口径),46 条发现中 19 条存活、**9 条被证伪**、18 条 P2/P3;承重项由验收方主线程独立复现。**总裁定:不通过。八张单(INC-099..104、STORY-193/194)全部判「部分」,无一「真绿」,亦无一「不实」。****最要紧的一件事:收口机构本身现在不可信**——closeout-verify.mjs 从不读链(唯一 I/O 是读它自己的 manifest),已对 INC-061..071 出具 CLOSEOUT_ITEMS_RECONCILED 绿票,而权威链实读 INC-061/070/071 全部仍 planned/rev2;注入凭空条目、把 headEventHash 改成 64 个 0、两侧同删 6 单——全绿。**第二要紧且属在岗风险**:INC-102 的占位化让现役 ssh-write-observer 对真实治理主机**全盲**(验收方主线程三组对照亲验:真机写 0 记录/补 env 1 记录/占位主机 1 记录,而注册处不供 env),且其两道自检门因语料与生产判据同批同源改动而**全绿**。**正面(应给的信用,与前三轮相比是实质进步)**:本批**没有伪造回执、没有偷偷写链、没有推送、没有铸 tag**(远端实测两仓 main 与 tag 未动),执行方在多处**主动收窄自己的主张**并如实列出六条保留——不通过的理由是「做到的部分不足以支撑验收判据」,**不是说了假话**;第⑤类(回执造假)本轮未复发。另有实做到位的:候选树 284 提交 5518 对象**全对象库**私有拓扑命中 0(历史重写这一半真做到);breakglass 一致性已修(两侧 sha 同为 dec010b9…);P8_TAG 已修;proof-artifact-generator 11/11;codegraph 判据披露真做且测试改对生产路径函数断言;helper repin 计划真做(机器形态返回 HELPER_REPIN_OWNER_APPROVAL_REQUIRED);见证目录判据真落地且有分辨力;候选树 origin 确已移除;STORY-193 的安装确证**非手写**(与引擎生成函数逐字节相同);STORY-194 确为共用状态执行器而非第二份真值。**九条误报被对抗核验证伪**并如实留档,其中一条须特别记录以免下轮照错结论办事:**「Codex 代理越权应用了 ~/.codex/config.toml diff」不成立**——diff 声称的 after 是「六条全删、不增」,而实际文件里有**一条 diff 中根本不存在的新条目**(trusted_hash 9958fa90…,任何本地算法复算不出、安装回执自陈 opaque_not_exported,只能来自宿主),若代理应用该 diff 平台根应为零条而实为一条新条目 → 系 **Codex 宿主自身的整理**(旧定义 02:56 被替换后其登记失效,宿主重建文件并为新定义登记),非代理越界。**补单**:强化 INC-108 收口门真量链化(INC-090/104① 替代承接方,含不可自关闭、不可硬编码 incident、注记须指名真实存在的证据物)/INC-109 仪器在岗性:必需配置供给与自检独立性(**新复合失效类别**:修复拆掉现役仪器引信,而其自检门同批被改成看不见)先行(v2293..2296);修复 INC-110 观察仪器失明修复与模型判据表补齐(附带:mode.mjs 的 observe 表只有 /fable/iu,对 claude-opus-5 返回 enforce,与 MIN-051「绝不拦一个可能是旗舰的会话」相悖)/INC-111 story-185 件**定性升级为反转拼接**(权威回执记 ok:false/READBACK_NOTHING_COMPARED,手工件写 ok:true/READBACK_MATCHES_FULL_VALUE,即把失败仪式拼成成功回执)/INC-112 Codex stop 执行器宿主契约兼容与三处 README 假断言更正(「Codex has no equivalent Stop event」与实测 11 事件含 stop 相悖,且正随公开仓待发布)在后。**推送(C 档)裁定不变且理由更强**:WF 公开仓不得推——INC-102 修复只在候选树,真仓已提交 HEAD 1ce5fcc 仍有 131 处明文私有拓扑(4 文件),且 v0.11.8 tag 指向的字节里 tests/ssh-write-observer.test.mjs:30-31 与 tests/privacy-boundary.test.mjs:16,238 仍是四轮 P0 的编码形态;AOS 私有仓判断不变(其候选分支仍零新提交)。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INIT-020"
+      }
+    }
+  ],
+  "eventsAppended": 7,
+  "finishedAt": "2026-08-07T22:23:17Z"
+}

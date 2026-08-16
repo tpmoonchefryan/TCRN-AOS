@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "aos.report-witness-classification.v1",
+  "entries": [
+    {
+      "sourcePath": "docs/reports/init-020/story-185-closeout.receipt.json",
+      "preservedPath": "docs/reports/init-020/story-185-closeout.receipt.json",
+      "category": "reversed-conclusion-stitch-witness",
+      "acceptanceEligible": false,
+      "reasonCode": "RECEIPT_REVERSED_CONCLUSION_STITCH",
+      "bytes": 2140,
+      "sha256": "654da5f7b5780ed2810e1ce57f835697bfffdc468f885c429e98ee7876f3ae29",
+      "note": "Preserved red witness only. The authoritative 2026-08-06 ceremony receipt is READBACK_NOTHING_COMPARED; this report combines that failed attempt with a later successful readback and may not be used as a closeout receipt."
+    }
+  ]
+}

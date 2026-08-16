@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-020 INC-086",
+  "intent": "Dry-run only: rebase the cross-project knowledge marker to the live PG chain head without appending an event.",
+  "steps": [
+    {
+      "verb": "knowledge-rebase",
+      "flags": {}
+    }
+  ],
+  "readback": [
+    {
+      "verb": "knowledge-freshness",
+      "flags": {},
+      "expect": {
+        "reasonCode": "KNOWLEDGE_FRESHNESS_EVALUATED"
+      },
+      "recordFields": [
+        "reasonCode",
+        "evaluationDigest"
+      ]
+    },
+    {
+      "verb": "status",
+      "flags": {},
+      "expect": {
+        "version": 2257
+      },
+      "recordFields": [
+        "version",
+        "headEventHash"
+      ]
+    }
+  ]
+}

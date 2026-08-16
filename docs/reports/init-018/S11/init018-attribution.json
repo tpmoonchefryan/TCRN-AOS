@@ -1,0 +1,141 @@
+{
+  "generatedAt": "2026-08-05",
+  "association": "layer by message.model",
+  "byLayer": {
+    "execution": {
+      "input": 3591761,
+      "output": 1273271,
+      "cacheRead": 416530432,
+      "msgs": 1360,
+      "sessions": [
+        "0643ea49",
+        "67c2afb5"
+      ]
+    },
+    "review": {
+      "input": 969,
+      "output": 1769869,
+      "cacheRead": 132132112,
+      "msgs": 525,
+      "sessions": [
+        "05ff5dd7",
+        "f176a613"
+      ]
+    },
+    "verification": {
+      "input": 38,
+      "output": 9203,
+      "cacheRead": 2716559,
+      "msgs": 19,
+      "sessions": [
+        "8444e193",
+        "f176a613"
+      ]
+    }
+  },
+  "sessions": [
+    {
+      "file": "103706ac",
+      "in": 0,
+      "out": 0,
+      "cacheRead": 0,
+      "msgs": 0,
+      "byModel": {}
+    },
+    {
+      "file": "8444e193",
+      "in": 22,
+      "out": 3733,
+      "cacheRead": 461871,
+      "msgs": 11,
+      "byModel": {
+        "claude-opus-5": {
+          "input": 22,
+          "output": 3733,
+          "cacheCreation": 105391,
+          "cacheRead": 461871,
+          "messages": 11
+        }
+      }
+    },
+    {
+      "file": "05ff5dd7",
+      "in": 395,
+      "out": 706321,
+      "cacheRead": 48132282,
+      "msgs": 215,
+      "byModel": {
+        "claude-fable-5": {
+          "input": 395,
+          "output": 706321,
+          "cacheCreation": 1123275,
+          "cacheRead": 48132282,
+          "messages": 215
+        }
+      }
+    },
+    {
+      "file": "0643ea49",
+      "in": 1356885,
+      "out": 668917,
+      "cacheRead": 173663360,
+      "msgs": 593,
+      "byModel": {
+        "deepseek-v4-flash": {
+          "input": 1356885,
+          "output": 668917,
+          "cacheCreation": 0,
+          "cacheRead": 173663360,
+          "messages": 593
+        }
+      }
+    },
+    {
+      "file": "67c2afb5",
+      "in": 2234876,
+      "out": 604354,
+      "cacheRead": 242867072,
+      "msgs": 767,
+      "byModel": {
+        "deepseek-v4-flash": {
+          "input": 2234876,
+          "output": 604354,
+          "cacheCreation": 0,
+          "cacheRead": 242867072,
+          "messages": 767
+        }
+      }
+    },
+    {
+      "file": "f176a613",
+      "in": 590,
+      "out": 1069018,
+      "cacheRead": 86254518,
+      "msgs": 319,
+      "byModel": {
+        "claude-fable-5": {
+          "input": 574,
+          "output": 1063548,
+          "cacheCreation": 4608020,
+          "cacheRead": 83999830,
+          "messages": 310
+        },
+        "<synthetic>": {
+          "input": 0,
+          "output": 0,
+          "cacheCreation": 0,
+          "cacheRead": 0,
+          "messages": 1
+        },
+        "claude-opus-5": {
+          "input": 16,
+          "output": 5470,
+          "cacheCreation": 3483,
+          "cacheRead": 2254688,
+          "messages": 8
+        }
+      }
+    }
+  ],
+  "note": "cacheRead 含 prompt 缓存读取;仅计 INIT-018 提及的 6 会话"
+}

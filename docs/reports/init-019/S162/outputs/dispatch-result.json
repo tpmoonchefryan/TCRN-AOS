@@ -1,0 +1,263 @@
+[
+  {
+    "case": 0,
+    "label": "close-161-dispatch-162",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"ok\":true,\"reasonCode\":\"CEREMONY_COMPLETED_AND_READ_BACK\",\"host\":\"tcrn-platform-dev\",\"partition\":\"cross-project\",\"dryRun\":false,\"receipt\":{\"schemaVersion\":\"aos.local-client-ceremony-receipt.v1\",\"story\":\"TCRN-CROSS-INIT-019\",\"intent\":\"close STORY-161 (20 cards curated and promoted), dispatch STORY-162 to active (injection trigger)\",\"startedAt\":\"2026-08-05T14:47:34Z\",\"dryRun\":false,\"host\":\"tcrn-platform-dev\",\"partition\":\"cross-project\",\"topology\":{\"engineCli\":\"/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs\",\"workspace\":\"/srv/tcrn/governance/tcrn-workspace/cross-project/workspace\",\"attestDir\":\"/srv/tcrn/governance/tcrn-workspace/cross-project/attestations\",\"actor\":\"agent:fable\",\"configuredIn\":\"deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs\"},\"payload\":{\"path\":\"evidence/mcp-ceremony-write/payloads/2026-08-05T14-47-34-389Z-aa1212-cross-project.json\",\"sha256\":\"d72a165ea1be4c671cc326d3273060aac8e223a7e79c36f491dc20321c2665b7\",\"bytes\":998},\"hostEngineCatalogue\":{\"verbs\":103},\"chainBefore\":{\"workspaceId\":\"workspace:7732a51de4c38afb83bb77cf\",\"version\":1796,\"headEventHash\":\"532e7167ab60271fac2eef0cb80784f3c87f1a04a8242231e6aa906f64198878\",\"work\":280},\"steps\":[{\"ok\":true,\"verb\":\"work-transition\",\"mutates\":true,\"reasonCode\":\"WORKSPACE_COMMAND_COMPLETED\",\"argv\":[\"work-transition\",\"--actor\",\"agent:fable\",\"--at\",\"2026-08-05T14:47:35Z\",\"--attest-dir\",\"/srv/tcrn/governance/tcrn-workspace/cross-project/attestations\",\"--expected-version\",\"1796\",\"--id\",\"work:a5228dfd680ba0d2040c27da\",\"--status\",\"done\",\"--workspace\",\"/srv/tcrn/governance/tcrn-workspace/cross-project/workspace\"],\"autoSupplied\":[\"actor\",\"at\",\"attest-dir\",\"expected-version\",\"workspace\"],\"fromPayload\":[\"id\",\"status\"],\"headAtPlanning\":1796,\"executed\":true,\"accepted\":true,\"error\":null,\"recordId\":\"work:a5228dfd680ba0d2040c27da\",\"version\":1797},{\"ok\":true,\"verb\":\"work-transition\",\"mutates\":true,\"reasonCode\":\"WORKSPACE_COMMAND_COMPLETED\",\"argv\":[\"work-transition\",\"--actor\",\"agent:fable\",\"--at\",\"2026-08-05T14:47:36Z\",\"--attest-dir\",\"/srv/tcrn/governance/tcrn-workspace/cross-project/attestations\",\"--expected-version\",\"1797\",\"--id\",\"work:1212bf1ab6df24db916e54ce\",\"--status\",\"ready\",\"--workspace\",\"/srv/tcrn/governance/tcrn-workspace/cross-project/workspace\"],\"autoSupplied\":[\"actor\",\"at\",\"attest-dir\",\"expected-version\",\"workspace\"],\"fromPayload\":[\"id\",\"status\"],\"headAtPlanning\":1797,\"executed\":true,\"accepted\":true,\"error\":null,\"recordId\":\"work:1212bf1ab6df24db916e54ce\",\"version\":1798},{\"ok\":true,\"verb\":\"work-transition\",\"mutates\":true,\"reasonCode\":\"WORKSPACE_COMMAND_COMPLETED\",\"argv\":[\"work-transition\",\"--actor\",\"agent:fable\",\"--at\",\"2026-08-05T14:47:37Z\",\"--attest-dir\",\"/srv/tcrn/governance/tcrn-workspace/cross-project/attestations\",\"--expected-version\",\"1798\",\"--id\",\"work:1212bf1ab6df24db916e54ce\",\"--status\",\"active\",\"--workspace\",\"/srv/tcrn/governance/tcrn-workspace/cross-project/workspace\"],\"autoSupplied\":[\"actor\",\"at\",\"attest-dir\",\"expected-version\",\"workspace\"],\"fromPayload\":[\"id\",\"status\"],\"headAtPlanning\":1798,\"executed\":true,\"accepted\":true,\"error\":null,\"recordId\":\"work:1212bf1ab6df24db916e54ce\",\"version\":1799}],\"readback\":[{\"ok\":true,\"verb\":\"work-show\",\"mutates\":false,\"reasonCode\":\"WORKSPACE_RECORD_READY\",\"argv\":[\"work-show\",\"--id\",\"work:a5228dfd680ba0d2040c27da\",\"--workspace\",\"/srv/tcrn/governance/tcrn-workspace/cross-project/workspace\"],\"autoSupplied\":[\"workspace\"],\"fromPayload\":[\"id\"],\"executed\":true,\"accepted\":true,\"verdict\":{\"ok\":true,\"reasonCode\":\"READBACK_MATCHES_FULL_VALUE\",\"compared\":[{\"field\":\"status\",\"expected\":\"done\",\"observed\":\"done\",\"equal\":true}],\"unequal\":[]}},{\"ok\":true,\"verb\":\"work-show\",\"mutates\":false,\"reasonCode\":\"WORKSPACE_RECORD_READY\",\"argv\":[\"work-show\",\"--id\",\"work:1212bf1ab6df24db916e54ce\",\"--workspace\",\"/srv/tcrn/governance/tcrn-workspace/cross-project/workspace\"],\"autoSupplied\":[\"workspace\"],\"fromPayload\":[\"id\"],\"executed\":true,\"accepted\":true,\"verdict\":{\"ok\":true,\"reasonCode\":\"READBACK_MATCHES_FULL_VALUE\",\"compared\":[{\"field\":\"status\",\"expected\":\"active\",\"observed\":\"active\",\"equal\":true}],\"unequal\":[]}}],\"chainAfter\":{\"workspaceId\":\"workspace:7732a51de4c38afb83bb77cf\",\"version\":1799,\"headEventHash\":\"b4b6222e76a60650ada52378aaae6efe1aae94124b64b2037d6f07f36fc2e65a\",\"work\":280},\"knowledgeRebase\":{\"verb\":\"knowledge-rebase\",\"markerVersionBefore\":49,\"accepted\":true,\"reasonCode\":\"KNOWLEDGE_STORE_REBASED\",\"version\":50},\"eventsAppended\":3,\"ok\":true,\"reasonCode\":\"CEREMONY_COMPLETED_AND_READ_BACK\",\"finishedAt\":\"2026-08-05T14:47:41Z\"},\"receiptPath\":\"evidence/mcp-ceremony-write/receipts/2026-08-05T14-47-41-647Z-5ef354-cross-project.json\",\"payloadPath\":\"evidence/mcp-ceremony-write/payloads/2026-08-05T14-47-34-389Z-aa1212-cross-project.json\"}"
+        }
+      ],
+      "structuredContent": {
+        "ok": true,
+        "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+        "host": "tcrn-platform-dev",
+        "partition": "cross-project",
+        "dryRun": false,
+        "receipt": {
+          "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+          "story": "TCRN-CROSS-INIT-019",
+          "intent": "close STORY-161 (20 cards curated and promoted), dispatch STORY-162 to active (injection trigger)",
+          "startedAt": "2026-08-05T14:47:34Z",
+          "dryRun": false,
+          "host": "tcrn-platform-dev",
+          "partition": "cross-project",
+          "topology": {
+            "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+            "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+            "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+            "actor": "agent:fable",
+            "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+          },
+          "payload": {
+            "path": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-47-34-389Z-aa1212-cross-project.json",
+            "sha256": "d72a165ea1be4c671cc326d3273060aac8e223a7e79c36f491dc20321c2665b7",
+            "bytes": 998
+          },
+          "hostEngineCatalogue": {
+            "verbs": 103
+          },
+          "chainBefore": {
+            "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+            "version": 1796,
+            "headEventHash": "532e7167ab60271fac2eef0cb80784f3c87f1a04a8242231e6aa906f64198878",
+            "work": 280
+          },
+          "steps": [
+            {
+              "ok": true,
+              "verb": "work-transition",
+              "mutates": true,
+              "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+              "argv": [
+                "work-transition",
+                "--actor",
+                "agent:fable",
+                "--at",
+                "2026-08-05T14:47:35Z",
+                "--attest-dir",
+                "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+                "--expected-version",
+                "1796",
+                "--id",
+                "work:a5228dfd680ba0d2040c27da",
+                "--status",
+                "done",
+                "--workspace",
+                "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+              ],
+              "autoSupplied": [
+                "actor",
+                "at",
+                "attest-dir",
+                "expected-version",
+                "workspace"
+              ],
+              "fromPayload": [
+                "id",
+                "status"
+              ],
+              "headAtPlanning": 1796,
+              "executed": true,
+              "accepted": true,
+              "error": null,
+              "recordId": "work:a5228dfd680ba0d2040c27da",
+              "version": 1797
+            },
+            {
+              "ok": true,
+              "verb": "work-transition",
+              "mutates": true,
+              "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+              "argv": [
+                "work-transition",
+                "--actor",
+                "agent:fable",
+                "--at",
+                "2026-08-05T14:47:36Z",
+                "--attest-dir",
+                "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+                "--expected-version",
+                "1797",
+                "--id",
+                "work:1212bf1ab6df24db916e54ce",
+                "--status",
+                "ready",
+                "--workspace",
+                "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+              ],
+              "autoSupplied": [
+                "actor",
+                "at",
+                "attest-dir",
+                "expected-version",
+                "workspace"
+              ],
+              "fromPayload": [
+                "id",
+                "status"
+              ],
+              "headAtPlanning": 1797,
+              "executed": true,
+              "accepted": true,
+              "error": null,
+              "recordId": "work:1212bf1ab6df24db916e54ce",
+              "version": 1798
+            },
+            {
+              "ok": true,
+              "verb": "work-transition",
+              "mutates": true,
+              "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+              "argv": [
+                "work-transition",
+                "--actor",
+                "agent:fable",
+                "--at",
+                "2026-08-05T14:47:37Z",
+                "--attest-dir",
+                "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+                "--expected-version",
+                "1798",
+                "--id",
+                "work:1212bf1ab6df24db916e54ce",
+                "--status",
+                "active",
+                "--workspace",
+                "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+              ],
+              "autoSupplied": [
+                "actor",
+                "at",
+                "attest-dir",
+                "expected-version",
+                "workspace"
+              ],
+              "fromPayload": [
+                "id",
+                "status"
+              ],
+              "headAtPlanning": 1798,
+              "executed": true,
+              "accepted": true,
+              "error": null,
+              "recordId": "work:1212bf1ab6df24db916e54ce",
+              "version": 1799
+            }
+          ],
+          "readback": [
+            {
+              "ok": true,
+              "verb": "work-show",
+              "mutates": false,
+              "reasonCode": "WORKSPACE_RECORD_READY",
+              "argv": [
+                "work-show",
+                "--id",
+                "work:a5228dfd680ba0d2040c27da",
+                "--workspace",
+                "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+              ],
+              "autoSupplied": [
+                "workspace"
+              ],
+              "fromPayload": [
+                "id"
+              ],
+              "executed": true,
+              "accepted": true,
+              "verdict": {
+                "ok": true,
+                "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+                "compared": [
+                  {
+                    "field": "status",
+                    "expected": "done",
+                    "observed": "done",
+                    "equal": true
+                  }
+                ],
+                "unequal": []
+              }
+            },
+            {
+              "ok": true,
+              "verb": "work-show",
+              "mutates": false,
+              "reasonCode": "WORKSPACE_RECORD_READY",
+              "argv": [
+                "work-show",
+                "--id",
+                "work:1212bf1ab6df24db916e54ce",
+                "--workspace",
+                "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+              ],
+              "autoSupplied": [
+                "workspace"
+              ],
+              "fromPayload": [
+                "id"
+              ],
+              "executed": true,
+              "accepted": true,
+              "verdict": {
+                "ok": true,
+                "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+                "compared": [
+                  {
+                    "field": "status",
+                    "expected": "active",
+                    "observed": "active",
+                    "equal": true
+                  }
+                ],
+                "unequal": []
+              }
+            }
+          ],
+          "chainAfter": {
+            "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+            "version": 1799,
+            "headEventHash": "b4b6222e76a60650ada52378aaae6efe1aae94124b64b2037d6f07f36fc2e65a",
+            "work": 280
+          },
+          "knowledgeRebase": {
+            "verb": "knowledge-rebase",
+            "markerVersionBefore": 49,
+            "accepted": true,
+            "reasonCode": "KNOWLEDGE_STORE_REBASED",
+            "version": 50
+          },
+          "eventsAppended": 3,
+          "ok": true,
+          "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+          "finishedAt": "2026-08-05T14:47:41Z"
+        },
+        "receiptPath": "evidence/mcp-ceremony-write/receipts/2026-08-05T14-47-41-647Z-5ef354-cross-project.json",
+        "payloadPath": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-47-34-389Z-aa1212-cross-project.json"
+      },
+      "isError": false
+    }
+  }
+]

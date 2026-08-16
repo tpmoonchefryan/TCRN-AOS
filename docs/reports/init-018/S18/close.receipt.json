@@ -1,0 +1,276 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-155",
+  "intent": "闭 CONF-056 出 MIN-059(S16.3 终审+两份公约修订已采),并收口 STORY-155。",
+  "startedAt": "2026-08-05T09:32:54Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "<outside-repository>",
+    "sha256": "2b56a6837c73bab2612b827975bb38fd6f01182d8024de465d98a219cc17eb11",
+    "bytes": 5916
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1687,
+    "headEventHash": "f218ef7657045d09c354f136a4e0a31ee3ad38e5291eedc7a007a76ba16f05d9",
+    "work": 256
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "conference-close",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-close",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:32:55Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--conference-id",
+        "conference:d4d8e9e2ea6f90cb556352f9",
+        "--decisions",
+        "S16 三档提案照准:仍在 30 / 已消失 1(workflow-MCP「两侧未接」句,成立条件已消失且 S3 已修正) / 条件化 4(verify-s6、verify-otel-privacy、parity 白名单、SSH observer),和=编目总数 35, Q1 裁定:**不设第四档,改设入册字段**——编目每条增加「生效证据 ∈ {已证,未证}」且**默认未证**(举证责任在保有方);它不进三分类表,因三分类问时间轴而生效证据问采纳时刻,两轴正交。「已证」三坐标全可机器判定:①作用域交集非空(装在零控制树的仓里即红);②红证与绿证同一入口同一二进制同一动词(跑判据副本不算);③在自动化列车里且末次退出码已记录(127 不是绿), Q2 裁定:**代际不是原因,降为 observe 级提示**。主触发器改为载体变更事件(拓扑、名册、路径与 PATH、provider 接线)自动重验依赖它的约束;常设字段 last_verified_red 超期自动降为未证、由列车算出不靠人记得;代际触发仅适用于判据里点名模型行为的少数条目(stop-pact 分档、Fable observe), Q3 裁定:**处置不对称**。成立条件消失=退役题,提案+裁定不变;从未生效=**缺陷题**,立即开 INC 并对签发它的原单据追更正记录,摘掉它的绿不须任何人批准(它什么也没保护过),裁定的对象是修还是废而非要不要承认;残余适用性分析对「从未生效」**豁免**(无残余可分析);并附连带义务:判为从未生效须复检同手法的兄弟(假绿出自验收方法而非那一条约束), 采纳对抗席对本次修订自身的约束:本轮任何一条若不能被 verify 列车执行就不写进公约、或按能力补偿型如实登记「现无机器门」——那批缺陷没有一条源于公约缺字, 落点:docs/harness-constraint-convention.md 新增「二之二、生效证据与复审触发」(公约 8-11);docs/deliberation-adoption-convention.md 新增「绑定现在有门了」一节(含 conference-position-list 作 readback 会判 NOTHING_COMPARED 的实测提醒)",
+        "--expected-version",
+        "1687",
+        "--minutes-external-key",
+        "TCRN-CROSS-MIN-059",
+        "--outcome-class",
+        "role_decision",
+        "--summary",
+        "执行形态:**真隔离多代理,收据绑定,且绑定首次有门**(与以往的 synthesis-only 与「披露式多代理」都不同)。三席(minerva/verity/sable)在互不可见的独立上下文分头成文,原文存盘计 sha256 入收据;新判据 verify-deliberation-binding.mjs 从链上重建三席立场并逐字节比对,判 DELIBERATION_BINDING_VERIFIED(1772/1796/1853B 全中),篡改任一席摘要即 DELIBERATION_BINDING_BROKEN 并点名——两侧都动过。天花板不变:只证内容一致,不证认证;freshContext 编排者自记,可信采集方 EPIC-020 未建成;门绿不代表某席真的独立产出。三席对 Q1(是否增设第四档)意见相左,裁定取其中可执行的一支;Q2、Q3 三席收敛。S16 三档提案(仍在 30/已消失 1/条件化 4)照准。两份公约修订已按 MIN-058 终审即采落地。",
+        "--unresolved-issues",
+        "可信采集方(引擎 EPIC-020)未建成,故独立性仍不可机证;生效证据字段与 last_verified_red 的机器化落点尚未实现(现为公约条款,按公约 11 应登记为能力补偿型)",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "conference-id",
+        "decisions",
+        "minutes-external-key",
+        "outcome-class",
+        "summary",
+        "unresolved-issues"
+      ],
+      "headAtPlanning": 1687,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": null,
+      "version": 1688
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:32:56Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1688",
+        "--id",
+        "work:1310edffd401edcfd404e8c2",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1688,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:1310edffd401edcfd404e8c2",
+      "version": 1689
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:32:57Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:2382be1862c8c774187e1b9b",
+        "--expected-version",
+        "1689",
+        "--id",
+        "work:1310edffd401edcfd404e8c2",
+        "--scope",
+        "S18 隔离多代理审议试点(D7)——**已完成**。现象与背景:此前所有审议要么 synthesis-only,要么「多代理」只是开场声明的披露,链上无法与「一个上下文编造整套立场」区分。做法:三席(minerva 治理架构 / verity 判据与证据 / sable 对抗与成本)在互不可见的独立上下文就 S16.3 同一份背景分头成文(workflow run wf_cec0004e-223),原文逐字存 evidence/conf-056-seat-*.txt,由 deliberation-multi-agent.mjs 计收据并生成载荷(participant 无 seat 即拒,防名义多代理),经 ceremony 落 CONF-056(cross v1687)。**新判据 scripts/verify-deliberation-binding.mjs**:从链上取回立场→按拆片规则逆向重建(剥 n/N 标记、剥末片绑定行、单换行连接)→sha256 比对收据 outputDigest。验收判据(可红可绿):绿=DELIBERATION_BINDING_VERIFIED,三席 1772/1796/1853B 摘要全中;红=篡改任一席收据摘要即 DELIBERATION_BINDING_BROKEN 并点名该席,exit 1。两侧输出存 docs/reports/init-018/S18/outputs/。三席对 Q1 真实分歧(加档/设准入/反对以加档结案),Q2、Q3 收敛——分歧本身即独立性的旁证(非证明)。决策点:裁定见 MIN-059,两份公约修订按 MIN-058 终审即采已落地。天花板如实记:绑定只证内容一致不证认证,freshContext 编排者自记,可信采集方 EPIC-020 未建成,故门绿不代表某席真的独立产出;第一步的执行形态声明义务不因此减轻。实测提醒:conference-position-list 作仪式 readback 判 NOTHING_COMPARED(列表读无可比字段),绑定校验须单独跑。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1689,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:1310edffd401edcfd404e8c2",
+      "version": 1690
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:32:58Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1690",
+        "--id",
+        "work:1310edffd401edcfd404e8c2",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1690,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:1310edffd401edcfd404e8c2",
+      "version": 1691
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:1310edffd401edcfd404e8c2",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-155",
+            "observed": "TCRN-CROSS-STORY-155",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "S18 隔离多代理审议试点(D7)——**已完成**。现象与背景:此前所有审议要么 synthesis-only,要么「多代理」只是开场声明的披露,链上无法与「一个上下文编造整套立场」区分。做法:三席(minerva 治理架构 / verity 判据与证据 / sable 对抗与成本)在互不可见的独立上下文就 S16.3 同一份背景分头成文(workflow run wf_cec0004e-223),原文逐字存 evidence/conf-056-seat-*.txt,由 deliberation-multi-agent.mjs 计收据并生成载荷(participant 无 seat 即拒,防名义多代理),经 ceremony 落 CONF-056(cross v1687)。**新判据 scripts/verify-deliberation-binding.mjs**:从链上取回立场→按拆片规则逆向重建(剥 n/N 标记、剥末片绑定行、单换行连接)→sha256 比对收据 outputDigest。验收判据(可红可绿):绿=DELIBERATION_BINDING_VERIFIED,三席 1772/1796/1853B 摘要全中;红=篡改任一席收据摘要即 DELIBERATION_BINDING_BROKEN 并点名该席,exit 1。两侧输出存 docs/reports/init-018/S18/outputs/。三席对 Q1 真实分歧(加档/设准入/反对以加档结案),Q2、Q3 收敛——分歧本身即独立性的旁证(非证明)。决策点:裁定见 MIN-059,两份公约修订按 MIN-058 终审即采已落地。天花板如实记:绑定只证内容一致不证认证,freshContext 编排者自记,可信采集方 EPIC-020 未建成,故门绿不代表某席真的独立产出;第一步的执行形态声明义务不因此减轻。实测提醒:conference-position-list 作仪式 readback 判 NOTHING_COMPARED(列表读无可比字段),绑定校验须单独跑。",
+            "observed": "S18 隔离多代理审议试点(D7)——**已完成**。现象与背景:此前所有审议要么 synthesis-only,要么「多代理」只是开场声明的披露,链上无法与「一个上下文编造整套立场」区分。做法:三席(minerva 治理架构 / verity 判据与证据 / sable 对抗与成本)在互不可见的独立上下文就 S16.3 同一份背景分头成文(workflow run wf_cec0004e-223),原文逐字存 evidence/conf-056-seat-*.txt,由 deliberation-multi-agent.mjs 计收据并生成载荷(participant 无 seat 即拒,防名义多代理),经 ceremony 落 CONF-056(cross v1687)。**新判据 scripts/verify-deliberation-binding.mjs**:从链上取回立场→按拆片规则逆向重建(剥 n/N 标记、剥末片绑定行、单换行连接)→sha256 比对收据 outputDigest。验收判据(可红可绿):绿=DELIBERATION_BINDING_VERIFIED,三席 1772/1796/1853B 摘要全中;红=篡改任一席收据摘要即 DELIBERATION_BINDING_BROKEN 并点名该席,exit 1。两侧输出存 docs/reports/init-018/S18/outputs/。三席对 Q1 真实分歧(加档/设准入/反对以加档结案),Q2、Q3 收敛——分歧本身即独立性的旁证(非证明)。决策点:裁定见 MIN-059,两份公约修订按 MIN-058 终审即采已落地。天花板如实记:绑定只证内容一致不证认证,freshContext 编排者自记,可信采集方 EPIC-020 未建成,故门绿不代表某席真的独立产出;第一步的执行形态声明义务不因此减轻。实测提醒:conference-position-list 作仪式 readback 判 NOTHING_COMPARED(列表读无可比字段),绑定校验须单独跑。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-155",
+        "kind": "Story",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1691,
+    "headEventHash": "ba9b2d25de45c2c88e28b2953abc12bf86cfd055a5eef3282d2883bcdaf8b101",
+    "work": 256
+  },
+  "eventsAppended": 4,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-05T09:33:00Z"
+}

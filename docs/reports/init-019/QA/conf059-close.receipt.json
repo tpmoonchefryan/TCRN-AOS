@@ -1,0 +1,285 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-CONF-059",
+  "intent": "CONF-059 收会:落 MIN-062 纪要并把六题裁定注记到 INC-031、STORY-165、INIT-019",
+  "startedAt": "2026-08-06T03:26:21Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "<outside-repository>",
+    "sha256": "0ba4339ee6c6b5755d3a4283151b874dd1950cf090a5ef3191467d9bdb7decd1",
+    "bytes": 6805
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1946,
+    "headEventHash": "0d984b3e4afef8a33764d7ec33fe72f975e329b148ee83a53e8adb953426bfd4",
+    "work": 309
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "conference-close",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-close",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T03:26:22Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--conference-id",
+        "conference:0bd036805b95d2a778091fc1",
+        "--decisions",
+        "Q1 追认候选一(仪式按 store marker 供给 knowledge 族 CAS 已在 ceremony.mjs:140)并据此收口 INC-031,Q1 附 auto-rebase 属载荷外无回读之写、与没人读回来的写不算已证冲突、另立单裁定不随本次追认,Q2 STORY-165 的 enforce 受 EPIC-025 每个阻断面管辖(治理归属不等于树形归属、165 父级为 EPIC-049)但不必等 EPIC-025 整体解封,Q2 按 enforce-failure-policy-agenda-v1.md 的 S073 节单面裁失败政策、须明示 classify 已硬编码 fail-open 属既成预选,Q3 前向修复不改写已推送历史、并把卫生门量不到 origin-main 列为真缺陷补进 INC-071 条目集,Q4 最小必要前置集为 INC-061 与 062 与 063 与 064 与 066 五单、065 与 067 与 068 非前置,Q4 附 INC-065 降级不砍:只保留摘要须带命令与运行时刻且禁止无出处的总结式断言这一条最小判据,Q5 发布序列 WF 整合分支先推以取 INC-055 跨仓一致性门的首次红腿、AOS 整合分支紧随、干净检出对将推的那个 commit 重跑全门,Q5 落在 main 上的七条(helper 一 DS 三 TMS 三)推即发布动作须 Owner 批准、推整合分支不等于发布,Q6 传输形态不在本次采纳、留 STORY-159 派工时决、两席理由原样留档,收口注记口径为每单且在 done 之前(规则三系于该单、规则一与二才是批级),收口规格须由链上 scope 派生而非收口者申报、派生失败读作红",
+        "--evidence-ids",
+        "-",
+        "--expected-version",
+        "1946",
+        "--minutes-external-key",
+        "TCRN-CROSS-MIN-062",
+        "--outcome-class",
+        "role_decision",
+        "--summary",
+        "执行形态 multi-agent-deliberative:三席(Verity 对抗席、Mara 交付席、Minerva 治理席)由彼此看不见的独立上下文产出、各自另行核实链与仓;绑定收据 7b97f4a00a0d09 已单独校验 BINDING_VERIFIED(探针少一换行时确报 DIVERGENT 故非恒真)、天花板照记为一致性已证独立性未证。六题裁定:Q1 追认 store marker 候选并把 auto-rebase 剥离另裁、Q2 归 EPIC-025 阻断面管辖但单面裁失败政策不等整体解封、Q3 前向修复、Q4 最小前置五单(061 062 063 064 066)、Q5 分批推整合分支且 WF 先于 AOS 以取 INC-055 首次红腿、Q6 不采纳留 159 派工时决。三席交集为 Q3 与 Q4 四单与 Q5 分批;分歧为 Q4 是否含 061(二比一采纳)与 Q6(一比一未采纳)。主审补一条三席未见的反证:tracked 的 remediation-batch-2-summary 仍写四前置全达成而实为假、故 INC-065 降级不砍。",
+        "--unresolved-issues",
+        "对外发布与合并 main 与发 v0.11.0 仍是唯一必停点须 Owner go,落在 main 上的七条提交的推送须 Owner 批准,S073 单面失败政策裁定含 Owner 在钩子路径外亲测 kill switch,INC-068 的公约修订须 Owner 裁定,auto-rebase 的方向须另立单裁定,Q6 传输形态待 STORY-159 派工时决",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "actor",
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "conference-id",
+        "decisions",
+        "evidence-ids",
+        "minutes-external-key",
+        "outcome-class",
+        "summary",
+        "unresolved-issues"
+      ],
+      "headAtPlanning": 1946,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": null,
+      "version": 1947
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T03:26:23Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:14d808ae0b0a5826c3850c25",
+        "--expected-version",
+        "1947",
+        "--id",
+        "work:0c26ae6aff6c1d1f9af07239",
+        "--scope",
+        "【CONF-059/MIN-062 裁定】追认候选①:仪式按 store marker 供给 knowledge 族 CAS(ceremony-plan.mjs:51 的 KNOWLEDGE_STORE_CAS_VERBS 与 ceremony.mjs:140 的 casSource 已实现、提交 4e45c8c/STORY-160)。本单据此可收口。**但 auto-rebase 剥离另裁**:写后自动 knowledge-rebase 在载荷外、无回读、SPEC 未载、属本单自标「不推荐」的候选③形态、与「没人读回来的写不算已证」冲突;三席中 Verity 判其为「未声明的③」、Minerva 判须另裁、Mara 未反对。收口动作:追认①并把被拒形状补落;auto-rebase 另立单。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1947,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:0c26ae6aff6c1d1f9af07239",
+      "version": 1948
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T03:26:24Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:14d808ae0b0a5826c3850c25",
+        "--expected-version",
+        "1948",
+        "--id",
+        "work:9a8457936b92b35bb1884db7",
+        "--scope",
+        "【CONF-059/MIN-062 裁定】enforce 归属定案:受 TCRN-CROSS-EPIC-025「每个阻断面」管辖——治理归属不等于树形归属(本单父级为 EPIC-049)。依据:tcrn-workflow/docs/activation/enforce-failure-policy-agenda-v1.md 第 39 行有「S073: PreToolUse gate」一节、头部载 Governing boundary MIN-046(CONF-043)与 Required outcome class owner_intent_required、文末载 EPIC-025 与 S073-075 保持 blocked 且 host enforce 授权数为零;observer 切 enforce 即一个 PreToolUse 阻断面(注册在项目级 settings、matcher 为全量 Bash)。**但不必等 EPIC-025 整体解封**:按该议程 S073 节单面裁失败政策即可。裁定时须明示 ssh-write-observer.mjs:632 的 catch 已硬编码 fail-open(parse-error→PASS)、即失败语义已被代码替 Owner 预选一半。08-12 评估照出、但切换须先有该单面裁定。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1948,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:9a8457936b92b35bb1884db7",
+      "version": 1949
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T03:26:25Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:14d808ae0b0a5826c3850c25",
+        "--expected-version",
+        "1949",
+        "--id",
+        "work:7d2bb6490ce764420117a085",
+        "--scope",
+        "【CONF-059/MIN-062 会议结论】受治审议已开(执行形态 multi-agent-deliberative、三席独立、绑定 BINDING_VERIFIED)。采纳集:最小必要前置=INC-061 062 063 064 066 五单(三席交集四单、061 二比一采纳、依据是它是唯一把「依赖」做成写面拒绝的咽点);065 降级不砍(只留「摘要须带命令与运行时刻、禁无出处总结式断言」一条);067/068 非前置。发布序列:WF 整合分支先推以取 INC-055 跨仓一致性门首次红腿、AOS 紧随、干净检出对将推的那个 commit 重跑全门;落在 main 上的七条(helper 1/DS 3/TMS 3)推即发布须 Owner 批准。仍待 Owner:对外发布、七条 main 提交推送、S073 单面失败政策(含亲测 kill switch)、INC-068 公约修订、auto-rebase 方向、Q6 传输形态。主审补证:tracked 的 QA/remediation-batch-2-summary.md 仍写「四前置全达成」而实为假、08-12 照读即盲签、须随 INC-071 更正。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1949,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:7d2bb6490ce764420117a085",
+      "version": 1950
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:0c26ae6aff6c1d1f9af07239",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-031",
+            "observed": "TCRN-CROSS-INC-031",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【CONF-059/MIN-062 裁定】追认候选①:仪式按 store marker 供给 knowledge 族 CAS(ceremony-plan.mjs:51 的 KNOWLEDGE_STORE_CAS_VERBS 与 ceremony.mjs:140 的 casSource 已实现、提交 4e45c8c/STORY-160)。本单据此可收口。**但 auto-rebase 剥离另裁**:写后自动 knowledge-rebase 在载荷外、无回读、SPEC 未载、属本单自标「不推荐」的候选③形态、与「没人读回来的写不算已证」冲突;三席中 Verity 判其为「未声明的③」、Minerva 判须另裁、Mara 未反对。收口动作:追认①并把被拒形状补落;auto-rebase 另立单。",
+            "observed": "【CONF-059/MIN-062 裁定】追认候选①:仪式按 store marker 供给 knowledge 族 CAS(ceremony-plan.mjs:51 的 KNOWLEDGE_STORE_CAS_VERBS 与 ceremony.mjs:140 的 casSource 已实现、提交 4e45c8c/STORY-160)。本单据此可收口。**但 auto-rebase 剥离另裁**:写后自动 knowledge-rebase 在载荷外、无回读、SPEC 未载、属本单自标「不推荐」的候选③形态、与「没人读回来的写不算已证」冲突;三席中 Verity 判其为「未声明的③」、Minerva 判须另裁、Mara 未反对。收口动作:追认①并把被拒形状补落;auto-rebase 另立单。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-031",
+        "status": "planned"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1950,
+    "headEventHash": "571500c0823ba80ada67354f06ac74df89bfe768b2573b9ff797e745f58dbd2b",
+    "work": 309
+  },
+  "knowledgeRebase": {
+    "verb": "knowledge-rebase",
+    "markerVersionBefore": 64,
+    "accepted": true,
+    "reasonCode": "KNOWLEDGE_STORE_REBASED",
+    "version": 65
+  },
+  "eventsAppended": 4,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-06T03:26:29Z"
+}

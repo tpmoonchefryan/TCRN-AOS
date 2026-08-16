@@ -1,0 +1,92 @@
+{
+  "intent": "INC-081 收口注解仪式:重录批次核销 done/active 全值回执比对,过 INC-080 回执卫生门。",
+  "readback": [
+    {
+      "expect": {
+        "status": "done",
+        "kind": "Story"
+      },
+      "flags": {
+        "id": "work:48970e7a57787d63bd4709fd"
+      },
+      "recordFields": [
+        "externalKey",
+        "kind",
+        "status",
+        "scope"
+      ],
+      "verb": "work-show"
+    },
+    {
+      "expect": {
+        "status": "active"
+      },
+      "flags": {
+        "id": "work:8797455f66197645465abb73"
+      },
+      "recordFields": [
+        "externalKey",
+        "kind",
+        "status"
+      ],
+      "verb": "work-show"
+    },
+    {
+      "expect": {
+        "status": "done",
+        "kind": "Incident"
+      },
+      "flags": {
+        "id": "work:c1fc09e48ba190c894c1c9ca"
+      },
+      "recordFields": [
+        "externalKey",
+        "kind",
+        "status"
+      ],
+      "verb": "work-show"
+    },
+    {
+      "expect": {
+        "status": "active"
+      },
+      "flags": {
+        "id": "work:f01d514e0ebf8e3d3328dcce"
+      },
+      "recordFields": [
+        "externalKey",
+        "kind",
+        "status"
+      ],
+      "verb": "work-show"
+    },
+    {
+      "expect": {
+        "status": "done",
+        "kind": "Incident"
+      },
+      "flags": {
+        "id": "work:a5d3607e14d5f2a50bd0695e"
+      },
+      "recordFields": [
+        "externalKey",
+        "kind",
+        "status"
+      ],
+      "verb": "work-show"
+    }
+  ],
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "steps": [
+    {
+      "flags": {
+        "actor": "agent:fable",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "id": "work:4d0ecd9c1e6ea5292ef08330",
+        "scope": "【INC-081 收口】重录批次核销完成:弃轨内容已按语义重录于 PG 权威链(v2133→2152),本仪式全值回执比对通过(INC-080 回执卫生门)。"
+      },
+      "verb": "work-annotate"
+    }
+  ],
+  "story": "TCRN-CROSS-INC-081"
+}

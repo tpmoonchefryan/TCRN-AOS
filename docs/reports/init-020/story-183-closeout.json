@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-183",
+  "intent": "STORY-183 收口:拒绝面语料集与门面宕机演练完成。19 条拒绝语料(承接 INC-047/069 保护目标)+mutation 证人(移除任一规则语料翻转)+宕机演练(break-glass 只读+影子队列 replay),正腿/红腿实证。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:d8470bce54832e7e2e29f813",
+        "scope": "【收口(2026-08-06)】拒绝面语料集与门面宕机演练完成。交付物:①deploy/aos-resident-cockpit/facade-write-rejection-corpus.mjs——拒绝语料数据 19 条+镜像/变异机制+scratch fixture;②facade-write-rejection-corpus.test.mjs(正腿+mutation 证人+两侧判决统一);③facade-downtime-drill.mjs 与 facade-downtime-drill.test.mjs(宕机演练:UP→DOWN 停门面→break-glass 白名单 SSH status 只读(使用记录带理由、allowlisted 判真)→影子队列缓冲治理写→恢复→经门面 /api/ceremony replay 落地+回读+裁剪);④fallback-cli.mjs 仅 export flagsFromQueuedArgv(供演练复用)。语料覆盖:INC-047(缺 actor→CEREMONY_THREW_BEFORE_RECEIPT、缺回读→PAYLOAD_INVALID)、INC-069(段内走私 reserved flag/读动词/authority-output/一次性供权族/fixture-only/未声明 flag/缺必填 flag/未知动词/不可解析回读→各自具名 reason code 整批拒)、INC-064(dryRun 直通 CEREMONY_PLANNED_ONLY 不推链、partition 路由、未知分区 MCP_PARTITION_UNKNOWN)。验收两侧:正腿=语料全绿(全拒);红腿=mutation 证人——移除任一拒绝规则,对应语料必转 PASS(19 条全翻转,无 mutation 纯净镜像 0 翻转,证人有牙);两侧同码(facade 写面与本地 ceremony 同判)。宕机演练:break-glass 使用记录带理由、fallback replay 经正门重放。门全绿:pnpm test 505/505、read-face:gate、local-purity:proof、doc-topology:proof、control-tree:proof。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:d8470bce54832e7e2e29f813", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:d8470bce54832e7e2e29f813", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:d8470bce54832e7e2e29f813", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:d8470bce54832e7e2e29f813" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-183", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

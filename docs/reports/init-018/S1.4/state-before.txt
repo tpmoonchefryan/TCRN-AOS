@@ -1,0 +1,39 @@
+=== 五归档目录 chflags 前现状 ===
+total 0
+drwxr-xr-x@ 6 ryanlan  staff  - 192 Aug  3 15:08 Joi-Button
+drwxr-xr-x@ 6 ryanlan  staff  - 192 Aug  4 15:16 Joi-Button-shadow
+drwxr-xr-x@ 7 ryanlan  staff  - 224 Jul 30 10:59 TCRN-AOS
+drwxr-xr-x@ 6 ryanlan  staff  - 192 Aug  3 15:25 TCRN-Design-System
+drwxr-xr-x@ 5 ryanlan  staff  - 160 Aug  3 16:04 TCRN-Design-System-shadow
+drwxr-xr-x@ 6 ryanlan  staff  - 192 Aug  3 15:26 TCRN-TMS
+drwxr-xr-x@ 5 ryanlan  staff  - 160 Aug  3 16:04 TCRN-TMS-shadow
+drwxr-xr-x@ 6 ryanlan  staff  - 192 Aug  3 15:20 cross-project
+drwxr-xr-x@ 5 ryanlan  staff  - 160 Aug  4 14:41 cross-project-shadow
+drwxr-xr-x@ 3 ryanlan  staff  -  96 Jul 22 02:58 release-trust
+=== 五个归档目录顶层条目 ===
+total 32
+-rw-r--r--@   1 ryanlan  staff  - 12626 Jul 30 10:59 ARCHIVED.md
+drwxr-xr-x@ 614 ryanlan  staff  - 19648 Jul 30 02:19 attestations
+drwxr-xr-x@   2 ryanlan  staff  -    64 Jul 26 18:58 evidence-locator
+drwxr-xr-x@   2 ryanlan  staff  -    64 Jul 26 18:58 transient
+drwxr-xr-x@   3 ryanlan  staff  -    96 Jul 26 18:58 workspace
+total 0
+drwxr-xr-x@ 3 ryanlan  staff  - 96 Aug  3 15:20 authority
+drwxr-xr-x@ 2 ryanlan  staff  - 64 Jul 21 04:21 evidence-locator
+drwxr-xr-x@ 2 ryanlan  staff  - 64 Jul 21 04:21 transient
+drwxr-xr-x@ 3 ryanlan  staff  - 96 Jul 21 17:18 workspace
+total 0
+drwxr-xr-x@ 3 ryanlan  staff  - 96 Aug  3 15:25 authority
+drwxr-xr-x@ 2 ryanlan  staff  - 64 Jul 21 16:33 evidence-locator
+drwxr-xr-x@ 2 ryanlan  staff  - 64 Jul 21 16:33 transient
+drwxr-xr-x@ 3 ryanlan  staff  - 96 Jul 21 17:18 workspace
+total 0
+drwxr-xr-x@ 3 ryanlan  staff  - 96 Aug  3 15:26 authority
+drwxr-xr-x@ 2 ryanlan  staff  - 64 Jul 25 04:29 evidence-locator
+drwxr-xr-x@ 2 ryanlan  staff  - 64 Jul 25 04:29 transient
+drwxr-xr-x@ 3 ryanlan  staff  - 96 Jul 25 04:29 workspace
+total 0
+drwxr-xr-x@ 3 ryanlan  staff  - 96 Aug  3 15:08 authority
+drwxr-xr-x@ 2 ryanlan  staff  - 64 Jul 31 18:02 evidence-locator
+drwxr-xr-x@ 2 ryanlan  staff  - 64 Jul 31 18:02 transient
+drwxr-xr-x@ 3 ryanlan  staff  - 96 Jul 31 18:02 workspace

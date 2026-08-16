@@ -1,0 +1,22 @@
+[
+  {
+    "label": "close-166-dispatch-167",
+    "arguments": {
+      "partition": "cross-project",
+      "payload": {
+        "schemaVersion": "aos.local-client-ceremony.v1",
+        "story": "TCRN-CROSS-INIT-019",
+        "intent": "close STORY-166 (projection freshness convention + unified inspection in verify), dispatch STORY-167 to active (owner queue)",
+        "steps": [
+          { "verb": "work-transition", "flags": { "id": "work:3e8d82154ed0cb757d0b4a8d", "status": "done" } },
+          { "verb": "work-transition", "flags": { "id": "work:23b5106dead9c12817d5da20", "status": "ready" } },
+          { "verb": "work-transition", "flags": { "id": "work:23b5106dead9c12817d5da20", "status": "active" } }
+        ],
+        "readback": [
+          { "verb": "work-show", "flags": { "id": "work:3e8d82154ed0cb757d0b4a8d" }, "expect": { "status": "done" } },
+          { "verb": "work-show", "flags": { "id": "work:23b5106dead9c12817d5da20" }, "expect": { "status": "active" } }
+        ]
+      }
+    }
+  }
+]

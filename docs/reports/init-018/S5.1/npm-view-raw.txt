@@ -1,0 +1,10 @@
+name = 'promptfoo'
+version = '0.121.20'
+license = 'MIT'
+maintainers = [
+  'sklein12 <redacted-email>',
+  'mdangelo <redacted-email>',
+  'ianw <redacted-email>',
+  'justinbeckwith <redacted-email>',
+  'faizanminhas <redacted-email>'
+]

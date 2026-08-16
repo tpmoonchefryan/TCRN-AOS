@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-138",
+  "intent": "收口:终版 scope + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:73730b2b65453c4473e95b5b",
+        "scope": "R2 web-only 轻量船运 ship-web.mjs(关联 TCRN-AOS-INC-051)。现象:INC-049 管线无船 web 步骤,全量 apply 6×/日为临时态。修复:deploy/aos-resident-cockpit/ship-web.mjs,拓扑全量自 manifest.mjs 导入禁手抄地址,双向 per-file sha256 账本,--dry-run 不触网。验收:dry-run 计划与账本+账本不等分支红测;实跑与排程切换归审查层。MIN-055。执行结果@2026-08-05:已完成。新建 ship-web.mjs:前置(apps/web/dist 存在+bundle 带 generatedAt 戳)→装配 web 根(renderAosShellHtml(path:/)+每 MODULE_VIEWS 路由壳+复制 dist assets;非产品壳原样)→rsync→两侧各用自家 node 算逐文件 sha256 账本双向全值比对→JSON 报告;VM_HOST/VM_WEB/MODULE_VIEWS 全自 manifest.mjs。--dry-run 全程不触网存档。node --test 9/9 绿(含账本不等红测/缺文件红测/dry-run 不触网/前置失败/权限回归)。实跑一次 TRANSFER_LEDGERS_EQUAL(14 文件,两侧 fileSetDigest=0deaa96a…),活面 freshness 门 exit 0 fresh(generatedAt 16:34:57Z,新于船前 16:05:45Z)。事故:首跑 mkdtemp 0700 经 rsync --archive --perms 传播致 read face 全 404,已修(staging chmod 755+stagingRootMode 回归锚+远端恢复 0755)并留档 outputs/real-run-first-0700-incident.json。证据包 TCRN-AOS/docs/reports/init-018/R2/。范围外缺陷:无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:73730b2b65453c4473e95b5b", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:73730b2b65453c4473e95b5b" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-138", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

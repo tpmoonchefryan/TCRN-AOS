@@ -1,0 +1,150 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-020",
+  "intent": "三轮验收强化批立单(强化先行,Owner 常令):INC-090..094 五张强化单。键号经反查(INC 最高 089),id 经派生律预算。只立单不执行。",
+  "steps": [
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-090",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:298fa0e55765409d570e794c",
+        "scope": "【强化|核销门量链化】来源:2026-08-07 三轮验收。失效类别(实证):closeout-verify 的 items 与 redLeg 只作用于人写 manifest——INC-086/088 链上收口注记无义务红腿照样 18/18 reconciled(「门量错对象」再犯);未入 items 的单永不被发现(items 人写非链派生)。机制:closeout-verify 增链背书模式——①items 自链派生(经读面 work_list 按批次/键号区间),人写清单与链派生集 diff 非空即红;②逐单拉链上收口注记,须含红腿实录标记与指名证据物(路径/回执/commit sha/reason code 至少其一),缺失即红;③manifest 与链注记双源比对。判据两侧:正腿=对 QA2 批 18 单对链复核(应报出 086/088 缺红腿);红腿=测试链上造一单 done 无红腿注记必红+人写清单删一单必红。归属:tcrn-workflow(closeout-verify)+读面。前置:无。本单是 INC-095/096 的可检查前置。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-091",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:5b5fe954dedcb1a5d685b677",
+        "scope": "【强化|回执权威锚定与物化件政策】来源:2026-08-07 三轮验收。失效类别(二三轮连犯):形态门放行手工回执——二轮凭空伪造、三轮真值裁剪衍生件(story 字段改写、19 步裁 4 步,startedAt 同真批),且 null 头直接跳过校验、形态完好伪造版本号/hash 可过门(注入实证)。机制:①receipt-hygiene 增在线锚定:可达时逐回执把 chainBefore/chainAfter(version+hash 全值)与各 step version 对权威读面 event 流核对,锚不上具名红;离线逐件标 anchored:false 不默绿;修 null 头跳过;②政策(公约登记):归档回执必须是引擎/写面物化件的逐字节拷贝(evidence/mcp-ceremony-write/receipts/ 或门面 writeRoot),手工组装/裁剪衍生件=违规;门对「同批次裁剪指纹」(startedAt 相同而 steps 为子集)具名报。判据两侧:正腿=存量回执全锚定;红腿=形态完好伪造件必红+裁剪衍生件必红。归属:TCRN-AOS。前置:无。INC-095 回执替换的守门方。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-092",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:4c6565e57256658822ebb16c",
+        "scope": "【强化|署名通道化与执行形态申报】来源:2026-08-07 三轮验收。失效类别(实证):72 条收口事件 actor 全由载荷手写 agent:fable,与「移交 Codex」冲突,链上无从分辨执行者;18 注记零执行形态声明(审议声明纪律已有,收口批无对应义务)。机制:①两宿主写面客户端各自声明通道身份(如 CLIENT_HOST=claude-code|codex 经 MCP 服务器配置),门面回执增记 channelHost 与 payload actor 并列,不匹配具名标注(先观测不拒);②公约:收口批 intent/注记必含执行形态与执行者声明(单上下文/多代理、宿主、persona);③署名誓言:各宿主签自己的模型 persona(Claude=agent:fable,Codex=agent:gpt-5-codex 类),模板复制他者签名=记录违规。判据两侧:正腿=新仪式回执携 channelHost;红腿=payload actor 与通道不符时回执具名 mismatch。归属:TCRN-AOS(两面客户端+门面)+docs 公约。前置:无。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-093",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:ff778709779d141bb7cf23cb",
+        "scope": "【强化|发布物铸造门】来源:2026-08-07 三轮验收。失效类别(实证):v0.11.4..7 四个 tag 在 verify:p8 红着时铸造;发版形态偏离先例——0.11.4 的 release 提交携 44 文件实质改动、0.11.5/6/7 无 release 提交(先例=fix/feat 与 release 成对,release 只动 manifest/文档 16 文件形态)。机制:①task.mjs 发版目标铸 tag 前置 verifyP8,红即拒铸;②常备核查:本地新于远端最高 tag 的每个 tag 须有配对的 p8 绿证据物(带日期),缺即红;③release 提交形态断言:release(x.y.z) 提交 diff 限 manifest/CHANGELOG/发版文集合,实质源码改动混入即红。判据两侧:正腿=下次发版全流程绿;红腿=种一个 finding 后试铸 tag 必拒+源码文件掺进 release 提交必红。归属:tcrn-workflow。前置:无。INC-097/098 的可检查前置。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-094",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:67086511a3390c3a01c180df",
+        "scope": "【强化|隐私门类扩与全内容作用域】来源:2026-08-07 三轮验收。失效类别(实证):WF privacy.mjs 模式表无凭据 URL 类(postgresql://user:pass@ 完全不在扫描面,口令靠 127.0.0.1 顺带撞红)、无私有主机名类(tcrn-platform-dev×123+deploy@×1 全盲——把门修绿≠安全);AOS evidence-hygiene 后缀制(.txt/.ts 在作用域外,33af858 与 cockpit-data 两代泄漏同因)。机制:①WF 增两类模式:任意 scheme 的 user:pass@ 凭据 URL;私有主机名名册(声明式:tcrn-platform-dev、*.lan 等)+user@host 形态;②AOS 门改按内容判定(或扩展名全量),并 INC-089 处方执行;③两仓类清单对齐(一份类名册两处消费,承 breakglass 先例)。判据两侧:正腿=对现仓全跑出清单;红腿=.ts 植入主机路径必红+postgresql:// 带假口令必红+主机名植入必红。归属:tcrn-workflow+TCRN-AOS。前置:无。INC-097/098 的可检查前置。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:298fa0e55765409d570e794c"
+      },
+      "recordFields": [
+        "externalKey",
+        "kind",
+        "status"
+      ],
+      "expect": {
+        "externalKey": "TCRN-CROSS-INC-090",
+        "kind": "Incident",
+        "status": "planned"
+      },
+      "expectSameAs": [
+        {
+          "field": "scope",
+          "step": 1,
+          "flag": "scope"
+        }
+      ]
+    },
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:67086511a3390c3a01c180df"
+      },
+      "recordFields": [
+        "externalKey",
+        "kind",
+        "status"
+      ],
+      "expect": {
+        "externalKey": "TCRN-CROSS-INC-094",
+        "kind": "Incident",
+        "status": "planned"
+      },
+      "expectSameAs": [
+        {
+          "field": "scope",
+          "step": 9,
+          "flag": "scope"
+        }
+      ]
+    }
+  ]
+}

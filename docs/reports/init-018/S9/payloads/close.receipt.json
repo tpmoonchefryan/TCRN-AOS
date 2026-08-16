@@ -1,0 +1,174 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-149",
+  "intent": "收口:终版 scope + 置 done",
+  "startedAt": "2026-08-04T21:40:50Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "<outside-repository>",
+    "sha256": "797bf88b728e55925cb8e72a0b6868fec50c5b9675bea91c05f7b03145340a22",
+    "bytes": 1943
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1625,
+    "headEventHash": "04031636f992ddafcc4cc58a413271ddecbed8e2019eb89215daffda866f60ad",
+    "work": 248
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:deepseek-v4-flash",
+        "--at",
+        "2026-08-04T21:40:51Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1625",
+        "--id",
+        "work:804694151951bf3ded342261",
+        "--scope",
+        "S9 观测选型 spike(D4 已预授权执行层)。三候选运营成本表(Langfuse 自托管/OTel collector+轻 sink+座舱渲染/Jaeger all-in-one):进程数、内存、持久化依赖、月维护动作;运营成本为决定性审查;最轻候选出 PoC 可执行清单(VM 姿势沿 CONF-007:绑 127.0.0.1 仅 SSH 隧道)。VM 起服务实操归审查层。验收:成本表+裁定建议+PoC 清单。MIN-057。进度@2026-08-05: 已完成=三候选运营成本对比表(spike.md:进程数/内存/持久化依赖/月维护;Langfuse ≥4 进程≥4GB PG+Redis 强依赖;Jaeger all-in-one 单进程~0.5-1GB 内嵌存储重启丢数生产需外部存储;OTel Collector 1 进程~100-200MB 零强依赖)+裁定建议(运营成本决定性→选 OTel Collector+文件 JSONL sink+座舱渲染,与 S10 OTLP span 契合)+PoC 可执行清单(spike.md 第三节:VM 沿 CONF-007 绑 127.0.0.1 仅 SSH 隧道;systemd 单元+config.yaml otlp 回环+batch+文件 exporter 轮转;座舱只读渲染;绿×2+红×1 验证)。来源:Langfuse 官方 sizing/Jaeger deployment 2.1 架构/OTel Collector 对比。VM 起服务实操归审查层。阻塞=无。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1625,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:804694151951bf3ded342261",
+      "version": 1626
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:deepseek-v4-flash",
+        "--at",
+        "2026-08-04T21:40:52Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1626",
+        "--id",
+        "work:804694151951bf3ded342261",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1626,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:804694151951bf3ded342261",
+      "version": 1627
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:804694151951bf3ded342261",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-149",
+            "observed": "TCRN-CROSS-STORY-149",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "S9 观测选型 spike(D4 已预授权执行层)。三候选运营成本表(Langfuse 自托管/OTel collector+轻 sink+座舱渲染/Jaeger all-in-one):进程数、内存、持久化依赖、月维护动作;运营成本为决定性审查;最轻候选出 PoC 可执行清单(VM 姿势沿 CONF-007:绑 127.0.0.1 仅 SSH 隧道)。VM 起服务实操归审查层。验收:成本表+裁定建议+PoC 清单。MIN-057。进度@2026-08-05: 已完成=三候选运营成本对比表(spike.md:进程数/内存/持久化依赖/月维护;Langfuse ≥4 进程≥4GB PG+Redis 强依赖;Jaeger all-in-one 单进程~0.5-1GB 内嵌存储重启丢数生产需外部存储;OTel Collector 1 进程~100-200MB 零强依赖)+裁定建议(运营成本决定性→选 OTel Collector+文件 JSONL sink+座舱渲染,与 S10 OTLP span 契合)+PoC 可执行清单(spike.md 第三节:VM 沿 CONF-007 绑 127.0.0.1 仅 SSH 隧道;systemd 单元+config.yaml otlp 回环+batch+文件 exporter 轮转;座舱只读渲染;绿×2+红×1 验证)。来源:Langfuse 官方 sizing/Jaeger deployment 2.1 架构/OTel Collector 对比。VM 起服务实操归审查层。阻塞=无。",
+            "observed": "S9 观测选型 spike(D4 已预授权执行层)。三候选运营成本表(Langfuse 自托管/OTel collector+轻 sink+座舱渲染/Jaeger all-in-one):进程数、内存、持久化依赖、月维护动作;运营成本为决定性审查;最轻候选出 PoC 可执行清单(VM 姿势沿 CONF-007:绑 127.0.0.1 仅 SSH 隧道)。VM 起服务实操归审查层。验收:成本表+裁定建议+PoC 清单。MIN-057。进度@2026-08-05: 已完成=三候选运营成本对比表(spike.md:进程数/内存/持久化依赖/月维护;Langfuse ≥4 进程≥4GB PG+Redis 强依赖;Jaeger all-in-one 单进程~0.5-1GB 内嵌存储重启丢数生产需外部存储;OTel Collector 1 进程~100-200MB 零强依赖)+裁定建议(运营成本决定性→选 OTel Collector+文件 JSONL sink+座舱渲染,与 S10 OTLP span 契合)+PoC 可执行清单(spike.md 第三节:VM 沿 CONF-007 绑 127.0.0.1 仅 SSH 隧道;systemd 单元+config.yaml otlp 回环+batch+文件 exporter 轮转;座舱只读渲染;绿×2+红×1 验证)。来源:Langfuse 官方 sizing/Jaeger deployment 2.1 架构/OTel Collector 对比。VM 起服务实操归审查层。阻塞=无。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-149",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1627,
+    "headEventHash": "c0e4b5b052df6966fd33de113f750c20aaae21c23d8ce3f5f325f2c15d43e1b1",
+    "work": 248
+  },
+  "eventsAppended": 2,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-04T21:40:54Z"
+}

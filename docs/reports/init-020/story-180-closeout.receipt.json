@@ -1,0 +1,271 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-180",
+  "intent": "STORY-180 收口:scratch 链往返迁移实证完成,窗前硬件②。file→pg→file 完整往返 diff 为空+版本连续+marker 保持,中途注入差异被 verify 拦截,证据归档。",
+  "startedAt": "2026-08-06T09:24:17Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "docs/reports/init-020/story-180-closeout.json",
+    "sha256": "11ebbf6ee8d7754fab6217b8a0c6651828edf20a94c495fffd542abe64be0594",
+    "bytes": 2291
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2063,
+    "headEventHash": "7412f997e90418daec37d71403b3ad4a1be402e6269b8ea902ac2c67fe676229",
+    "work": 336
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:24:18Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2063",
+        "--id",
+        "work:41cd58d7aec961fc483eb97d",
+        "--scope",
+        "【收口(2026-08-06)】scratch 链往返迁移实证完成(窗前硬件②)。交付物:①packages/pg-backend/test/evidence-roundtrip.mjs——往返实证脚本(file 链+knowledge 店+artifact 店,plan/execute file→pg→verify→tamper 红腿→re-execute→rollback→verify,逐步取证);②evidence/aos-s180-roundtrip-migration.json——实证归档(INC-042 约束:无宿主路径,已校验 grep /Users/ 0 命中)。验收两侧:正腿=roundTripEmpty true(export/version/head/checkpoint 四维 diff 全空,往返后文件侧与 baseline 完全一致);红腿=中途 disable trigger 篡改 PG 事件 payload_hash → verifyMigration 红 WORKSPACE_MIGRATION_VERIFY_MISMATCH,复位后 re-execute 绿。8 步证据链:baseline→plan-file-to-pg→execute-file-to-pg→verify-pg→red-leg-tamper→re-execute-pg→rollback-pg-to-file→roundtrip-diff-empty。判据与 STORY-176 等价门一致(逐事件字节等价+版本连续+head+两店 marker)。此单为窗前四硬件之一(往返迁移实证)的产出处。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2063,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:41cd58d7aec961fc483eb97d",
+      "version": 2064
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:24:19Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2064",
+        "--id",
+        "work:41cd58d7aec961fc483eb97d",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2064,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:41cd58d7aec961fc483eb97d",
+      "version": 2065
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:24:21Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2065",
+        "--id",
+        "work:41cd58d7aec961fc483eb97d",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2065,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:41cd58d7aec961fc483eb97d",
+      "version": 2066
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:24:22Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2066",
+        "--id",
+        "work:41cd58d7aec961fc483eb97d",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2066,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:41cd58d7aec961fc483eb97d",
+      "version": 2067
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:41cd58d7aec961fc483eb97d",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-180",
+            "observed": "TCRN-CROSS-STORY-180",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【收口(2026-08-06)】scratch 链往返迁移实证完成(窗前硬件②)。交付物:①packages/pg-backend/test/evidence-roundtrip.mjs——往返实证脚本(file 链+knowledge 店+artifact 店,plan/execute file→pg→verify→tamper 红腿→re-execute→rollback→verify,逐步取证);②evidence/aos-s180-roundtrip-migration.json——实证归档(INC-042 约束:无宿主路径,已校验 grep /Users/ 0 命中)。验收两侧:正腿=roundTripEmpty true(export/version/head/checkpoint 四维 diff 全空,往返后文件侧与 baseline 完全一致);红腿=中途 disable trigger 篡改 PG 事件 payload_hash → verifyMigration 红 WORKSPACE_MIGRATION_VERIFY_MISMATCH,复位后 re-execute 绿。8 步证据链:baseline→plan-file-to-pg→execute-file-to-pg→verify-pg→red-leg-tamper→re-execute-pg→rollback-pg-to-file→roundtrip-diff-empty。判据与 STORY-176 等价门一致(逐事件字节等价+版本连续+head+两店 marker)。此单为窗前四硬件之一(往返迁移实证)的产出处。",
+            "observed": "【收口(2026-08-06)】scratch 链往返迁移实证完成(窗前硬件②)。交付物:①packages/pg-backend/test/evidence-roundtrip.mjs——往返实证脚本(file 链+knowledge 店+artifact 店,plan/execute file→pg→verify→tamper 红腿→re-execute→rollback→verify,逐步取证);②evidence/aos-s180-roundtrip-migration.json——实证归档(INC-042 约束:无宿主路径,已校验 grep /Users/ 0 命中)。验收两侧:正腿=roundTripEmpty true(export/version/head/checkpoint 四维 diff 全空,往返后文件侧与 baseline 完全一致);红腿=中途 disable trigger 篡改 PG 事件 payload_hash → verifyMigration 红 WORKSPACE_MIGRATION_VERIFY_MISMATCH,复位后 re-execute 绿。8 步证据链:baseline→plan-file-to-pg→execute-file-to-pg→verify-pg→red-leg-tamper→re-execute-pg→rollback-pg-to-file→roundtrip-diff-empty。判据与 STORY-176 等价门一致(逐事件字节等价+版本连续+head+两店 marker)。此单为窗前四硬件之一(往返迁移实证)的产出处。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-180",
+        "kind": "Story",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2067,
+    "headEventHash": "80bec8bf7014f7a178c76ade63ba2b432017a5bca25c4c8848ab9406ce7de854",
+    "work": 336
+  },
+  "knowledgeRebase": {
+    "verb": "knowledge-rebase",
+    "markerVersionBefore": 80,
+    "accepted": true,
+    "reasonCode": "KNOWLEDGE_STORE_REBASED",
+    "version": 81
+  },
+  "eventsAppended": 4,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-06T09:24:26Z"
+}

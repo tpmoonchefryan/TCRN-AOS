@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-137",
+  "intent": "收口:终版 scope + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:6f57a889a92275d690b6124b",
+        "scope": "R1 freshness 门窗口对齐排程节奏(关联 TCRN-AOS-INC-051)。现象:maxAgeHours 默认 48h 对 4h 排程恒绿(实测 7.23h 陈旧判 fresh 零 findings)。修复:TCRN-AOS/scripts/read-face-freshness.mjs 默认改 9h+--max-age-hours 旗标+超窗退出码非 0。验收:陈旧夹具红测一红一绿存档;活面运行绿。派工细则见简报 R1;执行层受限链写权按 MIN-055。执行结果@2026-08-05:已完成。默认 48→9h;--max-age-hours 旗标(优先级 flag>env>default);超窗退出码非 0 为既有契约确认未坏。活面实测 exit 0 fresh(age 0.37h 零 findings);node --test scripts/read-face-freshness.test.mjs 6/6 绿含红绿夹具;陈旧 -20h 夹具 exit 1 verdict not-fresh finding 命中、同夹具 +--max-age-hours 24 转绿;测试已接入 pnpm test。证据包 TCRN-AOS/docs/reports/init-018/R1/。红测结论:红已被演示并红绿双份存档。范围外缺陷:无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:6f57a889a92275d690b6124b", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:6f57a889a92275d690b6124b" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-137", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+✔ precondition: apps/web/dist exists and its bundle carries a generation stamp (5.155625ms)
+✔ green: an identical far side makes the ledger comparison pass (304.013667ms)
+✔ red: a far side with a mismatched byte fails, naming the file (118.795959ms)
+✔ red: a far side missing a file reds on missingOnVm (115.364ms)
+✔ dry-run touches no network: neither the rsync nor the remote ledger runs (60.921791ms)
+✔ the staging root is world-traversable (0700 would lock the read face out) (60.978166ms)
+✔ precondition fails when the local build is absent (2.69675ms)
+✔ the assembled web root is the served cockpit, not the /cockpit product shell (59.773708ms)
+✔ comparison predicates exist and are consistent with the injected flow (0.173583ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 774.621083

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-143",
+  "intent": "收口:终版 scope + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:54b578b6279e276c12279e8c",
+        "scope": "S15 常驻热路径字节计量:平台根与各仓 CLAUDE.md、MEMORY 索引、各仓 .mcp.json 的字节基线表(只计字节,表头注明不冒充 token)+复测口径文档(公约大改或模型代际更替触发)。验收:计量脚本+首份基线表存档。对应 G5 前置。MIN-055。执行结果@2026-08-05:已完成。计量脚本 scripts/bench/measure-context-bytes.mjs(只计字节,输出注明不冒充 token;absent 文件记 absent 而非 0;MEMORY 索引路径按 Claude Code project-slug 约定推导)。首份基线 context-bytes.json/.md:平台根 CLAUDE.md 18829、TCRN-TMS 5550、TCRN-Design-System 8479、TCRN-AOS 8880、tcrn-workflow 7347、tcrn-workflow-helper CLAUDE.md absent、MEMORY.md 11904、平台根 .mcp.json 1490(各仓无独立 .mcp.json),在场合计 62479 bytes。复测口径 remeasure-policy.md:触发=公约大改/模型代际切换,复测方法=重跑脚本 diff 基线,MEMORY 属运行态非每次强制。证据包 tcrn-workflow/docs/reports/init-018/S15/。范围外缺陷:无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:54b578b6279e276c12279e8c", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:54b578b6279e276c12279e8c" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-143", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

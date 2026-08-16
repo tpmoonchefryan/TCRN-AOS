@@ -1,0 +1,221 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INC-032",
+  "intent": "INC-032 收口:patrol 按 Owner 裁定删除;两 plist PATH 修复经三次真触发验收 exit 0;新增 scheduler:health 门(两侧可动,首日抓到一次真实失败);修复中发现并修掉管线缺一步 apply-read-face。",
+  "startedAt": "2026-08-05T05:10:08Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "<outside-repository>",
+    "sha256": "06b139c987af69dc3f4ff67d823988af6895381a0639d193d49ab6d4ee0804d2",
+    "bytes": 4224
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1658,
+    "headEventHash": "16fd8f3545873ab42856f2269b3a1ac7c2f83339b9192c8d5952200a7e307c30",
+    "work": 256
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T05:10:09Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1658",
+        "--id",
+        "work:0d1f26b84c240f6f4f0b5cbe",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1658,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:0d1f26b84c240f6f4f0b5cbe",
+      "version": 1659
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T05:10:10Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1659",
+        "--id",
+        "work:0d1f26b84c240f6f4f0b5cbe",
+        "--scope",
+        "【排程与唤起器同根失效;审查层自身缺陷】现象:三个 launchd 任务共用 `/bin/sh -lc` 不 source ~/.zshrc,PATH 无 nvm 下的 pnpm/claude——read-face-refresh 与 paired-backup 每次 exit 127,init018-patrol `spawn claude ENOENT` 且在抛错前已打印 `CONTINUATION_SPAWNED pid=undefined`(自造假绿)。读面刷新排程自装载起从未成功过一次,freshness 门当时红(12.15h>9h)。根因复现:`env -i /bin/sh -lc 'command -v pnpm'` 无输出。\n\n【修复完成 2026-08-05,全部经真触发验收,非语法推断】①**patrol 按 Owner 2026-08-05 裁定直接删除**:~/Library/LaunchAgents/com.tcrn.init018-patrol.plist、tcrn-workflow/tools/init018-patrol/、~/.tcrn-init018-patrol.json 三者全删,launchctl 名录零残留;连带解决「唤起器指向 Owner 门」与「日志谎报」两项,无需再修。②两份 plist 改为显式 `EnvironmentVariables.PATH`(nvm 项与 package.json engines.node 24.16.0 同钉)且 `-lc`→`-c`,不再依赖登录 shell;已装副本与仓内模板同字节。③**新增 `pnpm --dir TCRN-AOS scheduler:health`**(scripts/scheduler-health.mjs):名册由仓内 plist 模板的 Label 派生(不手写),两侧断言=模板对应的 agent 须已加载且末次退出为 0;`TCRN_SCHEDULER_PROBE` 注入 launchctl 输出以驱动红侧。此门此前完全不存在——`grep -rn launchctl` 全仓零命中,正是 127 能不被察觉跑一天的原因。\n\n【修复中发现并一并修掉的第二缺陷】首次真触发后 127 消失,露出下一层:job 收尾 exit 2「读面取不到」。查明**读面从未重启**(NRestarts=0,自 08-04 15:48 持续 active),真因是我上一轮把 `apply-read-face.mjs` 从管线里拿掉了——`apply.mjs` 换掉读面服务的静态根,而使读面部署到位并探测应答(READ_FACE_ANSWERS_ON_LAN_READONLY)的是 apply-read-face。管线补回该步并加**有界重试**(3×10s,仅容忍不可达,陈旧仍判红),第三次真触发 exit 0。\n\n【验收实测】三次真触发:①exit 2(暴露管线缺步)→②exit 1(重试不足以掩盖缺步,证明重试没有变成遮羞布)→③**exit 0**。终态:`launchctl list` 两任务末次退出均 0;`scheduler:health` → SCHEDULER_AGENTS_HEALTHY exit 0;`read-face-freshness` → fresh、age 0.127h、**服务的 cross 链版本 1658**(含 INIT-018 全 19 单、MIN-054..058 与 INC-032..039)。红测:重放 127 → SCHEDULER_AGENT_LAST_RUN_FAILED exit 1 并点名任务+给出诊断;agent 未加载 → SCHEDULER_AGENT_NOT_LOADED exit 1。**且该门在第一天就抓到一次非演习的真实失败**(上述 exit 2),这比合成红测更硬。证据包 TCRN-AOS/docs/reports/init-018/INC-032/(commands.md 可原样重跑 + outputs 红绿双份)。\n\n【残余,不隐瞒】(a)`scheduler:health` 无任何东西自动跑它(不宜进 CI:CI 无 launchd),须由审查层巡检或操作者手动跑——机器化落点待定;(b)paired-backup 仍用 StartInterval 21600(睡眠即弃班),因其 `--if-due` 语义可在下一班补做,故未擅改节奏,如需改为日历制另立;(c)plist 内 PATH 含本机绝对路径与 nvm 版本号,换机或升 node 须同步改(已写进模板注释)。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1659,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:0d1f26b84c240f6f4f0b5cbe",
+      "version": 1660
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T05:10:11Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1660",
+        "--id",
+        "work:0d1f26b84c240f6f4f0b5cbe",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1660,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:0d1f26b84c240f6f4f0b5cbe",
+      "version": 1661
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:0d1f26b84c240f6f4f0b5cbe",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-032",
+            "observed": "TCRN-CROSS-INC-032",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Incident",
+            "observed": "Incident",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【排程与唤起器同根失效;审查层自身缺陷】现象:三个 launchd 任务共用 `/bin/sh -lc` 不 source ~/.zshrc,PATH 无 nvm 下的 pnpm/claude——read-face-refresh 与 paired-backup 每次 exit 127,init018-patrol `spawn claude ENOENT` 且在抛错前已打印 `CONTINUATION_SPAWNED pid=undefined`(自造假绿)。读面刷新排程自装载起从未成功过一次,freshness 门当时红(12.15h>9h)。根因复现:`env -i /bin/sh -lc 'command -v pnpm'` 无输出。\n\n【修复完成 2026-08-05,全部经真触发验收,非语法推断】①**patrol 按 Owner 2026-08-05 裁定直接删除**:~/Library/LaunchAgents/com.tcrn.init018-patrol.plist、tcrn-workflow/tools/init018-patrol/、~/.tcrn-init018-patrol.json 三者全删,launchctl 名录零残留;连带解决「唤起器指向 Owner 门」与「日志谎报」两项,无需再修。②两份 plist 改为显式 `EnvironmentVariables.PATH`(nvm 项与 package.json engines.node 24.16.0 同钉)且 `-lc`→`-c`,不再依赖登录 shell;已装副本与仓内模板同字节。③**新增 `pnpm --dir TCRN-AOS scheduler:health`**(scripts/scheduler-health.mjs):名册由仓内 plist 模板的 Label 派生(不手写),两侧断言=模板对应的 agent 须已加载且末次退出为 0;`TCRN_SCHEDULER_PROBE` 注入 launchctl 输出以驱动红侧。此门此前完全不存在——`grep -rn launchctl` 全仓零命中,正是 127 能不被察觉跑一天的原因。\n\n【修复中发现并一并修掉的第二缺陷】首次真触发后 127 消失,露出下一层:job 收尾 exit 2「读面取不到」。查明**读面从未重启**(NRestarts=0,自 08-04 15:48 持续 active),真因是我上一轮把 `apply-read-face.mjs` 从管线里拿掉了——`apply.mjs` 换掉读面服务的静态根,而使读面部署到位并探测应答(READ_FACE_ANSWERS_ON_LAN_READONLY)的是 apply-read-face。管线补回该步并加**有界重试**(3×10s,仅容忍不可达,陈旧仍判红),第三次真触发 exit 0。\n\n【验收实测】三次真触发:①exit 2(暴露管线缺步)→②exit 1(重试不足以掩盖缺步,证明重试没有变成遮羞布)→③**exit 0**。终态:`launchctl list` 两任务末次退出均 0;`scheduler:health` → SCHEDULER_AGENTS_HEALTHY exit 0;`read-face-freshness` → fresh、age 0.127h、**服务的 cross 链版本 1658**(含 INIT-018 全 19 单、MIN-054..058 与 INC-032..039)。红测:重放 127 → SCHEDULER_AGENT_LAST_RUN_FAILED exit 1 并点名任务+给出诊断;agent 未加载 → SCHEDULER_AGENT_NOT_LOADED exit 1。**且该门在第一天就抓到一次非演习的真实失败**(上述 exit 2),这比合成红测更硬。证据包 TCRN-AOS/docs/reports/init-018/INC-032/(commands.md 可原样重跑 + outputs 红绿双份)。\n\n【残余,不隐瞒】(a)`scheduler:health` 无任何东西自动跑它(不宜进 CI:CI 无 launchd),须由审查层巡检或操作者手动跑——机器化落点待定;(b)paired-backup 仍用 StartInterval 21600(睡眠即弃班),因其 `--if-due` 语义可在下一班补做,故未擅改节奏,如需改为日历制另立;(c)plist 内 PATH 含本机绝对路径与 nvm 版本号,换机或升 node 须同步改(已写进模板注释)。",
+            "observed": "【排程与唤起器同根失效;审查层自身缺陷】现象:三个 launchd 任务共用 `/bin/sh -lc` 不 source ~/.zshrc,PATH 无 nvm 下的 pnpm/claude——read-face-refresh 与 paired-backup 每次 exit 127,init018-patrol `spawn claude ENOENT` 且在抛错前已打印 `CONTINUATION_SPAWNED pid=undefined`(自造假绿)。读面刷新排程自装载起从未成功过一次,freshness 门当时红(12.15h>9h)。根因复现:`env -i /bin/sh -lc 'command -v pnpm'` 无输出。\n\n【修复完成 2026-08-05,全部经真触发验收,非语法推断】①**patrol 按 Owner 2026-08-05 裁定直接删除**:~/Library/LaunchAgents/com.tcrn.init018-patrol.plist、tcrn-workflow/tools/init018-patrol/、~/.tcrn-init018-patrol.json 三者全删,launchctl 名录零残留;连带解决「唤起器指向 Owner 门」与「日志谎报」两项,无需再修。②两份 plist 改为显式 `EnvironmentVariables.PATH`(nvm 项与 package.json engines.node 24.16.0 同钉)且 `-lc`→`-c`,不再依赖登录 shell;已装副本与仓内模板同字节。③**新增 `pnpm --dir TCRN-AOS scheduler:health`**(scripts/scheduler-health.mjs):名册由仓内 plist 模板的 Label 派生(不手写),两侧断言=模板对应的 agent 须已加载且末次退出为 0;`TCRN_SCHEDULER_PROBE` 注入 launchctl 输出以驱动红侧。此门此前完全不存在——`grep -rn launchctl` 全仓零命中,正是 127 能不被察觉跑一天的原因。\n\n【修复中发现并一并修掉的第二缺陷】首次真触发后 127 消失,露出下一层:job 收尾 exit 2「读面取不到」。查明**读面从未重启**(NRestarts=0,自 08-04 15:48 持续 active),真因是我上一轮把 `apply-read-face.mjs` 从管线里拿掉了——`apply.mjs` 换掉读面服务的静态根,而使读面部署到位并探测应答(READ_FACE_ANSWERS_ON_LAN_READONLY)的是 apply-read-face。管线补回该步并加**有界重试**(3×10s,仅容忍不可达,陈旧仍判红),第三次真触发 exit 0。\n\n【验收实测】三次真触发:①exit 2(暴露管线缺步)→②exit 1(重试不足以掩盖缺步,证明重试没有变成遮羞布)→③**exit 0**。终态:`launchctl list` 两任务末次退出均 0;`scheduler:health` → SCHEDULER_AGENTS_HEALTHY exit 0;`read-face-freshness` → fresh、age 0.127h、**服务的 cross 链版本 1658**(含 INIT-018 全 19 单、MIN-054..058 与 INC-032..039)。红测:重放 127 → SCHEDULER_AGENT_LAST_RUN_FAILED exit 1 并点名任务+给出诊断;agent 未加载 → SCHEDULER_AGENT_NOT_LOADED exit 1。**且该门在第一天就抓到一次非演习的真实失败**(上述 exit 2),这比合成红测更硬。证据包 TCRN-AOS/docs/reports/init-018/INC-032/(commands.md 可原样重跑 + outputs 红绿双份)。\n\n【残余,不隐瞒】(a)`scheduler:health` 无任何东西自动跑它(不宜进 CI:CI 无 launchd),须由审查层巡检或操作者手动跑——机器化落点待定;(b)paired-backup 仍用 StartInterval 21600(睡眠即弃班),因其 `--if-due` 语义可在下一班补做,故未擅改节奏,如需改为日历制另立;(c)plist 内 PATH 含本机绝对路径与 nvm 版本号,换机或升 node 须同步改(已写进模板注释)。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-032",
+        "kind": "Incident",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1661,
+    "headEventHash": "8de9b317a059821384dc1dfd7c72f220dc23471eb656d130771aa99dbb5b8c16",
+    "work": 256
+  },
+  "eventsAppended": 3,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-05T05:10:13Z"
+}

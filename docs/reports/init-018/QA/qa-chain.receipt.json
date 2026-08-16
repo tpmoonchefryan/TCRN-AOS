@@ -1,0 +1,436 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-018",
+  "intent": "INIT-018 审查层质量评估(QA,三层流水线第三环)落链批:立 INC-040(F1 观察通道断裂)与 INC-041(F2..F7 收官残余批),并在 INIT-018 主单补 QA 收官注解。评估报告 TCRN-AOS/docs/reports/init-018/QA/report.md(sha256=eefb4349b735f01436aefe9138d963faaad5f800514946dac799a00837808909);续办授权 MIN-058。",
+  "startedAt": "2026-08-05T10:32:10Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "deploy/aos-local-client/payloads/cross-init018-qa-create.json",
+    "sha256": "0e921dd01fb0380ecb901dde91d354345faf3be475dae5074beb8d146fc771d9",
+    "bytes": 5852
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1713,
+    "headEventHash": "aae673c248ac232d6acf46770932c010ae1c834cb08f86953a6d4ca3589116ef",
+    "work": 256
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T10:32:11Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1713",
+        "--external-key",
+        "TCRN-CROSS-INC-040",
+        "--kind",
+        "Incident",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1713,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:5370016aa82c91a9e3433cad",
+      "version": 1714
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T10:32:12Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1714",
+        "--external-key",
+        "TCRN-CROSS-INC-041",
+        "--kind",
+        "Incident",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1714,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:30f973e55782de0ee3465fec",
+      "version": 1715
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T10:32:13Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:19dcee70c40e4d819d13b38a",
+        "--expected-version",
+        "1715",
+        "--id",
+        "work:5370016aa82c91a9e3433cad",
+        "--scope",
+        "【QA·F1 观察通道断裂,中高】S2 ssh-write-observer 的 DEFAULT_LOG 指向 tcrn-workflow/docs/reports/init-018/S2/——INC-034 证据迁移后该目录已不存在,logHit 的 appendFileSync ENOENT 被 observe 模式 catch 静默吞。实测(2026-08-05,QA/outputs/s2-log-channel-severed.txt):分类器正确判 HIT、hook exit 0、新旧两址零落盘;该缺陷挺过 INC-034(只补链上注解未扫代码引用)与 INC-037(重写判据保留旧路径)两轮。后果:STORY-144 enforce 切换判据「观察期无误报」失去判别力——空日志与通道已死不可区分,若按空日志切 enforce 即在真空证据上晋级。修复要求:①落盘前 mkdirSync(recursive) 且 sink 迁仓外(平台根 var/,同宅范式 ceremony-spans.mjs);②补活性证明(自探针/心跳行,使「通道死」可红);③enforce 切换的观察期自修复日重计。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1715,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:5370016aa82c91a9e3433cad",
+      "version": 1716
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T10:32:14Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:19dcee70c40e4d819d13b38a",
+        "--expected-version",
+        "1716",
+        "--id",
+        "work:30f973e55782de0ee3465fec",
+        "--scope",
+        "【QA·收官残余批 F2..F7】①F2(中):两仓 INIT-018 产出零提交零分支裸置 main 工作树,违背 delivery-cadence 公约整合分支制,且 verify:p1 对脏树拒发认证;须落整合分支提交(落分支/推 WIP 非对外发布无需停,合 main 发 v0.11.0 才是必停点待 Owner)。②F3(中):四悬置代办自此以本单为链上载体——S4.2 Codex 配置应用、STORY-144 enforce 切换(前置 INC-040)、S154 archify 安装、otel-spans.ts 接线(v0.11.0 列车);此前它们只活在 SUMMARY 散文与 MIN-058 裁定里,散文到门的 Initiative 不把自己的代办留在散文里。③F4(低):verify-otel-privacy 无参时 resolve(\"\") 返回 cwd 目录绕过 UNREADABLE 守卫致 EISDIR 裸崩,改 reason-coded 拒绝(参照 R1 could-not-judge exit 2)。④F5(低):SUMMARY.md 十六处 tcrn-workflow/docs/reports/ 系死路径,文件内订正区补第 9 条(链上 INC-034 注解不替代交接文档自身如实)。⑤F6(低):ceremony-spans 键校验 throw 在 try 外,注释「never during a live ceremony」失实,二选一对齐。⑥F7(瑕疵):token-attribution parseSession 未用形参 match 清理。全文与证据:TCRN-AOS/docs/reports/init-018/QA/report.md(sha256=eefb4349b735f01436aefe9138d963faaad5f800514946dac799a00837808909)。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1716,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:30f973e55782de0ee3465fec",
+      "version": 1717
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T10:32:15Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:19dcee70c40e4d819d13b38a",
+        "--expected-version",
+        "1717",
+        "--id",
+        "work:cad8ec31fdbb4b4680564cca",
+        "--scope",
+        "【审查层质量评估收官注解(三层流水线第三环)】QA 完成于 2026-08-05:实测矩阵全绿——引擎仓 60 测试文件 TESTS_VERIFIED(含三新);AOS 三新测试 42/42 与 parity/control-tree/scheduler/doc-topology/freshness 五门绿;S18 绑定门红绿两侧当场复验(绿 exit 0/篡改红 exit 1 点名席位);S1.3 悬置红测由本环执行——新会话实测 Edit 归档树被 INC-033 deny 规则当场拒,叠加 uchg 物理层,S1 双层防线全实证。结论:有条件通过——立 TCRN-CROSS-INC-040(观察通道断裂)与 TCRN-CROSS-INC-041(收官残余批)为放行 v0.11.0 发布列车的前置;发布本身对外必停待 Owner。流水线复盘裁定建议三条协议修正:迁移必须扫代码引用;观察期必须带活性证明;收官仪式载荷应含「为每个仍悬代办立载体」步骤。执行形态:单上下文,agent:fable(claude-fable-5),无多代理主张。报告 TCRN-AOS/docs/reports/init-018/QA/report.md,sha256=eefb4349b735f01436aefe9138d963faaad5f800514946dac799a00837808909。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1717,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:cad8ec31fdbb4b4680564cca",
+      "version": 1718
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:5370016aa82c91a9e3433cad",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-040",
+            "observed": "TCRN-CROSS-INC-040",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Incident",
+            "observed": "Incident",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【QA·F1 观察通道断裂,中高】S2 ssh-write-observer 的 DEFAULT_LOG 指向 tcrn-workflow/docs/reports/init-018/S2/——INC-034 证据迁移后该目录已不存在,logHit 的 appendFileSync ENOENT 被 observe 模式 catch 静默吞。实测(2026-08-05,QA/outputs/s2-log-channel-severed.txt):分类器正确判 HIT、hook exit 0、新旧两址零落盘;该缺陷挺过 INC-034(只补链上注解未扫代码引用)与 INC-037(重写判据保留旧路径)两轮。后果:STORY-144 enforce 切换判据「观察期无误报」失去判别力——空日志与通道已死不可区分,若按空日志切 enforce 即在真空证据上晋级。修复要求:①落盘前 mkdirSync(recursive) 且 sink 迁仓外(平台根 var/,同宅范式 ceremony-spans.mjs);②补活性证明(自探针/心跳行,使「通道死」可红);③enforce 切换的观察期自修复日重计。",
+            "observed": "【QA·F1 观察通道断裂,中高】S2 ssh-write-observer 的 DEFAULT_LOG 指向 tcrn-workflow/docs/reports/init-018/S2/——INC-034 证据迁移后该目录已不存在,logHit 的 appendFileSync ENOENT 被 observe 模式 catch 静默吞。实测(2026-08-05,QA/outputs/s2-log-channel-severed.txt):分类器正确判 HIT、hook exit 0、新旧两址零落盘;该缺陷挺过 INC-034(只补链上注解未扫代码引用)与 INC-037(重写判据保留旧路径)两轮。后果:STORY-144 enforce 切换判据「观察期无误报」失去判别力——空日志与通道已死不可区分,若按空日志切 enforce 即在真空证据上晋级。修复要求:①落盘前 mkdirSync(recursive) 且 sink 迁仓外(平台根 var/,同宅范式 ceremony-spans.mjs);②补活性证明(自探针/心跳行,使「通道死」可红);③enforce 切换的观察期自修复日重计。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-040",
+        "kind": "Incident",
+        "status": "planned"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:30f973e55782de0ee3465fec",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-041",
+            "observed": "TCRN-CROSS-INC-041",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Incident",
+            "observed": "Incident",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【QA·收官残余批 F2..F7】①F2(中):两仓 INIT-018 产出零提交零分支裸置 main 工作树,违背 delivery-cadence 公约整合分支制,且 verify:p1 对脏树拒发认证;须落整合分支提交(落分支/推 WIP 非对外发布无需停,合 main 发 v0.11.0 才是必停点待 Owner)。②F3(中):四悬置代办自此以本单为链上载体——S4.2 Codex 配置应用、STORY-144 enforce 切换(前置 INC-040)、S154 archify 安装、otel-spans.ts 接线(v0.11.0 列车);此前它们只活在 SUMMARY 散文与 MIN-058 裁定里,散文到门的 Initiative 不把自己的代办留在散文里。③F4(低):verify-otel-privacy 无参时 resolve(\"\") 返回 cwd 目录绕过 UNREADABLE 守卫致 EISDIR 裸崩,改 reason-coded 拒绝(参照 R1 could-not-judge exit 2)。④F5(低):SUMMARY.md 十六处 tcrn-workflow/docs/reports/ 系死路径,文件内订正区补第 9 条(链上 INC-034 注解不替代交接文档自身如实)。⑤F6(低):ceremony-spans 键校验 throw 在 try 外,注释「never during a live ceremony」失实,二选一对齐。⑥F7(瑕疵):token-attribution parseSession 未用形参 match 清理。全文与证据:TCRN-AOS/docs/reports/init-018/QA/report.md(sha256=eefb4349b735f01436aefe9138d963faaad5f800514946dac799a00837808909)。",
+            "observed": "【QA·收官残余批 F2..F7】①F2(中):两仓 INIT-018 产出零提交零分支裸置 main 工作树,违背 delivery-cadence 公约整合分支制,且 verify:p1 对脏树拒发认证;须落整合分支提交(落分支/推 WIP 非对外发布无需停,合 main 发 v0.11.0 才是必停点待 Owner)。②F3(中):四悬置代办自此以本单为链上载体——S4.2 Codex 配置应用、STORY-144 enforce 切换(前置 INC-040)、S154 archify 安装、otel-spans.ts 接线(v0.11.0 列车);此前它们只活在 SUMMARY 散文与 MIN-058 裁定里,散文到门的 Initiative 不把自己的代办留在散文里。③F4(低):verify-otel-privacy 无参时 resolve(\"\") 返回 cwd 目录绕过 UNREADABLE 守卫致 EISDIR 裸崩,改 reason-coded 拒绝(参照 R1 could-not-judge exit 2)。④F5(低):SUMMARY.md 十六处 tcrn-workflow/docs/reports/ 系死路径,文件内订正区补第 9 条(链上 INC-034 注解不替代交接文档自身如实)。⑤F6(低):ceremony-spans 键校验 throw 在 try 外,注释「never during a live ceremony」失实,二选一对齐。⑥F7(瑕疵):token-attribution parseSession 未用形参 match 清理。全文与证据:TCRN-AOS/docs/reports/init-018/QA/report.md(sha256=eefb4349b735f01436aefe9138d963faaad5f800514946dac799a00837808909)。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-041",
+        "kind": "Incident",
+        "status": "planned"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:cad8ec31fdbb4b4680564cca",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INIT-018",
+            "observed": "TCRN-CROSS-INIT-018",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Initiative",
+            "observed": "Initiative",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【审查层质量评估收官注解(三层流水线第三环)】QA 完成于 2026-08-05:实测矩阵全绿——引擎仓 60 测试文件 TESTS_VERIFIED(含三新);AOS 三新测试 42/42 与 parity/control-tree/scheduler/doc-topology/freshness 五门绿;S18 绑定门红绿两侧当场复验(绿 exit 0/篡改红 exit 1 点名席位);S1.3 悬置红测由本环执行——新会话实测 Edit 归档树被 INC-033 deny 规则当场拒,叠加 uchg 物理层,S1 双层防线全实证。结论:有条件通过——立 TCRN-CROSS-INC-040(观察通道断裂)与 TCRN-CROSS-INC-041(收官残余批)为放行 v0.11.0 发布列车的前置;发布本身对外必停待 Owner。流水线复盘裁定建议三条协议修正:迁移必须扫代码引用;观察期必须带活性证明;收官仪式载荷应含「为每个仍悬代办立载体」步骤。执行形态:单上下文,agent:fable(claude-fable-5),无多代理主张。报告 TCRN-AOS/docs/reports/init-018/QA/report.md,sha256=eefb4349b735f01436aefe9138d963faaad5f800514946dac799a00837808909。",
+            "observed": "【审查层质量评估收官注解(三层流水线第三环)】QA 完成于 2026-08-05:实测矩阵全绿——引擎仓 60 测试文件 TESTS_VERIFIED(含三新);AOS 三新测试 42/42 与 parity/control-tree/scheduler/doc-topology/freshness 五门绿;S18 绑定门红绿两侧当场复验(绿 exit 0/篡改红 exit 1 点名席位);S1.3 悬置红测由本环执行——新会话实测 Edit 归档树被 INC-033 deny 规则当场拒,叠加 uchg 物理层,S1 双层防线全实证。结论:有条件通过——立 TCRN-CROSS-INC-040(观察通道断裂)与 TCRN-CROSS-INC-041(收官残余批)为放行 v0.11.0 发布列车的前置;发布本身对外必停待 Owner。流水线复盘裁定建议三条协议修正:迁移必须扫代码引用;观察期必须带活性证明;收官仪式载荷应含「为每个仍悬代办立载体」步骤。执行形态:单上下文,agent:fable(claude-fable-5),无多代理主张。报告 TCRN-AOS/docs/reports/init-018/QA/report.md,sha256=eefb4349b735f01436aefe9138d963faaad5f800514946dac799a00837808909。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INIT-018",
+        "kind": "Initiative",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1718,
+    "headEventHash": "0afe27bd7f076284dace3d2ad1043c64a4d4b3fb80d45bb29ce607ac4f852039",
+    "work": 258
+  },
+  "eventsAppended": 5,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-05T10:32:17Z"
+}

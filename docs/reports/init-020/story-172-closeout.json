@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-172",
+  "intent": "STORY-172 收口:INC-061..071 核销清单定稿,按 closeout-verify 机器核形态成文;引入 superseded 处置 kind(指名承接处)并实现+红腿测试;清单对 closeout-verify 绿、蓄意漏一单必红。对 INC 各单的链上处置注记留执行期(红线)。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:6767241b2a45cb5a81aecef8",
+        "scope": "【收口(2026-08-06)】INC-061..071 核销清单定稿,三件交付物:①TCRN-AOS/docs/reports/init-020/closeout-verify.md(处置表,逐单以链上 scope 原文重判);②closeout-verify-manifest.json(closeout-verify 机器核形态:tcrn.closeout-verify.v1,11 单全名单+每单恰一处置);③closeout-verify.mjs 新增 superseded 处置 kind(carriedBy 指名承接链上 work id)+红腿测试 tests/closeout-verify-dispositions.test.mjs(6 用例)。处置概览:superseded×4(INC-061→STORY-182、INC-063→STORY-187、INC-064→STORY-183、INC-069→STORY-182+183)、retained×5(062/065/066/067/071,随 STORY-190 引用,保留单标注窗前/窗后时机)、deferred×1(INC-068 含公约修订需 Owner 裁定,独立立项)、fixed×1(INC-070 codegraph 判据回正)。机器核实证:正腿=closeout-verify 对 manifest 绿 CLOSEOUT_ITEMS_RECONCILED(11/11);红腿=蓄意从 dispositions 删除 INC-070 必红 CLOSEOUT_ITEMS_UNRECONCILED 且点名「INC-070 has no disposition」。测试 6/6 绿。红线遵守:对 INC 各单的链上处置注记未动(均仍 planned)。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:6767241b2a45cb5a81aecef8", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:6767241b2a45cb5a81aecef8", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:6767241b2a45cb5a81aecef8", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:6767241b2a45cb5a81aecef8" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-172", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

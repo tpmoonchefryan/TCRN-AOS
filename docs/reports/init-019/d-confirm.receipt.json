@@ -1,0 +1,306 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-019",
+  "intent": "落 Owner 对 D5-D9 的确认:开 CONF-058 锚于 INIT-019 记 Owner 逐字指令,闭会出 MIN-061(role_decision),回注 INIT 主单。仅落裁定,不开工——执行开工时点由 Owner 另行指令。",
+  "startedAt": "2026-08-05T13:49:47Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "deploy/aos-local-client/payloads/cross-init019-d-confirm.json",
+    "sha256": "14e3787e49fef487a8494dfb89461ea71f76e302c84c662dc5c79f8a1278667c",
+    "bytes": 5009
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1773,
+    "headEventHash": "950feaf5f6f9f142d3c92d79266a0c1103a20fa631da7867907f6600555dff02",
+    "work": 280
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "conference-open",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-open",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:49:48Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--desired-outcome",
+        "把 MIN-060 中待确认的 D5-D9 五项实施形态建议转为 Owner 已确认的裁定,消除该纪要的未决事项;同时明确本批仅落裁定不开工,派工时点由 Owner 另行指令。",
+        "--expected-version",
+        "1773",
+        "--external-key",
+        "TCRN-CROSS-CONF-058",
+        "--participant-ids",
+        "owner:governance,agent:fable",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--title",
+        "INIT-019 实施形态确认:D5-D9 全部采纳",
+        "--type",
+        "architecture",
+        "--work-ids",
+        "work:7d2bb6490ce764420117a085",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "desired-outcome",
+        "external-key",
+        "participant-ids",
+        "project-id",
+        "title",
+        "type",
+        "work-ids"
+      ],
+      "headAtPlanning": 1773,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": null,
+      "version": 1774
+    },
+    {
+      "ok": true,
+      "verb": "conference-append-position",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-append-position",
+        "--actor",
+        "agent:fable",
+        "--actor-id",
+        "owner:governance",
+        "--at",
+        "2026-08-05T13:49:49Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--conference-id",
+        "conference:6c8be79a6d3c0b6533e71422",
+        "--evidence-ids",
+        "-",
+        "--expected-version",
+        "1774",
+        "--external-key",
+        "POS-C058-OWNER-1",
+        "--position",
+        "Owner 指令原文(2026-08-05):「建议全部同意,将决策落到链上,先不要开始进行」。释义:MIN-060 所列 D5-D9 五项建议全部确认为裁定——D5 MCP 写面为单一 ceremony 工具;D6 分两阶段(先本机 MCP 包裹现有仪式,再座舱原生供 MCP 并把投影渲染上移);D7 知识内容三源策展、首批不少于二十卡且每卡 evidence 不少于一条;D8 拆单模板加第五要素「生效证据命令」并对 INC-041 四代办逐件补票;D9 SSH 按残余适用性条件化保留两类(主机 MCP 面不可达的 break-glass、按设计绕开服务层的逐字节比对),其余退役。同时明确:本批仅记录裁定,INIT-019 的执行不随本裁定启动,派工时点由 Owner 另行指令。",
+        "--recommendations",
+        "-",
+        "--risks",
+        "无新增风险面;D5-D9 的风险与缓解已随建议记录于 CONF-057 立场(单一工具漏纪律即重开封口、注入无预算挤占上下文、hook 裸相对路径重蹈 INC-040、策展直搬记忆成日记、本 INIT 自身不按五要素派工即成新样本)。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "actor-id",
+        "conference-id",
+        "evidence-ids",
+        "external-key",
+        "position",
+        "recommendations",
+        "risks"
+      ],
+      "headAtPlanning": 1774,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": null,
+      "version": 1775
+    },
+    {
+      "ok": true,
+      "verb": "conference-close",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "conference-close",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:49:50Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--conference-id",
+        "conference:6c8be79a6d3c0b6533e71422",
+        "--decisions",
+        "D5 确认:MCP 写面为单一 ceremony 工具而非逐动词转发,D6 确认:分两阶段实施(先本机 MCP 包裹现有仪式再座舱原生供 MCP 并把投影渲染上移),D7 确认:知识内容三源策展且首批不少于二十卡每卡 evidence 不少于一条,D8 确认:拆单模板加第五要素生效证据命令并对 INC-041 四代办逐件补票,D9 确认:SSH 按残余适用性条件化保留两类场景其余退役,附带裁定:本批仅落裁定不开工且派工时点由 Owner 另行指令",
+        "--expected-version",
+        "1775",
+        "--minutes-external-key",
+        "TCRN-CROSS-MIN-061",
+        "--outcome-class",
+        "role_decision",
+        "--summary",
+        "Owner 确认 MIN-060 的 D5-D9 全部采纳,由建议升格为裁定;MIN-060 的未决事项「D5 至 D9 待 Owner 确认」就此消除。STORY-159 的 D6 前提已满足,但仍保持 planned——本批仅落裁定不开工,INIT-019 全部十五张 Story 的派工时点由 Owner 另行指令。执行形态:Owner 指令逐字入档,余文由单一上下文合成,非多代理。",
+        "--unresolved-issues",
+        "无方向性未决。执行侧待办不变:STORY-165 的 enforce 晋级仍须观察窗积累且判据成文后经 Owner 确认;INC-042 未收口前 docs/reports 整树不入库;v0.11.0 发布仍为唯一必停点。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "conference-id",
+        "decisions",
+        "minutes-external-key",
+        "outcome-class",
+        "summary",
+        "unresolved-issues"
+      ],
+      "headAtPlanning": 1775,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": null,
+      "version": 1776
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:49:51Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:41f48bf0fce9057cfbce79bc",
+        "--expected-version",
+        "1776",
+        "--id",
+        "work:7d2bb6490ce764420117a085",
+        "--scope",
+        "【D5-D9 已确认(2026-08-05,Owner 指令「建议全部同意,将决策落到链上,先不要开始进行」)】MIN-060 待确认的五项实施形态建议全部升格为裁定,见 TCRN-CROSS-MIN-061:D5 单一 ceremony 写工具、D6 两阶段实施、D7 三源策展首批不少于二十卡、D8 五要素与 INC-041 补票、D9 SSH 条件化保留两类。方向清单 D1-D9 就此全部定案,执行期不得重开。**本 INIT 尚未开工**:全部十五张 Story 保持 planned,STORY-159 的 D6 前提已满足但同样待派;派工时点由 Owner 另行指令,届时按 BRIEFING 建议顺序(156 先行)派发。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1776,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:7d2bb6490ce764420117a085",
+      "version": 1777
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:7d2bb6490ce764420117a085",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INIT-019",
+            "observed": "TCRN-CROSS-INIT-019",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Initiative",
+            "observed": "Initiative",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【D5-D9 已确认(2026-08-05,Owner 指令「建议全部同意,将决策落到链上,先不要开始进行」)】MIN-060 待确认的五项实施形态建议全部升格为裁定,见 TCRN-CROSS-MIN-061:D5 单一 ceremony 写工具、D6 两阶段实施、D7 三源策展首批不少于二十卡、D8 五要素与 INC-041 补票、D9 SSH 条件化保留两类。方向清单 D1-D9 就此全部定案,执行期不得重开。**本 INIT 尚未开工**:全部十五张 Story 保持 planned,STORY-159 的 D6 前提已满足但同样待派;派工时点由 Owner 另行指令,届时按 BRIEFING 建议顺序(156 先行)派发。",
+            "observed": "【D5-D9 已确认(2026-08-05,Owner 指令「建议全部同意,将决策落到链上,先不要开始进行」)】MIN-060 待确认的五项实施形态建议全部升格为裁定,见 TCRN-CROSS-MIN-061:D5 单一 ceremony 写工具、D6 两阶段实施、D7 三源策展首批不少于二十卡、D8 五要素与 INC-041 补票、D9 SSH 条件化保留两类。方向清单 D1-D9 就此全部定案,执行期不得重开。**本 INIT 尚未开工**:全部十五张 Story 保持 planned,STORY-159 的 D6 前提已满足但同样待派;派工时点由 Owner 另行指令,届时按 BRIEFING 建议顺序(156 先行)派发。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INIT-019",
+        "kind": "Initiative",
+        "status": "planned"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1777,
+    "headEventHash": "ffd075c8e42690dbeae0b3c1f0c49d7b2c59b6ca2d47c3b736d3e0b394498a3c",
+    "work": 280
+  },
+  "eventsAppended": 4,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-05T13:49:52Z"
+}

@@ -1,0 +1,71 @@
+[
+ {
+  "label": "aos-knowledge-create",
+  "arguments": {
+   "partition": "TCRN-AOS",
+   "dryRun": false,
+   "payload": {
+    "schemaVersion": "aos.local-client-ceremony.v1",
+    "story": "TCRN-CROSS-INIT-019-STORY-163",
+    "intent": "dry-run: knowledge-create through the single ceremony MCP write face (marker CAS)",
+    "steps": [
+     {
+      "verb": "knowledge-create",
+      "flags": {
+       "external-key": "tcrn-init019-163-writeface-proof",
+       "scope": "Write-face knowledge-create proof (STORY-163.2)",
+       "project-id": "project:899d30df2e67bc6e98a4f50e",
+       "role-scopes": [
+        "implementation"
+       ],
+       "category": "implementation",
+       "kind": "fact",
+       "tags": [
+        "init019",
+        "writeface"
+       ],
+       "subject": "Write-face knowledge-create proof",
+       "summary": "A knowledge card created through the single ceremony MCP write face, proving the knowledge write path CAS's on the store marker.",
+       "snippet": "writefaceproof: knowledge-create driven via tcrn_ceremony.",
+       "accountable-owner-id": "agent:fable",
+       "source-references": [
+        "docs/reports/init-019/S163/notes.md"
+       ],
+       "source-digest": "3d9ea2de6a119c5810d9af15292c5dafadadc852e5d500b5714bf777ec2e45f0",
+       "work-ids": [
+        "-"
+       ],
+       "decision-ids": [
+        "-"
+       ],
+       "gate-ids": [
+        "-"
+       ],
+       "evidence-ids": [
+        "-"
+       ],
+       "lifecycle": "active",
+       "retrieval": "default",
+       "freshness": "fresh",
+       "last-verified": "2026-08-05T00:00:00Z",
+       "stale-days": 180,
+       "export": "metadata-only",
+       "body": "TCRN-CROSS-INIT-019 STORY-163.2: a knowledge card created through the single ceremony MCP write face (deploy/aos-mcp-write/server.mjs -> ceremony.mjs). The write CAS's on the knowledge store marker version, not the chain version. Evidence: docs/reports/init-019/S163/notes.md."
+      }
+     }
+    ],
+    "readback": [
+     {
+      "verb": "knowledge-list",
+      "flags": {
+       "search": "writefaceproof"
+      },
+      "expect": {
+       "total": 1
+      }
+     }
+    ]
+   }
+  }
+ }
+]

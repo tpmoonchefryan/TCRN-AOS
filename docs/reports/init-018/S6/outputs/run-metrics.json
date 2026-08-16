@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "reasonCode": "EVAL_GREEN",
+  "config": "<local-platform-root>/tcrn-workflow/tests/promptfoo/s6-lessons/s6-lessons.yaml",
+  "maxConcurrency": 2,
+  "maxAssertions": 200,
+  "estimatedAssertions": 6,
+  "assertions": 6,
+  "passed": 6,
+  "failed": 0,
+  "errors": 0,
+  "durationMs": 32,
+  "provider": "echo (offline, no API key)",
+  "evalExit": 0
+}

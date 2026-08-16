@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-141",
+  "intent": "收口:终版 scope + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:b064917a0bb513be79ab1969",
+        "scope": "S7 引擎行为面黄金样本:adapter-generate 与 persona-render 固定输入 golden 文件+node --test 比对回归(确定性,不调模型)。验收:比对绿+故意改一处输入证明能红,两输出存档。动词旗标以引擎 commands 名录实测为准禁猜。MIN-055。执行结果@2026-08-05:已完成。旗标实测 commands:adapter-generate --request <json>、persona-render --profile-id <string>(均 mutates=false)。固定输入集中 tests/fixtures/s7-golden/inputs.mjs(生成器与测试共用)。golden:adapter-generate.json(manifestDigest 6743c754…,经引擎纯函数 generateCodexAdapterBundle+admitCodexAdapterHostInput,因纯 CLI 无默认 host 上下文——与仓内 act4/p6b 同一构造口径)+persona-render.json(profile:tcrn-mneme-v1,经真实 CLI)。测试 tests/s7-behavior-surface.test.mjs 3/3 绿,被仓测试套件 tests/*.test.mjs 自动发现。红测:persona-render 换 profile-id → diff exit 1 全字段变;adapter-generate 改 promptText → requestDigest/manifestDigest 全变;真实红测临时改 inputs 的 profile-id 跑测试 → 2 红、还原 → 3 绿,证据 docs/reports/init-018/S7/red-proof/。证据包 tcrn-workflow/docs/reports/init-018/S7/。范围外缺陷:无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:b064917a0bb513be79ab1969", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:b064917a0bb513be79ab1969" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-141", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

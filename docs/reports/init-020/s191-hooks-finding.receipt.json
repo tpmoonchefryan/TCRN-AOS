@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "ok": false,
+  "reasonCode": "READBACK_DIVERGENT",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "facade": true,
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2256,
+    "headEventHash": "afaa8bf2b253895f15b643d09a75d5efaf9e9caca6766e2a85a42557fe26b4a1",
+    "work": 365
+  },
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2257,
+    "headEventHash": "6558874b38157ea202c6f18e7d04591c124c6fed882d43df5e188bcbd46a2779",
+    "work": 365
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T08:13:37Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2256",
+        "--id",
+        "work:82c32ba447fc4062301b05b5",
+        "--scope",
+        "【实测补充(2026-08-07,Owner 发现触发)】Owner 于 QA3 开工前发现 Codex UI「未找到钩子」。核查结论(非丢失,系有记录的刻意撤下):平台 .codex/README.md(2026-07-25,INIT-012 期)自述——旧 persona-bound 钩子定义判缺陷后「可恢复地」撤存为 hooks.json.withdrawn-persona-bound-20260725(实测在位,494B),完整旧接入留档 tmp/legacy-codex-pre-v050-20260724/(实测在位:project-codex+retired-active);设计意图仅留 fail-open SessionStart,但其定义文件亦不在加载位→UI 如实示空;用户级 config.toml [hooks.state] 六钩子信任登记仍在(5 禁 1 启),禁用旗标 7-26 备份即如此,与 S192 编辑无关(嫌疑排除)。对本单的含义:能力等价矩阵「激活生命周期/钩子面」一格的实测现状=Claude 侧有活跃治理钩子(stop-pact 用户级 Stop hook、ssh-write-observer PreToolUse),Codex 侧现役为零;引擎 Codex adapter 的 EPIC-024 observe-live 候选(tcrn-workflow/dist/local-codex-candidate/epic024-observe-live,persona-free 修正版)从未晋级,其 Codex CLI 0.139.0 时代的触发证据不适用于修正版。本单执行时须裁两点:①观察钩子是否按 persona-free 修正版经 adapter 动词族重新生成+安装+取活跃证据(adapter_generate/install/activation_assess/activation_record 正是为此而生);②stop-pact 的 Codex 对等物要不要建——Codex 执行 run-to-completion 批次时现无停止契约执行面,此为方向点,列 Owner 决策清单不预判。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2256,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:82c32ba447fc4062301b05b5",
+      "version": 2257
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:82c32ba447fc4062301b05b5",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": false,
+        "reasonCode": "READBACK_DIVERGENT",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-191",
+            "observed": "TCRN-CROSS-STORY-191",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "done",
+            "equal": false
+          },
+          {
+            "field": "scope",
+            "expected": "【实测补充(2026-08-07,Owner 发现触发)】Owner 于 QA3 开工前发现 Codex UI「未找到钩子」。核查结论(非丢失,系有记录的刻意撤下):平台 .codex/README.md(2026-07-25,INIT-012 期)自述——旧 persona-bound 钩子定义判缺陷后「可恢复地」撤存为 hooks.json.withdrawn-persona-bound-20260725(实测在位,494B),完整旧接入留档 tmp/legacy-codex-pre-v050-20260724/(实测在位:project-codex+retired-active);设计意图仅留 fail-open SessionStart,但其定义文件亦不在加载位→UI 如实示空;用户级 config.toml [hooks.state] 六钩子信任登记仍在(5 禁 1 启),禁用旗标 7-26 备份即如此,与 S192 编辑无关(嫌疑排除)。对本单的含义:能力等价矩阵「激活生命周期/钩子面」一格的实测现状=Claude 侧有活跃治理钩子(stop-pact 用户级 Stop hook、ssh-write-observer PreToolUse),Codex 侧现役为零;引擎 Codex adapter 的 EPIC-024 observe-live 候选(tcrn-workflow/dist/local-codex-candidate/epic024-observe-live,persona-free 修正版)从未晋级,其 Codex CLI 0.139.0 时代的触发证据不适用于修正版。本单执行时须裁两点:①观察钩子是否按 persona-free 修正版经 adapter 动词族重新生成+安装+取活跃证据(adapter_generate/install/activation_assess/activation_record 正是为此而生);②stop-pact 的 Codex 对等物要不要建——Codex 执行 run-to-completion 批次时现无停止契约执行面,此为方向点,列 Owner 决策清单不预判。",
+            "observed": "【实测补充(2026-08-07,Owner 发现触发)】Owner 于 QA3 开工前发现 Codex UI「未找到钩子」。核查结论(非丢失,系有记录的刻意撤下):平台 .codex/README.md(2026-07-25,INIT-012 期)自述——旧 persona-bound 钩子定义判缺陷后「可恢复地」撤存为 hooks.json.withdrawn-persona-bound-20260725(实测在位,494B),完整旧接入留档 tmp/legacy-codex-pre-v050-20260724/(实测在位:project-codex+retired-active);设计意图仅留 fail-open SessionStart,但其定义文件亦不在加载位→UI 如实示空;用户级 config.toml [hooks.state] 六钩子信任登记仍在(5 禁 1 启),禁用旗标 7-26 备份即如此,与 S192 编辑无关(嫌疑排除)。对本单的含义:能力等价矩阵「激活生命周期/钩子面」一格的实测现状=Claude 侧有活跃治理钩子(stop-pact 用户级 Stop hook、ssh-write-observer PreToolUse),Codex 侧现役为零;引擎 Codex adapter 的 EPIC-024 observe-live 候选(tcrn-workflow/dist/local-codex-candidate/epic024-observe-live,persona-free 修正版)从未晋级,其 Codex CLI 0.139.0 时代的触发证据不适用于修正版。本单执行时须裁两点:①观察钩子是否按 persona-free 修正版经 adapter 动词族重新生成+安装+取活跃证据(adapter_generate/install/activation_assess/activation_record 正是为此而生);②stop-pact 的 Codex 对等物要不要建——Codex 执行 run-to-completion 批次时现无停止契约执行面,此为方向点,列 Owner 决策清单不预判。",
+            "equal": true
+          }
+        ],
+        "unequal": [
+          "status"
+        ]
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-191",
+        "kind": "Story",
+        "status": "done"
+      }
+    }
+  ],
+  "eventsAppended": 1,
+  "finishedAt": "2026-08-07T08:13:39Z"
+}

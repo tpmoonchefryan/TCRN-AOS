@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-020",
+  "intent": "三轮验收强化批立单(强化先行,Owner 常令):INC-090..094 五张强化单。键号经反查(INC 最高 089),id 经派生律预算。只立单不执行。",
+  "ok": false,
+  "reasonCode": "CEREMONY_THREW_BEFORE_RECEIPT",
+  "error": "facade write ceremony failed: ",
+  "partition": "cross-project",
+  "dryRun": false,
+  "thrownBeforeReceipt": true,
+  "chainBefore": null,
+  "chainAfter": null,
+  "steps": [],
+  "readback": []
+}

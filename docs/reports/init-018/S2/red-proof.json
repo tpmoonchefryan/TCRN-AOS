@@ -1,0 +1,13 @@
+{
+  "title": "S2 判定可变红证明",
+  "tampered": "scripts/ssh-write-observer.mjs 的 SSH_WRITE_PRIMITIVE 临时把 \\brm\\b 换成 \\brm_NOPE\\b",
+  "red": {
+    "exit": 1,
+    "summary": "self-test 1 mismatch（rm 写原语样例不再被命中）"
+  },
+  "restored": {
+    "exit": 0,
+    "ok": true
+  },
+  "note": "还原后 restored-identical=true，matcher 与仓内一致。"
+}

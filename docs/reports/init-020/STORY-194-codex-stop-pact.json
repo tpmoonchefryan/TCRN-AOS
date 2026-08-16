@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "tcrn.init-020.story-194-codex-stop-pact.v1",
+  "story": "STORY-194",
+  "actor": "agent:gpt-5-codex",
+  "executionShape": "single-context",
+  "host": "Codex",
+  "status": "implemented-host-bridge-unclaimed",
+  "implementation": "tcrn-workflow/tools/stop-pact/codex-executor.mjs",
+  "sharedTruth": [
+    "tools/stop-pact/pact.mjs",
+    "tools/stop-pact/decide.mjs",
+    "tools/stop-pact/mode.mjs",
+    "~/.claude/stop-pact/current.json"
+  ],
+  "test": {
+    "command": "pnpm --dir tcrn-workflow verify:stop-pact:codex",
+    "tests": 5,
+    "passed": 5,
+    "result": "pass"
+  },
+  "failOpenCases": [
+    "missing session",
+    "missing timestamp",
+    "missing work delta",
+    "unidentifiable model",
+    "executor exception",
+    "no active pact"
+  ],
+  "hostBoundary": {
+    "codexStopEvent": "not provided by the current host contract",
+    "desktopLoadApprovalFire": "not claimed",
+    "sshWriteObserverCoverage": "explicitly-uncovered-residual"
+  }
+}

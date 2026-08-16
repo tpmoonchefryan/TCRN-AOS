@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-184",
+  "intent": "STORY-184 收口:门面真实链写生效证据完成,窗前硬件③。经门面写面对真实受治链(TCRN-TMS,活跃度最低)一次最小非破坏性治理写+全值回读,红腿整批拒且链版本不动,收据归档。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:6c7e52202d170a935a6a670f",
+        "scope": "【收口(2026-08-06)】门面真实链写生效证据完成(窗前硬件③)。交付物:①deploy/aos-resident-cockpit/facade-write-manifest.mjs(声明 5 分区 workspace/attestDir,port 4321,engineRoot=/srv/tcrn/engine/tcrn-workflow)、facade-write-runner.mjs、tcrn-aos-facade-write.service(systemd unit,三向核对 rendered==committed==installed)、apply-facade-write.mjs——门面写面 VM 部署形态(镜像 apply-facade-read 先例,已 rsync 到 VM 逐文件 sha256 双向对账、install+enable+start 并证明 health readonly:false/chainWriteAvailable:true/noPins:true、dry-run CEREMONY_PLANNED_ONLY 链 228 不动);②真实写:本机经 SSH 隧道调 VM 门面 POST /api/ceremony,partition=TCRN-TMS,work-annotate work:fc0e6a3439ce4b29de8204c7(TCRN-TMS-INC-002)scope 注记(保留原文本+追加 STORY-184 证据标记,status/kind 不变),链 228→229,eventsAppended=1;③回执 CEREMONY_COMPLETED_AND_READ_BACK:step0 accepted headAtPlanning=228、readback 4 字段全值匹配(READBACK_MATCHES_FULL_VALUE 含 expectSameAs scope)、expected-version 服务端现读、knowledge-rebase KNOWLEDGE_STORE_REBASED(不增链事件);④红腿:同批注入白名单外读动词 work-show 为首步→整批 409 具名拒 FACADE_WRITE_VERB_NOT_MUTATING,annotate 未执行,链版本不动(229);⑤收据归档 deploy/aos-resident-cockpit/evidence/story-184/(payloads+receipts 4 组,无本机宿主路径,未入库 INC-042);⑥MCP 只读面独立复核:status 229、scope 落地、attestation 落侧车。写路径=POST /api/ceremony,零 SSH 直驱引擎写链(break-glass 纪律)。门:facade-write 19/19、rejection 3/3、read 12/12、downtime 1/1、read-face gate 0 findings、doc-topology/local-purity 绿。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:6c7e52202d170a935a6a670f", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:6c7e52202d170a935a6a670f", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:6c7e52202d170a935a6a670f", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:6c7e52202d170a935a6a670f" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-184", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

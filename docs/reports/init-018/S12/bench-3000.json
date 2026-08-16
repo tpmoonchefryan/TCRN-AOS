@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "tcrn.s12-bench.v1",
+  "workspace": "<local-private-tmp>/claude-501/<local-project-dir>/f176a613-8a18-4330-8ef7-91d8ca65e63c/scratchpad/s12-bench/ws-3000/workspace",
+  "label": "3000",
+  "runsPerVerb": 5,
+  "date": 1785865579200,
+  "thresholdNote": "S12.3 threshold: a common read verb median >2000ms is the rule's startup-repair trigger",
+  "verbs": {
+    "status": {
+      "runs": 5,
+      "medianMs": 363,
+      "minMs": 361.6,
+      "maxMs": 463.3,
+      "allOk": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    "validate": {
+      "runs": 5,
+      "medianMs": 397.1,
+      "minMs": 394.3,
+      "maxMs": 785,
+      "allOk": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    "export": {
+      "runs": 5,
+      "medianMs": 421,
+      "minMs": 418.7,
+      "maxMs": 425.9,
+      "allOk": false,
+      "reasonCode": "INPUT_OVERSIZED"
+    },
+    "work-list": {
+      "runs": 5,
+      "medianMs": 401.1,
+      "minMs": 393.4,
+      "maxMs": 407,
+      "allOk": true,
+      "reasonCode": "WORKSPACE_LIST_READY"
+    }
+  }
+}

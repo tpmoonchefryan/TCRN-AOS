@@ -1,0 +1,504 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-018",
+  "intent": "收口 INC-033/034/035:控制树写保护覆盖到位并接进 verify;引擎冻结依赖图恢复且三道 CI 门转绿;S6 同义反复重做为判别力门。",
+  "startedAt": "2026-08-05T08:49:55Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "<outside-repository>",
+    "sha256": "b5e6cf6b302632dcdbfb7b58506423695120e765de972165979c569dffc4edf4",
+    "bytes": 9686
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1661,
+    "headEventHash": "8de9b317a059821384dc1dfd7c72f220dc23471eb656d130771aa99dbb5b8c16",
+    "work": 256
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:49:55Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1661",
+        "--id",
+        "work:86a52b72edd19c41b487f07c",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1661,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:86a52b72edd19c41b487f07c",
+      "version": 1662
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:49:56Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1662",
+        "--id",
+        "work:86a52b72edd19c41b487f07c",
+        "--scope",
+        "【S1 deny 规则装在了没有控制树的世界;G1 未达成】原缺陷:五仓 .claude/settings.json 的 deny 规则装在**零控制树**的仓内(实测 find 全零),而控制树全在平台根 .tcrn-workspace/ 与 ~/.tcrn-workflow;平台根无 settings.json、用户级 deny 为 null。\n\n【修复完成 2026-08-05】①平台根新建 .claude/settings.json,26 条 Write/Edit deny 覆盖真实控制树两处落点(容器 10 个分区目录 + 其中 9 棵物化 .tcrn-workflow 树 + 家目录树);主形态为**绝对式**(不依赖宿主如何锚定相对模式),每棵树另给四种点开头变体,因最深受治路径正位于字面 .tcrn-workflow 段下。②新增可证伪判据 `pnpm --dir TCRN-AOS control-tree:proof`:名册由**三次独立文件系统观测**派生而非手写清单(identity walk 找 .tcrn-workflow 目录 / 容器列举 / 家目录树),对每棵树以真实文件加三个深度的合成路径探测,要求 Write 与 Edit 在严格 glob 语义下双双覆盖。③**残余当场关闭**:复核者实测「仓内起的会话仍 21/21 全裸」(平台根规则以项目根锚定,对仓内会话不适用),已把 22 条可移植(绝对式与 ~ 式)规则并入五仓 settings,现 `--all-session-roots` 六个会话根**各 0/21 未覆盖**。④按本平台『不在 verify 里的门寿命=写它那天』,已把 control-tree:proof 接进 TCRN-AOS 的 pnpm verify 链。\n\n【红侧五项】修复前的五仓世界 / 删除家目录树规则 / 注入一棵未覆盖的树 / 各仓会话根独立判定(RED4,正是它量出并驱动了残余关闭) / 空世界不得恒绿。证据包 TCRN-AOS/docs/reports/init-018/INC-033/。\n\n【已声明的天花板,不隐瞒】(a)deny 只作用于 Write/Edit,**刻意不含 Bash**——引擎自身经 node 写控制树,Bash 级 deny 会切断唯一合法写路径;经 Bash 的 `cat >`/`sed -i`/`rsync` 直写仍未被权限拦,该面由 STORY-144 的 SSH 写观察器(observe 态)部分覆盖。(b)活体执行不可在会话内自证:权限于会话启动快照,真验证属下一个在平台根起的会话。本单证明的是「真实磁盘字节被真实 settings 字节静态覆盖」。(c)settings 内绝对路径为本机形态,换机须重生成;判据脚本本身全部从文件系统派生,不含本机常量。(d)家目录名册含已安装引擎的 node_modules(6,463 文件),故 deny 亦拦这些依赖文件的宿主编辑——几乎确定是想要的,但爆炸半径大于「链本身」,值得一次明示裁定。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1662,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:86a52b72edd19c41b487f07c",
+      "version": 1663
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:49:57Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1663",
+        "--id",
+        "work:86a52b72edd19c41b487f07c",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1663,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:86a52b72edd19c41b487f07c",
+      "version": 1664
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:49:59Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1664",
+        "--id",
+        "work:f499e2a47be1b4ba638fb1ee",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1664,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:f499e2a47be1b4ba638fb1ee",
+      "version": 1665
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:50:00Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1665",
+        "--id",
+        "work:f499e2a47be1b4ba638fb1ee",
+        "--scope",
+        "【交付使 tcrn-workflow CI 首门即红】原缺陷三处:依赖策略未同步 promptfoo 的 686 个包;format-check 42 文件不合规;verify:source 约 150 文件未入逐文件全量名册。\n\n【真实死因比原判更具体】`pnpm verify:dep` 报 **ERR_PNPM_IGNORED_BUILDS**:promptfoo 拖进 @playwright/browser-chromium、onnxruntime-node、@swc/core、sharp、esbuild、protobufjs 六个原生包要求逐个批准构建,执行层把「set this to true or false」六条**字面占位符**写进了 pnpm-workspace.yaml,于是 pnpm install 直接失败。\n\n【方向判断(按残余适用性分析)】dependency-policy.json 是**刻意的冻结依赖图**:8 个身份,每个带 license、integrity、purpose 与 acquisitionBoundary(explicit-npm-registry-read-with-ignore-scripts),离线物化。往里补 686 条不是「更新名册」,是把这个属性作废——而这是治理引擎的供应链信任面。故裁定:**promptfoo 移出引擎仓依赖图**,行为回归的确定性部分改零依赖实现(见 INC-035),模型门作为数据保留、运行需另一台带该工具的宿主(凭据与工具都是运行期配置,不是实现前置)。\n\n【修复完成 2026-08-05】①移除 promptfoo devDep 与 eval:s6:full;还原 pnpm-workspace.yaml 的六条占位符;lockfile **回到提交态**(git diff 为空)→ `pnpm verify:dep` exit 0。②**证据包整体迁至 TCRN-AOS**(docs/reports/init-018/,30 个包):初始化交付的证据是 Initiative 记录而非引擎发布源码,原样入册会把 603KB 的试用 HTML 等 154 个文件塞进引擎的可复现源码归档;迁后未入册文件由约 150 降至 **18**,且 18 条全部是货真价实的引擎源码,已正式入册(名册 355→373)→ `source` exit 0。③S7 黄金样本改为**字符串模块**:它是逐字节比对,而本仓格式化器会重排 .json,等于让格式化器改写被测的字节;改后 3/3 绿,篡改黄金样本 exit 1。④format-write 后 `format-check` exit 0(373 文件)——其中唯一剩余的 fixtures/protocol/v1/negative/cases.json **是 HEAD 上既存的红**(该文件已提交且工作树未改动,缺一个换行符),顺手修掉,协议测试 13/13 不受影响。\n\n【验收】source / format / dep 三道门各自 exit 0。`pnpm verify:p1` 仍拒(`P1_EXCLUSIVE_SOURCE_BASIS_REQUIRED`)——那是**设计**:它要求干净检出,本地有未提交改动时不予认证,不是缺陷。\n\n【残余】链上多条注解引用了旧路径 `tcrn-workflow/docs/reports/init-018/...`,证据已迁至 `TCRN-AOS/docs/reports/init-018/...`;按事件只增不改,以本条注解作为路径更正记录。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1665,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:f499e2a47be1b4ba638fb1ee",
+      "version": 1666
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:50:01Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1666",
+        "--id",
+        "work:f499e2a47be1b4ba638fb1ee",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1666,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:f499e2a47be1b4ba638fb1ee",
+      "version": 1667
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:50:02Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1667",
+        "--id",
+        "work:e89e707a91baecba7acdbf14",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1667,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:e89e707a91baecba7acdbf14",
+      "version": 1668
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:50:03Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1668",
+        "--id",
+        "work:e89e707a91baecba7acdbf14",
+        "--scope",
+        "【S6/S8 行为回归门:CI 里轮不到执行,且离线子集对 release 门零保护】\n\n【核验层未及的更硬一层,本单确证】S6 的 provider(s6-provider.mjs)**原样返回测试文件自己写的 vars.agentDecision**,断言再检查该字符串包含自己的子串——**模型从未参与**。所以「6/6 绿」等于 `assert(字面量包含自己的子串)`,红证是同一同义反复的反面。这不是「裸子串断言」,是本平台招牌失效模式(判据无法区分两个世界)的纯粹形态,两侧都不含任何关于引擎、平台或代理的信息。\n\n【正名而非删除】那对绿/红夹具确实证明了一件真事:**这组判据能区分正解与已付学费的反模式**。故重做为「判据判别力门」,并明确它**不是**行为门——行为只在真模型面前可观测,那是 s6-models.yaml 的 release 时关切。\n\n【修复完成 2026-08-05】①新语料 tests/fixtures/s6-lessons/corpus.mjs:六条教训各带 `mustContain` **与 `mustNotContain`**(否定感知——裸 contains 下「不要继续，先停下」能满足 `继续` 标记),各注明来源记忆文件与当时真实采取的反模式。②tests/s6-lessons.test.mjs 五项断言:语料两侧完备、正解全过、**反模式全不过(判别力主张)**、判据两半都被行使(不得只靠缺失判负)、以及**模型门语料未漂移**——该条在首次运行即抓到一次真漂移(我自己润色了场景文本)。③scripts/verify-s6.mjs 改零依赖入口(node --test),reasonCode 直书 S6_LESSON_MARKERS_DISCRIMINATE 并声明它不是行为主张。④删除同义反复三件(s6-lessons.yaml / s6-red-proof.yaml / s6-provider.mjs)与 promptfoo 驱动两件。⑤CI 重构:`lessons` **独立 job**(零依赖,不再藏在 fail-fast 的 verify:p1 之后——那正是「挂每 push CI 实测 6/6 绿」把本地测量报成 CI 测量的机制);删除 release-eval job,其谓词是裸 `workflow_dispatch`(无 tag、无 release、无 needs,任何一次手动触发都算 release 门)且它跑的脚本已随 promptfoo 移除。⑥新测试移入 tests/ 后被 `pnpm test` 自动发现(该套件按 tests/**/*.test.mjs 收集)。\n\n【红侧】让某条反模式与正解一致 → exit 1,报「反模式通过了,这组判据无法区分两个世界」并点名教训 id。\n\n【残余】模型门(s6-models.yaml)作为数据保留但**本仓无法运行**——promptfoo 已刻意移出依赖图,运行须在带该工具的宿主上,且需 S6_EVAL_API_KEY。这是如实的能力边界,不是待办的假装。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1668,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:e89e707a91baecba7acdbf14",
+      "version": 1669
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:50:04Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1669",
+        "--id",
+        "work:e89e707a91baecba7acdbf14",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1669,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:e89e707a91baecba7acdbf14",
+      "version": 1670
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:86a52b72edd19c41b487f07c",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-033",
+            "observed": "TCRN-CROSS-INC-033",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【S1 deny 规则装在了没有控制树的世界;G1 未达成】原缺陷:五仓 .claude/settings.json 的 deny 规则装在**零控制树**的仓内(实测 find 全零),而控制树全在平台根 .tcrn-workspace/ 与 ~/.tcrn-workflow;平台根无 settings.json、用户级 deny 为 null。\n\n【修复完成 2026-08-05】①平台根新建 .claude/settings.json,26 条 Write/Edit deny 覆盖真实控制树两处落点(容器 10 个分区目录 + 其中 9 棵物化 .tcrn-workflow 树 + 家目录树);主形态为**绝对式**(不依赖宿主如何锚定相对模式),每棵树另给四种点开头变体,因最深受治路径正位于字面 .tcrn-workflow 段下。②新增可证伪判据 `pnpm --dir TCRN-AOS control-tree:proof`:名册由**三次独立文件系统观测**派生而非手写清单(identity walk 找 .tcrn-workflow 目录 / 容器列举 / 家目录树),对每棵树以真实文件加三个深度的合成路径探测,要求 Write 与 Edit 在严格 glob 语义下双双覆盖。③**残余当场关闭**:复核者实测「仓内起的会话仍 21/21 全裸」(平台根规则以项目根锚定,对仓内会话不适用),已把 22 条可移植(绝对式与 ~ 式)规则并入五仓 settings,现 `--all-session-roots` 六个会话根**各 0/21 未覆盖**。④按本平台『不在 verify 里的门寿命=写它那天』,已把 control-tree:proof 接进 TCRN-AOS 的 pnpm verify 链。\n\n【红侧五项】修复前的五仓世界 / 删除家目录树规则 / 注入一棵未覆盖的树 / 各仓会话根独立判定(RED4,正是它量出并驱动了残余关闭) / 空世界不得恒绿。证据包 TCRN-AOS/docs/reports/init-018/INC-033/。\n\n【已声明的天花板,不隐瞒】(a)deny 只作用于 Write/Edit,**刻意不含 Bash**——引擎自身经 node 写控制树,Bash 级 deny 会切断唯一合法写路径;经 Bash 的 `cat >`/`sed -i`/`rsync` 直写仍未被权限拦,该面由 STORY-144 的 SSH 写观察器(observe 态)部分覆盖。(b)活体执行不可在会话内自证:权限于会话启动快照,真验证属下一个在平台根起的会话。本单证明的是「真实磁盘字节被真实 settings 字节静态覆盖」。(c)settings 内绝对路径为本机形态,换机须重生成;判据脚本本身全部从文件系统派生,不含本机常量。(d)家目录名册含已安装引擎的 node_modules(6,463 文件),故 deny 亦拦这些依赖文件的宿主编辑——几乎确定是想要的,但爆炸半径大于「链本身」,值得一次明示裁定。",
+            "observed": "【S1 deny 规则装在了没有控制树的世界;G1 未达成】原缺陷:五仓 .claude/settings.json 的 deny 规则装在**零控制树**的仓内(实测 find 全零),而控制树全在平台根 .tcrn-workspace/ 与 ~/.tcrn-workflow;平台根无 settings.json、用户级 deny 为 null。\n\n【修复完成 2026-08-05】①平台根新建 .claude/settings.json,26 条 Write/Edit deny 覆盖真实控制树两处落点(容器 10 个分区目录 + 其中 9 棵物化 .tcrn-workflow 树 + 家目录树);主形态为**绝对式**(不依赖宿主如何锚定相对模式),每棵树另给四种点开头变体,因最深受治路径正位于字面 .tcrn-workflow 段下。②新增可证伪判据 `pnpm --dir TCRN-AOS control-tree:proof`:名册由**三次独立文件系统观测**派生而非手写清单(identity walk 找 .tcrn-workflow 目录 / 容器列举 / 家目录树),对每棵树以真实文件加三个深度的合成路径探测,要求 Write 与 Edit 在严格 glob 语义下双双覆盖。③**残余当场关闭**:复核者实测「仓内起的会话仍 21/21 全裸」(平台根规则以项目根锚定,对仓内会话不适用),已把 22 条可移植(绝对式与 ~ 式)规则并入五仓 settings,现 `--all-session-roots` 六个会话根**各 0/21 未覆盖**。④按本平台『不在 verify 里的门寿命=写它那天』,已把 control-tree:proof 接进 TCRN-AOS 的 pnpm verify 链。\n\n【红侧五项】修复前的五仓世界 / 删除家目录树规则 / 注入一棵未覆盖的树 / 各仓会话根独立判定(RED4,正是它量出并驱动了残余关闭) / 空世界不得恒绿。证据包 TCRN-AOS/docs/reports/init-018/INC-033/。\n\n【已声明的天花板,不隐瞒】(a)deny 只作用于 Write/Edit,**刻意不含 Bash**——引擎自身经 node 写控制树,Bash 级 deny 会切断唯一合法写路径;经 Bash 的 `cat >`/`sed -i`/`rsync` 直写仍未被权限拦,该面由 STORY-144 的 SSH 写观察器(observe 态)部分覆盖。(b)活体执行不可在会话内自证:权限于会话启动快照,真验证属下一个在平台根起的会话。本单证明的是「真实磁盘字节被真实 settings 字节静态覆盖」。(c)settings 内绝对路径为本机形态,换机须重生成;判据脚本本身全部从文件系统派生,不含本机常量。(d)家目录名册含已安装引擎的 node_modules(6,463 文件),故 deny 亦拦这些依赖文件的宿主编辑——几乎确定是想要的,但爆炸半径大于「链本身」,值得一次明示裁定。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-033",
+        "status": "done"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:e89e707a91baecba7acdbf14",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-035",
+            "observed": "TCRN-CROSS-INC-035",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【S6/S8 行为回归门:CI 里轮不到执行,且离线子集对 release 门零保护】\n\n【核验层未及的更硬一层,本单确证】S6 的 provider(s6-provider.mjs)**原样返回测试文件自己写的 vars.agentDecision**,断言再检查该字符串包含自己的子串——**模型从未参与**。所以「6/6 绿」等于 `assert(字面量包含自己的子串)`,红证是同一同义反复的反面。这不是「裸子串断言」,是本平台招牌失效模式(判据无法区分两个世界)的纯粹形态,两侧都不含任何关于引擎、平台或代理的信息。\n\n【正名而非删除】那对绿/红夹具确实证明了一件真事:**这组判据能区分正解与已付学费的反模式**。故重做为「判据判别力门」,并明确它**不是**行为门——行为只在真模型面前可观测,那是 s6-models.yaml 的 release 时关切。\n\n【修复完成 2026-08-05】①新语料 tests/fixtures/s6-lessons/corpus.mjs:六条教训各带 `mustContain` **与 `mustNotContain`**(否定感知——裸 contains 下「不要继续，先停下」能满足 `继续` 标记),各注明来源记忆文件与当时真实采取的反模式。②tests/s6-lessons.test.mjs 五项断言:语料两侧完备、正解全过、**反模式全不过(判别力主张)**、判据两半都被行使(不得只靠缺失判负)、以及**模型门语料未漂移**——该条在首次运行即抓到一次真漂移(我自己润色了场景文本)。③scripts/verify-s6.mjs 改零依赖入口(node --test),reasonCode 直书 S6_LESSON_MARKERS_DISCRIMINATE 并声明它不是行为主张。④删除同义反复三件(s6-lessons.yaml / s6-red-proof.yaml / s6-provider.mjs)与 promptfoo 驱动两件。⑤CI 重构:`lessons` **独立 job**(零依赖,不再藏在 fail-fast 的 verify:p1 之后——那正是「挂每 push CI 实测 6/6 绿」把本地测量报成 CI 测量的机制);删除 release-eval job,其谓词是裸 `workflow_dispatch`(无 tag、无 release、无 needs,任何一次手动触发都算 release 门)且它跑的脚本已随 promptfoo 移除。⑥新测试移入 tests/ 后被 `pnpm test` 自动发现(该套件按 tests/**/*.test.mjs 收集)。\n\n【红侧】让某条反模式与正解一致 → exit 1,报「反模式通过了,这组判据无法区分两个世界」并点名教训 id。\n\n【残余】模型门(s6-models.yaml)作为数据保留但**本仓无法运行**——promptfoo 已刻意移出依赖图,运行须在带该工具的宿主上,且需 S6_EVAL_API_KEY。这是如实的能力边界,不是待办的假装。",
+            "observed": "【S6/S8 行为回归门:CI 里轮不到执行,且离线子集对 release 门零保护】\n\n【核验层未及的更硬一层,本单确证】S6 的 provider(s6-provider.mjs)**原样返回测试文件自己写的 vars.agentDecision**,断言再检查该字符串包含自己的子串——**模型从未参与**。所以「6/6 绿」等于 `assert(字面量包含自己的子串)`,红证是同一同义反复的反面。这不是「裸子串断言」,是本平台招牌失效模式(判据无法区分两个世界)的纯粹形态,两侧都不含任何关于引擎、平台或代理的信息。\n\n【正名而非删除】那对绿/红夹具确实证明了一件真事:**这组判据能区分正解与已付学费的反模式**。故重做为「判据判别力门」,并明确它**不是**行为门——行为只在真模型面前可观测,那是 s6-models.yaml 的 release 时关切。\n\n【修复完成 2026-08-05】①新语料 tests/fixtures/s6-lessons/corpus.mjs:六条教训各带 `mustContain` **与 `mustNotContain`**(否定感知——裸 contains 下「不要继续，先停下」能满足 `继续` 标记),各注明来源记忆文件与当时真实采取的反模式。②tests/s6-lessons.test.mjs 五项断言:语料两侧完备、正解全过、**反模式全不过(判别力主张)**、判据两半都被行使(不得只靠缺失判负)、以及**模型门语料未漂移**——该条在首次运行即抓到一次真漂移(我自己润色了场景文本)。③scripts/verify-s6.mjs 改零依赖入口(node --test),reasonCode 直书 S6_LESSON_MARKERS_DISCRIMINATE 并声明它不是行为主张。④删除同义反复三件(s6-lessons.yaml / s6-red-proof.yaml / s6-provider.mjs)与 promptfoo 驱动两件。⑤CI 重构:`lessons` **独立 job**(零依赖,不再藏在 fail-fast 的 verify:p1 之后——那正是「挂每 push CI 实测 6/6 绿」把本地测量报成 CI 测量的机制);删除 release-eval job,其谓词是裸 `workflow_dispatch`(无 tag、无 release、无 needs,任何一次手动触发都算 release 门)且它跑的脚本已随 promptfoo 移除。⑥新测试移入 tests/ 后被 `pnpm test` 自动发现(该套件按 tests/**/*.test.mjs 收集)。\n\n【红侧】让某条反模式与正解一致 → exit 1,报「反模式通过了,这组判据无法区分两个世界」并点名教训 id。\n\n【残余】模型门(s6-models.yaml)作为数据保留但**本仓无法运行**——promptfoo 已刻意移出依赖图,运行须在带该工具的宿主上,且需 S6_EVAL_API_KEY。这是如实的能力边界,不是待办的假装。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-035",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1670,
+    "headEventHash": "75b905e9d3ca873a62f11e7669866227c2585784ab2166ace4d1eabb829cb7aa",
+    "work": 256
+  },
+  "eventsAppended": 9,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-05T08:50:06Z"
+}

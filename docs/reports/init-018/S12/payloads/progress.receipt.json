@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-142",
+  "intent": "进度记录",
+  "startedAt": "2026-08-04T17:47:25Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "<outside-repository>",
+    "sha256": "4c66209cdec842505fe0396bb63719439d9bc5a3d07522873f4fead3eac57daf",
+    "bytes": 1831
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1576,
+    "headEventHash": "60b792681374317f3b14cd70515b53ca544d2fe3937b670910d483e58b02f49f",
+    "work": 236
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:deepseek-v4-flash",
+        "--at",
+        "2026-08-04T17:47:26Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1576",
+        "--id",
+        "work:46ab18d3baee83d7dba9f52e",
+        "--scope",
+        "S12 回放性能基准:合成链生成器(仅经引擎公开 CLI 生成 3k/10k 事件工作区,禁直写工作区文件)+bench 脚本对 status/validate/export/work-list 各≥5 次取中位墙钟。验收:两条合成链基准表 json+md;禁对 VM 活链跑基准。S12.3 阈值判定(只读动词>2s 启动修复)与基准落链归审查层。对应 G6。MIN-055。进度@2026-08-05:已完成=S12.1 合成器 scripts/bench/synthesize-chain.mjs(仅引擎公开 CLI init/project-create/work-create/work-transition,expected-version 链式 CAS,禁直写工作区)+3k 链生成成功(3758 事件,18.2min);S12.2 bench-replay.mjs(5 次取中位,拒绝动词记 FAILED reasonCode)+3k 基准实测 status 363ms/validate 397ms/work-list 401ms 均<2s 阈值;export FAILED INPUT_OVERSIZED——协议 1MiB canonical 上限,>3k 事件链不可导出,已列主要 finding 待审查层评估。10k 链合成后台进行中(长杆约 2h),bench-10000 待补。证据包=tcrn-workflow/docs/reports/init-018/S12/(bench-3000.json/.md+commands+notes 已就绪)。下一步=10k 完成后跑 bench 补齐,写定 S12.3 判定草案(当前数据不触发启动修复;export 上限另报)并收口。阻塞=无(等 10k)。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1576,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:46ab18d3baee83d7dba9f52e",
+      "version": 1577
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:46ab18d3baee83d7dba9f52e",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-142",
+            "observed": "TCRN-CROSS-STORY-142",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "active",
+            "observed": "active",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "S12 回放性能基准:合成链生成器(仅经引擎公开 CLI 生成 3k/10k 事件工作区,禁直写工作区文件)+bench 脚本对 status/validate/export/work-list 各≥5 次取中位墙钟。验收:两条合成链基准表 json+md;禁对 VM 活链跑基准。S12.3 阈值判定(只读动词>2s 启动修复)与基准落链归审查层。对应 G6。MIN-055。进度@2026-08-05:已完成=S12.1 合成器 scripts/bench/synthesize-chain.mjs(仅引擎公开 CLI init/project-create/work-create/work-transition,expected-version 链式 CAS,禁直写工作区)+3k 链生成成功(3758 事件,18.2min);S12.2 bench-replay.mjs(5 次取中位,拒绝动词记 FAILED reasonCode)+3k 基准实测 status 363ms/validate 397ms/work-list 401ms 均<2s 阈值;export FAILED INPUT_OVERSIZED——协议 1MiB canonical 上限,>3k 事件链不可导出,已列主要 finding 待审查层评估。10k 链合成后台进行中(长杆约 2h),bench-10000 待补。证据包=tcrn-workflow/docs/reports/init-018/S12/(bench-3000.json/.md+commands+notes 已就绪)。下一步=10k 完成后跑 bench 补齐,写定 S12.3 判定草案(当前数据不触发启动修复;export 上限另报)并收口。阻塞=无(等 10k)。",
+            "observed": "S12 回放性能基准:合成链生成器(仅经引擎公开 CLI 生成 3k/10k 事件工作区,禁直写工作区文件)+bench 脚本对 status/validate/export/work-list 各≥5 次取中位墙钟。验收:两条合成链基准表 json+md;禁对 VM 活链跑基准。S12.3 阈值判定(只读动词>2s 启动修复)与基准落链归审查层。对应 G6。MIN-055。进度@2026-08-05:已完成=S12.1 合成器 scripts/bench/synthesize-chain.mjs(仅引擎公开 CLI init/project-create/work-create/work-transition,expected-version 链式 CAS,禁直写工作区)+3k 链生成成功(3758 事件,18.2min);S12.2 bench-replay.mjs(5 次取中位,拒绝动词记 FAILED reasonCode)+3k 基准实测 status 363ms/validate 397ms/work-list 401ms 均<2s 阈值;export FAILED INPUT_OVERSIZED——协议 1MiB canonical 上限,>3k 事件链不可导出,已列主要 finding 待审查层评估。10k 链合成后台进行中(长杆约 2h),bench-10000 待补。证据包=tcrn-workflow/docs/reports/init-018/S12/(bench-3000.json/.md+commands+notes 已就绪)。下一步=10k 完成后跑 bench 补齐,写定 S12.3 判定草案(当前数据不触发启动修复;export 上限另报)并收口。阻塞=无(等 10k)。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-142",
+        "status": "active"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1577,
+    "headEventHash": "b2338ee90dae26fe77fd774b2fa13de79398a50de3c0b0fbecbd2b3a7ddc3739",
+    "work": 236
+  },
+  "eventsAppended": 1,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-04T17:47:28Z"
+}

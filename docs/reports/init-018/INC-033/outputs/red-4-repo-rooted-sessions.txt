@@ -1,0 +1,1187 @@
+matcher self-test: 24 samples, 0 failure(s)
+platform root:     <local-platform-root>
+session roots:     <local-platform-root>, <local-platform-root>/TCRN-AOS, <local-platform-root>/TCRN-Design-System, <local-platform-root>/TCRN-TMS, <local-platform-root>/tcrn-workflow, <local-platform-root>/tcrn-workflow-helper
+settings sources:  8
+  - <local-home>/.claude/settings.json [user] deny=0 file-rules=0
+  - <local-platform-root>/.claude/settings.json [project] deny=26 file-rules=26
+  - <local-platform-root>/.claude/settings.local.json [project] deny=0 file-rules=0
+  - <local-platform-root>/TCRN-AOS/.claude/settings.json [project] deny=4 file-rules=4
+  - <local-platform-root>/TCRN-Design-System/.claude/settings.json [project] deny=4 file-rules=4
+  - <local-platform-root>/TCRN-TMS/.claude/settings.json [project] deny=4 file-rules=4
+  - <local-platform-root>/tcrn-workflow/.claude/settings.json [project] deny=4 file-rules=4
+  - <local-platform-root>/tcrn-workflow-helper/.claude/settings.json [project] deny=4 file-rules=4
+file deny rules:   46
+control trees:     21
+--- session root: <local-platform-root> --- 0 uncovered of 21
+  OK   <local-platform-root>/.tcrn-workspace  [container-root] probes=11 real=740 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/cross-project  [container-child] probes=9 real=31 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/cross-project-shadow  [container-child] probes=7 real=4 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/Joi-Button  [container-child] probes=9 real=17 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/Joi-Button-shadow  [container-child] probes=9 real=6 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/release-trust  [container-child] probes=4 real=1 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/TCRN-AOS  [container-child] probes=11 real=633 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/TCRN-Design-System  [container-child] probes=9 real=24 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow  [container-child] probes=7 real=4 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/TCRN-TMS  [container-child] probes=9 real=16 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow  [container-child] probes=7 real=4 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow  [identity-walk] probes=8 real=5 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow  [identity-walk] probes=9 real=16 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow  [identity-walk] probes=9 real=20 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow  [identity-walk] probes=9 real=23 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow  [identity-walk] probes=9 real=15 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=strict Edit=strict
+  OK   <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow  [identity-walk] probes=9 real=30 Write=strict Edit=strict
+  OK   <local-home>/.tcrn-workflow  [home] probes=11 real=6463 Write=strict Edit=strict
+--- session root: <local-platform-root>/TCRN-AOS --- 21 uncovered of 21
+  FAIL <local-platform-root>/.tcrn-workspace  [container-root] probes=11 real=740 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:af064728aab1f7daa1440840.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:d3a21db4eea305c925ec737f.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:af064728aab1f7daa1440840.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:d3a21db4eea305c925ec737f.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project  [container-child] probes=9 real=31 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button  [container-child] probes=9 real=17 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button-shadow  [container-child] probes=9 real=6 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/release-trust  [container-child] probes=4 real=1 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/gate-identity-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/gate-identity-authority.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-AOS  [container-child] probes=11 real=633 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/attestations/000d6696f93ad6b00bca1f25239a214de28301125fb1354f8498711009d12212.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/attestations/000d6696f93ad6b00bca1f25239a214de28301125fb1354f8498711009d12212.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System  [container-child] probes=9 real=24 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS  [container-child] probes=9 real=16 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow  [identity-walk] probes=8 real=5 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/views/STATUS.md
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow  [identity-walk] probes=9 real=16 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow  [identity-walk] probes=9 real=20 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow  [identity-walk] probes=9 real=23 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow  [identity-walk] probes=9 real=15 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow  [identity-walk] probes=9 real=30 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-home>/.tcrn-workflow  [home] probes=11 real=6463 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-home>/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/meta-data.json
+         uncovered(Write): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/unevaluated.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/meta-data.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/unevaluated.json
+--- session root: <local-platform-root>/TCRN-Design-System --- 21 uncovered of 21
+  FAIL <local-platform-root>/.tcrn-workspace  [container-root] probes=11 real=740 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:af064728aab1f7daa1440840.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:d3a21db4eea305c925ec737f.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:af064728aab1f7daa1440840.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:d3a21db4eea305c925ec737f.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project  [container-child] probes=9 real=31 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button  [container-child] probes=9 real=17 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button-shadow  [container-child] probes=9 real=6 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/release-trust  [container-child] probes=4 real=1 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/gate-identity-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/gate-identity-authority.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-AOS  [container-child] probes=11 real=633 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/attestations/000d6696f93ad6b00bca1f25239a214de28301125fb1354f8498711009d12212.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/attestations/000d6696f93ad6b00bca1f25239a214de28301125fb1354f8498711009d12212.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System  [container-child] probes=9 real=24 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS  [container-child] probes=9 real=16 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow  [identity-walk] probes=8 real=5 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/views/STATUS.md
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow  [identity-walk] probes=9 real=16 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow  [identity-walk] probes=9 real=20 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow  [identity-walk] probes=9 real=23 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow  [identity-walk] probes=9 real=15 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow  [identity-walk] probes=9 real=30 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-home>/.tcrn-workflow  [home] probes=11 real=6463 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-home>/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/meta-data.json
+         uncovered(Write): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/unevaluated.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/meta-data.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/unevaluated.json
+--- session root: <local-platform-root>/TCRN-TMS --- 21 uncovered of 21
+  FAIL <local-platform-root>/.tcrn-workspace  [container-root] probes=11 real=740 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:af064728aab1f7daa1440840.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:d3a21db4eea305c925ec737f.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:af064728aab1f7daa1440840.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:d3a21db4eea305c925ec737f.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project  [container-child] probes=9 real=31 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button  [container-child] probes=9 real=17 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button-shadow  [container-child] probes=9 real=6 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/release-trust  [container-child] probes=4 real=1 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/gate-identity-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/gate-identity-authority.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-AOS  [container-child] probes=11 real=633 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/attestations/000d6696f93ad6b00bca1f25239a214de28301125fb1354f8498711009d12212.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/attestations/000d6696f93ad6b00bca1f25239a214de28301125fb1354f8498711009d12212.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System  [container-child] probes=9 real=24 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS  [container-child] probes=9 real=16 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow  [identity-walk] probes=8 real=5 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/views/STATUS.md
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow  [identity-walk] probes=9 real=16 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow  [identity-walk] probes=9 real=20 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow  [identity-walk] probes=9 real=23 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow  [identity-walk] probes=9 real=15 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow  [identity-walk] probes=9 real=30 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-home>/.tcrn-workflow  [home] probes=11 real=6463 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-home>/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/meta-data.json
+         uncovered(Write): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/unevaluated.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/meta-data.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/unevaluated.json
+--- session root: <local-platform-root>/tcrn-workflow --- 21 uncovered of 21
+  FAIL <local-platform-root>/.tcrn-workspace  [container-root] probes=11 real=740 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:af064728aab1f7daa1440840.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:d3a21db4eea305c925ec737f.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:af064728aab1f7daa1440840.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:d3a21db4eea305c925ec737f.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project  [container-child] probes=9 real=31 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button  [container-child] probes=9 real=17 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button-shadow  [container-child] probes=9 real=6 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/release-trust  [container-child] probes=4 real=1 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/gate-identity-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/gate-identity-authority.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-AOS  [container-child] probes=11 real=633 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/attestations/000d6696f93ad6b00bca1f25239a214de28301125fb1354f8498711009d12212.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/attestations/000d6696f93ad6b00bca1f25239a214de28301125fb1354f8498711009d12212.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System  [container-child] probes=9 real=24 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS  [container-child] probes=9 real=16 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow  [identity-walk] probes=8 real=5 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/views/STATUS.md
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow  [identity-walk] probes=9 real=16 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow  [identity-walk] probes=9 real=20 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow  [identity-walk] probes=9 real=23 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow  [identity-walk] probes=9 real=15 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow  [identity-walk] probes=9 real=30 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-home>/.tcrn-workflow  [home] probes=11 real=6463 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-home>/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/meta-data.json
+         uncovered(Write): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/unevaluated.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/meta-data.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/unevaluated.json
+--- session root: <local-platform-root>/tcrn-workflow-helper --- 21 uncovered of 21
+  FAIL <local-platform-root>/.tcrn-workspace  [container-root] probes=11 real=740 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:af064728aab1f7daa1440840.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:d3a21db4eea305c925ec737f.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:af064728aab1f7daa1440840.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/metadata/knowledge:d3a21db4eea305c925ec737f.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/knowledge/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project  [container-child] probes=9 real=31 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button  [container-child] probes=9 real=17 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button-shadow  [container-child] probes=9 real=6 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/shadow-queue.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/release-trust  [container-child] probes=4 real=1 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/release-trust/gate-identity-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/release-trust/gate-identity-authority.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-AOS  [container-child] probes=11 real=633 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/attestations/000d6696f93ad6b00bca1f25239a214de28301125fb1354f8498711009d12212.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/ARCHIVED.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/attestations/000d6696f93ad6b00bca1f25239a214de28301125fb1354f8498711009d12212.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System  [container-child] probes=9 real=24 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS  [container-child] probes=9 real=16 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/authority/vacate-authority.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/authority/vacate-authority.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow  [container-child] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow  [identity-walk] probes=8 real=5 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button-shadow/workspace/.tcrn-workflow/views/STATUS.md
+  FAIL <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow  [identity-walk] probes=9 real=16 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/Joi-Button/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow  [identity-walk] probes=9 real=20 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-AOS/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow  [identity-walk] probes=9 real=23 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-Design-System/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow  [identity-walk] probes=9 real=15 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/TCRN-TMS/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow  [identity-walk] probes=7 real=4 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/STATUS.md
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project-shadow/workspace/.tcrn-workflow/views/index.json
+  FAIL <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow  [identity-walk] probes=9 real=30 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Write): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000002.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000001.json
+         uncovered(Edit): <local-platform-root>/.tcrn-workspace/cross-project/workspace/.tcrn-workflow/events/000002.json
+  FAIL <local-home>/.tcrn-workflow  [home] probes=11 real=6463 Write=UNCOVERED Edit=UNCOVERED
+         uncovered(Write): <local-home>/.tcrn-workflow/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/a/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Write): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/meta-data.json
+         uncovered(Write): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/unevaluated.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/a/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/a/b/c/d/__probe__.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/meta-data.json
+         uncovered(Edit): <local-home>/.tcrn-workflow/candidates/c49734d17635d377d0216eb2389c7defeae14a84/node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/lib/refs/json-schema-2020-12/meta/unevaluated.json
+verdict: CONTROL_TREE_DENY_COVERAGE_FAILED (CONTROL_TREE_DENY_COVERAGE_INCOMPLETE)

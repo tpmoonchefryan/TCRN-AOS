@@ -1,0 +1,1028 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-018",
+  "intent": "收口 INIT-018:六个 EPIC 依次终态,末了 INIT 本体置 done(WSA-3 要求子树先终态)。",
+  "startedAt": "2026-08-05T09:34:13Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "<outside-repository>",
+    "sha256": "7b8cd859852b99606958e62f7efa2048cea843ead8ea8e5f5b786bf5118ecce6",
+    "bytes": 5886
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1691,
+    "headEventHash": "ba9b2d25de45c2c88e28b2953abc12bf86cfd055a5eef3282d2883bcdaf8b101",
+    "work": 256
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:14Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1691",
+        "--id",
+        "work:ee1e1f64cde12eb62c8ae23b",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1691,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ee1e1f64cde12eb62c8ae23b",
+      "version": 1692
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:15Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1692",
+        "--id",
+        "work:ee1e1f64cde12eb62c8ae23b",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1692,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ee1e1f64cde12eb62c8ae23b",
+      "version": 1693
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:16Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1693",
+        "--id",
+        "work:ee1e1f64cde12eb62c8ae23b",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1693,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ee1e1f64cde12eb62c8ae23b",
+      "version": 1694
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:17Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1694",
+        "--id",
+        "work:3f946d82e6f990923d614303",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1694,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:3f946d82e6f990923d614303",
+      "version": 1695
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:18Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1695",
+        "--id",
+        "work:3f946d82e6f990923d614303",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1695,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:3f946d82e6f990923d614303",
+      "version": 1696
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:19Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1696",
+        "--id",
+        "work:3f946d82e6f990923d614303",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1696,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:3f946d82e6f990923d614303",
+      "version": 1697
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:21Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1697",
+        "--id",
+        "work:fd23bf630bee698226534252",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1697,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:fd23bf630bee698226534252",
+      "version": 1698
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:22Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1698",
+        "--id",
+        "work:fd23bf630bee698226534252",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1698,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:fd23bf630bee698226534252",
+      "version": 1699
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:23Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1699",
+        "--id",
+        "work:fd23bf630bee698226534252",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1699,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:fd23bf630bee698226534252",
+      "version": 1700
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:24Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1700",
+        "--id",
+        "work:eeb7ef0896d82312093ced3e",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1700,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:eeb7ef0896d82312093ced3e",
+      "version": 1701
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:25Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1701",
+        "--id",
+        "work:eeb7ef0896d82312093ced3e",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1701,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:eeb7ef0896d82312093ced3e",
+      "version": 1702
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:26Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1702",
+        "--id",
+        "work:eeb7ef0896d82312093ced3e",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1702,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:eeb7ef0896d82312093ced3e",
+      "version": 1703
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:27Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1703",
+        "--id",
+        "work:51f88fcbe3cbfd8e4c858a74",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1703,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:51f88fcbe3cbfd8e4c858a74",
+      "version": 1704
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:28Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1704",
+        "--id",
+        "work:51f88fcbe3cbfd8e4c858a74",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1704,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:51f88fcbe3cbfd8e4c858a74",
+      "version": 1705
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:29Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1705",
+        "--id",
+        "work:51f88fcbe3cbfd8e4c858a74",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1705,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:51f88fcbe3cbfd8e4c858a74",
+      "version": 1706
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:31Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1706",
+        "--id",
+        "work:bc51bf24cbb20a5bd3a03bca",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1706,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:bc51bf24cbb20a5bd3a03bca",
+      "version": 1707
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:32Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1707",
+        "--id",
+        "work:bc51bf24cbb20a5bd3a03bca",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1707,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:bc51bf24cbb20a5bd3a03bca",
+      "version": 1708
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:33Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1708",
+        "--id",
+        "work:bc51bf24cbb20a5bd3a03bca",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1708,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:bc51bf24cbb20a5bd3a03bca",
+      "version": 1709
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:34Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:2382be1862c8c774187e1b9b",
+        "--expected-version",
+        "1709",
+        "--id",
+        "work:cad8ec31fdbb4b4680564cca",
+        "--scope",
+        "散文到门:治理纪律机械化·行为回归前移·可观测补全——**收官 2026-08-05**。三层流水线全程走完:DeepSeek v4 Flash 执行 18 张 Story;Opus 5 核验层以 64 代理独立重跑证据,查出 33 条存活缺陷并推翻 17 条误报(无对抗验证则误报率 34%),按 MIN-056 一律另立 INC 不回滚 done;Fable 5 终审并执链写。**INC-032..039 八张全部收口**:①排程三任务共用登录 sh 致 exit 127、自装载起从未成功过一次(含我自己那台唤起器在 spawn 抛错前谎报成功),经三次真触发才转绿并补 scheduler:health 门;②G1 未达成——deny 规则装在五个零控制树的仓里,平台根加规则后再补五仓,六个会话根现各 0/21 未覆盖;③交付曾使引擎仓 CI 首门即红,方向裁定为 promptfoo 移出冻结依赖图(补 686 条等于作废该属性)、证据包整体迁 AOS(未入册由 ~150 降到 18 条真源码)、S7 黄金样本改字符串模块;④S6「6/6 绿」实为断言字面量包含自己的子串(模型从未参与),正名重做为判别力门;⑤S3 红证跑判据副本、⑥S2 判据四缺陷加一处新发现的绕过、⑦七项叙述失真追加式订正、⑧被提交的 CLAUDE.md 仍断言 home=local 而判据只读工作树。**S18 首次以可证形态开会**:三席隔离产出+收据绑定+新判据 verify-deliberation-binding(绿=三席逐字节吻合,红=篡改摘要即点名),裁定见 MIN-059,两份公约据此修订。终态实测:引擎仓 test/source/format/proof 四门 exit 0;AOS 的 parity/control-tree/doc-topology/scheduler/freshness 五门 exit 0;cross 链 validate 干净。**六个目标**:G1 达成(经补覆盖)、G2 达成(parity 门四缺陷已修并入 verify)、G3 达成(判别力门+黄金样本+CI 独立 job)、G4 部分(埋点与成本归因交付但观测栈三单未对接,如实记 INC-038)、G5 达成(35 项编目+三档终审+公约 8-11)、G6 达成(基准落链、条件未触发、revisit 阈值已记)。最大的一条教训:本 Initiative 立意是把散文变成门,而它自己交付的门里有若干**从未生效**——判据两侧不可能不同、红证跑副本、门不在列车里。这条已写进 harness-constraint 公约二之二节,不再只是记忆。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1709,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:cad8ec31fdbb4b4680564cca",
+      "version": 1710
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:35Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1710",
+        "--id",
+        "work:cad8ec31fdbb4b4680564cca",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1710,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:cad8ec31fdbb4b4680564cca",
+      "version": 1711
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:36Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1711",
+        "--id",
+        "work:cad8ec31fdbb4b4680564cca",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1711,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:cad8ec31fdbb4b4680564cca",
+      "version": 1712
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T09:34:37Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1712",
+        "--id",
+        "work:cad8ec31fdbb4b4680564cca",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1712,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:cad8ec31fdbb4b4680564cca",
+      "version": 1713
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:cad8ec31fdbb4b4680564cca",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INIT-018",
+            "observed": "TCRN-CROSS-INIT-018",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Initiative",
+            "observed": "Initiative",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "散文到门:治理纪律机械化·行为回归前移·可观测补全——**收官 2026-08-05**。三层流水线全程走完:DeepSeek v4 Flash 执行 18 张 Story;Opus 5 核验层以 64 代理独立重跑证据,查出 33 条存活缺陷并推翻 17 条误报(无对抗验证则误报率 34%),按 MIN-056 一律另立 INC 不回滚 done;Fable 5 终审并执链写。**INC-032..039 八张全部收口**:①排程三任务共用登录 sh 致 exit 127、自装载起从未成功过一次(含我自己那台唤起器在 spawn 抛错前谎报成功),经三次真触发才转绿并补 scheduler:health 门;②G1 未达成——deny 规则装在五个零控制树的仓里,平台根加规则后再补五仓,六个会话根现各 0/21 未覆盖;③交付曾使引擎仓 CI 首门即红,方向裁定为 promptfoo 移出冻结依赖图(补 686 条等于作废该属性)、证据包整体迁 AOS(未入册由 ~150 降到 18 条真源码)、S7 黄金样本改字符串模块;④S6「6/6 绿」实为断言字面量包含自己的子串(模型从未参与),正名重做为判别力门;⑤S3 红证跑判据副本、⑥S2 判据四缺陷加一处新发现的绕过、⑦七项叙述失真追加式订正、⑧被提交的 CLAUDE.md 仍断言 home=local 而判据只读工作树。**S18 首次以可证形态开会**:三席隔离产出+收据绑定+新判据 verify-deliberation-binding(绿=三席逐字节吻合,红=篡改摘要即点名),裁定见 MIN-059,两份公约据此修订。终态实测:引擎仓 test/source/format/proof 四门 exit 0;AOS 的 parity/control-tree/doc-topology/scheduler/freshness 五门 exit 0;cross 链 validate 干净。**六个目标**:G1 达成(经补覆盖)、G2 达成(parity 门四缺陷已修并入 verify)、G3 达成(判别力门+黄金样本+CI 独立 job)、G4 部分(埋点与成本归因交付但观测栈三单未对接,如实记 INC-038)、G5 达成(35 项编目+三档终审+公约 8-11)、G6 达成(基准落链、条件未触发、revisit 阈值已记)。最大的一条教训:本 Initiative 立意是把散文变成门,而它自己交付的门里有若干**从未生效**——判据两侧不可能不同、红证跑副本、门不在列车里。这条已写进 harness-constraint 公约二之二节,不再只是记忆。",
+            "observed": "散文到门:治理纪律机械化·行为回归前移·可观测补全——**收官 2026-08-05**。三层流水线全程走完:DeepSeek v4 Flash 执行 18 张 Story;Opus 5 核验层以 64 代理独立重跑证据,查出 33 条存活缺陷并推翻 17 条误报(无对抗验证则误报率 34%),按 MIN-056 一律另立 INC 不回滚 done;Fable 5 终审并执链写。**INC-032..039 八张全部收口**:①排程三任务共用登录 sh 致 exit 127、自装载起从未成功过一次(含我自己那台唤起器在 spawn 抛错前谎报成功),经三次真触发才转绿并补 scheduler:health 门;②G1 未达成——deny 规则装在五个零控制树的仓里,平台根加规则后再补五仓,六个会话根现各 0/21 未覆盖;③交付曾使引擎仓 CI 首门即红,方向裁定为 promptfoo 移出冻结依赖图(补 686 条等于作废该属性)、证据包整体迁 AOS(未入册由 ~150 降到 18 条真源码)、S7 黄金样本改字符串模块;④S6「6/6 绿」实为断言字面量包含自己的子串(模型从未参与),正名重做为判别力门;⑤S3 红证跑判据副本、⑥S2 判据四缺陷加一处新发现的绕过、⑦七项叙述失真追加式订正、⑧被提交的 CLAUDE.md 仍断言 home=local 而判据只读工作树。**S18 首次以可证形态开会**:三席隔离产出+收据绑定+新判据 verify-deliberation-binding(绿=三席逐字节吻合,红=篡改摘要即点名),裁定见 MIN-059,两份公约据此修订。终态实测:引擎仓 test/source/format/proof 四门 exit 0;AOS 的 parity/control-tree/doc-topology/scheduler/freshness 五门 exit 0;cross 链 validate 干净。**六个目标**:G1 达成(经补覆盖)、G2 达成(parity 门四缺陷已修并入 verify)、G3 达成(判别力门+黄金样本+CI 独立 job)、G4 部分(埋点与成本归因交付但观测栈三单未对接,如实记 INC-038)、G5 达成(35 项编目+三档终审+公约 8-11)、G6 达成(基准落链、条件未触发、revisit 阈值已记)。最大的一条教训:本 Initiative 立意是把散文变成门,而它自己交付的门里有若干**从未生效**——判据两侧不可能不同、红证跑副本、门不在列车里。这条已写进 harness-constraint 公约二之二节,不再只是记忆。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INIT-018",
+        "kind": "Initiative",
+        "status": "done"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:bc51bf24cbb20a5bd3a03bca",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-EPIC-046",
+            "observed": "TCRN-CROSS-EPIC-046",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-EPIC-046",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1713,
+    "headEventHash": "aae673c248ac232d6acf46770932c010ae1c834cb08f86953a6d4ca3589116ef",
+    "work": 256
+  },
+  "eventsAppended": 22,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-05T09:34:39Z"
+}

@@ -1,0 +1,14 @@
+✔ green: a snapshot 1h old passes the default 9h window (95.907125ms)
+✔ red: a snapshot 20h old fails the default 9h window, exit non-zero (74.733417ms)
+✔ --max-age-hours widens the window, turning a red into a green (69.140083ms)
+✔ the flag beats the environment override (98.481666ms)
+✔ the environment override still widens the window when no flag is given (70.644875ms)
+✔ a malformed --max-age-hours is a could-not-judge, exit 2, never a pass (78.988291ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 552.195125

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "tcrn.init-020.inc-103-proof.v1",
+  "observedAt": "2026-08-08T19:09:00Z",
+  "actor": "agent:gpt-5-codex",
+  "repository": "tcrn-workflow",
+  "basis": {
+    "branch": "feat/cross-init018-prose-to-gates",
+    "head": "4ff61229934f3abb6d716140b6e134a80dd7cdab",
+    "tree": "56e3dc6505e1854fc911f5156a5f6bf69aaaa4b0",
+    "tag": "v0.11.8",
+    "tagObject": "45de380899e38bcc868e32a56ecec6789f853b44",
+    "reachableCommits": 284,
+    "reachableRefs": 10,
+    "unreachableObjects": 0
+  },
+  "releaseGates": {
+    "privacy": {
+      "reasonCode": "PRIVACY_SOURCE_CLEAN",
+      "gitObjects": 5561,
+      "historicalCommits": 284,
+      "sourceFiles": 429
+    },
+    "history": {
+      "reasonCode": "HISTORY_CLEAN",
+      "root": "5a7cc1f5cfca22bb3b7cd12a0476817355b517f9",
+      "objects": 5561,
+      "refs": 10,
+      "reflogEntries": 0
+    },
+    "p8": {
+      "reasonCode": "P8_WORKFLOW_RC_VERIFIED",
+      "version": "v0.11.8",
+      "basisCommit": "4ff61229934f3abb6d716140b6e134a80dd7cdab",
+      "sourceArchiveFiles": 429,
+      "sbomComponents": 23,
+      "directComponents": 4,
+      "transitiveComponents": 19,
+      "mutation": false,
+      "publication": false,
+      "sourceArchiveSha256": "82c2e2f8a7a89f28084f8412d88af693bf976e0faad7f3b72c8c0d8a51481527"
+    },
+    "tests": {
+      "command": "npm_config_user_agent=pnpm/11.3.0 node/v24.16.0 darwin arm64 node scripts/task.mjs test",
+      "result": "passed",
+      "tests": 1020
+    }
+  },
+  "boundaries": {
+    "push": false,
+    "publicMainChanged": false,
+    "backup": "governance-archive/init-020-inc098-pre-rewrite-2026-08-09T012929+0800"
+  },
+  "reasonCode": "INC_103_TRUE_REPO_RELEASE_PROOF_VERIFIED"
+}

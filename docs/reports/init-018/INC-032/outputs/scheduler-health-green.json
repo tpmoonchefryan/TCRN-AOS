@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "reasonCode": "SCHEDULER_AGENTS_HEALTHY",
+  "gate": "tcrn-scheduler-health",
+  "invariants": [
+    "every launchd template shipped by this repository has a loaded agent",
+    "each loaded agent's last run exited 0"
+  ],
+  "agents": [
+    {
+      "label": "com.tcrn.aos.paired-backup",
+      "loaded": true,
+      "running": false,
+      "lastExit": 0,
+      "ok": true,
+      "reason": "SCHEDULER_AGENT_LAST_RUN_CLEAN"
+    },
+    {
+      "label": "com.tcrn.aos.read-face-refresh",
+      "loaded": true,
+      "running": false,
+      "lastExit": 0,
+      "ok": true,
+      "reason": "SCHEDULER_AGENT_LAST_RUN_CLEAN"
+    }
+  ],
+  "failed": []
+}

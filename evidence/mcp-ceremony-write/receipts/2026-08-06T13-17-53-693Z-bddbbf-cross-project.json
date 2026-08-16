@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-189",
+  "intent": "切换窗开启与首链异常记录：Joi-Button 迁移 verify 红，窗口阻断，记版本前后/根因/处置。",
+  "startedAt": "2026-08-06T13:17:48Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "evidence/mcp-ceremony-write/payloads/2026-08-06T13-17-48-724Z-0435a3-cross-project.json",
+    "sha256": "946b90e0c095a222ae7ab2a920ac197994fac3eec3712edaf387bd78191e8a94",
+    "bytes": 1957
+  },
+  "hostEngineCatalogue": {
+    "verbs": 106
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2102,
+    "headEventHash": "9ea9894c13b3848d65f50512f83e85f487fa57f30e63573a01f3a01150719af1",
+    "work": 337
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T13:17:49Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2102",
+        "--id",
+        "work:8797455f66197645465abb73",
+        "--scope",
+        "【切换窗·2026-08-06 开启即阻断】五链 file→pg 切换窗开启(Owner 已确认执行,INC-072 解除)。首链 Joi-Button(最小)迁移尝试:plan 586 events/head fd18a916…;execute 成功;verify RED WORKSPACE_MIGRATION_VERIFY_MISMATCH。根因=段粒度不一致:file workspace.metadata.segmentEventLimit=64(10 段),PG backend 硬编码 SEGMENT_LIMIT=1024(1 段),workspace-migration.compareSnapshots 逐段字节比对必红。逐事件实证 586/586 sequence·event_hash·payload_hash·payload 全等,metadata·knowledge_marker·knowledge_view 三对 sha 全同→数据平面无损,纯工具判据缺陷(发布子代理验证链≤64 事件未触发)。处置:file 链=权威且 validate 绿(v586);PG chain_joi 清空回 STORY-188 供给空态(禁 append-only trigger→TRUNCATE→启用,已验证);未跑 migration-rollback——它会以 1024 限单段覆盖 64 限 10 段布局并残留陈旧段,属损坏非回滚。窗口 BLOCKED:任一真链(>64 事件)verify 必红,需引擎修复(PG 尊重 segmentEventLimit 或 verify 改逐事件比对)后重跑。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2102,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:8797455f66197645465abb73",
+      "version": 2103
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:8797455f66197645465abb73",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-189",
+            "observed": "TCRN-CROSS-STORY-189",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【切换窗·2026-08-06 开启即阻断】五链 file→pg 切换窗开启(Owner 已确认执行,INC-072 解除)。首链 Joi-Button(最小)迁移尝试:plan 586 events/head fd18a916…;execute 成功;verify RED WORKSPACE_MIGRATION_VERIFY_MISMATCH。根因=段粒度不一致:file workspace.metadata.segmentEventLimit=64(10 段),PG backend 硬编码 SEGMENT_LIMIT=1024(1 段),workspace-migration.compareSnapshots 逐段字节比对必红。逐事件实证 586/586 sequence·event_hash·payload_hash·payload 全等,metadata·knowledge_marker·knowledge_view 三对 sha 全同→数据平面无损,纯工具判据缺陷(发布子代理验证链≤64 事件未触发)。处置:file 链=权威且 validate 绿(v586);PG chain_joi 清空回 STORY-188 供给空态(禁 append-only trigger→TRUNCATE→启用,已验证);未跑 migration-rollback——它会以 1024 限单段覆盖 64 限 10 段布局并残留陈旧段,属损坏非回滚。窗口 BLOCKED:任一真链(>64 事件)verify 必红,需引擎修复(PG 尊重 segmentEventLimit 或 verify 改逐事件比对)后重跑。",
+            "observed": "【切换窗·2026-08-06 开启即阻断】五链 file→pg 切换窗开启(Owner 已确认执行,INC-072 解除)。首链 Joi-Button(最小)迁移尝试:plan 586 events/head fd18a916…;execute 成功;verify RED WORKSPACE_MIGRATION_VERIFY_MISMATCH。根因=段粒度不一致:file workspace.metadata.segmentEventLimit=64(10 段),PG backend 硬编码 SEGMENT_LIMIT=1024(1 段),workspace-migration.compareSnapshots 逐段字节比对必红。逐事件实证 586/586 sequence·event_hash·payload_hash·payload 全等,metadata·knowledge_marker·knowledge_view 三对 sha 全同→数据平面无损,纯工具判据缺陷(发布子代理验证链≤64 事件未触发)。处置:file 链=权威且 validate 绿(v586);PG chain_joi 清空回 STORY-188 供给空态(禁 append-only trigger→TRUNCATE→启用,已验证);未跑 migration-rollback——它会以 1024 限单段覆盖 64 限 10 段布局并残留陈旧段,属损坏非回滚。窗口 BLOCKED:任一真链(>64 事件)verify 必红,需引擎修复(PG 尊重 segmentEventLimit 或 verify 改逐事件比对)后重跑。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-189",
+        "kind": "Story",
+        "status": "planned"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2103,
+    "headEventHash": "394162a181392b3d81f279f25f0c0d08fc845db2c1e9d23104e1f7ce45c6e602",
+    "work": 337
+  },
+  "knowledgeRebase": {
+    "verb": "knowledge-rebase",
+    "markerVersionBefore": 91,
+    "accepted": true,
+    "reasonCode": "KNOWLEDGE_STORE_REBASED",
+    "version": 92
+  },
+  "eventsAppended": 1,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-06T13:17:53Z"
+}

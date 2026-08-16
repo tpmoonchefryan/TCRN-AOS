@@ -1,0 +1,11 @@
+--- pre-fix guard, invoked through a symlink: silent, exit 0, ZERO samples run
+exit=0 (green-looking, but nothing ran)
+--- repaired guard, same invocation: the corpus actually runs
+{
+  "total": 96,
+  "hits": 54,
+  "passes": 42,
+  "mismatches": [],
+  "ok": true
+}
+exit=0

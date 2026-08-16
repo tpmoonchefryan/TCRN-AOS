@@ -1,0 +1,212 @@
+{
+  "schemaVersion": "aos.inc096.file-track-byte-export.v1",
+  "purpose": "INC-096 exact bytes from the retained cross-project file track, not the PG authority",
+  "readReason": "INC-096 requires the retained sealed file-track bytes; the existing archive-window artifact was a PG event-list export. This one-shot SSH read is limited to the two event segment files, and performs no engine invocation or remote write.",
+  "source": {
+    "partition": "cross-project",
+    "track": "sealed file archive",
+    "transport": "ssh read-only cat",
+    "segments": [
+      {
+        "logicalPath": "cross-project/workspace/.tcrn-workflow/events/000033.json",
+        "bytes": 139016,
+        "sha256": "9750b0b27f483e6c7fd30c8935790954cf41137c9b380636fd09ab34e20a5ea2"
+      },
+      {
+        "logicalPath": "cross-project/workspace/.tcrn-workflow/events/000034.json",
+        "bytes": 14408,
+        "sha256": "7fb50e470a912f7a50c8cc8bb7ad5d0c93cbbf30e07ab1d6079a74f36efda07b"
+      }
+    ],
+    "authorityBoundary": "The VM file bytes are evidence only; no write or migration is performed."
+  },
+  "window": {
+    "firstSequence": 2106,
+    "lastSequence": 2122,
+    "eventCount": 17,
+    "previousSequence": 2105,
+    "previousEventHash": "5227a542525c363f82d85ce46d794397244368c80e86e2859121d18f96103046",
+    "sealedHeadEventHash": "ad2a7c9ba7fc38f0e51a3800c8dbd6535f3c52fd6d351cea9de235077200154e",
+    "expectedSealedHeadEventHash": "ad2a7c9ba7fc38f0e51a3800c8dbd6535f3c52fd6d351cea9de235077200154e"
+  },
+  "events": [
+    {
+      "sequence": 2106,
+      "path": "events/2106.json",
+      "bytes": 2024,
+      "sha256": "9559fc0c06df60a99d040741faf3e3110b9c4cb0f3553b96d583209332423839",
+      "eventHash": "d3d285aaee24020befc804ce07beff691ea04f76f56933f9abcdd86450c432e4",
+      "payloadHash": "47a54a979e4f7f1d00bff0bad67a1b04903832706701337d50a882c99dca684b",
+      "priorHash": "5227a542525c363f82d85ce46d794397244368c80e86e2859121d18f96103046",
+      "operation": "work.annotated"
+    },
+    {
+      "sequence": 2107,
+      "path": "events/2107.json",
+      "bytes": 2020,
+      "sha256": "566280b65172da8f751f72852cb3a755be35d94ec6fb86b8b06b332ab7520fab",
+      "eventHash": "4bce7beb75771759f60974a52a0587cdca9d9b256f49ecb7af72e61fa8b21919",
+      "payloadHash": "245eeee0a6dcba0b86d439cea701d2f8ceb797ac8a82f40ff3d15d768fc3d31f",
+      "priorHash": "d3d285aaee24020befc804ce07beff691ea04f76f56933f9abcdd86450c432e4",
+      "operation": "work.updated"
+    },
+    {
+      "sequence": 2108,
+      "path": "events/2108.json",
+      "bytes": 2021,
+      "sha256": "0f3e11c68e9aae8b3d514098526b1018e9fd7fbbc3dfb0867da9f84341a3bdfa",
+      "eventHash": "c8989979990b7efbc4ae67f6a189f7f24308ea866b7982600353cb0bf667fee5",
+      "payloadHash": "b55d77200ea8586a96487c44b6db84329d354bfff7fe19e0a595793f189ff715",
+      "priorHash": "4bce7beb75771759f60974a52a0587cdca9d9b256f49ecb7af72e61fa8b21919",
+      "operation": "work.updated"
+    },
+    {
+      "sequence": 2109,
+      "path": "events/2109.json",
+      "bytes": 2198,
+      "sha256": "f1212e975e8bdbfe167df27ad5ede0a744899c908e8edc4a5b80fd0b14df8655",
+      "eventHash": "b917d6534dd23d244c563e784b602c6b9e345903623f439f8a8a39d2ec40d71d",
+      "payloadHash": "efe22502e227f2e94fa24bff83b72d596a9d7d597616fdf5e42294fa90dc68c8",
+      "priorHash": "c8989979990b7efbc4ae67f6a189f7f24308ea866b7982600353cb0bf667fee5",
+      "operation": "work.annotated"
+    },
+    {
+      "sequence": 2110,
+      "path": "events/2110.json",
+      "bytes": 1631,
+      "sha256": "c1f54e53a9375d2af154897e736c8f46d2e23c050c0c90b52ef55ed6360e267b",
+      "eventHash": "44db0c0b325abb5338b15ac9bd11ac7488a7d95377546196dc5dc50739664ab2",
+      "payloadHash": "07c065993a3b703261239ba84507e8bb1495e3d7895698bb416acf9e0ba346c0",
+      "priorHash": "b917d6534dd23d244c563e784b602c6b9e345903623f439f8a8a39d2ec40d71d",
+      "operation": "work.annotated"
+    },
+    {
+      "sequence": 2111,
+      "path": "events/2111.json",
+      "bytes": 1659,
+      "sha256": "5fe4f60fd545d501c833f716d5e78b45fabde87c4b2b44da4a6bfce8b5ffb6d2",
+      "eventHash": "e16cdfed99abe3f3698a7b9beecded1ec22e67fd94e3ebbdb55b2517c7017a8f",
+      "payloadHash": "e31680cfcc1dd8bf5d771016210ed3b839c8614a107450dc17f5e00976612b90",
+      "priorHash": "44db0c0b325abb5338b15ac9bd11ac7488a7d95377546196dc5dc50739664ab2",
+      "operation": "work.annotated"
+    },
+    {
+      "sequence": 2112,
+      "path": "events/2112.json",
+      "bytes": 1655,
+      "sha256": "adcaa30b2c9256f3194cbcaad6735c513e42a82fe96cd238fbaffb9154d76936",
+      "eventHash": "e259beb03b40de3e1d5b7f8a00992398cf6e515761a755f0e3d3d70e8ddc5b28",
+      "payloadHash": "5a3b7136f6d949e53630c42dc6a3b5c5c53bef6e7fac16f7058c15b380697428",
+      "priorHash": "e16cdfed99abe3f3698a7b9beecded1ec22e67fd94e3ebbdb55b2517c7017a8f",
+      "operation": "work.updated"
+    },
+    {
+      "sequence": 2113,
+      "path": "events/2113.json",
+      "bytes": 1656,
+      "sha256": "8b15d2557e24f1a0bc35751ca1e684b0f852ef127fae234128847daedfa89f03",
+      "eventHash": "fb917b131420f43d23949ff64c30031ca07dae656361d340c2be1649701acc98",
+      "payloadHash": "1e0be863db6a14bdda4666ca29687550704f14c69d9ecd6a9e4eaa63f550434b",
+      "priorHash": "e259beb03b40de3e1d5b7f8a00992398cf6e515761a755f0e3d3d70e8ddc5b28",
+      "operation": "work.updated"
+    },
+    {
+      "sequence": 2114,
+      "path": "events/2114.json",
+      "bytes": 1654,
+      "sha256": "663cfa3d6fc58d13553dcfd31669ddb5fc4ac54085df1bf57a6e8c870e69ca95",
+      "eventHash": "3c032553e195d4da1bef7d9f11979a06718c3e010cbcfdb3bf701968d0e22a1b",
+      "payloadHash": "e00a5dcc5392e799c68166d643f9286e552f0c2d0380b6cccb07775757066deb",
+      "priorHash": "fb917b131420f43d23949ff64c30031ca07dae656361d340c2be1649701acc98",
+      "operation": "work.updated"
+    },
+    {
+      "sequence": 2115,
+      "path": "events/2115.json",
+      "bytes": 1591,
+      "sha256": "e336b2c402befe7b3943e420fae7ac29fb6bc1d36c83ce668acd85e403fcd1ea",
+      "eventHash": "2471b020b363a9880c3f584e0e6fcf7dbb764a43be91852fbf18e24c39eb3512",
+      "payloadHash": "5b13b302204ce9c83c9e1550bb31ec1bab0118e253c43fac7887de7eec9eae33",
+      "priorHash": "3c032553e195d4da1bef7d9f11979a06718c3e010cbcfdb3bf701968d0e22a1b",
+      "operation": "work.annotated"
+    },
+    {
+      "sequence": 2116,
+      "path": "events/2116.json",
+      "bytes": 1450,
+      "sha256": "695905fe1f21b0a4ad83c3741f2bdfbd019607cb1950adeb7e223212e805ba49",
+      "eventHash": "976bae09b9b28457ae5d299ef914a5da119f26379b7c39980b41a14bb1f41c7f",
+      "payloadHash": "800c2131a6d1badf1836b7cebd2093dd450a62f0d229abf54f207c5c03b2a618",
+      "priorHash": "2471b020b363a9880c3f584e0e6fcf7dbb764a43be91852fbf18e24c39eb3512",
+      "operation": "work.annotated"
+    },
+    {
+      "sequence": 2117,
+      "path": "events/2117.json",
+      "bytes": 1446,
+      "sha256": "e603fb52ad9f3d9bd146d6b798f59f12fa3a389e47e0cbd0f470eecbc710f739",
+      "eventHash": "6a476a9c344334ff8fde6e24b2925b9ad8083b2eca13a335ec7370bf1a44c94b",
+      "payloadHash": "387eff0b6507a60b462b35ce01220530b36498dab7c88e1c20f6e9a1bd330502",
+      "priorHash": "976bae09b9b28457ae5d299ef914a5da119f26379b7c39980b41a14bb1f41c7f",
+      "operation": "work.updated"
+    },
+    {
+      "sequence": 2118,
+      "path": "events/2118.json",
+      "bytes": 1447,
+      "sha256": "cbe99b64699be5d9553bb8dea615f622accf8157cd0ae4ec0cb01ab0183b2f07",
+      "eventHash": "e9ff6ff44cbb61f2f163a30eb6d44fbe0e3ab477a90ec2c802dbd2d5faca27a8",
+      "payloadHash": "ba60a1661dcb787fe154fd70397f5c66d4ef6bca87db068a686cf6c9e36f7659",
+      "priorHash": "6a476a9c344334ff8fde6e24b2925b9ad8083b2eca13a335ec7370bf1a44c94b",
+      "operation": "work.updated"
+    },
+    {
+      "sequence": 2119,
+      "path": "events/2119.json",
+      "bytes": 1445,
+      "sha256": "aa257df75f7a737613c4805ea825f98d563ef7ba9b8122d1f9f5bd22cca7cedc",
+      "eventHash": "8e2075a25091c2f4469966c4f1374d86bc929be158afe4df7412a78e765f29cb",
+      "payloadHash": "7a184bc6dd2ae5b446f3abd2071c89892b2f4be86ed1c9f960c19a99d4aec01b",
+      "priorHash": "e9ff6ff44cbb61f2f163a30eb6d44fbe0e3ab477a90ec2c802dbd2d5faca27a8",
+      "operation": "work.updated"
+    },
+    {
+      "sequence": 2120,
+      "path": "events/2120.json",
+      "bytes": 1238,
+      "sha256": "57a41f944a69dcda17304db33f876d6ba690ab4a293b8add077b8340bd7c0c5d",
+      "eventHash": "4592314f349a04cc445fd0e4b403fa0fb823ab9a20af07ecc9654d7ec2a61bfd",
+      "payloadHash": "baf34f5a5dc3ad41180d338bb132021a595d6805510f203658e23d6e02583891",
+      "priorHash": "8e2075a25091c2f4469966c4f1374d86bc929be158afe4df7412a78e765f29cb",
+      "operation": "work.annotated"
+    },
+    {
+      "sequence": 2121,
+      "path": "events/2121.json",
+      "bytes": 1234,
+      "sha256": "6c3d181ca59c5fb7eeb5e1cc125f8669fb18e75d4e599891e161283a672465c5",
+      "eventHash": "ef163fb12c6609e93899c1592b569c7324430b62449c48841f4a6d9275b639d5",
+      "payloadHash": "0f68ec41f4a2c9e54af1be5318cd174c85cc4db56212475d7fe244231c1e069e",
+      "priorHash": "4592314f349a04cc445fd0e4b403fa0fb823ab9a20af07ecc9654d7ec2a61bfd",
+      "operation": "work.updated"
+    },
+    {
+      "sequence": 2122,
+      "path": "events/2122.json",
+      "bytes": 1235,
+      "sha256": "e4147d835131252ac8f2078f16a0fa54102d61f733af6d4bf25f43d06bb1ea85",
+      "eventHash": "ad2a7c9ba7fc38f0e51a3800c8dbd6535f3c52fd6d351cea9de235077200154e",
+      "payloadHash": "3cc0bc37ec45273058146142276a898e38073d74e096c001a926fd23623532b9",
+      "priorHash": "ef163fb12c6609e93899c1592b569c7324430b62449c48841f4a6d9275b639d5",
+      "operation": "work.updated"
+    }
+  ],
+  "integrity": {
+    "exactEventBytes": true,
+    "extractedWithoutReserialisation": true,
+    "segmentsReadFromDeclaredPaths": true,
+    "sequencesContiguous": true,
+    "headMatchesExpected": true,
+    "byteDigestsAreFullSha256": true
+  }
+}

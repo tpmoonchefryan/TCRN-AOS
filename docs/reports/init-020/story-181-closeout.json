@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-181",
+  "intent": "STORY-181 收口:门面服务读面全集与部署形态完成。五分区读动词全集经门面供给、reason code 保真、变异/供权动词必拒、读进程不持 pins,正腿/红腿实证。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:5184834e16fb1f541afbdabd",
+        "scope": "【收口(2026-08-06)】门面服务读面全集与部署形态完成。交付物(TCRN-AOS/deploy/aos-resident-cockpit/):①facade-read-service.mjs——门面读面核心服务:引擎读动词全集经门面供给,工具表从引擎活的 commands CLI 输出派生(源 A:mutates/authorityBearing/fixture-only 形状),再对引擎 workflowMcpTools() 的 readOnlyHint/destructiveHint 描述符做 assertNoWriteExposed(源 B)——两侧互补过滤同一名录,任一源拒即拒答 MCP_REMOTE_EXPOSURE_INVARIANT;两侧断言直接 import remote-read-mcp.mjs 的已测谓词;工具表 60s TTL 复核,每转发前对当前名录 withtherGround 复核;reason code 原样穿透(仅诊断 scrub);②facade-read-runner.mjs(systemd 进程,零默认值)、facade-read-manifest.mjs(VM 部署形态,从 aos-partitions.mjs 单一名册导入五分区)、apply-facade-read.mjs(部署脚本,per-file sha256 ledger)、tcrn-aos-facade-read.service;③五分区扩面沿用 CockpitServiceOptions.workspaces 的 partitionId→workspacePath 接缝,VM 绑 127.0.0.1:4320 经 SSH 隧道(CONF-007 D7),单点可回退;④scripts/read-face-gate.mjs 扩到门面源码(不持 pins+两侧派生断言)。验收两侧(本机,文件后端):正腿=12/12 测试绿(catalog 暴露 60 只读动词,status/work-list/work-show/export/validate/knowledge-list/commands 经门面可达且 reason code 保真,含引擎自身 KNOLWEDGE_PATH_INVALID 原样穿透);红腿=work-transition→MCP_REMOTE_WRITE_REFUSED、adapter-activation-record→MCP_REMOTE_AUTHORITY_OUTPUT_REFUSED,红后链上读仍绿。不变式:读进程不持 pins(read-face-gate 6 不变式全绿,0 findings)。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:5184834e16fb1f541afbdabd", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:5184834e16fb1f541afbdabd", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:5184834e16fb1f541afbdabd", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:5184834e16fb1f541afbdabd" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-181", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

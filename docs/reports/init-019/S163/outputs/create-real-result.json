@@ -1,0 +1,165 @@
+[
+  {
+    "case": 0,
+    "label": "aos-knowledge-create",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"ok\":false,\"reasonCode\":\"STEP_REFUSED_BY_HOST_ENGINE\",\"host\":\"tcrn-platform-dev\",\"partition\":\"TCRN-AOS\",\"dryRun\":false,\"receipt\":{\"schemaVersion\":\"aos.local-client-ceremony-receipt.v1\",\"story\":\"TCRN-CROSS-INIT-019-STORY-163\",\"intent\":\"dry-run: knowledge-create through the single ceremony MCP write face (marker CAS)\",\"startedAt\":\"2026-08-05T14:34:50Z\",\"dryRun\":false,\"host\":\"tcrn-platform-dev\",\"partition\":\"TCRN-AOS\",\"topology\":{\"engineCli\":\"/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs\",\"workspace\":\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace\",\"attestDir\":\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations\",\"actor\":\"agent:fable\",\"configuredIn\":\"deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs\"},\"payload\":{\"path\":\"evidence/mcp-ceremony-write/payloads/2026-08-05T14-34-50-642Z-833ed9-TCRN-AOS.json\",\"sha256\":\"67ed4dbc86ea264785c3f95d73828ca08816b61d84103068a9b229bb025dd1ff\",\"bytes\":2051},\"hostEngineCatalogue\":{\"verbs\":103},\"chainBefore\":{\"workspaceId\":\"workspace:fbc32e3ff874fbbd637a1b85\",\"version\":1048,\"headEventHash\":\"eea6d9adf02ce66081e5268b06f45011d4fb24a15dabed687420dcfbeb19f44f\",\"work\":156},\"steps\":[{\"ok\":true,\"verb\":\"knowledge-create\",\"mutates\":true,\"reasonCode\":\"CLI_ARGUMENT_MALFORMED\",\"argv\":[\"knowledge-create\",\"--accountable-owner-id\",\"agent:fable\",\"--at\",\"2026-08-05T14:34:51Z\",\"--body\",\"TCRN-CROSS-INIT-019 STORY-163.2: a knowledge card created through the single ceremony MCP write face (deploy/aos-mcp-write/server.mjs -> ceremony.mjs). The write CAS's on the knowledge store marker version, not the chain version. Evidence: docs/reports/init-019/S163/notes.md.\",\"--category\",\"implementation\",\"--decision-ids\",\"-\",\"--evidence-ids\",\"-\",\"--expected-version\",\"21\",\"--export\",\"metadata-only\",\"--external-key\",\"tcrn-init019-163-writeface-proof\",\"--freshness\",\"fresh\",\"--gate-ids\",\"-\",\"--kind\",\"fact\",\"--last-verified\",\"2026-08-05T00:00:00Z\",\"--lifecycle\",\"active\",\"--project-id\",\"project:899d30df2e67bc6e98a4f50e\",\"--retrieval\",\"default\",\"--role-scopes\",\"implementation\",\"--scope\",\"Write-face knowledge-create proof (STORY-163.2)\",\"--snippet\",\"writefaceproof: knowledge-create driven via tcrn_ceremony.\",\"--source-digest\",\"3d9ea2de6a119c5810d9af15292c5dafadadc852e5d500b5714bf777ec2e45f0\",\"--source-references\",\"docs/reports/init-019/S163/notes.md\",\"--stale-days\",\"180\",\"--subject\",\"Write-face knowledge-create proof\",\"--summary\",\"A knowledge card created through the single ceremony MCP write face, proving the knowledge write path CAS's on the store marker.\",\"--tags\",\"init019,writeface\",\"--work-ids\",\"-\",\"--workspace\",\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace\"],\"autoSupplied\":[\"at\",\"expected-version\",\"workspace\"],\"fromPayload\":[\"accountable-owner-id\",\"body\",\"category\",\"decision-ids\",\"evidence-ids\",\"export\",\"external-key\",\"freshness\",\"gate-ids\",\"kind\",\"last-verified\",\"lifecycle\",\"project-id\",\"retrieval\",\"role-scopes\",\"scope\",\"snippet\",\"source-digest\",\"source-references\",\"stale-days\",\"subject\",\"summary\",\"tags\",\"work-ids\"],\"headAtPlanning\":21,\"executed\":true,\"accepted\":false,\"error\":\"scope=Write-face knowledge-create proof (STORY-163.2)\",\"recordId\":null,\"version\":null}],\"readback\":[],\"chainAfter\":{\"workspaceId\":\"workspace:fbc32e3ff874fbbd637a1b85\",\"version\":1048,\"headEventHash\":\"eea6d9adf02ce66081e5268b06f45011d4fb24a15dabed687420dcfbeb19f44f\",\"work\":156},\"ok\":false,\"reasonCode\":\"STEP_REFUSED_BY_HOST_ENGINE\"},\"receiptPath\":\"evidence/mcp-ceremony-write/receipts/2026-08-05T14-34-51-554Z-821976-TCRN-AOS.json\",\"payloadPath\":\"evidence/mcp-ceremony-write/payloads/2026-08-05T14-34-50-642Z-833ed9-TCRN-AOS.json\"}"
+        }
+      ],
+      "structuredContent": {
+        "ok": false,
+        "reasonCode": "STEP_REFUSED_BY_HOST_ENGINE",
+        "host": "tcrn-platform-dev",
+        "partition": "TCRN-AOS",
+        "dryRun": false,
+        "receipt": {
+          "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+          "story": "TCRN-CROSS-INIT-019-STORY-163",
+          "intent": "dry-run: knowledge-create through the single ceremony MCP write face (marker CAS)",
+          "startedAt": "2026-08-05T14:34:50Z",
+          "dryRun": false,
+          "host": "tcrn-platform-dev",
+          "partition": "TCRN-AOS",
+          "topology": {
+            "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+            "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+            "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+            "actor": "agent:fable",
+            "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+          },
+          "payload": {
+            "path": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-34-50-642Z-833ed9-TCRN-AOS.json",
+            "sha256": "67ed4dbc86ea264785c3f95d73828ca08816b61d84103068a9b229bb025dd1ff",
+            "bytes": 2051
+          },
+          "hostEngineCatalogue": {
+            "verbs": 103
+          },
+          "chainBefore": {
+            "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+            "version": 1048,
+            "headEventHash": "eea6d9adf02ce66081e5268b06f45011d4fb24a15dabed687420dcfbeb19f44f",
+            "work": 156
+          },
+          "steps": [
+            {
+              "ok": true,
+              "verb": "knowledge-create",
+              "mutates": true,
+              "reasonCode": "CLI_ARGUMENT_MALFORMED",
+              "argv": [
+                "knowledge-create",
+                "--accountable-owner-id",
+                "agent:fable",
+                "--at",
+                "2026-08-05T14:34:51Z",
+                "--body",
+                "TCRN-CROSS-INIT-019 STORY-163.2: a knowledge card created through the single ceremony MCP write face (deploy/aos-mcp-write/server.mjs -> ceremony.mjs). The write CAS's on the knowledge store marker version, not the chain version. Evidence: docs/reports/init-019/S163/notes.md.",
+                "--category",
+                "implementation",
+                "--decision-ids",
+                "-",
+                "--evidence-ids",
+                "-",
+                "--expected-version",
+                "21",
+                "--export",
+                "metadata-only",
+                "--external-key",
+                "tcrn-init019-163-writeface-proof",
+                "--freshness",
+                "fresh",
+                "--gate-ids",
+                "-",
+                "--kind",
+                "fact",
+                "--last-verified",
+                "2026-08-05T00:00:00Z",
+                "--lifecycle",
+                "active",
+                "--project-id",
+                "project:899d30df2e67bc6e98a4f50e",
+                "--retrieval",
+                "default",
+                "--role-scopes",
+                "implementation",
+                "--scope",
+                "Write-face knowledge-create proof (STORY-163.2)",
+                "--snippet",
+                "writefaceproof: knowledge-create driven via tcrn_ceremony.",
+                "--source-digest",
+                "3d9ea2de6a119c5810d9af15292c5dafadadc852e5d500b5714bf777ec2e45f0",
+                "--source-references",
+                "docs/reports/init-019/S163/notes.md",
+                "--stale-days",
+                "180",
+                "--subject",
+                "Write-face knowledge-create proof",
+                "--summary",
+                "A knowledge card created through the single ceremony MCP write face, proving the knowledge write path CAS's on the store marker.",
+                "--tags",
+                "init019,writeface",
+                "--work-ids",
+                "-",
+                "--workspace",
+                "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+              ],
+              "autoSupplied": [
+                "at",
+                "expected-version",
+                "workspace"
+              ],
+              "fromPayload": [
+                "accountable-owner-id",
+                "body",
+                "category",
+                "decision-ids",
+                "evidence-ids",
+                "export",
+                "external-key",
+                "freshness",
+                "gate-ids",
+                "kind",
+                "last-verified",
+                "lifecycle",
+                "project-id",
+                "retrieval",
+                "role-scopes",
+                "scope",
+                "snippet",
+                "source-digest",
+                "source-references",
+                "stale-days",
+                "subject",
+                "summary",
+                "tags",
+                "work-ids"
+              ],
+              "headAtPlanning": 21,
+              "executed": true,
+              "accepted": false,
+              "error": "scope=Write-face knowledge-create proof (STORY-163.2)",
+              "recordId": null,
+              "version": null
+            }
+          ],
+          "readback": [],
+          "chainAfter": {
+            "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+            "version": 1048,
+            "headEventHash": "eea6d9adf02ce66081e5268b06f45011d4fb24a15dabed687420dcfbeb19f44f",
+            "work": 156
+          },
+          "ok": false,
+          "reasonCode": "STEP_REFUSED_BY_HOST_ENGINE"
+        },
+        "receiptPath": "evidence/mcp-ceremony-write/receipts/2026-08-05T14-34-51-554Z-821976-TCRN-AOS.json",
+        "payloadPath": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-34-50-642Z-833ed9-TCRN-AOS.json"
+      },
+      "isError": true
+    }
+  }
+]

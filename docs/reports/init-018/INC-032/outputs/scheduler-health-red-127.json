@@ -1,0 +1,31 @@
+{
+  "ok": false,
+  "reasonCode": "SCHEDULER_AGENT_LAST_RUN_FAILED",
+  "gate": "tcrn-scheduler-health",
+  "invariants": [
+    "every launchd template shipped by this repository has a loaded agent",
+    "each loaded agent's last run exited 0"
+  ],
+  "agents": [
+    {
+      "label": "com.tcrn.aos.paired-backup",
+      "loaded": true,
+      "running": false,
+      "lastExit": 0,
+      "ok": true,
+      "reason": "SCHEDULER_AGENT_LAST_RUN_CLEAN"
+    },
+    {
+      "label": "com.tcrn.aos.read-face-refresh",
+      "loaded": true,
+      "running": false,
+      "lastExit": 127,
+      "ok": false,
+      "reason": "SCHEDULER_AGENT_LAST_RUN_FAILED",
+      "hint": "127 is command-not-found: the agent's PATH does not reach pnpm/node (INC-032)"
+    }
+  ],
+  "failed": [
+    "com.tcrn.aos.read-face-refresh"
+  ]
+}

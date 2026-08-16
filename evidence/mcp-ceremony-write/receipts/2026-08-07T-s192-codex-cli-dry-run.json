@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "ok": true,
+  "reasonCode": "CEREMONY_PLANNED_ONLY",
+  "dryRun": true,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "facade": true,
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2257,
+    "headEventHash": "6558874b38157ea202c6f18e7d04591c124c6fed882d43df5e188bcbd46a2779",
+    "work": 365
+  },
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2257,
+    "headEventHash": "6558874b38157ea202c6f18e7d04591c124c6fed882d43df5e188bcbd46a2779",
+    "work": 365
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "STEP_PLANNED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:gpt-5-codex",
+        "--at",
+        "2026-08-07T09:36:34Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2257",
+        "--id",
+        "work:b94c30ee29dfd5046374e0f8",
+        "--scope",
+        "S192 dry-run witness only; no governed event is appended.",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2257,
+      "executed": false,
+      "wouldSend": "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs work-annotate --actor agent:gpt-5-codex --at 2026-08-07T09:36:34Z --attest-dir /srv/tcrn/governance/tcrn-workspace/cross-project/attestations --decided-by minutes:6b3a226012700f4322fd28ee --expected-version 2257 --id work:b94c30ee29dfd5046374e0f8 --scope S192 dry-run witness only; no governed event is appended. --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "STEP_PLANNED",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:b94c30ee29dfd5046374e0f8",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": false
+    }
+  ],
+  "eventsAppended": 0,
+  "finishedAt": "2026-08-07T09:36:34Z"
+}

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-153",
+  "intent": "收口:终版 scope + 置 done(待门)",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:77b34718c4371b13d2398afb",
+        "scope": "S16 Fable 5 代际残余适用性复审。执行层做 S16.1 全平台约束/门/hook/公约编目(来源列全)+S16.2 逐条成立条件三档起草(仍在/已消失/条件化);核验层逐条复核。门:S16.3 提案清单+harness-constraint 公约修订稿(增按模型代际触发复审条款)终稿归审查层、裁定归 Owner;执行层完成草案后 annotate 待门。复审输出是提案不是删除。验收:编目表+三档草案。MIN-057。进度@2026-08-05: 已完成=S16.1 编目(docs/reports/init-018/S16/catalog.md:全平台约束/门/hook/公约 35 项,来源列全 A 公约 6+B 门 11+C hook 4+D 约束 14)+S16.2 三档起草(仍在 15/已消失 1/条件化 4:已消失=workflow-MCP 两侧未接句,S3 已修正;条件化=verify-s6 随场景库/verify-otel-privacy 随 sink 就位/parity:proof 白名单待 S4.2 收缩/SSH observer observe→enforce)。待门:S16.3 提案清单+harness-constraint 公约修订稿(增按模型代际触发复审条款)终稿归审查层、裁定归 Owner;核验层逐条复核。阻塞=无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:77b34718c4371b13d2398afb", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:77b34718c4371b13d2398afb" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-153", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

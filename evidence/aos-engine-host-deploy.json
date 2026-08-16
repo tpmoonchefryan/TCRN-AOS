@@ -2,13 +2,13 @@
   "schemaVersion": "aos.engine-host-deploy.v1",
   "ruling": "TCRN-AOS-MIN-007",
   "ok": true,
-  "startedAt": "2026-08-07T05:04:11Z",
-  "finishedAt": "2026-08-07T05:04:13Z",
+  "startedAt": "2026-08-07T12:29:19Z",
+  "finishedAt": "2026-08-07T12:29:20Z",
   "source": {
     "locator": "<local-governed-copy>",
-    "version": "0.11.7",
-    "tag": "v0.11.7",
-    "commit": "1ce5fccfb10a16cfd4198f358068ae7519df5264",
+    "version": "0.11.8",
+    "tag": "v0.11.8",
+    "commit": "7751bec7ee8f4ab90a5454f3e62665e44fb709ee",
     "workingTreeClean": true,
     "distCoveredByTag": false
   },
@@ -20,15 +20,15 @@
     ],
     "destinationHost": "tcrn-platform-dev",
     "enginePath": "/srv/tcrn/engine/tcrn-workflow",
-    "fileCount": 468,
-    "totalBytes": 6393242,
+    "fileCount": 472,
+    "totalBytes": 6422617,
     "fileSetDigest": {
-      "local": "6ddd6db63b93c171a5ae398b8b9fdae4f7b20d8978a4d4cbb61eba9b5c5a0285",
-      "remote": "6ddd6db63b93c171a5ae398b8b9fdae4f7b20d8978a4d4cbb61eba9b5c5a0285",
+      "local": "9fedd8f00c56a1699208f9829c9d4e1120f1ae0799ede634669b272b83fe038f",
+      "remote": "9fedd8f00c56a1699208f9829c9d4e1120f1ae0799ede634669b272b83fe038f",
       "match": true
     },
     "perFile": {
-      "compared": 468,
+      "compared": 472,
       "mismatched": 0,
       "missingOnVm": 0,
       "extraOnVm": 0
@@ -55,21 +55,18 @@
       "storage-home-seal",
       "storage-home-status"
     ],
-    "remotePackageVersion": "0.11.7",
+    "remotePackageVersion": "0.11.8",
     "runsWithoutNodeModules": true
   },
   "trust": {
-    "statement": "the VM copy is byte-identical to the local governed copy (v0.11.7 tag anchor for tracked source, digest ledger for the whole shipped set including dist); no claim stronger than that comparison is made",
+    "statement": "the VM copy is byte-identical to the local governed copy (v0.11.8 tag anchor for tracked source, digest ledger for the whole shipped set including dist); no claim stronger than that comparison is made",
     "pinsTransferred": false,
     "authorityMaterialDeferredTo": "EPIC-034-S120"
   },
   "predicateRedProofs": {
     "digestLedger": {
-      "executed": true,
-      "predicate": "per-file sha256 comparison",
-      "flippedFile": "README.md",
-      "wentRed": true,
-      "restoredGreen": true
+      "executed": false,
+      "reason": "run with --red-drill to exercise the predicate"
     },
     "filesystemGate": {
       "executed": true,
@@ -83,7 +80,7 @@
   "statfs": {
     "scratchParent": {
       "path": "/srv/tcrn",
-      "dfLine": "/dev/mapper/ubuntu--vg-ubuntu--lv ext4 102626232 29885132  67481836  31% /",
+      "dfLine": "/dev/mapper/ubuntu--vg-ubuntu--lv ext4 102626232 29722888  67644080  31% /",
       "magic": "0xef53",
       "inPinnedSet": true
     },

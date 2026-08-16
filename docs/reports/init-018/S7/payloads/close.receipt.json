@@ -1,0 +1,174 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-141",
+  "intent": "收口:终版 scope + 置 done",
+  "startedAt": "2026-08-04T17:05:07Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "<outside-repository>",
+    "sha256": "91c35c6a9e7a671555fc2fee99df830232c45ce2ffd756ed39ce6fe0370b5a3e",
+    "bytes": 2032
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1570,
+    "headEventHash": "065ab81d7d3bdbb2a17c602fe4df053f61bb316fd5499d737ac39dacd68ea203",
+    "work": 236
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:deepseek-v4-flash",
+        "--at",
+        "2026-08-04T17:05:08Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1570",
+        "--id",
+        "work:b064917a0bb513be79ab1969",
+        "--scope",
+        "S7 引擎行为面黄金样本:adapter-generate 与 persona-render 固定输入 golden 文件+node --test 比对回归(确定性,不调模型)。验收:比对绿+故意改一处输入证明能红,两输出存档。动词旗标以引擎 commands 名录实测为准禁猜。MIN-055。执行结果@2026-08-05:已完成。旗标实测 commands:adapter-generate --request <json>、persona-render --profile-id <string>(均 mutates=false)。固定输入集中 tests/fixtures/s7-golden/inputs.mjs(生成器与测试共用)。golden:adapter-generate.json(manifestDigest 6743c754…,经引擎纯函数 generateCodexAdapterBundle+admitCodexAdapterHostInput,因纯 CLI 无默认 host 上下文——与仓内 act4/p6b 同一构造口径)+persona-render.json(profile:tcrn-mneme-v1,经真实 CLI)。测试 tests/s7-behavior-surface.test.mjs 3/3 绿,被仓测试套件 tests/*.test.mjs 自动发现。红测:persona-render 换 profile-id → diff exit 1 全字段变;adapter-generate 改 promptText → requestDigest/manifestDigest 全变;真实红测临时改 inputs 的 profile-id 跑测试 → 2 红、还原 → 3 绿,证据 docs/reports/init-018/S7/red-proof/。证据包 tcrn-workflow/docs/reports/init-018/S7/。范围外缺陷:无。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1570,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:b064917a0bb513be79ab1969",
+      "version": 1571
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:deepseek-v4-flash",
+        "--at",
+        "2026-08-04T17:05:09Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1571",
+        "--id",
+        "work:b064917a0bb513be79ab1969",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1571,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:b064917a0bb513be79ab1969",
+      "version": 1572
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:b064917a0bb513be79ab1969",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-141",
+            "observed": "TCRN-CROSS-STORY-141",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "S7 引擎行为面黄金样本:adapter-generate 与 persona-render 固定输入 golden 文件+node --test 比对回归(确定性,不调模型)。验收:比对绿+故意改一处输入证明能红,两输出存档。动词旗标以引擎 commands 名录实测为准禁猜。MIN-055。执行结果@2026-08-05:已完成。旗标实测 commands:adapter-generate --request <json>、persona-render --profile-id <string>(均 mutates=false)。固定输入集中 tests/fixtures/s7-golden/inputs.mjs(生成器与测试共用)。golden:adapter-generate.json(manifestDigest 6743c754…,经引擎纯函数 generateCodexAdapterBundle+admitCodexAdapterHostInput,因纯 CLI 无默认 host 上下文——与仓内 act4/p6b 同一构造口径)+persona-render.json(profile:tcrn-mneme-v1,经真实 CLI)。测试 tests/s7-behavior-surface.test.mjs 3/3 绿,被仓测试套件 tests/*.test.mjs 自动发现。红测:persona-render 换 profile-id → diff exit 1 全字段变;adapter-generate 改 promptText → requestDigest/manifestDigest 全变;真实红测临时改 inputs 的 profile-id 跑测试 → 2 红、还原 → 3 绿,证据 docs/reports/init-018/S7/red-proof/。证据包 tcrn-workflow/docs/reports/init-018/S7/。范围外缺陷:无。",
+            "observed": "S7 引擎行为面黄金样本:adapter-generate 与 persona-render 固定输入 golden 文件+node --test 比对回归(确定性,不调模型)。验收:比对绿+故意改一处输入证明能红,两输出存档。动词旗标以引擎 commands 名录实测为准禁猜。MIN-055。执行结果@2026-08-05:已完成。旗标实测 commands:adapter-generate --request <json>、persona-render --profile-id <string>(均 mutates=false)。固定输入集中 tests/fixtures/s7-golden/inputs.mjs(生成器与测试共用)。golden:adapter-generate.json(manifestDigest 6743c754…,经引擎纯函数 generateCodexAdapterBundle+admitCodexAdapterHostInput,因纯 CLI 无默认 host 上下文——与仓内 act4/p6b 同一构造口径)+persona-render.json(profile:tcrn-mneme-v1,经真实 CLI)。测试 tests/s7-behavior-surface.test.mjs 3/3 绿,被仓测试套件 tests/*.test.mjs 自动发现。红测:persona-render 换 profile-id → diff exit 1 全字段变;adapter-generate 改 promptText → requestDigest/manifestDigest 全变;真实红测临时改 inputs 的 profile-id 跑测试 → 2 红、还原 → 3 绿,证据 docs/reports/init-018/S7/red-proof/。证据包 tcrn-workflow/docs/reports/init-018/S7/。范围外缺陷:无。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-141",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1572,
+    "headEventHash": "428156854deed084a0f07feae963220110c9eed46f6366809f313eb7b5696094",
+    "work": 236
+  },
+  "eventsAppended": 2,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-04T17:05:11Z"
+}

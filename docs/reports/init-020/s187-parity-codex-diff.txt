@@ -28,3 +28,11 @@ startup_timeout_sec = 120.0
 command = "node"
 args = ["TCRN-AOS/deploy/aos-mcp-write/server.mjs"]
 startup_timeout_sec = 120.0
+
+# --- Codex re-read (2026-08-07) ---
+#
+# The four entries above are now present in ~/.codex/config.toml. This re-read did
+# not edit the user-level file. `pnpm parity:proof` read both live sources and returned
+# PARITY_VERIFIED: the six anchor servers are present on both sides, no exemption is
+# active, every spec is launchable, and the injected drift red legs still went red.
+# The original generated diff remains above as the application record.

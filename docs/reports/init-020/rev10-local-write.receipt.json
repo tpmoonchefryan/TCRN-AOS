@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "aos.local-engine-write-receipt.v1",
+  "startedAt": "2026-08-08T16:43:35Z",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "id": "work:4d0ecd9c1e6ea5292ef08330",
+      "expectedVersion": 2460,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2461
+    },
+    {
+      "verb": "work-annotate",
+      "id": "work:b4b0ac5f23a9f2c74ca607c1",
+      "expectedVersion": 2461,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2462
+    },
+    {
+      "verb": "work-transition",
+      "id": "work:b4b0ac5f23a9f2c74ca607c1",
+      "to": "active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2463
+    }
+  ],
+  "readback": [
+    {
+      "id": "work:4d0ecd9c1e6ea5292ef08330",
+      "scopeMatches": true,
+      "status": "planned"
+    },
+    {
+      "id": "work:b4b0ac5f23a9f2c74ca607c1",
+      "scopeMatches": true,
+      "status": "active"
+    }
+  ],
+  "finishedAt": "2026-08-08T16:43:38Z",
+  "chainAfter": {
+    "headEventHash": "af6db7ac9f42732138a21835169fd00213bb509c8056bd4773f3846edfb2c1d6",
+    "projects": 1,
+    "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+    "storageHome": null,
+    "version": 2463,
+    "work": 394,
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf"
+  }
+}

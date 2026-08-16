@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-EPIC-053",
+  "intent": "EPIC-053 收口:存储抽象层与双后端等价(仪器化)完成。四子单 STORY-174/175/176/177 全 done,存储抽象、PG 后端、双后端等价门、两店 PG 化全部落地。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:ca7ba689328314c776bc29b8",
+        "scope": "【收口(2026-08-06)】存储抽象层与双后端等价完成,四子单全部 done。STORY-174=StorageBackend 抽象+FileBackend 收敛(workspace 数据平面 7 调用点经抽象,零行为变化,红腿注入一字节偏差链读红);STORY-175=Postgres 链后端(DDL+GRANT+append-only 触发器在真实 PG 实测、PgBackend、pg 驱动四审+依赖登记、依赖图解析器增强支持 peer-context);STORY-176=双后端等价门+PG 测试基建(窗前硬件①,文件/PG 同序列字节等价+mutation 证人红腿);STORY-177=knowledge/artifact 两店 PG 化(StoreBackend 抽象+FileStoreBackend+PgStoreBackend,两店数据平面路由到后端,字节等价实证)。EPIC-053 所载:抽象层落地(文件后端原样收敛为迁移期读源+等价基准)、PG 后端为唯一生产后端、等价门带 mutation 证人防恒真门、本地与 CI 以临时 PG 实例起测(本机 Docker PG)。生效证据两侧:正腿=scratch 双后端同批动词 diff 为空(等价门绿);红腿=注入单字节差异门判红(mutation 证人绿)。全套件绿(TESTS_VERIFIED)。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:ca7ba689328314c776bc29b8", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:ca7ba689328314c776bc29b8", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:ca7ba689328314c776bc29b8", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:ca7ba689328314c776bc29b8" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-EPIC-053", "kind": "Epic", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

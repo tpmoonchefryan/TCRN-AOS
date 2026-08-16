@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-154",
+  "intent": "收口:终版 scope + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:35593585f1051ee3dea7c7a7",
+        "scope": "S17 archify 采纳(tt-a1i/archify,第三环外采)。执行层:通读 skill 载荷全文+license 核验+风险笔记(四道审查)→合格则 digest 钉扎纳入+试用画三层流水线架构图;license 或供应链不合格则 annotate 否决理由收口,不强装。验收:审查笔记+钉扎记录或否决记录。MIN-057。进度@2026-08-05: 已完成=四道审查全通过(MIT 许可证 gh 实名核验/供应链 活跃 9131 星 deps{} 零依赖/防幻觉包名 gh repo view 实答/运营成本 单 Node CLI 无安装无常驻)+digest 钉扎纳入(pinned-digest.json:SKILL.md sha256 4946d2fb… v2.13 + repo HEAD 19213e10… + 试用 spec/artifact sha256)+试用画三层流水线架构图(spec outputs/tcrn-init018-three-layer.architecture.json sha256 038609f9…;deliver 产 603KB 自包含 HTML 09c25596…;validate 9/9 artifact checks 全绿;两次迭代修 1 处边穿组件+标签重叠,archify 布局可机器校验的价值实证)。结论=合格钉扎纳入。风险笔记:CLI 二进制未逐行审、repo 活跃钉扎会过时、架构图是试用产物——见 notes.md。阻塞=无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:35593585f1051ee3dea7c7a7", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:35593585f1051ee3dea7c7a7" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-154", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

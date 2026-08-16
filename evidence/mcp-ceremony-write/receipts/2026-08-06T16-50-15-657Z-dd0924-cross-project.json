@@ -1,0 +1,386 @@
+{
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "host": "127.0.0.1",
+  "partition": "cross-project",
+  "dryRun": false,
+  "receipt": {
+    "schemaVersion": "aos.facade-write-receipt.v1",
+    "story": "TCRN-CROSS-INIT-020",
+    "intent": "INIT-020 QA 修复批立单(第一段:先创建,注解随第二段):INC-081..086 六张修复单,强化批 INC-074..080 已先行落链(v2108..2121)。遵 Owner 指令强化先行修复在后;只立单不执行。",
+    "startedAt": "2026-08-06T16:50:03Z",
+    "dryRun": false,
+    "host": "127.0.0.1",
+    "partition": "cross-project",
+    "topology": {
+      "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+      "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+      "actor": "agent:fable",
+      "seam": "workspaces / attestDirs records stated by the deployment, never by the payload"
+    },
+    "payload": {
+      "sha256": "ad156185dae63bc74d3857ef2566ac56c79a11cd754a74c0634a1024b2b1efbd",
+      "bytes": 1580
+    },
+    "hostEngineCatalogue": {
+      "verbs": 106
+    },
+    "chainBefore": {
+      "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+      "version": 2121,
+      "headEventHash": "19caba826e88c99d53be5fca4ab6231d2ce95c7760cc013cd53a039190170d3f",
+      "work": 345
+    },
+    "steps": [
+      {
+        "ok": true,
+        "verb": "work-create",
+        "mutates": true,
+        "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+        "argv": [
+          "work-create",
+          "--actor",
+          "agent:fable",
+          "--at",
+          "2026-08-06T16:50:04Z",
+          "--attest-dir",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+          "--expected-version",
+          "2121",
+          "--external-key",
+          "TCRN-CROSS-INC-081",
+          "--kind",
+          "Incident",
+          "--project-id",
+          "project:e7da35c5aade8dd42c91cb0f",
+          "--status",
+          "planned",
+          "--workspace",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+        ],
+        "autoSupplied": [
+          "at",
+          "attest-dir",
+          "expected-version",
+          "workspace"
+        ],
+        "fromPayload": [
+          "actor",
+          "external-key",
+          "kind",
+          "project-id",
+          "status"
+        ],
+        "headAtPlanning": 2121,
+        "executed": true,
+        "accepted": true,
+        "error": null,
+        "recordId": "work:0883d3a3d0a8deb25b3b1a15",
+        "version": 2122
+      },
+      {
+        "ok": true,
+        "verb": "work-create",
+        "mutates": true,
+        "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+        "argv": [
+          "work-create",
+          "--actor",
+          "agent:fable",
+          "--at",
+          "2026-08-06T16:50:06Z",
+          "--attest-dir",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+          "--expected-version",
+          "2122",
+          "--external-key",
+          "TCRN-CROSS-INC-082",
+          "--kind",
+          "Incident",
+          "--project-id",
+          "project:e7da35c5aade8dd42c91cb0f",
+          "--status",
+          "planned",
+          "--workspace",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+        ],
+        "autoSupplied": [
+          "at",
+          "attest-dir",
+          "expected-version",
+          "workspace"
+        ],
+        "fromPayload": [
+          "actor",
+          "external-key",
+          "kind",
+          "project-id",
+          "status"
+        ],
+        "headAtPlanning": 2122,
+        "executed": true,
+        "accepted": true,
+        "error": null,
+        "recordId": "work:308076d6ccb8c88260f7c74c",
+        "version": 2123
+      },
+      {
+        "ok": true,
+        "verb": "work-create",
+        "mutates": true,
+        "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+        "argv": [
+          "work-create",
+          "--actor",
+          "agent:fable",
+          "--at",
+          "2026-08-06T16:50:07Z",
+          "--attest-dir",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+          "--expected-version",
+          "2123",
+          "--external-key",
+          "TCRN-CROSS-INC-083",
+          "--kind",
+          "Incident",
+          "--project-id",
+          "project:e7da35c5aade8dd42c91cb0f",
+          "--status",
+          "planned",
+          "--workspace",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+        ],
+        "autoSupplied": [
+          "at",
+          "attest-dir",
+          "expected-version",
+          "workspace"
+        ],
+        "fromPayload": [
+          "actor",
+          "external-key",
+          "kind",
+          "project-id",
+          "status"
+        ],
+        "headAtPlanning": 2123,
+        "executed": true,
+        "accepted": true,
+        "error": null,
+        "recordId": "work:5f61edc8a573bf92f38e64d7",
+        "version": 2124
+      },
+      {
+        "ok": true,
+        "verb": "work-create",
+        "mutates": true,
+        "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+        "argv": [
+          "work-create",
+          "--actor",
+          "agent:fable",
+          "--at",
+          "2026-08-06T16:50:09Z",
+          "--attest-dir",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+          "--expected-version",
+          "2124",
+          "--external-key",
+          "TCRN-CROSS-INC-084",
+          "--kind",
+          "Incident",
+          "--project-id",
+          "project:e7da35c5aade8dd42c91cb0f",
+          "--status",
+          "planned",
+          "--workspace",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+        ],
+        "autoSupplied": [
+          "at",
+          "attest-dir",
+          "expected-version",
+          "workspace"
+        ],
+        "fromPayload": [
+          "actor",
+          "external-key",
+          "kind",
+          "project-id",
+          "status"
+        ],
+        "headAtPlanning": 2124,
+        "executed": true,
+        "accepted": true,
+        "error": null,
+        "recordId": "work:86906fb23b895574d4cd58ac",
+        "version": 2125
+      },
+      {
+        "ok": true,
+        "verb": "work-create",
+        "mutates": true,
+        "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+        "argv": [
+          "work-create",
+          "--actor",
+          "agent:fable",
+          "--at",
+          "2026-08-06T16:50:10Z",
+          "--attest-dir",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+          "--expected-version",
+          "2125",
+          "--external-key",
+          "TCRN-CROSS-INC-085",
+          "--kind",
+          "Incident",
+          "--project-id",
+          "project:e7da35c5aade8dd42c91cb0f",
+          "--status",
+          "planned",
+          "--workspace",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+        ],
+        "autoSupplied": [
+          "at",
+          "attest-dir",
+          "expected-version",
+          "workspace"
+        ],
+        "fromPayload": [
+          "actor",
+          "external-key",
+          "kind",
+          "project-id",
+          "status"
+        ],
+        "headAtPlanning": 2125,
+        "executed": true,
+        "accepted": true,
+        "error": null,
+        "recordId": "work:448e8d740f8431720ef225ed",
+        "version": 2126
+      },
+      {
+        "ok": true,
+        "verb": "work-create",
+        "mutates": true,
+        "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+        "argv": [
+          "work-create",
+          "--actor",
+          "agent:fable",
+          "--at",
+          "2026-08-06T16:50:12Z",
+          "--attest-dir",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+          "--expected-version",
+          "2126",
+          "--external-key",
+          "TCRN-CROSS-INC-086",
+          "--kind",
+          "Incident",
+          "--project-id",
+          "project:e7da35c5aade8dd42c91cb0f",
+          "--status",
+          "planned",
+          "--workspace",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+        ],
+        "autoSupplied": [
+          "at",
+          "attest-dir",
+          "expected-version",
+          "workspace"
+        ],
+        "fromPayload": [
+          "actor",
+          "external-key",
+          "kind",
+          "project-id",
+          "status"
+        ],
+        "headAtPlanning": 2126,
+        "executed": true,
+        "accepted": true,
+        "error": null,
+        "recordId": "work:102ca7701ff4ad32349a551a",
+        "version": 2127
+      }
+    ],
+    "readback": [
+      {
+        "ok": true,
+        "verb": "work-show",
+        "mutates": false,
+        "reasonCode": "WORKSPACE_RECORD_READY",
+        "argv": [
+          "work-show",
+          "--id",
+          "work:cfa0e3552121eefe297561f9",
+          "--workspace",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+        ],
+        "autoSupplied": [
+          "workspace"
+        ],
+        "fromPayload": [
+          "id"
+        ],
+        "executed": true,
+        "accepted": true,
+        "verdict": {
+          "ok": true,
+          "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+          "compared": [
+            {
+              "field": "externalKey",
+              "expected": "TCRN-CROSS-INC-074",
+              "observed": "TCRN-CROSS-INC-074",
+              "equal": true
+            },
+            {
+              "field": "kind",
+              "expected": "Incident",
+              "observed": "Incident",
+              "equal": true
+            },
+            {
+              "field": "status",
+              "expected": "planned",
+              "observed": "planned",
+              "equal": true
+            }
+          ],
+          "unequal": []
+        },
+        "record": {
+          "externalKey": "TCRN-CROSS-INC-074",
+          "kind": "Incident",
+          "status": "planned"
+        }
+      }
+    ],
+    "chainAfter": {
+      "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+      "version": 2127,
+      "headEventHash": "f6a0cedbe03f936c109a92bb0abb934c604a7d716c9db8e211f7beeecac86cee",
+      "work": 351
+    },
+    "knowledgeRebase": {
+      "verb": "knowledge-rebase",
+      "markerVersionBefore": 92,
+      "accepted": false,
+      "reasonCode": "KNOWLEDGE_CAS_MISMATCH",
+      "version": null,
+      "error": "{\"ok\":false,\"reasonCode\":\"KNOWLEDGE_CAS_MISMATCH\",\"error\":\"92:93\"}"
+    },
+    "eventsAppended": 6,
+    "ok": true,
+    "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+    "finishedAt": "2026-08-06T16:50:15Z"
+  },
+  "receiptPath": "receipts/2026-08-06T16-50-03-654Z-955933-cross-project.json",
+  "payloadPath": "payloads/2026-08-06T16-50-03-654Z-955933-cross-project.json"
+}

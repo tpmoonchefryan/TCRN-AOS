@@ -1,0 +1,6 @@
+exit=0 for: {"tool_name":"Bash","tool_input":{"command":"env X=1 ssh tcrn-platform
+exit=0 for: {"tool_name":"Bash","tool_input":{"command":"ssh tcrn-platform-dev \"n
+exit=0 for: {"tool_name":"Read","tool_input":{"file_path":"/etc/hosts"}}
+exit=0 for: not json at all
+--- log (exactly one line, the HIT):
+{"at":"2026-08-05T08:40:05.228Z","tool":"Bash","reason":"ssh-write","command":"env X=1 ssh tcrn-platform-dev \"rm /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\""}

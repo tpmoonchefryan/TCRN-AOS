@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-INIT-020",
+  "intent": "INIT-020 QA 强化批立单(第一段:先创建,注解随第二段仪式):INC-074..080 七张强化单。键号经 work-list 反查(既有 INC 最高 073)。遵 Owner 指令『先落强化单再落修复单』;只立单不执行。",
+  "steps": [
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-074",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-075",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-076",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-077",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-078",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-079",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    },
+    {
+      "verb": "work-create",
+      "flags": {
+        "project-id": "project:e7da35c5aade8dd42c91cb0f",
+        "external-key": "TCRN-CROSS-INC-080",
+        "kind": "Incident",
+        "status": "planned",
+        "actor": "agent:fable"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-list",
+      "flags": {
+        "kind": "Incident",
+        "status": "planned"
+      }
+    }
+  ]
+}

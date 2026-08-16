@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-177",
+  "intent": "STORY-177 收口:knowledge/artifact 两店 PG 化完成。StoreBackend 抽象+文件/PG 双后端实现,两店数据平面路由到后端,字节等价实证,全套件绿。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:49b369e168bf854f58e88835",
+        "scope": "【收口(2026-08-06)】knowledge/artifact 两店 PG 化完成。交付物:①packages/core/src/store-backend.ts——StoreBackend 接口(knowledge marker/metadata/body/view + artifact marker/record 读写与枚举)+FileStoreBackend(文件实现,封装两店原 readBoundRegularFile/writeExclusiveFile/replaceRegularFile 语义)+withStoreBackendFactory(AsyncLocalStorage 注入,与 workspace 的 withStorageBackendFactory 同构)+StoreBackendError;②knowledge-core.ts/artifact-lifecycle.ts 数据平面 IO 路由到 StoreBackend(marker/record 读写+枚举),claim/quarantine 协议(mutation.claim/restore.claim)保留文件实现(与 STORY-174 对 workspace 租约的处理一致,PG 对应物按 ADR 重述);③packages/pg-backend/src/store.ts——PgStoreBackend 实现 StoreBackend 走 PG 表(knowledge_marker/knowledge_metadata/knowledge_bodies/knowledge_views/artifact_marker/artifact_records,枚举返回文件名形态与文件后端一致);④chain-ddl.sql 增两店六表;⑤正腿=tests/store-equivalence.test.mjs 两店数据平面字节等价(marker/metadata/body/record 文件与 PG 下字节完全一致+枚举一致);⑥全套件绿(TESTS_VERIFIED 67 文件)+p4(knowledge 47 negative/artifact 42 negative,64 排列字节决定性)+lint/format/sbom/proof-artifacts。CAS(marker 版本)与高水位绑定(knowledge 用 store marker 版本非链版本)语义原样。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:49b369e168bf854f58e88835", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:49b369e168bf854f58e88835", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:49b369e168bf854f58e88835", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:49b369e168bf854f58e88835" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-177", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

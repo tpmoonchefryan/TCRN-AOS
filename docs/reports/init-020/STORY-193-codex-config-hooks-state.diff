@@ -1,0 +1,28 @@
+--- <local-home>/.codex/config.toml	(before 2026-08-08)
++++ <local-home>/.codex/config.toml	(applied 2026-08-08; six stale platform-root entries removed)
+@@
+ [hooks.state]
+ 
+-[hooks.state."<local-platform-root>/.codex/hooks.json:permission_request:0:0"]
+-trusted_hash = "sha256:a4edbfc26a24b5f73545c83a8e85f930579291a789582ca4013158a08ae3bc42"
+-enabled = false
+ 
+-[hooks.state."<local-platform-root>/.codex/hooks.json:post_tool_use:0:0"]
+-trusted_hash = "sha256:7f3ff0d480f67d3246cbc3fd7b7727d7647c0c914258829055e94677473d400a"
+-enabled = false
+ 
+-[hooks.state."<local-platform-root>/.codex/hooks.json:pre_tool_use:0:0"]
+-trusted_hash = "sha256:52cd63ca7f2fc00387eb52fb97c13903e6259451bbc247c953703e4f23c95b6f"
+-enabled = false
+ 
+-[hooks.state."<local-platform-root>/.codex/hooks.json:session_start:0:0"]
+-trusted_hash = "sha256:0f8c529354e5482bc0b8db4531427cb1529dbbf4cab5e65d1913821dc3b2a114"
+-enabled = true
+ 
+-[hooks.state."<local-platform-root>/.codex/hooks.json:stop:0:0"]
+-enabled = false
+-trusted_hash = "sha256:6e461b6427b4ce19689d2a0c1724f1087d1aa3c4e2e12eaa75f4f3082e2d78e0"
+ 
+-[hooks.state."<local-platform-root>/.codex/hooks.json:user_prompt_submit:0:0"]
+-trusted_hash = "sha256:4bbbac215058d2cb85584765e270b06dc9a078b6ac5dd1f4ed30baa4602be1ed"
+-enabled = false

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-186",
+  "intent": "STORY-186 收口:break-glass 白名单收缩与拓扑清欠完成。mcp-unreachable-fallback 类改指门面不可达、service-layer-byte-compare 保留、拓扑承载门面地址、清欠 cockpit-service 手写引擎路径,正腿/红腿实证。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:960e88fa51ea3a5c4e9d0e7f",
+        "scope": "【收口(2026-08-06)】break-glass 白名单收缩与拓扑清欠完成。交付物:①deploy/aos-local-client/ssh-breakglass-allowlist.json——mcp-unreachable-fallback 类名/理由/条目理由改指「门面(facade-read/write)不可达」(不再 MCP 面不可达),service-layer-byte-compare 保留,两条目补 reviewedAt 2026-08-06,pattern 未改;②topology.mjs 从 facade-read/write-manifest.mjs 导入并再导出 FACADE_HOST/PORT/UNIT_NAME/ALLOWED_HOSTS 与 FACADE_WRITE_*(VM 半仍导入不拷贝,无循环依赖);③apps/cockpit-service/src/service.ts 清欠——移除手写 ~/.tcrn-workflow/... 引擎路径,改为 engineMcpPath 选项,缺失时 ENGINE_MCP_PATH_REQUIRED fail-closed;vm-resident-runner.mjs/本地 starter 供给引擎路径;④平台入口文档第 0 小节残余场景触发条件同步。验收两侧(一份名单两处消费):正腿=observer --self-test 117/117、allowlisted status→PASS/breakglass-allowlist、doc-topology-predicates 双消费一致性测试绿、doc-topology:proof=DOC_TOPOLOGY_IN_SYNC;红腿=白名单外 SSH 直驱 work-transition→HIT/ssh-engine-direct、治理树写→HIT/ssh-write、doc-topology 红证 SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED 触发并点名。门:typecheck/build/local-purity:proof/read-face:gate/parity:proof 全绿,touched 测试套件 256 例全过。留待:引擎仓镜像白名单(scripts/policy/ssh-breakglass-allowlist.json)与 AOS 权威文案漂移(pattern 未变),breakglass-consistency-check 将红,由 STORY-185 引擎侧刷新闭合。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:960e88fa51ea3a5c4e9d0e7f", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:960e88fa51ea3a5c4e9d0e7f", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:960e88fa51ea3a5c4e9d0e7f", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:960e88fa51ea3a5c4e9d0e7f" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-186", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

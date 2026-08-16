@@ -1,0 +1,341 @@
+{
+  "schemaVersion": "aos.local-engine-write-receipt.v1",
+  "intent": "INIT-020 收口终局迁移(Owner 验收通过)",
+  "startedAt": "2026-08-09T03:09:11Z",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "key": "INIT-020(rev11)",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2472
+    },
+    {
+      "readback": "INIT-020 rev11",
+      "scopeMatches": true
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-STORY-073",
+      "to": "cancelled",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2473
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-STORY-074",
+      "to": "cancelled",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2474
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-STORY-075",
+      "to": "cancelled",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2475
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-EPIC-025",
+      "to": "cancelled",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2476
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-092",
+      "to": "ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2477
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-092",
+      "to": "active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2478
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-092",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2479
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-093",
+      "to": "ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2480
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-093",
+      "to": "active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2481
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-093",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2482
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-097",
+      "to": "ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2483
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-097",
+      "to": "active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2484
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-097",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2485
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-100",
+      "to": "ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2486
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-100",
+      "to": "active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2487
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-100",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2488
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-111",
+      "to": "ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2489
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-111",
+      "to": "active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2490
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-111",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2491
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-113",
+      "to": "ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2492
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-113",
+      "to": "active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2493
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-113",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2494
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-108",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2495
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-105",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2496
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INC-117",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2497
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-STORY-199",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2498
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-STORY-200",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2499
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-STORY-201",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2500
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-STORY-196",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2501
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-STORY-197",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2502
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-STORY-190",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2503
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INIT-009",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2504
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-EPIC-056",
+      "to": "ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2505
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-EPIC-056",
+      "to": "active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2506
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-EPIC-056",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2507
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-EPIC-057",
+      "to": "ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2508
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-EPIC-057",
+      "to": "active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2509
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-EPIC-057",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2510
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-EPIC-058",
+      "to": "ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2511
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-EPIC-058",
+      "to": "active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2512
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-EPIC-058",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2513
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INIT-020",
+      "to": "ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2514
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INIT-020",
+      "to": "active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2515
+    },
+    {
+      "verb": "work-transition",
+      "key": "TCRN-CROSS-INIT-020",
+      "to": "done",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2516
+    }
+  ],
+  "finalSlate": {
+    "planned": [],
+    "ready": [],
+    "active": [],
+    "blocked": []
+  },
+  "chainAfter": {
+    "headEventHash": "ea50352ac4404c153f1a914064f2e02bd7037cb7ca9b3e0debf7682f77bda8de",
+    "projects": 1,
+    "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+    "storageHome": null,
+    "version": 2516,
+    "work": 394,
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf"
+  },
+  "finishedAt": "2026-08-09T03:09:59Z"
+}

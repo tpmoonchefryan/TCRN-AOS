@@ -1,0 +1,108 @@
+{
+  "ok": true,
+  "reasonCode": "CEREMONY_PLANNED_ONLY",
+  "host": "127.0.0.1",
+  "partition": "cross-project",
+  "dryRun": true,
+  "receipt": {
+    "schemaVersion": "aos.facade-write-receipt.v1",
+    "story": "TCRN-CROSS-INC-081",
+    "intent": "DRY-RUN 校验 INC-081 重录批次",
+    "startedAt": "2026-08-06T18:07:14Z",
+    "dryRun": true,
+    "host": "127.0.0.1",
+    "partition": "cross-project",
+    "topology": {
+      "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+      "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+      "actor": "agent:fable",
+      "seam": "workspaces / attestDirs records stated by the deployment, never by the payload"
+    },
+    "payload": {
+      "sha256": "7b8f59fa8330cbb48991413046f43c592469fd10c519dd0320a63a57fe1d26a8",
+      "bytes": 367
+    },
+    "hostEngineCatalogue": {
+      "verbs": 106
+    },
+    "chainBefore": {
+      "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+      "version": 2133,
+      "headEventHash": "4cc9b4ff5cc635b0f6ee45291b52a2bd270277328c5a9f1ffd7c2abf7ad7d749",
+      "work": 351
+    },
+    "steps": [
+      {
+        "ok": true,
+        "verb": "work-transition",
+        "mutates": true,
+        "reasonCode": "STEP_PLANNED",
+        "argv": [
+          "work-transition",
+          "--actor",
+          "agent:fable",
+          "--at",
+          "2026-08-06T18:07:16Z",
+          "--attest-dir",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+          "--expected-version",
+          "2133",
+          "--id",
+          "work:48970e7a57787d63bd4709fd",
+          "--status",
+          "done",
+          "--workspace",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+        ],
+        "autoSupplied": [
+          "at",
+          "attest-dir",
+          "expected-version",
+          "workspace"
+        ],
+        "fromPayload": [
+          "actor",
+          "id",
+          "status"
+        ],
+        "headAtPlanning": 2133,
+        "executed": false,
+        "wouldSend": "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs work-transition --actor agent:fable --at 2026-08-06T18:07:16Z --attest-dir /srv/tcrn/governance/tcrn-workspace/cross-project/attestations --expected-version 2133 --id work:48970e7a57787d63bd4709fd --status done --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      }
+    ],
+    "readback": [
+      {
+        "ok": true,
+        "verb": "work-show",
+        "mutates": false,
+        "reasonCode": "STEP_PLANNED",
+        "argv": [
+          "work-show",
+          "--id",
+          "work:48970e7a57787d63bd4709fd",
+          "--workspace",
+          "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+        ],
+        "autoSupplied": [
+          "workspace"
+        ],
+        "fromPayload": [
+          "id"
+        ],
+        "executed": false
+      }
+    ],
+    "chainAfter": {
+      "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+      "version": 2133,
+      "headEventHash": "4cc9b4ff5cc635b0f6ee45291b52a2bd270277328c5a9f1ffd7c2abf7ad7d749",
+      "work": 351
+    },
+    "eventsAppended": 0,
+    "ok": true,
+    "reasonCode": "CEREMONY_PLANNED_ONLY",
+    "finishedAt": "2026-08-06T18:07:16Z"
+  },
+  "receiptPath": "receipts/2026-08-06T18-07-14-749Z-533fd4-cross-project.json",
+  "payloadPath": "payloads/2026-08-06T18-07-14-749Z-533fd4-cross-project.json"
+}

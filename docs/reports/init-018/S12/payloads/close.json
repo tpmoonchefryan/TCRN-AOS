@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-142",
+  "intent": "收口:终版 scope(含 S12.3 判定草案) + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:46ab18d3baee83d7dba9f52e",
+        "scope": "S12 回放性能基准:合成链生成器(仅经引擎公开 CLI 生成 3k/10k 事件工作区,禁直写工作区文件)+bench 脚本对 status/validate/export/work-list 各≥5 次取中位墙钟。验收:两条合成链基准表 json+md;禁对 VM 活链跑基准。S12.3 阈值判定(只读动词>2s 启动修复)与基准落链归审查层。对应 G6。MIN-055。执行结果@2026-08-05:已完成(10k 被引擎写上限阻断,以撞顶部分链数据点交付)。S12.1 synthesize-chain.mjs(仅引擎 CLI init/project-create/work-create/work-transition,expected-version 链式 CAS,禁直写工作区)生成 3k 链(3157 条 work/3758 事件,18.2min)。S12.2 bench-replay.mjs(5 次取中位,拒绝动词记 FAILED reasonCode):3k 链 status 363/validate 397/work-list 401ms 全<2s;export FAILED INPUT_OVERSIZED。10k 尝试在 3353 条 work 处 work-create 撞 INPUT_OVERSIZED(Canonical input exceeds one MiB,packages/protocol/src/index.ts:277 maxCanonicalBytes)——引擎无法构建 >~3200-3350 条 work 的链;10k 部分链(3353 work)只读基准 status 440ms ok、validate/export/work-list 全 FAILED INPUT_OVERSIZED。S12.3 判定草案:只读动词中位全<500ms,不触发 >2s 启动修复(EPIC-044 按既有 D3 裁定条件自动决出=不启动);export/validate/work-list 的 1MiB 物化上限属动词能力上限非启动慢,单独上报审查层,建议评估提高 maxCanonicalBytes 或增量/分页物化,否则链不可超过 ~3200 条 work 记录(写与读均受限)。证据包 tcrn-workflow/docs/reports/init-018/S12/(bench-3000+bench-10k-ceiling json/md)。范围外缺陷:引擎 1MiB canonical 物化上限。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:46ab18d3baee83d7dba9f52e", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:46ab18d3baee83d7dba9f52e" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-142", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-179",
+  "intent": "STORY-179 收口:备份/快照/核对机构重基完成。PG 备份路径(pg_dump 定制格式+摘要)、offsite verify 判据更新、engine-host:verify 的 DB 等价物,正腿(真备份+异地验证)+红腿(篡改一字节 verify 红)实证。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:c38be8ca18a8d0f6dbea2e5e",
+        "scope": "【收口(2026-08-06)】备份/快照/核对机构重基完成。交付物(TCRN-AOS/deploy/aos-resident-cockpit/):①pg-backup-take.mjs——PG 取备份程序(只读 SELECT 取活链状态:events 数/head event_hash/全链 payload_hash 摘要/metadata+两店 marker sha256/连续性,pg_dump -F c 定制格式归档+sha256 sidecar,pg_restore --list 结构校验,产物带 partition/schema);②pg-backup-verify.mjs——异地 verify(摘要比对 dump 重算 sha256 vs sidecar+manifest+结构校验,不再逐文件树);③pg-chain-verify.mjs——engine-host:verify 的 DB 等价物(只读,事件行数+head+两店 marker digest 与预期比对,CHAIN_MATCHES_EXPECTED/DIFFERS);④pg-paired-backup.mjs——配套编排(复用 resident-lib stepper/state/transport+保留策略,PULL 方向不变,take→rsync PULL→异地 verify→红腿→轮换);⑤package.json 加 paired:backup-pg/paired:backup-pg-verify/pg:chain-verify。验收两侧(本机 Docker PG 实证,生产 VM PG 18 同机制留 STORY-188 窗前重跑):正腿=整条编排 ok=true(4 事件,PG_PAIR_TAKEN/PULLED/PG_BACKUP_VERIFIED),--verify-offsite 绿,dump sha256 三方一致;红腿=dump 第 100 字节翻转→verify DUMP_DIGEST_MISMATCH,注入漂移 knowledge_marker→pg-chain-verify CHAIN_DIFFERS_FROM_EXPECTED(两红均已复位)。文件备份路径 paired-backup.mjs/verify.mjs 零改动(git diff 空)。ADR §6 face 6 备份重定义达成。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:c38be8ca18a8d0f6dbea2e5e", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:c38be8ca18a8d0f6dbea2e5e", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:c38be8ca18a8d0f6dbea2e5e", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:c38be8ca18a8d0f6dbea2e5e" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-179", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

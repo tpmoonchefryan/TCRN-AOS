@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "reasonCode": "ASSERTION_CAP_EXCEEDED",
+  "config": "/tmp/promptfoo-overcap.yaml",
+  "maxConcurrency": 2,
+  "maxAssertions": 200,
+  "estimatedAssertions": 250
+}

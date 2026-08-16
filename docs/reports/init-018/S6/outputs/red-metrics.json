@@ -1,0 +1,15 @@
+{
+  "ok": false,
+  "reasonCode": "EVAL_NOT_GREEN",
+  "config": "<local-platform-root>/tcrn-workflow/tests/promptfoo/s6-lessons/s6-red-proof.yaml",
+  "maxConcurrency": 2,
+  "maxAssertions": 200,
+  "estimatedAssertions": 6,
+  "assertions": 6,
+  "passed": 0,
+  "failed": 6,
+  "errors": 0,
+  "durationMs": 23,
+  "provider": "echo (offline, no API key)",
+  "evalExit": 100
+}

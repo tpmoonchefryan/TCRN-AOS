@@ -1,0 +1,271 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-181",
+  "intent": "STORY-181 收口:门面服务读面全集与部署形态完成。五分区读动词全集经门面供给、reason code 保真、变异/供权动词必拒、读进程不持 pins,正腿/红腿实证。",
+  "startedAt": "2026-08-06T09:46:55Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "docs/reports/init-020/story-181-closeout.json",
+    "sha256": "4f2a65775512ff217ea0e9c94936b420de59e8550bbcc72bda2a713c82f0191b",
+    "bytes": 2922
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2071,
+    "headEventHash": "42a819991362603b8f12aed83beebc3cad5025c7c2086e4bca9f652cbd1bc827",
+    "work": 336
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:46:56Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2071",
+        "--id",
+        "work:5184834e16fb1f541afbdabd",
+        "--scope",
+        "【收口(2026-08-06)】门面服务读面全集与部署形态完成。交付物(TCRN-AOS/deploy/aos-resident-cockpit/):①facade-read-service.mjs——门面读面核心服务:引擎读动词全集经门面供给,工具表从引擎活的 commands CLI 输出派生(源 A:mutates/authorityBearing/fixture-only 形状),再对引擎 workflowMcpTools() 的 readOnlyHint/destructiveHint 描述符做 assertNoWriteExposed(源 B)——两侧互补过滤同一名录,任一源拒即拒答 MCP_REMOTE_EXPOSURE_INVARIANT;两侧断言直接 import remote-read-mcp.mjs 的已测谓词;工具表 60s TTL 复核,每转发前对当前名录 withtherGround 复核;reason code 原样穿透(仅诊断 scrub);②facade-read-runner.mjs(systemd 进程,零默认值)、facade-read-manifest.mjs(VM 部署形态,从 aos-partitions.mjs 单一名册导入五分区)、apply-facade-read.mjs(部署脚本,per-file sha256 ledger)、tcrn-aos-facade-read.service;③五分区扩面沿用 CockpitServiceOptions.workspaces 的 partitionId→workspacePath 接缝,VM 绑 127.0.0.1:4320 经 SSH 隧道(CONF-007 D7),单点可回退;④scripts/read-face-gate.mjs 扩到门面源码(不持 pins+两侧派生断言)。验收两侧(本机,文件后端):正腿=12/12 测试绿(catalog 暴露 60 只读动词,status/work-list/work-show/export/validate/knowledge-list/commands 经门面可达且 reason code 保真,含引擎自身 KNOLWEDGE_PATH_INVALID 原样穿透);红腿=work-transition→MCP_REMOTE_WRITE_REFUSED、adapter-activation-record→MCP_REMOTE_AUTHORITY_OUTPUT_REFUSED,红后链上读仍绿。不变式:读进程不持 pins(read-face-gate 6 不变式全绿,0 findings)。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2071,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:5184834e16fb1f541afbdabd",
+      "version": 2072
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:46:57Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2072",
+        "--id",
+        "work:5184834e16fb1f541afbdabd",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2072,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:5184834e16fb1f541afbdabd",
+      "version": 2073
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:46:59Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2073",
+        "--id",
+        "work:5184834e16fb1f541afbdabd",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2073,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:5184834e16fb1f541afbdabd",
+      "version": 2074
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:47:00Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2074",
+        "--id",
+        "work:5184834e16fb1f541afbdabd",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2074,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:5184834e16fb1f541afbdabd",
+      "version": 2075
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:5184834e16fb1f541afbdabd",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-181",
+            "observed": "TCRN-CROSS-STORY-181",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【收口(2026-08-06)】门面服务读面全集与部署形态完成。交付物(TCRN-AOS/deploy/aos-resident-cockpit/):①facade-read-service.mjs——门面读面核心服务:引擎读动词全集经门面供给,工具表从引擎活的 commands CLI 输出派生(源 A:mutates/authorityBearing/fixture-only 形状),再对引擎 workflowMcpTools() 的 readOnlyHint/destructiveHint 描述符做 assertNoWriteExposed(源 B)——两侧互补过滤同一名录,任一源拒即拒答 MCP_REMOTE_EXPOSURE_INVARIANT;两侧断言直接 import remote-read-mcp.mjs 的已测谓词;工具表 60s TTL 复核,每转发前对当前名录 withtherGround 复核;reason code 原样穿透(仅诊断 scrub);②facade-read-runner.mjs(systemd 进程,零默认值)、facade-read-manifest.mjs(VM 部署形态,从 aos-partitions.mjs 单一名册导入五分区)、apply-facade-read.mjs(部署脚本,per-file sha256 ledger)、tcrn-aos-facade-read.service;③五分区扩面沿用 CockpitServiceOptions.workspaces 的 partitionId→workspacePath 接缝,VM 绑 127.0.0.1:4320 经 SSH 隧道(CONF-007 D7),单点可回退;④scripts/read-face-gate.mjs 扩到门面源码(不持 pins+两侧派生断言)。验收两侧(本机,文件后端):正腿=12/12 测试绿(catalog 暴露 60 只读动词,status/work-list/work-show/export/validate/knowledge-list/commands 经门面可达且 reason code 保真,含引擎自身 KNOLWEDGE_PATH_INVALID 原样穿透);红腿=work-transition→MCP_REMOTE_WRITE_REFUSED、adapter-activation-record→MCP_REMOTE_AUTHORITY_OUTPUT_REFUSED,红后链上读仍绿。不变式:读进程不持 pins(read-face-gate 6 不变式全绿,0 findings)。",
+            "observed": "【收口(2026-08-06)】门面服务读面全集与部署形态完成。交付物(TCRN-AOS/deploy/aos-resident-cockpit/):①facade-read-service.mjs——门面读面核心服务:引擎读动词全集经门面供给,工具表从引擎活的 commands CLI 输出派生(源 A:mutates/authorityBearing/fixture-only 形状),再对引擎 workflowMcpTools() 的 readOnlyHint/destructiveHint 描述符做 assertNoWriteExposed(源 B)——两侧互补过滤同一名录,任一源拒即拒答 MCP_REMOTE_EXPOSURE_INVARIANT;两侧断言直接 import remote-read-mcp.mjs 的已测谓词;工具表 60s TTL 复核,每转发前对当前名录 withtherGround 复核;reason code 原样穿透(仅诊断 scrub);②facade-read-runner.mjs(systemd 进程,零默认值)、facade-read-manifest.mjs(VM 部署形态,从 aos-partitions.mjs 单一名册导入五分区)、apply-facade-read.mjs(部署脚本,per-file sha256 ledger)、tcrn-aos-facade-read.service;③五分区扩面沿用 CockpitServiceOptions.workspaces 的 partitionId→workspacePath 接缝,VM 绑 127.0.0.1:4320 经 SSH 隧道(CONF-007 D7),单点可回退;④scripts/read-face-gate.mjs 扩到门面源码(不持 pins+两侧派生断言)。验收两侧(本机,文件后端):正腿=12/12 测试绿(catalog 暴露 60 只读动词,status/work-list/work-show/export/validate/knowledge-list/commands 经门面可达且 reason code 保真,含引擎自身 KNOLWEDGE_PATH_INVALID 原样穿透);红腿=work-transition→MCP_REMOTE_WRITE_REFUSED、adapter-activation-record→MCP_REMOTE_AUTHORITY_OUTPUT_REFUSED,红后链上读仍绿。不变式:读进程不持 pins(read-face-gate 6 不变式全绿,0 findings)。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-181",
+        "kind": "Story",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2075,
+    "headEventHash": "737528eaf873471b55bd0bd62bde4362bbb393f7d7c9b0946c3f76461ff74e16",
+    "work": 336
+  },
+  "knowledgeRebase": {
+    "verb": "knowledge-rebase",
+    "markerVersionBefore": 82,
+    "accepted": true,
+    "reasonCode": "KNOWLEDGE_STORE_REBASED",
+    "version": 83
+  },
+  "eventsAppended": 4,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-06T09:47:04Z"
+}

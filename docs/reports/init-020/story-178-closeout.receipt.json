@@ -1,0 +1,271 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-178",
+  "intent": "STORY-178 收口:迁移动词族(双向)完成。migration-plan/execute/verify/rollback 四动词,file↔pg 双向同判据,正腿往返/红腿篡改/旁路拒三测试全绿,全套件无回归。",
+  "startedAt": "2026-08-06T09:00:49Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "docs/reports/init-020/story-178-closeout.json",
+    "sha256": "0156fffd51fe192b6745e1dcf0264d679eada09f20763b14a9571ae3766a6863",
+    "bytes": 2568
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2055,
+    "headEventHash": "60dd8602db345cee4b346d9428ba2824897dc3ed282a219681354dcda2738e62",
+    "work": 336
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:00:50Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2055",
+        "--id",
+        "work:e2e038dddfe4b0d5f64b11fc",
+        "--scope",
+        "【收口(2026-08-06)】迁移动词族(双向)完成。交付物:①packages/core/src/workspace-migration.ts——planMigration(只读盘点源后端,产计划书 schema tcrn.workspace-migration-plan.v1)/executeMigration(源后端逐段读事件+metadata+两店 → 目标后端字节不变写回,file 目标确保控制树骨架)/verifyMigration(目标侧重读,与源比对:逐事件段字节+metadata+版本连续 1..N+head hash+两店 marker/record)/rollbackMigration(pg→file 反向同判据)。后端选择:file 侧用 FileBackend/FileStoreBackend,pg 侧经 options 注入 PgBackend/PgStoreBackend;PG 不可达 WORKSPACE_MIGRATION_APPLY_UNAVAILABLE。旁路拷贝拒:execute/verify 对目标非空且 workspaceId/版本/head 与源不符 → WORKSPACE_MIGRATION_FUTURE,相同重跑幂等允许。②packages/pg-backend/test/migration.test.mjs 三测试:正腿=file 链+knowledge+artifact → execute 到 pg → verify 绿 → 幂等重跑 → rollback 回 file → verify 绿;红腿=篡改 pg payload_hash → verify ok:false;旁路=pg 目标持不同链 → execute/verify 均拒 WORKSPACE_MIGRATION_FUTURE。③全套件绿(TESTS_VERIFIED)+lint/format/sbom/verify:source/proof-artifacts。判据与 STORY-176 等价门一致(逐事件字节等价+版本连续+head+两店 marker)。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2055,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:e2e038dddfe4b0d5f64b11fc",
+      "version": 2056
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:00:51Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2056",
+        "--id",
+        "work:e2e038dddfe4b0d5f64b11fc",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2056,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:e2e038dddfe4b0d5f64b11fc",
+      "version": 2057
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:00:52Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2057",
+        "--id",
+        "work:e2e038dddfe4b0d5f64b11fc",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2057,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:e2e038dddfe4b0d5f64b11fc",
+      "version": 2058
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:00:54Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2058",
+        "--id",
+        "work:e2e038dddfe4b0d5f64b11fc",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2058,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:e2e038dddfe4b0d5f64b11fc",
+      "version": 2059
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:e2e038dddfe4b0d5f64b11fc",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-178",
+            "observed": "TCRN-CROSS-STORY-178",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【收口(2026-08-06)】迁移动词族(双向)完成。交付物:①packages/core/src/workspace-migration.ts——planMigration(只读盘点源后端,产计划书 schema tcrn.workspace-migration-plan.v1)/executeMigration(源后端逐段读事件+metadata+两店 → 目标后端字节不变写回,file 目标确保控制树骨架)/verifyMigration(目标侧重读,与源比对:逐事件段字节+metadata+版本连续 1..N+head hash+两店 marker/record)/rollbackMigration(pg→file 反向同判据)。后端选择:file 侧用 FileBackend/FileStoreBackend,pg 侧经 options 注入 PgBackend/PgStoreBackend;PG 不可达 WORKSPACE_MIGRATION_APPLY_UNAVAILABLE。旁路拷贝拒:execute/verify 对目标非空且 workspaceId/版本/head 与源不符 → WORKSPACE_MIGRATION_FUTURE,相同重跑幂等允许。②packages/pg-backend/test/migration.test.mjs 三测试:正腿=file 链+knowledge+artifact → execute 到 pg → verify 绿 → 幂等重跑 → rollback 回 file → verify 绿;红腿=篡改 pg payload_hash → verify ok:false;旁路=pg 目标持不同链 → execute/verify 均拒 WORKSPACE_MIGRATION_FUTURE。③全套件绿(TESTS_VERIFIED)+lint/format/sbom/verify:source/proof-artifacts。判据与 STORY-176 等价门一致(逐事件字节等价+版本连续+head+两店 marker)。",
+            "observed": "【收口(2026-08-06)】迁移动词族(双向)完成。交付物:①packages/core/src/workspace-migration.ts——planMigration(只读盘点源后端,产计划书 schema tcrn.workspace-migration-plan.v1)/executeMigration(源后端逐段读事件+metadata+两店 → 目标后端字节不变写回,file 目标确保控制树骨架)/verifyMigration(目标侧重读,与源比对:逐事件段字节+metadata+版本连续 1..N+head hash+两店 marker/record)/rollbackMigration(pg→file 反向同判据)。后端选择:file 侧用 FileBackend/FileStoreBackend,pg 侧经 options 注入 PgBackend/PgStoreBackend;PG 不可达 WORKSPACE_MIGRATION_APPLY_UNAVAILABLE。旁路拷贝拒:execute/verify 对目标非空且 workspaceId/版本/head 与源不符 → WORKSPACE_MIGRATION_FUTURE,相同重跑幂等允许。②packages/pg-backend/test/migration.test.mjs 三测试:正腿=file 链+knowledge+artifact → execute 到 pg → verify 绿 → 幂等重跑 → rollback 回 file → verify 绿;红腿=篡改 pg payload_hash → verify ok:false;旁路=pg 目标持不同链 → execute/verify 均拒 WORKSPACE_MIGRATION_FUTURE。③全套件绿(TESTS_VERIFIED)+lint/format/sbom/verify:source/proof-artifacts。判据与 STORY-176 等价门一致(逐事件字节等价+版本连续+head+两店 marker)。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-178",
+        "kind": "Story",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2059,
+    "headEventHash": "5af4ecd9368e765fc1ce7dc760996113f1edabb65e9afa9d028722ee347f9f22",
+    "work": 336
+  },
+  "knowledgeRebase": {
+    "verb": "knowledge-rebase",
+    "markerVersionBefore": 78,
+    "accepted": true,
+    "reasonCode": "KNOWLEDGE_STORE_REBASED",
+    "version": 79
+  },
+  "eventsAppended": 4,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-06T09:00:58Z"
+}

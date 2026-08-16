@@ -1,0 +1,271 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-EPIC-052",
+  "intent": "EPIC-052 收口:替换残余分析与 ADR(PG 版)+INC-061..071 核销清单,三子单(STORY-171/172/173)全 done 后主单收口。",
+  "startedAt": "2026-08-06T05:11:13Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "docs/reports/init-020/epic-052-closeout.json",
+    "sha256": "f5c81d308ee5d4768ef1a9a4d619abb61a03fe962fc4b57ac6b9dc1fa3299e36",
+    "bytes": 1882
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2031,
+    "headEventHash": "56b82cf7610911f76eab97eb9a7a921ba5276dbb1009d832cf5926dc245ea4fb",
+    "work": 336
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T05:11:14Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2031",
+        "--id",
+        "work:a3b94d6d202005f5fe229f0c",
+        "--scope",
+        "【收口(2026-08-06)】EPIC-052 替换残余分析与 ADR(PG 版)完成。三子单全部 done:STORY-171=ADR 0004 定稿(九节齐备:实例拓扑 PG18/schema 布局/角色 GRANT+触发器/事件表 DDL/租约 advisory lock+claims/六依赖面/迁移台账额度/轨道表/等价判据,每条判据写明红腿,决策点本 EPIC 裁毕,对抗评审 9 项修订落地);STORY-172=INC-061..071 核销清单(closeout-verify 机器核形态,引入 superseded 处置 kind+红腿测试,11 单每单恰一处置,正腿绿+漏一单红实证);STORY-173=四条等价判据红腿实证(scratch 改一字节即红,4/4 绿)。EPIC-052 scope 所载双交付(ADR+核销清单)均达成。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2031,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:a3b94d6d202005f5fe229f0c",
+      "version": 2032
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T05:11:15Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2032",
+        "--id",
+        "work:a3b94d6d202005f5fe229f0c",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2032,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:a3b94d6d202005f5fe229f0c",
+      "version": 2033
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T05:11:17Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2033",
+        "--id",
+        "work:a3b94d6d202005f5fe229f0c",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2033,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:a3b94d6d202005f5fe229f0c",
+      "version": 2034
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T05:11:18Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2034",
+        "--id",
+        "work:a3b94d6d202005f5fe229f0c",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2034,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:a3b94d6d202005f5fe229f0c",
+      "version": 2035
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:a3b94d6d202005f5fe229f0c",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-EPIC-052",
+            "observed": "TCRN-CROSS-EPIC-052",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Epic",
+            "observed": "Epic",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【收口(2026-08-06)】EPIC-052 替换残余分析与 ADR(PG 版)完成。三子单全部 done:STORY-171=ADR 0004 定稿(九节齐备:实例拓扑 PG18/schema 布局/角色 GRANT+触发器/事件表 DDL/租约 advisory lock+claims/六依赖面/迁移台账额度/轨道表/等价判据,每条判据写明红腿,决策点本 EPIC 裁毕,对抗评审 9 项修订落地);STORY-172=INC-061..071 核销清单(closeout-verify 机器核形态,引入 superseded 处置 kind+红腿测试,11 单每单恰一处置,正腿绿+漏一单红实证);STORY-173=四条等价判据红腿实证(scratch 改一字节即红,4/4 绿)。EPIC-052 scope 所载双交付(ADR+核销清单)均达成。",
+            "observed": "【收口(2026-08-06)】EPIC-052 替换残余分析与 ADR(PG 版)完成。三子单全部 done:STORY-171=ADR 0004 定稿(九节齐备:实例拓扑 PG18/schema 布局/角色 GRANT+触发器/事件表 DDL/租约 advisory lock+claims/六依赖面/迁移台账额度/轨道表/等价判据,每条判据写明红腿,决策点本 EPIC 裁毕,对抗评审 9 项修订落地);STORY-172=INC-061..071 核销清单(closeout-verify 机器核形态,引入 superseded 处置 kind+红腿测试,11 单每单恰一处置,正腿绿+漏一单红实证);STORY-173=四条等价判据红腿实证(scratch 改一字节即红,4/4 绿)。EPIC-052 scope 所载双交付(ADR+核销清单)均达成。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-EPIC-052",
+        "kind": "Epic",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2035,
+    "headEventHash": "d84ea808b0612dd0fe71bff34b48ee86dc50976d6536c9e78747b91178e3ce8c",
+    "work": 336
+  },
+  "knowledgeRebase": {
+    "verb": "knowledge-rebase",
+    "markerVersionBefore": 72,
+    "accepted": true,
+    "reasonCode": "KNOWLEDGE_STORE_REBASED",
+    "version": 73
+  },
+  "eventsAppended": 4,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-06T05:11:22Z"
+}

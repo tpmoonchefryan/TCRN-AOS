@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-EPIC-055",
+  "intent": "EPIC-055 收口:AOS 门面服务(读写,PG 底座)完成。四子单 STORY-181/182/183/184 全 done,窗前硬件③(门面真实写)达成。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:77801d322706b5241a45c79c",
+        "scope": "【收口(2026-08-06)】AOS 门面服务(读写)完成,四子单全部 done。STORY-181=门面读面全集(facade-read-service,五分区读动词全集经门面供给+reason code 保真+变异/供权动词拒+读进程不持 pins);STORY-182=门面写面仪式语义服务端化(facade-write-service,批+全值回读+expected-version 服务端现读+动词白名单派生+供权族/reserved flags 拒绝+收据物化+throw 亦留收据);STORY-183=拒绝面语料+宕机演练(19 条语料承接 INC-047/069+mutation 证人+break-glass 只读+影子队列 replay);STORY-184=门面真实链写生效证据(窗前硬件③,经门面对 TCRN-TMS 真实链最小非破坏性治理写+全值回读,红腿整批拒且链版本不动,收据归档)。EPIC-055 所载:读面全集与部署形态、写面仪式语义服务端化、拒绝面语料与宕机演练、门面真实写。生效证据两侧:正腿=真实写回执 CEREMONY_COMPLETED_AND_READ_BACK+全值回读;红腿=白名单外动词整批拒且链版本不动。门全绿(facade-write 19/19、rejection 3/3、read 12/12、downtime 1/1、read-face gate 0 findings、doc-topology/local-purity)。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:77801d322706b5241a45c79c", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:77801d322706b5241a45c79c", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:77801d322706b5241a45c79c", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:77801d322706b5241a45c79c" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-EPIC-055", "kind": "Epic", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

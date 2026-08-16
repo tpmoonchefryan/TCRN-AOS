@@ -1,0 +1,349 @@
+[
+  {
+    "case": 0,
+    "label": "red-1-reserved-flag",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"ok\":false,\"reasonCode\":\"RESERVED_FLAG_IN_PAYLOAD\",\"host\":\"tcrn-platform-dev\",\"partition\":\"TCRN-AOS\",\"dryRun\":false,\"receipt\":{\"schemaVersion\":\"aos.local-client-ceremony-receipt.v1\",\"story\":\"TCRN-CROSS-INIT-019-STORY-156\",\"intent\":\"red case 1: payload names the reserved expected-version flag\",\"startedAt\":\"2026-08-05T14:05:59Z\",\"dryRun\":false,\"host\":\"tcrn-platform-dev\",\"partition\":\"TCRN-AOS\",\"topology\":{\"engineCli\":\"/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs\",\"workspace\":\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace\",\"attestDir\":\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations\",\"actor\":\"agent:fable\",\"configuredIn\":\"deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs\"},\"payload\":{\"path\":\"evidence/mcp-ceremony-write/payloads/2026-08-05T14-05-59-620Z-9108a7-TCRN-AOS.json\",\"sha256\":\"6c5d18b3a3c4106bef748174db069d1b0ea72e09b586c7de76d0115cfd324c82\",\"bytes\":519},\"hostEngineCatalogue\":{\"verbs\":103},\"chainBefore\":{\"workspaceId\":\"workspace:fbc32e3ff874fbbd637a1b85\",\"version\":1047,\"headEventHash\":\"84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0\",\"work\":156},\"steps\":[{\"ok\":false,\"verb\":\"work-annotate\",\"reasonCode\":\"RESERVED_FLAG_IN_PAYLOAD\",\"detail\":\"expected-version is supplied by the wrapper and may not be named by a payload\",\"headAtPlanning\":1047}],\"readback\":[],\"chainAfter\":null,\"ok\":false,\"reasonCode\":\"RESERVED_FLAG_IN_PAYLOAD\"},\"receiptPath\":\"evidence/mcp-ceremony-write/receipts/2026-08-05T14-06-00-415Z-0f8347-TCRN-AOS.json\",\"payloadPath\":\"evidence/mcp-ceremony-write/payloads/2026-08-05T14-05-59-620Z-9108a7-TCRN-AOS.json\"}"
+        }
+      ],
+      "structuredContent": {
+        "ok": false,
+        "reasonCode": "RESERVED_FLAG_IN_PAYLOAD",
+        "host": "tcrn-platform-dev",
+        "partition": "TCRN-AOS",
+        "dryRun": false,
+        "receipt": {
+          "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+          "story": "TCRN-CROSS-INIT-019-STORY-156",
+          "intent": "red case 1: payload names the reserved expected-version flag",
+          "startedAt": "2026-08-05T14:05:59Z",
+          "dryRun": false,
+          "host": "tcrn-platform-dev",
+          "partition": "TCRN-AOS",
+          "topology": {
+            "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+            "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+            "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+            "actor": "agent:fable",
+            "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+          },
+          "payload": {
+            "path": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-05-59-620Z-9108a7-TCRN-AOS.json",
+            "sha256": "6c5d18b3a3c4106bef748174db069d1b0ea72e09b586c7de76d0115cfd324c82",
+            "bytes": 519
+          },
+          "hostEngineCatalogue": {
+            "verbs": 103
+          },
+          "chainBefore": {
+            "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+            "version": 1047,
+            "headEventHash": "84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0",
+            "work": 156
+          },
+          "steps": [
+            {
+              "ok": false,
+              "verb": "work-annotate",
+              "reasonCode": "RESERVED_FLAG_IN_PAYLOAD",
+              "detail": "expected-version is supplied by the wrapper and may not be named by a payload",
+              "headAtPlanning": 1047
+            }
+          ],
+          "readback": [],
+          "chainAfter": null,
+          "ok": false,
+          "reasonCode": "RESERVED_FLAG_IN_PAYLOAD"
+        },
+        "receiptPath": "evidence/mcp-ceremony-write/receipts/2026-08-05T14-06-00-415Z-0f8347-TCRN-AOS.json",
+        "payloadPath": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-05-59-620Z-9108a7-TCRN-AOS.json"
+      },
+      "isError": true
+    }
+  },
+  {
+    "case": 1,
+    "label": "red-2-no-readback",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"ok\":false,\"reasonCode\":\"PAYLOAD_INVALID\",\"host\":\"tcrn-platform-dev\",\"partition\":\"TCRN-AOS\",\"dryRun\":false,\"receipt\":{\"ok\":false,\"reasonCode\":\"PAYLOAD_INVALID\",\"problems\":[\"readback must contain at least one read; a write nobody read back is not proven\"]},\"receiptPath\":\"evidence/mcp-ceremony-write/receipts/2026-08-05T14-06-00-421Z-54cbc8-TCRN-AOS.json\",\"payloadPath\":\"evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-00-418Z-892a44-TCRN-AOS.json\"}"
+        }
+      ],
+      "structuredContent": {
+        "ok": false,
+        "reasonCode": "PAYLOAD_INVALID",
+        "host": "tcrn-platform-dev",
+        "partition": "TCRN-AOS",
+        "dryRun": false,
+        "receipt": {
+          "ok": false,
+          "reasonCode": "PAYLOAD_INVALID",
+          "problems": [
+            "readback must contain at least one read; a write nobody read back is not proven"
+          ]
+        },
+        "receiptPath": "evidence/mcp-ceremony-write/receipts/2026-08-05T14-06-00-421Z-54cbc8-TCRN-AOS.json",
+        "payloadPath": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-00-418Z-892a44-TCRN-AOS.json"
+      },
+      "isError": true
+    }
+  },
+  {
+    "case": 2,
+    "label": "red-3-verb-not-in-catalogue",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"ok\":false,\"reasonCode\":\"VERB_NOT_IN_CATALOGUE\",\"host\":\"tcrn-platform-dev\",\"partition\":\"TCRN-AOS\",\"dryRun\":false,\"receipt\":{\"schemaVersion\":\"aos.local-client-ceremony-receipt.v1\",\"story\":\"TCRN-CROSS-INIT-019-STORY-156\",\"intent\":\"red case 3: step verb absent from the host engine's own catalogue\",\"startedAt\":\"2026-08-05T14:06:00Z\",\"dryRun\":false,\"host\":\"tcrn-platform-dev\",\"partition\":\"TCRN-AOS\",\"topology\":{\"engineCli\":\"/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs\",\"workspace\":\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace\",\"attestDir\":\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations\",\"actor\":\"agent:fable\",\"configuredIn\":\"deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs\"},\"payload\":{\"path\":\"evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-00-423Z-f9560b-TCRN-AOS.json\",\"sha256\":\"bdbc88636041be8664c86d79e6cd0ca72e59c9399614592a851729ec2c542936\",\"bytes\":489},\"hostEngineCatalogue\":{\"verbs\":103},\"chainBefore\":{\"workspaceId\":\"workspace:fbc32e3ff874fbbd637a1b85\",\"version\":1047,\"headEventHash\":\"84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0\",\"work\":156},\"steps\":[{\"ok\":false,\"verb\":\"no-such-verb\",\"reasonCode\":\"VERB_NOT_IN_CATALOGUE\",\"detail\":\"the host engine's own commands output does not define it\",\"headAtPlanning\":1047}],\"readback\":[],\"chainAfter\":null,\"ok\":false,\"reasonCode\":\"VERB_NOT_IN_CATALOGUE\"},\"receiptPath\":\"evidence/mcp-ceremony-write/receipts/2026-08-05T14-06-01-254Z-a5b078-TCRN-AOS.json\",\"payloadPath\":\"evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-00-423Z-f9560b-TCRN-AOS.json\"}"
+        }
+      ],
+      "structuredContent": {
+        "ok": false,
+        "reasonCode": "VERB_NOT_IN_CATALOGUE",
+        "host": "tcrn-platform-dev",
+        "partition": "TCRN-AOS",
+        "dryRun": false,
+        "receipt": {
+          "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+          "story": "TCRN-CROSS-INIT-019-STORY-156",
+          "intent": "red case 3: step verb absent from the host engine's own catalogue",
+          "startedAt": "2026-08-05T14:06:00Z",
+          "dryRun": false,
+          "host": "tcrn-platform-dev",
+          "partition": "TCRN-AOS",
+          "topology": {
+            "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+            "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+            "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+            "actor": "agent:fable",
+            "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+          },
+          "payload": {
+            "path": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-00-423Z-f9560b-TCRN-AOS.json",
+            "sha256": "bdbc88636041be8664c86d79e6cd0ca72e59c9399614592a851729ec2c542936",
+            "bytes": 489
+          },
+          "hostEngineCatalogue": {
+            "verbs": 103
+          },
+          "chainBefore": {
+            "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+            "version": 1047,
+            "headEventHash": "84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0",
+            "work": 156
+          },
+          "steps": [
+            {
+              "ok": false,
+              "verb": "no-such-verb",
+              "reasonCode": "VERB_NOT_IN_CATALOGUE",
+              "detail": "the host engine's own commands output does not define it",
+              "headAtPlanning": 1047
+            }
+          ],
+          "readback": [],
+          "chainAfter": null,
+          "ok": false,
+          "reasonCode": "VERB_NOT_IN_CATALOGUE"
+        },
+        "receiptPath": "evidence/mcp-ceremony-write/receipts/2026-08-05T14-06-01-254Z-a5b078-TCRN-AOS.json",
+        "payloadPath": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-00-423Z-f9560b-TCRN-AOS.json"
+      },
+      "isError": true
+    }
+  },
+  {
+    "case": 3,
+    "label": "red-4-one-shot-authority-family",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"ok\":false,\"reasonCode\":\"VERB_REQUIRES_OUT_OF_BAND_AUTHORITY\",\"host\":\"tcrn-platform-dev\",\"partition\":\"TCRN-AOS\",\"dryRun\":false,\"receipt\":{\"schemaVersion\":\"aos.local-client-ceremony-receipt.v1\",\"story\":\"TCRN-CROSS-INIT-019-STORY-156\",\"intent\":\"red case 4: verb requires a per-invocation authority file, never driven from a batch wrapper\",\"startedAt\":\"2026-08-05T14:06:01Z\",\"dryRun\":false,\"host\":\"tcrn-platform-dev\",\"partition\":\"TCRN-AOS\",\"topology\":{\"engineCli\":\"/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs\",\"workspace\":\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace\",\"attestDir\":\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations\",\"actor\":\"agent:fable\",\"configuredIn\":\"deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs\"},\"payload\":{\"path\":\"evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-01-257Z-470805-TCRN-AOS.json\",\"sha256\":\"41a16933cd96cc12197a8bc2884aebdfcd53f53116a1fda5841721b89f728857\",\"bytes\":521},\"hostEngineCatalogue\":{\"verbs\":103},\"chainBefore\":{\"workspaceId\":\"workspace:fbc32e3ff874fbbd637a1b85\",\"version\":1047,\"headEventHash\":\"84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0\",\"work\":156},\"steps\":[{\"ok\":false,\"verb\":\"relocation-vacate\",\"reasonCode\":\"VERB_REQUIRES_OUT_OF_BAND_AUTHORITY\",\"detail\":\"this verb takes a per-invocation authority file; it is performed as its own ceremony, never from a batch wrapper\",\"headAtPlanning\":1047}],\"readback\":[],\"chainAfter\":null,\"ok\":false,\"reasonCode\":\"VERB_REQUIRES_OUT_OF_BAND_AUTHORITY\"},\"receiptPath\":\"evidence/mcp-ceremony-write/receipts/2026-08-05T14-06-02-176Z-ecb94a-TCRN-AOS.json\",\"payloadPath\":\"evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-01-257Z-470805-TCRN-AOS.json\"}"
+        }
+      ],
+      "structuredContent": {
+        "ok": false,
+        "reasonCode": "VERB_REQUIRES_OUT_OF_BAND_AUTHORITY",
+        "host": "tcrn-platform-dev",
+        "partition": "TCRN-AOS",
+        "dryRun": false,
+        "receipt": {
+          "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+          "story": "TCRN-CROSS-INIT-019-STORY-156",
+          "intent": "red case 4: verb requires a per-invocation authority file, never driven from a batch wrapper",
+          "startedAt": "2026-08-05T14:06:01Z",
+          "dryRun": false,
+          "host": "tcrn-platform-dev",
+          "partition": "TCRN-AOS",
+          "topology": {
+            "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+            "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+            "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+            "actor": "agent:fable",
+            "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+          },
+          "payload": {
+            "path": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-01-257Z-470805-TCRN-AOS.json",
+            "sha256": "41a16933cd96cc12197a8bc2884aebdfcd53f53116a1fda5841721b89f728857",
+            "bytes": 521
+          },
+          "hostEngineCatalogue": {
+            "verbs": 103
+          },
+          "chainBefore": {
+            "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+            "version": 1047,
+            "headEventHash": "84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0",
+            "work": 156
+          },
+          "steps": [
+            {
+              "ok": false,
+              "verb": "relocation-vacate",
+              "reasonCode": "VERB_REQUIRES_OUT_OF_BAND_AUTHORITY",
+              "detail": "this verb takes a per-invocation authority file; it is performed as its own ceremony, never from a batch wrapper",
+              "headAtPlanning": 1047
+            }
+          ],
+          "readback": [],
+          "chainAfter": null,
+          "ok": false,
+          "reasonCode": "VERB_REQUIRES_OUT_OF_BAND_AUTHORITY"
+        },
+        "receiptPath": "evidence/mcp-ceremony-write/receipts/2026-08-05T14-06-02-176Z-ecb94a-TCRN-AOS.json",
+        "payloadPath": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-01-257Z-470805-TCRN-AOS.json"
+      },
+      "isError": true
+    }
+  },
+  {
+    "case": 4,
+    "label": "dry-run-success",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"ok\":true,\"reasonCode\":\"CEREMONY_PLANNED_ONLY\",\"host\":\"tcrn-platform-dev\",\"partition\":\"TCRN-AOS\",\"dryRun\":true,\"receipt\":{\"schemaVersion\":\"aos.local-client-ceremony-receipt.v1\",\"story\":\"TCRN-CROSS-INIT-019-STORY-156\",\"intent\":\"dry-run proof: a planned-only ceremony against the anchor work item\",\"startedAt\":\"2026-08-05T14:06:02Z\",\"dryRun\":true,\"host\":\"tcrn-platform-dev\",\"partition\":\"TCRN-AOS\",\"topology\":{\"engineCli\":\"/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs\",\"workspace\":\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace\",\"attestDir\":\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations\",\"actor\":\"agent:fable\",\"configuredIn\":\"deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs\"},\"payload\":{\"path\":\"evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-02-179Z-aa23fd-TCRN-AOS.json\",\"sha256\":\"feebe53ec7b03f68270ec7811b7befa242cd770475d8c3586e50957c9066db2f\",\"bytes\":615},\"hostEngineCatalogue\":{\"verbs\":103},\"chainBefore\":{\"workspaceId\":\"workspace:fbc32e3ff874fbbd637a1b85\",\"version\":1047,\"headEventHash\":\"84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0\",\"work\":156},\"steps\":[{\"ok\":true,\"verb\":\"work-annotate\",\"mutates\":true,\"reasonCode\":\"STEP_PLANNED\",\"argv\":[\"work-annotate\",\"--actor\",\"agent:fable\",\"--at\",\"2026-08-05T14:06:02Z\",\"--attest-dir\",\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations\",\"--expected-version\",\"1047\",\"--id\",\"work:4c678a5fe78b6313ce56ea39\",\"--scope\",\"init-019-dry-run-proof\",\"--workspace\",\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace\"],\"autoSupplied\":[\"actor\",\"at\",\"attest-dir\",\"expected-version\",\"workspace\"],\"fromPayload\":[\"id\",\"scope\"],\"headAtPlanning\":1047,\"executed\":false,\"wouldSend\":\"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs 'work-annotate' '--actor' 'agent:fable' '--at' '2026-08-05T14:06:02Z' '--attest-dir' '/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations' '--expected-version' '1047' '--id' 'work:4c678a5fe78b6313ce56ea39' '--scope' 'init-019-dry-run-proof' '--workspace' '/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace'\"}],\"readback\":[{\"ok\":true,\"verb\":\"work-show\",\"mutates\":false,\"reasonCode\":\"STEP_PLANNED\",\"argv\":[\"work-show\",\"--id\",\"work:4c678a5fe78b6313ce56ea39\",\"--workspace\",\"/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace\"],\"autoSupplied\":[\"workspace\"],\"fromPayload\":[\"id\"],\"executed\":false}],\"chainAfter\":{\"workspaceId\":\"workspace:fbc32e3ff874fbbd637a1b85\",\"version\":1047,\"headEventHash\":\"84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0\",\"work\":156},\"eventsAppended\":0,\"ok\":true,\"reasonCode\":\"CEREMONY_PLANNED_ONLY\",\"finishedAt\":\"2026-08-05T14:06:03Z\"},\"receiptPath\":\"evidence/mcp-ceremony-write/receipts/2026-08-05T14-06-03-337Z-9f1fca-TCRN-AOS.json\",\"payloadPath\":\"evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-02-179Z-aa23fd-TCRN-AOS.json\"}"
+        }
+      ],
+      "structuredContent": {
+        "ok": true,
+        "reasonCode": "CEREMONY_PLANNED_ONLY",
+        "host": "tcrn-platform-dev",
+        "partition": "TCRN-AOS",
+        "dryRun": true,
+        "receipt": {
+          "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+          "story": "TCRN-CROSS-INIT-019-STORY-156",
+          "intent": "dry-run proof: a planned-only ceremony against the anchor work item",
+          "startedAt": "2026-08-05T14:06:02Z",
+          "dryRun": true,
+          "host": "tcrn-platform-dev",
+          "partition": "TCRN-AOS",
+          "topology": {
+            "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+            "workspace": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace",
+            "attestDir": "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+            "actor": "agent:fable",
+            "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+          },
+          "payload": {
+            "path": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-02-179Z-aa23fd-TCRN-AOS.json",
+            "sha256": "feebe53ec7b03f68270ec7811b7befa242cd770475d8c3586e50957c9066db2f",
+            "bytes": 615
+          },
+          "hostEngineCatalogue": {
+            "verbs": 103
+          },
+          "chainBefore": {
+            "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+            "version": 1047,
+            "headEventHash": "84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0",
+            "work": 156
+          },
+          "steps": [
+            {
+              "ok": true,
+              "verb": "work-annotate",
+              "mutates": true,
+              "reasonCode": "STEP_PLANNED",
+              "argv": [
+                "work-annotate",
+                "--actor",
+                "agent:fable",
+                "--at",
+                "2026-08-05T14:06:02Z",
+                "--attest-dir",
+                "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations",
+                "--expected-version",
+                "1047",
+                "--id",
+                "work:4c678a5fe78b6313ce56ea39",
+                "--scope",
+                "init-019-dry-run-proof",
+                "--workspace",
+                "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+              ],
+              "autoSupplied": [
+                "actor",
+                "at",
+                "attest-dir",
+                "expected-version",
+                "workspace"
+              ],
+              "fromPayload": [
+                "id",
+                "scope"
+              ],
+              "headAtPlanning": 1047,
+              "executed": false,
+              "wouldSend": "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs 'work-annotate' '--actor' 'agent:fable' '--at' '2026-08-05T14:06:02Z' '--attest-dir' '/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/attestations' '--expected-version' '1047' '--id' 'work:4c678a5fe78b6313ce56ea39' '--scope' 'init-019-dry-run-proof' '--workspace' '/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace'"
+            }
+          ],
+          "readback": [
+            {
+              "ok": true,
+              "verb": "work-show",
+              "mutates": false,
+              "reasonCode": "STEP_PLANNED",
+              "argv": [
+                "work-show",
+                "--id",
+                "work:4c678a5fe78b6313ce56ea39",
+                "--workspace",
+                "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace"
+              ],
+              "autoSupplied": [
+                "workspace"
+              ],
+              "fromPayload": [
+                "id"
+              ],
+              "executed": false
+            }
+          ],
+          "chainAfter": {
+            "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+            "version": 1047,
+            "headEventHash": "84a127439d76d7239337e74b2ad4ff96a8b561b580923e91a4d5f484d3e79aa0",
+            "work": 156
+          },
+          "eventsAppended": 0,
+          "ok": true,
+          "reasonCode": "CEREMONY_PLANNED_ONLY",
+          "finishedAt": "2026-08-05T14:06:03Z"
+        },
+        "receiptPath": "evidence/mcp-ceremony-write/receipts/2026-08-05T14-06-03-337Z-9f1fca-TCRN-AOS.json",
+        "payloadPath": "evidence/mcp-ceremony-write/payloads/2026-08-05T14-06-02-179Z-aa23fd-TCRN-AOS.json"
+      },
+      "isError": false
+    }
+  }
+]

@@ -1,0 +1,109 @@
+{
+  "schemaVersion": "tcrn.init-020.s199-local-return.v1",
+  "story": "TCRN-CROSS-STORY-199",
+  "observedAt": "2026-08-08",
+  "actor": "agent:gpt-5-codex",
+  "executionForm": "single-context-synthesis-only",
+  "purpose": "使五链活权威回到本机 file 后端，日常读写不再依赖 SSH；VM 旧地址保留为拒写封存证据。",
+  "partitions": [
+    {
+      "partitionId": "TCRN-AOS",
+      "workspaceId": "workspace:fbc32e3ff874fbbd637a1b85",
+      "relocationId": "relocation:478c6846fa453964189dc2b2",
+      "basis": { "version": 1050, "headEventHash": "ddba691af58380b8660875e9dda4478b5a1d8a3014db5da99a0233076dfe31f0" },
+      "local": { "address": ".tcrn-workspace/TCRN-AOS/workspace", "version": 1050, "headEventHash": "ddba691af58380b8660875e9dda4478b5a1d8a3014db5da99a0233076dfe31f0", "knowledgeVersion": 29 },
+      "migrationVerify": "WORKSPACE_MIGRATION_VERIFIED",
+      "vmOldAddressRead": "WORKSPACE_RELOCATION_VACATED"
+    },
+    {
+      "partitionId": "cross-project",
+      "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+      "relocationId": "relocation:73e7dfe169b7a564d88516dc",
+      "basis": { "version": 2428, "headEventHash": "74304090f5f64ebc3bf41bbf068bc31bb66721bb8d081f0e31352d8b5ed1ded1" },
+      "local": { "address": ".tcrn-workspace/cross-project/workspace", "versionAtMigration": 2428, "version": 2450, "headEventHash": "13ad79dc09dd85f0ffcacfd9c2a277ccc44928a5981212ef70e94e540d95a430", "knowledgeVersion": 125 },
+      "migrationVerify": "WORKSPACE_MIGRATION_VERIFIED",
+      "vmOldAddressRead": "WORKSPACE_RELOCATION_VACATED",
+      "forkRemediation": "The sealed legacy VM file tree was preserved; a fresh current file authority was initialized from PG before vacate/adopt so the deliberately sealed v2122 fork was not revived."
+    },
+    {
+      "partitionId": "TCRN-Design-System",
+      "workspaceId": "workspace:e7386bdcff8b3407e43ece51",
+      "relocationId": "relocation:2a1399d74c29b8d6fecc57ec",
+      "basis": { "version": 983, "headEventHash": "e079e10de28b0fe0a8abbbda973f463224e51178f3e35fd6cc6b42bef0be292a" },
+      "local": { "address": ".tcrn-workspace/TCRN-Design-System/workspace", "version": 983, "headEventHash": "e079e10de28b0fe0a8abbbda973f463224e51178f3e35fd6cc6b42bef0be292a", "knowledgeVersion": 3 },
+      "migrationVerify": "WORKSPACE_MIGRATION_VERIFIED",
+      "vmOldAddressRead": "WORKSPACE_RELOCATION_VACATED"
+    },
+    {
+      "partitionId": "TCRN-TMS",
+      "workspaceId": "workspace:f15c5abb6cd777c44453c2c9",
+      "relocationId": "relocation:d8fb63b4bd3b3293e6001901",
+      "basis": { "version": 229, "headEventHash": "c55e05ca599d933def967b39028d9ce529e3792206f680f60e06507def651ecf" },
+      "local": { "address": ".tcrn-workspace/TCRN-TMS/workspace", "version": 229, "headEventHash": "c55e05ca599d933def967b39028d9ce529e3792206f680f60e06507def651ecf", "knowledgeVersion": 9 },
+      "migrationVerify": "WORKSPACE_MIGRATION_VERIFIED",
+      "vmOldAddressRead": "WORKSPACE_RELOCATION_VACATED"
+    },
+    {
+      "partitionId": "Joi-Button",
+      "workspaceId": "workspace:f4edc54804be7e499804e3f0",
+      "relocationId": "relocation:56252580c1ae68c722429c54",
+      "basis": { "version": 586, "headEventHash": "fd18a91630783dc5737ee9a3f8ba6c8f4cdbb595728cb88c32b0d816e0468955" },
+      "local": { "address": ".tcrn-workspace/Joi-Button/workspace", "version": 586, "headEventHash": "fd18a91630783dc5737ee9a3f8ba6c8f4cdbb595728cb88c32b0d816e0468955", "knowledgeVersion": 4 },
+      "migrationVerify": "WORKSPACE_MIGRATION_VERIFIED",
+      "vmOldAddressRead": "WORKSPACE_RELOCATION_VACATED"
+    }
+  ],
+  "localReadMatrix": ["status", "validate", "event-list", "work-list", "work-show", "knowledge-validate"],
+  "localReadMatrixResult": "all five local workspaces answered with WORKSPACE_COMMAND_COMPLETED or KNOWLEDGE_STORE_VALID; cross was re-based from marker version 120 to 121 after the S200 read/write witness, to 122 after closeout annotations, and to 125 after the S196/S190 weekly closeout notes",
+  "vmOldAddressReadMatrix": ["status", "validate", "work-list", "knowledge-validate"],
+  "vmOldAddressReadMatrixResult": "all five old addresses answered WORKSPACE_RELOCATION_VACATED",
+  "s200": {
+    "localWriteWitness": { "operation": "work-annotate", "target": "TCRN-CROSS-STORY-200", "readback": "work-show full advisory and identity matched", "headAfter": "80baa0374ac2797d7b364058a7a8a7238ae6b54aeef79e6dadc32b106e53521c" },
+    "vmServices": { "units": ["tcrn-aos-cockpit.service", "tcrn-aos-read.service", "tcrn-aos-facade-read.service", "tcrn-aos-facade-write.service"], "state": "inactive/dead/disabled", "ports": [4318, 4319, 4320, 4321], "listeners": 0 },
+    "hostRoster": { "parityProof": "PARITY_VERIFIED", "codexConfig": "owner-review diff emitted, not applied", "userSettings": "not modified" }
+  },
+  "s201": {
+    "localPurity": "LOCAL_HOST_IS_A_PURE_CLIENT",
+    "docTopology": "DOC_TOPOLOGY_IN_SYNC",
+    "redProofs": { "localPurity": "tightening and unrostered-tree red legs passed", "docTopology": 6 }
+  },
+  "postReturnGates": {
+    "tip": "TIP_SINGLE_TRUTH_VERIFIED (five local status heads equal event-list tails)",
+    "receiptHygiene": "RECEIPT_HYGIENE_VERIFIED (187 receipts anchored; problems=[])",
+    "closeout": "CLOSEOUT_ITEMS_RECONCILED (11/11; live-local-engine authority v2450)",
+    "projection": "web-projection fresh at cross-project v2450; CodeGraph remains red on tracked dirty source changes",
+    "cockpitData": "five local partitions projected at v2450/v983/v229/v1050/v586"
+  },
+  "s196": {
+    "command": "pnpm prod:ready",
+    "decision": "NOT_READY",
+    "green": ["local-chain-integrity", "mcp-single-truth", "init-020-closeout", "knowledge-freshness", "fail-closed-write-refusal"],
+    "red": ["stop-pact-channel:STOP_PACT_CHANNEL_SEVERED", "helper-engine-pin:HELPER_REPIN_OWNER_APPROVAL_REQUIRED"],
+    "redLegs": "7/7 verified",
+    "weeklyNote": "S196 work-show advisory scope contains the result and purpose revalidation"
+  },
+  "s197": {
+    "protocolProof": "S197_PROTOCOL_VERIFIED",
+    "documents": ["CLAUDE.md", "TCRN-AOS/docs/reports/init-020/HANDOVER-2026-08-08-final-codex.md"]
+  },
+  "s189": {
+    "status": "done",
+    "purposeRevalidation": "read back",
+    "headAfter": "f17956665187fc491a1ed695841a349cc73f7805891e01add9cc2cd9b23417ac"
+  },
+  "s190": {
+    "status": "active",
+    "purposeRevalidation": "read back; NOT_READY and Owner stops recorded; no done claim"
+  },
+  "init009": {
+    "status": "active",
+    "doneTransition": "WORKSPACE_INPUT_INVALID; EPIC-025 retains blocked STORY-073/074/075; no blind retry"
+  },
+  "limits": [
+    "STOP_PACT_CHANNEL_SEVERED / STOP_PACT_HOOK_NOT_REGISTERED remains an Owner configuration stop",
+    "HELPER_REPIN_OWNER_APPROVAL_REQUIRED remains an Owner trust stop",
+    "projection freshness is red only for CodeGraph tracked dirty changes; the web projection and knowledge marker are fresh",
+    "S190 remains active because INIT-020 P0/Owner acceptance is not complete; INIT-009 done transition refusal is recorded",
+    "Owner acceptance, release tag/publish, and push were not performed"
+  ]
+}

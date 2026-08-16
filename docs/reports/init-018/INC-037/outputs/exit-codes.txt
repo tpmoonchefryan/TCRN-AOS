@@ -1,0 +1,5 @@
+self-test-green.json exit=0 (0 expected)
+branch-proof-green.txt exit=0 (0 expected)
+branch-proof-red-weakened-corpus.txt exit=1 (NON-ZERO expected: this is the red side)
+red-single-branch-selftest.txt exit=1 (NON-ZERO expected: this is the red side)
+pre-fix-comparison.json exit=0 (0 means the four defects reproduce on the pre-fix copy)

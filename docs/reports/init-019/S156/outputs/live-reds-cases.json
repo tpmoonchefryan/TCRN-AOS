@@ -1,0 +1,90 @@
+[
+  {
+    "label": "red-1-reserved-flag",
+    "arguments": {
+      "partition": "TCRN-AOS",
+      "payload": {
+        "schemaVersion": "aos.local-client-ceremony.v1",
+        "story": "TCRN-CROSS-INIT-019-STORY-156",
+        "intent": "red case 1: payload names the reserved expected-version flag",
+        "steps": [
+          { "verb": "work-annotate", "flags": { "id": "work:4c678a5fe78b6313ce56ea39", "expected-version": 1047 } }
+        ],
+        "readback": [
+          { "verb": "work-show", "flags": { "id": "work:4c678a5fe78b6313ce56ea39" }, "expect": { "scope": "x" } }
+        ]
+      }
+    }
+  },
+  {
+    "label": "red-2-no-readback",
+    "arguments": {
+      "partition": "TCRN-AOS",
+      "payload": {
+        "schemaVersion": "aos.local-client-ceremony.v1",
+        "story": "TCRN-CROSS-INIT-019-STORY-156",
+        "intent": "red case 2: payload carries no read-back, so the write is unproven",
+        "steps": [
+          { "verb": "work-annotate", "flags": { "id": "work:4c678a5fe78b6313ce56ea39", "scope": "x" } }
+        ],
+        "readback": []
+      }
+    }
+  },
+  {
+    "label": "red-3-verb-not-in-catalogue",
+    "arguments": {
+      "partition": "TCRN-AOS",
+      "payload": {
+        "schemaVersion": "aos.local-client-ceremony.v1",
+        "story": "TCRN-CROSS-INIT-019-STORY-156",
+        "intent": "red case 3: step verb absent from the host engine's own catalogue",
+        "steps": [
+          { "verb": "no-such-verb", "flags": { "id": "work:4c678a5fe78b6313ce56ea39" } }
+        ],
+        "readback": [
+          { "verb": "work-show", "flags": { "id": "work:4c678a5fe78b6313ce56ea39" }, "expect": { "scope": "x" } }
+        ]
+      }
+    }
+  },
+  {
+    "label": "red-4-one-shot-authority-family",
+    "arguments": {
+      "partition": "TCRN-AOS",
+      "payload": {
+        "schemaVersion": "aos.local-client-ceremony.v1",
+        "story": "TCRN-CROSS-INIT-019-STORY-156",
+        "intent": "red case 4: verb requires a per-invocation authority file, never driven from a batch wrapper",
+        "steps": [
+          { "verb": "relocation-vacate", "flags": { "id": "work:4c678a5fe78b6313ce56ea39" } }
+        ],
+        "readback": [
+          { "verb": "work-show", "flags": { "id": "work:4c678a5fe78b6313ce56ea39" }, "expect": { "scope": "x" } }
+        ]
+      }
+    }
+  },
+  {
+    "label": "dry-run-success",
+    "arguments": {
+      "partition": "TCRN-AOS",
+      "dryRun": true,
+      "payload": {
+        "schemaVersion": "aos.local-client-ceremony.v1",
+        "story": "TCRN-CROSS-INIT-019-STORY-156",
+        "intent": "dry-run proof: a planned-only ceremony against the anchor work item",
+        "steps": [
+          { "verb": "work-annotate", "flags": { "id": "work:4c678a5fe78b6313ce56ea39", "scope": "init-019-dry-run-proof" } }
+        ],
+        "readback": [
+          {
+            "verb": "work-show",
+            "flags": { "id": "work:4c678a5fe78b6313ce56ea39" },
+            "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+          }
+        ]
+      }
+    }
+  }
+]

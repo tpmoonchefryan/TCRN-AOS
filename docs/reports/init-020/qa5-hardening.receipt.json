@@ -1,0 +1,319 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "facade": true,
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2292,
+    "headEventHash": "4c75f7972b8253b208656ecfc7a3442dbf839616443bc428c045a3660f3fddf1",
+    "work": 377
+  },
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2296,
+    "headEventHash": "2d87f5417cd1affa46711dbfffe919958aa455b49950798315b7dd7919ac9f8b",
+    "work": 379
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T22:19:58Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2292",
+        "--external-key",
+        "TCRN-CROSS-INC-108",
+        "--kind",
+        "Incident",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 2292,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:5878b0843a1ec4ec3f733c69",
+      "version": 2293
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T22:20:00Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2293",
+        "--id",
+        "work:5878b0843a1ec4ec3f733c69",
+        "--scope",
+        "【强化|收口门真量链化(INC-090/104① 重做,判据不可被被量者关闭)】来源:2026-08-08 五轮验收整批阻断项。失效类别(实证,前科第③类原样复发+第②类):tcrn-workflow/scripts/closeout-verify.mjs **从头到尾没有任何链读取能力**——模块唯一的 I/O 是 readFileSync 它自己那份 manifest;authoritativeItems 与 items 由**同一份人写文件**提供(:79-124),判据退化成两个列表互等;chainAuthority 只做五项形状校验。它已对 INC-061..071 出具 CLOSEOUT_ITEMS_RECONCILED/exit0 绿票,而同一时刻经 MCP 只读面实读权威链(v2292):INC-061/070/071 **全部 status:planned/revision:2**、注记仍是立单原文、零收口记录。注入实证:凭空加 INC-999+一条注记→绿;chainAuthority.headEventHash 改成 64 个 0、source 改成「I made this up, no read happened」→绿;两侧同删 6 单→绿。工具自己的错误串写着「authoritativeItems derived from the chain work-list」而无一行代码派生自链。**新增子缺陷**:①11 条 chainNotes 是按 disposition 类别套模板生成的关键词串,点名的 11 个证据文件**一个都不存在**(find 两仓+候选树+~/.tcrn-workflow 零命中);把注记全压成「receipt red-leg」或「hashish negative path」(仅因 hash 嵌在 hashish 里)→仍绿;②**自关闭开关是本轮修复亲手铸出来的**——:142/:145 的 requireChainEvidence!==false 与 requireChainRedLeg!==false 是本轮新增 124 行的一部分,被量对象在自己 manifest 里写两个 false 即关掉判据(对照组 exit1/21 问题→注入组 exit0/problems:[]),恰落在 INC-104① 逐字点名要消除的失效类别里(同文件 :206-211 对 windowed 却做了反自述硬化并写了注释,说明作者知道该怎么做);③链派生义务钉死在硬编码字面量 CHAIN_DERIVED_INCIDENT=\"TCRN-CROSS-INIT-020\"(:46),改 incident 名/改大小写/加尾随空格/删字段即整体失效,对畸形自述 fail-open。机制:①items **必须**经读面 work_list 自链派生,不可由 manifest 供给,派生失败即红(不得 fail-open);②逐单拉链上收口注记,校验红腿实录与**指名证据物真实存在**(路径可解析且文件在位),不做子串匹配;③**判据不可被 manifest 自关闭**——移除 requireChain* 旗标或反转为「必须显式开启且缺省即开」,承同文件 windowed 的反自述硬化写法;④incident 作用域由链派生而非硬编码;⑤接进 pnpm verify(现全仓 grep \"closeout\" 在 package.json 零命中=这道门不在任何流水线里)。判据两侧:正腿=对本 INIT 全批与 QA2 批分别跑,结果与链上实况一致;红腿=①manifest 自造条目必红②注记不指名或指名不存在的证据物必红③写 requireChain*=false 必红④改 incident 名必红。归属:tcrn-workflow。前置:无。**INC-104① 的替代承接方;本 Initiative 任何「收口完成」声明在本单绿之前不予采信。**",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2293,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:5878b0843a1ec4ec3f733c69",
+      "version": 2294
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T22:20:01Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2294",
+        "--external-key",
+        "TCRN-CROSS-INC-109",
+        "--kind",
+        "Incident",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 2294,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:98b12ec3f2ee196502cb2fc6",
+      "version": 2295
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-07T22:20:03Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2295",
+        "--id",
+        "work:98b12ec3f2ee196502cb2fc6",
+        "--scope",
+        "【强化|仪器在岗性:必需配置供给与自检独立性】来源:2026-08-08 五轮验收 P1-2(**验收方主线程亲自复现**)。失效类别(**新复合类别**):一次修复把现役治理仪器的引信静默拆掉,而该仪器的两道自检门在同批被改成看不见这件事。实证(主线程探针,校准后三组对照):①对**真实治理主机**的 SSH 写 `ssh tcrn-platform-dev \"cat > /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\"`,在**现役钩子的实际形态(无 env)**下 → **0 条记录**;②同一条命令补 TCRN_SSH_GOVERNED_HOST/TCRN_SSH_RUNTIME_ROOT → **1 条 reason:\"ssh-write\"**(检测逻辑本身完好);③对占位主机 `ssh governed-host.invalid \"cat > /opt/tcrn-governed/...\"` → **1 条**。而平台根 .claude/settings.json:42 的现役注册**不带任何 env 字段**;launchctl getenv、env、用户级 settings、LaunchAgents plist、四个 zsh profile 全部零命中。即:**本平台唯一能发现「有人绕过仪式直接 SSH 写治理树」的仪器,此刻正盯着一台不存在的主机,对真机全盲。**切换时刻留在生产 sink 自己的日志里(var/tcrn-observe/ssh-write-hits.jsonl:13:43:54Z 还是 tcrn-platform-dev//srv/tcrn,19:16:53Z 已变成 governed-host.invalid//opt/tcrn-governed)。**加重情节**:失明状态下两道健康门**全绿**——`--self-test` 报 passes:39/ok:true、`--verify-channel` 报 OBSERVE_CHANNEL_LIVE——因为 39 条自测语料与探针命令在**同一批改动**里被改成由同一个 ${PRIVATE_VM_HOST} 模板生成,tests/ssh-write-observer.test.mjs:30-31 也被硬编码成 governed-host.invalid(第③类:量具由被量者提供 + 第⑥类:把门修绿≠安全)。机制:①**必需配置供给判据**——凡「行为依赖运行期配置」的治理仪器,须在缺配置时 **fail-closed 具名拒绝**(或由注册处强制供给),不得静默退化为看守占位目标;②**自检独立性**:自测语料与红腿探针**不得**由被测判据的同一份常量/模板生成,须独立声明并含至少一条「对真实目标的正例」;③**在岗性判据**:门须能回答「我此刻看守的目标是否真实存在/是否是受治面上登记的那个」,看守不存在的目标即红;④与 INC-105(stop-pact 在岗性自检门)合成一族「仪器在岗性」判据,单点声明两处消费。判据两侧:正腿=现役注册形态下对真机写必落记录;红腿=①摘掉 env 供给必红(而非静默失明)②把自测语料改成与生产判据同源必红③看守目标不在受治名册内必红。归属:tcrn-workflow + TCRN-AOS(注册处)。前置:无。**INC-110 的可检查前置**(修复正腿须由本门出具,避免量具由被量者提供)。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2295,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:98b12ec3f2ee196502cb2fc6",
+      "version": 2296
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:5878b0843a1ec4ec3f733c69",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-108",
+            "observed": "TCRN-CROSS-INC-108",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Incident",
+            "observed": "Incident",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【强化|收口门真量链化(INC-090/104① 重做,判据不可被被量者关闭)】来源:2026-08-08 五轮验收整批阻断项。失效类别(实证,前科第③类原样复发+第②类):tcrn-workflow/scripts/closeout-verify.mjs **从头到尾没有任何链读取能力**——模块唯一的 I/O 是 readFileSync 它自己那份 manifest;authoritativeItems 与 items 由**同一份人写文件**提供(:79-124),判据退化成两个列表互等;chainAuthority 只做五项形状校验。它已对 INC-061..071 出具 CLOSEOUT_ITEMS_RECONCILED/exit0 绿票,而同一时刻经 MCP 只读面实读权威链(v2292):INC-061/070/071 **全部 status:planned/revision:2**、注记仍是立单原文、零收口记录。注入实证:凭空加 INC-999+一条注记→绿;chainAuthority.headEventHash 改成 64 个 0、source 改成「I made this up, no read happened」→绿;两侧同删 6 单→绿。工具自己的错误串写着「authoritativeItems derived from the chain work-list」而无一行代码派生自链。**新增子缺陷**:①11 条 chainNotes 是按 disposition 类别套模板生成的关键词串,点名的 11 个证据文件**一个都不存在**(find 两仓+候选树+~/.tcrn-workflow 零命中);把注记全压成「receipt red-leg」或「hashish negative path」(仅因 hash 嵌在 hashish 里)→仍绿;②**自关闭开关是本轮修复亲手铸出来的**——:142/:145 的 requireChainEvidence!==false 与 requireChainRedLeg!==false 是本轮新增 124 行的一部分,被量对象在自己 manifest 里写两个 false 即关掉判据(对照组 exit1/21 问题→注入组 exit0/problems:[]),恰落在 INC-104① 逐字点名要消除的失效类别里(同文件 :206-211 对 windowed 却做了反自述硬化并写了注释,说明作者知道该怎么做);③链派生义务钉死在硬编码字面量 CHAIN_DERIVED_INCIDENT=\"TCRN-CROSS-INIT-020\"(:46),改 incident 名/改大小写/加尾随空格/删字段即整体失效,对畸形自述 fail-open。机制:①items **必须**经读面 work_list 自链派生,不可由 manifest 供给,派生失败即红(不得 fail-open);②逐单拉链上收口注记,校验红腿实录与**指名证据物真实存在**(路径可解析且文件在位),不做子串匹配;③**判据不可被 manifest 自关闭**——移除 requireChain* 旗标或反转为「必须显式开启且缺省即开」,承同文件 windowed 的反自述硬化写法;④incident 作用域由链派生而非硬编码;⑤接进 pnpm verify(现全仓 grep \"closeout\" 在 package.json 零命中=这道门不在任何流水线里)。判据两侧:正腿=对本 INIT 全批与 QA2 批分别跑,结果与链上实况一致;红腿=①manifest 自造条目必红②注记不指名或指名不存在的证据物必红③写 requireChain*=false 必红④改 incident 名必红。归属:tcrn-workflow。前置:无。**INC-104① 的替代承接方;本 Initiative 任何「收口完成」声明在本单绿之前不予采信。**",
+            "observed": "【强化|收口门真量链化(INC-090/104① 重做,判据不可被被量者关闭)】来源:2026-08-08 五轮验收整批阻断项。失效类别(实证,前科第③类原样复发+第②类):tcrn-workflow/scripts/closeout-verify.mjs **从头到尾没有任何链读取能力**——模块唯一的 I/O 是 readFileSync 它自己那份 manifest;authoritativeItems 与 items 由**同一份人写文件**提供(:79-124),判据退化成两个列表互等;chainAuthority 只做五项形状校验。它已对 INC-061..071 出具 CLOSEOUT_ITEMS_RECONCILED/exit0 绿票,而同一时刻经 MCP 只读面实读权威链(v2292):INC-061/070/071 **全部 status:planned/revision:2**、注记仍是立单原文、零收口记录。注入实证:凭空加 INC-999+一条注记→绿;chainAuthority.headEventHash 改成 64 个 0、source 改成「I made this up, no read happened」→绿;两侧同删 6 单→绿。工具自己的错误串写着「authoritativeItems derived from the chain work-list」而无一行代码派生自链。**新增子缺陷**:①11 条 chainNotes 是按 disposition 类别套模板生成的关键词串,点名的 11 个证据文件**一个都不存在**(find 两仓+候选树+~/.tcrn-workflow 零命中);把注记全压成「receipt red-leg」或「hashish negative path」(仅因 hash 嵌在 hashish 里)→仍绿;②**自关闭开关是本轮修复亲手铸出来的**——:142/:145 的 requireChainEvidence!==false 与 requireChainRedLeg!==false 是本轮新增 124 行的一部分,被量对象在自己 manifest 里写两个 false 即关掉判据(对照组 exit1/21 问题→注入组 exit0/problems:[]),恰落在 INC-104① 逐字点名要消除的失效类别里(同文件 :206-211 对 windowed 却做了反自述硬化并写了注释,说明作者知道该怎么做);③链派生义务钉死在硬编码字面量 CHAIN_DERIVED_INCIDENT=\"TCRN-CROSS-INIT-020\"(:46),改 incident 名/改大小写/加尾随空格/删字段即整体失效,对畸形自述 fail-open。机制:①items **必须**经读面 work_list 自链派生,不可由 manifest 供给,派生失败即红(不得 fail-open);②逐单拉链上收口注记,校验红腿实录与**指名证据物真实存在**(路径可解析且文件在位),不做子串匹配;③**判据不可被 manifest 自关闭**——移除 requireChain* 旗标或反转为「必须显式开启且缺省即开」,承同文件 windowed 的反自述硬化写法;④incident 作用域由链派生而非硬编码;⑤接进 pnpm verify(现全仓 grep \"closeout\" 在 package.json 零命中=这道门不在任何流水线里)。判据两侧:正腿=对本 INIT 全批与 QA2 批分别跑,结果与链上实况一致;红腿=①manifest 自造条目必红②注记不指名或指名不存在的证据物必红③写 requireChain*=false 必红④改 incident 名必红。归属:tcrn-workflow。前置:无。**INC-104① 的替代承接方;本 Initiative 任何「收口完成」声明在本单绿之前不予采信。**",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-108",
+        "kind": "Incident",
+        "status": "planned"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:98b12ec3f2ee196502cb2fc6",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-109",
+            "observed": "TCRN-CROSS-INC-109",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Incident",
+            "observed": "Incident",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【强化|仪器在岗性:必需配置供给与自检独立性】来源:2026-08-08 五轮验收 P1-2(**验收方主线程亲自复现**)。失效类别(**新复合类别**):一次修复把现役治理仪器的引信静默拆掉,而该仪器的两道自检门在同批被改成看不见这件事。实证(主线程探针,校准后三组对照):①对**真实治理主机**的 SSH 写 `ssh tcrn-platform-dev \"cat > /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\"`,在**现役钩子的实际形态(无 env)**下 → **0 条记录**;②同一条命令补 TCRN_SSH_GOVERNED_HOST/TCRN_SSH_RUNTIME_ROOT → **1 条 reason:\"ssh-write\"**(检测逻辑本身完好);③对占位主机 `ssh governed-host.invalid \"cat > /opt/tcrn-governed/...\"` → **1 条**。而平台根 .claude/settings.json:42 的现役注册**不带任何 env 字段**;launchctl getenv、env、用户级 settings、LaunchAgents plist、四个 zsh profile 全部零命中。即:**本平台唯一能发现「有人绕过仪式直接 SSH 写治理树」的仪器,此刻正盯着一台不存在的主机,对真机全盲。**切换时刻留在生产 sink 自己的日志里(var/tcrn-observe/ssh-write-hits.jsonl:13:43:54Z 还是 tcrn-platform-dev//srv/tcrn,19:16:53Z 已变成 governed-host.invalid//opt/tcrn-governed)。**加重情节**:失明状态下两道健康门**全绿**——`--self-test` 报 passes:39/ok:true、`--verify-channel` 报 OBSERVE_CHANNEL_LIVE——因为 39 条自测语料与探针命令在**同一批改动**里被改成由同一个 ${PRIVATE_VM_HOST} 模板生成,tests/ssh-write-observer.test.mjs:30-31 也被硬编码成 governed-host.invalid(第③类:量具由被量者提供 + 第⑥类:把门修绿≠安全)。机制:①**必需配置供给判据**——凡「行为依赖运行期配置」的治理仪器,须在缺配置时 **fail-closed 具名拒绝**(或由注册处强制供给),不得静默退化为看守占位目标;②**自检独立性**:自测语料与红腿探针**不得**由被测判据的同一份常量/模板生成,须独立声明并含至少一条「对真实目标的正例」;③**在岗性判据**:门须能回答「我此刻看守的目标是否真实存在/是否是受治面上登记的那个」,看守不存在的目标即红;④与 INC-105(stop-pact 在岗性自检门)合成一族「仪器在岗性」判据,单点声明两处消费。判据两侧:正腿=现役注册形态下对真机写必落记录;红腿=①摘掉 env 供给必红(而非静默失明)②把自测语料改成与生产判据同源必红③看守目标不在受治名册内必红。归属:tcrn-workflow + TCRN-AOS(注册处)。前置:无。**INC-110 的可检查前置**(修复正腿须由本门出具,避免量具由被量者提供)。",
+            "observed": "【强化|仪器在岗性:必需配置供给与自检独立性】来源:2026-08-08 五轮验收 P1-2(**验收方主线程亲自复现**)。失效类别(**新复合类别**):一次修复把现役治理仪器的引信静默拆掉,而该仪器的两道自检门在同批被改成看不见这件事。实证(主线程探针,校准后三组对照):①对**真实治理主机**的 SSH 写 `ssh tcrn-platform-dev \"cat > /srv/tcrn/governance/tcrn-workspace/cross-project/workspace/index.json\"`,在**现役钩子的实际形态(无 env)**下 → **0 条记录**;②同一条命令补 TCRN_SSH_GOVERNED_HOST/TCRN_SSH_RUNTIME_ROOT → **1 条 reason:\"ssh-write\"**(检测逻辑本身完好);③对占位主机 `ssh governed-host.invalid \"cat > /opt/tcrn-governed/...\"` → **1 条**。而平台根 .claude/settings.json:42 的现役注册**不带任何 env 字段**;launchctl getenv、env、用户级 settings、LaunchAgents plist、四个 zsh profile 全部零命中。即:**本平台唯一能发现「有人绕过仪式直接 SSH 写治理树」的仪器,此刻正盯着一台不存在的主机,对真机全盲。**切换时刻留在生产 sink 自己的日志里(var/tcrn-observe/ssh-write-hits.jsonl:13:43:54Z 还是 tcrn-platform-dev//srv/tcrn,19:16:53Z 已变成 governed-host.invalid//opt/tcrn-governed)。**加重情节**:失明状态下两道健康门**全绿**——`--self-test` 报 passes:39/ok:true、`--verify-channel` 报 OBSERVE_CHANNEL_LIVE——因为 39 条自测语料与探针命令在**同一批改动**里被改成由同一个 ${PRIVATE_VM_HOST} 模板生成,tests/ssh-write-observer.test.mjs:30-31 也被硬编码成 governed-host.invalid(第③类:量具由被量者提供 + 第⑥类:把门修绿≠安全)。机制:①**必需配置供给判据**——凡「行为依赖运行期配置」的治理仪器,须在缺配置时 **fail-closed 具名拒绝**(或由注册处强制供给),不得静默退化为看守占位目标;②**自检独立性**:自测语料与红腿探针**不得**由被测判据的同一份常量/模板生成,须独立声明并含至少一条「对真实目标的正例」;③**在岗性判据**:门须能回答「我此刻看守的目标是否真实存在/是否是受治面上登记的那个」,看守不存在的目标即红;④与 INC-105(stop-pact 在岗性自检门)合成一族「仪器在岗性」判据,单点声明两处消费。判据两侧:正腿=现役注册形态下对真机写必落记录;红腿=①摘掉 env 供给必红(而非静默失明)②把自测语料改成与生产判据同源必红③看守目标不在受治名册内必红。归属:tcrn-workflow + TCRN-AOS(注册处)。前置:无。**INC-110 的可检查前置**(修复正腿须由本门出具,避免量具由被量者提供)。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-109",
+        "kind": "Incident",
+        "status": "planned"
+      }
+    }
+  ],
+  "eventsAppended": 4,
+  "finishedAt": "2026-08-07T22:20:09Z"
+}

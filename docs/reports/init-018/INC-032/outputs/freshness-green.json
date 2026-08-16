@@ -1,0 +1,57 @@
+{
+  "ok": true,
+  "verdict": "fresh",
+  "probed": true,
+  "gate": "aos-read-face-data-freshness",
+  "schemaVersion": "aos.read-face-freshness.v1",
+  "maxAgeHours": 9,
+  "maxAgeSource": "default",
+  "invariants": [
+    "the read face answered over HTTP and served the data asset a browser loads, as JavaScript rather than the shell fallback",
+    "the served bytes carry a generation stamp",
+    "the stamp is not dated ahead of now beyond clock-skew tolerance",
+    "the snapshot's age is within the freshness window",
+    "the served shell and the served bundle carry the same stamp"
+  ],
+  "observedAt": "2026-08-05T05:09:17.335Z",
+  "source": {
+    "baseUrl": "http://192.168.51.249:4319",
+    "assetPath": "/assets/aos-client.js",
+    "shellPath": "/",
+    "urlSource": "deploy/aos-resident-cockpit/read-face-manifest.mjs",
+    "servedBytes": 4836708,
+    "servedContentType": "text/javascript",
+    "shellBytes": 437944,
+    "shellContentType": "text/html"
+  },
+  "generatedAt": "2026-08-05T05:01:23Z",
+  "extractedVia": "served-bundle-stamp-scan",
+  "candidateStamps": 1,
+  "shellGeneratedAt": "2026-08-05T05:01:23Z",
+  "shellExtractedVia": "served-shell-banner-element",
+  "ageHours": 0.1318,
+  "clockSkewToleranceMinutes": 5,
+  "servedPartitions": [
+    {
+      "id": "cross-project",
+      "chainVersion": 1658
+    },
+    {
+      "id": "TCRN-Design-System",
+      "chainVersion": 983
+    },
+    {
+      "id": "TCRN-TMS",
+      "chainVersion": 228
+    },
+    {
+      "id": "TCRN-AOS",
+      "chainVersion": 1047
+    },
+    {
+      "id": "Joi-Button",
+      "chainVersion": 586
+    }
+  ],
+  "findings": []
+}

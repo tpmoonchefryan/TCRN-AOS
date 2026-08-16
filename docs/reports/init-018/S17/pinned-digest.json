@@ -1,0 +1,14 @@
+{
+  "skill": {
+    "file": "archify/SKILL.md",
+    "bytes": 7929,
+    "sha256": "4946d2fb2af9cb84461b1b98b732b44833e6a1ceaebfe8cd9e9d9ca4e939e12e"
+  },
+  "repoHead": "19213e107f47733132e8958dd78f3a7fb8c6e225",
+  "trial": {
+    "specSha256": "038609f9667190304c90ff6e33e85d8817e5e98b42b361158e5c9c3f16b536d4",
+    "artifactSha256": "09c25596cf4d907ae1b3f286bc59370e22a5098965bb91f180384eef5bfab423",
+    "artifactBytes": 603144
+  },
+  "version": "2.13"
+}

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-152",
+  "intent": "收口:条件未触发 + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:25fcf7b755e32daf403308cf",
+        "scope": "S13/S14 回放修复(条件启动)。触发条件:STORY-142 基准判定常用只读动词中位>2s。执行层:条件满足时备齐 ADR 材料(基准数据/方案对比/D3 已裁信任模型=热路径信 snapshot+后台异步全链复验+不一致 fail-closed)并 annotate 待门;条件未触发则以「未触发+链长 revisit 阈值」收口本单。门:ADR 终稿与采纳经隔离审议(STORY-155)与审查层;实现含对全链回放的残余适用性分析(条件化保留为后台复验路径)。MIN-057。进度@2026-08-05: 条件未触发。STORY-142(S12)实测只读动词中位 363–440ms,全部 <2s(status 363/validate 397/export 421/work-list 401 @3k 链;10k-ceiling 撞顶 368–440ms),对照阈值「常用只读动词 >2s 启动修复」不满足,故本单不启动。链长 revisit 阈值:STORY-142 另发现引擎 canonical 1MiB 上限使链无法超过 ~3200 条 work 记录(写与读都受限,已单独报审查层);当某条真实链逼近该规模时,须 revisit 本修复(启动 ADR 材料备齐:基准数据 S12/方案对比/D3 已裁信任模型)。ADR 审议与终稿归审查层/STORY-155。阻塞=无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:25fcf7b755e32daf403308cf", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:25fcf7b755e32daf403308cf" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-152", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

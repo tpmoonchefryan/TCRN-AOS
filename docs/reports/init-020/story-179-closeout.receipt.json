@@ -1,0 +1,271 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-179",
+  "intent": "STORY-179 收口:备份/快照/核对机构重基完成。PG 备份路径(pg_dump 定制格式+摘要)、offsite verify 判据更新、engine-host:verify 的 DB 等价物,正腿(真备份+异地验证)+红腿(篡改一字节 verify 红)实证。",
+  "startedAt": "2026-08-06T09:20:36Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "docs/reports/init-020/story-179-closeout.json",
+    "sha256": "66f15df0d33c361b18aaf4e5574a663ccc9cdac3c905d67aaf3649ea303fba29",
+    "bytes": 2738
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2059,
+    "headEventHash": "5af4ecd9368e765fc1ce7dc760996113f1edabb65e9afa9d028722ee347f9f22",
+    "work": 336
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:20:37Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2059",
+        "--id",
+        "work:c38be8ca18a8d0f6dbea2e5e",
+        "--scope",
+        "【收口(2026-08-06)】备份/快照/核对机构重基完成。交付物(TCRN-AOS/deploy/aos-resident-cockpit/):①pg-backup-take.mjs——PG 取备份程序(只读 SELECT 取活链状态:events 数/head event_hash/全链 payload_hash 摘要/metadata+两店 marker sha256/连续性,pg_dump -F c 定制格式归档+sha256 sidecar,pg_restore --list 结构校验,产物带 partition/schema);②pg-backup-verify.mjs——异地 verify(摘要比对 dump 重算 sha256 vs sidecar+manifest+结构校验,不再逐文件树);③pg-chain-verify.mjs——engine-host:verify 的 DB 等价物(只读,事件行数+head+两店 marker digest 与预期比对,CHAIN_MATCHES_EXPECTED/DIFFERS);④pg-paired-backup.mjs——配套编排(复用 resident-lib stepper/state/transport+保留策略,PULL 方向不变,take→rsync PULL→异地 verify→红腿→轮换);⑤package.json 加 paired:backup-pg/paired:backup-pg-verify/pg:chain-verify。验收两侧(本机 Docker PG 实证,生产 VM PG 18 同机制留 STORY-188 窗前重跑):正腿=整条编排 ok=true(4 事件,PG_PAIR_TAKEN/PULLED/PG_BACKUP_VERIFIED),--verify-offsite 绿,dump sha256 三方一致;红腿=dump 第 100 字节翻转→verify DUMP_DIGEST_MISMATCH,注入漂移 knowledge_marker→pg-chain-verify CHAIN_DIFFERS_FROM_EXPECTED(两红均已复位)。文件备份路径 paired-backup.mjs/verify.mjs 零改动(git diff 空)。ADR §6 face 6 备份重定义达成。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2059,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:c38be8ca18a8d0f6dbea2e5e",
+      "version": 2060
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:20:38Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2060",
+        "--id",
+        "work:c38be8ca18a8d0f6dbea2e5e",
+        "--status",
+        "ready",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2060,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:c38be8ca18a8d0f6dbea2e5e",
+      "version": 2061
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:20:39Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2061",
+        "--id",
+        "work:c38be8ca18a8d0f6dbea2e5e",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2061,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:c38be8ca18a8d0f6dbea2e5e",
+      "version": 2062
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T09:20:40Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2062",
+        "--id",
+        "work:c38be8ca18a8d0f6dbea2e5e",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 2062,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:c38be8ca18a8d0f6dbea2e5e",
+      "version": 2063
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:c38be8ca18a8d0f6dbea2e5e",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-179",
+            "observed": "TCRN-CROSS-STORY-179",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【收口(2026-08-06)】备份/快照/核对机构重基完成。交付物(TCRN-AOS/deploy/aos-resident-cockpit/):①pg-backup-take.mjs——PG 取备份程序(只读 SELECT 取活链状态:events 数/head event_hash/全链 payload_hash 摘要/metadata+两店 marker sha256/连续性,pg_dump -F c 定制格式归档+sha256 sidecar,pg_restore --list 结构校验,产物带 partition/schema);②pg-backup-verify.mjs——异地 verify(摘要比对 dump 重算 sha256 vs sidecar+manifest+结构校验,不再逐文件树);③pg-chain-verify.mjs——engine-host:verify 的 DB 等价物(只读,事件行数+head+两店 marker digest 与预期比对,CHAIN_MATCHES_EXPECTED/DIFFERS);④pg-paired-backup.mjs——配套编排(复用 resident-lib stepper/state/transport+保留策略,PULL 方向不变,take→rsync PULL→异地 verify→红腿→轮换);⑤package.json 加 paired:backup-pg/paired:backup-pg-verify/pg:chain-verify。验收两侧(本机 Docker PG 实证,生产 VM PG 18 同机制留 STORY-188 窗前重跑):正腿=整条编排 ok=true(4 事件,PG_PAIR_TAKEN/PULLED/PG_BACKUP_VERIFIED),--verify-offsite 绿,dump sha256 三方一致;红腿=dump 第 100 字节翻转→verify DUMP_DIGEST_MISMATCH,注入漂移 knowledge_marker→pg-chain-verify CHAIN_DIFFERS_FROM_EXPECTED(两红均已复位)。文件备份路径 paired-backup.mjs/verify.mjs 零改动(git diff 空)。ADR §6 face 6 备份重定义达成。",
+            "observed": "【收口(2026-08-06)】备份/快照/核对机构重基完成。交付物(TCRN-AOS/deploy/aos-resident-cockpit/):①pg-backup-take.mjs——PG 取备份程序(只读 SELECT 取活链状态:events 数/head event_hash/全链 payload_hash 摘要/metadata+两店 marker sha256/连续性,pg_dump -F c 定制格式归档+sha256 sidecar,pg_restore --list 结构校验,产物带 partition/schema);②pg-backup-verify.mjs——异地 verify(摘要比对 dump 重算 sha256 vs sidecar+manifest+结构校验,不再逐文件树);③pg-chain-verify.mjs——engine-host:verify 的 DB 等价物(只读,事件行数+head+两店 marker digest 与预期比对,CHAIN_MATCHES_EXPECTED/DIFFERS);④pg-paired-backup.mjs——配套编排(复用 resident-lib stepper/state/transport+保留策略,PULL 方向不变,take→rsync PULL→异地 verify→红腿→轮换);⑤package.json 加 paired:backup-pg/paired:backup-pg-verify/pg:chain-verify。验收两侧(本机 Docker PG 实证,生产 VM PG 18 同机制留 STORY-188 窗前重跑):正腿=整条编排 ok=true(4 事件,PG_PAIR_TAKEN/PULLED/PG_BACKUP_VERIFIED),--verify-offsite 绿,dump sha256 三方一致;红腿=dump 第 100 字节翻转→verify DUMP_DIGEST_MISMATCH,注入漂移 knowledge_marker→pg-chain-verify CHAIN_DIFFERS_FROM_EXPECTED(两红均已复位)。文件备份路径 paired-backup.mjs/verify.mjs 零改动(git diff 空)。ADR §6 face 6 备份重定义达成。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-179",
+        "kind": "Story",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2063,
+    "headEventHash": "7412f997e90418daec37d71403b3ad4a1be402e6269b8ea902ac2c67fe676229",
+    "work": 336
+  },
+  "knowledgeRebase": {
+    "verb": "knowledge-rebase",
+    "markerVersionBefore": 79,
+    "accepted": true,
+    "reasonCode": "KNOWLEDGE_STORE_REBASED",
+    "version": 80
+  },
+  "eventsAppended": 4,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-06T09:20:45Z"
+}

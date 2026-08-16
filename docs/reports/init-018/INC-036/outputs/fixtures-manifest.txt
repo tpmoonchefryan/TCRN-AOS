@@ -1,0 +1,6 @@
+control	mcp-control.json	无——与真文件逐字节相同（对照组：fixture 模式本身不会把判定变红）
+drift	mcp-drift.json	新增 mcpServers.codegraph-xyz（Codex 侧没有、白名单也没有）
+vanished	mcp-vanished.json	删除 mcpServers.codegraph-ds（该服务器本就不在 Codex 侧，于是两侧同时消失）
+placeholder	mcp-placeholder.json	codegraph-aos 的 --path 改成 /Users/<you>/… 占位符
+dangling	mcp-dangling.json	codegraph-aos 的 --path 改成一个不存在的目录
+codex-dangling	codex-dangling.toml	Codex 侧 codegraph 的 --dir 改成一个不存在的目录

@@ -1,0 +1,174 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-140",
+  "intent": "收口:终版 scope + 置 done",
+  "startedAt": "2026-08-04T16:58:35Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "<outside-repository>",
+    "sha256": "a0284b49fb8ee8422db65a815dbbf2226f18368bd655a5afe89f280f8a624bc6",
+    "bytes": 1914
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1567,
+    "headEventHash": "d53216dcee99fd22b0bc16490f51faffa3110fb7617bc704635d393d8e8fb3ef",
+    "work": 236
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:deepseek-v4-flash",
+        "--at",
+        "2026-08-04T16:58:36Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1567",
+        "--id",
+        "work:ceb4edc3faf4956bf3fa8538",
+        "--scope",
+        "S5 promptfoo 采纳(三环第三环外采,四道审查内嵌)。npm view 实名核验+lockfile 钉版+离线 echo provider smoke(禁真实 API key/禁网络模型调用)+并发≤2 与断言计数护栏,运行指标出 run-metrics.json 喂 EPIC-043 成本归因。验收:smoke 绿输出+护栏配置存档+核验原始输出。对应 G3 前置。MIN-055。执行结果@2026-08-05:已完成。S5.1 npm view promptfoo 实名核验 name/version/license/maintainers,选定 0.121.20(MIT,当前 latest,防幻觉包名),原始输出存档 S5.1/npm-view-raw.txt。S5.2 pnpm add -D promptfoo@0.121.20 钉版,最小 echo provider 配置 + 离线确定性断言 smoke 1/1 pass(无 API key,无网络模型调用),配置与结果存档 S5.2/。S5.3 新建 scripts/promptfoo-eval.mjs 护栏:并发默认 ≤2(promptfoo -j 旗标)+断言计数上限默认 200(运行前轻量估算拒+运行后按结果复核),运行指标出 S5.3/run-metrics.json(EVAL_GREEN);红测 250 断言 > 上限 → ASSERTION_CAP_EXCEEDED 运行前拒绝 exit 2 存档。证据包 tcrn-workflow/docs/reports/init-018/S5.x/。范围外缺陷:无。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1567,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ceb4edc3faf4956bf3fa8538",
+      "version": 1568
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:deepseek-v4-flash",
+        "--at",
+        "2026-08-04T16:58:37Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1568",
+        "--id",
+        "work:ceb4edc3faf4956bf3fa8538",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1568,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ceb4edc3faf4956bf3fa8538",
+      "version": 1569
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:ceb4edc3faf4956bf3fa8538",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-140",
+            "observed": "TCRN-CROSS-STORY-140",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "S5 promptfoo 采纳(三环第三环外采,四道审查内嵌)。npm view 实名核验+lockfile 钉版+离线 echo provider smoke(禁真实 API key/禁网络模型调用)+并发≤2 与断言计数护栏,运行指标出 run-metrics.json 喂 EPIC-043 成本归因。验收:smoke 绿输出+护栏配置存档+核验原始输出。对应 G3 前置。MIN-055。执行结果@2026-08-05:已完成。S5.1 npm view promptfoo 实名核验 name/version/license/maintainers,选定 0.121.20(MIT,当前 latest,防幻觉包名),原始输出存档 S5.1/npm-view-raw.txt。S5.2 pnpm add -D promptfoo@0.121.20 钉版,最小 echo provider 配置 + 离线确定性断言 smoke 1/1 pass(无 API key,无网络模型调用),配置与结果存档 S5.2/。S5.3 新建 scripts/promptfoo-eval.mjs 护栏:并发默认 ≤2(promptfoo -j 旗标)+断言计数上限默认 200(运行前轻量估算拒+运行后按结果复核),运行指标出 S5.3/run-metrics.json(EVAL_GREEN);红测 250 断言 > 上限 → ASSERTION_CAP_EXCEEDED 运行前拒绝 exit 2 存档。证据包 tcrn-workflow/docs/reports/init-018/S5.x/。范围外缺陷:无。",
+            "observed": "S5 promptfoo 采纳(三环第三环外采,四道审查内嵌)。npm view 实名核验+lockfile 钉版+离线 echo provider smoke(禁真实 API key/禁网络模型调用)+并发≤2 与断言计数护栏,运行指标出 run-metrics.json 喂 EPIC-043 成本归因。验收:smoke 绿输出+护栏配置存档+核验原始输出。对应 G3 前置。MIN-055。执行结果@2026-08-05:已完成。S5.1 npm view promptfoo 实名核验 name/version/license/maintainers,选定 0.121.20(MIT,当前 latest,防幻觉包名),原始输出存档 S5.1/npm-view-raw.txt。S5.2 pnpm add -D promptfoo@0.121.20 钉版,最小 echo provider 配置 + 离线确定性断言 smoke 1/1 pass(无 API key,无网络模型调用),配置与结果存档 S5.2/。S5.3 新建 scripts/promptfoo-eval.mjs 护栏:并发默认 ≤2(promptfoo -j 旗标)+断言计数上限默认 200(运行前轻量估算拒+运行后按结果复核),运行指标出 S5.3/run-metrics.json(EVAL_GREEN);红测 250 断言 > 上限 → ASSERTION_CAP_EXCEEDED 运行前拒绝 exit 2 存档。证据包 tcrn-workflow/docs/reports/init-018/S5.x/。范围外缺陷:无。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-140",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1569,
+    "headEventHash": "8d878cb9f84ccd193816a0de0837c976a4bb451bda1b36a993f4c686e66f2091",
+    "work": 236
+  },
+  "eventsAppended": 2,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-04T16:58:39Z"
+}

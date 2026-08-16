@@ -1,0 +1,2 @@
+-	0	com.tcrn.aos.read-face-refresh
+-	0	com.tcrn.aos.paired-backup

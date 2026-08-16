@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-189",
+  "intent": "切换窗开启与首链异常记录：Joi-Button 迁移 verify 红，窗口阻断，记版本前后/根因/处置。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:8797455f66197645465abb73",
+        "actor": "agent:fable",
+        "scope": "【切换窗·2026-08-06 开启即阻断】五链 file→pg 切换窗开启(Owner 已确认执行,INC-072 解除)。首链 Joi-Button(最小)迁移尝试:plan 586 events/head fd18a916…;execute 成功;verify RED WORKSPACE_MIGRATION_VERIFY_MISMATCH。根因=段粒度不一致:file workspace.metadata.segmentEventLimit=64(10 段),PG backend 硬编码 SEGMENT_LIMIT=1024(1 段),workspace-migration.compareSnapshots 逐段字节比对必红。逐事件实证 586/586 sequence·event_hash·payload_hash·payload 全等,metadata·knowledge_marker·knowledge_view 三对 sha 全同→数据平面无损,纯工具判据缺陷(发布子代理验证链≤64 事件未触发)。处置:file 链=权威且 validate 绿(v586);PG chain_joi 清空回 STORY-188 供给空态(禁 append-only trigger→TRUNCATE→启用,已验证);未跑 migration-rollback——它会以 1024 限单段覆盖 64 限 10 段布局并残留陈旧段,属损坏非回滚。窗口 BLOCKED:任一真链(>64 事件)verify 必红,需引擎修复(PG 尊重 segmentEventLimit 或 verify 改逐事件比对)后重跑。"
+      }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": {
+        "id": "work:8797455f66197645465abb73"
+      },
+      "recordFields": [
+        "externalKey",
+        "kind",
+        "status"
+      ],
+      "expect": {
+        "externalKey": "TCRN-CROSS-STORY-189",
+        "kind": "Story",
+        "status": "planned"
+      },
+      "expectSameAs": [
+        {
+          "field": "scope",
+          "step": 0,
+          "flag": "scope"
+        }
+      ]
+    }
+  ]
+}

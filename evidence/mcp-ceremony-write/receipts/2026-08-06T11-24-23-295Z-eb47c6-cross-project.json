@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-188",
+  "intent": "STORY-188 窗前就绪:VM 生产 PG 18 开通、五链末次文件备份+异地验证、四硬件机器核对全绿,窗时点提请 Owner 排定(报备型,方向已裁)。",
+  "startedAt": "2026-08-06T11:24:18Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "evidence/mcp-ceremony-write/payloads/2026-08-06T11-24-18-464Z-963f80-cross-project.json",
+    "sha256": "da4c07e7c4c2f6a40c9f37efdcd80cab957a7d8f1aaf9a27034fb03f6f9dc83d",
+    "bytes": 2367
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2095,
+    "headEventHash": "393efce0ac0253491ec27ee6d27d6f006acde4d2b1d913d8e20852b4ff18db50",
+    "work": 336
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T11:24:19Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2095",
+        "--id",
+        "work:ba1b7255d0622a5d24eabe07",
+        "--scope",
+        "【窗前就绪(2026-08-06)】①VM 生产 PG 18.4 开通(tcrn-platform-dev,apt postgresql-18):listen_addresses='127.0.0.1';pg_hba 仅 local peer(postgres 管理员 + tcrn_engine 引擎角色,无 host 行);建 tcrn_governance 库,应用 chain-ddl.sql(三角色 tcrn_engine/tcrn_domain/tcrn_collab + 五 chain schema + domain/collab + events/metadata/views/两店表 + append-only 触发器 + GRANT 矩阵);GRANT 红腿 6/6 过(非引擎角色写拒 permission denied / UPDATE/DELETE 触发器拒 / TRUNCATE 拒 / 伪造 prior_hash 连续性拒,零残留);tcrn_engine 经 local peer 连通测试过;systemd postgresql@18-main 常驻+开机自启;备份接线(/srv/tcrn/backups/pg-pairs + pg_dump/pg_restore 就绪)。②末次文件形态配对备份:五链 2026-08-06T11:19Z 全取(paired-backup.mjs),拉回本机异地 + --verify-offsite 全过,永久留存标记 FINAL-FILE-TRUTH-RETENTION(最后文件真值)。③窗前四硬件机器核对全绿(window-readiness-check.mjs):等价门(STORY-176,equivalence.test.mjs 2/2)/往返迁移实证(STORY-180,roundTripEmpty=true)/门面真实写(STORY-184,回执 CEREMONY_COMPLETED_AND_READ_BACK,活链 TMS v229 与 chainAfter 一致)/末次备份(异地五对全在)。联合可满足性已自证(四判据同机同时可绿);红腿:--mask 任一项清单必红(exit 1),窗不得开。④窗时点提请 Owner 排定(报备型,非 owner_intent_required 门)。AOS 全门 505/505 绿。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2095,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ba1b7255d0622a5d24eabe07",
+      "version": 2096
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:ba1b7255d0622a5d24eabe07",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-188",
+            "observed": "TCRN-CROSS-STORY-188",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【窗前就绪(2026-08-06)】①VM 生产 PG 18.4 开通(tcrn-platform-dev,apt postgresql-18):listen_addresses='127.0.0.1';pg_hba 仅 local peer(postgres 管理员 + tcrn_engine 引擎角色,无 host 行);建 tcrn_governance 库,应用 chain-ddl.sql(三角色 tcrn_engine/tcrn_domain/tcrn_collab + 五 chain schema + domain/collab + events/metadata/views/两店表 + append-only 触发器 + GRANT 矩阵);GRANT 红腿 6/6 过(非引擎角色写拒 permission denied / UPDATE/DELETE 触发器拒 / TRUNCATE 拒 / 伪造 prior_hash 连续性拒,零残留);tcrn_engine 经 local peer 连通测试过;systemd postgresql@18-main 常驻+开机自启;备份接线(/srv/tcrn/backups/pg-pairs + pg_dump/pg_restore 就绪)。②末次文件形态配对备份:五链 2026-08-06T11:19Z 全取(paired-backup.mjs),拉回本机异地 + --verify-offsite 全过,永久留存标记 FINAL-FILE-TRUTH-RETENTION(最后文件真值)。③窗前四硬件机器核对全绿(window-readiness-check.mjs):等价门(STORY-176,equivalence.test.mjs 2/2)/往返迁移实证(STORY-180,roundTripEmpty=true)/门面真实写(STORY-184,回执 CEREMONY_COMPLETED_AND_READ_BACK,活链 TMS v229 与 chainAfter 一致)/末次备份(异地五对全在)。联合可满足性已自证(四判据同机同时可绿);红腿:--mask 任一项清单必红(exit 1),窗不得开。④窗时点提请 Owner 排定(报备型,非 owner_intent_required 门)。AOS 全门 505/505 绿。",
+            "observed": "【窗前就绪(2026-08-06)】①VM 生产 PG 18.4 开通(tcrn-platform-dev,apt postgresql-18):listen_addresses='127.0.0.1';pg_hba 仅 local peer(postgres 管理员 + tcrn_engine 引擎角色,无 host 行);建 tcrn_governance 库,应用 chain-ddl.sql(三角色 tcrn_engine/tcrn_domain/tcrn_collab + 五 chain schema + domain/collab + events/metadata/views/两店表 + append-only 触发器 + GRANT 矩阵);GRANT 红腿 6/6 过(非引擎角色写拒 permission denied / UPDATE/DELETE 触发器拒 / TRUNCATE 拒 / 伪造 prior_hash 连续性拒,零残留);tcrn_engine 经 local peer 连通测试过;systemd postgresql@18-main 常驻+开机自启;备份接线(/srv/tcrn/backups/pg-pairs + pg_dump/pg_restore 就绪)。②末次文件形态配对备份:五链 2026-08-06T11:19Z 全取(paired-backup.mjs),拉回本机异地 + --verify-offsite 全过,永久留存标记 FINAL-FILE-TRUTH-RETENTION(最后文件真值)。③窗前四硬件机器核对全绿(window-readiness-check.mjs):等价门(STORY-176,equivalence.test.mjs 2/2)/往返迁移实证(STORY-180,roundTripEmpty=true)/门面真实写(STORY-184,回执 CEREMONY_COMPLETED_AND_READ_BACK,活链 TMS v229 与 chainAfter 一致)/末次备份(异地五对全在)。联合可满足性已自证(四判据同机同时可绿);红腿:--mask 任一项清单必红(exit 1),窗不得开。④窗时点提请 Owner 排定(报备型,非 owner_intent_required 门)。AOS 全门 505/505 绿。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-188",
+        "kind": "Story",
+        "status": "planned"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2096,
+    "headEventHash": "2f50c411186be2d0410601881bebcb3e3dfb917eebe3753952772fd748ba4e85",
+    "work": 336
+  },
+  "knowledgeRebase": {
+    "verb": "knowledge-rebase",
+    "markerVersionBefore": 88,
+    "accepted": true,
+    "reasonCode": "KNOWLEDGE_STORE_REBASED",
+    "version": 89
+  },
+  "eventsAppended": 1,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-06T11:24:23Z"
+}

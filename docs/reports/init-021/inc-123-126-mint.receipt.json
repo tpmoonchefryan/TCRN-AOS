@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "aos.local-engine-write-receipt.v1",
+  "intent": "INC-123..126 世界保真与预检体系",
+  "steps": [
+    {
+      "label": "create TCRN-CROSS-INC-123",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "annotate TCRN-CROSS-INC-123",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "TCRN-CROSS-INC-123 ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "TCRN-CROSS-INC-123 active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "create TCRN-CROSS-INC-124",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "annotate TCRN-CROSS-INC-124",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "TCRN-CROSS-INC-124 ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "TCRN-CROSS-INC-124 active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "create TCRN-CROSS-INC-125",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "annotate TCRN-CROSS-INC-125",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "TCRN-CROSS-INC-125 ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "TCRN-CROSS-INC-125 active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "create TCRN-CROSS-INC-126",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "annotate TCRN-CROSS-INC-126",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "TCRN-CROSS-INC-126 ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    },
+    {
+      "label": "TCRN-CROSS-INC-126 active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED"
+    }
+  ],
+  "readback": {
+    "status": "active",
+    "scopeMatches": true
+  },
+  "chainAfter": {
+    "headEventHash": "92ecdd321c5586c535ab2ff06d14aea3f025c30903311fdda704227c63d4b1e7",
+    "projects": 1,
+    "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+    "storageHome": null,
+    "version": 2553,
+    "work": 403,
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf"
+  }
+}

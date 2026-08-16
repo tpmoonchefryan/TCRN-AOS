@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-176",
+  "intent": "STORY-176 收口:双后端等价门+PG 测试基建完成,窗前硬件①。等价门(文件/PG 同序列字节等价)+mutation 证人(注入偏差门红)实证通过,全套件绿。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:4b1af6c1f07a74ece0c475db",
+        "scope": "【收口(2026-08-06)】双后端等价门与 PG 测试基建完成。交付物:①packages/pg-backend/test/equivalence.test.mjs——等价门(窗前硬件①):同一命令序列(createProject→updateProject→createWork→transitionWork)分别跑文件后端与 PG 后端,断言 export 字节/版本/head hash 完全一致(ADR §9 判据 1+3);②mutation 证人(红腿):PgBackend 注入一字节偏差(读段首字节 {→|)→链读红 WORKSPACE_EVENT_CORRUPT,门判红(零证人即违公约 12);③后端工厂注入机制:workspace.ts 新增 withStorageBackendFactory(AsyncLocalStorage 包私有,scope 单操作,生产不触发),让同一套引擎动词可切换后端;④PG 段序列化修正:PgBackend.readSegment 用 canonicalJson(非 JSON.stringify)保证与文件后端段字节一致,writeSegment 用 ON CONFLICT DO UPDATE 支持段重写语义,append-only 触发器支持 no-op re-presentation(段重写)并拒字节分歧(伪造/分叉);⑤PgBackend 冒烟 4/4 绿(metadata/segment/view 往返+字节分歧拒绝)。验收两侧:正腿=等价门绿(两后端 export 字节一致)+全套件绿(TESTS_VERIFIED);红腿=mutation 证人绿(注入一字节偏差门红 EVENT_CORRUPT)。CI 内 PG 供给方式按实测定(本机 Docker PG),单点可回退不设门。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:4b1af6c1f07a74ece0c475db", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:4b1af6c1f07a74ece0c475db", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:4b1af6c1f07a74ece0c475db", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:4b1af6c1f07a74ece0c475db" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-176", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

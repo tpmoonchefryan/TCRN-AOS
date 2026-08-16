@@ -1,0 +1,31 @@
+$ pnpm test        # node scripts/task.mjs test — 仓内既有测试套（只发现 tests/*.test.mjs）
+
+ℹ tests 819
+ℹ suites 0
+ℹ pass 818
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 377910.481583
+
+✖ failing tests:
+
+test at tests/proof-artifact-generator.test.mjs:261:1
+✖ proof-artifact generator check proves the repository's refreshed generated surfaces (53.674417ms)
+  Error [ProofArtifactError]: .claude/settings.json
+      at fail (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/lib/proof-artifacts.mjs:116:9)
+      at rebuiltAllowlist (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/lib/proof-artifacts.mjs:203:62)
+      at async generateProofArtifacts (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/scripts/lib/proof-artifacts.mjs:341:21)
+      at async TestContext.<anonymous> (file://<local-home>/Code/TCRN%20Platform/tcrn-workflow/tests/proof-artifact-generator.test.mjs:262:17)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    reasonCode: 'PROOF_ARTIFACT_UNAPPROVED_SOURCE'
+  }
+
+
+判读：819 项中 818 绿，唯一红项是 proof-artifact 生成器在 .claude/settings.json 上报
+PROOF_ARTIFACT_UNAPPROVED_SOURCE——即 source-allowlist 缺项，与 INC-037 无关且在本单动手前即存在
+（本单未触碰 .claude/settings.json）。本单新增文件同属该缺项类别，处置见 commands.md 遗留项 1。
+注意：scripts/ssh-write-observer.test.mjs 不在 tests/ 下，因此不被这 819 项覆盖；
+它单独由 node --test scripts/ssh-write-observer.test.mjs 运行（85 项全绿）。

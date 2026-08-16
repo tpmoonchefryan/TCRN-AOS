@@ -1,0 +1,186 @@
+[
+ {
+  "label": "curation-promote-all",
+  "arguments": {
+   "partition": "cross-project",
+   "payload": {
+    "schemaVersion": "aos.local-client-ceremony.v1",
+    "story": "TCRN-CROSS-INIT-019-STORY-161",
+    "intent": "promote all 20 batch-1 knowledge cards so they are default-selectable",
+    "steps": [
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:7e06efd0a5c5cf92b6c7840b",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:ed4e6fbb70956a32de04042c",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:b303e52d7a90316055033f41",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:9fd99bab02557a7bedaf6639",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:65d088d532ec08c9bd848351",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:7dba2d2b2ba17eee44f25eb5",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:4b037630b2ef7dc9774472be",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:c496d068b76a3781e71273b3",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:9869aed6d9ebd4d1f1f0d473",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:ce1d48584bf43d477a258bb4",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:27a5c4820ff26be9ad5885b9",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:155621a1841c8f3e26996dd7",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:29695027d5dd0d3d894c1827",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:bf8cb0b8eedd64205e2dc894",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:7ecc5fd6c5af3f1ee8e0c5b4",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:6d696a70159180ae8551773e",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:3e5c4618c41ee9da181a2cf3",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:2c9f238fa7b0b4eb3788b875",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:3b1352d143fd545a9e540c96",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     },
+     {
+      "verb": "knowledge-promote",
+      "flags": {
+       "id": "knowledge:7c22045778b85f5124f5fdc3",
+       "state": "promoted",
+       "expected-revision": 1
+      }
+     }
+    ],
+    "readback": [
+     {
+      "verb": "knowledge-list",
+      "flags": {
+       "selection": "all"
+      },
+      "expect": {
+       "total": 20
+      }
+     }
+    ]
+   }
+  }
+ }
+]

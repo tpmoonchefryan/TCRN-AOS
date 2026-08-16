@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-149",
+  "intent": "收口:终版 scope + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:804694151951bf3ded342261",
+        "scope": "S9 观测选型 spike(D4 已预授权执行层)。三候选运营成本表(Langfuse 自托管/OTel collector+轻 sink+座舱渲染/Jaeger all-in-one):进程数、内存、持久化依赖、月维护动作;运营成本为决定性审查;最轻候选出 PoC 可执行清单(VM 姿势沿 CONF-007:绑 127.0.0.1 仅 SSH 隧道)。VM 起服务实操归审查层。验收:成本表+裁定建议+PoC 清单。MIN-057。进度@2026-08-05: 已完成=三候选运营成本对比表(spike.md:进程数/内存/持久化依赖/月维护;Langfuse ≥4 进程≥4GB PG+Redis 强依赖;Jaeger all-in-one 单进程~0.5-1GB 内嵌存储重启丢数生产需外部存储;OTel Collector 1 进程~100-200MB 零强依赖)+裁定建议(运营成本决定性→选 OTel Collector+文件 JSONL sink+座舱渲染,与 S10 OTLP span 契合)+PoC 可执行清单(spike.md 第三节:VM 沿 CONF-007 绑 127.0.0.1 仅 SSH 隧道;systemd 单元+config.yaml otlp 回环+batch+文件 exporter 轮转;座舱只读渲染;绿×2+红×1 验证)。来源:Langfuse 官方 sizing/Jaeger deployment 2.1 架构/OTel Collector 对比。VM 起服务实操归审查层。阻塞=无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:804694151951bf3ded342261", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:804694151951bf3ded342261" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-149", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

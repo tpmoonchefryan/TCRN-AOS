@@ -1,0 +1,4 @@
+--- must HIT: wrapper before ssh + remote tee into the governed tree
+{"command":"env X=1 ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs export --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace | tee /srv/tcrn/governance/x\"","verdict":"HIT","reason":"ssh-write"}
+--- must PASS: read-only ssh, local 2>&1
+{"command":"ssh tcrn-platform-dev \"node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs status --workspace /srv/tcrn/governance/tcrn-workspace/cross-project/workspace\" 2>&1","verdict":"PASS","reason":"no-write-primitive"}

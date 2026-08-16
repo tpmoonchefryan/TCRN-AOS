@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-139",
+  "intent": "收口:终版 scope + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:955cf05222a325672082c12c",
+        "scope": "S1 控制树本机写保护(执行层做 S1.1 盘点+S1.2 五仓项目级 deny 规则;S1.3 重启会话红测与 S1.4 归档 chflags 归审查层)。现象:「只有引擎可写控制树」至今为散文,stop-pact 先例证明散文按不住。修复:各仓 .claude/settings.json deny Write/Edit 于 **/.tcrn-workflow/** 与 **/.tcrn-workspace/**,合并不破坏现有键+JSON 校验。验收:逐仓 diff 存档;红测被拒留档(审查层)。对应 G1。MIN-055。执行结果@2026-08-05:已完成。S1.1 盘点清单(五归档分区+四 shadow+release-trust,判定依据 topology.mjs 的 PARTITION_ROSTER/SHADOW_ROSTER),见 tcrn-workflow/docs/reports/init-018/S1.1/inventory.md。S1.2 五仓 .claude/settings.json 新建同一条 deny 规则(Write/Edit 于 **/.tcrn-workflow/** 与 **/.tcrn-workspace/**),逐仓 node JSON.parse 校验通过;五仓原均无 settings.json,故无丢键问题。S1.3 执行宿主无法开新会话(权限规则会话启动快照,本会话不加载新 deny),红测待审查层,已在 tcrn-workflow/docs/reports/init-018/S1.3/red-test.md 附核验配方,不算 BLOCKED。S1.4 简报 v2 明确派执行层:对五归档目录 chflags -R uchg(TCRN-AOS/cross-project/TCRN-Design-System/TCRN-TMS/Joi-Button,不含 shadow),写保护红测 touch 被拒 Operation not permitted,解锁配方 TCRN-AOS/docs/reports/init-018/S1.4/unlock-runbook.md。证据包 tcrn-workflow/docs/reports/init-018/S1.1…S1.4/。范围外缺陷:无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:955cf05222a325672082c12c", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:955cf05222a325672082c12c" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-139", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

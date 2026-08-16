@@ -1,0 +1,466 @@
+[
+ {
+  "label": "aos-curation-create-batch-1",
+  "arguments": {
+   "partition": "cross-project",
+   "payload": {
+    "schemaVersion": "aos.local-client-ceremony.v1",
+    "story": "TCRN-CROSS-INIT-019-STORY-161",
+    "intent": "curate batch-1 create-batch-1: create 10 knowledge cards via the ceremony write face",
+    "steps": [
+     {
+      "verb": "knowledge-create",
+      "flags": {
+       "external-key": "tcrn-init019-c01",
+       "scope": "role",
+       "project-id": "project:e7da35c5aade8dd42c91cb0f",
+       "role-scopes": [
+        "implementation"
+       ],
+       "category": "workflow",
+       "kind": "guide",
+       "tags": [
+        "lesson",
+        "probe"
+       ],
+       "subject": "报缺陷前先怀疑自己的探针",
+       "summary": "平台累计十二次误报的共同根因是探针只看一侧或探针本身有误;报缺陷前先用已知好的输入校准探针。",
+       "snippet": "probe-before-defect:先校准探针,再报缺陷。",
+       "accountable-owner-id": "owner:init019",
+       "source-references": [
+        "docs/reports/init-018/SUMMARY.md"
+       ],
+       "source-digest": "b34221e0d81681338a31dc6265c4d63c81f48af937404361130aea065b59a21c",
+       "work-ids": [
+        "-"
+       ],
+       "decision-ids": [
+        "-"
+       ],
+       "gate-ids": [
+        "-"
+       ],
+       "evidence-ids": [
+        "evidence:init018-qa"
+       ],
+       "lifecycle": "active",
+       "retrieval": "default",
+       "freshness": "fresh",
+       "last-verified": "2026-08-05T00:00:00Z",
+       "stale-days": 180,
+       "export": "metadata-only",
+       "body": "主张:报缺陷前先怀疑自己的探针——共因是探针判据只看一侧、异步先问「等的是终态吗」、shell 分词与截断是量具、探针身份是量具(匿名 404≠不存在)。修正:先用「已知好的输入」校准探针,再下结论。此条不再成立当:探针已用已知好输入校准且仍报出缺陷,此时缺陷为真。"
+      }
+     },
+     {
+      "verb": "knowledge-create",
+      "flags": {
+       "external-key": "tcrn-init019-c02",
+       "scope": "role",
+       "project-id": "project:e7da35c5aade8dd42c91cb0f",
+       "role-scopes": [
+        "implementation"
+       ],
+       "category": "decision",
+       "kind": "decision",
+       "tags": [
+        "lesson",
+        "gate"
+       ],
+       "subject": "判据两侧必须能够不同",
+       "summary": "恒真门是平台三度付学费的缺陷形态;写完门先真做一次「什么会让它变红」。",
+       "snippet": "predicate-both-sides:写完门先问什么会让它红,并真做一次。",
+       "accountable-owner-id": "owner:init019",
+       "source-references": [
+        "docs/reports/init-018/R2/"
+       ],
+       "source-digest": "6f10aca2222a903cde65f13a35ab6ce2085e1ff56017283e5cd9551b1d86d610",
+       "work-ids": [
+        "-"
+       ],
+       "decision-ids": [
+        "-"
+       ],
+       "gate-ids": [
+        "-"
+       ],
+       "evidence-ids": [
+        "evidence:init018-r2"
+       ],
+       "lifecycle": "active",
+       "retrieval": "default",
+       "freshness": "fresh",
+       "last-verified": "2026-08-05T00:00:00Z",
+       "stale-days": 180,
+       "export": "metadata-only",
+       "body": "主张:任何判据两侧必须能够不同——恒真门(判据复制自身、白名单删掉即绿等)是真实缺陷。写完门先问「什么会让它变红」并真做一次。此条不再成立当:一个判据被证明在其评估的所有世界内都不会出现两侧同值,此时恒真可接受。"
+      }
+     },
+     {
+      "verb": "knowledge-create",
+      "flags": {
+       "external-key": "tcrn-init019-c03",
+       "scope": "role",
+       "project-id": "project:e7da35c5aade8dd42c91cb0f",
+       "role-scopes": [
+        "implementation"
+       ],
+       "category": "workflow",
+       "kind": "guide",
+       "tags": [
+        "lesson",
+        "gate"
+       ],
+       "subject": "门的判据须在每个会被评估的世界可满足",
+       "summary": "联合不可满足的门永不绿;合并后那次 verify 不冗余。",
+       "snippet": "gate-must-be-satisfiable-everywhere:判据在每个评估世界都须可满足。",
+       "accountable-owner-id": "owner:init019",
+       "source-references": [
+        "docs/reports/init-018/INC-040/"
+       ],
+       "source-digest": "0bf6a22595fd557d2fad7f2506d4a997892ab99007f7604d082299920a9b0d5e",
+       "work-ids": [
+        "-"
+       ],
+       "decision-ids": [
+        "-"
+       ],
+       "gate-ids": [
+        "-"
+       ],
+       "evidence-ids": [
+        "evidence:init018-inc040"
+       ],
+       "lifecycle": "active",
+       "retrieval": "default",
+       "freshness": "fresh",
+       "last-verified": "2026-08-05T00:00:00Z",
+       "stale-days": 180,
+       "export": "metadata-only",
+       "body": "主张:一个门若在某个会被评估的世界(如干净 checkout)里联合不可满足,它永不绿、等于被关闭。判据须在每个评估世界可满足。此条不再成立当:门只在单工作树运行、不存在其它评估世界。"
+      }
+     },
+     {
+      "verb": "knowledge-create",
+      "flags": {
+       "external-key": "tcrn-init019-c04",
+       "scope": "role",
+       "project-id": "project:e7da35c5aade8dd42c91cb0f",
+       "role-scopes": [
+        "implementation"
+       ],
+       "category": "testing",
+       "kind": "guide",
+       "tags": [
+        "lesson",
+        "ci"
+       ],
+       "subject": "本地全绿不等于 CI 绿",
+       "summary": "本地 455/0 全绿后 CI 仍连红两次(计数式覆盖门与探针名册未同步);push 后须 gh run watch,评审 prompt 点名 CI 脚本。",
+       "snippet": "local-green-not-ci-green:push 后看 CI,不只信本地。",
+       "accountable-owner-id": "owner:init019",
+       "source-references": [
+        "docs/reports/init-018/R1/"
+       ],
+       "source-digest": "c524d4bd4ba84c2656820313ca9b5906b83e81b7b0999311d229c57aa42026a0",
+       "work-ids": [
+        "-"
+       ],
+       "decision-ids": [
+        "-"
+       ],
+       "gate-ids": [
+        "-"
+       ],
+       "evidence-ids": [
+        "evidence:init018-r1"
+       ],
+       "lifecycle": "active",
+       "retrieval": "default",
+       "freshness": "fresh",
+       "last-verified": "2026-08-05T00:00:00Z",
+       "stale-days": 180,
+       "export": "metadata-only",
+       "body": "主张:本地全绿 ≠ CI 绿——CI 的探针/名册/构建可能与本地不同步(镜像 smoke 计数门、nginx location 未同步探针名册)。push 后必须 gh run watch。此条不再成立当:本地与 CI 使用同一份名册与探针且已证明同步。"
+      }
+     },
+     {
+      "verb": "knowledge-create",
+      "flags": {
+       "external-key": "tcrn-init019-c05",
+       "scope": "role",
+       "project-id": "project:e7da35c5aade8dd42c91cb0f",
+       "role-scopes": [
+        "implementation"
+       ],
+       "category": "standards",
+       "kind": "guide",
+       "tags": [
+        "lesson",
+        "documentation"
+       ],
+       "subject": "文档里的举例就是断言",
+       "summary": "公约点名一个实例等于对它的当下状态下了无人维护的判断;举例用类别,点名实例须写「截至某日实测」并给复核命令。",
+       "snippet": "example-in-convention-is-an-assertion:举例用类别,点名实例带日期与复核命令。",
+       "accountable-owner-id": "owner:init019",
+       "source-references": [
+        "docs/delivery-cadence-convention.md"
+       ],
+       "source-digest": "20e163827260ee6623dd6ac9b221ae3e2274da5d4c1f8b6c7ec2f13d299e9c5f",
+       "work-ids": [
+        "-"
+       ],
+       "decision-ids": [
+        "-"
+       ],
+       "gate-ids": [
+        "-"
+       ],
+       "evidence-ids": [
+        "evidence:delivery-cadence"
+       ],
+       "lifecycle": "active",
+       "retrieval": "default",
+       "freshness": "fresh",
+       "last-verified": "2026-08-05T00:00:00Z",
+       "stale-days": 180,
+       "export": "metadata-only",
+       "body": "主张:文档点名一个实例(仓/主机/地址)即断言其当下状态,且无人维护。举例用类别;确需点名时写「截至某日实测」并给复核命令。此条不再成立当:文档里所有实例名都已被机器判据覆盖(如 doc-topology 的三方对齐)。"
+      }
+     },
+     {
+      "verb": "knowledge-create",
+      "flags": {
+       "external-key": "tcrn-init019-c06",
+       "scope": "role",
+       "project-id": "project:e7da35c5aade8dd42c91cb0f",
+       "role-scopes": [
+        "implementation"
+       ],
+       "category": "workflow",
+       "kind": "guide",
+       "tags": [
+        "lesson",
+        "delivery"
+       ],
+       "subject": "凭据不是实现的前置",
+       "summary": "凭据是运行期配置;需凭据的步骤单列,其余本地可完成可测,不让凭据阻塞实现。",
+       "snippet": "credentials-not-implementation-blocker:凭据单列,其余本地可完成。",
+       "accountable-owner-id": "owner:init019",
+       "source-references": [
+        "docs/reports/init-018/SUMMARY.md"
+       ],
+       "source-digest": "b34221e0d81681338a31dc6265c4d63c81f48af937404361130aea065b59a21c",
+       "work-ids": [
+        "-"
+       ],
+       "decision-ids": [
+        "-"
+       ],
+       "gate-ids": [
+        "-"
+       ],
+       "evidence-ids": [
+        "evidence:init018-summary"
+       ],
+       "lifecycle": "active",
+       "retrieval": "default",
+       "freshness": "fresh",
+       "last-verified": "2026-08-05T00:00:00Z",
+       "stale-days": 180,
+       "export": "metadata-only",
+       "body": "主张:凭据是运行期配置,不是实现的前置;需凭据步骤单列,其余本地可完成可测。此条不再成立当:某步骤在无凭据世界无法被任何形式验证。"
+      }
+     },
+     {
+      "verb": "knowledge-create",
+      "flags": {
+       "external-key": "tcrn-init019-c07",
+       "scope": "role",
+       "project-id": "project:e7da35c5aade8dd42c91cb0f",
+       "role-scopes": [
+        "implementation"
+       ],
+       "category": "workflow",
+       "kind": "guide",
+       "tags": [
+        "lesson",
+        "run"
+       ],
+       "subject": "上下文将满不是收尾的理由",
+       "summary": "压缩自动发生;停下的正当理由只有实质阻塞(owner_intent_required/对外发布/硬阻断),不是资源余量。",
+       "snippet": "context-limit-is-not-a-reason-to-stop:停只因实质阻塞。",
+       "accountable-owner-id": "owner:init019",
+       "source-references": [
+        "docs/delivery-cadence-convention.md"
+       ],
+       "source-digest": "20e163827260ee6623dd6ac9b221ae3e2274da5d4c1f8b6c7ec2f13d299e9c5f",
+       "work-ids": [
+        "-"
+       ],
+       "decision-ids": [
+        "-"
+       ],
+       "gate-ids": [
+        "-"
+       ],
+       "evidence-ids": [
+        "evidence:stop-budget"
+       ],
+       "lifecycle": "active",
+       "retrieval": "default",
+       "freshness": "fresh",
+       "last-verified": "2026-08-05T00:00:00Z",
+       "stale-days": 180,
+       "export": "metadata-only",
+       "body": "主张:上下文接近上限自动压缩,不是停下的理由;停下只因三类必停。此条不再成立当:引擎停止压缩且上下文耗尽导致状态丢失。"
+      }
+     },
+     {
+      "verb": "knowledge-create",
+      "flags": {
+       "external-key": "tcrn-init019-c08",
+       "scope": "role",
+       "project-id": "project:e7da35c5aade8dd42c91cb0f",
+       "role-scopes": [
+        "implementation"
+       ],
+       "category": "decision",
+       "kind": "guide",
+       "tags": [
+        "lesson",
+        "stop-budget"
+       ],
+       "subject": "停顿预算只三类:owner_intent_required/对外发布/无裁定不可逆",
+       "summary": "执行期必停只有三类;其余继续。",
+       "snippet": "stop-budget-three-classes:只三类必停。",
+       "accountable-owner-id": "owner:init019",
+       "source-references": [
+        "docs/delivery-cadence-convention.md"
+       ],
+       "source-digest": "20e163827260ee6623dd6ac9b221ae3e2274da5d4c1f8b6c7ec2f13d299e9c5f",
+       "work-ids": [
+        "-"
+       ],
+       "decision-ids": [
+        "-"
+       ],
+       "gate-ids": [
+        "-"
+       ],
+       "evidence-ids": [
+        "evidence:stop-budget"
+       ],
+       "lifecycle": "active",
+       "retrieval": "default",
+       "freshness": "fresh",
+       "last-verified": "2026-08-05T00:00:00Z",
+       "stale-days": 180,
+       "export": "metadata-only",
+       "body": "主张:停顿预算只有三类(owner_intent_required 门、对外发布、无既有裁定支撑的不可逆方向变更)。此条不再成立当:Owner 明示扩大必停类别。"
+      }
+     },
+     {
+      "verb": "knowledge-create",
+      "flags": {
+       "external-key": "tcrn-init019-c09",
+       "scope": "role",
+       "project-id": "project:e7da35c5aade8dd42c91cb0f",
+       "role-scopes": [
+        "implementation"
+       ],
+       "category": "testing",
+       "kind": "guide",
+       "tags": [
+        "lesson",
+        "multi-agent"
+       ],
+       "subject": "多代理并发时每个都对,文件最后是错的",
+       "summary": "并发代理各自局部正确,顺序写文件会互相覆盖;验证须重跑注释里的 MEASURED 连前提。",
+       "snippet": "agents-right-in-sequence-file-wrong:并发验证须重跑全部前提。",
+       "accountable-owner-id": "owner:init019",
+       "source-references": [
+        "docs/reports/init-018/SUMMARY.md"
+       ],
+       "source-digest": "b34221e0d81681338a31dc6265c4d63c81f48af937404361130aea065b59a21c",
+       "work-ids": [
+        "-"
+       ],
+       "decision-ids": [
+        "-"
+       ],
+       "gate-ids": [
+        "-"
+       ],
+       "evidence-ids": [
+        "evidence:init018-multiagent"
+       ],
+       "lifecycle": "active",
+       "retrieval": "default",
+       "freshness": "fresh",
+       "last-verified": "2026-08-05T00:00:00Z",
+       "stale-days": 180,
+       "export": "metadata-only",
+       "body": "主张:多代理并发,每个代理局部正确但顺序写同一文件会互相覆盖;验证必须重跑全部前置(含注释里的 MEASURED 值)。此条不再成立当:写操作已互斥或按拓扑串行。"
+      }
+     },
+     {
+      "verb": "knowledge-create",
+      "flags": {
+       "external-key": "tcrn-init019-c10",
+       "scope": "role",
+       "project-id": "project:e7da35c5aade8dd42c91cb0f",
+       "role-scopes": [
+        "implementation"
+       ],
+       "category": "workflow",
+       "kind": "guide",
+       "tags": [
+        "lesson",
+        "index"
+       ],
+       "subject": "陈旧索引比 grep 更害:索引必带新鲜度前置",
+       "summary": "索引类工具用前先跑 status 确认晚于末次提交;陈旧索引快且自信地撒谎。",
+       "snippet": "index-freshness:用索引前先验新鲜度。",
+       "accountable-owner-id": "owner:init019",
+       "source-references": [
+        "CLAUDE.md"
+       ],
+       "source-digest": "6ebdb617a8104a7756d0cf36578ab01103dc9f07e4dc6feb751296b9c402faf7",
+       "work-ids": [
+        "-"
+       ],
+       "decision-ids": [
+        "-"
+       ],
+       "gate-ids": [
+        "-"
+       ],
+       "evidence-ids": [
+        "evidence:instrument-discipline"
+       ],
+       "lifecycle": "active",
+       "retrieval": "default",
+       "freshness": "fresh",
+       "last-verified": "2026-08-05T00:00:00Z",
+       "stale-days": 180,
+       "export": "metadata-only",
+       "body": "主张:任何索引类工具(codegraph/知识 store)用前先跑 status 确认索引晚于末次提交;陈旧索引快且自信地撒谎。此条不再成立当:索引与源同步、无滞后窗口。"
+      }
+     }
+    ],
+    "readback": [
+     {
+      "verb": "knowledge-list",
+      "flags": {
+       "selection": "all"
+      },
+      "expect": {
+       "total": 10
+      }
+     }
+    ]
+   }
+  }
+ }
+]

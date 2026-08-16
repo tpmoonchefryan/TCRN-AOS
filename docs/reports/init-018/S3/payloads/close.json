@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-145",
+  "intent": "收口:终版 scope + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:1cc1e916c0bfb3595cf1b921",
+        "scope": "S3 parity:proof 名册对等门。现象:宿主名册缺口曾静默五个 Initiative;平台 CLAUDE.md 的 workflow-MCP 句与实测漂移。做法:执行层起草两侧真值源规格(各仓 .mcp.json/~/.codex/config.toml 只读/.claude/skills)→对齐脚本+带日期与理由白名单(D1 绿起步)→注入伪漂移必红→入 proof 家族;以实测修正 CLAUDE.md 过时句。验收:首跑绿+漂移红两输出。注意:~/.codex 只读;写它属 STORY-146 的 Owner 门。MIN-057。进度@2026-08-05: 已完成=判断型规格起草(docs/reports/init-018/S3/spec.md:真值源/判定语义/当前实测/红证/待审查层)+parity-proof 实现(TCRN-AOS/deploy/aos-local-client/parity-proof.mjs:Claude .mcp.json + Codex config.toml 只读 + Claude skills;归一化 codegraph→codegraph-tms;node_repl/computer-use 排除;白名单豁免带日期理由;fail-closed 不可读即红)+入 proof 家族(pnpm parity:proof)+红证(RED A 注入假服务器 codegraph-xyz 红并点名;RED B 去 codegraph-ds 豁免红并点名)+CLAUDE.md 修正(§一.6 workflow-MCP 句已过时,实测 2026-08-05 tcrn-workflow MCP 两侧都已接;已更新为实测状态,doc-topology:proof 复验仍绿)。首跑 PARITY_VERIFIED(Claude 5 服务器/Codex 平台相关 2;缺口 3 条全豁免)。待审查层:白名单收缩节奏(S4.2 后)、是否并入 pnpm verify、归一化表维护、Codex skills 对等比较。阻塞=无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:1cc1e916c0bfb3595cf1b921", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:1cc1e916c0bfb3595cf1b921" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-145", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-175",
+  "intent": "STORY-175 收口:Postgres 链后端实现完成。DDL+GRANT+触发器在真实 PG 实测、PgBackend 实现 StorageBackend 接口、驱动选型四审、依赖登记、依赖图解析器增强支持 peer-context 形态。全套件绿。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:033acb8e4af4020cdadf8761",
+        "scope": "【收口(2026-08-06)】Postgres 链后端实现完成。交付物:①packages/pg-backend/schema/chain-ddl.sql——ADR §2-4 DDL(五 chain schema+domain+collab、三角色 tcrn_engine/tcrn_domain/tcrn_collab、events 表九字段含 schema_version 列+sequence 主键+continuity 触发器、metadata/views 表、GRANT 矩阵、REVOKE TRUNCATE,幂等);②packages/pg-backend/src/index.ts——PgBackend 实现 StorageBackend 接口(metadata/segment/view 读写、writeSegment 事务内追加、PG 错误映射 fail-closed 到引擎 reason code:unique_violation→WORKSPACE_CAS_MISMATCH、permission denied→WORKSPACE_PATH_INVALID、触发器 raise→EVENT_CORRUPT/CAS_MISMATCH、连接失败→MIGRATION_APPLY_UNAVAILABLE);③GRANT 面红腿 5 项在真实 PG(本机 Docker PG 16)实测:非引擎角色写 chain schema 拒(permission denied)、引擎角色正常写、UPDATE/DELETE 拒(append-only)、伪造 prior_hash 拒(连续性);④PG 驱动选型四审采纳 pg@8.22.0(MIT/成熟/纯 JS)落独立包,15 个 pg 族包+@types/pg 完整登记进 dependency-policy(license/integrity/purpose/acquisitionBoundary);⑤依赖图解析器增强支持 pnpm peer-context 键(pg-pool@3.14.0(pg@8.22.0))与 workspace-importer/optionalDependencies——解析原不支持,现 sbom/dependency 门全绿;⑥PgBackend 冒烟测试 4/4 绿(metadata/segment/view 往返+重复 sequence→CAS_MISMATCH)。验收两侧:正腿=全套件绿(TESTS_VERIFIED 66 文件)+sbom/dependency/lint/format/proof-artifacts 全绿;红腿=GRANT 面五红腿(见③)实测记录于 docs/reports/init-020/story-175-grant-redleg.md。双后端字节等价由 STORY-176 门判。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:033acb8e4af4020cdadf8761", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:033acb8e4af4020cdadf8761", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:033acb8e4af4020cdadf8761", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:033acb8e4af4020cdadf8761" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-175", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

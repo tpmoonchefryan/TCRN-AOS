@@ -1,0 +1,10 @@
+prompts:
+  - "Echo back exactly: {{input}}"
+providers:
+  - echo
+tests:
+  - vars:
+      input: "deterministic-smoke"
+    assert:
+      - type: contains
+        value: "Echo back exactly: deterministic-smoke"

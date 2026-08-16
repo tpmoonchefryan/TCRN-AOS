@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-173",
+  "intent": "STORY-173 收口:等价性判据集定义于 ADR 0004 §9(逐事件字节/reason code/head 哈希/视图与两店 marker),每条判据注入式红腿实证于 scratch workspace(改一字节即红),ADR 依判据定稿并记录 EPIC-052 三单完成状态。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:d1f2a24bb7ebd51b93bd071d",
+        "scope": "【收口(2026-08-06)】等价性判据集定义于 ADR 0004 §9(四条:①逐事件字节等价;②reason code 等价;③head 哈希等价;④视图与两店 marker 等价),每条判据写明红腿。注入式红腿实证落于 tests/story-173-equivalence-redleg.test.mjs(scratch workspace 改一字节即红):criterion1=payload 单字节翻转→materialize 红 WORKSPACE_EVENT_CORRUPT;criterion2=过期 expectedVersion→update 红 WORKSPACE_CAS_MISMATCH(reason-code 等价面);criterion3=复用 prior_hash 造分叉头→materialize 红 WORKSPACE_EVENT_CORRUPT;criterion4=改脏引擎派生视图 STATUS.md→validateWorkspace 红 WORKSPACE_VIEW_STALE。实测 4/4 绿(scratch 预演记录),每条判据各有一次真实红腿。ADR 0004 依判据定稿;EPIC-052 三单完成状态:STORY-171 done、STORY-172 done、本单 done。测试经 pnpm 调起,format-check/lint 全绿。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:d1f2a24bb7ebd51b93bd071d", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:d1f2a24bb7ebd51b93bd071d", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:d1f2a24bb7ebd51b93bd071d", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:d1f2a24bb7ebd51b93bd071d" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-173", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

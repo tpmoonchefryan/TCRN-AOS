@@ -1,0 +1,50 @@
+{
+  "ok": false,
+  "reasonCode": "DELIBERATION_BINDING_BROKEN",
+  "gate": "conference-deliberation-binding",
+  "conferenceKey": "TCRN-CROSS-CONF-056",
+  "conferenceId": "conference:d4d8e9e2ea6f90cb556352f9",
+  "claim": "每一席在链上的立场,剥去拆片标记与绑定行后重建,其 sha256 等于收据登记的 outputDigest",
+  "ceiling": "只证内容一致,不证认证:freshContext 由编排者自记,可信采集方(引擎 EPIC-020)未建成;本判据变红代表链上文本与收据不符,变绿不代表某个座位真的独立产出了它",
+  "seats": [
+    {
+      "actorId": "profile:tcrn-minerva-v1",
+      "positionKeys": [
+        "POS-C056-MINERVA-1"
+      ],
+      "ok": false,
+      "reasonCode": "SEAT_BYTES_DIVERGE",
+      "expectedDigest": "0d2062321a5a3fadcffd875e6861019476cf24ab2ce6e5fb1fb575b06113f1e6",
+      "rebuiltDigest": "6d2062321a5a3fadcffd875e6861019476cf24ab2ce6e5fb1fb575b06113f1e6",
+      "rebuiltBytes": 1772,
+      "receiptBytes": 1772
+    },
+    {
+      "actorId": "profile:tcrn-verity-v1",
+      "positionKeys": [
+        "POS-C056-VERITY-1"
+      ],
+      "ok": true,
+      "reasonCode": "SEAT_BYTES_MATCH_RECEIPT",
+      "expectedDigest": "1d647af922c135df020fa5f66d043a25dbc4ef903ed7de3dd42b4673ad471b8d",
+      "rebuiltDigest": "1d647af922c135df020fa5f66d043a25dbc4ef903ed7de3dd42b4673ad471b8d",
+      "rebuiltBytes": 1796,
+      "receiptBytes": 1796
+    },
+    {
+      "actorId": "profile:tcrn-sable-v1",
+      "positionKeys": [
+        "POS-C056-SABLE-1"
+      ],
+      "ok": true,
+      "reasonCode": "SEAT_BYTES_MATCH_RECEIPT",
+      "expectedDigest": "dae48b3ff64c4bc091651f5c86476d7d4e2cd79f0b48bc74a1953372f9fe69e4",
+      "rebuiltDigest": "dae48b3ff64c4bc091651f5c86476d7d4e2cd79f0b48bc74a1953372f9fe69e4",
+      "rebuiltBytes": 1853,
+      "receiptBytes": 1853
+    }
+  ],
+  "failed": [
+    "profile:tcrn-minerva-v1"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-140",
+  "intent": "收口:终版 scope + 置 done",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:ceb4edc3faf4956bf3fa8538",
+        "scope": "S5 promptfoo 采纳(三环第三环外采,四道审查内嵌)。npm view 实名核验+lockfile 钉版+离线 echo provider smoke(禁真实 API key/禁网络模型调用)+并发≤2 与断言计数护栏,运行指标出 run-metrics.json 喂 EPIC-043 成本归因。验收:smoke 绿输出+护栏配置存档+核验原始输出。对应 G3 前置。MIN-055。执行结果@2026-08-05:已完成。S5.1 npm view promptfoo 实名核验 name/version/license/maintainers,选定 0.121.20(MIT,当前 latest,防幻觉包名),原始输出存档 S5.1/npm-view-raw.txt。S5.2 pnpm add -D promptfoo@0.121.20 钉版,最小 echo provider 配置 + 离线确定性断言 smoke 1/1 pass(无 API key,无网络模型调用),配置与结果存档 S5.2/。S5.3 新建 scripts/promptfoo-eval.mjs 护栏:并发默认 ≤2(promptfoo -j 旗标)+断言计数上限默认 200(运行前轻量估算拒+运行后按结果复核),运行指标出 S5.3/run-metrics.json(EVAL_GREEN);红测 250 断言 > 上限 → ASSERTION_CAP_EXCEEDED 运行前拒绝 exit 2 存档。证据包 tcrn-workflow/docs/reports/init-018/S5.x/。范围外缺陷:无。",
+        "actor": "agent:deepseek-v4-flash"
+      }
+    },
+    {
+      "verb": "work-transition",
+      "flags": { "id": "work:ceb4edc3faf4956bf3fa8538", "status": "done", "actor": "agent:deepseek-v4-flash" }
+    }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:ceb4edc3faf4956bf3fa8538" },
+      "recordFields": ["externalKey", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-140", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

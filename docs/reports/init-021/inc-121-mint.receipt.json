@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "aos.local-engine-write-receipt.v1",
+  "intent": "INC-121 补立(p1 隐性欠账)",
+  "steps": [
+    {
+      "label": "create",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2534
+    },
+    {
+      "label": "annotate",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2535
+    },
+    {
+      "label": "ready",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2536
+    },
+    {
+      "label": "active",
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "version": 2537
+    }
+  ],
+  "readback": {
+    "status": "active",
+    "scopeMatches": true
+  },
+  "chainAfter": {
+    "headEventHash": "c4b613e7f29bb844cecd5d4d6afa3e06886bd8713887067eb5a45df2b4abae38",
+    "projects": 1,
+    "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+    "storageHome": null,
+    "version": 2537,
+    "work": 399,
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "verdict": "fresh",
+  "probed": true,
+  "gate": "aos-read-face-data-freshness",
+  "schemaVersion": "aos.read-face-freshness.v1",
+  "maxAgeHours": 24,
+  "maxAgeSource": "flag:--max-age-hours",
+  "invariants": [
+    "the read face answered over HTTP and served the data asset a browser loads, as JavaScript rather than the shell fallback",
+    "the served bytes carry a generation stamp",
+    "the stamp is not dated ahead of now beyond clock-skew tolerance",
+    "the snapshot's age is within the freshness window",
+    "the served shell and the served bundle carry the same stamp"
+  ],
+  "observedAt": "2026-08-04T16:28:06.908Z",
+  "source": {
+    "baseUrl": "http://127.0.0.1:4397",
+    "assetPath": "/assets/aos-client.js",
+    "shellPath": "/",
+    "urlSource": "env:AOS_READ_FACE_URL",
+    "servedBytes": 125,
+    "servedContentType": "text/javascript",
+    "shellBytes": 146,
+    "shellContentType": "text/html"
+  },
+  "generatedAt": "2026-08-03T20:28:05.857Z",
+  "extractedVia": "served-bundle-stamp-scan",
+  "candidateStamps": 1,
+  "shellGeneratedAt": "2026-08-03T20:28:05.857Z",
+  "shellExtractedVia": "served-shell-banner-element",
+  "ageHours": 20.0003,
+  "clockSkewToleranceMinutes": 5,
+  "servedPartitions": [
+    {
+      "id": "TCRN-AOS",
+      "chainVersion": 1557
+    }
+  ],
+  "findings": []
+}

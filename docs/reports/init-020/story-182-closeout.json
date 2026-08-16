@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-182",
+  "intent": "STORY-182 收口:门面写面仪式语义服务端化完成。批+全值回读、expected-version 服务端现读(knowledge 用 store marker 版本)、动词白名单派生、供权族/reserved flags 拒绝、收据物化+scrub+throw 亦留收据,正腿/红腿实证。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:f259c5066ba7d9af72198e6b",
+        "scope": "【收口(2026-08-06)】门面写面仪式语义服务端化完成。交付物:①deploy/aos-resident-cockpit/facade-write-service.mjs——写面服务端(GET /api/health、GET /api/engine/catalog、POST /api/ceremony 单一写面):规划/拒绝逻辑整面复用 ceremony-plan.mjs(assertPayload/planStep/judgeReadback/resolveExpectations/KNOWLEDGE_STORE_CAS_VERBS/requiresOutOfBandAuthority),发送半为进程内 runEngineCli(import 自 facade-read);动词白名单从引擎实时 commands 派生(mutates:true、非 authorityBearing、非一次性供权族、非 fixture-only)并与引擎 workflowMcpTools() 双源互证(实测 37 可写/66 拒绝);每次调用物化 payload+receipt 到 writeRoot,宿主路径清洗,throw 亦留收据(INC-047);②facade-write-service.test.mjs 19 测例(正腿+红腿+单元+源码门);③deploy/aos-mcp-write/server.mjs 物化载荷也过 scrubHostPaths(根因修复一处既有卫生漏)。验收两侧:正腿=一次 work-annotate 治理写只靠门面完成,回执含全值回读 READBACK_MATCHES_FULL_VALUE(4 字段),链 +1,独立 engine work-show 复核 scope 落地;红腿=PAYLOAD_INVALID/RESERVED_FLAG_IN_PAYLOAD×2/VERB_NOT_IN_CATALOGUE/VERB_REQUIRES_OUT_OF_BAND_AUTHORITY/FACADE_WRITE_VERB_NOT_MUTATING/READBACK_DIVERGENT/READBACK_NOTHING_COMPARED(NOTHING_COMPARED 不算比对)/MCP_PARTITION_UNKNOWN/CEREMONY_THREW_BEFORE_RECEIPT 全数具名拒绝。expected-version 语义:链动词写前现读链 head 自供,knowledge-* 五动词按 store marker 版本(直读 store.json,与链版本无关),载荷指名即 RESERVED_FLAG_IN_PAYLOAD;casSource 与 marker 读取均有单元证。门面自身不写链(源码门 0 findings)。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:f259c5066ba7d9af72198e6b", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:f259c5066ba7d9af72198e6b", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:f259c5066ba7d9af72198e6b", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:f259c5066ba7d9af72198e6b" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-182", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

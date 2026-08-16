@@ -1,0 +1,624 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-018",
+  "intent": "收口 INC-036/037/038/039:parity 红证走真实推导、SSH 观察器判据重写并补堵绕过、七项叙述订正追加式落地、被提交记录与判据双修。",
+  "startedAt": "2026-08-05T08:51:41Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "<outside-repository>",
+    "sha256": "a06069452443fc18f09156e1f83442243b3c3bb9775bab3824dc6800425d9c08",
+    "bytes": 8947
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1670,
+    "headEventHash": "75b905e9d3ca873a62f11e7669866227c2585784ab2166ace4d1eabb829cb7aa",
+    "work": 256
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:51:42Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1670",
+        "--id",
+        "work:e753047f8e46034f2f81216b",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1670,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:e753047f8e46034f2f81216b",
+      "version": 1671
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:51:43Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1671",
+        "--id",
+        "work:e753047f8e46034f2f81216b",
+        "--scope",
+        "【parity:proof 红证同义反复,白名单机制有洞】原四缺陷:红证跑判据的**复制品**不经真实推导;豁免只按服务器名匹配故两侧同时消失恒绿;名册纯并集无锚定;从不校验 command/args。\n\n【修复完成 2026-08-05,经独立复核 CONFIRMED】四项全部重写:红证改走真实推导路径;豁免条目附**方向**并断言被豁免服务器至少在预期一侧存在;名册加锚定最小集;校验 command/args 可解析(占位符与不存在路径判红)。新增 ALLOWLIST_ENTRY_OBSOLETE 判据——**这是刻意的收缩压力**:S4.2 把 Codex 侧接上后若不同步删白名单条目,本门会红并点名删哪条。当前真实状态仍判 PARITY_VERIFIED(Codex 侧缺的三服务器按方向正确豁免),27 例单测全绿。\n\n【接线(复核者点名的『门未入自动化列车』)】parity:proof 已进 TCRN-AOS 的 pnpm verify;parity-proof.test.mjs 已进 pnpm test 名单。收据已用 --emit 重出为 aos.instrument-parity-proof.**v2**(此前仓内留的是 v1 旧收据,读收据而不跑门的人会拿到被淘汰的判据名录)。\n\n【复核者记下的一条诚实边界】「旧判据逐条复刻」无法被字节级复核:修复前的 parity-proof.mjs 未入 git 且被原地覆盖,不存在可 diff 的 git 对象;复核者以幸存的 v1 收据逐项佐证语义忠实且全部吻合,故该说法算**被佐证,不算被证明**。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1671,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:e753047f8e46034f2f81216b",
+      "version": 1672
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:51:44Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1672",
+        "--id",
+        "work:e753047f8e46034f2f81216b",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1672,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:e753047f8e46034f2f81216b",
+      "version": 1673
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:51:45Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1673",
+        "--id",
+        "work:bf81a3ecd0b5b7ae173324ca",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1673,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:bf81a3ecd0b5b7ae173324ca",
+      "version": 1674
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:51:46Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1674",
+        "--id",
+        "work:bf81a3ecd0b5b7ae173324ca",
+        "--scope",
+        "【SSH 写观察器判据四缺陷】豁免无锚定子串且先于治理检查求值(可绕过)、ssh 前置 token 漏判、写原语对整行匹配致本地重定向误报、21 例样例留四个惰性分支。\n\n【修复完成 2026-08-05,经独立复核 CONFIRMED】判据由整行正则改为 **argv 锚定的 shell 解析**:跳过前导环境赋值与包装命令(env/time/sudo/nohup)后定位真正的 ssh;写原语只作用于 ssh 的远端命令串;豁免锚定整词并移到治理与写原语检查之后;豁免清单由五条收窄为两条并附残余适用性分析。配**变异式分支覆盖证明**(删掉某分支须恰有样例转红)。observe 语义未变,enforce 未切(D2 门)。\n\n【复核者在修复里又抓出一个绕过,已补堵】`ssh tcrn-platform-dev -p 2222 \"rm …/workspace/index.json\"` 被判 PASS——**目的地之后仍可跟选项**,而首轮扫描在目的地处即停,于是远端命令被读作从 `-p` 开始。已加第二轮选项扫描;实测该命令现判 **HIT**,而 `ssh host \"…status…\" 2>&1`(本地重定向)仍判 PASS。变异证明的两处锚点随源码改动同步刷新——锚点失配时它报「refresh the proof」而不是默默放过,这一点本身在本次修复中被验证了一次。\n\n【接线】测试原在 scripts/ 下,而本仓套件只收集 tests/**/*.test.mjs,寿命等于写它那天;已移入 tests/ssh-write-observer.test.mjs 并修正源码定位,85 例全绿、`pnpm test` 现会自动发现它。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1674,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:bf81a3ecd0b5b7ae173324ca",
+      "version": 1675
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:51:47Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1675",
+        "--id",
+        "work:bf81a3ecd0b5b7ae173324ca",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1675,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:bf81a3ecd0b5b7ae173324ca",
+      "version": 1676
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:51:48Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1676",
+        "--id",
+        "work:937d519551d03d5704e34cef",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1676,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:937d519551d03d5704e34cef",
+      "version": 1677
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:51:49Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1677",
+        "--id",
+        "work:937d519551d03d5704e34cef",
+        "--scope",
+        "【叙述与记录失真七项】\n\n【修复完成 2026-08-05,经独立复核 CONFIRMED】七项全部经实测确证并以**追加式**订正写入(原文一律保留,标注「订正(2026-08-05,核验层)」——这是本平台『事件只增不改』的文档侧对应物):①S12 1MiB 上限的三处错(由事件字节而非 work 记录数决定;export 今日已在三条活链上被拒;归因误指 index.json 实为 exportWorkspace 自行 canonical 化;且**此事非新发现**,docs/releases/0.8.0.md 早已公布并给出 event-list 分页缓解);②S11 报表与自带 JSON 自相矛盾(声称 cache_creation 全 0,同目录数据自记 5,840,169);③S10「四点 span 全实测」不成立(ceremony.readback 从未被观测);④引擎侧 otel-spans.ts 是死代码,SUMMARY 未如 S4/S16 标『待门』;⑤S16 三档不分割 35 项(B10 无档、表头与列表矛盾);⑥S4 归档态 diff 含 6 个 `<local-home> 占位符,patch -p1 会以默认 fuzz 静默接受;⑦S17『钉扎纳入』钉的是未安装物。SUMMARY 相应各行同步改为如实表述,并把「STORY-150/154 激活异常」改为**已被推翻**的结论(回执算术:S9 close 的 chainAfter = S10 close 的 chainBefore = 1627,中间无激活事件;缺失的 activate.receipt.json 即 tell——引擎与仪式无辜,真相是那两次激活从未成功执行)。\n\n【复核者对本单自身的三处发现,如实记下】(a)执行代理声称『recheck.sh 订正前后各跑一次、判据行 diff 为空』失实——实测 diff 有 57 行,因脚本自身在两次运行之间被改写(与本单要治的毛病同型);(b)recheck 第 6 节的红绿实测跑在脚本现造的 197 行合成 config.toml 上而非真实 ~/.codex/config.toml,归档未声明这是代理物(复核者已在真实文件的 scratch 副本上复做,红绿同样成立);(c)第 5 节两个关键数是硬编码 echo 而非算出(复核者独立数过,29 与 35 均对)。订正内容本身经复核成立;这三条是对**取证方式**的记录,留在链上以免下次照抄。\n\n【残余】ceremony.readback span 至今没有一条属于 S10 自己的证据:补证需一次带 TCRN_OTEL_SINK 的**真实**(非 dry-run)仪式,属受治写,须走仪式通路。证据包已随全批迁至 TCRN-AOS/docs/reports/init-018/。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1677,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:937d519551d03d5704e34cef",
+      "version": 1678
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:51:50Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1678",
+        "--id",
+        "work:937d519551d03d5704e34cef",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1678,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:937d519551d03d5704e34cef",
+      "version": 1679
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:51:52Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1679",
+        "--id",
+        "work:da0368de5136d1a0d35ec162",
+        "--status",
+        "active",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1679,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:da0368de5136d1a0d35ec162",
+      "version": 1680
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:51:52Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1680",
+        "--id",
+        "work:da0368de5136d1a0d35ec162",
+        "--scope",
+        "【被提交的记录仍断言链在本机,而机器判据读工作树故恒绿】原缺陷:TCRN-TMS 与 TCRN-Design-System 的 CLAUDE.md 于 2026-08-03 在工作树改为 home=vm 后**两天未提交**,git HEAD 仍叫读者对已 VACATED 的本地地址跑本地引擎;doc-topology:proof 读工作树,故它绿着而被提交的记录是错的。\n\n【修复完成 2026-08-05,两半都做】①两份 CLAUDE.md 已提交(TCRN-TMS b2e49b3b、TCRN-Design-System cf01ab6;仅提交 CLAUDE.md,未牵连未决的 .claude/),提交后 `git show HEAD:CLAUDE.md` 不再含 `| local |`。②判据补洞:doc-topology-proof.mjs 新增 readCommittedDocuments / judgeCommittedClaims——对每份登记文档取 `git show HEAD:<path>` 与工作树逐一比对声明块,不一致即 COMMITTED_CLAIMS_DIVERGE_FROM_THE_TREE 并点名文档;已接进 proof 的 expectations,`doc-topology:proof` 仍 DOC_TOPOLOGY_IN_SYNC。\n\n【红侧用真实历史字节】把 TMS 修复前那次提交(HEAD~1)喂给判据 → 判红并点名 TCRN-TMS/CLAUDE.md;当前状态判绿。既有 22 例预测试全绿。\n\n【已声明的天花板】平台根不是 git 仓库,其 5 份登记文档报为 `tracked:false`(如实记录,非静默放过)——它们的修改无 diff、无历史、不可审阅,这一点仍未解,属本判据明示边界。证据包 TCRN-AOS/docs/reports/init-018/INC-039/。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1680,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:da0368de5136d1a0d35ec162",
+      "version": 1681
+    },
+    {
+      "ok": true,
+      "verb": "work-transition",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-transition",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T08:51:53Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1681",
+        "--id",
+        "work:da0368de5136d1a0d35ec162",
+        "--status",
+        "done",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "status"
+      ],
+      "headAtPlanning": 1681,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:da0368de5136d1a0d35ec162",
+      "version": 1682
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:bf81a3ecd0b5b7ae173324ca",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-037",
+            "observed": "TCRN-CROSS-INC-037",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【SSH 写观察器判据四缺陷】豁免无锚定子串且先于治理检查求值(可绕过)、ssh 前置 token 漏判、写原语对整行匹配致本地重定向误报、21 例样例留四个惰性分支。\n\n【修复完成 2026-08-05,经独立复核 CONFIRMED】判据由整行正则改为 **argv 锚定的 shell 解析**:跳过前导环境赋值与包装命令(env/time/sudo/nohup)后定位真正的 ssh;写原语只作用于 ssh 的远端命令串;豁免锚定整词并移到治理与写原语检查之后;豁免清单由五条收窄为两条并附残余适用性分析。配**变异式分支覆盖证明**(删掉某分支须恰有样例转红)。observe 语义未变,enforce 未切(D2 门)。\n\n【复核者在修复里又抓出一个绕过,已补堵】`ssh tcrn-platform-dev -p 2222 \"rm …/workspace/index.json\"` 被判 PASS——**目的地之后仍可跟选项**,而首轮扫描在目的地处即停,于是远端命令被读作从 `-p` 开始。已加第二轮选项扫描;实测该命令现判 **HIT**,而 `ssh host \"…status…\" 2>&1`(本地重定向)仍判 PASS。变异证明的两处锚点随源码改动同步刷新——锚点失配时它报「refresh the proof」而不是默默放过,这一点本身在本次修复中被验证了一次。\n\n【接线】测试原在 scripts/ 下,而本仓套件只收集 tests/**/*.test.mjs,寿命等于写它那天;已移入 tests/ssh-write-observer.test.mjs 并修正源码定位,85 例全绿、`pnpm test` 现会自动发现它。",
+            "observed": "【SSH 写观察器判据四缺陷】豁免无锚定子串且先于治理检查求值(可绕过)、ssh 前置 token 漏判、写原语对整行匹配致本地重定向误报、21 例样例留四个惰性分支。\n\n【修复完成 2026-08-05,经独立复核 CONFIRMED】判据由整行正则改为 **argv 锚定的 shell 解析**:跳过前导环境赋值与包装命令(env/time/sudo/nohup)后定位真正的 ssh;写原语只作用于 ssh 的远端命令串;豁免锚定整词并移到治理与写原语检查之后;豁免清单由五条收窄为两条并附残余适用性分析。配**变异式分支覆盖证明**(删掉某分支须恰有样例转红)。observe 语义未变,enforce 未切(D2 门)。\n\n【复核者在修复里又抓出一个绕过,已补堵】`ssh tcrn-platform-dev -p 2222 \"rm …/workspace/index.json\"` 被判 PASS——**目的地之后仍可跟选项**,而首轮扫描在目的地处即停,于是远端命令被读作从 `-p` 开始。已加第二轮选项扫描;实测该命令现判 **HIT**,而 `ssh host \"…status…\" 2>&1`(本地重定向)仍判 PASS。变异证明的两处锚点随源码改动同步刷新——锚点失配时它报「refresh the proof」而不是默默放过,这一点本身在本次修复中被验证了一次。\n\n【接线】测试原在 scripts/ 下,而本仓套件只收集 tests/**/*.test.mjs,寿命等于写它那天;已移入 tests/ssh-write-observer.test.mjs 并修正源码定位,85 例全绿、`pnpm test` 现会自动发现它。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-037",
+        "status": "done"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:da0368de5136d1a0d35ec162",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-INC-039",
+            "observed": "TCRN-CROSS-INC-039",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "done",
+            "observed": "done",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【被提交的记录仍断言链在本机,而机器判据读工作树故恒绿】原缺陷:TCRN-TMS 与 TCRN-Design-System 的 CLAUDE.md 于 2026-08-03 在工作树改为 home=vm 后**两天未提交**,git HEAD 仍叫读者对已 VACATED 的本地地址跑本地引擎;doc-topology:proof 读工作树,故它绿着而被提交的记录是错的。\n\n【修复完成 2026-08-05,两半都做】①两份 CLAUDE.md 已提交(TCRN-TMS b2e49b3b、TCRN-Design-System cf01ab6;仅提交 CLAUDE.md,未牵连未决的 .claude/),提交后 `git show HEAD:CLAUDE.md` 不再含 `| local |`。②判据补洞:doc-topology-proof.mjs 新增 readCommittedDocuments / judgeCommittedClaims——对每份登记文档取 `git show HEAD:<path>` 与工作树逐一比对声明块,不一致即 COMMITTED_CLAIMS_DIVERGE_FROM_THE_TREE 并点名文档;已接进 proof 的 expectations,`doc-topology:proof` 仍 DOC_TOPOLOGY_IN_SYNC。\n\n【红侧用真实历史字节】把 TMS 修复前那次提交(HEAD~1)喂给判据 → 判红并点名 TCRN-TMS/CLAUDE.md;当前状态判绿。既有 22 例预测试全绿。\n\n【已声明的天花板】平台根不是 git 仓库,其 5 份登记文档报为 `tracked:false`(如实记录,非静默放过)——它们的修改无 diff、无历史、不可审阅,这一点仍未解,属本判据明示边界。证据包 TCRN-AOS/docs/reports/init-018/INC-039/。",
+            "observed": "【被提交的记录仍断言链在本机,而机器判据读工作树故恒绿】原缺陷:TCRN-TMS 与 TCRN-Design-System 的 CLAUDE.md 于 2026-08-03 在工作树改为 home=vm 后**两天未提交**,git HEAD 仍叫读者对已 VACATED 的本地地址跑本地引擎;doc-topology:proof 读工作树,故它绿着而被提交的记录是错的。\n\n【修复完成 2026-08-05,两半都做】①两份 CLAUDE.md 已提交(TCRN-TMS b2e49b3b、TCRN-Design-System cf01ab6;仅提交 CLAUDE.md,未牵连未决的 .claude/),提交后 `git show HEAD:CLAUDE.md` 不再含 `| local |`。②判据补洞:doc-topology-proof.mjs 新增 readCommittedDocuments / judgeCommittedClaims——对每份登记文档取 `git show HEAD:<path>` 与工作树逐一比对声明块,不一致即 COMMITTED_CLAIMS_DIVERGE_FROM_THE_TREE 并点名文档;已接进 proof 的 expectations,`doc-topology:proof` 仍 DOC_TOPOLOGY_IN_SYNC。\n\n【红侧用真实历史字节】把 TMS 修复前那次提交(HEAD~1)喂给判据 → 判红并点名 TCRN-TMS/CLAUDE.md;当前状态判绿。既有 22 例预测试全绿。\n\n【已声明的天花板】平台根不是 git 仓库,其 5 份登记文档报为 `tracked:false`(如实记录,非静默放过)——它们的修改无 diff、无历史、不可审阅,这一点仍未解,属本判据明示边界。证据包 TCRN-AOS/docs/reports/init-018/INC-039/。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-INC-039",
+        "status": "done"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1682,
+    "headEventHash": "85c02e3d130bc31806fe9cbab6d5a8fff24a9259bc9700731b3def39d0099229",
+    "work": 256
+  },
+  "eventsAppended": 12,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-05T08:51:56Z"
+}

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-150",
+  "intent": "收口补步:两段 transition 置 done(scope 已在首跑 annotate 生效)",
+  "steps": [
+    { "verb": "work-transition", "flags": { "id": "work:24bfd4d81a5aee351275b7c9", "status": "active", "actor": "agent:deepseek-v4-flash" } },
+    { "verb": "work-transition", "flags": { "id": "work:24bfd4d81a5aee351275b7c9", "status": "done", "actor": "agent:deepseek-v4-flash" } }
+  ],
+  "readback": [
+    { "verb": "work-show", "flags": { "id": "work:24bfd4d81a5aee351275b7c9" }, "recordFields": ["externalKey", "status"], "expect": { "externalKey": "TCRN-CROSS-STORY-150", "status": "done" } }
+  ]
+}

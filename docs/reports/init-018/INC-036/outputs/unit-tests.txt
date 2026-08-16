@@ -1,0 +1,35 @@
+✔ a balanced world with a correctly directed exemption is green (1.50575ms)
+✔ the roster covers anchors that neither side reported (0.146458ms)
+✔ an unallowlisted one-sided server is a defect naming the missing side (0.09275ms)
+✔ an exemption excuses ONLY the direction it declares (0.126542ms)
+✔ an allowlisted server vanishing from BOTH sides is red, not green (0.138ms)
+✔ an exemption whose gap has closed must be deleted, not left standing (0.062083ms)
+✔ an undated or unreasoned exemption is a defect (0.091125ms)
+✔ an exemption with no direction is malformed, and excuses nothing (0.057167ms)
+✔ an anchor absent from its declared side is a defect even with no gap (0.085583ms)
+✔ the shipped anchor roster names every server the platform .mcp.json declares (0.097667ms)
+✔ the shipped allowlist keeps its three pre-INC-036 reasons and dates (0.067083ms)
+✔ a well-formed spec raises nothing (0.09125ms)
+✔ an empty or non-string command is a defect (0.059625ms)
+✔ args that are not an array of strings are a defect (0.061792ms)
+✔ placeholder shapes are named, and a resolved path is not (0.089625ms)
+✔ a --path or --dir that is not a directory is a defect (0.0575ms)
+✔ a path flag with no value, or followed by another flag, is a defect (0.04625ms)
+✔ an absolute command that does not exist is a defect; a relative one is not probed (0.045125ms)
+✔ spec defects reach the verdict from either side (0.065041ms)
+✔ the TOML reader lifts command and args out of direct subtables only (0.279792ms)
+✔ a multi-line args array is not treated as complete until it closes (0.034375ms)
+✔ normalization renames the Codex codegraph and drops runtime servers (0.046791ms)
+✔ the parsed Codex spec is judged, not just its name (0.067917ms)
+✔ redProof reports the verdict of judgeParity, and can report a green one (0.11675ms)
+✔ redProof's answer follows the inputs, so it is not a canned red (0.093542ms)
+✔ redProof does not mutate the baseline it was handed (0.06775ms)
+✔ expectation bookkeeping distinguishes 'went red' from 'went red for the stated reason' (0.055375ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 49.154959

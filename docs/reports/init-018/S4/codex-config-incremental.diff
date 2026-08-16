@@ -1,0 +1,19 @@
+--- a/.codex/config.toml
++++ b/.codex/config.toml
+@@ -200,7 +200,16 @@
+ command = "/Users/<you>/.nvm/versions/node/v24.16.0/bin/pnpm"
+ args = ["--dir", "/Users/<you>/Code/TCRN Platform/TCRN-TMS", "exec", "codegraph", "serve", "--mcp", "--no-watch"]
+ startup_timeout_sec = 120.0
++[mcp_servers.codegraph-ds]
++command = "/Users/<you>/.nvm/versions/node/v24.16.0/bin/pnpm"
++args = ["--dir", "/Users/<you>/Code/TCRN Platform/TCRN-TMS", "exec", "codegraph", "serve", "--mcp", "--no-watch", "--path", "/Users/<you>/Code/TCRN Platform/TCRN-Design-System"]
++startup_timeout_sec = 120.0
+ 
++[mcp_servers.codegraph-aos]
++command = "/Users/<you>/.nvm/versions/node/v24.16.0/bin/pnpm"
++args = ["--dir", "/Users/<you>/Code/TCRN Platform/TCRN-TMS", "exec", "codegraph", "serve", "--mcp", "--no-watch", "--path", "/Users/<you>/Code/TCRN Platform/TCRN-AOS"]
++startup_timeout_sec = 120.0
++
+ [mcp_servers.node_repl]
+ command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
+ startup_timeout_sec = 120.0

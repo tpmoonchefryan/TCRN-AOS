@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "tcrn.init-020.wave6-proof.v1",
+  "observedAt": "2026-08-08T19:20:35Z",
+  "actor": "agent:gpt-5-codex",
+  "s196": {
+    "command": "pnpm --dir TCRN-AOS prod:ready",
+    "decision": "PRODUCTION_READY",
+    "reasonCode": "PRODUCTION_READY",
+    "probes": [
+      "local-chain-integrity:LOCAL_STATUS_VALIDATE_VERIFIED",
+      "mcp-single-truth:MCP_CLI_HEADS_MATCH",
+      "init-020-closeout:CLOSEOUT_ITEMS_RECONCILED",
+      "stop-pact-channel:STOP_PACT_CHANNEL_LIVE",
+      "helper-engine-pin:HELPER_ENGINE_PIN_VERIFIED",
+      "knowledge-freshness:KNOWLEDGE_FRESHNESS_ALL_FRESH",
+      "fail-closed-write-refusal:MCP_EXTERNAL_WRITE_REFUSED"
+    ],
+    "redLegs": 7,
+    "redLegsOk": true,
+    "crossHead": {
+      "version": 2471,
+      "headEventHash": "26e145f72f65cfeb8f6d2395459a3af6c507ab8e4d1c7731073604a3e4b38ab1"
+    },
+    "crossKnowledgeMarker": {
+      "version": 128,
+      "eventHighWaterDigest": "26e145f72f65cfeb8f6d2395459a3af6c507ab8e4d1c7731073604a3e4b38ab1"
+    }
+  },
+  "s197": {
+    "command": "pnpm --dir TCRN-AOS s197:protocol-proof",
+    "decision": "S197_PROTOCOL_VERIFIED",
+    "documents": [
+      "CLAUDE.md",
+      "TCRN-AOS/docs/reports/init-020/HANDOVER-2026-08-08-final-codex.md"
+    ]
+  },
+  "reasonCode": "S196_S197_WAVE6_PROOF_VERIFIED"
+}

@@ -1,0 +1,894 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-INIT-019",
+  "intent": "INIT-019 kickoff C 批:立 STORY-163..170(EPIC-048 末张 + EPIC-049/050/051 全部),每张带记录级四要素加第五要素生效证据命令,subtask 由 BRIEFING 承载不建链记录。",
+  "startedAt": "2026-08-05T13:43:44Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "deploy/aos-local-client/payloads/cross-init019-c.json",
+    "sha256": "4488175efed74cfc312aa8e2500b8ae665202c8da9dba056c447f1166c052e40",
+    "bytes": 12027
+  },
+  "hostEngineCatalogue": {
+    "verbs": 103
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1757,
+    "headEventHash": "73419252afbb5c136cfba50f415b683005f081f879f0948ea72c9afe786c9821",
+    "work": 272
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:45Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1757",
+        "--external-key",
+        "TCRN-CROSS-STORY-163",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:cf6f94a581d81a5672b3e381",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1757,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:f3681ec0bcb49de420109c4a",
+      "version": 1758
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:46Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1758",
+        "--id",
+        "work:f3681ec0bcb49de420109c4a",
+        "--scope",
+        "【知识面读写全走 MCP】D1+D2 在知识面的落实。红线边界:写动词全部经 STORY-156 的工具不许 SSH;store marker 版本不是链版本,CAS 传错会被拒。文件指针:核对 mcp__tcrn-workflow-aos-read__* 的知识动词可用性;改 .claude/skills/tcrn-workflow-helper/references/on-demand-context.md 里的命令形态。验证命令:knowledge-list/-candidates/-snippet/-body/-freshness 五个动词各经 MCP 调一次,不可用的列出来;一次 create 经 MCP 工具完成并读回。收口动作:helper 文档命令改为 MCP 形态。生效证据命令:pnpm --dir TCRN-AOS doc-topology:proof exit 0,且五个知识读动词经 MCP 实调成功。子任务 163.1-163.3 见 BRIEFING 第四节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1758,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:f3681ec0bcb49de420109c4a",
+      "version": 1759
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:47Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1759",
+        "--external-key",
+        "TCRN-CROSS-STORY-164",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:4fcf9b1832dbf02c80d9b103",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1759,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ae54775fdfa625c68c577547",
+      "version": 1760
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:48Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1760",
+        "--id",
+        "work:ae54775fdfa625c68c577547",
+        "--scope",
+        "【S2 语料扩面:SSH 直驱引擎判 HIT】把 D1 从散文变成门。红线边界:96 条既有样例是 INC-037 付过学费的资产,只准加不准弱化,任何 classify 判据的削弱要在收口记录点名并给理由;白名单必须消费 STORY-158.1 那同一份文件不许另建一份。文件指针:tcrn-workflow/scripts/ssh-write-observer.mjs 与 tests/ssh-write-observer.test.mjs。验证命令:node tcrn-workflow/scripts/ssh-write-observer.mjs --self-test 单独取退出码必须 0;红侧喂真实输入(一条经 ssh 的 status/work-list/work-show)判 HIT;白名单内命令判 PASS。收口动作:读动词也判 HIT,新语料在 CI lessons job 里跑到。生效证据命令:pnpm --dir tcrn-workflow verify:observe-channel exit 0,且喂一条真实 SSH 读命令后能从 sink 读回该行。子任务 164.1-164.4 见 BRIEFING 第五节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1760,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ae54775fdfa625c68c577547",
+      "version": 1761
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:49Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1761",
+        "--external-key",
+        "TCRN-CROSS-STORY-165",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:4fcf9b1832dbf02c80d9b103",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1761,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:9a8457936b92b35bb1884db7",
+      "version": 1762
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:50Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1762",
+        "--id",
+        "work:9a8457936b92b35bb1884db7",
+        "--scope",
+        "【enforce 晋级】红线边界:晋级判据必须排除 probe:true 的门自身流量;空日志只有在活性门同时为绿时才可读作零命中;观察窗自 2026-08-05 重置起算,不得引用重置前数据;切换必须带回退路径。文件指针:TCRN-AOS/docs/reports/init-019/S165/criteria.md;tcrn-workflow/scripts/ssh-write-observer.mjs 的 enforce 开关。验证命令:按判据对当前观察窗跑一次评估并输出结论(够不够都照写);切换后拦截一次真实误用。收口动作:判据成文待 Owner 确认后方可切换。生效证据命令:enforce 态下一条 SSH 直驱引擎命令被实际阻断,且回退开关能把它放回 observe。依赖:须等 STORY-164 落地且观察窗积累足够。子任务 165.1-165.3 见 BRIEFING 第五节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1762,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:9a8457936b92b35bb1884db7",
+      "version": 1763
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:51Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1763",
+        "--external-key",
+        "TCRN-CROSS-STORY-166",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:5376493c45ef826ae9dc22ef",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1763,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:3e8d82154ed0cb757d0b4a8d",
+      "version": 1764
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:52Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1764",
+        "--id",
+        "work:3e8d82154ed0cb757d0b4a8d",
+        "--scope",
+        "【投影新鲜度通则与统一巡检】根因:平台所有物化侧车(网页投影、知识 store、codegraph、记忆索引)都会按各自节奏变陈旧却各有各的新鲜度故事——INC-040 与知识高水位是同一类病的两次发作。红线边界:登记项必须可机器取数不许写「大约几小时」;不得为此新造第五个孤门,必须把 STORY-160.4 的标记差门并进来;门必须能红。文件指针:新建平台级 docs/projection-freshness-convention.md;巡检实现落 TCRN-AOS/scripts/ 下并进 verify 链。验证命令:一条命令输出四个侧车的 {真源版本, 自身版本, 龄} 三元组;人为放旧一个侧车后门红并点名该侧车。收口动作:通则成文、注册表四项齐备、巡检进 verify 链。生效证据命令:巡检在 STORY-168 的运行者里被定时跑到且末次退出码为 0。子任务 166.1-166.5 见 BRIEFING 第六节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1764,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:3e8d82154ed0cb757d0b4a8d",
+      "version": 1765
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:53Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1765",
+        "--external-key",
+        "TCRN-CROSS-STORY-167",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:5376493c45ef826ae9dc22ef",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1765,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:23b5106dead9c12817d5da20",
+      "version": 1766
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:54Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1766",
+        "--id",
+        "work:23b5106dead9c12817d5da20",
+        "--scope",
+        "【待 Owner 队列】对应根因:最后一公里合法地停给了人却没有队列——停对了地方,停在了看不见的地方。红线边界:不许把队列写成散文,必须从链和仓里取数;不得把 Owner 未裁的事项自行推进。文件指针:实现落 TCRN-AOS/scripts/ 下,可选在座舱渲染一页。验证命令:跑一次能列出链上 owner_intent_required 门、交付中扣下项、待批机械动作三类;队列非空且超期时给出提醒而非静默。收口动作:一条命令或一页可见。生效证据命令:当前跑一次,输出至少包含 INC-041 的四件代办与 v0.11.0 发布必停点。子任务 167.1-167.4 见 BRIEFING 第六节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1766,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:23b5106dead9c12817d5da20",
+      "version": 1767
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:55Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1767",
+        "--external-key",
+        "TCRN-CROSS-STORY-168",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:5376493c45ef826ae9dc22ef",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1767,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:c4a2fecde3bd18c961a33f60",
+      "version": 1768
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:56Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1768",
+        "--id",
+        "work:c4a2fecde3bd18c961a33f60",
+        "--scope",
+        "【统一运行者】对应根因:门管仓字节不管运行时。INC-032 的教训——三个 launchd 任务共用错误 PATH,每次 exit 127 而无人知,且工具自身还谎报成功。红线边界:回收与失败通知写在起手同一处;失败不许静默;launchd 任务永远用绝对 PATH;「修好」只有真触发 exit 0 才算,手跑一次不算。文件指针:取代散落的 launchd 任务,收敛到一个 timer;deploy/aos-resident-cockpit/ 下的 plist 模板与已装副本须同步。验证命令:一个 timer 跑全部门;退出码非零必须留痕且可见。收口动作:散落任务退役,巡检与健康板由它驱动。生效证据命令:真触发一次(不是手跑)后 launchctl 报告末次退出码 0,且失败场景能收到通知。子任务 168.1-168.3 见 BRIEFING 第六节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1768,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:c4a2fecde3bd18c961a33f60",
+      "version": 1769
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:57Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1769",
+        "--external-key",
+        "TCRN-CROSS-STORY-169",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:20598f9f418557b81d999ba7",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1769,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:50fec19eee42dff488b973af",
+      "version": 1770
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:58Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1770",
+        "--id",
+        "work:50fec19eee42dff488b973af",
+        "--scope",
+        "【五要素模板与公约修订】D8 的落法,本 INIT 的方法论产出。红线边界:修订必须走 harness-constraint 公约的既有程序(不是直接改字);不得把第五要素写成建议——它是缺一不派、缺一不收的硬要素。文件指针:docs/dispatch-readiness-convention.md(四要素->五要素)、docs/harness-constraint-convention.md(把 MIN-059 的「生效证据默认未证」从约束编目推广到一切交付物)。验证命令:公约文本里第五要素的定义与本 INIT 简报第 0.1 节一致。收口动作:派工模板更新,本简报即首个样例。生效证据命令:下一张派出的单按五要素成文,且其收口记录引用了修订后的公约条款。子任务 169.1-169.4 见 BRIEFING 第七节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1770,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:50fec19eee42dff488b973af",
+      "version": 1771
+    },
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:43:59Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "1771",
+        "--external-key",
+        "TCRN-CROSS-STORY-170",
+        "--kind",
+        "Story",
+        "--parent-id",
+        "work:20598f9f418557b81d999ba7",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "parent-id",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 1771,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ea2716bb763e6b2be214078a",
+      "version": 1772
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-05T13:44:00Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:a2e5a6cbdd858b9203c02b0d",
+        "--expected-version",
+        "1772",
+        "--id",
+        "work:ea2716bb763e6b2be214078a",
+        "--scope",
+        "【存量补票:INC-041 四代办】红线边界:本单只补票不执行那四件事——补票即为每件写清生效证据命令,让它们从散文变成可验收的单;不得在本单里改用户级配置。文件指针:TCRN-AOS/docs/reports/init-019/S170/tickets.md;补票结果以注解落回 TCRN-CROSS-INC-041。验证命令:四条生效证据命令逐条可执行(即使此刻结果为红也要能跑)。收口动作:四件各得一条命令——S4.2 Codex 配置应用(三个 MCP 服务器在 Codex 侧 status 实测可用且 parity:proof 白名单收缩后仍绿)、STORY-144 enforce 切换(与 STORY-165 合流)、S154 archify 安装(装后重算 sha256 与钉扎一致且在 skills 名册可见)、otel-spans 接线(引擎跑一次真动词后 sink 出现 verb span 且隐私门对该 sink exit 0)。生效证据命令:四条各跑一次并如实记录当前红绿。子任务 170.1-170.4 见 BRIEFING 第七节。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 1772,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:ea2716bb763e6b2be214078a",
+      "version": 1773
+    }
+  ],
+  "readback": [
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:f3681ec0bcb49de420109c4a",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-163",
+            "observed": "TCRN-CROSS-STORY-163",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【知识面读写全走 MCP】D1+D2 在知识面的落实。红线边界:写动词全部经 STORY-156 的工具不许 SSH;store marker 版本不是链版本,CAS 传错会被拒。文件指针:核对 mcp__tcrn-workflow-aos-read__* 的知识动词可用性;改 .claude/skills/tcrn-workflow-helper/references/on-demand-context.md 里的命令形态。验证命令:knowledge-list/-candidates/-snippet/-body/-freshness 五个动词各经 MCP 调一次,不可用的列出来;一次 create 经 MCP 工具完成并读回。收口动作:helper 文档命令改为 MCP 形态。生效证据命令:pnpm --dir TCRN-AOS doc-topology:proof exit 0,且五个知识读动词经 MCP 实调成功。子任务 163.1-163.3 见 BRIEFING 第四节。",
+            "observed": "【知识面读写全走 MCP】D1+D2 在知识面的落实。红线边界:写动词全部经 STORY-156 的工具不许 SSH;store marker 版本不是链版本,CAS 传错会被拒。文件指针:核对 mcp__tcrn-workflow-aos-read__* 的知识动词可用性;改 .claude/skills/tcrn-workflow-helper/references/on-demand-context.md 里的命令形态。验证命令:knowledge-list/-candidates/-snippet/-body/-freshness 五个动词各经 MCP 调一次,不可用的列出来;一次 create 经 MCP 工具完成并读回。收口动作:helper 文档命令改为 MCP 形态。生效证据命令:pnpm --dir TCRN-AOS doc-topology:proof exit 0,且五个知识读动词经 MCP 实调成功。子任务 163.1-163.3 见 BRIEFING 第四节。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-163",
+        "kind": "Story",
+        "status": "planned"
+      }
+    },
+    {
+      "ok": true,
+      "verb": "work-show",
+      "mutates": false,
+      "reasonCode": "WORKSPACE_RECORD_READY",
+      "argv": [
+        "work-show",
+        "--id",
+        "work:ea2716bb763e6b2be214078a",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "workspace"
+      ],
+      "fromPayload": [
+        "id"
+      ],
+      "executed": true,
+      "accepted": true,
+      "verdict": {
+        "ok": true,
+        "reasonCode": "READBACK_MATCHES_FULL_VALUE",
+        "compared": [
+          {
+            "field": "externalKey",
+            "expected": "TCRN-CROSS-STORY-170",
+            "observed": "TCRN-CROSS-STORY-170",
+            "equal": true
+          },
+          {
+            "field": "kind",
+            "expected": "Story",
+            "observed": "Story",
+            "equal": true
+          },
+          {
+            "field": "status",
+            "expected": "planned",
+            "observed": "planned",
+            "equal": true
+          },
+          {
+            "field": "scope",
+            "expected": "【存量补票:INC-041 四代办】红线边界:本单只补票不执行那四件事——补票即为每件写清生效证据命令,让它们从散文变成可验收的单;不得在本单里改用户级配置。文件指针:TCRN-AOS/docs/reports/init-019/S170/tickets.md;补票结果以注解落回 TCRN-CROSS-INC-041。验证命令:四条生效证据命令逐条可执行(即使此刻结果为红也要能跑)。收口动作:四件各得一条命令——S4.2 Codex 配置应用(三个 MCP 服务器在 Codex 侧 status 实测可用且 parity:proof 白名单收缩后仍绿)、STORY-144 enforce 切换(与 STORY-165 合流)、S154 archify 安装(装后重算 sha256 与钉扎一致且在 skills 名册可见)、otel-spans 接线(引擎跑一次真动词后 sink 出现 verb span 且隐私门对该 sink exit 0)。生效证据命令:四条各跑一次并如实记录当前红绿。子任务 170.1-170.4 见 BRIEFING 第七节。",
+            "observed": "【存量补票:INC-041 四代办】红线边界:本单只补票不执行那四件事——补票即为每件写清生效证据命令,让它们从散文变成可验收的单;不得在本单里改用户级配置。文件指针:TCRN-AOS/docs/reports/init-019/S170/tickets.md;补票结果以注解落回 TCRN-CROSS-INC-041。验证命令:四条生效证据命令逐条可执行(即使此刻结果为红也要能跑)。收口动作:四件各得一条命令——S4.2 Codex 配置应用(三个 MCP 服务器在 Codex 侧 status 实测可用且 parity:proof 白名单收缩后仍绿)、STORY-144 enforce 切换(与 STORY-165 合流)、S154 archify 安装(装后重算 sha256 与钉扎一致且在 skills 名册可见)、otel-spans 接线(引擎跑一次真动词后 sink 出现 verb span 且隐私门对该 sink exit 0)。生效证据命令:四条各跑一次并如实记录当前红绿。子任务 170.1-170.4 见 BRIEFING 第七节。",
+            "equal": true
+          }
+        ],
+        "unequal": []
+      },
+      "record": {
+        "externalKey": "TCRN-CROSS-STORY-170",
+        "kind": "Story",
+        "status": "planned"
+      }
+    }
+  ],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 1773,
+    "headEventHash": "950feaf5f6f9f142d3c92d79266a0c1103a20fa631da7867907f6600555dff02",
+    "work": 280
+  },
+  "eventsAppended": 16,
+  "ok": true,
+  "reasonCode": "CEREMONY_COMPLETED_AND_READ_BACK",
+  "finishedAt": "2026-08-05T13:44:03Z"
+}

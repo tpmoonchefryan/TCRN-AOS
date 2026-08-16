@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "tcrn.init-020.story-193-codex-hook-equivalence.v2",
+  "story": "STORY-193",
+  "actor": "agent:gpt-5-codex",
+  "executionShape": "single-context",
+  "host": "Codex CLI",
+  "hostVersionReadback": "codex-cli/0.145.0",
+  "status": "project-local-installed-host-approval-pending",
+  "engineProof": {
+    "command": "pnpm --dir TCRN-AOS codex-hooks:proof",
+    "underlyingTest": "tcrn-workflow/tests/qa4-codex-hook-equivalence.test.mjs",
+    "result": "pass",
+    "tests": 1,
+    "passed": 1,
+    "verbs": [
+      "adapter-generate",
+      "adapter-install",
+      "adapter-validate",
+      "adapter-simulate",
+      "adapter-activation-assess",
+      "adapter-activation-record"
+    ],
+    "installation": "temporary engine-created evidence root; removed after test",
+    "manualHooksJsonWrite": false
+  },
+  "projectLocalInstallation": {
+    "status": "installed_pending_host_approval",
+    "installationRoot": "<local-platform-root>",
+    "requestDigest": "d7489d104f0a1c668b6a436f8c37f1febc5aa42316d5d99f1763bd7b0002e270",
+    "capabilityManifestDigest": "8d59699f1f705b34bd57f817e55804ff4ab5eab66370e7f6f295704d11d5000e",
+    "inertInstallationReceipt": {
+      "path": "docs/reports/init-020/STORY-193-codex-inert-installation.json",
+      "receiptDigest": "5e2bc02725082858d26c77561894cfcecdd59cdf6dd31aa3184a846bf59a3ee8"
+    },
+    "activationInstallationReceipt": {
+      "path": "docs/reports/init-020/STORY-193-codex-activation-installation.json",
+      "receiptDigest": "d0f6086e5c26872f81fbc554b9cb76a42cdb403dab2a832a551b7582e634b090",
+      "activationState": "pending_host_approval",
+      "installationDoesNotProveActivation": true
+    },
+    "files": {
+      "hooks": ".codex/hooks.json",
+      "handler": ".codex/tcrn-workflow/session-start.mjs",
+      "summary": ".codex/tcrn-workflow/session-summary.json",
+      "sessionStartEntries": 1,
+      "matcher": "startup|resume",
+      "hookDefinitionDigest": "51e838c796acaf72055afa4f8e5f03a63a51ff3c08e2f56ce65a7df5d9480884",
+      "handlerDigest": "add8b4ca4f8a39c51ebca16c5260d432b6255edf381cc4197a0abd64f5d1a8a3",
+      "summaryDigest": "32d8de496517d7b4a0f88adbeeefbc608a7d8a2c55591709145d2ca5ccc4439e"
+    },
+    "localHandlerFire": {
+      "status": 0,
+      "outputDigest": "3f35d7d01cd0f7e3cd93ecd9dc2350accb1afecf63a343920f515a10bfd71f6c",
+      "sessionStartObserved": true
+    }
+  },
+  "hostActivation": {
+    "codexDesktopHostActive": false,
+    "hostApprovalClaimed": false,
+    "activationRecordState": "pending_host_approval",
+    "ownerAction": "approve the exact definition through /hooks and start a new Codex session; this report does not claim that host action"
+  },
+  "userConfigCleanup": {
+    "source": "<local-home>/.codex/config.toml",
+    "staleEntries": 6,
+    "diff": "docs/reports/init-020/STORY-193-codex-config-hooks-state.diff",
+    "applied": true,
+    "result": "six stale platform-root hooks.state entries removed; fresh exact-definition approval remains host-owned"
+  },
+  "sshWriteObserverDisposition": {
+    "claudeSurface": "PreToolUse/Bash command observer",
+    "codexSurface": "Codex App Server execution observation is read-only and does not invoke the SSH observer",
+    "status": "explicitly-uncovered-residual",
+    "defaultSafeClaim": false,
+    "matrix": "tcrn-workflow/docs/reports/init-020/STORY-191-adapter-equivalence-matrix.json"
+  },
+  "redLeg": {
+    "hostProofNotClaimed": true,
+    "configNotApplied": false,
+    "sshObserverCoverageNotInferred": true
+  }
+}

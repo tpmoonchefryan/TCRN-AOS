@@ -1,0 +1,170 @@
+{
+  "schemaVersion": "aos.local-client-ceremony-receipt.v1",
+  "story": "TCRN-CROSS-STORY-189",
+  "intent": "切换窗重跑(v0.11.1 部署后)逐链迁移结果记录:Joi/TMS verify 绿,DS verify 红已按链回滚,窗口阻断待引擎修复;立 INC-073 并记逐链回执。",
+  "startedAt": "2026-08-06T14:10:00Z",
+  "dryRun": false,
+  "host": "tcrn-platform-dev",
+  "partition": "cross-project",
+  "topology": {
+    "engineCli": "/srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs",
+    "workspace": "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace",
+    "attestDir": "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+    "actor": "agent:fable",
+    "configuredIn": "deploy/aos-local-client/topology.mjs (VM half imported from deploy/aos-resident-cockpit/manifest.mjs); partition targets in deploy/aos-local-client/aos-partitions.mjs"
+  },
+  "payload": {
+    "path": "evidence/mcp-ceremony-write/payloads/2026-08-06T14-10-00-236Z-8208f1-cross-project.json",
+    "sha256": "852693f89254a23220fcce65caea3cf8d6ab8925dd66e5d55f0f497e587eee0c",
+    "bytes": 2718
+  },
+  "hostEngineCatalogue": {
+    "verbs": 106
+  },
+  "chainBefore": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2103,
+    "headEventHash": "394162a181392b3d81f279f25f0c0d08fc845db2c1e9d23104e1f7ce45c6e602",
+    "work": 337
+  },
+  "steps": [
+    {
+      "ok": true,
+      "verb": "work-create",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-create",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T14:10:01Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2103",
+        "--external-key",
+        "TCRN-CROSS-INC-073",
+        "--kind",
+        "Incident",
+        "--project-id",
+        "project:e7da35c5aade8dd42c91cb0f",
+        "--status",
+        "planned",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "external-key",
+        "kind",
+        "project-id",
+        "status"
+      ],
+      "headAtPlanning": 2103,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:c1fc09e48ba190c894c1c9ca",
+      "version": 2104
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_COMMAND_COMPLETED",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T14:10:02Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--decided-by",
+        "minutes:6b3a226012700f4322fd28ee",
+        "--expected-version",
+        "2104",
+        "--id",
+        "work:8797455f66197645465abb73",
+        "--scope",
+        "【切换窗重跑·2026-08-06(v0.11.1 部署后,INC-072 解除)】逐链迁移结果(小链先行,file→pg,每链 verify 绿才进下一链):①Joi-Button v586→chain_joi:execute 成功(586 events),verify WORKSPACE_MIGRATION_VERIFIED(绿),validate 绿;②TCRN-TMS v229→chain_tms:execute 成功(229 events),verify VERIFIED(绿),validate 绿;③TCRN-Design-System v983→chain_ds:execute 成功(983 events),verify RED WORKSPACE_MIGRATION_FUTURE「target is present but unreadable: Canonical input exceeds one MiB」。根因=PG backend 硬编码 SEGMENT_LIMIT=1024,983 事件单段 canonical 超 PROTOCOL_LIMITS.maxCanonicalBytes(1MiB),file 侧 segmentEventLimit=64 每段≤64 事件故不超;数据平面未损(file 链=权威,validate 绿)。处置:已按链回滚——pg chain_ds 清空回 STORY-188 供给空态(disable append-only trigger→TRUNCATE→enable,postgres 表主),file 权威未动;④TCRN-AOS v1048/cross v2103 更大,同因必红,未尝试。窗口 BLOCKED:需引擎修复 PG backend 段限(PG 尊重 workspace segmentEventLimit 或降 SEGMENT_LIMIT 使 canonical 段<1MiB)并发布 v0.11.2 后重跑。已绿两链 Joi/TMS 的 PG 副本为已验证镜像,file 仍为权威。窗前四硬件仍全绿(末次文件备份 2026-08-06T11:19Z 异地已验)。",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "decided-by",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2104,
+      "executed": true,
+      "accepted": true,
+      "error": null,
+      "recordId": "work:8797455f66197645465abb73",
+      "version": 2105
+    },
+    {
+      "ok": true,
+      "verb": "work-annotate",
+      "mutates": true,
+      "reasonCode": "WORKSPACE_INPUT_INVALID",
+      "argv": [
+        "work-annotate",
+        "--actor",
+        "agent:fable",
+        "--at",
+        "2026-08-06T14:10:03Z",
+        "--attest-dir",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/attestations",
+        "--expected-version",
+        "2105",
+        "--id",
+        "work:8797455f66197645465abb73",
+        "--scope",
+        "",
+        "--workspace",
+        "/srv/tcrn/governance/tcrn-workspace/cross-project/workspace"
+      ],
+      "autoSupplied": [
+        "at",
+        "attest-dir",
+        "expected-version",
+        "workspace"
+      ],
+      "fromPayload": [
+        "actor",
+        "id",
+        "scope"
+      ],
+      "headAtPlanning": 2105,
+      "executed": true,
+      "accepted": false,
+      "error": "advisory scope must be a non-empty string",
+      "recordId": null,
+      "version": null
+    }
+  ],
+  "readback": [],
+  "chainAfter": {
+    "workspaceId": "workspace:7732a51de4c38afb83bb77cf",
+    "version": 2105,
+    "headEventHash": "5227a542525c363f82d85ce46d794397244368c80e86e2859121d18f96103046",
+    "work": 338
+  },
+  "ok": false,
+  "reasonCode": "STEP_REFUSED_BY_HOST_ENGINE"
+}

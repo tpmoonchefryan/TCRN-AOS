@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "reasonCode": "EVAL_GREEN",
+  "config": "<local-platform-root>/tcrn-workflow/docs/reports/init-018/S5.2/promptfooconfig.yaml",
+  "maxConcurrency": 2,
+  "maxAssertions": 200,
+  "estimatedAssertions": 1,
+  "assertions": 1,
+  "passed": 1,
+  "failed": 0,
+  "errors": 0,
+  "durationMs": 12,
+  "provider": "echo (offline, no API key)",
+  "evalExit": 0
+}

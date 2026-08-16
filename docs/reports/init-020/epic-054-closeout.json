@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-EPIC-054",
+  "intent": "EPIC-054 收口:迁移动词族(双向)+备份重基+scratch 往返实证完成。三子单 STORY-178/179/180 全 done,窗前硬件②达成。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:4a1304a35351ac46ff4c3a04",
+        "scope": "【收口(2026-08-06)】迁移动词族(双向)+备份重基+往返实证完成,三子单全部 done。STORY-178=workspace-migration.ts 四动词(plan/execute/verify/rollback,file↔pg 双向同判据,正腿往返/红腿篡改/旁路拒三测试);STORY-179=备份重基(AOS 侧 pg-backup-take/verify/chain-verify/paired-backup 四脚本,pg_dump 定制格式+摘要,offsite verify 判据更新,engine-host:verify DB 等价物,正腿真备份+异地验证/红腿篡改一字节 verify 红);STORY-180=scratch 往返迁移实证(窗前硬件②,file→pg→file 往返 diff 空+版本连续+marker 保持,中途注入被 verify 拦截,证据归档 evidence/aos-s180-roundtrip-migration.json 无宿主路径)。EPIC-054 所载:迁移动词族双向、备份 pg_dump 重基(PULL 不变)、snapshot/export 被绑对象按 ADR、往返实证。生效证据两侧:正腿=往返 diff 空+备份异地验证过;红腿=篡改一字节 verify 必红+旁路拷贝必拒。全套件绿。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:4a1304a35351ac46ff4c3a04", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:4a1304a35351ac46ff4c3a04", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:4a1304a35351ac46ff4c3a04", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:4a1304a35351ac46ff4c3a04" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-EPIC-054", "kind": "Epic", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "tcrn.closeout-verify.v2",
+  "incident": "TCRN-CROSS-INIT-020",
+  "chainPartition": "cross-project",
+  "items": [
+    "INC-061",
+    "INC-062",
+    "INC-063",
+    "INC-064",
+    "INC-065",
+    "INC-066",
+    "INC-067",
+    "INC-068",
+    "INC-069",
+    "INC-070",
+    "INC-071"
+  ],
+  "dispositions": {
+    "INC-061": {
+      "kind": "superseded",
+      "carriedBy": "work:f259c5066ba7d9af72198e6b",
+      "scope": "仪式层收口闸门由 STORY-182 写面仪式语义服务端化承接(单收口+证据纪律、同载荷多单 done 拒绝)"
+    },
+    "INC-062": {
+      "kind": "retained",
+      "ticket": "work:6767241b2a45cb5a81aecef8",
+      "scope": "传输无关收口纪律,STORY-190 收口时引用;证据/核销条目从 work-show scope 派生"
+    },
+    "INC-063": {
+      "kind": "superseded",
+      "carriedBy": "work:f805208e3c9bd147f95cbc1c",
+      "scope": "门名册与可达性机器 diff 由 STORY-187 判据扩面承接"
+    },
+    "INC-064": {
+      "kind": "superseded",
+      "carriedBy": "work:d8470bce54832e7e2e29f813",
+      "scope": "PASS 返回点证人覆盖由 STORY-183 拒绝面语料承接(SSH observer 退役前维持现状)"
+    },
+    "INC-065": {
+      "kind": "retained",
+      "ticket": "work:6767241b2a45cb5a81aecef8",
+      "scope": "结果表与证据侧车机器化,随 STORY-190 引用;复用现成机器不造新机器"
+    },
+    "INC-066": {
+      "kind": "retained",
+      "ticket": "work:6767241b2a45cb5a81aecef8",
+      "scope": "判据卫生三态退出,通用判据纪律,随 STORY-190 引用"
+    },
+    "INC-067": {
+      "kind": "retained",
+      "ticket": "work:6767241b2a45cb5a81aecef8",
+      "scope": "干净树测量纪律(先消树污再量),随 STORY-190 引用"
+    },
+    "INC-068": {
+      "kind": "deferred",
+      "reason": "含公约修订,需 Owner 裁定(docs/deliberation-adoption-convention + delivery-cadence-convention),独立于本 INIT 立项",
+      "scope": "对抗复核入环+复发教训升格,Owner 裁定后执行"
+    },
+    "INC-069": {
+      "kind": "superseded",
+      "carriedBy": "work:f259c5066ba7d9af72198e6b",
+      "scope": "段内走私闭合+两侧判决函数统一由 STORY-182 白名单判定+STORY-183 拒绝面语料承接(两消费者共享判决函数+跨消费者差分测试)"
+    },
+    "INC-070": {
+      "kind": "fixed",
+      "scope": "codegraph 判据回正(恢复可证伪而非删门),独立于本 INIT 的门修复,执行期验证"
+    },
+    "INC-071": {
+      "kind": "retained",
+      "ticket": "work:6767241b2a45cb5a81aecef8",
+      "scope": "三轮验收 P2/P3 批,条目集从 scope 推导(INC-062 前置),随 STORY-190 收口核验"
+    }
+  }
+}

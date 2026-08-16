@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-STORY-178",
+  "intent": "STORY-178 收口:迁移动词族(双向)完成。migration-plan/execute/verify/rollback 四动词,file↔pg 双向同判据,正腿往返/红腿篡改/旁路拒三测试全绿,全套件无回归。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:e2e038dddfe4b0d5f64b11fc",
+        "scope": "【收口(2026-08-06)】迁移动词族(双向)完成。交付物:①packages/core/src/workspace-migration.ts——planMigration(只读盘点源后端,产计划书 schema tcrn.workspace-migration-plan.v1)/executeMigration(源后端逐段读事件+metadata+两店 → 目标后端字节不变写回,file 目标确保控制树骨架)/verifyMigration(目标侧重读,与源比对:逐事件段字节+metadata+版本连续 1..N+head hash+两店 marker/record)/rollbackMigration(pg→file 反向同判据)。后端选择:file 侧用 FileBackend/FileStoreBackend,pg 侧经 options 注入 PgBackend/PgStoreBackend;PG 不可达 WORKSPACE_MIGRATION_APPLY_UNAVAILABLE。旁路拷贝拒:execute/verify 对目标非空且 workspaceId/版本/head 与源不符 → WORKSPACE_MIGRATION_FUTURE,相同重跑幂等允许。②packages/pg-backend/test/migration.test.mjs 三测试:正腿=file 链+knowledge+artifact → execute 到 pg → verify 绿 → 幂等重跑 → rollback 回 file → verify 绿;红腿=篡改 pg payload_hash → verify ok:false;旁路=pg 目标持不同链 → execute/verify 均拒 WORKSPACE_MIGRATION_FUTURE。③全套件绿(TESTS_VERIFIED)+lint/format/sbom/verify:source/proof-artifacts。判据与 STORY-176 等价门一致(逐事件字节等价+版本连续+head+两店 marker)。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:e2e038dddfe4b0d5f64b11fc", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:e2e038dddfe4b0d5f64b11fc", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:e2e038dddfe4b0d5f64b11fc", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:e2e038dddfe4b0d5f64b11fc" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-STORY-178", "kind": "Story", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}

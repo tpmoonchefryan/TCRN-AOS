@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aos.local-client-ceremony.v1",
+  "story": "TCRN-CROSS-EPIC-052",
+  "intent": "EPIC-052 收口:替换残余分析与 ADR(PG 版)+INC-061..071 核销清单,三子单(STORY-171/172/173)全 done 后主单收口。",
+  "steps": [
+    {
+      "verb": "work-annotate",
+      "flags": {
+        "id": "work:a3b94d6d202005f5fe229f0c",
+        "scope": "【收口(2026-08-06)】EPIC-052 替换残余分析与 ADR(PG 版)完成。三子单全部 done:STORY-171=ADR 0004 定稿(九节齐备:实例拓扑 PG18/schema 布局/角色 GRANT+触发器/事件表 DDL/租约 advisory lock+claims/六依赖面/迁移台账额度/轨道表/等价判据,每条判据写明红腿,决策点本 EPIC 裁毕,对抗评审 9 项修订落地);STORY-172=INC-061..071 核销清单(closeout-verify 机器核形态,引入 superseded 处置 kind+红腿测试,11 单每单恰一处置,正腿绿+漏一单红实证);STORY-173=四条等价判据红腿实证(scratch 改一字节即红,4/4 绿)。EPIC-052 scope 所载双交付(ADR+核销清单)均达成。",
+        "decided-by": "minutes:6b3a226012700f4322fd28ee",
+        "actor": "agent:fable"
+      }
+    },
+    { "verb": "work-transition", "flags": { "id": "work:a3b94d6d202005f5fe229f0c", "status": "ready", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:a3b94d6d202005f5fe229f0c", "status": "active", "actor": "agent:fable" } },
+    { "verb": "work-transition", "flags": { "id": "work:a3b94d6d202005f5fe229f0c", "status": "done", "actor": "agent:fable" } }
+  ],
+  "readback": [
+    {
+      "verb": "work-show",
+      "flags": { "id": "work:a3b94d6d202005f5fe229f0c" },
+      "recordFields": ["externalKey", "kind", "status"],
+      "expect": { "externalKey": "TCRN-CROSS-EPIC-052", "kind": "Epic", "status": "done" },
+      "expectSameAs": [{ "field": "scope", "step": 0, "flag": "scope" }]
+    }
+  ]
+}
