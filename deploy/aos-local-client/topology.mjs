@@ -145,6 +145,28 @@ export const PARTITION_ROSTER = Object.freeze([
     home: "local",
     relocationId: "relocation:73db11fbbe9ea33ba3c8ed55",
     liveAddress: "../.tcrn-workspace/Joi-Button/workspace"
+  }),
+  Object.freeze({
+    // TCRN-CROSS-INC-210. Admitted directly at the current container rather than moved
+    // into it: `relocation-inspect` answers `relocations: 0, state: live`. So there is no
+    // hop to name, and `relocationId` is null rather than a plausible-looking id.
+    //
+    // Null is not a hole here. `judgeControlTree` reads `relocationId` only on the `vm`
+    // branch, where it asks whether a retained ARCHIVE carries the hop that vacated it;
+    // a home partition's live tree is never judged against it. Writing a borrowed id to
+    // satisfy a shape would put a false claim where a checked one is expected, and the
+    // check that claim exists for would still not run.
+    //
+    // Before this row the partition was invisible in both directions at once: the purity
+    // scan saw an unrostered live tree and went red, while `doc-topology` never asked any
+    // document to declare its truth address and stayed green. One gap, two opposite
+    // symptoms.
+    partitionId: "dsh-joi-channel-theme",
+    externalKey: "DSH-JOI-CHANNEL-THEME-WORKSPACE",
+    workspaceId: "workspace:63d8b92e1510dd5638be4b97",
+    home: "local",
+    relocationId: null,
+    liveAddress: "../.tcrn-workspace/dsh-joi-channel-theme/workspace"
   })
 ]);
 

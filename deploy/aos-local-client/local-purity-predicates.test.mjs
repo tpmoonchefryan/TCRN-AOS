@@ -27,6 +27,15 @@ import { PARTITION_ROSTER } from "./topology.mjs";
 const AOS = Object.freeze(PARTITION_ROSTER.find((entry) => entry.partitionId === "TCRN-AOS"));
 const CROSS = Object.freeze(PARTITION_ROSTER.find((entry) => entry.partitionId === "cross-project"));
 
+// Archive/away branches are still part of the predicate contract, but the shipped
+// topology is now all-local after S199. Keep those branches on explicit synthetic
+// rosters instead of making the current roster lie in order to exercise them.
+const ALL_AWAY_ROSTER = Object.freeze(
+  PARTITION_ROSTER.map((entry) => ({ ...entry, home: "vm" })));
+const MIXED_ROSTER = Object.freeze(
+  PARTITION_ROSTER.map((entry) => entry.partitionId === "TCRN-AOS"
+    ? { ...entry, home: "vm" } : entry));
+
 const archivedAosRow = Object.freeze({
   address: "/local/platform/.tcrn-workspace/TCRN-AOS/workspace",
   externalKey: AOS.externalKey,
@@ -57,13 +66,13 @@ const permittedLiveRows = PARTITION_ROSTER.filter((entry) => entry.home === "loc
     externalKey: entry.externalKey,
     workspaceId: entry.workspaceId
   }));
+const permittedOtherLiveRows = permittedLiveRows.filter((row) => row.externalKey !== AOS.externalKey);
 
 /**
- * Archived rows for every partition whose chain moved to the AOS host. Since
- * 2026-08-03 (TCRN-CROSS-INIT-017) that is all of them, so this is the shape a
- * green local host actually presents: five vacated archives, zero live trees.
+ * Synthetic archived rows for every partition under an all-away roster. They keep
+ * the archive branch covered without changing the shipped all-local S199 roster.
  */
-const archivedRows = PARTITION_ROSTER.map((entry) => ({
+const archivedRows = ALL_AWAY_ROSTER.map((entry) => ({
   address: `/srv/tcrn/governance/tcrn-workspace/${entry.partitionId}/workspace`,
   externalKey: entry.externalKey,
   workspaceId: entry.workspaceId,
@@ -80,6 +89,21 @@ const establishedScope = () => judgeScanScope({
   partitionsFoundLive: PARTITION_ROSTER.filter((entry) => entry.home === "local")
     .map((entry) => entry.partitionId),
   roster: PARTITION_ROSTER
+});
+
+const establishedMixedScope = () => judgeScanScope({
+  containerExists: true,
+  rootsWalked: [{ id: "platform-root", reachable: true }, { id: "home-shallow", reachable: true }],
+  partitionsFoundLive: MIXED_ROSTER.filter((entry) => entry.home === "local")
+    .map((entry) => entry.partitionId),
+  roster: MIXED_ROSTER
+});
+
+const establishedAwayScope = () => judgeScanScope({
+  containerExists: true,
+  rootsWalked: [{ id: "platform-root", reachable: true }, { id: "home-shallow", reachable: true }],
+  partitionsFoundLive: [],
+  roster: ALL_AWAY_ROSTER
 });
 
 test("attribution needs BOTH identity terms, and one term matching alone is a conflict not a match", () => {
@@ -105,7 +129,7 @@ test("attribution needs BOTH identity terms, and one term matching alone is a co
 });
 
 test("the retained AOS archive is green, and reviving it — one field, engineState — is red", () => {
-  const archive = judgeControlTree({ tree: archivedAosRow, roster: PARTITION_ROSTER });
+  const archive = judgeControlTree({ tree: archivedAosRow, roster: ALL_AWAY_ROSTER });
   assert.equal(archive.ok, true);
   assert.equal(archive.reasonCode, "ARCHIVE_RETAINED_AND_DEAD");
   assert.equal(archive.home, "vm");
@@ -116,7 +140,7 @@ test("the retained AOS archive is green, and reviving it — one field, engineSt
   const revived = judgeControlTree({
     tree: { ...archivedAosRow, engineState: "live", readFaceAccepted: true,
       readFaceReasonCode: "WORKSPACE_COMMAND_COMPLETED", relocationCount: 0, lastRelocationId: null },
-    roster: PARTITION_ROSTER
+    roster: ALL_AWAY_ROSTER
   });
   assert.equal(revived.ok, false);
   assert.equal(revived.reasonCode, "AWAY_PARTITION_TREE_IS_LIVE");
@@ -126,7 +150,7 @@ test("an away-partition tree one governed verb short of live is red on its own",
   const awaiting = judgeControlTree({
     tree: { ...archivedAosRow, engineState: "adoption-required", readFaceAccepted: false,
       readFaceReasonCode: "WORKSPACE_RELOCATION_ADOPTION_REQUIRED" },
-    roster: PARTITION_ROSTER
+    roster: ALL_AWAY_ROSTER
   });
   assert.equal(awaiting.ok, false);
   assert.equal(awaiting.reasonCode, "AWAY_PARTITION_TREE_AWAITS_ADOPTION");
@@ -138,7 +162,7 @@ test("the archive is asserted on BOTH faces: a ledger that says vacated is not e
   // still says `vacated` while `status` answers must not pass.
   const answering = judgeControlTree({
     tree: { ...archivedAosRow, readFaceAccepted: true, readFaceReasonCode: "WORKSPACE_COMMAND_COMPLETED" },
-    roster: PARTITION_ROSTER
+    roster: ALL_AWAY_ROSTER
   });
   assert.equal(answering.ok, false);
   assert.equal(answering.reasonCode, "ARCHIVE_NOT_DEAD_ON_THE_READ_FACE");
@@ -147,7 +171,7 @@ test("the archive is asserted on BOTH faces: a ledger that says vacated is not e
   // "it refused BECAUSE it was vacated" is.
   const wrongRefusal = judgeControlTree({
     tree: { ...archivedAosRow, readFaceReasonCode: "WORKSPACE_NOT_FOUND" },
-    roster: PARTITION_ROSTER
+    roster: ALL_AWAY_ROSTER
   });
   assert.equal(wrongRefusal.ok, false);
   assert.equal(wrongRefusal.reasonCode, "ARCHIVE_NOT_DEAD_ON_THE_READ_FACE");
@@ -156,7 +180,7 @@ test("the archive is asserted on BOTH faces: a ledger that says vacated is not e
 test("an archive carrying a different hop is not accepted as the archive the roster names", () => {
   const otherHop = judgeControlTree({
     tree: { ...archivedAosRow, lastRelocationId: "relocation:ffffffffffffffffffffffff" },
-    roster: PARTITION_ROSTER
+    roster: ALL_AWAY_ROSTER
   });
   assert.equal(otherHop.ok, false);
   assert.equal(otherHop.reasonCode, "ARCHIVE_CARRIES_A_DIFFERENT_RELOCATION");
@@ -164,11 +188,10 @@ test("an archive carrying a different hop is not accepted as the archive the ros
   assert.equal(otherHop.observedRelocationId, "relocation:ffffffffffffffffffffffff");
 });
 
-test("since every partition moved to the AOS host, any live tree here is an away tree (red)", () => {
-  // TCRN-CROSS-INIT-017: all five partitions now live on the VM. There is no
-  // "partition that still lives here" any more — every live tree on this host is
-  // an away-partition artefact, and the predicate must read it red.
-  const away = judgeControlTree({ tree: liveCrossRow, roster: PARTITION_ROSTER });
+test("an all-away roster makes a live tree here an away tree (red)", () => {
+  // This branch is exercised against a synthetic all-away roster because S199's
+  // shipped roster now correctly says every chain is local.
+  const away = judgeControlTree({ tree: liveCrossRow, roster: ALL_AWAY_ROSTER });
   assert.equal(away.ok, false);
   assert.equal(away.reasonCode, "AWAY_PARTITION_TREE_IS_LIVE");
 
@@ -237,7 +260,7 @@ test("the relocation-state vocabulary is closed, and closed in the FAILING direc
     ["adoption-required", "foreign-address", "live", "vacated"]);
 });
 
-test("「什么都没找到」不得与「没找到活的 AOS 树」共用一个绿", () => {
+test("「什么都没找到」不得与「没找到活的本地树」共用一个绿", () => {
   const established = establishedScope();
   assert.equal(established.ok, true);
   assert.equal(established.reasonCode, "SCAN_SCOPE_ESTABLISHED");
@@ -252,12 +275,12 @@ test("「什么都没找到」不得与「没找到活的 AOS 树」共用一个
   assert.equal(nowhere.ok, false);
   assert.equal(nowhere.reasonCode, "SCAN_SCOPE_NOT_ESTABLISHED");
 
-  // Since every partition is now on the VM (TCRN-CROSS-INIT-017), the expected
-  // local set is empty, so the scope establishes regardless of what was found —
-  // a "found" live tree is then judged by the tree-level predicate, not by scope.
+  // The all-away synthetic roster has no expected local partitions, so the scope
+  // establishes regardless of what was found — a "found" live tree is then judged
+  // by the tree-level predicate, not by scope.
   const partial = judgeScanScope({
     containerExists: true, rootsWalked: [{ id: "platform-root", reachable: true }],
-    partitionsFoundLive: ["cross-project"], roster: PARTITION_ROSTER
+    partitionsFoundLive: ["cross-project"], roster: ALL_AWAY_ROSTER
   });
   assert.equal(partial.ok, true);
   assert.equal(partial.reasonCode, "SCAN_SCOPE_ESTABLISHED");
@@ -280,39 +303,45 @@ test("「什么都没找到」不得与「没找到活的 AOS 树」共用一个
   }).reasonCode, "SCAN_ROOT_UNREACHABLE");
 });
 
-test("today's real shape is green: all five chains archived, the local host is a pure client", () => {
-  // Since 2026-08-03 (TCRN-CROSS-INIT-017) every partition's chain lives on the
-  // AOS host; the local machine holds only archives. The predicate must read
-  // "zero live trees here" as the healthy, tightened state.
+test("today's real shape is green: every home chain lives locally", () => {
+  // Since S199 every partition's chain lives on this machine's local file backend;
+  // the shipped topology must therefore accept every live local tree it names.
+  //
+  // Both sides come from the roster rather than from a list frozen here. This is not a
+  // tautology — the left side is what the PREDICATE returned and the right side is what
+  // the roster DECLARES, so a predicate that dropped or invented a partition still fails.
+  // What it stops being is a second copy of the roster that has to be hand-edited every
+  // time one is admitted, which is how the count `5` outlived the fifth partition.
+  const homeRows = PARTITION_ROSTER.filter((entry) => entry.home === "local");
   const verdict = judgeLocalPurity({
-    trees: archivedRows,
+    trees: permittedLiveRows,
     roster: PARTITION_ROSTER,
     scope: establishedScope()
   });
   assert.equal(verdict.ok, true);
   assert.equal(verdict.reasonCode, "LOCAL_HOST_HOLDS_NO_AWAY_PARTITION_ARTEFACT");
-  assert.deepEqual(verdict.awayPartitions,
-    ["TCRN-AOS", "cross-project", "TCRN-Design-System", "TCRN-TMS", "Joi-Button"]);
-  assert.deepEqual(verdict.permittedLocalPartitions, []);
-  assert.equal(verdict.counts.retainedArchives, 5);
-  assert.equal(verdict.counts.permittedLiveTrees, 0);
+  assert.deepEqual(verdict.awayPartitions, []);
+  assert.deepEqual(verdict.permittedLocalPartitions,
+    homeRows.map((entry) => entry.partitionId).sort());
+  assert.equal(verdict.counts.retainedArchives, 0);
+  assert.equal(verdict.counts.permittedLiveTrees, homeRows.length);
   assert.equal(verdict.counts.liveAwayTrees, 0);
-  assert.match(verdict.tightening, /^已收紧/u);
+  assert.match(verdict.tightening, /^未收紧/u);
 });
 
-test("one revived AOS tree beside the three permitted ones turns the whole verdict red", () => {
+test("one revived AOS tree beside the other permitted ones turns the whole verdict red", () => {
   const revived = { ...archivedAosRow, address: "/scratch/revival/workspace",
     engineState: "live", readFaceAccepted: true,
     readFaceReasonCode: "WORKSPACE_COMMAND_COMPLETED", relocationCount: 0, lastRelocationId: null };
   const verdict = judgeLocalPurity({
-    trees: [archivedAosRow, ...permittedLiveRows, revived],
-    roster: PARTITION_ROSTER,
-    scope: establishedScope()
+    trees: [archivedAosRow, ...permittedOtherLiveRows, revived],
+    roster: MIXED_ROSTER,
+    scope: establishedMixedScope()
   });
   assert.equal(verdict.ok, false);
   assert.equal(verdict.reasonCode, "AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST");
   assert.equal(verdict.counts.liveAwayTrees, 1);
-  // And the three legitimate ones are UNAFFECTED. If they went red too, the
+  // And the other legitimate ones are UNAFFECTED. If they went red too, the
   // predicate would be measuring "is anything here" after all.
   assert.equal(verdict.verdicts.filter((row) => row.home === "local").every((row) => row.ok), true);
 });
@@ -338,7 +367,7 @@ test("a scope that was never established cannot be overridden by clean rows", ()
 });
 
 test("under the all-vm roster, two live trees for one partition report away first (fork is absorbed)", () => {
-  // Every partition is away now, so two live trees are each an away artefact,
+  // Every partition in this synthetic roster is away, so two live trees are each an away artefact,
   // and the away red (AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST) outranks the
   // fork term — the fork term protects against a locally-permitted partition
   // having two live trees, which no longer exists as a case. The predicate must
@@ -346,19 +375,17 @@ test("under the all-vm roster, two live trees for one partition report away firs
   const twin = { ...liveCrossRow, address: "/local/elsewhere/workspace" };
   const verdict = judgeLocalPurity({
     trees: [liveCrossRow, twin],
-    roster: PARTITION_ROSTER,
-    scope: establishedScope()
+    roster: ALL_AWAY_ROSTER,
+    scope: establishedAwayScope()
   });
   assert.equal(verdict.ok, false);
   assert.equal(verdict.reasonCode, "AWAY_PARTITION_ARTEFACT_PRESENT_ON_LOCAL_HOST");
 });
 
-test("TIGHTENING has arrived: the all-vm roster is the real shape, so only archives are green", () => {
-  // TCRN-CROSS-INIT-017 moved every partition to the AOS host. The roster is
-  // already fully "vm" — the tightening that used to be a future state is now
-  // the real shape. A machine holding only archives is green; any live tree is
-  // an away-partition artefact and red.
-  const tightened = PARTITION_ROSTER.map((entry) => ({ ...entry, home: "vm" }));
+test("an all-vm tightened roster accepts only archives", () => {
+  // The current roster is local, so this is the red-leg/tightening synthetic shape:
+  // moving the home declaration to VM makes any live local tree an away artefact.
+  const tightened = ALL_AWAY_ROSTER;
   const scope = judgeScanScope({
     containerExists: true,
     rootsWalked: [{ id: "platform-root", reachable: true }],
@@ -657,14 +684,28 @@ test("the roster this repository ships is the one the archive notice names", () 
   // The roster is data the predicate is parameterised by, so a wrong row would
   // make every judgement above test a machine that does not exist.
   assert.deepEqual(PARTITION_ROSTER.map((entry) => entry.partitionId),
-    ["TCRN-AOS", "cross-project", "TCRN-Design-System", "TCRN-TMS", "Joi-Button"]);
-  assert.equal(AOS.home, "vm");
+    ["TCRN-AOS", "cross-project", "TCRN-Design-System", "TCRN-TMS", "Joi-Button",
+      "dsh-joi-channel-theme"]);
+  assert.equal(AOS.home, "local");
   assert.equal(AOS.workspaceId, "workspace:fbc32e3ff874fbbd637a1b85");
-  assert.equal(AOS.relocationId, "relocation:bba03004faf175867349495b");
-  assert.equal(AOS.liveAddress, "/srv/tcrn/governance/tcrn-workspace/TCRN-AOS/workspace");
-  // Only the relocated partition carries a hop id: a `home: "local"` row with one
-  // would mean the roster claims a relocation that never happened.
+  // Measured, not recalled: `relocation-inspect` on this partition answers
+  // `relocations: 6, stage: adopted, relocationId: relocation:4e8ccbb9…`, and the trailing
+  // hop is what `scan-local` compares against (`lastRelocationId`). Two earlier values sat
+  // here and neither matched the roster this test claims to pin — the assertion had been
+  // red for long enough to stop being read.
+  assert.equal(AOS.relocationId, "relocation:4e8ccbb92424f97c595860d4");
+  assert.equal(AOS.liveAddress, "../.tcrn-workspace/TCRN-AOS/workspace");
+  // A hop is what a MOVE leaves behind, so only a partition that moved has one to name.
+  // `dsh-joi-channel-theme` was admitted where it already stands (`relocations: 0`), and
+  // TCRN-CROSS-INC-210 settled that as a legitimate origin rather than a missing field:
+  // null here, never a borrowed id. Every other row must still carry a well-formed one,
+  // because for those the hop is the thing that explains the current address.
   for (const entry of PARTITION_ROSTER.filter((row) => row.home === "local")) {
-    assert.equal(entry.relocationId, undefined, `${entry.partitionId} must not claim a hop`);
+    if (entry.relocationId === null) continue;
+    assert.match(entry.relocationId, /^relocation:[0-9a-f]{24}$/u,
+      `${entry.partitionId} must carry a well-formed hop or declare null`);
   }
+  assert.equal(PARTITION_ROSTER.filter((row) => row.relocationId === null)
+    .map((row) => row.partitionId).join(","), "dsh-joi-channel-theme",
+  "null is admitted for the one partition measured to have never moved, not as a default");
 });
