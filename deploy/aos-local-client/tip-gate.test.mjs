@@ -14,10 +14,16 @@ import { join } from "node:path";
 import { describe, test } from "node:test";
 import assert from "node:assert/strict";
 
-import { judgeTip } from "./tip-gate.mjs";
+import { judgeTip } from "./tip-gate.mjs";import { PARTITION_ROSTER } from "./topology.mjs";
+
 
 const H64 = (c) => c.repeat(64);
-const ALL = ["TCRN-AOS", "cross-project", "TCRN-Design-System", "TCRN-TMS", "Joi-Button"];
+// Derived, not frozen: the gate itself maps PARTITION_ROSTER, so a hand-kept copy here
+// makes every fixture short by one the moment a partition is admitted — which is exactly
+// what happened when dsh-joi-channel-theme joined (TCRN-CROSS-INC-210). The green cases
+// assert the gate agrees with the roster; a list typed twice only asserts it agrees with
+// whoever edited this line last.
+const ALL = PARTITION_ROSTER.map((entry) => entry.partitionId);
 
 async function judgeTipFixture(fixture) {
   const path = join(tmpdir(), `tip-fixture-${randomBytes(6).toString("hex")}.json`);
