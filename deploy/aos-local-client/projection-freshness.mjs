@@ -20,6 +20,9 @@ import { execFileSync } from "node:child_process";
 import { localChainHead, localEngine } from "./local-engine-read.mjs";
 import { PLATFORM_ROOT, REPO_ROOT } from "./topology.mjs";
 
+/** The cockpit binds this port on its own host (deploy/aos-resident-cockpit/manifest.mjs). */
+const COCKPIT_PORT = 4318;
+
 export const SIDECARS = Object.freeze([
   Object.freeze({
     id: "knowledge-store",
@@ -33,7 +36,21 @@ export const SIDECARS = Object.freeze([
     // rendered from it, so the threshold is written once. It used to be typed twice —
     // the string the report showed and the literal the comparison used — and the copy a
     // reader sees was the one nothing kept honest.
+    //
+    // TCRN-CROSS-INC-216: dormant. This row measures how fresh the cockpit projection is,
+    // and the cockpit it feeds is a resident unit on a host whose four services S200
+    // stopped and disabled. A freshness verdict on a sealed surface is not a finding, and
+    // refreshing it would be worse than useless — the builder opens a ChainClient against
+    // every live chain to rebuild a view nothing reads. The declaration is falsifiable in
+    // both directions: if the surface comes back, `dormantWhile` stops holding and the row
+    // returns to judging freshness (see checkWebProjection).
     id: "web-projection",
+    dormant: {
+      since: "2026-08-17",
+      reason: "cockpit resident services stopped and disabled by S200; the projection feeds nothing",
+      dormantWhile: "the cockpit service is not running",
+      recordedBy: "TCRN-CROSS-INC-216"
+    },
     maxAgeDays: 7,
     get maxAge() { return `${this.maxAgeDays} days`; },
     truth: "governed chain versions",
@@ -189,7 +206,48 @@ function trackedAddedSourceChanges(repoRoot) {
   }
 }
 
+/**
+ * Is the surface a dormant row claims is gone actually gone?
+ *
+ * A dormancy declaration that nothing checks is just a way to turn a red off. This asks
+ * the cockpit's own port — bound to loopback on its host and reachable only through a
+ * tunnel, so an answer here means somebody brought it back and the declaration is stale.
+ * Unreachable is the expected reading and is NOT taken as proof of anything else: it says
+ * "not answering here", which is exactly what the declaration claims.
+ */
+async function cockpitAnswers(port = COCKPIT_PORT, timeoutMs = 1_500) {
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      await fetch(`http://127.0.0.1:${port}/`, { signal: controller.signal });
+      return true;
+    } finally {
+      clearTimeout(timer);
+    }
+  } catch {
+    return false;
+  }
+}
+
 async function checkWebProjection() {
+  const declared = sidecar("web-projection").dormant;
+  if (declared !== undefined) {
+    if (await cockpitAnswers()) {
+      return {
+        status: "stale",
+        self: null,
+        reason: `declared dormant since ${declared.since} but the cockpit answers on :${COCKPIT_PORT} — the declaration no longer holds`
+      };
+    }
+    return {
+      status: "dormant",
+      self: declared.since,
+      reason: null,
+      dormantWhile: declared.dormantWhile,
+      recordedBy: declared.recordedBy
+    };
+  }
   // The cockpit data is produced by scripts/build-cockpit-data.mjs into
   // apps/web/src/cockpit-data.generated.ts (the direct output; the dist bundle is one
   // `pnpm build` behind). It embeds both the build time (generatedAt) and the chain
@@ -294,7 +352,11 @@ export async function runProjectionFreshness() {
   const registryMismatch = rows.length !== SIDECARS.length
     ? [`SIDECARS declares ${SIDECARS.length} sidecars but ${rows.length} rows were checked`]
     : [];
-  const bad = rows.filter((row) => row.status !== "fresh" && row.status !== "activity");
+  // `dormant` sits beside `activity` as a status that is not a failure: both are
+  // declared states rather than unfetched ones. Dormancy earns that only because it is
+  // checked — a row declared dormant while its surface answers comes back as `stale`
+  // (TCRN-CROSS-INC-216), so the declaration cannot be used to switch a red off.
+  const bad = rows.filter((row) => !["fresh", "activity", "dormant"].includes(row.status));
   return {
     schemaVersion: "tcrn.projection-freshness.v1",
     predicateDisclosure: CODEGRAPH_PREDICATE_DISCLOSURE,
