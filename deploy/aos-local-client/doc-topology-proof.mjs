@@ -32,7 +32,7 @@ import { execFile, execFileSync } from "node:child_process";
 import { promisify } from "node:util";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
-import { PARTITION_ROSTER, PLATFORM_ROOT, REPO_ROOT, VM_HOST, WORKSPACE_CONTAINER }
+import { CONTAINER_PARENT, PARTITION_ROSTER, PLATFORM_ROOT, REPO_ROOT, VM_HOST, WORKSPACE_CONTAINER }
   from "./topology.mjs";
 import { probeReadFace } from "./scan-local.mjs";
 import {
@@ -60,8 +60,17 @@ export function readSshBreakglassAllowlist(path = SSH_BREAKGLASS_ALLOWLIST_PATH)
   };
 }
 
-/** The local siting convention, as the claims write it: relative to the platform root. */
-export const localAddressOf = (partitionId) => `../.tcrn-workspace/${partitionId}/workspace`;
+/**
+ * The local siting convention, as the claims write it: relative to the platform CONTAINER.
+ *
+ * MIN-101 / INC-200. INIT-024 moved the container up one level and left this convention
+ * anchored to the repository-bearing directory, so a claim written in the canonical
+ * platform document — which now lives at the container root — read one level too high.
+ * `PLATFORM_ROOT` is deliberately unchanged: it still names the directory holding the
+ * repositories, exactly as its own comment says. It is the address convention that had
+ * to follow the chains, not the anchor that names the repositories.
+ */
+export const localAddressOf = (partitionId) => `.tcrn-workspace/${partitionId}/workspace`;
 
 /** Registered documents, read as bytes. A missing one is a row, not an exception. */
 export function readRegisteredDocuments(registry = DOC_REGISTRY) {
@@ -185,7 +194,7 @@ export async function probeAwayHost({ host = VM_HOST, address, engineCli }) {
 export async function observeDocTopology({ roster = PARTITION_ROSTER, probeVm = false } = {}) {
   const observations = {};
   for (const entry of roster) {
-    const localAddress = resolve(PLATFORM_ROOT, localAddressOf(entry.partitionId));
+    const localAddress = resolve(CONTAINER_PARENT, localAddressOf(entry.partitionId));
     const local = await probeReadFace(localAddress);
     let localWorkspaceId = null;
     const metadataPath = join(localAddress, ".tcrn-workflow/workspace.json");
@@ -322,7 +331,15 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
 
   // The mutations target the platform AGENTS.md, which is required to carry every
   // primary claim — so the red legs exercise the canonical file a reader is meant to trust.
-  const platform = documents.find((document) => document.path === "AGENTS.md") ?? null;
+  // MIN-101 / INC-200: the mutation target is read out of the registry rather than
+  // spelled here. These four reds hard-coded "AGENTS.md", which was the canonical
+  // platform document until the container moved; afterwards that path named the
+  // classification folder's pointer stub, which carries no claims, so every mutation
+  // edited a file with nothing to break and all four legs reported STAYED_GREEN — a
+  // red suite that had quietly stopped proving anything.
+  const PLATFORM_DOC = (DOC_REGISTRY.find((rule) => rule.mustCarryClaims
+    && [...rule.expectedPartitions ?? []].length === PARTITION_ROSTER.length)?.path) ?? "AGENTS.md";
+  const platform = documents.find((document) => document.path === PLATFORM_DOC) ?? null;
   const awayEntry = PARTITION_ROSTER.find((entry) => entry.home === "vm") ?? null;
   const targetEntry = PARTITION_ROSTER[0] ?? null;
   // INC-045: the red suite must run under both topology directions. Previously it was
@@ -331,7 +348,7 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
   // the actual home direction for the observation contradiction.
   const platformParsed = platform === null
     ? { spans: [] }
-    : parseClaimBlocks(platform.text, { path: "AGENTS.md" });
+    : parseClaimBlocks(platform.text, { path: PLATFORM_DOC });
 
   const reds = [];
   if (platform !== null && targetEntry !== null) {
@@ -346,35 +363,35 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
       + `${CLAIM_BLOCK_END}`;
     reds.push(redProof({
       id: "HOME_FLIPPED_IN_A_REAL_DOCUMENT",
-      why: `AGENTS.md 把 ${targetEntry.partitionId} 的 home 改写成 ${flippedHome}——`
+      why: `${PLATFORM_DOC} 把 ${targetEntry.partitionId} 的 home 改写成 ${flippedHome}——`
         + "即把当前拓扑的真值位置写成相反方向。",
       documents, base,
-      mutate: editDocument("AGENTS.md",
+      mutate: editDocument(PLATFORM_DOC,
         `| \`${targetEntry.partitionId}\` | \`${targetEntry.home}\` |`,
         `| \`${targetEntry.partitionId}\` | \`${flippedHome}\` |`),
       expectCode: "CLAIMED_HOME_CONTRADICTS_ROSTER",
       names: (hits) => hits.some((finding) =>
-        finding.path === "AGENTS.md" && finding.partitionId === targetEntry.partitionId)
+        finding.path === PLATFORM_DOC && finding.partitionId === targetEntry.partitionId)
     }));
 
     reds.push(redProof({
       id: "ADDRESS_ALTERED_BY_ONE_SEGMENT",
-      why: `AGENTS.md 把 ${targetEntry.partitionId} 的真值地址改掉一段路径——`
+      why: `${PLATFORM_DOC} 把 ${targetEntry.partitionId} 的真值地址改掉一段路径——`
         + "地址错一段与错整条同样致命,因为读者会照着它跑命令。",
       documents, base,
-      mutate: editDocument("AGENTS.md",
+      mutate: editDocument(PLATFORM_DOC,
         expectedAddress,
         alteredAddress),
       expectCode: "CLAIMED_ADDRESS_CONTRADICTS_ROSTER",
       names: (hits) => hits.some((finding) =>
-        finding.path === "AGENTS.md" && finding.partitionId === targetEntry.partitionId)
+        finding.path === PLATFORM_DOC && finding.partitionId === targetEntry.partitionId)
     }));
 
     reds.push(redProof({
       id: "REQUIRED_BLOCK_DELETED",
       why: "整块声明被删掉。若删块能让上面两条红消失,这道门就只是一条建议。",
       documents, base,
-      mutate: (all) => all.map((document) => document.path !== "AGENTS.md"
+      mutate: (all) => all.map((document) => document.path !== PLATFORM_DOC
         ? document
         : {
           ...document,
@@ -382,7 +399,7 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
             + document.text.slice(platformParsed.spans[0]?.end ?? 0)
         }),
       expectCode: "REQUIRED_CLAIM_BLOCK_ABSENT",
-      names: (hits) => hits.some((finding) => finding.path === "AGENTS.md")
+      names: (hits) => hits.some((finding) => finding.path === PLATFORM_DOC)
     }));
 
     reds.push(redProof({
@@ -401,12 +418,12 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
       why: "声明块保持正确,却在正文里另写一句带具体地址的话——这正是本会话栽过的那个形状:"
         + "一处更新了,另一处没有,而两处都在同一份文档里。",
       documents, base,
-      mutate: (all) => all.map((document) => document.path !== "AGENTS.md"
+      mutate: (all) => all.map((document) => document.path !== PLATFORM_DOC
         ? document
         : { ...document, text: `${document.text}\n事件链在 ${expectedAddress} 下。\n` }),
       expectCode: "ADDRESS_STATED_OUTSIDE_A_CLAIM_BLOCK",
       names: (hits) => hits.some((finding) =>
-        finding.path === "AGENTS.md" && finding.literal === expectedAddress)
+        finding.path === PLATFORM_DOC && finding.literal === expectedAddress)
     }));
 
     reds.push(redProof({
@@ -415,12 +432,15 @@ export async function runDocTopologyProof({ probeVm = false } = {}) {
         + "一条没进 break-glass 白名单的 ssh 直驱命令必须红并点名文件与行号。"
         + "(用写动词 work-transition,避免命中 mcp-unreachable-fallback 的 status 条目。)",
       documents, base,
-      mutate: editDocument("AGENTS.md",
-        "## 三、治理入口",
-        `## 三、治理入口\n\n复核走 \`ssh tcrn-platform-dev "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs `
+      // The anchor is the claim block's own END marker rather than a section heading:
+      // headings are prose and get renamed, and this red went quiet once the canonical
+      // document's headings no longer matched the literal spelled here.
+      mutate: editDocument(PLATFORM_DOC,
+        CLAIM_BLOCK_END,
+        `${CLAIM_BLOCK_END}\n\n复核走 \`ssh tcrn-platform-dev "node /srv/tcrn/engine/tcrn-workflow/scripts/tcrn-workflow.mjs `
         + `work-transition --id work:x --status done --workspace ${expectedAddress}"\`。\n`),
       expectCode: "SSH_DIRECT_ENGINE_COMMAND_NOT_ALLOWLISTED",
-      names: (hits) => hits.some((finding) => finding.path === "AGENTS.md")
+      names: (hits) => hits.some((finding) => finding.path === PLATFORM_DOC)
     }));
   }
 

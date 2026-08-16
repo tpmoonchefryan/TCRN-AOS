@@ -228,6 +228,44 @@ export function judgeMeasurement({ entry, observation }) {
 }
 
 /**
+ * MIN-101: a bridge document is judged by where its import lands, not by matching a
+ * literal string. `@AGENTS.md` was that literal, and it encoded the topology as it stood
+ * before the container moved: the canonical prose now sits one level above the
+ * classification folder, so the correct bridge there reads `@../AGENTS.md` and the old
+ * predicate called the correct form a defect. A literal that has to be rewritten whenever
+ * the tree moves is the frozen-reference shape the platform's gate-reference convention
+ * rules out.
+ *
+ * Both invariants the registry states survive, and they are the ones that matter: the file
+ * carries exactly one import line and nothing else (so it cannot become a second canon),
+ * and that import lands on an AGENTS.md. Resolution is syntactic on purpose — this module
+ * touches no disk, which is what lets the same judgement run against literals in the test
+ * and against the real tree in the proof.
+ */
+function judgeBridgeImport(documentPath, text) {
+  const lines = text.split(/\r?\n/u).map((line) => line.trim()).filter((line) => line.length > 0);
+  if (lines.length !== 1) {
+    return { ok: false, why: "a bridge carries exactly one import line and no other prose" };
+  }
+  const line = lines[0];
+  if (!line.startsWith("@") || line.startsWith("@@") || line.length < 2) {
+    return { ok: false, why: "the single line is not a host import" };
+  }
+  const segments = documentPath.split("/").slice(0, -1).concat(line.slice(1).split("/"));
+  const resolvedSegments = [];
+  for (const segment of segments) {
+    if (segment === "" || segment === ".") continue;
+    if (segment === "..") { resolvedSegments.pop(); continue; }
+    resolvedSegments.push(segment);
+  }
+  const resolved = resolvedSegments.join("/");
+  if (!resolved.endsWith("AGENTS.md")) {
+    return { ok: false, why: "the import does not land on an AGENTS.md", resolved };
+  }
+  return { ok: true, resolved };
+}
+
+/**
  * The whole judgement.
  *
  * @param documents  [{ path, text, exists }]  — registry order, texts as read
@@ -261,13 +299,18 @@ export function judgeDocTopology({
       findings.push({ code: "CLAIM_BLOCK_MALFORMED", path: rule.path, why: bad.why, line: bad.line });
     }
 
-    if (typeof rule.expectedImport === "string" && document.text.trim() !== rule.expectedImport) {
-      findings.push({
-        code: "AGENT_IMPORT_INVALID",
-        path: rule.path,
-        expected: rule.expectedImport,
-        observed: document.text.trim()
-      });
+    if (typeof rule.expectedImport === "string") {
+      const bridge = judgeBridgeImport(rule.path, document.text);
+      if (bridge.ok !== true) {
+        findings.push({
+          code: "AGENT_IMPORT_INVALID",
+          path: rule.path,
+          expected: rule.expectedImport,
+          why: bridge.why,
+          ...(bridge.resolved === undefined ? {} : { resolved: bridge.resolved }),
+          observed: document.text.trim()
+        });
+      }
     }
 
     if (rule.forbidClaimBlock === true && parsed.present === true) {

@@ -16,7 +16,7 @@ do not trust the sentence:
 
 | 分区 | home | 真值地址 | 复核命令 |
 | --- | --- | --- | --- |
-| `TCRN-AOS` | `local` | `../.tcrn-workspace/TCRN-AOS/workspace` | `本机引擎只读: status --workspace ../.tcrn-workspace/TCRN-AOS/workspace · 真值地址 ../.tcrn-workspace/TCRN-AOS/workspace` |
+| `TCRN-AOS` | `local` | `.tcrn-workspace/TCRN-AOS/workspace` | `本机引擎只读: status --workspace .tcrn-workspace/TCRN-AOS/workspace · 真值地址 .tcrn-workspace/TCRN-AOS/workspace` |
 
 <!-- TOPOLOGY-CLAIMS:END -->
 

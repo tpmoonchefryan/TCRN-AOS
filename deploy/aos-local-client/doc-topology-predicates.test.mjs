@@ -37,7 +37,7 @@ const LITERALS = Object.freeze([
   AWAY_ADDRESS
 ]);
 
-const localAddressOf = (partitionId) => `../.tcrn-workspace/${partitionId}/workspace`;
+const localAddressOf = (partitionId) => `.tcrn-workspace/${partitionId}/workspace`;
 
 const claimRow = (partitionId, home, address, command = `run --workspace ${address}`) =>
   `| \`${partitionId}\` | \`${home}\` | \`${address}\` | \`${command}\` |`;

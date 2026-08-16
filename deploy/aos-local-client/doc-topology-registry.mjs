@@ -39,10 +39,23 @@ const ALL_PARTITIONS = Object.freeze(PARTITION_ROSTER.map((entry) => entry.parti
  */
 export const DOC_REGISTRY = Object.freeze([
   Object.freeze({
-    path: "AGENTS.md",
-    what: "平台级代理正本。五个分区的活真值现在都在这里说全。",
+    // MIN-101 / INC-200: the canonical platform prose sits at the container root, one
+    // level above the repository-bearing directory this registry resolves against.
+    // Addressed as `AGENTS.md`, this row read the classification folder's 161-byte
+    // pointer stub — a file that says in its own words that it carries no second
+    // platform policy — and then demanded it carry the claims for all five partitions.
+    path: "../AGENTS.md",
+    what: "平台级代理正本(容器根)。五个分区的活真值现在都在这里说全。",
     mustCarryClaims: true,
     expectedPartitions: ALL_PARTITIONS
+  }),
+  Object.freeze({
+    // The classification folder's pointer. It must never grow claims of its own; the
+    // containment rule is exactly the check that catches it if someone writes one.
+    path: "AGENTS.md",
+    what: "分类夹指针。转接到容器根正本，自身不得携带任何声明。",
+    mustCarryClaims: false,
+    forbidClaimBlock: true
   }),
   Object.freeze({
     path: "docs/delivery-cadence-convention.md",
