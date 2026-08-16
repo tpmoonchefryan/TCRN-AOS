@@ -19,6 +19,14 @@ import { proveCloseout } from "./closeout-chain-proof.mjs";
 import { verifyStopPactChannel } from "../../../TCRN-Workflow/tools/stop-pact/verify-channel.mjs";
 
 const AOS_ROOT = resolve(PLATFORM_ROOT, "TCRN-AOS");
+// TCRN-CROSS-INC-213. The stop-pact channel is asked for at the container root, not at
+// the classification folder or inside a project. The 2026-08-16 ruling (INC-204/INC-207)
+// retired every project- and folder-level harness — harness is built at the chosen
+// workspace root and nowhere else — so this probe was reading two addresses the
+// platform had deliberately emptied and calling the channel severed while it was
+// running. The same shape as INC-212: a ruling moved the subject, the gate kept asking
+// where it used to be.
+const CONTAINER_ROOT = resolve(PLATFORM_ROOT, "..");
 const LOCAL_ENGINE_ROOT = process.env.TCRN_AOS_ENGINE_ROOT
   ?? resolve(homedir(), ".tcrn-workflow", "tcrn-workflow");
 const MCP_SERVER = resolve(LOCAL_ENGINE_ROOT, "scripts", "tcrn-workflow-mcp.mjs");
@@ -172,10 +180,9 @@ async function closeoutProbe() {
 }
 
 function stopPactProbe() {
-  const result = verifyStopPactChannel({ projectDirs: [PLATFORM_ROOT, AOS_ROOT] });
+  const result = verifyStopPactChannel({ projectDirs: [CONTAINER_ROOT] });
   const roots = (result.roots ?? []).map((root) => ({
-    project: root.projectDir === PLATFORM_ROOT ? "platform-root"
-      : root.projectDir === AOS_ROOT ? "TCRN-AOS" : "other",
+    project: root.projectDir === CONTAINER_ROOT ? "container-root" : "other",
     ok: root.ok === true,
     reason: root.reason ?? null,
     detail: root.detail ?? null,
