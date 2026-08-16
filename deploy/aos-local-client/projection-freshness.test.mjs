@@ -9,7 +9,7 @@ import assert from "node:assert/strict";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { CODEGRAPH_PREDICATE_DISCLOSURE, SIDECARS, checkMemoryIndex, codegraphPendingVerdict, trackedSourceChanges } from "./projection-freshness.mjs";
+import { CODEGRAPH_PREDICATE_DISCLOSURE, SIDECARS, checkMemoryIndex, codegraphPendingVerdict, trackedSourceChanges, sidecar} from "./projection-freshness.mjs";
 
 test("the production CodeGraph predicate is explicitly disclosed and has the INC-104 red legs", () => {
   assert.equal(CODEGRAPH_PREDICATE_DISCLOSURE.schemaVersion, "aos.codegraph-freshness-predicate.v2");
@@ -95,4 +95,20 @@ test("the generated cockpit projection is not codegraph source lag", async () =>
   const changes = trackedSourceChanges(repo);
   assert.deepEqual(changes, ["source.mjs"], "a non-generated tracked source change still reds codegraph freshness");
   rmSync(repo, { recursive: true, force: true });
+});
+
+test("every declared threshold is written once: the report renders from the number the check reads", () => {
+  // TCRN-CROSS-INC-211. The report's `maxAge` used to be prose typed beside the literal
+  // the comparison used, so editing one left the other quietly lying — and the lying copy
+  // was the one a reader sees. Asserting the rendered string derives from the enforced
+  // number is what stops them being re-split by a later refactor.
+  const web = sidecar("web-projection");
+  assert.equal(typeof web.maxAgeDays, "number");
+  assert.equal(web.maxAge, `${web.maxAgeDays} days`,
+    "the displayed max age must render from maxAgeDays, not be typed alongside it");
+  const memory = sidecar("memory-index");
+  assert.equal(typeof memory.activityNoticeDays, "number",
+    "the activity notice threshold is declared too, even though this row never reds");
+  assert.throws(() => sidecar("no-such-sidecar"), /unknown sidecar/u,
+    "lookup is by id and fails loudly; an index lookup shifts silently when a row is added");
 });

@@ -33,11 +33,22 @@ import { fileURLToPath } from "node:url";
 export const REPO_ROOT = resolve(fileURLToPath(new URL(".", import.meta.url)), "../..");
 
 /**
- * File kinds the gate reads. Generated typed projections are published bytes
- * too: the cockpit projection carried the exact host-path leak that the old
- * evidence-only suffix set could not see.
+ * File kinds the gate reads. Two suffixes were added after a leak got through each.
+ *
+ * `.ts` because the generated cockpit projection is published bytes too, and it carried
+ * the exact host-path leak the evidence-only suffix set could not see.
+ *
+ * `.txt` and `.diff` because raw gate output is the biggest single carrier of host paths
+ * in this repository and none of it was read. Measured 2026-08-17 while staging the
+ * init-018 tree: this gate reported zero offenders while 1352 host paths sat in eight
+ * `.txt` and `.diff` files, one of them holding 1182 on its own. INC-042 recorded the
+ * blind spot and INC-046 closed the ticket without closing the suffix set; the leak that
+ * proves it was found by scanning independently, not by this gate.
+ *
+ * The general rule, since the same mistake has now been made twice: the question is not
+ * "is this file prose" but "does this file get published". Raw output gets published.
  */
-export const SCANNED_EXTENSIONS = Object.freeze([".json", ".md", ".plist", ".ts"]);
+export const SCANNED_EXTENSIONS = Object.freeze([".json", ".md", ".plist", ".ts", ".txt", ".diff"]);
 
 /**
  * Files the gate reads by kind but excludes by NAME (INC-046).

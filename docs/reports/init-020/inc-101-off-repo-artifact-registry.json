@@ -5,7 +5,7 @@
   "entries": [
     {
       "id": "qa4-inc098-workflow-candidate",
-      "path": "<local-home>/.tcrn-workflow/candidates/qa4-inc098-O0SToT",
+      "path": "~/.tcrn-workflow/candidates/qa4-inc098-O0SToT",
       "purpose": "isolated QA4 INC-098 release-candidate artifact; not an accepted helper install and not a governed workspace",
       "originBeforeRemoval": "https://github.com/tpmoonchefryan/tcrn-workflow.git",
       "originAfterRemediation": "absent",
@@ -21,6 +21,12 @@
         "scope": "all refs reachable from the candidate checkout",
         "proof": "deploy/aos-local-client/off-repo-artifact-proof.mjs scans the two QA4 topology files in every reachable commit",
         "commitsObserved": 284
+      },
+      "presence": "retired",
+      "retirement": {
+        "reason": "生命周期止于 owner-release-decision，候选树在该决定之后被清理。登记保留是为了记住它曾存在过、去向如何，不是为了断言它还在。",
+        "recordedBy": "TCRN-CROSS-INC-213",
+        "recordedOn": "2026-08-17"
       }
     }
   ]

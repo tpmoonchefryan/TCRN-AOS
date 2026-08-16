@@ -29,8 +29,13 @@ export const SIDECARS = Object.freeze([
     self: "knowledge store marker eventHighWaterDigest"
   }),
   Object.freeze({
+    // TCRN-CROSS-INC-211. `maxAgeDays` is the number the check enforces and `maxAge` is
+    // rendered from it, so the threshold is written once. It used to be typed twice —
+    // the string the report showed and the literal the comparison used — and the copy a
+    // reader sees was the one nothing kept honest.
     id: "web-projection",
-    maxAge: "7 days",
+    maxAgeDays: 7,
+    get maxAge() { return `${this.maxAgeDays} days`; },
     truth: "governed chain versions",
     self: "cockpit-data generatedAt stamp"
   }),
@@ -41,7 +46,10 @@ export const SIDECARS = Object.freeze([
     self: "codegraph index build time"
   }),
   Object.freeze({
+    // The notice threshold is declared for the same reason, even though this row can
+    // never go stale: it produces an activity notice, never a verdict (INC-058).
     id: "memory-index",
+    activityNoticeDays: 30,
     maxAge: "n/a — activity notice only, not a freshness criterion (INC-058)",
     truth: "no independent truth (the memory files ARE the datum)",
     self: "newest memory file mtime",
@@ -204,8 +212,10 @@ async function checkWebProjection() {
     return { status: "unproven", self: stamp ?? null, reason: "generatedAt or cross-project chainVersion stamp not found" };
   }
   const ageDays = (Date.now() - Date.parse(stamp)) / 86_400_000;
-  if (ageDays > 7) {
-    return { status: "stale", self: stamp, reason: `projection stamp ${ageDays.toFixed(1)} days old (max 7)` };
+  const maxAgeDays = sidecar("web-projection").maxAgeDays;
+  if (ageDays > maxAgeDays) {
+    return { status: "stale", self: stamp,
+      reason: `projection stamp ${ageDays.toFixed(1)} days old (max ${maxAgeDays})` };
   }
   // The projection is only as fresh as the chain it claims to show. Compare its stamped
   // cross-project chain version against the LIVE chain (the truth); a view built before
@@ -255,8 +265,17 @@ export function checkMemoryIndex() {
     status: "activity",
     activityOnly: true,
     self: new Date(newest).toISOString().slice(0, 10),
-    reason: ageDays > 30 ? `memory files untouched ${ageDays.toFixed(1)} days (activity notice, not freshness)` : null
+    reason: ageDays > sidecar("memory-index").activityNoticeDays
+      ? `memory files untouched ${ageDays.toFixed(1)} days (activity notice, not freshness)`
+      : null
   };
+}
+
+/** The declared row for a sidecar, by id. Index lookups silently shift when one is added. */
+export function sidecar(id) {
+  const found = SIDECARS.find((entry) => entry.id === id);
+  if (found === undefined) throw new Error(`unknown sidecar ${id}`);
+  return found;
 }
 
 export async function runProjectionFreshness() {
@@ -265,10 +284,10 @@ export async function runProjectionFreshness() {
   const codegraph = checkCodegraph();
   const memory = checkMemoryIndex();
   const rows = [
-    { sidecar: "knowledge-store", maxAge: SIDECARS[0].maxAge, ...knowledge },
-    { sidecar: "web-projection", maxAge: SIDECARS[1].maxAge, ...web },
-    { sidecar: "codegraph", maxAge: SIDECARS[2].maxAge, ...codegraph },
-    { sidecar: "memory-index", maxAge: SIDECARS[3].maxAge, ...memory }
+    { sidecar: "knowledge-store", maxAge: sidecar("knowledge-store").maxAge, ...knowledge },
+    { sidecar: "web-projection", maxAge: sidecar("web-projection").maxAge, ...web },
+    { sidecar: "codegraph", maxAge: sidecar("codegraph").maxAge, ...codegraph },
+    { sidecar: "memory-index", maxAge: sidecar("memory-index").maxAge, ...memory }
   ];
   // INC-058: the declared registry and the executed rows must agree — a sidecar added to
   // SIDECARS but not wired into the checks (or vice versa) is a silently unguarded slot.

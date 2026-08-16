@@ -7,6 +7,7 @@
 
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, statSync } from "node:fs";
+import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -68,16 +69,40 @@ export function judgeOffRepoArtifact({ registryPath = DEFAULT_REGISTRY } = {}) {
   if (!entry || typeof entry.path !== "string" || typeof entry.purpose !== "string" || typeof entry.lifecycle !== "string") {
     problems.push("registry entry must declare path, purpose, and lifecycle");
   }
-  const candidate = entry?.path;
+  // The registry names the artifact with a `~/` prefix rather than a spelled-out home:
+  // it is a published file, and a published file that carries this machine's username is
+  // the leak the hygiene gate exists to stop. Expanding here keeps it machine-resolvable
+  // without publishing who ran it (the same shape INC-042 prescribed for the deny rules).
+  const declaredPath = entry?.path;
+  const candidate = typeof declaredPath === "string" && declaredPath.startsWith("~/")
+    ? join(homedir(), declaredPath.slice(2))
+    : declaredPath;
+  // An off-repo artifact reaches the end of its lifecycle and gets cleaned up; a registry
+  // that can only say "still here" turns that into a permanent red. `presence` says which
+  // world the entry describes, and BOTH are checked — a retirement that is declared while
+  // the tree is still on disk is exactly the state this registry exists to catch, so the
+  // declaration relaxes nothing on its own (TCRN-CROSS-INC-213).
+  const presence = entry?.presence ?? "expected";
+  if (!["expected", "retired"].includes(presence)) {
+    problems.push(`unknown presence ${JSON.stringify(presence)}; expected one of expected, retired`);
+  }
+  if (presence === "retired" && typeof entry?.retirement?.reason !== "string") {
+    problems.push("a retired entry must state why, and who recorded it");
+  }
   if (typeof candidate !== "string" || !candidate.startsWith("/")) {
-    problems.push("candidate path must be absolute");
+    problems.push("candidate path must be absolute (or `~/`-prefixed)");
   } else {
     if (isPathInside(PLATFORM_ROOT, candidate)) problems.push("candidate must remain outside the platform checkout");
-    if (!existsSync(candidate)) problems.push("candidate path does not exist");
+    if (presence === "retired") {
+      if (existsSync(candidate)) problems.push("entry is declared retired but the candidate tree is still on disk");
+    } else if (!existsSync(candidate)) problems.push("candidate path does not exist");
     else if (!statSync(candidate).isDirectory()) problems.push("candidate path is not a directory");
   }
 
-  if (typeof candidate === "string" && existsSync(candidate)) {
+  // Only an entry declared live gets the live checks. A retired one whose tree is still
+  // on disk is already a finding above; running git over it would crash on the first
+  // command, because "still on disk" says nothing about it still being a repository.
+  if (presence === "expected" && typeof candidate === "string" && existsSync(candidate)) {
     const top = runGit(candidate, ["rev-parse", "--show-toplevel"], { allowFailure: true });
     if (top !== resolve(candidate)) problems.push(`candidate git top-level mismatch: ${top ?? "unreadable"}`);
     const status = runGit(candidate, ["status", "--porcelain=v1", "--untracked-files=all"], { allowFailure: true });
