@@ -35,7 +35,8 @@
     "gate:generated-encoding": "node scripts/gate-generated-encoding.mjs",
     "image:build": "node scripts/image-build.mjs",
     "k8s:apply": "node scripts/k8s-apply.mjs",
-    "k8s:smoke": "node scripts/k8s-smoke.mjs"
+    "k8s:smoke": "node scripts/k8s-smoke.mjs",
+    "k8s:persistence-check": "node scripts/k8s-persistence-check.mjs"
   },
   "dependencies": {
     "@fastify/cookie": "11.1.2",
