@@ -15,17 +15,17 @@
  */
 export const STYLESHEET = `
 :root {
-  --aos-selection-fill: rgba(28, 25, 23, .06);
-  --aos-selection-fill-hover: rgba(28, 25, 23, .032);
+  /* The ink is DERIVED from the text colour, never stated per theme.
+   *
+   * Stating it per theme is what broke it: the design system's tokens are light-only, so a
+   * media query that flipped this to the dark value put a near-white ink at 6% on a
+   * near-white surface, and the selected item became invisible on every browser whose user
+   * prefers dark. Deriving it means the ink follows whatever the tokens say, in any theme
+   * the design system grows later, with nothing here to keep in step. */
+  --aos-selection-fill: color-mix(in srgb, var(--tcrn-color-text-primary, #1c1d21) 6%, transparent);
+  --aos-selection-fill-hover: color-mix(in srgb, var(--tcrn-color-text-primary, #1c1d21) 3.2%, transparent);
   --aos-radius: 6px;
   --aos-sidebar: 216px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --aos-selection-fill: rgba(236, 234, 230, .09);
-    --aos-selection-fill-hover: rgba(236, 234, 230, .05);
-  }
 }
 
 * { box-sizing: border-box; }

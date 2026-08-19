@@ -4,6 +4,11 @@ import type pg from "pg";
 import { dispatch, isAuthenticated, type Actor } from "../../../packages/kernel/src/index.js";
 import { STYLESHEET } from "../../../apps/web/src/styles.js";
 import { buildHref, hrefResetConditions, hrefWithout } from "../../../apps/web/src/url.js";
+import { makeCall, type PageContext } from "../../../apps/web/src/ui-kit.js";
+import { PageEditPage, PageNewPage, PageRevisionsPage, PageViewPage, SpacesPage } from "../../../apps/web/src/pages/knowledge.js";
+import { DecisionsPage, DeliberationRoomPage, DeliberationsPage, GatesPage } from "../../../apps/web/src/pages/governance.js";
+import { BoardPage, CommentPage, InboxPage, SavedViewsPage, SearchPage, SubjectCommentsPage, WatchingPage } from "../../../apps/web/src/pages/collab.js";
+import { AccountPage, AccountsPage, ActivityPage, ErasurePage, ProjectOverviewPage, ProjectSettingsPage, TrashPage } from "../../../apps/web/src/pages/admin.js";
 
 export interface RenderInput {
   readonly pool: pg.Pool;
@@ -540,7 +545,7 @@ async function NewWorkItemPage(input: RenderInput, shell: ShellData): Promise<Re
   return { status: 200, body: html(h(Shell, { ...shell, children: body }), "新建工作项") };
 }
 
-async function AccountPage(input: RenderInput, shell: ShellData): Promise<RenderOutput> {
+async function AccountPage2(input: RenderInput, shell: ShellData): Promise<RenderOutput> {
   const me = await call<{ handle: string; displayName: string; kind: string; isInstanceAdmin: boolean; credential: string; projects: Array<{ projectId: string; role: string }> }>(
     input, "auth.me", {},
   );
@@ -650,6 +655,31 @@ export async function renderPage(input: RenderInput): Promise<RenderOutput> {
 
   const path = input.pathname.replace(/\/+$/, "") || "/";
 
+  // Every screen receives the same context and reads only through `call`, so a page can
+  // show exactly what the API would return and nothing else.
+  const pageContext: PageContext = {
+    pool: input.pool,
+    actor: input.actor,
+    csrf: input.csrfToken,
+    pathname: path,
+    search: input.search,
+    projects: projects.items,
+    call: makeCall(input.pool, input.actor),
+  };
+  const page = async (body: Promise<import("react").ReactNode>, title: string): Promise<RenderOutput> => ({
+    status: 200,
+    body: html(h(Shell, { ...shell, children: await body }), title),
+  });
+
+  // Signed in and asking for the login page: show where you already are rather than a
+  // 404. A dead route on the one address everybody types is worse than a redundant one.
+  if (path === "/login") {
+    return { status: 200, body: html(h(Shell, { ...shell, children: h("div", null,
+      h("h1", null, "已经登录"),
+      h("p", { className: "page-intro" }, `当前身份：${input.actor.handle}。`),
+      h("p", null, h("a", { href: "/" }, "进入我的工作")),
+    ) }), "已登录") };
+  }
   if (path === "/") return MyWorkPage(input, shell);
   if (path === "/projects") return ProjectsPage(input, shell);
   if (path === "/work-items") return WorkItemsPage(input, shell);
@@ -658,12 +688,40 @@ export async function renderPage(input: RenderInput): Promise<RenderOutput> {
     return WorkItemDetailPage(input, shell, decodeURIComponent(path.slice("/work-items/".length)));
   }
   if (path === "/account" || path === "/account/tokens" || path === "/account/password") {
-    return AccountPage(input, shell);
+    return AccountPage2(input, shell);
   }
-  if (path === "/inbox") return NotBuiltPage(shell, "收件箱", "通知收件箱尚未建成。");
-  if (path === "/board") return NotBuiltPage(shell, "看板", "看板尚未建成。");
-  if (path === "/spaces") return NotBuiltPage(shell, "知识空间", "知识空间尚未建成。");
-  if (path === "/search") return NotBuiltPage(shell, "检索", "统一检索页尚未建成。");
+
+  // Knowledge
+  if (path === "/spaces" || path.startsWith("/spaces/")) return page(SpacesPage(pageContext), "知识空间");
+  if (path === "/pages/new") return page(PageNewPage(pageContext), "新建页面");
+  if (path.endsWith("/revisions") && path.startsWith("/pages/")) return page(PageRevisionsPage(pageContext), "版本历史");
+  if (path.endsWith("/edit") && path.startsWith("/pages/")) return page(PageEditPage(pageContext), "编辑页面");
+  if (path.startsWith("/pages/")) return page(PageViewPage(pageContext), "页面");
+
+  // Governance
+  if (path.endsWith("/governance/gates")) return page(GatesPage(pageContext), "门");
+  if (path.endsWith("/governance/deliberations")) return page(DeliberationsPage(pageContext), "审议");
+  if (path.endsWith("/governance/decisions")) return page(DecisionsPage(pageContext), "决定");
+  if (path.startsWith("/governance/deliberations/")) return page(DeliberationRoomPage(pageContext), "审议室");
+
+  // Collaboration
+  if (path.startsWith("/subjects/")) return page(SubjectCommentsPage(pageContext), "讨论");
+  if (path.startsWith("/comments/")) return page(CommentPage(pageContext), "评论");
+  if (path === "/inbox") return page(InboxPage(pageContext), "收件箱");
+  if (path === "/watching") return page(WatchingPage(pageContext), "我的关注");
+  if (path === "/board") return page(BoardPage(pageContext), "看板");
+  if (path === "/views") return page(SavedViewsPage(pageContext), "保存的视图");
+  if (path === "/search") return page(SearchPage(pageContext), "检索");
+
+  // Administration and the project screens
+  if (path === "/admin/accounts") return page(AccountsPage(pageContext), "账户");
+  if (path.startsWith("/admin/accounts/")) return page(AccountPage(pageContext), "账户");
+  if (path === "/admin/erasure") return page(ErasurePage(pageContext), "抹除");
+  if (path === "/trash") return page(TrashPage(pageContext), "回收站");
+  if (path === "/activity") return page(ActivityPage(pageContext), "活动");
+  if (path.endsWith("/settings") && path.startsWith("/projects/")) return page(ProjectSettingsPage(pageContext), "项目设置");
+  if (path.startsWith("/projects/")) return page(ProjectOverviewPage(pageContext), "项目");
+
   if (path === "/error") {
     return {
       status: 500,

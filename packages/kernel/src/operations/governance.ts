@@ -362,7 +362,7 @@ export const decideGate = defineOperation({
   requires: "authenticated",
   http: { method: "POST", path: "/api/v1/gates/{gateId}/decide" },
   mcp: { tool: "aos_gate_decide" },
-  ui: { route: "/governance/gates/{gateId}", control: "gate.decide" },
+  ui: { route: "/projects/{projectId}/governance/gates", control: "gate.decide" },
   handler: async ({ client, actor }, input) => {
     const row = await loadGate(client, input.gateId);
     await requireGovernance(client, row.project_id);

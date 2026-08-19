@@ -136,15 +136,70 @@ async function main() {
     bodyMd: "这条记录存在，是为了让每一屏都有东西可渲染。",
   });
 
+  // Seed the rest of the fixtures. A route whose id placeholder has no real value gets
+  // an empty segment and 404s, and the gate would then be reporting its own missing
+  // fixture as a product defect.
+  const space = await post("space.create", { key: "GATESP", name: "Gate space", projectId: project.id });
+  const page = await post("page.create", {
+    spaceId: space.id,
+    title: "表单回放用的页面",
+    bodyMd: "这一页存在，是为了让页面相关的路由有东西可渲染。",
+  });
+  const comment = await post("comment.create", {
+    subjectType: "work_item",
+    subjectId: item.id,
+    bodyMd: "回放夹具评论。",
+  });
+
+  const governed = await post("project.create", { key: "GOV", name: "Gate governance", governanceEnabled: true });
+  const deliberation = await post("deliberation.open", {
+    projectId: governed.id,
+    type: "architecture",
+    title: "回放用的审议",
+    executionMode: "synthesis_only",
+    desiredOutcome: "夹具：由主线程综合执笔，因此声明 synthesis_only。",
+  });
+  const gate = await post("gate.create", {
+    projectId: governed.id,
+    title: "回放用的门",
+    outcomeClass: "role_decision",
+  });
+  const second = await post("admin.create_account", {
+    handle: "gatesecond",
+    displayName: "Gate second",
+    kind: "human",
+    password: "gate-second-password-1",
+  });
+
+  const substitutions = {
+    "{key}": item.key,
+    "{projectId}": project.id,
+    "{spaceId}": space.id ?? "",
+    "{pageId}": page.id ?? "",
+    "{commentId}": comment.id ?? "",
+    "{subjectType}": "work_item",
+    "{subjectId}": item.id,
+    "{deliberationId}": deliberation.id ?? "",
+    "{gateId}": gate.id ?? "",
+    "{principalId}": second.principalId ?? second.id ?? "",
+  };
+
   const routes = new Set();
+  const unsubstituted = [];
   for (const operation of allOperations()) {
     if (!operation.ui) continue;
-    routes.add(
-      operation.ui.route
-        .replace("{key}", item.key)
-        .replace("{projectId}", project.id)
-        .replace(/\{[^}]+\}/g, ""),
-    );
+    let route = operation.ui.route;
+    for (const [token, value] of Object.entries(substitutions)) {
+      if (route.includes(token) && value === "") {
+        // No fixture for this id. Reported rather than blanked, so a route the gate cannot
+        // reach is visible instead of silently passing as an empty path.
+        unsubstituted.push({ operation: operation.id, route: operation.ui.route, missing: token });
+      }
+      route = route.split(token).join(value);
+    }
+    if (route.includes("{")) continue;
+    if (route.includes("//")) continue;
+    routes.add(route);
   }
 
   // Values for the blank inputs a page renders for a human to fill in.
@@ -173,8 +228,16 @@ async function main() {
       results.push({ route, ok: false, status: page.status, action: "(GET)", reason: `the route a control declares does not render: GET returned ${page.status}` });
       continue;
     }
-    const forms = formsIn(html).filter((form) => form.method === "POST");
-    for (const form of forms) {
+    const formCount = formsIn(html).filter((form) => form.method === "POST").length;
+    for (let formIndex = 0; formIndex < formCount; formIndex += 1) {
+      // Re-read the page for every submission. Replaying several forms from one snapshot
+      // makes the second one carry a version the first already superseded, and the 409 that
+      // follows is the concurrency check working rather than a broken control.
+      const fresh = await fetch(`${BASE}${route}`, { headers: { accept: "text/html", cookie } });
+      if (!fresh.ok) break;
+      const freshForms = formsIn(await fresh.text()).filter((entry) => entry.method === "POST");
+      const form = freshForms[formIndex];
+      if (!form) break;
       // Skip the destructive ones: this gate proves controls submit, and proving delete
       // works by deleting the fixture would break every later route in the same run.
       // Also skipped: change_password, which by design revokes every session — including
@@ -235,6 +298,7 @@ async function main() {
   const report = {
     ok: failures.length === 0 && replayed > 0 && performedEnough,
     routesChecked: routes.size,
+    routesWithoutAFixture: unsubstituted,
     formsReplayed: replayed,
     performed,
     reachedValidation: validated,

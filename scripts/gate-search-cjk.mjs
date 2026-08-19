@@ -27,7 +27,7 @@ const CORPUS = [
 const CASES = [
   { q: "工单", expect: ["c1"], why: "a two-character word in a longer run" },
   { q: "管理", expect: ["c1"], why: "a two-character word in the middle of a run" },
-  { q: "知识", expect: ["c2"], why: "the head of a longer term" },
+  { q: "知识", expect: ["c1", "c2"], why: "a term in one document's title and another's body — both are hits, and expecting only one was the test being wrong rather than the analyzer" },
   { q: "版本", expect: ["c2"], why: "a term inside the title" },
   { q: "检索", expect: ["c1", "c4"], why: "a term appearing in two documents, one in body one in title" },
   { q: "中文 检索", expect: ["c4"], why: "two terms are ANDed, not ORed" },
