@@ -1,162 +1,115 @@
-<p align="center">
-  <img src="docs/brand/tcrn-aos-impression.png" alt="TCRN AOS product impression" width="720" />
-</p>
-
 <h1 align="center">TCRN AOS</h1>
 
 <p align="center">
-  Agent Operations System: a local-first operations spine for agent-assisted work, proof, review, and bounded readback.
+  Work items and a knowledge base, for people and agents on the same team.
+  Runs on one node, owns its own data, and needs nothing else at runtime.
 </p>
 
 <p align="center">
   <a href="README.md">English</a>
   · <a href="README.zh-CN.md">简体中文</a>
-  · <a href="README.ja.md">日本語</a>
-  · <a href="README.ko.md">한국어</a>
-  · <a href="README.fr.md">Français</a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/tpmoonchefryan/TCRN-AOS"><img alt="GitHub repository" src="https://img.shields.io/badge/GitHub-TCRN--AOS-24292f" /></a>
   <img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-5865d8" />
-  <img alt="Node.js 24" src="https://img.shields.io/badge/Node.js-24-3c873a" />
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-local%20packages-3178c6" />
-  <img alt="Local first, no live dispatch" src="https://img.shields.io/badge/posture-local--first%20%2F%20no%20live%20dispatch-4f46e5" />
+  <img alt="Node.js 24" src="https://img.shields.io/badge/Node.js-24.16-3c873a" />
+  <img alt="PostgreSQL 18" src="https://img.shields.io/badge/PostgreSQL-18-336791" />
+  <img alt="single-node k3s" src="https://img.shields.io/badge/deploys%20on-single--node%20k3s-2f6b45" />
 </p>
 
-## What This Repo Is
+## What it is
 
-TCRN AOS, the Agent Operations System, is a local-first operations spine for
-agent-assisted work. It models work as projects, initiatives, epics,
-story-grain tickets, assignments, evidence links, gate work orders, comments,
-and audit events, then exposes bounded MCP-style methods and browser readback
-surfaces for reviewable coordination.
+A Jira-and-Confluence-class system you can run yourself: projects, a work-item tree, twelve
+relation types, labels, boards, comments, notifications, saved views, knowledge spaces with
+page revisions, and an opt-in governance layer of gates, deliberations and decisions.
 
-This repository is prepared for public source review and local experimentation.
-It is not a hosted service, not an autonomous dispatch system, and not a claim
-that any TCRN product milestone, runtime, release, owner-facing workflow, or
-final acceptance state is complete.
+Three surfaces — a REST API, an MCP service, and a server-rendered web interface — are all
+generated from one registry of operations. That is not an implementation detail: it is what
+lets the build check, rather than promise, that **a person can do by hand everything an agent
+can do**.
 
-## Local-First Boundaries
+## What makes it different
 
-- AOS stores operational proof data in local SQLite databases or in-memory stores.
-- Runtime profile roots are explicit and marker-checked before SQLite opens.
-- Browser readback is scoped to `/api/work/readback` ticket and audit views.
-- MCP transport methods are allowlisted; generic gateway, raw DB export, and
-  live dispatch surfaces are intentionally absent.
-- Audit and receipt payloads are metadata-oriented and redact sensitive detail.
-- Codex adapter proof paths are dry-run/no-send unless a separately reviewed
-  live-dispatch lane is implemented and accepted.
-- Workflow governance, thread registry truth, release authority, and owner
-  intent gates remain outside this repository.
-- **Nothing is published on the LAN.** The operations cockpit runs as a resident
-  service on the truth host bound to `127.0.0.1`, reachable only through an SSH
-  tunnel (CONF-007 D7). The one LAN surface this platform ever had — a read-only
-  static mirror at `aos.tcrn.lan` — was retired under `TCRN-AOS-STORY-134` once
-  that resident cockpit existed, and its route was removed rather than repointed:
-  a LAN ingress in front of a loopback-bound write face is an access-boundary
-  decision, not a redeployment. See `deploy/aos-mirror-retirement/`.
+**No JavaScript.** Not "progressively enhanced" — there is no script tag on any page. The
+interface changes things by submitting ordinary forms, so it is an API client by
+construction rather than by intention.
 
-## Architecture
+**The claim is a test.** `gate:parity-registry` asserts the registry, the OpenAPI document
+and the MCP tool list are the same set in both directions. `gate:forms` boots the real
+server, opens every route a control declares, and replays every form it finds. `gate:human-only`
+runs a whole project through those forms with zero agent principals in the database and the
+MCP surface never contacted. If a screen goes missing, the build goes red.
 
-```text
-apps/
-  api/       Local HTTP shell and browser-safe readback facade
-  web/       Static React work/readback shell
-packages/
-  domain/    AOS records, store, policies, idempotency, and redaction
-  db/        SQLite repository, migrations, runtime profile validation
-  mcp-gateway/
-             Domain method dispatcher and method-level idempotency
-  mcp-server/
-             Local JSON-line stdio/runtime transport
-  adapter-codex/
-             Dry-run Codex dispatch and terminal-return ingestion helpers
-scripts/     Proof, validation, smoke, and source-export helpers
-docs/        Architecture, security, runtime, and proof notes
-```
+**Three tiers of mutability, enforced by the database.** Work items and pages are editable
+and reopenable, with every prior value kept in a revision row. The activity stream and the
+revision tables are append-only, protected by triggers rather than by discipline.
+Deliberation positions, minutes, gate decisions and decisions are immutable and corrected
+only by writing a successor — a defeated position stays on the record.
 
-## Requirements
+**Erasure without breaking the audit trail.** The activity stream records who changed which
+*field names* and points at the revision row; it never stores the values. Erasing a person's
+data deletes revision rows through one named, journalled path, and the immutable stream stays
+whole. The journal's own trigger has no exemption, so a purge cannot erase its own trace.
 
-- Node.js compatible with the checked `packageManager` field.
-- `pnpm`.
-- A sibling checkout of `TCRN-Design-System` when installing locally, because
-  this package uses local file dependencies:
+**Chinese search that works.** `to_tsvector` treats an unbroken run of Chinese as a single
+token, so a two-character query — the dominant Chinese word form — matches nothing. The
+analyzer emits overlapping bigrams for CJK and ordinary lexemes for Latin, and the same
+function runs on write and on query so the two cannot drift. `gate:search-cjk` holds the
+corpus and also asserts the naive behaviour still fails, so the reason this exists stays
+true or goes red.
 
-```text
-TCRN Platform/
-  TCRN-AOS/
-  TCRN-Design-System/
-```
-
-## Quick Start
+## Run it
 
 ```sh
 pnpm install
+pnpm db:up          # Postgres 18 in Docker, on port 55432
 pnpm build
-pnpm verify:fast
-pnpm service:start
+AOS_BIND_HOST=127.0.0.1 AOS_DATABASE_URL=postgres://postgres:devpass@127.0.0.1:55432/aos pnpm start
 ```
 
-The local service serves the static shell and API readbacks. It does not start a
-remote runtime, external queue, live thread dispatch, publication flow, or owner
-intent executor.
+On first boot it creates one administrator and prints the password once. There are no
+default credentials.
 
-## Useful Commands
+For single-node k3s, see **[deploy/BOOTSTRAP.md](deploy/BOOTSTRAP.md)** — six commands, each
+of them run rather than described.
+
+## Verify it
 
 ```sh
-pnpm typecheck
-pnpm test
-pnpm verify:fast
 pnpm verify
-pnpm audit:licenses
-pnpm source-export:proof
-pnpm service:smoke
-pnpm phase3:readback-api-proof
-pnpm phase3:frontend-readback-proof
-pnpm p1:durable-runtime-profile-proof
 ```
 
-`pnpm verify` runs the broader local proof suite. Some proof commands create
-route-owned temporary storage and clean it up; durable local profile proofs are
-explicit about retention and no-overclaim boundaries.
+Fifteen steps: types, the generated migration module, the build, the tests, licences, and
+ten gates — registry parity, no side door into the store, the OpenAPI document, the MCP
+handshake, form replay, the by-hand scenario, Chinese search, absence of the sibling
+repositories, self-sufficiency, and generated-file encoding.
 
-## Security and Privacy Posture
+`pnpm verify:fast` skips the gates that need Docker.
 
-- Do not commit SQLite runtime databases, raw DB dumps, credentials, private
-  evidence payloads, local absolute path dumps, browser/keychain material, shell
-  history, or raw scanner output.
-- Public source export excludes local evidence receipts and generated runtime
-  artifacts by construction.
-- Sensitive content checks are implemented in domain redaction helpers and in
-  source-export/publication proof scripts.
-- Runtime profile validation denies unsafe roots, symlinks, traversal, stale
-  markers, and non-direct-child database paths before SQLite opens.
-- Public repository publication should use a sanitized current-tree export
-  rather than legacy local history unless that history has been independently
-  proven clean.
-- The cockpit stores three display preferences in cookies so the server can
-  render the first byte in the reader's own language and theme: side-nav
-  collapse (`tcrn-aos-side-nav-collapsed`), theme (`tcrn-aos-theme`), and
-  locale (`tcrn-aos-locale`). Each lives for one year, is `SameSite=Lax`,
-  carries `Secure` on HTTPS, and holds a preference value only — no identifier,
-  no credential, nothing personal. The same values are mirrored in
-  `localStorage`; clearing either store simply returns the defaults.
+## Layout
 
-## Docs
+```text
+packages/store    Postgres access, migrations codegen'd into the artifact, ids, text analysis
+packages/kernel   the operation registry, dispatch, authorization, audit, and all domain logic
+packages/mcp      the MCP server, generated from the registry
+apps/server       Fastify: REST, the MCP endpoint, and server-rendered pages
+apps/web          the interface — pages, the shared kit, the stylesheet
+deploy/k8s        Kustomize base and a single-node overlay
+scripts           the gates
+```
 
-- [Architecture](docs/architecture.md)
-- [Security boundaries](docs/security-boundaries.md)
-- [Persistent runtime storage prerequisite](docs/persistent-runtime-storage-prerequisite.md)
-- [Source export prerequisite](docs/source-export-prerequisite.md)
-- [Gateway adapter proof](docs/gateway-adapter-proof.md)
-- [Runtime proof](docs/runtime-proof.md)
-- [Retired proof scripts](docs/retired-proof-scripts.md) — what was removed, why, and
-  where each property it guarded is guarded now
-- [The resident cockpit](deploy/aos-resident-cockpit/README.md) — how and where the
-  product actually runs
-- [Retiring the mirror segment](deploy/aos-mirror-retirement/README.md)
+## What it deliberately does not have
 
-## License
+No rich-text editor — page bodies are Markdown in a textarea, rendered as text. No email or
+webhooks; notifications are in-app, because SMTP would be an external service at runtime. No
+drag-and-drop board; the same move is a select and a button, which is what keeps the board
+usable without scripting. No multi-tenancy, no custom roles, no identity provider. More than
+one replica needs a shared-write volume or an object store for attachments — everything else
+already lives in Postgres.
+
+It has no dependency on any other repository in this platform, and `gate:absence` renames
+them aside and runs the suite to keep that true.
+
+## Licence
 
 Apache-2.0. See [LICENSE](LICENSE).
