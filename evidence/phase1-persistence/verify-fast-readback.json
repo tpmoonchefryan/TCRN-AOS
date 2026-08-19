@@ -1,8 +1,0 @@
-{
-  "command": "pnpm verify:fast",
-  "disposition": "route_validation_command_recorded_separately_after_phase1_persistence_proof",
-  "noAcceptanceClaim": true,
-  "ok": true,
-  "proofScript": "phase1:persistence-proof",
-  "routeValidationRequired": true
-}

@@ -1,0 +1,127 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aos-attachments
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aos-config
+data:
+  AOS_BIND_HOST: "0.0.0.0"
+  AOS_PORT: "8080"
+  AOS_INSTANCE_NAME: "aos"
+  AOS_LOG_LEVEL: "info"
+  # Empty means no Host allow-list. Stated here rather than defaulted in code, because
+  # which hostnames are legitimate is a deployment's knowledge, not the application's.
+  AOS_ALLOWED_HOSTS: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aos-app
+spec:
+  selector:
+    app: aos-app
+  ports:
+    - port: 80
+      targetPort: 8080
+      name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aos-app
+spec:
+  replicas: 1
+  # Recreate, not RollingUpdate. The constraint is the attachment volume, which is
+  # ReadWriteOnce — two pods cannot hold it at once. Everything else (sessions,
+  # idempotency, all state) lives in Postgres, so the way to more than one replica is an
+  # RWX volume or an object-store adapter, and no schema change.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: aos-app
+  template:
+    metadata:
+      labels:
+        app: aos-app
+    spec:
+      securityContext:
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+      containers:
+        - name: aos
+          image: tcrn-aos:dev
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: aos-config
+          env:
+            - name: AOS_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: aos-secrets
+                  key: database-url
+            - name: AOS_BOOTSTRAP_ADMIN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: aos-secrets
+                  key: bootstrap-admin-user
+            - name: AOS_BOOTSTRAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: aos-secrets
+                  key: bootstrap-admin-password
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: blobs
+              mountPath: /data/blobs
+            - name: tmp
+              mountPath: /tmp
+          # Liveness touches the process only. A database blip must not restart-loop the
+          # app: the app is fine, its dependency is not, and restarting it fixes nothing.
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            periodSeconds: 10
+          # Readiness checks the database AND that the applied schema matches this image,
+          # which is what keeps traffic off a pod whose migration has not finished.
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8080
+            periodSeconds: 5
+          # A first boot runs every migration before it can answer anything. Thirty
+          # attempts at two seconds is five minutes of headroom.
+          startupProbe:
+            httpGet:
+              path: /readyz
+              port: 8080
+            failureThreshold: 150
+            periodSeconds: 2
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+      volumes:
+        - name: blobs
+          persistentVolumeClaim:
+            claimName: aos-attachments
+        - name: tmp
+          emptyDir: {}

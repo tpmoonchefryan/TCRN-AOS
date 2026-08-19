@@ -1,0 +1,20 @@
+# A plain Ingress, not a Traefik IngressRoute CRD.
+#
+# k3s ships Traefik and it serves plain Ingress objects, so this manifest applies
+# unchanged to any cluster with any ingress controller. Depending on the CRD would tie
+# the deployment to the one controller k3s happens to bundle today.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aos
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: aos-app
+                port:
+                  number: 80
