@@ -11,6 +11,7 @@
     "gate:openapi",
     "gate:mcp-handshake",
     "gate:forms",
+    "gate:ds-adoption",
     "gate:human-only",
     "gate:search-cjk",
     "gate:absence",

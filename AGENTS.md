@@ -26,7 +26,7 @@ process entrypoints, which create the pool before any request exists.
 
 ## Working here
 
-- `pnpm db:up` then `pnpm verify` — the full chain, fifteen steps. `pnpm verify:fast` skips
+- `pnpm db:up` then `pnpm verify` — the full chain, seventeen steps. `pnpm verify:fast` skips
   the gates that need Docker.
 - Migrations are `.sql` files under `packages/store/migrations/`, codegen'd into a TypeScript
   module so the running artifact carries its own schema. Run `pnpm codegen:migrations` after

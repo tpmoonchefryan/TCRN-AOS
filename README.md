@@ -91,10 +91,10 @@ an operator-run proof rather than part of `pnpm verify`.
 pnpm verify
 ```
 
-Sixteen steps: types, the generated migration module, the build, the tests, licences, and
-eleven gates — the verify-step manifest, registry parity, no side door into the store, the OpenAPI
-document, the MCP handshake, form replay, the by-hand scenario, Chinese search, absence of the sibling
-repositories, self-sufficiency, and generated-file encoding.
+Seventeen steps: types, the generated migration module, the build, the tests, licences, and
+twelve gates — the verify-step manifest, registry parity, no side door into the store, the OpenAPI
+document, the MCP handshake, form replay, Design System adoption, the by-hand scenario, Chinese
+search, absence of the sibling repositories, self-sufficiency, and generated-file encoding.
 
 `pnpm verify:fast` skips the gates that need Docker.
 

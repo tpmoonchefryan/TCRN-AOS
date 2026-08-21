@@ -74,8 +74,9 @@ AOS_BIND_HOST=127.0.0.1 AOS_DATABASE_URL=postgres://postgres:devpass@127.0.0.1:5
 pnpm verify
 ```
 
-十五步：类型、生成的迁移模块、构建、测试、许可证，以及十道门——注册表同权、无侧门、OpenAPI 文档、
-MCP 握手、表单回放、纯人工通关、中文检索、兄弟仓缺席、自足性、生成物编码。
+十七步：类型、生成的迁移模块、构建、测试、许可证，以及十二道门——验证名册、注册表同权、无侧门、
+OpenAPI 文档、MCP 握手、表单回放、Design System 接入、纯人工通关、中文检索、兄弟仓缺席、自足性、
+生成物编码。
 
 `pnpm verify:fast` 跳过需要 Docker 的门。
 
