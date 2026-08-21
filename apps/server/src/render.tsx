@@ -14,6 +14,7 @@ export interface RenderInput {
   readonly pool: pg.Pool;
   readonly actor: Actor;
   readonly csrfToken: string;
+  readonly loginCsrfToken: string;
   readonly mustChangePassword: boolean;
   readonly pathname: string;
   readonly search: URLSearchParams;
@@ -202,6 +203,7 @@ function LoginPage(input: RenderInput): RenderOutput {
     h("p", { className: "page-intro" }, "登录以继续。"),
     input.error ? h("div", { className: "error" }, input.error.message) : null,
     h("form", { method: "POST", action: "/api/v1/commands/auth.login" },
+      h("input", { type: "hidden", name: "_csrf", value: input.loginCsrfToken }),
       h("input", { type: "hidden", name: "_redirect", value: "/" }),
       h(Field, { label: "账号" }, h("input", { type: "text", name: "handle", autoFocus: true, required: true })),
       h(Field, { label: "口令" }, h("input", { type: "password", name: "password", required: true })),

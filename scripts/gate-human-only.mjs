@@ -28,7 +28,7 @@ function* walk(node) {
 async function getPage(path, cookie) {
   const response = await fetch(`${BASE}${path}`, { headers: { accept: "text/html", cookie } });
   const html = await response.text();
-  return { status: response.status, html, doc: parse(html) };
+  return { status: response.status, html, doc: parse(html), setCookie: response.headers.get("set-cookie") ?? "" };
 }
 
 /** Find a form by the operation its action names, and read its rendered fields. */
@@ -124,9 +124,10 @@ async function main() {
     console.log(JSON.stringify({ ok: false, steps }, null, 2));
     process.exit(1);
   }
+  const loginCookie = loginPage.setCookie.split(";")[0] ?? "";
   const loginResponse = await fetch(`${BASE}${loginForm.action}`, {
     method: "POST",
-    headers: { "content-type": "application/x-www-form-urlencoded", accept: "text/html" },
+    headers: { "content-type": "application/x-www-form-urlencoded", accept: "text/html", cookie: loginCookie },
     body: new URLSearchParams({ ...Object.fromEntries(loginForm.fields), handle: "person", password: "person-password-1234" }),
     redirect: "manual",
   });

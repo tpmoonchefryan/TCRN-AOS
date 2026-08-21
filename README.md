@@ -103,9 +103,10 @@ scripts           the gates
 No rich-text editor — page bodies are Markdown in a textarea, rendered as text. No email or
 webhooks; notifications are in-app, because SMTP would be an external service at runtime. No
 drag-and-drop board; the same move is a select and a button, which is what keeps the board
-usable without scripting. No multi-tenancy, no custom roles, no identity provider. More than
-one replica needs a shared-write volume or an object store for attachments — everything else
-already lives in Postgres.
+usable without scripting. No multi-tenancy, no custom roles, no identity provider. The base
+Kubernetes manifest is deliberately a local HTTP demo, so it sets `AOS_SECURE_COOKIES=false`;
+an HTTPS production overlay must set it to `true`. More than one replica needs a shared-write
+volume or an object store for attachments — everything else already lives in Postgres.
 
 It has no dependency on any other repository in this platform, and `gate:absence` renames
 them aside and runs the suite to keep that true.

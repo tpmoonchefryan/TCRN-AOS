@@ -11,6 +11,7 @@ import {
   dispatch,
   getOperation,
   hostAllowed,
+  newOpaqueToken,
   normaliseError,
   SECURITY_HEADERS,
   type Actor,
@@ -19,6 +20,7 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import { createMcpServer } from "../../../packages/mcp/src/server.js";
 import { buildOpenApi } from "./openapi.js";
 import { renderPage } from "./render.js";
+import { isLocalRedirect, LoginRateLimiter } from "./security.js";
 
 export interface AppOptions {
   readonly pool: pg.Pool;
@@ -34,11 +36,14 @@ export interface AppOptions {
 }
 
 const SESSION_COOKIE = "aos_session";
+const LOGIN_CSRF_COOKIE = "aos_login_csrf";
+const loginRateLimiter = new LoginRateLimiter();
 
 declare module "fastify" {
   interface FastifyRequest {
     actor: Actor;
     csrfSecret: string | null;
+    loginCsrfSecret: string | null;
     mustChangePassword: boolean;
   }
 }
@@ -64,6 +69,7 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
   // pair over per-request storage, with an anonymous default until authentication runs.
   const kActor = Symbol("aos.actor");
   const kCsrf = Symbol("aos.csrf");
+  const kLoginCsrf = Symbol("aos.loginCsrf");
   const kMustChange = Symbol("aos.mustChangePassword");
   const slots = (request: unknown): Record<symbol, unknown> => request as Record<symbol, unknown>;
   app.decorateRequest("actor", {
@@ -73,6 +79,10 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
   app.decorateRequest("csrfSecret", {
     getter(this: FastifyRequest) { return (slots(this)[kCsrf] as string | null | undefined) ?? null; },
     setter(this: FastifyRequest, value: string | null) { slots(this)[kCsrf] = value; },
+  });
+  app.decorateRequest("loginCsrfSecret", {
+    getter(this: FastifyRequest) { return (slots(this)[kLoginCsrf] as string | null | undefined) ?? null; },
+    setter(this: FastifyRequest, value: string | null) { slots(this)[kLoginCsrf] = value; },
   });
   app.decorateRequest("mustChangePassword", {
     getter(this: FastifyRequest) { return (slots(this)[kMustChange] as boolean | undefined) ?? false; },
@@ -99,9 +109,10 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
   });
 
   // Identity comes from a credential, never from request content.
-  app.addHook("preHandler", async (request) => {
+  app.addHook("preHandler", async (request, reply) => {
     request.actor = ANONYMOUS;
     request.csrfSecret = null;
+    request.loginCsrfSecret = request.cookies[LOGIN_CSRF_COOKIE] ?? null;
     request.mustChangePassword = false;
 
     const authorization = request.headers.authorization;
@@ -119,6 +130,21 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
         request.actor = resolved.actor;
         request.csrfSecret = resolved.csrfSecret;
         request.mustChangePassword = resolved.mustChangePassword;
+      }
+    }
+
+    const path = new URL(request.url, "http://internal").pathname;
+    if (request.method === "GET" && (path === "/login" || path === "/") && request.actor.principalId === "") {
+      const token = request.loginCsrfSecret ?? newOpaqueToken();
+      request.loginCsrfSecret = token;
+      if (!request.cookies[LOGIN_CSRF_COOKIE]) {
+        reply.setCookie(LOGIN_CSRF_COOKIE, token, {
+          httpOnly: true,
+          sameSite: "lax",
+          secure: options.secureCookies,
+          path: "/",
+          maxAge: 10 * 60,
+        });
       }
     }
   });
@@ -139,7 +165,7 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
       }
       return { ok: true, schemaVersion: applied, version: options.version };
     } catch (error) {
-      return reply.status(503).send({ ok: false, reasonCode: "database_unreachable", message: (error as Error).message });
+      return reply.status(503).send({ ok: false, reasonCode: "database_unreachable" });
     }
   });
 
@@ -200,12 +226,27 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
       });
     }
 
+    const redirectTo = typeof input._redirect === "string" ? input._redirect : null;
+    if (typeof input._redirect === "string" && !isLocalRedirect(input._redirect)) {
+      return reply.status(400).send({
+        ok: false,
+        reasonCode: "validation_failed",
+        message: "The redirect must be a local path",
+        detail: { field: "_redirect" },
+      });
+    }
+
     // A browser form post must prove it came from our own page. An API caller presenting
     // a bearer token has no ambient credential to abuse, so CSRF does not apply to it.
     const isBrowserSession = request.actor.credential === "session" && request.actor.principalId !== "";
-    if (isBrowserSession && operation.kind === "command") {
+    const isBrowserLogin = operationId === "auth.login" && (
+      wantsHtml(request)
+      || String(request.headers["content-type"] ?? "").split(";", 1)[0] === "application/x-www-form-urlencoded"
+    );
+    if ((isBrowserSession || isBrowserLogin) && operation.kind === "command") {
       const submitted = (input._csrf ?? (request.body as Record<string, unknown> | undefined)?._csrf) as unknown;
-      if (!csrfOk(request.csrfSecret ?? "", submitted)) {
+      const secret = isBrowserLogin ? request.loginCsrfSecret : request.csrfSecret;
+      if (!csrfOk(secret ?? "", submitted)) {
         return reply.status(403).send({
           ok: false,
           reasonCode: "csrf_failed",
@@ -216,7 +257,13 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
       const origin = request.headers.origin;
       if (typeof origin === "string" && origin.length > 0) {
         const host = request.headers.host ?? "";
-        if (!origin.endsWith(`//${host}`)) {
+        let sameOrigin = false;
+        try {
+          sameOrigin = new URL(origin).host === host;
+        } catch {
+          sameOrigin = false;
+        }
+        if (!sameOrigin) {
           return reply.status(403).send({
             ok: false,
             reasonCode: "csrf_failed",
@@ -227,19 +274,39 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
       }
     }
 
-    const redirectTo = typeof input._redirect === "string" ? input._redirect : null;
     const cleaned = { ...input };
     delete cleaned._csrf;
     delete cleaned._redirect;
 
     const idempotencyKey = request.headers["idempotency-key"];
-    const result = await dispatch(
-      options.pool,
-      operationId,
-      cleaned,
-      request.actor,
-      typeof idempotencyKey === "string" ? { idempotencyKey } : {},
-    );
+    const loginContext = operationId === "auth.login" && typeof cleaned.handle === "string"
+      ? { source: request.ip, handle: cleaned.handle }
+      : null;
+    if (loginContext && loginRateLimiter.isBlocked(loginContext.source, loginContext.handle)) {
+      return reply.status(429).send({
+        ok: false,
+        reasonCode: "rate_limited",
+        message: "Too many failed sign-in attempts; try again later",
+        detail: {},
+      });
+    }
+
+    let result;
+    try {
+      result = await dispatch(
+        options.pool,
+        operationId,
+        cleaned,
+        request.actor,
+        typeof idempotencyKey === "string" ? { idempotencyKey } : {},
+      );
+    } catch (error) {
+      if (loginContext && (error as { reasonCode?: string }).reasonCode === "unauthenticated") {
+        loginRateLimiter.recordFailure(loginContext.source, loginContext.handle);
+      }
+      throw error;
+    }
+    if (loginContext) loginRateLimiter.recordSuccess(loginContext.source, loginContext.handle);
 
     // Login is the one command that mints a browser credential; the cookie is set here
     // rather than in the operation, which knows nothing about transports.
@@ -252,6 +319,7 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
         path: "/",
         maxAge: 60 * 60 * 24 * 14,
       });
+      reply.clearCookie(LOGIN_CSRF_COOKIE, { path: "/" });
     }
     if (operationId === "auth.logout") {
       reply.clearCookie(SESSION_COOKIE, { path: "/" });
@@ -271,6 +339,7 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
         pool: options.pool,
         actor: request.actor,
         csrfToken: request.csrfSecret ?? "",
+        loginCsrfToken: request.loginCsrfSecret ?? "",
         mustChangePassword: request.mustChangePassword,
         pathname: "/result",
         search: new URLSearchParams(),
@@ -320,6 +389,7 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
       pool: options.pool,
       actor: request.actor,
       csrfToken: request.csrfSecret ?? "",
+      loginCsrfToken: request.loginCsrfSecret ?? "",
       mustChangePassword: request.mustChangePassword,
       pathname: url.pathname,
       search: url.searchParams,
@@ -335,6 +405,7 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
         pool: options.pool,
         actor: request.actor,
         csrfToken: request.csrfSecret ?? "",
+        loginCsrfToken: request.loginCsrfSecret ?? "",
         mustChangePassword: request.mustChangePassword,
         pathname: "/error",
         search: new URLSearchParams(),

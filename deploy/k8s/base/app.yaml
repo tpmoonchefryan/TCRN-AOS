@@ -18,6 +18,9 @@ data:
   AOS_PORT: "8080"
   AOS_INSTANCE_NAME: "aos"
   AOS_LOG_LEVEL: "info"
+  # The base manifest serves local HTTP for the demo. Production overlays must provide
+  # TLS and set this to true; keeping the choice explicit prevents a silent insecure default.
+  AOS_SECURE_COOKIES: "false"
   # Empty means no Host allow-list. Stated here rather than defaulted in code, because
   # which hostnames are legitimate is a deployment's knowledge, not the application's.
   AOS_ALLOWED_HOSTS: ""
@@ -119,6 +122,8 @@ spec:
             requests:
               memory: 256Mi
               cpu: 100m
+            limits:
+              cpu: 500m
       volumes:
         - name: blobs
           persistentVolumeClaim:

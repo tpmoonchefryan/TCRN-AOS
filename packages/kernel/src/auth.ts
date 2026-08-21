@@ -23,6 +23,11 @@ const SCRYPT_R = 8;
 const SCRYPT_P = 1;
 const KEY_LENGTH = 64;
 
+// Keep a real PHC for the missing-account branch. Passing null to verifyPassword used to
+// return before scrypt ran, making account enumeration a timing oracle.
+const DUMMY_PASSWORD_PHC =
+  "scrypt$32768$8$1$YW9zLWR1bW15LXNhbHQtMQ==$15DrRliawxRUHymvhVA4rfuV2IjOFpvofocTakoeuZq7RQ1xs0MflgW2xLL51tr6lu8RqnG6wjJZC1IIIwBcJA==";
+
 export async function hashPassword(password: string): Promise<string> {
   const salt = randomBytes(16);
   const derived = await scrypt(password, salt, KEY_LENGTH, {
@@ -186,9 +191,9 @@ export async function authenticatePassword(
     [handle],
   );
   const row = result.rows[0];
-  // Verify against a dummy hash when the account does not exist, so a missing account and
-  // a wrong password take the same time to answer.
-  const ok = await verifyPassword(password, row?.password_phc ?? null);
+  // Verify against a fixed dummy hash when the account does not exist, so a missing account
+  // and a wrong password take the same time to answer.
+  const ok = await verifyPassword(password, row?.password_phc ?? DUMMY_PASSWORD_PHC);
   if (!row || !ok || row.disabled_at) {
     fail("unauthenticated", "That handle and password do not match an account");
   }

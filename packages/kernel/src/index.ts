@@ -28,6 +28,7 @@ export {
   csrfOk,
   hashPassword,
   issueSession,
+  newOpaqueToken,
   revokeSessionById,
   sha256,
 } from "./auth.js";
