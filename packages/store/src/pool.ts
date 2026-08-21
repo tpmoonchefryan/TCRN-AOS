@@ -40,6 +40,15 @@ export function createPool(config: StoreConfig): pg.Pool {
   return pool;
 }
 
+/** Migrations use their own single connection without the request-pool statement timeout. */
+export function createMigrationPool(config: StoreConfig): pg.Pool {
+  return new pg.Pool({
+    connectionString: config.connectionString,
+    max: 1,
+    application_name: "aos-migrations",
+  });
+}
+
 /**
  * Run a unit of work in one transaction.
  *

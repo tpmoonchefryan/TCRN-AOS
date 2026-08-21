@@ -8,7 +8,7 @@ import { makeCall, type PageContext } from "../../../apps/web/src/ui-kit.js";
 import { PageEditPage, PageNewPage, PageRevisionsPage, PageViewPage, SpacesPage } from "../../../apps/web/src/pages/knowledge.js";
 import { DecisionsPage, DeliberationRoomPage, DeliberationsPage, GatesPage } from "../../../apps/web/src/pages/governance.js";
 import { BoardPage, CommentPage, InboxPage, SavedViewsPage, SearchPage, SubjectCommentsPage, WatchingPage } from "../../../apps/web/src/pages/collab.js";
-import { AccountPage, AccountsPage, ActivityPage, ErasurePage, ProjectOverviewPage, ProjectSettingsPage, TrashPage } from "../../../apps/web/src/pages/admin.js";
+import { AccountPage, AccountsPage, ActivityPage, ErasurePage, ProjectOverviewPage, ProjectSettingsPage, PurgesPage, TrashPage } from "../../../apps/web/src/pages/admin.js";
 
 export interface RenderInput {
   readonly pool: pg.Pool;
@@ -795,6 +795,7 @@ export async function renderPage(input: RenderInput): Promise<RenderOutput> {
   if (path === "/admin/accounts") return page(AccountsPage(pageContext), "账户");
   if (path.startsWith("/admin/accounts/")) return page(AccountPage(pageContext), "账户");
   if (path === "/admin/erasure") return page(ErasurePage(pageContext), "抹除");
+  if (path === "/admin/purges") return page(PurgesPage(pageContext), "抹除台账");
   if (path === "/trash") return page(TrashPage(pageContext), "回收站");
   if (path === "/activity") return page(ActivityPage(pageContext), "活动");
   if (path.endsWith("/settings") && path.startsWith("/projects/")) return page(ProjectSettingsPage(pageContext), "项目设置");

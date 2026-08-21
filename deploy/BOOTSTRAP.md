@@ -19,7 +19,7 @@ k3d cluster create aos --agents 0 -p "8080:80@loadbalancer" --wait
 
 已有 k3s 的机器跳过这步，把下文的 `localhost:8080` 换成你的 ingress 地址。
 
-核对（`local-path` 是 k3s 自带的存储类，两个 PVC 都用它）：
+核对（`local-path` 是 k3s 自带的存储类，Postgres PVC 使用它）：
 
 ```bash
 kubectl get nodes && kubectl get storageclass
@@ -122,15 +122,19 @@ kubectl -n aos exec -it aos-postgres-0 -- sh -c '
 通行的写法挂到 `/data`，会得到一个正常启动、正常服务、**每次重启把整个数据库丢光且全程不报错**
 的部署。这是本次部署里后果最严重的一处，清单里写了同样的注解。
 
-**`replicas: 1` 且 `strategy: Recreate`，因此每次发布有几秒不可用。** 限制来自附件卷是
-ReadWriteOnce，不是数据库——会话、幂等记录和其余状态都在 Postgres 里。要多副本，换 RWX 卷或
-接对象存储适配器即可，不需要改 schema。
+**默认 `replicas: 1`。** 这是单节点示例的容量选择；当前产品没有附件上传路径，也没有应用 blob
+卷。已实现的状态都在 Postgres，若要扩容，先按你的集群容量与发布策略调整副本数并验证数据库
+连接容量。
 
 **存活探针只探进程，就绪探针才碰数据库。** 数据库抖一下不该让应用反复重启：应用没坏，坏的是
 它的依赖，重启它什么也修不好。
 
 **`AOS_ALLOWED_HOSTS` 默认为空，即不校验 Host 头。** 哪些主机名是合法的属于部署方的知识，
 不该由应用替你猜。对外暴露时把它填上（逗号分隔），Host 头不在名单里的请求在进入路由前就被拒。
+
+**部署后的可重跑证明：** 在集群和管理员口令就绪后，从仓库根目录运行
+`pnpm verify:deploy`。它先运行 `scripts/k8s-smoke.mjs`，再运行会删除 Postgres Pod 的
+`scripts/k8s-persistence-check.mjs`；因此它需要 kubectl 访问，并且必须由操作者明确选择执行。
 
 ## 卸掉
 

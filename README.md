@@ -73,15 +73,19 @@ default credentials.
 For single-node k3s, see **[deploy/BOOTSTRAP.md](deploy/BOOTSTRAP.md)** — six commands, each
 of them run rather than described.
 
+After deployment, `pnpm verify:deploy` runs the external smoke check and then the persistence
+check. It requires a reachable cluster and deliberately deletes the Postgres pod, so it is
+an operator-run proof rather than part of `pnpm verify`.
+
 ## Verify it
 
 ```sh
 pnpm verify
 ```
 
-Fifteen steps: types, the generated migration module, the build, the tests, licences, and
-ten gates — registry parity, no side door into the store, the OpenAPI document, the MCP
-handshake, form replay, the by-hand scenario, Chinese search, absence of the sibling
+Sixteen steps: types, the generated migration module, the build, the tests, licences, and
+eleven gates — the verify-step manifest, registry parity, no side door into the store, the OpenAPI
+document, the MCP handshake, form replay, the by-hand scenario, Chinese search, absence of the sibling
 repositories, self-sufficiency, and generated-file encoding.
 
 `pnpm verify:fast` skips the gates that need Docker.
@@ -103,13 +107,18 @@ scripts           the gates
 No rich-text editor — page bodies are Markdown in a textarea, rendered as text. No email or
 webhooks; notifications are in-app, because SMTP would be an external service at runtime. No
 drag-and-drop board; the same move is a select and a button, which is what keeps the board
-usable without scripting. No multi-tenancy, no custom roles, no identity provider. The base
+usable without scripting. No multi-tenancy, no custom roles, no identity provider. Attachments
+are schema placeholders only; there is no upload path or blob volume in this release. The base
 Kubernetes manifest is deliberately a local HTTP demo, so it sets `AOS_SECURE_COOKIES=false`;
-an HTTPS production overlay must set it to `true`. More than one replica needs a shared-write
-volume or an object store for attachments — everything else already lives in Postgres.
+an HTTPS production overlay must set it to `true`. The single-node manifest starts one app
+replica by default, while all implemented state lives in Postgres.
 
 It has no dependency on any other repository in this platform, and `gate:absence` renames
 them aside and runs the suite to keep that true.
+
+On each boot, expired or revoked sessions older than 30 days, idempotency records older than
+7 days, and old notifications are pruned. The activity stream is intentionally append-only;
+its growth is a design choice, not an unadvertised cleanup omission.
 
 ## Licence
 

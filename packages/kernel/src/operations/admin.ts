@@ -603,6 +603,22 @@ const PURGEABLE: Record<(typeof PURGEABLE_SUBJECTS)[number], PurgeTarget> = {
   page: { table: "page_revision", idColumn: "page_id" },
 };
 
+const PURGE_PROJECT_SOURCE: Record<(typeof PURGEABLE_SUBJECTS)[number], string> = {
+  work_item: "SELECT project_id FROM work_item WHERE id = $1",
+  comment: "SELECT project_id FROM comment WHERE id = $1",
+  page: "SELECT s.project_id FROM page p JOIN space s ON s.id = p.space_id WHERE p.id = $1",
+};
+
+const PurgeJournalShape = Type.Object({
+  id: Type.String(),
+  actorLabel: Type.String(),
+  reason: Type.String(),
+  subjectType: Type.String(),
+  subjectId: Type.String(),
+  rowsRemoved: Type.Integer(),
+  purgedAt: Type.String(),
+});
+
 export const purgeRevisions = defineOperation({
   id: "admin.purge_revisions",
   kind: "command",
@@ -651,13 +667,63 @@ export const purgeRevisions = defineOperation({
        VALUES ($1, $2, $3, $4, $5) RETURNING id`,
       [actorLabel(actor), input.reason, input.subjectType, input.subjectId, rowsRemoved],
     );
+    const project = await client.query<{ project_id: string | null }>(
+      PURGE_PROJECT_SOURCE[input.subjectType],
+      [input.subjectId],
+    );
     await recordActivity(client, actor, {
       action: "revisions_purged",
       subjectType: input.subjectType,
       subjectId: input.subjectId,
+      projectId: project.rows[0]?.project_id ?? null,
       fieldNames: ["revisions"],
     });
     return { rowsRemoved, journalId: String(journal.rows[0]!.id) };
+  },
+});
+
+export const listPurges = defineOperation({
+  id: "admin.list_purges",
+  kind: "query",
+  summary: "Read the immutable purge journal",
+  input: Type.Object({
+    limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 200, default: 50 })),
+  }),
+  output: Type.Object({
+    items: Type.Array(PurgeJournalShape),
+    total: Type.Integer(),
+    truncated: Type.Boolean(),
+  }),
+  requires: "instance-admin",
+  http: { method: "GET", path: "/api/v1/admin/purges" },
+  mcp: { tool: "aos_admin_list_purges" },
+  ui: { route: "/admin/purges", control: "admin.list_purges" },
+  byteBudget: LIST_BYTE_BUDGET,
+  handler: async ({ client }, input) => {
+    const limit = input.limit ?? 50;
+    const totalResult = await client.query<{ count: string }>("SELECT count(*) AS count FROM purge_journal");
+    const total = Number(totalResult.rows[0]?.count ?? 0);
+    const rows = await client.query(
+      `SELECT id, actor_label, reason, subject_type, subject_id, rows_removed, purged_at
+         FROM purge_journal
+        ORDER BY id DESC
+        LIMIT $1`,
+      [limit + 1],
+    );
+    const page = rows.rows.slice(0, limit);
+    return enforceResponseBudget({
+      items: page.map((row) => ({
+        id: String(row.id),
+        actorLabel: row.actor_label,
+        reason: row.reason,
+        subjectType: row.subject_type,
+        subjectId: row.subject_id,
+        rowsRemoved: Number(row.rows_removed),
+        purgedAt: row.purged_at.toISOString(),
+      })),
+      total,
+      truncated: rows.rows.length > limit,
+    }, LIST_BYTE_BUDGET, total) as never;
   },
 });
 

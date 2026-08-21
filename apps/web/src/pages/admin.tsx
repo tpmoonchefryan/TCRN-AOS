@@ -114,6 +114,22 @@ interface CountOnly {
   total: number;
 }
 
+interface PurgeJournalRow {
+  id: string;
+  actorLabel: string;
+  reason: string;
+  subjectType: string;
+  subjectId: string;
+  rowsRemoved: number;
+  purgedAt: string;
+}
+
+interface PurgeJournalList {
+  items: PurgeJournalRow[];
+  total: number;
+  truncated: boolean;
+}
+
 const ACCOUNT_KINDS = ["human", "agent", "service"] as const;
 const PROJECT_ROLES = ["viewer", "contributor", "maintainer", "admin"] as const;
 
@@ -653,6 +669,33 @@ export async function ErasurePage(ctx: PageContext): Promise<ReactNode> {
         }, "在活动流里查看这个主体"),
       ),
     ),
+    h("p", null, h("a", { href: "/admin/purges" }, "查看不可变的抹除台账")),
+  );
+}
+
+export async function PurgesPage(ctx: PageContext): Promise<ReactNode> {
+  if (!ctx.actor.isInstanceAdmin) return notAnAdmin("抹除台账");
+  const list = await ctx.call<PurgeJournalList>("admin.list_purges", { limit: 100 });
+  return h("div", null,
+    h("h1", null, "抹除台账"),
+    h("p", { className: "page-intro" }, "这本台账本身不可抹除；它记录每次历史版本抹除的理由与数量。"),
+    list.items.length === 0
+      ? h(Empty, null, "还没有抹除记录。")
+      : h("div", { className: "rows" },
+          ...list.items.map((entry) =>
+            h("div", { key: entry.id, className: "row" },
+              h("span", { className: "row-key" }, `#${entry.id}`),
+              h("span", { className: "row-title" }, `${SUBJECT_LABEL[entry.subjectType] ?? entry.subjectType} ${entry.subjectId}`),
+              h("div", { className: "row-meta" },
+                h("span", { className: "reason" }, `${entry.rowsRemoved} 条历史版本 · ${stamp(entry.purgedAt)}`),
+                h("span", { className: "reason" }, `执行者：${entry.actorLabel}`),
+                h("span", { className: "prose" }, entry.reason),
+              ),
+            ),
+          ),
+        ),
+    h("p", { className: "reason" }, `共 ${list.total} 次抹除。${list.truncated ? "当前只显示最近 100 次。" : ""}`),
+    h("p", null, h("a", { href: "/admin/erasure" }, "回到抹除操作")),
   );
 }
 

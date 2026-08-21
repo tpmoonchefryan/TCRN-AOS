@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
-import { assertStatedBindHost, bootstrapIfEmpty } from "../../../packages/kernel/src/index.js";
-import { configFromEnv, createPool } from "../../../packages/store/src/pool.js";
+import { assertStatedBindHost, bootstrapIfEmpty, pruneEphemeralState } from "../../../packages/kernel/src/index.js";
+import { configFromEnv, createMigrationPool, createPool } from "../../../packages/store/src/pool.js";
 import { appliedSchemaVersion, expectedSchemaVersion, migrate } from "../../../packages/store/src/migrate.js";
 import { buildApp } from "./app.js";
 
@@ -23,7 +23,8 @@ async function main(): Promise<void> {
     .map((host) => host.trim())
     .filter((host) => host.length > 0);
 
-  const pool = createPool(configFromEnv());
+  const storeConfig = configFromEnv();
+  const pool = createPool(storeConfig);
 
   // Wait for the database rather than exiting.
   //
@@ -57,12 +58,19 @@ async function main(): Promise<void> {
   // Migrations run at boot, under an advisory lock, so two replicas starting together do
   // not race. The readiness probe compares the applied version against the one this image
   // carries, which is what keeps traffic off a pod whose schema is behind.
-  const outcome = await migrate(pool);
+  const migrationPool = createMigrationPool(storeConfig);
+  let outcome: Awaited<ReturnType<typeof migrate>>;
+  try {
+    outcome = await migrate(migrationPool);
+  } finally {
+    await migrationPool.end();
+  }
   console.log(
     JSON.stringify({ level: "info", at: "migrate", applied: outcome.applied, schemaVersion: outcome.schemaVersion }),
   );
 
   await bootstrapIfEmpty(pool, process.env.AOS_INSTANCE_NAME ?? "aos");
+  console.log(JSON.stringify({ level: "info", at: "prune-ephemeral-state", ...(await pruneEphemeralState(pool)) }));
 
   const app = await buildApp({
     pool,

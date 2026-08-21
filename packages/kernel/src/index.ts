@@ -33,6 +33,7 @@ export {
   sha256,
 } from "./auth.js";
 export { bootstrapIfEmpty } from "./bootstrap.js";
+export { pruneEphemeralState, type MaintenanceOutcome } from "./maintenance.js";
 export { dispatch, type DispatchResult } from "./dispatch.js";
 export { AosError, fail, normaliseError, type ReasonCode } from "./errors.js";
 export {

@@ -93,15 +93,21 @@ export const listProjects = defineOperation({
   ui: { route: "/projects", control: "project.list" },
   handler: async ({ client, actor }) => {
     const result = await client.query(
-      `SELECT p.id, p.key, p.name, p.description_md, p.settings, p.version, p.created_at,
+      `WITH work_counts AS (
+         SELECT project_id,
+                count(*) FILTER (WHERE deleted_at IS NULL) AS total_count,
+                count(*) FILTER (WHERE deleted_at IS NULL AND status NOT IN ('done','cancelled')) AS open_count
+           FROM work_item
+          GROUP BY project_id
+       )
+       SELECT p.id, p.key, p.name, p.description_md, p.settings, p.version, p.created_at,
               m.role,
-              count(w.id) FILTER (WHERE w.deleted_at IS NULL) AS total_count,
-              count(w.id) FILTER (WHERE w.deleted_at IS NULL AND w.status NOT IN ('done','cancelled')) AS open_count
+              coalesce(c.total_count, 0) AS total_count,
+              coalesce(c.open_count, 0) AS open_count
          FROM project p
          LEFT JOIN project_member m ON m.project_id = p.id AND m.principal_id = $1
-         LEFT JOIN work_item w ON w.project_id = p.id
+         LEFT JOIN work_counts c ON c.project_id = p.id
         WHERE p.deleted_at IS NULL AND ($2 OR m.principal_id IS NOT NULL)
-        GROUP BY p.id, m.role
         ORDER BY p.key`,
       [actor.principalId, actor.isInstanceAdmin],
     );

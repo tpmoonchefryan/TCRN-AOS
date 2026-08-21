@@ -1,15 +1,4 @@
 apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: aos-attachments
-spec:
-  accessModes: ["ReadWriteOnce"]
-  storageClassName: local-path
-  resources:
-    requests:
-      storage: 20Gi
----
-apiVersion: v1
 kind: ConfigMap
 metadata:
   name: aos-config
@@ -43,12 +32,11 @@ metadata:
   name: aos-app
 spec:
   replicas: 1
-  # Recreate, not RollingUpdate. The constraint is the attachment volume, which is
-  # ReadWriteOnce — two pods cannot hold it at once. Everything else (sessions,
-  # idempotency, all state) lives in Postgres, so the way to more than one replica is an
-  # RWX volume or an object-store adapter, and no schema change.
+  # One replica is the conservative single-node default. The product has no attachment
+  # upload path yet, so there is no local blob volume constraining rollout or scaling;
+  # all implemented state lives in Postgres.
   strategy:
-    type: Recreate
+    type: RollingUpdate
   selector:
     matchLabels:
       app: aos-app
@@ -87,8 +75,6 @@ spec:
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: blobs
-              mountPath: /data/blobs
             - name: tmp
               mountPath: /tmp
           # Liveness touches the process only. A database blip must not restart-loop the
@@ -125,8 +111,5 @@ spec:
             limits:
               cpu: 500m
       volumes:
-        - name: blobs
-          persistentVolumeClaim:
-            claimName: aos-attachments
         - name: tmp
           emptyDir: {}
