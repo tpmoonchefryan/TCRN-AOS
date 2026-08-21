@@ -188,7 +188,18 @@ export const SECURITY_HEADERS: Readonly<Record<string, string>> = {
     "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
   "x-content-type-options": "nosniff",
   "x-frame-options": "DENY",
-  "referrer-policy": "no-referrer",
+  // `same-origin`, NOT `no-referrer`.
+  //
+  // This one is counter-intuitive and it broke the product completely. With
+  // `no-referrer`, Chrome suppresses the origin along with the referrer on a top-level
+  // form navigation and sends the literal header `Origin: null`. This product mutates
+  // ONLY through form navigations, and its own CSRF check reads that `null`, fails to
+  // parse it as a URL, and refuses the request as cross-origin — so every form post in
+  // the product, starting with signing in, was refused in every real browser.
+  //
+  // `same-origin` keeps the referrer from leaking to other sites, which is what the
+  // strict value was for, and still lets a page identify its own origin to itself.
+  "referrer-policy": "same-origin",
 };
 
 /**
@@ -198,6 +209,27 @@ export const SECURITY_HEADERS: Readonly<Record<string, string>> = {
  * to carry is not part of identity. An empty list disables the check, and that is a
  * deployment's choice to make rather than a default this code makes for it.
  */
+/**
+ * Is this request's stated origin our own?
+ *
+ * `Origin: null` is returned as NOT same-origin on purpose: it is what a cross-site
+ * sandboxed frame sends, so treating it as trusted would open the hole this check exists
+ * to close. It is handled by name rather than by letting `new URL("null")` throw, because
+ * a check whose behaviour depends on an exception is a check nobody can read.
+ *
+ * The CSRF token is the actual defence; this is the second lock.
+ */
+export function sameOrigin(originHeader: unknown, hostHeader: unknown): boolean {
+  if (typeof originHeader !== "string" || originHeader.length === 0) return true; // not stated
+  if (originHeader === "null") return false; // opaque origin
+  const host = typeof hostHeader === "string" ? hostHeader : "";
+  try {
+    return new URL(originHeader).host === host;
+  } catch {
+    return false;
+  }
+}
+
 export function hostAllowed(hostHeader: string | undefined, allowedHosts: readonly string[]): boolean {
   if (allowedHosts.length === 0) return true;
   const host = typeof hostHeader === "string" ? (hostHeader.split(":")[0] ?? "") : "";

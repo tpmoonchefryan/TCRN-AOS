@@ -184,6 +184,34 @@ async function main() {
     "{principalId}": second.principalId ?? second.id ?? "",
   };
 
+  // ---------------------------------------------------------------------------
+  // The header pair that once made this product unusable in every real browser.
+  //
+  // `Referrer-Policy: no-referrer` makes Chrome send `Origin: null` on a top-level form
+  // navigation. This product mutates ONLY through form navigations, and its own CSRF check
+  // refuses an origin it cannot parse — so the two headers cancelled each other out and
+  // signing in was impossible, while every gate stayed green because `fetch` does not
+  // implement Referrer-Policy at all.
+  //
+  // Both halves are asserted: the policy must permit a same-origin form post, and an
+  // opaque origin must still be refused.
+  const headerProbe = await fetch(`${BASE}/`, { headers: { accept: "text/html", cookie } });
+  const referrerPolicy = (headerProbe.headers.get("referrer-policy") ?? "").toLowerCase().trim();
+  const policySuppressesOrigin = referrerPolicy === "no-referrer";
+
+  const opaque = await fetch(`${BASE}/api/v1/commands/work_item.create`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      accept: "text/html",
+      cookie,
+      origin: "null",
+    },
+    body: new URLSearchParams({ projectId: project.id, kind: "story", title: "opaque origin probe" }),
+    redirect: "manual",
+  });
+  const opaqueRefused = opaque.status === 403;
+
   const routes = new Set();
   const unsubstituted = [];
   for (const operation of allOperations()) {
@@ -334,7 +362,9 @@ async function main() {
   // report so a growing pile of them cannot hide.
   const performedEnough = replayed > 0 && performed * 2 > replayed;
   const report = {
-    ok: failures.length === 0 && replayed > 0 && performedEnough,
+    ok: failures.length === 0 && replayed > 0 && performedEnough && !policySuppressesOrigin && opaqueRefused,
+    referrerPolicy,
+    opaqueOriginRefused: opaqueRefused,
     routesChecked: routes.size,
     routesWithoutAFixture: unsubstituted,
     formsReplayed: replayed,
@@ -344,6 +374,18 @@ async function main() {
     missingRequiredControls: requiredControls.filter((operationId) => !renderedControls.has(operationId)),
     failures,
     ...(replayed === 0 ? { reasonCode: "NOTHING_REPLAYED", note: "no form was submitted; the gate proved nothing" } : {}),
+    ...(policySuppressesOrigin
+      ? {
+          reasonCode: "REFERRER_POLICY_SUPPRESSES_ORIGIN",
+          note: "Referrer-Policy: no-referrer makes a browser send Origin: null on form navigations, which this product's own CSRF check refuses — every form post would fail in a real browser while this gate's fetch-based replay stays green",
+        }
+      : {}),
+    ...(!opaqueRefused
+      ? {
+          reasonCode: "OPAQUE_ORIGIN_ACCEPTED",
+          note: "a form post claiming Origin: null was accepted; that is the shape a cross-site sandboxed frame sends",
+        }
+      : {}),
     ...(!performedEnough && replayed > 0
       ? {
           reasonCode: "TOO_FEW_PERFORMED",

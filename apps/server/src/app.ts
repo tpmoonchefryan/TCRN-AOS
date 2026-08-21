@@ -14,6 +14,7 @@ import {
   newOpaqueToken,
   normaliseError,
   parseQuery,
+  sameOrigin,
   SECURITY_HEADERS,
   type Actor,
 } from "../../../packages/kernel/src/index.js";
@@ -257,14 +258,7 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
       }
       const origin = request.headers.origin;
       if (typeof origin === "string" && origin.length > 0) {
-        const host = request.headers.host ?? "";
-        let sameOrigin = false;
-        try {
-          sameOrigin = new URL(origin).host === host;
-        } catch {
-          sameOrigin = false;
-        }
-        if (!sameOrigin) {
+        if (!sameOrigin(origin, request.headers.host)) {
           return reply.status(403).send({
             ok: false,
             reasonCode: "csrf_failed",
