@@ -1,5 +1,6 @@
-import { createElement as h, type ReactNode } from "react";
+import { Children, createElement as reactCreateElement, isValidElement, type ReactElement, type ReactNode } from "react";
 import type pg from "pg";
+import * as DS from "@tcrn/ui-react";
 import { dispatch, type Actor } from "../../../packages/kernel/src/index.js";
 import { buildHref } from "./url.js";
 
@@ -64,12 +65,77 @@ export function makeCall(pool: pg.Pool, actor: Actor) {
   };
 }
 
+type HProps = Record<string, unknown> | null | undefined;
+
+function componentProps(raw: HProps): Record<string, unknown> {
+  return raw ? { ...raw } : {};
+}
+
+function buttonProps(raw: HProps): Record<string, unknown> {
+  const props = componentProps(raw);
+  const variant = props["data-variant"];
+  delete props["data-variant"];
+  if (variant === "primary" || variant === "secondary" || variant === "quiet" || variant === "danger") {
+    props.variant = variant;
+  }
+  return props;
+}
+
+function badgeTone(value: unknown): "neutral" | "positive" | "warning" | "danger" {
+  return value === "done"
+    ? "positive"
+    : value === "active"
+    ? "warning"
+    : value === "blocked"
+    ? "danger"
+    : "neutral";
+}
+
+function selectOptions(children: readonly ReactNode[]): Array<{ value: string; label: string }> {
+  return Children.toArray(children).flatMap((child) => {
+    if (!isValidElement(child) || child.type !== "option") return [];
+    const option = child as ReactElement<{ value?: unknown; children?: ReactNode }>;
+    return [{ value: String(option.props.value ?? ""), label: String(option.props.children ?? "") }];
+  });
+}
+
+/**
+ * The pages stay written in the existing `h("...")` shape, while these primitive tags
+ * are centrally projected onto the vendored Design System. This keeps the replacement
+ * one-to-one at the render boundary and prevents a missed call site from silently
+ * reintroducing a hand-styled input or button.
+ */
+export function h(type: unknown, props?: HProps, ...children: ReactNode[]): ReactNode {
+  if (type === "input") {
+    const inputProps = componentProps(props);
+    const Component = inputProps.type === "checkbox" ? DS.Checkbox : DS.Input;
+    return reactCreateElement(Component, inputProps, ...children);
+  }
+  if (type === "textarea") return reactCreateElement(DS.Textarea, componentProps(props), ...children);
+  if (type === "select") {
+    return reactCreateElement(DS.Select, {
+      ...componentProps(props),
+      options: selectOptions(children),
+    });
+  }
+  if (type === "button") return reactCreateElement(DS.Button, buttonProps(props), ...children);
+  if (type === "h2") return reactCreateElement(DS.Heading, { ...componentProps(props), level: 2 }, ...children);
+  if (type === "span" && props?.className === "pill") {
+    return reactCreateElement(DS.Badge, { tone: badgeTone(props["data-tone"]) }, ...children);
+  }
+  if (type === "div" && props?.className === "panel") {
+    const cardProps = componentProps(props);
+    delete cardProps.className;
+    return reactCreateElement(DS.Card, cardProps, ...children);
+  }
+  if (type === "p" && props?.className === "empty") {
+    return reactCreateElement(DS.EmptyState, { title: children.length === 1 ? children[0] : children });
+  }
+  return reactCreateElement(type as never, props as never, ...children);
+}
+
 export function Field(props: { label: string; hint?: string; children?: ReactNode }): ReactNode {
-  return h("div", { className: "field" },
-    h("label", null, props.label),
-    props.children,
-    props.hint ? h("p", { className: "reason" }, props.hint) : null,
-  );
+  return h(DS.Field, { label: props.label, hint: props.hint }, props.children ?? null);
 }
 
 /**
@@ -94,8 +160,8 @@ export function Form(props: {
 }
 
 export function Panel(props: { title?: string; children?: ReactNode }): ReactNode {
-  return h("div", { className: "panel" },
-    props.title ? h("h2", null, props.title) : null,
+  return h(DS.Card, null,
+    props.title ? h(DS.Heading, { level: 2 }, props.title) : null,
     props.children,
   );
 }
@@ -110,11 +176,18 @@ export function Truncation(props: { shown: number; total: number; nextHref?: str
 }
 
 export function Empty(props: { children?: ReactNode }): ReactNode {
-  return h("p", { className: "empty" }, props.children);
+  return h(DS.EmptyState, { title: props.children ?? "" });
 }
 
 export function Pill(props: { children?: ReactNode; toneName?: string }): ReactNode {
-  return h("span", { className: "pill", "data-tone": props.toneName }, props.children);
+  const tone = props.toneName === "done"
+    ? "positive"
+    : props.toneName === "active"
+    ? "warning"
+    : props.toneName === "blocked"
+    ? "danger"
+    : "neutral";
+  return h(DS.Badge, { tone }, props.children);
 }
 
 /**
@@ -130,31 +203,27 @@ export function Attribution(props: { label?: string | null; read?: boolean }): R
 }
 
 export function breadcrumb(items: Array<{ href?: string; label: string }>): ReactNode {
-  return h("div", { className: "breadcrumb" },
-    ...items.flatMap((item, index) => [
-      index > 0 ? h("span", { key: `sep${index}` }, " › ") : null,
-      item.href
-        ? h("a", { key: item.label + index, href: item.href }, item.label)
-        : h("span", { key: item.label + index }, item.label),
-    ]),
-  );
+  return h(DS.Breadcrumb, {
+    items: items.map((item, index) => ({ id: `${item.label}-${index}`, label: item.label, href: item.href })),
+    label: "当前位置",
+  });
 }
 
 export function rowsList(
   items: Array<{ key: string; href: string; primary: ReactNode; meta?: ReactNode }>,
 ): ReactNode {
-  return h("div", { className: "rows" },
-    ...items.map((item) =>
-      // The row's href is always the record's own page, so middle-click and open-in-new-tab
-      // do the obvious thing at every width.
-      h("a", { key: item.key, className: "row", href: item.href },
+  return h(DS.TableShell, {
+    label: "列表",
+    columns: [{ key: "record", label: "" }],
+    rows: items.map((item) => ({
+      record: h("a", { key: item.key, href: item.href },
         h("span", { className: "row-key" }, item.key),
         h("span", { className: "row-title" }, item.primary),
         h("span", { className: "row-meta" }, item.meta),
       ),
-    ),
-  );
+    })),
+  });
 }
 
-export { h, buildHref };
+export { buildHref };
 export type { ReactNode };

@@ -16,6 +16,7 @@ import {
   type ReactNode,
 } from "../ui-kit.js";
 import { hrefResetConditions } from "../url.js";
+import * as DS from "@tcrn/ui-react";
 
 /**
  * Gates, deliberations and decisions.
@@ -1215,8 +1216,8 @@ export async function DeliberationRoomPage(ctx: PageContext): Promise<ReactNode>
                 disabled: !canClose,
               }, "写下纪要并关闭"),
             ),
-            h("fieldset", { className: "panel" },
-              h("legend", null, "决议（可选，一条）"),
+            h(DS.Card, null,
+              h(DS.Heading, { level: 3 }, "决议（可选，一条）"),
               h(Field, { label: "决议标题" },
                 h("input", { type: "text", name: "decisionTitle", maxLength: 400 }),
               ),
