@@ -30,9 +30,17 @@ can do**.
 
 ## What makes it different
 
-**No JavaScript.** Not "progressively enhanced" — there is no script tag on any page. The
-interface changes things by submitting ordinary forms, so it is an API client by
-construction rather than by intention.
+**Every mutation is a real form post.** The interface changes things by submitting
+`<form method="POST">` to the same operations the API exposes, so it is an API client by
+construction rather than by intention, and the whole product stays usable by hand.
+
+That is a floor, not a ceiling. An earlier draft of this file stated a ban on client-side
+JavaScript and called the product "not progressively enhanced". Nobody ruled that: it was
+the author's inference from "a person can manage the project by hand", it was stricter than
+the requirement, and it was the opposite of the posture the tree before this one had
+recorded. The design system this product renders with expects script — its tab component
+takes a required `onSelect`, its overlays are Radix, and it ships a client controller for
+its shell. The requirement that survives is the one the gates actually check.
 
 **The claim is a test.** `gate:parity-registry` asserts the registry, the OpenAPI document
 and the MCP tool list are the same set in both directions. `gate:forms` boots the real
@@ -107,7 +115,7 @@ scripts           the gates
 No rich-text editor — page bodies are Markdown in a textarea, rendered as text. No email or
 webhooks; notifications are in-app, because SMTP would be an external service at runtime. No
 drag-and-drop board; the same move is a select and a button, which is what keeps the board
-usable without scripting. No multi-tenancy, no custom roles, no identity provider. Attachments
+usable by hand. No multi-tenancy, no custom roles, no identity provider. Attachments
 are schema placeholders only; there is no upload path or blob volume in this release. The base
 Kubernetes manifest is deliberately a local HTTP demo, so it sets `AOS_SECURE_COOKIES=false`;
 an HTTPS production overlay must set it to `true`. The single-node manifest starts one app

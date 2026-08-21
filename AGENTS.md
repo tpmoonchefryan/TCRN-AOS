@@ -32,8 +32,12 @@ process entrypoints, which create the pool before any request exists.
   module so the running artifact carries its own schema. Run `pnpm codegen:migrations` after
   editing one; `codegen:check` fails the build if you forget. There are no down-migrations —
   a mistake is a new forward migration.
-- There is no client-side JavaScript, and adding some would break the product's central
-  property. Every mutation is a `<form method="POST">`.
+- Every mutation is a `<form method="POST">`, and that is what keeps the product usable by
+  hand — `gate:human-only` runs a whole project through those forms with zero agent
+  principals and the MCP surface never contacted. Client-side JavaScript is NOT forbidden.
+  A previous wording here banned it outright; that was never ruled by anyone, and the design
+  system this product renders with expects script. Adding script is fine as long as the
+  by-hand path stays whole and that gate stays green.
 - Tiers: work items, pages, comments and projects are editable and versioned; the activity
   stream and the revision tables are append-only by trigger; deliberation positions, minutes,
   gate decisions and decisions are immutable and corrected by supersession. The database
