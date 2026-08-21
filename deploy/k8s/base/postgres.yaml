@@ -57,11 +57,23 @@ spec:
               command: ["pg_isready", "-U", "aos", "-d", "aos"]
             initialDelaySeconds: 5
             periodSeconds: 5
+          # A startup probe, and the liveness probe does not begin until it succeeds.
+          #
+          # Without it, an unclean node restart is unrecoverable: the postmaster comes up and
+          # replays WAL, during which it answers `pg_isready` with "the database system is
+          # starting up". The liveness probe reads that as dead, kills the container mid-replay,
+          # and the next start replays from the same checkpoint and is killed at the same point
+          # — a crash loop that never ends and whose cause is the probe.
+          startupProbe:
+            exec:
+              command: ["pg_isready", "-U", "aos", "-d", "aos"]
+            periodSeconds: 5
+            failureThreshold: 120
           livenessProbe:
             exec:
               command: ["pg_isready", "-U", "aos", "-d", "aos"]
-            initialDelaySeconds: 30
             periodSeconds: 15
+            failureThreshold: 6
           resources:
             requests:
               memory: 256Mi

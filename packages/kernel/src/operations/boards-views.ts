@@ -73,7 +73,6 @@ const SavedViewShape = Type.Object({
   projectId: Type.Union([Type.String(), Type.Null()]),
   ownerId: Type.Union([Type.String(), Type.Null()]),
   name: Type.String(),
-  query: Type.Record(Type.String(), Type.Unknown()),
   isShared: Type.Boolean(),
   position: Type.Integer(),
   version: Type.Integer(),
@@ -411,10 +410,14 @@ export const moveBoardCard = defineOperation({
         });
       }
 
+      // Same two shapes as the detail page: an item's own gate and the project's. A board
+      // that can reach a status the detail page refuses is two rules for one thing, and the
+      // one people find is whichever they tried first.
       const blocking = await client.query<{ id: string; title: string }>(
         `SELECT id, title FROM gate
-          WHERE work_item_id = $1 AND status <> 'satisfied' AND blocks_status = $2`,
-        [row.id, input.toStatus],
+          WHERE status <> 'satisfied' AND blocks_status = $3
+            AND (work_item_id = $1 OR (work_item_id IS NULL AND project_id = $2))`,
+        [row.id, row.project_id, input.toStatus],
       );
       if (blocking.rowCount && blocking.rowCount > 0) {
         fail("gate_pending", `This item cannot reach ${input.toStatus} while a gate is unsatisfied`, {
@@ -532,10 +535,21 @@ export const createSavedView = defineOperation({
   id: "saved_view.create",
   kind: "command",
   summary: "Save a list's filters as a named, linkable view",
+  // Named filters, not an arbitrary object.
+  //
+  // A saved view IS a set of filters, and typing it as one is what lets a person save one
+  // from a form. As a free-form object it could only ever be posted by an API client, so
+  // the control on /views refused every submission a human could produce — while the gate
+  // that replays forms scored the refusal as "reached validation" and stayed green.
   input: Type.Object({
     projectId: Type.Optional(Type.String()),
     name: Type.String({ minLength: 1, maxLength: 200 }),
-    query: Type.Record(Type.String(), Type.Unknown()),
+    project: Type.Optional(Type.String({ maxLength: 64 })),
+    kind: Type.Optional(Type.String({ maxLength: 32 })),
+    status: Type.Optional(Type.String({ maxLength: 32 })),
+    assignee: Type.Optional(Type.String({ maxLength: 64 })),
+    label: Type.Optional(Type.String({ maxLength: 64 })),
+    q: Type.Optional(Type.String({ maxLength: 200 })),
     isShared: Type.Optional(Type.Boolean({ default: false })),
   }),
   output: SavedViewShape,
@@ -566,7 +580,20 @@ export const createSavedView = defineOperation({
       `INSERT INTO saved_view (id, project_id, owner_id, name, query, is_shared)
        VALUES ($1, $2, $3, $4, $5::jsonb, $6)
        RETURNING id, project_id, owner_id, name, query, is_shared, position, version, created_at, updated_at`,
-      [id, input.projectId ?? null, actor.principalId, input.name, JSON.stringify(input.query), isShared],
+      [
+        id,
+        input.projectId ?? null,
+        actor.principalId,
+        input.name,
+        JSON.stringify(
+          Object.fromEntries(
+            (["project", "kind", "status", "assignee", "label", "q"] as const)
+              .map((key) => [key, input[key]])
+              .filter(([, value]) => value !== undefined && value !== ""),
+          ),
+        ),
+        isShared,
+      ],
     );
     const row = result.rows[0]!;
 

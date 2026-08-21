@@ -213,8 +213,11 @@ export const getWorkItem = defineOperation({
   http: { method: "GET", path: "/api/v1/work-items/{key}" },
   mcp: { tool: "aos_work_item_get" },
   ui: { route: "/work-items/{key}", control: "work_item.get" },
-  handler: async ({ client }, input) => {
+  handler: async ({ client, actor }, input) => {
     const row = await loadWork(client, input.key);
+    // Every sibling read scopes by membership; this one did not, so any signed-in
+    // principal could read every work item in every project by guessing a key.
+    requireProjectRole(actor, row.project_id, "viewer");
 
     const ancestors = await client.query<{ key: string; title: string }>(
       `WITH RECURSIVE up AS (
@@ -348,8 +351,15 @@ export const listWorkItems = defineOperation({
         filterDigest: digest,
         limit,
       });
+      // The sort is `updated_at DESC, id ASC`, so the next page is everything strictly
+      // older, plus — among rows sharing the cursor's timestamp — those with a LARGER id.
+      // A row-wise `(a, b) < (x, y)` compares BOTH columns ascending and silently drops
+      // every tied row whose id sorts after the cursor's, which is most of them when a
+      // transaction writes several rows with one `now()`.
+      const cursorTime = push(cursor.last.sortKey);
+      const cursorId = push(cursor.last.id);
       where.push(
-        `(w.updated_at, w.id) < (${push(cursor.last.sortKey)}::timestamptz, ${push(cursor.last.id)})`,
+        `(w.updated_at < ${cursorTime}::timestamptz OR (w.updated_at = ${cursorTime}::timestamptz AND w.id > ${cursorId}))`,
       );
     }
 
@@ -545,10 +555,15 @@ export const transitionWorkItem = defineOperation({
     }
 
     // A gate blocks the transition it names, and it says which gate and why.
-    const blocking = await client.query<{ id: string; title: string }>(
-      `SELECT id, title FROM gate
-        WHERE work_item_id = $1 AND status <> 'satisfied' AND blocks_status = $2`,
-      [row.id, input.status],
+    // Two shapes of gate, and both must bite: one anchored to this item, and one opened on
+    // the project as a whole. `gate.create` offers the project-level form in its own summary,
+    // and matching only on work_item_id meant that gate sat there pending and stopped nothing.
+    const blocking = await client.query<{ id: string; title: string; scope: string }>(
+      `SELECT id, title, CASE WHEN work_item_id IS NULL THEN 'project' ELSE 'item' END AS scope
+         FROM gate
+        WHERE status <> 'satisfied' AND blocks_status = $3
+          AND (work_item_id = $1 OR (work_item_id IS NULL AND project_id = $2))`,
+      [row.id, row.project_id, input.status],
     );
     if (blocking.rowCount && blocking.rowCount > 0) {
       fail("gate_pending", `This item cannot reach ${input.status} while a gate is unsatisfied`, {

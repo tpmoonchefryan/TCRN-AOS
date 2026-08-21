@@ -28,7 +28,7 @@ export {
   csrfOk,
   hashPassword,
   issueSession,
-  revokeSession,
+  revokeSessionById,
   sha256,
 } from "./auth.js";
 export { bootstrapIfEmpty } from "./bootstrap.js";

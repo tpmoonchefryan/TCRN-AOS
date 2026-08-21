@@ -521,6 +521,9 @@ export const listTrash = defineOperation({
         filterDigest: digest,
         limit,
       });
+      // Correct as written: this list sorts `deleted_at DESC, t.id DESC`, both columns
+      // descending, which is exactly what a row-wise comparison expresses. The same shape
+      // IS wrong where the second column sorts ascending — see the governance lists.
       pageWhere.push(
         `(t.deleted_at, t.id) < (${push(cursor.last.sortKey)}::timestamptz, ${push(cursor.last.id)})`,
       );

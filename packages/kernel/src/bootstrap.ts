@@ -38,7 +38,14 @@ export async function bootstrapIfEmpty(pool: pg.Pool, instanceName: string): Pro
 
     const handle = process.env.AOS_BOOTSTRAP_ADMIN_USER ?? "admin";
     const provided = process.env.AOS_BOOTSTRAP_ADMIN_PASSWORD;
-    const password = provided && provided.length >= 12 ? provided : randomBytes(18).toString("base64url");
+    // A supplied password that is too short used to be silently swapped for a random one
+    // that was then never printed, because the log branch keyed off whether a password was
+    // provided rather than whether it was USED. The operator was left with an instance
+    // holding a credential nobody had ever seen. Now the substitution is stated, and the
+    // password that actually works is always the one printed.
+    const providedIsUsable = typeof provided === "string" && provided.length >= 12;
+    const substituted = typeof provided === "string" && !providedIsUsable;
+    const password = providedIsUsable ? provided : randomBytes(18).toString("base64url");
     const id = newId("pi");
 
     await client.query(
@@ -49,16 +56,19 @@ export async function bootstrapIfEmpty(pool: pg.Pool, instanceName: string): Pro
     await client.query("UPDATE instance_meta SET bootstrap_completed_at = now() WHERE id = true");
     await client.query("COMMIT");
 
-    if (!provided) {
+    if (!providedIsUsable) {
       // Printed once, never stored in the clear, and only readable by whoever can read
       // this pod's logs.
       console.log(
         JSON.stringify({
           level: "warn",
           at: "bootstrap",
-          message: "Created the first administrator. This password is shown once and must be changed at first sign-in.",
+          message: substituted
+            ? "AOS_BOOTSTRAP_ADMIN_PASSWORD was shorter than the 12-character minimum and was NOT used. This generated password is the one that works, it is shown once, and it must be changed at first sign-in."
+            : "Created the first administrator. This password is shown once and must be changed at first sign-in.",
           handle,
           password,
+          ...(substituted ? { suppliedPasswordRejected: "shorter than 12 characters" } : {}),
         }),
       );
     } else {

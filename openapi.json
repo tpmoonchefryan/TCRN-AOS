@@ -1601,6 +1601,147 @@
             "bearerToken": []
           }
         ]
+      },
+      "get": {
+        "operationId": "auth.list_api_tokens",
+        "summary": "List your personal access tokens",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "items"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "name",
+                          "hint",
+                          "createdAt",
+                          "lastUsedAt",
+                          "revokedAt"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "hint": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          },
+                          "lastUsedAt": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "revokedAt": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was refused; the body names a stable reasonCode",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not signed in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, stale version, refused transition, or pending gate",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "The response exceeds this endpoint's byte budget",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionCookie": []
+          },
+          {
+            "bearerToken": []
+          }
+        ]
       }
     },
     "/api/v1/auth/login": {
@@ -1775,29 +1916,13 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "sessionToken"
-                ],
-                "properties": {
-                  "sessionToken": {
-                    "minLength": 1,
-                    "type": "string"
-                  }
-                }
+                "properties": {}
               }
             },
             "application/x-www-form-urlencoded": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "sessionToken"
-                ],
-                "properties": {
-                  "sessionToken": {
-                    "minLength": 1,
-                    "type": "string"
-                  }
-                }
+                "properties": {}
               }
             }
           }
@@ -1810,11 +1935,15 @@
                 "schema": {
                   "type": "object",
                   "required": [
-                    "ok"
+                    "ok",
+                    "revoked"
                   ],
                   "properties": {
                     "ok": {
                       "type": "boolean"
+                    },
+                    "revoked": {
+                      "type": "integer"
                     }
                   }
                 }
@@ -11018,8 +11147,7 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "name",
-                  "query"
+                  "name"
                 ],
                 "properties": {
                   "projectId": {
@@ -11030,11 +11158,29 @@
                     "maxLength": 200,
                     "type": "string"
                   },
-                  "query": {
-                    "type": "object",
-                    "patternProperties": {
-                      "^(.*)$": {}
-                    }
+                  "project": {
+                    "maxLength": 64,
+                    "type": "string"
+                  },
+                  "kind": {
+                    "maxLength": 32,
+                    "type": "string"
+                  },
+                  "status": {
+                    "maxLength": 32,
+                    "type": "string"
+                  },
+                  "assignee": {
+                    "maxLength": 64,
+                    "type": "string"
+                  },
+                  "label": {
+                    "maxLength": 64,
+                    "type": "string"
+                  },
+                  "q": {
+                    "maxLength": 200,
+                    "type": "string"
                   },
                   "isShared": {
                     "default": false,
@@ -11047,8 +11193,7 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "name",
-                  "query"
+                  "name"
                 ],
                 "properties": {
                   "projectId": {
@@ -11059,11 +11204,29 @@
                     "maxLength": 200,
                     "type": "string"
                   },
-                  "query": {
-                    "type": "object",
-                    "patternProperties": {
-                      "^(.*)$": {}
-                    }
+                  "project": {
+                    "maxLength": 64,
+                    "type": "string"
+                  },
+                  "kind": {
+                    "maxLength": 32,
+                    "type": "string"
+                  },
+                  "status": {
+                    "maxLength": 32,
+                    "type": "string"
+                  },
+                  "assignee": {
+                    "maxLength": 64,
+                    "type": "string"
+                  },
+                  "label": {
+                    "maxLength": 64,
+                    "type": "string"
+                  },
+                  "q": {
+                    "maxLength": 200,
+                    "type": "string"
                   },
                   "isShared": {
                     "default": false,
@@ -11086,7 +11249,6 @@
                     "projectId",
                     "ownerId",
                     "name",
-                    "query",
                     "isShared",
                     "position",
                     "version",
@@ -11121,12 +11283,6 @@
                     },
                     "name": {
                       "type": "string"
-                    },
-                    "query": {
-                      "type": "object",
-                      "patternProperties": {
-                        "^(.*)$": {}
-                      }
                     },
                     "isShared": {
                       "type": "boolean"
@@ -11282,7 +11438,6 @@
                           "projectId",
                           "ownerId",
                           "name",
-                          "query",
                           "isShared",
                           "position",
                           "version",
@@ -11317,12 +11472,6 @@
                           },
                           "name": {
                             "type": "string"
-                          },
-                          "query": {
-                            "type": "object",
-                            "patternProperties": {
-                              "^(.*)$": {}
-                            }
                           },
                           "isShared": {
                             "type": "boolean"

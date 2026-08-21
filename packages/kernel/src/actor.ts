@@ -20,6 +20,13 @@ export interface Actor {
   readonly isInstanceAdmin: boolean;
   /** How this actor proved who they are on this request. */
   readonly credential: "session" | "api_token" | "bootstrap";
+  /**
+   * The session this request arrived on, when it arrived on one.
+   *
+   * Sign-out needs it, and taking it from the request body instead is how the logout
+   * control came to post a placeholder string that revoked nothing at all.
+   */
+  readonly sessionId?: string;
   readonly roles: ReadonlyMap<string, ProjectRole>;
 }
 

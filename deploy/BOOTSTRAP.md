@@ -84,6 +84,34 @@ curl -s http://localhost:8080/readyz
 
 浏览器打开 `http://localhost:8080`，用上面的账号口令登录，改掉口令，建第一个项目。
 
+## 5. 备份
+
+`kubectl apply` 已经把每晚 03:17 的备份任务装上了，写进一块独立的卷。它**先验证再轮转**——
+为腾地方删掉最后一份好副本，是这种脚本最经典也最致命的死法，而且只在真正需要它的那天才会被发现。
+
+立刻跑一次，不必等到半夜：
+
+```bash
+kubectl -n aos create job aos-backup-now --from=cronjob/aos-backup
+kubectl -n aos wait --for=condition=complete job/aos-backup-now --timeout=300s
+kubectl -n aos logs job/aos-backup-now
+```
+
+**恢复**（实测过：dump → 验证 → 恢复，行数与线上一致）。恢复进一个临时库先看清楚，
+确认无误再决定要不要覆盖生产：
+
+```bash
+kubectl -n aos exec -it aos-postgres-0 -- sh -c '
+  DUMP=$(ls -1t /backups/aos-*.dump | head -1)
+  psql -U aos -d postgres -c "CREATE DATABASE aos_restore_check"
+  pg_restore -U aos -d aos_restore_check "$DUMP"
+  psql -U aos -d aos_restore_check -c "SELECT count(*) FROM work_item"
+'
+```
+
+要真的覆盖生产库，先把应用停掉（`kubectl -n aos scale deploy/aos-app --replicas=0`），
+恢复完再拉起来——让应用在恢复过程中继续写，得到的是两份都不完整的数据。
+
 ---
 
 ## 几件不显然但会咬人的事

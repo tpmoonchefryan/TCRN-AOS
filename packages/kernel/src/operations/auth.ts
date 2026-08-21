@@ -1,7 +1,7 @@
 import { Type } from "@sinclair/typebox";
 import { newId } from "../../../store/src/ids.js";
 import { recordActivity } from "../audit.js";
-import { authenticatePassword, hashPassword, issueSession, newOpaqueToken, revokeSession, sha256, verifyPassword } from "../auth.js";
+import { authenticatePassword, hashPassword, issueSession, newOpaqueToken, revokeSessionById, sha256, verifyPassword } from "../auth.js";
 import { fail } from "../errors.js";
 import { defineOperation } from "../registry.js";
 
@@ -54,16 +54,25 @@ export const logout = defineOperation({
   id: "auth.logout",
   kind: "command",
   summary: "Sign out of the current session",
-  input: Type.Object({ sessionToken: Type.String({ minLength: 1 }) }),
-  output: Type.Object({ ok: Type.Boolean() }),
+  // Takes nothing. The session to end is the one the request arrived on, which the actor
+  // already carries — asking the form to name it is what let a placeholder string be
+  // submitted instead, revoking nothing while the browser dropped its cookie and everyone
+  // believed they had signed out.
+  input: Type.Object({}),
+  output: Type.Object({ ok: Type.Boolean(), revoked: Type.Integer() }),
   requires: "authenticated",
   http: { method: "POST", path: "/api/v1/auth/logout" },
   mcp: null,
   mcpExemptReason: "Sessions are a browser concern; an MCP client revokes its token instead.",
   ui: { route: "/", control: "auth.logout" },
-  handler: async ({ client }, input) => {
-    await revokeSession(client, input.sessionToken);
-    return { ok: true };
+  handler: async ({ client, actor }) => {
+    if (!actor.sessionId) {
+      // A token-authenticated caller has no session to end. Say so rather than reporting
+      // a success that did nothing.
+      fail("validation_failed", "This credential is not a session; revoke the token instead");
+    }
+    const revoked = await revokeSessionById(client, actor.sessionId);
+    return { ok: true, revoked };
   },
 });
 
@@ -165,6 +174,48 @@ export const createApiToken = defineOperation({
     });
     // Returned once. Only its digest is stored, so this is the only moment it exists.
     return { id, token: secret, hint };
+  },
+});
+
+export const listApiTokens = defineOperation({
+  id: "auth.list_api_tokens",
+  kind: "query",
+  summary: "List your personal access tokens",
+  input: Type.Object({}),
+  output: Type.Object({
+    items: Type.Array(
+      Type.Object({
+        id: Type.String(),
+        name: Type.String(),
+        hint: Type.String(),
+        createdAt: Type.String(),
+        lastUsedAt: Type.Union([Type.String(), Type.Null()]),
+        revokedAt: Type.Union([Type.String(), Type.Null()]),
+      }),
+    ),
+  }),
+  requires: "authenticated",
+  http: { method: "GET", path: "/api/v1/me/tokens" },
+  mcp: { tool: "aos_list_api_tokens" },
+  ui: { route: "/account/tokens", control: "auth.list_api_tokens" },
+  handler: async ({ client, actor }) => {
+    // Revoked tokens stay listed. A credential that vanishes when it is revoked leaves the
+    // person wondering whether they revoked it or imagined it.
+    const result = await client.query(
+      `SELECT id, name, hint, created_at, last_used_at, revoked_at
+         FROM api_token WHERE principal_id = $1 ORDER BY created_at DESC`,
+      [actor.principalId],
+    );
+    return {
+      items: result.rows.map((row) => ({
+        id: row.id,
+        name: row.name,
+        hint: row.hint,
+        createdAt: row.created_at.toISOString(),
+        lastUsedAt: row.last_used_at ? row.last_used_at.toISOString() : null,
+        revokedAt: row.revoked_at ? row.revoked_at.toISOString() : null,
+      })),
+    };
   },
 });
 

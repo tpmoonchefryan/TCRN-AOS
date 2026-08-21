@@ -87,10 +87,12 @@ export async function issueSession(
   return { sessionId: id, token, csrfToken, expiresAt };
 }
 
-export async function revokeSession(client: pg.PoolClient, token: string): Promise<void> {
-  await client.query("UPDATE session SET revoked_at = now() WHERE token_sha256 = $1 AND revoked_at IS NULL", [
-    sha256(token),
-  ]);
+export async function revokeSessionById(client: pg.PoolClient, sessionId: string): Promise<number> {
+  const result = await client.query(
+    "UPDATE session SET revoked_at = now() WHERE id = $1 AND revoked_at IS NULL",
+    [sessionId],
+  );
+  return result.rowCount ?? 0;
 }
 
 interface PrincipalRow {
@@ -131,9 +133,9 @@ export async function actorFromSessionToken(
   queryable: Pick<pg.PoolClient, "query">,
   token: string,
 ): Promise<{ actor: Actor; csrfSecret: string; mustChangePassword: boolean } | null> {
-  const result = await queryable.query<PrincipalRow & { csrf_secret: string }>(
+  const result = await queryable.query<PrincipalRow & { csrf_secret: string; session_id: string }>(
     `SELECT p.id, p.handle, p.display_name, p.kind, p.is_instance_admin, p.disabled_at,
-            p.must_change_password, s.csrf_secret
+            p.must_change_password, s.csrf_secret, s.id AS session_id
        FROM session s JOIN principal p ON p.id = s.principal_id
       WHERE s.token_sha256 = $1 AND s.revoked_at IS NULL AND s.expires_at > now()`,
     [sha256(token)],
@@ -142,7 +144,7 @@ export async function actorFromSessionToken(
   if (!row || row.disabled_at) return null;
   const roles = await loadRoles(queryable, row.id);
   return {
-    actor: toActor(row, "session", roles),
+    actor: { ...toActor(row, "session", roles), sessionId: row.session_id },
     csrfSecret: row.csrf_secret,
     mustChangePassword: row.must_change_password,
   };

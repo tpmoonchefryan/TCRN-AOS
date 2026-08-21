@@ -262,6 +262,23 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
       // every screen's state has to be reachable as a plain URL.
       return reply.status(303).header("location", redirectTo).send();
     }
+    if (wantsHtml(request)) {
+      // A form that names no redirect is saying its OUTPUT is the thing the person needs
+      // to see. Redirecting anyway is what threw away the one-time access token: the row
+      // was created, the browser was sent elsewhere, and the only copy of the secret was
+      // discarded in between.
+      const rendered = await renderPage({
+        pool: options.pool,
+        actor: request.actor,
+        csrfToken: request.csrfSecret ?? "",
+        mustChangePassword: request.mustChangePassword,
+        pathname: "/result",
+        search: new URLSearchParams(),
+        version: options.version,
+        result: { operationId, output: result.output },
+      });
+      return reply.status(rendered.status).type("text/html; charset=utf-8").send(rendered.body);
+    }
     return result.output;
   }
 

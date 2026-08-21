@@ -304,7 +304,13 @@ export const listGates = defineOperation({
         filterDigest: digest,
         limit,
       });
-      where.push(`(g.created_at, g.id) < (${push(cursor.last.sortKey)}::timestamptz, ${push(cursor.last.id)})`);
+      // `col DESC, id ASC` needs `col < c OR (col = c AND id > cursorId)`. A row-wise
+      // `(col, id) < (c, cursorId)` compares BOTH columns ascending, so every row sharing
+      // the cursor's timestamp with a larger id is skipped — and a transaction that writes
+      // several rows gives them all one `now()`, so that is most of them.
+      const cursorAt = push(cursor.last.sortKey);
+      const cursorRowId = push(cursor.last.id);
+      where.push(`(g.created_at < ${cursorAt}::timestamptz OR (g.created_at = ${cursorAt}::timestamptz AND g.id > ${cursorRowId}))`);
     }
 
     const whereSql = where.join(" AND ");
@@ -1140,7 +1146,13 @@ export const listDeliberations = defineOperation({
         filterDigest: digest,
         limit,
       });
-      where.push(`(created_at, id) < (${push(cursor.last.sortKey)}::timestamptz, ${push(cursor.last.id)})`);
+      // `col DESC, id ASC` needs `col < c OR (col = c AND id > cursorId)`. A row-wise
+      // `(col, id) < (c, cursorId)` compares BOTH columns ascending, so every row sharing
+      // the cursor's timestamp with a larger id is skipped — and a transaction that writes
+      // several rows gives them all one `now()`, so that is most of them.
+      const cursorAt = push(cursor.last.sortKey);
+      const cursorRowId = push(cursor.last.id);
+      where.push(`(created_at < ${cursorAt}::timestamptz OR (created_at = ${cursorAt}::timestamptz AND id > ${cursorRowId}))`);
     }
 
     const whereSql = where.join(" AND ");
@@ -1288,7 +1300,13 @@ export const listDecisions = defineOperation({
         filterDigest: digest,
         limit,
       });
-      where.push(`(d.decided_at, d.id) < (${push(cursor.last.sortKey)}::timestamptz, ${push(cursor.last.id)})`);
+      // `col DESC, id ASC` needs `col < c OR (col = c AND id > cursorId)`. A row-wise
+      // `(col, id) < (c, cursorId)` compares BOTH columns ascending, so every row sharing
+      // the cursor's timestamp with a larger id is skipped — and a transaction that writes
+      // several rows gives them all one `now()`, so that is most of them.
+      const cursorAt = push(cursor.last.sortKey);
+      const cursorRowId = push(cursor.last.id);
+      where.push(`(d.decided_at < ${cursorAt}::timestamptz OR (d.decided_at = ${cursorAt}::timestamptz AND d.id > ${cursorRowId}))`);
     }
 
     const whereSql = where.join(" AND ");

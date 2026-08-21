@@ -19,6 +19,8 @@ export interface RenderInput {
   readonly search: URLSearchParams;
   readonly version: string;
   readonly error?: { reasonCode: string; message: string; detail: Record<string, unknown> };
+  /** Set when a command's own output is what the person needs to read. */
+  readonly result?: { operationId: string; output: unknown };
 }
 
 export interface RenderOutput {
@@ -62,8 +64,12 @@ function html(body: ReactNode, title: string): string {
   )}`;
 }
 
-function Field(props: { label: string; children?: ReactNode }): ReactNode {
-  return h("div", { className: "field" }, h("label", null, props.label), props.children);
+function Field(props: { label: string; hint?: string; children?: ReactNode }): ReactNode {
+  return h("div", { className: "field" },
+    h("label", null, props.label),
+    props.children,
+    props.hint ? h("p", { className: "reason" }, props.hint) : null,
+  );
 }
 
 /** Every mutating control is a real form post. There is no other way to change anything. */
@@ -165,8 +171,7 @@ function Shell(props: {
           h("input", { type: "search", name: "q", placeholder: "检索", defaultValue: "" }),
         ),
         h(Form, { op: "auth.logout", redirect: "/login", csrf: props.csrf },
-          h("input", { type: "hidden", name: "sessionToken", value: "current" }),
-          h("button", { type: "submit" }, "退出"),
+          h("button", { type: "submit", "data-op": "auth.logout" }, "退出"),
         ),
       ),
       h("main", { className: "content" },
@@ -208,7 +213,8 @@ function LoginPage(input: RenderInput): RenderOutput {
 
 interface WorkItem {
   id: string; key: string; projectId: string; kind: string; title: string; status: string;
-  priority: string; assigneeHandle: string | null; labels: string[]; version: number; updatedAt: string;
+  priority: string; assigneeId: string | null; assigneeHandle: string | null;
+  labels: string[]; version: number; updatedAt: string;
 }
 
 async function WorkItemsPage(input: RenderInput, shell: ShellData): Promise<RenderOutput> {
@@ -358,6 +364,13 @@ async function WorkItemDetailPage(input: RenderInput, shell: ShellData, key: str
     input, "activity.list", { subjectType: "work_item", subjectId: item.id, limit: 30 },
   ).catch(() => ({ items: [] }));
 
+  // Assignment offers the project's members and nobody else: a person who cannot open the
+  // item is not a person who can be given it.
+  const memberList = await call<{ items: Array<{ principalId: string; handle: string; displayName: string }> }>(
+    input, "project.list_members", { projectId: item.projectId },
+  ).catch(() => ({ items: [] }));
+  const members = memberList.items;
+
   const detail = `/work-items/${item.key}`;
 
   const body = h("div", null,
@@ -384,6 +397,15 @@ async function WorkItemDetailPage(input: RenderInput, shell: ShellData, key: str
                 ...["urgent", "high", "normal", "low"].map((value) => h("option", { key: value, value }, value)),
               ),
             ),
+            h(Field, { label: "负责人", hint: "留空表示不指派。这一格决定它是否出现在某个人的「我的工作」里。" },
+              h("select", { name: "assigneeId", defaultValue: item.assigneeId ?? "" },
+                h("option", { value: "" }, "未指派"),
+                ...members.map((member) =>
+                  h("option", { key: member.principalId, value: member.principalId },
+                    `${member.handle} · ${member.displayName}`),
+                ),
+              ),
+            ),
             h("div", { className: "actions" },
               h("button", { type: "submit", "data-variant": "primary", "data-op": "work_item.update" }, "保存"),
             ),
@@ -405,6 +427,18 @@ async function WorkItemDetailPage(input: RenderInput, shell: ShellData, key: str
               ),
             )
           : null,
+        h("div", { className: "panel" },
+          h("h2", null, "标签"),
+          h(Form, { op: "work_item.set_labels", redirect: detail, csrf: shell.csrf },
+            h("input", { type: "hidden", name: "key", value: item.key }),
+            h(Field, { label: "标签（一行一个，提交即替换整组）" },
+              h("textarea", { name: "labels", defaultValue: item.labels.join("\n"), style: { minHeight: "70px" } }),
+            ),
+            h("div", { className: "actions" },
+              h("button", { type: "submit", "data-op": "work_item.set_labels" }, "保存标签"),
+            ),
+          ),
+        ),
         h("div", { className: "panel" },
           h("h2", null, "关联"),
           item.relations.length === 0
@@ -457,6 +491,16 @@ async function WorkItemDetailPage(input: RenderInput, shell: ShellData, key: str
                 ...STATUSES.map((status) => h("option", { key: status, value: status }, STATUS_LABEL[status])),
               ),
               h("button", { type: "submit", "data-op": "work_item.transition" }, "流转"),
+            ),
+          ),
+        ),
+        h("div", { className: "panel" },
+          h("h2", null, "移到回收站"),
+          h("p", { className: "reason" }, "不是永久删除：条目进回收站，可以从那里还原。"),
+          h(Form, { op: "work_item.delete", redirect: "/work-items", csrf: shell.csrf },
+            h("input", { type: "hidden", name: "key", value: item.key }),
+            h("div", { className: "actions" },
+              h("button", { type: "submit", "data-op": "work_item.delete" }, "移到回收站"),
             ),
           ),
         ),
@@ -546,9 +590,13 @@ async function NewWorkItemPage(input: RenderInput, shell: ShellData): Promise<Re
 }
 
 async function AccountPage2(input: RenderInput, shell: ShellData): Promise<RenderOutput> {
-  const me = await call<{ handle: string; displayName: string; kind: string; isInstanceAdmin: boolean; credential: string; projects: Array<{ projectId: string; role: string }> }>(
+  const me = await call<{ handle: string; displayName: string; kind: string; isInstanceAdmin: boolean; credential: string }>(
     input, "auth.me", {},
   );
+  const tokens = await call<{ items: Array<{ id: string; name: string; hint: string; createdAt: string; lastUsedAt: string | null; revokedAt: string | null }> }>(
+    input, "auth.list_api_tokens", {},
+  );
+
   const body = h("div", null,
     h("h1", null, "账户"),
     h("div", { className: "panel" },
@@ -557,23 +605,49 @@ async function AccountPage2(input: RenderInput, shell: ShellData): Promise<Rende
         h("dt", null, "名称"), h("dd", null, me.displayName),
         h("dt", null, "类别"), h("dd", null, me.kind),
         h("dt", null, "实例管理员"), h("dd", null, me.isInstanceAdmin ? "是" : "否"),
-        h("dt", null, "本次凭据"), h("dd", null, me.credential),
+        h("dt", null, "本次凭据"), h("dd", null, me.credential === "session" ? "浏览器会话" : "访问令牌"),
       ),
     ),
     h("div", { className: "panel" },
       h("h2", null, "修改口令"),
+      h("p", { className: "reason" }, "改口令会同时结束你其它所有会话。"),
       h(Form, { op: "auth.change_password", redirect: "/account", csrf: shell.csrf },
         h(Field, { label: "当前口令" }, h("input", { type: "password", name: "currentPassword", required: true })),
         h(Field, { label: "新口令（至少 12 位）" }, h("input", { type: "password", name: "newPassword", required: true, minLength: 12 })),
-        h("div", { className: "actions" }, h("button", { type: "submit", "data-op": "auth.change_password" }, "修改")),
+        h("div", { className: "actions" }, h("button", { type: "submit", "data-op": "auth.change_password" }, "修改口令")),
       ),
     ),
     h("div", { className: "panel" },
-      h("h2", null, "访问令牌"),
-      h("p", { className: "reason" }, "令牌用于 API 与 MCP。它只在创建时显示一次，之后只留摘要。"),
-      h(Form, { op: "auth.create_api_token", redirect: "/account/tokens", csrf: shell.csrf },
-        h(Field, { label: "名称" }, h("input", { type: "text", name: "name", required: true })),
-        h("div", { className: "actions" }, h("button", { type: "submit", "data-op": "auth.create_api_token" }, "创建令牌")),
+      h("h2", null, `访问令牌 (${tokens.items.filter((token) => !token.revokedAt).length} 个有效)`),
+      h("p", { className: "reason" },
+        "令牌用于 API 与 MCP。它只在创建时显示一次，之后库里只留摘要——所以创建后那一页是唯一能抄下它的地方。"),
+      tokens.items.length === 0
+        ? h("p", { className: "empty" }, "还没有令牌。")
+        : h("div", { className: "rows" },
+            ...tokens.items.map((token) =>
+              h("div", { key: token.id, className: "row" },
+                h("span", { className: "row-key" }, token.hint),
+                h("span", { className: "row-title" }, token.name),
+                h("span", { className: "row-meta" },
+                  h("span", { className: "pill" }, token.lastUsedAt ? `最近使用 ${token.lastUsedAt.slice(0, 10)}` : "从未使用"),
+                  token.revokedAt
+                    ? h("span", { className: "pill", "data-tone": "blocked" }, "已吊销")
+                    : h(Form, { op: "auth.revoke_api_token", redirect: "/account/tokens", csrf: shell.csrf },
+                        h("input", { type: "hidden", name: "id", value: token.id }),
+                        h("button", { type: "submit", "data-op": "auth.revoke_api_token" }, "吊销"),
+                      ),
+                ),
+              ),
+            ),
+          ),
+      // No _redirect: this command's output IS what the person needs, and redirecting past
+      // it is what threw the only copy of the secret away.
+      h("form", { method: "POST", action: "/api/v1/commands/auth.create_api_token", style: { marginTop: "12px" } },
+        h("input", { type: "hidden", name: "_csrf", value: shell.csrf }),
+        h(Field, { label: "新令牌的名称" }, h("input", { type: "text", name: "name", required: true })),
+        h("div", { className: "actions" },
+          h("button", { type: "submit", "data-variant": "primary", "data-op": "auth.create_api_token" }, "创建令牌"),
+        ),
       ),
     ),
   );
@@ -721,6 +795,32 @@ export async function renderPage(input: RenderInput): Promise<RenderOutput> {
   if (path === "/activity") return page(ActivityPage(pageContext), "活动");
   if (path.endsWith("/settings") && path.startsWith("/projects/")) return page(ProjectSettingsPage(pageContext), "项目设置");
   if (path.startsWith("/projects/")) return page(ProjectOverviewPage(pageContext), "项目");
+
+  // A command whose output is the point renders it here rather than redirecting past it.
+  if (path === "/result" && input.result) {
+    const output = input.result.output as Record<string, unknown>;
+    const secret = typeof output?.token === "string" ? output.token : null;
+    return {
+      status: 200,
+      body: html(h(Shell, { ...shell, children: h("div", null,
+        h("h1", null, "已完成"),
+        h("p", { className: "page-intro" }, `操作 ${input.result.operationId} 已执行。`),
+        secret
+          ? h("div", null,
+              h("div", { className: "notice" },
+                "这是这个令牌唯一一次显示。关掉这一页就再也取不回来了——只有它的摘要留在库里。"),
+              h("div", { className: "panel" },
+                h("h2", null, "访问令牌"),
+                h("p", { className: "prose", style: { fontFamily: "var(--tcrn-font-family-mono, monospace)", wordBreak: "break-all" } }, secret),
+              ),
+            )
+          : h("div", { className: "panel" },
+              h("pre", { className: "prose" }, JSON.stringify(output, null, 2)),
+            ),
+        h("p", null, h("a", { href: "/account/tokens" }, "回到令牌列表")),
+      ) }), "已完成"),
+    };
+  }
 
   if (path === "/error") {
     return {

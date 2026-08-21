@@ -291,10 +291,13 @@ async function main() {
   stop();
 
   const failures = results.filter((entry) => entry.ok === false);
-  // At least one form must actually have PERFORMED its operation. Without this the gate
-  // would pass on a build where every single control merely reached validation and
-  // refused — green, and proving nothing anyone cares about.
-  const performedEnough = performed > 0;
+  // The bar used to be one working form anywhere in the product, which is barely a bar at
+  // all: rename a single input on the project form and creation becomes impossible for
+  // every human, while the gate still records "reached validation" and stays green off the
+  // strength of some other screen. So: a MAJORITY of replayed forms must actually perform
+  // their operation, and every control that only ever reaches validation is named in the
+  // report so a growing pile of them cannot hide.
+  const performedEnough = replayed > 0 && performed * 2 > replayed;
   const report = {
     ok: failures.length === 0 && replayed > 0 && performedEnough,
     routesChecked: routes.size,
@@ -305,7 +308,10 @@ async function main() {
     failures,
     ...(replayed === 0 ? { reasonCode: "NOTHING_REPLAYED", note: "no form was submitted; the gate proved nothing" } : {}),
     ...(!performedEnough && replayed > 0
-      ? { reasonCode: "NOTHING_PERFORMED", note: "every form only reached validation; no control actually did anything" }
+      ? {
+          reasonCode: "TOO_FEW_PERFORMED",
+          note: `only ${performed} of ${replayed} replayed forms actually performed their operation; a majority must`,
+        }
       : {}),
   };
   console.log(JSON.stringify(report, null, 2));
