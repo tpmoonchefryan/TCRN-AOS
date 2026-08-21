@@ -136,6 +136,19 @@ async function main() {
   step("signing in sets a session cookie", cookie.startsWith("aos_session="), setCookie);
   step("signing in redirects rather than answering with a body", loginResponse.status === 303, loginResponse.status);
 
+  const home = await getPage("/", cookie);
+  for (const [path, label] of [
+    ["/watching", "关注入口"],
+    ["/views", "保存视图入口"],
+    ["/activity", "活动入口"],
+    ["/trash", "回收站入口"],
+    ["/admin/accounts", "账户管理入口"],
+    ["/admin/erasure", "抹除入口"],
+    ["/admin/purges", "抹除台账入口"],
+  ]) {
+    step(`首页可以点击到${label}`, home.html.includes(`href="${path}"`), path);
+  }
+
   // ---- create a project, by hand ----
   const projectsPage = await getPage("/projects", cookie);
   const projectForm = findForm(projectsPage.doc, "project.create");
@@ -159,6 +172,18 @@ async function main() {
   const keyMatch = /HAND-\d+/.exec(list.html);
   step("the new item appears in the list", keyMatch !== null, "no HAND- key rendered");
   const key = keyMatch?.[0];
+
+  const projectPage = await getPage("/projects", cookie);
+  const projectLink = /href="\/projects\/([^"?]+)"/.exec(projectPage.html)?.[1];
+  const projectOverview = projectLink ? await getPage(`/projects/${projectLink}`, cookie) : null;
+  for (const [suffix, label] of [
+    ["/settings", "项目设置入口"],
+    ["/governance/gates", "门入口"],
+    ["/governance/deliberations", "审议入口"],
+    ["/governance/decisions", "决定入口"],
+  ]) {
+    step(`项目页可以点击到${label}`, projectOverview?.html.includes(`href="/projects/${projectLink}${suffix}"`) === true, suffix);
+  }
 
   let detail = key ? await getPage(`/work-items/${key}`, cookie) : null;
   step("the detail page renders", detail?.status === 200, detail?.status);
