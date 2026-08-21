@@ -1,10 +1,11 @@
-import { createElement as h, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import type pg from "pg";
+import * as DS from "@tcrn/ui-react";
 import { dispatch, isAuthenticated, type Actor } from "../../../packages/kernel/src/index.js";
 import { STYLESHEET } from "../../../apps/web/src/styles.js";
 import { buildHref, hrefResetConditions, hrefWithout } from "../../../apps/web/src/url.js";
-import { makeCall, type PageContext } from "../../../apps/web/src/ui-kit.js";
+import { breadcrumb, h, makeCall, type PageContext } from "../../../apps/web/src/ui-kit.js";
 import { PageEditPage, PageNewPage, PageRevisionsPage, PageViewPage, SpacesPage } from "../../../apps/web/src/pages/knowledge.js";
 import { DecisionsPage, DeliberationRoomPage, DeliberationsPage, GatesPage } from "../../../apps/web/src/pages/governance.js";
 import { BoardPage, CommentPage, InboxPage, SavedViewsPage, SearchPage, SubjectCommentsPage, WatchingPage } from "../../../apps/web/src/pages/collab.js";
@@ -18,6 +19,7 @@ export interface RenderInput {
   readonly mustChangePassword: boolean;
   readonly pathname: string;
   readonly search: URLSearchParams;
+  readonly cookieHeader: string | undefined;
   readonly version: string;
   readonly error?: { reasonCode: string; message: string; detail: Record<string, unknown> };
   /** Set when a command's own output is what the person needs to read. */
@@ -58,6 +60,7 @@ function html(body: ReactNode, title: string): string {
         h("meta", { name: "viewport", content: "width=device-width, initial-scale=1" }),
         h("title", null, `${title} · TCRN AOS`),
         h("link", { rel: "stylesheet", href: "/assets/tokens.css" }),
+        h("link", { rel: "stylesheet", href: "/assets/tcrn.css" }),
         h("style", { dangerouslySetInnerHTML: { __html: STYLESHEET } }),
       ),
       h("body", null, body),
@@ -66,11 +69,7 @@ function html(body: ReactNode, title: string): string {
 }
 
 function Field(props: { label: string; hint?: string; children?: ReactNode }): ReactNode {
-  return h("div", { className: "field" },
-    h("label", null, props.label),
-    props.children,
-    props.hint ? h("p", { className: "reason" }, props.hint) : null,
-  );
+  return h(DS.Field, { label: props.label, hint: props.hint }, props.children ?? null);
 }
 
 /** Every mutating control is a real form post. There is no other way to change anything. */
@@ -88,6 +87,25 @@ function Form(props: {
   );
 }
 
+function shellRouteLabel(pathname: string): string {
+  const path = pathname.replace(/\/+$/, "") || "/";
+  if (path === "/") return "我的工作";
+  const labels: Array<[string, string]> = [
+    ["/inbox", "收件箱"],
+    ["/projects", "项目"],
+    ["/work-items", "工作项"],
+    ["/board", "看板"],
+    ["/spaces", "知识空间"],
+    ["/watching", "我的关注"],
+    ["/views", "保存的视图"],
+    ["/activity", "活动"],
+    ["/trash", "回收站"],
+    ["/admin", "管理"],
+    ["/account", "账户"],
+  ];
+  return labels.find(([prefix]) => path === prefix || path.startsWith(`${prefix}/`))?.[1] ?? "工作台";
+}
+
 function Shell(props: {
   actor: Actor;
   pathname: string;
@@ -97,112 +115,123 @@ function Shell(props: {
   children?: ReactNode;
   csrf: string;
   mustChangePassword: boolean;
+  requestPreferences: DS.ProductShellRequestPreferences;
 }): ReactNode {
   const currentProject = props.search.get("project");
   const scopeLabel = currentProject
     ? props.projects.find((project) => project.id === currentProject)?.key ?? currentProject
     : "全部项目";
-
-  const nav = (href: string, label: string, count?: number): ReactNode =>
-    h("a", {
-      className: "navitem",
-      href,
-      // Exactly one signal. The stylesheet inks the fill; nothing adds a second layer.
-      "aria-current": props.pathname === href.split("?")[0] ? "page" : undefined,
-    },
-      h("span", null, label),
-      count === undefined ? null : h("span", { className: "count" }, String(count)),
-    );
-
   const scopeHref = (projectId: string | null): string =>
     buildHref(props.pathname, props.search, { project: projectId, cursor: null });
-
-  return h("div", { className: "layout" },
-    h("nav", { className: "sidebar" },
-      h("div", { className: "brand" }, "TCRN AOS"),
-      h("div", { className: "navgroup" },
-        nav("/", "我的工作"),
-        nav("/inbox", "收件箱", props.unread),
+  const controller = DS.useProductShellController({
+    initialCollapsed: false,
+    initialTheme: "light",
+    initialLocale: "zh-CN",
+    collapsedStorageKey: "aos-shell-collapsed",
+    themeStorageKey: "aos-theme",
+    localeStorageKey: "aos-locale",
+    requestPreferences: props.requestPreferences,
+  });
+  const state = controller.productShellStateProps;
+  const controls = controller.productShellControlProps;
+  const navGroups: DS.ProductShellNavGroup[] = [
+    {
+      id: "delivery",
+      label: "交付",
+      items: [
+        { id: "projects", label: "项目", href: "/projects", selected: props.pathname === "/projects" },
+        { id: "work-items", label: "工作项", href: "/work-items", selected: props.pathname === "/work-items" },
+        { id: "board", label: "看板", href: "/board", selected: props.pathname === "/board" },
+      ],
+    },
+    {
+      id: "knowledge",
+      label: "知识",
+      items: [{ id: "spaces", label: "知识空间", href: "/spaces", selected: props.pathname.startsWith("/spaces") }],
+    },
+    {
+      id: "governance",
+      label: "治理",
+      items: [
+        { id: "watching", label: "我的关注", href: "/watching", selected: props.pathname === "/watching" },
+        { id: "views", label: "保存的视图", href: "/views", selected: props.pathname === "/views" },
+      ],
+    },
+    ...(props.actor.isInstanceAdmin
+      ? [{
+          id: "management",
+          label: "管理",
+          items: [
+            { id: "activity", label: "活动", href: "/activity", selected: props.pathname === "/activity" },
+            { id: "trash", label: "回收站", href: "/trash", selected: props.pathname === "/trash" },
+            { id: "accounts", label: "账户", href: "/admin/accounts", selected: props.pathname.startsWith("/admin/accounts") },
+            { id: "erasure", label: "抹除", href: "/admin/erasure", selected: props.pathname === "/admin/erasure" },
+            { id: "purges", label: "抹除台账", href: "/admin/purges", selected: props.pathname === "/admin/purges" },
+          ],
+        }]
+      : []),
+  ];
+  const headerActions = h("div", { className: "aos-shell-actions" },
+    h("details", { className: "scope" },
+      h("summary", null,
+        h("span", { className: "label" }, "范围"),
+        h("span", { className: "value" }, scopeLabel),
+        h("span", { "aria-hidden": "true" }, "▾"),
       ),
-      h("div", { className: "navgroup" },
-        h("h2", null, "交付"),
-        nav("/projects", "项目"),
-        nav("/work-items", "工作项"),
-        nav("/board", "看板"),
-      ),
-      h("div", { className: "navgroup" },
-        h("h2", null, "知识"),
-        nav("/spaces", "知识空间"),
-      ),
-      h("div", { className: "navgroup" },
-        h("h2", null, "治理"),
-        nav("/watching", "我的关注"),
-        nav("/views", "保存的视图"),
-      ),
-      props.actor.isInstanceAdmin
-        ? h("div", { className: "navgroup" },
-            h("h2", null, "管理"),
-            nav("/activity", "活动"),
-            nav("/trash", "回收站"),
-            nav("/admin/accounts", "账户"),
-            nav("/admin/erasure", "抹除"),
-            nav("/admin/purges", "抹除台账"),
-          )
-        : null,
-      h("div", { className: "navgroup" },
-        h("h2", null, "账户"),
-        nav("/account", props.actor.handle),
+      h("div", { className: "scope-menu" },
+        h("a", { href: scopeHref(null), "aria-current": currentProject ? undefined : "true" },
+          h("span", null, "全部项目"),
+          h("span", { className: "count" }, `${props.projects.length} 个`),
+        ),
+        h("hr", null),
+        ...props.projects.map((project) => h("a", {
+          key: project.id,
+          href: scopeHref(project.id),
+          "aria-current": currentProject === project.id ? "true" : undefined,
+        },
+          h("span", null, `${project.key} · ${project.name}`),
+          h("span", { className: "count" }, `${project.openCount}/${project.totalCount}`),
+        )),
       ),
     ),
-    h("div", { className: "main" },
-      h("header", { className: "topbar" },
-        // The only project control in the whole product. Two controls writing one
-        // parameter is the duplication this replaced.
-        h("details", { className: "scope" },
-          h("summary", null,
-            h("span", { className: "label" }, "范围"),
-            h("span", { className: "value" }, scopeLabel),
-            h("span", { "aria-hidden": "true" }, "▾"),
-          ),
-          h("div", { className: "scope-menu" },
-            h("a", { href: scopeHref(null), "aria-current": currentProject ? undefined : "true" },
-              h("span", null, "全部项目"),
-              h("span", { className: "count" }, `${props.projects.length} 个`),
-            ),
-            h("hr", null),
-            ...props.projects.map((project) =>
-              h("a", {
-                key: project.id,
-                href: scopeHref(project.id),
-                "aria-current": currentProject === project.id ? "true" : undefined,
-              },
-                h("span", null, `${project.key} · ${project.name}`),
-                h("span", { className: "count" }, `${project.openCount}/${project.totalCount}`),
-              ),
-            ),
-          ),
-        ),
-        h("div", { className: "spacer" }),
-        h("form", { method: "GET", action: "/search", className: "searchform", style: { maxWidth: "260px" } },
-          h("input", { type: "search", name: "q", placeholder: "检索", defaultValue: "" }),
-        ),
-        h(Form, { op: "auth.logout", redirect: "/login", csrf: props.csrf },
-          h("button", { type: "submit", "data-op": "auth.logout" }, "退出"),
-        ),
-      ),
-      h("main", { className: "content" },
-        props.mustChangePassword
-          ? h("div", { className: "notice" },
-              "这个账户仍在使用初始口令，建议尽快修改。",
-              h("a", { href: "/account/password" }, "现在修改"),
-            )
-          : null,
-        props.children,
-      ),
+    h(Form, { op: "auth.logout", redirect: "/login", csrf: props.csrf },
+      h("button", { type: "submit", "data-op": "auth.logout" }, "退出"),
     ),
   );
+  return h(DS.ProductShell, {
+    productName: "TCRN AOS",
+    moduleName: "工作台",
+    brandProductId: "aos",
+    brandHref: "/",
+    brandMarkSrc: "/assets/tcrn-brand-mark.svg",
+    currentRouteLabel: shellRouteLabel(props.pathname),
+    currentLocationLabel: "TCRN AOS",
+    navLabel: "主导航",
+    navGroups,
+    locales: [
+      { locale: "zh-CN", nativeName: "简体中文" },
+      { locale: "en", nativeName: "English" },
+      { locale: "ja", nativeName: "日本語" },
+      { locale: "ko", nativeName: "한국어" },
+      { locale: "fr", nativeName: "Français" },
+    ],
+    currentLocale: state.currentLocale,
+    collapsed: state.collapsed,
+    collapsedStorageKey: controls.collapsedStorageKey,
+    currentTheme: state.currentTheme,
+    localeMenuOpen: state.localeMenuOpen,
+    mobileNavExpanded: state.mobileNavExpanded,
+    onMobileNavExpandedChange: controls.onMobileNavExpandedChange,
+    onCollapsedChange: controls.onCollapsedChange,
+    onThemeChange: controls.onThemeChange,
+    onLocaleMenuOpenChange: controls.onLocaleMenuOpenChange,
+    onLocaleChange: controls.onLocaleChange,
+    headerActions,
+    contentRole: "main",
+    contentLabel: "工作区",
+    children: props.children,
+  });
 }
-
 async function call<T>(input: RenderInput, op: string, args: Record<string, unknown>): Promise<T> {
   const result = await dispatch<T>(input.pool, op, args, input.actor);
   return result.output;
@@ -392,14 +421,9 @@ async function WorkItemDetailPage(input: RenderInput, shell: ShellData, key: str
 
   const body = h("div", null,
     item.ancestors.length > 0
-      ? h("div", { className: "breadcrumb" },
-          ...item.ancestors.flatMap((ancestor, index) => [
-            index > 0 ? h("span", { key: `sep${index}` }, " › ") : null,
-            ancestor.deleted
-              ? h("span", { key: ancestor.key, className: "reason" }, ancestor.title)
-              : h("a", { key: ancestor.key, href: `/work-items/${ancestor.key}` }, `${ancestor.key} ${ancestor.title}`),
-          ]),
-        )
+      ? breadcrumb(item.ancestors.map((ancestor) => ancestor.deleted
+          ? { label: ancestor.title }
+          : { label: `${ancestor.key} ${ancestor.title}`, href: `/work-items/${ancestor.key}` }))
       : null,
     h("h1", null, `${item.key} ${item.title}`),
     h("div", { className: "grid2" },
@@ -724,6 +748,7 @@ interface ShellData {
   unread: number;
   csrf: string;
   mustChangePassword: boolean;
+  requestPreferences: DS.ProductShellRequestPreferences;
 }
 
 export async function renderPage(input: RenderInput): Promise<RenderOutput> {
@@ -735,6 +760,11 @@ export async function renderPage(input: RenderInput): Promise<RenderOutput> {
     input, "project.list", {},
   );
   const unreadResult = await call<{ unread: number }>(input, "notification.list", { limit: 1 }).catch(() => ({ unread: 0 }));
+  const requestPreferences = DS.readPreferenceCookieValues(input.cookieHeader, {
+    collapsedKey: "aos-shell-collapsed",
+    themeKey: "aos-theme",
+    localeKey: "aos-locale",
+  });
 
   const shell: ShellData = {
     actor: input.actor,
@@ -744,6 +774,7 @@ export async function renderPage(input: RenderInput): Promise<RenderOutput> {
     unread: unreadResult.unread ?? 0,
     csrf: input.csrfToken,
     mustChangePassword: input.mustChangePassword,
+    requestPreferences,
   };
 
   const path = input.pathname.replace(/\/+$/, "") || "/";

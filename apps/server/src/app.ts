@@ -338,6 +338,7 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
         mustChangePassword: request.mustChangePassword,
         pathname: "/result",
         search: new URLSearchParams(),
+        cookieHeader: request.headers.cookie,
         version: options.version,
         result: { operationId, output: result.output },
       });
@@ -394,6 +395,7 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
       mustChangePassword: request.mustChangePassword,
       pathname: url.pathname,
       search: url.searchParams,
+      cookieHeader: request.headers.cookie,
       version: options.version,
     });
     return reply.status(html.status).type("text/html; charset=utf-8").send(html.body);
@@ -410,6 +412,7 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
         mustChangePassword: request.mustChangePassword,
         pathname: "/error",
         search: new URLSearchParams(),
+        cookieHeader: request.headers.cookie,
         version: options.version,
         error: payload,
       });
