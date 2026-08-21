@@ -222,6 +222,8 @@ async function main() {
     descriptionMd: "回放说明",
     parentId: "",
     labels: "",
+    decisionTitle: "回放决议",
+    decisionBodyMd: "回放决议正文",
   };
 
   const results = [];

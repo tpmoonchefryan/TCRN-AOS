@@ -196,7 +196,7 @@ export const getWorkItem = defineOperation({
   output: Type.Intersect([
     WorkItemShape,
     Type.Object({
-      ancestors: Type.Array(Type.Object({ key: Type.String(), title: Type.String() })),
+      ancestors: Type.Array(Type.Object({ key: Type.String(), title: Type.String(), deleted: Type.Boolean() })),
       children: Type.Array(Type.Object({ key: Type.String(), title: Type.String(), status: Type.String(), kind: Type.String() })),
       relations: Type.Array(Type.Object({
         id: Type.String(),
@@ -219,16 +219,22 @@ export const getWorkItem = defineOperation({
     // principal could read every work item in every project by guessing a key.
     requireProjectRole(actor, row.project_id, "viewer");
 
-    const ancestors = await client.query<{ key: string; title: string }>(
+    const ancestorRows = await client.query<{ key: string; title: string; deleted_at: Date | null }>(
       `WITH RECURSIVE up AS (
-         SELECT id, parent_id, key, title, 0 AS depth FROM work_item WHERE id = $1
+         SELECT id, parent_id, key, title, deleted_at, 0 AS depth FROM work_item WHERE id = $1
          UNION ALL
-         SELECT w.id, w.parent_id, w.key, w.title, up.depth + 1
+         SELECT w.id, w.parent_id, w.key, w.title, w.deleted_at, up.depth + 1
            FROM work_item w JOIN up ON w.id = up.parent_id WHERE up.depth < 12
        )
-       SELECT key, title FROM up WHERE depth > 0 ORDER BY depth DESC`,
+       SELECT key, title, deleted_at FROM up WHERE depth > 0 ORDER BY depth DESC`,
       [row.id],
     );
+    const ancestors = ancestorRows.rows
+      .filter((ancestor) => ancestor.deleted_at === null)
+      .map((ancestor) => ({ key: ancestor.key, title: ancestor.title, deleted: false }));
+    if (ancestorRows.rows.some((ancestor) => ancestor.deleted_at !== null)) {
+      ancestors.push({ key: "deleted-ancestor", title: "上级已移入回收站", deleted: true });
+    }
 
     const children = await client.query<{ key: string; title: string; status: string; kind: string }>(
       "SELECT key, title, status, kind FROM work_item WHERE parent_id = $1 AND deleted_at IS NULL ORDER BY seq",
@@ -256,7 +262,7 @@ export const getWorkItem = defineOperation({
 
     return {
       ...toShape(row),
-      ancestors: ancestors.rows,
+      ancestors,
       children: children.rows,
       relations: relations.rows.map((r) => ({
         id: r.id,
@@ -344,6 +350,9 @@ export const listWorkItems = defineOperation({
       );
     }
 
+    const filterWhere = where.join(" AND ");
+    const filterParams = params.slice();
+
     if (input.cursor) {
       const cursor = decodeCursor(input.cursor, {
         schemaVersion: LIST_SCHEMA_VERSION,
@@ -365,8 +374,8 @@ export const listWorkItems = defineOperation({
 
     const whereSql = where.join(" AND ");
     const totalResult = await client.query<{ count: string }>(
-      `SELECT count(*) AS count FROM work_item w WHERE ${whereSql}`,
-      params,
+      `SELECT count(*) AS count FROM work_item w WHERE ${filterWhere}`,
+      filterParams,
     );
     const total = Number(totalResult.rows[0]?.count ?? 0);
 
@@ -450,6 +459,16 @@ export const updateWorkItem = defineOperation({
       parentId: input.parentId === undefined ? row.parent_id : input.parentId,
     };
     if (after.parentId === row.id) fail("validation_failed", "A work item cannot be its own parent");
+    if (after.parentId) {
+      const parent = await client.query<{ project_id: string }>(
+        "SELECT project_id FROM work_item WHERE id = $1 AND deleted_at IS NULL",
+        [after.parentId],
+      );
+      if (!parent.rows[0]) fail("not_found", "No such parent work item");
+      if (parent.rows[0].project_id !== row.project_id) {
+        fail("validation_failed", "A work item's parent must be in the same project");
+      }
+    }
 
     const changed = changedFields(before, after);
     if (changed.length === 0) return toShape(row) as never;
@@ -626,6 +645,7 @@ export const relateWorkItem = defineOperation({
     const from = await loadWork(client, input.key);
     requireProjectRole(actor, from.project_id, "contributor");
     const to = await loadWork(client, input.otherKey);
+    requireProjectRole(actor, to.project_id, "viewer");
     if (from.id === to.id) fail("validation_failed", "A work item cannot relate to itself");
     const id = newId("rel");
     await client.query(
@@ -657,7 +677,7 @@ export const unrelateWorkItem = defineOperation({
   handler: async ({ client, actor }, input) => {
     const from = await loadWork(client, input.key);
     requireProjectRole(actor, from.project_id, "contributor");
-    const result = await client.query("DELETE FROM relation WHERE id = $1", [input.relationId]);
+    const result = await client.query("DELETE FROM relation WHERE id = $1 AND from_id = $2", [input.relationId, from.id]);
     if (result.rowCount === 0) fail("not_found", "No such relation");
     await recordActivity(client, actor, {
       action: "unrelated",
@@ -736,6 +756,13 @@ export const deleteWorkItem = defineOperation({
     // irreversible teaches people to hoard.
     await client.query("UPDATE work_item SET deleted_at = now(), version = version + 1 WHERE id = $1", [row.id]);
     await client.query("DELETE FROM search_doc WHERE subject_type = 'work_item' AND subject_id = $1", [row.id]);
+    await client.query(
+      `DELETE FROM search_doc sd
+        USING comment c
+       WHERE sd.subject_type = 'comment' AND sd.subject_id = c.id
+         AND c.subject_type = 'work_item' AND c.subject_id = $1`,
+      [row.id],
+    );
     await recordActivity(client, actor, {
       action: "deleted",
       subjectType: "work_item",

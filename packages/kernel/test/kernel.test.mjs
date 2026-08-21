@@ -286,6 +286,8 @@ describe("paging", () => {
     const seen = [...first.items, ...second.items, ...third.items].map((item) => item.key);
     assert.equal(new Set(seen).size, seen.length, "no row may appear on two pages");
     assert.equal(seen.length, made.length, `every row must appear on some page (saw ${seen.length} of ${made.length})`);
+    assert.equal(second.total, made.length, "the second page's total must describe the filter, not the cursor remainder");
+    assert.equal(third.total, made.length, "the third page's total must remain stable too");
   });
 
   test("a cursor is refused once the filters change", async () => {
@@ -335,5 +337,143 @@ describe("sign-out", () => {
     assert.equal(result.revoked, 1, "exactly the caller's own session must be revoked");
     const after = await pool.query("SELECT revoked_at FROM session WHERE id = $1", [sessionId]);
     assert.ok(after.rows[0].revoked_at, "the row must actually carry a revocation time");
+  });
+});
+
+describe("remaining data and behavior contracts", () => {
+  test("a form-shaped deliberation close can record one structured decision", async () => {
+    const adminActor = actorFor(admin);
+    const governed = await run("project.create", { key: "KDD", name: "Decision fields", governanceEnabled: true }, adminActor);
+    const deliberation = await run(
+      "deliberation.open",
+      { projectId: governed.id, type: "retrospective", title: "form decision" },
+      adminActor,
+    );
+    const closed = await run(
+      "deliberation.close",
+      {
+        deliberationId: deliberation.id,
+        summaryMd: "纪要正文",
+        outcomeClass: "role_decision",
+        decisionTitle: "保留这条路径",
+        decisionBodyMd: "因为它可以由人手完成。",
+      },
+      adminActor,
+    );
+    assert.equal(closed.decisionIds.length, 1);
+    const decision = await pool.query("SELECT title, body_md FROM decision WHERE id = $1", [closed.decisionIds[0]]);
+    assert.equal(decision.rows[0].title, "保留这条路径");
+    assert.equal(decision.rows[0].body_md, "因为它可以由人手完成。");
+  });
+
+  test("comments on project subjects carry the same project id into search", async () => {
+    const actor = actorFor(contributor, [[project.id, "contributor"]]);
+    const comment = await run(
+      "comment.create",
+      { subjectType: "project", subjectId: project.id, bodyMd: "项目评论应可按项目检索" },
+      actor,
+    );
+    const indexed = await pool.query(
+      "SELECT project_id FROM search_doc WHERE subject_type = 'comment' AND subject_id = $1",
+      [comment.id],
+    );
+    assert.equal(indexed.rows[0].project_id, project.id);
+  });
+
+  test("Chinese search headlines the hit rather than returning an unmarked prefix", async () => {
+    const actor = actorFor(contributor, [[project.id, "contributor"]]);
+    const made = await run(
+      "work_item.create",
+      { projectId: project.id, kind: "story", title: "摘要测试", bodyMd: "前缀 命中 后缀" },
+      actor,
+    );
+    const result = await run("search.query", { q: "命中", limit: 50 }, actor);
+    const hit = result.items.find((item) => item.subjectId === made.id);
+    assert.ok(hit, "the indexed work item must be found");
+    assert.match(hit.snippet, /«命中»/, "the returned snippet must mark the hit");
+  });
+
+  test("a board move normalizes equal neighbouring ranks before inserting", async () => {
+    const adminActor = actorFor(admin);
+    const first = await run("work_item.create", { projectId: project.id, kind: "story", title: "rank first" }, adminActor);
+    const middle = await run("work_item.create", { projectId: project.id, kind: "story", title: "rank middle" }, adminActor);
+    const last = await run("work_item.create", { projectId: project.id, kind: "story", title: "rank last" }, adminActor);
+    await pool.query("UPDATE work_item SET rank = 'm' WHERE id = ANY($1::text[])", [[first.id, middle.id, last.id]]);
+    await run(
+      "board.move",
+      { key: middle.key, expectedVersion: middle.version, toStatus: "planned", beforeKey: first.key, afterKey: last.key },
+      adminActor,
+    );
+    const ranks = await pool.query("SELECT key, rank FROM work_item WHERE id = ANY($1::text[])", [[first.id, middle.id, last.id]]);
+    const byKey = new Map(ranks.rows.map((row) => [row.key, row.rank]));
+    assert.ok(byKey.get(first.key) < byKey.get(middle.key));
+    assert.ok(byKey.get(middle.key) < byKey.get(last.key));
+  });
+
+  test("concurrent idempotency requests execute the command once", async () => {
+    const adminActor = actorFor(admin);
+    const key = `kernel-idempotency-${Date.now()}`;
+    const input = { key: "KID", name: "Idempotent project" };
+    const [first, second] = await Promise.all([
+      dispatch(pool, "project.create", input, adminActor, { idempotencyKey: key }),
+      dispatch(pool, "project.create", input, adminActor, { idempotencyKey: key }),
+    ]);
+    assert.deepEqual(first.output, second.output);
+    assert.notEqual(first.replayed, second.replayed, "one caller executes and the other replays");
+    const count = await pool.query("SELECT count(*)::int AS n FROM project WHERE key = 'KID'");
+    assert.equal(count.rows[0].n, 1);
+  });
+
+  test("an update cannot attach a parent from another project", async () => {
+    const adminActor = actorFor(admin);
+    const other = await run("project.create", { key: "KDP", name: "Other parent project" }, adminActor);
+    const parent = await run("work_item.create", { projectId: other.id, kind: "story", title: "foreign parent" }, adminActor);
+    const current = await run("work_item.get", { key: story.key }, adminActor);
+    assert.equal(
+      await refusal(
+        "work_item.update",
+        { key: story.key, expectedVersion: current.version, parentId: parent.id },
+        adminActor,
+      ),
+      "validation_failed",
+    );
+  });
+
+  test("relations require access to both projects and cannot remove another item's link", async () => {
+    const adminActor = actorFor(admin);
+    const other = await run("project.create", { key: "KDR", name: "Other relation project" }, adminActor);
+    const foreign = await run("work_item.create", { projectId: other.id, kind: "story", title: "foreign relation" }, adminActor);
+    const contributorActor = actorFor(contributor, [[project.id, "contributor"]]);
+    assert.equal(
+      await refusal("work_item.relate", { key: story.key, relation: "relates_to", otherKey: foreign.key }, contributorActor),
+      "forbidden",
+    );
+
+    const sameA = await run("work_item.create", { projectId: project.id, kind: "story", title: "same project A" }, adminActor);
+    const sameB = await run("work_item.create", { projectId: project.id, kind: "story", title: "same project B" }, adminActor);
+    const relation = await run("work_item.relate", { key: sameA.key, relation: "relates_to", otherKey: sameB.key }, adminActor);
+    assert.equal(
+      await refusal("work_item.unrelate", { key: sameB.key, relationId: relation.id }, adminActor),
+      "not_found",
+    );
+    const remains = await pool.query("SELECT count(*)::int AS n FROM relation WHERE id = $1", [relation.id]);
+    assert.equal(remains.rows[0].n, 1);
+  });
+
+  test("deleting a work item hides its comments from search and explains a deleted ancestor", async () => {
+    const adminActor = actorFor(admin);
+    const parent = await run("work_item.create", { projectId: project.id, kind: "story", title: "deleted parent" }, adminActor);
+    const child = await run("work_item.create", { projectId: project.id, kind: "subtask", title: "orphaned child", parentId: parent.id }, adminActor);
+    const comment = await run(
+      "comment.create",
+      { subjectType: "work_item", subjectId: parent.id, bodyMd: "这个评论应随主体离开检索" },
+      actorFor(contributor, [[project.id, "contributor"]]),
+    );
+    await run("work_item.delete", { key: parent.key }, adminActor);
+    const readChild = await run("work_item.get", { key: child.key }, adminActor);
+    assert.equal(readChild.ancestors.at(-1).deleted, true);
+    assert.equal(readChild.ancestors.at(-1).title, "上级已移入回收站");
+    const search = await run("search.query", { q: "主体 离开", limit: 50 }, adminActor);
+    assert.equal(search.items.some((item) => item.subjectId === comment.id), false);
   });
 });

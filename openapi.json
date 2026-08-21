@@ -4873,6 +4873,39 @@
                       }
                     }
                   },
+                  "decisionTitle": {
+                    "minLength": 1,
+                    "maxLength": 400,
+                    "type": "string"
+                  },
+                  "decisionBodyMd": {
+                    "maxLength": 100000,
+                    "type": "string"
+                  },
+                  "decisionOutcomeClass": {
+                    "anyOf": [
+                      {
+                        "const": "discussion_only",
+                        "type": "string"
+                      },
+                      {
+                        "const": "recommendation",
+                        "type": "string"
+                      },
+                      {
+                        "const": "role_decision",
+                        "type": "string"
+                      },
+                      {
+                        "const": "blocked",
+                        "type": "string"
+                      },
+                      {
+                        "const": "owner_intent_required",
+                        "type": "string"
+                      }
+                    ]
+                  },
                   "unresolved": {
                     "maxItems": 50,
                     "type": "array",
@@ -4970,6 +5003,39 @@
                         }
                       }
                     }
+                  },
+                  "decisionTitle": {
+                    "minLength": 1,
+                    "maxLength": 400,
+                    "type": "string"
+                  },
+                  "decisionBodyMd": {
+                    "maxLength": 100000,
+                    "type": "string"
+                  },
+                  "decisionOutcomeClass": {
+                    "anyOf": [
+                      {
+                        "const": "discussion_only",
+                        "type": "string"
+                      },
+                      {
+                        "const": "recommendation",
+                        "type": "string"
+                      },
+                      {
+                        "const": "role_decision",
+                        "type": "string"
+                      },
+                      {
+                        "const": "blocked",
+                        "type": "string"
+                      },
+                      {
+                        "const": "owner_intent_required",
+                        "type": "string"
+                      }
+                    ]
                   },
                   "unresolved": {
                     "maxItems": 50,
@@ -14116,7 +14182,8 @@
                             "type": "object",
                             "required": [
                               "key",
-                              "title"
+                              "title",
+                              "deleted"
                             ],
                             "properties": {
                               "key": {
@@ -14124,6 +14191,9 @@
                               },
                               "title": {
                                 "type": "string"
+                              },
+                              "deleted": {
+                                "type": "boolean"
                               }
                             }
                           }

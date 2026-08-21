@@ -426,8 +426,16 @@ export const moveBoardCard = defineOperation({
       }
     }
 
-    const above = await neighbourRank(client, row, input.beforeKey);
-    const below = await neighbourRank(client, row, input.afterKey);
+    let above = await neighbourRank(client, row, input.beforeKey);
+    let below = await neighbourRank(client, row, input.afterKey);
+    if (above !== null && below !== null && above >= below) {
+      // Old fixtures and imports can leave adjacent cards with the same rank. Normalize
+      // the target column once before asking rankBetween for a slot; otherwise the fallback
+      // appends a suffix and the card silently lands at the end.
+      await rebalanceColumn(client, row.project_id, input.toStatus);
+      above = await neighbourRank(client, row, input.beforeKey);
+      below = await neighbourRank(client, row, input.afterKey);
+    }
     const rank = rankBetween(above, below);
 
     const before = { status: row.status, rank: row.rank };
@@ -512,6 +520,22 @@ async function neighbourRank(
     fail("validation_failed", "A card cannot be ranked against itself", { ref: key });
   }
   return row.rank;
+}
+
+async function rebalanceColumn(client: pg.PoolClient, projectId: string, status: BoardStatus): Promise<void> {
+  const rows = await client.query<{ id: string; rank: string }>(
+    `SELECT id, rank FROM work_item
+      WHERE project_id = $1 AND status = $2 AND deleted_at IS NULL
+      ORDER BY rank ASC, id ASC
+      FOR UPDATE`,
+    [projectId, status],
+  );
+  for (const [index, row] of rows.rows.entries()) {
+    const rank = String(index + 1).padStart(12, "0");
+    if (row.rank !== rank) {
+      await client.query("UPDATE work_item SET rank = $1 WHERE id = $2", [rank, row.id]);
+    }
+  }
 }
 
 function toSavedView(row: SavedViewRow, principalId: string): Record<string, unknown> {
@@ -652,6 +676,9 @@ export const listSavedViews = defineOperation({
     ];
     if (input.projectId) where.push(`sv.project_id = ${push(input.projectId)}`);
 
+    const filterWhere = where.join(" AND ");
+    const filterParams = params.slice();
+
     if (input.cursor) {
       const cursor = decodeCursor(input.cursor, {
         schemaVersion: SAVED_VIEW_SCHEMA_VERSION,
@@ -664,8 +691,8 @@ export const listSavedViews = defineOperation({
 
     const whereSql = where.join(" AND ");
     const totalResult = await client.query<{ count: string }>(
-      `SELECT count(*) AS count FROM saved_view sv WHERE ${whereSql}`,
-      params,
+      `SELECT count(*) AS count FROM saved_view sv WHERE ${filterWhere}`,
+      filterParams,
     );
     const total = Number(totalResult.rows[0]?.count ?? 0);
 
@@ -787,6 +814,9 @@ export const listLabels = defineOperation({
     };
     const where: string[] = [`l.project_id = ${push(input.projectId)}`];
 
+    const filterWhere = where.join(" AND ");
+    const filterParams = params.slice();
+
     if (input.cursor) {
       const cursor = decodeCursor(input.cursor, {
         schemaVersion: LABEL_SCHEMA_VERSION,
@@ -799,8 +829,8 @@ export const listLabels = defineOperation({
 
     const whereSql = where.join(" AND ");
     const totalResult = await client.query<{ count: string }>(
-      `SELECT count(*) AS count FROM label l WHERE ${whereSql}`,
-      params,
+      `SELECT count(*) AS count FROM label l WHERE ${filterWhere}`,
+      filterParams,
     );
     const total = Number(totalResult.rows[0]?.count ?? 0);
 

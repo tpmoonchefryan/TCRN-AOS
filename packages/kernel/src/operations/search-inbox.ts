@@ -137,8 +137,12 @@ export const searchQuery = defineOperation({
       `WITH q AS (SELECT to_tsquery('simple', ${push(query)}) AS query)
        SELECT sd.subject_type, sd.subject_id, sd.title, sd.key, sd.status, sd.project_id,
               ts_rank_cd(sd.search_vec, q.query, 32) AS rank_score,
-              ts_headline('simple', coalesce(nullif(sd.body_text, ''), sd.title), q.query,
-                          '${HEADLINE_OPTIONS}') AS snippet,
+              ts_headline(
+                'simple',
+                array_to_string(tsvector_to_array(sd.search_vec), ' '),
+                q.query,
+                '${HEADLINE_OPTIONS}, MaxFragments=2'
+              ) AS snippet,
               count(*) OVER () AS total_count
          FROM search_doc sd CROSS JOIN q
         WHERE ${where.join(" AND ")}

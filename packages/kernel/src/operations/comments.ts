@@ -295,9 +295,10 @@ export const createComment = defineOperation({
 
     const id = newId("cm");
     const type = input.type ?? "human_intent";
-    // Only a work item denormalises its project onto the comment; every other subject
-    // reaches its project through the join above.
-    const projectId = input.subjectType === "work_item" ? project : null;
+    // The search index and authorization must agree for every subject type. Keeping the
+    // resolved project on the comment avoids a NULL index row that only administrators can
+    // ever see in a project-scoped search.
+    const projectId = project;
 
     await client.query(
       `INSERT INTO comment (id, subject_type, subject_id, project_id, parent_comment_id, type, author_id, body_md)
@@ -383,6 +384,9 @@ export const listComments = defineOperation({
       `c.subject_id = ${push(input.subjectId)}`,
     ];
 
+    const filterWhere = where.join(" AND ");
+    const filterParams = params.slice();
+
     if (input.cursor) {
       const cursor = decodeCursor(input.cursor, {
         schemaVersion: LIST_SCHEMA_VERSION,
@@ -397,8 +401,8 @@ export const listComments = defineOperation({
 
     const whereSql = where.join(" AND ");
     const totalResult = await client.query<{ count: string }>(
-      `SELECT count(*) AS count FROM comment c WHERE ${whereSql}`,
-      params,
+      `SELECT count(*) AS count FROM comment c WHERE ${filterWhere}`,
+      filterParams,
     );
     const total = Number(totalResult.rows[0]?.count ?? 0);
 

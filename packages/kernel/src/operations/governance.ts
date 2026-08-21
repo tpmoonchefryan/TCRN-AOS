@@ -297,6 +297,9 @@ export const listGates = defineOperation({
     if (input.outcomeClass) where.push(`g.outcome_class = ${push(input.outcomeClass)}`);
     if (input.open) where.push("g.status <> 'satisfied'");
 
+    const filterWhere = where.join(" AND ");
+    const filterParams = params.slice();
+
     if (input.cursor) {
       const cursor = decodeCursor(input.cursor, {
         schemaVersion: GATE_LIST_SCHEMA_VERSION,
@@ -315,8 +318,8 @@ export const listGates = defineOperation({
 
     const whereSql = where.join(" AND ");
     const totalResult = await client.query<{ count: string }>(
-      `SELECT count(*) AS count FROM gate g LEFT JOIN work_item w ON w.id = g.work_item_id WHERE ${whereSql}`,
-      params,
+      `SELECT count(*) AS count FROM gate g LEFT JOIN work_item w ON w.id = g.work_item_id WHERE ${filterWhere}`,
+      filterParams,
     );
     const total = Number(totalResult.rows[0]?.count ?? 0);
 
@@ -919,6 +922,11 @@ export const closeDeliberation = defineOperation({
         { maxItems: 50 },
       ),
     ),
+    // A browser form cannot send an object array. These named fields carry one optional
+    // decision alongside the minutes; API/MCP callers may still send the full array.
+    decisionTitle: Type.Optional(Type.String({ minLength: 1, maxLength: 400 })),
+    decisionBodyMd: Type.Optional(Type.String({ maxLength: 100_000 })),
+    decisionOutcomeClass: Type.Optional(MinutesOutcomeEnum),
     unresolved: Type.Optional(Type.Array(Type.String({ minLength: 1, maxLength: 2000 }), { maxItems: 50 })),
     expectedVersion: Type.Optional(Type.Integer({ minimum: 1 })),
   }),
@@ -955,6 +963,13 @@ export const closeDeliberation = defineOperation({
       bodyMd: entry.bodyMd ?? "",
       outcomeClass: entry.outcomeClass ?? input.outcomeClass,
     }));
+    if (input.decisionTitle) {
+      entries.push({
+        title: input.decisionTitle,
+        bodyMd: input.decisionBodyMd ?? "",
+        outcomeClass: input.decisionOutcomeClass ?? input.outcomeClass,
+      });
+    }
 
     const minutesId = newId("dm");
     await client.query(
@@ -1139,6 +1154,9 @@ export const listDeliberations = defineOperation({
     if (input.status) where.push(`status = ${push(input.status)}`);
     if (input.executionMode) where.push(`execution_mode = ${push(input.executionMode)}`);
 
+    const filterWhere = where.join(" AND ");
+    const filterParams = params.slice();
+
     if (input.cursor) {
       const cursor = decodeCursor(input.cursor, {
         schemaVersion: DELIBERATION_LIST_SCHEMA_VERSION,
@@ -1157,8 +1175,8 @@ export const listDeliberations = defineOperation({
 
     const whereSql = where.join(" AND ");
     const totalResult = await client.query<{ count: string }>(
-      `SELECT count(*) AS count FROM deliberation WHERE ${whereSql}`,
-      params,
+      `SELECT count(*) AS count FROM deliberation WHERE ${filterWhere}`,
+      filterParams,
     );
     const total = Number(totalResult.rows[0]?.count ?? 0);
 
@@ -1293,6 +1311,9 @@ export const listDecisions = defineOperation({
       where.push("NOT EXISTS (SELECT 1 FROM decision s WHERE s.supersedes_id = d.id)");
     }
 
+    const filterWhere = where.join(" AND ");
+    const filterParams = params.slice();
+
     if (input.cursor) {
       const cursor = decodeCursor(input.cursor, {
         schemaVersion: DECISION_LIST_SCHEMA_VERSION,
@@ -1311,8 +1332,8 @@ export const listDecisions = defineOperation({
 
     const whereSql = where.join(" AND ");
     const totalResult = await client.query<{ count: string }>(
-      `SELECT count(*) AS count FROM decision d WHERE ${whereSql}`,
-      params,
+      `SELECT count(*) AS count FROM decision d WHERE ${filterWhere}`,
+      filterParams,
     );
     const total = Number(totalResult.rows[0]?.count ?? 0);
 

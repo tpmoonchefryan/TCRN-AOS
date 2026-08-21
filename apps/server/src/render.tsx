@@ -356,7 +356,7 @@ async function WorkItemsPage(input: RenderInput, shell: ShellData): Promise<Rend
 async function WorkItemDetailPage(input: RenderInput, shell: ShellData, key: string): Promise<RenderOutput> {
   const item = await call<WorkItem & {
     bodyMd: string;
-    ancestors: Array<{ key: string; title: string }>;
+    ancestors: Array<{ key: string; title: string; deleted: boolean }>;
     children: Array<{ key: string; title: string; status: string; kind: string }>;
     relations: Array<{ id: string; direction: string; relation: string; otherKey: string; otherTitle: string; otherStatus: string }>;
     openGates: Array<{ id: string; title: string; status: string; outcomeClass: string }>;
@@ -380,7 +380,9 @@ async function WorkItemDetailPage(input: RenderInput, shell: ShellData, key: str
       ? h("div", { className: "breadcrumb" },
           ...item.ancestors.flatMap((ancestor, index) => [
             index > 0 ? h("span", { key: `sep${index}` }, " › ") : null,
-            h("a", { key: ancestor.key, href: `/work-items/${ancestor.key}` }, `${ancestor.key} ${ancestor.title}`),
+            ancestor.deleted
+              ? h("span", { key: ancestor.key, className: "reason" }, ancestor.title)
+              : h("a", { key: ancestor.key, href: `/work-items/${ancestor.key}` }, `${ancestor.key} ${ancestor.title}`),
           ]),
         )
       : null,
