@@ -20,6 +20,7 @@ const FORBIDDEN = [
 ];
 
 const STORE_IMPORT = /from\s+["'][^"']*packages\/store\/[^"']*["']|from\s+["']\.\.\/\.\.\/store\/[^"']*["']/;
+const DIRECT_QUERY = /\.query\s*\(/;
 
 // The exemptions are exactly the process entrypoints. A `main` has to create the pool and
 // run migrations before any request exists, so it necessarily touches the store — but it
@@ -54,6 +55,28 @@ for (const { dir, why } of FORBIDDEN) {
     for (const [index, line] of source.split("\n").entries()) {
       if (STORE_IMPORT.test(line)) {
         violations.push({ file: rel, line: index + 1, statement: line.trim(), why });
+      }
+    }
+  }
+}
+
+for (const dir of ["apps/web/src/pages", "apps/server/src/render.tsx"]) {
+  const root = join(repoRoot, dir);
+  const candidates = dir.endsWith(".tsx") ? [root] : [];
+  if (candidates.length === 0) {
+    for await (const file of walk(root)) candidates.push(file);
+  }
+  for (const file of candidates) {
+    const rel = relative(repoRoot, file);
+    const source = await readFile(file, "utf8");
+    for (const [index, line] of source.split("\n").entries()) {
+      if (DIRECT_QUERY.test(line)) {
+        violations.push({
+          file: rel,
+          line: index + 1,
+          statement: line.trim(),
+          why: "rendered pages may only call dispatch; a direct query would bypass authorization",
+        });
       }
     }
   }

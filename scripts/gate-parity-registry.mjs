@@ -51,6 +51,13 @@ if (extraTools.length) problems.push({ what: "generated for MCP but not declared
 const commandsWithoutUi = operations
   .filter((operation) => operation.kind === "command" && operation.ui === null)
   .map((operation) => ({ id: operation.id, statedReason: operation.uiExemptReason }));
+const unexplainedCommandsWithoutUi = commandsWithoutUi.filter((operation) => !operation.statedReason);
+if (unexplainedCommandsWithoutUi.length) {
+  problems.push({
+    what: "commands without a UI control and without an exemption reason",
+    ids: unexplainedCommandsWithoutUi.map((operation) => operation.id),
+  });
+}
 
 // Duplicate route bindings would mean two operations answering the same address, which is
 // how a screen comes to render something other than what it says it does.

@@ -25,7 +25,7 @@ const FORBIDDEN = [
 
 // Documents may discuss the separation; code may not depend on it. The distinction is the
 // point of the rule, so it is stated rather than left to whoever reads the output.
-const SEARCHED = ["packages", "apps", "scripts", "deploy"];
+const SEARCHED = [".", "packages", "apps", "scripts", "deploy"];
 const SKIP_FILE = /gate-absence\.mjs$/;
 
 async function* walk(dir) {
@@ -46,9 +46,24 @@ async function* walk(dir) {
   }
 }
 
+async function* rootFiles(dir) {
+  let entries;
+  try {
+    entries = await readdir(dir, { withFileTypes: true });
+  } catch {
+    return;
+  }
+  for (const entry of entries) {
+    if (entry.isFile() && /\.(ts|tsx|mjs|js|json|sql|ya?ml)$/.test(entry.name)) {
+      yield join(dir, entry.name);
+    }
+  }
+}
+
 const references = [];
 for (const dir of SEARCHED) {
-  for await (const file of walk(join(repoRoot, dir))) {
+  const files = dir === "." ? rootFiles(repoRoot) : walk(join(repoRoot, dir));
+  for await (const file of files) {
     if (SKIP_FILE.test(file)) continue;
     const source = await readFile(file, "utf8");
     for (const [index, line] of source.split("\n").entries()) {
@@ -88,7 +103,12 @@ try {
   }
 
   if (!suite.reason) {
-    const result = spawnSync("node", ["--test", "--test-concurrency=1", "packages/store/test/search-text.test.mjs", "apps/web/src/test/url.test.mjs"], {
+    const result = spawnSync("node", [
+      "--test",
+      "--test-concurrency=1",
+      "packages/**/test/*.test.mjs",
+      "apps/**/test/*.test.mjs",
+    ], {
       cwd: repoRoot,
       encoding: "utf8",
     });

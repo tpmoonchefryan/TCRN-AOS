@@ -13,7 +13,8 @@
 // find out from a red gate rather than from folklore.
 
 import pg from "pg";
-import { analyze, toQuery } from "../dist/packages/store/src/search-text.js";
+import { upsertSearchDoc } from "../dist/packages/kernel/src/audit.js";
+import { toQuery } from "../dist/packages/store/src/search-text.js";
 
 const DB = process.env.AOS_DATABASE_URL ?? "postgres://postgres:devpass@127.0.0.1:55432/aos";
 
@@ -40,47 +41,56 @@ const CASES = [
 async function main() {
   const client = new pg.Client({ connectionString: DB });
   await client.connect();
-
-  await client.query("CREATE TEMP TABLE gate_corpus (id text primary key, search_vec tsvector)");
-  for (const document of CORPUS) {
-    await client.query(
-      `INSERT INTO gate_corpus (id, search_vec) VALUES ($1,
-         setweight(to_tsvector('simple', $2), 'A') || setweight(to_tsvector('simple', $3), 'B'))`,
-      [document.id, analyze(document.title).join(" "), analyze(document.body).join(" ")],
-    );
-  }
+  const prefix = `gate-cjk-${Date.now()}-${Math.random().toString(36).slice(2)}-`;
 
   const failures = [];
-
-  for (const testCase of CASES) {
-    const query = toQuery(testCase.q);
-    const found = query
-      ? (
-          await client.query("SELECT id FROM gate_corpus WHERE search_vec @@ to_tsquery('simple', $1) ORDER BY id", [query])
-        ).rows.map((row) => row.id)
-      : [];
-    const expected = [...testCase.expect].sort();
-    if (JSON.stringify(found) !== JSON.stringify(expected)) {
-      failures.push({ query: testCase.q, why: testCase.why, expected, found });
+  let naiveHits = null;
+  try {
+    // Exercise the same write helper the product uses. A hand-copied INSERT here would
+    // let the gate stay green after the real index construction changed.
+    for (const document of CORPUS) {
+      await upsertSearchDoc(client, {
+        subjectType: "work_item",
+        subjectId: `${prefix}${document.id}`,
+        title: document.title,
+        body: document.body,
+      });
     }
-  }
 
-  // The control: the same search with the plain configuration, which must still fail.
-  const naive = await client.query(
-    "SELECT count(*)::int AS hits FROM (SELECT to_tsvector('simple', $1) AS v) t WHERE t.v @@ to_tsquery('simple', $2)",
-    ["工单管理系统", "工单"],
-  );
-  const naiveHits = naive.rows[0].hits;
-  if (naiveHits !== 0) {
-    failures.push({
-      query: "control",
-      why: "the plain configuration now matches a two-character CJK query, so the analyzer's stated reason for existing is out of date",
-      expected: 0,
-      found: naiveHits,
-    });
-  }
+    for (const testCase of CASES) {
+      const query = toQuery(testCase.q);
+      const found = query
+        ? (
+            await client.query(
+              "SELECT subject_id FROM search_doc WHERE subject_type = 'work_item' AND subject_id LIKE $1 AND search_vec @@ to_tsquery('simple', $2) ORDER BY subject_id",
+              [`${prefix}%`, query],
+            )
+          ).rows.map((row) => row.subject_id.slice(prefix.length))
+        : [];
+      const expected = [...testCase.expect].sort();
+      if (JSON.stringify(found) !== JSON.stringify(expected)) {
+        failures.push({ query: testCase.q, why: testCase.why, expected, found });
+      }
+    }
 
-  await client.end();
+    // The control: the same search with the plain configuration, which must still fail.
+    const naive = await client.query(
+      "SELECT count(*)::int AS hits FROM (SELECT to_tsvector('simple', $1) AS v) t WHERE t.v @@ to_tsquery('simple', $2)",
+      ["工单管理系统", "工单"],
+    );
+    naiveHits = naive.rows[0].hits;
+    if (naiveHits !== 0) {
+      failures.push({
+        query: "control",
+        why: "the plain configuration now matches a two-character CJK query, so the analyzer's stated reason for existing is out of date",
+        expected: 0,
+        found: naiveHits,
+      });
+    }
+  } finally {
+    await client.query("DELETE FROM search_doc WHERE subject_type = 'work_item' AND subject_id LIKE $1", [`${prefix}%`]);
+    await client.end();
+  }
 
   const report = { ok: failures.length === 0, cases: CASES.length, corpus: CORPUS.length, naiveControlHits: naiveHits, failures };
   console.log(JSON.stringify(report, null, 2));

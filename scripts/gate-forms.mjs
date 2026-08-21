@@ -188,8 +188,15 @@ async function main() {
   const unsubstituted = [];
   for (const operation of allOperations()) {
     if (!operation.ui) continue;
+    const routeSubstitutions = {
+      ...substitutions,
+      // Governance screens must be rendered from a project with governance enabled. Using
+      // the plain fixture here made every governance form become a "governance disabled"
+      // notice, so the gate replayed zero of the controls it claimed to cover.
+      ...(operation.ui.route.includes("/governance/") ? { "{projectId}": governed.id } : {}),
+    };
     let route = operation.ui.route;
-    for (const [token, value] of Object.entries(substitutions)) {
+    for (const [token, value] of Object.entries(routeSubstitutions)) {
       if (route.includes(token) && value === "") {
         // No fixture for this id. Reported rather than blanked, so a route the gate cannot
         // reach is visible instead of silently passing as an empty path.
@@ -218,6 +225,7 @@ async function main() {
   };
 
   const results = [];
+  const renderedControls = new Set();
   let replayed = 0;
   let performed = 0;
   let validated = 0;
@@ -228,7 +236,12 @@ async function main() {
       results.push({ route, ok: false, status: page.status, action: "(GET)", reason: `the route a control declares does not render: GET returned ${page.status}` });
       continue;
     }
-    const formCount = formsIn(html).filter((form) => form.method === "POST").length;
+    const initialForms = formsIn(html).filter((form) => form.method === "POST");
+    for (const form of initialForms) {
+      const renderedOperation = form.action.split("/").at(-1);
+      if (renderedOperation) renderedControls.add(renderedOperation);
+    }
+    const formCount = initialForms.length;
     for (let formIndex = 0; formIndex < formCount; formIndex += 1) {
       // Re-read the page for every submission. Replaying several forms from one snapshot
       // makes the second one carry a version the first already superseded, and the 409 that
@@ -238,6 +251,8 @@ async function main() {
       const freshForms = formsIn(await fresh.text()).filter((entry) => entry.method === "POST");
       const form = freshForms[formIndex];
       if (!form) break;
+      const renderedOperation = form.action.split("/").at(-1);
+      if (renderedOperation) renderedControls.add(renderedOperation);
       // Skip the destructive ones: this gate proves controls submit, and proving delete
       // works by deleting the fixture would break every later route in the same run.
       // Also skipped: change_password, which by design revokes every session — including
@@ -290,6 +305,21 @@ async function main() {
 
   stop();
 
+  // Governance is the route family most likely to disappear behind a "disabled" fixture.
+  // Require its representative controls to be present in rendered HTML, not merely that
+  // some unrelated form elsewhere performed an operation.
+  const requiredControls = [
+    "gate.create",
+    "gate.decide",
+    "deliberation.open",
+    "deliberation.add_position",
+    "deliberation.close",
+  ];
+  for (const operationId of requiredControls) {
+    if (!renderedControls.has(operationId)) {
+      results.push({ operationId, ok: false, detail: "the rendered governance fixture exposed no form for this control" });
+    }
+  }
   const failures = results.filter((entry) => entry.ok === false);
   // The bar used to be one working form anywhere in the product, which is barely a bar at
   // all: rename a single input on the project form and creation becomes impossible for
@@ -305,6 +335,8 @@ async function main() {
     formsReplayed: replayed,
     performed,
     reachedValidation: validated,
+    requiredControls,
+    missingRequiredControls: requiredControls.filter((operationId) => !renderedControls.has(operationId)),
     failures,
     ...(replayed === 0 ? { reasonCode: "NOTHING_REPLAYED", note: "no form was submitted; the gate proved nothing" } : {}),
     ...(!performedEnough && replayed > 0

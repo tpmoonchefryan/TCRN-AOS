@@ -178,7 +178,7 @@ function Shell(props: {
       h("main", { className: "content" },
         props.mustChangePassword
           ? h("div", { className: "notice" },
-              "这个账户仍在使用初始口令。",
+              "这个账户仍在使用初始口令，建议尽快修改。",
               h("a", { href: "/account/password" }, "现在修改"),
             )
           : null,

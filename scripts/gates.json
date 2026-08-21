@@ -1,0 +1,20 @@
+{
+  "verifySteps": [
+    "typecheck",
+    "codegen:check",
+    "build",
+    "test",
+    "audit:licenses",
+    "gate:manifest",
+    "gate:parity-registry",
+    "gate:no-side-door",
+    "gate:openapi",
+    "gate:mcp-handshake",
+    "gate:forms",
+    "gate:human-only",
+    "gate:search-cjk",
+    "gate:absence",
+    "gate:self-sufficiency",
+    "gate:generated-encoding"
+  ]
+}
