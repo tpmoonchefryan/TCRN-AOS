@@ -13,6 +13,7 @@ import {
   hostAllowed,
   newOpaqueToken,
   normaliseError,
+  parseQuery,
   SECURITY_HEADERS,
   type Actor,
 } from "../../../packages/kernel/src/index.js";
@@ -364,7 +365,13 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
     if (operation.kind === "query") {
       app.get(fastifyPath, async (request, reply) => {
         const params = (request.params ?? {}) as Record<string, unknown>;
-        const query = (request.query ?? {}) as Record<string, unknown>;
+        const schema = operation.input as unknown as { properties?: Record<string, unknown> };
+        const allowed = new Set(Object.keys(schema.properties ?? {}));
+        // Validate the raw URL before dispatch cleans the object. In particular, do not
+        // let Fastify/TypeBox erase a typo or an authority-shaped key into a green read.
+        const query = Object.fromEntries(
+          parseQuery(new URL(request.url, "http://internal").searchParams, allowed),
+        );
         const result = await dispatch(options.pool, operation.id, { ...query, ...params }, request.actor);
         return reply.send(result.output);
       });
