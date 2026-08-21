@@ -238,6 +238,9 @@ async function main() {
       results.push({ route, ok: false, status: page.status, action: "(GET)", reason: `the route a control declares does not render: GET returned ${page.status}` });
       continue;
     }
+    if (html.includes("<script")) {
+      results.push({ route, ok: false, status: page.status, action: "(GET)", reason: "a rendered page contains client-side JavaScript" });
+    }
     const initialForms = formsIn(html).filter((form) => form.method === "POST");
     for (const form of initialForms) {
       const renderedOperation = form.action.split("/").at(-1);
