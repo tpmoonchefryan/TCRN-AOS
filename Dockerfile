@@ -38,10 +38,9 @@ RUN pnpm install --frozen-lockfile --prefer-offline --prod \
  && pnpm store prune || true
 
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/apps/server/assets ./apps/server/assets
 
-# The blob directory is a mount point in the cluster; created here so a run without a
-# volume still starts rather than failing on a missing path.
-RUN mkdir -p /data/blobs && chown -R 10001:10001 /data /app
+RUN chown -R 10001:10001 /app
 
 USER 10001:10001
 EXPOSE 8080

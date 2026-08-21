@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
+import { resolve } from "node:path";
+import { tcrnCoreComponentCss } from "@tcrn/ui-react";
 import { assertStatedBindHost, bootstrapIfEmpty, pruneEphemeralState } from "../../../packages/kernel/src/index.js";
 import { configFromEnv, createMigrationPool, createPool } from "../../../packages/store/src/pool.js";
 import { appliedSchemaVersion, expectedSchemaVersion, migrate } from "../../../packages/store/src/migrate.js";
@@ -89,6 +91,13 @@ async function main(): Promise<void> {
   const tokensCss = readFileSync(tokensPath, "utf8");
   app.get("/assets/tokens.css", async (_request, reply) =>
     reply.type("text/css; charset=utf-8").header("cache-control", "public, max-age=3600").send(tokensCss),
+  );
+  app.get("/assets/tcrn.css", async (_request, reply) =>
+    reply.type("text/css; charset=utf-8").header("cache-control", "public, max-age=3600").send(tcrnCoreComponentCss),
+  );
+  const brandMark = readFileSync(resolve(process.cwd(), "apps/server/assets/tcrn-brand-mark.svg"), "utf8");
+  app.get("/assets/tcrn-brand-mark.svg", async (_request, reply) =>
+    reply.type("image/svg+xml").header("cache-control", "public, max-age=86400").send(brandMark),
   );
 
   await app.listen({ host: bindHost, port });

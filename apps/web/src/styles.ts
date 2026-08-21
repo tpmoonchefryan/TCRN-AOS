@@ -1,8 +1,12 @@
 /**
  * The stylesheet, served as one file.
  *
- * Two rules from the design record are load-bearing here and are the reason this is not
- * generic CSS:
+ * This file contains only AOS-owned page composition and the few controls the Design
+ * System does not provide. Component ink, form controls, navigation, cards, badges,
+ * breadcrumbs and the product shell come from `/assets/tcrn.css`.
+ *
+ * Two rules from the design record are load-bearing here and are the reason the retained
+ * page CSS is not generic CSS:
  *
  *  - The default filter face is at most two rows, about 96px. The design it replaces
  *    stacked six rows and 340px, which pushed the list itself below the fold — the
@@ -25,11 +29,13 @@ export const STYLESHEET = `
   --aos-selection-fill: color-mix(in srgb, var(--tcrn-color-text-primary, #1c1d21) 6%, transparent);
   --aos-selection-fill-hover: color-mix(in srgb, var(--tcrn-color-text-primary, #1c1d21) 3.2%, transparent);
   --aos-radius: 6px;
-  --aos-sidebar: 216px;
 }
 
+/* AOS page composition still needs a predictable box model and document canvas; the DS
+   component sheet deliberately does not own the product's body margins. */
 * { box-sizing: border-box; }
 
+/* The DS does not provide a body reset or the product's Markdown canvas. */
 body {
   margin: 0;
   font-family: var(--tcrn-font-family-sans, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif);
@@ -39,60 +45,8 @@ body {
   background: var(--tcrn-color-surface-canvas, #fafaf9);
 }
 
-a { color: inherit; text-underline-offset: .16em; }
-a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible {
-  outline: 2px solid var(--tcrn-color-focus-ring, #17707f);
-  outline-offset: 2px;
-}
-
-.layout { display: grid; grid-template-columns: var(--aos-sidebar) 1fr; min-height: 100vh; }
-@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } }
-
-/* ---------- sidebar: the ink family with a fill ---------- */
-.sidebar {
-  border-right: 1px solid var(--tcrn-color-border-subtle, #e7e7e3);
-  background: var(--tcrn-color-surface-panel, #fff);
-  padding: 14px 10px;
-  display: flex; flex-direction: column; gap: 18px;
-}
-.brand { font-weight: 650; letter-spacing: .02em; padding: 4px 10px 10px; }
-.navgroup { display: flex; flex-direction: column; gap: 1px; }
-.navgroup h2 {
-  font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--tcrn-color-text-muted, #8a8c93); margin: 10px 10px 4px; font-weight: 600;
-}
-.navitem {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  padding: 6px 10px; border-radius: var(--aos-radius);
-  color: var(--tcrn-color-text-secondary, #55575e);
-  text-decoration: none; background: transparent;
-}
-.navitem:hover { background: var(--aos-selection-fill-hover); color: var(--tcrn-color-text-primary, #1c1d21); }
-.navitem[aria-current="page"] {
-  background: var(--aos-selection-fill);
-  color: var(--tcrn-color-text-primary, #1c1d21);
-  font-weight: 600;
-}
-.count {
-  font-variant-numeric: tabular-nums; font-size: 12px;
-  background: var(--tcrn-color-surface-muted, #f2f2f0);
-  color: var(--tcrn-color-text-muted, #8a8c93);
-  border-radius: 999px; padding: 0 7px;
-}
-.navitem[aria-current="page"] .count {
-  background: var(--tcrn-color-surface-panel, #fff);
-  color: var(--tcrn-color-text-primary, #1c1d21);
-  font-weight: 650;
-  box-shadow: 0 0 0 1px var(--tcrn-color-border-subtle, #e7e7e3);
-}
-
-/* ---------- header: the one place scope is chosen ---------- */
-.main { display: flex; flex-direction: column; min-width: 0; }
-.topbar {
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  padding: 10px 20px; border-bottom: 1px solid var(--tcrn-color-border-subtle, #e7e7e3);
-  background: var(--tcrn-color-surface-panel, #fff);
-}
+/* ---------- AOS scope selector retained: ProductShell has no project-scope control. */
+.aos-shell-actions { display: inline-flex; align-items: center; gap: 8px; }
 .scope { position: relative; }
 .scope > summary {
   list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
@@ -116,9 +70,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .scope-menu a:hover { background: var(--aos-selection-fill-hover); }
 .scope-menu a[aria-current="true"] { background: var(--aos-selection-fill); color: var(--tcrn-color-text-primary, #1c1d21); font-weight: 600; }
 .scope-menu hr { border: 0; border-top: 1px solid var(--tcrn-color-border-subtle, #e7e7e3); margin: 4px 0; }
+/* The project scope menu has no DS count primitive; these are its compact numeric hints. */
+.scope-menu .count { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--tcrn-color-text-muted, #8a8c93); }
 .spacer { flex: 1 1 auto; }
 
-.content { padding: 18px 20px 60px; min-width: 0; }
+/* The shell owns the workspace surface; these are page-level headings and copy. */
 h1 { font-size: 20px; margin: 0 0 4px; }
 .page-intro { color: var(--tcrn-color-text-secondary, #55575e); margin: 0 0 16px; }
 
@@ -206,47 +162,12 @@ h1 { font-size: 20px; margin: 0 0 4px; }
 .row-meta { display: flex; gap: 6px; align-items: center; }
 @media (max-width: 700px) { .row { grid-template-columns: 1fr; gap: 4px; } .row-meta { flex-wrap: wrap; } }
 
-.pill {
-  font-size: 11.5px; padding: 1px 7px; border-radius: 999px; white-space: nowrap;
-  border: 1px solid var(--tcrn-color-border-subtle, #e7e7e3);
-  color: var(--tcrn-color-text-secondary, #55575e);
-  background: var(--tcrn-color-surface-muted, #f2f2f0);
-}
-.pill[data-tone="done"] { color: var(--tcrn-color-state-ready, #15693a); background: var(--tcrn-color-state-ready-bg, #eaf2ec); border-color: transparent; }
-.pill[data-tone="active"] { color: var(--tcrn-color-state-warning, #8a5a08); background: var(--tcrn-color-state-warning-bg, #f5eee1); border-color: transparent; }
-.pill[data-tone="blocked"] { color: var(--tcrn-color-state-blocked, #b3271e); background: var(--tcrn-color-state-blocked-bg, #f7eae8); border-color: transparent; }
-
-/* ---------- panels, forms, tables ---------- */
-.panel {
-  border: 1px solid var(--tcrn-color-border-subtle, #e7e7e3);
-  border-radius: var(--aos-radius);
-  background: var(--tcrn-color-surface-panel, #fff);
-  padding: 14px 16px; margin-bottom: 14px;
-}
-.panel h2 { font-size: 14px; margin: 0 0 10px; }
+/* ---------- AOS page composition; DS owns the controls and surfaces above. ---------- */
 .grid2 { display: grid; grid-template-columns: 1fr 340px; gap: 14px; align-items: start; }
 @media (max-width: 1100px) { .grid2 { grid-template-columns: 1fr; } }
 
-label { display: block; font-size: 12px; color: var(--tcrn-color-text-muted, #8a8c93); margin-bottom: 3px; }
-input[type="text"], input[type="password"], input[type="search"], select, textarea {
-  width: 100%; font: inherit; padding: 7px 9px; color: inherit;
-  border: 1px solid var(--tcrn-color-border-control, #8e8e88);
-  border-radius: var(--aos-radius);
-  background: var(--tcrn-color-surface-panel, #fff);
-}
-textarea { min-height: 140px; resize: vertical; font-family: var(--tcrn-font-family-mono, ui-monospace, Menlo, monospace); font-size: 13px; }
-.field { margin-bottom: 10px; }
+/* DS Field/Input/Select/Textarea/Button own their labels, dimensions, focus and ink. */
 .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
-button {
-  font: inherit; cursor: pointer; padding: 7px 13px; border-radius: var(--aos-radius);
-  border: 1px solid var(--tcrn-color-border-control, #8e8e88);
-  background: var(--tcrn-color-surface-panel, #fff); color: inherit;
-}
-button[data-variant="primary"] {
-  background: var(--tcrn-color-brand-primary, #17707f); border-color: var(--tcrn-color-brand-primary, #17707f);
-  color: var(--tcrn-color-text-inverse, #fafaf9); font-weight: 600;
-}
-button[disabled] { opacity: .55; cursor: not-allowed; }
 .reason { font-size: 12px; color: var(--tcrn-color-text-muted, #8a8c93); }
 
 .kv { display: grid; grid-template-columns: 120px 1fr; gap: 6px 12px; font-size: 13px; }
@@ -271,12 +192,9 @@ button[disabled] { opacity: .55; cursor: not-allowed; }
   color: var(--tcrn-color-state-blocked, #b3271e);
   border-radius: var(--aos-radius); padding: 10px 12px; margin-bottom: 14px;
 }
-.empty { color: var(--tcrn-color-text-muted, #8a8c93); padding: 18px 2px; }
+/* DS EmptyState owns empty-state layout and tone. */
 .truncation { font-size: 12px; color: var(--tcrn-color-text-muted, #8a8c93); margin-top: 10px; }
 .unread { font-style: normal; color: var(--tcrn-color-text-muted, #8a8c93); }
 
 .login { max-width: 360px; margin: 12vh auto; }
-.breadcrumb { font-size: 12.5px; color: var(--tcrn-color-text-muted, #8a8c93); margin-bottom: 6px; }
-.breadcrumb a { text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
 `;
