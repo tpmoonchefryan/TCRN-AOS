@@ -6,7 +6,6 @@ import { spawn } from "node:child_process";
 import { parse } from "parse5";
 import pg from "pg";
 import { allOperations } from "../dist/packages/kernel/src/index.js";
-import { tcrnCoreComponentCss } from "@tcrn/ui-react";
 
 const PORT = Number(process.env.AOS_GATE_PORT ?? 8127);
 const BASE = `http://127.0.0.1:${PORT}`;
