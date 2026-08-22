@@ -1,0 +1,136 @@
+# 派工：Storybook 产品化与三处 DS 缺陷
+
+给 Codex。可以用 `goal` 指令完成。**没有硬门**，末尾的「验收」是验收项。
+
+Owner 于 2026-08-22 看图指出 Storybook 的样式与章节产品化问题，并要求一并检查 logo 取用规则。
+
+---
+
+## 零、五条落在哪
+
+| 单 | 内容 | 仓 |
+| --- | --- | --- |
+| `TCRN-DS-INC-010` | Storybook 文档外壳未产品化（7 个栏目落地页 + 翻页器 + 四类杂项 + 一道门） | TCRN-Design-System |
+| `TCRN-DS-INC-011` | core 缺三组修饰类定义（inline-alert / state-view / heading--4 + 一道门） | TCRN-Design-System |
+| `TCRN-DS-INC-012` | AI 消费契约不写品牌资产的正本取用地址 | TCRN-Design-System |
+| `TCRN-DS-INC-013` | `--wrap` 档圆点仍浮在两行之间（STORY-097 残留） | TCRN-Design-System |
+| `TCRN-AOS-INC-052` | `LEGACY_TONE_ALIASES` 与工作状态词撞 | TCRN-AOS |
+
+**每条单的 scope 就是规格**，链上写得比本文细，动手前读它。
+
+---
+
+## 一、一条贯穿全部五条的认识
+
+**Storybook 是 DS 自己的发布面，本地这份仓是开发源码。** 消费方（包括 AI 消费方）取的是发布出去的那份。
+所以：
+
+- 发布面的未产品化不是内部瑕疵，是**权威源本身在向所有消费方展示一个未完成的样子**（INC-010）
+- 品牌资产的取用路径必须指向发布面，**不许写成仓内路径**（INC-012）——那正是这条单要区分掉的东西
+
+---
+
+## 二、INC-010 Storybook 文档外壳
+
+实测（量的是 `storybook-static` 构建产物，不是源码推断）：
+
+- `tcrn-doc-category-index` 全家 **7 个类在三份样式表里一条定义都没有**。浏览器实测链接色
+  `rgb(0, 0, 238)`、`text-decoration: underline`——就是浏览器默认。**七个栏目落地页全部如此**：
+  `index`(欢迎)、`style-guide`、`foundations`、`components`、`patterns`、`change-log`、`proof`。
+  那是读者进入每一章时第一眼看到的页。
+- 同一页两个 `<h2>欢迎</h2>`：一个来自 `pageHeadHtml`，一个来自 `sectionIndexBodyHtml`。
+- `tcrn-doc-chapter-pager__link--previous` 无定义（29 页命中），而 `--next` 有——翻页器只有一半有样式。
+- 另有 `tcrn-doc-nav__section-icon-svg`（224 次 / 32 页）、`tcrn-story-disclosure__title` 与
+  `__chevron-svg`（各 55 次 / 20 页）、`tcrn-component-reference__intro`（5 页）、`tcrn-eyebrow` 无定义。
+
+**链接直接用 `.tcrn-link`，不要自造。** 那个基元刚随 `TCRN-DS-STORY-095` 进 core，栏目页正是它的用例。
+
+**第五项那道门是本条唯一防复发的东西**：断言文档模板用到的每个 `tcrn-*` 类都在样式表里查得到。
+前四项补的是这一批，门管下一批。
+
+---
+
+## 三、INC-011 core 的修饰类
+
+实测 `tcrnComponentCss`（106,900 字节）：
+
+- `.tcrn-inline-alert--warning` 有，`--danger` / `--positive` / `--neutral` **没有**——
+  一条危险提示与一条中性提示长得一样
+- `.tcrn-state-view` 基类有，四个色调修饰 **全部没有**
+- `.tcrn-heading--1/2/3` 有，`--4` **没有**（构建产物里 34 次 / 4 页）
+
+取值沿用既有状态令牌，**不新造颜色**。
+
+**这是同一类错的第三次。** 设计规格作者写案④时给 Badge 传了 `tone="info"`，`tcrn-badge--info`
+不存在，渲染出来和 neutral 一样，肉眼盯着才发现；AOS 因此在 `gate:ds-adoption` 立了一条断言。
+**那道门在消费方仓里，而缺陷在 DS——消费者替权威源立了门，权威源自己没有。** 本条把它搬回来。
+可参考 AOS 那道门的做法，但**不许跨仓引用其代码**。
+
+---
+
+## 四、INC-012 契约里的取用路径
+
+契约把「必须用哪一个 logo」写到了极细——`productLogoRegistry` 有每个产品的 assetId、五语 tagline、
+suffix 类名；`requiredBeforeProductFrontendImplementation` 第 6/7/8 条强制使用已登记资产。
+**但 40 个顶层键里没有一条说那个 svg 从哪里取。**
+
+三包实测不带任何 svg 或字体实体（直接列 tar 即可确认）；`TcrnBrandMark` 的默认 `src` 是裸相对名
+`"tcrn-brand-mark.svg"`，即假定消费方自己在同源下供一份。结果是**最该被规则挡住的那一步反而没有规则**——
+AOS 接入时只能靠人去发布面上试出来。
+
+同样没写进契约的另一半：**开发源码与发布面的区别**。一个读到本仓的消费方会以为仓里那份就是权威。
+
+**不要把答案写成仓内路径。** 路径要指向消费方真正能取到的那一份，并配一个可复核命令——
+一条无人核对的地址与没有地址等价。
+
+---
+
+## 五、INC-013 `--wrap` 档的圆点
+
+实测：`--wrap` 徽章折成两行、高 36px 时，圆点中心距顶 **18px**，第一行文字中心在 **10.5px**——
+点在两行之间。根因未变：`.tcrn-badge::before` 仍是 `inset-block-start: 50%`。
+
+STORY-097 的三处成因里，①会折与③居中散排随 `nowrap` 一并解决，②**是被遮住而不是修好的**。
+`--wrap` 是现在唯一能折行的路径，谁 opt-in 谁就撞上。
+
+**判据 2 是安全带**：单行外观一个像素都不许变。
+
+---
+
+## 六、INC-052 AOS 的词撞（另一个仓）
+
+`STATUS_TONE` 与 `LEGACY_TONE_ALIASES` 两张表，后者含 `active → warning`——正是重排要修掉的错映射。
+
+**今天到不了**：两处 `statusPill` 都走 `tone(status)`，返回色调词，`badgeTone` 第一分支放行。
+但有 **8 处**调用点传与工作状态同名的字面量作 toneName（「未读」传 `"active"`、「实例管理员」传
+`"active"`、「已停用」/「过期」传 `"blocked"`、「已复核」/published 传 `"done"`），喂的正是 legacy 表。
+
+**风险在将来**：谁写一句 `h(Pill, { toneName: item.status })`，会静默拿回旧的错映射而不报错。
+
+改键名（较小）或显式拒绝工作状态字符串（较严），二选一，**并在测试里钉住**。
+那 8 处的观感不改。
+
+---
+
+## 七、顺序与停止点
+
+INC-010/011/012/013 同在 DS 仓，可并行；INC-052 在 AOS 仓，独立。
+
+DS 改完若动了 `tcrnComponentCss`，按既有约定要重打 tarball、AOS 换包、门户刷新 CSS 快照
+（`TCRN-CROSS-INC-223` 立的规矩）。
+
+提交身份 `tpmoonchefryan <253097889+tpmoonchefryan@users.noreply.github.com>`，不加 `Co-Authored-By`。
+
+**做完不是 `done`。** INC-010 的外观归 Owner 亲眼判，门全绿后仍待 Owner 看；其余属机检车道。
+推送、发布、部署是各自独立的停止点。
+
+---
+
+## 附：本批未开单的两件
+
+- **密度修饰的长尾**：`--compact` / `--dense` 在组件表里是有的（10 / 18 次），但没覆盖到每个组件；
+  `--comfortable` 一次都没有。构建产物里有二十余个这类类名无定义。未开单是因为还不确定它们是
+  「该有样式而漏了」还是「本就只作语义标记」——需要先有一个判断，而那个判断是 Owner 的。
+- **`TCRN-DS-STORY-097` 判据 4 已作废**（rev 3 注记）：那条要求 DS 断言七状态标签宽度不超过 96px，
+  但七个状态是 AOS 的词汇、案③已裁定留在 AOS，DS 侧没有可查的文案——**判据写错了仓，是写单人的错**。
+  测得的数字仍成立（最宽真实标签 85px、裸枚举 142px），断言的归属地是 AOS，该门另开单。
