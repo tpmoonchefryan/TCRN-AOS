@@ -5,7 +5,7 @@ import * as DS from "@tcrn/ui-react";
 import { dispatch, isAuthenticated, type Actor } from "../../../packages/kernel/src/index.js";
 import { STYLESHEET } from "../../../apps/web/src/styles.js";
 import { buildHref, hrefResetConditions, hrefWithout } from "../../../apps/web/src/url.js";
-import { breadcrumb, h, makeCall, type PageContext } from "../../../apps/web/src/ui-kit.js";
+import { breadcrumb, h, makeCall, STATUSES, STATUS_LABEL, tone, type PageContext } from "../../../apps/web/src/ui-kit.js";
 import { PageEditPage, PageNewPage, PageRevisionsPage, PageViewPage, SpacesPage } from "../../../apps/web/src/pages/knowledge.js";
 import { DecisionsPage, DeliberationRoomPage, DeliberationsPage, GatesPage } from "../../../apps/web/src/pages/governance.js";
 import { BoardPage, CommentPage, InboxPage, SavedViewsPage, SearchPage, SubjectCommentsPage, WatchingPage } from "../../../apps/web/src/pages/collab.js";
@@ -31,26 +31,7 @@ export interface RenderOutput {
   readonly body: string;
 }
 
-const STATUSES = ["planned", "ready", "active", "blocked", "pending_acceptance", "done", "cancelled"] as const;
 const KINDS = ["initiative", "epic", "story", "subtask", "review", "incident", "release"] as const;
-
-/** The seven words this product uses for state. Never another vocabulary's words. */
-const STATUS_LABEL: Record<string, string> = {
-  planned: "planned",
-  ready: "ready",
-  active: "active",
-  blocked: "blocked",
-  pending_acceptance: "pending acceptance",
-  done: "done",
-  cancelled: "cancelled",
-};
-
-function tone(status: string): string | undefined {
-  if (status === "done") return "done";
-  if (status === "active") return "active";
-  if (status === "blocked") return "blocked";
-  return undefined;
-}
 
 function html(body: ReactNode, title: string): string {
   return `<!doctype html>${renderToStaticMarkup(
@@ -382,7 +363,7 @@ async function WorkItemsPage(input: RenderInput, shell: ShellData): Promise<Rend
                   ? h("span", { className: "pill" }, item.assigneeHandle)
                   : h("span", { className: "pill" }, "未指派"),
                 h("span", { className: "pill" }, item.kind),
-                h("span", { className: "pill", "data-tone": tone(item.status) }, STATUS_LABEL[item.status] ?? item.status),
+                h("span", { className: "pill", "data-tone": tone(item.status), "data-state": item.status }, STATUS_LABEL[item.status] ?? item.status),
               ),
             ),
           ),
@@ -463,7 +444,7 @@ async function WorkItemDetailPage(input: RenderInput, shell: ShellData, key: str
                     h("span", { className: "row-key" }, child.key),
                     h("span", { className: "row-title" }, child.title),
                     h("span", { className: "row-meta" },
-                      h("span", { className: "pill", "data-tone": tone(child.status) }, STATUS_LABEL[child.status] ?? child.status),
+                      h("span", { className: "pill", "data-tone": tone(child.status), "data-state": child.status }, STATUS_LABEL[child.status] ?? child.status),
                     ),
                   ),
                 ),
@@ -517,7 +498,7 @@ async function WorkItemDetailPage(input: RenderInput, shell: ShellData, key: str
         h("div", { className: "panel" },
           h("h2", null, "状态"),
           h("dl", { className: "kv" },
-            h("dt", null, "当前"), h("dd", null, h("span", { className: "pill", "data-tone": tone(item.status) }, STATUS_LABEL[item.status] ?? item.status)),
+            h("dt", null, "当前"), h("dd", null, h("span", { className: "pill", "data-tone": tone(item.status), "data-state": item.status }, STATUS_LABEL[item.status] ?? item.status)),
             h("dt", null, "类型"), h("dd", null, item.kind),
             h("dt", null, "负责人"), h("dd", null, item.assigneeHandle ?? "未指派"),
             h("dt", null, "修订"), h("dd", null, `r${item.version}`),
@@ -713,7 +694,7 @@ async function MyWorkPage(input: RenderInput, shell: ShellData): Promise<RenderO
                 h("span", { className: "row-key" }, item.key),
                 h("span", { className: "row-title" }, item.title),
                 h("span", { className: "row-meta" },
-                  h("span", { className: "pill", "data-tone": tone(item.status) }, STATUS_LABEL[item.status] ?? item.status),
+                  h("span", { className: "pill", "data-tone": tone(item.status), "data-state": item.status }, STATUS_LABEL[item.status] ?? item.status),
                 ),
               ),
             ),

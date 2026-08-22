@@ -557,7 +557,7 @@ packages:
     version: 3.0.0
 
   '@tcrn/ui-react@file:vendor/tcrn-ui-react-3.0.0.tgz':
-    resolution: {integrity: sha512-9EXntPJ9gqZOSYIlCaRB6mIqcAJtl/FcPlI+crEyf88imwOpDTFNQYok8NOUbDVZoDW98Qi5thUgnZJ27n4IFw==, tarball: file:vendor/tcrn-ui-react-3.0.0.tgz}
+    resolution: {integrity: sha512-FXHW6jFWqUNUWkPtS5NgS10w+IAOjXxJ4ZzV9N02C0XqbMi71NE8VFPm9AQN4LemcEv9F6lH3JntY7Rdx47HHw==, tarball: file:vendor/tcrn-ui-react-3.0.0.tgz}
     version: 3.0.0
     peerDependencies:
       react: ^18.3.0 || ^19.0.0

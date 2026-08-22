@@ -42,20 +42,38 @@ export const KINDS = [
 
 /** The seven words this product uses for state. Never another vocabulary's words. */
 export const STATUS_LABEL: Record<string, string> = {
-  planned: "planned",
-  ready: "ready",
-  active: "active",
-  blocked: "blocked",
-  pending_acceptance: "pending acceptance",
-  done: "done",
-  cancelled: "cancelled",
+  planned: "已计划",
+  ready: "就绪",
+  active: "进行中",
+  blocked: "已阻塞",
+  pending_acceptance: "待验收",
+  done: "已完成",
+  cancelled: "已取消",
 };
 
-export function tone(status: string): string | undefined {
-  if (status === "done") return "done";
-  if (status === "active") return "active";
-  if (status === "blocked") return "blocked";
-  return undefined;
+export type WorkStatusTone = "neutral" | "positive" | "warning" | "danger";
+
+/** One closed product-state map. The status identity stays separate from its visual tone. */
+export const STATUS_TONE: Readonly<Record<string, WorkStatusTone>> = Object.freeze({
+  planned: "neutral",
+  ready: "positive",
+  active: "neutral",
+  blocked: "danger",
+  pending_acceptance: "warning",
+  done: "positive",
+  cancelled: "neutral",
+});
+
+// A few non-work-status badges still use the older semantic aliases (for example,
+// a closed deliberation). They are presentation aliases, not a second work-status map.
+const LEGACY_TONE_ALIASES: Readonly<Record<string, WorkStatusTone>> = Object.freeze({
+  done: "positive",
+  active: "warning",
+  blocked: "danger",
+});
+
+export function tone(status: string): WorkStatusTone {
+  return STATUS_TONE[status] ?? "neutral";
 }
 
 export function makeCall(pool: pg.Pool, actor: Actor) {
@@ -81,14 +99,9 @@ function buttonProps(raw: HProps): Record<string, unknown> {
   return props;
 }
 
-function badgeTone(value: unknown): "neutral" | "positive" | "warning" | "danger" {
-  return value === "done"
-    ? "positive"
-    : value === "active"
-    ? "warning"
-    : value === "blocked"
-    ? "danger"
-    : "neutral";
+function badgeTone(value: unknown): WorkStatusTone {
+  if (value === "neutral" || value === "positive" || value === "warning" || value === "danger") return value;
+  return typeof value === "string" ? LEGACY_TONE_ALIASES[value] ?? "neutral" : "neutral";
 }
 
 function selectOptions(children: readonly ReactNode[]): Array<{ value: string; label: string }> {
@@ -121,7 +134,10 @@ export function h(type: unknown, props?: HProps, ...children: ReactNode[]): Reac
   if (type === "button") return reactCreateElement(DS.Button, buttonProps(props), ...children);
   if (type === "h2") return reactCreateElement(DS.Heading, { ...componentProps(props), level: 2 }, ...children);
   if (type === "span" && props?.className === "pill") {
-    return reactCreateElement(DS.Badge, { tone: badgeTone(props["data-tone"]) }, ...children);
+    return h(DS.Badge, {
+      tone: badgeTone(props["data-tone"]),
+      "data-state": props["data-state"],
+    }, ...children);
   }
   if (type === "div" && props?.className === "panel") {
     const cardProps = componentProps(props);
@@ -179,15 +195,11 @@ export function Empty(props: { children?: ReactNode }): ReactNode {
   return h(DS.EmptyState, { title: props.children ?? "" });
 }
 
-export function Pill(props: { children?: ReactNode; toneName?: string }): ReactNode {
-  const tone = props.toneName === "done"
-    ? "positive"
-    : props.toneName === "active"
-    ? "warning"
-    : props.toneName === "blocked"
-    ? "danger"
-    : "neutral";
-  return h(DS.Badge, { tone }, props.children);
+export function Pill(props: { children?: ReactNode; toneName?: string; state?: string }): ReactNode {
+  return h(DS.Badge, {
+    tone: badgeTone(props.toneName),
+    ...(props.state === undefined ? {} : { "data-state": props.state }),
+  }, props.children);
 }
 
 /**

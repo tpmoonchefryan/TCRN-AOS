@@ -184,9 +184,7 @@ function pathSegments(pathname: string): string[] {
 function statusPill(status: string): ReactNode {
   const toneName = tone(status);
   const label = STATUS_LABEL[status] ?? status;
-  // Pill's toneName is an optional string, and under exactOptionalPropertyTypes an
-  // explicit undefined is not the same as an absent key.
-  return toneName ? h(Pill, { toneName }, label) : h(Pill, {}, label);
+  return h(Pill, { toneName, state: status }, label);
 }
 
 /**

@@ -344,7 +344,7 @@ function subjectPill(subjectType: string): ReactNode {
 function statusPill(status: string): ReactNode {
   const toneName = tone(status);
   const label = STATUS_LABEL[status] ?? status;
-  return toneName ? h(Pill, { toneName }, label) : h(Pill, null, label);
+  return h(Pill, { toneName, state: status }, label);
 }
 
 /** This page's own address, conditions included, for a form's redirect target. */
