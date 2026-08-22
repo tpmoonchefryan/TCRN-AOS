@@ -1,0 +1,3703 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AOS 前端 · DS 四处缺口设计规格</title>
+<style>/* ═══ DS 令牌，取自 @tcrn/ui-tokens/src/tokens.css，逐字节 ═══ */
+:root {
+  --tcrn-color-text-primary: #1c1d21;
+  --tcrn-color-text-secondary: #55575e;
+  --tcrn-color-text-muted: #8a8c93;
+  --tcrn-color-text-tertiary: #73757c;
+  --tcrn-color-text-inverse: #fafaf9;
+  --tcrn-color-surface-canvas: #fafaf9;
+  --tcrn-color-surface-panel: #ffffff;
+  --tcrn-color-surface-muted: #f2f2f0;
+  --tcrn-color-neutral-calibration-canvas: #f5f5f5;
+  --tcrn-color-neutral-calibration-panel: #fcfcfc;
+  --tcrn-color-neutral-calibration-muted: #eeeeee;
+  --tcrn-color-neutral-calibration-border: #808080;
+  --tcrn-color-border-subtle: #e7e7e3;
+  --tcrn-color-border-strong: #cfcfc9;
+  --tcrn-color-border-control: #8e8e88;
+  --tcrn-color-brand-teal: #17707f;
+  --tcrn-color-brand-primary: #17707f;
+  --tcrn-color-brand-primary-bg: #e6f1f3;
+  --tcrn-color-brand-secondary: #2a6b76;
+  --tcrn-color-brand-secondary-bg: #e3eff1;
+  --tcrn-color-brand-accent: #93332a;
+  --tcrn-color-brand-accent-bg: #f5e9e5;
+  --tcrn-color-brand-neutral: #55575e;
+  --tcrn-color-brand-neutral-bg: #f2f2f0;
+  --tcrn-color-focus-ring: #17707f;
+  --tcrn-color-focus-ring-calibrated: #0056a4;
+  --tcrn-color-progress-track-calibrated: #eeeeee;
+  --tcrn-color-progress-fill-start-calibrated: #2784d5;
+  --tcrn-color-progress-fill-end-calibrated: #6363c6;
+  --tcrn-color-state-ready: #15693a;
+  --tcrn-color-state-ready-bg: #eaf2ec;
+  --tcrn-color-state-blocked: #b3271e;
+  --tcrn-color-state-blocked-bg: #f7eae8;
+  --tcrn-color-state-warning: #8a5a08;
+  --tcrn-color-state-warning-bg: #f5eee1;
+  --tcrn-color-state-warning-calibrated: #604200;
+  --tcrn-color-state-warning-calibrated-bg: #fde1a7;
+  --tcrn-color-state-danger-calibrated: #742e2b;
+  --tcrn-color-state-danger-calibrated-bg: #ffd1ca;
+  --tcrn-type-family-ui: Inter, Avenir Next, Helvetica Neue, Arial, sans-serif;
+  --tcrn-type-family-latin: Inter, Avenir Next, Helvetica Neue, Arial, sans-serif;
+  --tcrn-type-family-distributable-latin: Inter, sans-serif;
+  --tcrn-type-family-distributable-zh-cn: Noto Sans CJK SC, Source Han Sans SC, sans-serif;
+  --tcrn-type-family-distributable-ja: Noto Sans CJK JP, Source Han Sans JP, sans-serif;
+  --tcrn-type-family-distributable-ko: Noto Sans CJK KR, Source Han Sans KR, sans-serif;
+  --tcrn-type-family-distributable-mono: Liberation Mono, monospace;
+  --tcrn-type-family-zh-cn: PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, Heiti SC, sans-serif;
+  --tcrn-type-family-ja: Hiragino Sans, Yu Gothic, Noto Sans CJK JP, Source Han Sans JP, Meiryo, sans-serif;
+  --tcrn-type-family-ko: Apple SD Gothic Neo, Malgun Gothic, Noto Sans CJK KR, Source Han Sans KR, sans-serif;
+  --tcrn-type-family-mono: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  --tcrn-type-family-stamp: Source Serif 4, Songti SC, Noto Serif CJK SC, Georgia, serif;
+  --tcrn-type-family-distributable-stamp-latin: Source Serif 4, serif;
+  --tcrn-type-family-distributable-stamp-zh-cn: Noto Serif CJK SC, serif;
+  --tcrn-type-size-stamp-min: 12px;
+  --tcrn-type-tracking-stamp: 0.06em;
+  --tcrn-type-size-ui: 13px;
+  --tcrn-type-size-reading: 14px;
+  --tcrn-type-size-caption: 11px;
+  --tcrn-type-size-meta: 12px;
+  --tcrn-type-size-body: 13px;
+  --tcrn-type-size-control: 13px;
+  --tcrn-type-size-section: 18px;
+  --tcrn-type-size-page: 28px;
+  --tcrn-type-size-heading-2: 22px;
+  --tcrn-type-size-heading-3: 16px;
+  --tcrn-type-line-ui: 1.35;
+  --tcrn-type-line-reading: 1.45;
+  --tcrn-type-line-caption: 1.35;
+  --tcrn-type-line-body: 1.45;
+  --tcrn-type-line-control: 1.2;
+  --tcrn-type-line-section: 1.25;
+  --tcrn-type-line-page: 1.3;
+  --tcrn-type-weight-regular: 400;
+  --tcrn-type-weight-medium: 600;
+  --tcrn-type-weight-strong: 700;
+  --tcrn-text-body-dense: var(--tcrn-type-weight-regular) var(--tcrn-type-size-ui)/var(--tcrn-type-line-ui) var(--tcrn-type-family-ui);
+  --tcrn-text-body-reading: var(--tcrn-type-weight-regular) var(--tcrn-type-size-reading)/var(--tcrn-type-line-reading) var(--tcrn-type-family-ui);
+  --tcrn-radius-panel: 6px;
+  --tcrn-elevation-floating: 0 1px 2px rgba(28, 29, 33, 0.06), 0 0 0 1px var(--tcrn-color-border-subtle);
+  --tcrn-state-dot-size: 6px;
+  --tcrn-state-chip-padding: 3px 8px 3px 6px;
+  --tcrn-space-0h: 2px;
+  --tcrn-space-1: 4px;
+  --tcrn-space-1h: 6px;
+  --tcrn-space-2: 8px;
+  --tcrn-space-2h: 10px;
+  --tcrn-space-3: 12px;
+  --tcrn-space-3h: 14px;
+  --tcrn-density-compact-row-height: 36px;
+  --tcrn-space-4: 16px;
+  --tcrn-space-4h: 18px;
+  --tcrn-space-5: 20px;
+  --tcrn-space-6: 32px;
+  --tcrn-selection-fill: rgba(28, 29, 33, 0.06);
+  --tcrn-selection-fill-hover: rgba(28, 29, 33, 0.032);
+  --tcrn-selection-edge: #1c1d21;
+  --tcrn-selection-glide: 220ms cubic-bezier(0.3, 0.8, 0.3, 1);
+  --tcrn-radius-control: 4px;
+  --tcrn-radius-surface: 6px;
+  --tcrn-radius-pill: 999px;
+  --tcrn-elevation-focus: 0 0 0 2px #fafaf9, 0 0 0 4px #17707f;
+  --tcrn-motion-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --tcrn-motion-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --tcrn-motion-ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --tcrn-motion-comprehension: 160ms linear;
+  --tcrn-motion-press-scale: 0.97;
+  --tcrn-motion-spring-duration: 0.5s;
+  --tcrn-motion-spring-bounce: 0.15;
+  --tcrn-motion-fast: 120ms cubic-bezier(0.23, 1, 0.32, 1);
+  --tcrn-motion-instant: 80ms cubic-bezier(0.23, 1, 0.32, 1);
+  --tcrn-motion-standard: 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  --tcrn-motion-emphasis: 220ms cubic-bezier(0.32, 0.72, 0, 1);
+  --tcrn-motion-loading-loop: 900ms linear;
+  --tcrn-motion-skeleton-loop: 1400ms ease-in-out;
+  --tcrn-motion-progress-loop: 1200ms ease-in-out;
+  --tcrn-motion-reduced-duration: 0.01ms;
+  --tcrn-z-overlay: 30;
+  --tcrn-z-popover: 20;
+  --tcrn-container-readable: 1120px;
+}
+[data-tcrn-theme="dark"] {
+  --tcrn-selection-fill: rgba(236, 236, 234, 0.09);
+  --tcrn-selection-fill-hover: rgba(236, 236, 234, 0.05);
+  --tcrn-selection-edge: #ececea;
+  --tcrn-color-border-control: #66686e;
+  --tcrn-color-text-tertiary: #83858b;
+  --tcrn-color-text-inverse: #0e1c20;
+  --tcrn-color-text-primary: #ececea;
+  --tcrn-color-text-secondary: #a9abb1;
+  --tcrn-color-text-muted: #7a7c82;
+  --tcrn-color-surface-canvas: #111214;
+  --tcrn-color-surface-panel: #18191c;
+  --tcrn-color-surface-muted: #212226;
+  --tcrn-color-neutral-calibration-canvas: #161616;
+  --tcrn-color-neutral-calibration-panel: #222222;
+  --tcrn-color-neutral-calibration-muted: #2f2f2f;
+  --tcrn-color-neutral-calibration-border: #808080;
+  --tcrn-color-border-subtle: #292b2f;
+  --tcrn-color-border-strong: #3f4147;
+  --tcrn-color-brand-teal: #62c3d2;
+  --tcrn-color-brand-primary: #62c3d2;
+  --tcrn-color-brand-primary-bg: #12333a;
+  --tcrn-color-brand-secondary: #62c3d2;
+  --tcrn-color-brand-secondary-bg: #12333a;
+  --tcrn-color-brand-accent: #d98d82;
+  --tcrn-color-brand-accent-bg: #3a211d;
+  --tcrn-color-brand-neutral: #a9abb1;
+  --tcrn-color-brand-neutral-bg: #212226;
+  --tcrn-color-focus-ring: #62c3d2;
+  --tcrn-color-focus-ring-calibrated: #5cb3ff;
+  --tcrn-color-progress-track-calibrated: #222222;
+  --tcrn-color-progress-fill-start-calibrated: #2784d5;
+  --tcrn-color-progress-fill-end-calibrated: #8d92f9;
+  --tcrn-color-state-ready: #5fbe8b;
+  --tcrn-color-state-ready-bg: #16261e;
+  --tcrn-color-state-blocked: #e0837b;
+  --tcrn-color-state-blocked-bg: #2b1a18;
+  --tcrn-color-state-warning: #d9ab52;
+  --tcrn-color-state-warning-bg: #2a2317;
+  --tcrn-color-state-warning-calibrated: #604200;
+  --tcrn-color-state-warning-calibrated-bg: #fde1a7;
+  --tcrn-color-state-danger-calibrated: #742e2b;
+  --tcrn-color-state-danger-calibrated-bg: #ffd1ca;
+  --tcrn-elevation-focus: 0 0 0 2px #111214, 0 0 0 4px #62c3d2;
+}
+</style>
+<style>/* ═══ DS 组件表，取自 tcrnCoreComponentCss —— AOS 线上 /assets/tcrn.css 的同一份字节 ═══ */
+
+:root {
+  --tcrn-motion-product-shell: var(--tcrn-motion-emphasis);
+  --tcrn-motion-product-shell-search: 240ms var(--tcrn-motion-ease-drawer);
+  --tcrn-color-brand-secondary-readable: #246f80;
+  --tcrn-brand-accent-aos: #187c7c;
+  --tcrn-brand-accent-tms: #2c63c8;
+  --tcrn-brand-accent-workflow: #3b5272;
+  --tcrn-brand-accent-design-system-1: #6577f3;
+  --tcrn-brand-accent-design-system-2: #3096f4;
+  --tcrn-brand-accent-design-system-3: #43d4cf;
+  --tcrn-brand-accent-design-system-4: #78b957;
+}
+[data-tcrn-theme="dark"] {
+  --tcrn-color-brand-secondary-readable: #a6e8ef;
+  --tcrn-brand-accent-aos: #69d6d0;
+  --tcrn-brand-accent-tms: #9bb8ff;
+  --tcrn-brand-accent-workflow: #9db5d4;
+  --tcrn-brand-accent-design-system-1: #aeb8ff;
+  --tcrn-brand-accent-design-system-2: #83c8ff;
+  --tcrn-brand-accent-design-system-3: #7ce4df;
+  --tcrn-brand-accent-design-system-4: #c9f08f;
+}
+.tcrn-button,
+.tcrn-shell-locale-menu__trigger,
+.tcrn-shell-locale-menu__option {
+  font: inherit;
+}
+.tcrn-button,
+.tcrn-link-button,
+.tcrn-button--secondary,
+.tcrn-link-button--secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tcrn-space-2);
+  min-height: 38px;
+  padding: 0 var(--tcrn-space-3);
+  border: 1px solid var(--tcrn-color-border-control);
+  border-radius: var(--tcrn-radius-control);
+  background: var(--tcrn-color-surface-panel);
+  color: var(--tcrn-color-text-primary);
+  font-size: var(--tcrn-type-size-ui);
+  font-weight: var(--tcrn-type-weight-strong);
+  transition: transform var(--tcrn-motion-instant), background-color var(--tcrn-motion-fast), border-color var(--tcrn-motion-fast), color var(--tcrn-motion-fast);
+}
+/* A pressable surface has to answer the press, or the interface reads as not
+   listening. Scale is deliberately subtle and lives on :active (not :hover), so it
+   works the same under a finger as under a pointer. */
+.tcrn-button:active,
+.tcrn-nav-item:active,
+.tcrn-shell-theme-toggle:active,
+.tcrn-shell-locale-menu__trigger:active,
+.tcrn-table-toolbar__chip:active,
+.tcrn-table-toolbar__collapse:active {
+  transform: scale(var(--tcrn-motion-press-scale));
+}
+.tcrn-button--primary,
+.tcrn-link-button--primary {
+  background: var(--tcrn-color-brand-primary);
+  border-color: var(--tcrn-color-brand-primary);
+  color: var(--tcrn-color-text-inverse);
+}
+[data-tcrn-theme="dark"] .tcrn-button--primary,
+[data-tcrn-theme="dark"] .tcrn-link-button--primary {
+  color: var(--tcrn-color-surface-canvas);
+}
+.tcrn-button--quiet,
+.tcrn-link-button--quiet {
+  border-color: transparent;
+  background: transparent;
+}
+/* TCRN-DS-STORY-063: the core Button / LinkButton answered neither hover nor keyboard focus in
+   either layer (only .tcrn-button carried press-scale). They now speak the same feedback language
+   as the shell controls — muted-surface hover, a deepened brand fill on the primary variant, the
+   focus-ring outline, and press-scale on both (LinkButton was missing the press it shares). */
+.tcrn-button:not([disabled]):hover,
+.tcrn-link-button:hover {
+  border-color: var(--tcrn-color-border-control);
+  background: color-mix(in srgb, var(--tcrn-color-surface-muted) 72%, var(--tcrn-color-surface-panel));
+  color: var(--tcrn-color-text-primary);
+}
+.tcrn-button--primary:not([disabled]):hover,
+.tcrn-link-button--primary:hover {
+  border-color: color-mix(in srgb, var(--tcrn-color-brand-primary) 88%, var(--tcrn-color-brand-secondary));
+  background: color-mix(in srgb, var(--tcrn-color-brand-primary) 88%, var(--tcrn-color-brand-secondary));
+}
+.tcrn-button:focus-visible,
+.tcrn-link-button:focus-visible {
+  outline: 2px solid var(--tcrn-color-focus-ring);
+  outline-offset: 2px;
+}
+.tcrn-link-button:active {
+  transform: scale(var(--tcrn-motion-press-scale));
+}
+.tcrn-button--danger {
+  border-color: var(--tcrn-color-state-blocked);
+  color: var(--tcrn-color-state-blocked);
+}
+.tcrn-button--md {
+  min-height: 38px;
+  padding: 0 var(--tcrn-space-3);
+}
+.tcrn-button--sm {
+  min-height: 30px;
+  padding: 0 var(--tcrn-space-2);
+  gap: var(--tcrn-space-1h);
+  font-size: var(--tcrn-type-size-meta);
+}
+.tcrn-button[disabled],
+.tcrn-nav-item[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.64;
+}
+.tcrn-icon-button {
+  inline-size: 38px;
+  block-size: 38px;
+  padding: 0;
+}
+.tcrn-divider {
+  border: 0;
+  border-top: 1px solid var(--tcrn-color-border-subtle);
+  margin: var(--tcrn-space-3) 0;
+}
+.tcrn-shell-theme-toggle,
+.tcrn-button.tcrn-shell-theme-toggle {
+  position: relative;
+  inline-size: 36px;
+  block-size: 36px;
+  min-inline-size: 36px;
+  min-block-size: 36px;
+  min-height: 36px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--tcrn-radius-pill);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  transition:
+    background-color var(--tcrn-motion-standard),
+    border-color var(--tcrn-motion-standard),
+    color var(--tcrn-motion-standard),
+    box-shadow var(--tcrn-motion-standard);
+}
+.tcrn-shell-side-nav-toggle {
+  transition:
+    background-color var(--tcrn-motion-standard),
+    border-color var(--tcrn-motion-standard),
+    color var(--tcrn-motion-standard),
+    box-shadow var(--tcrn-motion-standard);
+}
+.tcrn-shell-theme-toggle:hover,
+.tcrn-shell-side-nav-toggle:hover,
+.tcrn-shell-locale-menu__trigger:hover,
+.tcrn-shell-locale-menu__trigger[aria-expanded="true"] {
+  border-color: var(--tcrn-color-border-control);
+  background: color-mix(in srgb, var(--tcrn-color-surface-muted) 72%, var(--tcrn-color-surface-panel));
+  color: var(--tcrn-color-text-primary);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+}
+.tcrn-product-shell .tcrn-shell-theme-toggle:focus-visible,
+.tcrn-product-shell .tcrn-shell-side-nav-toggle:focus-visible,
+.tcrn-product-shell .tcrn-shell-locale-menu__trigger:focus-visible,
+.tcrn-product-shell .tcrn-search-input:focus-within {
+  box-shadow: none;
+}
+.tcrn-product-shell .tcrn-search-input:focus-within {
+  outline: 3px solid var(--tcrn-color-focus-ring);
+  outline-offset: 2px;
+}
+.tcrn-product-shell .tcrn-search-input__control:focus,
+.tcrn-product-shell .tcrn-search-input__control:focus-visible {
+  outline-style: none;
+  outline-width: 0;
+  outline-offset: 0;
+  box-shadow: none;
+}
+.tcrn-shell-theme-toggle__icon {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.58) rotate(-90deg);
+  transition:
+    opacity var(--tcrn-motion-emphasis),
+    transform var(--tcrn-motion-emphasis);
+}
+.tcrn-shell-theme-toggle[data-current-theme="light"] .tcrn-shell-theme-toggle__icon[data-theme-icon="light"],
+.tcrn-shell-theme-toggle[data-current-theme="dark"] .tcrn-shell-theme-toggle__icon[data-theme-icon="dark"] {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) rotate(0deg);
+}
+.tcrn-shell-theme-toggle[data-current-theme="light"] .tcrn-shell-theme-toggle__icon[data-theme-icon="dark"] {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.58) rotate(-90deg);
+}
+.tcrn-shell-theme-toggle[data-current-theme="dark"] .tcrn-shell-theme-toggle__icon[data-theme-icon="light"] {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.58) rotate(90deg);
+}
+.tcrn-shell-side-nav-toggle {
+  inline-size: 38px;
+  block-size: 38px;
+  min-inline-size: 38px;
+  min-block-size: 38px;
+  min-height: 38px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  color: var(--tcrn-color-brand-primary);
+}
+/*
+ * Mobile-only, and hidden by default rather than shown by default: above the
+ * breakpoint the navigation is always on screen, so a show/hide control there
+ * would be the no-op the responsive standard forbids — the same reason its
+ * width-collapse sibling is hidden below the breakpoint. Each control exists
+ * exactly where it does something.
+ */
+.tcrn-shell-mobile-nav-toggle {
+  display: none;
+  place-items: center;
+  padding: 0;
+  color: var(--tcrn-color-brand-primary);
+}
+.tcrn-shell-side-nav-toggle__icon {
+  display: inline-grid;
+  inline-size: 20px;
+  block-size: 20px;
+  place-items: center;
+}
+.tcrn-icon-button__label,
+.tcrn-sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+/* aria-live announcer: visually-hidden by default so status text is spoken by
+   assistive tech without occupying layout (agent-picked announcer disposition). */
+.tcrn-live-region {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.tcrn-brand-lockup,
+.tcrn-shell-brand-lockup,
+.tcrn-product-logo {
+  --tcrn-brand-mark-size: 38px;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  gap: var(--tcrn-space-3);
+}
+.tcrn-brand-mark {
+  display: block;
+  inline-size: var(--tcrn-brand-mark-size);
+  block-size: var(--tcrn-brand-mark-size);
+  flex: 0 0 auto;
+  filter: var(--tcrn-brand-mark-filter, none);
+  transition:
+    inline-size var(--tcrn-motion-emphasis),
+    block-size var(--tcrn-motion-emphasis),
+    filter var(--tcrn-motion-standard);
+}
+.tcrn-brand-wordmark {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  min-width: 0;
+  gap: var(--tcrn-space-0h) var(--tcrn-space-2);
+  color: var(--tcrn-color-text-primary);
+  font-size: var(--tcrn-type-size-section);
+  font-weight: var(--tcrn-type-weight-regular);
+  line-height: var(--tcrn-type-line-section);
+  overflow-wrap: anywhere;
+}
+.tcrn-brand-wordmark__base {
+  flex: 0 0 auto;
+  letter-spacing: 0;
+  font-weight: var(--tcrn-type-weight-regular);
+  white-space: nowrap;
+}
+.tcrn-brand-wordmark__suffix {
+  flex: 0 1 auto;
+  min-width: 0;
+  color: var(--tcrn-color-brand-secondary-readable);
+  font-size: inherit;
+  font-weight: var(--tcrn-type-weight-strong);
+}
+.tcrn-brand-wordmark__suffix--aos {
+  color: var(--tcrn-brand-accent-aos);
+}
+.tcrn-brand-wordmark__suffix--tms {
+  color: var(--tcrn-brand-accent-tms);
+}
+.tcrn-brand-wordmark__suffix--workflow {
+  color: var(--tcrn-brand-accent-workflow);
+}
+.tcrn-brand-wordmark__suffix--design-system {
+  background: linear-gradient(
+    105deg,
+    var(--tcrn-brand-accent-design-system-1) 0%,
+    var(--tcrn-brand-accent-design-system-2) 31%,
+    var(--tcrn-brand-accent-design-system-3) 62%,
+    var(--tcrn-brand-accent-design-system-4) 100%
+  );
+  background-clip: text;
+  color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.tcrn-brand-lockup--long-name .tcrn-brand-wordmark {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+.tcrn-shell-brand-lockup__copy,
+.tcrn-product-logo__copy {
+  display: grid;
+  min-width: 0;
+  gap: var(--tcrn-space-0h);
+}
+.tcrn-product-logo__line-one {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--tcrn-space-0h) var(--tcrn-space-1);
+  color: var(--tcrn-color-text-primary);
+  font-size: var(--tcrn-type-size-ui);
+  font-weight: var(--tcrn-type-weight-regular);
+  line-height: var(--tcrn-type-line-ui);
+  white-space: nowrap;
+}
+.tcrn-product-logo__line-one-base {
+  flex: 0 0 auto;
+  font-weight: var(--tcrn-type-weight-regular);
+  white-space: nowrap;
+}
+.tcrn-product-logo__line-one-suffix {
+  flex: 0 1 auto;
+  min-width: 0;
+  font-weight: var(--tcrn-type-weight-strong);
+  white-space: nowrap;
+}
+.tcrn-product-logo--stacked-suffix .tcrn-product-logo__line-one {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  white-space: normal;
+}
+.tcrn-shell-brand-lockup__caption,
+.tcrn-product-logo__line-two {
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+  font-weight: var(--tcrn-type-weight-strong);
+  line-height: var(--tcrn-type-line-caption);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tcrn-product-shell {
+  --tcrn-product-shell-sidebar-width: 280px;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: var(--tcrn-product-shell-sidebar-width) minmax(0, 1fr);
+  background: var(--tcrn-color-surface-canvas);
+  color: var(--tcrn-color-text-primary);
+  font-family: var(--tcrn-type-family-ui);
+  font-size: var(--tcrn-type-size-ui);
+  line-height: var(--tcrn-type-line-ui);
+  letter-spacing: 0;
+  transition: grid-template-columns var(--tcrn-motion-product-shell);
+}
+.tcrn-product-shell[data-product-shell-collapsed="true"] {
+  --tcrn-product-shell-sidebar-width: 92px;
+}
+.tcrn-product-shell[data-theme-switching="true"]::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--tcrn-color-brand-primary-bg), transparent 20%);
+  animation: tcrn-product-shell-theme-wash var(--tcrn-motion-product-shell) both;
+}
+@keyframes tcrn-product-shell-theme-wash {
+  from { opacity: 0.22; }
+  to { opacity: 0; }
+}
+.tcrn-product-shell :focus-visible:not(.tcrn-search-input__control) {
+  outline: 3px solid var(--tcrn-color-focus-ring);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+.tcrn-product-shell__sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tcrn-space-5);
+  min-width: 0;
+  padding: var(--tcrn-space-4);
+  border-right: 1px solid var(--tcrn-color-border-subtle);
+  background: var(--tcrn-color-surface-panel);
+  /*
+   * The rail is exactly one viewport tall and sticky, so navigation taller than
+   * the viewport used to paint outside its own box with nothing to scroll: the
+   * page scrolled, the sticky rail did not, and the items past the fold were
+   * unreachable at any scroll position. Measured on a rotated 375x760 phone —
+   * 812x375 is above the mobile breakpoint, so it takes this path — where the
+   * last three destinations could not be reached at all (TCRN-AOS-INC-026).
+   * dvh for the same family of reason: vh ignores the browser chrome that
+   * appears and disappears on a phone.
+   */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.tcrn-product-shell__sidebar-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 38px;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-product-shell__brand {
+  display: flex;
+  min-width: 0;
+  min-height: 46px;
+  align-items: center;
+  overflow: hidden;
+  text-decoration: none;
+}
+.tcrn-product-shell[data-product-shell-collapsed="true"] .tcrn-product-shell__sidebar-header {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+.tcrn-product-shell[data-product-shell-collapsed="true"] .tcrn-product-shell__brand {
+  inline-size: 42px;
+  min-height: 42px;
+}
+.tcrn-product-shell[data-product-shell-collapsed="true"] .tcrn-shell-brand-lockup__copy,
+.tcrn-product-shell[data-product-shell-collapsed="true"] .tcrn-product-logo__copy,
+.tcrn-product-shell[data-product-shell-collapsed="true"] .tcrn-nav-group__label,
+.tcrn-product-shell[data-product-shell-collapsed="true"] .tcrn-nav-item__label,
+.tcrn-product-shell[data-product-shell-collapsed="true"] .tcrn-nav-item__disabled-reason {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.tcrn-product-shell[data-product-shell-collapsed="true"] .tcrn-side-nav {
+  align-items: center;
+}
+.tcrn-product-shell[data-product-shell-collapsed="true"] .tcrn-nav-group {
+  width: 48px;
+}
+.tcrn-product-shell[data-product-shell-collapsed="true"] .tcrn-nav-item {
+  grid-template-columns: 20px;
+  justify-content: center;
+  inline-size: 44px;
+  min-height: 42px;
+  padding: var(--tcrn-space-2);
+}
+.tcrn-product-shell[data-product-shell-collapsed="true"] .tcrn-nav-item[data-nav-item-has-icon="false"]::before {
+  content: "";
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: var(--tcrn-radius-pill);
+  background: currentColor;
+}
+.tcrn-product-shell__workspace {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+.tcrn-product-shell__workspace > .tcrn-top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: var(--tcrn-space-4);
+  min-height: 68px;
+  padding: var(--tcrn-space-3) var(--tcrn-space-5);
+  border: 0;
+  border-bottom: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: 0;
+  justify-content: stretch;
+  background: color-mix(in srgb, var(--tcrn-color-surface-panel), transparent 5%);
+  backdrop-filter: blur(16px);
+}
+.tcrn-product-shell__utility-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--tcrn-space-3);
+  min-width: 0;
+}
+.tcrn-product-shell__utility-row > * {
+  min-width: 0;
+}
+.tcrn-product-shell__header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  min-width: 0;
+}
+.tcrn-product-shell__current-location {
+  display: grid;
+  flex: 0 1 240px;
+  gap: var(--tcrn-space-0h);
+  margin-right: auto;
+  min-width: 0;
+  max-width: 240px;
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-caption);
+  line-height: var(--tcrn-type-line-caption);
+  letter-spacing: 0;
+}
+.tcrn-product-shell__current-location strong {
+  color: var(--tcrn-color-text-primary);
+  font-size: var(--tcrn-type-size-ui);
+  font-weight: var(--tcrn-type-weight-strong);
+  line-height: var(--tcrn-type-line-ui);
+}
+.tcrn-product-shell__current-location span,
+.tcrn-product-shell__current-location strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tcrn-product-shell-search {
+  position: relative;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: 260px;
+  margin-left: auto;
+  justify-self: end;
+  width: 260px;
+  max-width: min(100%, 260px);
+  transition:
+    flex-basis var(--tcrn-motion-product-shell-search),
+    width var(--tcrn-motion-product-shell-search),
+    max-width var(--tcrn-motion-product-shell-search);
+}
+.tcrn-product-shell-search[data-search-expanded="true"] {
+  flex-basis: 420px;
+  width: 420px;
+  max-width: min(100%, 420px);
+}
+.tcrn-product-shell-search__results {
+  position: absolute;
+  inset-block-start: calc(100% + var(--tcrn-space-2));
+  inset-inline-end: 0;
+  z-index: 40;
+  display: grid;
+  gap: var(--tcrn-space-1);
+  width: min(420px, calc(100vw - 32px));
+  padding: var(--tcrn-space-2);
+  border: 1px solid var(--tcrn-color-border-strong);
+  border-radius: var(--tcrn-radius-panel);
+  background: var(--tcrn-color-surface-panel);
+  box-shadow: var(--tcrn-elevation-floating);
+}
+.tcrn-product-shell-search__results[hidden] {
+  display: none;
+}
+.tcrn-product-shell-search__result,
+.tcrn-product-shell-search__empty {
+  display: grid;
+  gap: var(--tcrn-space-0h);
+  padding: var(--tcrn-space-2);
+  border-radius: var(--tcrn-radius-control);
+  color: var(--tcrn-color-text-primary);
+  text-decoration: none;
+}
+.tcrn-product-shell-search__result:hover,
+.tcrn-product-shell-search__result[data-selected="true"] {
+  background: var(--tcrn-selection-fill);
+}
+.tcrn-product-shell-search__result span,
+.tcrn-product-shell-search__empty {
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+}
+.tcrn-product-shell__main {
+  min-width: 0;
+  padding: var(--tcrn-space-5);
+}
+.tcrn-product-shell-content-stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--tcrn-space-5);
+  min-width: 0;
+  max-width: 1180px;
+}
+.tcrn-product-shell-content-stack > *,
+.tcrn-product-shell-section-grid > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.tcrn-product-shell-section-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.75fr);
+  gap: var(--tcrn-space-4);
+  align-items: start;
+}
+.tcrn-top-bar {
+  display: grid;
+  grid-template-columns: max-content max-content minmax(0, 1fr);
+  align-items: center;
+  gap: var(--tcrn-space-4);
+  min-height: 68px;
+  padding: var(--tcrn-space-3) var(--tcrn-space-5);
+  border-bottom: 1px solid var(--tcrn-color-border-subtle);
+  background: color-mix(in srgb, var(--tcrn-color-surface-panel), transparent 5%);
+  backdrop-filter: blur(16px);
+}
+.tcrn-top-bar__brand {
+  font-weight: var(--tcrn-type-weight-strong);
+}
+.tcrn-top-bar__module {
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-ui);
+}
+.tcrn-top-bar__actions {
+  min-width: 0;
+}
+.tcrn-side-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tcrn-space-4);
+}
+.tcrn-nav-group {
+  display: grid;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-nav-group__label {
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-caption);
+  font-weight: var(--tcrn-type-weight-strong);
+  text-transform: uppercase;
+  letter-spacing: 0;
+  padding: 0 var(--tcrn-space-2);
+}
+.tcrn-nav-group__items {
+  display: grid;
+  gap: var(--tcrn-space-1);
+}
+/* TCRN-DS-STORY-062: NavGroup's selected prop previously emitted data-selected with NO visual
+   rule (a dead API). The containing group of the active item now marks itself the same way the
+   doc-shell section header does — brand text on the group label; the 3px rail stays on the leaf. */
+.tcrn-nav-group[data-selected="true"] > .tcrn-nav-group__label {
+  color: var(--tcrn-color-text-primary);
+}
+.tcrn-nav-item {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  min-height: 38px;
+  padding: var(--tcrn-space-2);
+  border: 1px solid transparent;
+  border-radius: var(--tcrn-radius-control);
+  color: var(--tcrn-color-text-secondary);
+  text-decoration: none;
+}
+.tcrn-nav-item[data-nav-item-has-icon="false"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.tcrn-nav-item__content {
+  min-width: 0;
+}
+/* TCRN-DS-STORY-062 → STORY-087: selection used to speak one axis — a 3px left-edge brand
+   rail, brand text, zero radius. It now speaks ink. The rail is gone; this sentence is kept
+   only to say so, because the original wording survived the change that deleted the rule it
+   described and read as truth for three commits.
+   The item keeps its own radius rather than squaring off for an axis that no
+   longer exists, and weight is safe here because a sidebar item sits in a
+   fixed-width column where a bolder label cannot reflow the row. */
+.tcrn-nav-item[data-selected="true"],
+.tcrn-nav-item[aria-current="page"] {
+  color: var(--tcrn-color-text-primary);
+  font-weight: var(--tcrn-type-weight-strong);
+  background: var(--tcrn-selection-fill);
+}
+.tcrn-nav-item:hover {
+  background: var(--tcrn-color-surface-muted);
+  color: var(--tcrn-color-text-primary);
+}
+.tcrn-nav-item__label {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+.tcrn-search-input {
+  --tcrn-search-input-icon-size: 16px;
+  --tcrn-search-input-block-size: 38px;
+  --tcrn-search-input-padding-inline: var(--tcrn-space-3);
+  --tcrn-search-input-column-gap: var(--tcrn-space-2);
+  --tcrn-search-input-control-min-inline-size: 9ch;
+  display: grid;
+  grid-template-columns: var(--tcrn-search-input-icon-size) minmax(var(--tcrn-search-input-control-min-inline-size), 1fr) max-content;
+  align-items: center;
+  gap: var(--tcrn-search-input-column-gap);
+  min-block-size: var(--tcrn-search-input-block-size);
+  min-inline-size: var(--tcrn-search-input-min-inline-size, 0);
+  max-inline-size: 100%;
+  padding: 0 var(--tcrn-search-input-padding-inline);
+  border: 1px solid var(--tcrn-color-border-control);
+  border-radius: var(--tcrn-radius-control);
+  background: var(--tcrn-color-surface-panel);
+}
+/* The fill prop: the wrapper takes its container's full inline size. */
+.tcrn-search-input--fill {
+  inline-size: 100%;
+}
+.tcrn-search-input__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  grid-column: 1;
+  inline-size: var(--tcrn-search-input-icon-size);
+  block-size: var(--tcrn-search-input-icon-size);
+  color: var(--tcrn-color-text-secondary);
+  pointer-events: none;
+}
+.tcrn-search-input__icon svg {
+  inline-size: var(--tcrn-search-input-icon-size);
+  block-size: var(--tcrn-search-input-icon-size);
+}
+.tcrn-search-input .tcrn-search-input__control {
+  appearance: none;
+  box-sizing: border-box;
+  grid-column: 2;
+  width: 100%;
+  min-height: 0;
+  min-width: 0;
+  max-width: none;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--tcrn-color-text-primary);
+  font: inherit;
+  box-shadow: none;
+}
+.tcrn-search-input:focus-within {
+  outline: 3px solid var(--tcrn-color-focus-ring);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+.tcrn-search-input .tcrn-search-input__control:focus,
+.tcrn-search-input .tcrn-search-input__control:focus-visible {
+  outline-style: none;
+  outline-width: 0;
+  outline-offset: 0;
+  box-shadow: none;
+}
+.tcrn-search-input__shortcut {
+  position: static;
+  z-index: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  grid-column: 3;
+  color: var(--tcrn-color-text-secondary);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-surface);
+  background: var(--tcrn-color-surface-muted);
+  padding: var(--tcrn-space-0h) var(--tcrn-space-1h);
+  font-family: var(--tcrn-type-family-ui);
+  font-size: var(--tcrn-type-size-caption);
+  font-weight: var(--tcrn-type-weight-strong);
+  line-height: var(--tcrn-type-line-caption);
+  letter-spacing: 0;
+  pointer-events: none;
+}
+.tcrn-shell-locale-menu {
+  position: relative;
+}
+.tcrn-shell-locale-menu__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  max-width: 132px;
+  min-height: 36px;
+  padding: 0 var(--tcrn-space-2h);
+  border: 1px solid var(--tcrn-color-border-control);
+  border-radius: var(--tcrn-radius-pill);
+  background: var(--tcrn-color-surface-panel);
+  color: var(--tcrn-color-text-primary);
+  font-size: var(--tcrn-type-size-ui);
+  font-weight: var(--tcrn-type-weight-strong);
+  line-height: var(--tcrn-type-line-ui);
+  letter-spacing: 0;
+  transition:
+    background-color var(--tcrn-motion-standard),
+    border-color var(--tcrn-motion-standard),
+    color var(--tcrn-motion-standard),
+    box-shadow var(--tcrn-motion-standard);
+}
+.tcrn-shell-locale-menu__current {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tcrn-shell-locale-menu__panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + var(--tcrn-space-2));
+  z-index: 30;
+  display: grid;
+  gap: var(--tcrn-space-1);
+  min-width: 148px;
+  padding: var(--tcrn-space-2);
+  border: 1px solid var(--tcrn-color-border-strong);
+  border-radius: var(--tcrn-radius-panel);
+  background: var(--tcrn-color-surface-panel);
+  box-shadow: var(--tcrn-elevation-floating);
+}
+.tcrn-shell-locale-menu__chevron {
+  flex: 0 0 auto;
+  width: 11px;
+  height: 11px;
+  color: var(--tcrn-color-text-tertiary);
+  pointer-events: none;
+  transition: transform var(--tcrn-motion-emphasis);
+}
+.tcrn-shell-locale-menu[data-locale-menu-open="true"] .tcrn-shell-locale-menu__chevron,
+.tcrn-shell-locale-menu__trigger[aria-expanded="true"] .tcrn-shell-locale-menu__chevron {
+  transform: rotate(180deg);
+}
+.tcrn-shell-locale-menu__panel[hidden] {
+  display: none;
+}
+.tcrn-shell-locale-menu__option {
+  border: 0;
+  border-radius: var(--tcrn-radius-control);
+  padding: var(--tcrn-space-2);
+  text-align: left;
+  background: transparent;
+  color: var(--tcrn-color-text-primary);
+}
+.tcrn-shell-locale-menu__option[aria-current="true"],
+.tcrn-shell-locale-menu__option:hover {
+  background: var(--tcrn-color-surface-muted);
+}
+.tcrn-shell-locale-menu__name {
+  font: inherit;
+}
+[data-theme-icon="dark"],
+[data-side-nav-icon="expand"] {
+  display: none;
+}
+html[data-tcrn-theme="dark"] [data-theme-icon="light"],
+[data-side-nav-collapsed="true"] [data-side-nav-icon="collapse"] {
+  display: none;
+}
+html[data-tcrn-theme="dark"] [data-theme-icon="dark"],
+[data-side-nav-collapsed="true"] [data-side-nav-icon="expand"] {
+  display: inline-flex;
+}
+.tcrn-table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  margin-block-end: var(--tcrn-space-2);
+}
+.tcrn-table-toolbar .tcrn-search-input {
+  flex: 1 1 220px;
+  min-width: 180px;
+}
+.tcrn-table-toolbar .tcrn-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--tcrn-space-1);
+}
+.tcrn-table-toolbar__chip {
+  min-height: 26px;
+  padding: 0 var(--tcrn-space-2);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-control);
+  background: transparent;
+  color: var(--tcrn-color-text-secondary);
+  font: inherit;
+  font-size: var(--tcrn-type-size-meta);
+  cursor: pointer;
+  transition:
+    background-color var(--tcrn-motion-fast),
+    border-color var(--tcrn-motion-fast),
+    color var(--tcrn-motion-fast);
+}
+.tcrn-table-toolbar__chip:hover {
+  border-color: var(--tcrn-color-border-control);
+  color: var(--tcrn-color-text-primary);
+}
+.tcrn-table-toolbar__chip:focus-visible,
+.tcrn-table-toolbar__collapse:focus-visible {
+  outline: 2px solid var(--tcrn-color-focus-ring);
+  outline-offset: 2px;
+}
+/* TCRN-DS-STORY-087 — "selection is ink", applied to a chip that carries a frame.
+   This chip and WorkQuickFilters are both exported filter chips with the same
+   "this filter is chosen" meaning, and they carried two different grammars until
+   now: this one painted brand, that one inked. One grammar does not mean one
+   declaration — ink takes over whatever structural layer the control already
+   has. The quick filter sits in a frameless track and so takes fill; this chip
+   owns a visible border and so takes the edge. Nothing is added on top in
+   either case, and brand colour stays with actionability. */
+.tcrn-table-toolbar__chip[aria-pressed="true"] {
+  border-color: var(--tcrn-selection-edge);
+  color: var(--tcrn-color-text-primary);
+}
+.tcrn-table-toolbar__count {
+  margin-inline-start: auto;
+  /* text-secondary, not text-muted: the live match count is real information and
+     muted fails the 4.5:1 contrast floor on panel surfaces. */
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+  font-variant-numeric: tabular-nums;
+}
+.tcrn-table-toolbar__collapse {
+  min-height: 26px;
+  padding: 0 var(--tcrn-space-2);
+  border: 1px solid transparent;
+  border-radius: var(--tcrn-radius-control);
+  background: transparent;
+  color: var(--tcrn-color-text-secondary);
+  font: inherit;
+  font-size: var(--tcrn-type-size-meta);
+  cursor: pointer;
+}
+.tcrn-table-toolbar__collapse:hover {
+  color: var(--tcrn-color-text-primary);
+  border-color: var(--tcrn-color-border-subtle);
+}
+.tcrn-table-toolbar__collapse [data-table-toolbar-collapse-label="expand"],
+.tcrn-table-toolbar__collapse[aria-expanded="false"] [data-table-toolbar-collapse-label="collapse"] {
+  display: none;
+}
+.tcrn-table-toolbar__collapse[aria-expanded="false"] [data-table-toolbar-collapse-label="expand"] {
+  display: inline;
+}
+.tcrn-table-shell [role="row"][hidden] {
+  display: none;
+}
+.tcrn-environment-banner,
+.tcrn-inline-alert {
+  display: flex;
+  align-items: center;
+  gap: var(--tcrn-space-3);
+  min-height: 42px;
+  padding: var(--tcrn-space-2) var(--tcrn-space-3);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-panel);
+  background: var(--tcrn-color-brand-neutral-bg);
+}
+.tcrn-inline-alert--warning {
+  background: var(--tcrn-color-state-warning-bg);
+}
+.tcrn-heading {
+  margin: 0;
+  letter-spacing: 0;
+}
+.tcrn-heading--1 {
+  font-size: clamp(28px, 3vw, 44px);
+  line-height: 1.04;
+}
+.tcrn-heading--2 {
+  font-size: var(--tcrn-type-size-heading-2);
+}
+.tcrn-heading--3 {
+  font-size: var(--tcrn-type-size-heading-3);
+}
+.tcrn-text {
+  margin: var(--tcrn-space-2) 0 0;
+  color: var(--tcrn-color-text-secondary);
+}
+/* Status reads as ink dot plus word. The pill-with-pastel-fill it replaces put a
+   saturated block of colour behind every row in a dense table, which is loud at
+   this density and is the single most recognisable tell of generated UI. Squaring
+   the chip to the control radius keeps it reading as an instrument value rather
+   than a marketing badge. */
+.tcrn-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 24px;
+  padding: var(--tcrn-state-chip-padding);
+  padding-inline-start: calc(var(--tcrn-space-2) + var(--tcrn-state-dot-size) + 4px);
+  border-radius: var(--tcrn-radius-control);
+  font-size: var(--tcrn-type-size-meta);
+  line-height: 1.25;
+  font-weight: var(--tcrn-type-weight-strong);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+  background: var(--tcrn-color-surface-muted);
+  color: var(--tcrn-color-text-secondary);
+}
+/* The dot is positioned rather than laid out. As a flex item it contributed its own
+   min-content width, which left the anonymous text item unable to shrink and clipped
+   longer labels ("Proof required") at narrow widths; out of flow it costs the label
+   nothing and the text wraps as it did before. */
+.tcrn-badge::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: var(--tcrn-space-2);
+  inset-block-start: 50%;
+  inline-size: var(--tcrn-state-dot-size);
+  block-size: var(--tcrn-state-dot-size);
+  margin-block-start: calc(var(--tcrn-state-dot-size) / -2);
+  border-radius: 50%;
+  background: currentColor;
+}
+.tcrn-badge--warning {
+  background: var(--tcrn-color-state-warning-bg);
+  color: var(--tcrn-color-state-warning);
+}
+.tcrn-badge--positive {
+  background: var(--tcrn-color-state-ready-bg);
+  color: var(--tcrn-color-state-ready);
+}
+.tcrn-badge--danger {
+  background: var(--tcrn-color-state-blocked-bg);
+  color: var(--tcrn-color-state-blocked);
+}
+
+/* ── B「治理纸感」identity stamp ──────────────────────────────────────────────
+   Reserved for identity moments: a gate closing, a ruling landing, a release being
+   accepted. It is deliberately the only place the serif and the oxblood ink appear,
+   because an impression that shows up everywhere stops meaning anything. The
+   whitelist is enforced mechanically by scripts/stamp-whitelist-proof.mjs. */
+.tcrn-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  padding: var(--tcrn-space-1) var(--tcrn-space-2h);
+  border: 1px solid currentColor;
+  border-radius: var(--tcrn-radius-control);
+  color: var(--tcrn-color-brand-accent);
+  background: transparent;
+  font-family: var(--tcrn-type-family-stamp);
+  font-size: var(--tcrn-type-size-stamp-min);
+  font-weight: var(--tcrn-type-weight-strong);
+  letter-spacing: var(--tcrn-type-tracking-stamp);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.tcrn-stamp[data-stamp-moment="release"] {
+  color: var(--tcrn-color-state-ready);
+}
+/* The double rule is the archival-document memory: two weights, not one, so a
+   header carrying a ruling reads differently from an ordinary panel header. */
+.tcrn-stamp-rule {
+  border: 0;
+  border-top: 2px solid var(--tcrn-color-border-strong);
+  border-bottom: 1px solid var(--tcrn-color-border-subtle);
+  block-size: 3px;
+  margin: 0;
+}
+.tcrn-readback-panel,
+.tcrn-table-shell {
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-panel);
+  background: var(--tcrn-color-surface-panel);
+}
+.tcrn-readback-panel {
+  display: grid;
+  gap: var(--tcrn-space-2);
+  padding: var(--tcrn-space-4);
+  overflow: hidden;
+}
+.tcrn-readback-panel > .tcrn-heading + * {
+  margin-top: 0;
+}
+.tcrn-key-value-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--tcrn-space-3);
+  margin: var(--tcrn-space-3) 0 0;
+}
+.tcrn-key-value-list div {
+  display: grid;
+  gap: var(--tcrn-space-0h);
+  padding: var(--tcrn-space-2);
+  border-radius: var(--tcrn-radius-panel);
+  background: var(--tcrn-color-surface-muted);
+}
+.tcrn-key-value-list dt {
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+}
+.tcrn-key-value-list dd {
+  margin: 0;
+  font-weight: var(--tcrn-type-weight-strong);
+}
+.tcrn-table-shell {
+  display: grid;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+}
+.tcrn-table-shell__head,
+.tcrn-table-shell__row {
+  display: grid;
+  grid-template-columns: var(
+    --tcrn-table-shell-columns,
+    repeat(var(--tcrn-table-column-count, 1), minmax(var(--tcrn-table-shell-column-min-width, 160px), 1fr))
+  );
+  min-width: var(
+    --tcrn-table-shell-min-width,
+    max(100%, calc(var(--tcrn-table-column-count, 1) * var(--tcrn-table-shell-column-min-width, 160px)))
+  );
+}
+.tcrn-table-shell__head {
+  position: sticky;
+  top: 0;
+  background: var(--tcrn-color-surface-muted);
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+  font-weight: var(--tcrn-type-weight-strong);
+}
+.tcrn-table-shell__head span,
+.tcrn-table-shell__cell {
+  min-width: 0;
+  min-height: 44px;
+  padding: var(--tcrn-space-3);
+  border-bottom: 1px solid var(--tcrn-color-border-subtle);
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.tcrn-table-shell__row:last-child .tcrn-table-shell__cell {
+  border-bottom: 0;
+}
+.tcrn-table-shell__empty {
+  padding: var(--tcrn-space-3);
+  color: var(--tcrn-color-text-secondary);
+}
+.tcrn-table-shell__empty-row {
+  display: block;
+}
+@media (max-width: 520px) {
+  .tcrn-table-shell {
+    overflow-x: visible;
+  }
+  .tcrn-table-shell__head {
+    display: none;
+  }
+  .tcrn-table-shell__row {
+    grid-template-columns: 1fr;
+    gap: var(--tcrn-space-2);
+    min-width: 0;
+    padding: var(--tcrn-space-3);
+  }
+  .tcrn-table-shell__cell {
+    display: grid;
+    grid-template-columns: minmax(84px, 0.4fr) minmax(0, 1fr);
+    gap: var(--tcrn-space-2);
+    min-width: 0;
+  }
+  .tcrn-table-shell__cell::before {
+    content: attr(data-label);
+    color: var(--tcrn-color-text-secondary);
+    font-weight: var(--tcrn-type-weight-strong);
+  }
+}
+/* TCRN-DS-STORY-088 — SearchableList.
+   Frameless rows inside one framed panel, so selection inks the row: the same
+   grammar the rest of the system speaks, applied to a surface that did not
+   exist until now. */
+.tcrn-searchable-list {
+  display: grid;
+  gap: var(--tcrn-space-2);
+  min-width: 0;
+}
+.tcrn-searchable-list__items {
+  display: grid;
+  gap: var(--tcrn-space-0h);
+  max-height: 18rem;
+  overflow-y: auto;
+  min-width: 0;
+}
+.tcrn-searchable-list__item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  width: 100%;
+  min-height: 34px;
+  padding: var(--tcrn-space-1) var(--tcrn-space-2h);
+  border: 1px solid transparent;
+  border-radius: var(--tcrn-radius-control);
+  background: transparent;
+  color: var(--tcrn-color-text-primary);
+  text-align: start;
+  text-decoration: none;
+  font: inherit;
+  cursor: pointer;
+}
+.tcrn-searchable-list__item:hover {
+  background: var(--tcrn-selection-fill-hover);
+}
+.tcrn-searchable-list__item[data-selected="true"] {
+  background: var(--tcrn-selection-fill);
+  font-weight: var(--tcrn-type-weight-strong);
+}
+.tcrn-searchable-list__item[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.64;
+}
+.tcrn-searchable-list__label {
+  display: grid;
+  min-width: 0;
+}
+.tcrn-searchable-list__description,
+.tcrn-searchable-list__meta {
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+}
+.tcrn-searchable-list__meta {
+  white-space: nowrap;
+}
+.tcrn-searchable-list__divider {
+  border: 0;
+  border-top: 1px solid var(--tcrn-color-border-subtle);
+  margin: var(--tcrn-space-1) var(--tcrn-space-1h);
+}
+.tcrn-searchable-list__truncation {
+  padding: var(--tcrn-space-1) var(--tcrn-space-2h);
+}
+.tcrn-searchable-list__state {
+  display: grid;
+  gap: var(--tcrn-space-2);
+}
+@container tcrn-work-row (max-width: 464px) {
+  .tcrn-work-item-row,
+  .tcrn-work-item-row--compact,
+  .tcrn-work-item-row--dense {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* 780px of actual container: below it the 280px detail column starves the list. */
+@container tcrn-work-split-view (max-width: 780px) {
+  .tcrn-work-split-view {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /*
+   * Stacked, the one bit the consumer supplies decides the detail region's
+   * fate: absent a selection it is an empty box pushing the list down, and
+   * with one it is what the reader chose, so it leads. Without the attribute
+   * both regions render in source order, which is the pre-admission layout.
+   */
+  .tcrn-work-split-view[data-detail-populated="false"] .tcrn-work-split-view__detail {
+    display: none;
+  }
+  .tcrn-work-split-view[data-detail-populated="true"] .tcrn-work-split-view__detail {
+    order: -1;
+  }
+}
+.tcrn-template-gallery {
+  min-width: 0;
+}
+.tcrn-template-gallery {
+  display: grid;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-template-gallery__card .tcrn-heading,
+.tcrn-template-gallery__card .tcrn-text {
+  margin: 0;
+}
+.tcrn-template-gallery {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.tcrn-template-gallery__card {
+  display: grid;
+  gap: var(--tcrn-space-2);
+  min-width: 0;
+}
+.tcrn-skip-link {
+  position: fixed;
+  z-index: 1000;
+  top: var(--tcrn-space-3);
+  left: var(--tcrn-space-3);
+  transform: translateY(-150%);
+  padding: var(--tcrn-space-2) var(--tcrn-space-3);
+  border-radius: var(--tcrn-radius-control);
+  background: var(--tcrn-color-surface-panel);
+  border: 1px solid var(--tcrn-color-border-control);
+}
+.tcrn-skip-link:focus {
+  transform: translateY(0);
+}
+@media (max-width: 760px) {
+  .tcrn-product-shell {
+    --tcrn-product-shell-sidebar-width: 1fr;
+    grid-template-columns: 1fr;
+  }
+  .tcrn-product-shell__sidebar {
+    position: relative;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--tcrn-color-border-subtle);
+  }
+  .tcrn-product-shell__workspace > .tcrn-top-bar,
+  .tcrn-top-bar {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+  /*
+   * Lever 2 of the mobile fold budget. Each of these used to take a full row of
+   * its own, which spent 130px of a 760px screen on three controls before the
+   * page said anything. They sit on one line and wrap only when they must.
+   */
+  .tcrn-product-shell__utility-row {
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--tcrn-space-2);
+  }
+  .tcrn-product-shell__current-location,
+  .tcrn-shell-locale-menu {
+    flex: 0 1 auto;
+    margin-right: 0;
+    max-width: none;
+    width: auto;
+  }
+  .tcrn-product-shell-search,
+  .tcrn-product-shell-search[data-search-expanded="true"] {
+    flex-basis: min(100%, 320px);
+    margin-left: 0;
+    justify-self: start;
+    width: 320px;
+    max-width: 320px;
+  }
+  /*
+   * The width-collapse control stays hidden here, and that ruling has not
+   * changed: narrowing a rail to 92px means nothing in a full-width stacked
+   * layout, and a control that does nothing is what the responsive standard
+   * forbids. What was never ruled on — because the shell had two destinations
+   * when this rule was written and has eleven now — is whether the navigation
+   * can be put away at all. That is the control below, and it is a different one.
+   */
+  .tcrn-product-shell__sidebar-header .tcrn-shell-side-nav-toggle {
+    display: none;
+  }
+  .tcrn-shell-mobile-nav-toggle {
+    display: inline-flex;
+    /* Sole route to the whole IA on the one viewport where it is touched. */
+    min-width: 44px;
+    min-height: 44px;
+  }
+  /*
+   * Lever 1. display:none rather than a transform: it takes the eleven links
+   * out of the tab order and out of the accessibility tree, which a translated
+   * or merely invisible panel does not. Closed is the CSS default, so a server
+   * render emits the closed nav with no script and no correction after
+   * hydration — the attribute only ever turns it on.
+   */
+  .tcrn-product-shell__sidebar .tcrn-side-nav {
+    display: none;
+  }
+  .tcrn-product-shell[data-mobile-nav-expanded="true"] .tcrn-product-shell__sidebar .tcrn-side-nav {
+    display: grid;
+  }
+  /*
+   * The header carries the only navigation control on this viewport, so it has
+   * to survive the scroll that the shorter page now invites. Without this it
+   * leaves after 79px and the reader has no way back to the navigation at all.
+   */
+  .tcrn-product-shell__sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .tcrn-work-board,
+  .tcrn-work-hierarchy__levels,
+  .tcrn-work-item-inspector__grid,
+  .tcrn-work-page-header__body,
+  .tcrn-work-item-row,
+  .tcrn-work-item-row--compact,
+  .tcrn-work-split-view,
+  .tcrn-work-detail-layout__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tcrn-work-page-header__meta,
+  .tcrn-work-page-header__actions,
+  .tcrn-work-detail-layout__actions {
+    justify-content: flex-start;
+  }
+  .tcrn-work-management-subnav > a,
+  .tcrn-work-management-subnav > span,
+  .tcrn-work-view-tabs > a,
+  .tcrn-work-view-tabs > span,
+  .tcrn-work-quick-filters > a,
+  .tcrn-work-quick-filters > span {
+    /*
+     * Lever 3. These wrapped into four and three rows, spending 380px of the
+     * fold on chrome before the first work item. One scrolling row each: the
+     * chips keep their own width (a CJK filter name with a count needs 213px
+     * and shrinking it bled the text out of the chip), and the overflow is the
+     * row's, not the page's.
+     *
+     * Supersedes the wrap-based sizing that fixed that bleed — same property,
+     * different mechanism, and the no-page-overflow property it was protecting
+     * still holds because the scroll is contained here.
+     */
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+  .tcrn-work-view-tabs,
+  .tcrn-work-quick-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    /* Momentum on touch, and the row keeps its own scrollbar off the page. */
+    -webkit-overflow-scrolling: touch;
+  }
+  .tcrn-shell-locale-menu__trigger {
+    width: 100%;
+    max-width: none;
+    justify-content: space-between;
+  }
+  .tcrn-product-shell__main {
+    padding: var(--tcrn-space-4);
+  }
+  .tcrn-shell-brand-lockup__caption,
+  .tcrn-product-logo__line-two {
+    white-space: normal;
+  }
+  .tcrn-product-shell-section-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tcrn-key-value-list {
+    grid-template-columns: 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Reduced motion means fewer and gentler animations, not none. Travel is what
+     causes discomfort, so transform and position animation is removed; opacity and
+     colour transitions stay, because they are how the interface says that something
+     changed. Killing them outright leaves state changes to happen with no cue at
+     all, which is a comprehension regression dressed up as an accessibility win. */
+  .tcrn-product-shell,
+  .tcrn-product-shell-search {
+    transition: opacity var(--tcrn-motion-comprehension), background-color var(--tcrn-motion-comprehension), color var(--tcrn-motion-comprehension), border-color var(--tcrn-motion-comprehension);
+  }
+  .tcrn-product-shell[data-theme-switching="true"]::after {
+    animation: none;
+  }
+  .tcrn-button,
+  .tcrn-button.tcrn-shell-theme-toggle,
+  .tcrn-nav-item,
+  .tcrn-search-input,
+  .tcrn-shell-theme-toggle__icon,
+  .tcrn-shell-locale-menu__trigger,
+  .tcrn-shell-locale-menu__chevron {
+    transition: opacity var(--tcrn-motion-comprehension), background-color var(--tcrn-motion-comprehension), color var(--tcrn-motion-comprehension), border-color var(--tcrn-motion-comprehension);
+  }
+  /* No travel, and no press-scale either: scale is transform. */
+  .tcrn-button:active,
+  .tcrn-nav-item:active,
+  .tcrn-shell-theme-toggle:active,
+  .tcrn-shell-locale-menu__trigger:active,
+  .tcrn-table-toolbar__chip:active,
+  .tcrn-table-toolbar__collapse:active,
+  .tcrn-link-button:active,
+  .tcrn-product-launcher button:active,
+  .tcrn-product-switcher button:active,
+  .tcrn-module-tabs button:active,
+  .tcrn-section-tabs button:active,
+  .tcrn-segmented-nav button:active {
+    transform: none;
+  }
+}
+
+/* ---- Component families relocated from the docs demo layer (TCRN-DS-STORY-037) ----
+   These 24 families are emitted by real @tcrn/ui-react components (Form, Overlay,
+   Feedback, Layout, Navigation, DataDisplay, Typography). They used to live only in the
+   docs stylesheets, so package consumers rendered them unstyled. Values are copied
+   verbatim from the canonical, tokenized story-demo-styles.ts (converged by S034); the
+   docs demo layer keeps only its own presentation chrome (see docs/style-scale.md,
+   "Demo-chrome exemption list"). */
+
+/* Base surface card — Layout .tcrn-surface / .tcrn-disclosure-panel, Feedback
+   .tcrn-state-view / .tcrn-state-surface / .tcrn-status-summary-panel, DataDisplay
+   .tcrn-detail-inspector, Overlay .tcrn-popover / .tcrn-dialog / .tcrn-confirm-dialog /
+   .tcrn-detail-drawer / .tcrn-action-drawer. */
+.tcrn-surface,
+.tcrn-detail-inspector,
+.tcrn-status-summary-panel,
+.tcrn-state-view,
+.tcrn-state-surface,
+.tcrn-disclosure-panel,
+.tcrn-popover,
+.tcrn-dialog,
+.tcrn-confirm-dialog,
+.tcrn-detail-drawer,
+.tcrn-action-drawer {
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-surface);
+  background: var(--tcrn-color-surface-panel);
+  padding: var(--tcrn-space-3);
+  max-width: 100%;
+  min-width: 0;
+}
+
+.tcrn-surface,
+.tcrn-detail-inspector,
+.tcrn-status-summary-panel,
+.tcrn-confirm-dialog,
+.tcrn-detail-drawer,
+.tcrn-action-drawer {
+  display: grid;
+  gap: var(--tcrn-space-2h);
+}
+
+/* Typography highlight */
+.tcrn-highlight-text {
+  display: inline;
+}
+
+.tcrn-highlight-mark {
+  border-radius: var(--tcrn-radius-control);
+  background: var(--tcrn-color-brand-primary-bg);
+  color: var(--tcrn-color-text-primary);
+  font-weight: var(--tcrn-type-weight-medium);
+  padding: 0 var(--tcrn-space-0h);
+}
+
+/* Feedback state view */
+.tcrn-state-view {
+  display: grid;
+  gap: var(--tcrn-space-2);
+}
+
+.tcrn-state-view h3,
+.tcrn-state-view p {
+  margin: 0;
+}
+
+/* Feedback skeleton */
+.tcrn-skeleton,
+.tcrn-skeleton-group {
+  display: block;
+  max-width: 100%;
+}
+
+.tcrn-skeleton {
+  position: relative;
+  overflow: hidden;
+  min-height: 18px;
+  border-radius: var(--tcrn-radius-control);
+  background: var(--tcrn-color-surface-muted);
+}
+
+.tcrn-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.62), transparent);
+  animation: tcrn-skeleton-shimmer var(--tcrn-motion-skeleton-loop) infinite;
+}
+
+.tcrn-skeleton--text {
+  width: 100%;
+  height: 1em;
+}
+
+.tcrn-skeleton--rectangular {
+  width: 100%;
+  height: 56px;
+}
+
+.tcrn-skeleton--circular {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--tcrn-radius-pill);
+}
+
+.tcrn-skeleton-group {
+  display: grid;
+  gap: var(--tcrn-space-2);
+}
+
+.tcrn-skeleton-group .tcrn-skeleton:last-child {
+  width: 72%;
+}
+
+@keyframes tcrn-skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Feedback state surface */
+.tcrn-state-surface {
+  display: grid;
+  place-items: center;
+  gap: var(--tcrn-space-2);
+  text-align: center;
+  min-height: 144px;
+  color: var(--tcrn-color-text-secondary);
+}
+
+.tcrn-state-surface__icon {
+  color: var(--tcrn-color-text-muted);
+}
+
+.tcrn-state-surface__title,
+.tcrn-state-surface__description {
+  margin: 0;
+}
+
+.tcrn-state-surface--warning .tcrn-state-surface__title,
+.tcrn-state-surface--warning .tcrn-state-surface__icon {
+  color: var(--tcrn-color-state-warning);
+}
+
+.tcrn-state-surface--danger .tcrn-state-surface__title,
+.tcrn-state-surface--danger .tcrn-state-surface__icon {
+  color: var(--tcrn-color-state-blocked);
+}
+
+.tcrn-state-surface__action {
+  display: flex;
+  gap: var(--tcrn-space-2);
+  margin-top: var(--tcrn-space-2);
+}
+
+/* Overlay tooltip — genuine :hover / :focus-within reveal only. The storybook
+   static-preview hook (a docs-only attribute variant the component never emits) stays in
+   the docs demo layer. */
+.tcrn-tooltip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+}
+
+.tcrn-tooltip__content {
+  position: absolute;
+  z-index: var(--tcrn-z-popover);
+  pointer-events: none;
+  width: max-content;
+  max-width: min(260px, calc(100vw - 32px));
+  border-radius: var(--tcrn-radius-control);
+  background: var(--tcrn-color-text-primary);
+  color: var(--tcrn-color-surface-panel);
+  padding: var(--tcrn-space-1h) var(--tcrn-space-2);
+  font-size: var(--tcrn-type-size-meta);
+  line-height: 1.35;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--tcrn-motion-standard), transform var(--tcrn-motion-standard);
+  box-shadow: var(--tcrn-elevation-floating);
+}
+
+.tcrn-tooltip:hover .tcrn-tooltip__content,
+.tcrn-tooltip:focus-within .tcrn-tooltip__content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tcrn-tooltip[data-placement="top"] .tcrn-tooltip__content {
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+}
+
+.tcrn-tooltip[data-placement="top"]:hover .tcrn-tooltip__content,
+.tcrn-tooltip[data-placement="top"]:focus-within .tcrn-tooltip__content {
+  transform: translate(-50%, 0);
+}
+
+.tcrn-tooltip[data-placement="bottom"] .tcrn-tooltip__content {
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translate(-50%, -4px);
+}
+
+.tcrn-tooltip[data-placement="bottom"]:hover .tcrn-tooltip__content,
+.tcrn-tooltip[data-placement="bottom"]:focus-within .tcrn-tooltip__content {
+  transform: translate(-50%, 0);
+}
+
+.tcrn-tooltip[data-placement="right"] .tcrn-tooltip__content {
+  top: 50%;
+  left: calc(100% + 8px);
+  transform: translate(-4px, -50%);
+}
+
+.tcrn-tooltip[data-placement="right"]:hover .tcrn-tooltip__content,
+.tcrn-tooltip[data-placement="right"]:focus-within .tcrn-tooltip__content {
+  transform: translate(0, -50%);
+}
+
+.tcrn-tooltip[data-placement="left"] .tcrn-tooltip__content {
+  top: 50%;
+  right: calc(100% + 8px);
+  transform: translate(4px, -50%);
+}
+
+.tcrn-tooltip[data-placement="left"]:hover .tcrn-tooltip__content,
+.tcrn-tooltip[data-placement="left"]:focus-within .tcrn-tooltip__content {
+  transform: translate(0, -50%);
+}
+
+/* Layout collapsible + disclosure */
+.tcrn-collapsible-region {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0.4;
+  transition: grid-template-rows var(--tcrn-motion-emphasis), opacity var(--tcrn-motion-standard);
+}
+
+.tcrn-collapsible-region[data-expanded="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.tcrn-collapsible-region[aria-hidden="true"] {
+  visibility: hidden;
+}
+
+.tcrn-collapsible-region__inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tcrn-disclosure-panel {
+  display: grid;
+  gap: var(--tcrn-space-2);
+}
+
+.tcrn-disclosure-panel__title {
+  margin: 0;
+}
+
+/* Form field */
+.tcrn-field {
+  display: grid;
+  /* The field's rows are label and control, both content-sized. Left to stretch, a
+     field that a layout has made taller than its content hands the extra height to
+     those rows, and the control inside grows past the min-height it declares — a
+     select stating 34px was observed at 44.1px this way. The field keeps its own
+     size; whatever gave it extra height is the layout's business, not the control's. */
+  align-content: start;
+  gap: var(--tcrn-space-1);
+  margin-bottom: 10px;
+  border-radius: var(--tcrn-radius-control);
+  background-color: transparent;
+  outline: 1px solid transparent;
+  outline-offset: 2px;
+  transition:
+    background-color 150ms ease-out,
+    outline-color 150ms ease-out;
+}
+
+.tcrn-field:focus-within {
+  background-color: color-mix(in srgb, var(--tcrn-color-surface-muted) 56%, transparent);
+  outline-color: color-mix(in srgb, var(--tcrn-color-border-strong) 66%, transparent);
+}
+
+.tcrn-field--error {
+  background-color: color-mix(in srgb, var(--tcrn-color-state-blocked-bg) 62%, transparent);
+  outline-color: var(--tcrn-color-state-blocked);
+}
+
+.tcrn-field__label {
+  font-weight: 600;
+}
+
+.tcrn-field__hint {
+  color: var(--tcrn-color-text-secondary);
+}
+
+.tcrn-field__error {
+  color: var(--tcrn-color-state-blocked);
+}
+
+/* Form input + select (.tcrn-input--short is a docs-only demo width and stays there) */
+.tcrn-input,
+.tcrn-select {
+  min-height: 34px;
+  border: 1px solid var(--tcrn-color-border-strong);
+  border-radius: var(--tcrn-radius-control);
+  max-width: 100%;
+  padding: 0 var(--tcrn-space-2h);
+}
+/* Textarea is a modifier on .tcrn-input (border/bg/radius/font come from the base);
+   these deltas give it a multi-line box and a vertical resize handle. */
+.tcrn-textarea {
+  min-height: 96px;
+  padding: var(--tcrn-space-2) var(--tcrn-space-3);
+  resize: vertical;
+  line-height: var(--tcrn-type-line-ui);
+}
+
+/* Navigation breadcrumb */
+.tcrn-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--tcrn-space-1h);
+  min-width: 0;
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-caption);
+  line-height: 1.35;
+}
+
+.tcrn-breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tcrn-space-1h);
+  min-width: 0;
+}
+
+.tcrn-breadcrumb__separator {
+  width: 14px;
+  height: 14px;
+  color: var(--tcrn-color-text-muted);
+}
+
+.tcrn-breadcrumb [aria-current="page"] {
+  color: var(--tcrn-color-text-primary);
+  font-weight: 700;
+}
+
+/* An ancestor crumb is now a link (it previously rendered as an inert span, so
+   there was nothing to style). Quiet by default and underlined on hover: the
+   trail is chrome, and a row of permanently underlined links competes with the
+   page title it sits above. */
+.tcrn-breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+}
+.tcrn-breadcrumb a:hover {
+  color: var(--tcrn-color-brand-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+/* Pagination container. Pagination renders an empty nav today; this readies the
+   row layout for page controls without asserting markup S036 does not ship. */
+.tcrn-pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+}
+
+/* Navigation tab families — .tcrn-filter-bar stays doc-side (already package-owned via
+   the scoped .tcrn-table-toolbar .tcrn-filter-bar rule; introducing a top-level
+   .tcrn-filter-bar here would trip the shell-fidelity duplicate-selector gate). */
+/* The same segmented track, for the button-based selectors. These previously
+   said "selected" with a brand-tinted border plus a floating shadow — a lift,
+   which competed with the shell's real elevation language. */
+.tcrn-product-launcher,
+.tcrn-product-switcher,
+.tcrn-module-tabs,
+.tcrn-section-tabs,
+.tcrn-segmented-nav {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--tcrn-space-0h);
+  padding: var(--tcrn-space-0h);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-surface);
+  background: var(--tcrn-color-surface-panel);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.tcrn-product-launcher button,
+.tcrn-product-switcher button,
+.tcrn-module-tabs button,
+.tcrn-section-tabs button,
+.tcrn-segmented-nav button {
+  min-height: 34px;
+  border: 1px solid transparent;
+  border-radius: var(--tcrn-radius-control);
+  background: transparent;
+  color: var(--tcrn-color-text-secondary);
+  padding: 0 var(--tcrn-space-2h);
+  white-space: nowrap;
+}
+
+.tcrn-product-launcher button[data-selected="true"],
+.tcrn-product-switcher button[data-selected="true"],
+.tcrn-module-tabs button[data-selected="true"],
+.tcrn-section-tabs button[data-selected="true"],
+.tcrn-segmented-nav button[data-selected="true"],
+.tcrn-product-launcher button[aria-current="page"],
+.tcrn-product-switcher button[aria-current="page"],
+.tcrn-module-tabs button[aria-current="page"],
+.tcrn-section-tabs button[aria-current="page"],
+.tcrn-segmented-nav button[aria-current="page"] {
+  background: var(--tcrn-selection-fill);
+  color: var(--tcrn-color-text-primary);
+}
+.tcrn-product-launcher button:hover,
+.tcrn-product-switcher button:hover,
+.tcrn-module-tabs button:hover,
+.tcrn-section-tabs button:hover,
+.tcrn-segmented-nav button:hover {
+  background: var(--tcrn-selection-fill-hover);
+  color: var(--tcrn-color-text-primary);
+}
+.tcrn-product-launcher button:focus-visible,
+.tcrn-product-switcher button:focus-visible,
+.tcrn-module-tabs button:focus-visible,
+.tcrn-section-tabs button:focus-visible,
+.tcrn-segmented-nav button:focus-visible {
+  outline: 2px solid var(--tcrn-color-focus-ring);
+  outline-offset: 2px;
+}
+.tcrn-product-launcher button:active,
+.tcrn-product-switcher button:active,
+.tcrn-module-tabs button:active,
+.tcrn-section-tabs button:active,
+.tcrn-segmented-nav button:active {
+  transform: scale(var(--tcrn-motion-press-scale));
+}
+
+/* Component-loop primitives: each rule stays package-owned and token-led so the
+   exported CSS can be consumed without importing the React implementation. */
+.tcrn-switch {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--tcrn-space-1) var(--tcrn-space-2);
+  align-items: center;
+  min-width: 0;
+  color: var(--tcrn-color-text-primary);
+  cursor: pointer;
+}
+.tcrn-switch__control {
+  appearance: none;
+  inline-size: 42px;
+  block-size: 24px;
+  margin: 0;
+  border: 1px solid var(--tcrn-color-border-control);
+  border-radius: var(--tcrn-radius-pill);
+  background: var(--tcrn-color-surface-muted);
+  box-shadow: inset 0 0 0 3px var(--tcrn-color-surface-muted);
+  cursor: pointer;
+}
+.tcrn-switch__control::before {
+  display: block;
+  inline-size: 16px;
+  block-size: 16px;
+  margin: 3px;
+  border-radius: 50%;
+  background: var(--tcrn-color-text-secondary);
+  content: "";
+  transition: transform var(--tcrn-motion-fast) var(--tcrn-motion-comprehension), background var(--tcrn-motion-fast) var(--tcrn-motion-comprehension);
+}
+.tcrn-switch__control:checked {
+  border-color: var(--tcrn-color-brand-primary);
+  background: var(--tcrn-color-brand-primary-bg);
+}
+.tcrn-switch__control:checked::before {
+  background: var(--tcrn-color-brand-primary);
+  transform: translateX(18px);
+}
+.tcrn-switch__control:focus-visible {
+  outline: 3px solid var(--tcrn-color-focus-ring);
+  outline-offset: 2px;
+}
+.tcrn-switch__label {
+  min-width: 0;
+  font-weight: var(--tcrn-type-weight-medium);
+}
+.tcrn-switch__description {
+  grid-column: 2;
+  min-width: 0;
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+  line-height: var(--tcrn-type-line-caption);
+}
+.tcrn-switch--disabled {
+  color: var(--tcrn-color-text-muted);
+  cursor: not-allowed;
+}
+.tcrn-switch--disabled .tcrn-switch__control {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.tcrn-stat-card {
+  display: grid;
+  gap: var(--tcrn-space-1);
+  min-width: 0;
+  padding: var(--tcrn-space-3);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-surface);
+  background: var(--tcrn-color-surface-panel);
+}
+.tcrn-stat-card__label,
+.tcrn-stat-card__note {
+  min-width: 0;
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+  line-height: var(--tcrn-type-line-caption);
+}
+.tcrn-stat-card__value {
+  min-width: 0;
+  color: var(--tcrn-color-text-primary);
+  font-size: var(--tcrn-type-size-heading-2);
+  line-height: var(--tcrn-type-line-section);
+  overflow-wrap: anywhere;
+}
+.tcrn-stat-card--positive .tcrn-stat-card__value {
+  color: var(--tcrn-color-state-ready);
+}
+.tcrn-stat-card--warning .tcrn-stat-card__value {
+  color: var(--tcrn-color-state-warning);
+}
+.tcrn-stat-card--danger .tcrn-stat-card__value {
+  color: var(--tcrn-color-state-blocked);
+}
+
+.tcrn-setting-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 0.8fr) max-content;
+  gap: var(--tcrn-space-3);
+  align-items: center;
+  min-width: 0;
+  padding-block: var(--tcrn-space-2);
+  border-block-end: 1px solid var(--tcrn-color-border-subtle);
+}
+.tcrn-setting-row__label,
+.tcrn-setting-row__control,
+.tcrn-setting-row__tools {
+  min-width: 0;
+}
+.tcrn-setting-row__label {
+  display: grid;
+  gap: var(--tcrn-space-0h);
+}
+.tcrn-setting-row__key {
+  color: var(--tcrn-color-text-tertiary);
+  font-family: var(--tcrn-type-family-mono);
+  font-size: var(--tcrn-type-size-meta);
+}
+.tcrn-setting-row__name {
+  color: var(--tcrn-color-text-primary);
+  font-weight: var(--tcrn-type-weight-medium);
+}
+.tcrn-setting-row__description {
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+  line-height: var(--tcrn-type-line-caption);
+}
+.tcrn-setting-row__control {
+  display: flex;
+  justify-content: flex-start;
+}
+.tcrn-setting-row__tools {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-setting-row__modified {
+  inline-size: var(--tcrn-state-dot-size);
+  block-size: var(--tcrn-state-dot-size);
+  border-radius: 50%;
+  background: var(--tcrn-color-state-warning);
+}
+.tcrn-setting-row__reset {
+  min-height: 32px;
+  padding-inline: var(--tcrn-space-2);
+  border: 1px solid var(--tcrn-color-border-control);
+  border-radius: var(--tcrn-radius-control);
+  background: transparent;
+  color: var(--tcrn-color-text-secondary);
+  font: inherit;
+  cursor: pointer;
+}
+.tcrn-setting-row__reset:hover {
+  border-color: var(--tcrn-color-brand-primary);
+  color: var(--tcrn-color-brand-primary);
+}
+
+.tcrn-field-provenance {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content max-content;
+  gap: var(--tcrn-space-2);
+  align-items: center;
+  min-width: 0;
+  padding: var(--tcrn-space-2);
+  border: 1px dashed var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-control);
+  background: var(--tcrn-color-surface-muted);
+}
+.tcrn-field-provenance__value {
+  min-width: 0;
+  color: var(--tcrn-color-text-primary);
+  overflow-wrap: anywhere;
+}
+.tcrn-field-provenance__source {
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+}
+.tcrn-field-provenance__action {
+  display: inline-flex;
+  align-items: center;
+}
+.tcrn-field-provenance--overridden {
+  border-style: solid;
+  border-color: var(--tcrn-selection-edge);
+  background: var(--tcrn-selection-fill);
+}
+
+.tcrn-line-numbered-editor {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--tcrn-color-border-control);
+  border-radius: var(--tcrn-radius-control);
+  background: var(--tcrn-color-surface-panel);
+}
+.tcrn-line-numbered-editor__gutter {
+  min-inline-size: 44px;
+  max-block-size: 260px;
+  margin: 0;
+  padding: var(--tcrn-space-2) var(--tcrn-space-2) var(--tcrn-space-2) var(--tcrn-space-1);
+  overflow: hidden;
+  border-inline-end: 1px solid var(--tcrn-color-border-subtle);
+  color: var(--tcrn-color-text-tertiary);
+  font-family: var(--tcrn-type-family-mono);
+  font-size: var(--tcrn-type-size-meta);
+  line-height: var(--tcrn-type-line-ui);
+  list-style: none;
+  text-align: end;
+  user-select: none;
+}
+.tcrn-line-numbered-editor__gutter li {
+  min-block-size: var(--tcrn-type-line-ui);
+}
+.tcrn-line-numbered-editor__gutter li[data-editor-line-finding="true"] {
+  color: var(--tcrn-color-state-warning);
+  font-weight: var(--tcrn-type-weight-strong);
+}
+.tcrn-line-numbered-editor__gutter li.tcrn-line-numbered-editor__line--danger {
+  color: var(--tcrn-color-state-blocked);
+}
+.tcrn-line-numbered-editor__content {
+  display: grid;
+  gap: var(--tcrn-space-2);
+  min-width: 0;
+}
+.tcrn-line-numbered-editor__control {
+  min-block-size: 260px;
+  resize: vertical;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--tcrn-type-family-mono);
+  line-height: var(--tcrn-type-line-ui);
+}
+.tcrn-line-numbered-editor__control:focus-visible {
+  outline: 3px solid var(--tcrn-color-focus-ring);
+  outline-offset: -3px;
+}
+.tcrn-line-numbered-editor__findings {
+  display: grid;
+  gap: var(--tcrn-space-1);
+  margin: 0;
+  padding: 0 var(--tcrn-space-2) var(--tcrn-space-2);
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+  list-style: none;
+}
+.tcrn-line-numbered-editor__finding--warning,
+.tcrn-line-numbered-editor__finding--danger {
+  color: var(--tcrn-color-state-warning);
+}
+.tcrn-line-numbered-editor__finding--danger {
+  color: var(--tcrn-color-state-blocked);
+}
+.tcrn-line-numbered-editor__finding-line {
+  margin-inline-end: var(--tcrn-space-2);
+  font-family: var(--tcrn-type-family-mono);
+  font-weight: var(--tcrn-type-weight-strong);
+}
+
+.tcrn-app-status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--tcrn-space-2) var(--tcrn-space-3);
+  min-width: 0;
+  padding: var(--tcrn-space-2) var(--tcrn-space-3);
+  border-block-start: 1px solid var(--tcrn-color-border-subtle);
+  background: var(--tcrn-color-surface-muted);
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+}
+.tcrn-app-status-bar__command {
+  min-width: 0;
+  color: var(--tcrn-color-text-secondary);
+  font-family: var(--tcrn-type-family-mono);
+  overflow-wrap: anywhere;
+}
+.tcrn-app-status-bar__state {
+  min-width: 0;
+  color: var(--tcrn-color-text-primary);
+  font-weight: var(--tcrn-type-weight-medium);
+}
+.tcrn-app-status-bar__action {
+  margin-inline-start: auto;
+}
+
+.tcrn-definition-list {
+  display: grid;
+  gap: var(--tcrn-space-3);
+  margin: 0;
+}
+.tcrn-definition-list__item {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.35fr) minmax(0, 1fr);
+  gap: var(--tcrn-space-3);
+  min-width: 0;
+}
+.tcrn-definition-list__term {
+  color: var(--tcrn-color-text-secondary);
+  font-weight: var(--tcrn-type-weight-medium);
+}
+.tcrn-definition-list__definition {
+  min-width: 0;
+  margin: 0;
+  color: var(--tcrn-color-text-primary);
+  overflow-wrap: anywhere;
+}
+.tcrn-definition-list--dense {
+  gap: var(--tcrn-space-1);
+}
+.tcrn-definition-list--dense .tcrn-definition-list__item {
+  gap: var(--tcrn-space-2);
+}
+
+.tcrn-lock-hint {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--tcrn-space-1);
+  max-inline-size: 100%;
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+  line-height: var(--tcrn-type-line-caption);
+}
+.tcrn-lock-hint__icon {
+  flex: 0 0 auto;
+  color: var(--tcrn-color-state-warning);
+}
+.tcrn-lock-hint__text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .tcrn-setting-row {
+    grid-template-columns: minmax(0, 1fr) max-content;
+  }
+
+  .tcrn-setting-row__control {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .tcrn-setting-row__tools {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .tcrn-definition-list__item {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--tcrn-space-1);
+  }
+}
+
+/* Overlay dialog + popover grid (.alpha-overlay-demo__dialog stays doc-side) */
+.tcrn-dialog,
+.tcrn-popover {
+  display: grid;
+  gap: var(--tcrn-space-2h);
+}
+
+.tcrn-popover {
+  z-index: var(--tcrn-z-popover);
+  max-width: 420px;
+  border-color: color-mix(in srgb, var(--tcrn-color-brand-primary) 24%, transparent);
+  box-shadow: var(--tcrn-elevation-floating);
+}
+
+/* Reduced-motion + forced-colors handling for the relocated component families. */
+@media (prefers-reduced-motion: reduce) {
+  .tcrn-skeleton::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  .tcrn-tooltip__content,
+  .tcrn-collapsible-region,
+  .tcrn-field {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .tcrn-field:focus-within,
+  .tcrn-field--error {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+
+.tcrn-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tcrn-space-3);
+  padding: var(--tcrn-space-4);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-md);
+  background: var(--tcrn-color-surface);
+}
+.tcrn-card--raised { box-shadow: var(--tcrn-shadow-raised); }
+.tcrn-card--quiet { background: var(--tcrn-color-surface-subtle); border-color: transparent; }
+.tcrn-card--interactive { cursor: pointer; }
+.tcrn-card--interactive:focus-visible {
+  outline: 2px solid var(--tcrn-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.tcrn-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--tcrn-color-surface-subtle);
+  color: var(--tcrn-color-text-secondary);
+  font-weight: 600;
+  flex: none;
+}
+.tcrn-avatar--small { inline-size: 24px; block-size: 24px; font-size: var(--tcrn-font-size-xs); }
+.tcrn-avatar--medium { inline-size: 32px; block-size: 32px; font-size: var(--tcrn-font-size-sm); }
+.tcrn-avatar--large { inline-size: 48px; block-size: 48px; font-size: var(--tcrn-font-size-md); }
+.tcrn-avatar__image { inline-size: 100%; block-size: 100%; object-fit: cover; }
+
+.tcrn-progress {
+  position: relative;
+  overflow: hidden;
+  block-size: var(--tcrn-space-2);
+  border-radius: var(--tcrn-radius-sm);
+  background: var(--tcrn-color-surface-subtle);
+}
+.tcrn-progress__fill {
+  display: block;
+  block-size: 100%;
+  background: var(--tcrn-color-accent);
+}
+.tcrn-progress--indeterminate .tcrn-progress__fill {
+  inline-size: 40%;
+  animation: tcrn-progress-slide 1.2s linear infinite;
+}
+@keyframes tcrn-progress-slide {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(250%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tcrn-progress--indeterminate .tcrn-progress__fill { animation: none; inline-size: 100%; opacity: 0.5; }
+}
+
+.tcrn-stepper__list {
+  display: flex;
+  gap: var(--tcrn-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tcrn-stepper__step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+  color: var(--tcrn-color-text-secondary);
+}
+.tcrn-stepper__step--current { color: var(--tcrn-color-text-primary); font-weight: 600; }
+.tcrn-stepper__marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 24px;
+  block-size: 24px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  font-size: var(--tcrn-font-size-xs);
+}
+.tcrn-stepper__step--complete .tcrn-stepper__marker {
+  background: var(--tcrn-color-accent);
+  border-color: var(--tcrn-color-accent);
+  color: var(--tcrn-color-on-accent);
+}
+.tcrn-stepper__description { grid-column: 2; font-size: var(--tcrn-font-size-xs); }
+
+.tcrn-radio-group { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--tcrn-space-2); }
+.tcrn-radio-group__legend { padding: 0; font-weight: 600; }
+.tcrn-radio-group__option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--tcrn-space-2);
+}
+.tcrn-radio-group__description { grid-column: 2; font-size: var(--tcrn-font-size-xs); color: var(--tcrn-color-text-secondary); }
+.tcrn-radio-group__option[data-option-disabled="true"] { color: var(--tcrn-color-text-disabled); }
+
+.tcrn-tabs__list {
+  display: flex;
+  gap: var(--tcrn-space-1);
+  border-block-end: 1px solid var(--tcrn-color-border-subtle);
+}
+.tcrn-tabs__tab {
+  padding: var(--tcrn-space-2) var(--tcrn-space-3);
+  border: 0;
+  background: none;
+  color: var(--tcrn-color-text-secondary);
+  cursor: pointer;
+  border-block-end: 2px solid transparent;
+}
+.tcrn-tabs__tab--selected { color: var(--tcrn-color-text-primary); border-block-end-color: var(--tcrn-color-accent); font-weight: 600; }
+.tcrn-tabs__tab:focus-visible { outline: 2px solid var(--tcrn-color-focus-ring); outline-offset: -2px; }
+.tcrn-tabs__tab:disabled { color: var(--tcrn-color-text-disabled); cursor: not-allowed; }
+.tcrn-tabs__panel { padding-block-start: var(--tcrn-space-3); }
+.tcrn-tabs__panel:focus-visible { outline: 2px solid var(--tcrn-color-focus-ring); outline-offset: 2px; }
+
+.tcrn-menu {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 12rem;
+  padding: var(--tcrn-space-1);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-md);
+  background: var(--tcrn-color-surface);
+  box-shadow: var(--tcrn-shadow-raised);
+}
+.tcrn-menu__item {
+  padding: var(--tcrn-space-2) var(--tcrn-space-3);
+  border: 0;
+  background: none;
+  text-align: start;
+  cursor: pointer;
+  border-radius: var(--tcrn-radius-sm);
+}
+.tcrn-menu__item--active { background: var(--tcrn-color-surface-subtle); }
+.tcrn-menu__item:disabled { color: var(--tcrn-color-text-disabled); cursor: not-allowed; }
+.tcrn-menu__item:focus-visible { outline: 2px solid var(--tcrn-color-focus-ring); outline-offset: -2px; }
+
+.tcrn-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--tcrn-space-3);
+  padding: var(--tcrn-space-3) var(--tcrn-space-4);
+  border: 1px solid var(--tcrn-color-border-subtle);
+  border-radius: var(--tcrn-radius-md);
+  background: var(--tcrn-color-surface);
+}
+.tcrn-toast--positive { border-color: var(--tcrn-color-positive-border); }
+.tcrn-toast--warning { border-color: var(--tcrn-color-warning-border); }
+.tcrn-toast--danger { border-color: var(--tcrn-color-danger-border); }
+.tcrn-toast__message { flex: 1; }
+.tcrn-toast__dismiss { border: 0; background: none; cursor: pointer; padding: var(--tcrn-space-1); }
+
+.tcrn-date-picker { padding: var(--tcrn-space-2); border: 1px solid var(--tcrn-color-border-subtle); border-radius: var(--tcrn-radius-sm); }
+
+.tcrn-tree, .tcrn-tree__group { list-style: none; margin: 0; padding: 0; }
+.tcrn-tree__group { padding-inline-start: var(--tcrn-space-4); }
+.tcrn-tree__row { display: flex; align-items: center; gap: var(--tcrn-space-1); }
+.tcrn-tree__toggle { border: 0; background: none; cursor: pointer; padding: 0; inline-size: 1.25rem; }
+.tcrn-tree__toggle--leaf { visibility: hidden; }
+.tcrn-tree__label { border: 0; background: none; cursor: pointer; text-align: start; padding: var(--tcrn-space-1); }
+.tcrn-tree__item[aria-selected="true"] > .tcrn-tree__row { background: var(--tcrn-color-surface-subtle); }
+
+.tcrn-data-grid { inline-size: 100%; border-collapse: collapse; }
+.tcrn-data-grid th, .tcrn-data-grid td { padding: var(--tcrn-space-2) var(--tcrn-space-3); text-align: start; border-block-end: 1px solid var(--tcrn-color-border-subtle); }
+.tcrn-data-grid__sort { border: 0; background: none; cursor: pointer; font: inherit; padding: 0; }</style>
+<style>/* ═══ 提案增量 · 尚未进入 DS ═══════════════════════════════════════════
+   下面每一条都是本规格书要你裁的东西。位置：tcrnComponentCss，core 侧。 */
+
+/* ① 正文链接。不是新发明：DS 已有这套墨，注释里管它叫 "inline-record-link ink"，
+   在 .tcrn-machine-token__link 与 .tcrn-knowledge-search-results__head a 各写了一遍。
+   两处都在 domain 分区，而产品外壳只外链 core——所以产品拿不到它。这里做的是
+   把已经重复两遍的既有模式提升为 core 的命名基元，不是画一个新的。
+
+   常驻下划线是必需，不是风格：品牌墨对正文墨明 2.94:1、暗 1.73:1，两档都低于
+   G183 的 3:1，颜色单独无法承担"这是链接"。DS 现有写法本来就常驻下划线，命名
+   之后这条要求才有地方被门检查。 */
+.tcrn-link {
+  color: var(--tcrn-color-brand-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  /* 继承来的 35% 实测只有明 1.69:1 / 暗 2.17:1 —— 承重的那个提示自己几乎看不见。
+     70% 是两档同时过 3:1 的交叉点（明 3.14 / 暗 4.83），仍明显比正文轻。 */
+  text-decoration-color: color-mix(in srgb, var(--tcrn-color-brand-primary) 70%, transparent);
+}
+.tcrn-link:hover {
+  text-decoration-color: var(--tcrn-color-brand-primary);
+}
+.tcrn-link:focus-visible {
+  outline: 2px solid var(--tcrn-color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--tcrn-radius-control);
+}
+/* 第二档：chrome 链接。与 core 现有的 .tcrn-breadcrumb a 逐字一致——那条规则的注释
+   已经把理由写清了："一整排常驻下划线会和它上面的页标题打架"。命名它，是为了让
+   面包屑之外的同类位置（卡片整块可点、密集工具条）不必各自重新发明。
+
+   偏移取 0.2em，跟 .tcrn-breadcrumb a:hover 一致。顺带记一笔：野生的 chrome 档
+   现在有两个偏移值——面包屑 0.2em，而 .tcrn-work-board__card-link 与
+   a.tcrn-relationship-chip 用 0.15em。哪个都不算错，但两个并存说明没有基元可抄，
+   这正是命名它要解决的事。 */
+.tcrn-link--quiet {
+  color: inherit;
+  text-decoration: none;
+}
+.tcrn-link--quiet:hover {
+  color: var(--tcrn-color-brand-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+
+/* ② 分页。core 里 .tcrn-pagination 的行布局早就在了，缺的只是里面的元素。
+   读数抄 .tcrn-table-toolbar__count 的既有裁定：text-secondary 而不是 text-muted，
+   因为计数是真信息，而 muted 在面板上明 3.36:1 / 暗 4.21:1，两档都不到 4.5:1。 */
+.tcrn-pagination__range {
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+  font-variant-numeric: tabular-nums;
+}
+.tcrn-pagination__range b {
+  color: var(--tcrn-color-text-primary);
+  font-weight: var(--tcrn-type-weight-medium);
+}
+.tcrn-pagination__next {
+  margin-inline-start: auto;
+  font-size: var(--tcrn-type-size-meta);
+}
+
+/* ④ 状态徽章的一行规则。这一条是 Owner 审稿时指出来的：标签一长，样式整个崩。
+   查下来是三处叠加，不是一处：
+
+   1) white-space:normal + overflow-wrap:anywhere → 会折行；
+      width:max-content + max-width:100% → 单元格一窄就必折。
+   2) ::before 的点定在 inset-block-start:50%。单行时那就是文字中心；
+      折成两行后 50% 落在两行之间 —— 点悬在缝里，不属于任何一行。
+   3) text-align:center 在单行时无效，一折行就变成居中散排。
+
+   实测：状态列 150px、徽章被卡到 126px 时，"pending acceptance" 撑到 36px 高，
+   而同列其它徽章 24px；该行从 48px 涨到 62px，同表其它行仍是 48px —— 行高不再是常量。
+
+   修法是给它一条硬规则：状态徽章占一行，永不撑高所在的行。装不下就截断加省略号，
+   全文留在 title 与无障碍名里。截断比折行好，理由不是好看：表格的行高是网格的一部分，
+   折行毁掉的是网格，截断毁掉的只是那一格里能读到多少字，而后者可恢复、前者不可。
+
+   注意标记要多一层 span：.tcrn-badge 是 inline-flex，text-overflow 作用在弹性项上，
+   直接挂容器上对匿名文本项无效。 */
+.tcrn-badge {
+  white-space: nowrap;
+  /* text-align:center 去掉 —— 单行时它本就没作用，是折行时才显形的隐患 */
+  text-align: start;
+}
+.tcrn-badge__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 自由内容的徽章（标签名、用户起的名字）显式 opt-in 折行。
+   Badge 今天一件干两份活：封闭词汇的状态片，和长度不可控的标签。
+   默认值应当归状态片 —— 因为 padding 与圆点的令牌本来就叫
+   --tcrn-state-chip-padding 与 --tcrn-state-dot-size，DS 自己早把它当状态片命名了。 */
+.tcrn-badge--wrap {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.tcrn-badge--wrap .tcrn-badge__label {
+  overflow: visible;
+  white-space: normal;
+}
+</style>
+<style>
+
+/* ═══ 主题桥 ═══════════════════════════════════════════════════════════
+   DS 的暗档挂在 [data-tcrn-theme="dark"]，光档在裸 :root —— 没有为「观者
+   自己是什么主题」留过接口。而 Artifact 的观者有三态：显式 dark、显式 light、
+   以及什么都不标（多数人），这时只有 prefers-color-scheme 能分。
+   下面把 DS 的两档原样重挂到这三态上，色值逐字照搬，不新造一个。
+   样件面板各自钉死明/暗，不跟观者走 —— 它们是并排对照，跟着观者变就没得比了。 */
+[data-tcrn-theme="light"] {
+  --tcrn-color-text-primary: #1c1d21;
+  --tcrn-color-text-secondary: #55575e;
+  --tcrn-color-text-muted: #8a8c93;
+  --tcrn-color-text-tertiary: #73757c;
+  --tcrn-color-text-inverse: #fafaf9;
+  --tcrn-color-surface-canvas: #fafaf9;
+  --tcrn-color-surface-panel: #ffffff;
+  --tcrn-color-surface-muted: #f2f2f0;
+  --tcrn-color-neutral-calibration-canvas: #f5f5f5;
+  --tcrn-color-neutral-calibration-panel: #fcfcfc;
+  --tcrn-color-neutral-calibration-muted: #eeeeee;
+  --tcrn-color-neutral-calibration-border: #808080;
+  --tcrn-color-border-subtle: #e7e7e3;
+  --tcrn-color-border-strong: #cfcfc9;
+  --tcrn-color-border-control: #8e8e88;
+  --tcrn-color-brand-teal: #17707f;
+  --tcrn-color-brand-primary: #17707f;
+  --tcrn-color-brand-primary-bg: #e6f1f3;
+  --tcrn-color-brand-secondary: #2a6b76;
+  --tcrn-color-brand-secondary-bg: #e3eff1;
+  --tcrn-color-brand-accent: #93332a;
+  --tcrn-color-brand-accent-bg: #f5e9e5;
+  --tcrn-color-brand-neutral: #55575e;
+  --tcrn-color-brand-neutral-bg: #f2f2f0;
+  --tcrn-color-focus-ring: #17707f;
+  --tcrn-color-focus-ring-calibrated: #0056a4;
+  --tcrn-color-progress-track-calibrated: #eeeeee;
+  --tcrn-color-progress-fill-start-calibrated: #2784d5;
+  --tcrn-color-progress-fill-end-calibrated: #6363c6;
+  --tcrn-color-state-ready: #15693a;
+  --tcrn-color-state-ready-bg: #eaf2ec;
+  --tcrn-color-state-blocked: #b3271e;
+  --tcrn-color-state-blocked-bg: #f7eae8;
+  --tcrn-color-state-warning: #8a5a08;
+  --tcrn-color-state-warning-bg: #f5eee1;
+  --tcrn-color-state-warning-calibrated: #604200;
+  --tcrn-color-state-warning-calibrated-bg: #fde1a7;
+  --tcrn-color-state-danger-calibrated: #742e2b;
+  --tcrn-color-state-danger-calibrated-bg: #ffd1ca;
+  --tcrn-type-family-ui: Inter, Avenir Next, Helvetica Neue, Arial, sans-serif;
+  --tcrn-type-family-latin: Inter, Avenir Next, Helvetica Neue, Arial, sans-serif;
+  --tcrn-type-family-distributable-latin: Inter, sans-serif;
+  --tcrn-type-family-distributable-zh-cn: Noto Sans CJK SC, Source Han Sans SC, sans-serif;
+  --tcrn-type-family-distributable-ja: Noto Sans CJK JP, Source Han Sans JP, sans-serif;
+  --tcrn-type-family-distributable-ko: Noto Sans CJK KR, Source Han Sans KR, sans-serif;
+  --tcrn-type-family-distributable-mono: Liberation Mono, monospace;
+  --tcrn-type-family-zh-cn: PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, Heiti SC, sans-serif;
+  --tcrn-type-family-ja: Hiragino Sans, Yu Gothic, Noto Sans CJK JP, Source Han Sans JP, Meiryo, sans-serif;
+  --tcrn-type-family-ko: Apple SD Gothic Neo, Malgun Gothic, Noto Sans CJK KR, Source Han Sans KR, sans-serif;
+  --tcrn-type-family-mono: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  --tcrn-type-family-stamp: Source Serif 4, Songti SC, Noto Serif CJK SC, Georgia, serif;
+  --tcrn-type-family-distributable-stamp-latin: Source Serif 4, serif;
+  --tcrn-type-family-distributable-stamp-zh-cn: Noto Serif CJK SC, serif;
+  --tcrn-type-size-stamp-min: 12px;
+  --tcrn-type-tracking-stamp: 0.06em;
+  --tcrn-type-size-ui: 13px;
+  --tcrn-type-size-reading: 14px;
+  --tcrn-type-size-caption: 11px;
+  --tcrn-type-size-meta: 12px;
+  --tcrn-type-size-body: 13px;
+  --tcrn-type-size-control: 13px;
+  --tcrn-type-size-section: 18px;
+  --tcrn-type-size-page: 28px;
+  --tcrn-type-size-heading-2: 22px;
+  --tcrn-type-size-heading-3: 16px;
+  --tcrn-type-line-ui: 1.35;
+  --tcrn-type-line-reading: 1.45;
+  --tcrn-type-line-caption: 1.35;
+  --tcrn-type-line-body: 1.45;
+  --tcrn-type-line-control: 1.2;
+  --tcrn-type-line-section: 1.25;
+  --tcrn-type-line-page: 1.3;
+  --tcrn-type-weight-regular: 400;
+  --tcrn-type-weight-medium: 600;
+  --tcrn-type-weight-strong: 700;
+  --tcrn-text-body-dense: var(--tcrn-type-weight-regular) var(--tcrn-type-size-ui)/var(--tcrn-type-line-ui) var(--tcrn-type-family-ui);
+  --tcrn-text-body-reading: var(--tcrn-type-weight-regular) var(--tcrn-type-size-reading)/var(--tcrn-type-line-reading) var(--tcrn-type-family-ui);
+  --tcrn-radius-panel: 6px;
+  --tcrn-elevation-floating: 0 1px 2px rgba(28, 29, 33, 0.06), 0 0 0 1px var(--tcrn-color-border-subtle);
+  --tcrn-state-dot-size: 6px;
+  --tcrn-state-chip-padding: 3px 8px 3px 6px;
+  --tcrn-space-0h: 2px;
+  --tcrn-space-1: 4px;
+  --tcrn-space-1h: 6px;
+  --tcrn-space-2: 8px;
+  --tcrn-space-2h: 10px;
+  --tcrn-space-3: 12px;
+  --tcrn-space-3h: 14px;
+  --tcrn-density-compact-row-height: 36px;
+  --tcrn-space-4: 16px;
+  --tcrn-space-4h: 18px;
+  --tcrn-space-5: 20px;
+  --tcrn-space-6: 32px;
+  --tcrn-selection-fill: rgba(28, 29, 33, 0.06);
+  --tcrn-selection-fill-hover: rgba(28, 29, 33, 0.032);
+  --tcrn-selection-edge: #1c1d21;
+  --tcrn-selection-glide: 220ms cubic-bezier(0.3, 0.8, 0.3, 1);
+  --tcrn-radius-control: 4px;
+  --tcrn-radius-surface: 6px;
+  --tcrn-radius-pill: 999px;
+  --tcrn-elevation-focus: 0 0 0 2px #fafaf9, 0 0 0 4px #17707f;
+  --tcrn-motion-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --tcrn-motion-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --tcrn-motion-ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --tcrn-motion-comprehension: 160ms linear;
+  --tcrn-motion-press-scale: 0.97;
+  --tcrn-motion-spring-duration: 0.5s;
+  --tcrn-motion-spring-bounce: 0.15;
+  --tcrn-motion-fast: 120ms cubic-bezier(0.23, 1, 0.32, 1);
+  --tcrn-motion-instant: 80ms cubic-bezier(0.23, 1, 0.32, 1);
+  --tcrn-motion-standard: 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  --tcrn-motion-emphasis: 220ms cubic-bezier(0.32, 0.72, 0, 1);
+  --tcrn-motion-loading-loop: 900ms linear;
+  --tcrn-motion-skeleton-loop: 1400ms ease-in-out;
+  --tcrn-motion-progress-loop: 1200ms ease-in-out;
+  --tcrn-motion-reduced-duration: 0.01ms;
+  --tcrn-z-overlay: 30;
+  --tcrn-z-popover: 20;
+  --tcrn-container-readable: 1120px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --tcrn-selection-fill: rgba(236, 236, 234, 0.09);
+  --tcrn-selection-fill-hover: rgba(236, 236, 234, 0.05);
+  --tcrn-selection-edge: #ececea;
+  --tcrn-color-border-control: #66686e;
+  --tcrn-color-text-tertiary: #83858b;
+  --tcrn-color-text-inverse: #0e1c20;
+  --tcrn-color-text-primary: #ececea;
+  --tcrn-color-text-secondary: #a9abb1;
+  --tcrn-color-text-muted: #7a7c82;
+  --tcrn-color-surface-canvas: #111214;
+  --tcrn-color-surface-panel: #18191c;
+  --tcrn-color-surface-muted: #212226;
+  --tcrn-color-neutral-calibration-canvas: #161616;
+  --tcrn-color-neutral-calibration-panel: #222222;
+  --tcrn-color-neutral-calibration-muted: #2f2f2f;
+  --tcrn-color-neutral-calibration-border: #808080;
+  --tcrn-color-border-subtle: #292b2f;
+  --tcrn-color-border-strong: #3f4147;
+  --tcrn-color-brand-teal: #62c3d2;
+  --tcrn-color-brand-primary: #62c3d2;
+  --tcrn-color-brand-primary-bg: #12333a;
+  --tcrn-color-brand-secondary: #62c3d2;
+  --tcrn-color-brand-secondary-bg: #12333a;
+  --tcrn-color-brand-accent: #d98d82;
+  --tcrn-color-brand-accent-bg: #3a211d;
+  --tcrn-color-brand-neutral: #a9abb1;
+  --tcrn-color-brand-neutral-bg: #212226;
+  --tcrn-color-focus-ring: #62c3d2;
+  --tcrn-color-focus-ring-calibrated: #5cb3ff;
+  --tcrn-color-progress-track-calibrated: #222222;
+  --tcrn-color-progress-fill-start-calibrated: #2784d5;
+  --tcrn-color-progress-fill-end-calibrated: #8d92f9;
+  --tcrn-color-state-ready: #5fbe8b;
+  --tcrn-color-state-ready-bg: #16261e;
+  --tcrn-color-state-blocked: #e0837b;
+  --tcrn-color-state-blocked-bg: #2b1a18;
+  --tcrn-color-state-warning: #d9ab52;
+  --tcrn-color-state-warning-bg: #2a2317;
+  --tcrn-color-state-warning-calibrated: #604200;
+  --tcrn-color-state-warning-calibrated-bg: #fde1a7;
+  --tcrn-color-state-danger-calibrated: #742e2b;
+  --tcrn-color-state-danger-calibrated-bg: #ffd1ca;
+  --tcrn-elevation-focus: 0 0 0 2px #111214, 0 0 0 4px #62c3d2;
+  }
+}
+:root[data-theme="dark"] {
+  --tcrn-selection-fill: rgba(236, 236, 234, 0.09);
+  --tcrn-selection-fill-hover: rgba(236, 236, 234, 0.05);
+  --tcrn-selection-edge: #ececea;
+  --tcrn-color-border-control: #66686e;
+  --tcrn-color-text-tertiary: #83858b;
+  --tcrn-color-text-inverse: #0e1c20;
+  --tcrn-color-text-primary: #ececea;
+  --tcrn-color-text-secondary: #a9abb1;
+  --tcrn-color-text-muted: #7a7c82;
+  --tcrn-color-surface-canvas: #111214;
+  --tcrn-color-surface-panel: #18191c;
+  --tcrn-color-surface-muted: #212226;
+  --tcrn-color-neutral-calibration-canvas: #161616;
+  --tcrn-color-neutral-calibration-panel: #222222;
+  --tcrn-color-neutral-calibration-muted: #2f2f2f;
+  --tcrn-color-neutral-calibration-border: #808080;
+  --tcrn-color-border-subtle: #292b2f;
+  --tcrn-color-border-strong: #3f4147;
+  --tcrn-color-brand-teal: #62c3d2;
+  --tcrn-color-brand-primary: #62c3d2;
+  --tcrn-color-brand-primary-bg: #12333a;
+  --tcrn-color-brand-secondary: #62c3d2;
+  --tcrn-color-brand-secondary-bg: #12333a;
+  --tcrn-color-brand-accent: #d98d82;
+  --tcrn-color-brand-accent-bg: #3a211d;
+  --tcrn-color-brand-neutral: #a9abb1;
+  --tcrn-color-brand-neutral-bg: #212226;
+  --tcrn-color-focus-ring: #62c3d2;
+  --tcrn-color-focus-ring-calibrated: #5cb3ff;
+  --tcrn-color-progress-track-calibrated: #222222;
+  --tcrn-color-progress-fill-start-calibrated: #2784d5;
+  --tcrn-color-progress-fill-end-calibrated: #8d92f9;
+  --tcrn-color-state-ready: #5fbe8b;
+  --tcrn-color-state-ready-bg: #16261e;
+  --tcrn-color-state-blocked: #e0837b;
+  --tcrn-color-state-blocked-bg: #2b1a18;
+  --tcrn-color-state-warning: #d9ab52;
+  --tcrn-color-state-warning-bg: #2a2317;
+  --tcrn-color-state-warning-calibrated: #604200;
+  --tcrn-color-state-warning-calibrated-bg: #fde1a7;
+  --tcrn-color-state-danger-calibrated: #742e2b;
+  --tcrn-color-state-danger-calibrated-bg: #ffd1ca;
+  --tcrn-elevation-focus: 0 0 0 2px #111214, 0 0 0 4px #62c3d2;
+}
+
+:root { color-scheme: light dark; }
+body {
+  margin: 0;
+  background: var(--tcrn-color-surface-canvas);
+  color: var(--tcrn-color-text-primary);
+  font: var(--tcrn-text-body-reading);
+  font-family: var(--tcrn-type-family-zh-cn);
+}
+* { box-sizing: border-box; }
+.wrap { max-width: var(--tcrn-container-readable); margin: 0 auto; padding: var(--tcrn-space-6) var(--tcrn-space-5) calc(var(--tcrn-space-6) * 2); }
+.doc-head { border-bottom: 1px solid var(--tcrn-color-border-strong); padding-bottom: var(--tcrn-space-4); margin-bottom: var(--tcrn-space-6); }
+.doc-head h1 { font-size: var(--tcrn-type-size-page); line-height: var(--tcrn-type-line-page); margin: 0 0 var(--tcrn-space-2); font-weight: var(--tcrn-type-weight-strong); }
+.doc-head .sub { color: var(--tcrn-color-text-secondary); font-size: var(--tcrn-type-size-reading); margin: 0; }
+.doc-meta { display: flex; flex-wrap: wrap; gap: var(--tcrn-space-1h); margin-top: var(--tcrn-space-3); }
+.doc-meta span { font-size: var(--tcrn-type-size-caption); color: var(--tcrn-color-text-secondary); background: var(--tcrn-color-surface-muted); border-radius: var(--tcrn-radius-control); padding: var(--tcrn-space-0h) var(--tcrn-space-1h); font-variant-numeric: tabular-nums; }
+
+section.item { margin-bottom: calc(var(--tcrn-space-6) * 1.5); }
+section.item > h2 {
+  font-size: var(--tcrn-type-size-heading-2); line-height: var(--tcrn-type-line-section);
+  margin: 0 0 var(--tcrn-space-1); font-weight: var(--tcrn-type-weight-strong);
+  display: flex; align-items: baseline; gap: var(--tcrn-space-2);
+}
+section.item > h2 .ord { font-variant-numeric: tabular-nums; color: var(--tcrn-color-brand-primary); }
+.verdict-line { margin: 0 0 var(--tcrn-space-4); padding: var(--tcrn-space-2h) var(--tcrn-space-3); border-inline-start: 3px solid var(--tcrn-color-brand-primary); background: var(--tcrn-color-brand-primary-bg); border-radius: 0 var(--tcrn-radius-control) var(--tcrn-radius-control) 0; font-size: var(--tcrn-type-size-reading); }
+h3.block { font-size: var(--tcrn-type-size-heading-3); margin: var(--tcrn-space-5) 0 var(--tcrn-space-2); font-weight: var(--tcrn-type-weight-strong); }
+p.body { margin: 0 0 var(--tcrn-space-2h); color: var(--tcrn-color-text-primary); max-width: 78ch; }
+p.body.dim { color: var(--tcrn-color-text-secondary); }
+ul.body { margin: 0 0 var(--tcrn-space-3); padding-inline-start: var(--tcrn-space-5); max-width: 78ch; }
+ul.body li { margin-bottom: var(--tcrn-space-1h); }
+code { font-family: var(--tcrn-type-family-mono); font-size: 0.92em; background: var(--tcrn-color-surface-muted); padding: 1px var(--tcrn-space-1); border-radius: var(--tcrn-radius-control); }
+.src { font-family: var(--tcrn-type-family-mono); font-size: var(--tcrn-type-size-caption); color: var(--tcrn-color-text-secondary); }
+
+table.ev { border-collapse: collapse; width: 100%; margin: var(--tcrn-space-2) 0 var(--tcrn-space-4); font-size: var(--tcrn-type-size-meta); }
+table.ev th, table.ev td { text-align: start; padding: var(--tcrn-space-1h) var(--tcrn-space-2); border-bottom: 1px solid var(--tcrn-color-border-subtle); vertical-align: top; }
+table.ev tbody td:first-child { white-space: nowrap; }
+table.ev thead th { background: var(--tcrn-color-surface-muted); color: var(--tcrn-color-text-secondary); font-weight: var(--tcrn-type-weight-strong); border-bottom-color: var(--tcrn-color-border-strong); }
+table.ev td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.ev td.note { color: var(--tcrn-color-text-secondary); }
+table.ev td.plain { color: var(--tcrn-color-text-secondary); font-size: var(--tcrn-type-size-caption); }
+.verdict { font-weight: var(--tcrn-type-weight-strong); font-size: var(--tcrn-type-size-caption); letter-spacing: 0.04em; }
+.verdict.pass { color: var(--tcrn-color-state-ready); }
+.verdict.fail { color: var(--tcrn-color-state-blocked); }
+
+figure.pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--tcrn-space-2); margin: var(--tcrn-space-2) 0 var(--tcrn-space-4); }
+figure.pair--wide { grid-template-columns: 1fr; gap: var(--tcrn-space-1h); }
+figure.pair figcaption { grid-column: 1 / -1; font-size: var(--tcrn-type-size-caption); color: var(--tcrn-color-text-secondary); margin-top: var(--tcrn-space-0h); }
+.pane { position: relative; border: 1px solid var(--tcrn-color-border-strong); border-radius: var(--tcrn-radius-panel); background: var(--tcrn-color-surface-canvas); color: var(--tcrn-color-text-primary); overflow: hidden; }
+.pane-tag { position: absolute; inset-block-start: 0; inset-inline-end: 0; font-size: var(--tcrn-type-size-caption); padding: 1px var(--tcrn-space-1h); background: var(--tcrn-color-surface-muted); color: var(--tcrn-color-text-secondary); border-start-end-radius: var(--tcrn-radius-panel); border-end-start-radius: var(--tcrn-radius-control); z-index: 1; }
+.pane-body { padding: var(--tcrn-space-3); }
+.cell-when { font-size: var(--tcrn-type-size-caption); color: var(--tcrn-color-text-secondary); font-variant-numeric: tabular-nums; }
+.spec-void { font-size: var(--tcrn-type-size-meta); color: var(--tcrn-color-text-secondary); border: 1px dashed var(--tcrn-color-border-strong); border-radius: var(--tcrn-radius-control); padding: var(--tcrn-space-2h); }
+
+pre.css { margin: var(--tcrn-space-2) 0 var(--tcrn-space-4); padding: var(--tcrn-space-3); background: var(--tcrn-color-surface-panel); border: 1px solid var(--tcrn-color-border-subtle); border-inline-start: 3px solid var(--tcrn-color-brand-secondary); border-radius: var(--tcrn-radius-panel); overflow-x: auto; font-family: var(--tcrn-type-family-mono); font-size: var(--tcrn-type-size-caption); line-height: 1.55; }
+/* text-secondary，不是 text-muted —— 本页在案②里刚写明 muted 两档都不到 4.5:1，
+   注释是要读的正文，不能自己踩自己刚立的判据。 */
+pre.css .c { color: var(--tcrn-color-text-secondary); }
+pre.css .s { color: var(--tcrn-color-brand-primary); font-weight: var(--tcrn-type-weight-medium); }
+
+.ask { border: 1px solid var(--tcrn-color-border-strong); border-radius: var(--tcrn-radius-panel); background: var(--tcrn-color-surface-panel); padding: var(--tcrn-space-3) var(--tcrn-space-4); }
+.ask h3 { margin: 0 0 var(--tcrn-space-2h); font-size: var(--tcrn-type-size-heading-3); }
+.ask ol { margin: 0; padding-inline-start: var(--tcrn-space-5); }
+.ask li { margin-bottom: var(--tcrn-space-2h); }
+.aside { border-inline-start: 3px solid var(--tcrn-color-state-warning); background: var(--tcrn-color-state-warning-bg); padding: var(--tcrn-space-2h) var(--tcrn-space-3); border-radius: 0 var(--tcrn-radius-control) var(--tcrn-radius-control) 0; font-size: var(--tcrn-type-size-meta); margin: var(--tcrn-space-3) 0; }
+
+/* AOS 现状复刻：它今天的 .truncation 就是 text-muted，且里面的 a 无任何规则命中。 */
+.aos-truncation-now { font-size: 12px; color: var(--tcrn-color-text-muted); margin: 0; }
+
+/* 案④「改前」样件：把 core 现有的三条声明原样恢复，好让缺陷看得见。
+   只在 .demo-before 内生效，不影响本页其它地方。 */
+.demo-before .tcrn-badge { white-space: normal; overflow-wrap: anywhere; text-align: center; }
+.demo-before .tcrn-badge__label { overflow: visible; text-overflow: clip; white-space: normal; }
+
+/* 宽内容在自己的盒子里滚 —— 正文永远不横向滚动。
+   证据表最宽的一张有七列（七个状态 × 五种语言），400px 的窄屏放不下，
+   但把它塞窄不是答案：那张表的信息就是宽度本身。 */
+.tablewrap { overflow-x: auto; overscroll-behavior-inline: contain; margin: var(--tcrn-space-2) 0 var(--tcrn-space-4); }
+.tablewrap > table.ev { min-width: max-content; margin: 0; }
+
+/* 并排对照在窄屏改成上下。176px 一栏塞一张四列表格，对照就不成其为对照了。 */
+@media (max-width: 760px) {
+  .pair, .pair--wide, figure.pair { grid-template-columns: 1fr; }
+}
+</style>
+</head><body><div class="wrap">
+
+<header class="doc-head">
+  <h1>AOS 前端 · DS 四处缺口设计规格</h1>
+  <p class="sub">四条的设计答案 —— 三条来自接入 DS 时的实测，第四条来自 Owner 审本稿时的指正。每个样件是活的 DS 标记，放在真实语境里；每个数字是算出来的，不是感觉出来的。</p>
+  <div class="doc-meta">
+    <span>2026-08-21</span>
+    <span>DS 令牌 167 行 · 逐字节内联</span>
+    <span>core 组件表 75.5KB · 逐字节内联</span>
+    <span>domain 26.9KB · 未加载（与 AOS 线上一致）</span>
+    <span>提案增量 32 条声明</span>
+  </div>
+</header>
+
+<p class="body dim">怎么读：页面里除了「提案增量」一块，所有样式都是 DS 仓库里此刻的真实导出字节 —— 令牌来自
+<code>packages/ui-tokens/src/tokens.css</code>，组件表来自 <code>tcrnCoreComponentCss</code>，也就是 AOS 的
+<code>/assets/tcrn.css</code> 供的同一份。DS 里尚不存在的规则集中在一处、单独标注，便于你只看增量。
+明暗两档并置渲染，用的是 DS 自己的 <code>[data-tcrn-theme="dark"]</code> 机制，不是两套手写颜色。</p>
+
+<!-- ════════════════════ ① ════════════════════ -->
+<section class="item">
+  <h2><span class="ord">①</span> 正文链接</h2>
+  <p class="verdict-line"><b>结论：DS 已经有这套墨，而且自己给它起了名字。</b>缺的不是设计，是「它在 domain 分区，产品外壳拿不到」。
+  提案是把已经重复写了两遍的既有模式提升为 core 的命名基元 —— <code>.tcrn-link</code> / <code>.tcrn-link--quiet</code> ——
+  外加一处基于实测的修正。</p>
+
+  <h3 class="block">依据</h3>
+  <p class="body">DS 的注释自己点了名。<code>Navigation.tsx:3359</code> 写着「Same <b>inline-record-link ink</b> as the
+  Knowledge result anchor」—— 作者在写第二处的时候就知道这是同一套墨，并且记下来了。两处逐字相同：
+  <code>.tcrn-machine-token__link</code> 与 <code>.tcrn-knowledge-search-results__head a</code>。</p>
+  <p class="body">但两处都带 domain 前缀（<code>tcrn-machine-token</code> / <code>tcrn-knowledge</code> 在
+  <code>DOMAIN_CLASS_PREFIXES</code> 里），而 AOS 只外链 <code>tcrnCoreComponentCss</code>。跑一遍切分实测：</p>
+  <div class="tablewrap"><table class="ev"><thead><tr><th>选择器</th><th>core（AOS 外链的那份）</th><th>domain（AOS 不加载）</th><th>产品能不能用</th></tr></thead><tbody><tr><td><code>.tcrn-machine-token__link</code></td><td class="plain">无</td><td class="plain">有</td><td><span class="verdict fail">拿不到</span></td></tr><tr><td><code>.tcrn-knowledge-search-results__head a</code></td><td class="plain">无</td><td class="plain">有</td><td><span class="verdict fail">拿不到</span></td></tr><tr><td><code>.tcrn-work-board__card-link</code></td><td class="plain">无</td><td class="plain">有</td><td><span class="verdict fail">拿不到</span></td></tr><tr><td><code>a.tcrn-relationship-chip</code></td><td class="plain">无</td><td class="plain">有</td><td><span class="verdict fail">拿不到</span></td></tr><tr><td><code>.tcrn-breadcrumb a</code></td><td class="plain">有</td><td class="plain">无</td><td><span class="verdict pass">能</span></td></tr></tbody></table></div>
+  <p class="body">再数一次字节：<code>text-decoration-color: …35%</code> 这套记录链接墨，在 core 出现
+  <b>0</b> 次、在 domain 出现 <b>2</b> 次。
+  <code>text-decoration: underline</code> 在 core 只有 <b>1</b> 次，就是面包屑那条 hover。
+  也就是说 <b>AOS 拿到的那份样式表里，一条常驻下划线的链接墨都没有</b>。</p>
+  <p class="body">与此同时，core 和 AOS 的样式表里都<b>没有任何裸 <code>a</code> 规则</b>。后果现在就能看见：AOS
+  <code>Truncation</code> 里的「下一页」是浏览器默认蓝 —— 和 DS 当初给
+  <code>.tcrn-knowledge-search-results__head a</code> 写的死因注释一字不差：「previously had no color/decoration
+  at all — bare UA blue for package consumers」。</p>
+
+  <h3 class="block">可达性：常驻下划线是必需，不是风格</h3>
+  <div class="tablewrap"><table class="ev"><thead><tr><th>检查项</th><th>颜色对</th><th>实测</th><th>门限</th><th>判定</th><th>说明</th></tr></thead><tbody><tr><td>链接墨对面板底（可读性）</td><td><code>brand-primary / surface-panel</code></td><td class="num">5.74:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">明档</td></tr><tr><td>链接墨对面板底（可读性）</td><td><code>brand-primary / surface-panel</code></td><td class="num">8.58:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">暗档</td></tr><tr><td>链接墨对正文墨 · WCAG G183</td><td><code>brand-primary / text-primary</code></td><td class="num">2.94:1</td><td class="num">3.0:1</td><td><span class="verdict fail">FAIL</span></td><td class="note">明档 —— 颜色不能单独区分链接</td></tr><tr><td>链接墨对正文墨 · WCAG G183</td><td><code>brand-primary / text-primary</code></td><td class="num">1.73:1</td><td class="num">3.0:1</td><td><span class="verdict fail">FAIL</span></td><td class="note">暗档 —— 同上，且更差</td></tr><tr><td>链接墨对次级正文 · G183</td><td><code>brand-primary / text-secondary</code></td><td class="num">1.26:1</td><td class="num">3.0:1</td><td><span class="verdict fail">FAIL</span></td><td class="note">明档</td></tr><tr><td>链接墨对次级正文 · G183</td><td><code>brand-primary / text-secondary</code></td><td class="num">1.12:1</td><td class="num">3.0:1</td><td><span class="verdict fail">FAIL</span></td><td class="note">暗档</td></tr><tr><td>下划线 35%（DS 现值）</td><td><code>underline@35% / panel</code></td><td class="num">1.69:1</td><td class="num">3.0:1</td><td><span class="verdict fail">FAIL</span></td><td class="note">明档 —— 承重提示自身过淡</td></tr><tr><td>下划线 35%（DS 现值）</td><td><code>underline@35% / panel</code></td><td class="num">2.17:1</td><td class="num">3.0:1</td><td><span class="verdict fail">FAIL</span></td><td class="note">暗档</td></tr><tr><td>下划线 70%（提案值）</td><td><code>underline@70% / panel</code></td><td class="num">3.14:1</td><td class="num">3.0:1</td><td><span class="verdict pass">PASS</span></td><td class="note">明档 —— 两档同时过关的交叉点</td></tr><tr><td>下划线 70%（提案值）</td><td><code>underline@70% / panel</code></td><td class="num">4.83:1</td><td class="num">3.0:1</td><td><span class="verdict pass">PASS</span></td><td class="note">暗档</td></tr></tbody></table></div>
+  <p class="body">两档下品牌墨对正文墨都低于 3:1（明 2.94、暗 1.73）。按 WCAG G183，颜色单独无法承担「这是链接」，
+  必须有非颜色提示。DS 现有写法本来就常驻下划线 —— 命名它，是让这条要求有个能被门检查的落点。</p>
+  <div class="aside"><b>一处修正。</b>继承来的默认下划线是品牌色 35%，实测对面板只有明 1.69:1 / 暗 2.17:1 ——
+  承重的那个提示自己几乎看不见。扫了一遍 alpha：70% 是两档同时过 3:1 的交叉点（明 3.14 / 暗 4.83）。
+  说实话：3:1 是我从 1.4.11（非文本对比）借来的自设标尺，WCAG 并没有对 text-decoration 明文规定这个数；
+  但 G183 要求提示「可见」，1.69:1 的 1px 发丝线过不了这个词。hover 仍然到 100%。</div>
+
+  <h3 class="block">样件</h3>
+  
+<figure class="pair">
+  <div class="pane" data-tcrn-theme="light"><div class="pane-tag">明</div><div class="pane-body">
+<div class="tcrn-card">
+  <nav class="tcrn-breadcrumb" aria-label="位置">
+    <span class="tcrn-breadcrumb__item"><a class="tcrn-link--quiet" href="#">平台</a></span>
+    <span class="tcrn-breadcrumb__item"><svg class="tcrn-breadcrumb__separator" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4l4 4-4 4"/></svg><a class="tcrn-link--quiet" href="#">AOS</a></span>
+    <span class="tcrn-breadcrumb__item"><svg class="tcrn-breadcrumb__separator" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4l4 4-4 4"/></svg><span aria-current="page">工作项</span></span>
+  </nav>
+  <h3 class="tcrn-heading tcrn-heading--3">验收车道</h3>
+  <p class="tcrn-text">后端与逻辑的正确性由机器裁定，落 <a class="tcrn-link" href="#">九个门组</a> 全绿即
+  <code>done</code>；前端停在 <a class="tcrn-link" href="#">待验收</a>，等 Owner 的眼睛。判据名册见
+  <a class="tcrn-link" href="#">acceptance-gate-groups.json</a>。</p>
+</div></div></div>
+  <div class="pane" data-tcrn-theme="dark"><div class="pane-tag">暗</div><div class="pane-body">
+<div class="tcrn-card">
+  <nav class="tcrn-breadcrumb" aria-label="位置">
+    <span class="tcrn-breadcrumb__item"><a class="tcrn-link--quiet" href="#">平台</a></span>
+    <span class="tcrn-breadcrumb__item"><svg class="tcrn-breadcrumb__separator" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4l4 4-4 4"/></svg><a class="tcrn-link--quiet" href="#">AOS</a></span>
+    <span class="tcrn-breadcrumb__item"><svg class="tcrn-breadcrumb__separator" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4l4 4-4 4"/></svg><span aria-current="page">工作项</span></span>
+  </nav>
+  <h3 class="tcrn-heading tcrn-heading--3">验收车道</h3>
+  <p class="tcrn-text">后端与逻辑的正确性由机器裁定，落 <a class="tcrn-link" href="#">九个门组</a> 全绿即
+  <code>done</code>；前端停在 <a class="tcrn-link" href="#">待验收</a>，等 Owner 的眼睛。判据名册见
+  <a class="tcrn-link" href="#">acceptance-gate-groups.json</a>。</p>
+</div></div></div>
+  <figcaption>两档的分工：顶上的面包屑是 chrome 档（<code>.tcrn-link--quiet</code>，安静、hover 才出线），正文里的是记录档（<code>.tcrn-link</code>，常驻下划线）。面包屑用的是 DS 真实的 Breadcrumb 标记与 core 现有规则。</figcaption>
+</figure>
+
+  <h3 class="block">提案</h3>
+  <pre class="css"><span class="c">/* ① 正文链接。不是新发明：DS 已有这套墨，注释里管它叫 "inline-record-link ink"，
+   在 .tcrn-machine-token__link 与 .tcrn-knowledge-search-results__head a 各写了一遍。
+   两处都在 domain 分区，而产品外壳只外链 core——所以产品拿不到它。这里做的是
+   把已经重复两遍的既有模式提升为 core 的命名基元，不是画一个新的。
+
+   常驻下划线是必需，不是风格：品牌墨对正文墨明 2.94:1、暗 1.73:1，两档都低于
+   G183 的 3:1，颜色单独无法承担"这是链接"。DS 现有写法本来就常驻下划线，命名
+   之后这条要求才有地方被门检查。 */</span>
+<span class="s">.tcrn-link</span> {
+  color: var(--tcrn-color-brand-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  <span class="c">/* 继承来的 35% 实测只有明 1.69:1 / 暗 2.17:1 —— 承重的那个提示自己几乎看不见。
+     70% 是两档同时过 3:1 的交叉点（明 3.14 / 暗 4.83），仍明显比正文轻。 */</span>
+  text-decoration-color: color-mix(in srgb, var(--tcrn-color-brand-primary) 70%, transparent);
+}
+<span class="s">.tcrn-link:hover</span> {
+  text-decoration-color: var(--tcrn-color-brand-primary);
+}
+<span class="s">.tcrn-link:focus-visible</span> {
+  outline: 2px solid var(--tcrn-color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--tcrn-radius-control);
+}
+<span class="c">/* 第二档：chrome 链接。与 core 现有的 .tcrn-breadcrumb a 逐字一致——那条规则的注释
+   已经把理由写清了："一整排常驻下划线会和它上面的页标题打架"。命名它，是为了让
+   面包屑之外的同类位置（卡片整块可点、密集工具条）不必各自重新发明。
+
+   偏移取 0.2em，跟 .tcrn-breadcrumb a:hover 一致。顺带记一笔：野生的 chrome 档
+   现在有两个偏移值——面包屑 0.2em，而 .tcrn-work-board__card-link 与
+   a.tcrn-relationship-chip 用 0.15em。哪个都不算错，但两个并存说明没有基元可抄，
+   这正是命名它要解决的事。 */</span>
+<span class="s">.tcrn-link--quiet</span> {
+  color: inherit;
+  text-decoration: none;
+}
+<span class="s">.tcrn-link--quiet:hover</span> {
+  color: var(--tcrn-color-brand-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}</pre>
+  <p class="body">React 侧：<code>Link</code> 与 <code>LinkQuiet</code>，或一个带
+  <code>variant?: "record" | "quiet"</code> 的 <code>Link</code>。倾向后者 —— 与 DS 现有
+  <code>Button variant</code> 的形状一致。两处 domain 调用点改为复用 core 基元，
+  <code>tcrnComponentCss</code> 字节因此净减。</p>
+</section>
+
+<!-- ════════════════════ ② ════════════════════ -->
+<section class="item">
+  <h2><span class="ord">②</span> Pagination 渲染出空 nav</h2>
+  <p class="verdict-line"><b>结论：这不是漏做，是 no-overclaim 家规落在组件上。</b>DS 在两个地方写明了理由。设计要守住那个理由，不是把它拆掉。
+  而且产品的数据层本身就不支持页码 —— 诚实的形状是「范围读数 + 下一页」，AOS 已经把它做出来了。</p>
+
+  <h3 class="block">依据：DS 自己的两处声明</h3>
+  <ul class="body">
+    <li>CSS 注释（<code>Navigation.tsx:4792</code>）：「Pagination renders an empty nav today; this readies the row
+    layout for page controls <b>without asserting markup S036 does not ship</b>」—— 行布局先备好，标记不假装存在。</li>
+    <li>契约行（<code>contract-stories/content/navigation-rows.ts:11</code>）：rule 是「Separates long indexed lists
+    <b>without losing current filter or proof context</b>」，boundary 是「<b>No remote count claim without product
+    data</b>」。空 nav 就是这条 boundary 的执行结果：DS 手上没有产品数据，就不肯渲染「第 1 / 12 页」。</li>
+  </ul>
+
+  <h3 class="block">依据：产品数据层把形状钉死了</h3>
+  <p class="body">AOS 的列表操作（<code>packages/kernel/src/operations/work-items.ts</code>）入参
+  <code>limit</code> + <code>cursor</code>，回参 <code>nextCursor: string | null</code> + <code>total: integer</code>。
+  <b>没有 offset，也没有 prevCursor。</b>于是：</p>
+  <ul class="body">
+    <li>页码<b>不可实现</b> —— 无法寻址「第 7 页」。给 <code>Pagination</code> 加 <code>pageCount</code> 只会招来 boundary 明令禁止的那种声明。</li>
+    <li>「上一页」<b>服务端不可实现</b> —— 没有反向游标。</li>
+    <li>范围读数<b>可实现</b> —— <code>total</code> 是真实的产品数据，正是 boundary 允许的那种。</li>
+  </ul>
+  <p class="body">AOS 已经把诚实的那个做出来了：<code>Truncation({ shown, total, nextHref })</code>，七处调用点，
+  并且 <code>shown &gt;= total</code> 时返回 <code>null</code> —— 注释写的是「Never a silent ceiling」。
+  提案就是把这个被产品验证过的形状收进 DS，计数由消费方供给。</p>
+
+  <h3 class="block">读数的墨色：DS 已经裁过一次</h3>
+  <p class="body">core 里 <code>.tcrn-table-toolbar__count</code> 带着理由：「text-secondary, not text-muted: the live
+  match count is real information and muted fails the 4.5:1 contrast floor on panel surfaces」。实测复核：</p>
+  <div class="tablewrap"><table class="ev"><thead><tr><th>检查项</th><th>颜色对</th><th>实测</th><th>门限</th><th>判定</th><th>说明</th></tr></thead><tbody><tr><td>计数读数用 text-muted</td><td><code>text-muted / surface-panel</code></td><td class="num">3.36:1</td><td class="num">4.5:1</td><td><span class="verdict fail">FAIL</span></td><td class="note">明档 —— AOS 现状用的就是这个</td></tr><tr><td>计数读数用 text-muted</td><td><code>text-muted / surface-panel</code></td><td class="num">4.21:1</td><td class="num">4.5:1</td><td><span class="verdict fail">FAIL</span></td><td class="note">暗档</td></tr><tr><td>计数读数用 text-secondary</td><td><code>text-secondary / surface-panel</code></td><td class="num">7.21:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">明档 —— DS 已就此裁过</td></tr><tr><td>计数读数用 text-secondary</td><td><code>text-secondary / surface-panel</code></td><td class="num">7.66:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">暗档</td></tr></tbody></table></div>
+  <p class="body">AOS 现在的 <code>.truncation</code> 用的正是 <code>text-muted</code>。顺带一提，
+  <code>styles.ts</code> 里 <code>text-muted</code> 共 13 处、13 个选择器 —— 这是系统性的，不是一条规则的事，
+  但超出本规格书范围，单独记。</p>
+
+  <h3 class="block">样件：四个状态</h3>
+  
+<figure class="pair">
+  <div class="pane" data-tcrn-theme="light"><div class="pane-tag">明</div><div class="pane-body"><p class="aos-truncation-now">显示 50 条，共 137 条。<a href="#"> 下一页</a></p></div></div>
+  <div class="pane" data-tcrn-theme="dark"><div class="pane-tag">暗</div><div class="pane-body"><p class="aos-truncation-now">显示 50 条，共 137 条。<a href="#"> 下一页</a></p></div></div>
+  <figcaption>AOS 现状：text-muted 读数 + 浏览器默认蓝的「下一页」。</figcaption>
+</figure>
+  
+<figure class="pair">
+  <div class="pane" data-tcrn-theme="light"><div class="pane-tag">明</div><div class="pane-body"><nav class="tcrn-pagination" aria-label="工作项分页">
+    <span class="tcrn-pagination__range">显示 <b>50</b> / <b>137</b> 条</span>
+    <a class="tcrn-link tcrn-pagination__next" href="#">下一页</a>
+  </nav></div></div>
+  <div class="pane" data-tcrn-theme="dark"><div class="pane-tag">暗</div><div class="pane-body"><nav class="tcrn-pagination" aria-label="工作项分页">
+    <span class="tcrn-pagination__range">显示 <b>50</b> / <b>137</b> 条</span>
+    <a class="tcrn-link tcrn-pagination__next" href="#">下一页</a>
+  </nav></div></div>
+  <figcaption>提案：范围读数 + .tcrn-link 下一页。行布局用的是 core 里早就有的 .tcrn-pagination。</figcaption>
+</figure>
+  
+<figure class="pair">
+  <div class="pane" data-tcrn-theme="light"><div class="pane-tag">明</div><div class="pane-body"><div class="spec-void">（<code>shown &gt;= total</code>：整个 nav 不渲染，一个字节都不留）</div></div></div>
+  <div class="pane" data-tcrn-theme="dark"><div class="pane-tag">暗</div><div class="pane-body"><div class="spec-void">（<code>shown &gt;= total</code>：整个 nav 不渲染，一个字节都不留）</div></div></div>
+  <figcaption>已到底：整个 nav 不渲染。AOS 的「Never a silent ceiling」提升为 DS 行为。</figcaption>
+</figure>
+  
+<figure class="pair">
+  <div class="pane" data-tcrn-theme="light"><div class="pane-tag">明</div><div class="pane-body"><div class="spec-void">（<code>total</code> 缺省：不渲染。没有产品数据就不出计数——边界由构造保证，不靠自律）</div></div></div>
+  <div class="pane" data-tcrn-theme="dark"><div class="pane-tag">暗</div><div class="pane-body"><div class="spec-void">（<code>total</code> 缺省：不渲染。没有产品数据就不出计数——边界由构造保证，不靠自律）</div></div></div>
+  <figcaption>消费方没给 total：不渲染。boundary 由构造保证 —— 没有产品数据，就没有计数可声明。</figcaption>
+</figure>
+
+  <h3 class="block">提案</h3>
+  <pre class="css"><span class="c">/* ② 分页。core 里 .tcrn-pagination 的行布局早就在了，缺的只是里面的元素。
+   读数抄 .tcrn-table-toolbar__count 的既有裁定：text-secondary 而不是 text-muted，
+   因为计数是真信息，而 muted 在面板上明 3.36:1 / 暗 4.21:1，两档都不到 4.5:1。 */</span>
+<span class="s">.tcrn-pagination__range</span> {
+  color: var(--tcrn-color-text-secondary);
+  font-size: var(--tcrn-type-size-meta);
+  font-variant-numeric: tabular-nums;
+}
+.tcrn-pagination__range b {
+  color: var(--tcrn-color-text-primary);
+  font-weight: var(--tcrn-type-weight-medium);
+}
+<span class="s">.tcrn-pagination__next</span> {
+  margin-inline-start: auto;
+  font-size: var(--tcrn-type-size-meta);
+}</pre>
+  <pre class="css">Pagination({ label, shown, total, nextHref, prevHref?, locale })
+
+<span class="c">// total 缺省      → 返回 null（boundary：没有产品数据就不出计数）
+// shown &gt;= total  → 返回 null（不做假天花板）
+// nextHref 缺省    → 省略该可点项，而不是渲染一个禁用态
+// 永不提供 pageCount / 页码 —— 那正是 boundary 禁止的声明，而且数据层也做不到
+// prevHref 可选、由消费方供给（浏览器历史或调用方自己的游标栈）；DS 不暗示 API 能产出它</span></pre>
+</section>
+
+<!-- ════════════════════ ③ ════════════════════ -->
+<section class="item">
+  <h2><span class="ord">③</span> 七个工作状态对四种徽章外观</h2>
+  <p class="verdict-line"><b>结论：DS 已经答过这题，而且答案是形状，不是数量。</b>它用<b>十一</b>个状态对四种色调，
+  且收敛只发生在视觉层。真正的缺陷不是「四种不够」，是 <b>AOS 现在的分配跟 DS 的语义反着</b>。</p>
+
+  <h3 class="block">依据：DS 的既有先例</h3>
+  <p class="body"><code>@tcrn/ui-copy-state</code> 里 <code>ReadinessState</code> 是十一个值的封闭联合，
+  <code>presentations</code> 表把它们映到四种色调：positive 1 个、neutral 6 个、warning 3 个、danger 1 个。
+  分布本来就不均匀。关键在这几点：</p>
+  <ul class="body">
+    <li><b>收敛只在视觉层。</b><code>StatusBadge</code> 把 <code>data-state={presentation.state}</code> 落在元素上
+    （<code>Feedback.tsx:61</code>）—— 色调塌成四种，状态身份仍然一对一、机器可读。<b>色调编码的是紧迫类别，不是身份。</b></li>
+    <li><b>唯一映射表。</b>一张 <code>Record&lt;ReadinessState, CopyStateContract&gt;</code>，不是散在各调用点。</li>
+    <li><b>fail-closed。</b><code>normalizeState()</code> 遇到不认识的值落到 <code>unknown</code> → neutral。</li>
+    <li><b>不许渲染裸枚举。</b><code>rawEnumLabelsAllowed: false</code>，<code>sanitizeCopyStateLabel()</code> 会把
+    形如 <code>pending_acceptance</code> 的字符串挡掉，每个状态都有五语手写文案。</li>
+  </ul>
+
+  <h3 class="block">第五档不可用 —— 而且是被机制挡的</h3>
+  <p class="body">直觉上会想给「待验收」单独一档。数字上 <code>brand-accent</code> 够（见下表），但那是图章专用墨：
+  DS 明文把衬线与豫红保留给 <code>.tcrn-stamp</code>，并由 <code>scripts/stamp-whitelist-proof.mjs</code>
+  机器执行 ——「an impression that shows up everywhere stops meaning anything」。所以设计必须活在四档之内，
+  这也正是 DS 拿十一个状态得出的同一个结论。</p>
+  <div class="tablewrap"><table class="ev"><thead><tr><th>检查项</th><th>颜色对</th><th>实测</th><th>门限</th><th>判定</th><th>说明</th></tr></thead><tbody><tr><td>徽章 neutral 文字</td><td><code>text-secondary / surface-muted</code></td><td class="num">6.44:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">明档</td></tr><tr><td>徽章 neutral 文字</td><td><code>text-secondary / surface-muted</code></td><td class="num">6.92:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">暗档</td></tr><tr><td>徽章 positive 文字</td><td><code>state-ready / state-ready-bg</code></td><td class="num">5.91:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">明档</td></tr><tr><td>徽章 positive 文字</td><td><code>state-ready / state-ready-bg</code></td><td class="num">6.94:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">暗档</td></tr><tr><td>徽章 warning 文字</td><td><code>state-warning / state-warning-bg</code></td><td class="num">5.13:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">明档</td></tr><tr><td>徽章 warning 文字</td><td><code>state-warning / state-warning-bg</code></td><td class="num">7.32:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">暗档</td></tr><tr><td>徽章 danger 文字</td><td><code>state-blocked / state-blocked-bg</code></td><td class="num">5.55:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">明档</td></tr><tr><td>徽章 danger 文字</td><td><code>state-blocked / state-blocked-bg</code></td><td class="num">6.09:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">暗档</td></tr><tr><td>第五档若用 accent</td><td><code>brand-accent / brand-accent-bg</code></td><td class="num">6.43:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">明档 —— 数字够，但被图章白名单机制禁用</td></tr><tr><td>第五档若用 accent</td><td><code>brand-accent / brand-accent-bg</code></td><td class="num">5.71:1</td><td class="num">4.5:1</td><td><span class="verdict pass">PASS</span></td><td class="note">暗档 —— 同上</td></tr></tbody></table></div>
+  <p class="body">四档本身的可达性全部通过，明暗都过。顺带说明一件容易被「修绿」的事：徽章底对面板底只有
+  1.1:1 左右 —— 这是<b>故意的、承重的</b>。DS 的注释写着状态读作「ink dot plus word」，
+  它替换掉的那种饱和色块「在这个密度下很吵，是生成式界面最容易被认出的破绽」。不要去提高那个对比。</p>
+
+  <h3 class="block">缺陷在分配</h3>
+  <p class="body">AOS 今天的映射（<code>apps/web/src/ui-kit.tsx</code> 的 <code>tone()</code> 与
+  <code>badgeTone()</code>，两处各写一遍）：<code>done</code>→positive、<code>active</code>→<b>warning</b>、
+  <code>blocked</code>→danger，其余全 neutral。对着 DS 的语义看，这是反的：</p>
+  <ul class="body">
+    <li><code>active</code> 拿到 warning —— 一个正常推进中的任务被打扮成需要注意。一个健康的迭代看起来像告警板。</li>
+    <li><code>pending_acceptance</code> 拿到 neutral —— 唯一<b>真的在等人动手</b>的状态，被画成惰性的。</li>
+  </ul>
+  <p class="body">DS 表里的规则是可读的：<code>review_required</code> → warning，<code>ready</code> → positive。
+  <b>warning 的意思是「有人欠一个动作」</b>，不是「这里在动」。按这条重排：</p>
+  
+<figure class="pair pair--wide">
+  <div class="pane" data-tcrn-theme="light"><div class="pane-tag">明</div><div class="pane-body"><div class="tcrn-table-shell" role="table" aria-label="工作项" style="--tcrn-table-shell-columns: 96px minmax(0,1fr) 150px 132px; --tcrn-table-shell-min-width: 100%; --tcrn-table-shell-column-min-width: 96px;">
+    <div role="row" class="tcrn-table-shell__head"><span>键</span><span>标题</span><span>状态</span><span>更新</span></div>
+    <div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-141</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">登录页令牌接线</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="planned" title="planned"><span class="tcrn-badge__label">planned</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:00</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-142</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">工作项列表分页</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="ready" title="ready"><span class="tcrn-badge__label">ready</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:01</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-143</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">徽章语义收敛</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--warning" data-state="active" title="active"><span class="tcrn-badge__label">active</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:02</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-144</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">跨仓依赖方向检查</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--danger" data-state="blocked" title="blocked"><span class="tcrn-badge__label">blocked</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:03</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-145</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">验收车道判据落档</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="pending_acceptance" title="pending acceptance"><span class="tcrn-badge__label">pending acceptance</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:04</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-146</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">门组名册补写</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--positive" data-state="done" title="done"><span class="tcrn-badge__label">done</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:05</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-147</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">旧镜像清理</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="cancelled" title="cancelled"><span class="tcrn-badge__label">cancelled</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:06</span></div>
+    </div>
+  </div></div></div>
+  <div class="pane" data-tcrn-theme="dark"><div class="pane-tag">暗</div><div class="pane-body"><div class="tcrn-table-shell" role="table" aria-label="工作项" style="--tcrn-table-shell-columns: 96px minmax(0,1fr) 150px 132px; --tcrn-table-shell-min-width: 100%; --tcrn-table-shell-column-min-width: 96px;">
+    <div role="row" class="tcrn-table-shell__head"><span>键</span><span>标题</span><span>状态</span><span>更新</span></div>
+    <div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-141</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">登录页令牌接线</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="planned" title="planned"><span class="tcrn-badge__label">planned</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:00</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-142</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">工作项列表分页</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="ready" title="ready"><span class="tcrn-badge__label">ready</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:01</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-143</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">徽章语义收敛</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--warning" data-state="active" title="active"><span class="tcrn-badge__label">active</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:02</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-144</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">跨仓依赖方向检查</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--danger" data-state="blocked" title="blocked"><span class="tcrn-badge__label">blocked</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:03</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-145</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">验收车道判据落档</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="pending_acceptance" title="pending acceptance"><span class="tcrn-badge__label">pending acceptance</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:04</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-146</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">门组名册补写</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--positive" data-state="done" title="done"><span class="tcrn-badge__label">done</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:05</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-147</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">旧镜像清理</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="cancelled" title="cancelled"><span class="tcrn-badge__label">cancelled</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:06</span></div>
+    </div>
+  </div></div></div>
+  <figcaption>AOS 现状：active 报警、待验收沉默。另外注意 <code>pending acceptance</code> 在窄列里折了两行——DS 的徽章允许换行，但一个两行高的状态格会把整行撑高。</figcaption>
+</figure>
+  
+<figure class="pair pair--wide">
+  <div class="pane" data-tcrn-theme="light"><div class="pane-tag">明</div><div class="pane-body"><div class="tcrn-table-shell" role="table" aria-label="工作项" style="--tcrn-table-shell-columns: 96px minmax(0,1fr) 150px 132px; --tcrn-table-shell-min-width: 100%; --tcrn-table-shell-column-min-width: 96px;">
+    <div role="row" class="tcrn-table-shell__head"><span>键</span><span>标题</span><span>状态</span><span>更新</span></div>
+    <div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-141</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">登录页令牌接线</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="planned" title="已计划"><span class="tcrn-badge__label">已计划</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:00</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-142</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">工作项列表分页</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--positive" data-state="ready" title="就绪"><span class="tcrn-badge__label">就绪</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:01</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-143</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">徽章语义收敛</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="active" title="进行中"><span class="tcrn-badge__label">进行中</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:02</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-144</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">跨仓依赖方向检查</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--danger" data-state="blocked" title="已阻塞"><span class="tcrn-badge__label">已阻塞</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:03</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-145</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">验收车道判据落档</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--warning" data-state="pending_acceptance" title="待验收"><span class="tcrn-badge__label">待验收</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:04</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-146</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">门组名册补写</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--positive" data-state="done" title="已完成"><span class="tcrn-badge__label">已完成</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:05</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-147</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">旧镜像清理</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="cancelled" title="已取消"><span class="tcrn-badge__label">已取消</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:06</span></div>
+    </div>
+  </div></div></div>
+  <div class="pane" data-tcrn-theme="dark"><div class="pane-tag">暗</div><div class="pane-body"><div class="tcrn-table-shell" role="table" aria-label="工作项" style="--tcrn-table-shell-columns: 96px minmax(0,1fr) 150px 132px; --tcrn-table-shell-min-width: 100%; --tcrn-table-shell-column-min-width: 96px;">
+    <div role="row" class="tcrn-table-shell__head"><span>键</span><span>标题</span><span>状态</span><span>更新</span></div>
+    <div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-141</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">登录页令牌接线</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="planned" title="已计划"><span class="tcrn-badge__label">已计划</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:00</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-142</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">工作项列表分页</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--positive" data-state="ready" title="就绪"><span class="tcrn-badge__label">就绪</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:01</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-143</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">徽章语义收敛</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="active" title="进行中"><span class="tcrn-badge__label">进行中</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:02</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-144</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">跨仓依赖方向检查</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--danger" data-state="blocked" title="已阻塞"><span class="tcrn-badge__label">已阻塞</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:03</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-145</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">验收车道判据落档</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--warning" data-state="pending_acceptance" title="待验收"><span class="tcrn-badge__label">待验收</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:04</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-146</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">门组名册补写</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--positive" data-state="done" title="已完成"><span class="tcrn-badge__label">已完成</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:05</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-147</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">旧镜像清理</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="cancelled" title="已取消"><span class="tcrn-badge__label">已取消</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:06</span></div>
+    </div>
+  </div></div></div>
+  <figcaption>提案：warning 只给真的在等人的那一个；标签走中文，与界面其余部分一致，且不再折行。</figcaption>
+</figure>
+  <p class="body">提案分配：<code>ready</code>/<code>done</code> → positive，<code>pending_acceptance</code> → warning，
+  <code>blocked</code> → danger，<code>planned</code>/<code>active</code>/<code>cancelled</code> → neutral。
+  计 positive 2、neutral 3、warning 1、danger 1。</p>
+
+  <h3 class="block">映射表放哪</h3>
+  <p class="body">建议<b>留在 AOS</b>，但采用 DS 的形状。理由是方向：那七个词是产品自己的词汇
+  （<code>search-inbox.ts:532</code>「The seven words for state, from 0002」），而 DS 的
+  <code>ReadinessState</code> 说的是证据就绪度 —— 另一根轴。把产品状态塞进 DS 会让 DS 背上产品词汇，
+  正是 domain 分区（<code>DOMAIN_CLASS_PREFIXES</code> 里的 <code>tcrn-work</code>）存在的意义所要避免的。</p>
+  <p class="body">AOS 要照搬的是形状，不是位置：一张封闭联合 + 单一映射表 + fail-closed 默认 +
+  <code>data-state</code> 保留身份 + 色调派生而非各调用点手写。眼下 <code>tone()</code> 和
+  <code>badgeTone()</code> 是同一份知识的两份抄写，这本身就是要修的。</p>
+  <div class="aside"><b>附带的小问题，一并请裁。</b>AOS 现在的 <code>STATUS_LABEL</code> 是英文近枚举词
+  （<code>planned</code>、<code>pending acceptance</code>…），而界面其余部分是中文（「显示 50 条，共 137 条」）。
+  它之所以没被 DS 的 <code>findRawEnumLabelHits</code> 拦下，只是因为下划线换成了空格。上面的提案样件里我
+  直接给了一套中文标签（已计划/就绪/进行中/已阻塞/待验收/已完成/已取消）。这是第四个决定，你可以单独否掉它
+  而保留色调重排。</div>
+</section>
+
+
+<!-- ════════════════════ ④ ════════════════════ -->
+<section class="item">
+  <h2><span class="ord">④</span> 状态徽章一行放不下就崩</h2>
+  <p class="verdict-line"><b>结论：这是 DS 的缺陷，三处叠加，不是一处。</b>它由 Owner 审本稿时指出。
+  修法是给状态徽章一条硬规则 —— <b>占一行，永不撑高所在的行</b> —— 装不下就截断，全文留在 <code>title</code> 里。</p>
+
+  <h3 class="block">依据：三处叠加</h3>
+  <div class="tablewrap"><table class="ev"><thead><tr><th>成因</th><th>core 里的声明</th><th>单行时</th><th>一折行</th></tr></thead><tbody>
+    <tr><td>会折</td><td class="plain"><code>white-space:normal</code> + <code>overflow-wrap:anywhere</code>，配 <code>width:max-content</code> / <code>max-width:100%</code></td><td class="plain">无所谓</td><td><span class="verdict fail">单元格一窄就必折</span></td></tr>
+    <tr><td>点悬空</td><td class="plain"><code>::before</code> 定在 <code>inset-block-start:50%</code></td><td class="plain">恰是文字中心</td><td><span class="verdict fail">50% 落在两行之间，点不属于任何一行</span></td></tr>
+    <tr><td>散排</td><td class="plain"><code>text-align:center</code></td><td class="plain">无作用</td><td><span class="verdict fail">变成居中散排</span></td></tr>
+  </tbody></table></div>
+  <p class="body">实测：状态列 150px，徽章被 <code>max-width:100%</code> 卡到 126px 时，
+  <code>pending acceptance</code> 撑到 <b>36px</b> 高，而同列其它徽章 <b>24px</b> ——
+  该行从 <b>48px</b> 涨到 <b>62px</b>（+29%），而同表其它行仍是 48px —— 表格的行高不再是常量。</p>
+
+  <h3 class="block">但根因在案③：撑破它的那个标签本来就不该出现</h3>
+  <p class="body">把七个状态 × 五种语言的 DS 文案逐个量一遍，最宽的是法语 <code>En recette</code>，
+  <b>85px</b>；而今天渲染的裸枚举 <code>pending acceptance</code> 是 <b>142px</b> —— 宽出 67%。
+  <b>用 DS 自己的文案，126px 的格子里没有一个状态会折行。</b>折行是渲染裸枚举的后果，
+  而那本来就被 <code>rawEnumLabelsAllowed: false</code> 禁着。</p>
+  <div class="tablewrap"><table class="ev"><thead><tr><th>状态</th><th>zh-CN</th><th>en</th><th>ja</th><th>ko</th><th>fr</th><th>最宽</th></tr></thead><tbody>
+    <tr><td><code>planned</code></td><td class="plain">待办 50</td><td class="plain">Planned 72</td><td class="plain">未着手 62</td><td class="plain">예정 47</td><td class="plain">Planifié 69</td><td><b>72px</b></td></tr>
+    <tr><td><code>ready</code></td><td class="plain">就绪 50</td><td class="plain">Ready 62</td><td class="plain">着手可 62</td><td class="plain">준비됨 58</td><td class="plain">Prêt 50</td><td><b>62px</b></td></tr>
+    <tr><td><code>active</code></td><td class="plain">进行中 62</td><td class="plain">Active 62</td><td class="plain">進行中 62</td><td class="plain">진행 중 62</td><td class="plain">En cours 77</td><td><b>77px</b></td></tr>
+    <tr><td><code>blocked</code></td><td class="plain">阻塞 50</td><td class="plain">Blocked 72</td><td class="plain">ブロック 74</td><td class="plain">차단됨 58</td><td class="plain">Bloqué 66</td><td><b>74px</b></td></tr>
+    <tr><td><code>pending_acceptance</code></td><td class="plain">待验收 62</td><td class="plain">In review 77</td><td class="plain">受入待ち 74</td><td class="plain">인수 대기 72</td><td class="plain">En recette 85</td><td><b>85px</b></td></tr>
+    <tr><td><code>done</code></td><td class="plain">完成 50</td><td class="plain">Done 56</td><td class="plain">完了 50</td><td class="plain">완료 47</td><td class="plain">Terminé 73</td><td><b>73px</b></td></tr>
+    <tr><td><code>cancelled</code></td><td class="plain">取消 50</td><td class="plain">Cancelled 83</td><td class="plain">中止 50</td><td class="plain">취소됨 58</td><td class="plain">Annulé 65</td><td><b>83px</b></td></tr>
+    <tr><td><code>pending acceptance</code> <span class="verdict fail">裸枚举</span></td><td class="plain" colspan="5">今天渲染的就是这个。它不是文案，是数据库里的值换了个空格。</td><td><b>142px</b></td></tr>
+  </tbody></table></div>
+  <p class="body">所以门可以是一条数：<b>任一状态、任一语言的标签，在 DS 参考度量下不得超过 96px</b>
+  （85px 之上留 13% 余量）。85 过，142 不过。截断因此是安全网，不是常态 —— 一个每天都在触发的降级不叫降级。</p>
+
+  <h3 class="block">样件：改前</h3>
+  <figure class="pair pair--wide">
+  <div class="pane" data-tcrn-theme="light"><div class="pane-tag">明</div><div class="pane-body"><div class="tcrn-table-shell demo-before" role="table" aria-label="工作项" style="--tcrn-table-shell-columns: 96px minmax(0,1fr) 150px 132px; --tcrn-table-shell-min-width: 100%; --tcrn-table-shell-column-min-width: 96px;">
+    <div role="row" class="tcrn-table-shell__head"><span>键</span><span>标题</span><span>状态</span><span>更新</span></div>
+    <div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-144</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">跨仓依赖方向检查</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--danger" data-state="blocked" title="blocked"><span class="tcrn-badge__label">blocked</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:03</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-145</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">验收车道判据落档</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="pending_acceptance" title="pending acceptance"><span class="tcrn-badge__label">pending acceptance</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:04</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-146</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">门组名册补写</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--positive" data-state="done" title="done"><span class="tcrn-badge__label">done</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:05</span></div>
+    </div></div></div></div>
+  <div class="pane" data-tcrn-theme="dark"><div class="pane-tag">暗</div><div class="pane-body"><div class="tcrn-table-shell demo-before" role="table" aria-label="工作项" style="--tcrn-table-shell-columns: 96px minmax(0,1fr) 150px 132px; --tcrn-table-shell-min-width: 100%; --tcrn-table-shell-column-min-width: 96px;">
+    <div role="row" class="tcrn-table-shell__head"><span>键</span><span>标题</span><span>状态</span><span>更新</span></div>
+    <div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-144</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">跨仓依赖方向检查</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--danger" data-state="blocked" title="blocked"><span class="tcrn-badge__label">blocked</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:03</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-145</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">验收车道判据落档</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="pending_acceptance" title="pending acceptance"><span class="tcrn-badge__label">pending acceptance</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:04</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-146</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">门组名册补写</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--positive" data-state="done" title="done"><span class="tcrn-badge__label">done</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:05</span></div>
+    </div></div></div></div>
+</figure>
+  <p class="cap">恢复 core 现有的三条声明，状态列与实测同为 150px。<code>pending acceptance</code> 折成两行、36px，圆点落在两行之间，该行 62px、其余 48px。</p>
+
+  <h3 class="block">样件：改后</h3>
+  <figure class="pair pair--wide">
+  <div class="pane" data-tcrn-theme="light"><div class="pane-tag">明</div><div class="pane-body"><div class="tcrn-table-shell" role="table" aria-label="工作项" style="--tcrn-table-shell-columns: 96px minmax(0,1fr) 150px 132px; --tcrn-table-shell-min-width: 100%; --tcrn-table-shell-column-min-width: 96px;">
+    <div role="row" class="tcrn-table-shell__head"><span>键</span><span>标题</span><span>状态</span><span>更新</span></div>
+    <div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-144</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">跨仓依赖方向检查</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--danger" data-state="blocked" title="blocked"><span class="tcrn-badge__label">blocked</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:03</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-145</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">验收车道判据落档</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="pending_acceptance" title="pending acceptance"><span class="tcrn-badge__label">pending acceptance</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:04</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-146</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">门组名册补写</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--positive" data-state="done" title="done"><span class="tcrn-badge__label">done</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:05</span></div>
+    </div></div></div></div>
+  <div class="pane" data-tcrn-theme="dark"><div class="pane-tag">暗</div><div class="pane-body"><div class="tcrn-table-shell" role="table" aria-label="工作项" style="--tcrn-table-shell-columns: 96px minmax(0,1fr) 150px 132px; --tcrn-table-shell-min-width: 100%; --tcrn-table-shell-column-min-width: 96px;">
+    <div role="row" class="tcrn-table-shell__head"><span>键</span><span>标题</span><span>状态</span><span>更新</span></div>
+    <div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-144</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">跨仓依赖方向检查</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--danger" data-state="blocked" title="blocked"><span class="tcrn-badge__label">blocked</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:03</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-145</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">验收车道判据落档</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--neutral" data-state="pending_acceptance" title="pending acceptance"><span class="tcrn-badge__label">pending acceptance</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:04</span></div>
+    </div><div role="row" class="tcrn-table-shell__row">
+      <div role="cell" class="tcrn-table-shell__cell"><a class="tcrn-link" href="#">AOS-146</a></div>
+      <div role="cell" class="tcrn-table-shell__cell">门组名册补写</div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="tcrn-badge tcrn-badge--positive" data-state="done" title="done"><span class="tcrn-badge__label">done</span></span></div>
+      <div role="cell" class="tcrn-table-shell__cell"><span class="cell-when">08-21 17:05</span></div>
+    </div></div></div></div>
+</figure>
+  <p class="cap">同样的标签、同样 150px 的列。一行、24px，与同列其它徽章齐平，行高回到常量；放不下的部分交给省略号，全文留在 <code>title</code> 与无障碍名里。</p>
+
+  <h3 class="block">提案</h3>
+  <p class="body">默认值应当归状态片：padding 与圆点的令牌本来就叫
+  <code>--tcrn-state-chip-padding</code> 与 <code>--tcrn-state-dot-size</code> ——
+  DS 自己早把 <code>Badge</code> 当状态片命名了。长度不可控的那份活（标签名、用户起的名字）
+  显式 opt-in 到 <code>.tcrn-badge--wrap</code>。<code>Badge</code> 今天一件干两份活，这是分开的时机。</p>
+  <div class="aside"><b>要你裁的第五件。</b>截断 vs 折行，我选截断，理由不是好看：表格的行高是网格的一部分，
+  折行毁掉网格，截断只毁掉那一格里能读到多少字 —— 后者可恢复（title、悬停、无障碍名都留着全文），前者不可。
+  如果你认为状态宁可折行也要看全，这条改起来只是一个默认值。</div>
+</section>
+
+<!-- ════════════════════ 附 ════════════════════ -->
+<section class="item">
+  <h2>附：查证时撞见的一个 DS 缺陷（不在本次三条内）</h2>
+  <p class="body">core/domain 切分只检查顶层块的选择器，嵌套 at-rule 内部的选择器不看。实测：
+  <code>.tcrn-work-item-row</code> 作为<b>选择器</b>（不是注释）出现在 core 里，位置是
+  <code>@container tcrn-work-row (max-width: 464px)</code> 内部。<code>tcrn-work</code> 是 domain 前缀，
+  这一条本该在 domain。</p>
+  <p class="body">更要紧的是切分自带的那道门（<code>component-css-partition.test.tsx:45</code> 的
+  <code>leaked</code> 检查）用的是同一个顶层解析器，所以<b>它对这类泄漏是盲的</b> —— 门是绿的，泄漏是真的。
+  这跟本次三条无关，我没有动它；按平台规矩这应该是一条独立 Incident，不是顺手改掉的东西。</p>
+</section>
+
+<!-- ════════════════════ 待裁 ════════════════════ -->
+<section class="item">
+  <div class="ask">
+    <h3>要你裁的</h3>
+    <ol>
+      <li><b>① 正文链接</b> —— 把既有的 inline-record-link 墨提升为 core 的 <code>.tcrn-link</code> /
+      <code>.tcrn-link--quiet</code>，并把默认下划线 alpha 从 35% 提到 70%（两档同时过 3:1 的交叉点）。
+      提到 70% 会让默认态比 DS 今天略明显 —— 这是唯一一处我改了 DS 的既有观感，单独确认。</li>
+      <li><b>② Pagination</b> —— 采用「范围读数 + 下一页」，永不提供页码；<code>total</code> 缺省或已到底时整个
+      组件不渲染。等于把 AOS 的 <code>Truncation</code> 提升为 DS 组件。</li>
+      <li><b>③ 状态色调</b> —— 留在四档内，按 DS 语义重排：warning 只给 <code>pending_acceptance</code>，
+      <code>active</code> 回到 neutral，<code>ready</code> 升 positive。映射表留在 AOS，但照 DS 的形状重写，
+      并把 <code>tone()</code>/<code>badgeTone()</code> 两份抄写合成一份。</li>
+      <li><b>③ 附带</b> —— 状态标签是否改中文。可单独否掉，不影响上一条。</li>
+    </ol>
+  </div>
+</section>
+
+</div></body></html>
