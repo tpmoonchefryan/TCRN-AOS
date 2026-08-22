@@ -149,9 +149,82 @@ Owner 2026-08-22 追加裁定：**「DS 的 Storybook 应该提供平台统一�
 
 ---
 
+## 六点六、EPIC-035 组件与类型去产品化，`@tcrn/ui-domain` 归并
+
+Owner 2026-08-22 追加裁定：**「一并做，接受重组重构」**——把「按功能而非按产品」从发布面贯彻到
+组件与类型本身。
+
+### 先读这一段：判据被施加在名字上
+
+`scripts/generic-primitive-scan.mjs` 的 `DOMAIN_PREFIXES` 是 `["Work","Knowledge","Gate","Evidence"]`，
+匹配式 `^export function ((?:Work|Knowledge|Gate|Evidence)[A-Z]\w*)`——**只读函数名，从不看 props**。
+执行「组件属于 DS 当且仅当其 props 能被描述而不提及任何单一产品的业务概念」这条裁定的机制，
+检查的是名字。两个方向的错都由此产生：
+
+- **假阴性**：`WorkActivityFeed` 改名 `ActivityFeed`，门立刻变绿，而它是否通用毫无变化
+- **假阳性**：`KnowledgeLabelSet`、`MachineToken`、`WorkFieldPanel`、`WorkInlineCreateStatic`、
+  `WorkSplitView` 的 props 里**不出现任何产品实体类型**，按裁定本就属 core，却因前缀被逐出
+
+**所以 STORY-101 必须先做。** 后面四条会大量改名，判据不先修，那些改名会让门整片变绿——
+而变绿的原因是判据被绕过，不是实质变好。
+
+### 实测出来的三件事
+
+**一、同一功能被实现了多遍。** 五个组件 props 形状完全相同（`density, items, label, locale`）：
+`EvidenceAttachmentList` ≡ `KnowledgeAttachmentList` ≡ `WorkActivityFeed` ≡ `KnowledgePageTree` ≡
+`KnowledgeTocRail`。前两个连文案表都是同一张 `attachmentTableLabels`，只差默认密度；
+`MetadataRail` 与 `KnowledgeMetadataRail` 只差一个可选 `labels`。
+
+**注意 STORY-102 的判据 3**：后三个形状相同但**职责不同**，是三个功能共用一个 props 形状，
+**不是同一功能的三份实现**——不要合并，并把这个区分写进注释。
+
+**二、类型层同样带产品前缀，而多数是通用概念穿了产品的名字。** `WorkAction` 就是一个动作
+（出现在四个组件上）、`KnowledgeVersion` 就是一个版本、`EvidenceAttachment` 与
+`KnowledgeAttachment` 是同一个附件的两个名字。乙组 26 个之所以「props 含产品实体」，
+正是因为这些类型自己带前缀——**判据在此处是循环的**。不改类型，组件改名就是表面工作。
+
+**三、该包没有任何产品消费方。** AOS 零代码引用、TMS 零、workflow 零。唯一消费方是 DS 自己的
+Storybook 与 `examples/tms-react-pilot`，而后者第 3 行是
+`import { WorkIndex } from "@tcrn/ui-domain"`——**一个 TMS 示例引用以 AOS 域命名的组件**，
+本裁定要消除的形态在仓里已经字面发生。
+
+**重构因此不打断任何产品。** 若实施中发现某个未登记的消费方，停下来呈报，不要就地改人家的代码。
+
+### 五条子单，次序要紧
+
+| 单 | 内容 |
+| --- | --- |
+| `TCRN-DS-STORY-101` | 通用性判据从名字改为 props 实质（**先做**） |
+| `TCRN-DS-STORY-102` | 合并重复实现（AttachmentList、MetadataRail） |
+| `TCRN-DS-STORY-103` | 类型层去产品化，一路到底 |
+| `TCRN-DS-STORY-104` | 组件按功能改名并归位 core |
+| `TCRN-DS-STORY-105` | `@tcrn/ui-domain` 的处置（先清点，再结论） |
+
+**功能名由 Owner 定**，STORY-104 只提候选。判据与 EPIC-034 一致：
+「另外两个产品看到这个名字，知道自己要的东西在里面」。
+
+**STORY-104 最容易犯的错是查重不足**：core 已有 `DetailInspector`、`SegmentedNav`、
+`SectionTabs`、`TableShell`，而 `WorkItemInspector`、`WorkViewTabs`、`WorkList` 归位后
+很可能与它们同功能。把一个产品域件改名后放进 core，结果 core 里出现两个做同一件事的组件——
+那是把问题从一处搬到另一处。**先查重，再改名。**
+
+**两个待裁项**（STORY-103 提出判断、不自行拍板）：`WorkRelationshipType`（十二个具名关系类型）
+与 `GatePipelineGate`（治理门）是否也应通用化。一个由调用方给词汇表的关系芯片、
+一个由调用方给阶段的流水线，本身是通用的。
+
+### 与 `TCRN-TMS-MIN-008` 的关系
+
+INIT-012 的抽出是对的：当时 AOS 在用那些组件，删掉会打断唯一的活消费方。今天那个消费方不在了。
+**这是前提失效，不是裁定被推翻**——STORY-105 的判据 4 要求把这句话写清楚。
+
+---
+
 ## 七、顺序与停止点
 
 INC-010/011/012/013 同在 DS 仓，可并行；INC-052 在 AOS 仓，独立。
+
+EPIC-034 与 EPIC-035 是同一裁定的两面，**要在故事 id 上对齐**（发布面改名与组件改名不能各叫各的）。
+EPIC-035 内部次序是硬的：**101 → 102 → 103 → 104 → 105**，先修判据再改名。
 
 DS 改完若动了 `tcrnComponentCss`，按既有约定要重打 tarball、AOS 换包、门户刷新 CSS 快照
 （`TCRN-CROSS-INC-223` 立的规矩）。
