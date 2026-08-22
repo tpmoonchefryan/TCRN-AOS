@@ -1,5 +1,10 @@
 # 派工：Storybook 产品化与三处 DS 缺陷
 
+> **2026-08-22 更新**：本批已扩为十五条单，其中十四条属 DS 仓。
+> **完整派工书已移至 DS 仓**：`TCRN-Design-System/docs/2026-08-22-de-productization-handoff.md`
+> —— 那里是这些工作的home。本文保留为本批的缘起记录，以及 `TCRN-AOS-INC-052`（本仓唯一一条）的规格。
+> 两个待裁项（`WorkRelationshipType`、`GatePipelineGate`）Owner 已裁「通用」，详见 DS 侧派工书第三节。
+
 给 Codex。可以用 `goal` 指令完成。**没有硬门**，末尾的「验收」是验收项。
 
 Owner 于 2026-08-22 看图指出 Storybook 的样式与章节产品化问题，并要求一并检查 logo 取用规则。
