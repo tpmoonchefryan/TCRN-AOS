@@ -1,7 +1,7 @@
 {
   "note": "Design System packages vendored as tarballs. A file:../ sibling dependency cannot survive a sealed container build, and pnpm hardlinks such a dependency to the same inode — so a version audit across it reads one file twice and can never fail.",
   "source": "TCRN-Design-System",
-  "sourceCommit": "f3605e608871b2ca620387d90e0ae313a5e48094",
+  "sourceCommit": "5c3f121a1687025138ee3b53e5d85cebeadf8fad",
   "packedAt": "2026-08-22",
   "entries": [
     {
@@ -11,8 +11,8 @@
     },
     {
       "file": "tcrn-ui-react-3.0.0.tgz",
-      "sha256": "b25a605a9d284d19ff9678d99588a32ccd087f8ce884f2af8add6f026967dffe",
-      "bytes": 182706
+      "sha256": "a2ddf250324aeafb4b390e5f3a0b218bf238224915e94a82d15c8a6aa916c248",
+      "bytes": 183861
     },
     {
       "file": "tcrn-ui-tokens-3.0.0.tgz",
